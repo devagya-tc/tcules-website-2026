@@ -1,0 +1,170 @@
+/* ══ Component layer — prose ═════════════════════════════════════════════════════
+   Tier 3. Rich text: the flow a CMS body field arrives as, and the only place in the
+   system where the markup is not ours to choose. Everything a body field can contain
+   — headings, paragraphs, both list kinds, a definition list, a blockquote, a figure,
+   a table, a rule, and the six inline marks — is styled here and nowhere else.
+
+   Naming: --prose-{part}-{modifier}
+           part      ink | link | marker | quote | rule | code | pre | mark | table
+           modifier  the role within that part, then the state
+
+   ── What this file declares, and what it deliberately does not ──────────────────
+   GEOMETRY it owns: the marker hang, the two code insets, the two radii, the two
+   rule weights. Each is a primitive given a prose meaning, which is what a component
+   layer is for — the same move as --btn-radius:var(--radius-8).
+
+   DISTANCE it does not own. Prose.module.css reads --gap-text, --gap-block,
+   --gap-stack and --gap-tight directly, because a --prose-flow:var(--gap-text) is a
+   second name for one distance and the system already deleted --sec-gap for being
+   exactly that. There is no remap here to earn the name: prose's paragraph beat IS
+   the text step, not a role that happens to land on it.
+
+   TYPE it does not own either. The module reads --text-body-lg, --text-quote,
+   --text-caption, --text-code and --text-ui-sm as composites. Prose has no size
+   ordinals to map them onto — unlike the button's three heights — so a
+   --prose-text:var(--text-body-lg) would rename without meaning.
+
+   ── Every surface restates every token ──────────────────────────────────────────
+   Not just the deltas from paper. A block carrying only deltas is not self-contained:
+   nest that surface inside a non-paper one and it inherits the enclosing surface's
+   values for whatever it omitted. Rich text is the worst place for that to happen —
+   a body field is long, and a quote or a code span that loses its ground turns into
+   unreadable text halfway down a page nobody scrolled to in review. The repetition
+   below is the fix, and tokens:check fails the build if a block drifts.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   The marker inset is an optical correction measured against Public Sans at 18px, not
+   a layout distance: it is the width the bullet and a two-digit numeral both clear, so
+   that every line of an item starts on the same vertical instead of the first line
+   being pushed right. --gap-block would be a coincidence at 24, and the day the gap
+   scale is re-tuned this list must not move.
+   Same reasoning for the underline offset and the two code insets, which are cut
+   against Geist Mono's cap height at 14px inside an 18px line.
+
+   The blockquote rule is the deck weight rather than the hairline. A hairline beside
+   28px serif disappears; the quote then reads as an unexplained indent.            */
+:root{
+--prose-marker-inset:var(--space-24);   /* optical, not --gap-block */
+--prose-link-underline-offset:var(--space-2);  /* optical: clears Public Sans' descenders at 18px */
+--prose-code-padding-x:var(--space-6);  /* optical, not --gap-tight */
+--prose-code-padding-y:var(--space-2);  /* optical */
+--prose-code-radius:var(--radius-4);
+--prose-pre-radius:var(--radius-0);     /* a code panel is square. Deliberate, not an absence */
+--prose-quote-rule-width:var(--border-width-hairline-deck);
+--prose-rule-width:var(--border-width-hairline);
+--prose-table-rule-width:var(--border-width-hairline);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The default and the origin; every other surface is measured against it.
+
+   Body ink is neutral-900 rather than 950 — 14.62:1 is already past AAA and the
+   softer step is what keeps 68 characters of 18px sans from vibrating. Headings
+   take 950, so the step between a head and its body is tonal as well as scalar.
+
+   The pre panel inverts. A dark block inside a light page is the one place this
+   system uses a filled ground for emphasis, and it is legitimate because a code
+   listing genuinely is a different KIND of content — not a paragraph asking for
+   more attention.                                                              */
+:root,[data-surface="paper"]{
+--prose-ink:var(--color-neutral-900);              /* 14.62:1 */
+--prose-ink-heading:var(--color-neutral-950);      /* 16.35:1 */
+--prose-ink-muted:var(--color-neutral-600);        /*  4.92:1 — the floor of AA, do not lighten */
+--prose-marker-ink:var(--color-neutral-600);       /* an <ol> numeral is content, so it holds AA */
+--prose-link-ink:var(--color-brandeis-500);        /*  6.17:1 */
+--prose-link-ink-hover:var(--color-brandeis-600);
+--prose-link-rule:var(--color-brandeis-300);       /* the underline sits under the ink, not level with it */
+--prose-quote-ink:var(--color-neutral-800);
+--prose-quote-rule:var(--color-brandeis-500);
+--prose-rule:var(--color-neutral-200);
+--prose-code-bg:var(--color-neutral-100);--prose-code-fg:var(--color-neutral-900);
+--prose-pre-bg:var(--color-neutral-950);--prose-pre-fg:var(--color-neutral-100);
+--prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
+--prose-table-head-ink:var(--color-neutral-700);
+--prose-table-rule:var(--color-neutral-200);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   The ground has already spent the lightest step, so every quiet value moves one
+   rung darker to keep the same separation: muted 600→700 (600 would be 4.39:1 here
+   and fail), the code chip 100→200, and both rules 200→300. The inverted pre panel
+   does not move — it is already as far from this ground as it can get.          */
+[data-surface="tint"]{
+--prose-ink:var(--color-neutral-900);              /* 13.06:1 */
+--prose-ink-heading:var(--color-neutral-950);      /* 14.61:1 */
+--prose-ink-muted:var(--color-neutral-700);        /*  7.27:1 — stepped; 600 would be 4.39:1 */
+--prose-marker-ink:var(--color-neutral-700);
+--prose-link-ink:var(--color-brandeis-500);        /*  5.51:1 */
+--prose-link-ink-hover:var(--color-brandeis-600);
+--prose-link-rule:var(--color-brandeis-300);
+--prose-quote-ink:var(--color-neutral-800);
+--prose-quote-rule:var(--color-brandeis-500);
+--prose-rule:var(--color-neutral-300);
+--prose-code-bg:var(--color-neutral-200);--prose-code-fg:var(--color-neutral-900);
+--prose-pre-bg:var(--color-neutral-950);--prose-pre-fg:var(--color-neutral-100);
+--prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
+--prose-table-head-ink:var(--color-neutral-700);
+--prose-table-rule:var(--color-neutral-300);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   Body ink is neutral-100, not white. Pure white on near-black at 18px over a full
+   measure haloes; 100 measures 13.63:1 and reads cleanly. Headings and the quote
+   DO take white, because they are short and the extra step is what re-establishes
+   the tonal gap that 900→950 gives on paper.
+
+   Blue inverts here: brandeis-500 is 2.11:1 on this ground and unreadable, so the
+   link lifts to 300 and the quote rule to 300 with it.
+
+   The pre panel lightens instead of darkening — 900 against a 950 ground. It is the
+   one surface where the code block is a lighter shape than the page, and that is
+   correct: the panel's job is to differ from the flow, not to be dark.          */
+[data-surface="ink"]{
+--prose-ink:var(--color-neutral-100);              /* 13.63:1 — softer than white, which haloes */
+--prose-ink-heading:var(--color-white);            /* 15.85:1 */
+--prose-ink-muted:var(--color-neutral-400);        /*  8.02:1 */
+--prose-marker-ink:var(--color-neutral-500);       /*  5.36:1 */
+--prose-link-ink:var(--color-brandeis-300);        /*  7.32:1 — 500 would be 2.11:1 */
+--prose-link-ink-hover:var(--color-brandeis-200);
+--prose-link-rule:var(--color-brandeis-400);
+--prose-quote-ink:var(--color-white);
+--prose-quote-rule:var(--color-brandeis-300);
+--prose-rule:var(--color-neutral-800);
+--prose-code-bg:var(--color-neutral-800);--prose-code-fg:var(--color-neutral-100);  /* 8.63:1 */
+--prose-pre-bg:var(--color-neutral-900);--prose-pre-fg:var(--color-neutral-100);
+--prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
+--prose-table-head-ink:var(--color-neutral-400);
+--prose-table-rule:var(--color-neutral-800);
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   The ground is the interaction colour, so nothing may be blue to mean "clickable".
+   The link is white and earns its affordance from the underline alone, which is why
+   --prose-link-rule steps to 200 here rather than staying quiet — it is carrying the
+   whole signal.
+
+   The quote rule is the one peridot in this file. Brandeis against Brandeis is
+   invisible, and peridot is the system's highlight: it is doing exactly its job,
+   marking one passage, and it fills nothing that could be mistaken for an action.
+
+   The code chip drops to 600 — a darker blue rather than a neutral — because a grey
+   chip on a saturated ground reads as a rendering fault. The pre panel still goes to
+   neutral-950; a full listing is a different kind of content and says so.       */
+[data-surface="blue"]{
+--prose-ink:var(--color-white);                    /*  8.06:1 */
+--prose-ink-heading:var(--color-white);
+--prose-ink-muted:var(--color-brandeis-100);       /*  6.34:1 */
+--prose-marker-ink:var(--color-brandeis-100);
+--prose-link-ink:var(--color-white);               /*  6.23:1 */
+--prose-link-ink-hover:var(--color-brandeis-100);
+--prose-link-rule:var(--color-brandeis-200);
+--prose-quote-ink:var(--color-white);
+--prose-quote-rule:var(--color-peridot-400);       /* highlight, never an action */
+--prose-rule:var(--color-brandeis-400);
+--prose-code-bg:var(--color-brandeis-600);--prose-code-fg:var(--color-white);       /* 8.53:1 */
+--prose-pre-bg:var(--color-neutral-950);--prose-pre-fg:var(--color-neutral-100);
+--prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
+--prose-table-head-ink:var(--color-brandeis-100);
+--prose-table-rule:var(--color-brandeis-400);
+}

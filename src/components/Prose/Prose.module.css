@@ -1,0 +1,353 @@
+/* Prose — the rich-text flow.
+
+   The one stylesheet in this repo that styles markup it did not write. A CMS body field arrives
+   as an opaque HTML string, so the selectors are element selectors and the spacing is margins.
+   Both are deliberate, both are scoped inside .prose, and Prose.tsx explains why at length.
+
+   Reads directly, per tokens/components/prose.css:
+   · the gap scale (--gap-*) for every distance, because a --prose-flow would be a second name
+     for one step and the system already deleted --sec-gap for exactly that;
+   · the type composites (--text-*), because Prose has no size ordinals to map them onto.
+   Everything prose-specific — the marker hang, the code insets, every colour — comes through a
+   --prose-* token.
+
+   Type is restated here rather than inherited from the base layer in globals.css. That layer is
+   a floor for a bare element on a page nobody has styled; a flow that reads correctly wherever
+   it is dropped cannot depend on it still being there. */
+
+.prose {
+  max-width: var(--measure-body);
+  font: var(--text-body-lg);
+  color: var(--prose-ink);
+}
+
+/* ── The flow ────────────────────────────────────────────────────────────────────────────────
+   Read top to bottom: each rule is the same specificity as the last, so a later one wins where
+   they overlap. That is the mechanism, not an accident.
+
+     p to p                16   the beat
+     around a set piece    24   list, quote, figure, table, code panel
+     after any heading     24   the head-to-body step
+     before a subhead      32   more air above than below, so it belongs to what follows
+     before an h2          48   a new idea
+     around a rule         48   the strongest break the flow has
+
+   Prose itself never sets an outer margin — the first child is zeroed, and the Layout holding
+   Prose still owns the gap above it. */
+.prose > * + * {
+  margin-block-start: var(--gap-text);
+}
+.prose > * + :is(ul, ol, dl, blockquote, figure, table, pre) {
+  margin-block-start: var(--gap-block);
+}
+.prose > :is(ul, ol, dl, blockquote, figure, table, pre) + * {
+  margin-block-start: var(--gap-block);
+}
+.prose > :is(h1, h2, h3, h4, h5, h6) + * {
+  margin-block-start: var(--gap-block);
+}
+.prose > * + :is(h3, h4, h5, h6) {
+  margin-block-start: var(--gap-gutter);
+}
+.prose > * + h2 {
+  margin-block-start: var(--gap-stack);
+}
+/* A subhead directly under a head is one unit, not two — it gets the head-to-body step back. */
+.prose > :is(h1, h2, h3, h4, h5, h6) + :is(h1, h2, h3, h4, h5, h6) {
+  margin-block-start: var(--gap-block);
+}
+.prose > * + hr,
+.prose > hr + * {
+  margin-block-start: var(--gap-stack);
+}
+.prose > :first-child {
+  margin-block-start: 0;
+}
+
+/* ── Headings ────────────────────────────────────────────────────────────────────────────────
+   h1 to h5 take the display composites; h6 takes the mono chrome role, because the ladder has
+   five title steps and a sixth serif step below 22px would be smaller than the body it heads.
+   A mono, tracked, uppercase run-in is the honest sixth. */
+.prose :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--prose-ink-heading);
+  text-wrap: balance;
+}
+.prose h1 {
+  font: var(--text-h1);
+  letter-spacing: var(--text-h1-tracking);
+}
+.prose h2 {
+  font: var(--text-h2);
+  letter-spacing: var(--text-h2-tracking);
+}
+.prose h3 {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+}
+.prose h4 {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+}
+.prose h5 {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+}
+.prose h6 {
+  font: var(--text-ui);
+  letter-spacing: var(--text-ui-tracking);
+  text-transform: uppercase;
+}
+
+/* ── Paragraph ───────────────────────────────────────────────────────────────────────────────
+   `pretty` costs nothing and removes the single-word last line, which is the most visible
+   typographic fault in a long body field. */
+.prose p {
+  text-wrap: pretty;
+}
+
+/* ── Lists ───────────────────────────────────────────────────────────────────────────────────
+   reset.css strips the marker and the inset from every list, because a `Layout as="ul"` is a
+   layout container and must not carry either. A list that is genuinely a list takes them back,
+   and this is where that happens.
+
+   `outside` puts the marker in the inset rather than in the text, so every line of an item —
+   the first and every wrapped one — starts on the same vertical. `inside` pushes the first line
+   right and leaves the rest behind it, which notches the left edge of every multi-line item.
+   The text block is therefore indented from the paragraph above by the inset, which is the
+   conventional reading of a list and the reason the inset is a measured value rather than 0. */
+.prose :is(ul, ol) {
+  padding-inline-start: var(--prose-marker-inset);
+  list-style-position: outside;
+}
+.prose ul {
+  list-style-type: disc;
+}
+.prose ol {
+  list-style-type: decimal;
+}
+.prose ul ul {
+  list-style-type: circle;
+}
+.prose ol ol {
+  list-style-type: lower-alpha;
+}
+.prose li::marker {
+  color: var(--prose-marker-ink);
+}
+.prose li + li {
+  margin-block-start: var(--gap-tight);
+}
+.prose li > :is(ul, ol) {
+  margin-block-start: var(--gap-tight);
+}
+/* A CMS wraps multi-paragraph list items in <p>. Without this they collapse into one another. */
+.prose li > p + p {
+  margin-block-start: var(--gap-text);
+}
+
+/* ── Definition list ─────────────────────────────────────────────────────────────────────────
+   The term is the head and the definition is its body, so the pair takes the inline step and
+   the gap BETWEEN pairs takes the text step. Same shape as the flow above, one level down. */
+.prose dt {
+  font: var(--text-body-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--prose-ink-heading);
+}
+.prose dd {
+  margin-block-start: var(--gap-inline);
+  margin-inline-start: var(--prose-marker-inset);
+}
+.prose dd + dt {
+  margin-block-start: var(--gap-text);
+}
+
+/* ── Blockquote ──────────────────────────────────────────────────────────────────────────────
+   Serif at 28px with a rule on the leading edge. The rule is the deck weight, not the hairline:
+   beside type this large a 1px line reads as a rendering artefact and the quote looks like an
+   indent nobody explained.
+
+   The inset is padding rather than margin so the rule sits at the quote's own edge, and the
+   quote keeps the measure of the flow around it rather than narrowing. */
+.prose blockquote {
+  border-inline-start: var(--prose-quote-rule-width) solid var(--prose-quote-rule);
+  padding-inline-start: var(--gap-block);
+  font: var(--text-quote);
+  color: var(--prose-quote-ink);
+}
+.prose blockquote > * + * {
+  margin-block-start: var(--gap-text);
+}
+.prose blockquote :is(p, cite) {
+  font: inherit;
+}
+.prose blockquote cite {
+  display: block;
+  font: var(--text-body-sm);
+  font-style: normal;
+  color: var(--prose-ink-muted);
+}
+.prose blockquote > cite,
+.prose blockquote > * + cite {
+  margin-block-start: var(--gap-block);
+}
+
+/* ── Figure ──────────────────────────────────────────────────────────────────────────────────
+   reset.css already makes media block-level and shrink to their track. The caption is the only
+   thing left to say, and it is a caption everywhere: an image, a table, a code panel. */
+.prose figcaption,
+.prose caption {
+  font: var(--text-caption);
+  color: var(--prose-ink-muted);
+  text-align: start;
+}
+.prose figcaption {
+  margin-block-start: var(--gap-tight);
+}
+.prose caption {
+  margin-block-end: var(--gap-tight);
+}
+
+/* ── Rule ────────────────────────────────────────────────────────────────────────────────────
+   A hairline and nothing else. The break is made by the 48 above and below it; the line only
+   confirms it. */
+.prose hr {
+  border: 0;
+  border-block-start: var(--prose-rule-width) solid var(--prose-rule);
+}
+
+/* ── Table ───────────────────────────────────────────────────────────────────────────────────
+   A CMS table has no wrapper to scroll inside, so the table becomes its own scroll container.
+   `display: block` is the price of that and it is worth paying: the alternative is a wide table
+   dragging the whole page sideways, which reads as a broken layout rather than a wide table.
+
+   Rules are horizontal only. Vertical rules turn a table into a grid of boxes and make every
+   column look equally important, which is exactly what a data table is trying not to say. */
+.prose table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--text-body-sm);
+}
+.prose :is(th, td) {
+  padding: var(--gap-tight) var(--gap-text);
+  border-block-end: var(--prose-table-rule-width) solid var(--prose-table-rule);
+  text-align: start;
+  vertical-align: baseline;
+}
+.prose :is(th, td):first-child {
+  padding-inline-start: 0;
+}
+.prose :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+.prose th {
+  font: var(--text-ui-sm);
+  letter-spacing: var(--text-ui-sm-tracking);
+  text-transform: uppercase;
+  color: var(--prose-table-head-ink);
+}
+.prose tbody tr:last-child :is(th, td) {
+  border-block-end: 0;
+}
+
+/* ── Links ───────────────────────────────────────────────────────────────────────────────────
+   Underlined at rest, always. Colour alone is not an affordance inside a body of text, and on
+   the blue surface there is no colour to spend — the link is white on blue and the underline is
+   carrying the entire signal. On hover the rule takes the ink's own hover value, so the two
+   move together instead of the underline staying behind. */
+.prose a {
+  color: var(--prose-link-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--prose-link-rule);
+  text-decoration-thickness: var(--prose-rule-width);
+  text-underline-offset: var(--prose-link-underline-offset);
+}
+.prose a:hover {
+  color: var(--prose-link-ink-hover);
+  text-decoration-color: var(--prose-link-ink-hover);
+}
+
+/* ── Inline marks ────────────────────────────────────────────────────────────────────────────
+   The six a rich-text editor can actually produce, plus abbr. `small` reads as the caption role
+   rather than a percentage of whatever it sits in, so it holds its size inside a heading. */
+.prose strong,
+.prose b {
+  font-weight: var(--font-weight-semibold);
+  color: var(--prose-ink-heading);
+}
+.prose em,
+.prose i {
+  font-style: italic;
+}
+.prose mark {
+  background: var(--prose-mark-bg);
+  color: var(--prose-mark-ink);
+  padding-inline: var(--prose-code-padding-x);
+}
+.prose del {
+  text-decoration: line-through;
+  color: var(--prose-ink-muted);
+}
+.prose ins {
+  text-decoration: underline;
+  text-decoration-color: var(--prose-link-rule);
+  text-underline-offset: var(--prose-link-underline-offset);
+}
+.prose small {
+  font: var(--text-caption);
+  color: var(--prose-ink-muted);
+}
+.prose abbr[title] {
+  text-decoration: underline dotted;
+  text-decoration-color: var(--prose-ink-muted);
+  text-underline-offset: var(--prose-link-underline-offset);
+  cursor: help;
+}
+/* Superscripts do not open a line. The zero line-height keeps a footnote marker from adding a
+   pixel of leading to the one paragraph that has one. */
+.prose :is(sub, sup) {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+}
+.prose sup {
+  vertical-align: super;
+}
+.prose sub {
+  vertical-align: sub;
+}
+
+/* ── Code ────────────────────────────────────────────────────────────────────────────────────
+   Two different things sharing a face. Inline code is a chip in a sentence, so it takes a soft
+   ground, a small radius and 0.9em — matching the surrounding text's size rather than the code
+   role's, because a 14px mono span inside 18px sans sits noticeably low.
+
+   A code panel is a different KIND of content, not a paragraph asking for attention, which is
+   what earns it a filled ground in a system that otherwise refuses them. It is square, it keeps
+   the code role's real size, and it scrolls rather than wrapping: a wrapped line of code is a
+   line of code that lies about where it ends. */
+.prose :not(pre) > code,
+.prose kbd,
+.prose samp {
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+  background: var(--prose-code-bg);
+  color: var(--prose-code-fg);
+  padding: var(--prose-code-padding-y) var(--prose-code-padding-x);
+  border-radius: var(--prose-code-radius);
+}
+.prose pre {
+  background: var(--prose-pre-bg);
+  color: var(--prose-pre-fg);
+  padding: var(--gap-text);
+  border-radius: var(--prose-pre-radius);
+  overflow-x: auto;
+}
+.prose pre code {
+  font: var(--text-code);
+  background: none;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+}

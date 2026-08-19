@@ -12,6 +12,10 @@
  * Button and Icon are the first CONTROLS in the tier — they arrange nothing, they are things a
  * layout arranges. A row of them belongs in a Cluster, which owns the gap; a button never sets
  * its own outer spacing.
+ *
+ * Prose is neither. It is the rich-text flow — the one component that styles markup it did not
+ * write, because a CMS body field arrives as a string. It is the documented exception to the
+ * no-margins rule, and the exception is argued in the component itself.
  */
 export { Section, type SectionProps } from './Section';
 export { Layout, type LayoutProps } from './Layout';
@@ -24,3 +28,4 @@ export {
   type ButtonSize,
 } from './Button';
 export { Icon, iconNames, type IconProps, type IconName, type IconSize } from './Icon';
+export { Prose, type ProseProps } from './Prose';

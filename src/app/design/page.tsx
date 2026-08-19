@@ -13,6 +13,16 @@ import { Cluster, Layout, Section } from '@/components';
  */
 const SPECIMENS = [
   {
+    tier: 'Foundations',
+    items: [
+      {
+        href: '/design/typography',
+        name: 'Typography',
+        note: 'every --text-* role, the ladders under them, and the Prose rich-text flow',
+      },
+    ],
+  },
+  {
     tier: 'Primitives',
     items: [
       { href: '/design/section', name: 'Section', note: 'band, content column, vertical rhythm' },
@@ -24,6 +34,11 @@ const SPECIMENS = [
         note: '3 emphases × 2 tones, 3 sizes, 3 variants, 4 surfaces',
       },
       { href: '/design/icon', name: 'Icon', note: 'the glyph set, 4 size roles, currentColor' },
+      {
+        href: '/design/typography',
+        name: 'Prose',
+        note: 'the rich-text flow — specimen lives on the typography route',
+      },
     ],
   },
   { tier: 'Patterns', items: [] },
