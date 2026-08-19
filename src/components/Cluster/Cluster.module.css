@@ -7,7 +7,7 @@
    Because it wraps, it has two seams: colGap between items on a line, rowGap between the wrapped
    lines. Set separately, with NO default on either — an axis the caller doesn't state renders 0,
    because a silent 12 looks plausible and hides the omission. The ramp is Layout's vocabulary
-   capped at lg; a chip row has no use for a structural beat.
+   capped at block; a chip row has no use for a structural beat.
 
    Both seams read the gap scale's --gap-* usage tokens directly, capped at block — the same
    scale Layout uses, and the ceiling is the only difference between them. No private ramp: the
