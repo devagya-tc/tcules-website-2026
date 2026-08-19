@@ -19,8 +19,8 @@ export function Specimen({
   children: ReactNode;
 }) {
   return (
-    <Layout as="section" rowGap="md" className={styles.spec}>
-      <Layout rowGap="2xs">
+    <Layout as="section" rowGap="block" className={styles.spec}>
+      <Layout rowGap="tight">
         <p className={styles.specTitle}>{title}</p>
         {note ? <p className={styles.specNote}>{note}</p> : null}
       </Layout>

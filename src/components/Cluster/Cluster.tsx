@@ -5,10 +5,16 @@ import { cx } from '@/lib/cx';
 import styles from './Cluster.module.css';
 
 /**
- * The gap ramp — the same magnitude vocabulary Layout uses, capped at `lg`: a wrapping chip row
- * has no use for a 96px structural beat, so the ceiling is where the two primitives differ.
+ * The gap scale, capped at `block` (24). A wrapping row of chips or buttons has no use for a
+ * 48px block beat, let alone a 96px section one — the ceiling is the only place Cluster and
+ * Layout differ, and both read the same --gap-* usage tokens.
+ *
+ *   inline   4   inside a key and its value
+ *   tight    8   icon to label, chip padding, a stat and its unit
+ *   text    16   items in a metadata row
+ *   block   24   a button group set apart from its neighbours
  */
-type ClusterGap = '2xs' | 'xs' | 'sm' | 'md' | 'lg';
+type ClusterGap = 'inline' | 'tight' | 'text' | 'block';
 type ClusterAlign = 'start' | 'center' | 'end' | 'baseline' | 'stretch';
 type ClusterJustify = 'start' | 'center' | 'end' | 'between';
 

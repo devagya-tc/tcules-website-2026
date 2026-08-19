@@ -10,12 +10,12 @@
    vanish on ink and fight the ground on blue, which would make the surface specimens unreadable
    at exactly the moment they matter. */
 .page {
-  padding-block: var(--space-32);
+  padding-block: var(--gap-gutter);
 }
 
 .spec {
   border-top: var(--border-width-hairline) solid var(--sec-rule);
-  padding-block-start: var(--space-16);
+  padding-block-start: var(--gap-text);
 }
 
 .specTitle {
@@ -34,14 +34,17 @@
 .box {
   background: color-mix(in srgb, var(--sec-ink) 7%, transparent);
   border: var(--border-width-hairline) solid var(--sec-rule);
-  padding: var(--space-12);
+  padding: var(--gap-tight);
   font: var(--text-caption);
   color: var(--sec-ink-muted);
 }
 
-/* Deliberately taller, to prove `align` and `equalRows` do what they claim. */
+/* Deliberately taller, to prove `align` and `equalRows` do what they claim. Reaches the space
+   ramp rather than the gap scale because this is a box's own height, not a distance between two
+   things — and it is measuring chrome besides. --space-120 was removed from the ramp in the
+   token update; 128 is the nearest step. */
 .boxTall {
-  min-height: var(--space-120);
+  min-height: var(--space-128);
 }
 
 .boxAccent {
@@ -60,7 +63,7 @@
   border: var(--border-width-hairline) solid var(--sec-rule);
   font: var(--text-caption);
   color: var(--sec-ink-muted);
-  padding: var(--space-6) var(--space-8);
+  padding: var(--gap-inline) var(--gap-tight);
 }
 
 /* A specimen whose content is SUPPOSED to exceed its container (the nowrap Cluster) scrolls

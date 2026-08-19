@@ -35,12 +35,13 @@ Never reach sideways, and never inline a one-off.
 `Section`, `Layout` and `Cluster` express every arrangement in the site between them:
 
 - **`Section`** — the full-width band. Paints the ground and owns the content column (1240 cap,
-  32 gutter) and the vertical air (88, or `density="tight"` 64 / `density="loose"` 120, or
-  `flush` 0). Every one of those values comes from `--sec-*`; the component contributes none of
-  its own. `surface="paper | tint | ink | blue"` sets the ground for everything inside it.
+  32 gutter) and the vertical air (96, or `density="tight"` 64 / `density="open"` 128, or `flush`
+  0). Every one of those values comes from `--sec-*`; the component contributes none of its own.
+  `surface="paper | tint | ink | blue"` sets the ground for everything inside it.
 - **`Layout`** — the columnar axis. Tracks (`3`, `[2,1]`, per-breakpoint, `fit`, `tile`) plus
-  `rowGap` / `colGap`. A vertical stack is the single-track case.
-- **`Cluster`** — the inline axis. Wrapping rows: chips, button groups, metadata.
+  `rowGap` / `colGap`, both taking gap-scale step names. A vertical stack is the single-track case.
+- **`Cluster`** — the inline axis. Wrapping rows: chips, button groups, metadata. Same scale,
+  capped at `block`.
 
 **Rules:**
 
@@ -57,38 +58,83 @@ Never reach sideways, and never inline a one-off.
    `max-width`, no background or colour via `className`. One band out of alignment with the
    others is a visible defect, and a hand-set background defeats the whole surface model.
 
-## Tokens: two tiers, and nothing outside them holds a value
+## Tokens: three layers, and nothing outside them holds a value
 
 The token system lives in `src/styles/tokens/` and is imported by `src/app/globals.css`. Read
 `tokens/index.css` first — it states the rules and it is the only file you import.
 
-| Tier | Path | What it holds |
+| Layer | Where | What it holds |
 |---|---|---|
-| 1 · primitives | `tokens/primitives.css` | facts. `--color-brandeis-500`, `--space-24`, `--font-size-43`. Named for the value, never the use |
-| 2 · components | `tokens/components/*.css` | meaning. `--sec-ground`, `--btn-solid-primary-bg`, `--lay-gap-lg`. One file per component, re-declared per surface |
+| 1 · primitives | `primitives.css` | ramps and ladders. `--color-brandeis-500`, `--space-24`, `--font-size-h1`. Declared once, consumed through a usage token wherever one exists |
+| 2 · usage | `primitives.css` | one curated answer per question. **`--gap-*` (9 steps)** and `--text-*` (17 roles). Surface-independent, therefore shared |
+| 3 · components | `components/*.css` | what a value MEANS for one component. `--sec-ground`, `--btn-solid-primary-bg`. Re-declared once per surface |
 
-**There is no semantic tier, by design.** Surface-awareness is restated per component; the
-payoff is that a component is readable in one file and changing one never moves another.
+**Colour has no usage layer, deliberately.** What a colour means depends entirely on the surface
+— `brandeis-50` is a hover tint on paper and invisible on tint; blue as ink fails on ink and
+lifts to 200. A shared `--color-bg-hover` would be wrong three times out of four. Components own
+colour, per surface. That is the one asymmetry in the system and it is intentional.
 
-**The rules that matter most in day-to-day work:**
+### The gap scale is the only answer to "how far apart"
 
-1. **No stylesheet outside `tokens/` writes a hex, a raw distance or a font stack.** If the value
-   you need has no token, add the token. `npm run tokens:check` enforces both halves of this —
-   it fails on a `var()` that resolves to nothing and on a literal colour outside the token
-   layer. Run it before you commit CSS.
-2. **A component never reads another component's tokens.** Shared values are primitives, or they
-   are duplicated on purpose. `--lay-gap-*` and `--clu-gap-*` are the worked example: same rung
-   names, two files, both pointing at `--space-*`, deliberately not shared.
+Nine steps, named for what they separate:
+
+| Step | | Where it lands |
+|---|---|---|
+| `--gap-inline` | 4 | inside a key and its value |
+| `--gap-tight` | 8 | icon to label, chip padding, a stat and its unit |
+| `--gap-text` | 16 | paragraph to paragraph, cell padding on a dense table |
+| `--gap-block` | 24 | head to body inside a block — the most used step |
+| `--gap-gutter` | 32 | container gutter, and the gap between cards in a set |
+| `--gap-stack` | 48 | block to block inside a section |
+| `--gap-column` | 64 | column gutter where two halves must read as separate |
+| `--gap-section` | 96 | section padding, tight |
+| `--gap-section-open` | 128 | section padding, open |
+
+1. **Layout distance never comes from `--space-*`.** The space ramp exists so the gap scale can be
+   built from it. A component may reach the ramp for an **optical correction** — a label's
+   side-bearing margin, a ring offset — and must say so in a comment on the token, as
+   `button.css` does.
+2. **A distance that is not one of these nine is a mistake or a new step.** Decide which. Do not
+   split the difference.
+3. **A step is chosen by what it separates, never by how it looks at one width.** The scale does
+   not shift responsively — the *layout* changes at a breakpoint, the distance does not. Do not
+   add a media query that swaps one step for another.
+
+`Layout` and `Cluster` take these names directly as `rowGap` / `colGap` values. Cluster caps at
+`block`: a wrapping chip row has no use for a 48px block beat.
+
+### The other rules that matter day to day
+
+1. **No stylesheet outside `tokens/` writes a hex, a raw distance or a font stack.**
+   `npm run tokens:check` enforces both halves — it fails on a `var()` that resolves to nothing
+   and on a literal colour outside the token layer. Run it before you commit CSS.
+2. **A component never reads another component's tokens.** Shared values are primitives or usage
+   tokens, or they are duplicated on purpose.
 3. **Surface is declared with `data-surface="paper | tint | ink | blue"` on an ancestor** — a
-   Section — and never on the control itself. That is what lets a button three components deep
-   get the right treatment without being told where it is.
+   Section — never on the control itself. That is what lets a button three components deep get
+   the right treatment without being told where it is.
 4. **Type is consumed as a composite:** `font: var(--text-h2)` plus
-   `letter-spacing: var(--text-h2-tracking)`. Never restate a size. The composites re-declare
+   `letter-spacing: var(--text-h2-tracking)`. Never restate a size. Title roles re-declare
    themselves at 1023px and 767px, so a rule needs no breakpoint of its own for type.
 5. **Adding a component layer:** copy the shape of `tokens/components/button.css` — geometry in
    `:root`, then one block per surface with deltas only. Name tokens
-   `--{abbrev}-{variant}-{part}-{state}`, register the file in `tokens/index.css`, keep it to
-   the one component.
+   `--{abbrev}-{variant}-{part}-{state}`, register the file in `tokens/index.css`, keep it to the
+   one component.
+
+### Why component tokens live in `tokens/`, not beside the component
+
+Asked and settled. They stay in `tokens/components/*.css` for one decisive reason: **`index.css`
+guarantees cascade order**, and a component layer must come after the primitives and usage tokens
+it reads. Colocating them as `Section.tokens.css` would hand that ordering to the bundler's
+module graph, which is not something you control — and a component layer that loads before the
+usage layer resolves to nothing, silently.
+
+Two supporting reasons: surface remaps are `:root` / `[data-surface]` declarations, which are
+global by nature and not what CSS Modules are for; and the token set is authored and delivered as
+one portable folder, so splitting it means a new delivery can no longer be dropped in.
+
+The cost is that `Section/` does not contain everything about Section. The naming convention
+(`--sec-*` ↔ `Section`) and `tokens:check` cover the gap.
 
 **`src/styles/reset.css` is not a token file and is not optional.** `box-sizing: border-box` is
 required for `Section` to function at all, and zeroed heading margins are required for `Layout`'s
@@ -99,11 +145,6 @@ tokens, applied in `globals.css`.
 bare elements onto the composites. It is a floor, not the answer: a `Heading` component with a
 `size` prop is the right home, because a page routinely needs an h2-level element at h3 scale and
 the element name should not decide the scale.
-
-**Known gap:** the `--sec-*` geometry is flat across viewports — one 32px gutter, one 88px
-vertical air. The layout primitives' gap ramps are flat too. If a responsive ramp is wanted, its
-home is a re-declaration inside the relevant token file under the same `max-width: 1023px` /
-`max-width: 767px` breakpoints the type composites use — never a media query in a component.
 
 ## Every component is a folder
 

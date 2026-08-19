@@ -1,38 +1,19 @@
 /* ══ Component layer — layout ════════════════════════════════════════════════════
-   Tier 2. Layout is the columnar primitive: it owns the two seams between its
-   children and the track widths its content-driven modes reflow at. Nothing here
-   varies by surface — a seam is a distance, and a distance does not change colour —
-   so this file is one :root block rather than one per surface.
+   Tier 3. Track widths for Layout's content-driven modes — the minimum under
+   columns="fit", the actual width under columns="tile".
 
-   Naming: --lay-{part}-{step}. Parts are gap and track.
+   This file holds no distances. Layout's two seams come straight from the gap scale
+   (--gap-block, --gap-gutter, …): a seam between rows is exactly the question that
+   scale answers, and a private --lay-gap-* ramp would be a tenth answer competing
+   with the nine, which is what the scale exists to prevent.
 
-   The gap ramp is a MAGNITUDE scale named by size, not by relationship. Cluster
-   carries the same vocabulary capped at lg, in its own file and pointing at the same
-   primitives — the two are deliberately NOT shared. A wrapping chip row and a page
-   grid answer to different ceilings, and one reading the other's tokens would make
-   changing either unsafe.
+   Track widths are different in kind. They are component GEOMETRY — how wide a card
+   wants to be before it stops being a card — not a distance between two things. A
+   card's comfortable width is not a multiple of the spacing base, and forcing it onto
+   the gap scale would distort both. Same reasoning as --btn-height-md.
+
+   Naming: --lay-track-{step}.
    ═══════════════════════════════════════════════════════════════════════════════ */
-
-/* ── Seams · the gap ramp ──────────────────────────────────────────────────────
-   Eight rungs on the 8px base, 2px-granular only where the scale is. rowGap and
-   colGap draw from this one ramp; neither has a default, so an axis nobody states
-   renders 0.                                                                    */
-:root{
---lay-gap-2xs:var(--space-4);    /*  4  joined */
---lay-gap-xs:var(--space-8);     /*  8  icon ↔ label */
---lay-gap-sm:var(--space-12);    /* 12  chips, button rows */
---lay-gap-md:var(--space-16);    /* 16  fields, rows */
---lay-gap-lg:var(--space-24);    /* 24  the field seam — a card grid, a copy block */
---lay-gap-xl:var(--space-32);    /* 32  between unlike blocks */
---lay-gap-2xl:var(--space-40);   /* 40  sub-regions */
---lay-gap-3xl:var(--space-48);   /* 48  the large sub-region beat */
-}
-
-/* ── Track widths · the content-driven modes ───────────────────────────────────
-   The minimum under columns="fit", the actual width under columns="tile". Literals
-   because they are component geometry: a card's comfortable width is not a multiple
-   of the spacing base and pretending otherwise would distort the scale. Same
-   reasoning as --btn-height-md.                                                 */
 :root{
 --lay-track-xs:192px;   /* small tiles, logo cells */
 --lay-track-sm:256px;   /* compact cards */

@@ -42,14 +42,14 @@
   padding-block: var(--sec-padding-y);
 }
 
-/* Vertical air — the two variants the token layer declares. There is no arbitrary value: a
-   band is standard, tight or loose, or it is flush. */
+/* Vertical air — the two variants the token layer declares, both gap-scale steps. There is no
+   arbitrary value: a band is standard (96), tight (64), open (128), or flush (0). */
 .tight {
   padding-block: var(--sec-padding-y-tight);
 }
 
-.loose {
-  padding-block: var(--sec-padding-y-loose);
+.open {
+  padding-block: var(--sec-padding-y-open);
 }
 
 .flush {

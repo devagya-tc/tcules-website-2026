@@ -13,8 +13,11 @@ import styles from './Section.module.css';
  */
 export type SectionSurface = 'paper' | 'tint' | 'ink' | 'blue';
 
-/** Vertical air. Omit for the standard band; the two variants are the token layer's own. */
-export type SectionDensity = 'tight' | 'loose';
+/**
+ * Vertical air. Omit for the standard band (--sec-padding-y, 96). The two variants are the token
+ * layer's own, and there is no arbitrary value: a band is standard, tight, open, or flush.
+ */
+export type SectionDensity = 'tight' | 'open';
 
 export type SectionProps = {
   /** Element to render. Defaults to a semantic <section>; use "div"/"header"/"footer" as needed. */
@@ -28,7 +31,7 @@ export type SectionProps = {
    * inheriting dark roles.
    */
   surface?: SectionSurface;
-  /** Vertical air — `tight` (64) or `loose` (120) against the standard 88. */
+  /** Vertical air — `tight` (64) or `open` (128) against the standard 96. */
   density?: SectionDensity;
   /**
    * Drop the vertical air to zero, for a composition that supplies its own — a full-bleed

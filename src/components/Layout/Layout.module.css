@@ -19,12 +19,13 @@
    a silent 24 looks plausible and hides an omission; a collapsed seam is wrong on sight.
 
    ── Tokens ────────────────────────────────────────────────────────────────────────────────
-   Every rung reads --lay-gap-*, and every track width --lay-track-*, both declared in
-   tokens/components/layout.css. No literal distance appears in this file: changing the ramp
-   means editing the token layer, and it moves every Layout in the site at once.
+   Both seams read the gap scale's --gap-* usage tokens directly — that scale IS the answer to
+   "how far apart are these two things", and a private ramp here would be a tenth answer
+   competing with the nine. Track widths read --lay-track-* from tokens/components/layout.css,
+   because a card's comfortable width is geometry, not a distance between two things.
 
-   Cluster carries the same rung NAMES from its own --clu-gap-* layer, capped at lg. The two do
-   not share tokens by design — see the note in either token file. */
+   No literal distance appears in this file. Cluster reads the same scale, capped at block: a
+   wrapping chip row has no use for a 96px section beat. */
 .layout {
   display: grid;
   /* Both axes zeroed HERE on every .layout, because --layout-*-gap custom properties INHERIT: a
@@ -39,27 +40,29 @@
   justify-items: var(--layout-justify-items, stretch);
 }
 
-/* rowGap — the block-axis seam, between rows. Rung names match the tokens they will resolve to. */
-.rowgap-none { --layout-row-gap: 0; }                          /*  0   flush, on purpose — rows share an edge */
-.rowgap-2xs  { --layout-row-gap: var(--lay-gap-2xs); }    /*  4   joined */
-.rowgap-xs   { --layout-row-gap: var(--lay-gap-xs); }      /*  8   icon ↔ label */
-.rowgap-sm   { --layout-row-gap: var(--lay-gap-sm); }     /* 12   chips, button rows */
-.rowgap-md   { --layout-row-gap: var(--lay-gap-md); }        /* 16   fields, rows */
-.rowgap-lg   { --layout-row-gap: var(--lay-gap-lg); }      /* 24   the field seam — a card grid, a copy block */
-.rowgap-xl   { --layout-row-gap: var(--lay-gap-xl); }        /* 32   between unlike blocks */
-.rowgap-2xl  { --layout-row-gap: var(--lay-gap-2xl); }     /* 40   sub-regions */
-.rowgap-3xl  { --layout-row-gap: var(--lay-gap-3xl); }       /* 48   large sub-region beat */
+/* rowGap — the block-axis seam, between rows. Every step is a --gap-* usage token. */
+.rowgap-none { --layout-row-gap: 0; }                             /*  0   flush, on purpose — rows share an edge */
+.rowgap-inline        { --layout-row-gap: var(--gap-inline); }    /*   4  inside a key and its value */
+.rowgap-tight         { --layout-row-gap: var(--gap-tight); }     /*   8  icon to label, chip padding */
+.rowgap-text          { --layout-row-gap: var(--gap-text); }      /*  16  paragraph to paragraph */
+.rowgap-block         { --layout-row-gap: var(--gap-block); }     /*  24  head to body inside a block — the most used step */
+.rowgap-gutter        { --layout-row-gap: var(--gap-gutter); }    /*  32  container gutter, cards in a set */
+.rowgap-stack         { --layout-row-gap: var(--gap-stack); }     /*  48  block to block inside a section */
+.rowgap-column        { --layout-row-gap: var(--gap-column); }    /*  64  column gutter where two halves read as separate */
+.rowgap-section       { --layout-row-gap: var(--gap-section); }   /*  96  section padding, tight */
+.rowgap-section-open  { --layout-row-gap: var(--gap-section-open); }/* 128  section padding, open */
 
-/* colGap — the inline-axis seam, between columns. Same ramp; no tracks, nothing to act on. */
+/* colGap — the inline-axis seam, between columns. Same scale; no tracks, nothing to act on. */
 .colgap-none { --layout-col-gap: 0; }
-.colgap-2xs  { --layout-col-gap: var(--lay-gap-2xs); }
-.colgap-xs   { --layout-col-gap: var(--lay-gap-xs); }
-.colgap-sm   { --layout-col-gap: var(--lay-gap-sm); }
-.colgap-md   { --layout-col-gap: var(--lay-gap-md); }
-.colgap-lg   { --layout-col-gap: var(--lay-gap-lg); }
-.colgap-xl   { --layout-col-gap: var(--lay-gap-xl); }
-.colgap-2xl  { --layout-col-gap: var(--lay-gap-2xl); }
-.colgap-3xl  { --layout-col-gap: var(--lay-gap-3xl); }
+.colgap-inline        { --layout-col-gap: var(--gap-inline); }
+.colgap-tight         { --layout-col-gap: var(--gap-tight); }
+.colgap-text          { --layout-col-gap: var(--gap-text); }
+.colgap-block         { --layout-col-gap: var(--gap-block); }
+.colgap-gutter        { --layout-col-gap: var(--gap-gutter); }
+.colgap-stack         { --layout-col-gap: var(--gap-stack); }
+.colgap-column        { --layout-col-gap: var(--gap-column); }
+.colgap-section       { --layout-col-gap: var(--gap-section); }
+.colgap-section-open  { --layout-col-gap: var(--gap-section-open); }
 
 /* minTrack — track width for the content-driven modes ("fit" floor / "tile" actual). Component
    GEOMETRY, not spacing rhythm, so these are local literals and stay local literals even after

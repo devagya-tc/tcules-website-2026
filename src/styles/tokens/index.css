@@ -1,53 +1,61 @@
 /* ══ Tcules tokens — entry point ══════════════════════════════════════════════════
    Import this one file. Order matters: fonts, then primitives, then every
-   component layer. A component layer may only read primitives, so it must come
-   after them and may come in any order among its peers.
+   component layer. A component layer reads primitives and usage tokens, so it
+   must come after them, and may come in any order among its peers.
 
-   ── Two tiers, and the rule that keeps them apart ───────────────────────────────
-   1. PRIMITIVES  tokens/primitives.css
-      Facts. --color-brandeis-500, --space-24, --font-size-43. Named for the value,
-      never for the use. Nothing else in the system may hold a raw value.
+   ── The layers ─────────────────────────────────────────────────────────────────
+   1. PRIMITIVES        ramps and ladders. --color-brandeis-500, --space-24,
+                        --font-size-h1. Declared once, consumed through a usage
+                        token wherever one exists.
 
-   2. COMPONENTS  tokens/components/*.css
-      Meaning. --btn-solid-primary-bg, --sec-ground. Each component decides what a
-      primitive means for it, and re-declares that decision once per surface. A
-      component token points at a primitive or at another token in the same file —
-      never at another component's token.
+   2. USAGE  (space, type)   --gap-block, --text-h1. One curated answer per
+                        question: how far apart is a head from its body, what does
+                        an h1 look like. Nine gap steps, seventeen text roles.
+                        These are surface-independent — a 24px gap is 24px on ink
+                        — so they are shared, and sharing them is what stops nine
+                        components inventing nine spacings.
 
-   There is no semantic tier by design. The cost is that surface-awareness is
-   restated per component; the benefit is that a component is readable in one file
-   and changing one never moves another.
+   3. COMPONENTS        --btn-solid-primary-bg, --sec-ground. What a value MEANS
+                        for one component, re-declared once per surface.
+
+   Colour deliberately has no usage layer. What a colour means depends entirely on
+   the surface it sits on — brandeis-50 is a hover tint on paper and invisible on a
+   tint, blue as ink fails on ink and lifts to 200 — so a shared "--color-bg-hover"
+   would be wrong three times out of four. Components own colour, per surface. That
+   is the one asymmetry in this system and it is deliberate.
 
    ── Rules ──────────────────────────────────────────────────────────────────────
    · A stylesheet outside tokens/ never writes a hex, a px or a font stack. If the
      value you need has no token, add the token.
-   · A component never reads another component's tokens. Shared values are
-     primitives, or they are duplicated on purpose.
-   · Surface is declared with data-surface="paper | tint | ink | blue" on an
-     ancestor — a section, a panel, a footer — and never on the control itself.
-     Paper needs no attribute; it is the :root default.
-   · Interaction states live in the component layer. hover and focus share the
-     -hover value, pressed and active share -pressed, and a component must not
-     make hover and pressed the same value.
+   · Layout distance comes from the gap scale, never from --space-*. A component
+     may reach the space ramp for an OPTICAL correction — a label's side-bearing
+     margin, a ring offset — and must say so in a comment on the token.
    · Type is consumed as a composite: font:var(--text-h1) plus
-     letter-spacing:var(--text-h1-tracking). Never restate a size. The composite
-     re-declares itself at 1023px and 767px, so a rule needs no breakpoint of its
-     own for type.
+     letter-spacing:var(--text-h1-tracking). Never restate a size. Title roles
+     re-declare themselves at 1023px and 767px, so a rule needs no breakpoint of
+     its own for type.
+   · A component never reads another component's tokens. Shared values are
+     primitives or usage tokens, or they are duplicated on purpose.
+   · Surface is declared with data-surface="paper | tint | ink | blue" on an
+     ancestor — a section, a panel, a footer — never on the control itself. Paper
+     needs no attribute; it is the :root default.
+   · Interaction states live in the component layer. hover and focus share the
+     -hover value, pressed and active share -pressed, and hover and pressed must
+     never resolve to the same value.
    · A genuinely one-off value — a logotype, a diagram label — stays inline with a
      comment. It does not get a name that suggests it is reusable.
 
    ── Adding a component layer ───────────────────────────────────────────────────
    Copy the shape of tokens/components/button.css: geometry in :root, then one
-   block per surface, deltas only. Name tokens
-   --{abbrev}-{variant}-{part}-{state}, add the file to the imports below, and
-   keep the file to the one component.
+   block per surface carrying deltas only. Name tokens
+   --{abbrev}-{variant}-{part}-{state}, add the file to the imports below, and keep
+   the file to the one component.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 @import "fonts.css";
 @import "primitives.css";
 @import "components/section.css";
 @import "components/layout.css";
-@import "components/cluster.css";
 @import "components/button.css";
 
 /* Newsreader is a variable optical-size face; without this it renders at the

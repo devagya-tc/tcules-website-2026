@@ -5,15 +5,37 @@ import { cx } from '@/lib/cx';
 import styles from './Layout.module.css';
 
 /**
- * The gap ramp — a MAGNITUDE scale, named by size. Cluster spells its rungs the same way but
- * stops at `lg`: a wrapping chip row has no use for a 96px structural beat, so the two ramps
- * share one vocabulary and differ only by ceiling.
+ * The gap scale — the token system's nine steps, named for what they separate. Each resolves to
+ * a `--gap-*` usage token; Layout declares no distances of its own.
  *
- * Named by size rather than by relationship (`inline`/`content`/`group`) on purpose: a rung
- * called `cluster` would mean something different from the `Cluster` component, and in practice
- * two rungs cover the large majority of call sites, so the semantics do not earn their keep.
+ *   inline        4   inside a key and its value
+ *   tight         8   icon to label, chip padding, a stat and its unit
+ *   text         16   paragraph to paragraph, cell padding on a dense table
+ *   block        24   head to body inside a block — the most used step
+ *   gutter       32   container gutter, and the gap between cards in a set
+ *   stack        48   block to block inside a section
+ *   column       64   column gutter where two halves must read as separate
+ *   section      96   section padding, tight
+ *   section-open 128  section padding, open
+ *
+ * A step is chosen by what it separates, never by how it looks at one width — the scale does not
+ * shift responsively, the layout does. A distance that is not one of these nine is a mistake or
+ * a new step; do not split the difference.
+ *
+ * `none` is not a step. It is the explicit statement that two rows share an edge, which is a
+ * layout decision rather than a distance.
  */
-type Gap = 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+type Gap =
+  | 'none'
+  | 'inline'
+  | 'tight'
+  | 'text'
+  | 'block'
+  | 'gutter'
+  | 'stack'
+  | 'column'
+  | 'section'
+  | 'section-open';
 
 /** Block-axis placement of items within their row, and inline-axis placement within their track. */
 type Place = 'stretch' | 'start' | 'center' | 'end';
@@ -54,13 +76,13 @@ export type LayoutProps = {
   /** Element to render (default "div"; use "ul"/"ol"/"section" etc. as needed). */
   as?: ElementType;
   /**
-   * Block-axis seam — the distance between ROWS. A rung on the ramp; NO default, so an axis
-   * nobody sets renders 0. That is deliberate: a silent 24 looks plausible and hides the
+   * Block-axis seam — the distance between ROWS. A step on the gap scale; NO default, so an
+   * axis nobody sets renders 0. That is deliberate: a silent 24 looks plausible and hides the
    * omission, while a collapsed seam is wrong on sight. A vertical stack needs only this one.
    */
   rowGap?: Gap;
   /**
-   * Inline-axis seam — the distance between COLUMNS. Same ramp, same no-default rule. Nothing
+   * Inline-axis seam — the distance between COLUMNS. Same scale, same no-default rule. Nothing
    * to act on without `columns`, so a single-track Layout leaves it off.
    */
   colGap?: Gap;

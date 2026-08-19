@@ -17,8 +17,8 @@ export default function SectionSpecimenPage() {
   return (
     <>
       <Section>
-        <Layout rowGap="2xl">
-          <Layout rowGap="sm">
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
             <h1>Section</h1>
             <p>
               The full-width band. Insets its content to the one shared content column, applies
@@ -35,8 +35,8 @@ export default function SectionSpecimenPage() {
           </Layout>
 
           <Specimen
-            title="Vertical air — --sec-padding-y, 88 flat"
-            note="One value at every width. The token layer declares tight (64) and loose (120) beside it, reachable via the density prop, and flush zeroes it. There is no arbitrary value: a band is one of those four."
+            title="Vertical air — --sec-padding-y, 96 flat"
+            note="One value at every width, and a gap-scale step: --gap-section. The token layer declares tight (64, --gap-column) and open (128, --gap-section-open) beside it, reachable via the density prop, and flush zeroes it. There is no arbitrary value: a band is one of those four."
           >
             <div className={s.ruler}>content sits inside the vertical air</div>
           </Specimen>
@@ -51,7 +51,7 @@ export default function SectionSpecimenPage() {
       </Section>
 
       <Section className={s.bandOutline}>
-        <Layout rowGap="md">
+        <Layout rowGap="text">
           <p className={s.specTitle}>Two stacked Sections — the band boundary</p>
           <p className={s.specNote}>
             The dashed outline is chrome, not a border the primitive draws. Bands are separated by
@@ -64,14 +64,14 @@ export default function SectionSpecimenPage() {
       </Section>
 
       <Section className={s.bandOutline}>
-        <Layout rowGap="md">
+        <Layout rowGap="text">
           <p className={s.specTitle}>The second band</p>
           <Box>band B</Box>
         </Layout>
       </Section>
 
       <Section flush className={s.bandOutline}>
-        <Layout rowGap="md">
+        <Layout rowGap="text">
           <p className={s.specTitle}>flush — vertical rhythm zeroed</p>
           <p className={s.specNote}>
             For a composition that supplies its own vertical space; a full-bleed immersive hero is
@@ -84,8 +84,8 @@ export default function SectionSpecimenPage() {
 
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
         <Section key={surface} surface={surface}>
-          <Layout rowGap="lg">
-            <Layout rowGap="2xs">
+          <Layout rowGap="block">
+            <Layout rowGap="tight">
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>
               <p className={s.specNote}>
                 {SURFACE_NOTES[surface]} Every --sec-* role is remapped in the token layer, so the
@@ -94,7 +94,7 @@ export default function SectionSpecimenPage() {
               </p>
             </Layout>
             <h3>A heading on {surface}</h3>
-            <Layout columns={3} colGap="lg" rowGap="lg">
+            <Layout columns={3} colGap="block" rowGap="block">
               <Box>ink-muted on this ground</Box>
               <Box accent>accent</Box>
               <Box>hairline</Box>
@@ -104,21 +104,21 @@ export default function SectionSpecimenPage() {
       ))}
 
       <Section density="tight" className={s.bandOutline}>
-        <Layout rowGap="md">
-          <p className={s.specTitle}>density=&quot;tight&quot; — 64 against the standard 88</p>
+        <Layout rowGap="text">
+          <p className={s.specTitle}>density=&quot;tight&quot; — 64 against the standard 96</p>
           <Box>tight band</Box>
         </Layout>
       </Section>
 
-      <Section density="loose" className={s.bandOutline}>
-        <Layout rowGap="md">
-          <p className={s.specTitle}>density=&quot;loose&quot; — 120</p>
-          <Box>loose band</Box>
+      <Section density="open" className={s.bandOutline}>
+        <Layout rowGap="text">
+          <p className={s.specTitle}>density=&quot;open&quot; — 128</p>
+          <Box>open band</Box>
         </Layout>
       </Section>
 
       <Section>
-        <Layout rowGap="md">
+        <Layout rowGap="text">
           <p className={s.specTitle}>as=&quot;div&quot; — the element is a prop</p>
           <p className={s.specNote}>
             Defaults to a semantic &lt;section&gt;. Use div / header / footer where the semantics

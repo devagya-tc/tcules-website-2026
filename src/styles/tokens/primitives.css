@@ -1,18 +1,26 @@
 /* ══ Tcules — primitives ═════════════════════════════════════════════════════════
-   Tier 1 of two. Every value in the system is declared here exactly once, and
-   nothing here refers to anything else except within its own category.
+   Tier 1. Every value in the system is declared here exactly once. Nothing here
+   refers to anything outside its own category, and nothing here is consumed by a
+   component directly except where a comment says so.
 
-   Naming: --{category}-{value}. The value is the fact, not the intention:
-   --color-brandeis-500, --space-24, --font-size-43. A primitive never says where
-   it is used, so it never lies when usage changes.
+   Two naming schemes, and the reason they differ:
+   · A RAMP is named for its value — --color-brandeis-500, --space-24. The name is
+     the fact. Consumers reach these through a usage token, not directly.
+   · A LADDER is named for its role — --font-size-h1, --font-size-body. The type
+     scale was cut per role (67 · 54 · 43 · 34 · 28 · 22 for Newsreader), so the
+     role IS the value's identity; --font-size-54 would be a number in search of
+     a meaning, and picking one by eye is how a scale drifts.
 
-   There is no semantic tier. Components declare what a value MEANS, in their own
-   token layer, and re-declare it per surface. See tokens/index.css for the rule.
+   Line-height and letter-spacing stay ratio- and role-named respectively: a ratio
+   is genuinely shared across roles (1.6 carries body and code), and tracking is an
+   optical correction, not a step.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-/* ── Colour ────────────────────────────────────────────────────────────────────
-   Three ramps and two page grounds. Every neutral is warm-shifted (#71706A, not
-   #717171); a cool grey dropped in reads as foreign. 50 is the lightest step.  */
+/* ── Colour · ramps ────────────────────────────────────────────────────────────
+   Every neutral is warm-shifted (#71706A, not #717171); a cool grey dropped in
+   reads as foreign. 50 is the lightest step. Colour has no shared usage layer —
+   what a colour means depends on the surface, so components own that. See
+   tokens/index.css.                                                            */
 :root{
 --color-neutral-50:#F5F5F5;--color-neutral-100:#EBEBEA;--color-neutral-200:#DEDEDE;--color-neutral-300:#CFCFCE;--color-neutral-400:#B2B1AE;--color-neutral-500:#91908D;--color-neutral-600:#71706A;--color-neutral-700:#504F49;--color-neutral-800:#383733;--color-neutral-900:#292824;--color-neutral-950:#1B1B18;
 /* Brandeis — the one interaction colour on the web. 500 is the brand value. */
@@ -26,80 +34,159 @@
 --color-success-500:#3FA84B;
 }
 
-/* ── Type · primitives ────────────────────────────────────────────────────────
-   Sizes are px-mapped. Titles run a 1.25 ratio from 22px, text a 1.125 from
-   16px, chrome a 1.125 from 13px. Missing steps are derived, not invented.    */
+/* ── Space · ramp ──────────────────────────────────────────────────────────────
+   8px base: every multiple of 8 to 96, then 128 and 160 for section rhythm.
+   Below 8 the ramp is 2px-granular for optical corrections — a 4px label margin,
+   a 2px ring offset, a 6px chip inset. --space-1 is for hairline nudges and is
+   the only odd value.
+
+   DO NOT consume this ramp for layout. Reach for the gap scale below; it exists
+   so that "the space between a head and its body" has one answer everywhere
+   instead of nine plausible ones. Optical corrections inside a component are the
+   documented exception.                                                        */
+:root{
+--space-0:0px;--space-1:1px;--space-2:2px;--space-4:4px;--space-6:6px;--space-8:8px;--space-10:10px;--space-12:12px;--space-14:14px;--space-16:16px;--space-20:20px;--space-24:24px;--space-28:28px;--space-32:32px;--space-40:40px;--space-48:48px;--space-56:56px;--space-64:64px;--space-72:72px;--space-80:80px;--space-88:88px;--space-96:96px;--space-128:128px;--space-160:160px;
+}
+
+/* ── Space · gap scale ─────────────────────────────────────────────────────────
+   The usage layer for distance. Nine steps, each with one job. It governs gap,
+   padding and margin alike — the token names the distance, not the property.
+
+   step               value  where it lands
+   --gap-inline         4px  Inside a key and its value. The only sub-8 step in use.
+   --gap-tight          8px  Icon to label, chip padding, a stat and its unit.
+   --gap-text          16px  Paragraph to paragraph, cell padding on a dense table.
+   --gap-block         24px  Head to body inside a block. The most used step.
+   --gap-gutter        32px  Container gutter, and the gap between cards in a set.
+   --gap-stack         48px  Block to block inside a section.
+   --gap-column        64px  Column gutter where two halves must read as separate.
+   --gap-section       96px  Section padding, tight.
+   --gap-section-open 128px  Section padding, open.
+
+   Two rules. A layout value that is not one of these nine is a mistake or a new
+   step — decide which, do not split the difference. And a step is chosen by what
+   it separates, never by how it looks at one width: the scale does not shift
+   responsively, the layout does.                                               */
+:root{
+--gap-inline:var(--space-4);
+--gap-tight:var(--space-8);
+--gap-text:var(--space-16);
+--gap-block:var(--space-24);
+--gap-gutter:var(--space-32);
+--gap-stack:var(--space-48);
+--gap-column:var(--space-64);
+--gap-section:var(--space-96);
+--gap-section-open:var(--space-128);
+}
+
+/* ── Type · families ──────────────────────────────────────────────────────────
+   Three faces, each with a fixed job, and no two vertically adjacent elements
+   share one: the canonical stack is mono eyebrow → serif title → sans body.    */
 :root{
 --font-family-display:"Newsreader",Georgia,"Times New Roman",serif;
 --font-family-sans:"Public Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
 --font-family-mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
---font-size-67:67px;--font-size-54:54px;--font-size-43:43px;--font-size-40:40px;--font-size-34:34px;--font-size-32:32px;--font-size-28:28px;--font-size-25:25px;--font-size-22:22px;--font-size-20:20px;--font-size-18:18px;--font-size-16:16px;--font-size-14:14px;--font-size-13:13px;--font-size-12:12px;--font-size-11:11px;
+}
+
+/* ── Type · size ladder ───────────────────────────────────────────────────────
+   Titles run 1.25 from 22px, text 1.125 from 16px, chrome 1.125 from 13px. Named
+   by role because the ladder was cut per role. Where two roles share a value —
+   h4 and quote at 28px, ui-lg and body-sm at 14px — the value is stated twice on
+   purpose: they are free to move independently.                                */
+:root{
+--font-size-display:67px;
+--font-size-h1:54px;
+--font-size-h2:43px;
+--font-size-h3:34px;
+--font-size-h4:28px;
+--font-size-h5:22px;
+--font-size-quote:28px;
+--font-size-lead:20px;
+--font-size-body-lg:18px;
+--font-size-body:16px;
+--font-size-body-sm:14px;
+--font-size-caption:13px;
+--font-size-ui:13px;
+--font-size-ui-sm:12px;
+--font-size-ui-lg:14px;
+--font-size-eyebrow:12px;
+--font-size-micro:11px;
+--font-size-stat:40px;
+--font-size-code:14px;
+/* Breakpoint cuts. Titles step down; text and chrome hold at every width. */
+--font-size-display-t:54px;--font-size-display-m:43px;
+--font-size-h1-t:43px;--font-size-h1-m:34px;
+--font-size-h2-t:34px;--font-size-h2-m:28px;
+--font-size-h3-t:28px;--font-size-h3-m:25px;
+--font-size-h4-t:25px;--font-size-h4-m:22px;
+--font-size-h5-m:20px;
+--font-size-quote-m:22px;
+--font-size-lead-m:18px;
+--font-size-stat-m:32px;
+}
+
+/* ── Type · weight, line height, tracking ─────────────────────────────────────
+   Newsreader runs 400 above 43px and 500 below it; the face gains weight as it
+   grows, so the token does not. Ratios are named as ratio × 100.               */
+:root{
 --font-weight-regular:400;--font-weight-medium:500;--font-weight-semibold:600;
-/* Line height, named as the ratio × 100. Tight for titles, open for text. */
 --line-height-100:1;--line-height-104:1.04;--line-height-106:1.06;--line-height-108:1.08;--line-height-110:1.1;--line-height-112:1.12;--line-height-114:1.14;--line-height-116:1.16;--line-height-118:1.18;--line-height-120:1.2;--line-height-122:1.22;--line-height-126:1.26;--line-height-128:1.28;--line-height-130:1.3;--line-height-135:1.35;--line-height-140:1.4;--line-height-145:1.45;--line-height-150:1.5;--line-height-155:1.55;--line-height-160:1.6;
-/* Tracking is role-named: it corrects an optical error, it is not a ramp. */
---letter-spacing-display:-0.02em;--letter-spacing-title:-0.015em;--letter-spacing-title-tight:-0.01em;--letter-spacing-none:0em;--letter-spacing-ui:0.08em;--letter-spacing-micro:0.1em;--letter-spacing-eyebrow:0.12em;
+--letter-spacing-display:-0.02em;--letter-spacing-h1:-0.018em;--letter-spacing-title:-0.015em;--letter-spacing-title-tight:-0.01em;--letter-spacing-title-fine:-0.005em;--letter-spacing-none:0em;--letter-spacing-ui:0.08em;--letter-spacing-micro:0.1em;--letter-spacing-eyebrow:0.12em;
 /* Measure — the only two line-length limits the system enforces. */
 --measure-title:22ch;--measure-body:68ch;
 }
 
-/* ── Type · composite roles ───────────────────────────────────────────────────
-   One declaration per element. Tracking is not part of the font shorthand, so
-   each role that needs it ships a -tracking companion beside it. These four
-   tokens are re-declared under the breakpoints below: a consumer writes
-   font:var(--text-h1) once and never branches on width.                       */
-:root{
---text-display:var(--font-weight-regular) var(--font-size-67)/var(--line-height-104) var(--font-family-display);--text-display-tracking:var(--letter-spacing-display);
---text-h1:var(--font-weight-regular) var(--font-size-54)/var(--line-height-106) var(--font-family-display);--text-h1-tracking:-0.018em;
---text-h2:var(--font-weight-medium) var(--font-size-43)/var(--line-height-110) var(--font-family-display);--text-h2-tracking:var(--letter-spacing-title);
---text-h3:var(--font-weight-medium) var(--font-size-34)/var(--line-height-116) var(--font-family-display);--text-h3-tracking:var(--letter-spacing-title-tight);
---text-h4:var(--font-weight-medium) var(--font-size-28)/var(--line-height-120) var(--font-family-display);--text-h4-tracking:-0.005em;
---text-h5:var(--font-weight-medium) var(--font-size-22)/var(--line-height-128) var(--font-family-display);--text-h5-tracking:var(--letter-spacing-none);
---text-quote:var(--font-weight-regular) var(--font-size-28)/var(--line-height-135) var(--font-family-display);
---text-lead:var(--font-weight-regular) var(--font-size-20)/var(--line-height-150) var(--font-family-sans);
---text-body-lg:var(--font-weight-regular) var(--font-size-18)/var(--line-height-155) var(--font-family-sans);
---text-body:var(--font-weight-regular) var(--font-size-16)/var(--line-height-160) var(--font-family-sans);
---text-body-sm:var(--font-weight-regular) var(--font-size-14)/var(--line-height-155) var(--font-family-sans);
---text-caption:var(--font-weight-regular) var(--font-size-13)/var(--line-height-145) var(--font-family-sans);
---text-ui:var(--font-weight-semibold) var(--font-size-13)/var(--line-height-120) var(--font-family-mono);--text-ui-tracking:var(--letter-spacing-ui);
---text-eyebrow:var(--font-weight-semibold) var(--font-size-12)/var(--line-height-120) var(--font-family-mono);--text-eyebrow-tracking:var(--letter-spacing-eyebrow);
---text-micro:var(--font-weight-semibold) var(--font-size-11)/var(--line-height-120) var(--font-family-mono);--text-micro-tracking:var(--letter-spacing-micro);
---text-stat:var(--font-weight-medium) var(--font-size-40)/var(--line-height-100) var(--font-family-mono);--text-stat-tracking:var(--letter-spacing-title-tight);
---text-code:var(--font-weight-regular) var(--font-size-14)/var(--line-height-160) var(--font-family-mono);
-}
-/* Tablet — 768 to 1023. Titles step down one; text and chrome hold. */
-@media (max-width:1023px){:root{
---text-display:var(--font-weight-regular) var(--font-size-54)/var(--line-height-106) var(--font-family-display);
---text-h1:var(--font-weight-regular) var(--font-size-43)/var(--line-height-108) var(--font-family-display);
---text-h2:var(--font-weight-medium) var(--font-size-34)/var(--line-height-114) var(--font-family-display);
---text-h3:var(--font-weight-medium) var(--font-size-28)/var(--line-height-120) var(--font-family-display);
---text-h4:var(--font-weight-medium) var(--font-size-25)/var(--line-height-122) var(--font-family-display);
-}}
-/* Mobile — below 768. Titles step down again; lead and stat follow. */
-@media (max-width:767px){:root{
---text-display:var(--font-weight-regular) var(--font-size-43)/var(--line-height-108) var(--font-family-display);
---text-h1:var(--font-weight-regular) var(--font-size-34)/var(--line-height-112) var(--font-family-display);
---text-h2:var(--font-weight-medium) var(--font-size-28)/var(--line-height-118) var(--font-family-display);
---text-h3:var(--font-weight-medium) var(--font-size-25)/var(--line-height-122) var(--font-family-display);
---text-h4:var(--font-weight-medium) var(--font-size-22)/var(--line-height-126) var(--font-family-display);
---text-h5:var(--font-weight-medium) var(--font-size-20)/var(--line-height-130) var(--font-family-display);
---text-quote:var(--font-weight-regular) var(--font-size-22)/var(--line-height-140) var(--font-family-display);
---text-lead:var(--font-weight-regular) var(--font-size-18)/var(--line-height-155) var(--font-family-sans);
---text-stat:var(--font-weight-medium) var(--font-size-32)/var(--line-height-100) var(--font-family-mono);
-}}
+/* ── Type · usage layer ───────────────────────────────────────────────────────
+   One declaration per element: font:var(--text-h1) plus its tracking companion,
+   which cannot live in the font shorthand. These are what a component consumes;
+   the ladder above exists so these can be composed, not so a rule can pick a
+   size out of it.
 
-/* ── Space ────────────────────────────────────────────────────────────────────
-   8px base. Every multiple of 8 up to 96, then 120 and 160 for section rhythm.
-   Below 8 the scale is 2px-granular for optical corrections — a 4px label
-   margin, a 2px ring offset, a 6px chip inset. --space-1 exists for hairline
-   nudges and is the only odd value; if you reach for it twice, use 2.        */
+   The title roles re-declare themselves at 1023px and 767px, so a rule needs no
+   breakpoint of its own for type. Body and chrome hold at every width.         */
 :root{
---space-0:0px;--space-1:1px;--space-2:2px;--space-4:4px;--space-6:6px;--space-8:8px;--space-10:10px;--space-12:12px;--space-14:14px;--space-16:16px;--space-20:20px;--space-24:24px;--space-28:28px;--space-32:32px;--space-40:40px;--space-48:48px;--space-56:56px;--space-64:64px;--space-72:72px;--space-80:80px;--space-88:88px;--space-96:96px;--space-120:120px;--space-160:160px;
+--text-display:var(--font-weight-regular) var(--font-size-display)/var(--line-height-104) var(--font-family-display);--text-display-tracking:var(--letter-spacing-display);
+--text-h1:var(--font-weight-regular) var(--font-size-h1)/var(--line-height-106) var(--font-family-display);--text-h1-tracking:var(--letter-spacing-h1);
+--text-h2:var(--font-weight-medium) var(--font-size-h2)/var(--line-height-110) var(--font-family-display);--text-h2-tracking:var(--letter-spacing-title);
+--text-h3:var(--font-weight-medium) var(--font-size-h3)/var(--line-height-116) var(--font-family-display);--text-h3-tracking:var(--letter-spacing-title-tight);
+--text-h4:var(--font-weight-medium) var(--font-size-h4)/var(--line-height-120) var(--font-family-display);--text-h4-tracking:var(--letter-spacing-title-fine);
+--text-h5:var(--font-weight-medium) var(--font-size-h5)/var(--line-height-128) var(--font-family-display);--text-h5-tracking:var(--letter-spacing-none);
+--text-quote:var(--font-weight-regular) var(--font-size-quote)/var(--line-height-135) var(--font-family-display);
+--text-lead:var(--font-weight-regular) var(--font-size-lead)/var(--line-height-150) var(--font-family-sans);
+--text-body-lg:var(--font-weight-regular) var(--font-size-body-lg)/var(--line-height-155) var(--font-family-sans);
+--text-body:var(--font-weight-regular) var(--font-size-body)/var(--line-height-160) var(--font-family-sans);
+--text-body-sm:var(--font-weight-regular) var(--font-size-body-sm)/var(--line-height-155) var(--font-family-sans);
+--text-caption:var(--font-weight-regular) var(--font-size-caption)/var(--line-height-145) var(--font-family-sans);
+--text-ui:var(--font-weight-semibold) var(--font-size-ui)/var(--line-height-120) var(--font-family-mono);--text-ui-tracking:var(--letter-spacing-ui);
+--text-eyebrow:var(--font-weight-semibold) var(--font-size-eyebrow)/var(--line-height-120) var(--font-family-mono);--text-eyebrow-tracking:var(--letter-spacing-eyebrow);
+--text-micro:var(--font-weight-semibold) var(--font-size-micro)/var(--line-height-120) var(--font-family-mono);--text-micro-tracking:var(--letter-spacing-micro);
+--text-stat:var(--font-weight-medium) var(--font-size-stat)/var(--line-height-100) var(--font-family-mono);--text-stat-tracking:var(--letter-spacing-title-tight);
+--text-code:var(--font-weight-regular) var(--font-size-code)/var(--line-height-160) var(--font-family-mono);
 }
+/* Tablet — 768 to 1023. */
+@media (max-width:1023px){:root{
+--text-display:var(--font-weight-regular) var(--font-size-display-t)/var(--line-height-106) var(--font-family-display);
+--text-h1:var(--font-weight-regular) var(--font-size-h1-t)/var(--line-height-108) var(--font-family-display);
+--text-h2:var(--font-weight-medium) var(--font-size-h2-t)/var(--line-height-114) var(--font-family-display);
+--text-h3:var(--font-weight-medium) var(--font-size-h3-t)/var(--line-height-120) var(--font-family-display);
+--text-h4:var(--font-weight-medium) var(--font-size-h4-t)/var(--line-height-122) var(--font-family-display);
+}}
+/* Mobile — below 768. */
+@media (max-width:767px){:root{
+--text-display:var(--font-weight-regular) var(--font-size-display-m)/var(--line-height-108) var(--font-family-display);
+--text-h1:var(--font-weight-regular) var(--font-size-h1-m)/var(--line-height-112) var(--font-family-display);
+--text-h2:var(--font-weight-medium) var(--font-size-h2-m)/var(--line-height-118) var(--font-family-display);
+--text-h3:var(--font-weight-medium) var(--font-size-h3-m)/var(--line-height-122) var(--font-family-display);
+--text-h4:var(--font-weight-medium) var(--font-size-h4-m)/var(--line-height-126) var(--font-family-display);
+--text-h5:var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-130) var(--font-family-display);
+--text-quote:var(--font-weight-regular) var(--font-size-quote-m)/var(--line-height-140) var(--font-family-display);
+--text-lead:var(--font-weight-regular) var(--font-size-lead-m)/var(--line-height-155) var(--font-family-sans);
+--text-stat:var(--font-weight-medium) var(--font-size-stat-m)/var(--line-height-100) var(--font-family-mono);
+}}
 
 /* ── Radius ───────────────────────────────────────────────────────────────────
    Small and purposeful. 0 is a real choice, not an absence: grid cells and code
-   panels are square. --radius-full is the pill, used for status only.         */
+   panels are square. --radius-full is the pill, used for status only.          */
 :root{
 --radius-0:0px;--radius-4:4px;--radius-8:8px;--radius-full:999px;
 }
@@ -107,7 +194,7 @@
 /* ── Border ───────────────────────────────────────────────────────────────────
    One optical weight, four media. A 1px rule is invisible projected and drops
    out when a platform re-encodes an image, so the number changes to keep the
-   appearance. Web is the only one a stylesheet uses; the rest are the record. */
+   appearance. Web is the only one a stylesheet uses; the rest are the record.  */
 :root{
 --border-width-0:0px;--border-width-1:1px;--border-width-2:2px;--border-width-3:3px;
 --border-width-hairline:var(--border-width-1);
@@ -117,37 +204,37 @@
 }
 
 /* ── Focus ring ───────────────────────────────────────────────────────────────
-   A hard ring, never a glow. The two colours are surface-dependent — the gap
-   takes the surface it sits on — so they belong to a component layer, not here. */
+   A hard ring, never a glow. Its two colours are surface-dependent — the gap
+   takes the surface it sits on — so they belong to a component layer.          */
 :root{
 --focus-ring-width:var(--space-2);
 --focus-ring-offset:var(--space-2);
 }
 
 /* ── Motion ───────────────────────────────────────────────────────────────────
-   Colour and border only. Nothing in this system moves, scales or fades.      */
+   Colour and border only. Nothing in this system moves, scales or fades.       */
 :root{
 --duration-instant:0ms;--duration-fast:140ms;
 --easing-standard:cubic-bezier(0.2,0,0,1);
 }
 
 /* ── Elevation ────────────────────────────────────────────────────────────────
-   Declared so that "no shadow" is a value a component can point at, rather
-   than an omission someone fills in later. There is no second step.          */
+   Declared so "no shadow" is a value a component points at, rather than an
+   omission someone fills in later. There is no second step.                   */
 :root{
 --shadow-none:none;
 }
 
 /* ── Z-index ──────────────────────────────────────────────────────────────────
    Named layers, 100 apart. Never write a raw z-index; if a thing needs a layer
-   that is not here, the layer is missing and gets added by name.             */
+   that is not here, the layer is missing and gets added by name.              */
 :root{
 --z-base:0;--z-raised:100;--z-sticky:200;--z-dropdown:300;--z-overlay:400;--z-modal:500;--z-toast:600;
 }
 
 /* ── Icon ─────────────────────────────────────────────────────────────────────
    Line glyphs on a 24px box: 1.5px stroke, round caps, currentColor, no fill.
-   The three smaller sizes are the same glyph scaled down inside a button.     */
+   The smaller sizes are the same glyph scaled down inside a control.          */
 :root{
 --icon-size-14:14px;--icon-size-16:16px;--icon-size-18:18px;--icon-size-24:24px;
 --icon-stroke:1.5px;
@@ -156,7 +243,7 @@
 /* ── Breakpoint ───────────────────────────────────────────────────────────────
    CSS cannot read a custom property inside a media query, so these are the
    record and the media queries above inline the same numbers. Change both.
-   Ranges: mobile ≤767 · tablet 768–1023 · desktop 1024–1439 · wide ≥1440.    */
+   Ranges: mobile ≤767 · tablet 768–1023 · desktop 1024–1439 · wide ≥1440.     */
 :root{
 --breakpoint-480:480px;--breakpoint-768:768px;--breakpoint-1024:1024px;--breakpoint-1280:1280px;--breakpoint-1440:1440px;
 }

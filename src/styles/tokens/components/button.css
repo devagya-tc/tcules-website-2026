@@ -19,14 +19,20 @@
 /* ── Geometry · identical on every surface ─────────────────────────────────────
    8 box padding / 4 label margin / 4 icon gap. The three differ because the
    things they space differ: an uppercase mono glyph starts at its side bearing,
-   an icon already carries ~2px of air inside its box. They do not scale.       */
+   an icon already carries ~2px of air inside its box. They do not scale.
+
+   These four reach past the gap scale into the space ramp on purpose. They are
+   optical corrections measured against Geist Mono's uppercase side bearings at
+   13px, not layout distances — --gap-tight would be a coincidence here, and the
+   day the gap scale is re-tuned this button must not move. That exception is
+   documented per token and nowhere else in the file.                          */
 :root{
---btn-padding-x:var(--space-8);
---btn-label-margin:var(--space-4);
---btn-gap:var(--space-4);
+--btn-padding-x:var(--space-8);       /* optical, not --gap-tight */
+--btn-label-margin:var(--space-4);    /* optical, not --gap-inline */
+--btn-gap:var(--space-4);             /* optical, not --gap-inline */
 --btn-gap-bare:var(--space-8);        /* link emphasis has no box and no label margin */
 --btn-height-sm:32px;--btn-height-md:40px;--btn-height-lg:48px;
---btn-font-size-sm:var(--font-size-12);--btn-font-size-md:var(--font-size-13);--btn-font-size-lg:var(--font-size-14);
+--btn-font-size-sm:var(--font-size-ui-sm);--btn-font-size-md:var(--font-size-ui);--btn-font-size-lg:var(--font-size-ui-lg);
 --btn-icon-size-sm:var(--icon-size-14);--btn-icon-size-md:var(--icon-size-16);--btn-icon-size-lg:var(--icon-size-18);
 --btn-hit-min:44px;                   /* extended past the box, never by resizing it */
 --btn-font-family:var(--font-family-mono);

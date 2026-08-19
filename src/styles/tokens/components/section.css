@@ -10,16 +10,19 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   88px of vertical air inside a 1240px container with 32px gutters. The rail is
-   the left column a running head or note sits in.                             */
+   Every distance here is a gap-scale step, which is the point: a section is the
+   most-copied layout in the system, so it must not invent a number. Tight and
+   open are the two section paddings; --sec-gap is the head-to-body step.       */
 :root{
---sec-padding-y:var(--space-88);
---sec-padding-y-tight:var(--space-64);
---sec-padding-y-loose:var(--space-120);
+--sec-padding-y:var(--gap-section);
+--sec-padding-y-tight:var(--gap-column);
+--sec-padding-y-open:var(--gap-section-open);
 --sec-container:1240px;
---sec-gutter:var(--space-32);
+--sec-gutter:var(--gap-gutter);
 --sec-rail:180px;
---sec-gap:var(--space-24);
+--sec-gap:var(--gap-block);
+--sec-gap-stack:var(--gap-stack);
+--sec-gap-text:var(--gap-text);
 --sec-rule-width:var(--border-width-hairline);
 --sec-text-title:var(--text-h2);
 --sec-text-title-tracking:var(--text-h2-tracking);

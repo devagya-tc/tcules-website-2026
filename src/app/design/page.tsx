@@ -27,8 +27,8 @@ const SPECIMENS = [
 export default function DesignIndexPage() {
   return (
     <Section>
-      <Layout rowGap="2xl">
-        <Layout rowGap="sm">
+      <Layout rowGap="stack">
+        <Layout rowGap="block">
           <h1>Proving ground</h1>
           <p>
             Every component and every arrangement, rendered. No token system yet — the
@@ -38,15 +38,15 @@ export default function DesignIndexPage() {
         </Layout>
 
         {SPECIMENS.map((group) => (
-          <Layout key={group.tier} rowGap="md">
+          <Layout key={group.tier} rowGap="block">
             <h2>{group.tier}</h2>
             {group.items.length === 0 ? (
               <p>None yet.</p>
             ) : (
-              <Layout as="ul" rowGap="sm">
+              <Layout as="ul" rowGap="tight">
                 {group.items.map((item) => (
                   <li key={item.href}>
-                    <Cluster colGap="sm" align="baseline">
+                    <Cluster colGap="tight" align="baseline">
                       <Link href={item.href}>{item.name}</Link>
                       <span>— {item.note}</span>
                     </Cluster>

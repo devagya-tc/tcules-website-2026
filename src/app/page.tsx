@@ -10,15 +10,15 @@ import { Cluster, Layout, Section } from '@/components';
 export default function HomePage() {
   return (
     <Section>
-      <Layout rowGap="xl">
-        <Layout rowGap="sm">
+      <Layout rowGap="stack">
+        <Layout rowGap="block">
           <h1>Tcules</h1>
           <p>
             Scaffolding. Three layout primitives, no tokens yet — the proving ground is where
             they are exercised.
           </p>
         </Layout>
-        <Cluster colGap="md" rowGap="sm">
+        <Cluster colGap="text" rowGap="tight">
           <Link href="/design">Proving ground</Link>
           <Link href="/design/section">Section</Link>
           <Link href="/design/layout">Layout</Link>
