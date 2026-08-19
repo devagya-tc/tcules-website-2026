@@ -18,17 +18,13 @@
    and they are rarely the same relationship, so each is stated by the caller or it renders 0 —
    a silent 24 looks plausible and hides an omission; a collapsed seam is wrong on sight.
 
-   ── The token seam ────────────────────────────────────────────────────────────────────────
-   Every rung reads `var(--gap-*, <literal>)`. Nothing defines --gap-* yet, so the literal is
-   used. When the token system lands and declares --gap-lg on :root, it inherits in here and
-   wins over the fallback automatically — no edit to this file, no migration step, nothing to
-   delete. That is why the token NAME is written today rather than a bare literal: naming it
-   otherwise would cost 26 edits later.
+   ── Tokens ────────────────────────────────────────────────────────────────────────────────
+   Every rung reads --lay-gap-*, and every track width --lay-track-*, both declared in
+   tokens/components/layout.css. No literal distance appears in this file: changing the ramp
+   means editing the token layer, and it moves every Layout in the site at once.
 
-   NOTE — the top three rungs (xl / 2xl / 3xl) are FLAT here. They are designed to step at
-   768/1024 (32→40, 40→48→64, 48→64→96) so a large structural beat compresses on a phone, but
-   that stepping belongs to the token ramp, not to this module. The base value is the fallback;
-   the stepping returns with the token system. */
+   Cluster carries the same rung NAMES from its own --clu-gap-* layer, capped at lg. The two do
+   not share tokens by design — see the note in either token file. */
 .layout {
   display: grid;
   /* Both axes zeroed HERE on every .layout, because --layout-*-gap custom properties INHERIT: a
@@ -45,34 +41,34 @@
 
 /* rowGap — the block-axis seam, between rows. Rung names match the tokens they will resolve to. */
 .rowgap-none { --layout-row-gap: 0; }                          /*  0   flush, on purpose — rows share an edge */
-.rowgap-2xs  { --layout-row-gap: var(--gap-2xs, 0.25rem); }    /*  4   joined */
-.rowgap-xs   { --layout-row-gap: var(--gap-xs, 0.5rem); }      /*  8   icon ↔ label */
-.rowgap-sm   { --layout-row-gap: var(--gap-sm, 0.75rem); }     /* 12   chips, button rows */
-.rowgap-md   { --layout-row-gap: var(--gap-md, 1rem); }        /* 16   fields, rows */
-.rowgap-lg   { --layout-row-gap: var(--gap-lg, 1.5rem); }      /* 24   the field seam — a card grid, a copy block */
-.rowgap-xl   { --layout-row-gap: var(--gap-xl, 2rem); }        /* 32   between unlike blocks */
-.rowgap-2xl  { --layout-row-gap: var(--gap-2xl, 2.5rem); }     /* 40   sub-regions */
-.rowgap-3xl  { --layout-row-gap: var(--gap-3xl, 3rem); }       /* 48   large sub-region beat */
+.rowgap-2xs  { --layout-row-gap: var(--lay-gap-2xs); }    /*  4   joined */
+.rowgap-xs   { --layout-row-gap: var(--lay-gap-xs); }      /*  8   icon ↔ label */
+.rowgap-sm   { --layout-row-gap: var(--lay-gap-sm); }     /* 12   chips, button rows */
+.rowgap-md   { --layout-row-gap: var(--lay-gap-md); }        /* 16   fields, rows */
+.rowgap-lg   { --layout-row-gap: var(--lay-gap-lg); }      /* 24   the field seam — a card grid, a copy block */
+.rowgap-xl   { --layout-row-gap: var(--lay-gap-xl); }        /* 32   between unlike blocks */
+.rowgap-2xl  { --layout-row-gap: var(--lay-gap-2xl); }     /* 40   sub-regions */
+.rowgap-3xl  { --layout-row-gap: var(--lay-gap-3xl); }       /* 48   large sub-region beat */
 
 /* colGap — the inline-axis seam, between columns. Same ramp; no tracks, nothing to act on. */
 .colgap-none { --layout-col-gap: 0; }
-.colgap-2xs  { --layout-col-gap: var(--gap-2xs, 0.25rem); }
-.colgap-xs   { --layout-col-gap: var(--gap-xs, 0.5rem); }
-.colgap-sm   { --layout-col-gap: var(--gap-sm, 0.75rem); }
-.colgap-md   { --layout-col-gap: var(--gap-md, 1rem); }
-.colgap-lg   { --layout-col-gap: var(--gap-lg, 1.5rem); }
-.colgap-xl   { --layout-col-gap: var(--gap-xl, 2rem); }
-.colgap-2xl  { --layout-col-gap: var(--gap-2xl, 2.5rem); }
-.colgap-3xl  { --layout-col-gap: var(--gap-3xl, 3rem); }
+.colgap-2xs  { --layout-col-gap: var(--lay-gap-2xs); }
+.colgap-xs   { --layout-col-gap: var(--lay-gap-xs); }
+.colgap-sm   { --layout-col-gap: var(--lay-gap-sm); }
+.colgap-md   { --layout-col-gap: var(--lay-gap-md); }
+.colgap-lg   { --layout-col-gap: var(--lay-gap-lg); }
+.colgap-xl   { --layout-col-gap: var(--lay-gap-xl); }
+.colgap-2xl  { --layout-col-gap: var(--lay-gap-2xl); }
+.colgap-3xl  { --layout-col-gap: var(--lay-gap-3xl); }
 
 /* minTrack — track width for the content-driven modes ("fit" floor / "tile" actual). Component
    GEOMETRY, not spacing rhythm, so these are local literals and stay local literals even after
    the token system arrives (same reasoning as Section's inset ramp). Consumed by the inline
    --tmpl-base that columns="fit"/"tile" emits. */
-.mintrack-xs { --layout-min-track: 12rem; } /* 192 — small tiles, logo cells */
-.mintrack-sm { --layout-min-track: 16rem; } /* 256 — compact cards */
-.mintrack-md { --layout-min-track: 20rem; } /* 320 — standard cards (default) */
-.mintrack-lg { --layout-min-track: 24rem; } /* 384 — feature cards */
+.mintrack-xs { --layout-min-track: var(--lay-track-xs); } /* 192 — small tiles, logo cells */
+.mintrack-sm { --layout-min-track: var(--lay-track-sm); } /* 256 — compact cards */
+.mintrack-md { --layout-min-track: var(--lay-track-md); } /* 320 — standard cards (default) */
+.mintrack-lg { --layout-min-track: var(--lay-track-lg); } /* 384 — feature cards */
 
 /* PLACEMENT — three axes, because a grid genuinely has three distinct questions:
      align        = block axis, each item within its row      (align-items)

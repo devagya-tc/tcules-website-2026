@@ -9,8 +9,9 @@
    because a silent 12 looks plausible and hides the omission. The ramp is Layout's vocabulary
    capped at lg; a chip row has no use for a structural beat.
 
-   Rungs read `var(--gap-*, <literal>)` — the same token seam Layout uses, and the reason both
-   primitives will pick up the token ramp with no edit. See Layout.module.css. */
+   Rungs read --clu-gap-*, declared in tokens/components/cluster.css. Same rung names as
+   Layout, its own token layer, pointing at the same primitives — duplicated on purpose so the
+   two ceilings stay independently changeable. */
 .cluster {
   display: flex;
   flex-wrap: wrap;
@@ -27,18 +28,18 @@
 .nowrap { flex-wrap: nowrap; }
 
 /* rowGap — between wrapped lines. */
-.rowgap-2xs { --cluster-row-gap: var(--gap-2xs, 0.25rem); } /*  4 */
-.rowgap-xs  { --cluster-row-gap: var(--gap-xs, 0.5rem); }   /*  8 */
-.rowgap-sm  { --cluster-row-gap: var(--gap-sm, 0.75rem); }  /* 12 */
-.rowgap-md  { --cluster-row-gap: var(--gap-md, 1rem); }     /* 16 */
-.rowgap-lg  { --cluster-row-gap: var(--gap-lg, 1.5rem); }   /* 24 */
+.rowgap-2xs { --cluster-row-gap: var(--clu-gap-2xs); } /*  4 */
+.rowgap-xs  { --cluster-row-gap: var(--clu-gap-xs); }   /*  8 */
+.rowgap-sm  { --cluster-row-gap: var(--clu-gap-sm); }  /* 12 */
+.rowgap-md  { --cluster-row-gap: var(--clu-gap-md); }     /* 16 */
+.rowgap-lg  { --cluster-row-gap: var(--clu-gap-lg); }   /* 24 */
 
 /* colGap — between items on a line. */
-.colgap-2xs { --cluster-col-gap: var(--gap-2xs, 0.25rem); }
-.colgap-xs  { --cluster-col-gap: var(--gap-xs, 0.5rem); }
-.colgap-sm  { --cluster-col-gap: var(--gap-sm, 0.75rem); }
-.colgap-md  { --cluster-col-gap: var(--gap-md, 1rem); }
-.colgap-lg  { --cluster-col-gap: var(--gap-lg, 1.5rem); }
+.colgap-2xs { --cluster-col-gap: var(--clu-gap-2xs); }
+.colgap-xs  { --cluster-col-gap: var(--clu-gap-xs); }
+.colgap-sm  { --cluster-col-gap: var(--clu-gap-sm); }
+.colgap-md  { --cluster-col-gap: var(--clu-gap-md); }
+.colgap-lg  { --cluster-col-gap: var(--clu-gap-lg); }
 
 /* align = cross axis (vertical alignment of items in the row). */
 .align-start    { --cluster-align: flex-start; }

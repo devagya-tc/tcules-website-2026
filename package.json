@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "tokens:check": "node scripts/tokens-check.mjs",
     "format": "prettier --write ."
   },
   "engines": {

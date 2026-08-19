@@ -1,9 +1,68 @@
-/* The global stylesheet. Currently one import, and that is the whole story:
+/* The global stylesheet. Three things, in this order:
 
-   • reset.css      — required by the layout primitives (see the file for why)
+   1. tokens/index.css  — the whole token system. One import, per its own instructions:
+                          fonts, then primitives, then every component layer.
+   2. reset.css         — required by the layout primitives (see the file for why).
+   3. the base layer    — the minimum needed for a bare element to look like it belongs
+                          to the system rather than to the browser.
 
-   NOT here yet, deliberately: colour, typography, the spacing scale, focus rings, elevation.
-   All of that arrives with the token system, at which point a tokens/ import joins the one
-   below and the primitives pick the values up through the var() fallbacks they already
-   declare. */
+   Reset comes after the tokens so its structural zeroing cannot be undone by a token rule,
+   and the base layer comes last so it wins over the reset's margin zeroing where it must. */
+@import '../styles/tokens/index.css';
 @import '../styles/reset.css';
+
+/* ── Base ──────────────────────────────────────────────────────────────────────────────────
+   Body takes the ground, the ink and the body composite. --sec-ground / --sec-ink are the
+   section layer's :root defaults (paper / neutral-900), which is exactly what an un-sectioned
+   page should be — and it means a Section that paints the same ground is invisible against it,
+   as intended. */
+body {
+  font: var(--text-body);
+  background: var(--sec-ground);
+  color: var(--sec-ink);
+}
+
+/* Headings map to the display composites, tracking included — the token system requires the
+   -tracking companion beside every role that ships one, because tracking is not part of the
+   font shorthand.
+
+   This is a BASE layer, not the final answer. A Heading component with a `size` prop is the
+   right home for this, because a page routinely needs an h2-level element at h3 scale and the
+   element name should not decide the scale. Until that component exists, these five rules stop
+   a bare heading rendering as a browser default. */
+h1 {
+  font: var(--text-h1);
+  letter-spacing: var(--text-h1-tracking);
+}
+h2 {
+  font: var(--text-h2);
+  letter-spacing: var(--text-h2-tracking);
+}
+h3 {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+}
+h4 {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+}
+h5 {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+}
+
+/* Links take the section layer's link roles, so a link inside an ink or blue band lifts to a
+   legible step without knowing where it is. */
+a {
+  color: var(--sec-link-fg);
+}
+a:hover {
+  color: var(--sec-link-fg-hover);
+}
+
+/* Inline code and the mono chrome role. */
+code,
+kbd,
+samp {
+  font: var(--text-code);
+}

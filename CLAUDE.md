@@ -34,9 +34,10 @@ Never reach sideways, and never inline a one-off.
 
 `Section`, `Layout` and `Cluster` express every arrangement in the site between them:
 
-- **`Section`** — the full-width band. Owns the content column (inset ramp + 1280 cap) and the
-  vertical rhythm (64 → 96 → 128, stepping at 768/1024). Vertical rhythm is **system-owned**:
-  there is no prop for it, and `flush` is the only escape.
+- **`Section`** — the full-width band. Paints the ground and owns the content column (1240 cap,
+  32 gutter) and the vertical air (88, or `density="tight"` 64 / `density="loose"` 120, or
+  `flush` 0). Every one of those values comes from `--sec-*`; the component contributes none of
+  its own. `surface="paper | tint | ink | blue"` sets the ground for everything inside it.
 - **`Layout`** — the columnar axis. Tracks (`3`, `[2,1]`, per-breakpoint, `fit`, `tile`) plus
   `rowGap` / `colGap`. A vertical stack is the single-track case.
 - **`Cluster`** — the inline axis. Wrapping rows: chips, button groups, metadata.
@@ -52,32 +53,57 @@ Never reach sideways, and never inline a one-off.
    A silent 24 looks plausible and hides an omission; a collapsed seam is wrong on sight.
 4. **Non-uniform rhythm comes from NESTING, not from a rhythm knob.** Tighten by grouping, loosen
    by separating. A heading's spacing is a consequence of which `Layout` it lives in.
-5. **Never override Section's content column from outside.** No horizontal padding, no
-   `max-width` via `className`. One band out of alignment with the others is a visible defect.
+5. **Never override Section's content column or ground from outside.** No horizontal padding, no
+   `max-width`, no background or colour via `className`. One band out of alignment with the
+   others is a visible defect, and a hand-set background defeats the whole surface model.
 
-## No token system yet
+## Tokens: two tiers, and nothing outside them holds a value
 
-Colour, typography, the spacing scale, focus rings and elevation **do not exist in this repo
-yet**. They arrive as `src/styles/tokens/**` and are wired in deliberately.
+The token system lives in `src/styles/tokens/` and is imported by `src/app/globals.css`. Read
+`tokens/index.css` first — it states the rules and it is the only file you import.
 
-**What that means while building:**
+| Tier | Path | What it holds |
+|---|---|---|
+| 1 · primitives | `tokens/primitives.css` | facts. `--color-brandeis-500`, `--space-24`, `--font-size-43`. Named for the value, never the use |
+| 2 · components | `tokens/components/*.css` | meaning. `--sec-ground`, `--btn-solid-primary-bg`, `--lay-gap-lg`. One file per component, re-declared per surface |
 
-- Every gap rung in the primitives reads `var(--gap-lg, 1.5rem)`. Nothing defines `--gap-*`, so
-  the literal is used. **When the token system lands and declares `--gap-lg` on `:root`, it
-  inherits in and wins over the fallback automatically** — no component edit, no migration step.
-  That is why token *names* are already written into the CSS.
-- **Do not add colour to `src/components`, `src/patterns` or `src/templates`.** Not "temporarily",
-  not "just a grey". A placeholder colour becomes a thing to hunt down later, and there is no
-  semantic role to hang it on yet. The greys in `src/app/design/_specimen/` are measuring chrome
-  for the proving ground and are the single exception — nothing outside that folder may look
-  like it.
-- **`src/styles/reset.css` is not a token file and is not optional.** `box-sizing: border-box` is
-  required for `Section` to function at all, and zeroed heading margins are required for
-  `Layout`'s gaps to be the only spacing. Read the file before changing it.
+**There is no semantic tier, by design.** Surface-awareness is restated per component; the
+payoff is that a component is readable in one file and changing one never moves another.
 
-**Deferred, and tracked:** `Section`'s tonal `surface` prop and `theme="dark"` island; the
-responsive stepping on the `xl` / `2xl` / `3xl` gap rungs; a `tokens:check` script that asserts
-every `var(--…)` in a `*.module.css` resolves to a defined token. All three land with the tokens.
+**The rules that matter most in day-to-day work:**
+
+1. **No stylesheet outside `tokens/` writes a hex, a raw distance or a font stack.** If the value
+   you need has no token, add the token. `npm run tokens:check` enforces both halves of this —
+   it fails on a `var()` that resolves to nothing and on a literal colour outside the token
+   layer. Run it before you commit CSS.
+2. **A component never reads another component's tokens.** Shared values are primitives, or they
+   are duplicated on purpose. `--lay-gap-*` and `--clu-gap-*` are the worked example: same rung
+   names, two files, both pointing at `--space-*`, deliberately not shared.
+3. **Surface is declared with `data-surface="paper | tint | ink | blue"` on an ancestor** — a
+   Section — and never on the control itself. That is what lets a button three components deep
+   get the right treatment without being told where it is.
+4. **Type is consumed as a composite:** `font: var(--text-h2)` plus
+   `letter-spacing: var(--text-h2-tracking)`. Never restate a size. The composites re-declare
+   themselves at 1023px and 767px, so a rule needs no breakpoint of its own for type.
+5. **Adding a component layer:** copy the shape of `tokens/components/button.css` — geometry in
+   `:root`, then one block per surface with deltas only. Name tokens
+   `--{abbrev}-{variant}-{part}-{state}`, register the file in `tokens/index.css`, keep it to
+   the one component.
+
+**`src/styles/reset.css` is not a token file and is not optional.** `box-sizing: border-box` is
+required for `Section` to function at all, and zeroed heading margins are required for `Layout`'s
+gaps to be the only spacing. It deliberately states no type and no colour — both come from the
+tokens, applied in `globals.css`.
+
+**Base element typography lives in `globals.css`** — five heading rules, links and code, mapping
+bare elements onto the composites. It is a floor, not the answer: a `Heading` component with a
+`size` prop is the right home, because a page routinely needs an h2-level element at h3 scale and
+the element name should not decide the scale.
+
+**Known gap:** the `--sec-*` geometry is flat across viewports — one 32px gutter, one 88px
+vertical air. The layout primitives' gap ramps are flat too. If a responsive ramp is wanted, its
+home is a re-declaration inside the relevant token file under the same `max-width: 1023px` /
+`max-width: 767px` breakpoints the type composites use — never a media query in a component.
 
 ## Every component is a folder
 

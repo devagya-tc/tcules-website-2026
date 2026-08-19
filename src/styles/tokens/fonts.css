@@ -1,0 +1,32 @@
+/* ══ Tcules — font request ═══════════════════════════════════════════════════════
+   Three families, the weights the scale actually uses, nothing else.
+
+   Newsreader   400, 500 + italic  — titles (variable optical size 6..72)
+   Public Sans  400, 500, 600      — body
+   Geist Mono   400, 500, 600      — chrome, stats, code
+
+   ── Why this file declares nothing ──────────────────────────────────────────────
+   This was an `@import url("https://fonts.googleapis.com/…")`. It did not work, and it
+   failed SILENTLY: CSS requires @import to precede every other rule in a stylesheet,
+   and this file is concatenated into a bundle behind globals.css, so its @import
+   landed mid-stylesheet, became invalid, and was dropped at build time. The result
+   was zero font requests and all three families falling through to their local
+   fallbacks — Georgia, -apple-system, ui-monospace — which looks like a design
+   choice rather than a defect.
+
+   The request therefore lives in src/app/layout.tsx as a <link> in <head>, which is
+   both valid and discovered earlier than an @import inside a stylesheet would be.
+   The family NAMES in primitives.css are unchanged and remain the only thing any
+   consumer reads.
+
+   ── Self-hosting ────────────────────────────────────────────────────────────────
+   To remove the network call, put @font-face rules HERE (in this file, where they
+   are valid — @font-face is not @import and is not position-sensitive) and delete
+   the <link> from layout.tsx. Nothing else changes, because every consumer reads
+   --font-family-*.
+
+   Using next/font/google instead would also work and would self-host automatically,
+   but it generates hashed family names, so --font-family-display / -sans / -mono in
+   primitives.css would have to be repointed at its CSS variables. That is a change
+   to the token layer, which is why it is not the default here.
+   ═══════════════════════════════════════════════════════════════════════════════ */

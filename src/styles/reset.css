@@ -56,10 +56,9 @@ html {
 
 body {
   min-height: 100dvh;
-  /* Inherit, don't set. Type and colour belong to the token system; stating anything here
-     would be a default to unpick later. */
-  font-family: inherit;
-  line-height: 1.5;
+  /* No type or colour here. Both now come from the token system, applied in globals.css —
+     a font-family or line-height stated in the reset would be a default silently competing
+     with the --text-* composites. */
 }
 
 /* Media are block-level and never exceed their track. Layout's minmax(0, 1fr) stops a track

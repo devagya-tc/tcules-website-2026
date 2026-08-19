@@ -1,70 +1,71 @@
 /* SCAFFOLDING CHROME — not the design system.
 
-   The proving ground has to make seams, tracks and bands VISIBLE, which needs fill and edges,
-   which needs colour. There is no token system yet, so these are bare literals and they are
-   allowed to be: nothing in src/components, src/patterns or src/templates may look like this
-   file, and none of it should be copied out of here. It is a measuring instrument.
+   The proving ground has to make seams, tracks and bands VISIBLE, which needs fill and edges.
+   Every value here comes from the token layer, so this file writes no hex and no raw distance —
+   but nothing in src/components, src/patterns or src/templates should look like it, and nothing
+   should be copied out of it. It is a measuring instrument.
 
-   Delete or re-point at tokens once the token system lands. */
+   Fills are derived from --sec-ink with color-mix rather than picked from the neutral ramp, so a
+   specimen box adapts to whichever of the four surfaces it is sitting on. A fixed neutral would
+   vanish on ink and fight the ground on blue, which would make the surface specimens unreadable
+   at exactly the moment they matter. */
 .page {
-  padding-block: 2rem;
+  padding-block: var(--space-32);
 }
 
 .spec {
-  border-top: 1px solid #d4d4d4;
-  padding-block-start: 1rem;
+  border-top: var(--border-width-hairline) solid var(--sec-rule);
+  padding-block-start: var(--space-16);
 }
 
 .specTitle {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.8125rem;
-  color: #525252;
+  font: var(--text-ui);
+  letter-spacing: var(--text-ui-tracking);
+  color: var(--sec-ink-muted);
 }
 
 .specNote {
-  font-size: 0.875rem;
-  color: #525252;
-  max-width: 62ch;
+  font: var(--text-body-sm);
+  color: var(--sec-ink-muted);
+  max-width: var(--measure-body);
 }
 
-/* A demo block. Fill + hairline so the gap between two of them is unmistakable. */
+/* A demo block. Fill plus hairline so the gap between two of them is unmistakable. */
 .box {
-  background: #ececea;
-  border: 1px solid #d4d4d4;
-  padding: 0.75rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.75rem;
-  color: #404040;
+  background: color-mix(in srgb, var(--sec-ink) 7%, transparent);
+  border: var(--border-width-hairline) solid var(--sec-rule);
+  padding: var(--space-12);
+  font: var(--text-caption);
+  color: var(--sec-ink-muted);
 }
 
 /* Deliberately taller, to prove `align` and `equalRows` do what they claim. */
 .boxTall {
-  min-height: 7rem;
+  min-height: var(--space-120);
 }
 
 .boxAccent {
-  background: #dbe4ff;
-  border-color: #b8c8ff;
+  background: color-mix(in srgb, var(--sec-accent) 14%, transparent);
+  border-color: var(--sec-accent);
 }
 
-/* Marks the band edges so Section's inset and vertical rhythm are measurable. */
+/* Marks the band edges so Section's gutter and vertical air are measurable. */
 .bandOutline {
-  outline: 1px dashed #b8c8ff;
-  outline-offset: -1px;
+  outline: var(--border-width-hairline) dashed var(--sec-accent);
+  outline-offset: calc(var(--border-width-hairline) * -1);
 }
 
 .ruler {
-  background: #ececea;
-  border: 1px solid #d4d4d4;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.75rem;
-  color: #404040;
-  padding: 0.375rem 0.5rem;
+  background: color-mix(in srgb, var(--sec-ink) 7%, transparent);
+  border: var(--border-width-hairline) solid var(--sec-rule);
+  font: var(--text-caption);
+  color: var(--sec-ink-muted);
+  padding: var(--space-6) var(--space-8);
 }
 
 /* A specimen whose content is SUPPOSED to exceed its container (the nowrap Cluster) scrolls
-   inside its own box. Without this the demo drags the whole page sideways, which reads as a
-   bug in the primitive rather than the documented behaviour of the prop being shown. */
+   inside its own box. Without this the demo drags the whole page sideways, which reads as a bug
+   in the primitive rather than the documented behaviour of the prop being shown. */
 .scrollX {
   overflow-x: auto;
 }

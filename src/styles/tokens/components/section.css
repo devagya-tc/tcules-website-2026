@@ -1,0 +1,93 @@
+/* ══ Component layer — section ═══════════════════════════════════════════════════
+   Tier 2. The page frame is a component like any other: it owns the ground it
+   paints, the ink that reads on that ground, the hairlines that divide it, and
+   the rhythm between its rows. Nothing in this system is "page-level CSS" with a
+   free hand on primitives — if a value has no component, it has no home.
+
+   Naming: --sec-{part}-{state}. Parts are ground, ink, rule, accent, link.
+   Set data-surface on the <section>; everything inside inherits, including a
+   button three components deep that has no idea what it is sitting on.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   88px of vertical air inside a 1240px container with 32px gutters. The rail is
+   the left column a running head or note sits in.                             */
+:root{
+--sec-padding-y:var(--space-88);
+--sec-padding-y-tight:var(--space-64);
+--sec-padding-y-loose:var(--space-120);
+--sec-container:1240px;
+--sec-gutter:var(--space-32);
+--sec-rail:180px;
+--sec-gap:var(--space-24);
+--sec-rule-width:var(--border-width-hairline);
+--sec-text-title:var(--text-h2);
+--sec-text-title-tracking:var(--text-h2-tracking);
+--sec-text-eyebrow:var(--text-eyebrow);
+--sec-text-eyebrow-tracking:var(--text-eyebrow-tracking);
+--sec-text-body:var(--text-body);
+--sec-measure-title:var(--measure-title);
+--sec-measure-body:var(--measure-body);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The eyebrow is deliberately neutral, not blue: blue means clickable, and a
+   label that borrows the colour breaks that contract before the page loads.    */
+:root,[data-surface="paper"]{
+--sec-ground:var(--color-paper);
+--sec-ink:var(--color-neutral-900);
+--sec-ink-muted:var(--color-neutral-600);
+--sec-ink-label:var(--color-neutral-700);
+--sec-rule:var(--color-neutral-200);
+--sec-rule-strong:var(--color-neutral-400);
+--sec-accent:var(--color-brandeis-500);      /* blue as a field or rule */
+--sec-accent-ink:var(--color-brandeis-500);  /* blue as text */
+--sec-link-fg:var(--color-brandeis-500);
+--sec-link-fg-hover:var(--color-brandeis-600);
+--sec-highlight:var(--color-peridot-500);
+--sec-highlight-ink:var(--color-neutral-900);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   Alternating rows, quote blocks, table headers. Ink is unchanged; the rules
+   step one deeper so a hairline still reads against the deeper ground.        */
+[data-surface="tint"]{
+--sec-ground:var(--color-paper-deep);
+--sec-rule:var(--color-neutral-300);
+--sec-rule-strong:var(--color-neutral-500);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   The footer and the closing panel. Blue holds at 500 where it is a field or a
+   rule, and lifts to 200 where it is text — the same floor the button layer
+   answers to. Body ink is white rather than paper: paper on ink reads slightly
+   warm at body size and slightly dirty at caption size.                       */
+[data-surface="ink"]{
+--sec-ground:var(--color-neutral-950);
+--sec-ink:var(--color-white);
+--sec-ink-muted:var(--color-neutral-400);
+--sec-ink-label:var(--color-neutral-500);
+--sec-rule:var(--color-neutral-800);
+--sec-rule-strong:var(--color-neutral-700);
+--sec-accent:var(--color-brandeis-500);
+--sec-accent-ink:var(--color-brandeis-200);
+--sec-link-fg:var(--color-brandeis-300);
+--sec-link-fg-hover:var(--color-brandeis-200);
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   A pivot: one appearance per page, and it never touches an ink section. Blue
+   cannot accent itself, so the accent goes to paper and the highlight — Peridot
+   — is the only colour that still carries emphasis here.                       */
+[data-surface="blue"]{
+--sec-ground:var(--color-brandeis-500);
+--sec-ink:var(--color-white);
+--sec-ink-muted:var(--color-brandeis-100);
+--sec-ink-label:var(--color-brandeis-100);
+--sec-rule:var(--color-brandeis-400);
+--sec-rule-strong:var(--color-brandeis-300);
+--sec-accent:var(--color-paper);
+--sec-accent-ink:var(--color-white);
+--sec-link-fg:var(--color-white);
+--sec-link-fg-hover:var(--color-brandeis-100);
+}
