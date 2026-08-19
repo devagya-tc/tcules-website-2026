@@ -59,6 +59,16 @@
 --btn-text-tracking:var(--text-ui-tracking);  /* one value: all three sizes track alike */
 --btn-icon-size-sm:var(--icon-size-14);--btn-icon-size-md:var(--icon-size-16);--btn-icon-size-lg:var(--icon-size-18);
 --btn-radius:var(--radius-8);
+--btn-radius-bare:var(--radius-0);        /* link has no box, so it has no corner */
+--btn-radius-bare-focus:var(--radius-4);  /* ...but its focus ring takes one, or the ring
+                                             draws a hard rectangle around a bare label */
+/* The link underline. Drawn as a rule rather than text-decoration, because a decorated
+   underline can only appear all at once and this one wipes in from the left. The offset is an
+   optical correction under a 13px uppercase mono baseline, not a layout distance — which is why
+   it reaches the space ramp. The spec sheet measured 3px; the ramp is 2px-granular below 8, so
+   this is the nearest step rather than a new one. */
+--btn-link-rule-width:var(--border-width-hairline);
+--btn-link-rule-offset:var(--space-2);
 --btn-shadow:var(--shadow-none);
 --btn-transition-duration:var(--duration-fast);
 --btn-transition-easing:var(--easing-standard);

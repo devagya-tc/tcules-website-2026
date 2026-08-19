@@ -81,6 +81,7 @@
 @import "primitives.css";
 @import "components/section.css";
 @import "components/layout.css";
+@import "components/icon.css";
 @import "components/button.css";
 
 /* Newsreader is a variable optical-size face; without this it renders at the

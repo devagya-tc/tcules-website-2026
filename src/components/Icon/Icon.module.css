@@ -1,0 +1,52 @@
+/* Icon — a line glyph on a 24-unit box.
+
+   Presentation attributes are set here rather than on the markup so the glyph data in glyphs.ts
+   stays pure path geometry: a new glyph is a `d` string and nothing else, and it cannot arrive
+   carrying its own fill or its own weight. Stroke properties inherit down the SVG tree, so
+   declaring them once on the root element covers every path inside it.
+
+   No colour of its own, and no per-surface rule. `currentColor` means the glyph takes the ink of
+   the surface or the foreground of the control it sits in, which is correct on all four surfaces
+   for free — see tokens/components/icon.css for why that layer has no surface blocks. */
+.icon {
+  /* `block` kills the inline baseline gap. An inline SVG sits on the text baseline and reserves
+     descender space below it, which puts a glyph a couple of pixels high inside a flex row that
+     is otherwise centred correctly — visible on the icon-only button, where the box is square and
+     the error has nowhere to hide. */
+  display: block;
+  /* Never absorb or give up space in a flex row. Without this a long label compresses the glyph
+     rather than the button growing, and the icon distorts instead of the layout reflowing. */
+  flex: none;
+
+  fill: none;
+  stroke: currentColor;
+  /* 1.5 in the box's OWN units, so it scales with the viewBox: a 24-unit stroke of 1.5 renders at
+     1px once the glyph is drawn into a 16px control. Declared in px because SVG geometry resolves
+     CSS px against the local coordinate system, not the device. */
+  stroke-width: var(--icon-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The four size roles. A control that owns its icon size overrides these with its own token —
+   Button's `.button > svg` rule is more specific than a single class, deliberately, so the icon
+   steps with the button and a `size` passed to an Icon inside one is ignored. */
+.sm {
+  width: var(--icn-size-sm);
+  height: var(--icn-size-sm);
+}
+
+.md {
+  width: var(--icn-size-md);
+  height: var(--icn-size-md);
+}
+
+.lg {
+  width: var(--icn-size-lg);
+  height: var(--icn-size-lg);
+}
+
+.xl {
+  width: var(--icn-size-xl);
+  height: var(--icn-size-xl);
+}

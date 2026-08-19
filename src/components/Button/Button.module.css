@@ -1,0 +1,382 @@
+/* Button — the control, built to the Button Spec Sheet.
+
+   Every colour, distance, radius, duration and easing comes from --btn-*, declared in
+   tokens/components/button.css and re-declared once per surface there. This file states no value
+   of its own: it decides STRUCTURE and which token each state reads, and nothing else. That is
+   what lets the same markup answer a paper band, a tint panel, an ink footer and a blue pivot
+   without knowing which one it is standing on.
+
+   ── The three numbers ───────────────────────────────────────────────────────────
+   8 box padding / 4 label margin / 4 icon gap. They differ because the things they space
+   differ, and they do NOT scale with the size: only the height, the label and the icon step.
+
+   An uppercase Geist Mono glyph starts at its side bearing and ends with a trailing track, so
+   8px of padding around a label reads as 6. The extra 4px margin restores what the type gives
+   away — the visible inset becomes 12 and reads as 8. An icon needs no such correction: a Solar
+   glyph already carries ~2px of clearance inside its own box, so 8 to the box edge puts it
+   optically level with a label that has 12. The 4px gap plus the label's 4px margin makes the
+   same 8 between label ink and icon box, so the glyph sits centred in its own field.
+
+   ── Rule order is load-bearing ──────────────────────────────────────────────────
+   Sizes are declared BEFORE `.link`, so a bare link keeps `height: auto` at every size rather
+   than picking up a box height. Hover is declared BEFORE pressed, so pointer-down wins while
+   the pointer is also hovering, and a held `active` does not fall back to the hover fill.
+   Both are equal-specificity pairs decided by source order — moving a block breaks a state. */
+
+/* ── Base · md ─────────────────────────────────────────────────────────────────
+   Height is explicit rather than derived from vertical padding, so a button lines up with an
+   input, a select and a status pill on the same row without any of them being measured against
+   each other.
+
+   Type arrives as a COMPOSITE — family, weight, size and ratio in one declaration. The spec
+   sheet pins the label to Geist Mono rather than inheriting a page mono, because it was drawn
+   across seven directions that each ran a different mono and the 8/4/4 rule was measured
+   against Geist Mono's bearings. This repo settled on one mono, and --text-ui composites it, so
+   consuming the usage token IS the pinned face here — with the ladder's line height rather than
+   the sheet's 1, which changes nothing: the height is fixed and the label is flex-centred. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--btn-height-md);
+  padding-inline: var(--btn-padding-x);
+  gap: var(--btn-gap);
+  border: 0;
+  border-radius: var(--btn-radius);
+  background: transparent;
+  font: var(--btn-text-md);
+  letter-spacing: var(--btn-text-tracking);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: var(--btn-shadow);
+  /* Colour only — the one thing in this system that transitions. There is no elevation to
+     raise, no transform to shrink and no opacity to fade. The link's underline is the single
+     exception and is declared with the link rules below. */
+  transition:
+    background var(--btn-transition-duration) var(--btn-transition-easing),
+    color var(--btn-transition-duration) var(--btn-transition-easing);
+}
+
+/* An anchor carrying these classes must not pick the underline back up on hover. */
+.button:hover {
+  text-decoration: none;
+}
+
+/* The icon, at the button's size rather than its own. `> svg` is a class-plus-element selector,
+   so it beats Icon's single-class size rule deliberately: the spec's rule is that the glyph steps
+   with the BUTTON, which makes the button the component that decides. Takes an <Icon> or a bare
+   <svg> as a direct child — a wrapper element around it would not be sized. */
+.button > svg {
+  width: var(--btn-icon-size-md);
+  height: var(--btn-icon-size-md);
+}
+
+/* ── Size · sm and lg ──────────────────────────────────────────────────────────
+   Height, label and icon step. Padding, label margin and gap do not: the optical error they
+   correct is a property of the type at its size, not a proportion of the box. Letter-spacing is
+   not restated — the `font` shorthand does not reset it, so all three sizes track alike from the
+   base rule, which is what --btn-text-tracking asserts by being a single value. */
+.sm {
+  height: var(--btn-height-sm);
+  font: var(--btn-text-sm);
+}
+
+.sm > svg {
+  width: var(--btn-icon-size-sm);
+  height: var(--btn-icon-size-sm);
+}
+
+.lg {
+  height: var(--btn-height-lg);
+  font: var(--btn-text-lg);
+}
+
+.lg > svg {
+  width: var(--btn-icon-size-lg);
+  height: var(--btn-icon-size-lg);
+}
+
+/* ── Variant · icon only ───────────────────────────────────────────────────────
+   Square at the size's height, glyph centred. The padding goes to zero because centring a single
+   glyph in a square wins over holding the 8px minimum — with padding left in, the box is wider
+   than it is tall and stops being square. */
+.iconOnly {
+  width: var(--btn-height-md);
+  padding-inline: 0;
+}
+
+.iconOnly.sm {
+  width: var(--btn-height-sm);
+}
+
+.iconOnly.lg {
+  width: var(--btn-height-lg);
+}
+
+/* ── Emphasis · link geometry ──────────────────────────────────────────────────
+   No box at all, so it can sit inside a paragraph or under a case title. Drops the height, the
+   padding and the label margin, and carries the whole 8 as its gap — there is no box padding
+   left for the 4+4 to add to. Declared after the size rules on purpose: `height: auto` has to
+   beat `.sm` and `.lg`, and both are single classes decided by source order. */
+.link {
+  height: auto;
+  padding-inline: 0;
+  gap: var(--btn-gap-bare);
+  border-radius: var(--btn-radius-bare);
+}
+
+/* ── The label ─────────────────────────────────────────────────────────────────
+   Two elements, and both are needed. The outer span carries the optical margin. The inner one
+   pulls back the trailing letter-space, so the 4px is measured ink to ink and a centred label
+   sits on true centre rather than half a pixel to the left of it. The pull-back is the tracking
+   token negated rather than a second literal — restate the number and the two drift apart the
+   day the tracking changes. */
+.label {
+  display: inline-block;
+  margin-inline: var(--btn-label-margin);
+}
+
+.link .label {
+  margin-inline: 0;
+}
+
+.labelInk {
+  display: inline-block;
+  margin-inline-end: calc(-1 * var(--btn-text-tracking));
+}
+
+/* ══ State ═══════════════════════════════════════════════════════════════════════
+   Six states, three fills, and every one of them a colour change. Hover and focus take the
+   first step; pressed and active take the second and share one value, so pressing a stateful
+   control previews the state it is about to hold.
+
+   All of it is gated on `.live`, which the component emits only when the button is not disabled.
+   That is what makes a disabled control inert on an anchor as well as a <button> — `:disabled`
+   does not exist on an <a>, so gating on the enabled case rather than excluding the disabled one
+   is the only form that covers both.
+
+   `.active` is the HELD second step: a selected filter, the current nav item, an open panel. A
+   call to action never enters it, so on a solid primary the deep step is only ever momentary. */
+
+/* ── Solid ── */
+.solid.primary {
+  background: var(--btn-solid-primary-bg);
+  color: var(--btn-solid-primary-fg);
+}
+
+.solid.primary.live:hover,
+.solid.primary.live:focus-visible {
+  background: var(--btn-solid-primary-bg-hover);
+}
+
+.solid.primary.live:active,
+.solid.primary.live.active {
+  background: var(--btn-solid-primary-bg-pressed);
+}
+
+.solid.neutral {
+  background: var(--btn-solid-neutral-bg);
+  color: var(--btn-solid-neutral-fg);
+}
+
+.solid.neutral.live:hover,
+.solid.neutral.live:focus-visible {
+  background: var(--btn-solid-neutral-bg-hover);
+}
+
+.solid.neutral.live:active,
+.solid.neutral.live.active {
+  background: var(--btn-solid-neutral-bg-pressed);
+}
+
+/* A solid button's label never moves — not on hover, not on press, on any surface — which is why
+   the token layer declares no --btn-solid-*-fg-pressed for these rules to read. The absence is
+   the assertion. */
+
+/* ── Ghost ─────────────────────────────────────────────────────────────────────
+   No outline, deliberately. A ghost is always shown beside a solid primary, and two boxes of
+   equal edge weight — one filled, one outlined — read as two buttons of the same rank before the
+   label is even parsed. Fill-only reads as the quieter of the two immediately. The box is still
+   there; it appears the moment the pointer does. */
+.ghost.primary {
+  color: var(--btn-ghost-primary-fg);
+}
+
+.ghost.primary.live:hover,
+.ghost.primary.live:focus-visible {
+  background: var(--btn-ghost-primary-bg-hover);
+}
+
+.ghost.primary.live:active,
+.ghost.primary.live.active {
+  background: var(--btn-ghost-primary-bg-pressed);
+  color: var(--btn-ghost-primary-fg-pressed);
+}
+
+.ghost.neutral {
+  color: var(--btn-ghost-neutral-fg);
+}
+
+.ghost.neutral.live:hover,
+.ghost.neutral.live:focus-visible {
+  background: var(--btn-ghost-neutral-bg-hover);
+}
+
+.ghost.neutral.live:active,
+.ghost.neutral.live.active {
+  background: var(--btn-ghost-neutral-bg-pressed);
+  color: var(--btn-ghost-neutral-fg-pressed);
+}
+
+/* ── Link ──────────────────────────────────────────────────────────────────────
+   Colour only, no fill — so its hover step is a label colour rather than a field. On paper a
+   neutral link runs 900 → blue 500 → blue 600: without that move a neutral link would have no
+   hover affordance at all, and since focus is "the hover fill plus the ring", a link with no
+   fill would degrade to ring-only. */
+.link.primary {
+  color: var(--btn-link-primary-fg);
+}
+
+.link.primary.live:hover,
+.link.primary.live:focus-visible {
+  color: var(--btn-link-primary-fg-hover);
+}
+
+.link.primary.live:active,
+.link.primary.live.active {
+  color: var(--btn-link-primary-fg-pressed);
+}
+
+.link.neutral {
+  color: var(--btn-link-neutral-fg);
+}
+
+.link.neutral.live:hover,
+.link.neutral.live:focus-visible {
+  color: var(--btn-link-neutral-fg-hover);
+}
+
+.link.neutral.live:active,
+.link.neutral.live.active {
+  color: var(--btn-link-neutral-fg-pressed);
+}
+
+/* ── The link's underline ──────────────────────────────────────────────────────
+   Drawn as a rule, not text-decoration, because a decorated underline can only appear all at
+   once and this one wipes in from the left. It is the single animated property in the system that
+   is not a colour, and it is animated on the same 140ms as the colours.
+
+   Inset on the right by the tracking, so the rule stops under the last GLYPH rather than under
+   the empty letter-space after it — the same correction the label's negative end-margin makes,
+   applied to the rule. */
+.link .labelInk {
+  position: relative;
+}
+
+.link .labelInk::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: var(--btn-text-tracking);
+  bottom: calc(-1 * var(--btn-link-rule-offset));
+  height: var(--btn-link-rule-width);
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--btn-transition-duration) var(--btn-transition-easing);
+}
+
+.link.live:hover .labelInk::after,
+.link.live:focus-visible .labelInk::after,
+.link.live:active .labelInk::after,
+.link.live.active .labelInk::after {
+  transform: scaleX(1);
+}
+
+/* The wipe is the one motion here, so it is the one thing to answer for. Reduced motion keeps the
+   underline — it is the affordance — and simply stops it travelling. */
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .link .labelInk::after {
+    transition-duration: var(--duration-instant);
+  }
+}
+
+/* ── Tab focus ─────────────────────────────────────────────────────────────────
+   Keyboard only, via :focus-visible, so a mouse click never draws the ring and a tab always
+   does. Two rings in one shadow: the offset drawn in the SURFACE colour, then the ring itself.
+   The surface-coloured gap is what lets a blue ring read against a blue fill, and because both
+   halves are surface tokens, a button in the ink footer takes an ink gap and a lighter blue ring
+   with no change here.
+
+   The fill is not restated: :focus-visible is listed alongside :hover in every rule above, so a
+   keyboard user is shown exactly what a pointer user is shown. */
+.button:focus {
+  outline: none;
+}
+
+.button.live:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--btn-ring-offset) var(--btn-ring-gap-color),
+    0 0 0 calc(var(--btn-ring-offset) + var(--btn-ring-width)) var(--btn-ring-color);
+}
+
+/* A bare link has no corner, but a hard rectangle around a label reads as a box the link does not
+   have. The ring alone gets one. */
+.link.live:focus-visible {
+  border-radius: var(--btn-radius-bare-focus);
+}
+
+/* ── Disabled ──────────────────────────────────────────────────────────────────
+   Loses its colour, keeps its geometry, and answers nothing. Explicit tokens rather than an
+   opacity: opacity mixes the warm neutrals toward whatever sits behind the control, so one
+   declaration produces a different colour on every surface — and over a blue fill it drops the
+   label to roughly 2:1, an unreadable button that still looks like a live one.
+
+   It carries no `.live` class, so no hover, press, active or focus rule can reach it, and
+   pointer-events go on top of that. A disabled label is exempt from the 4.5:1 minimum:
+   neutral-500 on neutral-100 at 2.6:1 is intended, because unavailable should look unavailable. */
+.button:disabled,
+.button.disabled {
+  cursor: not-allowed;
+  box-shadow: var(--btn-shadow);
+  pointer-events: none;
+}
+
+.solid:disabled,
+.solid.disabled {
+  background: var(--btn-disabled-bg);
+  color: var(--btn-disabled-fg);
+}
+
+.ghost:disabled,
+.ghost.disabled,
+.link:disabled,
+.link.disabled {
+  background: transparent;
+  color: var(--btn-disabled-fg);
+}
+
+/* ── Touch · the 44px floor ────────────────────────────────────────────────────
+   A 32 or 40 box is below the touch minimum. Rather than inflate the box on small screens and
+   break the row it sits in, the hit area is extended PAST the box with a pseudo-element: full
+   width, 44 tall, centred. The layout does not move and the target is legal.
+
+   For toolbars and table rows that stay dense on touch. A button that can simply step up to lg
+   should do that instead — at 48 the box already clears the floor and needs nothing. */
+.hit {
+  position: relative;
+}
+
+.hit::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: var(--btn-hit-min);
+  transform: translateY(-50%);
+}

@@ -18,6 +18,12 @@ const SPECIMENS = [
       { href: '/design/section', name: 'Section', note: 'band, content column, vertical rhythm' },
       { href: '/design/layout', name: 'Layout', note: 'columnar axis — tracks and the two seams' },
       { href: '/design/cluster', name: 'Cluster', note: 'inline axis — wrapping rows' },
+      {
+        href: '/design/button',
+        name: 'Button',
+        note: '3 emphases × 2 tones, 3 sizes, 3 variants, 4 surfaces',
+      },
+      { href: '/design/icon', name: 'Icon', note: 'the glyph set, 4 size roles, currentColor' },
     ],
   },
   { tier: 'Patterns', items: [] },
