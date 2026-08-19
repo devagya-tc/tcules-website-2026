@@ -1,0 +1,106 @@
+/* RESET — not hygiene. Two browser defaults actively break the layout primitives, and this
+   file exists to switch them off. There is no Tailwind here, so there is no preflight doing
+   it for us.
+
+   1. box-sizing. Section is `width: 100%` plus `padding-inline`. Under the default
+      content-box that padding is ADDED to the 100%, so the band overflows its container at
+      every viewport — the primitive does not function at all. border-box is load-bearing.
+
+   2. Default margins on headings and paragraphs. Layout and Cluster own every gap between
+      their children; that is the whole contract ("children never set their own outer
+      spacing"). A default <h2> margin stacks on top of rowGap, so the rendered gap is the
+      rung PLUS an invisible margin — every gap reads wrong and the cause is not visible in
+      the markup. Zeroing them makes the primitive the only source of spacing.
+
+   Everything else below is the conventional minimum. No colour, no type scale, no spacing
+   scale — those arrive with the token system. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* (1) — required by Section */
+}
+
+/* (2) — required by Layout and Cluster */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ol,
+ul {
+  margin: 0;
+}
+
+/* Lists used as layout containers (a Layout as="ul") carry no marker or inset. A list that
+   is genuinely a list re-declares these itself. */
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+html {
+  /* Anchor navigation and scroll-into-view land below a future sticky header rather than
+     under it. Value is intentionally a literal — this is shell geometry, not spacing rhythm. */
+  scroll-padding-block-start: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  /* Inherit, don't set. Type and colour belong to the token system; stating anything here
+     would be a default to unpick later. */
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* Media are block-level and never exceed their track. Layout's minmax(0, 1fr) stops a track
+   blowing out, but only if the media itself agrees to shrink. */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Form controls do not inherit typography by default, which makes an input inside a
+   token-styled page look foreign. */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Long words and URLs break rather than forcing a track wider than its minmax(0, 1fr). */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

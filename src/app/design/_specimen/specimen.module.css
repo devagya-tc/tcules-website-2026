@@ -1,0 +1,70 @@
+/* SCAFFOLDING CHROME — not the design system.
+
+   The proving ground has to make seams, tracks and bands VISIBLE, which needs fill and edges,
+   which needs colour. There is no token system yet, so these are bare literals and they are
+   allowed to be: nothing in src/components, src/patterns or src/templates may look like this
+   file, and none of it should be copied out of here. It is a measuring instrument.
+
+   Delete or re-point at tokens once the token system lands. */
+.page {
+  padding-block: 2rem;
+}
+
+.spec {
+  border-top: 1px solid #d4d4d4;
+  padding-block-start: 1rem;
+}
+
+.specTitle {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8125rem;
+  color: #525252;
+}
+
+.specNote {
+  font-size: 0.875rem;
+  color: #525252;
+  max-width: 62ch;
+}
+
+/* A demo block. Fill + hairline so the gap between two of them is unmistakable. */
+.box {
+  background: #ececea;
+  border: 1px solid #d4d4d4;
+  padding: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  color: #404040;
+}
+
+/* Deliberately taller, to prove `align` and `equalRows` do what they claim. */
+.boxTall {
+  min-height: 7rem;
+}
+
+.boxAccent {
+  background: #dbe4ff;
+  border-color: #b8c8ff;
+}
+
+/* Marks the band edges so Section's inset and vertical rhythm are measurable. */
+.bandOutline {
+  outline: 1px dashed #b8c8ff;
+  outline-offset: -1px;
+}
+
+.ruler {
+  background: #ececea;
+  border: 1px solid #d4d4d4;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  color: #404040;
+  padding: 0.375rem 0.5rem;
+}
+
+/* A specimen whose content is SUPPOSED to exceed its container (the nowrap Cluster) scrolls
+   inside its own box. Without this the demo drags the whole page sideways, which reads as a
+   bug in the primitive rather than the documented behaviour of the prop being shown. */
+.scrollX {
+  overflow-x: auto;
+}

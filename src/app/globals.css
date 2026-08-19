@@ -1,0 +1,9 @@
+/* The global stylesheet. Currently one import, and that is the whole story:
+
+   • reset.css      — required by the layout primitives (see the file for why)
+
+   NOT here yet, deliberately: colour, typography, the spacing scale, focus rings, elevation.
+   All of that arrives with the token system, at which point a tokens/ import joins the one
+   below and the primitives pick the values up through the var() fallbacks they already
+   declare. */
+@import '../styles/reset.css';

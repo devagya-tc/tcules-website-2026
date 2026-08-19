@@ -1,0 +1,121 @@
+/* Layout — the columnar layout. Fills the content box Section gives it, owns the two seams
+   BETWEEN children (the real "gutters"), and arranges them into tracks.
+
+   A vertical stack is just the single-track case. Column tracks are driven by a template
+   custom property set inline — so any count (3), ratio ([2,1], [1,1,2]) or reflowing "fit" grid
+   works without a class per shape. Each breakpoint falls back to the nearest smaller defined
+   template, and base defaults to a single track, so columns collapse to a stack on small
+   screens. minmax(0, *fr) stops wide children (long words, media) blowing out a track.
+
+   The single-track DEFAULT is minmax(0, 1fr), not a bare 1fr, and the difference is not
+   cosmetic: a bare `1fr` carries an implicit `auto` MINIMUM, so one unshrinkable child (a
+   nowrap row, a wide table, a long unbroken string) widens the track and every sibling in it
+   — the heading and body copy get dragged out to the offending child's width and the page
+   scrolls sideways. minmax(0, …) removes that floor. The explicit column specs get this from
+   the track() helper in Layout.tsx; the default has to state it here.
+
+   rowGap and colGap are separate axes with NO default. A grid has a row seam and a column seam
+   and they are rarely the same relationship, so each is stated by the caller or it renders 0 —
+   a silent 24 looks plausible and hides an omission; a collapsed seam is wrong on sight.
+
+   ── The token seam ────────────────────────────────────────────────────────────────────────
+   Every rung reads `var(--gap-*, <literal>)`. Nothing defines --gap-* yet, so the literal is
+   used. When the token system lands and declares --gap-lg on :root, it inherits in here and
+   wins over the fallback automatically — no edit to this file, no migration step, nothing to
+   delete. That is why the token NAME is written today rather than a bare literal: naming it
+   otherwise would cost 26 edits later.
+
+   NOTE — the top three rungs (xl / 2xl / 3xl) are FLAT here. They are designed to step at
+   768/1024 (32→40, 40→48→64, 48→64→96) so a large structural beat compresses on a phone, but
+   that stepping belongs to the token ramp, not to this module. The base value is the fallback;
+   the stepping returns with the token system. */
+.layout {
+  display: grid;
+  /* Both axes zeroed HERE on every .layout, because --layout-*-gap custom properties INHERIT: a
+     nested Layout that sets one axis would otherwise pick up an ancestor's value on the other.
+     The .rowgap-* / .colgap-* opt-in classes come later in the cascade and override this. */
+  --layout-row-gap: 0;
+  --layout-col-gap: 0;
+  column-gap: var(--layout-col-gap);
+  row-gap: var(--layout-row-gap);
+  grid-template-columns: var(--tmpl-base, minmax(0, 1fr));
+  align-items: var(--layout-align, stretch);
+  justify-items: var(--layout-justify-items, stretch);
+}
+
+/* rowGap — the block-axis seam, between rows. Rung names match the tokens they will resolve to. */
+.rowgap-none { --layout-row-gap: 0; }                          /*  0   flush, on purpose — rows share an edge */
+.rowgap-2xs  { --layout-row-gap: var(--gap-2xs, 0.25rem); }    /*  4   joined */
+.rowgap-xs   { --layout-row-gap: var(--gap-xs, 0.5rem); }      /*  8   icon ↔ label */
+.rowgap-sm   { --layout-row-gap: var(--gap-sm, 0.75rem); }     /* 12   chips, button rows */
+.rowgap-md   { --layout-row-gap: var(--gap-md, 1rem); }        /* 16   fields, rows */
+.rowgap-lg   { --layout-row-gap: var(--gap-lg, 1.5rem); }      /* 24   the field seam — a card grid, a copy block */
+.rowgap-xl   { --layout-row-gap: var(--gap-xl, 2rem); }        /* 32   between unlike blocks */
+.rowgap-2xl  { --layout-row-gap: var(--gap-2xl, 2.5rem); }     /* 40   sub-regions */
+.rowgap-3xl  { --layout-row-gap: var(--gap-3xl, 3rem); }       /* 48   large sub-region beat */
+
+/* colGap — the inline-axis seam, between columns. Same ramp; no tracks, nothing to act on. */
+.colgap-none { --layout-col-gap: 0; }
+.colgap-2xs  { --layout-col-gap: var(--gap-2xs, 0.25rem); }
+.colgap-xs   { --layout-col-gap: var(--gap-xs, 0.5rem); }
+.colgap-sm   { --layout-col-gap: var(--gap-sm, 0.75rem); }
+.colgap-md   { --layout-col-gap: var(--gap-md, 1rem); }
+.colgap-lg   { --layout-col-gap: var(--gap-lg, 1.5rem); }
+.colgap-xl   { --layout-col-gap: var(--gap-xl, 2rem); }
+.colgap-2xl  { --layout-col-gap: var(--gap-2xl, 2.5rem); }
+.colgap-3xl  { --layout-col-gap: var(--gap-3xl, 3rem); }
+
+/* minTrack — track width for the content-driven modes ("fit" floor / "tile" actual). Component
+   GEOMETRY, not spacing rhythm, so these are local literals and stay local literals even after
+   the token system arrives (same reasoning as Section's inset ramp). Consumed by the inline
+   --tmpl-base that columns="fit"/"tile" emits. */
+.mintrack-xs { --layout-min-track: 12rem; } /* 192 — small tiles, logo cells */
+.mintrack-sm { --layout-min-track: 16rem; } /* 256 — compact cards */
+.mintrack-md { --layout-min-track: 20rem; } /* 320 — standard cards (default) */
+.mintrack-lg { --layout-min-track: 24rem; } /* 384 — feature cards */
+
+/* PLACEMENT — three axes, because a grid genuinely has three distinct questions:
+     align        = block axis, each item within its row      (align-items)
+     justifyItems = inline axis, each item within its track   (justify-items)
+     justify      = inline axis, the TRACKS within the row    (justify-content)
+   `align` and `justify` mean the same thing here as on Cluster, so the two primitives read
+   alike; `justifyItems` is named for the CSS property because it is a genuinely different
+   question and any shorter name would blur it into `justify`. */
+.align-stretch { --layout-align: stretch; }
+.align-start   { --layout-align: start; }
+.align-center  { --layout-align: center; }
+.align-end     { --layout-align: end; }
+
+.justifyitems-stretch { --layout-justify-items: stretch; }
+.justifyitems-start   { --layout-justify-items: start; }
+.justifyitems-center  { --layout-justify-items: center; }
+.justifyitems-end     { --layout-justify-items: end; }
+
+/* Track distribution. No class is emitted when `justify` is omitted, so the browser default
+   stands. Only bites when the tracks leave slack — auto-width tracks, or a "fit" grid with room
+   to spare; with 1fr tracks there is nothing to distribute. */
+.justify-start   { justify-content: start; }
+.justify-center  { justify-content: center; }
+.justify-end     { justify-content: end; }
+.justify-between { justify-content: space-between; }
+
+/* equalRows — every item the same height. Two parts: grid-auto-rows:1fr makes wrapped rows
+   equal to the tallest, and align-items:stretch makes each item FILL its row (so the card
+   surface actually grows, not just the invisible track). The stretch is forced here — not read
+   from --layout-align — so the prop "just works" even alongside align="start", which would
+   otherwise leave content-height cards top-aligned in tall rows. Block axis is spoken for; use
+   justifyItems for inline placement. Do not use on a vertical stack. */
+.equal-rows {
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .layout { grid-template-columns: var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr))); }
+}
+@media (min-width: 1024px) {
+  .layout { grid-template-columns: var(--tmpl-lg, var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr)))); }
+}
+@media (min-width: 1440px) {
+  .layout { grid-template-columns: var(--tmpl-xl, var(--tmpl-lg, var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr))))); }
+}

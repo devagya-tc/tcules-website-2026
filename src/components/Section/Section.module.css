@@ -1,0 +1,89 @@
+/* Section — the full-width band + the one shared content column.
+
+   The element is always full-width, so a background set on it later (when the token system
+   lands) will bleed edge-to-edge for free. Horizontal padding alone insets the content:
+
+     padding-inline: max( --inset , (100% - --max-content) / 2 )
+
+   • narrow viewports → the max() picks --inset → content = width minus the edge inset
+   • past --max-content → the centering term wins → content is capped and centred
+
+   So one declaration does the edge inset, the centring, and the max-width cap.
+
+   The true "gutter" (space BETWEEN columns) is not here — that is Layout's colGap.
+
+   Media queries cannot read custom properties, so the breakpoints (480 / 768 / 1024 / 1440)
+   are inline; only the inset VALUE steps.
+
+   The edge-inset ramp and the content width are page-shell geometry, not spacing rhythm, so
+   they are local literals and stay local literals even after the token system arrives. */
+.section {
+  --inset: 1rem; /* 16px — page edge inset (mobile) */
+  --max-content: 80rem; /* 1280px — the shared content column */
+
+  width: 100%;
+  padding-inline: max(var(--inset), (100% - var(--max-content)) / 2);
+
+  /* Positioned containing block for BLEED LAYERS. A child that needs to escape the content
+     column and cover the band edge-to-edge (a hero backdrop, a decorative rule field) does it
+     with `position: absolute; inset: 0` — an absolutely positioned box resolves against its
+     ancestor's PADDING box, which here is the full band including the inline inset above.
+     That is the only reliable escape: the inset is a max() over `100%`, so a child cannot
+     recompute it from a custom property (the % would resolve against the child's own width).
+     Purely enabling — it changes nothing about in-flow content. */
+  position: relative;
+
+  /* No band separator, by design. Bands are separated by whitespace — and later by tone —
+     never by a rule. A stacked pair reads as two bands because the ground changes, not
+     because a line says so.
+
+     Vertical rhythm is system-owned, NOT author-controlled: 64 → 96 → 128, stepping at
+     768/1024. `flush` zeroes it.
+
+     The var() fallbacks are the token seam. Nothing defines --space-* yet, so the literal is
+     used. When the token system lands and declares --space-64 on :root, it inherits in here
+     and wins over the fallback automatically — no edit to this file, no migration step. That
+     is why the token NAME is written here today rather than a bare literal. */
+  padding-block: var(--space-64, 4rem); /* 64 */
+}
+
+.flush {
+  padding-block: 0;
+}
+
+@media (min-width: 480px) {
+  .section {
+    --inset: 1.5rem; /* 24 */
+  }
+}
+
+@media (min-width: 768px) {
+  .section {
+    --inset: 2rem; /* 32 */
+    padding-block: var(--space-96, 6rem); /* 96 */
+  }
+  .flush {
+    padding-block: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section {
+    --inset: 2.5rem; /* 40 */
+    padding-block: var(--space-128, 8rem); /* 128 */
+  }
+  .flush {
+    padding-block: 0;
+  }
+}
+
+@media (min-width: 1440px) {
+  .section {
+    --inset: 3rem; /* 48 */
+  }
+}
+
+/* Surface COLOUR is deliberately absent. This module holds ONLY the structural band —
+   padding, inset, width, vertical rhythm, positioning. When the token system arrives, the
+   tonal band and the dark island are reintroduced via a data attribute on the element and a
+   per-surface role remap in the token layer, so this file stays colourless. */
