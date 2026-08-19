@@ -1,0 +1,5 @@
+/* The styles entry for the design-sync bundle.
+   One line on purpose: app/globals.css is already the site's real global stylesheet
+   (tokens/index.css → reset.css → the base element layer, in that order), so pointing at it
+   keeps the bundle honest as that file changes rather than duplicating its decisions here. */
+@import '../src/app/globals.css';

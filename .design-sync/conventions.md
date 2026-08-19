@@ -1,0 +1,119 @@
+## How to build with Tcules
+
+No provider, no theme object, no wrapper component. Load `styles.css` and `_ds_bundle.js` and
+every component is correct. All 9 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
+`Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`.
+
+### There is no class vocabulary — do not invent one
+
+Components are CSS Modules with hashed class names. There are **no utility classes** (`p-4`,
+`bg-surface`, `text-lg` do not exist and never will) and **no style props** (`color`, `bg`,
+`pad`). Anything you write as a class name is guaranteed not to resolve. You style by choosing
+components and props; for your own glue CSS, you use the custom properties below.
+
+### A page is a stack of `<Section>` bands
+
+`Section` is the full-width band. It paints the ground, owns the content column (1240 cap, 32
+gutter) and the vertical air. `surface="paper | tint | ink | blue"` sets the ground and emits
+`data-surface`, which every descendant reads — so a `Button` three levels deep re-colours itself
+correctly without being told where it is. Set the surface once, on the band.
+
+**Never** set `background`, `color`, `padding`, `max-width` or horizontal margin on a Section or
+to override one. That is the single most damaging thing you can do here: it puts one band out of
+alignment with every other band and defeats the surface model. Use `density="tight" | "open"`
+(64 / 128 against the default 96) or `flush` (0) for vertical air.
+
+### All arrangement comes from three primitives
+
+Never write `display: grid` or `display: flex` yourself.
+
+- **`Layout`** — the columnar axis and the vertical stack. `columns={3}`, `columns={[2,1]}`,
+  `columns="fit"` / `"tile"` (with `minTrack="xs|sm|md|lg"`), or per-breakpoint
+  `{base, md, lg, xl}`. Also `align`, `justifyItems`, `justify`, `equalRows`. Omit `columns` for
+  a vertical stack — that is the most common Layout in the system.
+- **`Cluster`** — the inline axis: wrapping rows of buttons, chips, metadata. `align`, `justify`,
+  `nowrap`.
+
+Both take `rowGap` and `colGap` as **gap-scale role names**, and **neither has a default — an
+axis you do not state renders 0**. The nine steps, named for what they separate:
+
+`inline` 4 · `tight` 8 · `text` 16 · `block` 24 · `gutter` 32 · `stack` 48 · `column` 64 ·
+`section` 96 · `section-open` 128
+
+`Layout` also accepts `none`. **`Cluster` caps at `block`** — `gutter` and above are silently
+ignored there, which renders as a collapsed row, so use `block` as Cluster's largest step.
+
+Two more rules that decide whether a composition is right:
+
+1. **Children never set their own outer spacing.** No margins on anything you put inside a
+   Layout or Cluster. The container owns the gap.
+2. **Vary rhythm by NESTING, not by a knob.** Tighten by grouping into an inner `Layout` with a
+   smaller `rowGap`; loosen by separating. A heading's spacing is a consequence of which Layout
+   it sits in.
+
+### Custom properties, for your own glue CSS only
+
+- **Distance** — `var(--gap-block)` and the eight other role names above. Never a raw px.
+- **Type is a composite**, and size is never restated:
+  `font: var(--text-h2); letter-spacing: var(--text-h2-tracking);`
+  Roles: `--text-display`, `--text-h1`…`--text-h5`, `--text-lead`, `--text-body`,
+  `--text-body-lg`, `--text-body-sm`, `--text-ui`, `--text-ui-lg`, `--text-ui-sm`,
+  `--text-eyebrow`, `--text-caption`, `--text-micro`, `--text-quote`, `--text-stat`,
+  `--text-code`. A `-tracking` companion exists for `display`, `h1`–`h5`, `eyebrow`, `micro`,
+  `stat`, `ui`, `ui-sm`, `ui-lg` — pass it whenever you use those.
+- **Surface colour** — `--sec-ground`, `--sec-ink`, `--sec-ink-muted`, `--sec-ink-label`,
+  `--sec-rule`, `--sec-rule-strong`, `--sec-accent`, `--sec-link-ink`. These are remapped per
+  surface, so reading them keeps your glue correct on all four grounds. Colour has no
+  surface-independent usage layer by design — do not hard-code a hex.
+- Families are `--font-family-display` (Newsreader), `--font-family-sans` (Public Sans),
+  `--font-family-mono` (Geist Mono).
+
+### Components
+
+`Button` — `emphasis="solid|ghost|link"` × `tone="primary|neutral"`, `size="sm|md|lg"`, plus
+`icon` / `iconLeft` (one side only), `iconOnly` (requires `aria-label`), `active`, `disabled`.
+A button that navigates is an anchor: `as="a" href="…"`. It never sets its own outer spacing —
+put it in a `Cluster`.
+
+`Icon` — `name` is a 17-value union (`arrow-right`, `check`, `chevron-down`, `design-systems`,
+`software-development`, …; the full list is in `Icon.d.ts`). Decorative and `aria-hidden` by
+default; pass `label` only when the glyph carries meaning alone. Inside a Button the button
+decides the size.
+
+`Prose` — the rich-text flow, for a CMS body string via `html` or JSX via `children`. It is the
+one component allowed to use margins internally.
+
+`SiteNav` / `SiteFooter` — whole page furniture, driven entirely by props (`items` + `cta`;
+`brand`/`groups`/`newsletter`/`meta`/`utility`). Both take `surface`.
+
+### Read before styling
+
+This design system's `styles.css` and its `@import` closure (the token definitions all live in
+`_ds_bundle.css`, which `styles.css` imports) are the authority on every custom property. For a
+component, `components/<group>/<Name>/<Name>.prompt.md` and `<Name>.d.ts` are the real API —
+read them rather than guessing a prop.
+
+### An idiomatic block
+
+```jsx
+const { Section, Layout, Cluster, Button, Icon } = window.Tcules;
+
+<Section surface="tint" density="tight">
+  <Layout columns={[2, 1]} colGap="column" rowGap="stack" align="start">
+    <Layout rowGap="block">
+      <h2>Design systems your engineers trust</h2>
+      <p>Tokens with one answer per question, and primitives that own every distance.</p>
+      <Cluster colGap="tight" rowGap="tight">
+        <Button as="a" href="/contact">Start a project</Button>
+        <Button emphasis="ghost" tone="neutral" iconLeft={<Icon name="download" />}>
+          Download the overview
+        </Button>
+      </Cluster>
+    </Layout>
+    <Layout rowGap="text">
+      <h4>What you get</h4>
+      <p>A token layer, three layout primitives, and a component set with a sandbox route each.</p>
+    </Layout>
+  </Layout>
+</Section>
+```

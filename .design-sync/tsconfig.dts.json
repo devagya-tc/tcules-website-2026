@@ -1,0 +1,21 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": false,
+    "incremental": false,
+    "rootDir": "../src",
+    "declarationDir": "../dist/types",
+    "plugins": []
+  },
+  "include": [
+    "../next-env.d.ts",
+    "../src/components/**/*.ts",
+    "../src/components/**/*.tsx",
+    "../src/patterns/**/*.ts",
+    "../src/patterns/**/*.tsx",
+    "../src/lib/**/*.ts"
+  ]
+}

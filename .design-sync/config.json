@@ -1,0 +1,53 @@
+{
+  "projectId": "7e0cfeb1-6218-4b3a-8fca-ef8320798b90",
+  "pkg": "tcules-website-2026",
+  "globalName": "Tcules",
+  "shape": "package",
+  "srcDir": "src",
+  "tsconfig": ".design-sync/tsconfig.bundle.json",
+  "buildCmd": "npx tsc -p .design-sync/tsconfig.dts.json",
+  "docsDir": ".design-sync/groups",
+  "guidelinesGlob": [
+    "docs/*.md"
+  ],
+  "componentSrcMap": {
+    "Section": "src/components/Section/Section.tsx",
+    "Layout": "src/components/Layout/Layout.tsx",
+    "Cluster": "src/components/Cluster/Cluster.tsx",
+    "Button": "src/components/Button/Button.tsx",
+    "Icon": "src/components/Icon/Icon.tsx",
+    "Logo": "src/components/Logo/Logo.tsx",
+    "Prose": "src/components/Prose/Prose.tsx",
+    "SiteNav": "src/patterns/SiteNav/SiteNav.tsx",
+    "SiteFooter": "src/patterns/SiteFooter/SiteFooter.tsx"
+  },
+  "overrides": {
+    "Section": {
+      "cardMode": "column"
+    },
+    "SiteNav": {
+      "cardMode": "column",
+      "viewport": "1280x420"
+    },
+    "SiteFooter": {
+      "cardMode": "column",
+      "viewport": "1280x1500"
+    },
+    "Layout": {
+      "cardMode": "column"
+    },
+    "Cluster": {
+      "cardMode": "column"
+    },
+    "Icon": {
+      "cardMode": "column"
+    },
+    "Logo": {
+      "cardMode": "column"
+    }
+  },
+  "dtsPropsFor": {
+    "Icon": "  /** Which glyph. The union of the set in glyphs.ts, so a typo fails to compile. */\n  name: \"arrow-right\" | \"arrow-left\" | \"download\" | \"copy\" | \"close-circle\" | \"document-text\" | \"check\" | \"chevron-down\" | \"chevron-right\" | \"menu\" | \"close\" | \"product-design\" | \"modernisation\" | \"design-systems\" | \"ai-product-ux\" | \"design-engineering\" | \"software-development\";\n  /** Size role. Defaults to `md` (16). Ignored inside a control that sizes its own icons. */\n  size?: \"sm\" | \"md\" | \"lg\" | \"xl\";\n  /** An accessible name, for an icon that carries meaning ON ITS OWN. Leave it off for the\n      common case \u2014 a glyph beside a label, or inside a button that already has one \u2014 where the\n      icon is decorative and is rendered aria-hidden. */\n  label?: string;\n  className?: string;"
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}

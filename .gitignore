@@ -33,3 +33,11 @@ yarn-error.log*
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# design-sync (claude.ai/design) — staged scripts, build output, machine state
+/.ds-sync/
+/ds-bundle/
+/dist/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules
