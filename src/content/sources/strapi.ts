@@ -16,4 +16,7 @@ export const strapiSource: ContentSource = {
   async listPages() {
     throw new Error('strapiSource is not implemented yet — the active source is fixtureSource.');
   },
+  async getNavigation() {
+    throw new Error('strapiSource is not implemented yet — the active source is fixtureSource.');
+  },
 };

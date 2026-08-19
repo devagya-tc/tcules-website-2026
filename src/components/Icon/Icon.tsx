@@ -40,17 +40,20 @@ export type IconProps = {
 };
 
 /**
- * Icon — a line glyph from the system's set, drawn in `currentColor`.
+ * Icon — a solid glyph from the system's set, filled with `currentColor`.
  *
- * It has no colour of its own and takes no colour prop. The glyph is stroked in `currentColor`,
+ * It has no colour of its own and takes no colour prop. The glyph is filled with `currentColor`,
  * so it inherits the ink of the surface or the foreground of the control it sits in and is
  * correct on all four surfaces without being told which one. There is no coloured icon inside a
  * button anywhere in this system, in either colour variant.
  *
- * Stroke weight is 1.5 in the box's own units, not 1.5 device pixels: scaled into a 16px control
- * the glyph renders at a true 1px, which is what keeps a small icon from looking heavier than the
- * label beside it. That is the Solar convention and the reason the ramp is expressed as a viewBox
- * rather than a set of separately drawn sizes.
+ * A glyph's counters are HOLES, cut with `fill-rule: evenodd` in Icon.module.css, not shapes
+ * painted in the ground colour — so they show whatever is behind them and stay correct on all
+ * four surfaces. A painted counter would be right on exactly one.
+ *
+ * There is no stroke weight to set. A solid glyph carries its weight in the geometry, which is
+ * what lets one drawing serve 14, 16, 18 and 24 — and the reason the ramp is expressed as a
+ * viewBox rather than a set of separately drawn sizes.
  */
 export function Icon({ name, size = 'md', label, className }: IconProps) {
   const named = label !== undefined;

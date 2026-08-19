@@ -1,0 +1,251 @@
+/* ══ Component layer — nav ═══════════════════════════════════════════════════════
+   Tier 3. Every value the site navigation uses — the bar, the mega-menu panel and the
+   mobile drawer — decided once and re-decided per surface.
+
+   SiteNav is a PATTERN, not a primitive, and it still gets a layer here. It has to: the
+   rule that no stylesheet outside tokens/ writes a hex or a raw distance does not have a
+   tier exemption, and a pattern with chrome of its own — a bar height, a panel inset, an
+   item's hover fill — has values that are neither a gap-scale step nor a colour any surface
+   already names. The alternative is literals in SiteNav.module.css, which is the drift this
+   whole layer exists to stop. Same argument, same file shape as button.css.
+
+   Naming: --nav-{part}-{modifier}-{state}.
+     item          a top-level bar item — the disclosure trigger or the plain link
+     row           a service/format row inside a panel: mark, label, promise
+     rail          the panel's second column
+     panel         the mega-menu band itself
+     drawer        the mobile sheet
+
+   A CONTROL has a bg and an fg; a passage of text on a ground has an ink. Both registers
+   appear here because the nav contains both: --nav-item-bg-hover is a control fill,
+   --nav-row-promise-ink is body copy. Never mix them on one part.
+
+   ── What is NOT here ────────────────────────────────────────────────────────────
+   The ground. The bar, the panel and the drawer are each a Section, so Section paints them
+   from --sec-ground and a --nav-ground would be a second name for a decision already made
+   one layer down — which a component may not read and must not duplicate.
+
+   Button is likewise absent. The panel's "All services" link and the bar's CTA are Buttons
+   and answer to --btn-*; nothing here restates a control this system already owns.
+
+   ── Every surface restates every token ──────────────────────────────────────────
+   Not the deltas from paper. The nav is the one component guaranteed to be nested inside
+   something else — a drawer over an ink band, a panel over a blue pivot — so a block that
+   omits a token inherits it from whatever the page put underneath. The four blocks below
+   are repetitive on purpose and tokens:check fails the build if one drifts.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   Bar heights are literals and t-shirt-named, like --btn-height-md: a bar's height is set
+   so a 24px wordmark and a 40px control both sit in it with air to spare, which is optical
+   geometry rather than a distance between two things. The compact step is not a responsive
+   version of the same decision — below 1024 the bar holds a mark and one control instead of
+   a mark, five items and a CTA, so it is a different bar.
+
+   Two values reach past the gap scale into the space ramp, and both are marked. They are
+   optical corrections against Geist Mono's uppercase side bearings at 13px — the same
+   measurement button.css documents — not layout distances, and they must not move the day
+   the gap scale is re-tuned.
+
+   Type arrives as a COMPOSITE everywhere. Nothing here restates a family, a size or a
+   ratio.                                                                            */
+:root{
+--nav-bar-height:72px;
+--nav-bar-height-compact:64px;
+--nav-rule-width:var(--border-width-hairline);
+--nav-z:var(--z-sticky);
+--nav-panel-z:var(--z-dropdown);
+--nav-transition-duration:var(--duration-fast);
+--nav-transition-easing:var(--easing-standard);
+--nav-ring-width:var(--focus-ring-width);
+--nav-ring-offset:var(--focus-ring-offset);
+
+/* The bar item. 40 tall so it lines up with a md Button in the same row. */
+--nav-item-height:40px;
+--nav-item-padding-x:var(--space-12);               /* optical, not --gap-text: mono side bearings */
+--nav-item-gap:var(--space-4);                      /* optical, not --gap-inline: label to chevron */
+--nav-item-radius:var(--radius-8);
+--nav-item-text:var(--text-ui);
+--nav-item-text-tracking:var(--text-ui-tracking);
+--nav-item-icon-size:var(--icon-size-14);
+
+/* The panel. Its air is its own — the band is `flush`, because a nav panel is not a content
+ section and the three section steps (64 · 96 · 128) are all too tall for one. */
+--nav-panel-padding-y:var(--gap-stack);
+--nav-panel-bar-inset:var(--gap-text);
+/* Cap the panel at the viewport below it and let it scroll. Expertise carries twelve rows and
+ six rail links; on a 13" laptop in a browser with two toolbars, the uncapped panel runs off
+ the bottom and the last row cannot be reached at all. dvh, not vh, so a mobile browser's
+ collapsing chrome does not leave the cap wrong by the height of its own address bar. */
+--nav-panel-max-block:calc(100dvh - var(--nav-bar-height));
+
+/* A row inside a panel: mark, label, promise. */
+--nav-row-padding:var(--gap-tight);
+--nav-row-radius:var(--radius-8);
+--nav-row-text:var(--text-body-lg);
+--nav-row-promise-text:var(--text-body-sm);
+--nav-row-icon-size:var(--icon-size-24);
+--nav-row-measure:var(--measure-body);
+
+/* The rail — the panel's second column. Its hairline is what makes two halves read as two
+ halves; the inset is the air between that rule and the rail's own content, which is why the
+ panel's column gap is `gutter` rather than `column` (32 + rule + 32 lands at the 64 a
+ `column` seam would have given, with the rule in the middle of it). */
+--nav-rail-inset:var(--gap-gutter);
+--nav-rail-title-text:var(--text-h5);
+--nav-rail-title-tracking:var(--text-h5-tracking);
+--nav-rail-body-text:var(--text-body-sm);
+--nav-rail-link-text:var(--text-body-sm);
+
+/* Labels — the optional heading on a rows block, and a rail group's name. Mono, uppercase,
+ the same eyebrow role the rest of the system uses for a label that is not a link. */
+--nav-label-text:var(--text-eyebrow);
+--nav-label-tracking:var(--text-eyebrow-tracking);
+
+/* The mobile drawer. Padding is its own for the same reason the panel's is. */
+--nav-drawer-padding-y:var(--gap-gutter);
+--nav-drawer-item-padding-y:var(--gap-text);
+--nav-drawer-item-text:var(--text-ui-lg);
+--nav-drawer-item-tracking:var(--text-ui-lg-tracking);
+--nav-drawer-panel-inset:var(--gap-text);
+--nav-drawer-panel-gap:var(--gap-text);
+--nav-drawer-max-block:calc(100dvh - var(--nav-bar-height-compact));
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The default bar.
+
+   An item's rest state is ink, not blue. Every item in the bar is a link, so colouring them
+   all blue spends the one signal the system has for "clickable" on a row where it
+   distinguishes nothing — the same argument that keeps the eyebrow neutral in section.css.
+   Blue is what the item becomes when you reach for it, and what the CURRENT item holds.
+
+   The active state is the held second step, matching the button model: a fill plus the blue
+   label. brandeis-500 on brandeis-50 measures 5.79:1.
+
+   --nav-row-icon-ink is neutral-500 at 3.42:1 against paper. That is below the 4.5:1 text
+   floor and above the 3:1 floor for a non-text graphic, which is the correct floor here: the
+   mark repeats what the label beside it already says, and the label is at 14.62:1. It is
+   quieter than the label ON PURPOSE — a row whose glyph is as loud as its title reads as two
+   headings.                                                                          */
+:root,[data-surface="paper"]{
+--nav-rule:var(--color-neutral-200);
+--nav-item-fg:var(--color-neutral-900);             /* 14.62:1 */
+--nav-item-fg-hover:var(--color-brandeis-500);
+--nav-item-bg-hover:var(--color-neutral-100);
+--nav-item-fg-active:var(--color-brandeis-500);
+--nav-item-bg-active:var(--color-brandeis-50);      /*  5.79:1 with the label above */
+--nav-row-bg-hover:var(--color-neutral-100);
+--nav-row-label-ink:var(--color-neutral-900);
+--nav-row-label-ink-hover:var(--color-brandeis-500);
+--nav-row-promise-ink:var(--color-neutral-600);     /*  4.92:1 — the floor of AA, do not lighten */
+--nav-row-icon-ink:var(--color-neutral-500);        /*  3.42:1 — non-text floor, see the header */
+--nav-row-icon-ink-hover:var(--color-brandeis-500);
+--nav-label-ink:var(--color-neutral-700);           /*  8.14:1 */
+--nav-title-ink:var(--color-neutral-900);
+--nav-body-ink:var(--color-neutral-600);
+--nav-link-ink:var(--color-neutral-900);
+--nav-link-ink-hover:var(--color-brandeis-500);
+--nav-ring-color:var(--color-brandeis-500);
+--nav-ring-gap-color:var(--color-paper);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   A header sitting on the tint ground. Three families of value step one deeper and none of
+   them is optional.
+
+   The FILLS: neutral-100 is already the colour of this panel, so both hover fills go to 200,
+   and the active fill goes from brandeis-50 to 100 for the same reason — 50 on paper-deep is
+   invisible, which would leave the current item marked by colour alone.
+
+   The MUTED INKS: neutral-600 on paper-deep is 4.39:1 and FAILS AA. The promise line steps to
+   700 (7.27:1) and the rail body with it; the label steps to 800 (10.54:1) to stay clearly
+   apart from the promise. The row mark steps to 600, still a graphic at 4.39:1 and now well
+   clear of the 3:1 floor.
+
+   Everything else matches paper and is restated anyway, because a surface that omits a token
+   is not self-contained.                                                             */
+[data-surface="tint"]{
+--nav-rule:var(--color-neutral-300);
+--nav-item-fg:var(--color-neutral-900);             /* 13.06:1 */
+--nav-item-fg-hover:var(--color-brandeis-500);
+--nav-item-bg-hover:var(--color-neutral-200);
+--nav-item-fg-active:var(--color-brandeis-500);
+--nav-item-bg-active:var(--color-brandeis-100);     /* stepped; 50 is invisible on paper-deep */
+--nav-row-bg-hover:var(--color-neutral-200);
+--nav-row-label-ink:var(--color-neutral-900);
+--nav-row-label-ink-hover:var(--color-brandeis-500);
+--nav-row-promise-ink:var(--color-neutral-700);     /*  7.27:1 — stepped; 600 would be 4.39:1 */
+--nav-row-icon-ink:var(--color-neutral-600);
+--nav-row-icon-ink-hover:var(--color-brandeis-500);
+--nav-label-ink:var(--color-neutral-800);           /* 10.54:1 — stepped to stay clear of promise */
+--nav-title-ink:var(--color-neutral-900);
+--nav-body-ink:var(--color-neutral-700);
+--nav-link-ink:var(--color-neutral-900);
+--nav-link-ink-hover:var(--color-brandeis-500);
+--nav-ring-color:var(--color-brandeis-500);
+--nav-ring-gap-color:var(--color-paper-deep);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   The neutrals reverse and the blues lift. brandeis-500 as text on neutral-950 reaches only
+   2.77:1, so every blue that carries a LABEL here comes off the light end of the ramp: hover
+   at 300 (7.32:1), the held active state at 200 (10.48:1) so it reads as the deeper of the
+   two, and the focus ring at 300 — the same three floors button.css answers to.
+
+   The fills are neutral, never a blue tint. At the pale end of the blue ramp there is no tint
+   left to see against a near-black ground, so a "subtle blue wash" resolves to nothing and the
+   hover state disappears.                                                            */
+[data-surface="ink"]{
+--nav-rule:var(--color-neutral-800);
+--nav-item-fg:var(--color-white);
+--nav-item-fg-hover:var(--color-brandeis-300);      /*  7.32:1 */
+--nav-item-bg-hover:var(--color-neutral-900);
+--nav-item-fg-active:var(--color-brandeis-200);     /* 10.48:1 — the deeper of the two steps */
+--nav-item-bg-active:var(--color-neutral-800);
+--nav-row-bg-hover:var(--color-neutral-900);
+--nav-row-label-ink:var(--color-white);
+--nav-row-label-ink-hover:var(--color-brandeis-300);
+--nav-row-promise-ink:var(--color-neutral-400);
+--nav-row-icon-ink:var(--color-neutral-500);
+--nav-row-icon-ink-hover:var(--color-brandeis-300);
+--nav-label-ink:var(--color-neutral-500);
+--nav-title-ink:var(--color-white);
+--nav-body-ink:var(--color-neutral-400);
+--nav-link-ink:var(--color-white);
+--nav-link-ink-hover:var(--color-brandeis-300);
+--nav-ring-color:var(--color-brandeis-300);
+--nav-ring-gap-color:var(--color-neutral-950);
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   Blue cannot signal itself. Every hover and active state that was a colour change on the
+   other three surfaces becomes a FILL here — 600 for hover, 700 for the held step — and the
+   labels collapse to white, because on a blue field there is one voice. That collapse is
+   correct rather than lazy: an item that went pale-blue on hover against a blue ground would
+   read as disabled.
+
+   Only the light end of the ramp clears AA on brandeis-500: white 6.23:1, 50 at 5.57:1, 100 at
+   4.91:1, and 200 already at 3.78:1 — which is why the muted inks stop at 100 and the row mark
+   at 200 is a graphic, not text.                                                     */
+[data-surface="blue"]{
+--nav-rule:var(--color-brandeis-400);
+--nav-item-fg:var(--color-white);                   /*  6.23:1 */
+--nav-item-fg-hover:var(--color-white);
+--nav-item-bg-hover:var(--color-brandeis-600);
+--nav-item-fg-active:var(--color-white);
+--nav-item-bg-active:var(--color-brandeis-700);
+--nav-row-bg-hover:var(--color-brandeis-600);
+--nav-row-label-ink:var(--color-white);
+--nav-row-label-ink-hover:var(--color-white);
+--nav-row-promise-ink:var(--color-brandeis-100);    /*  4.91:1 */
+--nav-row-icon-ink:var(--color-brandeis-200);       /*  3.78:1 — non-text floor */
+--nav-row-icon-ink-hover:var(--color-white);
+--nav-label-ink:var(--color-brandeis-100);
+--nav-title-ink:var(--color-white);
+--nav-body-ink:var(--color-brandeis-100);
+--nav-link-ink:var(--color-white);
+--nav-link-ink-hover:var(--color-brandeis-50);      /*  5.57:1 */
+--nav-ring-color:var(--color-white);
+--nav-ring-gap-color:var(--color-brandeis-500);
+}

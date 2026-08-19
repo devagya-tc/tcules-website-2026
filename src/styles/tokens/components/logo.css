@@ -1,0 +1,64 @@
+/* ══ Component layer — logo ══════════════════════════════════════════════════════
+   Tier 3. The wordmark's three heights, and the one colour in it that is not ink.
+
+   Naming: --logo-{part}-{modifier}.
+
+   ── Why there is exactly one surface-dependent token ────────────────────────────
+   The letterforms are not here. They take `currentColor` — the mark inherits the ink of the
+   surface or the foreground of the link that wraps it, so a --logo-ink would be a token
+   asserting a decision the cascade already makes correctly, and it would be wrong the
+   moment the mark sat inside a link rather than beside one.
+
+   The bar above the "u" is the exception, and it is the reason this layer exists: it is
+   brand colour, so it does NOT follow ink, and what it should be depends entirely on what
+   it is drawn over. Hence one token, declared four times.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   Heights, not widths: the mark keeps its own proportions and `width: auto` follows.
+
+   These are component GEOMETRY and take t-shirt names, like --btn-height-*. They are
+   literals rather than gap-scale steps on purpose — a logotype's height is set so its
+   x-height reads level with the chrome beside it, which is an optical measurement against
+   Geist Mono at 13px, not a distance between two things. md at 24 is the header bar; lg at
+   40 is the footer, where the mark is the largest thing in the band.                  */
+:root{
+--logo-height-sm:20px;
+--logo-height-md:24px;
+--logo-height-lg:40px;
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The brand value. Blue means clickable on the web, and this is the one mark allowed to
+   borrow it without being a link, because it IS the brand rather than a reference to it. */
+:root,[data-surface="paper"]{
+--logo-bar:var(--color-brandeis-500);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   Unchanged from paper — brandeis-500 holds against paper-deep — and restated rather than
+   inherited, so a tint panel nested inside an ink section does not take ink's lifted step. */
+[data-surface="tint"]{
+--logo-bar:var(--color-brandeis-500);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   Lifted to 300. brandeis-500 on neutral-950 reaches 2.77:1 — the same floor the button
+   layer answers to for a ring — and the bar is a 27-unit block of solid colour, so a step
+   that is merely "visible" is not enough: it has to read as the same mark. 300 is where the
+   footer's wordmark stops looking like it has a dark smudge over the "u".               */
+[data-surface="ink"]{
+--logo-bar:var(--color-brandeis-300);
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   Blue cannot accent itself, so the bar goes to Peridot — the one colour that still carries
+   emphasis on a blue field (see the blue block in section.css). This is the highlight ramp
+   doing the job it exists for, and it is the only place in the system where the wordmark is
+   not blue or ink.
+
+   The alternative is variant="mono", which the component offers for exactly this surface
+   when the mark should read as one silhouette instead.                                  */
+[data-surface="blue"]{
+--logo-bar:var(--color-peridot-400);
+}

@@ -1,0 +1,463 @@
+/* SiteNav — the site header: sticky bar, mega-menu panel, compact drawer.
+
+   Every colour, distance, height, radius and duration comes from --nav-*, declared in
+   tokens/components/nav.css and re-declared once per surface there. This file decides STRUCTURE
+   and which token each state reads, and states no value of its own — so the same markup answers
+   a paper header, a tint one, the ink footer's sibling and a blue pivot without knowing which.
+
+   ── What arranges what ──────────────────────────────────────────────────────────
+   Nothing in this file lays out content. Every band is a Section, every stack is a Layout and
+   every row is a Cluster, so the rules below are colour, type, hairlines and the two things a
+   primitive cannot express: a sticky bar's position, and an overlay's escape from the flow.
+
+   The exceptions are the CONTROLS — .itemControl and .drawerControl — which are `inline-flex` /
+   `block` boxes holding their own label and glyph. That is a control laying out its own inside,
+   exactly as Button.module.css does with the same 4px optical gap, and it is not the
+   "hand-rolled grid for arrangement" the layout rule prohibits.
+
+   ── Hiding, and why `display` appears on a Cluster's className ──────────────────
+   Two elements swap at 1024: the item list and the CTA are desktop-only, the menu button is
+   compact-only. Hiding a Cluster means overriding the `display: flex` it sets on itself, and
+   restoring it means naming `flex` again in the media query. That is the cost of a primitive that
+   owns its own display, and it is the correct trade — the alternative is a `hidden` prop on
+   Cluster, which would put a responsive concern inside a layout primitive that deliberately has
+   none. */
+
+/* ── The header shell ──────────────────────────────────────────────────────────
+   Sticky, and the positioning context every overlay in this file resolves against. It paints
+   nothing: the bar Section inside it owns the ground, which is what keeps the surface model in
+   one place.
+
+   `position: sticky` establishes a containing block for absolutely positioned descendants, so the
+   panel and the drawer need no `position: relative` here to find it. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--nav-z);
+}
+
+/* ── The bar ───────────────────────────────────────────────────────────────────
+   The hairline is set here rather than on the header, and that is deliberate: this element
+   carries the `data-surface` attribute, so --nav-rule resolves against the bar's OWN ground. On
+   the header it would resolve against whatever encloses the header, and an ink header dropped
+   into a light page would draw a light rule.
+
+   This is the one place a className touches a Section's paint, and it is confined to a border on
+   the nav's own band, from the nav's own token layer. It sets no ground, no ink, no horizontal
+   padding and no max-width — those are Section's and are not overridden anywhere in this file. */
+.bar {
+  border-block-end: var(--nav-rule-width) solid var(--nav-rule);
+}
+
+/* The bar's height lives on the ROW, not the band: Cluster is already a centring flex row, so a
+   min-height here centres the mark, the items and the CTA against each other for free. Put on the
+   Section instead, the band would grow and its contents would sit at the top. */
+.barRow {
+  min-height: var(--nav-bar-height-compact);
+}
+
+/* The wordmark's link. Inline-flex so the anchor is exactly the mark's box with no baseline slack
+   under it, and it takes the surface ink rather than a link colour — the logo is the brand, not a
+   reference to it, so it does not turn blue. */
+.brand {
+  display: inline-flex;
+  color: var(--nav-item-fg);
+  border-radius: var(--nav-item-radius);
+}
+
+.brand:hover {
+  color: var(--nav-item-fg);
+}
+
+/* ── The item list ─────────────────────────────────────────────────────────────
+   Hidden below 1024, where the drawer takes over. See the header note on `display`. */
+.items {
+  display: none;
+}
+
+/* The `<li>` stays STATIC on purpose. The panel inside it is absolutely positioned and has to
+   resolve against .header to span the viewport; give this a `position` and the panel collapses to
+   the width of one bar item. */
+.item {
+  position: static;
+}
+
+/* ── The item control ──────────────────────────────────────────────────────────
+   A trigger or a link, identical in appearance. Uppercase mono chrome from --nav-item-text, at
+   the same 40px height as the md Button beside it so the row reads as one set of controls.
+
+   Colour only, on the same 140ms as everything else in the system. Nothing here moves. */
+.itemControl {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nav-item-gap);
+  height: var(--nav-item-height);
+  padding-inline: var(--nav-item-padding-x);
+  border: 0;
+  border-radius: var(--nav-item-radius);
+  background: transparent;
+  color: var(--nav-item-fg);
+  font: var(--nav-item-text);
+  letter-spacing: var(--nav-item-text-tracking);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--nav-transition-duration) var(--nav-transition-easing),
+    color var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+/* Hover and focus take the first step, as everywhere else in the system. */
+.itemControl:hover,
+.itemControl:focus-visible {
+  background: var(--nav-item-bg-hover);
+  color: var(--nav-item-fg-hover);
+}
+
+/* The HELD state — this section is the one you are in, or its panel is open. Declared after hover
+   so a pointer over the current item does not fall back to the hover fill; both are single
+   classes and the order is what decides it. Same argument as Button's `.active`. */
+.itemActive {
+  background: var(--nav-item-bg-active);
+  color: var(--nav-item-fg-active);
+}
+
+.itemActive:hover,
+.itemActive:focus-visible {
+  background: var(--nav-item-bg-active);
+  color: var(--nav-item-fg-active);
+}
+
+/* The label pulls back its trailing letter-space, so the chevron sits 4px from the last GLYPH
+   rather than 4px from the empty track after it. Same correction as Button's .labelInk. */
+.itemLabel {
+  display: inline-block;
+  margin-inline-end: calc(-1 * var(--nav-item-text-tracking));
+}
+
+/* Sized by a class-plus-element selector so it beats Icon's own single-class size rule — the nav
+   decides how big its chevron is, exactly as the button decides for the glyph inside it. */
+.itemControl > svg,
+.drawerControl svg {
+  width: var(--nav-item-icon-size);
+  height: var(--nav-item-icon-size);
+}
+
+.chevron {
+  /* No transition. The rotation is what the OPEN STATE looks like, not a movement between two
+     states — this system transitions colour and one border, and a spinning glyph is neither. One
+     mark that points at its panel beats two glyphs that have to be kept in agreement. */
+  transition: none;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* ── Focus ─────────────────────────────────────────────────────────────────────
+   Keyboard only. Two rings in one shadow — the offset painted in the surface colour, then the ring
+   — which is what lets a blue ring read against a blue fill. Both halves are surface tokens, so
+   the ink header takes an ink gap and a lighter ring with no rule of its own here. */
+.itemControl:focus,
+.brand:focus,
+.row:focus,
+.railLink:focus,
+.drawerControl:focus,
+.drawerLink:focus {
+  outline: none;
+}
+
+.itemControl:focus-visible,
+.brand:focus-visible,
+.row:focus-visible,
+.railLink:focus-visible,
+.drawerControl:focus-visible,
+.drawerLink:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--nav-ring-offset) var(--nav-ring-gap-color),
+    0 0 0 calc(var(--nav-ring-offset) + var(--nav-ring-width)) var(--nav-ring-color);
+}
+
+/* The bar's CTA — desktop only; the drawer carries its own at lg. */
+.cta {
+  display: none;
+}
+
+/* ── The panel ─────────────────────────────────────────────────────────────────
+   Full-bleed, overlaying the page rather than pushing it down. `top: 100%` is the bottom of the
+   header, and left/right of 0 span it — the header is the viewport's width, so the Section inside
+   insets its content to the same column as every band below it.
+
+   Capped at the viewport and scrollable: Expertise carries twelve rows and six rail links, which
+   on a short laptop viewport runs past the fold with no way to reach the last of them.
+
+   `flush`, with its own padding-block: a nav panel is not a content band and Section's three
+   vertical steps (64 · 96 · 128) are each taller than the whole panel needs. This is the case
+   `flush` is documented for — a composition that supplies its own air. */
+.panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: var(--nav-panel-z);
+  max-block-size: var(--nav-panel-max-block);
+  overflow-y: auto;
+  padding-block: var(--nav-panel-padding-y);
+  border-block-end: var(--nav-rule-width) solid var(--nav-rule);
+}
+
+/* ── A panel row ───────────────────────────────────────────────────────────────
+   The whole row is the target, not just its title: a two-line row whose second line is not
+   clickable is a row people click on and nothing happens. The negative inset is the one margin in
+   this file and it is not spacing — it pulls the row's own padding back out so the ROW TEXT still
+   aligns with the column edge while the hover fill extends past it. Without it the panel's first
+   column sits 8px in from every other band on the page. */
+.row {
+  display: block;
+  margin-inline: calc(-1 * var(--nav-row-padding));
+  padding: var(--nav-row-padding);
+  border-radius: var(--nav-row-radius);
+  color: var(--nav-row-label-ink);
+  text-decoration: none;
+  transition:
+    background var(--nav-transition-duration) var(--nav-transition-easing),
+    color var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+.row:hover,
+.row:focus-visible {
+  background: var(--nav-row-bg-hover);
+  color: var(--nav-row-label-ink-hover);
+}
+
+/* The text column has to be allowed to shrink. A flex child's default minimum is its content, so
+   without this a long promise widens the Cluster past its track and the two-column rows overflow
+   into each other. `flex: 1` is not spacing and not arrangement — it is the correction that makes
+   a wrapping row wrap. */
+.rowText {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  max-inline-size: var(--nav-row-measure);
+}
+
+/* Sized and coloured by the nav, not by Icon: the mark is a fixed 24 here regardless of what the
+   glyph would take on its own. Quieter than the label at rest, and it reaches the accent with the
+   label on hover — the row has one hover state, expressed in two inks. */
+.row svg {
+  width: var(--nav-row-icon-size);
+  height: var(--nav-row-icon-size);
+}
+
+.rowIcon {
+  color: var(--nav-row-icon-ink);
+  transition: color var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+.row:hover .rowIcon,
+.row:focus-visible .rowIcon {
+  color: var(--nav-row-icon-ink-hover);
+}
+
+/* Inherits the row's colour, so the title moves with the row's one hover state rather than
+   declaring a second. */
+.rowLabel {
+  font: var(--nav-row-text);
+}
+
+.rowPromise {
+  color: var(--nav-row-promise-ink);
+  font: var(--nav-row-promise-text);
+}
+
+/* ── The rail ──────────────────────────────────────────────────────────────────
+   The hairline is what makes the panel read as two halves rather than one wide column of links.
+   Below md the [2,1] collapses to a stack, so the rule moves from the rail's side to its top —
+   a vertical rule on a full-width block separates nothing. */
+.rail {
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+  padding-block-start: var(--nav-rail-inset);
+}
+
+@media (min-width: 768px) {
+  .rail {
+    border-block-start: 0;
+    padding-block-start: 0;
+    border-inline-start: var(--nav-rule-width) solid var(--nav-rule);
+    padding-inline-start: var(--nav-rail-inset);
+  }
+}
+
+/* A compartment's title. Serif, against the sans rows in the column beside it — the panel's two
+   halves are told apart by the face before either is read. */
+.railTitle {
+  color: var(--nav-title-ink);
+  font: var(--nav-rail-title-text);
+  letter-spacing: var(--nav-rail-title-tracking);
+}
+
+.railBody {
+  color: var(--nav-body-ink);
+  font: var(--nav-rail-body-text);
+  max-inline-size: var(--nav-row-measure);
+}
+
+.railLink {
+  display: inline-block;
+  border-radius: var(--nav-item-radius);
+  color: var(--nav-link-ink);
+  font: var(--nav-rail-link-text);
+  text-decoration: none;
+  transition: color var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+.railLink:hover,
+.railLink:focus-visible {
+  color: var(--nav-link-ink-hover);
+}
+
+/* A label over a set — a rows block's heading, a rail group's name. Mono, uppercase, and
+   deliberately NOT blue: it names a group, it does not go anywhere. */
+.blockLabel {
+  color: var(--nav-label-ink);
+  font: var(--nav-label-text);
+  letter-spacing: var(--nav-label-tracking);
+  text-transform: uppercase;
+}
+
+/* The panel's foot — one link to the section index, separated by a rule so it reads as a
+   conclusion rather than a seventh row. */
+.panelBar {
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+  padding-block-start: var(--nav-panel-bar-inset);
+}
+
+/* ── The drawer ────────────────────────────────────────────────────────────────
+   The compact counterpart to the panel: one sheet under the bar, scrollable, holding every item
+   as an accordion. Absolutely positioned for the same reason the panel is — it covers the page
+   instead of pushing it down — and hidden outright at 1024 so a drawer left open across a resize
+   cannot end up beside the desktop bar. */
+.drawer {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: var(--nav-panel-z);
+  max-block-size: var(--nav-drawer-max-block);
+  overflow-y: auto;
+  padding-block: var(--nav-drawer-padding-y);
+  border-block-end: var(--nav-rule-width) solid var(--nav-rule);
+}
+
+/* A hairline per row, drawn on the top edge so the list reads as divided rather than boxed —
+   the last item has no rule under it and the sheet's own bottom border closes the set. */
+.drawerItem {
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+}
+
+.drawerItem:first-child {
+  border-block-start: 0;
+}
+
+/* `block` and full width so the Cluster inside can push the glyph to the far edge — the label and
+   the chevron are the control's own contents, which is why the control lays them out. */
+.drawerControl {
+  display: block;
+  width: 100%;
+  padding-block: var(--nav-drawer-item-padding-y);
+  border: 0;
+  border-radius: var(--nav-item-radius);
+  background: transparent;
+  color: var(--nav-item-fg);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+.drawerControl:hover,
+.drawerControl:focus-visible {
+  color: var(--nav-item-fg-hover);
+}
+
+/* No fill for the held state here, unlike the bar. A full-width row filled edge to edge reads as
+   a selected table row rather than as a place in a menu, so the current section is marked by ink
+   alone — the same value the bar's label takes. */
+.drawerActive {
+  color: var(--nav-item-fg-active);
+}
+
+.drawerActive:hover,
+.drawerActive:focus-visible {
+  color: var(--nav-item-fg-active);
+}
+
+.drawerLabel {
+  font: var(--nav-drawer-item-text);
+  letter-spacing: var(--nav-drawer-item-tracking);
+  text-transform: uppercase;
+}
+
+/* An expanded accordion's contents, inset so the child links read as belonging to the item above
+   them rather than as more items. */
+.drawerPanel {
+  padding-inline-start: var(--nav-drawer-panel-inset);
+  padding-block-end: var(--nav-drawer-panel-gap);
+}
+
+.drawerLink {
+  display: inline-block;
+  border-radius: var(--nav-item-radius);
+  color: var(--nav-link-ink);
+  font: var(--nav-rail-link-text);
+  text-decoration: none;
+  transition: color var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+.drawerLink:hover,
+.drawerLink:focus-visible {
+  color: var(--nav-link-ink-hover);
+}
+
+/* ── The 1024 swap ────────────────────────────────────────────────────────────
+   One breakpoint, and it changes WHAT is in the bar rather than how big anything is. Below it the
+   bar holds a mark and one control; above it a mark, five items and a CTA. Those are two different
+   bars, which is why they have two heights rather than one that shrinks. */
+@media (min-width: 1024px) {
+  .barRow {
+    min-height: var(--nav-bar-height);
+  }
+
+  .items {
+    display: flex;
+  }
+
+  .cta {
+    display: inline-flex;
+  }
+
+  .menuButton,
+  .drawer {
+    display: none;
+  }
+
+  .panel {
+    display: block;
+  }
+}
+
+/* Colour is the only thing this component transitions, so reduced motion has almost nothing to
+   answer for. Zeroing the duration keeps every state exactly as visible and simply removes the
+   fade between them. */
+@media (prefers-reduced-motion: reduce) {
+  .itemControl,
+  .row,
+  .rowIcon,
+  .railLink,
+  .drawerControl,
+  .drawerLink {
+    transition-duration: var(--duration-instant);
+  }
+}

@@ -1,0 +1,57 @@
+/* Logo — the wordmark.
+
+   Sized by height, with `width: auto`, so the mark keeps its own proportions and a size change is
+   one number. Every value comes from --logo-*, declared in tokens/components/logo.css; this file
+   states no distance and no colour.
+
+   The letterforms and the bar are separated into two classes rather than one element with an
+   override, because they answer different questions: the letterforms are TEXT and follow the ink
+   of wherever they land, while the bar is the one piece of brand colour in the mark and is
+   remapped per surface. */
+.logo {
+  /* Kills the inline baseline gap. An inline SVG reserves descender space below itself, which
+     leaves the mark sitting a couple of pixels high in an otherwise centred bar row — the same
+     correction Icon makes, for the same reason. */
+  display: block;
+  width: auto;
+  /* Never compress in a flex row. Without this, a long nav squeezes the wordmark rather than the
+     row wrapping, and the letterforms distort. */
+  flex: none;
+  /* The same statement for a grid context, and it is not optional. A grid child with `width: auto`
+     is STRETCHED to its track, and a stretched SVG keeps its aspect ratio by centring the artwork
+     inside a box the width of the column — so a Logo dropped straight into a Layout renders as a
+     40px-tall wordmark floating in the middle of the page. Content-sized is the only correct
+     answer for a mark, in either primitive. A caller who wants it placed differently puts it in a
+     Cluster, which is the primitive that owns inline placement. */
+  justify-self: start;
+}
+
+.sm {
+  height: var(--logo-height-sm);
+}
+
+.md {
+  height: var(--logo-height-md);
+}
+
+.lg {
+  height: var(--logo-height-lg);
+}
+
+/* The letterforms. `currentColor` is the whole colour model: the mark takes the ink of the surface
+   or the foreground of the link it sits in, and is therefore correct on all four surfaces with no
+   per-surface rule in this file. */
+.mark {
+  fill: currentColor;
+}
+
+/* The bar above the "u" — brand colour, remapped per surface in the token layer. */
+.bar {
+  fill: var(--logo-bar);
+}
+
+/* variant="mono" — the bar joins the letterforms. For a surface that IS the accent, where an
+   accent bar has nothing to contrast against. */
+.barMono {
+  fill: currentColor;
+}

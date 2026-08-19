@@ -12,5 +12,6 @@ const source: ContentSource = fixtureSource;
 
 export const getPage = source.getPage.bind(source);
 export const listPages = source.listPages.bind(source);
+export const getNavigation = source.getNavigation.bind(source);
 
-export type { Page, PageBlock, PageSeo, ContentSource } from './types';
+export type { Page, PageBlock, PageSeo, Navigation, ContentSource } from './types';

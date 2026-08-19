@@ -84,6 +84,9 @@
 @import "components/icon.css";
 @import "components/button.css";
 @import "components/prose.css";
+@import "components/logo.css";
+@import "components/nav.css";
+@import "components/footer.css";
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */

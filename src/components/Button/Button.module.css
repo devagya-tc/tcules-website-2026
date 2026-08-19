@@ -12,9 +12,11 @@
 
    An uppercase Geist Mono glyph starts at its side bearing and ends with a trailing track, so
    8px of padding around a label reads as 6. The extra 4px margin restores what the type gives
-   away — the visible inset becomes 12 and reads as 8. An icon needs no such correction: a Solar
-   glyph already carries ~2px of clearance inside its own box, so 8 to the box edge puts it
-   optically level with a label that has 12. The 4px gap plus the label's 4px margin makes the
+   away — the visible inset becomes 12 and reads as 8. An icon needs no such correction: a glyph in
+   this set is drawn with ~2px of clearance inside its own box, so 8 to the box edge puts it
+   optically level with a label that has 12. That clearance is a convention of the set rather than
+   a property of the artwork, so it survived the set going from stroked to solid — which is why
+   these three numbers did not move with it. The 4px gap plus the label's 4px margin makes the
    same 8 between label ink and icon box, so the glyph sits centred in its own field.
 
    ── Rule order is load-bearing ──────────────────────────────────────────────────

@@ -1,8 +1,8 @@
-/* Icon — a line glyph on a 24-unit box.
+/* Icon — a solid glyph on a 24-unit box.
 
    Presentation attributes are set here rather than on the markup so the glyph data in glyphs.ts
    stays pure path geometry: a new glyph is a `d` string and nothing else, and it cannot arrive
-   carrying its own fill or its own weight. Stroke properties inherit down the SVG tree, so
+   carrying its own fill or its own weight. Both properties below inherit down the SVG tree, so
    declaring them once on the root element covers every path inside it.
 
    No colour of its own, and no per-surface rule. `currentColor` means the glyph takes the ink of
@@ -18,14 +18,18 @@
      rather than the button growing, and the icon distorts instead of the layout reflowing. */
   flex: none;
 
-  fill: none;
-  stroke: currentColor;
-  /* 1.5 in the box's OWN units, so it scales with the viewBox: a 24-unit stroke of 1.5 renders at
-     1px once the glyph is drawn into a 16px control. Declared in px because SVG geometry resolves
-     CSS px against the local coordinate system, not the device. */
-  stroke-width: var(--icon-stroke);
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  fill: currentColor;
+  /* Solid glyphs have COUNTERS — the cross inside close-circle, the lines inside document-text,
+     the prompt inside software-development — and every one of them is a subpath enclosed by the
+     mass in the same `d`. evenodd is what turns an enclosed subpath into a hole; under the
+     default nonzero it fills solid instead, and the glyph silently becomes a blob.
+
+     The alternative was drawing counters as a second path in the ground colour, which works on
+     exactly one surface. A hole shows whatever is behind it, so it is right on all four. */
+  fill-rule: evenodd;
+  /* No stroke, deliberately, and stated rather than left to the default: a glyph that picked up a
+     stroke from an ancestor SVG rule would render at a weight the set was not drawn for. */
+  stroke: none;
 }
 
 /* The four size roles. A control that owns its icon size overrides these with its own token —

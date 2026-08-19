@@ -6,9 +6,19 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
  * Icon specimen — the set, the four sizes, and the two things that make an icon correct without
  * being configured: `currentColor` and the 24-unit box.
  *
- * The set is deliberately small. It is exactly the glyphs the button specification names, plus the
- * two counterparts a set of navigation controls needs. An icon set that grows by accident is how a
- * system ends up with four arrows.
+ * The set is SOLID: filled shapes, no stroke, counters cut out of the mass with fill-rule evenodd.
+ * That last part is what this page has to show, because a counter drawn as a shape in the ground
+ * colour would look identical here on paper and break on the other three bands — so check the
+ * cross in close-circle, the lines in document-text and the prompt in software-development on the
+ * ink and blue sections at the bottom.
+ *
+ * The set is deliberately small and grows only when a component names a glyph it cannot do without.
+ * Three groups: the ACTIONS the button specification names, the DISCLOSURE marks a nav needs to say
+ * it opens and shuts something, and six SUBJECT marks — one per service — which are the only glyphs
+ * here standing for a thing rather than an act. An icon set that grows by accident is how a system
+ * ends up with four arrows.
+ *
+ * The set below is rendered from `iconNames`, so this page cannot fall behind glyphs.ts.
  */
 
 const SIZES = [
@@ -28,22 +38,30 @@ export default function IconSpecimenPage() {
           <Layout rowGap="block">
             <h1>Icon</h1>
             <p>
-              A line glyph on a 24-unit box, stroked in <code>currentColor</code>. It has no colour
-              of its own and takes no colour prop — it inherits the ink of the surface or the
-              foreground of the control it sits in, which is why{' '}
+              A solid glyph on a 24-unit box, filled with <code>currentColor</code>. It has no
+              colour of its own and takes no colour prop — it inherits the ink of the surface or
+              the foreground of the control it sits in, which is why{' '}
               <code>tokens/components/icon.css</code> is the one component layer in the system with
               no surface blocks at all. There is nothing per-surface to declare.
             </p>
             <p>
-              Stroke weight is 1.5 in the box&rsquo;s own units, not 1.5 device pixels. Scaled into
-              a 16px control the glyph renders at a true 1px, which is what keeps a small icon from
-              looking heavier than the label beside it.
+              A counter — the cross inside <code>close-circle</code>, the lines inside{' '}
+              <code>document-text</code> — is a <strong>hole</strong>, not a shape painted in the
+              ground colour. It is a subpath enclosed by the mass in the same <code>d</code>, and{' '}
+              <code>fill-rule: evenodd</code> is what turns it into a hole. A painted counter would
+              be correct on exactly one surface; a hole shows whatever is behind it, so it is right
+              on all four.
+            </p>
+            <p>
+              There is no stroke token at any layer, and the absence is deliberate. A solid glyph
+              carries its weight in the geometry, which is what lets it scale down to 14px without
+              looking heavier than the label beside it — a fixed stroke width would not.
             </p>
           </Layout>
 
           <Specimen
             title="The set"
-            note="Drawn to Solar's linear conventions — strokes only, 1.5 weight, round caps and joins, and roughly 2px of clearance inside the box. That clearance is load-bearing: it is the reason a button gives its icon 8px to the box edge where it gives its label 12."
+            note="Drawn to Solar's BOLD conventions — filled shapes, no stroke, and roughly 2px of clearance inside the box. That clearance is load-bearing: it is the reason a button gives its icon 8px to the box edge where it gives its label 12. Drawn rather than imported, and that is a licence decision: Solar ships under CC BY 4.0, so using its actual paths would put an attribution obligation on the site. Conventions are not the artwork. The six service marks answer one test: each has to be a distinct silhouette at 16px, because two marks that read alike at row size are worse than none."
           >
             <Layout columns="fit" minTrack="xs" colGap="gutter" rowGap="gutter">
               {iconNames.map((name) => (

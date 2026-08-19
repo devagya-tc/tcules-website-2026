@@ -294,11 +294,16 @@
 }
 
 /* ── Icon ─────────────────────────────────────────────────────────────────────
-   Line glyphs on a 24px box: 1.5px stroke, round caps, currentColor, no fill.
-   The smaller sizes are the same glyph scaled down inside a control.          */
+   Solid glyphs on a 24px box: filled in currentColor, no stroke, counters cut out
+   of the mass. The smaller sizes are the same glyph scaled down inside a control.
+
+   There is no --icon-stroke, and its absence is the record of a decision: the set
+   was stroke-only at 1.5 units and is now filled, so a stroke width would be a
+   token nothing reads asserting a weight nothing draws. Solid glyphs carry their
+   own weight in the geometry — that is what makes them scale to 14px without
+   looking heavier than the label beside them, where a fixed stroke would not.   */
 :root{
 --icon-size-14:14px;--icon-size-16:16px;--icon-size-18:18px;--icon-size-24:24px;
---icon-stroke:1.5px;
 }
 
 /* ── Breakpoint ───────────────────────────────────────────────────────────────

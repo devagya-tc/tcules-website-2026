@@ -1,0 +1,189 @@
+/* ══ Component layer — footer ════════════════════════════════════════════════════
+   Tier 3. The site footer: the brand block, the newsletter, the directory of links, the
+   contact strip and the utility row.
+
+   Naming: --foot-{part}-{modifier}-{state}.
+     tagline   the line under the wordmark
+     label     a group's name and the newsletter eyebrow — mono, uppercase, not a link
+     link      a directory or utility link
+     meta      the contact strip: a key in mono, a value in sans
+     field     the newsletter's email input
+     legal     the copyright line
+
+   Like nav.css, this is a layer for a PATTERN, and for the same reason: a footer has chrome
+   of its own — a field's height, a hairline between bands, the ink a copyright line takes —
+   and none of it is a value some other layer already names.
+
+   ── The field is the one thing here that should not be ──────────────────────────
+   --foot-field-* describes a text input, and a text input is a CONTROL: it belongs in
+   src/components/Input with its own --inp-* layer, exactly as Button has one, and every other
+   form on the site will want it. It is here because the footer needs a field today and the
+   primitive does not exist yet.
+
+   Two consequences, stated so they are not discovered: the styling for a control lives in a
+   pattern, which is the coupling the tier rule exists to prevent; and any second field on the
+   site either duplicates these values or reads another component's tokens, and both are wrong.
+   When Input lands, this block moves to tokens/components/input.css unchanged and
+   SiteFooter.module.css loses its field rules. It is a bg/fg set rather than a ground/ink set
+   already, so the move is a rename of the prefix and nothing else.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   The field's height matches --btn-height-md at 40, because the Subscribe button sits beside
+   it in the same row and two controls on one row that do not agree on height are the most
+   visible defect a form can have. It is a literal and t-shirt-adjacent for the same reason the
+   button's heights are: a control's height is optical, measured against the type inside it.
+
+   One value reaches the space ramp and says so. Everything else is a gap-scale step or a type
+   composite.                                                                          */
+:root{
+--foot-rule-width:var(--border-width-hairline);
+--foot-transition-duration:var(--duration-fast);
+--foot-transition-easing:var(--easing-standard);
+--foot-ring-width:var(--focus-ring-width);
+--foot-ring-offset:var(--focus-ring-offset);
+
+/* The inset below a band's hairline. The air ABOVE it is the Layout's rowGap, because Layout takes
+ a gap-scale role name directly and a --foot-band-gap restating it would be a second name for one
+ distance — which nothing else could read, and which is exactly the token the system deleted when
+ --sec-gap turned out to alias --gap-block. This one exists because it is a PADDING inside the
+ band, which no primitive owns. */
+--foot-band-inset:var(--gap-stack);
+
+/* Type. Composites only — the footer restates no family, size or ratio. The tagline runs at
+ --text-lead because the brand block is the largest thing in the band; everything below it is
+ body-sm and micro, which is what keeps a directory of forty links from competing with it. */
+--foot-tagline-text:var(--text-lead);
+--foot-tagline-measure:var(--measure-title);
+--foot-title-text:var(--text-h4);
+--foot-title-tracking:var(--text-h4-tracking);
+--foot-body-text:var(--text-body-sm);
+--foot-body-measure:var(--measure-body);
+--foot-label-text:var(--text-eyebrow);
+--foot-label-tracking:var(--text-eyebrow-tracking);
+--foot-link-text:var(--text-body-sm);
+--foot-social-text:var(--text-ui-sm);
+--foot-social-tracking:var(--text-ui-sm-tracking);
+--foot-meta-key-text:var(--text-micro);
+--foot-meta-key-tracking:var(--text-micro-tracking);
+--foot-meta-value-text:var(--text-body-sm);
+--foot-legal-text:var(--text-caption);
+
+/* The field. See the header for why it is here and where it goes. */
+--foot-field-height:40px;
+--foot-field-padding-x:var(--space-12);             /* optical, not --gap-text: matches the button's inset */
+--foot-field-radius:var(--radius-8);
+--foot-field-rule-width:var(--border-width-hairline);
+--foot-field-text:var(--text-body);
+--foot-field-min-inline:16rem;                      /* the field stops shrinking before it stops being usable */
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   A light footer. Not the default one — SITE_FOOTER_IA ships dark, and the ink block below is
+   what the site actually renders — but a footer is a component and answers on every surface,
+   and the light one is what a landing page with no closing pivot needs.
+
+   The link rest state is ink rather than blue, matching the nav and for the same reason: forty
+   blue links in a directory is not forty signals, it is a blue block. Blue is the reach.  */
+:root,[data-surface="paper"]{
+--foot-rule:var(--color-neutral-200);
+--foot-tagline-ink:var(--color-neutral-700);        /*  8.14:1 */
+--foot-title-ink:var(--color-neutral-900);
+--foot-body-ink:var(--color-neutral-600);           /*  4.92:1 — the floor of AA, do not lighten */
+--foot-label-ink:var(--color-neutral-700);
+--foot-link-ink:var(--color-neutral-700);
+--foot-link-ink-hover:var(--color-brandeis-500);
+--foot-meta-key-ink:var(--color-neutral-500);       /*  3.42:1 — a mono key beside its own value */
+--foot-meta-value-ink:var(--color-neutral-900);
+--foot-legal-ink:var(--color-neutral-600);
+--foot-field-bg:var(--color-white);
+--foot-field-fg:var(--color-neutral-900);
+--foot-field-placeholder-fg:var(--color-neutral-500);
+--foot-field-rule:var(--color-neutral-300);
+--foot-field-rule-focus:var(--color-brandeis-500);
+--foot-ring-color:var(--color-brandeis-500);
+--foot-ring-gap-color:var(--color-paper);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   The muted inks step because they have to: neutral-600 on paper-deep is 4.39:1 and fails AA,
+   so body and legal go to 700 and the label to 800 to stay apart from them. The field keeps a
+   white bg — a field the colour of its own panel has no edge but its rule, and the rule steps
+   to 400 to hold against the deeper ground.                                          */
+[data-surface="tint"]{
+--foot-rule:var(--color-neutral-300);
+--foot-tagline-ink:var(--color-neutral-700);        /*  7.27:1 */
+--foot-title-ink:var(--color-neutral-900);
+--foot-body-ink:var(--color-neutral-700);           /*  7.27:1 — stepped; 600 would be 4.39:1 */
+--foot-label-ink:var(--color-neutral-800);          /* 10.54:1 — stepped to stay clear of body */
+--foot-link-ink:var(--color-neutral-800);
+--foot-link-ink-hover:var(--color-brandeis-500);
+--foot-meta-key-ink:var(--color-neutral-600);
+--foot-meta-value-ink:var(--color-neutral-900);
+--foot-legal-ink:var(--color-neutral-700);
+--foot-field-bg:var(--color-white);
+--foot-field-fg:var(--color-neutral-900);
+--foot-field-placeholder-fg:var(--color-neutral-500);
+--foot-field-rule:var(--color-neutral-400);
+--foot-field-rule-focus:var(--color-brandeis-500);
+--foot-ring-color:var(--color-brandeis-500);
+--foot-ring-gap-color:var(--color-paper-deep);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   What the site ships. The neutrals reverse; the blues lift off the light end of the ramp,
+   because brandeis-500 as text on neutral-950 is 2.77:1 — link hover at 300 (7.32:1) and the
+   field's focus rule at 300 with it.
+
+   Body ink is neutral-400 rather than a warm paper step, and the tagline is white: at
+   --text-lead the tagline is the only line in the band that carries the brand's voice, and
+   muting it to match the directory below flattens the whole footer to one weight. That is the
+   scale-not-decoration rule in one token.                                            */
+[data-surface="ink"]{
+--foot-rule:var(--color-neutral-800);
+--foot-tagline-ink:var(--color-white);
+--foot-title-ink:var(--color-white);
+--foot-body-ink:var(--color-neutral-400);
+--foot-label-ink:var(--color-neutral-500);
+--foot-link-ink:var(--color-neutral-300);
+--foot-link-ink-hover:var(--color-brandeis-300);    /*  7.32:1 */
+--foot-meta-key-ink:var(--color-neutral-500);
+--foot-meta-value-ink:var(--color-white);
+--foot-legal-ink:var(--color-neutral-500);
+--foot-field-bg:var(--color-neutral-900);
+--foot-field-fg:var(--color-white);
+--foot-field-placeholder-fg:var(--color-neutral-500);
+--foot-field-rule:var(--color-neutral-700);
+--foot-field-rule-focus:var(--color-brandeis-300);
+--foot-ring-color:var(--color-brandeis-300);
+--foot-ring-gap-color:var(--color-neutral-950);
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   A footer on the pivot. Only the light end of the ramp clears AA on brandeis-500 — white
+   6.23:1, 50 at 5.57:1, 100 at 4.91:1, 200 already 3.78:1 — so every ink here is white, 50 or
+   100, and the mono meta key at 200 is the one value treated as a graphic rather than a
+   passage of text.
+
+   The field fills with 600, the ramp step below its own ground, so it reads as recessed rather
+   than as a white box punched into the field. Its focus rule is white, because a blue rule on
+   blue is not a focus state.                                                          */
+[data-surface="blue"]{
+--foot-rule:var(--color-brandeis-400);
+--foot-tagline-ink:var(--color-white);
+--foot-title-ink:var(--color-white);
+--foot-body-ink:var(--color-brandeis-100);          /*  4.91:1 */
+--foot-label-ink:var(--color-brandeis-100);
+--foot-link-ink:var(--color-brandeis-50);           /*  5.57:1 */
+--foot-link-ink-hover:var(--color-white);
+--foot-meta-key-ink:var(--color-brandeis-200);      /*  3.78:1 — a mono key, read as a graphic */
+--foot-meta-value-ink:var(--color-white);
+--foot-legal-ink:var(--color-brandeis-100);
+--foot-field-bg:var(--color-brandeis-600);
+--foot-field-fg:var(--color-white);
+--foot-field-placeholder-fg:var(--color-brandeis-200);
+--foot-field-rule:var(--color-brandeis-400);
+--foot-field-rule-focus:var(--color-white);
+--foot-ring-color:var(--color-white);
+--foot-ring-gap-color:var(--color-brandeis-500);
+}
