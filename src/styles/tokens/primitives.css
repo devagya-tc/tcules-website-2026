@@ -6,14 +6,18 @@
    Two naming schemes, and the reason they differ:
    · A RAMP is named for its value — --color-brandeis-500, --space-24. The name is
      the fact. Consumers reach these through a usage token, not directly.
-   · A LADDER is named for its role — --font-size-h1, --font-size-body. The type
+   · A LADDER is named for its role — --font-size-h1, --line-height-h2. The type
      scale was cut per role (67 · 54 · 43 · 34 · 28 · 22 for Newsreader), so the
-     role IS the value's identity; --font-size-54 would be a number in search of
-     a meaning, and picking one by eye is how a scale drifts.
+     role IS the value's identity; --font-size-54 or --line-height-114 is a number
+     in search of a meaning, and picking one by eye is how a scale drifts.
 
-   Line-height and letter-spacing stay ratio- and role-named respectively: a ratio
-   is genuinely shared across roles (1.6 carries body and code), and tracking is an
-   optical correction, not a step.
+   Size and line height are laddered together, because they are one decision. Where
+   two roles share a value — h4 and quote at 28px, body and code at 1.6 — it is
+   stated twice on purpose: they are free to move independently.
+
+   Letter-spacing is the exception and stays as it is: tracking corrects an optical
+   error at a size, it is not a step on a scale, and one correction genuinely serves
+   several roles.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Colour · ramps ────────────────────────────────────────────────────────────
@@ -125,12 +129,62 @@
 --font-size-stat-m:32px;
 }
 
-/* ── Type · weight, line height, tracking ─────────────────────────────────────
+/* ── Type · line-height ladder ────────────────────────────────────────────────
+   Named by role, like the size ladder, and for the same reason: a size and its
+   line height are ONE typographic decision. Splitting them meant --font-size-h2
+   sat beside --line-height-110 in the same declaration — a role name and a
+   magnitude name describing one choice — and re-sizing h2 meant re-picking a ratio
+   by eye from a list of twenty. Named per role, the pair is decided once and moves
+   together.
+
+   The ratios are unchanged from the ramp they replace. Where two roles share one —
+   body and code at 1.6, ui / eyebrow / micro at 1.2, body-lg and body-sm at 1.55 —
+   it is stated per role on purpose, exactly as h4 and quote both state 28px: they
+   are free to move independently.
+
+   Titles tighten as they grow and open up as they shrink, so the title roles carry
+   -t (tablet, ≤1023) and -m (mobile, ≤767) steps beside the base, matching the size
+   ladder's suffixes. A role with no variant holds at every width.               */
+:root{
+--line-height-display:1.04;
+--line-height-h1:1.06;
+--line-height-h2:1.1;
+--line-height-h3:1.16;
+--line-height-h4:1.2;
+--line-height-h5:1.28;
+--line-height-quote:1.35;
+--line-height-lead:1.5;
+--line-height-body-lg:1.55;
+--line-height-body:1.6;
+--line-height-body-sm:1.55;
+--line-height-caption:1.45;
+--line-height-ui:1.2;
+--line-height-eyebrow:1.2;
+--line-height-micro:1.2;
+--line-height-stat:1;
+--line-height-code:1.6;
+/* Breakpoint steps. Only the roles whose ratio actually moves have one — stat holds
+   at 1 on every width, so it has no -m step even though its SIZE has one. */
+--line-height-display-t:1.06;--line-height-display-m:1.08;
+--line-height-h1-t:1.08;--line-height-h1-m:1.12;
+--line-height-h2-t:1.14;--line-height-h2-m:1.18;
+--line-height-h3-t:1.2;--line-height-h3-m:1.22;
+--line-height-h4-t:1.22;--line-height-h4-m:1.26;
+--line-height-h5-m:1.3;
+--line-height-quote-m:1.4;
+--line-height-lead-m:1.55;
+}
+
+/* ── Type · weight, tracking, measure ─────────────────────────────────────────
    Newsreader runs 400 above 43px and 500 below it; the face gains weight as it
-   grows, so the token does not. Ratios are named as ratio × 100.               */
+   grows, so the token does not.
+
+   Letter-spacing is NOT laddered by role, deliberately. Tracking corrects an
+   optical error at a given size rather than marking a step on a scale, and the same
+   correction genuinely serves several roles — which is why h2, h3 and h4 read
+   --letter-spacing-title, -title-tight and -title-fine rather than one name each. */
 :root{
 --font-weight-regular:400;--font-weight-medium:500;--font-weight-semibold:600;
---line-height-100:1;--line-height-104:1.04;--line-height-106:1.06;--line-height-108:1.08;--line-height-110:1.1;--line-height-112:1.12;--line-height-114:1.14;--line-height-116:1.16;--line-height-118:1.18;--line-height-120:1.2;--line-height-122:1.22;--line-height-126:1.26;--line-height-128:1.28;--line-height-130:1.3;--line-height-135:1.35;--line-height-140:1.4;--line-height-145:1.45;--line-height-150:1.5;--line-height-155:1.55;--line-height-160:1.6;
 --letter-spacing-display:-0.02em;--letter-spacing-h1:-0.018em;--letter-spacing-title:-0.015em;--letter-spacing-title-tight:-0.01em;--letter-spacing-title-fine:-0.005em;--letter-spacing-none:0em;--letter-spacing-ui:0.08em;--letter-spacing-micro:0.1em;--letter-spacing-eyebrow:0.12em;
 /* Measure — the only two line-length limits the system enforces. */
 --measure-title:22ch;--measure-body:68ch;
@@ -145,43 +199,43 @@
    The title roles re-declare themselves at 1023px and 767px, so a rule needs no
    breakpoint of its own for type. Body and chrome hold at every width.         */
 :root{
---text-display:var(--font-weight-regular) var(--font-size-display)/var(--line-height-104) var(--font-family-display);--text-display-tracking:var(--letter-spacing-display);
---text-h1:var(--font-weight-regular) var(--font-size-h1)/var(--line-height-106) var(--font-family-display);--text-h1-tracking:var(--letter-spacing-h1);
---text-h2:var(--font-weight-medium) var(--font-size-h2)/var(--line-height-110) var(--font-family-display);--text-h2-tracking:var(--letter-spacing-title);
---text-h3:var(--font-weight-medium) var(--font-size-h3)/var(--line-height-116) var(--font-family-display);--text-h3-tracking:var(--letter-spacing-title-tight);
---text-h4:var(--font-weight-medium) var(--font-size-h4)/var(--line-height-120) var(--font-family-display);--text-h4-tracking:var(--letter-spacing-title-fine);
---text-h5:var(--font-weight-medium) var(--font-size-h5)/var(--line-height-128) var(--font-family-display);--text-h5-tracking:var(--letter-spacing-none);
---text-quote:var(--font-weight-regular) var(--font-size-quote)/var(--line-height-135) var(--font-family-display);
---text-lead:var(--font-weight-regular) var(--font-size-lead)/var(--line-height-150) var(--font-family-sans);
---text-body-lg:var(--font-weight-regular) var(--font-size-body-lg)/var(--line-height-155) var(--font-family-sans);
---text-body:var(--font-weight-regular) var(--font-size-body)/var(--line-height-160) var(--font-family-sans);
---text-body-sm:var(--font-weight-regular) var(--font-size-body-sm)/var(--line-height-155) var(--font-family-sans);
---text-caption:var(--font-weight-regular) var(--font-size-caption)/var(--line-height-145) var(--font-family-sans);
---text-ui:var(--font-weight-semibold) var(--font-size-ui)/var(--line-height-120) var(--font-family-mono);--text-ui-tracking:var(--letter-spacing-ui);
---text-eyebrow:var(--font-weight-semibold) var(--font-size-eyebrow)/var(--line-height-120) var(--font-family-mono);--text-eyebrow-tracking:var(--letter-spacing-eyebrow);
---text-micro:var(--font-weight-semibold) var(--font-size-micro)/var(--line-height-120) var(--font-family-mono);--text-micro-tracking:var(--letter-spacing-micro);
---text-stat:var(--font-weight-medium) var(--font-size-stat)/var(--line-height-100) var(--font-family-mono);--text-stat-tracking:var(--letter-spacing-title-tight);
---text-code:var(--font-weight-regular) var(--font-size-code)/var(--line-height-160) var(--font-family-mono);
+--text-display:var(--font-weight-regular) var(--font-size-display)/var(--line-height-display) var(--font-family-display);--text-display-tracking:var(--letter-spacing-display);
+--text-h1:var(--font-weight-regular) var(--font-size-h1)/var(--line-height-h1) var(--font-family-display);--text-h1-tracking:var(--letter-spacing-h1);
+--text-h2:var(--font-weight-medium) var(--font-size-h2)/var(--line-height-h2) var(--font-family-display);--text-h2-tracking:var(--letter-spacing-title);
+--text-h3:var(--font-weight-medium) var(--font-size-h3)/var(--line-height-h3) var(--font-family-display);--text-h3-tracking:var(--letter-spacing-title-tight);
+--text-h4:var(--font-weight-medium) var(--font-size-h4)/var(--line-height-h4) var(--font-family-display);--text-h4-tracking:var(--letter-spacing-title-fine);
+--text-h5:var(--font-weight-medium) var(--font-size-h5)/var(--line-height-h5) var(--font-family-display);--text-h5-tracking:var(--letter-spacing-none);
+--text-quote:var(--font-weight-regular) var(--font-size-quote)/var(--line-height-quote) var(--font-family-display);
+--text-lead:var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead) var(--font-family-sans);
+--text-body-lg:var(--font-weight-regular) var(--font-size-body-lg)/var(--line-height-body-lg) var(--font-family-sans);
+--text-body:var(--font-weight-regular) var(--font-size-body)/var(--line-height-body) var(--font-family-sans);
+--text-body-sm:var(--font-weight-regular) var(--font-size-body-sm)/var(--line-height-body-sm) var(--font-family-sans);
+--text-caption:var(--font-weight-regular) var(--font-size-caption)/var(--line-height-caption) var(--font-family-sans);
+--text-ui:var(--font-weight-semibold) var(--font-size-ui)/var(--line-height-ui) var(--font-family-mono);--text-ui-tracking:var(--letter-spacing-ui);
+--text-eyebrow:var(--font-weight-semibold) var(--font-size-eyebrow)/var(--line-height-eyebrow) var(--font-family-mono);--text-eyebrow-tracking:var(--letter-spacing-eyebrow);
+--text-micro:var(--font-weight-semibold) var(--font-size-micro)/var(--line-height-micro) var(--font-family-mono);--text-micro-tracking:var(--letter-spacing-micro);
+--text-stat:var(--font-weight-medium) var(--font-size-stat)/var(--line-height-stat) var(--font-family-mono);--text-stat-tracking:var(--letter-spacing-title-tight);
+--text-code:var(--font-weight-regular) var(--font-size-code)/var(--line-height-code) var(--font-family-mono);
 }
 /* Tablet — 768 to 1023. */
 @media (max-width:1023px){:root{
---text-display:var(--font-weight-regular) var(--font-size-display-t)/var(--line-height-106) var(--font-family-display);
---text-h1:var(--font-weight-regular) var(--font-size-h1-t)/var(--line-height-108) var(--font-family-display);
---text-h2:var(--font-weight-medium) var(--font-size-h2-t)/var(--line-height-114) var(--font-family-display);
---text-h3:var(--font-weight-medium) var(--font-size-h3-t)/var(--line-height-120) var(--font-family-display);
---text-h4:var(--font-weight-medium) var(--font-size-h4-t)/var(--line-height-122) var(--font-family-display);
+--text-display:var(--font-weight-regular) var(--font-size-display-t)/var(--line-height-display-t) var(--font-family-display);
+--text-h1:var(--font-weight-regular) var(--font-size-h1-t)/var(--line-height-h1-t) var(--font-family-display);
+--text-h2:var(--font-weight-medium) var(--font-size-h2-t)/var(--line-height-h2-t) var(--font-family-display);
+--text-h3:var(--font-weight-medium) var(--font-size-h3-t)/var(--line-height-h3-t) var(--font-family-display);
+--text-h4:var(--font-weight-medium) var(--font-size-h4-t)/var(--line-height-h4-t) var(--font-family-display);
 }}
 /* Mobile — below 768. */
 @media (max-width:767px){:root{
---text-display:var(--font-weight-regular) var(--font-size-display-m)/var(--line-height-108) var(--font-family-display);
---text-h1:var(--font-weight-regular) var(--font-size-h1-m)/var(--line-height-112) var(--font-family-display);
---text-h2:var(--font-weight-medium) var(--font-size-h2-m)/var(--line-height-118) var(--font-family-display);
---text-h3:var(--font-weight-medium) var(--font-size-h3-m)/var(--line-height-122) var(--font-family-display);
---text-h4:var(--font-weight-medium) var(--font-size-h4-m)/var(--line-height-126) var(--font-family-display);
---text-h5:var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-130) var(--font-family-display);
---text-quote:var(--font-weight-regular) var(--font-size-quote-m)/var(--line-height-140) var(--font-family-display);
---text-lead:var(--font-weight-regular) var(--font-size-lead-m)/var(--line-height-155) var(--font-family-sans);
---text-stat:var(--font-weight-medium) var(--font-size-stat-m)/var(--line-height-100) var(--font-family-mono);
+--text-display:var(--font-weight-regular) var(--font-size-display-m)/var(--line-height-display-m) var(--font-family-display);
+--text-h1:var(--font-weight-regular) var(--font-size-h1-m)/var(--line-height-h1-m) var(--font-family-display);
+--text-h2:var(--font-weight-medium) var(--font-size-h2-m)/var(--line-height-h2-m) var(--font-family-display);
+--text-h3:var(--font-weight-medium) var(--font-size-h3-m)/var(--line-height-h3-m) var(--font-family-display);
+--text-h4:var(--font-weight-medium) var(--font-size-h4-m)/var(--line-height-h4-m) var(--font-family-display);
+--text-h5:var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-h5-m) var(--font-family-display);
+--text-quote:var(--font-weight-regular) var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-display);
+--text-lead:var(--font-weight-regular) var(--font-size-lead-m)/var(--line-height-lead-m) var(--font-family-sans);
+--text-stat:var(--font-weight-medium) var(--font-size-stat-m)/var(--line-height-stat) var(--font-family-mono);
 }}
 
 /* ── Radius ───────────────────────────────────────────────────────────────────

@@ -65,7 +65,7 @@ The token system lives in `src/styles/tokens/` and is imported by `src/app/globa
 
 | Layer | Where | What it holds |
 |---|---|---|
-| 1 · primitives | `primitives.css` | ramps and ladders. `--color-brandeis-500`, `--space-24`, `--font-size-h1`. Declared once, consumed through a usage token wherever one exists |
+| 1 · primitives | `primitives.css` | ramps and ladders. `--color-brandeis-500`, `--space-24`, `--font-size-h1`, `--line-height-h1`. Declared once, consumed through a usage token wherever one exists |
 | 2 · usage | `primitives.css` | one curated answer per question. **`--gap-*` (9 steps)** and `--text-*` (17 roles). Surface-independent, therefore shared |
 | 3 · components | `components/*.css` | what a value MEANS for one component. `--sec-ground`, `--btn-solid-primary-bg`. Re-declared once per surface |
 
@@ -114,8 +114,15 @@ Nine steps, named for what they separate:
    Section — never on the control itself. That is what lets a button three components deep get
    the right treatment without being told where it is.
 4. **Type is consumed as a composite:** `font: var(--text-h2)` plus
-   `letter-spacing: var(--text-h2-tracking)`. Never restate a size. Title roles re-declare
-   themselves at 1023px and 767px, so a rule needs no breakpoint of its own for type.
+   `letter-spacing: var(--text-h2-tracking)`. Never restate a size or a ratio. Title roles
+   re-declare themselves at 1023px and 767px, so a rule needs no breakpoint of its own for type.
+
+   Size **and** line height are laddered by role — `--font-size-h2` pairs with
+   `--line-height-h2`, and both carry `-t` / `-m` breakpoint steps. They are one typographic
+   decision, so they are named and changed together; if you add a size, add its ratio in the
+   same edit. Letter-spacing is the deliberate exception: tracking corrects an optical error at
+   a size rather than marking a step, and one correction serves several roles, which is why h2,
+   h3 and h4 share `--letter-spacing-title{,-tight,-fine}`.
 5. **Adding a component layer:** copy the shape of `tokens/components/button.css` — geometry in
    `:root`, then one block per surface with deltas only. Name tokens
    `--{abbrev}-{variant}-{part}-{state}`, register the file in `tokens/index.css`, keep it to the
