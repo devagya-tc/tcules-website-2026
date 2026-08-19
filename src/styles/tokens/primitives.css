@@ -197,7 +197,12 @@
    size out of it.
 
    The title roles re-declare themselves at 1023px and 767px, so a rule needs no
-   breakpoint of its own for type. Body and chrome hold at every width.         */
+   breakpoint of its own for type. Body and chrome hold at every width.
+
+   ui ships at three sizes because controls do: a small, medium and large button all
+   want the same mono/semibold/1.2 chrome, differing only in size. Without all three
+   as composites a control has to rebuild the font by hand out of the ladder — which
+   is how a component ends up with no line-height at all.                       */
 :root{
 --text-display:var(--font-weight-regular) var(--font-size-display)/var(--line-height-display) var(--font-family-display);--text-display-tracking:var(--letter-spacing-display);
 --text-h1:var(--font-weight-regular) var(--font-size-h1)/var(--line-height-h1) var(--font-family-display);--text-h1-tracking:var(--letter-spacing-h1);
@@ -211,7 +216,9 @@
 --text-body:var(--font-weight-regular) var(--font-size-body)/var(--line-height-body) var(--font-family-sans);
 --text-body-sm:var(--font-weight-regular) var(--font-size-body-sm)/var(--line-height-body-sm) var(--font-family-sans);
 --text-caption:var(--font-weight-regular) var(--font-size-caption)/var(--line-height-caption) var(--font-family-sans);
+--text-ui-sm:var(--font-weight-semibold) var(--font-size-ui-sm)/var(--line-height-ui) var(--font-family-mono);--text-ui-sm-tracking:var(--letter-spacing-ui);
 --text-ui:var(--font-weight-semibold) var(--font-size-ui)/var(--line-height-ui) var(--font-family-mono);--text-ui-tracking:var(--letter-spacing-ui);
+--text-ui-lg:var(--font-weight-semibold) var(--font-size-ui-lg)/var(--line-height-ui) var(--font-family-mono);--text-ui-lg-tracking:var(--letter-spacing-ui);
 --text-eyebrow:var(--font-weight-semibold) var(--font-size-eyebrow)/var(--line-height-eyebrow) var(--font-family-mono);--text-eyebrow-tracking:var(--letter-spacing-eyebrow);
 --text-micro:var(--font-weight-semibold) var(--font-size-micro)/var(--line-height-micro) var(--font-family-mono);--text-micro-tracking:var(--letter-spacing-micro);
 --text-stat:var(--font-weight-medium) var(--font-size-stat)/var(--line-height-stat) var(--font-family-mono);--text-stat-tracking:var(--letter-spacing-title-tight);

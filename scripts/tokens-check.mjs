@@ -62,6 +62,42 @@ for (const file of consumers) {
   }
 }
 
+/**
+ * SURFACE SELF-CONTAINMENT.
+ *
+ * Every surface block in a component layer must declare every surface-dependent token that
+ * any other surface declares. A block carrying only deltas from paper is not self-contained:
+ * nest that surface inside a non-paper one and it inherits the enclosing surface's values for
+ * whatever it omitted. That produced white ink on a light ground at 1.13:1 before it was fixed,
+ * and nothing in CSS complains — which is exactly why it is checked here.
+ */
+const SURFACES = ['paper', 'tint', 'ink', 'blue'];
+const stripComments = strip;
+
+for (const file of tokenFiles.filter((f) => f.includes('/components/'))) {
+  const css = stripComments(read(file));
+  const perSurface = new Map(SURFACES.map((s) => [s, new Set()]));
+  // Walk each top-level block and attribute its declarations to the surfaces in its selector.
+  for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selector = m[1];
+    const decls = [...m[2].matchAll(/(--[\w-]+)\s*:/g)].map((d) => d[1]);
+    for (const s of SURFACES) {
+      if (selector.includes(`[data-surface="${s}"]`)) decls.forEach((d) => perSurface.get(s).add(d));
+    }
+  }
+  const union = new Set([...perSurface.values()].flatMap((v) => [...v]));
+  if (union.size === 0) continue;
+  for (const s of SURFACES) {
+    const missing = [...union].filter((t) => !perSurface.get(s).has(t)).sort();
+    if (missing.length) {
+      problems.push(
+        `${file}  surface "${s}" omits ${missing.length} token(s) another surface declares, ` +
+          `so it inherits them from whatever encloses it: ${missing.join(', ')}`,
+      );
+    }
+  }
+}
+
 console.log(
   `tokens:check — ${tokens.size} tokens defined across ${tokenFiles.length} files, ` +
     `${consumers.length} consumer stylesheets checked`,

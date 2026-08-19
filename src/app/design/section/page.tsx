@@ -4,7 +4,7 @@ import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 const SURFACE_NOTES = {
   paper: 'The default and the origin — every other surface is a delta from it.',
-  tint: 'Alternating rows, quote blocks, table headers. Ink is unchanged; the rules step one deeper so a hairline still reads against the deeper ground.',
+  tint: 'Alternating rows, quote blocks, table headers. The rules step one deeper against the deeper ground — and so do the two muted inks, because neutral-600 on paper-deep is 4.39:1 and fails AA.',
   ink: 'The footer and the closing panel. Blue holds at 500 as a field, and lifts to 200 as text, because blue ink on neutral-950 reaches only 2.7:1.',
   blue: 'A pivot — one appearance per page, and it never touches an ink section. Blue cannot accent itself, so the accent goes to paper.',
 } as const;

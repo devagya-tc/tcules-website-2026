@@ -35,7 +35,21 @@
      re-declare themselves at 1023px and 767px, so a rule needs no breakpoint of
      its own for type.
    · A component never reads another component's tokens. Shared values are
-     primitives or usage tokens, or they are duplicated on purpose.
+     primitives or usage tokens, or they are duplicated on purpose. A token only one
+     component could ever read, that merely renames a usage token, is not worth
+     having — a --sec-gap aliasing --gap-block is a second name for one distance.
+   · Two registers for colour, and they do not mix. A SURFACE has a ground and an ink
+     (--sec-ground, --sec-ink, --sec-link-ink). A CONTROL has a bg and an fg
+     (--btn-solid-primary-bg, --btn-ghost-neutral-fg). Never -fg on a surface, never
+     -ink on a control.
+   · Two vocabularies for steps, and which one to use is decided by what is stepping.
+     A DISTANCE takes a gap-scale role name — --gap-block, --sec-padding-y-tight. A
+     COMPONENT SIZE takes a t-shirt name — --btn-height-md, --lay-track-sm. Distances
+     are shared across the system so they are named for the relationship; a size
+     belongs to one component, so a neutral ordinal is honest.
+   · A colour token carries its measured contrast in a comment where that value is a
+     FLOOR rather than a preference — see the ink surface in button.css. A later
+     "let's lighten this one step" then has the number in front of it.
    · Surface is declared with data-surface="paper | tint | ink | blue" on an
      ancestor — a section, a panel, a footer — never on the control itself. Paper
      needs no attribute; it is the :root default.
@@ -46,10 +60,21 @@
      comment. It does not get a name that suggests it is reusable.
 
    ── Adding a component layer ───────────────────────────────────────────────────
-   Copy the shape of tokens/components/button.css: geometry in :root, then one
-   block per surface carrying deltas only. Name tokens
-   --{abbrev}-{variant}-{part}-{state}, add the file to the imports below, and keep
-   the file to the one component.
+   Copy the shape of tokens/components/button.css: geometry in :root, then one block
+   per surface. Name tokens --{abbrev}-{variant}-{part}-{state}, add the file to the
+   imports below, and keep the file to the one component.
+
+   EVERY surface block declares EVERY surface-dependent token — not just the deltas
+   from paper. A block that carries only deltas is not self-contained: nest that
+   surface inside a non-paper one and it inherits the enclosing surface's values for
+   everything it left out. This is not hypothetical. A tint panel inside an ink
+   section used to render white ink on a light ground at 1.13:1, and a button in it
+   lost its ghost label, its link and its focus ring. The repetition is the fix.
+
+   A STATE token exists in the set only if the value moves on at least one surface —
+   a solid button's label never changes on press, so there is no --btn-solid-*-fg-
+   pressed asserting that it does. Once a token is in the set, every surface declares
+   it, even where that surface's value equals its own rest.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 @import "fonts.css";

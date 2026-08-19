@@ -1,43 +1,63 @@
 /* ══ Component layer — button ════════════════════════════════════════════════════
-   Tier 2. This file is the only place a button colour is decided, and it decides
-   it four times: once per surface. Every value is a primitive; nothing is a
-   literal and nothing is derived from another component.
+   Tier 3. This file is the only place a button colour is decided, and it decides it
+   four times: once per surface. Every value is a primitive or a usage token; nothing
+   is a literal except the three heights and the hit minimum, and nothing is derived
+   from another component.
 
    Naming: --btn-{emphasis}-{colour}-{part}-{state}
            emphasis  solid | ghost | link
            colour    primary (Brandeis) | neutral (ink)
-           part      bg | fg
+           part      bg | fg          — a control has a background and a foreground;
+                                        a SURFACE has a ground and an ink (section.css)
            state     rest (no suffix) | hover | pressed
    Geometry and shared parts drop the emphasis and colour: --btn-height-md,
-   --btn-ring, --btn-disabled-bg.
+   --btn-ring-color, --btn-disabled-bg.
 
-   State model, fixed and not a token: hover and focus take -hover. Pressed and
-   active take -pressed. Focus is the hover fill plus the ring, so the keyboard
-   sees what the pointer sees. Disabled answers nothing.
+   ── The state model, fixed and not a token ──────────────────────────────────────
+   Hover and focus take -hover. Pressed and active take -pressed. Focus is the hover
+   fill plus the ring, so the keyboard sees what the pointer sees. Disabled answers
+   nothing.
+
+   A state token exists in the set only if the value MOVES on at least one surface.
+   That is why there is no --btn-solid-*-fg-pressed: a solid button's label never
+   changes on press, on any surface, so the token would assert a change that does not
+   happen. Once a token is in the set, though, EVERY surface declares it — even where
+   that surface's value equals its own rest (ghost fg on ink and blue). Which brings
+   us to:
+
+   ── Every surface restates every token ──────────────────────────────────────────
+   Not just the deltas from paper. A surface that declares only deltas is not
+   self-contained: nest it inside a non-paper surface and it inherits that surface's
+   values for everything it left out. Measured before this was fixed — a tint panel
+   inside an ink section rendered ghost-neutral at 1.13:1, link-primary at 2.09:1 and
+   a focus ring at 2.09:1 against its own gap. The blocks below are therefore
+   repetitive on purpose, and the repetition is what makes nesting safe.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   8 box padding / 4 label margin / 4 icon gap. The three differ because the
-   things they space differ: an uppercase mono glyph starts at its side bearing,
-   an icon already carries ~2px of air inside its box. They do not scale.
+   8 box padding / 4 label margin / 4 icon gap. The three differ because the things
+   they space differ: an uppercase mono glyph starts at its side bearing, an icon
+   already carries ~2px of air inside its box. They do not scale.
 
    These four reach past the gap scale into the space ramp on purpose. They are
-   optical corrections measured against Geist Mono's uppercase side bearings at
-   13px, not layout distances — --gap-tight would be a coincidence here, and the
-   day the gap scale is re-tuned this button must not move. That exception is
-   documented per token and nowhere else in the file.                          */
+   optical corrections measured against Geist Mono's uppercase side bearings at 13px,
+   not layout distances — --gap-tight would be a coincidence here, and the day the gap
+   scale is re-tuned this button must not move. Documented per token, nowhere else.
+
+   Type comes in as a COMPOSITE, one per size. The button does not restate a family,
+   a weight, a size or a ratio: --text-ui-sm / --text-ui / --text-ui-lg carry all four,
+   which is the point of the usage layer. Rebuilding a font by hand out of the ladder
+   is how a control ends up with no line-height at all and inherits body's 1.6.   */
 :root{
 --btn-padding-x:var(--space-8);       /* optical, not --gap-tight */
 --btn-label-margin:var(--space-4);    /* optical, not --gap-inline */
 --btn-gap:var(--space-4);             /* optical, not --gap-inline */
 --btn-gap-bare:var(--space-8);        /* link emphasis has no box and no label margin */
 --btn-height-sm:32px;--btn-height-md:40px;--btn-height-lg:48px;
---btn-font-size-sm:var(--font-size-ui-sm);--btn-font-size-md:var(--font-size-ui);--btn-font-size-lg:var(--font-size-ui-lg);
---btn-icon-size-sm:var(--icon-size-14);--btn-icon-size-md:var(--icon-size-16);--btn-icon-size-lg:var(--icon-size-18);
 --btn-hit-min:44px;                   /* extended past the box, never by resizing it */
---btn-font-family:var(--font-family-mono);
---btn-font-weight:var(--font-weight-semibold);
---btn-letter-spacing:var(--letter-spacing-ui);
+--btn-text-sm:var(--text-ui-sm);--btn-text-md:var(--text-ui);--btn-text-lg:var(--text-ui-lg);
+--btn-text-tracking:var(--text-ui-tracking);  /* one value: all three sizes track alike */
+--btn-icon-size-sm:var(--icon-size-14);--btn-icon-size-md:var(--icon-size-16);--btn-icon-size-lg:var(--icon-size-18);
 --btn-radius:var(--radius-8);
 --btn-shadow:var(--shadow-none);
 --btn-transition-duration:var(--duration-fast);
@@ -47,70 +67,94 @@
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────
-   The default and the origin. Every other surface is a delta from it.         */
+   The default and the origin; every other surface is measured against it.
+
+   link-neutral turns BLUE on hover. It used to hold neutral-900 through rest and
+   hover and only move on press, which meant a neutral link had no hover affordance
+   at all — and since link has no fill, "focus is the hover fill plus the ring"
+   degraded to ring-only. Rest → hover → pressed now runs 900 → 500 → 600.       */
 :root,[data-surface="paper"]{
 --btn-solid-primary-bg:var(--color-brandeis-500);--btn-solid-primary-bg-hover:var(--color-brandeis-600);--btn-solid-primary-bg-pressed:var(--color-brandeis-700);
---btn-solid-primary-fg:var(--color-white);--btn-solid-primary-fg-pressed:var(--color-white);
+--btn-solid-primary-fg:var(--color-white);
 --btn-solid-neutral-bg:var(--color-neutral-950);--btn-solid-neutral-bg-hover:var(--color-neutral-800);--btn-solid-neutral-bg-pressed:var(--color-neutral-700);
---btn-solid-neutral-fg:var(--color-paper);--btn-solid-neutral-fg-pressed:var(--color-paper);
+--btn-solid-neutral-fg:var(--color-paper);
 --btn-ghost-primary-fg:var(--color-brandeis-500);--btn-ghost-primary-fg-pressed:var(--color-brandeis-600);
 --btn-ghost-primary-bg-hover:var(--color-brandeis-50);--btn-ghost-primary-bg-pressed:var(--color-brandeis-100);
 --btn-ghost-neutral-fg:var(--color-neutral-900);--btn-ghost-neutral-fg-pressed:var(--color-neutral-950);
 --btn-ghost-neutral-bg-hover:var(--color-neutral-100);--btn-ghost-neutral-bg-pressed:var(--color-neutral-200);
 --btn-link-primary-fg:var(--color-brandeis-500);--btn-link-primary-fg-hover:var(--color-brandeis-600);--btn-link-primary-fg-pressed:var(--color-brandeis-700);
---btn-link-neutral-fg:var(--color-neutral-900);--btn-link-neutral-fg-hover:var(--color-neutral-900);--btn-link-neutral-fg-pressed:var(--color-brandeis-500);
+--btn-link-neutral-fg:var(--color-neutral-900);--btn-link-neutral-fg-hover:var(--color-brandeis-500);--btn-link-neutral-fg-pressed:var(--color-brandeis-600);
 --btn-disabled-bg:var(--color-neutral-100);--btn-disabled-fg:var(--color-neutral-500);
---btn-ring:var(--color-brandeis-500);--btn-ring-gap:var(--color-paper);
+--btn-ring-color:var(--color-brandeis-500);--btn-ring-gap-color:var(--color-paper);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
    A tint that worked on paper is already the colour of this panel, so both ghost
    fills step down one — hover 50→100, pressed 100→200 — and stay one step apart.
-   Opaque fills and links are already separated from the ground; untouched.     */
+   Disabled steps with them. Everything else matches paper and is restated anyway,
+   because a surface that omits a token is not self-contained (see the header).   */
 [data-surface="tint"]{
+--btn-solid-primary-bg:var(--color-brandeis-500);--btn-solid-primary-bg-hover:var(--color-brandeis-600);--btn-solid-primary-bg-pressed:var(--color-brandeis-700);
+--btn-solid-primary-fg:var(--color-white);
+--btn-solid-neutral-bg:var(--color-neutral-950);--btn-solid-neutral-bg-hover:var(--color-neutral-800);--btn-solid-neutral-bg-pressed:var(--color-neutral-700);
+--btn-solid-neutral-fg:var(--color-paper);
+--btn-ghost-primary-fg:var(--color-brandeis-500);--btn-ghost-primary-fg-pressed:var(--color-brandeis-600);
 --btn-ghost-primary-bg-hover:var(--color-brandeis-100);--btn-ghost-primary-bg-pressed:var(--color-brandeis-200);
+--btn-ghost-neutral-fg:var(--color-neutral-900);--btn-ghost-neutral-fg-pressed:var(--color-neutral-950);
 --btn-ghost-neutral-bg-hover:var(--color-neutral-200);--btn-ghost-neutral-bg-pressed:var(--color-neutral-300);
---btn-disabled-bg:var(--color-neutral-200);
---btn-ring-gap:var(--color-paper-deep);
+--btn-link-primary-fg:var(--color-brandeis-500);--btn-link-primary-fg-hover:var(--color-brandeis-600);--btn-link-primary-fg-pressed:var(--color-brandeis-700);
+--btn-link-neutral-fg:var(--color-neutral-900);--btn-link-neutral-fg-hover:var(--color-brandeis-500);--btn-link-neutral-fg-pressed:var(--color-brandeis-600);
+--btn-disabled-bg:var(--color-neutral-200);--btn-disabled-fg:var(--color-neutral-500);
+--btn-ring-color:var(--color-brandeis-500);--btn-ring-gap-color:var(--color-paper-deep);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
    Blue does not move: the solid primary keeps 500 with its white label and runs
-   600 / 700 exactly as on paper, so the primary action is the same object here.
-   The neutrals reverse. Two values are contrast floors rather than preferences —
-   blue as ink and blue as a 2px ring both reach only 2.7:1 on neutral-950, so a
-   blue label lifts to 200 (10.5:1) and the ring to 300 (7.3:1). A ghost carries
-   neutral fills in both steps, 900 then 800, and never a blue tint: at the pale
-   end of the blue ramp there is no tint left to see.                          */
+   600 / 700 exactly as on paper, so the primary action is the same object here. It is
+   restated rather than inherited, because inheriting it means an ink panel nested in a
+   blue section would pick up blue's INVERTED primary.
+
+   The neutrals reverse. Two values are contrast floors rather than preferences — blue
+   as ink and blue as a 2px ring both reach only 2.77:1 on neutral-950, so a blue label
+   lifts to 200 (10.48:1) and the ring to 300 (7.32:1). A ghost carries neutral fills in
+   both steps, 900 then 800, and never a blue tint: at the pale end of the blue ramp
+   there is no tint left to see. link-neutral runs white → 300 → 200.            */
 [data-surface="ink"]{
+--btn-solid-primary-bg:var(--color-brandeis-500);--btn-solid-primary-bg-hover:var(--color-brandeis-600);--btn-solid-primary-bg-pressed:var(--color-brandeis-700);
+--btn-solid-primary-fg:var(--color-white);
 --btn-solid-neutral-bg:var(--color-paper);--btn-solid-neutral-bg-hover:var(--color-neutral-200);--btn-solid-neutral-bg-pressed:var(--color-neutral-300);
---btn-solid-neutral-fg:var(--color-neutral-950);--btn-solid-neutral-fg-pressed:var(--color-neutral-950);
+--btn-solid-neutral-fg:var(--color-neutral-950);
 --btn-ghost-primary-fg:var(--color-brandeis-200);--btn-ghost-primary-fg-pressed:var(--color-brandeis-200);
 --btn-ghost-primary-bg-hover:var(--color-neutral-900);--btn-ghost-primary-bg-pressed:var(--color-neutral-800);
 --btn-ghost-neutral-fg:var(--color-white);--btn-ghost-neutral-fg-pressed:var(--color-white);
 --btn-ghost-neutral-bg-hover:var(--color-neutral-900);--btn-ghost-neutral-bg-pressed:var(--color-neutral-800);
 --btn-link-primary-fg:var(--color-brandeis-300);--btn-link-primary-fg-hover:var(--color-brandeis-200);--btn-link-primary-fg-pressed:var(--color-brandeis-100);
---btn-link-neutral-fg:var(--color-white);--btn-link-neutral-fg-hover:var(--color-white);--btn-link-neutral-fg-pressed:var(--color-brandeis-300);
+--btn-link-neutral-fg:var(--color-white);--btn-link-neutral-fg-hover:var(--color-brandeis-300);--btn-link-neutral-fg-pressed:var(--color-brandeis-200);
 --btn-disabled-bg:var(--color-neutral-800);--btn-disabled-fg:var(--color-neutral-600);
---btn-ring:var(--color-brandeis-300);--btn-ring-gap:var(--color-neutral-950);
+--btn-ring-color:var(--color-brandeis-300);--btn-ring-gap-color:var(--color-neutral-950);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
-   The one surface where the primary cannot be blue. Solid primary inverts to
-   paper with an ink label; ghost and link go white and fill with the ramp below
-   the ground, 600 then 700. Primary and neutral collapse here — both read white
-   — and that is correct: on a blue field there is one voice.                   */
+   The one surface where the primary cannot be blue. Solid primary inverts to paper
+   with an ink label; ghost fills with the ramp below the ground, 600 then 700.
+   Primary and neutral collapse for ghost and link — both read white — and that is
+   correct: on a blue field there is one voice.
+
+   The link states run white → 50 → 100 rather than stopping at white for two steps.
+   Only the light end of the ramp clears AA on a brandeis-500 ground: white 6.23:1,
+   50 is 5.57:1, 100 is 4.91:1, and 200 is already 3.78:1 — which is why pressed does
+   not continue to 200 the way it does on ink.                                   */
 [data-surface="blue"]{
 --btn-solid-primary-bg:var(--color-paper);--btn-solid-primary-bg-hover:var(--color-neutral-200);--btn-solid-primary-bg-pressed:var(--color-neutral-300);
---btn-solid-primary-fg:var(--color-neutral-950);--btn-solid-primary-fg-pressed:var(--color-neutral-950);
+--btn-solid-primary-fg:var(--color-neutral-950);
 --btn-solid-neutral-bg:var(--color-neutral-950);--btn-solid-neutral-bg-hover:var(--color-neutral-900);--btn-solid-neutral-bg-pressed:var(--color-neutral-800);
---btn-solid-neutral-fg:var(--color-paper);--btn-solid-neutral-fg-pressed:var(--color-paper);
+--btn-solid-neutral-fg:var(--color-paper);
 --btn-ghost-primary-fg:var(--color-white);--btn-ghost-primary-fg-pressed:var(--color-white);
 --btn-ghost-primary-bg-hover:var(--color-brandeis-600);--btn-ghost-primary-bg-pressed:var(--color-brandeis-700);
 --btn-ghost-neutral-fg:var(--color-white);--btn-ghost-neutral-fg-pressed:var(--color-white);
 --btn-ghost-neutral-bg-hover:var(--color-brandeis-600);--btn-ghost-neutral-bg-pressed:var(--color-brandeis-700);
---btn-link-primary-fg:var(--color-white);--btn-link-primary-fg-hover:var(--color-white);--btn-link-primary-fg-pressed:var(--color-brandeis-100);
---btn-link-neutral-fg:var(--color-white);--btn-link-neutral-fg-hover:var(--color-white);--btn-link-neutral-fg-pressed:var(--color-brandeis-100);
+--btn-link-primary-fg:var(--color-white);--btn-link-primary-fg-hover:var(--color-brandeis-50);--btn-link-primary-fg-pressed:var(--color-brandeis-100);
+--btn-link-neutral-fg:var(--color-white);--btn-link-neutral-fg-hover:var(--color-brandeis-50);--btn-link-neutral-fg-pressed:var(--color-brandeis-100);
 --btn-disabled-bg:var(--color-brandeis-600);--btn-disabled-fg:var(--color-brandeis-300);
---btn-ring:var(--color-white);--btn-ring-gap:var(--color-brandeis-500);
+--btn-ring-color:var(--color-white);--btn-ring-gap-color:var(--color-brandeis-500);
 }

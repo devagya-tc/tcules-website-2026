@@ -106,14 +106,33 @@ Nine steps, named for what they separate:
 ### The other rules that matter day to day
 
 1. **No stylesheet outside `tokens/` writes a hex, a raw distance or a font stack.**
-   `npm run tokens:check` enforces both halves — it fails on a `var()` that resolves to nothing
-   and on a literal colour outside the token layer. Run it before you commit CSS.
-2. **A component never reads another component's tokens.** Shared values are primitives or usage
-   tokens, or they are duplicated on purpose.
-3. **Surface is declared with `data-surface="paper | tint | ink | blue"` on an ancestor** — a
+   `npm run tokens:check` enforces three things — a `var()` that resolves to nothing, a literal
+   colour outside the token layer, and **surface self-containment** (below). Run it before you
+   commit CSS.
+2. **Every surface block declares every surface-dependent token — not just the deltas from
+   paper.** A block carrying only deltas is not self-contained: nest that surface inside a
+   non-paper one and it inherits the enclosing surface's values for whatever it omitted. A tint
+   panel inside an ink section rendered white ink on a light ground at 1.13:1, and the button in
+   it lost its ghost label, its link and its focus ring. The surface blocks are repetitive on
+   purpose. `tokens:check` fails the build if one drifts.
+3. **A state token exists only if the value moves on at least one surface** — there is no
+   `--btn-solid-*-fg-pressed`, because a solid button's label never changes on press. Once a
+   token is in the set, every surface declares it, even where it equals that surface's own rest.
+4. **Two registers for colour, and they do not mix.** A *surface* has a **ground** and an **ink**
+   (`--sec-ground`, `--sec-link-ink`). A *control* has a **bg** and an **fg**
+   (`--btn-ghost-neutral-fg`). Never `-fg` on a surface, never `-ink` on a control.
+5. **Two vocabularies for steps.** A *distance* takes a gap-scale role name (`--gap-block`,
+   `--sec-padding-y-tight`). A *component size* takes a t-shirt name (`--btn-height-md`,
+   `--lay-track-sm`). Distances are shared system-wide so they name the relationship; a size
+   belongs to one component, so an ordinal is honest.
+6. **A component never reads another component's tokens.** Shared values are primitives or usage
+   tokens, or they are duplicated on purpose. And a token only one component could ever read,
+   which merely renames a usage token, is not worth having — `--sec-gap` aliasing `--gap-block`
+   was a second name for one distance and was deleted.
+7. **Surface is declared with `data-surface="paper | tint | ink | blue"` on an ancestor** — a
    Section — never on the control itself. That is what lets a button three components deep get
    the right treatment without being told where it is.
-4. **Type is consumed as a composite:** `font: var(--text-h2)` plus
+8. **Type is consumed as a composite:** `font: var(--text-h2)` plus
    `letter-spacing: var(--text-h2-tracking)`. Never restate a size or a ratio. Title roles
    re-declare themselves at 1023px and 767px, so a rule needs no breakpoint of its own for type.
 
@@ -123,7 +142,7 @@ Nine steps, named for what they separate:
    same edit. Letter-spacing is the deliberate exception: tracking corrects an optical error at
    a size rather than marking a step, and one correction serves several roles, which is why h2,
    h3 and h4 share `--letter-spacing-title{,-tight,-fine}`.
-5. **Adding a component layer:** copy the shape of `tokens/components/button.css` — geometry in
+9. **Adding a component layer:** copy the shape of `tokens/components/button.css` — geometry in
    `:root`, then one block per surface with deltas only. Name tokens
    `--{abbrev}-{variant}-{part}-{state}`, register the file in `tokens/index.css`, keep it to the
    one component.

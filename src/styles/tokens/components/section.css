@@ -4,33 +4,53 @@
    the rhythm between its rows. Nothing in this system is "page-level CSS" with a
    free hand on primitives — if a value has no component, it has no home.
 
-   Naming: --sec-{part}-{state}. Parts are ground, ink, rule, accent, link.
-   Set data-surface on the <section>; everything inside inherits, including a
-   button three components deep that has no idea what it is sitting on.
+   Naming: --sec-{part}-{modifier}-{state}. A surface has a GROUND and an INK — never
+   bg/fg, which is the register controls use. Parts:
+     ground                          the band's fill
+     ink · ink-muted · ink-label     text on that fill, three weights of emphasis
+     rule · rule-strong              hairlines on that fill
+     accent · accent-ink             brand blue as a field, and as text
+     link-ink · link-ink-hover       link text
+     highlight · highlight-ink       surface-independent, see the geometry block
+
+   Set data-surface on the <section>; everything inside inherits, including a button
+   three components deep that has no idea what it is sitting on.
+
+   EVERY surface restates EVERY ground-dependent role — it is not enough to declare
+   the deltas from paper. A surface that declares only deltas is not self-contained,
+   and nesting it inside a non-paper surface inherits the wrong ink: a tint panel
+   inside an ink section rendered white text on a light ground at 1.13:1.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   Every distance here is a gap-scale step, which is the point: a section is the
-   most-copied layout in the system, so it must not invent a number. Tight and
-   open are the two section paddings; --sec-gap is the head-to-body step.       */
+   Every distance is a gap-scale step, which is the point: a section is the most-copied
+   layout in the system, so it must not invent a number. Two literals are the exception
+   and are marked; both are frame geometry, not distance between two things.
+
+   The gaps INSIDE a section are not here. Layout owns every gap between siblings and
+   reads the gap scale directly, so a --sec-gap aliasing --gap-block would be a second
+   name for one distance that nothing may read (a component never reads another
+   component's tokens). Same for the type and measure roles: a section header will get
+   its own layer reading --text-h2 and --measure-body, rather than a --sec-text-title
+   alias only Section itself could use.                                          */
 :root{
 --sec-padding-y:var(--gap-section);
 --sec-padding-y-tight:var(--gap-column);
 --sec-padding-y-open:var(--gap-section-open);
---sec-container:1240px;
 --sec-gutter:var(--gap-gutter);
---sec-rail:180px;
---sec-gap:var(--gap-block);
---sec-gap-stack:var(--gap-stack);
---sec-gap-text:var(--gap-text);
 --sec-rule-width:var(--border-width-hairline);
---sec-text-title:var(--text-h2);
---sec-text-title-tracking:var(--text-h2-tracking);
---sec-text-eyebrow:var(--text-eyebrow);
---sec-text-eyebrow-tracking:var(--text-eyebrow-tracking);
---sec-text-body:var(--text-body);
---sec-measure-title:var(--measure-title);
---sec-measure-body:var(--measure-body);
+--sec-container:1240px;  /* literal: the content column. Not a scale step — it is the
+                            measure the page frame was designed at, and it sits inside
+                            --breakpoint-1280 so the gutter survives at that width. */
+--sec-rail:180px;        /* literal: the left column a running head or margin note sits
+                            in. Column geometry, like --lay-track-*. */
+
+/* Highlight — surface-INDEPENDENT, so it lives here rather than in the surface blocks.
+   A highlight brings its own ground (Peridot) and its own ink, so the pair is legible
+   wherever it lands and does not need restating per surface. Marker/emphasis only;
+   Peridot never fills an action. */
+--sec-highlight:var(--color-peridot-500);
+--sec-highlight-ink:var(--color-neutral-900);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────
@@ -38,26 +58,38 @@
    label that borrows the colour breaks that contract before the page loads.    */
 :root,[data-surface="paper"]{
 --sec-ground:var(--color-paper);
---sec-ink:var(--color-neutral-900);
---sec-ink-muted:var(--color-neutral-600);
---sec-ink-label:var(--color-neutral-700);
+--sec-ink:var(--color-neutral-900);            /* 14.62:1 */
+--sec-ink-muted:var(--color-neutral-600);      /*  4.92:1 — the floor of AA, do not lighten */
+--sec-ink-label:var(--color-neutral-700);      /*  8.14:1 */
 --sec-rule:var(--color-neutral-200);
 --sec-rule-strong:var(--color-neutral-400);
---sec-accent:var(--color-brandeis-500);      /* blue as a field or rule */
---sec-accent-ink:var(--color-brandeis-500);  /* blue as text */
---sec-link-fg:var(--color-brandeis-500);
---sec-link-fg-hover:var(--color-brandeis-600);
---sec-highlight:var(--color-peridot-500);
---sec-highlight-ink:var(--color-neutral-900);
+--sec-accent:var(--color-brandeis-500);        /* blue as a field or rule */
+--sec-accent-ink:var(--color-brandeis-500);    /* blue as text — 6.17:1 */
+--sec-link-ink:var(--color-brandeis-500);
+--sec-link-ink-hover:var(--color-brandeis-600);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
-   Alternating rows, quote blocks, table headers. Ink is unchanged; the rules
-   step one deeper so a hairline still reads against the deeper ground.        */
+   Alternating rows, quote blocks, table headers.
+
+   The rules step one deeper so a hairline still reads against the deeper ground — and
+   so do the two muted inks, for the same reason and it is not optional:
+   neutral-600 on paper-deep is 4.39:1, which FAILS AA. Stepping muted to 700 and label
+   to 800 restores 7.27:1 and 10.54:1 and keeps the two roles distinct.
+
+   Every role is restated even where the value matches paper. That is what makes tint
+   self-contained, so a tint panel nested inside an ink or blue section still reads.  */
 [data-surface="tint"]{
 --sec-ground:var(--color-paper-deep);
+--sec-ink:var(--color-neutral-900);            /* 13.06:1 */
+--sec-ink-muted:var(--color-neutral-700);      /*  7.27:1 — stepped; 600 would be 4.39:1 */
+--sec-ink-label:var(--color-neutral-800);      /* 10.54:1 — stepped to stay clear of muted */
 --sec-rule:var(--color-neutral-300);
 --sec-rule-strong:var(--color-neutral-500);
+--sec-accent:var(--color-brandeis-500);
+--sec-accent-ink:var(--color-brandeis-500);    /*  5.51:1 */
+--sec-link-ink:var(--color-brandeis-500);
+--sec-link-ink-hover:var(--color-brandeis-600);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
@@ -74,8 +106,8 @@
 --sec-rule-strong:var(--color-neutral-700);
 --sec-accent:var(--color-brandeis-500);
 --sec-accent-ink:var(--color-brandeis-200);
---sec-link-fg:var(--color-brandeis-300);
---sec-link-fg-hover:var(--color-brandeis-200);
+--sec-link-ink:var(--color-brandeis-300);      /*  7.32:1 */
+--sec-link-ink-hover:var(--color-brandeis-200);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -91,6 +123,6 @@
 --sec-rule-strong:var(--color-brandeis-300);
 --sec-accent:var(--color-paper);
 --sec-accent-ink:var(--color-white);
---sec-link-fg:var(--color-white);
---sec-link-fg-hover:var(--color-brandeis-100);
+--sec-link-ink:var(--color-white);             /*  6.23:1 */
+--sec-link-ink-hover:var(--color-brandeis-100);
 }
