@@ -356,7 +356,9 @@ stroke to solid, and a hand-written vocabulary block described the old idiom for
 nobody re-read it.
 
 `docs/component-spec-template.md` is the spec contract: what a spec must say before it is buildable.
-Read it before writing one.
+Read it before writing one. `docs/guides/designer-workflow.md` is the same workflow written for the
+person doing the designing — step by step, with who owns each step — and is what to hand a new
+designer.
 
 **(b) Build — in Claude Code, in this repo.**
 
