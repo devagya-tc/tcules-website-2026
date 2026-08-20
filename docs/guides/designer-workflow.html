@@ -390,6 +390,16 @@ Section · Layout · Cluster · Button · Icon · Logo · Prose · SiteNav · Si
       short.
     </p>
 
+    <div class="note">
+      <p>
+        <strong>For the eighteen components the content audit identified, this question has already been
+        asked.</strong> <code>docs/briefs/README.md</code> records the answer, component by component —
+        and for four of them, Button, Prose, SiteNav and SiteFooter, the answer is that shipped code
+        already covers it. Those four briefs say <em>do not specify this</em> and list what to verify
+        instead. If yours is one of them, phase two is not your next step; reading the brief is.
+      </p>
+    </div>
+
     <div class="gate">
       <p class="eyebrow">The only question that matters yet</p>
       <p class="gate-q">Can this be built from those nine and the props they already have?</p>
@@ -436,35 +446,70 @@ Section · Layout · Cluster · Button · Icon · Logo · Prose · SiteNav · Si
       <li>
         <span class="num">01</span>
         <div class="step-body">
-          <div class="step-head"><h3>Generate the brief</h3></div>
+          <div class="step-head"><h3>Open the brief for your component</h3></div>
           <div class="cmd">
-            <span class="where">Terminal · in the repo folder</span>
-            <pre><code>npm run design:brief | pbcopy</code></pre>
+            <span class="where">Repo folder · any editor</span>
+            <pre><code>docs/briefs/&lt;NN&gt;-&lt;component&gt;.md</code></pre>
           </div>
           <p>
-            That copies it to your clipboard (on Windows or Linux, drop <code>| pbcopy</code> and
-            copy the output by hand). Run it <strong>fresh every time.</strong> Everything it prints
-            — every colour ramp with its hex values, the nine spacing steps, all 19 type roles and
-            which 12 carry a letter-spacing companion, the glyph set, the token prefixes already
-            taken, each existing component's measurements, and the three layout primitives' real
-            props — is read out of the repo at that moment. A saved copy is right for about a week and
-            then starts lying.
+            <strong>Select all of it. That is the whole step.</strong> There is one of these for each
+            component the content audit identified, and it is already written: what the thing is,
+            which pages carry it and how many, the closest existing component, the constraints that
+            come from real content, and what is being left to your judgement. Nothing to fill in and
+            nothing to combine.
           </p>
+          <p>
+            Read <code>docs/briefs/README.md</code> first. It gives the order to run them in, names
+            the <strong>four that already ship</strong> — Button, Prose, SiteNav, SiteFooter — so you
+            do not specify something that exists, and flags the three carrying a decision that is not
+            yours to make. Those three say so inside the brief itself, marked
+            <code>UNRESOLVED</code>, so the question travels with the document instead of being
+            guessed at.
+          </p>
+          <div class="note">
+            <p>
+              <strong>Specifying something that is not one of the eighteen?</strong> Then there is no
+              prepared brief, and you generate one:
+            </p>
+            <div class="cmd">
+              <span class="where">Terminal · in the repo folder</span>
+              <pre><code>npm run design:brief | pbcopy</code></pre>
+            </div>
+            <p>
+              That prints the same document with the seven fields blank, for you to fill in: component
+              name, what it is in one sentence, where it appears,
+              <strong>the closest thing that already exists</strong>, references, hard constraints,
+              and what you are leaving to Claude's judgement. The fourth field saves the most time —
+              and it is the one that most often sends you back to phase one.
+            </p>
+          </div>
         </div>
       </li>
 
       <li>
         <span class="num">02</span>
         <div class="step-body">
-          <div class="step-head"><h3>Fill in the brief block</h3></div>
+          <div class="step-head"><h3>Know where the token names come from</h3></div>
           <p>
-            Seven fields sit at the top of what you just copied: component name, what it is in one
-            sentence, where it appears, <strong>the closest thing that already exists</strong>,
-            references, hard constraints, and what you are leaving to Claude's judgement.
+            You will not find the colour ramps inside the brief any more. Every colour with its hex
+            values, the nine spacing steps, all 19 type roles and which 12 carry a letter-spacing
+            companion, the glyph set, the prefixes already taken, each existing component's
+            measurements and the three layout primitives' real props live in
+            <strong><code>vocabulary.md</code></strong>, a guidelines document in the Tcules project.
+            It is generated out of the repo's token layer, so a name in it is a name that resolves in
+            the browser.
           </p>
           <p>
-            The fourth field saves the most time — and it is the one that most often sends you back
-            to phase one.
+            One copy in the project rather than a copy inside every brief — but the staleness rule is
+            unchanged and it is the whole reason any of this is generated: <strong>a hand-kept list of
+            token names is right for about a week and then starts lying.</strong> If a token is renamed in
+            the repo, that document has to be regenerated and pushed to the project again — nothing
+            checks it for you, so if a name in it looks wrong, say so rather than working around it.
+          </p>
+          <p>
+            <strong>If you cannot see it in the project, stop and say so</strong> rather than working
+            from memory of a similar system. A plausible-but-wrong token name renders perfectly and is
+            wrong forever, and no build check can catch it.
           </p>
         </div>
       </li>
@@ -475,7 +520,7 @@ Section · Layout · Cluster · Button · Icon · Logo · Prose · SiteNav · Si
           <div class="step-head"><h3>Paste it into the Tcules project and send</h3></div>
           <div class="cmd">
             <span class="where">Browser · claude.ai/design · the Tcules project</span>
-            <pre><code>Paste: the brief from step 1, with your seven fields filled in.</code></pre>
+            <pre><code>Paste the brief you just opened, whole.</code></pre>
           </div>
           <p>
             The project matters more than the prompt. With the library loaded, the mockup gets
@@ -811,6 +856,12 @@ git branch -d feat/accordion</code></pre>
         <em>an agent grades the rendered preview sheets</em> and does an attended upload. It needs
         judgement, not just a keystroke.
       </p>
+      <p>
+        <strong>Guidelines are the exception.</strong> The vocabulary document is a plain file in the project, not
+        part of the bundle — so updating it needs neither <code>.ds-sync/</code> nor a graded preview, only
+        write access to the project. That is what let the token names move out of every brief without
+        waiting for a component re-sync.
+      </p>
     </div>
 
     <p>What the owner does, so you know what to ask for:</p>
@@ -861,7 +912,8 @@ git branch -d feat/accordion</code></pre>
           <tr><td><code>claude</code></td><td>Terminal, in the repo folder</td><td>Every session — it works on the folder you are standing in</td></tr>
           <tr><td><code>git checkout main &amp;&amp; git pull</code></td><td>Terminal, repo folder</td><td>Before starting anything new</td></tr>
           <tr><td><code>git checkout -b feat/name</code></td><td>Terminal, repo folder</td><td>Once per component</td></tr>
-          <tr><td><code>npm run design:brief | pbcopy</code></td><td>Terminal, repo folder</td><td>Every time you write a spec — never from a saved copy</td></tr>
+          <tr><td><code>docs/briefs/&lt;NN&gt;-&lt;component&gt;.md</code></td><td>Repo folder, any editor</td><td>Open, select all, paste. The prepared brief for one of the eighteen</td></tr>
+          <tr><td><code>npm run design:brief | pbcopy</code></td><td>Terminal, repo folder</td><td>Only for a component that is <em>not</em> one of the eighteen — never from a saved copy</td></tr>
           <tr><td><code>/build-from-spec &lt;path&gt;</code></td><td>Claude Code, repo folder</td><td>Once the spec says <code>accepted</code></td></tr>
           <tr><td><code>npm run verify</code></td><td>Terminal, repo folder</td><td>Before every pull request. Six checks</td></tr>
           <tr><td><code>/audit-component &lt;Name&gt;</code></td><td>Claude Code, repo folder</td><td>After building, before the pull request</td></tr>
@@ -872,7 +924,8 @@ git branch -d feat/accordion</code></pre>
           <tr><td><code>npm ci</code></td><td>Terminal, repo folder</td><td>First time, and whenever dependencies change</td></tr>
           <tr><td><code>npm run format</code></td><td>Terminal, repo folder</td><td>Rarely — it edits files, so run it deliberately</td></tr>
           <tr><td><code>gh pr merge --squash --delete-branch</code></td><td>Terminal, repo folder</td><td><strong>Owner only.</strong> After review</td></tr>
-          <tr><td>the re-sync driver</td><td>Owner's machine, outside the repo</td><td><strong>Owner only.</strong> After merge — the tooling is gitignored, and it needs a person to grade the preview sheets</td></tr>
+          <tr><td>the re-sync driver</td><td>Owner's machine, outside the repo</td><td><strong>Owner only, for a new component.</strong> After merge — the tooling is gitignored, and it needs a person to grade the preview sheets</td></tr>
+          <tr><td>a guidelines push</td><td>Browser or Claude Code, with project write access</td><td>When <code>vocabulary.md</code> changed. No bundle and no preview grading, so not gated on the owner's machine</td></tr>
         </tbody>
       </table>
     </div>
@@ -896,9 +949,7 @@ git branch -d feat/accordion</code></pre>
         for every component, not just yours — the build command stops and asks for exactly this
         reason.</li>
       <li><strong>Reviewing and merging the pull request.</strong></li>
-      <li><strong>Re-syncing the design library afterwards</strong>, so your component becomes
-        something the next person can compose with instead of re-specify. The tooling for it is not in
-        the repo — see phase seven.</li>
+      <li><strong>Re-syncing the design library afterwards, <strong>for a new component</strong>, so yours becomes something the next person can compose with instead of re-specify. The tooling for it is not in the repo — see phase seven. A <em>guidelines</em> change is different and is not on this list: pushing an updated <code>vocabulary.md</code> needs no bundle and no preview grading, only write access to the project.</li>
     </ul>
 
     <div class="note">
