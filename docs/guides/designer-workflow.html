@@ -249,6 +249,12 @@
       <em>“repository not found”</em> rather than “no access”.
     </p>
 
+    <p>
+      Ask for <strong>one more thing at the same time: access to the Tcules project in Claude
+      Design.</strong> That is where the nine live components live and where you will write every
+      spec — a repo clone does not give it to you, and it is the other half of this workflow.
+    </p>
+
     <p>Then install these three, if you do not have them:</p>
     <ul>
       <li><strong>Node 20.11.1 or newer</strong> — <a href="https://nodejs.org">nodejs.org</a></li>
@@ -365,12 +371,23 @@ is green before I start. Tell me the branch name and stop.</code></pre>
       <h2>Decide whether you need a new component at all</h2>
     </div>
 
+    <div class="cmd">
+      <span class="where">Browser · claude.ai/design</span>
+      <pre><code>Open the Tcules project — the one whose component list is:
+Section · Layout · Cluster · Button · Icon · Logo · Prose · SiteNav · SiteFooter</code></pre>
+    </div>
+
     <p>
-      In <strong>Claude Design</strong>, open the project carrying the Tcules library. It holds nine
-      live components — <code>Section</code>, <code>Layout</code>, <code>Cluster</code>,
-      <code>Button</code>, <code>Icon</code>, <code>Logo</code>, <code>Prose</code>,
-      <code>SiteNav</code>, <code>SiteFooter</code>. These are the real shipped components, not
-      pictures of them.
+      That is the project the owner shared with you during setup. If you cannot see it, you have not
+      been added — ask, rather than starting a new project, because a fresh one has no component
+      library in it and everything below silently stops working. Those nine are the real shipped
+      components, not pictures of them.
+    </p>
+
+    <p>
+      <strong>Everything in phase two happens in that project.</strong> Not a normal Claude
+      conversation, not a new design project — the library is what makes the mockup real and the spec
+      short.
     </p>
 
     <div class="gate">
@@ -455,11 +472,17 @@ is green before I start. Tell me the branch name and stop.</code></pre>
       <li>
         <span class="num">03</span>
         <div class="step-body">
-          <div class="step-head"><h3>Send it — inside the project that has the library</h3></div>
+          <div class="step-head"><h3>Paste it into the Tcules project and send</h3></div>
+          <div class="cmd">
+            <span class="where">Browser · claude.ai/design · the Tcules project</span>
+            <pre><code>Paste: the brief from step 1, with your seven fields filled in.</code></pre>
+          </div>
           <p>
-            This matters. With the library loaded, the mockup gets composed from real components and
-            the spec covers only the genuinely new part. Without it, you get a spec that re-describes
-            <code>Section</code> back at you and an implementer who has to work out which half is new.
+            The project matters more than the prompt. With the library loaded, the mockup gets
+            composed from real components and the spec covers only the genuinely new part. Send the
+            same text in a plain Claude conversation and you get a spec that re-describes
+            <code>Section</code> back at you, plus an implementer who has to work out which half is
+            new.
           </p>
         </div>
       </li>
@@ -727,25 +750,100 @@ gh pr view --web</code></pre>
       <li>
         <span class="num">14</span>
         <div class="step-body">
-          <div class="step-head"><h3>After it merges</h3><span class="who">developer</span></div>
+          <div class="step-head"><h3>The owner merges it</h3><span class="who">not you</span></div>
           <p>
-            Re-sync the design library so the new component joins the nine, and the next request can
-            be answered by composing instead of specifying. That is the loop closing.
+            Review and merge are the owner's. What they do is squash the branch into one commit on
+            <code>main</code> and delete the branch — the same shape as the pull request that brought
+            the header and footer in.
           </p>
+          <div class="cmd">
+            <span class="where">Terminal · the owner, in the repo folder</span>
+            <pre><code>gh pr merge &lt;number&gt; --squash --delete-branch</code></pre>
+          </div>
           <p>
-            If the build added a <strong>glyph</strong>, the two hand-pinned copies of the icon set in
-            <code>.design-sync/</code> need updating in the same pass —
-            <code>npm run design:check</code> fails if they are forgotten.
+            If they ask for changes instead, make them <strong>on the same branch</strong> and push
+            again. The pull request updates itself and CI re-runs; never open a second one for the
+            same work.
           </p>
+        </div>
+      </li>
+
+      <li>
+        <span class="num">15</span>
+        <div class="step-body">
+          <div class="step-head"><h3>Clean up, and get current again</h3></div>
           <div class="cmd">
             <span class="where">Terminal · in the repo folder</span>
             <pre><code>git checkout main
 git pull
 git branch -d feat/accordion</code></pre>
           </div>
+          <p>
+            Do this before starting the next thing, not after. Branching from a stale
+            <code>main</code> is how you end up resolving conflicts that did not need to exist.
+          </p>
         </div>
       </li>
     </ol>
+  </section>
+
+  <!-- ══ PHASE 7 ═════════════════════════════════════════════════════════════ -->
+  <section class="stack-wide">
+    <div class="phase">
+      <p class="eyebrow">Phase seven · the owner's half</p>
+      <h2>Getting the new component back into Claude Design</h2>
+    </div>
+
+    <p>
+      Merging does <strong>not</strong> put your component in the design library. Until someone
+      re-syncs, that project still holds nine components — so the next person to want an accordion
+      will write another spec for the one you just built. This is the step that closes the loop, and
+      it is worth understanding even though you do not run it.
+    </p>
+
+    <div class="note">
+      <h3>Why you cannot run it</h3>
+      <p>
+        The sync toolchain lives in <code>.ds-sync/</code> and its build output in
+        <code>ds-bundle/</code>, and <strong>both are gitignored</strong> — they are deliberately not
+        in the repo, so a clone does not include them. The re-sync also is not a single command: its
+        own driver describes a chain of build, diff, validate and capture, after which
+        <em>an agent grades the rendered preview sheets</em> and does an attended upload. It needs
+        judgement, not just a keystroke.
+      </p>
+    </div>
+
+    <p>What the owner does, so you know what to ask for:</p>
+    <ul>
+      <li>Runs the re-sync driver, which rebuilds the bundle and the type declarations, diffs against
+        what the project already has, and captures preview cards only for what actually changed.</li>
+      <li>Reviews the new component's preview sheet, and any warning the validator raises that is not
+        already recorded in <code>.design-sync/NOTES.md</code> as known.</li>
+      <li>Authors a preview for the new component — one per component, hand-written, so the card shows
+        the states worth seeing rather than a default render.</li>
+      <li>Uploads, at which point the library has ten components and composition can answer what used
+        to need a spec.</li>
+    </ul>
+
+    <div class="note">
+      <h3>If your build added a glyph, say so in the pull request</h3>
+      <p>
+        The icon set is enumerated by hand in two places inside <code>.design-sync/</code> — a type
+        union and a preview array — and both feed the library. <code>npm run design:check</code> now
+        fails if they drift from <code>glyphs.ts</code>, so the pull request will catch it, but the
+        owner needs to know a re-sync is due for the icon card as well as the new component.
+      </p>
+    </div>
+
+    <div class="note">
+      <h3>Batching is fine; forgetting is not</h3>
+      <p>
+        Nothing breaks if several components merge before one re-sync — the diff stage only captures
+        what changed, so a batch costs little more than a single. What costs real time is a library
+        that has quietly fallen a few components behind, because every request it cannot answer turns
+        into a spec that did not need writing.
+      </p>
+    </div>
   </section>
 
   <!-- ══ REFERENCE ═══════════════════════════════════════════════════════════ -->
@@ -773,6 +871,8 @@ git branch -d feat/accordion</code></pre>
           <tr><td><code>gh pr checks</code></td><td>Terminal, repo folder</td><td>After opening it, to see if CI is green</td></tr>
           <tr><td><code>npm ci</code></td><td>Terminal, repo folder</td><td>First time, and whenever dependencies change</td></tr>
           <tr><td><code>npm run format</code></td><td>Terminal, repo folder</td><td>Rarely — it edits files, so run it deliberately</td></tr>
+          <tr><td><code>gh pr merge --squash --delete-branch</code></td><td>Terminal, repo folder</td><td><strong>Owner only.</strong> After review</td></tr>
+          <tr><td>the re-sync driver</td><td>Owner's machine, outside the repo</td><td><strong>Owner only.</strong> After merge — the tooling is gitignored, and it needs a person to grade the preview sheets</td></tr>
         </tbody>
       </table>
     </div>
@@ -785,15 +885,20 @@ git branch -d feat/accordion</code></pre>
       <h2>When you genuinely need the owner</h2>
     </div>
 
-    <p>Four things, and everything else on this page you can do alone.</p>
+    <p>Five things, and everything else on this page you can do alone.</p>
 
     <ul>
-      <li><strong>The collaborator invite</strong>, once.</li>
-      <li><strong>Answering a BLOCKING question</strong> in a spec, and accepting it.</li>
+      <li><strong>The collaborator invite, and access to the Tcules project in Claude Design.</strong>
+        Both once, at setup. The second is the one people forget to ask for.</li>
+      <li><strong>Answering a BLOCKING question</strong> in a spec, and changing its status to
+        accepted.</li>
       <li><strong>A new token, a new spacing step, or a new colour.</strong> These change the system
         for every component, not just yours — the build command stops and asks for exactly this
         reason.</li>
-      <li><strong>Merging the pull request.</strong></li>
+      <li><strong>Reviewing and merging the pull request.</strong></li>
+      <li><strong>Re-syncing the design library afterwards</strong>, so your component becomes
+        something the next person can compose with instead of re-specify. The tooling for it is not in
+        the repo — see phase seven.</li>
     </ul>
 
     <div class="note">

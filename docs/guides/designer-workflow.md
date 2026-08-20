@@ -17,14 +17,19 @@ every single command, the decision fork, and an ownership table.
 
 The path from an empty machine to a merged pull request, for someone who is not the repo owner:
 
-- one-time setup, including the prompt that clones the repo and briefs you on it
+- one-time setup, including the prompt that clones the repo and briefs you on it — and the second
+  invite people forget to ask for, access to the Tcules project in Claude Design
 - getting current and branching, every session
 - the phase-one gate — whether a new component is needed at all
-- writing the spec in Claude Design, and landing it in `docs/specs/`
+- writing the spec **in that project** (not a plain Claude conversation, which is where the library
+  and therefore the whole point of it goes missing), and landing it in `docs/specs/`
 - `/build-from-spec`, the six checks, and `/audit-component`
-- committing, pushing, opening a pull request, and what CI does with it
+- committing, pushing, opening a pull request, what CI does with it, and how it gets merged
+- **phase seven — the re-sync**: why merging does not put the component in the design library, why a
+  contributor cannot run the sync (`.ds-sync/` and `ds-bundle/` are gitignored, and grading the
+  preview sheets needs a person), and what to ask the owner for
 - every command with **where** it runs, and prompts for the steps worth handing to Claude Code
-- the four things that genuinely need the owner
+- the five things that genuinely need the owner
 
 ## If you change it
 
