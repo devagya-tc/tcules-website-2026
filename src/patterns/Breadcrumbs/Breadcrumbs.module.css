@@ -1,0 +1,255 @@
+/* Breadcrumbs — the ancestor trail, built to docs/specs/Breadcrumbs.md.
+
+   Every colour, distance, radius, duration and easing comes from --crumb-*, declared in
+   tokens/components/breadcrumbs.css and re-declared once per surface there. This file states no
+   value of its own: it decides STRUCTURE and which token each state reads, and nothing else. That
+   is what lets the same markup answer a paper band, a tint panel, an ink band and a blue pivot
+   without knowing which one it is standing on.
+
+   ── The band ────────────────────────────────────────────────────────────────────
+   This component owns its band, so there is exactly one way a trail can sit on a page. That is
+   the same shape SiteNav and SiteFooter already take, and it is why `surface` is a prop here: a
+   control reads data-surface from an ancestor because it sits in somebody else's band, and a
+   pattern that owns one has no ancestor to ask.
+
+   ── What is NOT here, and why ───────────────────────────────────────────────────
+   No display:flex and no display:grid. Every arrangement in this component is a Cluster — the
+   wrapping row of the trail itself, and the nowrap row inside each crumb. There is nothing left
+   for a local grid to do.
+
+   No list reset. reset.css already zeroes an <ol>'s margin, padding and marker, and restating
+   them here would be a second answer to a settled question.
+
+   No z-index. Nothing in this component stacks: --z-base is 0 and the hit extension is inset to
+   its own anchor's inline edges, so it cannot reach over the crumb beside it.
+
+   No text-transform. Labels render verbatim from frontmatter — uppercasing would mangle "AI
+   Product UX", it would cost a reader the word shapes they navigate by, and it is precisely what
+   keeps the trail distinguishable from a hero eyebrow set in mono below it.
+
+   ── Rule order is load-bearing ──────────────────────────────────────────────────
+   Hover is declared BEFORE pressed, so pointer-down wins while the pointer is also hovering.
+   They are an equal-specificity pair decided by source order — moving a block breaks a state.
+
+   ── Why the colour rules are scoped `.trail .link` ─────────────────────────────
+   globals.css maps bare anchors onto the surface roles: `a` and `a:hover`. A lone `.link:hover`
+   ties `a:hover` on specificity (0,1,1) and the winner is then decided by stylesheet order, which
+   is the bundler's business rather than this file's — and the two values differ (brandeis-500 here
+   against --sec-link-ink-hover's 600 on paper), so a lost tie is a real colour drift that renders
+   perfectly and looks almost right. The descendant selector takes it to (0,2,1) and settles it
+   here instead. It needs no extra markup: .trail is on the <ol> that every link sits inside. */
+
+/* ── The band's air · 64 above, the ring's reach below ───────────────────────
+   On the <nav>, INSIDE the flush Section, and that placement is the whole point of this block.
+
+   The obvious way to write this is on the Section itself — `flush` plus a className adding the
+   top. It is what an earlier draft did, with a comment claiming that adding a longhand to a flush
+   band is safe because it conflicts with nothing. That was wrong: Section's `.flush` is
+   `padding-block: 0`, a SHORTHAND, so it sets padding-block-start too, and a longhand on another
+   single class is the same (0,1,0). The winner is stylesheet order — the identical failure the
+   draft rejected `density="tight"` plus a zeroed end for. It happened to render correctly because
+   importing Section puts its module first, which is not a thing to rest on.
+
+   Putting the air on the nav removes the contest instead of winning it on specificity. The Section
+   is genuinely flush, nothing in this file touches a Section at all, and the two values cannot be
+   reordered out of existence. It also means this component no longer claims the licence SiteNav
+   takes to style its own band from outside — it does not need it.
+
+   ABOVE: 64, because a sticky SiteNav sits immediately above this band on every route and stacks
+   over it, and the hit extension reaches 23.15px up. BELOW: the focus ring's reach and nothing
+   more — the air between the trail and the hero belongs to the HERO band, and contributing a
+   seam's worth here would make the two paddings add.
+
+   --gap-column is read directly rather than renamed: a --crumb-band-padding token would be a
+   second name for one distance, which is why --sec-gap was deleted. It is also the step
+   --sec-padding-y-tight resolves to, quoted by VALUE because a component may not read another
+   component's tokens — so if Section's tight density is re-tuned, this must be re-checked. */
+.root {
+  padding-block-start: var(--gap-column);
+  padding-block-end: var(--crumb-ring-clearance);
+}
+
+/* ── The trail ─────────────────────────────────────────────────────────────────
+   One type role for the whole component, set once here and INHERITED by the links, the dividers,
+   the collapse mark and the current page — which is why no other rule in this file names a font.
+   A composite, so nothing restates a family, a weight, a size or a ratio. --text-caption has no
+   tracking companion, so there is no letter-spacing to state either.
+
+   No measure. Every part is a label rather than running text, and the collapse caps the row at
+   four of them — --measure-body would cap this row around 435px and wrap a four-item trail on a
+   1240px column that has room for it. */
+.trail {
+  font: var(--crumb-label-text);
+}
+
+/* ── The link ──────────────────────────────────────────────────────────────────
+   `position: relative` is the containing block for both pseudo-elements below, and it is the only
+   reason it is here.
+
+   `display: inline-block` is load-bearing and was a BUG FIX, not tidying. The first crumb is a
+   bare <li> because it has no divider to arrange, so its anchor is an ordinary INLINE box; every
+   other crumb is a `Cluster as="li"`, so its anchor is a direct child of a flex container and gets
+   blockified. Those two boxes are not the same height — an inline anchor's box is the font's
+   content area (~13px at --text-caption), a blockified one is the whole line box (18.85px) — and
+   BOTH pseudo-elements below are positioned against it. So the rule's -2px offset landed tight
+   under the text on the first crumb and about 5px below it on all the others, which reads as the
+   underline not working anywhere but the first; and the 44px hit was centred on a 13px box in one
+   case and an 18.85px box in the rest, quietly making the overshoot arithmetic wrong.
+
+   inline-block makes the box the line box in both contexts — an atomic inline-level box takes the
+   line height, and blockifying an inline-block yields a block of the same height — so every crumb
+   measures identically. It is also what SiteFooter's `.link` and `.socialLink` do, and Button's
+   `.label`, for the same reason: a text link that draws its own rule needs a box it can rely on. */
+.trail .link {
+  position: relative;
+  display: inline-block;
+  /* The rule's clearance, held INSIDE the label's box rather than as a negative offset below it.
+     That is the difference between a rule that renders and one that does not: the band gives
+     nothing downward, so anything positioned below this box is outside the band and is painted
+     over by the next one. Inside the box it cannot be clipped by anything.
+     It also removes a defect the spec had documented and accepted: the wrapped line pitch becomes
+     20.85 + 24 = 44.85px, which is more than the 44px target, so two wrapped lines' targets no
+     longer overlap at all. The 1.15px overlap is gone rather than reasoned about. */
+  padding-block-end: var(--crumb-link-rule-offset);
+  color: var(--crumb-link-ink);
+  text-decoration: none;
+  transition: color var(--crumb-transition-duration) var(--crumb-transition-easing);
+}
+
+.trail .link:hover,
+.trail .link:focus-visible {
+  color: var(--crumb-link-ink-hover);
+}
+
+.trail .link:active {
+  color: var(--crumb-link-ink-pressed);
+}
+
+/* ── The rule ──────────────────────────────────────────────────────────────────
+   Drawn as a rule rather than text-decoration, because a decorated underline can only appear all
+   at once and this one wipes in from the inline start. It paints `currentColor` and has no colour
+   token of its own, deliberately: it can then never disagree with the label it underlines, and it
+   never needs a surface block. It is decoration — redundant with a colour move it always
+   accompanies — so it is not a contrast floor.
+
+   `transform-origin` is the one place a physical value is unavoidable: CSS has no logical
+   equivalent, and `0 50%` at least states the origin as a position rather than as the `left`
+   keyword the rest of this file avoids. In LTR it is the inline start, which is what the wipe
+   wants. */
+.link::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: var(--crumb-link-rule-width);
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--crumb-transition-duration) var(--crumb-transition-easing);
+}
+
+.trail .link:hover::after,
+.trail .link:focus-visible::after,
+.trail .link:active::after {
+  transform: scaleX(1);
+}
+
+/* On blue the ink has almost nowhere left to go — hover is white and the only lighter thing is
+   nothing — so pressed moves one ramp step and the RULE carries the difference by doubling. This
+   is the token that keeps a rendered hover and a rendered pressed distinguishable on that surface.
+   `block-size` is not in the transition list above, so the step is instant: a change, not a
+   growth. */
+.trail .link:active::after {
+  block-size: var(--crumb-link-rule-width-pressed);
+}
+
+/* ── Touch · the 44px floor ────────────────────────────────────────────────────
+   A 20.85px line box is far below the touch minimum. Rather than inflate the box — which would
+   mean changing a type role or a height at a breakpoint, and the gap scale does not shift
+   responsively — the hit area is extended PAST the box with a pseudo-element: the label's own
+   inline extent, --crumb-hit-min tall. The row does not move and the target is legal.
+
+   Inset to the anchor's inline edges rather than pinned with left/right, so it cannot reach over
+   the crumb beside it. */
+.link::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  /* Anchored to the BOTTOM of the label's box and grown upward, not centred on it. Centring would
+     put (44 - 20.85) / 2 = 11.575px of the target below the box — outside the band, where the next
+     band paints over it, so the target would be silently cut to about 36px on the one component
+     whose targets are already the tightest on the site. Growing upward puts the whole 44 inside
+     the band, because the band has 64 of air above.
+     It is also correct on a wrapped row: the target reaches 44 - 20.85 = 23.15px above the box,
+     and the previous line's box bottom is --gap-block (24) above it, so consecutive lines clear
+     each other by 0.85px instead of overlapping. */
+  inset-block-end: 0;
+  block-size: var(--crumb-hit-min);
+}
+
+/* ── Tab focus ─────────────────────────────────────────────────────────────────
+   Keyboard only, via :focus-visible, so a mouse click never draws the ring and a tab always does.
+   Two rings in one shadow: the offset drawn in the SURFACE colour, then the ring itself. The
+   surface-coloured gap is what lets a white ring read against a blue ground, and because both
+   halves are surface tokens a trail in an ink band takes an ink gap and a lighter blue ring with
+   no change here.
+
+   The ink and the rule are not restated: :focus-visible is listed alongside :hover in every rule
+   above, so a keyboard user is shown exactly what a pointer user is shown. A bare label has no
+   corner of its own, but a 2px ring drawing a hard rectangle around one reads as a rendering
+   artefact, so the ring alone takes a radius. */
+.link:focus {
+  outline: none;
+}
+
+.trail .link:focus-visible {
+  outline: none;
+  border-radius: var(--crumb-link-radius-focus);
+  box-shadow:
+    0 0 0 var(--crumb-ring-offset) var(--crumb-ring-gap-color),
+    0 0 0 calc(var(--crumb-ring-offset) + var(--crumb-ring-width)) var(--crumb-ring-color);
+}
+
+/* ── The inert parts ───────────────────────────────────────────────────────────
+   Three parts, no states between them, so three declarations. `current` is the loudest ink in the
+   row and its ancestors the quietest; the divider drops below both, because a separator that
+   competes with the labels it separates has failed at its one job. */
+.current {
+  color: var(--crumb-current-ink);
+}
+
+.divider {
+  color: var(--crumb-divider-ink);
+}
+
+.collapse {
+  color: var(--crumb-collapse-ink);
+}
+
+/* Visually hidden, still announced — not `display: none` and not `visibility: hidden`, both of
+   which remove it from the accessibility tree, which is the opposite of the point. Copied from
+   SiteFooter's hidden field label so the site has one technique rather than two.
+
+   The negative margin is the ONLY margin in this file and it is not outer spacing: it is what
+   pulls the 1px clip box out of the flow so a 4px inline gap does not appear beside a string
+   nobody can see. */
+.collapseCount {
+  position: absolute;
+  width: var(--crumb-hidden-size);
+  height: var(--crumb-hidden-size);
+  margin: calc(-1 * var(--crumb-hidden-size));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The wipe is the one motion here, so it is the one thing to answer for. Reduced motion keeps the
+   underline — it is the affordance — and simply stops it travelling. The colour transition is left
+   at its own duration on purpose: a colour change is not motion. */
+@media (prefers-reduced-motion: reduce) {
+  .link::after {
+    transition-duration: var(--duration-instant);
+  }
+}

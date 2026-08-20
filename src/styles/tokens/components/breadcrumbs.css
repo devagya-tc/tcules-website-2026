@@ -1,0 +1,201 @@
+/* ══ Component layer — breadcrumbs ═══════════════════════════════════════════════
+   Tier 2. The ancestor trail above a page hero, on 128 of 129 routes. This file is the
+   only place a crumb colour is decided, and it decides it four times: once per surface.
+   Every value is a primitive or a usage token; nothing is a literal except the hit
+   minimum, and nothing is derived from another component.
+
+   Naming: --crumb-{part}-{role}-{state}
+           part   link | current | divider | collapse | ring
+           role   ink                       — a bare text link has an INK, not an fg;
+                                              -fg is for a control with a box, which is
+                                              why nav.css says --nav-item-fg for its
+                                              tinted item and --nav-link-ink for a bare
+                                              one. Nothing here has a box.
+           state  rest (no suffix) | hover | pressed
+   There is no {variant} slot: one variant, one size. The only thing that varies is
+   DEPTH, and depth is data.
+
+   ── The state model ─────────────────────────────────────────────────────────────
+   Hover and focus take -hover. Pressed takes -pressed. Focus is the hover ink plus the
+   ring plus the full-width rule, so the keyboard sees what the pointer sees. Only `link`
+   has states at all: `divider`, `current` and `collapse` are inert by construction.
+
+   A state token exists in the set only if the value MOVES on at least one surface. Four
+   absences are therefore assertions, not omissions:
+
+     no --crumb-*-bg-*          nothing paints a box behind a crumb. The trail is a bare
+                                text link, following Button emphasis="link" rather than
+                                SiteNav's tinted item — so the hover and pressed inks are
+                                measured against the surface GROUND, because that is what
+                                is behind them.
+     no --crumb-disabled-*      a trail never holds an unavailable level. If an ancestor
+                                has no page, frontmatter omits it from the array. A level
+                                is either a link or the current page.
+     no --crumb-link-ink-current  currency here is STRUCTURAL — it is the last item — so
+                                it is a part with its own token, not a state on link.
+     no --crumb-expanded-*      nothing opens. The collapse is inert: no disclosure, no
+                                aria-expanded, no focus to place after a state change.
+
+   ── Every surface restates every token ──────────────────────────────────────────
+   Not just the deltas from paper. A surface that declares only deltas is not
+   self-contained: nest it inside a non-paper surface and it inherits that surface's
+   values for everything it left out. Measured, elsewhere in this system, before it was
+   fixed — a tint panel inside an ink section rendered ghost-neutral at 1.13:1. For this
+   component the same failure would strand --color-neutral-400 on --color-paper-deep at
+   1.90:1. The blocks below are repetitive on purpose.
+
+   Four of these rows land exactly on mappings section.css already makes — link-ink on
+   --sec-ink-muted, current-ink on --sec-ink, divider-ink on --sec-rule-strong, link-ink-
+   hover on --sec-link-ink. That agreement says the values were derived the way the system
+   derives its own, and it is NOT a reason to alias them: a component token that reads
+   --sec-* silently follows it the day the surface layer is re-tuned, which is how a trail
+   ends up quieter than it was specified to be with nobody having decided that. Every cell
+   below names its --color-* step.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   Type comes in as a COMPOSITE, one role for the whole component: --text-caption at
+   13px/1.45. It is a SANS role, and that is the resolution of the eyebrow problem — on
+   the pages where a hero eyebrow sits immediately below the trail, the two short labels
+   differ in family (sans against mono), case (verbatim against uppercase), tracking
+   (none against --text-eyebrow-tracking) and ink. Two mono labels stacked 24px apart
+   read as one broken line; sans over mono reads as apparatus over category.
+
+   --text-caption has no tracking companion, so none is declared here. Nothing to
+   restate, and a --crumb-label-tracking would be a name for a value that does not exist. */
+:root{
+--crumb-label-text:var(--text-caption);
+
+/* 44px, matching --btn-hit-min exactly, so a trail link and a Button with extendHitArea
+   have the same touch target and a thumb learns one size for the whole site. A literal
+   because the touch floor is a floor rather than a step on any ramp — it does not scale,
+   and there is no size axis here for it to scale with. */
+--crumb-hit-min:44px;
+
+/* The link's underline. Drawn as a rule rather than text-decoration, because a decorated
+   underline can only appear all at once and this one wipes in from the inline start —
+   the same part, in the same system, as Button's link rule. It thickens on press, and
+   that is load-bearing on ONE surface: see the blue block. */
+--crumb-link-rule-width:var(--border-width-hairline);
+--crumb-link-rule-width-pressed:var(--border-width-2);
+--crumb-link-rule-offset:var(--space-2);   /* optical, not --gap-tight: clears the
+                                              descenders of "g" and "y" in a label like
+                                              "Interaction and UI Design" set at
+                                              --text-caption. The day the gap scale is
+                                              re-tuned this must not move. Same step and
+                                              same reason as --btn-link-rule-offset. */
+
+/* A bare label has no corner, but a 2px ring drawing a hard rectangle around one reads as
+   a rendering artefact. The ring alone takes a radius — following --btn-radius-bare-focus. */
+--crumb-link-radius-focus:var(--radius-4);
+--crumb-ring-width:var(--focus-ring-width);
+--crumb-ring-offset:var(--focus-ring-offset);
+
+/* The focus ring is a box-shadow, so it always draws OUTSIDE the label's box — offset plus width,
+   on every side. Above and beside it that is free air. Below it is not: the trail contributes
+   nothing downward beyond this, so the label's bottom edge is nearly the band's bottom edge, and
+   without this the bottom of the ring lands outside the band and is painted over by the next one
+   (every Section is position:relative, so the later one wins the tree order). This is the smallest
+   value that keeps a focus ring whole.
+   DERIVED, not a step off the ramp: it is the ring's own reach, so it is computed from the two
+   tokens that define that reach rather than from a 4px that happens to equal them today. Re-tune
+   either ring token and this follows. That is the difference between a coupling and a coincidence,
+   and an earlier draft of this token asserted the coupling in a comment while hardcoding
+   --space-4. */
+--crumb-ring-clearance:calc(var(--crumb-ring-offset) + var(--crumb-ring-width));
+
+--crumb-transition-duration:var(--duration-fast);
+--crumb-transition-easing:var(--easing-standard);
+
+/* The clipped box that keeps the collapse's "{n} levels omitted" out of the layout while
+   leaving it in the accessibility tree. Not an optical correction and not a layout
+   distance — it is a TECHNIQUE'S OWN GEOMETRY, copied from SiteFooter's hidden field
+   label, and it reaches the space ramp because 1px is not a distance the gap scale has
+   any business naming. */
+--crumb-hidden-size:var(--space-1);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The baseline. Ancestors sit at neutral-600 — the quietest ink that still clears AA on
+   this ground — so the trail reads as apparatus rather than content, and the current page
+   at neutral-900 is unmistakably the loudest thing in the row. Hover goes to brandeis-500
+   because blue in this system means clickable and appears on nothing that is not; pressed
+   continues to 700, two ramp steps, a visible darkening rather than a guess. The divider
+   drops to neutral-400 — the step --sec-rule-strong uses here — because a separator that
+   competes with the labels it separates has failed at its one job. */
+:root,[data-surface="paper"]{
+--crumb-link-ink:var(--color-neutral-600);          /*  4.92:1 — the floor of AA, do not lighten */
+--crumb-link-ink-hover:var(--color-brandeis-500);   /*  6.17:1 */
+--crumb-link-ink-pressed:var(--color-brandeis-700); /* 10.07:1 */
+--crumb-current-ink:var(--color-neutral-900);       /* 14.62:1 */
+--crumb-collapse-ink:var(--color-neutral-600);      /*  4.92:1 — the floor of AA, do not lighten */
+--crumb-divider-ink:var(--color-neutral-400);       /*  2.12:1 — decoration, exempt */
+--crumb-ring-color:var(--color-brandeis-500);--crumb-ring-gap-color:var(--color-paper);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   Every muted value steps one darker, because the ground did. neutral-600 does NOT still
+   pass here — it is 4.39:1 on paper-deep, under the floor — which is the same reason
+   section.css steps --sec-ink-muted to 700 on this surface. Matching it means the trail
+   and the body copy under it are the same grey rather than two greys. The divider follows
+   to neutral-500, --sec-rule-strong's step here.
+
+   The hover and pressed blues do not move: brandeis-500 still clears at 5.51:1 on the
+   deeper ground, and moving them would make a hovered link on tint a different blue from
+   a hovered link on paper for no reason a reader could see. Restated anyway, because a
+   surface that omits a token is not self-contained. */
+[data-surface="tint"]{
+--crumb-link-ink:var(--color-neutral-700);          /*  7.27:1 — stepped; 600 would be 4.39:1 */
+--crumb-link-ink-hover:var(--color-brandeis-500);   /*  5.51:1 */
+--crumb-link-ink-pressed:var(--color-brandeis-700); /*  8.99:1 */
+--crumb-current-ink:var(--color-neutral-900);       /* 13.06:1 */
+--crumb-collapse-ink:var(--color-neutral-700);      /*  7.27:1 — stepped; 600 would be 4.39:1 */
+--crumb-divider-ink:var(--color-neutral-500);       /*  2.82:1 — decoration, exempt */
+--crumb-ring-color:var(--color-brandeis-500);--crumb-ring-gap-color:var(--color-paper-deep);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   The direction inverts. Ancestors LIFT to neutral-400 and the current page to white. The
+   hover blue lifts three ramp steps to brandeis-300, because brandeis-500 on neutral-950
+   reaches only 2.77:1 and is the exact failure the surface model exists to prevent — the
+   same floor that lifts --btn-ring-color to 300 here. Pressed then goes lighter STILL, to
+   brandeis-100, since on a dark ground "more" means brighter.
+
+   The divider is the only value that travels the other way — neutral-700, the darkest of
+   the four surfaces — because on ink a light separator is louder than the labels it
+   separates. */
+[data-surface="ink"]{
+--crumb-link-ink:var(--color-neutral-400);          /*  8.05:1 */
+--crumb-link-ink-hover:var(--color-brandeis-300);   /*  7.32:1 — floor: 500 is 2.77:1 here */
+--crumb-link-ink-pressed:var(--color-brandeis-100); /* 13.61:1 */
+--crumb-current-ink:var(--color-white);             /* 17.26:1 */
+--crumb-collapse-ink:var(--color-neutral-400);      /*  8.05:1 */
+--crumb-divider-ink:var(--color-neutral-700);       /*  2.10:1 — decoration, exempt */
+--crumb-ring-color:var(--color-brandeis-300);--crumb-ring-gap-color:var(--color-neutral-950);
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   The ramp runs out, and this is the surface that made --crumb-link-rule-width-pressed
+   exist. Only the light end of the blue ramp clears AA on a brandeis-500 ground: white
+   6.23:1, 50 is 5.57:1, 100 is 4.91:1, and 200 is already 3.78:1. So ancestors sit at 100
+   — the tightest cell in this table, and the reason nothing quieter is allowed here —
+   hover reaches white, and pressed steps BACK DOWN to 50, because there is no colour
+   above white to press into.
+
+   With the ink move reduced to one ramp step, the RULE carries the difference between
+   hover and pressed: it doubles in height. Without that, blue would have a rendered hover
+   and a rendered pressed a reviewer could not tell apart.
+
+   One consequence to accept knowingly: a hovered ancestor here is the same white as the
+   current page. They stay distinguishable because the hovered one carries a rule and the
+   current one never can. The ring is white over the blue ground — blue-on-blue would have
+   been invisible, which is why the ring is a per-surface token at all. */
+[data-surface="blue"]{
+--crumb-link-ink:var(--color-brandeis-100);         /*  4.91:1 — the tightest cell here, do not lighten */
+--crumb-link-ink-hover:var(--color-white);          /*  6.23:1 */
+--crumb-link-ink-pressed:var(--color-brandeis-50);  /*  5.57:1 — one step; the rule width carries the rest */
+--crumb-current-ink:var(--color-white);             /*  6.23:1 */
+--crumb-collapse-ink:var(--color-brandeis-100);     /*  4.91:1 — the tightest cell here, do not lighten */
+--crumb-divider-ink:var(--color-brandeis-300);      /*  2.64:1 — decoration, exempt */
+--crumb-ring-color:var(--color-white);--crumb-ring-gap-color:var(--color-brandeis-500);
+}
