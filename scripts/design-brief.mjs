@@ -506,10 +506,38 @@ function check() {
   console.log('every token named in the docs resolves in the token layer');
 }
 
+/**
+ * Preamble for the standalone vocabulary document.
+ *
+ * It arrives in Claude Design as always-on guidelines, not as part of a message, so it has to say
+ * what it is and what it is for without the surrounding brief to explain it.
+ */
+const VOCAB_HEADER = `# The Tcules token vocabulary
+
+**Every colour, distance, type role, glyph and prop union this design system actually has.** It is
+generated out of the repository's token layer, so a name here is a name that resolves in the browser.
+
+Use it when you are **specifying a new component**: the hex values are exact and are given so you
+can compute WCAG contrast ratios and state a measured number in the spec. You will not need it to
+*compose* a mockup out of the Tcules component library — those components are already correct on
+every surface.
+
+**Never write a token name that is not in this document.** A plausible-but-wrong name — 800 where
+you meant 700 — renders perfectly and is wrong forever, and no build check can catch it. When a
+value genuinely does not exist, raise a NEW TOKEN REQUEST instead.
+`;
+
 /* ── Main ────────────────────────────────────────────────────────────────────── */
 
 if (process.argv.includes('--check')) {
   check();
+} else if (process.argv.includes('--vocabulary')) {
+  /* The vocabulary block on its own, for delivery to Claude Design as a GUIDELINES document rather
+     than inside a pasted brief. One copy in the project beats a copy inside every brief: the block
+     is 81% of the canonical brief's length, so duplicating it per component was ~5,400 lines of the
+     same ramp tables. Written to docs/vocabulary.md by scripts/briefs-build.mjs, which is also what
+     byte-checks it against the token layer. */
+  process.stdout.write(`${VOCAB_HEADER}\n${vocabulary()}\n`);
 } else {
   if (!existsSync(PROMPT)) {
     console.error(`FAIL  ${PROMPT} not found — that file holds the prose half of the brief.`);
