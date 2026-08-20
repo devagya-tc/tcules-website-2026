@@ -1,5 +1,5 @@
 /* ══ Component layer — section ═══════════════════════════════════════════════════
-   Tier 2. The page frame is a component like any other: it owns the ground it
+   Tier 3. The page frame is a component like any other: it owns the ground it
    paints, the ink that reads on that ground, the hairlines that divide it, and
    the rhythm between its rows. Nothing in this system is "page-level CSS" with a
    free hand on primitives — if a value has no component, it has no home.

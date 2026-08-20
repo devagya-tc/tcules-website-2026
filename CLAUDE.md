@@ -13,8 +13,8 @@ app  →  templates  →  patterns  →  components  →  lib / styles
 |---|---|---|
 | — | `src/app/**` | routes. Composition only; read content, pass props |
 | 3 | `src/templates/**` | whole page-type layouts (article shape, service-page shape) |
-| 2 | `src/patterns/**` | composed blocks — hero, content section, CTA, card |
-| 1 | `src/components/**` | primitives — `Section`, `Layout`, `Cluster` |
+| 2 | `src/patterns/**` | composed blocks — `SiteNav` and `SiteFooter` today; hero, CTA, card next |
+| 1 | `src/components/**` | primitives, controls and marks — `Section`, `Layout`, `Cluster`, `Button`, `Icon`, `Logo`, `Prose` |
 | — | `src/content/**` | the CMS seam. Imported by pages and nothing else |
 | — | `src/lib/**`, `src/styles/**` | leaves. Import nothing above them |
 
@@ -29,6 +29,13 @@ nearest — that is the failure this rule exists to prevent.
 
 **If a tier needs something the tier below does not provide, build it in the tier below.**
 Never reach sideways, and never inline a one-off.
+
+**Sideways has an idiom, and it is not an import.** A primitive that needs another primitive inside
+it takes it as a `ReactNode` prop and lets the caller compose — `Button` never imports `Icon`, it
+accepts `icon`, so the caller decides which glyph and the control only sizes what it is handed. Import
+the sibling instead and the two are welded for every future use. Lint blocks the alias and the `../`
+back door both, so the choice is: take the prop, or accept that the thing is a *pattern* rather than
+a primitive. Same rule one tier up — a pattern does not import a pattern.
 
 ## Layout is done by the primitives. Always.
 
@@ -66,7 +73,7 @@ The token system lives in `src/styles/tokens/` and is imported by `src/app/globa
 | Layer | Where | What it holds |
 |---|---|---|
 | 1 · primitives | `primitives.css` | ramps and ladders. `--color-brandeis-500`, `--space-24`, `--font-size-h1`, `--line-height-h1`. Declared once, consumed through a usage token wherever one exists |
-| 2 · usage | `primitives.css` | one curated answer per question. **`--gap-*` (9 steps)** and `--text-*` (17 roles). Surface-independent, therefore shared |
+| 2 · usage | `primitives.css` | one curated answer per question. **`--gap-*` (9 steps)** and `--text-*` (19 roles). Surface-independent, therefore shared |
 | 3 · components | `components/*.css` | what a value MEANS for one component. `--sec-ground`, `--btn-solid-primary-bg`. Re-declared once per surface |
 
 **Colour has no usage layer, deliberately.** What a colour means depends entirely on the surface
@@ -106,9 +113,12 @@ Nine steps, named for what they separate:
 ### The other rules that matter day to day
 
 1. **No stylesheet outside `tokens/` writes a hex, a raw distance or a font stack.**
-   `npm run tokens:check` enforces three things — a `var()` that resolves to nothing, a literal
-   colour outside the token layer, and **surface self-containment** (below). Run it before you
-   commit CSS.
+   `npm run tokens:check` enforces five things: a `var()` that resolves to nothing; a literal
+   **hex** outside the token layer; a raw `px`/`rem` **in a `*.module.css`** (`reset.css` and
+   `globals.css` are the shell and carry argued literals); a component layer `tokens/index.css`
+   never `@import`s; and **surface self-containment** (below). Know what it still does not see: a
+   font stack, a colour written as `rgb()` / `hsl()` / a CSS keyword, and anything in a TSX inline
+   style. Those are on you and on review. `npm run verify` runs it with the other four checks.
 2. **Every surface block declares every surface-dependent token — not just the deltas from
    paper.** A block carrying only deltas is not self-contained: nest that surface inside a
    non-paper one and it inherits the enclosing surface's values for whatever it omitted. A tint
@@ -143,9 +153,15 @@ Nine steps, named for what they separate:
    a size rather than marking a step, and one correction serves several roles, which is why h2,
    h3 and h4 share `--letter-spacing-title{,-tight,-fine}`.
 9. **Adding a component layer:** copy the shape of `tokens/components/button.css` — geometry in
-   `:root`, then one block per surface with deltas only. Name tokens
+   `:root`, then one block per surface, **each declaring every surface-dependent token** (see rule
+   2; deltas-only fails the build). Name the file for the component, not the abbreviation
+   (`button.css` holds `--btn-*`). Name tokens
    `--{abbrev}-{variant}-{part}-{state}`, register the file in `tokens/index.css`, keep it to the
-   one component.
+   one component. **Registering it is part of the same edit as creating it.** `tokens:check` now
+   fails on an unregistered layer, but the reason it had to be taught to is worth knowing: it globs
+   `tokens/**` for definitions, so an unregistered file still counts as *defined* — every `var()`
+   reading it resolved in the check and resolved to nothing in the browser, with lint and tsc silent
+   too. The file and its cascade position are one decision.
 
 ### Why component tokens live in `tokens/`, not beside the component
 
@@ -191,7 +207,12 @@ Re-export from the tier barrel (`src/components/index.ts`) so call sites import
 ## Nothing gets a page route before it has a `design/` route
 
 `src/app/design/**` is the proving ground: one route per component, **every** arrangement
-rendered. It holds `page.tsx` files only — components are never defined there.
+rendered. It holds `page.tsx` files only, with one exception: **`design/_specimen/`**, the harness
+the specimens are built out of — `Specimen`, `Box` and their CSS. That is route-local scaffolding
+for the proving ground itself, underscore-prefixed so Next does not route it, and nothing outside
+`src/app/design/**` may import it. The rule it is an exception to still holds everywhere else: no
+component the *site* could use is ever defined under `design/`. If something here starts looking
+useful to a page, that is the signal to build it properly in `src/components/`.
 
 This is the highest-leverage rule in the file. In the previous codebase the components that had
 sandbox routes are in good shape and the 111 that did not are the reason for this rebuild.
@@ -210,10 +231,11 @@ a five-file blast radius for exactly this reason.
 
 ```
 src/content/
+├── index.ts              the front door — pages and the root layout import THIS
 ├── types.ts              view models — the shapes a PAGE consumes
-├── source.ts             getPage(slug) · listPages() — import from HERE
+├── source.ts             getPage · listPages · getNavigation — the one source assignment
 └── sources/
-    ├── fixtures.ts       active
+    ├── fixtures/         active — index.ts, navigation.ts
     └── strapi.ts         stub
 ```
 
@@ -227,6 +249,38 @@ exists.
 
 Patterns and templates may not import `@/content` at all; they take what they render as props.
 That is what lets one pattern serve a fixture today and a CMS response later.
+
+## How a component gets made
+
+Two surfaces, and a file between them. **Claude Design** writes the spec; **Claude Code** builds it
+here. Full walkthrough in `ONBOARDING.md` § 8.
+
+**Most of the time the answer is that nothing new is needed.** `.design-sync/` pushes the nine real
+components into Claude Design as a live library, so a page can be composed out of actual shipped
+components — correct on every surface, in every state, without anyone describing them. Reach for the
+spec workflow below only when the thing genuinely does not exist. Establishing that it already does
+is the more valuable outcome, and it is the one the last codebase never reached 111 times.
+
+1. **Specify.** `npm run design:brief` prints the brief to paste into Claude Design — its prose half
+   is `docs/prompts/component-spec-brief.md` and its **vocabulary half is generated from the token
+   layer at run time**. Never hand-copy a token name, a glyph name or a prop union into a document:
+   Claude Design cannot see this repo, a stale list is silent, and a designer who cannot see a name
+   invents one. An invented name that happens to exist renders perfectly and is wrong forever.
+   The spec lands at `docs/specs/<Component>.md`. The contract is
+   `docs/component-spec-template.md`; the worked example is `docs/specs/Button.md`, which describes
+   a component you can read the code of.
+2. **Build.** `/build-from-spec docs/specs/<Component>.md`. It gates rather than guesses, and it
+   refuses to start on a spec still marked `draft` or carrying an unanswered BLOCKING question.
+3. **Audit.** `/audit-component <Name>` — an independent read-only pass. It reports; it does not fix.
+
+**`npm run verify`** chains six checks: `lint`, `typecheck`, `tokens:check`, `classes:check`,
+`specimens:check` and `design:check`. `npm run build && npm run aria:check` additionally proves every
+ARIA idref in the rendered output resolves and that no id is duplicated; it is separate because it
+needs a build.
+
+None of it sees a child margin, a hand-rolled arrangement, a restated font size, a token name that
+exists but is the wrong step, or whether the composition is any good. Those are the eye's job, and
+the squint test below is the standard.
 
 ## The old repo
 

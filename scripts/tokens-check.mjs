@@ -28,6 +28,11 @@ const JS_INJECTED = new Set(['--tmpl-base', '--tmpl-md', '--tmpl-lg', '--tmpl-xl
 
 const read = (f) => readFileSync(f, 'utf8');
 const strip = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
+/* Same, but keeps the line count — a comment becomes blank lines rather than disappearing. Any
+   check that reports `file:line` from a stripped stream needs this one, or it points at the wrong
+   line: a 20-line header comment shifts every finding below it by 20. */
+const stripKeepLines = (css) =>
+  css.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
 const definedIn = (css) => new Set([...strip(css).matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]));
 const usedIn = (css) => [...strip(css).matchAll(/var\(\s*(--[\w-]+)/g)].map((m) => m[1]);
 const lineOf = (css, needle) => css.slice(0, css.indexOf(needle)).split('\n').length;
@@ -41,11 +46,32 @@ if (tokenFiles.length === 0) {
 const tokens = new Set();
 for (const f of tokenFiles) for (const t of definedIn(read(f))) tokens.add(t);
 
+/**
+ * REGISTRATION. A component layer that tokens/index.css never @imports does not load in the
+ * browser — and is INVISIBLE TO THIS CHECK, because definitions are collected by globbing the
+ * folder above. So every var() that reads it resolves here and resolves to nothing at runtime,
+ * lint and tsc see nothing, and the symptom is an unpainted control that looks like a CSS bug.
+ * Cascade order is the entire reason these files live in tokens/ rather than beside the
+ * component; an unregistered file has no order at all.
+ */
+const entry = read('src/styles/tokens/index.css');
+const unregistered = tokenFiles
+  .filter((f) => f.includes('/components/'))
+  .map((f) => f.slice(f.indexOf('components/')))
+  .filter((rel) => !entry.includes(rel));
+
 const consumers = [...new Set(CONSUMER_GLOBS.flatMap((g) => globSync(g)))]
   .filter((f) => !f.includes('/tokens/'))
   .sort();
 
 const problems = [];
+
+for (const rel of unregistered) {
+  problems.push(
+    `src/styles/tokens/index.css  never @imports ${rel}, so nothing in it loads — ` +
+      `every var() that reads it resolves in this check and resolves to nothing in the browser`,
+  );
+}
 
 for (const file of consumers) {
   const css = read(file);
@@ -59,6 +85,47 @@ for (const file of consumers) {
 
   for (const hex of new Set(strip(css).match(/#[0-9a-fA-F]{3,8}\b/g) ?? [])) {
     problems.push(`${file}:${lineOf(css, hex)}  writes the literal colour ${hex} — colour belongs to the token layer`);
+  }
+
+  /**
+   * A raw distance, same argument as the literal colour above: the gap scale is the only answer
+   * to "how far apart", and a 12px that is neither --gap-tight nor --gap-text is a decision
+   * nobody made.
+   *
+   * Scoped to *.module.css deliberately. reset.css and globals.css are the SHELL, not components,
+   * and both carry argued literals — reset.css's scroll-padding is shell geometry that lands an
+   * anchor below a future sticky header, and it says so on the line above itself. Widening this
+   * to the whole consumer set would fail the build on a value the repo deliberately defends.
+   *
+   * Comments are already stripped. An at-rule prelude is exempt: a breakpoint is a media QUERY,
+   * not a distance, which is the whole point of the scale not shifting responsively. em-relative
+   * sizes are not matched either — they scale with their context by design, as Prose's code span
+   * does.
+   */
+  if (file.endsWith('.module.css')) {
+    /* An at-rule PRELUDE is exempt — a breakpoint is a media query, not a distance, which is the
+       whole point of the scale not shifting responsively. Two subtleties the obvious version gets
+       wrong: a prelude can wrap across lines (`@media (min-width: 768px) and\n (max-width: …)`),
+       and a whole at-rule can sit on one line, in which case the declarations after its `{` are
+       NOT exempt and a 4px inside it would otherwise escape. So: track the prelude across lines,
+       and on any at-rule line only skip up to the brace. */
+    let inPrelude = false;
+    stripKeepLines(css)
+      .split('\n')
+      .forEach((line, i) => {
+        const opensAtRule = /^\s*@(media|supports|container)/.test(line);
+        if (opensAtRule || inPrelude) {
+          inPrelude = !line.includes('{');
+          line = line.includes('{') ? line.slice(line.indexOf('{') + 1) : '';
+        }
+        const raw = line.match(/(?<![\w-])-?\d*\.?\d+(px|rem)\b/g);
+        if (raw) {
+          problems.push(
+            `${file}:${i + 1}  writes the raw distance ${raw.join(', ')} — a distance comes from ` +
+              `the gap scale, or from an optical correction in the token layer with a comment saying so`,
+          );
+        }
+      });
   }
 }
 
@@ -74,15 +141,51 @@ for (const file of consumers) {
 const SURFACES = ['paper', 'tint', 'ink', 'blue'];
 const stripComments = strip;
 
+/**
+ * Drop at-rule BLOCKS entirely, braces and contents, before attributing declarations to surfaces.
+ * The walker below is a flat sweep, so it would otherwise find a `[data-surface="ink"]` block
+ * nested inside an `@media` and then report the other three surfaces as omitting whatever that
+ * responsive override declares. No component layer uses `@media` today — by rule, the scale does
+ * not shift responsively — but the failure would be three confident findings about nothing.
+ */
+const dropAtRuleBlocks = (css) => {
+  let out = '';
+  for (let i = 0; i < css.length; i++) {
+    if (css[i] !== '@') {
+      out += css[i];
+      continue;
+    }
+    const open = css.indexOf('{', i);
+    if (open === -1) {
+      out += css.slice(i);
+      break;
+    }
+    let depth = 0;
+    let j = open;
+    for (; j < css.length; j++) {
+      if (css[j] === '{') depth++;
+      else if (css[j] === '}' && --depth === 0) break;
+    }
+    i = j;
+  }
+  return out;
+};
+
 for (const file of tokenFiles.filter((f) => f.includes('/components/'))) {
-  const css = stripComments(read(file));
+  const css = dropAtRuleBlocks(stripComments(read(file)));
   const perSurface = new Map(SURFACES.map((s) => [s, new Set()]));
   // Walk each top-level block and attribute its declarations to the surfaces in its selector.
   for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
     const selector = m[1];
     const decls = [...m[2].matchAll(/(--[\w-]+)\s*:/g)].map((d) => d[1]);
     for (const s of SURFACES) {
-      if (selector.includes(`[data-surface="${s}"]`)) decls.forEach((d) => perSurface.get(s).add(d));
+      /* Either quote style. Prettier does not format CSS attribute selectors here, so a file
+         written with single quotes would otherwise attribute NOTHING to any surface, leave the
+         union empty, hit the `continue` below and pass silently — the check would still print
+         its reassuring green line while enforcing nothing at all. */
+      if (new RegExp(`\\[data-surface=['"]${s}['"]\\]`).test(selector)) {
+        decls.forEach((d) => perSurface.get(s).add(d));
+      }
     }
   }
   const union = new Set([...perSurface.values()].flatMap((v) => [...v]));
@@ -109,4 +212,6 @@ if (problems.length) {
   process.exit(1);
 }
 
-console.log('all custom properties resolve; no literal colours outside the token layer');
+console.log(
+  'all custom properties resolve; every component layer is registered; no literal colours or raw distances outside the token layer',
+);

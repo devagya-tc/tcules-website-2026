@@ -78,8 +78,8 @@
 .colgap-section-open  { --layout-col-gap: var(--gap-section-open); }
 
 /* minTrack — track width for the content-driven modes ("fit" floor / "tile" actual). Component
-   GEOMETRY, not spacing rhythm, so these are local literals and stay local literals even after
-   the token system arrives (same reasoning as Section's inset ramp). Consumed by the inline
+   GEOMETRY, not spacing rhythm, which is why these take t-shirt names from layout.css rather
+   than a gap-scale role (same reasoning as Section's inset ramp). Consumed by the inline
    --tmpl-base that columns="fit"/"tile" emits. */
 .mintrack-xs { --layout-min-track: var(--lay-track-xs); } /* 192 — small tiles, logo cells */
 .mintrack-sm { --layout-min-track: var(--lay-track-sm); } /* 256 — compact cards */

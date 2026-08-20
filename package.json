@@ -9,6 +9,12 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "tokens:check": "node scripts/tokens-check.mjs",
+    "specimens:check": "node scripts/specimens-check.mjs",
+    "classes:check": "node scripts/classes-check.mjs",
+    "aria:check": "node scripts/aria-check.mjs",
+    "design:brief": "node scripts/design-brief.mjs",
+    "design:check": "node scripts/design-brief.mjs --check",
+    "verify": "npm run lint && npm run typecheck && npm run tokens:check && npm run classes:check && npm run specimens:check && npm run design:check",
     "format": "prettier --write ."
   },
   "engines": {

@@ -14,6 +14,24 @@
       "Read(../tcules-website/cms-ready/**)",
       "Read(../tcules-website/.next/**)",
       "Read(../tcules-website/node_modules/**)"
+    ],
+    "allow": [
+      "Bash(npm run lint)",
+      "Bash(npm run typecheck)",
+      "Bash(npm run tokens:check)",
+      "Bash(npm run specimens:check)",
+      "Bash(npm run design:check)",
+      "Bash(npm run design:brief)",
+      "Bash(npm run aria:check)",
+      "Bash(npm run verify)",
+      "Bash(npm run build)",
+      "Bash(node scripts/tokens-check.mjs)",
+      "Bash(node scripts/specimens-check.mjs)",
+      "Bash(node scripts/design-brief.mjs:*)",
+      "Bash(node scripts/aria-check.mjs)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
     ]
   }
 }

@@ -53,7 +53,7 @@ type ButtonBase = Omit<ComponentPropsWithoutRef<'button'>, 'color' | 'children'>
    * route. Link emphasis is almost always an anchor; solid and ghost are almost always buttons.
    * Paths come from `@/lib/routes`, never written out at the call site.
    *
-   *     <Button as={Link} href={routes.contact}>Start a project</Button>
+   *     <Button as={Link} href={ROUTES.contact}>Start a project</Button>
    *     <Button as="a" href="https://example.com">Read the paper</Button>
    *
    * `type` and `disabled` are only emitted for a real `button`; an anchor gets `aria-disabled`

@@ -8,7 +8,8 @@
   "buildCmd": "npx tsc -p .design-sync/tsconfig.dts.json",
   "docsDir": ".design-sync/groups",
   "guidelinesGlob": [
-    "docs/*.md"
+    "docs/*.md",
+    "docs/specs/*.md"
   ],
   "componentSrcMap": {
     "Section": "src/components/Section/Section.tsx",
