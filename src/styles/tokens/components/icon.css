@@ -1,12 +1,17 @@
 /* ══ Component layer — icon ══════════════════════════════════════════════════════
    Tier 3. The smallest layer in the system, and it has no surface blocks at all.
 
-   An icon has no colour of its own. Every glyph is drawn in `currentColor`, so it takes
+   An icon has no colour of its own. Every glyph is FILLED with `currentColor`, so it takes
    the ink or the label colour of whatever it sits in and is correct on all four surfaces
    without being told which one — a button's icon is the button's foreground, an icon in a
    heading is the heading's ink. That is the whole reason this file declares no
    ground-dependent token: there is nothing per-surface to declare, so restating four
    identical blocks would assert a variation that does not exist.
+
+   The same holds for a glyph's counters. They are HOLES cut through the mass with
+   fill-rule: evenodd, not shapes painted in the ground colour, so they show whatever is
+   behind them — which is the only form that survives all four surfaces. A
+   --icn-counter would be a token for a colour the set never paints.
 
    Naming: --icn-{part}-{modifier}. Only sizes, because size is the only thing an icon owns.
 
@@ -16,10 +21,10 @@
    and the system's rule is that a component size takes a t-shirt name. So this layer maps
    the four ordinals onto the ramp once, and Icon reads only the ordinals.
 
-   --icn-stroke is deliberately NOT declared. It would be a pure alias of --icon-stroke,
-   which is already named for exactly one thing and already carries the 24-box convention
-   in its comment; a second name would add a hop and no meaning. Icon.module.css reads the
-   primitive directly, which is the documented exception rather than a shortcut.
+   There is no stroke token at any layer. The set was stroke-only at 1.5 units and is now
+   solid, so a width here would assert a weight nothing draws — see the Icon block in
+   primitives.css, which keeps the record of why the primitive went away rather than
+   letting it look like an oversight.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────

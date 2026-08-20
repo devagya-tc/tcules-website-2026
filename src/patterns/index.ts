@@ -7,4 +7,27 @@
  *
  * A pattern may import from @/components. It may not import a template or @/content.
  */
-export {};
+export { SiteNav } from './SiteNav';
+export type {
+  SiteNavProps,
+  SiteNavItem,
+  SiteNavLink,
+  SiteNavBlock,
+  SiteNavRowsBlock,
+  SiteNavRow,
+  SiteNavRailBlock,
+  SiteNavRailCompartment,
+  SiteNavRailGroup,
+  SiteNavBarBlock,
+} from './SiteNav';
+
+export { SiteFooter } from './SiteFooter';
+export type {
+  SiteFooterProps,
+  SiteFooterBrand,
+  SiteFooterGroup,
+  SiteFooterLink,
+  SiteFooterMetaItem,
+  SiteFooterNewsletter,
+  SiteFooterSocial,
+} from './SiteFooter';

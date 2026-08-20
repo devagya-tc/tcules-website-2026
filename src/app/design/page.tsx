@@ -35,13 +35,32 @@ const SPECIMENS = [
       },
       { href: '/design/icon', name: 'Icon', note: 'the glyph set, 4 size roles, currentColor' },
       {
+        href: '/design/logo',
+        name: 'Logo',
+        note: 'the wordmark — 3 heights, 2 bar treatments, 4 surfaces',
+      },
+      {
         href: '/design/typography',
         name: 'Prose',
         note: 'the rich-text flow — specimen lives on the typography route',
       },
     ],
   },
-  { tier: 'Patterns', items: [] },
+  {
+    tier: 'Patterns',
+    items: [
+      {
+        href: '/design/site-nav',
+        name: 'SiteNav',
+        note: 'the header — bar, mega-menu panels, mobile drawer, 4 surfaces',
+      },
+      {
+        href: '/design/site-footer',
+        name: 'SiteFooter',
+        note: 'the footer — 5 bands, the directory, the newsletter field, 4 surfaces',
+      },
+    ],
+  },
   { tier: 'Templates', items: [] },
 ] as const;
 
@@ -52,9 +71,9 @@ export default function DesignIndexPage() {
         <Layout rowGap="block">
           <h1>Proving ground</h1>
           <p>
-            Every component and every arrangement, rendered. No token system yet — the
-            primitives are structural only, and the greys on these pages are measuring chrome,
-            not design.
+            Every component and every arrangement, rendered. Nothing gets a page route before it
+            has a route here, and the list is registered by hand so it stays honest about what is
+            actually covered.
           </p>
         </Layout>
 

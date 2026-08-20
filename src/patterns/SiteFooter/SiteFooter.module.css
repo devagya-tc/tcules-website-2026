@@ -1,0 +1,240 @@
+/* SiteFooter — the closing band.
+
+   Every colour, distance, height, radius and type role comes from --foot-*, declared in
+   tokens/components/footer.css and re-declared once per surface there. This file decides
+   STRUCTURE and which token each part reads, and states no value of its own.
+
+   ── What arranges what ──────────────────────────────────────────────────────────
+   Nothing here lays out content. The band is a Section, every stack and every column set is a
+   Layout, every row is a Cluster. What is left is type, colour, four hairlines, and the two
+   corrections a flex child needs to be allowed to shrink.
+
+   ── The field ───────────────────────────────────────────────────────────────────
+   .fieldLabel / .field are a text CONTROL being styled inside a pattern, which is the coupling the
+   tier rule exists to prevent. It is deliberate and temporary: the footer needs a field and
+   src/components/Input does not exist yet. tokens/components/footer.css carries the full argument
+   and the exit — when Input lands, these three rules delete and the --foot-field-* block moves to
+   an --inp-* layer unchanged. */
+
+/* ── Band separators ───────────────────────────────────────────────────────────
+   A hairline with air on both sides, and nothing else. The Layout above supplies the 48 ABOVE the
+   rule as its rowGap; this supplies the 48 below it, so the rule sits centred in roughly a
+   section's worth of space without either half being a margin.
+
+   Band 1 does not carry this class: a rule above the wordmark would be a rule against the
+   section's own top padding. */
+.band {
+  border-block-start: var(--foot-rule-width) solid var(--foot-rule);
+  padding-block-start: var(--foot-band-inset);
+}
+
+/* ── 1 · Brand ─────────────────────────────────────────────────────────────────
+   The tagline is the only line in the footer at --text-lead, and on the ink surface it is the only
+   one at full white. That is the band's visual weight, and it is scale and colour rather than a
+   box: measure-title holds it to 22ch so it breaks as a statement rather than running the width of
+   the page. */
+.tagline {
+  max-inline-size: var(--foot-tagline-measure);
+  color: var(--foot-tagline-ink);
+  font: var(--foot-tagline-text);
+}
+
+/* Mono and uppercase, so three social links beside a solid button read as chrome rather than as
+   the start of the directory below. */
+.socialLink {
+  display: inline-block;
+  color: var(--foot-link-ink);
+  font: var(--foot-social-text);
+  letter-spacing: var(--foot-social-tracking);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--foot-transition-duration) var(--foot-transition-easing);
+}
+
+.socialLink:hover,
+.socialLink:focus-visible {
+  color: var(--foot-link-ink-hover);
+}
+
+/* ── 2 · Newsletter ────────────────────────────────────────────────────────────
+   A label naming a block, not a link, so it is neutral rather than blue — the same rule that keeps
+   section.css's eyebrow off the accent ramp. Used by the directory's group titles too. */
+.label {
+  color: var(--foot-label-ink);
+  font: var(--foot-label-text);
+  letter-spacing: var(--foot-label-tracking);
+  text-transform: uppercase;
+}
+
+.title {
+  color: var(--foot-title-ink);
+  font: var(--foot-title-text);
+  letter-spacing: var(--foot-title-tracking);
+}
+
+.body {
+  max-inline-size: var(--foot-body-measure);
+  color: var(--foot-body-ink);
+  font: var(--foot-body-text);
+}
+
+/* The label IS the field's box — the input is nested inside it, so no id wires them together. It
+   grows to fill the row and stops shrinking at --foot-field-min-inline; a flex child's default
+   minimum is its content, so `min-inline-size: 0` is what lets the basis actually govern. Neither
+   is spacing: they are what makes a field in a wrapping row wrap instead of overflow. */
+.fieldLabel {
+  flex: 1 1 var(--foot-field-min-inline);
+  min-inline-size: 0;
+}
+
+/* Visually hidden, still announced. Not `display: none` and not `visibility: hidden` — both remove
+   it from the accessibility tree, which is the opposite of the point. */
+.fieldLabelText {
+  position: absolute;
+  width: var(--space-1);
+  height: var(--space-1);
+  margin: calc(-1 * var(--space-1));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 40 tall, matching --btn-height-md, because the Subscribe button is in the same Cluster and two
+   controls on one row that disagree on height is the most visible defect a form can have.
+
+   The rule is the field's whole edge — no fill difference on the light surfaces, a recessed fill on
+   the dark ones — and it is the one border in the system that transitions, on the same 140ms as
+   every colour. */
+.field {
+  width: 100%;
+  height: var(--foot-field-height);
+  padding-inline: var(--foot-field-padding-x);
+  border: var(--foot-field-rule-width) solid var(--foot-field-rule);
+  border-radius: var(--foot-field-radius);
+  background: var(--foot-field-bg);
+  color: var(--foot-field-fg);
+  font: var(--foot-field-text);
+  transition:
+    border-color var(--foot-transition-duration) var(--foot-transition-easing),
+    background var(--foot-transition-duration) var(--foot-transition-easing);
+}
+
+.field::placeholder {
+  color: var(--foot-field-placeholder-fg);
+  /* Chrome and Safari apply their own opacity to a placeholder on top of the colour, which lands
+     the ink below its measured contrast. Pinned so the token is what renders. */
+  opacity: 1;
+}
+
+/* Focus takes the ring AND lifts the border. A field is the one control here whose edge is its
+   entire affordance, so leaving the border at rest under a ring reads as two unrelated outlines. */
+.field:focus-visible {
+  border-color: var(--foot-field-rule-focus);
+}
+
+/* ── 3 · Directory ─────────────────────────────────────────────────────────────
+   Ink at rest, blue on reach. Forty links all in blue is not forty signals, it is a blue block —
+   the same argument the nav makes for its bar items. */
+.link {
+  display: inline-block;
+  color: var(--foot-link-ink);
+  font: var(--foot-link-text);
+  text-decoration: none;
+  transition: color var(--foot-transition-duration) var(--foot-transition-easing);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--foot-link-ink-hover);
+}
+
+/* ── 4 · Contact ───────────────────────────────────────────────────────────────
+   Mono micro for the key, sans for the value: the face is what tells you which half you are
+   reading, and it is why this band does not look like the directory above it despite both being
+   small text in columns. */
+.metaKey {
+  color: var(--foot-meta-key-ink);
+  font: var(--foot-meta-key-text);
+  letter-spacing: var(--foot-meta-key-tracking);
+  text-transform: uppercase;
+}
+
+/* The reset zeroes dd's margin; nothing here needs to restate it. */
+.metaValue {
+  color: var(--foot-meta-value-ink);
+  font: var(--foot-meta-value-text);
+}
+
+/* A reachable value keeps the value's ink rather than taking the directory's — it is the same fact
+   either way, and only its hover says it is clickable. */
+.metaLink {
+  color: var(--foot-meta-value-ink);
+  text-decoration: none;
+  transition: color var(--foot-transition-duration) var(--foot-transition-easing);
+}
+
+.metaLink:hover,
+.metaLink:focus-visible {
+  color: var(--foot-link-ink-hover);
+}
+
+.address {
+  max-inline-size: var(--foot-body-measure);
+  color: var(--foot-legal-ink);
+  font: var(--foot-legal-text);
+}
+
+/* ── 5 · Utility ───────────────────────────────────────────────────────────────
+   The quietest line on the page, and the only one at caption size. */
+.legal {
+  color: var(--foot-legal-ink);
+  font: var(--foot-legal-text);
+}
+
+.utilityLink {
+  display: inline-block;
+  color: var(--foot-link-ink);
+  font: var(--foot-legal-text);
+  text-decoration: none;
+  transition: color var(--foot-transition-duration) var(--foot-transition-easing);
+}
+
+.utilityLink:hover,
+.utilityLink:focus-visible {
+  color: var(--foot-link-ink-hover);
+}
+
+/* ── Focus ─────────────────────────────────────────────────────────────────────
+   Keyboard only. Two rings in one shadow — the offset in the surface colour, then the ring — so a
+   ring reads against the ground it is drawn on. Both halves are surface tokens, which is why the
+   ink footer and a blue one need no rule of their own here. */
+.link:focus,
+.socialLink:focus,
+.metaLink:focus,
+.utilityLink:focus,
+.field:focus {
+  outline: none;
+}
+
+.link:focus-visible,
+.socialLink:focus-visible,
+.metaLink:focus-visible,
+.utilityLink:focus-visible,
+.field:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--foot-ring-offset) var(--foot-ring-gap-color),
+    0 0 0 calc(var(--foot-ring-offset) + var(--foot-ring-width)) var(--foot-ring-color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link,
+  .socialLink,
+  .metaLink,
+  .utilityLink,
+  .field {
+    transition-duration: var(--duration-instant);
+  }
+}

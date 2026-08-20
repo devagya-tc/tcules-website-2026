@@ -38,6 +38,19 @@
   grid-template-columns: var(--tmpl-base, minmax(0, 1fr));
   align-items: var(--layout-align, stretch);
   justify-items: var(--layout-justify-items, stretch);
+  /* NOT the browser default, and this one is load-bearing. `align-content` defaults to `stretch`,
+     which distributes any spare block space among auto-sized ROWS — so a Layout that got stretched
+     to fill a taller sibling silently re-spaces its own children and the rendered gap is no longer
+     the step the caller asked for. Measured: a rowGap="block" (24) stack inside a stretched column
+     rendered at 130. That breaks the primitive's only contract, it cannot be seen in the markup,
+     and every nested Layout inherits the problem from whichever ancestor was stretched.
+
+     `start` pins the rows to their gap and lets the leftover space stay leftover. The gap scale is
+     the system's one answer to "how far apart", and nothing else may quietly outvote it.
+
+     equalRows is unaffected: grid-auto-rows:1fr makes the rows absorb the space themselves, so
+     there is nothing left here to distribute either way. */
+  align-content: start;
 }
 
 /* rowGap — the block-axis seam, between rows. Every step is a --gap-* usage token. */
