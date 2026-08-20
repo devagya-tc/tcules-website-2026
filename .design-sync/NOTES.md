@@ -61,6 +61,48 @@ the Icon and Logo rows to zero spacing. **`Cluster` caps at `block`** — `gutte
   `src/styles/tokens/fonts.css`: the same `@import` is dead in the Next build (it lands mid-stylesheet
   and is dropped), which is why the app uses a `<link>` in `layout.tsx` instead.
 
+## Validator warnings after upload — both are no-ops in this repo
+
+Claude Design's validator reports two formatting warnings on this design system, with fixes to make
+"in the repo, not the design project". Both were checked against this pipeline and neither is
+actionable here. Neither affects rendering — the components are correct as shipped.
+
+**"Eleven tokens can't be classified"** — `--duration-instant`, `--duration-fast`,
+`--easing-standard`, the seven `--z-*` layers, and `--border-width-hairline-print`. The suggested fix
+is a `/* @kind other */` (or `/* @kind spacing */`) comment after each declaration in the token
+source. **It cannot reach the extractor.** The only CSS this sync uploads is `_ds_bundle.css`, plus a
+one-line `styles.css` that imports it — `cfg.tokensPkg` is unset, so `copyTokens` never runs,
+`ds-bundle/tokens/` is empty, and `src/styles/tokens/**` is never uploaded (see
+`.cache/upload-list.txt`). esbuild strips every authored CSS comment on the way into that bundle even
+at `minify: false`, the `/*!` legal-comment form included; the 23 comments left in it are esbuild's
+own `/* path */` file banners. Verified directly against `.ds-sync/node_modules/.bin/esbuild`. A
+`@kind` comment in `primitives.css` would be invisible to the validator and the warning would recur
+— dead weight in the token layer of exactly the kind the token rules exist to keep out.
+
+The eleven are also *correctly* unclassifiable: a duration, an easing curve and a z-layer are not
+colour, spacing, radius, shadow or font. The warning is the extractor saying so, not a defect.
+
+Silencing it would need the kinds inside `_ds_bundle.css`, i.e. a post-build step that re-injects
+them between `package-build.mjs` and upload. Not built: it mutates a generated file whose hash
+`_ds_sync.json` records, and the warning costs nothing.
+
+**"Fifty-three properties declared under component selectors"** — the `--layout-*` and `--cluster-*`
+per-instance plumbing: 34 + 19 declarations across 9 unique names, matching the validator's count
+exactly. Nothing to change, and the note's own instruction is right — **do not move them to
+`:root`.** Each instance overrides them locally; that is how `rowGap` and `colGap` work, so hoisting
+them breaks both primitives. There is no exclusion knob either. The app's scope filter is
+deliberately permissive, and `lib/css.mjs` records the trade in its own source: component vars "DO
+enter the token list … That's tolerable (they're real, usable vars) and the price of designs actually
+receiving component CSS."
+
+That note also mentions `--crumb-*` in `docs/specs/Breadcrumbs-specimen.html`, and confirms it needs
+no change. **Breadcrumbs has since shipped** — `src/patterns/Breadcrumbs/`, spec at
+`docs/specs/Breadcrumbs.md`, synced 20 Aug 2026 as the tenth component — so that specimen and the
+brief are both superseded; see *Designer artifacts in the project* below. The prediction held: a
+`--crumb-*` layer classifies as colour, spacing and font, so the eleven stayed eleven, and it is
+scoped as a token layer rather than a component selector, so it did not join the fifty-three. The
+sync after it shipped reported the same two warnings, unchanged.
+
 ## Card presentation
 
 Six components carry `cfg.overrides.<Name>.cardMode = "column"` — `Section`, `Layout`, `Cluster`,
@@ -79,6 +121,43 @@ binds them by basename, so there is no `docsMap` enumeration to maintain. The bo
 deliberately — an empty body still lets the converter synthesise `.prompt.md` from JSDoc, props and
 preview examples; adding prose there would replace that synthesis. See `groups/README.txt`.
 
+## Designer artifacts in the project that this sync does NOT manage
+
+`list_files` on the project shows three paths under `docs/` that no sync run produced:
+`docs/design-sync-notes.md`, `docs/specs/Breadcrumbs.md`, `docs/specs/Breadcrumbs-specimen.html`.
+They are the designer's own working artifacts, uploaded through Claude Design rather than by the
+converter. **They are outside every write glob this skill uses** (`guidelines/**`, not `docs/**`), so
+a sync neither updates nor deletes them — do not mistake them for orphans a reconciliation pass
+should clean up.
+
+Two are now superseded and worth retiring **by hand, by their author**: the specimen was the
+designer's stand-in for a component that now ships with a real specimen route at
+`/design/breadcrumbs`, and `docs/specs/Breadcrumbs.md` is an in-flight copy of a spec whose
+implemented version now ships to `guidelines/docs/specs/Breadcrumbs.md` via `guidelinesGlob`. Two
+copies of one spec at two paths is the kind of thing that gets read from the wrong one a year later.
+
+## `conventions.md` enumerates the component list — it goes stale on every component add
+
+The header opens with "All N are on `window.Tcules`" and names every component. Nothing checks it:
+`design:check` cross-checks token names, not the header's prose, and the build stitches whatever the
+file says. The Breadcrumbs sync caught it at 9-vs-10 only because the conventions step re-validates
+the header against the fresh build every run — **keep doing that**, and correct the count and the
+list rather than re-authoring the file. Getting it wrong is not cosmetic: the header is inlined into
+the design agent's system prompt, so an agent reading "All 9" concludes the tenth component does not
+exist and builds its own instead, which is the exact waste the library is meant to prevent.
+
+The rest of the header was re-validated against the build the same run and every name still resolves
+— all nine gap steps, every `--text-*` role and its `-tracking` companion (including `ui-sm` and
+`ui-lg`, which do exist), and all eight `--sec-*` names.
+
+## The converter command may be blocked by the permission classifier
+
+On the Breadcrumbs sync, `node .ds-sync/resync.mjs …` was denied twice by Claude Code's auto-mode
+classifier — with a pipe and bare — and a `cat > … <<'EOF'` heredoc for the anchor file was denied
+too. The driver had to be run by the user via `!`, and the anchor written with the Write tool. If a
+future run hits this, either add a Bash allow rule for `node .ds-sync/*` or expect to hand the one
+command to the user. Nothing about the repo causes it; it is the environment's permission mode.
+
 ## Re-sync risks — what to watch
 
 - **`dist/types/` is gitignored and required.** A fresh clone must run `cfg.buildCmd` first, or every
@@ -96,9 +175,18 @@ preview examples; adding prose there would replace that synthesis. See `groups/R
   shape changes, the previews still compile against the old copy. They are trimmed on purpose (the
   full IA overflows a card), so this is a deliberate cost, not a bug — but re-check them when the
   pattern types change.
+- **The two validator warnings are expected — do not "fix" them.** See *Validator warnings after
+  upload* above. The `@kind` comment form cannot survive esbuild into `_ds_bundle.css`, and the
+  `--layout-*`/`--cluster-*` properties must stay under their component selectors.
 - **The shims track Next's API surface.** If a component starts importing something else from
   `next/*` (e.g. `useSearchParams`, `useRouter`), the bundle will fail to resolve it and the shim
   needs the export added.
 - **Only statically-renderable states are covered.** SiteNav's open mega-menu panel and mobile
   drawer, and every hover/press/focus state, need interaction and are not in any card.
+- **`conventions.md`'s component count and list must be re-validated every sync.** See its own
+  section above. It is the one uploaded artifact whose staleness silently misinforms the design agent.
 - Toolchain at last sync: node v26.0.0, esbuild + ts-morph + playwright installed under `.ds-sync/`.
+- Last sync: 20 Aug 2026 — 10 components, Breadcrumbs added. 9 verified-by-upload and skipped,
+  1 new, 0 changed, 0 removed; render check 10/10 clean; all 6 Breadcrumbs cells graded good and
+  carried forward on the second driver run (0 grade cleared, which is the proof the next sync is
+  fast). No component is on the floor card — all 10 have authored previews.

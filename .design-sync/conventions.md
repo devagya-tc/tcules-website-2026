@@ -1,8 +1,8 @@
 ## How to build with Tcules
 
 No provider, no theme object, no wrapper component. Load `styles.css` and `_ds_bundle.js` and
-every component is correct. All 9 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
-`Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`.
+every component is correct. All 10 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
+`Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`.
 
 ### There is no class vocabulary — do not invent one
 
@@ -85,6 +85,27 @@ one component allowed to use margins internally.
 
 `SiteNav` / `SiteFooter` — whole page furniture, driven entirely by props (`items` + `cta`;
 `brand`/`groups`/`newsletter`/`meta`/`utility`). Both take `surface`.
+
+`Breadcrumbs` — the ancestor trail above a page hero: `items` (an array of `{ label, href }`,
+two or more; fewer renders nothing) and `surface`. It states position; it is not navigation —
+`SiteNav` is. The last item is always the current page and is rendered as text, never a link, and
+four or more levels collapse to four with the middle elided, so depth costs nothing.
+
+It **brings its own band** — like `SiteNav` and `SiteFooter`, and that is why it takes `surface`
+rather than reading one. So place it as a **direct child of the page**, never inside a `Section`
+(the content column would inset twice) and never inside a `Layout` (a band is not a row). It
+gives 64 of air above itself and almost none below, because the air below belongs to the band
+that follows it — put the hero's `Section` immediately after and set both `surface` values the
+same, or the seam between them reads as a two-tone split.
+
+```jsx
+<Breadcrumbs surface="paper" items={[
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: 'Interaction and UI Design', href: '/services/interaction-ui-design' },
+]} />
+<Section surface="paper" density="tight">…the hero…</Section>
+```
 
 ### Read before styling
 
