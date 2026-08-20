@@ -239,7 +239,13 @@ Only if they apply, and say which you are doing and why:
   ```
 
   State the smallest counter's size in px at 16 and at 14 — `glyphs.ts`'s own header warns that "two
-  marks that read alike at row size are worse than none", and arithmetic is not the same as looking;
+  marks that read alike at row size are worse than none", and arithmetic is not the same as looking.
+
+  **Then update the two hand-pinned copies of the glyph set**, or `design:check` fails:
+  `.design-sync/config.json` → `dtsPropsFor.Icon` (the `IconName` union is pinned there because
+  `keyof typeof glyphs` collapses to `unknown` in the extractor) and `.design-sync/previews/Icon.tsx`
+  → `NAMES`. Both feed the live component library that Claude Design composes from, so a glyph
+  missing there is a glyph the next designer is told does not exist;
 - `src/lib/routes.ts` — the component needs a path (never a literal at a call site);
 - `scripts/tokens-check.mjs` → `JS_INJECTED` — the component writes a custom property from an inline
   `style` object, as `Layout` does with `--tmpl-*`. Without the entry `tokens:check` fails; the entry

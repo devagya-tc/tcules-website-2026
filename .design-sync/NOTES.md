@@ -84,10 +84,13 @@ preview examples; adding prose there would replace that synthesis. See `groups/R
 - **`dist/types/` is gitignored and required.** A fresh clone must run `cfg.buildCmd` first, or every
   `.d.ts` silently degrades. This is the most likely cause of a bad re-sync.
 - **`Icon.d.ts` is hand-pinned.** `IconName = keyof typeof glyphs` collapses to `unknown` in the
-  extractor, so `cfg.dtsPropsFor.Icon` carries the 17-value union verbatim. **If a glyph is added to
-  or removed from `src/components/Icon/glyphs.ts`, that union and `previews/Icon.tsx`'s `NAMES` array
-  both go stale silently** — nothing checks them. Regenerate from
-  `dist/types/components/Icon/glyphs.d.ts`.
+  extractor, so `cfg.dtsPropsFor.Icon` carries the 17-value union verbatim, and
+  `previews/Icon.tsx`'s `NAMES` array is a second copy. Adding or removing a glyph in
+  `src/components/Icon/glyphs.ts` used to make both stale **silently**; `npm run design:check`
+  now cross-checks them against `glyphs.ts` in both directions and names the offending glyph and
+  file, so a re-sync cannot start from a stale union. Regenerate from
+  `dist/types/components/Icon/glyphs.d.ts`. (`.claude/commands/build-from-spec.md` STEP 8 tells the
+  builder to update both in the same edit as the glyph.)
 - **Preview content is inlined, not `$ref`'d.** `SiteNav.tsx` and `SiteFooter.tsx` previews carry a
   hand-trimmed copy of the IA from `src/content/sources/fixtures/navigation.ts`. If the real fixture's
   shape changes, the previews still compile against the old copy. They are trimmed on purpose (the

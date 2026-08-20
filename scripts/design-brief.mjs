@@ -390,6 +390,49 @@ seam to size.
 `;
 }
 
+/**
+ * The glyph set is enumerated THREE times outside glyphs.ts, and two of those copies are invisible
+ * to every other check:
+ *
+ *   1. the generated brief          — read from glyphs.ts at run time, so it cannot drift
+ *   2. .design-sync/config.json     — `dtsPropsFor.Icon` hand-pins the IconName union, because
+ *                                     `keyof typeof glyphs` collapses to `unknown` in the extractor
+ *   3. .design-sync/previews/Icon.tsx — a NAMES array the preview card maps over
+ *
+ * .design-sync/NOTES.md records that both 2 and 3 "go stale silently — nothing checks them". This is
+ * that check. The cost of the drift is specific: the design library that Claude Design composes from
+ * would not offer a glyph this repo has, or would offer one it does not, and a designer working from
+ * the card would specify against the wrong set.
+ */
+function glyphDrift() {
+  const truth = glyphSet().names;
+  if (truth.length === 0) return [];
+  const out = [];
+
+  const compare = (where, found) => {
+    const missing = truth.filter((n) => !found.includes(n));
+    const extra = found.filter((n) => !truth.includes(n));
+    if (missing.length) out.push(`${where}  is missing ${missing.length} glyph(s) that ${GLYPHS} defines: ${missing.join(', ')}`);
+    if (extra.length) out.push(`${where}  names ${extra.length} glyph(s) that ${GLYPHS} does not define: ${extra.join(', ')}`);
+  };
+
+  const cfgPath = '.design-sync/config.json';
+  if (existsSync(cfgPath)) {
+    const cfg = JSON.parse(read(cfgPath));
+    const pinned = cfg?.dtsPropsFor?.Icon ?? '';
+    const union = pinned.match(/name:\s*([^;]+);/)?.[1] ?? '';
+    if (union) compare(`${cfgPath}  dtsPropsFor.Icon`, [...union.matchAll(/"([a-z0-9-]+)"/g)].map((m) => m[1]));
+  }
+
+  const previewPath = '.design-sync/previews/Icon.tsx';
+  if (existsSync(previewPath)) {
+    const block = strip(read(previewPath)).match(/const NAMES\s*=\s*\[([\s\S]*?)\]/);
+    if (block) compare(`${previewPath}  NAMES`, [...block[1].matchAll(/'([a-z0-9-]+)'/g)].map((m) => m[1]));
+  }
+
+  return out;
+}
+
 /* ── --check: every token the docs name must resolve ─────────────────────────── */
 
 function check() {
@@ -446,11 +489,18 @@ function check() {
       }
     });
   }
-  console.log(`design:brief --check — ${docs.length} docs, ${known.size} known tokens`);
+  problems.push(...glyphDrift());
+
+  console.log(
+    `design:brief --check — ${docs.length} docs, ${known.size} known tokens, ` +
+      `${glyphSet().names.length} glyphs cross-checked against .design-sync`,
+  );
   if (problems.length) {
     console.error(`\n${problems.length} problem(s):\n`);
     for (const p of problems) console.error(`  ${p}`);
-    console.error('\nA token name in a doc is a promise to a designer who cannot read the repo.');
+    console.error(
+      '\nA token or glyph name in a doc is a promise to a designer who cannot read the repo.',
+    );
     process.exit(1);
   }
   console.log('every token named in the docs resolves in the token layer');
