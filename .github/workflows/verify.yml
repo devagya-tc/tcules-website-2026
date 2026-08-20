@@ -1,0 +1,39 @@
+# Run the repo's own checks on every pull request, and on main.
+#
+# Why this exists: the six checks in `npm run verify` are the difference between "it compiles" and
+# "it follows the system", and until now they only ran where someone remembered to type them. Branch
+# protection is not available on this plan, so this workflow cannot BLOCK a merge — it makes the
+# answer visible on the pull request, which is what lets someone who is not the repo owner open one
+# with confidence and get told they are wrong by a machine rather than by a person.
+#
+# It deliberately does not run `npm run build`, `npm run aria:check` or `npm run format`. The first
+# two need a browser build and belong to the person shipping an interactive component; the third
+# writes files, and a formatter that edits code in CI is how a diff stops matching what its author
+# reviewed.
+name: verify
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # engines in package.json sets the floor at >=20.11.1; 22 is the current LTS above it.
+          node-version: '22'
+          cache: npm
+
+      # `npm ci` rather than `npm install`: it installs exactly the committed lockfile and fails if
+      # package.json and the lockfile disagree, which is a real failure and not something to paper
+      # over in CI.
+      - run: npm ci
+
+      - name: npm run verify
+        run: npm run verify
