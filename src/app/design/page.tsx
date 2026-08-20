@@ -50,6 +50,11 @@ const SPECIMENS = [
     tier: 'Patterns',
     items: [
       {
+        href: '/design/breadcrumbs',
+        name: 'Breadcrumbs',
+        note: 'the ancestor trail — depth ladder, collapse, 4 surfaces, its own band',
+      },
+      {
         href: '/design/site-nav',
         name: 'SiteNav',
         note: 'the header — bar, mega-menu panels, mobile drawer, 4 surfaces',

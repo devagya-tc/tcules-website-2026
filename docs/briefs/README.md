@@ -27,7 +27,7 @@ Thirteen are pasteable. Five are not, and say so at the top of the file.
 | 03 | [Nav](03-nav.md) | `SiteNav` · 2 · `--nav-` | 129 pages | **ships today — do not specify** |
 | 04 | [Footer](04-footer.md) | `SiteFooter` · 2 · `--foot-` | 129 pages | **ships today — do not specify** |
 | 05 | [Page Hero](05-page-hero.md) | `PageHero` · 2 · `--hero-` | 129 routes · 3 arrangements | paste |
-| 06 | [Breadcrumbs](06-breadcrumbs.md) | `Breadcrumbs` · 2 · `--crumb-` | 128 routes · 1 | paste |
+| 06 | [Breadcrumbs](06-breadcrumbs.md) | `Breadcrumbs` · 2 · `--crumb-` | 128 routes · 1 | **ships today — do not specify** |
 | 07 | [Content Section](07-content-section.md) | `ContentSection` · 2 · `--csec-` | 110 routes · 738 instances · 4 | paste |
 | 08 | [CTA Section](08-cta-section.md) | `CtaSection` · 2 · `--cta-` | 76 routes · 113 instances · 2 | paste — carries an `UNRESOLVED` |
 | 09 | [Form](09-form.md) | `EnquiryForm` · 2 · `--enq-` | 56 routes · 1 | paste — carries an `UNRESOLVED` |
@@ -41,7 +41,7 @@ Thirteen are pasteable. Five are not, and say so at the top of the file.
 | 17 | [Stat](17-stat.md) | `Stat` · 2 · `--stat-` | 1 route resolved, 3 claimed · 2 | paste — with 15 |
 | 18 | [Filters](18-filters.md) | `Filters` · 2 · unassigned | none | **blocked on content — do not specify** |
 
-Every proposed prefix was checked against the eight already taken — `--btn-`, `--foot-`, `--icn-`,
+Every proposed prefix was checked against the nine already taken — `--btn-`, `--foot-`, `--icn-`,
 `--lay-`, `--logo-`, `--nav-`, `--prose-`, `--sec-`.
 
 ## The order to run them in
@@ -50,9 +50,12 @@ Dependency order, plus what unblocks the most pages.
 
 1. **Page Hero** · 05 — 129 routes, and no page renders without it.
 2. **Content Section** · 07 — 738 instances. Everything below is a child of it.
-3. **Breadcrumbs** · 06 — 128 routes, one rendering, no open axis.
-4. **Accordion** · 14 and **Table** · 10 — one rendering each, and Table may turn out to be a
+3. **Accordion** · 14 and **Table** · 10 — one rendering each, and Table may turn out to be a
    `Prose` change rather than a component.
+
+*(Breadcrumbs · 06 was third on this list and now ships — `src/patterns/Breadcrumbs/`, spec at
+`docs/specs/Breadcrumbs.md`, specimen at `/design/breadcrumbs`. Do not specify it again; compose
+against the shipped component in the library.)*
 5. **Block Card** · 12 and **List Card** · 11 — the two shapes the section's child slot takes.
 6. **Proof, as one session** — **Testimonial** · 15 and **Stat** · 17 together. Split apart, Stat
    duplicates half of Testimonial.

@@ -72,3 +72,44 @@
 .scrollX {
   overflow-x: auto;
 }
+
+/* The real eyebrow role, for specimens that have to prove a component reads DIFFERENTLY from it.
+   The Breadcrumbs route needs this: the whole of its Q3 is that a sans trail over a mono eyebrow
+   reads as apparatus over category, and a note about the eyebrow set in the note's own sans face
+   proves nothing. There is no Heading or Eyebrow component yet, so the role is consumed here —
+   composite plus its tracking companion, uppercase, and --sec-ink-label, which is section.css's
+   own answer for a label rather than the accent ramp. */
+.eyebrow {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: uppercase;
+  color: var(--sec-ink-label);
+}
+
+/* A stand-in for the sticky SiteNav, so a band that has to be looked at UNDER the bar can be. Only
+   the bar's bottom hairline and its height matter for that, and both come from the nav's own token
+   layer — this is measuring chrome reading the tokens of the thing it stands in for, which is the
+   one place that is honest rather than a component reading another component's tokens. */
+.mockBar {
+  min-height: var(--nav-bar-height-compact);
+  border-block-end: var(--nav-rule-width) solid var(--nav-rule);
+}
+
+/* Outlines a 44px touch floor next to a target so the extension can be compared against it. */
+.hitFloor {
+  min-height: var(--btn-hit-min);
+  outline: var(--border-width-hairline) dashed var(--sec-accent);
+  outline-offset: calc(var(--border-width-hairline) * -1);
+}
+
+/* An h2 ELEMENT at h1 SCALE. Needed wherever a specimen has to show a component in situ against a
+   real page title without minting a second <h1> on a page that already has one. This is the gap
+   CLAUDE.md names — "a page routinely needs an h2-level element at h3 scale and the element name
+   should not decide the scale" — and the real fix is a Heading component with a size prop. Until
+   that exists, the proving ground consumes the role directly rather than choosing between a wrong
+   element and a wrong size. */
+.titleScale {
+  font: var(--text-h1);
+  letter-spacing: var(--text-h1-tracking);
+  color: var(--sec-ink);
+}

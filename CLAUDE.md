@@ -13,7 +13,7 @@ app  →  templates  →  patterns  →  components  →  lib / styles
 |---|---|---|
 | — | `src/app/**` | routes. Composition only; read content, pass props |
 | 3 | `src/templates/**` | whole page-type layouts (article shape, service-page shape) |
-| 2 | `src/patterns/**` | composed blocks — `SiteNav` and `SiteFooter` today; hero, CTA, card next |
+| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter` and `Breadcrumbs` today; hero, CTA, card next |
 | 1 | `src/components/**` | primitives, controls and marks — `Section`, `Layout`, `Cluster`, `Button`, `Icon`, `Logo`, `Prose` |
 | — | `src/content/**` | the CMS seam. Imported by pages and nothing else |
 | — | `src/lib/**`, `src/styles/**` | leaves. Import nothing above them |

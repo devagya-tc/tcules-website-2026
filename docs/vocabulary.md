@@ -112,13 +112,14 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--btn-` (components/button.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--lay-` (components/layout.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css)
+`--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--lay-` (components/layout.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
 **Their geometry, so you can size against it rather than guessing.** A new control is measured
 against the controls beside it — if you are specifying one, say which of these it must line up with.
 
+- **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
 - **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
 - **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-tagline-measure` 22ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 68ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em · `--foot-field-height` 40px · `--foot-field-padding-x` 12px · `--foot-field-radius` 8px · `--foot-field-rule-width` 1px · `--foot-field-min-inline` 16rem
 - **icon.css** — `--icn-size-sm` 14px · `--icn-size-md` 16px · `--icn-size-lg` 18px · `--icn-size-xl` 24px
@@ -152,6 +153,6 @@ seam to size.
 ### What already exists — check these before specifying anything new
 
 - **Primitives** (`src/components/`): `Button` · `Cluster` · `Icon` · `Layout` · `Logo` · `Prose` · `Section`
-- **Patterns** (`src/patterns/`): `SiteFooter` · `SiteNav`
+- **Patterns** (`src/patterns/`): `Breadcrumbs` · `SiteFooter` · `SiteNav`
 - **Templates** (`src/templates/`): — none yet
 

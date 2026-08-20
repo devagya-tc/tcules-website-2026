@@ -19,6 +19,7 @@
     "Icon": "src/components/Icon/Icon.tsx",
     "Logo": "src/components/Logo/Logo.tsx",
     "Prose": "src/components/Prose/Prose.tsx",
+    "Breadcrumbs": "src/patterns/Breadcrumbs/Breadcrumbs.tsx",
     "SiteNav": "src/patterns/SiteNav/SiteNav.tsx",
     "SiteFooter": "src/patterns/SiteFooter/SiteFooter.tsx"
   },
@@ -45,6 +46,10 @@
     },
     "Logo": {
       "cardMode": "column"
+    },
+    "Breadcrumbs": {
+      "cardMode": "column",
+      "viewport": "1280x260"
     }
   },
   "dtsPropsFor": {
