@@ -77,20 +77,24 @@
    it, even where that surface's value equals its own rest.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-@import "fonts.css";
-@import "primitives.css";
-@import "components/section.css";
-@import "components/layout.css";
-@import "components/icon.css";
-@import "components/button.css";
-@import "components/prose.css";
-@import "components/logo.css";
-@import "components/nav.css";
-@import "components/footer.css";
-@import "components/breadcrumbs.css";
-@import "components/cta-section.css";
-@import "components/page-hero.css";
+@import 'fonts.css';
+@import 'primitives.css';
+@import 'components/section.css';
+@import 'components/layout.css';
+@import 'components/icon.css';
+@import 'components/button.css';
+@import 'components/input.css';
+@import 'components/prose.css';
+@import 'components/logo.css';
+@import 'components/nav.css';
+@import 'components/footer.css';
+@import 'components/breadcrumbs.css';
+@import 'components/cta-section.css';
+@import 'components/enquiry-form.css';
+@import 'components/page-hero.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */
-html{font-optical-sizing:auto}
+html {
+  font-optical-sizing: auto;
+}

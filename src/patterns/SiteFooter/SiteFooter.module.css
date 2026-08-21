@@ -10,11 +10,8 @@
    corrections a flex child needs to be allowed to shrink.
 
    ── The field ───────────────────────────────────────────────────────────────────
-   .fieldLabel / .field are a text CONTROL being styled inside a pattern, which is the coupling the
-   tier rule exists to prevent. It is deliberate and temporary: the footer needs a field and
-   src/components/Input does not exist yet. tokens/components/footer.css carries the full argument
-   and the exit — when Input lands, these three rules delete and the --foot-field-* block moves to
-   an --inp-* layer unchanged. */
+   The wrapper owns only the label relationship and its place in the wrapping row. Input owns the
+   control box through its quiet emphasis; the footer no longer styles a native input privately. */
 
 /* ── Band separators ───────────────────────────────────────────────────────────
    A hairline with air on both sides, and nothing else. The Layout above supplies the 48 ABOVE the
@@ -79,11 +76,9 @@
 }
 
 /* The label IS the field's box — the input is nested inside it, so no id wires them together. It
-   grows to fill the row and stops shrinking at --foot-field-min-inline; a flex child's default
-   minimum is its content, so `min-inline-size: 0` is what lets the basis actually govern. Neither
-   is spacing: they are what makes a field in a wrapping row wrap instead of overflow. */
+   grows to fill the row; Input owns the control's usable minimum. */
 .fieldLabel {
-  flex: 1 1 var(--foot-field-min-inline);
+  flex: 1 1 auto;
   min-inline-size: 0;
 }
 
@@ -99,39 +94,6 @@
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
-}
-
-/* 40 tall, matching --btn-height-md, because the Subscribe button is in the same Cluster and two
-   controls on one row that disagree on height is the most visible defect a form can have.
-
-   The rule is the field's whole edge — no fill difference on the light surfaces, a recessed fill on
-   the dark ones — and it is the one border in the system that transitions, on the same 140ms as
-   every colour. */
-.field {
-  width: 100%;
-  height: var(--foot-field-height);
-  padding-inline: var(--foot-field-padding-x);
-  border: var(--foot-field-rule-width) solid var(--foot-field-rule);
-  border-radius: var(--foot-field-radius);
-  background: var(--foot-field-bg);
-  color: var(--foot-field-fg);
-  font: var(--foot-field-text);
-  transition:
-    border-color var(--foot-transition-duration) var(--foot-transition-easing),
-    background var(--foot-transition-duration) var(--foot-transition-easing);
-}
-
-.field::placeholder {
-  color: var(--foot-field-placeholder-fg);
-  /* Chrome and Safari apply their own opacity to a placeholder on top of the colour, which lands
-     the ink below its measured contrast. Pinned so the token is what renders. */
-  opacity: 1;
-}
-
-/* Focus takes the ring AND lifts the border. A field is the one control here whose edge is its
-   entire affordance, so leaving the border at rest under a ring reads as two unrelated outlines. */
-.field:focus-visible {
-  border-color: var(--foot-field-rule-focus);
 }
 
 /* ── 3 · Directory ─────────────────────────────────────────────────────────────
@@ -213,16 +175,14 @@
 .link:focus,
 .socialLink:focus,
 .metaLink:focus,
-.utilityLink:focus,
-.field:focus {
+.utilityLink:focus {
   outline: none;
 }
 
 .link:focus-visible,
 .socialLink:focus-visible,
 .metaLink:focus-visible,
-.utilityLink:focus-visible,
-.field:focus-visible {
+.utilityLink:focus-visible {
   outline: none;
   box-shadow:
     0 0 0 var(--foot-ring-offset) var(--foot-ring-gap-color),
@@ -233,8 +193,7 @@
   .link,
   .socialLink,
   .metaLink,
-  .utilityLink,
-  .field {
+  .utilityLink {
     transition-duration: var(--duration-instant);
   }
 }

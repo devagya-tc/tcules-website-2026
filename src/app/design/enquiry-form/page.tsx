@@ -1,0 +1,207 @@
+import Link from 'next/link';
+
+import { Button, Cluster, Layout, Section } from '@/components';
+import { CtaSection, EnquiryForm } from '@/patterns';
+import { ENDPOINTS, ROUTES } from '@/lib/routes';
+
+import { specimenStyles as s } from '../_specimen/Specimen';
+
+const CONTEXT = {
+  originRoute: ROUTES.designEnquiryForm,
+  placement: 'closing-cta',
+  family: 'design-system',
+  serviceOrAudit: 'component-specimen',
+  referrer: '',
+  campaign: '',
+} as const;
+
+const BODY = ['Tell us what you are trying to ship and who it is for.'] as const;
+
+function Enquiry({
+  outcome = 'success',
+  audit = false,
+  urlLabel,
+}: {
+  outcome?: 'success' | 'error' | 'pending';
+  audit?: boolean;
+  urlLabel?: 'Site or product URL' | 'Link to the work' | 'Where can we see it?';
+}) {
+  const action = `${ENDPOINTS.enquiryDesign}?outcome=${outcome}`;
+
+  return audit ? (
+    <EnquiryForm
+      variant="audit"
+      action={action}
+      context={{ ...CONTEXT, intent: 'free-audit' }}
+    />
+  ) : (
+    <EnquiryForm action={action} context={CONTEXT} urlLabel={urlLabel} />
+  );
+}
+
+export default function EnquiryFormSpecimenPage() {
+  return (
+    <>
+      <Section>
+        <Layout rowGap="block">
+          <h1>EnquiryForm</h1>
+          <p>
+            One stacked field set, two closed label variants, blur-only validation, and an
+            asynchronous success replacement. Every rendering sits inside CtaSection.
+          </p>
+        </Layout>
+      </Section>
+
+      <CtaSection
+        eyebrow="Variant · enquiry"
+        heading="Send an enquiry"
+        body={['Six hidden context fields and the standard enquiry labels.']}
+        form={<Enquiry />}
+        scheduleHref={ROUTES.contact}
+      />
+      <CtaSection
+        eyebrow="Variant · audit"
+        heading="Request a free audit"
+        body={['Seven hidden context fields and the fixed audit URL wording.']}
+        form={<Enquiry audit />}
+        scheduleHref={ROUTES.contact}
+        surface="tint"
+      />
+      <Section density="tight">
+        <Layout rowGap="tight">
+          <h2>Submitted context contract</h2>
+          <p>
+            Enquiry posts <code>origin_route</code>, <code>placement</code>, <code>family</code>
+            , <code>service_or_audit</code>, <code>referrer</code>, and <code>campaign</code>.
+            Audit adds <code>intent</code>. Empty referrer and campaign values remain present
+            rather than being dropped.
+          </p>
+        </Layout>
+      </Section>
+
+      <CtaSection
+        heading="Reach each state through the real controls"
+        body={[
+          'Blur an empty or malformed field for Invalid. Submit the three forms below for pending Success, Error, and delayed Submitting. Point at a field, hold the submit, and Tab through the form for the native hover, pressed, and focus states.',
+        ]}
+        form={<Enquiry outcome="pending" />}
+        scheduleHref={ROUTES.contact}
+      />
+      <CtaSection
+        eyebrow="State · error"
+        heading="Typed answers survive a failed request"
+        body={['This endpoint returns 500; the controls re-enable and keep their values.']}
+        form={<Enquiry outcome="error" urlLabel="Link to the work" />}
+        scheduleHref={ROUTES.contact}
+        surface="tint"
+      />
+      <CtaSection
+        eyebrow="State · success"
+        heading="The completed form becomes a next step"
+        body={['This endpoint succeeds; focus moves to the replacement status region.']}
+        form={<Enquiry outcome="success" urlLabel="Where can we see it?" />}
+        scheduleHref={ROUTES.contact}
+      />
+
+      {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
+        <CtaSection
+          key={surface}
+          eyebrow={`Surface · ${surface}`}
+          heading="Start with the work as it is"
+          body={BODY}
+          form={<Enquiry />}
+          scheduleHref={ROUTES.contact}
+          surface={surface}
+        />
+      ))}
+
+      <Section surface="ink" density="tight">
+        <Layout rowGap="block">
+          <h2>Nested surface boundary</h2>
+          <p>The blue form below must resolve its own tokens, not inherit this ink band.</p>
+        </Layout>
+      </Section>
+      <CtaSection
+        heading="A blue close between ink bands"
+        body={BODY}
+        form={<Enquiry />}
+        scheduleHref={ROUTES.contact}
+        surface="blue"
+      />
+      <Section surface="ink" density="tight">
+        <p>Ink resumes after the blue form.</p>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <h2>Edge cases</h2>
+          <p>
+            The next audit uses the longest fixed label. Scheduling remains the enclosing CTA&rsquo;s
+            single persistent action. The final rendering is deliberately constrained by an
+            illegal 256px parent to expose the documented floor.
+          </p>
+        </Layout>
+      </Section>
+      <CtaSection
+        eyebrow="Edge · longest label"
+        heading="The audit wording at the narrow end"
+        body={BODY}
+        form={
+          <EnquiryForm
+            variant="audit"
+            action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+            context={{ ...CONTEXT, intent: 'free-audit' }}
+          />
+        }
+        scheduleHref={ROUTES.contact}
+      />
+      <div className={s.trackSm}>
+        <CtaSection
+          eyebrow="Edge · illegal parent"
+          heading="A 256px parent that does not size the band"
+          body={BODY}
+          form={<Enquiry />}
+          scheduleHref={ROUTES.contact}
+          surface="tint"
+        />
+      </div>
+      <Cluster colGap="tight" rowGap="tight">
+        <CtaSection
+          eyebrow="Edge · wrapping parent"
+          heading="A Cluster does not promise a form track"
+          body={BODY}
+          form={<Enquiry />}
+          scheduleHref={ROUTES.contact}
+          surface="blue"
+        />
+      </Cluster>
+
+      <Section density="tight">
+        <p>
+          The adjacent pair is deliberately erroneous: a production route must render one
+          enquiry form. It proves that separate <code>useId</code> namespaces do not collide
+          even when the route rule is broken.
+        </p>
+      </Section>
+      <CtaSection
+        heading="The first adjacent form"
+        body={BODY}
+        form={<Enquiry />}
+        scheduleHref={ROUTES.contact}
+      />
+      <CtaSection
+        heading="The second adjacent form"
+        body={BODY}
+        form={<Enquiry urlLabel="Link to the work" />}
+        scheduleHref={ROUTES.contact}
+        surface="tint"
+      />
+
+      <Section>
+        <Button as={Link} href={ROUTES.design} emphasis="link" tone="neutral">
+          Back to the proving ground
+        </Button>
+      </Section>
+    </>
+  );
+}

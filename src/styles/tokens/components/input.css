@@ -1,0 +1,125 @@
+/* ══ Component layer — input ═════════════════════════════════════════════════════
+   Tier 3. A native input or textarea control, with two reusable emphases:
+   standard for forms and quiet for low-chrome bands such as SiteFooter.
+
+   Naming: --inp-{emphasis}-{part}-{state}. Shared disabled and invalid tokens omit
+   the emphasis because both treatments answer those semantic states identically.
+   Every surface restates every colour token so nested surfaces remain independent. */
+
+:root {
+  /* 40px agrees with the md Button beside quiet fields; standard controls step to the explicit
+     44px touch size below 768. The 16rem minimum is the last width at which the field remains
+     usable, and 128px gives textarea four body lines plus its optical insets. */
+  --inp-height-md: 40px;
+  --inp-height-touch: 44px;
+  --inp-padding-x: var(--space-12); /* optical control inset, not layout spacing */
+  --inp-textarea-padding-y: var(--space-12); /* optical control inset, not layout spacing */
+  --inp-min-inline: 16rem;
+  --inp-textarea-min-block: 128px;
+  --inp-radius: var(--radius-8);
+  --inp-rule-width: var(--border-width-1);
+  --inp-invalid-rule-width: var(--border-width-2);
+  --inp-text: var(--text-body);
+  --inp-shadow: var(--shadow-none);
+  --inp-transition-duration: var(--duration-fast);
+  --inp-transition-easing: var(--easing-standard);
+  --inp-ring-width: var(--focus-ring-width);
+  --inp-ring-offset: var(--focus-ring-offset);
+}
+
+:root,
+[data-surface='paper'] {
+  /* White lifts the control half a warmth-step off paper. Placeholder neutral-600 is 4.97:1 on
+     that exact field fill; the Brandeis ring is 6.18:1 against its paper-coloured gap. */
+  --inp-standard-bg: var(--color-white);
+  --inp-standard-fg: var(--color-neutral-900);
+  --inp-standard-placeholder-fg: var(--color-neutral-600);
+  --inp-standard-rule: var(--color-neutral-300);
+  --inp-standard-rule-hover: var(--color-neutral-500);
+  --inp-standard-ring-color: var(--color-brandeis-500);
+  --inp-standard-ring-gap-color: var(--color-paper);
+  --inp-disabled-bg: var(--color-neutral-100);
+  --inp-disabled-fg: var(--color-neutral-500);
+  --inp-disabled-rule: var(--color-neutral-200);
+  --inp-invalid-rule: var(--color-danger-600);
+  --inp-quiet-bg: var(--color-white);
+  --inp-quiet-fg: var(--color-neutral-900);
+  --inp-quiet-placeholder-fg: var(
+    --color-neutral-600
+  ); /* 4.97:1 on white; 500 failed at 3.19:1 */
+  --inp-quiet-rule: var(--color-neutral-300);
+  --inp-quiet-rule-focus: var(--color-brandeis-500);
+  --inp-quiet-ring-color: var(--color-brandeis-500);
+  --inp-quiet-ring-gap-color: var(--color-paper);
+}
+
+[data-surface='tint'] {
+  /* Standard uses paper on deep paper, while quiet preserves the footer's white field. Both light
+     fields need neutral-600 placeholder ink: the previous neutral-500 measured only 3.19:1. */
+  --inp-standard-bg: var(--color-paper);
+  --inp-standard-fg: var(--color-neutral-900);
+  --inp-standard-placeholder-fg: var(--color-neutral-600);
+  --inp-standard-rule: var(--color-neutral-400);
+  --inp-standard-rule-hover: var(--color-neutral-600);
+  --inp-standard-ring-color: var(--color-brandeis-500);
+  --inp-standard-ring-gap-color: var(--color-paper-deep);
+  --inp-disabled-bg: var(--color-neutral-200);
+  --inp-disabled-fg: var(--color-neutral-500);
+  --inp-disabled-rule: var(--color-neutral-300);
+  --inp-invalid-rule: var(--color-danger-600);
+  --inp-quiet-bg: var(--color-white);
+  --inp-quiet-fg: var(--color-neutral-900);
+  --inp-quiet-placeholder-fg: var(
+    --color-neutral-600
+  ); /* 4.97:1 on white; 500 failed at 3.19:1 */
+  --inp-quiet-rule: var(--color-neutral-400);
+  --inp-quiet-rule-focus: var(--color-brandeis-500);
+  --inp-quiet-ring-color: var(--color-brandeis-500);
+  --inp-quiet-ring-gap-color: var(--color-paper-deep);
+}
+
+[data-surface='ink'] {
+  /* The field recesses to neutral-900. Placeholder neutral-400 (standard) and neutral-500 (quiet)
+     clear 4.5:1 on that fill; the ring lifts to Brandeis-300 for the dark gap. */
+  --inp-standard-bg: var(--color-neutral-900);
+  --inp-standard-fg: var(--color-neutral-50);
+  --inp-standard-placeholder-fg: var(--color-neutral-400);
+  --inp-standard-rule: var(--color-neutral-700);
+  --inp-standard-rule-hover: var(--color-neutral-500);
+  --inp-standard-ring-color: var(--color-brandeis-300);
+  --inp-standard-ring-gap-color: var(--color-neutral-950);
+  --inp-disabled-bg: var(--color-neutral-950);
+  --inp-disabled-fg: var(--color-neutral-600);
+  --inp-disabled-rule: var(--color-neutral-800);
+  --inp-invalid-rule: var(--color-danger-300);
+  --inp-quiet-bg: var(--color-neutral-900);
+  --inp-quiet-fg: var(--color-white);
+  --inp-quiet-placeholder-fg: var(--color-neutral-500);
+  --inp-quiet-rule: var(--color-neutral-700);
+  --inp-quiet-rule-focus: var(--color-brandeis-300);
+  --inp-quiet-ring-color: var(--color-brandeis-300);
+  --inp-quiet-ring-gap-color: var(--color-neutral-950);
+}
+
+[data-surface='blue'] {
+  /* Standard returns to white; quiet recesses one brand step to Brandeis-600. Brandeis-200 is the
+     quiet placeholder floor at 4.61:1, and a white ring is required against the blue gap. */
+  --inp-standard-bg: var(--color-white);
+  --inp-standard-fg: var(--color-neutral-900);
+  --inp-standard-placeholder-fg: var(--color-neutral-600);
+  --inp-standard-rule: var(--color-brandeis-200);
+  --inp-standard-rule-hover: var(--color-brandeis-400);
+  --inp-standard-ring-color: var(--color-white);
+  --inp-standard-ring-gap-color: var(--color-brandeis-500);
+  --inp-disabled-bg: var(--color-neutral-100);
+  --inp-disabled-fg: var(--color-neutral-500);
+  --inp-disabled-rule: var(--color-neutral-300);
+  --inp-invalid-rule: var(--color-danger-100);
+  --inp-quiet-bg: var(--color-brandeis-600);
+  --inp-quiet-fg: var(--color-white);
+  --inp-quiet-placeholder-fg: var(--color-brandeis-200);
+  --inp-quiet-rule: var(--color-brandeis-400);
+  --inp-quiet-rule-focus: var(--color-white);
+  --inp-quiet-ring-color: var(--color-white);
+  --inp-quiet-ring-gap-color: var(--color-brandeis-500);
+}

@@ -9,9 +9,9 @@
  * the inline axis. Between them they express every arrangement, and nothing else in the repo
  * should be doing layout by hand.
  *
- * Button and Icon are the first CONTROLS in the tier — they arrange nothing, they are things a
- * layout arranges. A row of them belongs in a Cluster, which owns the gap; a button never sets
- * its own outer spacing.
+ * Button, Icon and Input are CONTROLS in the tier — they arrange nothing above themselves, they
+ * are things a layout arranges. Input owns only the native control box; labels and messages stay
+ * with the pattern composing it. A row of controls belongs in a Cluster, which owns the gap.
  *
  * Logo is a third kind: a MARK. Not an Icon, and the line between them is no longer fill versus
  * stroke now that the glyph set is solid too — it is PROPORTION and OWNERSHIP OF COLOUR. An icon
@@ -39,5 +39,6 @@ export {
   type ButtonSize,
 } from './Button';
 export { Icon, iconNames, type IconProps, type IconName, type IconSize } from './Icon';
+export { Input, type InputEmphasis, type InputProps } from './Input';
 export { Logo, type LogoProps, type LogoSize, type LogoVariant } from './Logo';
 export { Prose, type ProseProps } from './Prose';

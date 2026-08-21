@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 
-import { Button, Cluster, Layout, Prose, Section } from '@/components';
+import { Button, Cluster, Input, Layout, Prose, Section } from '@/components';
 import { CtaSection, type CtaPoint } from '@/patterns';
 import { ROUTES } from '@/lib/routes';
 
@@ -54,7 +54,7 @@ function SpecimenNote({ title, note }: { title: string; note: string }) {
   );
 }
 
-/** Specimen-only stand-in until brief 09's real form component is implemented. */
+/** A deliberately inert fixture: this page isolates CtaSection while using the shipped field box. */
 function DemoForm({
   kind = 'project',
   submitLabel,
@@ -67,13 +67,13 @@ function DemoForm({
       <Layout as="form" rowGap="block">
         <Layout as="label" rowGap="inline">
           <span className={s.demoFieldLabel}>Your name</span>
-          <input className={s.demoField} name={`${kind}-name`} required />
+          <Input name={`${kind}-name`} required />
         </Layout>
         <Layout as="label" rowGap="inline">
           <span className={s.demoFieldLabel}>
             {kind === 'audit' ? 'Website or product URL' : 'What are you trying to ship?'}
           </span>
-          <input className={s.demoField} name={`${kind}-brief`} required />
+          <Input name={`${kind}-brief`} required />
         </Layout>
         <Button type="submit" tone="neutral">
           {submitLabel ?? (kind === 'audit' ? 'Request free audit' : 'Send enquiry')}

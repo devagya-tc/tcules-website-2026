@@ -79,6 +79,7 @@ export const ROUTES = {
 
   /* The proving ground. Not linked from the site; named so a specimen can cross-link. */
   design: '/design',
+  designEnquiryForm: '/design/enquiry-form',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
@@ -106,4 +107,5 @@ export const UNRESOLVED_EXTERNAL = '#unresolved-external';
  */
 export const ENDPOINTS = {
   newsletter: '/api/newsletter',
+  enquiryDesign: '/api/design/enquiry',
 } as const;
