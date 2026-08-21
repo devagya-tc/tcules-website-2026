@@ -55,6 +55,11 @@ const SPECIMENS = [
         note: 'the ancestor trail — depth ladder, collapse, 4 surfaces, its own band',
       },
       {
+        href: '/design/page-hero',
+        name: 'PageHero',
+        note: 'the page opening — slot ladder, paragraph ladder, byline shapes, 4 surfaces, its own band',
+      },
+      {
         href: '/design/site-nav',
         name: 'SiteNav',
         note: 'the header — bar, mega-menu panels, mobile drawer, 4 surfaces',
