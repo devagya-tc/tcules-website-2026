@@ -129,13 +129,6 @@
   max-inline-size: var(--lay-track-sm);
 }
 
-/* Labels for the inert form fixture used on the CtaSection proving ground. */
-.demoFieldLabel {
-  font: var(--text-ui-sm);
-  letter-spacing: var(--text-ui-sm-tracking);
-  color: var(--sec-ink-muted);
-}
-
 /* Two illegal placements, made lookable-at. A band belongs to the page and must not be put in a
    grid track — but "must not" is a claim a reviewer should be able to check by eye, and a spec that
    names a 320px floor is naming a rendering nobody can see without a way to constrain the width.

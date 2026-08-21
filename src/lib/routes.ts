@@ -79,6 +79,7 @@ export const ROUTES = {
 
   /* The proving ground. Not linked from the site; named so a specimen can cross-link. */
   design: '/design',
+  designCtaSection: '/design/cta-section',
   designEnquiryForm: '/design/enquiry-form',
 } as const;
 
