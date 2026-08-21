@@ -1,0 +1,109 @@
+/* ══ Component layer — ListCard ══════════════════════════════════════════════════
+   Tier 2. One ruled list row, with one marker slot and an optional whole-row link.
+
+   Naming: --lcrd-{part}-{role}-{state}
+     parts: title | body | marker | link | rule | ring | thumbnail | content
+     states: rest (no suffix) | hover | pressed
+
+   There is no variant slot. split/stacked changes Layout props, marker kind changes content, and
+   href changes semantics. None changes the component's visual role or creates a second palette.
+
+   State-token absences are assertions:
+     no background tokens       the row never paints a fill;
+     no body/marker state tokens those parts never move;
+     no disabled/active tokens   links are either destinations or absent;
+     no rule-hover colour token  the overlay takes currentColor from --lcrd-link-ink-hover.
+
+   Every surface below declares every surface-dependent token. The repetition prevents a tint row
+   nested inside an ink section inheriting the outer body's ink or focus gap. */
+
+/* ── Geometry · identical on every surface ───────────────────────────────────── */
+:root {
+  --lcrd-title-text: var(--text-h5);
+  --lcrd-title-tracking: var(--text-h5-tracking);
+  --lcrd-body-text: var(--text-body);
+  --lcrd-marker-text: var(--text-stat);
+  --lcrd-marker-tracking: var(--text-stat-tracking);
+
+  /* Component geometry, not layout distance. 192 matches Layout's xs track by value rather than
+     reading --lay-track-xs: a component never reads another component's tokens. It is the minimum
+     readable copy core beside a 24px marker; below it the outer Cluster wraps the marker first. */
+  --lcrd-content-min-xs: 192px;
+
+  /* The accepted native-image contract. 160px was measured as a recognisable landscape sample in
+     the 1240px row while still leaving the 192px content core room before Cluster wraps it. */
+  --lcrd-thumbnail-inline-md: 160px;
+  --lcrd-thumbnail-ratio: 3 / 2;
+
+  --lcrd-rule-width: var(--border-width-hairline);
+  --lcrd-rule-width-pressed: var(--border-width-2);
+  --lcrd-radius: var(--radius-0);
+  --lcrd-shadow: var(--shadow-none);
+  --lcrd-ring-width: var(--focus-ring-width);
+  --lcrd-ring-offset: var(--focus-ring-offset);
+  --lcrd-transition-duration: var(--duration-fast);
+  --lcrd-transition-easing: var(--easing-standard);
+}
+
+/* ── Surface: paper ─────────────────────────────────────────────────────────────
+   Static title and marker use neutral-900; body drops to 700. A linked title and cue run through
+   brandeis 500 → 600 → 700, while the neutral-300 base hairline stays decoration underneath the
+   currentColor overlay. */
+:root,
+[data-surface='paper'] {
+  --lcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --lcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --lcrd-marker-ink: var(--color-neutral-900); /* 14.62:1 */
+  --lcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --lcrd-link-ink-hover: var(--color-brandeis-600); /* 7.52:1 */
+  --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
+  --lcrd-rule-ink: var(--color-neutral-300); /* decoration */
+  --lcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
+  --lcrd-ring-gap-color: var(--color-paper);
+}
+
+/* ── Surface: tint ──────────────────────────────────────────────────────────────
+   The text and action ramps still clear their floors on paper-deep, so they are restated at the
+   same steps. The base rule moves to neutral-400 to remain present on the deeper ground. */
+[data-surface='tint'] {
+  --lcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --lcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
+  --lcrd-marker-ink: var(--color-neutral-900); /* 13.06:1 */
+  --lcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --lcrd-link-ink-hover: var(--color-brandeis-600); /* 6.72:1 */
+  --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
+  --lcrd-rule-ink: var(--color-neutral-400); /* decoration */
+  --lcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
+  --lcrd-ring-gap-color: var(--color-paper-deep);
+}
+
+/* ── Surface: ink ───────────────────────────────────────────────────────────────
+   The direction inverts. Static title/marker lift to white and body to neutral-300. The linked
+   ramp lifts to brandeis 300 → 100 → 50 because brandeis-500 is only 2.77:1 here. The rule drops
+   to neutral-700 so a twelve-row block does not become a light ladder. */
+[data-surface='ink'] {
+  --lcrd-title-ink: var(--color-white); /* 17.26:1 */
+  --lcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --lcrd-marker-ink: var(--color-white); /* 17.26:1 */
+  --lcrd-link-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --lcrd-link-ink-hover: var(--color-brandeis-100); /* 13.61:1 */
+  --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 15.44:1 */
+  --lcrd-rule-ink: var(--color-neutral-700); /* decoration */
+  --lcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
+  --lcrd-ring-gap-color: var(--color-neutral-950);
+}
+
+/* ── Surface: blue ──────────────────────────────────────────────────────────────
+   The light end is the only end that clears AA: link 100 → white → 50, static title/marker white,
+   body 50. Pressed remains distinct from hover through both ink and the doubled rule. */
+[data-surface='blue'] {
+  --lcrd-title-ink: var(--color-white); /* 6.23:1 */
+  --lcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --lcrd-marker-ink: var(--color-white); /* 6.23:1 */
+  --lcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --lcrd-link-ink-hover: var(--color-white); /* 6.23:1 */
+  --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
+  --lcrd-rule-ink: var(--color-brandeis-300); /* decoration */
+  --lcrd-ring-color: var(--color-white); /* 6.23:1 against gap */
+  --lcrd-ring-gap-color: var(--color-brandeis-500);
+}

@@ -2,15 +2,15 @@
 
 ## 0 · Front matter
 
-|                     |                                      |
-| ------------------- | ------------------------------------ |
-| **Component**       | `ListCard`                           |
-| **Tier**            | 2 pattern (`src/patterns/ListCard/`) |
-| **Status**          | accepted                             |
-| **Token prefix**    | `--lcrd-*`                           |
-| **Designer / date** | Codex / 21 Aug 2026                  |
-| **Implements**      | `docs/briefs/11-list-card.md`        |
-| **Implemented at**  | Pending build                        |
+|                     |                                                                                                                        |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **Component**       | `ListCard`                                                                                                             |
+| **Tier**            | 2 pattern (`src/patterns/ListCard/`)                                                                                   |
+| **Status**          | implemented                                                                                                            |
+| **Token prefix**    | `--lcrd-*`                                                                                                             |
+| **Designer / date** | Codex / 21 Aug 2026                                                                                                    |
+| **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
+| **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
 
 ## 1 · Identity
 
@@ -488,12 +488,32 @@ one whole-row anchor. **Recommendation and draft decision: one whole-row native 
 the large row target honest, gives one focus stop, and lets `href` control cue presence without a
 second prop.
 
+---
+
+## Decisions the build made that this document did not
+
+Three implementation details complete the accepted contract without changing it:
+
+1. **Native thumbnail metadata is 480 × 320, lazy and asynchronous.** The intrinsic dimensions
+   preserve the accepted 3:2 frame before CSS loads; `loading="lazy"` and `decoding="async"` keep a
+   row image from blocking the surrounding list. The repository still has no Image primitive or
+   `next/image` precedent, so the one native-image lint suppression is local to this documented
+   contract.
+2. **The root states its full-line behavior directly.** `inline-size: 100%` makes each `li` occupy
+   one available line even when its parent is a wrapping `Cluster`; `min-inline-size: 0` still lets
+   an illegally narrow parent shrink and wrap the row rather than widening the page.
+3. **The specimen adds an xs track and a neutral image fixture.** The route-local harness gains a
+   192px `trackXs` beside its existing 256px track, and `/public/design/list-card-sample.svg`
+   supplies predictable 3:2 content. Neither is product API or component styling.
+
+---
+
 ## Appendix — self-audit
 
 ```
 STRUCTURE
 [x] All 18 sections present, in order, with the exact headings.
-[x] Front matter states Tier 2 pattern, Status accepted, and token prefix --lcrd-*. The prefix has
+[x] Front matter states Tier 2 pattern, Status implemented, and token prefix --lcrd-*. The prefix has
     no repository collision.
 [x] Every Anatomy part appears in colour, geometry, or is explicitly marked as carrying no value.
 

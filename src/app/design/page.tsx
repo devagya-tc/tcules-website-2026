@@ -78,6 +78,11 @@ const SPECIMENS = [
         note: 'the three-field form — 2 label sets, async lifecycle, 4 surfaces',
       },
       {
+        href: '/design/list-card',
+        name: 'ListCard',
+        note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces',
+      },
+      {
         href: '/design/page-hero',
         name: 'PageHero',
         note: 'the page opening — slot ladder, paragraph ladder, byline shapes, 4 surfaces, its own band',
