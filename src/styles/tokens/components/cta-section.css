@@ -4,18 +4,56 @@
    control value. There are deliberately no CTA background, border, radius,
    shadow, state, or spacing tokens.
 
-   The seven type tokens are surface-independent. The five ink tokens are
+   The type and measure tokens are surface-independent. The five ink tokens are
    repeated in full on every surface so a nested surface cannot inherit a value
-   from the surrounding band. */
+   from the surrounding band.
+
+   Every companion and every measure is aliased through this prefix rather than
+   read from --text-* or --measure-* in the module, following --foot-title-
+   tracking and --foot-body-measure, so CtaSection.module.css reads nothing but
+   --cta-*. That is not tidiness: it is what keeps a role and its tracking one
+   decision in one place, which the `offer` block below depends on. */
 
 :root {
   --cta-eyebrow-text: var(--text-eyebrow);
+  --cta-eyebrow-tracking: var(--text-eyebrow-tracking);
   --cta-heading-text: var(--text-h2);
+  --cta-heading-tracking: var(--text-h2-tracking);
   --cta-lead-text: var(--text-lead);
   --cta-body-text: var(--text-body-lg);
   --cta-point-text: var(--text-body);
   --cta-detail-text: var(--text-body-sm);
   --cta-marker-text: var(--text-micro);
+  --cta-marker-tracking: var(--text-micro-tracking);
+
+  /* Two measures. The heading takes the title measure so a three-line close
+     keeps the shape of a statement; everything that runs takes the body
+     measure. `label` deliberately takes neither — it is a step name in an
+     ordered list, not running text, and the list's own track caps the row.
+     --cta-lead-text and --cta-body-text have no tracking companion: --text-lead
+     and --text-body-lg are two of the seven roles that ship none, so a
+     --cta-lead-tracking would name a value that does not exist. */
+  --cta-heading-measure: var(--measure-title);
+  --cta-body-measure: var(--measure-body);
+}
+
+/* ── The offer's heading steps down, and BOTH halves step together ───────────
+   `offer` interrupts a page mid-scroll rather than closing it, so its heading
+   drops one rung to --text-h3 — a mid-page ask that shouted at closing-block
+   scale would compete with the section it interrupts.
+
+   Size and tracking are re-declared here as one edit, keyed on the attribute
+   the component already emits (data-arrangement="offer" on the band). They used
+   to be split: the size remapped by a class in the module and the tracking
+   hard-wired in two separate module selectors. That is the one arrangement in
+   this system where a role's size and its correction can drift apart —
+   re-tune --cta-heading-text and the tracking silently keeps the old role's
+   value — and the token rules call size and its companion one typographic
+   decision for exactly this reason. Keeping them in one block is what makes
+   that impossible rather than merely unlikely. */
+[data-arrangement='offer'] {
+  --cta-heading-text: var(--text-h3);
+  --cta-heading-tracking: var(--text-h3-tracking);
 }
 
 :root,

@@ -137,6 +137,12 @@ type CtaFormSlot =
 
 Variants are role-named, and there is **one size**.
 
+**One correction from the build.** The `actions` row of the table below said `1` for `offer` while
+section 3's `CtaFormSlot` says "one or two" and the implementation accepts both. The table was the
+half that was never narrowed — nothing in the corpus or the constraints argues for capping `offer`
+at one action, and section 14's don't-19 holds either way, because index 1 is always `ghost`. So the
+table is corrected to match the type rather than the type to the table.
+
 | | `md` (only size) |
 |---|---|
 | `split` — the enquiry close, 56 instances | the component, two columns, form right |
@@ -151,7 +157,7 @@ Variants are role-named, and there is **one size**.
 | `heading` | `--text-h2`, always | `--text-h2`, always | `--text-h3`, always |
 | `lead` + `body` | 1–2 | 1–2 | 1–2 |
 | `points` | vertical list, content column | 3-up row, 392px tracks | wrapping inline row |
-| `actions` | the scheduling link only, under the form | 1–2, under the points | 1, under the points |
+| `actions` | the scheduling link only, under the form | 1–2, under the points | **1 or 2**, under the points |
 | `form` | required, right column | forbidden | optional, under the copy |
 | `proof` | optional, full-width row | optional, right column | forbidden |
 | band | `--sec-padding-y` 96px | `--sec-padding-y` 96px | `--sec-padding-y-tight` 64px |

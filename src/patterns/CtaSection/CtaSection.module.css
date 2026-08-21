@@ -1,10 +1,57 @@
-/* CtaSection owns type and ink only. Section paints the band; Layout and Cluster
-   own every seam and arrangement; Button owns every interactive value. */
+/* CtaSection — the block that closes a commercial page, built to docs/specs/CtaSection.md.
 
-.offer {
-  --cta-heading-text: var(--text-h3);
-}
+   This file owns TYPE AND INK, and nothing else. `Section` paints the band and owns the content
+   column; `Layout` and `Cluster` own every seam and every arrangement; `Button` owns every
+   interactive value. Seven rules, seven parts that carry colour or type, and no fourth thing.
 
+   Every value it reads is a `var(--cta-*)` declared in tokens/components/cta-section.css, which
+   re-declares the five inks once per surface. So the same markup answers paper, tint, an ink band
+   and the blue pivot without knowing which it is standing on.
+
+   ── What is NOT here, and why each absence is a decision ────────────────────────
+   No `background`, no `color` on the root, no `padding-inline`, no `max-width` and no
+   `--cta-*-bg-*` token. The component hands a `surface` to `Section` and `Section` paints; the
+   ground is `--sec-ground` and nothing else. That is the hard constraint "must not own its ground"
+   read as a rule about what this stylesheet may contain rather than about which props exist, and
+   the spec's §14 names the grep that proves it.
+
+   No `display: grid` and no `display: flex`. All three arrangements are `Layout` and `Cluster` in
+   the TSX — the two-column split, the 3-up points row in `open`, the wrapping row in `offer`.
+   There is nothing left for a local grid to do.
+
+   No margin, no padding, no reach into `--space-*`. The one optical correction available — the
+   mono numeral in `marker` sits a shade high against the sans label beside it — is declined in the
+   spec's §7(c) rather than taken.
+
+   No `@media`, no `transition`, no `transform`, no `animation`, no `opacity`. There are no states
+   to interpolate between: nothing here responds to a pointer and nothing opens. The only stateful
+   things in the band are the `Button`s and whatever the caller passes into the form slot.
+
+   No `--cta-*` state token exists at all, which is that assertion in the token layer.
+
+   ── Why the size and tracking pairs are NOT in this file ────────────────────────
+   `offer` renders its heading one rung down, at `--text-h3`. That remap lives in the token layer,
+   keyed on `[data-arrangement='offer']`, because a role's size and its tracking companion are one
+   typographic decision and must move together. This file previously remapped the size with an
+   `.offer` class and hard-wired the two tracking values in two separate selectors, which meant
+   re-tuning the size in the token layer left the tracking silently at the old role's value. The
+   `.offer` class is gone with it: the component already emits `data-arrangement` on the band for
+   the spec's own acceptance check, so the discriminator was there to be used.
+
+   ── Rule order is not load-bearing ─────────────────────────────────────────────
+   One shared wrapping rule, then seven part rules with distinct selectors, no shared property
+   between any two and no state pair decided by source order. A consequence of having no states. */
+
+/* ── Every text part breaks inside a word ───────────────────────────────────────
+   Six parts, one rule. A 60-character unbroken token in an `h2` is a content fault and should look
+   like one, but it must not take the page's layout with it — the band never produces a horizontal
+   scrollbar, at any width, for any content. `anywhere` rather than `break-word` because these
+   parts sit in narrow tracks (the 470px form column, the 3-up points row) where a token can be
+   wider than its track while still being narrower than the band.
+
+   A `Button` label is deliberately NOT in this list. It is typed `string`, it never wraps and
+   never truncates, and a URL in one is a copy bug that should show as a conspicuously wide
+   button rather than being quietly folded. */
 .eyebrow,
 .heading,
 .lead,
@@ -14,52 +61,77 @@
   overflow-wrap: anywhere;
 }
 
+/* ── The eyebrow ───────────────────────────────────────────────────────────────
+   The one `text-transform` in the component. `--text-eyebrow` is a mono semibold role whose
+   tracking exists FOR capitals: set lower case, a tracked mono label reads as letter-spaced body
+   text rather than as a label. Applied here rather than in the data, so the frontmatter keeps its
+   authored casing and reversing the decision is one declaration. */
 .eyebrow {
-  max-inline-size: var(--measure-body);
+  max-inline-size: var(--cta-body-measure);
   color: var(--cta-eyebrow-ink);
   font: var(--cta-eyebrow-text);
-  letter-spacing: var(--text-eyebrow-tracking);
+  letter-spacing: var(--cta-eyebrow-tracking);
   text-transform: uppercase;
 }
 
+/* ── The heading ───────────────────────────────────────────────────────────────
+   An `h2` in all three arrangements — the page's one `h1` belongs to `PageHero`, and this block
+   appears once or twice per route, so it can never be the page's title. `offer` renders it at h3
+   SCALE, which is a type role rather than a level; the remap is in the token layer.
+
+   `text-wrap: balance` because this is the loudest line in the band and a widow in it is visible
+   across a room. It wraps to at most three lines inside the title measure. Never clamped and never
+   truncated: `heading=""` renders an empty `h2` on purpose, because the region is labelled from it
+   and an unnamed region is a findable fault where a placeholder string is a shipped one. */
 .heading {
-  max-inline-size: var(--measure-title);
+  max-inline-size: var(--cta-heading-measure);
   color: var(--cta-heading-ink);
   font: var(--cta-heading-text);
-  letter-spacing: var(--text-h2-tracking);
+  letter-spacing: var(--cta-heading-tracking);
   text-wrap: balance;
 }
 
-.offer .heading {
-  letter-spacing: var(--text-h3-tracking);
-}
+/* ── The copy · two roles, one measure ─────────────────────────────────────────
+   `body[0]` at `--text-lead` and `body[1]` at `--text-body-lg`, which gives one or two paragraphs
+   an internal hierarchy with no prop and no count-driven rule. A third paragraph does not compile:
+   this block asks, it does not explain.
 
+   Both share `--cta-body-measure` and resolve to different widths on purpose, because `ch` is
+   relative to each part's own role. Neither role has a tracking companion, so neither states one. */
 .lead {
-  max-inline-size: var(--measure-body);
+  max-inline-size: var(--cta-body-measure);
   color: var(--cta-body-ink);
   font: var(--cta-lead-text);
 }
 
 .body {
-  max-inline-size: var(--measure-body);
+  max-inline-size: var(--cta-body-measure);
   color: var(--cta-body-ink);
   font: var(--cta-body-text);
 }
 
+/* ── The points · marker, label, detail ────────────────────────────────────────
+   Three rules, no box, no rule, no bullet glyph. The marker is the list position written as a
+   numeral, and it carries a real contrast floor rather than a decoration exemption: it is
+   `aria-hidden` because a screen reader takes position from the `<ol>`, but a sighted reader counts
+   the steps with it, so it is meaningful text at 4.5:1.
+
+   `label` takes no measure — it is a step name in an ordered list rather than running text, and the
+   list's own track caps the row. `detail` takes the body measure because it is a clause. That
+   asymmetry is the reason the two are separate parts sharing one ink. */
 .marker {
   color: var(--cta-marker-ink);
   font: var(--cta-marker-text);
-  letter-spacing: var(--text-micro-tracking);
+  letter-spacing: var(--cta-marker-tracking);
 }
 
 .label {
   color: var(--cta-point-ink);
   font: var(--cta-point-text);
-  overflow-wrap: anywhere;
 }
 
 .detail {
-  max-inline-size: var(--measure-body);
+  max-inline-size: var(--cta-body-measure);
   color: var(--cta-point-ink);
   font: var(--cta-detail-text);
 }
