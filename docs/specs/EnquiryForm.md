@@ -16,7 +16,7 @@ Three things were read rather than assumed, and they change the shape of this do
 
 1. **`CtaSection` exists.** It is a shipped pattern with `form?: React.ReactNode`, `scheduleHref?: string`, `actions`, `proof`, `arrangement="split" | "open" | "offer"` and `surface`. So the ground, the content column, the heading, the body, the points, the schedule link and the vertical air are **not in this spec**. This component is what goes in `form`.
 2. **`Button` exists** and owns every action treatment — including the one thing this component cannot express (see §16, Button `busy`).
-3. **`Field` does not exist yet, and the owner approved specifying and building it first** (§17 Q1). The control rows below are the accepted source for that primitive; `EnquiryForm` composes it rather than drawing a second private field system.
+3. **`Input` does not exist yet, and the owner approved the repository's existing `Input` / `--inp-*` reservation** (§17 Q9). It is the control-only primitive: `EnquiryForm` keeps labels, flags and messages, and composes `Input` for the input and textarea boxes. The footer migrates to its `quiet` emphasis without changing appearance.
 
 ---
 
@@ -31,7 +31,7 @@ Three things were read rather than assumed, and they change the shape of this do
 | It is not | What does that instead |
 |---|---|
 | A section, a band or a ground | `CtaSection` — it paints the surface, owns the 1240 column and the vertical air, and emits `data-surface` that this component reads |
-| A text field | `Field` (tier 1), approved in §17 Q1 and built first. `EnquiryForm` composes it and draws no input treatment of its own |
+| A text input or textarea box | `Input` (tier 1), approved in §17 Q9 and built first. `EnquiryForm` composes it and draws no control treatment of its own; labels and messages remain this pattern's responsibility |
 | The scheduling action, or the button that opens the scheduler | `CtaSection`'s `scheduleHref`, rendered by `Button` — outside this component and outside the `<form>`. The one exception is the Success panel, which receives a ready-made node in `scheduleAction` (§3) |
 
 **Nearest existing component, and why this is not a prop on it.** `SiteFooter`'s newsletter field — one input, one submit, its own `--foot-field-*` token set (`--foot-field-height` 40, `--foot-field-padding-x` 12, `--foot-field-radius` 8, `--foot-field-rule-width` 1, `--foot-field-min-inline` 16rem). It is not a prop on `SiteFooter` because a footer capture is one input with no validity, no async lifecycle and no success replacement; and it is not a prop on `CtaSection` because `CtaSection` deliberately has no route or content-source knowledge, while this thing exists to carry seven route-derived hidden fields. The overlap is the *control*, not the form — which is Q1 again.
@@ -75,6 +75,8 @@ Content slots the caller fills: the label set (§3 `variant`, `urlLabel`), `cont
 | `scheduleAction` | `React.ReactNode` | `undefined` | The already-constructed scheduling control the **Success** panel shows. The caller builds it and lazily loads whatever it opens; this component never imports a scheduler |
 | `onSubmitted` | `(() => void) \| undefined` | `undefined` | Analytics hook. Fires once, after Success renders |
 
+**Approved tier-1 dependency.** `Input` renders either an `input` or a `textarea` through a discriminated `as="input" | "textarea"` API, forwards the native attributes for that element, and exposes `emphasis="standard" | "quiet"` with `standard` as the default. `invalid` emits the invalid class and `aria-invalid="true"`; native `disabled` carries Submitting. `quiet` exists to discharge the repository reservation without changing the footer's rendered treatment (§17 Q9). `EnquiryForm` uses `standard`; `SiteFooter` uses `quiet`.
+
 **Deliberately NOT props, and why**
 
 | Not a prop | Why |
@@ -105,7 +107,7 @@ Variants are label sets, not shapes. There is **one size**.
 | `enquiry` (49 routes) | email · "What are you working on?" · optional URL (three wordings) · submit "Send enquiry" · 6 hidden fields |
 | `audit` (7 routes) | email · "What are you working on?" · optional URL ("URL of the site to audit") · submit "Request free audit" · 7 hidden fields (`intent`) |
 
-**Steps with size:** nothing, because there is one size. The submit is `Button size="md"` so that `--btn-height-md` 40px and `--enq-field-height` 40px agree; a second form size would break that agreement in both directions at once and no route asks for one.
+**Steps with size:** nothing, because there is one size. The submit is `Button size="md"` so that `--btn-height-md` 40px and `--inp-height-md` 40px agree; a second form size would break that agreement in both directions at once and no route asks for one.
 
 **Deliberately does not step:** the field height, the gap steps and the type roles are identical in both variants. The two variants differ in **five strings and one hidden input** — nothing geometric.
 
@@ -127,11 +129,11 @@ From the fixed model, and nothing else:
 | Model state | Suffix | Applies? | Parts whose value moves |
 |---|---|---|---|
 | rest | none | yes | base for every part |
-| hover | `-hover` | yes | `control` — `--enq-field-rule-hover` only. The label, value and ground hold |
-| focus (keyboard) | `-hover` + ring | yes | `control` — the hover rule value **plus** `--enq-field-ring` at `--focus-ring-width` / `--focus-ring-offset` |
+| hover | `-hover` | yes | `control` — `--inp-standard-rule-hover` only. The label, value and ground hold |
+| focus (keyboard) | `-hover` + ring | yes | `control` — the hover rule value **plus** `--inp-standard-ring-color` at `--focus-ring-width` / `--focus-ring-offset` |
 | pressed | `-pressed` | **no** | Excluded. Nothing in this component is pressable: the only press target is `submit`, and `Button` owns `--btn-*-pressed`. No `--enq-*-pressed` token exists, and that absence is the assertion that nothing here changes on `:active` |
 | held (active / current) | `-pressed` | **no** | Excluded. No control here is ever "the current one" |
-| disabled | own tokens | yes | `control` — `--enq-field-ground-disabled`, `--enq-field-ink-disabled`, `--enq-field-rule-disabled`. No `opacity`, anywhere, ever. Reached only while Submitting |
+| disabled | own tokens | yes | `control` — `--inp-disabled-bg`, `--inp-disabled-fg`, `--inp-disabled-rule`. No `opacity`, anywhere, ever. Reached only while Submitting |
 | expanded | `-expanded` | **no** | Excluded. Nothing opens |
 
 **The brief's five states, mapped onto that model.** Three of the five are not in the model at all and are raised as mechanisms in §16 — they are written here so the argument is visible, not so it is smuggled in.
@@ -139,7 +141,7 @@ From the fixed model, and nothing else:
 | Brief state | How it is built | Rule |
 |---|---|---|
 | **Idle** | rest | `message` and `status` present and empty |
-| **Invalid** | `control` at `--enq-field-rule-invalid` and `--border-width-2`, `aria-invalid="true"`, `message` filled, plus the `close-circle` glyph inside the message | **Per field, on blur.** Never on keystroke, never on submit-sweep. A field the visitor has not left yet has not been judged |
+| **Invalid** | `control` at `--inp-invalid-rule` and `--border-width-2`, `aria-invalid="true"`, `message` filled, plus the `close-circle` glyph inside the message | **Per field, on blur.** Never on keystroke, never on submit-sweep. A field the visitor has not left yet has not been judged |
 | **Submitting** | `submit` **busy, not disabled** (§16 request 3); the three `control`s disabled; `status` filled; `aria-busy="true"` on `form` | The label and the focus survive because the button survives. Focus is moved to `submit` before the controls disable (§11) |
 | **Success** | `form` unmounts; `success` mounts in its place | Replaces the form. Nothing is left to fill in |
 | **Error** | `submit` returns to rest, controls re-enable, `status` filled and its rule moves to `--enq-status-rule-error` | **Keeps every character typed.** The component never re-mounts the controls on failure |
@@ -150,22 +152,23 @@ Hover and pressed cannot be identical here because pressed does not exist; the a
 
 ## 6. Per-surface colour
 
-One row per token, four columns, every cell a real name. Rows 1–13 are the control rows: **Q1 is accepted, so they move verbatim to `--fld-*` and this table keeps rows 14–19.** `--color-danger-*` is approved in §17 Q2 and is marked (req) wherever it appears.
+One row per token, four columns, every cell a real name. The control rows are owned by the approved `Input` / `--inp-*` layer; the label, flag, message, status, success and caption rows stay under `--enq-*`. `--color-danger-*` is approved in §17 Q2 and is marked (req) wherever it appears.
 
 | Token | paper | tint | ink | blue |
 |---|---|---|---|---|
 | `--enq-label-ink` | `--color-neutral-700` · 8.14:1 on `--color-paper` | `--color-neutral-700` · 7.27:1 on `--color-paper-deep` | `--color-neutral-200` · 12.83:1 on `--color-neutral-950` | `--color-brandeis-50` · 5.57:1 on `--color-brandeis-500` |
 | `--enq-flag-ink` | `--color-neutral-600` · 4.92:1 on `--color-paper` | `--color-neutral-700` · 7.27:1 on `--color-paper-deep` | `--color-neutral-400` · 8.05:1 on `--color-neutral-950` | `--color-brandeis-100` · 4.91:1 on `--color-brandeis-500` |
-| `--enq-field-ground` | `--color-white` · n/a — decoration | `--color-paper` · n/a — decoration | `--color-neutral-900` · n/a — decoration | `--color-white` · n/a — decoration |
-| `--enq-field-ink` | `--color-neutral-900` · 14.75:1 on `--color-white` | `--color-neutral-900` · 14.62:1 on `--color-paper` | `--color-neutral-50` · 13.53:1 on `--color-neutral-900` | `--color-neutral-900` · 14.75:1 on `--color-white` |
-| `--enq-field-placeholder-ink` | `--color-neutral-600` · 4.97:1 on `--color-white` | `--color-neutral-600` · 4.92:1 on `--color-paper` | `--color-neutral-400` · 6.88:1 on `--color-neutral-900` | `--color-neutral-600` · 4.97:1 on `--color-white` |
-| `--enq-field-rule` | `--color-neutral-300` · n/a — decoration | `--color-neutral-400` · n/a — decoration | `--color-neutral-700` · n/a — decoration | `--color-brandeis-200` · n/a — decoration |
-| `--enq-field-rule-hover` | `--color-neutral-500` · n/a — decoration | `--color-neutral-600` · n/a — decoration | `--color-neutral-500` · n/a — decoration | `--color-brandeis-400` · n/a — decoration |
-| `--enq-field-ring` | `--color-brandeis-500` · 6.18:1 on `--color-paper` (its gap colour) | `--color-brandeis-500` · 5.51:1 on `--color-paper-deep` | `--color-brandeis-300` · 7.32:1 on `--color-neutral-950` | `--color-white` · 6.23:1 on `--color-brandeis-500` |
-| `--enq-field-ground-disabled` | `--color-neutral-100` · n/a — decoration | `--color-neutral-200` · n/a — decoration | `--color-neutral-950` · n/a — decoration | `--color-neutral-100` · n/a — decoration |
-| `--enq-field-ink-disabled` | `--color-neutral-500` · 2.67:1 on `--color-neutral-100` — **deliberate exception, disabled is exempt** | `--color-neutral-500` · 2.37:1 on `--color-neutral-200` — **deliberate exception** | `--color-neutral-600` · 3.48:1 on `--color-neutral-950` — **deliberate exception** | `--color-neutral-500` · 2.67:1 on `--color-neutral-100` — **deliberate exception** |
-| `--enq-field-rule-disabled` | `--color-neutral-200` · n/a — decoration | `--color-neutral-300` · n/a — decoration | `--color-neutral-800` · n/a — decoration | `--color-neutral-300` · n/a — decoration |
-| `--enq-field-rule-invalid` | `--color-danger-600` (req) · n/a — decoration | `--color-danger-600` (req) · n/a — decoration | `--color-danger-300` (req) · n/a — decoration | `--color-danger-100` (req) · n/a — decoration |
+| `--inp-standard-bg` | `--color-white` · n/a — decoration | `--color-paper` · n/a — decoration | `--color-neutral-900` · n/a — decoration | `--color-white` · n/a — decoration |
+| `--inp-standard-fg` | `--color-neutral-900` · 14.75:1 on `--color-white` | `--color-neutral-900` · 14.62:1 on `--color-paper` | `--color-neutral-50` · 13.53:1 on `--color-neutral-900` | `--color-neutral-900` · 14.75:1 on `--color-white` |
+| `--inp-standard-placeholder-fg` | `--color-neutral-600` · 4.97:1 on `--color-white` | `--color-neutral-600` · 4.92:1 on `--color-paper` | `--color-neutral-400` · 6.88:1 on `--color-neutral-900` | `--color-neutral-600` · 4.97:1 on `--color-white` |
+| `--inp-standard-rule` | `--color-neutral-300` · n/a — decoration | `--color-neutral-400` · n/a — decoration | `--color-neutral-700` · n/a — decoration | `--color-brandeis-200` · n/a — decoration |
+| `--inp-standard-rule-hover` | `--color-neutral-500` · n/a — decoration | `--color-neutral-600` · n/a — decoration | `--color-neutral-500` · n/a — decoration | `--color-brandeis-400` · n/a — decoration |
+| `--inp-standard-ring-color` | `--color-brandeis-500` · 6.18:1 on `--color-paper` (its gap colour) | `--color-brandeis-500` · 5.51:1 on `--color-paper-deep` | `--color-brandeis-300` · 7.32:1 on `--color-neutral-950` | `--color-white` · 6.23:1 on `--color-brandeis-500` |
+| `--inp-standard-ring-gap-color` | `--color-paper` · n/a — decoration | `--color-paper-deep` · n/a — decoration | `--color-neutral-950` · n/a — decoration | `--color-brandeis-500` · n/a — decoration |
+| `--inp-disabled-bg` | `--color-neutral-100` · n/a — decoration | `--color-neutral-200` · n/a — decoration | `--color-neutral-950` · n/a — decoration | `--color-neutral-100` · n/a — decoration |
+| `--inp-disabled-fg` | `--color-neutral-500` · 2.67:1 on `--color-neutral-100` — **deliberate exception, disabled is exempt** | `--color-neutral-500` · 2.37:1 on `--color-neutral-200` — **deliberate exception** | `--color-neutral-600` · 3.48:1 on `--color-neutral-950` — **deliberate exception** | `--color-neutral-500` · 2.67:1 on `--color-neutral-100` — **deliberate exception** |
+| `--inp-disabled-rule` | `--color-neutral-200` · n/a — decoration | `--color-neutral-300` · n/a — decoration | `--color-neutral-800` · n/a — decoration | `--color-neutral-300` · n/a — decoration |
+| `--inp-invalid-rule` | `--color-danger-600` (req) · n/a — decoration | `--color-danger-600` (req) · n/a — decoration | `--color-danger-300` (req) · n/a — decoration | `--color-danger-100` (req) · n/a — decoration |
 | `--enq-message-invalid-ink` | `--color-danger-600` (req) · 6.48:1 on `--color-paper` | `--color-danger-600` (req) · 5.78:1 on `--color-paper-deep` | `--color-danger-300` (req) · 8.65:1 on `--color-neutral-950` | `--color-danger-100` (req) · 5.03:1 on `--color-brandeis-500` |
 | `--enq-status-ink` | `--color-neutral-900` · 14.62:1 on `--color-paper` | `--color-neutral-900` · 13.06:1 on `--color-paper-deep` | `--color-neutral-100` · 14.47:1 on `--color-neutral-950` | `--color-white` · 6.23:1 on `--color-brandeis-500` |
 | `--enq-status-rule` | `--color-neutral-300` · n/a — decoration | `--color-neutral-400` · n/a — decoration | `--color-neutral-700` · n/a — decoration | `--color-brandeis-200` · n/a — decoration |
@@ -174,7 +177,19 @@ One row per token, four columns, every cell a real name. Rows 1–13 are the con
 | `--enq-success-rule` | `--color-success-500` · n/a — decoration (3.01:1 on `--color-paper`) | `--color-success-500` · n/a — decoration (2.69:1 on `--color-paper-deep`) | `--color-success-500` · n/a — decoration (5.68:1 on `--color-neutral-950`) | `--color-white` · n/a — decoration (6.23:1 on `--color-brandeis-500`) |
 | `--enq-caption-ink` | `--color-neutral-600` · 4.92:1 on `--color-paper` | `--color-neutral-700` · 7.27:1 on `--color-paper-deep` | `--color-neutral-400` · 8.05:1 on `--color-neutral-950` | `--color-brandeis-100` · 4.91:1 on `--color-brandeis-500` |
 
-19 rows × 4 cells = 76 cells, none empty, none a delta.
+20 rows × 4 cells = 80 cells, none empty, none a delta. Eleven rows belong to `Input`; nine belong to `EnquiryForm`.
+
+**`Input emphasis="quiet"` — the preserved footer treatment.** These seven tokens move verbatim from `footer.css`; they are not deltas from `standard`, and each surface remains self-contained. Disabled and invalid continue to read the four shared `--inp-disabled-*` / `--inp-invalid-rule` rows above.
+
+| Token | paper | tint | ink | blue |
+|---|---|---|---|---|
+| `--inp-quiet-bg` | `--color-white` | `--color-white` | `--color-neutral-900` | `--color-brandeis-600` |
+| `--inp-quiet-fg` | `--color-neutral-900` | `--color-neutral-900` | `--color-white` | `--color-white` |
+| `--inp-quiet-placeholder-fg` | `--color-neutral-500` | `--color-neutral-500` | `--color-neutral-500` | `--color-brandeis-200` |
+| `--inp-quiet-rule` | `--color-neutral-300` | `--color-neutral-400` | `--color-neutral-700` | `--color-brandeis-400` |
+| `--inp-quiet-rule-focus` | `--color-brandeis-500` | `--color-brandeis-500` | `--color-brandeis-300` | `--color-white` |
+| `--inp-quiet-ring-color` | `--color-brandeis-500` | `--color-brandeis-500` | `--color-brandeis-300` | `--color-white` |
+| `--inp-quiet-ring-gap-color` | `--color-paper` | `--color-paper-deep` | `--color-neutral-950` | `--color-brandeis-500` |
 
 **paper.** The control lifts off the band rather than sinking into it: `--color-white` against `--color-paper` is a half-step of warmth, enough to read as an inset without a shadow (there is only `--shadow-none`). Because the field ground is whiter than the band, the placeholder can sit at `--color-neutral-600` and still clear the floor at 4.97:1 — measured on white, not on paper, which is the distinction the delta-table failure was made of. The ring is `--color-brandeis-500` at 6.18:1 against the band showing through the 2px offset.
 
@@ -184,7 +199,7 @@ One row per token, four columns, every cell a real name. Rows 1–13 are the con
 
 **blue.** The loudest ground gets the quietest form: the control returns to `--color-white`, so rows 4–5 are the paper values again and the field is the calmest rectangle in the band. The ring cannot be blue on blue, so it is `--color-white` at 6.23:1. This is the tightest column in the table — the label at `--color-brandeis-50` is 5.57:1 and the flag and caption at `--color-brandeis-100` are 4.91:1, with no rung left below them, which is why `--color-brandeis-200` (3.78:1) appears here only as a rule and never as text. `--enq-success-rule` is the one row where the value is not the semantic colour: `--color-success-500` measures 2.05:1 on `--color-brandeis-500` and would read as dirt, so the rule goes `--color-white` and the success meaning is carried by the sentence and the `check` glyph.
 
-**Nested surface.** This component never paints a ground, so it cannot nest a surface — it inherits whichever `data-surface` `CtaSection` emitted and re-declares all 19 tokens under each of the four. The case that actually occurs is the reverse: **this component inside a band whose surface differs from the page's other bands** — e.g. the closing `CtaSection surface="blue"` under a page of `paper` sections. Because every token is declared in full under all four surfaces (no cell inherits from paper), the form is correct the moment the attribute changes, and the specimen's nested band (§15) renders the whole form inside a `blue` band inside an `ink` page to prove no value leaked in from the level above.
+**Nested surface.** Neither component paints a ground: `EnquiryForm` and its child `Input` inherit whichever `data-surface` `CtaSection` emitted, and both token layers restate their complete sets on all four surfaces. The case that actually occurs is the reverse: **this component inside a band whose surface differs from the page's other bands** — e.g. the closing `CtaSection surface="blue"` under a page of `paper` sections. The specimen's nested band (§15) renders the whole form inside a `blue` band inside an `ink` page to prove no value leaked in from the level above.
 
 ---
 
@@ -208,17 +223,18 @@ The non-uniform rhythm is nesting, not a knob: `tight` inside a group, `block` b
 
 | Name | Token | Value | Measured against |
 |---|---|---|---|
-| field height, md | `--enq-field-height` | 40px | `--btn-height-md` 40px — the submit sits directly under the fields and the two boxes must agree; also equals `--foot-field-height` 40px, so the site has one field height |
-| field height, touch | `--enq-field-height-touch` | 44px | `--btn-hit-min` / `--crumb-hit-min` 44px — the touch floor the rest of the system already states |
-| field inline padding | `--enq-field-padding-x` | 12px | `--foot-field-padding-x` 12px and `--nav-item-padding-x` 12px — the existing inset for a 40px control |
-| field min inline size | `--enq-field-min-inline` | 256px | `--foot-field-min-inline` 16rem, and `--lay-track-sm` 256px — the narrowest track `Layout` can hand it |
+| input height, md | `--inp-height-md` | 40px | `--btn-height-md` 40px — the submit sits directly under the fields and the two boxes must agree; also migrates `--foot-field-height` 40px, so the site has one input height |
+| input height, touch | `--inp-height-touch` | 44px | `--btn-hit-min` / `--crumb-hit-min` 44px — the touch floor the rest of the system already states |
+| input inline padding | `--inp-padding-x` | 12px | migrates `--foot-field-padding-x` 12px and matches `--nav-item-padding-x` 12px — the existing inset for a 40px control |
+| textarea block padding | `--inp-textarea-padding-y` | 12px | the same optical inset on the multiline axis; it is part of the 128px four-line measurement below, not a gap between siblings |
+| input minimum inline size | `--inp-min-inline` | 256px | migrates `--foot-field-min-inline` 16rem, and equals `--lay-track-sm` 256px — the narrowest track `Layout` can hand it |
 | form max inline size | `--enq-form-max-inline` | 470px | the track it holds at ≥1024: `--sec-container` 1240 less `--gap-column` 64, split [3,2] by `CtaSection arrangement="split"` = 470px. Below 1024 the band stacks and the cap stops a 1240-wide email field |
-| textarea min block size | `--enq-textarea-min-block` | 128px | four lines of `--text-body` (16 × 1.6 = 25.6 → 102px) plus the control's own vertical inset (2 × 12px), rounded up to 128 |
+| textarea min block size | `--inp-textarea-min-block` | 128px | four lines of `--text-body` (16 × 1.6 = 25.6 → 102px) plus the control's own vertical inset (2 × 12px), rounded up to 128 |
 | message reserve | `--enq-message-reserve` | 19px | one line of `--text-caption` (13 × 1.45 = 18.85 → 19px). The `message` element is always rendered at this minimum, so filling it moves nothing below it |
 
 ### (c) Optical corrections reaching the space ramp
 
-**None, and why.** Every distance above is a gap-scale role name and every literal is a control size or a container cap measured against an existing one. Nothing in this component sits at an optical edge that the gap scale gets wrong — the one candidate, the label-to-control distance, is genuinely `tight` and should re-tune with the scale. Count: 0.
+Two, both inside `Input`: `--inp-padding-x` and `--inp-textarea-padding-y` reach `--space-12`. They are optical control insets, not sibling separation and not `--gap-*`; the first migrates the footer's existing argued inset, and the second applies the same measured inset on the multiline axis. The label-to-control distance remains genuinely `tight` and should re-tune with the gap scale. Count: 2.
 
 ### Radius, border, shadow, z
 
@@ -259,11 +275,11 @@ The non-uniform rhythm is nesting, not a knob: `tight` inside a group, `block` b
 
 **At 1023.** `CtaSection` collapses its split, so the form stops being a 470px companion track and becomes a full-width block. `--enq-form-max-inline` 470px holds it at the width it was designed for rather than letting the fields run to 1240. Nothing inside the form re-arranges — it was already stacked.
 
-**At 767.** `--enq-field-height` re-declares to `--enq-field-height-touch` 44px and `--enq-textarea-min-block` holds. The form is still one column of three groups.
+**At 767.** `--inp-height-md` re-declares to `--inp-height-touch` 44px and `--inp-textarea-min-block` holds. The form is still one column of three groups.
 
 **What must NOT change.** The gap scale does not shift responsively: `tight`, `block`, `stack` and `text` are the same distances at 375 as at 1440. No media query swaps one step for another and no media query changes a type role — `--text-body` is 16px everywhere, and the title roles that do re-declare at 1023 and 767 all belong to `CtaSection`, not here. The arrangement may change; the distance may not.
 
-**Touch targets — one legal means each, stated.** The three `control`s reach 44px by **stepping the size up** (`--enq-field-height-touch`): each field is the only thing on its row, so growing it moves nothing beside it. The `submit` reaches 44px by **extending the hit area past the box** — `Button extendHitArea` — because it sits in a `Cluster` where a taller box would move the row and break its agreement with the fields above it. `scheduleAction` in the Success panel is built by the caller and must be passed with `extendHitArea` for the same reason (§14).
+**Touch targets — one legal means each, stated.** The three `control`s reach 44px by **stepping the size up** (`--inp-height-touch`): each field is the only thing on its row, so growing it moves nothing beside it. The `submit` reaches 44px by **extending the hit area past the box** — `Button extendHitArea` — because it sits in a `Cluster` where a taller box would move the row and break its agreement with the fields above it. `scheduleAction` in the Success panel is built by the caller and must be passed with `extendHitArea` for the same reason (§14).
 
 ---
 
@@ -381,10 +397,10 @@ Restated, because each has already gone wrong somewhere in this codebase: **no h
 | Many items (2× expected) | Not reachable — six visible fields cannot be requested. The hidden set does double, from 6 to 7 on the audit variant, and hidden inputs have no layout, so nothing shifts |
 | Missing image or missing optional slot | No images anywhere (§16 does not request one). Optional slots: `scheduleAction` absent → the Success panel renders the heading and sentence only, and the `Cluster` that would have held it is not rendered (an empty `Cluster` would still consume its row). `flag` is rendered only on the URL group |
 | Empty required-ish text | `urlLabel` cannot be empty (closed union). If `context` values arrive empty they still render as empty hidden inputs rather than being dropped, so the endpoint always receives seven or six keys and can tell "unknown" from "absent" |
-| The narrow track at 767 | Field height steps to `--enq-field-height-touch` 44px; `--enq-field-min-inline` 256px holds each control; labels may wrap to two lines; the submit stays one line at both label lengths ("Request free audit" is 18 characters at `--btn-*`, ~150px against a 256px minimum) |
-| **A parent that does not size it** (a wrapping row, not a grid track) | The `form` sets `min-inline-size: --enq-field-min-inline` 256px and the controls inherit it, so a `Cluster` or a shrink-to-fit parent cannot collapse it below a usable field. That 256px is the stated minimum; `--enq-form-max-inline` 470px is the stated maximum; between them the form is fluid |
+| The narrow track at 767 | Input height steps to `--inp-height-touch` 44px; `--inp-min-inline` 256px holds each control; labels may wrap to two lines; the submit stays one line at both label lengths ("Request free audit" is 18 characters at `--btn-*`, ~150px against a 256px minimum) |
+| **A parent that does not size it** (a wrapping row, not a grid track) | The `form` sets `min-inline-size: --inp-min-inline` 256px and the controls share that minimum, so a `Cluster` or a shrink-to-fit parent cannot collapse it below a usable field. That 256px is the stated minimum; `--enq-form-max-inline` 470px is the stated maximum; between them the form is fluid |
 | Logical properties rather than left/right | Every inset, cap and rule is logical: `padding-inline`, `min-inline-size`, `max-inline-size`, `min-block-size`, `border-block-start` on the status rule. No `left`, `right`, `margin-left` or `text-align: left` anywhere in the component |
-| This component's surface nested inside a different one | It owns no ground and declares all 19 tokens under all four surfaces, so it is correct the instant `data-surface` changes on any ancestor. §15 renders it in a `blue` band inside an `ink` page to prove no paper value leaked through |
+| This component's surface nested inside a different one | Neither `EnquiryForm` nor `Input` owns a ground; both layers declare their complete token sets under all four surfaces, so they are correct the instant `data-surface` changes on any ancestor. §15 renders them in a `blue` band inside an `ink` page to prove no paper value leaked through |
 | Two of this component adjacent | Two forms on one page is a **bug**, not a layout: both would post the same seven context keys with different values and the second would win the analytics. The specimen renders the adjacent pair (§15) so the reviewer can see that ids do not collide — `useId` guarantees it — but the route rule stands at one per page, and a lint rule on the page templates is the right enforcement |
 | Interactive content inside a slot | `scheduleAction` is the only node slot, and it is expected to be interactive (a `Button`). It renders **outside** the `<form>`'s submit path — the Success panel has replaced the form, so there is no nesting of a control inside a form it does not belong to. A caller passing a second form or an `<a>` wrapping a `<button>` is out of contract |
 
@@ -408,7 +424,7 @@ Restated, because each has already gone wrong somewhere in this codebase: **no h
 
 | | Statement | How a reviewer decides it |
 |---|---|---|
-| Do | Every `--enq-*` token is declared under all four `data-surface` blocks | Count the declarations in the diff: 19 × 4 = 76 |
+| Do | Every surface-dependent `--enq-*` and `--inp-*` token is declared under all four `data-surface` blocks | Count identical declarations per surface: 9 `--enq-*` plus 18 `--inp-*` = 27 × 4 |
 | Do | `message` and `status` are in the DOM at Idle, empty | Inspect the Idle specimen column; both elements exist |
 | Do | `Button` carries `extendHitArea` on the submit and on `scheduleAction` | Grep the component and the page for `extendHitArea` |
 | Do | Validation fires on `blur` and on no other event | Grep for `onBlur`; there must be no `onChange`- or `onSubmit`-driven validity call |
@@ -487,7 +503,7 @@ NEW MECHANISM REQUEST
 Name:         per-field validity (aria-invalid + a reserved message line)
 Layer:        3 component (a state axis, not a value)
 Value:        A validity axis orthogonal to the fixed state model: a field may be invalid while
-              being at rest, hovered or focused. Rendered as --enq-field-rule-invalid at
+              being at rest, hovered or focused. Rendered as --inp-invalid-rule at
               --border-width-2, a close-circle glyph, a sentence in --enq-message-invalid-ink, and
               aria-invalid="true".
 Why nothing existing works:  The fixed model has rest, hover, focus, pressed, held, disabled and
@@ -541,13 +557,13 @@ Blast radius: Button, on all four surfaces × three emphases × two tones, plus 
 
 ## 17. Open questions
 
-All eight questions were resolved by the owner on **21 August 2026**. The original options and recommendations remain below, with the accepted decision recorded inline. Nothing remains BLOCKING.
+All nine questions were resolved by the owner on **21 August 2026**. The original options and recommendations remain below, with the accepted decision recorded inline. Nothing remains BLOCKING.
 
-**1. Does a tier-1 `Field` primitive get specified first? — ANSWERED, 21 August 2026.**
+**1. Does a tier-1 `Field` primitive get specified first? — ANSWERED, then superseded by Q9 on 21 August 2026.**
 Options: (a) specify `Field` now; `EnquiryForm` composes it and draws no input of its own; `SiteFooter`'s newsletter field is refactored onto it in the same change. (b) `EnquiryForm` owns `--enq-field-*` and the site has two bespoke field token sets.
 **Recommendation: (a).** Rows 1–13 of §6 are a *control*, not a form — they are the same 52 cells the footer already answered privately, and a second private answer means two sets that cannot read each other and diverge on the first re-tune. `Field` is a primitive by the tier test (a control, arranging nothing above itself), and it is small: label, control, flag, message, seven tokens' worth of surface work. Under (a) this document keeps §6 rows 14–19, §7's sizes for the form box and the textarea, the state machine, the hidden set, and the Success panel — and rows 1–13 move to `--fld-*` **verbatim, values and measured ratios unchanged**, which is why they are specified in full here either way. Blocking because it decides what this component *is*: a form that composes a control, or a form that contains one.
 
-**Owner decision — accepted 21 August 2026: (a).** Specify and build the tier-1 `Field` primitive first, compose it in `EnquiryForm`, and refactor `SiteFooter`'s newsletter field onto it in the same change.
+**Owner decision at spec review — accepted 21 August 2026: (a).** The shared-control decision stands. Gate 2 later discovered the repository's explicit `Input` / `--inp-*` reservation, so Q9 supersedes the primitive's name and narrows it to the control box; labels, flags and messages stay with `EnquiryForm`.
 
 **2. Is the danger ramp granted? — ANSWERED, 21 August 2026.**
 Options: (a) grant the three steps in §16. (b) refuse, and Invalid is carried by `--border-width-2`, the `close-circle` glyph and a message in the ordinary body ink.
@@ -589,6 +605,12 @@ Options: (a) the union in §3. (b) a free string off the route record.
 
 **Owner decision — accepted 21 August 2026: (a).** Keep the four URL labels as the closed literal union in §3.
 
+**9. Does the accepted `Field` name supersede the repository's reserved `Input`, or does the reservation win? — ANSWERED, 21 August 2026; was BLOCKING at build Gate 2.**
+Options: (a) keep `Field` / `--fld-*`, supersede the reservation, and let the footer adopt the standard field treatment; (b) use the reserved `Input` / `--inp-*` primitive and preserve the footer treatment.
+**Recommendation after reading the reservation:** (b). The reservation predates this spec and is explicit in both `footer.css` and `SiteFooter.module.css`. `Input` is the control-only seam those files planned: the pattern continues to own its label and message composition, while the reusable box owns `bg` / `fg`, rules, focus, disabled and invalid. Preserving the footer requires a second reusable emphasis rather than a footer override, so the API is `emphasis="standard" | "quiet"`; the existing footer values move verbatim into `quiet`, and `standard` takes the enquiry values above.
+
+**Owner decision — accepted 21 August 2026: (b).** Use `Input` and preserve the footer treatment. `EnquiryForm` uses the default `standard` emphasis; `SiteFooter` uses `quiet`. This decision discharges the reservation and keeps the tier rule: neither pattern styles a native input privately.
+
 ---
 
 ## Appendix — self-audit
@@ -602,8 +624,11 @@ STRUCTURE
     fieldset, group, actions and hidden are explicitly marked as carrying no value of their own.
 
 NAMES
-[x] Count of distinct token names used: 47 . Every one appears verbatim in vocabulary.md, or in a
-    NEW TOKEN REQUEST (--color-danger-600 / -300 / -100). Checked one at a time: --color-paper,
+[x] Count of distinct token-shaped names used after the Gate 2 amendment: 118, including the
+    historical --fld-* / --enq-field-* names retained only inside Q1's rejected option and the
+    --foot-field-* migration sources. Every accepted implementation name appears verbatim in
+    vocabulary.md, is an approved --inp-* / --enq-* component token, or is a NEW TOKEN REQUEST
+    (--color-danger-600 / -300 / -100). Checked one at a time: --color-paper,
     --color-paper-deep, --color-white, --color-neutral-100/200/300/400/500/600/700/800/900/950,
     --color-brandeis-50/100/200/300/400/500, --color-success-500, --gap-tight/-text/-block/-stack
     (as Layout/Cluster role names), --text-ui, --text-ui-tracking, --text-micro,
@@ -625,17 +650,19 @@ NAMES
 [x] Every --text-* role paired with a tracking companion is on the list that has one (ui, micro,
     h5). The seven with none are marked "none — this role has no tracking companion".
 [x] Every layout distance is a gap-scale role name, referred to by name.
-[x] Every space-ramp reach carries its justification sentence. Count: 0 .
+[x] Every space-ramp reach carries its justification sentence. Count: 2 — Input's inline padding
+    and textarea block padding, both optical control insets at --space-12 rather than sibling gaps.
 [x] Every literal pixel value is a component size or a container cap, t-shirt named, and says what
     it was measured against. Count: 7 (§7b).
 
 COLOUR AND CONTRAST
 [x] One row per token, four columns: paper, tint, ink, blue.
-[x] No cell is empty, "same as paper", or a delta. Rows: 19 × 4 cells.
+[x] No cell is empty, "same as paper", or a delta. Rows: 20 × 4 in the main ownership table plus
+    7 × 4 in Input's preserved quiet-emphasis table = 108 cells.
 [x] Every text colour has a measured ratio against the exact ground or fill it sits on — the field
     inks are measured on the field ground, not on the band; the flag, label, message, status,
     success and caption inks are measured on the band ground they actually sit on.
-[x] Every text ratio is ≥ 4.5:1 except the four --enq-field-ink-disabled cells, each marked as the
+[x] Every text ratio is ≥ 4.5:1 except the four --inp-disabled-fg cells, each marked as the
     deliberate exception.
 [x] The focus ring is measured against its own gap colour on all four surfaces: 6.18 · 5.51 · 7.32
     · 6.23.
@@ -666,7 +693,7 @@ LAYOUT, TYPE, SEMANTICS
 [x] Every part carrying running text names a measure (--measure-body for the success sentence and
     the caption; the 470px cap for the control value).
 [x] Every interactive target reaches 44px on touch: fields by stepping the size up
-    (--enq-field-height-touch), buttons by Button extendHitArea. Both means stated, each with its
+    (--inp-height-touch), buttons by Button extendHitArea. Both means stated, each with its
     reason.
 [x] Every ARIA idref points at an element that is ALWAYS rendered (message, status, flag), and §11
     states what would be required of aria-controls if the Success panel were revealed rather than
@@ -677,7 +704,7 @@ LAYOUT, TYPE, SEMANTICS
 COMPLETENESS
 [x] All thirteen content edge-case rows answered; the unreachable ones say why they are
     unreachable rather than "n/a".
-[x] The "parent that does not size it" row names the minimum: --enq-field-min-inline 256px.
+[x] The "parent that does not size it" row names the minimum: --inp-min-inline 256px.
 [x] Do's and Don'ts are testable — each row names the grep, the specimen column or the diff count
     that decides it.
 [x] The specimen plan renders both variants × the one size × all four surfaces, forces Idle,
@@ -685,7 +712,7 @@ COMPLETENESS
     includes the nested-surface band, both-adjacent, the narrow track and every §12 row.
 [x] Section 16 lists six justified requests in the block form.
 [x] Every open question has options, a recommendation, and its owner decision recorded inline.
-    Three were BLOCKING and all three are resolved.
+    Three were BLOCKING in the design review; Q9 was BLOCKING at build Gate 2. All four are resolved.
 [x] Squint test: the block reads as three ideas, not one rectangle repeated — a tight label/control
     pair repeated at one rhythm, a stack-sized break, then the action group at a different rhythm
     with a caption below it; and Success is a different shape entirely (a rule, a heading at
