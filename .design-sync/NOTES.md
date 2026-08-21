@@ -15,7 +15,7 @@ Repo-specific gotchas for future syncs. Read this before re-running.
   `npx tsc -p .design-sync/tsconfig.dts.json` to emit declarations to `dist/types/` (gitignored).
   `findTypesRoot` picks `dist/types` up automatically. **Run it before the converter** or every
   `<Name>.d.ts` degrades to a stub.
-- `componentSrcMap` enumerates all 12 components on purpose: with an explicit `--entry` and no
+- `componentSrcMap` enumerates all 14 components on purpose: with an explicit `--entry` and no
   shipped `.d.ts`, `exportedNames()` returns empty, so the map IS the component list. A component
   missing from it does not exist as far as the sync is concerned — the build prints
   `package: N components (N src-matched)`, so check that number against the tier folders every run.
@@ -107,8 +107,9 @@ sync after it shipped reported the same two warnings, unchanged.
 
 ## Card presentation
 
-Ten components carry `cfg.overrides.<Name>.cardMode = "column"` — `Section`, `Layout`, `Cluster`,
-`Icon`, `Logo`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`. (This sentence said "six" while
+Twelve components carry `cfg.overrides.<Name>.cardMode = "column"` — `Section`, `Layout`, `Cluster`,
+`Icon`, `Logo`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`, `Input`,
+`EnquiryForm`. Only `Button` and `Prose` are not on the list. (This sentence said "six" while
 listing seven names before the PageHero sync; the count is worth re-deriving from `config.json`
 rather than trusting the prose, and only `Button` and `Prose` are absent from the list.) The product's card grid cell is ≤728px, and in a 2-up grid
 these components' stories broke words character-by-character or clipped. `SiteNav` also declares
@@ -182,6 +183,42 @@ renamed.** These five (`--cta-eyebrow-tracking`, `--cta-heading-tracking`, `--ct
 folder and no prefix, so nothing about the change looked like it would move a doc — and
 `design:check` passes either way, because it only fails on a doc naming a token that does *not*
 exist, never on a doc missing one that does.
+
+## A pseudo-element hit extension does NOT work on an `<input>` — measured
+
+Button reaches the 44px touch floor with `.hit::after { block-size: 44px }`, and copying that onto
+`Input`'s `quiet` emphasis looks like the obvious fix for a 40px field. It is not: **an `<input>` is
+a void element and generates no pseudo-element box.** The trap is that everything *reports* fine —
+`getComputedStyle(el, '::after')` returns `content: ""` and `height: 44px`, so the declaration
+resolves, `tokens:check` passes and the CSS looks right. Measured with `elementFromPoint`, a point
+4px above the field hits the wrapping `<label>`, not the input. The extension does nothing.
+
+So the two means EnquiryForm's spec names for reaching the floor — step the box, or extend the hit
+area — are **Button's** two means. An input has different ones: step the box, or rely on an
+associated `<label>`, which forwards a tap natively. In the footer that label measures 73.6px, so
+the real target already clears the floor by a wide margin and the 40px box is fine. What is NOT fine
+is a bare `<Input>` with no label: unnamed AND under-target, and no type can prevent it, because a
+wrapping `<label>` and an external `<label for>` are both invisible to the props.
+
+**The general lesson is the one this repo keeps relearning: a resolving declaration is not a
+rendering one.** If a fix depends on a box existing, measure the box.
+
+## The invalid rule is seen against the FIELD, not against the band
+
+Found by looking at the Input card rather than by reading the token table, and it is the kind of
+thing no check can see. `--inp-invalid-rule` shipped as one token shared by both emphases, and on
+blue it was `danger-100` — chosen against the blue *ground*, where it measures 5.03:1. But the rule
+is drawn at the edge of the field, so what it is actually seen against is the field's own fill, and
+on blue the standard fill is **white**: 1.24:1. Invisible, leaving the width step as the only carrier
+of the state, which the component's own spec forbids.
+
+Blue is also the only surface where the two emphases' fills diverge — standard is white, quiet is
+`brandeis-600` — so **no single step can clear on both**: `danger-600` measures 6.54:1 on white and
+1.16:1 on brandeis-600, `danger-100` the reverse. The token is now named per emphasis, like every
+other rule in that file, and each surface picks the step that contrasts with the fill it sits on.
+
+When you add a surface block for anything that draws a rule *inside* a filled box, measure against
+the fill, not the ground.
 
 ## A component can ship WITHOUT its design-sync half, and nothing catches it
 
@@ -388,3 +425,15 @@ is graded on its own merits.
   blocks do not, which is the right split: the API is documented, the implementation reasoning stays
   in source), `styleSha` and `bundleSha12` (the new `--cta-*` tokens), and `auxSha` (the spec's §4
   correction plus the regenerated vocabulary). 8 files uploaded.
+- Sync: 21 Aug 2026, fourth run — **14 components, `Input` and `EnquiryForm` added** (brief 09
+  shipped two: the pattern and the primitive it needed). Both arrived from another author with the
+  whole code side done and none of the `.design-sync/` half, which is the second time that has
+  happened and the reason the section above exists. 11 verified-by-upload, **1 changed**, 2 new,
+  0 removed; anchor `ok`; four stages green; render check 14/14; all 25 cells graded good and
+  carried forward (`pendingGrade: []`). 35 files uploaded across five components — the two new
+  ones, plus `Button` and `PageHero` whose `.d.ts` and `.prompt.md` moved (Button gained a `busy`
+  state in the same PR; PageHero carried the prop-doc rewrite that #12 never synced), plus
+  `CtaSection`, which **re-captured and re-graded because its own preview changed**: its `form` slot
+  now holds the real `EnquiryForm` instead of the browser-default stand-in it used while no form
+  component existed. That is the third time the "an example goes stale when a component ships" rule
+  has fired, and the first time it fired on a preview rather than on `conventions.md`.

@@ -15,12 +15,14 @@
     "Section": "src/components/Section/Section.tsx",
     "Layout": "src/components/Layout/Layout.tsx",
     "Cluster": "src/components/Cluster/Cluster.tsx",
+    "Input": "src/components/Input/Input.tsx",
     "Button": "src/components/Button/Button.tsx",
     "Icon": "src/components/Icon/Icon.tsx",
     "Logo": "src/components/Logo/Logo.tsx",
     "Prose": "src/components/Prose/Prose.tsx",
     "Breadcrumbs": "src/patterns/Breadcrumbs/Breadcrumbs.tsx",
     "CtaSection": "src/patterns/CtaSection/CtaSection.tsx",
+    "EnquiryForm": "src/patterns/EnquiryForm/EnquiryForm.tsx",
     "PageHero": "src/patterns/PageHero/PageHero.tsx",
     "SiteNav": "src/patterns/SiteNav/SiteNav.tsx",
     "SiteFooter": "src/patterns/SiteFooter/SiteFooter.tsx"
@@ -58,6 +60,13 @@
       "viewport": "1280x760"
     },
     "CtaSection": {
+      "cardMode": "column",
+      "viewport": "1280x900"
+    },
+    "Input": {
+      "cardMode": "column"
+    },
+    "EnquiryForm": {
       "cardMode": "column",
       "viewport": "1280x900"
     }

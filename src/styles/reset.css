@@ -34,10 +34,18 @@ figure,
 blockquote,
 dl,
 dd,
+hr,
 ol,
 ul {
   margin: 0;
 }
+
+/* `hr` joined that list late, and the reason is worth keeping. EnquiryForm renders one as a direct
+   child of a `Layout`, and every UA sheet gives it `margin-block: 0.5em` — so the rendered seam was
+   --gap-block plus about 8px, with another 8 above it, and nothing in the markup said so. That is
+   the exact failure this block's own header describes. It was the only non-Prose `hr` in the repo,
+   which is why it went unnoticed and why the fix belongs here rather than on one component's rule:
+   the next one would have inherited it. */
 
 /* Lists used as layout containers (a Layout as="ul") carry no marker or inset. A list that
    is genuinely a list re-declares these itself. */

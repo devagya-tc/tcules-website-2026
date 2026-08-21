@@ -112,7 +112,12 @@ export function SiteFooter({
                   required
                 />
               </label>
-              <Button type="submit">{newsletter.cta.label}</Button>
+              {/* extendHitArea because this one has nothing to help it: the field beside it is
+                  wrapped in a label that forwards taps, and this Button is not. 40px box, 44px
+                  target, row height unchanged. */}
+              <Button type="submit" extendHitArea>
+                {newsletter.cta.label}
+              </Button>
             </Cluster>
           </form>
         </Layout>

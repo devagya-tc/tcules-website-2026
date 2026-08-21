@@ -86,19 +86,55 @@ export default function InputSpecimenPage() {
         </Layout>
       </Section>
 
+      {/* Every surface renders every STATE, not just rest. Four of the eighteen surface-dependent
+          tokens — --inp-invalid-rule and the three --inp-disabled-* — move per surface, and with
+          invalid and disabled shown on one surface only they were never looked at on ink or blue.
+          The invalid rule in particular steps danger-600 / 600 / 300 / 100 across the four. */}
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
         <Section key={surface} surface={surface} density="tight">
           <Specimen
             title={`Surface · ${surface}`}
-            note="Identical markup: standard first, preserved quiet treatment second."
+            note="Identical markup on all four: rest, invalid and disabled, standard then the preserved quiet treatment. Every one of the 18 surface-dependent tokens renders in this band."
           >
             <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="block">
               <LabelledInput label="Standard" />
               <LabelledInput label="Quiet" emphasis="quiet" />
+              <LabelledInput label="Standard · invalid" invalid />
+              <LabelledInput label="Quiet · invalid" emphasis="quiet" invalid />
+              <LabelledInput label="Standard · disabled" disabled />
+              <LabelledInput label="Quiet · disabled" emphasis="quiet" disabled />
             </Layout>
           </Specimen>
         </Section>
       ))}
+
+      {/* ── The nested-surface band ───────────────────────────────────────────────
+          The reason all four blocks restate all eighteen tokens rather than carrying deltas. A blue
+          Section inside an ink one must render the BLUE column; if any token were missing from the
+          blue block it would inherit ink's value and the mismatch would show here as a field that
+          does not match its own ground. Input owns more surface-dependent tokens than any other
+          primitive, and until now it was the only one with no band to prove it. */}
+      <Section surface="ink">
+        <Layout rowGap="stack">
+          <Specimen
+            title="Nested surface · ink outer"
+            note="The reference: an ink field on the ink ground it belongs to."
+          >
+            <LabelledInput label="Standard · on ink" />
+          </Specimen>
+          <Section surface="blue" density="tight">
+            <Specimen
+              title="Nested surface · blue inside ink"
+              note="SPECIMEN-ONLY ARRANGEMENT — a Section inside a Section insets the content column twice, which is why the two do not align. What it proves is the colour: this field must read as blue's column (invalid at danger-100, the lightest step, because on blue nothing darker clears), not as ink's stranded on a blue ground."
+            >
+              <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="block">
+                <LabelledInput label="Standard · on blue" />
+                <LabelledInput label="Standard · invalid" invalid />
+              </Layout>
+            </Specimen>
+          </Section>
+        </Layout>
+      </Section>
 
       <Section>
         <Layout rowGap="block">

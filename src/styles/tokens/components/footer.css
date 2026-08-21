@@ -79,9 +79,9 @@
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
    The muted inks step because they have to: neutral-600 on paper-deep is 4.39:1 and fails AA,
-   so body and legal go to 700 and the label to 800 to stay apart from them. The field keeps a
-   white bg — a field the colour of its own panel has no edge but its rule, and the rule steps
-   to 400 to hold against the deeper ground.                                          */
+   so body and legal go to 700 and the label to 800 to stay apart from them.
+   (The newsletter field's own bg and rule used to be described here. They live in input.css
+   under the quiet emphasis now — see the header. This block no longer sets them.)      */
 [data-surface='tint'] {
   --foot-rule: var(--color-neutral-300);
   --foot-tagline-ink: var(--color-neutral-700); /*  7.27:1 */
@@ -99,8 +99,8 @@
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
    What the site ships. The neutrals reverse; the blues lift off the light end of the ramp,
-   because brandeis-500 as text on neutral-950 is 2.77:1 — link hover at 300 (7.32:1) and the
-   field's focus rule at 300 with it.
+   because brandeis-500 as text on neutral-950 is 2.77:1 — link hover at 300 (7.32:1). Input's
+   quiet focus rule makes the same move on this surface, in its own layer.
 
    Body ink is neutral-400 rather than a warm paper step, and the tagline is white: at
    --text-lead the tagline is the only line in the band that carries the brand's voice, and
@@ -127,9 +127,8 @@
    100, and the mono meta key at 200 is the one value treated as a graphic rather than a
    passage of text.
 
-   The field fills with 600, the ramp step below its own ground, so it reads as recessed rather
-   than as a white box punched into the field. Its focus rule is white, because a blue rule on
-   blue is not a focus state.                                                          */
+   (The field's fill and its white focus rule were described here and are now input.css's, under
+   the quiet emphasis. The reasoning moved with the tokens.)                            */
 [data-surface='blue'] {
   --foot-rule: var(--color-brandeis-400);
   --foot-tagline-ink: var(--color-white);
