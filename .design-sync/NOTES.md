@@ -129,6 +129,60 @@ binds them by basename, so there is no `docsMap` enumeration to maintain. The bo
 deliberately — an empty body still lets the converter synthesise `.prompt.md` from JSDoc, props and
 preview examples; adding prose there would replace that synthesis. See `groups/README.txt`.
 
+## Prop JSDoc is TRUNCATED at 127 characters in `.prompt.md` — write the first sentence to stand alone
+
+`<Name>.prompt.md` is synthesised from the source, and it is the artifact the design agent actually
+reads. Two things happen to the JSDoc on the way in, and they are not the same thing:
+
+- The **component-level** doc comment above the exported function arrives **whole**, paragraphs and
+  all. CtaSection's thirty-line header is in its `.prompt.md` verbatim.
+- Every **per-prop** doc is flattened to one line and hard-cut at **127 characters**, wrappers
+  included — so about 119 characters of text — **with no ellipsis, mid-word.** Measured across both
+  patterns: 7 of PageHero's 8 prop docs and 4 of CtaSection's 5 are cut, one of them at `and th`.
+
+So the rule for a prop doc is: **the first sentence must be self-contained and under ~115
+characters.** Everything after it is for whoever reads the source, and the agent will never see it.
+This is not a reason to write less — the long-form reasoning is why the code is legible — it is a
+reason to put the load-bearing half first. "A `string` and not a `ReactNode`, so a second heading
+cannot be smuggled in" survives; "The block's `h2`, verbatim. A `string` and not a `ReactNode`, and
+that typing is the mechanism rather than a conveni" does not.
+
+Two consequences worth knowing while you are in there:
+
+1. **The `.prompt.md` FLATTENS a discriminated union.** CtaSection's four-member union arrives as
+   five independent optional props (`arrangement?`, `form?`, `scheduleHref?`, `actions?`, `proof?`),
+   so nothing in that file says the combinations are constrained. The `.d.ts` beside it carries the
+   real union and is correct. If a component's constraints live in its type, say so **in prose in
+   the component-level comment**, which is the half that survives intact — and do not do what the
+   first draft of CtaSection's header did, which was point the reader at a source location
+   (`the block above CtaSplitProps`) that is not in the artifact.
+2. The `.d.ts` keeps every JSDoc in full, so nothing is lost from the API reference. Only the prompt
+   is lopped.
+
+## The generated vocabulary lists the LAST declaration of a geometry token
+
+`docs/vocabulary.md` is generated from the token layer, and for the per-component geometry lines it
+reports whatever the file declares last. That is fine while every component token is declared once
+in `:root` — the four surface blocks only re-declare *inks*, which those lines do not carry.
+
+`cta-section.css` broke that assumption on 21 Aug: `--cta-heading-tracking` is declared in `:root`
+as `--text-h2-tracking` and re-declared in `[data-arrangement='offer']` as `--text-h3-tracking`, so
+the vocabulary reports **-0.01em (the offer override) rather than -0.015em (the default)**. The
+declaration order is not negotiable — `:root` and `[data-arrangement]` are the same specificity, so
+the override has to come second or it does not apply.
+
+Nothing is broken and neither value is wrong; the doc just names the override. It is only a
+component-internal token, which no designer writes, so it has not been worked around. Know it
+before "fixing" the number, and expect the same wherever an arrangement or a mode re-declares a
+geometry token in the same file.
+
+**And regenerate the vocabulary whenever a component layer gains a token, not only when one is
+renamed.** These five (`--cta-eyebrow-tracking`, `--cta-heading-tracking`, `--cta-marker-tracking`,
+`--cta-heading-measure`, `--cta-body-measure`) were added by a refactor that touched no component
+folder and no prefix, so nothing about the change looked like it would move a doc — and
+`design:check` passes either way, because it only fails on a doc naming a token that does *not*
+exist, never on a doc missing one that does.
+
 ## A component can ship WITHOUT its design-sync half, and nothing catches it
 
 `CtaSection` arrived in PR #8 from another author with the whole **code** side done properly — the
@@ -324,3 +378,13 @@ is graded on its own merits.
   new spec, and `_ds_sync.json` last. Verified after upload: 12 render hashes, 12 source keys, and
   the ten untouched components byte-identical. All 12 have authored previews; nothing is on the
   floor card.
+- Re-sync: 21 Aug 2026, third run of the day — **no component added or removed.** Ran after the
+  CtaSection audit fixes landed: 12 verified-by-upload, 0 changed, 0 new, 0 removed; anchor `ok`;
+  capture skipped `empty_worklist`, which is the documented no-work path rather than a failure
+  (`stages.capture.ok` is `null`, and the top-level `ok` is true). `renderHashes` and `sourceKeys`
+  came back byte-identical, so every grade held and nothing re-captured — the second confirmation
+  of the trust model, this time for an edit that changed only comments and a token file.
+  What moved: `CtaSection.d.ts` and `CtaSection.prompt.md` (prop JSDoc reaches both — plain `/* */`
+  blocks do not, which is the right split: the API is documented, the implementation reasoning stays
+  in source), `styleSha` and `bundleSha12` (the new `--cta-*` tokens), and `auxSha` (the spec's §4
+  correction plus the regenerated vocabulary). 8 files uploaded.
