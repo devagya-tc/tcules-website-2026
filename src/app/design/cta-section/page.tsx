@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
 
-import { Button, Cluster, Input, Layout, Prose, Section } from '@/components';
-import { CtaSection, type CtaPoint } from '@/patterns';
-import { ROUTES } from '@/lib/routes';
+import { Cluster, Layout, Prose, Section } from '@/components';
+import { CtaSection, EnquiryForm, type CtaPoint } from '@/patterns';
+import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
 import { Box, specimenStyles as s } from '../_specimen/Specimen';
 
@@ -32,6 +32,26 @@ const OFFER_BODY = [
   'A focused audit finds the friction worth fixing before a larger programme begins.',
 ] as const;
 
+const FORM_CONTEXT = {
+  originRoute: ROUTES.designCtaSection,
+  placement: 'component-specimen',
+  family: 'design-system',
+  serviceOrAudit: 'cta-section',
+  referrer: '',
+  campaign: '',
+} as const;
+
+const ENQUIRY_FORM_PROPS = {
+  action: `${ENDPOINTS.enquiryDesign}?outcome=success`,
+  context: FORM_CONTEXT,
+} as const;
+
+const AUDIT_FORM_PROPS = {
+  ...ENQUIRY_FORM_PROPS,
+  variant: 'audit',
+  context: { ...FORM_CONTEXT, intent: 'free-audit' },
+} as const;
+
 const REJECTIONS = [
   'centred — cannot hold the form or an ordered list without turning into a funnel page',
   'formLeft / reverse — creates visible drift across the 56 form closes',
@@ -51,35 +71,6 @@ function SpecimenNote({ title, note }: { title: string; note: string }) {
         <p className={s.specNote}>{note}</p>
       </Layout>
     </Section>
-  );
-}
-
-/** A deliberately inert fixture: this page isolates CtaSection while using the shipped field box. */
-function DemoForm({
-  kind = 'project',
-  submitLabel,
-}: {
-  kind?: 'project' | 'audit';
-  submitLabel?: string;
-}) {
-  return (
-    <Box>
-      <Layout as="form" rowGap="block">
-        <Layout as="label" rowGap="inline">
-          <span className={s.demoFieldLabel}>Your name</span>
-          <Input name={`${kind}-name`} required />
-        </Layout>
-        <Layout as="label" rowGap="inline">
-          <span className={s.demoFieldLabel}>
-            {kind === 'audit' ? 'Website or product URL' : 'What are you trying to ship?'}
-          </span>
-          <Input name={`${kind}-brief`} required />
-        </Layout>
-        <Button type="submit" tone="neutral">
-          {submitLabel ?? (kind === 'audit' ? 'Request free audit' : 'Send enquiry')}
-        </Button>
-      </Layout>
-    </Box>
   );
 }
 
@@ -147,10 +138,10 @@ export default function CtaSectionSpecimenPage() {
             the band.
           </p>
           <p>
-            The accepted copy rule is visible throughout this route: use the tailored ask named
-            by the page, with “Start a project” and “Request free audit” as the standard
-            fallbacks. Copy stays in the page layer; this component accepts the chosen label as
-            a string.
+            Action-only CTAs use the tailored ask named by the page, with “Start a project” and
+            “Request free audit” as their standard fallbacks. Form CTAs delegate their submit
+            copy and behaviour to EnquiryForm: “Send enquiry” for projects and “Request free
+            audit” for audits.
           </p>
         </Layout>
       </Section>
@@ -192,7 +183,7 @@ export default function CtaSectionSpecimenPage() {
         heading="Tell us what you are trying to ship"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
-        form={<DemoForm submitLabel="Start a project" />}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
         proof={<DemoProof kind="figures" />}
         surface="paper"
@@ -228,14 +219,14 @@ export default function CtaSectionSpecimenPage() {
         heading="Start a product engagement"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
-        form={<DemoForm />}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
       />
       <CtaSection
         heading="Request a free audit"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
-        form={<DemoForm kind="audit" />}
+        form={<EnquiryForm {...AUDIT_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
         surface="tint"
       />
@@ -244,7 +235,7 @@ export default function CtaSectionSpecimenPage() {
         heading="See what your current experience is costing"
         body={OFFER_BODY}
         points={STANDARD_POINTS}
-        form={<DemoForm kind="audit" />}
+        form={<EnquiryForm {...AUDIT_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
       />
       <CtaSection
@@ -268,20 +259,20 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="3 · Accepted ask ladder"
-        note="The same geometries with the two standard fallbacks and the longest tailored labels. Buttons stay single-line; their Cluster wraps when two long actions no longer share a row."
+        note="The real EnquiryForm shows its fixed submit copy while action-only CTAs carry the standard fallbacks and longest tailored labels. Buttons stay single-line; their Cluster wraps when two long actions no longer share a row."
       />
       <CtaSection
         heading="Turn the next product decision into a plan"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
-        form={<DemoForm submitLabel="Start a project" />}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
       />
       <CtaSection
         heading="Turn the next product decision into a plan"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
-        form={<DemoForm submitLabel="Discuss the relevant project" />}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} urlLabel="Link to the work" />}
         scheduleHref={ROUTES.contact}
         surface="tint"
       />
@@ -317,7 +308,7 @@ export default function CtaSectionSpecimenPage() {
             heading={`Split with ${count} point${count === 1 ? '' : 's'}`}
             body={SPLIT_BODY}
             points={points}
-            form={<DemoForm />}
+            form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
             scheduleHref={ROUTES.contact}
             surface={count % 2 === 0 ? 'paper' : 'tint'}
           />
@@ -348,7 +339,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="5 · States: none to force"
-        note="CtaSection itself has no hover, focus, pressed, disabled, or expanded state. Point at, press, and tab through the Buttons and demo form fields below: those controls own their own states and focus rings."
+        note="CtaSection itself has no hover, focus, pressed, disabled, or expanded state. Point at, press, and tab through the Buttons and EnquiryForm controls below: those controls own their own states and focus rings."
       />
 
       <SpecimenNote
@@ -362,7 +353,7 @@ export default function CtaSectionSpecimenPage() {
             heading="Tell us what you are trying to ship"
             body={SPLIT_BODY}
             points={STANDARD_POINTS}
-            form={<DemoForm />}
+            form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
             scheduleHref={ROUTES.contact}
             proof={<DemoProof kind="figures" />}
             surface={surface}
@@ -391,7 +382,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="7 · Surface boundaries"
-        note="A tint CTA between ink bands, then an ink CTA between paper bands. Each CTA's own data-surface scope resolves all five CTA inks plus the form and proof stand-ins inside it."
+        note="A tint CTA between ink bands, then an ink CTA between paper bands. Each CTA's own data-surface scope resolves all five CTA inks plus the real EnquiryForm and proof stand-in inside it."
       />
       <Section surface="ink" density="tight">
         <p>Ink band before the tint CTA.</p>
@@ -400,7 +391,7 @@ export default function CtaSectionSpecimenPage() {
         heading="A light close inside a dark page sequence"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
-        form={<DemoForm />}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
         proof={<DemoProof />}
         surface="tint"
@@ -434,7 +425,7 @@ export default function CtaSectionSpecimenPage() {
           heading={`Split · ${kind} proof`}
           body={SPLIT_BODY}
           points={STANDARD_POINTS}
-          form={<DemoForm />}
+          form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
           scheduleHref={ROUTES.contact}
           proof={<DemoProof kind={kind} />}
         />
@@ -481,7 +472,7 @@ export default function CtaSectionSpecimenPage() {
         heading="Tell us what you are trying to ship"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
-        form={<DemoForm />}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
         proof={<DemoProof />}
         surface="tint"
@@ -495,14 +486,14 @@ export default function CtaSectionSpecimenPage() {
         heading="Start the first project conversation"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
-        form={<DemoForm />}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
       />
       <CtaSection
         heading="Start the second project conversation"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
-        form={<DemoForm />}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
         surface="tint"
       />
@@ -557,14 +548,14 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="13 · Illegal narrow parents"
-        note="These are deliberately invalid placements. At the named 320px floor text breaks without horizontal overflow; at the 256px sub-floor the demo form is the first part to show pressure."
+        note="These are deliberately invalid placements. At the named 320px floor text breaks without horizontal overflow; at the 256px sub-floor EnquiryForm is the first part to show pressure."
       />
       <div className={s.narrowMd}>
         <CtaSection
           heading="A 320px parent that does not size the band correctly"
           body={SPLIT_BODY}
           points={STANDARD_POINTS}
-          form={<DemoForm />}
+          form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
           scheduleHref={ROUTES.contact}
         />
       </div>
@@ -573,7 +564,7 @@ export default function CtaSectionSpecimenPage() {
           heading="A 256px sub-floor parent that exposes the form constraint"
           body={SPLIT_BODY}
           points={STANDARD_POINTS}
-          form={<DemoForm />}
+          form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
           scheduleHref={ROUTES.contact}
           surface="tint"
         />
