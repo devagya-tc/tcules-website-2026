@@ -203,8 +203,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
       aria-busy={submitting || undefined}
       onSubmit={handleSubmit}
     >
-      <Layout rowGap="stack">
-        <Layout rowGap="block">
+      <Layout rowGap="block">
+        <Layout rowGap="text">
           <FieldGroup
             id={ids.email}
             messageId={ids.emailMessage}

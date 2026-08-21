@@ -371,7 +371,7 @@ Numerals render two-digit and zero-padded (`01`, `02`, `03`) rather than `1.` �
       <Layout rowGap="stack">                                   {/* the form half */}
         <div>{form}</div>                                       {/* form — brief 09, passed in */}
         <Cluster colGap="tight" rowGap="tight">                 {/* actions — 8 both axes */}
-          <Button as="a" href={scheduleHref} emphasis="ghost" tone="neutral" size="md" extendHitArea>
+          <Button as="a" href={scheduleHref} emphasis="link" tone="neutral" size="md" extendHitArea>
             See available times
           </Button>
         </Cluster>
@@ -459,7 +459,7 @@ Three things that string is meant to prove: the region arrives with the heading 
 
 **Nothing in this component transitions, and nothing in it moves.** It has no states (section 5), so there is no value to interpolate between. `CtaSection.module.css` declares no `transition`, no `transform`, no `animation`, no `opacity` and no height change, and section 14 names the grep that proves it.
 
-The only motion in the band belongs to the controls: `Button`'s colours on `--duration-fast` with `--easing-standard`, and — on a `link` emphasis, which this component does not use — its rule wiping in along its own axis, which is the system's one motion precedent. The form's own controls inherit the same duration and easing through their own tokens.
+The only motion in the band belongs to the controls: `Button`'s colours on `--duration-fast` with `--easing-standard`; the scheduling action's `link` emphasis also wipes its rule in along its own axis, which is the system's one motion precedent. The form's own controls inherit the same duration and easing through their own tokens.
 
 **What does not move, explicitly:** the heading does not rise or fade on scroll; the points do not stagger; the numerals do not count up; the form does not slide in; the band does not animate its height when the form's error summary appears (the band grows, instantly, because nothing here animates height); the actions do not scale, lift or shadow on hover. A scroll-triggered entrance on the closing block is the single most-requested CTA motion and it is refused: it delays the ask, it fires at the moment the reader has decided, and it would be a second motion precedent, which the brief says must be asked for rather than assumed. If it is genuinely wanted it is a NEW MECHANISM REQUEST with its own argument.
 

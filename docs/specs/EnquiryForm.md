@@ -210,15 +210,15 @@ One row per token, four columns, every cell a real name. The control rows are ow
 
 | Where                                            | Role    | Owner                                       |
 | ------------------------------------------------ | ------- | ------------------------------------------- |
-| `group` → `group` inside `fieldset`              | `block` | `Layout rowGap="block"`                     |
+| `group` → `group` inside `fieldset`              | `text`  | `Layout rowGap="text"`                      |
 | `label` → `control` → `message` inside a `group` | `tight` | `Layout rowGap="tight"`                     |
 | `label` → `flag` (inline)                        | `tight` | `Cluster colGap="tight"`                    |
-| `fieldset` → `status` → `actions` group          | `stack` | `Layout rowGap="stack"` on `form`           |
+| `fieldset` → `status` → `actions` group          | `block` | `Layout rowGap="block"` on `form`           |
 | `submit` → `caption`                             | `text`  | `Layout rowGap="text"` on the actions group |
 | glyph → text inside `message`                    | `tight` | `Cluster colGap="tight"`                    |
 | `success` rule → heading → sentence              | `block` | `Layout rowGap="block"`                     |
 
-The non-uniform rhythm is nesting, not a knob: `tight` inside a group, `block` between groups, `stack` between the field set and everything after it. No child sets outer spacing anywhere.
+The non-uniform rhythm is nesting, not a knob: `tight` inside a group, `text` between groups, and `block` between the field set, status and action group. No child sets outer spacing anywhere.
 
 ### (b) Component sizes — t-shirt named, each measured against something real
 
@@ -279,7 +279,7 @@ Two, both inside `Input`: `--inp-padding-x` and `--inp-textarea-padding-y` reach
 
 **At 767.** `--inp-height-md` re-declares to `--inp-height-touch` 44px and `--inp-textarea-min-block` holds. The form is still one column of three groups.
 
-**What must NOT change.** The gap scale does not shift responsively: `tight`, `block`, `stack` and `text` are the same distances at 375 as at 1440. No media query swaps one step for another and no media query changes a type role — `--text-body` is 16px everywhere, and the title roles that do re-declare at 1023 and 767 all belong to `CtaSection`, not here. The arrangement may change; the distance may not.
+**What must NOT change.** The gap scale does not shift responsively: `tight`, `text` and `block` are the same distances at 375 as at 1440. No media query swaps one step for another and no media query changes a type role — `--text-body` is 16px everywhere, and the title roles that do re-declare at 1023 and 767 all belong to `CtaSection`, not here. The arrangement may change; the distance may not.
 
 **Touch targets — one legal means each, stated.** The three `control`s reach 44px by **stepping the size up** (`--inp-height-touch`): each field is the only thing on its row, so growing it moves nothing beside it. The `submit` reaches 44px by **extending the hit area past the box** — `Button extendHitArea` — because it sits in a `Cluster` where a taller box would move the row and break its agreement with the fields above it. The surviving scheduling link is `CtaSection`'s control and reaches the floor through that pattern's existing `extendHitArea` contract.
 
@@ -299,8 +299,8 @@ Two, both inside `Input`: `--inp-padding-x` and `--inp-textarea-padding-y` reach
 
 // EnquiryForm
 <form aria-label="Send an enquiry" aria-busy={submitting || undefined}>
-  <Layout rowGap="stack">                            {/* fields → status → actions */}
-    <Layout rowGap="block">                          {/* fields: group to group */}
+  <Layout rowGap="block">                            {/* fields → status → actions */}
+    <Layout rowGap="text">                           {/* fields: group to group */}
       <Layout rowGap="tight">                        {/* group: label → control → message */}
         <label />                                    {/* URL label wraps in Cluster with its flag */}
         <Input />
@@ -593,9 +593,9 @@ reply sentence; the CTA-owned scheduling action remains immediately after it in 
 
 **5. Is "See available times" a link-emphasis `Button` or a solid secondary? — ANSWERED, 21 August 2026.**
 Options: (a) `emphasis="link"`. (b) `emphasis="ghost" tone="neutral"`. (c) `emphasis="solid" tone="primary"`.
-**Recommendation: (b)** for the action that survives Success. A footnote is too quiet, while solid primary in a band whose primary action has just completed reads as a second ask.
+**Recommendation: (a)** for the action that survives Success. It remains a full-sized, focusable anchor with the system link rule and 44px hit area, while reading as a secondary navigation choice rather than another form action. Solid primary would read as a second ask.
 
-**Owner decision — accepted 21 August 2026: (b).** `CtaSection` already renders its required scheduling link as `emphasis="ghost" tone="neutral"`; EnquiryForm neither duplicates nor restyles it.
+**Owner decision — revised 21 August 2026: (a).** The scheduling action remains required by brief 08 and owned by `CtaSection`, which renders it as `emphasis="link" tone="neutral"`; EnquiryForm neither duplicates nor restyles it.
 
 **6. What element level carries the Success heading? — ANSWERED, 21 August 2026.** The role is `--text-h5`; the element is the question. `CtaSection` owns the band's `h2`, so the Success heading is an `h3` at `--text-h5` scale — a level-vs-scale mismatch this system has no `Heading` component to mediate.
 Options: (a) `h3` at `--text-h5`. (b) no heading; the `--text-lead` sentence alone.
@@ -639,7 +639,7 @@ NAMES
     vocabulary.md, is an approved --inp-* / --enq-* component token, or is a NEW TOKEN REQUEST
     (--color-danger-600 / -300 / -100). Checked one at a time: --color-paper,
     --color-paper-deep, --color-white, --color-neutral-100/200/300/400/500/600/700/800/900/950,
-    --color-brandeis-50/100/200/300/400/500, --color-success-500, --gap-tight/-text/-block/-stack
+    --color-brandeis-50/100/200/300/400/500, --color-success-500, --gap-tight/-text/-block
     (as Layout/Cluster role names), --text-ui, --text-ui-tracking, --text-micro,
     --text-micro-tracking, --text-body, --text-body-sm, --text-caption, --text-lead, --text-h5,
     --text-h5-tracking, --measure-body, --radius-0, --radius-8, --border-width-1, --border-width-2,
@@ -649,7 +649,7 @@ NAMES
     --foot-field-min-inline, --nav-item-padding-x, --sec-container, --lay-track-sm.
 [x] Every glyph named (close-circle, check) is in the 17-glyph set. No new glyph requested.
 [x] Every prop and prop VALUE given for Section, Layout or Cluster is in the published unions:
-    Layout rowGap tight|text|block|stack, columns={2}|"tile", minTrack="sm", colGap="gutter",
+    Layout rowGap tight|text|block, columns={2}|"tile", minTrack="sm", colGap="gutter",
     as="form"; Cluster colGap="tight" rowGap="tight" align="center"; CtaSection
     arrangement="split", surface paper|tint|ink|blue.
 [x] Zero hex codes / rgb() / hsl() / colour words outside the contrast measurements and the three
@@ -725,7 +725,7 @@ COMPLETENESS
 [x] Every open question has options, a recommendation, and its owner decision recorded inline.
     Three were BLOCKING in the design review; Q9 was BLOCKING at build Gate 2. All four are resolved.
 [x] Squint test: the block reads as three ideas, not one rectangle repeated — a tight label/control
-    pair repeated at one rhythm, a stack-sized break, then the action group at a different rhythm
+    pair repeated at the text rhythm, a block-sized break, then the action group at a different rhythm
     with a caption below it; and Success is a different shape entirely (a rule, a heading at
     display scale and one lead line) rather than the form's silhouette refilled. The CTA-owned
     scheduling action remains beneath either shape, so there is exactly one next step.

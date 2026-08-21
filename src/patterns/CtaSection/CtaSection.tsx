@@ -294,7 +294,7 @@ function CtaActions({
         <Button
           as="a"
           href={scheduleHref}
-          emphasis="ghost"
+          emphasis="link"
           tone="neutral"
           size="md"
           extendHitArea
