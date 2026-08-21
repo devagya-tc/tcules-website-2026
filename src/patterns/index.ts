@@ -17,6 +17,12 @@
  * carrying its single h1. Like Breadcrumbs it owns its band and takes `surface` as a prop, and for
  * the same reason (a pattern that paints a band has no ancestor to read data-surface from); unlike
  * it, it is a block a page is built out of rather than apparatus around one.
+ *
+ * CtaSection is its bookend — a CLOSE, the page's ask made once, carrying an h2 and never an h1.
+ * It is the third pattern here to take `surface` as a prop, for the same reason as the other two,
+ * with one distinction worth knowing: it hands the value to Section and paints nothing itself, so
+ * taking the prop is not the same as owning the ground. It is also the only pattern that appears
+ * TWICE on a route — a mid-page offer and a closing block are both this component.
  */
 export { SiteNav } from './SiteNav';
 export type {
