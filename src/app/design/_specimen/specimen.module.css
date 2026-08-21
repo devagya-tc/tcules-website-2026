@@ -114,6 +114,46 @@
   color: var(--sec-ink);
 }
 
+/* Illegal-parent stress frames. These use Layout's own named track sizes so the CTA specimen can
+   show its documented 320px floor and the 256px sub-floor without minting route-local geometry. */
+.narrowMd,
+.narrowSm {
+  margin-inline: auto;
+}
+
+.narrowMd {
+  max-inline-size: var(--lay-track-md);
+}
+
+.narrowSm {
+  max-inline-size: var(--lay-track-sm);
+}
+
+/* Form-field measuring chrome for patterns whose real form is specified separately. This is not
+   the future Input component: it exists only to make focus order and narrow-track pressure visible
+   in the proving ground. */
+.demoFieldLabel {
+  font: var(--text-ui-sm);
+  letter-spacing: var(--text-ui-sm-tracking);
+  color: var(--sec-ink-muted);
+}
+
+.demoField {
+  inline-size: 100%;
+  min-block-size: var(--btn-hit-min);
+  border: var(--border-width-hairline) solid var(--sec-rule-strong);
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--sec-ink);
+  font: var(--text-body);
+  padding-inline: var(--gap-tight);
+}
+
+.demoField:focus-visible {
+  outline: var(--focus-ring-width) solid var(--sec-accent);
+  outline-offset: var(--focus-ring-offset);
+}
+
 /* Two illegal placements, made lookable-at. A band belongs to the page and must not be put in a
    grid track — but "must not" is a claim a reviewer should be able to check by eye, and a spec that
    names a 320px floor is naming a rendering nobody can see without a way to constrain the width.
