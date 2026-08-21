@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+
 import { Button, Cluster, Icon, Layout, Section } from '@/components';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
@@ -9,7 +11,7 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
  * Hover, pressed and tab focus deliberately have no props: they are the stylesheet's business,
  * driven by :hover, :active and :focus-visible. That means this page cannot print them in a
  * column, and it says so where it matters rather than quietly showing five states and calling it
- * six. Point at a button, hold it down, and tab to it — that is the rest of the specification, and
+ * seven. Point at a button, hold it down, and tab to it — that is the rest of the specification, and
  * it has to be exercised on each of the four surfaces below.
  */
 
@@ -41,7 +43,7 @@ const SURFACES = [
   },
 ] as const;
 
-/** One surface's full set of six, plus the disabled and held states on that ground. */
+/** One surface's full set of six, plus the busy, disabled and held states on that ground. */
 function SurfaceMatrix() {
   return (
     <Layout rowGap="gutter">
@@ -56,7 +58,7 @@ function SurfaceMatrix() {
         ))}
       </Layout>
       <Layout rowGap="tight">
-        <p className={s.specTitle}>Held · active — and disabled, on this ground</p>
+        <p className={s.specTitle}>Held · active — busy — and disabled, on this ground</p>
         <Cluster colGap="text" rowGap="text">
           <Button emphasis="ghost" tone="neutral" active>
             All work
@@ -64,6 +66,7 @@ function SurfaceMatrix() {
           <Button emphasis="link" tone="neutral" active>
             Approach
           </Button>
+          <Button busy>Send enquiry</Button>
           <Button disabled>Send enquiry</Button>
           <Button emphasis="ghost" tone="neutral" disabled>
             All work
@@ -85,16 +88,16 @@ export default function ButtonSpecimenPage() {
           <Layout rowGap="block">
             <h1>Button</h1>
             <p>
-              Three emphases against two tones, three sizes, three variants and six states. The
-              component contributes no colour and no distance — every value comes from{' '}
+              Three emphases against two tones, three sizes, three variants and seven states.
+              The component contributes no colour and no distance — every value comes from{' '}
               <code>--btn-*</code>, which the token layer re-declares once per surface. The same
               markup is therefore correct on all four grounds without being told which one it is
               standing on.
             </p>
             <p>
-              The box is 8 / 4 / 4: eight of box padding, a further four of label margin, four of
-              icon gap. The three differ because the things they space differ, and none of them
-              scales with the size.
+              The box is 8 / 4 / 4: eight of box padding, a further four of label margin, four
+              of icon gap. The three differ because the things they space differ, and none of
+              them scales with the size.
             </p>
           </Layout>
 
@@ -120,42 +123,37 @@ export default function ButtonSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="States — three of six are printable"
-            note="Rest, active and disabled are below. Hover, pressed and tab focus have no props by design, so they cannot be printed in a column: point at each button, hold it down, and tab to it. Hover and focus share one value, pressed and active share the other, and the two must never resolve to the same colour."
+            title="States — four of seven are printable"
+            note="Rest, active, busy and disabled are below. Busy keeps its label and focusability while suppressing pointer states. Hover, pressed and tab focus have no props by design, so point at each button, hold it down, and tab to it."
           >
-            <Layout columns={[2, 1, 1, 1]} colGap="text" rowGap="text" align="center">
+            <Layout columns={[2, 1, 1, 1, 1]} colGap="text" rowGap="text" align="center">
               <p className={s.specTitle}>Emphasis · tone</p>
               <p className={s.specTitle}>Rest</p>
               <p className={s.specTitle}>Active — held</p>
+              <p className={s.specTitle}>Busy — progress</p>
               <p className={s.specTitle}>Disabled</p>
-              {COMBOS.map((c) => (
-                <Layout key={c.emphasis + c.tone} rowGap="none" justifyItems="start">
-                  <p className={s.specTitle}>{c.name}</p>
-                  <p className={s.specNote}>{c.sub}</p>
-                </Layout>
-              ))}
-              {/* Layout fills tracks in order, so the four cells of each row are emitted as one
+              {/* Layout fills tracks in order, so the five cells of each row are emitted as one
                   flat run. Grouping them per row would need a nested Layout per row and a second
                   grid to keep the columns aligned — this is the arrangement the primitive is for. */}
               {COMBOS.map((c) => (
-                <Button key={`${c.emphasis}${c.tone}-rest`} emphasis={c.emphasis} tone={c.tone}>
-                  All work
-                </Button>
-              ))}
-              {COMBOS.map((c) => (
-                <Button key={`${c.emphasis}${c.tone}-on`} emphasis={c.emphasis} tone={c.tone} active>
-                  All work
-                </Button>
-              ))}
-              {COMBOS.map((c) => (
-                <Button
-                  key={`${c.emphasis}${c.tone}-off`}
-                  emphasis={c.emphasis}
-                  tone={c.tone}
-                  disabled
-                >
-                  All work
-                </Button>
+                <Fragment key={c.emphasis + c.tone}>
+                  <Layout rowGap="none" justifyItems="start">
+                    <p className={s.specTitle}>{c.name}</p>
+                    <p className={s.specNote}>{c.sub}</p>
+                  </Layout>
+                  <Button emphasis={c.emphasis} tone={c.tone}>
+                    All work
+                  </Button>
+                  <Button emphasis={c.emphasis} tone={c.tone} active>
+                    All work
+                  </Button>
+                  <Button emphasis={c.emphasis} tone={c.tone} busy>
+                    All work
+                  </Button>
+                  <Button emphasis={c.emphasis} tone={c.tone} disabled>
+                    All work
+                  </Button>
+                </Fragment>
               ))}
             </Layout>
           </Specimen>
@@ -192,8 +190,8 @@ export default function ButtonSpecimenPage() {
               <Layout rowGap="tight" justifyItems="start">
                 <p className={s.specTitle}>Icon only</p>
                 <p className={s.specNote}>
-                  Square at the size&rsquo;s height, and an <code>aria-label</code> the type system
-                  requires. Glyphs that need no gloss only.
+                  Square at the size&rsquo;s height, and an <code>aria-label</code> the type
+                  system requires. Glyphs that need no gloss only.
                 </p>
                 <Cluster colGap="text" rowGap="text">
                   <Button
@@ -272,7 +270,12 @@ export default function ButtonSpecimenPage() {
             <Layout rowGap="block">
               <Cluster colGap="text" rowGap="text">
                 <Button size="lg">Start a project</Button>
-                <Button size="lg" emphasis="ghost" tone="primary" icon={<Icon name="arrow-right" />}>
+                <Button
+                  size="lg"
+                  emphasis="ghost"
+                  tone="primary"
+                  icon={<Icon name="arrow-right" />}
+                >
                   See the work
                 </Button>
               </Cluster>
@@ -291,9 +294,9 @@ export default function ButtonSpecimenPage() {
                 </Button>
               </Cluster>
               <p className={s.specNote}>
-                The segmented set above is what <code>active</code> is for — the held second step,
-                the same value a press reads. Pressing an item therefore previews the state it is
-                about to take. A call to action never enters it.
+                The segmented set above is what <code>active</code> is for — the held second
+                step, the same value a press reads. Pressing an item therefore previews the
+                state it is about to take. A call to action never enters it.
               </p>
             </Layout>
           </Specimen>
@@ -324,13 +327,18 @@ export default function ButtonSpecimenPage() {
           >
             <Layout rowGap="text">
               <p className={s.specNote}>
-                A link is reading rather than doing. Hover the two below: on paper a neutral link
-                runs ink → blue 500 → blue 600, because without that move it would have no hover
-                affordance at all — and since focus is the hover treatment plus the ring, a link
-                with no fill would degrade to ring-only.
+                A link is reading rather than doing. Hover the two below: on paper a neutral
+                link runs ink → blue 500 → blue 600, because without that move it would have no
+                hover affordance at all — and since focus is the hover treatment plus the ring,
+                a link with no fill would degrade to ring-only.
               </p>
               <Cluster colGap="block" rowGap="text">
-                <Button as="a" href="#link-demo" emphasis="link" icon={<Icon name="arrow-right" />}>
+                <Button
+                  as="a"
+                  href="#link-demo"
+                  emphasis="link"
+                  icon={<Icon name="arrow-right" />}
+                >
                   Read case study
                 </Button>
                 <Button as="a" href="#link-demo" emphasis="link" tone="neutral">
@@ -382,11 +390,12 @@ export default function ButtonSpecimenPage() {
             <p className={s.specTitle}>A tint panel nested inside an ink section</p>
             <p className={s.specNote}>
               The reason every surface block in the token layer restates every token instead of
-              carrying deltas from paper. A tint block that declared only its two ghost fills would
-              inherit ink&rsquo;s values for everything else it omitted — and this panel used to
-              render ghost-neutral at 1.13:1, link-primary at 2.09:1, and a focus ring at 2.09:1
-              against its own gap. The buttons in the panel below should be indistinguishable from
-              the ones on the tint band above; tab through them to check the ring.
+              carrying deltas from paper. A tint block that declared only its two ghost fills
+              would inherit ink&rsquo;s values for everything else it omitted — and this panel
+              used to render ghost-neutral at 1.13:1, link-primary at 2.09:1, and a focus ring
+              at 2.09:1 against its own gap. The buttons in the panel below should be
+              indistinguishable from the ones on the tint band above; tab through them to check
+              the ring.
             </p>
           </Layout>
           <Section as="div" surface="tint" density="tight">

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Button, Cluster, Layout, Logo, Section } from '@/components';
+import { Button, Cluster, Input, Layout, Logo, Section } from '@/components';
 
 import styles from './SiteFooter.module.css';
 import type { SiteFooterProps } from './types';
@@ -103,8 +103,8 @@ export function SiteFooter({
                   three broken `for` references. */}
               <label className={styles.fieldLabel}>
                 <span className={styles.fieldLabelText}>{newsletter.fieldLabel}</span>
-                <input
-                  className={styles.field}
+                <Input
+                  emphasis="quiet"
                   type="email"
                   name="email"
                   autoComplete="email"

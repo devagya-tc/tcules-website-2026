@@ -25,13 +25,26 @@ const SPECIMENS = [
   {
     tier: 'Primitives',
     items: [
-      { href: '/design/section', name: 'Section', note: 'band, content column, vertical rhythm' },
-      { href: '/design/layout', name: 'Layout', note: 'columnar axis — tracks and the two seams' },
+      {
+        href: '/design/section',
+        name: 'Section',
+        note: 'band, content column, vertical rhythm',
+      },
+      {
+        href: '/design/layout',
+        name: 'Layout',
+        note: 'columnar axis — tracks and the two seams',
+      },
       { href: '/design/cluster', name: 'Cluster', note: 'inline axis — wrapping rows' },
       {
         href: '/design/button',
         name: 'Button',
         note: '3 emphases × 2 tones, 3 sizes, 3 variants, 4 surfaces',
+      },
+      {
+        href: '/design/input',
+        name: 'Input',
+        note: 'native input and textarea, 2 emphases, semantic states, 4 surfaces',
       },
       { href: '/design/icon', name: 'Icon', note: 'the glyph set, 4 size roles, currentColor' },
       {
@@ -58,6 +71,11 @@ const SPECIMENS = [
         href: '/design/cta-section',
         name: 'CtaSection',
         note: 'the commercial close — 3 arrangements, accepted ask ladder, 4 surfaces',
+      },
+      {
+        href: '/design/enquiry-form',
+        name: 'EnquiryForm',
+        note: 'the three-field form — 2 label sets, async lifecycle, 4 surfaces',
       },
       {
         href: '/design/page-hero',
@@ -87,8 +105,8 @@ export default function DesignIndexPage() {
           <h1>Proving ground</h1>
           <p>
             Every component and every arrangement, rendered. Nothing gets a page route before it
-            has a route here, and the list is registered by hand so it stays honest about what is
-            actually covered.
+            has a route here, and the list is registered by hand so it stays honest about what
+            is actually covered.
           </p>
         </Layout>
 

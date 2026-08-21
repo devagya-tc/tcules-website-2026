@@ -1,0 +1,94 @@
+/* EnquiryForm owns the form's copy and feedback, not its control boxes or outer band.
+
+   Layout and Cluster own every sibling seam in the JSX. This module only applies the component's
+   inline cap, reserved feedback line, type roles and per-surface inks. The form and its success
+   replacement share the same 256–470px bounds so completion does not change the CTA column's
+   measure. The 19px message reserve is one --text-caption line: blur validation may fill it without
+   moving the controls below. No margin, private flex/grid arrangement or surface paint belongs here.
+
+   State order is load-bearing: .status establishes the neutral rule, then .statusError replaces
+   only that rule. Success is a substitution performed by React, not a hidden sibling, so there is
+   no opacity or height transition to coordinate. */
+
+.form,
+.success {
+  inline-size: 100%;
+  min-inline-size: var(--enq-form-min-inline);
+  max-inline-size: var(--enq-form-max-inline);
+}
+
+.label {
+  color: var(--enq-label-ink);
+  font: var(--text-ui);
+  letter-spacing: var(--text-ui-tracking);
+  transition: color var(--enq-transition-duration) var(--enq-transition-easing);
+}
+
+.flag {
+  color: var(--enq-flag-ink);
+  font: var(--text-micro);
+  letter-spacing: var(--text-micro-tracking);
+}
+
+.message {
+  min-inline-size: 0;
+  min-block-size: var(--enq-message-reserve);
+  color: var(--enq-message-invalid-ink);
+  font: var(--text-caption);
+  transition: color var(--enq-transition-duration) var(--enq-transition-easing);
+}
+
+.message span {
+  /* A pasted URL cannot widen the 256px minimum; one-line feedback truncates at the component cap. */
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status {
+  border-block-start: var(--border-width-hairline) solid var(--enq-status-rule);
+  color: var(--enq-status-ink);
+  font: var(--text-body-sm);
+  transition:
+    border-color var(--enq-transition-duration) var(--enq-transition-easing),
+    color var(--enq-transition-duration) var(--enq-transition-easing);
+}
+
+.statusError {
+  border-block-start-color: var(--enq-status-rule-error);
+}
+
+.caption {
+  max-inline-size: var(--measure-body);
+  color: var(--enq-caption-ink);
+  font: var(--text-caption);
+}
+
+.success {
+  color: var(--enq-success-ink);
+}
+
+.successRule {
+  inline-size: 100%;
+  border: 0;
+  border-block-start: var(--border-width-hairline) solid var(--enq-success-rule);
+}
+
+.successHeading {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+}
+
+.successBody {
+  max-inline-size: var(--measure-body);
+  font: var(--text-lead);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .label,
+  .message,
+  .status {
+    transition-duration: var(--duration-instant);
+  }
+}

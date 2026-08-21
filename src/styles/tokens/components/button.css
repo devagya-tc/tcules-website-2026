@@ -9,14 +9,15 @@
            colour    primary (Brandeis) | neutral (ink)
            part      bg | fg          — a control has a background and a foreground;
                                         a SURFACE has a ground and an ink (section.css)
-           state     rest (no suffix) | hover | pressed
+           state     rest (no suffix) | hover | pressed | busy
    Geometry and shared parts drop the emphasis and colour: --btn-height-md,
    --btn-ring-color, --btn-disabled-bg.
 
    ── The state model, fixed and not a token ──────────────────────────────────────
    Hover and focus take -hover. Pressed and active take -pressed. Focus is the hover
-   fill plus the ring, so the keyboard sees what the pointer sees. Disabled answers
-   nothing.
+   fill plus the ring, so the keyboard sees what the pointer sees. Busy is a held progress
+   state with its own post-activation tokens: it keeps focus and its label while `.live`
+   suppresses pointer states. Disabled answers nothing.
 
    A state token exists in the set only if the value MOVES on at least one surface.
    That is why there is no --btn-solid-*-fg-pressed: a solid button's label never
@@ -48,32 +49,40 @@
    a weight, a size or a ratio: --text-ui-sm / --text-ui / --text-ui-lg carry all four,
    which is the point of the usage layer. Rebuilding a font by hand out of the ladder
    is how a control ends up with no line-height at all and inherits body's 1.6.   */
-:root{
---btn-padding-x:var(--space-8);       /* optical, not --gap-tight */
---btn-label-margin:var(--space-4);    /* optical, not --gap-inline */
---btn-gap:var(--space-4);             /* optical, not --gap-inline */
---btn-gap-bare:var(--space-8);        /* link emphasis has no box and no label margin */
---btn-height-sm:32px;--btn-height-md:40px;--btn-height-lg:48px;
---btn-hit-min:44px;                   /* extended past the box, never by resizing it */
---btn-text-sm:var(--text-ui-sm);--btn-text-md:var(--text-ui);--btn-text-lg:var(--text-ui-lg);
---btn-text-tracking:var(--text-ui-tracking);  /* one value: all three sizes track alike */
---btn-icon-size-sm:var(--icon-size-14);--btn-icon-size-md:var(--icon-size-16);--btn-icon-size-lg:var(--icon-size-18);
---btn-radius:var(--radius-8);
---btn-radius-bare:var(--radius-0);        /* link has no box, so it has no corner */
---btn-radius-bare-focus:var(--radius-4);  /* ...but its focus ring takes one, or the ring
+:root {
+  --btn-padding-x: var(--space-8); /* optical, not --gap-tight */
+  --btn-label-margin: var(--space-4); /* optical, not --gap-inline */
+  --btn-gap: var(--space-4); /* optical, not --gap-inline */
+  --btn-gap-bare: var(--space-8); /* link emphasis has no box and no label margin */
+  --btn-height-sm: 32px;
+  --btn-height-md: 40px;
+  --btn-height-lg: 48px;
+  --btn-hit-min: 44px; /* extended past the box, never by resizing it */
+  --btn-text-sm: var(--text-ui-sm);
+  --btn-text-md: var(--text-ui);
+  --btn-text-lg: var(--text-ui-lg);
+  --btn-text-tracking: var(--text-ui-tracking); /* one value: all three sizes track alike */
+  --btn-icon-size-sm: var(--icon-size-14);
+  --btn-icon-size-md: var(--icon-size-16);
+  --btn-icon-size-lg: var(--icon-size-18);
+  --btn-radius: var(--radius-8);
+  --btn-radius-bare: var(--radius-0); /* link has no box, so it has no corner */
+  --btn-radius-bare-focus: var(
+    --radius-4
+  ); /* ...but its focus ring takes one, or the ring
                                              draws a hard rectangle around a bare label */
-/* The link underline. Drawn as a rule rather than text-decoration, because a decorated
+  /* The link underline. Drawn as a rule rather than text-decoration, because a decorated
    underline can only appear all at once and this one wipes in from the left. The offset is an
    optical correction under a 13px uppercase mono baseline, not a layout distance — which is why
    it reaches the space ramp. The spec sheet measured 3px; the ramp is 2px-granular below 8, so
    this is the nearest step rather than a new one. */
---btn-link-rule-width:var(--border-width-hairline);
---btn-link-rule-offset:var(--space-2);
---btn-shadow:var(--shadow-none);
---btn-transition-duration:var(--duration-fast);
---btn-transition-easing:var(--easing-standard);
---btn-ring-width:var(--focus-ring-width);
---btn-ring-offset:var(--focus-ring-offset);
+  --btn-link-rule-width: var(--border-width-hairline);
+  --btn-link-rule-offset: var(--space-2);
+  --btn-shadow: var(--shadow-none);
+  --btn-transition-duration: var(--duration-fast);
+  --btn-transition-easing: var(--easing-standard);
+  --btn-ring-width: var(--focus-ring-width);
+  --btn-ring-offset: var(--focus-ring-offset);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────
@@ -83,19 +92,42 @@
    hover and only move on press, which meant a neutral link had no hover affordance
    at all — and since link has no fill, "focus is the hover fill plus the ring"
    degraded to ring-only. Rest → hover → pressed now runs 900 → 500 → 600.       */
-:root,[data-surface="paper"]{
---btn-solid-primary-bg:var(--color-brandeis-500);--btn-solid-primary-bg-hover:var(--color-brandeis-600);--btn-solid-primary-bg-pressed:var(--color-brandeis-700);
---btn-solid-primary-fg:var(--color-white);
---btn-solid-neutral-bg:var(--color-neutral-950);--btn-solid-neutral-bg-hover:var(--color-neutral-800);--btn-solid-neutral-bg-pressed:var(--color-neutral-700);
---btn-solid-neutral-fg:var(--color-paper);
---btn-ghost-primary-fg:var(--color-brandeis-500);--btn-ghost-primary-fg-pressed:var(--color-brandeis-600);
---btn-ghost-primary-bg-hover:var(--color-brandeis-50);--btn-ghost-primary-bg-pressed:var(--color-brandeis-100);
---btn-ghost-neutral-fg:var(--color-neutral-900);--btn-ghost-neutral-fg-pressed:var(--color-neutral-950);
---btn-ghost-neutral-bg-hover:var(--color-neutral-100);--btn-ghost-neutral-bg-pressed:var(--color-neutral-200);
---btn-link-primary-fg:var(--color-brandeis-500);--btn-link-primary-fg-hover:var(--color-brandeis-600);--btn-link-primary-fg-pressed:var(--color-brandeis-700);
---btn-link-neutral-fg:var(--color-neutral-900);--btn-link-neutral-fg-hover:var(--color-brandeis-500);--btn-link-neutral-fg-pressed:var(--color-brandeis-600);
---btn-disabled-bg:var(--color-neutral-100);--btn-disabled-fg:var(--color-neutral-500);
---btn-ring-color:var(--color-brandeis-500);--btn-ring-gap-color:var(--color-paper);
+:root,
+[data-surface='paper'] {
+  --btn-solid-primary-bg: var(--color-brandeis-500);
+  --btn-solid-primary-bg-hover: var(--color-brandeis-600);
+  --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
+  --btn-solid-primary-bg-busy: var(--color-brandeis-700);
+  --btn-solid-primary-fg: var(--color-white);
+  --btn-solid-neutral-bg: var(--color-neutral-950);
+  --btn-solid-neutral-bg-hover: var(--color-neutral-800);
+  --btn-solid-neutral-bg-pressed: var(--color-neutral-700);
+  --btn-solid-neutral-bg-busy: var(--color-neutral-700);
+  --btn-solid-neutral-fg: var(--color-paper);
+  --btn-ghost-primary-fg: var(--color-brandeis-500);
+  --btn-ghost-primary-fg-pressed: var(--color-brandeis-600);
+  --btn-ghost-primary-bg-hover: var(--color-brandeis-50);
+  --btn-ghost-primary-bg-pressed: var(--color-brandeis-100);
+  --btn-ghost-primary-bg-busy: var(--color-brandeis-100);
+  --btn-ghost-primary-fg-busy: var(--color-brandeis-600);
+  --btn-ghost-neutral-fg: var(--color-neutral-900);
+  --btn-ghost-neutral-fg-pressed: var(--color-neutral-950);
+  --btn-ghost-neutral-bg-hover: var(--color-neutral-100);
+  --btn-ghost-neutral-bg-pressed: var(--color-neutral-200);
+  --btn-ghost-neutral-bg-busy: var(--color-neutral-200);
+  --btn-ghost-neutral-fg-busy: var(--color-neutral-950);
+  --btn-link-primary-fg: var(--color-brandeis-500);
+  --btn-link-primary-fg-hover: var(--color-brandeis-600);
+  --btn-link-primary-fg-pressed: var(--color-brandeis-700);
+  --btn-link-neutral-fg: var(--color-neutral-900);
+  --btn-link-neutral-fg-hover: var(--color-brandeis-500);
+  --btn-link-neutral-fg-pressed: var(--color-brandeis-600);
+  --btn-link-primary-fg-busy: var(--color-brandeis-700);
+  --btn-link-neutral-fg-busy: var(--color-brandeis-600);
+  --btn-disabled-bg: var(--color-neutral-100);
+  --btn-disabled-fg: var(--color-neutral-500);
+  --btn-ring-color: var(--color-brandeis-500);
+  --btn-ring-gap-color: var(--color-paper);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
@@ -103,19 +135,41 @@
    fills step down one — hover 50→100, pressed 100→200 — and stay one step apart.
    Disabled steps with them. Everything else matches paper and is restated anyway,
    because a surface that omits a token is not self-contained (see the header).   */
-[data-surface="tint"]{
---btn-solid-primary-bg:var(--color-brandeis-500);--btn-solid-primary-bg-hover:var(--color-brandeis-600);--btn-solid-primary-bg-pressed:var(--color-brandeis-700);
---btn-solid-primary-fg:var(--color-white);
---btn-solid-neutral-bg:var(--color-neutral-950);--btn-solid-neutral-bg-hover:var(--color-neutral-800);--btn-solid-neutral-bg-pressed:var(--color-neutral-700);
---btn-solid-neutral-fg:var(--color-paper);
---btn-ghost-primary-fg:var(--color-brandeis-500);--btn-ghost-primary-fg-pressed:var(--color-brandeis-600);
---btn-ghost-primary-bg-hover:var(--color-brandeis-100);--btn-ghost-primary-bg-pressed:var(--color-brandeis-200);
---btn-ghost-neutral-fg:var(--color-neutral-900);--btn-ghost-neutral-fg-pressed:var(--color-neutral-950);
---btn-ghost-neutral-bg-hover:var(--color-neutral-200);--btn-ghost-neutral-bg-pressed:var(--color-neutral-300);
---btn-link-primary-fg:var(--color-brandeis-500);--btn-link-primary-fg-hover:var(--color-brandeis-600);--btn-link-primary-fg-pressed:var(--color-brandeis-700);
---btn-link-neutral-fg:var(--color-neutral-900);--btn-link-neutral-fg-hover:var(--color-brandeis-500);--btn-link-neutral-fg-pressed:var(--color-brandeis-600);
---btn-disabled-bg:var(--color-neutral-200);--btn-disabled-fg:var(--color-neutral-500);
---btn-ring-color:var(--color-brandeis-500);--btn-ring-gap-color:var(--color-paper-deep);
+[data-surface='tint'] {
+  --btn-solid-primary-bg: var(--color-brandeis-500);
+  --btn-solid-primary-bg-hover: var(--color-brandeis-600);
+  --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
+  --btn-solid-primary-bg-busy: var(--color-brandeis-700);
+  --btn-solid-primary-fg: var(--color-white);
+  --btn-solid-neutral-bg: var(--color-neutral-950);
+  --btn-solid-neutral-bg-hover: var(--color-neutral-800);
+  --btn-solid-neutral-bg-pressed: var(--color-neutral-700);
+  --btn-solid-neutral-bg-busy: var(--color-neutral-700);
+  --btn-solid-neutral-fg: var(--color-paper);
+  --btn-ghost-primary-fg: var(--color-brandeis-500);
+  --btn-ghost-primary-fg-pressed: var(--color-brandeis-600);
+  --btn-ghost-primary-bg-hover: var(--color-brandeis-100);
+  --btn-ghost-primary-bg-pressed: var(--color-brandeis-200);
+  --btn-ghost-primary-bg-busy: var(--color-brandeis-200);
+  --btn-ghost-primary-fg-busy: var(--color-brandeis-600);
+  --btn-ghost-neutral-fg: var(--color-neutral-900);
+  --btn-ghost-neutral-fg-pressed: var(--color-neutral-950);
+  --btn-ghost-neutral-bg-hover: var(--color-neutral-200);
+  --btn-ghost-neutral-bg-pressed: var(--color-neutral-300);
+  --btn-ghost-neutral-bg-busy: var(--color-neutral-300);
+  --btn-ghost-neutral-fg-busy: var(--color-neutral-950);
+  --btn-link-primary-fg: var(--color-brandeis-500);
+  --btn-link-primary-fg-hover: var(--color-brandeis-600);
+  --btn-link-primary-fg-pressed: var(--color-brandeis-700);
+  --btn-link-neutral-fg: var(--color-neutral-900);
+  --btn-link-neutral-fg-hover: var(--color-brandeis-500);
+  --btn-link-neutral-fg-pressed: var(--color-brandeis-600);
+  --btn-link-primary-fg-busy: var(--color-brandeis-700);
+  --btn-link-neutral-fg-busy: var(--color-brandeis-600);
+  --btn-disabled-bg: var(--color-neutral-200);
+  --btn-disabled-fg: var(--color-neutral-500);
+  --btn-ring-color: var(--color-brandeis-500);
+  --btn-ring-gap-color: var(--color-paper-deep);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
@@ -129,19 +183,41 @@
    lifts to 200 (10.48:1) and the ring to 300 (7.32:1). A ghost carries neutral fills in
    both steps, 900 then 800, and never a blue tint: at the pale end of the blue ramp
    there is no tint left to see. link-neutral runs white → 300 → 200.            */
-[data-surface="ink"]{
---btn-solid-primary-bg:var(--color-brandeis-500);--btn-solid-primary-bg-hover:var(--color-brandeis-600);--btn-solid-primary-bg-pressed:var(--color-brandeis-700);
---btn-solid-primary-fg:var(--color-white);
---btn-solid-neutral-bg:var(--color-paper);--btn-solid-neutral-bg-hover:var(--color-neutral-200);--btn-solid-neutral-bg-pressed:var(--color-neutral-300);
---btn-solid-neutral-fg:var(--color-neutral-950);
---btn-ghost-primary-fg:var(--color-brandeis-200);--btn-ghost-primary-fg-pressed:var(--color-brandeis-200);
---btn-ghost-primary-bg-hover:var(--color-neutral-900);--btn-ghost-primary-bg-pressed:var(--color-neutral-800);
---btn-ghost-neutral-fg:var(--color-white);--btn-ghost-neutral-fg-pressed:var(--color-white);
---btn-ghost-neutral-bg-hover:var(--color-neutral-900);--btn-ghost-neutral-bg-pressed:var(--color-neutral-800);
---btn-link-primary-fg:var(--color-brandeis-300);--btn-link-primary-fg-hover:var(--color-brandeis-200);--btn-link-primary-fg-pressed:var(--color-brandeis-100);
---btn-link-neutral-fg:var(--color-white);--btn-link-neutral-fg-hover:var(--color-brandeis-300);--btn-link-neutral-fg-pressed:var(--color-brandeis-200);
---btn-disabled-bg:var(--color-neutral-800);--btn-disabled-fg:var(--color-neutral-600);
---btn-ring-color:var(--color-brandeis-300);--btn-ring-gap-color:var(--color-neutral-950);
+[data-surface='ink'] {
+  --btn-solid-primary-bg: var(--color-brandeis-500);
+  --btn-solid-primary-bg-hover: var(--color-brandeis-600);
+  --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
+  --btn-solid-primary-bg-busy: var(--color-brandeis-700);
+  --btn-solid-primary-fg: var(--color-white);
+  --btn-solid-neutral-bg: var(--color-paper);
+  --btn-solid-neutral-bg-hover: var(--color-neutral-200);
+  --btn-solid-neutral-bg-pressed: var(--color-neutral-300);
+  --btn-solid-neutral-bg-busy: var(--color-neutral-300);
+  --btn-solid-neutral-fg: var(--color-neutral-950);
+  --btn-ghost-primary-fg: var(--color-brandeis-200);
+  --btn-ghost-primary-fg-pressed: var(--color-brandeis-200);
+  --btn-ghost-primary-bg-hover: var(--color-neutral-900);
+  --btn-ghost-primary-bg-pressed: var(--color-neutral-800);
+  --btn-ghost-primary-bg-busy: var(--color-neutral-800);
+  --btn-ghost-primary-fg-busy: var(--color-brandeis-200);
+  --btn-ghost-neutral-fg: var(--color-white);
+  --btn-ghost-neutral-fg-pressed: var(--color-white);
+  --btn-ghost-neutral-bg-hover: var(--color-neutral-900);
+  --btn-ghost-neutral-bg-pressed: var(--color-neutral-800);
+  --btn-ghost-neutral-bg-busy: var(--color-neutral-800);
+  --btn-ghost-neutral-fg-busy: var(--color-white);
+  --btn-link-primary-fg: var(--color-brandeis-300);
+  --btn-link-primary-fg-hover: var(--color-brandeis-200);
+  --btn-link-primary-fg-pressed: var(--color-brandeis-100);
+  --btn-link-neutral-fg: var(--color-white);
+  --btn-link-neutral-fg-hover: var(--color-brandeis-300);
+  --btn-link-neutral-fg-pressed: var(--color-brandeis-200);
+  --btn-link-primary-fg-busy: var(--color-brandeis-100);
+  --btn-link-neutral-fg-busy: var(--color-brandeis-200);
+  --btn-disabled-bg: var(--color-neutral-800);
+  --btn-disabled-fg: var(--color-neutral-600);
+  --btn-ring-color: var(--color-brandeis-300);
+  --btn-ring-gap-color: var(--color-neutral-950);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -154,17 +230,39 @@
    Only the light end of the ramp clears AA on a brandeis-500 ground: white 6.23:1,
    50 is 5.57:1, 100 is 4.91:1, and 200 is already 3.78:1 — which is why pressed does
    not continue to 200 the way it does on ink.                                   */
-[data-surface="blue"]{
---btn-solid-primary-bg:var(--color-paper);--btn-solid-primary-bg-hover:var(--color-neutral-200);--btn-solid-primary-bg-pressed:var(--color-neutral-300);
---btn-solid-primary-fg:var(--color-neutral-950);
---btn-solid-neutral-bg:var(--color-neutral-950);--btn-solid-neutral-bg-hover:var(--color-neutral-900);--btn-solid-neutral-bg-pressed:var(--color-neutral-800);
---btn-solid-neutral-fg:var(--color-paper);
---btn-ghost-primary-fg:var(--color-white);--btn-ghost-primary-fg-pressed:var(--color-white);
---btn-ghost-primary-bg-hover:var(--color-brandeis-600);--btn-ghost-primary-bg-pressed:var(--color-brandeis-700);
---btn-ghost-neutral-fg:var(--color-white);--btn-ghost-neutral-fg-pressed:var(--color-white);
---btn-ghost-neutral-bg-hover:var(--color-brandeis-600);--btn-ghost-neutral-bg-pressed:var(--color-brandeis-700);
---btn-link-primary-fg:var(--color-white);--btn-link-primary-fg-hover:var(--color-brandeis-50);--btn-link-primary-fg-pressed:var(--color-brandeis-100);
---btn-link-neutral-fg:var(--color-white);--btn-link-neutral-fg-hover:var(--color-brandeis-50);--btn-link-neutral-fg-pressed:var(--color-brandeis-100);
---btn-disabled-bg:var(--color-brandeis-600);--btn-disabled-fg:var(--color-brandeis-300);
---btn-ring-color:var(--color-white);--btn-ring-gap-color:var(--color-brandeis-500);
+[data-surface='blue'] {
+  --btn-solid-primary-bg: var(--color-paper);
+  --btn-solid-primary-bg-hover: var(--color-neutral-200);
+  --btn-solid-primary-bg-pressed: var(--color-neutral-300);
+  --btn-solid-primary-bg-busy: var(--color-neutral-300);
+  --btn-solid-primary-fg: var(--color-neutral-950);
+  --btn-solid-neutral-bg: var(--color-neutral-950);
+  --btn-solid-neutral-bg-hover: var(--color-neutral-900);
+  --btn-solid-neutral-bg-pressed: var(--color-neutral-800);
+  --btn-solid-neutral-bg-busy: var(--color-neutral-800);
+  --btn-solid-neutral-fg: var(--color-paper);
+  --btn-ghost-primary-fg: var(--color-white);
+  --btn-ghost-primary-fg-pressed: var(--color-white);
+  --btn-ghost-primary-bg-hover: var(--color-brandeis-600);
+  --btn-ghost-primary-bg-pressed: var(--color-brandeis-700);
+  --btn-ghost-primary-bg-busy: var(--color-brandeis-700);
+  --btn-ghost-primary-fg-busy: var(--color-white);
+  --btn-ghost-neutral-fg: var(--color-white);
+  --btn-ghost-neutral-fg-pressed: var(--color-white);
+  --btn-ghost-neutral-bg-hover: var(--color-brandeis-600);
+  --btn-ghost-neutral-bg-pressed: var(--color-brandeis-700);
+  --btn-ghost-neutral-bg-busy: var(--color-brandeis-700);
+  --btn-ghost-neutral-fg-busy: var(--color-white);
+  --btn-link-primary-fg: var(--color-white);
+  --btn-link-primary-fg-hover: var(--color-brandeis-50);
+  --btn-link-primary-fg-pressed: var(--color-brandeis-100);
+  --btn-link-neutral-fg: var(--color-white);
+  --btn-link-neutral-fg-hover: var(--color-brandeis-50);
+  --btn-link-neutral-fg-pressed: var(--color-brandeis-100);
+  --btn-link-primary-fg-busy: var(--color-brandeis-100);
+  --btn-link-neutral-fg-busy: var(--color-brandeis-100);
+  --btn-disabled-bg: var(--color-brandeis-600);
+  --btn-disabled-fg: var(--color-brandeis-300);
+  --btn-ring-color: var(--color-white);
+  --btn-ring-gap-color: var(--color-brandeis-500);
 }

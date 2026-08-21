@@ -23,6 +23,9 @@
  * with one distinction worth knowing: it hands the value to Section and paints nothing itself, so
  * taking the prop is not the same as owning the ground. It is also the only pattern that appears
  * TWICE on a route — a mid-page offer and a closing block are both this component.
+ *
+ * EnquiryForm is a BEHAVIOURAL FORM: route-blind in what it renders, but responsible for the
+ * blur-validation and asynchronous lifecycle shared by every page that collects an enquiry.
  */
 export { SiteNav } from './SiteNav';
 export type {
@@ -43,6 +46,14 @@ export type { BreadcrumbsProps, BreadcrumbItem } from './Breadcrumbs';
 
 export { CtaSection } from './CtaSection';
 export type { CtaSectionProps, CtaPoint, CtaAction } from './CtaSection';
+
+export { EnquiryForm } from './EnquiryForm';
+export type {
+  AuditUrlLabel,
+  EnquiryContextBase,
+  EnquiryFormProps,
+  EnquiryUrlLabel,
+} from './EnquiryForm';
 
 export { PageHero } from './PageHero';
 export type {

@@ -150,9 +150,10 @@
 }
 
 /* ══ State ═══════════════════════════════════════════════════════════════════════
-   Six states, three fills, and every one of them a colour change. Hover and focus take the
+   Seven states, three fills, and every one of them a colour change. Hover and focus take the
    first step; pressed and active take the second and share one value, so pressing a stateful
-   control previews the state it is about to hold.
+   control previews the state it is about to hold. Busy takes its own named post-activation
+   value while preserving focus and the label.
 
    All of it is gated on `.live`, which the component emits only when the button is not disabled.
    That is what makes a disabled control inert on an anchor as well as a <button> — `:disabled`
@@ -265,6 +266,38 @@
   color: var(--btn-link-neutral-fg-pressed);
 }
 
+/* Busy is application progress, not disabled and not held. It keeps focus and the accessible
+   label, but reads a dedicated post-activation value while `.live` gates out hover and press. */
+.button.busy {
+  cursor: progress;
+}
+
+.solid.primary.busy {
+  background: var(--btn-solid-primary-bg-busy);
+}
+
+.solid.neutral.busy {
+  background: var(--btn-solid-neutral-bg-busy);
+}
+
+.ghost.primary.busy {
+  background: var(--btn-ghost-primary-bg-busy);
+  color: var(--btn-ghost-primary-fg-busy);
+}
+
+.ghost.neutral.busy {
+  background: var(--btn-ghost-neutral-bg-busy);
+  color: var(--btn-ghost-neutral-fg-busy);
+}
+
+.link.primary.busy {
+  color: var(--btn-link-primary-fg-busy);
+}
+
+.link.neutral.busy {
+  color: var(--btn-link-neutral-fg-busy);
+}
+
 /* ── The link's underline ──────────────────────────────────────────────────────
    Drawn as a rule, not text-decoration, because a decorated underline can only appear all at
    once and this one wipes in from the left. It is the single animated property in the system that
@@ -297,6 +330,10 @@
   transform: scaleX(1);
 }
 
+.link.busy .labelInk::after {
+  transform: scaleX(1);
+}
+
 /* The wipe is the one motion here, so it is the one thing to answer for. Reduced motion keeps the
    underline — it is the affordance — and simply stops it travelling. */
 @media (prefers-reduced-motion: reduce) {
@@ -319,7 +356,8 @@
   outline: none;
 }
 
-.button.live:focus-visible {
+.button.live:focus-visible,
+.button.busy:focus-visible {
   outline: none;
   box-shadow:
     0 0 0 var(--btn-ring-offset) var(--btn-ring-gap-color),
@@ -328,7 +366,8 @@
 
 /* A bare link has no corner, but a hard rectangle around a label reads as a box the link does not
    have. The ring alone gets one. */
-.link.live:focus-visible {
+.link.live:focus-visible,
+.link.busy:focus-visible {
   border-radius: var(--btn-radius-bare-focus);
 }
 

@@ -25,17 +25,52 @@
    reads as foreign. 50 is the lightest step. Colour has no shared usage layer —
    what a colour means depends on the surface, so components own that. See
    tokens/index.css.                                                            */
-:root{
---color-neutral-50:#F5F5F5;--color-neutral-100:#EBEBEA;--color-neutral-200:#DEDEDE;--color-neutral-300:#CFCFCE;--color-neutral-400:#B2B1AE;--color-neutral-500:#91908D;--color-neutral-600:#71706A;--color-neutral-700:#504F49;--color-neutral-800:#383733;--color-neutral-900:#292824;--color-neutral-950:#1B1B18;
-/* Brandeis — the one interaction colour on the web. 500 is the brand value. */
---color-brandeis-50:#EEF2FF;--color-brandeis-100:#DBE4FF;--color-brandeis-200:#B8C8FF;--color-brandeis-300:#8AA5FF;--color-brandeis-400:#4D78FF;--color-brandeis-500:#0048FF;--color-brandeis-600:#003EE0;--color-brandeis-700:#0031B0;--color-brandeis-800:#002585;--color-brandeis-900:#001A5C;--color-brandeis-950:#00103A;
-/* Peridot — highlight only. Never fills a primary action. */
---color-peridot-50:#FCFDE9;--color-peridot-100:#F6FBC9;--color-peridot-200:#EDF79B;--color-peridot-300:#E2F26A;--color-peridot-400:#D7F04A;--color-peridot-500:#C3DD2A;--color-peridot-600:#A1B71F;--color-peridot-700:#7C8C1C;--color-peridot-800:#616C1C;--color-peridot-900:#515A1D;--color-peridot-950:#2C3110;
-/* Grounds — warm off-white, never pure white. Absolutes for labels on a fill. */
---color-paper:#FFFEFA;--color-paper-deep:#F3F1EA;
---color-white:#FFFFFF;--color-black:#000000;
-/* System feedback — not part of the brand palette, never decorative. */
---color-success-500:#3FA84B;
+:root {
+  --color-neutral-50: #f5f5f5;
+  --color-neutral-100: #ebebea;
+  --color-neutral-200: #dedede;
+  --color-neutral-300: #cfcfce;
+  --color-neutral-400: #b2b1ae;
+  --color-neutral-500: #91908d;
+  --color-neutral-600: #71706a;
+  --color-neutral-700: #504f49;
+  --color-neutral-800: #383733;
+  --color-neutral-900: #292824;
+  --color-neutral-950: #1b1b18;
+  /* Brandeis — the one interaction colour on the web. 500 is the brand value. */
+  --color-brandeis-50: #eef2ff;
+  --color-brandeis-100: #dbe4ff;
+  --color-brandeis-200: #b8c8ff;
+  --color-brandeis-300: #8aa5ff;
+  --color-brandeis-400: #4d78ff;
+  --color-brandeis-500: #0048ff;
+  --color-brandeis-600: #003ee0;
+  --color-brandeis-700: #0031b0;
+  --color-brandeis-800: #002585;
+  --color-brandeis-900: #001a5c;
+  --color-brandeis-950: #00103a;
+  /* Peridot — highlight only. Never fills a primary action. */
+  --color-peridot-50: #fcfde9;
+  --color-peridot-100: #f6fbc9;
+  --color-peridot-200: #edf79b;
+  --color-peridot-300: #e2f26a;
+  --color-peridot-400: #d7f04a;
+  --color-peridot-500: #c3dd2a;
+  --color-peridot-600: #a1b71f;
+  --color-peridot-700: #7c8c1c;
+  --color-peridot-800: #616c1c;
+  --color-peridot-900: #515a1d;
+  --color-peridot-950: #2c3110;
+  /* Grounds — warm off-white, never pure white. Absolutes for labels on a fill. */
+  --color-paper: #fffefa;
+  --color-paper-deep: #f3f1ea;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  /* System feedback — not part of the brand palette, never decorative. */
+  --color-success-500: #3fa84b;
+  --color-danger-600: #b3261e;
+  --color-danger-300: #f5a29b;
+  --color-danger-100: #ffe0dc;
 }
 
 /* ── Space · ramp ──────────────────────────────────────────────────────────────
@@ -48,8 +83,31 @@
    so that "the space between a head and its body" has one answer everywhere
    instead of nine plausible ones. Optical corrections inside a component are the
    documented exception.                                                        */
-:root{
---space-0:0px;--space-1:1px;--space-2:2px;--space-4:4px;--space-6:6px;--space-8:8px;--space-10:10px;--space-12:12px;--space-14:14px;--space-16:16px;--space-20:20px;--space-24:24px;--space-28:28px;--space-32:32px;--space-40:40px;--space-48:48px;--space-56:56px;--space-64:64px;--space-72:72px;--space-80:80px;--space-88:88px;--space-96:96px;--space-128:128px;--space-160:160px;
+:root {
+  --space-0: 0px;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-14: 14px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-28: 28px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-56: 56px;
+  --space-64: 64px;
+  --space-72: 72px;
+  --space-80: 80px;
+  --space-88: 88px;
+  --space-96: 96px;
+  --space-128: 128px;
+  --space-160: 160px;
 }
 
 /* ── Space · gap scale ─────────────────────────────────────────────────────────
@@ -71,25 +129,25 @@
    step — decide which, do not split the difference. And a step is chosen by what
    it separates, never by how it looks at one width: the scale does not shift
    responsively, the layout does.                                               */
-:root{
---gap-inline:var(--space-4);
---gap-tight:var(--space-8);
---gap-text:var(--space-16);
---gap-block:var(--space-24);
---gap-gutter:var(--space-32);
---gap-stack:var(--space-48);
---gap-column:var(--space-64);
---gap-section:var(--space-96);
---gap-section-open:var(--space-128);
+:root {
+  --gap-inline: var(--space-4);
+  --gap-tight: var(--space-8);
+  --gap-text: var(--space-16);
+  --gap-block: var(--space-24);
+  --gap-gutter: var(--space-32);
+  --gap-stack: var(--space-48);
+  --gap-column: var(--space-64);
+  --gap-section: var(--space-96);
+  --gap-section-open: var(--space-128);
 }
 
 /* ── Type · families ──────────────────────────────────────────────────────────
    Three faces, each with a fixed job, and no two vertically adjacent elements
    share one: the canonical stack is mono eyebrow → serif title → sans body.    */
-:root{
---font-family-display:"Newsreader",Georgia,"Times New Roman",serif;
---font-family-sans:"Public Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
---font-family-mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+:root {
+  --font-family-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-family-sans: 'Public Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-family-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 /* ── Type · size ladder ───────────────────────────────────────────────────────
@@ -97,36 +155,41 @@
    by role because the ladder was cut per role. Where two roles share a value —
    h4 and quote at 28px, ui-lg and body-sm at 14px — the value is stated twice on
    purpose: they are free to move independently.                                */
-:root{
---font-size-display:67px;
---font-size-h1:54px;
---font-size-h2:43px;
---font-size-h3:34px;
---font-size-h4:28px;
---font-size-h5:22px;
---font-size-quote:28px;
---font-size-lead:20px;
---font-size-body-lg:18px;
---font-size-body:16px;
---font-size-body-sm:14px;
---font-size-caption:13px;
---font-size-ui:13px;
---font-size-ui-sm:12px;
---font-size-ui-lg:14px;
---font-size-eyebrow:12px;
---font-size-micro:11px;
---font-size-stat:40px;
---font-size-code:14px;
-/* Breakpoint cuts. Titles step down; text and chrome hold at every width. */
---font-size-display-t:54px;--font-size-display-m:43px;
---font-size-h1-t:43px;--font-size-h1-m:34px;
---font-size-h2-t:34px;--font-size-h2-m:28px;
---font-size-h3-t:28px;--font-size-h3-m:25px;
---font-size-h4-t:25px;--font-size-h4-m:22px;
---font-size-h5-m:20px;
---font-size-quote-m:22px;
---font-size-lead-m:18px;
---font-size-stat-m:32px;
+:root {
+  --font-size-display: 67px;
+  --font-size-h1: 54px;
+  --font-size-h2: 43px;
+  --font-size-h3: 34px;
+  --font-size-h4: 28px;
+  --font-size-h5: 22px;
+  --font-size-quote: 28px;
+  --font-size-lead: 20px;
+  --font-size-body-lg: 18px;
+  --font-size-body: 16px;
+  --font-size-body-sm: 14px;
+  --font-size-caption: 13px;
+  --font-size-ui: 13px;
+  --font-size-ui-sm: 12px;
+  --font-size-ui-lg: 14px;
+  --font-size-eyebrow: 12px;
+  --font-size-micro: 11px;
+  --font-size-stat: 40px;
+  --font-size-code: 14px;
+  /* Breakpoint cuts. Titles step down; text and chrome hold at every width. */
+  --font-size-display-t: 54px;
+  --font-size-display-m: 43px;
+  --font-size-h1-t: 43px;
+  --font-size-h1-m: 34px;
+  --font-size-h2-t: 34px;
+  --font-size-h2-m: 28px;
+  --font-size-h3-t: 28px;
+  --font-size-h3-m: 25px;
+  --font-size-h4-t: 25px;
+  --font-size-h4-m: 22px;
+  --font-size-h5-m: 20px;
+  --font-size-quote-m: 22px;
+  --font-size-lead-m: 18px;
+  --font-size-stat-m: 32px;
 }
 
 /* ── Type · line-height ladder ────────────────────────────────────────────────
@@ -145,34 +208,39 @@
    Titles tighten as they grow and open up as they shrink, so the title roles carry
    -t (tablet, ≤1023) and -m (mobile, ≤767) steps beside the base, matching the size
    ladder's suffixes. A role with no variant holds at every width.               */
-:root{
---line-height-display:1.04;
---line-height-h1:1.06;
---line-height-h2:1.1;
---line-height-h3:1.16;
---line-height-h4:1.2;
---line-height-h5:1.28;
---line-height-quote:1.35;
---line-height-lead:1.5;
---line-height-body-lg:1.55;
---line-height-body:1.6;
---line-height-body-sm:1.55;
---line-height-caption:1.45;
---line-height-ui:1.2;
---line-height-eyebrow:1.2;
---line-height-micro:1.2;
---line-height-stat:1;
---line-height-code:1.6;
-/* Breakpoint steps. Only the roles whose ratio actually moves have one — stat holds
+:root {
+  --line-height-display: 1.04;
+  --line-height-h1: 1.06;
+  --line-height-h2: 1.1;
+  --line-height-h3: 1.16;
+  --line-height-h4: 1.2;
+  --line-height-h5: 1.28;
+  --line-height-quote: 1.35;
+  --line-height-lead: 1.5;
+  --line-height-body-lg: 1.55;
+  --line-height-body: 1.6;
+  --line-height-body-sm: 1.55;
+  --line-height-caption: 1.45;
+  --line-height-ui: 1.2;
+  --line-height-eyebrow: 1.2;
+  --line-height-micro: 1.2;
+  --line-height-stat: 1;
+  --line-height-code: 1.6;
+  /* Breakpoint steps. Only the roles whose ratio actually moves have one — stat holds
    at 1 on every width, so it has no -m step even though its SIZE has one. */
---line-height-display-t:1.06;--line-height-display-m:1.08;
---line-height-h1-t:1.08;--line-height-h1-m:1.12;
---line-height-h2-t:1.14;--line-height-h2-m:1.18;
---line-height-h3-t:1.2;--line-height-h3-m:1.22;
---line-height-h4-t:1.22;--line-height-h4-m:1.26;
---line-height-h5-m:1.3;
---line-height-quote-m:1.4;
---line-height-lead-m:1.55;
+  --line-height-display-t: 1.06;
+  --line-height-display-m: 1.08;
+  --line-height-h1-t: 1.08;
+  --line-height-h1-m: 1.12;
+  --line-height-h2-t: 1.14;
+  --line-height-h2-m: 1.18;
+  --line-height-h3-t: 1.2;
+  --line-height-h3-m: 1.22;
+  --line-height-h4-t: 1.22;
+  --line-height-h4-m: 1.26;
+  --line-height-h5-m: 1.3;
+  --line-height-quote-m: 1.4;
+  --line-height-lead-m: 1.55;
 }
 
 /* ── Type · weight, tracking, measure ─────────────────────────────────────────
@@ -183,11 +251,22 @@
    optical error at a given size rather than marking a step on a scale, and the same
    correction genuinely serves several roles — which is why h2, h3 and h4 read
    --letter-spacing-title, -title-tight and -title-fine rather than one name each. */
-:root{
---font-weight-regular:400;--font-weight-medium:500;--font-weight-semibold:600;
---letter-spacing-display:-0.02em;--letter-spacing-h1:-0.018em;--letter-spacing-title:-0.015em;--letter-spacing-title-tight:-0.01em;--letter-spacing-title-fine:-0.005em;--letter-spacing-none:0em;--letter-spacing-ui:0.08em;--letter-spacing-micro:0.1em;--letter-spacing-eyebrow:0.12em;
-/* Measure — the only two line-length limits the system enforces. */
---measure-title:22ch;--measure-body:68ch;
+:root {
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --letter-spacing-display: -0.02em;
+  --letter-spacing-h1: -0.018em;
+  --letter-spacing-title: -0.015em;
+  --letter-spacing-title-tight: -0.01em;
+  --letter-spacing-title-fine: -0.005em;
+  --letter-spacing-none: 0em;
+  --letter-spacing-ui: 0.08em;
+  --letter-spacing-micro: 0.1em;
+  --letter-spacing-eyebrow: 0.12em;
+  /* Measure — the only two line-length limits the system enforces. */
+  --measure-title: 22ch;
+  --measure-body: 68ch;
 }
 
 /* ── Type · usage layer ───────────────────────────────────────────────────────
@@ -203,94 +282,156 @@
    want the same mono/semibold/1.2 chrome, differing only in size. Without all three
    as composites a control has to rebuild the font by hand out of the ladder — which
    is how a component ends up with no line-height at all.                       */
-:root{
---text-display:var(--font-weight-regular) var(--font-size-display)/var(--line-height-display) var(--font-family-display);--text-display-tracking:var(--letter-spacing-display);
---text-h1:var(--font-weight-regular) var(--font-size-h1)/var(--line-height-h1) var(--font-family-display);--text-h1-tracking:var(--letter-spacing-h1);
---text-h2:var(--font-weight-medium) var(--font-size-h2)/var(--line-height-h2) var(--font-family-display);--text-h2-tracking:var(--letter-spacing-title);
---text-h3:var(--font-weight-medium) var(--font-size-h3)/var(--line-height-h3) var(--font-family-display);--text-h3-tracking:var(--letter-spacing-title-tight);
---text-h4:var(--font-weight-medium) var(--font-size-h4)/var(--line-height-h4) var(--font-family-display);--text-h4-tracking:var(--letter-spacing-title-fine);
---text-h5:var(--font-weight-medium) var(--font-size-h5)/var(--line-height-h5) var(--font-family-display);--text-h5-tracking:var(--letter-spacing-none);
---text-quote:var(--font-weight-regular) var(--font-size-quote)/var(--line-height-quote) var(--font-family-display);
---text-lead:var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead) var(--font-family-sans);
---text-body-lg:var(--font-weight-regular) var(--font-size-body-lg)/var(--line-height-body-lg) var(--font-family-sans);
---text-body:var(--font-weight-regular) var(--font-size-body)/var(--line-height-body) var(--font-family-sans);
---text-body-sm:var(--font-weight-regular) var(--font-size-body-sm)/var(--line-height-body-sm) var(--font-family-sans);
---text-caption:var(--font-weight-regular) var(--font-size-caption)/var(--line-height-caption) var(--font-family-sans);
---text-ui-sm:var(--font-weight-semibold) var(--font-size-ui-sm)/var(--line-height-ui) var(--font-family-mono);--text-ui-sm-tracking:var(--letter-spacing-ui);
---text-ui:var(--font-weight-semibold) var(--font-size-ui)/var(--line-height-ui) var(--font-family-mono);--text-ui-tracking:var(--letter-spacing-ui);
---text-ui-lg:var(--font-weight-semibold) var(--font-size-ui-lg)/var(--line-height-ui) var(--font-family-mono);--text-ui-lg-tracking:var(--letter-spacing-ui);
---text-eyebrow:var(--font-weight-semibold) var(--font-size-eyebrow)/var(--line-height-eyebrow) var(--font-family-mono);--text-eyebrow-tracking:var(--letter-spacing-eyebrow);
---text-micro:var(--font-weight-semibold) var(--font-size-micro)/var(--line-height-micro) var(--font-family-mono);--text-micro-tracking:var(--letter-spacing-micro);
---text-stat:var(--font-weight-medium) var(--font-size-stat)/var(--line-height-stat) var(--font-family-mono);--text-stat-tracking:var(--letter-spacing-title-tight);
---text-code:var(--font-weight-regular) var(--font-size-code)/var(--line-height-code) var(--font-family-mono);
+:root {
+  --text-display: var(--font-weight-regular) var(--font-size-display)/var(--line-height-display)
+    var(--font-family-display);
+  --text-display-tracking: var(--letter-spacing-display);
+  --text-h1: var(--font-weight-regular) var(--font-size-h1)/var(--line-height-h1)
+    var(--font-family-display);
+  --text-h1-tracking: var(--letter-spacing-h1);
+  --text-h2: var(--font-weight-medium) var(--font-size-h2)/var(--line-height-h2)
+    var(--font-family-display);
+  --text-h2-tracking: var(--letter-spacing-title);
+  --text-h3: var(--font-weight-medium) var(--font-size-h3)/var(--line-height-h3)
+    var(--font-family-display);
+  --text-h3-tracking: var(--letter-spacing-title-tight);
+  --text-h4: var(--font-weight-medium) var(--font-size-h4)/var(--line-height-h4)
+    var(--font-family-display);
+  --text-h4-tracking: var(--letter-spacing-title-fine);
+  --text-h5: var(--font-weight-medium) var(--font-size-h5)/var(--line-height-h5)
+    var(--font-family-display);
+  --text-h5-tracking: var(--letter-spacing-none);
+  --text-quote: var(--font-weight-regular) var(--font-size-quote)/var(--line-height-quote)
+    var(--font-family-display);
+  --text-lead: var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead)
+    var(--font-family-sans);
+  --text-body-lg: var(--font-weight-regular) var(--font-size-body-lg)/var(--line-height-body-lg)
+    var(--font-family-sans);
+  --text-body: var(--font-weight-regular) var(--font-size-body)/var(--line-height-body)
+    var(--font-family-sans);
+  --text-body-sm: var(--font-weight-regular) var(--font-size-body-sm)/var(--line-height-body-sm)
+    var(--font-family-sans);
+  --text-caption: var(--font-weight-regular) var(--font-size-caption)/var(--line-height-caption)
+    var(--font-family-sans);
+  --text-ui-sm: var(--font-weight-semibold) var(--font-size-ui-sm)/var(--line-height-ui)
+    var(--font-family-mono);
+  --text-ui-sm-tracking: var(--letter-spacing-ui);
+  --text-ui: var(--font-weight-semibold) var(--font-size-ui)/var(--line-height-ui)
+    var(--font-family-mono);
+  --text-ui-tracking: var(--letter-spacing-ui);
+  --text-ui-lg: var(--font-weight-semibold) var(--font-size-ui-lg)/var(--line-height-ui)
+    var(--font-family-mono);
+  --text-ui-lg-tracking: var(--letter-spacing-ui);
+  --text-eyebrow: var(--font-weight-semibold)
+    var(--font-size-eyebrow)/var(--line-height-eyebrow) var(--font-family-mono);
+  --text-eyebrow-tracking: var(--letter-spacing-eyebrow);
+  --text-micro: var(--font-weight-semibold) var(--font-size-micro)/var(--line-height-micro)
+    var(--font-family-mono);
+  --text-micro-tracking: var(--letter-spacing-micro);
+  --text-stat: var(--font-weight-medium) var(--font-size-stat)/var(--line-height-stat)
+    var(--font-family-mono);
+  --text-stat-tracking: var(--letter-spacing-title-tight);
+  --text-code: var(--font-weight-regular) var(--font-size-code)/var(--line-height-code)
+    var(--font-family-mono);
 }
 /* Tablet — 768 to 1023. */
-@media (max-width:1023px){:root{
---text-display:var(--font-weight-regular) var(--font-size-display-t)/var(--line-height-display-t) var(--font-family-display);
---text-h1:var(--font-weight-regular) var(--font-size-h1-t)/var(--line-height-h1-t) var(--font-family-display);
---text-h2:var(--font-weight-medium) var(--font-size-h2-t)/var(--line-height-h2-t) var(--font-family-display);
---text-h3:var(--font-weight-medium) var(--font-size-h3-t)/var(--line-height-h3-t) var(--font-family-display);
---text-h4:var(--font-weight-medium) var(--font-size-h4-t)/var(--line-height-h4-t) var(--font-family-display);
-}}
+@media (max-width: 1023px) {
+  :root {
+    --text-display: var(--font-weight-regular)
+      var(--font-size-display-t)/var(--line-height-display-t) var(--font-family-display);
+    --text-h1: var(--font-weight-regular) var(--font-size-h1-t)/var(--line-height-h1-t)
+      var(--font-family-display);
+    --text-h2: var(--font-weight-medium) var(--font-size-h2-t)/var(--line-height-h2-t)
+      var(--font-family-display);
+    --text-h3: var(--font-weight-medium) var(--font-size-h3-t)/var(--line-height-h3-t)
+      var(--font-family-display);
+    --text-h4: var(--font-weight-medium) var(--font-size-h4-t)/var(--line-height-h4-t)
+      var(--font-family-display);
+  }
+}
 /* Mobile — below 768. */
-@media (max-width:767px){:root{
---text-display:var(--font-weight-regular) var(--font-size-display-m)/var(--line-height-display-m) var(--font-family-display);
---text-h1:var(--font-weight-regular) var(--font-size-h1-m)/var(--line-height-h1-m) var(--font-family-display);
---text-h2:var(--font-weight-medium) var(--font-size-h2-m)/var(--line-height-h2-m) var(--font-family-display);
---text-h3:var(--font-weight-medium) var(--font-size-h3-m)/var(--line-height-h3-m) var(--font-family-display);
---text-h4:var(--font-weight-medium) var(--font-size-h4-m)/var(--line-height-h4-m) var(--font-family-display);
---text-h5:var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-h5-m) var(--font-family-display);
---text-quote:var(--font-weight-regular) var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-display);
---text-lead:var(--font-weight-regular) var(--font-size-lead-m)/var(--line-height-lead-m) var(--font-family-sans);
---text-stat:var(--font-weight-medium) var(--font-size-stat-m)/var(--line-height-stat) var(--font-family-mono);
-}}
+@media (max-width: 767px) {
+  :root {
+    --text-display: var(--font-weight-regular)
+      var(--font-size-display-m)/var(--line-height-display-m) var(--font-family-display);
+    --text-h1: var(--font-weight-regular) var(--font-size-h1-m)/var(--line-height-h1-m)
+      var(--font-family-display);
+    --text-h2: var(--font-weight-medium) var(--font-size-h2-m)/var(--line-height-h2-m)
+      var(--font-family-display);
+    --text-h3: var(--font-weight-medium) var(--font-size-h3-m)/var(--line-height-h3-m)
+      var(--font-family-display);
+    --text-h4: var(--font-weight-medium) var(--font-size-h4-m)/var(--line-height-h4-m)
+      var(--font-family-display);
+    --text-h5: var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-h5-m)
+      var(--font-family-display);
+    --text-quote: var(--font-weight-regular) var(--font-size-quote-m)/var(--line-height-quote-m)
+      var(--font-family-display);
+    --text-lead: var(--font-weight-regular) var(--font-size-lead-m)/var(--line-height-lead-m)
+      var(--font-family-sans);
+    --text-stat: var(--font-weight-medium) var(--font-size-stat-m)/var(--line-height-stat)
+      var(--font-family-mono);
+  }
+}
 
 /* ── Radius ───────────────────────────────────────────────────────────────────
    Small and purposeful. 0 is a real choice, not an absence: grid cells and code
    panels are square. --radius-full is the pill, used for status only.          */
-:root{
---radius-0:0px;--radius-4:4px;--radius-8:8px;--radius-full:999px;
+:root {
+  --radius-0: 0px;
+  --radius-4: 4px;
+  --radius-8: 8px;
+  --radius-full: 999px;
 }
 
 /* ── Border ───────────────────────────────────────────────────────────────────
    One optical weight, four media. A 1px rule is invisible projected and drops
    out when a platform re-encodes an image, so the number changes to keep the
    appearance. Web is the only one a stylesheet uses; the rest are the record.  */
-:root{
---border-width-0:0px;--border-width-1:1px;--border-width-2:2px;--border-width-3:3px;
---border-width-hairline:var(--border-width-1);
---border-width-hairline-deck:var(--border-width-2);
---border-width-hairline-social:var(--border-width-3);
---border-width-hairline-print:0.75pt;
+:root {
+  --border-width-0: 0px;
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-3: 3px;
+  --border-width-hairline: var(--border-width-1);
+  --border-width-hairline-deck: var(--border-width-2);
+  --border-width-hairline-social: var(--border-width-3);
+  --border-width-hairline-print: 0.75pt;
 }
 
 /* ── Focus ring ───────────────────────────────────────────────────────────────
    A hard ring, never a glow. Its two colours are surface-dependent — the gap
    takes the surface it sits on — so they belong to a component layer.          */
-:root{
---focus-ring-width:var(--space-2);
---focus-ring-offset:var(--space-2);
+:root {
+  --focus-ring-width: var(--space-2);
+  --focus-ring-offset: var(--space-2);
 }
 
 /* ── Motion ───────────────────────────────────────────────────────────────────
    Colour and border only. Nothing in this system moves, scales or fades.       */
-:root{
---duration-instant:0ms;--duration-fast:140ms;
---easing-standard:cubic-bezier(0.2,0,0,1);
+:root {
+  --duration-instant: 0ms;
+  --duration-fast: 140ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
 /* ── Elevation ────────────────────────────────────────────────────────────────
    Declared so "no shadow" is a value a component points at, rather than an
    omission someone fills in later. There is no second step.                   */
-:root{
---shadow-none:none;
+:root {
+  --shadow-none: none;
 }
 
 /* ── Z-index ──────────────────────────────────────────────────────────────────
    Named layers, 100 apart. Never write a raw z-index; if a thing needs a layer
    that is not here, the layer is missing and gets added by name.              */
-:root{
---z-base:0;--z-raised:100;--z-sticky:200;--z-dropdown:300;--z-overlay:400;--z-modal:500;--z-toast:600;
+:root {
+  --z-base: 0;
+  --z-raised: 100;
+  --z-sticky: 200;
+  --z-dropdown: 300;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-toast: 600;
 }
 
 /* ── Icon ─────────────────────────────────────────────────────────────────────
@@ -302,14 +443,21 @@
    token nothing reads asserting a weight nothing draws. Solid glyphs carry their
    own weight in the geometry — that is what makes them scale to 14px without
    looking heavier than the label beside them, where a fixed stroke would not.   */
-:root{
---icon-size-14:14px;--icon-size-16:16px;--icon-size-18:18px;--icon-size-24:24px;
+:root {
+  --icon-size-14: 14px;
+  --icon-size-16: 16px;
+  --icon-size-18: 18px;
+  --icon-size-24: 24px;
 }
 
 /* ── Breakpoint ───────────────────────────────────────────────────────────────
    CSS cannot read a custom property inside a media query, so these are the
    record and the media queries above inline the same numbers. Change both.
    Ranges: mobile ≤767 · tablet 768–1023 · desktop 1024–1439 · wide ≥1440.     */
-:root{
---breakpoint-480:480px;--breakpoint-768:768px;--breakpoint-1024:1024px;--breakpoint-1280:1280px;--breakpoint-1440:1440px;
+:root {
+  --breakpoint-480: 480px;
+  --breakpoint-768: 768px;
+  --breakpoint-1024: 1024px;
+  --breakpoint-1280: 1280px;
+  --breakpoint-1440: 1440px;
 }

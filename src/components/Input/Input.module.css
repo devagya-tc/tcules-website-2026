@@ -1,0 +1,121 @@
+/* Input — the native control box shared by forms and low-chrome capture rows.
+
+   This primitive owns only the box: labels, optional flags, validation copy and sibling spacing
+   stay with the composing pattern. Every colour and distance comes from --inp-*; the module reads
+   the current data-surface scope and never paints or selects a surface itself.
+
+   Rule order is deliberate. Emphasis establishes rest and focus, invalid replaces the rule, and
+   disabled comes last so an unavailable invalid field reads unavailable. At the phone breakpoint
+   standard single-line controls step from 40 to the 44px touch floor. Quiet stays 40px because it
+   shares a row with SiteFooter's 40px Button; that preservation is the reason quiet is a named
+   emphasis instead of a footer override. Textareas already exceed the floor through their 128px
+   minimum and remain natively resizable. */
+
+.control {
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  min-inline-size: var(--inp-min-inline);
+  block-size: var(--inp-height-md);
+  padding-inline: var(--inp-padding-x);
+  border: var(--inp-rule-width) solid;
+  border-radius: var(--inp-radius);
+  font: var(--inp-text);
+  box-shadow: var(--inp-shadow);
+  transition:
+    border-color var(--inp-transition-duration) var(--inp-transition-easing),
+    background var(--inp-transition-duration) var(--inp-transition-easing);
+}
+
+.control::placeholder {
+  /* Browsers otherwise attenuate the declared ink and invalidate its measured contrast. This is
+     a rendering normalization, not a visual state or a transition. */
+  opacity: 1;
+}
+
+.standard {
+  border-color: var(--inp-standard-rule);
+  background: var(--inp-standard-bg);
+  color: var(--inp-standard-fg);
+}
+
+.standard::placeholder {
+  color: var(--inp-standard-placeholder-fg);
+}
+
+.standard:not(:disabled, .invalid):hover,
+.standard:not(:disabled, .invalid):focus-visible {
+  border-color: var(--inp-standard-rule-hover);
+}
+
+.quiet {
+  border-color: var(--inp-quiet-rule);
+  background: var(--inp-quiet-bg);
+  color: var(--inp-quiet-fg);
+}
+
+.quiet::placeholder {
+  color: var(--inp-quiet-placeholder-fg);
+}
+
+.quiet:not(:disabled, .invalid):focus-visible {
+  border-color: var(--inp-quiet-rule-focus);
+}
+
+.control:focus {
+  outline: none;
+}
+
+.standard:focus-visible {
+  box-shadow:
+    0 0 0 var(--inp-ring-offset) var(--inp-standard-ring-gap-color),
+    0 0 0 calc(var(--inp-ring-offset) + var(--inp-ring-width)) var(--inp-standard-ring-color);
+}
+
+.quiet:focus-visible {
+  box-shadow:
+    0 0 0 var(--inp-ring-offset) var(--inp-quiet-ring-gap-color),
+    0 0 0 calc(var(--inp-ring-offset) + var(--inp-ring-width)) var(--inp-quiet-ring-color);
+}
+
+.invalid {
+  /* Width and colour move together; aria-invalid carries the same state non-visually. */
+  border-width: var(--inp-invalid-rule-width);
+  border-color: var(--inp-invalid-rule);
+}
+
+.control:disabled {
+  /* Explicit tokens avoid opacity mixing differently on each of the four surfaces. */
+  cursor: not-allowed;
+  border-color: var(--inp-disabled-rule);
+  background: var(--inp-disabled-bg);
+  color: var(--inp-disabled-fg);
+}
+
+.control:disabled::placeholder {
+  color: var(--inp-disabled-fg);
+}
+
+.textarea {
+  block-size: auto;
+  min-block-size: var(--inp-textarea-min-block);
+  padding-block: var(--inp-textarea-padding-y);
+  resize: vertical;
+}
+
+@media (max-width: 767px) {
+  .control:not(.textarea) {
+    block-size: var(--inp-height-touch);
+  }
+
+  /* The footer's quiet treatment is intentionally preserved at its existing 40px box. */
+  .quiet:not(.textarea) {
+    block-size: var(--inp-height-md);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control {
+    transition-duration: var(--duration-instant);
+  }
+}

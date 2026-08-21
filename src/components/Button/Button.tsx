@@ -45,7 +45,10 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 /* Everything a <button> accepts, minus the two we redefine. `color` is dropped so `tone` can own
    the colour axis without colliding with the HTML attribute; `children` is dropped so each variant
    below can state its own rule about whether a label is required. */
-type ButtonBase = Omit<ComponentPropsWithoutRef<'button'>, 'color' | 'children'> & {
+type ButtonBase = Omit<
+  ComponentPropsWithoutRef<'button'>,
+  'color' | 'children' | 'aria-busy' | 'disabled'
+> & {
   /**
    * Element to render. Defaults to `button`.
    *
@@ -96,6 +99,19 @@ type ButtonBase = Omit<ComponentPropsWithoutRef<'button'>, 'color' | 'children'>
   className?: string;
 };
 
+/* Progress and unavailability are mutually exclusive contracts. A busy action must keep focus;
+   a disabled action must leave the tab order. Allowing both would make that promise impossible. */
+type ButtonAvailability =
+  | {
+      /**
+       * An in-progress action. Keeps the control focusable and named, suppresses pointer states,
+       * and emits aria-busy without pretending the action is unavailable.
+       */
+      busy: true;
+      disabled?: never;
+    }
+  | { busy?: false; disabled?: boolean };
+
 /* A labelled button. The label is the whole button in the common case: two to four words, terse
    and literal, uppercased by the stylesheet rather than by the copy. */
 type WithLabel = {
@@ -126,20 +142,22 @@ type IconAlone = {
   iconLeft?: never;
 };
 
-export type ButtonProps = ButtonBase & ((WithLabel & (TrailingIcon | LeadingIcon)) | IconAlone);
+export type ButtonProps = ButtonBase &
+  ButtonAvailability &
+  ((WithLabel & (TrailingIcon | LeadingIcon)) | IconAlone);
 
 /**
  * Button — the control, built to the Button Spec Sheet.
  *
  * Six combinations (three emphases × two tones), three sizes, three variants (label, label and
- * icon, icon alone) and six states. It contributes no colour and no distance: every value comes
+ * icon, icon alone) and seven states. It contributes no colour and no distance: every value comes
  * from `--btn-*` in tokens/components/button.css, which re-declares the whole set once per
  * surface. So the same markup is correct on paper, on a tint panel, in the ink footer and on the
  * blue pivot — including a tint panel nested inside an ink section — without being told where it
  * is. Put it inside a `Section` and the `data-surface` attribute does the rest.
  *
- * Hover, pressed, focus and disabled are the stylesheet's business and take no props. `active` is
- * the one state a caller holds, because only application state knows which filter is selected.
+ * Hover, pressed, focus and disabled are the stylesheet's business. `active` and `busy` are the
+ * two states a caller holds, because only application state knows selection and request progress.
  */
 export function Button({
   as: Tag = 'button',
@@ -150,6 +168,7 @@ export function Button({
   iconLeft,
   iconOnly = false,
   active = false,
+  busy = false,
   disabled = false,
   extendHitArea = false,
   type,
@@ -170,6 +189,7 @@ export function Button({
     <Tag
       {...rest}
       {...nativeState}
+      aria-busy={busy || undefined}
       className={cx(
         styles.button,
         styles[emphasis],
@@ -183,7 +203,7 @@ export function Button({
            here rather than passed: a caller cannot make a disabled button interactive by
            forgetting a prop. It exists as a class rather than a `:not(:disabled)` selector
            because an anchor has no `:disabled` to negate. */
-        disabled ? styles.disabled : styles.live,
+        disabled ? styles.disabled : busy ? styles.busy : styles.live,
         extendHitArea && styles.hit,
         className,
       )}

@@ -47,20 +47,18 @@ export default async function SiteFooterSpecimenPage() {
             four instances below coexist without three broken <code>for</code> references.
           </p>
           <p>
-            Two things to hold against it. The field is a{' '}
-            <strong>control styled inside a pattern</strong>, which is the coupling the tier
-            rule exists to prevent — it is here because <code>src/components/Input</code> does
-            not exist yet, and when it does these three rules delete and{' '}
-            <code>--foot-field-*</code> moves to an <code>--inp-*</code> layer unchanged. And
-            the form posts to <code>/api/newsletter</code>, which{' '}
+            The field now composes the shared <code>Input</code> primitive with its quiet
+            emphasis. Its 40px geometry and four surface treatments moved out of this pattern;
+            the light placeholder stepped one rung darker to clear the text contrast floor. The
+            form still posts to <code>/api/newsletter</code>, which{' '}
             <strong>nothing serves</strong>: a real submission is a 404 until that route exists.
           </p>
           <p>
             The socials are named links, not logo marks — and not because the glyph set is
-            unfilled, since it is filled. Because these are trademarks: each carries its own usage
-            rules, its own proportions and its own permission to check, and none is drawn on this
-            system&rsquo;s 24-unit box. A word is also the accessible form, since an icon-only
-            social row needs a label per icon anyway.
+            unfilled, since it is filled. Because these are trademarks: each carries its own
+            usage rules, its own proportions and its own permission to check, and none is drawn
+            on this system&rsquo;s 24-unit box. A word is also the accessible form, since an
+            icon-only social row needs a label per icon anyway.
           </p>
         </Layout>
       </Section>

@@ -1,0 +1,72 @@
+/* ══ Component layer — enquiry form ══════════════════════════════════════════════
+   Tier 3. The pattern owns form copy, feedback and success treatment. Native
+   controls deliberately live in input.css and the submit deliberately lives in
+   button.css; this layer never reaches into either component's tokens. */
+
+:root {
+  /* The minimum duplicates Input's usable floor intentionally: patterns never read another
+     component's tokens. The maximum is CtaSection's 470px split track. One 19px caption line is
+     reserved so blur validation does not move later controls. */
+  --enq-form-min-inline: 16rem;
+  --enq-form-max-inline: 470px;
+  --enq-message-reserve: 19px;
+  --enq-transition-duration: var(--duration-fast);
+  --enq-transition-easing: var(--easing-standard);
+}
+
+:root,
+[data-surface='paper'] {
+  /* Neutral-600 is the text floor for flag/caption at 4.92:1 on paper. Danger-600 carries invalid
+     copy at 6.48:1; the success rule is decorative while the check glyph and sentence carry meaning. */
+  --enq-label-ink: var(--color-neutral-700);
+  --enq-flag-ink: var(--color-neutral-600);
+  --enq-message-invalid-ink: var(--color-danger-600);
+  --enq-status-ink: var(--color-neutral-900);
+  --enq-status-rule: var(--color-neutral-300);
+  --enq-status-rule-error: var(--color-danger-600);
+  --enq-success-ink: var(--color-neutral-900);
+  --enq-success-rule: var(--color-success-500);
+  --enq-caption-ink: var(--color-neutral-600);
+}
+
+[data-surface='tint'] {
+  /* Deep paper raises the ground: flag and caption step to neutral-700 because neutral-600 would
+     fail at 4.39:1. Danger-600 remains 5.78:1 for invalid and error copy. */
+  --enq-label-ink: var(--color-neutral-700);
+  --enq-flag-ink: var(--color-neutral-700);
+  --enq-message-invalid-ink: var(--color-danger-600);
+  --enq-status-ink: var(--color-neutral-900);
+  --enq-status-rule: var(--color-neutral-400);
+  --enq-status-rule-error: var(--color-danger-600);
+  --enq-success-ink: var(--color-neutral-900);
+  --enq-success-rule: var(--color-success-500);
+  --enq-caption-ink: var(--color-neutral-700);
+}
+
+[data-surface='ink'] {
+  /* Text polarity inverts without borrowing Input tokens. Neutral-400 keeps flag/caption above the
+     text floor, while danger-300 carries error copy at 8.65:1 on neutral-950. */
+  --enq-label-ink: var(--color-neutral-200);
+  --enq-flag-ink: var(--color-neutral-400);
+  --enq-message-invalid-ink: var(--color-danger-300);
+  --enq-status-ink: var(--color-neutral-100);
+  --enq-status-rule: var(--color-neutral-700);
+  --enq-status-rule-error: var(--color-danger-300);
+  --enq-success-ink: var(--color-neutral-50);
+  --enq-success-rule: var(--color-success-500);
+  --enq-caption-ink: var(--color-neutral-400);
+}
+
+[data-surface='blue'] {
+  /* Brand-100 is the quiet text floor at 4.91:1. Danger-100 reaches 5.03:1; the success rule turns
+     white because semantic success-500 would be only 2.05:1 on this ground. */
+  --enq-label-ink: var(--color-brandeis-50);
+  --enq-flag-ink: var(--color-brandeis-100);
+  --enq-message-invalid-ink: var(--color-danger-100);
+  --enq-status-ink: var(--color-white);
+  --enq-status-rule: var(--color-brandeis-200);
+  --enq-status-rule-error: var(--color-danger-100);
+  --enq-success-ink: var(--color-white);
+  --enq-success-rule: var(--color-white);
+  --enq-caption-ink: var(--color-brandeis-100);
+}
