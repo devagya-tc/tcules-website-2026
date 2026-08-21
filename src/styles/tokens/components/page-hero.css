@@ -1,0 +1,205 @@
+/* ══ Component layer — page hero ═════════════════════════════════════════════════
+   Tier 2. The opening block of a page — one h1, an optional eyebrow, one to six paragraphs
+   of lead copy, an optional byline, an optional caller block and nought to two actions —
+   on all 129 routes, exactly once, always first inside <main>. Built to
+   docs/specs/PageHero.md. This file is the only place a hero colour is decided, and it
+   decides it four times: once per surface.
+
+   Naming: --hero-{part}-{role}
+           part   title | lead | body | eyebrow | key | value
+           role   ink                       — every part is text on the band's own ground.
+                                              Nothing in this component has a box, so
+                                              nothing has an fg and nothing has a bg. -fg
+                                              is for a control with a fill, which is why
+                                              button.css says --btn-solid-primary-fg and
+                                              this file says --hero-title-ink.
+                  text | tracking | measure  — the typographic geometry, identical on all
+                                              four surfaces.
+   There is no {variant} slot and no {state} slot, and both absences are load-bearing.
+
+   ── One variant, one size ───────────────────────────────────────────────────────
+   The spec's §4 collapses the three briefed arrangements into one: no row of the corpus
+   differs in ARRANGEMENT, only in which optional slot is filled, and the two slots that do
+   the differentiating — eyebrow and byline — are independent of each other. So there is
+   nothing for a variant to select and nothing for a size to step. A --hero-{variant}-*
+   token would have been a name for a page family styled identically to the default.
+
+   ── The state model: there isn't one ────────────────────────────────────────────
+   ZERO --hero-* state tokens, and that is an assertion rather than an omission: given the
+   same props this component renders the same pixels at every moment of its life, on every
+   surface, at every width. Nothing here responds to a pointer, nothing is focusable and
+   nothing opens.
+
+     no --hero-*-hover      no part of the hero reacts to a pointer. The Buttons in the
+     no --hero-*-pressed    band do, through --btn-*-hover and --btn-*-pressed, which is
+                            their own spec's business.
+     no --hero-*-disabled   a page opening cannot be unavailable.
+     no --hero-*-expanded   nothing opens. No disclosure, no aria-expanded, and no idref
+                            pointing at a panel that is not rendered.
+     no --hero-ring-*       nothing the component renders can take focus, so it never
+                            draws a ring. The rings inside the band are Button's, measured
+                            against --btn-ring-gap-color on all four surfaces there.
+     no --hero-*-bg         nothing in the hero is boxed. There is no fill behind any part
+                            to measure a ratio against, which is why every cell below is
+                            measured against the BAND's ground.
+
+   The system's rule that a rendered hover must differ from a rendered pressed is satisfied
+   here vacuously — there is no pair of renderings that could be identical — and satisfied
+   for real by Button, which is the only thing in this band a pointer can reach.
+
+   ── Every surface restates every token ──────────────────────────────────────────
+   Not just the deltas from paper. The hero paints its own band, so it is never nested in
+   the ordinary sense — but the band IS a [data-surface] scope, and all six inks resolve
+   from whichever block that attribute selects. A tint hero standing between two ink bands
+   must render the tint column; a deltas-only table would strand --color-neutral-100 on
+   --color-paper-deep at 1.13:1, which is the measured failure this repetition exists to
+   prevent. The blocks below are repetitive on purpose.
+
+   Four of these rows land exactly on mappings section.css already makes — title-ink on
+   --sec-ink and eyebrow-ink on --sec-ink-label, on all four surfaces. That agreement says
+   the values were derived the way the system derives its own, and it is NOT a reason to
+   alias them: a component token that reads --sec-* silently follows it the day the surface
+   layer is re-tuned, which is how a page opening ends up quieter than it was specified to
+   be with nobody having decided that. Every cell below names its --color-* step.
+
+   ── Two tokens that hold identical values on all four surfaces ──────────────────
+   --hero-eyebrow-ink and --hero-key-ink never diverge. They stay two tokens: anatomy names
+   become token slots, the two parts take different type roles (--text-eyebrow at 12 and
+   --text-micro at 11), and one is a category while the other is a field label. Same call
+   breadcrumbs.css made for --crumb-link-ink and --crumb-collapse-ink.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   Type comes in as COMPOSITES, six roles for six parts, and three families in one band:
+   the title is display serif, the copy is sans, the two labels are mono. A hero built from
+   one family has to earn its structure from rules and boxes; this one gets it from the
+   type, which is why §2 has no `rule` part and no `panel` part and why there is no
+   border-width token above zero anywhere below.
+
+   Only three of the six roles have a tracking companion — --text-lead, --text-body-lg and
+   --text-body-sm are three of the seven roles in the layer that genuinely have none — so
+   only three are declared. A --hero-lead-tracking would name a value that does not exist.
+   Each companion is aliased through this prefix rather than read from --text-* in the
+   module, following --foot-title-tracking, so the module reads nothing but --hero-*.
+
+   No distance token of any kind. Every seam in this component is a Layout or Cluster gap
+   prop — 24 inside the opening, 16 between paragraphs, 48 between blocks, 4 between a key
+   and its value, 8 between actions — and the band's own 96 is --sec-padding-y at Section's
+   default density, which is not this component's to name. A --hero-stack-gap would be a
+   second name for --gap-stack, which is why --sec-gap was deleted. */
+:root{
+--hero-eyebrow-text:var(--text-eyebrow);
+--hero-eyebrow-tracking:var(--text-eyebrow-tracking);
+--hero-title-text:var(--text-h1);
+--hero-title-tracking:var(--text-h1-tracking);
+--hero-lead-text:var(--text-lead);
+--hero-body-text:var(--text-body-lg);
+--hero-key-text:var(--text-micro);
+--hero-key-tracking:var(--text-micro-tracking);
+--hero-value-text:var(--text-body-sm);
+
+/* The two measures, and they are two because the title and the copy are answering
+   different questions. 22ch at --text-h1 measures 693px in Newsreader, so the title takes
+   56% of the 1240 column and leaves the right side open — that silhouette is the reason
+   the hero needs no second column to look composed. 68ch on the copy measures 832px at
+   --text-lead and 749px at --text-body-lg, because `ch` resolves against each part's own
+   role; the lead therefore measures 83px wider than the paragraphs beneath it, which reads
+   as a lead rather than as an error.
+
+   Every number in the paragraph above was measured in a browser at build. The spec's §7(b)
+   had estimated 594 / 748 / 673 and a ~75px delta, all of them low, because a `ch` in these
+   two faces is wider than the estimate assumed. The tokens did not change and neither did
+   the argument — only the arithmetic was wrong, and it is corrected here as well as there
+   because this is the file the spec points at as the place a value is decided.
+
+   The measure does NOT narrow as the copy grows. A hero that tightened its measure at six
+   paragraphs would turn its longest pages into ribbons.
+
+   The eyebrow takes the body measure too, because a 44-character phrase is running text
+   however small it is set — the corpus's longest, CONNECTX · AI-NATIVE BUILDING ENERGY
+   PRODUCT, measures about 380px uppercased and sits on one line. The measure is there to
+   cap the one that does not. */
+--hero-title-measure:var(--measure-title);
+--hero-body-measure:var(--measure-body);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The baseline, and a three-step ramp read from loudest down. The title at neutral-900 is
+   the loudest ink on the page; the lead and the byline values sit together at neutral-800;
+   the body paragraphs drop to neutral-700; and the two mono labels sit quietest at
+   neutral-600, which they can afford because mono, semibold and --text-eyebrow-tracking
+   already make them read louder than their size.
+
+   The lead and the byline value share an ink deliberately: the two things a reader takes
+   from an article opening are what it is about and who wrote it, and at 20px and 14px they
+   need the same weight of ink to arrive together.
+
+   Nothing here is blue. Blue in this system means clickable and appears on nothing that is
+   not — the only blue in the band is inside a Button. */
+:root,[data-surface="paper"]{
+--hero-title-ink:var(--color-neutral-900);    /* 14.62:1 */
+--hero-lead-ink:var(--color-neutral-800);     /* 11.81:1 */
+--hero-body-ink:var(--color-neutral-700);     /*  8.14:1 — §6 of the spec rounds this to 8.15 */
+--hero-value-ink:var(--color-neutral-800);    /* 11.81:1 */
+--hero-eyebrow-ink:var(--color-neutral-600);  /*  4.92:1 — the floor of AA, do not lighten */
+--hero-key-ink:var(--color-neutral-600);      /*  4.92:1 — the floor of AA, do not lighten */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   The title and the lead hold their ramp steps, losing about a point of ratio each to the
+   deeper ground and staying far clear of the floor. The one real move is at the quiet end
+   and it is a measured one: neutral-600 on paper-deep computes 4.39:1 and FAILS the 4.5
+   floor, so the eyebrow and the credit keys step to neutral-700 — which is where the body
+   paragraphs already are.
+
+   So on tint, and only on tint, those three parts share an ink. They stay distinguishable
+   by family, case and tracking rather than by colour, which is the rule anyway. The
+   alternative — leaving 600 in place because it is "nearly" 4.5 — is exactly the class of
+   failure a deltas-only table produces. This is the one cell in the file a future reviewer
+   will want to lighten; the number is here so that decision has to argue with it. */
+[data-surface="tint"]{
+--hero-title-ink:var(--color-neutral-900);    /* 13.06:1 — §6 of the spec rounds this to 13.05 */
+--hero-lead-ink:var(--color-neutral-800);     /* 10.54:1 */
+--hero-body-ink:var(--color-neutral-700);     /*  7.27:1 */
+--hero-value-ink:var(--color-neutral-800);    /* 10.54:1 */
+--hero-eyebrow-ink:var(--color-neutral-700);  /*  7.27:1 — stepped; 600 would be 4.39:1 */
+--hero-key-ink:var(--color-neutral-700);      /*  7.27:1 — stepped; 600 would be 4.39:1 */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   The direction inverts and the ramp gets more room. The title lifts to white, the lead
+   and the byline values to neutral-100, the body to neutral-300 and the two mono labels to
+   neutral-400 — the same step breadcrumbs.css lifts its links to on this ground, so a
+   trail and an eyebrow standing 96px apart on an ink band are the same grey rather than
+   two greys.
+
+   Every cell here is at least 8:1, which is the surface where a serif display title at 54
+   is most at risk of looking thin. The ink is not the reason it reads; it is the reason it
+   does not shimmer. */
+[data-surface="ink"]{
+--hero-title-ink:var(--color-white);          /* 17.26:1 */
+--hero-lead-ink:var(--color-neutral-100);     /* 14.47:1 */
+--hero-body-ink:var(--color-neutral-300);     /* 11.07:1 */
+--hero-value-ink:var(--color-neutral-100);    /* 14.47:1 */
+--hero-eyebrow-ink:var(--color-neutral-400);  /*  8.05:1 */
+--hero-key-ink:var(--color-neutral-400);      /*  8.05:1 */
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   The ramp runs out and the three-step structure survives on the last three values it has:
+   white for the title, brandeis-50 for the lead and the byline values, brandeis-100 for
+   the body and both mono labels. These are the tightest cells in the file, and 100 is the
+   reason nothing quieter is allowed on this ground — 200 is already 3.78:1.
+
+   One consequence to accept knowingly: on blue the eyebrow and the body paragraphs are the
+   same ink, as they are on tint. Blue and tint both lose the eyebrow's colour distinction
+   and keep its typographic one. A blue hero has fewer steps available than a paper one and
+   this is what that costs. */
+[data-surface="blue"]{
+--hero-title-ink:var(--color-white);          /*  6.23:1 */
+--hero-lead-ink:var(--color-brandeis-50);     /*  5.57:1 */
+--hero-body-ink:var(--color-brandeis-100);    /*  4.91:1 — the tightest cell here, do not lighten */
+--hero-value-ink:var(--color-brandeis-50);    /*  5.57:1 */
+--hero-eyebrow-ink:var(--color-brandeis-100); /*  4.91:1 — the tightest cell here, do not lighten */
+--hero-key-ink:var(--color-brandeis-100);     /*  4.91:1 — the tightest cell here, do not lighten */
+}
