@@ -46,6 +46,10 @@ export type SectionProps = {
   className?: string;
   children: ReactNode;
   id?: string;
+  /** Accessible name relationship for a band that is exposed as a labelled region. */
+  'aria-labelledby'?: string;
+  /** Optional component-owned arrangement marker for rendered-output acceptance checks. */
+  'data-arrangement'?: string;
 };
 
 /**
@@ -64,10 +68,14 @@ export function Section({
   className,
   children,
   id,
+  'aria-labelledby': ariaLabelledBy,
+  'data-arrangement': dataArrangement,
 }: SectionProps) {
   return (
     <Tag
       id={id}
+      aria-labelledby={ariaLabelledBy}
+      data-arrangement={dataArrangement}
       data-surface={surface}
       className={cx(
         styles.section,

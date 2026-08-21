@@ -6,11 +6,11 @@
 |---|---|
 | **Component** | `CtaSection` |
 | **Tier** | 2 pattern (`src/patterns/CtaSection/`) |
-| **Status** | accepted |
+| **Status** | implemented |
 | **Token prefix** | `--cta-*` (collides with none of `--btn-` `--crumb-` `--foot-` `--icn-` `--lay-` `--logo-` `--nav-` `--prose-` `--sec-`) |
 | **Designer / date** | Design · 21 Aug 2026 |
 | **Implements** | COMPONENT NAME: CtaSection — the block that closes a commercial page. 76 routes, 113 instances |
-| **Implemented at** | — not built |
+| **Implemented at** | `src/patterns/CtaSection/CtaSection.tsx` · `src/patterns/CtaSection/CtaSection.module.css` · `src/styles/tokens/components/cta-section.css` · specimen `src/app/design/cta-section/page.tsx` |
 
 Composed and checked against the loaded Tcules library (`window.Tcules`, 10 real components) and `guidelines/docs/vocabulary.md`. The mockup at `docs/specs/CtaSection-specimen.html` is built out of the real `Section`, `Layout`, `Cluster`, `Button`, `Icon` and `Prose`, so nothing in sections 7, 9 or 10 is a claim about arrangement that has not been rendered. Every ratio in section 6 was computed from the exact hexes in the vocabulary; all nineteen pairs used here also appear in `docs/specs/PageHero.md` and `docs/specs/Breadcrumbs.md` and agree with both. Assumptions I could not check are marked **[assumed]** and collected in section 17.
 
@@ -446,7 +446,7 @@ Three things that string is meant to prove: the region arrives with the heading 
 | **9 · A parent that does not size it** | This is a band and may only be a direct child of the page or its template. It must not be placed inside a `Section` (the content column would inset twice), inside a `Layout` track (a band is not a row), or inside a `Cluster` (a wrapping row does not size a band, and the block would shrink to its longest word). For the case where it happens anyway, the named minimum is **320px, `--lay-track-md`** — the width at which the longest single word in a corpus heading still fits without overflow at the 767 type scale. Below 320 it renders and breaks inside words rather than overflowing, and the form column, which cannot go below `--foot-field-min-inline` 256px without its own fields overflowing, is the part that shows the fault first |
 | **10 · Logical properties rather than left/right** | Every distance in the component is a `Layout` or `Cluster` gap, which are logical by construction, or a measure, which is `max-inline-size`. There is no `margin`, no `padding`, no `left`/`right` and no positioned part anywhere in the stylesheet, so there is no physical-direction property to get wrong. "Content-left / form-right" is `columns={[3, 2]}` in source order and mirrors correctly under RTL with no work, which is the cleanest available answer to this row |
 | **11 · This component's surface nested inside a different one** | Addressed in section 6. The band is the `[data-surface]` scope and all five tokens are declared in all four blocks, so a `tint` CTA between two `ink` bands renders the tint column at 11.81:1 rather than a light ink stranded on a light ground at 1.13:1. Inside the band, the form and `proof` read `--sec-*` from this band's surface. Neither slot may contain a `Section` — the column would inset twice — nor a `Breadcrumbs`, nor a `PageHero`, nor another `CtaSection` |
-| **12 · Two of this component adjacent** | **The normal case, on 37 routes** — and the constraint is that they must not look identical, so it is enforced by shape rather than by review: the mid-page instance is `offer` (tight band, `--text-h3` heading, one wrapping row of points, no proof) and the closing instance is `split` or `open` (96px band, `--text-h2` heading, two columns, proof available). Two instances of the **same** arrangement on one route is the bug; the component cannot detect a sibling — no `:has()`, no upward selector — so section 14 item 15 names the frontmatter grep that catches it. Two adjacent in the DOM with nothing between them, which the mid-page placement never produces, shows as 160px of dead air (96 + 64) and two `h2`s in a row |
+| **12 · Two of this component adjacent** | **The normal case, on 37 routes** — and the constraint is that they must not look identical, so it is enforced by shape rather than by review: the mid-page instance is `offer` (tight band, `--text-h3` heading, one wrapping row of points, no proof) and the closing instance is `split` or `open` (96px band, `--text-h2` heading, two columns, proof available). Two instances of the **same** arrangement on one route is the bug; the component cannot detect a sibling — no `:has()`, no upward selector — so section 14 item 15 names the frontmatter grep that catches it. An `offer` and a standard close placed directly adjacent produce 160px of facing band air (64 + 96); two adjacent standard closes produce 192px (96 + 96). Both are invalid because the real mid-page placement always leaves page content between the two `h2`s |
 | **13 · Interactive content inside a slot** | `form` and `proof` may both hold interactive content, and the first one always does. It enters the tab order in DOM order and the component adds no `tabindex`, no focus trap and no roving index. Anything focusable there reaches the 44px floor by its own means. The other slots **cannot** hold interactive content, and that is a compile-time guarantee rather than a rule: `heading`, `eyebrow`, every entry in `body`, and both fields of every `CtaPoint` are typed `string`, so no element — no control, no link, no second heading — can be passed into them. `CtaAction` is `{ label: string; href: string }` for the same reason: a `ReactNode` label is how an icon, a `<br>` and eventually a nested button get into a control |
 
 ## 13 · Motion
@@ -470,7 +470,7 @@ The only motion in the band belongs to the controls: `Button`'s colours on `--du
 5. An absent slot renders no element — with `points` undefined, the rendered DOM contains no `<ol>`, and the computed distance between `lede` and `actions` equals `--gap-stack` exactly once, not twice.
 6. Every action is `Button size="md"` with `extendHitArea` — each action's computed box height is 40px and its rendered hit area is 44px. Assert both; an action missing the extension is the one failure this component can ship that a screenshot will not show.
 7. `points` renders as an `<ol>` with an `<li>` per entry and an `aria-hidden` numeral in each — assert in the rendered DOM. A `<ul>` or a `<div>` role-listed is a diff comment.
-8. The component's stylesheet contains no `background`, no `color` on the root part, no `max-width` outside the two `--measure-*` declarations and no `padding-inline` — grep and expect zero, four, two and zero matches. This is "must not own its ground", as a check.
+8. The component's stylesheet contains no `background` and no `padding-inline`; the `.offer` root class sets only `--cta-heading-text`; all seven `color` declarations belong to text parts; and the five `max-inline-size` declarations belong only to `eyebrow`, `heading`, `lead`, `body` and `detail`, using the two approved `--measure-*` roles. Strip comments, grep each declaration and inspect its selector. This is "must not own its ground", as a check.
 
 **Don't**
 
@@ -499,7 +499,7 @@ The block list for `/design/cta-section`, in order.
 7. **The nested-surface band** — a `tint` CTA between two `ink` bands, and an `ink` CTA between two `paper` bands, each with its five resolved values listed, plus a form and a `Proof` inside each so the two slots' inheritance is a rendering rather than a claim.
 8. **The proof ladder** — `Proof` with figures only (the `Stat` case), quote only (the `Testimonial` case), and both (the `/how-we-work` case), each shown in `split`'s full-width row and in `open`'s 470px column. Six bands, and they are the argument for section 1's collapse of two briefed components into one.
 9. **The two-per-page band** — a full page fragment: an `offer` mid-scroll, two paragraphs of `Prose` between, then a `split` close, on the surfaces they would really take. Annotated with what makes them not look identical: 64 against 96 of band air, `--text-h3` against `--text-h2`, one wrapping row against a vertical list, no proof against proof.
-10. **The wrong version of the same band** — two `split` instances on one page, labelled "this is the bug section 12 row 12 names", with the 160px of dead air and the two `h2`s measured.
+10. **The wrong version of the same band** — two `split` instances on one page, labelled "this is the bug section 12 row 12 names", with the 192px of facing band air and the two `h2`s measured.
 11. **Every edge case from section 12**, each labelled with its row number: the 28-character and 60-character labels; a bare URL in `body[1]`; `heading=""` with its unnamed region annotated; an empty string in a point label; the 1023, 767 and 375 columns; the 320px floor and a 256px sub-floor.
 12. **Interactive content in `proof`** — a `Proof` whose quote carries a link, with the tab order annotated: copy, actions, proof.
 13. **The component in a narrow track** — 320px and 256px, both marked as illegal placements, with the rendering shown rather than described.
@@ -510,7 +510,7 @@ The block list for `/design/cta-section`, in order.
 
 **None — every value in this spec is an existing token.**
 
-The five `--cta-*-ink` and eight `--cta-*-text` declarations are this component's own component-layer tokens, which is the layer the system expects a new component to add: each resolves to a `--color-*` or `--text-*` name that appears verbatim in `guidelines/docs/vocabulary.md`, and they are enumerated in sections 6 and 8 rather than requested here. A component token is not a new token in the sense this section means; a new `--color-*`, `--gap-*`, `--text-*` or glyph would be.
+The five `--cta-*-ink` and seven `--cta-*-text` declarations are this component's own component-layer tokens, which is the layer the system expects a new component to add: each resolves to a `--color-*` or `--text-*` name that appears verbatim in `guidelines/docs/vocabulary.md`, and they are enumerated in sections 6 and 8 rather than requested here. A component token is not a new token in the sense this section means; a new `--color-*`, `--gap-*`, `--text-*` or glyph would be.
 
 Four values were checked against the ramps and found, and the near-misses are worth recording because each one is a request someone will otherwise make later:
 
@@ -588,7 +588,7 @@ Specified as a compile error. Options: as specified; allow it; allow it only whe
 ```
 STRUCTURE
 [x] All 18 sections present, in order, with the exact headings.
-[x] Front matter states Tier 2 pattern, Status accepted, and token prefix
+[x] Front matter states Tier 2 pattern, Status implemented, and token prefix
     --cta-*, which collides with none of the nine taken prefixes and with no primitive family.
 [x] Every part named in Anatomy appears in the colour table, the geometry list, or both.
     Eighteen parts: five carry colour and are the five rows of section 6 (four parts share
@@ -597,11 +597,11 @@ STRUCTURE
     explicitly marked as carrying no value of their own.
 
 NAMES
-[x] Count of distinct token names used: 61. Every one appears verbatim in
+[x] Count of distinct token names used: 60. Every one appears verbatim in
     guidelines/docs/vocabulary.md, or is a --cta-* component token this spec declares. I
     checked them ONE AT A TIME, not by pattern. They are: 14 --color-* (paper, paper-deep,
-    white, neutral-100/300/400/600/700/800/900/950, brandeis-50/100/500); 13 --cta-*
-    component tokens declared here (5 ink, 8 text); 7 --gap-* (inline, tight, text, block,
+    white, neutral-100/300/400/600/700/800/900/950, brandeis-50/100/500); 12 --cta-*
+    component tokens declared here (5 ink, 7 text); 7 --gap-* (inline, tight, text, block,
     gutter, stack, column); 12 --text-* (eyebrow + tracking, h2 + tracking, h3 + tracking,
     micro + tracking, lead, body-lg, body, body-sm); 2 --measure-* (title, body); --radius-0;
     --border-width-0; --shadow-none; --z-base; 4 --sec-* referenced (container, gutter,
@@ -637,9 +637,9 @@ NAMES
 [x] Every literal pixel value is a component size or a container cap, t-shirt named, and says
     what it was measured against. Count: 8, all in 7(b) — three declared (the two measures
     resolved to px for the reader, the 40px control height) and five computed consequences
-    (706, 470, 392, 320, and 256 quoted from --foot-field-min-inline). The 160px of dead air
-    in section 12 row 12 is 96 + 64, both Section's, and is named as a visual tell rather than
-    as a value this component sets.
+    (706, 470, 392, 320, and 256 quoted from --foot-field-min-inline). The 160px and 192px of
+    facing band air in section 12 row 12 are respectively 64 + 96 and 96 + 96, all Section's,
+    and are named as visual tells rather than as values this component sets.
 
 COLOUR AND CONTRAST
 [x] The colour table has one row per token and four columns: paper, tint, ink, blue.
@@ -676,7 +676,8 @@ STATES
     --cta-*-hover, -pressed, -expanded and -disabled tokens exist, and their absence is the
     assertion that this component renders as a function of its props alone.
 [x] Every state token is declared on all four surfaces — vacuously, there being none. All
-    thirteen tokens that DO exist are declared in all four blocks.
+    twelve tokens that DO exist are declared by the component layer; all five surface-dependent
+    ink tokens are repeated in every surface block, and the seven text tokens are shared in `:root`.
 [x] Disabled uses its own tokens and no opacity — vacuously; opacity appears nowhere and
     section 14 item 11 names the grep. No colour-only state, there being no state.
 

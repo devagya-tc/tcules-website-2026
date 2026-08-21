@@ -1,0 +1,65 @@
+/* CtaSection owns type and ink only. Section paints the band; Layout and Cluster
+   own every seam and arrangement; Button owns every interactive value. */
+
+.offer {
+  --cta-heading-text: var(--text-h3);
+}
+
+.eyebrow,
+.heading,
+.lead,
+.body,
+.label,
+.detail {
+  overflow-wrap: anywhere;
+}
+
+.eyebrow {
+  max-inline-size: var(--measure-body);
+  color: var(--cta-eyebrow-ink);
+  font: var(--cta-eyebrow-text);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: uppercase;
+}
+
+.heading {
+  max-inline-size: var(--measure-title);
+  color: var(--cta-heading-ink);
+  font: var(--cta-heading-text);
+  letter-spacing: var(--text-h2-tracking);
+  text-wrap: balance;
+}
+
+.offer .heading {
+  letter-spacing: var(--text-h3-tracking);
+}
+
+.lead {
+  max-inline-size: var(--measure-body);
+  color: var(--cta-body-ink);
+  font: var(--cta-lead-text);
+}
+
+.body {
+  max-inline-size: var(--measure-body);
+  color: var(--cta-body-ink);
+  font: var(--cta-body-text);
+}
+
+.marker {
+  color: var(--cta-marker-ink);
+  font: var(--cta-marker-text);
+  letter-spacing: var(--text-micro-tracking);
+}
+
+.label {
+  color: var(--cta-point-ink);
+  font: var(--cta-point-text);
+  overflow-wrap: anywhere;
+}
+
+.detail {
+  max-inline-size: var(--measure-body);
+  color: var(--cta-point-ink);
+  font: var(--cta-detail-text);
+}

@@ -1,0 +1,52 @@
+/* ══ Component layer — CTA section ════════════════════════════════════════════
+   Tier 2. The commercial close contributes type and ink only. Section owns the
+   band and its ground; Layout and Cluster own every seam; Button owns every
+   control value. There are deliberately no CTA background, border, radius,
+   shadow, state, or spacing tokens.
+
+   The seven type tokens are surface-independent. The five ink tokens are
+   repeated in full on every surface so a nested surface cannot inherit a value
+   from the surrounding band. */
+
+:root {
+  --cta-eyebrow-text: var(--text-eyebrow);
+  --cta-heading-text: var(--text-h2);
+  --cta-lead-text: var(--text-lead);
+  --cta-body-text: var(--text-body-lg);
+  --cta-point-text: var(--text-body);
+  --cta-detail-text: var(--text-body-sm);
+  --cta-marker-text: var(--text-micro);
+}
+
+:root,
+[data-surface='paper'] {
+  --cta-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --cta-body-ink: var(--color-neutral-800); /* 11.81:1 */
+  --cta-point-ink: var(--color-neutral-700); /* 8.15:1 */
+  --cta-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
+  --cta-marker-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
+}
+
+[data-surface='tint'] {
+  --cta-heading-ink: var(--color-neutral-900); /* 13.05:1 */
+  --cta-body-ink: var(--color-neutral-800); /* 10.54:1 */
+  --cta-point-ink: var(--color-neutral-700); /* 7.27:1 */
+  --cta-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
+  --cta-marker-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
+}
+
+[data-surface='ink'] {
+  --cta-heading-ink: var(--color-white); /* 17.26:1 */
+  --cta-body-ink: var(--color-neutral-100); /* 14.47:1 */
+  --cta-point-ink: var(--color-neutral-300); /* 11.07:1 */
+  --cta-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+  --cta-marker-ink: var(--color-neutral-400); /* 8.05:1 */
+}
+
+[data-surface='blue'] {
+  --cta-heading-ink: var(--color-white); /* 6.23:1 */
+  --cta-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --cta-point-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --cta-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --cta-marker-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+}
