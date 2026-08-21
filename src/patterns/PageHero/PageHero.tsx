@@ -83,16 +83,22 @@ export type PageHeroProps = {
   /** The date pairs, after the credits. Absent renders nothing. */
   dates?: HeroDates;
   /**
-   * Nought, one or two controls — the three counts the corpus has, as a type. A third entry has
-   * no member of the union to match, so it is a compile error rather than a review comment.
+   * Nought, one or two. Position decides emphasis: the first renders solid/primary, the second
+   * ghost/neutral.
    *
-   * POSITION decides emphasis: the first is solid/primary, the second is ghost/neutral. The
-   * second emphasis is a consequence of a second entry, not a slot waiting to be filled, which
-   * is why there is no `emphasis` on HeroAction.
+   * Those are the three counts the corpus has, as a type — a third entry has no member of the
+   * union to match, so it is a compile error rather than a review comment. The second emphasis is
+   * a consequence of a second entry, not a slot waiting to be filled, which is why there is no
+   * `emphasis` on HeroAction.
    */
   actions?: readonly [] | readonly [HeroAction] | readonly [HeroAction, HeroAction];
   /**
-   * The ground this component's own band paints. Defaults to `paper`.
+   * The ground this band paints. It must match the `Breadcrumbs` above it, or the seam goes
+   * two-tone. Defaults to `paper`.
+   *
+   * That instruction leads deliberately: a prop doc is truncated at 127 characters in the
+   * `.prompt.md` the design agent reads, so the first sentence is the only part that reaches it,
+   * and this is the one thing about this prop that no check and neither component can catch.
    *
    * A prop here rather than an inherited attribute, and it is the same answer SiteNav,
    * SiteFooter and Breadcrumbs already give: a control reads `data-surface` from an ancestor
@@ -105,8 +111,11 @@ export type PageHeroProps = {
    */
   surface?: SectionSurface;
   /**
-   * The `extras` row — a caller-supplied block between the byline and the actions. One route
-   * uses it today (`/contact`'s stat block).
+   * The `extras` row, between the byline and the actions. No `Section` inside it, and any headings
+   * in it start at h3.
+   *
+   * Both constraints lead for the same reason `surface`'s does — see that prop. One route uses the
+   * slot today (`/contact`'s stat block).
    *
    * It carries no colour and no distance of its own, which is the point of it: whatever is
    * passed reads --sec-* from the hero's own band, so a Layout of stats inside a blue hero is
