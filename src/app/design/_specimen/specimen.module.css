@@ -146,3 +146,9 @@
 .trackSm {
   max-inline-size: var(--lay-track-sm);
 }
+
+/* The ListCard specimen's lower stress bound. Like trackMd/trackSm this is measuring chrome that
+   stands in for a real Layout track, so reading Layout's named component size is intentional. */
+.trackXs {
+  max-inline-size: var(--lay-track-xs);
+}

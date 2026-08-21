@@ -1,0 +1,180 @@
+/* ListCard — one ruled row, built to docs/specs/ListCard.md.
+
+   Every colour, type role, component size and state value comes from --lcrd-*, declared in
+   tokens/components/list-card.css and re-declared once per surface there. Layout and Cluster own
+   every arrangement and every seam. This module provides only the row's own edge, inner inset,
+   child sizing, crop and interactive rendering.
+
+   ── What is absent, and why ────────────────────────────────────────────────────
+   No background. A ListCard never owns its ground and a filled object is BlockCard's job.
+   No surrounding edge. The one border is the row's block-end rule.
+   No margin. The parent Layout owns the list axis and uses rowGap="none".
+   No display:grid or display:flex. Layout and Cluster own both axes; flex values below size their
+   children inside those primitives and do not arrange siblings by themselves.
+   No responsive type or distance override. Layout collapses the split at its md boundary, and the
+   type composites step in the shared type layer.
+
+   Rule order is load-bearing: hover/focus precede pressed, so pointer-down wins while the pointer
+   is also hovering. The paired selectors have equal specificity and source order decides them. */
+
+/* One list row, filling whatever track the parent list supplies. min-inline-size:0 lets an illegal
+   sub-xs parent shrink the box and wrap its text rather than pushing the page wider. */
+.root {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+/* The semantic frame is either an anchor or a div. Its padding is INNER edge-to-content distance;
+   the bottom border is the row's own finish, not an outer seam. A block anchor fills the li and
+   makes the whole visible row the target. */
+.frame {
+  position: relative;
+  display: block;
+  min-inline-size: 0;
+  padding-block: var(--gap-text);
+  border-block-end: var(--lcrd-rule-width) solid var(--lcrd-rule-ink);
+  border-radius: var(--lcrd-radius);
+  box-shadow: var(--lcrd-shadow);
+}
+
+/* The content/cue core is a Cluster child. Its basis is the named xs component minimum; flex-grow
+   takes the rest of the row, and min(100%, xs) is what lets it shrink in a parent narrower than
+   the minimum without horizontal overflow. This is sizing inside Cluster, not a second layout. */
+.core {
+  flex: 1 1 var(--lcrd-content-min-xs);
+  min-inline-size: min(100%, var(--lcrd-content-min-xs));
+}
+
+/* The title/body Layout receives all remaining core width while the cue keeps its own box. */
+.content {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.marker,
+.cue {
+  flex: 0 0 auto;
+}
+
+.marker {
+  color: var(--lcrd-marker-ink);
+}
+
+/* The number is weight, not a bullet. nowrap keeps 01 together if a caller passes a narrow parent. */
+.number {
+  font: var(--lcrd-marker-text);
+  letter-spacing: var(--lcrd-marker-tracking);
+  white-space: nowrap;
+}
+
+/* These names assert the fill-specific geometry. Icon owns its own 24px box; the wrapper adds
+   neither a frame nor a second size. */
+.icon {
+  line-height: 0;
+}
+
+/* A content image rather than a panel. The wrapper supplies one invariant crop; the native image
+   supplies source, alternative text and intrinsic dimensions. */
+.thumbnail {
+  display: block;
+  inline-size: var(--lcrd-thumbnail-inline-md);
+  aspect-ratio: var(--lcrd-thumbnail-ratio);
+  overflow: hidden;
+}
+
+.thumbnailImage {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.title {
+  max-inline-size: var(--measure-title);
+  overflow-wrap: anywhere;
+  color: var(--lcrd-title-ink);
+  font: var(--lcrd-title-text);
+  letter-spacing: var(--lcrd-title-tracking);
+}
+
+.body {
+  max-inline-size: var(--measure-body);
+  overflow-wrap: anywhere;
+  color: var(--lcrd-body-ink);
+  font: var(--lcrd-body-text);
+}
+
+.cue {
+  color: inherit;
+  line-height: 0;
+}
+
+/* Higher specificity than globals.css's bare anchor rules. The anchor's currentColor drives the
+   linked title, cue and interactive rule together; body and marker keep their quieter own inks. */
+.root .link {
+  color: var(--lcrd-link-ink);
+  text-decoration: none;
+  transition: color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
+}
+
+.root .link:hover,
+.root .link:focus-visible {
+  color: var(--lcrd-link-ink-hover);
+  text-decoration: none;
+}
+
+.root .link:active {
+  color: var(--lcrd-link-ink-pressed);
+}
+
+.link .title {
+  color: inherit;
+}
+
+/* The base hairline never disappears. This overlay is the non-colour hover carrier: it wipes over
+   the neutral rule in current link ink, then doubles on press. The change in block size is instant,
+   so press reads as a state rather than as a growth animation. */
+.link::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: var(--lcrd-rule-width);
+  background: currentColor;
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--lcrd-transition-duration) var(--lcrd-transition-easing);
+}
+
+.root .link:hover::after,
+.root .link:focus-visible::after,
+.root .link:active::after {
+  transform: scaleX(1);
+}
+
+.root .link:active::after {
+  block-size: var(--lcrd-rule-width-pressed);
+}
+
+/* One keyboard-only ring around the entire row. The gap colour is the surface beneath it, so a
+   nested tint row inside ink resolves a tint gap rather than inheriting the outer ground. */
+.link:focus {
+  outline: none;
+}
+
+.root .link:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--lcrd-ring-offset) var(--lcrd-ring-gap-color),
+    0 0 0 calc(var(--lcrd-ring-offset) + var(--lcrd-ring-width)) var(--lcrd-ring-color);
+}
+
+/* Keep the interaction carrier; stop it travelling. Colour remains at its normal duration because
+   a colour change is not motion. */
+@media (prefers-reduced-motion: reduce) {
+  .link::after {
+    transition-duration: var(--duration-instant);
+  }
+}
