@@ -15,7 +15,7 @@ Repo-specific gotchas for future syncs. Read this before re-running.
   `npx tsc -p .design-sync/tsconfig.dts.json` to emit declarations to `dist/types/` (gitignored).
   `findTypesRoot` picks `dist/types` up automatically. **Run it before the converter** or every
   `<Name>.d.ts` degrades to a stub.
-- `componentSrcMap` enumerates all 11 components on purpose: with an explicit `--entry` and no
+- `componentSrcMap` enumerates all 12 components on purpose: with an explicit `--entry` and no
   shipped `.d.ts`, `exportedNames()` returns empty, so the map IS the component list. A component
   missing from it does not exist as far as the sync is concerned — the build prints
   `package: N components (N src-matched)`, so check that number against the tier folders every run.
@@ -107,15 +107,17 @@ sync after it shipped reported the same two warnings, unchanged.
 
 ## Card presentation
 
-Nine components carry `cfg.overrides.<Name>.cardMode = "column"` — `Section`, `Layout`, `Cluster`,
-`Icon`, `Logo`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`. (This sentence said "six" while
+Ten components carry `cfg.overrides.<Name>.cardMode = "column"` — `Section`, `Layout`, `Cluster`,
+`Icon`, `Logo`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`. (This sentence said "six" while
 listing seven names before the PageHero sync; the count is worth re-deriving from `config.json`
 rather than trusting the prose, and only `Button` and `Prose` are absent from the list.) The product's card grid cell is ≤728px, and in a 2-up grid
 these components' stories broke words character-by-character or clipped. `SiteNav` also declares
 `viewport: "1280x420"` (below 1024 it renders its mobile drawer, so a default 900px card showed only
 a logo and a hamburger) `SiteFooter` `viewport: "1280x1500"` (five bands do not fit 700px), `Breadcrumbs` `1280x260` and
 `PageHero` `1280x760` — a hero band is 96 of air, a two-line display title, up to six paragraphs, a
-byline and an actions row, then 96 again, and the default 700px cut the actions off.
+byline and an actions row, then 96 again, and the default 700px cut the actions off — and
+`CtaSection` `1280x900`, whose `split` arrangement needs the full width to be two columns at all and
+is the tallest of its three (lede and points beside a form, with a proof row underneath).
 Note an explicit `viewport` **is** grade-keyed — changing it needs a full `package-build.mjs`, not a
 targeted `preview-rebuild.mjs`, or capture prints `[CONFIG_STALE]`.
 
@@ -126,6 +128,52 @@ sole job is setting `category` to the repo's own tier vocabulary (Primitives / P
 binds them by basename, so there is no `docsMap` enumeration to maintain. The bodies are empty
 deliberately — an empty body still lets the converter synthesise `.prompt.md` from JSDoc, props and
 preview examples; adding prose there would replace that synthesis. See `groups/README.txt`.
+
+## A component can ship WITHOUT its design-sync half, and nothing catches it
+
+`CtaSection` arrived in PR #8 from another author with the whole **code** side done properly — the
+tier barrel, `tokens/index.css`, a `--cta-*` layer, a specimen route, the `SPECIMENS` entry, an
+implemented spec — and **none of the `.design-sync/` side**: no `componentSrcMap` entry, no
+`previews/CtaSection.tsx`, no `groups/CtaSection.md`, and `conventions.md` still said eleven. Main
+was fully green the whole time.
+
+**That is not an oversight anyone could have caught by running the checks.** `npm run verify` has no
+opinion about `.design-sync/` — `design:check` cross-references token *names* in docs against the
+token layer, and `specimens:check` covers `src/app/design/**`. Nothing looks at whether the sync
+config knows about a folder in `src/patterns/`. So a component can be shipped, routed, specimen'd,
+audited, merged, and still be invisible to the design library — which is precisely the waste the
+library exists to prevent, arriving through the one door nothing guards.
+
+**So: after any component PR you did not raise yourself, check these four before syncing.**
+
+    .design-sync/config.json          componentSrcMap entry + an overrides entry if the card needs one
+    .design-sync/previews/<Name>.tsx  the authored card — without it the component lands on the floor card
+    .design-sync/groups/<Name>.md     the frontmatter-only category stub
+    .design-sync/conventions.md       the count, the list, and any example the component obsoletes
+
+`docs/vocabulary.md` is the fifth and it is generated — re-run `npm run design:brief` rather than
+editing it; a new component layer means a new prefix in the taken list and a new geometry line.
+
+The build tells you if you miss the first one: `package: N components (N src-matched)`. Check that N
+against `ls src/components src/patterns`. It will not tell you about the other three.
+
+## When a shared PRIMITIVE changes, the diff is longer than the added list — and that is correct
+
+The same PR added two props to `Section` (`aria-labelledby` and `data-arrangement`, so a band can be
+a labelled region and a rendered-output check can find an arrangement). The driver then reported
+`added: ["CtaSection"]` but `upload.components: ["CtaSection", "Section"]`, which looks wrong for a
+second and is not:
+
+- `Section.d.ts` and `Section.prompt.md` changed, because the props are part of the declarations and
+  the prompt is synthesised from them → **bytes re-upload.**
+- `Section.jsx`, its `renderHash` and its `sourceKey` did **not** change → **grade is kept and it
+  never re-captures.** Verified against the remote anchor afterwards: `Section.jsx` held at
+  `c1433ed74f03` while `.d.ts` moved `63ee5cf763f1` → `a6c24dab8472`.
+
+That is the trust model working exactly as `resync.mjs`'s header describes it: DS source edits
+re-upload bytes without re-grading. Do not "fix" a longer `upload.components` by re-capturing the
+primitive, and do not assume a component in that list needs grading — `pendingGrade` is the only
+list that means grade me.
 
 ## Designer artifacts in the project that this sync does NOT manage
 
@@ -141,6 +189,12 @@ designer's stand-in for a component that now ships with a real specimen route at
 `/design/breadcrumbs`, and `docs/specs/Breadcrumbs.md` is an in-flight copy of a spec whose
 implemented version now ships to `guidelines/docs/specs/Breadcrumbs.md` via `guidelinesGlob`. Two
 copies of one spec at two paths is the kind of thing that gets read from the wrong one a year later.
+
+**CtaSection is the exception that shows the pattern is a HABIT, not a rule.** Its spec cites a
+mockup at `docs/specs/CtaSection-specimen.html`, and that file is in neither the project nor the
+repo — this designer worked without uploading their stand-in. So the count stayed at five rather
+than climbing to seven. Worth knowing before a future reconciliation pass reads the absence as
+something having been deleted.
 
 **As of the PageHero sync there are five, and the pattern has repeated exactly.**
 `docs/specs/PageHero.md` and `docs/specs/PageHero-specimen.html` appeared in the project the same
@@ -176,6 +230,16 @@ exists to prevent — while `PageHero` sat one section below in the same documen
 So the rule is wider than the count: **every time a component ships, grep the header for the thing
 it replaces.** A new component usually obsoletes a worked example somewhere in this file, and
 nothing checks that either.
+
+**Confirmed one sync later, which is the reason to trust it.** `CtaSection` shipped and the rule
+fired immediately on a different example: the closing *"An idiomatic block"* section is a two-column
+band with a heading, a paragraph and two Buttons — a hand-rolled commercial close, and now the exact
+thing `CtaSection` exists to be. It was not deleted, because it is also the file's only worked
+example of composing the three primitives and that teaching is worth keeping. It gained a preamble
+instead: this shows how the primitives compose, it is **not** a template for a page's ask, and if
+the block is the page's ask (or its opening) then `CtaSection` (or `PageHero`) is the component.
+Reach for the primitives for the blocks in between. Expect this to recur on every component that
+lands — the fix is usually a sentence, not a deletion.
 
 ## The converter command may be blocked by the permission classifier
 
@@ -240,7 +304,7 @@ is graded on its own merits.
   1 new, 0 changed, 0 removed; render check 10/10 clean; all 6 Breadcrumbs cells graded good and
   carried forward on the second driver run (0 grade cleared, which is the proof the next sync is
   fast). No component is on the floor card — all 10 have authored previews.
-- Last sync: 21 Aug 2026 — **11 components, PageHero added.** 10 verified-by-upload and skipped,
+- Previous sync: 21 Aug 2026 — **11 components, PageHero added.** 10 verified-by-upload and skipped,
   1 new, 0 changed, 0 removed; anchor `ok`; all four stages green; render check 11/11 clean; all 10
   PageHero cells graded good and carried forward on the second driver run (`pendingGrade: []`).
   13 files uploaded — the component's four artifacts, its `_preview` module, the bundle, the
@@ -250,3 +314,13 @@ is graded on its own merits.
   else moved. The two validator warnings are expected to recur unchanged — `--hero-*` is a token
   layer like `--crumb-*`, so it classifies cleanly and joins neither the eleven nor the fifty-three.
   All 11 have authored previews; nothing is on the floor card.
+- Last sync: 21 Aug 2026, second run of the day — **12 components, CtaSection added** (built by
+  another author; its design-sync half was authored here, see the section above). 11
+  verified-by-upload and skipped, 1 new, 0 changed, 0 removed; anchor `ok`; all four stages green;
+  render check 12/12 clean; all 10 CtaSection cells graded good and carried forward on the second
+  driver run (`pendingGrade: []`). 17 files uploaded: CtaSection's four artifacts and its preview
+  module, **Section's four re-uploaded** for the props change (grade kept, no re-capture), the
+  bundle, the styling, the stitched README, `guidelines/index.md`, the regenerated vocabulary, the
+  new spec, and `_ds_sync.json` last. Verified after upload: 12 render hashes, 12 source keys, and
+  the ten untouched components byte-identical. All 12 have authored previews; nothing is on the
+  floor card.
