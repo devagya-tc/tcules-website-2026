@@ -12,7 +12,9 @@
    minimum and remain natively resizable. */
 
 .control {
-  box-sizing: border-box;
+  /* No box-sizing here: reset.css sets it on `*` already, and this was the only module in the repo
+     restating it. `display: block` IS the control's own box rather than an arrangement of siblings,
+     which is why it is not a Layout's job. */
   display: block;
   inline-size: 100%;
   min-inline-size: var(--inp-min-inline);
@@ -22,9 +24,11 @@
   border-radius: var(--inp-radius);
   font: var(--inp-text);
   box-shadow: var(--inp-shadow);
-  transition:
-    border-color var(--inp-transition-duration) var(--inp-transition-easing),
-    background var(--inp-transition-duration) var(--inp-transition-easing);
+  /* border-color only. `background` was in this list and could never fire: no --inp-*-bg moves on
+     hover, focus or invalid, and the one that does move is :disabled, which is not a state anything
+     transitions into. A transition on a value that never changes reads as a promise the component
+     does not keep. */
+  transition: border-color var(--inp-transition-duration) var(--inp-transition-easing);
 }
 
 .control::placeholder {
@@ -43,6 +47,9 @@
   color: var(--inp-standard-placeholder-fg);
 }
 
+/* Hover and focus resolve to the same rule colour deliberately — the keyboard is shown what the
+   pointer is shown. The DIFFERENCE between them is carried by the ring below, which :hover never
+   draws and :focus-visible always does. */
 .standard:not(:disabled, .invalid):hover,
 .standard:not(:disabled, .invalid):focus-visible {
   border-color: var(--inp-standard-rule-hover);
@@ -58,8 +65,12 @@
   color: var(--inp-quiet-placeholder-fg);
 }
 
+/* Same pair as standard, and the same token naming: focus takes the -hover value plus the ring.
+   This used to answer :focus-visible alone under a -focus name, which put a state suffix in the
+   layer that the state model does not have and left quiet with no hover response at all. */
+.quiet:not(:disabled, .invalid):hover,
 .quiet:not(:disabled, .invalid):focus-visible {
-  border-color: var(--inp-quiet-rule-focus);
+  border-color: var(--inp-quiet-rule-hover);
 }
 
 .control:focus {
@@ -78,10 +89,26 @@
     0 0 0 calc(var(--inp-ring-offset) + var(--inp-ring-width)) var(--inp-quiet-ring-color);
 }
 
+/* Width and colour move together; aria-invalid carries the same state non-visually.
+
+   The colour is per EMPHASIS, because the rule is seen against the field's own fill rather than
+   against the band — and on blue the two fills diverge (white for standard, brandeis-600 for
+   quiet), so one shared value cannot clear on both. The width is shared: it steps identically
+   whatever the fill.
+
+   `.standard.invalid` is (0,2,0) and `.control:disabled` below is also (0,2,0), so the disabled
+   block staying LAST is what keeps an unavailable invalid field reading as unavailable. Do not
+   move it. */
 .invalid {
-  /* Width and colour move together; aria-invalid carries the same state non-visually. */
   border-width: var(--inp-invalid-rule-width);
-  border-color: var(--inp-invalid-rule);
+}
+
+.standard.invalid {
+  border-color: var(--inp-standard-invalid-rule);
+}
+
+.quiet.invalid {
+  border-color: var(--inp-quiet-invalid-rule);
 }
 
 .control:disabled {
@@ -108,7 +135,24 @@
     block-size: var(--inp-height-touch);
   }
 
-  /* The footer's quiet treatment is intentionally preserved at its existing 40px box. */
+  /* Quiet keeps its 40px box, and the argument is not the one this comment used to make.
+     It is NOT "parity with SiteFooter's 40px Button", because Button's own answer to a 40px box is
+     to extend its hit area past it — citing the box and ignoring the target proves nothing.
+
+     The real reason quiet may stay at 40 is that its tap target is not the input. Its only consumer
+     wraps it in a <label>, which forwards a tap to the control natively, and that label measures
+     73.6px on the rendered page — so the target clears the floor by a wide margin and stepping the
+     box would only break the row it shares with the Button.
+
+     And the means Button uses is NOT AVAILABLE HERE. An <input> is a void element and generates no
+     pseudo-element box, so `.quiet::after { block-size: 44px }` resolves in getComputedStyle —
+     content and height both report — while producing nothing at all: measured, a point 4px above
+     the field hits the label, not the input. That is why the spec's "extend the hit area past the
+     box" is Button's means and not this component's, and why the two means it names are not two.
+
+     What this DOES leave: a bare `<Input emphasis="quiet">` with no associated label is under-target
+     as well as unnamed. The label is load-bearing for both, and no type can enforce it — a wrapping
+     <label> and an external <label for> are both invisible to the props. Wire one. */
   .quiet:not(.textarea) {
     block-size: var(--inp-height-md);
   }

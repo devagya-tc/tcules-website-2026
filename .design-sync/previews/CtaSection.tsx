@@ -1,5 +1,5 @@
-import { Button, CtaSection, Layout } from 'tcules-website-2026';
-import type { CtaPoint } from 'tcules-website-2026';
+import { CtaSection, EnquiryForm, Layout } from 'tcules-website-2026';
+import type { CtaPoint, EnquiryContextBase } from 'tcules-website-2026';
 
 /* NOTE: these preview files are type-STRIPPED, not type-checked (see .design-sync/NOTES.md), so an
    invalid prop value fails silently at render. Two things to keep honest here:
@@ -25,27 +25,34 @@ const OFFER_BODY: readonly [string] = [
   'A free audit of one flow in your product: what it costs you today, and the three changes that would pay for themselves first.',
 ];
 
+/* The context every enquiry carries. Required as a whole object by EnquiryForm. */
+const CONTEXT: EnquiryContextBase = {
+  originRoute: '/services/design-systems',
+  placement: 'closing',
+  family: 'services',
+  serviceOrAudit: 'design-systems',
+  referrer: 'organic',
+  campaign: 'none',
+};
+
 /**
- * The form is a CALLER-SUPPLIED slot, not part of this component — which is why it is a `ReactNode`
- * and why what you see below is unstyled. There is no field or form component in this library yet,
- * so a real page passes its own; when one ships, it goes in this slot unchanged. Do not read the
- * browser-default inputs below as the intended design of a Tcules form.
+ * The `form` slot is a `ReactNode`, and **`EnquiryForm` is what goes in it.** That pairing is the
+ * composition the design intends: CtaSection brings the band, the lede and the points; EnquiryForm
+ * brings the fields, their validation and the submit.
+ *
+ * These cards used to show hand-rolled browser-default inputs with a note saying no form component
+ * existed yet. One does now, so they show the real thing — do not build fields into this slot by
+ * hand.
  */
 function FormSlot({ audit = false }: { audit?: boolean }) {
-  return (
-    <Layout as="form" rowGap="block">
-      <Layout as="label" rowGap="inline">
-        <span>Your name</span>
-        <input name="name" required />
-      </Layout>
-      <Layout as="label" rowGap="inline">
-        <span>{audit ? 'Website or product URL' : 'What are you trying to ship?'}</span>
-        <input name="brief" required />
-      </Layout>
-      <Button type="submit" tone="neutral">
-        {audit ? 'Request free audit' : 'Send enquiry'}
-      </Button>
-    </Layout>
+  return audit ? (
+    <EnquiryForm
+      variant="audit"
+      action="/api/audit"
+      context={{ ...CONTEXT, placement: 'mid-page', intent: 'ux-audit' }}
+    />
+  ) : (
+    <EnquiryForm action="/api/enquiry" context={CONTEXT} />
   );
 }
 

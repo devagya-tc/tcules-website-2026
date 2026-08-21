@@ -1,9 +1,9 @@
 ## How to build with Tcules
 
 No provider, no theme object, no wrapper component. Load `styles.css` and `_ds_bundle.js` and
-every component is correct. All 12 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
-`Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`,
-`CtaSection`.
+every component is correct. All 14 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
+`Input`, `Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`,
+`CtaSection`, `EnquiryForm`.
 
 ### There is no class vocabulary — do not invent one
 
@@ -152,8 +152,40 @@ Two things follow, and both are load-bearing:
    what it asks for, and let the type refuse the rest — do not reach for a prop the table above
    does not list against your arrangement.
 2. **`form` and `proof` are caller-supplied `ReactNode` slots, and neither is styled by this
-   component.** There is no field or form component in this library yet, so a page passes its own.
-   A preview card showing browser-default inputs is showing an empty slot, not an intended design.
+   component.** But **`EnquiryForm` is now what goes in the `form` slot** — that is the composition
+   the design intends, and it is the whole reason the slot is a `ReactNode` rather than a boolean.
+   This passage used to say no field or form component existed; both do now, so do not hand-roll
+   one. `proof` is still genuinely caller-supplied until a `Proof` pattern exists.
+
+`Input` — **the control box, and nothing else.** `emphasis="standard | quiet"`, `invalid`, and
+`as="textarea"` for the multiline variant; every applicable native attribute passes through. It
+renders no label, no validation message and no spacing to its siblings — those belong to whatever
+composes it.
+
+Two things to get right:
+
+1. **Always give it a label.** A wrapping `<label>` or an external `<label for>` is what supplies
+   the accessible name, and for the 40px `quiet` emphasis it also supplies the touch target — the
+   label forwards a tap natively and is comfortably over 44px, which the control alone is not. No
+   prop can enforce this: both wiring routes are invisible to the type.
+2. **`standard` is the one to reach for.** `quiet` exists to preserve `SiteFooter`'s lower-chrome
+   row and stays 40px at every width; `standard` steps to 44 on a phone. Choosing `quiet` for a
+   form is choosing the footer's compromise for no reason.
+
+`EnquiryForm` — **the enquiry, as a form.** `action` (required), `variant="enquiry | audit"`,
+`urlLabel` (one of three fixed phrasings, or the audit one), a required `context` object, and an
+optional `onSubmitted`. It renders the fields, the labels, the validation copy and the submit.
+
+Three things to know:
+
+1. **It goes in a `CtaSection`'s `form` slot.** It brings no band of its own, and that pairing is
+   the only composition the design intends.
+2. **`context` is required as a whole object**, not six optional props — a submission that does not
+   know which page it came from produces a lead nobody can route. The `audit` variant additionally
+   requires `context.intent`, and forbids it on `enquiry`.
+3. **Four of its states cannot appear in a card.** Invalid, submitting, error and success all need a
+   live endpoint and a real interaction. What a card shows is the idle shape — including the line
+   reserved under each field, which is why a validation message never pushes the submit down.
 
 ### Read before styling
 

@@ -18,8 +18,10 @@ regenerated and pushed again.**
 
 ## The eighteen
 
-Ten are pasteable. Eight are not: seven describe components that **already ship** — do not specify
-them, compose from the library instead — and one is blocked on content. Each says so in its Status
+Nine are pasteable. Nine are not: eight describe components that **already ship** — do not specify
+them, compose from the library instead — and one is blocked on content. Brief 09 shipped **two**
+components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also absorbed
+SiteFooter's private newsletter field tokens. Each says so in its Status
 cell, and the five that never had a `BRIEF` block say so at the top of the file too.
 
 **This table is the first thing a designer reads, so a stale Status cell is the most expensive kind
@@ -37,7 +39,7 @@ move its row to "ships today" in the same change that merges it.
 | 06 | [Breadcrumbs](06-breadcrumbs.md) | `Breadcrumbs` · 2 · `--crumb-` | 128 routes · 1 | **ships today — do not specify** |
 | 07 | [Content Section](07-content-section.md) | `ContentSection` · 2 · `--csec-` | 110 routes · 738 instances · 4 | paste |
 | 08 | [CTA Section](08-cta-section.md) | `CtaSection` · 2 · `--cta-` | 76 routes · 113 instances · 3 | **ships today — do not specify** |
-| 09 | [Form](09-form.md) | `EnquiryForm` · 2 · `--enq-` | 56 routes · 1 | paste — carries an `UNRESOLVED` |
+| 09 | [Form](09-form.md) | `EnquiryForm` · 2 · `--enq-` (+ `Input` · 1 · `--inp-`) | 56 routes · 2 variants | **ships today — do not specify** |
 | 10 | [Table](10-table.md) | `DataTable` · 1 · `--tbl-` | 56 routes · 61 tables · 1 | paste — carries an `UNRESOLVED` |
 | 11 | [List Card](11-list-card.md) | `ListCard` · 2 · `--lcrd-` | 53 routes · 70 sections · 5 | paste |
 | 12 | [Block Card](12-block-card.md) | `BlockCard` · 2 · `--bcrd-` | 38 routes · 78 clusters · 2 | paste |

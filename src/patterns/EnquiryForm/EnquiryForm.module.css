@@ -21,7 +21,6 @@
   color: var(--enq-label-ink);
   font: var(--text-ui);
   letter-spacing: var(--text-ui-tracking);
-  transition: color var(--enq-transition-duration) var(--enq-transition-easing);
 }
 
 .flag {
@@ -30,29 +29,40 @@
   letter-spacing: var(--text-micro-tracking);
 }
 
+/* No colour transition on the label or here, and that is a correction rather than an omission.
+   --enq-label-ink and --enq-message-invalid-ink are one constant per surface — there is no second
+   value in the token layer and no state class that would select one — so a `transition: color` on
+   either could never fire. §5 of the spec says as much ("the label, value and ground hold"); §13's
+   motion table said otherwise, and the build had followed the table. The only colour that moves in
+   this component is the status rule below. */
 .message {
   min-inline-size: 0;
   min-block-size: var(--enq-message-reserve);
   color: var(--enq-message-invalid-ink);
   font: var(--text-caption);
-  transition: color var(--enq-transition-duration) var(--enq-transition-easing);
 }
 
+/* The sentence WRAPS rather than truncating, and the reason is that it is not decoration. At the
+   component's own documented 256px floor, "That does not look like an email address." at
+   --text-caption leaves about 232px once the 16px glyph and its 8px gap are taken — so `nowrap`
+   plus an ellipsis discarded characters from a required error message, and the specimen's own
+   256px band rendered it clipped. --enq-message-reserve already holds the one-line height, so
+   wrapping costs no layout shift; it only grows downward when it has to.
+
+   `min-inline-size: 0` stays: it is what lets the span shrink inside its Cluster instead of
+   forcing the row wider than the form. */
 .message span {
-  /* A pasted URL cannot widen the 256px minimum; one-line feedback truncates at the component cap. */
   min-inline-size: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .status {
   border-block-start: var(--border-width-hairline) solid var(--enq-status-rule);
   color: var(--enq-status-ink);
   font: var(--text-body-sm);
-  transition:
-    border-color var(--enq-transition-duration) var(--enq-transition-easing),
-    color var(--enq-transition-duration) var(--enq-transition-easing);
+  /* border-color only. The rule moves from neutral to danger when the status turns into an error,
+     which is the one value in this component that has two states to travel between. The ink does
+     not move with it — one --enq-status-ink per surface — so it is not in the list. */
+  transition: border-color var(--enq-transition-duration) var(--enq-transition-easing);
 }
 
 .statusError {
@@ -85,9 +95,9 @@
   font: var(--text-lead);
 }
 
+/* One selector, because there is one transition. It listed .label and .message as well, which
+   neutralised nothing on either. */
 @media (prefers-reduced-motion: reduce) {
-  .label,
-  .message,
   .status {
     transition-duration: var(--duration-instant);
   }

@@ -24,17 +24,18 @@ needs no attribute.
 
 | Surface | Ground |
 |---|---|
-| `paper` | `--color-paper` #FFFEFA |
-| `tint` | `--color-paper-deep` #F3F1EA |
-| `ink` | `--color-neutral-950` #1B1B18 |
-| `blue` | `--color-brandeis-500` #0048FF |
+| `paper` | `--color-paper` #fffefa |
+| `tint` | `--color-paper-deep` #f3f1ea |
+| `ink` | `--color-neutral-950` #1b1b18 |
+| `blue` | `--color-brandeis-500` #0048ff |
 
-### Colour ramps — 38 tokens
+### Colour ramps — 41 tokens
 
-- `--color-neutral-{50,100,200,300,400,500,600,700,800,900,950}` — 50 #F5F5F5 · 100 #EBEBEA · 200 #DEDEDE · 300 #CFCFCE · 400 #B2B1AE · 500 #91908D · 600 #71706A · 700 #504F49 · 800 #383733 · 900 #292824 · 950 #1B1B18
-- `--color-brandeis-{50,100,200,300,400,500,600,700,800,900,950}` — 50 #EEF2FF · 100 #DBE4FF · 200 #B8C8FF · 300 #8AA5FF · 400 #4D78FF · 500 #0048FF · 600 #003EE0 · 700 #0031B0 · 800 #002585 · 900 #001A5C · 950 #00103A
-- `--color-peridot-{50,100,200,300,400,500,600,700,800,900,950}` — 50 #FCFDE9 · 100 #F6FBC9 · 200 #EDF79B · 300 #E2F26A · 400 #D7F04A · 500 #C3DD2A · 600 #A1B71F · 700 #7C8C1C · 800 #616C1C · 900 #515A1D · 950 #2C3110
-- `--color-paper` #FFFEFA · `--color-paper-deep` #F3F1EA · `--color-white` #FFFFFF · `--color-black` #000000 · `--color-success-500` #3FA84B
+- `--color-neutral-{50,100,200,300,400,500,600,700,800,900,950}` — 50 #f5f5f5 · 100 #ebebea · 200 #dedede · 300 #cfcfce · 400 #b2b1ae · 500 #91908d · 600 #71706a · 700 #504f49 · 800 #383733 · 900 #292824 · 950 #1b1b18
+- `--color-brandeis-{50,100,200,300,400,500,600,700,800,900,950}` — 50 #eef2ff · 100 #dbe4ff · 200 #b8c8ff · 300 #8aa5ff · 400 #4d78ff · 500 #0048ff · 600 #003ee0 · 700 #0031b0 · 800 #002585 · 900 #001a5c · 950 #00103a
+- `--color-peridot-{50,100,200,300,400,500,600,700,800,900,950}` — 50 #fcfde9 · 100 #f6fbc9 · 200 #edf79b · 300 #e2f26a · 400 #d7f04a · 500 #c3dd2a · 600 #a1b71f · 700 #7c8c1c · 800 #616c1c · 900 #515a1d · 950 #2c3110
+- `--color-danger-{100,300,600}` — 100 #ffe0dc · 300 #f5a29b · 600 #b3261e
+- `--color-paper` #fffefa · `--color-paper-deep` #f3f1ea · `--color-white` #ffffff · `--color-black` #000000 · `--color-success-500` #3fa84b
 
 The hex values are given **so you can measure contrast**, and for no other reason. Never write a
 hex in the spec — write the token name.
@@ -93,12 +94,12 @@ second group names a token that does not exist: `--text-quote`, `--text-lead`, `
 - **Radius:** `--radius-0` 0px · `--radius-4` 4px · `--radius-8` 8px · `--radius-full` 999px
 - **Border width:** `--border-width-0` 0px · `--border-width-1` 1px · `--border-width-2` 2px · `--border-width-3` 3px · `--border-width-hairline` 1px · `--border-width-hairline-deck` 2px · `--border-width-hairline-social` 3px · `--border-width-hairline-print` 0.75pt
 - **Focus ring:** `--focus-ring-width` 2px · `--focus-ring-offset` 2px
-- **Motion:** `--duration-instant` 0ms · `--duration-fast` 140ms · `--easing-standard` cubic-bezier(0.2,0,0,1)
+- **Motion:** `--duration-instant` 0ms · `--duration-fast` 140ms · `--easing-standard` cubic-bezier(0.2, 0, 0, 1)
 - **Elevation:** `--shadow-none` none
 - **Z-index:** `--z-base` 0 · `--z-raised` 100 · `--z-sticky` 200 · `--z-dropdown` 300 · `--z-overlay` 400 · `--z-modal` 500 · `--z-toast` 600
 - **Icon:** `--icon-size-14` 14px · `--icon-size-16` 16px · `--icon-size-18` 18px · `--icon-size-24` 24px
 - **Breakpoints:** `--breakpoint-480` 480px · `--breakpoint-768` 768px · `--breakpoint-1024` 1024px · `--breakpoint-1280` 1280px · `--breakpoint-1440` 1440px
-- **Families:** `--font-family-display` "Newsreader",Georgia,"Times New Roman",serif · `--font-family-sans` "Public Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif · `--font-family-mono` "Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace
+- **Families:** `--font-family-display` 'Newsreader', Georgia, 'Times New Roman', serif · `--font-family-sans` 'Public Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif · `--font-family-mono` 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace
 - **Weights:** `--font-weight-regular` 400 · `--font-weight-medium` 500 · `--font-weight-semibold` 600
 
 ### The glyph set — exactly these 17
@@ -112,7 +113,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--cta-` (components/cta-section.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--lay-` (components/layout.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css)
+`--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -122,8 +123,10 @@ against the controls beside it — if you are specifying one, say which of these
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
 - **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.01em · `--cta-marker-tracking` 0.1em · `--cta-heading-measure` 22ch · `--cta-body-measure` 68ch
-- **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-tagline-measure` 22ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 68ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em · `--foot-field-height` 40px · `--foot-field-padding-x` 12px · `--foot-field-radius` 8px · `--foot-field-rule-width` 1px · `--foot-field-min-inline` 16rem
+- **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-max-inline` 470px · `--enq-message-reserve` 19px
+- **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-tagline-measure` 22ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 68ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em
 - **icon.css** — `--icn-size-sm` 14px · `--icn-size-md` 16px · `--icn-size-lg` 18px · `--icn-size-xl` 24px
+- **input.css** — `--inp-height-md` 40px · `--inp-height-touch` 44px · `--inp-padding-x` 12px · `--inp-textarea-padding-y` 12px · `--inp-min-inline` 16rem · `--inp-textarea-min-block` 128px · `--inp-radius` 8px · `--inp-rule-width` 1px · `--inp-invalid-rule-width` 2px · `--inp-ring-width` 2px · `--inp-ring-offset` 2px
 - **layout.css** — `--lay-track-xs` 192px · `--lay-track-sm` 256px · `--lay-track-md` 320px · `--lay-track-lg` 384px
 - **logo.css** — `--logo-height-sm` 20px · `--logo-height-md` 24px · `--logo-height-lg` 40px
 - **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 12px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-panel-padding-y` 48px · `--nav-panel-bar-inset` 16px · `--nav-row-padding` 8px · `--nav-row-radius` 8px · `--nav-row-icon-size` 24px · `--nav-row-measure` 68ch · `--nav-rail-inset` 32px · `--nav-rail-title-tracking` 0em · `--nav-label-tracking` 0.12em · `--nav-drawer-padding-y` 32px · `--nav-drawer-item-padding-y` 16px · `--nav-drawer-item-tracking` 0.08em · `--nav-drawer-panel-inset` 16px · `--nav-drawer-panel-gap` 16px
@@ -154,7 +157,7 @@ seam to size.
 
 ### What already exists — check these before specifying anything new
 
-- **Primitives** (`src/components/`): `Button` · `Cluster` · `Icon` · `Layout` · `Logo` · `Prose` · `Section`
-- **Patterns** (`src/patterns/`): `Breadcrumbs` · `CtaSection` · `PageHero` · `SiteFooter` · `SiteNav`
+- **Primitives** (`src/components/`): `Button` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Prose` · `Section`
+- **Patterns** (`src/patterns/`): `Breadcrumbs` · `CtaSection` · `EnquiryForm` · `PageHero` · `SiteFooter` · `SiteNav`
 - **Templates** (`src/templates/`): — none yet
 
