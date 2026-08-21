@@ -1,8 +1,8 @@
 ## How to build with Tcules
 
 No provider, no theme object, no wrapper component. Load `styles.css` and `_ds_bundle.js` and
-every component is correct. All 10 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
-`Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`.
+every component is correct. All 11 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
+`Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`.
 
 ### There is no class vocabulary — do not invent one
 
@@ -104,8 +104,31 @@ same, or the seam between them reads as a two-tone split.
   { label: 'Services', href: '/services' },
   { label: 'Interaction and UI Design', href: '/services/interaction-ui-design' },
 ]} />
-<Section surface="paper" density="tight">…the hero…</Section>
+<PageHero surface="paper" title="Interaction and UI Design" body={['…the opening…']} />
 ```
+
+`PageHero` — **the opening of a page, and the component that owns its `h1`.** `title` (a string),
+`body` (one to six paragraph strings, the first of which renders as the lead), plus four optional
+slots: `eyebrow` (a category label above the title), `credits` (role groups — `author`, `host`,
+`guest`, `reviewer` — each with its own `people`), `dates` (`published`, optional `modified`), and
+`actions` (nought, one or two `{ label, href }`; the first renders solid, the second ghost).
+`children` is a free slot between the byline and the actions. And `surface`, because this one
+brings its own band too.
+
+Four things to get right, because each of them is a decision the component has already made:
+
+1. **Do not build a hero out of a `Section`.** This is the most likely mistake now that the
+   component exists — a `Section` with an `h1`, a `Layout` and a `Cluster` inside it will look
+   close and will be wrong: the measures, the 24/16/48 rhythm, the lead-versus-body type split and
+   the four-surface inks are all inside `PageHero`. Reach for it whenever a page needs an opening.
+2. **One per page, always first inside `<main>`, never a second one.** Two heroes are two `h1`s.
+   `title` is typed as a string precisely so an element cannot be passed into it.
+3. **There is no `variant`, and asking for one is asking for the wrong thing.** A plain page, an
+   article and a case study are the same arrangement with different slots filled — an article is a
+   hero *with* `credits` and `dates`, nothing more. Compose by filling slots.
+4. **It is a band, so it is a direct child of the page** — never inside a `Section`, a `Layout` or
+   a `Cluster` — and its `surface` must match the `Breadcrumbs` above it, as in the example above.
+   It gives 96 of air above and below, which is the air the trail deliberately does not give.
 
 ### Read before styling
 
