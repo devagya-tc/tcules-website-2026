@@ -153,3 +153,21 @@
   outline: var(--focus-ring-width) solid var(--sec-accent);
   outline-offset: var(--focus-ring-offset);
 }
+
+/* Two illegal placements, made lookable-at. A band belongs to the page and must not be put in a
+   grid track — but "must not" is a claim a reviewer should be able to check by eye, and a spec that
+   names a 320px floor is naming a rendering nobody can see without a way to constrain the width.
+   These two clamp a band to Layout's own track widths, md (320) and sm (256), so the floor and the
+   sub-floor are renderings rather than assertions.
+
+   They read --lay-* deliberately, and it is the same honesty .mockBar takes with the nav's tokens:
+   this IS a stand-in for a Layout track, so the token that DEFINES a track is the right value to
+   borrow rather than a literal that happens to equal it today. Any specimen using either of these
+   must label the band as an illegal placement — otherwise it reads as a supported arrangement. */
+.trackMd {
+  max-inline-size: var(--lay-track-md);
+}
+
+.trackSm {
+  max-inline-size: var(--lay-track-sm);
+}

@@ -1,0 +1,698 @@
+import { Button, Cluster, Layout, Section, type SectionSurface } from '@/components';
+import {
+  Breadcrumbs,
+  PageHero,
+  type HeroCredit,
+  type HeroDates,
+  type PageHeroProps,
+} from '@/patterns';
+
+import { ROUTES } from '@/lib/routes';
+
+import { specimenStyles as s } from '../_specimen/Specimen';
+
+/**
+ * PageHero specimen — one variant, one size, and SLOT PRESENCE as the only thing that varies.
+ *
+ * Every hero below is a BAND, at the top level of this page and never nested inside another
+ * Section — the component owns its band, so nesting it would inset its content column a second
+ * time inside the outer one. That is also why this page does not use the `Specimen` wrapper the
+ * primitive routes use: `Specimen` is a Layout, and a Layout cannot contain a band. Each hero's
+ * note therefore sits in its own band below it.
+ *
+ * THIS ROUTE RENDERS MANY h1 ELEMENTS, DELIBERATELY. One h1 per page is the component's hardest
+ * constraint and the proving ground is the one route that has to break it: every band here is a
+ * real hero and a real hero carries the page's h1. So the spec's §14 check — grep the built HTML
+ * for `<h1` and expect exactly one — is written against ROUTE output and this page is excluded
+ * from it by inspection. Nothing else on the page mints one: the title you are reading is an h2
+ * at h1 scale, via the harness's `titleScale`.
+ *
+ * There is no state column, and that absence is the specimen. Nothing this component renders
+ * responds to a pointer, takes focus or opens, so there is no `active`, no `disabled` and no
+ * `expanded` to force — see the "States" block. The Buttons in the bands DO have hover, pressed
+ * and focus; they take no props and they are tested on /design/button rather than re-tested here.
+ *
+ * What a static page cannot show, and where to look instead: the 767 and 375 columns need the
+ * window narrowed (nothing in this component changes at either — that is the assertion), and the
+ * 44px touch floor on an action is a rendered hit area rather than a visible box, so the hit-floor
+ * band prints the arithmetic beside a dashed 44px outline.
+ */
+
+/* ── The copy ─────────────────────────────────────────────────────────────────────
+   Real sentences rather than lorem, because the measure, the lead/body split and the balanced
+   title can only be judged against text that behaves like text. Twelve paragraphs, so the
+   paragraph ladder can reach 2× the corpus maximum without repeating one. */
+const PARAS = [
+  'A retrofit programme that pays for itself in the first year, measured on the meter rather than in the model. We built the product that proves it, and the one that sells it.',
+  'The client had eleven buildings, four metering vendors and no single number anybody trusted. Every quarterly review started by arguing about the data instead of the plan.',
+  'We began with the meter. One ingest path, one unit, one timestamp convention, and a reconciliation report that names the gap rather than smoothing it over.',
+  'The forecast came second, and it is deliberately conservative: it under-promises on the buildings we know least about, so a portfolio review is a conversation about what to do rather than about whether to believe the tool.',
+  'The interface is a single page per building and a single page per portfolio. Everything else is a link out to the evidence.',
+  'Rollout took nine weeks, ran alongside the existing reporting rather than replacing it on day one, and the first month of overlap is what earned the switch.',
+  'The energy team now closes a quarter in two days instead of three weeks, and the argument about the data has not happened since.',
+  'What we would do differently: start the vendor reconciliation earlier. It was the longest pole and we found that out in week five.',
+  'The product is now in its second year and has been extended to two more portfolios without a rewrite, which is the only durable test of a data model.',
+  'Nothing in it is bespoke to this client except the buildings. The metering adapters, the reconciliation report and the forecast are the parts we bring.',
+  'This paragraph exists to push the stack past the corpus maximum, so the measure and the rhythm can be judged at a length no route actually has.',
+  'And this one takes it to twelve — 2× the maximum. There is no cap and no truncation: the stack simply grows, and a hero this long is a review comment on a route rather than a behaviour in a component.',
+] as const;
+
+const paragraphs = (count: number): readonly [string, ...string[]] => [
+  PARAS[0],
+  ...PARAS.slice(1, count),
+];
+
+const TITLE = 'A building energy product that pays for its own rollout';
+
+/* A short title for the two byline blocks, and the reason is the squint test. Blocks 4 and 5 vary
+   ONE row across eight bands; rendered under a two-line title and three paragraphs they read as
+   eight copies of the same rectangle, which §15 promised would be "a dense byline matrix" instead.
+   A short title and a single paragraph make the byline most of the band, so the thing under test is
+   the thing you see. */
+const SHORT_TITLE = 'The ConnectX rollout';
+const EYEBROW = 'ConnectX · AI-native building energy product';
+
+/* The corpus's longest h1 — a Service L3 name at 57 characters, which is the string edge case 1
+   is written about. */
+const LONG_TITLE = 'Design Engineering for Regulated Energy Platform Rollouts';
+
+/* Edge case 2: one unbroken token far longer than any track. It must break inside itself rather
+   than push a horizontal scrollbar onto the band. */
+const URL_PARA =
+  'The full naming decision is written up at https://tcules.com/services/product-design/design-systems/token-naming-and-prefix-reservation-policy and is worth reading before proposing a prefix.';
+
+/* Every path through ROUTES, including in the proving ground. `/case-studies` is the canonical
+   family and `/work` is explicitly NOT a route — routes.ts records that as a settled decision the
+   previous codebase carried unresolved across five files — so a specimen that wrote /work would
+   put the question back into a grep. The leaf is composed from the family rather than written out
+   for the same reason. */
+const CASE_STUDY = `${ROUTES.caseStudies}/connectx`;
+
+const ONE_ACTION = [{ label: 'Read the case study', href: CASE_STUDY }] as const;
+const TWO_ACTIONS = [
+  { label: 'Read the case study', href: CASE_STUDY },
+  { label: 'Talk to the team', href: ROUTES.contact },
+] as const;
+
+const TRAIL = [
+  { label: 'Home', href: ROUTES.home },
+  { label: 'Case studies', href: ROUTES.caseStudies },
+  { label: 'ConnectX', href: CASE_STUDY },
+] as const;
+
+/**
+ * The note for the band above it, in its own band on the same ground. Below rather than above,
+ * because a hero gives 96 in both directions: putting the note underneath makes the seam you read
+ * as "this note belongs to that hero" the smaller of the two.
+ */
+function Note({
+  title,
+  note,
+  surface = 'paper',
+}: {
+  title: string;
+  note: string;
+  surface?: SectionSurface;
+}) {
+  return (
+    <Section surface={surface} density="tight">
+      <Layout rowGap="tight">
+        <p className={s.specTitle}>{title}</p>
+        <p className={s.specNote}>{note}</p>
+      </Layout>
+    </Section>
+  );
+}
+
+/* §4's slot table, printed so a reader meets the argument that collapsed three arrangements into
+   one before they meet any rendering. */
+const SLOT_TABLE = [
+  { part: 'eyebrow', left: 'filled on 18', caseStudy: 'filled on 1', article: 'filled on 13' },
+  { part: 'title', left: 'always', caseStudy: 'always', article: 'always' },
+  { part: 'lead + body', left: 'always', caseStudy: 'always', article: 'always' },
+  { part: 'byline', left: 'never', caseStudy: 'never', article: 'always' },
+  { part: 'extras', left: '1 (/contact)', caseStudy: 'never', article: 'never' },
+  { part: 'actions', left: '0 / 1 / 2', caseStudy: '0', article: '0 / 1' },
+] as const;
+
+/* The four optional slots, as a type. Annotated rather than inferred with `as const`, for two
+   reasons: the literals below are then checked against the real prop types at the point they are
+   written, and a spread of this shape after `title` and `body` cannot widen either of them to
+   undefined the way a Partial<PageHeroProps> would. */
+type HeroSlots = Pick<PageHeroProps, 'eyebrow' | 'credits' | 'dates' | 'actions'>;
+
+/* Block 2 — the slot-presence ladder, each rung labelled with its corpus count. */
+const LADDER: readonly { key: string; title: string; note: string; props: HeroSlots }[] = [
+  {
+    key: 'bare',
+    title: 'Bare title and body — 113 routes',
+    note: 'The default, and the arrangement 13 of the 14 case studies use byte-for-byte. No eyebrow, no byline, no extras, no actions: the stack has one child, so it shows no 48px seam at all.',
+    props: {},
+  },
+  {
+    key: 'eyebrow',
+    title: '+ eyebrow — 32 routes',
+    note: 'One slot filled. The eyebrow sits 24 above the title, not 8 — 8 under a 12px label reads as a caption stuck to the title; 24 reads as a label above one. It is uppercased by the stylesheet, so the frontmatter keeps "ConnectX · AI-native building energy product" as authored.',
+    props: { eyebrow: EYEBROW },
+  },
+  {
+    key: 'one-action',
+    title: '+ one action — 59 routes have at least one',
+    note: 'One action renders one solid/primary Button and no ghost. The second emphasis is a consequence of a second array entry, not a slot waiting to be filled.',
+    props: { actions: ONE_ACTION },
+  },
+  {
+    key: 'two-actions',
+    title: '+ two actions',
+    note: 'Position decides emphasis: first solid/primary, second ghost/neutral. Both are size="md" with extendHitArea, both anchors. Four actions is a compile error, not a runtime cap.',
+    props: { actions: TWO_ACTIONS },
+  },
+  {
+    key: 'audit',
+    title: '+ eyebrow and two actions — the audit hero, 6 routes',
+    note: 'Two independent slots filled at once, which is the whole of §4: this is not a third arrangement, it is the two optional slots that differentiate the corpus both being present.',
+    props: { eyebrow: EYEBROW, actions: TWO_ACTIONS },
+  },
+  {
+    key: 'article',
+    title: '+ credits and dates — the article hero, 15 routes',
+    note: 'The byline appears as a <dl>, 48 below the copy. Each pair is a key over its value at 4px, and pair-to-pair is 24 — a six-fold difference, which is why the row needs no rule, no dot and no separator character.',
+    props: {
+      credits: [{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }],
+      dates: { published: '2026-03-03', modified: '2026-06-12' },
+    },
+  },
+  {
+    key: 'both',
+    title: '+ eyebrow, credits and dates — 1 route',
+    note: 'The podcast-with-a-client case, and the band that proves the two slots are independent rather than two settings of one. No new prop and no new code renders it.',
+    props: {
+      eyebrow: EYEBROW,
+      credits: [
+        { role: 'host', people: ['Alice Chen'] },
+        { role: 'guest', people: ['Ben Ndlovu', 'Cara Whitfield'] },
+      ],
+      dates: { published: '2026-03-03' },
+    },
+  },
+];
+
+/* Block 4 — the credit shapes, including the one the type allows and no page uses. */
+const CREDIT_SHAPES: readonly {
+  key: string;
+  title: string;
+  note: string;
+  credits: readonly HeroCredit[];
+}[] = [
+  {
+    key: 'one-author',
+    title: 'One author',
+    note: 'One group, one name, no join.',
+    credits: [{ role: 'author', people: ['Alice Chen'] }],
+  },
+  {
+    key: 'two-authors',
+    title: 'Two authors',
+    note: 'Joined with "and" and no comma. One <dd> for the group, not one per person — which is what stops the label being repeated.',
+    credits: [{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }],
+  },
+  {
+    key: 'host-guest',
+    title: 'Host and one guest',
+    note: 'Two groups, two labels: "Hosted by" and "With". The labels come from the role and never change with the count.',
+    credits: [
+      { role: 'host', people: ['Alice Chen'] },
+      { role: 'guest', people: ['Ben Ndlovu'] },
+    ],
+  },
+  {
+    key: 'host-guests',
+    title: 'Host and three guests',
+    note: 'Three or more names are comma-separated with "and" before the last, in one <dd>. "With" appears once, not three times.',
+    credits: [
+      { role: 'host', people: ['Alice Chen'] },
+      { role: 'guest', people: ['Ben Ndlovu', 'Cara Whitfield', 'Dev Anand'] },
+    ],
+  },
+  {
+    key: 'author-reviewer',
+    title: 'Author and reviewer — the shape that exists in the type and on no page',
+    note: 'Shown so that its absence on all 15 long-read routes is visibly a choice rather than an oversight. `reviewer` is a role inside credits, so an absent reviewer is an absent group: no label, no value, no space. A separate reviewer prop would be a "Reviewed by" hole waiting for somebody to pass an empty array.',
+    credits: [
+      { role: 'author', people: ['Alice Chen'] },
+      { role: 'reviewer', people: ['Ben Ndlovu'] },
+    ],
+  },
+];
+
+/* Block 5 — the date shapes. The third one is the assertion. */
+const DATE_SHAPES: readonly { key: string; title: string; note: string; dates: HeroDates }[] = [
+  {
+    key: 'published',
+    title: 'Published only',
+    note: 'One pair. Rendered as <time datetime="2026-03-03">3 March 2026</time>, formatted in UTC so the server and every browser agree.',
+    dates: { published: '2026-03-03' },
+  },
+  {
+    key: 'both',
+    title: 'Published and modified',
+    note: 'Two pairs, in that order, labelled "Published" and "Updated".',
+    dates: { published: '2026-03-03', modified: '2026-06-12' },
+  },
+  {
+    key: 'equal',
+    title: 'Published and modified EQUAL — must render one pair, not two',
+    note: 'Both dates are 2026-03-03. A modified date equal to the published one is not a second fact — it is the CMS stamping a timestamp on save — so it renders nothing. Count the pairs: there must be one.',
+    dates: { published: '2026-03-03', modified: '2026-03-03' },
+  },
+];
+
+/* Block 6 — printed in place of the state column this component cannot have. */
+const STATE_REFERENCE = [
+  {
+    state: 'rest',
+    what: 'The only rendering this component has. Six inks, three families, one measure per part. Given the same props it renders the same pixels at every moment of its life.',
+  },
+  {
+    state: 'hover / pressed',
+    what: 'Nothing in the hero responds to a pointer. Point at the title, the eyebrow or a credit and nothing moves — that is the assertion, not a missing rule. The Buttons do respond, through --btn-*, which is their spec’s business.',
+  },
+  {
+    state: 'focus',
+    what: 'Nothing the component renders is focusable, so it declares no ring token and paints no ring. Tab through a band: focus goes to any control in extras, then the first action, then the second, in DOM order, and the rings you see are Button’s.',
+  },
+  {
+    state: 'held / disabled / expanded',
+    what: 'None of the three can be expressed. A hero is never "the current one" — there is one per page, so there is nothing for it to be current among; a page opening cannot be unavailable; and nothing here opens, so there is no aria-expanded and no idref pointing at a panel that is not rendered.',
+  },
+] as const;
+
+/* Block 7 — §6's per-surface paragraph, beside the band it describes. */
+const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
+  {
+    surface: 'paper',
+    note: 'The baseline and a three-step ramp: the title at neutral-900 (14.62:1) is the loudest ink on the page, the lead and the byline values sit together at neutral-800 (11.81:1), the body drops to neutral-700 (8.14:1), and the two mono labels sit quietest at neutral-600 (4.92:1) — which they can afford because mono, semibold and the eyebrow tracking already make them read louder than their size. Nothing here is blue: blue means clickable and appears on nothing that is not, so the only blue in the band is inside the Button.',
+  },
+  {
+    surface: 'tint',
+    note: 'THE ONE CELL A FUTURE REVIEWER WILL WANT TO LIGHTEN — and both parts it moves are on this band, the eyebrow above the title and the credit keys below the copy. The title and the lead hold their ramp steps, losing about a point each to the deeper ground. The one real move is at the quiet end: neutral-600 on paper-deep computes 4.39:1 and FAILS the 4.5 floor, so the eyebrow and the credit keys step to neutral-700 (7.27:1) — where the body paragraphs already are. On tint, and only on tint, those three parts share an ink; they stay distinguishable by family, case and tracking, which is the rule anyway. Leaving 600 in place because it is "nearly" 4.5 is exactly the class of failure a deltas-only table produces.',
+  },
+  {
+    surface: 'ink',
+    note: 'The direction inverts and the ramp gets more room. Title to white (17.26:1), lead and byline values to neutral-100 (14.47:1), body to neutral-300 (11.07:1), mono labels to neutral-400 (8.05:1) — the same step Breadcrumbs lifts its links to on this ground, so a trail and an eyebrow standing 96 apart are the same grey rather than two greys. Every cell here is at least 8:1, which matters on the surface where a serif title is most at risk of looking thin.',
+  },
+  {
+    surface: 'blue',
+    note: 'The ramp runs out and the three-step structure survives on the last three values it has: white (6.23:1), brandeis-50 (5.57:1), brandeis-100 (4.91:1) — the tightest cells in the table, and the reason nothing quieter than 100 is allowed here, since 200 is already 3.78:1. One consequence to accept knowingly: on blue the eyebrow and the body paragraphs are the same ink, as they are on tint. Blue and tint both lose the eyebrow’s colour distinction and keep its typographic one.',
+  },
+];
+
+export default function PageHeroSpecimenPage() {
+  return (
+    <>
+      <Section>
+        <Layout rowGap="block">
+          <h2 className={s.titleScale}>PageHero</h2>
+          <p>
+            The opening block of a page: one <code>h1</code>, an optional eyebrow above it, one to
+            six paragraphs of lead copy, an optional byline of credits and dates, an optional
+            caller block and nought to two actions. It paints its own band and it is the first
+            thing inside <code>main</code> on all 129 routes.
+          </p>
+          <p>
+            <strong>This route renders many h1 elements on purpose.</strong> Every band below is
+            a real hero, and a real hero carries the page&apos;s h1 — so the one-h1 rule is
+            checked against built route output, not against the proving ground. The title above
+            is an <code>h2</code> at h1 scale so the page adds none of its own.
+          </p>
+          <p>
+            One variant and one size. The three arrangements the brief described — text-left,
+            article, case study — are <em>one</em> arrangement: no page differs in how the hero is
+            arranged, only in which optional slot is filled, and the two slots that differentiate
+            the corpus are independent of each other.
+          </p>
+        </Layout>
+      </Section>
+
+      {/* ── 1 · The matrix ─────────────────────────────────────────────────────── */}
+      <Section density="tight">
+        <Layout rowGap="block">
+          <p className={s.specTitle}>1 · The matrix — 1 variant × 1 size</p>
+          <p className={s.specNote}>
+            Printed rather than rendered, there being one cell. Below it is §4&apos;s slot table:
+            the three briefed arrangements laid against each other by part. No row differs in
+            ARRANGEMENT — every difference is a slot that is filled or is not.
+          </p>
+          <Layout rowGap="tight">
+            <Layout columns={[2, 1, 1, 1]} colGap="gutter" rowGap="tight">
+              <p className={s.eyebrow}>part</p>
+              <p className={s.eyebrow}>text-left · 100</p>
+              <p className={s.eyebrow}>case study · 14</p>
+              <p className={s.eyebrow}>article · 15</p>
+            </Layout>
+            {SLOT_TABLE.map((row) => (
+              <Layout key={row.part} columns={[2, 1, 1, 1]} colGap="gutter" rowGap="tight">
+                <p className={s.specNote}>
+                  <code>{row.part}</code>
+                </p>
+                <p className={s.specNote}>{row.left}</p>
+                <p className={s.specNote}>{row.caseStudy}</p>
+                <p className={s.specNote}>{row.article}</p>
+              </Layout>
+            ))}
+          </Layout>
+          <p className={s.specNote}>
+            The two slots that do the differentiating — <code>eyebrow</code> and{' '}
+            <code>byline</code> — are independent, so what can render is a 2 × 2 of slot presence
+            rather than a three-way switch. A <code>variant=&quot;caseStudy&quot;</code> would
+            have been a name for a page family styled identically to the default, and the first
+            thing it would have done is make the eyebrow a consequence of the variant.
+          </p>
+        </Layout>
+      </Section>
+
+      {/* ── 2 · The slot-presence ladder ───────────────────────────────────────── */}
+      {LADDER.map((rung) => (
+        <div key={rung.key}>
+          <PageHero title={TITLE} body={paragraphs(3)} {...rung.props} />
+          <Note title={`2 · ${rung.title}`} note={rung.note} />
+        </div>
+      ))}
+
+      {/* ── 3 · The paragraph ladder ───────────────────────────────────────────── */}
+      {([1, 2, 3, 4, 5, 6, 12] as const).map((count) => (
+        <div key={count}>
+          <PageHero title={TITLE} body={paragraphs(count)} />
+          <Note
+            title={`3 · ${count} paragraph${count === 1 ? '' : 's'}`}
+            note={
+              count === 1
+                ? '34 routes. One paragraph renders as a single --text-lead <p> and copy shows no seam at all.'
+                : count === 12
+                  ? '2× the corpus maximum, and there is no route like it. No cap, no truncation, no warning: the lead role still applies to the first paragraph only, so this renders as a lead and eleven body paragraphs and looks exactly like what it is — a page whose opening should have been a section. That is a review comment on a route, not a behaviour here.'
+                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-lead (20) and everything under it at --text-body-lg (18); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: 68ch resolves against each part's own role, so the lead measures 83px wider — 832px against 749px, both measured. That reads as a lead, not as an error.`
+            }
+          />
+        </div>
+      ))}
+
+      {/* ── 4 · The credit shapes ──────────────────────────────────────────────── */}
+      {CREDIT_SHAPES.map((shape) => (
+        <div key={shape.key}>
+          <PageHero
+            title={SHORT_TITLE}
+            body={paragraphs(1)}
+            credits={shape.credits}
+            dates={{ published: '2026-03-03' }}
+          />
+          <Note title={`4 · ${shape.title}`} note={shape.note} />
+        </div>
+      ))}
+
+      {/* ── 5 · The date shapes ────────────────────────────────────────────────── */}
+      {DATE_SHAPES.map((shape) => (
+        <div key={shape.key}>
+          <PageHero
+            title={SHORT_TITLE}
+            body={paragraphs(1)}
+            credits={[{ role: 'author', people: ['Alice Chen'] }]}
+            dates={shape.dates}
+          />
+          <Note title={`5 · ${shape.title}`} note={shape.note} />
+        </div>
+      ))}
+
+      {/* ── 6 · States: none to force ──────────────────────────────────────────── */}
+      <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={TWO_ACTIONS} />
+      <Section density="tight">
+        <Layout rowGap="block">
+          <p className={s.specTitle}>6 · States — and why there is no state column here</p>
+          <p className={s.specNote}>
+            Rest is what the band above renders, and it needs no prop. NO STATE IN THIS COMPONENT
+            CAN BE FORCED FROM OUTSIDE, because there are none: zero <code>--hero-*</code> state
+            tokens exist, and that is the assertion that this component&apos;s rendering is a
+            function of its props alone. Do not go looking for a control column that should not
+            exist.
+          </p>
+          <Layout rowGap="text">
+            {STATE_REFERENCE.map((row) => (
+              <Layout key={row.state} columns={[1, 3]} colGap="gutter" rowGap="tight">
+                <p className={s.eyebrow}>{row.state}</p>
+                <p className={s.specNote}>{row.what}</p>
+              </Layout>
+            ))}
+          </Layout>
+        </Layout>
+      </Section>
+
+      {/* ── 7 · Four surfaces, identical markup, one prop apart ─────────────────── */}
+      {SURFACES.map((entry) => (
+        <div key={entry.surface}>
+          {/* Every one of the six inks, on every surface, in one band. The byline is here
+              deliberately and it was missing at first: without credits and dates, --hero-key-ink
+              and --hero-value-ink — 2 of the 6 tokens, 6 of the 24 cells — rendered on paper and
+              nowhere else, and the most-argued cell in the whole token layer is one of them. The
+              tint block steps the eyebrow AND the credit keys to neutral-700 because neutral-600
+              on paper-deep is 4.39:1, and the key half of that fix could not be looked at. */}
+          <PageHero
+            surface={entry.surface}
+            title={TITLE}
+            body={paragraphs(3)}
+            eyebrow={EYEBROW}
+            credits={[{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }]}
+            dates={{ published: '2026-03-03', modified: '2026-06-12' }}
+            actions={TWO_ACTIONS}
+          />
+          <Note
+            surface={entry.surface}
+            title={`7 · Surface · ${entry.surface}`}
+            note={entry.note}
+          />
+        </div>
+      ))}
+
+      {/* ── 8 · The nested-surface bands ────────────────────────────────────────
+          Not nested inside a Section — these are SIBLING bands. The hero paints its own ground,
+          so a tint hero standing between two ink bands is the real composition rather than an
+          approximation of it, and the only thing that decides which column it reads is the
+          data-surface its own Section writes. */}
+      <Section surface="ink" density="tight">
+        <p className={s.specNote}>An ink band above.</p>
+      </Section>
+      <PageHero surface="tint" title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
+      <Section surface="ink" density="tight">
+        <p className={s.specNote}>An ink band below.</p>
+      </Section>
+      <Note
+        title="8 · Nested surface · a tint hero between two ink bands"
+        note="This hero reads the TINT column, not ink's: lead at neutral-800 on paper-deep (10.54:1), eyebrow and keys at neutral-700 (7.27:1), title at neutral-900 (13.06:1). Had the tint block carried only its deltas from paper it would have inherited ink's values for whatever it omitted and stranded neutral-100 on this light ground at 1.13:1 — which is a measured failure elsewhere in this system, not a hypothetical one. The repetition in the token layer is the fix."
+      />
+
+      <Section density="tight">
+        <p className={s.specNote}>A paper band above.</p>
+      </Section>
+      <PageHero surface="ink" title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
+      <Section density="tight">
+        <p className={s.specNote}>A paper band below.</p>
+      </Section>
+      <Note
+        title="8 · Nested surface · an ink hero between two paper bands"
+        note="The same test in the other direction: white title (17.26:1), neutral-100 lead (14.47:1), neutral-400 eyebrow (8.05:1). The seam above and below is two 96px paddings meeting, which is what every band-to-band seam on a real route looks like."
+      />
+
+      {/* ── 9 · The Breadcrumbs seam ────────────────────────────────────────────── */}
+      {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
+        <div key={surface}>
+          <Breadcrumbs items={TRAIL} surface={surface} />
+          <PageHero surface={surface} title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
+        </div>
+      ))}
+      <Note
+        title="9 · The Breadcrumbs seam — matched on all four surfaces, above"
+        note="The real composition: the trail band, then the hero band, nothing between them but the two paddings that face each other. The trail gives only its focus ring's 4px downward, so the 96 above the eyebrow is the HERO band's — which is the half that should own it. Look at the trail and the eyebrow together: sans over mono, verbatim over uppercase, untracked over tracked, 13px over 12px. Four differences, and the 96 between them is the fourth defence rather than the only one."
+      />
+
+      <Breadcrumbs items={TRAIL} surface="paper" />
+      <PageHero surface="ink" title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
+      <Note
+        surface="ink"
+        title="9 · Deliberately MISMATCHED — a paper trail over an ink hero"
+        note="THIS IS THE BUG, rendered. Neither component can detect it: each paints its own band and neither can see its sibling. The fix is one template constant passed to both, which is why the spec's §14 check reads 'the hero's surface equals the Breadcrumbs surface immediately above it' and is a diff over the template rather than a runtime guard."
+      />
+
+      {/* ── 10 · Every edge case from §12 ───────────────────────────────────────── */}
+      <PageHero title={LONG_TITLE} body={paragraphs(2)} />
+      <Note
+        title="10 · Row 1 · the longest realistic title, 57 characters"
+        note="The corpus's longest h1 is a Service L3 name of about this length. It wraps inside --measure-title (22ch, measured 693px at --text-h1) and the lines BALANCE rather than leaving one word alone on the last — a widow in the strongest shape on the page is visible from across a room. Never truncated, never clamped: there is no line-clamp and no text-overflow anywhere in this component."
+      />
+
+      <PageHero title={TITLE} body={[PARAS[0], PARAS[1], URL_PARA]} />
+      <Note
+        title="10 · Row 2 · one long unbroken token, in paragraph 3"
+        note="A 100-character URL breaks inside itself rather than pushing a horizontal scrollbar onto the band. Check the page's own horizontal scroll: there must be none, at any width. reset.css sets overflow-wrap: break-word on p and h1, which is why this component does not restate it — and why the two byline parts, which are dt and dd, do state it themselves."
+      />
+
+      <PageHero title="" body={paragraphs(2)} />
+      <Note
+        title='10 · Row 7 · title="" — an empty h1, deliberately'
+        note="No placeholder copy, ever — no Untitled, no em dash, no fallback string — because a fallback is how a content fault ships. A page with no h1 is worse than a page with a visibly empty one, and the empty element is what makes the fault findable in an audit. Inspect the DOM above: there is an h1 element and it is empty."
+      />
+
+      <PageHero title={TITLE} body={[PARAS[0], '   ', PARAS[1]]} />
+      <Note
+        title="10 · Row 7 · an empty string inside body"
+        note="Three entries, one of them whitespace. It is filtered BEFORE the roles are assigned, so it produces no <p> and no seam around nothing — and the filtering order matters: dropping blanks afterwards would let a blank first entry make the lead an empty paragraph and promote paragraph two to body scale. Count the paragraphs above: two."
+      />
+
+      <PageHero
+        title={TITLE}
+        body={paragraphs(2)}
+        eyebrow={EYEBROW}
+        credits={[{ role: 'author', people: ['Alice Chen'] }]}
+        dates={{ published: '2026-03-03', modified: '2026-06-12' }}
+        actions={TWO_ACTIONS}
+      >
+        <Layout columns={3} colGap="gutter" rowGap="block">
+          <Layout rowGap="inline">
+            <h3>11 buildings</h3>
+            <p className={s.specNote}>across four metering vendors</p>
+          </Layout>
+          <Layout rowGap="inline">
+            <h3>9 weeks</h3>
+            <p className={s.specNote}>from kickoff to first switch</p>
+          </Layout>
+          <Layout rowGap="inline">
+            <h3>2 days</h3>
+            <p className={s.specNote}>to close a quarter, from three weeks</p>
+          </Layout>
+        </Layout>
+      </PageHero>
+      <Note
+        title="10 · Rows 6 and 11 · every slot filled at once, extras included"
+        note="The only band on this page with all six slots present, and the one that proves the order: eyebrow, title, copy, byline, extras, actions, at 48 between each block. The stat block is the /contact case — headings start at h3, because the page's body sections use h2 and a hero adjunct is subordinate to them. It carries no ink of its own: whatever goes in extras reads --sec-* from the hero's own band, so this same block on a blue hero would be white-on-blue without being told."
+      />
+
+      {/* ── 11 · Two adjacent ───────────────────────────────────────────────────── */}
+      <PageHero title={TITLE} body={paragraphs(1)} />
+      <PageHero title="A second hero, which is a second h1" body={paragraphs(1)} />
+      <Note
+        title="11 · Two adjacent — THIS IS A BUG; the specimen shows what the bug looks like"
+        note="Forbidden: two heroes are two h1s and one page has one h1. The component cannot detect a sibling — there is no :has() and no upward selector — so this is a lint rule and a review, not a runtime guard. The visual tell is the seam you are looking at: two --sec-padding-y paddings meet and leave 192px of dead air between two display titles, which is unmistakable once it has been seen once."
+      />
+
+      {/* ── 12 · Interactive content in extras ──────────────────────────────────── */}
+      <PageHero title={TITLE} body={paragraphs(1)} actions={TWO_ACTIONS}>
+        <Cluster colGap="tight" rowGap="tight">
+          <Button
+            as="a"
+            href={ROUTES.caseStudies}
+            emphasis="ghost"
+            tone="neutral"
+            size="md"
+            extendHitArea
+          >
+            Extras control one
+          </Button>
+          <Button
+            as="a"
+            href={ROUTES.services}
+            emphasis="ghost"
+            tone="neutral"
+            size="md"
+            extendHitArea
+          >
+            Extras control two
+          </Button>
+        </Cluster>
+      </PageHero>
+      <Note
+        title="12 · Interactive content in extras — tab order"
+        note="Tab from the top: extras control one, extras control two, then the first action, then the second. DOM order, which is visual order, and the component adds no tabindex, no focus trap and no roving index. Anything focusable in extras reaches the 44px floor by its own means — these two are Buttons with extendHitArea, which already do. The other slots CANNOT hold interactive content, and that is a compile-time guarantee rather than a rule: title, eyebrow and every entry in body are typed string, so no control, no link and no second heading can be passed into them."
+      />
+
+      {/* ── 13 · The hit floor ──────────────────────────────────────────────────── */}
+      <PageHero title={TITLE} body={paragraphs(1)} actions={TWO_ACTIONS} />
+      <Section density="tight">
+        <Layout rowGap="block">
+          <p className={s.specTitle}>13 · The 44px touch floor, which a screenshot will not show</p>
+          <p className={s.specNote}>
+            Every action is <code>Button size=&quot;md&quot;</code> with{' '}
+            <code>extendHitArea</code>. The box is <code>--btn-height-md</code> 40 and the floor
+            is <code>--btn-hit-min</code> 44, so the extension covers the missing 4 without
+            moving the row — and the row not moving is the point: stepping to{' '}
+            <code>size=&quot;lg&quot;</code> would make the hero&apos;s controls 48 while every
+            other control on the site stayed at 40, and the hero would be claiming a loudness the
+            design does not intend. The dashed box below is 44 tall, for comparison against the
+            actions above. An action missing the extension is the one failure this component can
+            ship that a screenshot will not show, so assert both numbers in the rendered DOM.
+          </p>
+          <div className={s.hitFloor} />
+        </Layout>
+      </Section>
+
+      {/* ── 14 · Illegal placements, rendered ───────────────────────────────────── */}
+      <Section density="tight">
+        <Layout rowGap="block">
+          <p className={s.specTitle}>
+            14 · Illegal placements — a band in a narrow track, at 320 and at 256
+          </p>
+          <p className={s.specNote}>
+            PageHero is a band and may only be a direct child of the page or its template. It must
+            not be placed inside a <code>Section</code> (the content column would inset twice),
+            inside a <code>Layout</code> track (a band is not a row) or inside a{' '}
+            <code>Cluster</code> (which would shrink it to its longest word). Both bands below are
+            clamped by the harness to Layout&apos;s own track widths so the floor is a rendering
+            rather than a claim — and both are wrong on purpose.
+          </p>
+          <div className={s.trackMd}>
+            <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={ONE_ACTION} />
+          </div>
+          <p className={s.specNote}>
+            <strong>320px, --lay-track-md — the named minimum.</strong> The longest single word in
+            a corpus h1 still fits without overflow at this width. Both measures exceed the column
+            here and go inert, which is the correct behaviour and needs no rule; nothing reorders
+            and no media query fires, because there are none in this component.
+          </p>
+          <div className={s.trackSm}>
+            <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={ONE_ACTION} />
+          </div>
+          <p className={s.specNote}>
+            <strong>256px, --lay-track-sm — below the floor.</strong> It renders and it breaks
+            inside words rather than overflowing. That is the documented behaviour of a placement
+            that should not exist, not a supported width.
+          </p>
+        </Layout>
+      </Section>
+
+      {/* ── 15 · What this page cannot show ─────────────────────────────────────── */}
+      <Section density="tight">
+        <Layout rowGap="block">
+          <p className={s.specTitle}>15 · What a static page cannot show</p>
+          <p className={s.specNote}>
+            <strong>The 767 and 375 columns.</strong> Narrow the window. Nothing in this component
+            changes at either — no DOM change, no reordering, no gap change, no type change of its
+            own — and that is the assertion rather than an omission: the stack is single-track at
+            every width, both Clusters wrap by themselves, and both measures are{' '}
+            <code>ch</code>-based so they follow the type down with no second value to keep in
+            sync. <code>--text-h1</code> re-declares itself at 1023 and 767 in the type layer,
+            which is where that decision belongs.
+          </p>
+          <p className={s.specNote}>
+            <strong>The Buttons&apos; three stateless states.</strong> Hover, pressed and{' '}
+            <code>:focus-visible</code> have no props anywhere in this system. Point at an action,
+            hold it down, and tab to it, on each of the four surfaces in block 7. They are
+            Button&apos;s states and Button&apos;s specimen tests them properly.
+          </p>
+          <p className={s.specNote}>
+            <strong>Reduced motion.</strong> Nothing in this component moves, so{' '}
+            <code>prefers-reduced-motion: reduce</code> has nothing to switch off and the
+            rendering under it is byte-identical. The stylesheet contains no{' '}
+            <code>@media</code> block of any kind, including that one — the identity is
+            structural, not conditional.
+          </p>
+        </Layout>
+      </Section>
+    </>
+  );
+}
