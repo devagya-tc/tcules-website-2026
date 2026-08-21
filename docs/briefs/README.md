@@ -18,7 +18,14 @@ regenerated and pushed again.**
 
 ## The eighteen
 
-Thirteen are pasteable. Five are not, and say so at the top of the file.
+Ten are pasteable. Eight are not: seven describe components that **already ship** — do not specify
+them, compose from the library instead — and one is blocked on content. Each says so in its Status
+cell, and the five that never had a `BRIEF` block say so at the top of the file too.
+
+**This table is the first thing a designer reads, so a stale Status cell is the most expensive kind
+of staleness in the repo.** It sends someone off to specify a component that already exists, which
+is the exact waste the library was built to prevent — and nothing checks it. When a component ships,
+move its row to "ships today" in the same change that merges it.
 
 | # | Brief | Proposed name · tier · prefix | Launch scope | Status |
 |---|---|---|---|---|
@@ -26,10 +33,10 @@ Thirteen are pasteable. Five are not, and say so at the top of the file.
 | 02 | [Rich Text](02-rich-text.md) | `Prose` · 1 · `--prose-` | 129 pages | **ships today — do not specify** |
 | 03 | [Nav](03-nav.md) | `SiteNav` · 2 · `--nav-` | 129 pages | **ships today — do not specify** |
 | 04 | [Footer](04-footer.md) | `SiteFooter` · 2 · `--foot-` | 129 pages | **ships today — do not specify** |
-| 05 | [Page Hero](05-page-hero.md) | `PageHero` · 2 · `--hero-` | 129 routes · 3 arrangements | paste |
+| 05 | [Page Hero](05-page-hero.md) | `PageHero` · 2 · `--hero-` | 129 routes · 1 arrangement | **ships today — do not specify** |
 | 06 | [Breadcrumbs](06-breadcrumbs.md) | `Breadcrumbs` · 2 · `--crumb-` | 128 routes · 1 | **ships today — do not specify** |
 | 07 | [Content Section](07-content-section.md) | `ContentSection` · 2 · `--csec-` | 110 routes · 738 instances · 4 | paste |
-| 08 | [CTA Section](08-cta-section.md) | `CtaSection` · 2 · `--cta-` | 76 routes · 113 instances · 2 | paste — carries an `UNRESOLVED` |
+| 08 | [CTA Section](08-cta-section.md) | `CtaSection` · 2 · `--cta-` | 76 routes · 113 instances · 3 | **ships today — do not specify** |
 | 09 | [Form](09-form.md) | `EnquiryForm` · 2 · `--enq-` | 56 routes · 1 | paste — carries an `UNRESOLVED` |
 | 10 | [Table](10-table.md) | `DataTable` · 1 · `--tbl-` | 56 routes · 61 tables · 1 | paste — carries an `UNRESOLVED` |
 | 11 | [List Card](11-list-card.md) | `ListCard` · 2 · `--lcrd-` | 53 routes · 70 sections · 5 | paste |

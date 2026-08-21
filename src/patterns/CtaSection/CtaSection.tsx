@@ -24,10 +24,11 @@ export type CtaAction = {
 
 type CtaSectionBaseProps = {
   /**
-   * The block's `h2`, verbatim. A `string` and not a `ReactNode`, and that typing is the mechanism
-   * rather than a convenience: it makes a second heading impossible to smuggle in, which matters
-   * here because this block appears once or twice on a route that already has exactly one `h1`
-   * from `PageHero`.
+   * The block's `h2`, verbatim. An empty string renders an empty `h2` — there is no fallback copy.
+   *
+   * A `string` and not a `ReactNode`, and that typing is the mechanism rather than a convenience:
+   * it makes a second heading impossible to smuggle in, which matters here because this block
+   * appears once or twice on a route that already has exactly one `h1` from `PageHero`.
    *
    * An empty string renders an empty `h2` on purpose. The region is labelled from this heading, so
    * an empty one exposes an unnamed region — a findable fault, where a fallback string would be a
@@ -44,11 +45,10 @@ type CtaSectionBaseProps = {
   /** The category label above the heading. Absent renders no element and no seam. */
   eyebrow?: string;
   /**
-   * What happens next, in order — and the order is the meaning, which is why it renders as an
-   * `<ol>` and why each marker is the position written as a numeral rather than a glyph.
+   * What happens next, in order — an `<ol>`, so the order is the meaning. Empty renders no list.
    *
-   * Empty renders no `<ol>` at all: 20 of the 113 instances are expected to be pointless in
-   * exactly that way.
+   * Each marker is the position written as a numeral rather than a glyph, for the same reason. 20
+   * of the 113 instances are expected to be pointless, and an empty list costs no space.
    */
   points?: readonly CtaPoint[];
   /**
