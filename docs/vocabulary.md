@@ -112,7 +112,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--lay-` (components/layout.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css)
+`--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--cta-` (components/cta-section.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--lay-` (components/layout.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -134,7 +134,7 @@ against the controls beside it — if you are specifying one, say which of these
 
 Layout is done by these three. Always. Anything you specify is arranged by one of them.
 
-**`Section`** — `as?: ElementType` · `surface?: SectionSurface` · `density?: SectionDensity` · `flush?: boolean` · `children: ReactNode`
+**`Section`** — `as?: ElementType` · `surface?: SectionSurface` · `density?: SectionDensity` · `flush?: boolean` · `children: ReactNode` · `'aria-labelledby'?: string` · `'data-arrangement'?: string`
 
   where `SectionSurface` = 'paper' | 'tint' | 'ink' | 'blue' · `SectionDensity` = 'tight' | 'open'
 
@@ -154,6 +154,6 @@ seam to size.
 ### What already exists — check these before specifying anything new
 
 - **Primitives** (`src/components/`): `Button` · `Cluster` · `Icon` · `Layout` · `Logo` · `Prose` · `Section`
-- **Patterns** (`src/patterns/`): `Breadcrumbs` · `PageHero` · `SiteFooter` · `SiteNav`
+- **Patterns** (`src/patterns/`): `Breadcrumbs` · `CtaSection` · `PageHero` · `SiteFooter` · `SiteNav`
 - **Templates** (`src/templates/`): — none yet
 

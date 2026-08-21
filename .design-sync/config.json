@@ -20,6 +20,7 @@
     "Logo": "src/components/Logo/Logo.tsx",
     "Prose": "src/components/Prose/Prose.tsx",
     "Breadcrumbs": "src/patterns/Breadcrumbs/Breadcrumbs.tsx",
+    "CtaSection": "src/patterns/CtaSection/CtaSection.tsx",
     "PageHero": "src/patterns/PageHero/PageHero.tsx",
     "SiteNav": "src/patterns/SiteNav/SiteNav.tsx",
     "SiteFooter": "src/patterns/SiteFooter/SiteFooter.tsx"
@@ -55,6 +56,10 @@
     "PageHero": {
       "cardMode": "column",
       "viewport": "1280x760"
+    },
+    "CtaSection": {
+      "cardMode": "column",
+      "viewport": "1280x900"
     }
   },
   "dtsPropsFor": {

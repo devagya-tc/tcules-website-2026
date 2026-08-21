@@ -1,8 +1,9 @@
 ## How to build with Tcules
 
 No provider, no theme object, no wrapper component. Load `styles.css` and `_ds_bundle.js` and
-every component is correct. All 11 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
-`Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`.
+every component is correct. All 12 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
+`Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`,
+`CtaSection`.
 
 ### There is no class vocabulary — do not invent one
 
@@ -130,6 +131,30 @@ Four things to get right, because each of them is a decision the component has a
    a `Cluster` — and its `surface` must match the `Breadcrumbs` above it, as in the example above.
    It gives 96 of air above and below, which is the air the trail deliberately does not give.
 
+`CtaSection` — **the page's ask, made once.** `heading` (an `h2`, never an `h1`), `body` (one or two
+paragraph strings), optional `eyebrow` and `points` (a list of `{ label, detail? }`), `surface`, and
+then whichever slots the arrangement asks for. It brings its own band and labels its own region from
+its heading, so it needs no `aria-label`.
+
+**Three arrangements, and they are three JOBS rather than three densities of one shape.** Pick by
+what the page is asking the reader to do:
+
+| `arrangement` | The page asks for | Takes |
+|---|---|---|
+| `split` (default) | an **enquiry** | `form` + `scheduleHref`, optionally `proof` |
+| `open` | a **click** | one or two `actions`, optionally `proof` |
+| `offer` | an **interruption** — the free audit, mid-scroll | either `form` + `scheduleHref` **or** `actions`; never `proof` |
+
+Two things follow, and both are load-bearing:
+
+1. **The combinations are enforced by the type, not by convention.** `arrangement="open"` with a
+   `form`, or `arrangement="offer"` with `proof`, does not compile. So choose the arrangement, fill
+   what it asks for, and let the type refuse the rest — do not reach for a prop the table above
+   does not list against your arrangement.
+2. **`form` and `proof` are caller-supplied `ReactNode` slots, and neither is styled by this
+   component.** There is no field or form component in this library yet, so a page passes its own.
+   A preview card showing browser-default inputs is showing an empty slot, not an intended design.
+
 ### Read before styling
 
 This design system's `styles.css` and its `@import` closure (the token definitions all live in
@@ -138,6 +163,12 @@ component, `components/<group>/<Name>/<Name>.prompt.md` and `<Name>.d.ts` are th
 read them rather than guessing a prop.
 
 ### An idiomatic block
+
+This is here to show how the three primitives compose — a band, a two-column axis, a wrapping row —
+and that is all it is. **It is not a template for a page's closing ask:** it happens to look like
+one, and if the block you are building is the page's ask then `CtaSection` is the component, with
+its form and proof slots and its three arrangements already decided. Same for a page opening, which
+is `PageHero`. Reach for the primitives directly for the blocks in BETWEEN those two.
 
 ```jsx
 const { Section, Layout, Cluster, Button, Icon } = window.Tcules;
