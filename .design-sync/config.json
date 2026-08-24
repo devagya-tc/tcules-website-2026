@@ -25,6 +25,7 @@
     "EnquiryForm": "src/patterns/EnquiryForm/EnquiryForm.tsx",
     "ListCard": "src/patterns/ListCard/ListCard.tsx",
     "BlockCard": "src/patterns/BlockCard/BlockCard.tsx",
+    "Accordion": "src/patterns/Accordion/Accordion.tsx",
     "PageHero": "src/patterns/PageHero/PageHero.tsx",
     "SiteNav": "src/patterns/SiteNav/SiteNav.tsx",
     "SiteFooter": "src/patterns/SiteFooter/SiteFooter.tsx"
@@ -79,6 +80,10 @@
     "BlockCard": {
       "cardMode": "column",
       "viewport": "1280x900"
+    },
+    "Accordion": {
+      "cardMode": "column",
+      "viewport": "1280x820"
     }
   },
   "dtsPropsFor": {

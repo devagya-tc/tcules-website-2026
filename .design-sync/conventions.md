@@ -1,9 +1,9 @@
 ## How to build with Tcules
 
 No provider, no theme object, no wrapper component. Load `styles.css` and `_ds_bundle.js` and
-every component is correct. All 16 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
+every component is correct. All 17 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
 `Input`, `Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`,
-`CtaSection`, `EnquiryForm`, `ListCard`, `BlockCard`.
+`CtaSection`, `EnquiryForm`, `ListCard`, `BlockCard`, `Accordion`.
 
 ### There is no class vocabulary — do not invent one
 
@@ -254,6 +254,35 @@ Four things to get right:
 `titleAs` gives the title heading semantics without changing its type — the tile's title is always
 set at h4 scale. Like `Button` and `ListCard`, `BlockCard` reads `data-surface` from the band above
 it, so set the surface once on the `Section`.
+
+`Accordion` — **one multi-open question-and-answer set**, and the only component here built on a
+native browser control. One prop: `items`, an array of `{ question, answerHtml }`.
+
+Every item is a real `<details>` / `<summary>`. That is the point of it: the browser owns the
+expanded state, the keyboard contract and the accessibility tree, so there is **no client boundary,
+no authored ARIA and no managed focus** — and nothing for you to add. If you find yourself writing
+`aria-expanded`, `role="region"` or a click handler around this, stop; you are rebuilding what it
+already has.
+
+Four things to get right:
+
+1. **`question` is plain text and `answerHtml` is rich text.** The question is a `string` and not a
+   node on purpose — a summary already carries a role and a keyboard contract, so a heading, a link
+   or a control cannot be put inside one. The answer goes through `Prose`, so paragraphs, lists,
+   emphasis, code and links are all already styled on every surface.
+2. **The first item is open and every item is independent.** There is no single-open mode, no
+   `defaultOpen` and no external control of state. Opening one never closes another and never moves
+   focus, which is what lets a reader compare two answers.
+3. **Two to eight items.** One is a paragraph wearing a disclosure; past eight the reader is
+   scanning a list of headings instead of reading answers, and the content wants a different shape.
+   Blank questions and blank answers are dropped rather than rendered as an empty row.
+4. **It is a ladder, not a stack of panels.** No ground behind an item, no border around one — one
+   hairline above the set and one below each item. Opening an item changes the ink of its rule and
+   nothing else, so nothing moves under the reader. Do not put it inside a bordered or filled box to
+   "contain" it.
+
+It caps at the body measure because it is a reading column, and it takes no `surface` — set the
+surface once on the `Section` above it.
 
 ### Read before styling
 

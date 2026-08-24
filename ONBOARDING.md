@@ -320,7 +320,7 @@ Two surfaces, because they are good at different things. **Claude Design** write
 Code** in this repo builds it. The seam between them is a file in `docs/specs/`.
 
 **Before any of that: check whether you need a new component at all.** `.design-sync/` bundles the
-sixteen real components onto `window.Tcules` and pushes them into Claude Design with
+seventeen real components onto `window.Tcules` and pushes them into Claude Design with
 `.design-sync/conventions.md` as their guidelines, so a page can be *composed* from actual shipped
 code rather than from a description of it. That is the default path and it is strictly better where
 it applies — the components in a mockup built that way are the real ones, so their surfaces, states
