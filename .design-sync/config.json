@@ -87,6 +87,7 @@
     "Proof": {
       "cardMode": "column",
       "viewport": "1280x820"
+    },
     "Figure": {
       "cardMode": "column",
       "viewport": "1280x900"
