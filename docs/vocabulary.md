@@ -113,7 +113,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css)
+`--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -128,6 +128,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **icon.css** — `--icn-size-sm` 14px · `--icn-size-md` 16px · `--icn-size-lg` 18px · `--icn-size-xl` 24px
 - **input.css** — `--inp-height-md` 40px · `--inp-height-touch` 44px · `--inp-padding-x` 12px · `--inp-textarea-padding-y` 12px · `--inp-min-inline` 16rem · `--inp-textarea-min-block` 128px · `--inp-radius` 8px · `--inp-rule-width` 1px · `--inp-invalid-rule-width` 2px · `--inp-ring-width` 2px · `--inp-ring-offset` 2px
 - **layout.css** — `--lay-track-xs` 192px · `--lay-track-sm` 256px · `--lay-track-md` 320px · `--lay-track-lg` 384px
+- **list-card.css** — `--lcrd-title-tracking` 0em · `--lcrd-marker-tracking` -0.01em · `--lcrd-content-min-xs` 192px · `--lcrd-thumbnail-inline-md` 160px · `--lcrd-rule-width` 1px · `--lcrd-rule-width-pressed` 2px · `--lcrd-radius` 0px · `--lcrd-ring-width` 2px · `--lcrd-ring-offset` 2px
 - **logo.css** — `--logo-height-sm` 20px · `--logo-height-md` 24px · `--logo-height-lg` 40px
 - **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 12px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-panel-padding-y` 48px · `--nav-panel-bar-inset` 16px · `--nav-row-padding` 8px · `--nav-row-radius` 8px · `--nav-row-icon-size` 24px · `--nav-row-measure` 68ch · `--nav-rail-inset` 32px · `--nav-rail-title-tracking` 0em · `--nav-label-tracking` 0.12em · `--nav-drawer-padding-y` 32px · `--nav-drawer-item-padding-y` 16px · `--nav-drawer-item-tracking` 0.08em · `--nav-drawer-panel-inset` 16px · `--nav-drawer-panel-gap` 16px
 - **page-hero.css** — `--hero-eyebrow-tracking` 0.12em · `--hero-title-tracking` -0.018em · `--hero-key-tracking` 0.1em · `--hero-title-measure` 22ch · `--hero-body-measure` 68ch
@@ -158,6 +159,6 @@ seam to size.
 ### What already exists — check these before specifying anything new
 
 - **Primitives** (`src/components/`): `Button` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Prose` · `Section`
-- **Patterns** (`src/patterns/`): `Breadcrumbs` · `CtaSection` · `EnquiryForm` · `PageHero` · `SiteFooter` · `SiteNav`
+- **Patterns** (`src/patterns/`): `Breadcrumbs` · `CtaSection` · `EnquiryForm` · `ListCard` · `PageHero` · `SiteFooter` · `SiteNav`
 - **Templates** (`src/templates/`): — none yet
 

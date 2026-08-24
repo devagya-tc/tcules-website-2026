@@ -23,6 +23,7 @@
     "Breadcrumbs": "src/patterns/Breadcrumbs/Breadcrumbs.tsx",
     "CtaSection": "src/patterns/CtaSection/CtaSection.tsx",
     "EnquiryForm": "src/patterns/EnquiryForm/EnquiryForm.tsx",
+    "ListCard": "src/patterns/ListCard/ListCard.tsx",
     "PageHero": "src/patterns/PageHero/PageHero.tsx",
     "SiteNav": "src/patterns/SiteNav/SiteNav.tsx",
     "SiteFooter": "src/patterns/SiteFooter/SiteFooter.tsx"
@@ -69,6 +70,10 @@
     "EnquiryForm": {
       "cardMode": "column",
       "viewport": "1280x900"
+    },
+    "ListCard": {
+      "cardMode": "column",
+      "viewport": "1280x760"
     }
   },
   "dtsPropsFor": {

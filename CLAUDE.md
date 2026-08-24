@@ -13,7 +13,7 @@ app  →  templates  →  patterns  →  components  →  lib / styles
 |---|---|---|
 | — | `src/app/**` | routes. Composition only; read content, pass props |
 | 3 | `src/templates/**` | whole page-type layouts (article shape, service-page shape) |
-| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter` and `Breadcrumbs` today; hero, CTA, card next |
+| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`, `EnquiryForm` and `ListCard` today; `BlockCard` and `ContentSection` next |
 | 1 | `src/components/**` | primitives, controls and marks — `Section`, `Layout`, `Cluster`, `Button`, `Icon`, `Logo`, `Prose` |
 | — | `src/content/**` | the CMS seam. Imported by pages and nothing else |
 | — | `src/lib/**`, `src/styles/**` | leaves. Import nothing above them |
@@ -255,8 +255,8 @@ That is what lets one pattern serve a fixture today and a CMS response later.
 Two surfaces, and a file between them. **Claude Design** writes the spec; **Claude Code** builds it
 here. Full walkthrough in `ONBOARDING.md` § 8.
 
-**Most of the time the answer is that nothing new is needed.** `.design-sync/` pushes the nine real
-components into Claude Design as a live library, so a page can be composed out of actual shipped
+**Most of the time the answer is that nothing new is needed.** `.design-sync/` pushes the fifteen
+real components into Claude Design as a live library, so a page can be composed out of actual shipped
 components — correct on every surface, in every state, without anyone describing them. Reach for the
 spec workflow below only when the thing genuinely does not exist. Establishing that it already does
 is the more valuable outcome, and it is the one the last codebase never reached 111 times.
@@ -273,11 +273,11 @@ is the more valuable outcome, and it is the one the last codebase never reached 
    **The request half is a file, and it is ready to paste.** `docs/briefs/<NN>-<component>.md` is a
    complete document per component — this prose plus that component's filled `BRIEF` block. The
    designer opens one file, selects all, pastes. There is nothing to assemble and no second document.
-   Nine of the eighteen are pasteable. Of the other nine, five (`01`–`04`, `18`) carry no `BRIEF`
+   Eight of the eighteen are pasteable. Of the other ten, five (`01`–`04`, `18`) carry no `BRIEF`
    block on purpose — four are answered by code that already ships and one is parked on content
-   work — and four (`05`, `06`, `08`, `09`) kept their block but are now answered by shipped code
-   too: `PageHero`, `Breadcrumbs`, `CtaSection` and `EnquiryForm`. Their Status cells say so; the
-   block is left in place as the record of what was asked for.
+   work — and five (`05`, `06`, `08`, `09`, `11`) kept their block but are now answered by shipped
+   code too: `PageHero`, `Breadcrumbs`, `CtaSection`, `EnquiryForm` and `ListCard`. Their Status
+   cells say so; the block is left in place as the record of what was asked for.
    `docs/briefs/README.md` indexes them and gives the order.
 
    The token vocabulary is **not** in them. It lives once in the Claude Design project as a guidelines

@@ -62,7 +62,7 @@ function Marker({ marker }: { marker: ListCardMarker }) {
     /* The title names the subject, so Icon's unlabelled form is the right one: it emits
        aria-hidden and cannot duplicate the row name. */
     return (
-      <span className={cx(styles.marker, styles.icon)}>
+      <span className={styles.marker}>
         <Icon name={marker.name} size="xl" />
       </span>
     );
