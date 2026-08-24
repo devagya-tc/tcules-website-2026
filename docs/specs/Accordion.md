@@ -2,15 +2,15 @@
 
 ## 0 · Front matter
 
-|                     |                                      |
-| ------------------- | ------------------------------------ |
-| **Component**       | `Accordion`                          |
-| **Tier**            | 2 pattern (`src/patterns/Accordion/`) |
-| **Status**          | accepted                             |
-| **Token prefix**    | `--acc-*`                            |
-| **Designer / date** | Codex / 24 Aug 2026                  |
-| **Implements**      | `docs/briefs/14-accordion.md`        |
-| **Implemented at**  | Pending build                        |
+|                     |                                                                                                                         |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Component**       | `Accordion`                                                                                                             |
+| **Tier**            | 2 pattern (`src/patterns/Accordion/`)                                                                                   |
+| **Status**          | implemented                                                                                                             |
+| **Token prefix**    | `--acc-*`                                                                                                               |
+| **Designer / date** | Codex / 24 Aug 2026                                                                                                     |
+| **Implements**      | `docs/briefs/14-accordion.md`                                                                                           |
+| **Implemented at**  | `src/patterns/Accordion/` · `src/styles/tokens/components/accordion.css` · specimen `src/app/design/accordion/page.tsx` |
 
 ## 1 · Identity
 
@@ -423,7 +423,7 @@ gap weakens the question/answer grouping, and repeated grounds create the reject
 ```text
 STRUCTURE
 [x] All 18 sections present, in order, with the exact headings.
-[x] Front matter states Tier 2 pattern, Status accepted and token prefix --acc-*; repository search
+[x] Front matter states Tier 2 pattern, Status implemented and token prefix --acc-*; repository search
     finds no collision.
 [x] Every Anatomy part appears in colour, geometry or is explicitly delegated to native semantics
     or Prose.

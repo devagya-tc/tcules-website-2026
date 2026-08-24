@@ -1,0 +1,111 @@
+/* Accordion — one native multi-open disclosure set, built to docs/specs/Accordion.md.
+
+   Layout owns the zero-gap item axis and Cluster owns question/mark placement. This module owns
+   only the continuous rule ladder, trigger hit area and answer inset. It has no item ground,
+   hand-written sibling arrangement, breakpoint, height animation or surface selector. */
+
+.root {
+  position: relative;
+  z-index: var(--acc-layer);
+  inline-size: 100%;
+  max-inline-size: var(--measure-body);
+  min-inline-size: 0;
+  border-block-start: var(--acc-rule-width) solid var(--acc-rule-ink);
+  border-radius: var(--acc-radius);
+  box-shadow: var(--acc-shadow);
+}
+
+.item {
+  min-inline-size: 0;
+  border-block-end: var(--acc-rule-width) solid var(--acc-rule-ink);
+  transition: border-color var(--acc-transition-duration) var(--acc-transition-easing);
+}
+
+.item[open] {
+  border-block-end-color: var(--acc-rule-ink-expanded);
+}
+
+.trigger {
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding-block: var(--gap-text);
+  color: var(--acc-trigger-fg);
+  background-color: transparent;
+  cursor: pointer;
+  list-style: none;
+  transition: background-color var(--acc-transition-duration) var(--acc-transition-easing);
+}
+
+.trigger::-webkit-details-marker {
+  display: none;
+}
+
+.trigger::marker {
+  content: '';
+}
+
+.trigger:hover,
+.trigger:focus-visible {
+  background-color: var(--acc-trigger-bg-hover);
+}
+
+.trigger:active {
+  background-color: var(--acc-trigger-bg-pressed);
+}
+
+.trigger:focus {
+  outline: none;
+}
+
+.trigger:focus-visible {
+  position: relative;
+  outline: none;
+  box-shadow:
+    0 0 0 var(--acc-ring-offset) var(--acc-ring-gap-color),
+    0 0 0 calc(var(--acc-ring-offset) + var(--acc-ring-width)) var(--acc-ring-color);
+}
+
+.triggerContent {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.question {
+  min-inline-size: 0;
+  max-inline-size: var(--measure-body);
+  overflow-wrap: anywhere;
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+}
+
+.markClosed,
+.markOpen {
+  flex: 0 0 auto;
+  color: inherit;
+}
+
+.markOpen {
+  display: none;
+}
+
+.item[open] .markClosed {
+  display: none;
+}
+
+.item[open] .markOpen {
+  display: inline-flex;
+}
+
+.answer {
+  min-inline-size: 0;
+  max-inline-size: var(--measure-body);
+  padding-block: var(--gap-tight) var(--gap-block);
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item,
+  .trigger {
+    transition-duration: var(--duration-instant);
+  }
+}
