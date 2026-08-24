@@ -34,6 +34,9 @@
  * for the usual two reasons (it consumes a content shape, and it arranges with Cluster and Layout).
  * BlockCard is its bounded sibling: an edge-defined TILE that fills a parent-owned grid track. It
  * still paints no ground; the complete four-sided edge, media scale and h4 title make the object.
+ * Accordion is a DISCLOSURE SET: one continuous rule ladder of native details/summary pairs. It
+ * owns a CMS-shaped question/answer array and composes Layout, Cluster, Icon and Prose while
+ * leaving surface and surrounding page rhythm to its caller.
  */
 export { SiteNav } from './SiteNav';
 export type {
@@ -73,6 +76,9 @@ export type {
 
 export { BlockCard } from './BlockCard';
 export type { BlockCardProps, BlockCardMedia, BlockCardTitleElement } from './BlockCard';
+
+export { Accordion } from './Accordion';
+export type { AccordionProps, AccordionItem } from './Accordion';
 
 export { PageHero } from './PageHero';
 export type {

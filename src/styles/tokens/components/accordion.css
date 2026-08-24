@@ -1,0 +1,66 @@
+/* ══ Component layer — Accordion ═════════════════════════════════════════════════
+   Tier 2. One continuous native disclosure set with independent, multi-open items.
+
+   Naming: --acc-{part}-{role}-{state}
+     parts: trigger | rule | ring
+     states: rest (no suffix) | hover | pressed | expanded
+
+   Accordion paints no ground. The answer delegates its entire palette to Prose, and every
+   surface block below redeclares every Accordion colour so a nested surface cannot inherit an
+   enclosing set's interaction ground, rule or focus pair. */
+
+:root {
+  --acc-rule-width: var(--border-width-hairline);
+  --acc-radius: var(--radius-0);
+  --acc-shadow: var(--shadow-none);
+  --acc-layer: var(--z-base);
+  --acc-ring-width: var(--focus-ring-width);
+  --acc-ring-offset: var(--focus-ring-offset);
+  --acc-transition-duration: var(--duration-fast);
+  --acc-transition-easing: var(--easing-standard);
+}
+
+/* Paper: neutral interaction grounds keep blue for the open rule and keyboard ring. */
+:root,
+[data-surface='paper'] {
+  --acc-trigger-fg: var(--color-neutral-900); /* 14.62:1 */
+  --acc-trigger-bg-hover: var(--color-neutral-100); /* foreground 12.37:1 */
+  --acc-trigger-bg-pressed: var(--color-neutral-200); /* foreground 10.97:1 */
+  --acc-rule-ink: var(--color-neutral-300); /* decoration */
+  --acc-rule-ink-expanded: var(--color-brandeis-500); /* decoration */
+  --acc-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
+  --acc-ring-gap-color: var(--color-paper);
+}
+
+/* Tint: interaction fills and the quiet rule deepen against paper-deep. */
+[data-surface='tint'] {
+  --acc-trigger-fg: var(--color-neutral-900); /* 13.06:1 */
+  --acc-trigger-bg-hover: var(--color-neutral-200); /* foreground 10.97:1 */
+  --acc-trigger-bg-pressed: var(--color-neutral-300); /* foreground 9.46:1 */
+  --acc-rule-ink: var(--color-neutral-400); /* decoration */
+  --acc-rule-ink-expanded: var(--color-brandeis-500); /* decoration */
+  --acc-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
+  --acc-ring-gap-color: var(--color-paper-deep);
+}
+
+/* Ink: white trigger ink sits on distinct neutral hover and pressed grounds. */
+[data-surface='ink'] {
+  --acc-trigger-fg: var(--color-white); /* 17.26:1 */
+  --acc-trigger-bg-hover: var(--color-neutral-900); /* foreground 14.75:1 */
+  --acc-trigger-bg-pressed: var(--color-neutral-800); /* foreground 11.92:1 */
+  --acc-rule-ink: var(--color-neutral-700); /* decoration */
+  --acc-rule-ink-expanded: var(--color-brandeis-300); /* decoration */
+  --acc-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
+  --acc-ring-gap-color: var(--color-neutral-950);
+}
+
+/* Blue: the existing Brandeis surface deepens for pointer states; open and focus lift to white. */
+[data-surface='blue'] {
+  --acc-trigger-fg: var(--color-white); /* 6.23:1 */
+  --acc-trigger-bg-hover: var(--color-brandeis-600); /* foreground 7.59:1 */
+  --acc-trigger-bg-pressed: var(--color-brandeis-700); /* foreground 10.16:1 */
+  --acc-rule-ink: var(--color-brandeis-300); /* decoration */
+  --acc-rule-ink-expanded: var(--color-white); /* decoration */
+  --acc-ring-color: var(--color-white); /* 6.23:1 against gap */
+  --acc-ring-gap-color: var(--color-brandeis-500);
+}

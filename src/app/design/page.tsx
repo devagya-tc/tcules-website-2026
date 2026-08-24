@@ -88,6 +88,11 @@ const SPECIMENS = [
         note: 'the bounded tile — 3 media fills, responsive grids, linked states, 4 surfaces',
       },
       {
+        href: '/design/accordion',
+        name: 'Accordion',
+        note: 'the native disclosure set — multi-open behavior, rich answers, 4 surfaces',
+      },
+      {
         href: '/design/page-hero',
         name: 'PageHero',
         note: 'the page opening — slot ladder, paragraph ladder, byline shapes, 4 surfaces, its own band',
