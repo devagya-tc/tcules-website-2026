@@ -43,16 +43,16 @@ move its row to "ships today" in the same change that merges it.
 | 10 | [Table](10-table.md) | `DataTable` · 1 · `--tbl-` | 56 routes · 61 tables · 1 | paste — carries an `UNRESOLVED` |
 | 11 | [List Card](11-list-card.md) | `ListCard` · 2 · `--lcrd-` | 53 routes · 70 sections · 5 | **ships today — do not specify** |
 | 12 | [Block Card](12-block-card.md) | `BlockCard` · 2 · `--bcrd-` | 38 routes · 78 clusters · 2 | **ships today — do not specify** |
-| 13 | [Figure](13-figure.md) | `Figure` · 1 · `--fig-` | 0 images · 21 captions written | paste — run it last |
+| 13 | [Figure](13-figure.md) | `Figure` · 2 · `--fig-` | 0 images · 21 captions written | **ships today — do not specify** |
 | 14 | [Accordion](14-accordion.md) | `Accordion` · 2 · `--acc-` | 21 routes · 22 sections · 1 | **ships today — do not specify** |
 | 15 | [Testimonial](15-testimonial.md) | `Proof` · 2 · `--proof-` | 6 routes · 2 | **ships today in shared Proof — do not specify** |
 | 16 | [Callout](16-callout.md) | `Callout` · 1 · `--call-` | 8 routes · 10 instances · 1 | paste |
 | 17 | [Stat](17-stat.md) | `Proof` · 2 · `--proof-` | 1 route resolved, 3 claimed · 2 | **ships today in shared Proof — do not specify** |
 | 18 | [Filters](18-filters.md) | `Filters` · 2 · unassigned | none | **blocked on content — do not specify** |
 
-Every proposed prefix was checked against the seventeen already taken — `--acc-`, `--bcrd-`,
-`--btn-`, `--crumb-`, `--cta-`, `--enq-`, `--foot-`, `--hero-`, `--icn-`, `--inp-`, `--lay-`,
-`--lcrd-`, `--logo-`, `--nav-`, `--proof-`, `--prose-`, `--sec-`. That list is generated into
+Every proposed prefix was checked against the eighteen already taken — `--acc-`, `--bcrd-`,
+`--btn-`, `--crumb-`, `--cta-`, `--enq-`, `--fig-`, `--foot-`, `--hero-`, `--icn-`, `--inp-`,
+`--lay-`, `--lcrd-`, `--logo-`, `--nav-`, `--proof-`, `--prose-`, `--sec-`. That list is generated into
 `docs/vocabulary.md`; read it there rather than trusting this sentence, which has been stale twice.
 
 ## The order to run them in
@@ -91,7 +91,24 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
 7. **CTA Section** · 08 and **Form** · 09 — CTA depends on the proof slot, Form on whether a field
    control is a primitive.
 8. **Callout** · 16.
-9. **Figure** · 13 — the image slot has to exist in Hero, Content Section and Block Card first.
+9. **Figure** · 13 — **shipped early, and the dependency stated here turned out to be backwards.**
+   `src/patterns/Figure/`, spec at `docs/specs/Figure.md`, specimen at `/design/figure`. Do not
+   specify it again; compose against the shipped component.
+
+   The premise was that Figure had to wait for an image slot in Hero, Content Section and Block
+   Card. It did not: Figure asks nothing of any container — it fills whatever inline space it is
+   given, paints no ground and takes no `surface` — so it was buildable against the one call site
+   that is real today, standalone use in case studies, where 21 caption-and-note lines were already
+   written with nothing to hold them. The slot question runs the other way and is now the blocked
+   one: `PageHero` deferred it pending Figure existing (`PageHero.md` §17 Q3), and when those
+   containers gain a slot it must be an `image?: ReactNode` the caller fills, because a pattern may
+   not import a pattern. Recorded as `Figure.md` §17 9b.
+
+   What Figure DID need was a content-model decision, answered 24 Aug 2026 and recorded as
+   `Figure.md` §17 9a: long-form bodies are a block list — rich text, then a figure, then rich text
+   — and an image never arrives inside a rich-text body string. Three of the brief's five hard
+   constraints (the quieter note, the hairline, parent-decided width) cannot be expressed inside
+   one, so `Prose` is not an alternative route for a figure.
 10. **Filters** · 18 — after a taxonomy exists. Content work, not design work.
 
 ## Three carry a decision that is not the designer's

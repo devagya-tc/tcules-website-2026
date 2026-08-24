@@ -98,6 +98,11 @@ const SPECIMENS = [
         note: 'the evidence block — attributed quotes, checked figures, combined layouts, 4 surfaces',
       },
       {
+        href: '/design/figure',
+        name: 'Figure',
+        note: 'the captioned image — slot ladder, 3 intrinsic ratios uncropped, the empty state, 4 surfaces',
+      },
+      {
         href: '/design/page-hero',
         name: 'PageHero',
         note: 'the page opening — slot ladder, paragraph ladder, byline shapes, 4 surfaces, its own band',

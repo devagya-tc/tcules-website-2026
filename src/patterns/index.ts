@@ -39,6 +39,19 @@
  * leaving surface and surrounding page rhythm to its caller.
  * Proof is EVIDENCE: an attributed quotation, checked figures, or both. It composes Layout,
  * Prose and Button while leaving the ground and its position in a page argument to the caller.
+ *
+ * Figure is the quietest thing in the tier and the first to hold an IMAGE as its subject rather
+ * than as a marker: an asset, its caption and an optional quieter note, filling whatever inline
+ * space it is handed and asking nothing of the container. It is presentational to the letter —
+ * no state, no interactive node, no ARIA, no id — and it is a pattern for the usual two reasons.
+ * Its one departure from every sibling above is that the image is NOT sized here: whether a
+ * screenshot runs the width of the text or the width of the section is the page's decision, and
+ * building it in would give two places the power to disagree.
+ *
+ * The two are unrelated despite the word they share, and this barrel is where that collision is
+ * visible: a `ProofFigure` is a CHECKED STATISTIC — a value, a label and the date it was verified
+ * — while `Figure` is a captioned image. Neither renders the other, and nothing but the noun is
+ * common to them.
  */
 export { SiteNav } from './SiteNav';
 export type {
@@ -84,6 +97,9 @@ export type { AccordionProps, AccordionItem } from './Accordion';
 
 export { Proof } from './Proof';
 export type { ProofProps, ProofQuote, ProofFigure } from './Proof';
+
+export { Figure } from './Figure';
+export type { FigureProps, FigureImage } from './Figure';
 
 export { PageHero } from './PageHero';
 export type {

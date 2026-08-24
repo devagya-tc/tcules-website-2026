@@ -20,6 +20,28 @@ export type Page = {
   seo?: PageSeo;
 };
 
+/**
+ * One block in a page's flow. The discriminant maps 1:1 onto a pattern in @/patterns.
+ *
+ * ── Long-form bodies are a BLOCK LIST, never one rich-text field ─────────────────────────────
+ * Decided 24 Aug 2026. An article or case study alternates: rich text, then a figure, then rich
+ * text, then a figure. A `prose` block carries an HTML string and renders through `Prose`; an
+ * image is its own `figure` block and renders through the `Figure` pattern.
+ *
+ * **An image never arrives inside a rich-text body string.** That is a contract, not a
+ * preference, and three things depend on it — none of which a body string can express:
+ *
+ *   · the quieter NOTE under the caption. Prose sets one colour for a whole <figcaption>, so a
+ *     two-tone legend would need a micro-format the CMS has to emit correctly forever;
+ *   · the hairline that ends a light screenshot on a light ground. Prose styles the caption and
+ *     leaves the image alone;
+ *   · width. Inside .prose an image fills the text measure, and whether a figure runs the text
+ *     column or the full section is the template's decision, which a string cannot carry.
+ *
+ * Enforced where sanitisation already happens — in sources/*, see the note in sources/strapi.ts.
+ * A body field that arrives carrying <img> or <figure> is a content-model violation, not
+ * something a component should quietly absorb.
+ */
 export type PageBlock = {
   /** Discriminant — maps 1:1 onto a pattern in @/patterns. */
   type: string;
