@@ -1,0 +1,143 @@
+/* ══ Component layer — Figure ════════════════════════════════════════════════════
+   Tier 2. An image with a caption and an optional quieter note, filling whatever inline
+   space its parent gives it. Built to docs/specs/Figure.md.
+
+   Naming: --fig-{part}-{role}
+     parts: caption | note | rule | image | (the box itself, for --fig-min-xs)
+
+   ── There is no state suffix anywhere in this file, and that is the assertion ────
+   Nothing Figure renders is interactive: no link, no button, no focusable node, so the
+   fixed state model has nothing to attach to. hover, pressed, focus, disabled and
+   expanded are therefore absent rather than declared-and-equal, because a state token
+   exists only if the value MOVES on at least one surface and here there is no second
+   rendering to move to. Given the same three props this component draws the same pixels
+   on every surface, forever. A click-to-enlarge treatment would be a new mechanism with
+   its own spec, not a state this layer quietly grows.
+
+   Nor is there a ground: Figure paints none. No --fig-*-bg exists, so a figure standing
+   in a tint panel nested inside an ink section shows the tint panel, not a box.
+
+   ── The rule is decoration, and it takes the house's ladder ─────────────────────
+   The spec first argued this hairline was non-text meaningful content and held it to 3:1,
+   which put it at neutral-500 on paper (3.16:1) and neutral-600 on tint (4.39:1). Reviewed
+   on the specimen and rejected: at those steps the rule takes more attention than the
+   screenshot it surrounds, and its job is only to create a slight distinction from the
+   ground where one is needed. That is decoration, so it is annotated as decoration and
+   drops the floor.
+
+   The values are then not a fresh judgement. --acc-rule-ink, --bcrd-edge-ink and
+   --lcrd-rule-ink already ship one identical ladder for exactly this job — 300 / 400 / 700
+   / brandeis-300 — so Figure takes it too, and a fourth component agreeing is worth more
+   than a fourth opinion. Every ratio below is now BELOW 3:1 on purpose; each is stated so
+   that a later "this is too quiet" has the number in front of it.
+
+   The one surface worth reading twice is ink, where the rule is quieter against the ground
+   (2.10:1) but louder against the screenshot's own near-white pixels (8.07:1). That is the
+   right way round: on a near-black band the image's own edge is already maximal contrast,
+   so the rule has nothing to do and should disappear into the ground rather than ring the
+   image.
+
+   Every surface block declares every surface-dependent token. Deltas-only is not
+   self-contained: nest this inside a non-paper surface and it inherits the enclosing
+   surface's values for whatever it omitted.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   Caption and note share ONE type role and are told apart by ink alone. --text-caption
+   is the only sans role at or below body-small scale; the mono role at that size
+   (--text-micro) comes bundled with semibold weight and tracking meant for short
+   capitalised labels, which is the wrong voice for a sentence explaining what an image
+   does not establish. So "quieter" here is a colour decision, and the surface blocks
+   below keep the two inks a full rung apart on all four grounds. Neither token carries
+   a tracking companion, because --text-caption has none.
+
+   Both distances in this component (image→legend, caption→note) are Layout rowGap
+   steps and appear nowhere in this file: there is no --fig-gap-* because there is no
+   distance Figure owns that the gap scale does not already name.
+
+   No --fig-z: nothing here is positioned, so nothing stacks. Writing z-index:0 would
+   manufacture a stacking context to assert an absence. */
+:root {
+  --fig-caption-text: var(--text-caption);
+  --fig-note-text: var(--text-caption);
+
+  /* Component geometry, not layout distance. 192 matches Layout's xs track by value
+     rather than reading --lay-track-xs: a component never reads another component's
+     tokens. It is the floor for a parent that does not size the figure — a wrapping row
+     rather than a grid track — and is the same value, for the same reason, that
+     --lcrd-content-min-xs already sets: below it a caption in --text-caption starts
+     breaking on very short lines instead of wrapping on words. */
+  --fig-min-xs: 192px;
+
+  --fig-rule-width: var(--border-width-hairline);
+
+  /* Square corners on purpose. A radius clips screenshot content at exactly the corners
+     a screenshot is least likely to spare — the same reasoning that rules out cropping. */
+  --fig-image-radius: var(--radius-0);
+
+  /* Nothing here is elevated. A Figure is not a bounded card; BlockCard owns the tile. */
+  --fig-image-shadow: var(--shadow-none);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The baseline. The caption reads with the weight of running prose rather than a label,
+   so it takes the same neutral-700 step body copy takes. The note steps one rung quieter
+   to 600 and clears the text floor by a thin margin on purpose: an aside should read as
+   an aside.
+
+   The rule is doing the most work of any surface here, because a light-UI screenshot on
+   paper is nearly the colour of the ground and has no edge of its own. 300 is the house's
+   decorative step and it is enough: a grey hairline on near-white is visible without being
+   a frame. It replaced neutral-500, which cleared 3:1 and looked like one.               */
+:root,
+[data-surface='paper'] {
+  --fig-caption-ink: var(--color-neutral-700); /* 8.14:1 */
+  --fig-note-ink: var(--color-neutral-600); /* 4.92:1 — floor is 4.5 */
+  --fig-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   The ground darkens and neutral-600 measures 4.39:1 here — a fail as text. The note
+   therefore steps up to 700, which is the caption's own paper value, and left alone the
+   two would render in identical ink on this one surface. They share one type role with
+   no family, case or tracking difference between them, so that collision would be total
+   rather than partial: the caption steps to 800 to keep a full rung of daylight. The
+   cost, stated plainly, is that the caption is measurably darker on tint than on paper.
+
+   The rule steps with the ground, 300 to 400, and stays decoration. It has less to do here
+   than on paper: the tint ground is already darker than a light screenshot, so some of the
+   distinction is made before the rule draws anything.                                  */
+[data-surface='tint'] {
+  --fig-caption-ink: var(--color-neutral-800); /* 10.54:1 */
+  --fig-note-ink: var(--color-neutral-700); /* 7.27:1 */
+  --fig-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   The direction inverts and the neutrals lift. Caption to 300, note to 400 — the same
+   two steps this system already uses for body and for a quiet label on this ground.
+
+   The rule DROPS to 700 rather than lifting with them, and that is the decision worth
+   reading twice: a screenshot on a near-black ground already has all the edge it needs
+   from its own light pixels, so a pale hairline would read as a second surface sitting on
+   the black one. 700 all but disappears into the ground (2.10:1), which is the point —
+   this is the one surface where the honest amount of rule is almost none.               */
+[data-surface='ink'] {
+  --fig-caption-ink: var(--color-neutral-300); /* 11.07:1 */
+  --fig-note-ink: var(--color-neutral-400); /* 8.05:1 */
+  --fig-rule-ink: var(--color-neutral-700); /* 2.10:1 vs the ground — decoration */
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   The tightest window in the system: only the light end of the Brandeis ramp clears AA
+   on a 500 ground. Caption takes 50 (5.57:1), note takes 100 (4.91:1) — the tightest
+   passing cell in this layer — and there is no third step available, which is why the
+   rule cannot follow the pattern of stepping past the note. It takes 300, DARKER than
+   either text ink and quieter than the 200 it replaced: on a saturated ground the
+   distinction wanted is a slight one, and stepping toward the ground is what makes it
+   slight.                                                                             */
+[data-surface='blue'] {
+  --fig-caption-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --fig-note-ink: var(--color-brandeis-100); /* 4.91:1 — floor is 4.5 */
+  --fig-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
+}
