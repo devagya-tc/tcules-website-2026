@@ -9,9 +9,10 @@ verbatim in that vocabulary.
 
 ## FIRST — specify only what does not already exist
 
-If this project has the **Tcules component library** loaded (the fifteen real components on
+If this project has the **Tcules component library** loaded (the sixteen real components on
 `window.Tcules`: `Section`, `Layout`, `Cluster`, `Input`, `Button`, `Icon`, `Logo`, `Prose`,
-`SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`, `EnquiryForm`, `ListCard`), then **compose your mockup out of those real components** rather than describing them.
+`SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`, `EnquiryForm`, `ListCard`,
+`BlockCard`), then **compose your mockup out of those real components** rather than describing them.
 They are the actual shipped code — correct on all four surfaces, correct in every state — so a mockup
 built from them is already true, and anything you would write about how they behave is a worse copy
 of something the implementer can just read.

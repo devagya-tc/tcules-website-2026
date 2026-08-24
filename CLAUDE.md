@@ -255,7 +255,7 @@ That is what lets one pattern serve a fixture today and a CMS response later.
 Two surfaces, and a file between them. **Claude Design** writes the spec; **Claude Code** builds it
 here. Full walkthrough in `ONBOARDING.md` § 8.
 
-**Most of the time the answer is that nothing new is needed.** `.design-sync/` pushes the fifteen
+**Most of the time the answer is that nothing new is needed.** `.design-sync/` pushes the sixteen
 real components into Claude Design as a live library, so a page can be composed out of actual shipped
 components — correct on every surface, in every state, without anyone describing them. Reach for the
 spec workflow below only when the thing genuinely does not exist. Establishing that it already does
