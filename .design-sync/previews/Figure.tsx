@@ -116,10 +116,13 @@ export function Default() {
  * The slot ladder, and what an absent slot does: it renders no element AND no seam. No note means
  * no eight-pixel gap sitting empty under the caption; no image means no `<img>`, no hairline and no
  * sixteen-pixel gap above the legend.
+ *
+ * Side by side rather than stacked so the two legends compare at a glance — and because a card cell
+ * fits roughly one full-width figure, which is a property of the frame rather than of the component.
  */
 export function SlotLadder() {
   return (
-    <Layout rowGap="stack">
+    <Layout columns={2} colGap="gutter" rowGap="gutter">
       <Figure image={SMALL} caption={CAPTION} />
       <Figure image={SMALL} caption={CAPTION} note={NOTE} />
     </Layout>
@@ -144,34 +147,39 @@ export function EmptyState() {
 }
 
 /**
- * Three intrinsic ratios at one track width, uncropped: 16:9, 9:13 and a small 8:5 upscaled. Nothing
- * is letterboxed or padded to a common shape. If a set of figures needs matching heights, that is
- * `equalRows` on the parent `Layout` — the parent's tool, not the figure's.
+ * Three intrinsic ratios in three EQUAL tracks, uncropped: 16:9, 9:13 and a small 8:5. Nothing is
+ * letterboxed or padded to a common shape, so the three bottom edges land at three different
+ * heights — which is the whole decision, visible in one glance.
+ *
+ * Three across rather than stacked, because the point is a comparison and because a stacked set of
+ * full-width figures runs past any card cell: a 16:9 image at 1280 is already 720px before its
+ * legend. The track is narrower here than in `Default`; what matters is that all three share it.
+ *
+ * If such a set needs matching heights, that is `equalRows` on the parent `Layout` — the parent's
+ * tool, not the figure's.
  */
 export function Shapes() {
   return (
-    <Layout rowGap="stack">
-      <Figure image={WIDE} caption="Wide — 1600×900." note={NOTE} />
-      <Figure image={TALL} caption="Tall — 720×1040." note={NOTE} />
-      <Figure
-        image={SMALL}
-        caption="Small — 320×200, upscaled to the full track."
-        note={NOTE}
-      />
+    <Layout columns={3} colGap="gutter" rowGap="gutter">
+      <Figure image={WIDE} caption="Wide — 1600×900." />
+      <Figure image={TALL} caption="Tall — 720×1040." />
+      <Figure image={SMALL} caption="Small — 320×200, upscaled." />
     </Layout>
   );
 }
 
 /**
- * Two figures in a two-column `Layout`. Each fills its own track independently, and because the two
- * assets differ in intrinsic ratio their bottom edges do not align — the accepted cost of never
- * cropping. The parent owns the gap; neither figure sets any outer spacing of its own.
+ * Two adjacent figures, same asset, different legends — so what varies between neighbours is the
+ * text rather than the image. Two figures in sequence is an expected pattern rather than a bug.
+ *
+ * The parent owns the gap: neither figure sets any outer spacing of its own, so `colGap` here is the
+ * only thing that moves that distance. `Shapes` above is where the mismatched-height case lives.
  */
 export function TwoUp() {
   return (
     <Layout columns={2} colGap="gutter" rowGap="gutter">
-      <Figure image={WIDE} caption="Wide — 16:9." note={NOTE} />
-      <Figure image={TALL} caption="Tall — 9:13." note={NOTE} />
+      <Figure image={SMALL} caption="Caption only." />
+      <Figure image={SMALL} caption="Caption and note." note={NOTE} />
     </Layout>
   );
 }
