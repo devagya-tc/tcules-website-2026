@@ -95,6 +95,7 @@
 @import 'components/list-card.css';
 @import 'components/block-card.css';
 @import 'components/accordion.css';
+@import 'components/proof.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */

@@ -1,0 +1,57 @@
+/* ══ Component layer — Proof ════════════════════════════════════════════════════
+   Tier 2. One attributed client quotation, a set of checked figures, or both.
+
+   Naming: --proof-{part}-{role}
+     parts: quote | attribution | value | label | checked
+
+   Proof paints no ground and owns no interactive state. Prose owns links inside quote HTML and
+   Button owns the optional figure-source link. Every surface block below redeclares all six Proof
+   colours so a nested surface cannot inherit evidence ink or the quote rule from its parent. */
+
+:root {
+  --proof-quote-rule-width: var(--border-width-hairline-deck);
+  --proof-radius: var(--radius-0);
+  --proof-shadow: var(--shadow-none);
+  --proof-layer: var(--z-base);
+}
+
+/* Paper: long quote copy is quiet neutral; the audited value carries the strongest ink. */
+:root,
+[data-surface='paper'] {
+  --proof-quote-ink: var(--color-neutral-800); /* 11.81:1 */
+  --proof-attribution-ink: var(--color-neutral-600); /* 4.92:1 */
+  --proof-value-ink: var(--color-neutral-950); /* 17.10:1 */
+  --proof-label-ink: var(--color-neutral-700); /* 8.14:1 */
+  --proof-checked-ink: var(--color-neutral-600); /* 4.92:1 */
+  --proof-quote-rule: var(--color-brandeis-500); /* decoration */
+}
+
+/* Tint: supporting copy deepens against paper-deep while the audited value stays neutral-950. */
+[data-surface='tint'] {
+  --proof-quote-ink: var(--color-neutral-800); /* 10.54:1 */
+  --proof-attribution-ink: var(--color-neutral-700); /* 7.27:1 */
+  --proof-value-ink: var(--color-neutral-950); /* 15.27:1 */
+  --proof-label-ink: var(--color-neutral-800); /* 10.54:1 */
+  --proof-checked-ink: var(--color-neutral-700); /* 7.27:1 */
+  --proof-quote-rule: var(--color-brandeis-500); /* decoration */
+}
+
+/* Ink: quotation and value lift to white; quiet evidence copy uses neutral-400. */
+[data-surface='ink'] {
+  --proof-quote-ink: var(--color-white); /* 17.26:1 */
+  --proof-attribution-ink: var(--color-neutral-400); /* 8.05:1 */
+  --proof-value-ink: var(--color-white); /* 17.26:1 */
+  --proof-label-ink: var(--color-neutral-400); /* 8.05:1 */
+  --proof-checked-ink: var(--color-neutral-400); /* 8.05:1 */
+  --proof-quote-rule: var(--color-brandeis-300); /* decoration */
+}
+
+/* Blue: white leads, Brandeis-100 supports, and peridot accents only the decorative quote rule. */
+[data-surface='blue'] {
+  --proof-quote-ink: var(--color-white); /* 6.23:1 */
+  --proof-attribution-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --proof-value-ink: var(--color-white); /* 6.23:1 */
+  --proof-label-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --proof-checked-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --proof-quote-rule: var(--color-peridot-400); /* decoration */
+}

@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
 import { Cluster, Layout, Prose, Section } from '@/components';
-import { CtaSection, EnquiryForm, type CtaPoint } from '@/patterns';
+import { CtaSection, EnquiryForm, Proof, type CtaPoint, type ProofFigure } from '@/patterns';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
 import { Box, specimenStyles as s } from '../_specimen/Specimen';
@@ -63,6 +63,24 @@ const REJECTIONS = [
   'compact — splits the difference between Section densities that already have clear jobs',
 ] as const;
 
+const PROOF_FIGURES = [
+  {
+    value: '90+',
+    label: 'completed projects',
+    checkedOn: 'checked on 8 August 2026',
+  },
+  {
+    value: '4.8/5',
+    label: '4.8/5 Clutch rating',
+    checkedOn: 'checked on 8 August 2026',
+  },
+  {
+    value: '19',
+    label: 'countries with Tcules clients',
+    checkedOn: 'checked on 8 August 2026',
+  },
+] as const satisfies readonly ProofFigure[];
+
 function SpecimenNote({ title, note }: { title: string; note: string }) {
   return (
     <Section density="tight">
@@ -74,55 +92,26 @@ function SpecimenNote({ title, note }: { title: string; note: string }) {
   );
 }
 
-/** Specimen-only stand-in for the separately briefed Proof pattern. */
-function DemoProof({
+/** Selects real Proof content shapes without copying Proof's presentation into the CTA specimen. */
+function ProofFixture({
   kind = 'both',
   interactive = false,
 }: {
   kind?: 'figures' | 'quote' | 'both';
   interactive?: boolean;
 }) {
-  return (
-    <Box accent>
-      <Layout rowGap="block">
-        {kind !== 'quote' ? (
-          <Layout columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="block">
-            <Layout rowGap="inline">
-              <strong>32%</strong>
-              <span>faster first release</span>
-            </Layout>
-            <Layout rowGap="inline">
-              <strong>4.8/5</strong>
-              <span>client rating</span>
-            </Layout>
-            <Layout rowGap="inline">
-              <strong>11 weeks</strong>
-              <span>to measurable value</span>
-            </Layout>
-          </Layout>
-        ) : null}
-        {kind !== 'figures' ? (
-          <figure>
-            <Layout rowGap="text">
-              <blockquote>
-                “They turned a broad product problem into a sequence the whole team could act
-                on.”
-              </blockquote>
-              <figcaption>
-                Product director, workflow software
-                {interactive ? (
-                  <>
-                    {' · '}
-                    <a href={ROUTES.caseStudies}>Read the case study</a>
-                  </>
-                ) : null}
-              </figcaption>
-            </Layout>
-          </figure>
-        ) : null}
-      </Layout>
-    </Box>
-  );
+  const quote = {
+    quoteHtml: interactive
+      ? `<p>They turned a broad product problem into a sequence the whole team could act on. <a href="${ROUTES.caseStudies}">Read the case study</a>.</p>`
+      : '<p>They turned a broad product problem into a sequence the whole team could act on.</p>',
+    name: 'Ashok Mohanty',
+    role: 'Founder',
+    company: 'Auxentios',
+  } as const;
+
+  if (kind === 'figures') return <Proof figures={PROOF_FIGURES} />;
+  if (kind === 'quote') return <Proof quote={quote} />;
+  return <Proof quote={quote} figures={PROOF_FIGURES} />;
 }
 
 export default function CtaSectionSpecimenPage() {
@@ -185,7 +174,7 @@ export default function CtaSectionSpecimenPage() {
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
-        proof={<DemoProof kind="figures" />}
+        proof={<ProofFixture kind="figures" />}
         surface="paper"
       />
       <CtaSection
@@ -198,7 +187,7 @@ export default function CtaSectionSpecimenPage() {
           { label: 'Discuss the relevant project', href: ROUTES.contact },
           { label: 'See how we work', href: ROUTES.howWeWork },
         ]}
-        proof={<DemoProof kind="quote" />}
+        proof={<ProofFixture kind="quote" />}
         surface="tint"
       />
       <CtaSection
@@ -355,7 +344,7 @@ export default function CtaSectionSpecimenPage() {
             points={STANDARD_POINTS}
             form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
             scheduleHref={ROUTES.contact}
-            proof={<DemoProof kind="figures" />}
+            proof={<ProofFixture kind="figures" />}
             surface={surface}
           />
           <CtaSection
@@ -365,7 +354,7 @@ export default function CtaSectionSpecimenPage() {
             body={OPEN_BODY}
             points={STANDARD_POINTS}
             actions={[{ label: 'Start a project', href: ROUTES.contact }]}
-            proof={<DemoProof kind="quote" />}
+            proof={<ProofFixture kind="quote" />}
             surface={surface}
           />
           <CtaSection
@@ -382,7 +371,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="7 · Surface boundaries"
-        note="A tint CTA between ink bands, then an ink CTA between paper bands. Each CTA's own data-surface scope resolves all five CTA inks plus the real EnquiryForm and proof stand-in inside it."
+        note="A tint CTA between ink bands, then an ink CTA between paper bands. Each CTA's own data-surface scope resolves all five CTA inks plus the real EnquiryForm and Proof inside it."
       />
       <Section surface="ink" density="tight">
         <p>Ink band before the tint CTA.</p>
@@ -393,7 +382,7 @@ export default function CtaSectionSpecimenPage() {
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
-        proof={<DemoProof />}
+        proof={<ProofFixture />}
         surface="tint"
       />
       <Section surface="ink" density="tight">
@@ -408,7 +397,7 @@ export default function CtaSectionSpecimenPage() {
         body={OPEN_BODY}
         points={STANDARD_POINTS}
         actions={[{ label: 'Start a project', href: ROUTES.contact }]}
-        proof={<DemoProof />}
+        proof={<ProofFixture />}
         surface="ink"
       />
       <Section density="tight">
@@ -417,7 +406,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="8 · Proof ladder"
-        note="Figures only, quote only, and both: first in split's full-width proof row, then in open's narrower right column. These are stand-ins until Proof itself is built."
+        note="The real Proof renders figures only, quote only, and both: first in split's full-width proof row, then in open's narrower right column."
       />
       {(['figures', 'quote', 'both'] as const).map((kind) => (
         <CtaSection
@@ -427,7 +416,7 @@ export default function CtaSectionSpecimenPage() {
           points={STANDARD_POINTS}
           form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
           scheduleHref={ROUTES.contact}
-          proof={<DemoProof kind={kind} />}
+          proof={<ProofFixture kind={kind} />}
         />
       ))}
       {(['figures', 'quote', 'both'] as const).map((kind) => (
@@ -438,7 +427,7 @@ export default function CtaSectionSpecimenPage() {
           body={OPEN_BODY}
           points={STANDARD_POINTS}
           actions={[{ label: 'Start a project', href: ROUTES.contact }]}
-          proof={<DemoProof kind={kind} />}
+          proof={<ProofFixture kind={kind} />}
           surface="tint"
         />
       ))}
@@ -474,7 +463,7 @@ export default function CtaSectionSpecimenPage() {
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         scheduleHref={ROUTES.contact}
-        proof={<DemoProof />}
+        proof={<ProofFixture />}
         surface="tint"
       />
 
@@ -542,7 +531,7 @@ export default function CtaSectionSpecimenPage() {
         body={OPEN_BODY}
         points={STANDARD_POINTS}
         actions={[{ label: 'Start a project', href: ROUTES.contact }]}
-        proof={<DemoProof kind="quote" interactive />}
+        proof={<ProofFixture kind="quote" interactive />}
         surface="ink"
       />
 

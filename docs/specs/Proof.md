@@ -1,0 +1,559 @@
+# Proof
+
+## 0 · Front matter
+
+|                     |                                                       |
+| ------------------- | ----------------------------------------------------- |
+| **Component**       | `Proof`                                               |
+| **Tier**            | 2 pattern (`src/patterns/Proof/`)                     |
+| **Status**          | implemented                                           |
+| **Token prefix**    | `--proof-*`                                           |
+| **Designer / date** | Codex / 24 Aug 2026                                   |
+| **Implements**      | `docs/briefs/15-testimonial.md` and `docs/briefs/17-stat.md` together, as required by `docs/briefs/README.md` |
+| **Implemented at**  | `src/patterns/Proof/` · `src/styles/tokens/components/proof.css` · specimen `src/app/design/proof/page.tsx` |
+
+The owner accepted the shared component identity in section 17 question 1. The public API, folder,
+token prefix and specimen route therefore use `Proof` rather than separate Testimonial and Stat
+names.
+
+## 1 · Identity
+
+`Proof` is one evidence block: an attributed client quotation, a set of checked figures, or the two
+together. `quote` is the Testimonial case, `figures` is the Stat case, and both populated is the
+combined evidence block already anticipated by `CtaSection`. It is Tier 2 because it accepts
+CMS-shaped records and composes the Tier 1 `Layout`, `Prose` and `Button` components.
+
+It is not an arbitrary blockquote: `Prose` owns ordinary rich-text blockquotes and their internal
+flow. The content seam routes an attributed quotation here and leaves an unattributed quotation to
+`Callout`; Proof never inspects its HTML for a name. It is not a CTA: `CtaSection` owns the band,
+heading, actions, form and placement of its `proof: ReactNode` slot, while Proof owns only the
+evidence inside that slot. It is not a card or panel: `BlockCard` owns bounded tiles and `Section`
+owns grounds; Proof paints no ground and has no four-sided edge.
+
+This cannot be a prop on `Prose`. The required attribution is a separate typed record, figures carry
+checked dates and optional sources, and the display arrangement sits beside figures. Those are
+structure outside a rich-text field. It cannot be a `CtaSection` variant because the same evidence
+also appears in ordinary content sections and case-study prose, and a pattern may not import a
+sibling pattern.
+
+The Testimonial brief resolves six routes, once each: display on `/how-we-work` and
+`/services/product-design`, compact inside four case studies. The Stat brief resolves one row of
+four on `/home` and claims appearances on `/about` and `/contact`; the content migration must confirm
+those two claimed routes before using them. A page normally carries one Proof. A page may compose
+several independent Proof instances, but the component does not turn six total quotes into a set
+variant.
+
+## 2 · Anatomy
+
+| Part | Required | Element / owner | Content and responsibility |
+| ---- | -------- | --------------- | -------------------------- |
+| root | yes | `Layout` | Owns the relationship between the optional quote figure and optional figures list. Carries no ground. |
+| quote | required in `compact`; optional in `display` | `Layout as="figure"` | One quotation and its attribution as one semantic unit, with both semantic children kept direct. |
+| quote-rule | whenever quote renders | quote logical leading edge | Deck-weight leading rule; decoration only, never an oversized quotation glyph. |
+| quote-text | whenever quote renders | native `blockquote` containing `Prose` | One trusted, sanitised rich-text field of one to six sentences. `Prose` owns its markup and inline-link behavior; Proof owns the arrangement-specific quote scale. |
+| attribution | whenever quote renders | native `figcaption` | Name, role and company emitted from three required strings in that order, separated by commas. |
+| attribution-media | provision only; not rendered | future position before attribution text | Reserved position for a future portrait or logo. There is no prop, DOM node, class or token until real content and an image contract exist. |
+| figures | optional in `display`; forbidden in `compact` | `Layout as="ul"` | Ordered one-to-four checked figures. The parent owns the item gaps and reflow. |
+| figure | for every figures record | native `li` containing `Layout` | One value/label unit plus its own checked metadata and optional source. |
+| value-label | for every figure | nested `Layout` | Keeps the audited value and what it counts as one visual unit. |
+| value | for every figure | text `span` | Verbatim audited value such as “90+” or “4.8/5”; never inferred, rounded or coloured as a link. |
+| label | for every figure | text `span` | Verbatim sentence-case source label, visually uppercased by the component. |
+| checked | for every figure | text `span` | Required per-item checked date, authored as a complete phrase such as “checked on 8 August 2026”. |
+| source | optional per figure | existing `Button as="a"` | Fixed visible label “View source”; Button owns every link state and the extended touch target. |
+
+There is no eyebrow, heading, body-copy, image, logo, avatar, rating mark, review-theme list, action
+slot, decorative quote glyph, panel, surface or set wrapper. A containing content pattern owns the
+heading; a rating is an ordinary figure whose value happens to be `4.8/5`.
+
+## 3 · Props / API
+
+```ts
+export type ProofQuote = {
+  quoteHtml: string;
+  name: string;
+  role: string;
+  company: string;
+};
+
+export type ProofFigure = {
+  value: string;
+  label: string;
+  checkedOn: string;
+  sourceHref?: string;
+};
+
+type ProofCompactProps = {
+  arrangement: 'compact';
+  quote: ProofQuote;
+  figures?: never;
+};
+
+type ProofDisplayProps =
+  | { arrangement?: 'display'; quote: ProofQuote; figures?: readonly ProofFigure[] }
+  | { arrangement?: 'display'; quote?: never; figures: readonly ProofFigure[] };
+
+export type ProofProps = ProofCompactProps | ProofDisplayProps;
+```
+
+| Prop / field | Exact type | Default | What it decides |
+| ------------ | ---------- | ------- | --------------- |
+| `arrangement` | `'display' \| 'compact'` | `'display'` | Section-scale evidence versus an embedded quotation. It decides composition and quote type, not a free size axis. |
+| `quote` | `ProofQuote` | none | Whether the attributed quotation figure renders. Required for compact. |
+| `figures` | `readonly ProofFigure[]` | none | Whether the checked-figure list renders. Expected count one to four; forbidden for compact. |
+| `quoteHtml` | `string` | none | Trusted, content-seam-sanitised quote body handed to `Prose html`; it does not contain the attribution. |
+| `name` | `string` | none | First attribution field. |
+| `role` | `string` | none | Second attribution field. |
+| `company` | `string` | none | Third attribution field. |
+| `value` | `string` | none | Verbatim audited figure value. |
+| `label` | `string` | none | What the figure counts. |
+| `checkedOn` | `string` | none | Required per-figure integrity line, including “checked on”. |
+| `sourceHref` | `string` | none | Optional source destination. Call sites use the named Clutch destination from the routes module once its exact URL is supplied. |
+
+The API deliberately has no `size`, `tone`, `surface`, `color`, `ground`, `padding`, `gap`, `radius`,
+`height`, `width`, `columns`, `align`, `quoteMark`, `avatar`, `portrait`, `logo`, `rating`, `set`,
+`sourceLabel`, `checkedDateShared`, `children`, `className` or `style`. Arrangement is semantic,
+not a visual size picker. The component owns its internal geometry. Surface comes only from the
+nearest `data-surface`. Portrait and logo are provisions, not speculative API.
+
+`arrangement="compact"` with `figures`, compact without `quote`, and display without either key
+must be compile errors. A quote with a React-node attribution or figures with a row-level checked
+date must also fail type checking because those shapes do not exist. TypeScript cannot prove that
+an array is non-empty or a string is non-blank without making CMS data hostile; runtime validation
+warns in development, omits invalid records and renders `null` when no valid evidence remains.
+
+## 4 · Variants × sizes
+
+| Arrangement | `md` | Content allowed | Intended context |
+| ----------- | ---- | --------------- | ---------------- |
+| `display` | the default rendering | quote, figures, or both | Own section, hero/CTA slot or full content block |
+| `compact` | embedded rendering | quote only | Inside an existing prose section or narrow reading flow |
+
+There is one size. Display and compact are role-named arrangements rather than `lg` and `sm`
+because they differ in composition: display may pair quote and figures, while compact must embed
+and is quote-only. Display uses the h3 composite for the quotation; compact uses the quote
+composite. The attribution, rule weight and measure do not step.
+
+Rejected variants are `set`, `feature`, `rating`, `logo-led`, `portrait-led`, boxed, filled,
+centred and decorative-mark. Six quotations across the whole corpus do not justify a two- or
+three-up API. A feature figure is the same value/label/date/source anatomy at a different scale,
+and no resolved route requires it. Parent `Layout` can compose several Proof instances later
+without making the individual component know it is in a set.
+
+## 5 · States
+
+Proof itself has only rest state. Quote, attribution, figure values, labels, dates and the leading
+rule do not respond to pointer, keyboard, selection, expansion, availability or asynchronous work.
+No Proof state token exists.
+
+Inline links inside `quoteHtml` keep `Prose`'s existing rest, hover, focus and pressed contract.
+The optional source is the existing `Button` with `emphasis="link"`, `tone="neutral"`, `size="sm"`
+and `extendHitArea`; Button owns its hover, keyboard focus, pressed and disabled machinery. Proof
+does not copy, recolour or force those states.
+
+Held/current, selected, disabled, expanded/open, busy, loading and error are deliberately excluded.
+This is evidence, not a control, disclosure, selection, request or validation surface. There is no
+colour-only state and no content-sniffed state.
+
+## 6 · Per-surface colour
+
+The six tokens below are the complete colour contribution of Proof. `Prose` still owns inline-link
+colours and Button owns source-link colours and focus geometry. Text ratios are measured against
+the exact Section ground; the quote rule is decoration.
+
+| Token | paper | tint | ink | blue |
+| ----- | ----- | ---- | --- | ---- |
+| `--proof-quote-ink` | `--color-neutral-800` — 11.81:1 | `--color-neutral-800` — 10.54:1 | `--color-white` — 17.26:1 | `--color-white` — 6.23:1 |
+| `--proof-attribution-ink` | `--color-neutral-600` — 4.92:1 | `--color-neutral-700` — 7.27:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
+| `--proof-value-ink` | `--color-neutral-950` — 17.10:1 | `--color-neutral-950` — 15.27:1 | `--color-white` — 17.26:1 | `--color-white` — 6.23:1 |
+| `--proof-label-ink` | `--color-neutral-700` — 8.14:1 | `--color-neutral-800` — 10.54:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
+| `--proof-checked-ink` | `--color-neutral-600` — 4.92:1 | `--color-neutral-700` — 7.27:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
+| `--proof-quote-rule` | `--color-brandeis-500` — n/a, decoration | `--color-brandeis-500` — n/a, decoration | `--color-brandeis-300` — n/a, decoration | `--color-peridot-400` — n/a, decoration |
+
+**Paper.** The quotation softens to neutral-800 so long display copy does not compete with the
+page heading; the audited value takes neutral-950. Attribution, dates and labels step down through
+neutral-600/700 while remaining above the normal-text floor. Only the decorative rule uses the
+action family, so a non-clickable number never appears clickable.
+
+**Tint.** Quote and label deepen to neutral-800 and metadata to neutral-700 against paper-deep.
+The value remains neutral-950. Brandeis-500 can hold the rule because it is an accent at the quote's
+edge rather than a second ground.
+
+**Ink.** Quote and value lift to white; supporting attribution, label and checked text use
+neutral-400. Brandeis-300 lifts the rule enough to remain visibly distinct without turning the
+whole block into a blue panel.
+
+**Blue.** Quote and value remain white. Supporting copy uses Brandeis-100, the lightest quiet step
+that still clears 4.5:1 on Brandeis-500. The peridot-400 rule provides a non-action accent; no
+peridot fills a control and the real source link retains Button's complete blue-surface treatment.
+
+Every surface block redeclares all six tokens. A tint Proof inside an ink parent resolves the full
+tint column from its nearest surface scope; an ink Proof inside a paper parent resolves the full ink
+column. Proof never caches an outer value, paints a nested ground or relies on a deltas-only table.
+
+## 7 · Geometry & spacing
+
+### (a) Distances
+
+- Display quote-to-figures relationship: root `Layout columns="fit" minTrack="md"`
+  with `colGap="column"` and `rowGap="stack"`; one child naturally renders one track.
+- Compact root: one track and no vacant seam.
+- Quote leading inset: `--gap-block` between the rule and quote content.
+- Quote-text-to-attribution relationship: nested `Layout rowGap="block"`.
+- Figures: `Layout columns="tile" minTrack="sm" colGap="gutter" rowGap="block"`
+  with `justify="between"`. Fixed-width tile tracks keep a partial last row from stretching.
+- Value-to-label relationship: nested `Layout rowGap="tight"`, one audited unit.
+- Value-label-to-checked relationship: outer figure `Layout rowGap="text"`.
+- Checked-to-source relationship: nested metadata `Layout rowGap="tight"`; no source means no
+  source element and no empty seam.
+- Proof-to-heading, Prose sibling, CTA frame or neighbouring Proof: the parent `Layout` owns that
+  block or stack relationship. Proof sets no outer margin.
+
+### (b) Component sizes
+
+- `md`: the only size; inline size is the available parent track, `min-inline-size: 0`, with no
+  fixed block size.
+- Display pair track: `Layout minTrack="md"`, resolving to the existing 320px layout track and
+  measured so two children fit the 1240px Section cap but collapse inside CtaSection's 470px column.
+- Figure tile: `Layout minTrack="sm"`, resolving to the existing 256px layout track. Four tiles
+  fit the 1240px cap; two fit the 703px content width immediately below 767; one fits a 470px CTA
+  column without compressing `4.8/5`.
+- Quote and quote-text measure: `--measure-body` so the six-sentence case stays readable rather
+  than growing to the 1240px cap.
+- Attribution measure: `--measure-body`. “Ashok Mohanty, Founder, Auxentios” is authored as one
+  content line but may wrap rather than overflow in a 192px stress track.
+- Rule: `--proof-quote-rule-width` resolves to `--border-width-hairline-deck`, measured against the
+  quote composite and matching Prose's established blockquote rule.
+- Radius: `--proof-radius` resolves to `--radius-0`.
+- Shadow: `--proof-shadow` resolves to `--shadow-none`.
+- Layer: `--proof-layer` resolves to `--z-base`; no part overlaps another.
+
+### (c) Optical corrections
+
+None. Proof does not reach the space ramp. Every inset and seam is a gap-scale relationship, the
+rule uses an existing border-width token and the two track minima come from Layout's existing
+component geometry.
+
+## 8 · Typography
+
+| Part | Role | Tracking companion | Measure |
+| ---- | ---- | ------------------ | ------- |
+| display quote-text | `--text-h3` | `--text-h3-tracking` | `--measure-body` |
+| compact quote-text | `--text-quote` | none — this role has no tracking companion | `--measure-body` |
+| attribution | `--text-body-sm` | none — this role has no tracking companion | `--measure-body` |
+| value | `--text-stat` | `--text-stat-tracking` | intrinsic inside one figure tile |
+| label | `--text-micro` | `--text-micro-tracking` | one figure tile |
+| checked | `--text-caption` | none — this role has no tracking companion | one figure tile |
+| source | owned by `Button size="sm" emphasis="link"` | owned by `Button` | intrinsic visible label |
+
+Quote, attribution and checked-date copy stay in authored sentence case: “The team helped us make a
+complicated workflow clear.” and “Ashok Mohanty, Founder, Auxentios”. Figure labels are supplied in
+sentence case — “completed projects” — and visually uppercased by the component to bind four
+differently shaped values into one row. Values and names are never transformed.
+
+Display deliberately stops at h3 rather than h2 or a one-off display role. The 34px serif scale
+has enough position and weight to lead a section while holding the measured six-sentence quote;
+the shared h3 composite already steps at the system breakpoints. Compact retains the established
+28px Prose blockquote scale so it embeds without becoming a second page heading.
+
+## 9 · Responsive
+
+At 1023, the root and figure layouts remain content-driven. Type composites re-resolve through the
+shared token layer; Proof does not swap a type role or gap. At 767, the same `tile`/`sm` figure row
+fits two 256px tracks in the Section content width, producing the preferred two-by-two reading for
+four figures. In a 470px CTA column it becomes one track; in a 192px stress track the tile shrinks
+to the parent and all text wraps without widening it.
+
+The display quote/figures pair uses `fit` with a `md` minimum: it is two columns where both 320px
+tracks plus the column seam fit and one column otherwise. Compact is always one embedded track.
+The quote never clamps and the component never changes its type role based on sentence count.
+
+The source `Button size="sm"` reaches the 44px touch floor through `extendHitArea` so the 32px
+visible link does not make the figure row taller. Inline Prose links keep Prose/Button's existing
+touch contract. The gap scale does not shift responsively.
+
+## 10 · Composition
+
+```tsx
+<Layout columns={both ? 'fit' : undefined} minTrack="md" colGap={both ? 'column' : undefined} rowGap={both ? 'stack' : undefined}>
+  {quote && (
+    <Layout as="figure" rowGap="block">
+      <blockquote><Prose html={quote.quoteHtml} /></blockquote>
+      <figcaption>{quote.name}, {quote.role}, {quote.company}</figcaption>
+    </Layout>
+  )}
+  {figures && (
+    <Layout as="ul" columns="tile" minTrack="sm" colGap="gutter" rowGap="block" justify="between">
+      {figures.map((figure) => (
+        <li><Layout rowGap="text">…value/label…checked/source…</Layout></li>
+      ))}
+    </Layout>
+  )}
+</Layout>
+```
+
+The conditional axis props express that an absent child leaves no seam; the implementation may
+split the branches rather than pass conditional props. `Layout` owns every block and column
+relationship. `Prose` owns trusted inline markup, and `Button` owns the optional link. There is no
+hand-written grid or flex arrangement, no margin on any child and no external override of Section's
+ground, padding or content column.
+
+## 11 · Accessibility
+
+The quote is a native `figure` containing `blockquote` and `figcaption`; the attribution is visible
+text, not an accessible-name override. The figures collection is a native `ul`, with one `li` per
+audited record. A source uses an anchor through `Button`; its visible “View source” label receives
+the contextual accessible name `View source for {label}`. It navigates in the same browsing context
+unless the application explicitly adopts a site-wide external-link policy.
+
+| Key / input | Quote inline link | Figure source link | Focus after action |
+| ----------- | ----------------- | ------------------ | ------------------ |
+| `Tab` | Moves to the next inline link, then onward in document order. | Moves to the source after the figure's checked line. | The newly focused anchor. |
+| `Shift+Tab` | Reverses through inline links. | Moves to the previous focusable element. | The newly focused element. |
+| `Enter` | Navigates to the link destination. | Navigates to `sourceHref`. | Browser navigation behavior. |
+| `Space` | Unbound; scrolls the page for an anchor. | Unbound; scrolls the page for an anchor. | Unchanged. |
+| pointer click | Navigates through the existing link. | Navigates to `sourceHref`. | Browser navigation behavior. |
+| `Escape` | Unbound; Proof is not a modal or disclosure. | Unbound. | Unchanged. |
+| Arrow/Home/End | Unbound; Proof is not a composite widget. | Unbound. | Unchanged. |
+
+Proof authors no `role`, `tabIndex`, live region, `aria-labelledby`, `aria-describedby`,
+`aria-controls`, `aria-expanded` or IDs. There is therefore no generated idref and no attribute
+that can point at an absent quote or source. The content seam sanitises `quoteHtml`; Proof does not
+claim that untrusted HTML is safe.
+
+Focus order is document order: quote links, then source links in figure order, then the next page
+control. Rendering or omitting optional evidence happens before interaction and moves no focus.
+Button's source ring remains `focus-visible` only and keeps its complete per-surface measured
+palette. Proof text maintains at least 4.5:1 on all four surfaces; the decorative rule has no
+contrast floor. Reduced motion changes only the delegated link transitions to their existing
+instant behavior.
+
+With quote and figures, a screen reader encounters: “The team helped us make a complicated
+workflow clear. Ashok Mohanty, Founder, Auxentios. List, four items. 90 plus, completed projects,
+checked on 8 August 2026. 4.8 out of 5, 4.8 out of 5 Clutch rating, checked on 8 August 2026, View
+source for 4.8 out of 5 Clutch rating, link.” Exact number pronunciation remains the user agent's
+language behavior; no hidden replacement rewrites audited values.
+
+## 12 · Content edge cases
+
+| Case | Required handling |
+| ---- | ----------------- |
+| Longest realistic string | Render the real six-sentence quotation at display h3 and compact quote scale, with the full attribution. It grows naturally, never clamps and never selects a smaller role from length. |
+| One long unbroken token | A URL in `quoteHtml` follows Prose's wrapping rule. Long name, role, company, value, label or checked strings use anywhere wrapping inside a `min-inline-size: 0` track; the audited value is not split unless the parent is narrower than the token itself. |
+| Zero items | Display with no valid quote and zero valid figures warns in development and renders `null`, with no empty root or seam. The public union prevents the ordinary no-content call. |
+| One item | One valid figure renders one 256px tile in the parent-owned list without stretching to imitate four; one quote renders its own figure without a vacant second track. |
+| Many items (2× expected) | Render all eight valid figures in tile rows and warn above the expected maximum of four. Do not truncate, carousel or invent pagination. Eight quotes are eight parent-composed Proof instances; there is no set prop. |
+| Missing image or missing optional slot | No image is built. Missing quote leaves figures only; missing figures leaves the quote only; missing source leaves no Button and no source seam. Future portrait/logo position is before attribution text, but no placeholder renders. |
+| Empty required-ish text | Blank quote body or any blank attribution field invalidates the quote. Blank value, label or checked date invalidates that figure. Warn in development, retain other valid evidence and render `null` if none remains. |
+| Narrow track at 767 | Display pair stacks when two md tracks no longer fit; four figures become two-by-two through tile/sm. Type roles and gap steps remain unchanged. |
+| Parent that does not size it | Root requests the full available inline size with `min-inline-size: 0`; tile tracks keep their existing 256px preferred minimum and can shrink to 100%. In a wrapping `Cluster`, full inline sizing prevents intrinsic collapse. No hard component minimum is needed; the parent supplies the explicit 192px stress track. |
+| Logical properties rather than left/right | Quote rule and inset use the logical inline-start edge; all spacing is block/inline. RTL moves the rule and inset together without reordering authored attribution fields. |
+| Surface nested inside a different one | The nearest surface redeclares all six Proof tokens; Prose and Button independently resolve their complete palettes from that same scope. Proof paints no intervening ground. |
+| Two components adjacent | Each root carries no outer margin or ground. The parent supplies `rowGap="stack"` for production; a zero-gap stress harness shows two evidence blocks remain semantically separate without accidental rules between them. |
+| Interactive content inside a slot | Trusted quote HTML may contain inline links, and a figure may render one source Button. They remain separate anchors in document order; controls, forms, nested buttons and arbitrary React children are not accepted by the API. |
+
+## 13 · Motion
+
+None on Proof. Quote, attribution, values, labels, dates and the decorative rule do not transition.
+There is no transform, translation, rotation, scale, wipe, fade, opacity change, height animation,
+max-height animation, quote reveal or count-up.
+
+Prose inline links and the source Button keep their own colour, border and link-rule transitions
+with `--duration-fast` and `--easing-standard`. Under reduced motion those existing primitives use
+`--duration-instant`; Proof adds no mechanism or exception.
+
+## 14 · Do's and Don'ts
+
+**Do**
+
+1. Route attributed blockquotes to the typed `quote` record at the content seam; type-check that
+   name, role and company are separate required strings.
+2. Render the same real six-sentence quote in display and compact specimens; inspect the computed
+   roles and confirm there is no length-dependent class.
+3. Render `4.8/5` as a normal `ProofFigure` with a label and its own checked date; inspect the DOM
+   for no rating-specific branch.
+4. Use `Layout` for the root, figure tiles and every nested rhythm; search the module for a
+   sibling-arranging grid/flex declaration and expect none.
+5. Render identical markup on paper, tint, ink and blue and inspect all six resolved Proof tokens,
+   plus Prose and Button tokens on the nearest nested surface.
+6. Preserve every audited value, label and date verbatim and show one-to-four figures without a
+   stretched partial row.
+7. Tab and point through quote links and source links on every surface; verify their states belong
+   to Prose/Button and every source accessible name includes its figure label.
+
+**Don't**
+
+8. Do not add separate Testimonial, Stat or rating folders if section 17 question 1 accepts Proof;
+   repository paths and exports decide this test.
+9. Do not sniff `quoteHtml`, rendered children or punctuation for attribution; search for parsing,
+   child walking and regular expressions and expect none.
+10. Do not paint a ground, card edge or oversized quotation mark; computed background remains
+    transparent and the glyph/asset tree contains no quote decoration.
+11. Do not add portrait/logo props or placeholders before real content and an image contract exist;
+    the public type and rendered tree contain neither.
+12. Do not colour a non-clickable value with any Brandeis token; only the decorative rule and
+    delegated links may use that family.
+13. Do not share one checked date across a row, infer it from the current day, or hide it visually;
+    every rendered figure contains its own visible `checkedOn` string.
+14. Do not truncate figures after four, quotes after a sentence count or attribution at one visual
+    line; warnings preserve content and wrapping preserves access.
+
+## 15 · Specimen plan — `/design/proof`
+
+The exact block list, in order:
+
+1. **Identity.** One display quote plus four checked figures, annotated as the combined block that
+   collapses the two briefs if question 1 is accepted.
+2. **Full arrangement × size matrix.** Display quote-only, figures-only and combined at the one md
+   size; compact quote-only at the same md size. No empty matrix cell implies a supported call.
+3. **Quote length ladder.** Identical attribution with real one-, three- and six-sentence bodies in
+   display, followed by the six-sentence body in compact. Print the resolved quote roles.
+4. **Figure count ladder.** One, two, three and four real figures, including `90+` and `4.8/5`, then
+   eight for the 2× stress case. Dates remain per item and partial rows retain tile width.
+5. **Source treatment.** Figures without and with the source Button, including two repeated Clutch
+   destinations. Visible label, contextual accessible name and same-context navigation are noted.
+6. **States: delegated only.** Rest references plus instructions to point, hold and Tab to inline
+   Prose and source Button links. Hover, pressed and keyboard focus have no Proof props and must be
+   pointed at, held and tabbed to; Proof has no forceable state.
+7. **All four surfaces as sibling bands with identical markup.** Each renders the same combined
+   Proof and prints the matching section 6 rationale and six resolved values.
+8. **Nested surfaces.** Tint inside ink and ink inside paper, with the same combined markup and
+   resolved Proof, Prose and Button tokens listed.
+9. **Embedded context.** Compact between two `Prose` paragraphs with the parent owning both seams;
+   it reads as part of the flow, not as a band.
+10. **CTA contexts.** Quote-only, figures-only and combined passed into CtaSection's existing proof
+    slot in split/full-width and open/470px contexts. The specimen replaces CtaSection's temporary
+    proof helper; it does not make CtaSection import Proof.
+11. **Long and invalid content.** Unbroken quote URL; long attribution fields; long value/label/date;
+    blank quote body; each blank attribution field; each blank figure field; empty figures and no
+    valid evidence.
+12. **Narrow and unsized parents.** Combined/display and compact at 320px, 256px and 192px, then in
+    a wrapping `Cluster` without a grid track. No intrinsic collapse or horizontal page overflow.
+13. **Two adjacent Proof instances.** Production stack gap followed by a zero-gap stress harness,
+    proving neither paints a joining ground or accidental separator.
+14. **Semantics and focus order.** Print figure/blockquote/figcaption and ul/li maps, then include
+    an inline quote link and two source links for Tab/Shift+Tab testing.
+15. **Portrait/logo provisions.** A text-only annotation marks the future location before
+    attribution; no placeholder, prop or image renders.
+16. **What a static page cannot force.** Manual instructions for hover, held pointer, Tab focus,
+    1023/767 widths and reduced motion.
+
+The squint test reads as four shapes: a tall serif quote rail, a horizontal figure rhythm, a
+two-column combined block and a compact interruption inside prose. Scale and position make the
+hierarchy; no repeated boxes or alternating grounds do it.
+
+## 16 · New token requests
+
+**None — every value in this spec is an existing token.**
+
+The `--proof-*` component layer maps existing ramp colours, h3/quote/stat/body-sm/micro/caption type
+roles, measures, Layout track sizes, gap roles, deck rule, radius, shadow and z-layer into Proof's
+parts. Prose and Button retain their own component layers. No primitive, usage token, glyph, image
+contract or motion mechanism is requested.
+
+## 17 · Open questions
+
+**1 · Component identity across briefs 15 and 17 — resolved (was BLOCKING).**
+
+- **(a) One `Proof` pattern.** Quote-only is Testimonial, figures-only is Stat, and both filled is
+  the combined evidence block. Ship one folder, one `--proof-*` surface table and one specimen.
+- **(b) Separate `Testimonial` and `Stat` patterns.** Each gets its own props, tokens and specimen;
+  a parent must compose the rating and quote when they appear together.
+- **(c) Three patterns.** Separate Testimonial, Stat and Rating even though Rating has the exact
+  value/label/date/source anatomy of a figure.
+
+**Owner decision — accepted 24 August 2026: (a), one `Proof`.**
+`docs/briefs/README.md` explicitly requires briefs 15 and 17 to be specified in one session because
+splitting them duplicates half the system. CtaSection's accepted spec already names the shared
+`Proof` slot, and the combined case cannot be represented by either briefed component alone. One
+discriminated API makes compact quote-only at compile time and renders `4.8/5` through the same
+audited figure contract as `90+`.
+
+**2 · Display versus compact — non-blocking.** Options: one rendering everywhere; two role-named
+arrangements; or a free size prop. **Recommendation and draft decision: two arrangements.** Compact
+is structurally quote-only and embeds in prose; display may include figures and stand as a content
+block. A size prop would let a caller put display behavior at compact scale without solving that
+composition difference.
+
+**3 · Display quote scale — non-blocking.** Options: h2; h3; or quote. **Recommendation and draft
+decision: h3.** It is visibly stronger than the compact quote composite but survives the real
+six-sentence case at the body measure. H2 makes the longest quote compete with the page heading;
+quote erases the distinction between arrangements.
+
+**4 · The `4.8/5` rating — non-blocking.** Options: ordinary figure; part of quote attribution; or a
+third rating pattern. **Recommendation and draft decision: ordinary figure.** It already has the
+same required label, checked date and optional Clutch source as the other figures. The quote remains
+valid without it, and no rating-only behavior exists.
+
+**5 · Quote set — non-blocking.** Options: add a two-/three-up set arrangement; or leave set
+composition to a parent. **Recommendation and draft decision: no set arrangement.** There are only
+six quotes across the site and no route shows more than one. A future real set can compose Proof
+instances with Layout and establish its own selection/count rules.
+
+**6 · Portrait and logo provisions — non-blocking.** Options: build optional props now; reserve a
+future position only; or reject media permanently. **Recommendation and draft decision: reserve the
+position before attribution text and build nothing.** No portrait or logo appears in 129 content
+files and the repository has no image contract. A prop without content would manufacture crop,
+aspect-ratio and empty-state decisions.
+
+**7 · Figure sources and the Clutch URL — non-blocking.** Options: style a raw anchor locally; use
+the existing link Button and accept `sourceHref`; or make the entire value clickable.
+**Recommendation and draft decision: `Button as="a" emphasis="link" tone="neutral" size="sm"`
+with `extendHitArea`, and keep the value non-interactive.** The caller passes the named Clutch route
+once its exact external URL is supplied; Proof must not guess a literal or substitute
+`UNRESOLVED_EXTERNAL` in production content.
+
+## Appendix · Self-audit
+
+```text
+STRUCTURE
+[x] All 18 sections present, in order, with the exact headings.
+[x] Front matter states Tier 2 pattern, Status implemented and token prefix --proof-*; live vocabulary
+    generation and repository search find no collision.
+[x] Every Anatomy part appears in colour, geometry or is explicitly delegated to Layout, Prose,
+    Button, native semantics or a future provision that renders no value.
+
+NAMES
+[x] Distinct token-name count: 38. Every referenced existing name resolves in the repository token
+    layer; --proof-* names are the component layer declared by this spec.
+[x] Glyph count: 0.
+[x] Section, Layout and Cluster prop/value names are existing unions: as, rowGap, colGap, columns,
+    minTrack, justify; ul, fit, tile, md, sm, tight, text, block, gutter, stack, column, between.
+[x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS declarations, selectors or media blocks.
+[x] h3, stat and micro use their tracking companions; quote, body-sm and caption correctly have none.
+[x] Every layout distance is a gap-scale role.
+[x] Space-ramp reaches: 0.
+[x] Literal measurements describe existing breakpoints, track tokens, the CTA track, Section cap or
+    content stress harness; none becomes a new implementation value.
+
+COLOUR AND CONTRAST
+[x] Colour table has 6 rows × 4 complete cells; no delta and no blank.
+[x] Every Proof text colour is at least 4.5:1 on its exact ground.
+[x] Proof owns no focusable part; Prose and Button own and measure their own focus rings.
+[x] The rule is explicitly marked decoration.
+[x] One paragraph per surface explains the mapping; nested surfaces are specified.
+
+STATES
+[x] Proof claims only rest. Delegated link states remain with existing primitives.
+[x] No Proof hover/pressed tokens exist, so the hover-versus-pressed requirement does not apply to
+    its static parts; Button and Prose already differ in their interactive renderings.
+[x] Excluded states have no tokens; no disabled opacity and no colour-only state.
+
+LAYOUT, TYPE, SEMANTICS
+[x] Every arrangement belongs to Layout; every columns declaration states colGap.
+[x] No child margin and no responsive gap/type-role swap.
+[x] Quote, attribution, value, label and checked text name measures or their containing tile.
+[x] Source Button clears the 44px floor through extendHitArea.
+[x] Native figure/list semantics need no authored ARIA idref or upward-walking selector.
+
+COMPLETENESS
+[x] All thirteen required content edge cases are answered.
+[x] The unsized-parent row explains why no hard minimum is needed and names the sm tile preference
+    plus the parent-owned 192px stress track.
+[x] Do's and Don'ts name a type check, repository path, search, computed style or rendered tree.
+[x] Specimen plan covers both arrangements, the one size, delegated states, all four surfaces, nested
+    surfaces, every edge case, adjacent instances, CTA/prose contexts and narrow tracks.
+[x] Section 16 says None and explains why component tokens are not a new request.
+[x] Every open question has options, recommendation and status; zero blockers remain.
+[x] Squint test: quote rail, figure rhythm, combined columns and compact prose interruption rather
+    than one rectangle repeated.
+```
