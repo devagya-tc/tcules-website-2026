@@ -86,7 +86,7 @@ export function BlockCard({ title, body, media, titleAs: Title = 'h3', href }: B
   const destination = href?.trim() ? href : undefined;
   const imageMedia = media?.kind === 'image' ? <Media media={media} /> : null;
 
-  const content = (
+  const inset = (
     <Layout rowGap="block" className={styles.content}>
       {media?.kind === 'icon' ? <Media media={media} /> : null}
       <Layout rowGap="tight">
@@ -103,18 +103,25 @@ export function BlockCard({ title, body, media, titleAs: Title = 'h3', href }: B
     </Layout>
   );
 
+  /* The frame stacks exactly two things: an optional edge-to-edge image and one inset content
+     block. That is an arrangement, so it is a Layout and not the frame's own block flow —
+     `rowGap="none"` is the explicit statement that the image and the inset share an edge, which is
+     what keeps the crop flush to the frame's border on three sides. */
+  const content = (
+    <Layout rowGap="none">
+      {imageMedia}
+      {inset}
+    </Layout>
+  );
+
   return (
     <li className={styles.root}>
       {destination ? (
         <a className={cx(styles.frame, styles.link)} href={destination}>
-          {imageMedia}
           {content}
         </a>
       ) : (
-        <div className={styles.frame}>
-          {imageMedia}
-          {content}
-        </div>
+        <div className={styles.frame}>{content}</div>
       )}
     </li>
   );
