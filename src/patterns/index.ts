@@ -1,8 +1,8 @@
 /**
  * TIER 2 — patterns.
  *
- * Composed blocks built FROM primitives: a reusable commercial close, page heroes, content
- * sections, and cards.
+ * Composed blocks built FROM primitives: a reusable commercial close, page heroes, an enquiry
+ * form, and cards.
  * Content-shaped but route-blind and data-blind — a pattern receives everything it renders as
  * props, so the same pattern serves a fixture today and a CMS response later.
  *
@@ -26,6 +26,13 @@
  *
  * EnquiryForm is a BEHAVIOURAL FORM: route-blind in what it renders, but responsible for the
  * blur-validation and asynchronous lifecycle shared by every page that collects an enquiry.
+ *
+ * ListCard is the fifth kind, and the only one here that is not a block: it is a ROW, and the
+ * smallest thing in this tier. It owns no band, takes no `surface`, paints no ground, and renders a
+ * bare <li> — the list element belongs to the caller, as a Layout with rowGap="none", because the
+ * row finishes itself with its own block-end rule and a gap would break the ladder. It is a pattern
+ * for the usual two reasons (it consumes a content shape, and it arranges with Cluster and Layout),
+ * and it is deliberately NOT the filled object: BlockCard is that, and is still to be built.
  */
 export { SiteNav } from './SiteNav';
 export type {

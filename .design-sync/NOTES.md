@@ -11,11 +11,28 @@ Repo-specific gotchas for future syncs. Read this before re-running.
 - Instead the sync has its own committed library entry, `.design-sync/ds-entry.ts`, which re-exports
   the two public tier barrels (`@/components`, `@/patterns`) and imports `.design-sync/ds-styles.css`.
   Pass it with `--entry .design-sync/ds-entry.ts`.
+- **Omitting `--entry` does not fall back — it fails, and the error names the wrong cause.** The
+  ListCard run tried it and `package-build` died in `lib/dts.mjs`'s `projectFor` with
+  `ENOENT … node_modules/tcules-website-2026/package.json`, which reads like a missing dependency or
+  a broken self-link. It is neither: with no entry the converter looks for the package it would have
+  synthesised from, and this repo is not installed as one. The whole invocation, for copying:
+
+      npx tsc -p .design-sync/tsconfig.dts.json          # FIRST — emits dist/types/
+      node .ds-sync/resync.mjs \
+        --config .design-sync/config.json \
+        --node-modules ./node_modules \
+        --out ./ds-bundle \
+        --remote .design-sync/.cache/remote-anchor.json \
+        --entry .design-sync/ds-entry.ts
+
+  A failed build also reports `shape: "storybook"` in the verdict while the log says `shape=package`
+  three lines earlier. That is the verdict's default showing through, not a detection failure — do
+  not chase it.
 - Because there is no shipped `.d.ts` tree, `cfg.buildCmd` runs
   `npx tsc -p .design-sync/tsconfig.dts.json` to emit declarations to `dist/types/` (gitignored).
   `findTypesRoot` picks `dist/types` up automatically. **Run it before the converter** or every
   `<Name>.d.ts` degrades to a stub.
-- `componentSrcMap` enumerates all 14 components on purpose: with an explicit `--entry` and no
+- `componentSrcMap` enumerates all 15 components on purpose: with an explicit `--entry` and no
   shipped `.d.ts`, `exportedNames()` returns empty, so the map IS the component list. A component
   missing from it does not exist as far as the sync is concerned — the build prints
   `package: N components (N src-matched)`, so check that number against the tier folders every run.
@@ -107,9 +124,9 @@ sync after it shipped reported the same two warnings, unchanged.
 
 ## Card presentation
 
-Twelve components carry `cfg.overrides.<Name>.cardMode = "column"` — `Section`, `Layout`, `Cluster`,
-`Icon`, `Logo`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`, `Input`,
-`EnquiryForm`. Only `Button` and `Prose` are not on the list. (This sentence said "six" while
+Thirteen components carry `cfg.overrides.<Name>.cardMode = "column"` — `Section`, `Layout`,
+`Cluster`, `Icon`, `Logo`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`, `Input`,
+`EnquiryForm`, `ListCard`. Only `Button` and `Prose` are not on the list. (This sentence said "six" while
 listing seven names before the PageHero sync; the count is worth re-deriving from `config.json`
 rather than trusting the prose, and only `Button` and `Prose` are absent from the list.) The product's card grid cell is ≤728px, and in a 2-up grid
 these components' stories broke words character-by-character or clipped. `SiteNav` also declares
@@ -119,6 +136,14 @@ a logo and a hamburger) `SiteFooter` `viewport: "1280x1500"` (five bands do not 
 byline and an actions row, then 96 again, and the default 700px cut the actions off — and
 `CtaSection` `1280x900`, whose `split` arrangement needs the full width to be two columns at all and
 is the tallest of its three (lede and points beside a form, with a proof row underneath).
+`ListCard` takes `1280x760`, and its reason is the sharpest of the set: its default `split`
+arrangement is a two-column title/body split that Layout resolves at **768px and up**. A grid card
+cell is ≤728px, which is *below that boundary* — so in grid mode every card would have rendered the
+collapsed single-track geometry, the `split`/`stacked` distinction would have been invisible, and the
+`Default` example would have silently shown the wrong shape while looking entirely plausible. Worth
+generalising: **when a component's default arrangement has a breakpoint above 728px, grid mode cannot
+show its default.** Check the component's own media boundaries before accepting the default card, not
+just whether the words wrap.
 Note an explicit `viewport` **is** grade-keyed — changing it needs a full `package-build.mjs`, not a
 targeted `preview-rebuild.mjs`, or capture prints `[CONFIG_STALE]`.
 
@@ -247,6 +272,33 @@ editing it; a new component layer means a new prefix in the taken list and a new
 
 The build tells you if you miss the first one: `package: N components (N src-matched)`. Check that N
 against `ls src/components src/patterns`. It will not tell you about the other three.
+
+**It has now happened TWICE, identically, which makes it the default rather than the exception.**
+`ListCard` arrived in PR #16 (24 Aug 2026) with the same shape as CtaSection's PR #8: the code side
+complete and correct — `src/patterns/ListCard/`, a `--lcrd-` layer registered in `tokens/index.css`,
+the tier barrel, `routes.ts`, a thorough specimen at `/design/list-card`, its `SPECIMENS` entry, an
+accepted spec — and **not one of the four `.design-sync/` files.** `npm run verify` was green on all
+six checks before any of them were written, and stayed green after.
+
+So stop treating the four-file check as a precaution for other people's PRs. **It is the first thing
+to do on any pull that adds a folder under `src/components/` or `src/patterns/`**, including your
+own. Two for two is a process gap, not an author.
+
+The ListCard sync also confirmed a fifth and sixth place the count goes stale, both outside
+`.design-sync/`, and both worse than `conventions.md` because a *designer* reads them:
+
+    docs/briefs/README.md               the Status cell — its own header says to move the row in the
+                                        merging change, and PR #16 did not. It said `paste` for a
+                                        component that ships.
+    docs/briefs/<NN>-*.md               the "FIRST — specify only what does not already exist"
+                                        paragraph, in EVERY brief file. Thirteen said "the twelve
+                                        real components" and `docs/prompts/component-spec-brief.md`
+                                        said "ten" — independently stale, neither checked.
+
+That brief paragraph is the single highest-cost line in the repo to get wrong: it is the sentence
+whose entire job is to stop a designer specifying something that already exists, and it was naming a
+library three components short. `Input`, `EnquiryForm` and `ListCard` were all invisible in it.
+`CLAUDE.md` carries the same count in two places and was stale in both.
 
 ## When a shared PRIMITIVE changes, the diff is longer than the added list — and that is correct
 
@@ -437,3 +489,37 @@ is graded on its own merits.
   now holds the real `EnquiryForm` instead of the browser-default stand-in it used while no form
   component existed. That is the third time the "an example goes stale when a component ships" rule
   has fired, and the first time it fired on a preview rather than on `conventions.md`.
+- Last sync: 24 Aug 2026 — **15 components, `ListCard` added** (PR #16, another author; the whole
+  `.design-sync/` half was authored here — the third occurrence, see the section above). 14
+  verified-by-upload and skipped, 1 new, 0 changed, 0 removed; anchor `ok`, refreshed from the live
+  `_ds_sync.json` before the run; all four stages green; render check 15/15 with not one flag set
+  across the whole file (`blank`, `thin`, `nameOnly`, `allHollow`, `collapsed`, `hasPlaceholder`,
+  `fallbackCard`, `variantsIdentical`, `bad` — all empty); all 9 ListCard cells graded good.
+  22 files uploaded: ListCard's four artifacts, its `_preview` module, the bundle, both styling
+  files, the two vendor modules, the stitched README, `_ds_needs_recompile`, `guidelines/index.md`,
+  the spec template, the regenerated vocabulary, all six implemented specs, and `_ds_sync.json`
+  last. Verified after upload: 15 render hashes, 15 source keys, and **every one of the fourteen
+  pre-existing components byte-identical in both maps** — the fourth confirmation of the trust model.
+  `styleSha` and `bundleSha12` moved, correctly: the new `--lcrd-` layer plus an audit fix to
+  `ListCard.module.css`.
+  All 15 have authored previews; nothing is on the floor card.
+
+  Two things specific to this one, both worth carrying forward:
+
+  **The preview needed a self-contained image.** ListCard is the first component with a thumbnail,
+  and `previews/` renders outside the Next app — so `/design/list-card-sample.svg`, which the
+  specimen route uses happily, resolves to nothing there. `previews/ListCard.tsx` inlines the same
+  sample as an `encodeURIComponent`'d `data:image/svg+xml` URI. Confirmed rendering in both the
+  `MarkerKinds` and `Thumbnails` cells. **Any future component taking an image src needs the same
+  treatment** — a `/public` path in a preview fails silently as a broken frame, and the render check
+  does not flag it (`hasPlaceholder` is about placeholder markup, not a failed image load).
+
+  **The audit found a real rendering defect that every check passed.** `.link::after` — the hover
+  wipe — sat at `inset-block-end: 0` on the same element that carries the base rule as its own
+  `border-block-end`. An absolutely positioned box resolves that against the padding box, so the
+  overlay stacked *above* the border rather than covering it: a two-tone 2px rule on hover and 3px
+  on press, where the spec asks for one hairline and exactly twice it. Valid CSS, resolving tokens,
+  clean build, green everything. Fixed by pulling the overlay out by the base rule's own width.
+  The pattern was copied from `Breadcrumbs.module.css`, where `0` is correct **because that `.link`
+  has no border of its own** — so this is the failure mode of borrowing a working idiom into a
+  context with one more layer in it.

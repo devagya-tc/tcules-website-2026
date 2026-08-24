@@ -1,7 +1,9 @@
 /* ListCard — one ruled row, built to docs/specs/ListCard.md.
 
    Every colour, type role, component size and state value comes from --lcrd-*, declared in
-   tokens/components/list-card.css and re-declared once per surface there. Layout and Cluster own
+   tokens/components/list-card.css and re-declared once per surface there. Two usage tokens are read
+   unaliased and the spec names them that way: --measure-title / --measure-body on the copy, and
+   --gap-text as the row's inner inset. Both are shared answers rather than this component's own. Layout and Cluster own
    every arrangement and every seam. This module provides only the row's own edge, inner inset,
    child sizing, crop and interactive rendering.
 
@@ -67,11 +69,10 @@
   white-space: nowrap;
 }
 
-/* These names assert the fill-specific geometry. Icon owns its own 24px box; the wrapper adds
-   neither a frame nor a second size. */
-.icon {
-  line-height: 0;
-}
+/* The icon fill needs no rule of its own, and that absence is the assertion: Icon owns its box, its
+   `display: block` and its `flex: none`, so the wrapper contributes only .marker's ink and sizing.
+   A `line-height: 0` stood here and could never have applied — the wrapper is a Cluster flex item,
+   so it is blockified, and its only child is a block-level svg, so no line box ever forms. */
 
 /* A content image rather than a panel. The wrapper supplies one invariant crop; the native image
    supplies source, alternative text and intrinsic dimensions. */
@@ -107,7 +108,6 @@
 
 .cue {
   color: inherit;
-  line-height: 0;
 }
 
 /* Higher specificity than globals.css's bare anchor rules. The anchor's currentColor drives the
@@ -132,18 +132,31 @@
   color: inherit;
 }
 
-/* The base hairline never disappears. This overlay is the non-colour hover carrier: it wipes over
-   the neutral rule in current link ink, then doubles on press. The change in block size is instant,
-   so press reads as a state rather than as a growth animation. */
+/* The overlay is the non-colour hover carrier: it wipes across in current link ink, then doubles on
+   press. The change in block size is instant, so press reads as a state rather than as a growth
+   animation.
+
+   The negative inset is load-bearing and not a nudge. This element IS .frame, which carries the base
+   rule as its own border-block-end, and an absolutely positioned box resolves inset-block-end
+   against its containing block's PADDING box — i.e. the INNER edge of that border. At 0 the overlay
+   therefore stacked on top of the hairline instead of covering it, rendering a two-tone 2px rule on
+   hover and 3px on press. The spec asks for one hairline on hover and exactly twice that on press,
+   so the overlay is pulled out by the base rule's own width to sit ON the border it replaces.
+
+   Breadcrumbs.module.css runs the same wipe at inset-block-end: 0 and is correct there for a reason
+   that does not hold here — its .link has no border of its own for the overlay to double. */
 .link::after {
   content: '';
   position: absolute;
   inset-inline: 0;
-  inset-block-end: 0;
+  inset-block-end: calc(-1 * var(--lcrd-rule-width));
   block-size: var(--lcrd-rule-width);
   background: currentColor;
   pointer-events: none;
   transform: scaleX(0);
+  /* The one place a physical value is unavoidable: a wipe has a direction, and `left` is not a
+     logical keyword. `0 50%` grows the rule from the row's inline start, which is where the marker
+     and the title already are — the same choice, and the same exception, as Breadcrumbs. */
   transform-origin: 0 50%;
   transition: transform var(--lcrd-transition-duration) var(--lcrd-transition-easing);
 }

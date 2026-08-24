@@ -1,9 +1,9 @@
 ## How to build with Tcules
 
 No provider, no theme object, no wrapper component. Load `styles.css` and `_ds_bundle.js` and
-every component is correct. All 14 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
+every component is correct. All 15 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
 `Input`, `Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`,
-`CtaSection`, `EnquiryForm`.
+`CtaSection`, `EnquiryForm`, `ListCard`.
 
 ### There is no class vocabulary — do not invent one
 
@@ -187,6 +187,42 @@ Three things to know:
    live endpoint and a real interaction. What a card shows is the idle shape — including the line
    reserved under each field, which is why a validation message never pushes the submit down.
 
+`ListCard` — **one ruled row in a list, and the smallest card in the system.** `title`, `body`, an
+optional `marker`, `arrangement="split | stacked"`, `titleAs="span | h3 | h4"` and an optional
+`href`. It is a closed record: no `children`, no `className`, no DOM spread.
+
+It is a ROW, not a panel — no background, no surrounding border, no shadow. Its only edge is a
+hairline at the block end, which is what lets a set of them read as one continuous ladder instead of
+a stack of separate objects. **If you need a filled or bordered object, this is not it** and nothing
+in the set is yet; do not reach for `ListCard` and add a ground around it.
+
+Four things to get right:
+
+1. **It renders an `<li>`, so the parent list is yours — and it is a `Layout`, not a bare `<ul>`.**
+   `<Layout as="ol" rowGap="none">` when position is part of the meaning (a numbered sequence, a
+   process), `<Layout as="ul" rowGap="none">` when it is not (terms, services, links). `rowGap` is
+   `none` because each row finishes itself with its own rule — a gap would open a visible break in a
+   ladder meant to read as continuous. A bare `<ul>` would also put a browser-default list marker
+   and inset next to the component's own marker slot.
+2. **`marker` is ONE slot with three fills, and the discriminator is content, not appearance.**
+   `{kind:'number', value}`, `{kind:'icon', name}`, `{kind:'thumbnail', src, alt}`, or absent. Every
+   fill lands in the same leading position under the same rule, inset and type — so pick by what the
+   row actually leads with, and do not read the three as three visual variants. `alt` is required
+   even when the correct value is `''`: decoration has to be chosen, not omitted. Under an `<ol>` the
+   number is `aria-hidden`, because the list already announces position.
+3. **`arrangement` is title/body geometry ONLY.** `split` (the default) puts them in a 2:3
+   two-column split at 768px and up and collapses to one track below it; `stacked` keeps body under
+   title at every width. It changes nothing else about the row — not the rule, not the marker, not
+   the inset.
+4. **`href` turns the WHOLE row into one native link**, with one focus stop, one accessible name and
+   an arrow cue at the row's inline end. Without it the row is inert, with no pointer states and no
+   cue. There is no way to put a second control in a row, and that is deliberate: one row, one
+   destination.
+
+`titleAs` is separate from all four. It gives the title heading semantics without changing its type —
+reach for `h3` or `h4` when the rows are page landmarks, not when they are prose. And like `Button`,
+`ListCard` takes no `surface`: it paints no ground and reads `data-surface` from the band above it.
+
 ### Read before styling
 
 This design system's `styles.css` and its `@import` closure (the token definitions all live in
@@ -200,7 +236,11 @@ This is here to show how the three primitives compose — a band, a two-column a
 and that is all it is. **It is not a template for a page's closing ask:** it happens to look like
 one, and if the block you are building is the page's ask then `CtaSection` is the component, with
 its form and proof slots and its three arrangements already decided. Same for a page opening, which
-is `PageHero`. Reach for the primitives directly for the blocks in BETWEEN those two.
+is `PageHero`. Reach for the primitives directly for the blocks in BETWEEN those two — with one
+exception that has since shipped: if the in-between block is a **list of terms, steps, services or
+links**, that is `ListCard` inside a `Layout as="ul" | "ol"`, not a hand-rolled stack. The right-hand
+column below is a single text item precisely because no row component existed when this was written;
+a set of them today is a ladder of `ListCard`s.
 
 ```jsx
 const { Section, Layout, Cluster, Button, Icon } = window.Tcules;
