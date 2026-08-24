@@ -13,6 +13,23 @@ checks in `npm run verify` exist to prevent, reintroduced by the document explai
 is authored because the guide needs structure Markdown cannot carry: a "where do I run this" label on
 every single command, the decision fork, and an ownership table.
 
+## Sending it to someone without a checkout
+
+    npm run guide:dist
+
+Writes two files into `dist/guide/`, both **generated** from the HTML beside this one:
+
+- `tcules-component-workflow.html` — the same page wrapped in the doctype, head and two reset rules
+  the artifact shell was supplying. The authored file is a fragment, so mailing it raw renders as
+  unstyled text in the wrong font; this one opens by double-click.
+- `tcules-component-workflow.md` — for a reader in Slack, a ticket or a phone. The conversion is
+  written per construct rather than generic, because the structure _is_ the content: every command
+  keeps its "where do I run this" label, the numbered spine keeps its numbers, the decision fork
+  keeps both branches, and the ownership table stays a table.
+
+`dist/` is gitignored on purpose. Committing the output would be the two-copies-of-one-truth failure
+this file already argues against, just with a build step in front of it. Regenerate instead.
+
 ## What it covers
 
 The path from an empty machine to a merged pull request, for someone who is not the repo owner:
