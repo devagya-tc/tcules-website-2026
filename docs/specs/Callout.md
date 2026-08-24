@@ -6,12 +6,13 @@
 | ------------------- | ------------------------------------ |
 | **Component**       | `Callout`                            |
 | **Tier**            | 2 pattern (`src/patterns/Callout/`)  |
-| **Status**          | accepted                             |
+| **Status**          | implemented                          |
 | **Token prefix**    | `--call-*`                           |
 | **Designer / date** | Codex / 24 Aug 2026                  |
 | **Implements**      | `docs/briefs/16-callout.md`          |
+| **Implemented at**  | `src/patterns/Callout/` · `src/styles/tokens/components/callout.css` · specimen `src/app/design/callout/page.tsx` |
 
-This spec was checked against the current repository vocabulary and the nineteen shipped
+This spec was checked against the current repository vocabulary and the twenty shipped
 components. The brief proposes Tier 1, but the hard constraint that rich text “takes Prose” changes
 that answer: a primitive may not import another primitive, while a Tier 2 pattern may compose
 `Prose`. The owner accepted the new Tier 2 pattern in section 17 question 1; the remaining
@@ -385,7 +386,7 @@ contract.
 ```text
 STRUCTURE
 [x] All 18 sections present, in order, with the exact headings.
-[x] Front matter states Tier 2 pattern, Status accepted and token prefix --call-*; repository search
+[x] Front matter states Tier 2 pattern, Status implemented and token prefix --call-*; repository search
     finds no collision.
 [x] Both Anatomy parts are accounted for: root carries semantics and sizing; content carries the
     sole colour and type decisions and delegates HTML flow to Prose.

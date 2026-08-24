@@ -96,6 +96,7 @@
 @import 'components/block-card.css';
 @import 'components/accordion.css';
 @import 'components/proof.css';
+@import 'components/callout.css';
 @import 'components/figure.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the

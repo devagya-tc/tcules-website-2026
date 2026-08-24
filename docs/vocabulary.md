@@ -113,7 +113,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css)
+`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -163,6 +163,6 @@ seam to size.
 ### What already exists — check these before specifying anything new
 
 - **Primitives** (`src/components/`): `Button` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Prose` · `Section`
-- **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `CtaSection` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav`
+- **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `CtaSection` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav`
 - **Templates** (`src/templates/`): — none yet
 

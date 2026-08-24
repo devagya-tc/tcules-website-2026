@@ -1,0 +1,28 @@
+/* ══ Component layer — Callout ══════════════════════════════════════════════════
+   Tier 2. A semantic scope note rendered through Prose, built to docs/specs/Callout.md.
+
+   Naming: --call-{part}-{role}
+
+   Callout has one surface-dependent role and no geometry of its own. Body-small and body measure
+   are existing system roles, not component-specific aliases. There is no ground, rule, radius,
+   shadow, spacing, state or motion token because the component owns none of those things.
+
+   Every surface restates the token so a surface nested inside a different surface cannot inherit
+   the wrong ink from its outer ancestor. */
+
+:root,
+[data-surface='paper'] {
+  --call-content-ink: var(--color-neutral-600); /* 4.92:1 */
+}
+
+[data-surface='tint'] {
+  --call-content-ink: var(--color-neutral-700); /* 7.27:1 */
+}
+
+[data-surface='ink'] {
+  --call-content-ink: var(--color-neutral-400); /* 8.05:1 */
+}
+
+[data-surface='blue'] {
+  --call-content-ink: var(--color-brandeis-100); /* 4.91:1 */
+}

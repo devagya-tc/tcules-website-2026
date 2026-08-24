@@ -39,6 +39,9 @@
  * leaving surface and surrounding page rhythm to its caller.
  * Proof is EVIDENCE: an attributed quotation, checked figures, or both. It composes Layout,
  * Prose and Button while leaving the ground and its position in a page argument to the caller.
+ * Callout is a SCOPE NOTE: a quiet, unattributed boundary on the claim immediately before it. It
+ * composes Prose inside a semantic note while leaving the ground and the claim-to-note seam to
+ * its caller. It is not a quotation, alert, card or second rich-text variant.
  *
  * Figure is the quietest thing in the tier and the first to hold an IMAGE as its subject rather
  * than as a marker: an asset, its caption and an optional quieter note, filling whatever inline
@@ -97,6 +100,9 @@ export type { AccordionProps, AccordionItem } from './Accordion';
 
 export { Proof } from './Proof';
 export type { ProofProps, ProofQuote, ProofFigure } from './Proof';
+
+export { Callout } from './Callout';
+export type { CalloutProps } from './Callout';
 
 export { Figure } from './Figure';
 export type { FigureProps, FigureImage } from './Figure';

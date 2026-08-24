@@ -18,8 +18,8 @@ regenerated and pushed again.**
 
 ## The eighteen
 
-Six are pasteable. Twelve are not: eleven describe components that **already ship** — do not specify
-them, compose from the library instead — and one is blocked on content. Brief 09 shipped **two**
+Two are pasteable. Sixteen are not: fifteen describe components that **already ship** — do not
+specify them, compose from the library instead — and one is blocked on content. Brief 09 shipped **two**
 components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also absorbed
 SiteFooter's private newsletter field tokens. Each says so in its Status
 cell, and the five that never had a `BRIEF` block say so at the top of the file too.
@@ -46,13 +46,13 @@ move its row to "ships today" in the same change that merges it.
 | 13 | [Figure](13-figure.md) | `Figure` · 2 · `--fig-` | 0 images · 21 captions written | **ships today — do not specify** |
 | 14 | [Accordion](14-accordion.md) | `Accordion` · 2 · `--acc-` | 21 routes · 22 sections · 1 | **ships today — do not specify** |
 | 15 | [Testimonial](15-testimonial.md) | `Proof` · 2 · `--proof-` | 6 routes · 2 | **ships today in shared Proof — do not specify** |
-| 16 | [Callout](16-callout.md) | `Callout` · 1 · `--call-` | 8 routes · 10 instances · 1 | paste |
+| 16 | [Callout](16-callout.md) | `Callout` · 2 · `--call-` | 8 routes · 10 instances · 1 | **ships today — do not specify** |
 | 17 | [Stat](17-stat.md) | `Proof` · 2 · `--proof-` | 1 route resolved, 3 claimed · 2 | **ships today in shared Proof — do not specify** |
 | 18 | [Filters](18-filters.md) | `Filters` · 2 · unassigned | none | **blocked on content — do not specify** |
 
-Every proposed prefix was checked against the eighteen already taken — `--acc-`, `--bcrd-`,
-`--btn-`, `--crumb-`, `--cta-`, `--enq-`, `--fig-`, `--foot-`, `--hero-`, `--icn-`, `--inp-`,
-`--lay-`, `--lcrd-`, `--logo-`, `--nav-`, `--proof-`, `--prose-`, `--sec-`. That list is generated into
+Every proposed prefix was checked against the nineteen already taken — `--acc-`, `--bcrd-`,
+`--btn-`, `--call-`, `--crumb-`, `--cta-`, `--enq-`, `--fig-`, `--foot-`, `--hero-`, `--icn-`,
+`--inp-`, `--lay-`, `--lcrd-`, `--logo-`, `--nav-`, `--proof-`, `--prose-`, `--sec-`. That list is generated into
 `docs/vocabulary.md`; read it there rather than trusting this sentence, which has been stale twice.
 
 ## The order to run them in
@@ -90,7 +90,9 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
 
 7. **CTA Section** · 08 and **Form** · 09 — CTA depends on the proof slot, Form on whether a field
    control is a primitive.
-8. **Callout** · 16.
+8. **Callout** · 16 — **now ships** at `src/patterns/Callout/`, with its spec at
+   `docs/specs/Callout.md` and specimen at `/design/callout`. Do not specify it again; compose the
+   shared semantic scope note from the library.
 9. **Figure** · 13 — **shipped early, and the dependency stated here turned out to be backwards.**
    `src/patterns/Figure/`, spec at `docs/specs/Figure.md`, specimen at `/design/figure`. Do not
    specify it again; compose against the shipped component.

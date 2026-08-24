@@ -82,6 +82,7 @@ export const ROUTES = {
   designCtaSection: '/design/cta-section',
   designEnquiryForm: '/design/enquiry-form',
   designProof: '/design/proof',
+  designCallout: '/design/callout',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

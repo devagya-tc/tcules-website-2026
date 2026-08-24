@@ -98,6 +98,11 @@ const SPECIMENS = [
         note: 'the evidence block — attributed quotes, checked figures, combined layouts, 4 surfaces',
       },
       {
+        href: '/design/callout',
+        name: 'Callout',
+        note: 'the quiet scope note — semantic routing, placement equivalence, narrow tracks, 4 surfaces',
+      },
+      {
         href: '/design/figure',
         name: 'Figure',
         note: 'the captioned image — slot ladder, 3 intrinsic ratios uncropped, the empty state, 4 surfaces',

@@ -1,0 +1,16 @@
+/* Callout owns only the size and treatment of its semantic note. The parent owns every outer
+   seam; the nearest Section owns the ground; Prose owns the trusted rich-text descendants. */
+.root {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+/* Two classes make this override deliberately more specific than Prose's base treatment without
+   coupling to Prose's private class name. Inline marks and links keep their own Prose tokens. */
+.root .content {
+  min-inline-size: 0;
+  max-inline-size: var(--measure-body);
+  overflow-wrap: anywhere;
+  font: var(--text-body-sm);
+  color: var(--call-content-ink);
+}
