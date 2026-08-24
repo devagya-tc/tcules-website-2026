@@ -10,8 +10,10 @@
   min-inline-size: 0;
 }
 
-/* A block anchor/div fills the equal-height track while its children keep natural document order:
-   image first when present, then one inset content block. */
+/* De-inlines the anchor and sizes it to fill the equal-height track. It arranges NOTHING: the
+   frame has exactly one child, a `Layout rowGap="none"` that owns the image/inset stack, so this
+   `display: block` is a sizing declaration in the sense ListCard.module.css:34 uses it. It is also
+   the containing block for the block-end wipe below, which is the only reason for `position`. */
 .frame {
   position: relative;
   display: block;
@@ -91,12 +93,18 @@
 }
 
 /* The card keeps its quiet four-sided edge at rest. This overlay replaces only the block-end edge
-   with current link ink, wiping from inline start. Its negative inset places it on the frame's own
-   border; pressed doubles the overlay without changing any surrounding geometry. */
+   with current link ink, wiping from inline start. Pressed doubles the overlay without changing any
+   surrounding geometry: the box grows upward from a fixed block-end, so nothing below it moves. */
 .link::after {
   content: '';
   position: absolute;
-  inset-inline: 0;
+  /* Both insets are negated edge widths, and for the same reason: an absolutely positioned box
+     resolves its offsets against the PADDING box, so `0` would stop one hairline short of the
+     border on every side it touches. On the block axis that left the overlay stacked ABOVE the
+     border rather than covering it — the two-tone rule ListCard fixed in the same place. On the
+     inline axis it left the bottom corner of each side border un-wiped, so the rule this comment
+     calls a replacement was a replacement with a notch at each end. */
+  inset-inline: calc(-1 * var(--bcrd-edge-width));
   inset-block-end: calc(-1 * var(--bcrd-edge-width));
   block-size: var(--bcrd-edge-width);
   background: currentColor;

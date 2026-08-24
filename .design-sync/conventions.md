@@ -1,9 +1,9 @@
 ## How to build with Tcules
 
 No provider, no theme object, no wrapper component. Load `styles.css` and `_ds_bundle.js` and
-every component is correct. All 15 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
+every component is correct. All 17 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
 `Input`, `Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`,
-`CtaSection`, `EnquiryForm`, `ListCard`.
+`CtaSection`, `EnquiryForm`, `ListCard`, `BlockCard`, `Accordion`.
 
 ### There is no class vocabulary — do not invent one
 
@@ -193,8 +193,9 @@ optional `marker`, `arrangement="split | stacked"`, `titleAs="span | h3 | h4"` a
 
 It is a ROW, not a panel — no background, no surrounding border, no shadow. Its only edge is a
 hairline at the block end, which is what lets a set of them read as one continuous ladder instead of
-a stack of separate objects. **If you need a filled or bordered object, this is not it** and nothing
-in the set is yet; do not reach for `ListCard` and add a ground around it.
+a stack of separate objects. **If you need a bordered object, this is not it — that is `BlockCard`,
+below.** Do not reach for `ListCard` and add a ground around it. Neither of them paints a ground;
+the difference is the edge, and it is the whole difference between a ladder and a grid of tiles.
 
 Four things to get right:
 
@@ -223,6 +224,66 @@ Four things to get right:
 reach for `h3` or `h4` when the rows are page landmarks, not when they are prose. And like `Button`,
 `ListCard` takes no `surface`: it paints no ground and reads `data-surface` from the band above it.
 
+`BlockCard` — **one edge-bounded tile in a grid.** `title`, `body`, an optional `media`,
+`titleAs="h3" | "h4"` and an optional `href`. Closed like `ListCard`: no `children`, no `className`,
+no DOM spread, and no `surface`, `columns` or `equalHeight` — those describe a relationship between
+cards, so they live on the parent.
+
+`ListCard` and `BlockCard` are the two card shapes and picking between them is one question: **is
+this a ladder or a grid?** A ladder of ruled rows down one column is `ListCard`. A set of tiles
+across two or four tracks, each a complete object with its own four-sided edge, is `BlockCard`.
+Neither paints a ground — both show the band through — so do not choose by colour.
+
+Four things to get right:
+
+1. **It renders an `<li>`, so the grid is yours, and it is a `Layout`.** `<Layout as="ul"
+   columns={{ base: 1, md: 2, xl: 4 }} colGap="gutter" rowGap="gutter" equalRows>`. `equalRows` is
+   what makes every tile in a row the same height regardless of copy length — without it a
+   four-across set is four different rectangles and the edges stop lining up, which is the one
+   thing a bordered tile cannot survive.
+2. **`media` is one optional slot with two closed fills**, `{kind:'icon', name}` or
+   `{kind:'image', src, alt}` — never a node, so a tile cannot acquire an overlay, a control or a
+   call-site crop. An icon sits *inside* the inset content above the title; an image sits
+   *edge-to-edge above* it in a fixed 3:2 crop. `alt` is required even when the right value is `''`.
+3. **`href` turns the WHOLE tile into one native link**, with one focus stop and an arrow cue at the
+   inline end of the content. Without it the tile is inert and complete — there is no empty action
+   row where the cue would have been. Never put a second link or a `Button` inside one.
+4. **Title text never goes over the image.** Image above, content below, always; the component has
+   no overlay mode and adding one at the call site is not available to you.
+
+`titleAs` gives the title heading semantics without changing its type — the tile's title is always
+set at h4 scale. Like `Button` and `ListCard`, `BlockCard` reads `data-surface` from the band above
+it, so set the surface once on the `Section`.
+
+`Accordion` — **one multi-open question-and-answer set**, and the only component here built on a
+native browser control. One prop: `items`, an array of `{ question, answerHtml }`.
+
+Every item is a real `<details>` / `<summary>`. That is the point of it: the browser owns the
+expanded state, the keyboard contract and the accessibility tree, so there is **no client boundary,
+no authored ARIA and no managed focus** — and nothing for you to add. If you find yourself writing
+`aria-expanded`, `role="region"` or a click handler around this, stop; you are rebuilding what it
+already has.
+
+Four things to get right:
+
+1. **`question` is plain text and `answerHtml` is rich text.** The question is a `string` and not a
+   node on purpose — a summary already carries a role and a keyboard contract, so a heading, a link
+   or a control cannot be put inside one. The answer goes through `Prose`, so paragraphs, lists,
+   emphasis, code and links are all already styled on every surface.
+2. **The first item is open and every item is independent.** There is no single-open mode, no
+   `defaultOpen` and no external control of state. Opening one never closes another and never moves
+   focus, which is what lets a reader compare two answers.
+3. **Two to eight items.** One is a paragraph wearing a disclosure; past eight the reader is
+   scanning a list of headings instead of reading answers, and the content wants a different shape.
+   Blank questions and blank answers are dropped rather than rendered as an empty row.
+4. **It is a ladder, not a stack of panels.** No ground behind an item, no border around one — one
+   hairline above the set and one below each item. Opening an item changes the ink of its rule and
+   nothing else, so nothing moves under the reader. Do not put it inside a bordered or filled box to
+   "contain" it.
+
+It caps at the body measure because it is a reading column, and it takes no `surface` — set the
+surface once on the `Section` above it.
+
 ### Read before styling
 
 This design system's `styles.css` and its `@import` closure (the token definitions all live in
@@ -236,11 +297,14 @@ This is here to show how the three primitives compose — a band, a two-column a
 and that is all it is. **It is not a template for a page's closing ask:** it happens to look like
 one, and if the block you are building is the page's ask then `CtaSection` is the component, with
 its form and proof slots and its three arrangements already decided. Same for a page opening, which
-is `PageHero`. Reach for the primitives directly for the blocks in BETWEEN those two — with one
-exception that has since shipped: if the in-between block is a **list of terms, steps, services or
-links**, that is `ListCard` inside a `Layout as="ul" | "ol"`, not a hand-rolled stack. The right-hand
-column below is a single text item precisely because no row component existed when this was written;
-a set of them today is a ladder of `ListCard`s.
+is `PageHero`. Reach for the primitives directly for the blocks in BETWEEN those two — with two
+exceptions that have since shipped, and between them they cover most in-between blocks. If the block
+is a **list of terms, steps, services or links**, that is `ListCard` inside a
+`Layout as="ul" | "ol"`, not a hand-rolled stack. If it is a **grid of tiles** — services, case
+studies, capabilities, anything where each item is a complete object read across rather than down —
+that is `BlockCard` inside a `Layout as="ul"` with `equalRows`, not a `Section` per card and not a
+hand-rolled bordered box. The right-hand column below is a single text item precisely because
+neither card existed when this was written; a set of them today is one or the other.
 
 ```jsx
 const { Section, Layout, Cluster, Button, Icon } = window.Tcules;

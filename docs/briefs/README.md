@@ -18,12 +18,11 @@ regenerated and pushed again.**
 
 ## The eighteen
 
-Four are pasteable. Fourteen are not: thirteen describe components that **already ship** — do not
-specify them, compose from the library instead — and one is blocked on content. Brief 09 shipped
-**two** components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also
-absorbed SiteFooter's private newsletter field tokens. Briefs 15 and 17 resolve to one shared
-`Proof` pattern. Each says so in its Status cell, and the five that never had a `BRIEF` block say so
-at the top of the file too.
+Six are pasteable. Twelve are not: eleven describe components that **already ship** — do not specify
+them, compose from the library instead — and one is blocked on content. Brief 09 shipped **two**
+components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also absorbed
+SiteFooter's private newsletter field tokens. Each says so in its Status
+cell, and the five that never had a `BRIEF` block say so at the top of the file too.
 
 **This table is the first thing a designer reads, so a stale Status cell is the most expensive kind
 of staleness in the repo.** It sends someone off to specify a component that already exists, which
@@ -62,8 +61,13 @@ Dependency order, plus what unblocks the most pages.
 
 1. **Page Hero** · 05 — 129 routes, and no page renders without it.
 2. **Content Section** · 07 — 738 instances. Everything below is a child of it.
-3. **Accordion** · 14 and **Table** · 10 — one rendering each, and Table may turn out to be a
-   `Prose` change rather than a component.
+3. **Table** · 10 — one rendering, and it may turn out to be a `Prose` change rather than a
+   component.
+
+*(Accordion · 14 was the other half of this step and now ships — `src/patterns/Accordion/`, spec at
+`docs/specs/Accordion.md`, specimen at `/design/accordion`. Do not specify it again; compose against
+the shipped component. Note it landed as a tier-2 **pattern**, not the tier-1 primitive this table
+proposed: it composes Layout, Cluster, Icon and Prose, and a primitive may not do that.)*
 
 *(Breadcrumbs · 06 was third on this list and now ships — `src/patterns/Breadcrumbs/`, spec at
 `docs/specs/Breadcrumbs.md`, specimen at `/design/breadcrumbs`. Do not specify it again; compose

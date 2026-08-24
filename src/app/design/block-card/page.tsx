@@ -300,10 +300,10 @@ export default function BlockCardSpecimenPage() {
                 ['focus', 'Hover rendering plus the keyboard-only two-part ring.'],
                 ['pressed', 'Pressed ink and an instant two-hairline block-end edge.'],
               ].map(([state, note]) => (
-                <div key={state}>
+                <Layout key={state} rowGap="inline">
                   <strong>{state}</strong>
                   <p>{note}</p>
-                </div>
+                </Layout>
               ))}
             </Layout>
           </Cards>

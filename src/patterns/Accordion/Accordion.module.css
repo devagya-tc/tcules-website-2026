@@ -2,14 +2,42 @@
 
    Layout owns the zero-gap item axis and Cluster owns question/mark placement. This module owns
    only the continuous rule ladder, trigger hit area and answer inset. It has no item ground,
-   hand-written sibling arrangement, breakpoint, height animation or surface selector. */
+   hand-written sibling arrangement, breakpoint, height animation or surface selector.
+
+   ── What is NOT here, and why ───────────────────────────────────────────────────
+   No display:flex and no display:grid. Both axes are primitives — a Layout for the item ladder,
+   a Cluster for the question/mark row. The two `flex:` and one `display: inline-flex` below size
+   and reveal children INSIDE that Cluster; they arrange nothing, and each says so on its own line.
+
+   No position and no z-index on the root. Nothing in this component stacks: `--z-base` is 0, and
+   the only thing that needs to paint over a neighbour is the focus ring, which is handled where it
+   arises — `.trigger:focus-visible` takes `position: relative` itself, which lifts it into the
+   positioned layer above the next item's border without a stacking context around the whole set.
+   An earlier draft carried `position: relative; z-index: var(--acc-layer)` here and an `--acc-layer`
+   token aliasing `--z-base`; both were inert, and the token was a second name for one primitive of
+   the kind CLAUDE.md deletes. Breadcrumbs and Figure had already answered this the same way.
+
+   No height, max-height or transform animation on the answer. `<details>` has no animatable
+   intrinsic size, and faking one costs the native behaviour this component exists to keep.
+
+   ── Rule order is load-bearing ──────────────────────────────────────────────────
+   `.trigger:hover`/`:focus-visible`, then `:active`, then `:focus-visible` again. All three are
+   (0,2,0), so source order decides them:
+     · `:active` AFTER the hover pair, so pointer-down wins while the pointer is also hovering.
+     · the second `:focus-visible` block AFTER `:active`, and it deliberately sets NO background —
+       so a trigger that is pressed and focused keeps the pressed ground and still gets the ring.
+   Moving a block breaks a state, and both failures render plausibly. */
 
 .root {
-  position: relative;
-  z-index: var(--acc-layer);
   inline-size: 100%;
+  /* The set is a reading column, so it takes the body measure. The cap is restated on .question
+     and .answer rather than left to inherit: those two are the elements that actually hold text,
+     and each is one CSS Modules rename away from being lifted out of this root. */
   max-inline-size: var(--measure-body);
   min-inline-size: 0;
+  /* The ladder is continuous: this is the ONLY rule above the first item, and every item carries
+     its own below. That is what makes N items read as one object rather than N stacked ones, and
+     it is why the item axis is a Layout with rowGap="none". */
   border-block-start: var(--acc-rule-width) solid var(--acc-rule-ink);
   border-radius: var(--acc-radius);
   box-shadow: var(--acc-shadow);
@@ -21,6 +49,8 @@
   transition: border-color var(--acc-transition-duration) var(--acc-transition-easing);
 }
 
+/* Open state is carried by the rule's ink, not by a ground or a width step: the ladder keeps its
+   geometry exactly, so opening an item never moves the one below it. */
 .item[open] {
   border-block-end-color: var(--acc-rule-ink-expanded);
 }
@@ -28,10 +58,19 @@
 .trigger {
   inline-size: 100%;
   min-inline-size: 0;
+  /* --gap-text above and below an h5 line box is what clears the 44px touch floor: 22/1.28 is a
+     28.16px line, so the summary measures ~60px (and ~58px at the mobile h5 step). No size token
+     and no pseudo-element hit extension — and note a ::after extension would work here where it
+     does NOT on Input, because <summary> is not a void element. See .design-sync/NOTES.md. */
   padding-block: var(--gap-text);
   color: var(--acc-trigger-fg);
   background-color: transparent;
   cursor: pointer;
+  /* Three rules for one marker, because the engines disagree about which handle exists.
+     `list-style` is the standard removal and is what current Chromium and Firefox honour;
+     ::-webkit-details-marker is the legacy WebKit pseudo-element that predates it and is the only
+     handle older Safari offers; emptying ::marker covers the engine that keeps summary as a
+     list-item regardless. All three are needed and none is redundant with another. */
   list-style: none;
   transition: background-color var(--acc-transition-duration) var(--acc-transition-easing);
 }
@@ -53,11 +92,15 @@
   background-color: var(--acc-trigger-bg-pressed);
 }
 
+/* Kill the UA outline for every focus, keyboard or not; the block below puts back a ring that is
+   keyboard-only and two-part. Splitting them is what stops a mouse click drawing a ring. */
 .trigger:focus {
   outline: none;
 }
 
 .trigger:focus-visible {
+  /* Lifts the summary into the positioned layer so the ring paints OVER the next item's border
+     rather than under it. No z-index needed: the sibling it must clear is not positioned. */
   position: relative;
   outline: none;
   box-shadow:
@@ -73,11 +116,16 @@
 .question {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
+  /* A CMS question can arrive as one unbroken string — a URL, a product name. `anywhere` breaks it
+     rather than letting it widen the trigger past the root and push the mark off the row. */
   overflow-wrap: anywhere;
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
 }
 
+/* Both marks are fixed-basis children of the trigger's Cluster: no grow, no shrink, natural width.
+   The question is the only flexible thing on that row, so it takes every remaining pixel and wraps,
+   and the mark stays a constant distance from the row's inline end at any question length. */
 .markClosed,
 .markOpen {
   flex: 0 0 auto;
@@ -92,6 +140,10 @@
   display: none;
 }
 
+/* inline-flex rather than the span's default inline: an inline box would add the line box's
+   half-leading around Icon's block-level svg and shift the mark off the question's optical centre.
+   The Cluster blockifies its children anyway, so this is what the closed mark already resolves to —
+   stating it keeps the two marks identical rather than relying on that. */
 .item[open] .markOpen {
   display: inline-flex;
 }
@@ -99,6 +151,10 @@
 .answer {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
+  /* --gap-tight above and --gap-block below, and these ARE the real distances: Prose is a
+     lobotomised owl, so its first child carries no leading margin and its last none trailing.
+     The asymmetry is deliberate — the answer belongs to the question above it, and the larger
+     step below is what separates it from the next item's rule. */
   padding-block: var(--gap-tight) var(--gap-block);
   overflow-wrap: anywhere;
 }
