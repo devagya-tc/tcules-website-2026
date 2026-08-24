@@ -191,9 +191,21 @@
   margin-block-start: var(--gap-block);
 }
 
-/* ── Figure ──────────────────────────────────────────────────────────────────────────────────
+/* ── Caption ─────────────────────────────────────────────────────────────────────────────────
    reset.css already makes media block-level and shrink to their track. The caption is the only
-   thing left to say, and it is a caption everywhere: an image, a table, a code panel. */
+   thing left to say, and it is a caption everywhere: a table, a code panel — and, out of
+   contract, an image.
+
+   That last case is worth knowing about. A body field carries NO images: an image in long-form
+   content is its own `figure` block rendered by the Figure pattern, which is where the quieter
+   note, the hairline and the caller's choice of width come from (see PageBlock in
+   @/content/types). None of those three is expressible here, so the figcaption rule below is a
+   net under a content-model violation, not a second way to publish a figure. The <caption> half
+   is a genuine, supported path.
+
+   It also lands on a <Figure> composed into `children` — a descendant selector cannot tell the
+   two apart — adding 8 to that component's own 16. Same conclusion by a different route: a
+   figure is a sibling block, not a child of a prose flow. */
 .prose figcaption,
 .prose caption {
   font: var(--text-caption);

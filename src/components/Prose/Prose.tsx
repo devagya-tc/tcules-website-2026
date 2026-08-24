@@ -22,6 +22,13 @@ export type ProseProps = {
    * in a tier-1 component is a sanitiser everyone assumes is running and nobody can see. If the
    * source cannot make that guarantee, it must not hand the field to this prop.
    *
+   * **It also carries no images.** Long-form bodies are a block list — rich text, then a figure,
+   * then rich text — so an image is its own `figure` block rendered by the `Figure` pattern, and
+   * never an `<img>` or `<figure>` inside this string. See the contract on `PageBlock` in
+   * `@/content/types`. The `figcaption` rule in this component's stylesheet is therefore a safety
+   * net for a violation rather than a supported path — it still earns its place styling a table's
+   * `<caption>`, which a body field legitimately does contain.
+   *
    * Ignored when `children` is given.
    */
   html?: string;

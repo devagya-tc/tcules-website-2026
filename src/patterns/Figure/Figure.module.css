@@ -1,0 +1,106 @@
+/* Figure — an image with a caption and an optional quieter note, built to docs/specs/Figure.md.
+
+   Every colour, width, radius and shadow comes from --fig-*, declared in
+   tokens/components/figure.css and re-declared once per surface there. One usage token is read
+   unaliased, and the spec names it that way: --measure-body, on both lines of the legend. A token
+   only one component could read, that merely renames a usage token, is not worth having. The two
+   gap steps are not in this file at all — they are Layout rowGap props.
+
+   ── What is absent, and why ────────────────────────────────────────────────────
+   No background. A Figure never owns its ground; the filled or edged tile is BlockCard's job.
+   No margin, anywhere. The two seams inside are Layout's; the seam AROUND is the parent's.
+   No display:grid or display:flex. Both arrangements are Layout single-track stacks. The one
+     display:block below de-inlines the image; it arranges nothing.
+   No object-fit, aspect-ratio, max-block-size or min-block-size on the image. The intrinsic
+     ratio IS the decision — a crop mode would cut small type out of some screenshots, which is
+     the one thing this component exists not to do.
+   No @media query of any kind, including a reduced-motion one. Nothing here moves, so there is
+     nothing to switch off, and the gap scale does not shift responsively.
+   No position, so no z-index. Nothing stacks.
+   No :hover, :active, :focus-visible or transition. Nothing in this component is interactive, and
+     a hover treatment would visually promise a click that does nothing.
+
+   Rule order is not load-bearing here: no two selectors in this file target the same property on
+   the same element, because there are no states to order.
+
+   ── One interaction this file cannot defend against ─────────────────────────────
+   Prose.module.css carries `.prose figcaption { margin-block-start: var(--gap-tight) }` — a
+   DESCENDANT selector, so it lands on the <figcaption> this component renders and adds 8 on top
+   of root's own 16, giving a 24px seam inside a Prose. Its font and colour on the same selector
+   are harmlessly overridden, because the two inks are set on the <p>s rather than on the
+   container. That rule is correct for the CMS-authored figures Prose was written for, so neither
+   component was changed: <Prose><Figure/></Prose> is not a supported arrangement, and a page that
+   wants a figure beside flowing copy puts it beside the Prose block. Recorded here as well as in
+   spec § 1 because whoever composes the two will have these two modules open, not the spec. */
+
+/* The box, filling whatever inline space the parent gives it — and there is deliberately no
+   `inline-size: 100%` here, which is the one non-obvious thing in this file.
+
+   It is unnecessary in every parent that sizes its children: this element is a grid container and
+   therefore a block-level box, so a block parent already gives it the full width, and a Layout
+   track stretches it (Layout's justifyItems defaults to stretch). It is actively WRONG in a parent
+   that does not size its children — a Cluster, i.e. a wrapping flex row — where 100% resolves
+   against the whole row, so every figure would claim the full width and force a wrap, and no
+   minimum could ever be observed.
+
+   Which is what min-inline-size is for. In that unsized row the box is content-sized, and this is
+   the floor: 192px is the narrowest track where a caption in --text-caption still wraps on words.
+   The min(100%, xs) form is what keeps it safe in both directions — inside a parent genuinely
+   narrower than 192 the 100% term wins, so the figure wraps its text rather than pushing the page
+   sideways. Both halves of that are load-bearing: with `inline-size: 100%` present, the whole
+   declaration was inert.
+
+   One thing to know before trying to SEE this floor: the percentage resolves against the parent's
+   inline size, so it collapses to zero wherever that size is itself indefinite — including a
+   shrink-to-fit wrapper you might add around the figure to draw an outline on it. Wrapping the
+   figure to measure it changes the answer. /design/figure proves the floor by what does not fit
+   in a definite-width row instead, which is why that band looks indirect. */
+.root {
+  min-inline-size: min(100%, var(--fig-min-xs));
+}
+
+/* The image at its own intrinsic ratio, scaled to the track. block-size:auto with the width and
+   height attributes present is what preserves that ratio — the attributes reserve the space, the
+   percentage does the scaling, and neither one crops.
+
+   display:block removes the inline baseline gap under the image; it arranges nothing.
+
+   The rule sits INSIDE the 100% rather than adding to it, so the rendered box is exactly the
+   parent's track at every width, border included. That is reset.css's global border-box doing the
+   work, which is why this file does not restate box-sizing. */
+.image {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  border: var(--fig-rule-width) solid var(--fig-rule-ink);
+  border-radius: var(--fig-image-radius);
+  box-shadow: var(--fig-image-shadow);
+}
+
+/* The legend is a container and carries no colour and no type of its own — only the 8px seam,
+   which is its Layout's rowGap. min-inline-size:0 overrides a grid item's auto minimum, so a
+   caption containing one long unbroken token wraps inside the track instead of widening it. */
+.legend {
+  min-inline-size: 0;
+}
+
+/* Caption and note share one type role and are told apart by ink alone. Both cap at the shared
+   body measure: a Figure can be handed a 1240px track, where 13px text would otherwise run to
+   about 41 words a line. Both align to the box's own inline-start edge — the same edge the image
+   starts from — because a Figure cannot see any external text column to align to.
+
+   overflow-wrap:anywhere is the second half of the long-URL answer: min-inline-size:0 above lets
+   the track hold its width, and this breaks inside the word rather than overflowing it. */
+.caption {
+  max-inline-size: var(--measure-body);
+  overflow-wrap: anywhere;
+  color: var(--fig-caption-ink);
+  font: var(--fig-caption-text);
+}
+
+.note {
+  max-inline-size: var(--measure-body);
+  overflow-wrap: anywhere;
+  color: var(--fig-note-ink);
+  font: var(--fig-note-text);
+}
