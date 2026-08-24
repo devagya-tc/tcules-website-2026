@@ -7,10 +7,14 @@ import { specimenStyles as s } from '../_specimen/Specimen';
 /**
  * SiteFooter specimen — the five bands, on four grounds.
  *
- * Composition only, reading the real IA through the seam: five link groups, forty-odd links, four
+ * Composition only, reading the real IA through the seam: six link groups, thirty-six links, four
  * meta pairs and the newsletter. A footer fed a trimmed fixture proves nothing, because its whole
- * difficulty is what happens at full length — five columns that have to hold nine links and four,
- * a directory that must not out-shout the tagline above it.
+ * difficulty is what happens at full length — six columns that have to hold nine links and two, a
+ * directory that must not out-shout the tagline above it.
+ *
+ * Below lg every one of those columns is rendered a SECOND time as a `<details>` accordion, and
+ * the breakpoint decides which copy is shown. Narrow the window on any footer here and the
+ * directory swaps rendering; both are in the markup at every width, which is the point.
  *
  * The real footer is at the bottom of this page, on ink, mounted by the root layout.
  */
@@ -27,10 +31,11 @@ export default async function SiteFooterSpecimenPage() {
           <h1>SiteFooter</h1>
           <p>
             The closing band, in five deliberately unlike shapes: the brand block (the mark at
-            40, a tagline at lead, one solid action, three mono links), the newsletter (two
-            columns — the pitch and the field), the directory (five narrow columns of the
-            quietest text on the page), the contact strip (four mono key/value cells and an
-            address), and the utility line.
+            40 and a tagline at lead on one side, the action and a rating badge on the other),
+            the directory (six narrow columns of the quietest text on the page), the newsletter
+            (two columns — the pitch and the field), the contact strip (four mono key/value
+            cells and an address), and the utility line. Under all of it, the wordmark again at
+            --opacity-faint: ground rather than a sixth band.
           </p>
           <p>
             That variety is the point. A footer is the easiest place in a site to end up with
@@ -54,11 +59,27 @@ export default async function SiteFooterSpecimenPage() {
             <strong>nothing serves</strong>: a real submission is a 404 until that route exists.
           </p>
           <p>
-            The socials are named links, not logo marks — and not because the glyph set is
-            unfilled, since it is filled. Because these are trademarks: each carries its own
-            usage rules, its own proportions and its own permission to check, and none is drawn
-            on this system&rsquo;s 24-unit box. A word is also the accessible form, since an
-            icon-only social row needs a label per icon anyway.
+            The socials now carry their official marks — and the old argument for words alone
+            is why those marks are <em>not</em> glyphs. Each is a trademark with its own usage
+            rules and its own proportions, and none is drawn on this system&rsquo;s 24-unit box,
+            so redrawing one to fit would stop it being the mark. They live beside this pattern
+            at the proportions their owners published, monochrome on <code>currentColor</code>,
+            and the word stays as the accessible name.
+          </p>
+          <p>
+            The directory is rendered <strong>twice</strong>: a six-column grid at lg, six
+            collapsed <code>&lt;details&gt;</code> below it, and CSS picks. It has to be two
+            renderings rather than one — a closed <code>&lt;details&gt;</code> cannot be forced
+            visually open in Chrome, which no <code>display</code> override undoes. So the
+            links appear twice in the markup. That is the accepted cost of keeping every link
+            in the rendered mobile HTML with no client JavaScript;{' '}
+            <code>display: none</code> takes the inactive copy out of the accessibility tree and
+            the tab order together, so only one is ever reachable.
+          </p>
+          <p>
+            The Clutch rating is a <strong>placeholder</strong>. So are all three off-site
+            hrefs, which resolve to <code>EXTERNAL</code> in <code>@/lib/routes</code> — the
+            badge&rsquo;s 4.9 and the profile behind it land together or not at all.
           </p>
         </Layout>
       </Section>

@@ -110,7 +110,7 @@ const SPECIMENS = [
       {
         href: '/design/site-footer',
         name: 'SiteFooter',
-        note: 'the footer — 5 bands, the directory, the newsletter field, 4 surfaces',
+        note: 'the footer — 5 bands, the directory and its accordions, the rating badge, 4 surfaces',
       },
     ],
   },

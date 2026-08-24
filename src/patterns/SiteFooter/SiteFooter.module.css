@@ -6,8 +6,9 @@
 
    ── What arranges what ──────────────────────────────────────────────────────────
    Nothing here lays out content. The band is a Section, every stack and every column set is a
-   Layout, every row is a Cluster. What is left is type, colour, four hairlines, and the two
-   corrections a flex child needs to be allowed to shrink.
+   Layout, every row is a Cluster. What is left is type, colour, hairlines, the two corrections a
+   flex child needs to be allowed to shrink, and the one breakpoint that chooses between the
+   directory's two renderings.
 
    ── The field ───────────────────────────────────────────────────────────────────
    The wrapper owns only the label relationship and its place in the wrapping row. Input owns the
@@ -26,20 +27,179 @@
 }
 
 /* ── 1 · Brand ─────────────────────────────────────────────────────────────────
-   The tagline is the only line in the footer at --text-lead, and on the ink surface it is the only
+   Two groups opposed across the band, as grid tracks rather than flex children. That is
+   deliberate: a flex BASIS is a width in a row and a HEIGHT the moment the row wraps to a column,
+   which is how a stated basis opens a void between the tagline and the CTA on a narrow screen. A
+   track cannot make that mistake — the column count changes at the breakpoint and nothing carries
+   a width across the axis change. */
+.brandIdentity {
+  /* A grid child will not shrink below its content without this, and the tagline's measure is a
+     maximum rather than a width. */
+  min-inline-size: 0;
+}
+
+/* Shrink-to-fit and pushed to the end of its own track, so the action is as wide as the button
+   rather than as wide as the space left over. `justify-items` because a Layout is a grid — this
+   aligns the button and the badge within it, and they are different widths. */
+.brandAction {
+  justify-items: start;
+}
+
+@media (min-width: 768px) {
+  .brandAction {
+    justify-items: end;
+  }
+}
+
+/* The tagline is the only line in the footer at --text-lead, and on the ink surface it is the only
    one at full white. That is the band's visual weight, and it is scale and colour rather than a
-   box: measure-title holds it to 22ch so it breaks as a statement rather than running the width of
-   the page. */
+   box: the lede measure holds it to 40ch so it breaks as a statement rather than running the
+   width of the page. */
 .tagline {
   max-inline-size: var(--foot-tagline-measure);
   color: var(--foot-tagline-ink);
   font: var(--foot-tagline-text);
 }
 
-/* Mono and uppercase, so three social links beside a solid button read as chrome rather than as
-   the start of the directory below. */
-.socialLink {
+/* The rating badge. An outline pill, not a fill: it is a claim with a source, and a filled chip
+   beside a solid button would read as a second action. */
+.ratingBadge {
+  display: inline-flex;
+  gap: var(--gap-tight);
+  align-items: center;
+  padding-block: var(--gap-tight);
+  padding-inline: var(--foot-badge-padding-inline);
+  color: var(--foot-link-ink);
+  font: var(--foot-social-text);
+  letter-spacing: var(--foot-social-tracking);
+  text-decoration: none;
+  border: var(--foot-rule-width) solid var(--foot-rule);
+  border-radius: var(--foot-badge-radius);
+  transition:
+    color var(--foot-transition-duration) var(--foot-transition-easing),
+    border-color var(--foot-transition-duration) var(--foot-transition-easing);
+}
+
+.ratingBadge:hover,
+.ratingBadge:focus-visible {
+  color: var(--foot-link-ink-hover);
+  border-color: var(--foot-link-ink-hover);
+}
+
+/* The one graphic in the badge, and the only thing in the footer that is neither type nor rule. */
+.ratingStar {
+  color: var(--foot-badge-star-ink);
+}
+
+/* Tighter than the badge's own padding, so the mark and the word read as one lockup rather than
+   as a third item in the row. */
+.ratingLockup {
+  display: inline-flex;
+  gap: var(--gap-inline);
+  align-items: center;
+}
+
+/* ── 2 · Directory ─────────────────────────────────────────────────────────────
+   Two renderings of one list, and CSS picks. See the note in SiteFooter.tsx for why this cannot
+   be one rendering: a closed <details> cannot be forced visually open in Chrome.
+
+   The inactive one is `display: none`, which takes it out of the accessibility tree and the tab
+   order together — so the duplication costs bytes and nothing else. */
+.directoryDesktop {
+  display: none;
+}
+
+.directoryAccordions {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .directoryDesktop {
+    display: block;
+  }
+
+  .directoryAccordions {
+    display: none;
+  }
+}
+
+/* Ink at rest, blue on reach. Forty links all in blue is not forty signals, it is a blue block —
+   the same argument the nav makes for its bar items. */
+.link {
   display: inline-block;
+  color: var(--foot-link-ink);
+  font: var(--foot-link-text);
+  text-decoration: none;
+  transition: color var(--foot-transition-duration) var(--foot-transition-easing);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--foot-link-ink-hover);
+}
+
+/* One accordion per group. The rule sits under each, so six of them read as a ruled list rather
+   than six boxes. */
+.accordion {
+  border-block-end: var(--foot-rule-width) solid var(--foot-rule);
+}
+
+/* `list-style: none` plus the WebKit pseudo-element: the two engines hide the disclosure triangle
+   differently, and only one of them is standard. Both are needed for the chevron below to be the
+   only marker. */
+.accordionSummary {
+  display: flex;
+  gap: var(--gap-text);
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--gap-text);
+  cursor: pointer;
+  list-style: none;
+}
+
+.accordionSummary::-webkit-details-marker {
+  display: none;
+}
+
+.accordionChevron {
+  display: inline-flex;
+  color: var(--foot-label-ink);
+  transition: transform var(--foot-transition-duration) var(--foot-transition-easing);
+}
+
+.accordion[open] .accordionChevron {
+  transform: rotate(180deg);
+}
+
+.accordionPanel {
+  padding-block-end: var(--gap-text);
+}
+
+/* The socials at the foot of the last desktop column: a rule and air above them, no label. A
+   label would make them a seventh group; the rule says the column has ended. */
+.columnSocial {
+  margin-block-start: var(--gap-tight);
+  padding-block-start: var(--gap-tight);
+  border-block-start: var(--foot-rule-width) solid var(--foot-rule);
+}
+
+/* On mobile they sit under the last accordion's rule and carry none of their own, so they read as
+   the end of the directory block rather than as a band. */
+.mobileSocial {
+  padding-block-start: var(--gap-block);
+}
+
+.socialList {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Mono and uppercase, so a profile link reads as chrome rather than as the start of another
+   directory column. */
+.socialLink {
+  display: inline-flex;
+  gap: var(--gap-tight);
+  align-items: center;
   color: var(--foot-link-ink);
   font: var(--foot-social-text);
   letter-spacing: var(--foot-social-tracking);
@@ -53,7 +213,14 @@
   color: var(--foot-link-ink-hover);
 }
 
-/* ── 2 · Newsletter ────────────────────────────────────────────────────────────
+/* The system draws no diagonal arrow. Rotating the horizontal one is the documented workaround,
+   and the rotation lives here rather than in the glyph so the glyph stays one shape. */
+.outboundCue {
+  display: inline-flex;
+  transform: rotate(-45deg);
+}
+
+/* ── 3 · Newsletter ────────────────────────────────────────────────────────────
    A label naming a block, not a link, so it is neutral rather than blue — the same rule that keeps
    section.css's eyebrow off the accent ramp. Used by the directory's group titles too. */
 .label {
@@ -75,6 +242,13 @@
   font: var(--foot-body-text);
 }
 
+/* The form column centres against the pitch beside it rather than sitting at its top: two
+   unequal-height blocks aligned at the top leave the field stranded against the title. */
+.newsletterForm {
+  align-self: center;
+  inline-size: 100%;
+}
+
 /* The label IS the field's box — the input is nested inside it, so no id wires them together. It
    grows to fill the row; Input owns the control's usable minimum. */
 .fieldLabel {
@@ -94,22 +268,6 @@
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
-}
-
-/* ── 3 · Directory ─────────────────────────────────────────────────────────────
-   Ink at rest, blue on reach. Forty links all in blue is not forty signals, it is a blue block —
-   the same argument the nav makes for its bar items. */
-.link {
-  display: inline-block;
-  color: var(--foot-link-ink);
-  font: var(--foot-link-text);
-  text-decoration: none;
-  transition: color var(--foot-transition-duration) var(--foot-transition-easing);
-}
-
-.link:hover,
-.link:focus-visible {
-  color: var(--foot-link-ink-hover);
 }
 
 /* ── 4 · Contact ───────────────────────────────────────────────────────────────
@@ -149,7 +307,9 @@
 }
 
 /* ── 5 · Utility ───────────────────────────────────────────────────────────────
-   The quietest line on the page, and the only one at caption size. */
+   The quietest line on the page, and the only one at caption size. The links take the legal ink
+   rather than the directory's link ink: four pieces of small print in link colour would read as a
+   sixth navigation group. */
 .legal {
   color: var(--foot-legal-ink);
   font: var(--foot-legal-text);
@@ -157,7 +317,7 @@
 
 .utilityLink {
   display: inline-block;
-  color: var(--foot-link-ink);
+  color: var(--foot-legal-ink);
   font: var(--foot-legal-text);
   text-decoration: none;
   transition: color var(--foot-transition-duration) var(--foot-transition-easing);
@@ -168,6 +328,37 @@
   color: var(--foot-link-ink-hover);
 }
 
+/* ── Watermark ─────────────────────────────────────────────────────────────────
+   The mark as ground. At --opacity-faint it is a texture in the surface — a shape when looked
+   for, gone when read past — which is the only way an oversized logo sits under live text without
+   competing with it.
+
+   Sized here rather than through Logo's own ramp: the ramp is three chrome heights for a mark
+   that names something, and this one names nothing. `overflow: hidden` because at this size the
+   mark is wider than a narrow viewport, and a horizontal scrollbar on every page of the site
+   would be a high price for a texture.
+
+   It sits FLUSH to the bottom of the band: the negative margin cancels the Section's own closing
+   padding, so the mark's baseline lands on the edge of the ground rather than floating a
+   section's worth of air above it. A texture with space under it reads as a last element; a
+   texture running off the bottom edge reads as the surface itself, which is the job.
+
+   That means this pattern knows one value belonging to Section — --sec-padding-y, the standard
+   density it is always rendered at. It is the same value, read from the same token, so the two
+   cannot drift; a footer given `density="tight"` would need this to follow, and nothing renders
+   one. */
+.watermark {
+  margin-block-start: var(--gap-stack);
+  margin-block-end: calc(-1 * var(--sec-padding-y));
+  overflow: hidden;
+  opacity: var(--foot-watermark-opacity);
+}
+
+.watermark svg {
+  block-size: var(--foot-watermark-size);
+  inline-size: auto;
+}
+
 /* ── Focus ─────────────────────────────────────────────────────────────────────
    Keyboard only. Two rings in one shadow — the offset in the surface colour, then the ring — so a
    ring reads against the ground it is drawn on. Both halves are surface tokens, which is why the
@@ -175,14 +366,18 @@
 .link:focus,
 .socialLink:focus,
 .metaLink:focus,
-.utilityLink:focus {
+.utilityLink:focus,
+.ratingBadge:focus,
+.accordionSummary:focus {
   outline: none;
 }
 
 .link:focus-visible,
 .socialLink:focus-visible,
 .metaLink:focus-visible,
-.utilityLink:focus-visible {
+.utilityLink:focus-visible,
+.ratingBadge:focus-visible,
+.accordionSummary:focus-visible {
   outline: none;
   box-shadow:
     0 0 0 var(--foot-ring-offset) var(--foot-ring-gap-color),
@@ -193,7 +388,9 @@
   .link,
   .socialLink,
   .metaLink,
-  .utilityLink {
+  .utilityLink,
+  .ratingBadge,
+  .accordionChevron {
     transition-duration: var(--duration-instant);
   }
 }

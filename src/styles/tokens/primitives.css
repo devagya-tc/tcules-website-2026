@@ -264,8 +264,14 @@
   --letter-spacing-ui: 0.08em;
   --letter-spacing-micro: 0.1em;
   --letter-spacing-eyebrow: 0.12em;
-  /* Measure — the only two line-length limits the system enforces. */
+  /* Measure — the three line-length limits the system enforces.
+
+     `lede` sits between the other two because a lead-sized line needs a limit neither of them
+     gives: 22ch breaks a --text-lead paragraph into a stack of fragments, and 68ch lets it run
+     the width of a content column and stop reading as a statement. It arrived when the footer's
+     tagline lost the CTA that used to sit beside it. */
   --measure-title: 22ch;
+  --measure-lede: 40ch;
   --measure-body: 68ch;
 }
 
@@ -373,9 +379,23 @@
   }
 }
 
+/* ── Opacity ──────────────────────────────────────────────────────────────────
+   One step, and it exists for one job: a mark used as ground rather than as a
+   mark. At .06 a wordmark is a texture in the surface — legible as a shape when
+   looked for, gone when read past — which is the only way an oversized logo can
+   sit under live text without competing with it.
+
+   NOT for muting text or disabling a control. Both of those are a colour
+   decision, and the ink ramps already answer them at a known contrast; an
+   opacity on type produces a value no contrast check can name.                */
+:root {
+  --opacity-faint: 0.06;
+}
+
 /* ── Radius ───────────────────────────────────────────────────────────────────
    Small and purposeful. 0 is a real choice, not an absence: grid cells and code
-   panels are square. --radius-full is the pill, used for status only.          */
+   panels are square. --radius-full is the pill — status, and the footer's
+   rating badge.                                                               */
 :root {
   --radius-0: 0px;
   --radius-4: 4px;

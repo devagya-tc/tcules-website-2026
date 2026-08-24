@@ -1,34 +1,49 @@
 import Link from 'next/link';
 
-import { Button, Cluster, Input, Layout, Logo, Section } from '@/components';
+import { Button, Cluster, Icon, Input, Layout, Logo, Section } from '@/components';
 
+import { BrandMark } from './BrandMark';
 import styles from './SiteFooter.module.css';
-import type { SiteFooterProps } from './types';
+import type { SiteFooterProps, SiteFooterSocial } from './types';
 
 /**
- * SiteFooter — the closing band: brand, newsletter, directory, contact, utility.
+ * SiteFooter — the closing band: brand, directory, newsletter, contact, utility.
  *
  * A SERVER component, and worth keeping that way. Nothing here is stateful, nothing reads the URL,
  * and the newsletter posts as a plain form rather than through JavaScript — so the footer ships no
  * client bundle at all. That is why `'use client'` is confined to SiteNav, which genuinely needs
  * it: a footer on every page of the site is the wrong place to hand the browser a hydration cost
- * for nothing.
+ * for nothing. The mobile accordions below are native `<details>`, chosen so that constraint
+ * survives them.
  *
  * ── Five bands, five shapes ─────────────────────────────────────────────────────────────────────
  * The one decision worth defending. A footer is the easiest place in a site to end up with four
  * identical rectangles of small links, and the rule here is that if you squint it has to read as
  * more than one idea. So:
  *
- *   1  BRAND      the mark at 40, a tagline at lead, one solid action, three mono links.
- *                 Left-weighted and tall. Weight comes from scale and position, not a tint.
- *   2  NEWSLETTER two columns — the pitch, and the field. The only form on the page.
- *   3  DIRECTORY  five narrow columns of body-sm links. Deliberately the quietest block.
+ *   1  BRAND      the mark at 40 and a tagline at lead on one side, the action and the rating
+ *                 badge on the other. Left-weighted and tall; the weight is scale and position.
+ *   2  DIRECTORY  six narrow columns of body-sm links. Deliberately the quietest block.
+ *   3  NEWSLETTER two columns — the pitch, and the field. The only form on the page.
  *   4  CONTACT    four mono key/value cells and an address. Dense, small, a different face.
- *   5  UTILITY    one line: the legal notice against the utility links.
+ *   5  UTILITY    one line: the utility links against the legal notice.
  *
  * Bands 2 to 5 are separated by a hairline with air on both sides, and by nothing else — no
  * alternating grounds, because varying the ground behind a block is how a page ends up with five
- * bands and one idea.
+ * bands and one idea. Under all of it sits the watermark: the mark again, oversized, at
+ * --opacity-faint, which is ground rather than a sixth band.
+ *
+ * ── Why the directory is rendered twice ─────────────────────────────────────────────────────────
+ * The design is a six-column grid at lg and six collapsed accordions below it. Those are two
+ * different DOM shapes, not one shape restyled, and with no JavaScript nothing can turn one into
+ * the other at runtime. Forcing a closed `<details>` visually open with `display` DOES NOT WORK in
+ * Chrome — the UA hides closed content more strongly than a `display` override undoes, which was
+ * verified rather than assumed. So both are rendered and CSS picks one.
+ *
+ * The cost is that the directory's links appear twice in the markup. That is accepted, and the
+ * alternative was worse: the audit requires every link to be in the rendered mobile HTML, which
+ * rules out shipping only the accordions' contents when open. `display: none` removes the inactive
+ * copy from the accessibility tree and the tab order both, so only one is ever reachable.
  */
 export function SiteFooter({
   brand,
@@ -41,49 +56,165 @@ export function SiteFooter({
   legal,
   surface = 'ink',
 }: SiteFooterProps) {
+  /* The bar over the "u" is the brand blue, and on a dark ground it is the one element of the mark
+     that does not simply invert. `mono` drops it to currentColor so the wordmark reads as one
+     white shape. Light grounds keep the accent, which is where it was drawn to sit. */
+  const logoVariant = surface === 'ink' || surface === 'blue' ? 'mono' : 'accent';
+
+  /* Rendered at the foot of the last directory column on desktop, and as its own row on mobile.
+     One list, declared once, placed twice — see the note on the directory above. */
+  const socialList = (
+    <Cluster as="ul" className={styles.socialList} rowGap="tight" colGap="text">
+      {brand.social.map((social: SiteFooterSocial) => (
+        <li key={social.label}>
+          {/* A plain anchor, not a Link: next/link prefetches and client-navigates, and neither
+              means anything for another origin. `noreferrer` implies `noopener`, and both are
+              stated because the pair is what reviews look for. */}
+          <a
+            className={styles.socialLink}
+            href={social.href}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <BrandMark name={social.mark} />
+            {social.label}
+            {/* The system draws no diagonal arrow, so the horizontal one is rotated. If ↗ starts
+                recurring elsewhere, that is the point at which it earns a glyph of its own rather
+                than a rotation in every consumer. */}
+            <span className={styles.outboundCue}>
+              <Icon name="arrow-right" size="sm" />
+            </span>
+          </a>
+        </li>
+      ))}
+    </Cluster>
+  );
+
   return (
     <Section as="footer" surface={surface}>
       <Layout rowGap="stack">
         {/* ── 1 · Brand ───────────────────────────────────────────────────────────────
             No hairline and no inset: it is the first band, and a rule above the mark would be a
-            rule against the section's own top padding. */}
-        <Layout rowGap="block">
-          <Layout rowGap="text">
+            rule against the section's own top padding.
+
+            Opposed rather than stacked: the mark and its sentence read left, the thing to DO reads
+            right, and the gap between them is what stops the band being one more full-width
+            rectangle. Two tracks at 2:1 rather than a Cluster, because Cluster's gap scale stops
+            at 24 and the two halves need a column's worth of air to read as opposed rather than
+            adjacent. One track below md, where the right group left-aligns under the tagline. */}
+        <Layout
+          columns={{ base: 1, md: [2, 1] }}
+          colGap="column"
+          rowGap="gutter"
+        >
+          <Layout className={styles.brandIdentity} rowGap="block">
             {/* The mark carries its own name here. Unlike the header's, it is not inside a link,
                 so nothing else announces it. */}
-            <Logo size="lg" />
+            <Logo size="lg" variant={logoVariant} />
             <p className={styles.tagline}>{brand.tagline}</p>
           </Layout>
 
-          <Cluster rowGap="block" colGap="block">
-            <Button as={Link} href={cta.href} size="lg">
+          <Layout className={styles.brandAction} rowGap="block">
+            {/* md, not lg. The tagline beside it is the band's weight; an lg button opposite a
+                lede line makes two things compete for the same job, and the badge under it reads
+                as a caption to a smaller control rather than an equal to a larger one. */}
+            <Button as={Link} href={cta.href}>
               {cta.label}
             </Button>
-            {/* Mono, uppercase — a different face from the sans directory below, so three links
-                beside a solid button do not read as the start of another link list. */}
-            <Cluster as="ul" rowGap="tight" colGap="text">
-              {brand.social.map((social) => (
-                <li key={social.label}>
-                  {/* A plain anchor, not a Link: next/link prefetches and client-navigates, and
-                      neither means anything for another origin. `noreferrer` implies `noopener`,
-                      and both are stated because the pair is what reviews look for. */}
-                  <a
-                    className={styles.socialLink}
-                    href={social.href}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  >
-                    {social.label}
-                  </a>
-                </li>
-              ))}
-            </Cluster>
-          </Cluster>
+            {brand.rating ? (
+              <a
+                className={styles.ratingBadge}
+                href={brand.rating.href}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                {/* Decorative: "4.9 on Clutch" is already the whole claim, and a star announced as
+                    "black star" adds nothing a screen reader needs. */}
+                <span className={styles.ratingStar} aria-hidden="true">
+                  ★
+                </span>
+                {brand.rating.score} on
+                {/* Mark and word tighter than the badge's own padding, so the two read as one
+                    lockup rather than as a third item in the row. */}
+                <span className={styles.ratingLockup}>
+                  <BrandMark name={brand.rating.mark} />
+                  {brand.rating.platform}
+                </span>
+              </a>
+            ) : null}
+          </Layout>
         </Layout>
 
-        {/* ── 2 · Newsletter ──────────────────────────────────────────────────────── */}
+        {/* ── 2 · Directory ───────────────────────────────────────────────────────────
+            Six columns at lg, accordions below it. The link rest state is ink rather than blue:
+            forty blue links is not forty signals, it is a blue block. */}
+        <div className={styles.band}>
+          {/* Desktop. Six tracks exactly — the group count is the column count, so a seventh group
+              would wrap rather than squeeze, which is the failure worth seeing.
+
+              The breakpoint toggle lives on this wrapper rather than on the Layout, because both
+              would be single-class selectors and which one won `display` would come down to the
+              order the bundler happened to emit them in. */}
+          <div className={styles.directoryDesktop}>
+            <Layout columns={6} colGap="gutter" rowGap="stack">
+              {groups.map((group, index) => (
+                <Layout key={group.title} rowGap="block">
+                  <p className={styles.label}>{group.title}</p>
+                  <Layout as="ul" rowGap="tight">
+                    {group.links.map((link) => (
+                      <li key={`${group.title}-${link.label}`}>
+                        <Link href={link.href} className={styles.link}>
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </Layout>
+                  {/* The socials hang off the last column under a hairline of their own. They are
+                      not a group — no label, and a rule instead — so the column reads as a list
+                      that has ended rather than as a seventh heading. */}
+                  {index === groups.length - 1 ? (
+                    <div className={styles.columnSocial}>{socialList}</div>
+                  ) : null}
+                </Layout>
+              ))}
+            </Layout>
+          </div>
+
+          {/* Mobile. Native <details>: collapsed by default, no script, and every link present in
+              the markup whether or not a group is open. */}
+          <div className={styles.directoryAccordions}>
+            {groups.map((group) => (
+              <details key={group.title} className={styles.accordion}>
+                <summary className={styles.accordionSummary}>
+                  <span className={styles.label}>{group.title}</span>
+                  <span className={styles.accordionChevron}>
+                    <Icon name="chevron-down" size="sm" />
+                  </span>
+                </summary>
+                <Layout as="ul" className={styles.accordionPanel} rowGap="tight">
+                  {group.links.map((link) => (
+                    <li key={`${group.title}-${link.label}`}>
+                      <Link href={link.href} className={styles.link}>
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </Layout>
+              </details>
+            ))}
+            {/* Outside the accordions and always visible: a profile link that can only be reached
+                by opening a panel is a profile link nobody reaches. No rule of its own — it sits
+                under the last accordion's, so it reads as the end of the directory. */}
+            <div className={styles.mobileSocial}>{socialList}</div>
+          </div>
+        </div>
+
+        {/* ── 3 · Newsletter ──────────────────────────────────────────────────────── */}
         <Layout className={styles.band} columns={[1, 1]} colGap="column" rowGap="stack">
           <Layout rowGap="block">
+            {/* The label and title nest at tight INSIDE a block stack. Flattening all three to
+                block makes them read as three unrelated lines rather than an eyebrow on a title
+                with a sentence under it. */}
             <Layout rowGap="tight">
               <p className={styles.label}>Newsletter</p>
               <p className={styles.title}>{newsletter.title}</p>
@@ -94,7 +225,7 @@ export function SiteFooter({
           {/* A plain POST, no JavaScript. NOTHING SERVES THIS ENDPOINT YET — see ENDPOINTS in
               @/lib/routes. `align="end"` so a field and button that have wrapped onto two lines
               still sit on one baseline. */}
-          <form action={newsletter.action} method="post">
+          <form action={newsletter.action} method="post" className={styles.newsletterForm}>
             <Cluster rowGap="tight" colGap="tight" align="end">
               {/* The input is WRAPPED by its label rather than wired to it with an id. A real
                   label is required — a placeholder is not one, it disappears the moment anyone
@@ -112,39 +243,16 @@ export function SiteFooter({
                   required
                 />
               </label>
-              {/* extendHitArea because this one has nothing to help it: the field beside it is
-                  wrapped in a label that forwards taps, and this Button is not. 40px box, 44px
-                  target, row height unchanged. */}
-              <Button type="submit" extendHitArea>
+              {/* Ghost rather than solid: the page already has one primary action, two bands up,
+                  and a second solid button here would split the ask. extendHitArea because this
+                  one has nothing to help it — the field beside it is wrapped in a label that
+                  forwards taps, and this Button is not. 40px box, 44px target, row height
+                  unchanged. */}
+              <Button type="submit" emphasis="ghost" extendHitArea>
                 {newsletter.cta.label}
               </Button>
             </Cluster>
           </form>
-        </Layout>
-
-        {/* ── 3 · Directory ───────────────────────────────────────────────────────────
-            Five columns at lg, three at md, one below. The link rest state is ink rather than
-            blue: forty blue links is not forty signals, it is a blue block. */}
-        <Layout
-          className={styles.band}
-          columns={{ base: 1, md: 3, lg: 5 }}
-          colGap="gutter"
-          rowGap="stack"
-        >
-          {groups.map((group) => (
-            <Layout key={group.title} rowGap="block">
-              <p className={styles.label}>{group.title}</p>
-              <Layout as="ul" rowGap="tight">
-                {group.links.map((link) => (
-                  <li key={`${group.title}-${link.label}`}>
-                    <Link href={link.href} className={styles.link}>
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </Layout>
-            </Layout>
-          ))}
         </Layout>
 
         {/* ── 4 · Contact ─────────────────────────────────────────────────────────────
@@ -172,9 +280,11 @@ export function SiteFooter({
           <p className={styles.address}>{address}</p>
         </Layout>
 
-        {/* ── 5 · Utility ─────────────────────────────────────────────────────────── */}
+        {/* ── 5 · Utility ───────────────────────────────────────────────────────────
+            Links lead, the notice closes. The links take the legal treatment rather than the
+            directory's: they are the quietest thing in the footer, and giving them link ink would
+            make four pieces of small print look like a sixth navigation group. */}
         <Cluster className={styles.band} justify="between" rowGap="text" colGap="text">
-          <p className={styles.legal}>{legal}</p>
           <Cluster as="ul" rowGap="tight" colGap="text">
             {utility.map((item) => (
               <li key={item.label}>
@@ -184,8 +294,18 @@ export function SiteFooter({
               </li>
             ))}
           </Cluster>
+          <p className={styles.legal}>{legal}</p>
         </Cluster>
       </Layout>
+
+      {/* ── Watermark ───────────────────────────────────────────────────────────────
+          The mark again, oversized, as ground rather than as a mark. Rendered at a real size
+          rather than transformed: a transform contributes nothing to layout height, so a scaled
+          mark paints outside the document and cannot be scrolled to. Decorative — the wordmark is
+          already announced once at the top of the band, and twice is noise. */}
+      <div className={styles.watermark} aria-hidden="true">
+        <Logo size="lg" variant="mono" title="" />
+      </div>
     </Section>
   );
 }
