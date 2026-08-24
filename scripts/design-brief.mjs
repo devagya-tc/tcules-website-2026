@@ -40,6 +40,10 @@ const SURFACES = ['paper', 'tint', 'ink', 'blue'];
 
 const read = (f) => readFileSync(f, 'utf8');
 const strip = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
+/* Node's glob returns platform separators. Normalise before parsing repository paths so the
+   generated vocabulary is byte-identical on Windows and POSIX rather than reporting a clean
+   checkout as stale on one of them. */
+const repoPath = (file) => file.replaceAll('\\', '/');
 
 /* Declarations inside a breakpoint are the SAME role re-declared at another size — the ladder,
    not a new name. Dropping the at-rule blocks leaves one base value per token, which is what a
@@ -168,7 +172,7 @@ function glyphSet() {
  */
 function componentGeometry() {
   const out = [];
-  for (const file of globSync('src/styles/tokens/components/*.css').sort()) {
+  for (const file of globSync('src/styles/tokens/components/*.css').map(repoPath).sort()) {
     const css = strip(read(file));
     /* :root holds geometry; the [data-surface] blocks hold colour, which is per-surface and is the
        designer's job to specify rather than to look up. */
@@ -195,7 +199,7 @@ function componentGeometry() {
 
 function takenPrefixes() {
   const rows = [];
-  for (const file of globSync('src/styles/tokens/components/*.css').sort()) {
+  for (const file of globSync('src/styles/tokens/components/*.css').map(repoPath).sort()) {
     const counts = new Map();
     for (const m of strip(read(file)).matchAll(/(--[a-z]+)-[\w-]+\s*:/g)) {
       counts.set(m[1], (counts.get(m[1]) ?? 0) + 1);
@@ -273,6 +277,7 @@ function primitiveProps() {
 
 function tierFolders(tier) {
   return globSync(`src/${tier}/*/`)
+    .map(repoPath)
     .map((p) => p.replace(/\/$/, '').split('/').pop())
     .sort();
 }
