@@ -6,10 +6,11 @@
 | ------------------- | ----------------------------------------------------- |
 | **Component**       | `Proof`                                               |
 | **Tier**            | 2 pattern (`src/patterns/Proof/`)                     |
-| **Status**          | accepted                                              |
+| **Status**          | implemented                                           |
 | **Token prefix**    | `--proof-*`                                           |
 | **Designer / date** | Codex / 24 Aug 2026                                   |
 | **Implements**      | `docs/briefs/15-testimonial.md` and `docs/briefs/17-stat.md` together, as required by `docs/briefs/README.md` |
+| **Implemented at**  | `src/patterns/Proof/` · `src/styles/tokens/components/proof.css` · specimen `src/app/design/proof/page.tsx` |
 
 The owner accepted the shared component identity in section 17 question 1. The public API, folder,
 token prefix and specimen route therefore use `Proof` rather than separate Testimonial and Stat
@@ -47,7 +48,7 @@ variant.
 | Part | Required | Element / owner | Content and responsibility |
 | ---- | -------- | --------------- | -------------------------- |
 | root | yes | `Layout` | Owns the relationship between the optional quote figure and optional figures list. Carries no ground. |
-| quote | required in `compact`; optional in `display` | native `figure` | One quotation and its attribution as one semantic unit. |
+| quote | required in `compact`; optional in `display` | `Layout as="figure"` | One quotation and its attribution as one semantic unit, with both semantic children kept direct. |
 | quote-rule | whenever quote renders | quote logical leading edge | Deck-weight leading rule; decoration only, never an oversized quotation glyph. |
 | quote-text | whenever quote renders | native `blockquote` containing `Prose` | One trusted, sanitised rich-text field of one to six sentences. `Prose` owns its markup and inline-link behavior; Proof owns the arrangement-specific quote scale. |
 | attribution | whenever quote renders | native `figcaption` | Name, role and company emitted from three required strings in that order, separated by commas. |
@@ -275,12 +276,10 @@ touch contract. The gap scale does not shift responsively.
 ```tsx
 <Layout columns={both ? 'fit' : undefined} minTrack="md" colGap={both ? 'column' : undefined} rowGap={both ? 'stack' : undefined}>
   {quote && (
-    <figure>
-      <Layout rowGap="block">
-        <blockquote><Prose html={quote.quoteHtml} /></blockquote>
-        <figcaption>{quote.name}, {quote.role}, {quote.company}</figcaption>
-      </Layout>
-    </figure>
+    <Layout as="figure" rowGap="block">
+      <blockquote><Prose html={quote.quoteHtml} /></blockquote>
+      <figcaption>{quote.name}, {quote.role}, {quote.company}</figcaption>
+    </Layout>
   )}
   {figures && (
     <Layout as="ul" columns="tile" minTrack="sm" colGap="gutter" rowGap="block" justify="between">
@@ -508,7 +507,7 @@ once its exact external URL is supplied; Proof must not guess a literal or subst
 ```text
 STRUCTURE
 [x] All 18 sections present, in order, with the exact headings.
-[x] Front matter states Tier 2 pattern, Status accepted and token prefix --proof-*; live vocabulary
+[x] Front matter states Tier 2 pattern, Status implemented and token prefix --proof-*; live vocabulary
     generation and repository search find no collision.
 [x] Every Anatomy part appears in colour, geometry or is explicitly delegated to Layout, Prose,
     Button, native semantics or a future provision that renders no value.

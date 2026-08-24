@@ -93,6 +93,11 @@ const SPECIMENS = [
         note: 'the native disclosure set — multi-open behavior, rich answers, 4 surfaces',
       },
       {
+        href: '/design/proof',
+        name: 'Proof',
+        note: 'the evidence block — attributed quotes, checked figures, combined layouts, 4 surfaces',
+      },
+      {
         href: '/design/page-hero',
         name: 'PageHero',
         note: 'the page opening — slot ladder, paragraph ladder, byline shapes, 4 surfaces, its own band',

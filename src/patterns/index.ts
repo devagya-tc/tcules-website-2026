@@ -37,6 +37,8 @@
  * Accordion is a DISCLOSURE SET: one continuous rule ladder of native details/summary pairs. It
  * owns a CMS-shaped question/answer array and composes Layout, Cluster, Icon and Prose while
  * leaving surface and surrounding page rhythm to its caller.
+ * Proof is EVIDENCE: an attributed quotation, checked figures, or both. It composes Layout,
+ * Prose and Button while leaving the ground and its position in a page argument to the caller.
  */
 export { SiteNav } from './SiteNav';
 export type {
@@ -79,6 +81,9 @@ export type { BlockCardProps, BlockCardMedia, BlockCardTitleElement } from './Bl
 
 export { Accordion } from './Accordion';
 export type { AccordionProps, AccordionItem } from './Accordion';
+
+export { Proof } from './Proof';
+export type { ProofProps, ProofQuote, ProofFigure } from './Proof';
 
 export { PageHero } from './PageHero';
 export type {

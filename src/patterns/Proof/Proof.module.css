@@ -1,0 +1,96 @@
+/* Proof — attributed quotation, checked figures, or both, built to docs/specs/Proof.md.
+
+   Layout owns every relationship: the quote/figures pair, the figure tiles and each nested
+   vertical rhythm. This module owns only the evidence parts' inline size, type, rule and ink. It
+   paints no ground, has no hand-written sibling arrangement, breakpoint, interactive state or
+   decorative quotation glyph. */
+
+.root {
+  position: relative;
+  z-index: var(--proof-layer);
+  inline-size: 100%;
+  min-inline-size: 0;
+  border-radius: var(--proof-radius);
+  box-shadow: var(--proof-shadow);
+}
+
+.quote {
+  min-inline-size: 0;
+  max-inline-size: var(--measure-body);
+  border-inline-start: var(--proof-quote-rule-width) solid var(--proof-quote-rule);
+  padding-inline-start: var(--gap-block);
+}
+
+.quoteText {
+  min-inline-size: 0;
+  max-inline-size: var(--measure-body);
+  color: var(--proof-quote-ink);
+  overflow-wrap: anywhere;
+}
+
+.display .quoteText {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+}
+
+.compact .quoteText {
+  font: var(--text-quote);
+}
+
+/* Prose remains the trusted-HTML seam and keeps its flow/link behavior. The two-class selector is
+   intentionally stronger than Prose's root class so the arrangement can own this field's quote
+   composite without copying Prose's link, emphasis or paragraph rules. */
+.quoteText .quoteProse {
+  min-inline-size: 0;
+  max-inline-size: var(--measure-body);
+  font: inherit;
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+
+.attribution {
+  min-inline-size: 0;
+  max-inline-size: var(--measure-body);
+  overflow-wrap: anywhere;
+  font: var(--text-body-sm);
+  color: var(--proof-attribution-ink);
+}
+
+.figures {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.figure,
+.valueLabel,
+.metadata {
+  min-inline-size: 0;
+}
+
+.value {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  font: var(--text-stat);
+  letter-spacing: var(--text-stat-tracking);
+  color: var(--proof-value-ink);
+}
+
+.label {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  font: var(--text-micro);
+  letter-spacing: var(--text-micro-tracking);
+  text-transform: uppercase;
+  color: var(--proof-label-ink);
+}
+
+.checked {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  font: var(--text-caption);
+  color: var(--proof-checked-ink);
+}
+
+.source {
+  justify-self: start;
+}

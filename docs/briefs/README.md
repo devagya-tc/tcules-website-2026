@@ -18,11 +18,12 @@ regenerated and pushed again.**
 
 ## The eighteen
 
-Seven are pasteable. Eleven are not: ten describe components that **already ship** — do not specify
-them, compose from the library instead — and one is blocked on content. Brief 09 shipped **two**
-components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also absorbed
-SiteFooter's private newsletter field tokens. Each says so in its Status
-cell, and the five that never had a `BRIEF` block say so at the top of the file too.
+Four are pasteable. Fourteen are not: thirteen describe components that **already ship** — do not
+specify them, compose from the library instead — and one is blocked on content. Brief 09 shipped
+**two** components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also
+absorbed SiteFooter's private newsletter field tokens. Briefs 15 and 17 resolve to one shared
+`Proof` pattern. Each says so in its Status cell, and the five that never had a `BRIEF` block say so
+at the top of the file too.
 
 **This table is the first thing a designer reads, so a stale Status cell is the most expensive kind
 of staleness in the repo.** It sends someone off to specify a component that already exists, which
@@ -44,16 +45,16 @@ move its row to "ships today" in the same change that merges it.
 | 11 | [List Card](11-list-card.md) | `ListCard` · 2 · `--lcrd-` | 53 routes · 70 sections · 5 | **ships today — do not specify** |
 | 12 | [Block Card](12-block-card.md) | `BlockCard` · 2 · `--bcrd-` | 38 routes · 78 clusters · 2 | **ships today — do not specify** |
 | 13 | [Figure](13-figure.md) | `Figure` · 1 · `--fig-` | 0 images · 21 captions written | paste — run it last |
-| 14 | [Accordion](14-accordion.md) | `Accordion` · 1 · `--acc-` | 21 routes · 22 sections · 1 | paste |
-| 15 | [Testimonial](15-testimonial.md) | `Testimonial` · 2 · `--tstm-` | 6 routes · 2 | paste — with 17 |
+| 14 | [Accordion](14-accordion.md) | `Accordion` · 2 · `--acc-` | 21 routes · 22 sections · 1 | **ships today — do not specify** |
+| 15 | [Testimonial](15-testimonial.md) | `Proof` · 2 · `--proof-` | 6 routes · 2 | **ships today in shared Proof — do not specify** |
 | 16 | [Callout](16-callout.md) | `Callout` · 1 · `--call-` | 8 routes · 10 instances · 1 | paste |
-| 17 | [Stat](17-stat.md) | `Stat` · 2 · `--stat-` | 1 route resolved, 3 claimed · 2 | paste — with 15 |
+| 17 | [Stat](17-stat.md) | `Proof` · 2 · `--proof-` | 1 route resolved, 3 claimed · 2 | **ships today in shared Proof — do not specify** |
 | 18 | [Filters](18-filters.md) | `Filters` · 2 · unassigned | none | **blocked on content — do not specify** |
 
-Every proposed prefix was checked against the fifteen already taken — `--bcrd-`, `--btn-`,
-`--crumb-`, `--cta-`, `--enq-`, `--foot-`, `--hero-`, `--icn-`, `--inp-`, `--lay-`, `--lcrd-`,
-`--logo-`, `--nav-`, `--prose-`, `--sec-`. That list is generated into `docs/vocabulary.md`; read it there
-rather than trusting this sentence, which has been stale twice.
+Every proposed prefix was checked against the seventeen already taken — `--acc-`, `--bcrd-`,
+`--btn-`, `--crumb-`, `--cta-`, `--enq-`, `--foot-`, `--hero-`, `--icn-`, `--inp-`, `--lay-`,
+`--lcrd-`, `--logo-`, `--nav-`, `--proof-`, `--prose-`, `--sec-`. That list is generated into
+`docs/vocabulary.md`; read it there rather than trusting this sentence, which has been stale twice.
 
 ## The order to run them in
 
@@ -75,8 +76,14 @@ at `/design/block-card`. Do not specify it again; compose against the shipped co
 `docs/specs/ListCard.md`, specimen at `/design/list-card`. Do not specify it again; compose against
 the shipped component in the library. The distinction remains load-bearing: `ListCard` is a ruled
 ROW, while `BlockCard` is a four-sided edge-bounded TILE; neither paints a ground.)*
+
 6. **Proof, as one session** — **Testimonial** · 15 and **Stat** · 17 together. Split apart, Stat
    duplicates half of Testimonial.
+
+*(Proof now ships — `src/patterns/Proof/`, spec at `docs/specs/Proof.md`, specimen at
+`/design/proof`. Brief 15's quote-only case, brief 17's figures-only case and their combined
+evidence block are one pattern. Do not specify Testimonial, Stat or Rating separately.)*
+
 7. **CTA Section** · 08 and **Form** · 09 — CTA depends on the proof slot, Form on whether a field
    control is a primitive.
 8. **Callout** · 16.
