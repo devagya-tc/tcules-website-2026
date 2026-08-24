@@ -251,7 +251,7 @@
 
     <p>
       Ask for <strong>one more thing at the same time: access to the Tcules project in Claude
-      Design.</strong> That is where the nine live components live and where you will write every
+      Design.</strong> That is where the ten live components live and where you will write every
       spec — a repo clone does not give it to you, and it is the other half of this workflow.
     </p>
 
@@ -374,13 +374,14 @@ is green before I start. Tell me the branch name and stop.</code></pre>
     <div class="cmd">
       <span class="where">Browser · claude.ai/design</span>
       <pre><code>Open the Tcules project — the one whose component list is:
-Section · Layout · Cluster · Button · Icon · Logo · Prose · SiteNav · SiteFooter</code></pre>
+Section · Layout · Cluster · Button · Icon · Logo · Prose
+SiteNav · SiteFooter · Breadcrumbs</code></pre>
     </div>
 
     <p>
       That is the project the owner shared with you during setup. If you cannot see it, you have not
       been added — ask, rather than starting a new project, because a fresh one has no component
-      library in it and everything below silently stops working. Those nine are the real shipped
+      library in it and everything below silently stops working. Those ten are the real shipped
       components, not pictures of them.
     </p>
 
@@ -402,7 +403,7 @@ Section · Layout · Cluster · Button · Icon · Logo · Prose · SiteNav · Si
 
     <div class="gate">
       <p class="eyebrow">The only question that matters yet</p>
-      <p class="gate-q">Can this be built from those nine and the props they already have?</p>
+      <p class="gate-q">Can this be built from those ten and the props they already have?</p>
     </div>
 
     <p>
@@ -872,7 +873,7 @@ git branch -d feat/accordion</code></pre>
         already recorded in <code>.design-sync/NOTES.md</code> as known.</li>
       <li>Authors a preview for the new component — one per component, hand-written, so the card shows
         the states worth seeing rather than a default render.</li>
-      <li>Uploads, at which point the library has ten components and composition can answer what used
+      <li>Uploads, at which point the library has eleven components and composition can answer what used
         to need a spec.</li>
     </ul>
 
@@ -949,7 +950,7 @@ git branch -d feat/accordion</code></pre>
         for every component, not just yours — the build command stops and asks for exactly this
         reason.</li>
       <li><strong>Reviewing and merging the pull request.</strong></li>
-      <li><strong>Re-syncing the design library afterwards, <strong>for a new component</strong>, so yours becomes something the next person can compose with instead of re-specify. The tooling for it is not in the repo — see phase seven. A <em>guidelines</em> change is different and is not on this list: pushing an updated <code>vocabulary.md</code> needs no bundle and no preview grading, only write access to the project.</li>
+      <li><strong>Re-syncing the design library afterwards, for a new component</strong>, so yours becomes something the next person can compose with instead of re-specify. The tooling for it is not in the repo — see phase seven. A <em>guidelines</em> change is different and is not on this list: pushing an updated <code>vocabulary.md</code> needs no bundle and no preview grading, only write access to the project.</li>
     </ul>
 
     <div class="note">
