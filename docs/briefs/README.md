@@ -18,7 +18,7 @@ regenerated and pushed again.**
 
 ## The eighteen
 
-Eight are pasteable. Ten are not: nine describe components that **already ship** — do not specify
+Seven are pasteable. Eleven are not: ten describe components that **already ship** — do not specify
 them, compose from the library instead — and one is blocked on content. Brief 09 shipped **two**
 components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also absorbed
 SiteFooter's private newsletter field tokens. Each says so in its Status
@@ -42,7 +42,7 @@ move its row to "ships today" in the same change that merges it.
 | 09 | [Form](09-form.md) | `EnquiryForm` · 2 · `--enq-` (+ `Input` · 1 · `--inp-`) | 56 routes · 2 variants | **ships today — do not specify** |
 | 10 | [Table](10-table.md) | `DataTable` · 1 · `--tbl-` | 56 routes · 61 tables · 1 | paste — carries an `UNRESOLVED` |
 | 11 | [List Card](11-list-card.md) | `ListCard` · 2 · `--lcrd-` | 53 routes · 70 sections · 5 | **ships today — do not specify** |
-| 12 | [Block Card](12-block-card.md) | `BlockCard` · 2 · `--bcrd-` | 38 routes · 78 clusters · 2 | paste |
+| 12 | [Block Card](12-block-card.md) | `BlockCard` · 2 · `--bcrd-` | 38 routes · 78 clusters · 2 | **ships today — do not specify** |
 | 13 | [Figure](13-figure.md) | `Figure` · 1 · `--fig-` | 0 images · 21 captions written | paste — run it last |
 | 14 | [Accordion](14-accordion.md) | `Accordion` · 1 · `--acc-` | 21 routes · 22 sections · 1 | paste |
 | 15 | [Testimonial](15-testimonial.md) | `Testimonial` · 2 · `--tstm-` | 6 routes · 2 | paste — with 17 |
@@ -50,9 +50,9 @@ move its row to "ships today" in the same change that merges it.
 | 17 | [Stat](17-stat.md) | `Stat` · 2 · `--stat-` | 1 route resolved, 3 claimed · 2 | paste — with 15 |
 | 18 | [Filters](18-filters.md) | `Filters` · 2 · unassigned | none | **blocked on content — do not specify** |
 
-Every proposed prefix was checked against the fourteen already taken — `--btn-`, `--crumb-`,
-`--cta-`, `--enq-`, `--foot-`, `--hero-`, `--icn-`, `--inp-`, `--lay-`, `--lcrd-`, `--logo-`,
-`--nav-`, `--prose-`, `--sec-`. That list is generated into `docs/vocabulary.md`; read it there
+Every proposed prefix was checked against the fifteen already taken — `--bcrd-`, `--btn-`,
+`--crumb-`, `--cta-`, `--enq-`, `--foot-`, `--hero-`, `--icn-`, `--inp-`, `--lay-`, `--lcrd-`,
+`--logo-`, `--nav-`, `--prose-`, `--sec-`. That list is generated into `docs/vocabulary.md`; read it there
 rather than trusting this sentence, which has been stale twice.
 
 ## The order to run them in
@@ -67,12 +67,14 @@ Dependency order, plus what unblocks the most pages.
 *(Breadcrumbs · 06 was third on this list and now ships — `src/patterns/Breadcrumbs/`, spec at
 `docs/specs/Breadcrumbs.md`, specimen at `/design/breadcrumbs`. Do not specify it again; compose
 against the shipped component in the library.)*
-5. **Block Card** · 12 — one of the two shapes the section's child slot takes.
+
+*(Block Card · 12 now ships — `src/patterns/BlockCard/`, spec at `docs/specs/BlockCard.md`, specimen
+at `/design/block-card`. Do not specify it again; compose against the shipped component.)*
 
 *(List Card · 11 was the other half of this step and now ships — `src/patterns/ListCard/`, spec at
 `docs/specs/ListCard.md`, specimen at `/design/list-card`. Do not specify it again; compose against
-the shipped component in the library. `BlockCard` is still to be specified, and the distinction is
-load-bearing: `ListCard` is a ruled ROW with no ground, `BlockCard` is the filled object.)*
+the shipped component in the library. The distinction remains load-bearing: `ListCard` is a ruled
+ROW, while `BlockCard` is a four-sided edge-bounded TILE; neither paints a ground.)*
 6. **Proof, as one session** — **Testimonial** · 15 and **Stat** · 17 together. Split apart, Stat
    duplicates half of Testimonial.
 7. **CTA Section** · 08 and **Form** · 09 — CTA depends on the proof slot, Form on whether a field

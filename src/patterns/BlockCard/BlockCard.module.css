@@ -1,0 +1,134 @@
+/* BlockCard — one edge-bounded tile, built to docs/specs/BlockCard.md.
+
+   Layout owns every block-axis group and Cluster owns cue alignment. This module supplies the
+   object's edge, inset, crop, child sizing and link rendering. It deliberately has no background,
+   margin, hand-written grid or flex arrangement, surface selector, breakpoint or variant rule. */
+
+.root {
+  inline-size: 100%;
+  block-size: 100%;
+  min-inline-size: 0;
+}
+
+/* A block anchor/div fills the equal-height track while its children keep natural document order:
+   image first when present, then one inset content block. */
+.frame {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  min-inline-size: 0;
+  border: var(--bcrd-edge-width) solid var(--bcrd-edge-ink);
+  border-radius: var(--bcrd-radius);
+  box-shadow: var(--bcrd-shadow);
+}
+
+.content {
+  min-inline-size: 0;
+  padding: var(--gap-block);
+}
+
+.iconMedia {
+  display: block;
+  color: var(--bcrd-media-ink);
+}
+
+.imageMedia {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: var(--bcrd-media-ratio);
+  overflow: hidden;
+}
+
+.image {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.title {
+  max-inline-size: var(--measure-title);
+  overflow-wrap: anywhere;
+  color: var(--bcrd-title-ink);
+  font: var(--bcrd-title-text);
+  letter-spacing: var(--bcrd-title-tracking);
+}
+
+.body {
+  max-inline-size: var(--measure-body);
+  overflow-wrap: anywhere;
+  color: var(--bcrd-body-ink);
+  font: var(--bcrd-body-text);
+}
+
+.cue {
+  color: inherit;
+}
+
+/* Higher specificity than the global anchor rule. currentColor ties the linked title, icon, cue
+   and edge wipe together; body retains its quieter surface-specific ink. */
+.root .link {
+  color: var(--bcrd-link-ink);
+  text-decoration: none;
+  transition: color var(--bcrd-transition-duration) var(--bcrd-transition-easing);
+}
+
+.root .link:hover,
+.root .link:focus-visible {
+  color: var(--bcrd-link-ink-hover);
+  text-decoration: none;
+}
+
+.root .link:active {
+  color: var(--bcrd-link-ink-pressed);
+}
+
+.link .title,
+.link .iconMedia {
+  color: inherit;
+}
+
+/* The card keeps its quiet four-sided edge at rest. This overlay replaces only the block-end edge
+   with current link ink, wiping from inline start. Its negative inset places it on the frame's own
+   border; pressed doubles the overlay without changing any surrounding geometry. */
+.link::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: calc(-1 * var(--bcrd-edge-width));
+  block-size: var(--bcrd-edge-width);
+  background: currentColor;
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--bcrd-transition-duration) var(--bcrd-transition-easing);
+}
+
+.root .link:hover::after,
+.root .link:focus-visible::after,
+.root .link:active::after {
+  transform: scaleX(1);
+}
+
+.root .link:active::after {
+  block-size: var(--bcrd-edge-width-pressed);
+}
+
+.link:focus {
+  outline: none;
+}
+
+.root .link:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--bcrd-ring-offset) var(--bcrd-ring-gap-color),
+    0 0 0 calc(var(--bcrd-ring-offset) + var(--bcrd-ring-width)) var(--bcrd-ring-color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link::after {
+    transition-duration: var(--duration-instant);
+  }
+}

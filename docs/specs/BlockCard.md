@@ -2,15 +2,15 @@
 
 ## 0 · Front matter
 
-|                     |                                       |
-| ------------------- | ------------------------------------- |
-| **Component**       | `BlockCard`                           |
-| **Tier**            | 2 pattern (`src/patterns/BlockCard/`) |
-| **Status**          | accepted                              |
-| **Token prefix**    | `--bcrd-*`                            |
-| **Designer / date** | Codex / 24 Aug 2026                   |
-| **Implements**      | `docs/briefs/12-block-card.md`        |
-| **Implemented at**  | Pending build                         |
+|                     |                                                                                                                        |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **Component**       | `BlockCard`                                                                                                            |
+| **Tier**            | 2 pattern (`src/patterns/BlockCard/`)                                                                                  |
+| **Status**          | implemented                                                                                                            |
+| **Token prefix**    | `--bcrd-*`                                                                                                             |
+| **Designer / date** | Codex / 24 Aug 2026                                                                                                    |
+| **Implements**      | `docs/briefs/12-block-card.md`                                                                                         |
+| **Implemented at**  | `src/patterns/BlockCard/` · `src/styles/tokens/components/block-card.css` · specimen `src/app/design/block-card/page.tsx` |
 
 ## 1 · Identity
 
@@ -247,8 +247,8 @@ The parent `Layout`, not the card, owns reflow:
 
 - Two-card clusters: `columns={{ base: 1, md: 2 }}`.
 - Three-card clusters: `columns={{ base: 1, md: 2, lg: 3 }}`.
-- Four-card clusters: `columns={{ base: 1, md: 2, xl: 4 }}`. They read 2×2 from 768 through 1279
-  and become one deliberate four-card row only when the content track can support it.
+- Four-card clusters: `columns={{ base: 1, md: 2, xl: 4 }}`. They read 2×2 from 768 through 1439
+  and become one deliberate four-card row at the existing `Layout` xl boundary of 1440.
 - Five-to-eight-card clusters choose three or four at `xl` from their content grouping; BlockCard
   has no count detection and no orphan rule.
 
@@ -377,7 +377,7 @@ its normal duration because colour change is not motion.
 
 1. Put every group in `Layout as="ul"` with explicit columns, `colGap="gutter"`,
    `rowGap="gutter"` and `equalRows`; inspect the call-site tree and computed tracks.
-2. Render four cards as two columns from `md` and four only from `xl`; inspect 1023, 1279 and 1280
+2. Render four cards as two columns from `md` and four only from `xl`; inspect 1023, 1439 and 1440
    to prove the fourth never becomes a three-column orphan.
 3. Render image media above the title at 3:2 and icon media inside the inset content; compare their
    DOM order and crop boxes.
@@ -432,7 +432,7 @@ The exact block list, in order:
    items with visible empty harness; one item; 16 items; omitted media and blank image source; blank
    title/body/href; 767 track; unsized wrapping parent; logical placement; nested surface; zero-gap
    adjacent cards; rejected interactive slot as a contract note.
-10. **Four-card breakpoint proof.** The same four cards at exact 1279 and 1280 instructions: 2×2
+10. **Four-card breakpoint proof.** The same four cards at exact 1439 and 1440 instructions: 2×2
     below `xl`, one row at `xl`; the static page note gives manual viewport steps.
 11. **Narrow tracks.** The same icon, image and no-media cards at 256px and 192px. No overflow, title
     overlay or cue collision is allowed.
@@ -440,7 +440,7 @@ The exact block list, in order:
 13. **Two adjacent.** Two zero-gap cards show the deliberate double hairline, followed by the same
     pair at the required gutter to show the production composition.
 14. **What a static page cannot force.** A final note names pointer-down, keyboard focus, the exact
-    767/1279/1280 boundaries and reduced motion, with manual instructions for each.
+    767/1439/1440 boundaries and reduced motion, with manual instructions for each.
 
 The squint test reads as five shapes: one edge-bound identity pair, three progressively denser grid
 bands, a media-led ladder, four surface bands and two narrow stress rails. The card's weight comes

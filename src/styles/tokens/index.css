@@ -93,6 +93,7 @@
 @import 'components/enquiry-form.css';
 @import 'components/page-hero.css';
 @import 'components/list-card.css';
+@import 'components/block-card.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */
