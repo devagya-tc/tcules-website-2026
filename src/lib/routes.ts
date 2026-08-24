@@ -102,6 +102,20 @@ export const UNRESOLVED_ROUTE = '/#unresolved-route';
 export const UNRESOLVED_EXTERNAL = '#unresolved-external';
 
 /**
+ * Off-site profiles that more than one component links to.
+ *
+ * Clutch is the reason this exists: the footer's rating badge and `Stat`'s source link are two
+ * consumers of one URL, and two fixtures each holding their own copy is how they drift apart.
+ * NOT SUPPLIED YET — it resolves to UNRESOLVED_EXTERNAL until the real profile lands, so the
+ * placeholder is greppable in one place rather than two.
+ */
+export const EXTERNAL = {
+  clutch: UNRESOLVED_EXTERNAL,
+  linkedin: UNRESOLVED_EXTERNAL,
+  youtube: UNRESOLVED_EXTERNAL,
+} as const;
+
+/**
  * Endpoints, which are not routes. Named here anyway so a form action is not a literal in a
  * pattern's fixture. NOTHING SERVES THIS YET — the newsletter field posts to a 404 until an
  * `app/api/newsletter/route.ts` exists.

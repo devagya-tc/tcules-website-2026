@@ -1,5 +1,5 @@
 import type { SiteFooterProps, SiteNavProps } from '@/patterns';
-import { ENDPOINTS, ROUTES, UNRESOLVED_EXTERNAL, UNRESOLVED_ROUTE } from '@/lib/routes';
+import { ENDPOINTS, EXTERNAL, ROUTES, UNRESOLVED_ROUTE } from '@/lib/routes';
 
 import type { Navigation } from '../../types';
 
@@ -265,11 +265,16 @@ const NAV: SiteNavProps = {
 const FOOTER: SiteFooterProps = {
   brand: {
     tagline: 'Product intent, kept visible from the first decision to what ships.',
+    /* Two, not three: Clutch left this list for the rating badge below. A profile that carries a
+       score is a claim with a source, and a row of three names cannot say 4.9. */
     social: [
-      { label: 'LinkedIn', href: UNRESOLVED_EXTERNAL },
-      { label: 'YouTube', href: UNRESOLVED_EXTERNAL },
-      { label: 'Clutch', href: UNRESOLVED_EXTERNAL },
+      { label: 'LinkedIn', href: EXTERNAL.linkedin, mark: 'linkedin' },
+      { label: 'YouTube', href: EXTERNAL.youtube, mark: 'youtube' },
     ],
+    /* PLACEHOLDER. 4.9 is the one invented value in the redesign — it was never read off the real
+       profile, which is also still unsupplied. Both land together or neither does; a score with no
+       reachable source is worse than no badge. */
+    rating: { platform: 'Clutch', mark: 'clutch', score: '4.9', href: EXTERNAL.clutch },
   },
   groups: [
     {
@@ -288,28 +293,15 @@ const FOOTER: SiteFooterProps = {
     {
       title: 'Expertise',
       links: [
-        { label: 'B2B SaaS and Workflow', href: ROUTES.b2bSaasWorkflow },
-        { label: 'AI and Developer Tools', href: ROUTES.aiDeveloperTools },
+        { label: 'B2B SaaS and Workflow Software', href: ROUTES.b2bSaasWorkflow },
+        { label: 'AI Products and Developer Tools', href: ROUTES.aiDeveloperTools },
         { label: 'Data and Decision Products', href: ROUTES.dataDecisionProducts },
         { label: 'Marketplaces', href: ROUTES.marketplaces },
-        { label: 'Content and Discovery', href: ROUTES.contentDiscovery },
+        { label: 'Content and Knowledge Platforms', href: ROUTES.contentDiscovery },
         { label: 'FinTech', href: ROUTES.fintech },
         { label: 'HealthTech', href: ROUTES.healthtech },
         { label: 'EdTech', href: ROUTES.edtech },
         { label: 'All Expertise', href: ROUTES.expertise },
-      ],
-    },
-    {
-      title: 'Insights',
-      links: [
-        { label: 'Articles', href: ROUTES.articles },
-        { label: 'Guides', href: ROUTES.guides },
-        { label: 'Podcasts', href: ROUTES.podcasts },
-        { label: 'Videos', href: ROUTES.videos },
-        { label: 'Events', href: ROUTES.events },
-        { label: 'Research', href: ROUTES.research },
-        { label: 'Tools and Resources', href: ROUTES.tools },
-        { label: 'Glossary', href: ROUTES.glossary },
       ],
     },
     {
@@ -325,10 +317,32 @@ const FOOTER: SiteFooterProps = {
       ],
     },
     {
-      title: 'Lab and company',
+      title: 'Insights',
+      links: [
+        { label: 'Articles', href: ROUTES.articles },
+        { label: 'Guides', href: ROUTES.guides },
+        { label: 'Podcasts', href: ROUTES.podcasts },
+        { label: 'Videos', href: ROUTES.videos },
+        { label: 'Events', href: ROUTES.events },
+        { label: 'Research', href: ROUTES.research },
+        { label: 'Tools and Resources', href: ROUTES.tools },
+        { label: 'Glossary', href: ROUTES.glossary },
+      ],
+    },
+    /* Lab is two links and stays its own column rather than folding into Company. It is the one
+       group whose contents are products rather than pages about the studio, and burying the design
+       system under "Company" is how nobody finds it. Marketing's IA folds them together — that
+       note is the one still open. */
+    {
+      title: 'Lab',
       links: [
         { label: 'Future Interfaces Lab', href: ROUTES.futureInterfacesLab },
         { label: 'Matter Design System', href: ROUTES.matterDesignSystem },
+      ],
+    },
+    {
+      title: 'Company',
+      links: [
         { label: 'About', href: ROUTES.about },
         { label: 'Team', href: ROUTES.team },
         { label: 'Careers', href: ROUTES.careers },

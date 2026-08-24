@@ -1,0 +1,20 @@
+/* BrandMark — the three third-party marks. Structure and colour routing only; every value comes
+   from a token. See BrandMark.tsx for why these are not glyphs. */
+
+/* Square, at the icon ramp's small step, and sized in the inline axis so a mark scales with the
+   text it sits beside rather than with the row. `block` because an inline SVG sits on the text
+   baseline and leaves a descender's worth of space under it, which reads as a broken row. */
+.mark {
+  display: block;
+  flex: none;
+  inline-size: var(--icn-size-sm);
+  block-size: var(--icn-size-sm);
+  fill: currentColor;
+}
+
+/* The knocked-out half of a two-fill mark — LinkedIn's letters inside its tile. It takes the
+   SURFACE's ground rather than a fixed white, which is the whole reason one asset can invert:
+   on ink the letters go dark, on paper they go light, and neither needs a second file. */
+.knockout {
+  fill: var(--sec-ground);
+}

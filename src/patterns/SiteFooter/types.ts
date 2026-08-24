@@ -1,5 +1,7 @@
 import type { SectionSurface } from '@/components';
 
+import type { BrandMarkName } from './BrandMark';
+
 /**
  * The site footer's information architecture, as a shape.
  *
@@ -7,8 +9,8 @@ import type { SectionSurface } from '@/components';
  * render them, and @/content declares its fixture against them. A CMS remodel is absorbed inside
  * the source, not here.
  *
- * The footer is deliberately NOT one list of link groups. It is six unlike bands — brand,
- * newsletter, directory, contact, utility, legal — and each has its own type below, because a
+ * The footer is deliberately NOT one list of link groups. It is five unlike bands — brand,
+ * directory, newsletter, contact, utility — and each has its own type below, because a
  * footer built out of one repeated shape is the failure the design rules name: if you squint and
  * every block is the same rectangle, it is not finished.
  */
@@ -19,21 +21,56 @@ export type SiteFooterLink = {
 };
 
 /**
- * A social profile.
+ * A social profile: a mark, and the word that names it.
  *
- * Named links, not logo marks — and the reason is not that the glyph set is unfilled, because it
- * is filled. It is that these are TRADEMARKS: each comes with its own usage rules, its own
- * proportions, and its own permission to check, and none of them is drawn on this system's 24-unit
- * box. Redrawing one to fit would stop it being the mark. A word is also the accessible form — an
- * icon-only social row needs a label per icon anyway, so the label was always going to be
- * written.
+ * This used to be a word alone, and the argument for that is worth keeping because it is still
+ * half true. These are TRADEMARKS: each comes with its own usage rules, its own proportions and
+ * its own permission to check, and none of them is drawn on this system's 24-unit box. Redrawing
+ * one to fit would stop it being the mark.
+ *
+ * So the marks did NOT join the glyph set. `mark` selects an official asset held locally by this
+ * pattern, at whatever proportions its owner published — see BrandMark. Icon's box is for glyphs
+ * this system draws; a trademark is not one of those, and the earlier decision was right about
+ * that even though it drew the wrong conclusion from it.
+ *
+ * `label` survives unchanged and is still required: it is the accessible name, and an icon-only
+ * social row needs a label per icon anyway.
  */
-export type SiteFooterSocial = SiteFooterLink;
+export type SiteFooterSocial = SiteFooterLink & {
+  mark: BrandMarkName;
+};
+
+/**
+ * The rating badge in the brand block — a score, and the profile it comes from.
+ *
+ * Split out of the social list because it is not a link to a profile, it is a claim with a source.
+ * A row of three names cannot say "4.9", and a badge that says it has to be reachable so the claim
+ * can be checked.
+ */
+export type SiteFooterRating = {
+  /** The platform's name, paired with its mark. 'Clutch'. */
+  platform: string;
+  mark: BrandMarkName;
+  /**
+   * The score as authored — '4.9', not 4.9. It is copy, not arithmetic: nothing formats it,
+   * nothing averages it, and a trailing zero is a decision rather than a rounding artefact.
+   */
+  score: string;
+  /** The profile. One href, two consumers — Stat's source link is the other. See @/lib/routes. */
+  href: string;
+};
 
 export type SiteFooterBrand = {
   /** One line under the wordmark, at --text-lead. The largest type in the band after the mark. */
   tagline: string;
+  /**
+   * The profiles. These render at the foot of the directory's last column on desktop, and in a
+   * row of their own on mobile — not in this band, despite living on this prop. They belong to
+   * the brand as a fact; where they are drawn is the layout's business.
+   */
   social: SiteFooterSocial[];
+  /** Optional: a footer without a rating to show simply omits it. */
+  rating?: SiteFooterRating;
 };
 
 export type SiteFooterGroup = {
@@ -69,7 +106,10 @@ export type SiteFooterMetaItem = {
 
 export type SiteFooterProps = {
   brand: SiteFooterBrand;
-  /** The directory. Five groups is what the sitemap yields; the layout takes any number. */
+  /**
+   * The directory. Six groups is what the sitemap yields; the layout takes any number, but six
+   * is what the lg track count is drawn for and a seventh would wrap to a second row.
+   */
   groups: SiteFooterGroup[];
   /** The closing action. Solid, primary, lg — the last thing in the band that is not chrome. */
   cta: SiteFooterLink;
