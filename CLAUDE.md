@@ -13,7 +13,7 @@ app  →  templates  →  patterns  →  components  →  lib / styles
 |---|---|---|
 | — | `src/app/**` | routes. Composition only; read content, pass props |
 | 3 | `src/templates/**` | whole page-type layouts (article shape, service-page shape) |
-| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`, `EnquiryForm` and `ListCard` today; `BlockCard` and `ContentSection` next |
+| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`, `EnquiryForm`, `ListCard` and `BlockCard` today; `ContentSection` next |
 | 1 | `src/components/**` | primitives, controls and marks — `Section`, `Layout`, `Cluster`, `Button`, `Icon`, `Logo`, `Prose` |
 | — | `src/content/**` | the CMS seam. Imported by pages and nothing else |
 | — | `src/lib/**`, `src/styles/**` | leaves. Import nothing above them |
@@ -273,10 +273,11 @@ is the more valuable outcome, and it is the one the last codebase never reached 
    **The request half is a file, and it is ready to paste.** `docs/briefs/<NN>-<component>.md` is a
    complete document per component — this prose plus that component's filled `BRIEF` block. The
    designer opens one file, selects all, pastes. There is nothing to assemble and no second document.
-   Eight of the eighteen are pasteable. Of the other ten, five (`01`–`04`, `18`) carry no `BRIEF`
+   Seven of the eighteen are pasteable. Of the other eleven, five (`01`–`04`, `18`) carry no `BRIEF`
    block on purpose — four are answered by code that already ships and one is parked on content
-   work — and five (`05`, `06`, `08`, `09`, `11`) kept their block but are now answered by shipped
-   code too: `PageHero`, `Breadcrumbs`, `CtaSection`, `EnquiryForm` and `ListCard`. Their Status
+   work — and six (`05`, `06`, `08`, `09`, `11`, `12`) kept their block but are now answered by
+   shipped code too: `PageHero`, `Breadcrumbs`, `CtaSection`, `EnquiryForm`, `ListCard` and
+   `BlockCard`. Their Status
    cells say so; the block is left in place as the record of what was asked for.
    `docs/briefs/README.md` indexes them and gives the order.
 

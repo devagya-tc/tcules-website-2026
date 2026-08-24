@@ -31,8 +31,9 @@
  * smallest thing in this tier. It owns no band, takes no `surface`, paints no ground, and renders a
  * bare <li> — the list element belongs to the caller, as a Layout with rowGap="none", because the
  * row finishes itself with its own block-end rule and a gap would break the ladder. It is a pattern
- * for the usual two reasons (it consumes a content shape, and it arranges with Cluster and Layout),
- * and it is deliberately NOT the filled object: BlockCard is that, and is still to be built.
+ * for the usual two reasons (it consumes a content shape, and it arranges with Cluster and Layout).
+ * BlockCard is its bounded sibling: an edge-defined TILE that fills a parent-owned grid track. It
+ * still paints no ground; the complete four-sided edge, media scale and h4 title make the object.
  */
 export { SiteNav } from './SiteNav';
 export type {
@@ -69,6 +70,9 @@ export type {
   ListCardArrangement,
   ListCardTitleElement,
 } from './ListCard';
+
+export { BlockCard } from './BlockCard';
+export type { BlockCardProps, BlockCardMedia, BlockCardTitleElement } from './BlockCard';
 
 export { PageHero } from './PageHero';
 export type {

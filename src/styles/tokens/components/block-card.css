@@ -1,0 +1,82 @@
+/* ══ Component layer — BlockCard ═════════════════════════════════════════════════
+   Tier 2. One edge-bounded tile with an optional media fill and optional whole-card link.
+
+   Naming: --bcrd-{part}-{role}-{state}
+     parts: title | body | media | link | edge | ring | image
+     states: rest (no suffix) | hover | pressed
+
+   There is no background or ground token: BlockCard is bounded by its four-sided edge and keeps
+   the nearest Section visible through it. Every surface block redeclares every colour token so a
+   nested surface cannot inherit an outer card palette. */
+
+:root {
+  --bcrd-title-text: var(--text-h4);
+  --bcrd-title-tracking: var(--text-h4-tracking);
+  --bcrd-body-text: var(--text-body);
+  --bcrd-media-ratio: 3 / 2;
+  --bcrd-edge-width: var(--border-width-hairline);
+  --bcrd-edge-width-pressed: var(--border-width-2);
+  --bcrd-radius: var(--radius-0);
+  --bcrd-shadow: var(--shadow-none);
+  --bcrd-ring-width: var(--focus-ring-width);
+  --bcrd-ring-offset: var(--focus-ring-offset);
+  --bcrd-transition-duration: var(--duration-fast);
+  --bcrd-transition-easing: var(--easing-standard);
+}
+
+/* Paper: static title/icon use neutral-900 and body drops to 700. Linked currentColor runs through
+   Brandeis 500 → 600 → 700 above the neutral-300 decorative edge. */
+:root,
+[data-surface='paper'] {
+  --bcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --bcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --bcrd-media-ink: var(--color-neutral-900); /* 14.62:1 */
+  --bcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --bcrd-link-ink-hover: var(--color-brandeis-600); /* 7.52:1 */
+  --bcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
+  --bcrd-edge-ink: var(--color-neutral-300); /* decoration */
+  --bcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
+  --bcrd-ring-gap-color: var(--color-paper);
+}
+
+/* Tint: the light-surface text and action ramps still clear their floors; only the quiet edge and
+   focus gap step to the deeper surface values. */
+[data-surface='tint'] {
+  --bcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --bcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
+  --bcrd-media-ink: var(--color-neutral-900); /* 13.06:1 */
+  --bcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --bcrd-link-ink-hover: var(--color-brandeis-600); /* 6.72:1 */
+  --bcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
+  --bcrd-edge-ink: var(--color-neutral-400); /* decoration */
+  --bcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
+  --bcrd-ring-gap-color: var(--color-paper-deep);
+}
+
+/* Ink: static title/icon invert to white and body to neutral-300. The linked ramp lifts to
+   Brandeis 300 → 100 → 50 so all three states remain distinct and legible. */
+[data-surface='ink'] {
+  --bcrd-title-ink: var(--color-white); /* 17.26:1 */
+  --bcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --bcrd-media-ink: var(--color-white); /* 17.26:1 */
+  --bcrd-link-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --bcrd-link-ink-hover: var(--color-brandeis-100); /* 13.61:1 */
+  --bcrd-link-ink-pressed: var(--color-brandeis-50); /* 15.44:1 */
+  --bcrd-edge-ink: var(--color-neutral-700); /* decoration */
+  --bcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
+  --bcrd-ring-gap-color: var(--color-neutral-950);
+}
+
+/* Blue: white and the light Brandeis end are the only AA text choices. The paired focus gap is the
+   Section's actual Brandeis-500 ground, so the white outer ring is measured against what it frames. */
+[data-surface='blue'] {
+  --bcrd-title-ink: var(--color-white); /* 6.23:1 */
+  --bcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --bcrd-media-ink: var(--color-white); /* 6.23:1 */
+  --bcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --bcrd-link-ink-hover: var(--color-white); /* 6.23:1 */
+  --bcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
+  --bcrd-edge-ink: var(--color-brandeis-300); /* decoration */
+  --bcrd-ring-color: var(--color-white); /* 6.23:1 against gap */
+  --bcrd-ring-gap-color: var(--color-brandeis-500);
+}

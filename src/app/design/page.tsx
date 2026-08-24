@@ -83,6 +83,11 @@ const SPECIMENS = [
         note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces',
       },
       {
+        href: '/design/block-card',
+        name: 'BlockCard',
+        note: 'the bounded tile — 3 media fills, responsive grids, linked states, 4 surfaces',
+      },
+      {
         href: '/design/page-hero',
         name: 'PageHero',
         note: 'the page opening — slot ladder, paragraph ladder, byline shapes, 4 surfaces, its own band',
