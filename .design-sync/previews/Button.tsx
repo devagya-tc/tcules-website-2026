@@ -57,15 +57,34 @@ export function WithIcons() {
         Mark reviewed
       </Button>
       <Button iconOnly icon={<Icon name="copy" />} aria-label="Copy link" />
-      <Button iconOnly emphasis="ghost" tone="neutral" icon={<Icon name="close" />} aria-label="Dismiss" />
+      <Button
+        iconOnly
+        emphasis="ghost"
+        tone="neutral"
+        icon={<Icon name="close" />}
+        aria-label="Dismiss"
+      />
     </Cluster>
   );
 }
 
 /**
- * The two states a caller holds. `active` is the held second step — a selected filter or the
- * current nav item; `disabled` leaves the tab order. Hover, press and focus are the
- * stylesheet's business and take no props, so they cannot be shown statically.
+ * The THREE states a caller holds. Hover, press and focus are the stylesheet's business, take no
+ * props, and cannot be shown statically — these are the three that application state owns.
+ *
+ *   `active`    the held second step: a selected filter, the current nav item, an open panel. It
+ *               reads the same value a press reads, so pressing a stateful control previews the
+ *               state it is about to take. A call to action never enters it.
+ *   `busy`      an action in progress. Keeps the control FOCUSABLE and keeps its label, emits
+ *               `aria-busy`, and suppresses pointer states.
+ *   `disabled`  unavailable. Leaves the tab order, answers nothing, and uses its own tokens
+ *               rather than opacity — unavailable should look unavailable.
+ *
+ * **`busy` and `disabled` are mutually exclusive in the type, and that is the important part.** A
+ * button mid-request is not unavailable: disabling it drops focus on submit, which loses the
+ * keyboard user's place and silently discards a screen reader's context. So a submit button that
+ * is working is `busy`, never `disabled` with the label changed to "Submitting…" — which is what
+ * this preview showed before `busy` existed.
  */
 export function States() {
   return (
@@ -82,7 +101,16 @@ export function States() {
         </Button>
       </Cluster>
       <Cluster colGap="tight" rowGap="tight">
-        <Button disabled>Submitting…</Button>
+        <Button busy>Send enquiry</Button>
+        <Button emphasis="ghost" tone="neutral" busy>
+          Exporting
+        </Button>
+        <Button emphasis="link" tone="primary" busy>
+          Generating report
+        </Button>
+      </Cluster>
+      <Cluster colGap="tight" rowGap="tight">
+        <Button disabled>Send enquiry</Button>
         <Button emphasis="ghost" tone="neutral" disabled>
           Export unavailable
         </Button>

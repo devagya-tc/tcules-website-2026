@@ -4,6 +4,12 @@ import { Button, Cluster, Layout, Section } from 'tcules-website-2026';
  * The four grounds. Surface is declared once on the band and everything inside reads it — the
  * buttons below are the same markup in all four cells and are re-coloured by the token layer,
  * not by a prop.
+ *
+ * Two props exist that are not design decisions and are documented here so nobody reaches for the
+ * wrong one: `aria-labelledby` names a band that is exposed as a labelled region, pointing at the
+ * id of the heading inside it — use it when a band is genuinely a region a screen reader should be
+ * able to jump to, not on every section. `data-arrangement` is a test hook for rendered-output
+ * acceptance checks and carries no visual meaning at all; do not compose with it.
  */
 export function Surfaces() {
   return (
@@ -71,7 +77,10 @@ export function ContentBand() {
         </Layout>
         <Layout rowGap="text">
           <h4>What you get</h4>
-          <p>A token layer, three layout primitives, and a component set with a sandbox route each.</p>
+          <p>
+            A token layer, three layout primitives, and a component set with a sandbox route
+            each.
+          </p>
         </Layout>
       </Layout>
     </Section>

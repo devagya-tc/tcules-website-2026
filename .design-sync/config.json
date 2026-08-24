@@ -23,6 +23,7 @@
     "ListCard": "src/patterns/ListCard/ListCard.tsx",
     "BlockCard": "src/patterns/BlockCard/BlockCard.tsx",
     "Accordion": "src/patterns/Accordion/Accordion.tsx",
+    "Proof": "src/patterns/Proof/Proof.tsx",
     "Figure": "src/patterns/Figure/Figure.tsx",
     "PageHero": "src/patterns/PageHero/PageHero.tsx",
     "SiteNav": "src/patterns/SiteNav/SiteNav.tsx",
@@ -80,6 +81,10 @@
       "viewport": "1280x900"
     },
     "Accordion": {
+      "cardMode": "column",
+      "viewport": "1280x820"
+    },
+    "Proof": {
       "cardMode": "column",
       "viewport": "1280x820"
     },

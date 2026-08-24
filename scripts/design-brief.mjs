@@ -435,6 +435,35 @@ function glyphDrift() {
 
 /* ── --check: every token the docs name must resolve ─────────────────────────── */
 
+/**
+ * docs/vocabulary.md must equal what --vocabulary prints right now.
+ *
+ * That file is the ONE copy of the token vocabulary Claude Design reads, as a guidelines document
+ * in the project. Nothing checked it until this function existed, and it rotted twice: the footer
+ * rebuild added --measure-lede — a whole new usage token — and four --foot-* values without
+ * regenerating it, so for a while the vocabulary a designer worked from did not contain a name the
+ * repo had. That is the exact failure the generated brief exists to prevent, arriving through the
+ * one door nothing was watching.
+ *
+ * A byte comparison rather than a token-by-token one, deliberately: the whole point is that this
+ * file is generated, so any difference at all means somebody edited it by hand or forgot to re-run
+ * the generator, and both need the same fix. The script's own comment used to say briefs-build.mjs
+ * wrote and byte-checked it; that script is not in the repo, which is how the drift went unnoticed.
+ *
+ * The fix is always `npm run vocabulary`, and then pushing the file to the Claude Design project —
+ * that second half is still manual and no check can see it.
+ */
+function vocabularyDrift() {
+  const path = 'docs/vocabulary.md';
+  if (!existsSync(path)) return [`${path} is missing — run \`npm run vocabulary\``];
+  const expected = `${VOCAB_HEADER}\n${vocabulary()}\n`;
+  if (read(path) === expected) return [];
+  return [
+    `${path} is stale — it no longer matches the token layer. Run \`npm run vocabulary\`, ` +
+      `then push the file to the Claude Design project as its guidelines document.`,
+  ];
+}
+
 function check() {
   const docs = [
     ...globSync('docs/**/*.md'),
@@ -490,6 +519,7 @@ function check() {
     });
   }
   problems.push(...glyphDrift());
+  problems.push(...vocabularyDrift());
 
   console.log(
     `design:brief --check — ${docs.length} docs, ${known.size} known tokens, ` +
@@ -535,8 +565,12 @@ if (process.argv.includes('--check')) {
   /* The vocabulary block on its own, for delivery to Claude Design as a GUIDELINES document rather
      than inside a pasted brief. One copy in the project beats a copy inside every brief: the block
      is 81% of the canonical brief's length, so duplicating it per component was ~5,400 lines of the
-     same ramp tables. Written to docs/vocabulary.md by scripts/briefs-build.mjs, which is also what
-     byte-checks it against the token layer. */
+     same ramp tables.
+
+     This prints to stdout; `npm run vocabulary` is what writes docs/vocabulary.md, and --check
+     byte-compares the committed file against this output (see vocabularyDrift). An earlier version
+     of this comment credited scripts/briefs-build.mjs with both jobs. That script is not in the
+     repo — which is how the file went stale twice without anything noticing. */
   process.stdout.write(`${VOCAB_HEADER}\n${vocabulary()}\n`);
 } else {
   if (!existsSync(PROMPT)) {
