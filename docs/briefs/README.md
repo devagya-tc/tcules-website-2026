@@ -18,7 +18,7 @@ regenerated and pushed again.**
 
 ## The eighteen
 
-Seven are pasteable. Eleven are not: ten describe components that **already ship** — do not specify
+Six are pasteable. Twelve are not: eleven describe components that **already ship** — do not specify
 them, compose from the library instead — and one is blocked on content. Brief 09 shipped **two**
 components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also absorbed
 SiteFooter's private newsletter field tokens. Each says so in its Status
@@ -44,15 +44,15 @@ move its row to "ships today" in the same change that merges it.
 | 11 | [List Card](11-list-card.md) | `ListCard` · 2 · `--lcrd-` | 53 routes · 70 sections · 5 | **ships today — do not specify** |
 | 12 | [Block Card](12-block-card.md) | `BlockCard` · 2 · `--bcrd-` | 38 routes · 78 clusters · 2 | **ships today — do not specify** |
 | 13 | [Figure](13-figure.md) | `Figure` · 1 · `--fig-` | 0 images · 21 captions written | paste — run it last |
-| 14 | [Accordion](14-accordion.md) | `Accordion` · 1 · `--acc-` | 21 routes · 22 sections · 1 | paste |
+| 14 | [Accordion](14-accordion.md) | `Accordion` · 2 · `--acc-` | 21 routes · 22 sections · 1 | **ships today — do not specify** |
 | 15 | [Testimonial](15-testimonial.md) | `Testimonial` · 2 · `--tstm-` | 6 routes · 2 | paste — with 17 |
 | 16 | [Callout](16-callout.md) | `Callout` · 1 · `--call-` | 8 routes · 10 instances · 1 | paste |
 | 17 | [Stat](17-stat.md) | `Stat` · 2 · `--stat-` | 1 route resolved, 3 claimed · 2 | paste — with 15 |
 | 18 | [Filters](18-filters.md) | `Filters` · 2 · unassigned | none | **blocked on content — do not specify** |
 
-Every proposed prefix was checked against the fifteen already taken — `--bcrd-`, `--btn-`,
-`--crumb-`, `--cta-`, `--enq-`, `--foot-`, `--hero-`, `--icn-`, `--inp-`, `--lay-`, `--lcrd-`,
-`--logo-`, `--nav-`, `--prose-`, `--sec-`. That list is generated into `docs/vocabulary.md`; read it there
+Every proposed prefix was checked against the sixteen already taken — `--acc-`, `--bcrd-`,
+`--btn-`, `--crumb-`, `--cta-`, `--enq-`, `--foot-`, `--hero-`, `--icn-`, `--inp-`, `--lay-`,
+`--lcrd-`, `--logo-`, `--nav-`, `--prose-`, `--sec-`. That list is generated into `docs/vocabulary.md`; read it there
 rather than trusting this sentence, which has been stale twice.
 
 ## The order to run them in
@@ -61,8 +61,13 @@ Dependency order, plus what unblocks the most pages.
 
 1. **Page Hero** · 05 — 129 routes, and no page renders without it.
 2. **Content Section** · 07 — 738 instances. Everything below is a child of it.
-3. **Accordion** · 14 and **Table** · 10 — one rendering each, and Table may turn out to be a
-   `Prose` change rather than a component.
+3. **Table** · 10 — one rendering, and it may turn out to be a `Prose` change rather than a
+   component.
+
+*(Accordion · 14 was the other half of this step and now ships — `src/patterns/Accordion/`, spec at
+`docs/specs/Accordion.md`, specimen at `/design/accordion`. Do not specify it again; compose against
+the shipped component. Note it landed as a tier-2 **pattern**, not the tier-1 primitive this table
+proposed: it composes Layout, Cluster, Icon and Prose, and a primitive may not do that.)*
 
 *(Breadcrumbs · 06 was third on this list and now ships — `src/patterns/Breadcrumbs/`, spec at
 `docs/specs/Breadcrumbs.md`, specimen at `/design/breadcrumbs`. Do not specify it again; compose

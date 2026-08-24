@@ -175,7 +175,12 @@ outer ink value may leak through an omitted declaration.
 - Focus: `--acc-ring-width` and `--acc-ring-offset` resolve to the shared focus geometry.
 - Radius: `--acc-radius` resolves to `--radius-0`.
 - Shadow: `--acc-shadow` resolves to `--shadow-none`.
-- Layer: `--acc-layer` resolves to `--z-base`; no item overlaps another.
+- Layer: none. This line specified `--acc-layer` resolving to `--z-base`, and the build did not
+  take it: `--z-base` is 0, no item overlaps another, and the only thing that must paint over a
+  neighbour is the focus ring, which `.trigger:focus-visible` handles with its own
+  `position: relative`. A one-component token renaming a primitive is what CLAUDE.md's token
+  rule 6 deletes, and Breadcrumbs and Figure had already settled it the same way. See
+  `Accordion.module.css`.
 
 ### (c) Optical corrections
 
@@ -381,7 +386,7 @@ so the page does not become one rectangle repeated.
 **None — every value in this spec is an existing token.**
 
 The `--acc-*` component layer maps existing colour ramps, h5/body typography, measures, gap roles,
-icon sizes, hairline, focus geometry, radius, shadow, z-layer, duration and easing into Accordion's
+icon sizes, hairline, focus geometry, radius, shadow, duration and easing into Accordion's
 parts and states. It introduces no primitive, usage token, glyph or motion mechanism.
 
 ## 17 · Open questions

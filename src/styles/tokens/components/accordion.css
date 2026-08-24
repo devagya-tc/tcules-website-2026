@@ -7,13 +7,17 @@
 
    Accordion paints no ground. The answer delegates its entire palette to Prose, and every
    surface block below redeclares every Accordion colour so a nested surface cannot inherit an
-   enclosing set's interaction ground, rule or focus pair. */
+   enclosing set's interaction ground, rule or focus pair.
+
+   There is no layer token. The spec asked for one resolving to --z-base, but --z-base is 0 and
+   nothing in this component stacks — a token whose only reader is one component and whose only
+   job is renaming a primitive is the case CLAUDE.md deletes (--sec-gap aliasing --gap-block).
+   Breadcrumbs and Figure both reached the same answer and recorded it in their modules. */
 
 :root {
   --acc-rule-width: var(--border-width-hairline);
   --acc-radius: var(--radius-0);
   --acc-shadow: var(--shadow-none);
-  --acc-layer: var(--z-base);
   --acc-ring-width: var(--focus-ring-width);
   --acc-ring-offset: var(--focus-ring-offset);
   --acc-transition-duration: var(--duration-fast);
