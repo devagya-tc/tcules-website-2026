@@ -51,6 +51,15 @@ const IMAGE = {
       '<path d="M400 272h1956v1H400zm0 94h1956v1H400zm0 94h1956v1H400z" fill="#e5e1d6"/>' +
       '<path d="M420 302h244v12H420zm324 0h162v12H744zm-324 94h276v12H420zm324 0h202v12H744z" fill="#71706a"/>' +
       '<path d="M420 610h1936v1H420z" fill="#292824"/>' +
+      '<path d="M420 652h188v13H420z" fill="#91908d"/>' +
+      /* Three stat tiles. They fill the band between the table and the charts, which read as a
+         half-empty screenshot without them — and a light, BUSY screenshot is the case the
+         per-surface hairline exists for, so an empty one understates the card. */
+      '<path d="M420 700h620v170H420zm658 0h620v170h-620zm658 0h620v170h-620z" fill="#f8f7f2"/>' +
+      '<path d="M452 744h180v34H452zm658 0h150v34h-150zm658 0h206v34h-206z" fill="#292824"/>' +
+      '<path d="M452 806h300v13H452zm658 0h336v13h-336zm658 0h268v13h-268z" fill="#91908d"/>' +
+      '<path d="M984 730h24v24h-24z" fill="#c3dd2a"/>' +
+      '<path d="M1642 730h24v24h-24zm658 0h24v24h-24z" fill="#0048ff"/>' +
       '<path d="M452 1010h80v230h-80zm140-54h80v284h-80zm140-86h80v370h-80zm140 44h80v326h-80z" fill="#0048ff"/>' +
       '<path d="M1240 956h80v284h-80zm140-38h80v322h-80zm140 60h80v262h-80zm140-98h80v360h-80z" fill="#b8c8ff"/>' +
       '<path d="M420 1256h1936v1H420z" fill="#91908d"/>',
@@ -283,7 +292,13 @@ export function WithImage() {
     component builds the src, so every route embeds on the same host (youtube-nocookie.com, which
     withholds tracking cookies until a visitor presses play) with the same parameters. The frame is
     16/9 because that is YouTube's ratio — it is not applied to images. Autoplay is not in the allow
-    list, and the title is the frame's accessible name, so say what the video is. */
+    list, and the title is the frame's accessible name, so say what the video is.
+
+    THE CARD BELOW SHOWS AN EMPTY OUTLINED BOX, AND THAT IS CORRECT. This preview renders in an
+    isolated frame with no route to youtube-nocookie.com, so the player never loads and what is
+    left is exactly what this component owns: the 16/9 box and the per-surface hairline around it.
+    In the app the same box holds the player. Read the empty card as the geometry, not as a broken
+    component — everything inside the frame belongs to another origin and was never ours to draw. */
 export function WithVideo() {
   return <PageHero title={TITLE} body={[LEAD, SECOND]} eyebrow={EYEBROW} media={VIDEO} />;
 }
