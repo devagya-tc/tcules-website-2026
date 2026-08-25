@@ -55,6 +55,119 @@ export type PageSeo = {
   noindex?: boolean;
 };
 
+export type AuditAction = {
+  label: string;
+  href: string;
+  external: boolean;
+};
+
+export type AuditCard = {
+  title: string;
+  body: string;
+  href?: string;
+};
+
+export type AuditLabelledItem = {
+  title: string;
+  body: string;
+  href?: string;
+};
+
+export type AuditContentColumn = {
+  id: string;
+  eyebrow?: string;
+  heading: string;
+  bodyHtml: string;
+  items: AuditLabelledItem[];
+  links: AuditAction[];
+};
+
+export type AuditBlock =
+  | { id: string; type: 'rich-text'; html: string }
+  | { id: string; type: 'card-grid'; columns: 1 | 2 | 3 | 4; cards: AuditCard[] }
+  | { id: string; type: 'comparison-cards'; cards: AuditCard[] }
+  | { id: string; type: 'table'; html: string }
+  | {
+      id: string;
+      type: 'quote';
+      quote: { quoteHtml: string; name: string; role: string; company: string };
+      source?: AuditAction;
+    }
+  | { id: string; type: 'callout'; html: string }
+  | {
+      id: string;
+      type: 'labelled-list';
+      displayStyle: string;
+      items: AuditLabelledItem[];
+    }
+  | {
+      id: string;
+      type: 'two-column';
+      left?: AuditContentColumn;
+      right?: AuditContentColumn;
+    }
+  | {
+      id: string;
+      type: 'link-group';
+      heading: string;
+      description?: string;
+      links: AuditLabelledItem[];
+    }
+  | {
+      id: string;
+      type: 'media';
+      image?: { src: string; alt: string; width: number; height: number };
+      caption: string;
+      note?: string;
+    };
+
+export type AuditSection = {
+  id: string;
+  heading?: {
+    text: string;
+    anchorId: string;
+    navigationLabel?: string;
+  };
+  blocks: AuditBlock[];
+};
+
+export type AuditSeo = PageSeo & {
+  robots?: { index: boolean; follow: boolean };
+  structuredData?: Record<string, unknown> | unknown[];
+};
+
+export type AuditPage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  hero: {
+    eyebrow?: string;
+    highlightedText?: string;
+    description: string;
+    tags: string[];
+    actions: AuditAction[];
+  };
+  sections: AuditSection[];
+  faq?: {
+    eyebrow?: string;
+    heading: string;
+    description?: string;
+    items: Array<{ question: string; answerHtml: string }>;
+  };
+  cta?: {
+    eyebrow?: string;
+    heading: string;
+    body: readonly [string] | readonly [string, string];
+    points: Array<{ label: string }>;
+    actions: readonly [AuditAction] | readonly [AuditAction, AuditAction];
+  };
+  seo?: AuditSeo;
+};
+
+export type AuditContentSource = {
+  getAuditPage(slug: string): Promise<AuditPage | null>;
+};
+
 /**
  * The site chrome — the header's and footer's information architecture.
  *

@@ -87,6 +87,11 @@ export const ROUTES = {
 
 export type RouteKey = keyof typeof ROUTES;
 
+/** Build one canonical audit-detail path without duplicating the route family at call sites. */
+export function auditPath(slug: string): string {
+  return `${ROUTES.audits}/${encodeURIComponent(slug)}`;
+}
+
 /**
  * A destination the sitemap does not answer yet.
  *
