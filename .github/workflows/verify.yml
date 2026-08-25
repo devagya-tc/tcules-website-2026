@@ -10,6 +10,15 @@
 # two need a browser build and belong to the person shipping an interactive component; the third
 # writes files, and a formatter that edits code in CI is how a diff stops matching what its author
 # reviewed.
+#
+# It does not need a build to typecheck either, and that is now true rather than assumed. Next 16's
+# route-aware helpers — `PageProps<'/audits/[slug]'>`, `LayoutProps`, `RouteContext` — are GENERATED
+# globals, written into `.next/types` by `next dev`, `next build` or `next typegen`. A `tsc --noEmit`
+# with no `.next` cannot see them, so `main` went red the moment the first typed-route page landed
+# (25 Aug 2026, `src/app/audits/[slug]/page.tsx`): it typechecked on its author's machine, where a
+# dev server had already generated the types, and nowhere else. `npm run typecheck` therefore runs
+# `next typegen` first — half a second, no bundle — which fixes a fresh clone as well as this
+# workflow. Do not "fix" a `Cannot find name 'PageProps'` by hand-writing the params type.
 name: verify
 
 on:

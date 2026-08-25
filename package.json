@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "tokens:check": "node scripts/tokens-check.mjs",
     "specimens:check": "node scripts/specimens-check.mjs",
     "classes:check": "node scripts/classes-check.mjs",
