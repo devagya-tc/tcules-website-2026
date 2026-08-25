@@ -1,4 +1,4 @@
-import { Button, Icon, Layout, type IconName } from '@/components';
+import { Button, Cluster, Icon, Layout, type IconName } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './BlockCard.module.css';
@@ -182,7 +182,14 @@ export function BlockCard({
         <Title className={styles.title}>{title}</Title>
         {hasBody ? <p className={styles.body}>{body}</p> : null}
       </Layout>
-      {cta}
+      {/* The Cluster is what keeps the cta at the copy's inline start. A grid item is blockified,
+          so the Button's `inline-flex` becomes `flex` and the content Layout's `justify-items:
+          stretch` gave it the whole track — with Button's own centred label, that rendered the cta
+          indented to the middle of every card, against § 7's "inline start, aligned with the copy
+          above it". A Cluster is the inline axis and starts its items, so the control sits at its
+          intrinsic width where the eyebrow, title and body begin. No gap is stated because there is
+          one child. */}
+      {cta ? <Cluster>{cta}</Cluster> : null}
     </Layout>
   );
 

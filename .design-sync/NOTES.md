@@ -120,6 +120,66 @@ the Icon and Logo rows to zero spacing. **`Cluster` caps at `block`** — `gutte
   `src/styles/tokens/fonts.css`: the same `@import` is dead in the Next build (it lands mid-stylesheet
   and is dropped), which is why the app uses a `<link>` in `layout.tsx` instead.
 
+## A CSS-ONLY change is invisible to the diff, and that is the trap this file needed most
+
+25 Aug 2026, the mono-uppercase sync. The change was 27 `text-transform` declarations across
+fourteen stylesheets plus one usage token — no component's `.tsx`, `.d.ts` or preview moved. The
+verdict read **19 unchanged, 1 changed** (the changed one was BlockCard, for unrelated work), and the
+capture stage skipped with `empty_worklist`. That is all correct and all misleading:
+
+- `sourceKeys` and `renderHashes` are keyed on component sources and rendered DOM. A stylesheet
+  changes neither, so a change that is ENTIRELY visual reports as no change at all.
+- What carries it is `styleSha` → `upload.styling` and `upload.bundle`. The cards in the design
+  project render live against `_ds_bundle.css`, so uploading the bundle IS the sync. Nothing is
+  missing from the library.
+- But **no sheet is produced**, so nobody sees the change. Run the capture by hand for the
+  components the change actually touches:
+
+      node .ds-sync/package-capture.mjs --out ./ds-bundle \
+        --spot-check-components EnquiryForm,SiteFooter,Proof,ListCard,CtaSection,Button,PageHero,Prose
+
+  `--spot-check-components` keeps the recorded grades and re-renders the sheets so you can confirm
+  they still hold. It is the only way to review a token-layer change on this pipeline.
+
+**And a recorded grade can be falsified by a file the component does not own.** EnquiryForm's OnTint
+note said "the labels hold their mono treatment against the deeper ground". After the rule the labels
+are sans, and the note was the only place in the repo still claiming otherwise — no check could see
+it, because grades live in `.cache/` and the component's own files never moved. When a token-layer
+change lands, grep the grade notes for what it falsifies before uploading; the verdicts stayed
+`good`, the notes did not.
+
+## Preview doc comments are the first thing a redesign makes false
+
+The same run carried the Cards 1a redesign of BlockCard, whose preview still opened "one
+edge-bounded tile … bounded on four sides by one hairline edge" and described an arrow cue and an
+inner inset — all deleted by the redesign. **Those doc comments are what Claude Design shows a
+designer**, so uploading them would have taught the library a card that no longer exists: the same
+failure as Callout's spec arriving before Callout did, from the other direction. Rewriting the
+preview also re-scoped the card: three new stories (`WithEyebrow`, `Horizontal`, and `EqualRows`
+re-argued for a borderless card) and the build printed `(grade cleared for BlockCard — contract
+changed; re-grade from the fresh sheet)`, which is the pipeline doing the right thing unprompted.
+
+Two mechanics learned while sizing it:
+
+- **`node package-build.mjs` alone DELETES `.render-check.json`** — it is written by the validate
+  stage, so a bare build leaves you reading a stale file or none at all. Re-measure `maxHeight`
+  through the full `resync.mjs`, never through the build alone.
+- The first Horizontal story stacked three cards and took the sheet's tallest cell to **1291**
+  against a 1280x900 card. Trimming it to two — left then right is the whole of what `imageSide`
+  does — brought it to **845**. Prefer trimming the story to raising the viewport: the card is a
+  review surface, and NOTES' own rule about a card three times its content cuts both ways.
+
+## The capture sheets review the APP, not only the library
+
+Worth saying plainly, because it is the highest-value thing this pipeline did on 25 Aug: the
+BlockCard sheet showed every cta indented to the middle of its card. Cause — a grid item is
+blockified, so the cta `Button`'s `inline-flex` became `flex`, the content `Layout`'s
+`justify-items: stretch` gave it the whole track, and Button's own centred label did the rest. The
+spec says "inline start, aligned with the copy above it". Nothing in `npm run verify` can see that,
+the specimen route had the same defect, and it took a rendered sheet to notice. Fix was a `Cluster`
+around the cta — the inline-axis primitive starts its items — and the re-captured sheet shows the
+eyebrow, title, body and cta sharing one inline start.
+
 ## Validator warnings after upload — both are no-ops in this repo
 
 Claude Design's validator reports two formatting warnings on this design system, with fixes to make
