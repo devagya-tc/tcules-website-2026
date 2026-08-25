@@ -35,7 +35,12 @@
    across seven directions that each ran a different mono and the 8/4/4 rule was measured
    against Geist Mono's bearings. This repo settled on one mono, and --text-ui composites it, so
    consuming the usage token IS the pinned face here — with the ladder's line height rather than
-   the sheet's 1, which changes nothing: the height is fixed and the label is flex-centred. */
+   the sheet's 1, which changes nothing: the height is fixed and the label is flex-centred.
+
+   The case comes with the face. --text-mono-case is the system's one answer for mono, so this
+   control no longer decides its own uppercase (tokens/primitives.css § Type · case); it renders it
+   in CSS rather than taking it from the caller, which is what keeps a label's accessible name in
+   the capitalisation somebody authored. */
 .button {
   display: inline-flex;
   align-items: center;
@@ -48,7 +53,7 @@
   background: transparent;
   font: var(--btn-text-md);
   letter-spacing: var(--btn-text-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;

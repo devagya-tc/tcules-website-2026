@@ -23,9 +23,11 @@
    No z-index. Nothing in this component stacks: --z-base is 0 and the hit extension is inset to
    its own anchor's inline edges, so it cannot reach over the crumb beside it.
 
-   No text-transform. Labels render verbatim from frontmatter — uppercasing would mangle "AI
-   Product UX", it would cost a reader the word shapes they navigate by, and it is precisely what
-   keeps the trail distinguishable from a hero eyebrow set in mono below it.
+   No text-transform, and the mono rule is why it needs no exception. Mono is always uppercase in
+   this system (tokens/primitives.css § Type · case) — the trail is a SANS role, so the rule does
+   not reach it. Labels render verbatim from frontmatter: uppercasing would mangle "AI Product UX",
+   it would cost a reader the word shapes they navigate by, and it is precisely what keeps the trail
+   distinguishable from a hero eyebrow set in mono below it.
 
    ── Rule order is load-bearing ──────────────────────────────────────────────────
    Hover is declared BEFORE pressed, so pointer-down wins while the pointer is also hovering.

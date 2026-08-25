@@ -18,9 +18,14 @@
   padding-block-start: var(--gap-text);
 }
 
+/* The cell label. Mono, so it takes the mono case (tokens/primitives.css § Type · case) rather
+   than leaving each route to add a transform beside it — the harness that labels the proving ground
+   should render the system's rule, not a second version of it. Descriptive prose belongs to
+   .specNote below, which is sans and stays verbatim. */
 .specTitle {
   font: var(--text-ui);
   letter-spacing: var(--text-ui-tracking);
+  text-transform: var(--text-mono-case);
   color: var(--sec-ink-muted);
 }
 
@@ -82,7 +87,7 @@
 .eyebrow {
   font: var(--text-eyebrow);
   letter-spacing: var(--text-eyebrow-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
   color: var(--sec-ink-label);
 }
 

@@ -216,7 +216,11 @@ heading proves the question was considered; a missing one proves it was not.
     sentence in the required form below. Then radius, border width, shadow, z-layer
 8.  Typography — part → --text-* role → its tracking companion, or "none — this role has no
     tracking companion". Measure for anything carrying running text. Case as a decision, with
-    the example copy written in sentence case
+    the example copy written in sentence case. Case is only a decision where a sans role is
+    involved: MONO IS ALWAYS UPPERCASE and takes --text-mono-case, so a part on a mono role is
+    settled by the vocabulary and a part that must read in sentence case is asking for a sans
+    role. Write the example copy in the capitalisation a caller would pass either way — the
+    transform is presentation, never the string
 9.  Responsive — what changes at 1023 and at 767, and what must NOT. Restate that the gap
     scale does not shift responsively. Touch targets: 44px minimum, reached either by stepping
     the size up or by extending the hit area past the box so the row does not move — pick one
@@ -334,6 +338,8 @@ NAMES  (this is the section that matters most)
 [ ] Zero hex codes / rgb() / hsl() / colour words outside the contrast measurements.
 [ ] Zero Tailwind class names. Zero CSS declarations, selectors or @media blocks.
 [ ] Every --text-* role I paired with a tracking companion is on the list that has one.
+[ ] Every mono part takes --text-mono-case, and no part is described as mono in sentence case.
+    Any part whose copy must stay sentence case is on a sans role.
 [ ] Every layout distance is a gap-scale role name, referred to by name.
 [ ] Every space-ramp reach carries its justification sentence in the required form. Count: ____ .
 [ ] Every literal pixel value is a component size or a container cap, t-shirt named, and says

@@ -379,6 +379,47 @@
   }
 }
 
+/* ── Type · case ──────────────────────────────────────────────────────────────
+   MONO IS ALWAYS UPPERCASE, and it is uppercase in PRESENTATION ONLY.
+
+   Mono is this system's label voice — chrome, eyebrows, keys, control labels,
+   stats — and it is cut for capitals: --letter-spacing-ui, -micro and -eyebrow
+   open the tracking by 0.08–0.12em, which is a correction for the side bearings
+   of capitals. Set lower-case, a mono role at that tracking reads as
+   letter-spaced body text rather than as a label, so the case is not a taste
+   applied per component. It is part of the role.
+
+   It could not live inside the composite: `font:` carries a weight, a size, a
+   ratio and a family, and no text-transform — the same reason tracking is a
+   companion token rather than part of the shorthand.
+
+   ONE token, not a -case companion per role. Tracking is per-role because the
+   correction genuinely differs at 11, 12 and 13px; case does not differ, so six
+   names all reading `uppercase` would be six names for one decision — the
+   --sec-gap mistake, in the layer that mistake was deleted from. Every consumer
+   reads this one name, which is also what makes the decision reversible in one
+   declaration rather than in fifteen stylesheets.
+
+   IN PRESENTATION ONLY, and that half is load-bearing. The transform is applied
+   in CSS, never in the data and never by a caller: a CMS field, a prop and an
+   accessible name all keep the capitalisation somebody authored, so a screen
+   reader announces "Read more" rather than spelling out an acronym, and copy
+   stays editable as prose. A component that wants uppercase writes
+   `text-transform: var(--text-mono-case)` beside its `font:` — it never ships
+   "READ MORE" as a string.
+
+   ONE EXEMPTION: --text-code. Mono there is not a label, it is content, and case
+   is semantic in code — `Section` and `SECTION` are different identifiers. So the
+   code role carries no transform, in Prose or anywhere else, and that is the only
+   mono rule in the system that does not read this token.
+
+   Numerals have no case, so on --text-stat the transform is a no-op for the digits
+   and normalises an alphabetic suffix — "12k" sets as "12K", which is the same
+   voice the unit beside it is already in.                                      */
+:root {
+  --text-mono-case: uppercase;
+}
+
 /* ── Opacity ──────────────────────────────────────────────────────────────────
    One step, and it exists for one job: a mark used as ground rather than as a
    mark. At .06 a wordmark is a texture in the surface — legible as a shape when

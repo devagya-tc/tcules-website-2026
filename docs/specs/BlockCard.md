@@ -55,7 +55,7 @@ full content width without making the fourth an orphan.
 | `media`   | no                | One slot filled by a decorative `Icon` or one native image            | Static media ink and the image crop; never a second action        |
 | `content` | yes               | The stack containing media icon, copy and optional cta                | The block-axis relationships between its children. No inset       |
 | `copy`    | yes               | The tight group containing `eyebrow`, `title` and `body`              | No colour or distance outside its `Layout`                        |
-| `eyebrow` | no                | One `span` above the title; whitespace-only content emits no element  | Eyebrow ink, the eyebrow type role and its uppercase transform    |
+| `eyebrow` | no                | One `span` above the title; whitespace-only content emits no element  | Eyebrow ink and the eyebrow type role; the case comes from `--text-mono-case` |
 | `title`   | yes               | An `h3` or `h4`, selected by `titleAs`                                | `--bcrd-title-ink` and `--measure-title`, linked or not           |
 | `body`    | yes in the API    | One paragraph; whitespace-only content emits no element               | Body ink and `--measure-body`                                     |
 | `cta`     | linked cards only | One link `Button` — `emphasis="link"`, `as="span"`, trailing `arrow-right` | Nothing. `Button` owns its type, case, seam, glyph size, colour and underline |
@@ -372,9 +372,10 @@ without relying on a fill, and it is what keeps the horizontal orientation from 
 Title and body render verbatim in sentence case with no text transform. Examples: “When this is
 useful” and “Map the decision, evidence and owner before work begins.”
 
-The eyebrow is the one uppercased part, and the transform belongs to the component rather than to
-`--text-eyebrow`: the composite is shared, and `SiteFooter`'s `.label` and `SiteNav`'s `.blockLabel`
-make the same division. The caller passes ordinary capitalisation — “Case study”, not “CASE STUDY”
+The eyebrow is the one uppercased part the card draws itself, and the transform belongs to the ROLE
+rather than to the component: mono is always uppercase system-wide, so the rule reads
+`text-transform: var(--text-mono-case)`, exactly as `SiteFooter`'s `.label` and `SiteNav`'s
+`.blockLabel` do (`tokens/primitives.css` § Type · case). The caller passes ordinary capitalisation — “Case study”, not “CASE STUDY”
 — so the string stays readable in a CMS field and the rendering stays one decision.
 
 The cta is **uppercased by `Button`**, not by this component and not by the caller. Every control on

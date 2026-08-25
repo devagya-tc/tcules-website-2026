@@ -243,10 +243,14 @@ The component aliases the first three roles through `--lcrd-title-text`,
 `--lcrd-title-tracking`, `--lcrd-body-text`, `--lcrd-marker-text` and
 `--lcrd-marker-tracking`. `titleAs` changes element semantics, never the visual role.
 
-All copy renders verbatim in sentence case. There is no text transform. Example: “Recruit
-participants with the right product context” and “Define who needs to be represented before the
-sample is recruited.” Numbers render with at least two digits (`01`–`12`) and are never bullet
-characters.
+All copy renders verbatim in sentence case: the title and body are sans, so the mono rule does not
+reach them. Example: “Recruit participants with the right product context” and “Define who needs to
+be represented before the sample is recruited.” Numbers render with at least two digits (`01`–`12`)
+and are never bullet characters — the marker is the file's one mono part and states
+`text-transform: var(--text-mono-case)` beside its font, which a numeral has nothing to do with. It
+is stated so that every mono rule in the system looks the same and no omission has to be read as a
+decision. **Amended 25 Aug 2026:** this paragraph read "There is no text transform" before mono's
+case moved to the token layer.
 
 ## 9 · Responsive
 

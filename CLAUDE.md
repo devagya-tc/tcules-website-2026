@@ -152,6 +152,24 @@ Nine steps, named for what they separate:
    same edit. Letter-spacing is the deliberate exception: tracking corrects an optical error at
    a size rather than marking a step, and one correction serves several roles, which is why h2,
    h3 and h4 share `--letter-spacing-title{,-tight,-fine}`.
+
+   **Mono is always uppercase, and uppercase in presentation only.** Mono is the label voice —
+   chrome, eyebrows, keys, control labels, stats — and its tracking is opened 0.08–0.12em as a
+   correction for the side bearings of capitals, so set lower-case a mono role reads as
+   letter-spaced body text rather than as a label. The case therefore belongs to the role, not to
+   whichever component consumed it: every rule that sets a mono role writes
+   `text-transform: var(--text-mono-case)` beside its `font:`, for the same reason tracking is a
+   companion — `font:` carries no transform. One token rather than a `-case` per role, because
+   tracking genuinely differs at 11, 12 and 13px and case does not; six names for one decision is
+   the `--sec-gap` mistake.
+
+   *In presentation only* is the load-bearing half. The transform is CSS and never the string: a
+   prop, a CMS field and an `aria-label` all keep the capitalisation somebody authored, so pass
+   "Read more", not "READ MORE". **A label that must stay sentence case is not a mono label —
+   give it a sans role.** That is the resolution rather than an exception, and the system has
+   exactly one exception: `--text-code`, where mono is content rather than a label and case is
+   semantic (`Section` and `SECTION` are different identifiers). A numeral has no case, so on
+   `--text-stat` the transform is a no-op on digits and normalises an alphabetic suffix.
 9. **Adding a component layer:** copy the shape of `tokens/components/button.css` — geometry in
    `:root`, then one block per surface, **each declaring every surface-dependent token** (see rule
    2; deltas-only fails the build). Name the file for the component, not the abbreviation

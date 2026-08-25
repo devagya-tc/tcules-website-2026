@@ -489,7 +489,12 @@ and the `.sm` / `.lg` rules do not restate `letter-spacing` — the `font` short
 it, so all three sizes track alike from the base rule. That is the assertion the single token
 makes.
 
-**The uppercase decision.** `text-transform: uppercase` is applied by the stylesheet, never by the
+**The uppercase decision. Amended 25 Aug 2026 — it is no longer this component's decision.** Mono
+is always uppercase system-wide, so the rule reads `text-transform: var(--text-mono-case)` and the
+argument below is now the token layer's (`tokens/primitives.css` § Type · case, `CLAUDE.md` § type
+rules). Nothing about this control's rendering moves; what moves is where the decision is stated,
+and reversing it is one declaration for every mono label on the site rather than for this one.
+`text-transform` is applied by the stylesheet, never by the
 copy. Three consequences, all of them the reason: the accessible name a screen reader reads is the
 sentence-case DOM text rather than shouted capitals; a label that arrives from the CMS in caps
 cannot double-transform; and a designer or an editor writing "Start a project" cannot accidentally

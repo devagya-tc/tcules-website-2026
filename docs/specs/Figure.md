@@ -200,7 +200,7 @@ Both seams in this component (16px, 8px) are used exactly as declared gap-scale 
 
 **Measure.** Both `caption` and `note` take `--measure-body` (68ch). Since `Figure` can be given a track far wider than a comfortable line of 13px text — a full 1240px section is 41 words per line uncapped — the measure keeps the legend readable under a wide image without `Figure` needing to know how wide the image actually is. Both lines left-align to `root`'s own inline-start edge, the same edge the image starts from; they never centre under the image and never try to match a text column the component has no way to know about (section 17 Q4).
 
-**Case.** Sentence case throughout. No `text-transform` on any part — unlike `PageHero`'s eyebrow, a caption is read as a sentence, not announced as a label, so there is nothing here for a transform to do.
+**Case.** Sentence case throughout. No `text-transform` on any part — both roles here are **sans**, so the system's mono-is-always-uppercase rule does not reach them, and that is the same decision seen from the other side: unlike `PageHero`'s eyebrow, a caption is read as a sentence rather than announced as a label, which is precisely why § 7 chose `--text-caption` over the mono role at that size.
 
 Example copy, exactly as it would be authored (from the brief's own reference lines):
 

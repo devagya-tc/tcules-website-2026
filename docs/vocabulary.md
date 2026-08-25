@@ -65,30 +65,58 @@ Reach it only for an **optical correction**, with the justification sentence the
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
 
-| Role | Size | Line height | Family | Weight | Tracking companion |
-|---|---|---|---|---|---|
-| `--text-display` | 67px | 1.04 | display | regular | `--text-display-tracking` |
-| `--text-h1` | 54px | 1.06 | display | regular | `--text-h1-tracking` |
-| `--text-h2` | 43px | 1.1 | display | medium | `--text-h2-tracking` |
-| `--text-h3` | 34px | 1.16 | display | medium | `--text-h3-tracking` |
-| `--text-h4` | 28px | 1.2 | display | medium | `--text-h4-tracking` |
-| `--text-h5` | 22px | 1.28 | display | medium | `--text-h5-tracking` |
-| `--text-quote` | 28px | 1.35 | display | regular | **none** |
-| `--text-lead` | 20px | 1.5 | sans | regular | **none** |
-| `--text-body-lg` | 18px | 1.55 | sans | regular | **none** |
-| `--text-body` | 16px | 1.6 | sans | regular | **none** |
-| `--text-body-sm` | 14px | 1.55 | sans | regular | **none** |
-| `--text-caption` | 13px | 1.45 | sans | regular | **none** |
-| `--text-ui-sm` | 12px | 1.2 | mono | semibold | `--text-ui-sm-tracking` |
-| `--text-ui` | 13px | 1.2 | mono | semibold | `--text-ui-tracking` |
-| `--text-ui-lg` | 14px | 1.2 | mono | semibold | `--text-ui-lg-tracking` |
-| `--text-eyebrow` | 12px | 1.2 | mono | semibold | `--text-eyebrow-tracking` |
-| `--text-micro` | 11px | 1.2 | mono | semibold | `--text-micro-tracking` |
-| `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` |
-| `--text-code` | 14px | 1.6 | mono | regular | **none** |
+| Role | Size | Line height | Family | Weight | Tracking companion | Case |
+|---|---|---|---|---|---|---|
+| `--text-display` | 67px | 1.04 | display | regular | `--text-display-tracking` | verbatim |
+| `--text-h1` | 54px | 1.06 | display | regular | `--text-h1-tracking` | verbatim |
+| `--text-h2` | 43px | 1.1 | display | medium | `--text-h2-tracking` | verbatim |
+| `--text-h3` | 34px | 1.16 | display | medium | `--text-h3-tracking` | verbatim |
+| `--text-h4` | 28px | 1.2 | display | medium | `--text-h4-tracking` | verbatim |
+| `--text-h5` | 22px | 1.28 | display | medium | `--text-h5-tracking` | verbatim |
+| `--text-quote` | 28px | 1.35 | display | regular | **none** | verbatim |
+| `--text-lead` | 20px | 1.5 | sans | regular | **none** | verbatim |
+| `--text-body-lg` | 18px | 1.55 | sans | regular | **none** | verbatim |
+| `--text-body` | 16px | 1.6 | sans | regular | **none** | verbatim |
+| `--text-body-sm` | 14px | 1.55 | sans | regular | **none** | verbatim |
+| `--text-caption` | 13px | 1.45 | sans | regular | **none** | verbatim |
+| `--text-ui-sm` | 12px | 1.2 | mono | semibold | `--text-ui-sm-tracking` | `--text-mono-case` |
+| `--text-ui` | 13px | 1.2 | mono | semibold | `--text-ui-tracking` | `--text-mono-case` |
+| `--text-ui-lg` | 14px | 1.2 | mono | semibold | `--text-ui-lg-tracking` | `--text-mono-case` |
+| `--text-eyebrow` | 12px | 1.2 | mono | semibold | `--text-eyebrow-tracking` | `--text-mono-case` |
+| `--text-micro` | 11px | 1.2 | mono | semibold | `--text-micro-tracking` | `--text-mono-case` |
+| `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` | `--text-mono-case` |
+| `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
 **12 roles have a tracking companion. 7 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
+
+### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
+
+Mono is this system's label voice: chrome, eyebrows, keys, control labels, stats. All
+7 mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
+correction for the side bearings of capitals — so set lower-case, a mono role reads as
+letter-spaced body text rather than as a label. **The case belongs to the role, not to the
+component.** 6 of the 7 take it: `--text-ui-sm`, `--text-ui`, `--text-ui-lg`, `--text-eyebrow`, `--text-micro`, `--text-stat`.
+
+Write it beside the font, exactly as you write tracking, and for the same reason — `font:` carries
+a family, weight, size and ratio, and no transform:
+
+```css
+font: var(--text-eyebrow);
+letter-spacing: var(--text-eyebrow-tracking);
+text-transform: var(--text-mono-case);
+```
+
+**In presentation only.** Never write the uppercase into the copy, a prop, a CMS field or an
+`aria-label`: pass "Read more", not "READ MORE". The string stays in the capitalisation somebody
+authored, which is what a screen reader announces and what an editor edits; the sheet does the
+shouting. One token, so the whole decision reverses in one declaration.
+
+**A label that must stay sentence case is not a mono label** — give it a sans role. That is the
+resolution, not an exemption: mono has exactly 1, `--text-code`, where mono is
+**content** rather than a label and case is semantic — `Section` and `SECTION` are different
+identifiers. Numerals have no case, so the transform is a no-op on a stat's digits and normalises an
+alphabetic suffix: "12k" sets as "12K".
 
 - **Measure (line length):** `--measure-title` 22ch · `--measure-lede` 40ch · `--measure-body` 68ch
 - **Radius:** `--radius-0` 0px · `--radius-4` 4px · `--radius-8` 8px · `--radius-full` 999px

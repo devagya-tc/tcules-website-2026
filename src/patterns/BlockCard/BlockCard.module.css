@@ -75,14 +75,16 @@
   object-position: center;
 }
 
-/* The quiet label above the title. Uppercase is applied here, not in the token: --text-eyebrow is
-   a shared composite and the transform is this component's rendering decision, which is the same
-   division SiteFooter's .label and SiteNav's .blockLabel make. */
+/* The quiet label above the title. Uppercase is not this component's decision: mono is always
+   uppercase in this system (tokens/primitives.css § Type · case), so the rule reads
+   --text-mono-case like SiteFooter's .label, SiteNav's .blockLabel and the Button that draws the
+   cta below. The caller passes ordinary capitalisation — "Case study", not "CASE STUDY" — because
+   the transform is presentation and the string is content. */
 .eyebrow {
   color: var(--bcrd-eyebrow-ink);
   font: var(--bcrd-eyebrow-text);
   letter-spacing: var(--bcrd-eyebrow-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
 }
 
 .title {

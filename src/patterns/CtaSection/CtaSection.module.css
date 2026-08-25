@@ -62,16 +62,18 @@
 }
 
 /* ── The eyebrow ───────────────────────────────────────────────────────────────
-   The one `text-transform` in the component. `--text-eyebrow` is a mono semibold role whose
-   tracking exists FOR capitals: set lower case, a tracked mono label reads as letter-spaced body
-   text rather than as a label. Applied here rather than in the data, so the frontmatter keeps its
-   authored casing and reversing the decision is one declaration. */
+   Mono, so it takes `--text-mono-case` — mono is always uppercase in this system
+   (tokens/primitives.css § Type · case), and the marker below is the component's other mono part.
+   `--text-eyebrow` is a mono semibold role whose tracking exists FOR capitals: set lower case, a
+   tracked mono label reads as letter-spaced body text rather than as a label, which is why the case
+   belongs to the role. Applied in CSS rather than in the data, so the frontmatter keeps its
+   authored casing and reversing the decision is one declaration in the token layer. */
 .eyebrow {
   max-inline-size: var(--cta-body-measure);
   color: var(--cta-eyebrow-ink);
   font: var(--cta-eyebrow-text);
   letter-spacing: var(--cta-eyebrow-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
 }
 
 /* ── The heading ───────────────────────────────────────────────────────────────
@@ -123,6 +125,7 @@
   color: var(--cta-marker-ink);
   font: var(--cta-marker-text);
   letter-spacing: var(--cta-marker-tracking);
+  text-transform: var(--text-mono-case);
 }
 
 .label {

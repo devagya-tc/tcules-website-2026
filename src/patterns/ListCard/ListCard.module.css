@@ -69,10 +69,14 @@
   color: var(--lcrd-marker-ink);
 }
 
-/* The number is weight, not a bullet. nowrap keeps 01 together if a caller passes a narrow parent. */
+/* The number is weight, not a bullet. nowrap keeps 01 together if a caller passes a narrow parent.
+   The mono case is stated even though a numeral has none: it is what makes this rule agree with
+   every other mono rule on sight, so the next reader does not have to work out whether the omission
+   was a decision. */
 .number {
   font: var(--lcrd-marker-text);
   letter-spacing: var(--lcrd-marker-tracking);
+  text-transform: var(--text-mono-case);
   white-space: nowrap;
 }
 

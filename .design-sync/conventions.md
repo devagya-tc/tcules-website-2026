@@ -62,6 +62,16 @@ Two more rules that decide whether a composition is right:
   `--text-eyebrow`, `--text-caption`, `--text-micro`, `--text-quote`, `--text-stat`,
   `--text-code`. A `-tracking` companion exists for `display`, `h1`–`h5`, `eyebrow`, `micro`,
   `stat`, `ui`, `ui-sm`, `ui-lg` — pass it whenever you use those.
+- **MONO IS ALWAYS UPPERCASE, in presentation only.** The six mono label roles — `ui`, `ui-sm`,
+  `ui-lg`, `eyebrow`, `micro`, `stat` — take a third companion, and every rule that sets one
+  writes all three:
+  `font: var(--text-eyebrow); letter-spacing: var(--text-eyebrow-tracking); text-transform: var(--text-mono-case);`
+  Their tracking is opened for capitals, so a mono role set lower-case reads as letter-spaced body
+  text rather than as a label. **Never write the uppercase into a string** — not into copy, a prop,
+  a CMS field or an `aria-label`. Pass "Read more", not "READ MORE"; the sheet does the shouting,
+  and the authored capitalisation is what a screen reader announces. **A label that must stay
+  sentence case is not a mono label — give it a sans role.** `--text-code` is the one exemption:
+  mono there is content, and case is semantic in code.
 - **Surface colour** — `--sec-ground`, `--sec-ink`, `--sec-ink-muted`, `--sec-ink-label`,
   `--sec-rule`, `--sec-rule-strong`, `--sec-accent`, `--sec-link-ink`. These are remapped per
   surface, so reading them keeps your glue correct on all four grounds. Colour has no
