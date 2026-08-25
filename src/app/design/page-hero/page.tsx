@@ -86,6 +86,49 @@ const URL_PARA =
    previous codebase carried unresolved across five files — so a specimen that wrote /work would
    put the question back into a grep. The leaf is composed from the family rather than written out
    for the same reason. */
+/* ── The media assets ─────────────────────────────────────────────────────────────
+   Three SVGs in public/design, at three intrinsic ratios, because the ratio is the only thing the
+   image rendering does NOT normalise: it renders at its own, uncropped, scaled to the column. A
+   single 16/9 sample would prove nothing about that and would silently agree with the video's box.
+
+   SVG rather than a screenshot for the same reason every other specimen asset here is: it is a few
+   hundred bytes, it is legible under review as text, and it upscales cleanly — which matters for
+   the NARROW one, whose whole job is to be upscaled past its intrinsic width. An SVG makes that
+   band understate the softness a real 480px raster would show, and the note says so. */
+const MEDIA_WIDE = {
+  kind: 'image',
+  src: '/design/hero-sample-wide.svg',
+  alt: 'The ConnectX portfolio dashboard: a sidebar of buildings, a table of meter readings and a bar chart comparing forecast against actual consumption.',
+  width: 2400,
+  height: 1350,
+} as const;
+
+const MEDIA_TALL = {
+  kind: 'image',
+  src: '/design/hero-sample-tall.svg',
+  alt: 'The single-building view, portrait: a header, a table of readings, a highlighted forecast panel and two grouped charts.',
+  width: 900,
+  height: 1200,
+} as const;
+
+const MEDIA_NARROW = {
+  kind: 'image',
+  src: '/design/hero-sample-narrow.svg',
+  alt: 'A 480px-wide thumbnail of the same dashboard, used here to show what happens to an asset narrower than the content column.',
+  width: 480,
+  height: 270,
+} as const;
+
+/* Blender's Big Buck Bunny — a Creative Commons film, chosen because it is genuinely free to embed
+   and has been at the same id for years, which is what a proving ground needs from a third party.
+   If YouTube ever answers with "Video unavailable", the band still does its whole job: the ratio,
+   the hairline and the four surface columns are ours and are what this block is looking at. */
+const MEDIA_VIDEO = {
+  kind: 'youtube',
+  id: 'aqz-KE-bpKQ',
+  title: 'Big Buck Bunny — Blender Foundation, Creative Commons',
+} as const;
+
 const CASE_STUDY = `${ROUTES.caseStudies}/connectx`;
 
 const ONE_ACTION = [{ label: 'Read the case study', href: CASE_STUDY }] as const;
@@ -133,6 +176,7 @@ const SLOT_TABLE = [
   { part: 'byline', left: 'never', caseStudy: 'never', article: 'always' },
   { part: 'extras', left: '1 (/contact)', caseStudy: 'never', article: 'never' },
   { part: 'actions', left: '0 / 1 / 2', caseStudy: '0', article: '0 / 1' },
+  { part: 'media', left: 'never yet', caseStudy: 'never yet', article: 'never yet' },
 ] as const;
 
 /* The four optional slots, as a type. Annotated rather than inferred with `as const`, for two
@@ -316,8 +360,9 @@ export default function PageHeroSpecimenPage() {
           <p>
             The opening block of a page: one <code>h1</code>, an optional eyebrow above it, one to
             six paragraphs of lead copy, an optional byline of credits and dates, an optional
-            caller block and nought to two actions. It paints its own band and it is the first
-            thing inside <code>main</code> on all 129 routes.
+            caller block, nought to two actions and — last — an optional image or YouTube embed. It
+            paints its own band and it is the first thing inside <code>main</code> on all 129
+            routes.
           </p>
           <p>
             <strong>This route renders many h1 elements on purpose.</strong> Every band below is
@@ -665,10 +710,93 @@ export default function PageHeroSpecimenPage() {
         </Layout>
       </Section>
 
-      {/* ── 15 · What this page cannot show ─────────────────────────────────────── */}
+      {/* ── 15 · The media slot ─────────────────────────────────────────────────
+          The one part of the hero that is a BOX, and the only one that reaches both edges of the
+          content column. Everything above it is left-set text inside a measure, which is why this
+          slot exists at all: squint at any band in block 2 and it is three sizes of the same
+          rectangle, and squint at the first band below and it is not.
+
+          Nine bands. Two renderings, three intrinsic ratios, four surfaces and the two placements
+          that are wrong. */}
+      <PageHero
+        title={TITLE}
+        body={paragraphs(2)}
+        eyebrow={EYEBROW}
+        credits={[{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }]}
+        dates={{ published: '2026-03-03', modified: '2026-06-12' }}
+        actions={TWO_ACTIONS}
+        media={MEDIA_WIDE}
+      />
+      <Note
+        title="15 · An image, with every other slot filled"
+        note="The whole order, and the media is LAST: eyebrow, title, copy, byline, actions, image, at 48 between each block. Below the actions rather than under the copy on purpose — the byline stays tight to the title it credits and the actions stay in the reading flow rather than stranded under a picture. The image takes the full 1240 column while the copy above it stops at 68ch, and that difference in width is the whole point of the slot. The hairline around it is --hero-media-rule-ink: a light UI screenshot on near-white paper has no edge of its own, so 300 at 1.54:1 is decoration doing a job rather than a frame."
+      />
+
+      <PageHero title={TITLE} body={paragraphs(1)} eyebrow={EYEBROW} media={MEDIA_VIDEO} />
+      <Note
+        title="15 · A YouTube embed"
+        note="An id and a title, never a URL and never an iframe: the component builds the src, so all 129 routes embed on the same host (youtube-nocookie.com, which withholds tracking cookies until a visitor presses play), with the same parameters and the same referrer policy. The 16/9 box is an aspect-ratio on the iframe ITSELF — no wrapper, no padding-top percentage, nothing absolutely positioned — and 16/9 is YouTube's ratio rather than a house one, which is why it is not applied to the images. Autoplay is deliberately absent from the allow list. Tab through this band: the iframe ELEMENT is not in the tab order, so focus passes into YouTube's own document, whose controls and rings are theirs and cannot be reached from our stylesheet at any cost."
+      />
+
+      <PageHero title={TITLE} body={paragraphs(1)} media={MEDIA_TALL} />
+      <Note
+        title="15 · A portrait asset — the intrinsic ratio is the decision"
+        note="No object-fit, no aspect-ratio and no max-block-size on the image, exactly as in Figure: a crop mode would cut small type out of some screenshots, and a hero is where a screenshot is largest and most likely to be read. So a 900×1200 asset renders 1240 wide and about 1653 tall, and it dominates the band — which is a content decision about what to put in the slot rather than a component that needs a knob. If a route wants a shorter band, it wants a wider asset."
+      />
+
+      <PageHero title={TITLE} body={paragraphs(1)} media={MEDIA_NARROW} />
+      <Note
+        title="15 · An asset narrower than the column — upscaled, knowingly"
+        note="480px wide in a 1240px column. There is no cap at the intrinsic width, and that is a knowing omission: a max-inline-size here would leave a short image sitting in a column-width row and turn a content fault into a layout one. The fix belongs to the asset — deliver at 1240 or wider — and the prop doc says so. This sample is an SVG, so it upscales cleanly and UNDERSTATES the problem; a 480px raster in this band is visibly soft. What the band does prove is that nothing breaks: the box is still the column, the hairline still meets it, and the rhythm above is untouched."
+      />
+
+      {SURFACES.map((entry) => (
+        <div key={`media-${entry.surface}`}>
+          <PageHero
+            surface={entry.surface}
+            title={SHORT_TITLE}
+            body={paragraphs(1)}
+            media={MEDIA_WIDE}
+          />
+          <Note
+            surface={entry.surface}
+            title={`15 · Media on ${entry.surface}`}
+            note={
+              entry.surface === 'ink'
+                ? 'The rule DROPS to neutral-700 (2.10:1) rather than lifting with the inks, and this is the band that shows why: a light screenshot on near-black already has all the edge it needs from its own pixels, so a pale hairline would read as a second surface sitting on the black one. Almost none is the honest amount of rule here.'
+                : entry.surface === 'blue'
+                  ? 'The rule takes brandeis-300 (2.64:1) — DARKER than every text ink on this ground. The light end of the ramp is spent on the type, and on a saturated ground the distinction wanted is a slight one; stepping toward the ground is what makes it slight.'
+                  : entry.surface === 'tint'
+                    ? 'The rule steps with the ground, neutral-300 to neutral-400 (1.90:1), and has less to do than on paper: the tint ground is already darker than a light screenshot, so some of the distinction is made before the rule draws anything.'
+                    : 'The surface that needs the rule most. neutral-300 at 1.54:1 against near-white paper is a grey hairline that is visible without being a frame — the same call figure.css makes, re-derived here rather than read from --fig-*, because a component never reads another component\u2019s tokens and a hero image must not move the day Figure is re-tuned.'
+            }
+          />
+        </div>
+      ))}
+
+      <PageHero title={TITLE} body={paragraphs(1)} media={MEDIA_WIDE}>
+        <Cluster colGap="tight" rowGap="tight">
+          <Button
+            as="a"
+            href={ROUTES.caseStudies}
+            emphasis="ghost"
+            tone="neutral"
+            size="md"
+            extendHitArea
+          >
+            An extras control
+          </Button>
+        </Cluster>
+      </PageHero>
+      <Note
+        title="15 · Media and extras together — the order, and the tab order"
+        note="extras sits between the byline and the actions; media is after both. Tab from the top: the extras control, then the actions if there were any, then into the video document if the media were a video. DOM order is visual order and the component adds no tabindex anywhere. Note also that extras and media are not alternatives — extras is a caller-composed block that reads the band's --sec-* inks, and media is a closed union of two renderings the component owns. A caller who wants a second image puts it in extras and owns its geometry there."
+      />
+
+      {/* ── 16 · What this page cannot show ─────────────────────────────────────── */}
       <Section density="tight">
         <Layout rowGap="block">
-          <p className={s.specTitle}>15 · What a static page cannot show</p>
+          <p className={s.specTitle}>16 · What a static page cannot show</p>
           <p className={s.specNote}>
             <strong>The 767 and 375 columns.</strong> Narrow the window. Nothing in this component
             changes at either — no DOM change, no reordering, no gap change, no type change of its

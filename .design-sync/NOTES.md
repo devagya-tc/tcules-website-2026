@@ -86,20 +86,39 @@ Claude Design's validator reports two formatting warnings on this design system,
 "in the repo, not the design project". Both were checked against this pipeline and neither is
 actionable here. Neither affects rendering — the components are correct as shipped.
 
-**"Eleven tokens can't be classified"** — `--duration-instant`, `--duration-fast`,
-`--easing-standard`, the seven `--z-*` layers, and `--border-width-hairline-print`. The suggested fix
-is a `/* @kind other */` (or `/* @kind spacing */`) comment after each declaration in the token
-source. **It cannot reach the extractor.** The only CSS this sync uploads is `_ds_bundle.css`, plus a
-one-line `styles.css` that imports it — `cfg.tokensPkg` is unset, so `copyTokens` never runs,
+**"Fourteen tokens can't be classified"** — `--duration-instant`, `--duration-fast`,
+`--easing-standard`, the seven `--z-*` layers, `--border-width-hairline-print`, `--opacity-faint`,
+`--bcrd-media-ratio` and `--lcrd-thumbnail-ratio`. **This count grows with the token layer and that is
+expected.** It read *eleven* when this note was first written on 20 Aug; the three that joined are
+exactly the three unclassifiable tokens added since — `--lcrd-thumbnail-ratio` with ListCard (21 Aug),
+then `--bcrd-media-ratio` with BlockCard and `--opacity-faint` with the footer rebuild (both 24 Aug).
+Nothing regressed. A ratio (`3 / 2`) and a bare `0.06` are no more colour, spacing, radius, shadow or
+font than a duration is, so **expect one more per media-carrying component**: PageHero's
+`--hero-media-ratio` will take it to fifteen on the next sync. Re-derive the delta against this list
+before treating a changed number as a finding.
+
+The suggested fix is a `/* @kind other */` (or `/* @kind spacing */`) comment after each declaration
+in the token source. **It cannot reach the extractor.** The only CSS this sync uploads is
+`_ds_bundle.css`, plus a one-line `styles.css` that imports it — `cfg.tokensPkg` is unset, so `copyTokens` never runs,
 `ds-bundle/tokens/` is empty, and `src/styles/tokens/**` is never uploaded (see
 `.cache/upload-list.txt`). esbuild strips every authored CSS comment on the way into that bundle even
 at `minify: false`, the `/*!` legal-comment form included; the 23 comments left in it are esbuild's
-own `/* path */` file banners. Verified directly against `.ds-sync/node_modules/.bin/esbuild`. A
-`@kind` comment in `primitives.css` would be invisible to the validator and the warning would recur
-— dead weight in the token layer of exactly the kind the token rules exist to keep out.
+own `/* path */` file banners. Verified directly against `.ds-sync/node_modules/.bin/esbuild`, and
+**re-verified 25 Aug 2026** — the claim is two cheap commands, so re-run them rather than trusting
+this paragraph:
 
-The eleven are also *correctly* unclassifiable: a duration, an easing curve and a z-layer are not
-colour, spacing, radius, shadow or font. The warning is the extractor saying so, not a defect.
+    printf ':root{--z-toast:600; /* @kind other */\n--a:1px; /*! legal */}\n' > /tmp/kindtest.css
+    .ds-sync/node_modules/.bin/esbuild --bundle /tmp/kindtest.css --loader:.css=css --minify=false
+    grep -o '/\*[^*]*\*/' ds-bundle/_ds_bundle.css | sort -u   # file banners only, no authored text
+
+Both comment forms come back stripped, and the second shows `src/styles/tokens/**` reaching the
+bundle as bare declarations with every authored comment gone. A `@kind` comment in `primitives.css`
+would be invisible to the validator and the warning would recur — dead weight in the token layer of
+exactly the kind the token rules exist to keep out.
+
+The fourteen are also *correctly* unclassifiable: a duration, an easing curve, a z-layer, an
+aspect ratio and an opacity are not colour, spacing, radius, shadow or font. The warning is the
+extractor saying so, not a defect.
 
 Silencing it would need the kinds inside `_ds_bundle.css`, i.e. a post-build step that re-injects
 them between `package-build.mjs` and upload. Not built: it mutates a generated file whose hash
@@ -118,7 +137,7 @@ That note also mentions `--crumb-*` in `docs/specs/Breadcrumbs-specimen.html`, a
 no change. **Breadcrumbs has since shipped** — `src/patterns/Breadcrumbs/`, spec at
 `docs/specs/Breadcrumbs.md`, synced 20 Aug 2026 as the tenth component — so that specimen and the
 brief are both superseded; see *Designer artifacts in the project* below. The prediction held: a
-`--crumb-*` layer classifies as colour, spacing and font, so the eleven stayed eleven, and it is
+`--crumb-*` layer classifies as colour, spacing and font, so the count was unmoved by it, and it is
 scoped as a token layer rather than a component selector, so it did not join the fifty-three. The
 sync after it shipped reported the same two warnings, unchanged.
 

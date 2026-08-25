@@ -6,20 +6,34 @@
    the same markup answer a paper band, a tint band, an ink band and a blue pivot without knowing
    which one it is standing on.
 
-   ── Six rules, and the count is the design ──────────────────────────────────────
-   Fourteen parts, six of which carry colour. Seven more — root, stack, opening, copy, byline,
-   pair, actions — carry DISTANCE ONLY, and every one of those distances is a Section, Layout or
-   Cluster gap prop in the TSX. The fourteenth, extras, carries NOTHING AT ALL, which is the point
-   of it: a slot that imposed an ink or a step would be a slot the caller had to fight.
+   ── Eight rules, and the count is the design ────────────────────────────────────
+   Fifteen parts, eight of which carry a value here: six inks on the six text parts, and the two
+   media renderings — an image and a video frame — which are the only boxes in the component.
+   Seven more — root, stack, opening, copy, byline, pair, actions — carry DISTANCE ONLY, and
+   every one of those distances is a Section, Layout or Cluster gap prop in the TSX. The
+   fifteenth, extras, carries NOTHING AT ALL, which is the point of it: a slot that imposed an
+   ink or a step would be a slot the caller had to fight.
 
-   So eight of the fourteen emit no class and appear nowhere in this file: a rule for them would
+   So seven of the fifteen emit no class and appear nowhere in this file: a rule for them would
    be a rule with nothing to say. If you are looking for where the 48, the 24, the 16, the 8 and
    the 4 are set, they are in the JSX, which is where the arrangement belongs.
+
+   The media part takes no class of its own and has no wrapper. `.image` and `.video` are the two
+   renderings of one slot, they are mutually exclusive by the prop's union, and each sits directly
+   in the stack as one row — so a wrapper element would exist only to hold a class with nothing in
+   it. The aspect-ratio goes on the <iframe> itself, which is what makes that true.
 
    ── What is NOT here, and why each absence is a decision ────────────────────────
    No display:flex and no display:grid. Every arrangement in this component is a Layout or a
    Cluster; there is nothing left for a local grid to do. The one inline-flex inside the band is
-   Button's, centring a label in its own control box, which is not arrangement.
+   Button's, centring a label in its own control box, which is not arrangement. The two
+   display:block declarations below de-inline a replaced element; they arrange nothing.
+
+   No position and therefore no z-index, INCLUDING on the video. The 16/9 box is an aspect-ratio
+   on the iframe itself, so the padding-top-percentage-plus-absolute-fill idiom that every embed
+   snippet on the internet still carries is not needed here: it predates aspect-ratio, it needs a
+   wrapper this component would otherwise not have, and it manufactures a stacking context in a
+   band that has nothing to stack.
 
    No margin, anywhere, on any node. §7(c) of the spec names the one optical correction that was
    available — Newsreader at --text-h1 sets the title's ink a couple of pixels inside its box
@@ -44,25 +58,34 @@
    No line-clamp and no text-overflow. The title is never truncated — a 58-character h1 wraps to
    three lines and balances instead.
 
+   No object-fit, no max-block-size and no aspect-ratio ON THE IMAGE. The intrinsic ratio IS the
+   decision, exactly as it is in Figure: a crop mode would cut small type out of some screenshots,
+   and a hero is where a screenshot is largest and most likely to be read. The one aspect-ratio in
+   the file boxes the YouTube frame, whose content is 16/9 because that is what YouTube serves.
+
    No overflow-wrap on the four running parts. reset.css already sets `overflow-wrap: break-word`
    on p and h1, which covers the eyebrow, the title, the lead and the body paragraphs; restating
    it here would be a second answer to a settled question. The two byline parts are dt and dd,
    which the reset does not reach, so they state it themselves below.
 
-   No focus ring, no hover rule, no pressed rule. Nothing this component renders can take focus
-   or respond to a pointer. The rings and the state colours inside the band belong to Button.
+   No focus ring, no hover rule, no pressed rule. No ELEMENT this component renders can take
+   focus or respond to a pointer — an <iframe> element is not itself in the tab order, Tab moves
+   INTO its document, and that document is youtube-nocookie on another origin whose controls and
+   rings cannot be styled from here at any cost. The rings and the state colours that ARE ours
+   inside the band belong to Button.
 
    No list reset and no dd inset reset. reset.css zeroes dl and dd margins already.
 
    ── Rule order is not load-bearing here ─────────────────────────────────────────
-   Six rules, six distinct selectors, no shared property between any two of them and no state
+   Eight rules, eight distinct selectors, no shared property between any two of them and no state
    pair to decide by source order. They can be read in any order, which is a consequence of
    having no states rather than a property of the file. */
 
 /* ── The eyebrow ───────────────────────────────────────────────────────────────
-   The one text-transform in the component. --text-eyebrow is a mono semibold role with
-   --text-eyebrow-tracking on it, and tracking that wide exists FOR capitals: set lower-case, a
-   tracked mono label reads as letter-spaced body text rather than as a label.
+   One of the two text-transforms in the component, the byline key below being the other.
+   --text-eyebrow is a mono semibold role with --text-eyebrow-tracking on it, and tracking that
+   wide exists FOR capitals: set lower-case, a tracked mono label reads as letter-spaced body
+   text rather than as a label.
 
    It is also what keeps this label distinguishable from the Breadcrumbs trail 96px above it —
    that is sans, verbatim, untracked and 13px, this is mono, uppercase, tracked and 12px, so the
@@ -107,17 +130,23 @@
 }
 
 /* ── The copy · two roles, one measure token ───────────────────────────────────
-   The lead at 20 and the paragraphs beneath it at 18, which gives the copy an internal hierarchy
-   that scales from one paragraph to six with no prop and no count-driven rule.
+   The lead at 20 and the paragraphs beneath it at 16, which gives the copy an internal hierarchy
+   that scales from one paragraph to six with no prop and no count-driven rule. The paragraphs
+   were 18 and are now 16 — the same role the page's Prose body takes. The hero's copy therefore
+   MEETS body scale rather than staying a step above it, and the hierarchy inside the band is
+   carried by the lead alone: 20 against 16 is a wider step than 20 against 18, so the lead reads
+   as a lead more clearly than it did.
 
    Both take --hero-body-measure, and the two resolve to DIFFERENT widths on purpose: `ch`
-   resolves against each part's own role, so 68ch measures 832px on the lead and 749px on the
-   paragraphs. That 83px difference down a left-set column reads as a lead rather than as an
-   error. One measure declared on the copy wrapper instead would resolve against the band's
-   inherited --text-body and come out narrower than either. (Measured in the browser; §7(b)'s
-   pre-build estimates of 748 and 673 were both low.)
+   resolves against each part's own role, so 68ch measures 832px on the lead and — now that the
+   paragraphs are 16 rather than 18 — around 666px on them, scaled from the 749px measured in the
+   browser at 18. That figure is arithmetic rather than a measurement and the direction is what
+   matters: the gap between the lead's measure and the paragraphs' widens with the size change, so
+   the lead is now the wider line by a clearer margin. One measure declared on the copy wrapper
+   instead would resolve against the band's inherited --text-body and come out at the paragraphs'
+   width for both.
 
-   Neither role has a tracking companion — --text-lead and --text-body-lg are two of the seven in
+   Neither role has a tracking companion — --text-lead and --text-body are two of the seven in
    the layer that ship none — so there is no letter-spacing to state, and a --hero-lead-tracking
    would name a value that does not exist. */
 .lead {
@@ -138,10 +167,19 @@
    and the next is a six-fold difference, so each pair reads as one unit and the row reads as a
    row. Both numbers are Layout and Cluster gap props, not values here.
 
-   The key is mono, tracked and VERBATIM — the one place this component differs from SiteFooter's
-   otherwise identical meta block, which uppercases its keys. "Written by" is a sentence a reader
-   completes with the names below it; WRITTEN BY is a field header on a form. The eyebrow above is
-   the label in this band and there is only room for one.
+   The key is mono, tracked and UPPERCASE, which is what makes it identical to SiteFooter's meta
+   block rather than nearly so. It read verbatim until now, on the argument that "Written by" is a
+   sentence a reader completes with the names below it while WRITTEN BY is a field header on a
+   form, and that the eyebrow was the one label this band had room for. That is overruled: a
+   byline key IS a field header — it names a fact rather than beginning a sentence — and the case
+   is what stops it being mistaken for the value it labels at 4px of separation.
+
+   It does not compete with the eyebrow, which is 96px away at the top of the band, one point
+   larger, a rung darker on paper and tracked wider still. The two now share a case and differ in
+   four other ways, and they were never in the same part of the band to begin with.
+
+   The transform is applied here rather than in the data, so CREDIT_LABELS keeps its authored
+   casing and reversing this decision is one declaration.
 
    No measure on either: a mono role label and a joined list of two or three names are labels, and
    the Cluster caps the row by wrapping. They do state overflow-wrap, because reset.css reaches p
@@ -149,6 +187,7 @@
    past the column. */
 .key {
   overflow-wrap: break-word;
+  text-transform: uppercase;
   color: var(--hero-key-ink);
   font: var(--hero-key-text);
   letter-spacing: var(--hero-key-tracking);
@@ -160,4 +199,65 @@
   overflow-wrap: break-word;
   color: var(--hero-value-ink);
   font: var(--hero-value-text);
+}
+
+/* ── The media · one slot, two renderings ──────────────────────────────────────
+   The last row of the stack, 48 below the actions, and the only box in the component. It is what
+   gives the band a second shape: a hero whose blocks are all left-set text at three sizes reads
+   as one idea however good the type is, and a full-column image or video under it does not.
+
+   Full column, not --hero-body-measure. The copy is capped at 68ch because a 1240px line of text
+   is unreadable; an image has no such failure and the band's own content column is the right
+   width for it. That is also what makes the shape work — the media is the one part of the hero
+   that reaches both edges of the column, and cutting it to the measure would just make it a
+   fourth left-set block.
+
+   Neither rendering carries a distance. The seam above is the stack's rowGap, and the band's 96
+   below is --sec-padding-y at Section's default density.
+
+   ── The image ────────────────────────────────────────────────────────────────
+   At its own intrinsic ratio, scaled to the column, uncropped. block-size:auto with the width and
+   height attributes present is what preserves that ratio — the attributes reserve the space so
+   the page does not shift when the asset lands, the percentage does the scaling, and neither one
+   crops. Same contract Figure's image has, and for the same reasons.
+
+   The rule sits INSIDE the 100% rather than adding to it, so the rendered box is exactly the
+   column at every width, border included. That is reset.css's global border-box doing the work,
+   which is why this file does not restate box-sizing.
+
+   No cap at the asset's intrinsic width, and that is a knowing omission rather than an oversight:
+   an asset narrower than 1240 will upscale and look soft. The fix belongs to the asset, and the
+   prop doc in the TSX is where that expectation is stated, because a max-inline-size here would
+   silently centre-or-left a small image in a column-width row and turn a content fault into a
+   layout one. */
+.image {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  border: var(--hero-media-rule-width) solid var(--hero-media-rule-ink);
+  border-radius: var(--hero-media-radius);
+}
+
+/* ── The video ────────────────────────────────────────────────────────────────
+   aspect-ratio on the <iframe> itself, with block-size:auto to let it resolve — an iframe is a
+   replaced element with a 150px default height, and `auto` against a ratio is what replaces that
+   default rather than fighting it. No wrapper, no padding-top percentage and nothing absolutely
+   positioned; see the header.
+
+   overflow:hidden is not decoration and it is not dead code at --radius-0. It is what makes
+   --hero-media-radius mean anything on this element: an iframe's document paints over its own
+   border box, so the day that token becomes 8px the player's corners would square themselves off
+   again without it, in a way no screenshot of today's build would predict.
+
+   The rule is the image's rule, on purpose. A video frame and a screenshot are the same kind of
+   object in this band — a rectangle of somebody else's pixels — and giving them two different
+   edges would be two answers to one question. */
+.video {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: var(--hero-media-ratio);
+  overflow: hidden;
+  border: var(--hero-media-rule-width) solid var(--hero-media-rule-ink);
+  border-radius: var(--hero-media-radius);
 }

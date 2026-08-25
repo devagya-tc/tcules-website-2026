@@ -5,4 +5,7 @@ export type {
   HeroCreditRole,
   HeroDates,
   HeroAction,
+  HeroMedia,
+  HeroImage,
+  HeroVideo,
 } from './PageHero';

@@ -20,6 +20,54 @@ const THIRD =
 const CREDITS: HeroCredit[] = [{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }];
 const DATES = { published: '2026-03-03', modified: '2026-06-12' };
 
+/* The media slot is a DISCRIMINATED UNION, so `kind` is not decoration: an image carries
+   src/alt/width/height and a video carries an id and a title, and neither shape can be handed the
+   other's fields. width/height are the asset's INTRINSIC pixels, not a size request — the image
+   always renders at the band's full content column — and the id is the eleven-character YouTube id,
+   never a URL and never an iframe. Deliver an image at 1240 or wider; there is no cap, so a
+   narrower asset upscales. */
+/* The source is INLINED, following Figure's preview for the same reason: a preview renders outside
+   the Next app, so the `/public` path the specimen route uses resolves to nothing here and fails as
+   a broken frame the render check does not flag. This is the same dashboard shape as
+   `/design/page-hero`, simplified, and it is LIGHT on purpose — a near-white screenshot is the case
+   the hairline exists for. */
+const svg = (body, w, h) =>
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}">` +
+      `<rect width="${w}" height="${h}" fill="#fdfdfb"/>${body}</svg>`,
+  );
+
+const IMAGE = {
+  kind: 'image',
+  src: svg(
+    '<rect width="2400" height="96" fill="#f3f1ea"/><circle cx="56" cy="48" r="13" fill="#c3dd2a"/>' +
+      '<path d="M96 40h200v16H96z" fill="#71706a"/>' +
+      '<rect x="2040" y="26" width="272" height="44" rx="8" fill="#0048ff"/>' +
+      '<rect y="96" width="336" height="1254" fill="#f8f7f2"/>' +
+      '<path d="M44 160h188v13H44zm0 60h150v13H44zm0 60h200v13H44zm0 60h128v13H44z" fill="#91908d"/>' +
+      '<rect x="44" y="212" width="248" height="25" fill="#dbe4ff"/>' +
+      '<path d="M400 164h352v20H400zm0 46h568v13H400z" fill="#504f49"/>' +
+      '<path d="M400 272h1956v1H400zm0 94h1956v1H400zm0 94h1956v1H400z" fill="#e5e1d6"/>' +
+      '<path d="M420 302h244v12H420zm324 0h162v12H744zm-324 94h276v12H420zm324 0h202v12H744z" fill="#71706a"/>' +
+      '<path d="M420 610h1936v1H420z" fill="#292824"/>' +
+      '<path d="M452 1010h80v230h-80zm140-54h80v284h-80zm140-86h80v370h-80zm140 44h80v326h-80z" fill="#0048ff"/>' +
+      '<path d="M1240 956h80v284h-80zm140-38h80v322h-80zm140 60h80v262h-80zm140-98h80v360h-80z" fill="#b8c8ff"/>' +
+      '<path d="M420 1256h1936v1H420z" fill="#91908d"/>',
+    2400,
+    1350,
+  ),
+  alt: 'The ConnectX portfolio dashboard: a sidebar of buildings, a table of meter readings and a bar chart comparing forecast against actual consumption.',
+  width: 2400,
+  height: 1350,
+} as const;
+
+const VIDEO = {
+  kind: 'youtube',
+  id: 'aqz-KE-bpKQ',
+  title: 'Big Buck Bunny — Blender Foundation, Creative Commons',
+} as const;
+
 /**
  * The opening block of a page: one h1, an optional eyebrow above it, one to six paragraphs of lead
  * copy, an optional byline of credits and dates, an optional caller block and nought to two
@@ -37,6 +85,10 @@ const DATES = { published: '2026-03-03', modified: '2026-06-12' };
  * article, case study — are one arrangement: nothing differs in how it is ARRANGED, only in which
  * optional slot is filled, and the two slots that differentiate it (eyebrow and byline) are
  * independent of each other. So compose a hero by filling slots, never by asking for a variant.
+ *
+ * `media` is the one part of the band that is a BOX and the only one that reaches both edges of
+ * the content column — everything else is left-set text inside a measure. It is what stops a hero
+ * reading as three sizes of the same rectangle, and it goes LAST, below the actions.
  */
 export function Default() {
   return <PageHero title={TITLE} body={[LEAD, SECOND, THIRD]} />;
@@ -112,9 +164,11 @@ export function WithEverything() {
 }
 
 /** Six paragraphs — the longest opening any route has. The first is always the lead at 20px and the
-    rest are body copy at 18px, so the copy gets its hierarchy from the count with no prop. The
-    measure does NOT narrow as the copy grows: a hero that tightened its measure would turn its
-    longest pages into ribbons. */
+    rest are body copy at 16px, the same size the page's Prose body takes, so the copy gets its
+    hierarchy from the count with no prop. 20 against 16 is a wide enough step that the lead reads
+    as a lead without the paragraphs needing to sit above body scale themselves. The measure does
+    NOT narrow as the copy grows: a hero that tightened its measure would turn its longest pages
+    into ribbons. */
 export function LongCopy() {
   return (
     <PageHero
@@ -203,4 +257,33 @@ export function InteractiveExtras() {
       </Cluster>
     </PageHero>
   );
+}
+
+
+/** An image under the hero, LAST in the band — below the actions, not beside the copy. It renders
+    at its own intrinsic ratio, uncropped, at the full width of the content column, so a portrait
+    asset makes a tall band and that is a content decision rather than a missing crop prop. The
+    hairline around it is a per-surface token: visible on paper where a light screenshot has no edge
+    of its own, and almost nothing on ink where it already does. */
+export function WithImage() {
+  return (
+    <PageHero
+      title={TITLE}
+      body={[LEAD]}
+      eyebrow={EYEBROW}
+      credits={CREDITS}
+      dates={DATES}
+      actions={[{ label: 'Read the case study', href: '/case-studies/connectx' }]}
+      media={IMAGE}
+    />
+  );
+}
+
+/** A YouTube embed in the same slot. Pass an id and a title, never a URL and never an iframe: the
+    component builds the src, so every route embeds on the same host (youtube-nocookie.com, which
+    withholds tracking cookies until a visitor presses play) with the same parameters. The frame is
+    16/9 because that is YouTube's ratio — it is not applied to images. Autoplay is not in the allow
+    list, and the title is the frame's accessible name, so say what the video is. */
+export function WithVideo() {
+  return <PageHero title={TITLE} body={[LEAD, SECOND]} eyebrow={EYEBROW} media={VIDEO} />;
 }
