@@ -251,6 +251,9 @@ Recorded in §12.6.
 1. Assert the nav data and the sitemap file agree on every `href`, both directions.
 2. Assert exactly one `role="banner"` per route, and that the logo is not focusable while the
    mobile sheet is open.
+2b. **In the sheet, assert all six root rows share one left edge and one right edge.** Three are
+   `<button>` and three are `<a>`; any property a UA sets differently on the two — padding, border,
+   font — is a 6px step in the list unless the shared class states it. See §12.8.
 3. Sweep the pointer across all six bar items at speed: the panel must not flicker, and must end
    on the item under the pointer.
 4. Switch Services → Insights → Services and confirm the plate's height never exceeds
@@ -408,7 +411,25 @@ looking at it. `tokens:check` and `classes:check` cannot see a box, and the defa
 is a viewport tall enough that the cap never engages — which is why the QA list in §10 asks for
 1280, 1440 and 1920 and should also ask for a SHORT viewport. Worth adding.
 
-### 12.8 · Two QA items cannot be met yet, and are not faked
+### 12.8 · The sheet's rows did not line up
+
+The three rows that open a section are `<button>`; the three that navigate are `<a>`. A UA gives a
+button `padding-inline: 6px` and an anchor none, and `.sheetControl` — the one class both wear —
+stated `padding-block` and `border` but not `padding-inline`. So **Services, Expertise and Insights
+sat 6px further in than Work, Lab and About**, labels and chevrons both. Measured: labels at x=27
+against x=21.
+
+`reset.css` does not zero button padding, and should not be asked to: it states only what `Section`
+and `Layout` cannot function without, and zeroing it globally would reach every control in the repo
+to correct one component's row. **A class worn by two element types owns the difference between
+them** — so `.sheetControl` now states `padding-inline` explicitly, for the same reason it already
+stated `border: 0`.
+
+The desktop bar has the same button-and-anchor mix and was already correct, because `Button` states
+its own padding — which is the argument for controls being `Button` wherever one fits, and the
+reason this only bit the one row that is hand-rolled.
+
+### 12.9 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at

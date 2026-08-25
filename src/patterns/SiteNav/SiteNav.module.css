@@ -577,6 +577,16 @@
   border-block-start: var(--nav-rule-width) solid var(--nav-rule);
 }
 
+/* ONE CLASS, TWO ELEMENTS — so it has to neutralise everything the two disagree about.
+   A menu row is a <button> and a direct link is an <a>, and a UA gives a button
+   `padding-inline: 6px` that an anchor does not: the three that open sat 6px further in than the
+   three that navigate, labels and chevrons both. `padding-inline` is therefore stated rather than
+   left off, and `border: 0` is here for the same reason.
+
+   Fixed here and not in reset.css on purpose. Zeroing button padding globally would be a shell
+   change reaching every control in the repo to correct one component's row, and reset.css states
+   only what Section and Layout cannot function without. The class shared by two element types is
+   what owns the difference between them. */
 .sheetControl {
   display: flex;
   align-items: center;
@@ -584,6 +594,7 @@
   gap: var(--gap-text);
   inline-size: 100%;
   padding-block: var(--nav-sheet-row-padding-block);
+  padding-inline: 0;
   border: 0;
   background: transparent;
   color: var(--nav-row-label-ink);
