@@ -65,30 +65,58 @@ Reach it only for an **optical correction**, with the justification sentence the
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
 
-| Role | Size | Line height | Family | Weight | Tracking companion |
-|---|---|---|---|---|---|
-| `--text-display` | 67px | 1.04 | display | regular | `--text-display-tracking` |
-| `--text-h1` | 54px | 1.06 | display | regular | `--text-h1-tracking` |
-| `--text-h2` | 43px | 1.1 | display | medium | `--text-h2-tracking` |
-| `--text-h3` | 34px | 1.16 | display | medium | `--text-h3-tracking` |
-| `--text-h4` | 28px | 1.2 | display | medium | `--text-h4-tracking` |
-| `--text-h5` | 22px | 1.28 | display | medium | `--text-h5-tracking` |
-| `--text-quote` | 28px | 1.35 | display | regular | **none** |
-| `--text-lead` | 20px | 1.5 | sans | regular | **none** |
-| `--text-body-lg` | 18px | 1.55 | sans | regular | **none** |
-| `--text-body` | 16px | 1.6 | sans | regular | **none** |
-| `--text-body-sm` | 14px | 1.55 | sans | regular | **none** |
-| `--text-caption` | 13px | 1.45 | sans | regular | **none** |
-| `--text-ui-sm` | 12px | 1.2 | mono | semibold | `--text-ui-sm-tracking` |
-| `--text-ui` | 13px | 1.2 | mono | semibold | `--text-ui-tracking` |
-| `--text-ui-lg` | 14px | 1.2 | mono | semibold | `--text-ui-lg-tracking` |
-| `--text-eyebrow` | 12px | 1.2 | mono | semibold | `--text-eyebrow-tracking` |
-| `--text-micro` | 11px | 1.2 | mono | semibold | `--text-micro-tracking` |
-| `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` |
-| `--text-code` | 14px | 1.6 | mono | regular | **none** |
+| Role | Size | Line height | Family | Weight | Tracking companion | Case |
+|---|---|---|---|---|---|---|
+| `--text-display` | 67px | 1.04 | display | regular | `--text-display-tracking` | verbatim |
+| `--text-h1` | 54px | 1.06 | display | regular | `--text-h1-tracking` | verbatim |
+| `--text-h2` | 43px | 1.1 | display | medium | `--text-h2-tracking` | verbatim |
+| `--text-h3` | 34px | 1.16 | display | medium | `--text-h3-tracking` | verbatim |
+| `--text-h4` | 28px | 1.2 | display | medium | `--text-h4-tracking` | verbatim |
+| `--text-h5` | 22px | 1.28 | display | medium | `--text-h5-tracking` | verbatim |
+| `--text-quote` | 28px | 1.35 | display | regular | **none** | verbatim |
+| `--text-lead` | 20px | 1.5 | sans | regular | **none** | verbatim |
+| `--text-body-lg` | 18px | 1.55 | sans | regular | **none** | verbatim |
+| `--text-body` | 16px | 1.6 | sans | regular | **none** | verbatim |
+| `--text-body-sm` | 14px | 1.55 | sans | regular | **none** | verbatim |
+| `--text-caption` | 13px | 1.45 | sans | regular | **none** | verbatim |
+| `--text-ui-sm` | 12px | 1.2 | mono | semibold | `--text-ui-sm-tracking` | `--text-mono-case` |
+| `--text-ui` | 13px | 1.2 | mono | semibold | `--text-ui-tracking` | `--text-mono-case` |
+| `--text-ui-lg` | 14px | 1.2 | mono | semibold | `--text-ui-lg-tracking` | `--text-mono-case` |
+| `--text-eyebrow` | 12px | 1.2 | mono | semibold | `--text-eyebrow-tracking` | `--text-mono-case` |
+| `--text-micro` | 11px | 1.2 | mono | semibold | `--text-micro-tracking` | `--text-mono-case` |
+| `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` | `--text-mono-case` |
+| `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
 **12 roles have a tracking companion. 7 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
+
+### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
+
+Mono is this system's label voice: chrome, eyebrows, keys, control labels, stats. All
+7 mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
+correction for the side bearings of capitals — so set lower-case, a mono role reads as
+letter-spaced body text rather than as a label. **The case belongs to the role, not to the
+component.** 6 of the 7 take it: `--text-ui-sm`, `--text-ui`, `--text-ui-lg`, `--text-eyebrow`, `--text-micro`, `--text-stat`.
+
+Write it beside the font, exactly as you write tracking, and for the same reason — `font:` carries
+a family, weight, size and ratio, and no transform:
+
+```css
+font: var(--text-eyebrow);
+letter-spacing: var(--text-eyebrow-tracking);
+text-transform: var(--text-mono-case);
+```
+
+**In presentation only.** Never write the uppercase into the copy, a prop, a CMS field or an
+`aria-label`: pass "Read more", not "READ MORE". The string stays in the capitalisation somebody
+authored, which is what a screen reader announces and what an editor edits; the sheet does the
+shouting. One token, so the whole decision reverses in one declaration.
+
+**A label that must stay sentence case is not a mono label** — give it a sans role. That is the
+resolution, not an exemption: mono has exactly 1, `--text-code`, where mono is
+**content** rather than a label and case is semantic — `Section` and `SECTION` are different
+identifiers. Numerals have no case, so the transform is a no-op on a stat's digits and normalises an
+alphabetic suffix: "12k" sets as "12K".
 
 - **Measure (line length):** `--measure-title` 22ch · `--measure-lede` 40ch · `--measure-body` 68ch
 - **Radius:** `--radius-0` 0px · `--radius-4` 4px · `--radius-8` 8px · `--radius-full` 999px
@@ -121,7 +149,7 @@ Yours must not collide with any of those, nor with a primitive family above.
 against the controls beside it — if you are specifying one, say which of these it must line up with.
 
 - **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px
-- **block-card.css** — `--bcrd-title-tracking` -0.005em · `--bcrd-edge-width` 1px · `--bcrd-edge-width-pressed` 2px · `--bcrd-radius` 0px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
+- **block-card.css** — `--bcrd-title-tracking` -0.005em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-radius` 0px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
 - **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.01em · `--cta-marker-tracking` 0.1em · `--cta-heading-measure` 22ch · `--cta-body-measure` 68ch
@@ -131,7 +159,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **icon.css** — `--icn-size-sm` 14px · `--icn-size-md` 16px · `--icn-size-lg` 18px · `--icn-size-xl` 24px
 - **input.css** — `--inp-height-md` 40px · `--inp-height-touch` 44px · `--inp-padding-x` 12px · `--inp-textarea-padding-y` 12px · `--inp-min-inline` 16rem · `--inp-textarea-min-block` 128px · `--inp-radius` 8px · `--inp-rule-width` 1px · `--inp-invalid-rule-width` 2px · `--inp-ring-width` 2px · `--inp-ring-offset` 2px
 - **layout.css** — `--lay-track-xs` 192px · `--lay-track-sm` 256px · `--lay-track-md` 320px · `--lay-track-lg` 384px
-- **list-card.css** — `--lcrd-title-tracking` 0em · `--lcrd-marker-tracking` -0.01em · `--lcrd-content-min-xs` 192px · `--lcrd-thumbnail-inline-md` 160px · `--lcrd-rule-width` 1px · `--lcrd-rule-width-pressed` 2px · `--lcrd-radius` 0px · `--lcrd-ring-width` 2px · `--lcrd-ring-offset` 2px
+- **list-card.css** — `--lcrd-title-tracking` 0em · `--lcrd-marker-tracking` -0.01em · `--lcrd-content-min-xs` 192px · `--lcrd-thumbnail-inline-md` 160px · `--lcrd-rule-width` 1px · `--lcrd-radius` 0px · `--lcrd-ring-width` 2px · `--lcrd-ring-offset` 2px
 - **logo.css** — `--logo-height-sm` 20px · `--logo-height-md` 24px · `--logo-height-lg` 40px
 - **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 12px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-panel-padding-y` 48px · `--nav-panel-bar-inset` 16px · `--nav-row-padding` 8px · `--nav-row-radius` 8px · `--nav-row-icon-size` 24px · `--nav-row-measure` 68ch · `--nav-rail-inset` 32px · `--nav-rail-title-tracking` 0em · `--nav-label-tracking` 0.12em · `--nav-drawer-padding-y` 32px · `--nav-drawer-item-padding-y` 16px · `--nav-drawer-item-tracking` 0.08em · `--nav-drawer-panel-inset` 16px · `--nav-drawer-panel-gap` 16px
 - **page-hero.css** — `--hero-eyebrow-tracking` 0.12em · `--hero-title-tracking` -0.018em · `--hero-key-tracking` 0.1em · `--hero-title-measure` 22ch · `--hero-body-measure` 68ch · `--hero-media-radius` 0px · `--hero-media-rule-width` 1px

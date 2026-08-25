@@ -99,7 +99,7 @@
   color: var(--nav-item-fg);
   font: var(--nav-item-text);
   letter-spacing: var(--nav-item-text-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
@@ -324,7 +324,7 @@
   color: var(--nav-label-ink);
   font: var(--nav-label-text);
   letter-spacing: var(--nav-label-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
 }
 
 /* The panel's foot — one link to the section index, separated by a rule so it reads as a
@@ -397,7 +397,7 @@
 .drawerLabel {
   font: var(--nav-drawer-item-text);
   letter-spacing: var(--nav-drawer-item-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
 }
 
 /* An expanded accordion's contents, inset so the child links read as belonging to the item above

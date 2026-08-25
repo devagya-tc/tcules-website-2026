@@ -67,11 +67,15 @@
   min-inline-size: 0;
 }
 
+/* Mono, so it takes the mono case, and the transform is a no-op on "4.9" or "120" — it earns its
+   line on the value that carries a letter. "12k" sets as "12K", in the same voice as the label
+   under it, rather than as the one lower-case glyph in a band of capitals. */
 .value {
   min-inline-size: 0;
   overflow-wrap: anywhere;
   font: var(--text-stat);
   letter-spacing: var(--text-stat-tracking);
+  text-transform: var(--text-mono-case);
   color: var(--proof-value-ink);
 }
 
@@ -80,7 +84,7 @@
   overflow-wrap: anywhere;
   font: var(--text-micro);
   letter-spacing: var(--text-micro-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
   color: var(--proof-label-ink);
 }
 

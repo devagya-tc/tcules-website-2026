@@ -135,8 +135,19 @@ function gapScale() {
   return { rows: rows.join('\n'), count: declared.size };
 }
 
+/* The one mono role whose case is NOT transformed, hardcoded here for the same reason the gap
+   scale's job descriptions are: it is an argued exception, not a pattern a regex can see. Mono is
+   the label voice and is always uppercase; --text-code is mono as CONTENT, and case is semantic in
+   content. If a second exemption is ever argued for, it joins this set and the table says so. */
+const CASE_EXEMPT = new Set(['--text-code']);
+
 function textRoles() {
-  const roles = namesMatching(/^--text-/).filter((n) => !n.endsWith('-tracking'));
+  /* -tracking and -case are COMPANIONS, not roles. A companion left in this list prints as a role
+     with no size, ratio, family or weight — four question marks in the one table a designer sizes
+     type from, which reads as a broken token rather than as a companion. */
+  const roles = namesMatching(/^--text-/).filter(
+    (n) => !n.endsWith('-tracking') && !n.endsWith('-case'),
+  );
   const withTracking = roles.filter((n) => tokens.has(`${n}-tracking`));
   const without = roles.filter((n) => !tokens.has(`${n}-tracking`));
   const rows = roles.map((n) => {
@@ -147,9 +158,22 @@ function textRoles() {
     /* Size and ratio are ONE typographic decision here and are laddered together per role, so the
        brief prints them together — a designer given only the size will invent the ratio. */
     const lh = resolve(raw.match(/var\(\s*(--line-height-[\w-]+)\s*\)/)?.[1] ? `var(${raw.match(/var\(\s*(--line-height-[\w-]+)\s*\)/)[1]})` : '') || '?';
-    return `| \`${n}\` | ${size} | ${lh} | ${family} | ${weight} | ${tokens.has(`${n}-tracking`) ? `\`${n}-tracking\`` : '**none**' } |`;
+    /* Case is printed per role rather than left to the prose below, because the prose is what a
+       reader skips: a designer scanning for "which of these shouts" gets the answer in the row. */
+    const cased = family === 'mono' && !CASE_EXEMPT.has(n);
+    const caseCell = cased ? '`--text-mono-case`' : family === 'mono' ? '**verbatim — the exemption**' : 'verbatim';
+    return `| \`${n}\` | ${size} | ${lh} | ${family} | ${weight} | ${tokens.has(`${n}-tracking`) ? `\`${n}-tracking\`` : '**none**' } | ${caseCell} |`;
   });
-  return { rows: rows.join('\n'), count: roles.length, withTracking, without };
+  const mono = roles.filter((n) => (tokens.get(n) ?? '').includes('var(--font-family-mono)'));
+  return {
+    rows: rows.join('\n'),
+    count: roles.length,
+    withTracking,
+    without,
+    mono,
+    cased: mono.filter((n) => !CASE_EXEMPT.has(n)),
+    exempt: mono.filter((n) => CASE_EXEMPT.has(n)),
+  };
 }
 
 function glyphSet() {
@@ -337,12 +361,40 @@ Reach it only for an **optical correction**, with the justification sentence the
 \`font: var(--text-h2)\` **plus** \`letter-spacing: var(--text-h2-tracking)\`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
 
-| Role | Size | Line height | Family | Weight | Tracking companion |
-|---|---|---|---|---|---|
+| Role | Size | Line height | Family | Weight | Tracking companion | Case |
+|---|---|---|---|---|---|---|
 ${type.rows}
 
 **${type.withTracking.length} roles have a tracking companion. ${type.without.length} have none** — pairing one with a role in that
 second group names a token that does not exist: ${type.without.map((n) => `\`${n}\``).join(', ')}.
+
+### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
+
+Mono is this system's label voice: chrome, eyebrows, keys, control labels, stats. All
+${type.mono.length} mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
+correction for the side bearings of capitals — so set lower-case, a mono role reads as
+letter-spaced body text rather than as a label. **The case belongs to the role, not to the
+component.** ${type.cased.length} of the ${type.mono.length} take it: ${type.cased.map((n) => `\`${n}\``).join(', ')}.
+
+Write it beside the font, exactly as you write tracking, and for the same reason — \`font:\` carries
+a family, weight, size and ratio, and no transform:
+
+\`\`\`css
+font: var(--text-eyebrow);
+letter-spacing: var(--text-eyebrow-tracking);
+text-transform: var(--text-mono-case);
+\`\`\`
+
+**In presentation only.** Never write the uppercase into the copy, a prop, a CMS field or an
+\`aria-label\`: pass "Read more", not "READ MORE". The string stays in the capitalisation somebody
+authored, which is what a screen reader announces and what an editor edits; the sheet does the
+shouting. One token, so the whole decision reverses in one declaration.
+
+**A label that must stay sentence case is not a mono label** — give it a sans role. That is the
+resolution, not an exemption: mono has exactly ${type.exempt.length}, ${type.exempt.map((n) => `\`${n}\``).join(', ')}, where mono is
+**content** rather than a label and case is semantic — \`Section\` and \`SECTION\` are different
+identifiers. Numerals have no case, so the transform is a no-op on a stat's digits and normalises an
+alphabetic suffix: "12k" sets as "12K".
 
 ${simpleFamily(/^--measure-/, 'Measure (line length)') ?? ''}
 ${simpleFamily(/^--radius-/, 'Radius') ?? ''}

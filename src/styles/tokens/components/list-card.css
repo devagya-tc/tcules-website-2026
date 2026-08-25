@@ -9,10 +9,14 @@
    href changes semantics. None changes the component's visual role or creates a second palette.
 
    State-token absences are assertions:
-     no background tokens       the row never paints a fill;
+     no background tokens        the row never paints a fill;
+     no title state tokens       the title holds --lcrd-title-ink linked or not; only the cue moves;
      no body/marker state tokens those parts never move;
      no disabled/active tokens   links are either destinations or absent;
-     no rule-hover colour token  the overlay takes currentColor from --lcrd-link-ink-hover.
+     no rule state tokens        the row's block-end rule is decoration at one width in every
+                                 state. The hover wipe that once doubled it on press is gone, so
+                                 --lcrd-rule-width-pressed went with it rather than lingering as a
+                                 width nothing draws.
 
    Every surface below declares every surface-dependent token. The repetition prevents a tint row
    nested inside an ink section inheriting the outer body's ink or focus gap. */
@@ -36,7 +40,6 @@
   --lcrd-thumbnail-ratio: 3 / 2;
 
   --lcrd-rule-width: var(--border-width-hairline);
-  --lcrd-rule-width-pressed: var(--border-width-2);
   --lcrd-radius: var(--radius-0);
   --lcrd-shadow: var(--shadow-none);
   --lcrd-ring-width: var(--focus-ring-width);
@@ -46,9 +49,9 @@
 }
 
 /* ── Surface: paper ─────────────────────────────────────────────────────────────
-   Static title and marker use neutral-900; body drops to 700. A linked title and cue run through
-   brandeis 500 → 600 → 700, while the neutral-300 base hairline stays decoration underneath the
-   currentColor overlay. */
+   Title, body and marker use their own inks whether or not the row is linked. The brandeis
+   500 → 600 → 700 ramp now lands on the trailing cue alone, and the neutral-300 hairline is
+   decoration at one width in every state. */
 :root,
 [data-surface='paper'] {
   --lcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
@@ -94,8 +97,8 @@
 }
 
 /* ── Surface: blue ──────────────────────────────────────────────────────────────
-   The light end is the only end that clears AA: link 100 → white → 50, static title/marker white,
-   body 50. Pressed remains distinct from hover through both ink and the doubled rule. */
+   The light end is the only end that clears AA: cue 100 → white → 50, title/marker white, body 50.
+   Pressed stays distinct from hover through ink alone, which is all the cue now changes. */
 [data-surface='blue'] {
   --lcrd-title-ink: var(--color-white); /* 6.23:1 */
   --lcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */

@@ -1,8 +1,28 @@
-/* BlockCard — one edge-bounded tile, built to docs/specs/BlockCard.md.
+/* BlockCard — one borderless tile, built to docs/specs/BlockCard.md.
 
-   Layout owns every block-axis group and Cluster owns cue alignment. This module supplies the
-   object's edge, inset, crop, child sizing and link rendering. It deliberately has no background,
-   margin, hand-written grid or flex arrangement, surface selector, breakpoint or variant rule. */
+   Layout owns every block-axis group and the horizontal orientation's two tracks; Button owns the
+   cta entirely. This module supplies the object's crop, child sizing, orientation ratio swap and
+   link rendering. It deliberately has no background, margin, hand-written grid or flex
+   arrangement, surface selector or breakpoint.
+
+   ── What is absent, and why ────────────────────────────────────────────────────
+   No edge. The tile was bounded by a four-sided hairline and is now bounded by the parent Layout's
+   gutter alone. Nothing here paints a border on any surface or in any state.
+   No content inset. The inset existed to hold copy off that edge; with the edge gone it would set
+   text 24px in from a boundary that no longer exists, putting neighbouring cards' images 32px
+   apart while their titles sat 80px apart. Copy is flush to the media instead, and the image-to-
+   copy relationship moved to the frame Layout's rowGap where a container distance belongs.
+   No `position`. Its only job was to be the containing block for the removed hover wipe; the focus
+   ring is a box-shadow and needs no positioning.
+   No title state rule. The title holds --bcrd-title-ink whether the card is linked or not — the
+   whole point of the redesign — so nothing sets `color: inherit` on it. Same for icon media.
+   No cta rule at all. The cta is a link `Button` rendered `as="span"`, so Button owns its type,
+   case, colour, glyph size, seam and underline. This module styles no part of it and declares no
+   colour for it; the frame anchor carries `data-btn-link-group` and Button's own stylesheet reads
+   the card's states from there. A `.cta` class here would be a second opinion about a control.
+
+   Rule order is load-bearing: hover/focus precede pressed, so pointer-down wins while the pointer
+   is also hovering. The paired selectors have equal specificity and source order decides them. */
 
 .root {
   inline-size: 100%;
@@ -11,23 +31,21 @@
 }
 
 /* De-inlines the anchor and sizes it to fill the equal-height track. It arranges NOTHING: the
-   frame has exactly one child, a `Layout rowGap="none"` that owns the image/inset stack, so this
-   `display: block` is a sizing declaration in the sense ListCard.module.css:34 uses it. It is also
-   the containing block for the block-end wipe below, which is the only reason for `position`. */
+   frame has exactly one child — a Layout that owns either the media/content stack or the
+   horizontal row — so this `display: block` is a sizing declaration in the sense
+   ListCard.module.css:34 uses it. Radius and shadow are held at zero and none: a borderless
+   editorial tile is not a control shell and never lifts off its surface. */
 .frame {
-  position: relative;
   display: block;
   inline-size: 100%;
   block-size: 100%;
   min-inline-size: 0;
-  border: var(--bcrd-edge-width) solid var(--bcrd-edge-ink);
   border-radius: var(--bcrd-radius);
   box-shadow: var(--bcrd-shadow);
 }
 
 .content {
   min-inline-size: 0;
-  padding: var(--gap-block);
 }
 
 .iconMedia {
@@ -38,8 +56,15 @@
 .imageMedia {
   display: block;
   inline-size: 100%;
-  aspect-ratio: var(--bcrd-media-ratio);
+  aspect-ratio: var(--bcrd-media-ratio-vertical);
   overflow: hidden;
+}
+
+/* The one orientation difference below the frame. It is a class on the media element rather than a
+   `.horizontal .imageMedia` descendant rule so the two ratios have equal specificity and neither
+   can win by nesting. */
+.imageMediaHorizontal {
+  aspect-ratio: var(--bcrd-media-ratio-horizontal);
 }
 
 .image {
@@ -48,6 +73,18 @@
   block-size: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+/* The quiet label above the title. Uppercase is not this component's decision: mono is always
+   uppercase in this system (tokens/primitives.css § Type · case), so the rule reads
+   --text-mono-case like SiteFooter's .label, SiteNav's .blockLabel and the Button that draws the
+   cta below. The caller passes ordinary capitalisation — "Case study", not "CASE STUDY" — because
+   the transform is presentation and the string is content. */
+.eyebrow {
+  color: var(--bcrd-eyebrow-ink);
+  font: var(--bcrd-eyebrow-text);
+  letter-spacing: var(--bcrd-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
 }
 
 .title {
@@ -65,63 +102,18 @@
   font: var(--bcrd-body-text);
 }
 
-.cue {
-  color: inherit;
-}
-
-/* Higher specificity than the global anchor rule. currentColor ties the linked title, icon, cue
-   and edge wipe together; body retains its quieter surface-specific ink. */
+/* Higher specificity than the global anchor rule. The anchor carries NO link colour of its own —
+   every part below it states its own ink, and the cta gets its three steps from Button — so
+   `inherit` here keeps globals.css's bare-anchor blue from reaching anything the design wants
+   dark. It also has no `transition`: nothing on this element changes colour. */
 .root .link {
-  color: var(--bcrd-link-ink);
+  color: inherit;
   text-decoration: none;
-  transition: color var(--bcrd-transition-duration) var(--bcrd-transition-easing);
 }
 
 .root .link:hover,
 .root .link:focus-visible {
-  color: var(--bcrd-link-ink-hover);
   text-decoration: none;
-}
-
-.root .link:active {
-  color: var(--bcrd-link-ink-pressed);
-}
-
-.link .title,
-.link .iconMedia {
-  color: inherit;
-}
-
-/* The card keeps its quiet four-sided edge at rest. This overlay replaces only the block-end edge
-   with current link ink, wiping from inline start. Pressed doubles the overlay without changing any
-   surrounding geometry: the box grows upward from a fixed block-end, so nothing below it moves. */
-.link::after {
-  content: '';
-  position: absolute;
-  /* Both insets are negated edge widths, and for the same reason: an absolutely positioned box
-     resolves its offsets against the PADDING box, so `0` would stop one hairline short of the
-     border on every side it touches. On the block axis that left the overlay stacked ABOVE the
-     border rather than covering it — the two-tone rule ListCard fixed in the same place. On the
-     inline axis it left the bottom corner of each side border un-wiped, so the rule this comment
-     calls a replacement was a replacement with a notch at each end. */
-  inset-inline: calc(-1 * var(--bcrd-edge-width));
-  inset-block-end: calc(-1 * var(--bcrd-edge-width));
-  block-size: var(--bcrd-edge-width);
-  background: currentColor;
-  pointer-events: none;
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-  transition: transform var(--bcrd-transition-duration) var(--bcrd-transition-easing);
-}
-
-.root .link:hover::after,
-.root .link:focus-visible::after,
-.root .link:active::after {
-  transform: scaleX(1);
-}
-
-.root .link:active::after {
-  block-size: var(--bcrd-edge-width-pressed);
 }
 
 .link:focus {
@@ -135,8 +127,6 @@
     0 0 0 calc(var(--bcrd-ring-offset) + var(--bcrd-ring-width)) var(--bcrd-ring-color);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .link::after {
-    transition-duration: var(--duration-instant);
-  }
-}
+/* No prefers-reduced-motion block, and nothing in this module to put in one. The card's own edge
+   wipe is gone and no rule here transforms. The one animation a linked card shows — the cta's
+   underline — belongs to Button, which answers for it in its own stylesheet. */

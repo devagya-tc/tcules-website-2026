@@ -95,7 +95,7 @@
 .prose h6 {
   font: var(--text-ui);
   letter-spacing: var(--text-ui-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
 }
 
 /* ── Paragraph ───────────────────────────────────────────────────────────────────────────────
@@ -256,7 +256,7 @@
 .prose th {
   font: var(--text-ui-sm);
   letter-spacing: var(--text-ui-sm-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
   color: var(--prose-table-head-ink);
 }
 .prose tbody tr:last-child :is(th, td) {
@@ -338,7 +338,13 @@
    A code panel is a different KIND of content, not a paragraph asking for attention, which is
    what earns it a filled ground in a system that otherwise refuses them. It is square, it keeps
    the code role's real size, and it scrolls rather than wrapping: a wrapped line of code is a
-   line of code that lies about where it ends. */
+   line of code that lies about where it ends.
+
+   NO --text-mono-case here, and it is the system's one exemption rather than an omission. Mono is
+   always uppercase (tokens/primitives.css § Type · case) because mono is the label voice — but in
+   these four rules mono is CONTENT, and case is semantic in content: `Section` and `SECTION` are
+   different identifiers, and `npm` is not `NPM`. h6 and th above are labels and do take the case;
+   code, kbd and samp are the sample of something real and must render it verbatim. */
 .prose :not(pre) > code,
 .prose kbd,
 .prose samp {

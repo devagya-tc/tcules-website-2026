@@ -72,6 +72,7 @@
   color: var(--foot-link-ink);
   font: var(--foot-social-text);
   letter-spacing: var(--foot-social-tracking);
+  text-transform: var(--text-mono-case);
   text-decoration: none;
   border: var(--foot-rule-width) solid var(--foot-rule);
   border-radius: var(--foot-badge-radius);
@@ -203,7 +204,7 @@
   color: var(--foot-link-ink);
   font: var(--foot-social-text);
   letter-spacing: var(--foot-social-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
   text-decoration: none;
   transition: color var(--foot-transition-duration) var(--foot-transition-easing);
 }
@@ -227,7 +228,7 @@
   color: var(--foot-label-ink);
   font: var(--foot-label-text);
   letter-spacing: var(--foot-label-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
 }
 
 .title {
@@ -278,7 +279,7 @@
   color: var(--foot-meta-key-ink);
   font: var(--foot-meta-key-text);
   letter-spacing: var(--foot-meta-key-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
 }
 
 /* The reset zeroes dd's margin; nothing here needs to restate it. */

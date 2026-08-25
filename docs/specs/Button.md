@@ -12,6 +12,7 @@
 | **Implements**         | No brief. `Button.tsx` and `tokens/components/button.css` both cite "the Button Spec Sheet", which resolved to nothing until this file existed — this is that sheet, and the citation is what it implements.                                    |
 | **Implemented at**     | `src/components/Button/Button.tsx` · `src/components/Button/Button.module.css` · `src/styles/tokens/components/button.css` · specimen `src/app/design/button/page.tsx`                                                                          |
 | **Spec reconstructed** | 2026-08-19, from the shipped implementation                                                                                                                                                                                                     |
+| **Revised**            | 2026-08-25 — adds the `data-btn-link-group` contract in section 5, so a link Button can serve as the label of an enclosing whole-card or whole-row anchor.                                                                                      |
 
 > **What this document is.** Both `Button.tsx` and `tokens/components/button.css` open by saying
 > they were "built to the Button Spec Sheet". This is that sheet, reconstructed after the fact so
@@ -204,6 +205,50 @@ token names.
 | **active** (held) | `active` prop, as `.active`                     | `-bg-pressed`                             | `-bg-pressed` + `-fg-pressed`       | `-fg-pressed`; rule stays in        |
 | **busy**          | `busy` prop, as `.busy` + `aria-busy="true"`    | `-bg-busy`                                | `-bg-busy` + `-fg-busy`             | `-fg-busy`; rule stays in           |
 | **disabled**      | `disabled` prop → `.disabled` (and `:disabled`) | `--btn-disabled-bg` + `--btn-disabled-fg` | transparent + `--btn-disabled-fg`   | transparent + `--btn-disabled-fg`   |
+
+### `data-btn-link-group` — link states driven by an enclosing anchor
+
+One published contract, added 2026-08-25, and it applies to `link` emphasis only.
+
+A whole-card or whole-row pattern — `BlockCard`, and any successor that wraps a row in one anchor —
+is a single native anchor around everything it contains. Its read-more cta ought to be a real link
+Button rather than a hand-drawn cue, but it cannot be an interactive element: a `<button>` or `<a>`
+nested inside that anchor is invalid markup and a second focus stop for one destination. It therefore
+renders `as="span"`.
+
+A span is never hovered, focused or pressed. Every rule in the table above is gated on `.live` plus
+one of those pseudo-classes, so a span-rendered Button would sit at rest permanently — the right
+colour, and no underline, forever.
+
+**The contract.** An ancestor carrying the `data-btn-link-group` attribute declares that **its**
+`:hover`, `:focus-visible` and `:active` are the states of every link Button inside it. The caller
+sets one attribute; Button's own stylesheet resolves the values.
+
+| Driven by                             | What the link Button does                             |
+| ------------------------------------- | ----------------------------------------------------- |
+| `[data-btn-link-group]:hover`         | `fg` → `-fg-hover`; the underline wipes in            |
+| `[data-btn-link-group]:focus-visible` | the same — the ancestor owns the ring, not the Button  |
+| `[data-btn-link-group]:active`        | `fg` → `-fg-pressed`; the underline stays in          |
+
+Three things about it are deliberate:
+
+1. **It is an attribute, not a class or a custom property.** This is an agreement between two CSS
+   Modules, and Modules hash class names while leaving attribute selectors global — so an attribute
+   is the only name both sides can spell. The rejected alternative was for Button to expose a custom
+   property the caller sets on hover; that would put a `--btn-*` name in a pattern's stylesheet and
+   break the rule that a component never reads another component's tokens. The attribute keeps every
+   value declared here.
+2. **It adds no new token and no new value.** The driven rules read the same
+   `--btn-link-{tone}-fg-hover` and `-fg-pressed` as the pointer rules, in the same order — hover and
+   focus before pressed, so pointer-down wins while the pointer is also hovering. A driven Button is
+   meant to be indistinguishable from a hovered one, not to have a second look.
+3. **Reduced motion still applies.** The driven rules move the same `::after` pseudo-element as the
+   pointer rules, so section 13's `prefers-reduced-motion` block covers them without a second media
+   query. A caller cannot acquire un-answered motion by opting into the group.
+
+It does **not** make the Button focusable, does not change its ARIA, and does not apply to `solid` or
+`ghost` — a filled control inside a whole-card anchor is the thing this contract exists to avoid, not
+a case to support.
 
 **The state model is fixed, and it is not a token.**
 
@@ -444,7 +489,12 @@ and the `.sm` / `.lg` rules do not restate `letter-spacing` — the `font` short
 it, so all three sizes track alike from the base rule. That is the assertion the single token
 makes.
 
-**The uppercase decision.** `text-transform: uppercase` is applied by the stylesheet, never by the
+**The uppercase decision. Amended 25 Aug 2026 — it is no longer this component's decision.** Mono
+is always uppercase system-wide, so the rule reads `text-transform: var(--text-mono-case)` and the
+argument below is now the token layer's (`tokens/primitives.css` § Type · case, `CLAUDE.md` § type
+rules). Nothing about this control's rendering moves; what moves is where the decision is stated,
+and reversing it is one declaration for every mono label on the site rather than for this one.
+`text-transform` is applied by the stylesheet, never by the
 copy. Three consequences, all of them the reason: the accessible name a screen reader reads is the
 sentence-case DOM text rather than shouted capitals; a label that arrives from the CMS in caps
 cannot double-transform; and a designer or an editor writing "Start a project" cannot accidentally

@@ -224,7 +224,7 @@ The current page differs from its ancestors by **ink only** — `--color-neutral
 
 **Measure.** No part carries running text — every part is a label, and the collapse caps the row at four of them — so no part names a measure. `--measure-body` (68ch) is deliberately not applied to `trail`: at `--text-caption` it caps the row around 435px, which would wrap a 4-item trail on a 1240px column that has room for it.
 
-**Case.** Labels render verbatim from frontmatter. No `text-transform` anywhere in the component: uppercasing would mangle labels like "AI Product UX", it would cost a reader the word shapes they navigate by, and it is precisely what makes the trail distinguishable from the eyebrow below it. Example copy, exactly as authored: `Home / Services / Product Design / Interaction and UI Design`.
+**Case.** Labels render verbatim from frontmatter, and the mono rule is why that needs no exception: mono is always uppercase system-wide (`tokens/primitives.css` § Type · case), and this component's one role is **sans**, so the rule does not reach it. No `text-transform` anywhere in the component: uppercasing would mangle labels like "AI Product UX", it would cost a reader the word shapes they navigate by, and it is precisely what makes the trail distinguishable from the eyebrow below it. Example copy, exactly as authored: `Home / Services / Product Design / Interaction and UI Design`.
 
 ## 9 · Responsive
 

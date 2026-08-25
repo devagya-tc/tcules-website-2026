@@ -82,16 +82,19 @@
    having no states rather than a property of the file. */
 
 /* ── The eyebrow ───────────────────────────────────────────────────────────────
-   One of the two text-transforms in the component, the byline key below being the other.
+   One of the two mono parts in the component, the byline key below being the other, so both take
+   --text-mono-case: mono is always uppercase in this system (tokens/primitives.css § Type · case).
    --text-eyebrow is a mono semibold role with --text-eyebrow-tracking on it, and tracking that
    wide exists FOR capitals: set lower-case, a tracked mono label reads as letter-spaced body
-   text rather than as a label.
+   text rather than as a label. That is the reason the case belongs to the role rather than to
+   this component, and the token is now where it is stated.
 
    It is also what keeps this label distinguishable from the Breadcrumbs trail 96px above it —
    that is sans, verbatim, untracked and 13px, this is mono, uppercase, tracked and 12px, so the
    two differ in four ways and the air between them is the fourth defence rather than the only
    one. The transform is applied here rather than in the data, so the frontmatter keeps its
-   authored casing and reversing this decision is one declaration.
+   authored casing, and reversing the decision is one declaration — in the token layer now, for
+   every mono label on the site at once rather than for this one.
 
    The measure caps the one eyebrow that needs it. A 44-character phrase is running text however
    small it is set. */
@@ -100,7 +103,7 @@
   color: var(--hero-eyebrow-ink);
   font: var(--hero-eyebrow-text);
   letter-spacing: var(--hero-eyebrow-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
 }
 
 /* ── The title ─────────────────────────────────────────────────────────────────
@@ -187,7 +190,7 @@
    past the column. */
 .key {
   overflow-wrap: break-word;
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
   color: var(--hero-key-ink);
   font: var(--hero-key-text);
   letter-spacing: var(--hero-key-tracking);

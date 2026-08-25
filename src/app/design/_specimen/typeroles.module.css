@@ -53,40 +53,50 @@
 .caption {
   font: var(--text-caption);
 }
+/* The chrome roles carry the mono case themselves, and there is no longer an `.upper` class beside
+   them. Mono is always uppercase in this system (tokens/primitives.css § Type · case), so a
+   specimen that had to opt into the transform was showing the role undressed and then dressing it
+   for the photograph. Every one of these classes now renders exactly what a component gets.
+
+   The composite still cannot carry the case — `font:` has no text-transform, which is why
+   --text-mono-case is a companion token like tracking — so each rule states it beside the font, in
+   the same two-line shape every component uses. */
 .uiSm {
   font: var(--text-ui-sm);
   letter-spacing: var(--text-ui-sm-tracking);
+  text-transform: var(--text-mono-case);
 }
 .ui {
   font: var(--text-ui);
   letter-spacing: var(--text-ui-tracking);
+  text-transform: var(--text-mono-case);
 }
 .uiLg {
   font: var(--text-ui-lg);
   letter-spacing: var(--text-ui-lg-tracking);
+  text-transform: var(--text-mono-case);
 }
 .eyebrow {
   font: var(--text-eyebrow);
   letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
 }
 .micro {
   font: var(--text-micro);
   letter-spacing: var(--text-micro-tracking);
+  text-transform: var(--text-mono-case);
 }
+/* Digits have no case, so the transform shows nothing here and is stated anyway — see the note on
+   the specimen: it earns its line on a value like 12k. */
 .stat {
   font: var(--text-stat);
   letter-spacing: var(--text-stat-tracking);
+  text-transform: var(--text-mono-case);
 }
+/* The system's one exemption, and the specimen proves it by rendering `const gap = 24` verbatim
+   beside five roles that shout. Mono here is content, not a label, and case is semantic in code. */
 .code {
   font: var(--text-code);
-}
-
-/* The chrome roles are cut for uppercase and are never rendered lowercase in practice — but the
-   transform is the CONSUMER's, not the token's, exactly as it is in Button and Prose. This class
-   is applied beside the role class so the specimen shows the real thing without pretending the
-   composite carries it. */
-.upper {
-  text-transform: uppercase;
 }
 
 /* The measure demonstration. A rule down the right edge at 68ch makes the cap visible; without

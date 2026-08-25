@@ -188,7 +188,6 @@ const CHROME_ROLES = [
     px: 12,
     lh: 1.2,
     track: '0.08em',
-    upper: true,
     where: 'a 32px control',
   },
   {
@@ -197,7 +196,6 @@ const CHROME_ROLES = [
     px: 13,
     lh: 1.2,
     track: '0.08em',
-    upper: true,
     where: 'a 40px control — the default',
   },
   {
@@ -206,7 +204,6 @@ const CHROME_ROLES = [
     px: 14,
     lh: 1.2,
     track: '0.08em',
-    upper: true,
     where: 'a 48px control',
   },
   {
@@ -215,7 +212,6 @@ const CHROME_ROLES = [
     px: 12,
     lh: 1.2,
     track: '0.12em',
-    upper: true,
     where: 'above a title, never below one',
   },
   {
@@ -224,7 +220,6 @@ const CHROME_ROLES = [
     px: 11,
     lh: 1.2,
     track: '0.1em',
-    upper: true,
     where: 'the smallest legible label in the system',
   },
   {
@@ -233,7 +228,6 @@ const CHROME_ROLES = [
     px: 40,
     lh: 1,
     track: '-0.01em',
-    upper: false,
     where: 'a figure standing alone — steps to 32 on mobile',
   },
   {
@@ -242,7 +236,6 @@ const CHROME_ROLES = [
     px: 14,
     lh: 1.6,
     track: '—',
-    upper: false,
     where: 'inline code and the code panel',
   },
 ] as const;
@@ -315,7 +308,7 @@ export default function TypographySpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <p className={`${t.eyebrow} ${t.upper}`}>Foundations</p>
+            <p className={t.eyebrow}>Foundations</p>
             <h1>Typography</h1>
             <p className={t.lead}>
               Three faces, a ladder cut per role, and one composite per role so that nothing
@@ -435,7 +428,7 @@ export default function TypographySpecimenPage() {
 
           <Specimen
             title="The chrome roles"
-            note="All mono, all semibold, all tracked open — and none of them carries text-transform. Uppercase is the consumer's decision, exactly as it is in Button and in Prose's h6, so the token stays usable by the one caller that wants sentence case. Shown uppercase here because that is how they actually ship."
+            note="All mono, all semibold, all tracked open — and mono is ALWAYS UPPERCASE, in presentation only. Every rule that sets one of these roles writes text-transform: var(--text-mono-case) beside its font, so the case belongs to the role rather than to whichever component consumed it: the tracking here is a correction for the side bearings of capitals, and set lower-case a tracked mono label reads as letter-spaced body text. The transform is CSS and never the string, so a CMS field, a prop and an accessible name all keep the capitalisation somebody authored. Two rows read differently on purpose. stat carries the case and shows nothing for it, because a numeral has none — it earns its line on a value like 12k, which sets as 12K. And code is the one exemption in the system: mono there is content rather than a label, and case is semantic in content."
           >
             <Layout rowGap="block">
               {CHROME_ROLES.map((r) => (
@@ -447,7 +440,7 @@ export default function TypographySpecimenPage() {
                     </span>
                   </Layout>
                   <Layout rowGap="inline" className={t.sampleCell}>
-                    <span className={`${r.className} ${r.upper ? t.upper : ''}`}>
+                    <span className={r.className}>
                       {r.role === 'stat'
                         ? '2,480'
                         : r.role === 'code'
@@ -481,10 +474,10 @@ export default function TypographySpecimenPage() {
           <Specimen title="size / line-height, by viewport">
             <Layout rowGap="tight">
               <Layout columns={[2, 1, 1, 1]} colGap="gutter">
-                <span className={`${s.specTitle} ${t.upper}`}>role</span>
-                <span className={`${s.specTitle} ${t.upper}`}>desktop</span>
-                <span className={`${s.specTitle} ${t.upper}`}>≤1023</span>
-                <span className={`${s.specTitle} ${t.upper}`}>≤767</span>
+                <span className={s.specTitle}>role</span>
+                <span className={s.specTitle}>desktop</span>
+                <span className={s.specTitle}>≤1023</span>
+                <span className={s.specTitle}>≤767</span>
               </Layout>
               {BREAKPOINTS.map((b) => (
                 <Layout key={b.role} columns={[2, 1, 1, 1]} colGap="gutter">
@@ -583,7 +576,7 @@ export default function TypographySpecimenPage() {
       <Section density="open">
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <p className={`${t.eyebrow} ${t.upper}`}>Rich text</p>
+            <p className={t.eyebrow}>Rich text</p>
             <h2>Prose</h2>
             <p className={t.lead}>
               The flow a CMS body field arrives as, styled once. Headings, both list kinds, a

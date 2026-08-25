@@ -75,19 +75,19 @@ const LINKED = [
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
-    note: 'Neutral-900 title and marker, neutral-700 body, and a 500 → 600 → 700 linked ramp.',
+    note: 'Neutral-900 title and marker, neutral-700 body, and a 500 → 600 → 700 ramp on the cue alone.',
   },
   {
     surface: 'tint',
-    note: 'The text and linked ramps still pass unchanged; the decorative rule steps to neutral-400.',
+    note: 'The text and cue ramps still pass unchanged; the decorative rule steps to neutral-400.',
   },
   {
     surface: 'ink',
-    note: 'Title and marker lift to white, body to neutral-300, and the linked ramp lifts to 300 → 100 → 50.',
+    note: 'Title and marker lift to white, body to neutral-300, and the cue ramp lifts to 300 → 100 → 50.',
   },
   {
     surface: 'blue',
-    note: 'Only the light end clears AA: link 100 → white → 50, with a white focus ring against its blue gap.',
+    note: 'Only the light end clears AA: cue 100 → white → 50, with a white focus ring against its blue gap.',
   },
 ] as const;
 
@@ -153,7 +153,7 @@ function SurfaceRows() {
       />
       <ListCard
         title="Design systems"
-        body="The linked row proves link ink, icon marker, cue, interactive rule and focus ring."
+        body="The linked row proves the dark title, icon marker, cue link ink and focus ring."
         marker={{ kind: 'icon', name: 'design-systems' }}
         href={ROUTES.designSystems}
       />
@@ -188,7 +188,8 @@ export default function ListCardSpecimenPage() {
           <h1>ListCard</h1>
           <p>
             One ruled row in a semantic list: a number, icon, thumbnail or no marker; one title
-            and body; and one whole-row link with an automatic cue when a destination exists. It
+            and body; and one whole-row link whose arrow cue is the only part that carries the
+            link colour. The title stays dark whether the row navigates or not, and the row
             never paints a fill or a surrounding edge.
           </p>
         </Layout>
@@ -312,8 +313,11 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>4 · States</h2>
             <p>
-              The static row has rest only. Point at, hold and Tab to the linked row: hover adds
-              the rule overlay, focus adds its surface ring, and pressed doubles the rule.
+              The static row has rest only. Point at, hold and Tab to the linked row: the arrow
+              cue is the only part that moves, and colour is the only thing about it that
+              changes. The row&rsquo;s own hairline is decoration at one width in every state —
+              the wipe that used to animate across it and double on press is gone. Focus still
+              adds the surface-aware two-part ring, so keyboard focus is never colour alone.
             </p>
           </Layout>
           <Rows ordered>
@@ -333,10 +337,10 @@ export default function ListCardSpecimenPage() {
           </Rows>
           <Layout columns={{ base: 1, md: [1, 3] }} colGap="gutter" rowGap="tight">
             {[
-              ['rest', 'Link ink and the quiet base hairline.'],
-              ['hover', 'Hover ink plus a hairline overlay that wipes across.'],
-              ['focus', 'The hover rendering plus the two-part keyboard ring.'],
-              ['pressed', 'Pressed ink plus a doubled overlay rule.'],
+              ['rest', 'Dark title, quiet base hairline, and the cue at --lcrd-link-ink.'],
+              ['hover', 'The cue alone steps to --lcrd-link-ink-hover. Nothing else changes.'],
+              ['focus', 'The hover cue plus the two-part keyboard ring around the row.'],
+              ['pressed', 'The cue alone steps to --lcrd-link-ink-pressed.'],
             ].map(([state, note]) => (
               <div key={state}>
                 <strong>{state}</strong>
@@ -607,9 +611,10 @@ export default function ListCardSpecimenPage() {
         <Layout rowGap="block">
           <h2>12 · What this static page cannot force</h2>
           <p>
-            Hold the pointer for pressed, Tab for keyboard focus, narrow through exactly 767 for
-            the split collapse, and enable reduced motion to make the rule wipe instant. None
-            has a prop; the absence is part of the contract.
+            Hold the pointer for pressed, Tab for keyboard focus, and narrow through exactly 767
+            for the split collapse. Reduced motion is no longer on the list: the rule wipe was
+            the row&rsquo;s only transform and it is gone, so there is nothing left for the
+            preference to shorten. None has a prop; the absence is part of the contract.
           </p>
         </Layout>
       </Section>

@@ -57,7 +57,7 @@ variant.
 | figure | for every figures record | native `li` containing `Layout` | One value/label unit plus its own checked metadata and optional source. |
 | value-label | for every figure | nested `Layout` | Keeps the audited value and what it counts as one visual unit. |
 | value | for every figure | text `span` | Verbatim audited value such as “90+” or “4.8/5”; never inferred, rounded or coloured as a link. |
-| label | for every figure | text `span` | Verbatim sentence-case source label, visually uppercased by the component. |
+| label | for every figure | text `span` | Verbatim sentence-case source label, uppercased at render by `--text-mono-case` — mono is always uppercase, and the string keeps its authored casing. |
 | checked | for every figure | text `span` | Required per-item checked date, authored as a complete phrase such as “checked on 8 August 2026”. |
 | source | optional per figure | existing `Button as="a"` | Fixed visible label “View source”; Button owns every link state and the extended touch target. |
 
@@ -247,7 +247,7 @@ component geometry.
 
 Quote, attribution and checked-date copy stay in authored sentence case: “The team helped us make a
 complicated workflow clear.” and “Ashok Mohanty, Founder, Auxentios”. Figure labels are supplied in
-sentence case — “completed projects” — and visually uppercased by the component to bind four
+sentence case — “completed projects” — and uppercased at render by `--text-mono-case` to bind four
 differently shaped values into one row. Values and names are never transformed.
 
 Display deliberately stops at h3 rather than h2 or a one-off display role. The 34px serif scale

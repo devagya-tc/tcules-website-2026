@@ -17,16 +17,26 @@
   max-inline-size: var(--enq-form-max-inline);
 }
 
+/* A SANS role, and the change is the mono rule reaching this component rather than a re-taste.
+   Mono is always uppercase now (see tokens/primitives.css § Type · case), and these labels are
+   questions — "What are you working on?" — so upper-casing them would make the site's most
+   conversational moment read as a row of shouted field names. The spec argued for sentence case
+   here on exactly that ground; under the rule, a label that must stay sentence case is not a mono
+   label. --text-body-sm at 14/1.5 keeps it: one step up in size from the 13px it left, no tracking
+   companion to restate, and a different voice from the --text-caption message below it, which is
+   the one distinction the two lines have to keep. The mono voice stays on the flag beside it. */
 .label {
   color: var(--enq-label-ink);
-  font: var(--text-ui);
-  letter-spacing: var(--text-ui-tracking);
+  font: var(--text-body-sm);
 }
 
+/* "Optional" is a field's status rather than part of the question, which is exactly the job the
+   mono micro role names — so it takes the mono case with everything else in that voice. */
 .flag {
   color: var(--enq-flag-ink);
   font: var(--text-micro);
   letter-spacing: var(--text-micro-tracking);
+  text-transform: var(--text-mono-case);
 }
 
 /* No colour transition on the label or here, and that is a correction rather than an omission.
