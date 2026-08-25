@@ -2,32 +2,73 @@
    Tier 2. One ruled list row, with one marker slot and an optional whole-row link.
 
    Naming: --lcrd-{part}-{role}-{state}
-     parts: title | body | marker | link | rule | ring | thumbnail | content
+     parts: title | body | marker | number | link | rule | ring | thumbnail | content
      states: rest (no suffix) | hover | pressed
 
    There is no variant slot. split/stacked changes Layout props, marker kind changes content, and
    href changes semantics. None changes the component's visual role or creates a second palette.
+
+   The number has its own ink, separate from --lcrd-marker-ink, and the split is the point: an
+   ordinal is chrome and an icon marker names the subject, so they do not want the same weight. One
+   token would have forced a choice between a shouting ordinal and a receding subject glyph.
+
+   It sits ONE STEP QUIETER than the quiet-label ramp used by --crumb-collapse-ink, --foot-label-ink
+   and --bcrd-eyebrow-ink, because a 20px numeral carries further than a 12px label and has to give
+   more back. On the two light surfaces that means stepping toward white; on ink and blue it means
+   stepping TOWARD THE GROUND — the opposite direction in hex, the same direction in emphasis. Every
+   cell clears 3:1 and none clears 4.5:1, which is the deliberate part: the numeral is aria-hidden and
+   the parent <ol> carries the order, so it is a visible mark duplicating semantics the markup already
+   states — the same argument --fig-rule-ink makes at 1.90:1. If it ever becomes the only source of
+   the order, it has to come back up to 4.5:1.
 
    State-token absences are assertions:
      no background tokens        the row never paints a fill;
      no title state tokens       the title holds --lcrd-title-ink linked or not; only the cue moves;
      no body/marker state tokens those parts never move;
      no disabled/active tokens   links are either destinations or absent;
-     no rule state tokens        the row's block-end rule is decoration at one width in every
-                                 state. The hover wipe that once doubled it on press is gone, so
-                                 --lcrd-rule-width-pressed went with it rather than lingering as a
-                                 width nothing draws.
+     no rule WIDTH state          the rule is one width in every state; the wipe that once doubled
+                                 it on press is gone, and --lcrd-rule-width-pressed went with it
+                                 rather than lingering as a width nothing draws.
+     one rule COLOUR state        --lcrd-rule-ink-hover, and it is the row's hover affordance. The
+                                 target is the whole row — up to 1240px wide — and the only other
+                                 thing that moves is an 18px arrow at the far end of it, which is
+                                 not perceptible feedback for a box that size. The rule is the one
+                                 element that spans the target, so it is the one that can signal
+                                 across it. Colour only: no width change, no wipe, no transform.
+                                 A static row has no hover and never resolves it.
 
    Every surface below declares every surface-dependent token. The repetition prevents a tint row
    nested inside an ink section inheriting the outer body's ink or focus gap. */
 
 /* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
-  --lcrd-title-text: var(--text-h5);
-  --lcrd-title-tracking: var(--text-h5-tracking);
+  /* h4, not h5. The row is up to 1240px wide and BlockCard's title is h4 in a 286px track, so at
+     h5 the narrower object had the larger title — an inversion, not a preference. 28px also carries
+     the three jobs this row does: a step in a process, a clickable article or guide on a listing
+     page, and an item in a plain content list. */
+  --lcrd-title-text: var(--text-h4);
+  --lcrd-title-tracking: var(--text-h4-tracking);
   --lcrd-body-text: var(--text-body);
-  --lcrd-marker-text: var(--text-stat);
-  --lcrd-marker-tracking: var(--text-stat-tracking);
+  /* The number is an INDEX, not a measurement. It shipped at --text-stat, 40px against a 22px h5
+     title, which made the ordinal the loudest thing in a row whose content is the title. The fix is
+     NOT to shrink it to a control label: at 13px it stopped competing and stopped indexing. It stays
+     large and gives its weight back through colour instead — see --lcrd-number-ink. --text-index is
+     the 20px mono role added for exactly this gap; see primitives.css, where the mono ramp ran
+     11, 12, 13, 14 and then jumped straight to stat's 40. */
+  --lcrd-marker-text: var(--text-index);
+  --lcrd-marker-tracking: var(--text-index-tracking);
+
+  /* Optical, not --gap-*. This is not a distance between two things; it is a baseline correction.
+     The number is a 13px/1.2 box (15.6px, baseline ~11px down) sitting beside a 22px/1.28 title box
+     (28.2px, baseline ~19.6px down) in a Cluster aligned to `start`, so without it the ordinal
+     floats ~8px above the line it indexes. `align="baseline"` on that Cluster would be the correct
+     relationship and cannot be used: the same marker slot holds a 160px thumbnail, whose baseline
+     is its bottom edge, so baseline-aligning the slot would shove every thumbnail row. The
+     correction therefore belongs to the number alone. At 20px/1.2 the number's baseline sits ~17.6px
+     down and an h4 title's ~23px, so 6px is the nearest ramp step to a ~5.4px difference. This value
+     is a function of BOTH type sizes: it was 8px against a 13px number, 2px against an h5 title, and
+     6px now. Change either role and recompute it in the same edit. */
+  --lcrd-number-baseline-offset: var(--space-6);
 
   /* Component geometry, not layout distance. 192 matches Layout's xs track by value rather than
      reading --lay-track-xs: a component never reads another component's tokens. It is the minimum
@@ -57,10 +98,12 @@
   --lcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --lcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --lcrd-marker-ink: var(--color-neutral-900); /* 14.62:1 */
+  --lcrd-number-ink: var(--color-neutral-500); /* 3.16:1 — quiet mark, clears 3:1 */
   --lcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
   --lcrd-link-ink-hover: var(--color-brandeis-600); /* 7.52:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
   --lcrd-rule-ink: var(--color-neutral-300); /* decoration */
+  --lcrd-rule-ink-hover: var(--color-neutral-600); /* 4.92:1 — the hover affordance */
   --lcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --lcrd-ring-gap-color: var(--color-paper);
 }
@@ -72,10 +115,12 @@
   --lcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --lcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --lcrd-marker-ink: var(--color-neutral-900); /* 13.06:1 */
+  --lcrd-number-ink: var(--color-neutral-600); /* 4.39:1 — stepped on the deeper ground */
   --lcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-link-ink-hover: var(--color-brandeis-600); /* 6.72:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --lcrd-rule-ink: var(--color-neutral-400); /* decoration */
+  --lcrd-rule-ink-hover: var(--color-neutral-700); /* 7.27:1 */
   --lcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --lcrd-ring-gap-color: var(--color-paper-deep);
 }
@@ -88,10 +133,12 @@
   --lcrd-title-ink: var(--color-white); /* 17.26:1 */
   --lcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --lcrd-marker-ink: var(--color-white); /* 17.26:1 */
+  --lcrd-number-ink: var(--color-neutral-500); /* 5.41:1 — quieter, toward the ground */
   --lcrd-link-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-link-ink-hover: var(--color-brandeis-100); /* 13.61:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 15.44:1 */
   --lcrd-rule-ink: var(--color-neutral-700); /* decoration */
+  --lcrd-rule-ink-hover: var(--color-neutral-400); /* 8.05:1 — stronger on ink means lighter */
   --lcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --lcrd-ring-gap-color: var(--color-neutral-950);
 }
@@ -103,10 +150,12 @@
   --lcrd-title-ink: var(--color-white); /* 6.23:1 */
   --lcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-marker-ink: var(--color-white); /* 6.23:1 */
+  --lcrd-number-ink: var(--color-brandeis-200); /* 3.78:1 — quieter than 100's, clear of 3:1 */
   --lcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
   --lcrd-link-ink-hover: var(--color-white); /* 6.23:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-rule-ink: var(--color-brandeis-300); /* decoration */
+  --lcrd-rule-ink-hover: var(--color-white); /* 6.23:1 */
   --lcrd-ring-color: var(--color-white); /* 6.23:1 against gap */
   --lcrd-ring-gap-color: var(--color-brandeis-500);
 }

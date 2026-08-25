@@ -9,7 +9,7 @@
 | **Status**          | implemented                                                                                                            |
 | **Token prefix**    | `--lcrd-*`                                                                                                             |
 | **Designer / date** | Codex / 21 Aug 2026                                                                                                    |
-| **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed |
+| **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and the rule as the hover affordance |
 | **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
 | **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
 
@@ -39,20 +39,26 @@ parent list.
 | --------- | ---------------: | -------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `root`    |              yes | One `li`; the only legal outer element                                           | Full available inline size; no colour of its own                  |
 | `frame`   |              yes | An `a` when `href` is present, otherwise an inert `div`                          | Row inset, focus ring and interactive state boundary              |
-| `marker`  |               no | One slot filled by a formatted number, an `Icon`, or one thumbnail media element | `--lcrd-marker-ink`; fill-specific geometry                       |
+| `marker`  |               no | One slot filled by a formatted number, an `Icon`, or one thumbnail media element | `--lcrd-marker-ink` for the icon fill, `--lcrd-number-ink` for the number; fill-specific geometry |
 | `content` |              yes | The group containing `title` and `body`                                          | `split` or `stacked` arrangement; no colour of its own            |
 | `title`   |              yes | A `span`, `h3` or `h4`, selected by `titleAs`                                    | `--lcrd-title-ink`, linked or not                                 |
 | `body`    |   yes in the API | One paragraph; whitespace-only content emits no element                          | `--lcrd-body-ink` and `--measure-body`                            |
 | `cue`     | linked rows only | `Icon name="arrow-right" size="lg"`, hidden from assistive technology            | The row's only link ink, and the row's only state                 |
-| `rule`    |              yes | The root's block-end hairline                                                    | `--lcrd-rule-ink` at one width in every state                     |
+| `rule`    |              yes | The root's block-end hairline                                                    | `--lcrd-rule-ink`, `--lcrd-rule-ink-hover`; one width in every state |
 
 The title's ink does not depend on `href`, matching the same change in `BlockCard`: a linked row is
 recognisable by its arrow, not by a blue heading, so `--lcrd-link-ink` is worn by the cue alone.
 
-The `rule` is decoration and always was. It is the row's own block-end hairline, at one width on
-every surface and in every state; the interactive overlay that used to wipe across it on hover and
-double on press is gone. Do not read the two as the same thing — removing the wipe did not remove
-the row's rule.
+The `rule` is the row's own block-end hairline, at one width on every surface and in every state. The
+interactive overlay that used to wipe across it and double on press is gone; do not read the two as
+the same thing, because removing the wipe did not remove the rule.
+
+**It is no longer only decoration.** The rule takes a hover colour, and that is deliberate: the
+target is the entire row — up to 1240px wide — and the rule is the only part of the anatomy that
+spans it. An 18px arrow at the far inline end stepping one shade of blue is not perceptible feedback
+for a box that size, which is what the redesign left behind when it removed the wipe and the linked
+title's colour in the same pass. The rule signals across the whole target instead, in colour only:
+no width change, no wipe, no transform. A static row has no `:hover` and never resolves it.
 
 The marker is one anatomical slot. `number`, `icon` and `thumbnail` name fills of that slot, not
 variants, sibling components or independent child positions. Omitting the marker omits both its
@@ -122,21 +128,28 @@ Static rows have only rest. They do not respond to a pointer and do not enter th
 | State           | Trigger                              | Parts that move                                                                              |
 | --------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
 | rest            | Base rendering                       | Nothing moves. Title, body and marker hold their own inks; the cue holds `--lcrd-link-ink`   |
-| hover           | Pointer over a linked frame          | The cue alone takes `--lcrd-link-ink-hover`                                                  |
-| focus, keyboard | `:focus-visible` on a linked frame   | The hover cue plus the two-part ring from `--lcrd-ring-color` and `--lcrd-ring-gap-color`    |
+| hover           | Pointer over a linked frame          | The rule takes `--lcrd-rule-ink-hover` across the full row; the cue takes `--lcrd-link-ink-hover` |
+| focus, keyboard | `:focus-visible` on a linked frame   | Exactly the hover rendering plus the two-part ring from `--lcrd-ring-color` and `--lcrd-ring-gap-color` |
 | pressed         | Pointer activation on a linked frame | The cue alone takes `--lcrd-link-ink-pressed`                                                |
 
-The cue is the only part with states, and colour is the only thing about it that changes. The rule
-wipe that carried hover along its own axis, and the doubled width that carried press, are both gone;
-the row's block-end hairline is decoration at one width throughout. Hover and pressed therefore
-differ from each other and from rest through ink alone, and each surface declares three separate cue
-steps so all three stay distinguishable — section 6 measures all twelve.
+Two parts move, and between them they cover the two scales the row works at. The **rule** carries
+hover across the whole target, because it is the only element that spans it. The **cue** carries the
+finer read at the row's inline end, and it is the only part that also distinguishes pressed.
 
-That narrowing is deliberate and its cost is bounded. Hover is a pointer affordance rather than
-information, and the arrow already identifies the row as navigation at rest. The one state a keyboard
-user depends on is focus, and focus is carried by the two-part ring around the whole row, not by
-colour — which makes the ring load-bearing rather than decorative and is why section 6 measures it
-against its own gap on all four surfaces.
+Colour is the only thing either of them changes. The width never moves, nothing wipes and nothing
+transforms — the mechanism the original spec used for hover is gone and has not been replaced with
+another one. Each surface declares its own rule-hover and its three cue steps; section 6 measures
+them.
+
+An earlier pass of this redesign left hover on the cue alone, and it was wrong for a reason worth
+recording: the row is up to 1240px wide and roughly 82px tall, and a one-step colour change on an
+18px glyph at the far end of it is not feedback a pointer user will notice. Removing the wipe was
+right; leaving nothing in its place was not.
+
+Pressed remains distinguishable from hover through the cue's own step. Focus is the hover rendering
+plus the two-part ring, so keyboard focus is never carried by colour alone — which makes the ring
+load-bearing rather than decorative, and is why section 6 measures it against its own gap on all four
+surfaces.
 
 Held, disabled, expanded, busy, loading and error are excluded. A navigation row is neither a
 selectable option nor an unavailable action; nothing opens and nothing asynchronous happens. Their
@@ -153,17 +166,35 @@ ground: `--color-paper`, `--color-paper-deep`, `--color-neutral-950` and
 | `--lcrd-title-ink`        | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
 | `--lcrd-body-ink`         | `--color-neutral-700` — 8.14:1                  | `--color-neutral-700` — 7.27:1                  | `--color-neutral-300` — 11.07:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--lcrd-marker-ink`       | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
+| `--lcrd-number-ink`       | `--color-neutral-500` — 3.16:1                  | `--color-neutral-600` — 4.39:1                  | `--color-neutral-500` — 5.41:1                  | `--color-brandeis-200` — 3.78:1             |
 | `--lcrd-link-ink`         | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-brandeis-100` — 4.91:1             |
 | `--lcrd-link-ink-hover`   | `--color-brandeis-600` — 7.52:1                 | `--color-brandeis-600` — 6.72:1                 | `--color-brandeis-100` — 13.61:1                | `--color-white` — 6.23:1                    |
 | `--lcrd-link-ink-pressed` | `--color-brandeis-700` — 10.07:1                | `--color-brandeis-700` — 8.99:1                 | `--color-brandeis-50` — 15.44:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--lcrd-rule-ink`         | `--color-neutral-300` — n/a, decoration         | `--color-neutral-400` — n/a, decoration         | `--color-neutral-700` — n/a, decoration         | `--color-brandeis-300` — n/a, decoration    |
+| `--lcrd-rule-ink-hover`   | `--color-neutral-600` — 4.92:1                  | `--color-neutral-700` — 7.27:1                  | `--color-neutral-400` — 8.05:1                  | `--color-white` — 6.23:1                    |
 | `--lcrd-ring-color`       | `--color-brandeis-500` — 6.17:1 against its gap | `--color-brandeis-500` — 5.51:1 against its gap | `--color-brandeis-300` — 7.32:1 against its gap | `--color-white` — 6.23:1 against its gap    |
 | `--lcrd-ring-gap-color`   | `--color-paper` — paired ring 6.17:1            | `--color-paper-deep` — paired ring 5.51:1       | `--color-neutral-950` — paired ring 7.32:1      | `--color-brandeis-500` — paired ring 6.23:1 |
 
-**Paper.** The title and number sit at neutral-900 whether or not the row navigates, while the body
-drops to neutral-700 so a row reads title first without sacrificing AA. The cue starts at
-brandeis-500 and advances through 600 and 700, and it is the only part of the row that does. The
-neutral-300 rule is deliberately quieter than text and stays at that one value in every state.
+**Paper.** The title sits at neutral-900 whether or not the row navigates, while the body drops to
+neutral-700 so a row reads title first without sacrificing AA. The cue starts at brandeis-500 and
+advances through 600 and 700, and it is the only part of the row that does. The neutral-300 rule is
+deliberately quieter than text and stays at that one value in every state.
+
+**The number is not the marker, for colour.** `--lcrd-marker-ink` keeps the title's ink for the icon
+fill; `--lcrd-number-ink` is the ordinal's own. The split is deliberate: an ordinal is chrome and an
+icon names the subject, so one token would have forced a choice between a shouting number and a
+receding subject glyph.
+
+It sits **one step quieter than the quiet-label ramp** used by `--crumb-collapse-ink`,
+`--foot-label-ink` and `--bcrd-eyebrow-ink`. A 20px numeral carries further than a 12px label and has
+to give more back, and colour — not size — is where this component gives it. On the two light
+surfaces that means stepping toward white; on ink and blue it means stepping **toward the ground**,
+which is the opposite direction in hex and the same direction in emphasis.
+
+Every cell clears 3:1 and none clears 4.5:1, and that is the deliberate part rather than an
+oversight. The numeral is `aria-hidden` and the parent `<ol>` carries the order, so it is a visible
+mark duplicating semantics the markup already states — the same argument `--fig-rule-ink` makes at
+1.90:1. The moment it becomes the only source of the order, it has to come back up to 4.5:1.
 
 **Tint.** Title, body and marker can keep their paper steps: each still clears its floor on
 paper-deep. The cue ramp is also restated unchanged because brandeis-500, 600 and 700 all clear AA
@@ -191,7 +222,10 @@ The component does not receive a `surface` prop and never paints the panel groun
 
 - Parent list rows: `Layout rowGap="none"`. Adjacent ruled rows share an edge; there is no outer
   seam to hide the list relationship.
-- Frame block inset: `--gap-text`. This is inner edge-to-content space, not outer spacing.
+- Frame block inset: `--gap-block`. This is inner edge-to-content space, not outer spacing. It was
+  `--gap-text`, whose own scale entry reads "cell padding on a dense table" — which a full-width
+  editorial row carrying an h4 title is not. Because it is padding on both edges, the distance
+  between two adjacent rows' content is twice it: 32px before, 48px now.
 - Marker to the content/cue core: `Cluster colGap="block"`; when the outer cluster wraps, its
   wrapped line seam is `rowGap="block"`.
 - Stacked title to body: `Layout rowGap="tight"`.
@@ -204,12 +238,13 @@ The component does not receive a `surface` prop and never paints the panel groun
 ### (b) Component sizes
 
 - `md` row: the only size; it has no fixed height and fills the available inline size. A title-only
-  linked row still measures at least 56px high at the narrow type step: one h5 line plus two
-  `--gap-text` insets, so the whole-row target clears 44px without a hit extension.
+  linked row measures about 82px high: one h4 line at 33.6px plus two `--gap-block` insets, so the
+  whole-row target clears 44px with room to spare and needs no hit extension. It was ~56px at the h5
+  title and the `--gap-text` inset.
 - `xs` content core minimum: `--lcrd-content-min-xs` is 192px, measured against Layout's existing
   `xs` track. It keeps a number or 24px icon beside readable copy and causes the larger thumbnail
   to wrap above the core before the copy collapses.
-- Number marker: no box size. Two-digit formatting and `--text-stat` supply a stable optical column
+- Number marker: no box size. Two-digit formatting and `--text-index` supply a stable optical column
   for the expected 1–12 range.
 - Icon marker: `Icon size="xl"`, resolving to `--icon-size-24`.
 - Cue: `Icon size="lg"`, resolving to `--icon-size-18`.
@@ -219,9 +254,24 @@ The component does not receive a `surface` prop and never paints the panel groun
 
 ### (c) Optical corrections
 
-None. The component does not reach into `--space-*`; every inset and seam is a gap-scale
+**One, and it is the number's baseline.** `--lcrd-number-baseline-offset` is `--space-6`, applied as
+`padding-block-start` on the number fill alone. Every other inset and seam is a gap-scale
 relationship, every icon is sized by `Icon`, and the rule and focus ring use their own system
 geometry.
+
+It reaches the space ramp because it is not a distance between two things — it is a correction for
+two different line boxes starting at the same top. The number is 20px/1.2 (a 24px box, baseline
+~17.6px down); the title is now h4, 28px/1.2 (33.6px, baseline ~23px down); the outer `Cluster` is
+`align="start"`. Without the offset the ordinal floats ~5.4px above the line it indexes, and 6px is
+the nearest ramp step.
+
+The value is a function of **both** type roles, which is the thing to remember about it: 8px against
+a 13px number, 2px against an h5 title, 6px now. Change either role and recompute it in the same
+edit.
+
+`align="baseline"` on that `Cluster` is the typographically correct relationship and cannot be used:
+the same marker slot holds a 160px thumbnail whose baseline is its bottom edge, so baseline-aligning
+the slot would shove every thumbnail row. The correction belongs to the number alone.
 
 Radius is `--radius-0`: a ruled row is not a rounded object. The block-end rule is
 `--border-width-hairline` and there is no second width — `--lcrd-rule-width-pressed` was deleted with
@@ -233,9 +283,9 @@ at `--z-base`.
 
 | Part                     | Type role        | Tracking                                   | Measure                              |
 | ------------------------ | ---------------- | ------------------------------------------ | ------------------------------------ |
-| `title`                  | `--text-h5`      | `--text-h5-tracking`                       | `--measure-title`                    |
+| `title`                  | `--text-h4`      | `--text-h4-tracking`                       | `--measure-title`                    |
 | `body`                   | `--text-body`    | none — this role has no tracking companion | `--measure-body`                     |
-| Number fill in `marker`  | `--text-stat`    | `--text-stat-tracking`                     | none — one expected two-digit marker |
+| Number fill in `marker`  | `--text-index`   | `--text-index-tracking`                    | none — one expected two-digit marker |
 | Icon and thumbnail fills | none             | none                                       | none                                 |
 | `cue`                    | none — an `Icon` | none                                       | none                                 |
 
@@ -252,9 +302,32 @@ is stated so that every mono rule in the system looks the same and no omission h
 decision. **Amended 25 Aug 2026:** this paragraph read "There is no text transform" before mono's
 case moved to the token layer.
 
+**The number's role changed on 25 Aug 2026, and this is the argument.** It shipped as `--text-stat`
+and is now `--text-index`. `--text-stat` is 40px; the title was an h5 at 22px. That made the ordinal
+almost twice the size of the content it indexes, and the loudest element in every row — a hierarchy
+inversion rather than a matter of taste. The role was the mistake, not the size: `--text-stat` is for
+a number that IS the content, the way a metric is in `Proof`, and a position in a list is a label.
+
+There is deliberately no middle step. The mono ramp runs 11, 12, 13, 14 and then jumps to 40, so a
+mono numeral is either a metric or a label with nothing in between to retreat to. Inventing a 24px
+mono step to split the difference is what the token rules forbid: a size that is not on the ramp is
+a mistake or a new step, and this is neither.
+
+`--text-ui` over `--text-eyebrow` — both mono semibold, one pixel apart — because of tracking.
+Eyebrow opens to 0.12em, which visibly splits the two digits of “01” into two marks, while ui's
+0.08em holds them as one. Size and tracking move together here as everywhere.
+
+**Colour is the lever, not size.** The first attempt at this de-emphasis took the number to
+`--text-ui` at 13px and was wrong: at that size it stopped competing with the title and stopped
+indexing the list, becoming a caption rather than a mark. The ordinal wants to stay large and give
+its weight back through ink, which is what section 6 does. `--text-index` at 20px sits well under the h4 title's 28px — present enough to scan a
+twelve-row list by, quiet enough that the title leads. The
+baseline correction in section 7(c) is the third part: a large numeral floating above the line it
+indexes reads as a misalignment however light it is.
+
 ## 9 · Responsive
 
-At 1023, no component arrangement changes. The existing h5 and stat roles resolve their
+At 1023, no component arrangement changes. The existing h4 and index roles resolve their
 tablet values from the type layer; `ListCard` does not restate them.
 
 At 767, `split` becomes one track because its `Layout` declares one track at base and a 2:3 split
@@ -337,11 +410,16 @@ ARIA is deliberately small:
 No ids are generated and there are no id references. Consequently there is no absent target for
 `aria-controls` to point at.
 
-Keyboard focus uses `:focus-visible` only. It shows the hover ink and overlay rule, plus a
-`--focus-ring-width` ring separated by `--focus-ring-offset` in the surface's own gap colour. The
-ring-to-gap ratios are 6.17:1, 5.51:1, 7.32:1 and 6.23:1. Text and meaningful glyphs meet 4.5:1 in
-every live state; the quiet base rule is decoration. Reduced motion keeps the rule visible but
-makes its wipe instant.
+Keyboard focus uses `:focus-visible` only. It shows the hover cue ink plus a `--focus-ring-width`
+ring separated by `--focus-ring-offset` in the surface's own gap colour. The ring-to-gap ratios are
+6.17:1, 5.51:1, 7.32:1 and 6.23:1. Text and meaningful glyphs meet 4.5:1 in every live state; the
+quiet base rule is decoration and does not participate in any state.
+
+Hover reaches the rule as well as the cue, so a pointer user gets a signal that spans the target
+rather than one 18px glyph at the end of it. Both are colour changes; nothing in the component
+transforms, so there is no reduced-motion clause to write. The ring remains the only non-colour
+signal and the only one a keyboard user depends on, which is why it is measured against its own gap
+on all four surfaces rather than treated as a default.
 
 A screen reader encounters a static numbered item as: “List, 12 items. Research plan. Define who
 needs to be represented before recruitment.” It encounters a linked item as: “Service design. Map
@@ -394,7 +472,7 @@ query in the same change.
    inspect the target overlay.
 5. Render identical ListCard markup on all four surface bands and inspect resolved `--lcrd-*`
    values rather than passing a surface prop.
-6. Use `titleAs` to match the page outline while preserving h5 visual type; compare the heading map
+6. Use `titleAs` to match the page outline while preserving h4 visual type; compare the heading map
    with the computed type token.
 7. Prove the title's ink does not depend on `href`: render the same row linked and static side by
    side and expect both computed title colours to be `--lcrd-title-ink`.
@@ -519,14 +597,16 @@ or a filled selected/interactive state. **Recommendation and draft decision: rul
 selected content need is present, and a neutral fill would duplicate `BlockCard`.
 
 **4 · How the number is drawn — non-blocking.** Options: an ordinary body numeral; a micro label;
-or a zero-padded stat numeral. **Recommendation and draft decision: zero-padded `--text-stat`**, at
+or a zero-padded stat numeral. **Recommendation and draft decision: zero-padded `--text-stat`**
+(superseded 25 Aug 2026 — the zero-padding held, the stat role did not; see section 8), at
 least two digits and hidden from assistive technology inside an `ol`. Its scale makes sequence the
 row's first read and prevents the marker from becoming a bullet.
 
 **5 · Title semantics — non-blocking.** Options: always a heading; never a heading; or an exact
 element union. **Recommendation and draft decision: `titleAs: 'span' | 'h3' | 'h4'`, default
-`span`.** Term lists do not need 12 new headings; linked subheading clusters often do. Visual h5
-type remains fixed in all three.
+`span`.** A plain content list does not need 12 new headings; a stepped process or a listing page of
+articles usually does. Visual type is fixed in all three — h5 when this was written, h4 since the
+presence pass.
 
 **6 · Link target — non-blocking.** Options: title-only anchor plus cue; a nested link Button; or
 one whole-row anchor. **Recommendation and draft decision: one whole-row native anchor.** It makes
@@ -575,26 +655,38 @@ NAMES
 [x] Section, Layout and Cluster props/values are existing unions: as, rowGap, colGap, columns,
     align, nowrap; none, tight, block, column, start; base, md; ol, ul, li.
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS rule blocks or media-query blocks.
-[x] Tracking companions are used only with h5 and stat, both of which have one.
+[x] Tracking companions are used only with h4 and index, both of which have one. The marker moved
+    off stat on 25 Aug 2026; size and tracking moved together, and --text-index borrows ui's 0.08em
+    rather than declaring a third correction.
 [x] Every layout distance is a gap-scale role.
-[x] Space-ramp reaches: 0.
+[x] Space-ramp reaches: 1 — --lcrd-number-baseline-offset (--space-2), argued in section 7(c) as a
+    baseline correction rather than a distance, and commented as optical on its own token.
+[x] One new USAGE role was added for this component's sake: --text-index, 20px mono. Section 8 and
+    docs/vocabulary.md carry it, /design/typography renders it, and the justification is a genuine
+    hole in the ramp (mono ran 11, 12, 13, 14, then 40) rather than this component's convenience.
 [x] Literal pixel values are component sizes, a touch floor or the Section cap, each measured in
     section 7. Count: 22 occurrences, 8 distinct values.
 
 COLOUR AND CONTRAST
-[x] Colour table has 9 rows × 4 full cells; no delta and no blank.
+[x] Colour table has 11 rows × 4 full cells; no delta and no blank. The number row was added when
+    the ordinal stopped sharing the icon's ink, and the rule-hover row when the rule became the
+    hover affordance.
 [x] Every text/glyph cell has a measured ratio of at least 4.5:1.
 [x] Focus ring is measured against its own gap on all four surfaces.
-[x] Base rule is explicitly marked decoration, and is now the only thing it ever was: no state
-    changes its colour or its width.
+[x] The rule's rest value is marked decoration; its hover value is not, and section 2 says so. No
+    state changes its WIDTH, which is the assertion the removed wipe made false.
 [x] One paragraph per surface explains the mapping; nested surfaces are specified.
 
 STATES
 [x] Every claimed state comes from the fixed model and uses its fixed suffix.
-[x] Hover and pressed differ on all four surfaces through cue ink. They are now colour-only, which
-    section 5 states explicitly and argues rather than leaving implied — the ring carries focus, the
-    one state a keyboard user depends on.
+[x] Hover and pressed differ on all four surfaces through cue ink, and hover additionally changes the
+    rule across the full row. Both are colour-only and section 5 argues that rather than leaving it
+    implied, including why the cue alone was not enough for a 1240px target.
 [x] Every state token moves on at least one surface and is declared in all four columns.
+[x] Relative emphasis is stated, not just per-part values: the first read is the TITLE, then the
+    marker, then the body, then the cue. h4 title over a 20px quiet numeral over 16px body. This line
+    exists because its absence is what let a 40px marker ship above a 22px title — see
+    docs/guides/spec-process-review.md, finding 2.
 [x] Excluded states have no token. There is no disabled opacity.
 [x] No token remains for anything the component no longer draws: --lcrd-rule-width-pressed is
     deleted, not zeroed.

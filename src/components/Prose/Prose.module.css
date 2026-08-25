@@ -17,7 +17,7 @@
 
 .prose {
   max-width: var(--measure-body);
-  font: var(--text-body-lg);
+  font: var(--text-body);
   color: var(--prose-ink);
 }
 
@@ -149,7 +149,7 @@
    The term is the head and the definition is its body, so the pair takes the inline step and
    the gap BETWEEN pairs takes the text step. Same shape as the flow above, one level down. */
 .prose dt {
-  font: var(--text-body-lg);
+  font: var(--text-body);
   font-weight: var(--font-weight-semibold);
   color: var(--prose-ink-heading);
 }

@@ -36,38 +36,38 @@ const SURFACE_ITEMS = CORE_ITEMS.slice(0, 3);
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
-    note: 'Neutral trigger ink and interaction grounds, with Brandeis reserved for the open rule and focus ring.',
+    note: 'Questions rest at neutral-800 and rise to neutral-950; the mark rests quieter at neutral-500. Brandeis appears in one place only, the focus ring.',
   },
   {
     surface: 'tint',
-    note: 'The full palette resolves against paper-deep: deeper neutral states, rule and focus gap included.',
+    note: 'The same two ink steps against paper-deep, with the mark one further down the ramp at neutral-600 — neutral-500 on this ground misses the 3:1 non-text floor.',
   },
   {
     surface: 'ink',
-    note: 'White questions sit over neutral-900 and neutral-800 pointer states; open rules lift to Brandeis 300.',
+    note: 'The ladder inverts: neutral-300 rests and white is the raised step, so the open question is the brightest thing in the set.',
   },
   {
     surface: 'blue',
-    note: 'White questions and focus use the light end while hover and pressed deepen the existing Brandeis ground.',
+    note: 'Both steps come out of the Brandeis tints rather than a second colour family, and the raised step is white.',
   },
 ] as const;
 
 const NESTED_SURFACE_TOKENS = {
   tint: [
-    ['--acc-trigger-fg', '--color-neutral-900'],
-    ['--acc-trigger-bg-hover', '--color-neutral-200'],
-    ['--acc-trigger-bg-pressed', '--color-neutral-300'],
-    ['--acc-rule-ink', '--color-neutral-400'],
-    ['--acc-rule-ink-expanded', '--color-brandeis-500'],
+    ['--acc-question-ink', '--color-neutral-800'],
+    ['--acc-question-ink-hover', '--color-neutral-950'],
+    ['--acc-mark-ink', '--color-neutral-600'],
+    ['--acc-mark-ink-hover', '--color-neutral-950'],
+    ['--acc-rule-ink', '--color-neutral-300'],
     ['--acc-ring-color', '--color-brandeis-500'],
     ['--acc-ring-gap-color', '--color-paper-deep'],
   ],
   ink: [
-    ['--acc-trigger-fg', '--color-white'],
-    ['--acc-trigger-bg-hover', '--color-neutral-900'],
-    ['--acc-trigger-bg-pressed', '--color-neutral-800'],
-    ['--acc-rule-ink', '--color-neutral-700'],
-    ['--acc-rule-ink-expanded', '--color-brandeis-300'],
+    ['--acc-question-ink', '--color-neutral-300'],
+    ['--acc-question-ink-hover', '--color-white'],
+    ['--acc-mark-ink', '--color-neutral-500'],
+    ['--acc-mark-ink-hover', '--color-white'],
+    ['--acc-rule-ink', '--color-neutral-800'],
     ['--acc-ring-color', '--color-brandeis-300'],
     ['--acc-ring-gap-color', '--color-neutral-950'],
   ],
@@ -108,7 +108,8 @@ export default function AccordionSpecimenPage() {
           <p>
             One continuous set of native question-and-answer disclosures. The first valid item
             begins open, every item remains independently openable, and rich answers belong to
-            Prose rather than to a second body treatment.
+            Prose rather than to a second body treatment. The component paints no ground in any
+            state: hover, press and open move the ink of the question and its mark.
           </p>
         </Layout>
       </Section>
@@ -119,7 +120,9 @@ export default function AccordionSpecimenPage() {
             <h2>1 · Identity and finish</h2>
             <p>
               Five native disclosures form one leading-and-ending rule ladder. There is no item
-              fill at rest, no surrounding box and no gap between records.
+              fill in any state, no surrounding box and no gap between records. Every rule is the
+              same hairline whether its item is open or closed — an open disclosure is already
+              self-evidently open, because the answer is on screen.
             </p>
           </Layout>
           <Accordion items={CORE_ITEMS} />
@@ -186,17 +189,19 @@ export default function AccordionSpecimenPage() {
             <h2>5 · States</h2>
             <p>
               The first row begins expanded and the second closed. Point, hold and Tab to
-              compare native rest, hover, keyboard focus, pressed and expanded treatments.
+              compare native rest, hover, keyboard focus, pressed and expanded treatments. Hover,
+              focus and open all resolve to one raised ink, so the set holds two ink values rather
+              than five; pressed is the only state that adds a second signal.
             </p>
           </Layout>
           <Accordion items={CORE_ITEMS.slice(0, 2)} />
           <Layout columns={{ base: 1, md: [1, 3] }} colGap="gutter" rowGap="tight">
             {[
-              ['rest', 'Transparent trigger and quiet ending rule.'],
-              ['hover', 'A surface-specific background appears behind the full trigger.'],
-              ['focus', 'Hover rendering plus a two-part keyboard-only ring.'],
-              ['pressed', 'A second, deeper surface-specific trigger background.'],
-              ['expanded', 'Down chevron, visible answer and action-colour ending rule.'],
+              ['rest', 'Question at --acc-question-ink, mark quieter at --acc-mark-ink, quiet ending rule.'],
+              ['hover', 'Question and mark rise to their -hover ink. No ground appears, on any surface.'],
+              ['focus', 'The raised ink plus a two-part keyboard-only ring — the ring is the only Brandeis in the component.'],
+              ['pressed', 'The raised ink held, plus a hairline underline at --acc-mark-ink, so press differs from hover by more than colour.'],
+              ['expanded', 'Down chevron, visible answer and the raised ink held. The rule does not change.'],
             ].map(([state, note]) => (
               <div key={state}>
                 <strong>{state}</strong>
@@ -212,7 +217,11 @@ export default function AccordionSpecimenPage() {
           <Layout rowGap="block">
             <h2>6 · Rich answer shapes</h2>
             <p>
-              Accordion supplies only the answer inset; Prose owns every inner relationship.
+              Accordion supplies the answer inset and nothing else. Prose owns every other
+              decision — type, colour, flow rhythm, links, lists, and the fallbacks for an answer
+              that arrives carrying an h4, a blockquote or a table. The 16px the redesign wanted
+              under the 22px question is Prose&rsquo;s own flow size, so there is nothing here to
+              restate.
             </p>
           </Layout>
           <Accordion
@@ -256,7 +265,7 @@ export default function AccordionSpecimenPage() {
             <h2>8 · Nested surfaces</h2>
             <p>
               The tint panel resolves all seven Accordion colour tokens from itself; no
-              enclosing ink value leaks into its triggers, rules or focus pair.
+              enclosing ink value leaks into its questions, marks, rules or focus pair.
             </p>
           </Layout>
           <Section as="div" surface="tint" density="tight">
@@ -344,9 +353,12 @@ export default function AccordionSpecimenPage() {
           <Layout rowGap="block">
             <h2>11 · Native semantics and focus order</h2>
             <p>
-              The element map is <code>details → summary + Prose</code>. Tab moves from the
-              first summary into its answer link, then to the next summary; Shift+Tab reverses
-              it. Escape, arrows, Home and End are deliberately unbound.
+              The element map is <code>details → summary(h3 + mark) + Prose</code>. The question
+              is a heading inside the native summary, so 5–7 questions appear in the heading tree
+              and a screen-reader or voice-control user can jump to the set on a long page; the
+              summary keeps its own role, expanded state and accessible name regardless. Tab moves
+              from the first summary into its answer link, then to the next summary; Shift+Tab
+              reverses it. Escape, arrows, Home and End are deliberately unbound.
             </p>
           </Layout>
           <Accordion
@@ -363,6 +375,12 @@ export default function AccordionSpecimenPage() {
               },
             ]}
           />
+          <Specimen
+            title='questionAs="h4"'
+            note="Semantics only — the question renders at the h5 composite whichever element it is. Inspect the accessibility tree: the pair above is h3 and the pair below is h4, and both summaries keep the same role, expanded state and accessible name. h4 is for the route that nests a set under an h3; every audited route takes the h3 default because ContentSection owns the section heading."
+          >
+            <Accordion questionAs="h4" items={SURFACE_ITEMS.slice(0, 2)} />
+          </Specimen>
         </Layout>
       </Section>
 
@@ -425,9 +443,11 @@ export default function AccordionSpecimenPage() {
           <h2>14 · What this static page cannot force</h2>
           <p>
             Point for hover, hold for pressed, Tab for the keyboard ring, and use Enter and
-            Space to toggle. Reload to verify the first-valid initial state, narrow through
-            exactly 767px, and enable reduced motion to make colour transitions instant. None of
-            these states has a prop, and answer height never animates.
+            Space to toggle. Watch the question AND its mark on each: there is no ground to look
+            for, and a state that only moved the question would be the bug. Reload to verify the
+            first-valid initial state, narrow through exactly 767px, and enable reduced motion to
+            make the two ink transitions instant. None of these states has a prop, and answer
+            height never animates.
           </p>
         </Layout>
       </Section>
