@@ -1,4 +1,6 @@
-import type { IconName, SectionSurface } from '@/components';
+import type { ReactNode } from 'react';
+
+import type { SectionSurface } from '@/components';
 
 /**
  * The site navigation's information architecture, as a shape.
@@ -9,118 +11,167 @@ import type { IconName, SectionSurface } from '@/components';
  * what a source happens to store. @/content imports them and declares the fixture against them,
  * which is the direction the seam runs.
  *
- * The panel is a LIST OF BLOCKS rather than a fixed set of fields, and that is the load-bearing
- * decision in this file. Three block kinds cover every panel the sitemap asks for, and a panel
- * built from them can express depth — grouped rows, a rail of compartments, an index link at the
- * foot — without the nav growing a bespoke case per top-level item. The previous site cut
- * Expertise and the Insights taxonomy out of the header entirely, because with one flat treatment
- * for every kind of content, depth could only read as a dump.
+ * ── The load-bearing decision: EVERY item carries its children ──────────────────────────────────
+ * Work, Lab and About render as plain links today. Their children are in the data anyway, on
+ * `children`, unrendered. Two reasons, both from docs/specs/SiteNav.md §2.1.
+ *
+ * First, switching Lab to a menu later is a change to ONE FIELD on one record — `form: 'link'`
+ * becomes `form: 'compact'` and the groups are already written — rather than a content migration
+ * done under time pressure by whoever is on the ticket.
+ *
+ * Second, these same records are meant to feed the footer, the in-page section navigation and the
+ * sitemap. A child that exists in one of those and not another is a bug a build can catch, and it
+ * can only catch it if there is one list to compare against.
+ *
+ * ── Why this replaced a list of blocks ──────────────────────────────────────────────────────────
+ * The previous shape was a `SiteNavBlock[]` per item — rows, rail, bar — which let a panel be
+ * anything and therefore made every panel a separate design. The revised IA is narrower on
+ * purpose: a mega is GROUPS of links, plus at most one rail. Two shapes instead of an open set,
+ * which is what lets one plate morph between three sections rather than three panels blink in and
+ * out of existence.
  */
 
-/** A destination and its label. The atom every block is built out of. */
+/**
+ * Does the page behind this link exist yet?
+ *
+ * `planned` means the route is decided and the page is not built. The link still renders, and it
+ * renders IDENTICALLY to a live one — see the note on the type below. This flag is not for the
+ * nav: it is for the sitemap generator, which must not submit a holding page to a search engine.
+ */
+export type SiteNavStatus = 'live' | 'planned';
+
+/**
+ * How a bar item behaves.
+ *
+ *   mega     opens the plate: two groups side by side, optionally a rail
+ *   compact  opens the plate at its narrow width — one or two short groups, never a rail
+ *   link     navigates. `children` is carried and not rendered
+ *
+ * `compact` is in the union because §2.1 promises that switching Lab or About to a menu is a
+ * one-field edit, and a union member nothing can be set to is not a promise. NO ITEM USES IT
+ * TODAY. It renders as a mega held to `--nav-plate-width-sm`, which is what "compact menu" means
+ * in this design language — not as a special case with rules of its own.
+ */
+export type SiteNavForm = 'mega' | 'compact' | 'link';
+
+/**
+ * A destination and its label. The atom every group is built out of.
+ *
+ * `status` is required rather than optional, and on every link rather than only the unbuilt ones.
+ * An optional flag makes "no page yet" and "nobody filled this in" the same value, and the second
+ * of those is the one that ships by accident.
+ */
 export type SiteNavLink = {
   label: string;
   href: string;
+  status: SiteNavStatus;
 };
 
-/**
- * One row in a `rows` block: a destination, a promise, and optionally a mark.
- *
- * `promise` is required, not optional. A row without one is a link in a list, and a link in a list
- * belongs in the rail — the whole reason a row costs two lines and half a column is that it says
- * what you get, and a panel of rows with empty second lines is worse than a panel of plain links.
- */
-export type SiteNavRow = {
+/** A named list of links — one column of a plate, one block of a sheet pane. */
+export type SiteNavGroup = {
   label: string;
-  promise: string;
-  href: string;
-  /**
-   * A mark from the glyph set. Optional, and the test is whether it ADDS anything: the six
-   * services carry marks because "Design Systems" and "Design Engineering" are hard to tell apart
-   * at a glance, while the Insights formats do not, because "Podcasts" needs no help and a glyph
-   * that says nothing is noise.
-   */
-  icon?: IconName;
-};
-
-/** Rows — the panel's primary column. Two columns of promise rows, optionally under a label. */
-export type SiteNavRowsBlock = {
-  kind: 'rows';
-  /** A mono label over the set, for a panel with more than one group of rows. */
-  label?: string;
-  /** How many columns the rows run in. Collapses to one below the md breakpoint regardless. */
-  columns?: 1 | 2;
-  items: SiteNavRow[];
+  links: readonly SiteNavLink[];
 };
 
 /**
- * A rail compartment — the editorial unit. An eyebrow, a title, a sentence and one action; the
- * shape a panel uses to say "start here" rather than "here is everything".
+ * A rail card. The primary one leads with an image; the secondary is a compact row under it.
+ *
+ * The secondary is NOT a second card, and that is structural rather than aesthetic: a full card
+ * makes the rail taller than the two columns beside it, and then the plate's height is set by the
+ * offer instead of by the content — which is the one thing the morph must not depend on.
+ *
+ * `image` is a slot, so the caller decides what fills it and this pattern never learns about
+ * `next/image`. Without one the card renders title-only rather than showing an empty frame: an
+ * unfilled grey rectangle in a live header reads as a broken image, not as a placeholder. The
+ * proving ground and the design-sync preview both pass one, so the filled arrangement is proven.
  */
-export type SiteNavRailCompartment = {
-  eyebrow: string;
+export type SiteNavCard = {
   title: string;
-  description: string;
-  action: SiteNavLink;
+  href: string;
+  status: SiteNavStatus;
+  role: 'primary' | 'secondary';
+  image?: ReactNode;
 };
 
-/** A rail group — a named list of plain links, for destinations that need no selling. */
-export type SiteNavRailGroup = {
+/** The plate's third column. Services alone has one. */
+export type SiteNavRail = {
   label: string;
-  links: SiteNavLink[];
+  cards: readonly SiteNavCard[];
 };
 
 /**
- * The rail — the panel's second column, and the reason a panel reads as designed rather than as a
- * table of contents. Either flavour, or both: compartments carry weight, groups carry breadth.
- */
-export type SiteNavRailBlock = {
-  kind: 'rail';
-  compartments?: SiteNavRailCompartment[];
-  groups?: SiteNavRailGroup[];
-};
-
-/**
- * The bar — one link across the foot of the panel, to the section's own index.
+ * A top-level bar item.
  *
- * This is what lets the top-level item be a DISCLOSURE rather than a link: "Services" opens the
- * panel, and "All services" is where you go. A trigger that both navigates and opens has to
- * choose one on click, and whichever it chooses is wrong for half its users.
- */
-export type SiteNavBarBlock = {
-  kind: 'bar';
-  link: SiteNavLink;
-};
-
-export type SiteNavBlock = SiteNavRowsBlock | SiteNavRailBlock | SiteNavBarBlock;
-
-/**
- * A top-level bar item. With a `panel` it is a disclosure; without one it is a plain link — Work
- * and About have nothing to group, and giving them an empty panel to be consistent would put a
- * chevron on a control that opens nothing.
+ * `href` is required in practice when `form` is `'link'` and meaningless otherwise — a mega's
+ * trigger opens rather than navigates, because a control that does both has to pick one on click
+ * and is wrong for half its users. It is typed optional rather than as a discriminated union
+ * deliberately: the union would make `form` unchangeable without also restructuring the record,
+ * and being able to flip that one field is the whole point of §2.1.
  */
 export type SiteNavItem = {
   /** Stable identity for open/closed state. Not derived from the label, which is editorial. */
   key: string;
   label: string;
-  href: string;
+  form: SiteNavForm;
+  /** Where the item goes when `form` is `'link'`. Ignored by a mega. */
+  href?: string;
   /**
    * Paths this item owns that do not sit under its own href — Services also owns `/audits` and
    * `/how-we-work`, About also owns `/team` and `/careers`. Without these, those pages leave the
    * whole bar unlit, which reads as "you are nowhere".
+   *
+   * Not in the spec's type. It is here because the spec still asks the bar item to carry `active`
+   * (§3), and an item can only know it is current if it is told which paths it covers.
    */
-  matchPaths?: string[];
-  panel?: SiteNavBlock[];
+  matchPaths?: readonly string[];
+  /** The plate's columns. `mega` and `compact`. */
+  groups?: readonly SiteNavGroup[];
+  /** The plate's third column. `mega` only, and only where there is something to put in it. */
+  rail?: SiteNavRail;
+  /**
+   * How wide the plate opens for this item.
+   *
+   * The plate shrinks to its content — 1240 for Services, 880 for Expertise, 720 for Insights —
+   * because a plate held at the full content width beside four short rows shows 500px of empty
+   * ground, and that reads as a mistake rather than as restraint.
+   *
+   * It is DECLARED rather than derived. A pattern cannot count words: deriving the width from
+   * link counts would silently re-lay out the plate the day a group gains a seventh item, and the
+   * cause would be invisible in both the data and the markup. Defaults to `lg` with a rail and
+   * `md` without.
+   */
+  panelWidth?: 'sm' | 'md' | 'lg';
+  /**
+   * The children of a `link` item — carried, not rendered. See the header.
+   *
+   * Typed on every item rather than only on links so that flipping `form` needs no other edit,
+   * but only a `link` has anywhere to put them today.
+   */
+  children?: readonly SiteNavLink[];
 };
 
 export type SiteNavProps = {
-  items: SiteNavItem[];
-  /** The one action in the bar. Always solid, always primary — it is the offer. */
+  items: readonly SiteNavItem[];
+  /**
+   * The offer. Solid primary, always — it is the one thing the bar asks for.
+   *
+   * Rendered in the bar above the breakpoint and at the right of the sheet's sticky foot below it,
+   * where the primary belongs under the right thumb.
+   */
   cta: SiteNavLink;
   /**
-   * The ground the bar, the panel and the drawer paint. Defaults to `paper`.
+   * The lighter way in — "Request audit". Ghost neutral, and MOBILE ONLY.
    *
-   * One prop for all three on purpose: a header whose panel is a different surface from its bar
+   * It has no place in the bar: a bar with two actions has no offer, it has a choice, and the
+   * whole reason the desktop rail carries "Request Free Audit" as a compact row is that the same
+   * offer twice in one view is one offer too many. The sheet is the opposite case — its foot is
+   * the only chrome a thumb can reach without scrolling, so both ways in belong there.
+   */
+  ctaSecondary: SiteNavLink;
+  /**
+   * The ground the bar, the plate and the sheet paint. Defaults to `paper`.
+   *
+   * One prop for all three on purpose: a header whose plate is a different surface from its bar
    * reads as two components that happen to be adjacent.
    */
   surface?: SectionSurface;
