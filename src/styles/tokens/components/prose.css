@@ -19,10 +19,10 @@
    exactly that. There is no remap here to earn the name: prose's paragraph beat IS
    the text step, not a role that happens to land on it.
 
-   TYPE it does not own either. The module reads --text-body-lg, --text-quote,
+   TYPE it does not own either. The module reads --text-body, --text-quote,
    --text-caption, --text-code and --text-ui-sm as composites. Prose has no size
    ordinals to map them onto — unlike the button's three heights — so a
-   --prose-text:var(--text-body-lg) would rename without meaning.
+   --prose-text:var(--text-body) would rename without meaning.
 
    ── Every surface restates every token ──────────────────────────────────────────
    Not just the deltas from paper. A block carrying only deltas is not self-contained:
@@ -34,19 +34,21 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   The marker inset is an optical correction measured against Public Sans at 18px, not
+   The marker inset is an optical correction measured against Public Sans, not
    a layout distance: it is the width the bullet and a two-digit numeral both clear, so
    that every line of an item starts on the same vertical instead of the first line
    being pushed right. --gap-block would be a coincidence at 24, and the day the gap
    scale is re-tuned this list must not move.
    Same reasoning for the underline offset and the two code insets, which are cut
-   against Geist Mono's cap height at 14px inside an 18px line.
+   against Geist Mono's cap height at 14px inside the body line. All four were cut
+   when the flow ran at --text-body-lg (18); the flow is --text-body (16) now and they
+   were not re-cut, because each one still clears what it was measured to clear.
 
    The blockquote rule is the deck weight rather than the hairline. A hairline beside
    28px serif disappears; the quote then reads as an unexplained indent.            */
 :root{
 --prose-marker-inset:var(--space-24);   /* optical, not --gap-block */
---prose-link-underline-offset:var(--space-2);  /* optical: clears Public Sans' descenders at 18px */
+--prose-link-underline-offset:var(--space-2);  /* optical: clears Public Sans' descenders */
 --prose-code-padding-x:var(--space-6);  /* optical, not --gap-tight */
 --prose-code-padding-y:var(--space-2);  /* optical */
 --prose-code-radius:var(--radius-4);
@@ -60,7 +62,7 @@
    The default and the origin; every other surface is measured against it.
 
    Body ink is neutral-900 rather than 950 — 14.62:1 is already past AAA and the
-   softer step is what keeps 68 characters of 18px sans from vibrating. Headings
+   softer step is what keeps 68 characters of body sans from vibrating. Headings
    take 950, so the step between a head and its body is tonal as well as scalar.
 
    The pre panel inverts. A dark block inside a light page is the one place this
@@ -109,7 +111,7 @@
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
-   Body ink is neutral-100, not white. Pure white on near-black at 18px over a full
+   Body ink is neutral-100, not white. Pure white on near-black over a full
    measure haloes; 100 measures 13.63:1 and reads cleanly. Headings and the quote
    DO take white, because they are short and the extra step is what re-establishes
    the tonal gap that 900→950 gives on paper.
