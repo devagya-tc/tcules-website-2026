@@ -25,6 +25,7 @@
     "Accordion": "src/patterns/Accordion/Accordion.tsx",
     "Proof": "src/patterns/Proof/Proof.tsx",
     "Figure": "src/patterns/Figure/Figure.tsx",
+    "Callout": "src/patterns/Callout/Callout.tsx",
     "PageHero": "src/patterns/PageHero/PageHero.tsx",
     "SiteNav": "src/patterns/SiteNav/SiteNav.tsx",
     "SiteFooter": "src/patterns/SiteFooter/SiteFooter.tsx"
@@ -91,6 +92,10 @@
     "Figure": {
       "cardMode": "column",
       "viewport": "1280x900"
+    },
+    "Callout": {
+      "cardMode": "column",
+      "viewport": "1280x560"
     }
   },
   "dtsPropsFor": {

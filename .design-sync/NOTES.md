@@ -37,6 +37,46 @@ Repo-specific gotchas for future syncs. Read this before re-running.
   missing from it does not exist as far as the sync is concerned — the build prints
   `package: N components (N src-matched)`, so check that number against the tier folders every run.
 
+## Registering a component is two files and a config entry, and the config is the one that bites
+
+`componentSrcMap` IS the component list (see above), so a component that ships in `src/patterns/`
+does not reach the library until it has all three of:
+
+- a `componentSrcMap` entry,
+- `.design-sync/previews/<Name>.tsx` — the stories, whose doc comments are what Claude Design shows,
+- `.design-sync/groups/<Name>.md` — two lines of frontmatter naming the category.
+
+Nothing checks this and nothing can: `specimens:check` covers `src/app/design/**`, not the sync, so a
+component with a proving-ground route and no sync artifacts passes `npm run verify` green and is
+simply absent from the library. `Callout` shipped on 25 Aug 2026 and was invisible until it was
+registered by hand — its spec had already gone up with the aux docs, so the library was showing a
+spec for a component it did not have. **The number to check every run is the one the build prints:**
+`package: N components (N src-matched)` must equal the tier-folder count.
+
+`viewport` is worth a second pass rather than a guess. Read `maxHeight` for the component out of
+`ds-bundle/.render-check.json` after the first build and size the card to it: Callout's tallest cell
+measures 416 and its card was cut from a guessed 1280x900 to 1280x560, because a card three times
+its content is as bad a review surface as one the stories run past.
+
+## Two things about the anchor, learned the hard way on 25 Aug 2026
+
+`--remote` is a hand-maintained sidecar; nothing writes it for you. The refresh is
+`cp ds-bundle/_ds_sync.json .design-sync/.cache/remote-anchor.json`, and there are two traps.
+
+**Copy the sidecar from the build you actually UPLOADED, not from a later one.** Refreshing the
+anchor after a subsequent rebuild makes the anchor claim the remote holds files it has never seen —
+a settled `upload.any: false` that is a lie. The tell is the next re-sync going quiet while
+`bundleSha12` and `styleSha` differ from what you pushed. Recovery is to push the current bundle,
+styles and any component the diff names so the claim becomes true.
+
+**A sha that moves with no source change of YOURS is a source change of SOMEBODY ELSE'S.** A re-sync
+that reported all twenty components unchanged and still wanted to upload `BlockCard` looked like
+build non-determinism, and consecutive builds proved byte-identical — so it was not. The real cause
+was concurrent editing: `BlockCard.tsx` and six other files were being modified in the working tree
+while the sync ran. **`sourceHashes` in the sidecar is the diagnostic** — diff it against the anchor
+and it names the file. Check `git status` before every upload, because the bundle is built from the
+WORKING TREE and will carry uncommitted work-in-progress into the shared library.
+
 ## `cfg.tsconfig` must be a minimal, comment-free file — this one bites
 
 `lib/bundle.mjs`'s tsconfig parser strips `/* */` comments with a regex before `JSON.parse`. In the
