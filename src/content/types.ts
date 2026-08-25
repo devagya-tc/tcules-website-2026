@@ -136,6 +136,204 @@ export type ContentSeo = PageSeo & {
   structuredData?: Record<string, unknown> | unknown[];
 };
 
+export type AboutAction = {
+  label: string;
+  href: string;
+  external: boolean;
+};
+
+export type AboutImage = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
+export type AboutImageSection = {
+  id: string;
+  heading: string;
+  description: string;
+  images: AboutImage[];
+};
+
+export type AboutCard = {
+  id: string;
+  title: string;
+  body: string;
+  eyebrow?: string;
+  image?: AboutImage;
+  icon?: AboutImage;
+  action?: AboutAction;
+  surface?: 'paper' | 'tint' | 'ink' | 'blue';
+};
+
+export type AboutPage = {
+  documentId: string;
+  slug: string;
+  hero: {
+    heading: string;
+    description: string;
+    image?: AboutImage;
+  };
+  introduction?: {
+    heading: string;
+    description: string;
+  };
+  secondSection?: AboutImageSection;
+  thirdSection?: AboutImageSection;
+  principles?: {
+    id: string;
+    heading: string;
+    items: AboutCard[];
+  };
+  voices?: {
+    id: string;
+    heading: string;
+    cards: AboutCard[];
+  };
+  checklist?: {
+    id: string;
+    heading: string;
+    cards: AboutCard[];
+  };
+  closing?: {
+    id: string;
+    heading: string;
+    action?: AboutAction;
+    cards: AboutCard[];
+  };
+  updatedAt?: string;
+  publishedAt?: string;
+  seo?: ContentSeo;
+};
+
+export type AboutContentSource = {
+  getAboutPage(slug: string): Promise<AboutPage | null>;
+};
+
+export type ContactImage = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+};
+
+export type ContactAction = {
+  id: string;
+  label: string;
+  href: string;
+  description: string;
+  external: boolean;
+  icon?: ContactImage;
+};
+
+export type ContactCard = {
+  id: string;
+  heading: string;
+  icon?: ContactImage;
+  action?: ContactAction;
+};
+
+export type ContactPage = {
+  documentId: string;
+  slug: string;
+  heading: string;
+  description: string;
+  cards: ContactCard[];
+  socialMedia: ContactAction[];
+  createdAt?: string;
+  updatedAt?: string;
+  publishedAt?: string;
+  seo?: ContentSeo;
+};
+
+export type ContactFormSubmission = {
+  clientName: string;
+  clientCompany: string;
+  clientEmail: string;
+  clientContact: string;
+  clientComments: string;
+};
+
+export type ContactSubmissionResult = {
+  documentId: string;
+  createdAt?: string;
+  publishedAt?: string;
+};
+
+export type ContactContentSource = {
+  getContactPage(slug: string): Promise<ContactPage | null>;
+  createClientContact(data: ContactFormSubmission): Promise<ContactSubmissionResult>;
+};
+
+export type CareerAction = {
+  label: string;
+  href: string;
+  external: boolean;
+};
+
+export type CareerImage = {
+  src: string;
+  alt: string;
+};
+
+export type CareerCard = {
+  id: string;
+  heading: string;
+  icon?: CareerImage;
+  action?: CareerAction;
+};
+
+export type CareerOpening = {
+  documentId: string;
+  roleName: string;
+  roleDomain: string;
+  roleLocation: string;
+  roleDescription: string;
+  action?: CareerAction;
+  publishedAt?: string;
+};
+
+export type CareerPage = {
+  documentId: string;
+  slug: string;
+  hero: {
+    heading: string;
+    description: string;
+  };
+  secondSection?: {
+    id: string;
+    heading: string;
+    cards: CareerCard[];
+  };
+  thirdSection?: {
+    id: string;
+    heading: string;
+    description: string;
+    openings: CareerOpening[];
+    pageInfo: {
+      total: number;
+      page: number;
+      pageSize: number;
+      pageCount: number;
+    };
+  };
+  fourthSection?: {
+    id: string;
+    heading: string;
+    icon?: CareerImage;
+    action?: CareerAction;
+    cards: CareerCard[];
+    bottomHeading: string;
+    bottomAction?: CareerAction;
+  };
+  seo?: ContentSeo;
+};
+
+export type CareerContentSource = {
+  getCareerPage(slug: string): Promise<CareerPage | null>;
+};
+
 export type AuditSeo = ContentSeo;
 
 export type AuditPage = {
@@ -168,6 +366,95 @@ export type AuditPage = {
 
 export type AuditContentSource = {
   getAuditPage(slug: string): Promise<AuditPage | null>;
+};
+
+export type ToolCard = {
+  title: string;
+  body: string;
+  eyebrow?: string;
+};
+
+export type ToolLabelledItem = {
+  title: string;
+  body: string;
+  href?: string;
+  external?: boolean;
+};
+
+export type ToolContentColumn = {
+  id: string;
+  eyebrow?: string;
+  heading: string;
+  bodyHtml: string;
+  items: ToolLabelledItem[];
+};
+
+export type ToolBlock =
+  | { id: string; type: 'rich-text'; html: string }
+  | { id: string; type: 'card-grid'; columns: 1 | 2 | 3 | 4; cards: ToolCard[] }
+  | { id: string; type: 'comparison-cards'; cards: ToolCard[] }
+  | { id: string; type: 'table'; html: string }
+  | {
+      id: string;
+      type: 'quote';
+      quote: { quoteHtml: string; name: string; role: string; company: string };
+    }
+  | { id: string; type: 'callout'; html: string }
+  | {
+      id: string;
+      type: 'labelled-list';
+      displayStyle: string;
+      items: ToolLabelledItem[];
+    }
+  | {
+      id: string;
+      type: 'two-column';
+      left?: ToolContentColumn;
+      right?: ToolContentColumn;
+    }
+  | {
+      id: string;
+      type: 'link-group';
+      heading: string;
+      description?: string;
+      links: ToolLabelledItem[];
+    }
+  | {
+      id: string;
+      type: 'media';
+      image?: { src: string; alt: string; width: number; height: number };
+      caption: string;
+      download?: { label: string; href: string };
+    };
+
+export type ToolSection = {
+  id: string;
+  heading?: {
+    text: string;
+    anchorId: string;
+    navigationLabel?: string;
+  };
+  blocks: ToolBlock[];
+};
+
+export type ToolSeo = ContentSeo;
+
+export type ToolPage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  publishedAt?: string;
+  hero: {
+    eyebrow?: string;
+    highlightedText?: string;
+    description: string;
+  };
+  sections: ToolSection[];
+  seo?: ToolSeo;
+};
+
+export type ToolContentSource = {
+  getToolPage(slug: string): Promise<ToolPage | null>;
 };
 
 /**
@@ -358,6 +645,156 @@ export type ServicesMasterPage = {
 
 export type ServicesMasterContentSource = {
   getServicesMasterPage(slug: string): Promise<ServicesMasterPage | null>;
+};
+
+export type FutureInterfacesLabAction = {
+  label: string;
+  href: string;
+  external: boolean;
+  description?: string;
+  icon?: FutureInterfacesLabImage;
+};
+
+export type FutureInterfacesLabImage = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+};
+
+export type FutureInterfacesLabCard = {
+  id: string;
+  title: string;
+  body: string;
+  showIcon: boolean;
+  icon?: FutureInterfacesLabImage;
+  image?: FutureInterfacesLabImage;
+  tiles: Array<{ id: string; title: string; body: string }>;
+  pointsHtml: string;
+  details: Array<{ id: string; heading: string; bodyHtml: string }>;
+  action?: FutureInterfacesLabAction;
+};
+
+export type FutureInterfacesLabSection = {
+  id: string;
+  heading: string;
+  cards: FutureInterfacesLabCard[];
+};
+
+export type FutureInterfacesLabPage = {
+  documentId: string;
+  slug: string;
+  hero: {
+    heading: string;
+    body: readonly [string, ...string[]];
+    actions: FutureInterfacesLabAction[];
+  };
+  sections: FutureInterfacesLabSection[];
+  misc?: {
+    id: string;
+    eyebrow: string;
+    heading: string;
+    body: readonly [string];
+    action?: FutureInterfacesLabAction;
+  };
+  interfaceLabs?: {
+    id: string;
+    cards: Array<{
+      id: string;
+      title: string;
+      icon?: FutureInterfacesLabImage;
+      action?: FutureInterfacesLabAction;
+    }>;
+  };
+  seo?: ContentSeo;
+};
+
+export type FutureInterfacesLabContentSource = {
+  getFutureInterfacesLabPage(slug: string): Promise<FutureInterfacesLabPage | null>;
+};
+
+export type FutureInterfacesLabJoinAction = {
+  label: string;
+  href: string;
+  external: boolean;
+  description?: string;
+};
+
+export type FutureInterfacesLabJoinImage = {
+  src: string;
+  alt: string;
+};
+
+export type FutureInterfacesLabJoinCard = {
+  id: string;
+  title: string;
+  body: string;
+  icon?: FutureInterfacesLabJoinImage;
+  action?: FutureInterfacesLabJoinAction;
+};
+
+export type FutureInterfacesLabJoinCardSection = {
+  id: string;
+  heading: string;
+  description?: string;
+  icon?: FutureInterfacesLabJoinImage;
+  cards: FutureInterfacesLabJoinCard[];
+};
+
+export type FutureInterfacesLabJoinPage = {
+  documentId: string;
+  slug: string;
+  hero: {
+    id: string;
+    eyebrow?: string;
+    heading: string;
+    body: readonly [string, ...string[]];
+    actions: FutureInterfacesLabJoinAction[];
+  };
+  secondSection?: FutureInterfacesLabJoinCardSection;
+  thirdSection?: FutureInterfacesLabJoinCardSection;
+  fourthSection?: {
+    id: string;
+    body: string[];
+    content?: FutureInterfacesLabJoinCardSection;
+  };
+  fifthSection?: FutureInterfacesLabJoinCardSection;
+  sixthSection?: {
+    id: string;
+    heading: string;
+    description?: string;
+    leftCard?: {
+      id: string;
+      heading: string;
+      description: string;
+      bottomText?: string;
+    };
+    rightCards: Array<{ id: string; heading: string; description: string }>;
+  };
+  seventhSection?: {
+    id: string;
+    heading: string;
+    description?: string;
+    faqs: Array<{
+      id: string;
+      question: string;
+      answerHtml: string;
+      slug?: string;
+    }>;
+  };
+  eighthSection?: {
+    id: string;
+    heading: string;
+    description?: string;
+    icon?: FutureInterfacesLabJoinImage;
+  };
+  updatedAt?: string;
+  publishedAt?: string;
+  seo?: ContentSeo;
+};
+
+export type FutureInterfacesLabJoinContentSource = {
+  getFutureInterfacesLabJoinPage(slug: string): Promise<FutureInterfacesLabJoinPage | null>;
 };
 
 export type ExpertiseAction = {
@@ -656,6 +1093,132 @@ export type CaseStudyPage = {
 
 export type CaseStudyContentSource = {
   getCaseStudyPage(slug: string): Promise<CaseStudyPage | null>;
+  getCaseStudyListingPage(slug: string): Promise<CaseStudyListingPage | null>;
+};
+
+export type InsightAction = {
+  label: string;
+  href: string;
+  external: boolean;
+};
+
+export type InsightImage = {
+  src: string;
+  alt: string;
+};
+
+export type InsightFormatCard = {
+  id: string;
+  title: string;
+  image?: InsightImage;
+};
+
+export type InsightFilterOption = {
+  id: string;
+  name: string;
+  kind: 'category' | 'tag';
+};
+
+export type InsightFilterGroup = {
+  id: string;
+  label: string;
+  options: InsightFilterOption[];
+};
+
+export type InsightTaxonomy = {
+  documentId: string;
+  name: string;
+  slug?: string;
+};
+
+export type InsightResourceKind = 'article' | 'event' | 'interview' | 'podcast';
+
+export type InsightResource = {
+  documentId: string;
+  kind: InsightResourceKind;
+  title: string;
+  slug: string;
+  description: string;
+  image?: InsightImage;
+  tags: InsightTaxonomy[];
+  categories: InsightTaxonomy[];
+  filterIds: string[];
+  publishedAt?: string;
+};
+
+export type InsightsPage = {
+  documentId: string;
+  slug: string;
+  hero: {
+    heading: string;
+    description: string;
+  };
+  formatCards: InsightFormatCard[];
+  lab?: {
+    id: string;
+    heading: string;
+    description: string;
+    action?: InsightAction;
+  };
+  resources: {
+    id: string;
+    heading: string;
+    filters: InsightFilterGroup[];
+    items: InsightResource[];
+  };
+  closing?: {
+    id: string;
+    heading: string;
+    description: string;
+  };
+  seo?: ContentSeo;
+};
+
+export type InsightsContentSource = {
+  getInsightsPage(slug: string): Promise<InsightsPage | null>;
+};
+
+export type CaseStudyListingImage = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+};
+
+export type CaseStudyListingItem = {
+  documentId: string;
+  title: string;
+  slug: string;
+  description: string;
+  thumbnail?: CaseStudyListingImage;
+  tags: Array<{ documentId: string; name: string }>;
+  categories: Array<{ documentId: string; name: string; slug: string }>;
+  publishedAt?: string;
+};
+
+export type CaseStudyListingPage = {
+  documentId: string;
+  slug: string;
+  hero: {
+    heading: string;
+    description: string;
+    action?: CaseStudyAction;
+  };
+  items: CaseStudyListingItem[];
+  pageInfo: {
+    total: number;
+    page: number;
+    pageSize: number;
+    pageCount: number;
+  };
+  misc?: {
+    id: string;
+    label: string;
+    heading: string;
+    description: string;
+    action?: CaseStudyAction;
+  };
+  seo?: ContentSeo;
 };
 
 export type PodcastAction = CaseStudyAction;
@@ -724,6 +1287,129 @@ export type PodcastPage = {
 
 export type PodcastContentSource = {
   getPodcastPage(slug: string): Promise<PodcastPage | null>;
+};
+
+export type EventAction = PodcastAction;
+
+export type EventImage = PodcastImage;
+
+export type EventBlock = PodcastBlock;
+
+export type EventResource = PodcastResource;
+
+export type EventDetail = {
+  id: string;
+  location?: string;
+  date?: string;
+};
+
+export type EventPage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  description: string;
+  createdAt?: string;
+  publishedAt?: string;
+  featureImage?: EventImage;
+  socialImage?: EventImage;
+  details: EventDetail[];
+  tags: string[];
+  categories: string[];
+  blocks: EventBlock[];
+  resources: EventResource[];
+  seo?: ContentSeo;
+};
+
+export type EventContentSource = {
+  getEventPage(slug: string): Promise<EventPage | null>;
+};
+
+export type BlogAction = CaseStudyAction;
+
+export type BlogImage = CaseStudyImage;
+
+export type BlogAuthor = {
+  id: string;
+  name: string;
+  designation?: string;
+  image?: BlogImage;
+};
+
+export type BlogBlock =
+  | { id: string; type: 'prose'; html: string }
+  | { id: string; type: 'callout'; html: string }
+  | { id: string; type: 'separator'; html: string }
+  | { id: string; type: 'code'; html: string }
+  | {
+      id: string;
+      type: 'figures';
+      figures: Array<{ image: BlogImage; caption: string }>;
+    }
+  | {
+      id: string;
+      type: 'video';
+      title?: string;
+      description?: string;
+      youtubeId?: string;
+      video?: {
+        src: string;
+        mime: string;
+        poster?: string;
+        width?: number;
+        height?: number;
+        autoplay: boolean;
+        loop: boolean;
+      };
+      thumbnail?: BlogImage;
+    }
+  | {
+      id: string;
+      type: 'embed';
+      title: string;
+      description?: string;
+      url?: string;
+      width?: number;
+      height?: number;
+      thumbnail?: BlogImage;
+    };
+
+export type BlogResource = {
+  documentId: string;
+  slug: string;
+  title: string;
+  publishedAt?: string;
+  image?: BlogImage;
+  tags: string[];
+  categories: string[];
+};
+
+export type BlogPage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  description: string;
+  createdAt?: string;
+  publishedAt?: string;
+  publishedContent?: string;
+  updatedAt?: string;
+  heroVideo?: { id: string; title: string };
+  featureImage?: BlogImage;
+  socialImage?: BlogImage;
+  authors: BlogAuthor[];
+  tags: string[];
+  categories: string[];
+  blocks: BlogBlock[];
+  resources: BlogResource[];
+  cta?: {
+    heading: string;
+    body: readonly [string];
+    actions: readonly [BlogAction];
+  };
+  seo?: ContentSeo;
+};
+
+export type BlogContentSource = {
+  getBlogPage(slug: string): Promise<BlogPage | null>;
 };
 
 export type PrivacyPolicySection = {

@@ -20,13 +20,17 @@ const BODY = ['Tell us what you are trying to ship and who it is for.'] as const
 function Enquiry({
   outcome = 'success',
   audit = false,
+  contact = false,
   urlLabel,
 }: {
   outcome?: 'success' | 'error' | 'pending';
   audit?: boolean;
+  contact?: boolean;
   urlLabel?: 'Site or product URL' | 'Link to the work' | 'Where can we see it?';
 }) {
   const action = `${ENDPOINTS.enquiryDesign}?outcome=${outcome}`;
+
+  if (contact) return <EnquiryForm variant="contact" action={action} />;
 
   return audit ? (
     <EnquiryForm
@@ -46,8 +50,9 @@ export default function EnquiryFormSpecimenPage() {
         <Layout rowGap="block">
           <h1>EnquiryForm</h1>
           <p>
-            One stacked field set, two closed label variants, blur-only validation, and an
-            asynchronous success replacement. Every rendering sits inside CtaSection.
+            Shared stacked field sets for enquiries, audits, and contact, with blur-only
+            validation and an asynchronous success replacement. Every specimen rendering sits
+            inside CtaSection.
           </p>
         </Layout>
       </Section>
@@ -66,6 +71,13 @@ export default function EnquiryFormSpecimenPage() {
         form={<Enquiry audit />}
         scheduleHref={ROUTES.contact}
         surface="tint"
+      />
+      <CtaSection
+        eyebrow="Variant · contact"
+        heading="Start a conversation"
+        body={['Five visible contact fields mapped directly to the client-contact mutation.']}
+        form={<Enquiry contact />}
+        scheduleHref={ROUTES.contact}
       />
       <Section density="tight">
         <Layout rowGap="tight">
@@ -136,9 +148,9 @@ export default function EnquiryFormSpecimenPage() {
         <Layout rowGap="stack">
           <h2>Edge cases</h2>
           <p>
-            The next audit uses the longest fixed label. Scheduling remains the enclosing CTA&rsquo;s
-            single persistent action. The final rendering is deliberately constrained by an
-            illegal 256px parent to expose the documented floor.
+            The next audit uses the longest fixed label. Scheduling remains the enclosing
+            CTA&rsquo;s single persistent action. The final rendering is deliberately
+            constrained by an illegal 256px parent to expose the documented floor.
           </p>
         </Layout>
       </Section>

@@ -64,6 +64,7 @@ export const ROUTES = {
 
   /* Lab and company. */
   futureInterfacesLab: '/future-interfaces-lab',
+  futureInterfacesLabJoin: '/future-interfaces-lab/join',
   matterDesignSystem: '/matter-design-system',
   about: '/about',
   team: '/team',
@@ -118,9 +119,30 @@ export function podcastPath(slug: string): string {
   return `${ROUTES.podcasts}/${encodeURIComponent(slug)}`;
 }
 
+/** Build one canonical event-detail path from the named insights family. */
+export function eventPath(slug: string): string {
+  return `${ROUTES.events}/${encodeURIComponent(slug)}`;
+}
+
 /** Build one canonical article-detail path for podcast resource links. */
 export function articlePath(slug: string): string {
   return `${ROUTES.articles}/${encodeURIComponent(slug)}`;
+}
+
+/** Build one canonical tool-detail path from the named insights family. */
+export function toolPath(slug: string): string {
+  return `${ROUTES.tools}/${encodeURIComponent(slug)}`;
+}
+
+/** Build an insight-detail path while preserving each level of a nested CMS slug. */
+export function blogPath(slug: string): string {
+  const encodedSlug = slug
+    .split('/')
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join('/');
+
+  return encodedSlug ? `${ROUTES.insights}/${encodedSlug}` : ROUTES.insights;
 }
 
 /** Build one canonical glossary-detail path from the named route family. */
@@ -165,5 +187,6 @@ export const EXTERNAL = {
  */
 export const ENDPOINTS = {
   newsletter: '/api/newsletter',
+  contact: '/api/contact',
   enquiryDesign: '/api/design/enquiry',
 } as const;

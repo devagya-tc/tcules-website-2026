@@ -75,7 +75,7 @@ const SPECIMENS = [
       {
         href: '/design/enquiry-form',
         name: 'EnquiryForm',
-        note: 'the three-field form — 2 label sets, async lifecycle, 4 surfaces',
+        note: 'enquiry, audit, and contact field sets — async lifecycle, 4 surfaces',
       },
       {
         href: '/design/list-card',

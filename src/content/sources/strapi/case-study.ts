@@ -3,14 +3,19 @@ import type {
   CaseStudyBlock,
   CaseStudyContentSource,
   CaseStudyImage,
+  CaseStudyListingImage,
+  CaseStudyListingItem,
+  CaseStudyListingPage,
   CaseStudyPage,
   ContentSeo,
 } from '../../types';
-import { CASE_STUDY_BY_SLUG_QUERY } from './case-study-query';
+import { CASE_STUDY_BY_SLUG_QUERY, CASE_STUDY_LISTING_QUERY } from './case-study-query';
 import type {
   StrapiCaseStudy,
   StrapiCaseStudyBlock,
   StrapiCaseStudyFile,
+  StrapiCaseStudyListingItem,
+  StrapiCaseStudyListingResponse,
   StrapiCaseStudyResponse,
   StrapiCaseStudySeo,
 } from './case-study-types';
@@ -18,10 +23,23 @@ import { markdownToHtml } from './markdown';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
+const CASE_STUDIES_SLUG = 'case-studies';
 const CASE_STUDY_REVALIDATE_SECONDS = 300;
 
 function value(value: string | null | undefined): string {
   return typeof value === 'string' ? value.trim() : '';
+}
+
+function displayHeading(candidate: string | null | undefined): string {
+  return value(candidate)
+    .split('|')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .join(' ');
+}
+
+function normaliseSlug(candidate: string | null | undefined): string {
+  return value(candidate).replace(/^\/+|\/+$/gu, '');
 }
 
 function getStrapiGraphqlUrl(): string {
@@ -83,6 +101,72 @@ function mapAction(
     href,
     external:
       link?.isExternal === true || href.startsWith('http://') || href.startsWith('https://'),
+  };
+}
+
+function positiveDimension(candidate: number | null | undefined): number | undefined {
+  return typeof candidate === 'number' && Number.isFinite(candidate) && candidate > 0
+    ? candidate
+    : undefined;
+}
+
+function mapListingImage(
+  file: StrapiCaseStudyListingItem['thumbnail'],
+  title: string,
+  graphqlUrl: string,
+): CaseStudyListingImage | undefined {
+  const src = absoluteUrl(file?.url, graphqlUrl);
+  if (!src) return undefined;
+
+  const width = positiveDimension(file?.width);
+  const height = positiveDimension(file?.height);
+
+  return {
+    src,
+    alt: value(file?.alternativeText) || title,
+    ...(width ? { width } : {}),
+    ...(height ? { height } : {}),
+  };
+}
+
+function mapListingItem(
+  item: StrapiCaseStudyListingItem,
+  index: number,
+  graphqlUrl: string,
+): CaseStudyListingItem | undefined {
+  const title = value(item.title);
+  const slug = normaliseSlug(item.slug);
+  if (!title || !slug) return undefined;
+
+  const thumbnail = mapListingImage(item.thumbnail, title, graphqlUrl);
+  const tags = (item.tags ?? []).flatMap((tag) => {
+    const name = value(tag.name);
+    return name
+      ? [{ documentId: value(tag.documentId) || `case-study-tag-${index + 1}-${name}`, name }]
+      : [];
+  });
+  const categories = (item.categories ?? []).flatMap((category) => {
+    const name = value(category.name);
+    if (!name) return [];
+
+    return [
+      {
+        documentId: value(category.documentId) || `case-study-category-${index + 1}-${name}`,
+        name,
+        slug: normaliseSlug(category.slug),
+      },
+    ];
+  });
+
+  return {
+    documentId: value(item.documentId) || `case-study-${index + 1}`,
+    title,
+    slug,
+    description: value(item.description),
+    ...(thumbnail ? { thumbnail } : {}),
+    tags,
+    categories,
+    ...(value(item.publishedAt) ? { publishedAt: value(item.publishedAt) } : {}),
   };
 }
 
@@ -396,6 +480,66 @@ function mapCaseStudy(raw: StrapiCaseStudy, graphqlUrl: string): CaseStudyPage |
   };
 }
 
+function nonNegativeInteger(candidate: number | null | undefined): number {
+  return typeof candidate === 'number' && Number.isInteger(candidate) && candidate >= 0
+    ? candidate
+    : 0;
+}
+
+function mapCaseStudyListing(
+  payload: StrapiCaseStudyListingResponse,
+  requestedSlug: string,
+  graphqlUrl: string,
+): CaseStudyListingPage | null {
+  const rawPage = payload.data?.caseStudyLandingPage;
+  if (!rawPage) return null;
+
+  const cmsSlug = normaliseSlug(rawPage.seo?.slug);
+  if (cmsSlug && cmsSlug !== requestedSlug) return null;
+
+  const heading = displayHeading(rawPage.heroSection?.heading);
+  if (!heading) return null;
+
+  const heroAction = mapAction(rawPage.heroSection?.button);
+  const items = (payload.data?.caseStudies_connection?.nodes ?? []).flatMap((item, index) => {
+    const mapped = mapListingItem(item, index, graphqlUrl);
+    return mapped ? [mapped] : [];
+  });
+  const rawPageInfo = payload.data?.caseStudies_connection?.pageInfo;
+  const miscHeading = displayHeading(rawPage.misc?.heading);
+  const miscAction = mapAction(rawPage.misc?.button);
+  const misc =
+    rawPage.misc && miscHeading
+      ? {
+          id: value(rawPage.misc.id) || 'case-studies-misc',
+          label: value(rawPage.misc.label),
+          heading: miscHeading,
+          description: value(rawPage.misc.description),
+          ...(miscAction ? { action: miscAction } : {}),
+        }
+      : undefined;
+  const seo = mapSeo(rawPage.seo);
+
+  return {
+    documentId: value(rawPage.documentId) || requestedSlug,
+    slug: cmsSlug || requestedSlug,
+    hero: {
+      heading,
+      description: value(rawPage.heroSection?.description),
+      ...(heroAction ? { action: heroAction } : {}),
+    },
+    items,
+    pageInfo: {
+      total: nonNegativeInteger(rawPageInfo?.total),
+      page: nonNegativeInteger(rawPageInfo?.page),
+      pageSize: nonNegativeInteger(rawPageInfo?.pageSize),
+      pageCount: nonNegativeInteger(rawPageInfo?.pageCount),
+    },
+    ...(misc ? { misc } : {}),
+    ...(seo ? { seo } : {}),
+  };
+}
+
 async function fetchCaseStudyBySlug(slug: string): Promise<StrapiCaseStudy | null> {
   const graphqlUrl = getStrapiGraphqlUrl();
   const response = await fetch(graphqlUrl, {
@@ -428,7 +572,55 @@ async function fetchCaseStudyBySlug(slug: string): Promise<StrapiCaseStudy | nul
   return payload.data?.currentCaseStudy?.[0] ?? null;
 }
 
+async function fetchCaseStudyListing(): Promise<{
+  graphqlUrl: string;
+  payload: StrapiCaseStudyListingResponse;
+}> {
+  const graphqlUrl = getStrapiGraphqlUrl();
+  const response = await fetch(graphqlUrl, {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: CASE_STUDY_LISTING_QUERY,
+      variables: {
+        status: 'PUBLISHED',
+        page: 1,
+        pageSize: 100,
+        sort: ['updatedAt:desc'],
+      },
+    }),
+    cache: 'force-cache',
+    next: {
+      revalidate: CASE_STUDY_REVALIDATE_SECONDS,
+      tags: ['case-studies'],
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Strapi case-study listing request failed with HTTP ${response.status}.`);
+  }
+
+  const payload = (await response.json()) as StrapiCaseStudyListingResponse;
+  const errors = payload.errors?.map((error) => value(error.message)).filter(Boolean) ?? [];
+  if (errors.length > 0) {
+    throw new Error(`Strapi case-study listing query failed: ${errors.join('; ')}`);
+  }
+
+  return { graphqlUrl, payload };
+}
+
 export const caseStudySource: CaseStudyContentSource = {
+  async getCaseStudyListingPage(slug) {
+    const requestedSlug = normaliseSlug(slug);
+    if (requestedSlug !== CASE_STUDIES_SLUG) return null;
+
+    const { graphqlUrl, payload } = await fetchCaseStudyListing();
+    return mapCaseStudyListing(payload, requestedSlug, graphqlUrl);
+  },
+
   async getCaseStudyPage(slug) {
     const requestedSlug = value(slug);
     if (!requestedSlug) return null;

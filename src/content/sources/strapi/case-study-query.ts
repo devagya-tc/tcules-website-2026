@@ -169,3 +169,82 @@ export const CASE_STUDY_BY_SLUG_QUERY = /* GraphQL */ `
     mime
   }
 `;
+
+export const CASE_STUDY_LISTING_QUERY = /* GraphQL */ `
+  query GetCaseStudyListingPage(
+    $status: PublicationStatus = PUBLISHED
+    $page: Int = 1
+    $pageSize: Int = 100
+    $sort: [String] = ["updatedAt:desc"]
+  ) {
+    caseStudyLandingPage(status: $status) {
+      documentId
+      heroSection {
+        id
+        heading
+        description
+        button {
+          id
+          name
+          href
+          isExternal
+        }
+      }
+      misc {
+        id
+        label
+        heading
+        description
+        button {
+          id
+          name
+          href
+          isExternal
+        }
+      }
+      seo {
+        id
+        metaTitle
+        metaDescription
+        slug
+        canonicalURL
+        robot
+      }
+    }
+
+    caseStudies_connection(
+      status: $status
+      sort: $sort
+      pagination: { page: $page, pageSize: $pageSize }
+    ) {
+      pageInfo {
+        total
+        page
+        pageSize
+        pageCount
+      }
+      nodes {
+        documentId
+        title
+        slug
+        description
+        thumbnail {
+          url
+          alternativeText
+          width
+          height
+        }
+        tags {
+          documentId
+          name
+        }
+        categories {
+          documentId
+          name
+          slug
+        }
+        publishedAt
+      }
+    }
+  }
+`;

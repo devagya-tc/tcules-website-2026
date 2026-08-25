@@ -99,3 +99,62 @@ export type StrapiCaseStudyResponse = {
   data?: { currentCaseStudy?: StrapiCaseStudy[] | null } | null;
   errors?: Array<{ message?: string | null }> | null;
 };
+
+export type StrapiCaseStudyListingLink = {
+  id?: string | null;
+  name?: string | null;
+  href?: string | null;
+  isExternal?: boolean | null;
+};
+
+export type StrapiCaseStudyListingItem = {
+  documentId?: string | null;
+  title?: string | null;
+  slug?: string | null;
+  description?: string | null;
+  thumbnail?: Pick<StrapiCaseStudyFile, 'url' | 'alternativeText' | 'width' | 'height'> | null;
+  tags?: Array<{
+    documentId?: string | null;
+    name?: string | null;
+  }> | null;
+  categories?: Array<{
+    documentId?: string | null;
+    name?: string | null;
+    slug?: string | null;
+  }> | null;
+  publishedAt?: string | null;
+};
+
+export type StrapiCaseStudyListingPage = {
+  documentId?: string | null;
+  heroSection?: {
+    id?: string | null;
+    heading?: string | null;
+    description?: string | null;
+    button?: StrapiCaseStudyListingLink | null;
+  } | null;
+  misc?: {
+    id?: string | null;
+    label?: string | null;
+    heading?: string | null;
+    description?: string | null;
+    button?: StrapiCaseStudyListingLink | null;
+  } | null;
+  seo?: StrapiCaseStudySeo | null;
+};
+
+export type StrapiCaseStudyListingResponse = {
+  data?: {
+    caseStudyLandingPage?: StrapiCaseStudyListingPage | null;
+    caseStudies_connection?: {
+      pageInfo?: {
+        total?: number | null;
+        page?: number | null;
+        pageSize?: number | null;
+        pageCount?: number | null;
+      } | null;
+      nodes?: StrapiCaseStudyListingItem[] | null;
+    } | null;
+  } | null;
+  errors?: Array<{ message?: string | null }> | null;
+};
