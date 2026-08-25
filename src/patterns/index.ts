@@ -94,7 +94,7 @@ export { BlockCard } from './BlockCard';
 export type { BlockCardProps, BlockCardMedia, BlockCardTitleElement } from './BlockCard';
 
 export { Accordion } from './Accordion';
-export type { AccordionProps, AccordionItem } from './Accordion';
+export type { AccordionProps, AccordionItem, AccordionQuestionElement } from './Accordion';
 
 export { Proof } from './Proof';
 export type { ProofProps, ProofQuote, ProofFigure } from './Proof';

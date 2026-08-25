@@ -8,7 +8,7 @@
 | **Tier**            | 2 pattern (`src/patterns/Accordion/`)                                                                                   |
 | **Status**          | implemented                                                                                                             |
 | **Token prefix**    | `--acc-*`                                                                                                               |
-| **Designer / date** | Codex / 24 Aug 2026                                                                                                     |
+| **Designer / date** | Codex / 24 Aug 2026 · redesign resolved 25 Aug 2026 (Direction A)                                                       |
 | **Implements**      | `docs/briefs/14-accordion.md`                                                                                           |
 | **Implemented at**  | `src/patterns/Accordion/` · `src/styles/tokens/components/accordion.css` · specimen `src/app/design/accordion/page.tsx` |
 
@@ -40,18 +40,23 @@ often 5–7, and normally ends the page.
 | ---------- | -------- | ---------------------- | -------------------------- |
 | root       | yes      | `Layout as="div"`      | Owns the zero-gap block axis for one complete disclosure set and its leading rule. |
 | item       | yes      | native `details`       | One question/answer relationship and its block-end rule. It is the only element that owns open state. |
-| trigger    | yes      | native `summary`       | The full-width interactive target. Owns pointer and keyboard states and contains only the question and decorative mark. |
-| question   | yes      | text `span`            | One plain-text question, normally ending in a question mark. It is not caller-authored markup and cannot contain a control. |
-| mark       | yes      | `Icon`                 | Decorative disclosure direction: `chevron-right` while closed and `chevron-down` while open. |
-| answer     | yes      | `Prose`                | One trusted, sanitised rich-text field, normally one or two paragraphs. Prose alone owns markup rhythm, inline links and body typography. |
-| rule       | yes      | root/item logical edge | One leading hairline for the set and one block-end hairline per item. The expanded item's final rule steps to the action ink. |
+| trigger    | yes      | `Cluster as="summary"` | The full-width interactive target, and the only inline arrangement in the component. Owns pointer and keyboard states and contains only the question and decorative mark. |
+| question   | yes      | `h3` / `h4`            | One plain-text question, normally ending in a question mark. It is not caller-authored markup and cannot contain a control. A heading element at the h5 composite — see section 8. |
+| mark       | yes      | one `span`, two `Icon` | Decorative disclosure direction. Both chevrons sit in the DOM at all times and `[open]` picks which one shows, so nothing rotates. |
+| answer     | yes      | `Prose`                | One trusted, sanitised rich-text field, normally one or two paragraphs. Prose owns markup rhythm, inline links and colour; Accordion restates the size and nothing else. |
+| rule       | yes      | root/item logical edge | One leading hairline for the set and one block-end hairline per item. Every rule is `--acc-rule-ink` in every state. |
 
 There is no optional media, icon slot, nested item slot, grouping label, action slot, header or
 footer. `ContentSection` owns the section heading and any eyebrow outside the array seam.
 
+There is no `triggerContent` wrapper. The `summary` IS the Cluster, which is what removed a span
+and a class from the build; the mark is a direct child of the row it sits at the end of.
+
 ## 3 · Props / API
 
 ```ts
+export type AccordionQuestionElement = 'h3' | 'h4';
+
 export type AccordionItem = {
   question: string;
   answerHtml: string;
@@ -59,17 +64,25 @@ export type AccordionItem = {
 
 export type AccordionProps = {
   items: readonly AccordionItem[];
+  questionAs?: AccordionQuestionElement;
 };
 ```
 
 | Prop         | Exact type                   | Default | What it decides |
 | ------------ | ---------------------------- | ------- | --------------- |
 | `items`      | `readonly AccordionItem[]`   | none    | Ordered disclosures. Zero valid items render nothing; expected production count is 2–8. |
+| `questionAs` | `'h3' \| 'h4'`               | `'h3'`  | Heading level for every question. Semantics only — the question renders at the h5 composite either way. |
 | `question`   | `string`                     | none    | Native summary accessible name and visible question text. Whitespace-only values invalidate that item. |
 | `answerHtml` | `string`                     | none    | Trusted, content-seam-sanitised HTML handed directly to `Prose html`. Whitespace-only values invalidate that item. |
 
+`questionAs` is the one API surface change in the redesign, and it takes the shape `titleAs`
+already has on `BlockCard` and `ListCard` rather than inventing a second idiom. `h3` is correct on
+every audited route because `ContentSection` owns the section's `h2`; `h4` exists for the route
+that ever nests a set under an `h3`. Hard-coding `h3` would have been one prop fewer and no way
+out of that case short of a code change.
+
 The API deliberately has no `mode`, `multiple`, `defaultOpen`, `openItems`, `onToggle`,
-`allowCollapse`, `mark`, `markPosition`, `variant`, `size`, `surface`, `tone`, `finish`, `heading`,
+`allowCollapse`, `mark`, `markPosition`, `variant`, `size`, `surface`, `tone`, `finish`,
 `group`, `children`, `className` or `style`. Disclosure mode and initial state are site-wide
 decisions, not per-call choices. Mark, placement, separator, type, gap, radius, shadow, colour and
 width belong to the component contract. Surface comes only from the nearest `data-surface`.
@@ -96,16 +109,32 @@ one content block without painting seven grounds.
 
 ## 5 · States
 
+**The component paints no ground, in any state, on any surface.** Not at rest, not on hover, not
+on press, not when open. State is carried entirely by the ink of the question and its mark, which
+is where the reader is already looking. `--acc-trigger-bg-hover` filled the whole 68ch trigger with
+a square-cornered warm-grey slab — the largest thing that happened on the page in response to a
+pointer moving, and it read as a selected table row rather than as a control. Both ground tokens
+are deleted; there is nothing to search the module for.
+
 | State              | Trigger / owner                | What visibly or semantically changes |
 | ------------------ | ------------------------------ | ------------------------------------- |
-| rest · closed      | native base state              | Question and right chevron render over the inherited ground; the quiet rule closes the row. |
-| hover              | trigger pointer hover          | `--acc-trigger-bg-hover` appears behind the full trigger. Question/mark ink does not move. |
-| focus · keyboard   | trigger `focus-visible`        | Hover background plus the two-part surface ring. Native focus remains on the summary. |
-| pressed            | trigger pointer down           | `--acc-trigger-bg-pressed` replaces hover, so pressed differs on every surface without relying on colour alone. |
-| expanded · open    | native item open state         | Answer becomes available, mark swaps to `chevron-down`, and the item's `--acc-rule-ink-expanded` replaces its quiet rule. |
+| rest · closed      | native base state              | Question at `--acc-question-ink` and right chevron at the quieter `--acc-mark-ink`, over the inherited ground; the quiet rule closes the row. |
+| hover              | trigger pointer hover          | Question and mark rise to `--acc-question-ink-hover` and `--acc-mark-ink-hover`. No ground appears. |
+| focus · keyboard   | trigger `focus-visible`        | The raised ink plus the two-part surface ring. Native focus remains on the summary. |
+| pressed            | trigger pointer down           | The raised ink is held and the question gains a hairline underline at `--acc-mark-ink`, so pressed differs from hover by more than colour. |
+| expanded · open    | native item open state         | Answer becomes available, mark swaps to `chevron-down`, and question and mark hold the raised ink. The rule does not change. |
 
-The open mark swap is immediate; it does not rotate or fade. The expanded rule colour transitions,
-but answer height does not. In the recommended multi-open mode, expanding one item does not alter
+Hover, pressed and expanded resolve the question to one raised ink, so the set holds two ink values
+rather than five. That is why there is no `--acc-question-ink-pressed` or `-expanded`: token rule 3
+says a state token exists only if the value moves on at least one surface, which is the same reason
+there is no `--btn-solid-*-fg-pressed`.
+
+**The expanded rule is gone.** `--acc-rule-ink-expanded` put the action colour on a decoration, and
+put it at the *bottom* of the answer — often 300px below the question whose state it described. An
+open disclosure is already self-evidently open: the answer is on screen.
+
+The open mark swap is immediate; it does not rotate or fade. The two ink transitions run at
+`--acc-transition-duration`, but answer height does not. In the recommended multi-open mode, expanding one item does not alter
 any sibling. In the recommended initial state, the first valid item begins expanded and every
 remaining item begins closed.
 
@@ -115,39 +144,49 @@ disabled opacity and no state sniffed from answer content.
 
 ## 6 · Per-surface colour
 
-The trigger owns a control palette; the answer owns none because `Prose` resolves its own complete
-surface palette. At rest the trigger paints no background, so `--acc-trigger-fg` is measured against
-the Section ground. Hover and pressed background cells include the unchanged trigger foreground's
-contrast against that fill.
+The trigger owns two ink ladders — one for the question, one for the mark — and no ground at all,
+so every value below is measured directly against the Section ground. The answer owns no colour:
+`Prose` resolves its own complete surface palette and Accordion never overrides it, because a
+`strong`, a link or a `code` span inside an answer has to match Prose everywhere else on the site.
+There is deliberately no `--acc-answer-ink`; the 22/16 size step and the serif-to-sans shift carry
+the hierarchy instead.
+
+The mark is decoration — an unlabelled, `aria-hidden` `Icon` whose state the native control already
+announces — so it is measured against the 3:1 non-text floor rather than 4.5:1. Rules are
+decoration too, and are marked as such.
 
 | Token                         | paper                                              | tint                                               | ink                                                | blue                                             |
 | ----------------------------- | -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------ |
-| `--acc-trigger-fg`            | `--color-neutral-900` — 14.62:1                   | `--color-neutral-900` — 13.06:1                   | `--color-white` — 17.26:1                         | `--color-white` — 6.23:1                        |
-| `--acc-trigger-bg-hover`      | `--color-neutral-100` — foreground 12.37:1        | `--color-neutral-200` — foreground 10.97:1        | `--color-neutral-900` — foreground 14.75:1        | `--color-brandeis-600` — foreground 7.59:1      |
-| `--acc-trigger-bg-pressed`    | `--color-neutral-200` — foreground 10.97:1        | `--color-neutral-300` — foreground 9.46:1         | `--color-neutral-800` — foreground 11.92:1        | `--color-brandeis-700` — foreground 10.16:1     |
-| `--acc-rule-ink`              | `--color-neutral-300` — n/a, decoration           | `--color-neutral-400` — n/a, decoration           | `--color-neutral-700` — n/a, decoration           | `--color-brandeis-300` — n/a, decoration        |
-| `--acc-rule-ink-expanded`     | `--color-brandeis-500` — n/a, decoration          | `--color-brandeis-500` — n/a, decoration          | `--color-brandeis-300` — n/a, decoration          | `--color-white` — n/a, decoration                |
+| `--acc-question-ink`          | `--color-neutral-800` — 11.81:1                   | `--color-neutral-800` — 10.54:1                   | `--color-neutral-300` — 11.07:1                   | `--color-brandeis-100` — 4.91:1                 |
+| `--acc-question-ink-hover`    | `--color-neutral-950` — 17.10:1                   | `--color-neutral-950` — 15.27:1                   | `--color-white` — 17.26:1                         | `--color-white` — 6.23:1                        |
+| `--acc-mark-ink`              | `--color-neutral-500` — 3.16:1, decoration        | `--color-neutral-600` — 4.39:1, decoration        | `--color-neutral-500` — 5.41:1, decoration        | `--color-brandeis-200` — 3.78:1, decoration     |
+| `--acc-mark-ink-hover`        | `--color-neutral-950` — 17.10:1                   | `--color-neutral-950` — 15.27:1                   | `--color-white` — 17.26:1                         | `--color-white` — 6.23:1                        |
+| `--acc-rule-ink`              | `--color-neutral-200` — 1.33:1, decoration        | `--color-neutral-300` — 1.38:1, decoration        | `--color-neutral-800` — 1.45:1, decoration        | `--color-brandeis-400` — 1.62:1, decoration     |
 | `--acc-ring-color`            | `--color-brandeis-500` — 6.17:1 against its gap   | `--color-brandeis-500` — 5.51:1 against its gap   | `--color-brandeis-300` — 7.32:1 against its gap   | `--color-white` — 6.23:1 against its gap        |
 | `--acc-ring-gap-color`        | `--color-paper` — paired ring 6.17:1              | `--color-paper-deep` — paired ring 5.51:1         | `--color-neutral-950` — paired ring 7.32:1        | `--color-brandeis-500` — paired ring 6.23:1     |
 
-**Paper.** The question and mark use neutral-900. Neutral-100 and 200 distinguish hover and
-press without turning every question blue; blue is reserved for the expanded rule and focus ring.
-The neutral-300 resting hairline keeps a seven-row set quiet.
+**Paper.** The question rests one step below full ink at neutral-800 and rises to neutral-950, so
+the open question is the darkest thing in the set and needs no rule to say so. The mark rests
+quieter at neutral-500 — it is the affordance cue, not the content — and converges on the
+question's raised ink, so hover reads as one gesture rather than two things moving separately. The
+neutral-200 hairline is one step lighter than the old neutral-300, which at 5–7 rows turned the set
+into a table. Blue appears in exactly one place: the focus ring. Note that the mark's 3.16:1 is the
+thinnest margin in the set; it clears the non-text floor and nothing quieter would.
 
-**Tint.** The trigger ink holds at neutral-900, while interaction grounds deepen to neutral-200
-and 300 so they remain visible on paper-deep. The resting rule steps to neutral-400; expanded and
-focus remain Brandeis 500 because both clear their floor.
+**Tint.** The question ink holds at the paper values against paper-deep. The mark steps one further
+down the ramp to neutral-600, because neutral-500 on this ground is 2.82:1 and misses the non-text
+floor. The resting rule steps to neutral-300; focus remains Brandeis 500.
 
-**Ink.** White carries the trigger. Neutral-900 and 800 supply hover and pressed grounds without
-introducing a pale-blue panel into the dark band. The quiet rule stays neutral-700; expanded rule
-and focus lift to Brandeis 300.
+**Ink.** The ladder inverts. Neutral-300 rests and white is the raised step, so the open question is
+the brightest thing in the band without a pale panel appearing behind it. The quiet rule deepens to
+neutral-800 and focus lifts to Brandeis 300.
 
-**Blue.** The trigger stays white. Hover and pressed deepen the existing surface through Brandeis
-600 and 700; the component never introduces a second ground family. The expanded rule and focus
-ring use white, with the ring's gap resolving to the Section's actual Brandeis-500 ground.
+**Blue.** Both steps come out of the Brandeis tints rather than a second colour family: brandeis-100
+rests and white raises, which is the same top of the ladder the ink surface uses. The rule quietens
+to brandeis-400 against the brandeis-500 ground, and the focus ring's gap resolves to that ground.
 
 Every surface block redeclares all seven surface-dependent tokens. A tint Accordion nested inside
-an ink section resolves the complete tint column, including interaction grounds and focus gap; no
+an ink section resolves the complete tint column, including both ink ladders and the focus gap; no
 outer ink value may leak through an omitted declaration.
 
 ## 7 · Geometry & spacing
@@ -155,10 +194,14 @@ outer ink value may leak through an omitted declaration.
 ### (a) Distances
 
 - Root item seam: `Layout rowGap="none"`; rule edges meet as one ladder.
-- Trigger block inset: `--gap-text` above and below the h5 question, making the natural target
-  comfortably taller than the 44px floor.
-- Question-to-mark seam: `Cluster colGap="block"`, `justify="between"`, `nowrap`, `align="start"`.
-- Trigger-to-answer seam: `--gap-tight` at the answer's block start.
+- Trigger block inset: `--gap-block` above and below the h5 question, up from `--gap-text`. With no
+  ground defining the row, the inset is the only thing that makes it one — and it clears the 44px
+  floor with room to spare.
+- Question-to-mark seam: `Cluster colGap="block"`, `justify="between"`, `nowrap`, `align="start"`,
+  on the `summary` itself.
+- Trigger-to-answer seam: **0** at the answer's block start. The trigger's own `--gap-block` inset
+  is the whole seam now, and it has to be, because that inset is also the hit area. The total
+  distance from question to answer is unchanged at 24; what changed is which element owns it.
 - Answer-to-item edge inset: `--gap-block` at block end. `Prose` owns every internal paragraph
   relationship and Accordion adds no margin inside it.
 - Production Accordion-to-neighbour relationship: the containing page `Layout` chooses its normal
@@ -184,8 +227,14 @@ outer ink value may leak through an omitted declaration.
 
 ### (c) Optical corrections
 
-None. Accordion does not reach the space ramp. Trigger and answer insets are layout relationships
-named by the gap scale; the mark uses an existing icon size.
+One. `--acc-question-underline-offset` resolves to `--space-6`: the offset that clears Public Sans'
+descenders under the 22px question, so the pressed underline reads as a rule rather than as a
+strikethrough through the tail of a `g`. It is a correction at a size, not a layout distance, which
+is what earns the reach to the space ramp — the same reach and the same reason as
+`--prose-link-underline-offset`. Its thickness reuses `--acc-rule-width`.
+
+Trigger and answer insets remain layout relationships named by the gap scale, and the mark uses an
+existing icon size.
 
 ## 8 · Typography
 
@@ -195,12 +244,33 @@ named by the gap scale; the mark uses an existing icon size.
 | answer   | owned by `Prose` | owned by `Prose`         | `Prose`'s `--measure-body` |
 
 Question copy is sentence case and retains its authored question mark: “How long does a product
-design engagement take?” It is a `span` inside the native summary, not a heading element. The
-summary is already a named interactive control, and adding a second heading-navigation system for
-the same eight questions would duplicate rather than clarify the page structure.
+design engagement take?” It is an `h3` by default (`h4` via `questionAs`) inside the native summary,
+and it takes the h5 composite whichever element it is — the heading is semantics, not a size step.
 
-The answer is never retyped or recoloured by Accordion. `Prose` renders its existing body-lg role,
-links, lists and one/two-paragraph rhythm on every surface.
+This overturns the original decision, which was that the question should stay a `span` because the
+summary is already a named interactive control. That holds for a single disclosure. It does not
+hold for this component's deployment: 5–7 questions, on 21 routes, normally as the last block on a
+long page. Screen-reader and voice-control users navigate a page like that by heading, and without
+one the entire FAQ is absent from the heading tree with no way to jump to it or scan it. The summary
+keeps its role, its expanded state and its accessible name either way; the heading is additive.
+
+**The answer is 16px, and Accordion says nothing to make it so.** 18px under a 22px question is a
+1.22 ratio and neither element leads; 16 gives 1.38. `Prose`'s flow is `--text-body`, so the ratio
+the redesign asked for is what the answer already renders at. The answer is never retyped and never
+recoloured — there is no `--acc-answer-ink`, because a `strong`, a link or a `code` span inside an
+answer has to match Prose everywhere else on the site. Accordion's `.answer` class owns the inset,
+the measure and the wrapping, and nothing else.
+
+**How that was settled, because it took three passes.** The first proposal was that `Prose` gain
+`size?: "lg" | "md"` — its single type size being the actual defect, on the evidence that `Proof`
+already escapes it with `font: inherit`. That was rejected by the owner on 25 August 2026. The
+fallback in the redesign brief was to re-implement a paragraph/list/link subset inside Accordion's
+module, which would leave an answer carrying an `h4`, a `blockquote` or a table rendering unstyled
+the first time content went off the audited shape; the build did not do that either. It restated the
+size alone, at the answer root, with a selector strong enough to beat Prose's — and then `Prose`
+stepped its whole flow from `--text-body-lg` to `--text-body`, which made that override a no-op and
+retired it. The 18px this section used to describe is gone from the system, not overridden in one
+component.
 
 ## 9 · Responsive
 
@@ -213,8 +283,9 @@ At 767 the component shrinks to the parent track. At the 192px stress track, ful
 hard component minimum: a disclosure remains operable below 192px, so inventing one would only
 widen an illegal parent.
 
-The trigger clears the 44px touch floor through its h5 line plus two `--gap-text` block insets; no
-invisible hit extension or responsive size step is needed. The gap scale does not shift
+The trigger clears the 44px touch floor through its h5 line plus two `--gap-block` insets: 22/1.28
+is a 28.16px line, so the summary measures ~76px, and ~74px at the mobile h5 step where 20/1.3 gives
+26px. No invisible hit extension or responsive size step is needed. The gap scale does not shift
 responsively, the answer never clamps, and the mark never overlaps the question.
 
 ## 10 · Composition
@@ -223,23 +294,27 @@ responsively, the answer never clamps, and the mark never overlaps the question.
 <Layout as="div" rowGap="none">
   {items.map((item, index) => (
     <details open={index === 0}>
-      <summary>
-        <Cluster as="span" colGap="block" justify="between" align="start" nowrap>
-          <span>{item.question}</span>
-          <Icon name={open ? 'chevron-down' : 'chevron-right'} size="lg" />
-        </Cluster>
-      </summary>
+      <Cluster as="summary" colGap="block" justify="between" align="start" nowrap>
+        <Question>{item.question}</Question>
+        <span>
+          <Icon name="chevron-right" size="lg" />
+          <Icon name="chevron-down" size="lg" />
+        </span>
+      </Cluster>
       <Prose html={item.answerHtml} />
     </details>
   ))}
 </Layout>
 ```
 
-This skeleton communicates ownership, not runtime syntax: native `details` owns open state and the
-implementation exposes the correct mark through that state without rotating it. `Layout` owns the
-zero-gap item axis; `Cluster` owns the only inline arrangement. There is no hand-written grid or
-flex arrangement, no margin on a child and no external override of Section's ground, padding or
-content column.
+This skeleton communicates ownership, not runtime syntax: native `details` owns open state, and both
+chevrons sit in the DOM at all times so `[open]` can pick which one shows without rotating either.
+`Question` is the `questionAs` element, `h3` by default.
+
+`Layout` owns the zero-gap item axis and the `summary` IS the Cluster that owns the only inline
+arrangement — which is what removed the `triggerContent` span the first build carried. There is no
+hand-written grid or flex arrangement, no margin on a child and no external override of Section's
+ground, padding or content column.
 
 ## 11 · Accessibility
 
@@ -247,6 +322,12 @@ Each item is one native `details` with a direct native `summary` followed by its
 The browser supplies disclosure role, expanded/collapsed state, activation behavior and the
 summary's accessible name from the question. The two chevrons are unlabelled `Icon` instances and
 therefore `aria-hidden`; they do not repeat the state the native control already announces.
+
+The question is a heading inside that summary — `h3` by default, `h4` via `questionAs` — so a set of
+5–7 questions appears in the heading tree of a page it normally ends. That is the point of it:
+screen-reader and voice-control users navigate a long page by heading, and the first build left the
+entire FAQ absent from that tree with no way to jump to it or scan it. The heading is additive and
+costs the summary nothing: role, expanded state and accessible name are unchanged either way.
 
 | Key / input     | Closed item | Open item | Focus after action |
 | --------------- | ----------- | --------- | ------------------ |
@@ -268,10 +349,14 @@ recommended multi-open mode, opening one item leaves siblings and focus untouche
 the focused summary leaves focus on that summary. There is no programmatic close while focus is in
 an answer.
 
-The focus ring appears only for `focus-visible`, using the measured ring/gap pairs in section 6.
-Question contrast is at least 4.5:1 at rest, hover and pressed on all surfaces. Prose retains its
-own measured contrast. Reduced motion makes background and border-colour transitions instant; no
-height or mark transform exists to reduce.
+The focus ring appears only for `focus-visible`, using the measured ring/gap pairs in section 6, and
+it is unchanged by the redesign. Keyboard focus resolves the question and mark to the same raised
+ink as hover — a focused row that read quieter than a hovered one would be a regression, and the old
+build avoided it only because the ring arrived alongside the hover ground.
+
+Question contrast is at least 4.5:1 at rest, hover and pressed on all four surfaces; the mark is
+decoration and clears the 3:1 non-text floor on all four. Prose retains its own measured contrast.
+Reduced motion makes the two ink transitions instant; no height or mark transform exists to reduce.
 
 A screen reader announces a closed item as “How long does a product design engagement take?,
 collapsed, button” and after activation as “How long does a product design engagement take?,
@@ -297,10 +382,11 @@ expanded, button”, followed by the answer in normal reading order.
 
 ## 13 · Motion
 
-Trigger background colour and item border colour transition with
-`--acc-transition-duration: --duration-fast` and
-`--acc-transition-easing: --easing-standard`. The disclosure opens and closes at native layout
-speed with no height interpolation. The chevron swap is immediate.
+Question ink and mark ink transition with `--acc-transition-duration: --duration-fast` and
+`--acc-transition-easing: --easing-standard`. Those are the only two transitions in the component:
+the trigger background they used to describe no longer exists, and the item border no longer changes
+colour, so neither is animated. The disclosure opens and closes at native layout speed with no
+height interpolation. The chevron swap is immediate.
 
 There is no transform, translation, rotation, scale, rule wipe, fade, opacity change, height
 animation, max-height animation, answer slide or mark movement. Reduced motion resolves the two
@@ -314,9 +400,11 @@ unchanged.
 1. Render a native `details`/`summary` pair for every valid record; inspect the accessibility tree
    and native open state.
 2. Hand every answer string to `Prose html`; inspect one- and two-paragraph answers and an inline
-   link without adding answer typography to Accordion's module.
-3. Use `Layout rowGap="none"` for the set and `Cluster` for question/mark placement; the module must
-   contain no sibling-arranging grid or flex declaration.
+   link. Accordion's module says exactly one thing about the answer — its size — and nothing about
+   its colour, flow rhythm, links or lists.
+3. Use `Layout rowGap="none"` for the set and `Cluster as="summary"` for question/mark placement;
+   the module must contain no sibling-arranging grid or flex declaration, and no `triggerContent`
+   wrapper.
 4. Render the identical record set on paper, tint, ink and blue and inspect all seven resolved
    colour tokens, including the nearest nested surface.
 5. Keep the summary taller than 44px, the mark at inline end and the question wrappable at 192px.
@@ -328,10 +416,12 @@ unchanged.
 
 8. Do not add a mode, initial-open, icon, placement, grouping, nesting, variant, size, surface,
    children, className or style prop; attempted calls must fail type checking.
-9. Do not paint an item ground at rest or surround each item with four borders; search for a rest
-   background and inline edges and expect neither.
+9. Do not paint an item or trigger ground in ANY state — rest, hover, focus, pressed or open — and
+   do not surround each item with four borders. Search the module for `background` and for inline
+   edges and expect neither. Do not give the open item a rule colour of its own either: search for
+   an `[open]` border rule and expect none.
 10. Do not animate height or rotate the mark; search the module for height/max-height transitions
-    and transforms and expect none.
+    and transforms and expect none. Both chevrons are in the DOM and `[open]` picks between them.
 11. Do not author ARIA disclosure attributes or IDs on top of native details/summary; the rendered
     tree must carry no duplicate role/state wiring.
 12. Do not import a pattern, content or route. Accordion may import only Tier 1 components and
@@ -387,7 +477,22 @@ so the page does not become one rectangle repeated.
 
 The `--acc-*` component layer maps existing colour ramps, h5/body typography, measures, gap roles,
 icon sizes, hairline, focus geometry, radius, shadow, duration and easing into Accordion's
-parts and states. It introduces no primitive, usage token, glyph or motion mechanism.
+parts and states. It introduces no primitive, usage token, glyph or motion mechanism. That is still
+true after the redesign: every new value is an existing ramp step.
+
+The layer as built, for the record:
+
+- **New.** `--acc-question-ink`, `--acc-question-ink-hover`, `--acc-mark-ink`, `--acc-mark-ink-hover`
+  (four surfaces each), and the geometry token `--acc-question-underline-offset`.
+- **Changed.** `--acc-rule-ink` lightens one step on every surface: neutral-200 paper, neutral-300
+  tint, neutral-800 ink, brandeis-400 blue.
+- **Dropped.** `--acc-trigger-fg` (split into a question ink and a mark ink, which no longer move
+  together), `--acc-trigger-bg-hover`, `--acc-trigger-bg-pressed`, `--acc-rule-ink-expanded`.
+- **Unchanged.** `--acc-ring-color`, `--acc-ring-gap-color`, `--acc-ring-width`, `--acc-ring-offset`,
+  `--acc-rule-width`, `--acc-radius`, `--acc-shadow`, `--acc-transition-duration`,
+  `--acc-transition-easing`.
+
+The surface-dependent count is seven either way, so section 6's table keeps its shape.
 
 ## 17 · Open questions
 
@@ -419,9 +524,24 @@ revealed axis without rotation, and trailing placement preserves one clean quest
 wrapped rows. Plus/minus adds glyphs while conveying no more state.
 
 **4 · Item separation — non-blocking.** Options: one rule ladder; a gap; or a ground per item.
-**Recommendation and draft decision: one leading rule and one block-end rule per item, with the
-expanded item's ending rule stepping to action ink.** Rules preserve a single set at 5–7 rows. A
-gap weakens the question/answer grouping, and repeated grounds create the rejected stack of boxes.
+**Recommendation and draft decision: one leading rule and one block-end rule per item.** Rules
+preserve a single set at 5–7 rows. A gap weakens the question/answer grouping, and repeated grounds
+create the rejected stack of boxes.
+
+The draft added "with the expanded item's ending rule stepping to action ink", and the redesign of
+25 August 2026 removed that half: it put the action colour on a decoration, at the bottom of an
+answer often 300px below the question whose state it described. The ladder itself is unchanged and
+the rule is one step lighter on every surface. See sections 5 and 6.
+
+**5 · The three redesign decisions — resolved 25 August 2026.**
+
+- **(a) Answer ink.** Inherit Prose's own, or add `--acc-answer-ink` at neutral-700. **Accepted:
+  inherit.** Section 8 has the reasoning.
+- **(b) Question element.** Hard-code `h3`, or add `questionAs`. **Accepted: `questionAs`, defaulting
+  to `h3`**, following the `titleAs` precedent on `BlockCard` and `ListCard`.
+- **(c) A `size` prop on `Prose`.** **Rejected.** Accordion restates the answer's size from outside
+  instead, at the answer root, so Prose keeps every other decision it owns. Section 8 has the
+  reasoning and what was given up.
 
 ## Appendix · Self-audit
 
@@ -434,36 +554,46 @@ STRUCTURE
     or Prose.
 
 NAMES
-[x] Distinct token-name count: 45. Every referenced existing name resolves in the repository token
-    layer; --acc-* names are the component layer declared by this spec.
+[x] Distinct token-name count: 50, of which 22 are --acc-*. Every referenced existing name resolves
+    in the repository token layer; --acc-* names are the component layer declared by this spec.
+    Seven --acc-* names appear ONLY in prose recording what was deleted or never built —
+    --acc-trigger-fg, --acc-trigger-bg-hover, --acc-trigger-bg-pressed, --acc-rule-ink-expanded,
+    --acc-question-ink-pressed, --acc-answer-ink and --acc-layer. The token layer declares 12.
 [x] Glyphs are existing: chevron-right and chevron-down.
 [x] Section, Layout and Cluster prop/value names are existing unions: as, rowGap, colGap, justify,
     align, nowrap; div, span, none, block, between, start.
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS declarations, selectors or media blocks.
 [x] h5 uses its required tracking companion; Prose owns the answer composite.
 [x] Every layout distance is a gap-scale role.
-[x] Space-ramp reaches: 0.
+[x] Space-ramp reaches: 1 — --acc-question-underline-offset: --space-6, an optical correction under
+    the 22px question, commented as one in accordion.css. Section 7(c) states it.
 [x] Literal pixels appear only as existing breakpoint, touch, track and Section-cap measurements
     used to explain verification; no literal becomes an implementation value.
 
 COLOUR AND CONTRAST
 [x] Colour table has 7 rows × 4 complete cells; no delta and no blank.
-[x] Trigger foreground is at least 4.5:1 at rest, hover and pressed on all surfaces.
+[x] Question ink is at least 4.5:1 at rest, hover and pressed on all four surfaces (lowest 4.91:1,
+    brandeis-100 on blue). The mark is decoration and clears the 3:1 non-text floor on all four
+    (lowest 3.16:1, neutral-500 on paper). Ratios were recomputed for this redesign, not copied.
 [x] Focus ring is measured against its own gap on all four surfaces.
 [x] Rules are explicitly marked decoration.
 [x] One paragraph per surface explains the mapping; nested surfaces are specified.
 
 STATES
 [x] Rest, hover, focus, pressed and expanded come from the fixed model.
-[x] Hover and pressed backgrounds differ on all four surfaces.
-[x] Every state token moves on at least one surface and is declared in all four columns.
+[x] There are no backgrounds. Pressed differs from hover by a hairline underline rather than by a
+    ground, on all four surfaces.
+[x] Every state token moves on at least one surface and is declared in all four columns. The
+    redesign brief listed --acc-question-ink-pressed and --acc-question-ink-expanded with the same
+    four values as -hover; they were not built, per token rule 3.
 [x] Excluded states have no tokens; no disabled opacity and no colour-only state.
 
 LAYOUT, TYPE, SEMANTICS
 [x] Every arrangement belongs to Layout or Cluster; no columns declaration requires a colGap.
 [x] No child margin and no responsive gap/type-role swap.
 [x] Question and answer name measures.
-[x] Native summary clears the 44px floor through its line plus block insets.
+[x] Native summary clears the 44px floor through its line plus two --gap-block insets: ~76px, and
+    ~74px at the mobile h5 step.
 [x] Native details/summary needs no authored ARIA idref or upward-walking selector.
 
 COMPLETENESS
