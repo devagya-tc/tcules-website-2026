@@ -468,10 +468,27 @@
 }
 
 /* ── Motion ───────────────────────────────────────────────────────────────────
-   Colour and border only. Nothing in this system moves, scales or fades.       */
+   Colour and border, for everything the page is made of. The two longer steps
+   are for SURFACES — a panel that opens over the page, a sheet that rises from
+   the bottom — and they exist because 140ms is right for a chevron and wrong for
+   a box the size of the viewport: at `fast` a plate does not open, it appears,
+   and the eye reads a cut rather than a movement.
+
+   Four steps, and no more without an argument. A duration nobody can tell apart
+   from its neighbour is a decision that costs a name and buys nothing, which is
+   why there is no step between `fast` and `medium` — the one value the nav
+   needed there (180ms, its plate fade) is DERIVED from the morph it belongs to,
+   in nav.css, where the relationship can be written down.
+
+     instant  0    the reduced-motion answer for every move in the system
+     fast     140  a glyph, a hover fill, a colour — anything under the pointer
+     medium   240  a detail on a surface that is already moving
+     slow     360  the surface itself: a plate morphing, a pane crossing        */
 :root {
   --duration-instant: 0ms;
   --duration-fast: 140ms;
+  --duration-medium: 240ms;
+  --duration-slow: 360ms;
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 

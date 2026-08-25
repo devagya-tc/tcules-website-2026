@@ -1,4 +1,4 @@
-/* SiteNav — the site header: sticky bar, mega-menu panel, compact drawer.
+/* SiteNav — the site header: a sticky bar, one morphing plate, one mobile sheet.
 
    Every colour, distance, height, radius and duration comes from --nav-*, declared in
    tokens/components/nav.css and re-declared once per surface there. This file decides STRUCTURE
@@ -6,17 +6,24 @@
    a paper header, a tint one, the ink footer's sibling and a blue pivot without knowing which.
 
    ── What arranges what ──────────────────────────────────────────────────────────
-   Nothing in this file lays out content. Every band is a Section, every stack is a Layout and
-   every row is a Cluster, so the rules below are colour, type, hairlines and the two things a
-   primitive cannot express: a sticky bar's position, and an overlay's escape from the flow.
+   Nothing in this file arranges CONTENT. The bar is a Cluster, the plate's columns and the sheet's
+   groups are Layouts, so the rules below are colour, type, hairlines and the three things a
+   primitive cannot express: a sticky bar's position, an overlay's escape from the flow, and a box
+   whose width and height are animated.
 
-   The exceptions are the CONTROLS — .itemControl and .drawerControl — which are `inline-flex` /
-   `block` boxes holding their own label and glyph. That is a control laying out its own inside,
-   exactly as Button.module.css does with the same 4px optical gap, and it is not the
-   "hand-rolled grid for arrangement" the layout rule prohibits.
+   The exceptions are the CONTROLS — .row, .card, .sheetControl, .sheetHead — which are flex boxes
+   holding their own label and glyph. That is a control laying out its own inside, exactly as
+   Button.module.css does, and it is not the "hand-rolled grid for arrangement" the layout rule
+   prohibits. Two of them (.track, .sheet) are the animation machinery described above.
+
+   ── The two measured heights ────────────────────────────────────────────────────
+   --nav-plate-block and --nav-sheet-block are written from SiteNav.tsx through an inline style,
+   the same escape Layout uses for --tmpl-*. Both are declared here with a floor, so a frame
+   before the first measurement renders a closed box rather than an unresolved var() — and so
+   tokens:check sees a definition rather than a missing token.
 
    ── Hiding, and why `display` appears on a Cluster's className ──────────────────
-   Two elements swap at 1024: the item list and the CTA are desktop-only, the menu button is
+   Two elements swap at 1024: the item list and the CTA are desktop-only, the menu toggle is
    compact-only. Hiding a Cluster means overriding the `display: flex` it sets on itself, and
    restoring it means naming `flex` again in the media query. That is the cost of a primitive that
    owns its own display, and it is the correct trade — the alternative is a `hidden` prop on
@@ -24,12 +31,11 @@
    none. */
 
 /* ── The header shell ──────────────────────────────────────────────────────────
-   Sticky, and the positioning context every overlay in this file resolves against. It paints
-   nothing: the bar Section inside it owns the ground, which is what keeps the surface model in
-   one place.
+   Sticky, and the positioning context the plate resolves against. It paints nothing: the bar
+   Section inside it owns the ground, which is what keeps the surface model in one place.
 
    `position: sticky` establishes a containing block for absolutely positioned descendants, so the
-   panel and the drawer need no `position: relative` here to find it. */
+   plate needs no `position: relative` here to find it. */
 .header {
   position: sticky;
   top: 0;
@@ -58,167 +64,214 @@
 
 /* The wordmark's link. Inline-flex so the anchor is exactly the mark's box with no baseline slack
    under it, and it takes the surface ink rather than a link colour — the logo is the brand, not a
-   reference to it, so it does not turn blue. */
+   link that happens to be a picture. */
 .brand {
   display: inline-flex;
+  align-items: center;
+  flex: none;
   color: var(--nav-item-fg);
-  border-radius: var(--nav-item-radius);
+  text-decoration: none;
+  transition: opacity var(--nav-transition-duration) var(--nav-transition-easing);
 }
 
 .brand:hover {
-  color: var(--nav-item-fg);
+  opacity: 0.7;
 }
 
-/* ── The item list ─────────────────────────────────────────────────────────────
-   Hidden below 1024, where the drawer takes over. See the header note on `display`. */
+/* The item list. Hidden below the breakpoint — see the header note on Cluster and display. */
 .items {
   display: none;
 }
 
-/* The `<li>` stays STATIC on purpose. The panel inside it is absolutely positioned and has to
-   resolve against .header to span the viewport; give this a `position` and the panel collapses to
-   the width of one bar item. */
-.item {
-  position: static;
-}
+/* A bar item is a Button and contributes almost nothing here: a label that must not wrap, and a
+   chevron that turns over when the pane it controls is open.
 
-/* ── The item control ──────────────────────────────────────────────────────────
-   A trigger or a link, identical in appearance. Uppercase mono chrome from --nav-item-text, at
-   the same 40px height as the md Button beside it so the row reads as one set of controls.
-
-   Colour only, on the same 140ms as everything else in the system. Nothing here moves. */
+   `[aria-expanded='true']` rather than Button's own active class. A CSS Module cannot name another
+   component's hashed class, and it should not want to — the attribute is the state, it is already
+   on the element for the accessibility tree, and reading it here means the rotation cannot drift
+   out of step with what a screen reader is told. */
 .itemControl {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--nav-item-gap);
-  height: var(--nav-item-height);
-  padding-inline: var(--nav-item-padding-x);
-  border: 0;
-  border-radius: var(--nav-item-radius);
-  background: transparent;
-  color: var(--nav-item-fg);
-  font: var(--nav-item-text);
-  letter-spacing: var(--nav-item-text-tracking);
-  text-transform: var(--text-mono-case);
-  text-decoration: none;
   white-space: nowrap;
-  cursor: pointer;
-  transition:
-    background var(--nav-transition-duration) var(--nav-transition-easing),
-    color var(--nav-transition-duration) var(--nav-transition-easing);
+  text-decoration: none;
 }
 
-/* Hover and focus take the first step, as everywhere else in the system. */
-.itemControl:hover,
-.itemControl:focus-visible {
-  background: var(--nav-item-bg-hover);
-  color: var(--nav-item-fg-hover);
+.itemControl > svg {
+  transition: transform var(--nav-transition-duration) var(--nav-transition-easing);
 }
 
-/* The HELD state — this section is the one you are in, or its panel is open. Declared after hover
-   so a pointer over the current item does not fall back to the hover fill; both are single
-   classes and the order is what decides it. Same argument as Button's `.active`. */
-.itemActive {
-  background: var(--nav-item-bg-active);
-  color: var(--nav-item-fg-active);
-}
-
-.itemActive:hover,
-.itemActive:focus-visible {
-  background: var(--nav-item-bg-active);
-  color: var(--nav-item-fg-active);
-}
-
-/* The label pulls back its trailing letter-space, so the chevron sits 4px from the last GLYPH
-   rather than 4px from the empty track after it. Same correction as Button's .labelInk. */
-.itemLabel {
-  display: inline-block;
-  margin-inline-end: calc(-1 * var(--nav-item-text-tracking));
-}
-
-/* Sized by a class-plus-element selector so it beats Icon's own single-class size rule — the nav
-   decides how big its chevron is, exactly as the button decides for the glyph inside it. */
-.itemControl > svg,
-.drawerControl svg {
-  width: var(--nav-item-icon-size);
-  height: var(--nav-item-icon-size);
-}
-
-.chevron {
-  /* No transition. The rotation is what the OPEN STATE looks like, not a movement between two
-     states — this system transitions colour and one border, and a spinning glyph is neither. One
-     mark that points at its panel beats two glyphs that have to be kept in agreement. */
-  transition: none;
-}
-
-.chevronOpen {
+.itemControl[aria-expanded='true'] > svg {
   transform: rotate(180deg);
 }
 
-/* ── Focus ─────────────────────────────────────────────────────────────────────
-   Keyboard only. Two rings in one shadow — the offset painted in the surface colour, then the ring
-   — which is what lets a blue ring read against a blue fill. Both halves are surface tokens, so
-   the ink header takes an ink gap and a lighter ring with no rule of its own here. */
-.itemControl:focus,
-.brand:focus,
-.row:focus,
-.railLink:focus,
-.drawerControl:focus,
-.drawerLink:focus {
-  outline: none;
-}
-
-.itemControl:focus-visible,
-.brand:focus-visible,
-.row:focus-visible,
-.railLink:focus-visible,
-.drawerControl:focus-visible,
-.drawerLink:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 var(--nav-ring-offset) var(--nav-ring-gap-color),
-    0 0 0 calc(var(--nav-ring-offset) + var(--nav-ring-width)) var(--nav-ring-color);
-}
-
-/* The bar's CTA — desktop only; the drawer carries its own at lg. */
+/* The bar's CTA is desktop-only; the sheet's foot carries it below the breakpoint. The toggle is
+   the mirror image. */
 .cta {
   display: none;
 }
 
-/* ── The panel ─────────────────────────────────────────────────────────────────
-   Full-bleed, overlaying the page rather than pushing it down. `top: 100%` is the bottom of the
-   header, and left/right of 0 span it — the header is the viewport's width, so the Section inside
-   insets its content to the same column as every band below it.
-
-   Capped at the viewport and scrollable: Expertise carries twelve rows and six rail links, which
-   on a short laptop viewport runs past the fold with no way to reach the last of them.
-
-   `flush`, with its own padding-block: a nav panel is not a content band and Section's three
-   vertical steps (64 · 96 · 128) are each taller than the whole panel needs. This is the case
-   `flush` is documented for — a composition that supplies its own air. */
-.panel {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: var(--nav-panel-z);
-  max-block-size: var(--nav-panel-max-block);
-  overflow-y: auto;
-  padding-block: var(--nav-panel-padding-y);
-  border-block-end: var(--nav-rule-width) solid var(--nav-rule);
+.toggle {
+  display: inline-flex;
 }
 
-/* ── A panel row ───────────────────────────────────────────────────────────────
-   The whole row is the target, not just its title: a two-line row whose second line is not
-   clickable is a row people click on and nothing happens. The negative inset is the one margin in
-   this file and it is not spacing — it pulls the row's own padding back out so the ROW TEXT still
-   aligns with the column edge while the hover fill extends past it. Without it the panel's first
-   column sits 8px in from every other band on the page. */
+/* ── The plate: stage, box, panes ──────────────────────────────────────────────
+   THE STAGE is out of flow and full-bleed, so the page behind it never moves — QA §10.4 asks that
+   the plate never sets the page's own height, and being absolutely positioned is the whole of the
+   answer. It carries the scrim, the gap under the bar and the centring; it paints nothing.
+
+   `pointer-events: none` on the stage with `auto` on the plate and the scrim: the 16px gap between
+   the bar and the plate is stage, and a gap that swallowed the pointer would break the walk from
+   an item down into the pane it just opened.
+
+   The fade is the OPEN transition — the plate arrives at its size rather than sliding, per §4.
+   `visibility` is transitioned with a delay equal to the fade so the panes stay unreachable the
+   instant the opacity hits zero rather than a frame later; on the way in the delay is dropped. */
+.stage {
+  display: none;
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  z-index: var(--nav-panel-z);
+  padding-block-start: var(--gap-text);
+  padding-inline: var(--gap-gutter);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--nav-plate-fade) var(--nav-transition-easing),
+    visibility 0s linear var(--nav-plate-fade);
+}
+
+.stage[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* The page has to recede, and the system has no elevation token — so a scrim is what separates an
+   inset panel from the ground it floats over. Fixed rather than absolute: it covers the viewport
+   below the bar, not just the plate's own box.
+
+   It is INSIDE the header, which has one consequence worth knowing: the pointer never leaves the
+   header by moving down the page, so the header's pointerleave cannot close the plate that way.
+   That is the prototype's behaviour too, and it is why the scrim takes a click — with the pointer
+   exit covered, a click on the dimmed page is the dismiss a reader reaches for. */
+.scrim {
+  position: fixed;
+  inset-block-start: var(--nav-bar-height);
+  inset-block-end: 0;
+  inset-inline: 0;
+  background: var(--nav-scrim);
+  pointer-events: auto;
+}
+
+/* THE PLATE. One box for all three sections. Its width comes from the section that is showing and
+   its height from that section's measured pane, and both are transitioned — which is the whole
+   morph. `overflow: hidden` is what makes the cross-slide read as one container rather than three
+   panes flying past each other, and it is also why the SCROLLING lives on the pane below.
+
+   `max-inline-size: 100%` matters between 1024 and 1304, where the widest plate is wider than the
+   viewport it has to sit inside. No shadow — see docs/specs/SiteNav.md §10. */
+.plate {
+  --nav-plate-block: var(--space-0);
+
+  position: relative;
+  margin-inline: auto;
+  max-inline-size: 100%;
+  block-size: var(--nav-plate-block);
+  max-block-size: var(--nav-panel-max-block);
+  background: var(--nav-panel-ground);
+  border: var(--nav-rule-width) solid var(--nav-rule);
+  border-radius: var(--nav-plate-radius);
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+/* THE MORPH IS GATED, and the gate is the point rather than an optimisation. Opening from closed
+   has to arrive at the section's size (§4) — with the transition always on, the plate's height
+   animates up from zero and the whole thing reads as a drawer rolling down. `data-morph` is only
+   set when something was already open, so a switch travels and an open does not. */
+.stage[data-morph] .plate {
+  transition:
+    inline-size var(--nav-plate-morph) var(--nav-transition-easing),
+    block-size var(--nav-plate-morph) var(--nav-transition-easing);
+}
+
+.plate[data-width='lg'],
+.pane[data-width='lg'] {
+  inline-size: var(--nav-plate-width-lg);
+}
+
+.plate[data-width='md'],
+.pane[data-width='md'] {
+  inline-size: var(--nav-plate-width-md);
+}
+
+.plate[data-width='sm'],
+.pane[data-width='sm'] {
+  inline-size: var(--nav-plate-width-sm);
+}
+
+/* A PANE. Absolutely positioned so all three can be mounted at once — which is what lets their
+   heights be measured and gives a switch something to slide — and shifted by arithmetic: its own
+   index minus the showing one, times its full width. A pane two places later sits two widths to
+   the right and enters from there. Direction falls out of item order with nothing to compute.
+
+   The cap and the scroll are here rather than on the plate, because the plate clips: Services
+   carries twelve rows and a rail, and on a short laptop viewport the last of them has to be
+   reachable. Capping the pane also caps what the plate is ever told to be, which is what QA §10.4
+   checks. */
+.pane {
+  --nav-pane-shift: 0;
+
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  max-inline-size: 100%;
+  max-block-size: var(--nav-panel-max-block);
+  overflow-y: auto;
+  padding: var(--gap-stack) var(--gap-gutter) var(--gap-gutter);
+  opacity: 0;
+  transform: translateX(calc(var(--nav-pane-shift) * 100%));
+  /* The fade is unconditional — it IS the open — while the slide is gated with the plate's size
+     for the same reason. On an open from closed the panes are already where they belong. */
+  transition: opacity var(--nav-plate-fade) var(--nav-transition-easing);
+}
+
+.stage[data-morph] .pane {
+  transition:
+    transform var(--nav-plate-morph) var(--nav-transition-easing),
+    opacity var(--nav-plate-fade) var(--nav-transition-easing);
+}
+
+.pane[data-open] {
+  opacity: 1;
+}
+
+/* ── Inside a pane ─────────────────────────────────────────────────────────────
+   A group's label. Mono, uppercase, and the same role in the plate and in the sheet — one label
+   ink for both, because they are the same thing at two sizes. */
+.groupLabel {
+  font: var(--nav-label-text);
+  letter-spacing: var(--nav-label-tracking);
+  text-transform: uppercase;
+  color: var(--nav-label-ink);
+}
+
+/* A ROW. Direction B: a brandeis fill at the row radius, with the label and the arrow both taking
+   the blue. The whole row is the target — a row whose label is clickable and whose empty right
+   half is not is a row people click on and nothing happens.
+
+   The negative inset is the one margin on a container in this file and it is not spacing: it pulls
+   the row's own padding back out so the LABEL still aligns with its column's edge while the hover
+   fill extends past it. Without it the plate's first column sits 16px in from the group label
+   above it. */
 .row {
-  display: block;
-  margin-inline: calc(-1 * var(--nav-row-padding));
-  padding: var(--nav-row-padding);
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--gap-text);
+  padding: var(--nav-row-padding-block) var(--nav-row-padding-inline);
+  margin-inline: calc(-1 * var(--nav-row-padding-inline));
   border-radius: var(--nav-row-radius);
   color: var(--nav-row-label-ink);
   text-decoration: none;
@@ -233,198 +286,420 @@
   color: var(--nav-row-label-ink-hover);
 }
 
-/* The text column has to be allowed to shrink. A flex child's default minimum is its content, so
-   without this a long promise widens the Cluster past its track and the two-column rows overflow
-   into each other. `flex: 1` is not spacing and not arrangement — it is the correction that makes
-   a wrapping row wrap. */
-.rowText {
-  flex: 1 1 0;
-  min-inline-size: 0;
-  max-inline-size: var(--nav-row-measure);
-}
-
-/* Sized and coloured by the nav, not by Icon: the mark is a fixed 24 here regardless of what the
-   glyph would take on its own. Quieter than the label at rest, and it reaches the accent with the
-   label on hover — the row has one hover state, expressed in two inks. */
-.row svg {
-  width: var(--nav-row-icon-size);
-  height: var(--nav-row-icon-size);
-}
-
-.rowIcon {
-  color: var(--nav-row-icon-ink);
-  transition: color var(--nav-transition-duration) var(--nav-transition-easing);
-}
-
-.row:hover .rowIcon,
-.row:focus-visible .rowIcon {
-  color: var(--nav-row-icon-ink-hover);
-}
-
-/* Inherits the row's colour, so the title moves with the row's one hover state rather than
-   declaring a second. */
 .rowLabel {
   font: var(--nav-row-text);
 }
 
-.rowPromise {
-  color: var(--nav-row-promise-ink);
-  font: var(--nav-row-promise-text);
+/* The arrow slides in from -4px on hover rather than being always present: an arrow on every one
+   of eighteen rows is eighteen arrows, and none of them is pointing at anything.
+
+   The margin is an OPTICAL CORRECTION, not spacing — it centres a 14px glyph on the row's first
+   line so a label long enough to wrap keeps its arrow beside the line it starts on (§8.5), rather
+   than drifting to the middle of two. Computed from the row's own line box, so it follows the type
+   role and holds no distance of its own. */
+.rowArrow {
+  flex: none;
+  align-self: start;
+  margin-block-start: calc((var(--nav-row-line) - var(--nav-row-arrow-size)) / 2);
+  inline-size: var(--nav-row-arrow-size);
+  block-size: var(--nav-row-arrow-size);
+  color: var(--nav-row-arrow-ink);
+  opacity: 0;
+  transform: translateX(calc(-1 * var(--nav-row-arrow-travel)));
+  transition:
+    opacity var(--nav-transition-duration) var(--nav-transition-easing),
+    transform var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+.row:hover .rowArrow,
+.row:focus-visible .rowArrow,
+.card:hover .rowArrow,
+.card:focus-visible .rowArrow,
+.railAction:hover .rowArrow,
+.railAction:focus-visible .rowArrow,
+.card:hover .cardArrow,
+.card:focus-visible .cardArrow {
+  opacity: 1;
+  transform: none;
 }
 
 /* ── The rail ──────────────────────────────────────────────────────────────────
-   The hairline is what makes the panel read as two halves rather than one wide column of links.
-   Below md the [2,1] collapses to a stack, so the rule moves from the rail's side to its top —
-   a vertical rule on a full-width block separates nothing. */
+   Its hairline is what makes two halves read as two halves. The inset is the air between that rule
+   and the rail's own content, which is why the plate's column seam is `column` rather than
+   `gutter`: 64 either side of the rule reads as one break rather than two columns that touch it. */
 .rail {
-  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
-  padding-block-start: var(--nav-rail-inset);
+  border-inline-start: var(--nav-rule-width) solid var(--nav-rule);
+  padding-inline-start: var(--gap-column);
 }
 
-@media (min-width: 768px) {
-  .rail {
-    border-block-start: 0;
-    padding-block-start: 0;
-    border-inline-start: var(--nav-rule-width) solid var(--nav-rule);
-    padding-inline-start: var(--nav-rail-inset);
-  }
-}
-
-/* A compartment's title. Serif, against the sans rows in the column beside it — the panel's two
-   halves are told apart by the face before either is read. */
-.railTitle {
+/* A rail card: an image slot, a title, an arrow. Edged rather than filled — a filled card in a
+   panel that is already a floating box is a box inside a box. */
+.card {
+  display: block;
+  padding: var(--nav-card-padding);
+  border: var(--nav-rule-width) solid var(--nav-card-edge);
+  border-radius: var(--nav-card-radius);
   color: var(--nav-title-ink);
+  text-decoration: none;
+  transition: border-color var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+.card:hover,
+.card:focus-visible {
+  border-color: var(--nav-card-edge-hover);
+}
+
+/* The slot holds its ratio whatever it is given, and paints a ground under it so a transparent or
+   still-loading image does not punch a hole in the card. It renders only when an image is passed —
+   see the note on SiteNavCard. */
+.cardImage {
+  display: block;
+  aspect-ratio: var(--nav-card-image-ratio);
+  margin-block-end: var(--gap-tight);
+  border-radius: var(--nav-card-image-radius);
+  background: var(--nav-card-image-ground);
+  overflow: hidden;
+}
+
+.cardImage > * {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-text);
   font: var(--nav-rail-title-text);
   letter-spacing: var(--nav-rail-title-tracking);
 }
 
-.railBody {
-  color: var(--nav-body-ink);
-  font: var(--nav-rail-body-text);
-  max-inline-size: var(--nav-row-measure);
+.cardArrow {
+  flex: none;
+  inline-size: var(--nav-card-arrow-size);
+  block-size: var(--nav-card-arrow-size);
+  color: var(--nav-row-arrow-ink);
+  opacity: 0;
+  transform: translateX(calc(-1 * var(--nav-row-arrow-travel)));
+  transition:
+    opacity var(--nav-transition-duration) var(--nav-transition-easing),
+    transform var(--nav-transition-duration) var(--nav-transition-easing);
 }
 
-.railLink {
-  display: inline-block;
-  border-radius: var(--nav-item-radius);
-  color: var(--nav-link-ink);
-  font: var(--nav-rail-link-text);
+/* The rail's SECONDARY card is a compact row, not a second card, and the reason is structural: a
+   full card makes the rail taller than the two columns beside it, and then the plate's height is
+   set by the offer instead of by the content. Uppercase and blue, so it still reads as the
+   action it is. */
+.railAction {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  padding-block-start: var(--gap-text);
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+  font: var(--nav-rail-action-text);
+  letter-spacing: var(--nav-rail-action-tracking);
+  text-transform: uppercase;
+  color: var(--nav-rail-action-fg);
   text-decoration: none;
   transition: color var(--nav-transition-duration) var(--nav-transition-easing);
 }
 
-.railLink:hover,
-.railLink:focus-visible {
-  color: var(--nav-link-ink-hover);
+.railAction:hover,
+.railAction:focus-visible {
+  color: var(--nav-rail-action-fg-hover);
 }
 
-/* A label over a set — a rows block's heading, a rail group's name. Mono, uppercase, and
-   deliberately NOT blue: it names a group, it does not go anywhere. */
-.blockLabel {
-  color: var(--nav-label-ink);
-  font: var(--nav-label-text);
-  letter-spacing: var(--nav-label-tracking);
-  text-transform: var(--text-mono-case);
-}
+/* ── The sheet ─────────────────────────────────────────────────────────────────
+   Fixed to the bottom of the viewport, not to the header: a bottom sheet is anchored to the thumb,
+   and the header it belongs to is at the other end of the screen.
 
-/* The panel's foot — one link to the section index, separated by a rule so it reads as a
-   conclusion rather than a seventh row. */
-.panelBar {
-  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
-  padding-block-start: var(--nav-panel-bar-inset);
-}
-
-/* ── The drawer ────────────────────────────────────────────────────────────────
-   The compact counterpart to the panel: one sheet under the bar, scrollable, holding every item
-   as an accordion. Absolutely positioned for the same reason the panel is — it covers the page
-   instead of pushing it down — and hidden outright at 1024 so a drawer left open across a resize
-   cannot end up beside the desktop bar. */
-.drawer {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
+   THE HEIGHT IS THE TRANSITION. Closed it is zero and translated out of view; open it is the
+   measured hug of its root list, capped at the viewport less the reserve; drilled into a section
+   it is that full height. `min()` is what applies the cap, so a phone too short for six rows never
+   produces a sheet taller than its own screen. */
+.sheetScrim {
+  position: fixed;
+  inset-block-start: var(--nav-bar-height-compact);
+  inset-block-end: 0;
+  inset-inline: 0;
   z-index: var(--nav-panel-z);
-  max-block-size: var(--nav-drawer-max-block);
-  overflow-y: auto;
-  padding-block: var(--nav-drawer-padding-y);
-  border-block-end: var(--nav-rule-width) solid var(--nav-rule);
+  background: var(--nav-scrim);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--nav-sheet-surface) var(--nav-transition-easing);
 }
 
-/* A hairline per row, drawn on the top edge so the list reads as divided rather than boxed —
-   the last item has no rule under it and the sheet's own bottom border closes the set. */
-.drawerItem {
+.sheetScrim[data-open] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sheet {
+  --nav-sheet-block: var(--space-0);
+
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: var(--nav-panel-z);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  block-size: var(--space-0);
+  background: var(--nav-panel-ground);
+  border: var(--nav-rule-width) solid var(--nav-rule);
+  border-block-end: 0;
+  border-start-start-radius: var(--nav-sheet-radius);
+  border-start-end-radius: var(--nav-sheet-radius);
+  transform: translateY(100%);
+  pointer-events: none;
+  transition:
+    transform var(--nav-sheet-surface) var(--nav-transition-easing),
+    block-size var(--nav-sheet-surface) var(--nav-transition-easing);
+}
+
+.sheet[data-open] {
+  block-size: min(var(--nav-sheet-block), var(--nav-sheet-block-full));
+  transform: none;
+  pointer-events: auto;
+}
+
+.sheet[data-open][data-level='section'] {
+  block-size: var(--nav-sheet-block-full);
+}
+
+/* The grab handle sits in its own padded row rather than carrying a margin, so the sheet's hugging
+   height is the sum of three offsetHeights and no computed margins — see the measurement note in
+   SiteNav.tsx. */
+.grabRail {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--gap-tight) var(--space-2); /* optical: the handle's own air, sub-scale */
+}
+
+.grab {
+  inline-size: var(--nav-grab-width);
+  block-size: var(--nav-grab-height);
+  border-radius: var(--radius-full);
+  background: var(--nav-grab-bg);
+}
+
+/* Two levels on one track, each a screen wide. Sliding the track rather than swapping the panes is
+   what keeps both mounted, so Back is a transform rather than a re-render. */
+.track {
+  display: flex;
+  inline-size: 200%;
+  block-size: 100%;
+  transition: transform var(--nav-sheet-level) var(--nav-transition-easing);
+}
+
+.sheet[data-level='section'] .track {
+  transform: translateX(-50%);
+}
+
+.sheetPane {
+  display: flex;
+  flex-direction: column;
+  inline-size: 50%;
+  min-block-size: 0;
+}
+
+/* The root scrolls as one. The section pane pins its header and scrolls only the list beneath it,
+   which is what keeps Back reachable in a twelve-row section (§8.6). */
+.sheetPaneRoot {
+  overflow-y: auto;
+}
+
+.sheetPaneSection {
+  overflow: hidden;
+}
+
+.sheetRootInner {
+  padding: var(--gap-tight) var(--nav-sheet-padding-inline) var(--gap-block);
+}
+
+.sheetInner {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  padding: var(--gap-tight) var(--nav-sheet-padding-inline) var(--gap-gutter);
+}
+
+/* Root rows are separated by a rule rather than by air: at six rows in a sheet this short,
+   whitespace alone did not read as a list. */
+.sheetRows {
+  list-style: none;
+}
+
+.sheetRow + .sheetRow {
   border-block-start: var(--nav-rule-width) solid var(--nav-rule);
 }
 
-.drawerItem:first-child {
-  border-block-start: 0;
-}
-
-/* `block` and full width so the Cluster inside can push the glyph to the far edge — the label and
-   the chevron are the control's own contents, which is why the control lays them out. */
-.drawerControl {
-  display: block;
-  width: 100%;
-  padding-block: var(--nav-drawer-item-padding-y);
+.sheetControl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-text);
+  inline-size: 100%;
+  padding-block: var(--nav-sheet-row-padding-block);
   border: 0;
-  border-radius: var(--nav-item-radius);
   background: transparent;
-  color: var(--nav-item-fg);
+  color: var(--nav-row-label-ink);
   text-align: start;
   text-decoration: none;
   cursor: pointer;
   transition: color var(--nav-transition-duration) var(--nav-transition-easing);
 }
 
-.drawerControl:hover,
-.drawerControl:focus-visible {
-  color: var(--nav-item-fg-hover);
+.sheetControl:hover,
+.sheetControl:focus-visible {
+  color: var(--nav-row-label-ink-hover);
 }
 
-/* No fill for the held state here, unlike the bar. A full-width row filled edge to edge reads as
-   a selected table row rather than as a place in a menu, so the current section is marked by ink
-   alone — the same value the bar's label takes. */
-.drawerActive {
-  color: var(--nav-item-fg-active);
+.sheetControlLabel {
+  font: var(--nav-sheet-row-text);
 }
 
-.drawerActive:hover,
-.drawerActive:focus-visible {
-  color: var(--nav-item-fg-active);
+.sheetChevron {
+  flex: none;
+  inline-size: var(--nav-sheet-chevron-size);
+  block-size: var(--nav-sheet-chevron-size);
+  color: var(--nav-row-arrow-ink);
 }
 
-.drawerLabel {
-  font: var(--nav-drawer-item-text);
-  letter-spacing: var(--nav-drawer-item-tracking);
-  text-transform: var(--text-mono-case);
+/* Back on the left, the section's name centred. Three tracks with the outer two equal is what
+   centres the middle one against the wider of them — a two-track row would centre the title
+   against the space Back leaves, which is not the middle of the sheet. */
+.sheetHead {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--gap-tight);
+  padding: var(--gap-tight) var(--nav-sheet-padding-inline);
+  border-block-end: var(--nav-rule-width) solid var(--nav-rule);
 }
 
-/* An expanded accordion's contents, inset so the child links read as belonging to the item above
-   them rather than as more items. */
-.drawerPanel {
-  padding-inline-start: var(--nav-drawer-panel-inset);
-  padding-block-end: var(--nav-drawer-panel-gap);
-}
-
-.drawerLink {
-  display: inline-block;
+.sheetBack {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  padding: var(--gap-tight);
+  margin-inline-start: calc(-1 * var(--gap-tight)); /* optical: pull the label to the edge */
+  border: 0;
   border-radius: var(--nav-item-radius);
-  color: var(--nav-link-ink);
-  font: var(--nav-rail-link-text);
+  background: transparent;
+  font: var(--nav-sheet-back-text);
+  letter-spacing: var(--nav-sheet-back-tracking);
+  color: var(--nav-rail-action-fg);
+  cursor: pointer;
+}
+
+.sheetBackIcon {
+  inline-size: var(--nav-row-arrow-size);
+  block-size: var(--nav-row-arrow-size);
+  transition: transform var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+.sheetBack:active .sheetBackIcon {
+  transform: translateX(calc(-1 * var(--nav-row-arrow-travel)));
+}
+
+.sheetTitle {
+  font: var(--nav-label-text);
+  letter-spacing: var(--nav-label-tracking);
+  text-transform: uppercase;
+  color: var(--nav-title-ink);
+}
+
+.sheetGroup {
+  list-style: none;
+}
+
+.sheetLabel {
+  font: var(--nav-label-text);
+  letter-spacing: var(--nav-label-tracking);
+  text-transform: uppercase;
+  color: var(--nav-label-ink);
+}
+
+.sheetLink {
+  display: block;
+  padding-block: var(--nav-sheet-link-padding-block);
+  font: var(--nav-sheet-link-text);
+  color: var(--nav-row-label-ink);
   text-decoration: none;
   transition: color var(--nav-transition-duration) var(--nav-transition-easing);
 }
 
-.drawerLink:hover,
-.drawerLink:focus-visible {
-  color: var(--nav-link-ink-hover);
+.sheetLink:hover,
+.sheetLink:focus-visible {
+  color: var(--nav-row-label-ink-hover);
 }
 
-/* ── The 1024 swap ────────────────────────────────────────────────────────────
-   One breakpoint, and it changes WHAT is in the bar rather than how big anything is. Below it the
-   bar holds a mark and one control; above it a mark, five items and a CTA. Those are two different
-   bars, which is why they have two heights rather than one that shrinks. */
+/* The sticky foot. Both offers, at both levels, pinned where a thumb reaches: the ghost on the
+   left and the solid primary on the right. The shadow appears only while there is list left below
+   it, which is the one cue that the pane scrolls. */
+.sheetFoot {
+  padding: var(--nav-sheet-foot-padding-block) var(--nav-sheet-padding-inline);
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+  background: var(--nav-panel-ground);
+}
+
+/* Rows enter in sequence, capped in the component at ten — an uncapped stagger over a twelve-row
+   section makes the last row arrive half a second late, which reads as the pane being slow. */
+@keyframes rowIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--nav-row-lift));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.stagger {
+  --i: 0;
+
+  animation: rowIn var(--nav-sheet-detail) var(--nav-transition-easing) both;
+  animation-delay: calc(var(--i) * var(--nav-row-stagger));
+}
+
+/* ── Focus ─────────────────────────────────────────────────────────────────────
+   Keyboard only. Two rings in one shadow — the offset painted in the surface colour, then the ring
+   — which is what lets a blue ring read against a blue fill. Both halves are surface tokens, so
+   the ink header takes an ink gap and a lighter ring with no rule of its own here. */
+.brand:focus,
+.row:focus,
+.card:focus,
+.railAction:focus,
+.sheetControl:focus,
+.sheetBack:focus,
+.sheetLink:focus {
+  outline: none;
+}
+
+.brand:focus-visible,
+.row:focus-visible,
+.card:focus-visible,
+.railAction:focus-visible,
+.sheetControl:focus-visible,
+.sheetBack:focus-visible,
+.sheetLink:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--nav-ring-offset) var(--nav-ring-gap-color),
+    0 0 0 calc(var(--nav-ring-offset) + var(--nav-ring-width)) var(--nav-ring-color);
+}
+
+/* ── The one breakpoint ────────────────────────────────────────────────────────
+   It changes WHAT is in the bar rather than how big anything is. Below it the bar holds a mark and
+   one control and the sheet is the navigation; above it a mark, six items and a CTA, and the plate
+   is. Those are two different bars, which is why they have two heights rather than one that
+   shrinks. */
 @media (min-width: 1024px) {
   .barRow {
     min-height: var(--nav-bar-height);
@@ -438,26 +713,47 @@
     display: inline-flex;
   }
 
-  .menuButton,
-  .drawer {
-    display: none;
+  .stage {
+    display: block;
   }
 
-  .panel {
-    display: block;
+  .toggle,
+  .sheet,
+  .sheetScrim {
+    display: none;
   }
 }
 
-/* Colour is the only thing this component transitions, so reduced motion has almost nothing to
-   answer for. Zeroing the duration keeps every state exactly as visible and simply removes the
-   fade between them. */
+/* Every duration drops to zero and nothing else changes: the plate still resizes to its section
+   and the sheet still grows for one, they simply arrive rather than travel. Both are states a
+   reader has to be able to reach, so removing the motion may not remove the state — which is why
+   this zeroes durations rather than disabling the transform the layout depends on. */
 @media (prefers-reduced-motion: reduce) {
-  .itemControl,
+  .brand,
+  .itemControl > svg,
+  .stage,
+  .plate,
+  .pane,
   .row,
-  .rowIcon,
-  .railLink,
-  .drawerControl,
-  .drawerLink {
+  .rowArrow,
+  .card,
+  .cardArrow,
+  .railAction,
+  .sheetScrim,
+  .sheet,
+  .track,
+  .sheetControl,
+  .sheetBackIcon,
+  .sheetLink {
     transition-duration: var(--duration-instant);
+  }
+
+  .stage {
+    transition-delay: var(--duration-instant);
+  }
+
+  .stagger {
+    animation-duration: var(--duration-instant);
+    animation-delay: var(--duration-instant);
   }
 }

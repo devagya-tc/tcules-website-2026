@@ -61,13 +61,11 @@ export type {
   SiteNavProps,
   SiteNavItem,
   SiteNavLink,
-  SiteNavBlock,
-  SiteNavRowsBlock,
-  SiteNavRow,
-  SiteNavRailBlock,
-  SiteNavRailCompartment,
-  SiteNavRailGroup,
-  SiteNavBarBlock,
+  SiteNavGroup,
+  SiteNavCard,
+  SiteNavRail,
+  SiteNavForm,
+  SiteNavStatus,
 } from './SiteNav';
 
 export { Breadcrumbs } from './Breadcrumbs';
