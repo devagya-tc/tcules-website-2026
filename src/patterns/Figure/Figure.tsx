@@ -94,10 +94,17 @@ export function Figure({ image, caption, note }: FigureProps) {
           alt={image.alt}
           width={image.width}
           height={image.height}
-          /* Unconditional, as ListCard's thumbnail is. The one case this would mis-serve — an
-             above-the-fold hero image — cannot exist yet: PageHero has no image slot. When it
-             gains one, this becomes a joint amendment to both specs rather than a `priority` prop
-             added speculatively today. */
+          /* Unconditional, as ListCard's thumbnail is. The one case this would mis-serve is an
+             above-the-fold hero image, and that case has now been RESOLVED BY SEPARATION rather
+             than by a prop: PageHero gained a `media` slot on 25 Aug 2026 and does not fill it
+             with a Figure — it owns its own <img>, eager and fetchPriority="high", because a hero
+             image is the LCP element on the routes that have one. A hero image also has no
+             caption; the copy above it is the caption, which is the distinction that makes the
+             two components separate rather than one nested in the other.
+
+             So this stays lazy and gains no `loading` or `priority` prop: every real Figure is a
+             page-body figure below the fold. The joint amendment this comment used to ask for is
+             recorded in Figure.md §17 Q7 and Q9b and in PageHero.md §17 Q3. */
           loading="lazy"
           decoding="async"
         />

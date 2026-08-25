@@ -74,7 +74,7 @@ That is the whole surface — three props, none of them a size, a position or a 
 | `variant` | There is one arrangement regardless of which container holds `Figure` or whether one does at all. A `variant` prop would be this component naming its container's context, which the container already knows and `Figure` does not need to |
 | `as` | The root is always `<figure>`, the legend always `<figcaption>`. That native pairing is what associates the caption with the image with zero ARIA; an escape hatch would make the association optional by accident |
 | `border`, `showBorder` | Section 17 Q5 and section 4's rejected-variants row. The rule is not a per-call decision |
-| `loading`, `priority` | Section 17 Q7 — not yet, pending a real above-the-fold use, which does not exist while `PageHero` has no image slot |
+| `loading`, `priority` | Section 17 Q7 — **still not, and now for a better reason than "no use exists".** `PageHero` gained a `media` slot on 25 Aug 2026 and did **not** take a `Figure` to fill it: it owns its own `<img>`, eager and `fetchPriority="high"`. So the above-the-fold case moved out of this component rather than into it, and a `Figure` remains a page-body figure, correctly lazy |
 | `className`, `style`, `id` | Closed record, as `ListCard` and `PageHero` are. The only things this component says about itself are its content and which optional slots are filled |
 
 **Compile errors, not review comments**
@@ -367,6 +367,10 @@ As specified, both are required alongside `src` and `alt`, so the native `<img>`
 
 `ListCard`'s thumbnail ships `loading="lazy" decoding="async"` unconditionally. **Recommendation: the same, unconditionally, for now.** The one real tension — a `Figure` used as a hero's above-the-fold image would be mis-served by unconditional lazy-loading — cannot be resolved yet because no such use exists: `PageHero` has no image slot (this document's headline finding). Revisit when it does, as a joint amendment to both specs, not as a `priority` prop added speculatively today.
 
+**RESOLVED, 25 Aug 2026 — the joint amendment, and `Figure` is unchanged by it.** `PageHero` gained a `media` slot, so the above-the-fold hero image now exists. It is not a `Figure`: the hero owns its own `<img>` — eager, `decoding="async"`, `fetchPriority="high"`, because a hero image is the LCP element on the routes that have one. See `PageHero.md` §10 and §17 Q3.
+
+So the tension this question named is **resolved by separation rather than by a prop**, which is the better outcome and was not the expected one. `Figure` keeps `loading="lazy"` unconditionally and gains no `loading` or `priority` prop, because every real `Figure` is a page-body figure below the fold. The `Figure.tsx` comment that predicted this amendment has been updated to record it rather than to keep predicting it.
+
 **8 · The caption/note split of the brief's three reference lines. — non-blocking, and a stated assumption. ACCEPTED as recommended, 24 Aug 2026.**
 
 The brief gives three lines and calls them tone samples, not a worked example split across two fields. This spec reads each as a short label sentence followed by a qualifying one, and assigns the first half to `caption` and the second to `note` (section 8). **[assumed]** — if the 21 real lines are not written in this two-part shape, the example copy in section 8 should be swapped for real ones, but the component contract (two independent optional string fields) does not change either way.
@@ -384,6 +388,12 @@ The rule is enforced where sanitisation already happens, in `src/content/sources
 **9b · Whether `PageHero`, `ContentSection` or `BlockCard` should gain a slot for `Figure`. — non-blocking, out of scope for this spec. DEFERRED as recommended, 24 Aug 2026.**
 
 `PageHero.md` §17 Q3 already deferred this on the hero side, pending `Figure` existing; `ContentSection` and `BlockCard` do not exist yet to defer anything. **Recommendation: amend `PageHero` separately, once `Figure` ships, adding an `image?: ReactNode` slot** rather than an `image` prop that constructs `Figure` internally — `PageHero` is a pattern and may not import another pattern, so the slot must stay a `ReactNode` the caller fills, exactly as `CtaSection.form` takes `EnquiryForm`. `ContentSection` and `BlockCard` should do the same when they are specified. None of this blocks building `Figure` itself, which asks nothing of any container (section 3).
+
+**ANSWERED, 25 Aug 2026 — `PageHero` gained the slot, and this recommendation was NOT followed.** Recorded here rather than quietly superseded, because the divergence is the interesting part.
+
+The half that held: `PageHero` may not import `Figure`, so it does not — and it does not construct one internally either. The half that did not: the slot is **not** a `ReactNode`. `PageHero.media` is a closed discriminated union of an image and a YouTube embed, and the component owns both renderings. The reason is in `PageHero.md` §3: a `ReactNode` would have put the 16/9 box, the hairline, the four surface inks and the embed's host at the **call site**, on 129 routes, in a tier whose whole job is composition. `CtaSection.form` is not the precedent it looked like — `EnquiryForm` is a whole pattern with its own spec, its own tokens and its own states, and handing it over as a node hands over something already finished. A bare hero image is not finished until somebody has decided its width, its edge and its four surface inks, and the hero is the only thing that can decide those.
+
+So the hero's media is **not a `Figure`**, and that is now a settled distinction rather than an oversight: a `Figure` is an image with a **caption**, and a hero image has no caption — the copy above it is the caption. Nothing about `Figure` changed. `ContentSection` and `BlockCard` are still open, and the question for them is now sharper: does the container need a *captioned* figure (take a `Figure`, or a `ReactNode`) or a bare image it must style per surface (own it, as the hero does)?
 
 **10 · Equalising height across two side-by-side figures. — non-blocking. ACCEPTED as recommended, 24 Aug 2026.**
 

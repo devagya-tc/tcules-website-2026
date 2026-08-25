@@ -6,15 +6,22 @@
    decides it four times: once per surface.
 
    Naming: --hero-{part}-{role}
-           part   title | lead | body | eyebrow | key | value
-           role   ink                       — every part is text on the band's own ground.
-                                              Nothing in this component has a box, so
-                                              nothing has an fg and nothing has a bg. -fg
-                                              is for a control with a fill, which is why
-                                              button.css says --btn-solid-primary-fg and
-                                              this file says --hero-title-ink.
+           part   title | lead | body | eyebrow | key | value | media
+           role   ink                       — every TEXT part is text on the band's own
+                                              ground. None of them has a box, so none has
+                                              an fg and none has a bg. -fg is for a control
+                                              with a fill, which is why button.css says
+                                              --btn-solid-primary-fg and this file says
+                                              --hero-title-ink.
+                  rule-ink                   — the media part's hairline, and the only
+                                              non-text colour in the file. It edges a box
+                                              rather than filling one, so it is an -ink on
+                                              a surface part and not an fg on a control.
                   text | tracking | measure  — the typographic geometry, identical on all
                                               four surfaces.
+                  ratio | radius | rule-width
+                                             — the media part's geometry, likewise identical
+                                              on all four surfaces.
    There is no {variant} slot and no {state} slot, and both absences are load-bearing.
 
    ── One variant, one size ───────────────────────────────────────────────────────
@@ -36,12 +43,20 @@
      no --hero-*-disabled   a page opening cannot be unavailable.
      no --hero-*-expanded   nothing opens. No disclosure, no aria-expanded, and no idref
                             pointing at a panel that is not rendered.
-     no --hero-ring-*       nothing the component renders can take focus, so it never
-                            draws a ring. The rings inside the band are Button's, measured
-                            against --btn-ring-gap-color on all four surfaces there.
-     no --hero-*-bg         nothing in the hero is boxed. There is no fill behind any part
-                            to measure a ratio against, which is why every cell below is
-                            measured against the BAND's ground.
+     no --hero-ring-*       no ELEMENT this component renders can take focus, so it never
+                            draws a ring. The media part is the one thing that needs saying
+                            twice: an <iframe> element is not itself in the tab order — Tab
+                            moves INTO its document — and that document is youtube-nocookie
+                            on another origin, so its controls and their focus rings are
+                            YouTube's and cannot be reached from this file at all. The rings
+                            that ARE ours inside the band are Button's, measured against
+                            --btn-ring-gap-color on all four surfaces there.
+     no --hero-*-bg         the media part is boxed and every other part is not, and even
+                            the boxed one has no fill: an image and a video frame paint
+                            their own pixels edge to edge, so a ground behind either would
+                            be invisible the moment it loaded. --hero-media-rule-ink is
+                            therefore measured against the BAND's ground, as every other
+                            cell below is.
 
    The system's rule that a rendered hover must differ from a rendered pressed is satisfied
    here vacuously — there is no pair of renderings that could be identical — and satisfied
@@ -49,8 +64,8 @@
 
    ── Every surface restates every token ──────────────────────────────────────────
    Not just the deltas from paper. The hero paints its own band, so it is never nested in
-   the ordinary sense — but the band IS a [data-surface] scope, and all six inks resolve
-   from whichever block that attribute selects. A tint hero standing between two ink bands
+   the ordinary sense — but the band IS a [data-surface] scope, and all seven
+   surface-dependent values resolve from whichever block that attribute selects. A tint hero standing between two ink bands
    must render the tint column; a deltas-only table would strand --color-neutral-100 on
    --color-paper-deep at 1.13:1, which is the measured failure this repetition exists to
    prevent. The blocks below are repetitive on purpose.
@@ -70,15 +85,18 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   Type comes in as COMPOSITES, six roles for six parts, and three families in one band:
-   the title is display serif, the copy is sans, the two labels are mono. A hero built from
-   one family has to earn its structure from rules and boxes; this one gets it from the
-   type, which is why §2 has no `rule` part and no `panel` part and why there is no
-   border-width token above zero anywhere below.
+   Type comes in as COMPOSITES, six roles for the six text parts, and three families in one
+   band: the title is display serif, the copy is sans, the two labels are mono. A hero built
+   from one family has to earn its structure from rules and boxes; this one gets it from the
+   type, which is why §2 has no `rule` part and no `panel` part.
 
-   Only three of the six roles have a tracking companion — --text-lead, --text-body-lg and
-   --text-body-sm are three of the seven roles in the layer that genuinely have none — so
-   only three are declared. A --hero-lead-tracking would name a value that does not exist.
+   The one border-width above zero in the file belongs to the media part and to nothing else.
+   It edges an IMAGE rather than dividing the band — a light screenshot needs an edge the way
+   a paragraph does not — so it is not the decoration the paragraph above rules out.
+
+   Only three of the six type roles have a tracking companion — --text-lead, --text-body
+   and --text-body-sm are three of the seven roles in the layer that genuinely have none —
+   so only three are declared. A --hero-lead-tracking would name a value that does not exist.
    Each companion is aliased through this prefix rather than read from --text-* in the
    module, following --foot-title-tracking, so the module reads nothing but --hero-*.
 
@@ -93,7 +111,12 @@
 --hero-title-text:var(--text-h1);
 --hero-title-tracking:var(--text-h1-tracking);
 --hero-lead-text:var(--text-lead);
---hero-body-text:var(--text-body-lg);
+/* 16, and the same role the page's Prose body takes. It was --text-body-lg at 18,
+   chosen so hero copy stayed a step above body scale; the copy now MEETS body scale
+   instead, and the hierarchy inside the hero is carried by the lead alone — 20 against
+   16 is a wider step than 20 against 18, so the lead reads as a lead more clearly than
+   it did, and the paragraphs beneath it read as the body copy they are. */
+--hero-body-text:var(--text-body);
 --hero-key-text:var(--text-micro);
 --hero-key-tracking:var(--text-micro-tracking);
 --hero-value-text:var(--text-body-sm);
@@ -121,6 +144,28 @@
    cap the one that does not. */
 --hero-title-measure:var(--measure-title);
 --hero-body-measure:var(--measure-body);
+
+/* ── The media part ──────────────────────────────────────────────────────────
+   Three values, and only the first of them is a decision anyone will want to argue
+   with. 16/9 is not a house ratio and is not applied to the image — the image renders
+   at its own intrinsic ratio, uncropped, exactly as Figure's does. This ratio boxes the
+   YOUTUBE FRAME, whose content is 16/9 because that is what YouTube serves; anything
+   else letterboxes inside the player rather than cropping it, which is a black band
+   drawn by another origin inside our band.
+
+   A ratio is not a distance and not a size, so it takes neither vocabulary: `16 / 9` is
+   the shape of somebody else's video, which is why it is written here as itself rather
+   than laddered.
+
+   Square corners and a hairline, for the reasons figure.css argues at length and does
+   not need repeating: a radius clips screenshot content at exactly the corners a
+   screenshot is least likely to spare, and a light UI screenshot on paper is nearly the
+   colour of the ground and has no edge of its own. The values are re-derived here rather
+   than read from --fig-*, because a component never reads another component's tokens —
+   the day Figure re-tunes its rule, a hero image must not move with it. */
+--hero-media-ratio:16 / 9;
+--hero-media-radius:var(--radius-0);
+--hero-media-rule-width:var(--border-width-hairline);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────
@@ -143,6 +188,9 @@
 --hero-value-ink:var(--color-neutral-800);    /* 11.81:1 */
 --hero-eyebrow-ink:var(--color-neutral-600);  /*  4.92:1 — the floor of AA, do not lighten */
 --hero-key-ink:var(--color-neutral-600);      /*  4.92:1 — the floor of AA, do not lighten */
+--hero-media-rule-ink:var(--color-neutral-300); /* 1.54:1 — decoration, and the surface that
+                                                   needs it most: a light UI screenshot on
+                                                   near-white has no edge of its own */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
@@ -164,6 +212,9 @@
 --hero-value-ink:var(--color-neutral-800);    /* 10.54:1 */
 --hero-eyebrow-ink:var(--color-neutral-700);  /*  7.27:1 — stepped; 600 would be 4.39:1 */
 --hero-key-ink:var(--color-neutral-700);      /*  7.27:1 — stepped; 600 would be 4.39:1 */
+--hero-media-rule-ink:var(--color-neutral-400); /* 1.90:1 — decoration. It steps with the
+                                                   ground and has less to do than on paper:
+                                                   tint is already darker than a light shot */
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
@@ -183,6 +234,13 @@
 --hero-value-ink:var(--color-neutral-100);    /* 14.47:1 */
 --hero-eyebrow-ink:var(--color-neutral-400);  /*  8.05:1 */
 --hero-key-ink:var(--color-neutral-400);      /*  8.05:1 */
+--hero-media-rule-ink:var(--color-neutral-700); /* 2.10:1 — decoration, and it DROPS rather
+                                                   than lifting with the inks: a shot on
+                                                   near-black has all the edge it needs from
+                                                   its own light pixels, and a pale hairline
+                                                   would read as a second surface on the
+                                                   black one. Almost none is the honest
+                                                   amount of rule here */
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -202,4 +260,10 @@
 --hero-value-ink:var(--color-brandeis-50);    /*  5.57:1 */
 --hero-eyebrow-ink:var(--color-brandeis-100); /*  4.91:1 — the tightest cell here, do not lighten */
 --hero-key-ink:var(--color-brandeis-100);     /*  4.91:1 — the tightest cell here, do not lighten */
+--hero-media-rule-ink:var(--color-brandeis-300); /* 2.64:1 — decoration, and DARKER than
+                                                    every text ink on this ground. The light
+                                                    end of the ramp is spent on the type; on
+                                                    a saturated ground the distinction wanted
+                                                    is a slight one, and stepping toward the
+                                                    ground is what makes it slight */
 }

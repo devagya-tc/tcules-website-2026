@@ -114,6 +114,9 @@ export type {
   HeroCreditRole,
   HeroDates,
   HeroAction,
+  HeroMedia,
+  HeroImage,
+  HeroVideo,
 } from './PageHero';
 
 export { SiteFooter } from './SiteFooter';
