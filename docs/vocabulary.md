@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 19 roles, consumed as composites
+### Type — 20 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -83,20 +83,21 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-ui` | 13px | 1.2 | mono | semibold | `--text-ui-tracking` | `--text-mono-case` |
 | `--text-ui-lg` | 14px | 1.2 | mono | semibold | `--text-ui-lg-tracking` | `--text-mono-case` |
 | `--text-eyebrow` | 12px | 1.2 | mono | semibold | `--text-eyebrow-tracking` | `--text-mono-case` |
+| `--text-index` | 20px | 1.2 | mono | semibold | `--text-index-tracking` | `--text-mono-case` |
 | `--text-micro` | 11px | 1.2 | mono | semibold | `--text-micro-tracking` | `--text-mono-case` |
 | `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` | `--text-mono-case` |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**12 roles have a tracking companion. 7 have none** — pairing one with a role in that
+**13 roles have a tracking companion. 7 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
 
 Mono is this system's label voice: chrome, eyebrows, keys, control labels, stats. All
-7 mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
+8 mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
 correction for the side bearings of capitals — so set lower-case, a mono role reads as
 letter-spaced body text rather than as a label. **The case belongs to the role, not to the
-component.** 6 of the 7 take it: `--text-ui-sm`, `--text-ui`, `--text-ui-lg`, `--text-eyebrow`, `--text-micro`, `--text-stat`.
+component.** 7 of the 8 take it: `--text-ui-sm`, `--text-ui`, `--text-ui-lg`, `--text-eyebrow`, `--text-index`, `--text-micro`, `--text-stat`.
 
 Write it beside the font, exactly as you write tracking, and for the same reason — `font:` carries
 a family, weight, size and ratio, and no transform:
@@ -122,7 +123,7 @@ alphabetic suffix: "12k" sets as "12K".
 - **Radius:** `--radius-0` 0px · `--radius-4` 4px · `--radius-8` 8px · `--radius-full` 999px
 - **Border width:** `--border-width-0` 0px · `--border-width-1` 1px · `--border-width-2` 2px · `--border-width-3` 3px · `--border-width-hairline` 1px · `--border-width-hairline-deck` 2px · `--border-width-hairline-social` 3px · `--border-width-hairline-print` 0.75pt
 - **Focus ring:** `--focus-ring-width` 2px · `--focus-ring-offset` 2px
-- **Motion:** `--duration-instant` 0ms · `--duration-fast` 140ms · `--easing-standard` cubic-bezier(0.2, 0, 0, 1)
+- **Motion:** `--duration-instant` 0ms · `--duration-fast` 140ms · `--duration-medium` 240ms · `--duration-slow` 360ms · `--easing-standard` cubic-bezier(0.2, 0, 0, 1)
 - **Elevation:** `--shadow-none` none
 - **Z-index:** `--z-base` 0 · `--z-raised` 100 · `--z-sticky` 200 · `--z-dropdown` 300 · `--z-overlay` 400 · `--z-modal` 500 · `--z-toast` 600
 - **Icon:** `--icon-size-14` 14px · `--icon-size-16` 16px · `--icon-size-18` 18px · `--icon-size-24` 24px
@@ -148,7 +149,7 @@ Yours must not collide with any of those, nor with a primitive family above.
 **Their geometry, so you can size against it rather than guessing.** A new control is measured
 against the controls beside it — if you are specifying one, say which of these it must line up with.
 
-- **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px
+- **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px · `--acc-question-underline-offset` 6px
 - **block-card.css** — `--bcrd-title-tracking` -0.005em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-radius` 0px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
 - **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
@@ -159,9 +160,9 @@ against the controls beside it — if you are specifying one, say which of these
 - **icon.css** — `--icn-size-sm` 14px · `--icn-size-md` 16px · `--icn-size-lg` 18px · `--icn-size-xl` 24px
 - **input.css** — `--inp-height-md` 40px · `--inp-height-touch` 44px · `--inp-padding-x` 12px · `--inp-textarea-padding-y` 12px · `--inp-min-inline` 16rem · `--inp-textarea-min-block` 128px · `--inp-radius` 8px · `--inp-rule-width` 1px · `--inp-invalid-rule-width` 2px · `--inp-ring-width` 2px · `--inp-ring-offset` 2px
 - **layout.css** — `--lay-track-xs` 192px · `--lay-track-sm` 256px · `--lay-track-md` 320px · `--lay-track-lg` 384px
-- **list-card.css** — `--lcrd-title-tracking` 0em · `--lcrd-marker-tracking` -0.01em · `--lcrd-content-min-xs` 192px · `--lcrd-thumbnail-inline-md` 160px · `--lcrd-rule-width` 1px · `--lcrd-radius` 0px · `--lcrd-ring-width` 2px · `--lcrd-ring-offset` 2px
+- **list-card.css** — `--lcrd-title-tracking` -0.005em · `--lcrd-marker-tracking` 0.08em · `--lcrd-number-baseline-offset` 6px · `--lcrd-content-min-xs` 192px · `--lcrd-thumbnail-inline-md` 160px · `--lcrd-rule-width` 1px · `--lcrd-radius` 0px · `--lcrd-ring-width` 2px · `--lcrd-ring-offset` 2px
 - **logo.css** — `--logo-height-sm` 20px · `--logo-height-md` 24px · `--logo-height-lg` 40px
-- **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 12px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-panel-padding-y` 48px · `--nav-panel-bar-inset` 16px · `--nav-row-padding` 8px · `--nav-row-radius` 8px · `--nav-row-icon-size` 24px · `--nav-row-measure` 68ch · `--nav-rail-inset` 32px · `--nav-rail-title-tracking` 0em · `--nav-label-tracking` 0.12em · `--nav-drawer-padding-y` 32px · `--nav-drawer-item-padding-y` 16px · `--nav-drawer-item-tracking` 0.08em · `--nav-drawer-panel-inset` 16px · `--nav-drawer-panel-gap` 16px
+- **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 16px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-plate-width-lg` 1240px · `--nav-plate-width-md` 880px · `--nav-plate-width-sm` 720px · `--nav-plate-radius` 8px · `--nav-plate-inset` 16px · `--nav-row-padding-block` 8px · `--nav-row-padding-inline` 16px · `--nav-row-radius` 8px · `--nav-row-arrow-size` 14px · `--nav-row-arrow-travel` 4px · `--nav-rail-title-tracking` 0em · `--nav-rail-action-tracking` 0.08em · `--nav-card-radius` 8px · `--nav-card-padding` 16px · `--nav-card-image-radius` 4px · `--nav-card-arrow-size` 16px · `--nav-label-tracking` 0.12em · `--nav-sheet-reserve` 88px · `--nav-sheet-radius` 8px · `--nav-sheet-padding-inline` 20px · `--nav-sheet-row-padding-block` 12px · `--nav-sheet-foot-padding-block` 12px · `--nav-sheet-link-padding-block` 10px · `--nav-sheet-back-tracking` 0.08em · `--nav-sheet-chevron-size` 16px · `--nav-grab-width` 36px · `--nav-grab-height` 4px · `--nav-row-lift` 6px
 - **page-hero.css** — `--hero-eyebrow-tracking` 0.12em · `--hero-title-tracking` -0.018em · `--hero-key-tracking` 0.1em · `--hero-title-measure` 22ch · `--hero-body-measure` 68ch · `--hero-media-radius` 0px · `--hero-media-rule-width` 1px
 - **proof.css** — `--proof-quote-rule-width` 2px · `--proof-radius` 0px
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px

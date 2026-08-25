@@ -3,7 +3,7 @@
    Every colour, type role, component size and state value comes from --lcrd-*, declared in
    tokens/components/list-card.css and re-declared once per surface there. Two usage tokens are read
    unaliased and the spec names them that way: --measure-title / --measure-body on the copy, and
-   --gap-text as the row's inner inset. Both are shared answers rather than this component's own. Layout and Cluster own
+   --gap-block as the row's inner inset. Both are shared answers rather than this component's own. Layout and Cluster own
    every arrangement and every seam. This module provides only the row's own edge, inner inset,
    child sizing, crop and interactive rendering.
 
@@ -40,7 +40,11 @@
 .frame {
   display: block;
   min-inline-size: 0;
-  padding-block: var(--gap-text);
+  /* --gap-block, not --gap-text. The gap scale calls 16 "cell padding on a dense table" and this
+     is a full-width editorial row carrying an h4 title, which is not a dense table. Because the
+     value is padding on both edges, the distance between two adjacent rows' content is twice it:
+     32px before, 48px now. */
+  padding-block: var(--gap-block);
   border-block-end: var(--lcrd-rule-width) solid var(--lcrd-rule-ink);
   border-radius: var(--lcrd-radius);
   box-shadow: var(--lcrd-shadow);
@@ -69,11 +73,18 @@
   color: var(--lcrd-marker-ink);
 }
 
-/* The number is weight, not a bullet. nowrap keeps 01 together if a caller passes a narrow parent.
+/* The number is an index, not weight and not a bullet. It reads at the mono label role, so the
+   title leads the row and the ordinal supports it; see the note on --lcrd-marker-text for why the
+   type ramp leaves no step between the two. nowrap keeps 01 together in a narrow parent.
    The mono case is stated even though a numeral has none: it is what makes this rule agree with
    every other mono rule on sight, so the next reader does not have to work out whether the omission
    was a decision. */
 .number {
+  /* Later than .marker in this file and at equal specificity, which is what lets the ordinal take
+     its own quiet ink while an icon marker keeps .marker's. Source order is the mechanism, so do
+     not reorder these two rules. */
+  padding-block-start: var(--lcrd-number-baseline-offset);
+  color: var(--lcrd-number-ink);
   font: var(--lcrd-marker-text);
   letter-spacing: var(--lcrd-marker-tracking);
   text-transform: var(--text-mono-case);
@@ -126,14 +137,24 @@
 
 /* Higher specificity than globals.css's bare anchor rules. The anchor carries NO link colour of its
    own — title, body, marker and cue each state their own ink — so `inherit` keeps the bare-anchor
-   blue from reaching the title the redesign wants dark. */
+   blue from reaching the title the redesign wants dark.
+
+   The transition is on border-color, and it is the row's own rule: this element carries the
+   block-end border, so the affordance and the border live on the same box. */
 .root .link {
   color: inherit;
   text-decoration: none;
+  transition: border-color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
 }
 
+/* The hover affordance, and the reason it is the rule rather than the cue: the target is the whole
+   row and the rule is the only part that spans it. An 18px arrow at the far inline end changing one
+   step of blue is not perceptible feedback for a box up to 1240px wide. Colour only — the width
+   never moves, nothing wipes, nothing transforms. A static row has no :hover and keeps the rest
+   rule at every moment. */
 .root .link:hover,
 .root .link:focus-visible {
+  border-block-end-color: var(--lcrd-rule-ink-hover);
   text-decoration: none;
 }
 

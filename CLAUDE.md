@@ -73,7 +73,7 @@ The token system lives in `src/styles/tokens/` and is imported by `src/app/globa
 | Layer | Where | What it holds |
 |---|---|---|
 | 1 · primitives | `primitives.css` | ramps and ladders. `--color-brandeis-500`, `--space-24`, `--font-size-h1`, `--line-height-h1`. Declared once, consumed through a usage token wherever one exists |
-| 2 · usage | `primitives.css` | one curated answer per question. **`--gap-*` (9 steps)** and `--text-*` (19 roles). Surface-independent, therefore shared |
+| 2 · usage | `primitives.css` | one curated answer per question. **`--gap-*` (9 steps)** and `--text-*` (20 roles). Surface-independent, therefore shared |
 | 3 · components | `components/*.css` | what a value MEANS for one component. `--sec-ground`, `--btn-solid-primary-bg`. Re-declared once per surface |
 
 **Colour has no usage layer, deliberately.** What a colour means depends entirely on the surface

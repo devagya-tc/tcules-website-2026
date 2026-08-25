@@ -29,6 +29,17 @@ export const ROUTES = {
   audits: '/audits',
   howWeWork: '/how-we-work',
 
+  /* The six audits, named individually because the nav lists them as a group of six rather than
+     linking the index. They resolve through the `/audits/[slug]` route that already ships, so
+     `auditPath()` below would build the same strings — but a nav item takes a NAME, and a call
+     site that computes one cannot be checked against the union. */
+  uxProductAudit: '/audits/ux-product-audit',
+  designSystemAudit: '/audits/design-system-audit',
+  designToCodeAudit: '/audits/design-to-code-audit',
+  productModernisationAssessment: '/audits/product-modernisation-assessment',
+  aiProductUxReadiness: '/audits/ai-product-ux-readiness',
+  prototypeHardeningReview: '/audits/prototype-hardening-review',
+
   /* Work. `/case-studies` is the canonical family and `/work` is not a route — the previous
      codebase carried that question unresolved across five files, which is why it is settled
      here rather than at a call site. */
@@ -62,7 +73,9 @@ export const ROUTES = {
   tools: '/tools',
   glossary: '/glossary',
 
-  /* Lab and company. */
+  /* Lab and company. The five Lab children are carried by the nav data even though Lab renders as
+     a direct link today — see docs/specs/SiteNav.md §2.1. Naming them is what makes switching Lab
+     to a menu a one-field edit rather than a content migration. */
   futureInterfacesLab: '/future-interfaces-lab',
   futureInterfacesLabJoin: '/future-interfaces-lab/join',
   matterDesignSystem: '/matter-design-system',

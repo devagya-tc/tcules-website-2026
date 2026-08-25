@@ -1,13 +1,28 @@
 /* Accordion — one native multi-open disclosure set, built to docs/specs/Accordion.md.
 
-   Layout owns the zero-gap item axis and Cluster owns question/mark placement. This module owns
-   only the continuous rule ladder, trigger hit area and answer inset. It has no item ground,
-   hand-written sibling arrangement, breakpoint, height animation or surface selector.
+   Layout owns the zero-gap item axis and the summary IS the Cluster that owns question/mark
+   placement. This module owns only the continuous rule ladder, the trigger hit area, the state
+   ink and the answer inset. It has no item ground, hand-written sibling arrangement, breakpoint,
+   height animation or surface selector.
+
+   ── The component paints no ground, in any state ────────────────────────────────
+   Not at rest, not on hover, not on press, not when open. The previous build filled the whole
+   68ch trigger with --acc-trigger-bg-hover: the largest thing that happened on the page in
+   response to a pointer moving, square-cornered and warm grey, and it read as a selected table
+   row rather than as a control. State now moves the INK of the question and its mark, which is
+   where the reader is already looking. Both background tokens are deleted, so there is nothing
+   here to search for and no `background-color` below.
+
+   The open item has no rule colour of its own either. --acc-rule-ink-expanded put the action
+   colour on a decoration, at the BOTTOM of an answer that is often 300px below the question whose
+   state it described — and an open disclosure is self-evidently open, because the answer is on
+   screen. Every item's rule is --acc-rule-ink in every state.
 
    ── What is NOT here, and why ───────────────────────────────────────────────────
-   No display:flex and no display:grid. Both axes are primitives — a Layout for the item ladder,
-   a Cluster for the question/mark row. The two `flex:` and one `display: inline-flex` below size
-   and reveal children INSIDE that Cluster; they arrange nothing, and each says so on its own line.
+   No display:flex and no display:grid for ARRANGEMENT. Both axes are primitives — a Layout for
+   the item ladder, and the summary itself is a Cluster, which is what removed the extra
+   triggerContent span this module used to carry. The `flex` and `display: inline-flex` below size
+   and reveal children inside that Cluster; they arrange nothing, and each says so on its own line.
 
    No position and no z-index on the root. Nothing in this component stacks: `--z-base` is 0, and
    the only thing that needs to paint over a neighbour is the focus ring, which is handled where it
@@ -18,15 +33,15 @@
    the kind CLAUDE.md deletes. Breadcrumbs and Figure had already answered this the same way.
 
    No height, max-height or transform animation on the answer. `<details>` has no animatable
-   intrinsic size, and faking one costs the native behaviour this component exists to keep.
+   intrinsic size, and faking one costs the native behaviour this component exists to keep. The
+   mark still does not rotate: both chevrons are in the DOM and `[open]` picks which one shows.
 
    ── Rule order is load-bearing ──────────────────────────────────────────────────
-   `.trigger:hover`/`:focus-visible`, then `:active`, then `:focus-visible` again. All three are
-   (0,2,0), so source order decides them:
-     · `:active` AFTER the hover pair, so pointer-down wins while the pointer is also hovering.
-     · the second `:focus-visible` block AFTER `:active`, and it deliberately sets NO background —
-       so a trigger that is pressed and focused keeps the pressed ground and still gets the ring.
-   Moving a block breaks a state, and both failures render plausibly. */
+   `.trigger:hover`/`:focus-visible`/`.item[open]`, then `:active`. All of the state selectors
+   resolve the question to the SAME raised ink, so they cannot fight over colour — what source
+   order decides is the underline: `:active` comes last so a pressed row keeps it while also
+   hovered. The `:focus-visible` ring block is separate from `:focus`, which only kills the UA
+   outline; splitting them is what stops a mouse click drawing a ring. */
 
 .root {
   inline-size: 100%;
@@ -37,34 +52,29 @@
   min-inline-size: 0;
   /* The ladder is continuous: this is the ONLY rule above the first item, and every item carries
      its own below. That is what makes N items read as one object rather than N stacked ones, and
-     it is why the item axis is a Layout with rowGap="none". */
+     it is why the item axis is a Layout with rowGap="none". The hairline is one ramp step lighter
+     than it was on every surface — at 5–7 rows the old step turned the set into a table. */
   border-block-start: var(--acc-rule-width) solid var(--acc-rule-ink);
   border-radius: var(--acc-radius);
   box-shadow: var(--acc-shadow);
 }
 
+/* No transition and no [open] rule: the ink of this border never moves, in any state. */
 .item {
   min-inline-size: 0;
   border-block-end: var(--acc-rule-width) solid var(--acc-rule-ink);
-  transition: border-color var(--acc-transition-duration) var(--acc-transition-easing);
-}
-
-/* Open state is carried by the rule's ink, not by a ground or a width step: the ladder keeps its
-   geometry exactly, so opening an item never moves the one below it. */
-.item[open] {
-  border-block-end-color: var(--acc-rule-ink-expanded);
 }
 
 .trigger {
   inline-size: 100%;
   min-inline-size: 0;
-  /* --gap-text above and below an h5 line box is what clears the 44px touch floor: 22/1.28 is a
-     28.16px line, so the summary measures ~60px (and ~58px at the mobile h5 step). No size token
-     and no pseudo-element hit extension — and note a ::after extension would work here where it
-     does NOT on Input, because <summary> is not a void element. See .design-sync/NOTES.md. */
-  padding-block: var(--gap-text);
-  color: var(--acc-trigger-fg);
-  background-color: transparent;
+  /* --gap-block above and below, up from --gap-text. With no ground defining the row, the inset
+     is the only thing that makes it one — and it is what clears the 44px touch floor with room to
+     spare: 22/1.28 is a 28.16px line, so the summary measures ~76px (and ~74px at the mobile h5
+     step, where 20/1.3 gives 26px). No size token and no pseudo-element hit extension — and note
+     a ::after extension would work here where it does NOT on Input, because <summary> is not a
+     void element. See .design-sync/NOTES.md. */
+  padding-block: var(--gap-block);
   cursor: pointer;
   /* Three rules for one marker, because the engines disagree about which handle exists.
      `list-style` is the standard removal and is what current Chromium and Firefox honour;
@@ -72,7 +82,6 @@
      handle older Safari offers; emptying ::marker covers the engine that keeps summary as a
      list-item regardless. All three are needed and none is redundant with another. */
   list-style: none;
-  transition: background-color var(--acc-transition-duration) var(--acc-transition-easing);
 }
 
 .trigger::-webkit-details-marker {
@@ -81,15 +90,6 @@
 
 .trigger::marker {
   content: '';
-}
-
-.trigger:hover,
-.trigger:focus-visible {
-  background-color: var(--acc-trigger-bg-hover);
-}
-
-.trigger:active {
-  background-color: var(--acc-trigger-bg-pressed);
 }
 
 /* Kill the UA outline for every focus, keyboard or not; the block below puts back a ring that is
@@ -108,11 +108,9 @@
     0 0 0 calc(var(--acc-ring-offset) + var(--acc-ring-width)) var(--acc-ring-color);
 }
 
-.triggerContent {
-  inline-size: 100%;
-  min-inline-size: 0;
-}
-
+/* The question carries its own type rather than the h3 element's: the heading exists so 5–7
+   questions appear in the heading tree on a page that is normally 21 routes deep, not to be read
+   at h3 scale. `.question` at (0,1,0) beats the bare `h3` rule in globals.css. */
 .question {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
@@ -121,47 +119,91 @@
   overflow-wrap: anywhere;
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
+  color: var(--acc-question-ink);
+  transition: color var(--acc-transition-duration) var(--acc-transition-easing);
 }
 
-/* Both marks are fixed-basis children of the trigger's Cluster: no grow, no shrink, natural width.
-   The question is the only flexible thing on that row, so it takes every remaining pixel and wraps,
-   and the mark stays a constant distance from the row's inline end at any question length. */
-.markClosed,
-.markOpen {
-  flex: 0 0 auto;
-  color: inherit;
-}
+/* The mark is a fixed-basis child of the trigger's Cluster: no grow, no shrink, natural width. The
+   question is the only flexible thing on that row, so it takes every remaining pixel and wraps,
+   and the mark stays a constant distance from the row's inline end at any question length.
 
-.markOpen {
-  display: none;
-}
-
-.item[open] .markClosed {
-  display: none;
-}
-
-/* inline-flex rather than the span's default inline: an inline box would add the line box's
+   inline-flex rather than the span's default inline: an inline box would add the line box's
    half-leading around Icon's block-level svg and shift the mark off the question's optical centre.
-   The Cluster blockifies its children anyway, so this is what the closed mark already resolves to —
-   stating it keeps the two marks identical rather than relying on that. */
-.item[open] .markOpen {
+
+   It rests quieter than the question — it is the affordance cue, not the content — and rises to
+   the same raised ink when the row is live, so hover reads as one gesture rather than two things
+   moving separately. */
+.mark {
+  flex: 0 0 auto;
   display: inline-flex;
+  color: var(--acc-mark-ink);
+  transition: color var(--acc-transition-duration) var(--acc-transition-easing);
 }
 
+/* Both chevrons sit in the DOM at all times and both are decorative, so [open] picks which one
+   shows and nothing rotates. The two child selectors are the reason .mark takes EXACTLY two
+   children — closed first, open second — and adding a third would silently re-point them. */
+.mark > :last-child {
+  display: none;
+}
+
+.item[open] .mark > :first-child {
+  display: none;
+}
+
+.item[open] .mark > :last-child {
+  display: block;
+}
+
+/* Hover, keyboard focus and open all resolve to one raised ink — three states, one value, so the
+   token layer declares it once (see accordion.css). Focus joins them because the ring alone used
+   to arrive alongside the hover ground, and a focused row that reads quieter than a hovered one
+   is a regression for the keyboard. */
+.trigger:hover .question,
+.trigger:focus-visible .question,
+.item[open] .question {
+  color: var(--acc-question-ink-hover);
+}
+
+.trigger:hover .mark,
+.trigger:focus-visible .mark,
+.item[open] .mark {
+  color: var(--acc-mark-ink-hover);
+}
+
+/* Pressed holds the raised ink and adds a hairline underline, so it differs from hover by more
+   than colour — which is the job the deleted --acc-trigger-bg-pressed used to do. Last, so a row
+   that is pressed AND hovered keeps it. */
+.trigger:active .question {
+  text-decoration: underline;
+  text-decoration-color: var(--acc-mark-ink);
+  text-decoration-thickness: var(--acc-rule-width);
+  text-underline-offset: var(--acc-question-underline-offset);
+}
+
+/* Accordion says NOTHING about the answer's type or its colour, and this class is the whole of
+   what it does say: the inset, the measure and the wrapping.
+
+   The redesign wanted 16px under the 22px question — 18 was a 1.22 ratio and neither element led,
+   where 16 gives 1.38 — and Prose's flow is --text-body, so there is nothing left to restate. An
+   earlier pass here raised the selector to (0,2,0) to override Prose's root at 18px; when Prose
+   stepped its whole flow down to 16 that override became a no-op, and a no-op with an explanation
+   attached is worse than no rule. There is no --acc-answer-ink either: a strong, a link or a code
+   span inside an answer has to match Prose everywhere else on the site. */
 .answer {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
-  /* --gap-tight above and --gap-block below, and these ARE the real distances: Prose is a
-     lobotomised owl, so its first child carries no leading margin and its last none trailing.
-     The asymmetry is deliberate — the answer belongs to the question above it, and the larger
-     step below is what separates it from the next item's rule. */
-  padding-block: var(--gap-tight) var(--gap-block);
+  /* 0 at the block start: the trigger's own --gap-block inset is the whole trigger-to-answer seam
+     now, and it has to be, because that inset is also the hit area. --gap-block at the block end
+     is what separates the answer from the next item's rule. */
+  padding-block: 0 var(--gap-block);
   overflow-wrap: anywhere;
+  font: var(--text-body);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .item,
-  .trigger {
+  .question,
+  .mark {
     transition-duration: var(--duration-instant);
   }
 }

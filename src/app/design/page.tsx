@@ -115,7 +115,7 @@ const SPECIMENS = [
       {
         href: '/design/site-nav',
         name: 'SiteNav',
-        note: 'the header — bar, mega-menu panels, mobile drawer, 4 surfaces',
+        note: 'the header — bar, the morphing plate at 3 widths, the mobile sheet, 4 surfaces',
       },
       {
         href: '/design/site-footer',

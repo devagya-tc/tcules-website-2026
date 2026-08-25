@@ -188,9 +188,11 @@ export default function ListCardSpecimenPage() {
           <h1>ListCard</h1>
           <p>
             One ruled row in a semantic list: a number, icon, thumbnail or no marker; one title
-            and body; and one whole-row link whose arrow cue is the only part that carries the
-            link colour. The title stays dark whether the row navigates or not, and the row
-            never paints a fill or a surrounding edge.
+            and body; and an optional whole-row link. It carries three jobs on purpose — a step
+            in a process, a clickable article or guide on a listing page, and an item in a plain
+            content list — which is why the marker, the heading level and the link are all
+            independently optional. The title stays dark whether the row navigates or not, and
+            the row never paints a fill.
           </p>
         </Layout>
       </Section>
@@ -239,7 +241,7 @@ export default function ListCardSpecimenPage() {
             <ListCard
               arrangement="stacked"
               title="Number marker"
-              body="A two-digit stat gives a sequence visible weight without becoming a bullet."
+              body="A two-digit index orders the sequence without outweighing the title it indexes."
               marker={{ kind: 'number', value: 1 }}
             />
             <ListCard
@@ -313,11 +315,13 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>4 · States</h2>
             <p>
-              The static row has rest only. Point at, hold and Tab to the linked row: the arrow
-              cue is the only part that moves, and colour is the only thing about it that
-              changes. The row&rsquo;s own hairline is decoration at one width in every state —
-              the wipe that used to animate across it and double on press is gone. Focus still
-              adds the surface-aware two-part ring, so keyboard focus is never colour alone.
+              The static row has rest only. Point at, hold and Tab to the linked row: the{' '}
+              <strong>rule</strong> changes colour across the whole row and the{' '}
+              <strong>cue</strong> changes with it, which is the point — the target is up to
+              1240px wide, and one 18px arrow at the far end of it is not feedback anybody
+              notices. Both are colour only: the rule&rsquo;s width never moves, nothing wipes
+              and nothing transforms. Pressed steps the cue again. Focus adds the surface-aware
+              two-part ring on top, so keyboard focus is never carried by colour alone.
             </p>
           </Layout>
           <Rows ordered>
@@ -337,10 +341,19 @@ export default function ListCardSpecimenPage() {
           </Rows>
           <Layout columns={{ base: 1, md: [1, 3] }} colGap="gutter" rowGap="tight">
             {[
-              ['rest', 'Dark title, quiet base hairline, and the cue at --lcrd-link-ink.'],
-              ['hover', 'The cue alone steps to --lcrd-link-ink-hover. Nothing else changes.'],
-              ['focus', 'The hover cue plus the two-part keyboard ring around the row.'],
-              ['pressed', 'The cue alone steps to --lcrd-link-ink-pressed.'],
+              [
+                'rest',
+                'Dark h4 title, quiet numeral, quiet base hairline, cue at --lcrd-link-ink.',
+              ],
+              [
+                'hover',
+                'The rule steps to --lcrd-rule-ink-hover across the row; the cue steps too.',
+              ],
+              ['focus', 'Exactly the hover rendering plus the two-part keyboard ring.'],
+              [
+                'pressed',
+                'The cue steps to --lcrd-link-ink-pressed; the rule holds its hover value.',
+              ],
             ].map(([state, note]) => (
               <div key={state}>
                 <strong>{state}</strong>
@@ -399,7 +412,8 @@ export default function ListCardSpecimenPage() {
             <h2>7 · Twelve-row sample-finding block</h2>
             <p>
               One full-width ordered list with zero row gap. Narrow through 767: title/body
-              stacks, two-digit markers hold the left rhythm and the rules keep one list intact.
+              stacks, two-digit markers hold the left rhythm quietly and the rules keep one list
+              intact.
             </p>
           </Layout>
           <SampleList />
