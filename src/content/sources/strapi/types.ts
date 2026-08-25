@@ -140,3 +140,21 @@ export type StrapiAuditResponse = {
   data?: { auditPage?: StrapiAudit[] | null } | null;
   errors?: Array<{ message?: string | null }> | null;
 };
+
+export type StrapiHowWeWorkBlock = StrapiAuditBlock & {
+  richTextBody?: unknown;
+  gridColumns?: string | null;
+  gridCards?: StrapiAuditBlock['cardGridCards'];
+  comparisonItems?: StrapiAuditBlock['comparisonCards'];
+  calloutBody?: unknown;
+  groupLinks?: StrapiLink[] | null;
+};
+
+export type StrapiHowWeWork = Omit<StrapiAudit, 'content'> & {
+  content?: StrapiHowWeWorkBlock[] | null;
+};
+
+export type StrapiHowWeWorkResponse = {
+  data?: { newHowWeWork?: StrapiHowWeWork | null } | null;
+  errors?: Array<{ message?: string | null }> | null;
+};

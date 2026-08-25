@@ -7,8 +7,11 @@ import type {
   AuditPage,
   AuditSection,
   AuditSeo,
+  HowWeWorkContentSource,
+  HowWeWorkPage,
 } from '../types';
 import { AUDIT_BY_SLUG_QUERY } from './strapi/audit-query';
+import { HOW_WE_WORK_QUERY } from './strapi/how-we-work-query';
 import {
   escapeHtml,
   richTextToHtml,
@@ -20,12 +23,16 @@ import type {
   StrapiAuditBlock,
   StrapiAuditResponse,
   StrapiContentColumn,
+  StrapiHowWeWork,
+  StrapiHowWeWorkResponse,
   StrapiLabelledItem,
   StrapiLink,
 } from './strapi/types';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const AUDIT_REVALIDATE_SECONDS = 300;
+const HOW_WE_WORK_REVALIDATE_SECONDS = 300;
+const HOW_WE_WORK_SLUG = 'how-we-work';
 
 function value(value: string | null | undefined): string {
   return typeof value === 'string' ? value.trim() : '';
@@ -581,6 +588,43 @@ function mapAudit(rawAudit: StrapiAudit, graphqlUrl: string): AuditPage | null {
   };
 }
 
+function mapHowWeWork(
+  rawPage: StrapiHowWeWork,
+  requestedSlug: string,
+  graphqlUrl: string,
+): HowWeWorkPage | null {
+  if (!value(rawPage.title)) return null;
+
+  const auditShape: StrapiAudit = {
+    ...rawPage,
+    // newHowWeWork is a singleton in the supplied schema. Its internal CMS slug currently names
+    // the singleton version; the public route is intentionally fixed by the content seam.
+    slug: requestedSlug,
+    content: (rawPage.content ?? []).map((block) => ({
+      ...block,
+      body:
+        block.__typename === 'ComponentAuditRichText'
+          ? block.richTextBody
+          : block.__typename === 'ComponentAuditCallout'
+            ? block.calloutBody
+            : block.body,
+      cardGridColumns: block.gridColumns,
+      cardGridCards: block.gridCards,
+      comparisonCards: block.comparisonItems,
+      links: block.__typename === 'ComponentAuditLinkGroup' ? block.groupLinks : block.links,
+    })),
+  };
+  const mapped = mapAudit(auditShape, graphqlUrl);
+  if (!mapped) return null;
+
+  return {
+    ...mapped,
+    ...(value(rawPage.createdAt) ? { createdAt: value(rawPage.createdAt) } : {}),
+    ...(value(rawPage.updatedAt) ? { updatedAt: value(rawPage.updatedAt) } : {}),
+    ...(value(rawPage.publishedAt) ? { publishedAt: value(rawPage.publishedAt) } : {}),
+  };
+}
+
 async function fetchAuditBySlug(slug: string): Promise<StrapiAudit | null> {
   const graphqlUrl = getStrapiGraphqlUrl();
   const response = await fetch(graphqlUrl, {
@@ -613,6 +657,41 @@ async function fetchAuditBySlug(slug: string): Promise<StrapiAudit | null> {
   return payload.data?.auditPage?.[0] ?? null;
 }
 
+async function fetchHowWeWork(): Promise<{
+  graphqlUrl: string;
+  page: StrapiHowWeWork | null;
+}> {
+  const graphqlUrl = getStrapiGraphqlUrl();
+  const response = await fetch(graphqlUrl, {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: HOW_WE_WORK_QUERY,
+      variables: { status: 'PUBLISHED' },
+    }),
+    cache: 'force-cache',
+    next: {
+      revalidate: HOW_WE_WORK_REVALIDATE_SECONDS,
+      tags: ['how-we-work'],
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Strapi how-we-work request failed with HTTP ${response.status}.`);
+  }
+
+  const payload = (await response.json()) as StrapiHowWeWorkResponse;
+  const errors = payload.errors?.map((error) => value(error.message)).filter(Boolean) ?? [];
+  if (errors.length > 0) {
+    throw new Error(`Strapi how-we-work query failed: ${errors.join('; ')}`);
+  }
+
+  return { graphqlUrl, page: payload.data?.newHowWeWork ?? null };
+}
+
 /**
  * The audit source is the only layer that knows Strapi's response shape. It converts every CMS
  * record into page-facing view models, sanitises rich text, and rejects media embedded in rich
@@ -626,5 +705,15 @@ export const strapiSource: AuditContentSource = {
     const graphqlUrl = getStrapiGraphqlUrl();
     const audit = await fetchAuditBySlug(requestedSlug);
     return audit ? mapAudit(audit, graphqlUrl) : null;
+  },
+};
+
+export const howWeWorkSource: HowWeWorkContentSource = {
+  async getHowWeWorkPage(slug) {
+    const requestedSlug = value(slug);
+    if (requestedSlug !== HOW_WE_WORK_SLUG) return null;
+
+    const { graphqlUrl, page } = await fetchHowWeWork();
+    return page ? mapHowWeWork(page, requestedSlug, graphqlUrl) : null;
   },
 };

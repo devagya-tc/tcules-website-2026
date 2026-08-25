@@ -37,6 +37,8 @@ export type ListCardProps = {
   titleAs?: ListCardTitleElement;
   /** A non-blank destination turns the entire row into one native link and adds its cue. */
   href?: string;
+  /** Opens a linked row in a new tab when its CMS destination is explicitly external. */
+  external?: boolean;
 };
 
 function warn(message: string) {
@@ -112,6 +114,7 @@ export function ListCard({
   arrangement = 'split',
   titleAs: Title = 'span',
   href,
+  external = false,
 }: ListCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -149,7 +152,12 @@ export function ListCard({
   return (
     <li className={styles.root}>
       {destination ? (
-        <a className={cx(styles.frame, styles.link)} href={destination}>
+        <a
+          className={cx(styles.frame, styles.link)}
+          href={destination}
+          target={external ? '_blank' : undefined}
+          rel={external ? 'noreferrer' : undefined}
+        >
           {row}
         </a>
       ) : (
