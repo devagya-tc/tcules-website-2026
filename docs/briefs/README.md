@@ -1,6 +1,7 @@
 # Component briefs
 
-One file per component the content audit identified. **Open the file, select all of it, paste it into
+One file per component. Eighteen came out of the content audit; **19 did not** — a brief may also
+be raised for a component a real call site turns out to need. **Open the file, select all of it, paste it into
 the Tcules project in Claude Design.** That is the whole step — each one is a complete document:
 the spec-writing prose and that component's own filled brief, in one place.
 
@@ -16,9 +17,9 @@ Design project as a guidelines document. Regenerate it with
 `guidelines/docs/`. Nothing checks the pushed copy is current, so **after a token rename it has to be
 regenerated and pushed again.**
 
-## The eighteen
+## The nineteen
 
-Two are pasteable. Sixteen are not: fifteen describe components that **already ship** — do not
+Three are pasteable. Sixteen are not: fifteen describe components that **already ship** — do not
 specify them, compose from the library instead — and one is blocked on content. Brief 09 shipped **two**
 components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also absorbed
 SiteFooter's private newsletter field tokens. Each says so in its Status
@@ -49,6 +50,7 @@ move its row to "ships today" in the same change that merges it.
 | 16 | [Callout](16-callout.md) | `Callout` · 2 · `--call-` | 8 routes · 10 instances · 1 | **ships today — do not specify** |
 | 17 | [Stat](17-stat.md) | `Proof` · 2 · `--proof-` | 1 route resolved, 3 claimed · 2 | **ships today in shared Proof — do not specify** |
 | 18 | [Filters](18-filters.md) | `Filters` · 2 · unassigned | none | **blocked on content — do not specify** |
+| 19 | [Table of Contents](19-table-of-contents.md) | `TableOfContents` · 2 · `--toc-` | 82 routes ≥ 6 headings · 1 arrangement | paste |
 
 Every proposed prefix was checked against the nineteen already taken — `--acc-`, `--bcrd-`,
 `--btn-`, `--call-`, `--crumb-`, `--cta-`, `--enq-`, `--fig-`, `--foot-`, `--hero-`, `--icn-`,
@@ -112,6 +114,22 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
    constraints (the quieter note, the hairline, parent-decided width) cannot be expressed inside
    one, so `Prose` is not an alternative route for a figure.
 10. **Filters** · 18 — after a taxonomy exists. Content work, not design work.
+11. **Table of Contents** · 19 — **runnable now, and blocked by nothing.** It takes an ordered
+    array of `{ label, href }` and reads no page, no DOM and no sibling, so it does not wait on
+    ContentSection or on a template. Its call site is already real and already hand-rolled:
+    `src/app/audits/[slug]/page.tsx` builds an "On this page" band inline out of a tint `Section`
+    and a `Cluster` of link Buttons. Brief 19 replaces that band with a **sticky rail**, so the
+    audit route's shape changes when it lands.
+
+    The content seam is already ahead of it. `AuditSection.heading` is
+    `{ text, anchorId, navigationLabel? }` — the id is derived and de-duplicated in
+    `sources/strapi.ts`, and the optional short label is what makes an outline readable at all: the
+    corpus's section headings run to a median of 35 characters and a maximum of 87, so heading text
+    is a fallback and not the label. The brief carries that measurement as its central constraint.
+
+    One thing it asks for that the system has never had: **observing scroll position**, to mark the
+    section the reader is in. Client components exist, scroll observation does not, so it comes back
+    as a NEW MECHANISM REQUEST with an argument attached rather than as a token.
 
 ## Three carry a decision that is not the designer's
 
