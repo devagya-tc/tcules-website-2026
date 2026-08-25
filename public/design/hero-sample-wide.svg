@@ -22,7 +22,19 @@
   <g fill="#c3dd2a"><path d="M2140 294h130v27h-130zm0 188h130v27h-130z"/></g>
   <g fill="#dbe4ff"><path d="M2140 388h130v27h-130z"/></g>
   <path d="M420 610h1936v1H420z" fill="#292824"/>
-  <g fill="#91908d"><path d="M420 652h188v13H420zm2044 0h0z"/></g>
+  <g fill="#91908d"><path d="M420 652h188v13H420z"/></g>
+  <!-- Three stat tiles, filling the band that was empty between the table and the charts. -->
+  <g fill="#f8f7f2">
+    <path d="M420 700h620v170H420zm658 0h620v170h-620zm658 0h620v170h-620z"/>
+  </g>
+  <g fill="#292824">
+    <path d="M452 744h180v34H452zm658 0h150v34h-150zm658 0h206v34h-206z"/>
+  </g>
+  <g fill="#91908d">
+    <path d="M452 806h300v13H452zm658 0h336v13h-336zm658 0h268v13h-268z"/>
+  </g>
+  <g fill="#c3dd2a"><path d="M984 730h24v24h-24z"/></g>
+  <g fill="#0048ff"><path d="M1642 730h24v24h-24zm658 0h24v24h-24z"/></g>
   <g fill="#0048ff">
     <path d="M452 1010h80v230h-80zm140-54h80v284h-80zm140-86h80v370h-80zm140 44h80v326h-80zm140-118h80v444h-80z"/>
   </g>

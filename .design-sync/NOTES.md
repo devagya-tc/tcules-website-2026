@@ -90,8 +90,9 @@ actionable here. Neither affects rendering — the components are correct as shi
 `--easing-standard`, the seven `--z-*` layers, `--border-width-hairline-print`, `--opacity-faint`,
 `--bcrd-media-ratio` and `--lcrd-thumbnail-ratio`. **This count grows with the token layer and that is
 expected.** It read *eleven* when this note was first written on 20 Aug; the three that joined are
-exactly the three unclassifiable tokens added since — `--lcrd-thumbnail-ratio` with ListCard (21 Aug),
-then `--bcrd-media-ratio` with BlockCard and `--opacity-faint` with the footer rebuild (both 24 Aug).
+exactly the three unclassifiable tokens added since — `--lcrd-thumbnail-ratio` with ListCard
+(21 Aug), then `--bcrd-media-ratio` with BlockCard and `--opacity-faint` with the footer rebuild
+(both 24 Aug).
 Nothing regressed. A ratio (`3 / 2`) and a bare `0.06` are no more colour, spacing, radius, shadow or
 font than a duration is, so **expect one more per media-carrying component**: PageHero's
 `--hero-media-ratio` will take it to fifteen on the next sync. Re-derive the delta against this list
@@ -99,22 +100,41 @@ before treating a changed number as a finding.
 
 The suggested fix is a `/* @kind other */` (or `/* @kind spacing */`) comment after each declaration
 in the token source. **It cannot reach the extractor.** The only CSS this sync uploads is
-`_ds_bundle.css`, plus a one-line `styles.css` that imports it — `cfg.tokensPkg` is unset, so `copyTokens` never runs,
-`ds-bundle/tokens/` is empty, and `src/styles/tokens/**` is never uploaded (see
-`.cache/upload-list.txt`). esbuild strips every authored CSS comment on the way into that bundle even
-at `minify: false`, the `/*!` legal-comment form included; the 23 comments left in it are esbuild's
-own `/* path */` file banners. Verified directly against `.ds-sync/node_modules/.bin/esbuild`, and
-**re-verified 25 Aug 2026** — the claim is two cheap commands, so re-run them rather than trusting
-this paragraph:
+`_ds_bundle.css`, plus a one-line `styles.css` that imports it — `cfg.tokensPkg` is unset, so
+`copyTokens` never runs, `ds-bundle/tokens/` is empty, and `src/styles/tokens/**` is never uploaded
+(see `.cache/upload-list.txt`). esbuild strips every authored CSS comment on the way into that
+bundle even at `minify: false`, the `/*!` legal-comment form included; the 23 comments left in it
+are esbuild's own `/* path */` file banners. Verified directly against
+`.ds-sync/node_modules/.bin/esbuild`, and **re-verified 25 Aug 2026** — the claim is three cheap
+commands, so re-run them rather than trusting this paragraph:
 
     printf ':root{--z-toast:600; /* @kind other */\n--a:1px; /*! legal */}\n' > /tmp/kindtest.css
     .ds-sync/node_modules/.bin/esbuild --bundle /tmp/kindtest.css --loader:.css=css --minify=false
     grep -o '/\*[^*]*\*/' ds-bundle/_ds_bundle.css | sort -u   # file banners only, no authored text
 
-Both comment forms come back stripped, and the second shows `src/styles/tokens/**` reaching the
-bundle as bare declarations with every authored comment gone. A `@kind` comment in `primitives.css`
+The second command returns both comment forms stripped; the third shows the only comments left in
+the shipped bundle are esbuild's own file banners, with `src/styles/tokens/**` present as bare
+declarations and every authored comment gone. A `@kind` comment in `primitives.css`
 would be invisible to the validator and the warning would recur — dead weight in the token layer of
 exactly the kind the token rules exist to keep out.
+
+**25 Aug 2026 — the prediction above did not come true, and the reason matters more than the count.**
+PageHero's `media` slot landed and `--hero-media-ratio` was added, so this paragraph expected the
+count to read fifteen. It read nothing: the unclassified-token warning **did not fire at all**, in
+either mode. `node .ds-sync/package-validate.mjs ./ds-bundle` emits exactly two warnings now —
+`[FONT_REMOTE]` (documented above) and `[RENDER_SKIPPED]` on a `--no-render-check` run — and a full
+`resync` reports `1 warning(s)`, which is the FONT_REMOTE one. So do not go looking for a fourteen
+or a fifteen: this validate build does not count unclassifiable tokens.
+
+What survives from the paragraph above, and is the part worth keeping: the `/* @kind */` fix still
+cannot reach the extractor, for the reasons and by the commands given. **That was tested for real on
+this branch and left a trap worth knowing about.** The `@kind` comments existed in the token layer at
+`ce2357f` as exactly that experiment; `main` removed them as dead weight, which is the right call and
+agrees with this note. A `git stash` taken on the older base and popped onto current `main` **silently
+reintroduced all fourteen of them** across `primitives.css`, `block-card.css` and `list-card.css` —
+three files the PageHero work never touched. It shows up as unexplained modified files after a
+`stash pop`, and `git checkout origin/main -- <those files>` is the fix. Check `git status` against
+the files you meant to change before committing a rebased sync.
 
 The fourteen are also *correctly* unclassifiable: a duration, an easing curve, a z-layer, an
 aspect ratio and an opacity are not colour, spacing, radius, shadow or font. The warning is the
