@@ -92,6 +92,42 @@ export function auditPath(slug: string): string {
   return `${ROUTES.audits}/${encodeURIComponent(slug)}`;
 }
 
+/** Build a service-detail path while preserving each level of a nested CMS slug. */
+export function servicePath(slug: string): string {
+  const encodedSlug = slug
+    .split('/')
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join('/');
+
+  return encodedSlug ? `${ROUTES.services}/${encodedSlug}` : ROUTES.services;
+}
+
+/** Build one canonical expertise-detail path from the named route family. */
+export function expertisePath(slug: string): string {
+  return `${ROUTES.expertise}/${encodeURIComponent(slug)}`;
+}
+
+/** Build one canonical case-study detail path from the named route family. */
+export function caseStudyPath(slug: string): string {
+  return `${ROUTES.caseStudies}/${encodeURIComponent(slug)}`;
+}
+
+/** Build one canonical podcast-detail path from the named insights family. */
+export function podcastPath(slug: string): string {
+  return `${ROUTES.podcasts}/${encodeURIComponent(slug)}`;
+}
+
+/** Build one canonical article-detail path for podcast resource links. */
+export function articlePath(slug: string): string {
+  return `${ROUTES.articles}/${encodeURIComponent(slug)}`;
+}
+
+/** Build one canonical glossary-detail path from the named route family. */
+export function glossaryPath(slug: string): string {
+  return `${ROUTES.glossary}/${encodeURIComponent(slug)}`;
+}
+
 /**
  * A destination the sitemap does not answer yet.
  *

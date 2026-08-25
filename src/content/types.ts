@@ -131,10 +131,12 @@ export type AuditSection = {
   blocks: AuditBlock[];
 };
 
-export type AuditSeo = PageSeo & {
+export type ContentSeo = PageSeo & {
   robots?: { index: boolean; follow: boolean };
   structuredData?: Record<string, unknown> | unknown[];
 };
+
+export type AuditSeo = ContentSeo;
 
 export type AuditPage = {
   documentId: string;
@@ -166,6 +168,689 @@ export type AuditPage = {
 
 export type AuditContentSource = {
   getAuditPage(slug: string): Promise<AuditPage | null>;
+};
+
+/**
+ * How We Work uses the same ordered content-block vocabulary as an audit page in Strapi. Keeping
+ * the page-facing model aligned lets both route families compose the same established patterns
+ * while their CMS queries and cache identities remain independent.
+ */
+export type HowWeWorkAction = AuditAction;
+export type HowWeWorkBlock = AuditBlock;
+export type HowWeWorkContentColumn = AuditContentColumn;
+export type HowWeWorkPage = AuditPage & {
+  createdAt?: string;
+  updatedAt?: string;
+  publishedAt?: string;
+};
+
+export type HowWeWorkContentSource = {
+  getHowWeWorkPage(slug: string): Promise<HowWeWorkPage | null>;
+};
+
+export type ServiceAction = {
+  label: string;
+  href: string;
+  external: boolean;
+};
+
+export type ServiceCard = {
+  title: string;
+  body: string;
+  href?: string;
+};
+
+export type ServiceLabelledItem = {
+  title: string;
+  body: string;
+  href?: string;
+};
+
+export type ServiceContentColumn = {
+  id: string;
+  eyebrow?: string;
+  heading: string;
+  bodyHtml: string;
+  items: ServiceLabelledItem[];
+  links: ServiceAction[];
+};
+
+export type ServiceBlock =
+  | { id: string; type: 'rich-text'; html: string }
+  | { id: string; type: 'card-grid'; columns: 1 | 2 | 3 | 4; cards: ServiceCard[] }
+  | { id: string; type: 'comparison-cards'; cards: ServiceCard[] }
+  | { id: string; type: 'table'; html: string }
+  | {
+      id: string;
+      type: 'quote';
+      quote: { quoteHtml: string; name: string; role: string; company: string };
+      source?: ServiceAction;
+    }
+  | { id: string; type: 'callout'; html: string }
+  | {
+      id: string;
+      type: 'labelled-list';
+      displayStyle: string;
+      items: ServiceLabelledItem[];
+    }
+  | {
+      id: string;
+      type: 'two-column';
+      left?: ServiceContentColumn;
+      right?: ServiceContentColumn;
+    }
+  | {
+      id: string;
+      type: 'link-group';
+      heading: string;
+      description?: string;
+      links: ServiceLabelledItem[];
+    }
+  | {
+      id: string;
+      type: 'media';
+      image?: { src: string; alt: string; width: number; height: number };
+      caption: string;
+      download?: ServiceAction;
+    };
+
+export type ServiceSection = {
+  id: string;
+  heading?: {
+    text: string;
+    anchorId: string;
+    navigationLabel?: string;
+  };
+  blocks: ServiceBlock[];
+};
+
+export type ServiceSeo = ContentSeo;
+
+export type ServicePage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  hero: {
+    eyebrow?: string;
+    highlightedText?: string;
+    description: string;
+    tags: string[];
+    actions: ServiceAction[];
+  };
+  sections: ServiceSection[];
+  faq?: {
+    eyebrow?: string;
+    heading: string;
+    description?: string;
+    items: Array<{ question: string; answerHtml: string }>;
+  };
+  capabilitiesCta?: {
+    heading: string;
+    body: readonly [string] | readonly [string, string];
+    points: Array<{ label: string }>;
+    actions: readonly [ServiceAction] | readonly [ServiceAction, ServiceAction];
+  };
+  cta?: {
+    heading: string;
+    descriptionHtml: string;
+    disclaimerHtml: string;
+  };
+  seo?: ServiceSeo;
+};
+
+export type ServiceContentSource = {
+  getServicePage(slug: string): Promise<ServicePage | null>;
+};
+
+export type ServicesMasterAction = {
+  label: string;
+  href: string;
+  external: boolean;
+};
+
+export type ServicesMasterImage = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+};
+
+export type ServicesMasterCard = {
+  id: string;
+  title: string;
+  description: string;
+  pointsHtml: string;
+  action?: ServicesMasterAction;
+  icon?: ServicesMasterImage;
+};
+
+export type ServicesMasterSection = {
+  id: string;
+  heading: string;
+  body: string[];
+  serviceName?: string;
+  action?: ServicesMasterAction;
+  icon?: ServicesMasterImage;
+  cards: ServicesMasterCard[];
+};
+
+export type ServicesMasterPage = {
+  documentId: string;
+  slug: string;
+  createdAt?: string;
+  updatedAt?: string;
+  publishedAt?: string;
+  hero: {
+    heading: string;
+    body: readonly [string, ...string[]];
+    labels: string[];
+    actions: ServicesMasterAction[];
+  };
+  sections: ServicesMasterSection[];
+  closingCta?: {
+    heading: string;
+    body: readonly [string] | readonly [string, string];
+    points: Array<{ label: string }>;
+    actions: ServicesMasterAction[];
+  };
+  seo?: ContentSeo;
+};
+
+export type ServicesMasterContentSource = {
+  getServicesMasterPage(slug: string): Promise<ServicesMasterPage | null>;
+};
+
+export type ExpertiseAction = {
+  label: string;
+  href: string;
+  external: boolean;
+};
+
+export type ExpertiseCard = {
+  title: string;
+  body: string;
+  eyebrow?: string;
+  href?: string;
+  ctaLabel?: string;
+};
+
+export type ExpertiseLabelledItem = {
+  title: string;
+  body: string;
+  href?: string;
+};
+
+export type ExpertiseContentColumn = {
+  id: string;
+  eyebrow?: string;
+  heading: string;
+  bodyHtml: string;
+  items: ExpertiseLabelledItem[];
+  links: ExpertiseAction[];
+};
+
+export type ExpertiseBlock =
+  | { id: string; type: 'rich-text'; html: string }
+  | { id: string; type: 'card-grid'; columns: 1 | 2 | 3 | 4; cards: ExpertiseCard[] }
+  | { id: string; type: 'comparison-cards'; cards: ExpertiseCard[] }
+  | { id: string; type: 'table'; html: string }
+  | {
+      id: string;
+      type: 'quote';
+      quote: { quoteHtml: string; name: string; role: string; company: string };
+      source?: ExpertiseAction;
+    }
+  | { id: string; type: 'callout'; html: string }
+  | {
+      id: string;
+      type: 'labelled-list';
+      displayStyle: string;
+      items: ExpertiseLabelledItem[];
+    }
+  | {
+      id: string;
+      type: 'two-column';
+      left?: ExpertiseContentColumn;
+      right?: ExpertiseContentColumn;
+    }
+  | {
+      id: string;
+      type: 'link-group';
+      heading?: string;
+      description?: string;
+      links: ExpertiseLabelledItem[];
+    }
+  | {
+      id: string;
+      type: 'media';
+      image?: { src: string; alt: string; width: number; height: number };
+      caption: string;
+      download?: ExpertiseAction;
+    };
+
+export type ExpertiseSection = {
+  id: string;
+  heading?: {
+    text: string;
+    anchorId: string;
+    navigationLabel?: string;
+  };
+  blocks: ExpertiseBlock[];
+};
+
+export type ExpertiseSeo = ContentSeo;
+
+export type ExpertisePage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  createdAt?: string;
+  updatedAt?: string;
+  publishedAt?: string;
+  hero: {
+    eyebrow?: string;
+    highlightedText?: string;
+    description: string;
+    tags: string[];
+    actions: ExpertiseAction[];
+  };
+  sections: ExpertiseSection[];
+  faq?: {
+    eyebrow?: string;
+    heading: string;
+    description?: string;
+    items: Array<{ question: string; answerHtml: string }>;
+  };
+  capabilitiesCta?: {
+    heading: string;
+    body: readonly [string] | readonly [string, string];
+    points: Array<{ label: string }>;
+    actions: readonly [ExpertiseAction] | readonly [ExpertiseAction, ExpertiseAction];
+  };
+  cta?: {
+    heading: string;
+    descriptionHtml: string;
+    disclaimerHtml: string;
+  };
+  seo?: ExpertiseSeo;
+};
+
+export type ExpertiseContentSource = {
+  getExpertisePage(slug: string): Promise<ExpertisePage | null>;
+};
+
+export type GlossaryAction = AuditAction;
+
+export type GlossaryCard = AuditCard & {
+  eyebrow?: string;
+};
+
+export type GlossaryLabelledItem = AuditLabelledItem;
+
+export type GlossaryContentColumn = AuditContentColumn;
+
+export type GlossaryBlock =
+  | { id: string; type: 'rich-text'; html: string }
+  | { id: string; type: 'card-grid'; columns: 1 | 2 | 3 | 4; cards: GlossaryCard[] }
+  | { id: string; type: 'comparison-cards'; cards: GlossaryCard[] }
+  | { id: string; type: 'table'; html: string }
+  | {
+      id: string;
+      type: 'quote';
+      quote: { quoteHtml: string; name: string; role: string; company: string };
+      source?: GlossaryAction;
+    }
+  | { id: string; type: 'callout'; html: string; tone?: string }
+  | {
+      id: string;
+      type: 'labelled-list';
+      displayStyle: string;
+      items: GlossaryLabelledItem[];
+    }
+  | {
+      id: string;
+      type: 'two-column';
+      left?: GlossaryContentColumn;
+      right?: GlossaryContentColumn;
+    }
+  | {
+      id: string;
+      type: 'link-group';
+      heading: string;
+      description?: string;
+      links: GlossaryLabelledItem[];
+    }
+  | {
+      id: string;
+      type: 'media';
+      image?: { src: string; alt: string; width: number; height: number };
+      caption: string;
+      href?: string;
+      mime?: string;
+    };
+
+export type GlossarySection = {
+  id: string;
+  heading?: {
+    text: string;
+    anchorId: string;
+    navigationLabel?: string;
+  };
+  blocks: GlossaryBlock[];
+};
+
+export type GlossarySeo = ContentSeo;
+
+export type GlossaryPage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  createdAt?: string;
+  updatedAt?: string;
+  publishedAt?: string;
+  hero: {
+    eyebrow?: string;
+    highlightedText?: string;
+    description: string;
+    tags: string[];
+    actions: GlossaryAction[];
+  };
+  sections: GlossarySection[];
+  faq?: {
+    eyebrow?: string;
+    heading: string;
+    description?: string;
+    items: Array<{ question: string; answerHtml: string }>;
+  };
+  cta?: {
+    eyebrow?: string;
+    heading: string;
+    body: readonly [string] | readonly [string, string];
+    points: Array<{ label: string }>;
+    actions: readonly [GlossaryAction] | readonly [GlossaryAction, GlossaryAction];
+  };
+  seo?: GlossarySeo;
+};
+
+export type GlossaryContentSource = {
+  getGlossaryPage(slug: string): Promise<GlossaryPage | null>;
+};
+
+export type CaseStudyAction = {
+  label: string;
+  href: string;
+  external: boolean;
+};
+
+export type CaseStudyImage = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  mime: string;
+};
+
+export type CaseStudyBlock =
+  | { id: string; type: 'prose'; html: string }
+  | {
+      id: string;
+      type: 'figures';
+      figures: Array<{ image: CaseStudyImage; caption: string }>;
+    }
+  | {
+      id: string;
+      type: 'video';
+      title?: string;
+      description?: string;
+      video?: {
+        src: string;
+        mime: string;
+        poster?: string;
+        width?: number;
+        height?: number;
+        autoplay: boolean;
+        loop: boolean;
+      };
+      thumbnail?: CaseStudyImage;
+    }
+  | {
+      id: string;
+      type: 'embed';
+      title: string;
+      description?: string;
+      url?: string;
+      width?: number;
+      height?: number;
+      thumbnail?: CaseStudyImage;
+    }
+  | { id: string; type: 'code'; html: string }
+  | { id: string; type: 'separator'; html: string }
+  | {
+      id: string;
+      type: 'quote';
+      quote: { quoteHtml: string; name: string; role: string; company: string };
+    }
+  | { id: string; type: 'link'; action: CaseStudyAction; description?: string };
+
+export type CaseStudyPage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  description: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  heroImage?: CaseStudyImage;
+  socialImage?: CaseStudyImage;
+  profile: Array<{ id: string; label: string; value: string }>;
+  statements: Array<{ id: string; title: string; body: string }>;
+  categories: string[];
+  tags: string[];
+  blocks: CaseStudyBlock[];
+  cta?: {
+    heading: string;
+    body: readonly [string];
+    actions: readonly [CaseStudyAction];
+  };
+  seo?: ContentSeo;
+};
+
+export type CaseStudyContentSource = {
+  getCaseStudyPage(slug: string): Promise<CaseStudyPage | null>;
+};
+
+export type PodcastAction = CaseStudyAction;
+
+export type PodcastImage = CaseStudyImage;
+
+export type PodcastBlock =
+  | { id: string; type: 'prose'; html: string }
+  | {
+      id: string;
+      type: 'figures';
+      figures: Array<{ image: PodcastImage; caption: string }>;
+    }
+  | {
+      id: string;
+      type: 'video';
+      title?: string;
+      description?: string;
+      video?: {
+        src: string;
+        mime: string;
+        poster?: string;
+        width?: number;
+        height?: number;
+        autoplay: boolean;
+        loop: boolean;
+      };
+      thumbnail?: PodcastImage;
+    }
+  | {
+      id: string;
+      type: 'shadow-card';
+      heading?: string;
+      descriptionHtml?: string;
+      youtubeId?: string;
+      mediaUrl?: string;
+      action?: PodcastAction;
+      emphasized: boolean;
+    }
+  | { id: string; type: 'callout'; html: string }
+  | { id: string; type: 'separator'; html: string };
+
+export type PodcastResource = {
+  documentId: string;
+  slug: string;
+  title: string;
+  publishedAt?: string;
+  image?: PodcastImage;
+};
+
+export type PodcastPage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  description: string;
+  createdAt?: string;
+  publishedAt?: string;
+  heroVideo?: { id: string; title: string };
+  socialImage?: PodcastImage;
+  tags: string[];
+  categories: string[];
+  blocks: PodcastBlock[];
+  resources: PodcastResource[];
+  seo?: ContentSeo;
+};
+
+export type PodcastContentSource = {
+  getPodcastPage(slug: string): Promise<PodcastPage | null>;
+};
+
+export type PrivacyPolicySection = {
+  id: string;
+  heading: string;
+  bodyHtml: string;
+};
+
+export type PrivacyPolicyPage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  description: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  sections: PrivacyPolicySection[];
+  seo?: ContentSeo;
+};
+
+export type PrivacyPolicyContentSource = {
+  getPrivacyPolicyPage(slug: string): Promise<PrivacyPolicyPage | null>;
+};
+
+export type TermsOfUseSection = {
+  id: string;
+  heading: string;
+  bodyHtml: string;
+};
+
+export type TermsOfUsePage = {
+  documentId: string;
+  slug: string;
+  title: string;
+  description: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  sections: TermsOfUseSection[];
+  seo?: ContentSeo;
+};
+
+export type TermsOfUseContentSource = {
+  getTermsOfUsePage(slug: string): Promise<TermsOfUsePage | null>;
+};
+
+export type MatterDesignSystemAction = {
+  label: string;
+  href: string;
+  external: boolean;
+  description?: string;
+};
+
+export type MatterDesignSystemImage = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+};
+
+export type MatterDesignSystemCard = {
+  id: string;
+  title: string;
+  body: string;
+  icon?: MatterDesignSystemImage;
+  image?: MatterDesignSystemImage;
+  action?: MatterDesignSystemAction;
+};
+
+export type MatterDesignSystemSection = {
+  id: string;
+  heading: string;
+  icon?: MatterDesignSystemImage;
+  cards: MatterDesignSystemCard[];
+};
+
+export type MatterDesignSystemDisplayCard = {
+  id: string;
+  heading: string;
+  description: string;
+  icon?: MatterDesignSystemImage;
+  images: MatterDesignSystemImage[];
+};
+
+export type MatterDesignSystemStrip = {
+  id: string;
+  heading: string;
+  description: string;
+  backgroundImage?: MatterDesignSystemImage;
+  action?: MatterDesignSystemAction;
+};
+
+export type MatterDesignSystemPage = {
+  documentId: string;
+  slug: string;
+  hero: {
+    id: string;
+    eyebrow: string;
+    headingOne: string;
+    headingTwo: string;
+    description: string;
+    action?: MatterDesignSystemAction;
+    image?: MatterDesignSystemImage & { width: number; height: number };
+  };
+  secondSection?: MatterDesignSystemSection;
+  thirdSection?: MatterDesignSystemSection;
+  stripOne?: MatterDesignSystemStrip;
+  fourthSection?: {
+    id: string;
+    heading: string;
+    icon?: MatterDesignSystemImage;
+    cards: MatterDesignSystemDisplayCard[];
+  };
+  fifthSection?: MatterDesignSystemSection;
+  stripTwo?: MatterDesignSystemStrip;
+  contactUs?: {
+    id: string;
+    headingOne: string;
+    headingTwo: string;
+    description: string;
+    icon?: MatterDesignSystemImage;
+  };
+  updatedAt?: string;
+  publishedAt?: string;
+  seo?: ContentSeo;
+};
+
+export type MatterDesignSystemContentSource = {
+  getMatterDesignSystemPage(slug: string): Promise<MatterDesignSystemPage | null>;
 };
 
 /**
