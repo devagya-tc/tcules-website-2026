@@ -223,6 +223,14 @@ const CHROME_ROLES = [
     where: 'the smallest legible label in the system',
   },
   {
+    className: t.index,
+    role: 'index',
+    px: 20,
+    lh: 1.2,
+    track: '0.08em',
+    where: "a list's ordinal — the mono ramp's only step between a label and a figure",
+  },
+  {
     className: t.stat,
     role: 'stat',
     px: 40,
@@ -250,6 +258,7 @@ const BREAKPOINTS = [
   { role: 'h5', d: '22 / 1.28', tab: '22 / 1.28', mob: '20 / 1.3' },
   { role: 'quote', d: '28 / 1.35', tab: '28 / 1.35', mob: '22 / 1.4' },
   { role: 'lead', d: '20 / 1.5', tab: '20 / 1.5', mob: '18 / 1.55' },
+  { role: 'index', d: '20 / 1.2', tab: '20 / 1.2', mob: '20 / 1.2' },
   { role: 'stat', d: '40 / 1', tab: '40 / 1', mob: '32 / 1' },
 ] as const;
 
