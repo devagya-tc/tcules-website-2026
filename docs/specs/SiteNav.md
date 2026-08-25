@@ -256,6 +256,9 @@ Recorded in §12.6.
 4. Switch Services → Insights → Services and confirm the plate's height never exceeds
    `--nav-panel-max-block` and never sets the page's own height.
 5. Open every section at 1280, 1440 and 1920: the plate stays centred at its own width.
+   **And at a SHORT viewport — 560 and 400 — where the height cap engages: the plate must end on or
+   above the viewport's bottom edge, and the last row must scroll into view.** Every geometry defect
+   in §12.7 hid at 1440x900, where the cap never bites.
 6. With `prefers-reduced-motion`, confirm no transform or opacity transition runs and every state
    is still reachable.
 7. On a 375px viewport, confirm all six root items sit below the vertical midpoint, and that the
@@ -361,7 +364,51 @@ fix is a fixed-track mode on `Layout`, which is a conversation about the primiti
    placeholder, so the card is title-only without one. `/design/site-nav` and the design-sync
    preview both pass an image, so the image-led arrangement is proven somewhere.
 
-### 12.7 · Two QA items cannot be met yet, and are not faked
+### 12.7 · Six overlap defects found by measuring the open plate
+
+None of the six checks can see geometry, and none of these was visible at a 1440x900 desktop with
+the default content. All were measured and are fixed.
+
+1. **The plate hung off the bottom of the screen.** `--nav-panel-max-block` was
+   `100dvh - --nav-bar-height`, but `--nav-bar-height` is the bar ROW's height and the bar also
+   draws a hairline under it — and the plate then starts one `--nav-plate-inset` below that. At a
+   560px viewport the bottom of a maxed plate sat 17px below the fold, unreachable by scrolling
+   because the thing hanging off the screen WAS the pane's scroll container. The cap now subtracts
+   all three terms, and the inset is a token so the stage's padding and the cap cannot drift apart.
+   At 400px the plate now ends exactly on the viewport's bottom edge and the last row scrolls into
+   view.
+2. **The plate clipped the last 2px of every pane.** `--nav-plate-block` is the pane's border box
+   and the plate is `box-sizing: border-box`, so handing the raw value over left the plate's content
+   box two hairlines short. The plate's `block-size` now adds them back.
+3. **A pane's measured height was wrong for the width it would be rendered at.** Panes were clamped
+   by `max-inline-size: 100%` of the plate, so while the 720 Insights pane was open the 1240
+   Services pane laid out 718 wide, wrapped to nearly twice its height, hit the viewport cap and
+   recorded 488 — and the plate then opened Services 86px taller than its content, permanently. The
+   stage is now an inline-size container and both the plate and every pane size against `100cqi`, so
+   a pane's width no longer depends on whose turn it is. That forced the scrim out of the stage:
+   `container-type` brings `contain: layout`, which would have made the stage the containing block
+   for a `position: fixed` scrim and positioned it against an 18px box.
+4. **The scrim covered the bar's own hairline** and dimmed it by 20%, for the same
+   row-height-is-not-bar-height reason as (1). Both scrims now start below the rule.
+5. **A two-pixel broken frame.** With no measurement yet the plate is two hairlines tall and
+   `overflow: hidden` clips every pane to nothing, so hovering within a frame of load showed a 2px
+   line that then snapped open. The stage only opens once the shown pane has a height.
+6. **`aria-expanded="false"` on the sheet's drill-in buttons**, which could never become true —
+   they push the sheet to a second level and scroll themselves out of view rather than revealing a
+   region in place. Removed; there were seven `aria-expanded` nodes in one header and now there are
+   four.
+
+A seventh, found while fixing (1) and (2) together: capping the plate and the pane at the same
+number let the plate clamp itself back to the cap while the pane stayed two hairlines taller, which
+re-clipped the last row at exactly the viewport height where the cap starts to bite. The pane's cap
+is now the plate's cap less its borders.
+
+**What made these findable:** measuring the open plate's boxes against the viewport rather than
+looking at it. `tokens:check` and `classes:check` cannot see a box, and the default 1440x900 desktop
+is a viewport tall enough that the cap never engages — which is why the QA list in §10 asks for
+1280, 1440 and 1920 and should also ask for a SHORT viewport. Worth adding.
+
+### 12.8 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at

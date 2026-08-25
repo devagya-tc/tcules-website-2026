@@ -118,9 +118,21 @@
    the plate never sets the page's own height, and being absolutely positioned is the whole of the
    answer. It carries the scrim, the gap under the bar and the centring; it paints nothing.
 
-   `pointer-events: none` on the stage with `auto` on the plate and the scrim: the 16px gap between
-   the bar and the plate is stage, and a gap that swallowed the pointer would break the walk from
-   an item down into the pane it just opened.
+   `pointer-events: none` on the stage with `auto` on the plate: the 16px gap between the bar and
+   the plate is stage, and a gap that swallowed the pointer would break the walk from an item down
+   into the pane it just opened. The scrim is a SIBLING rather than a child — see below.
+
+   IT IS AN INLINE-SIZE CONTAINER, and that is what makes the plate's height trustworthy. The panes
+   used to be clamped by `max-inline-size: 100%` of the plate, so while the 720 Insights pane was
+   open the 1240 Services pane laid out 720 wide, wrapped to nearly twice its real height, and that
+   height went into the measurement cache — leaving the plate 86px taller than its content the next
+   time Services opened. Sizing both the plate AND every pane against `100cqi` — the stage's own
+   content width — means a pane's width no longer depends on which section happens to be showing,
+   so what is measured is what will be rendered.
+
+   `container-type` brings `contain: layout`, which makes this element a containing block for fixed
+   descendants. That is exactly why the scrim had to move out: inside here it would have been
+   positioned against an 18px-tall box instead of the viewport.
 
    The fade is the OPEN transition — the plate arrives at its size rather than sliding, per §4.
    `visibility` is transitioned with a delay equal to the fade so the panes stay unreachable the
@@ -131,7 +143,8 @@
   inset-inline: 0;
   top: 100%;
   z-index: var(--nav-panel-z);
-  padding-block-start: var(--gap-text);
+  container-type: inline-size;
+  padding-block-start: var(--nav-plate-inset);
   padding-inline: var(--gap-gutter);
   pointer-events: none;
   opacity: 0;
@@ -151,16 +164,33 @@
    inset panel from the ground it floats over. Fixed rather than absolute: it covers the viewport
    below the bar, not just the plate's own box.
 
+   IT STARTS BELOW THE BAR'S HAIRLINE, not below the bar's row. --nav-bar-height is the row; the bar
+   draws a rule under it, so starting at the row height laid the scrim over the nav's own bottom
+   border and dimmed it by 20%.
+
+   A SIBLING OF THE STAGE, not a child, because the stage is a container and therefore a containing
+   block for fixed descendants (see above). It sits before the stage in the DOM so the plate paints
+   over it with no z-index of its own to maintain.
+
    It is INSIDE the header, which has one consequence worth knowing: the pointer never leaves the
    header by moving down the page, so the header's pointerleave cannot close the plate that way.
    That is the prototype's behaviour too, and it is why the scrim takes a click — with the pointer
    exit covered, a click on the dimmed page is the dismiss a reader reaches for. */
 .scrim {
+  display: none;
   position: fixed;
-  inset-block-start: var(--nav-bar-height);
+  inset-block-start: calc(var(--nav-bar-height) + var(--nav-rule-width));
   inset-block-end: 0;
   inset-inline: 0;
+  z-index: var(--nav-panel-z);
   background: var(--nav-scrim);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--nav-plate-fade) var(--nav-transition-easing);
+}
+
+.scrim[data-open] {
+  opacity: 1;
   pointer-events: auto;
 }
 
@@ -176,8 +206,10 @@
 
   position: relative;
   margin-inline: auto;
-  max-inline-size: 100%;
-  block-size: var(--nav-plate-block);
+  /* PLUS ITS OWN BORDERS. --nav-plate-block is the pane's border box, and this element is
+     border-box too — so handing the raw value over left the plate's CONTENT box two hairlines
+     short and clipped the last 2px of every pane. */
+  block-size: calc(var(--nav-plate-block) + 2 * var(--nav-rule-width));
   max-block-size: var(--nav-panel-max-block);
   background: var(--nav-panel-ground);
   border: var(--nav-rule-width) solid var(--nav-rule);
@@ -196,19 +228,24 @@
     block-size var(--nav-plate-morph) var(--nav-transition-easing);
 }
 
+/* One width per section, shared by the plate and by the pane that fills it, and clamped against
+   the STAGE rather than against each other — `100cqi` is the stage's content width, so a pane is
+   the width it will be rendered at whether or not it is the one showing. Between 1024 and 1304 the
+   widest plate is wider than the viewport it has to sit in, and this is what handles that without
+   making one pane's measurement depend on another pane's turn. */
 .plate[data-width='lg'],
 .pane[data-width='lg'] {
-  inline-size: var(--nav-plate-width-lg);
+  inline-size: min(var(--nav-plate-width-lg), 100cqi);
 }
 
 .plate[data-width='md'],
 .pane[data-width='md'] {
-  inline-size: var(--nav-plate-width-md);
+  inline-size: min(var(--nav-plate-width-md), 100cqi);
 }
 
 .plate[data-width='sm'],
 .pane[data-width='sm'] {
-  inline-size: var(--nav-plate-width-sm);
+  inline-size: min(var(--nav-plate-width-sm), 100cqi);
 }
 
 /* A PANE. Absolutely positioned so all three can be mounted at once — which is what lets their
@@ -226,8 +263,11 @@
   position: absolute;
   inset-block-start: 0;
   inset-inline-start: 0;
-  max-inline-size: 100%;
-  max-block-size: var(--nav-panel-max-block);
+  /* The plate's cap MINUS the plate's own borders, because the cap is what the plate's border box
+     may be and this pane has to fit inside its content box. Capping both at the same number let the
+     plate clamp itself back to the cap while the pane stayed two hairlines taller, which clipped
+     the last 2px of the last row at exactly the viewport height where the cap starts to bite. */
+  max-block-size: calc(var(--nav-panel-max-block) - 2 * var(--nav-rule-width));
   overflow-y: auto;
   padding: var(--gap-stack) var(--gap-gutter) var(--gap-gutter);
   opacity: 0;
@@ -420,9 +460,10 @@
    measured hug of its root list, capped at the viewport less the reserve; drilled into a section
    it is that full height. `min()` is what applies the cap, so a phone too short for six rows never
    produces a sheet taller than its own screen. */
+/* Below the COMPACT bar and its hairline, for the reason .scrim documents above. */
 .sheetScrim {
   position: fixed;
-  inset-block-start: var(--nav-bar-height-compact);
+  inset-block-start: calc(var(--nav-bar-height-compact) + var(--nav-rule-width));
   inset-block-end: 0;
   inset-inline: 0;
   z-index: var(--nav-panel-z);
@@ -713,7 +754,8 @@
     display: inline-flex;
   }
 
-  .stage {
+  .stage,
+  .scrim {
     display: block;
   }
 
@@ -732,6 +774,7 @@
   .brand,
   .itemControl > svg,
   .stage,
+  .scrim,
   .plate,
   .pane,
   .row,

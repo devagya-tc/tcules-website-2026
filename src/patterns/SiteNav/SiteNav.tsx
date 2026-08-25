@@ -176,10 +176,6 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
   const toggleId = `${uid}-toggle`;
 
   const menuItems = items.filter(opens);
-  /* The pane the plate is currently SHAPED to. `lastPlate` rather than `plate`, so a close is a
-     fade at the size it already had rather than a resize on the way out. */
-  const shownItem = menuItems.find((item) => item.key === (plateKey ?? lastPlate));
-  const shownIndex = shownItem ? menuItems.indexOf(shownItem) : 0;
 
   /* ── Measured geometry ────────────────────────────────────────────────────────
      Two heights animate and neither can be written in CSS: the plate's is the open pane's
@@ -188,20 +184,48 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
   const [paneBlocks, setPaneBlocks] = useState<Record<string, number>>({});
   const [sheetBlock, setSheetBlock] = useState<number | null>(null);
 
+  /* The pane the plate is currently SHAPED to. `lastPlate` rather than `plate`, so a close is a
+     fade at the size it already had rather than a resize on the way out. */
+  const shownItem = menuItems.find((item) => item.key === (plateKey ?? lastPlate));
+  const shownIndex = shownItem ? menuItems.indexOf(shownItem) : 0;
+  const shownBlock = (shownItem && paneBlocks[shownItem.key]) || 0;
+
+  /**
+   * Open only once the plate knows how tall it is.
+   *
+   * The panes are measured on mount, so in practice this is true by the time anyone reaches the
+   * bar. It is a guard against the one frame where it is not: with no measurement the plate is two
+   * hairlines tall, `overflow: hidden` clips every pane to nothing, and what appears under the bar
+   * is a 2px line that then snaps open. A frame of nothing is better than a frame of wrong.
+   */
+  const plateOpen = plateKey !== null && shownBlock > 0;
+
   useEffect(() => {
     const panes = plateRef.current?.querySelectorAll<HTMLElement>('[data-pane]');
     if (!panes?.length) return;
 
     const observer = new ResizeObserver((entries) => {
+      /* MEASURED HERE, not inside the updater below. A state updater may be replayed, and it runs
+         at a moment React chooses rather than the one the observer fired at — so reading layout
+         inside it records whatever the DOM happened to say then. Reading in the callback body ties
+         each number to the resize that produced it.
+
+         The border box, because the plate has to fit the pane's whole box; `borderBoxSize` is what
+         the observer already computed, so preferring it over offsetHeight also avoids forcing a
+         second layout per entry. */
+      const measured = new Map<string, number>();
+      for (const entry of entries) {
+        const element = entry.target as HTMLElement;
+        const key = element.dataset.pane;
+        const block = Math.ceil(entry.borderBoxSize?.[0]?.blockSize ?? element.offsetHeight);
+        if (key && block > 0) measured.set(key, block);
+      }
+      if (measured.size === 0) return;
+
       setPaneBlocks((current) => {
         let next = current;
-        for (const entry of entries) {
-          const element = entry.target as HTMLElement;
-          const key = element.dataset.pane;
-          /* offsetHeight, not contentRect: the pane carries its own padding and the plate has to
-             fit the border box, not the content box. */
-          const block = element.offsetHeight;
-          if (!key || block === 0 || current[key] === block) continue;
+        for (const [key, block] of measured) {
+          if (current[key] === block) continue;
           next = next === current ? { ...current } : next;
           next[key] = block;
         }
@@ -474,19 +498,26 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
           Out of flow, so the page behind it never moves. The stage carries the scrim and the
           centring; the plate is the box that morphs; the panes are its content, all three mounted
           so their heights can be measured and so a switch has something to slide. */}
+      {/* The scrim is a sibling of the stage, not a child: the stage is an inline-size container,
+          which makes it a containing block for fixed descendants, and a scrim positioned against an
+          18px-tall box is not a scrim. It sits first so the plate paints over it on DOM order
+          alone. */}
+      <span
+        className={styles.scrim}
+        data-open={plateOpen || undefined}
+        aria-hidden="true"
+        onClick={closePlate}
+      />
       <div
         className={styles.stage}
-        data-open={plateKey !== null || undefined}
+        data-open={plateOpen || undefined}
         data-morph={morph || undefined}
       >
-        <span className={styles.scrim} aria-hidden="true" onClick={closePlate} />
         <div
           ref={plateRef}
           className={styles.plate}
           data-width={shownItem ? plateWidth(shownItem) : 'lg'}
-          style={vars({
-            '--nav-plate-block': `${(shownItem && paneBlocks[shownItem.key]) || 0}px`,
-          })}
+          style={vars({ '--nav-plate-block': `${shownBlock}px` })}
         >
           {menuItems.map((item, index) => (
             <div
@@ -540,10 +571,13 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                 {items.map((item) => (
                   <li key={item.key} className={styles.sheetRow}>
                     {opens(item) ? (
+                      /* NO aria-expanded. It would never become true: this pushes the sheet to a
+                         second level and scrolls itself out of view rather than revealing a region
+                         in place, so a permanent "collapsed" is a promise about a state that does
+                         not exist. The chevron and the label carry it. */
                       <button
                         type="button"
                         className={styles.sheetControl}
-                        aria-expanded={false}
                         onClick={() => setNav({ section: item.key })}
                       >
                         <span className={styles.sheetControlLabel}>{item.label}</span>

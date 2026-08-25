@@ -91,6 +91,11 @@
   --nav-plate-width-md: 880px;
   --nav-plate-width-sm: 720px;
   --nav-plate-radius: var(--radius-8);
+  /* The air between the bar's hairline and the plate's top edge. It is a token rather than a bare
+     --gap-text at the call site because TWO rules have to agree on it: the stage pads by it, and
+     the height cap below subtracts it. When they disagreed, a maxed-out plate hung 17px off the
+     bottom of the screen and the last rows could not be reached. */
+  --nav-plate-inset: var(--gap-text);
 
   /* The plate morphs; the panes cross-fade. 360ms is the surface step off the ramp, and the
      fade is DERIVED from it rather than named separately — the designer chose half the
@@ -98,12 +103,20 @@
   --nav-plate-morph: var(--duration-slow);
   --nav-plate-fade: calc(var(--nav-plate-morph) / 2);
 
-  /* Cap the plate at the viewport below the bar and let it scroll. Services carries twelve
+  /* Cap the plate at the space actually below the bar and let it scroll. Services carries twelve
      rows and a rail; on a 13" laptop in a browser with two toolbars, the uncapped plate runs
      off the bottom and the last row cannot be reached at all. dvh, not vh, so a mobile
      browser's collapsing chrome does not leave the cap wrong by the height of its own
-     address bar. */
-  --nav-panel-max-block: calc(100dvh - var(--nav-bar-height));
+     address bar.
+
+     ALL THREE TERMS ARE LOAD-BEARING. --nav-bar-height is the bar ROW's height and the bar also
+     draws a hairline under it, so the bar's real bottom is one border lower; the plate then starts
+     one inset below that. Subtracting only the row height — which is what this did — put the
+     bottom of a maxed plate 17px below the fold at a 560px viewport, unreachable by scrolling
+     because the pane's own scroll container was the thing hanging off the screen. */
+  --nav-panel-max-block: calc(
+    100dvh - var(--nav-bar-height) - var(--nav-rule-width) - var(--nav-plate-inset)
+  );
 
   /* A row inside a plate column or a sheet pane. */
   --nav-row-padding-block: var(--gap-tight);
