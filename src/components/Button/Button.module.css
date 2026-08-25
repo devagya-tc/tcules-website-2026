@@ -334,8 +334,52 @@
   transform: scaleX(1);
 }
 
+/* ── Driven by an enclosing interactive surface ─────────────────────────────────
+   A link Button inside a whole-card or whole-row anchor is that anchor's LABEL, not a second
+   control: it renders `as="span"`, so it never enters the tab order and is never itself hovered,
+   focused or pressed. Every rule above is gated on states it can no longer reach, which would
+   leave it permanently at rest — the right colour, and no underline, forever.
+
+   An ancestor carrying `data-btn-link-group` declares that ITS pointer and keyboard states are
+   this button's states. That is the whole contract.
+
+   It is an attribute rather than a class on purpose. This is an agreement between two CSS Modules,
+   and Modules hash class names while leaving attribute selectors global — so an attribute is the
+   only name both sides can spell. The alternative, exposing a custom property for the caller to
+   set, would put `--btn-*` in another component's stylesheet and break the rule that a component
+   never reads another component's tokens.
+
+   The pairs below mirror the pairs above exactly: same tones, same tokens, hover and focus before
+   pressed so pointer-down wins while the pointer is also hovering. A driven button is meant to be
+   indistinguishable from a hovered one, not to have a second look. */
+[data-btn-link-group]:hover .link.primary.live,
+[data-btn-link-group]:focus-visible .link.primary.live {
+  color: var(--btn-link-primary-fg-hover);
+}
+
+[data-btn-link-group]:active .link.primary.live {
+  color: var(--btn-link-primary-fg-pressed);
+}
+
+[data-btn-link-group]:hover .link.neutral.live,
+[data-btn-link-group]:focus-visible .link.neutral.live {
+  color: var(--btn-link-neutral-fg-hover);
+}
+
+[data-btn-link-group]:active .link.neutral.live {
+  color: var(--btn-link-neutral-fg-pressed);
+}
+
+[data-btn-link-group]:hover .link.live .labelInk::after,
+[data-btn-link-group]:focus-visible .link.live .labelInk::after,
+[data-btn-link-group]:active .link.live .labelInk::after {
+  transform: scaleX(1);
+}
+
 /* The wipe is the one motion here, so it is the one thing to answer for. Reduced motion keeps the
-   underline — it is the affordance — and simply stops it travelling. */
+   underline — it is the affordance — and simply stops it travelling. It covers the driven case
+   too: the rules above move the same pseudo-element, so they inherit the same shortened duration
+   and a caller cannot acquire un-answered motion by opting into the group. */
 @media (prefers-reduced-motion: reduce) {
   .button,
   .link .labelInk::after {

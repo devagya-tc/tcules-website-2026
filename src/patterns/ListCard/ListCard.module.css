@@ -15,6 +15,11 @@
    children inside those primitives and do not arrange siblings by themselves.
    No responsive type or distance override. Layout collapses the split at its md boundary, and the
    type composites step in the shared type layer.
+   No rule wipe. Hover used to animate a hairline across the row's block-end and double it on press.
+   The row's own rule stays — it was always decoration, never the interactive element — but the
+   trailing cue is now the only part that moves, and it moves in colour alone.
+   No title state rule. The title holds --lcrd-title-ink linked or not; nothing sets it to inherit.
+   No motion. Nothing transforms, so there is no prefers-reduced-motion block left to write.
 
    Rule order is load-bearing: hover/focus precede pressed, so pointer-down wins while the pointer
    is also hovering. The paired selectors have equal specificity and source order decides them. */
@@ -28,9 +33,11 @@
 
 /* The semantic frame is either an anchor or a div. Its padding is INNER edge-to-content distance;
    the bottom border is the row's own finish, not an outer seam. A block anchor fills the li and
-   makes the whole visible row the target. */
+   makes the whole visible row the target.
+
+   `position: relative` stood here to be the containing block for the removed hover wipe, which was
+   its only job — the focus ring is a box-shadow and needs no positioning, so it went with it. */
 .frame {
-  position: relative;
   display: block;
   min-inline-size: 0;
   padding-block: var(--gap-text);
@@ -106,69 +113,34 @@
   font: var(--lcrd-body-text);
 }
 
+/* The row's only link-coloured part, and the only part with states. The arrow alone now carries
+   what the title used to share with it. */
 .cue {
-  color: inherit;
+  color: var(--lcrd-link-ink);
+  transition: color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
 }
 
-/* Higher specificity than globals.css's bare anchor rules. The anchor's currentColor drives the
-   linked title, cue and interactive rule together; body and marker keep their quieter own inks. */
+/* Higher specificity than globals.css's bare anchor rules. The anchor carries NO link colour of its
+   own — title, body, marker and cue each state their own ink — so `inherit` keeps the bare-anchor
+   blue from reaching the title the redesign wants dark. */
 .root .link {
-  color: var(--lcrd-link-ink);
+  color: inherit;
   text-decoration: none;
-  transition: color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
 }
 
 .root .link:hover,
 .root .link:focus-visible {
-  color: var(--lcrd-link-ink-hover);
   text-decoration: none;
 }
 
-.root .link:active {
+/* Hover and press move the cue and nothing else: no wipe, no rule width change, no transform. */
+.root .link:hover .cue,
+.root .link:focus-visible .cue {
+  color: var(--lcrd-link-ink-hover);
+}
+
+.root .link:active .cue {
   color: var(--lcrd-link-ink-pressed);
-}
-
-.link .title {
-  color: inherit;
-}
-
-/* The overlay is the non-colour hover carrier: it wipes across in current link ink, then doubles on
-   press. The change in block size is instant, so press reads as a state rather than as a growth
-   animation.
-
-   The negative inset is load-bearing and not a nudge. This element IS .frame, which carries the base
-   rule as its own border-block-end, and an absolutely positioned box resolves inset-block-end
-   against its containing block's PADDING box — i.e. the INNER edge of that border. At 0 the overlay
-   therefore stacked on top of the hairline instead of covering it, rendering a two-tone 2px rule on
-   hover and 3px on press. The spec asks for one hairline on hover and exactly twice that on press,
-   so the overlay is pulled out by the base rule's own width to sit ON the border it replaces.
-
-   Breadcrumbs.module.css runs the same wipe at inset-block-end: 0 and is correct there for a reason
-   that does not hold here — its .link has no border of its own for the overlay to double. */
-.link::after {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: calc(-1 * var(--lcrd-rule-width));
-  block-size: var(--lcrd-rule-width);
-  background: currentColor;
-  pointer-events: none;
-  transform: scaleX(0);
-  /* The one place a physical value is unavoidable: a wipe has a direction, and `left` is not a
-     logical keyword. `0 50%` grows the rule from the row's inline start, which is where the marker
-     and the title already are — the same choice, and the same exception, as Breadcrumbs. */
-  transform-origin: 0 50%;
-  transition: transform var(--lcrd-transition-duration) var(--lcrd-transition-easing);
-}
-
-.root .link:hover::after,
-.root .link:focus-visible::after,
-.root .link:active::after {
-  transform: scaleX(1);
-}
-
-.root .link:active::after {
-  block-size: var(--lcrd-rule-width-pressed);
 }
 
 /* One keyboard-only ring around the entire row. The gap colour is the surface beneath it, so a
@@ -182,12 +154,4 @@
   box-shadow:
     0 0 0 var(--lcrd-ring-offset) var(--lcrd-ring-gap-color),
     0 0 0 calc(var(--lcrd-ring-offset) + var(--lcrd-ring-width)) var(--lcrd-ring-color);
-}
-
-/* Keep the interaction carrier; stop it travelling. Colour remains at its normal duration because
-   a colour change is not motion. */
-@media (prefers-reduced-motion: reduce) {
-  .link::after {
-    transition-duration: var(--duration-instant);
-  }
 }
