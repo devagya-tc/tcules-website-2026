@@ -548,6 +548,16 @@ export type ServiceSection = {
     anchorId: string;
     navigationLabel?: string;
   };
+  /**
+   * One sentence under the heading, before the blocks that argue it.
+   *
+   * There is no `deck` field on ComponentServiceSectionHeading yet, so today this is LIFTED by
+   * the Strapi mapper out of the italic first paragraph authors have been writing at the top of
+   * a section's first rich-text block — which is what a missing field looks like from the
+   * outside. The view model states the shape it wants regardless; when the CMS grows the field,
+   * the mapper stops inferring and reads it, and nothing above here changes.
+   */
+  deck?: string;
   blocks: ServiceBlock[];
 };
 

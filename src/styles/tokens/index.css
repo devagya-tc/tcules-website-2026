@@ -99,6 +99,7 @@
 @import 'components/callout.css';
 @import 'components/figure.css';
 @import 'components/table-of-contents.css';
+@import 'components/content-section.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */

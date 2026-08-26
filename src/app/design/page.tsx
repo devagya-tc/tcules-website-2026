@@ -73,6 +73,11 @@ const SPECIMENS = [
         note: 'the outline of a long-form document — sticky rail, live mark, 2 arrangements, 4 surfaces',
       },
       {
+        href: '/design/content-section',
+        name: 'ContentSection',
+        note: 'one CMS section as one band — head group, deck, block beat, 4 surfaces, 2 densities',
+      },
+      {
         href: '/design/cta-section',
         name: 'CtaSection',
         note: 'the commercial close — 3 arrangements, accepted ask ladder, 4 surfaces',

@@ -15,6 +15,7 @@ import {
   BlockCard,
   Breadcrumbs,
   Callout,
+  ContentSection,
   CtaSection,
   Figure,
   ListCard,
@@ -353,32 +354,31 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
       </PageHero>
 
 
-      {service.sections.length > 0 ? (
-        <Section as="div" surface="paper">
-          <Layout rowGap="section">
-            {service.sections.map((section) => {
-              const content = (
-                <Layout rowGap="stack">
-                  {section.heading ? (
-                    <h2 id={section.heading.anchorId}>{section.heading.text}</h2>
-                  ) : null}
-                  {section.blocks.map((block) => (
-                    <Fragment key={block.id}>{renderServiceBlock(block)}</Fragment>
-                  ))}
-                </Layout>
-              );
+      {/* ONE BAND PER SECTION, alternating ground.
 
-              return section.heading ? (
-                <section key={section.id} aria-labelledby={section.heading.anchorId}>
-                  {content}
-                </section>
-              ) : (
-                <div key={section.id}>{content}</div>
-              );
-            })}
-          </Layout>
-        </Section>
-      ) : null}
+          Previously all eight sections shared a single paper Section and were separated by a
+          `Layout rowGap="section"`. That put the h2 and every block in one flat stack, so 48 was
+          the only distance in the page: heading-to-body read exactly as far apart as
+          body-to-the-cards-beneath-it, and eight sections in one unbroken white band gave the
+          reader nothing to measure progress against. ContentSection owns the internal grouping;
+          the alternation is this route's decision because only the page knows the sequence.
+
+          The surface ladder is temporary in exactly one sense: it is `index % 2` because
+          ComponentServiceSectionHeading has no `surface` field yet. When it grows one, this
+          expression becomes `section.surface` and nothing else here changes. */}
+      {service.sections.map((section, index) => (
+        <ContentSection
+          key={section.id}
+          heading={section.heading?.text}
+          headingId={section.heading?.anchorId}
+          deck={section.deck}
+          surface={index % 2 === 0 ? 'paper' : 'tint'}
+        >
+          {section.blocks.map((block) => (
+            <Fragment key={block.id}>{renderServiceBlock(block)}</Fragment>
+          ))}
+        </ContentSection>
+      ))}
 
       {service.faq ? (
         <Section surface="tint" aria-labelledby="service-faq-heading">

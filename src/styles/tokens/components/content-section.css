@@ -1,0 +1,57 @@
+/* ══ Component layer — ContentSection ═══════════════════════════════════════════
+   Tier 2. The band a CMS section becomes: an optional eyebrow, one h2, an optional deck,
+   and whatever blocks the page hands it.
+
+   Naming: --csec-{part}-{role}
+
+   Three type roles and two measures, all of them existing system roles rather than
+   component-specific sizes — this component invents no scale. It owns no ground, no rule and
+   no state: Section paints the band from the surface it is handed, Layout owns every seam, and
+   nothing here responds to a pointer.
+
+   The heading takes the TITLE measure and the deck the LEDE measure, which is the whole point of
+   having two: a section heading is a statement that should break early and read as a shape, and
+   the deck beneath it is a sentence that should not run to the full body measure or it stops
+   reading as a deck and starts reading as the first paragraph of the body.
+
+   Every surface restates every ink, so a band nested inside a different surface cannot inherit
+   the wrong value from an outer ancestor. */
+
+:root {
+  --csec-eyebrow-text: var(--text-eyebrow);
+  --csec-eyebrow-tracking: var(--text-eyebrow-tracking);
+  --csec-heading-text: var(--text-h2);
+  --csec-heading-tracking: var(--text-h2-tracking);
+
+  /* --csec-deck-text has no tracking companion: --text-lead is a body role and carries no
+     optical correction, so a --csec-deck-tracking would name a value that does not exist. */
+  --csec-deck-text: var(--text-lead);
+
+  --csec-heading-measure: var(--measure-title);
+  --csec-deck-measure: var(--measure-lede);
+}
+
+:root,
+[data-surface='paper'] {
+  --csec-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --csec-deck-ink: var(--color-neutral-700); /* 8.15:1 */
+  --csec-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
+}
+
+[data-surface='tint'] {
+  --csec-heading-ink: var(--color-neutral-900); /* 13.05:1 */
+  --csec-deck-ink: var(--color-neutral-700); /* 7.27:1 */
+  --csec-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
+}
+
+[data-surface='ink'] {
+  --csec-heading-ink: var(--color-white); /* 17.26:1 */
+  --csec-deck-ink: var(--color-neutral-300); /* 11.07:1 */
+  --csec-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+}
+
+[data-surface='blue'] {
+  --csec-heading-ink: var(--color-white); /* 6.23:1 */
+  --csec-deck-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --csec-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+}

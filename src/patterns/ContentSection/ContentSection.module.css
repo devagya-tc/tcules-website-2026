@@ -1,0 +1,33 @@
+/* ContentSection — type and ink only.
+
+   Section paints the band and owns the content column; Layout owns every seam. This file states
+   no distance, no ground and no size of its own: every value comes from --csec-*, declared in
+   tokens/components/content-section.css.
+
+   Classes: .eyebrow .heading .deck */
+
+.eyebrow {
+  font: var(--csec-eyebrow-text);
+  letter-spacing: var(--csec-eyebrow-tracking);
+
+  /* Mono is always uppercase, and the transform is CSS rather than the string — the prop and the
+     CMS field keep whatever capitalisation somebody authored. */
+  text-transform: var(--text-mono-case);
+  color: var(--csec-eyebrow-ink);
+}
+
+.heading {
+  font: var(--csec-heading-text);
+  letter-spacing: var(--csec-heading-tracking);
+  color: var(--csec-heading-ink);
+
+  /* The title measure, so a full-sentence section heading breaks early and reads as a shape
+     rather than as a line of running text spanning the whole 1240 column. */
+  max-inline-size: var(--csec-heading-measure);
+}
+
+.deck {
+  font: var(--csec-deck-text);
+  color: var(--csec-deck-ink);
+  max-inline-size: var(--csec-deck-measure);
+}
