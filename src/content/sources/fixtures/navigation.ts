@@ -281,15 +281,17 @@ const FOOTER: SiteFooterProps = {
   brand: {
     tagline: 'Product intent, kept visible from the first decision to what ships.',
     /* Two, not three: Clutch left this list for the rating badge below. A profile that carries a
-       score is a claim with a source, and a row of three names cannot say 4.9. */
+       score is a claim with a source, and a row of three names cannot say 4.8. */
     social: [
       { label: 'LinkedIn', href: EXTERNAL.linkedin, mark: 'linkedin' },
       { label: 'YouTube', href: EXTERNAL.youtube, mark: 'youtube' },
     ],
-    /* PLACEHOLDER. 4.9 is the one invented value in the redesign — it was never read off the real
-       profile, which is also still unsupplied. Both land together or neither does; a score with no
-       reachable source is worse than no badge. */
-    rating: { platform: 'Clutch', mark: 'clutch', score: '4.9', href: EXTERNAL.clutch },
+    /* Read off the real profile on 2026-08-26, which is now linked from EXTERNAL.clutch — the
+       redesign's invented 4.9 is gone. A STRING, not a number: nothing formats or averages it, and
+       Clutch publishes one decimal place, so a score that lands on a whole number must still print
+       as "5.0" rather than collapsing to "5". Re-read the profile when updating it; a score that
+       drifts from its own source is the failure this pairing exists to prevent. */
+    rating: { platform: 'Clutch', mark: 'clutch', score: '4.8', href: EXTERNAL.clutch },
   },
   groups: [
     {

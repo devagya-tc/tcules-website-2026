@@ -87,8 +87,20 @@
   border-color: var(--foot-link-ink-hover);
 }
 
-/* The one graphic in the badge, and the only thing in the footer that is neither type nor rule. */
+/* The one graphic in the badge, and the only thing in the footer that is neither type nor rule.
+
+   Set larger than the text it sits beside, and in `em` so it stays that way whatever the badge's
+   own role resolves to. At 1em a ★ reads noticeably smaller than the digits next to it: the glyph
+   is drawn well inside its em box, where a digit fills the cap height, so matching the font sizes
+   does NOT match the optical sizes. 1.35 is the correction, arrived at by eye against the numeral.
+
+   `em` rather than a token deliberately — this is an optical correction relative to its context,
+   which is the same reason Prose sets its sub, sup and inline code in em. A px here would be a
+   distance the scale has no answer for, and a size token would break the moment the badge's type
+   role changed. `line-height: 1` keeps the taller glyph from adding leading to the row. */
 .ratingStar {
+  font-size: 1.35em;
+  line-height: 1;
   color: var(--foot-badge-star-ink);
 }
 

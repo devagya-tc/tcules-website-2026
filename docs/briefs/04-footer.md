@@ -52,10 +52,11 @@ one implementation welds a body block to the site frame.
    go live as pages land. Confirm the fixture carries them.
 3. **No cookie-policy link in the legal row.** The cookie policy is reached from the consent popup.
    Legal row is privacy, terms, accessibility, HTML sitemap, copyright. Check the fixture.
-4. ~~**The Clutch profile**~~ **Done** — `EXTERNAL` in `@/lib/routes` now holds all three off-site
-   profiles, so Stat (brief 17) reads the same Clutch href the footer's rating badge does. All
-   three still resolve to `UNRESOLVED_EXTERNAL`: the real URLs are not supplied yet, and neither is
-   the rating the badge prints.
+4. ~~**The Clutch profile**~~ **Done** — `EXTERNAL` in `@/lib/routes` holds all three off-site
+   profiles, so Stat (brief 17) reads the same Clutch href the footer's rating badge does. The
+   Clutch URL and its 4.8 are both real as of 2026-08-26 and are read off the same page, which is
+   why they live beside each other. **LinkedIn and YouTube are still unsupplied** and resolve to
+   `UNRESOLVED_EXTERNAL`.
 
 ## A note on the newsletter field — ~~open~~ settled
 
