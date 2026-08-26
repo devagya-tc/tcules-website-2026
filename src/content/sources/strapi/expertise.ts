@@ -640,7 +640,7 @@ async function fetchExpertiseBySlug(slug: string): Promise<StrapiExpertise | nul
     },
     body: JSON.stringify({
       query: EXPERTISE_BY_SLUG_QUERY,
-      variables: { slug, status: 'PUBLISHED' },
+      variables: { slug, status: 'DRAFT' },
     }),
     cache: 'force-cache',
     next: {

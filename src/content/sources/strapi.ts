@@ -635,7 +635,7 @@ async function fetchAuditBySlug(slug: string): Promise<StrapiAudit | null> {
     },
     body: JSON.stringify({
       query: AUDIT_BY_SLUG_QUERY,
-      variables: { slug, status: 'PUBLISHED' },
+      variables: { slug, status: 'DRAFT' },
     }),
     cache: 'force-cache',
     next: {

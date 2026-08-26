@@ -1,5 +1,5 @@
 export const SERVICES_MASTER_QUERY = /* GraphQL */ `
-  query GetNewCapabilities($status: PublicationStatus = PUBLISHED) {
+  query GetNewCapabilities($status: PublicationStatus = DRAFT) {
     newCapabilities(status: $status) {
       documentId
       createdAt

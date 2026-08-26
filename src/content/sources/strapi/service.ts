@@ -618,7 +618,7 @@ async function fetchServiceBySlug(slug: string): Promise<StrapiService | null> {
     },
     body: JSON.stringify({
       query: SERVICE_BY_SLUG_QUERY,
-      variables: { slug, status: 'PUBLISHED' },
+      variables: { slug, status: 'DRAFT' },
     }),
     cache: 'force-cache',
     next: {

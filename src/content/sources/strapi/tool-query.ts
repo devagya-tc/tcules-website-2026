@@ -1,5 +1,5 @@
 export const TOOL_BY_SLUG_QUERY = /* GraphQL */ `
-  query GetTools($slug: String!, $status: PublicationStatus = PUBLISHED) {
+  query GetTools($slug: String!, $status: PublicationStatus = DRAFT) {
     tools(status: $status, filters: { slug: { eq: $slug } }, pagination: { limit: 1 }) {
       documentId
       title

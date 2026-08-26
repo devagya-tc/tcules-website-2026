@@ -531,7 +531,7 @@ async function fetchToolBySlug(slug: string): Promise<StrapiTool | null> {
     },
     body: JSON.stringify({
       query: TOOL_BY_SLUG_QUERY,
-      variables: { slug, status: 'PUBLISHED' },
+      variables: { slug, status: 'DRAFT' },
     }),
     cache: 'force-cache',
     next: {

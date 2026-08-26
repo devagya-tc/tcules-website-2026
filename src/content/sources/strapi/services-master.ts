@@ -344,7 +344,7 @@ async function fetchServicesMaster(): Promise<{
     },
     body: JSON.stringify({
       query: SERVICES_MASTER_QUERY,
-      variables: { status: 'PUBLISHED' },
+      variables: { status: 'DRAFT' },
     }),
     cache: 'force-cache',
     next: {

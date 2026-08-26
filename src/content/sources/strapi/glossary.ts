@@ -596,7 +596,7 @@ async function fetchGlossaryBySlug(slug: string): Promise<StrapiGlossary | null>
     },
     body: JSON.stringify({
       query: GLOSSARY_BY_SLUG_QUERY,
-      variables: { slug, status: 'PUBLISHED' },
+      variables: { slug, status: 'DRAFT' },
     }),
     cache: 'force-cache',
     next: {
