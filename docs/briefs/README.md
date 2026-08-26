@@ -120,20 +120,29 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
     again; compose against the shipped component. It brought the system its first **scroll
     observation**, which nothing here had before.
 
-    **The component ships; the call sites have not moved yet.** `src/app/audits/[slug]/page.tsx`
-    still hand-rolls its "On this page" band out of a tint `Section` and a `Cluster` of link
-    Buttons (line 311), and five more routes carry the same block: `services/[...slug]`,
-    `expertise/[slug]`, `glossary/[slug]`, `tools/[slug]` and `how-we-work`. Swapping those six
-    bands for the rail is route work that is now unblocked and outstanding —
-    and it changes those pages' shape, which is why it is worth doing deliberately rather than
-    incidentally.
+    **The six routes carrying the retired band did not all become rails, and an earlier version of
+    this paragraph said they would.** They do not, because **page type decides, not heading
+    count** — `TableOfContents.md` § 1. Long-form documents get an outline; standard pages get
+    none. Of the six, only `audits/[slug]` is long-form: it now composes the rail. The band was
+    **deleted outright** from `services/[...slug]`, `expertise/[slug]`, `glossary/[slug]`,
+    `tools/[slug]` and `how-we-work`, which are standard pages and should never have carried a
+    page outline.
 
     The content seam was already ahead of it and still is. `AuditSection.heading` is
     `{ text, anchorId, navigationLabel? }` — the id is derived and de-duplicated in
     `sources/strapi.ts`, and the optional short label is what makes an outline readable at all: the
     corpus's section headings run to a median of 35 characters and a maximum of 87, so heading text
-    is a fallback and not the label. A route that adopts the rail has to pass the short label, not
-    the heading.
+    is a fallback and not the label. A route that adopts the rail passes the short label, not the
+    heading, and a section without one is simply absent from the outline.
+
+    **Three of § 1's long-form types cannot render an outline yet, and it is a content-model gap
+    rather than route work.** `terms-of-use` and `privacy-policy` carry
+    `{ id, heading: string, bodyHtml }` — the route generates the heading ids, but there is no
+    `navigationLabel`, so every entry would fall back to full heading text. `case-studies` and
+    `insights` are further back: `CaseStudyBlock` and `BlogBlock` have **no heading member at
+    all** — the bodies are opaque rich text and the `<h2>`s the routes render from `block.title`
+    carry no id. Giving either an outline means deriving anchors at the seam first, the way
+    `sources/strapi.ts` already does for the five section types that have them.
 12. **Tag** · 20 — **runnable now, and blocked by nothing.** Ten route modules already render its
     row as bare `<li>` text inside a `Cluster`, so the call sites are real, shipped and identical.
     It is one mark and `Cluster` keeps the row, which is why the brief forbids a `TagList` in its
