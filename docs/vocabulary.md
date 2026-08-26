@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 20 roles, consumed as composites
+### Type — 21 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -73,6 +73,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-h3` | 34px | 1.16 | display | medium | `--text-h3-tracking` | verbatim |
 | `--text-h4` | 28px | 1.2 | display | medium | `--text-h4-tracking` | verbatim |
 | `--text-h5` | 22px | 1.28 | display | medium | `--text-h5-tracking` | verbatim |
+| `--text-h6` | 18px | 1.35 | display | medium | `--text-h6-tracking` | verbatim |
 | `--text-quote` | 28px | 1.35 | display | regular | **none** | verbatim |
 | `--text-lead` | 20px | 1.5 | sans | regular | **none** | verbatim |
 | `--text-body-lg` | 18px | 1.55 | sans | regular | **none** | verbatim |
@@ -88,7 +89,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` | `--text-mono-case` |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**13 roles have a tracking companion. 7 have none** — pairing one with a role in that
+**14 roles have a tracking companion. 7 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
@@ -162,7 +163,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **layout.css** — `--lay-track-xs` 192px · `--lay-track-sm` 256px · `--lay-track-md` 320px · `--lay-track-lg` 384px
 - **list-card.css** — `--lcrd-title-tracking` -0.005em · `--lcrd-marker-tracking` 0.08em · `--lcrd-number-baseline-offset` 6px · `--lcrd-content-min-xs` 192px · `--lcrd-thumbnail-inline-md` 160px · `--lcrd-rule-width` 1px · `--lcrd-radius` 0px · `--lcrd-ring-width` 2px · `--lcrd-ring-offset` 2px
 - **logo.css** — `--logo-height-sm` 20px · `--logo-height-md` 24px · `--logo-height-lg` 40px
-- **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 16px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-plate-width-lg` 1240px · `--nav-plate-width-md` 880px · `--nav-plate-width-sm` 720px · `--nav-plate-radius` 8px · `--nav-plate-inset` 16px · `--nav-row-padding-block` 8px · `--nav-row-padding-inline` 16px · `--nav-row-radius` 8px · `--nav-row-arrow-size` 14px · `--nav-row-arrow-travel` 4px · `--nav-rail-title-tracking` 0em · `--nav-rail-action-tracking` 0.08em · `--nav-card-radius` 8px · `--nav-card-padding` 16px · `--nav-card-image-radius` 4px · `--nav-card-arrow-size` 16px · `--nav-label-tracking` 0.12em · `--nav-sheet-reserve` 88px · `--nav-sheet-radius` 8px · `--nav-sheet-padding-inline` 20px · `--nav-sheet-row-padding-block` 12px · `--nav-sheet-foot-padding-block` 12px · `--nav-sheet-link-padding-block` 10px · `--nav-sheet-back-tracking` 0.08em · `--nav-sheet-chevron-size` 16px · `--nav-grab-width` 36px · `--nav-grab-height` 4px · `--nav-row-lift` 6px
+- **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 16px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-plate-width-lg` 1120px · `--nav-plate-width-md` 780px · `--nav-plate-width-sm` 560px · `--nav-plate-radius` 8px · `--nav-plate-inset` 16px · `--nav-row-padding-block` 8px · `--nav-row-padding-inline` 16px · `--nav-row-radius` 8px · `--nav-row-arrow-size` 14px · `--nav-row-arrow-travel` 4px · `--nav-rail-title-tracking` 0em · `--nav-rail-action-tracking` 0.08em · `--nav-card-radius` 8px · `--nav-card-padding` 16px · `--nav-card-image-radius` 4px · `--nav-card-arrow-size` 16px · `--nav-label-tracking` 0.12em · `--nav-sheet-reserve` 88px · `--nav-sheet-radius` 8px · `--nav-sheet-padding-inline` 20px · `--nav-sheet-row-padding-block` 12px · `--nav-sheet-foot-padding-block` 12px · `--nav-sheet-link-padding-block` 12px · `--nav-sheet-back-tracking` 0.08em · `--nav-sheet-chevron-size` 16px · `--nav-grab-width` 36px · `--nav-grab-height` 4px · `--nav-sheet-dismiss-distance` 56px · `--nav-sheet-dismiss-flick-distance` 24px · `--nav-drag-slop` 8px · `--nav-row-lift` 6px
 - **page-hero.css** — `--hero-eyebrow-tracking` 0.12em · `--hero-title-tracking` -0.018em · `--hero-key-tracking` 0.1em · `--hero-title-measure` 22ch · `--hero-body-measure` 68ch · `--hero-media-radius` 0px · `--hero-media-rule-width` 1px
 - **proof.css** — `--proof-quote-rule-width` 2px · `--proof-radius` 0px
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px

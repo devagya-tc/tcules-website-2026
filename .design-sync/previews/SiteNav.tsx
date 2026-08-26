@@ -20,6 +20,9 @@ const SERVICES: SiteNavItem = {
   /* A mega has no href — its trigger opens rather than navigates — so its own index is named
      here beside the paths it owns outside its family. */
   matchPaths: ['/services', '/audits', '/how-we-work'],
+  /* The way through to /services. A mega's trigger opens rather than navigates, so without this
+     the section's own index has no route to it. Insights carries one too; Expertise does not. */
+  hub: { label: 'All services', href: '/services', status: 'planned' },
   panelWidth: 'lg',
   groups: [
     {
@@ -60,16 +63,21 @@ const SERVICES: SiteNavItem = {
   rail: {
     label: 'Working together',
     cards: [
-      /* The image slot filled, which is the arrangement the spec describes and the app's own
-         fixture cannot show — the artwork for this card is still an open item, and the card
-         renders title-only without one rather than showing an empty frame. */
+      /* The image is a RECORD now, not a slot — {src, alt, width, height}, the same contract Figure
+         and PageHero take, which is what lets the content seam carry it. The file is a placeholder:
+         the artwork for this card is still an open item, and it is diagrammatic so it reads as a
+         stand-in rather than as a photograph nobody chose. */
       {
         title: 'How We Work',
         href: '/how-we-work',
         status: 'planned',
         role: 'primary',
-        // eslint-disable-next-line @next/next/no-img-element -- accepted native-image contract
-        image: <img src="/design/hero-sample-wide.svg" alt="" width={2400} height={1350} />,
+        image: {
+          src: '/nav/how-we-work-placeholder.svg',
+          alt: '',
+          width: 480,
+          height: 210,
+        },
       },
       { title: 'Request Free Audit', href: '/audits', status: 'planned', role: 'secondary' },
     ],
@@ -113,6 +121,7 @@ const INSIGHTS: SiteNavItem = {
   label: 'Insights',
   form: 'mega',
   matchPaths: ['/insights', '/glossary', '/tools'],
+  hub: { label: 'All insights', href: '/insights', status: 'planned' },
   panelWidth: 'sm',
   groups: [
     {

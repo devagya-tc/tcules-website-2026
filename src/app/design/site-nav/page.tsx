@@ -31,51 +31,6 @@ function only(nav: SiteNavProps, keys: string[]): SiteNavProps {
   return { ...nav, items: nav.items.filter((item) => keys.includes(item.key)) };
 }
 
-/**
- * Fill the rail's primary card with a real image.
- *
- * The fixture supplies none — the artwork for "Working together" is an open item — and the card
- * renders title-only without one, because an empty framed rectangle in a live header reads as a
- * broken image rather than as a placeholder. So the image-led arrangement the spec actually
- * describes has to be proven here, and this is the only place in the repo that passes the slot.
- */
-function withRailImage(nav: SiteNavProps): SiteNavProps {
-  return {
-    ...nav,
-    items: nav.items.map((item) =>
-      item.rail
-        ? {
-            ...item,
-            rail: {
-              ...item.rail,
-              cards: item.rail.cards.map((card) =>
-                card.role === 'primary'
-                  ? {
-                      ...card,
-                      /* A native <img>, per the contract Figure established and PageHero
-                         follows — there is no Image primitive in this repo and no next/image
-                         precedent in a pattern. `alt=""` because the card's own title is the
-                         link text: a description here would make a screen reader read the
-                         destination twice, once badly. */
-                      image: (
-                        // eslint-disable-next-line @next/next/no-img-element -- accepted native-image contract
-                        <img
-                          src="/design/hero-sample-wide.svg"
-                          alt=""
-                          width={2400}
-                          height={1350}
-                        />
-                      ),
-                    }
-                  : card,
-              ),
-            },
-          }
-        : item,
-    ),
-  };
-}
-
 export default async function SiteNavSpecimenPage() {
   const { nav } = await getNavigation();
 
@@ -123,22 +78,15 @@ export default async function SiteNavSpecimenPage() {
           </Layout>
 
           <Specimen
-            title="Plate · two groups and the rail — 1240"
-            note="Services, the widest of the three. Two groups of six plus the rail, which is the only one in the nav. Hover a row: direction B — a brandeis-50 fill at the row radius, the label and the arrow both taking the blue, the arrow sliding in from -4px. The fill extends past the text because the row's padding is pulled back out with a negative inset, so the label still aligns with the group label above it. The rail's secondary card is a compact row rather than a second card: a full card would make the rail taller than the columns beside it, and then the plate's height would be set by the offer instead of by the content."
+            title="Plate · two groups and the rail — 1120"
+            note="Services, the widest of the three. Two groups of six plus the rail, which is the only one in the nav. It was 1240 to match the page’s content column, so the plate lined up with the bands behind it — at 14px rows that alignment cost a 255px hole between the two lists, so it came down to 1120 and the pane ratio moved 2:1 to 5:3 in the same edit, which is what keeps the cut on the columns (339 → 278) instead of the rail (308, unchanged). The hub link at the foot is the way through to /services: the trigger opens rather than navigates, so without it the section index has no route to it. Hover a row: direction B — a brandeis-50 fill at the row radius, the label and the arrow both taking the blue, the arrow sliding in from -4px. The fill extends past the text because the row's padding is pulled back out with a negative inset, so the label still aligns with the group label above it. The rail's secondary card is a compact row rather than a second card: a full card would make the rail taller than the columns beside it, and then the plate's height would be set by the offer instead of by the content."
           >
             <SiteNav {...only(nav, ['services'])} />
           </Specimen>
 
           <Specimen
-            title="Plate · the rail's image slot filled"
-            note="The same Services plate with an image passed into the primary card. This is the arrangement the spec describes and the fixture cannot show — the slot holds a 16:7 ratio whatever it is given, paints a ground under it so a transparent or still-loading image does not punch a hole in the card, and crops with object-fit. Compare the rail's height against the specimen above: the card grows and the plate grows with it, which is exactly why the height is measured rather than guessed."
-          >
-            <SiteNav {...only(withRailImage(nav), ['services'])} />
-          </Specimen>
-
-          <Specimen
-            title="Plate · no rail — 880 and 720"
-            note="Expertise and Insights. Same vocabulary, no rail, so the plate narrows to its content rather than holding 1240px of empty ground — 880 for two groups of six, 720 for two of four. Move between them and watch the box morph in both axes at once. The width is DECLARED on the item rather than derived from a link count: deriving it would silently re-lay out the plate the day a group gained a seventh row, and the cause would be invisible in the data and in the markup."
+            title="Plate · no rail — 780 and 560"
+            note="Expertise and Insights. Same vocabulary, no rail, so the plate narrows to its content rather than holding the widest plate's width in empty ground — 780 for two groups of six, 560 for two of four. Both were re-measured when the rows went to 14px: at the old 880 and 720 they left 83px and 163px of empty track per column. Move between them and watch the box morph in both axes at once. The width is DECLARED on the item rather than derived from a link count: deriving it would silently re-lay out the plate the day a group gained a seventh row, and the cause would be invisible in the data and in the markup."
           >
             <SiteNav {...only(nav, ['expertise', 'insights'])} />
           </Specimen>
@@ -159,7 +107,7 @@ export default async function SiteNavSpecimenPage() {
 
           <Specimen
             title="The sheet — narrow the window past 1024"
-            note="Everything above collapses to a toggle, and the navigation becomes a bottom sheet. It hugs its root list, so all six items sit in the lower half of the screen where a thumb is; open a section and it grows to the screen less 88px, and Back shrinks it again. The height change IS the transition, which is why it is measured — CSS cannot animate to auto. Two offers stay pinned at the foot at both levels, primary on the right. While it is open the wordmark is behind the scrim and out of the tab order: the close glyph, the scrim and Back are the exits, and a mark that also dismissed would be a fourth answer to a question that already had three."
+            note="Everything above collapses to a toggle, and the navigation becomes a bottom sheet. The hub link is here too, at the end of a section’s scrolling list rather than in the sticky foot — the foot holds the two offers, and a third action in the one strip a thumb reaches would compete with both. Three sizes, one step apart: section links 14px matching the plate’s rows, the six root rows 16px since they are the top level on the one surface where they are the primary target, and the rail card 18px. The root rows have no desktop counterpart to match — up there the same six items are the bar, set in mono at 13. All six sit 14px below the midpoint of a 375x812 screen; shrinking them moved the list DOWN, because the sheet is anchored to the bottom and a shorter sheet starts lower. It hugs its list at both levels — all six root items sit in the lower half of the screen where a thumb is, and a section grows to its OWN content, capped at the screen less 88px. Insights hugs at 657; Services and Expertise overrun the cap and scroll at 724. The sticky foot never moves between them: the sheet is anchored to the viewport's bottom edge, so only the top travels. The height change IS the transition, which is why it is measured — CSS cannot animate to auto. Two offers stay pinned at the foot at both levels, primary on the right. While it is open the wordmark is behind the scrim and out of the tab order: the close glyph, the scrim and Back are the exits, and a mark that also dismissed would be a fourth answer to a question that already had three."
           >
             <SiteNav {...nav} />
           </Specimen>

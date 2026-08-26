@@ -56,7 +56,7 @@ const WEIGHTS = [
     className: t.weightMedium,
     token: '--font-weight-medium',
     value: 500,
-    where: 'h2 through h5, and the stat',
+    where: 'h2 through h6, and the stat',
   },
   {
     className: t.weightSemibold,
@@ -120,6 +120,15 @@ const TITLE_ROLES = [
     lh: 1.28,
     track: '0',
     steps: '— / 20',
+    sample: 'Design that earns its keep',
+  },
+  {
+    className: t.h6,
+    role: 'h6',
+    px: 18,
+    lh: 1.35,
+    track: '0',
+    steps: '— / —',
     sample: 'Design that earns its keep',
   },
 ] as const;
@@ -256,6 +265,7 @@ const BREAKPOINTS = [
   { role: 'h3', d: '34 / 1.16', tab: '28 / 1.2', mob: '25 / 1.22' },
   { role: 'h4', d: '28 / 1.2', tab: '25 / 1.22', mob: '22 / 1.26' },
   { role: 'h5', d: '22 / 1.28', tab: '22 / 1.28', mob: '20 / 1.3' },
+  { role: 'h6', d: '18 / 1.35', tab: '18 / 1.35', mob: '18 / 1.35' },
   { role: 'quote', d: '28 / 1.35', tab: '28 / 1.35', mob: '22 / 1.4' },
   { role: 'lead', d: '20 / 1.5', tab: '20 / 1.5', mob: '18 / 1.55' },
   { role: 'index', d: '20 / 1.2', tab: '20 / 1.2', mob: '20 / 1.2' },
@@ -561,13 +571,14 @@ export default function TypographySpecimenPage() {
             </p>
           </Layout>
 
-          <Specimen title="h1 – h5, a, code">
+          <Specimen title="h1 – h6, a, code">
             <Layout rowGap="text">
               <h1>Heading one</h1>
               <h2>Heading two</h2>
               <h3>Heading three</h3>
               <h4>Heading four</h4>
               <h5>Heading five</h5>
+              <h6>Heading six</h6>
               <p>
                 A paragraph with <a href="/design">a link in it</a> and a run of{' '}
                 <code>inline code</code>. The link takes the surface&rsquo;s own link ink; the
@@ -629,6 +640,7 @@ export default function TypographySpecimenPage() {
                 independently.
               </p>
               <h5>A fifth-level heading</h5>
+              <h6>A sixth-level heading</h6>
               <h6>And the sixth</h6>
               <p>
                 Two headings in a row are one unit, not two, so the second takes the

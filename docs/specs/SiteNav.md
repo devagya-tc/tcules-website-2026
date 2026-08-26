@@ -129,8 +129,9 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `cta` | `Button` solid primary `sm` | right of the bar |
 | `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `menu` ↔ `close` |
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
-| `pane` | one per mega section | 1240 / 880 / 720px wide; two label + link columns, plus the rail in Services |
-| `rail` | `<aside>`, 340px | primary card (image slot, title) + secondary row |
+| `pane` | one per mega section | 1120 / 780 / 560px wide; two label + link columns, plus the rail in Services |
+| `hubBar` | `Cluster` + `Button emphasis="link"` | the way through to the section index — Services and Insights only. Hairline above, `--gap-text` under it |
+| `rail` | `<aside>`, ~308px | primary card (image, `h6` title) + secondary row |
 | `scrim` | fixed box under the plate | `--nav-scrim`, below the bar. The system has no elevation token; edge, radius and scrim do the separating |
 | `sheet` | mobile | bottom sheet, grab handle, two-level track, sticky CTA bar |
 
@@ -161,25 +162,64 @@ back to the trigger, and Tab out of the last row are managed explicitly — see 
 
 Below `--breakpoint-1024`: bar with logo left, toggle right; the CTA moves inside the sheet.
 
-**The sheet hugs its list.** Closed → open, it rises to the height of the six items plus the CTA
-bar (~370px of an 812px screen), so every item sits in the lower half. Opening a section grows it
-to `100% - var(--nav-sheet-reserve)`; back shrinks it again. The height change *is* the transition,
-so both heights are measured and written as pixels — an `auto` height does not animate.
+**The sheet hugs its list, at BOTH levels.** Closed → open it rises to the height of the six items
+plus the CTA bar; opening a section grows it to that section's own content, capped at
+`100% - var(--nav-sheet-reserve)`. One rule, `min(hug, full)`, in both places — §5 originally said a
+section grows to the full height flat, and that left the one short section (Insights) 67px shorter
+than its own bottom edge. See §12.14. Every height is measured and written as pixels, because the
+height change *is* the transition and an `auto` height does not animate.
+
+Measured on a 375×812 screen: root **428**, Insights **657** (hugs), Services and Expertise **724**
+(both overrun the cap and scroll). The sticky foot does not move between any of them — the sheet is
+anchored to the bottom of the viewport, so only its top edge travels.
 
 **Levels.** Root list → section pane, sliding one screen sideways. Header inside the pane: back on
 the left, section name **centred, uppercase** on `--nav-label-text`. Section rows are type-only, no
 glyphs.
 
+**Groups in a section pane are separated by a RULE, not by whitespace.** The 1b mobile prototype
+settled this — "with six links each, spacing on its own was not enough to read as a break" — and it
+is a mobile-only need: stacked one above another, 24px of air between the end of six links and the
+next label does not say "new group" the way two side-by-side columns do on the plate. 24, rule, 24,
+and it applies to the rail's block too, because "Working together" is a boundary as well.
+
 **Sticky CTA bar**, present at both levels, pinned to the sheet's foot: **Request audit** (ghost
 neutral) left, **Start a project** (solid primary) right — primary under the right thumb. A
 hairline shadow appears above the bar while list remains below it.
 
-**Not in the mobile pane:** the "All services / All expertise / All insights" hub link (removed),
-and the Request Free Audit card (the sticky bar carries the offer). Working together renders as
-the single primary card with its image slot.
+**The hub link IS in the mobile pane**, at the end of the scrolling list, exactly as it is at the
+foot of the plate — see §12.12. It is not in the sticky foot: the foot is where the offers live, and
+a third action in the one strip a thumb can reach would compete with both of them.
+
+**Not in the mobile pane:** the Request Free Audit card, because the sticky bar carries that offer.
+Working together renders as the single primary card with its image slot.
+
+**Three sizes in the sheet, one step apart each.** Section-pane links are `body-sm` (14), matching
+the plate's rows — the same destination should not be two sizes. The six ROOT rows are `body` (16):
+one step above the links so the two levels are not identical, one step below where they started. The
+rail card is `body-lg` (18), the heaviest thing in the pane.
+
+The root rows have **no desktop counterpart to match** — the same six items are the bar up there, set
+in `--text-ui` at 13 mono uppercase through `Button` — so their size is judged on its own. 16 keeps
+a 49.6px target, well over the 44 floor, and closes the step to the section links to a single size.
+
+**Shrinking them made §10.7 safer, which is the opposite of how it looks.** See §12.21.
+
+**Swipe down to dismiss.** The grab handle promises a gesture and now performs one: a downward drag
+puts the whole sheet away — section and all — rather than stepping back a level, because Back
+already means "up one" and the swipe means "put this away". It travels with the finger.
+
+A drag may start on the handle or the header always, and on the list only when that list is already
+scrolled to its top and the movement is downward; anything else is left to scroll. It is not claimed
+until the pointer passes `--nav-drag-slop`, so a tap stays a tap — and once claimed, the click that
+would follow on release is swallowed, or flicking the sheet away from a row would dismiss it and
+then navigate to that row. Release dismisses past `--nav-sheet-dismiss-distance` (56) or on a flick
+over `--nav-sheet-dismiss-velocity` that has also travelled `--nav-sheet-dismiss-flick-distance`
+(24); otherwise it snaps back.
 
 **While the sheet is open** the page header is behind the scrim: the logo is `aria-hidden` and not
-focusable. Exits are the close glyph, the scrim, and back. The mark is not a second dismiss.
+focusable. Exits are the close glyph, the scrim, back, and the swipe. The mark is not a second
+dismiss.
 
 ## 6 · Motion
 
@@ -217,8 +257,8 @@ Recorded in §12.6.
 
 1. **A group with one link** — renders as a group of one; no special case.
 2. **A section with no rail** — Expertise and Insights: the plate narrows to its content
-   (880 / 720). It does not hold 1240px of empty ground.
-3. **A fourth group in a mega** — panes are a grid; a third column fits inside 1240 without a
+   (780 / 560). It does not hold the widest plate's width in empty ground.
+3. **A fourth group in a mega** — panes are a grid; a third column fits inside the widest plate without a
    layout change.
 4. **A `planned` link whose page is missing** — the nav still renders it. See §12.5: the CI check
    the spec asks for cannot exist yet, because almost no page routes are built.
@@ -290,7 +330,7 @@ Recorded here rather than fixed silently. Nothing below changes a designed outco
 ### 12.1 · The plate cannot be a `Section`, so it owns a ground
 
 `Section` owns the content column (1240 cap, 32 gutter) and its ground, and CLAUDE.md forbids
-overriding either from outside. The plate's box is 1240 / 880 / 720 wide and carries its own
+overriding either from outside. The plate's box is 1120 / 780 / 560 wide and carries its own
 border, radius and padding — so it cannot be a `Section` and cannot inherit `--sec-ground`. It
 paints `--nav-panel-ground` instead, declared once per surface. The same token serves the mobile
 sheet, which is the same idea at another size.
@@ -328,10 +368,10 @@ panes are `inert`, so they hold no focus and take no pointer.
 ### 12.5 · The rail is a ratio, not a 340px track
 
 `Layout` has no fixed-track mode, and a local grid to get one is the hand-rolled arrangement the
-layout rule prohibits. The plate body is `Layout columns={[2, 1]} colGap="column"`, which at the
-plate's own width lands the rail at **371px rather than 340**. This is the one dimension in the
-component that does not match the prototype. The alternatives were both worse: fr weights chosen to
-resolve to 340 at exactly 1240 (magic numbers, brittle the moment the padding or the seam moves), or
+layout rule prohibits. The plate body is `Layout columns={[5, 3]} colGap="column"`, which at the
+plate's own width lands the rail at **308px rather than 340** — near enough what was asked for, and
+now the term the ratio exists to hold still (§12.10). The alternatives were both worse: fr weights chosen to
+resolve to 340 at exactly one plate width (magic numbers, brittle the moment the padding or the seam moves), or
 changing a tier-1 primitive every component in the repo depends on. `--nav-rail-width` was therefore
 never added — a token with no reader is worse than no token. If 340 turns out to matter, the right
 fix is a fixed-track mode on `Layout`, which is a conversation about the primitive.
@@ -384,7 +424,7 @@ the default content. All were measured and are fixed.
    and the plate is `box-sizing: border-box`, so handing the raw value over left the plate's content
    box two hairlines short. The plate's `block-size` now adds them back.
 3. **A pane's measured height was wrong for the width it would be rendered at.** Panes were clamped
-   by `max-inline-size: 100%` of the plate, so while the 720 Insights pane was open the 1240
+   by `max-inline-size: 100%` of the plate, so while the narrow Insights pane was open the widest
    Services pane laid out 718 wide, wrapped to nearly twice its height, hit the viewport cap and
    recorded 488 — and the plate then opened Services 86px taller than its content, permanently. The
    stage is now an inline-size container and both the plate and every pane size against `100cqi`, so
@@ -429,7 +469,176 @@ The desktop bar has the same button-and-anchor mix and was already correct, beca
 its own padding — which is the argument for controls being `Button` wherever one fits, and the
 reason this only bit the one row that is hand-rolled.
 
-### 12.9 · Two QA items cannot be met yet, and are not faked
+### 12.10 · The widths and the pane ratio both answer to the row type
+
+The spec set three plate widths against 18px rows. The rows are 14px now, and all three widths and
+the pane ratio moved with them — recorded here because the numbers in §3 and §8 are consequences,
+not decisions, and the next type change invalidates them again.
+
+**Measured at 18px, then at 14px with the old widths:**
+
+| Section | Plate | Column track | Longest label | Slack per column |
+|---|---|---|---|---|
+| Services | 1240 | 339 | 230 ("Product Modernisation Assessment") | 109 — and **191** in the first column, whose longest is 148 |
+| Expertise | 880 | 376 | 293 | 83 |
+| Insights | 720 | 296 | 133 | 163 — better than half air |
+
+The number that decided it was not the slack but the **255px between column one's text and column
+two's text** in Services: the 64px seam plus 191px of unused track, so a fifth of the plate was the
+gap between two lists and the two groups stopped reading as one block.
+
+**Now:** 1120 / 780 / 560, and the pane ratio `[2, 1]` → `[5, 3]`.
+
+The ratio change is the part worth understanding. Narrowing Services under `[2, 1]` would have taken
+the 120px off the rail as well — content 307 → 266 — shrinking the one column whose width buys
+something, its 16:7 image slot. At `[5, 3]` the rail lands back on **308**, unchanged, and the whole
+cut falls on the two link columns: track 339 → 278 against a longest label of 230, so column two is
+properly filled, the inter-column gap drops to 194, and nothing wraps. Expertise 780 leaves 33px of
+slack, Insights 560 leaves 83px.
+
+**What was given up.** 1240 was `--sec-max-inline`, so the widest plate lined up with every band on
+the page behind it. That was worth having when the plate was full; at 14px it bought an alignment
+nobody can see through a 20% scrim in exchange for the 255px hole. **If the row type ever goes back
+up, this is the first decision to revisit** — and the arithmetic to redo is: widest label in a
+column, doubled, plus one `--gap-column` seam and two `--gap-gutter` edges, then a ratio that leaves
+the rail at ~308.
+
+### 12.12 · The hub link came back to mobile, and §5 was wrong to bracket it with the card
+
+§5 listed two things as "not in the mobile pane" — the hub link and the Request Free Audit card —
+and gave one reason, "the sticky bar carries the offer". That reason only covers the card. The hub
+link is not an offer and duplicates nothing: it is the only route to a section's own index, because
+a mega's trigger opens rather than navigates. So it is in the sheet now, at the end of the scrolling
+list, with the same hairline treatment it has on the plate.
+
+It sits INSIDE the list rather than pinned in the foot. The foot holds the two offers, and a phone
+gives you one strip a thumb reaches comfortably; a third action in it competes with both.
+
+**The touch floor moved with the type and had to be re-derived.** `--nav-sheet-link-padding-block`
+was `--space-10`, commented as "44px row from a 24px line" — true at `body` (25.6px line, 45.6 row).
+At `body-sm` the line box is 21.7, which would have taken the row to 41.7 and put it under the 44px
+floor. `--space-12` lands it at 45.7. The type and the padding are one decision: re-point the type
+and re-derive the padding as `(44 - line) / 2`.
+
+### 12.14 · A section pane hugs its content too
+
+§5 said a section "grows it to `100% - 88px`", flat. Measured, that made the sheet taller than what
+was in it for the one short section: Insights' content came to 530 in a 597 list box — **67px of
+dead space above the sticky foot** — while Services (819) and Expertise (657) both overran the cap
+and scrolled regardless.
+
+It is now `min(hug, full)` at both levels, which is the rule the ROOT already used. That matters more
+than the 67px: a section that forced itself full was the last place in this component where a surface
+was bigger than its content, and removing it is the same correction the desktop plate got when its
+three widths came down to fit their columns.
+
+**The argument I expected to lose on, and didn't.** A varying section height sounds like it would
+move the sticky foot, which is the one target a thumb aims at. It does not: the sheet is
+`inset-block-end: 0`, so the foot sits on the viewport's bottom edge whatever the height, and only
+the top edge travels — which is already what the root→section transition does on purpose. Verified:
+`footBottom` is 812 on an 812 screen at every level.
+
+**And it exposed a 1px error in the ROOT hug, which had been there since the sheet was built.** Both
+hug heights are sums of border boxes, and the sheet is `box-sizing: border-box` with one hairline on
+the block axis — so handing either sum over raw left the content box a hairline short and made the
+list scrollable by 1px at a height meant to fit it exactly. Both now add `var(--nav-rule-width)`.
+The same arithmetic §12.7 records for the plate, missed here because 1px of scroll is invisible
+until you compare `scrollHeight` against `clientHeight`.
+
+### 12.16 · Swipe to dismiss, and the two thresholds that had to be measured
+
+Not in the spec, and the handle had been drawn for it since the sheet was built — an affordance
+promising a gesture that did nothing.
+
+**Where a drag may start is the whole design.** The handle and the header carry
+`touch-action: none`, so the browser hands over the pointer rather than deciding to scroll with it;
+that is scoped to those two elements alone, so the list keeps its own panning. A drag from the list
+is allowed as well, but only at `scrollTop <= 0` and only downward — otherwise a swipe meant to
+scroll would throw the sheet off the screen. Verified: a downward drag begun while the list was
+scrolled to 200 does nothing at all.
+
+**Two thresholds, and the second one was wrong on the first attempt.** Distance is 56px. The flick
+gate was originally velocity plus the 8px slop, and testing it showed a fast 9px twitch dismissing
+the sheet — the thumb barely moved and the navigation was gone. A flick now has to travel 24px as
+well as move fast.
+
+**The click has to be swallowed.** A drag begun on a row and released past the threshold dismissed
+the sheet *and* followed that row's link. A capture-phase guard, armed the instant the drag is
+claimed and consumed by the next click, fixes it. Verified: a 100px drag starting on the Work link
+dismisses and leaves `location.pathname` at `/`.
+
+Seven cases were driven to confirm it: a slow 20px drag snaps back; a slow 100px drag dismisses; a
+32px flick dismisses; an upward swipe from a row is ignored; a downward drag from a link dismisses
+without navigating; a downward drag from a mid-scrolled list is ignored; and a drag from a section
+header dismisses the sheet entirely rather than returning to the root.
+
+### 12.17 · The sheet's header spacing was a hierarchy inversion, not just tightness
+
+The first group label in a section pane sat 8px under the header's rule and 8px above its own first
+link — **equidistant**, so it read as floating between two things rather than heading the list it
+belongs to. That is what made the eyebrow hard to parse; the fix is a ratio, not more air. The
+body's top step is `--gap-block`, which puts the label three times closer to its list than to the
+rule and costs the header the same beat as any other group boundary in the pane — which is what it
+is.
+
+### 12.19 · The rail card's title, and the tracking token that went with it
+
+`--nav-rail-title-text` was `--text-h5` — 22 on desktop, 20 below 768 — against 14px rows. A 1.43×
+step reads as a section heading rather than as a card title, and the card is a card. It is
+`--text-body-lg` now: still the heaviest text in the pane, at 1.29×.
+
+**`--nav-rail-title-tracking` was deleted rather than repointed**, and that is the part worth
+recording. `--text-body-lg` is one of the seven roles with no tracking companion, and h5's tracking
+is an optical correction cut for 22px display type — carrying it to 18px sans would be correcting an
+error that is no longer there. The rule in CLAUDE.md §8 is that pairing a tracking token with a role
+in that second group names something that does not exist; the honest move when a role loses its
+companion is for the component token to lose it too.
+
+### 12.21 · A correction: shorter root rows move the list DOWN, not up
+
+An earlier note in §5 and in `nav.css` claimed the root rows' 52px height was "what puts all six
+below the midpoint of a 375×812 screen", and used that to argue for keeping them at 18px. **That was
+backwards.** The sheet is anchored to the bottom of the viewport, so shorter rows make it shorter,
+which moves its top edge DOWN and every row further below the midpoint.
+
+Measured, going 18 → 16: the sheet hugs at **415** instead of 428, its top edge sits at 397 instead
+of 384, and the first row lands **14px below the midpoint** where it previously cleared by 1. The
+touch floor was never at risk either — 49.6px at 16, 45.7px at 14, both over 44.
+
+Recorded because the wrong reason is now written into a token comment as a warning: nobody should
+restore 18px to protect a measurement that never depended on it. The real argument for a given size
+here is the size itself.
+
+### 12.23 · The rail card's image, and the type role that had to be invented for its title
+
+**The image is a RECORD now, not a `ReactNode` slot.** The slot read well until the caller turned
+out to be the content seam — and `navigation.ts` is a `.ts` module that cannot hold JSX, so the
+artwork had nowhere to live except a component, which is where a nav's images least belong.
+`{ src, alt, width, height }` is also simply the house contract: `Figure` established it, `PageHero`
+follows it, both render a native `<img>`. Being the one pattern with a different image shape was
+never a virtue.
+
+`public/nav/how-we-work-placeholder.svg` is a 526-byte diagrammatic stand-in — a pod, a track, a
+phase — named so it cannot be mistaken for the real thing. §11's first open item is still the real
+artwork.
+
+**And the title needed `--text-h6`, which did not exist.** Two rounds ago the title was `--text-h5`
+and I dropped it to `--text-body-lg` on a request to make it 18px. That request was about SIZE, and
+the change quietly moved three things: 22/20 → 18, **serif → sans**, and medium → regular. The card
+is a mono eyebrow above a title, and `primitives.css` states the canonical stack as *mono eyebrow →
+serif title → sans body* — so a sans title collapsed the middle of it. **Reporting only the size was
+the error**, not the size itself.
+
+The ladder had no serif step at 18: titles run 67 · 54 · 43 · 34 · 28 · 22, and text runs sans. So
+`--text-h6` was added at **18px / 1.35, display medium** — derived rather than chosen: the title
+ladder is 1.25 from 22 (22→28→34→43→54→67 all check out), and 22 ÷ 1.25 = 17.6 → 18. No breakpoint
+step, because h5's `-m` exists so 22 is not too big on a phone and 18 already sits at body scale.
+
+It closed a real gap beyond this card: `reset.css` has always counted `h6` as a heading while
+`globals.css` styled five, so a bare `<h6>` anywhere on the site fell through to the browser's bold
+0.67em default. It now has a rule, and `/design/typography` covers the role.
+
+### 12.24 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at

@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react';
-
 import type { SectionSurface } from '@/components';
 
 /**
@@ -80,17 +78,31 @@ export type SiteNavGroup = {
  * makes the rail taller than the two columns beside it, and then the plate's height is set by the
  * offer instead of by the content — which is the one thing the morph must not depend on.
  *
- * `image` is a slot, so the caller decides what fills it and this pattern never learns about
- * `next/image`. Without one the card renders title-only rather than showing an empty frame: an
- * unfilled grey rectangle in a live header reads as a broken image, not as a placeholder. The
- * proving ground and the design-sync preview both pass one, so the filled arrangement is proven.
+ * `image` is a RECORD, not a slot, and that changed on purpose. It was a `ReactNode` so the caller
+ * could decide what filled it — which read well until the caller turned out to be the content seam,
+ * and content is a `.ts` module that cannot hold JSX. The image then had nowhere to live except a
+ * component, which is where a nav's artwork least belongs.
+ *
+ * `{ src, alt, width, height }` is also simply the house contract: `Figure` established it,
+ * `PageHero` follows it, and both render a native `<img>`. Being the one pattern with a different
+ * image shape was never a virtue.
+ *
+ * Still optional. Without one the card renders title-only rather than showing an empty frame: an
+ * unfilled grey rectangle in a live header reads as a broken image, not as a placeholder.
  */
+export type SiteNavCardImage = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
 export type SiteNavCard = {
   title: string;
   href: string;
   status: SiteNavStatus;
   role: 'primary' | 'secondary';
-  image?: ReactNode;
+  image?: SiteNavCardImage;
 };
 
 /** The plate's third column. Services alone has one. */
@@ -129,9 +141,18 @@ export type SiteNavItem = {
   /** The plate's third column. `mega` only, and only where there is something to put in it. */
   rail?: SiteNavRail;
   /**
+   * The way through to the section's own index — "All services" at the foot of the plate.
+   *
+   * OPTIONAL, and it is not an oversight where it is missing. A mega's trigger opens rather than
+   * navigates, so without one of these a section with an index page has no route to it; but not
+   * every section HAS an index worth sending anyone to, and a bar that promises one and lands on a
+   * thin page is worse than no promise. Services and Insights carry one today; Expertise does not.
+   */
+  hub?: SiteNavLink;
+  /**
    * How wide the plate opens for this item.
    *
-   * The plate shrinks to its content — 1240 for Services, 880 for Expertise, 720 for Insights —
+   * The plate shrinks to its content — 1120 for Services, 780 for Expertise, 560 for Insights —
    * because a plate held at the full content width beside four short rows shows 500px of empty
    * ground, and that reads as a mistake rather than as restraint.
    *

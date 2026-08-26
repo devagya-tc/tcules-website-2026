@@ -162,6 +162,12 @@
   --font-size-h3: 34px;
   --font-size-h4: 28px;
   --font-size-h5: 22px;
+  /* The ladder's own next step down, not a value picked by eye: 22 / 1.25 = 17.6. It exists because
+     the system could express a serif title at 22 and a sans body at 18, and nothing in between —
+     so a small card's title had to choose between the wrong size and the wrong voice. It also gives
+     <h6> a role at last; reset.css has always counted it as a heading while globals.css styled
+     five. */
+  --font-size-h6: 18px;
   --font-size-quote: 28px;
   --font-size-lead: 20px;
   --font-size-body-lg: 18px;
@@ -220,6 +226,10 @@
   --line-height-h3: 1.16;
   --line-height-h4: 1.2;
   --line-height-h5: 1.28;
+  /* Continuing the trend rather than restating h5: the ratios loosen as the size drops
+     (1.2 · 1.28 · 1.35), because a shorter line needs proportionally more leading to stay
+     readable. Size and ratio are one decision and move together. */
+  --line-height-h6: 1.35;
   --line-height-quote: 1.35;
   --line-height-lead: 1.5;
   --line-height-body-lg: 1.55;
@@ -313,6 +323,13 @@
   --text-h5: var(--font-weight-medium) var(--font-size-h5)/var(--line-height-h5)
     var(--font-family-display);
   --text-h5-tracking: var(--letter-spacing-none);
+  /* Same weight and family as every title role — what makes it a title is the voice, not the size.
+     Tracking is none, as h5's is: only h4 and above are large enough for the negative correction to
+     be doing anything. NO BREAKPOINT STEP, and that is deliberate — h5 has an `-m` because 22 is
+     too big on a phone, while 18 already sits at body scale and has nowhere to go. */
+  --text-h6: var(--font-weight-medium) var(--font-size-h6)/var(--line-height-h6)
+    var(--font-family-display);
+  --text-h6-tracking: var(--letter-spacing-none);
   --text-quote: var(--font-weight-regular) var(--font-size-quote)/var(--line-height-quote)
     var(--font-family-display);
   --text-lead: var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead)

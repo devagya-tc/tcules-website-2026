@@ -25,7 +25,7 @@
    ── The ground IS here now, and that is a change ────────────────────────────────
    This file used to say a --nav-ground "would be a second name for a decision already made
    one layer down", because the panel WAS a full-bleed Section and Section paints its own
-   band. The plate is not a Section any more and cannot be one: it is 1240, 880 or 720 wide
+   band. The plate is not a Section any more and cannot be one: it is 1120, 780 or 560 wide
    depending on the section open, it carries its own border, radius and padding, and
    CLAUDE.md forbids overriding Section's content column or ground from outside. So the
    plate and the sheet paint --nav-panel-ground, which resolves to the SAME ground the
@@ -79,17 +79,29 @@
   /* ── The plate ───────────────────────────────────────────────────────────────
      THREE WIDTHS, and they are the whole reason the plate is not a Section. Services
      carries two columns and the rail and fills the content column; Expertise carries two
-     columns and no rail; Insights carries two short ones. A plate held at 1240 for all
-     three shows 360px of empty ground next to Insights, which reads as a mistake rather
-     than as restraint. T-shirt names, per the rule that a component SIZE takes an ordinal
+     columns and no rail; Insights carries two short ones. A plate held at the widest for all
+     three shows hundreds of pixels of empty ground next to Insights, which reads as a mistake
+     rather than as restraint. T-shirt names, per the rule that a component SIZE takes an ordinal
      and only a shared DISTANCE takes a role name.
 
-     lg matches --sec-max-inline (1240) on purpose: the widest plate lines up with every
-     band on the page behind it. It is stated rather than read, because a component may not
-     read another component's tokens. */
-  --nav-plate-width-lg: 1240px;
-  --nav-plate-width-md: 880px;
-  --nav-plate-width-sm: 720px;
+     ALL THREE ARE TUNED AGAINST --nav-row-text, and that is the thing to know before changing any
+     of them. At 18px rows they were 1240, 880 and 720. At 14px each left a column holding far less
+     than its track: 191px of slack in Services' first column against a 148px label, 83px in
+     Expertise, 163px in Insights — the Insights plate was better than half air. So all three came
+     down, and Services' [5,3] pane ratio came down with it so the cut lands on the columns rather
+     than on the rail (see PlatePane).
+
+     lg USED TO BE 1240 to match --sec-max-inline, so the widest plate lined up with every band on
+     the page behind it. That was worth having when the plate was full; at 14px it bought an
+     alignment nobody can see through a 20% scrim in exchange for a 255px hole between two lists.
+     The alignment is the thing that was given up here — if the row type ever goes back up, this is
+     the first decision to revisit.
+
+     Re-point the row type and all three want re-measuring: widest label in a column, doubled, plus
+     one --gap-column seam and two --gap-gutter edges. */
+  --nav-plate-width-lg: 1120px;
+  --nav-plate-width-md: 780px;
+  --nav-plate-width-sm: 560px;
   --nav-plate-radius: var(--radius-8);
   /* The air between the bar's hairline and the plate's top edge. It is a token rather than a bare
      --gap-text at the call site because TWO rules have to agree on it: the stage pads by it, and
@@ -122,22 +134,39 @@
   --nav-row-padding-block: var(--gap-tight);
   --nav-row-padding-inline: var(--gap-text);
   --nav-row-radius: var(--radius-8);
-  --nav-row-text: var(--text-body-lg);
+  /* body-sm, not body-lg. It closes the size gap to the 12px group label above a row to 2px, which
+     is deliberate and survivable only because size is the LEAST of the four things separating the
+     two: the label is mono where the row is sans, uppercase where the row is sentence case,
+     tracked open where the row is not, and a step lighter in ink. Drop any of those three and the
+     column reads flat. */
+  --nav-row-text: var(--text-body-sm);
   --nav-row-arrow-size: var(--icon-size-14);
   --nav-row-arrow-travel: var(--space-4); /* optical: the arrow slides in from -4px */
   /* The row's own line box, composed from the two halves of its type role rather than measured.
      A label long enough to wrap keeps its arrow centred on the FIRST line, and centring on a line
      means knowing how tall a line is — which the `font:` composite cannot be asked for back. */
-  --nav-row-line: calc(var(--font-size-body-lg) * var(--line-height-body-lg));
+  --nav-row-line: calc(var(--font-size-body-sm) * var(--line-height-body-sm));
 
   /* The rail — the plate's third column, in Services alone.
-     NO WIDTH TOKEN. The design measured 340px, and the arrangement is a Layout `[2, 1]` instead:
-     Layout has no fixed-track mode, and hand-rolling a grid to get one is the arrangement the
-     layout rule prohibits. At the plate's own width that resolves to 371, which is the one
-     dimension in this component that does not match the prototype — recorded in
-     docs/specs/SiteNav.md §12 rather than fixed by reaching around the primitive. */
-  --nav-rail-title-text: var(--text-h5);
-  --nav-rail-title-tracking: var(--text-h5-tracking);
+     NO WIDTH TOKEN, and the rail's width is a CONSEQUENCE rather than a decision. The design
+     measured 340px; the arrangement is a Layout ratio instead, because Layout has no fixed-track
+     mode and hand-rolling a grid to get one is what the layout rule prohibits. At `[5, 3]` and a
+     1120 plate that resolves to 308 — near enough the 340 asked for, and deliberately the term the
+     ratio HOLDS STILL when the plate narrows, since the rail is the one column whose width buys
+     something. Recorded in docs/specs/SiteNav.md §12 rather than fixed by reaching around the
+     primitive. */
+  /* h6 — 18px serif medium, the title role that did not exist until this card needed it.
+     
+     The card is the only shape in the rail and its title should be the heaviest text in the pane,
+     but h5 put it at 22 desktop / 20 mobile against 14px rows: a 1.43x step that read as a section
+     heading. Dropping it to body-lg fixed the size and broke the voice — the card is a mono eyebrow
+     above a title, and primitives.css states the canonical stack as mono eyebrow -> serif title ->
+     sans body, so a sans title collapses the middle of it. h6 is 18 AND serif, which is the pairing
+     nothing in the ladder could express before.
+
+     Its tracking companion comes back with it, because h6 has one — `none`, as h5's is. */
+  --nav-rail-title-text: var(--text-h6);
+  --nav-rail-title-tracking: var(--text-h6-tracking);
   --nav-rail-action-text: var(--text-ui-sm);
   --nav-rail-action-tracking: var(--text-ui-sm-tracking);
 
@@ -190,14 +219,56 @@
      the day someone tidies this file. */
   --nav-sheet-row-padding-block: var(--space-12);
   --nav-sheet-foot-padding-block: var(--space-12);
-  --nav-sheet-row-text: var(--text-body-lg);
-  --nav-sheet-link-padding-block: var(--space-10); /* optical: 44px row from a 24px line */
-  --nav-sheet-link-text: var(--text-body);
+  /* THE SIX ROOT ROWS sit at body — one step above the section links and the plate's rows, one
+     step below where they started.
+
+     They have no desktop counterpart to match: the same six items are the BAR up there, set in
+     --text-ui at 13 mono uppercase through Button. So this is judged on its own, and 16 is the
+     answer because it keeps a 49.6px target — well over the 44 floor — while closing the step to
+     the 14px section links to a single size, so the two levels read as one sheet.
+
+     AND SHRINKING THEM MAKES §10.7 SAFER, WHICH IS THE OPPOSITE OF WHAT IT LOOKS LIKE. The sheet is
+     anchored to the bottom of the viewport, so shorter rows make it shorter, which moves its top
+     edge DOWN and every row further below the screen's midpoint. An earlier note here claimed the
+     52px height was what kept the six below the line; that was backwards, and it is written out
+     here so nobody restores 18px to protect a measurement that never depended on it. */
+  --nav-sheet-row-text: var(--text-body);
+  /* A section-pane link. body-sm to match the plate's rows — the two are the same thing at two
+     sizes of screen, and a destination that is 14px on the desktop and 16px on a phone is two
+     decisions where there should be one.
+
+     THE PADDING MOVED WITH THE TYPE, and it had to. body-sm's line box is 21.7 against body's
+     25.6, so holding --space-10 would have taken this row to 41.7 and put it under the 44px touch
+     floor — the one measurement a phone list may not lose. --space-12 lands it at 45.7. The two
+     values are one decision: re-point the type and re-derive the padding from (44 - line) / 2. */
+  --nav-sheet-link-padding-block: var(--space-12);
+  --nav-sheet-link-text: var(--text-body-sm);
   --nav-sheet-back-text: var(--text-ui-sm);
   --nav-sheet-back-tracking: var(--text-ui-sm-tracking);
   --nav-sheet-chevron-size: var(--icon-size-16);
   --nav-grab-width: 36px;
   --nav-grab-height: 4px;
+
+  /* ── Swipe to dismiss ────────────────────────────────────────────────────────
+     The distance a downward drag has to cover before releasing dismisses rather than snaps back,
+     and the flick that dismisses regardless of distance.
+
+     56 is a deliberate literal and not a gap step: it is the shortest travel that cannot be a
+     mis-tap or the slop of a thumb reaching for a row — around a row and a quarter — while still
+     being well under the shortest sheet this component produces. The velocity gate is what makes a
+     fast flick work without asking for the full distance, which is the difference between a sheet
+     that feels attached to the finger and one that argues with it.
+
+     --nav-drag-slop is the movement allowed before a gesture is claimed as a drag at all. Under it
+     nothing happens and a tap stays a tap; over it the sheet takes the pointer and the click that
+     would have followed is suppressed. */
+  --nav-sheet-dismiss-distance: 56px;
+  --nav-sheet-dismiss-velocity: 0.4; /* px per ms, unitless on purpose — read in JS, not CSS */
+  /* A flick still has to GO somewhere. Velocity alone, gated only by the slop, meant a fast 9px
+     twitch threw the sheet away — the thumb barely moved and the navigation vanished. 24 is far
+     enough to be a deliberate downward gesture and still well short of the 56 a slow drag needs. */
+  --nav-sheet-dismiss-flick-distance: 24px;
+  --nav-drag-slop: var(--space-8);
 
   /* Row entrance. 40ms lands inside the 36–50 the design asked for; the count is capped in
      the component, because a cap is a rule about a list rather than a value on an element. */

@@ -3,7 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import type { CSSProperties, FocusEvent, KeyboardEvent, PointerEvent } from 'react';
+import type {
+  CSSProperties,
+  FocusEvent,
+  KeyboardEvent,
+  MouseEvent,
+  PointerEvent,
+} from 'react';
 
 import { Button, Cluster, Icon, Layout, Logo, Section } from '@/components';
 import { isActivePath } from '@/lib/activePath';
@@ -67,6 +73,17 @@ const STAGGER_CAP = 10;
 
 /** Everything the browser will put a Tab stop on, inside a pane. */
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/* ── Swipe to dismiss ──────────────────────────────────────────────────────────
+   Mirrors --nav-sheet-dismiss-* and --nav-drag-slop in nav.css. They live there because they are
+   this component's geometry and that file is where its literals are argued; they are duplicated
+   here because a pointer handler cannot read a custom property without a getComputedStyle per
+   frame, which is a worse trade than two numbers that have to agree. If you change one, change
+   both — the token carries the reasoning. */
+const DRAG_SLOP = 8;
+const DISMISS_DISTANCE = 56;
+const DISMISS_VELOCITY = 0.4;
+const DISMISS_FLICK_DISTANCE = 24;
 
 type NavState = {
   /** The path this state was set on. See the note in the component. */
@@ -164,8 +181,23 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
   const plateRef = useRef<HTMLDivElement>(null);
   const grabRef = useRef<HTMLSpanElement>(null);
   const rootListRef = useRef<HTMLDivElement>(null);
+  const headRef = useRef<HTMLDivElement>(null);
+  const sectionBodyRef = useRef<HTMLDivElement>(null);
   const footRef = useRef<HTMLDivElement>(null);
   const hoverTimer = useRef<number | null>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  /**
+   * The gesture in progress. `claimed` flips once the pointer has travelled past the slop, which is
+   * the moment the sheet takes the gesture over — before that it is still possibly a tap.
+   */
+  const gesture = useRef<{
+    id: number;
+    startY: number;
+    lastY: number;
+    lastT: number;
+    velocity: number;
+    claimed: boolean;
+  } | null>(null);
 
   /* React-generated, so two SiteNavs on one page (the proving ground renders four) cannot collide
      on the ids that wire aria-controls to their panes. */
@@ -183,6 +215,9 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
      than measured once, because a web font landing after first paint changes both. */
   const [paneBlocks, setPaneBlocks] = useState<Record<string, number>>({});
   const [sheetBlock, setSheetBlock] = useState<number | null>(null);
+  const [sectionBlocks, setSectionBlocks] = useState<Record<string, number>>({});
+  /** How far the sheet is currently pulled down, in px. 0 unless a finger is on it. */
+  const [drag, setDrag] = useState(0);
 
   /* The pane the plate is currently SHAPED to. `lastPlate` rather than `plate`, so a close is a
      fade at the size it already had rather than a resize on the way out. */
@@ -199,6 +234,9 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
    * is a 2px line that then snaps open. A frame of nothing is better than a frame of wrong.
    */
   const plateOpen = plateKey !== null && shownBlock > 0;
+
+  /* The open section's hugging height, or null before it has been measured. */
+  const sectionHug = (lastSection && sectionBlocks[lastSection]) || null;
 
   useEffect(() => {
     const panes = plateRef.current?.querySelectorAll<HTMLElement>('[data-pane]');
@@ -254,6 +292,37 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
     parts.forEach((part) => part && observer.observe(part));
     return () => observer.disconnect();
   }, []);
+
+  /**
+   * And the same sum again for a SECTION, which hugs too.
+   *
+   * The sheet's own idiom is to hug: the root level already does. A section pane that forced itself
+   * to the full height was the last place in this component where a surface was taller than what
+   * was in it — Insights sat 67px short of its own bottom edge — and it needed no special case to
+   * fix, only the same `min(hug, full)` the root uses. Services and Expertise overrun the cap and
+   * behave exactly as before.
+   *
+   * Keyed on the open section rather than mounted once: the body remounts per section, so both the
+   * element to measure and the number to store change together.
+   */
+  useEffect(() => {
+    const key = lastSection;
+    const body = sectionBodyRef.current;
+    const parts = [grabRef.current, headRef.current, footRef.current];
+    if (!key || !body || parts.some((part) => part === null)) return;
+
+    const measure = () => {
+      const block =
+        parts.reduce((total, part) => total + (part?.offsetHeight ?? 0), 0) + body.offsetHeight;
+      if (block <= 0) return;
+      setSectionBlocks((current) => (current[key] === block ? current : { ...current, [key]: block }));
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(body);
+    return () => observer.disconnect();
+  }, [lastSection]);
 
   /* ── Closing ──────────────────────────────────────────────────────────────── */
   const closePlate = useCallback(() => setNav({ plate: null }), [setNav]);
@@ -322,6 +391,105 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
     if (event.pointerType !== 'mouse') return;
     clearIntent();
     closePlate();
+  };
+
+  /* ── Swipe the sheet away ─────────────────────────────────────────────────────
+     A bottom sheet with a grab handle promises a gesture, and until now the handle was decoration.
+     Swiping down dismisses the whole thing — sheet and section together — rather than stepping back
+     a level: the gesture means "put this away", and Back already means "up one".
+
+     WHERE A DRAG MAY START is the whole design of this. The handle and the header always, because
+     they carry `touch-action: none` and are what the affordance points at. The list as well, but
+     only when it is already scrolled to the top and only downward — otherwise a swipe meant to
+     scroll would throw the sheet off the screen. Anything else, and any upward move, is left alone.
+
+     A drag is not CLAIMED until the pointer has passed the slop. Under it the gesture is still a
+     tap and a link still navigates; over it the sheet takes the pointer, and the click that would
+     otherwise follow on release is swallowed in `onSheetClickCapture` — without that, flicking the
+     sheet away from a row would dismiss it and then navigate to that row. */
+  /* Armed the instant a drag is claimed and consumed by the first click after it, so a flick that
+     starts on a row dismisses the sheet without also following that row's link. */
+  const swallowClick = useRef(false);
+
+  const scrollerAtTop = (target: EventTarget | null) => {
+    const scroller = (target as HTMLElement | null)?.closest<HTMLElement>(
+      `.${styles.sheetInner}, .${styles.sheetPaneRoot}`,
+    );
+    return scroller ? scroller.scrollTop <= 0 : false;
+  };
+
+  const onSheetPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (!sheetOpen || gesture.current) return;
+    const target = event.target as HTMLElement | null;
+    const fromHandle = Boolean(target?.closest(`.${styles.grabRail}, .${styles.sheetHead}`));
+    if (!fromHandle && !scrollerAtTop(target)) return;
+
+    gesture.current = {
+      id: event.pointerId,
+      startY: event.clientY,
+      lastY: event.clientY,
+      lastT: event.timeStamp,
+      velocity: 0,
+      claimed: false,
+    };
+  };
+
+  const onSheetPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    const current = gesture.current;
+    if (!current || current.id !== event.pointerId) return;
+
+    const dy = event.clientY - current.startY;
+    const dt = event.timeStamp - current.lastT;
+    if (dt > 0) current.velocity = (event.clientY - current.lastY) / dt;
+    current.lastY = event.clientY;
+    current.lastT = event.timeStamp;
+
+    if (!current.claimed) {
+      /* Upward first means this was a scroll, not a dismissal. Let it go and do not look again. */
+      if (dy < 0) {
+        gesture.current = null;
+        return;
+      }
+      if (dy < DRAG_SLOP) return;
+      current.claimed = true;
+      swallowClick.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+
+    /* Clamped at 0: the sheet is content-sized, so there is nothing above its own top edge to
+       reveal by dragging up, and letting it go negative would lift it off the viewport floor. */
+    setDrag(Math.max(0, dy));
+  };
+
+  const cancelGesture = () => {
+    gesture.current = null;
+    swallowClick.current = false;
+    setDrag(0);
+  };
+
+  const endGesture = (event: PointerEvent<HTMLDivElement>) => {
+    const current = gesture.current;
+    if (!current || current.id !== event.pointerId) return;
+    gesture.current = null;
+
+    if (!current.claimed) return;
+    const travelled = Math.max(0, event.clientY - current.startY);
+    /* A flick has to travel as well as move fast. Gated on the slop alone, a 9px twitch at speed
+       dismissed the sheet — the thumb barely moved and the navigation was gone. */
+    const flicked = current.velocity > DISMISS_VELOCITY && travelled > DISMISS_FLICK_DISTANCE;
+
+    setDrag(0);
+    if (travelled > DISMISS_DISTANCE || flicked) setNav({ sheet: false, section: null });
+  };
+
+  /* Capture, so it runs before the row's own handler. Only fires for a gesture that was claimed,
+     and only once — `drag` is already back to 0 by then, so the flag is the gesture ref being
+     consumed above plus this one-shot guard. */
+  const onSheetClickCapture = (event: MouseEvent<HTMLDivElement>) => {
+    if (!swallowClick.current) return;
+    swallowClick.current = false;
+    event.preventDefault();
+    event.stopPropagation();
   };
 
   /* ── Keyboard entry into the plate ────────────────────────────────────────────
@@ -554,10 +722,24 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
       />
       <div
         id={sheetId}
+        ref={sheetRef}
         className={styles.sheet}
         data-open={sheetOpen || undefined}
+        data-dragging={drag > 0 || undefined}
         data-level={section ? 'section' : 'root'}
-        style={sheetBlock === null ? undefined : vars({ '--nav-sheet-block': `${sheetBlock}px` })}
+        onPointerDown={onSheetPointerDown}
+        onPointerMove={onSheetPointerMove}
+        onPointerUp={endGesture}
+        onPointerCancel={cancelGesture}
+        onClickCapture={onSheetClickCapture}
+        /* Each is emitted only once measured. The stylesheet defaults the section height to the
+           full cap, so an unmeasured frame renders the old force-filled behaviour rather than a
+           sheet collapsed to nothing. */
+        style={vars({
+          ...(sheetBlock === null ? {} : { '--nav-sheet-block': `${sheetBlock}px` }),
+          ...(sectionHug === null ? {} : { '--nav-sheet-section-block': `${sectionHug}px` }),
+          ...(drag === 0 ? {} : { '--nav-sheet-drag': `${drag}px` }),
+        })}
         inert={!sheetOpen}
       >
         <span ref={grabRef} className={styles.grabRail}>
@@ -599,7 +781,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
           </div>
 
           <div className={cx(styles.sheetPane, styles.sheetPaneSection)} inert={section === null}>
-            <div className={styles.sheetHead}>
+            <div ref={headRef} className={styles.sheetHead}>
               <button
                 type="button"
                 className={styles.sheetBack}
@@ -610,10 +792,15 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
               </button>
               <span className={styles.sheetTitle}>{sheetSection?.label}</span>
             </div>
-            {/* Keyed on the section, so the row entrance replays for each one rather than running
-                once for whichever section happened to open first. */}
-            <div key={sheetSection?.key} className={styles.sheetInner}>
-              {sheetSection ? <SheetPane item={sheetSection} /> : null}
+            {/* The scroll container is stable so its ref survives a section change; the BODY is
+                keyed, so the row entrance replays for each section rather than running once for
+                whichever opened first. The list's padding lives on the body rather than the
+                scroller, which is what lets the hug height be four offsetHeights and no computed
+                styles. */}
+            <div className={styles.sheetInner}>
+              <div ref={sectionBodyRef} key={sheetSection?.key} className={styles.sheetBody}>
+                {sheetSection ? <SheetPane item={sheetSection} /> : null}
+              </div>
             </div>
           </div>
         </div>
@@ -655,12 +842,19 @@ function PlatePane({ item }: { item: SiteNavItem }) {
   const primary = item.rail?.cards.filter((card) => card.role === 'primary') ?? [];
   const secondary = item.rail?.cards.filter((card) => card.role === 'secondary') ?? [];
 
-  return (
-    /* [2,1] with a `column` seam, which is what puts the rail beside the two link columns rather
+  const body = (
+    /* [5,3] with a `column` seam, which is what puts the rail beside the two link columns rather
        than a fixed 340 track — Layout has no fixed-track mode, and a local grid to get one would
-       be the hand-rolled arrangement the layout rule prohibits. At the plate's own width the rail
-       lands at 371 rather than the prototype's 340; see docs/specs/SiteNav.md §12. */
-    <Layout columns={item.rail ? [2, 1] : undefined} colGap="column" rowGap="stack">
+       be the hand-rolled arrangement the layout rule prohibits.
+
+       FIVE-TO-THREE RATHER THAN TWO-TO-ONE, and the ratio is doing one job: holding the rail still
+       while the plate narrows. At 14px rows the plate came down from 1240 to 1120, and under [2,1]
+       that cut would have fallen on the rail too — content 307 to 266, shrinking the one element
+       whose width buys something, its 16:7 image slot. At [5,3] the rail lands back on 307 and the
+       120px comes entirely off the two link columns, whose tracks go 339 to 277 against a longest
+       label of 230. The rail's own width is a CONSEQUENCE of this ratio, which is why there is no
+       --nav-rail-width token; see docs/specs/SiteNav.md §12. */
+    <Layout columns={item.rail ? [5, 3] : undefined} colGap="column" rowGap="stack">
       <Layout columns={2} colGap="column" rowGap="stack">
         {groups.map((group) => (
           <Layout key={group.label} rowGap="block">
@@ -697,6 +891,37 @@ function PlatePane({ item }: { item: SiteNavItem }) {
       ) : null}
     </Layout>
   );
+
+  if (!item.hub) return body;
+
+  return (
+    /* Nested, so the seam between the columns and the hub bar is a `stack` beat this Layout owns
+       rather than a margin the bar sets on itself. The bar's own hairline and the air under it are
+       paint and padding — inside the box, so neither is the child spacing the layout rule forbids.
+       No token for that 16: a name whose only job is to rename --gap-text is the --sec-gap mistake
+       the token rules already made once. */
+    <Layout rowGap="stack">
+      {body}
+      {/* A Cluster of one, so the control stays content-sized — a bare grid child stretches to its
+          track, and a full-width link emphasis reads as a rule rather than as a link.
+
+          Button rather than a fifth hand-rolled anchor. It brings the mono case, the padding, the
+          arrow slot and the focus ring already decided, which is the whole argument: the one row in
+          this component that was hand-rolled is the one that shipped 6px out of alignment. */}
+      <Cluster className={styles.hubBar}>
+        <Button
+          as={Link}
+          href={item.hub.href}
+          emphasis="link"
+          tone="neutral"
+          size="sm"
+          icon={<Icon name="arrow-right" />}
+        >
+          {item.hub.label}
+        </Button>
+      </Cluster>
+    </Layout>
+  );
 }
 
 /**
@@ -709,7 +934,21 @@ function PlatePane({ item }: { item: SiteNavItem }) {
 function RailCard({ card }: { card: SiteNavCard }) {
   return (
     <Link href={card.href} className={styles.card}>
-      {card.image ? <span className={styles.cardImage}>{card.image}</span> : null}
+      {card.image ? (
+        <span className={styles.cardImage}>
+          {/* A native <img>, per the contract Figure established and PageHero follows — there is no
+              Image primitive in this repo and no next/image precedent in a pattern. The slot holds
+              the ratio and the crop; the intrinsic size is here only so the browser can reserve the
+              box before the file arrives. */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- accepted native-image contract */}
+          <img
+            src={card.image.src}
+            alt={card.image.alt}
+            width={card.image.width}
+            height={card.image.height}
+          />
+        </span>
+      ) : null}
       <span className={styles.cardTitle}>
         <span>{card.title}</span>
         <Icon name="arrow-right" className={styles.cardArrow} />
@@ -721,8 +960,11 @@ function RailCard({ card }: { card: SiteNavCard }) {
 /**
  * One section inside the sheet. The same groups, as type only.
  *
- * The hub link ("All services") and the audit card are both gone from here: the sheet's sticky
- * foot already carries both offers, and the same offer twice in one pane is one offer too many.
+ * The hub link is here, at the end of the scrolling list, exactly as it is at the foot of the
+ * plate. The audit card is not: the sticky foot already carries that offer, and the same offer
+ * twice in one pane is one offer too many. Those were one bullet in the spec and they are two
+ * different decisions — the card duplicates something, the hub link duplicates nothing.
+ *
  * Rows carry no glyphs — the settled direction dropped them, and a glyph nobody drew is a
  * placeholder shipped.
  */
@@ -775,6 +1017,28 @@ function SheetPane({ item }: { item: SiteNavItem }) {
             </div>
           ))}
         </Layout>
+      ) : null}
+
+      {/* Inside the scrolling list rather than pinned beside the two actions in the foot. It is a
+          way through, not an offer, and the foot is where the offers live — parking it there would
+          make three actions compete in the one strip a thumb can reach. Last in the stagger, so it
+          arrives after the rows it is the end of. */}
+      {item.hub ? (
+        <Cluster
+          className={cx(styles.hubBar, styles.stagger)}
+          style={vars({ '--i': Math.min(position++, STAGGER_CAP) })}
+        >
+          <Button
+            as={Link}
+            href={item.hub.href}
+            emphasis="link"
+            tone="neutral"
+            size="sm"
+            icon={<Icon name="arrow-right" />}
+          >
+            {item.hub.label}
+          </Button>
+        </Cluster>
       ) : null}
     </Layout>
   );

@@ -62,6 +62,7 @@ const SERVICES: SiteNavItem = {
      here beside the paths it owns outside its family. Without `/services` the bar would sit
      unlit on the page the section is named after. */
   matchPaths: [ROUTES.services, ROUTES.audits, ROUTES.howWeWork],
+  hub: { label: 'All services', href: ROUTES.services, status: 'planned' },
   panelWidth: 'lg',
   groups: [
     {
@@ -99,9 +100,22 @@ const SERVICES: SiteNavItem = {
   rail: {
     label: 'Working together',
     cards: [
-      /* No `image` yet. The card renders title-only rather than showing an empty frame — see the
-         note on SiteNavCard. The artwork is the spec's open item, not a missing prop. */
-      { title: 'How We Work', href: ROUTES.howWeWork, status: 'planned', role: 'primary' },
+      /* A PLACEHOLDER, and named so it cannot be mistaken for the real thing: the artwork for this
+         card is still the spec's first open item. It is diagrammatic on purpose — a pod, a track and
+         a phase — so it reads as a stand-in rather than as a photograph nobody chose. Swap the file
+         and the alt together; the ratio and the crop belong to the slot, not to the asset. */
+      {
+        title: 'How We Work',
+        href: ROUTES.howWeWork,
+        status: 'planned',
+        role: 'primary',
+        image: {
+          src: '/nav/how-we-work-placeholder.svg',
+          alt: '',
+          width: 480,
+          height: 210,
+        },
+      },
       { title: 'Request Free Audit', href: ROUTES.audits, status: 'planned', role: 'secondary' },
     ],
   },
@@ -113,8 +127,12 @@ const SERVICES: SiteNavItem = {
    groups now — the previous shape made the first a set of promise rows and the second a rail,
    which is two treatments for one kind of thing.
 
-   No rail, so the plate narrows to 880. Public Sector and Regulated Industries is struck in the
-   content doc and is not here. */
+   No rail, so the plate narrows to 780. Public Sector and Regulated Industries is struck in the
+   content doc and is not here.
+
+   AND NO HUB LINK, unlike Services and Insights. That is a decision rather than an omission: it is
+   the one mega whose index page nobody has asked to send people to. Add `hub` here the day
+   /expertise is worth landing on. */
 const EXPERTISE: SiteNavItem = {
   key: 'expertise',
   label: 'Expertise',
@@ -148,7 +166,7 @@ const EXPERTISE: SiteNavItem = {
 };
 
 /* ── Insights ─────────────────────────────────────────────────────────────────────
-   Formats, then the things that are not a format. Four and four, so the plate narrows to 720 — the
+   Formats, then the things that are not a format. Four and four, so the plate narrows to 560 — the
    smallest of the three, and the reason the plate has three widths at all.
 
    Research and Series are struck, as is the whole third group (Current, Rising Topics, Latest
@@ -159,6 +177,7 @@ const INSIGHTS: SiteNavItem = {
   label: 'Insights',
   form: 'mega',
   matchPaths: [ROUTES.insights, ROUTES.glossary, ROUTES.tools],
+  hub: { label: 'All insights', href: ROUTES.insights, status: 'planned' },
   panelWidth: 'sm',
   groups: [
     {

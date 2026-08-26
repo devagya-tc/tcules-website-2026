@@ -50,6 +50,13 @@ h5 {
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
 }
+/* The sixth, which had no rule until --text-h6 existed. Before this a bare <h6> anywhere on the
+   site fell through to the browser default — bold, 0.67em, the wrong family — while its five
+   siblings were on the ladder. */
+h6 {
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+}
 
 /* Links take the section layer's link roles, so a link inside any band lifts to a legible step
    without knowing where it is. Section speaks ground/ink rather than bg/fg — that register is

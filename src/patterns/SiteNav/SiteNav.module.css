@@ -124,7 +124,7 @@
 
    IT IS AN INLINE-SIZE CONTAINER, and that is what makes the plate's height trustworthy. The panes
    used to be clamped by `max-inline-size: 100%` of the plate, so while the 720 Insights pane was
-   open the 1240 Services pane laid out 720 wide, wrapped to nearly twice its real height, and that
+   open the widest Services pane laid out at Insights' width, wrapped to nearly twice its real height, and that
    height went into the measurement cache — leaving the plate 86px taller than its content the next
    time Services opened. Sizing both the plate AND every pane against `100cqi` — the stage's own
    content width — means a pane's width no longer depends on which section happens to be showing,
@@ -199,7 +199,7 @@
    morph. `overflow: hidden` is what makes the cross-slide read as one container rather than three
    panes flying past each other, and it is also why the SCROLLING lives on the pane below.
 
-   `max-inline-size: 100%` matters between 1024 and 1304, where the widest plate is wider than the
+   The container clamp below matters between 1024 and 1184, where the widest plate is wider than the
    viewport it has to sit inside. No shadow — see docs/specs/SiteNav.md §10. */
 .plate {
   --nav-plate-block: var(--space-0);
@@ -230,7 +230,7 @@
 
 /* One width per section, shared by the plate and by the pane that fills it, and clamped against
    the STAGE rather than against each other — `100cqi` is the stage's content width, so a pane is
-   the width it will be rendered at whether or not it is the one showing. Between 1024 and 1304 the
+   the width it will be rendered at whether or not it is the one showing. Between 1024 and 1184 the
    widest plate is wider than the viewport it has to sit in, and this is what handles that without
    making one pane's measurement depend on another pane's turn. */
 .plate[data-width='lg'],
@@ -363,6 +363,14 @@
   transform: none;
 }
 
+/* The way through to the section's index, at the foot of the plate. The rule is what makes it read
+   as the end of the pane rather than as a nineteenth destination; the air under the rule is the
+   bar's own padding, and the beat above it belongs to the Layout that holds both. */
+.hubBar {
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+  padding-block-start: var(--gap-text);
+}
+
 /* ── The rail ──────────────────────────────────────────────────────────────────
    Its hairline is what makes two halves read as two halves. The inset is the air between that rule
    and the rail's own content, which is why the plate's column seam is `column` rather than
@@ -480,6 +488,8 @@
 
 .sheet {
   --nav-sheet-block: var(--space-0);
+  --nav-sheet-section-block: var(--nav-sheet-block-full);
+  --nav-sheet-drag: var(--space-0);
 
   position: fixed;
   inset-inline: 0;
@@ -500,14 +510,45 @@
     block-size var(--nav-sheet-surface) var(--nav-transition-easing);
 }
 
+/* PLUS THE SHEET'S OWN TOP HAIRLINE, in both rules below. Both measured values are sums of border
+   boxes and this element is border-box too, so handing either over raw left the content box one
+   hairline short — enough to make the list scrollable by 1px at a height that was supposed to fit
+   it exactly. The same arithmetic the plate needs, and one border rather than two because
+   `border-block-end` is zeroed above. */
 .sheet[data-open] {
-  block-size: min(var(--nav-sheet-block), var(--nav-sheet-block-full));
-  transform: none;
+  block-size: min(
+    calc(var(--nav-sheet-block) + var(--nav-rule-width)),
+    var(--nav-sheet-block-full)
+  );
+  transform: translateY(var(--nav-sheet-drag));
   pointer-events: auto;
 }
 
+/* While a finger is on it the sheet is under direct manipulation, so every transition comes off —
+   a 420ms ease between frames of a drag is the sheet arguing with the thumb. `will-change` is worth
+   its cost here for exactly the length of the gesture and is dropped with the attribute. */
+.sheet[data-dragging] {
+  transition: none;
+  will-change: transform;
+}
+
+/* The two places a drag may always begin. `touch-action: none` on these and nowhere else is what
+   guarantees the gesture: the browser hands us the pointer instead of deciding to scroll with it,
+   and because it is scoped to the handle and the header the list below keeps its own panning
+   intact. A drag from the list is allowed too, but only at scrollTop 0 and only downward — see
+   onSheetPointerDown. */
+.grabRail,
+.sheetHead {
+  touch-action: none;
+}
+
+/* A section hugs too, capped the same way the root is. Defaulted to the full cap above, so a frame
+   before the measurement lands renders the old force-filled height rather than a collapsed sheet. */
 .sheet[data-open][data-level='section'] {
-  block-size: var(--nav-sheet-block-full);
+  block-size: min(
+    calc(var(--nav-sheet-section-block) + var(--nav-rule-width)),
+    var(--nav-sheet-block-full)
+  );
 }
 
 /* The grab handle sits in its own padded row rather than carrying a margin, so the sheet's hugging
@@ -520,6 +561,7 @@
 }
 
 .grab {
+  cursor: grab;
   inline-size: var(--nav-grab-width);
   block-size: var(--nav-grab-height);
   border-radius: var(--radius-full);
@@ -564,7 +606,19 @@
   flex: 1 1 auto;
   min-block-size: 0;
   overflow-y: auto;
-  padding: var(--gap-tight) var(--nav-sheet-padding-inline) var(--gap-gutter);
+}
+
+/* The list's air sits here rather than on the scroller above, so the section's hugging height is a
+   sum of border boxes and needs no computed padding read back out of the DOM.
+
+   THE TOP STEP IS `block`, NOT `tight`, and the reason is hierarchy rather than roominess. At
+   `tight` the first group label sat 8px under the header's rule and 8px above its own first link —
+   equidistant, so it read as floating between two things instead of heading the list beneath it,
+   which is what made the eyebrow hard to parse. At `block` it is three times closer to its list
+   than to the rule, and the header now costs the same beat as any other group boundary in the
+   pane — which is what it is. */
+.sheetBody {
+  padding: var(--gap-block) var(--nav-sheet-padding-inline) var(--gap-gutter);
 }
 
 /* Root rows are separated by a rule rather than by air: at six rows in a sheet this short,
@@ -667,6 +721,21 @@
 
 .sheetGroup {
   list-style: none;
+}
+
+/* A RULE BETWEEN GROUPS, and the 1b mobile prototype already settled this: "groups are separated by
+   a rule, not by whitespace alone — with six links each, spacing on its own was not enough to read
+   as a break". Stacked one above another, 24px of air between the end of six links and the next
+   label does not say "new group" the way two side-by-side columns do on the plate, which is why
+   this exists here and has no counterpart in PlatePane.
+
+   `border` and `padding` rather than a margin: the beat above the rule is the parent Layout's
+   `block` step, and the beat below it is this element's own padding — so the seam is 24, rule, 24
+   and no child sets its own outer spacing. It applies to the rail's block as well as the link
+   groups, because "Working together" is a group boundary too. */
+.sheetGroup + .sheetGroup {
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+  padding-block-start: var(--gap-block);
 }
 
 .sheetLabel {
