@@ -782,14 +782,22 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
 
           <div className={cx(styles.sheetPane, styles.sheetPaneSection)} inert={section === null}>
             <div ref={headRef} className={styles.sheetHead}>
-              <button
-                type="button"
+              {/* A Button, not a bespoke <button>. It was hand-rolled and set a MONO role in
+                  sentence case — "Menu" in Geist Mono with the tracking opened, which §8 names as
+                  the failure that makes a label read as letter-spaced body text. Button takes the
+                  case from --text-mono-case, so the fix is structural rather than a transform
+                  bolted on, and it arrives with the focus ring and pressed state already decided.
+                  `iconLeft`, because the glyph names the direction rather than the destination. */}
+              <Button
                 className={styles.sheetBack}
+                emphasis="link"
+                tone="primary"
+                size="sm"
+                iconLeft={<Icon name="arrow-left" />}
                 onClick={() => setNav({ section: null })}
               >
-                <Icon name="arrow-left" className={styles.sheetBackIcon} />
                 Menu
-              </button>
+              </Button>
               <span className={styles.sheetTitle}>{sheetSection?.label}</span>
             </div>
             {/* The scroll container is stable so its ref survives a section change; the BODY is
@@ -843,19 +851,35 @@ function PlatePane({ item }: { item: SiteNavItem }) {
   const secondary = item.rail?.cards.filter((card) => card.role === 'secondary') ?? [];
 
   const body = (
-    /* [5,3] with a `column` seam, which is what puts the rail beside the two link columns rather
-       than a fixed 340 track — Layout has no fixed-track mode, and a local grid to get one would
-       be the hand-rolled arrangement the layout rule prohibits.
+    /* Two nested Layouts, and the two seams are DIFFERENT STEPS on purpose.
 
-       FIVE-TO-THREE RATHER THAN TWO-TO-ONE, and the ratio is doing one job: holding the rail still
-       while the plate narrows. At 14px rows the plate came down from 1240 to 1120, and under [2,1]
-       that cut would have fallen on the rail too — content 307 to 266, shrinking the one element
-       whose width buys something, its 16:7 image slot. At [5,3] the rail lands back on 307 and the
-       120px comes entirely off the two link columns, whose tracks go 339 to 277 against a longest
-       label of 230. The rail's own width is a CONSEQUENCE of this ratio, which is why there is no
-       --nav-rail-width token; see docs/specs/SiteNav.md §12. */
-    <Layout columns={item.rail ? [5, 3] : undefined} colGap="column" rowGap="stack">
-      <Layout columns={2} colGap="column" rowGap="stack">
+       The OUTER seam is `gutter` (32), not `column`. The rail draws a hairline on its own leading
+       edge and insets its content by another 32, so 32 + rule + 32 lands the whole thing at the 64
+       a `column` seam would have given, with the rule in the middle of it — which is what the
+       pre-rebuild design documented and what the rebuild lost by using `column` on both sides. That
+       put 129px between the second column's track and the rail's content, and 177 between its last
+       label and the same point: a quarter of the plate spent on one gap.
+
+       The INNER seam is `gutter` (32) as well. Those two are peer groups rather than two halves that
+       must read apart — the rail is the thing this pane genuinely divides, and it has a rule to say
+       so. One caveat lives with it: a row's hover fill extends --nav-row-padding-inline past its
+       track on both sides, so a 32 seam leaves 16px between a lit fill and the next column's text
+       where 64 left 48. Tight, and checked; do not tighten it further without re-measuring that.
+
+       NINE-TO-FIVE, and the ratio does one job: holding the rail still while everything else moves.
+       Under [2,1] the plate's cuts fall on the rail too — it would sit at 287 here — shrinking the
+       one element whose width buys anything, its 16:7 image slot. At [9,5] the rail holds ~310 and
+       the columns hold ~276 against a longest label of 230. The rail's width is a CONSEQUENCE of
+       this ratio, which is why there is still no --nav-rail-width token; see
+       docs/specs/SiteNav.md §12. */
+    <Layout columns={item.rail ? [9, 5] : undefined} colGap="gutter" rowGap="stack">
+      {/* Equal unless the item says otherwise — see SiteNavItem.columnRatio. Spread, because Layout
+          takes a mutable number[] and the prop is a readonly tuple so a caller cannot mutate it. */}
+      <Layout
+        columns={item.columnRatio ? [...item.columnRatio] : 2}
+        colGap="gutter"
+        rowGap="stack"
+      >
         {groups.map((group) => (
           <Layout key={group.label} rowGap="block">
             <p className={styles.groupLabel}>{group.label}</p>
@@ -880,11 +904,24 @@ function PlatePane({ item }: { item: SiteNavItem }) {
             {primary.map((card) => (
               <RailCard key={card.href} card={card} />
             ))}
+            {/* Wrapped the way the hub link is: the rule and the air above it stay on the Cluster,
+                so the control itself is just a control. Button brings the mono case, the focus ring
+                and the pressed step — and its own underline on hover, which replaces the sliding
+                arrow this row used to borrow from the plate's rows. That is the trade: one hover
+                language for controls, another for rows. */}
             {secondary.map((card) => (
-              <Link key={card.href} href={card.href} className={styles.railAction}>
-                <span>{card.title}</span>
-                <Icon name="arrow-right" className={styles.rowArrow} />
-              </Link>
+              <Cluster key={card.href} className={styles.railAction}>
+                <Button
+                  as={Link}
+                  href={card.href}
+                  emphasis="link"
+                  tone="primary"
+                  size="sm"
+                  icon={<Icon name="arrow-right" />}
+                >
+                  {card.title}
+                </Button>
+              </Cluster>
             ))}
           </Layout>
         </Layout>

@@ -129,7 +129,7 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `cta` | `Button` solid primary `sm` | right of the bar |
 | `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `menu` ↔ `close` |
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
-| `pane` | one per mega section | 1120 / 780 / 560px wide; two label + link columns, plus the rail in Services |
+| `pane` | one per mega section | 1056 / 780 / 560px wide; two label + link columns, plus the rail in Services |
 | `hubBar` | `Cluster` + `Button emphasis="link"` | the way through to the section index — Services and Insights only. Hairline above, `--gap-text` under it |
 | `rail` | `<aside>`, ~308px | primary card (image, `h6` title) + secondary row |
 | `scrim` | fixed box under the plate | `--nav-scrim`, below the bar. The system has no elevation token; edge, radius and scrim do the separating |
@@ -330,7 +330,7 @@ Recorded here rather than fixed silently. Nothing below changes a designed outco
 ### 12.1 · The plate cannot be a `Section`, so it owns a ground
 
 `Section` owns the content column (1240 cap, 32 gutter) and its ground, and CLAUDE.md forbids
-overriding either from outside. The plate's box is 1120 / 780 / 560 wide and carries its own
+overriding either from outside. The plate's box is 1056 / 780 / 560 wide and carries its own
 border, radius and padding — so it cannot be a `Section` and cannot inherit `--sec-ground`. It
 paints `--nav-panel-ground` instead, declared once per surface. The same token serves the mobile
 sheet, which is the same idea at another size.
@@ -368,9 +368,9 @@ panes are `inert`, so they hold no focus and take no pointer.
 ### 12.5 · The rail is a ratio, not a 340px track
 
 `Layout` has no fixed-track mode, and a local grid to get one is the hand-rolled arrangement the
-layout rule prohibits. The plate body is `Layout columns={[5, 3]} colGap="column"`, which at the
-plate's own width lands the rail at **308px rather than 340** — near enough what was asked for, and
-now the term the ratio exists to hold still (§12.10). The alternatives were both worse: fr weights chosen to
+layout rule prohibits. The plate body is `Layout columns={[9, 5]} colGap="gutter"`, which at the
+plate's own width lands the rail at **311px rather than 340** — near enough what was asked for, and
+the term the ratio exists to hold still (§12.10, §12.30). The alternatives were both worse: fr weights chosen to
 resolve to 340 at exactly one plate width (magic numbers, brittle the moment the padding or the seam moves), or
 changing a tier-1 primitive every component in the repo depends on. `--nav-rail-width` was therefore
 never added — a token with no reader is worse than no token. If 340 turns out to matter, the right
@@ -487,7 +487,9 @@ The number that decided it was not the slack but the **255px between column one'
 two's text** in Services: the 64px seam plus 191px of unused track, so a fifth of the plate was the
 gap between two lists and the two groups stopped reading as one block.
 
-**Now:** 1120 / 780 / 560, and the pane ratio `[2, 1]` → `[5, 3]`.
+**Then:** 1120 / 780 / 560, and the pane ratio `[2, 1]` → `[5, 3]`. **Now 1056**, ratio `[9, 5]` — see
+§12.30, where the rail's seam turned out to be double what the design asked for and the 64px it gave
+back came out of the plate.
 
 The ratio change is the part worth understanding. Narrowing Services under `[2, 1]` would have taken
 the 120px off the rail as well — content 307 → 266 — shrinking the one column whose width buys
@@ -638,7 +640,168 @@ It closed a real gap beyond this card: `reset.css` has always counted `h6` as a 
 `globals.css` styled five, so a bare `<h6>` anywhere on the site fell through to the browser's bold
 0.67em default. It now has a rule, and `/design/typography` covers the role.
 
-### 12.24 · Two QA items cannot be met yet, and are not faked
+### 12.25 · A link audit, and the two controls it caught
+
+Asked directly: which of the nav's links are `Button` and which are hand-rolled. The answer split
+three ways, and the middle column is the interesting one.
+
+| Element | Renders as | Verdict |
+|---|---|---|
+| Bar items, bar CTA, toggle, hub link, sheet foot CTAs | `Button` | correct |
+| Plate rows, sheet links, sheet row labels, card title | plain `<Link>` | **correctly NOT `Button`** |
+| Logo | plain `<Link>` | a mark, not a text link |
+| Rail secondary action, sheet Back | hand-rolled | **converted** |
+
+**Why the second row must stay hand-rolled.** `Button`'s link variant is mono and uppercase — its
+label runs through `--text-mono-case`. The plate's rows and the sheet's links are sentence-case
+destination names in sans ("Product Modernisation"), and §8 is explicit that a label which must stay
+sentence case is not a mono label. Making those `Button`s would uppercase the whole IA. So they are
+anchors on purpose, not by omission.
+
+**The sheet's Back control was broken, and it was mine.** It set `--nav-sheet-back-text` — a mono
+role — with no `text-transform` at all, so "Menu" rendered in Geist Mono, sentence case, tracking
+opened to 0.96px: precisely the failure §8 describes, sitting next to an uppercase "SERVICES" in the
+same header row. It is a `Button emphasis="link"` now, which takes the case from the token rather
+than from a transform bolted on.
+
+**The rail's secondary action went the same way.** Both are wrapped so the class keeps only what
+`Button` cannot know — a grid cell for Back, the rule and its air for the rail seam. Six tokens went
+with them (`--nav-rail-action-text`/`-tracking`, `--nav-rail-action-fg`/`-fg-hover` across four
+surface blocks, `--nav-sheet-back-text`/`-tracking`), because each merely restated something
+`--btn-*` had already decided. One visible trade: the rail action's hover is now `Button`'s underline
+rather than the sliding arrow it used to borrow from the rows.
+
+**And four rules wrote `text-transform: uppercase` as a literal** where §8 says the case belongs to
+`--text-mono-case`. Same pixels today; a token bypass that would not follow if the decision ever
+reversed. Fixed.
+
+### 12.26 · Three smaller answers
+
+1. **Insights and Expertise have no cards.** Services carries the only rail in the nav — one rail,
+   two cards. That is §8.2 by design. Adding one to either is not a styling change: a card needs a
+   rail, a rail needs a third column, and both plates would have to widen back out from 780/560.
+2. **The card's image-to-text gap was `--gap-tight` (8)** against the card's own 16px padding, so the
+   title sat closer to the image than to any edge and the interior read as two rhythms. It is
+   `--gap-text` (16) now, matching the padding, on both surfaces.
+3. **The logo no longer responds to hover** — and this took two goes, because there were two
+   separate effects and only one of them was in this component. See §12.28.
+
+### 12.28 · The logo's blue hover was the shell outranking the component
+
+The first attempt removed `.brand:hover { opacity: 0.7 }` and reported the logo fixed. It was not:
+the dim was a second, smaller effect, and **the blue was coming from `globals.css`**.
+
+```
+a:hover { color: var(--sec-link-ink-hover) }   /* 0-1-1 */
+.brand  { color: var(--nav-item-fg) }          /* 0-1-0 */
+```
+
+`a:hover` outranks the class, so the wordmark took Section's link blue — measured
+`rgb(0, 62, 224)` — the moment a pointer touched it, whatever `.brand` said at rest. The fix is a
+`:hover` rule that **restates the rest ink** at 0-2-0. It looks like a no-op and is the only thing
+holding the mark; the stylesheet says so, because the obvious cleanup is to delete it.
+
+**The same leak reached the rail card.** `.card:hover` set only `border-color`, so the card's title
+inherited the same blue while the border went brandeis-500 — two hover languages on one object,
+neither chosen. It now holds `--nav-title-ink` too: the edge is the whole affordance.
+
+**Audited for other instances, and there are none.** Every other anchor in the nav either declares
+its own hover colour (`.row`, `.sheetControl`, `.sheetLink`) or is a `Button`, whose
+`.link.primary.live:hover` sits at 0-4-0. `CtaSection`, `PageHero` and `Proof` all use `Button as="a"`
+and are covered by the same. `SiteFooter`'s links all declare hover colours. So the trap bit exactly
+the two hand-rolled anchors that did not.
+
+**And the general fix was then taken.** `globals.css`'s base element rules are documented as "a
+floor, not the answer", but `a:hover` is a *type + pseudo-class* selector at 0-1-1 and therefore
+outranked any single component class — so the floor was not a floor, and any future pattern that
+coloured an anchor without also colouring `:hover` would have inherited Section's link ink silently.
+Both rules are `:where(a)` / `:where(a:hover)` now, at zero specificity.
+
+**Which makes the two defences above redundant, so they are gone.** `.brand` and `.card` hold their
+ink through hover by simply declaring it once. The comments left behind say what the rules used to
+be for, because "why is there no `:hover` here" is the question a reader will have.
+
+The audit that preceded the change: every anchor in the repo carrying a colour class also carries a
+`:hover` for it, or is a `Button` (0-4-0), or is a `Prose` descendant (`.prose a` / `.prose a:hover`,
+which uses its own `--prose-link-*`). Nothing relied on the old outranking. Verified afterwards that
+a bare anchor still takes the floor at rest (`#0048ff`) and on hover (`#003ee0`), and that a Prose
+link still hovers on its own token.
+
+### 12.30 · The rail's seam was double the design's, and the rebuild did it
+
+Reported as "the space between the rail and the second group feels like more". It was: **129px** from
+the second column's track edge to the rail's content, and **177px** from its last label to the same
+point — a sixth of the plate spent on one gap.
+
+The pre-rebuild `nav.css` had already settled this, in a comment the rebuild deleted along with the
+token that carried it:
+
+> the inset is the air between that rule and the rail's own content, which is why the panel's column
+> gap is `gutter` rather than `column` (32 + rule + 32 lands at the 64 a `column` seam would have
+> given, with the rule in the middle of it)
+
+The rebuild used `column` on **both** sides — 64 + rule + 64 — so the seam was exactly twice what was
+asked for. One seam, two halves, and both have to move together; that is the thing worth remembering,
+because either half looks defensible alone.
+
+**Where the freed 64px went is the other half of the fix.** Leaving the plate at 1120 would have
+redistributed it into tracks that already had slack — the columns would have gone to ~309, taking
+column one's slack from 129 to 161 and simply moving the oversized gap between the two lists instead.
+So it came out of the plate: **1120 → 1056**, with the ratio re-derived to `[9, 5]` so the rail holds
+its width.
+
+Measured after, and the point is how little moved: seam 129 → **65**, visual 177 → **112**, column
+tracks 278 → 277, column-two slack 48 → 47, rail content 308 → 311, pane height 444 → 444, nothing
+wrapped. The gap halved and nothing else changed.
+
+### 12.31 · The seam between the two link columns, and why halving it gained half
+
+`gutter` (32) rather than `column` (64). Those two are peer groups of links, not two halves that must
+read apart — the rail is the thing this pane genuinely divides and it has a rule to say so.
+
+**Two things measured after, both worth knowing.**
+
+The visible gap between the two lists went 193 → **177**, not 193 → 161. A `Layout` seam comes out of
+the track budget, so the 32 saved was split between the two tracks: they grew 277 → 293 and column
+one's slack grew 129 → 145, giving back half the saving. **The gap between those columns is dominated
+by slack, not by the seam** — "Product Modernisation" is a 148px label in a 293px track, and equal
+tracks force column one to carry the difference however wide the seam is.
+
+And a row's hover fill extends `--nav-row-padding-inline` past its track on both sides, so the
+clearance from a lit fill to the next column's text is now **16px**, where 64 left 48. Checked, and
+tight: do not narrow this seam further without re-measuring that.
+
+### 12.32 · Unequal link columns, declared per item because the direction is not shared
+
+The gap between the two link columns is dominated by SLACK, not by the seam (§12.31): equal tracks
+force whichever group has the shorter labels to carry the difference. So the tracks are unequal now —
+`SiteNavItem.columnRatio`, omitted for equal.
+
+**One shared ratio was the obvious move and it does not work.** Measured at the shipping copy, the
+direction of the need is not consistent between sections:
+
+| Section | col 1 longest | col 2 longest | wants |
+|---|---|---|---|
+| Services | 148 "Product Modernisation" | **230** "Product Modernisation Assessment" | col 2 larger |
+| Expertise | **293** "Content, Knowledge and Discovery Platforms" | 259 "PropTech, ConTech and Field Operations" | **col 1 larger** |
+| Insights | 60 "Podcasts" | **133** "Tools and Resources" | col 2 larger |
+
+A global `[3, 4]` would have left Expertise's first column **0.1px** of clearance — a wrap waiting for
+a font to render a hair wider. So Services and Insights declare `[3, 4]`; Expertise declares nothing,
+and the fixture says why, because "no ratio here" is otherwise indistinguishable from an oversight.
+
+**Measured after.** Services 251/334, slack 103 and 104 — a 1px difference where equal tracks gave
+145 and 63; the visible gap between the two lists 177 → **135**. Insights 199/265, slack 139 and 132,
+gap 171. Expertise unchanged at 342/342, slack 49 and 83. Nothing wrapped in any section and no pane
+height moved.
+
+**The cost, stated plainly.** This is the first thing in the component tuned to the *length of the
+copy* rather than to its structure, and nothing in the build can catch it going stale: change a
+Services label and the ratio is silently wrong. It is declared rather than derived for the same
+reason `panelWidth` is — a pattern cannot count words — and the ratio is two numbers rather than two
+pixel widths, so it at least survives the plate resizing.
+
+### 12.33 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at

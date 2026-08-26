@@ -85,7 +85,10 @@
      and only a shared DISTANCE takes a role name.
 
      ALL THREE ARE TUNED AGAINST --nav-row-text, and that is the thing to know before changing any
-     of them. At 18px rows they were 1240, 880 and 720. At 14px each left a column holding far less
+     of them. At 18px rows they were 1240, 880 and 720. lg came down again, 1120 to 1056, when the
+     rail's seam was halved — the 64px that came out of the seam came out of the PLATE rather than
+     going into tracks that already had slack, which is the only way to fix an oversized gap without
+     opening another one somewhere else. At 14px each left a column holding far less
      than its track: 191px of slack in Services' first column against a 148px label, 83px in
      Expertise, 163px in Insights — the Insights plate was better than half air. So all three came
      down, and Services' [5,3] pane ratio came down with it so the cut lands on the columns rather
@@ -99,7 +102,7 @@
 
      Re-point the row type and all three want re-measuring: widest label in a column, doubled, plus
      one --gap-column seam and two --gap-gutter edges. */
-  --nav-plate-width-lg: 1120px;
+  --nav-plate-width-lg: 1056px;
   --nav-plate-width-md: 780px;
   --nav-plate-width-sm: 560px;
   --nav-plate-radius: var(--radius-8);
@@ -167,10 +170,15 @@
      Its tracking companion comes back with it, because h6 has one — `none`, as h5's is. */
   --nav-rail-title-text: var(--text-h6);
   --nav-rail-title-tracking: var(--text-h6-tracking);
-  --nav-rail-action-text: var(--text-ui-sm);
-  --nav-rail-action-tracking: var(--text-ui-sm-tracking);
 
-  /* A rail card. The image slot holds its ratio whether or not an image is supplied, so the
+  /* THE RAIL'S SECONDARY ACTION AND THE SHEET'S BACK CONTROL HAVE NO TOKENS HERE ANY MORE.
+     Both were hand-rolled links reading --nav-rail-action-* and --nav-sheet-back-*; both are
+     `Button emphasis="link"` now, so their type, case, ink, hover and focus all answer to --btn-*.
+     Six tokens went with them, including two per surface block. A component may not read another
+     component's tokens, and a token only this component could read which merely restates what
+     Button already decided is the --sec-gap mistake in a different costume.
+
+     A rail card. The image slot holds its ratio whether or not an image is supplied, so the
      rail's height does not change the day one lands. */
   --nav-card-radius: var(--radius-8);
   --nav-card-padding: var(--gap-text);
@@ -243,8 +251,6 @@
      values are one decision: re-point the type and re-derive the padding from (44 - line) / 2. */
   --nav-sheet-link-padding-block: var(--space-12);
   --nav-sheet-link-text: var(--text-body-sm);
-  --nav-sheet-back-text: var(--text-ui-sm);
-  --nav-sheet-back-tracking: var(--text-ui-sm-tracking);
   --nav-sheet-chevron-size: var(--icon-size-16);
   --nav-grab-width: 36px;
   --nav-grab-height: 4px;
@@ -311,8 +317,6 @@
   --nav-card-edge: var(--color-neutral-200);
   --nav-card-edge-hover: var(--color-brandeis-500);
   --nav-card-image-ground: var(--color-paper-deep);
-  --nav-rail-action-fg: var(--color-brandeis-500); /*  6.17:1 */
-  --nav-rail-action-fg-hover: var(--color-brandeis-600);
   --nav-link-ink: var(--color-neutral-900);
   --nav-link-ink-hover: var(--color-brandeis-500);
   --nav-grab-bg: var(--color-neutral-300);
@@ -351,8 +355,6 @@
   --nav-card-edge: var(--color-neutral-300);
   --nav-card-edge-hover: var(--color-brandeis-500);
   --nav-card-image-ground: var(--color-neutral-200);
-  --nav-rail-action-fg: var(--color-brandeis-600); /*  6.72:1 */
-  --nav-rail-action-fg-hover: var(--color-brandeis-700);
   --nav-link-ink: var(--color-neutral-900);
   --nav-link-ink-hover: var(--color-brandeis-600);
   --nav-grab-bg: var(--color-neutral-400);
@@ -396,8 +398,6 @@
   --nav-card-edge: var(--color-neutral-800);
   --nav-card-edge-hover: var(--color-brandeis-300);
   --nav-card-image-ground: var(--color-neutral-900);
-  --nav-rail-action-fg: var(--color-brandeis-300); /*  7.32:1 */
-  --nav-rail-action-fg-hover: var(--color-brandeis-200);
   --nav-link-ink: var(--color-white);
   --nav-link-ink-hover: var(--color-brandeis-300);
   --nav-grab-bg: var(--color-neutral-700);
@@ -433,8 +433,6 @@
   --nav-card-edge: var(--color-brandeis-400);
   --nav-card-edge-hover: var(--color-white);
   --nav-card-image-ground: var(--color-brandeis-600);
-  --nav-rail-action-fg: var(--color-white);
-  --nav-rail-action-fg-hover: var(--color-brandeis-50); /*  5.57:1 */
   --nav-link-ink: var(--color-white);
   --nav-link-ink-hover: var(--color-brandeis-50);
   --nav-grab-bg: var(--color-brandeis-300);

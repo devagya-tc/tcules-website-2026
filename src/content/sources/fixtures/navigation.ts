@@ -63,6 +63,10 @@ const SERVICES: SiteNavItem = {
      unlit on the page the section is named after. */
   matchPaths: [ROUTES.services, ROUTES.audits, ROUTES.howWeWork],
   hub: { label: 'All services', href: ROUTES.services, status: 'planned' },
+  /* The audits carry the long labels — "Product Modernisation Assessment" at 230px against
+     "Product Modernisation" at 148 — so the second column takes the larger share and the two end up
+     with matching slack instead of 145 and 63. Re-measure if a label changes. */
+  columnRatio: [3, 4],
   panelWidth: 'lg',
   groups: [
     {
@@ -138,6 +142,11 @@ const EXPERTISE: SiteNavItem = {
   label: 'Expertise',
   form: 'mega',
   matchPaths: [ROUTES.expertise],
+  /* NO columnRatio, and that is a measurement rather than an oversight. Expertise is the one mega
+     whose FIRST group holds the longer labels — "Content, Knowledge and Discovery Platforms" at 293
+     against "PropTech, ConTech and Field Operations" at 259 — so the [3, 4] its siblings use would
+     leave that column 0.1px of clearance and wrap it. Equal tracks already sit at 49 and 83 slack,
+     which is as balanced as this copy gets. */
   panelWidth: 'md',
   groups: [
     {
@@ -178,6 +187,8 @@ const INSIGHTS: SiteNavItem = {
   form: 'mega',
   matchPaths: [ROUTES.insights, ROUTES.glossary, ROUTES.tools],
   hub: { label: 'All insights', href: ROUTES.insights, status: 'planned' },
+  /* Same shape as Services — "Tools and Resources" against "Podcasts" — so the same ratio. */
+  columnRatio: [3, 4],
   panelWidth: 'sm',
   groups: [
     {

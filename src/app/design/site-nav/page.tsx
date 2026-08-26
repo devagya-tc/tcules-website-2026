@@ -78,7 +78,7 @@ export default async function SiteNavSpecimenPage() {
           </Layout>
 
           <Specimen
-            title="Plate · two groups and the rail — 1120"
+            title="Plate · two groups and the rail — 1056"
             note="Services, the widest of the three. Two groups of six plus the rail, which is the only one in the nav. It was 1240 to match the page’s content column, so the plate lined up with the bands behind it — at 14px rows that alignment cost a 255px hole between the two lists, so it came down to 1120 and the pane ratio moved 2:1 to 5:3 in the same edit, which is what keeps the cut on the columns (339 → 278) instead of the rail (308, unchanged). The hub link at the foot is the way through to /services: the trigger opens rather than navigates, so without it the section index has no route to it. Hover a row: direction B — a brandeis-50 fill at the row radius, the label and the arrow both taking the blue, the arrow sliding in from -4px. The fill extends past the text because the row's padding is pulled back out with a negative inset, so the label still aligns with the group label above it. The rail's secondary card is a compact row rather than a second card: a full card would make the rail taller than the columns beside it, and then the plate's height would be set by the offer instead of by the content."
           >
             <SiteNav {...only(nav, ['services'])} />
