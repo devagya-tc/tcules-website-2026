@@ -23,6 +23,10 @@ const SERVICES: SiteNavItem = {
   /* The way through to /services. A mega's trigger opens rather than navigates, so without this
      the section's own index has no route to it. Insights carries one too; Expertise does not. */
   hub: { label: 'All services', href: '/services', status: 'planned' },
+  /* The audits carry the longer labels, so the second column takes the larger share and the two end
+     up with matching slack. Declared per item because the direction differs by section — Expertise's
+     longer labels are in its FIRST group, so it deliberately has none. */
+  columnRatio: [3, 4],
   panelWidth: 'lg',
   groups: [
     {
@@ -122,6 +126,7 @@ const INSIGHTS: SiteNavItem = {
   form: 'mega',
   matchPaths: ['/insights', '/glossary', '/tools'],
   hub: { label: 'All insights', href: '/insights', status: 'planned' },
+  columnRatio: [3, 4],
   panelWidth: 'sm',
   groups: [
     {

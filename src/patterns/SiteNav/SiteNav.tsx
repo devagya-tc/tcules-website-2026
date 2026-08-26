@@ -873,7 +873,13 @@ function PlatePane({ item }: { item: SiteNavItem }) {
        this ratio, which is why there is still no --nav-rail-width token; see
        docs/specs/SiteNav.md §12. */
     <Layout columns={item.rail ? [9, 5] : undefined} colGap="gutter" rowGap="stack">
-      <Layout columns={2} colGap="gutter" rowGap="stack">
+      {/* Equal unless the item says otherwise — see SiteNavItem.columnRatio. Spread, because Layout
+          takes a mutable number[] and the prop is a readonly tuple so a caller cannot mutate it. */}
+      <Layout
+        columns={item.columnRatio ? [...item.columnRatio] : 2}
+        colGap="gutter"
+        rowGap="stack"
+      >
         {groups.map((group) => (
           <Layout key={group.label} rowGap="block">
             <p className={styles.groupLabel}>{group.label}</p>

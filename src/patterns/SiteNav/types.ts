@@ -150,6 +150,21 @@ export type SiteNavItem = {
    */
   hub?: SiteNavLink;
   /**
+   * How the plate's two link columns divide the space between them. Omit for equal tracks.
+   *
+   * DECLARED, for the same reason `panelWidth` is: a pattern cannot count words. And here the
+   * direction of the need is not even consistent between sections, which is what rules out one
+   * shared ratio. Measured at the shipping copy — Services runs 148 against 230, so its second
+   * column wants the larger share; Expertise runs 293 against 259 and wants the OPPOSITE; Insights
+   * runs 60 against 133 and matches Services. A single `[3, 4]` left Expertise's first column with
+   * 0.1px of clearance on "Content, Knowledge and Discovery Platforms" — a wrap waiting for a font
+   * to render a hair wider.
+   *
+   * So: state it where the copy asks for it, leave it off where equal is right, and re-measure when
+   * a label changes. Two numbers, not two pixel widths, so the ratio survives the plate resizing.
+   */
+  columnRatio?: readonly [number, number];
+  /**
    * How wide the plate opens for this item.
    *
    * The plate shrinks to its content — 1056 for Services, 780 for Expertise, 560 for Insights —

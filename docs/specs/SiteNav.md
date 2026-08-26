@@ -771,7 +771,37 @@ And a row's hover fill extends `--nav-row-padding-inline` past its track on both
 clearance from a lit fill to the next column's text is now **16px**, where 64 left 48. Checked, and
 tight: do not narrow this seam further without re-measuring that.
 
-### 12.32 · Two QA items cannot be met yet, and are not faked
+### 12.32 · Unequal link columns, declared per item because the direction is not shared
+
+The gap between the two link columns is dominated by SLACK, not by the seam (§12.31): equal tracks
+force whichever group has the shorter labels to carry the difference. So the tracks are unequal now —
+`SiteNavItem.columnRatio`, omitted for equal.
+
+**One shared ratio was the obvious move and it does not work.** Measured at the shipping copy, the
+direction of the need is not consistent between sections:
+
+| Section | col 1 longest | col 2 longest | wants |
+|---|---|---|---|
+| Services | 148 "Product Modernisation" | **230** "Product Modernisation Assessment" | col 2 larger |
+| Expertise | **293** "Content, Knowledge and Discovery Platforms" | 259 "PropTech, ConTech and Field Operations" | **col 1 larger** |
+| Insights | 60 "Podcasts" | **133** "Tools and Resources" | col 2 larger |
+
+A global `[3, 4]` would have left Expertise's first column **0.1px** of clearance — a wrap waiting for
+a font to render a hair wider. So Services and Insights declare `[3, 4]`; Expertise declares nothing,
+and the fixture says why, because "no ratio here" is otherwise indistinguishable from an oversight.
+
+**Measured after.** Services 251/334, slack 103 and 104 — a 1px difference where equal tracks gave
+145 and 63; the visible gap between the two lists 177 → **135**. Insights 199/265, slack 139 and 132,
+gap 171. Expertise unchanged at 342/342, slack 49 and 83. Nothing wrapped in any section and no pane
+height moved.
+
+**The cost, stated plainly.** This is the first thing in the component tuned to the *length of the
+copy* rather than to its structure, and nothing in the build can catch it going stale: change a
+Services label and the ratio is silently wrong. It is declared rather than derived for the same
+reason `panelWidth` is — a pattern cannot count words — and the ratio is two numbers rather than two
+pixel widths, so it at least survives the plate resizing.
+
+### 12.33 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at
