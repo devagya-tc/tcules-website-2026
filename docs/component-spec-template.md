@@ -73,8 +73,10 @@ Part → `--text-*` role → its tracking companion, or "none — this role has 
 Measure for anything carrying running text. Case as a decision.
 
 ## 9 · Responsive
-What changes at 1023 and 767, and what must not. Touch targets: 44px minimum, and which of the two
-legal means gets there.
+What changes at 1023 and 767, and what must not. Touch targets: 24×24 CSS px is the floor (WCAG 2.2
+SC 2.5.8, AA; 44×44 is SC 2.5.5, AAA) and never the goal — state the number this component needs and
+the argument for it, which of the two means gets there, and where targets sit near each other, that
+no two intersect.
 
 ## 10 · Composition
 A short JSX skeleton naming which primitive provides each arrangement and which gap step is on each
