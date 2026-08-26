@@ -247,9 +247,13 @@ heading proves the question was considered; a missing one proves it was not.
     tracking companion". Measure for anything carrying running text. Case as a decision, with
     the example copy written in sentence case
 9.  Responsive — what changes at 1023 and at 767, and what must NOT. Restate that the gap
-    scale does not shift responsively. Touch targets: 44px minimum, reached either by stepping
-    the size up or by extending the hit area past the box so the row does not move — pick one
-    and say which
+    scale does not shift responsively. Touch targets: 24×24 CSS px is the FLOOR and never the
+    goal (WCAG 2.2 SC 2.5.8, AA; 44×44 is SC 2.5.5, AAA). The number above it is this component's
+    decision, argued from what it is and where it is tapped — a standalone control on a phone
+    wants 44; a mark in a dense wrapping row wants the smallest target that stays unambiguous.
+    State the number, state how it is reached (stepping the size up, or extending the hit area
+    past the box so the row does not move), and where targets sit near each other, prove no two
+    intersect
 10. Composition — a short JSX skeleton naming which primitive provides each arrangement and
     which gap step is on each axis. Plus an explicit restatement of: no hand-rolled grid or
     flex, no margins on children, no overriding Section from outside
@@ -394,7 +398,8 @@ LAYOUT, TYPE, SEMANTICS
 [ ] No margin on any child, anywhere in the spec.
 [ ] No media query changes a gap step or a type role.
 [ ] Every part carrying running text names a measure.
-[ ] Every interactive target reaches 44px on touch, and the spec says by which legal means.
+[ ] Every interactive target clears 24×24 with no two targets intersecting, and the spec argues
+    the number it chose rather than restating a default.
 [ ] Every ARIA idref I specified points at an element that is ALWAYS rendered, or the spec says
     what the attribute does when that element is absent.
 [ ] No selector walks upward; no `:has()`; every state a parent needs is a prop or a class.

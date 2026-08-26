@@ -450,13 +450,22 @@
   color: var(--btn-disabled-fg);
 }
 
-/* ── Touch · the 44px floor ────────────────────────────────────────────────────
-   A 32 or 40 box is below the touch minimum. Rather than inflate the box on small screens and
-   break the row it sits in, the hit area is extended PAST the box with a pseudo-element: full
-   width, 44 tall, centred. The layout does not move and the target is legal.
+/* ── Touch · the 44px target ───────────────────────────────────────────────────
+   A 32 or 40 box is under the 44 this control aims for. Rather than inflate the box on small
+   screens and break the row it sits in, the hit area is extended PAST the box with a
+   pseudo-element: full width, 44 tall, centred. The layout does not move and the target clears
+   44 — SC 2.5.5, Level AAA, well above the 24×24 that SC 2.5.8 requires at AA. 44 is this
+   control's argued choice, not the floor; a component that needs a different number argues its
+   own.
+
+   VERTICAL ONLY, by design: left and right stay at the box edges. In a WRAPPING row this would
+   overlap the rows above and below — at an 8px row gap a 28 box extended to 44 meets its
+   neighbour exactly, and a 24 box overlaps by 12 — and overlapping targets are worse than
+   smaller ones, because a tap in the seam lands on whichever element wins the stacking order.
+   Hence the scope below.
 
    For toolbars and table rows that stay dense on touch. A button that can simply step up to lg
-   should do that instead — at 48 the box already clears the floor and needs nothing. */
+   should do that instead — at 48 the box already clears 44 and needs nothing. */
 .hit {
   position: relative;
 }
