@@ -221,16 +221,6 @@ export default async function ToolPage({ params }: PageProps<'/tools/[slug]'>) {
   if (!tool) notFound();
 
   const title = tool.title || tool.hero.highlightedText || '';
-  const navigation = tool.sections.flatMap((section) =>
-    section.heading?.navigationLabel
-      ? [
-          {
-            label: section.heading.navigationLabel,
-            href: `#${section.heading.anchorId}`,
-          },
-        ]
-      : [],
-  );
 
   return (
     <>
@@ -258,31 +248,6 @@ export default async function ToolPage({ params }: PageProps<'/tools/[slug]'>) {
         surface="paper"
       />
 
-      {navigation.length > 0 ? (
-        <Section as="div" density="tight" surface="tint">
-          <Layout rowGap="block">
-            <h2>On this page</h2>
-            <nav aria-label="On this page">
-              <Cluster as="ul" colGap="text" rowGap="tight">
-                {navigation.map((item) => (
-                  <li key={item.href}>
-                    <Button
-                      as="a"
-                      href={item.href}
-                      emphasis="link"
-                      tone="neutral"
-                      size="md"
-                      extendHitArea
-                    >
-                      {item.label}
-                    </Button>
-                  </li>
-                ))}
-              </Cluster>
-            </nav>
-          </Layout>
-        </Section>
-      ) : null}
 
       {tool.sections.length > 0 ? (
         <Section as="div" surface="paper">
