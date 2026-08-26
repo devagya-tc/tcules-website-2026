@@ -146,21 +146,22 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
     7 at 22 and 27, **none over the component's 40-character warning**. Legal headings are terse
     by convention, so the heading IS the label rather than a fallback for one.
 
-    **Articles, case studies, events and podcasts are the pages that most want an outline, and
-    they are the ones still blocked.** The blocker is sharper than "no heading field":
-    `BlogBlock`, `CaseStudyBlock` and `PodcastBlock` (aliased by `EventBlock`) do carry a `title`,
-    but only on their `video` and `embed` members — it labels a media embed, so the `<h2>` those
-    routes render from it is a caption. **The real headings live inside the `prose` blocks'
-    `html`**, which `Prose` renders with `dangerouslySetInnerHTML` and which carries no ids. An
-    outline built from what those routes put in an `h2` today would list video titles.
+    **Articles, case studies and podcasts have it too, and needed no CMS change.** Their headings
+    live inside a markdown blob rather than as records, so the seam collects them while converting
+    that markdown and puts an opaque positional anchor on each.
+    **`docs/guides/long-form-outline.md`** is the whole story — how it works, what it deliberately
+    does not do, the root fix, and how to delete it. Events render no rail: all three have zero
+    level-2 headings, so the component's floor of two is never met.
 
-    Unblocking them is seam work of a known shape — inject ids into the prose HTML in
-    `sources/strapi/*.ts`, reusing the `anchorSlug` / `uniqueAnchor` de-duplication that already
-    serves the five section types, and emit the heading list on the view model. The labels are the
-    harder half: insight headings run to a median of 33 characters with 33 of 113 over 40, and
-    case-study headings to a median of 44 with **41 of 72 over 40**. Most case-study entries would
-    clamp, which argues for a `navigationLabel` on those types rather than for shipping the
-    fallback.
+    The labels needed no new field, which an earlier read of the OLD repo's corpus got backwards —
+    it put case-study headings at a median of 44 characters with more than half over 40 and
+    concluded the rail would be unreadable. The live CMS says **20**. Measure the source, not a
+    copy of it.
+
+    **The root fix is still a content-model change**, and the guide argues it: give these four
+    families sections as records, the shape the other five already have. That is what buys stable
+    author-controlled anchors, publishable deep links and a real `navigationLabel`. Until then the
+    workaround delivers the rail without pretending to deliver the anchors.
 12. **Tag** · 20 — **runnable now, and blocked by nothing.** Ten route modules already render its
     row as bare `<li>` text inside a `Cluster`, so the call sites are real, shipped and identical.
     It is one mark and `Cluster` keeps the row, which is why the brief forbids a `TagList` in its

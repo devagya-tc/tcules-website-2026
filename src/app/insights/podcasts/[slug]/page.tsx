@@ -5,7 +5,15 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Layout, Prose, Section } from '@/components';
 import { getPodcastPage, type PodcastBlock, type PodcastImage } from '@/content';
 import { articlePath, podcastPath, ROUTES } from '@/lib/routes';
-import { BlockCard, Breadcrumbs, Callout, Figure, PageHero } from '@/patterns';
+import {
+  BlockCard,
+  Breadcrumbs,
+  Callout,
+  Figure,
+  PageHero,
+  TableOfContents,
+  type TocItem,
+} from '@/patterns';
 
 type PodcastPageProps = { params: Promise<{ slug: string }> };
 
@@ -207,6 +215,21 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
 
   if (!podcast) notFound();
 
+  /* The outline the seam derived from this body's level-2 headings, mapped to what the component
+     takes. A podcast page is a long-form document, which is what earns it a rail —
+     page type decides, not heading count (docs/specs/TableOfContents.md § 1).
+
+     The anchors are opaque and already on the rendered headings; see
+     docs/guides/long-form-outline.md. */
+  const outline: TocItem[] = podcast.outline.map((entry) => ({
+    label: entry.label,
+    href: `#${entry.anchorId}` as const,
+  }));
+
+  /* The component's own floor is two. Below it there is no rail AND no reserved track — a [1, 4]
+     grid would otherwise squeeze the document into four-fifths of the content column for nothing. */
+  const hasOutline = outline.length >= 2;
+
   const published = dateOnly(podcast.publishedAt);
   const heroMedia = podcast.heroVideo
     ? {
@@ -255,10 +278,24 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
 
       {podcast.blocks.length > 0 ? (
         <Section as="div" surface="paper">
-          <Layout as="article" rowGap="stack">
-            {podcast.blocks.map((block) => (
-              <Fragment key={block.id}>{renderPodcastBlock(block, podcast.title)}</Fragment>
-            ))}
+          {/* The shell from docs/specs/TableOfContents.md § 10. The rail is a TRACK, not a band, so it
+              sits inside this Section — which is what makes the two arrangements one piece of markup:
+              below 1024 the columns collapse and the first track becomes the first block of the
+              Section, nothing moved in the DOM. `align="start"` is required, not stylistic: a
+              stretched grid item fills the row and has nowhere to stick. The <article> stays around
+              the document — the outline is about the article, not part of it. */}
+          <Layout
+            columns={hasOutline ? { base: 1, lg: [1, 4] } : { base: 1 }}
+            colGap="column"
+            rowGap="stack"
+            align="start"
+          >
+            {hasOutline ? <TableOfContents items={outline} /> : null}
+            <Layout as="article" rowGap="stack">
+              {podcast.blocks.map((block) => (
+                <Fragment key={block.id}>{renderPodcastBlock(block, podcast.title)}</Fragment>
+              ))}
+            </Layout>
           </Layout>
         </Section>
       ) : null}
