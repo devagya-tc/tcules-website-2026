@@ -184,27 +184,34 @@ export function glossaryPath(slug: string): string {
 export const UNRESOLVED_ROUTE = '/#unresolved-route';
 
 /**
- * An off-site destination not yet supplied — the social profiles. Same argument as
- * UNRESOLVED_ROUTE: one greppable name beats four `#`s.
+ * An off-site destination not yet supplied. Same argument as UNRESOLVED_ROUTE: one greppable name
+ * beats a scattering of `#`s.
+ *
+ * The social profiles were its first users and are all supplied now — see EXTERNAL. It stays
+ * because the need recurs: `Proof`'s specimen uses it for a figure whose source is not yet
+ * published, and the next unsourced claim will want it too.
  */
 export const UNRESOLVED_EXTERNAL = '#unresolved-external';
 
 /**
- * Off-site profiles that more than one component links to.
+ * Off-site profiles that more than one component links to. All three are supplied.
  *
  * Clutch is the reason this exists: the footer's rating badge and `Stat`'s source link are two
  * consumers of one URL, and two fixtures each holding their own copy is how they drift apart.
- * It is supplied now; LinkedIn and YouTube are still waiting, and resolve to
- * UNRESOLVED_EXTERNAL so the gap is greppable in one place rather than four.
  *
  * The Clutch profile is also the SOURCE OF THE RATING the footer prints. Whoever changes the
  * score in the fixture reads it off this page, and the score and this URL move together — a
  * number nobody can check against its own source is worse than no badge.
+ *
+ * LinkedIn is the regional `in.linkedin.com` host and YouTube the `@handle` form, both as the
+ * companies themselves publish them. Neither is normalised to a canonical host or a channel id:
+ * these are the URLs that were given, they redirect correctly, and rewriting somebody's own
+ * address into what looks tidier is how a link quietly stops resolving.
  */
 export const EXTERNAL = {
   clutch: 'https://clutch.co/profile/tcules-ux-design-studio',
-  linkedin: UNRESOLVED_EXTERNAL,
-  youtube: UNRESOLVED_EXTERNAL,
+  linkedin: 'https://in.linkedin.com/company/tcules',
+  youtube: 'https://www.youtube.com/@tcules',
 } as const;
 
 /**

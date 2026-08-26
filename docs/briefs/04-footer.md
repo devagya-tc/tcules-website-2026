@@ -55,8 +55,8 @@ one implementation welds a body block to the site frame.
 4. ~~**The Clutch profile**~~ **Done** — `EXTERNAL` in `@/lib/routes` holds all three off-site
    profiles, so Stat (brief 17) reads the same Clutch href the footer's rating badge does. The
    Clutch URL and its 4.8 are both real as of 2026-08-26 and are read off the same page, which is
-   why they live beside each other. **LinkedIn and YouTube are still unsupplied** and resolve to
-   `UNRESOLVED_EXTERNAL`.
+   why they live beside each other. LinkedIn and YouTube were supplied the same day. Every off-site
+   link the footer renders now resolves.
 
 ## A note on the newsletter field — ~~open~~ settled
 

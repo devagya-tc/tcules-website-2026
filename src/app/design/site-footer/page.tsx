@@ -80,8 +80,8 @@ export default async function SiteFooterSpecimenPage() {
             The Clutch rating is real, and so is the profile behind it — both read off the
             live page and named together in <code>EXTERNAL</code> in{' '}
             <code>@/lib/routes</code>, because a score nobody can check against its own source
-            is worse than no badge. <strong>LinkedIn and YouTube are still unsupplied</strong>
-            and resolve to <code>UNRESOLVED_EXTERNAL</code>.
+            is worse than no badge. LinkedIn and YouTube are supplied too, so every off-site
+            link in this footer now resolves.
           </p>
         </Layout>
       </Section>

@@ -13,9 +13,9 @@ import type { Navigation } from '../../types';
  * changes.
  *
  * Every href is a name from @/lib/routes rather than a literal, so a URL decision is one edit
- * there. Three destinations have no canonical URL in the sitemap and take UNRESOLVED_ROUTE; the
- * social profiles have no URLs supplied and take UNRESOLVED_EXTERNAL. Both are greppable, which a
- * scattering of `#` is not.
+ * there. Three destinations have no canonical URL in the sitemap and take UNRESOLVED_ROUTE, which
+ * is greppable in a way a scattering of `#` is not. The social profiles took the off-site
+ * equivalent until their URLs were supplied; they read EXTERNAL now.
  */
 
 /**
