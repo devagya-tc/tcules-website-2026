@@ -75,9 +75,19 @@ export const ROUTES = {
 
   /* Lab and company. The five Lab children are carried by the nav data even though Lab renders as
      a direct link today — see docs/specs/SiteNav.md §2.1. Naming them is what makes switching Lab
-     to a menu a one-field edit rather than a content migration. */
+     to a menu a one-field edit rather than a content migration.
+
+     These five were dropped by the conflict resolution in PR #36's `Merge branch 'main' into
+     strapi-integration` and are restored here. The tell that it was a casualty rather than a
+     decision: the comment above survived while the routes it describes did not. `join` is PR #36's
+     and stays. */
   futureInterfacesLab: '/future-interfaces-lab',
   futureInterfacesLabJoin: '/future-interfaces-lab/join',
+  labExperiments: '/future-interfaces-lab/experiments',
+  labTools: '/future-interfaces-lab/tools',
+  labResearch: '/future-interfaces-lab/research',
+  labDatasets: '/future-interfaces-lab/datasets',
+  labProgrammes: '/future-interfaces-lab/programmes',
   matterDesignSystem: '/matter-design-system',
   about: '/about',
   team: '/team',
