@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, type ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -20,7 +20,9 @@ import {
   ListCard,
   PageHero,
   Proof,
+  TableOfContents,
   type HeroAction,
+  type TocItem,
 } from '@/patterns';
 
 type HeroActions = readonly [] | readonly [HeroAction] | readonly [HeroAction, HeroAction];
@@ -43,6 +45,35 @@ function cardColumns(count: 1 | 2 | 3 | 4): LayoutProps['columns'] {
     default:
       return { base: 1, md: 2 };
   }
+}
+
+/**
+ * The two-column shell from docs/specs/TableOfContents.md § 10. The rail is a TRACK, not a band, so
+ * it sits INSIDE the body Section rather than above it — which is also what makes the two
+ * arrangements one piece of markup: below 1024 the columns collapse and the shell's first track
+ * simply becomes the first block of the Section, with nothing moved in the DOM.
+ *
+ * `align="start"` is required rather than stylistic: a stretched grid item fills the row and has
+ * nowhere to stick.
+ *
+ * Fewer than two labelled sections renders no rail AND no reserved track. The component's own floor
+ * is two, so a `[1, 4]` grid would otherwise squeeze the body into four-fifths of the content column
+ * to leave room for nothing.
+ */
+function Shell({ outline, children }: { outline: readonly TocItem[]; children: ReactNode }) {
+  /* The body track keeps this page's own rhythm: `section` (96) is the beat between an audit's
+     top-level sections and swapping it for the spec sketch's `stack` would retune the page under
+     cover of a component swap. */
+  const body = <Layout rowGap="section">{children}</Layout>;
+
+  if (outline.length < 2) return body;
+
+  return (
+    <Layout columns={{ base: 1, lg: [1, 4] }} colGap="column" rowGap="stack" align="start">
+      <TableOfContents items={outline} />
+      {body}
+    </Layout>
+  );
 }
 
 function renderColumn(column: AuditContentColumn) {
@@ -260,12 +291,20 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
   if (!audit) notFound();
 
   const heroActions = firstTwoHeroActions(audit.hero.actions);
-  const navigation = audit.sections.flatMap((section) =>
+
+  /* The outline. An audit is a long-form document, which is what earns it a rail — the page type
+     decides, not the heading count (docs/specs/TableOfContents.md § 1). Sections without a
+     navigationLabel are absent from it on purpose: the seam curates membership, and heading text
+     runs to a median of 35 characters, which is a sentence rather than a label.
+
+     Typed rather than inferred, because `href` is `#${string}` and a bare template expression in a
+     standalone const widens to `string`. */
+  const outline: TocItem[] = audit.sections.flatMap((section) =>
     section.heading?.navigationLabel
       ? [
           {
             label: section.heading.navigationLabel,
-            href: `#${section.heading.anchorId}`,
+            href: `#${section.heading.anchorId}` as const,
           },
         ]
       : [],
@@ -305,35 +344,9 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
         ) : null}
       </PageHero>
 
-      {navigation.length > 0 ? (
-        <Section as="div" density="tight" surface="tint">
-          <Layout rowGap="block">
-            <h2>On this page</h2>
-            <nav aria-label="On this page">
-              <Cluster as="ul" colGap="text" rowGap="tight">
-                {navigation.map((item) => (
-                  <li key={item.href}>
-                    <Button
-                      as="a"
-                      href={item.href}
-                      emphasis="link"
-                      tone="neutral"
-                      size="md"
-                      extendHitArea
-                    >
-                      {item.label}
-                    </Button>
-                  </li>
-                ))}
-              </Cluster>
-            </nav>
-          </Layout>
-        </Section>
-      ) : null}
-
       {audit.sections.length > 0 ? (
         <Section as="div" surface="paper">
-          <Layout rowGap="section">
+          <Shell outline={outline}>
             {audit.sections.map((section) => {
               const content = (
                 <Layout rowGap="stack">
@@ -354,7 +367,7 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
                 <div key={section.id}>{content}</div>
               );
             })}
-          </Layout>
+          </Shell>
         </Section>
       ) : null}
 
