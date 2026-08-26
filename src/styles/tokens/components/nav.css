@@ -86,10 +86,17 @@
 
      lg matches --sec-max-inline (1240) on purpose: the widest plate lines up with every
      band on the page behind it. It is stated rather than read, because a component may not
-     read another component's tokens. */
+     read another component's tokens.
+
+     md AND sm ARE TUNED AGAINST --nav-row-text, which is the thing to know before changing either.
+     At 18px rows they were 880 and 720; at 14px those left 83px and 163px of empty track per
+     column — the Insights plate was better than half air — so they came down. lg did not move,
+     because it answers to the page's content column rather than to its own content. Re-point the
+     row type and these two want re-measuring: widest label in a column, doubled, plus one
+     --gap-column seam and two --gap-gutter edges. */
   --nav-plate-width-lg: 1240px;
-  --nav-plate-width-md: 880px;
-  --nav-plate-width-sm: 720px;
+  --nav-plate-width-md: 780px;
+  --nav-plate-width-sm: 560px;
   --nav-plate-radius: var(--radius-8);
   /* The air between the bar's hairline and the plate's top edge. It is a token rather than a bare
      --gap-text at the call site because TWO rules have to agree on it: the stage pads by it, and
@@ -122,13 +129,18 @@
   --nav-row-padding-block: var(--gap-tight);
   --nav-row-padding-inline: var(--gap-text);
   --nav-row-radius: var(--radius-8);
-  --nav-row-text: var(--text-body-lg);
+  /* body-sm, not body-lg. It closes the size gap to the 12px group label above a row to 2px, which
+     is deliberate and survivable only because size is the LEAST of the four things separating the
+     two: the label is mono where the row is sans, uppercase where the row is sentence case,
+     tracked open where the row is not, and a step lighter in ink. Drop any of those three and the
+     column reads flat. */
+  --nav-row-text: var(--text-body-sm);
   --nav-row-arrow-size: var(--icon-size-14);
   --nav-row-arrow-travel: var(--space-4); /* optical: the arrow slides in from -4px */
   /* The row's own line box, composed from the two halves of its type role rather than measured.
      A label long enough to wrap keeps its arrow centred on the FIRST line, and centring on a line
      means knowing how tall a line is — which the `font:` composite cannot be asked for back. */
-  --nav-row-line: calc(var(--font-size-body-lg) * var(--line-height-body-lg));
+  --nav-row-line: calc(var(--font-size-body-sm) * var(--line-height-body-sm));
 
   /* The rail — the plate's third column, in Services alone.
      NO WIDTH TOKEN. The design measured 340px, and the arrangement is a Layout `[2, 1]` instead:

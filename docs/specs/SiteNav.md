@@ -129,7 +129,8 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `cta` | `Button` solid primary `sm` | right of the bar |
 | `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `menu` ↔ `close` |
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
-| `pane` | one per mega section | 1240 / 880 / 720px wide; two label + link columns, plus the rail in Services |
+| `pane` | one per mega section | 1240 / 780 / 560px wide; two label + link columns, plus the rail in Services |
+| `hubBar` | `Cluster` + `Button emphasis="link"` | the way through to the section index — Services and Insights only. Hairline above, `--gap-text` under it |
 | `rail` | `<aside>`, 340px | primary card (image slot, title) + secondary row |
 | `scrim` | fixed box under the plate | `--nav-scrim`, below the bar. The system has no elevation token; edge, radius and scrim do the separating |
 | `sheet` | mobile | bottom sheet, grab handle, two-level track, sticky CTA bar |
@@ -217,7 +218,7 @@ Recorded in §12.6.
 
 1. **A group with one link** — renders as a group of one; no special case.
 2. **A section with no rail** — Expertise and Insights: the plate narrows to its content
-   (880 / 720). It does not hold 1240px of empty ground.
+   (780 / 560). It does not hold 1240px of empty ground.
 3. **A fourth group in a mega** — panes are a grid; a third column fits inside 1240 without a
    layout change.
 4. **A `planned` link whose page is missing** — the nav still renders it. See §12.5: the CI check
@@ -290,7 +291,7 @@ Recorded here rather than fixed silently. Nothing below changes a designed outco
 ### 12.1 · The plate cannot be a `Section`, so it owns a ground
 
 `Section` owns the content column (1240 cap, 32 gutter) and its ground, and CLAUDE.md forbids
-overriding either from outside. The plate's box is 1240 / 880 / 720 wide and carries its own
+overriding either from outside. The plate's box is 1240 / 780 / 560 wide and carries its own
 border, radius and padding — so it cannot be a `Section` and cannot inherit `--sec-ground`. It
 paints `--nav-panel-ground` instead, declared once per surface. The same token serves the mobile
 sheet, which is the same idea at another size.
@@ -384,7 +385,7 @@ the default content. All were measured and are fixed.
    and the plate is `box-sizing: border-box`, so handing the raw value over left the plate's content
    box two hairlines short. The plate's `block-size` now adds them back.
 3. **A pane's measured height was wrong for the width it would be rendered at.** Panes were clamped
-   by `max-inline-size: 100%` of the plate, so while the 720 Insights pane was open the 1240
+   by `max-inline-size: 100%` of the plate, so while the narrow Insights pane was open the 1240
    Services pane laid out 718 wide, wrapped to nearly twice its height, hit the viewport cap and
    recorded 488 — and the plate then opened Services 86px taller than its content, permanently. The
    stage is now an inline-size container and both the plate and every pane size against `100cqi`, so

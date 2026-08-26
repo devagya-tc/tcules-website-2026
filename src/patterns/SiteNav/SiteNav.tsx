@@ -655,7 +655,7 @@ function PlatePane({ item }: { item: SiteNavItem }) {
   const primary = item.rail?.cards.filter((card) => card.role === 'primary') ?? [];
   const secondary = item.rail?.cards.filter((card) => card.role === 'secondary') ?? [];
 
-  return (
+  const body = (
     /* [2,1] with a `column` seam, which is what puts the rail beside the two link columns rather
        than a fixed 340 track — Layout has no fixed-track mode, and a local grid to get one would
        be the hand-rolled arrangement the layout rule prohibits. At the plate's own width the rail
@@ -695,6 +695,37 @@ function PlatePane({ item }: { item: SiteNavItem }) {
           </Layout>
         </Layout>
       ) : null}
+    </Layout>
+  );
+
+  if (!item.hub) return body;
+
+  return (
+    /* Nested, so the seam between the columns and the hub bar is a `stack` beat this Layout owns
+       rather than a margin the bar sets on itself. The bar's own hairline and the air under it are
+       paint and padding — inside the box, so neither is the child spacing the layout rule forbids.
+       No token for that 16: a name whose only job is to rename --gap-text is the --sec-gap mistake
+       the token rules already made once. */
+    <Layout rowGap="stack">
+      {body}
+      {/* A Cluster of one, so the control stays content-sized — a bare grid child stretches to its
+          track, and a full-width link emphasis reads as a rule rather than as a link.
+
+          Button rather than a fifth hand-rolled anchor. It brings the mono case, the padding, the
+          arrow slot and the focus ring already decided, which is the whole argument: the one row in
+          this component that was hand-rolled is the one that shipped 6px out of alignment. */}
+      <Cluster className={styles.hubBar}>
+        <Button
+          as={Link}
+          href={item.hub.href}
+          emphasis="link"
+          tone="neutral"
+          size="sm"
+          icon={<Icon name="arrow-right" />}
+        >
+          {item.hub.label}
+        </Button>
+      </Cluster>
     </Layout>
   );
 }

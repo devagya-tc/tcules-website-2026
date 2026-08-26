@@ -363,6 +363,14 @@
   transform: none;
 }
 
+/* The way through to the section's index, at the foot of the plate. The rule is what makes it read
+   as the end of the pane rather than as a nineteenth destination; the air under the rule is the
+   bar's own padding, and the beat above it belongs to the Layout that holds both. */
+.hubBar {
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+  padding-block-start: var(--gap-text);
+}
+
 /* ── The rail ──────────────────────────────────────────────────────────────────
    Its hairline is what makes two halves read as two halves. The inset is the air between that rule
    and the rail's own content, which is why the plate's column seam is `column` rather than

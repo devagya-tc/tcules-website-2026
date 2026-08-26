@@ -129,6 +129,15 @@ export type SiteNavItem = {
   /** The plate's third column. `mega` only, and only where there is something to put in it. */
   rail?: SiteNavRail;
   /**
+   * The way through to the section's own index — "All services" at the foot of the plate.
+   *
+   * OPTIONAL, and it is not an oversight where it is missing. A mega's trigger opens rather than
+   * navigates, so without one of these a section with an index page has no route to it; but not
+   * every section HAS an index worth sending anyone to, and a bar that promises one and lands on a
+   * thin page is worse than no promise. Services and Insights carry one today; Expertise does not.
+   */
+  hub?: SiteNavLink;
+  /**
    * How wide the plate opens for this item.
    *
    * The plate shrinks to its content — 1240 for Services, 880 for Expertise, 720 for Insights —

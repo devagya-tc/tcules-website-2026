@@ -20,6 +20,9 @@ const SERVICES: SiteNavItem = {
   /* A mega has no href — its trigger opens rather than navigates — so its own index is named
      here beside the paths it owns outside its family. */
   matchPaths: ['/services', '/audits', '/how-we-work'],
+  /* The way through to /services. A mega's trigger opens rather than navigates, so without this
+     the section's own index has no route to it. Insights carries one too; Expertise does not. */
+  hub: { label: 'All services', href: '/services', status: 'planned' },
   panelWidth: 'lg',
   groups: [
     {
@@ -113,6 +116,7 @@ const INSIGHTS: SiteNavItem = {
   label: 'Insights',
   form: 'mega',
   matchPaths: ['/insights', '/glossary', '/tools'],
+  hub: { label: 'All insights', href: '/insights', status: 'planned' },
   panelWidth: 'sm',
   groups: [
     {

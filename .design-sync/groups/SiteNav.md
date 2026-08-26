@@ -10,7 +10,7 @@ are the strongest proof the studio has and should not be the fifth thing read.
 
 **Above 1024 the three menu sections are panes of ONE plate.** An inset box over the page, with its
 own hairline, radius and scrim, which morphs between 1240 (Services, the only section with a rail),
-880 (Expertise) and 720 (Insights) rather than holding one width and showing empty ground. Opening
+780 (Expertise) and 560 (Insights) rather than holding one width and showing empty ground. Opening
 is a fade at the section's final size; switching slides the panes and morphs the box, with the
 direction taken from the order of the items in the bar. Crossing a direct link on the way closes
 nothing.
@@ -19,6 +19,10 @@ nothing.
 six items sit in the lower half of the screen where a thumb is. A section grows it to the screen
 less 88px; Back shrinks it again. Two actions stay pinned at the foot at both levels — Request audit
 on the left, Start a project on the right.
+
+**Services and Insights carry a hub link** at the foot of the plate — "ALL SERVICES", "ALL INSIGHTS"
+— because a mega's trigger opens rather than navigates, so without one the section's own index has
+no route to it. Expertise has none, deliberately.
 
 **Composing a page with this: place it and stop.** It needs no wrapper, no surface Section around
 it and no spacing above it — it is sticky, it paints its own ground from `surface`, and the plate and
