@@ -194,11 +194,15 @@ export const UNRESOLVED_EXTERNAL = '#unresolved-external';
  *
  * Clutch is the reason this exists: the footer's rating badge and `Stat`'s source link are two
  * consumers of one URL, and two fixtures each holding their own copy is how they drift apart.
- * NOT SUPPLIED YET — it resolves to UNRESOLVED_EXTERNAL until the real profile lands, so the
- * placeholder is greppable in one place rather than two.
+ * It is supplied now; LinkedIn and YouTube are still waiting, and resolve to
+ * UNRESOLVED_EXTERNAL so the gap is greppable in one place rather than four.
+ *
+ * The Clutch profile is also the SOURCE OF THE RATING the footer prints. Whoever changes the
+ * score in the fixture reads it off this page, and the score and this URL move together — a
+ * number nobody can check against its own source is worse than no badge.
  */
 export const EXTERNAL = {
-  clutch: UNRESOLVED_EXTERNAL,
+  clutch: 'https://clutch.co/profile/tcules-ux-design-studio',
   linkedin: UNRESOLVED_EXTERNAL,
   youtube: UNRESOLVED_EXTERNAL,
 } as const;

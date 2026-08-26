@@ -77,9 +77,11 @@ export default async function SiteFooterSpecimenPage() {
             the tab order together, so only one is ever reachable.
           </p>
           <p>
-            The Clutch rating is a <strong>placeholder</strong>. So are all three off-site
-            hrefs, which resolve to <code>EXTERNAL</code> in <code>@/lib/routes</code> — the
-            badge&rsquo;s 4.9 and the profile behind it land together or not at all.
+            The Clutch rating is real, and so is the profile behind it — both read off the
+            live page and named together in <code>EXTERNAL</code> in{' '}
+            <code>@/lib/routes</code>, because a score nobody can check against its own source
+            is worse than no badge. <strong>LinkedIn and YouTube are still unsupplied</strong>
+            and resolve to <code>UNRESOLVED_EXTERNAL</code>.
           </p>
         </Layout>
       </Section>

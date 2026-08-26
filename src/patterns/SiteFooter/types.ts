@@ -44,7 +44,7 @@ export type SiteFooterSocial = SiteFooterLink & {
  * The rating badge in the brand block — a score, and the profile it comes from.
  *
  * Split out of the social list because it is not a link to a profile, it is a claim with a source.
- * A row of three names cannot say "4.9", and a badge that says it has to be reachable so the claim
+ * A row of three names cannot say "4.8", and a badge that says it has to be reachable so the claim
  * can be checked.
  */
 export type SiteFooterRating = {
@@ -52,8 +52,9 @@ export type SiteFooterRating = {
   platform: string;
   mark: BrandMarkName;
   /**
-   * The score as authored — '4.9', not 4.9. It is copy, not arithmetic: nothing formats it,
-   * nothing averages it, and a trailing zero is a decision rather than a rounding artefact.
+   * The score as authored — '4.8', not 4.8. It is copy, not arithmetic: nothing formats it,
+   * nothing averages it, and a trailing zero is a decision rather than a rounding artefact: a
+   * profile sitting on a whole number still prints '5.0'.
    */
   score: string;
   /** The profile. One href, two consumers — Stat's source link is the other. See @/lib/routes. */
@@ -111,7 +112,7 @@ export type SiteFooterProps = {
    * is what the lg track count is drawn for and a seventh would wrap to a second row.
    */
   groups: SiteFooterGroup[];
-  /** The closing action. Solid, primary, lg — the last thing in the band that is not chrome. */
+  /** The closing action. Solid, primary, md — the last thing in the band that is not chrome. */
   cta: SiteFooterLink;
   newsletter: SiteFooterNewsletter;
   meta: SiteFooterMetaItem[];

@@ -128,7 +128,7 @@ export function SiteFooter({
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                {/* Decorative: "4.9 on Clutch" is already the whole claim, and a star announced as
+                {/* Decorative: "4.8 on Clutch" is already the whole claim, and a star announced as
                     "black star" adds nothing a screen reader needs. */}
                 <span className={styles.ratingStar} aria-hidden="true">
                   ★
