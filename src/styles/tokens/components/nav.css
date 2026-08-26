@@ -155,8 +155,14 @@
      ratio HOLDS STILL when the plate narrows, since the rail is the one column whose width buys
      something. Recorded in docs/specs/SiteNav.md §12 rather than fixed by reaching around the
      primitive. */
-  --nav-rail-title-text: var(--text-h5);
-  --nav-rail-title-tracking: var(--text-h5-tracking);
+  /* body-lg, not h5. The card is the only shape in the rail and should stay the heaviest text in
+     the pane, but h5 put it at 22 on desktop and 20 on mobile against 14px rows — a 1.43x step that
+     read as a section heading rather than a card title. 18 keeps it clearly first at 1.29x.
+
+     AND ITS TRACKING TOKEN IS GONE RATHER THAN REPOINTED. body-lg is one of the seven roles with no
+     tracking companion; h5's was an optical correction cut for 22px display type, and carrying it
+     down to 18px sans would be applying a correction to an error that is no longer there. */
+  --nav-rail-title-text: var(--text-body-lg);
   --nav-rail-action-text: var(--text-ui-sm);
   --nav-rail-action-tracking: var(--text-ui-sm-tracking);
 

@@ -422,7 +422,6 @@
   justify-content: space-between;
   gap: var(--gap-text);
   font: var(--nav-rail-title-text);
-  letter-spacing: var(--nav-rail-title-tracking);
 }
 
 .cardArrow {
@@ -721,6 +720,21 @@
 
 .sheetGroup {
   list-style: none;
+}
+
+/* A RULE BETWEEN GROUPS, and the 1b mobile prototype already settled this: "groups are separated by
+   a rule, not by whitespace alone — with six links each, spacing on its own was not enough to read
+   as a break". Stacked one above another, 24px of air between the end of six links and the next
+   label does not say "new group" the way two side-by-side columns do on the plate, which is why
+   this exists here and has no counterpart in PlatePane.
+
+   `border` and `padding` rather than a margin: the beat above the rule is the parent Layout's
+   `block` step, and the beat below it is this element's own padding — so the seam is 24, rule, 24
+   and no child sets its own outer spacing. It applies to the rail's block as well as the link
+   groups, because "Working together" is a group boundary too. */
+.sheetGroup + .sheetGroup {
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+  padding-block-start: var(--gap-block);
 }
 
 .sheetLabel {

@@ -177,6 +177,12 @@ anchored to the bottom of the viewport, so only its top edge travels.
 the left, section name **centred, uppercase** on `--nav-label-text`. Section rows are type-only, no
 glyphs.
 
+**Groups in a section pane are separated by a RULE, not by whitespace.** The 1b mobile prototype
+settled this — "with six links each, spacing on its own was not enough to read as a break" — and it
+is a mobile-only need: stacked one above another, 24px of air between the end of six links and the
+next label does not say "new group" the way two side-by-side columns do on the plate. 24, rule, 24,
+and it applies to the rail's block too, because "Working together" is a boundary as well.
+
 **Sticky CTA bar**, present at both levels, pinned to the sheet's foot: **Request audit** (ghost
 neutral) left, **Start a project** (solid primary) right — primary under the right thumb. A
 hairline shadow appears above the bar while list remains below it.
@@ -571,7 +577,20 @@ body's top step is `--gap-block`, which puts the label three times closer to its
 rule and costs the header the same beat as any other group boundary in the pane — which is what it
 is.
 
-### 12.18 · Two QA items cannot be met yet, and are not faked
+### 12.19 · The rail card's title, and the tracking token that went with it
+
+`--nav-rail-title-text` was `--text-h5` — 22 on desktop, 20 below 768 — against 14px rows. A 1.43×
+step reads as a section heading rather than as a card title, and the card is a card. It is
+`--text-body-lg` now: still the heaviest text in the pane, at 1.29×.
+
+**`--nav-rail-title-tracking` was deleted rather than repointed**, and that is the part worth
+recording. `--text-body-lg` is one of the seven roles with no tracking companion, and h5's tracking
+is an optical correction cut for 22px display type — carrying it to 18px sans would be correcting an
+error that is no longer there. The rule in CLAUDE.md §8 is that pairing a tracking token with a role
+in that second group names something that does not exist; the honest move when a role loses its
+companion is for the component token to lose it too.
+
+### 12.20 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at
