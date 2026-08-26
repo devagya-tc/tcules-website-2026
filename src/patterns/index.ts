@@ -51,6 +51,22 @@
  * screenshot runs the width of the text or the width of the section is the page's decision, and
  * building it in would give two places the power to disagree.
  *
+ * TableOfContents is the newest kind, and the only component in this repo whose rendered output is
+ * not a function of its props alone: it is an OUTLINE — an ordered list of one page's own section
+ * headings, marking the section the reader is currently in. That mark is the whole reason it is a
+ * component; without it a rail of links is a Layout and a list. It is a client component holding one
+ * IntersectionObserver, gated to 1024 and up, and it is the first dependency in this system on where
+ * the page is scrolled to. Like ListCard it owns no band and takes no `surface` — it is a TRACK, not
+ * a band, and reads data-surface from the Section it sits inside. It is a pattern for the usual two
+ * reasons and for a third that is stronger than either: it resolves ids that live outside its own
+ * subtree, in the page's body, which is the strongest possible form of knowing something above
+ * itself.
+ *
+ * It is not navigation and not the ancestor trail. SiteNav is how you reach another page;
+ * Breadcrumbs says where this page sits in the site and ends in this page. This says what is inside
+ * the page and ends in its last section, and its `#${string}` href type forbids it from ever
+ * leaving the current document.
+ *
  * The two are unrelated despite the word they share, and this barrel is where that collision is
  * visible: a `ProofFigure` is a CHECKED STATISTIC — a value, a label and the date it was verified
  * — while `Figure` is a captioned image. Neither renders the other, and nothing but the noun is
@@ -71,6 +87,9 @@ export type {
 
 export { Breadcrumbs } from './Breadcrumbs';
 export type { BreadcrumbsProps, BreadcrumbItem } from './Breadcrumbs';
+
+export { TableOfContents } from './TableOfContents';
+export type { TableOfContentsProps, TocItem } from './TableOfContents';
 
 export { CtaSection } from './CtaSection';
 export type { CtaSectionProps, CtaPoint, CtaAction } from './CtaSection';

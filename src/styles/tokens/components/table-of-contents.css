@@ -1,0 +1,382 @@
+/* ══ Component layer — table of contents ══════════════════════════════════════════
+   Tier 2. The outline of a long-form document: an ordered list of that page's section
+   headings, held in a sticky rail beside the body at 1024 and up, and a static block
+   immediately below the hero under that width. Built to docs/specs/TableOfContents.md.
+
+   This file is the only place a --toc- value is decided, and it decides every colour four
+   times: once per surface. Every value is a primitive or a usage token, and exactly TWO are
+   literals: --toc-max-inline (180) and --toc-min-inline (160). Both are CAPS, which is the
+   one place this repo writes a number — --btn-height-md is 40px, --nav-bar-height is 72px and
+   --crumb-hit-min is 44px, all literals, because a cap is a decision rather than a step. Every
+   other number here reads the ramp step it would otherwise have restated: the sticky inset
+   reads --space-72, the digit column --space-24, the row's padding --space-12, the underline's
+   offset --space-2. Each says what it was measured against.
+
+   Naming: --toc-{part}-{role}-{state}
+           part   title | label | ordinal | current-label | current-ordinal | rule |
+                  current-rule | ring
+           role   ink                       — every text part here is a BARE label with no
+                                              box, and a bare label has an INK, not an fg.
+                                              -fg is for a control with a box, which is why
+                                              nav.css says --nav-item-fg for its tinted item
+                                              and --nav-link-ink for a bare one. Nothing in
+                                              this component paints a box, at rest or in any
+                                              state, so nothing here takes -fg.
+           state  rest (no suffix) | hover | pressed
+   There is no {variant} slot: one variant, one size. Two things vary and neither is a
+   token — ENTRY COUNT, which is data, and ARRANGEMENT, which is one media query in the
+   module on identical markup.
+
+   ── The state model ─────────────────────────────────────────────────────────────
+   Hover and focus take -hover. Pressed takes -pressed. Focus is the hover ink plus the
+   ring plus the full-width underline, so the keyboard sees what the pointer sees. Only
+   `link` has states: `title` and `rule` are inert by construction.
+
+   BLUE IS NOT A POINTER STATE HERE, and that is the one deliberate inversion in this file.
+   Everywhere else in this system — Button emphasis="link", Breadcrumbs, Prose's inline
+   links — blue is what a link turns when you point at it. Here blue means "you are here",
+   and the pointer states run the other way, into dark neutral. The house rule survives
+   intact, because it is "blue never appears on anything that is not clickable" and every
+   entry IS a link; what changed is which of two clickable meanings blue is spent on.
+   Owner-directed, 26 Aug 2026, recorded as spec §17 Q11. The cost, stated where the values
+   are: this rail's hover language differs from every other link on the site, and the
+   underline is what pays for it — the same affordance Button's link emphasis draws, so the
+   SHAPE of the hover is familiar even though the hue is not.
+
+   CURRENCY IS A PART, NOT A STATE. The fixed model routes "held: active / selected /
+   current" to -pressed, and taking that literally would make the current entry look
+   pressed — which is wrong twice over here: it would hand currency the pointer's tokens,
+   and -pressed is where the pointer lives. Breadcrumbs established the escape for a
+   structural currency (--crumb-current-ink) and it applies again for a second reason: the
+   model's held states describe a control the USER selected, and nobody selected this. It is
+   a report of where the document is scrolled to. So the current row's three values are
+   part-named — --toc-current-label-ink, --toc-current-ordinal-ink, --toc-current-rule.
+
+   The part and the pointer states COMPOSE, and the precedence is in the module: hover and
+   pressed win on the label, because the reader is pointing at that row; the 3px rule and
+   the blue ordinal persist through hover, press and focus, so a pointer can never hide the
+   mark.
+
+   A state token exists in the set only if the value MOVES on at least one surface. Five
+   absences are therefore assertions, not omissions:
+
+     no --toc-*-bg-*        nothing paints a box behind a row, on any surface, in any
+                            state. The rail must not own its ground — it sits inside
+                            somebody else's Section and reads data-surface from it — so the
+                            hover and pressed inks are measured against the surface GROUND,
+                            because that is what is behind them.
+     no --toc-rule-hover    the rule reports CURRENCY and nothing else. A hairline that also
+                            brightened on hover would give the rail two marks that both mean
+                            "attention" and no way to tell which is which. This token existed
+                            in the spec's first draft and was deleted in review; its absence
+                            is the assertion that the two jobs are separated — `rule` carries
+                            currency, `underline` carries the pointer.
+     no --toc-disabled-*    an entry is either in the outline or absent from it. A section is
+                            never listed-but-unavailable, and `opacity` appears nowhere in
+                            this component.
+     no --toc-expanded-*    nothing opens. One level, no disclosure, no aria-expanded, no
+                            aria-controls naming something unrendered.
+     no underline colour    the underline paints currentColor, so it can never disagree with
+                            the label above it and never needs a surface block. Same part,
+                            same reasoning, as Button's link rule and Breadcrumbs' rule.
+
+   ── Every surface restates every token ──────────────────────────────────────────
+   Not just the deltas from paper. A surface that declares only deltas is not
+   self-contained: nest it inside a non-paper surface and it inherits that surface's values
+   for everything it left out. Measured elsewhere in this system before it was fixed — a
+   tint panel inside an ink section rendered ghost-neutral at 1.13:1. For this component the
+   same failure would strand --color-neutral-500 on --color-paper-deep at 2.82:1, under the
+   text floor, on a rail that looks merely quiet. The blocks below are repetitive on purpose.
+
+   Two rows land on mappings section.css already makes — label-ink on --sec-ink-muted at
+   tint, and nothing else. That agreement is not a reason to alias: a component token that
+   reads --sec-* silently follows it the day the surface layer is re-tuned, which is how an
+   outline ends up quieter than it was specified to be with nobody having decided that.
+   Every cell below names its own --color-* step. Breadcrumbs argues this at length and this
+   file follows it.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   Two type roles for the whole component, both composites, so nothing below restates a
+   family, a weight, a size or a ratio.
+
+   MONO for the title and the ordinal, because both are labels rather than content: "On this
+   page" is fixed chrome authored once and reads correctly shouted, and a digit has no case
+   at all, so --text-mono-case is a no-op on it. The mono column buys two things a sans
+   digit would not — two digits are always the same width, so every label starts on a
+   straight edge with no token declaring it, and the ordinal gets a baseline to sit on.
+
+   SANS for the label, and this is a rule rather than a preference. A navigationLabel is
+   authored sentence case by an editor — "Limitation of liability" — and mono is always
+   uppercase in this system, with tracking cut for capitals; primitives.css § Type · case
+   states the resolution directly: a label that must stay sentence case is not a mono label,
+   give it a sans role. So the row label cannot be mono, and the brief's worry about nineteen
+   uppercase 40-character entries is not a risk to weigh but a rule that already decided.
+
+   --text-body-sm has no tracking companion, so none is declared here. Nothing to restate,
+   and a --toc-label-tracking would be a name for a value that does not exist.
+
+   NOT --text-index, and this is the one type decision worth the paragraph. That role exists
+   — 20px mono semibold, consumed by ListCard as --lcrd-marker-text — and the spec first
+   claimed it did not, because the designer's guidelines copy predated it. It is still wrong
+   here, and ListCard's own comment is the argument: it records a 40px ordinal that "made the
+   ordinal the loudest thing in a row whose content is the title", and 20px is the fix
+   AGAINST A 22PX --text-h4 TITLE — a number slightly smaller than the thing it indexes. This
+   component's label is 14px. A 20px ordinal beside it is 1.4x the label and reproduces the
+   very failure that comment describes. Holding ListCard's ratio against a 14px label lands
+   at 12-13px; --text-micro at 11px is the nearest role and is also the smallest label in the
+   system. Owner-confirmed 26 Aug 2026, spec §17 Q18. */
+:root {
+  --toc-mono-text: var(--text-micro);
+  --toc-mono-tracking: var(--text-micro-tracking);
+  --toc-label-text: var(--text-body-sm);
+
+  /* Where the sticky rail's top edge lands: the nav bar, plus a gutter of air.
+     --space-72 is the PRIMITIVE --nav-bar-height itself resolves to, read directly rather
+     than through Nav's token, because a component may not read another component's tokens —
+     so if the bar height moves off this step, this must be re-checked. That is exactly the
+     idiom Breadcrumbs.module.css:67 uses: it reads --gap-column, the step
+     --sec-padding-y-tight resolves to, and says in a comment that Section being re-tuned
+     means re-checking here. Reading Nav's token instead would make this component follow
+     Nav silently, which is the failure; writing a bare 72px would put a literal in a layer
+     that has a step for it, which is the other one.
+     Composed as a calc rather than written as one number so the air half stays on the gap
+     scale and reads as air.
+     --nav-bar-height-compact (64) never applies: the rail only sticks at 1024 and up, and
+     the bar is 72 there — verified in SiteNav.module.css, where the compact height is
+     inside the below-1024 branch. */
+  --toc-sticky-inset: calc(var(--space-72) + var(--gap-gutter));
+
+  /* The rail's inline cap. 180px, which is also what --sec-rail declares for "the left
+     column a running head or margin note sits in" — the same intent, quoted by value for
+     the reason above, and Section never consumes it.
+     Measured against the shell: inside the 1240 content column with colGap="column" (64),
+     a [1, 4] track is 235.2px at 1240 and 179.2px at a 1024 viewport. So at the width
+     where the rail is tightest the track binds at 0.8px under this cap, and above about
+     1030 this cap binds and the slack sits at the rail's inline end — which widens the
+     apparent gutter and keeps the title and ordinals flush with the content column's
+     inline start, aligned with the hero title, every h2 and every card edge. */
+  --toc-max-inline: 180px;
+
+  /* The floor, and a real one rather than a formality. In a Cluster or a columns="fit"
+     track the rail's intrinsic minimum would be its widest unbreakable word, about 60px,
+     which is not a narrow rail but a broken one. At this floor the label column is
+     180 - 16 (inline-end padding) - 24 (ordinal) - 16 (column seam) = 124px at the cap and
+     104px here, which at --text-body-sm holds 14 characters a line and 28 across the
+     two-line clamp — the longest three-word navigation label in the corpus. Also the width
+     a [1, 6] track computes to inside the 1240 column (160.6px), which is where the
+     specimen renders it. */
+  --toc-min-inline: 160px;
+
+  /* The visible viewport below the sticky inset, less the same gutter of air at the block
+     end. dvh rather than vh so retracting browser chrome cannot clip the last entry.
+     Nineteen entries — the corpus worst case — measure about 870px, so on any viewport
+     under roughly 1000px tall the rail scrolls inside its own sticky box rather than
+     growing past it. It does not stop being sticky (the outline would vanish on the one
+     page that needs it most) and it does not cap the count (an outline that silently omits
+     sections is a lie). */
+  --toc-max-block: calc(100dvh - var(--toc-sticky-inset) - var(--gap-gutter));
+
+  /* The digit column, as a FIXED flex basis rather than a ratio — which is what holds the
+     rule at one inline position on a 180px rail and on a 160px one alike. --space-24 is the
+     step --prose-marker-inset reads for the same geometry — how far a list marker sits from
+     its text — so this reads the same primitive rather than restating its value or reading
+     Prose's token. NOT --gap-block, which is the same 24: this is the WIDTH OF a column, not
+     the distance BETWEEN two things, and the gap scale names only the second. Two digits at
+     --text-micro measure about 15.4px, so the rule has 8.6px of clearance before it. */
+  --toc-ordinal-inline: var(--space-24);
+
+  /* --space-12, the step --nav-sheet-row-padding-block reads — the closest analogue in the
+     system, a stacked column of nav rows — and it is read rather than restated because 12 has
+     no gap-scale name, which makes the ramp its only honest source. It was a bare 12px until
+     the audit pointed out it would have been the ONLY padding token in the layer writing a
+     literal. AND the 44px touch floor: a
+     --text-body-sm line box is about 21.7px, so 21.7 + 24 = about 45.7px, clearing 44.
+     That is the first of the two legal means, stepping the BOX up, and the second is
+     unavailable here: entries are contiguous, so a hit extension past the box would overlap
+     the rows above and below, which is precisely the defect Breadcrumbs measured and fixed.
+     There is deliberately no --toc-entry-min-block alongside this: the target is produced
+     by the padding, and a floor token beside it could silently disagree with the padding
+     the day the type role changes. 1024 is an iPad landscape width, which is why a touch
+     floor applies to a component that only becomes a rail on "desktop". */
+  --toc-entry-padding-block: var(--space-12);
+
+  /* The clamp. Two lines rather than free wrapping, because at 28 characters a line free
+     wrapping lets one row be three rows tall and the ladder loses its pitch; and rather
+     than one, because a single line cuts most real fallback headings mid-word. A count, not
+     a distance — the gap scale has no business naming it. */
+  --toc-label-lines: 2;
+
+  /* The one hairline in this component, and it runs BETWEEN the ordinal column and the
+     label column rather than around anything. 1px matches --sec-rule-width, --acc-rule-width
+     and --lcrd-rule-width. The current step is 1 -> 3 rather than 1 -> 2 on purpose: at
+     --proof-quote-rule-width's 2px the difference between a marked and an unmarked row is
+     one device pixel on a 45.7px row, which is not a mark. */
+  --toc-rule-width: var(--border-width-hairline);
+  --toc-current-rule-width: var(--border-width-3);
+
+  /* The label's underline — the pointer's half of the drawing. Drawn as a rule rather than
+     text-decoration because a decorated underline can only appear all at once and this one
+     wipes in from the inline start: the same part, in the same system, as Button's link rule
+     and Breadcrumbs' rule. It doubles on press, which is what keeps a rendered hover and a
+     rendered pressed distinguishable in a second, non-colour way on all four surfaces. */
+  --toc-underline-width: var(--border-width-hairline);
+  --toc-underline-width-pressed: var(--border-width-2);
+  --toc-underline-offset: var(
+    --space-2
+  ); /* optical, not --gap-tight: this clears the
+                                              descenders of the "y" and "g" in a label like
+                                              "Governance and ownership" set at
+                                              --text-body-sm. The day the gap scale is
+                                              re-tuned this must not move. Same step and
+                                              same reason as --crumb-link-rule-offset. */
+
+  /* A row has no box and therefore no corner, but a 2px ring drawing a hard rectangle
+     around bare text reads as a rendering artefact. The ring alone takes a radius,
+     following --btn-radius-bare-focus. */
+  --toc-entry-radius-focus: var(--radius-4);
+  --toc-ring-width: var(--focus-ring-width);
+  --toc-ring-offset: var(--focus-ring-offset);
+
+  --toc-transition-duration: var(--duration-fast);
+  --toc-transition-easing: var(--easing-standard);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The baseline. The unmarked rows sit at neutral-600 — the quietest ink that still clears
+   AA on this ground — and the title sits there too, which is as quiet as it can legally go:
+   neutral-500 is 3.16:1 here and fails the text floor. What still makes the head read as
+   quieter than the ladder is 11px mono against 14px sans, not ink.
+
+   Currency is brandeis-500 on the ordinal and the rule with the label at neutral-900 —
+   three times the contrast of its neighbours, and the only blue in the rail. The pointer
+   runs the other way: hover to neutral-900, pressed two ramp steps further to neutral-950,
+   the darkest ink in the system. Hover and current therefore hold the SAME label value
+   here, and that is deliberate — pointing at a row previews what being in it looks like,
+   and the blue ordinal says which one you are actually in.
+
+   The rule stays at neutral-300, one step quieter than --sec-rule-strong's 400 on this
+   surface, because it runs the ladder's full height rather than separating two items. */
+:root,
+[data-surface='paper'] {
+  --toc-title-ink: var(--color-neutral-600); /*  4.92:1 — the floor of AA, do not lighten */
+  --toc-label-ink: var(--color-neutral-600); /*  4.92:1 — the floor of AA, do not lighten */
+  --toc-label-ink-hover: var(--color-neutral-900); /* 14.62:1 */
+  --toc-label-ink-pressed: var(--color-neutral-950); /* 17.10:1 */
+  --toc-ordinal-ink: var(
+    --color-neutral-600
+  ); /*  4.92:1 — a text floor, not decoration; see below */
+  --toc-current-label-ink: var(--color-neutral-900); /* 14.62:1 */
+  --toc-current-ordinal-ink: var(--color-brandeis-500); /*  6.17:1 */
+  --toc-rule: var(--color-neutral-300); /*  1.54:1 — decoration, exempt */
+  --toc-current-rule: var(
+    --color-brandeis-500
+  ); /*  6.17:1 — the mark; a graphical object, floor 3:1 */
+  --toc-ring-color: var(--color-brandeis-500); /*  6.17:1 against its gap */
+  --toc-ring-gap-color: var(--color-paper);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   Every muted value steps one darker, because the ground did, and here it is FORCED rather
+   than preferred: neutral-600 measures 4.39:1 on paper-deep and fails the floor. So the
+   title, the labels and the ordinals sit at neutral-700, which is also what section.css
+   steps --sec-ink-muted to on this surface — so the outline and the body copy beside it are
+   the same grey rather than two greys. The honest cost: the rail cannot be as quiet on tint
+   as it is on paper.
+
+   Both blues hold. brandeis-500 still clears at 5.51:1 on the deeper ground, so the mark is
+   the same blue on tint as on paper, which matters more than a tuned value would — a reader
+   moving down a page of alternating bands should not see the mark change hue. Restated
+   anyway, because a surface that omits a token is not self-contained. */
+[data-surface='tint'] {
+  --toc-title-ink: var(--color-neutral-700); /*  7.27:1 — stepped; 600 would be 4.39:1 */
+  --toc-label-ink: var(--color-neutral-700); /*  7.27:1 — stepped; 600 would be 4.39:1 */
+  --toc-label-ink-hover: var(--color-neutral-900); /* 13.06:1 */
+  --toc-label-ink-pressed: var(--color-neutral-950); /* 15.27:1 */
+  --toc-ordinal-ink: var(--color-neutral-700); /*  7.27:1 — stepped; 600 would be 4.39:1 */
+  --toc-current-label-ink: var(--color-neutral-900); /* 13.06:1 */
+  --toc-current-ordinal-ink: var(--color-brandeis-500); /*  5.51:1 */
+  --toc-rule: var(--color-neutral-400); /*  1.90:1 — decoration, exempt */
+  --toc-current-rule: var(--color-brandeis-500); /*  5.51:1 — the mark; floor 3:1 */
+  --toc-ring-color: var(--color-brandeis-500); /*  5.51:1 against its gap */
+  --toc-ring-gap-color: var(--color-paper-deep);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   The direction inverts, and the unmarked rows get QUIETER rather than louder: neutral-500
+   at 5.41:1, one step below --sec-ink-muted's neutral-400 (8.05:1) on this surface. That is
+   a deliberate departure from the surface layer's own answer — up to nineteen rows at
+   8.05:1 on a dark ground glow, and compete with the body copy beside them.
+
+   The mark lifts three ramp steps to brandeis-300, because brandeis-500 on neutral-950 is
+   2.77:1 and is exactly the failure the surface model exists to prevent — the same floor
+   that lifts --btn-ring-color and --crumb-link-ink-hover to 300 here. The current label is
+   neutral-100 rather than white, which leaves white free to be the pressed value: on the
+   one surface where the ramp runs out at the top, currency and press still hold different
+   values.
+
+   The rule is the only thing that travels the other way, to neutral-700 — the darkest of
+   the four surfaces — because on ink a light hairline is louder than the labels it sits
+   behind. This is the Callout trap, and what carries this component through it is that
+   there is no fill to get wrong: only inks, and every ink moves AWAY from the ground. */
+[data-surface='ink'] {
+  --toc-title-ink: var(--color-neutral-500); /*  5.41:1 */
+  --toc-label-ink: var(--color-neutral-500); /*  5.41:1 */
+  --toc-label-ink-hover: var(--color-neutral-200); /* 12.83:1 */
+  --toc-label-ink-pressed: var(--color-white); /* 17.26:1 */
+  --toc-ordinal-ink: var(--color-neutral-500); /*  5.41:1 */
+  --toc-current-label-ink: var(--color-neutral-100); /* 14.47:1 — not white; white is pressed */
+  --toc-current-ordinal-ink: var(
+    --color-brandeis-300
+  ); /*  7.32:1 — floor: 500 is 2.77:1 here */
+  --toc-rule: var(--color-neutral-700); /*  2.10:1 — decoration, exempt */
+  --toc-current-rule: var(--color-brandeis-300); /*  7.32:1 — the mark; floor 3:1 */
+  --toc-ring-color: var(--color-brandeis-300); /*  7.32:1 against its gap */
+  --toc-ring-gap-color: var(--color-neutral-950);
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   The surface where the owner's decision cannot be taken literally, and saying so is the
+   whole job of this block: BLUE ON BLUE IS 1:1, so the mark cannot be blue. It becomes
+   white on both the ordinal and the rule, and the non-colour half of the mark — 3px against
+   1px — does proportionally more work here than anywhere else.
+
+   Only the light end of the blue ramp clears AA on a brandeis-500 ground: white 6.23:1, 50
+   is 5.57:1, 100 is 4.91:1, and 200 is already 3.78:1. So the unmarked rows sit at 100 —
+   the tightest cell in this table and the reason nothing quieter is allowed here. Hover goes
+   to 50 rather than to a neutral, because neutral-200 measures 4.63:1 on this ground and
+   reads as muddy grey on a saturated one; pressed then reaches white.
+
+   One consequence to accept knowingly: pressed and current hold the same white here. They
+   stay distinguishable because pressed draws a 2px underline while current draws a 3px rule
+   and a white ordinal, and because a press lasts only as long as a finger is down. */
+[data-surface='blue'] {
+  --toc-title-ink: var(
+    --color-brandeis-100
+  ); /*  4.91:1 — the tightest cell here, do not lighten */
+  --toc-label-ink: var(
+    --color-brandeis-100
+  ); /*  4.91:1 — the tightest cell here, do not lighten */
+  --toc-label-ink-hover: var(
+    --color-brandeis-50
+  ); /*  5.57:1 — not a neutral; 200 is 4.63:1 and muddy */
+  --toc-label-ink-pressed: var(--color-white); /*  6.23:1 */
+  --toc-ordinal-ink: var(
+    --color-brandeis-100
+  ); /*  4.91:1 — the tightest cell here, do not lighten */
+  --toc-current-label-ink: var(--color-white); /*  6.23:1 */
+  --toc-current-ordinal-ink: var(
+    --color-white
+  ); /*  6.23:1 — white, not blue: blue on blue is 1:1 */
+  --toc-rule: var(--color-brandeis-300); /*  2.64:1 — decoration, exempt */
+  --toc-current-rule: var(--color-white); /*  6.23:1 — the mark; floor 3:1 */
+  --toc-ring-color: var(--color-white); /*  6.23:1 against its gap */
+  --toc-ring-gap-color: var(--color-brandeis-500);
+}
+
+/* THE ORDINAL IS HELD TO THE TEXT FLOOR ON ALL FOUR SURFACES even though it is
+   aria-hidden, and that is worth stating once here rather than four times above. A sighted
+   reader navigates by those digits. aria-hidden describes what a screen reader skips — the
+   <ol> already announces "4 of 11", so "zero four" before every label is noise — not what a
+   designer may under-contrast. The reason the digit column still reads as quieter than the
+   labels is SIZE AND FAMILY, 11px mono against 14px sans, not ink. */

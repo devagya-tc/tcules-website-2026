@@ -68,6 +68,11 @@ const SPECIMENS = [
         note: 'the ancestor trail — depth ladder, collapse, 4 surfaces, its own band',
       },
       {
+        href: '/design/table-of-contents',
+        name: 'TableOfContents',
+        note: 'the outline of a long-form document — sticky rail, live mark, 2 arrangements, 4 surfaces',
+      },
+      {
         href: '/design/cta-section',
         name: 'CtaSection',
         note: 'the commercial close — 3 arrangements, accepted ask ladder, 4 surfaces',

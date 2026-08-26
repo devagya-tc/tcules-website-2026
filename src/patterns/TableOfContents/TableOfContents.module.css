@@ -1,0 +1,361 @@
+/* TableOfContents — the outline of a long-form document, built to docs/specs/TableOfContents.md.
+
+   Every colour, distance, radius, duration and easing comes from --toc-*, declared in
+   tokens/components/table-of-contents.css and re-declared once per surface there. This file states
+   no value of its own: it decides STRUCTURE and which token each state reads, and nothing else.
+   That is what lets the same markup answer a paper band, a tint panel, an ink band and a blue
+   pivot without knowing which one it is standing on.
+
+   ── Two arrangements, one media query ───────────────────────────────────────────
+   Below 1024 the outline is a static, full-width, single-column block sitting immediately after
+   the hero, and it needs NO base declarations to be that: an unstyled <nav> holding a stacked list
+   already is one. So `.rail` appears only inside the one media query, which is where the whole
+   difference between the two arrangements lives — position, both inline caps, the block cap, the
+   internal scroll and the scrollbar's clearance. Nothing else in this file is inside a breakpoint,
+   and no gap step and no type role may ever be: the layout changes at 1024, the distances do not.
+
+   ── What is NOT here, and why ───────────────────────────────────────────────────
+   No display: grid. One display: flex, inside `.link`, laying an ordinal and a label on one
+   baseline in a single control box — the case CLAUDE.md permits explicitly, named here as that
+   rule requires. It arranges nothing and no sibling depends on it. Every real arrangement is a
+   Layout: the head's air, and the ladder's contiguous rows at `rowGap="none"`.
+
+   One display: -webkit-box, on `.labelInk`, because that is what -webkit-line-clamp requires. The
+   unprefixed `line-clamp` is NOT Baseline in 2026 — Firefox still needs the prefix — so both are
+   declared and the prefixed pair is the one that works. Spec §14 item 10 is amended to permit it.
+
+   No list reset. reset.css already zeroes an <ol>'s margin, padding and marker, and restating them
+   here would be a second answer to a settled question.
+
+   No margin, anywhere, with no exception — this component has no visually hidden text to clip.
+
+   No z-index. --z-base is 0 and that is what this component takes: the rail's only overlap is the
+   SiteNav bar crossing its top edge, and the nav must win that. Taking --z-sticky would put the
+   outline over the site's own bar.
+
+   No background, on any part, in any state. The rail must not own its ground: it sits inside
+   somebody else's Section and reads data-surface from it, which is why the hover and pressed inks
+   are measured against the surface ground in the token layer.
+
+   ── Rule order is load-bearing ──────────────────────────────────────────────────
+   Hover is declared BEFORE pressed, so pointer-down wins while the pointer is also hovering. They
+   are an equal-specificity pair decided by source order — moving a block breaks a state.
+
+   ── Why the colour rules are scoped `.list .link` ──────────────────────────────
+   globals.css maps bare anchors onto the surface roles: `a` and `a:hover`. A lone `.link:hover`
+   ties `a:hover` on specificity (0,1,1) and the winner is then decided by stylesheet order, which
+   is the bundler's business rather than this file's — and the two values differ (a dark neutral
+   here against --sec-link-ink-hover's blue), so a lost tie is a real colour drift that renders
+   perfectly and looks almost right. It would also hand this component's hover back to the blue
+   that currency has been given, which is the one confusion the whole colour model exists to
+   prevent. The descendant selector takes it to (0,2,1) and settles it here. It needs no extra
+   markup: .list is on the <ol> every link sits inside.
+
+   ── Where currency and the pointer meet ─────────────────────────────────────────
+   They compose, and the precedence is decided by specificity rather than by a rule about it.
+   `.current .link` is (0,2,0) and `.list .link:hover` is (0,2,1), so HOVER WINS ON THE LABEL —
+   the reader is pointing at that row and the live thing should answer. Nothing in any pointer
+   state touches `.ordinal` or `::before`, so the blue ordinal and the 3px rule PERSIST through
+   hover, press and focus: a pointer can never hide the mark. Hovering the current row therefore
+   renders a blue ordinal, a blue 3px rule, a dark neutral label and an underline — visibly the
+   current row being pointed at, not either state alone. */
+
+/* ── The head ──────────────────────────────────────────────────────────────────
+   It carries no rule. An earlier draft drew a hairline under it AND one down the leading edge of
+   every row; the two met at a corner and read as a box nobody finished. The air below it — the
+   Layout's --gap-block — is now the only thing separating the head from the ladder, which is why
+   that step is "head to body inside a block" rather than something tighter.
+
+   Mono, and uppercased in PRESENTATION only: the string is authored "On this page" so that the
+   capitalisation an editor wrote is the capitalisation a screen reader announces. text-transform
+   sits beside `font` because a composite carries no transform, for the same reason letter-spacing
+   does. */
+.title {
+  font: var(--toc-mono-text);
+  letter-spacing: var(--toc-mono-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--toc-title-ink);
+}
+
+/* ── The ladder ────────────────────────────────────────────────────────────────
+   One type role set here and INHERITED by the links and their labels, which is why `.labelInk`
+   names no font: the only part that overrides it is the ordinal, which is the other role. A
+   composite, so nothing restates a family, a weight, a size or a ratio. --text-body-sm has no
+   tracking companion, so there is no letter-spacing to state either.
+
+   No measure. Nothing here carries running text — what caps a label's line is the rail's own
+   inline size, and --measure-body would cap it around 500px, four times the label column, naming
+   a constraint that never binds and implying the rail is a reading column. It is not; the body
+   track beside it is. */
+.list {
+  font: var(--toc-label-text);
+}
+
+/* ── The row ───────────────────────────────────────────────────────────────────
+   The control box, and the only flex container in the file.
+
+   `position: relative` is the containing block for the rule below, and it is the only reason it is
+   here. `align-items: baseline` is what puts the digits on the label's FIRST line's baseline at
+   every row height, so a one-line row and a two-line row read as the same ladder — an earlier
+   draft positioned the ordinal absolutely, which took it out of baseline alignment and left every
+   digit floating a few pixels above its label.
+
+   `gap` is doing two jobs at once: it is the column seam, and it is the clearance the rule needs
+   on both sides of itself. --gap-text is read directly rather than renamed — a --toc-column-seam
+   token would be a second name for one distance, which is why --sec-gap was deleted.
+
+   The block padding is what reaches the 44px touch floor: a --text-body-sm line box is about
+   21.7px, so 21.7 + 24 = about 45.7px. That is the first of the two legal means, stepping the BOX
+   up, and the second is unavailable here — entries are contiguous, so a hit extension past the box
+   would overlap the rows above and below, which is precisely the defect Breadcrumbs measured and
+   fixed. It also means the row PITCH equals the target, so consecutive rows clear each other. */
+.link {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-text);
+  padding-block: var(--toc-entry-padding-block);
+  color: var(--toc-label-ink);
+  text-decoration: none;
+  transition: color var(--toc-transition-duration) var(--toc-transition-easing);
+}
+
+.list .link:hover {
+  color: var(--toc-label-ink-hover);
+}
+
+.list .link:active {
+  color: var(--toc-label-ink-pressed);
+}
+
+/* ── The ordinal ───────────────────────────────────────────────────────────────
+   A FIXED basis and no shrink, which is what holds the rule at one inline position on a 180px rail
+   and on a 160px one alike — a ratio would move it every time the track did. Start-aligned rather
+   than end-aligned: the digits stay flush with the content column's inline start, so they line up
+   with the hero title, every h2 and every card edge on the page, and the slack falls where the
+   rule needs clearance.
+
+   It carries its OWN colour, which is what makes it immune to the pointer: no hover or pressed
+   rule touches this part, so when the row is current the blue survives being pointed at.
+
+   Mono, uppercased in presentation — a no-op on digits, which have no case, and the reason the
+   mono role costs nothing here while buying a monospaced column in which two digits are always the
+   same width. */
+.ordinal {
+  flex: 0 0 var(--toc-ordinal-inline);
+  font: var(--toc-mono-text);
+  letter-spacing: var(--toc-mono-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--toc-ordinal-ink);
+  transition: color var(--toc-transition-duration) var(--toc-transition-easing);
+}
+
+/* ── The label ─────────────────────────────────────────────────────────────────
+   Two elements, and the split is the same one Button makes for the same reason. `.label` is the
+   underline's positioning context and takes the remaining inline space; `.labelInk` is the box
+   that CLIPS, and the clip is why they cannot be one element — `overflow: hidden` on the box the
+   underline is drawn against would crop the underline.
+
+   `min-inline-size: 0` lets the flex item shrink below its content's intrinsic width, which is
+   what allows the clamp and the word-break to work at all in a 160px rail; without it a long
+   label would push the rail wider than its cap. */
+.label {
+  position: relative;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+/* Clamped to two lines with an ellipsis, and the clamp is VISUAL only: the full string stays in
+   the DOM, so a screen reader reads the whole heading and the accessible name is complete.
+
+   `overflow-wrap: anywhere` rather than `break-word`, and the difference is load-bearing: only
+   `anywhere` also reduces the element's intrinsic MINIMUM width, which is what stops a pasted URL
+   setting the rail's minimum to the length of one unbreakable token and pushing it past its cap.
+
+   Both spellings of the clamp are declared. The prefixed pair is the one that works — unprefixed
+   `line-clamp` is not Baseline in 2026 — and `display: -webkit-box` is the second and last
+   `display` in this file. */
+.labelInk {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--toc-label-lines);
+  line-clamp: var(--toc-label-lines);
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+/* ── The rule · currency, and nothing else ─────────────────────────────────────
+   One hairline, and it runs BETWEEN the ordinal column and the label column rather than around
+   anything: it sits at the start of the row's gap, spans the row's full height, and turns no
+   corners. Because the rows are contiguous, the per-row segments butt into one unbroken line down
+   the ladder, and the rail's outer edge stays a single clean alignment.
+
+   It reports CURRENCY only. There is no hover value and no --toc-rule-hover to read: a hairline
+   that also brightened on hover would give the rail two marks that both mean "attention" and no
+   way to tell which is which. `underline` carries the pointer; this carries the mark. Nothing in
+   this component is ever ambiguous about which of the two it is reporting.
+
+   `background-color` transitions; `inline-size` deliberately does not, so the 1px -> 3px step is a
+   CHANGE rather than a growth. Animating the mark would be the current section chasing the scroll,
+   which is the one motion the design forbids. */
+.link::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--toc-ordinal-inline);
+  inline-size: var(--toc-rule-width);
+  background-color: var(--toc-rule);
+  transition: background-color var(--toc-transition-duration) var(--toc-transition-easing);
+}
+
+/* ── The underline · the pointer, and nothing else ─────────────────────────────
+   Drawn as a rule rather than text-decoration, because a decorated underline can only appear all
+   at once and this one wipes in from the inline start — the same part, in the same system, as
+   Button's link rule and Breadcrumbs' rule. It paints `currentColor` and has no colour token of
+   its own, deliberately: it can then never disagree with the label above it, and it never needs a
+   surface block. It is decoration — redundant with a colour move it always accompanies — so it is
+   not a contrast floor.
+
+   The offset is a NEGATIVE inset rather than bottom padding on `.label`, and that is the one place
+   this component departs from how Breadcrumbs draws the same part. Padding there was forced: its
+   band gives nothing downward, so anything below the box would be painted over by the next band.
+   Here the row has 12px of its own padding below the text and its neighbour has 12 above, so there
+   is room — and taking the padding route instead would grow the label's box by 2px, push the row
+   past the measured 45.70px, and change the touch arithmetic for a clearance the row already has.
+
+   `transform-origin` is the one place a physical value is unavoidable: CSS has no logical
+   equivalent, and `0 50%` at least states the origin as a position rather than as the `left`
+   keyword the rest of this file avoids. In LTR it is the inline start, which is what the wipe
+   wants. */
+.label::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: calc(-1 * var(--toc-underline-offset));
+  block-size: var(--toc-underline-width);
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--toc-transition-duration) var(--toc-transition-easing);
+}
+
+.list .link:hover .label::after,
+.list .link:focus-visible .label::after,
+.list .link:active .label::after {
+  transform: scaleX(1);
+}
+
+/* The pressed step. `block-size` is not in the transition list above, so it is instant — a change,
+   not a growth, following --crumb-link-rule-width-pressed. This is also what keeps a rendered
+   hover and a rendered pressed distinguishable in a second, NON-COLOUR way on all four surfaces,
+   rather than only on the one where the ramp ran out. */
+.list .link:active .label::after {
+  block-size: var(--toc-underline-width-pressed);
+}
+
+/* ── Currency ──────────────────────────────────────────────────────────────────
+   A class on the <li>, emitted by the component. Nothing detects anything: no :has(), no selector
+   that walks upward. It holds no value of its own — it re-points three other parts at their
+   --toc-current-* values, which is why it is a PART in the token layer rather than a state.
+
+   Focus also shows what hover shows: :focus-visible is listed alongside :hover in the label rule
+   above, so a keyboard user is shown exactly what a pointer user is shown. */
+.current .link {
+  color: var(--toc-current-label-ink);
+}
+
+.current .ordinal {
+  color: var(--toc-current-ordinal-ink);
+}
+
+.current .link::before {
+  inline-size: var(--toc-current-rule-width);
+  background-color: var(--toc-current-rule);
+}
+
+/* ── Tab focus ─────────────────────────────────────────────────────────────────
+   Keyboard only, via :focus-visible, so a mouse click never draws the ring and a tab always does.
+   Two rings in one shadow: the gap drawn in the SURFACE colour, then the ring itself. The
+   surface-coloured gap is what lets a white ring read against a blue ground, and because both
+   halves are surface tokens a rail in an ink band takes an ink gap and a lighter blue ring with no
+   change here.
+
+   DRAWN INWARD, which is this component's one departure from how Button, Breadcrumbs and
+   SiteFooter draw theirs. An outset ring at --toc-ring-offset would reach 4px above and below a
+   box whose neighbours are CONTIGUOUS — so it would overlap the rows either side — and 4px past
+   the rail's inline start, breaking the one alignment the rail has. Inset, the ring's outer edge
+   is the row's own edge and nothing collides. The row paints no fill, so the gap is still the
+   surface ground and the ring's 3:1 measurement is against the same thing it would have been
+   outset.
+
+   A row has no corner of its own, but a 2px ring drawing a hard rectangle around bare text reads
+   as a rendering artefact, so the ring alone takes a radius. */
+.link:focus {
+  outline: none;
+}
+
+.list .link:focus-visible {
+  outline: none;
+  border-radius: var(--toc-entry-radius-focus);
+  color: var(--toc-label-ink-hover);
+  box-shadow:
+    inset 0 0 0 var(--toc-ring-offset) var(--toc-ring-gap-color),
+    inset 0 0 0 calc(var(--toc-ring-offset) + var(--toc-ring-width)) var(--toc-ring-color);
+}
+
+/* ── The rail · 1024 and up ────────────────────────────────────────────────────
+   The one media query in this file, and it changes only position, the caps and the scroll. The
+   literal matches Layout's `lg` breakpoint, so the shell's second track appearing and the rail
+   sticking are one width by construction.
+
+   The block cap is the viewport below the sticky inset, less a gutter at the end. Nineteen entries
+   — the corpus worst case — measure about 870px, so on most viewports the rail scrolls inside its
+   own sticky box. It does not stop being sticky (the outline would vanish on the one page that
+   needs it most) and it does not cap the count (an outline that silently omits sections is a lie).
+   The cost, accepted: the head scrolls away with the first few entries while the reader is
+   scrolling inside the rail. Pinning it needs a grid row relationship Layout does not express, and
+   a prop on the most load-bearing primitive in the system earns its place at the second caller.
+
+   `overflow-y`, and it is the one physical property in this file. The logical spelling is
+   `overflow-block` and it is deliberately not the load-bearing declaration: its support could not
+   be confirmed at build time, and its failure mode is a CLIPPED nineteen-entry outline on the one
+   page that most needs one. This site is horizontal-tb throughout with no vertical writing mode
+   anywhere, so overflow-y IS the block axis here and nothing is lost but the spelling. Spec §12's
+   logical-properties row is amended to record this.
+
+   `overscroll-behavior: contain` as the shorthand rather than the -block longhand, for the same
+   support reason and at no cost: the rail never scrolls on the inline axis, so setting both is
+   setting one.
+
+   The inline-end padding is where a classic scrollbar draws its track. Without it the scrollbar
+   sits over the last characters of every label, which is why it is a real distance rather than
+   trim — and why it lives here rather than at base: there is no internal scroll below 1024. */
+@media (min-width: 1024px) {
+  .rail {
+    position: sticky;
+    inset-block-start: var(--toc-sticky-inset);
+    max-inline-size: var(--toc-max-inline);
+    min-inline-size: var(--toc-min-inline);
+    max-block-size: var(--toc-max-block);
+    padding-inline-end: var(--gap-text);
+    overflow-block: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* The wipe is the one motion here, so it is the one thing to answer for. Reduced motion keeps the
+   underline — it is the affordance — and simply stops it travelling.
+
+   The colour transitions drop too, and that is belt-and-braces rather than doctrine: strictly a
+   colour change is not motion. It is specified because a nineteen-row rail re-colouring as the
+   reader scrolls is the one place in this system where a 140ms colour tween could read as movement
+   to a motion-sensitive reader. */
+@media (prefers-reduced-motion: reduce) {
+  .link,
+  .ordinal,
+  .link::before,
+  .label::after {
+    transition-duration: var(--duration-instant);
+  }
+}
