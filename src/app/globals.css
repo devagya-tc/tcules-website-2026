@@ -60,11 +60,32 @@ h6 {
 
 /* Links take the section layer's link roles, so a link inside any band lifts to a legible step
    without knowing where it is. Section speaks ground/ink rather than bg/fg — that register is
-   reserved for controls. */
-a {
+   reserved for controls.
+
+   ── :where(), and why it is not decoration ──────────────────────────────────────
+   Both rules sit at ZERO specificity, so any component class beats them. That is what this whole
+   block claims to be — the header above calls base element typography "a floor, not the answer" —
+   and written plainly it was not true of the second rule.
+
+   `a:hover` is a type plus a pseudo-class: specificity 0-1-1, which OUTRANKS a single component
+   class at 0-1-0. So a component that coloured an anchor and did not also colour `:hover` had its
+   ink replaced by --sec-link-ink-hover the moment a pointer touched it, silently, and the cause
+   was in a file it never mentions. SiteNav's wordmark turned blue on hover for exactly this
+   reason, and so did the rail card's title; both needed a `:hover` rule whose only job was to
+   restate the colour they had already set.
+
+   `:where()` takes the specificity to 0-0-0 and the trap with it: a component class wins by
+   existing, and the floor still applies to every bare anchor a CMS field produces, because author
+   rules beat the UA stylesheet whatever their specificity. Order is load-bearing — equal
+   specificity means the later rule wins, so hover stays second.
+
+   Audited before changing: nothing was relying on the old outranking. Every anchor in the repo that
+   carries a colour class also carries a `:hover` for it, or is a `Button` (0-4-0), or is a `Prose`
+   descendant (`.prose a` / `.prose a:hover`). The two exceptions were the SiteNav bugs above. */
+:where(a) {
   color: var(--sec-link-ink);
 }
-a:hover {
+:where(a:hover) {
   color: var(--sec-link-ink-hover);
 }
 

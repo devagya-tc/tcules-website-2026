@@ -709,13 +709,21 @@ its own hover colour (`.row`, `.sheetControl`, `.sheetLink`) or is a `Button`, w
 and are covered by the same. `SiteFooter`'s links all declare hover colours. So the trap bit exactly
 the two hand-rolled anchors that did not.
 
-**The general shape, worth knowing before the next pattern hand-rolls a link.** `globals.css`'s base
-element rules are documented as "a floor, not the answer", but `a:hover` is a *type + pseudo-class*
-selector and therefore outranks any single component class. A component that sets a colour on an
-anchor and does not also set it on `:hover` will silently inherit Section's link ink. Writing the
-shell's link rules as `:where(a)` / `:where(a:hover)` would drop them to zero specificity and close
-the whole class of bug — that is a shell change touching every link on the site, so it is raised
-here rather than taken.
+**And the general fix was then taken.** `globals.css`'s base element rules are documented as "a
+floor, not the answer", but `a:hover` is a *type + pseudo-class* selector at 0-1-1 and therefore
+outranked any single component class — so the floor was not a floor, and any future pattern that
+coloured an anchor without also colouring `:hover` would have inherited Section's link ink silently.
+Both rules are `:where(a)` / `:where(a:hover)` now, at zero specificity.
+
+**Which makes the two defences above redundant, so they are gone.** `.brand` and `.card` hold their
+ink through hover by simply declaring it once. The comments left behind say what the rules used to
+be for, because "why is there no `:hover` here" is the question a reader will have.
+
+The audit that preceded the change: every anchor in the repo carrying a colour class also carries a
+`:hover` for it, or is a `Button` (0-4-0), or is a `Prose` descendant (`.prose a` / `.prose a:hover`,
+which uses its own `--prose-link-*`). Nothing relied on the old outranking. Verified afterwards that
+a bare anchor still takes the floor at rest (`#0048ff`) and on hover (`#003ee0`), and that a Prose
+link still hovers on its own token.
 
 ### 12.29 · Two QA items cannot be met yet, and are not faked
 
