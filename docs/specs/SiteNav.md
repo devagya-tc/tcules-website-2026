@@ -754,7 +754,24 @@ Measured after, and the point is how little moved: seam 129 → **65**, visual 1
 tracks 278 → 277, column-two slack 48 → 47, rail content 308 → 311, pane height 444 → 444, nothing
 wrapped. The gap halved and nothing else changed.
 
-### 12.31 · Two QA items cannot be met yet, and are not faked
+### 12.31 · The seam between the two link columns, and why halving it gained half
+
+`gutter` (32) rather than `column` (64). Those two are peer groups of links, not two halves that must
+read apart — the rail is the thing this pane genuinely divides and it has a rule to say so.
+
+**Two things measured after, both worth knowing.**
+
+The visible gap between the two lists went 193 → **177**, not 193 → 161. A `Layout` seam comes out of
+the track budget, so the 32 saved was split between the two tracks: they grew 277 → 293 and column
+one's slack grew 129 → 145, giving back half the saving. **The gap between those columns is dominated
+by slack, not by the seam** — "Product Modernisation" is a 148px label in a 293px track, and equal
+tracks force column one to carry the difference however wide the seam is.
+
+And a row's hover fill extends `--nav-row-padding-inline` past its track on both sides, so the
+clearance from a lit fill to the next column's text is now **16px**, where 64 left 48. Checked, and
+tight: do not narrow this seam further without re-measuring that.
+
+### 12.32 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at

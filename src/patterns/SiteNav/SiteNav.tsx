@@ -860,8 +860,11 @@ function PlatePane({ item }: { item: SiteNavItem }) {
        put 129px between the second column's track and the rail's content, and 177 between its last
        label and the same point: a quarter of the plate spent on one gap.
 
-       The INNER seam stays `column` (64), because those two are peer groups of links that must read
-       as separate columns, which is exactly what that step is for.
+       The INNER seam is `gutter` (32) as well. Those two are peer groups rather than two halves that
+       must read apart — the rail is the thing this pane genuinely divides, and it has a rule to say
+       so. One caveat lives with it: a row's hover fill extends --nav-row-padding-inline past its
+       track on both sides, so a 32 seam leaves 16px between a lit fill and the next column's text
+       where 64 left 48. Tight, and checked; do not tighten it further without re-measuring that.
 
        NINE-TO-FIVE, and the ratio does one job: holding the rail still while everything else moves.
        Under [2,1] the plate's cuts fall on the rail too — it would sit at 287 here — shrinking the
@@ -870,7 +873,7 @@ function PlatePane({ item }: { item: SiteNavItem }) {
        this ratio, which is why there is still no --nav-rail-width token; see
        docs/specs/SiteNav.md §12. */
     <Layout columns={item.rail ? [9, 5] : undefined} colGap="gutter" rowGap="stack">
-      <Layout columns={2} colGap="column" rowGap="stack">
+      <Layout columns={2} colGap="gutter" rowGap="stack">
         {groups.map((group) => (
           <Layout key={group.label} rowGap="block">
             <p className={styles.groupLabel}>{group.label}</p>
