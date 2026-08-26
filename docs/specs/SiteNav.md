@@ -129,7 +129,7 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `cta` | `Button` solid primary `sm` | right of the bar |
 | `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `menu` ↔ `close` |
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
-| `pane` | one per mega section | 1240 / 780 / 560px wide; two label + link columns, plus the rail in Services |
+| `pane` | one per mega section | 1120 / 780 / 560px wide; two label + link columns, plus the rail in Services |
 | `hubBar` | `Cluster` + `Button emphasis="link"` | the way through to the section index — Services and Insights only. Hairline above, `--gap-text` under it |
 | `rail` | `<aside>`, 340px | primary card (image slot, title) + secondary row |
 | `scrim` | fixed box under the plate | `--nav-scrim`, below the bar. The system has no elevation token; edge, radius and scrim do the separating |
@@ -218,8 +218,8 @@ Recorded in §12.6.
 
 1. **A group with one link** — renders as a group of one; no special case.
 2. **A section with no rail** — Expertise and Insights: the plate narrows to its content
-   (780 / 560). It does not hold 1240px of empty ground.
-3. **A fourth group in a mega** — panes are a grid; a third column fits inside 1240 without a
+   (780 / 560). It does not hold the widest plate's width in empty ground.
+3. **A fourth group in a mega** — panes are a grid; a third column fits inside the widest plate without a
    layout change.
 4. **A `planned` link whose page is missing** — the nav still renders it. See §12.5: the CI check
    the spec asks for cannot exist yet, because almost no page routes are built.
@@ -291,7 +291,7 @@ Recorded here rather than fixed silently. Nothing below changes a designed outco
 ### 12.1 · The plate cannot be a `Section`, so it owns a ground
 
 `Section` owns the content column (1240 cap, 32 gutter) and its ground, and CLAUDE.md forbids
-overriding either from outside. The plate's box is 1240 / 780 / 560 wide and carries its own
+overriding either from outside. The plate's box is 1120 / 780 / 560 wide and carries its own
 border, radius and padding — so it cannot be a `Section` and cannot inherit `--sec-ground`. It
 paints `--nav-panel-ground` instead, declared once per surface. The same token serves the mobile
 sheet, which is the same idea at another size.
@@ -329,10 +329,10 @@ panes are `inert`, so they hold no focus and take no pointer.
 ### 12.5 · The rail is a ratio, not a 340px track
 
 `Layout` has no fixed-track mode, and a local grid to get one is the hand-rolled arrangement the
-layout rule prohibits. The plate body is `Layout columns={[2, 1]} colGap="column"`, which at the
-plate's own width lands the rail at **371px rather than 340**. This is the one dimension in the
-component that does not match the prototype. The alternatives were both worse: fr weights chosen to
-resolve to 340 at exactly 1240 (magic numbers, brittle the moment the padding or the seam moves), or
+layout rule prohibits. The plate body is `Layout columns={[5, 3]} colGap="column"`, which at the
+plate's own width lands the rail at **308px rather than 340** — near enough what was asked for, and
+now the term the ratio exists to hold still (§12.10). The alternatives were both worse: fr weights chosen to
+resolve to 340 at exactly one plate width (magic numbers, brittle the moment the padding or the seam moves), or
 changing a tier-1 primitive every component in the repo depends on. `--nav-rail-width` was therefore
 never added — a token with no reader is worse than no token. If 340 turns out to matter, the right
 fix is a fixed-track mode on `Layout`, which is a conversation about the primitive.
@@ -385,7 +385,7 @@ the default content. All were measured and are fixed.
    and the plate is `box-sizing: border-box`, so handing the raw value over left the plate's content
    box two hairlines short. The plate's `block-size` now adds them back.
 3. **A pane's measured height was wrong for the width it would be rendered at.** Panes were clamped
-   by `max-inline-size: 100%` of the plate, so while the narrow Insights pane was open the 1240
+   by `max-inline-size: 100%` of the plate, so while the narrow Insights pane was open the widest
    Services pane laid out 718 wide, wrapped to nearly twice its height, hit the viewport cap and
    recorded 488 — and the plate then opened Services 86px taller than its content, permanently. The
    stage is now an inline-size container and both the plate and every pane size against `100cqi`, so
@@ -430,7 +430,41 @@ The desktop bar has the same button-and-anchor mix and was already correct, beca
 its own padding — which is the argument for controls being `Button` wherever one fits, and the
 reason this only bit the one row that is hand-rolled.
 
-### 12.9 · Two QA items cannot be met yet, and are not faked
+### 12.10 · The widths and the pane ratio both answer to the row type
+
+The spec set three plate widths against 18px rows. The rows are 14px now, and all three widths and
+the pane ratio moved with them — recorded here because the numbers in §3 and §8 are consequences,
+not decisions, and the next type change invalidates them again.
+
+**Measured at 18px, then at 14px with the old widths:**
+
+| Section | Plate | Column track | Longest label | Slack per column |
+|---|---|---|---|---|
+| Services | 1240 | 339 | 230 ("Product Modernisation Assessment") | 109 — and **191** in the first column, whose longest is 148 |
+| Expertise | 880 | 376 | 293 | 83 |
+| Insights | 720 | 296 | 133 | 163 — better than half air |
+
+The number that decided it was not the slack but the **255px between column one's text and column
+two's text** in Services: the 64px seam plus 191px of unused track, so a fifth of the plate was the
+gap between two lists and the two groups stopped reading as one block.
+
+**Now:** 1120 / 780 / 560, and the pane ratio `[2, 1]` → `[5, 3]`.
+
+The ratio change is the part worth understanding. Narrowing Services under `[2, 1]` would have taken
+the 120px off the rail as well — content 307 → 266 — shrinking the one column whose width buys
+something, its 16:7 image slot. At `[5, 3]` the rail lands back on **308**, unchanged, and the whole
+cut falls on the two link columns: track 339 → 278 against a longest label of 230, so column two is
+properly filled, the inter-column gap drops to 194, and nothing wraps. Expertise 780 leaves 33px of
+slack, Insights 560 leaves 83px.
+
+**What was given up.** 1240 was `--sec-max-inline`, so the widest plate lined up with every band on
+the page behind it. That was worth having when the plate was full; at 14px it bought an alignment
+nobody can see through a 20% scrim in exchange for the 255px hole. **If the row type ever goes back
+up, this is the first decision to revisit** — and the arithmetic to redo is: widest label in a
+column, doubled, plus one `--gap-column` seam and two `--gap-gutter` edges, then a ratio that leaves
+the rail at ~308.
+
+### 12.11 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at

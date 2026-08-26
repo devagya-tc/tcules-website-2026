@@ -25,7 +25,7 @@
    ── The ground IS here now, and that is a change ────────────────────────────────
    This file used to say a --nav-ground "would be a second name for a decision already made
    one layer down", because the panel WAS a full-bleed Section and Section paints its own
-   band. The plate is not a Section any more and cannot be one: it is 1240, 880 or 720 wide
+   band. The plate is not a Section any more and cannot be one: it is 1120, 780 or 560 wide
    depending on the section open, it carries its own border, radius and padding, and
    CLAUDE.md forbids overriding Section's content column or ground from outside. So the
    plate and the sheet paint --nav-panel-ground, which resolves to the SAME ground the
@@ -79,22 +79,27 @@
   /* ── The plate ───────────────────────────────────────────────────────────────
      THREE WIDTHS, and they are the whole reason the plate is not a Section. Services
      carries two columns and the rail and fills the content column; Expertise carries two
-     columns and no rail; Insights carries two short ones. A plate held at 1240 for all
-     three shows 360px of empty ground next to Insights, which reads as a mistake rather
-     than as restraint. T-shirt names, per the rule that a component SIZE takes an ordinal
+     columns and no rail; Insights carries two short ones. A plate held at the widest for all
+     three shows hundreds of pixels of empty ground next to Insights, which reads as a mistake
+     rather than as restraint. T-shirt names, per the rule that a component SIZE takes an ordinal
      and only a shared DISTANCE takes a role name.
 
-     lg matches --sec-max-inline (1240) on purpose: the widest plate lines up with every
-     band on the page behind it. It is stated rather than read, because a component may not
-     read another component's tokens.
+     ALL THREE ARE TUNED AGAINST --nav-row-text, and that is the thing to know before changing any
+     of them. At 18px rows they were 1240, 880 and 720. At 14px each left a column holding far less
+     than its track: 191px of slack in Services' first column against a 148px label, 83px in
+     Expertise, 163px in Insights — the Insights plate was better than half air. So all three came
+     down, and Services' [5,3] pane ratio came down with it so the cut lands on the columns rather
+     than on the rail (see PlatePane).
 
-     md AND sm ARE TUNED AGAINST --nav-row-text, which is the thing to know before changing either.
-     At 18px rows they were 880 and 720; at 14px those left 83px and 163px of empty track per
-     column — the Insights plate was better than half air — so they came down. lg did not move,
-     because it answers to the page's content column rather than to its own content. Re-point the
-     row type and these two want re-measuring: widest label in a column, doubled, plus one
-     --gap-column seam and two --gap-gutter edges. */
-  --nav-plate-width-lg: 1240px;
+     lg USED TO BE 1240 to match --sec-max-inline, so the widest plate lined up with every band on
+     the page behind it. That was worth having when the plate was full; at 14px it bought an
+     alignment nobody can see through a 20% scrim in exchange for a 255px hole between two lists.
+     The alignment is the thing that was given up here — if the row type ever goes back up, this is
+     the first decision to revisit.
+
+     Re-point the row type and all three want re-measuring: widest label in a column, doubled, plus
+     one --gap-column seam and two --gap-gutter edges. */
+  --nav-plate-width-lg: 1120px;
   --nav-plate-width-md: 780px;
   --nav-plate-width-sm: 560px;
   --nav-plate-radius: var(--radius-8);
@@ -143,11 +148,13 @@
   --nav-row-line: calc(var(--font-size-body-sm) * var(--line-height-body-sm));
 
   /* The rail — the plate's third column, in Services alone.
-     NO WIDTH TOKEN. The design measured 340px, and the arrangement is a Layout `[2, 1]` instead:
-     Layout has no fixed-track mode, and hand-rolling a grid to get one is the arrangement the
-     layout rule prohibits. At the plate's own width that resolves to 371, which is the one
-     dimension in this component that does not match the prototype — recorded in
-     docs/specs/SiteNav.md §12 rather than fixed by reaching around the primitive. */
+     NO WIDTH TOKEN, and the rail's width is a CONSEQUENCE rather than a decision. The design
+     measured 340px; the arrangement is a Layout ratio instead, because Layout has no fixed-track
+     mode and hand-rolling a grid to get one is what the layout rule prohibits. At `[5, 3]` and a
+     1120 plate that resolves to 308 — near enough the 340 asked for, and deliberately the term the
+     ratio HOLDS STILL when the plate narrows, since the rail is the one column whose width buys
+     something. Recorded in docs/specs/SiteNav.md §12 rather than fixed by reaching around the
+     primitive. */
   --nav-rail-title-text: var(--text-h5);
   --nav-rail-title-tracking: var(--text-h5-tracking);
   --nav-rail-action-text: var(--text-ui-sm);

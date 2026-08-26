@@ -656,11 +656,18 @@ function PlatePane({ item }: { item: SiteNavItem }) {
   const secondary = item.rail?.cards.filter((card) => card.role === 'secondary') ?? [];
 
   const body = (
-    /* [2,1] with a `column` seam, which is what puts the rail beside the two link columns rather
+    /* [5,3] with a `column` seam, which is what puts the rail beside the two link columns rather
        than a fixed 340 track — Layout has no fixed-track mode, and a local grid to get one would
-       be the hand-rolled arrangement the layout rule prohibits. At the plate's own width the rail
-       lands at 371 rather than the prototype's 340; see docs/specs/SiteNav.md §12. */
-    <Layout columns={item.rail ? [2, 1] : undefined} colGap="column" rowGap="stack">
+       be the hand-rolled arrangement the layout rule prohibits.
+
+       FIVE-TO-THREE RATHER THAN TWO-TO-ONE, and the ratio is doing one job: holding the rail still
+       while the plate narrows. At 14px rows the plate came down from 1240 to 1120, and under [2,1]
+       that cut would have fallen on the rail too — content 307 to 266, shrinking the one element
+       whose width buys something, its 16:7 image slot. At [5,3] the rail lands back on 307 and the
+       120px comes entirely off the two link columns, whose tracks go 339 to 277 against a longest
+       label of 230. The rail's own width is a CONSEQUENCE of this ratio, which is why there is no
+       --nav-rail-width token; see docs/specs/SiteNav.md §12. */
+    <Layout columns={item.rail ? [5, 3] : undefined} colGap="column" rowGap="stack">
       <Layout columns={2} colGap="column" rowGap="stack">
         {groups.map((group) => (
           <Layout key={group.label} rowGap="block">

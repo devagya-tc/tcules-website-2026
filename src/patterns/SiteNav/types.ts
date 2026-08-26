@@ -140,7 +140,7 @@ export type SiteNavItem = {
   /**
    * How wide the plate opens for this item.
    *
-   * The plate shrinks to its content — 1240 for Services, 880 for Expertise, 720 for Insights —
+   * The plate shrinks to its content — 1120 for Services, 780 for Expertise, 560 for Insights —
    * because a plate held at the full content width beside four short rows shows 500px of empty
    * ground, and that reads as a mistake rather than as restraint.
    *

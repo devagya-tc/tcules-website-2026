@@ -9,7 +9,7 @@ solid action. Three of the six open a menu; three navigate. Work sits second bec
 are the strongest proof the studio has and should not be the fifth thing read.
 
 **Above 1024 the three menu sections are panes of ONE plate.** An inset box over the page, with its
-own hairline, radius and scrim, which morphs between 1240 (Services, the only section with a rail),
+own hairline, radius and scrim, which morphs between 1120 (Services, the only section with a rail),
 780 (Expertise) and 560 (Insights) rather than holding one width and showing empty ground. Opening
 is a fade at the section's final size; switching slides the panes and morphs the box, with the
 direction taken from the order of the items in the bar. Crossing a direct link on the way closes
