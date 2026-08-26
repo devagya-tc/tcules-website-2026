@@ -38,12 +38,34 @@ type AuditVariantProps = SharedProps & {
   context: EnquiryContextBase & { intent: string };
 };
 
-export type EnquiryFormProps = EnquiryVariantProps | AuditVariantProps;
+type ContactVariantProps = SharedProps & {
+  variant: 'contact';
+  urlLabel?: never;
+  context?: never;
+};
+
+export type EnquiryFormProps = EnquiryVariantProps | AuditVariantProps | ContactVariantProps;
 
 type Lifecycle = 'idle' | 'submitting' | 'error' | 'success';
-type FieldMessages = { email: string; work: string; url: string };
+type FieldMessages = {
+  email: string;
+  work: string;
+  url: string;
+  name: string;
+  company: string;
+  contact: string;
+  comments: string;
+};
 
-const EMPTY_MESSAGES: FieldMessages = { email: '', work: '', url: '' };
+const EMPTY_MESSAGES: FieldMessages = {
+  email: '',
+  work: '',
+  url: '',
+  name: '',
+  company: '',
+  contact: '',
+  comments: '',
+};
 
 function validHttpsUrl(value: string): boolean {
   if (value === '') return true;
@@ -101,8 +123,9 @@ function FieldGroup({
 }
 
 /**
- * EnquiryForm — the site's single three-field form. Validation is deliberately blur-only;
- * submission keeps uncontrolled values mounted on failure and replaces the form on success.
+ * EnquiryForm — the site's shared enquiry behavior for the three-field enquiry/audit set and
+ * five-field contact set. Validation is deliberately blur-only; submission keeps uncontrolled
+ * values mounted on failure and replaces the form on success.
  */
 export function EnquiryForm(props: EnquiryFormProps) {
   const instanceId = useId();
@@ -119,8 +142,16 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const submitting = lifecycle === 'submitting';
 
   const ids = {
+    name: `${instanceId}-name`,
+    nameMessage: `${instanceId}-name-msg`,
+    company: `${instanceId}-company`,
+    companyMessage: `${instanceId}-company-msg`,
     email: `${instanceId}-email`,
     emailMessage: `${instanceId}-email-msg`,
+    contact: `${instanceId}-contact`,
+    contactMessage: `${instanceId}-contact-msg`,
+    comments: `${instanceId}-comments`,
+    commentsMessage: `${instanceId}-comments-msg`,
     work: `${instanceId}-work`,
     workMessage: `${instanceId}-work-msg`,
     url: `${instanceId}-url`,
@@ -179,7 +210,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
           <h3 className={styles.successHeading}>One reply, within a working day.</h3>
           <Cluster colGap="tight" align="center" nowrap>
             <Icon name="check" />
-            <p className={styles.successBody}>Thanks — we have your enquiry.</p>
+            <p className={styles.successBody}>
+              {variant === 'contact'
+                ? 'Thanks — we have your message.'
+                : 'Thanks — we have your enquiry.'}
+            </p>
           </Cluster>
         </Layout>
       </div>
@@ -188,7 +223,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
   const status =
     lifecycle === 'submitting'
-      ? 'Sending your enquiry.'
+      ? variant === 'contact'
+        ? 'Sending your message.'
+        : 'Sending your enquiry.'
       : lifecycle === 'error'
         ? 'That did not send. Your answers are still here — try again.'
         : '';
@@ -199,91 +236,228 @@ export function EnquiryForm(props: EnquiryFormProps) {
       action={props.action}
       method="post"
       noValidate
-      aria-label={variant === 'audit' ? 'Request a free audit' : 'Send an enquiry'}
+      aria-label={
+        variant === 'audit'
+          ? 'Request a free audit'
+          : variant === 'contact'
+            ? 'Contact Tcules'
+            : 'Send an enquiry'
+      }
       aria-busy={submitting || undefined}
       onSubmit={handleSubmit}
     >
       <Layout rowGap="block">
         <Layout rowGap="text">
-          <FieldGroup
-            id={ids.email}
-            messageId={ids.emailMessage}
-            label="Email address"
-            message={messages.email}
-          >
-            <Input
-              id={ids.email}
-              type="email"
-              name="email"
-              autoComplete="email"
-              placeholder="you@company.com"
-              required
-              disabled={submitting}
-              invalid={Boolean(messages.email)}
-              aria-describedby={ids.emailMessage}
-              onBlur={(event) =>
-                setMessage(
-                  'email',
-                  event.currentTarget.value.trim() === '' ||
-                    event.currentTarget.validity.typeMismatch
-                    ? 'That does not look like an email address.'
-                    : '',
-                )
-              }
-            />
-          </FieldGroup>
+          {variant === 'contact' ? (
+            <>
+              <FieldGroup
+                id={ids.name}
+                messageId={ids.nameMessage}
+                label="Your Name"
+                message={messages.name}
+              >
+                <Input
+                  id={ids.name}
+                  name="clientName"
+                  autoComplete="name"
+                  required
+                  disabled={submitting}
+                  invalid={Boolean(messages.name)}
+                  aria-describedby={ids.nameMessage}
+                  onBlur={(event) =>
+                    setMessage(
+                      'name',
+                      event.currentTarget.value.trim() === '' ? 'Enter your name.' : '',
+                    )
+                  }
+                />
+              </FieldGroup>
 
-          <FieldGroup
-            id={ids.work}
-            messageId={ids.workMessage}
-            label="What are you working on?"
-            message={messages.work}
-          >
-            <Input
-              as="textarea"
-              id={ids.work}
-              name="what_are_you_working_on"
-              required
-              disabled={submitting}
-              invalid={Boolean(messages.work)}
-              aria-describedby={ids.workMessage}
-              onBlur={(event) =>
-                setMessage(
-                  'work',
-                  event.currentTarget.value.trim() === ''
-                    ? 'Tell us what you are working on.'
-                    : '',
-                )
-              }
-            />
-          </FieldGroup>
+              <FieldGroup
+                id={ids.company}
+                messageId={ids.companyMessage}
+                label="Company Name"
+                message={messages.company}
+              >
+                <Input
+                  id={ids.company}
+                  name="clientCompany"
+                  autoComplete="organization"
+                  required
+                  disabled={submitting}
+                  invalid={Boolean(messages.company)}
+                  aria-describedby={ids.companyMessage}
+                  onBlur={(event) =>
+                    setMessage(
+                      'company',
+                      event.currentTarget.value.trim() === '' ? 'Enter your company name.' : '',
+                    )
+                  }
+                />
+              </FieldGroup>
 
-          <FieldGroup
-            id={ids.url}
-            messageId={ids.urlMessage}
-            label={urlLabel}
-            flag="Optional"
-            flagId={ids.urlFlag}
-            message={messages.url}
-          >
-            <Input
-              id={ids.url}
-              type="url"
-              inputMode="url"
-              name="url"
-              disabled={submitting}
-              invalid={Boolean(messages.url)}
-              aria-describedby={`${ids.urlFlag} ${ids.urlMessage}`}
-              onBlur={(event) =>
-                setMessage(
-                  'url',
-                  validHttpsUrl(event.currentTarget.value.trim())
-                    ? ''
-                    : 'Use a full address beginning with https://.',
-                )
-              }
-            />
-          </FieldGroup>
+              <FieldGroup
+                id={ids.email}
+                messageId={ids.emailMessage}
+                label="Email Address"
+                message={messages.email}
+              >
+                <Input
+                  id={ids.email}
+                  type="email"
+                  name="clientEmail"
+                  autoComplete="email"
+                  placeholder="you@company.com"
+                  required
+                  disabled={submitting}
+                  invalid={Boolean(messages.email)}
+                  aria-describedby={ids.emailMessage}
+                  onBlur={(event) =>
+                    setMessage(
+                      'email',
+                      event.currentTarget.value.trim() === '' ||
+                        event.currentTarget.validity.typeMismatch
+                        ? 'That does not look like an email address.'
+                        : '',
+                    )
+                  }
+                />
+              </FieldGroup>
+
+              <FieldGroup
+                id={ids.contact}
+                messageId={ids.contactMessage}
+                label="Contact Number"
+                message={messages.contact}
+              >
+                <Input
+                  id={ids.contact}
+                  type="tel"
+                  name="clientContact"
+                  autoComplete="tel"
+                  required
+                  disabled={submitting}
+                  invalid={Boolean(messages.contact)}
+                  aria-describedby={ids.contactMessage}
+                  onBlur={(event) =>
+                    setMessage(
+                      'contact',
+                      event.currentTarget.value.trim() === ''
+                        ? 'Enter your contact number.'
+                        : '',
+                    )
+                  }
+                />
+              </FieldGroup>
+
+              <FieldGroup
+                id={ids.comments}
+                messageId={ids.commentsMessage}
+                label="Let’s talk about your product"
+                message={messages.comments}
+              >
+                <Input
+                  as="textarea"
+                  id={ids.comments}
+                  name="clientComments"
+                  required
+                  disabled={submitting}
+                  invalid={Boolean(messages.comments)}
+                  aria-describedby={ids.commentsMessage}
+                  onBlur={(event) =>
+                    setMessage(
+                      'comments',
+                      event.currentTarget.value.trim() === ''
+                        ? 'Tell us about your product.'
+                        : '',
+                    )
+                  }
+                />
+              </FieldGroup>
+            </>
+          ) : (
+            <>
+              <FieldGroup
+                id={ids.email}
+                messageId={ids.emailMessage}
+                label="Email address"
+                message={messages.email}
+              >
+                <Input
+                  id={ids.email}
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  placeholder="you@company.com"
+                  required
+                  disabled={submitting}
+                  invalid={Boolean(messages.email)}
+                  aria-describedby={ids.emailMessage}
+                  onBlur={(event) =>
+                    setMessage(
+                      'email',
+                      event.currentTarget.value.trim() === '' ||
+                        event.currentTarget.validity.typeMismatch
+                        ? 'That does not look like an email address.'
+                        : '',
+                    )
+                  }
+                />
+              </FieldGroup>
+
+              <FieldGroup
+                id={ids.work}
+                messageId={ids.workMessage}
+                label="What are you working on?"
+                message={messages.work}
+              >
+                <Input
+                  as="textarea"
+                  id={ids.work}
+                  name="what_are_you_working_on"
+                  required
+                  disabled={submitting}
+                  invalid={Boolean(messages.work)}
+                  aria-describedby={ids.workMessage}
+                  onBlur={(event) =>
+                    setMessage(
+                      'work',
+                      event.currentTarget.value.trim() === ''
+                        ? 'Tell us what you are working on.'
+                        : '',
+                    )
+                  }
+                />
+              </FieldGroup>
+
+              <FieldGroup
+                id={ids.url}
+                messageId={ids.urlMessage}
+                label={urlLabel}
+                flag="Optional"
+                flagId={ids.urlFlag}
+                message={messages.url}
+              >
+                <Input
+                  id={ids.url}
+                  type="url"
+                  inputMode="url"
+                  name="url"
+                  disabled={submitting}
+                  invalid={Boolean(messages.url)}
+                  aria-describedby={`${ids.urlFlag} ${ids.urlMessage}`}
+                  onBlur={(event) =>
+                    setMessage(
+                      'url',
+                      validHttpsUrl(event.currentTarget.value.trim())
+                        ? ''
+                        : 'Use a full address beginning with https://.',
+                    )
+                  }
+                />
+              </FieldGroup>
+            </>
+          )}
         </Layout>
 
         <p
@@ -300,7 +474,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
         <Layout rowGap="text">
           <Cluster rowGap="tight" colGap="tight" align="center">
             <Button type="submit" size="md" extendHitArea busy={submitting}>
-              {variant === 'audit' ? 'Request free audit' : 'Send enquiry'}
+              {variant === 'audit'
+                ? 'Request free audit'
+                : variant === 'contact'
+                  ? 'Send message'
+                  : 'Send enquiry'}
             </Button>
           </Cluster>
           <p className={styles.caption}>
@@ -309,15 +487,19 @@ export function EnquiryForm(props: EnquiryFormProps) {
         </Layout>
       </Layout>
 
-      <input type="hidden" name="origin_route" value={props.context.originRoute} />
-      <input type="hidden" name="placement" value={props.context.placement} />
-      <input type="hidden" name="family" value={props.context.family} />
-      <input type="hidden" name="service_or_audit" value={props.context.serviceOrAudit} />
-      <input type="hidden" name="referrer" value={props.context.referrer} />
-      <input type="hidden" name="campaign" value={props.context.campaign} />
-      {props.variant === 'audit' ? (
-        <input type="hidden" name="intent" value={props.context.intent} />
-      ) : null}
+      {props.variant === 'contact' ? null : (
+        <>
+          <input type="hidden" name="origin_route" value={props.context.originRoute} />
+          <input type="hidden" name="placement" value={props.context.placement} />
+          <input type="hidden" name="family" value={props.context.family} />
+          <input type="hidden" name="service_or_audit" value={props.context.serviceOrAudit} />
+          <input type="hidden" name="referrer" value={props.context.referrer} />
+          <input type="hidden" name="campaign" value={props.context.campaign} />
+          {props.variant === 'audit' ? (
+            <input type="hidden" name="intent" value={props.context.intent} />
+          ) : null}
+        </>
+      )}
     </form>
   );
 }

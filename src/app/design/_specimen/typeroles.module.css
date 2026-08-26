@@ -86,6 +86,14 @@
   letter-spacing: var(--text-micro-tracking);
   text-transform: var(--text-mono-case);
 }
+/* An index numeral. Digits have no case, so the transform is a no-op and is stated anyway, for the
+   same reason it is on stat. */
+.index {
+  font: var(--text-index);
+  letter-spacing: var(--text-index-tracking);
+  text-transform: var(--text-mono-case);
+}
+
 /* Digits have no case, so the transform shows nothing here and is stated anyway — see the note on
    the specimen: it earns its line on a value like 12k. */
 .stat {

@@ -2,12 +2,29 @@
    Tier 2. One continuous native disclosure set with independent, multi-open items.
 
    Naming: --acc-{part}-{role}-{state}
-     parts: trigger | rule | ring
-     states: rest (no suffix) | hover | pressed | expanded
+     parts: question | mark | rule | ring
+     states: rest (no suffix) | hover
 
-   Accordion paints no ground. The answer delegates its entire palette to Prose, and every
-   surface block below redeclares every Accordion colour so a nested surface cannot inherit an
-   enclosing set's interaction ground, rule or focus pair.
+   Accordion paints no ground — not at rest, not on hover, not on press, not when open, on any
+   surface. State is carried entirely by the INK of the question and its mark, which is where the
+   reader is already looking. The previous set painted --acc-trigger-bg-hover behind the whole
+   68ch trigger: the largest thing that happened on the page in response to a pointer moving, and
+   it read as a selected table row rather than a control. Both grounds are gone.
+
+   The answer delegates its entire palette to Prose. Accordion never recolours it: a strong, a
+   link or a code span inside an answer has to match Prose everywhere else on the site, and the
+   22/16 size step plus the serif-to-sans shift already carries the hierarchy. There is therefore
+   no --acc-answer-ink, deliberately.
+
+   ── Three states, two values ────────────────────────────────────────────────────
+   Hover, pressed and expanded all resolve to --acc-question-ink-hover, so the set holds ONE
+   raised ink rather than three names for it. Token rule 3: a state token exists only if the value
+   moves on at least one surface, which is why there is no --btn-solid-*-fg-pressed either. The
+   redesign brief listed --acc-question-ink-pressed and --acc-question-ink-expanded separately and
+   gave both the same four values as -hover; declaring them would have been three names for one
+   decision, which is the --sec-gap mistake. Pressed is still distinguishable from hover — it adds
+   a hairline underline (see .trigger:active in the module), which is what the deleted
+   --acc-trigger-bg-pressed used to do.
 
    There is no layer token. The spec asked for one resolving to --z-base, but --z-base is 0 and
    nothing in this component stacks — a token whose only reader is one component and whose only
@@ -20,51 +37,61 @@
   --acc-shadow: var(--shadow-none);
   --acc-ring-width: var(--focus-ring-width);
   --acc-ring-offset: var(--focus-ring-offset);
+  /* Optical, not a layout distance: the offset that clears Public Sans' descenders under the h5
+     question at 22px, so the pressed underline reads as a rule rather than as a strikethrough
+     through the tail of a `g`. Same reach and same reason as --prose-link-underline-offset. */
+  --acc-question-underline-offset: var(--space-6);
   --acc-transition-duration: var(--duration-fast);
   --acc-transition-easing: var(--easing-standard);
 }
 
-/* Paper: neutral interaction grounds keep blue for the open rule and keyboard ring. */
+/* Paper: the question rests one step below full ink and rises to it. The mark rests quieter still
+   — it is the affordance cue, not the content — and converges on the question's raised ink when
+   the row is live, so hover reads as one gesture rather than two things moving separately.
+   Blue appears in exactly one place on this surface and every other: the keyboard ring. */
 :root,
 [data-surface='paper'] {
-  --acc-trigger-fg: var(--color-neutral-900); /* 14.62:1 */
-  --acc-trigger-bg-hover: var(--color-neutral-100); /* foreground 12.37:1 */
-  --acc-trigger-bg-pressed: var(--color-neutral-200); /* foreground 10.97:1 */
-  --acc-rule-ink: var(--color-neutral-300); /* decoration */
-  --acc-rule-ink-expanded: var(--color-brandeis-500); /* decoration */
+  --acc-question-ink: var(--color-neutral-800); /* 11.81:1 */
+  --acc-question-ink-hover: var(--color-neutral-950); /* 17.10:1 */
+  --acc-mark-ink: var(--color-neutral-500); /* decoration; 3.16:1 clears the 3:1 non-text floor */
+  --acc-mark-ink-hover: var(--color-neutral-950); /* 17.10:1 */
+  --acc-rule-ink: var(--color-neutral-200); /* decoration; 1.33:1 */
   --acc-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --acc-ring-gap-color: var(--color-paper);
 }
 
-/* Tint: interaction fills and the quiet rule deepen against paper-deep. */
+/* Tint: the question ink holds at the paper values against paper-deep, and the mark steps one
+   further down the ramp — neutral-500 on this ground is 2.82:1 and misses the non-text floor. */
 [data-surface='tint'] {
-  --acc-trigger-fg: var(--color-neutral-900); /* 13.06:1 */
-  --acc-trigger-bg-hover: var(--color-neutral-200); /* foreground 10.97:1 */
-  --acc-trigger-bg-pressed: var(--color-neutral-300); /* foreground 9.46:1 */
-  --acc-rule-ink: var(--color-neutral-400); /* decoration */
-  --acc-rule-ink-expanded: var(--color-brandeis-500); /* decoration */
+  --acc-question-ink: var(--color-neutral-800); /* 10.54:1 */
+  --acc-question-ink-hover: var(--color-neutral-950); /* 15.27:1 */
+  --acc-mark-ink: var(--color-neutral-600); /* decoration; 4.39:1 */
+  --acc-mark-ink-hover: var(--color-neutral-950); /* 15.27:1 */
+  --acc-rule-ink: var(--color-neutral-300); /* decoration; 1.38:1 */
   --acc-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --acc-ring-gap-color: var(--color-paper-deep);
 }
 
-/* Ink: white trigger ink sits on distinct neutral hover and pressed grounds. */
+/* Ink: the ladder inverts. The resting question is neutral-300 and white is the raised step, so
+   the open question is the brightest thing in the set and needs no rule to say so. */
 [data-surface='ink'] {
-  --acc-trigger-fg: var(--color-white); /* 17.26:1 */
-  --acc-trigger-bg-hover: var(--color-neutral-900); /* foreground 14.75:1 */
-  --acc-trigger-bg-pressed: var(--color-neutral-800); /* foreground 11.92:1 */
-  --acc-rule-ink: var(--color-neutral-700); /* decoration */
-  --acc-rule-ink-expanded: var(--color-brandeis-300); /* decoration */
+  --acc-question-ink: var(--color-neutral-300); /* 11.07:1 */
+  --acc-question-ink-hover: var(--color-white); /* 17.26:1 */
+  --acc-mark-ink: var(--color-neutral-500); /* decoration; 5.41:1 */
+  --acc-mark-ink-hover: var(--color-white); /* 17.26:1 */
+  --acc-rule-ink: var(--color-neutral-800); /* decoration; 1.45:1 */
   --acc-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --acc-ring-gap-color: var(--color-neutral-950);
 }
 
-/* Blue: the existing Brandeis surface deepens for pointer states; open and focus lift to white. */
+/* Blue: the two steps come out of the Brandeis tints rather than a second colour family, and the
+   raised step is white — the same top of the ladder the ink surface uses. */
 [data-surface='blue'] {
-  --acc-trigger-fg: var(--color-white); /* 6.23:1 */
-  --acc-trigger-bg-hover: var(--color-brandeis-600); /* foreground 7.59:1 */
-  --acc-trigger-bg-pressed: var(--color-brandeis-700); /* foreground 10.16:1 */
-  --acc-rule-ink: var(--color-brandeis-300); /* decoration */
-  --acc-rule-ink-expanded: var(--color-white); /* decoration */
+  --acc-question-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --acc-question-ink-hover: var(--color-white); /* 6.23:1 */
+  --acc-mark-ink: var(--color-brandeis-200); /* decoration; 3.78:1 */
+  --acc-mark-ink-hover: var(--color-white); /* 6.23:1 */
+  --acc-rule-ink: var(--color-brandeis-400); /* decoration; 1.62:1 */
   --acc-ring-color: var(--color-white); /* 6.23:1 against gap */
   --acc-ring-gap-color: var(--color-brandeis-500);
 }

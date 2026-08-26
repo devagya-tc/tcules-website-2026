@@ -173,6 +173,11 @@
   --font-size-ui-lg: 14px;
   --font-size-eyebrow: 12px;
   --font-size-micro: 11px;
+  /* The mono ramp's missing middle. Chrome sizes stop at 14 and the next mono step is stat's 40,
+     so a mono numeral that is neither a control label nor a metric had nowhere to sit — a list's
+     ordinal index is exactly that, and 40px made it larger than the h5 title it indexes. 20 reads
+     as an index beside a 22px title without competing with it. */
+  --font-size-index: 20px;
   --font-size-stat: 40px;
   --font-size-code: 14px;
   /* Breakpoint cuts. Titles step down; text and chrome hold at every width. */
@@ -224,6 +229,7 @@
   --line-height-ui: 1.2;
   --line-height-eyebrow: 1.2;
   --line-height-micro: 1.2;
+  --line-height-index: 1.2; /* the chrome ratio, not stat's 1 — an index can wrap in a narrow track */
   --line-height-stat: 1;
   --line-height-code: 1.6;
   /* Breakpoint steps. Only the roles whose ratio actually moves have one — stat holds
@@ -331,6 +337,14 @@
   --text-eyebrow: var(--font-weight-semibold)
     var(--font-size-eyebrow)/var(--line-height-eyebrow) var(--font-family-mono);
   --text-eyebrow-tracking: var(--letter-spacing-eyebrow);
+  /* A mono numeral or short key at index scale — the ordinal in a numbered list, and anything else
+     that needs to read as a quiet mark rather than as a control label or a metric. It borrows ui's
+     tracking rather than declaring its own: 0.08em is the correction that keeps two digits reading
+     as one token, where eyebrow's 0.12em splits "01" into two marks. One correction serving two
+     roles is the documented exception, not a shortcut. */
+  --text-index: var(--font-weight-semibold) var(--font-size-index)/var(--line-height-index)
+    var(--font-family-mono);
+  --text-index-tracking: var(--letter-spacing-ui);
   --text-micro: var(--font-weight-semibold) var(--font-size-micro)/var(--line-height-micro)
     var(--font-family-mono);
   --text-micro-tracking: var(--letter-spacing-micro);
