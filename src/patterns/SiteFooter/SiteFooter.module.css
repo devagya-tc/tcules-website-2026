@@ -367,9 +367,23 @@
   opacity: var(--foot-watermark-opacity);
 }
 
+/* The mark is sized by whichever axis runs out first, and the box always fits the artwork.
+
+   --foot-watermark-size is a MAXIMUM here, not a height. Setting it as a height is what broke the
+   mobile footer: the box stayed 160 tall while the artwork scaled down to fit a 311px column, and
+   an SVG that cannot fill its box centres itself in it — leaving ~39px of empty box under the
+   letterforms, so the mark floated above a band it was supposed to be flush with. Logo's own
+   stylesheet warns about this exact behaviour in a grid; it is the same failure in a narrow one.
+
+   So: fit-content asks for the artwork's natural width, max-inline-size gives the column the last
+   word, and an auto block-size means the height is always whatever that width implies. Wide
+   enough, and the height cap binds instead and the width follows from it. Neither axis is ever
+   told a value the other has to fake. */
 .watermark svg {
-  block-size: var(--foot-watermark-size);
-  inline-size: auto;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  block-size: auto;
+  max-block-size: var(--foot-watermark-size);
 }
 
 /* ── Focus ─────────────────────────────────────────────────────────────────────
