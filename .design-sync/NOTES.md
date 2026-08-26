@@ -114,6 +114,19 @@ the Icon and Logo rows to zero spacing. **`Cluster` caps at `block`** — `gutte
 
 ## Known render warns (expected — not new)
 
+- `[GRID_OVERFLOW] … (fixed/portal)` on **SiteNav** — fired for the first time on 26 Aug 2026, and it
+  is not flaky. The plate and the sheet are `position: fixed` (three declarations in
+  `SiteNav.module.css`), so every story's fixed children anchor to the viewport rather than to their
+  grid cell and all three surfaces pile up at the same spot. `cardMode: "column"` cannot fix that —
+  only one story may render at a time. Resolved by `cfg.overrides.SiteNav`:
+  `{"cardMode": "single", "primaryStory": "Bar", "viewport": "1280x160"}`. Single cards are exempt
+  from the check by construction, so **this warn should not return**; if it does, something has put a
+  second story back in the card. The cost is that OnInk and OnBlue no longer appear as cells — they
+  are still captured and graded individually via `?story=`, and the surface prop is documented in
+  `.prompt.md`, but the picker card now shows the paper bar alone.
+- Changing `cardMode`/`primaryStory`/`viewport` together is **not** a presentation-only edit as far as
+  `preview-rebuild.mjs` is concerned — it exits `[CONFIG_STALE]` and demands a full `package-build`.
+  Just run the driver again rather than reaching for the targeted loop.
 - `[FONT_REMOTE]` for "Newsreader", "Public Sans", "Geist Mono". The families are served by a
   Google Fonts `@import` that sits at line 1 of `_ds_bundle.css`, which is a valid position, so they
   **do** load here. Verified visually in the Prose and Section sheets. Note the irony recorded in
@@ -662,3 +675,58 @@ is graded on its own merits.
   The pattern was copied from `Breadcrumbs.module.css`, where `0` is correct **because that `.link`
   has no border of its own** — so this is the failure mode of borrowing a working idiom into a
   context with one more layer in it.
+
+## Held sync — 26 Aug 2026. Verified, built, deliberately NOT uploaded
+
+The first run of this pipeline that stopped at the gate on purpose. Everything below is done and
+will still be true when it resumes; the only missing step is the upload.
+
+**What is ready.** 20 components (20 src-matched); render check 20/20 with `bad: 0`, no floor cards;
+all four driver stages green; anchor `ok`. `SiteNav` was the one `changed` component (the plate and
+sheet rebuild) — all three cells graded `good`, and the third driver run printed `1 carried forward,
+0 captured`, which is the proof the next sync is fast. The verdict at rest:
+`upload.any: true`, `deletePaths: []`, `bundle/styling/aux` all true, and
+`upload.components: [Accordion, Button, Cluster, EnquiryForm, Layout, ListCard, Prose, Section,
+SiteNav]` — nine, because the shared primitives' `.d.ts`/`.prompt.md` bytes moved while their render
+hashes held. That is the documented longer-than-`added` case, not a problem.
+
+**Why it stopped.** `git status` before upload caught six files modified **during the run**
+(13:06–13:11, while the driver was building): a live `ListCard` redesign moving the hover affordance
+from `--lcrd-rule-ink-hover` to `--lcrd-fill-hover`/`--lcrd-fill-pressed` on all four surfaces, plus
+a rewritten `docs/specs/ListCard.md` (+126 lines) and the design route. Proven to be in the build,
+not inferred: `_ds_bundle.css` carried `--lcrd-fill-hover` ×5 and `--lcrd-rule-ink-hover` ×0, and
+`ds-bundle/guidelines/docs/specs/ListCard.md` carried the uncommitted rewrite. The user's call was
+to hold — many things WIP.
+
+**This is the second time the concurrent-edit trap has fired**, after the BlockCard case above, so
+treat the `git status` check as mandatory rather than defensive. Note what makes it nasty here: the
+CSS half is invisible to the diff (no component's `sourceKey` or `renderHash` moves), so it would
+have shipped through `styleSha` → `upload.styling` with nothing in the verdict naming `ListCard` as
+changed and no sheet showing it.
+
+**Do NOT `git stash` to get a clean tree.** Something was writing those files minutes earlier;
+stashing yanks live work out from under whoever holds it. If a committed-state upload is ever wanted
+while the tree is dirty, build in a separate `git worktree` at HEAD instead.
+
+**To resume:** confirm the WIP is committed or reverted, then `npm ci` if the clone is fresh,
+`npx tsc -p .design-sync/tsconfig.dts.json`, one driver run, and upload per §5 — full writes,
+`deletes` verbatim from `upload.deletePaths`. Re-fetch `_ds_sync.json` first; the remote anchor is
+still the 25 Aug one (`bundleSha12 24028a821967`), because nothing was uploaded.
+
+**Two durable fixes this run made, both worth keeping regardless of when the upload happens:**
+
+- `cfg.overrides.SiteNav` → `cardMode: "single"` (see the render-warns section above).
+- `conventions.md` said **"All 17"** and listed 17 while the build ships **20** — `Proof`, `Figure`
+  and `Callout` were absent from both the opening enumeration and the Components section, so the
+  design agent was being told three shipped components do not exist. Corrected to 20 with an entry
+  each, written from their generated `.d.ts` and source doc comments. The header's other names were
+  re-validated against the fresh build: all 20 components now appear (`built-but-never-named: none`)
+  and all 32 `--*` tokens it names resolve in `_ds_bundle.css`. **This is the third consecutive sync
+  where the count was stale** — it goes stale on every component add and nothing checks it.
+
+**Unrelated, and already clean:** six `guidelines/**` files were pushed by hand earlier the same day
+(vocabulary, the Accordion/EnquiryForm/ListCard specs, a first-ever `SiteNav.md`, and `index.md`)
+before the driver ran, because the bundle could not be rebuilt at that point. Verified afterwards
+that the remote copy of `ListCard.md` carries `rule-ink-hover` ×3 and `fill-hover` ×0 — the committed
+HEAD text, not the WIP rewrite. Those writes did not refresh `_ds_sync.json`, so the next run's
+`auxSha` will differ and re-upload aux; that is idempotent and expected.
