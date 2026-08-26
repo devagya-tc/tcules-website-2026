@@ -162,10 +162,16 @@ back to the trigger, and Tab out of the last row are managed explicitly — see 
 
 Below `--breakpoint-1024`: bar with logo left, toggle right; the CTA moves inside the sheet.
 
-**The sheet hugs its list.** Closed → open, it rises to the height of the six items plus the CTA
-bar (~370px of an 812px screen), so every item sits in the lower half. Opening a section grows it
-to `100% - var(--nav-sheet-reserve)`; back shrinks it again. The height change *is* the transition,
-so both heights are measured and written as pixels — an `auto` height does not animate.
+**The sheet hugs its list, at BOTH levels.** Closed → open it rises to the height of the six items
+plus the CTA bar; opening a section grows it to that section's own content, capped at
+`100% - var(--nav-sheet-reserve)`. One rule, `min(hug, full)`, in both places — §5 originally said a
+section grows to the full height flat, and that left the one short section (Insights) 67px shorter
+than its own bottom edge. See §12.14. Every height is measured and written as pixels, because the
+height change *is* the transition and an `auto` height does not animate.
+
+Measured on a 375×812 screen: root **428**, Insights **657** (hugs), Services and Expertise **724**
+(both overrun the cap and scroll). The sticky foot does not move between any of them — the sheet is
+anchored to the bottom of the viewport, so only its top edge travels.
 
 **Levels.** Root list → section pane, sliding one screen sideways. Header inside the pane: back on
 the left, section name **centred, uppercase** on `--nav-label-text`. Section rows are type-only, no
@@ -491,7 +497,32 @@ At `body-sm` the line box is 21.7, which would have taken the row to 41.7 and pu
 floor. `--space-12` lands it at 45.7. The type and the padding are one decision: re-point the type
 and re-derive the padding as `(44 - line) / 2`.
 
-### 12.13 · Two QA items cannot be met yet, and are not faked
+### 12.14 · A section pane hugs its content too
+
+§5 said a section "grows it to `100% - 88px`", flat. Measured, that made the sheet taller than what
+was in it for the one short section: Insights' content came to 530 in a 597 list box — **67px of
+dead space above the sticky foot** — while Services (819) and Expertise (657) both overran the cap
+and scrolled regardless.
+
+It is now `min(hug, full)` at both levels, which is the rule the ROOT already used. That matters more
+than the 67px: a section that forced itself full was the last place in this component where a surface
+was bigger than its content, and removing it is the same correction the desktop plate got when its
+three widths came down to fit their columns.
+
+**The argument I expected to lose on, and didn't.** A varying section height sounds like it would
+move the sticky foot, which is the one target a thumb aims at. It does not: the sheet is
+`inset-block-end: 0`, so the foot sits on the viewport's bottom edge whatever the height, and only
+the top edge travels — which is already what the root→section transition does on purpose. Verified:
+`footBottom` is 812 on an 812 screen at every level.
+
+**And it exposed a 1px error in the ROOT hug, which had been there since the sheet was built.** Both
+hug heights are sums of border boxes, and the sheet is `box-sizing: border-box` with one hairline on
+the block axis — so handing either sum over raw left the content box a hairline short and made the
+list scrollable by 1px at a height meant to fit it exactly. Both now add `var(--nav-rule-width)`.
+The same arithmetic §12.7 records for the plate, missed here because 1px of scroll is invisible
+until you compare `scrollHeight` against `clientHeight`.
+
+### 12.15 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at

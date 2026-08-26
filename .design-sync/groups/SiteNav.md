@@ -17,7 +17,7 @@ nothing.
 
 **Below 1024 the whole navigation is a sheet** that rises from the bottom and hugs its list, so all
 six items sit in the lower half of the screen where a thumb is. A section grows it to the screen
-less 88px; Back shrinks it again. Two actions stay pinned at the foot at both levels — Request audit
+that section's own content, capped at the screen less 88px; Back shrinks it again. Two actions stay pinned at the foot at both levels — Request audit
 on the left, Start a project on the right.
 
 Type differs between the two on purpose: a section's links are 14px in both, but the sheet's six

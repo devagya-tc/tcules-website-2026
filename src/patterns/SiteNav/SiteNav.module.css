@@ -488,6 +488,7 @@
 
 .sheet {
   --nav-sheet-block: var(--space-0);
+  --nav-sheet-section-block: var(--nav-sheet-block-full);
 
   position: fixed;
   inset-inline: 0;
@@ -508,14 +509,27 @@
     block-size var(--nav-sheet-surface) var(--nav-transition-easing);
 }
 
+/* PLUS THE SHEET'S OWN TOP HAIRLINE, in both rules below. Both measured values are sums of border
+   boxes and this element is border-box too, so handing either over raw left the content box one
+   hairline short — enough to make the list scrollable by 1px at a height that was supposed to fit
+   it exactly. The same arithmetic the plate needs, and one border rather than two because
+   `border-block-end` is zeroed above. */
 .sheet[data-open] {
-  block-size: min(var(--nav-sheet-block), var(--nav-sheet-block-full));
+  block-size: min(
+    calc(var(--nav-sheet-block) + var(--nav-rule-width)),
+    var(--nav-sheet-block-full)
+  );
   transform: none;
   pointer-events: auto;
 }
 
+/* A section hugs too, capped the same way the root is. Defaulted to the full cap above, so a frame
+   before the measurement lands renders the old force-filled height rather than a collapsed sheet. */
 .sheet[data-open][data-level='section'] {
-  block-size: var(--nav-sheet-block-full);
+  block-size: min(
+    calc(var(--nav-sheet-section-block) + var(--nav-rule-width)),
+    var(--nav-sheet-block-full)
+  );
 }
 
 /* The grab handle sits in its own padded row rather than carrying a margin, so the sheet's hugging
@@ -572,6 +586,11 @@
   flex: 1 1 auto;
   min-block-size: 0;
   overflow-y: auto;
+}
+
+/* The list's air sits here rather than on the scroller above, so the section's hugging height is a
+   sum of border boxes and needs no computed padding read back out of the DOM. */
+.sheetBody {
   padding: var(--gap-tight) var(--nav-sheet-padding-inline) var(--gap-gutter);
 }
 

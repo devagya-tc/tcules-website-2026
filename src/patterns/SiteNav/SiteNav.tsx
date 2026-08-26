@@ -164,6 +164,8 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
   const plateRef = useRef<HTMLDivElement>(null);
   const grabRef = useRef<HTMLSpanElement>(null);
   const rootListRef = useRef<HTMLDivElement>(null);
+  const headRef = useRef<HTMLDivElement>(null);
+  const sectionBodyRef = useRef<HTMLDivElement>(null);
   const footRef = useRef<HTMLDivElement>(null);
   const hoverTimer = useRef<number | null>(null);
 
@@ -183,6 +185,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
      than measured once, because a web font landing after first paint changes both. */
   const [paneBlocks, setPaneBlocks] = useState<Record<string, number>>({});
   const [sheetBlock, setSheetBlock] = useState<number | null>(null);
+  const [sectionBlocks, setSectionBlocks] = useState<Record<string, number>>({});
 
   /* The pane the plate is currently SHAPED to. `lastPlate` rather than `plate`, so a close is a
      fade at the size it already had rather than a resize on the way out. */
@@ -199,6 +202,9 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
    * is a 2px line that then snaps open. A frame of nothing is better than a frame of wrong.
    */
   const plateOpen = plateKey !== null && shownBlock > 0;
+
+  /* The open section's hugging height, or null before it has been measured. */
+  const sectionHug = (lastSection && sectionBlocks[lastSection]) || null;
 
   useEffect(() => {
     const panes = plateRef.current?.querySelectorAll<HTMLElement>('[data-pane]');
@@ -254,6 +260,37 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
     parts.forEach((part) => part && observer.observe(part));
     return () => observer.disconnect();
   }, []);
+
+  /**
+   * And the same sum again for a SECTION, which hugs too.
+   *
+   * The sheet's own idiom is to hug: the root level already does. A section pane that forced itself
+   * to the full height was the last place in this component where a surface was taller than what
+   * was in it — Insights sat 67px short of its own bottom edge — and it needed no special case to
+   * fix, only the same `min(hug, full)` the root uses. Services and Expertise overrun the cap and
+   * behave exactly as before.
+   *
+   * Keyed on the open section rather than mounted once: the body remounts per section, so both the
+   * element to measure and the number to store change together.
+   */
+  useEffect(() => {
+    const key = lastSection;
+    const body = sectionBodyRef.current;
+    const parts = [grabRef.current, headRef.current, footRef.current];
+    if (!key || !body || parts.some((part) => part === null)) return;
+
+    const measure = () => {
+      const block =
+        parts.reduce((total, part) => total + (part?.offsetHeight ?? 0), 0) + body.offsetHeight;
+      if (block <= 0) return;
+      setSectionBlocks((current) => (current[key] === block ? current : { ...current, [key]: block }));
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(body);
+    return () => observer.disconnect();
+  }, [lastSection]);
 
   /* ── Closing ──────────────────────────────────────────────────────────────── */
   const closePlate = useCallback(() => setNav({ plate: null }), [setNav]);
@@ -557,7 +594,13 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
         className={styles.sheet}
         data-open={sheetOpen || undefined}
         data-level={section ? 'section' : 'root'}
-        style={sheetBlock === null ? undefined : vars({ '--nav-sheet-block': `${sheetBlock}px` })}
+        /* Each is emitted only once measured. The stylesheet defaults the section height to the
+           full cap, so an unmeasured frame renders the old force-filled behaviour rather than a
+           sheet collapsed to nothing. */
+        style={vars({
+          ...(sheetBlock === null ? {} : { '--nav-sheet-block': `${sheetBlock}px` }),
+          ...(sectionHug === null ? {} : { '--nav-sheet-section-block': `${sectionHug}px` }),
+        })}
         inert={!sheetOpen}
       >
         <span ref={grabRef} className={styles.grabRail}>
@@ -599,7 +642,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
           </div>
 
           <div className={cx(styles.sheetPane, styles.sheetPaneSection)} inert={section === null}>
-            <div className={styles.sheetHead}>
+            <div ref={headRef} className={styles.sheetHead}>
               <button
                 type="button"
                 className={styles.sheetBack}
@@ -610,10 +653,15 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
               </button>
               <span className={styles.sheetTitle}>{sheetSection?.label}</span>
             </div>
-            {/* Keyed on the section, so the row entrance replays for each one rather than running
-                once for whichever section happened to open first. */}
-            <div key={sheetSection?.key} className={styles.sheetInner}>
-              {sheetSection ? <SheetPane item={sheetSection} /> : null}
+            {/* The scroll container is stable so its ref survives a section change; the BODY is
+                keyed, so the row entrance replays for each section rather than running once for
+                whichever opened first. The list's padding lives on the body rather than the
+                scroller, which is what lets the hug height be four offsetHeights and no computed
+                styles. */}
+            <div className={styles.sheetInner}>
+              <div ref={sectionBodyRef} key={sheetSection?.key} className={styles.sheetBody}>
+                {sheetSection ? <SheetPane item={sheetSection} /> : null}
+              </div>
             </div>
           </div>
         </div>
