@@ -120,13 +120,17 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
     again; compose against the shipped component. It brought the system its first **scroll
     observation**, which nothing here had before.
 
-    **The six routes carrying the retired band did not all become rails, and an earlier version of
-    this paragraph said they would.** They do not, because **page type decides, not heading
-    count** — `TableOfContents.md` § 1. Long-form documents get an outline; standard pages get
-    none. Of the six, only `audits/[slug]` is long-form: it now composes the rail. The band was
-    **deleted outright** from `services/[...slug]`, `expertise/[slug]`, `glossary/[slug]`,
-    `tools/[slug]` and `how-we-work`, which are standard pages and should never have carried a
-    page outline.
+    **All six routes carrying the retired band lost it, and none gained a rail.** **Page type
+    decides, not heading count** — `TableOfContents.md` § 1 — and all six are standard pages:
+    `services/[...slug]`, `expertise/[slug]`, `glossary/[slug]`, `tools/[slug]`, `how-we-work`
+    and `audits/[slug]`. They carried the band because it was the only outline the system had.
+
+    `audits` was on § 1's long-form list and came off it at adoption, which is worth knowing
+    because the mistake was subtle: it qualified on heading count (median 11, the highest in the
+    corpus), the one criterion that sentence disavows. `AuditPage` and `ServicePage` are the same
+    shape and `HowWeWorkPage` is `AuditPage & {…}`, so an audit page is long-form only if a
+    service page is. The six audit routes are productised offerings with a hero CTA, an FAQ and a
+    closing CTA. The spec carries the correction and its reasoning.
 
     The content seam was already ahead of it and still is. `AuditSection.heading` is
     `{ text, anchorId, navigationLabel? }` — the id is derived and de-duplicated in
@@ -135,8 +139,9 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
     is a fallback and not the label. A route that adopts the rail passes the short label, not the
     heading, and a section without one is simply absent from the outline.
 
-    **Three of § 1's long-form types cannot render an outline yet, and it is a content-model gap
-    rather than route work.** `terms-of-use` and `privacy-policy` carry
+    **Which leaves the component with no call site, and that is the honest state of it.** All four
+    remaining long-form types are blocked on the content model rather than on route work.
+    `terms-of-use` and `privacy-policy` carry
     `{ id, heading: string, bodyHtml }` — the route generates the heading ids, but there is no
     `navigationLabel`, so every entry would fall back to full heading text. `case-studies` and
     `insights` are further back: `CaseStudyBlock` and `BlogBlock` have **no heading member at
