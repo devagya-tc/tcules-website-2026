@@ -435,7 +435,7 @@ export default function PageHeroSpecimenPage() {
                 ? '34 routes. One paragraph renders as a single --text-lead <p> and copy shows no seam at all.'
                 : count === 12
                   ? '2× the corpus maximum, and there is no route like it. No cap, no truncation, no warning: the lead role still applies to the first paragraph only, so this renders as a lead and eleven body paragraphs and looks exactly like what it is — a page whose opening should have been a section. That is a review comment on a route, not a behaviour here.'
-                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-lead (20) and everything under it at --text-body-lg (18); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: 68ch resolves against each part's own role, so the lead measures 83px wider — 832px against 749px, both measured. That reads as a lead, not as an error.`
+                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-lead (20) and everything under it at --text-body (16); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: 68ch resolves against each part's own role, so the lead measures 166px wider — 832px against 666px, both measured. That reads as a lead, not as an error.`
             }
           />
         </div>
