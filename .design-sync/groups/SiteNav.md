@@ -20,6 +20,10 @@ six items sit in the lower half of the screen where a thumb is. A section grows 
 that section's own content, capped at the screen less 88px; Back shrinks it again. Two actions stay pinned at the foot at both levels — Request audit
 on the left, Start a project on the right.
 
+**Swiping the sheet down dismisses it** — the whole thing, section and all, since Back already means
+"up one". It follows the finger, starts from the handle or the header (or from the list when that
+list is at its top), and snaps back if the gesture is too short to mean it.
+
 Type differs between the two on purpose: a section's links are 14px in both, but the sheet's six
 ROOT rows stay 18px. They are the primary targets on a touch surface, and their height is what keeps
 all six below the midpoint of a 375x812 screen.

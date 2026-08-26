@@ -489,6 +489,7 @@
 .sheet {
   --nav-sheet-block: var(--space-0);
   --nav-sheet-section-block: var(--nav-sheet-block-full);
+  --nav-sheet-drag: var(--space-0);
 
   position: fixed;
   inset-inline: 0;
@@ -519,8 +520,26 @@
     calc(var(--nav-sheet-block) + var(--nav-rule-width)),
     var(--nav-sheet-block-full)
   );
-  transform: none;
+  transform: translateY(var(--nav-sheet-drag));
   pointer-events: auto;
+}
+
+/* While a finger is on it the sheet is under direct manipulation, so every transition comes off —
+   a 420ms ease between frames of a drag is the sheet arguing with the thumb. `will-change` is worth
+   its cost here for exactly the length of the gesture and is dropped with the attribute. */
+.sheet[data-dragging] {
+  transition: none;
+  will-change: transform;
+}
+
+/* The two places a drag may always begin. `touch-action: none` on these and nowhere else is what
+   guarantees the gesture: the browser hands us the pointer instead of deciding to scroll with it,
+   and because it is scoped to the handle and the header the list below keeps its own panning
+   intact. A drag from the list is allowed too, but only at scrollTop 0 and only downward — see
+   onSheetPointerDown. */
+.grabRail,
+.sheetHead {
+  touch-action: none;
 }
 
 /* A section hugs too, capped the same way the root is. Defaulted to the full cap above, so a frame
@@ -542,6 +561,7 @@
 }
 
 .grab {
+  cursor: grab;
   inline-size: var(--nav-grab-width);
   block-size: var(--nav-grab-height);
   border-radius: var(--radius-full);
@@ -589,9 +609,16 @@
 }
 
 /* The list's air sits here rather than on the scroller above, so the section's hugging height is a
-   sum of border boxes and needs no computed padding read back out of the DOM. */
+   sum of border boxes and needs no computed padding read back out of the DOM.
+
+   THE TOP STEP IS `block`, NOT `tight`, and the reason is hierarchy rather than roominess. At
+   `tight` the first group label sat 8px under the header's rule and 8px above its own first link —
+   equidistant, so it read as floating between two things instead of heading the list beneath it,
+   which is what made the eyebrow hard to parse. At `block` it is three times closer to its list
+   than to the rule, and the header now costs the same beat as any other group boundary in the
+   pane — which is what it is. */
 .sheetBody {
-  padding: var(--gap-tight) var(--nav-sheet-padding-inline) var(--gap-gutter);
+  padding: var(--gap-block) var(--nav-sheet-padding-inline) var(--gap-gutter);
 }
 
 /* Root rows are separated by a rule rather than by air: at six rows in a sheet this short,

@@ -3,7 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import type { CSSProperties, FocusEvent, KeyboardEvent, PointerEvent } from 'react';
+import type {
+  CSSProperties,
+  FocusEvent,
+  KeyboardEvent,
+  MouseEvent,
+  PointerEvent,
+} from 'react';
 
 import { Button, Cluster, Icon, Layout, Logo, Section } from '@/components';
 import { isActivePath } from '@/lib/activePath';
@@ -67,6 +73,17 @@ const STAGGER_CAP = 10;
 
 /** Everything the browser will put a Tab stop on, inside a pane. */
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/* ── Swipe to dismiss ──────────────────────────────────────────────────────────
+   Mirrors --nav-sheet-dismiss-* and --nav-drag-slop in nav.css. They live there because they are
+   this component's geometry and that file is where its literals are argued; they are duplicated
+   here because a pointer handler cannot read a custom property without a getComputedStyle per
+   frame, which is a worse trade than two numbers that have to agree. If you change one, change
+   both — the token carries the reasoning. */
+const DRAG_SLOP = 8;
+const DISMISS_DISTANCE = 56;
+const DISMISS_VELOCITY = 0.4;
+const DISMISS_FLICK_DISTANCE = 24;
 
 type NavState = {
   /** The path this state was set on. See the note in the component. */
@@ -168,6 +185,19 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
   const sectionBodyRef = useRef<HTMLDivElement>(null);
   const footRef = useRef<HTMLDivElement>(null);
   const hoverTimer = useRef<number | null>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  /**
+   * The gesture in progress. `claimed` flips once the pointer has travelled past the slop, which is
+   * the moment the sheet takes the gesture over — before that it is still possibly a tap.
+   */
+  const gesture = useRef<{
+    id: number;
+    startY: number;
+    lastY: number;
+    lastT: number;
+    velocity: number;
+    claimed: boolean;
+  } | null>(null);
 
   /* React-generated, so two SiteNavs on one page (the proving ground renders four) cannot collide
      on the ids that wire aria-controls to their panes. */
@@ -186,6 +216,8 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
   const [paneBlocks, setPaneBlocks] = useState<Record<string, number>>({});
   const [sheetBlock, setSheetBlock] = useState<number | null>(null);
   const [sectionBlocks, setSectionBlocks] = useState<Record<string, number>>({});
+  /** How far the sheet is currently pulled down, in px. 0 unless a finger is on it. */
+  const [drag, setDrag] = useState(0);
 
   /* The pane the plate is currently SHAPED to. `lastPlate` rather than `plate`, so a close is a
      fade at the size it already had rather than a resize on the way out. */
@@ -359,6 +391,105 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
     if (event.pointerType !== 'mouse') return;
     clearIntent();
     closePlate();
+  };
+
+  /* ── Swipe the sheet away ─────────────────────────────────────────────────────
+     A bottom sheet with a grab handle promises a gesture, and until now the handle was decoration.
+     Swiping down dismisses the whole thing — sheet and section together — rather than stepping back
+     a level: the gesture means "put this away", and Back already means "up one".
+
+     WHERE A DRAG MAY START is the whole design of this. The handle and the header always, because
+     they carry `touch-action: none` and are what the affordance points at. The list as well, but
+     only when it is already scrolled to the top and only downward — otherwise a swipe meant to
+     scroll would throw the sheet off the screen. Anything else, and any upward move, is left alone.
+
+     A drag is not CLAIMED until the pointer has passed the slop. Under it the gesture is still a
+     tap and a link still navigates; over it the sheet takes the pointer, and the click that would
+     otherwise follow on release is swallowed in `onSheetClickCapture` — without that, flicking the
+     sheet away from a row would dismiss it and then navigate to that row. */
+  /* Armed the instant a drag is claimed and consumed by the first click after it, so a flick that
+     starts on a row dismisses the sheet without also following that row's link. */
+  const swallowClick = useRef(false);
+
+  const scrollerAtTop = (target: EventTarget | null) => {
+    const scroller = (target as HTMLElement | null)?.closest<HTMLElement>(
+      `.${styles.sheetInner}, .${styles.sheetPaneRoot}`,
+    );
+    return scroller ? scroller.scrollTop <= 0 : false;
+  };
+
+  const onSheetPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (!sheetOpen || gesture.current) return;
+    const target = event.target as HTMLElement | null;
+    const fromHandle = Boolean(target?.closest(`.${styles.grabRail}, .${styles.sheetHead}`));
+    if (!fromHandle && !scrollerAtTop(target)) return;
+
+    gesture.current = {
+      id: event.pointerId,
+      startY: event.clientY,
+      lastY: event.clientY,
+      lastT: event.timeStamp,
+      velocity: 0,
+      claimed: false,
+    };
+  };
+
+  const onSheetPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    const current = gesture.current;
+    if (!current || current.id !== event.pointerId) return;
+
+    const dy = event.clientY - current.startY;
+    const dt = event.timeStamp - current.lastT;
+    if (dt > 0) current.velocity = (event.clientY - current.lastY) / dt;
+    current.lastY = event.clientY;
+    current.lastT = event.timeStamp;
+
+    if (!current.claimed) {
+      /* Upward first means this was a scroll, not a dismissal. Let it go and do not look again. */
+      if (dy < 0) {
+        gesture.current = null;
+        return;
+      }
+      if (dy < DRAG_SLOP) return;
+      current.claimed = true;
+      swallowClick.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+
+    /* Clamped at 0: the sheet is content-sized, so there is nothing above its own top edge to
+       reveal by dragging up, and letting it go negative would lift it off the viewport floor. */
+    setDrag(Math.max(0, dy));
+  };
+
+  const cancelGesture = () => {
+    gesture.current = null;
+    swallowClick.current = false;
+    setDrag(0);
+  };
+
+  const endGesture = (event: PointerEvent<HTMLDivElement>) => {
+    const current = gesture.current;
+    if (!current || current.id !== event.pointerId) return;
+    gesture.current = null;
+
+    if (!current.claimed) return;
+    const travelled = Math.max(0, event.clientY - current.startY);
+    /* A flick has to travel as well as move fast. Gated on the slop alone, a 9px twitch at speed
+       dismissed the sheet — the thumb barely moved and the navigation was gone. */
+    const flicked = current.velocity > DISMISS_VELOCITY && travelled > DISMISS_FLICK_DISTANCE;
+
+    setDrag(0);
+    if (travelled > DISMISS_DISTANCE || flicked) setNav({ sheet: false, section: null });
+  };
+
+  /* Capture, so it runs before the row's own handler. Only fires for a gesture that was claimed,
+     and only once — `drag` is already back to 0 by then, so the flag is the gesture ref being
+     consumed above plus this one-shot guard. */
+  const onSheetClickCapture = (event: MouseEvent<HTMLDivElement>) => {
+    if (!swallowClick.current) return;
+    swallowClick.current = false;
+    event.preventDefault();
+    event.stopPropagation();
   };
 
   /* ── Keyboard entry into the plate ────────────────────────────────────────────
@@ -591,15 +722,23 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
       />
       <div
         id={sheetId}
+        ref={sheetRef}
         className={styles.sheet}
         data-open={sheetOpen || undefined}
+        data-dragging={drag > 0 || undefined}
         data-level={section ? 'section' : 'root'}
+        onPointerDown={onSheetPointerDown}
+        onPointerMove={onSheetPointerMove}
+        onPointerUp={endGesture}
+        onPointerCancel={cancelGesture}
+        onClickCapture={onSheetClickCapture}
         /* Each is emitted only once measured. The stylesheet defaults the section height to the
            full cap, so an unmeasured frame renders the old force-filled behaviour rather than a
            sheet collapsed to nothing. */
         style={vars({
           ...(sheetBlock === null ? {} : { '--nav-sheet-block': `${sheetBlock}px` }),
           ...(sectionHug === null ? {} : { '--nav-sheet-section-block': `${sectionHug}px` }),
+          ...(drag === 0 ? {} : { '--nav-sheet-drag': `${drag}px` }),
         })}
         inert={!sheetOpen}
       >

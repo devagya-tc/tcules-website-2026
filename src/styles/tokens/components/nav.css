@@ -231,6 +231,27 @@
   --nav-grab-width: 36px;
   --nav-grab-height: 4px;
 
+  /* ── Swipe to dismiss ────────────────────────────────────────────────────────
+     The distance a downward drag has to cover before releasing dismisses rather than snaps back,
+     and the flick that dismisses regardless of distance.
+
+     56 is a deliberate literal and not a gap step: it is the shortest travel that cannot be a
+     mis-tap or the slop of a thumb reaching for a row — around a row and a quarter — while still
+     being well under the shortest sheet this component produces. The velocity gate is what makes a
+     fast flick work without asking for the full distance, which is the difference between a sheet
+     that feels attached to the finger and one that argues with it.
+
+     --nav-drag-slop is the movement allowed before a gesture is claimed as a drag at all. Under it
+     nothing happens and a tap stays a tap; over it the sheet takes the pointer and the click that
+     would have followed is suppressed. */
+  --nav-sheet-dismiss-distance: 56px;
+  --nav-sheet-dismiss-velocity: 0.4; /* px per ms, unitless on purpose — read in JS, not CSS */
+  /* A flick still has to GO somewhere. Velocity alone, gated only by the slop, meant a fast 9px
+     twitch threw the sheet away — the thumb barely moved and the navigation vanished. 24 is far
+     enough to be a deliberate downward gesture and still well short of the 56 a slow drag needs. */
+  --nav-sheet-dismiss-flick-distance: 24px;
+  --nav-drag-slop: var(--space-8);
+
   /* Row entrance. 40ms lands inside the 36–50 the design asked for; the count is capped in
      the component, because a cap is a rule about a list rather than a value on an element. */
   --nav-row-stagger: 40ms;

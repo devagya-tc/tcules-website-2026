@@ -195,8 +195,21 @@ does under a cursor, and their 52px height is what puts all six below the midpoi
 screen (§10.7). The sheet also has no width pressure to relieve, which is the whole reason the plate
 shrank.
 
+**Swipe down to dismiss.** The grab handle promises a gesture and now performs one: a downward drag
+puts the whole sheet away — section and all — rather than stepping back a level, because Back
+already means "up one" and the swipe means "put this away". It travels with the finger.
+
+A drag may start on the handle or the header always, and on the list only when that list is already
+scrolled to its top and the movement is downward; anything else is left to scroll. It is not claimed
+until the pointer passes `--nav-drag-slop`, so a tap stays a tap — and once claimed, the click that
+would follow on release is swallowed, or flicking the sheet away from a row would dismiss it and
+then navigate to that row. Release dismisses past `--nav-sheet-dismiss-distance` (56) or on a flick
+over `--nav-sheet-dismiss-velocity` that has also travelled `--nav-sheet-dismiss-flick-distance`
+(24); otherwise it snaps back.
+
 **While the sheet is open** the page header is behind the scrim: the logo is `aria-hidden` and not
-focusable. Exits are the close glyph, the scrim, and back. The mark is not a second dismiss.
+focusable. Exits are the close glyph, the scrim, back, and the swipe. The mark is not a second
+dismiss.
 
 ## 6 · Motion
 
@@ -522,7 +535,43 @@ list scrollable by 1px at a height meant to fit it exactly. Both now add `var(--
 The same arithmetic §12.7 records for the plate, missed here because 1px of scroll is invisible
 until you compare `scrollHeight` against `clientHeight`.
 
-### 12.15 · Two QA items cannot be met yet, and are not faked
+### 12.16 · Swipe to dismiss, and the two thresholds that had to be measured
+
+Not in the spec, and the handle had been drawn for it since the sheet was built — an affordance
+promising a gesture that did nothing.
+
+**Where a drag may start is the whole design.** The handle and the header carry
+`touch-action: none`, so the browser hands over the pointer rather than deciding to scroll with it;
+that is scoped to those two elements alone, so the list keeps its own panning. A drag from the list
+is allowed as well, but only at `scrollTop <= 0` and only downward — otherwise a swipe meant to
+scroll would throw the sheet off the screen. Verified: a downward drag begun while the list was
+scrolled to 200 does nothing at all.
+
+**Two thresholds, and the second one was wrong on the first attempt.** Distance is 56px. The flick
+gate was originally velocity plus the 8px slop, and testing it showed a fast 9px twitch dismissing
+the sheet — the thumb barely moved and the navigation was gone. A flick now has to travel 24px as
+well as move fast.
+
+**The click has to be swallowed.** A drag begun on a row and released past the threshold dismissed
+the sheet *and* followed that row's link. A capture-phase guard, armed the instant the drag is
+claimed and consumed by the next click, fixes it. Verified: a 100px drag starting on the Work link
+dismisses and leaves `location.pathname` at `/`.
+
+Seven cases were driven to confirm it: a slow 20px drag snaps back; a slow 100px drag dismisses; a
+32px flick dismisses; an upward swipe from a row is ignored; a downward drag from a link dismisses
+without navigating; a downward drag from a mid-scrolled list is ignored; and a drag from a section
+header dismisses the sheet entirely rather than returning to the root.
+
+### 12.17 · The sheet's header spacing was a hierarchy inversion, not just tightness
+
+The first group label in a section pane sat 8px under the header's rule and 8px above its own first
+link — **equidistant**, so it read as floating between two things rather than heading the list it
+belongs to. That is what made the eyebrow hard to parse; the fix is a ratio, not more air. The
+body's top step is `--gap-block`, which puts the label three times closer to its list than to the
+rule and costs the header the same beat as any other group boundary in the pane — which is what it
+is.
+
+### 12.18 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at
