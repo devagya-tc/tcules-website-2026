@@ -299,7 +299,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
 
       {page.closing ? (
         <Section
-          surface="ink"
+          surface="tint"
           aria-labelledby={page.closing.heading ? 'insights-closing-heading' : undefined}
         >
           <Layout

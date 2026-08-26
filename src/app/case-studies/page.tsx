@@ -98,7 +98,7 @@ export default async function CaseStudiesPage() {
         page.misc.action ? (
           <CtaSection
             arrangement="open"
-            surface="ink"
+            surface="tint"
             eyebrow={page.misc.label || undefined}
             heading={page.misc.heading}
             body={[page.misc.description]}
@@ -110,7 +110,7 @@ export default async function CaseStudiesPage() {
             ]}
           />
         ) : (
-          <Section surface="ink" aria-labelledby="case-studies-misc-heading">
+          <Section surface="tint" aria-labelledby="case-studies-misc-heading">
             <Layout rowGap="block">
               {page.misc.label ? <p>{page.misc.label}</p> : null}
               <h2 id="case-studies-misc-heading">{page.misc.heading}</h2>

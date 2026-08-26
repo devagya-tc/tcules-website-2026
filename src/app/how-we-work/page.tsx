@@ -336,7 +336,7 @@ export default async function HowWeWorkPage() {
       {page.cta ? (
         <CtaSection
           arrangement="open"
-          surface="ink"
+          surface="tint"
           heading={page.cta.heading}
           body={page.cta.body}
           eyebrow={page.cta.eyebrow}

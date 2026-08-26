@@ -286,7 +286,7 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
       {caseStudy.cta ? (
         <CtaSection
           arrangement="open"
-          surface="ink"
+          surface="tint"
           heading={caseStudy.cta.heading}
           body={caseStudy.cta.body}
           actions={caseStudy.cta.actions}

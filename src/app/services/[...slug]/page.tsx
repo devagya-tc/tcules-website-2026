@@ -406,7 +406,7 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
         ) : (
           <CtaSection
             arrangement="open"
-            surface="ink"
+            surface="tint"
             heading={service.capabilitiesCta.heading}
             body={service.capabilitiesCta.body}
             points={service.capabilitiesCta.points}
@@ -416,7 +416,7 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
       ) : null}
 
       {service.cta ? (
-        <Section surface="ink" aria-labelledby="service-cta-heading">
+        <Section surface="tint" aria-labelledby="service-cta-heading">
           <Layout rowGap="stack">
             <h2 id="service-cta-heading">{service.cta.heading}</h2>
             {service.cta.descriptionHtml ? <Prose html={service.cta.descriptionHtml} /> : null}
