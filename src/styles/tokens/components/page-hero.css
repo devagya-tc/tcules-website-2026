@@ -125,15 +125,23 @@
    different questions. 22ch at --text-h1 measures 693px in Newsreader, so the title takes
    56% of the 1240 column and leaves the right side open — that silhouette is the reason
    the hero needs no second column to look composed. 68ch on the copy measures 832px at
-   --text-lead and 749px at --text-body-lg, because `ch` resolves against each part's own
-   role; the lead therefore measures 83px wider than the paragraphs beneath it, which reads
-   as a lead rather than as an error.
+   --text-lead and 666px at --text-body, because `ch` resolves against each part's own
+   role; the lead therefore measures 166px wider than the paragraphs beneath it — a fifth
+   of its own line — which reads as a lead rather than as an error.
 
-   Every number in the paragraph above was measured in a browser at build. The spec's §7(b)
-   had estimated 594 / 748 / 673 and a ~75px delta, all of them low, because a `ch` in these
+   Every number in the paragraph above was measured in a browser. The spec's §7(b) had
+   estimated 594 / 748 / 673 and a ~75px delta, all of them low, because a `ch` in these
    two faces is wider than the estimate assumed. The tokens did not change and neither did
    the argument — only the arithmetic was wrong, and it is corrected here as well as there
    because this is the file the spec points at as the place a value is decided.
+
+   Re-measured 26 Aug 2026, after --hero-body-text went to --text-body: the paragraphs'
+   measure was 749px while the body ran at 18, and this comment kept quoting that number
+   and its 83px delta for a day after the size changed. 666 and 166 are measurements now
+   rather than the ≈666 the amendment scaled by hand — the hand arithmetic was right to
+   within a pixel. Nothing enforces a number written in a comment, which is the whole
+   lesson: a measured value pinned in prose goes stale the moment its input moves, so it
+   carries the role it was measured at, not just the pixels.
 
    The measure does NOT narrow as the copy grows. A hero that tightened its measure at six
    paragraphs would turn its longest pages into ribbons.
