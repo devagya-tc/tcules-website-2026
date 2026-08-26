@@ -2,7 +2,7 @@
    Tier 2. One ruled list row, with one marker slot and an optional whole-row link.
 
    Naming: --lcrd-{part}-{role}-{state}
-     parts: title | body | marker | number | link | rule | ring | thumbnail | content
+     parts: title | body | marker | number | ground | link | rule | ring | thumbnail | content
      states: rest (no suffix) | hover | pressed
 
    There is no variant slot. split/stacked changes Layout props, marker kind changes content, and
@@ -22,20 +22,25 @@
    the order, it has to come back up to 4.5:1.
 
    State-token absences are assertions:
-     no background tokens        the row never paints a fill;
+     ONE pair of ground tokens    --lcrd-ground-hover / -pressed. The row paints no ground AT REST and
+                                 never has; what changed on 26 Aug 2026 is that hover and press do.
+                                 GROUND, not bg: rule 4 gives a surface a ground and an ink, a
+                                 control a bg and an fg, and every other colour this component owns
+                                 is an -ink. Button says --btn-ghost-*-bg because a Button IS a
+                                 control. "fill" was neither register and was the wrong word. See
+                                 the note below the geometry block for why a hover ground is a state
+                                 rather than a finish, and does not make this a BlockCard;
      no title state tokens       the title holds --lcrd-title-ink linked or not; only the cue moves;
      no body/marker state tokens those parts never move;
      no disabled/active tokens   links are either destinations or absent;
-     no rule WIDTH state          the rule is one width in every state; the wipe that once doubled
-                                 it on press is gone, and --lcrd-rule-width-pressed went with it
-                                 rather than lingering as a width nothing draws.
-     one rule COLOUR state        --lcrd-rule-ink-hover, and it is the row's hover affordance. The
-                                 target is the whole row — up to 1240px wide — and the only other
-                                 thing that moves is an 18px arrow at the far end of it, which is
-                                 not perceptible feedback for a box that size. The rule is the one
-                                 element that spans the target, so it is the one that can signal
-                                 across it. Colour only: no width change, no wipe, no transform.
-                                 A static row has no hover and never resolves it.
+     no cue hover token           --lcrd-link-ink-hover was deleted with the cue's hover step: ghost
+                                 holds its foreground through hover, so nothing moves to it any
+                                 more, and a state token that never moves does not exist;
+     no rule state at all         the rule is one width AND one colour in every state. A darkening
+                                 rule was tried on 25 Aug as the full-width hover signal and
+                                 replaced the next day by the fill, which is the better answer to
+                                 the same problem: it covers the whole target rather than one edge
+                                 of it. --lcrd-rule-width-pressed went earlier, with the wipe;
 
    Every surface below declares every surface-dependent token. The repetition prevents a tint row
    nested inside an ink section inheriting the outer body's ink or focus gap. */
@@ -65,10 +70,14 @@
      relationship and cannot be used: the same marker slot holds a 160px thumbnail, whose baseline
      is its bottom edge, so baseline-aligning the slot would shove every thumbnail row. The
      correction therefore belongs to the number alone. At 20px/1.2 the number's baseline sits ~17.6px
-     down and an h4 title's ~23px, so 6px is the nearest ramp step to a ~5.4px difference. This value
+     down and an h4 title's ~23px, a computed difference of ~5.4px. The shipped value is --space-4, set
+     by eye against the real faces rather than by that arithmetic: the calculation assumes an ascent
+     ratio per family and the two here do not match it, so 4px is what actually sits the numeral on
+     the title's baseline. An optical correction is measured, not derived — that is what makes it
+     optical. This value
      is a function of BOTH type sizes: it was 8px against a 13px number, 2px against an h5 title, and
      6px now. Change either role and recompute it in the same edit. */
-  --lcrd-number-baseline-offset: var(--space-6);
+  --lcrd-number-baseline-offset: var(--space-4);
 
   /* Component geometry, not layout distance. 192 matches Layout's xs track by value rather than
      reading --lay-track-xs: a component never reads another component's tokens. It is the minimum
@@ -80,6 +89,26 @@
   --lcrd-thumbnail-inline-md: 160px;
   --lcrd-thumbnail-ratio: 3 / 2;
 
+  /* ── The hover fill ───────────────────────────────────────────────────────────
+     A whole-row anchor up to 1240px wide needs a whole-row affordance. Hover used to be carried by
+     a rule wipe, then by nothing, then briefly by the rule's colour; a fill is the one signal that
+     covers the target it belongs to.
+
+     The values are Button's ghost-neutral steps, unchanged: neutral-100/200 on paper, 200/300 on tint,
+     900/800 on ink, brandeis-600/700 on blue. Ghost already answers "a quiet field appears under the
+     pointer" on all four surfaces, and answering it a second way here would be two answers to one
+     question.
+
+     Ghost's STATE MODEL is taken too, not only its values, and that is the part worth stating: ghost
+     moves its background on hover and its foreground only on press. So the cue holds --lcrd-link-ink
+     through hover and steps once on press. One event, one signal — a ground appearing across 1240px
+     and a glyph changing shade are not two pieces of information.
+
+     This does NOT make the row a BlockCard, and the distinction is rest versus state. § 1 says the
+     row never paints a fill; that argument was about a fill AT REST used for rhythm, which would
+     turn a list into a stack of tiles, and it still holds — nothing here paints at rest. A fill
+     that exists only while the pointer is down the row is an affordance, not a finish. The earlier
+     prohibition was written against a case this is not. */
   --lcrd-rule-width: var(--border-width-hairline);
   --lcrd-radius: var(--radius-0);
   --lcrd-shadow: var(--shadow-none);
@@ -100,10 +129,10 @@
   --lcrd-marker-ink: var(--color-neutral-900); /* 14.62:1 */
   --lcrd-number-ink: var(--color-neutral-500); /* 3.16:1 — quiet mark, clears 3:1 */
   --lcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
-  --lcrd-link-ink-hover: var(--color-brandeis-600); /* 7.52:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
   --lcrd-rule-ink: var(--color-neutral-300); /* decoration */
-  --lcrd-rule-ink-hover: var(--color-neutral-600); /* 4.92:1 — the hover affordance */
+  --lcrd-ground-hover: var(--color-neutral-100);
+  --lcrd-ground-pressed: var(--color-neutral-200);
   --lcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --lcrd-ring-gap-color: var(--color-paper);
 }
@@ -117,10 +146,10 @@
   --lcrd-marker-ink: var(--color-neutral-900); /* 13.06:1 */
   --lcrd-number-ink: var(--color-neutral-600); /* 4.39:1 — stepped on the deeper ground */
   --lcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
-  --lcrd-link-ink-hover: var(--color-brandeis-600); /* 6.72:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --lcrd-rule-ink: var(--color-neutral-400); /* decoration */
-  --lcrd-rule-ink-hover: var(--color-neutral-700); /* 7.27:1 */
+  --lcrd-ground-hover: var(--color-neutral-200);
+  --lcrd-ground-pressed: var(--color-neutral-300);
   --lcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --lcrd-ring-gap-color: var(--color-paper-deep);
 }
@@ -135,10 +164,10 @@
   --lcrd-marker-ink: var(--color-white); /* 17.26:1 */
   --lcrd-number-ink: var(--color-neutral-500); /* 5.41:1 — quieter, toward the ground */
   --lcrd-link-ink: var(--color-brandeis-300); /* 7.32:1 */
-  --lcrd-link-ink-hover: var(--color-brandeis-100); /* 13.61:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 15.44:1 */
   --lcrd-rule-ink: var(--color-neutral-700); /* decoration */
-  --lcrd-rule-ink-hover: var(--color-neutral-400); /* 8.05:1 — stronger on ink means lighter */
+  --lcrd-ground-hover: var(--color-neutral-900);
+  --lcrd-ground-pressed: var(--color-neutral-800);
   --lcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --lcrd-ring-gap-color: var(--color-neutral-950);
 }
@@ -152,10 +181,10 @@
   --lcrd-marker-ink: var(--color-white); /* 6.23:1 */
   --lcrd-number-ink: var(--color-brandeis-200); /* 3.78:1 — quieter than 100's, clear of 3:1 */
   --lcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --lcrd-link-ink-hover: var(--color-white); /* 6.23:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-rule-ink: var(--color-brandeis-300); /* decoration */
-  --lcrd-rule-ink-hover: var(--color-white); /* 6.23:1 */
+  --lcrd-ground-hover: var(--color-brandeis-600);
+  --lcrd-ground-pressed: var(--color-brandeis-700);
   --lcrd-ring-color: var(--color-white); /* 6.23:1 against gap */
   --lcrd-ring-gap-color: var(--color-brandeis-500);
 }

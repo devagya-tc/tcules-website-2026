@@ -192,7 +192,7 @@ export default function ListCardSpecimenPage() {
             in a process, a clickable article or guide on a listing page, and an item in a plain
             content list — which is why the marker, the heading level and the link are all
             independently optional. The title stays dark whether the row navigates or not, and
-            the row never paints a fill.
+            the row paints no ground at rest.
           </p>
         </Layout>
       </Section>
@@ -315,13 +315,16 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>4 · States</h2>
             <p>
-              The static row has rest only. Point at, hold and Tab to the linked row: the{' '}
-              <strong>rule</strong> changes colour across the whole row and the{' '}
-              <strong>cue</strong> changes with it, which is the point — the target is up to
-              1240px wide, and one 18px arrow at the far end of it is not feedback anybody
-              notices. Both are colour only: the rule&rsquo;s width never moves, nothing wipes
-              and nothing transforms. Pressed steps the cue again. Focus adds the surface-aware
-              two-part ring on top, so keyboard focus is never carried by colour alone.
+              The static row has rest only. Point at, hold and Tab to the linked row: a{' '}
+              <strong>ground</strong> appears under the whole row on hover and the{' '}
+              <strong>cue holds still</strong> — then press deepens the ground and steps the cue
+              together. That is <code>Button</code>&rsquo;s ghost model, values and state
+              machine both: a ghost button moves its background under the pointer and its label
+              only on the click. Hover moves one thing, press moves two. The target is up to
+              1240px wide and about 82px tall, so the signal has to cover it, and it paints only
+              under a pointer — a list of these is still a list of ruled rows, not a stack of
+              tiles. Focus adds the surface-aware two-part ring on top, so keyboard focus is
+              never carried by colour alone.
             </p>
           </Layout>
           <Rows ordered>
@@ -347,12 +350,12 @@ export default function ListCardSpecimenPage() {
               ],
               [
                 'hover',
-                'The rule steps to --lcrd-rule-ink-hover across the row; the cue steps too.',
+                'The frame paints --lcrd-ground-hover across the whole row. The cue holds.',
               ],
               ['focus', 'Exactly the hover rendering plus the two-part keyboard ring.'],
               [
                 'pressed',
-                'The cue steps to --lcrd-link-ink-pressed; the rule holds its hover value.',
+                'The ground steps to --lcrd-ground-pressed AND the cue to its pressed ink.',
               ],
             ].map(([state, note]) => (
               <div key={state}>
@@ -548,8 +551,12 @@ export default function ListCardSpecimenPage() {
             <h2>10 · Narrow tracks</h2>
             <p>
               The same number, icon and linked thumbnail rows at Layout&rsquo;s sm and xs track
-              widths. Markers wrap without widening the page; the content core can shrink below
-              xs only when the parent itself is smaller.
+              widths. This is where the inline inset is proved: it takes 32px from each track,
+              so the copy gets 224px at sm and 160px at xs — below the 192px core minimum at xs,
+              where the marker wraps above the core instead of squeezing it. Nothing overflows
+              at either width, because padding sits inside the border box. Markers wrap without
+              widening the page; the content core can shrink below xs only when the parent
+              itself is smaller.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">

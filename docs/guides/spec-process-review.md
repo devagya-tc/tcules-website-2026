@@ -124,6 +124,25 @@ hover was considered and rejected or simply never raised.
 "No rest fill, because that is BlockCard's boundary" leaves hover open on purpose. "Never paints a
 fill" closes a door nobody meant to close.
 
+## 6 · `design:check` does not catch a doc naming a deleted component token
+
+Found on 26 Aug while removing `--lcrd-rule-ink-hover` after one day. The spec named it in three
+places, the token was gone from the layer, and `npm run design:check` still reported "every token
+named in the docs resolves in the token layer".
+
+The check appears to treat a component's own `--{abbrev}-*` prefix as declared-by-that-spec and skip
+it, which is reasonable for a spec proposing a layer and wrong for one documenting a shipped layer.
+`BlockCard.md` has the same exposure: it names `--bcrd-edge-ink`, `--bcrd-link-ink` and
+`--bcrd-cta-text` as removed, and nothing verifies that the ones it does **not** mark as removed
+still exist.
+
+The gap matters because this check is the only thing standing behind the promise in its own failure
+message — "a token or glyph name in a doc is a promise to a designer who cannot read the repo." It
+keeps that promise for every prefix except the component's own.
+
+**The fix:** cross-check a spec's `--{abbrev}-*` mentions against that component's registered token
+file, and allow a name to be absent only where the surrounding prose marks it removed.
+
 ## 6 · Editing note for whoever picks this up
 
 Two of the findings above (2 and 3) are template changes and would apply to all eleven shipped
