@@ -65,16 +65,26 @@
 /* The wordmark's link. Inline-flex so the anchor is exactly the mark's box with no baseline slack
    under it, and it takes the surface ink rather than a link colour — the logo is the brand, not a
    link that happens to be a picture. */
-/* NO HOVER STATE, deliberately. It used to dim to 0.7 opacity, which is not a colour change in the
-   stylesheet and is read as one on the screen — the mark is the brand, and a brand that fades when
-   a pointer crosses it looks like it is being disabled. The cursor already says the mark is a link,
-   and the focus ring below covers the keyboard. Nothing to transition, so nothing is declared. */
+/* NO HOVER STATE, deliberately — the mark is the brand, and a brand that changes when a pointer
+   crosses it looks like it is being disabled. The cursor already says the mark is a link and the
+   focus ring below covers the keyboard.
+
+   THE :hover RULE EXISTS TO PREVENT A HOVER STATE, NOT TO ADD ONE, and it is needed because of a
+   specificity trap in the shell. `globals.css` sets `a:hover { color: var(--sec-link-ink-hover) }`
+   at 0-1-1, which OUTRANKS this class at 0-1-0 — so the wordmark inherited Section's link blue
+   (#003ee0) the moment a pointer touched it, whatever this rule said at rest. Restating the rest
+   ink at 0-2-0 is what holds it. Do not delete this as redundant: it looks like a no-op and is the
+   only thing stopping the logo turning blue. */
 .brand {
   display: inline-flex;
   align-items: center;
   flex: none;
   color: var(--nav-item-fg);
   text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--nav-item-fg);
 }
 
 /* The item list. Hidden below the breakpoint — see the header note on Cluster and display. */
@@ -389,9 +399,14 @@
   transition: border-color var(--nav-transition-duration) var(--nav-transition-easing);
 }
 
+/* The edge is the whole affordance, so the title must NOT move with it — and holding it still takes
+   a declaration for the same reason .brand's does: the card is an <a>, and the shell's `a:hover`
+   outranks `.card`'s own ink. Without this the title went Section's link blue while the border went
+   brandeis-500, which is two hover languages on one object and neither was chosen. */
 .card:hover,
 .card:focus-visible {
   border-color: var(--nav-card-edge-hover);
+  color: var(--nav-title-ink);
 }
 
 /* The slot holds its ratio whatever it is given, and paints a ground under it so a transparent or

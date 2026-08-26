@@ -681,11 +681,43 @@ reversed. Fixed.
 2. **The card's image-to-text gap was `--gap-tight` (8)** against the card's own 16px padding, so the
    title sat closer to the image than to any edge and the interior read as two rhythms. It is
    `--gap-text` (16) now, matching the padding, on both surfaces.
-3. **The logo no longer responds to hover.** It dimmed to `opacity: 0.7` — not a colour change in
-   the stylesheet and read as one on the screen. A brand that fades under the pointer looks like it
-   is being disabled. The cursor and the focus ring are the affordances.
+3. **The logo no longer responds to hover** — and this took two goes, because there were two
+   separate effects and only one of them was in this component. See §12.28.
 
-### 12.27 · Two QA items cannot be met yet, and are not faked
+### 12.28 · The logo's blue hover was the shell outranking the component
+
+The first attempt removed `.brand:hover { opacity: 0.7 }` and reported the logo fixed. It was not:
+the dim was a second, smaller effect, and **the blue was coming from `globals.css`**.
+
+```
+a:hover { color: var(--sec-link-ink-hover) }   /* 0-1-1 */
+.brand  { color: var(--nav-item-fg) }          /* 0-1-0 */
+```
+
+`a:hover` outranks the class, so the wordmark took Section's link blue — measured
+`rgb(0, 62, 224)` — the moment a pointer touched it, whatever `.brand` said at rest. The fix is a
+`:hover` rule that **restates the rest ink** at 0-2-0. It looks like a no-op and is the only thing
+holding the mark; the stylesheet says so, because the obvious cleanup is to delete it.
+
+**The same leak reached the rail card.** `.card:hover` set only `border-color`, so the card's title
+inherited the same blue while the border went brandeis-500 — two hover languages on one object,
+neither chosen. It now holds `--nav-title-ink` too: the edge is the whole affordance.
+
+**Audited for other instances, and there are none.** Every other anchor in the nav either declares
+its own hover colour (`.row`, `.sheetControl`, `.sheetLink`) or is a `Button`, whose
+`.link.primary.live:hover` sits at 0-4-0. `CtaSection`, `PageHero` and `Proof` all use `Button as="a"`
+and are covered by the same. `SiteFooter`'s links all declare hover colours. So the trap bit exactly
+the two hand-rolled anchors that did not.
+
+**The general shape, worth knowing before the next pattern hand-rolls a link.** `globals.css`'s base
+element rules are documented as "a floor, not the answer", but `a:hover` is a *type + pseudo-class*
+selector and therefore outranks any single component class. A component that sets a colour on an
+anchor and does not also set it on `:hover` will silently inherit Section's link ink. Writing the
+shell's link rules as `:where(a)` / `:where(a:hover)` would drop them to zero specificity and close
+the whole class of bug — that is a shell change touching every link on the site, so it is raised
+here rather than taken.
+
+### 12.29 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at
