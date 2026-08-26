@@ -100,9 +100,22 @@ const SERVICES: SiteNavItem = {
   rail: {
     label: 'Working together',
     cards: [
-      /* No `image` yet. The card renders title-only rather than showing an empty frame — see the
-         note on SiteNavCard. The artwork is the spec's open item, not a missing prop. */
-      { title: 'How We Work', href: ROUTES.howWeWork, status: 'planned', role: 'primary' },
+      /* A PLACEHOLDER, and named so it cannot be mistaken for the real thing: the artwork for this
+         card is still the spec's first open item. It is diagrammatic on purpose — a pod, a track and
+         a phase — so it reads as a stand-in rather than as a photograph nobody chose. Swap the file
+         and the alt together; the ratio and the crop belong to the slot, not to the asset. */
+      {
+        title: 'How We Work',
+        href: ROUTES.howWeWork,
+        status: 'planned',
+        role: 'primary',
+        image: {
+          src: '/nav/how-we-work-placeholder.svg',
+          alt: '',
+          width: 480,
+          height: 210,
+        },
+      },
       { title: 'Request Free Audit', href: ROUTES.audits, status: 'planned', role: 'secondary' },
     ],
   },

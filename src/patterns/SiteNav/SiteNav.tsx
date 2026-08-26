@@ -934,7 +934,21 @@ function PlatePane({ item }: { item: SiteNavItem }) {
 function RailCard({ card }: { card: SiteNavCard }) {
   return (
     <Link href={card.href} className={styles.card}>
-      {card.image ? <span className={styles.cardImage}>{card.image}</span> : null}
+      {card.image ? (
+        <span className={styles.cardImage}>
+          {/* A native <img>, per the contract Figure established and PageHero follows — there is no
+              Image primitive in this repo and no next/image precedent in a pattern. The slot holds
+              the ratio and the crop; the intrinsic size is here only so the browser can reserve the
+              box before the file arrives. */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- accepted native-image contract */}
+          <img
+            src={card.image.src}
+            alt={card.image.alt}
+            width={card.image.width}
+            height={card.image.height}
+          />
+        </span>
+      ) : null}
       <span className={styles.cardTitle}>
         <span>{card.title}</span>
         <Icon name="arrow-right" className={styles.cardArrow} />

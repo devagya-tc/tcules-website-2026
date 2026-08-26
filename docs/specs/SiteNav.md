@@ -131,7 +131,7 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
 | `pane` | one per mega section | 1120 / 780 / 560px wide; two label + link columns, plus the rail in Services |
 | `hubBar` | `Cluster` + `Button emphasis="link"` | the way through to the section index — Services and Insights only. Hairline above, `--gap-text` under it |
-| `rail` | `<aside>`, 340px | primary card (image slot, title) + secondary row |
+| `rail` | `<aside>`, ~308px | primary card (image, `h6` title) + secondary row |
 | `scrim` | fixed box under the plate | `--nav-scrim`, below the bar. The system has no elevation token; edge, radius and scrim do the separating |
 | `sheet` | mobile | bottom sheet, grab handle, two-level track, sticky CTA bar |
 
@@ -609,7 +609,36 @@ Recorded because the wrong reason is now written into a token comment as a warni
 restore 18px to protect a measurement that never depended on it. The real argument for a given size
 here is the size itself.
 
-### 12.22 · Two QA items cannot be met yet, and are not faked
+### 12.23 · The rail card's image, and the type role that had to be invented for its title
+
+**The image is a RECORD now, not a `ReactNode` slot.** The slot read well until the caller turned
+out to be the content seam — and `navigation.ts` is a `.ts` module that cannot hold JSX, so the
+artwork had nowhere to live except a component, which is where a nav's images least belong.
+`{ src, alt, width, height }` is also simply the house contract: `Figure` established it, `PageHero`
+follows it, both render a native `<img>`. Being the one pattern with a different image shape was
+never a virtue.
+
+`public/nav/how-we-work-placeholder.svg` is a 526-byte diagrammatic stand-in — a pod, a track, a
+phase — named so it cannot be mistaken for the real thing. §11's first open item is still the real
+artwork.
+
+**And the title needed `--text-h6`, which did not exist.** Two rounds ago the title was `--text-h5`
+and I dropped it to `--text-body-lg` on a request to make it 18px. That request was about SIZE, and
+the change quietly moved three things: 22/20 → 18, **serif → sans**, and medium → regular. The card
+is a mono eyebrow above a title, and `primitives.css` states the canonical stack as *mono eyebrow →
+serif title → sans body* — so a sans title collapsed the middle of it. **Reporting only the size was
+the error**, not the size itself.
+
+The ladder had no serif step at 18: titles run 67 · 54 · 43 · 34 · 28 · 22, and text runs sans. So
+`--text-h6` was added at **18px / 1.35, display medium** — derived rather than chosen: the title
+ladder is 1.25 from 22 (22→28→34→43→54→67 all check out), and 22 ÷ 1.25 = 17.6 → 18. No breakpoint
+step, because h5's `-m` exists so 22 is not too big on a phone and 18 already sits at body scale.
+
+It closed a real gap beyond this card: `reset.css` has always counted `h6` as a heading while
+`globals.css` styled five, so a bare `<h6>` anywhere on the site fell through to the browser's bold
+0.67em default. It now has a rule, and `/design/typography` covers the role.
+
+### 12.24 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at

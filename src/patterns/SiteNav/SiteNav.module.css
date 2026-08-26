@@ -422,6 +422,7 @@
   justify-content: space-between;
   gap: var(--gap-text);
   font: var(--nav-rail-title-text);
+  letter-spacing: var(--nav-rail-title-tracking);
 }
 
 .cardArrow {

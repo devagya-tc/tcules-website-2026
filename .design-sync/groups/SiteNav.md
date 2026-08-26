@@ -29,6 +29,10 @@ root rows are 16px — one step up, since they are the top level on the one surf
 primary target — and the rail card's title is 18px, the heaviest text in either pane. The root rows
 have no desktop counterpart to match: up there the same six items are the bar, set in mono at 13.
 
+The rail's primary card is **image-led**: a 16:7 slot above an `h6` title. The image arrives as
+`{ src, alt, width, height }`, the same record `Figure` and `PageHero` take, and the file shipping
+today is a named placeholder — the real artwork is still open.
+
 **Services and Insights carry a hub link** — "ALL SERVICES", "ALL INSIGHTS" — at the foot of the
 plate on desktop and at the end of the scrolling list in the sheet. A mega's trigger opens rather
 than navigates, so without one the section's own index has no route to it. Expertise has none,

@@ -5,6 +5,7 @@ export type {
   SiteNavLink,
   SiteNavGroup,
   SiteNavCard,
+  SiteNavCardImage,
   SiteNavRail,
   SiteNavForm,
   SiteNavStatus,

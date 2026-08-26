@@ -31,51 +31,6 @@ function only(nav: SiteNavProps, keys: string[]): SiteNavProps {
   return { ...nav, items: nav.items.filter((item) => keys.includes(item.key)) };
 }
 
-/**
- * Fill the rail's primary card with a real image.
- *
- * The fixture supplies none — the artwork for "Working together" is an open item — and the card
- * renders title-only without one, because an empty framed rectangle in a live header reads as a
- * broken image rather than as a placeholder. So the image-led arrangement the spec actually
- * describes has to be proven here, and this is the only place in the repo that passes the slot.
- */
-function withRailImage(nav: SiteNavProps): SiteNavProps {
-  return {
-    ...nav,
-    items: nav.items.map((item) =>
-      item.rail
-        ? {
-            ...item,
-            rail: {
-              ...item.rail,
-              cards: item.rail.cards.map((card) =>
-                card.role === 'primary'
-                  ? {
-                      ...card,
-                      /* A native <img>, per the contract Figure established and PageHero
-                         follows — there is no Image primitive in this repo and no next/image
-                         precedent in a pattern. `alt=""` because the card's own title is the
-                         link text: a description here would make a screen reader read the
-                         destination twice, once badly. */
-                      image: (
-                        // eslint-disable-next-line @next/next/no-img-element -- accepted native-image contract
-                        <img
-                          src="/design/hero-sample-wide.svg"
-                          alt=""
-                          width={2400}
-                          height={1350}
-                        />
-                      ),
-                    }
-                  : card,
-              ),
-            },
-          }
-        : item,
-    ),
-  };
-}
-
 export default async function SiteNavSpecimenPage() {
   const { nav } = await getNavigation();
 
@@ -127,13 +82,6 @@ export default async function SiteNavSpecimenPage() {
             note="Services, the widest of the three. Two groups of six plus the rail, which is the only one in the nav. It was 1240 to match the page’s content column, so the plate lined up with the bands behind it — at 14px rows that alignment cost a 255px hole between the two lists, so it came down to 1120 and the pane ratio moved 2:1 to 5:3 in the same edit, which is what keeps the cut on the columns (339 → 278) instead of the rail (308, unchanged). The hub link at the foot is the way through to /services: the trigger opens rather than navigates, so without it the section index has no route to it. Hover a row: direction B — a brandeis-50 fill at the row radius, the label and the arrow both taking the blue, the arrow sliding in from -4px. The fill extends past the text because the row's padding is pulled back out with a negative inset, so the label still aligns with the group label above it. The rail's secondary card is a compact row rather than a second card: a full card would make the rail taller than the columns beside it, and then the plate's height would be set by the offer instead of by the content."
           >
             <SiteNav {...only(nav, ['services'])} />
-          </Specimen>
-
-          <Specimen
-            title="Plate · the rail's image slot filled"
-            note="The same Services plate with an image passed into the primary card. This is the arrangement the spec describes and the fixture cannot show — the slot holds a 16:7 ratio whatever it is given, paints a ground under it so a transparent or still-loading image does not punch a hole in the card, and crops with object-fit. Compare the rail's height against the specimen above: the card grows and the plate grows with it, which is exactly why the height is measured rather than guessed."
-          >
-            <SiteNav {...only(withRailImage(nav), ['services'])} />
           </Specimen>
 
           <Specimen

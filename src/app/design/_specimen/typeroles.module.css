@@ -35,6 +35,10 @@
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
 }
+.h6 {
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+}
 .quote {
   font: var(--text-quote);
 }
