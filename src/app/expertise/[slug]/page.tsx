@@ -427,7 +427,7 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
         ) : (
           <CtaSection
             arrangement="open"
-            surface="ink"
+            surface="tint"
             heading={expertise.capabilitiesCta.heading}
             body={expertise.capabilitiesCta.body}
             points={expertise.capabilitiesCta.points}
@@ -437,7 +437,7 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
       ) : null}
 
       {expertise.cta ? (
-        <Section surface="ink" aria-labelledby="expertise-cta-heading">
+        <Section surface="tint" aria-labelledby="expertise-cta-heading">
           <Layout rowGap="stack">
             <h2 id="expertise-cta-heading">{expertise.cta.heading}</h2>
             {expertise.cta.descriptionHtml ? (

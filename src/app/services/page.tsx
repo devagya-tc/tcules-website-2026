@@ -213,7 +213,7 @@ export default async function ServicesPage() {
         page.closingCta.actions.length > 0 ? (
           <CtaSection
             arrangement="open"
-            surface="ink"
+            surface="tint"
             heading={page.closingCta.heading}
             body={page.closingCta.body}
             points={page.closingCta.points}
@@ -222,7 +222,7 @@ export default async function ServicesPage() {
             }
           />
         ) : (
-          <Section surface="ink" aria-labelledby="services-closing-heading">
+          <Section surface="tint" aria-labelledby="services-closing-heading">
             <Layout rowGap="block">
               <h2 id="services-closing-heading">{page.closingCta.heading}</h2>
               {page.closingCta.body.map((paragraph) => (

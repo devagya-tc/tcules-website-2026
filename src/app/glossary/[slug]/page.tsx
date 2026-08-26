@@ -390,7 +390,7 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
       {glossary.cta ? (
         <CtaSection
           arrangement="open"
-          surface="ink"
+          surface="tint"
           heading={glossary.cta.heading}
           body={glossary.cta.body}
           eyebrow={glossary.cta.eyebrow}

@@ -263,7 +263,7 @@ export default async function FutureInterfacesLabPage() {
         page.misc.action ? (
           <CtaSection
             arrangement="open"
-            surface="ink"
+            surface="tint"
             eyebrow={page.misc.eyebrow || undefined}
             heading={page.misc.heading}
             body={page.misc.body}
@@ -275,7 +275,7 @@ export default async function FutureInterfacesLabPage() {
             ]}
           />
         ) : (
-          <Section surface="ink" aria-labelledby={`future-interfaces-lab-misc-${page.misc.id}`}>
+          <Section surface="tint" aria-labelledby={`future-interfaces-lab-misc-${page.misc.id}`}>
             <Layout rowGap="block">
               {page.misc.eyebrow ? <p>{page.misc.eyebrow}</p> : null}
               <h2 id={`future-interfaces-lab-misc-${page.misc.id}`}>{page.misc.heading}</h2>

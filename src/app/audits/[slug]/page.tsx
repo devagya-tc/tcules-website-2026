@@ -374,7 +374,7 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
       {audit.cta ? (
         <CtaSection
           arrangement="open"
-          surface="ink"
+          surface="tint"
           heading={audit.cta.heading}
           body={audit.cta.body}
           eyebrow={audit.cta.eyebrow}
