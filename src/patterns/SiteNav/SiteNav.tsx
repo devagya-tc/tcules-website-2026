@@ -782,14 +782,22 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
 
           <div className={cx(styles.sheetPane, styles.sheetPaneSection)} inert={section === null}>
             <div ref={headRef} className={styles.sheetHead}>
-              <button
-                type="button"
+              {/* A Button, not a bespoke <button>. It was hand-rolled and set a MONO role in
+                  sentence case — "Menu" in Geist Mono with the tracking opened, which §8 names as
+                  the failure that makes a label read as letter-spaced body text. Button takes the
+                  case from --text-mono-case, so the fix is structural rather than a transform
+                  bolted on, and it arrives with the focus ring and pressed state already decided.
+                  `iconLeft`, because the glyph names the direction rather than the destination. */}
+              <Button
                 className={styles.sheetBack}
+                emphasis="link"
+                tone="primary"
+                size="sm"
+                iconLeft={<Icon name="arrow-left" />}
                 onClick={() => setNav({ section: null })}
               >
-                <Icon name="arrow-left" className={styles.sheetBackIcon} />
                 Menu
-              </button>
+              </Button>
               <span className={styles.sheetTitle}>{sheetSection?.label}</span>
             </div>
             {/* The scroll container is stable so its ref survives a section change; the BODY is
@@ -880,11 +888,24 @@ function PlatePane({ item }: { item: SiteNavItem }) {
             {primary.map((card) => (
               <RailCard key={card.href} card={card} />
             ))}
+            {/* Wrapped the way the hub link is: the rule and the air above it stay on the Cluster,
+                so the control itself is just a control. Button brings the mono case, the focus ring
+                and the pressed step — and its own underline on hover, which replaces the sliding
+                arrow this row used to borrow from the plate's rows. That is the trade: one hover
+                language for controls, another for rows. */}
             {secondary.map((card) => (
-              <Link key={card.href} href={card.href} className={styles.railAction}>
-                <span>{card.title}</span>
-                <Icon name="arrow-right" className={styles.rowArrow} />
-              </Link>
+              <Cluster key={card.href} className={styles.railAction}>
+                <Button
+                  as={Link}
+                  href={card.href}
+                  emphasis="link"
+                  tone="primary"
+                  size="sm"
+                  icon={<Icon name="arrow-right" />}
+                >
+                  {card.title}
+                </Button>
+              </Cluster>
             ))}
           </Layout>
         </Layout>

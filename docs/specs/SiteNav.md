@@ -638,7 +638,54 @@ It closed a real gap beyond this card: `reset.css` has always counted `h6` as a 
 `globals.css` styled five, so a bare `<h6>` anywhere on the site fell through to the browser's bold
 0.67em default. It now has a rule, and `/design/typography` covers the role.
 
-### 12.24 · Two QA items cannot be met yet, and are not faked
+### 12.25 · A link audit, and the two controls it caught
+
+Asked directly: which of the nav's links are `Button` and which are hand-rolled. The answer split
+three ways, and the middle column is the interesting one.
+
+| Element | Renders as | Verdict |
+|---|---|---|
+| Bar items, bar CTA, toggle, hub link, sheet foot CTAs | `Button` | correct |
+| Plate rows, sheet links, sheet row labels, card title | plain `<Link>` | **correctly NOT `Button`** |
+| Logo | plain `<Link>` | a mark, not a text link |
+| Rail secondary action, sheet Back | hand-rolled | **converted** |
+
+**Why the second row must stay hand-rolled.** `Button`'s link variant is mono and uppercase — its
+label runs through `--text-mono-case`. The plate's rows and the sheet's links are sentence-case
+destination names in sans ("Product Modernisation"), and §8 is explicit that a label which must stay
+sentence case is not a mono label. Making those `Button`s would uppercase the whole IA. So they are
+anchors on purpose, not by omission.
+
+**The sheet's Back control was broken, and it was mine.** It set `--nav-sheet-back-text` — a mono
+role — with no `text-transform` at all, so "Menu" rendered in Geist Mono, sentence case, tracking
+opened to 0.96px: precisely the failure §8 describes, sitting next to an uppercase "SERVICES" in the
+same header row. It is a `Button emphasis="link"` now, which takes the case from the token rather
+than from a transform bolted on.
+
+**The rail's secondary action went the same way.** Both are wrapped so the class keeps only what
+`Button` cannot know — a grid cell for Back, the rule and its air for the rail seam. Six tokens went
+with them (`--nav-rail-action-text`/`-tracking`, `--nav-rail-action-fg`/`-fg-hover` across four
+surface blocks, `--nav-sheet-back-text`/`-tracking`), because each merely restated something
+`--btn-*` had already decided. One visible trade: the rail action's hover is now `Button`'s underline
+rather than the sliding arrow it used to borrow from the rows.
+
+**And four rules wrote `text-transform: uppercase` as a literal** where §8 says the case belongs to
+`--text-mono-case`. Same pixels today; a token bypass that would not follow if the decision ever
+reversed. Fixed.
+
+### 12.26 · Three smaller answers
+
+1. **Insights and Expertise have no cards.** Services carries the only rail in the nav — one rail,
+   two cards. That is §8.2 by design. Adding one to either is not a styling change: a card needs a
+   rail, a rail needs a third column, and both plates would have to widen back out from 780/560.
+2. **The card's image-to-text gap was `--gap-tight` (8)** against the card's own 16px padding, so the
+   title sat closer to the image than to any edge and the interior read as two rhythms. It is
+   `--gap-text` (16) now, matching the padding, on both surfaces.
+3. **The logo no longer responds to hover.** It dimmed to `opacity: 0.7` — not a colour change in
+   the stylesheet and read as one on the screen. A brand that fades under the pointer looks like it
+   is being disabled. The cursor and the focus ring are the affordances.
+
+### 12.27 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at

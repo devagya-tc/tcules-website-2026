@@ -65,17 +65,16 @@
 /* The wordmark's link. Inline-flex so the anchor is exactly the mark's box with no baseline slack
    under it, and it takes the surface ink rather than a link colour — the logo is the brand, not a
    link that happens to be a picture. */
+/* NO HOVER STATE, deliberately. It used to dim to 0.7 opacity, which is not a colour change in the
+   stylesheet and is read as one on the screen — the mark is the brand, and a brand that fades when
+   a pointer crosses it looks like it is being disabled. The cursor already says the mark is a link,
+   and the focus ring below covers the keyboard. Nothing to transition, so nothing is declared. */
 .brand {
   display: inline-flex;
   align-items: center;
   flex: none;
   color: var(--nav-item-fg);
   text-decoration: none;
-  transition: opacity var(--nav-transition-duration) var(--nav-transition-easing);
-}
-
-.brand:hover {
-  opacity: 0.7;
 }
 
 /* The item list. Hidden below the breakpoint — see the header note on Cluster and display. */
@@ -293,7 +292,7 @@
 .groupLabel {
   font: var(--nav-label-text);
   letter-spacing: var(--nav-label-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
   color: var(--nav-label-ink);
 }
 
@@ -355,8 +354,6 @@
 .row:focus-visible .rowArrow,
 .card:hover .rowArrow,
 .card:focus-visible .rowArrow,
-.railAction:hover .rowArrow,
-.railAction:focus-visible .rowArrow,
 .card:hover .cardArrow,
 .card:focus-visible .cardArrow {
   opacity: 1;
@@ -403,7 +400,10 @@
 .cardImage {
   display: block;
   aspect-ratio: var(--nav-card-image-ratio);
-  margin-block-end: var(--gap-tight);
+  /* `text`, matching the card's own padding. At `tight` the title sat 8px under a hard-edged filled
+     block inside a card padded 16 all round, so the interior read as two different rhythms and the
+     title looked crowded against the image rather than captioning it. */
+  margin-block-end: var(--gap-text);
   border-radius: var(--nav-card-image-radius);
   background: var(--nav-card-image-ground);
   overflow: hidden;
@@ -439,25 +439,15 @@
 
 /* The rail's SECONDARY card is a compact row, not a second card, and the reason is structural: a
    full card makes the rail taller than the two columns beside it, and then the plate's height is
-   set by the offer instead of by the content. Uppercase and blue, so it still reads as the
-   action it is. */
+   set by the offer instead of by the content.
+
+   THIS IS THE SEAM, NOT THE CONTROL. The control inside it is a `Button emphasis="link"`, which
+   owns its own type, case, ink, focus ring and pressed state — so all that is left here is the rule
+   that separates the offer from the card above it and the air under that rule. Everything this used
+   to declare was a restatement of something Button had already decided. */
 .railAction {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-tight);
   padding-block-start: var(--gap-text);
   border-block-start: var(--nav-rule-width) solid var(--nav-rule);
-  font: var(--nav-rail-action-text);
-  letter-spacing: var(--nav-rail-action-tracking);
-  text-transform: uppercase;
-  color: var(--nav-rail-action-fg);
-  text-decoration: none;
-  transition: color var(--nav-transition-duration) var(--nav-transition-easing);
-}
-
-.railAction:hover,
-.railAction:focus-visible {
-  color: var(--nav-rail-action-fg-hover);
 }
 
 /* ── The sheet ─────────────────────────────────────────────────────────────────
@@ -686,36 +676,17 @@
   border-block-end: var(--nav-rule-width) solid var(--nav-rule);
 }
 
+/* Back. A `Button emphasis="link"` now, so the only thing left for this class is which grid cell it
+   sits in — Button's link variant already zeroes its own inline padding, which is what used to
+   need the negative margin pull. */
 .sheetBack {
   justify-self: start;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-tight);
-  padding: var(--gap-tight);
-  margin-inline-start: calc(-1 * var(--gap-tight)); /* optical: pull the label to the edge */
-  border: 0;
-  border-radius: var(--nav-item-radius);
-  background: transparent;
-  font: var(--nav-sheet-back-text);
-  letter-spacing: var(--nav-sheet-back-tracking);
-  color: var(--nav-rail-action-fg);
-  cursor: pointer;
-}
-
-.sheetBackIcon {
-  inline-size: var(--nav-row-arrow-size);
-  block-size: var(--nav-row-arrow-size);
-  transition: transform var(--nav-transition-duration) var(--nav-transition-easing);
-}
-
-.sheetBack:active .sheetBackIcon {
-  transform: translateX(calc(-1 * var(--nav-row-arrow-travel)));
 }
 
 .sheetTitle {
   font: var(--nav-label-text);
   letter-spacing: var(--nav-label-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
   color: var(--nav-title-ink);
 }
 
@@ -741,7 +712,7 @@
 .sheetLabel {
   font: var(--nav-label-text);
   letter-spacing: var(--nav-label-tracking);
-  text-transform: uppercase;
+  text-transform: var(--text-mono-case);
   color: var(--nav-label-ink);
 }
 
@@ -796,9 +767,7 @@
 .brand:focus,
 .row:focus,
 .card:focus,
-.railAction:focus,
 .sheetControl:focus,
-.sheetBack:focus,
 .sheetLink:focus {
   outline: none;
 }
@@ -806,9 +775,7 @@
 .brand:focus-visible,
 .row:focus-visible,
 .card:focus-visible,
-.railAction:focus-visible,
 .sheetControl:focus-visible,
-.sheetBack:focus-visible,
 .sheetLink:focus-visible {
   outline: none;
   box-shadow:
@@ -861,12 +828,10 @@
   .rowArrow,
   .card,
   .cardArrow,
-  .railAction,
   .sheetScrim,
   .sheet,
   .track,
   .sheetControl,
-  .sheetBackIcon,
   .sheetLink {
     transition-duration: var(--duration-instant);
   }
