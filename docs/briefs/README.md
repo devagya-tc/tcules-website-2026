@@ -120,20 +120,47 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
     again; compose against the shipped component. It brought the system its first **scroll
     observation**, which nothing here had before.
 
-    **The component ships; the call sites have not moved yet.** `src/app/audits/[slug]/page.tsx`
-    still hand-rolls its "On this page" band out of a tint `Section` and a `Cluster` of link
-    Buttons (line 311), and five more routes carry the same block: `services/[...slug]`,
-    `expertise/[slug]`, `glossary/[slug]`, `tools/[slug]` and `how-we-work`. Swapping those six
-    bands for the rail is route work that is now unblocked and outstanding —
-    and it changes those pages' shape, which is why it is worth doing deliberately rather than
-    incidentally.
+    **All six routes carrying the retired band lost it, and none gained a rail.** **Page type
+    decides, not heading count** — `TableOfContents.md` § 1 — and all six are standard pages:
+    `services/[...slug]`, `expertise/[slug]`, `glossary/[slug]`, `tools/[slug]`, `how-we-work`
+    and `audits/[slug]`. They carried the band because it was the only outline the system had.
+
+    `audits` was on § 1's long-form list and came off it at adoption, which is worth knowing
+    because the mistake was subtle: it qualified on heading count (median 11, the highest in the
+    corpus), the one criterion that sentence disavows. `AuditPage` and `ServicePage` are the same
+    shape and `HowWeWorkPage` is `AuditPage & {…}`, so an audit page is long-form only if a
+    service page is. The six audit routes are productised offerings with a hero CTA, an FAQ and a
+    closing CTA. The spec carries the correction and its reasoning.
 
     The content seam was already ahead of it and still is. `AuditSection.heading` is
     `{ text, anchorId, navigationLabel? }` — the id is derived and de-duplicated in
     `sources/strapi.ts`, and the optional short label is what makes an outline readable at all: the
     corpus's section headings run to a median of 35 characters and a maximum of 87, so heading text
-    is a fallback and not the label. A route that adopts the rail has to pass the short label, not
-    the heading.
+    is a fallback and not the label. A route that adopts the rail passes the short label, not the
+    heading, and a section without one is simply absent from the outline.
+
+    **The rail went to `terms-of-use` and `privacy-policy`**, which are the long-form documents the
+    site has today. Both were briefly written off as blocked on the missing `navigationLabel`
+    field — wrongly, and the lesson is that a type does not tell you what is in it. Measured:
+    terms-of-use is 11 sections at a median of 16 characters and a maximum of 26, privacy-policy
+    7 at 22 and 27, **none over the component's 40-character warning**. Legal headings are terse
+    by convention, so the heading IS the label rather than a fallback for one.
+
+    **Articles, case studies, events and podcasts are the pages that most want an outline, and
+    they are the ones still blocked.** The blocker is sharper than "no heading field":
+    `BlogBlock`, `CaseStudyBlock` and `PodcastBlock` (aliased by `EventBlock`) do carry a `title`,
+    but only on their `video` and `embed` members — it labels a media embed, so the `<h2>` those
+    routes render from it is a caption. **The real headings live inside the `prose` blocks'
+    `html`**, which `Prose` renders with `dangerouslySetInnerHTML` and which carries no ids. An
+    outline built from what those routes put in an `h2` today would list video titles.
+
+    Unblocking them is seam work of a known shape — inject ids into the prose HTML in
+    `sources/strapi/*.ts`, reusing the `anchorSlug` / `uniqueAnchor` de-duplication that already
+    serves the five section types, and emit the heading list on the view model. The labels are the
+    harder half: insight headings run to a median of 33 characters with 33 of 113 over 40, and
+    case-study headings to a median of 44 with **41 of 72 over 40**. Most case-study entries would
+    clamp, which argues for a `navigationLabel` on those types rather than for shipping the
+    fallback.
 12. **Tag** · 20 — **runnable now, and blocked by nothing.** Ten route modules already render its
     row as bare `<li>` text inside a `Cluster`, so the call sites are real, shipped and identical.
     It is one mark and `Cluster` keeps the row, which is why the brief forbids a `TagList` in its
