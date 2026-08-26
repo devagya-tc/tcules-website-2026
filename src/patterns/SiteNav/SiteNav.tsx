@@ -759,8 +759,11 @@ function RailCard({ card }: { card: SiteNavCard }) {
 /**
  * One section inside the sheet. The same groups, as type only.
  *
- * The hub link ("All services") and the audit card are both gone from here: the sheet's sticky
- * foot already carries both offers, and the same offer twice in one pane is one offer too many.
+ * The hub link is here, at the end of the scrolling list, exactly as it is at the foot of the
+ * plate. The audit card is not: the sticky foot already carries that offer, and the same offer
+ * twice in one pane is one offer too many. Those were one bullet in the spec and they are two
+ * different decisions — the card duplicates something, the hub link duplicates nothing.
+ *
  * Rows carry no glyphs — the settled direction dropped them, and a glyph nobody drew is a
  * placeholder shipped.
  */
@@ -813,6 +816,28 @@ function SheetPane({ item }: { item: SiteNavItem }) {
             </div>
           ))}
         </Layout>
+      ) : null}
+
+      {/* Inside the scrolling list rather than pinned beside the two actions in the foot. It is a
+          way through, not an offer, and the foot is where the offers live — parking it there would
+          make three actions compete in the one strip a thumb can reach. Last in the stagger, so it
+          arrives after the rows it is the end of. */}
+      {item.hub ? (
+        <Cluster
+          className={cx(styles.hubBar, styles.stagger)}
+          style={vars({ '--i': Math.min(position++, STAGGER_CAP) })}
+        >
+          <Button
+            as={Link}
+            href={item.hub.href}
+            emphasis="link"
+            tone="neutral"
+            size="sm"
+            icon={<Icon name="arrow-right" />}
+          >
+            {item.hub.label}
+          </Button>
+        </Cluster>
       ) : null}
     </Layout>
   );

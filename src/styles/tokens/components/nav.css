@@ -209,9 +209,22 @@
      the day someone tidies this file. */
   --nav-sheet-row-padding-block: var(--space-12);
   --nav-sheet-foot-padding-block: var(--space-12);
+  /* THE SIX ROOT ROWS STAY AT body-lg while the plate's rows and the section links went to body-sm.
+     That is deliberate on both counts: these six are the primary targets on a touch surface, where
+     a small row costs more than it does under a cursor, and their 52px height is what puts all six
+     below the midpoint of a 375x812 screen (§10.7) — shrink the type and that measurement has to be
+     re-derived for nothing gained, since the sheet has no width pressure to relieve. */
   --nav-sheet-row-text: var(--text-body-lg);
-  --nav-sheet-link-padding-block: var(--space-10); /* optical: 44px row from a 24px line */
-  --nav-sheet-link-text: var(--text-body);
+  /* A section-pane link. body-sm to match the plate's rows — the two are the same thing at two
+     sizes of screen, and a destination that is 14px on the desktop and 16px on a phone is two
+     decisions where there should be one.
+
+     THE PADDING MOVED WITH THE TYPE, and it had to. body-sm's line box is 21.7 against body's
+     25.6, so holding --space-10 would have taken this row to 41.7 and put it under the 44px touch
+     floor — the one measurement a phone list may not lose. --space-12 lands it at 45.7. The two
+     values are one decision: re-point the type and re-derive the padding from (44 - line) / 2. */
+  --nav-sheet-link-padding-block: var(--space-12);
+  --nav-sheet-link-text: var(--text-body-sm);
   --nav-sheet-back-text: var(--text-ui-sm);
   --nav-sheet-back-tracking: var(--text-ui-sm-tracking);
   --nav-sheet-chevron-size: var(--icon-size-16);

@@ -20,9 +20,15 @@ six items sit in the lower half of the screen where a thumb is. A section grows 
 less 88px; Back shrinks it again. Two actions stay pinned at the foot at both levels — Request audit
 on the left, Start a project on the right.
 
-**Services and Insights carry a hub link** at the foot of the plate — "ALL SERVICES", "ALL INSIGHTS"
-— because a mega's trigger opens rather than navigates, so without one the section's own index has
-no route to it. Expertise has none, deliberately.
+Type differs between the two on purpose: a section's links are 14px in both, but the sheet's six
+ROOT rows stay 18px. They are the primary targets on a touch surface, and their height is what keeps
+all six below the midpoint of a 375x812 screen.
+
+**Services and Insights carry a hub link** — "ALL SERVICES", "ALL INSIGHTS" — at the foot of the
+plate on desktop and at the end of the scrolling list in the sheet. A mega's trigger opens rather
+than navigates, so without one the section's own index has no route to it. Expertise has none,
+deliberately. It is never in the sheet's sticky foot: that strip holds the two offers, and a third
+action in the one place a thumb reaches would compete with both.
 
 **Composing a page with this: place it and stop.** It needs no wrapper, no surface Section around
 it and no spacing above it — it is sticky, it paints its own ground from `surface`, and the plate and

@@ -175,9 +175,19 @@ glyphs.
 neutral) left, **Start a project** (solid primary) right — primary under the right thumb. A
 hairline shadow appears above the bar while list remains below it.
 
-**Not in the mobile pane:** the "All services / All expertise / All insights" hub link (removed),
-and the Request Free Audit card (the sticky bar carries the offer). Working together renders as
-the single primary card with its image slot.
+**The hub link IS in the mobile pane**, at the end of the scrolling list, exactly as it is at the
+foot of the plate — see §12.12. It is not in the sticky foot: the foot is where the offers live, and
+a third action in the one strip a thumb can reach would compete with both of them.
+
+**Not in the mobile pane:** the Request Free Audit card, because the sticky bar carries that offer.
+Working together renders as the single primary card with its image slot.
+
+**Type in the sheet does not follow the plate all the way down.** Section-pane links are `body-sm`,
+matching the plate's rows — the same destination should not be two sizes. The six ROOT rows stay
+`body-lg`: they are the primary targets on a touch surface, where a small row costs more than it
+does under a cursor, and their 52px height is what puts all six below the midpoint of a 375x812
+screen (§10.7). The sheet also has no width pressure to relieve, which is the whole reason the plate
+shrank.
 
 **While the sheet is open** the page header is behind the scrim: the logo is `aria-hidden` and not
 focusable. Exits are the close glyph, the scrim, and back. The mark is not a second dismiss.
@@ -464,7 +474,24 @@ up, this is the first decision to revisit** — and the arithmetic to redo is: w
 column, doubled, plus one `--gap-column` seam and two `--gap-gutter` edges, then a ratio that leaves
 the rail at ~308.
 
-### 12.11 · Two QA items cannot be met yet, and are not faked
+### 12.12 · The hub link came back to mobile, and §5 was wrong to bracket it with the card
+
+§5 listed two things as "not in the mobile pane" — the hub link and the Request Free Audit card —
+and gave one reason, "the sticky bar carries the offer". That reason only covers the card. The hub
+link is not an offer and duplicates nothing: it is the only route to a section's own index, because
+a mega's trigger opens rather than navigates. So it is in the sheet now, at the end of the scrolling
+list, with the same hairline treatment it has on the plate.
+
+It sits INSIDE the list rather than pinned in the foot. The foot holds the two offers, and a phone
+gives you one strip a thumb reaches comfortably; a third action in it competes with both.
+
+**The touch floor moved with the type and had to be re-derived.** `--nav-sheet-link-padding-block`
+was `--space-10`, commented as "44px row from a 24px line" — true at `body` (25.6px line, 45.6 row).
+At `body-sm` the line box is 21.7, which would have taken the row to 41.7 and put it under the 44px
+floor. `--space-12` lands it at 45.7. The type and the padding are one decision: re-point the type
+and re-derive the padding as `(44 - line) / 2`.
+
+### 12.13 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at
