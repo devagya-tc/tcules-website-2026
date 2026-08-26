@@ -139,15 +139,28 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
     is a fallback and not the label. A route that adopts the rail passes the short label, not the
     heading, and a section without one is simply absent from the outline.
 
-    **Which leaves the component with no call site, and that is the honest state of it.** All four
-    remaining long-form types are blocked on the content model rather than on route work.
-    `terms-of-use` and `privacy-policy` carry
-    `{ id, heading: string, bodyHtml }` — the route generates the heading ids, but there is no
-    `navigationLabel`, so every entry would fall back to full heading text. `case-studies` and
-    `insights` are further back: `CaseStudyBlock` and `BlogBlock` have **no heading member at
-    all** — the bodies are opaque rich text and the `<h2>`s the routes render from `block.title`
-    carry no id. Giving either an outline means deriving anchors at the seam first, the way
-    `sources/strapi.ts` already does for the five section types that have them.
+    **The rail went to `terms-of-use` and `privacy-policy`**, which are the long-form documents the
+    site has today. Both were briefly written off as blocked on the missing `navigationLabel`
+    field — wrongly, and the lesson is that a type does not tell you what is in it. Measured:
+    terms-of-use is 11 sections at a median of 16 characters and a maximum of 26, privacy-policy
+    7 at 22 and 27, **none over the component's 40-character warning**. Legal headings are terse
+    by convention, so the heading IS the label rather than a fallback for one.
+
+    **Articles, case studies, events and podcasts are the pages that most want an outline, and
+    they are the ones still blocked.** The blocker is sharper than "no heading field":
+    `BlogBlock`, `CaseStudyBlock` and `PodcastBlock` (aliased by `EventBlock`) do carry a `title`,
+    but only on their `video` and `embed` members — it labels a media embed, so the `<h2>` those
+    routes render from it is a caption. **The real headings live inside the `prose` blocks'
+    `html`**, which `Prose` renders with `dangerouslySetInnerHTML` and which carries no ids. An
+    outline built from what those routes put in an `h2` today would list video titles.
+
+    Unblocking them is seam work of a known shape — inject ids into the prose HTML in
+    `sources/strapi/*.ts`, reusing the `anchorSlug` / `uniqueAnchor` de-duplication that already
+    serves the five section types, and emit the heading list on the view model. The labels are the
+    harder half: insight headings run to a median of 33 characters with 33 of 113 over 40, and
+    case-study headings to a median of 44 with **41 of 72 over 40**. Most case-study entries would
+    clamp, which argues for a `navigationLabel` on those types rather than for shipping the
+    fallback.
 12. **Tag** · 20 — **runnable now, and blocked by nothing.** Ten route modules already render its
     row as bare `<li>` text inside a `Cluster`, so the call sites are real, shipped and identical.
     It is one mark and `Cluster` keeps the row, which is why the brief forbids a `TagList` in its
