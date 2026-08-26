@@ -326,9 +326,12 @@ Repo: devagya-tc/tcules-website-2026  ·  branch: main  ·  it is PRIVATE.
     </div>
 
     <p>
-      Two rules, and they exist because <strong>nothing on the server enforces them.</strong> This
-      plan cannot protect the <code>main</code> branch, so the only thing keeping <code>main</code>
-      clean is that people do this:
+      Two rules, and they exist because <strong>nothing on the server enforces them.</strong> A
+      branch protection rule for <code>main</code> does now exist in the repository settings, but
+      GitHub does not honour one on a private repository on this plan — that needs a Team or
+      Enterprise <em>organization</em> account. So the rule records the intent and a direct push
+      still sails straight through it. What actually keeps <code>main</code> clean is that people
+      do this:
     </p>
     <ul>
       <li><strong>Never commit to <code>main</code>.</strong> Always work on a branch.</li>
@@ -342,6 +345,15 @@ Repo: devagya-tc/tcules-website-2026  ·  branch: main  ·  it is PRIVATE.
 git pull
 git checkout -b feat/accordion</code></pre>
     </div>
+
+    <p>
+      One thing does push back. <code>npm ci</code> installs a <code>pre-push</code> hook that
+      refuses any push landing on <code>main</code>, whatever the branch you are standing on is
+      called. If it fires, you meant to be on a branch and are not — the message it prints
+      tells you how to move the commits across. It is a guardrail and not a gate: it lives in your
+      own checkout, so it cannot help a machine that never ran an install, and
+      <code>git push --no-verify</code> steps around it on purpose.
+    </p>
 
     <p>
       Branch names follow what is already in the repo: <code>feat/</code> for something new,
@@ -922,7 +934,7 @@ git branch -d feat/accordion</code></pre>
           <tr><td><code>npm run dev</code></td><td>Terminal, repo folder</td><td>To look at it in a browser. <code>Ctrl-C</code> stops it</td></tr>
           <tr><td><code>gh pr create</code></td><td>Terminal, repo folder</td><td>When the branch is ready for review</td></tr>
           <tr><td><code>gh pr checks</code></td><td>Terminal, repo folder</td><td>After opening it, to see if CI is green</td></tr>
-          <tr><td><code>npm ci</code></td><td>Terminal, repo folder</td><td>First time, and whenever dependencies change</td></tr>
+          <tr><td><code>npm ci</code></td><td>Terminal, repo folder</td><td>First time, and whenever dependencies change. Also installs the <code>pre-push</code> hook that refuses pushes to <code>main</code></td></tr>
           <tr><td><code>npm run format</code></td><td>Terminal, repo folder</td><td>Rarely — it edits files, so run it deliberately</td></tr>
           <tr><td><code>gh pr merge --squash --delete-branch</code></td><td>Terminal, repo folder</td><td><strong>Owner only.</strong> After review</td></tr>
           <tr><td>the re-sync driver</td><td>Owner's machine, outside the repo</td><td><strong>Owner only, for a new component.</strong> After merge — the tooling is gitignored, and it needs a person to grade the preview sheets</td></tr>

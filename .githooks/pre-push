@@ -1,0 +1,46 @@
+#!/bin/sh
+# Refuse a push whose REMOTE ref is main.
+#
+# Why the remote ref rather than the current branch: `git push origin HEAD:main` and
+# `git push origin feat/x:main` both land on main from a local branch called something else, so the
+# local name proves nothing. Git feeds this hook one line per ref being updated, as
+# <local ref> SP <local sha> SP <remote ref> SP <remote sha>, and the third field is the only one
+# that says where the commits are actually going.
+#
+# Installed by `npm ci` / `npm install` via scripts/install-hooks.mjs, which points core.hooksPath
+# at this directory. It is a guardrail and not a gate: `--no-verify` skips it, a clone that never
+# ran an install never gets it, and CI does not see it at all. The real gate is branch protection,
+# which GitHub does not enforce on a private repository on this plan — a rule for `main` exists in
+# the repository settings and does nothing. See docs/guides/designer-workflow.html.
+
+blocked=0
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  case "$remote_ref" in
+    refs/heads/main) blocked=1 ;;
+  esac
+done
+
+if [ "$blocked" -eq 0 ]; then
+  exit 0
+fi
+
+cat >&2 <<'MSG'
+
+  Refusing to push to main.
+
+  Every change here goes through a branch and a pull request. Nothing on GitHub
+  enforces that on this plan, so this hook does.
+
+      git checkout -b feat/your-thing
+      git push -u origin feat/your-thing
+
+  Already committed on main? Move the commits onto a branch, then reset main:
+
+      git branch feat/your-thing
+      git reset --hard origin/main
+      git checkout feat/your-thing
+
+  If you genuinely mean it, `git push --no-verify` skips this.
+
+MSG
+exit 1
