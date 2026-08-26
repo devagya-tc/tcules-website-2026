@@ -194,12 +194,16 @@ a third action in the one strip a thumb can reach would compete with both of the
 **Not in the mobile pane:** the Request Free Audit card, because the sticky bar carries that offer.
 Working together renders as the single primary card with its image slot.
 
-**Type in the sheet does not follow the plate all the way down.** Section-pane links are `body-sm`,
-matching the plate's rows — the same destination should not be two sizes. The six ROOT rows stay
-`body-lg`: they are the primary targets on a touch surface, where a small row costs more than it
-does under a cursor, and their 52px height is what puts all six below the midpoint of a 375x812
-screen (§10.7). The sheet also has no width pressure to relieve, which is the whole reason the plate
-shrank.
+**Three sizes in the sheet, one step apart each.** Section-pane links are `body-sm` (14), matching
+the plate's rows — the same destination should not be two sizes. The six ROOT rows are `body` (16):
+one step above the links so the two levels are not identical, one step below where they started. The
+rail card is `body-lg` (18), the heaviest thing in the pane.
+
+The root rows have **no desktop counterpart to match** — the same six items are the bar up there, set
+in `--text-ui` at 13 mono uppercase through `Button` — so their size is judged on its own. 16 keeps
+a 49.6px target, well over the 44 floor, and closes the step to the section links to a single size.
+
+**Shrinking them made §10.7 safer, which is the opposite of how it looks.** See §12.21.
 
 **Swipe down to dismiss.** The grab handle promises a gesture and now performs one: a downward drag
 puts the whole sheet away — section and all — rather than stepping back a level, because Back
@@ -590,7 +594,22 @@ error that is no longer there. The rule in CLAUDE.md §8 is that pairing a track
 in that second group names something that does not exist; the honest move when a role loses its
 companion is for the component token to lose it too.
 
-### 12.20 · Two QA items cannot be met yet, and are not faked
+### 12.21 · A correction: shorter root rows move the list DOWN, not up
+
+An earlier note in §5 and in `nav.css` claimed the root rows' 52px height was "what puts all six
+below the midpoint of a 375×812 screen", and used that to argue for keeping them at 18px. **That was
+backwards.** The sheet is anchored to the bottom of the viewport, so shorter rows make it shorter,
+which moves its top edge DOWN and every row further below the midpoint.
+
+Measured, going 18 → 16: the sheet hugs at **415** instead of 428, its top edge sits at 397 instead
+of 384, and the first row lands **14px below the midpoint** where it previously cleared by 1. The
+touch floor was never at risk either — 49.6px at 16, 45.7px at 14, both over 44.
+
+Recorded because the wrong reason is now written into a token comment as a warning: nobody should
+restore 18px to protect a measurement that never depended on it. The real argument for a given size
+here is the size itself.
+
+### 12.22 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at

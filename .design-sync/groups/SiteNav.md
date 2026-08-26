@@ -24,9 +24,10 @@ on the left, Start a project on the right.
 "up one". It follows the finger, starts from the handle or the header (or from the list when that
 list is at its top), and snaps back if the gesture is too short to mean it.
 
-Type differs between the two on purpose: a section's links are 14px in both, but the sheet's six
-ROOT rows stay 18px. They are the primary targets on a touch surface, and their height is what keeps
-all six below the midpoint of a 375x812 screen.
+Type differs between the two on purpose. A section's links are 14px on both surfaces; the sheet's six
+root rows are 16px — one step up, since they are the top level on the one surface where they are the
+primary target — and the rail card's title is 18px, the heaviest text in either pane. The root rows
+have no desktop counterpart to match: up there the same six items are the bar, set in mono at 13.
 
 **Services and Insights carry a hub link** — "ALL SERVICES", "ALL INSIGHTS" — at the foot of the
 plate on desktop and at the end of the scrolling list in the sheet. A mega's trigger opens rather

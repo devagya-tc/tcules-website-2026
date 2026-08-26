@@ -215,12 +215,20 @@
      the day someone tidies this file. */
   --nav-sheet-row-padding-block: var(--space-12);
   --nav-sheet-foot-padding-block: var(--space-12);
-  /* THE SIX ROOT ROWS STAY AT body-lg while the plate's rows and the section links went to body-sm.
-     That is deliberate on both counts: these six are the primary targets on a touch surface, where
-     a small row costs more than it does under a cursor, and their 52px height is what puts all six
-     below the midpoint of a 375x812 screen (§10.7) — shrink the type and that measurement has to be
-     re-derived for nothing gained, since the sheet has no width pressure to relieve. */
-  --nav-sheet-row-text: var(--text-body-lg);
+  /* THE SIX ROOT ROWS sit at body — one step above the section links and the plate's rows, one
+     step below where they started.
+
+     They have no desktop counterpart to match: the same six items are the BAR up there, set in
+     --text-ui at 13 mono uppercase through Button. So this is judged on its own, and 16 is the
+     answer because it keeps a 49.6px target — well over the 44 floor — while closing the step to
+     the 14px section links to a single size, so the two levels read as one sheet.
+
+     AND SHRINKING THEM MAKES §10.7 SAFER, WHICH IS THE OPPOSITE OF WHAT IT LOOKS LIKE. The sheet is
+     anchored to the bottom of the viewport, so shorter rows make it shorter, which moves its top
+     edge DOWN and every row further below the screen's midpoint. An earlier note here claimed the
+     52px height was what kept the six below the line; that was backwards, and it is written out
+     here so nobody restores 18px to protect a measurement that never depended on it. */
+  --nav-sheet-row-text: var(--text-body);
   /* A section-pane link. body-sm to match the plate's rows — the two are the same thing at two
      sizes of screen, and a destination that is 14px on the desktop and 16px on a phone is two
      decisions where there should be one.
