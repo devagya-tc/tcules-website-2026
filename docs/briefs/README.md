@@ -1,7 +1,7 @@
 # Component briefs
 
-One file per component. Eighteen came out of the content audit; **19 did not** — a brief may also
-be raised for a component a real call site turns out to need. **Open the file, select all of it, paste it into
+One file per component. Eighteen came out of the content audit; **19 and 20 did not** — a brief may
+also be raised for a component a real call site turns out to need. **Open the file, select all of it, paste it into
 the Tcules project in Claude Design.** That is the whole step — each one is a complete document:
 the spec-writing prose and that component's own filled brief, in one place.
 
@@ -17,9 +17,9 @@ Design project as a guidelines document. Regenerate it with
 `guidelines/docs/`. Nothing checks the pushed copy is current, so **after a token rename it has to be
 regenerated and pushed again.**
 
-## The nineteen
+## The twenty
 
-Three are pasteable. Sixteen are not: fifteen describe components that **already ship** — do not
+Four are pasteable. Sixteen are not: fifteen describe components that **already ship** — do not
 specify them, compose from the library instead — and one is blocked on content. Brief 09 shipped **two**
 components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also absorbed
 SiteFooter's private newsletter field tokens. Each says so in its Status
@@ -51,6 +51,7 @@ move its row to "ships today" in the same change that merges it.
 | 17 | [Stat](17-stat.md) | `Proof` · 2 · `--proof-` | 1 route resolved, 3 claimed · 2 | **ships today in shared Proof — do not specify** |
 | 18 | [Filters](18-filters.md) | `Filters` · 2 · unassigned | none | **blocked on content — do not specify** |
 | 19 | [Table of Contents](19-table-of-contents.md) | `TableOfContents` · 2 · `--toc-` | 82 routes ≥ 6 headings · 1 arrangement | paste |
+| 20 | [Tag](20-tag.md) | `Tag` · 1 · `--tag-` | 10 route modules · 2 variants · 1 arrangement | paste |
 
 Every proposed prefix was checked against the nineteen already taken — `--acc-`, `--bcrd-`,
 `--btn-`, `--call-`, `--crumb-`, `--cta-`, `--enq-`, `--fig-`, `--foot-`, `--hero-`, `--icn-`,
@@ -130,6 +131,32 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
     One thing it asks for that the system has never had: **observing scroll position**, to mark the
     section the reader is in. Client components exist, scroll observation does not, so it comes back
     as a NEW MECHANISM REQUEST with an argument attached rather than as a token.
+12. **Tag** · 20 — **runnable now, and blocked by nothing.** Ten route modules already render its
+    row as bare `<li>` text inside a `Cluster`, so the call sites are real, shipped and identical.
+    It is one mark and `Cluster` keeps the row, which is why the brief forbids a `TagList` in its
+    first hard constraint.
+
+    Two variants, decided rather than left open: an **inert** taxonomy mark and an **interactive**
+    filter chip that takes over the insights filter rows from `Button emphasis="ghost" size="sm"`.
+    So the insights route's filter band changes shape when it lands, and the component carries the
+    full state model on one variant and none of it on the other. A **status** variant was
+    considered and is explicitly out — `src/content/types.ts` has no status field of any kind on
+    any page type, and the brief records that so it does not get re-raised.
+
+    The one constraint worth knowing before reading it: an inert mark must not read as touchable,
+    an interactive mark must not read as inert, and neither may borrow a button's rest signature.
+    That third leg is satisfiable because `Button.module.css:207` rules out an edge at rest for
+    every emphasis, deliberately — so an edged box is unclaimed territory and is what both tag
+    variants can safely take.
+
+    It is also **the brief that changed the shared touch-target rule.** §9 used to state a flat
+    44px minimum; it now states 24×24 as the floor (WCAG 2.2 SC 2.5.8, AA; 44×44 is SC 2.5.5,
+    AAA) and asks each component to argue the number above it. Tag is the worked case: neither
+    means §9 offers reaches 44 on a wrapping row — `extendHitArea` grows the target vertically
+    only, so at `rowGap="tight"` the extended targets of two adjacent rows overlap, and stepping
+    the box up to 44 makes a tag button-sized, which the legibility constraint forbids. **24 is a
+    floor to clear, not a size to aim at**, and the brief says so in terms, because a filter row
+    operated by thumb deserves better than the minimum.
 
 ## Three carry a decision that is not the designer's
 
