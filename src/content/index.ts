@@ -38,6 +38,7 @@ export type {
   Page,
   PageBlock,
   PageSeo,
+  PageOutlineEntry,
   AboutPage,
   AboutImageSection,
   AboutCard,

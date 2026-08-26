@@ -5,6 +5,7 @@ import type {
   EventContentSource,
   EventImage,
   EventPage,
+  PageOutlineEntry,
 } from '../../types';
 import { EVENT_BY_SLUG_QUERY } from './event-query';
 import type {
@@ -16,7 +17,7 @@ import type {
   StrapiEventResponse,
   StrapiEventSeo,
 } from './event-types';
-import { markdownToHtml } from './markdown';
+import { markdownToHtml, type BodyHeading } from './markdown';
 import { escapeHtml, safeContentHref } from './rich-text';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
@@ -144,12 +145,13 @@ function mapBlock(
   index: number,
   title: string,
   graphqlUrl: string,
+  outline: BodyHeading[],
 ): EventBlock | undefined {
   const id = blockId(block, index);
 
   switch (block.__typename) {
     case 'ComponentBlogAndCasestudiesBlogOrCasestudyText': {
-      const html = markdownToHtml(block.blogContent, `${id} content`);
+      const html = markdownToHtml(block.blogContent, `${id} content`, { headings: outline });
       return html ? { id, type: 'prose', html } : undefined;
     }
 
@@ -338,6 +340,15 @@ function mapEvent(
   const featureImage = mapImage(rawEvent.featureImage, title, 'feature image', graphqlUrl);
   const seo = mapSeo(rawEvent.seo);
 
+  /* Hoisted rather than inlined below, because `outline` is filled as a SIDE EFFECT of mapping the
+     blocks: reading it from a later key of the same object literal would make the result depend on
+     key order, which is the kind of correctness nobody sees in review. */
+  const outline: PageOutlineEntry[] = [];
+  const blocks = (rawEvent.mainSection ?? []).flatMap((block, index) => {
+    const mapped = mapBlock(block, index, title, graphqlUrl, outline);
+    return mapped ? [mapped] : [];
+  });
+
   return {
     documentId: value(rawEvent.documentId) || slug,
     slug,
@@ -367,10 +378,8 @@ function mapEvent(
       const name = value(category.name);
       return name ? [name] : [];
     }),
-    blocks: (rawEvent.mainSection ?? []).flatMap((block, index) => {
-      const mapped = mapBlock(block, index, title, graphqlUrl);
-      return mapped ? [mapped] : [];
-    }),
+    blocks,
+    outline,
     resources: (resources ?? []).flatMap((resource, index) => {
       const mapped = mapResource(resource, index, graphqlUrl);
       return mapped ? [mapped] : [];
