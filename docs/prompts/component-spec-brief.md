@@ -24,11 +24,11 @@ verbatim in the vocabulary below.
 
 ## FIRST — specify only what does not already exist
 
-If this project has the **Tcules component library** loaded (the seventeen real components on
-`window.Tcules`: `Section`, `Layout`, `Cluster`, `Input`, `Button`, `Icon`, `Logo`, `Prose`,
-`SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`, `EnquiryForm`, `ListCard`,
-`BlockCard`, `Accordion`), then **compose your mockup out of those real components** rather than
-describing them.
+If this project has the **Tcules component library** loaded — the real components on
+`window.Tcules`, named under *What already exists* in the vocabulary document — then **compose your
+mockup out of those real components** rather than describing them. Read that list rather than any
+roster written into prose: components ship between briefs, and a name missing from a hand-kept list
+is how a designer ends up specifying something that already exists.
 They are the actual shipped code — correct on all four surfaces, correct in every state — so a mockup
 built from them is already true, and anything you would write about how they behave is a worse copy
 of something the implementer can just read.

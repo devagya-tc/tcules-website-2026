@@ -19,7 +19,7 @@ regenerated and pushed again.**
 
 ## The twenty
 
-Four are pasteable. Sixteen are not: fifteen describe components that **already ship** — do not
+Three are pasteable. Seventeen are not: sixteen describe components that **already ship** — do not
 specify them, compose from the library instead — and one is blocked on content. Brief 09 shipped **two**
 components rather than one: `EnquiryForm` and the `Input` primitive it needed, which also absorbed
 SiteFooter's private newsletter field tokens. Each says so in its Status
@@ -50,13 +50,13 @@ move its row to "ships today" in the same change that merges it.
 | 16 | [Callout](16-callout.md) | `Callout` · 2 · `--call-` | 8 routes · 10 instances · 1 | **ships today — do not specify** |
 | 17 | [Stat](17-stat.md) | `Proof` · 2 · `--proof-` | 1 route resolved, 3 claimed · 2 | **ships today in shared Proof — do not specify** |
 | 18 | [Filters](18-filters.md) | `Filters` · 2 · unassigned | none | **blocked on content — do not specify** |
-| 19 | [Table of Contents](19-table-of-contents.md) | `TableOfContents` · 2 · `--toc-` | 82 routes ≥ 6 headings · 1 arrangement | paste |
+| 19 | [Table of Contents](19-table-of-contents.md) | `TableOfContents` · 2 · `--toc-` | 82 routes ≥ 6 headings · 1 arrangement | **ships today — do not specify** |
 | 20 | [Tag](20-tag.md) | `Tag` · 1 · `--tag-` | 10 route modules · 2 variants · 1 arrangement | paste |
 
-Every proposed prefix was checked against the nineteen already taken — `--acc-`, `--bcrd-`,
-`--btn-`, `--call-`, `--crumb-`, `--cta-`, `--enq-`, `--fig-`, `--foot-`, `--hero-`, `--icn-`,
-`--inp-`, `--lay-`, `--lcrd-`, `--logo-`, `--nav-`, `--proof-`, `--prose-`, `--sec-`. That list is generated into
-`docs/vocabulary.md`; read it there rather than trusting this sentence, which has been stale twice.
+Every proposed prefix was checked against the ones already taken. **That list is generated into
+`docs/vocabulary.md` — read it there.** It is deliberately not copied here: this sentence used to
+carry the list and went stale three times, most recently when `--toc-` landed with
+`TableOfContents`.
 
 ## The order to run them in
 
@@ -115,22 +115,25 @@ evidence block are one pattern. Do not specify Testimonial, Stat or Rating separ
    constraints (the quieter note, the hairline, parent-decided width) cannot be expressed inside
    one, so `Prose` is not an alternative route for a figure.
 10. **Filters** · 18 — after a taxonomy exists. Content work, not design work.
-11. **Table of Contents** · 19 — **runnable now, and blocked by nothing.** It takes an ordered
-    array of `{ label, href }` and reads no page, no DOM and no sibling, so it does not wait on
-    ContentSection or on a template. Its call site is already real and already hand-rolled:
-    `src/app/audits/[slug]/page.tsx` builds an "On this page" band inline out of a tint `Section`
-    and a `Cluster` of link Buttons. Brief 19 replaces that band with a **sticky rail**, so the
-    audit route's shape changes when it lands.
+11. **Table of Contents** · 19 — **now ships**: `src/patterns/TableOfContents/`, spec at
+    `docs/specs/TableOfContents.md`, specimen at `/design/table-of-contents`. Do not specify it
+    again; compose against the shipped component. It brought the system its first **scroll
+    observation**, which nothing here had before.
 
-    The content seam is already ahead of it. `AuditSection.heading` is
+    **The component ships; the call sites have not moved yet.** `src/app/audits/[slug]/page.tsx`
+    still hand-rolls its "On this page" band out of a tint `Section` and a `Cluster` of link
+    Buttons (line 311), and five more routes carry the same block: `services/[...slug]`,
+    `expertise/[slug]`, `glossary/[slug]`, `tools/[slug]` and `how-we-work`. Swapping those six
+    bands for the rail is route work that is now unblocked and outstanding —
+    and it changes those pages' shape, which is why it is worth doing deliberately rather than
+    incidentally.
+
+    The content seam was already ahead of it and still is. `AuditSection.heading` is
     `{ text, anchorId, navigationLabel? }` — the id is derived and de-duplicated in
     `sources/strapi.ts`, and the optional short label is what makes an outline readable at all: the
     corpus's section headings run to a median of 35 characters and a maximum of 87, so heading text
-    is a fallback and not the label. The brief carries that measurement as its central constraint.
-
-    One thing it asks for that the system has never had: **observing scroll position**, to mark the
-    section the reader is in. Client components exist, scroll observation does not, so it comes back
-    as a NEW MECHANISM REQUEST with an argument attached rather than as a token.
+    is a fallback and not the label. A route that adopts the rail has to pass the short label, not
+    the heading.
 12. **Tag** · 20 — **runnable now, and blocked by nothing.** Ten route modules already render its
     row as bare `<li>` text inside a `Cluster`, so the call sites are real, shipped and identical.
     It is one mark and `Cluster` keeps the row, which is why the brief forbids a `TagList` in its
