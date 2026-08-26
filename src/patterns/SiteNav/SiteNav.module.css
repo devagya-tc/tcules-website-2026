@@ -374,12 +374,17 @@
 }
 
 /* ── The rail ──────────────────────────────────────────────────────────────────
-   Its hairline is what makes two halves read as two halves. The inset is the air between that rule
-   and the rail's own content, which is why the plate's column seam is `column` rather than
-   `gutter`: 64 either side of the rule reads as one break rather than two columns that touch it. */
+   Its hairline is what makes two halves read as two halves. This inset is the air between that rule
+   and the rail's own content, and it is HALF of one seam rather than a seam of its own: the Layout
+   above contributes `gutter` on the other side, so 32 + rule + 32 reads as a single 64 break with
+   the rule in its middle. Both sides have to move together — at `column` here and `column` there
+   the seam was 129px and the rail floated a quarter of the plate away from the columns.
+
+   No token for the 32. It would only rename --gap-gutter, which is the --sec-gap mistake the token
+   rules already made once; the reasoning belongs in a comment, not in a second name. */
 .rail {
   border-inline-start: var(--nav-rule-width) solid var(--nav-rule);
-  padding-inline-start: var(--gap-column);
+  padding-inline-start: var(--gap-gutter);
 }
 
 /* A rail card: an image slot, a title, an arrow. Edged rather than filled — a filled card in a

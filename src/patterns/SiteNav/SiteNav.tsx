@@ -851,18 +851,25 @@ function PlatePane({ item }: { item: SiteNavItem }) {
   const secondary = item.rail?.cards.filter((card) => card.role === 'secondary') ?? [];
 
   const body = (
-    /* [5,3] with a `column` seam, which is what puts the rail beside the two link columns rather
-       than a fixed 340 track — Layout has no fixed-track mode, and a local grid to get one would
-       be the hand-rolled arrangement the layout rule prohibits.
+    /* Two nested Layouts, and the two seams are DIFFERENT STEPS on purpose.
 
-       FIVE-TO-THREE RATHER THAN TWO-TO-ONE, and the ratio is doing one job: holding the rail still
-       while the plate narrows. At 14px rows the plate came down from 1240 to 1120, and under [2,1]
-       that cut would have fallen on the rail too — content 307 to 266, shrinking the one element
-       whose width buys something, its 16:7 image slot. At [5,3] the rail lands back on 307 and the
-       120px comes entirely off the two link columns, whose tracks go 339 to 277 against a longest
-       label of 230. The rail's own width is a CONSEQUENCE of this ratio, which is why there is no
-       --nav-rail-width token; see docs/specs/SiteNav.md §12. */
-    <Layout columns={item.rail ? [5, 3] : undefined} colGap="column" rowGap="stack">
+       The OUTER seam is `gutter` (32), not `column`. The rail draws a hairline on its own leading
+       edge and insets its content by another 32, so 32 + rule + 32 lands the whole thing at the 64
+       a `column` seam would have given, with the rule in the middle of it — which is what the
+       pre-rebuild design documented and what the rebuild lost by using `column` on both sides. That
+       put 129px between the second column's track and the rail's content, and 177 between its last
+       label and the same point: a quarter of the plate spent on one gap.
+
+       The INNER seam stays `column` (64), because those two are peer groups of links that must read
+       as separate columns, which is exactly what that step is for.
+
+       NINE-TO-FIVE, and the ratio does one job: holding the rail still while everything else moves.
+       Under [2,1] the plate's cuts fall on the rail too — it would sit at 287 here — shrinking the
+       one element whose width buys anything, its 16:7 image slot. At [9,5] the rail holds ~310 and
+       the columns hold ~276 against a longest label of 230. The rail's width is a CONSEQUENCE of
+       this ratio, which is why there is still no --nav-rail-width token; see
+       docs/specs/SiteNav.md §12. */
+    <Layout columns={item.rail ? [9, 5] : undefined} colGap="gutter" rowGap="stack">
       <Layout columns={2} colGap="column" rowGap="stack">
         {groups.map((group) => (
           <Layout key={group.label} rowGap="block">

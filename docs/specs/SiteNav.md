@@ -129,7 +129,7 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `cta` | `Button` solid primary `sm` | right of the bar |
 | `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `menu` ↔ `close` |
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
-| `pane` | one per mega section | 1120 / 780 / 560px wide; two label + link columns, plus the rail in Services |
+| `pane` | one per mega section | 1056 / 780 / 560px wide; two label + link columns, plus the rail in Services |
 | `hubBar` | `Cluster` + `Button emphasis="link"` | the way through to the section index — Services and Insights only. Hairline above, `--gap-text` under it |
 | `rail` | `<aside>`, ~308px | primary card (image, `h6` title) + secondary row |
 | `scrim` | fixed box under the plate | `--nav-scrim`, below the bar. The system has no elevation token; edge, radius and scrim do the separating |
@@ -330,7 +330,7 @@ Recorded here rather than fixed silently. Nothing below changes a designed outco
 ### 12.1 · The plate cannot be a `Section`, so it owns a ground
 
 `Section` owns the content column (1240 cap, 32 gutter) and its ground, and CLAUDE.md forbids
-overriding either from outside. The plate's box is 1120 / 780 / 560 wide and carries its own
+overriding either from outside. The plate's box is 1056 / 780 / 560 wide and carries its own
 border, radius and padding — so it cannot be a `Section` and cannot inherit `--sec-ground`. It
 paints `--nav-panel-ground` instead, declared once per surface. The same token serves the mobile
 sheet, which is the same idea at another size.
@@ -368,9 +368,9 @@ panes are `inert`, so they hold no focus and take no pointer.
 ### 12.5 · The rail is a ratio, not a 340px track
 
 `Layout` has no fixed-track mode, and a local grid to get one is the hand-rolled arrangement the
-layout rule prohibits. The plate body is `Layout columns={[5, 3]} colGap="column"`, which at the
-plate's own width lands the rail at **308px rather than 340** — near enough what was asked for, and
-now the term the ratio exists to hold still (§12.10). The alternatives were both worse: fr weights chosen to
+layout rule prohibits. The plate body is `Layout columns={[9, 5]} colGap="gutter"`, which at the
+plate's own width lands the rail at **311px rather than 340** — near enough what was asked for, and
+the term the ratio exists to hold still (§12.10, §12.30). The alternatives were both worse: fr weights chosen to
 resolve to 340 at exactly one plate width (magic numbers, brittle the moment the padding or the seam moves), or
 changing a tier-1 primitive every component in the repo depends on. `--nav-rail-width` was therefore
 never added — a token with no reader is worse than no token. If 340 turns out to matter, the right
@@ -487,7 +487,9 @@ The number that decided it was not the slack but the **255px between column one'
 two's text** in Services: the 64px seam plus 191px of unused track, so a fifth of the plate was the
 gap between two lists and the two groups stopped reading as one block.
 
-**Now:** 1120 / 780 / 560, and the pane ratio `[2, 1]` → `[5, 3]`.
+**Then:** 1120 / 780 / 560, and the pane ratio `[2, 1]` → `[5, 3]`. **Now 1056**, ratio `[9, 5]` — see
+§12.30, where the rail's seam turned out to be double what the design asked for and the 64px it gave
+back came out of the plate.
 
 The ratio change is the part worth understanding. Narrowing Services under `[2, 1]` would have taken
 the 120px off the rail as well — content 307 → 266 — shrinking the one column whose width buys
@@ -725,7 +727,34 @@ which uses its own `--prose-link-*`). Nothing relied on the old outranking. Veri
 a bare anchor still takes the floor at rest (`#0048ff`) and on hover (`#003ee0`), and that a Prose
 link still hovers on its own token.
 
-### 12.29 · Two QA items cannot be met yet, and are not faked
+### 12.30 · The rail's seam was double the design's, and the rebuild did it
+
+Reported as "the space between the rail and the second group feels like more". It was: **129px** from
+the second column's track edge to the rail's content, and **177px** from its last label to the same
+point — a sixth of the plate spent on one gap.
+
+The pre-rebuild `nav.css` had already settled this, in a comment the rebuild deleted along with the
+token that carried it:
+
+> the inset is the air between that rule and the rail's own content, which is why the panel's column
+> gap is `gutter` rather than `column` (32 + rule + 32 lands at the 64 a `column` seam would have
+> given, with the rule in the middle of it)
+
+The rebuild used `column` on **both** sides — 64 + rule + 64 — so the seam was exactly twice what was
+asked for. One seam, two halves, and both have to move together; that is the thing worth remembering,
+because either half looks defensible alone.
+
+**Where the freed 64px went is the other half of the fix.** Leaving the plate at 1120 would have
+redistributed it into tracks that already had slack — the columns would have gone to ~309, taking
+column one's slack from 129 to 161 and simply moving the oversized gap between the two lists instead.
+So it came out of the plate: **1120 → 1056**, with the ratio re-derived to `[9, 5]` so the rail holds
+its width.
+
+Measured after, and the point is how little moved: seam 129 → **65**, visual 177 → **112**, column
+tracks 278 → 277, column-two slack 48 → 47, rail content 308 → 311, pane height 444 → 444, nothing
+wrapped. The gap halved and nothing else changed.
+
+### 12.31 · Two QA items cannot be met yet, and are not faked
 
 **§10.1 and §8.4 (nav data ↔ sitemap, CI on unresolved hrefs).** There is no sitemap generator in
 this repo and, apart from `/`, `/audits/[slug]` and the proving ground, no page routes exist at
