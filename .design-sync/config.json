@@ -35,8 +35,9 @@
       "cardMode": "column"
     },
     "SiteNav": {
-      "cardMode": "column",
-      "viewport": "1280x420"
+      "cardMode": "single",
+      "primaryStory": "Bar",
+      "viewport": "1280x160"
     },
     "SiteFooter": {
       "cardMode": "column",

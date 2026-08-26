@@ -1,9 +1,9 @@
 ## How to build with Tcules
 
 No provider, no theme object, no wrapper component. Load `styles.css` and `_ds_bundle.js` and
-every component is correct. All 17 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
+every component is correct. All 20 are on `window.Tcules`: `Section`, `Layout`, `Cluster`,
 `Input`, `Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`,
-`CtaSection`, `EnquiryForm`, `ListCard`, `BlockCard`, `Accordion`.
+`CtaSection`, `EnquiryForm`, `ListCard`, `BlockCard`, `Accordion`, `Proof`, `Figure`, `Callout`.
 
 ### There is no class vocabulary — do not invent one
 
@@ -293,6 +293,34 @@ Four things to get right:
 
 It caps at the body measure because it is a reading column, and it takes no `surface` — set the
 surface once on the `Section` above it.
+
+`Proof` — **attributed client evidence, checked figures, or both.** `arrangement="compact |
+display"`, `quote`, and `figures`. `display` may render the quote, the figures, or both;
+`compact` embeds one quote in a reading flow and **forbids `figures` at compile time**, so a
+compact Proof carrying stats is a type error rather than a layout surprise.
+
+The distinction that decides whether you want this at all is attribution: a blockquote **with** a
+name and a role is a `Proof`; the same blockquote **without** one is a `Callout`. The pattern never
+inspects the markup to work that out — whoever supplies the content decides. It takes no `surface`.
+
+`Figure` — **an image with a caption that carries the meaning.** `image`, `caption` (required,
+a `string`), and an optional `note`. `image` is four fields that arrive together or not at all —
+`src`, `alt`, `width`, `height` — where the two dimensions are the asset's **intrinsic** pixels
+rather than a size request: they are what lets the browser reserve the block-size so the page does
+not shift when the image lands. CSS scales the box to its track.
+
+Two rules worth stating because they are easy to get backwards. **`alt` must not restate the
+caption** — `alt` describes what the image *shows*, the caption says what it *means*, and the
+`note` says what it does **not** establish. And **an image is optional**: a caption alone is a
+first-class rendering, not a degraded one.
+
+`Callout` — **a quiet parenthetic note on the claim immediately before it.** One prop: `html`,
+trusted rich text with the same inline markup `Prose` accepts.
+
+It paints no ground and no edge, sets no outer spacing and takes no `surface` — the nearest
+`Section` supplies the palette and the parent `Layout` supplies the seam. If you are reaching for a
+tinted box or a coloured left border to mark an aside, that is the thing this component exists to
+replace: the quiet text role is the whole treatment.
 
 ### Read before styling
 
