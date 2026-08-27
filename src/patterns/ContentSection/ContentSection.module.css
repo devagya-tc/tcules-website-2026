@@ -4,7 +4,7 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .heading .deck */
+   Classes: .eyebrow .heading .lead */
 
 .eyebrow {
   font: var(--csec-eyebrow-text);
@@ -26,8 +26,8 @@
   max-inline-size: var(--csec-heading-measure);
 }
 
-.deck {
-  font: var(--csec-deck-text);
-  color: var(--csec-deck-ink);
-  max-inline-size: var(--csec-deck-measure);
+.lead {
+  font: var(--csec-lead-text);
+  color: var(--csec-lead-ink);
+  max-inline-size: var(--csec-lead-measure);
 }

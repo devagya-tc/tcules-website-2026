@@ -75,7 +75,7 @@ const SPECIMENS = [
       {
         href: '/design/content-section',
         name: 'ContentSection',
-        note: 'one CMS section as one band — head group, deck, block beat, 4 surfaces, 2 densities',
+        note: 'one CMS section as one band — head group, lead, block beat, 4 surfaces, 2 densities',
       },
       {
         href: '/design/cta-section',

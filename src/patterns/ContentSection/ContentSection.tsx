@@ -27,15 +27,20 @@ export type ContentSectionProps = {
   /** The category label above the heading. Absent renders no element and no seam. */
   eyebrow?: string;
   /**
-   * One sentence under the heading, at lede scale — what this section is about, before the
-   * blocks that argue it.
+   * One sentence under the heading — what this section is about, before the blocks that argue it.
+   *
+   * Named for the type role it takes (`--text-lead`), which is the same name `PageHero` and
+   * `CtaSection` give their own opening line. The difference between this and theirs is the API
+   * rather than the word: there, the lead is `body[0]` of a tuple and a second paragraph may
+   * follow it in the same slot. Here it stands alone — the body is `children`, and it is blocks
+   * rather than prose.
    *
    * This is the slot that makes the rhythm work. Without it the heading and the first block are
    * the only two things in the band, so a single gap step has to serve both "heading to its own
    * lead" and "lead to the evidence under it" — and those are different distances. With it, the
-   * eyebrow, heading and deck group into ONE unit and the blocks are a separate beat.
+   * eyebrow, heading and lead group into ONE unit and the blocks are a separate beat.
    */
-  deck?: string;
+  lead?: string;
   /**
    * Which ground `Section` paints under this band. Passed straight through and read nowhere
    * else — this component paints nothing, so taking the prop is not the same as owning the
@@ -54,7 +59,7 @@ export type ContentSectionProps = {
 
 /**
  * ContentSection — one CMS section as one band, built for the shape every long-form page type in
- * this repo produces: an optional eyebrow, one heading, an optional deck, then a run of blocks.
+ * this repo produces: an optional eyebrow, one heading, an optional lead, then a run of blocks.
  *
  * IT EXISTS FOR THE RHYTHM, and the rhythm is nesting rather than a knob. The old composition put
  * the h2 and every block in one `Layout rowGap="stack"`, so all of them were flat siblings and
@@ -64,7 +69,7 @@ export type ContentSectionProps = {
  * separating:
  *
  *   tight  (8)   eyebrow → heading      a label and the thing it labels
- *   block  (24)  heading → deck         a statement and its own lead
+ *   block  (24)  heading → lead         a statement and its own opening line
  *   stack  (48)  head group → blocks    and between the blocks themselves
  *
  * So the head group reads as one object with air beneath it, rather than as three evenly spaced
@@ -82,14 +87,14 @@ export function ContentSection({
   heading,
   headingId,
   eyebrow,
-  deck,
+  lead,
   surface,
   density,
   children,
 }: ContentSectionProps) {
   /* The head group is only rendered when something is in it. An untitled section is the run of
      blocks before the first heading, and it wants no empty row above it. */
-  const hasHead = Boolean(eyebrow || heading || deck);
+  const hasHead = Boolean(eyebrow || heading || lead);
 
   /* A `section` element is only honest when the band has a name. Unheaded, it is a `div` —
      an unnamed <section> is a region a screen reader announces and cannot identify. */
@@ -104,7 +109,7 @@ export function ContentSection({
     >
       <Layout rowGap="stack">
         {hasHead ? (
-          /* 24 between the heading and its deck. The eyebrow+heading pair nests one level
+          /* 24 between the heading and its lead. The eyebrow+heading pair nests one level
              deeper at 8, so the three rows are two groups rather than three evenly spaced
              lines — which is the whole reason this component is not a flat Layout. */
           <Layout rowGap="block">
@@ -118,13 +123,13 @@ export function ContentSection({
                 ) : null}
               </Layout>
             ) : null}
-            {deck ? <p className={styles.deck}>{deck}</p> : null}
+            {lead ? <p className={styles.lead}>{lead}</p> : null}
           </Layout>
         ) : null}
 
         {/* The body beat. A second Layout rather than spreading the children into the outer one,
             so the head group is ONE row of the outer stack no matter how many blocks follow —
-            without it, a band with no deck would be indistinguishable from the flat composition
+            without it, a band with no lead would be indistinguishable from the flat composition
             this component replaces. */}
         {children !== undefined ? <Layout rowGap="stack">{children}</Layout> : null}
       </Layout>

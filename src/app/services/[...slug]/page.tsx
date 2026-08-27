@@ -439,7 +439,7 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
           key={section.id}
           heading={section.heading?.text}
           headingId={section.heading?.anchorId}
-          deck={section.deck}
+          lead={section.lead}
           surface={surfaces[index]}
         >
           {section.blocks.map((block) => (

@@ -44,7 +44,7 @@
  * its caller. It is not a quotation, alert, card or second rich-text variant.
  *
  * ContentSection is a BAND, and the only pattern here whose reason for existing is a distance:
- * one CMS section — eyebrow, heading, deck, then a run of blocks the caller supplies as children.
+ * one CMS section — eyebrow, heading, lead, then a run of blocks the caller supplies as children.
  * It takes `surface` like the other band-owning patterns and paints nothing itself. What it owns
  * is the grouping: the head group nests at 8 and 24 so it reads as one object, and the blocks are
  * a separate 48 beat beneath it. A flat Layout cannot say that, which is why this is a component

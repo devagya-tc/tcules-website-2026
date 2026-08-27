@@ -380,9 +380,9 @@ function uniqueAnchor(candidate: string, usedAnchors: Set<string>): string {
 }
 
 /**
- * Lift a section's DECK out of the rich text it is currently hiding in.
+ * Lift a section's LEAD out of the rich text it is currently hiding in.
  *
- * ComponentServiceSectionHeading has no `deck` field, so authors have been writing the section's
+ * ComponentServiceSectionHeading has no `lead` field, so authors have been writing the section's
  * lead as an ITALIC FIRST PARAGRAPH at the top of the section's first rich-text block — "What the
  * interface may be telling you", "What Product Design owns", "What you may actually receive". On
  * product-design that is six of the seven rich-text blocks, which is not a style choice; it is
@@ -392,20 +392,20 @@ function uniqueAnchor(candidate: string, usedAnchors: Set<string>): string {
  * rewrites the page. All four must hold:
  *
  *   • the block is the section's FIRST — a mid-section italic lead ("A useful next step") is a
- *     transition inside the argument, not the section's deck, and stays where it was authored
+ *     transition inside the argument, not the section's lead, and stays where it was authored
  *   • it is a rich-text block, and its first node is a paragraph
  *   • EVERY text child of that paragraph is italic — a paragraph with one emphasised phrase in it
- *     is a paragraph, not a deck
+ *     is a paragraph, not a lead
  *   • the resulting sentence is short enough to be a lead rather than an argument
  *
- * Returns the deck text and the paragraphs that remain. When the block was only the deck, nothing
+ * Returns the lead text and the paragraphs that remain. When the block was only the lead, nothing
  * remains and the caller drops the block entirely rather than leaving an empty Prose in the band.
  *
- * This is a BRIDGE. When the CMS grows the field, this function is deleted and the deck is read.
+ * This is a BRIDGE. When the CMS grows the field, this function is deleted and the lead is read.
  */
-const DECK_MAX_LENGTH = 200;
+const LEAD_MAX_LENGTH = 200;
 
-function liftDeck(body: unknown): { deck: string; rest: unknown[] } | undefined {
+function liftLead(body: unknown): { lead: string; rest: unknown[] } | undefined {
   if (!Array.isArray(body) || body.length === 0) return undefined;
 
   const [first, ...rest] = body;
@@ -417,19 +417,19 @@ function liftDeck(body: unknown): { deck: string; rest: unknown[] } | undefined 
       isRecord(child) && typeof child.text === 'string',
   );
 
-  /* Every text child italic, and at least one of them — an empty paragraph is not a deck. Nodes
-     that are not text at all (a link, an inline image) disqualify it: a deck is a sentence. */
+  /* Every text child italic, and at least one of them — an empty paragraph is not a lead. Nodes
+     that are not text at all (a link, an inline image) disqualify it: a lead is a sentence. */
   if (texts.length === 0 || texts.length !== children.length) return undefined;
   if (!texts.every((child) => child.italic === true)) return undefined;
 
-  const deck = texts
+  const lead = texts
     .map((child) => String(child.text))
     .join('')
     .trim();
 
-  if (!deck || deck.length > DECK_MAX_LENGTH) return undefined;
+  if (!lead || lead.length > LEAD_MAX_LENGTH) return undefined;
 
-  return { deck, rest };
+  return { lead, rest };
 }
 
 function mapSections(
@@ -473,13 +473,13 @@ function mapSections(
       sections.push(current);
     }
 
-    /* The deck lift, applied only to a section's FIRST block — see liftDeck. When the lifted
+    /* The lead lift, applied only to a section's FIRST block — see liftLead. When the lifted
        paragraph was the whole block, `rest` is empty and mapBlock returns undefined, so the
        block disappears rather than leaving an empty Prose under the heading. */
     if (current.blocks.length === 0 && block.__typename === 'ComponentServiceRichText') {
-      const lifted = liftDeck(block.richTextBody);
+      const lifted = liftLead(block.richTextBody);
       if (lifted) {
-        current.deck = lifted.deck;
+        current.lead = lifted.lead;
         const remainder = mapBlock(
           { ...block, richTextBody: lifted.rest },
           index,
@@ -497,7 +497,7 @@ function mapSections(
   });
 
   return sections.filter(
-    (section) => section.heading || section.deck || section.blocks.length > 0,
+    (section) => section.heading || section.lead || section.blocks.length > 0,
   );
 }
 

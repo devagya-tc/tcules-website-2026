@@ -1,5 +1,5 @@
 /* ══ Component layer — ContentSection ═══════════════════════════════════════════
-   Tier 2. The band a CMS section becomes: an optional eyebrow, one h2, an optional deck,
+   Tier 2. The band a CMS section becomes: an optional eyebrow, one h2, an optional lead,
    and whatever blocks the page hands it.
 
    Naming: --csec-{part}-{role}
@@ -9,10 +9,14 @@
    no state: Section paints the band from the surface it is handed, Layout owns every seam, and
    nothing here responds to a pointer.
 
-   The heading takes the TITLE measure and the deck the LEDE measure, which is the whole point of
+   The heading takes the TITLE measure and the lead the LEAD measure, which is the whole point of
    having two: a section heading is a statement that should break early and read as a shape, and
-   the deck beneath it is a sentence that should not run to the full body measure or it stops
-   reading as a deck and starts reading as the first paragraph of the body.
+   the lead beneath it is a sentence that should not run to the full body measure or it stops
+   reading as a lead and starts reading as the first paragraph of the body.
+
+   `lead` is the system's name for this role, not this component's — --text-lead, --font-size-lead,
+   --line-height-lead and --measure-lead all carry it, and PageHero and CtaSection use the same
+   word for their own opening line. One role, one word.
 
    Every surface restates every ink, so a band nested inside a different surface cannot inherit
    the wrong value from an outer ancestor. */
@@ -23,35 +27,35 @@
   --csec-heading-text: var(--text-h2);
   --csec-heading-tracking: var(--text-h2-tracking);
 
-  /* --csec-deck-text has no tracking companion: --text-lead is a body role and carries no
-     optical correction, so a --csec-deck-tracking would name a value that does not exist. */
-  --csec-deck-text: var(--text-lead);
+  /* --csec-lead-text has no tracking companion: --text-lead is a body role and carries no
+     optical correction, so a --csec-lead-tracking would name a value that does not exist. */
+  --csec-lead-text: var(--text-lead);
 
   --csec-heading-measure: var(--measure-title);
-  --csec-deck-measure: var(--measure-lede);
+  --csec-lead-measure: var(--measure-lead);
 }
 
 :root,
 [data-surface='paper'] {
   --csec-heading-ink: var(--color-neutral-900); /* 14.62:1 */
-  --csec-deck-ink: var(--color-neutral-700); /* 8.15:1 */
+  --csec-lead-ink: var(--color-neutral-700); /* 8.15:1 */
   --csec-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
 }
 
 [data-surface='tint'] {
   --csec-heading-ink: var(--color-neutral-900); /* 13.05:1 */
-  --csec-deck-ink: var(--color-neutral-700); /* 7.27:1 */
+  --csec-lead-ink: var(--color-neutral-700); /* 7.27:1 */
   --csec-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
 }
 
 [data-surface='ink'] {
   --csec-heading-ink: var(--color-white); /* 17.26:1 */
-  --csec-deck-ink: var(--color-neutral-300); /* 11.07:1 */
+  --csec-lead-ink: var(--color-neutral-300); /* 11.07:1 */
   --csec-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
 }
 
 [data-surface='blue'] {
   --csec-heading-ink: var(--color-white); /* 6.23:1 */
-  --csec-deck-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --csec-lead-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --csec-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
 }

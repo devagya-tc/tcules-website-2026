@@ -50,7 +50,7 @@ function Steps() {
  * ContentSection — the proving ground.
  *
  * The specimens below are ordered to make ONE comparison legible above all others: the first two
- * are the same content with and without a deck, because the deck is what turns the head group
+ * are the same content with and without a lead, because the lead is what turns the head group
  * into an object and is the whole argument for this component existing. Everything after that is
  * coverage: every slot, every surface, the two densities, and the shapes that have no heading.
  *
@@ -68,9 +68,9 @@ export default function ContentSectionSpecimen() {
           <Prose
             html={
               '<p>The gap ladder inside the band, and the whole reason this is a component: ' +
-              '<strong>8</strong> eyebrow to heading, <strong>24</strong> heading to deck, ' +
+              '<strong>8</strong> eyebrow to heading, <strong>24</strong> heading to lead, ' +
               '<strong>48</strong> head group to the blocks and between the blocks. ' +
-              'Compare the first two specimens — same content, deck and no deck.</p>'
+              'Compare the first two specimens — same content, lead and no lead.</p>'
             }
           />
         </Specimen>
@@ -78,9 +78,9 @@ export default function ContentSectionSpecimen() {
 
       <ContentSection
         surface="paper"
-        eyebrow="With a deck"
+        eyebrow="With a lead"
         heading="The screen is often where a deeper product problem becomes visible."
-        deck="What the interface may be telling you"
+        lead="What the interface may be telling you"
       >
         <Prose html={BODY_HTML} />
         <Cards />
@@ -88,7 +88,7 @@ export default function ContentSectionSpecimen() {
 
       <ContentSection
         surface="tint"
-        eyebrow="Without a deck"
+        eyebrow="Without a lead"
         heading="The screen is often where a deeper product problem becomes visible."
       >
         <Prose html={BODY_HTML} />
@@ -97,7 +97,7 @@ export default function ContentSectionSpecimen() {
 
       <ContentSection
         surface="paper"
-        heading="Heading only — no eyebrow, no deck"
+        heading="Heading only — no eyebrow, no lead"
         headingId="specimen-heading-only"
       >
         <Steps />
@@ -111,7 +111,7 @@ export default function ContentSectionSpecimen() {
         surface="paper"
         heading="One block, tight"
         headingId="specimen-density-tight"
-        deck="A band holding a paragraph does not want the air a five-card grid wants."
+        lead="A band holding a paragraph does not want the air a five-card grid wants."
         density="tight"
       >
         <Prose html={BODY_HTML} />
@@ -121,7 +121,7 @@ export default function ContentSectionSpecimen() {
         surface="tint"
         heading="One block, open"
         headingId="specimen-density-open"
-        deck="The other direction, for a band that carries the page's turn."
+        lead="The other direction, for a band that carries the page's turn."
         density="open"
       >
         <Prose html={BODY_HTML} />
@@ -132,7 +132,7 @@ export default function ContentSectionSpecimen() {
         eyebrow="On ink"
         heading="Every ink is restated per surface"
         headingId="specimen-surface-ink"
-        deck="Heading, deck and eyebrow each hold their contrast floor on all four grounds."
+        lead="Heading, lead and eyebrow each hold their contrast floor on all four grounds."
       >
         <Prose html={BODY_HTML} />
         <Cards />
@@ -143,7 +143,7 @@ export default function ContentSectionSpecimen() {
         eyebrow="On blue"
         heading="The pivot ground"
         headingId="specimen-surface-blue"
-        deck="One appearance per page, and never adjacent to an ink band."
+        lead="One appearance per page, and never adjacent to an ink band."
       >
         <Proof
           arrangement="compact"
