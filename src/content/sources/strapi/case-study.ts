@@ -8,6 +8,7 @@ import type {
   CaseStudyListingPage,
   CaseStudyPage,
   ContentSeo,
+  PageOutlineEntry,
 } from '../../types';
 import { CASE_STUDY_BY_SLUG_QUERY, CASE_STUDY_LISTING_QUERY } from './case-study-query';
 import type {
@@ -19,7 +20,7 @@ import type {
   StrapiCaseStudyResponse,
   StrapiCaseStudySeo,
 } from './case-study-types';
-import { markdownToHtml } from './markdown';
+import { markdownToHtml, type BodyHeading } from './markdown';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
@@ -196,12 +197,13 @@ function mapBlock(
   index: number,
   title: string,
   graphqlUrl: string,
+  outline: BodyHeading[],
 ): CaseStudyBlock | undefined {
   const id = blockId(block, index);
 
   switch (block.__typename) {
     case 'ComponentBlogAndCasestudiesBlogOrCasestudyText': {
-      const html = markdownToHtml(block.blogContent, `${id} content`);
+      const html = markdownToHtml(block.blogContent, `${id} content`, { headings: outline });
       return html ? { id, type: 'prose', html } : undefined;
     }
 
@@ -440,6 +442,15 @@ function mapCaseStudy(raw: StrapiCaseStudy, graphqlUrl: string): CaseStudyPage |
         }
       : undefined;
 
+  /* Hoisted rather than inlined below, because `outline` is filled as a SIDE EFFECT of mapping the
+     blocks: reading it from a later key of the same object literal would make the result depend on
+     key order, which is the kind of correctness nobody sees in review. */
+  const outline: PageOutlineEntry[] = [];
+  const blocks = (raw.caseStudyContents ?? []).flatMap((block, index) => {
+    const mapped = mapBlock(block, index, title, graphqlUrl, outline);
+    return mapped ? [mapped] : [];
+  });
+
   return {
     documentId: value(raw.documentId) || slug,
     slug,
@@ -471,10 +482,8 @@ function mapCaseStudy(raw: StrapiCaseStudy, graphqlUrl: string): CaseStudyPage |
       const name = value(tag.name);
       return name ? [name] : [];
     }),
-    blocks: (raw.caseStudyContents ?? []).flatMap((block, index) => {
-      const mapped = mapBlock(block, index, title, graphqlUrl);
-      return mapped ? [mapped] : [];
-    }),
+    blocks,
+    outline,
     ...(cta ? { cta } : {}),
     ...(seo ? { seo } : {}),
   };

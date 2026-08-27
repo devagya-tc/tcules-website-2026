@@ -6,6 +6,7 @@ import type {
   BlogPage,
   BlogResource,
   ContentSeo,
+  PageOutlineEntry,
 } from '../../types';
 import { BLOG_BY_SLUG_QUERY } from './blog-query';
 import type {
@@ -17,7 +18,7 @@ import type {
   StrapiBlogResponse,
   StrapiBlogSeo,
 } from './blog-types';
-import { markdownToHtml } from './markdown';
+import { markdownToHtml, type BodyHeading } from './markdown';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
@@ -166,6 +167,7 @@ function mapBlock(
   title: string,
   graphqlUrl: string,
   videoIsInHero: boolean,
+  outline: BodyHeading[],
 ): BlogBlock | undefined {
   const id = blockId(block, index);
 
@@ -185,7 +187,7 @@ function mapBlock(
     }
 
     case 'ComponentBlogAndCasestudiesBlogOrCasestudyText': {
-      const html = markdownToHtml(block.blogContent, `${id} content`);
+      const html = markdownToHtml(block.blogContent, `${id} content`, { headings: outline });
       return html ? { id, type: 'prose', html } : undefined;
     }
 
@@ -481,6 +483,16 @@ function mapBlog(
         }
       : undefined;
 
+  /* Hoisted rather than inlined below, because `outline` is filled as a SIDE EFFECT of mapping the
+     blocks: reading it from a later key of the same object literal would make the result depend on
+     key order, which is the kind of correctness nobody sees in review. */
+  const outline: PageOutlineEntry[] = [];
+  const blocks = sections.flatMap((block, index) => {
+    if (index === publishedContentBlockIndex) return [];
+    const mapped = mapBlock(block, index, title, graphqlUrl, index === heroVideoBlockIndex, outline);
+    return mapped ? [mapped] : [];
+  });
+
   return {
     documentId: value(rawBlog.documentId) || slug,
     slug,
@@ -508,11 +520,8 @@ function mapBlog(
     }),
     tags: labels(rawBlog.tags),
     categories: labels(rawBlog.categories),
-    blocks: sections.flatMap((block, index) => {
-      if (index === publishedContentBlockIndex) return [];
-      const mapped = mapBlock(block, index, title, graphqlUrl, index === heroVideoBlockIndex);
-      return mapped ? [mapped] : [];
-    }),
+    blocks,
+    outline,
     resources: (resources ?? []).flatMap((resource, index) => {
       const mapped = mapResource(resource, index, graphqlUrl);
       return mapped ? [mapped] : [];

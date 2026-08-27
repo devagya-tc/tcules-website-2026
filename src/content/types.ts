@@ -1083,6 +1083,8 @@ export type CaseStudyPage = {
   categories: string[];
   tags: string[];
   blocks: CaseStudyBlock[];
+  /** The level-2 outline of `blocks`, in reading order. Empty when the body has none. */
+  outline: PageOutlineEntry[];
   cta?: {
     heading: string;
     body: readonly [string];
@@ -1281,6 +1283,8 @@ export type PodcastPage = {
   tags: string[];
   categories: string[];
   blocks: PodcastBlock[];
+  /** The level-2 outline of `blocks`, in reading order. Empty when the body has none. */
+  outline: PageOutlineEntry[];
   resources: PodcastResource[];
   seo?: ContentSeo;
 };
@@ -1316,6 +1320,8 @@ export type EventPage = {
   tags: string[];
   categories: string[];
   blocks: EventBlock[];
+  /** The level-2 outline of `blocks`, in reading order. Empty when the body has none. */
+  outline: PageOutlineEntry[];
   resources: EventResource[];
   seo?: ContentSeo;
 };
@@ -1323,6 +1329,18 @@ export type EventPage = {
 export type EventContentSource = {
   getEventPage(slug: string): Promise<EventPage | null>;
 };
+
+/**
+ * One entry in a long-form page's outline, in reading order.
+ *
+ * The seam derives these from the level-2 headings inside a body's markdown; a page hands them to
+ * `TableOfContents` as `{ label, href: '#' + anchorId }`. `anchorId` is opaque and stable — see
+ * docs/guides/long-form-outline.md.
+ *
+ * A page with fewer than two of these renders no outline. That floor lives in the component and in
+ * the route, not here: this type only says what an entry IS.
+ */
+export type PageOutlineEntry = { label: string; anchorId: string };
 
 export type BlogAction = CaseStudyAction;
 
@@ -1399,6 +1417,8 @@ export type BlogPage = {
   tags: string[];
   categories: string[];
   blocks: BlogBlock[];
+  /** The level-2 outline of `blocks`, in reading order. Empty when the body has none. */
+  outline: PageOutlineEntry[];
   resources: BlogResource[];
   cta?: {
     heading: string;

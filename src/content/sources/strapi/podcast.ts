@@ -1,12 +1,13 @@
 import type {
   ContentSeo,
+  PageOutlineEntry,
   PodcastAction,
   PodcastBlock,
   PodcastContentSource,
   PodcastImage,
   PodcastPage,
 } from '../../types';
-import { markdownToHtml } from './markdown';
+import { markdownToHtml, type BodyHeading } from './markdown';
 import { PODCAST_BY_SLUG_QUERY } from './podcast-query';
 import type {
   StrapiPodcast,
@@ -144,6 +145,7 @@ function mapBlock(
   index: number,
   title: string,
   graphqlUrl: string,
+  outline: BodyHeading[],
   videoIsInHero = false,
 ): PodcastBlock | undefined {
   const id = blockId(block, index);
@@ -245,7 +247,7 @@ function mapBlock(
     }
 
     case 'ComponentBlogAndCasestudiesBlogOrCasestudyText': {
-      const html = markdownToHtml(block.blogContent, `${id} content`);
+      const html = markdownToHtml(block.blogContent, `${id} content`, { headings: outline });
       return html ? { id, type: 'prose', html } : undefined;
     }
 
@@ -347,6 +349,15 @@ function mapPodcast(
     heroVideoBlockIndex >= 0 ? youtubeId(sections[heroVideoBlockIndex]?.heading) : undefined;
   const seo = mapSeo(rawPodcast.seo);
 
+  /* Hoisted rather than inlined below, because `outline` is filled as a SIDE EFFECT of mapping the
+     blocks: reading it from a later key of the same object literal would make the result depend on
+     key order, which is the kind of correctness nobody sees in review. */
+  const outline: PageOutlineEntry[] = [];
+  const blocks = sections.flatMap((block, index) => {
+    const mapped = mapBlock(block, index, title, graphqlUrl, outline, index === heroVideoBlockIndex);
+    return mapped ? [mapped] : [];
+  });
+
   return {
     documentId: value(rawPodcast.documentId) || slug,
     slug,
@@ -364,10 +375,8 @@ function mapPodcast(
       const name = value(category.name);
       return name ? [name] : [];
     }),
-    blocks: sections.flatMap((block, index) => {
-      const mapped = mapBlock(block, index, title, graphqlUrl, index === heroVideoBlockIndex);
-      return mapped ? [mapped] : [];
-    }),
+    blocks,
+    outline,
     resources: (resources ?? []).flatMap((resource, index) => {
       const mapped = mapResource(resource, index, graphqlUrl);
       return mapped ? [mapped] : [];
