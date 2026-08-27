@@ -2,10 +2,19 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, type LayoutProps } from '@/components';
+import { Button, Cluster, Layout, Prose, type LayoutProps } from '@/components';
 import { getToolPage, type ToolBlock, type ToolContentColumn } from '@/content';
 import { ROUTES, toolPath } from '@/lib/routes';
-import { BlockCard, Breadcrumbs, Callout, Figure, ListCard, PageHero, Proof } from '@/patterns';
+import {
+  BlockCard,
+  Breadcrumbs,
+  Callout,
+  ContentSection,
+  Figure,
+  ListCard,
+  PageHero,
+  Proof,
+} from '@/patterns';
 
 function cardColumns(count: 1 | 2 | 3 | 4): LayoutProps['columns'] {
   switch (count) {
@@ -249,32 +258,26 @@ export default async function ToolPage({ params }: PageProps<'/tools/[slug]'>) {
       />
 
 
-      {tool.sections.length > 0 ? (
-        <Section as="div" surface="paper">
-          <Layout rowGap="section">
-            {tool.sections.map((section) => {
-              const content = (
-                <Layout rowGap="stack">
-                  {section.heading ? (
-                    <h2 id={section.heading.anchorId}>{section.heading.text}</h2>
-                  ) : null}
-                  {section.blocks.map((block) => (
-                    <Fragment key={block.id}>{renderToolBlock(block)}</Fragment>
-                  ))}
-                </Layout>
-              );
+      {/* ONE BAND PER SECTION. Every band is paper: tint marks a section that matters and the
+          page's asks, and nothing here has a field that could say which section that is — so the
+          ground is left alone rather than alternated. See the services route for the one place
+          that reads an accent out of block shape.
 
-              return section.heading ? (
-                <section key={section.id} aria-labelledby={section.heading.anchorId}>
-                  {content}
-                </section>
-              ) : (
-                <div key={section.id}>{content}</div>
-              );
-            })}
-          </Layout>
-        </Section>
-      ) : null}
+          ContentSection's `lead` is not passed because this page type has no source for one.
+          `liftLead` recovers a lead from an italic opening paragraph, and that convention was
+          measured across this corpus and found only on product-design; wiring it here would be
+          dead code. When the CMS grows a real field, it arrives as one prop. */}
+      {tool.sections.map((section) => (
+        <ContentSection
+          key={section.id}
+          heading={section.heading?.text}
+          headingId={section.heading?.anchorId}
+        >
+          {section.blocks.map((block) => (
+            <Fragment key={block.id}>{renderToolBlock(block)}</Fragment>
+          ))}
+        </ContentSection>
+      ))}
     </>
   );
 }
