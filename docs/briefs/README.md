@@ -41,7 +41,7 @@ move its row to "ships today" in the same change that merges it.
 | 07 | [Content Section](07-content-section.md) | `ContentSection` · 2 · `--csec-` | 110 routes · 738 instances · 4 | paste |
 | 08 | [CTA Section](08-cta-section.md) | `CtaSection` · 2 · `--cta-` | 76 routes · 113 instances · 3 | **ships today — do not specify** |
 | 09 | [Form](09-form.md) | `EnquiryForm` · 2 · `--enq-` (+ `Input` · 1 · `--inp-`) | 56 routes · 2 variants | **ships today — do not specify** |
-| 10 | [Table](10-table.md) | `DataTable` · 1 · `--tbl-` | 56 routes · 61 tables · 1 | paste — carries an `UNRESOLVED` |
+| 10 | [Table](10-table.md) | `DataTable` · 1 · `--tbl-` | 56 routes · 61 tables · 1 | paste |
 | 11 | [List Card](11-list-card.md) | `ListCard` · 2 · `--lcrd-` | 53 routes · 70 sections · 5 | **ships today — do not specify** |
 | 12 | [Block Card](12-block-card.md) | `BlockCard` · 2 · `--bcrd-` | 38 routes · 78 clusters · 2 | **ships today — do not specify** |
 | 13 | [Figure](13-figure.md) | `Figure` · 2 · `--fig-` | 0 images · 21 captions written | **ships today — do not specify** |

@@ -61,8 +61,14 @@ export type ProseProps = {
  * the gap between Prose and whatever sits above.
  *
  * ── What it does not do ─────────────────────────────────────────────────────────────────────
- * No `size` prop, no variants, no measure override. One rich-text treatment, on four surfaces.
- * A second one is a conversation, not a prop added ahead of a call site that needs it.
+ * No `size` prop and no variants. One rich-text treatment, on four surfaces. A second one is a
+ * conversation, not a prop added ahead of a call site that needs it.
+ *
+ * And no measure — not a prop to override one, but none at all. The stylesheet argues it: a
+ * reading column belongs to the page type, and a cap here could only be narrowed by a caller,
+ * never widened, so the primitive would be deciding for every route that a rich-text flow is a
+ * reading column. Half of them are not. **The caller owns the width**, which means a long-form
+ * route has to state its own measure and an unwrapped Prose will run the whole content column.
  *
  * Surface comes from the enclosing `data-surface`, as everywhere else — Prose is never told
  * where it is.

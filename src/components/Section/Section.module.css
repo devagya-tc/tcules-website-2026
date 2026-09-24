@@ -36,6 +36,13 @@
      Purely enabling — it changes nothing about in-flow content. */
   position: relative;
 
+  /* ...and the stacking context for them. A bleed layer that must sit UNDER the content (Texture)
+     takes a negative z-index; without isolation that resolves against the page, and the layer
+     paints beneath this band's own ground and vanishes. Isolating makes "below" mean "between the
+     ground and the content". A descendant that must overlay a later band (a sticky bar, a panel)
+     already forms its own stacking context, so nothing that rises out of a band is trapped. */
+  isolation: isolate;
+
   /* No band separator, by design. Bands are separated by ground and whitespace, never by a
      rule — a stacked pair reads as two bands because the tone changes, not because a line says
      so. Where a rule is genuinely wanted, --sec-rule exists for the content to draw one. */

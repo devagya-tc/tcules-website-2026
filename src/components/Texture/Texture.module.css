@@ -1,0 +1,18 @@
+/* Texture — a bleed layer. It covers its positioned ancestor's padding box, which for a Section is
+   the whole band including the gutter, and sits beneath the band's content: --tex-layer is below
+   zero, and Section isolates itself so that resolves between its ground and its children rather
+   than behind the page.
+
+   The grid is drawn in currentColor, so the one colour decision is --tex-ink, per surface. Width
+   and height are stated because an absolutely positioned <svg> is a replaced element and does not
+   stretch to its insets on its own. */
+.texture {
+  position: absolute;
+  inset: 0;
+  z-index: var(--tex-layer);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: var(--tex-ink);
+  fill: currentColor;
+}

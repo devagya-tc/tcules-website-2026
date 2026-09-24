@@ -282,12 +282,12 @@
   --letter-spacing-eyebrow: 0.12em;
   /* Measure — the three line-length limits the system enforces.
 
-     `lede` sits between the other two because a lead-sized line needs a limit neither of them
+     `lead` sits between the other two because a lead-sized line needs a limit neither of them
      gives: 22ch breaks a --text-lead paragraph into a stack of fragments, and 68ch lets it run
      the width of a content column and stop reading as a statement. It arrived when the footer's
      tagline lost the CTA that used to sit beside it. */
   --measure-title: 22ch;
-  --measure-lede: 40ch;
+  --measure-lead: 40ch;
   --measure-body: 68ch;
 }
 

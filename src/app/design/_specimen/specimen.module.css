@@ -157,3 +157,36 @@
 .trackXs {
   max-inline-size: var(--lay-track-xs);
 }
+
+/* Texture ink candidates for the grounds that are not decided yet — tint's neutral, and the two
+   dark grounds. These override
+   --tex-ink on one Texture so /design/texture can print the options side by side — a measuring
+   instrument, not a treatment. Delete them when tokens/components/texture.css settles its ink and
+   tint, ink and blue blocks. */
+.texInkBrandeis200 {
+  --tex-ink: var(--color-brandeis-200);
+}
+
+.texInkBrandeis300 {
+  --tex-ink: var(--color-brandeis-300);
+}
+
+.texInkBrandeis500 {
+  --tex-ink: var(--color-brandeis-500);
+}
+
+.texInkBrandeis800 {
+  --tex-ink: var(--color-brandeis-800);
+}
+
+.texInkNeutral300 {
+  --tex-ink: var(--color-neutral-300);
+}
+
+.texInkNeutral400 {
+  --tex-ink: var(--color-neutral-400);
+}
+
+.texInkWhite {
+  --tex-ink: var(--color-white);
+}

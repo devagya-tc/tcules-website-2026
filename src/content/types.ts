@@ -548,6 +548,18 @@ export type ServiceSection = {
     anchorId: string;
     navigationLabel?: string;
   };
+  /**
+   * One sentence under the heading, before the blocks that argue it. Named for the type role it
+   * takes — `--text-lead`, the same role and the same word `PageHero` and `CtaSection` use for
+   * their own opening line.
+   *
+   * There is no `lead` field on ComponentServiceSectionHeading yet, so today this is LIFTED by
+   * the Strapi mapper out of the italic first paragraph authors have been writing at the top of
+   * a section's first rich-text block — which is what a missing field looks like from the
+   * outside. The view model states the shape it wants regardless; when the CMS grows the field,
+   * the mapper stops inferring and reads it, and nothing above here changes.
+   */
+  lead?: string;
   blocks: ServiceBlock[];
 };
 

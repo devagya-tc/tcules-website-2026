@@ -2,12 +2,22 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, type LayoutProps } from '@/components';
+import {
+  Button,
+  Cluster,
+  Layout,
+  Prose,
+  Section,
+  Tag,
+  type LayoutProps,
+  type SectionSurface,
+} from '@/components';
 import {
   getServicePage,
   type ServiceAction,
   type ServiceBlock,
   type ServiceContentColumn,
+  type ServiceSection,
 } from '@/content';
 import { ROUTES, servicePath } from '@/lib/routes';
 import {
@@ -15,6 +25,7 @@ import {
   BlockCard,
   Breadcrumbs,
   Callout,
+  ContentSection,
   CtaSection,
   Figure,
   ListCard,
@@ -237,6 +248,52 @@ function renderServiceBlock(block: ServiceBlock) {
   }
 }
 
+/**
+ * Does this section exist to carry EVIDENCE, and nothing else?
+ *
+ * The one signal for "this band matters" that the content actually carries. A section holding a
+ * single quote and no other block is a standalone testimonial — an author put a heading on it and
+ * gave it nothing but the quotation, which is a placement decision rather than an inference. On
+ * product-design that is "A client's view of the working relationship"; across the twelve service
+ * pages it fires exactly once, and it cannot fire twice on a page that does not have two of them.
+ *
+ * It is deliberately narrow. A quote sitting among cards and prose is punctuation inside an
+ * argument, not the argument, so it does not qualify — which is why this tests the section's whole
+ * block list rather than asking whether a quote is present anywhere in it.
+ *
+ * A PROXY, and honest about being one: importance is editorial, and reading it from block shape is
+ * what you do while the CMS has no field to read instead.
+ */
+function isProofBand(section: ServiceSection): boolean {
+  const [only] = section.blocks;
+  return section.blocks.length === 1 && only?.type === 'quote';
+}
+
+/**
+ * The ground for every content band, decided for the whole run at once rather than per section.
+ *
+ * It has to be the whole run, because the rule that matters is an ADJACENCY rule and a section
+ * cannot see its neighbours. Two tint bands stacked are not two bands: they are one 400px block of
+ * tint with a seam invisible inside it, which is the same failure `Section` documents for `blue`
+ * ("never adjacent to an ink section"). Product-design is exactly this case — its proof band is
+ * the LAST section, and every band that can follow the run (FAQ, capabilities, close) is tint. So
+ * the accent is dropped there and the close keeps it, because the page's ask is the thing that
+ * should be marked if only one of the two can be.
+ *
+ * Everything not marked is paper. There is no alternation: a long paper run is answered by varying
+ * the arrangement of the blocks inside it, never the ground behind them.
+ */
+function sectionSurfaces(
+  sections: readonly ServiceSection[],
+  tintFollowsRun: boolean,
+): SectionSurface[] {
+  return sections.map((section, index) => {
+    if (!isProofBand(section)) return 'paper';
+    const isLast = index === sections.length - 1;
+    return isLast && tintFollowsRun ? 'paper' : 'tint';
+  });
+}
+
 const ACRONYMS: Record<string, string> = {
   ai: 'AI',
   api: 'API',
@@ -325,6 +382,11 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
   const title = service.title || service.hero.highlightedText || '';
   const heroActions = firstTwoHeroActions(service.hero.actions);
 
+  /* Every band that can follow the section run is tint, so the presence of any one of them is
+     what tells the last section it cannot take the accent. */
+  const tintFollowsRun = Boolean(service.faq || service.capabilitiesCta || service.cta);
+  const surfaces = sectionSurfaces(service.sections, tintFollowsRun);
+
   return (
     <>
       {service.seo?.structuredData ? (
@@ -346,39 +408,47 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
         {service.hero.tags.length > 0 ? (
           <Cluster as="ul" colGap="text" rowGap="tight">
             {service.hero.tags.map((tag) => (
-              <li key={tag}>{tag}</li>
+              <li key={tag}>
+                <Tag>{tag}</Tag>
+              </li>
             ))}
           </Cluster>
         ) : null}
       </PageHero>
 
+      {/* ONE BAND PER SECTION, and the ground is EARNED rather than alternated.
 
-      {service.sections.length > 0 ? (
-        <Section as="div" surface="paper">
-          <Layout rowGap="section">
-            {service.sections.map((section) => {
-              const content = (
-                <Layout rowGap="stack">
-                  {section.heading ? (
-                    <h2 id={section.heading.anchorId}>{section.heading.text}</h2>
-                  ) : null}
-                  {section.blocks.map((block) => (
-                    <Fragment key={block.id}>{renderServiceBlock(block)}</Fragment>
-                  ))}
-                </Layout>
-              );
+          Previously all eight sections shared a single paper Section and were separated by a
+          `Layout rowGap="section"`. That put the h2 and every block in one flat stack, so 48 was
+          the only distance in the page: heading-to-body read exactly as far apart as
+          body-to-the-cards-beneath-it. ContentSection owns the internal grouping; the ground is
+          this route's decision because only the page knows the sequence.
 
-              return section.heading ? (
-                <section key={section.id} aria-labelledby={section.heading.anchorId}>
-                  {content}
-                </section>
-              ) : (
-                <div key={section.id}>{content}</div>
-              );
-            })}
-          </Layout>
-        </Section>
-      ) : null}
+          The first version of this alternated `index % 2`, which is wrong and worth recording
+          as wrong: it put four tint bands on product-design, none of which was an important
+          section — they were the even-numbered ones. Tint marks a section that matters and the
+          page's asks (FAQ, capabilities, close); a band gets it for a reason, and there are only
+          ever one or two per page. Everything else is paper, and the answer to a long paper run
+          is to vary the ARRANGEMENT of the blocks inside it, never the ground behind them
+          (CLAUDE.md § Design quality).
+
+          Importance is editorial and the CMS has no field for it, so this reads the one signal
+          the content actually carries — see `isProofBand` and `sectionSurfaces`. When
+          ComponentServiceSectionHeading grows a `surface` field, that helper is deleted and this
+          expression becomes `section.surface`; nothing else here changes. */}
+      {service.sections.map((section, index) => (
+        <ContentSection
+          key={section.id}
+          heading={section.heading?.text}
+          headingId={section.heading?.anchorId}
+          lead={section.lead}
+          surface={surfaces[index]}
+        >
+          {section.blocks.map((block) => (
+            <Fragment key={block.id}>{renderServiceBlock(block)}</Fragment>
+          ))}
+        </ContentSection>
+      ))}
 
       {service.faq ? (
         <Section surface="tint" aria-labelledby="service-faq-heading">

@@ -54,7 +54,7 @@
   /* 40ch, not the 22ch it held while the CTA sat beside it. With the CTA moved to the opposite end
  of the band the tagline has the left half to itself, and 22ch there breaks one sentence into
  four fragments against a lot of empty ground. */
-  --foot-tagline-measure: var(--measure-lede);
+  --foot-tagline-measure: var(--measure-lead);
   --foot-title-text: var(--text-h4);
   --foot-title-tracking: var(--text-h4-tracking);
   --foot-body-text: var(--text-body-sm);

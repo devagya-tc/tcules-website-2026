@@ -15,8 +15,21 @@
    a floor for a bare element on a page nobody has styled; a flow that reads correctly wherever
    it is dropped cannot depend on it still being there. */
 
+/* NO MEASURE, and the absence is the decision. A reading column is a property of the PAGE TYPE,
+   not of the rich-text component: a long-form route is a reading column and caps itself, and once
+   the outline rail lands the FRAME produces the cap rather than a declaration — a [2, 3] ratio in
+   the 1176 content column puts the article track at 667px against a ~666px 68ch body measure. A
+   service, expertise, audit or tool page is not a reading column at all, and a table or a
+   two-track arrangement inside one has no use for a 68ch cap.
+
+   A max-width here could only ever be overridden DOWNWARD. A caller could narrow the flow and
+   could never widen it, so the primitive was answering a page-type question on behalf of every
+   call site — and answering it wrong for the non-long-form half, which is where the 68ch cap
+   crushed a five-column table into a reading column with 510px of the band empty beside it.
+
+   The cost is real and is accepted: a Prose dropped into the full content column with no track
+   around it runs about 145 characters a line. The caller owns the width. This file owns the flow. */
 .prose {
-  max-width: var(--measure-body);
   font: var(--text-body);
   color: var(--prose-ink);
 }

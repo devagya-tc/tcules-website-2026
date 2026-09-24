@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section } from '@/components';
+import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getPodcastPage, type PodcastBlock, type PodcastImage } from '@/content';
 import { articlePath, podcastPath, ROUTES } from '@/lib/routes';
 import {
@@ -270,7 +270,9 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
         {labels.length > 0 ? (
           <Cluster as="ul" colGap="text" rowGap="tight">
             {labels.map((label) => (
-              <li key={label}>{label}</li>
+              <li key={label}>
+                <Tag>{label}</Tag>
+              </li>
             ))}
           </Cluster>
         ) : null}

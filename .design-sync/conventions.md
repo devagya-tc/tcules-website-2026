@@ -5,6 +5,17 @@ every component is correct. All 20 are on `window.Tcules`: `Section`, `Layout`, 
 `Input`, `Button`, `Icon`, `Logo`, `Prose`, `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`,
 `CtaSection`, `EnquiryForm`, `ListCard`, `BlockCard`, `Accordion`, `Proof`, `Figure`, `Callout`.
 
+### Do not run `check_design_system` — it cannot pass, by construction
+
+Its two findings are permanent and neither is a defect. The **unregistered custom properties** are
+hashed CSS Module locals (`.Layout_rowgap-none { --layout-row-gap: 0 }`) — component-internal
+plumbing that is correctly scoped and is not a theme token. The **unclassified tokens**
+(`--opacity-faint`, `--z-*`, `--duration-*`, `--easing-standard`,
+`--border-width-hairline-print`) are real `:root` tokens that the checker wants `/* @kind other */`
+comments on; **the bundler strips every authored CSS comment**, so an annotation added in the repo
+never reaches `_ds_bundle.css`. There is nothing upstream to fix and no version of this system that
+reports clean. Run it only if a rendered component is actually wrong.
+
 ### There is no class vocabulary — do not invent one
 
 Components are CSS Modules with hashed class names. There are **no utility classes** (`p-4`,

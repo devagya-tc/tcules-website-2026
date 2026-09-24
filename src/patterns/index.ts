@@ -43,6 +43,13 @@
  * composes Prose inside a semantic note while leaving the ground and the claim-to-note seam to
  * its caller. It is not a quotation, alert, card or second rich-text variant.
  *
+ * ContentSection is a BAND, and the only pattern here whose reason for existing is a distance:
+ * one CMS section — eyebrow, heading, lead, then a run of blocks the caller supplies as children.
+ * It takes `surface` like the other band-owning patterns and paints nothing itself. What it owns
+ * is the grouping: the head group nests at 8 and 24 so it reads as one object, and the blocks are
+ * a separate 48 beat beneath it. A flat Layout cannot say that, which is why this is a component
+ * and not three lines at a call site repeated on every long-form route.
+ *
  * Figure is the quietest thing in the tier and the first to hold an IMAGE as its subject rather
  * than as a marker: an asset, its caption and an optional quieter note, filling whatever inline
  * space it is handed and asking nothing of the container. It is presentational to the letter —
@@ -118,6 +125,9 @@ export type { AccordionProps, AccordionItem, AccordionQuestionElement } from './
 
 export { Proof } from './Proof';
 export type { ProofProps, ProofQuote, ProofFigure } from './Proof';
+
+export { ContentSection } from './ContentSection';
+export type { ContentSectionProps } from './ContentSection';
 
 export { Callout } from './Callout';
 export type { CalloutProps } from './Callout';

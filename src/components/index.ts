@@ -13,6 +13,14 @@
  * are things a layout arranges. Input owns only the native control box; labels and messages stay
  * with the pattern composing it. A row of controls belongs in a Cluster, which owns the gap.
  *
+ * Tag is a MARK OF A SECOND KIND, and the pair is worth reading together. Logo is one
+ * distinguished object with its own proportions; Tag is one of a row of siblings, sized to the
+ * text around it. It ships two variants that share a box and invert their enclosure — an inert
+ * taxonomy label with a ground and no edge, and a filter chip with an edge and no ground — so a
+ * reader meets the same object whether it can be operated or not. Like Button it takes its one
+ * glyph as a ReactNode rather than importing Icon, and like Button it owns no distance outside its
+ * own box: the row is a Cluster's.
+ *
  * Logo is a third kind: a MARK. Not an Icon, and the line between them is no longer fill versus
  * stroke now that the glyph set is solid too — it is PROPORTION and OWNERSHIP OF COLOUR. An icon
  * is drawn on the system's own 24-unit box and takes currentColor entirely; the wordmark has its
@@ -22,6 +30,10 @@
  * Prose is neither. It is the rich-text flow — the one component that styles markup it did not
  * write, because a CMS body field arrives as a string. It is the documented exception to the
  * no-margins rule, and the exception is argued in the component itself.
+ *
+ * Texture is DECORATION. It arranges nothing and says nothing: a bleed layer that fills the band
+ * and shows the pixel grid through shapes the caller places and blurs. Its geometry is read from
+ * src/styles/textures/, the same spec the asset exporter reads.
  */
 export {
   Section,
@@ -42,3 +54,11 @@ export { Icon, iconNames, type IconProps, type IconName, type IconSize } from '.
 export { Input, type InputEmphasis, type InputProps } from './Input';
 export { Logo, type LogoProps, type LogoSize, type LogoVariant } from './Logo';
 export { Prose, type ProseProps } from './Prose';
+export { Tag, type TagProps, type TagVariant } from './Tag';
+export {
+  Texture,
+  TextureShape,
+  type TextureLength,
+  type TextureProps,
+  type TextureShapeProps,
+} from './Texture';

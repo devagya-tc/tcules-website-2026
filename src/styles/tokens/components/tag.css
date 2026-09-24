@@ -1,0 +1,242 @@
+/* ══ Component layer — tag ═══════════════════════════════════════════════════════
+   Tier 1. The site's small label mark, in two variants that share one box: the inert
+   `mark` that names what a page is filed under, and the interactive `filter` chip
+   that offers a query. This file is the only place a tag colour is decided, and it
+   decides it four times: once per surface.
+
+   Naming: --tag-{variant}-{part}-{state}
+           variant   mark (inert) | filter (interactive)
+           part      ink | bg | edge   — a tag is a MARK, not a control, so its label
+                                         takes `ink`. `bg` is the fill behind it. A
+                                         control's register is bg/fg (button.css); a
+                                         surface's is ground/ink (section.css).
+           state     rest (no suffix) | hover | pressed
+   Geometry and shared parts drop the variant: --tag-size-md, --tag-ring-color.
+
+   ── Enclosure is an inversion, not a degree ─────────────────────────────────────
+   The mark is a GROUND WITH NO EDGE. The chip is an EDGE WITH NO GROUND. That is the
+   categorical difference between the two variants and it is the reason there is no
+   --tag-mark-edge and no --tag-filter-bg. Separating them by strength instead — a
+   firmer line and a deeper fill — was tried and rejected: two weights of one treatment
+   read as one object twice, and a reader's first guess about the quieter one is that
+   it is disabled.
+
+   ── Nothing is blue until it is pointed at ──────────────────────────────────────
+   Blue appears on nothing in this system that is not clickable, which makes it the
+   strongest affordance code in the vocabulary. Spending it on fourteen chips that are
+   merely present is spending it on the wrong thing. So rest is neutral on all four
+   surfaces, hover takes the label and the line into the blue, and the meaning lands at
+   the moment a reader is asking the question. The one exception is the blue surface,
+   where every value is a blue because the ground is.
+
+   ── The state model, fixed and not a token ──────────────────────────────────────
+   Hover and focus take -hover. Pressed and HELD take -pressed. Focus is the hover paint
+   plus the ring, so the keyboard sees what the pointer sees. There is no -selected set:
+   a held chip is a chip that stays pressed, and what separates it from a momentary press
+   is permanence, aria-current and the close glyph — never a second colour.
+
+   A state token exists in the set only if the value MOVES on at least one surface. That
+   is why there is no --tag-mark-ink-hover: an inert mark has no states at all, on any
+   surface, and a hover added for symmetry would be a lie about whether the thing can be
+   operated — on ten routes at once. --tag-filter-bg-pressed is the boundary case: it
+   moves on exactly ONE surface, which is the rule's threshold, and the blue block says
+   why. Once a token is in the set, EVERY surface declares it, even where that surface's
+   value equals its own rest.
+
+   ── Every surface restates every token ──────────────────────────────────────────
+   Not just the deltas from paper. A surface that declares only deltas is not
+   self-contained: nest it inside a non-paper surface and it inherits that surface's
+   values for everything it left out. The mark is insulated by construction — its label
+   is measured against its OWN ground — but the chip is not: at rest it paints nothing,
+   so its label sits directly on whatever is behind it. The chip is the part that depends
+   on the surface having been declared, and the caller obligation follows: a panel that
+   changes the ground says so with data-surface.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   24 box / 8 inline padding / 0 block padding / 4 glyph gap / 1 label trim.
+
+   THE BOX IS 24 AND THE BLOCK PADDING IS ZERO, and those two facts are one decision.
+   A 13px sans label's line box is 18.85 and a 12px mono label's is 14.4; centred in a
+   24px minimum, both variants are exactly 24 tall with no padding to reconcile. Give
+   either one block padding and the shared geometry the whole component rests on is
+   gone. 24 is measured against --icon-size-24, the system's largest glyph box, which
+   is the right referent: a tag is a glyph-sized object in a row of text, not a
+   control-sized one. --btn-height-sm at 32 was the previous referent and it made a
+   taxonomy label the height of a button.
+
+   24 MEETS the AA target floor (SC 2.5.8) rather than clearing it, in both axes — the
+   narrowest possible chip, a one-character label, measures 24.00 x 24.00. The clearance
+   that a floor met without margin needs is bought by the CALLER's row gap, not here: a
+   filter row passes rowGap="text". This component owns no distance outside its own box,
+   which is also why it must not extend its hit area — .hit::after grows 10px above and
+   below, and at rowGap="text" two wrapped rows of extended targets would overlap by 4px.
+   A component cannot own the distance that makes its own extended hit area safe.
+
+   Type comes in as a COMPOSITE, one per variant. --text-caption carries 13px sans at
+   1.45 and has NO tracking companion; --text-ui-sm carries 12px mono semibold at 1.2 and
+   has both a tracking companion and a case. The mark is sans in the author's own case
+   because free text arrives unconstrained — 32 characters of sentence case set in mono
+   uppercase at 0.08em is neither a label nor a phrase — and the vocabulary's own rule
+   decides it: a label that must stay sentence case is not a mono label.               */
+:root {
+  --tag-size-md: 24px; /* the minimum in BOTH axes; see above */
+  --tag-radius: var(--radius-4);
+  --tag-edge-width: var(--border-width-hairline);
+  --tag-glyph-size: var(--icon-size-14);
+  --tag-shadow: var(--shadow-none);
+  --tag-transition-duration: var(--duration-fast);
+  --tag-transition-easing: var(--easing-standard);
+  --tag-ring-width: var(--focus-ring-width);
+  --tag-ring-offset: var(--focus-ring-offset);
+  /* Removed from the filter's inline-END padding, and only when no glyph follows.
+     optical, not --gap-tight: this corrects the trailing letter-space
+     --text-ui-sm-tracking adds after the label's last capital — 0.08em at 12px,
+     measured at 0.96px — against the box's own inline padding on the leading edge, so
+     the day the gap scale is re-tuned this must not move. It is the same correction
+     --btn-label-margin makes for the same reason on a mono control label, and it
+     applies to the filter only: --text-caption has no tracking, so the mark has
+     nothing to trim. */
+  --tag-label-trim: var(--space-1);
+  /* Between the label and the glyph, on a held chip.
+     optical, not --gap-inline: --gap-tight is the gap scale's own answer to "icon to
+     label" and this DECLINES it, so the value is not a step chosen by what it
+     separates — it is a correction for a 14px glyph beside a 12px label in a 24px box,
+     where the scale's answer exceeds the label's own cap height. --btn-gap is 4px for
+     this exact relationship and carries this exact justification; taking --gap-inline
+     instead would be the same pixel wearing a name that claims a system-wide
+     relationship it does not have. */
+  --tag-glyph-gap: var(--space-4);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The only ground either row stands on today, and the trap is exactly that.
+
+   The mark sits on --color-paper-deep — the system's own tint, so the ground is warm
+   rather than grey, and at 1.12:1 it is a change of paper rather than a drawn box.
+   --prose-mark-bg is the precedent for a small non-control mark carrying its own ground.
+
+   The chip is the inverse and paints nothing. Its hairline is neutral-500 rather than
+   400 because 400 measures 2.13:1 here and falls below the 3:1 an outline needs in order
+   to read as an outline. Every rest edge in this file is one step firmer than
+   --sec-rule-strong on its surface (400 -> 500 here), which is the relationship rather
+   than four separate measurements: a chip's outline is a box a reader may operate, so it
+   sits above the rules that merely divide the page.
+
+   Pressed and held draw BOTH the line and the label in neutral-950. The line goes from a
+   grey hint at 3.16:1 to full ink at 17.11:1 — a five-fold change in edge contrast that
+   occupies no area at all, which is what replaced an earlier draft's black capsule.   */
+:root,
+[data-surface='paper'] {
+  --tag-mark-ink: var(--color-neutral-700); /*  7.27:1 on its own ground */
+  --tag-mark-bg: var(--color-paper-deep); /*  1.12:1 vs the section — decoration */
+  --tag-filter-ink: var(--color-neutral-700); /*  8.14:1 */
+  --tag-filter-ink-hover: var(--color-brandeis-600); /*  7.53:1 */
+  --tag-filter-ink-pressed: var(--color-neutral-950); /* 17.11:1 */
+  --tag-filter-edge: var(--color-neutral-500); /*  3.16:1 — outline floor is 3:1 */
+  --tag-filter-edge-hover: var(--color-brandeis-500); /*  6.17:1 */
+  --tag-filter-edge-pressed: var(--color-neutral-950); /* 17.11:1 */
+  /* Declared as this surface's own ground: NOTHING FILLS on paper, in any state. A fill
+     equal to what is behind it is the only way a set that demands four declarations can
+     also assert that no area is painted. */
+  --tag-filter-bg-pressed: var(--color-paper);
+  --tag-ring-color: var(--color-brandeis-500); /*  6.17:1 vs its gap */
+  --tag-ring-gap-color: var(--color-paper);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   Two values move and each has its own measurement behind it.
+
+   The mark's ground goes to neutral-200, because --color-paper-deep on --color-paper-deep
+   is 1.00:1 — the tint surface IS the mark's paper colour, so here the mark borrows the
+   neutral ramp; at 1.19:1 it reads as the same quiet patch it was.
+
+   The chip's hairline steps to neutral-600, because neutral-500 measures 2.82:1 against
+   #f3f1ea and drops below the outline threshold; at 4.39:1 it holds the apparent weight
+   it had on paper, and it is again one step firmer than --sec-rule-strong (500 -> 600).
+
+   Nothing else moves. The blue of hover and the ink of held are as legible on a tint one
+   step down as they are on paper, and inventing a second value for either would have been
+   a delta pretending to be a decision. They are restated anyway — see the header.     */
+[data-surface='tint'] {
+  --tag-mark-ink: var(--color-neutral-700); /*  6.11:1 on its own ground */
+  --tag-mark-bg: var(--color-neutral-200); /*  1.19:1 vs the section — decoration */
+  --tag-filter-ink: var(--color-neutral-700); /*  7.27:1 */
+  --tag-filter-ink-hover: var(--color-brandeis-600); /*  6.72:1 */
+  --tag-filter-ink-pressed: var(--color-neutral-950); /* 15.27:1 */
+  --tag-filter-edge: var(--color-neutral-600); /*  4.39:1 — 500 is 2.82:1 here */
+  --tag-filter-edge-hover: var(--color-brandeis-500); /*  5.51:1 */
+  --tag-filter-edge-pressed: var(--color-neutral-950); /* 15.27:1 */
+  --tag-filter-bg-pressed: var(--color-paper-deep); /* nothing fills — see paper */
+  --tag-ring-color: var(--color-brandeis-500); /*  5.51:1 vs its gap */
+  --tag-ring-gap-color: var(--color-paper-deep);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   Every step runs the other way up, which is why this column cannot be a delta.
+
+   The chip's rest label LIFTS to neutral-200 at 12.83:1 where neutral-700 would be
+   unreadable, over a neutral-600 hairline at 3.48:1 — the same relationship the grey line
+   has on paper, inverted, and again one step firmer than --sec-rule-strong (700 -> 600,
+   which is FIRMER here because firmer on a dark ground means lighter).
+
+   Hover takes the PALE end of the blue ramp rather than the deep end, because no dark blue
+   lifts off #1b1b18 at all: --color-brandeis-950 measures 1.07:1. Pressed and held draw
+   label and line in --color-paper, because on a dark section THE LOUD STATE IS THE LIGHT
+   ONE.
+
+   The mark's ground steps to neutral-800 rather than 900: at 1.45:1 it separates from the
+   section, which a dark ground needs in order to be seen at all. It is the second-loudest
+   of the four mark grounds and that is the surface's doing, not drift.                */
+[data-surface='ink'] {
+  --tag-mark-ink: var(--color-neutral-400); /*  5.55:1 on its own ground */
+  --tag-mark-bg: var(--color-neutral-800); /*  1.45:1 vs the section — decoration */
+  --tag-filter-ink: var(--color-neutral-200); /* 12.83:1 */
+  --tag-filter-ink-hover: var(--color-brandeis-200); /* 10.48:1 — 950 is 1.07:1 here */
+  --tag-filter-ink-pressed: var(--color-paper); /* 17.11:1 */
+  --tag-filter-edge: var(--color-neutral-600); /*  3.48:1 */
+  --tag-filter-edge-hover: var(--color-brandeis-300); /*  7.32:1 */
+  --tag-filter-edge-pressed: var(--color-paper); /* 17.11:1 */
+  --tag-filter-bg-pressed: var(--color-neutral-950); /* nothing fills — see paper */
+  --tag-ring-color: var(--color-brandeis-300); /*  7.32:1 vs its gap */
+  --tag-ring-gap-color: var(--color-neutral-950);
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   Every neutral is gone on brand ground, and this is the one column where an outline
+   cannot carry the whole ladder.
+
+   Rest is brandeis-100 at 4.91:1 — the tightest text cell in the component — on a
+   brandeis-200 line at 3.78:1. Hover takes both to white, 6.23:1. AND THERE THE RAMP RUNS
+   OUT: nothing is lighter than white, and no dark ink clears the floor on #0048ff
+   (neutral-950 is 2.77:1, brandeis-950 is 2.97:1 — below the 3:1 an outline needs, let alone text). So pressed and held are
+   the only cells in this component that FILL: a white ground under a brandeis-700 label at
+   10.17:1. It is a forced value, not a preference.
+
+   --tag-filter-edge-hover and --tag-filter-edge-pressed therefore hold the SAME value here,
+   the only place in the file where a state token does not move. The rendered states still
+   differ, and the parts that carry the difference are the FILL and the LABEL: hover is a
+   white line and a white label on the blue ground, pressed is that same white line around a
+   white ground with the label reversed to brandeis-700. The edge is the constant, not the
+   state.
+
+   The mark takes brandeis-700 as its ground at 1.63:1 with brandeis-100 on it at 8.01:1 —
+   the loudest of the four mark grounds, because against #0048ff a quiet ground has to work
+   harder to exist.
+
+   No filter row stands on a blue Section today. The column is kept because blue is a
+   reserved surface colour and branded surfaces are a route this system may take; the day
+   one exists, the chip on it is already correct and measured.                          */
+[data-surface='blue'] {
+  --tag-mark-ink: var(--color-brandeis-100); /*  8.01:1 on its own ground */
+  --tag-mark-bg: var(--color-brandeis-700); /*  1.63:1 vs the section — decoration */
+  --tag-filter-ink: var(--color-brandeis-100); /*  4.91:1 — the tightest text cell */
+  --tag-filter-ink-hover: var(--color-white); /*  6.23:1 — the ramp's light end */
+  --tag-filter-ink-pressed: var(--color-brandeis-700); /* 10.17:1 on the one fill */
+  --tag-filter-edge: var(--color-brandeis-200); /*  3.78:1 */
+  --tag-filter-edge-hover: var(--color-white); /*  6.23:1 */
+  --tag-filter-edge-pressed: var(--color-white); /*  6.23:1 — constant; fill carries it */
+  --tag-filter-bg-pressed: var(--color-white); /*  6.23:1 — THE ONE FILL, forced */
+  --tag-ring-color: var(--color-white); /*  6.23:1 vs its gap */
+  --tag-ring-gap-color: var(--color-brandeis-500);
+}

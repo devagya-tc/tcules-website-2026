@@ -33,5 +33,20 @@
       "Bash(git diff:*)",
       "Bash(git log:*)"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/after-pr-checkout-main.sh\"",
+            "timeout": 15,
+            "statusMessage": "Returning to main"
+          }
+        ]
+      }
+    ]
   }
 }
