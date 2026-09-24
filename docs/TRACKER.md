@@ -16,7 +16,7 @@ fix lives in the component or its tokens, not in a route.
 
 ## Phase 0 — Base
 
-- [ ] **0.1** Land `feat/content-section-per-heading`: Tag, the Prose changes, the route edits, both docs.
+- [x] **0.1** Land `feat/content-section-per-heading`: Tag, Texture, the Prose changes, the route edits. (#55)
 - [ ] **0.2** Put the brand framework in the repo at `docs/brand/`: illustration concept, image rules,
       product UI treatment, ch05 Imagery, ch10 Social. Every later task reads it, so it has to be
       readable from here.
