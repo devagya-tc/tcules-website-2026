@@ -8,6 +8,7 @@ import {
   Layout,
   Prose,
   Section,
+  Tag,
   type LayoutProps,
   type SectionSurface,
 } from '@/components';
@@ -407,12 +408,13 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
         {service.hero.tags.length > 0 ? (
           <Cluster as="ul" colGap="text" rowGap="tight">
             {service.hero.tags.map((tag) => (
-              <li key={tag}>{tag}</li>
+              <li key={tag}>
+                <Tag>{tag}</Tag>
+              </li>
             ))}
           </Cluster>
         ) : null}
       </PageHero>
-
 
       {/* ONE BAND PER SECTION, and the ground is EARNED rather than alternated.
 

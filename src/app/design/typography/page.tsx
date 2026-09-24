@@ -1,6 +1,6 @@
 import { Cluster, Layout, Prose, Section } from '@/components';
 
-import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
+import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 import t from '../_specimen/typeroles.module.css';
 
 /**
@@ -317,6 +317,25 @@ function SurfaceFlow() {
           Muted text — <small>a caption, a note, a source</small>
         </li>
       </ul>
+    </Prose>
+  );
+}
+
+/* The same flow at three widths, so only the container varies. Deliberately a few paragraphs
+   rather than one: a measure is judged on where successive lines break, not on a single line. */
+function WidthSample() {
+  return (
+    <Prose>
+      <p>
+        Prose declares no measure. A reading column is a property of the page type rather than of
+        the rich-text component, so the container decides how wide this paragraph gets and the
+        component decides nothing about it.
+      </p>
+      <p>
+        A cap on the component could only ever be narrowed by a caller and never widened, which
+        made the primitive answer a page-type question for every route that renders a body field.
+        Half of them are not reading columns at all.
+      </p>
     </Prose>
   );
 }
@@ -831,6 +850,53 @@ export default function TypographySpecimenPage() {
                 on it the same way.</p>
                 <ul><li>Same marker hang</li><li>Same eight pixels between items</li></ul>`}
             />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      {/* ── The width contract ──────────────────────────────────────────────────────────────
+          Prose caps nothing, so these two specimens are the whole of what that means. The flow is
+          identical in both and only the container changes, which is the only way the claim can be
+          judged by eye. */}
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <p className={t.eyebrow}>Width</p>
+            <h2>The width belongs to the caller</h2>
+            <p className={t.lead}>
+              <code>Prose</code> declares no measure at all — not a default to override, none.
+            </p>
+            <p>
+              A reading column is a property of the page type. A <code>max-width</code> on the
+              component could only ever be narrowed by a caller and never widened, so the
+              primitive would be deciding for every route that a rich-text flow is a reading
+              column. Half of them are not: a service, expertise, audit or tool page is a
+              composition, and a table or a two-track arrangement inside one has no use for a
+              68ch cap.
+            </p>
+            <p>
+              The cost is the first specimen and it is not hidden. Dropped into the full content
+              column with nothing around it, the flow runs about 145 characters a line — which is
+              the caller&rsquo;s omission to fix, and the second specimen is how the frame fixes
+              it without anybody declaring a distance.
+            </p>
+          </Layout>
+
+          <Specimen
+            title="No track — the full content column"
+            note="1176px, about 145 characters a line. What an unwrapped Prose gives you: too wide to read, and visibly so, which is the point of showing it."
+          >
+            <WidthSample />
+          </Specimen>
+
+          <Specimen
+            title="A track — columns={{ base: 1, lg: [2, 3] }}"
+            note="The frame produces the measure instead of a declaration: 1176 less the 64 column gap, split 2:3, puts the flow track at 667px against a 68ch body measure of about 666. This is the long-form page with its outline rail; the box stands in for TableOfContents."
+          >
+            <Layout columns={{ base: 1, lg: [2, 3] }} colGap="column" rowGap="stack" align="start">
+              <Box>Outline rail</Box>
+              <WidthSample />
+            </Layout>
           </Specimen>
         </Layout>
       </Section>

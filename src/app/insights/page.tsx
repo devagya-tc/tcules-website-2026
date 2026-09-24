@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Icon, Layout, Section } from '@/components';
+import { Button, Cluster, Icon, Layout, Section, Tag } from '@/components';
 import {
   getInsightsPage,
   type InsightFilterGroup,
@@ -202,37 +202,42 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
                 return (
                   <Layout key={group.id} rowGap="text">
                     <h3>{group.label}</h3>
-                    <Cluster as="ul" colGap="tight" rowGap="tight">
-                      <li>
-                        <Button
-                          as="a"
-                          href={filterHref(selected, group.id)}
-                          emphasis="ghost"
-                          tone="neutral"
-                          size="sm"
-                          active={!activeOption}
-                          aria-current={!activeOption ? 'true' : undefined}
-                          extendHitArea
-                        >
-                          All
-                        </Button>
-                      </li>
+                    {/* Both gaps are `text` (16), and that is the touch-target argument rather
+                        than a preference: a Tag is 24 x 24, which MEETS the AA floor without
+                        margin, so the clearance has to come from the row. `tight` (8) would leave
+                        two 24px targets 8px apart. The gap belongs to the caller, which is why it
+                        is here and not in the component. */}
+                    <Cluster as="ul" colGap="text" rowGap="text">
                       {group.options.map((option) => {
                         const isActive = activeOption === option.id;
                         return (
                           <li key={option.id}>
-                            <Button
-                              as="a"
-                              href={filterHref(selected, group.id, option.id)}
-                              emphasis="ghost"
-                              tone="neutral"
-                              size="sm"
-                              active={isActive}
-                              aria-current={isActive ? 'true' : undefined}
-                              extendHitArea
+                            {/* The held chip's href CLEARS its group — `filterHref` with no
+                                option id deletes the key — which is what makes the `close` glyph
+                                a control rather than a decoration, and what replaced the "All"
+                                chip. "All" is the absence of a filter, not a filter: rendering it
+                                as a held, aria-current chip told a reader that "no constraint" was
+                                a constraint they had chosen. A group with nothing selected now
+                                says so by having no held chip in it.
+
+                                `aria-current` is not set here any more. Tag emits it from
+                                `selected`, so the attribute and the paint cannot drift apart. */}
+                            <Tag
+                              variant="filter"
+                              href={
+                                isActive
+                                  ? filterHref(selected, group.id)
+                                  : filterHref(selected, group.id, option.id)
+                              }
+                              selected={isActive}
+                              icon={
+                                isActive ? (
+                                  <Icon name="close" label="Clear filter" />
+                                ) : undefined
+                              }
                             >
                               {option.name}
-                            </Button>
+                            </Tag>
                           </li>
                         );
                       })}

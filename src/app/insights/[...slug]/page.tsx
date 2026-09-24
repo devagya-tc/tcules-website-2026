@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Cluster, Layout, Prose, Section } from '@/components';
+import { Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getBlogPage, type BlogBlock, type BlogImage } from '@/content';
 import { blogPath, ROUTES } from '@/lib/routes';
 import { BlockCard, Breadcrumbs, Callout, CtaSection, Figure, PageHero } from '@/patterns';
@@ -294,7 +294,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
         {labels.length > 0 ? (
           <Cluster as="ul" colGap="text" rowGap="tight">
             {labels.map((label) => (
-              <li key={label}>{label}</li>
+              <li key={label}>
+                <Tag>{label}</Tag>
+              </li>
             ))}
           </Cluster>
         ) : null}

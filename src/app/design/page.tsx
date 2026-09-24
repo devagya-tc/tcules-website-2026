@@ -48,9 +48,19 @@ const SPECIMENS = [
       },
       { href: '/design/icon', name: 'Icon', note: 'the glyph set, 4 size roles, currentColor' },
       {
+        href: '/design/tag',
+        name: 'Tag',
+        note: 'inert mark and filter chip — one box, inverted enclosure, four surfaces, held state',
+      },
+      {
         href: '/design/logo',
         name: 'Logo',
         note: 'the wordmark — 3 heights, 2 bar treatments, 4 surfaces',
+      },
+      {
+        href: '/design/texture',
+        name: 'Texture',
+        note: 'the pixel grid through placed, blurred shapes — 4 anchors, 4 surfaces, dark-ground candidates',
       },
       {
         href: '/design/typography',

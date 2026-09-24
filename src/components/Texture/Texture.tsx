@@ -1,0 +1,183 @@
+import { useId, type ReactNode } from 'react';
+
+import { cx } from '@/lib/cx';
+import grid from '@/styles/textures/pixel-grid.json';
+
+import styles from './Texture.module.css';
+
+/**
+ * A length on the field: a number is px, a percentage is of the field — its width for left, right
+ * and width, its height for top, bottom and height. Percentages keep a shape in place as the band
+ * reflows; px keep its size fixed while it does.
+ */
+export type TextureLength = number | `${number}%`;
+
+export type TextureProps = {
+  /**
+   * The shapes the grid shows through — `TextureShape`s. Where they are opaque the grid is at full
+   * strength; where a blur feathers them, it fades. No shapes, no texture: the field is a mask.
+   */
+  children: ReactNode;
+  className?: string;
+};
+
+/**
+ * Placed like an absolutely positioned box: `left` or `right`, `top` or `bottom`, and a size. Give
+ * NEITHER side on an axis and the shape is centred on it, which is the common case — a soft glow in
+ * the middle of a band. Give both and `left` / `top` wins; a shape has a size, not two edges. Any
+ * part of a shape may sit off the field — the band clips it, and its blur still bleeds in.
+ */
+export type TextureShapeProps = {
+  top?: TextureLength;
+  right?: TextureLength;
+  bottom?: TextureLength;
+  left?: TextureLength;
+  width: TextureLength;
+  height: TextureLength;
+  /** `rect` (default) or `ellipse`, which fills the same box. */
+  kind?: 'rect' | 'ellipse';
+  /** Corner radius of a `rect`, in px. */
+  radius?: number;
+  /**
+   * Feather, in FIGMA'S units — the number in a Layer blur's field, so a composition moves between
+   * the file and the page without arithmetic. Rendered as a Gaussian of half that deviation, which
+   * was fitted against the Figma render this texture was measured from. 0 or omitted is a hard edge.
+   */
+  blur?: number;
+};
+
+/* One id per render, safe inside url(#…). useId's own characters are not all valid there. */
+const useSvgId = (prefix: string) => `${prefix}${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
+
+/**
+ * Texture — the pixel grid as a decorative field. Fills its nearest positioned ancestor edge to
+ * edge (a Section is one, and isolates itself so the field sits between its ground and its
+ * content), and shows the grid only through the shapes it is given: place a shape, blur it, and
+ * the grid fades out with it. The workflow is the Figma one — shapes, then blur, then texture.
+ *
+ * The grid itself is never blurred, which is why this is SVG: a CSS filter would soften the
+ * pattern along with the shape. The pattern's geometry is read from the spec the export script
+ * reads, so the page and every exported asset are the same texture. Colour is --tex-ink, per
+ * surface; strength is the spec's and is not a prop.
+ *
+ * Decorative only — hidden from assistive tech, and it takes no pointer events.
+ */
+export function Texture({ children, className }: TextureProps) {
+  const pattern = useSvgId('tex-grid-');
+  const mask = useSvgId('tex-mask-');
+
+  return (
+    <svg aria-hidden="true" focusable="false" className={cx(styles.texture, className)}>
+      <defs>
+        <pattern
+          id={pattern}
+          width={grid.pitch}
+          height={grid.pitch}
+          patternUnits="userSpaceOnUse"
+        >
+          {grid.cells.map((c) => (
+            <rect
+              key={c.y * grid.pitch + c.x}
+              x={c.x}
+              y={c.y}
+              width={c.width}
+              height={c.height}
+              fillOpacity={c.alpha}
+            />
+          ))}
+        </pattern>
+        <mask id={mask} maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+          {children}
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill={`url(#${pattern})`} mask={`url(#${mask})`} />
+    </svg>
+  );
+}
+
+const scale = (l: TextureLength, k: number): TextureLength =>
+  typeof l === 'number' ? l * k : `${parseFloat(l) * k}%`;
+
+/**
+ * One axis of CSS-style placement, in the three terms SVG can take: which point of the field the
+ * shape hangs from (0, 50 or 100%), how far from it, and how far back the shape's own origin sits
+ * as a fraction of its size. `right: 24` on a 300-wide shape is: hang from 100%, move −24, and
+ * start the box one full width back.
+ */
+function axis(start: TextureLength | undefined, end: TextureLength | undefined) {
+  if (start !== undefined) return { anchor: '0%', offset: start, back: 0 };
+  if (end !== undefined) return { anchor: '100%', offset: scale(end, -1), back: -1 };
+  return { anchor: '50%', offset: 0, back: -0.5 };
+}
+
+/**
+ * One shape in a Texture's mask. Only meaningful as a child of `Texture` — it renders SVG, and
+ * outside a mask it would paint a white box.
+ */
+export function TextureShape({
+  top,
+  right,
+  bottom,
+  left,
+  width,
+  height,
+  kind = 'rect',
+  radius = 0,
+  blur = 0,
+}: TextureShapeProps) {
+  const filter = useSvgId('tex-blur-');
+  const h = axis(left, right);
+  const v = axis(top, bottom);
+
+  /* Two nested viewports, because an SVG attribute cannot say "100% − 24px": the outer one moves
+     the origin to the anchor, the inner one by the offset, and each takes a percentage on its own.
+     Neither declares a size, so both are the field's size and a percentage inside means the same
+     thing at every depth. overflow is visible so the shape can extend back past the new origin. */
+  const body =
+    kind === 'ellipse' ? (
+      <ellipse
+        cx={scale(width, h.back + 0.5)}
+        cy={scale(height, v.back + 0.5)}
+        rx={scale(width, 0.5)}
+        ry={scale(height, 0.5)}
+        fill="white"
+      />
+    ) : (
+      <rect
+        x={scale(width, h.back)}
+        y={scale(height, v.back)}
+        width={width}
+        height={height}
+        rx={radius}
+        fill="white"
+      />
+    );
+  const shape = (
+    <svg x={h.anchor} y={v.anchor} overflow="visible">
+      <svg x={h.offset} y={v.offset} overflow="visible">
+        {body}
+      </svg>
+    </svg>
+  );
+
+  if (!blur) return shape;
+
+  /* The filter region is the whole field and then some, in user space: the default region is the
+     shape's box plus 10%, which clips a large blur into a visible rectangle, and a region that
+     stopped at the field's edge would thin a shape that is placed half off it. */
+  return (
+    <>
+      <filter
+        id={filter}
+        filterUnits="userSpaceOnUse"
+        x="-50%"
+        y="-50%"
+        width="200%"
+        height="200%"
+      >
+        <feGaussianBlur stdDeviation={blur / 2} />
+      </filter>
+      <g filter={`url(#${filter})`}>{shape}</g>
+    </>
+  );
+}

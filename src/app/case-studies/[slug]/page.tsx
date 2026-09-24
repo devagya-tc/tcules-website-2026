@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section } from '@/components';
+import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import { BlockCard, Breadcrumbs, CtaSection, Figure, PageHero, Proof } from '@/patterns';
@@ -246,7 +246,9 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
             {caseStudy.categories.length > 0 || caseStudy.tags.length > 0 ? (
               <Cluster as="ul" colGap="text" rowGap="tight">
                 {[...caseStudy.categories, ...caseStudy.tags].map((label) => (
-                  <li key={label}>{label}</li>
+                  <li key={label}>
+                    <Tag>{label}</Tag>
+                  </li>
                 ))}
               </Cluster>
             ) : null}

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section } from '@/components';
+import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getServicesMasterPage, type ServicesMasterAction } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { BlockCard, Breadcrumbs, CtaSection, PageHero, type HeroAction } from '@/patterns';
@@ -89,7 +89,9 @@ export default async function ServicesPage() {
         {page.hero.labels.length > 0 ? (
           <Cluster as="ul" colGap="text" rowGap="tight">
             {page.hero.labels.map((label) => (
-              <li key={label}>{label}</li>
+              <li key={label}>
+                <Tag>{label}</Tag>
+              </li>
             ))}
           </Cluster>
         ) : null}

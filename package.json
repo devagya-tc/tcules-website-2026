@@ -18,7 +18,8 @@
     "vocabulary": "node scripts/design-brief.mjs --vocabulary > docs/vocabulary.md",
     "guide:dist": "node scripts/guide-dist.mjs",
     "verify": "npm run lint && npm run typecheck && npm run tokens:check && npm run classes:check && npm run specimens:check && npm run design:check",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "texture": "node scripts/texture.mjs"
   },
   "engines": {
     "node": ">=20.11.1"

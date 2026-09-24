@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section } from '@/components';
+import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getEventPage, type EventBlock, type EventImage } from '@/content';
 import { articlePath, eventPath, ROUTES } from '@/lib/routes';
 import { BlockCard, Breadcrumbs, Callout, Figure, PageHero } from '@/patterns';
@@ -285,7 +285,9 @@ export default async function EventPage({ params }: EventPageProps) {
             {labels.length > 0 ? (
               <Cluster as="ul" colGap="text" rowGap="tight">
                 {labels.map((label) => (
-                  <li key={label}>{label}</li>
+                  <li key={label}>
+                    <Tag>{label}</Tag>
+                  </li>
                 ))}
               </Cluster>
             ) : null}

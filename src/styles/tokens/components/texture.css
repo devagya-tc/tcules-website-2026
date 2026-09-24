@@ -1,0 +1,53 @@
+/* ══ Component layer — texture ═══════════════════════════════════════════════════
+   Tier 1. The decorative pattern field: the pixel grid, shown through whatever shapes the
+   caller places and blurs. The pattern's geometry and its alphas are NOT here — they are
+   the texture's identity and live once, in src/styles/textures/pixel-grid.json, which the
+   component and the export script both read. This layer owns only what the surface decides:
+   the ink the grid is drawn in, and where the field sits in the stack.
+
+   Naming: --tex-{part}. A texture is a mark on a surface, so its colour is an INK.
+
+   ── Provisional ─────────────────────────────────────────────────────────────────
+   Tint's neutral is a first pick and the dark-ground colours are not decided.
+   /design/texture prints the candidates side by side; pick there, then settle the tint,
+   ink and blue blocks below. Blue CANNOT keep brandeis-500
+   — it is the ground, and the grid would be drawn in the colour it sits on.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   Below the band's content and above its ground. -1 is a literal because the z ladder
+   starts at --z-base 0 and has no step beneath it; it resolves against Section, which
+   isolates itself so that "below" cannot fall through to the page behind the band.     */
+:root{
+--tex-layer:-1;
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The measured value — the Figma render this was taken from is blue on paper.        */
+:root,[data-surface="paper"]{
+--tex-ink:var(--color-brandeis-500);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   Neutral, not blue, and deliberately QUIETER than paper's grid. Paper-deep is the warm
+   secondary ground; a blue haze over it reads as a tint on a tint, and a neutral matched to
+   blue's strength (700, 1.38:1 at the grid's 21% peak) was tried and read as too apparent —
+   the grid stopped being texture and became pattern. 400 sits at 1.13:1: present when looked
+   for, gone at a glance. 300 (1.07:1) is the quieter alternative; the specimen prints both. */
+[data-surface="tint"]{
+--tex-ink:var(--color-neutral-400);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   PROVISIONAL — held at 500 as the first guess. At the grid's 21% peak, 500 over
+   neutral-950 is a faint cool haze; the specimen shows 300 and white beside it.        */
+[data-surface="ink"]{
+--tex-ink:var(--color-brandeis-500);
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   PROVISIONAL — white, because 500 is this ground and would draw nothing. The
+   specimen shows 200 and 800 beside it.                                                */
+[data-surface="blue"]{
+--tex-ink:var(--color-white);
+}

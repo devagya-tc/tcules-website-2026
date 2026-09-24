@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, type LayoutProps } from '@/components';
+import { Button, Cluster, Layout, Prose, Section, Tag, type LayoutProps } from '@/components';
 import {
   getAuditPage,
   type AuditAction,
@@ -290,12 +290,13 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
         {audit.hero.tags.length > 0 ? (
           <Cluster as="ul" colGap="text" rowGap="tight">
             {audit.hero.tags.map((tag) => (
-              <li key={tag}>{tag}</li>
+              <li key={tag}>
+                <Tag>{tag}</Tag>
+              </li>
             ))}
           </Cluster>
         ) : null}
       </PageHero>
-
 
       {/* ONE BAND PER SECTION. Every band is paper: tint marks a section that matters and the
           page's asks, and nothing here has a field that could say which section that is — so the

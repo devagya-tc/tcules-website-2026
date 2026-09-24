@@ -1,0 +1,13 @@
+{
+  "$comment": "The pixel-grid texture, as geometry. Source of truth for every export — run `npm run texture -- --help`. Units are layout px; an export at @2x doubles them. Measured from Figma node 435:2744 (a shader effect on a 30% layer, over paper): every 5x5 block of the render is identical, and each row of the 3px column carries its own alpha — two dashes, a fainter seam between them, fainter caps above and below. That row structure is what makes it read as an LCD column rather than as dashes, so it is kept; only a ~3% side fringe was dropped. Alphas already include the 30% layer. Colour is the only thing a use may vary.",
+  "name": "pixel-grid",
+  "pitch": 5,
+  "cells": [
+    { "x": 1, "y": 0, "width": 3, "height": 1, "alpha": 0.035 },
+    { "x": 1, "y": 1, "width": 3, "height": 1, "alpha": 0.21 },
+    { "x": 1, "y": 2, "width": 3, "height": 1, "alpha": 0.07 },
+    { "x": 1, "y": 3, "width": 3, "height": 1, "alpha": 0.21 },
+    { "x": 1, "y": 4, "width": 3, "height": 1, "alpha": 0.035 }
+  ],
+  "defaultColor": "brandeis-500"
+}

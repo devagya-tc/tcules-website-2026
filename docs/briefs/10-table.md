@@ -37,13 +37,26 @@ Two consequences worth being deliberate about:
 ```
 COMPONENT NAME: DataTable
 
-UNRESOLVED BEFORE ANYTHING ELSE: this component may not need to exist. All 61 tables arrive as
-markdown inside a body field and Prose already styles them. The only thing Prose cannot do is stack
-below md, because a responsive stack needs per-cell markup and Prose receives an opaque string. So
-either (A) the tables stay in Prose and scroll horizontally — no component, one overflow container —
-or (B) the content seam parses tables out of the body and hands them to this component as structured
-data. This brief describes B. If you judge A sufficient, SAY SO AND STOP: establishing that no new
-component is needed is the more valuable outcome.
+RESOLVED 27 Aug 2026 — BUILD IT. This replaces an UNRESOLVED that asked whether Prose was already
+sufficient. That question was written on a false premise: that all 61 tables arrive as markdown
+inside a body field. They do not. Strapi sends a `ComponentAuditTable` block carrying
+`tableColumns[].heading`, `tableRows[].rowHeading` and `tableRows[].cells[].content` — fully
+structured, as its own block, never inside a body string. `renderTable` in
+`src/content/sources/strapi.ts:121-146` is OUR code flattening that structure into an HTML string,
+and it discards the inline marks on the way (every cell goes through `richTextToPlainText`). So the
+"seam parses tables out of the body" cost that made this a real question does not exist: the seam
+stops stringifying and returns the view model instead, which makes `renderTable` smaller rather
+than larger. No Strapi change is required.
+
+And Prose falls short in TWO ways, not one:
+
+· It cannot stack below md — a responsive stack needs per-cell markup and Prose receives a string.
+· It caps at --measure-body, so a 3-to-5-column table inside a rich-text flow is crushed to a 68ch
+  reading column while the section column is 1176 wide. Measured on a live service page: the table
+  held 668px, every mono row header wrapped to two lines, and roughly 510px of the column sat empty
+  beside it. Removing Prose's cap does not fix this either — an opaque string still cannot carry
+  per-column behaviour: a key column that must not wrap, an aligned numeric column, a column that
+  must not shrink.
 
 WHAT IT IS (one sentence): The site's one table — a first column that is the row header, 2 to 5 data
 columns, 3 to 8 rows, an optional caption, and a stacked reading order below the md breakpoint.
@@ -52,13 +65,21 @@ WHERE IT APPEARS (which pages, how many per page): 56 routes, 61 tables. Service
 Expertise 8, Audit 4, Company 3, Service L2 3, Tool 5, Hub 2, Legal 1. Always inside a
 ContentSection's child slot.
 
-CLOSEST THING THAT ALREADY EXISTS: Prose, which styles markdown tables today. This exists only if the
-content seam starts emitting tables as structured data — see the note above.
+CLOSEST THING THAT ALREADY EXISTS: Prose, whose stylesheet styles `table`, `th`, `td` and `caption`
+today because the seam hands it a table as an HTML string. That is the thing being replaced — see
+the resolution above. Prose keeps those rules for the long-form bodies that legitimately contain a
+markdown table; this component is what a `table` BLOCK becomes.
 
 REFERENCES (links, screenshots, described precedents): Column counts across the 61: 2 columns on 12
 tables, 3 on 34, 4 on 13, 5 on 2. Rows run 3 to 8, most often 5 or 6. In every single one the first
 column is the key — real examples: "Uncertainty", "Failure condition", "Visible symptom",
 "Recommended action".
+
+TWO TEXT FIELDS, NOT ONE. The Strapi block carries both `caption` and `summary`, and the seam
+renders them differently today: `summary` becomes a `<p>` immediately BEFORE the table, `caption`
+becomes a `<caption>` as the table's first child, which Prose sets above the table with a
+--gap-tight seam beneath it. The view model should carry both, and the spec has to say what each one
+is and where it sits — the brief below only ever mentioned the caption.
 
 HARD CONSTRAINTS (must / must not):
 - The first column is the ROW HEADER in every one of the 61. Not a styling choice — semantics.
@@ -79,8 +100,11 @@ OPEN TO YOUR JUDGEMENT (what I have not decided):
 - Whether the row header stays visually distinct from the data cells on desktop, and by what — weight
   or ground, not both.
 - Whether a 5-column table at the 392px track inside a three-up grid is a case that has to work, or
-  a case the content should not create.
-- Whether the caption sits above or below. It is optional, so whichever reads better when absent.
+  a case the content should not create. Note that all 61 sit in a ContentSection's child slot, so
+  the track they actually get is the full 1176 content column.
+- Whether the caption sits above or below, and where `summary` sits relative to it. There is a
+  precedent rather than a blank page: the seam puts `summary` before the table and Prose puts
+  `caption` above it. Both are optional, so decide for the case where each is absent.
 ```
 
 ## The system you are designing into

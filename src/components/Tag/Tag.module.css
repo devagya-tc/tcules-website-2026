@@ -1,0 +1,263 @@
+/* Tag — the site's small label mark, built to docs/specs/Tag.md.
+
+   Every colour, distance, radius, duration and easing comes from --tag-*, declared in
+   tokens/components/tag.css and re-declared once per surface there. This file states no value of
+   its own: it decides STRUCTURE and which token each state reads, and nothing else. That is what
+   lets the same markup answer a paper hero, a tint filter band, an ink section and a blue pivot
+   without knowing which one it is standing on.
+
+   ── The two numbers, and the zero ───────────────────────────────────────────────
+   24 box / 8 inline padding / 0 block padding. The zero is the load-bearing one: a 13px sans
+   label's line box is 18.85 and a 12px mono label's is 14.4, so centred in a 24px minimum with no
+   block padding to reconcile, BOTH variants are exactly 24 tall. Give either one block padding and
+   the shared geometry the component rests on is gone.
+
+   ── Rule order is load-bearing ──────────────────────────────────────────────────
+   `.filter` is declared BEFORE its states so the rest edge is the base every state overrides.
+   Hover is declared BEFORE pressed, so pointer-down wins while the pointer is also hovering.
+   `.selected` is declared LAST, so a held chip keeps its `-pressed` paint under the pointer and
+   under the keyboard rather than falling back to hover — the equal-specificity pairs are decided
+   by source order, and moving a block breaks a state.
+
+   ── box-shadow does two flat jobs, and neither is elevation ─────────────────────
+   --tag-shadow is --shadow-none: nothing here is raised off the page. box-shadow is nevertheless
+   the drawing mechanism for the edge and the ring both, because it is the only property that
+   COMPOSES — one element has one `outline`, and one `border` would put the chip's text a pixel in
+   from the mark's, which at 24px is visible in a row that mixes them. So the edge is an INSET
+   layer, the ring is two OUTWARD layers, and a focused chip declares all three at once. Every
+   other component in this system draws its ring the same way; see Button.module.css. */
+
+/* ── Base · the box both variants share ────────────────────────────────────────
+   The minimum is stated in BOTH axes, so a one-character chip is a 24 x 24 square that meets the
+   AA target floor without a special case, and a mark in a container that offers no width never
+   collapses.
+
+   NOTHING WRAPS, for the reason no Button wraps: a small boxed object that reaches a second line
+   stops reading as one of a row of siblings and starts reading as a paragraph in a border. It is
+   also what holds the two variants to one height at every width — wrapped, they would diverge to
+   37.69 and 28.80, because --text-caption runs at 1.45 and --text-ui-sm at 1.2.
+
+   max-inline-size and overflow are the CONTAINMENT BACKSTOP for a label that cannot fit its
+   column, not a truncation feature: every measured label fits the narrowest real column (worst
+   case 267.96 in the 311px a 375px phone gives), so nothing on the site reaches them. There is no
+   ellipsis — a tidy "…" would make a content defect look intentional. (The label span below is
+   there to be trimmed, not to be truncated.)
+
+   Known boundary: those two properties contain the box wherever its containing block has a
+   definite width — a grid track, a `dd`, a block container. Inside `Cluster as="ul"` the `li` is
+   the flex item, and an `li` with the default `min-width: auto` takes its minimum from the
+   nowrap text inside it, so a tag wider than the whole line pushes the row rather than clipping.
+   Only a pasted URL reaches that, and the fix is `min-inline-size: 0` on the flex item, which
+   belongs to Cluster and not here. Recorded in the spec's § 12 row 2 rather than left to be found.
+
+   BLOCK-LEVEL, NOT INLINE-LEVEL. An inline-flex box sits on a line box, and inside
+   `Cluster as="ul"` — every call site — that line box belongs to the `li`: its strut is the
+   body's 25.59 line height, taller than the box, and overflow: hidden puts the box's baseline at
+   its bottom edge, so the `li` grew to 26.42 and the tag sat 2.42 low in it, the two variants
+   0.11 apart. vertical-align cannot answer it, because the strut alone outgrows 24. A
+   block-level box makes no line box, so the `li` is exactly the tag. fit-content keeps the
+   shrink-wrap inline-flex gave, in a block container and against a stretching grid track alike.
+   A tag is never set inside a sentence — Prose's <mark> is what does that — so nothing is lost.
+
+   flex lays out this box's OWN inside — one label, optionally one glyph — which is a
+   control centring its own parts and not an arrangement. Anything that arranges two tags is
+   Cluster's job, and there is no rule in this file that touches a sibling. */
+.tag {
+  display: flex;
+  inline-size: fit-content;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--tag-size-md);
+  min-inline-size: var(--tag-size-md);
+  max-inline-size: 100%;
+  /* Read straight from the gap scale rather than aliased to a --tag-* name: the scale's own
+     entry for this step is "icon to label, CHIP PADDING", so it is the answer and not a
+     coincidence, and a --tag-padding-x renaming it would be the --sec-gap mistake. Button's
+     --btn-padding-x is not the same case — that one is --space-8 correcting a mono side bearing,
+     and it needed a name to carry the justification. */
+  padding-inline: var(--gap-tight);
+  /* A DELIBERATE ZERO, stated rather than left to the UA default, because it is load-bearing:
+     it is the whole reason a 13px sans label and a 12px mono one are both exactly 24 tall. */
+  padding-block: var(--space-0);
+  border-radius: var(--tag-radius);
+  white-space: nowrap;
+  overflow: hidden;
+  box-shadow: var(--tag-shadow);
+}
+
+/* ── The label · centred on its capitals, not on its line box ──────────────────
+   Centring the line box centres the font's ascent and descent, and neither face splits them
+   evenly: measured on capitals, the 13px sans sat 2.40 high and the 12px mono 1.68 high, so both
+   variants read as riding up in their box. Trimming the label to cap height and baseline makes
+   the thing the box centres the capitals themselves — both now land within 0.5 of centre, which
+   is the measurement's own resolution.
+
+   It needs its own element because text-box trims a block container or an inline box, and the
+   text directly inside a flex container is neither. The height of the tag is untouched: 24 comes
+   from min-block-size, and a trimmed label is shorter than that in both voices. A browser without
+   text-box ignores the declaration and renders exactly what it rendered before. */
+.label {
+  text-box: trim-both cap alphabetic;
+}
+
+/* ── Variant · mark ────────────────────────────────────────────────────────────
+   A ground with no edge, and NO STATES AT ALL — no hover, no focus, no cursor, no transition.
+   Nothing is hit, so no touch-target floor applies to it; nothing is focusable, so there is no
+   ring. The absence is the assertion: a hover added for symmetry would be a lie about whether the
+   thing can be operated, on ten routes at once.
+
+   Sans in the author's own case, because free text arrives unconstrained. --text-caption has no
+   tracking companion and takes no case transform — both are properties of the role, and this rule
+   restates neither. */
+.mark {
+  font: var(--text-caption);
+  color: var(--tag-mark-ink);
+  background-color: var(--tag-mark-bg);
+}
+
+/* ── Variant · filter · rest ───────────────────────────────────────────────────
+   An edge with no ground. NO background is declared here and none is declared on hover, because
+   --tag-filter-bg and --tag-filter-bg-hover do not exist — the chip is an outline and a label in
+   every state, and those two absences are the assertion.
+
+   Mono uppercase is the label voice every control in this system speaks, and the case comes from
+   the ROLE rather than from this component or from the caller's string: --text-mono-case beside
+   the `font:`, for the same reason the tracking is a companion — `font:` carries no transform.
+
+   The inline-end padding gives back --tag-label-trim, the letter-space --text-ui-sm-tracking adds
+   after the label's last capital. `.hasGlyph` restores it below.
+
+   The transition is colour only, on all three painted parts at the same 140ms so the box never
+   looks half-changed. Nothing here moves geometrically in any state. */
+.filter {
+  font: var(--text-ui-sm);
+  letter-spacing: var(--text-ui-sm-tracking);
+  text-transform: var(--text-mono-case);
+  padding-inline-end: calc(var(--gap-tight) - var(--tag-label-trim));
+  color: var(--tag-filter-ink);
+  text-decoration: none;
+  box-shadow: inset 0 0 0 var(--tag-edge-width) var(--tag-filter-edge);
+  transition:
+    color var(--tag-transition-duration) var(--tag-transition-easing),
+    background-color var(--tag-transition-duration) var(--tag-transition-easing),
+    box-shadow var(--tag-transition-duration) var(--tag-transition-easing);
+}
+
+/* An anchor carrying these classes must not pick its underline back up on hover. */
+.filter:hover {
+  text-decoration: none;
+}
+
+/* The glyph, at the tag's size rather than its own. `> svg` is a class-plus-element selector, so
+   it beats Icon's single-class size rule deliberately: the glyph steps with the TAG, which makes
+   the tag the component that decides. 14 is the smallest the set has and the only one that fits —
+   a 16px glyph in a 24px box leaves 4px of clearance and reads as an icon with a label bolted on. */
+.filter > svg {
+  /* Physical rather than logical here, and it is the one place in this file that is. A glyph box
+     is square, so there is no direction to be correct about — and this rule has to beat Icon's own
+     `.md`, which sets `width`/`height`. Same property, same specificity mechanism, byte-identical
+     to the rule that already does this job in Button.module.css. Everything with a direction —
+     the paddings, the minimums, the label trim — is logical. */
+  width: var(--tag-glyph-size);
+  height: var(--tag-glyph-size);
+}
+
+/* ── Filter · hover and focus ──────────────────────────────────────────────────
+   BLUE ARRIVES ONLY HERE. Blue appears on nothing in this system that is not clickable, so
+   spending it at rest on a row of chips that are merely present spends it on the wrong thing; a
+   chip says LINK at the moment a reader asks and says nothing before.
+
+   Focus shows exactly what hover shows, per the fixed state model, plus the ring below. */
+.filter:hover,
+.filter:focus-visible {
+  color: var(--tag-filter-ink-hover);
+  box-shadow: inset 0 0 0 var(--tag-edge-width) var(--tag-filter-edge-hover);
+}
+
+/* ── Filter · pressed ──────────────────────────────────────────────────────────
+   Not a deeper blue — the surface's own INK, in both the line and the label. Hover and pressed
+   differ in hue rather than in weight, which is legible at a glance and does not depend on
+   remembering which value was paler.
+
+   background-color is declared even though it resolves to the surface's own ground on paper, tint
+   and ink. It moves on the blue surface only, where the ramp forces a fill; declaring it here on
+   all four is what keeps that one exception from needing a surface-specific rule.
+
+   A press is immediate: easing a press makes a control feel unresponsive. */
+.filter:active {
+  color: var(--tag-filter-ink-pressed);
+  background-color: var(--tag-filter-bg-pressed);
+  box-shadow: inset 0 0 0 var(--tag-edge-width) var(--tag-filter-edge-pressed);
+  transition-duration: var(--duration-instant);
+}
+
+/* ── Filter · the focus ring ───────────────────────────────────────────────────
+   :focus-visible only, never :focus, so a pointer press never draws it. Two OUTWARD layers over
+   the surface's own gap colour, composed with the edge's inset layer in one declaration because
+   one element has one box-shadow — set the ring alone here and the chip loses its outline for
+   exactly as long as it is focused.
+
+   The ring is the one thing focus adds that paint does not, which is why the held chip below still
+   gets one even though its paint does not answer the pointer. */
+.filter:focus {
+  outline: none;
+}
+
+.filter:focus-visible {
+  box-shadow:
+    inset 0 0 0 var(--tag-edge-width) var(--tag-filter-edge-hover),
+    0 0 0 var(--tag-ring-offset) var(--tag-ring-gap-color),
+    0 0 0 calc(var(--tag-ring-offset) + var(--tag-ring-width)) var(--tag-ring-color);
+}
+
+/* ── Filter · held ─────────────────────────────────────────────────────────────
+   A held chip is a chip that stays pressed: it reads the SAME -pressed values, and what separates
+   it from a momentary press is that it does not go away. Declared last and restated against
+   :hover, :focus-visible and :active so it survives all three.
+
+   IT HAS NO HOVER RESPONSE, and that is a decision. Its box is already at the end of the ramp —
+   there is nowhere louder to go — and repainting it back into the pale hover tint under the
+   pointer would say DESELECTED at the exact moment a reader is deciding whether to clear it. The
+   feedback for that action is the cursor, the close glyph, and on keyboard the ring.
+
+   There is no -selected colour token and no --tag-filter-bg-selected-hover; their absence is the
+   assertion. */
+.selected,
+.selected:hover,
+.selected:active {
+  color: var(--tag-filter-ink-pressed);
+  background-color: var(--tag-filter-bg-pressed);
+  box-shadow: inset 0 0 0 var(--tag-edge-width) var(--tag-filter-edge-pressed);
+}
+
+/* Held AND focused — the state a keyboard user is in immediately after choosing. The paint stays
+   at -pressed and the ring is added on top, which is the pair that proves the reversal survives
+   focus rather than falling back to hover paint. */
+.selected:focus-visible {
+  color: var(--tag-filter-ink-pressed);
+  box-shadow:
+    inset 0 0 0 var(--tag-edge-width) var(--tag-filter-edge-pressed),
+    0 0 0 var(--tag-ring-offset) var(--tag-ring-gap-color),
+    0 0 0 calc(var(--tag-ring-offset) + var(--tag-ring-width)) var(--tag-ring-color);
+}
+
+/* ── Filter · with a glyph ─────────────────────────────────────────────────────
+   In practice the held chip only. The inline-end padding is restored IN FULL, because the trailing
+   element is then the glyph rather than a tracked capital and there is no letter-space to take
+   back — which is why --tag-label-trim is conditional rather than part of the padding.
+
+   The chip is 19px wider than the same chip unselected (14 glyph + 4 gap + 1 restored trim), so a
+   filter row can re-wrap when a selection changes. That happens on a navigation, never under the
+   pointer, because nothing but `selected` puts a glyph there. */
+.hasGlyph {
+  gap: var(--tag-glyph-gap);
+  padding-inline-end: var(--gap-tight);
+}
+
+/* Every state still renders — colour and edge arrive at once instead of over 140ms — because the
+   states are paint, not movement. There is nothing to lose. */
+@media (prefers-reduced-motion: reduce) {
+  .filter {
+    transition-duration: var(--duration-instant);
+  }
+}
