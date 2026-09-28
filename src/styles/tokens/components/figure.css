@@ -56,7 +56,6 @@
      --lcrd-content-min-xs already sets: below it a caption in --text-caption starts
      breaking on very short lines instead of wrapping on words. */
   --fig-min-xs: 192px;
-
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────

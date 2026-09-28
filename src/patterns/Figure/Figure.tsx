@@ -51,12 +51,15 @@ export type FigureProps = {
   note?: string;
 };
 
+/* Section's column is min(100vw − 64px, 1240px): the 1240 cap is reached at 1304. */
+const FIGURE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
+
 /**
  * Figure — an image with a caption and an optional quieter note, built to docs/specs/Figure.md.
  *
  * It fills whatever inline space its parent gives it and asks nothing of that parent: no slot, no
  * context, no surface prop. Whichever `Section`, `PageHero` or future `ContentSection` established
- * `data-surface` is what the three `--fig-*` colours resolve against, so the same markup is
+ * `data-surface` is what the two `--fig-*` inks (and Media's capture rule) resolve against, so the same markup is
  * correct on paper, on a tint panel, in an ink band and on the blue pivot — including a tint panel
  * nested inside an ink section.
  *
@@ -70,9 +73,6 @@ export type FigureProps = {
  * fixed 3:2 centre crop that is right for `ListCard`'s marker is deliberately not generalised here.
  * Its edge is Media's, by kind, and radius 0 on every kind (ch05 §6).
  */
-/* Section's column is min(100vw − 64px, 1240px): the 1240 cap is reached at 1304. */
-const FIGURE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
-
 export function Figure({ image, caption, note }: FigureProps) {
   /* An empty note is treated as absent, an empty caption is not, and the asymmetry is deliberate
      rather than an oversight. `note` is optional, so `note=""` is indistinguishable from no note
