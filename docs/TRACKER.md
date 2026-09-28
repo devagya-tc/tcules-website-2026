@@ -40,11 +40,11 @@ fix lives in the component or its tokens, not in a route.
 
 Read-only. The output is a decision, not code.
 
-- [ ] **1.0** Revisit the foundations before the components that sit on them: the type ladder
+- [x] **1.0** Revisit the foundations before the components that sit on them: the type ladder
       (H1/H2 and card-heading wrapping with real long titles), the gap scale, the Section/Layout
       grid and breakpoints, media ratios, focus states. Most of it has shipped; this checks it against
       the handoff's "build now" list and the brand framework, and records what to refine.
-- [ ] **1.1** Write `docs/component-audit.md`. For each of the 25 shipped components, record:
+- [x] **1.1** Write `docs/component-audit.md` (decided 28 Sep; rulings in its §6). For each of the 25 shipped components, record:
       - **Jobs it must serve:** from the handoff's page families and semantic inventory.
       - **Arrangements it must offer:** from the brand's visual treatments. For example, PageHero
         currently has one left-aligned layout, but has to serve routing, situation-led, proof-led and
@@ -62,6 +62,11 @@ Read-only. The output is a decision, not code.
 - [ ] **1.2** Comp the five contexts from `visual-assets-plan.md` in Claude Design, using the audit's
       verdicts. Do the no-visual version first. This is where "is it beautiful" gets answered, before
       any code does.
+- [ ] **1.4** Illustration concepts and asset inventory (runs alongside 1.2; needs no code). From
+      `visual-assets-plan.md`: for each of the ~26 illustrations, the one-line message, the brief answered in
+      ch05 §4d order, and the read-back test. For each case study, run §9a to decide the cover and banner kind
+      (cut-out or registry archetype). Also inventory the client work and photography already cleared for use.
+      Output: `docs/illustration-concepts.md`, starting with the six service lines.
 - [ ] **1.3** Fill in Phase 2 below from 1.1 + 1.2: one task per component, in dependency order.
 
 ## Phase 2 — Component overhaul
