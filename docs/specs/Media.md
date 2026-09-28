@@ -232,7 +232,7 @@ floor. A screen reader announces the `alt` and nothing else. Reduced motion: not
 | Zero / one / many | one image per Media; any number per page |
 | Missing optional slot | no `sources` → single `src`; no `kind` → capture (M3); no `panel` → none |
 | Empty required-ish text | `alt=""` → decorative, rendered as an empty attribute, never omitted |
-| Narrow track at 767 / 326 | scales with its track; the 326 check is the 390 capture of `/design/media` |
+| Narrow track at 767 / 326 | scales with its track; band 8 of `/design/media` renders every kind at 326, and the 390 capture renders the whole page there |
 | Parent that does not size it | intrinsic in an unsized flex row resolves `100%` against the row; the pattern gives it a track. No minimum of its own — a figure's 192 floor is Figure's |
 | Logical properties | `inline-size`/`block-size` throughout |
 | Nested surface | the rule token is declared on all four surfaces (§6) |
@@ -269,8 +269,8 @@ identical markup, the illustration on blue labelled forbidden; (3) cut-out witho
 without a panel, then on each of the three panels, one with a shadow; (3b) panels on ink; (4) panel/shadow on
 kinds that refuse them, and the no-kind record beside the capture; (5) delivery — sources with the printed
 srcset, priority, and a no-sources asset; (6) intrinsic vs fill in a 3:2 card box, a capture and a panel in fill,
-and a 160 thumbnail box; (7) a 1:5 and an 8:1 asset; (8) every kind in a 320 track (the named track nearest 326;
-the 390 capture is the real 326); (9) tint nested between ink bands; states: none, said on the page.
+and a 160 thumbnail box; (7) a 1:5 and an 8:1 asset; (8) every kind in the harness's 326 `trackMobile` column (and
+the whole page at 390, where every band is in the real 326); (9) tint nested between ink bands; states: none, said on the page.
 
 ## 16 · New token requests
 
@@ -312,6 +312,6 @@ All non-blocking; each records the choice the build made.
 [x] Panel grounds argued as surface-independent. [x] No state tokens; no state exists.
 [x] One distance, a gap-scale step, argued.      [x] No --space-* reach.
 [x] No hex/rgb in the module; the shadow colour  [x] Every token named here resolves (design:check).
-    is derived in primitives.css.                [x] 326 row: the 390 capture, plus a 320 track.
+    is derived in primitives.css.                [x] 326 row: trackMobile, plus the 390 capture.
 [x] Do's and Don'ts are greps or specimen bands. [x] §17: 9 questions, none blocking.
 ```

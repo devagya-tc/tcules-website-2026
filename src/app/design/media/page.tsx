@@ -91,8 +91,8 @@ const SIZES_QUARTER =
 /* columns {base:1, md:2}, colGap gutter (32). */
 const SIZES_HALF =
   '(min-width: 1304px) 604px, (min-width: 768px) calc(50vw - 48px), calc(100vw - 64px)';
-/* A tile track at Layout's md width (320), which never exceeds the column. */
-const SIZES_TRACK_MD = '320px';
+/* The harness's 326 mobile column. */
+const SIZES_MOBILE = '326px';
 
 const KINDS: readonly { label: string; image: MediaImage; note: string }[] = [
   {
@@ -498,21 +498,23 @@ export default function MediaSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>8 · The narrow row</h2>
+            <h2>8 · The 326 row</h2>
             <p>
-              Every kind in a 320 track — Layout&rsquo;s md, the nearest named track to the 326
-              mobile column, so the 1440 capture shows the narrow case beside the wide ones. The
-              true 326 check is this page&rsquo;s 390 capture, where every band above renders in
-              the real 326 column.
+              Every kind in the mobile column — 326, a 390 viewport less Section&rsquo;s two
+              gutters, the width ch05 B3 approves every image at. The harness&rsquo;s{' '}
+              <code>trackMobile</code> frame puts that column on the 1440 capture beside the wide
+              bands; the 390 capture of this page renders every band above in the real one.
             </p>
           </Layout>
-          <Track size="md">
+          <Layout columns="fit" minTrack="lg" colGap="gutter" rowGap="stack" align="start">
             {KINDS.map(({ label, image }) => (
-              <Specimen key={label} title={`${label} at 320`}>
-                <Media image={image} sizes={SIZES_TRACK_MD} />
+              <Specimen key={label} title={`${label} at 326`}>
+                <div className={s.trackMobile}>
+                  <Media image={image} sizes={SIZES_MOBILE} />
+                </div>
               </Specimen>
             ))}
-          </Track>
+          </Layout>
         </Layout>
       </Section>
 
