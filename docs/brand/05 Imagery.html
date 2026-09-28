@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><title>Tcules · Digital Branding Framework · 05 Imagery</title><link rel="stylesheet" href="dbf.css"><script src="doc-page.js"></script><script src="image-slot.js"></script>
+<style>
+.doc{max-width:100%;min-width:0}.doc table{table-layout:fixed;width:100%}.doc td,.doc th{overflow-wrap:anywhere;word-break:break-word;white-space:normal}.doc .tok,.doc .alt{white-space:normal;overflow-wrap:anywhere}.sec,.grid,.stack,.attr,.opts,.opt,.ddv,.diag,figure{min-width:0;max-width:100%}.ddv figure .tmini{max-width:100%;overflow:hidden}
+.ph{position:relative;display:grid;place-items:center;background:repeating-linear-gradient(135deg,var(--tint) 0 5px,var(--paper) 5px 10px);border:1px solid var(--rule);color:var(--label);font:500 10.5px/1.3 var(--mono);text-align:center;padding:8px;overflow:hidden}
+.ph.dark{background:repeating-linear-gradient(135deg,#2a2a26 0 5px,#1b1b18 5px 10px);color:#cfcfce;border-color:transparent}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;break-inside:avoid}
+.opt{display:grid;gap:8px;padding:14px 16px 16px;border:1px solid var(--rule);align-content:start;font-size:12.5px;line-height:1.5}
+.opt.rec{border-color:var(--ink)}
+.opt .t{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.opt h4{font-size:16px}
+.rec-k{font:600 9.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--blue);white-space:nowrap}
+.opt .rule-l{font-family:var(--mono);font-size:11px;color:var(--ink);padding:8px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.opt .tr{color:var(--label);font-size:12px}
+.attr{display:grid;gap:14px;break-inside:avoid}
+.attr>h3{font-size:19px}
+.sheet td:nth-child(2){font-weight:500}
+.sheet .r{color:var(--blue);font-weight:500}
+.sheet .open{color:#b3261e}
+.sheet .done{color:var(--label)}
+.flag{color:#b3261e;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.tk{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) minmax(0,130px);gap:8px 16px;font-size:12.5px;align-items:baseline}
+.tk .tok{font-size:11.5px}
+.diag{display:grid;gap:8px}
+.diag .can{position:relative;background:var(--tint);border:1px solid var(--rule)}
+.diag .safe{position:absolute;border:1px dashed var(--blue)}
+.diag .lab{position:absolute;font:500 9.5px/1 var(--mono);color:var(--blue)}
+.ill{display:block;width:100%;height:auto;background:var(--paper);border:1px solid var(--rule)}
+.alt{font-family:var(--mono);font-size:11.5px;color:var(--ink);background:var(--tint);padding:2px 6px;text-transform:none;letter-spacing:0}
+.slot{display:grid;gap:8px}.slot .box{aspect-ratio:3/2;border:1px solid var(--rule);overflow:hidden}.slot .box.sq{aspect-ratio:1/1}.slot .cap{font-size:12px;color:var(--label)}
+image-slot{display:block;width:100%;height:100%}
+.rows{display:grid;gap:18px}
+.bd{display:grid;gap:14px;break-inside:avoid}
+.plate{position:relative;background:var(--tint)}.plate.ink{background:#1b1b18}.plate img{display:block;width:100%;height:auto}
+.mk{position:absolute;transform:translate(-50%,-50%);font:600 10px/1 var(--mono);letter-spacing:.04em;background:var(--ink);color:#fffefa;padding:3px 5px}.plate.ink .mk{background:#fffefa;color:#1b1b18}
+.leg{display:grid;gap:8px;font-size:12.5px;line-height:1.5}.leg>div{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;align-items:baseline}.leg b{font:600 10px/1.55 var(--mono);color:var(--label)}
+.dep{display:grid;gap:14px;break-inside:avoid}.dep>h3{font-size:19px}
+.xr{color:var(--blue);text-decoration:none}.xr:hover{text-decoration:underline}
+.msg{font-family:var(--mono);font-size:11.5px;line-height:1.5;color:var(--ink);border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);padding:8px 0}
+</style></head>
+<body><doc-page size="a4" margin="20mm">
+<div class="hd" slot="header"><span>Tcules · Digital Branding Framework</span><span>05 · Imagery</span></div>
+<div class="ft" slot="footer"><span>v1.0 · 25 September 2026</span><span>Decision record: <a class="xr" href="#s12">§12</a></span></div>
+<div class="doc">
+
+<section class="chapter" id="s05" data-screen-label="05 Imagery">
+<span class="n">05</span>
+<h1>Imagery</h1>
+<p class="lead">Three kinds of image, one set of rules. Client work is shown as shipped: cut out and placed on our ground, or flat where the whole layout is the subject. People are photographed in the light that is there, straight on, on a phone. Illustration is line-led, built on a stated concept, and used where there is no screen to show, and as a project's cover and banner where the product's own UI cannot carry the concept (<a class="xr" href="#s9a">§9a</a>). Every rule is checkable by looking at the image.</p>
+<p style="font-size:13px;color:var(--label)">Colour is referenced by token name; the values live in <a class="xr" href="02 Colour.html">chapter 02</a>. Type, layout and component behaviour are inherited from the design system and are not restated. There is no dark mode on the site, so no photograph or capture needs a second variant. Ink and blue are reserved surfaces, on the site and in social (<a class="xr" href="10 Social media.html#A4">chapter 10 §A4</a>), so an illustration is made for paper and paper-deep first; one placed on ink is recoloured per <a class="xr" href="#s4a">§4a</a>. Photographs marked stand-in are credited Unsplash images, which this internal document may carry and a public surface may not (<a class="xr" href="#s10">§10</a>).</p>
+</section>
+
+<section class="sec" id="s1" data-screen-label="1 Purpose">
+<header><span class="eyebrow">1 · Purpose, categories, roles</span><h2>What imagery does</h2><p>Imagery is evidence. It shows the work as it shipped, the people who made it, and the ideas that have no screen yet. It does not decorate, set a mood or fill a space.</p></header>
+<div class="rows">
+<div class="stack"><h4>Client work and mockups</h4><p>Screenshots, cut-out mockups and framed screens of shipped or unshipped work, always with written client approval. Highest volume. Leads on the website, case studies, proposals and decks. Produced to suit the product, not our site (<a class="xr" href="#s5">§5</a>).</p></div>
+<div class="stack"><h4>Team and studio</h4><p>People at work in the studio, and the studio itself. Shot on phones, in available light. Leads on About, hiring, bylines, and the content of LinkedIn and Clutch profiles; a profile's own banner and avatar follow chapter 10 §D1.</p></div>
+<div class="stack"><h4>Illustration</h4><p>Line-led artwork for a concept, service or process that has no screen to show. Built on a concept and generated from a brief (<a class="xr" href="#s4">§4</a>, <a class="xr" href="#s10">§10</a>). Leads on articles, blog posts, service pages and deck dividers, and is a project's cover and banner wherever the product's own UI cannot carry the concept (<a class="xr" href="#s9a">§9a</a>). Never as evidence on a case study.</p></div>
+</div>
+<div class="rows">
+<div class="stack"><h4>Decorative or non-decorative</h4><p>An image is non-decorative if removing it removes information the text beside it does not carry. Test: cover the image and read the page. If something is now missing, it is non-decorative and takes a caption and alt text (a project cover or banner takes no caption, <a class="xr" href="#s9a">§9a</a>) (<a class="xr" href="#s7">§7</a>). If nothing is missing, it is decorative and takes empty alt and no caption. The call is made by whoever places the image and is recorded in the CMS alt field.</p></div>
+<div class="stack"><h4>When illustration substitutes for photography</h4><p>Only when the subject has no screen and no person: a method, a service line, an abstraction, an article's idea. Illustration never substitutes for a screenshot that exists, except as a project cover or banner (<a class="xr" href="#s9a">§9a</a>) or a case-study social cover authored for its channel (chapter 10), and never depicts a person in place of a team photograph.</p></div>
+<div class="stack"><h4>What this chapter owns</h4><p>Photographs, screenshots, framed screens and illustration, including how they are exported and placed. It does not own icons (<a class="xr" href="04 Iconography.html">chapter 04</a>, up to 64px and a single glyph), charts (chapter 09), moving image (chapter 08) or composed graphics that carry type: posts, carousels, share previews and carousel covers (chapter 10). An image placed inside one of those as a plate follows this chapter. A still frame taken from motion is an image and follows this chapter.</p></div>
+<div class="stack"><h4>Which category leads on which surface</h4><p>Every surface, not only the website. Where two are named, the first leads and the second supports.</p><table style="font-size:12.5px"><thead><tr><th style="width:130px">Surface</th><th style="width:210px">Placement</th><th>Category</th></tr></thead><tbody>
+<tr><td>Website</td><td>Home, case studies</td><td>Client work</td></tr>
+<tr><td>Website</td><td>Project covers and banners</td><td>Client work as a cut-out, or illustration (<a class="xr" href="#s9a">§9a</a>)</td></tr>
+<tr><td>Website</td><td>Articles, insights, service pages</td><td>Illustration, then client work</td></tr>
+<tr><td>Website</td><td>About, careers, bylines</td><td>Team and studio</td></tr>
+<tr><td>Proposals and pitches</td><td>Throughout</td><td>Client work</td></tr>
+<tr><td>Decks</td><td>Section dividers</td><td>Illustration</td></tr>
+<tr><td>Profiles</td><td>LinkedIn, Clutch: posts and galleries (banner and avatar per chapter 10 §D1)</td><td>Team and studio</td></tr>
+<tr><td>Social</td><td>Inside a post: a cut-out or photograph in an image box, an illustration unboxed</td><td>Any, per the post's own type</td></tr>
+</tbody></table></div>
+</div>
+</section>
+
+<section class="sec pg" id="s1a" data-screen-label="1a What imagery conveys">
+<header><span class="eyebrow">1a · What imagery conveys</span><h2>What an image says about the people in it</h2><p>The sections that follow decide whether an image is accurate. This one decides what it implies, which is not the same test. One question is asked of every image before it is placed: what does this say about the people in it — the person using the work, the client, us? Five answers are permitted.</p></header>
+
+<div class="dep">
+<h3>The person using the work</h3>
+<table><tbody>
+<tr><td style="width:96px">Conveys</td><td>Capable use. The user is in command of the thing in front of them: reading it, deciding, getting the task done. Where the subject is difficulty, the difficulty is shown in the system — the screen, the flow, the step count, the data — and never on the person. A capture annotated at the point of friction (<a class="xr" href="#s2">§2</a>) carries a usability finding; a face cannot.</td></tr>
+<tr><td>Fails if</td><td>Frustration, confusion, fatigue or defeat is legible in a person: head in hands, squinting, jaw set, phone held at arm's length. The composition or the caption makes the user the cause of the problem. A before state is illustrated by an unhappy person rather than by the interface that produced the unhappiness.</td></tr>
+</tbody></table>
+<div class="ddv">
+<figure><span class="k ok">Do</span><span style="position:relative;display:inline-block;width:154px;max-width:100%"><img src="omny-detail-benefits.png" alt="Cut-out of a listing editor: a banner reading OmnyAI analyzed 64 user reviews above a list of product benefits, each with a count beside it." style="display:block;width:100%;height:auto;box-shadow:0 0 12px rgba(27,27,24,.08)"><span style="position:absolute;left:22%;top:31%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:#0048ff;color:#ffffff;display:grid;place-items:center;font:600 12px/1 var(--mono)">1</span></span><figcaption>OmnyAI · Product benefits, a cut-out at 100%. The friction is shown where it happens, one filled ring on the element the finding is about, the finding itself in the caption.</figcaption></figure>
+<figure><span class="k no">Don't</span><img src="https://images.unsplash.com/photo-1758874383583-59c39da93e40?w=1200&q=80&auto=format&fit=crop" alt="A man at a desk with a laptop, holding his head in both hands." style="display:block;width:100%;height:200px;object-fit:cover"><figcaption>The same finding put on a person. It makes the user the cause, and it evidences nothing about the product. Stand-in photograph by Vitaly Gariev on Unsplash.</figcaption></figure>
+</div>
+</div>
+
+<div class="dep">
+<h3>The client and their existing product</h3>
+<table><tbody>
+<tr><td style="width:96px">Conveys</td><td>A before state is permitted, labelled as a before and dated, shown as a state of the product under the constraints it was built in. The change is described as a change in the system — a flow, a hierarchy, a model — and the client's team is a party to it.</td></tr>
+<tr><td>Fails if</td><td>The before is undated or unlabelled, or cropped or captured to look worse than it was. The framing reads as a rescue, a clean-up or a mess we inherited. The client's own brand is made to look cheap. A named client's before appears without the approval <a class="xr" href="#s10">§10</a> requires.</td></tr>
+</tbody></table>
+<div class="ddv">
+<figure><span class="k ok">Before</span><div style="aspect-ratio:3/2;background:#efecfb;padding:16px;display:grid;gap:9px;align-content:center"><div style="display:flex;align-items:center;gap:9px;background:#e6e1fb;border-radius:999px;padding:6px 12px;width:max-content"><span style="font:600 11px/1 var(--mono);color:#4c3fa8">7</span><span style="font:400 12px/1 var(--sans);color:#2f2a4a">Durabilité</span><span style="font:400 11px/1 var(--sans);color:#9a95b8">×</span></div><div style="display:flex;align-items:center;gap:9px;background:#e6e1fb;border-radius:999px;padding:6px 12px;width:max-content"><span style="font:600 11px/1 var(--mono);color:#4c3fa8">6</span><span style="font:400 12px/1 var(--sans);color:#2f2a4a">Écologique</span><span style="font:400 11px/1 var(--sans);color:#9a95b8">×</span></div><div style="display:flex;align-items:center;gap:9px;background:#e6e1fb;border-radius:999px;padding:6px 12px;width:max-content"><span style="font:600 11px/1 var(--mono);color:#4c3fa8">4</span><span style="font:400 12px/1 var(--sans);color:#2f2a4a">Taille idéale</span><span style="font:400 11px/1 var(--sans);color:#9a95b8">×</span></div></div><figcaption>OmnyAI · Product benefits, before · 2025. A number on each chip, with nothing to say what the number counts.</figcaption></figure>
+<figure><span class="k ok">After</span><div style="aspect-ratio:3/2;background:#efecfb;padding:16px;display:grid;gap:10px;align-content:center"><div style="display:flex;align-items:center;gap:8px;background:#e6e1fb;padding:7px 11px"><span style="font:400 12px/1.2 var(--sans);color:#2f2a4a">OmnyAI analysed <strong style="font-weight:600">64</strong> user reviews</span></div><div style="display:flex;align-items:center;gap:10px"><span style="font:600 11px/1 var(--mono);color:#4c3fa8;background:#e6e1fb;border-radius:999px;padding:5px 8px">16</span><span style="font:400 12px/1 var(--sans);color:#2f2a4a">Highly practical</span><span style="font:400 12px/1 var(--sans);color:#6d5ae6">+</span></div><div style="display:flex;align-items:center;gap:10px"><span style="font:600 11px/1 var(--mono);color:#4c3fa8;background:#e6e1fb;border-radius:999px;padding:5px 8px">16</span><span style="font:400 12px/1 var(--sans);color:#2f2a4a">Extra thick for durability</span><span style="font:400 12px/1 var(--sans);color:#6d5ae6">+</span></div></div><figcaption>OmnyAI · Product benefits, after · 2026. The same region of the same panel, at the same scale: the count is now sourced to the reviews it came from. A state of the product, dated, and not a judgement of whoever shipped the first one.</figcaption></figure>
+</div>
+<p style="font-size:12.5px;color:var(--label)">The two states above are redrawn at one scale to show what a pair has to do. A published pair is two cut-outs of the same part, or two whole-layout captures, each at 2× or better (<a class="xr" href="#s2">§2</a>).</p>
+</div>
+
+<div class="dep">
+<h3>Us, and seniority</h3>
+<table><tbody>
+<tr><td style="width:96px">Conveys</td><td>People doing the work at the scale they do it: a screen half-built, a board mid-argument, two people at one monitor. Sessions are documented as sessions — where someone is standing and presenting to a seated room, that is the event, the room is as full as it was, and the caption names it. Seniority is not staged: nobody is arranged above or in front of a group for the camera, and founders are photographed working like everyone else. No single face stands in for the studio.</td></tr>
+<tr><td>Fails if</td><td>The standing-and-seated arrangement is set up for the camera, or used as a portrait of authority with no session to name. Arms folded in front of a team. A lone silhouette at a window. One person on more than a third of the people images on a surface. Portrait framing, dress or grooming that differs by seniority.</td></tr>
+</tbody></table>
+<div class="ddv">
+<figure><span class="k ok">Do</span><img src="https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186795/Image_Grid_3_0332b16e8f.webp" alt="A studio session: one person standing and presenting beside a whiteboard, the rest of the team seated around it." style="display:block;width:100%;height:200px;object-fit:cover"><figcaption>A session, captioned as the session it is. Someone is standing because they are presenting, and the room is as full as it was.</figcaption></figure>
+<figure><span class="k no">Don't</span><img src="https://images.unsplash.com/photo-1758518729286-e8d94cc231f5?w=1200&q=80&auto=format&fit=crop" alt="A man in a suit posed smiling to camera in a corporate lobby." style="display:block;width:100%;height:200px;object-fit:cover"><figcaption>The same standing figure with no session to name: posed to camera, dressed differently from the team, a lobby instead of the studio. A portrait of authority. Stand-in photograph by Vitaly Gariev on Unsplash.</figcaption></figure>
+</div>
+</div>
+
+<div class="dep">
+<h3>Results and proof</h3>
+<table><tbody>
+<tr><td style="width:96px">Conveys</td><td>An image proves only what it shows. A chart inside a capture is the product's chart as it ran, and the caption says whose data it is and over what period (<a class="xr" href="#s7">§7</a>). A result we claim is claimed in words beside the image, with the measure and the period, rather than implied by the picture.</td></tr>
+<tr><td>Fails if</td><td>A capture is selected or re-run so the line rises. Unlabelled axes are presented as evidence. Demo or replaced data (<a class="xr" href="#s2">§2</a>) is implied to be live. A figure in the image cannot be sourced from the caption. A metric is drawn into an illustration (<a class="xr" href="#s4">§4</a>).</td></tr>
+</tbody></table>
+<div class="ddv">
+<figure><span class="k ok">Do</span><div style="background:#fffefa;border:1px solid #91908d;padding:14px;display:grid;gap:10px"><span style="font:600 9px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#504f49">Task completion · weekly</span><svg viewBox="0 0 240 96" style="width:100%;height:90px;display:block" aria-hidden="true"><g fill="none" stroke="#cfcfce" stroke-width="1"><path d="M34 6 V78 H236"></path><path d="M34 42 H236" stroke-dasharray="3 3"></path></g><polyline points="34,68 74,62 114,52 154,44 194,32 236,26" fill="none" stroke="#0048ff" stroke-width="2.5"></polyline><g font-family="ui-monospace, monospace" font-size="10" fill="#71706a"><text x="0" y="10">60%</text><text x="0" y="46">40%</text><text x="0" y="81">20%</text><text x="34" y="93">Jan</text><text x="214" y="93">Jun</text></g></svg></div><figcaption>Axes labelled, units named, period stated. The caption says whose data it is and over what period.</figcaption></figure>
+<figure><span class="k no">Don't</span><div style="background:#fffefa;border:1px solid #91908d;padding:14px;display:grid;gap:10px;place-items:center"><svg viewBox="0 0 240 96" style="width:100%;height:90px;display:block" aria-hidden="true"><polyline points="10,84 60,68 110,48 160,26 232,8" fill="none" stroke="#0048ff" stroke-width="3"></polyline></svg><span style="font:500 22px/1 var(--display);color:#292824">3× growth</span></div><figcaption>A line with no axes, no units and no period, captioned with a multiple. Nothing here can be sourced.</figcaption></figure>
+</div>
+</div>
+
+<div class="dep">
+<h3>Competitors and other studios</h3>
+<table><tbody>
+<tr><td style="width:96px">Conveys</td><td>They do not appear. Our work is shown against the product we were given, or against nothing.</td></tr>
+<tr><td>Fails if</td><td>A competitor's product, mark or screen appears anywhere in an image. A side-by-side invites a comparison. Another studio's work is shown as a before without its authorship stated and the client's approval. A badge, ranking or logo places us above a named party.</td></tr>
+</tbody></table>
+</div>
+</section>
+
+<section class="sec pg" id="s2" data-screen-label="2 Client work">
+<header><span class="eyebrow">2 · Client work and mockups</span><h2>Flat, as shipped, chrome stripped</h2><p>A screenshot is a record. The rules below make it one that can be checked against the live product. Client-work assets are produced in the client product's own palette; nothing of ours is added around a capture (<a class="xr" href="#s5">§5</a>).</p></header>
+<table>
+<thead><tr><th style="width:170px">Rule</th><th>Pass condition</th></tr></thead>
+<tbody>
+<tr><td>What may be shown</td><td>Shipped or unshipped work, always with written client approval (<a class="xr" href="#s10">§10</a>). Final UI only. Wireframes, sketches and prototypes appear only inside a process section and are captioned as such.</td></tr>
+<tr><td>Fidelity</td><td>Captured at device pixel ratio 2 or higher from the running product or the design file. No upscaled captures; no JPEG artefacts; type in the capture is crisp at 100% on a 2560px export.</td></tr>
+<tr><td>Device frames</td><td>On the website: none. <span class="tok">Figure</span> and <span class="tok">PageHero</span> media render the capture with a hairline rule and <span class="tok">--radius-0</span>; that rule is the frame. In decks and proposals only, a frame is permitted as a plain rectangle with the device's own corner radius, one stroke, no hardware detail, no manufacturer marks. Never: photoreal device renders, hands holding phones, laptops on desks, 3D renders. The permitted frame is a capture's: a cut-out mockup takes no frame at any size, because its silhouette is its edge (<a class="xr" href="#s2a">§2a</a>).</td></tr>
+<tr><td>Browser chrome</td><td>Stripped. The capture starts at the page's top edge. One exception: when the address bar is the subject (a URL structure, a favicon), it stays and the caption says so.</td></tr>
+<tr><td>Projection</td><td>Flat only. No perspective, no isometric, no rotation, no skew. Test: every edge of the screen is parallel to a canvas edge. (Isometric projection belongs to illustration, <a class="xr" href="#s4a">§4a</a>, and never to a real screen.)</td></tr>
+<tr><td>Elevation</td><td>A flat capture sits flat: <span class="tok">--img-frame-elevation</span> = 0. Its one edge cue is the placement's hairline rule, so it takes no shadow. Behind it, the product's own ground colour taken from its UI and nothing else: no gradient, no photograph, no pattern. A cut-out has no page edge of its own: it sits on the placement's own ground, or on the contrast panel where its edge does not hold, and may carry one shadow, <span class="tok">--img-crop-elevation</span> = 0 0 12px rgba(27, 27, 24, .08) at the 2560 export — no offset, tight spread, 8% ink — never stacked, never coloured, never with perspective (<a class="xr" href="#s2a">§2a</a>).</td></tr>
+<tr><td>Content in frame</td><td>Real content as shipped. Where content is confidential it is replaced, not obscured: fictional values of the same type and length in the same place (see redaction). No lorem ipsum, no grey blocks.</td></tr>
+<tr><td>Annotations</td><td>On a capture or a cut-out, outside a project cover (<a class="xr" href="#s9a">§9a</a>). Numbered rings: <span class="tok">--annot-ring</span> = 56px, <span class="tok">--annot-stroke</span> = 3px on the working canvas, number in mono. One filled <span class="tok">--color-brandeis-500</span> ring with a <span class="tok">--color-white</span> numeral for the point that matters; <span class="tok">--color-neutral-900</span> outline rings for the observations around it. Where the product’s own UI is blue at that spot, the filled ring takes a <span class="tok">--color-paper</span> hairline outside its stroke so it stays separable. Maximum three per image, legend in the caption, not on the image. No arrows, no callout boxes, no fills other than the one ring. On a composed graphic the legend goes in the image box's caption.</td></tr>
+<tr><td>What the image is</td><td>A part of the UI, not a whole screen, shown as a cut-out (<a class="xr" href="#s2a">§2a</a>) at every size: one component, one state or one moment — a table with its filters, a summary card, one step of a flow — at 100% pixel scale or larger, and the caption says which part it is. At small sizes the check is the type floor in <a class="xr" href="#s2a">§2a</a> rather than a pixel ratio. A whole screen appears only as a flat capture at full column, where the layout itself is the subject, and the caption says so. Below full-width, a whole screen loses the detail that made it evidence: at card, thumbnail and social sizes the part is the only thing a reader can actually see.</td></tr>
+<tr><td>The pick test</td><td>Name what a reader takes from the image, in one phrase: <em>a chart with a quarter-on-quarter change</em>, <em>a count sourced to the reviews it came from</em>. If the phrase needs a second element to make sense, or if it comes out as <em>a dashboard</em>, <em>some cards</em> or <em>a list</em>, the crop is wrong — crop tighter, or pick another part of the product. One element carries the image; whatever else is in frame is context around it, never a second subject.</td></tr>
+<tr><td>Never degraded to fit</td><td>Where a capture will not read at its placement, the crop changes and the content does not. Blurring the small type, greeking it, deleting it, redrawing the fragment with loosened spacing and enlarged type, or rebuilding it as a simplified vignette: the first three are the methods redaction below refuses, and the last two are a re-typed screen under misrepresentation. Type inside a capture that falls below legibility stays as it is, because it is content. What changes is how much of the screen is in frame, and at small sizes how few parts are in the composition (<a class="xr" href="#s2a">§2a</a>).</td></tr>
+<tr><td>Crop discipline</td><td>A crop lands on a UI element's own edge or outside it, never through one, and never through type. Where the whole screen is the subject it is full viewport width, cropped on the block axis only. Captures only: a cut-out mockup has no crop on three sides and may bleed deliberately off one or two edges (<a class="xr" href="#s2a">§2a</a>).</td></tr>
+<tr><td>Multi-screen</td><td>For captures: two or three whole screens per composition, never more. A cut-out counts parts instead (<a class="xr" href="#s2a">§2a</a>). Same scale, same projection, top edges aligned. The gap between screens is one value within a composition and is set per asset, since the asset is produced to the product (<a class="xr" href="#s5">§5</a>); it is not a brand token.</td></tr>
+<tr><td>Before and after</td><td>A pair is one comparison: the same region of the product, at the same apparent scale, cropped to the same ratio, so the change is the only difference between the two images. Different crops, different zoom levels or two different screens make a pair nobody can read. Each is labelled and dated (<a class="xr" href="#s1a">§1a</a>).</td></tr>
+<tr><td>Redaction</td><td>Method: replace. Names, emails, figures and addresses are swapped for fictional equivalents before capture, or in the design file. Blur, pixelation and black bars are not permitted in a published image; they read as censorship and are reversible. <span class="tok">--img-redact-method</span> = replace.</td></tr>
+<tr><td>Misrepresentation</td><td>Fails if any of: a feature is shown that did not ship; a screen is re-skinned or re-typed after the fact; client branding is removed without the client asking; a mobile screen is presented as desktop or the reverse; concept work is shown without "Concept" in the caption; work by another party is shown as ours.</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">The same screen at card width</h3>
+<p style="font-size:13px">Three treatments of one screen, each in the same 3:2 card box at the width a thumbnail or a feed post actually gives it. The progression is screen, panel, cut-out element, and it is not a matter of taste: the treatment is decided by the size the image will be read at, and it tightens until the thing the image is evidence for can be read. The third is the method <a class="xr" href="#s2a">§2a</a> sets out.</p>
+<div class="grid c3">
+<figure><span class="k no">Don't</span><img src="omny-card-screen.png" alt="The whole listing editor screen fitted into a card box: panels and columns are visible, no text is legible." style="display:block;width:100%;height:auto"><figcaption><strong>The whole screen.</strong> A reader sees that an interface exists and learns nothing about it. Every value, label and state is below legibility.</figcaption></figure>
+<figure><span class="k no">Don't</span><img src="omny-card-panel.png" alt="One panel of the same screen in a card box: the shape of a list is readable, the words are not." style="display:block;width:100%;height:auto"><figcaption><strong>One panel.</strong> Tighter, and still not enough: the shape of a list arrives, the content does not. A panel is a screen at card width — at feed and slide width a panel that carries its own edge may be shown whole, which is a different case (<a class="xr" href="#s2a">§2a</a>).</figcaption></figure>
+<figure><span class="k ok">Do</span><div style="aspect-ratio:3/2;overflow:hidden;position:relative;background:var(--paper)"><img src="ui-mock-panel.png" alt="The same element cut out of its page: a banner reading OmnyAI analyzed 64 user reviews, an Add all control and two benefit rows each carrying a count of 16, running off the right edge of the card box with the page's own paper behind it." style="position:absolute;width:266%;left:-28.2%;top:-66.7%;height:auto"></div><figcaption><strong>One element, cut out, at its own size.</strong> The banner, the counts and the rows all read, the ground behind is the placement's own paper, and the rows run off the right edge rather than being shrunk to end inside it. At card and feed sizes the image is a cut-out element, not a crop of a rectangle: legibility comes from pixel scale, never from reduction (<a class="xr" href="#s2a">§2a</a>).</figcaption></figure>
+</div>
+<h3 style="font-size:19px">Checked at three sizes</h3>
+<p style="font-size:13px">An asset is approved at the size it will be read at, not the size it was made at. Two checks, both on the final asset. At <strong>270px</strong> wide the element is nameable within a couple of seconds — the pick test, run at the width a feed gives it. At <strong>120px</strong> wide the image is still one recognisable shape rather than a field of grey. The third treatment above passes both; the first two fail the first. And every image placed on the website is checked at <strong>326px</strong> wide, the content column in a 390px viewport: one asset serves every width, so an image that does not survive the mobile column is not used, however it looks on desktop. No image may depend on a mobile-only crop to pass (<a class="xr" href="#s8">§8</a>).</p>
+<h3 style="font-size:19px">Where imagery of client work may go</h3>
+<p style="font-size:13px">Client work is evidence, so it goes where evidence is what the surface is for, and at every size that evidence is a cut-out (<a class="xr" href="#s2a">§2a</a>). A flat capture is kept for the one case a cut-out cannot carry: a whole layout that is itself the subject. Three placements take neither, and each has something better to carry: an illustration, a photograph, or the words alone.</p>
+<table style="font-size:12px"><thead><tr><th style="width:150px">Surface</th><th style="width:86px">Read at</th><th>Takes</th></tr></thead><tbody>
+<tr><td><span class="tok">Figure</span>, <span class="tok">PageHero</span></td><td class="num">full column</td><td><strong>A cut-out</strong>, up to five parts (<a class="xr" href="#s2a">§2a</a>). A flat capture only where the whole layout is the subject, and the caption says so. Ratios in <a class="xr" href="#s9">§9</a>.</td></tr>
+<tr><td><span class="tok">BlockCard</span></td><td class="num">326–604px</td><td><strong>A cut-out mockup</strong>, two parts at this width, composed within the component's mechanical crop (<a class="xr" href="#s9">§9</a>).</td></tr>
+<tr><td><span class="tok">ListCard</span></td><td class="num">160px</td><td><strong>A cut-out mockup</strong> of one part, composed within the 3:2 crop (<a class="xr" href="#s9">§9</a>).</td></tr>
+<tr><td>Share preview</td><td class="num">100–500px</td><td><strong>A cut-out mockup</strong> in an image box. Never the page's own hero capture recropped: a preview is authored (<a class="xr" href="10 Social media.html#C1">10 §C1</a>), and it has to survive the centre-square crop chat clients apply.</td></tr>
+<tr><td>Feed post, square or portrait</td><td class="num">300–500px</td><td><strong>A cut-out mockup</strong> of up to three parts, in an image box — 440px tall on square, 640px on portrait (<a class="xr" href="10 Social media.html#A7">10 §A7</a>).</td></tr>
+<tr><td>Carousel inner slide</td><td class="num">300–500px</td><td><strong>A cut-out mockup.</strong> One part per slide, and one scale across the set, so the reader is not re-calibrating between slides.</td></tr>
+<tr><td>Video thumbnail</td><td class="num">300–600px</td><td><strong>A cut-out</strong> of one part, for a product video, in a 480 × 480 image box beside the title; otherwise an unboxed illustration. A podcast thumbnail carries the guest in a square profile box instead, and no client work (<a class="xr" href="10 Social media.html#D1">10 §D1</a>).</td></tr>
+<tr><td>Carousel cover</td><td class="num">—</td><td><strong>No.</strong> The cover states the promise and an illustration is its default graphic (<a class="xr" href="10 Social media.html#A7">10 §A7</a>). The evidence arrives on the inner slides.</td></tr>
+<tr><td>Instagram story</td><td class="num">—</td><td><strong>No.</strong> Seen for a couple of seconds at arm's length, and the platform's 240px bands and link sticker leave no room for an element at its own scale. A frame carrying client work is never reshared to one (<a class="xr" href="10 Social media.html#D1">10 §D1</a>).</td></tr>
+<tr><td>LinkedIn cover, profile background</td><td class="num">—</td><td><strong>No.</strong> 1128 × 191 and 1584 × 396 are too shallow for any element to survive, and the platform's own avatar covers the lower left (<a class="xr" href="10 Social media.html#D1">10 §D1</a>).</td></tr>
+</tbody></table>
+<div class="ddv">
+<figure><span class="k ok">Do</span><div class="tmini" style="min-height:130px;background:#f3f1ea;border-color:transparent;place-items:center"><div style="width:190px;aspect-ratio:16/10;background:#fffefa;border:1px solid #91908d;display:grid;grid-template-rows:14px 1fr;"><div style="border-bottom:1px solid #dedede"></div><div style="padding:10px;display:grid;gap:5px;align-content:start"><i style="display:block;height:5px;width:60%;background:#292824"></i><i style="display:block;height:4px;width:80%;background:#cfcfce"></i><i style="display:block;height:4px;width:70%;background:#cfcfce"></i><i style="display:block;height:8px;width:34px;background:#0048ff;margin-top:6px"></i></div></div></div><figcaption>Flat capture, chrome stripped, hairline rule, the product's own ground behind. Every edge parallel to the canvas. Shown whole because the subject here is the projection, not the content; at a real placement a flat capture is kept for a layout that is itself the subject, and anything less is a cut-out (<a class="xr" href="#s2a">§2a</a>).</figcaption></figure>
+<figure><span class="k no">Don't</span><div class="tmini" style="min-height:130px;background:linear-gradient(135deg,#dbe4ff,#edf79b);border-color:transparent;place-items:center;overflow:hidden"><div style="width:190px;aspect-ratio:16/10;background:#fffefa;border:1px solid #91908d;transform:perspective(500px) rotateY(-18deg) rotateX(6deg);box-shadow:14px 18px 30px rgba(0,0,0,.35);display:grid;grid-template-rows:14px 1fr;"><div style="border-bottom:1px solid #dedede;display:flex;gap:3px;padding:4px 6px"><i style="width:5px;height:5px;border-radius:50%;background:#b2b1ae"></i><i style="width:5px;height:5px;border-radius:50%;background:#b2b1ae"></i><i style="width:5px;height:5px;border-radius:50%;background:#b2b1ae"></i></div><div style="padding:10px;display:grid;gap:5px;align-content:start"><i style="display:block;height:5px;width:60%;background:#292824"></i><i style="display:block;height:4px;width:80%;background:#cfcfce"></i></div></div></div><figcaption>Perspective, drop shadow, browser chrome, gradient behind. Four rules failed in one image.</figcaption></figure>
+</div>
+<div class="grid">
+<div class="slot"><div class="box"><image-slot id="img-client-multi" shape="rect" fit="contain" src="client-darkroast-mobile.png" placeholder="Drop a multi-screen composition"></image-slot></div><span class="cap">The exception · whole screens at full column, because the layout itself is the subject. DarkRoast at one scale, top edges aligned, on the product's ground, and the caption has to say so. A whole panel shown as one part at feed width is a different permission (<a class="xr" href="#s2a">§2a</a>).</span></div>
+</div>
+</section>
+
+<section class="sec pg" id="s2a" data-screen-label="2a Composed mockups">
+<header><span class="eyebrow">2a · Client work and mockups · cut-outs</span><h2>Cut out, assembled, read at 300px</h2><p>The default for client work at every size, because every image is also read at the 326px mobile column (<a class="xr" href="#s2">§2</a>). A rectangular capture stops working somewhere under 600px. The crop that keeps one element legible has by then lost what the element is for, and the crop that keeps the context legible has lost the words. The method below is what they take instead: the product's own UI, lifted out of its page, reduced to the few parts that carry the point, and placed straight onto the surface's ground with no frame of any kind. It is a mockup rather than a record, so the rules exist to keep it as checkable as a capture.</p></header>
+<div class="grid c2">
+<figure><img src="ui-mock-flow.png" alt="A composed product mockup: a workflow node card headed AI feature with a provider dropdown set to Google, a file input and an output panel, wired by hairline connectors to small Input and Output pills, with Run workflow and View API buttons above. No page edge and no browser window." style="display:block;width:100%;height:auto"><figcaption><strong>The part, plus its wiring.</strong> One working node, the two things it connects to, and the buttons that act on it. Four parts, a full-column composition, so each one can sit at a size that reads, and the reader takes away what the product does rather than that it exists. The connectors, their endpoint dots and the provider row overhanging the card edge are all the product's own rendering — none of them is a composition device. Everything else that was on that screen is gone.</figcaption></figure>
+<figure><img src="ui-mock-node.png" alt="The same node card at a tighter crop, bleeding off the right edge of the canvas, with the Run workflow and View API buttons above it." style="display:block;width:100%;height:auto"><figcaption><strong>The same node, one step tighter.</strong> Two parts instead of four, at a larger share of the canvas, for a narrower placement. The card runs off the right edge rather than being shrunk to fit inside it: a fragment that continues past the frame reads as part of a real product, and the bleed lands in the panel's own empty area rather than through a control or a word.</figcaption></figure>
+</div>
+<figure><img src="ui-mock-panel.png" alt="A composed product mockup: the OmnyAI AI Assistance panel, cut out with no page behind it. A three-step pill row sits across its top edge and overhangs it on the left. Inside, a banner reads OmnyAI analyzed 64 user reviews, above an Add all control, three benefit rows each carrying a count of 16, and a pink analyzed-category card with product thumbnails and plus 10 products." style="display:block;width:100%;height:auto;max-width:620px"><figcaption><strong>The upper bound: a whole panel, at feed and slide width.</strong> A dialog that carries its own edge is one part, so the whole of it may be in frame — and this is as much as the method holds. The step row states where in the flow the reader is; the counts, the category card and the product thumbnails are the product's real content, down to its own spelling. One accent family carries the panel and a second marks the sourced card. At card width this asset fails the scale floor and the composition has to drop to two parts.</figcaption></figure>
+<table>
+<thead><tr><th style="width:170px">Rule</th><th>Pass condition</th></tr></thead>
+<tbody>
+<tr><td>When it is used</td><td>Every placement of client work: <span class="tok">Figure</span> and <span class="tok">PageHero</span> media, <span class="tok">BlockCard</span> and <span class="tok">ListCard</span> media, feed posts, carousel inner slides, share previews, video thumbnails, slides. The one exception is a whole layout that is itself the subject, which is a flat capture at full column (<a class="xr" href="#s2">§2</a>).</td></tr>
+<tr><td>What it is made of</td><td>The product's own UI at export fidelity, from the running product or its design file. Parts may be moved and panels may be truncated. Nothing is redrawn: type, weight, spacing inside a part, radii, iconography and colour stay as the product renders them.</td></tr>
+<tr><td>Cut out, not framed</td><td>No page edge, no window, no device. Mastered as PNG with alpha and served as WebP with alpha (<a class="xr" href="#s8">§8</a>), so the placement's own ground shows through, and the silhouette is the frame. Where the product's UI does not hold its edge against that ground — below 3:1 between the part's outer edge and the adjacent ground — the cut-out sits on a flat panel of <span class="tok">--color-paper</span>, <span class="tok">--color-paper-deep</span> or <span class="tok">--color-neutral-950</span> filling the slot: no hairline, no radius, no second shadow on the panel. The panel is chosen for contrast; if the edge holds, there is no panel. Repainting the product to match our ground is never permitted.</td></tr>
+<tr><td>How much is in frame</td><td>One working part, plus what it connects to and what acts on it. Up to five parts at full column, up to three on a single feed post, one per carousel slide, two in a <span class="tok">BlockCard</span>, one in a <span class="tok">ListCard</span> thumbnail. A dialog or panel that carries its own edge counts as one part and may be shown whole, which is the method's upper bound; beyond it the image is a screen again, and a screen does not read here. At card width a panel is a screen (<a class="xr" href="#s2">§2</a>).</td></tr>
+<tr><td>Scale floor</td><td>Scale to the type, not to the part. At the placement's width the mockup's leading label reads at 15px or more and its smallest label at 11px or more, measured on the final asset. Where the parts cannot all clear the floor, parts come out of the composition — nothing is scaled down to fit (<a class="xr" href="#s2">§2</a>).</td></tr>
+<tr><td>Bleed</td><td>A part may run off one or two canvas edges to say it continues past the frame. Never all four, never through type, and the bleed edge lands in a part's own empty area rather than through a control.</td></tr>
+<tr><td>Overhang</td><td>A part sits outside its container's edge where the product puts it there — an open dropdown, a popover, a floating toolbar — or where a control the container owns is lifted whole to sit across its edge, as the step row does above. An overhang stays intact, overlaps ground rather than other content, and never changes what the control says. Nothing else is nudged out of a container for effect.</td></tr>
+<tr><td>Connectors</td><td>The product's own, as it draws them: hairline, right-angled, with its endpoint dots. We add no arrows, curves, labels or highlights of our own; annotation stays in the caption (<a class="xr" href="#s2">§2</a>).</td></tr>
+<tr><td>Colour and elevation</td><td>The product's palette. One accent carries the part; a second appears only where the product itself uses it to mark a different kind of content, as the sourced-category card does above. Everything else stays neutral. Third-party marks stay in their own colour, because they are content. A drop shadow is permitted behind a cut-out: <span class="tok">--img-crop-elevation</span>, one per part, never stacked, never coloured, never with perspective, and none where the product draws its own.</td></tr>
+<tr><td>Copy stays as shipped</td><td>The product's own words, including its own mistakes: the category card above reads <em>House hold cleaning supplies</em> and stays that way. Correcting a client's copy inside a mockup is a re-typed screen under misrepresentation (<a class="xr" href="#s2">§2</a>). Confidential values are still replaced rather than corrected (<a class="xr" href="#s2">§2</a> redaction).</td></tr>
+<tr><td>Caption</td><td>None on a project cover or banner (<a class="xr" href="#s9a">§9a</a>). Everywhere else it names the product, names what the mockup shows, and says <em>composed from the live product</em> where parts have been moved. A composed mockup is not a record of a whole screen and cannot stand as evidence of a layout. It can stand as a before and after when both halves are cut from the same part of the same product, at one scale, and the caption says so (<a class="xr" href="#s2">§2</a>). On social the set's eyebrow names the client, and the image-box caption names the part (<a class="xr" href="#s7">§7</a>).</td></tr>
+<tr><td>Fails if</td><td>Parts from two products in one composition; a state assembled that the product cannot reach; type or spacing redrawn to fit; perspective, rotation or a device frame; a drawn callout, arrow or glow; more than one shadow on a part; a UI kit part standing in for the client's.</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">The same mockup at card width</h3>
+<p style="font-size:13px">Both compositions above, each placed in the same 270 × 180 box, the width a feed card gives it. The wide one keeps its four parts and loses its labels; the tight one keeps two parts at the scale they were composed at and bleeds off the bottom edge. Fewer parts, not a smaller mockup — the same two checks as a capture apply, nameable at 270px and one recognisable shape at 120px.</p>
+<div class="ddv">
+<figure><span class="k no">Don't</span><div style="width:270px;max-width:100%;aspect-ratio:3/2;border:1px solid var(--rule);overflow:hidden;background:#fff"><img src="ui-mock-flow.png" alt="The four-part composition fitted whole into a card box: the shapes of a flow are visible, none of the labels are legible." style="display:block;width:100%;height:100%;object-fit:contain"></div><figcaption>Fitted whole. Every part is in frame at a sixth of its size, so the flow is a diagram of nothing: the node, the pills and the buttons are all below the scale floor.</figcaption></figure>
+<figure><span class="k ok">Do</span><div style="width:270px;max-width:100%;aspect-ratio:3/2;overflow:hidden;background:#fffefa"><img src="ui-mock-node.png" alt="The tighter composition in the same card box, showing the buttons, the card header and the provider row at legible size and running off the bottom edge." style="display:block;width:100%;height:100%;object-fit:cover;object-position:left top"></div><figcaption>Composed for the box. The buttons, the node's name and the provider row all read, and the card carries on past the bottom edge instead of being resized to end inside it.</figcaption></figure>
+</div>
+</section>
+
+<section class="sec pg" id="s3" data-screen-label="3 Team and studio">
+<header><span class="eyebrow">3 · Team and studio photography</span><h2>People at work, in the light that is there</h2><p>Shot on phones, by the team, in the studio. The art direction is decided (<a class="xr" href="#s3a">§3a</a>); these rules hold with it.</p></header>
+<table>
+<thead><tr><th style="width:170px">Rule</th><th>Pass condition</th></tr></thead>
+<tbody>
+<tr><td>Subject matter</td><td>People working, talking, sketching, reviewing; the studio's rooms, tools and surfaces. Never appears: legible client work on any screen or wall; client names on boards or documents; anyone who has not consented; children; alcohol; other companies' branding as the subject.</td></tr>
+<tr><td>Camera</td><td>The phone's main camera at 1× or 2×. No ultrawide, no digital zoom past 2×, no filters, no live effects. Portrait mode (synthetic background blur): off. The blur edge halos at 2560px.</td></tr>
+<tr><td>Portrait framing</td><td>Head and shoulders, subject facing camera, eye line in the upper third of the frame. Headroom no more than 10% of frame height above the top of the head. Shot square at capture, or composed for a square crop, and the placement keeps 1:1 everywhere: website, social and decks. Never letterboxed (<a class="xr" href="10 Social media.html#B2">chapter 10 §B2</a>).</td></tr>
+<tr><td>Environmental framing</td><td>Subject occupies 25–50% of frame width; the room is legible around them. Eye line off camera. Camera at the subject's eye height; horizon and verticals level (test: door frames and screen edges are parallel to the canvas edges).</td></tr>
+<tr><td>Direction on a shoot</td><td>Directed candid. Subjects are placed, then asked to work; no eye contact with the camera except in portraits; no pointing at screens, no staged laughter, no handshakes.</td></tr>
+<tr><td>Backgrounds</td><td>The studio only: a plain wall or the working environment. No seamless paper, no branded backdrop, no green screen, no outdoor location shoots. Client work on background screens is blanked before the shot, not after.</td></tr>
+<tr><td>Two shoots, one brand</td><td>A new set passes if it matches the last on all of: available light with white balance to the dominant source (<a class="xr" href="#s3a">§3a</a>), 1× or 2× main camera, straight-on level framing, no grain, full tonal range, no treatment, and this table. Because light varies by hour and room, the tonal rule (neutral greys, no clipping) is what makes two sets match; check it on every select.</td></tr>
+<tr><td>Individual v group</td><td>Individual for profiles, bylines and quotes. Group for About and careers, up to six recognisable faces, every one consented. Larger groups are shot so faces beyond six are not recognisable (turned away, out of focus).</td></tr>
+<tr><td>Consent and review</td><td>Written consent before publishing, scoped to the surfaces named in <a class="xr" href="#s1">§1</a>. Subject reviews and approves the selects before first publication. Opt-out at any time, honoured on every surface we control at the next deploy. On leaving Tcules, a person's images are withdrawn from active surfaces at the next deploy unless they opt in to remain.</td></tr>
+</tbody></table>
+<div class="grid c3">
+<div class="slot"><div class="box sq"><image-slot id="img-team-portrait" shape="rect" src="https://images.unsplash.com/photo-1758876021212-a87517fc8954?w=1600&q=80&auto=format&fit=crop" credit="Photo by Vitaly Gariev on Unsplash" credit-href="https://unsplash.com/@silverkblack" placeholder="Drop a portrait"></image-slot></div><span class="cap">Portrait · stand-in. Facing camera, eye line in the upper third, available light, shot square and never masked (<a class="xr" href="#s6">§6</a>).</span></div>
+<div class="slot"><div class="box"><image-slot id="img-team-env" shape="rect" src="https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186770/Image_Grid_2_0a225c3d79.webp" placeholder="Drop an environmental shot"></image-slot></div><span class="cap">Environmental · two people at one screen, the room legible around them, no eye contact with the camera.</span></div>
+<div class="slot"><div class="box"><image-slot id="img-studio" shape="rect" src="https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186507/Image_1_c048010957.webp" placeholder="Drop a studio shot"></image-slot></div><span class="cap">Studio · the wall mid-project. Available light, nothing legible that belongs to a client.</span></div>
+</div>
+</section>
+
+<section class="sec pg" id="s3a" data-screen-label="3a Photography art direction">
+<header><span class="eyebrow">3a · Photography art direction · Decided</span><h2>Five attributes, one rule each</h2><p>Each applies to team and studio photography. The pass condition is the rule; the note says why.</p></header>
+<table>
+<thead><tr><th style="width:170px">Attribute</th><th style="width:44%">Rule</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>Light</td><td>Available light, mixed. Whatever is on: windows, desk lamps, screens. No added light, no flash, no gels. White balance set to the dominant source so that a grey card in frame measures neutral (R, G and B within 5).</td><td>Chosen because it is how the studio is actually shot. The cost is colour casts that differ shot to shot; the white-balance test and the tonal rule below are what hold two sets together.</td></tr>
+<tr><td>Crop and framing</td><td>Straight-on, level. Camera at subject eye height, verticals parallel to the frame edge, subject centred or on a third with nothing between camera and subject.</td><td>Matches <a class="xr" href="#s2">§2</a>'s flat rule for screens: one projection across every category.</td></tr>
+<tr><td>Depth of field</td><td>No rule. Shot on phones; depth of field is whatever the main camera gives. Synthetic blur (portrait mode) is off, <a class="xr" href="#s3">§3</a>.</td><td>A depth-of-field rule cannot be met on a phone, so it is not written.</td></tr>
+<tr><td>Grain</td><td>None added. Sensor noise below visible at 100% on the 2560 export; shoot at the lowest ISO the light allows, and reject a select whose noise is visible in the shadows at 100%.</td><td>Keeps photographs and screenshots looking like one brand; both are crisp at 100%.</td></tr>
+<tr><td>Tonal range and saturation</td><td>Full range, neutral. Blacks and whites present, no clipping in either. Greys neutral (as above). Skin tones unshifted. No preset, no split tone, no saturation adjustment.</td><td>The one thing that has to be checked on every select, because the light rule guarantees nothing else will match.</td></tr>
+</tbody></table>
+</section>
+
+<section class="sec pg" id="s4" data-screen-label="4 Illustration">
+<header><span class="eyebrow">4 · Illustration</span><h2>Where there is no screen</h2><p>An illustration is not decoration and not a mood. It is a concept, drawn: a construction whose arrangement carries one message, which a reader recovers by looking at it. An illustration that cannot be read back to a message is decoration, and decoration has no placement (<a class="xr" href="#s1">§1</a>).</p></header>
+<table>
+<thead><tr><th style="width:170px">Rule</th><th>Pass condition</th></tr></thead>
+<tbody>
+<tr><td>The message</td><td>Every illustration has one line, written before it is made: what this illustration says. One sentence, present tense, about the subject and not about the illustration — "the intent set in the first decision is still there in what ships", "a component crosses from design to build without being translated". The line is filed with the asset.</td></tr>
+<tr><td>Read-back</td><td>Whoever places the illustration says what it shows, without the line in front of them, and the two match. If the illustration carries several readings, or none, it is remade. An illustration that passes every other rule and fails this one does not ship.</td></tr>
+<tr><td>Structure carries it</td><td>The message is carried by arrangement: what sits on what, what is aligned, what is repeated, what is open, what is marked (<a class="xr" href="#s4a">§4a</a>). Not by a label, and not by a metaphor the reader has to be told. Cover the labels and the illustration still says most of it.</td></tr>
+<tr><td>When used</td><td>The subject is a concept, method, service, process or article idea with no shipped screen to show. Test: if a real screenshot could stand in this position, use it and the illustration fails. Two exceptions: a project's cover and banner, which convey the concept, and a case-study social cover authored for its channel (chapter 10). For the cover and banner, <a class="xr" href="#s9a">§9a</a> decides which kind does it.</td></tr>
+<tr><td>When not used</td><td>Never as a substitute for <em>evidence</em>: where client work is the subject, a real capture must stand, so the body of a case-study page and the image boxes inside a case-study social set carry cut-outs. A project's cover and banner convey its concept, as a product-UI cut-out or an illustration (<a class="xr" href="#s9a">§9a</a>). A case-study social cover is authored for its channel and may carry an illustration that diagrams the problem, provided the set still shows the product in an image box (<a class="xr" href="10 Social media.html#A7">chapter 10 §A7</a>). Never to depict a person in place of a team photograph. Never as a decorative background (<a class="xr" href="#s6">§6</a>).</td></tr>
+<tr><td>Detail relative to placement</td><td>Checked at the smallest size it will appear at: a 3:2 <span class="tok">BlockCard</span> image at card width, or a 160px <span class="tok">ListCard</span> thumbnail, and at the 326px mobile column. Line weight holds at any size (<a class="xr" href="#s4a">§4a</a>), so what is checked is detail — no two objects merging, and the message still arriving. Where it does not, simplify: fewer elements, not smaller ones — a few bars and blocks in place of dense UI, larger dots at a wider pitch. Never ship a different illustration at the smaller size.</td></tr>
+<tr><td>Illustration v icon</td><td>An icon is one Solar Bold glyph at 64px or below, in the current ink (<a class="xr" href="04 Iconography.html">chapter 04</a>). Anything generated or drawn by us, anything above 64px, or any composition of more than one element is illustration and follows this chapter. Icons are never enlarged into illustrations; illustrations are never shrunk into icons.</td></tr>
+<tr><td>Never illustrated</td><td>Client logos or products; real, identifiable people; competitors' products; awards and badges; anything a photograph or screenshot already exists for, except a project cover or banner chosen by <a class="xr" href="#s9a">§9a</a>. Human figures: none. A person appears as their place — a seat, a station, a marked tile — never as a body; people are photographed (<a class="xr" href="#s3">§3</a>).</td></tr>
+<tr><td>Method</td><td>Generated from a written brief (<a class="xr" href="#s10">§10</a>) answered in the order of <a class="xr" href="#s4d">§4d</a>, then corrected by hand until it meets <a class="xr" href="#s4a">§4a</a> row by row. Generation artefacts are fixed rather than tolerated: broken lines, doubled edges, axes that are nearly but not quite parallel, stray marks, pseudo-text.</td></tr>
+<tr><td>Format</td><td>SVG, and the SVG is the asset. It is placed as SVG wherever the surface renders SVG. Where an asset is flattened later — a social export, a deck, a PDF, a raster thumbnail — it is exported from the SVG at that asset's size, and the SVG stays filed with it (<a class="xr" href="#s8">§8</a>).</td></tr>
+<tr><td>Text and numbers</td><td>No prose inside the image. Annotation labels that name parts of the illustration are permitted per <a class="xr" href="#s4b">§4b</a>. A number that is only information — a date, a price, a metric, a count in a stat line — is never illustrated and never set inside the illustration; it is type in the layout around it (chapter 10). A number appears inside an illustration only where the quantity itself is what the illustration is about, and then it is constructed on the illustration’s own axes as counted or measured form, not set as type. Generated pseudo-text (glyph-like marks that spell nothing) fails the image.</td></tr>
+</tbody></table>
+</section>
+
+<section class="sec pg" id="s4a" data-screen-label="4a Illustration direction">
+<header><span class="eyebrow">4a · Illustration · Direction</span><h2>Isometric line</h2><p>Flat planes in parallel projection, drawn in one line weight. Blue draws the system; peridot marks the one item that travels through it (<a class="xr" href="#s4b">§4b</a>). Lines over surfaces, on paper and on ink.</p></header>
+<table>
+<thead><tr><th style="width:170px">Rule</th><th>Pass condition</th></tr></thead>
+<tbody>
+<tr><td>Projection</td><td>Parallel. Each horizontal axis runs two units across to one unit down (26.57°); verticals stay vertical. No vanishing point, no perspective, no rotation off those axes. Test: any two edges parallel in the object are parallel in the illustration and measure the same slope.</td></tr>
+<tr><td>Placed by formula</td><td>Every point is placed in flat plane coordinates and projected; nothing is nudged by eye, so edges on different objects stay parallel. For a point (x, y) at height z, on a plane whose left corner is (ox, oy): <span class="v">sx = ox + (x + y) × 0.7071</span> and <span class="v">sy = oy + (y − x) × 0.3536 − z × 0.8660</span>.</td></tr>
+<tr><td>Construction</td><td>Built, not sketched. Planes are flat: a face with an outline and no thickness, standing panels included. Three forms show thickness: the plinth, a low raised block that lifts an object off its plane (<a class="xr" href="#s4b">§4b</a>), kept low; the carried item; and a cylinder that is itself the form. A volume's side faces follow one light, from the upper right, so the left-facing side is always the darker of the two. Depth comes from stacking and position, not from edges. No freehand line, no wobble, no sketch texture.</td></tr>
+<tr><td>Elevation</td><td>Objects that share a ground share an elevation, and their bases meet it; nothing floats unless floating is the point. Where elevation does differ, the difference carries meaning — a stack of layers, one object lifted on a plinth — and every object's base sits on a plane that exists in the illustration. Test: name the plane each object stands on. If an object has none, it is misdrawn, not stylised.</td></tr>
+<tr><td>Size and stacking</td><td>Main planes are 400–640 units wide on the 1000-unit source canvas. Stacked planes sit at equal vertical spacing. A point on a lower plane is hidden where y − x is less than 400 − 2.45 × the gap (in z units), so echoes on lower planes are placed well clear of that line, toward the front corner.</td></tr>
+<tr><td>Occlusion</td><td>Objects are opaque. A nearer object hides what is behind it, using the plane face in the ground's own colour. What is behind shows through in two cases, and the illustration makes clear which: the nearer object is unbuilt or proposed, so it is dashed, with no fill or at most an echo tint; or the message is the relationship between front and back — continuity across layers, a thing inside a container, a cutaway — so the nearer object is outline-only throughout. Mixed treatment within one class of object fails: six seats are all opaque or all open, never four and two.</td></tr>
+<tr><td>Line v fill</td><td>Line-led. Every object is drawn in outline. Fills are the plane face, the one solid blue plane, the carried item and its echoes (<a class="xr" href="#s4b">§4b</a>), and a plinth's side faces. Fails if filled area exceeds line-bounded open area.</td></tr>
+<tr><td>Line weight</td><td>One weight, with three named exceptions. <span class="tok">--ill-stroke</span> = 1.5px for every outline and all UI detail, round joins and caps, held constant on screen at every size: <span class="tok">vector-effect: non-scaling-stroke</span> on every stroked path. Dashed and dotted lines carry the same weight. The exceptions are ratios of it and are non-scaling too: the ink seam at 1.75× (2.6px), a peridot outline on the blue plane or on ink at 1.25× (1.9px), and the carried item's path at 5× (7.5px). Test: open the file at 320px and at 2560px; the line measures the same in both, and the illustration reads in both.</td></tr>
+<tr><td>Dashes</td><td><span class="tok">--ill-dash</span> = 6 4 for every dashed outline: a ground, a boundary, an echo, a leader. <span class="tok">--ill-dash-connector</span> = 8 6 for a blue connector between objects, which ends in a small solid blue diamond. A dashed edge is context, a limit, or something not yet built. A solid edge is a thing that exists.</td></tr>
+<tr><td>Texture</td><td>A dot grid marks a raw or unresolved surface: dots of 2.2 units at 30% line colour, on a 28–40 unit pitch. Hatching at 13% marks a cut or standing face. Shipped surfaces stay plain. On the solid blue plane the dots are paper at 40%.</td></tr>
+<tr><td>Corners</td><td>Square. The only curves are circles and ellipses that are themselves the form: an intent ring, a cylinder.</td></tr>
+<tr><td>Ground</td><td>Transparent, so the page's ground shows through. An illustration never sits inside a box: no hairline, no panel, no frame and no shadow, in any placement — its edges are its own lines. The source is a 1000 × 1000 canvas with the object filling 70–80% of it; that is the working file, not a placement. Each placement's ratio and subject area are set where the placement is (<a class="xr" href="#s9">§9</a>, <a class="xr" href="#s9a">§9a</a>), and a placement that crops mechanically (<span class="tok">BlockCard</span>, <span class="tok">ListCard</span>) still crops, so an illustration for a card is recomposed at the card's ratio. Colours are chosen for the ground it is placed on (below); an illustration for a second ground is a second export from the same source.</td></tr>
+<tr><td>Figures</td><td>None. A person is represented by their place — a seat, a station, a marked tile — never by a body. People are photographed (<a class="xr" href="#s3">§3</a>).</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">Palette by ground</h3>
+<p style="font-size:13px">Paper, tint and ink. An illustration is not placed on blue: the solid blue plane would disappear into it.</p>
+<table>
+<thead><tr><th style="width:150px">Role</th><th style="width:38%">On paper and tint</th><th>On ink</th></tr></thead>
+<tbody>
+<tr><td>Line</td><td><span class="tok">--color-brandeis-500</span></td><td><span class="tok">--color-brandeis-300</span></td></tr>
+<tr><td>Plane face<br><span style="font-size:11.5px;color:var(--label)">so a nearer plane hides a farther one</span></td><td>The ground's own colour: <span class="tok">--color-paper</span> or <span class="tok">--color-paper-deep</span></td><td>The ground's own colour: <span class="tok">--color-neutral-950</span></td></tr>
+<tr><td>Solid blue plane<br><span style="font-size:11.5px;color:var(--label)">exactly one per illustration</span></td><td><span class="tok">--color-brandeis-500</span>. Detail on it switches to <span class="tok">--color-paper</span> at 40–80%</td><td><span class="tok">--color-brandeis-500</span>, its edges redrawn in the line colour; detail in <span class="tok">--color-paper</span> at 40–80%</td></tr>
+<tr><td>Carried item, solid<br><span style="font-size:11.5px;color:var(--label)">once per illustration</span></td><td><span class="tok">--color-peridot-400</span>, solid <span class="tok">--color-neutral-950</span> outline. Where it shows thickness, its left side face is <span class="tok">--color-peridot-600</span> and its right takes the top's <span class="tok">--color-peridot-400</span></td><td><span class="tok">--color-peridot-400</span> on the face that reads flat; side faces <span class="tok">--color-peridot-600</span> with a <span class="tok">--color-neutral-950</span> hairline, so the volume reads without glare</td></tr>
+<tr><td>Carried item, echo</td><td><span class="tok">--color-peridot-200</span>, or <span class="tok">--color-peridot-400</span> at 40%, with a dashed <span class="tok">--color-neutral-950</span> outline. On the blue plane: dashed <span class="tok">--color-peridot-400</span> outline over <span class="tok">--color-neutral-950</span> at 25%</td><td>Dashed <span class="tok">--color-peridot-400</span> outline, no fill</td></tr>
+<tr><td>Path</td><td colspan="2"><span class="tok">--color-peridot-400</span> at 40–55%, at the path weight. Routes follow the grid axes and run down plane edges; they never cut diagonally across the illustration.</td></tr>
+<tr><td>Ink emphasis<br><span style="font-size:11.5px;color:var(--label)">the seam, the item's outline, the chip leader</span></td><td><span class="tok">--color-neutral-950</span>. Never a plane, never UI</td><td>The item's outline stays <span class="tok">--color-neutral-950</span>; the seam and the chip leader turn <span class="tok">--color-paper</span></td></tr>
+<tr><td>Plinth faces</td><td>Paper plinth: left <span class="tok">--color-brandeis-200</span>, right <span class="tok">--color-brandeis-100</span>. Blue plinth: left <span class="tok">--color-brandeis-700</span>, right <span class="tok">--color-brandeis-600</span>. Plinth in progress, peridot only where the plinth is the carried item: top <span class="tok">--color-peridot-200</span>, left <span class="tok">--color-peridot-300</span>, right <span class="tok">--color-peridot-200</span>. Thin edges of standing panels and inner walls: <span class="tok">--color-brandeis-50</span></td><td>Left <span class="tok">--color-brandeis-900</span>, right <span class="tok">--color-brandeis-800</span>; the top takes the ground's colour. Thin edges: the ground's colour</td></tr>
+<tr><td>Texture</td><td><span class="tok">--color-brandeis-500</span>: dots at 30%, hatching at 13%</td><td><span class="tok">--color-brandeis-300</span>: dots at 30%, hatching at 13%</td></tr>
+<tr><td>Annotation</td><td>Concept chip: <span class="tok">--color-neutral-950</span> on <span class="tok">--color-peridot-400</span>. Part label: <span class="tok">--color-brandeis-500</span></td><td>Concept chip: <span class="tok">--color-neutral-950</span> on <span class="tok">--color-peridot-400</span>. Part label: <span class="tok">--color-brandeis-300</span></td></tr>
+<tr><td>No new hues</td><td colspan="2">Every value is a token above or an alpha of blue, ink or paper. No gradients, no shadows, no glows, no colour ramps — a dot field is a pattern, not a gradient. Illustration is the one place peridot appears as a fill, and every peridot mark in an illustration is the carried item or the concept chip's block, which points at it and counts with it as the illustration's one peridot mark (<a class="xr" href="#s4b">§4b</a>).</td></tr>
+</tbody></table>
+</section>
+
+<section class="sec pg" id="s4b" data-screen-label="4b Illustration vocabulary">
+<header><span class="eyebrow">4b · Illustration · Vocabulary</span><h2>One item, followed through a system</h2><p>Every illustration picks one item and shows it at one or more points in a system. The item keeps its identity; its treatment shows how real it is at each point. The forms, marks and labels below are what the system is drawn with.</p></header>
+<h3 style="font-size:19px">The carried item</h3>
+<table>
+<thead><tr><th style="width:170px">Rule</th><th>Pass condition</th></tr></thead>
+<tbody>
+<tr><td>One item</td><td>A single thing to follow: a value, a component, an action, an intent. Everything peridot in the illustration is that item, or the concept chip's block that points at it. If a peridot mark is neither, it is blue. Peridot used as a general highlight on unrelated elements loses the thread between them.</td></tr>
+<tr><td>One solid</td><td>The item is solid peridot with a solid ink outline exactly once, where it is real to the user: shipped, on screen, tapped.</td></tr>
+<tr><td>Echoes</td><td>Every other appearance is an echo, coloured per <a class="xr" href="#s4a">§4a</a>. Dashed for proposed, solid for built.</td></tr>
+<tr><td>Paths</td><td>Where the item travels between layers or objects, the route is traced as a path (<a class="xr" href="#s4a">§4a</a>), or as a dashed ink thread where it holds one position on several planes.</td></tr>
+<tr><td>One solid blue plane</td><td>Exactly one filled blue surface per illustration, to anchor the composition and give it weight. Everything else is plane face with blue line work.</td></tr>
+</tbody></table>
+<p style="font-size:13px">Four echo treatments exist because the Intent Stack tells a progression (<a class="xr" href="#s4c">§4c</a>). An illustration without stages needs only two: echo and solid.</p>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;break-inside:avoid">
+<div style="display:grid;gap:8px;align-content:start"><div style="height:84px;display:grid;place-items:center;background:#fffefa"><div style="position:relative;width:56px;height:56px;border-radius:50%;border:1.5px dashed #1b1b18;background:rgba(215,240,74,.4)"><i style="position:absolute;left:12px;top:14px;width:9px;height:9px;border-radius:50%;background:#d7f04a;outline:1.5px solid #1b1b18"></i><i style="position:absolute;left:32px;top:26px;width:7px;height:7px;border-radius:50%;background:#d7f04a;outline:1.5px solid #1b1b18"></i><i style="position:absolute;left:19px;top:37px;width:6px;height:6px;border-radius:50%;background:#d7f04a;outline:1.5px solid #1b1b18"></i></div></div><span class="mono">Glimmer</span><span style="font-size:12.5px;line-height:1.5">Loose peridot dots in a dashed ink circle. Raw signal.</span></div>
+<div style="display:grid;gap:8px;align-content:start"><div style="height:84px;display:grid;place-items:center;background:#0048ff"><div style="width:52px;height:52px;border-radius:50%;border:1.9px dashed #d7f04a;background:rgba(27,27,24,.25);display:flex;align-items:center;justify-content:center;gap:5px"><i style="width:7px;height:7px;border-radius:50%;background:#d7f04a"></i><i style="width:7px;height:7px;border-radius:50%;background:#d7f04a"></i><i style="width:7px;height:7px;border-radius:50%;background:#d7f04a"></i></div></div><span class="mono">Named</span><span style="font-size:12.5px;line-height:1.5">Dashed peridot outline over 25% ink, on the blue plane.</span></div>
+<div style="display:grid;gap:8px;align-content:start"><div style="height:84px;display:grid;place-items:center;background:#fffefa"><div style="width:56px;height:56px;border:1.5px dashed #1b1b18;background:#edf79b"></div></div><span class="mono">Spec'd</span><span style="font-size:12.5px;line-height:1.5">Pale peridot, dashed ink outline. Planned, not real yet.</span></div>
+<div style="display:grid;gap:8px;align-content:start"><div style="height:84px;display:grid;place-items:center;background:#fffefa"><div style="width:56px;height:56px;border:1.5px solid #1b1b18;background:#d7f04a"></div></div><span class="mono">Shipped</span><span style="font-size:12.5px;line-height:1.5">Solid peridot, solid ink outline. Once per illustration.</span></div>
+</div>
+<h3 style="font-size:19px">Forms</h3>
+<p style="font-size:13px">The system is built from these forms. Most illustrations use one or two; a third is fine where the message line needs it. The read-back test in <a class="xr" href="#s4">§4</a> decides, not the count.</p>
+<table>
+<thead><tr><th style="width:170px">Form</th><th>What it is</th><th style="width:130px">Shown in</th></tr></thead>
+<tbody>
+<tr><td>Flat plane</td><td>One surface: a screen, a system or a field. The base of every illustration.</td><td>All</td></tr>
+<tr><td>Split plane</td><td>One plane divided into two states side by side, separated by the ink seam.</td><td>The Seam</td></tr>
+<tr><td>Stack</td><td>Planes at equal vertical spacing, one per layer, read bottom to top. The vertical axis orders one thing — time, dependency, abstraction — consistently within the illustration.</td><td>Intent Stack</td></tr>
+<tr><td>Plinth</td><td>A low raised block that lifts an object above its plane. With the carried item and a cylinder, one of the three forms that show thickness (<a class="xr" href="#s4a">§4a</a>).</td><td>The Seam</td></tr>
+<tr><td>Standing panel</td><td>A vertical sheet on a plane: a device screen or an output surface.</td><td>—</td></tr>
+<tr><td>Cutaway</td><td>A box with walls removed, showing the layers inside. Cut faces are hatched.</td><td>The Cutaway</td></tr>
+</tbody></table>
+<p style="font-size:13px">Within a form, these devices have carried a message before. They are a starting point, not a set of assignments; a device may do something else, provided the message line names what it is doing.</p>
+<table>
+<thead><tr><th style="width:170px">Device</th><th>What it has carried</th></tr></thead>
+<tbody>
+<tr><td>Dashed ground diamond</td><td>The field the subject sits in — a studio, a system, a market. Dashed, because context is not a thing.</td></tr>
+<tr><td>Dashed ink thread</td><td>One item holding the same position on more than one plane: how continuity has been drawn.</td></tr>
+<tr><td>Repeated tile field</td><td>A period or a series, with one tile marked or lifted as the one that matters.</td></tr>
+<tr><td>Arcs from a source</td><td>Reach, or spread.</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">UI shorthand</h3>
+<p style="font-size:13px">Interface detail on a plane uses only these marks, drawn flat on the surface in plane coordinates, in the line colour. On the solid blue plane they are paper at 40–80%. Glyph-like marks are never used (<a class="xr" href="#s4">§4</a>).</p>
+<table>
+<thead><tr><th style="width:90px"></th><th style="width:130px">Mark</th><th>Stands for</th></tr></thead>
+<tbody>
+<tr><td><i style="display:block;width:14px;height:14px;background:#0048ff"></i></td><td>Mark</td><td>Small solid square. A logo, icon or avatar.</td></tr>
+<tr><td><i style="display:block;width:72px;height:8px;background:rgba(0,72,255,.3)"></i></td><td>Text bar</td><td>Bar at 30%. A line of copy; vary the lengths.</td></tr>
+<tr><td><i style="display:block;width:56px;height:10px;background:#0048ff"></i></td><td>Heading bar</td><td>Solid bar. A title or a primary button; one per block.</td></tr>
+<tr><td><i style="display:block;width:48px;height:28px;border:1.5px solid #0048ff"></i></td><td>Block</td><td>Outlined rectangle. A card, image or panel.</td></tr>
+<tr><td><span style="display:flex;align-items:flex-end;gap:4px;height:28px"><i style="width:8px;height:12px;background:#0048ff"></i><i style="width:8px;height:22px;background:#0048ff"></i><i style="width:8px;height:16px;background:#0048ff"></i><i style="width:8px;height:28px;background:#0048ff"></i></span></td><td>Chart</td><td>Solid bars of varied height. Data.</td></tr>
+<tr><td><i style="display:block;width:56px;height:28px;background-image:radial-gradient(rgba(0,72,255,.3) 2px,transparent 2.2px);background-size:10px 10px"></i></td><td>Dot field</td><td>Dots at 30% (<a class="xr" href="#s4a">§4a</a>, texture). Raw, unresolved or not yet designed.</td></tr>
+<tr><td><span style="display:flex;align-items:center"><i style="width:48px;border-top:1.5px dashed #0048ff"></i><i style="width:8px;height:8px;background:#0048ff;transform:rotate(45deg);margin-left:2px"></i></span></td><td>Connector</td><td>Dashed line at 8 6, ending in a solid diamond. A dependency or data flow.</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">Labels</h3>
+<table>
+<thead><tr><th style="width:170px">Label</th><th>Rule</th></tr></thead>
+<tbody>
+<tr><td>Concept chip<br><span style="font-size:11.5px;color:var(--label)">one per illustration</span></td><td>Names the idea. A placement too small to read labels — a share preview, a thumbnail, a card — drops the whole annotation layer; the illustration reads without it (<a class="xr" href="#s4">§4</a>). The mono role at 600, caps, 17 units on the 1000-unit canvas with 2 units of tracking; ink on a peridot block with an ink outline. An ink arrowhead and dashed leader point at the solid item.</td></tr>
+<tr><td>Part label<br><span style="font-size:11.5px;color:var(--label)">up to two</span></td><td>Names a region of the system. The mono role at 600, caps, 18 units with 2 units of tracking, in the part-label colour with no block. A blue arrowhead and dashed leader.</td></tr>
+<tr><td>Placement</td><td>Two or three words each, uppercase. Arrowheads are 10 × 12 triangles; leaders are dashed at <span class="tok">--ill-dash</span>. Labels sit outside the object with leaders reaching in, and the annotation layer is a separate group that can be removed: the illustration still works without it (<a class="xr" href="#s4">§4</a>). Outlined on export (<a class="xr" href="#s8">§8</a>), and not the caption (<a class="xr" href="#s7">§7</a>). Labels carry words, never figures (<a class="xr" href="#s4">§4</a>).</td></tr>
+</tbody></table>
+</section>
+
+<section class="sec pg" id="s4c" data-screen-label="4c Illustrations read back">
+<header><span class="eyebrow">4c · Illustrations, read back</span><h2>Message first, then the devices that carry it</h2><p>Each illustration is given as its message line, the artwork, and the devices doing the work. Read the artwork before the legend: what it says should arrive before any label is read.</p></header>
+<div class="bd">
+<h3 style="font-size:19px">Intent → shipped</h3>
+<div class="msg">What this illustration says · The intent set in the first decision is still there in what ships.</div>
+<div class="plate" style="background:#fffefa">
+<img src="ill-intent-stack.png" alt="Four planes stacked on one vertical axis, drawn in blue line on paper: a faded field of dots at the bottom, a solid blue dotted plane above it, a plane of interface outlines, and at the top a screen with real content. The same small element sits in the same position on every plane, joined by a dashed vertical line, and arrives solid peridot on the top plane. Labels read First decision, Intent — shipped, and What ships.">
+<span class="mk" style="left:38.9%;top:77.1%">1</span><span class="mk" style="left:36.7%;top:61.1%">2</span><span class="mk" style="left:38.9%;top:45.1%">3</span><span class="mk" style="left:38.9%;top:27.8%">4</span><span class="mk" style="left:60%;top:59.7%">5</span><span class="mk" style="left:48.9%;top:37.5%">6</span>
+</div>
+<div class="leg">
+<div><b>1</b><span>The faded field of dots is the first decision: marks, not a plane. It happened, and it is not the subject.</span></div>
+<div><b>2</b><span>The strategy layer, solid and dotted — the plane with mass. What is already decided.</span></div>
+<div><b>3</b><span>The interface layer in outline only: structure, not yet a product.</span></div>
+<div><b>4</b><span>What ships, the one plane drawn with real content in it, highest because the axis is time.</span></div>
+<div><b>5</b><span>The plumb line. One position held on all four planes: that is the message, and it is structure rather than label.</span></div>
+<div><b>6</b><span>The intent, in the same place on every plane, changing state as it rises — loose dots, a dashed ring, a dashed frame, then a filled tile — and arriving solid at the top. One emphasised element, four states, never a second colour.</span></div>
+</div>
+</div>
+<div class="bd">
+<h3 style="font-size:19px">The Seam</h3>
+<div class="msg">What this illustration says · A component crosses from design to build without being translated.</div>
+<div class="plate" style="background:#fffefa;aspect-ratio:994/547">
+<img src="ill-the-seam.svg" alt="One flat plane split in two by an ink line. The left half, labelled Design, carries a dot grid; the right half, labelled Shipped, is plain with a few interface bars. A low blue plinth sits across the line with a component on it, outlined in paper, and one peridot bar in the component. A peridot chip reads No translation." style="position:absolute;inset:0;width:100%;height:100%">
+<span class="mk" style="left:20%;top:62%">1</span><span class="mk" style="left:80%;top:35%">2</span><span class="mk" style="left:64%;top:64%">3</span><span class="mk" style="left:36%;top:50%">4</span><span class="mk" style="left:53.7%;top:47.6%">5</span><span class="mk" style="left:83%;top:86%">6</span>
+</div>
+<div class="leg">
+<div><b>1</b><span>The design half carries the dot grid: a surface not yet resolved.</span></div>
+<div><b>2</b><span>The shipped half is plain, with interface detail in the shorthand.</span></div>
+<div><b>3</b><span>The ink seam, at 1.75×, is the single point the concept turns on.</span></div>
+<div><b>4</b><span>The plinth is the one solid blue plane, raised on its own thickness. It sits across the seam.</span></div>
+<div><b>5</b><span>The carried item, the component, solid once. It arrives unchanged, so it has no echo.</span></div>
+<div><b>6</b><span>The concept chip names the idea and points at the solid item. Two part labels name the halves.</span></div>
+</div>
+</div>
+<div class="bd">
+<h3 style="font-size:19px">The Cutaway</h3>
+<div class="msg">What this illustration says · One tap on the screen is carried down through every layer that makes it true.</div>
+<div class="plate" style="background:#fffefa;aspect-ratio:759/906;max-width:420px">
+<img src="ill-the-cutaway.svg" alt="A box with its front walls removed, showing three layers: an interface plane on top with a solid peridot button, a services layer with a pale peridot block, and a solid blue data layer with a dashed peridot echo above a stack of cylinders. Wide pale peridot paths run down the edges between them. Labels read One tap, What the user sees and What makes it true." style="position:absolute;inset:0;width:100%;height:100%">
+<span class="mk" style="left:33%;top:37%">1</span><span class="mk" style="left:39.1%;top:23.1%">2</span><span class="mk" style="left:75%;top:31%">3</span><span class="mk" style="left:50%;top:39%">4</span><span class="mk" style="left:33%;top:62%">5</span><span class="mk" style="left:66.2%;top:52.9%">6</span><span class="mk" style="left:50.4%;top:67.4%">7</span>
+</div>
+<div class="leg">
+<div><b>1</b><span>The cut faces are hatched; the outer wall carries the dot grid. The box is a cutaway, so what is inside shows.</span></div>
+<div><b>2</b><span>The tap, solid once, on the interface: where it is real to the user.</span></div>
+<div><b>3</b><span>The path carries the tap down, along the grid axes and plane edges, never diagonally across.</span></div>
+<div><b>4</b><span>An echo in the services layer: pale peridot, dashed ink outline.</span></div>
+<div><b>5</b><span>The data layer is the one solid blue plane; its detail is paper at 40%.</span></div>
+<div><b>6</b><span>The echo on the blue plane: dashed peridot outline over 25% ink.</span></div>
+<div><b>7</b><span>Storage in plain line. Two part labels name the top and the bottom of the system.</span></div>
+</div>
+</div>
+<p style="font-size:13px">All three follow one item through a system: solid once, echoed elsewhere, on one solid blue plane.</p>
+</section>
+
+<section class="sec pg" id="s4d" data-screen-label="4d From brief to illustration">
+<header><span class="eyebrow">4d · Illustration · Method</span><h2>From brief to illustration</h2><p>The brief (<a class="xr" href="#s10">§10</a>) is answered in this order. Each step fixes one part of the illustration.</p></header>
+<table>
+<thead><tr><th style="width:36px">№</th><th style="width:140px">Step</th><th>What it fixes</th></tr></thead>
+<tbody>
+<tr><td class="num">01</td><td>The idea</td><td>The concept in two or three words, which become the concept chip, and the message line (<a class="xr" href="#s4">§4</a>). Both are filed with the asset.</td></tr>
+<tr><td class="num">02</td><td>The item</td><td>The one thing that carries the idea through the system. It becomes the peridot element.</td></tr>
+<tr><td class="num">03</td><td>The system</td><td>The forms that hold the item (<a class="xr" href="#s4b">§4b</a>), and which surface is the solid blue plane.</td></tr>
+<tr><td class="num">04</td><td>The route</td><td>Where the item is solid and where it is an echo. Paths or a thread connect them where they sit on different layers.</td></tr>
+<tr><td class="num">05</td><td>The detail</td><td>The remaining surfaces, filled sparingly with the UI shorthand. Shipped surfaces stay plain.</td></tr>
+<tr><td class="num">06</td><td>The labels</td><td>The concept chip pointing at the solid item, and up to two part labels. Then the checks in <a class="xr" href="#s4">§4</a>, labels off.</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">Checklist</h3>
+<table>
+<tbody>
+<tr><td style="width:36px" class="num">□</td><td>One idea, and one carried item that expresses it.</td></tr>
+<tr><td class="num">□</td><td>Every peridot mark is the carried item, solid once and echoed elsewhere, or the concept chip's block that points at it.</td></tr>
+<tr><td class="num">□</td><td>Exactly one solid blue plane, built from the forms and the UI shorthand.</td></tr>
+<tr><td class="num">□</td><td>Every edge projected from plane coordinates; every outline 1.5px, non-scaling. Planes flat; thickness only on a plinth, the carried item or a cylinder.</td></tr>
+<tr><td class="num">□</td><td>Dashed for proposed, solid for built.</td></tr>
+<tr><td class="num">□</td><td>No gradients, shadows, perspective or new hues.</td></tr>
+<tr><td class="num">□</td><td>One concept chip, up to two part labels, on a removable layer.</td></tr>
+<tr><td class="num">□</td><td>Reads at its smallest placement with labels off (<a class="xr" href="#s4">§4</a>).</td></tr>
+</tbody></table>
+<div class="bd">
+<h3 style="font-size:19px">Test · Closed loop</h3>
+<p style="font-size:13px">Made from the steps above and nothing else, to check that this section is enough to extend the set.</p>
+<div class="msg">What this illustration says · What users do feeds straight back into the product.</div>
+<div class="plate" style="background:#fffefa;aspect-ratio:881/544">
+<img src="ill-closed-loop.svg" alt="Two stacked planes: a product plane in blue line with interface bars and blocks, and below it a solid blue usage plane with a paper dot grid. A solid peridot feature sits on the product plane; its dashed echo sits on the usage plane. Pale peridot paths run down the left edge and back up the front edge. A chip reads Closed loop; labels read Product and Usage." style="position:absolute;inset:0;width:100%;height:100%">
+<span class="mk" style="left:31.3%;top:41.3%">1</span><span class="mk" style="left:45.9%;top:52.4%">2</span><span class="mk" style="left:49.8%;top:65.6%">3</span><span class="mk" style="left:25%;top:70%">4</span><span class="mk" style="left:54.7%;top:73.3%">5</span>
+</div>
+<div class="leg">
+<div><b>1</b><span>Form: a stack of two planes. The product plane carries a mark, text bars, a heading bar and blocks.</span></div>
+<div><b>2</b><span>Item: a product feature, solid where it ships.</span></div>
+<div><b>3</b><span>Route: paths run down the left edge into usage and back up the front edge.</span></div>
+<div><b>4</b><span>The usage layer is the solid blue plane, with a paper dot field.</span></div>
+<div><b>5</b><span>The feature's echo in usage.</span></div>
+</div>
+
+</div>
+</section>
+
+<section class="sec pg" id="s5" data-screen-label="5 Colour roles">
+<header><span class="eyebrow">5 · Imagery colour roles</span><h2>What colour may touch an image</h2><p>Three questions, in the order they come up: what goes around an image, what goes on it, and what is applied to it. The short answer to the last two is nothing.</p></header>
+<table>
+<thead><tr><th style="width:170px">Question</th><th>Answer</th></tr></thead>
+<tbody>
+<tr><td>Around an image<br><span style="font-size:11.5px;color:var(--label)">margins, bands, the canvas an illustration does not cover</span></td><td>Whoever owns the image owns the ground behind it. A capture sits on the product's own ground, taken from its UI (<a class="xr" href="#s2">§2</a>); a cut-out sits on the placement's ground, or on the contrast panel (<a class="xr" href="#s2a">§2a</a>). Our own assets sit on the ground of the surface they are placed on: <span class="tok">--color-paper</span>, <span class="tok">--color-paper-deep</span> or <span class="tok">--color-neutral-950</span>. Flat, one colour, covering the whole canvas rather than the safe area. There is no separate imagery fill colour.</td></tr>
+<tr><td>On an image</td><td>Nothing of ours, with two exceptions: the numbered annotation ring on client work, capture or cut-out (<a class="xr" href="#s2">§2</a>), and the contrast panel behind a cut-out whose edge does not hold (<a class="xr" href="#s2a">§2a</a>). No other panel, band, wash or colour of ours is laid over or around any image, on any surface. The edges that placements draw are listed where they apply: the hairline on a full-column capture (<a class="xr" href="#s2">§2</a>), the inset image-box hairline on a composed graphic (<a class="xr" href="10 Social media.html#A7">10 §A7</a>), and the permitted shadows (<a class="xr" href="#s2">§2</a>, <a class="xr" href="#s2a">§2a</a>). Blue inside a capture is the product's own UI, not ours.</td></tr>
+<tr><td>Inside an illustration</td><td>The one category we draw in our own colours, so it is the one place our palette appears inside the image. Line and fills are set by <a class="xr" href="#s4a">§4a</a> and change with the ground the illustration is placed on: blue line on paper, the lighter blue on ink. Either way there is one solid blue plane, and peridot marks only the carried item and the concept chip's block (<a class="xr" href="#s4b">§4b</a>).</td></tr>
+<tr><td>Applied to an image</td><td>No treatment. Photographs publish in natural colour under the <a class="xr" href="#s3a">§3a</a> tonal rule, captures as captured, illustrations as drawn. No tint, no duotone, no black and white, no filter, anywhere.</td></tr>
+</tbody></table>
+<div class="grid c3">
+<div class="stack"><div class="ph" style="height:56px;background:#f3f1ea"><span>paper · paper-deep · ink</span></div><span style="font-size:12px;color:var(--label)">Our assets sit on the ground of the surface they are placed on.</span></div>
+<div class="stack"><div class="ph" style="height:56px;background:repeating-linear-gradient(135deg,#dbe4ff 0 5px,#eef2ff 5px 10px)"><span>the product's own ground</span></div><span style="font-size:12px;color:var(--label)">Client work sits on whatever ground its UI uses.</span></div>
+<div class="stack"><div class="ph dark" style="height:56px"><span>no wash · no panel · no duotone</span></div><span style="font-size:12px;color:var(--label)">Nothing of ours is laid over or around an image.</span></div>
+</div>
+</section>
+
+<section class="sec pg" id="s6" data-screen-label="6 With content and type">
+<header><span class="eyebrow">6 · Imagery with content and type</span><h2>Beside text, always</h2></header>
+<table>
+<thead><tr><th style="width:190px">Rule</th><th>Pass condition</th></tr></thead>
+<tbody>
+<tr><td>Captions</td><td>Non-decorative images are accompanied by a caption (<a class="xr" href="#s7">§7</a>), except a project cover or banner (<a class="xr" href="#s9a">§9a</a>). On the website this is enforced: <span class="tok">Figure</span> requires <span class="tok">caption</span> as a string.</td></tr>
+<tr><td>Content over an image</td><td>No content sits on top of an image (<a class="xr" href="#s6a">§6a</a>); annotation does, where <a class="xr" href="#s2">§2</a> and <a class="xr" href="#s4b">§4b</a> allow it. No image ever sits behind a paragraph, a list, a table, a form or a control, on any surface. On the website no component takes an image behind text, and none will (<span class="tok">BlockCard</span> puts the image above or beside the title; <span class="tok">Figure</span> and <span class="tok">PageHero</span> media are blocks). In decks, social and print an image is a block beside or above text, inside the template's margins or bled per <a class="xr" href="10 Social media.html#A7">10 §A7</a>, never under it.</td></tr>
+<tr><td>Contrast beside imagery</td><td>No type sits on an image, so none is measured against one. Text beside an image follows <a class="xr" href="02 Colour.html">chapter 02</a>’s pairing rules against the band it sits on.</td></tr>
+<tr><td>Logo over imagery</td><td>The logo never sits on an image. It sits on the flat ground beside it, in the version that ground takes (<a class="xr" href="02 Colour.html">chapter 02</a>, <a class="xr" href="10 Social media.html#A6">10 §A6</a>). Lockup and clearance per chapter 01.</td></tr>
+<tr><td>Corner radius</td><td><span class="tok">--radius-0</span> on every image, in every medium, with one exception: the <span class="tok">SiteNav</span> rail card's image takes <span class="tok">--radius-4</span>, because the card around it is a control rather than an image placement (<a class="xr" href="#s9">§9</a>). This is what <span class="tok">Figure</span>, <span class="tok">PageHero</span> and <span class="tok">BlockCard</span> render, and decks and social follow it. A device frame, permitted in decks and proposals only, carries the device's radius (<a class="xr" href="#s2">§2</a>); the exported canvas does not.</td></tr>
+<tr><td>Masking</td><td>None. No photograph is masked to a circle or a shape. A cut-out of product UI (<a class="xr" href="#s2a">§2a</a>) is not a mask: its silhouette is the product's own. A profile photograph is a 1:1 square; the platform may mask it, we do not.</td></tr>
+<tr><td>Bleed</td><td>Never for on-page imagery. On the website images sit inside the content column that <span class="tok">Section</span> owns; in decks and print inside the template's margins (chapters 11, 12). Inside a composed graphic (chapter 10) an image sits in an image box and may bleed to two or three edges of that canvas, per <a class="xr" href="10 Social media.html#A7">10 §A7</a>.</td></tr>
+</tbody></table>
+</section>
+
+<section class="sec pg" id="s6a" data-screen-label="6a No type on an image">
+<header><span class="eyebrow">6a · Type and imagery</span><h2>No image carries content</h2><p>Words that are content — a headline, a claim, a caption, an attribution — sit beside or below an image, never over it. This holds for every kind of image and every surface. Annotation is not content: the numbered rings on a capture (<a class="xr" href="#s2">§2</a>) and the labels on an illustration (<a class="xr" href="#s4b">§4b</a>) point at the image and are part of it.</p></header>
+<table>
+<thead><tr><th style="width:220px">What the image carries</th><th style="width:90px">Type on it</th><th>Where the words go</th></tr></thead>
+<tbody>
+<tr><td>Photograph — team, studio, environment, a person at work</td><td>Never</td><td>Beside or below the image box, on the surface's own ground. On a composed graphic, in the text block the template gives it (<a class="xr" href="10 Social media.html#A7">chapter 10 §A7</a>).</td></tr>
+<tr><td>Product capture, cut-out, any UI</td><td>Never</td><td>Beside it, or in the caption (<a class="xr" href="#s7">§7</a>). Every pixel is content, and type laid over content edits the evidence.</td></tr>
+<tr><td>Illustration</td><td>Never</td><td>Outside the illustration. Labels inside an illustration are annotation, a different device, and follow <a class="xr" href="#s4b">§4b</a>.</td></tr>
+<tr><td>Any image in an image box inside a composed graphic</td><td>Never</td><td>A share preview, post, carousel frame, cover or video thumbnail keeps its type on the flat ground beside or below the image box. Designed type on a flat ground with no image under it is not type on an image, and is governed by chapter 10.</td></tr>
+</tbody></table>
+<table style="font-size:12.5px"><tbody>
+<tr><td style="width:220px">Section openers</td><td>About, careers, studio and culture open with a photograph as a block beside or below the page's title. There is no photographic-opener pattern, and none is built.</td></tr>
+</tbody></table>
+<div class="ddv">
+<figure><span class="k ok">Do</span><div style="aspect-ratio:1280/670;background:#e9e6f9;display:grid;grid-template-columns:1.05fr .95fr;overflow:hidden">
+<div style="padding:18px;display:grid;align-content:space-between;gap:14px"><span style="font:600 7.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#504f49">Case study · OmnyAI</span><span style="font:500 19px/1.16 var(--display);color:#292824;letter-spacing:-.01em">Every count on the screen traces back to a review.</span></div>
+<div style="position:relative;overflow:hidden"><img src="omny-card-element.png" alt="" style="position:absolute;left:0;right:14px;top:50%;transform:translateY(-50%);width:auto;max-width:calc(100% - 14px);height:auto;box-shadow:0 0 12px rgba(27,27,24,.08)"></div>
+</div><figcaption>Client work keeps its words off it: they sit on the surface's own ground beside the image box, at full-opacity ink. This is the only arrangement it gets.</figcaption></figure>
+<figure><span class="k no">Don't</span><div style="position:relative;aspect-ratio:1280/670;overflow:hidden;background:#e9e6f9"><img src="omny-card-panel.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(27,27,24,.78),rgba(27,27,24,0) 72%)"></div><span style="position:absolute;left:18px;right:18px;bottom:14px;font:500 19px/1.16 var(--display);color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6)">Every count on the screen traces back to a review.</span></div><figcaption>The same words over the capture, with a scrim and a shadow propping them up, covering the rows the image was evidence for. Type on a capture fails whatever else is true.</figcaption></figure>
+</div>
+</section>
+
+<section class="sec pg" id="s7" data-screen-label="7 Captions and alt text">
+<header><span class="eyebrow">7 · Captions and alt text</span><h2>Say what it shows</h2><p>The caption says what the image establishes; the note (<span class="tok">Figure.note</span>) says what it does not. Alt text describes the image for someone who cannot see it and repeats nothing the caption already says.</p></header>
+<table>
+<thead><tr><th style="width:130px">Category</th><th style="width:36%">Caption structure</th><th>Alt-text pattern</th></tr></thead>
+<tbody>
+<tr><td>Client work</td><td>Client · product or project · what is shown, in one sentence. Client attribution is mandatory; on social, the set's eyebrow naming the client is the attribution, and an image-box caption names the part (chapter 10). Add "Concept" where <a class="xr" href="#s2">§2</a> requires it. Example: <span class="alt">OmnyAI · Console · Billing overview after the navigation rebuild.</span></td><td>Screen type, then the two or three things a reader needs to know are there. <span class="alt">Desktop screenshot of a billing dashboard: a monthly total, a usage chart and a table of invoices.</span></td></tr>
+<tr><td>Team and studio</td><td>Name and role, or the activity if the subject has opted out of being named. Example: <span class="alt">Priya Nair, design lead, reviewing a component spec.</span> Studio shots: room and what is happening.</td><td>Who (as the caption names them) and what they are doing, one sentence. No physical description beyond what the image is about. <span class="alt">Priya at a standing desk, marking up a printed spec.</span></td></tr>
+<tr><td>Illustration</td><td>What the illustration stands for, as a noun phrase — the one caption that is not a sentence. Example: <span class="alt">Token layer feeding three layout primitives.</span></td><td>What is drawn, plainly. <span class="alt">Illustration: one block feeding three smaller blocks.</span></td></tr>
+<tr><td>Project cover or banner</td><td>No caption: the card title or the page's h1 names the project, and a cover makes no claim a caption would qualify (<a class="xr" href="#s9a">§9a</a>).</td><td>Product UI: the product and the part shown. <span class="alt">OmnyAI console: the billing summary card.</span> Illustration: empty, because the card title or h1 names it.</td></tr>
+<tr><td>Decorative</td><td>No caption.</td><td>Empty: <span class="alt">alt=""</span>. Never omitted, never "image" or "photo".</td></tr>
+</tbody></table>
+<div class="rows">
+<div class="stack"><h4>No text baked in</h4><p>An image contains no meaningful text of its own: no headline, no label, no attribution rendered into the pixels. Text belongs in the caption, where it can be read, translated and searched. Text that is part of a screenshot's UI is content and stays. No image of any kind carries content laid over it (<a class="xr" href="#s6a">§6a</a>). Annotation is not content: numbered rings on a capture (<a class="xr" href="#s2">§2</a>) and labels on an illustration (<a class="xr" href="#s4b">§4b</a>).</p></div>
+<div class="stack"><h4>Length</h4><p>Caption one sentence, note one sentence, alt text under 125 characters. UK English, sentence case, full stop at the end of each.</p></div>
+</div>
+</section>
+
+<section class="sec pg" id="s8" data-screen-label="8 Format baseline">
+<header><span class="eyebrow">8 · Format baseline</span><h2>Raster and vector</h2><p>HTML is a production method, not a delivery format. An image may be authored in HTML, but the deliverable is always a file at the spec below — a raster for photographs and captures, an SVG for illustration. Nothing ships as live HTML.</p></header>
+<div class="rows">
+<div class="stack"><h4>Raster</h4><table style="font-size:12.5px"><tbody>
+<tr><td style="width:130px">Format</td><td>WebP. A cut-out is mastered as PNG with alpha and served as WebP with alpha (<a class="xr" href="#s2a">§2a</a>). Share previews and OG images: PNG-24, or JPG q85 with a cut-out or a photograph in frame. Several unfurlers refuse WebP and AVIF and fall back to no image at all, so the WebP rule stops there (<a class="xr" href="10 Social media.html#C1">chapter 10 §C1</a>).</td></tr>
+<tr><td>Minimum width</td><td><span class="tok">--img-min-width</span> = 2560px, for on-page imagery. Composed graphics export at their platform master — 1080 square, 1080 × 1350 portrait or 1080 × 1920 story, 2560 × 1340 share preview, 2560 × 1440 video thumbnail (<a class="xr" href="10 Social media.html#A2">chapter 10 §A2</a>, <a class="xr" href="10 Social media.html#C1">§C1</a>, <a class="xr" href="10 Social media.html#D1">§D1</a>) — and are not covered by this line.</td></tr>
+<tr><td>Height</td><td>Intrinsic per image, for on-page images. Fixed only where a placement fixes it (<a class="xr" href="#s9">§9</a>).</td></tr>
+<tr><td>Ground</td><td>Where present, covers the entire canvas, not only the safe working area. Colour per <a class="xr" href="#s5">§5</a>: the surface’s own ground for our assets, the product ground for client work.</td></tr>
+<tr><td>Applies to</td><td>Photographs and screenshots. Illustration is vector (<a class="xr" href="#s4">§4</a>).</td></tr>
+<tr><td>Colour space</td><td>sRGB, as exported. No profile step.</td></tr>
+<tr><td>Chosen for mobile</td><td>Approved at the narrowest width it renders at: 326px on the website, and 160px for a <span class="tok">ListCard</span> thumbnail (<a class="xr" href="#s2">§2</a>). One asset serves every width; there is no mobile-only crop or art-directed variant. Derived widths and weight ceilings per placement are in <a class="xr" href="#s9">§9</a>.</td></tr>
+</tbody></table></div>
+<div class="stack"><h4>Vector</h4><table style="font-size:12.5px"><tbody>
+<tr><td style="width:130px">Format</td><td>SVG</td></tr>
+<tr><td>Used for</td><td>Illustration (<a class="xr" href="#s4">§4</a>), diagrams and marks. Never photographic.</td></tr>
+<tr><td>Source file</td><td>The SVG is the source. A raster derived from it is exported from the SVG at the size that placement needs; a raster is never the source of a second raster. The SVG is filed with every asset made from it.</td></tr>
+<tr><td>Placed as</td><td>SVG wherever the surface renders it, the website included. Flattened only where the destination cannot take a vector.</td></tr>
+<tr><td>Legibility</td><td>Line weight is constant on screen at any size (<a class="xr" href="#s4a">§4a</a>), so detail is what has to hold. Checked at card-thumbnail size and at the 326px mobile column. If two objects merge or the message stops arriving, redraw it simpler; do not ship it small.</td></tr>
+<tr><td>Text</td><td>Outlined on export, annotation labels included, so no illustration depends on a font being present.</td></tr>
+<tr><td>Dimensions</td><td>No dimensional minimum applies. The 2560px line above is raster only.</td></tr>
+</tbody></table></div>
+</div>
+</section>
+
+<section class="sec pg" id="s9" data-screen-label="9 Placement specs">
+<header><span class="eyebrow">9 · Placement specs</span><h2>Where images sit</h2><p>Measured from the website's shipped components, 24 September 2026. Widths are CSS pixels: desktop at the 1240px content column, mobile at the 326px column of a 390px viewport (<a class="xr" href="#s2">§2</a>). Every image is supplied at the master in <a class="xr" href="#s8">§8</a>. Each placement is served the derived widths below, every one resized from that one master, and each file comes in under the slot's weight ceiling. One asset serves every width; a derived width is a resize, never a recomposition.</p></header>
+<h3 style="font-size:19px">Website</h3>
+<table style="font-size:12px">
+<thead><tr><th style="width:118px">Placement</th><th style="width:104px">Renders at</th><th style="width:108px">Ratio and crop</th><th>Edge, by kind</th><th style="width:118px">Derived · ceiling</th></tr></thead>
+<tbody>
+<tr><td><span class="tok">PageHero</span> image</td><td class="num">1240 · 326</td><td>Intrinsic, uncropped</td><td>Capture: hairline, <span class="tok">--radius-0</span>. Cut-out and illustration: no edge. On a case study this is the banner, never a whole screen (<a class="xr" href="#s9a">§9a</a>). Elsewhere, a whole screen only where the layout is the subject (<a class="xr" href="#s2">§2</a>).</td><td class="num">2480 · 1240 · 652<br>350 KB</td></tr>
+<tr><td><span class="tok">PageHero</span> video</td><td class="num">1240 · 326</td><td>16:9 box (<span class="tok">--hero-media-ratio</span>)</td><td>Hairline. The box exists because YouTube serves 16:9; it does not apply to stills.</td><td>—</td></tr>
+<tr><td><span class="tok">Figure</span></td><td class="num">track · 326</td><td>Intrinsic, uncropped, 100% of the track</td><td>Capture: hairline, <span class="tok">--radius-0</span>. Cut-out and illustration: no edge. Caption required.</td><td class="num">2480 · 1240 · 652<br>300 KB</td></tr>
+<tr><td><span class="tok">BlockCard</span> media, vertical</td><td class="num">392 in three tracks, 604 in two · 326</td><td>3:2, centre crop by the component</td><td>No edge on any kind. Client work here is a cut-out (<a class="xr" href="#s2a">§2a</a>), a project card carries its cover (<a class="xr" href="#s9a">§9a</a>).</td><td class="num">1208 · 784 · 652<br>150 KB</td></tr>
+<tr><td><span class="tok">BlockCard</span> media, horizontal</td><td>The card's media column</td><td>4:3, centre crop</td><td>As vertical. Anything that must survive every card placement sits inside the master's central 4:3; the block inset holds at every ratio because the crop preserves height.</td><td class="num">as vertical</td></tr>
+<tr><td><span class="tok">ListCard</span> thumbnail</td><td class="num">160 · 160</td><td>3:2, centre crop</td><td>No edge. The same supply rule as <span class="tok">BlockCard</span>; at this size a cut-out carries one part, and an illustration is checked for one recognisable shape.</td><td class="num">320<br>40 KB</td></tr>
+<tr><td><span class="tok">SiteNav</span> rail card</td><td class="num">about 300 · sheet width</td><td>16:7, centre crop</td><td>The one rounded image: <span class="tok">--radius-4</span>, inside a card that is itself a control (<a class="xr" href="#s6">§6</a>). It takes its own asset composed for 16:7, never a project cover or a card image recropped. Illustration unboxed within the crop; client work as one cut-out part.</td><td class="num">640<br>80 KB</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">Card imagery by family</h3>
+<table style="font-size:12.5px"><tbody>
+<tr><td style="width:170px">Case studies</td><td>The project's cover (<a class="xr" href="#s9a">§9a</a>): the same asset in every card placement above, composed so the central 4:3 carries it.</td></tr>
+<tr><td>Articles, insights, services, glossary</td><td>No media. These cards are text cards by design: the title, the lead and the link carry them, and every card component supports the media-less state.</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">Share previews</h3>
+<p style="font-size:13px">Defined in <a href="10 Social media.html#C1">chapter 10, Part C</a>. What holds here: designed type on a flat ground at 1.91:1, authored at 1280 × 670 and exported at 2560 × 1340; nothing below 1200 × 630; PNG-24, or JPG q85 with a cut-out or a photograph in frame; under 1 MB; a versioned file name. A cut-out or photograph sits in an image box beside the type and an illustration sits unboxed on the ground, never under the type (<a class="xr" href="#s6a">§6a</a>); either is authored for the preview rather than taken from the page's cover. A case study's preview leads with a cut-out; podcast and video previews are authored separately from their thumbnails. A share preview is not derived from a card image, and no image is cropped to fit a different ratio.</p>
+<h3 style="font-size:19px">LinkedIn carousel</h3>
+<p style="font-size:13px">Slides are 1080 × 1350 with an 80px margin on all four sides (<a href="10 Social media.html#A2">chapter 10 §A2</a>). Imagery sits in an image box per <a href="10 Social media.html#A7">§A7</a>: bled to two or three edges with the text block below it inside the margin; inset to the margin with a 1px hairline in the ground's rule ink, 640px tall; or a square profile box (<a href="10 Social media.html#A7">§A7</a>). Client work is a cut-out, one part per slide, cleared against the type floor (<a class="xr" href="#s2a">§2a</a>). Export is one PNG per slide at 1080 × 1350, and the set as one PDF for a LinkedIn document post (<a href="10 Social media.html#A2">chapter 10 §A2</a>).</p>
+</section>
+
+<section class="sec pg" id="s9a" data-screen-label="9a Project covers and banners">
+<header><span class="eyebrow">9a · Project covers and banners</span><h2>The concept first, then the evidence</h2><p>Every project has one cover and one banner. Their job is to convey the project's concept — what the work was about — not to document a screen. That can be done by the product's own UI, cut out to the one part that carries the concept, or by an illustration chosen by archetype. Which one is decided by the steps below, and the rule works for a project with no UI at all. The registry below is the set of archetypes an illustration cover may use.</p></header>
+<h3 style="font-size:19px">What they are</h3>
+<table>
+<thead><tr><th style="width:170px">Rule</th><th>Pass condition</th></tr></thead>
+<tbody>
+<tr><td>Cover</td><td>The image that stands for the project wherever it is listed: case-study cards (<span class="tok">BlockCard</span>, <span class="tok">ListCard</span>), related work and home. Composed at 3:2. A share preview or a social cover is authored for its channel (chapter 10) and is not this asset.</td></tr>
+<tr><td>Banner</td><td>The image at the top of the project's own page, as <span class="tok">PageHero</span> media. Composed at 16:9. The same kind, subject and emphasis as the cover, recomposed for the ratio — never a crop of the cover (<a class="xr" href="#s9">§9</a>).</td></tr>
+<tr><td>Never a screenshot</td><td>No whole screen, no browser or device chrome, no page layout. Product UI appears only as a cut-out (<a class="xr" href="#s2a">§2a</a>). No client logo, wordmark or type laid over either kind (<a class="xr" href="#s6a">§6a</a>).</td></tr>
+<tr><td>Evidence stays in the body</td><td>A cover never replaces the evidence. Where shipped UI exists, the page body carries captioned captures or cut-outs (<a class="xr" href="#s2">§2</a>, <a class="xr" href="#s2a">§2a</a>) even when the cover is product UI too. Where none exists — research, an audit, a setup engagement — the body carries the artefacts that do: findings, diagrams, the deliverable.</td></tr>
+<tr><td>Caption and alt</td><td>No caption on either kind (<a class="xr" href="#s7">§7</a>). A product-UI cover takes alt text naming the product and the part; an illustration cover takes empty alt, because the card title or the h1 already names what it stands for.</td></tr>
+<tr><td>Ground</td><td><span class="tok">--color-paper</span> or <span class="tok">--color-paper-deep</span>. A cover or banner is not placed on ink or blue, so an illustration needs one export per light ground — two, paper and paper-deep, because the occluding fill is the ground's own colour (<a class="xr" href="#s4a">§4a</a>) — and a cut-out is checked against light grounds only. A cut-out whose edge does not hold takes the contrast panel in <span class="tok">--color-paper</span> or <span class="tok">--color-paper-deep</span> (<a class="xr" href="#s2a">§2a</a>); a part whose edge holds against neither is not a cover.</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">Choosing the kind and the subject</h3>
+<p style="font-size:13px">Run the steps in order and stop at the first one that returns an answer. Every input is a field on the case-study record, so the choice can be made, and checked, without taste.</p>
+<table>
+<thead><tr><th style="width:170px">Step</th><th>Rule</th></tr></thead>
+<tbody>
+<tr><td>Inputs</td><td>From the case-study record: <em>engagement activity</em>, <em>product domain</em>, <em>industry</em>, <em>primary use</em>, <em>UI available</em> (shipped or client-approved, and cleared for use per <a class="xr" href="#s10">§10</a>), and <em>what changed</em> — one noun phrase naming what the project changed ("the one record every team reads", "the handoff from design file to component").</td></tr>
+<tr><td>0 · Product UI?</td><td>The cover is product UI when all three hold: UI is available; <em>what changed</em> is a part of the product rather than a process around it; and a cut-out of that part passes both checks below (nameable at 326px, one recognisable shape at 160px). Otherwise the cover is an illustration, and steps 1–4 choose its archetype.</td></tr>
+<tr><td>1 · Activity</td><td>If the engagement's primary deliverable is not a product surface — research, an audit, a design-to-code setup, a design-system setup, a modernisation plan — the archetype is the activity. The concept is the work that was done, not the product it was done to.</td></tr>
+<tr><td>2 · Domain</td><td>Otherwise, if the product belongs to a domain in the registry below, the archetype is the domain.</td></tr>
+<tr><td>3 · Industry</td><td>Otherwise — the product is horizontal, or its domain is not registered — if the industry shaped the design, the archetype is the industry. "Shaped" is checkable: the case study's challenge names an industry-specific constraint (regulation, site conditions, clinical safety, market hours).</td></tr>
+<tr><td>4 · Use</td><td>Otherwise the archetype is how people use it: at a desk with dense data, in the field on a phone, together in real time, or in conversation with a model.</td></tr>
+<tr><td>Modifier</td><td>Where steps 1–3 answered, the primary use may add one modifier: one secondary object or arrangement from its row. It qualifies the subject and is never a second subject. At most one.</td></tr>
+<tr><td>Emphasis</td><td>Illustration: the carried item, solid once (<a class="xr" href="#s4b">§4b</a>), is <em>what changed</em>. Product UI: the part in frame is <em>what changed</em>, and nothing of ours marks it — no ring, no highlight; the product's own accent does the work (<a class="xr" href="#s2a">§2a</a>).</td></tr>
+<tr><td>No row fits</td><td>Stop. Add a registry row — motif, default emphasis and a sample message line — and have it approved before anything is made. An agent never invents a motif outside the registry.</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">Registry · illustration covers</h3>
+<p style="font-size:13px">Every motif is built from the constructions in the forms and devices in <a class="xr" href="#s4b">§4b</a>, so the family reads as one hand. A motif is a vocabulary, not a template: the emphasis and the message line make each illustration specific.</p>
+<table style="font-size:12.5px">
+<thead><tr><th style="width:80px">Axis</th><th style="width:140px">Archetype</th><th>Motif</th><th style="width:170px">Default emphasis</th></tr></thead>
+<tbody>
+<tr><td>Activity</td><td>Research</td><td>A loose dot field on a dashed ground, gathering into a few clustered tiles</td><td>The cluster that became the finding</td></tr>
+<tr><td>Activity</td><td>Audit</td><td>A regular field of existing tiles on a plane, one lifted out of it</td><td>The lifted tile: the issue that mattered</td></tr>
+<tr><td>Activity</td><td>Design-to-code setup</td><td>Two stacked planes — an outline plane above, the solid blue plane below — joined by a dashed ink thread</td><td>The one part present on both planes</td></tr>
+<tr><td>Activity</td><td>Design system</td><td>A field of small identical tiles, and larger blocks built from them</td><td>The shared tile every block is built from</td></tr>
+<tr><td>Activity</td><td>Modernisation</td><td>An existing plane in dashed outline, a new solid plane on the same footprint</td><td>The part carried over intact</td></tr>
+<tr><td>Domain</td><td>CRM</td><td>One central plinth with connectors to the seats around it</td><td>The shared record</td></tr>
+<tr><td>Domain</td><td>Productivity</td><td>A plane of tiles in columns, one tile between columns</td><td>The tile in motion</td></tr>
+<tr><td>Domain</td><td>Analytics</td><td>A plane carrying a chart in the UI shorthand (<a class="xr" href="#s4b">§4b</a>): bars of varied height that stand for data, not a plot of it</td><td>The bar that answers the question</td></tr>
+<tr><td>Domain</td><td>Workflow and automation</td><td>Nodes on a plane joined by right-angled connectors</td><td>The node where work changes hands</td></tr>
+<tr><td>Domain</td><td>AI assistant</td><td>An input tile feeding a stack of planes, one output tile beside it</td><td>The output a person reviews</td></tr>
+<tr><td>Domain</td><td>Horizontal platform</td><td>A base plane carrying several different objects</td><td>The shared base</td></tr>
+<tr><td>Industry</td><td>Construction</td><td>An outline frame of boxes on a dashed site ground</td><td>The element the product tracks</td></tr>
+<tr><td>Industry</td><td>Legal and compliance</td><td>A stack of document planes with line runs, one set apart</td><td>The document that decides</td></tr>
+<tr><td>Use</td><td>Desk, dense data</td><td>One large plane dense with text bars</td><td>The row that matters</td></tr>
+<tr><td>Use</td><td>Field, mobile</td><td>A small standing panel on a wide dashed ground</td><td>The panel</td></tr>
+<tr><td>Use</td><td>Together, in real time</td><td>Seats around one shared plane</td><td>The shared plane</td></tr>
+<tr><td>Use</td><td>In conversation</td><td>Two facing tiles, alternating up a vertical axis</td><td>The turn the product takes</td></tr>
+</tbody></table>
+<h3 style="font-size:19px">Composition and responsive behaviour</h3>
+<table>
+<thead><tr><th style="width:170px">Rule</th><th>Pass condition</th></tr></thead>
+<tbody>
+<tr><td>Budget</td><td>Illustration: one motif, at most one modifier, one emphasis; one solid blue plane and one carried item (<a class="xr" href="#s4b">§4b</a>). Product UI: one part on the cover, so the same asset serves the <span class="tok">ListCard</span> thumbnail. On the banner, a cut-out of up to five parts (<a class="xr" href="#s2a">§2a</a>). Where a check fails, objects or parts come out — lines are never thinned and nothing is shrunk to fit (<a class="xr" href="#s4">§4</a>, <a class="xr" href="#s2a">§2a</a>).</td></tr>
+<tr><td>Cover subject area</td><td>Everything that carries the concept sits inside the central 4:3 of the 3:2 frame — the tightest crop any card applies (<span class="tok">BlockCard</span> horizontal). The outer strips carry ground or bleed only, so any crop lands on them.</td></tr>
+<tr><td>Banner subject area</td><td>No placement crops the banner. The subject keeps clear space of at least a tenth of the frame's height on every side, and spans 45–70% of the frame's height, so the frame never reads as empty at the full column. A cut-out may bleed off one or two edges per <a class="xr" href="#s2a">§2a</a>.</td></tr>
+<tr><td>Axis</td><td>A subject with no reading direction centres on the frame's vertical axis. One with a direction — a flow, before and after — runs left to right.</td></tr>
+<tr><td>Checked at 160px</td><td>The cover at <span class="tok">ListCard</span> thumbnail width: the subject is one recognisable shape. Illustration: the emphasis is a distinct peridot mark at least 6px on its shortest side. Product UI: the part's silhouette reads as one object.</td></tr>
+<tr><td>Checked at 326px</td><td>The cover in a one-track card, and the banner in <span class="tok">PageHero</span>, at the 390px viewport's column. Illustration: a reader shown the registry names the right row within a few seconds; no two objects merge; no gap between two lines is under 3px. Product UI: the part is nameable (the pick test, <a class="xr" href="#s2">§2</a>) and clears the <a class="xr" href="#s2a">§2a</a> scale floor.</td></tr>
+<tr><td>One file serves every width</td><td>Illustration: SVG, 1.5px at every size by <span class="tok">vector-effect: non-scaling-stroke</span> (<a class="xr" href="#s4a">§4a</a>). Product UI: a cut-out mastered as PNG with alpha and served as WebP with alpha (<a class="xr" href="#s8">§8</a>). No mobile-only crop (<a class="xr" href="#s2">§2</a>).</td></tr>
+<tr><td>Across a page</td><td>Where a page lists more than one cover (a listing, related work, home), no two adjacent covers share an archetype, and no two adjacent product-UI covers show the same kind of part. Where the set makes that impossible, reorder the listing; never change a cover's subject to force the variety.</td></tr>
+<tr><td>Recorded with the asset</td><td>Kind, archetype row and modifier (illustration) or product and part (product UI), <em>what changed</em>, the message line (<a class="xr" href="#s4">§4</a>, illustration only), and the result of both checks.</td></tr>
+<tr><td>Generation</td><td>Illustration only: the <a class="xr" href="#s10">§10</a> brief, plus the registry row verbatim, the emphasis noun phrase, the two frames and the two checks. Product UI is never generated (<a class="xr" href="#s10">§10</a>).</td></tr>
+</tbody></table>
+</section>
+
+<section class="sec pg" id="s10" data-screen-label="10 Sourcing rights governance">
+<header><span class="eyebrow">10 · Sourcing, rights, governance</span><h2>Where images come from, and who says yes</h2></header>
+<table>
+<thead><tr><th style="width:190px">Rule</th><th>Pass condition</th></tr></thead>
+<tbody>
+<tr><td>Sourcing</td><td>Client work is captured from the product. Team and studio are shot by the team. Illustration is generated from a brief (below). Stock photography is not published; every category is first-party. A credited stand-in may appear inside an internal document, never on a public surface, and is replaced by a first-party photograph before publication.</td></tr>
+<tr><td>Records</td><td>No licence record is kept for imagery; nothing is licensed in. Two records are kept because other rules depend on them: client approval where the row below requires it, and team consent (<a class="xr" href="#s3">§3</a>). Both are filed with the asset.</td></tr>
+<tr><td>Client approval</td><td>Required, in writing, before any public use of client work: shipped or not, credited or not, and for every caption that names the client.</td></tr>
+<tr><td>Client logos · source</td><td>Used only with the written approval above, and only as the file the client supplies or publishes, as SVG. Never redrawn, retyped, traced or recoloured beyond the rule below.</td></tr>
+<tr><td>Client logos · colour</td><td>In a set of marks — a logo strip, a client wall — every mark is one colour: the ground's ink, <span class="tok">--color-neutral-900</span> on paper and paper-deep, <span class="tok">--color-white</span> on ink. Never the clients' own colours inside a set, never a tint or an opacity. A mark shown alone, beside its own case study, may be the client's full-colour version.</td></tr>
+<tr><td>Client logos · size</td><td>Marks in a set are sized to equal visual weight, not equal width: each is scaled so its bounding-box area matches the set's target area, then capped at the set's maximum height and width. A mark with unusually heavy or light strokes may be corrected by up to ±15% of that size, and the correction is recorded with the asset. The gap between marks belongs to the layout (on the website, the <span class="tok">Cluster</span>), never to a logo.</td></tr>
+<tr><td>Client logos · never</td><td>On an image, in a box or tile of its own, with a shadow, cropped, or animated.</td></tr>
+<tr><td>Team consent</td><td>Per <a class="xr" href="#s3">§3</a>: written, scoped to surfaces, reviewable before publication, revocable. Leavers: withdrawn from active surfaces at the next deploy unless they opt in to remain; withdrawn on request at any time.</td></tr>
+<tr><td>AI-generated imagery</td><td>Permitted for illustration only. Each generation starts from a written brief that includes: the <a class="xr" href="#s4a">§4a</a> direction verbatim, the message line (<a class="xr" href="#s4">§4</a>), the subject as a noun phrase, the placement and its smallest size, the palette tokens, and the exclusions in <a class="xr" href="#s4">§4</a>. Output is checked against <a class="xr" href="#s4">§4</a> and <a class="xr" href="#s4a">§4a</a> row by row before use. Not permitted for client work (the product is the source) or team and studio (the team is the source). Retouching that adds no content (dust, sensor spots) is permitted in any category; confidential values are replaced before capture (<a class="xr" href="#s2">§2</a>). No disclosure is made, in captions or anywhere else (decided 25 September 2026).</td></tr>
+<tr><td>Verification</td><td>No internal review gate beyond written client approval (<a class="xr" href="#s10">§10</a>), team consent (<a class="xr" href="#s3">§3</a>) and the cover registry (<a class="xr" href="#s9a">§9a</a>). Whoever places an image checks it against <a class="xr" href="#s2">§2</a>, <a class="xr" href="#s3">§3</a>, <a class="xr" href="#s4">§4</a> and <a class="xr" href="#s6">§6</a> before use, row by row. The person who places it is responsible for it.</td></tr>
+<tr><td>Changes to this chapter</td><td>No fixed review. It changes when a rule fails in use, or when a placement it does not yet cover is built.</td></tr>
+</tbody></table>
+</section>
+
+<section class="sec pg" id="s11" data-screen-label="11 Do and don't">
+<header><span class="eyebrow">11 · In practice</span><h2>Do and don't</h2><p>Each pair demonstrates one rule, following the decided direction. Photographic pairs use credited stand-ins (<a class="xr" href="#s10">§10</a>).</p></header>
+<div class="ddv">
+<figure><span class="k ok">Do</span><div class="tmini" style="min-height:130px;background:#f3f1ea;border-color:transparent;place-items:center;grid-template-columns:1fr 1fr;gap:12px"><div style="width:100%;aspect-ratio:16/10;background:#fffefa;border:1px solid #91908d"></div><div style="width:100%;aspect-ratio:16/10;background:#fffefa;border:1px solid #91908d"></div></div><figcaption><a class="xr" href="#s2">§2</a> multi-screen · Two screens, same scale, top edges aligned, the product's ground behind.</figcaption></figure>
+<figure><span class="k no">Don't</span><div class="tmini" style="min-height:130px;background:#f3f1ea;border-color:transparent;place-items:center;grid-template-columns:1.3fr 1fr .8fr;gap:8px;align-items:end"><div style="width:100%;aspect-ratio:16/10;background:#fffefa;border:1px solid #91908d"></div><div style="width:100%;aspect-ratio:16/10;background:#fffefa;border:1px solid #91908d"></div><div style="width:60%;aspect-ratio:9/19;background:#fffefa;border:1px solid #91908d;border-radius:10px"></div></div><figcaption><a class="xr" href="#s2">§2</a> multi-screen · Three sizes, three scales, a phone beside a desktop: the reader cannot compare them.</figcaption></figure>
+</div>
+<div class="ddv">
+<figure><span class="k ok">Do</span><div class="tmini" style="min-height:130px;place-items:center"><div style="width:190px;aspect-ratio:16/10;background:#fffefa;border:1px solid #91908d;padding:12px;display:grid;gap:6px;align-content:start;font:400 7px/1 var(--sans);color:#292824"><span style="font-weight:500">Invoices</span><span style="display:flex;justify-content:space-between"><span>Ada Okafor</span><span>£4,120.00</span></span><span style="display:flex;justify-content:space-between"><span>Marta Lindqvist</span><span>£1,860.00</span></span><span style="display:flex;justify-content:space-between"><span>Tomás Reyes</span><span>£920.00</span></span></div></div><figcaption><a class="xr" href="#s2">§2</a> redaction · Confidential rows replaced with fictional names and figures of the same length.</figcaption></figure>
+<figure><span class="k no">Don't</span><div class="tmini" style="min-height:130px;place-items:center"><div style="width:190px;aspect-ratio:16/10;background:#fffefa;border:1px solid #91908d;padding:12px;display:grid;gap:6px;align-content:start;font:400 7px/1 var(--sans);color:#292824"><span style="font-weight:500">Invoices</span><span style="display:flex;justify-content:space-between"><i style="display:block;width:40px;height:7px;background:#1b1b18"></i><span style="filter:blur(2px)">£4,120.00</span></span><span style="display:flex;justify-content:space-between"><i style="display:block;width:48px;height:7px;background:#1b1b18"></i><span style="filter:blur(2px)">£1,860.00</span></span><span style="display:flex;justify-content:space-between"><i style="display:block;width:36px;height:7px;background:#1b1b18"></i><span style="filter:blur(2px)">£920.00</span></span></div></div><figcaption><a class="xr" href="#s2">§2</a> redaction · Black bars and blur. Reads as censorship, and blur is recoverable.</figcaption></figure>
+</div>
+<div class="ddv">
+<figure><span class="k ok">Do</span><div class="slot"><div class="box" style="border:none"><image-slot id="img-dd-team-do" shape="rect" src="https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186770/Image_Grid_2_0a225c3d79.webp" placeholder="Drop a passing team shot"></image-slot></div></div><figcaption><a class="xr" href="#s3">§3</a>, <a class="xr" href="#s3a">§3a</a> · Directed candid: the team working, no eye contact with the camera, available light, studio behind.</figcaption></figure>
+<figure><span class="k no">Don't</span><div class="slot"><div class="box" style="border:none"><image-slot id="img-dd-team-dont" shape="rect" src="https://images.unsplash.com/photo-1758518729286-e8d94cc231f5?w=1600&q=80&auto=format&fit=crop" credit="Photo by Vitaly Gariev on Unsplash" credit-href="https://unsplash.com/@silverkblack" placeholder="Drop a failing team shot"></image-slot></div></div><figcaption><a class="xr" href="#s3">§3</a> · Posed, smiling to camera, suit, lobby backdrop: eye contact in an environmental frame and a location that is not the studio. Corporate stock, not us.</figcaption></figure>
+</div>
+<div class="ddv">
+<figure><span class="k ok">Do</span><div class="tmini" style="min-height:130px;place-items:center;background:#f3f1ea;border-color:transparent"><svg viewBox="0 0 120 80" width="150" aria-hidden="true"><g stroke-linejoin="round" stroke-width="1.5"><path d="M20 50 L60 30 L100 50 L60 70 Z" fill="#f3f1ea" stroke="#0048ff" vector-effect="non-scaling-stroke"></path><path d="M36 30 L60 18 L84 30 L60 42 Z" fill="#0048ff" stroke="#0048ff" vector-effect="non-scaling-stroke"></path><path d="M52 30 L60 26 L68 30 L60 34 Z" fill="#d7f04a" stroke="#1b1b18" vector-effect="non-scaling-stroke"></path><path d="M70 54 L78 50 L86 54 L78 58 Z" fill="#edf79b" stroke="#1b1b18" stroke-dasharray="6 4" vector-effect="non-scaling-stroke"></path></g></svg></div><figcaption><a class="xr" href="#s4a">§4a</a>, <a class="xr" href="#s4b">§4b</a> · Flat planes in one line weight, one solid blue plane, and the carried item solid once with one dashed echo. Still reads at 160px wide.</figcaption></figure>
+<figure><span class="k no">Don't</span><div class="tmini" style="min-height:130px;place-items:center;background:#f3f1ea;border-color:transparent"><svg viewBox="0 0 120 80" width="150" aria-hidden="true"><defs><linearGradient id="g2" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#4d78ff"></stop><stop offset="1" stop-color="#0031b0"></stop></linearGradient></defs><path d="M20 44 L60 24 L100 44 L60 64 Z" fill="url(#g2)"></path><path d="M20 44 v6 L60 70 L100 50 v-6 L60 64 Z" fill="#002585"></path><path d="M84 22 L94 17 L104 22 L94 27 Z" fill="#d7f04a"></path><path d="M84 22 v10 L94 37 L104 32 v-10 L94 27 Z" fill="#a1b71f"></path><ellipse cx="60" cy="74" rx="34" ry="4" fill="rgba(0,0,0,.25)"></ellipse><text x="38" y="47" font-size="6" fill="#fff" font-family="sans-serif">DASHBOARD</text></svg></div><figcaption><a class="xr" href="#s4a">§4a</a> · Solid surfaces, gradients, a cast shadow, two accents as fills, generated text. Surfaces over lines is the first failure.</figcaption></figure>
+</div>
+<div class="ddv">
+<figure><span class="k ok">Do</span><div class="tmini" style="min-height:130px;background:#fffefa;padding:14px;grid-template-columns:1fr 1fr;gap:14px;align-items:center"><div style="font:500 14px/1.2 var(--display);color:#292824">Design systems your engineers trust</div><div class="ph" style="height:90px"><span>TEAM PHOTO<br>inset · caption below</span></div></div><figcaption><a class="xr" href="#s6">§6</a> · Slide: image as a block inside the margin, title beside it on the band. Nothing under anything.</figcaption></figure>
+<figure><span class="k no">Don't</span><div class="tmini" style="min-height:130px;border-color:transparent;padding:0;position:relative;overflow:hidden"><div class="ph dark" style="position:absolute;inset:0"><span></span></div><div style="position:relative;padding:22px 20px;font:500 16px/1.2 var(--display);color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6)">Design systems your engineers trust</div><img src="wordmark.svg" alt="" style="position:absolute;right:16px;bottom:14px;width:70px;filter:brightness(0) invert(1)"></div><figcaption><a class="xr" href="#s6">§6</a> · Image bled to the edge with type and logo over it, contrast rescued with a shadow. Three rules fail.</figcaption></figure>
+</div>
+<div class="ddv">
+<figure><span class="k ok">Do</span><div class="tmini" style="min-height:130px;gap:8px"><div style="height:60px;background:#fffefa;border:1px solid #91908d"></div><span style="font:400 11.5px/1.4 var(--sans);color:#504f49">OmnyAI · Console · Billing overview after the navigation rebuild.</span><span style="font:400 10.5px/1.4 var(--sans);color:#71706a">Figures shown are illustrative; the live product shows the customer's own.</span></div><figcaption><a class="xr" href="#s7">§7</a> · Caption with client attribution; a note saying what the image does not establish.</figcaption></figure>
+<figure><span class="k no">Don't</span><div class="tmini" style="min-height:130px;gap:8px"><div style="height:60px;background:#fffefa;border:1px solid #91908d;display:grid;place-items:end start;padding:6px"><span style="font:600 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#292824">Billing overview · OmnyAI</span></div><span style="font:400 11.5px/1.4 var(--sans);color:#504f49">Screenshot.</span></div><figcaption><a class="xr" href="#s7">§7</a> · Attribution baked into the pixels; a caption that says nothing.</figcaption></figure>
+</div>
+</section>
+
+<section class="sec pg sheet" id="s12" data-screen-label="12 Decision sheet">
+<header><span class="eyebrow">12 · Decision sheet</span><h2>Every decision, and where it is written</h2><p>Decided on 24 and 25 September 2026. Each is written into the rule it affects; this sheet records what was chosen.</p></header>
+<table>
+<thead><tr><th style="width:36px">№</th><th style="width:160px">Decision</th><th>What was chosen between</th><th style="width:220px">Outcome</th><th style="width:70px">Date</th></tr></thead>
+<tbody>
+<tr><td class="num">01</td><td>AI disclosure</td><td>Whether generated illustrations are disclosed.</td><td class="r">No disclosure (<a class="xr" href="#s10">§10</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">02</td><td>Cut-outs at full column</td><td>Whether <span class="tok">Figure</span> and <span class="tok">PageHero</span> carry cut-outs.</td><td class="r">Always cut-outs; a flat capture only where the whole layout is the subject (<a class="xr" href="#s2a">§2a</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">03</td><td>Cover registry</td><td>Which archetypes an illustration cover may use.</td><td class="r">The registry in <a class="xr" href="#s9a">§9a</a>; a new archetype is added as a row before anything is made</td><td>25 Sep</td></tr>
+<tr><td class="num">04</td><td>Banner ratio</td><td>The banner's frame.</td><td class="r">16:9</td><td>25 Sep</td></tr>
+<tr><td class="num">05</td><td>Other card imagery</td><td>Article, insight, service and glossary cards.</td><td class="r">No media (<a class="xr" href="#s9">§9</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">06</td><td>Delivery</td><td>Derived widths and weight ceilings per placement.</td><td class="r">As in <a class="xr" href="#s9">§9</a>, resized from one master</td><td>25 Sep</td></tr>
+<tr><td class="num">07</td><td>Illustrations on blue</td><td>The blue plane disappears on a brandeis-500 ground.</td><td class="r">Not placed on blue (<a class="xr" href="#s4a">§4a</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">08</td><td>Client logos</td><td>Rules for marks in a set.</td><td class="r">Source, colour, size and exclusions in <a class="xr" href="#s10">§10</a></td><td>25 Sep</td></tr>
+<tr><td class="num">09</td><td>Nav card radius</td><td>The <span class="tok">SiteNav</span> rail card draws its image at <span class="tok">--radius-4</span> against <a class="xr" href="#s6">§6</a>'s radius 0.</td><td class="r"><span class="tok">--radius-4</span>, as the one named exception (<a class="xr" href="#s6">§6</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">10</td><td>Annotation</td><td>Numbered rings over a capture, labels on an illustration.</td><td class="r">Allowed: annotation is not content (<a class="xr" href="#s6a">§6a</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">11</td><td>Portrait ratio</td><td>4:5 or square.</td><td class="r">1:1 everywhere (<a class="xr" href="#s3">§3</a>, <a class="xr" href="#s6">§6</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">12</td><td>Cut-out parts</td><td>How many parts per placement.</td><td class="r">Five at full column, three on a feed post, one per carousel slide, two in a card, one in a thumbnail (<a class="xr" href="#s2a">§2a</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">13</td><td>Covers on social</td><td>Whether a social or preview cover is the project cover.</td><td class="r">No: authored per channel (<a class="xr" href="#s9a">§9a</a>, chapter 10)</td><td>25 Sep</td></tr>
+<tr><td class="num">14</td><td>Nav card crop</td><td>The nav card crops 16:7.</td><td class="r">Its own 16:7 asset; covers are not reused there (<a class="xr" href="#s9">§9</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">15</td><td>Device frames</td><td>Where a device frame is permitted.</td><td class="r">Decks and proposals only (<a class="xr" href="#s2">§2</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">16</td><td>Instagram story</td><td>Client work on a story.</td><td class="r">None (<a class="xr" href="#s2">§2</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">17</td><td>Client approval</td><td>When written approval is needed.</td><td class="r">Always, before any public use (<a class="xr" href="#s10">§10</a>)</td><td>25 Sep</td></tr>
+<tr><td class="num">18</td><td>Cut-out format</td><td>File format for cut-outs.</td><td class="r">PNG with alpha as master, WebP with alpha served (<a class="xr" href="#s8">§8</a>)</td><td>25 Sep</td></tr>
+</tbody></table>
+</section>
+
+</div>
+</doc-page></body></html>
