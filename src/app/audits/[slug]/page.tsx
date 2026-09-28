@@ -17,6 +17,7 @@ import {
   Callout,
   ContentSection,
   CtaSection,
+  DataTable,
   Figure,
   ListCard,
   PageHero,
@@ -126,7 +127,7 @@ function renderAuditBlock(block: AuditBlock) {
       );
 
     case 'table':
-      return <Prose html={block.html} />;
+      return <DataTable {...block.table} />;
 
     case 'quote':
       return (

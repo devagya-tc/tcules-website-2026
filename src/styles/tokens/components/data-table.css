@@ -1,0 +1,106 @@
+/* ══ Component layer — DataTable ═════════════════════════════════════════════════
+   Tier 2. The site's one table: a key column of row headers, one to five data columns, an optional
+   caption, and a stacked reading order when its track is narrower than the md content column.
+   Built to docs/specs/DataTable.md (brief 10).
+
+   Naming: --dtab-{part}-{role}
+     parts: head (the column heads, and the same heads repeated as stacked labels)
+            key  (the row headers — the first column)
+            caption | rule | head-rule | empty
+     No state suffixes. The table is not interactive: nothing in it has a hover, a press or a
+     selection. A link inside a cell is Prose's, and moves on Prose's tokens.
+
+   ── What this file declares, and what it deliberately does not ──────────────────
+   There is no ground token, on any surface, in any part. The brief is explicit — the table MUST
+   NOT own its ground — and it is also why the row header is distinguished by WEIGHT and ink rather
+   than by a fill: "weight or ground, not both", and ground is not available. No zebra either.
+
+   There is no cell ink. Every data cell is a Prose flow (the cells are trusted rich text with
+   links and marks in them), so the body ink, the link, a strong and a code span all come from
+   --prose-* — exactly as they do in every other rich-text field on the site. Declaring a
+   --dtab-cell-ink would mean a link in a table and a link in a paragraph could drift apart.
+
+   The stacked labels have no token of their own. A label IS the column head, repeated beside the
+   value it names, so it reads --dtab-head-ink; a second name for one decision is the --sec-gap
+   mistake.
+
+   Distances are not here. The module reads --gap-* directly (cell inset --gap-text, column seam
+   --gap-block, label-to-value --gap-inline), because each one is the gap-scale step named for what
+   it separates and a --dtab-* alias would rename without meaning.
+
+   ── Every surface restates every token ──────────────────────────────────────────
+   A table inside a tint panel inside an ink section has to stay legible without being told where
+   it is. tokens:check fails the build if a block drifts. Contrast ratios below are WCAG 2.x,
+   computed from the ramp hexes in primitives.css against each surface's ground: paper, paper-deep,
+   neutral-950, brandeis-500.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --dtab-rule-width: var(--border-width-hairline);
+  /* The one component size. A `hold` column never narrows below this, so a greedy prose column
+     beside it cannot crush it to a word per line — which is what happened to every mono row header
+     at 668px when the table lived inside Prose. Measured against the widest designed case: the key
+     column plus five data columns in the 1176 content column is 196px a column, so a single held
+     column at 192 costs its neighbours nothing; at the 704 tablet column the other five share 512.
+     Same value as --lay-track-xs, duplicated on purpose: a component never reads another
+     component's tokens. No t-shirt ordinal: there is one size and no ladder for it to step on, so
+     an `-md` would promise siblings that do not exist — the same call as --crumb-hidden-size. */
+  --dtab-hold-size: 192px;
+  /* Optical, not a layout distance: the 1px clip box that visually hides the head row in the
+     stacked arrangement while keeping it in the accessibility tree. Same technique and same reach
+     as --crumb-hidden-size, duplicated rather than read. */
+  --dtab-hidden-size: var(--space-1);
+}
+
+/* Paper: the origin. The column heads rest two steps below full ink in the mono label voice — they
+   name, they do not compete with what they name. The row headers take full ink at semibold: that is
+   the whole of the key column's distinction, and it is weight, not a ground. The rule under the
+   head row is the one strong line in the component; the rules between rows are the hairline at the
+   quietest step that still separates, because at five or six rows a darker rule turns the table
+   into a grid of boxes. */
+:root,
+[data-surface='paper'] {
+  --dtab-head-ink: var(--color-neutral-700); /* 8.14:1 — 12px mono, so the 4.5 floor applies */
+  --dtab-key-ink: var(--color-neutral-950); /* 17.10:1 */
+  --dtab-caption-ink: var(--color-neutral-600); /* 4.92:1 — the floor of AA, do not lighten */
+  --dtab-head-rule-ink: var(--color-neutral-800); /* 11.81:1 — non-text, clears 3:1 */
+  --dtab-rule-ink: var(--color-neutral-200); /* decoration; 1.33:1 */
+  --dtab-empty-ink: var(--color-neutral-500); /* 3.16:1 — a mark for "nothing here", non-text */
+}
+
+/* Tint: paper-deep has spent the lightest step, so the quiet values move one rung darker — the
+   caption 600→700 (600 is 4.39:1 here and fails), the row rule 200→300, and the empty mark 500→600
+   (500 is 2.82:1 and misses the 3:1 non-text floor). The head ink and key ink hold. */
+[data-surface='tint'] {
+  --dtab-head-ink: var(--color-neutral-700); /* 7.27:1 */
+  --dtab-key-ink: var(--color-neutral-950); /* 15.27:1 */
+  --dtab-caption-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
+  --dtab-head-rule-ink: var(--color-neutral-800); /* 10.54:1 */
+  --dtab-rule-ink: var(--color-neutral-300); /* decoration; 1.38:1 */
+  --dtab-empty-ink: var(--color-neutral-600); /* 4.39:1 — stepped; 500 would be 2.82:1 */
+}
+
+/* Ink: the ladder inverts. White is the raised step, so the row headers take it; the heads and the
+   caption sit at neutral-400, the same muted step Prose uses on this ground. The head rule lifts to
+   neutral-300 and the row rule drops to 800 — the hairline has to be darker than the text to stay
+   a hairline. */
+[data-surface='ink'] {
+  --dtab-head-ink: var(--color-neutral-400); /* 8.05:1 */
+  --dtab-key-ink: var(--color-white); /* 17.26:1 */
+  --dtab-caption-ink: var(--color-neutral-400); /* 8.05:1 */
+  --dtab-head-rule-ink: var(--color-neutral-300); /* 11.07:1 */
+  --dtab-rule-ink: var(--color-neutral-800); /* decoration; 1.45:1 */
+  --dtab-empty-ink: var(--color-neutral-500); /* 5.41:1 */
+}
+
+/* Blue: the ground is the interaction colour, so every value comes out of the Brandeis tints and
+   white is the top of the ladder. brandeis-100 is the quietest step that still clears 4.5 for the
+   12px mono heads (brandeis-200 would be 3.78:1). */
+[data-surface='blue'] {
+  --dtab-head-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --dtab-key-ink: var(--color-white); /* 6.23:1 */
+  --dtab-caption-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --dtab-head-rule-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --dtab-rule-ink: var(--color-brandeis-400); /* decoration; 1.62:1 */
+  --dtab-empty-ink: var(--color-brandeis-200); /* 3.78:1 */
+}

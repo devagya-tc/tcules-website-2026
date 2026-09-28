@@ -118,6 +118,7 @@ export type {
   ImageSource,
   ImageKind,
   ImagePanel,
+  ContentTable,
   AboutPage,
   AboutImageSection,
   AboutCard,

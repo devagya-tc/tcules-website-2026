@@ -17,6 +17,7 @@ import {
   Callout,
   ContentSection,
   CtaSection,
+  DataTable,
   Figure,
   ListCard,
   PageHero,
@@ -133,7 +134,7 @@ function renderExpertiseBlock(block: ExpertiseBlock) {
       );
 
     case 'table':
-      return <Prose html={block.html} />;
+      return <DataTable {...block.table} />;
 
     case 'quote':
       return (
