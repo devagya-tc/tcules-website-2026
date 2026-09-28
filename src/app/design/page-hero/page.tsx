@@ -1,9 +1,18 @@
-import { Button, Cluster, Layout, Section, type SectionSurface } from '@/components';
+import {
+  Button,
+  Cluster,
+  Layout,
+  Section,
+  type MediaImage,
+  type SectionSurface,
+} from '@/components';
 import {
   Breadcrumbs,
   PageHero,
+  type HeroArrangement,
   type HeroCredit,
   type HeroDates,
+  type HeroMedia,
   type PageHeroProps,
 } from '@/patterns';
 
@@ -12,7 +21,8 @@ import { ROUTES } from '@/lib/routes';
 import { specimenStyles as s } from '../_specimen/Specimen';
 
 /**
- * PageHero specimen — one variant, one size, and SLOT PRESENCE as the only thing that varies.
+ * PageHero specimen — one variant, one size, SLOT PRESENCE, and (blocks 16–20) the two
+ * arrangements against every kind of media.
  *
  * Every hero below is a BAND, at the top level of this page and never nested inside another
  * Section — the component owns its band, so nesting it would inset its content column a second
@@ -96,39 +106,160 @@ const URL_PARA =
    hundred bytes, it is legible under review as text, and it upscales cleanly — which matters for
    the NARROW one, whose whole job is to be upscaled past its intrinsic width. An SVG makes that
    band understate the softness a real 480px raster would show, and the note says so. */
-const MEDIA_WIDE = {
-  kind: 'image',
-  src: '/design/hero-sample-wide.svg',
-  alt: 'The ConnectX portfolio dashboard: a sidebar of buildings, a table of meter readings and a bar chart comparing forecast against actual consumption.',
-  width: 2400,
-  height: 1350,
-} as const;
+const MEDIA_WIDE: HeroMedia = {
+  type: 'image',
+  image: {
+    src: '/design/hero-sample-wide.svg',
+    alt: 'The ConnectX portfolio dashboard: a sidebar of buildings, a table of meter readings and a bar chart comparing forecast against actual consumption.',
+    width: 2400,
+    height: 1350,
+  },
+};
 
-const MEDIA_TALL = {
-  kind: 'image',
-  src: '/design/hero-sample-tall.svg',
-  alt: 'The single-building view, portrait: a header, a table of readings, a highlighted forecast panel and two grouped charts.',
-  width: 900,
-  height: 1200,
-} as const;
+const MEDIA_TALL: HeroMedia = {
+  type: 'image',
+  image: {
+    src: '/design/hero-sample-tall.svg',
+    alt: 'The single-building view, portrait: a header, a table of readings, a highlighted forecast panel and two grouped charts.',
+    width: 900,
+    height: 1200,
+  },
+};
 
-const MEDIA_NARROW = {
-  kind: 'image',
-  src: '/design/hero-sample-narrow.svg',
-  alt: 'A 480px-wide thumbnail of the same dashboard, used here to show what happens to an asset narrower than the content column.',
-  width: 480,
-  height: 270,
-} as const;
+const MEDIA_NARROW: HeroMedia = {
+  type: 'image',
+  image: {
+    src: '/design/hero-sample-narrow.svg',
+    alt: 'A 480px-wide thumbnail of the same dashboard, used here to show what happens to an asset narrower than the content column.',
+    width: 480,
+    height: 270,
+  },
+};
 
 /* Blender's Big Buck Bunny — a Creative Commons film, chosen because it is genuinely free to embed
    and has been at the same id for years, which is what a proving ground needs from a third party.
    If YouTube ever answers with "Video unavailable", the band still does its whole job: the ratio,
    the hairline and the four surface columns are ours and are what this block is looking at. */
-const MEDIA_VIDEO = {
-  kind: 'youtube',
+const MEDIA_VIDEO: HeroMedia = {
+  type: 'youtube',
   id: 'aqz-KE-bpKQ',
   title: 'Big Buck Bunny — Blender Foundation, Creative Commons',
-} as const;
+};
+
+/* ── The media kinds (blocks 17–21) ─────────────────────────────────────────────
+   The brand framework's own assets, the same files /design/media proves Media against, each
+   carrying the kind ch05 would give it — because in a hero the KIND decides the edge (Media's
+   job) and the arrangement decides the width (this component's). The capture and the flow cut-out
+   carry derived widths, so their srcset rows choose between real files. None is a 2560 master
+   (ruling M2): the portrait in particular is 292 square and upscales visibly in a 588 track, which
+   is the supply fault the note on it names, not a rendering one. */
+const DERIVED = (base: string, ext: string) =>
+  [320, 652, 1240].map((width) => ({ src: `/design/media/${base}-${width}.${ext}`, width }));
+
+const CAPTURE: MediaImage = {
+  src: '/design/media/capture-listing.webp',
+  alt: 'Listing editor with four bullet fields on the left and an AI assistance panel of benefit chips on the right.',
+  width: 1436,
+  height: 883,
+  kind: 'capture',
+  sources: DERIVED('capture-listing', 'jpg'),
+};
+
+const CUT_OUT: MediaImage = {
+  src: '/design/media/cutout-flow.png',
+  alt: 'Workflow node: an input connected to an AI feature card with a provider field, a file field and an output.',
+  width: 1796,
+  height: 1112,
+  kind: 'cut-out',
+  sources: DERIVED('cutout-flow', 'png'),
+};
+
+/* Portrait-ratio product part (902 × 1088), for the tall row of block 19. */
+const CUT_OUT_TALL: MediaImage = {
+  src: '/design/media/cutout-node.png',
+  alt: 'A single workflow node card: a header, three configured fields and an output handle.',
+  width: 902,
+  height: 1088,
+  kind: 'cut-out',
+};
+
+/* alt="" on purpose: an illustration banner is named by the h1 beside it, so the image adds no
+   information the page does not already carry (ch05 § 9a, § 7). Never omitted, never "image". */
+const ILLUSTRATION: MediaImage = {
+  src: '/design/media/illustration-seam.svg',
+  alt: '',
+  width: 881,
+  height: 544,
+  kind: 'illustration',
+};
+
+const PHOTOGRAPH: MediaImage = {
+  src: '/design/media/photograph-portrait.png',
+  alt: 'Portrait, head and shoulders, facing the camera in available light.',
+  width: 292,
+  height: 292,
+  kind: 'photograph',
+};
+
+const STRESS_TALL: MediaImage = {
+  src: '/design/media/stress-tall.svg',
+  alt: 'A settings column of twelve stacked rows above a footer panel.',
+  width: 400,
+  height: 2000,
+  kind: 'capture',
+};
+
+const asHero = (image: MediaImage): HeroMedia => ({ type: 'image', image });
+
+/* One row per media case the arrangements are proved against, in the order ch05 § 1 leads them. */
+const MEDIA_CASES: readonly { key: string; label: string; media?: HeroMedia; note: string }[] =
+  [
+    {
+      key: 'none',
+      label: 'no media',
+      note: 'The no-visual hero — 97 of 129 routes. Both arrangements render the same single column, because there is nothing to put beside the copy: `beside` with no media is not an error, it is the family member that has no image.',
+    },
+    {
+      key: 'illustration',
+      label: 'illustration',
+      media: asHero(ILLUSTRATION),
+      note: 'Service line, how-we-work, audit, article (VAP). Never boxed — no hairline, no panel, no shadow — so the drawing sits on the band’s own ground and its edges are its own lines. alt="" because the h1 names what it stands for (ch05 § 9a).',
+    },
+    {
+      key: 'cut-out',
+      label: 'cut-out',
+      media: asHero(CUT_OUT),
+      note: 'Case-study banner and Matter / Future Interfaces Lab. No edge: the silhouette is the frame, and the band shows through the alpha (ch05 § 2a).',
+    },
+    {
+      key: 'capture',
+      label: 'capture',
+      media: asHero(CAPTURE),
+      note: 'A flat screen, only where the whole layout is the subject (ch05 § 2). Its one edge cue is Media’s hairline in the surface’s rule ink. An image with no kind renders exactly like this (M3).',
+    },
+    {
+      key: 'photograph',
+      label: 'photograph',
+      media: asHero(PHOTOGRAPH),
+      note: 'About and careers: “a photograph as a block beside or below the h1, never behind it” (ch05 § 6a). No edge, radius 0. This asset is 292 square and upscales — a supply fault, visible on purpose.',
+    },
+    {
+      key: 'youtube',
+      label: 'YouTube',
+      media: MEDIA_VIDEO,
+      note: 'Podcast and event. The one media with a box of its own — 16/9, because that is what YouTube serves — and the hero’s own hairline. Lazy, never the LCP.',
+    },
+  ];
+
+const ARRANGEMENTS: readonly HeroArrangement[] = ['stacked', 'beside'];
+
+/* CU04's budgets, at the floor and the ceiling: H1 4–10 words, hero support 15–35. */
+const CU_TITLE_MIN = 'Design systems, shipped properly';
+const CU_SUPPORT_MIN =
+  'We build tokens, components and documentation inside your team, so the system ships with you.';
+const CU_TITLE_MAX = 'Design systems that ship with the product, not after it';
+const CU_SUPPORT_MAX =
+  'We build the tokens, the components and the documentation inside your delivery team, so every release carries the system forward instead of leaving it behind, and nobody has to choose between consistency and speed again.';
 
 const CASE_STUDY = `${ROUTES.caseStudies}/connectx`;
 
@@ -177,7 +308,7 @@ const SLOT_TABLE = [
   { part: 'byline', left: 'never', caseStudy: 'never', article: 'always' },
   { part: 'extras', left: '1 (/contact)', caseStudy: 'never', article: 'never' },
   { part: 'actions', left: '0 / 1 / 2', caseStudy: '0', article: '0 / 1' },
-  { part: 'media', left: 'never yet', caseStudy: 'never yet', article: 'never yet' },
+  { part: 'media', left: 'some families', caseStudy: 'banner', article: 'illustration' },
 ] as const;
 
 /* The four optional slots, as a type. Annotated rather than inferred with `as const`, for two
@@ -359,10 +490,10 @@ export default function PageHeroSpecimenPage() {
         <Layout rowGap="block">
           <h2 className={s.titleScale}>PageHero</h2>
           <p>
-            The opening block of a page: one <code>h1</code>, an optional eyebrow above it, one to
-            six paragraphs of lead copy, an optional byline of credits and dates, an optional
-            caller block, nought to two actions and — last — an optional image or YouTube embed. It
-            paints its own band and it is the first thing inside <code>main</code> on all 129
+            The opening block of a page: one <code>h1</code>, an optional eyebrow above it, one
+            to six paragraphs of lead copy, an optional byline of credits and dates, an optional
+            caller block, nought to two actions and — last — an optional image or YouTube embed.
+            It paints its own band and it is the first thing inside <code>main</code> on all 129
             routes.
           </p>
           <p>
@@ -372,10 +503,11 @@ export default function PageHeroSpecimenPage() {
             is an <code>h2</code> at h1 scale so the page adds none of its own.
           </p>
           <p>
-            One variant and one size. The three arrangements the brief described — text-left,
-            article, case study — are <em>one</em> arrangement: no page differs in how the hero is
-            arranged, only in which optional slot is filled, and the two slots that differentiate
-            the corpus are independent of each other.
+            One variant and one size. The three page families the brief described — text-left,
+            article, case study — are one arrangement of the <em>copy</em>: they differ only in
+            which optional slot is filled. Where the <em>media</em> goes is the one arrangement
+            choice, <code>arrangement=&quot;stacked | beside&quot;</code>, made by the page
+            template per family (ruling H1). Blocks 16–21 prove it against every media kind.
           </p>
         </Layout>
       </Section>
@@ -385,9 +517,9 @@ export default function PageHeroSpecimenPage() {
         <Layout rowGap="block">
           <p className={s.specTitle}>1 · The matrix — 1 variant × 1 size</p>
           <p className={s.specNote}>
-            Printed rather than rendered, there being one cell. Below it is §4&apos;s slot table:
-            the three briefed arrangements laid against each other by part. No row differs in
-            ARRANGEMENT — every difference is a slot that is filled or is not.
+            Printed rather than rendered, there being one cell. Below it is §4&apos;s slot
+            table: the three briefed arrangements laid against each other by part. No row
+            differs in ARRANGEMENT — every difference is a slot that is filled or is not.
           </p>
           <Layout rowGap="tight">
             <Layout columns={[2, 1, 1, 1]} colGap="gutter" rowGap="tight">
@@ -409,10 +541,11 @@ export default function PageHeroSpecimenPage() {
           </Layout>
           <p className={s.specNote}>
             The two slots that do the differentiating — <code>eyebrow</code> and{' '}
-            <code>byline</code> — are independent, so what can render is a 2 × 2 of slot presence
-            rather than a three-way switch. A <code>variant=&quot;caseStudy&quot;</code> would
-            have been a name for a page family styled identically to the default, and the first
-            thing it would have done is make the eyebrow a consequence of the variant.
+            <code>byline</code> — are independent, so what can render is a 2 × 2 of slot
+            presence rather than a three-way switch. A{' '}
+            <code>variant=&quot;caseStudy&quot;</code> would have been a name for a page family
+            styled identically to the default, and the first thing it would have done is make
+            the eyebrow a consequence of the variant.
           </p>
         </Layout>
       </Section>
@@ -436,7 +569,7 @@ export default function PageHeroSpecimenPage() {
                 ? '34 routes. One paragraph renders as a single --text-lead <p> and copy shows no seam at all.'
                 : count === 12
                   ? '2× the corpus maximum, and there is no route like it. No cap, no truncation, no warning: the lead role still applies to the first paragraph only, so this renders as a lead and eleven body paragraphs and looks exactly like what it is — a page whose opening should have been a section. That is a review comment on a route, not a behaviour here.'
-                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-lead (20) and everything under it at --text-body (16); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: 68ch resolves against each part's own role, so the lead measures 166px wider — 832px against 666px, both measured. That reads as a lead, not as an error.`
+                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-lead (20) and everything under it at --text-body (16); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: the lead takes --measure-lead (40ch, about 490px at 20) and the paragraphs --measure-body (68ch, 666px at 16), so the lead is a short, large block and the body a long, small one — two shapes rather than one ragged column. Before 28 Sep both took 68ch and the lead ran 832px.`
             }
           />
         </div>
@@ -474,11 +607,11 @@ export default function PageHeroSpecimenPage() {
         <Layout rowGap="block">
           <p className={s.specTitle}>6 · States — and why there is no state column here</p>
           <p className={s.specNote}>
-            Rest is what the band above renders, and it needs no prop. NO STATE IN THIS COMPONENT
-            CAN BE FORCED FROM OUTSIDE, because there are none: zero <code>--hero-*</code> state
-            tokens exist, and that is the assertion that this component&apos;s rendering is a
-            function of its props alone. Do not go looking for a control column that should not
-            exist.
+            Rest is what the band above renders, and it needs no prop. NO STATE IN THIS
+            COMPONENT CAN BE FORCED FROM OUTSIDE, because there are none: zero{' '}
+            <code>--hero-*</code> state tokens exist, and that is the assertion that this
+            component&apos;s rendering is a function of its props alone. Do not go looking for a
+            control column that should not exist.
           </p>
           <Layout rowGap="text">
             {STATE_REFERENCE.map((row) => (
@@ -661,17 +794,20 @@ export default function PageHeroSpecimenPage() {
       <PageHero title={TITLE} body={paragraphs(1)} actions={TWO_ACTIONS} />
       <Section density="tight">
         <Layout rowGap="block">
-          <p className={s.specTitle}>13 · The 44px touch floor, which a screenshot will not show</p>
+          <p className={s.specTitle}>
+            13 · The 44px touch floor, which a screenshot will not show
+          </p>
           <p className={s.specNote}>
             Every action is <code>Button size=&quot;md&quot;</code> with{' '}
             <code>extendHitArea</code>. The box is <code>--btn-height-md</code> 40 and the floor
             is <code>--btn-hit-min</code> 44, so the extension covers the missing 4 without
             moving the row — and the row not moving is the point: stepping to{' '}
             <code>size=&quot;lg&quot;</code> would make the hero&apos;s controls 48 while every
-            other control on the site stayed at 40, and the hero would be claiming a loudness the
-            design does not intend. The dashed box below is 44 tall, for comparison against the
-            actions above. An action missing the extension is the one failure this component can
-            ship that a screenshot will not show, so assert both numbers in the rendered DOM.
+            other control on the site stayed at 40, and the hero would be claiming a loudness
+            the design does not intend. The dashed box below is 44 tall, for comparison against
+            the actions above. An action missing the extension is the one failure this component
+            can ship that a screenshot will not show, so assert both numbers in the rendered
+            DOM.
           </p>
           <div className={s.hitFloor} />
         </Layout>
@@ -684,29 +820,39 @@ export default function PageHeroSpecimenPage() {
             14 · Illegal placements — a band in a narrow track, at 320 and at 256
           </p>
           <p className={s.specNote}>
-            PageHero is a band and may only be a direct child of the page or its template. It must
-            not be placed inside a <code>Section</code> (the content column would inset twice),
-            inside a <code>Layout</code> track (a band is not a row) or inside a{' '}
-            <code>Cluster</code> (which would shrink it to its longest word). Both bands below are
-            clamped by the harness to Layout&apos;s own track widths so the floor is a rendering
-            rather than a claim — and both are wrong on purpose.
+            PageHero is a band and may only be a direct child of the page or its template. It
+            must not be placed inside a <code>Section</code> (the content column would inset
+            twice), inside a <code>Layout</code> track (a band is not a row) or inside a{' '}
+            <code>Cluster</code> (which would shrink it to its longest word). Both bands below
+            are clamped by the harness to Layout&apos;s own track widths so the floor is a
+            rendering rather than a claim — and both are wrong on purpose.
           </p>
           <div className={s.trackMd}>
-            <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={ONE_ACTION} />
+            <PageHero
+              title={TITLE}
+              body={paragraphs(2)}
+              eyebrow={EYEBROW}
+              actions={ONE_ACTION}
+            />
           </div>
           <p className={s.specNote}>
-            <strong>320px, --lay-track-md — the named minimum.</strong> The longest single word in
-            a corpus h1 still fits without overflow at this width. Both measures exceed the column
-            here and go inert, which is the correct behaviour and needs no rule; nothing reorders
-            and no media query fires, because there are none in this component.
+            <strong>320px, --lay-track-md — the named minimum.</strong> The longest single word
+            in a corpus h1 still fits without overflow at this width. Both measures exceed the
+            column here and go inert, which is the correct behaviour and needs no rule; nothing
+            reorders and no media query fires, because there are none in this component.
           </p>
           <div className={s.trackSm}>
-            <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={ONE_ACTION} />
+            <PageHero
+              title={TITLE}
+              body={paragraphs(2)}
+              eyebrow={EYEBROW}
+              actions={ONE_ACTION}
+            />
           </div>
           <p className={s.specNote}>
             <strong>256px, --lay-track-sm — below the floor.</strong> It renders and it breaks
-            inside words rather than overflowing. That is the documented behaviour of a placement
-            that should not exist, not a supported width.
+            inside words rather than overflowing. That is the documented behaviour of a
+            placement that should not exist, not a supported width.
           </p>
         </Layout>
       </Section>
@@ -730,7 +876,7 @@ export default function PageHeroSpecimenPage() {
       />
       <Note
         title="15 · An image, with every other slot filled"
-        note="The whole order, and the media is LAST: eyebrow, title, copy, byline, actions, image, at 48 between each block. Below the actions rather than under the copy on purpose — the byline stays tight to the title it credits and the actions stay in the reading flow rather than stranded under a picture. The image takes the full 1240 column while the copy above it stops at 68ch, and that difference in width is the whole point of the slot. The hairline around it is --hero-media-rule-ink: a light UI screenshot on near-white paper has no edge of its own, so 300 at 1.54:1 is decoration doing a job rather than a frame."
+        note="The whole order, and the media is LAST: eyebrow, title, copy, byline, actions, image, at 48 between each block. Below the actions rather than under the copy on purpose — the byline stays tight to the title it credits and the actions stay in the reading flow rather than stranded under a picture. The image takes the full 1240 column while the copy above it stops at its measures, and that difference in width is the whole point of the slot. The image has no kind, so Media renders it as a capture (M3) — the hairline is --media-capture-rule-ink: a light UI screenshot on near-white paper has no edge of its own, so 300 at 1.54:1 is decoration doing a job rather than a frame."
       />
 
       <PageHero title={TITLE} body={paragraphs(1)} eyebrow={EYEBROW} media={MEDIA_VIDEO} />
@@ -769,7 +915,7 @@ export default function PageHeroSpecimenPage() {
                   ? 'The rule takes brandeis-300 (2.64:1) — DARKER than every text ink on this ground. The light end of the ramp is spent on the type, and on a saturated ground the distinction wanted is a slight one; stepping toward the ground is what makes it slight.'
                   : entry.surface === 'tint'
                     ? 'The rule steps with the ground, neutral-300 to neutral-400 (1.90:1), and has less to do than on paper: the tint ground is already darker than a light screenshot, so some of the distinction is made before the rule draws anything.'
-                    : 'The surface that needs the rule most. neutral-300 at 1.54:1 against near-white paper is a grey hairline that is visible without being a frame — the same call figure.css makes, re-derived here rather than read from --fig-*, because a component never reads another component\u2019s tokens and a hero image must not move the day Figure is re-tuned.'
+                    : 'The surface that needs the rule most. neutral-300 at 1.54:1 against near-white paper is a grey hairline that is visible without being a frame — Media\u2019s capture edge, which the hero no longer restates: the image is a Media, and its edge is the capture kind\u2019s on every placement.'
             }
           />
         </div>
@@ -802,15 +948,15 @@ export default function PageHeroSpecimenPage() {
         <Layout rowGap="block">
           <p className={s.specTitle}>15 · 326 · mobile column</p>
           <p className={s.specNote}>
-            The hero at a 390 viewport, so its media fills a 326 column — the width every image is
-            approved at (ch05 B3). This is NOT an illegal placement like block 14: the harness frame
-            stands in for the phone, derived from <code>--viewport-390</code>, and the band&apos;s
-            own <code>--sec-gutter</code> makes the 326 rather than a second inset. The frame
-            cannot fire a media query, so at a wide window the title keeps its desktop step here
-            (the h1 re-declares on the viewport at 767, not on the frame) — judge the media, not
-            the title. Wide capture first, then portrait: the wide one&apos;s type is what fails at
-            this width, and that failure belongs to the asset. Hero media is intrinsic, so nothing
-            crops it to pass.
+            The hero at a 390 viewport, so its media fills a 326 column — the width every image
+            is approved at (ch05 B3). This is NOT an illegal placement like block 14: the
+            harness frame stands in for the phone, derived from <code>--viewport-390</code>, and
+            the band&apos;s own <code>--sec-gutter</code> makes the 326 rather than a second
+            inset. The frame cannot fire a media query, so at a wide window the title keeps its
+            desktop step here (the h1 re-declares on the viewport at 767, not on the frame) —
+            judge the media, not the title. Wide capture first, then portrait: the wide
+            one&apos;s type is what fails at this width, and that failure belongs to the asset.
+            Hero media is intrinsic, so nothing crops it to pass.
           </p>
           <div className={s.viewportMobile}>
             <PageHero title={SHORT_TITLE} body={paragraphs(1)} media={MEDIA_WIDE} />
@@ -821,31 +967,201 @@ export default function PageHeroSpecimenPage() {
         </Layout>
       </Section>
 
-      {/* ── 16 · What this page cannot show ─────────────────────────────────────── */}
+      {/* ── 16 · The no-visual hero, at CU04's budgets ─────────────────────────────
+          The most common hero on the site, so it is proved first and at both ends of the copy
+          standard: H1 4–10 words, support 15–35 (CU04). Weight comes from scale and position —
+          the h1 at 22ch, the lead at 40ch, both left-set on the column's strongest edge — and from
+          nothing else: no rule, no tint band, no reserved box. */}
+      <PageHero title={CU_TITLE_MIN} body={[CU_SUPPORT_MIN]} />
+      <Note
+        title="16 · No visual · CU04 floor — a 4-word H1, 15-word support"
+        note="Two shapes, not one: a large serif statement and a smaller sans lead that stops well short of the title's width. The band's open right half is the composition, not a hole — nothing is waiting to fill it."
+      />
+      <PageHero
+        title={CU_TITLE_MAX}
+        body={[CU_SUPPORT_MAX]}
+        eyebrow="Design systems"
+        actions={TWO_ACTIONS}
+      />
+      <Note
+        title="16 · No visual · CU04 ceiling — a 10-word H1, 35-word support, eyebrow and two actions"
+        note="The lead takes --measure-lead (40ch), the measure ContentSection's lead already uses, rather than the body's 68ch: at 68ch a 35-word lead runs three long lines and reads as the first paragraph of the body; at 40ch it is a five-line block under a balanced title, and the title and the lead read as two distinct shapes at squint. Paragraphs after the lead keep 68ch — they are body copy."
+      />
+
+      {/* ── 17 · Arrangement × media kind ──────────────────────────────────────────
+          Every arrangement against every media case. Identical copy in every band, so the only
+          variables are the two props under test. Narrow the window below 1024 and every `beside`
+          band becomes its `stacked` twin above it, byte for byte in layout. */}
+      {ARRANGEMENTS.map((arrangement) =>
+        MEDIA_CASES.map((entry) => (
+          <div key={`${arrangement}-${entry.key}`}>
+            <PageHero
+              arrangement={arrangement}
+              title={TITLE}
+              body={[CU_SUPPORT_MAX]}
+              eyebrow={EYEBROW}
+              actions={ONE_ACTION}
+              media={entry.media}
+            />
+            <Note
+              title={`17 · arrangement="${arrangement}" · ${entry.label}`}
+              note={
+                arrangement === 'beside' && entry.media
+                  ? `From 1024: copy and media in two equal tracks, 64 apart (--gap-column), top-aligned, the media at its own ratio inside a 588 track (sizes: HERO_BESIDE). ${entry.note}`
+                  : arrangement === 'stacked' && entry.media
+                    ? `The media below the copy as a full-column block, 48 under the actions (sizes: FULL_COLUMN). This is ruling H1's "below". ${entry.note}`
+                    : entry.note
+              }
+            />
+          </div>
+        )),
+      )}
+
+      {/* ── 18 · Beside at the ceiling ─────────────────────────────────────────── */}
+      <PageHero
+        arrangement="beside"
+        title={CU_TITLE_MAX}
+        body={[CU_SUPPORT_MAX]}
+        eyebrow="Design systems"
+        actions={TWO_ACTIONS}
+        media={asHero(ILLUSTRATION)}
+      />
+      <Note
+        title="18 · beside · CU04 ceiling — a 10-word H1 and 35-word support against an illustration"
+        note="The longest copy the standard allows, in a 588 track. The title's 22ch measure exceeds the track and goes inert, so the h1 wraps to the track instead; the lead's 40ch still fits. The two tracks stay equal (H2) however the copy runs — the image does not grow into the copy's side, and the copy does not push the image down."
+      />
+      <PageHero
+        arrangement="beside"
+        title={TITLE}
+        body={paragraphs(3)}
+        eyebrow={EYEBROW}
+        credits={[{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }]}
+        dates={{ published: '2026-03-03', modified: '2026-06-12' }}
+        actions={TWO_ACTIONS}
+        media={asHero(CUT_OUT)}
+      />
+      <Note
+        title="18 · beside · every copy slot filled — three paragraphs, a byline and two actions"
+        note="The copy column outgrows the media and that is accepted: top-aligned, the difference is air under the image, not a stretched or centred one. This is an over-budget hero (three paragraphs is past CU04's 35 words) and it still holds."
+      />
+
+      {/* ── 19 · Beside · the asset's shape ────────────────────────────────────── */}
+      {(
+        [
+          [
+            'square',
+            PHOTOGRAPH,
+            'A 1:1 photograph. 588 × 588 in the track — close to the copy’s own height at this length, so the band reads as two equal halves.',
+          ],
+          [
+            'tall',
+            CUT_OUT_TALL,
+            'A 902 × 1088 cut-out: about 710 tall in the track, so the image is the longer side and the copy sits at its top. Intrinsic, uncropped (H3).',
+          ],
+          [
+            'wide',
+            CAPTURE,
+            'A 1436 × 883 capture: about 360 tall in the track, so the copy is the longer side. A wide asset beside the copy is short; if the page wants it large, the template wants `stacked`.',
+          ],
+          [
+            '1:5 stress',
+            STRESS_TALL,
+            'A 400 × 2000 asset renders 588 × 2940 — the band becomes the image. Nothing clips it and nothing should: a very tall asset is a supply problem the 326 check catches (audit § 3), not something this component crops.',
+          ],
+        ] as const
+      ).map(([shape, image, note]) => (
+        <div key={shape}>
+          <PageHero
+            arrangement="beside"
+            title={TITLE}
+            body={[CU_SUPPORT_MAX]}
+            actions={ONE_ACTION}
+            media={asHero(image)}
+          />
+          <Note title={`19 · beside · a ${shape} asset`} note={note} />
+        </div>
+      ))}
+
+      {/* ── 20 · Beside on every surface ────────────────────────────────────────
+          A capture, because its hairline is the one surface-dependent value in the media and it
+          must re-tune on each ground without being told. Not an illustration: ch05 § 4a forbids
+          one on blue, and § 9a keeps a banner off ink and blue altogether — this row proves the
+          token layer, not a page anyone should build on the reserved grounds. */}
+      {SURFACES.map((entry) => (
+        <div key={`beside-${entry.surface}`}>
+          <PageHero
+            arrangement="beside"
+            surface={entry.surface}
+            title={TITLE}
+            body={[CU_SUPPORT_MAX]}
+            eyebrow={EYEBROW}
+            credits={[{ role: 'author', people: ['Alice Chen'] }]}
+            dates={{ published: '2026-03-03' }}
+            actions={TWO_ACTIONS}
+            media={asHero(CAPTURE)}
+          />
+          <Note
+            surface={entry.surface}
+            title={`20 · beside · surface ${entry.surface}`}
+            note="Identical markup, one prop apart. The six text inks are --hero-*, the capture's hairline is Media's --media-capture-rule-ink, and both re-declare per surface from the band's data-surface."
+          />
+        </div>
+      ))}
+
+      {/* ── 21 · 326 · every kind in the phone's column ────────────────────────────
+          The harness frames the VIEWPORT (390) and the band's own gutter makes the 326. The frame
+          cannot fire a media query, so `beside` would split inside it at a wide window — and below
+          1024 `beside` IS `stacked`, so these bands render `stacked`, which is what a phone gets
+          from either arrangement. The real 390 capture of this page shows every band above in
+          that state. */}
       <Section density="tight">
         <Layout rowGap="block">
-          <p className={s.specTitle}>16 · What a static page cannot show</p>
+          <p className={s.specTitle}>21 · 326 · every media kind at the mobile column</p>
           <p className={s.specNote}>
-            <strong>The 767 and 375 columns.</strong> Narrow the window. Nothing in this component
-            changes at either — no DOM change, no reordering, no gap change, no type change of its
-            own — and that is the assertion rather than an omission: the stack is single-track at
-            every width, both Clusters wrap by themselves, and both measures are{' '}
+            Below 1024 both arrangements are one column — copy, then media — so this is the
+            phone rendering of every band in 17. Each asset must still read at 326 (ch05 B3). At
+            a wide window the h1 keeps its desktop step inside the frame; judge the media and
+            the lead.
+          </p>
+        </Layout>
+      </Section>
+      {MEDIA_CASES.map((entry) => (
+        <div key={`mobile-${entry.key}`} className={s.viewportMobile}>
+          <PageHero
+            title={CU_TITLE_MAX}
+            body={[CU_SUPPORT_MAX]}
+            actions={ONE_ACTION}
+            media={entry.media}
+          />
+        </div>
+      ))}
+
+      {/* ── 22 · What this page cannot show ─────────────────────────────────────── */}
+      <Section density="tight">
+        <Layout rowGap="block">
+          <p className={s.specTitle}>22 · What a static page cannot show</p>
+          <p className={s.specNote}>
+            <strong>The 1024, 767 and 375 columns.</strong> Narrow the window. At 1023 every{' '}
+            <code>beside</code> band stacks — copy, then media — through Layout&apos;s{' '}
+            <code>lg</code> template, and that is the only change in the component. Nothing
+            changes at 767 or 375 — no DOM change, no reordering, no gap change, no type change
+            of its own — and that is the assertion rather than an omission: the stack is
+            single-track at every width, both Clusters wrap by themselves, and both measures are{' '}
             <code>ch</code>-based so they follow the type down with no second value to keep in
             sync. <code>--text-h1</code> re-declares itself at 1023 and 767 in the type layer,
             which is where that decision belongs.
           </p>
           <p className={s.specNote}>
             <strong>The Buttons&apos; three stateless states.</strong> Hover, pressed and{' '}
-            <code>:focus-visible</code> have no props anywhere in this system. Point at an action,
-            hold it down, and tab to it, on each of the four surfaces in block 7. They are
-            Button&apos;s states and Button&apos;s specimen tests them properly.
+            <code>:focus-visible</code> have no props anywhere in this system. Point at an
+            action, hold it down, and tab to it, on each of the four surfaces in block 7. They
+            are Button&apos;s states and Button&apos;s specimen tests them properly.
           </p>
           <p className={s.specNote}>
             <strong>Reduced motion.</strong> Nothing in this component moves, so{' '}
             <code>prefers-reduced-motion: reduce</code> has nothing to switch off and the
-            rendering under it is byte-identical. The stylesheet contains no{' '}
-            <code>@media</code> block of any kind, including that one — the identity is
-            structural, not conditional.
+            rendering under it is byte-identical. The stylesheet contains no <code>@media</code>{' '}
+            block of any kind, including that one — the identity is structural, not conditional.
           </p>
         </Layout>
       </Section>

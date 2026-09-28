@@ -160,6 +160,7 @@ export type {
   HeroCreditRole,
   HeroDates,
   HeroAction,
+  HeroArrangement,
   HeroMedia,
   HeroImage,
   HeroVideo,

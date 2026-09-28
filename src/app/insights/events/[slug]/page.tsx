@@ -244,13 +244,7 @@ export default async function EventPage({ params }: EventPageProps) {
   const labels = uniqueLabels([...event.categories, ...event.tags]);
   const hasHeroDetails = event.details.length > 0 || labels.length > 0;
   const heroMedia = event.featureImage
-    ? {
-        kind: 'image' as const,
-        src: event.featureImage.src,
-        alt: event.featureImage.alt,
-        width: event.featureImage.width,
-        height: event.featureImage.height,
-      }
+    ? { type: 'image' as const, image: event.featureImage }
     : undefined;
 
   return (
