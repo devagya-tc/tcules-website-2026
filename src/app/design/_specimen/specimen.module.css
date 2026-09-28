@@ -116,6 +116,7 @@
 .titleScale {
   font: var(--text-h1);
   letter-spacing: var(--text-h1-tracking);
+  text-wrap: var(--text-title-wrap);
   color: var(--sec-ink);
 }
 

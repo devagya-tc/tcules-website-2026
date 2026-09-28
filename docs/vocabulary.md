@@ -120,6 +120,24 @@ resolution, not an exemption: mono has exactly 1, `--text-code`, where mono is
 identifiers. Numerals have no case, so the transform is a no-op on a stat's digits and normalises an
 alphabetic suffix: "12k" sets as "12K".
 
+### Titles balance, running text wraps pretty
+
+Wrap is a property of the role, like case, and it has two answers. **Every title role** (display,
+h1–h6) is balanced, so a long title breaks into near-equal lines instead of leaving one word on the
+last. **Running text** — lead, body-lg, body, body-sm and quote, wherever they set sentences — wraps
+pretty: every line keeps the measure and only a closing single word is avoided. A UI line that
+borrows a body size (a nav row, a field label, a crumb) takes neither, and neither do mono labels.
+
+```css
+font: var(--text-h2);
+letter-spacing: var(--text-h2-tracking);
+text-wrap: var(--text-title-wrap);
+```
+
+Two tokens, one per decision: `--text-title-wrap` and `--text-running-wrap`. Design titles
+against their longest real copy — a ten-word h1 or h2, an eight-word card title — not a four-word
+placeholder that never wraps.
+
 - **Measure (line length):** `--measure-title` 22ch · `--measure-lead` 40ch · `--measure-body` 68ch
 - **Radius:** `--radius-0` 0px · `--radius-4` 4px · `--radius-8` 8px · `--radius-full` 999px
 - **Border width:** `--border-width-0` 0px · `--border-width-1` 1px · `--border-width-2` 2px · `--border-width-3` 3px · `--border-width-hairline` 1px · `--border-width-hairline-deck` 2px · `--border-width-hairline-social` 3px · `--border-width-hairline-print` 0.75pt

@@ -113,7 +113,8 @@
    answer, and a component whose title depended on it would lose its type the day a Heading
    component replaced it.
 
-   text-wrap: balance because the title is the strongest shape in the band and a widow in it is
+   Balanced, because every title role is (--text-title-wrap, tokens/primitives.css § Type · wrap),
+   and it matters most here: the title is the strongest shape in the band and a widow in it is
    visible from across a room. The 58-character Service L3 name — the corpus's longest — wraps to
    three balanced lines inside --measure-title rather than leaving one word alone on the last.
    Never clamped and never truncated: a 60-character unbroken token in an h1 is a content fault
@@ -129,7 +130,7 @@
   color: var(--hero-title-ink);
   font: var(--hero-title-text);
   letter-spacing: var(--hero-title-tracking);
-  text-wrap: balance;
+  text-wrap: var(--text-title-wrap);
 }
 
 /* ── The copy · two roles, one measure token ───────────────────────────────────
@@ -156,12 +157,14 @@
   max-inline-size: var(--hero-body-measure);
   color: var(--hero-lead-ink);
   font: var(--hero-lead-text);
+  text-wrap: var(--text-running-wrap);
 }
 
 .body {
   max-inline-size: var(--hero-body-measure);
   color: var(--hero-body-ink);
   font: var(--hero-body-text);
+  text-wrap: var(--text-running-wrap);
 }
 
 /* ── The byline · key over value ───────────────────────────────────────────────

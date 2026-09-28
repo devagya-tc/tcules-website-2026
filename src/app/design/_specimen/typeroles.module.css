@@ -14,45 +14,57 @@
 .display {
   font: var(--text-display);
   letter-spacing: var(--text-display-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 .h1 {
   font: var(--text-h1);
   letter-spacing: var(--text-h1-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 .h2 {
   font: var(--text-h2);
   letter-spacing: var(--text-h2-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 .h3 {
   font: var(--text-h3);
   letter-spacing: var(--text-h3-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 .h4 {
   font: var(--text-h4);
   letter-spacing: var(--text-h4-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 .h5 {
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 .h6 {
   font: var(--text-h6);
   letter-spacing: var(--text-h6-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 .quote {
   font: var(--text-quote);
+  text-wrap: var(--text-running-wrap);
 }
 .lead {
   font: var(--text-lead);
+  text-wrap: var(--text-running-wrap);
 }
 .bodyLg {
   font: var(--text-body-lg);
+  text-wrap: var(--text-running-wrap);
 }
 .body {
   font: var(--text-body);
+  text-wrap: var(--text-running-wrap);
 }
 .bodySm {
   font: var(--text-body-sm);
+  text-wrap: var(--text-running-wrap);
 }
 .caption {
   font: var(--text-caption);

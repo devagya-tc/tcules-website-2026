@@ -98,11 +98,13 @@
 .successHeading {
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 
 .successBody {
   max-inline-size: var(--measure-body);
   font: var(--text-lead);
+  text-wrap: var(--text-running-wrap);
 }
 
 /* One selector, because there is one transition. It listed .label and .message as well, which

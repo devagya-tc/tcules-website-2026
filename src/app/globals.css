@@ -33,22 +33,27 @@ body {
 h1 {
   font: var(--text-h1);
   letter-spacing: var(--text-h1-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 h2 {
   font: var(--text-h2);
   letter-spacing: var(--text-h2-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 h3 {
   font: var(--text-h3);
   letter-spacing: var(--text-h3-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 h4 {
   font: var(--text-h4);
   letter-spacing: var(--text-h4-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 h5 {
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 /* The sixth, which had no rule until --text-h6 existed. Before this a bare <h6> anywhere on the
    site fell through to the browser default — bold, 0.67em, the wrong family — while its five
@@ -56,6 +61,7 @@ h5 {
 h6 {
   font: var(--text-h6);
   letter-spacing: var(--text-h6-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 
 /* Links take the section layer's link roles, so a link inside any band lifts to a legible step

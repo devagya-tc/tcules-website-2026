@@ -93,6 +93,7 @@
   color: var(--bcrd-title-ink);
   font: var(--bcrd-title-text);
   letter-spacing: var(--bcrd-title-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 
 .body {
@@ -100,6 +101,7 @@
   overflow-wrap: anywhere;
   color: var(--bcrd-body-ink);
   font: var(--bcrd-body-text);
+  text-wrap: var(--text-running-wrap);
 }
 
 /* Higher specificity than the global anchor rule. The anchor carries NO link colour of its own —

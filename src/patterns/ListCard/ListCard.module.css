@@ -161,6 +161,7 @@
   color: var(--lcrd-title-ink);
   font: var(--lcrd-title-text);
   letter-spacing: var(--lcrd-title-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 
 .body {
@@ -168,6 +169,7 @@
   overflow-wrap: anywhere;
   color: var(--lcrd-body-ink);
   font: var(--lcrd-body-text);
+  text-wrap: var(--text-running-wrap);
 }
 
 /* The row's only link-coloured part. It holds this ink through hover and steps once on press, which

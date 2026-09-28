@@ -59,6 +59,7 @@
   max-inline-size: var(--foot-tagline-measure);
   color: var(--foot-tagline-ink);
   font: var(--foot-tagline-text);
+  text-wrap: var(--text-running-wrap);
 }
 
 /* The rating badge. An outline pill, not a fill: it is a claim with a source, and a filled chip
@@ -247,12 +248,14 @@
   color: var(--foot-title-ink);
   font: var(--foot-title-text);
   letter-spacing: var(--foot-title-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 
 .body {
   max-inline-size: var(--foot-body-measure);
   color: var(--foot-body-ink);
   font: var(--foot-body-text);
+  text-wrap: var(--text-running-wrap);
 }
 
 /* The form column centres against the pitch beside it rather than sitting at its top: two

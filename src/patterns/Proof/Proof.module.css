@@ -31,10 +31,12 @@
 .display .quoteText {
   font: var(--text-h3);
   letter-spacing: var(--text-h3-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 
 .compact .quoteText {
   font: var(--text-quote);
+  text-wrap: var(--text-running-wrap);
 }
 
 /* Prose remains the trusted-HTML seam and keeps its flow/link behavior. The two-class selector is
