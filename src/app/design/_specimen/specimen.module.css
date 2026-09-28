@@ -190,3 +190,27 @@
 .texInkWhite {
   --tex-ink: var(--color-white);
 }
+
+/* The mobile column — ch05 B3 / addendum D: every image placed on the site is approved at 326px,
+   the content column of a 390px viewport, and "specimens check images at 326px as a stress row".
+
+   These two are NOT illegal-placement frames, unlike .trackMd / .trackSm above: they stand in for
+   the phone, which is a width every placement has to survive. Neither writes the number. The
+   viewport is --viewport-390, the token layer's record of the narrowest checked width, and the
+   column is that less two --sec-gutter — Section's own gutter, read here with the same honesty
+   .mockBar takes with the nav's tokens, because this IS a stand-in for Section's content column.
+   If the gutter moves, the check moves with it.
+
+   .trackMobile is the column (326): wrap an in-column thing — a Figure, a card, a row — in it.
+   .viewportMobile is the viewport (390): wrap a BAND in it, so the band's own gutter produces the
+   326 column rather than insetting a 326 frame a second time. Neither can fire a media query, so
+   anything that re-arranges at 767 renders its desktop arrangement inside these; the specimens
+   that use them say which arrangement they show. At a 390 window both are inert, which is the
+   point: the frame and the phone agree. */
+.trackMobile {
+  max-inline-size: calc(var(--viewport-390) - 2 * var(--sec-gutter));
+}
+
+.viewportMobile {
+  max-inline-size: var(--viewport-390);
+}

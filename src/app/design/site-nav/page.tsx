@@ -92,6 +92,13 @@ export default async function SiteNavSpecimenPage() {
           </Specimen>
 
           <Specimen
+            title="326 · mobile column — the rail card"
+            note="ch05 B3 approves every image at 326, the phone's column. The rail card is the one image slot that never renders that wide, so it cannot be framed to 326 the way a card in the page can: the plate and the sheet size it, not its parent, and a header in a 326 frame at a wide window would still draw the desktop bar. Measured on this route: 276 × 121 in the plate at 1440, falling to 242 × 106 at 1024 where the plate is narrowest (hover Services), and 314 × 137 in the sheet at 390 (open the menu, then Services) — the sheet's 20px optical inset plus the card's own 16 padding and hairline take it below 326. Its asset is therefore judged at 242, its narrowest slot, which is stricter than the page's 326. The fixture's artwork is a named placeholder; this row is where the real one gets checked."
+          >
+            <SiteNav {...only(nav, ['services'])} />
+          </Specimen>
+
+          <Specimen
             title="Items that navigate"
             note="Work, Lab and About. Plain links, no chevron, and they still light up from inside their section — Services owns /audits and /how-we-work, About owns /team and /careers, so those pages do not leave the whole bar unlit. aria-current is exact, though: announcing five pages as 'current page' would be a lie the styling does not tell."
           >
