@@ -135,7 +135,7 @@ const SPECIMENS = [
       {
         href: '/design/figure',
         name: 'Figure',
-        note: 'the captioned image — slot ladder, 3 intrinsic ratios uncropped, the empty state, 4 surfaces',
+        note: 'the captioned image — slot ladder, 3 intrinsic ratios uncropped, the empty state, 4 surfaces, a row per Media kind',
       },
       {
         href: '/design/page-hero',
