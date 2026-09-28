@@ -1,0 +1,82 @@
+/* ══ Component layer — client mark ═══════════════════════════════════════════════
+   Tier 1. A client's logo in a set: a strip, a client wall. ch05 §10 fixes all three things
+   this file holds: the ONE colour every mark in a set takes, and the target and caps it is
+   sized to.
+
+   Naming: --cmark-{part}-{modifier}.
+
+   ── Why the ink is a token and not `currentColor` ───────────────────────────────
+   ch05 §10: "every mark is one colour: the ground's ink". The GROUND's ink, not whatever
+   colour the element happens to inherit. `currentColor` is the ground's ink only until the
+   mark sits inside a link to its case study, at which point it turns link-blue — a client's
+   mark painted in our brand colour, which is exactly what "never recoloured beyond the rule"
+   forbids. A token pins it to the ground whatever wraps it. It reads the same four values
+   --sec-ink does, duplicated on purpose (a component never reads another component's
+   tokens, CLAUDE.md rule 6).
+
+   The ink is a solid fill, never a tint or an opacity (ch05 §10), so there is no -muted.
+   There are no state tokens: a mark is not a control and nothing about it moves.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   Component SIZES, so they are literals with explicit names, like --logo-height-*. None of
+   them is a distance between two things: the gap between marks belongs to the Cluster
+   (ch05 §10), and this file holds none.
+
+   How the three combine (ClientMark.module.css does the arithmetic):
+     width  = √(target-side² × ratio) = target-side × √ratio   — equal AREA, not equal width
+     then   capped so height ≤ height-max and width ≤ width-max, the ratio kept
+     then   × (1 + correction), the recorded ±15%, and capped again
+
+   --cmark-target-side   the side of the square whose area every mark in a set matches. The
+                         target is stated as a side rather than an area because an area is
+                         px², and a custom property cannot hold a unit CSS has no type for.
+                         56 puts a 4:1 wordmark at 112 × 28 and a 3:1 at 97 × 32 — the
+                         common shapes land under the height cap and keep their full area.
+                         Below a ratio of 1.96 (56² / 40²) a mark reaches the cap first.
+   --cmark-height-max    ruling P2: "capped at ~40px tall". A square symbol or a stacked
+                         lockup stops here, which is why they read slightly lighter than a
+                         wordmark: the cap wins over the area, as ch05 orders it.
+   --cmark-width-max     at the height cap a 4:1 wordmark is 160 wide; nothing in a set is
+                         allowed to be wider than that. An ultra-wide wordmark (10:1 and
+                         beyond) shrinks in height instead of running the row.            */
+:root{
+--cmark-target-side:56px;
+--cmark-height-max:40px;
+--cmark-width-max:160px;
+/* Forced colours (Windows High Contrast) — surface-independent, because in that mode the
+   user's palette replaces every ground. CanvasText is a system colour KEYWORD, not a palette
+   value: the one colour correct there by definition, since the user chose it. Read only
+   inside @media (forced-colors: active) in ClientMark.module.css.                          */
+--cmark-ink-forced:CanvasText;
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   ch05 §10 names it: neutral-900 on paper. Logotypes are exempt from SC 1.4.3 and 1.4.11
+   treats them as the same, so these ratios are recorded rather than floors.                */
+:root,[data-surface="paper"]{
+--cmark-ink:var(--color-neutral-900);         /* 14.62:1 on paper */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   ch05 §10: neutral-900 on paper-deep too. Restated rather than inherited, so a tint panel
+   nested in an ink band still paints its marks dark.                                        */
+[data-surface="tint"]{
+--cmark-ink:var(--color-neutral-900);         /* 13.06:1 on paper-deep */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   ch05 §10: white on ink. White rather than paper, for the reason section.css gives for
+   body ink on this ground.                                                                  */
+[data-surface="ink"]{
+--cmark-ink:var(--color-white);               /* 17.26:1 on neutral-950 */
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   ch05 §10 names three grounds and not blue. "The ground's ink" on blue is white (section.css
+   --sec-ink), and ch02 puts our own wordmark white throughout on blue, so a client's mark
+   takes the same. Never a blue-ramp step: a client mark in brand blue on brand blue is a
+   tint, which §10 rules out.                                                                */
+[data-surface="blue"]{
+--cmark-ink:var(--color-white);               /*  6.23:1 on brandeis-500 */
+}
