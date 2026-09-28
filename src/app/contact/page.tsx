@@ -82,8 +82,12 @@ export default async function ContactPage() {
               <Layout as="ul" rowGap="none">
                 {page.cards.map((card) => {
                   const action = card.action;
-                  const image = card.icon ?? action?.icon;
 
+                  /* No marker. The CMS still sends `card.icon` / `action.icon` — small line-icon
+                     PNGs — and they rendered as 160px cover thumbnails, blurred and cropped. A
+                     thumbnail is for case-study and insight/resource rows only (ruling C1, ch05
+                     § 9), and a glyph that is not Solar Bold is not an icon marker either (ch04).
+                     The title names the channel; docs/strapi-changes.md logs the unused field. */
                   return (
                     <ListCard
                       key={card.id}
@@ -92,11 +96,6 @@ export default async function ContactPage() {
                         action
                           ? [action.label, action.description].filter(Boolean).join(' — ')
                           : ''
-                      }
-                      marker={
-                        image
-                          ? { kind: 'thumbnail', src: image.src, alt: image.alt }
-                          : undefined
                       }
                       href={action?.href}
                       external={action?.external}

@@ -106,3 +106,15 @@ supplied, like the panel, so it is recorded with the asset rather than chosen pe
 through the `Media` primitive, which ignores it on every other kind.
 
 **Found in.** tracker 2.6 (`docs/specs/Media.md` §3).
+
+## 10. The contact cards' icon field is no longer rendered
+
+**What.** The contact page's `card.icon` and `action.icon` uploads can be retired (or left empty). The site
+stopped rendering them in 2.11. No replacement field is needed: the card's heading names the channel.
+
+**Why.** They are small line-icon PNGs (69–96px), which ListCard rendered as 160px 3:2 cover thumbnails,
+upscaled and cropped. A ListCard thumbnail is for case-study and insight/resource rows only (ruling C1,
+ch05 §9), and a glyph that is not Solar Bold is not a legal icon either (ch04). If the owner later wants a
+glyph per channel, it is `letter` / `phone` / `calendar` chosen in code from ch04's fixed set, not an upload.
+
+**Found in.** tracker 2.11 (`docs/specs/ListCard.md` §17).
