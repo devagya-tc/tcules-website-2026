@@ -355,7 +355,7 @@ export default async function EventPage({ params }: EventPageProps) {
                   eyebrow="Article"
                   media={
                     resource.image
-                      ? { kind: 'image', src: resource.image.src, alt: resource.image.alt }
+                      ? { type: 'image', image: resource.image }
                       : undefined
                   }
                   href={articlePath(resource.slug)}

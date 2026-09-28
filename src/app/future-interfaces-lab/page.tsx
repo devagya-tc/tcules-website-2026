@@ -138,7 +138,7 @@ export default async function FutureInterfacesLabPage() {
                           body={card.body}
                           media={
                             media
-                              ? { kind: 'image', src: media.src, alt: media.alt }
+                              ? { type: 'image', image: media }
                               : undefined
                           }
                           href={card.action?.href}
@@ -248,7 +248,7 @@ export default async function FutureInterfacesLabPage() {
                 body={card.action?.description || ''}
                 media={
                   card.icon
-                    ? { kind: 'image', src: card.icon.src, alt: card.icon.alt }
+                    ? { type: 'image', image: card.icon }
                     : undefined
                 }
                 href={card.action?.href}

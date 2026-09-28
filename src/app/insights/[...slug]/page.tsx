@@ -365,7 +365,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                   eyebrow={resource.categories.join(' · ') || 'Insight'}
                   media={
                     resource.image
-                      ? { kind: 'image', src: resource.image.src, alt: resource.image.alt }
+                      ? { type: 'image', image: resource.image }
                       : undefined
                   }
                   href={blogPath(resource.slug)}
