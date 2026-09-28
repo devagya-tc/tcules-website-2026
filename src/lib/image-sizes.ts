@@ -21,8 +21,8 @@
  * by its tracks — with the 1304 term stated as a pixel width so a wide window never over-asks.
  *
  * ── Who uses what ─────────────────────────────────────────────────────────────────
- * PageHero reads FULL_COLUMN (stacked) and HERO_BESIDE (beside). Figure, BlockCard, ListCard and
- * the SiteNav rail card move onto these as each migrates onto Media (their own PRs); until then
+ * PageHero reads FULL_COLUMN (stacked) and HERO_BESIDE (beside); Proof reads PROOF_PORTRAIT.
+ * Figure, BlockCard, ListCard and the SiteNav rail card move onto these as each migrates onto Media (their own PRs); until then
  * they state their own, and the values here are the ones they should converge on.
  *
  * A leaf: imports nothing.
@@ -76,6 +76,14 @@ export const CARD_THREE_TRACKS =
  * (tokens/components/list-card.css). A 2× screen asks for 320, which is the ladder's smallest rung.
  */
 export const LIST_CARD_THUMBNAIL = '160px';
+
+/**
+ * Proof's quote portrait: a fixed 64 square at every width — --proof-portrait-size
+ * (tokens/components/proof.css). Ruling P1 makes it small and beside the name, so it never takes a
+ * track's width. A 2× screen asks for 128 and a 3× for 192, both served by the ladder's smallest
+ * rung, 320 (M2) — so a portrait is always the 320 derivative, never the master.
+ */
+export const PROOF_PORTRAIT = '64px';
 
 /**
  * The SiteNav rail card: about 300 beside the rail from 1024, the sheet's column below it.

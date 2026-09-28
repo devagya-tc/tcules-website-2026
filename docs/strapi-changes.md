@@ -129,3 +129,16 @@ string, so these fields can reach the page. A duplicated field is two sources of
 four rows where they already disagree prove it.
 
 **Found in.** `docs/specs/DataTable.md` § 17 Q6–Q7; tracker 2.15.
+
+## 11. Testimonials carry an optional portrait and an optional client mark
+
+**What.** Two optional relations on the testimonial record: `portrait` (a media asset, shot square per
+ch05 §3, no alt needed — the site renders it as decorative beside the name) and `clientMark` (the
+client's SVG, with its intrinsic width and height and the ±15% weight `correction` ch05 §10 records
+with the asset). The mark belongs on the **client** entity rather than on each testimonial if clients
+become an entity (one mark, many quotes); until then it rides the testimonial.
+
+**Why.** Both are facts about the testimonial — who said it and for whom — so they pass the entry-1
+test. `Proof` renders them (rulings P1, P2); without the fields there is nothing to render.
+
+**Found in.** tracker 2.12 (`docs/specs/Proof.md` §3, Amendment · 28 Sep 2026).
