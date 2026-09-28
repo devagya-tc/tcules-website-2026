@@ -143,7 +143,7 @@ placeholder that never wraps.
 - **Border width:** `--border-width-0` 0px · `--border-width-1` 1px · `--border-width-2` 2px · `--border-width-3` 3px · `--border-width-hairline` 1px · `--border-width-hairline-deck` 2px · `--border-width-hairline-social` 3px · `--border-width-hairline-print` 0.75pt
 - **Focus ring:** `--focus-ring-width` 2px · `--focus-ring-offset` 2px
 - **Motion:** `--duration-instant` 0ms · `--duration-fast` 140ms · `--duration-medium` 240ms · `--duration-slow` 360ms · `--easing-standard` cubic-bezier(0.2, 0, 0, 1)
-- **Elevation:** `--shadow-none` none
+- **Elevation:** `--shadow-none` none · `--shadow-crop` 0 0 6px color-mix(in srgb, #1b1b18 8%, transparent)
 - **Z-index:** `--z-base` 0 · `--z-raised` 100 · `--z-sticky` 200 · `--z-dropdown` 300 · `--z-overlay` 400 · `--z-modal` 500 · `--z-toast` 600
 - **Icon:** `--icon-size-14` 14px · `--icon-size-16` 16px · `--icon-size-18` 18px · `--icon-size-24` 24px
 - **Breakpoints:** `--breakpoint-480` 480px · `--breakpoint-768` 768px · `--breakpoint-1024` 1024px · `--breakpoint-1280` 1280px · `--breakpoint-1440` 1440px
@@ -161,7 +161,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
+`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -182,6 +182,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **layout.css** — `--lay-track-xs` 192px · `--lay-track-sm` 256px · `--lay-track-md` 320px · `--lay-track-lg` 384px
 - **list-card.css** — `--lcrd-title-tracking` -0.005em · `--lcrd-marker-tracking` 0.08em · `--lcrd-number-baseline-offset` 4px · `--lcrd-content-min-xs` 192px · `--lcrd-thumbnail-inline-md` 160px · `--lcrd-rule-width` 1px · `--lcrd-radius` 0px · `--lcrd-ring-width` 2px · `--lcrd-ring-offset` 2px
 - **logo.css** — `--logo-height-sm` 20px · `--logo-height-md` 24px · `--logo-height-lg` 40px
+- **media.css** — `--media-radius` 0px · `--media-capture-rule-width` 1px · `--media-panel-inset` 32px
 - **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 16px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-plate-width-lg` 1056px · `--nav-plate-width-md` 780px · `--nav-plate-width-sm` 560px · `--nav-plate-radius` 8px · `--nav-plate-inset` 16px · `--nav-row-padding-block` 8px · `--nav-row-padding-inline` 16px · `--nav-row-radius` 8px · `--nav-row-arrow-size` 14px · `--nav-row-arrow-travel` 4px · `--nav-rail-title-tracking` 0em · `--nav-card-radius` 8px · `--nav-card-padding` 16px · `--nav-card-image-radius` 4px · `--nav-card-arrow-size` 16px · `--nav-label-tracking` 0.12em · `--nav-sheet-reserve` 88px · `--nav-sheet-radius` 8px · `--nav-sheet-padding-inline` 20px · `--nav-sheet-row-padding-block` 12px · `--nav-sheet-foot-padding-block` 12px · `--nav-sheet-link-padding-block` 12px · `--nav-sheet-chevron-size` 16px · `--nav-grab-width` 36px · `--nav-grab-height` 4px · `--nav-sheet-dismiss-distance` 56px · `--nav-sheet-dismiss-flick-distance` 24px · `--nav-drag-slop` 8px · `--nav-row-lift` 6px
 - **page-hero.css** — `--hero-eyebrow-tracking` 0.12em · `--hero-title-tracking` -0.018em · `--hero-key-tracking` 0.1em · `--hero-title-measure` 22ch · `--hero-body-measure` 68ch · `--hero-media-radius` 0px · `--hero-media-rule-width` 1px
 - **proof.css** — `--proof-quote-rule-width` 2px · `--proof-radius` 0px
@@ -213,7 +214,7 @@ seam to size.
 
 ### What already exists — check these before specifying anything new
 
-- **Primitives** (`src/components/`): `Button` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Prose` · `Section` · `Tag` · `Texture`
+- **Primitives** (`src/components/`): `Button` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `Section` · `Tag` · `Texture`
 - **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaSection` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav` · `TableOfContents`
 - **Templates** (`src/templates/`): — none yet
 

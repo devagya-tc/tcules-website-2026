@@ -1,0 +1,100 @@
+/* ══ Component layer — Media ═════════════════════════════════════════════════════
+   Tier 1. The one way the site renders an image asset in a placement: the responsive
+   delivery (srcset from Strapi's formats, a sizes the placement supplies) and the brand's
+   edge-by-kind rules (ch05 §2, §2a, §4a, amendments B2–B5). Built to docs/specs/Media.md.
+
+   Naming: --media-{kind or part}-{part}-{role}
+     kinds  capture | cutout            (illustration and photograph own no token: they take
+                                         no edge, no panel and no shadow, so there is nothing
+                                         to declare for them — the absence is the rule)
+     parts  rule | shadow | panel | radius
+     roles  ink (a rule's colour) · ground (a panel's fill) · width · inset
+
+   ── Two kinds of colour live here, and only one of them is per surface ───────────
+   The capture's hairline is drawn in the SURFACE's rule ink, so it moves with the ground
+   the image sits on and is declared once per surface below. The cut-out's contrast panel
+   does NOT move with the surface: its colour is chosen at supply, per asset, for the
+   contrast between the product's own UI edge and the panel (ruling M4, ch05 B5), and it
+   is one of three fixed brand grounds whatever band the image lands in. So the three panel
+   grounds are geometry-like constants in :root and appear in no surface block — declaring
+   them four times would assert a variation the rule forbids.
+
+   ── There is no state suffix anywhere, and that is the assertion ─────────────────
+   An image is not a control. Nothing here hovers, presses, focuses or expands; a link
+   around an image is the pattern's element and the pattern's state. So no --media-*-hover
+   exists, and none is declared-and-equal either: a state token exists only if the value
+   moves on at least one surface.
+
+   ── The rule is decoration, and it takes the house's ladder ─────────────────────
+   300 / 400 / 700 / brandeis-300 — the ladder --acc-rule-ink, --bcrd-edge-ink,
+   --lcrd-rule-ink and --fig-rule-ink already ship for "a slight distinction from the
+   ground where one is needed" (the owner's ruling on Figure, 24 Aug 2026). It is
+   DUPLICATED here by value rather than read, because a component never reads another
+   component's tokens; when Figure moves onto Media (tracker 2.7) its own rule token goes
+   away and this becomes the only copy that draws an image's edge. Every ratio is below
+   3:1 on purpose and stated, so a later "this is too quiet" has the number in front of it.
+
+   Every surface block declares every surface-dependent token. Deltas-only is not
+   self-contained: nest this inside a non-paper surface and it inherits the enclosing
+   surface's values for whatever it omitted.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   Radius 0 on every image, in every medium (ch05 §6). The one exception the chapter
+   names — the SiteNav rail card's --radius-4 — belongs to that card, which is a control
+   rather than an image placement, so it is the card's token to set on its own box and
+   not a variant of this one.
+
+   The panel inset is a DISTANCE and so takes a gap-scale step, chosen by what it
+   separates: the edge of a container from the content it holds. That relationship already
+   has a name — the container gutter, the step Section uses between the band's edge and
+   its content column — so it is --gap-gutter, not the 24 that would look balanced at one
+   width. It does not shift responsively: at 326 the panel keeps 32 of air on each side,
+   and a part that no longer clears the ch05 §2a type floor inside that is a supply
+   problem (fewer parts), never a smaller inset. */
+:root {
+  --media-radius: var(--radius-0);
+  --media-capture-rule-width: var(--border-width-hairline);
+  --media-cutout-shadow: var(--shadow-crop);
+  --media-panel-inset: var(--gap-gutter);
+
+  /* The three contrast panels (ch05 §2a "Cut out, not framed", B5). Fixed brand grounds,
+     not surface values: an asset marked `panel: 'paper-deep'` gets paper-deep on paper,
+     on tint and on ink alike, because the panel exists for the UI's edge, not the band's. */
+  --media-panel-paper-ground: var(--color-paper);
+  --media-panel-paper-deep-ground: var(--color-paper-deep);
+  --media-panel-ink-ground: var(--color-neutral-950);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────
+   The capture's hairline does the most work here: a light-UI screenshot on paper is
+   nearly the colour of the ground and has no edge of its own. 300 is enough to make one
+   without reading as a frame. */
+:root,
+[data-surface='paper'] {
+  --media-capture-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────
+   The rule steps with the ground. The tint is already darker than a light screenshot, so
+   part of the distinction is made before the rule draws anything. */
+[data-surface='tint'] {
+  --media-capture-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────
+   The rule DROPS to 700 rather than lifting: a light screenshot on a near-black ground
+   already has all the edge it needs from its own pixels, so the honest amount of rule
+   here is almost none. */
+[data-surface='ink'] {
+  --media-capture-rule-ink: var(--color-neutral-700); /* 2.10:1 vs the ground — decoration */
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────
+   Stepping toward the ground is what keeps the distinction slight on a saturated field.
+   Blue is a reserved band (ch02, addendum D C1); a capture on it is legal, an
+   illustration is not (ch05 §4a) — that is a placement rule, and Media cannot see which
+   band it is in, so it is enforced in review and in the specimen, not here. */
+[data-surface='blue'] {
+  --media-capture-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
+}

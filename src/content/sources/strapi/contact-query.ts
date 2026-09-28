@@ -17,6 +17,7 @@ export const CONTACT_QUERY = /* GraphQL */ `
           alternativeText
           width
           height
+          formats
           mime
         }
         link {

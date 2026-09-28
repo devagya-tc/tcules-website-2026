@@ -7,6 +7,7 @@ import type {
   ContactSubmissionResult,
   ContentSeo,
 } from '../../types';
+import { absoluteAssetUrl, imageSources, positiveDimension } from './image';
 import { CONTACT_QUERY, CREATE_CLIENT_CONTACT_MUTATION } from './contact-query';
 import type {
   StrapiClientContactResponse,
@@ -29,18 +30,6 @@ function getStrapiGraphqlUrl(): string {
   return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
 }
 
-function absoluteAssetUrl(candidate: string | null | undefined, graphqlUrl: string): string {
-  const path = value(candidate);
-  if (!path) return '';
-
-  try {
-    const url = new URL(path, graphqlUrl);
-    return url.protocol === 'https:' || url.protocol === 'http:' ? url.toString() : '';
-  } catch {
-    return '';
-  }
-}
-
 function mapImage(
   file: StrapiContactImage | null | undefined,
   graphqlUrl: string,
@@ -48,20 +37,16 @@ function mapImage(
   const src = absoluteAssetUrl(file?.url, graphqlUrl);
   if (!src) return undefined;
 
-  const width =
-    typeof file?.width === 'number' && Number.isFinite(file.width) && file.width > 0
-      ? file.width
-      : undefined;
-  const height =
-    typeof file?.height === 'number' && Number.isFinite(file.height) && file.height > 0
-      ? file.height
-      : undefined;
+  const width = positiveDimension(file?.width);
+  const height = positiveDimension(file?.height);
+  const sources = width ? imageSources(file?.formats, width, graphqlUrl) : undefined;
 
   return {
     src,
     alt: value(file?.alternativeText),
     ...(width ? { width } : {}),
     ...(height ? { height } : {}),
+    ...(sources ? { sources } : {}),
   };
 }
 

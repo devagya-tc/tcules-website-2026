@@ -215,3 +215,18 @@
 .viewportMobile {
   max-inline-size: var(--viewport-390);
 }
+
+/* Parent-owned ratio boxes, for /design/media's `fit="fill"` rows. `fill` exists for the placements
+   that crop mechanically — the pattern owns the ratio, the image covers it — so proving it needs a
+   box that owns a ratio. .ratioCard reads --ratio-cover, the one cover crop BlockCard and ListCard
+   both alias. .ratioThumb borrows ListCard's thumbnail box by token, the same honesty .trackMd takes
+   with --lay-*: this IS a stand-in for that box, so the tokens that DEFINE it are the right values
+   to read, not a literal that equals them today. */
+.ratioCard {
+  aspect-ratio: var(--ratio-cover);
+}
+
+.ratioThumb {
+  inline-size: var(--lcrd-thumbnail-inline-md);
+  aspect-ratio: var(--lcrd-thumbnail-ratio);
+}

@@ -133,6 +133,7 @@ export const TOOL_BY_SLUG_QUERY = /* GraphQL */ `
             caption
             width
             height
+            formats
             url
             mime
           }

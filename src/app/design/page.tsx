@@ -48,6 +48,11 @@ const SPECIMENS = [
       },
       { href: '/design/icon', name: 'Icon', note: 'the glyph set, 4 size roles, currentColor' },
       {
+        href: '/design/media',
+        name: 'Media',
+        note: 'the image asset — 4 kinds × 4 surfaces, cut-out shadow and panels, srcset, intrinsic vs fill, stress shapes',
+      },
+      {
         href: '/design/tag',
         name: 'Tag',
         note: 'inert mark and filter chip — one box, inverted enclosure, four surfaces, held state',
