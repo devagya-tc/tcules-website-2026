@@ -31,6 +31,12 @@
  * write, because a CMS body field arrives as a string. It is the documented exception to the
  * no-margins rule, and the exception is argued in the component itself.
  *
+ * ClientMark is a FOURTH kind of mark: a client's logo in a set. Unlike Logo it owns no artwork —
+ * the client's SVG arrives as a URL and is drawn as a mask in --cmark-ink, so every mark in a set is
+ * one colour, the ground's ink — and unlike every other primitive it sizes by AREA, not by height
+ * or width, so marks of very different shapes carry equal weight. A logo strip is not a component:
+ * it is ClientMark × n in a Cluster, which owns the gap.
+ *
  * Texture is DECORATION. It arranges nothing and says nothing: a bleed layer that fills the band
  * and shows the pixel grid through shapes the caller places and blurs. Its geometry is read from
  * src/styles/textures/, the same spec the asset exporter reads.
@@ -62,3 +68,4 @@ export {
   type TextureProps,
   type TextureShapeProps,
 } from './Texture';
+export { ClientMark, type ClientMarkProps } from './ClientMark';
