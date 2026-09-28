@@ -78,8 +78,13 @@ export function imageSources(
   const byWidth = new Map<number, string>();
   for (const format of Object.values(formats)) {
     if (!isRecord(format)) continue;
-    const width = positiveDimension(typeof format.width === 'number' ? format.width : undefined);
-    const src = absoluteAssetUrl(typeof format.url === 'string' ? format.url : undefined, graphqlUrl);
+    const width = positiveDimension(
+      typeof format.width === 'number' ? format.width : undefined,
+    );
+    const src = absoluteAssetUrl(
+      typeof format.url === 'string' ? format.url : undefined,
+      graphqlUrl,
+    );
     if (!width || !src || width >= masterWidth) continue;
     byWidth.set(Math.round(width), src);
   }

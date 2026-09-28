@@ -89,7 +89,8 @@ const SIZES_FULL = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
 const SIZES_QUARTER =
   '(min-width: 1304px) 286px, (min-width: 1024px) calc(25vw - 40px), (min-width: 768px) calc(50vw - 48px), calc(100vw - 64px)';
 /* columns {base:1, md:2}, colGap gutter (32). */
-const SIZES_HALF = '(min-width: 1304px) 604px, (min-width: 768px) calc(50vw - 48px), calc(100vw - 64px)';
+const SIZES_HALF =
+  '(min-width: 1304px) 604px, (min-width: 768px) calc(50vw - 48px), calc(100vw - 64px)';
 /* A tile track at Layout's md width (320), which never exceeds the column. */
 const SIZES_TRACK_MD = '320px';
 
@@ -175,15 +176,16 @@ export default function MediaSpecimenPage() {
         <Layout rowGap="block">
           <h1>Media</h1>
           <p>
-            One image asset in one placement. It owns two things every image slot must get the same
-            — the responsive delivery (a native <code>srcset</code> from the CMS&rsquo;s derived
-            widths, and the <code>sizes</code> the placement states) and the brand&rsquo;s edge by
-            kind — and nothing else. Width is always the parent&rsquo;s. There is no caption: that
-            is <code>Figure</code>&rsquo;s.
+            One image asset in one placement. It owns two things every image slot must get the
+            same — the responsive delivery (a native <code>srcset</code> from the CMS&rsquo;s
+            derived widths, and the <code>sizes</code> the placement states) and the
+            brand&rsquo;s edge by kind — and nothing else. Width is always the parent&rsquo;s.
+            There is no caption: that is <code>Figure</code>&rsquo;s.
           </p>
           <p className={s.specNote}>
-            Every image below is a real asset from the brand framework. The 390 capture of this page
-            is the 326 check (ch05 §2, B3): Section&rsquo;s column in a 390 viewport is exactly 326.
+            Every image below is a real asset from the brand framework. The 390 capture of this
+            page is the 326 check (ch05 §2, B3): Section&rsquo;s column in a 390 viewport is
+            exactly 326.
           </p>
         </Layout>
       </Section>
@@ -193,9 +195,10 @@ export default function MediaSpecimenPage() {
           <Layout rowGap="block">
             <h2>1 · The matrix: four kinds, one edge rule each</h2>
             <p>
-              The only axis is <code>kind</code>, and it is a content fact about the asset, not a
-              presentation choice — so it arrives on the record. Two further fields apply to one
-              kind only: <code>panel</code> and <code>shadow</code> are cut-out fields (section 3).
+              The only axis is <code>kind</code>, and it is a content fact about the asset, not
+              a presentation choice — so it arrives on the record. Two further fields apply to
+              one kind only: <code>panel</code> and <code>shadow</code> are cut-out fields
+              (section 3).
             </p>
           </Layout>
           <Quarters>
@@ -244,15 +247,19 @@ export default function MediaSpecimenPage() {
             <h2>3 · Cut-out: shadow and the contrast panel</h2>
             <p>
               A cut-out sits straight on the band by default. It may carry one shadow —{' '}
-              <code>--shadow-crop</code>, drawn with <code>drop-shadow()</code> so it follows the
-              silhouette rather than the transparent box. Where the part&rsquo;s own edge does not
-              hold 3:1 against the ground, the asset is supplied with a <code>panel</code>: a flat
-              brand ground filling the slot, the part inset by the container gutter, no hairline, no
-              radius and no shadow of its own (§2a, B5, ruling M4).
+              <code>--shadow-crop</code>, drawn with <code>drop-shadow()</code> so it follows
+              the silhouette rather than the transparent box. Where the part&rsquo;s own edge
+              does not hold 3:1 against the ground, the asset is supplied with a{' '}
+              <code>panel</code>: a flat brand ground filling the slot, the part inset by the
+              container gutter, no hairline, no radius and no shadow of its own (§2a, B5, ruling
+              M4).
             </p>
           </Layout>
           <Halves>
-            <Specimen title="cut-out, no shadow" note="The default. The flow's own connectors and card edges hold against paper.">
+            <Specimen
+              title="cut-out, no shadow"
+              note="The default. The flow's own connectors and card edges hold against paper."
+            >
               <Media image={CUT_OUT} sizes={SIZES_HALF} />
             </Specimen>
             <Specimen
@@ -294,8 +301,8 @@ export default function MediaSpecimenPage() {
           <Layout rowGap="block">
             <h2>3b · The panels on ink</h2>
             <p>
-              The panel does not change with the band. Paper-deep on ink is the same paper-deep as on
-              paper, because it exists for the part&rsquo;s edge, not the band&rsquo;s.
+              The panel does not change with the band. Paper-deep on ink is the same paper-deep
+              as on paper, because it exists for the part&rsquo;s edge, not the band&rsquo;s.
             </p>
           </Layout>
           <Halves>
@@ -314,10 +321,10 @@ export default function MediaSpecimenPage() {
           <Layout rowGap="block">
             <h2>4 · Fields a kind does not take</h2>
             <p>
-              <code>panel</code> and <code>shadow</code> on anything but a cut-out are ignored, and
-              the development server logs a <code>Media:</code> warning naming the asset. A warning
-              rather than a throw: a wrong CMS field must not take a page down, and the fallback is
-              the brand-correct rendering.
+              <code>panel</code> and <code>shadow</code> on anything but a cut-out are ignored,
+              and the development server logs a <code>Media:</code> warning naming the asset. A
+              warning rather than a throw: a wrong CMS field must not take a page down, and the
+              fallback is the brand-correct rendering.
             </p>
           </Layout>
           <Quarters>
@@ -336,7 +343,10 @@ export default function MediaSpecimenPage() {
             >
               <Media image={{ ...CAPTURE, shadow: true }} sizes={SIZES_QUARTER} />
             </Specimen>
-            <Specimen title="photograph + panel" note="No panel: the panel is a cut-out device (§2a).">
+            <Specimen
+              title="photograph + panel"
+              note="No panel: the panel is a cut-out device (§2a)."
+            >
               <Media image={{ ...PHOTOGRAPH, panel: 'ink' }} sizes={SIZES_QUARTER} />
             </Specimen>
             <Specimen
@@ -355,10 +365,11 @@ export default function MediaSpecimenPage() {
             <h2>5 · Delivery: srcset, sizes and priority</h2>
             <p>
               The srcset is every derived width plus the master, ascending — read from whatever
-              widths the CMS returned, never from format names. With no derived widths there is one{' '}
-              <code>src</code> and no <code>sizes</code>. Every image is <code>loading=&quot;lazy&quot;</code>{' '}
-              and <code>decoding=&quot;async&quot;</code> unless it is the page&rsquo;s LCP hero, which
-              passes <code>priority</code> and gets <code>loading=&quot;eager&quot;</code> and{' '}
+              widths the CMS returned, never from format names. With no derived widths there is
+              one <code>src</code> and no <code>sizes</code>. Every image is{' '}
+              <code>loading=&quot;lazy&quot;</code> and <code>decoding=&quot;async&quot;</code>{' '}
+              unless it is the page&rsquo;s LCP hero, which passes <code>priority</code> and
+              gets <code>loading=&quot;eager&quot;</code> and{' '}
               <code>fetchpriority=&quot;high&quot;</code>. Inspect the elements to read the
               attributes; the chosen file is in the Network panel at each width.
             </p>
@@ -379,7 +390,10 @@ export default function MediaSpecimenPage() {
                 <SrcSet image={CUT_OUT} />
               </Layout>
             </Specimen>
-            <Specimen title="no sources" note="A single-file asset: the illustration is vector, so it has none.">
+            <Specimen
+              title="no sources"
+              note="A single-file asset: the illustration is vector, so it has none."
+            >
               <Layout rowGap="text">
                 <Media image={ILLUSTRATION} sizes={SIZES_HALF} />
                 <SrcSet image={ILLUSTRATION} />
@@ -395,9 +409,9 @@ export default function MediaSpecimenPage() {
             <h2>6 · Fit: intrinsic against fill</h2>
             <p>
               <code>intrinsic</code> (the default) is 100% of the parent&rsquo;s width with the
-              asset&rsquo;s own height — never cropped (ruling H3). <code>fill</code> covers a box
-              whose ratio the <em>parent</em> owns, centre-cropped, for the placements that crop
-              mechanically. The boxes here stand in for BlockCard&rsquo;s 3:2 media and
+              asset&rsquo;s own height — never cropped (ruling H3). <code>fill</code> covers a
+              box whose ratio the <em>parent</em> owns, centre-cropped, for the placements that
+              crop mechanically. The boxes here stand in for BlockCard&rsquo;s 3:2 media and
               ListCard&rsquo;s 160 thumbnail, and read their ratio tokens.
             </p>
           </Layout>
@@ -405,7 +419,10 @@ export default function MediaSpecimenPage() {
             <Specimen title="intrinsic" note="1796×1112 at its own ratio.">
               <Media image={CUT_OUT} sizes={SIZES_HALF} />
             </Specimen>
-            <Specimen title="fill, in a 3:2 box" note="The same asset covering a card's ratio. The crop is the box's.">
+            <Specimen
+              title="fill, in a 3:2 box"
+              note="The same asset covering a card's ratio. The crop is the box's."
+            >
               <div className={s.ratioCard}>
                 <Media image={CUT_OUT} sizes={SIZES_HALF} fit="fill" />
               </div>
@@ -423,11 +440,18 @@ export default function MediaSpecimenPage() {
               note="The panel fills the box and the part covers the inset content box inside it."
             >
               <div className={s.ratioCard}>
-                <Media image={{ ...PANEL_PART, panel: 'paper' }} sizes={SIZES_HALF} fit="fill" />
+                <Media
+                  image={{ ...PANEL_PART, panel: 'paper' }}
+                  sizes={SIZES_HALF}
+                  fit="fill"
+                />
               </div>
             </Specimen>
           </Halves>
-          <Specimen title="fill, ListCard thumbnail box — 160, 3:2" note="sizes: 160px — a fixed placement states a fixed width.">
+          <Specimen
+            title="fill, ListCard thumbnail box — 160, 3:2"
+            note="sizes: 160px — a fixed placement states a fixed width."
+          >
             <div className={s.ratioThumb}>
               <Media image={CUT_OUT} sizes="160px" fit="fill" />
             </div>
@@ -440,22 +464,32 @@ export default function MediaSpecimenPage() {
           <Layout rowGap="block">
             <h2>7 · Shape stress</h2>
             <p>
-              Intrinsic means intrinsic. A 1:5 asset at full column is very tall, and Media does not
-              clip it: a tall asset is a supply problem the 326 check catches, not a crop to add
-              here (audit §3, PageHero). A 8:1 asset is a thin strip whose detail fails at 326.
+              Intrinsic means intrinsic. A 1:5 asset at full column is very tall, and Media does
+              not clip it: a tall asset is a supply problem the 326 check catches, not a crop to
+              add here (audit §3, PageHero). A 8:1 asset is a thin strip whose detail fails at
+              326.
             </p>
           </Layout>
           <Halves>
-            <Specimen title="very tall — 400×2000, half column" note="Rendered at 604×3020 at 1440. It does not stop.">
+            <Specimen
+              title="very tall — 400×2000, half column"
+              note="Rendered at 604×3020 at 1440. It does not stop."
+            >
               <Media image={TALL} sizes={SIZES_HALF} />
             </Specimen>
-            <Specimen title="very tall — in a 192 track" note="The same asset where it belongs, if anywhere.">
+            <Specimen
+              title="very tall — in a 192 track"
+              note="The same asset where it belongs, if anywhere."
+            >
               <Track size="xs">
                 <Media image={TALL} sizes="192px" />
               </Track>
             </Specimen>
           </Halves>
-          <Specimen title="very wide — 2400×300, full column" note="155px tall at 1240; 41px at 326.">
+          <Specimen
+            title="very wide — 2400×300, full column"
+            note="155px tall at 1240; 41px at 326."
+          >
             <Media image={WIDE} sizes={SIZES_FULL} />
           </Specimen>
         </Layout>
@@ -467,9 +501,9 @@ export default function MediaSpecimenPage() {
             <h2>8 · The narrow row</h2>
             <p>
               Every kind in a 320 track — Layout&rsquo;s md, the nearest named track to the 326
-              mobile column, so the 1440 capture shows the narrow case beside the wide ones. The true
-              326 check is this page&rsquo;s 390 capture, where every band above renders in the real
-              326 column.
+              mobile column, so the 1440 capture shows the narrow case beside the wide ones. The
+              true 326 check is this page&rsquo;s 390 capture, where every band above renders in
+              the real 326 column.
             </p>
           </Layout>
           <Track size="md">
@@ -487,8 +521,8 @@ export default function MediaSpecimenPage() {
           <h2>9 · Nested surface</h2>
           <p>
             An ink band, then a tint band holding a capture, then ink again. The capture&rsquo;s
-            hairline must resolve tint&rsquo;s neutral-400, not ink&rsquo;s 700 — which is what the
-            tint block restating its token buys.
+            hairline must resolve tint&rsquo;s neutral-400, not ink&rsquo;s 700 — which is what
+            the tint block restating its token buys.
           </p>
         </Layout>
       </Section>

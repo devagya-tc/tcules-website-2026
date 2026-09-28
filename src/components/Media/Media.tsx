@@ -154,10 +154,16 @@ export function Media({ image, sizes, fit = 'intrinsic', priority = false }: Med
   const article = kind === 'illustration' ? 'an' : 'a';
 
   if (!isCutOut && image.panel) {
-    warn(`${article} ${kind} takes no panel — only a cut-out does (ch05 §2a, B4). Ignored`, image);
+    warn(
+      `${article} ${kind} takes no panel — only a cut-out does (ch05 §2a, B4). Ignored`,
+      image,
+    );
   }
   if (!isCutOut && image.shadow) {
-    warn(`${article} ${kind} takes no shadow — only a cut-out does (ch05 §2, B2). Ignored`, image);
+    warn(
+      `${article} ${kind} takes no shadow — only a cut-out does (ch05 §2, B2). Ignored`,
+      image,
+    );
   }
 
   const panel = isCutOut ? image.panel : undefined;
