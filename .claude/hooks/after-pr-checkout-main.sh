@@ -32,6 +32,12 @@ if [ "$branch" = "main" ]; then
   exit 0
 fi
 
+# A PR opened with an explicit --head for a branch that is not the one checked out here came from
+# another worktree. This hook runs in the project directory, not where the command ran, so moving
+# this checkout would yank a branch out from under whatever is working in it.
+head=$(printf '%s' "$command" | sed -n 's/.*--head[= ]\([^ ]*\).*/\1/p')
+if [ -n "$head" ] && [ "$head" != "$branch" ]; then exit 0; fi
+
 if out=$(git checkout main 2>&1); then
   message="PR created — switched from $branch back to main. The feature branch still holds the commits."
 else
