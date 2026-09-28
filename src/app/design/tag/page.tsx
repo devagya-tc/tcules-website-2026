@@ -233,13 +233,14 @@ export default function TagSpecimenPage() {
                 { t: 'Modernisation without a rewrite', e: 'Guide · Modernisation' },
                 { t: 'Shipping AI features people keep using', e: 'Podcast · AI products' },
               ].map((c) => (
-                <li key={c.t}>
-                  <BlockCard
-                    eyebrow={c.e}
-                    title={c.t}
-                    body="One supporting paragraph, so the card carries the weight a real one would."
-                  />
-                </li>
+                /* No <li> here: BlockCard's root IS the <li>, so wrapping it nests li in li — invalid
+                   HTML, and the hydration mismatch this page used to throw at both widths. */
+                <BlockCard
+                  key={c.t}
+                  eyebrow={c.e}
+                  title={c.t}
+                  body="One supporting paragraph, so the card carries the weight a real one would."
+                />
               ))}
             </Layout>
           </Specimen>
@@ -318,7 +319,7 @@ export default function TagSpecimenPage() {
 
           <Specimen
             title="2 · One long unbroken token, and 8 · the narrow track — the only cases that reach the clip"
-            note="Both rows are --lay-track-sm, 256px. The URL and the 31-character chip (267.96 natural) both exceed it, so this is the one condition under which anything is ever clipped. ABOVE, in a Layout: the track has a definite width, max-inline-size caps the box and overflow takes the remainder — clipped at the inline end, not wrapped and not scrolled. No ellipsis, because text-overflow needs a block container, which is an inner element this component deliberately does not have, and a tidy “…” would make a content defect look intentional. BELOW, the same two labels in a Cluster as='ul': here the li is the flex item, and at the default min-width:auto it takes its minimum from the nowrap text inside it — so the ROW is pushed past the track instead of the box clipping. Compare the two. The fix is min-inline-size:0 on the flex item, which belongs to Cluster and not to Tag; it is filed as the spec’s Q13."
+            note="Both rows are --lay-track-sm, 256px. The URL and the 31-character chip (267.96 natural) both exceed it, so this is the one condition under which anything is ever clipped. ABOVE, in a Layout: the track has a definite width, max-inline-size caps the box and overflow takes the remainder — clipped at the inline end, not wrapped and not scrolled. No ellipsis, because text-overflow needs a block container, which is an inner element this component deliberately does not have, and a tidy “…” would make a content defect look intentional. BELOW, the same two labels in a Cluster as='ul': here the li is the flex item, and at the default min-width:auto it takes its minimum from the nowrap text inside it — so the ROW is pushed past the track instead of the box clipping. This row sits in a box that scrolls on its own, so the push is visible without the page scrolling sideways at 390. Compare the two. The fix is min-inline-size:0 on the flex item, which belongs to Cluster and not to Tag; it is filed as the spec’s Q13."
           >
             <Layout rowGap="block">
               <Layout rowGap="text" className={s.trackSm}>
@@ -328,19 +329,27 @@ export default function TagSpecimenPage() {
                   AI Products and Developer Tools
                 </Tag>
               </Layout>
-              <Layout rowGap="text" className={s.trackSm}>
-                <p className={s.specTitle}>In a Cluster — the row is pushed instead</p>
-                <Cluster as="ul" colGap="text" rowGap="text">
-                  <li>
-                    <Tag>https://tcules.com/insights/articles/a-very-long-slug-indeed</Tag>
-                  </li>
-                  <li>
-                    <Tag variant="filter" href={ROUTES.insights}>
-                      AI Products and Developer Tools
-                    </Tag>
-                  </li>
-                </Cluster>
-              </Layout>
+              {/* The pushed row is the documented boundary (Q13), and it is SUPPOSED to exceed its
+                  track — at 390 the URL's 376px row is wider than the 326px column itself. So the
+                  256px track sits in a full-width box that scrolls on its own, the idiom
+                  /design/cluster uses for its nowrap row: at 1440 the push past the track is in
+                  plain view, and at 390 it scrolls inside the box rather than dragging the page.
+                  Nothing is clipped: scroll the box and the whole row is there. */}
+              <div className={s.scrollX}>
+                <Layout rowGap="text" className={s.trackSm}>
+                  <p className={s.specTitle}>In a Cluster — the row is pushed instead</p>
+                  <Cluster as="ul" colGap="text" rowGap="text">
+                    <li>
+                      <Tag>https://tcules.com/insights/articles/a-very-long-slug-indeed</Tag>
+                    </li>
+                    <li>
+                      <Tag variant="filter" href={ROUTES.insights}>
+                        AI Products and Developer Tools
+                      </Tag>
+                    </li>
+                  </Cluster>
+                </Layout>
+              </div>
             </Layout>
           </Specimen>
 
