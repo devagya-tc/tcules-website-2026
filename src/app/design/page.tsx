@@ -90,7 +90,7 @@ const SPECIMENS = [
       {
         href: '/design/content-section',
         name: 'ContentSection',
-        note: 'one CMS section as one band — head group, lead, block beat, 4 surfaces, 2 densities',
+        note: 'one CMS section as one band — stacked | beside × 4 surfaces, stress copy, absent slots, 390',
       },
       {
         href: '/design/cta-section',
