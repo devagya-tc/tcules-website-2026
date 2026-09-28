@@ -120,7 +120,12 @@ const SERVICES: SiteNavItem = {
           height: 210,
         },
       },
-      { title: 'Request Free Audit', href: ROUTES.audits, status: 'planned', role: 'secondary' },
+      {
+        title: 'Request Free Audit',
+        href: ROUTES.audits,
+        status: 'planned',
+        role: 'secondary',
+      },
     ],
   },
 };
@@ -394,7 +399,11 @@ const FOOTER: SiteFooterProps = {
     { label: 'Accessibility', href: ROUTES.accessibility },
     { label: 'Sitemap', href: ROUTES.sitemap },
   ],
-  legal: '© 2026 Tcules. All rights reserved.',
+  /* The Solar credit rides the legal notice, the footer's existing small-print slot, rather than a
+     new link or band: Solar Icons are CC BY 4.0 (DBF ch04), and attribution is owed once the first
+     Solar glyph is route-visible — ListCard's external cue, `square-arrow-right-up`. Title, author
+     and licence, which is what CC BY asks for; the footer's layout is unchanged. */
+  legal: '© 2026 Tcules. All rights reserved. Icons: Solar Icons by 480 Design, CC BY 4.0.',
 };
 
 export const NAVIGATION: Navigation = { nav: NAV, footer: FOOTER };

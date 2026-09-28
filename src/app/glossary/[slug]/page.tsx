@@ -169,7 +169,7 @@ function renderGlossaryBlock(block: GlossaryBlock) {
               key={`${block.id}-${item.title}`}
               title={item.title}
               body={item.body}
-              marker={numbered ? { kind: 'number', value: index + 1 } : undefined}
+              marker={numbered ? { type: 'number', value: index + 1 } : undefined}
               titleAs="h3"
               href={item.href}
             />

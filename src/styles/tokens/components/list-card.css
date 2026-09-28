@@ -91,6 +91,13 @@
   --lcrd-thumbnail-inline-md: 160px;
   --lcrd-thumbnail-ratio: var(--ratio-cover);
 
+  /* The clipped box that keeps an external row's "opens in a new tab" hint out of the layout while
+     leaving it in the accessibility tree. Not an optical correction and not a layout distance — a
+     TECHNIQUE'S OWN GEOMETRY, the same 1px --crumb-hidden-size and SiteFooter's hidden label use,
+     duplicated by value because a component never reads another's tokens. It reaches the space
+     ramp because 1px is not a distance the gap scale has any business naming. */
+  --lcrd-hidden-size: var(--space-1);
+
   /* ── The hover fill ───────────────────────────────────────────────────────────
      A whole-row anchor up to 1240px wide needs a whole-row affordance. Hover used to be carried by
      a rule wipe, then by nothing, then briefly by the rule's colour; a fill is the one signal that

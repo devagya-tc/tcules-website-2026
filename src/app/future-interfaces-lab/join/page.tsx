@@ -301,7 +301,7 @@ export default async function FutureInterfacesLabJoinPage() {
                       key={card.id}
                       title={card.heading}
                       body={card.description}
-                      marker={{ kind: 'number', value: index + 1 }}
+                      marker={{ type: 'number', value: index + 1 }}
                       titleAs="h3"
                     />
                   ))}

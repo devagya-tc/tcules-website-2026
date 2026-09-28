@@ -294,7 +294,7 @@ export default async function AboutPage() {
                     key={card.id}
                     title={card.title}
                     body={card.body}
-                    marker={{ kind: 'number', value: index + 1 }}
+                    marker={{ type: 'number', value: index + 1 }}
                     titleAs="h3"
                   />
                 ))}
