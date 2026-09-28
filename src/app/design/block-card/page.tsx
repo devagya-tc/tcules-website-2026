@@ -13,22 +13,22 @@ const CARDS = [
   {
     title: 'Product direction',
     body: 'Frame the decision, the evidence it needs and the outcome a customer should notice.',
-    media: { kind: 'icon', name: 'product-design' },
+    media: { kind: 'icon', name: 'document-text' },
   },
   {
     title: 'Design systems',
     body: 'Turn recurring interface decisions into a shared, durable product language.',
-    media: { kind: 'icon', name: 'design-systems' },
+    media: { kind: 'icon', name: 'check' },
   },
   {
     title: 'Design engineering',
     body: 'Carry interaction intent into production with the implementation team.',
-    media: { kind: 'icon', name: 'design-engineering' },
+    media: { kind: 'icon', name: 'copy' },
   },
   {
     title: 'AI product UX',
     body: 'Make model behaviour legible enough for people to judge and correct it.',
-    media: { kind: 'icon', name: 'ai-product-ux' },
+    media: { kind: 'icon', name: 'document-text' },
   },
 ] as const satisfies readonly { title: string; body: string; media: BlockCardMedia }[];
 
@@ -122,7 +122,7 @@ function SurfaceCards() {
         eyebrow="Capability"
         title="Static icon card"
         body="Title, eyebrow, icon and body resolve without any interactive ink."
-        media={{ kind: 'icon', name: 'design-systems' }}
+        media={{ kind: 'icon', name: 'check' }}
       />
       <BlockCard
         title="Static no-media card"
@@ -164,7 +164,7 @@ function ManyCards({ count }: { count: number }) {
           key={index}
           title={`Card ${index + 1}`}
           body="The component does not clamp, paginate, count siblings or hide later rows."
-          media={index % 3 === 0 ? { kind: 'icon', name: 'product-design' } : undefined}
+          media={index % 3 === 0 ? { kind: 'icon', name: 'document-text' } : undefined}
         />
       ))}
     </Cards>
@@ -439,7 +439,7 @@ export default function BlockCardSpecimenPage() {
                 eyebrow="Capability"
                 title="Icon media, horizontal requested"
                 body="The icon keeps its place at the head of the copy stack and the card stays single-column."
-                media={{ kind: 'icon', name: 'ai-product-ux' }}
+                media={{ kind: 'icon', name: 'document-text' }}
                 href={ROUTES.aiProductUx}
               />
               <BlockCard
@@ -535,7 +535,7 @@ export default function BlockCardSpecimenPage() {
             <BlockCard
               title="Icon fill"
               body="A decorative xl glyph begins the copy stack."
-              media={{ kind: 'icon', name: 'ai-product-ux' }}
+              media={{ kind: 'icon', name: 'document-text' }}
             />
             <BlockCard
               title="Image fill"
@@ -564,9 +564,7 @@ export default function BlockCardSpecimenPage() {
                   key={index}
                   title={linked ? `Linked card ${index + 1}` : `Static card ${index + 1}`}
                   body="The same title ink, copy and flush media hold whether or not navigation exists."
-                  media={
-                    index % 2 === 0 ? { kind: 'icon', name: 'design-engineering' } : undefined
-                  }
+                  media={index % 2 === 0 ? { kind: 'icon', name: 'copy' } : undefined}
                   href={linked ? ROUTES.designEngineering : undefined}
                 />
               );
@@ -875,7 +873,7 @@ export default function BlockCardSpecimenPage() {
                       eyebrow="Capability"
                       title="Icon"
                       body="Compact subject copy."
-                      media={{ kind: 'icon', name: 'product-design' }}
+                      media={{ kind: 'icon', name: 'document-text' }}
                     />
                     <BlockCard
                       eyebrow="Case study"

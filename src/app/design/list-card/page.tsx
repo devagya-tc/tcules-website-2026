@@ -51,19 +51,19 @@ const LINKED = [
     title: 'Product design',
     body: 'Turn a difficult workflow into a product people can understand and operate.',
     href: ROUTES.productDesign,
-    marker: { kind: 'icon', name: 'product-design' },
+    marker: { kind: 'icon', name: 'document-text' },
   },
   {
     title: 'Design systems',
     body: 'Build the decisions and reusable parts that keep a product coherent as it grows.',
     href: ROUTES.designSystems,
-    marker: { kind: 'icon', name: 'design-systems' },
+    marker: { kind: 'icon', name: 'check' },
   },
   {
     title: 'Design engineering',
     body: 'Carry interaction decisions into production without losing their intent.',
     href: ROUTES.designEngineering,
-    marker: { kind: 'icon', name: 'design-engineering' },
+    marker: { kind: 'icon', name: 'copy' },
   },
 ] as const satisfies readonly {
   title: string;
@@ -154,7 +154,7 @@ function SurfaceRows() {
       <ListCard
         title="Design systems"
         body="The linked row proves the dark title, icon marker, cue link ink and focus ring."
-        marker={{ kind: 'icon', name: 'design-systems' }}
+        marker={{ kind: 'icon', name: 'check' }}
         href={ROUTES.designSystems}
       />
     </Rows>
@@ -248,7 +248,7 @@ export default function ListCardSpecimenPage() {
               arrangement="stacked"
               title="Icon marker"
               body="The existing solid glyph is decorative because this title already names its subject."
-              marker={{ kind: 'icon', name: 'ai-product-ux' }}
+              marker={{ kind: 'icon', name: 'document-text' }}
             />
             <ListCard
               arrangement="stacked"
@@ -338,7 +338,7 @@ export default function ListCardSpecimenPage() {
               arrangement="stacked"
               title="Linked · point, hold and Tab"
               body="One native anchor owns the title, summary and arrow cue."
-              marker={{ kind: 'icon', name: 'design-engineering' }}
+              marker={{ kind: 'icon', name: 'copy' }}
               href={ROUTES.designEngineering}
             />
           </Rows>
@@ -437,7 +437,7 @@ export default function ListCardSpecimenPage() {
               <ListCard
                 title="Interaction and interface design for regulated financial products with several operational owners"
                 body="The complete naming record is available at https://tcules.com/services/product-design/design-systems/a-single-unbroken-token-that-must-wrap-before-it-can-widen-the-page and the row grows rather than truncating either field."
-                marker={{ kind: 'icon', name: 'product-design' }}
+                marker={{ kind: 'icon', name: 'document-text' }}
               />
             </Rows>
           </Specimen>
@@ -596,7 +596,7 @@ export default function ListCardSpecimenPage() {
                     arrangement="stacked"
                     title="Icon"
                     body="Compact subject copy."
-                    marker={{ kind: 'icon', name: 'product-design' }}
+                    marker={{ kind: 'icon', name: 'document-text' }}
                   />
                   <ListCard
                     arrangement="stacked"
@@ -621,7 +621,7 @@ export default function ListCardSpecimenPage() {
                     arrangement="stacked"
                     title="Icon"
                     body="Compact subject copy."
-                    marker={{ kind: 'icon', name: 'product-design' }}
+                    marker={{ kind: 'icon', name: 'document-text' }}
                   />
                   <ListCard
                     arrangement="stacked"

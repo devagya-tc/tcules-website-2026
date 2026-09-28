@@ -572,7 +572,7 @@ is graded on its own merits.
 - **`dist/types/` is gitignored and required.** A fresh clone must run `cfg.buildCmd` first, or every
   `.d.ts` silently degrades. This is the most likely cause of a bad re-sync.
 - **`Icon.d.ts` is hand-pinned.** `IconName = keyof typeof glyphs` collapses to `unknown` in the
-  extractor, so `cfg.dtsPropsFor.Icon` carries the 17-value union verbatim, and
+  extractor, so `cfg.dtsPropsFor.Icon` carries the IconName union verbatim, and
   `previews/Icon.tsx`'s `NAMES` array is a second copy. Adding or removing a glyph in
   `src/components/Icon/glyphs.ts` used to make both stale **silently**; `npm run design:check`
   now cross-checks them against `glyphs.ts` in both directions and names the offending glyph and

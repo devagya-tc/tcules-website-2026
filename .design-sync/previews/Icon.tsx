@@ -1,7 +1,7 @@
 import { Button, Cluster, Icon, Layout, Section } from 'tcules-website-2026';
 
-/* The whole set, in the source file's own order: actions, then disclosure, then the six service
-   subjects. Kept in sync with glyphs.ts by hand — adding a glyph is a deliberate act there, so
+/* The whole set, in the source file's own order: actions, then disclosure, then the ch04 status
+   and leaving marks. Kept in sync with glyphs.ts by hand — adding a glyph is a deliberate act there, so
    it is a deliberate act here too. */
 const NAMES = [
   'arrow-right',
@@ -15,15 +15,12 @@ const NAMES = [
   'chevron-right',
   'menu',
   'close',
-  'product-design',
-  'modernisation',
-  'design-systems',
-  'ai-product-ux',
-  'design-engineering',
-  'software-development',
+  'square-arrow-right-up',
+  'info-circle',
+  'danger-triangle',
 ] as const;
 
-/** All seventeen glyphs at the default 16. Every one is solid and filled with currentColor. */
+/** All fourteen glyphs at the default 16. Every one is solid and filled with currentColor. */
 export function TheSet() {
   return (
     <Cluster colGap="text" rowGap="text">
@@ -46,7 +43,7 @@ export function Sizes() {
     <Cluster colGap="block" rowGap="text" align="center">
       {(['sm', 'md', 'lg', 'xl'] as const).map((size) => (
         <Cluster key={size} colGap="tight" align="center">
-          <Icon name="modernisation" size={size} />
+          <Icon name="arrow-right" size={size} />
           <span>{size}</span>
         </Cluster>
       ))}
