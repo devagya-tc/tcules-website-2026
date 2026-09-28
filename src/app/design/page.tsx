@@ -63,6 +63,11 @@ const SPECIMENS = [
         note: 'the wordmark — 3 heights, 2 bar treatments, 4 surfaces',
       },
       {
+        href: '/design/client-mark',
+        name: 'ClientMark',
+        note: "a client's logo in a set — mask in the ground's ink, equal area, capped 40 × 160, ±15% correction, 4 surfaces",
+      },
+      {
         href: '/design/texture',
         name: 'Texture',
         note: 'the pixel grid through placed, blurred shapes — 4 anchors, 4 surfaces, dark-ground candidates',
@@ -90,7 +95,7 @@ const SPECIMENS = [
       {
         href: '/design/content-section',
         name: 'ContentSection',
-        note: 'one CMS section as one band — head group, lead, block beat, 4 surfaces, 2 densities',
+        note: 'one CMS section as one band — stacked | beside × 4 surfaces, stress copy, absent slots, 390',
       },
       {
         href: '/design/cta-section',

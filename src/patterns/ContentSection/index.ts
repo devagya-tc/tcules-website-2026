@@ -1,2 +1,2 @@
 export { ContentSection } from './ContentSection';
-export type { ContentSectionProps } from './ContentSection';
+export type { ContentSectionArrangement, ContentSectionProps } from './ContentSection';
