@@ -32,8 +32,9 @@
  * bare <li> — the list element belongs to the caller, as a Layout with rowGap="none", because the
  * row finishes itself with its own block-end rule and a gap would break the ladder. It is a pattern
  * for the usual two reasons (it consumes a content shape, and it arranges with Cluster and Layout).
- * BlockCard is its bounded sibling: an edge-defined TILE that fills a parent-owned grid track. It
- * still paints no ground; the complete four-sided edge, media scale and h4 title make the object.
+ * BlockCard is its sibling OBJECT: a borderless tile that fills a parent-owned grid track, with no
+ * edge and no ground; its title scale, cover media and position make the object. BlockCardSet is its
+ * set, the one place that knows the count and so the one place the featured first card is decided.
  * Accordion is a DISCLOSURE SET: one continuous rule ladder of native details/summary pairs. It
  * owns a CMS-shaped question/answer array and composes Layout, Cluster, Icon and Prose while
  * leaving surface and surrounding page rhythm to its caller.
@@ -117,8 +118,18 @@ export type {
   ListCardTitleElement,
 } from './ListCard';
 
-export { BlockCard } from './BlockCard';
-export type { BlockCardProps, BlockCardMedia, BlockCardTitleElement } from './BlockCard';
+export { BlockCard, BlockCardSet, FEATURED_FROM } from './BlockCard';
+export type {
+  BlockCardProps,
+  BlockCardMedia,
+  BlockCardImage,
+  BlockCardImageSide,
+  BlockCardOrientation,
+  BlockCardTitleElement,
+  BlockCardTracks,
+  BlockCardSetProps,
+  BlockCardSetItem,
+} from './BlockCard';
 
 export { Accordion } from './Accordion';
 export type { AccordionProps, AccordionItem, AccordionQuestionElement } from './Accordion';
