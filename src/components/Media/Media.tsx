@@ -105,14 +105,14 @@ export type MediaProps = {
  */
 export function mediaSrcSet(image: MediaImage): string | undefined {
   const byWidth = new Map<number, string>();
-  for (const source of image.sources ?? []) {
-    if (source.src && Number.isFinite(source.width) && source.width > 0) {
-      byWidth.set(Math.round(source.width), source.src);
-    }
-  }
+  const add = (src: string, width: number) => {
+    if (src && Number.isFinite(width) && width > 0) byWidth.set(Math.round(width), src);
+  };
+  for (const source of image.sources ?? []) add(source.src, source.width);
   /* The master last, so it wins a tie: if Strapi hands back a format as wide as the original,
-     the original is the better file at that width. */
-  byWidth.set(image.width, image.src);
+     the original is the better file at that width. It passes the same check as a source, so a
+     zero or fractional width can never write an invalid `w` descriptor. */
+  add(image.src, image.width);
   if (byWidth.size < 2) return undefined;
   return [...byWidth.entries()]
     .sort(([a], [b]) => a - b)
