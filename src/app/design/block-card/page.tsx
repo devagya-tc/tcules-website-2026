@@ -832,10 +832,35 @@ export default function BlockCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>14 · Narrow tracks</h2>
             <p>
-              Icon, image and no-media cards at Layout&rsquo;s 256px and 192px track sizes. Text
+              Image cards at the phone&rsquo;s 326px column, then icon, image and no-media cards
+              at Layout&rsquo;s 256px and 192px track sizes. Text
               wraps, the image shrinks and the cta never collides or widens the page.
             </p>
           </Layout>
+          <Specimen
+            title="326 · mobile column"
+            note="The width every card image is approved at (ch05 B3 — full-column and card placements alike): a 390 viewport less two 32px gutters, derived by the harness rather than written. Vertical only, and on purpose: the frame cannot fire a media query, so a horizontal card in it would still split at this window width. Below 767 the horizontal card collapses to this same stack, which band 8's 390 capture shows at the real width. The wide capture is the asset to judge here — its type is what fails at 326."
+          >
+            <div className={s.trackMobile}>
+              <Cards columns={{ base: 1 }}>
+                <BlockCard
+                  eyebrow="ConnectX · Case study"
+                  title="A wide capture in the phone's column"
+                  body="The cover crop at 326, from a 1600×900 screenshot."
+                  media={{ kind: 'image', src: WIDE_IMAGE, alt: '' }}
+                  href={ROUTES.caseStudies}
+                  ctaLabel="Read the ConnectX case"
+                />
+                <BlockCard
+                  eyebrow="Case study"
+                  title="The card sample"
+                  body="The same crop from the smaller card asset."
+                  media={{ kind: 'image', src: IMAGE, alt: '' }}
+                  href={ROUTES.caseStudies}
+                />
+              </Cards>
+            </div>
+          </Specimen>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
             {(
               [

@@ -550,7 +550,8 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>10 · Narrow tracks</h2>
             <p>
-              The same number, icon and linked thumbnail rows at Layout&rsquo;s sm and xs track
+              Thumbnail rows in the phone&rsquo;s 326px column, then the same number, icon and
+              linked thumbnail rows at Layout&rsquo;s sm and xs track
               widths. This is where the inline inset is proved: it takes 32px from each track,
               so the copy gets 224px at sm and 160px at xs — below the 192px core minimum at xs,
               where the marker wraps above the core instead of squeezing it. Nothing overflows
@@ -559,6 +560,28 @@ export default function ListCardSpecimenPage() {
               itself is smaller.
             </p>
           </Layout>
+          <Specimen
+            title="326 · mobile column"
+            note="The width every card image is approved at (ch05 B3): a 390 viewport less two 32px gutters, derived by the harness rather than written. Stacked only — the frame cannot fire a media query, and split collapses to stacked below 767 anyway. The thumbnail keeps its own 160px slot at this width, so the asset is judged at 160, not 326: that is the narrowest it renders anywhere, and the reason a cover asset shared with BlockCard has to read at both sizes."
+          >
+            <div className={s.trackMobile}>
+              <Rows>
+                <ListCard
+                  arrangement="stacked"
+                  title="A linked thumbnail in the phone's column"
+                  body="The cover crop at the thumbnail's own width, with the copy taking what is left of 326."
+                  marker={{ kind: 'thumbnail', src: THUMBNAIL, alt: '' }}
+                  href={ROUTES.caseStudies}
+                />
+                <ListCard
+                  arrangement="stacked"
+                  title="The same thumbnail, unlinked"
+                  body="No cue, so the core gets the cue's width back."
+                  marker={{ kind: 'thumbnail', src: THUMBNAIL, alt: '' }}
+                />
+              </Rows>
+            </div>
+          </Specimen>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
             <Specimen title="sm · 256px">
               <div className={s.trackSm}>

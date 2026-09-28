@@ -607,4 +607,9 @@
   --breakpoint-1024: 1024px;
   --breakpoint-1280: 1280px;
   --breakpoint-1440: 1440px;
+  /* Not a breakpoint — no media query fires here. The narrowest viewport the site is checked at
+     (the second width scripts/shots.mjs captures) and the one every image is approved in: ch05 B3
+     puts that check at 326px, which is this less two Section gutters. The proving ground's 326
+     track derives from it rather than writing the number, so the check follows the gutter. */
+  --viewport-390: 390px;
 }

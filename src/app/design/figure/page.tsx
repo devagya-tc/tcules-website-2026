@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { Cluster, Layout, Section, type SectionSurface } from '@/components';
 import { Figure, type FigureImage } from '@/patterns';
 
-import { Specimen } from '../_specimen/Specimen';
+import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 /* Three assets of deliberately different intrinsic ratio, all on a near-white ground. That ground
    is the point rather than a convenience: it is what has no edge of its own on paper, which is the
@@ -51,6 +51,10 @@ const EVIDENCE_NOTE =
  * would be a lie here: filling a narrower track is not an illegal placement for a Figure, it is
  * the contract. `columns="tile"` keeps the track at exactly its stated width instead of stretching
  * it, so what surrounds the figure below is a genuine grid track of the size named.
+ *
+ * The one exception is the 326 row, which uses the harness's .trackMobile. 326 is not a Layout
+ * track and should not become one: it is the phone's content column (ch05 B3), and .trackMobile is
+ * the harness frame that stands in for it — not an illegal-placement frame.
  */
 function Track({
   size,
@@ -416,6 +420,18 @@ export default function FigureSpecimenPage() {
               <Figure image={SMALL} caption={CAPTION} note={NOTE} />
               <Figure image={SMALL} caption={CAPTION} note={NOTE} />
             </Track>
+          </Specimen>
+          <Specimen
+            title="326 · mobile column"
+            note="The width every image is approved at (ch05 B3): a 390 viewport less two 32px gutters, derived by the harness from --viewport-390 and --sec-gutter rather than written. Wide capture, portrait and the small asset, each at the full 326. Read the pixels, not the layout — the wide capture's type is where a whole-screen capture fails this check, and that failure belongs to the asset, not to Figure."
+          >
+            <div className={s.trackMobile}>
+              <Layout rowGap="stack">
+                <Figure image={WIDE} caption={CAPTION} note={NOTE} />
+                <Figure image={TALL} caption={CAPTION} note={NOTE} />
+                <Figure image={SMALL} caption={CAPTION} note={NOTE} />
+              </Layout>
+            </div>
           </Specimen>
           <Specimen
             title="192px tracks — the floor"

@@ -33,7 +33,8 @@ import { specimenStyles as s } from '../_specimen/Specimen';
  * and focus; they take no props and they are tested on /design/button rather than re-tested here.
  *
  * What a static page cannot show, and where to look instead: the 767 and 375 columns need the
- * window narrowed (nothing in this component changes at either — that is the assertion), and the
+ * window narrowed (nothing in this component changes at either — that is the assertion; the 326
+ * image check alone gets a band, "15 · 326", framed to a 390 viewport by the harness), and the
  * 44px touch floor on an action is a rendered hit area rather than a visible box, so the hit-floor
  * band prints the arithmetic beside a dashed 44px outline.
  */
@@ -792,6 +793,33 @@ export default function PageHeroSpecimenPage() {
         title="15 · Media and extras together — the order, and the tab order"
         note="extras sits between the byline and the actions; media is after both. Tab from the top: the extras control, then the actions if there were any, then into the video document if the media were a video. DOM order is visual order and the component adds no tabindex anywhere. Note also that extras and media are not alternatives — extras is a caller-composed block that reads the band's --sec-* inks, and media is a closed union of two renderings the component owns. A caller who wants a second image puts it in extras and owns its geometry there."
       />
+
+      {/* ── 15 · The media slot at 326 ──────────────────────────────────────────
+          ch05 B3: every image is approved at the phone's column. A band's column is its own
+          gutter's doing, so the harness frames the VIEWPORT (390) and lets the hero produce the
+          326 itself, instead of clamping the band to 326 and insetting it a second time. */}
+      <Section density="tight">
+        <Layout rowGap="block">
+          <p className={s.specTitle}>15 · 326 · mobile column</p>
+          <p className={s.specNote}>
+            The hero at a 390 viewport, so its media fills a 326 column — the width every image is
+            approved at (ch05 B3). This is NOT an illegal placement like block 14: the harness frame
+            stands in for the phone, derived from <code>--viewport-390</code>, and the band&apos;s
+            own <code>--sec-gutter</code> makes the 326 rather than a second inset. The frame
+            cannot fire a media query, so at a wide window the title keeps its desktop step here
+            (the h1 re-declares on the viewport at 767, not on the frame) — judge the media, not
+            the title. Wide capture first, then portrait: the wide one&apos;s type is what fails at
+            this width, and that failure belongs to the asset. Hero media is intrinsic, so nothing
+            crops it to pass.
+          </p>
+          <div className={s.viewportMobile}>
+            <PageHero title={SHORT_TITLE} body={paragraphs(1)} media={MEDIA_WIDE} />
+          </div>
+          <div className={s.viewportMobile}>
+            <PageHero title={SHORT_TITLE} body={paragraphs(1)} media={MEDIA_TALL} />
+          </div>
+        </Layout>
+      </Section>
 
       {/* ── 16 · What this page cannot show ─────────────────────────────────────── */}
       <Section density="tight">
