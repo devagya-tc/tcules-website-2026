@@ -102,6 +102,18 @@ export type LayoutProps = {
    */
   equalRows?: boolean;
   /**
+   * The first child LEADS the set: it spans every track, in a row of its own sized to its own
+   * content, and the remaining children fill the tracks below it. This is the arrangement for a
+   * featured item above a set of peers (BlockCard's featured card, ruling C3) — one list, one
+   * grid, and the lead's span is the CONTAINER's statement about its first child rather than a
+   * child deciding its own placement.
+   *
+   * With `equalRows`, only the rows after the lead are equalised: the lead's row is explicit and
+   * `auto`, the implicit rows below it are `1fr`, and a flexible row never sizes against an item
+   * in an auto one. So a tall lead does not stretch every card row to its height.
+   */
+  lead?: boolean;
+  /**
    * Block-axis placement — how items sit vertically in their row (e.g. centre copy against a
    * taller image). Default "stretch".
    */
@@ -205,6 +217,7 @@ export function Layout({
   justifyItems = 'stretch',
   justify,
   equalRows = false,
+  lead = false,
   className,
   style,
   children,
@@ -223,6 +236,7 @@ export function Layout({
         styles[`justifyitems-${justifyItems}`],
         justify && styles[`justify-${justify}`],
         equalRows && styles['equal-rows'],
+        lead && styles.lead,
         className,
       )}
     >
