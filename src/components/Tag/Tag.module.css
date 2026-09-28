@@ -66,7 +66,13 @@
   display: flex;
   inline-size: fit-content;
   align-items: center;
+  /* Centred so a one-character label sits in the middle of its 24 x 24 square, and SAFE-centred so
+     a label wider than the box is clipped at the inline END, as the containment backstop above
+     promises. Plain `center` splits the overflow across both edges, so a pasted URL lost its
+     "https://" and its tail alike. The first declaration is the fallback for a browser without
+     `safe`, which drops the second as invalid and keeps the centring. */
   justify-content: center;
+  justify-content: safe center;
   min-block-size: var(--tag-size-md);
   min-inline-size: var(--tag-size-md);
   max-inline-size: 100%;
