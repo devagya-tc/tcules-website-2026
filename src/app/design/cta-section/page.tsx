@@ -433,6 +433,34 @@ export default function CtaSectionSpecimenPage() {
       ))}
 
       <SpecimenNote
+        title="8b · Open with and without proof"
+        note="The same open close twice: first with a quote in the right-hand column, then with no proof. Without proof the frame is one track, not a 3:2 frame with an empty 470px column. The heading and copy keep their own ch measures, so only the points row takes the full column, as three 392px tracks. Both are on paper so the frame is the only variable. At 390 both collapse to one column and read alike."
+      />
+      <CtaSection
+        arrangement="open"
+        eyebrow="Open · with proof"
+        heading="Make the next decision with evidence"
+        body={OPEN_BODY}
+        points={STANDARD_POINTS}
+        actions={[
+          { label: 'Start a project', href: ROUTES.contact },
+          { label: 'See how we work', href: ROUTES.howWeWork },
+        ]}
+        proof={<ProofFixture kind="quote" />}
+      />
+      <CtaSection
+        arrangement="open"
+        eyebrow="Open · without proof"
+        heading="Make the next decision with evidence"
+        body={OPEN_BODY}
+        points={STANDARD_POINTS}
+        actions={[
+          { label: 'Start a project', href: ROUTES.contact },
+          { label: 'See how we work', href: ROUTES.howWeWork },
+        ]}
+      />
+
+      <SpecimenNote
         title="9 · Two per page"
         note="The valid pair: a tight offer mid-scroll, real Prose between, then a standard split close. Their density, heading scale, point arrangement, and proof capability keep them visibly distinct."
       />
