@@ -66,3 +66,33 @@ brand decides which kind each is, a product-UI cut-out or a registry illustratio
 choice can be made and checked without taste. Without the fields it is made ad hoc per page.
 
 **Found in.** `docs/visual-assets-plan.md` (28 Sep revision), ch05 v1.0 §9a.
+
+## 6. Upload breakpoints match the site's widths, and serve WebP
+
+**What.** Set the Strapi upload plugin's responsive breakpoints to **1240, 652 and 320**. The original is the
+2560 master and is served as the largest size. Enable WebP output for generated formats. Cut-outs keep alpha.
+
+**Why.** The site serves images from Strapi's own formats as a native `srcset` (Phase 2 ruling M1). Strapi's
+default breakpoints (1000/750/500/64) match no width the site renders at, so the browser would download the
+wrong size at every placement. ch05 §8–9 require WebP and set these widths.
+
+**Found in.** `docs/phase-2-decisions.md` M1–M2; tracker 2.6.
+
+## 7. A contrast-panel field on media, beside kind
+
+**What.** An optional `panel` on media metadata, one of `paper`, `paper-deep` or `ink`, used only when `kind` is
+`cut-out`.
+
+**Why.** A cut-out whose UI edge fails 3:1 against the page sits on a flat panel (ch05 B5). Whether it fails
+can't be detected reliably in code, so whoever supplies the asset records it (Phase 2 ruling M4).
+
+**Found in.** `docs/phase-2-decisions.md` M4; tracker 2.6.
+
+## 8. Insights and resources carry a cover image
+
+**What.** A cover image field on articles, videos and podcasts (reuse `featureImage` where it exists), used on
+their cards.
+
+**Why.** Owner ruling C1 (28 Sep): any insight or resource with a cover image shows it on its card.
+
+**Found in.** `docs/phase-2-decisions.md` C1; tracker 2.10.
