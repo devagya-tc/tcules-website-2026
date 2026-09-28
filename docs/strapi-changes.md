@@ -106,3 +106,16 @@ supplied, like the panel, so it is recorded with the asset rather than chosen pe
 through the `Media` primitive, which ignores it on every other kind.
 
 **Found in.** tracker 2.6 (`docs/specs/Media.md` §3).
+
+## 10. Testimonials carry an optional portrait and an optional client mark
+
+**What.** Two optional relations on the testimonial record: `portrait` (a media asset, shot square per
+ch05 §3, no alt needed — the site renders it as decorative beside the name) and `clientMark` (the
+client's SVG, with its intrinsic width and height and the ±15% weight `correction` ch05 §10 records
+with the asset). The mark belongs on the **client** entity rather than on each testimonial if clients
+become an entity (one mark, many quotes); until then it rides the testimonial.
+
+**Why.** Both are facts about the testimonial — who said it and for whom — so they pass the entry-1
+test. `Proof` renders them (rulings P1, P2); without the fields there is nothing to render.
+
+**Found in.** tracker 2.12 (`docs/specs/Proof.md` §3, Amendment · 28 Sep 2026).

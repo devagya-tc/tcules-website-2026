@@ -1,9 +1,10 @@
 /* Proof — attributed quotation, checked figures, or both, built to docs/specs/Proof.md.
 
-   Layout owns every relationship: the quote/figures pair, the figure tiles and each nested
-   vertical rhythm. This module owns only the evidence parts' inline size, type, rule and ink. It
-   paints no ground, has no hand-written sibling arrangement, breakpoint, interactive state or
-   decorative quotation glyph. */
+   Layout and Cluster own every relationship: the quote/figures pair, the figure tiles, the portrait
+   beside the attribution and each nested vertical rhythm. This module owns only the evidence
+   parts' inline size, type, rule, indent and ink; its flex declarations size children inside a
+   Cluster and arrange nothing (ListCard's shape). It paints no ground, has no hand-written sibling
+   arrangement, breakpoint, interactive state or decorative quotation glyph. */
 
 .root {
   position: relative;
@@ -17,25 +18,32 @@
 .quote {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
-  border-inline-start: var(--proof-quote-rule-width) solid var(--proof-quote-rule);
-  padding-inline-start: var(--gap-block);
 }
 
+/* The site blockquote (ch10 B2.07): the rule runs beside the QUOTE only, not the attribution, and
+   the inset is padding so the rule sits at the quote's own edge. Italic in both arrangements —
+   "fails when it is set roman at heading size": the italic and the rule are what make it read as
+   reported speech, and the roman name under it is the second voice. `font-style` follows the
+   `font:` shorthand, which would otherwise reset it. */
 .quoteText {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
+  border-inline-start: var(--proof-quote-rule-width) solid var(--proof-quote-rule);
+  padding-inline-start: var(--gap-block);
   color: var(--proof-quote-ink);
   overflow-wrap: anywhere;
 }
 
 .display .quoteText {
   font: var(--text-h3);
+  font-style: italic;
   letter-spacing: var(--text-h3-tracking);
   text-wrap: var(--text-title-wrap);
 }
 
 .compact .quoteText {
   font: var(--text-quote);
+  font-style: italic;
   text-wrap: var(--text-running-wrap);
 }
 
@@ -53,9 +61,56 @@
 .attribution {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
+}
+
+/* No portrait: the text is indented by the rule plus its inset, so the name starts on the quote's
+   first letter (ch10 B2.07, "indented 54 — the rule's 6 plus the quote's 48"). With a portrait the
+   indent is dropped and the portrait takes the left margin instead; that class is simply absent.
+   Padding, not margin: it aligns content inside the part's own box and spaces nothing apart. */
+.attributionIndented {
+  padding-inline-start: calc(var(--proof-quote-rule-width) + var(--gap-block));
+}
+
+/* The fixed square. flex: none so the nowrap Cluster can never squeeze it; the ratio is the box's,
+   and Media fills it with a centre cover crop. Radius 0 is Media's for a photograph — never a
+   circle (ch05 §6). */
+.portrait {
+  display: block;
+  flex: none;
+  inline-size: var(--proof-portrait-size);
+  aspect-ratio: var(--proof-portrait-ratio);
+}
+
+/* The text column takes whatever the portrait leaves; min-inline-size 0 lets a long name wrap
+   rather than push the row wider than a 326 column. */
+.attributionText {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+/* The name in the display serif, roman: the change of family from the italic quote above is what
+   separates the two voices (ch10 A1.06). */
+.name {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+  color: var(--proof-name-ink);
+}
+
+.role {
+  min-inline-size: 0;
   overflow-wrap: anywhere;
   font: var(--text-body-sm);
+  text-wrap: var(--text-running-wrap);
   color: var(--proof-attribution-ink);
+}
+
+/* The hidden wrapper around ClientMark. ClientMark sizes itself and sets justify-self: start, so
+   the wrapper only has to be a block that does not stretch the mark across the column. */
+.mark {
+  display: block;
+  justify-self: start;
 }
 
 .figures {
