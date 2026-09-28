@@ -40,11 +40,11 @@ fix lives in the component or its tokens, not in a route.
 
 Read-only. The output is a decision, not code.
 
-- [ ] **1.0** Revisit the foundations before the components that sit on them: the type ladder
+- [x] **1.0** Revisit the foundations before the components that sit on them: the type ladder
       (H1/H2 and card-heading wrapping with real long titles), the gap scale, the Section/Layout
       grid and breakpoints, media ratios, focus states. Most of it has shipped; this checks it against
       the handoff's "build now" list and the brand framework, and records what to refine.
-- [ ] **1.1** Write `docs/component-audit.md`. For each of the 25 shipped components, record:
+- [x] **1.1** Write `docs/component-audit.md` (decided 28 Sep; rulings in its §6). For each of the 25 shipped components, record:
       - **Jobs it must serve:** from the handoff's page families and semantic inventory.
       - **Arrangements it must offer:** from the brand's visual treatments. For example, PageHero
         currently has one left-aligned layout, but has to serve routing, situation-led, proof-led and
@@ -59,25 +59,53 @@ Read-only. The output is a decision, not code.
         Cluster. Only propose a new component if the composition needs something of its own:
         markup or semantics, behaviour, or an arrangement the primitives can't express. If not,
         the answer is a composition in the template.
-- [ ] **1.2** Comp the five contexts from `visual-assets-plan.md` in Claude Design, using the audit's
-      verdicts. Do the no-visual version first. This is where "is it beautiful" gets answered, before
-      any code does.
-- [ ] **1.3** Fill in Phase 2 below from 1.1 + 1.2: one task per component, in dependency order.
+- [-] **1.2** ~~Comp the five contexts in Claude Design.~~ Dropped 28 Sep: whole pages are the wrong unit
+      before the components are fixed. Each component's design is now decided in its own spec (Phase 2), and
+      "is the page beautiful" is answered in Phase 3 on the real page. The one idea kept from it: the
+      no-visual page is designed first, in 3.2.
+- [ ] **1.4** Illustration concepts and asset inventory (runs alongside Phase 2; needs no code). From
+      `visual-assets-plan.md`: for each of the ~26 illustrations, the one-line message, the brief answered in
+      ch05 §4d order, and the read-back test. For each case study, run §9a to decide the cover and banner kind
+      (cut-out or registry archetype). Also inventory the client work and photography already cleared for use.
+      Output: `docs/illustration-concepts.md`, starting with the six service lines.
+- [x] **1.3** Fill in Phase 2 below from 1.1: one task per component, in dependency order (28 Sep).
 
 ## Phase 2 — Component overhaul
 
-One component per PR: spec → `/build-from-spec` → specimen with stress rows (shortest and longest
-real copy, long proper nouns, 390 wide) → `/audit-component`. The list is filled by 1.3; the rows
-below are known already.
+One component per PR, run as in CLAUDE.md § How a component gets made: Claude writes the spec, the
+owner answers its open questions, Claude builds (`/build-from-spec`), verifies (`verify`, `aria:check`,
+`/audit-component`) and screenshots (`npm run shots`), and the owner approves. Every specimen gains stress rows
+(shortest and longest real copy, long proper nouns, a 326 track). Order is `docs/component-audit.md` §5;
+★ marks the tasks that need an owner decision before building.
 
-- [ ] **2.x** PageHero: arrangements × media treatments (from 1.1)
-- [ ] **2.x** CtaSection: `open` leaves ~466px of dead ground when there's no proof (visual-assets-plan)
-- [ ] **2.x** Figure/media: `kind` capture · cut-out · illustration. A capture takes the hairline; a cut-out
-      takes no edge, one shadow and a contrast panel when needed; a drawing is never boxed (addendum B2–B5).
-- [ ] **2.x** BlockCard: put `orientation` / `imageSide` to use. They have zero usages today.
-- [ ] **2.x** Proof: portrait and client mark
-- [ ] **2.x** DataTable (brief 10): the comparison job
-- [ ] **2.x** *(rest from 1.3)*
+**Foundations: no decisions needed, so Claude runs these straight through.**
+- [ ] **2.1** Heading wrap: `text-wrap: balance` on every title role, `pretty` on lead/body. Long-title stress
+      rows in `/design/typography` at the CU04 ceilings.
+- [ ] **2.2** `_specimen` gains a 326 track. Every specimen with an image slot gets a 326 row.
+- [ ] **2.3** `--ratio-cover` 3/2 as a primitive; BlockCard and ListCard alias it.
+- [ ] **2.4** CtaSection: `open` collapses to one track when there is no proof (`CtaSection.tsx:376`, the
+      `Proof.tsx:189` idiom). ~466px of dead ground on ten routes.
+- [ ] **2.5** Tag: fix the specimen's hydration mismatch and its 18px overflow at 390 (found by `npm run shots`).
+
+**Media, in dependency order.**
+- [ ] **2.6** ★ `Media` primitive (new, tier 1): responsive slot (derived widths, WebP), `kind` capture ·
+      cut-out · illustration · photograph, intrinsic size, cover/contain. Everything with an image depends on it.
+- [ ] **2.7** Figure onto `Media`: edge by kind (a capture takes the hairline; a cut-out takes no edge, one
+      shadow and a contrast panel when needed; an illustration is never boxed), radius 0.
+- [ ] **2.8** ★ `ClientMark` primitive (new, tier 1): drawn in the ground's ink, sized by visual weight (ch05 §10).
+- [ ] **2.9** ★ PageHero rebuild: arrangements (stacked · media beside · media below) × media kind, media at
+      intrinsic ratio, a designed no-visual state. It unblocks 6.4.
+
+**Patterns.**
+- [ ] **2.10** ★ BlockCard: onto `Media`, a featured horizontal arrangement, a designed no-media state, and a review of
+      `media.kind: 'icon'` against ch04.
+- [ ] **2.11** ListCard: onto `Media`, the ordered marker as a real `ol`, the external glyph.
+- [ ] **2.12** ★ Proof: 1:1 portrait and client mark; `role` optional.
+- [ ] **2.13** ★ ContentSection: a head-beside-body arrangement; specimen raised to the Tag standard.
+- [ ] **2.14** Icon: the ch04 glyphs the site needs (`square-arrow-right-up`, `info-circle`, `danger-triangle`);
+      check the size scale against ch04's seven; review the six service glyphs.
+- [ ] **2.15** ★ DataTable (brief 10): the comparison job.
+- [ ] **2.16** Texture: write its spec (decorative ground; the placement limits in audit §3).
 
 ## Phase 3 — Slice 1: `/services/product-design`
 
@@ -86,7 +114,8 @@ below are known already.
       after today's Strapi response. Keep the adapter in `sources/strapi/service.ts` as thin as it can be
       while the page still renders. Anything that doesn't map cleanly goes on `docs/strapi-changes.md`
       and isn't solved here.
-- [ ] **3.2** `ServicePage` template in `src/templates/` + the section renderer.
+- [ ] **3.2** `ServicePage` template in `src/templates/` + the section renderer. Design the no-visual
+      state first (from the dropped 1.2): it is what most pages ship in.
 - [ ] **3.3** Route down to composition only (~50 lines).
 - [ ] **3.4** SEO/meta helper: unique title and description, canonical, social image, robots. No
       FAQPage schema. Analytics hooks at component boundaries (CTA to contact, form start/error/complete,

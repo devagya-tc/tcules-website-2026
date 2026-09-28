@@ -25,3 +25,44 @@ is: *does it change what the section says, or only how it looks?* Only the first
 
 **Found in.** 24 Sep call; tracker 3.1.
 
+## 2. Card ground is not a content field
+
+**What.** Remove the `surface` value the about page's closing cards carry (`about/page.tsx:349`,
+`surface={card.surface}`). The ground a card sits on is decided in code.
+
+**Why.** Surface is presentation (entry 1). It also lets an editor paint `ink` or `blue` anywhere, and
+those are reserved grounds, argued once per page (brand addendum D).
+
+**Found in.** Tracker 1.1, `docs/component-audit.md` §2.
+
+## 3. Every media asset records its kind
+
+**What.** A required `kind` on media metadata: `capture` · `cut-out` · `illustration` · `photograph`.
+
+**Why.** The kind changes what the image *is*, so it passes the entry-1 test. It decides how the site
+treats the image: a capture takes a hairline, a cut-out takes no edge and may take a contrast panel, and an
+illustration is never boxed (ch05 v1.0). Today nothing records it (visual-assets-plan), so every image gets
+the screenshot treatment.
+
+**Found in.** Tracker 1.1, `docs/component-audit.md` §2.
+
+## 4. Testimonial role is optional
+
+**What.** Testimonial `role` is optional; named attribution is not.
+
+**Why.** The handoff lists role as optional (§4), and the content system requires a name, not a title.
+`Proof` currently requires `role`.
+
+**Found in.** Tracker 1.1, `docs/component-audit.md` §3 Proof.
+
+## 5. Case studies carry a cover, a banner and the inputs that choose them
+
+**What.** Two media fields on the case-study record, `cover` (3:2) and `banner` (16:9). Also the fields
+ch05 §9a chooses them from: engagement activity, product domain, industry, primary use, whether UI is
+available and cleared, and "what changed" (one noun phrase).
+
+**Why.** Every project has one cover (used on every card) and one banner (the PageHero on its own page). The
+brand decides which kind each is, a product-UI cut-out or a registry illustration, from those inputs, so the
+choice can be made and checked without taste. Without the fields it is made ad hoc per page.
+
+**Found in.** `docs/visual-assets-plan.md` (28 Sep revision), ch05 v1.0 §9a.
