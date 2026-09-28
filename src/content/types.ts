@@ -11,6 +11,33 @@ import type { SiteFooterProps, SiteNavProps } from '@/patterns';
  * what the patterns need as props rather than by what the CMS happens to store.
  */
 
+/**
+ * An image asset, as every page receives it — the "record" a picture is (CLAUDE.md).
+ *
+ * `src`, `width` and `height` are the master file and its intrinsic pixel size; `sources` are the
+ * derived widths the CMS generated from it (Strapi's `formats`, ruling M2's 2560 · 1240 · 652 ·
+ * 320 ladder), read by width and never by name. `kind`, `panel` and `shadow` say what the image IS
+ * and how its edge is drawn (ch05 §2, §2a, §4a; rulings M3, M4); no source records them yet, so
+ * they arrive undefined and an image with no kind renders as a capture.
+ *
+ * Shaped to match `MediaImage` in src/components/Media structurally — the same precedent as
+ * `FigureImage` — so a page hands one straight to a pattern and neither side imports the other.
+ * `sources/strapi/image.ts` is the one place a Strapi upload becomes one of these.
+ */
+export type ImageSource = { src: string; width: number };
+export type ImageKind = 'capture' | 'cut-out' | 'illustration' | 'photograph';
+export type ImagePanel = 'paper' | 'paper-deep' | 'ink';
+export type ImageRecord = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  kind?: ImageKind;
+  panel?: ImagePanel;
+  shadow?: boolean;
+  sources?: ImageSource[];
+};
+
 /** A resolved page: whatever the route needs to render, already flattened and normalised. */
 export type Page = {
   slug: string;
@@ -116,7 +143,7 @@ export type AuditBlock =
   | {
       id: string;
       type: 'media';
-      image?: { src: string; alt: string; width: number; height: number };
+      image?: ImageRecord;
       caption: string;
       note?: string;
     };
@@ -142,12 +169,7 @@ export type AboutAction = {
   external: boolean;
 };
 
-export type AboutImage = {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-};
+export type AboutImage = ImageRecord;
 
 export type AboutImageSection = {
   id: string;
@@ -216,6 +238,7 @@ export type ContactImage = {
   alt: string;
   width?: number;
   height?: number;
+  sources?: ImageSource[];
 };
 
 export type ContactAction = {
@@ -422,7 +445,7 @@ export type ToolBlock =
   | {
       id: string;
       type: 'media';
-      image?: { src: string; alt: string; width: number; height: number };
+      image?: ImageRecord;
       caption: string;
       download?: { label: string; href: string };
     };
@@ -536,7 +559,7 @@ export type ServiceBlock =
   | {
       id: string;
       type: 'media';
-      image?: { src: string; alt: string; width: number; height: number };
+      image?: ImageRecord;
       caption: string;
       download?: ServiceAction;
     };
@@ -612,6 +635,7 @@ export type ServicesMasterImage = {
   alt: string;
   width?: number;
   height?: number;
+  sources?: ImageSource[];
 };
 
 export type ServicesMasterCard = {
@@ -672,6 +696,7 @@ export type FutureInterfacesLabImage = {
   alt: string;
   width?: number;
   height?: number;
+  sources?: ImageSource[];
 };
 
 export type FutureInterfacesLabCard = {
@@ -872,7 +897,7 @@ export type ExpertiseBlock =
   | {
       id: string;
       type: 'media';
-      image?: { src: string; alt: string; width: number; height: number };
+      image?: ImageRecord;
       caption: string;
       download?: ExpertiseAction;
     };
@@ -972,7 +997,7 @@ export type GlossaryBlock =
   | {
       id: string;
       type: 'media';
-      image?: { src: string; alt: string; width: number; height: number };
+      image?: ImageRecord;
       caption: string;
       href?: string;
       mime?: string;
@@ -1031,13 +1056,7 @@ export type CaseStudyAction = {
   external: boolean;
 };
 
-export type CaseStudyImage = {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-  mime: string;
-};
+export type CaseStudyImage = ImageRecord & { mime: string };
 
 export type CaseStudyBlock =
   | { id: string; type: 'prose'; html: string }
@@ -1197,6 +1216,7 @@ export type CaseStudyListingImage = {
   alt: string;
   width?: number;
   height?: number;
+  sources?: ImageSource[];
 };
 
 export type CaseStudyListingItem = {

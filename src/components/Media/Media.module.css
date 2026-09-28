@@ -1,0 +1,81 @@
+/* Media — one image asset in one placement, built to docs/specs/Media.md.
+
+   Every value comes from --media-*, declared in tokens/components/media.css; the capture's rule
+   ink is re-declared there once per surface. This file states no colour, distance, radius or
+   shadow of its own.
+
+   ── What is absent, and why ────────────────────────────────────────────────────
+   No margin. The seam around an image is the parent's.
+   No display:grid or display:flex. The two display:block declarations below de-inline an
+     element (the <img>'s baseline gap, the panel <span>); neither arranges anything.
+   No aspect-ratio. In `intrinsic` the ratio is the asset's own, carried by the width and height
+     attributes; in `fill` the ratio is the PARENT's box, which is the whole point of `fill` —
+     the pattern that crops owns the crop.
+   No max-inline-size, no max-block-size. A very tall asset renders tall: that is a supply
+     problem the 326 check catches (ch05 §2, B3), not something to clip here.
+   No box-shadow. A cut-out's silhouette is its alpha, and only filter: drop-shadow() follows it;
+     a box-shadow would draw a rectangle round the transparent box, which is a frame (ch05 §2a).
+   No @media query and no transition. Nothing here moves or changes with the viewport; the image
+     scales with its track and the browser picks the file from srcset and sizes.
+   No :hover or :focus. An image is not a control; a link around one is the pattern's.
+
+   Rule order is not load-bearing: no two rules here set the same property on the same element. */
+
+/* Every kind: the full inline size of whatever box contains it, and square corners (ch05 §6 —
+   radius 0 on every image). The width is 100% of the parent's track at every width, border
+   included, because reset.css's global border-box puts the capture's hairline inside it. */
+.image {
+  display: block;
+  inline-size: 100%;
+  border-radius: var(--media-radius);
+}
+
+/* Height from the asset's own ratio: block-size:auto with the width and height attributes
+   present scales without cropping, and the attributes reserve the space before it loads. */
+.intrinsic {
+  block-size: auto;
+}
+
+/* The parent owns the ratio; the image covers it from the centre. Only the placements that crop
+   mechanically use this, and they are supplied an asset authored at their ratio (ch05 B4, §9a). */
+.fill {
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* A capture's one edge cue: the placement's hairline in the surface's rule ink (ch05 §2). */
+.capture {
+  border: var(--media-capture-rule-width) solid var(--media-capture-rule-ink);
+}
+
+/* A cut-out's one shadow, following its silhouette (ch05 §2, B2). Never on a capture, never on
+   the panel, never stacked: the TSX only emits this class for a cut-out. */
+.shadow {
+  filter: drop-shadow(var(--media-cutout-shadow));
+}
+
+/* The contrast panel (ch05 §2a, B5): a flat field filling the slot, the cut-out inset by the
+   container gutter. No border, no radius beyond the image's own zero, no shadow of its own. */
+.panel {
+  display: block;
+  padding: var(--media-panel-inset);
+  border-radius: var(--media-radius);
+}
+
+/* In `fill`, the panel is what fills the parent's box, and the image covers the panel's content
+   box inside the inset. */
+.panelFill {
+  block-size: 100%;
+}
+
+.panelPaper {
+  background: var(--media-panel-paper-ground);
+}
+
+.panelPaperDeep {
+  background: var(--media-panel-paper-deep-ground);
+}
+
+.panelInk {
+  background: var(--media-panel-ink-ground);
+}

@@ -31,11 +31,20 @@
  * write, because a CMS body field arrives as a string. It is the documented exception to the
  * no-margins rule, and the exception is argued in the component itself.
  *
+<<<<<<< HEAD
  * ClientMark is a FOURTH kind of mark: a client's logo in a set. Unlike Logo it owns no artwork —
  * the client's SVG arrives as a URL and is drawn as a mask in --cmark-ink, so every mark in a set is
  * one colour, the ground's ink — and unlike every other primitive it sizes by AREA, not by height
  * or width, so marks of very different shapes carry equal weight. A logo strip is not a component:
  * it is ClientMark × n in a Cluster, which owns the gap.
+=======
+ * Media is the one ASSET RENDERER. It places a raster or vector image in whatever box its parent
+ * gives it — its own intrinsic ratio, or a ratio the parent owns — and decides only the two things
+ * every image slot must get the same: responsive delivery (a native srcset from Strapi's formats,
+ * and the `sizes` the placement states) and the brand's edge by kind (capture hairline, cut-out
+ * silhouette and panel, illustration never boxed). It arranges nothing and takes no caption; a
+ * caption is Figure's.
+>>>>>>> origin/feat/media
  *
  * Texture is DECORATION. It arranges nothing and says nothing: a bleed layer that fills the band
  * and shows the pixel grid through shapes the caller places and blurs. Its geometry is read from
@@ -60,6 +69,16 @@ export { Icon, iconNames, type IconProps, type IconName, type IconSize } from '.
 export { Input, type InputEmphasis, type InputProps } from './Input';
 export { Logo, type LogoProps, type LogoSize, type LogoVariant } from './Logo';
 export { Prose, type ProseProps } from './Prose';
+export {
+  Media,
+  mediaSrcSet,
+  type MediaFit,
+  type MediaImage,
+  type MediaKind,
+  type MediaPanel,
+  type MediaProps,
+  type MediaSource,
+} from './Media';
 export { Tag, type TagProps, type TagVariant } from './Tag';
 export {
   Texture,

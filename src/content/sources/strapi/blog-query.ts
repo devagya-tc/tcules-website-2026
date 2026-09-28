@@ -172,6 +172,7 @@ export const BLOG_BY_SLUG_QUERY = /* GraphQL */ `
     alternativeText
     width
     height
+    formats
     mime
   }
 

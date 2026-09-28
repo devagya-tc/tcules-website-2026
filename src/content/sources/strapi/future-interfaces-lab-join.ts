@@ -7,6 +7,7 @@ import type {
   FutureInterfacesLabJoinImage,
   FutureInterfacesLabJoinPage,
 } from '../../types';
+import { absoluteAssetUrl } from './image';
 import { FUTURE_INTERFACES_LAB_JOIN_QUERY } from './future-interfaces-lab-join-query';
 import type {
   StrapiFutureInterfacesLabJoin,
@@ -93,21 +94,6 @@ function mapSeo(
     ...(canonical ? { canonical } : {}),
     ...(robots ? { robots, noindex: !robots.index } : {}),
   };
-}
-
-function absoluteAssetUrl(
-  candidate: string | null | undefined,
-  graphqlUrl: string,
-): string | undefined {
-  const path = value(candidate);
-  if (!path) return undefined;
-
-  try {
-    const url = new URL(path, graphqlUrl);
-    return url.protocol === 'https:' || url.protocol === 'http:' ? url.toString() : undefined;
-  } catch {
-    return undefined;
-  }
 }
 
 function mapImage(

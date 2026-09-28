@@ -6,6 +6,7 @@ import type {
   FutureInterfacesLabImage,
   FutureInterfacesLabPage,
 } from '../../types';
+import { absoluteAssetUrl, imageSources, positiveDimension } from './image';
 import { FUTURE_INTERFACES_LAB_QUERY } from './future-interfaces-lab-query';
 import type {
   StrapiFutureInterfacesLab,
@@ -88,21 +89,6 @@ function mapSeo(
   };
 }
 
-function absoluteAssetUrl(
-  candidate: string | null | undefined,
-  graphqlUrl: string,
-): string | undefined {
-  const path = value(candidate);
-  if (!path) return undefined;
-
-  try {
-    const url = new URL(path, graphqlUrl);
-    return url.protocol === 'https:' || url.protocol === 'http:' ? url.toString() : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
 function mapImage(
   file: StrapiFutureInterfacesLabFile | null | undefined,
   graphqlUrl: string,
@@ -110,14 +96,16 @@ function mapImage(
   const src = absoluteAssetUrl(file?.url, graphqlUrl);
   if (!src) return undefined;
 
-  const width = typeof file?.width === 'number' && file.width > 0 ? file.width : undefined;
-  const height = typeof file?.height === 'number' && file.height > 0 ? file.height : undefined;
+  const width = positiveDimension(file?.width);
+  const height = positiveDimension(file?.height);
+  const sources = width ? imageSources(file?.formats, width, graphqlUrl) : undefined;
 
   return {
     src,
     alt: value(file?.alternativeText) || value(file?.caption),
     ...(width ? { width } : {}),
     ...(height ? { height } : {}),
+    ...(sources ? { sources } : {}),
   };
 }
 

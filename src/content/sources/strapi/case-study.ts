@@ -10,6 +10,7 @@ import type {
   ContentSeo,
   PageOutlineEntry,
 } from '../../types';
+import { imageSources, mapUploadImage, positiveDimension } from './image';
 import { CASE_STUDY_BY_SLUG_QUERY, CASE_STUDY_LISTING_QUERY } from './case-study-query';
 import type {
   StrapiCaseStudy,
@@ -67,20 +68,11 @@ function mapImage(
   context: string,
   graphqlUrl: string,
 ): CaseStudyImage | undefined {
-  if (!file || !value(file.mime).startsWith('image/')) return undefined;
-
-  const src = absoluteUrl(file.url, graphqlUrl);
-  const width = typeof file.width === 'number' && file.width > 0 ? file.width : undefined;
-  const height = typeof file.height === 'number' && file.height > 0 ? file.height : undefined;
-  if (!src || !width || !height) return undefined;
-
-  return {
-    src,
-    alt: value(file.alternativeText) || `${title} — ${context}`,
-    width,
-    height,
-    mime: value(file.mime),
-  };
+  const image = mapUploadImage(file, graphqlUrl, {
+    fallbackAlt: `${title} — ${context}`,
+    requireImageMime: true,
+  });
+  return image && file ? { ...image, mime: value(file.mime) } : undefined;
 }
 
 function mapAction(
@@ -105,12 +97,6 @@ function mapAction(
   };
 }
 
-function positiveDimension(candidate: number | null | undefined): number | undefined {
-  return typeof candidate === 'number' && Number.isFinite(candidate) && candidate > 0
-    ? candidate
-    : undefined;
-}
-
 function mapListingImage(
   file: StrapiCaseStudyListingItem['thumbnail'],
   title: string,
@@ -121,12 +107,14 @@ function mapListingImage(
 
   const width = positiveDimension(file?.width);
   const height = positiveDimension(file?.height);
+  const sources = width ? imageSources(file?.formats, width, graphqlUrl) : undefined;
 
   return {
     src,
     alt: value(file?.alternativeText) || title,
     ...(width ? { width } : {}),
     ...(height ? { height } : {}),
+    ...(sources ? { sources } : {}),
   };
 }
 
