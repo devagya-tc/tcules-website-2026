@@ -451,6 +451,44 @@
   --text-mono-case: uppercase;
 }
 
+/* ── Type · wrap ──────────────────────────────────────────────────────────────
+   A TITLE BALANCES, AND RUNNING TEXT WRAPS PRETTY. Both are properties of the
+   role, not of whichever component consumed it — the argument case makes above.
+
+   A title is a shape: display and h1–h6 set short, set large, and set where the
+   eye lands first, so a line of five words over a line of one reads as a fault
+   from across a room. `balance` evens the lines out. It was on the PageHero
+   title, the CtaSection heading and Prose's headings only, which meant the same
+   ten-word h2 broke well in one band and left a widow in the next, and the cause
+   was which file happened to have remembered.
+
+   Running text is not a shape, it is a measure. Balancing a paragraph would
+   pull every line in from the measure it was set to, so lead, body-lg, body,
+   body-sm and quote take `pretty` instead: the lines keep the measure and only
+   the last few are adjusted so a paragraph never ends on one word. Applied
+   where a part renders SENTENCES — a lead, a body field, an answer, a quote —
+   and not on a UI line that merely borrows a body size (a nav row, a footer
+   link, a field label, a crumb, a byline value). Those are one line by design,
+   and a wrap rule on them states a decision about paragraphs they never make.
+
+   It could not live inside the composite for the reason case cannot: `font:`
+   carries no wrapping. So a rule that sets a title role writes
+   `text-wrap: var(--text-title-wrap)` beside its `font:`, and a rule that sets
+   running text writes `text-wrap: var(--text-running-wrap)`.
+
+   TWO tokens, not one per role, because there are two decisions: every title
+   role wants the same answer and every running role wants the same answer.
+   Seven -wrap companions reading `balance` would be seven names for one
+   decision — the --sec-gap mistake again — and one name is what makes the call
+   reversible in one declaration.
+
+   Mono labels take neither. They are one line by construction, and a wrapping
+   eyebrow is a content fault that should look like one.                       */
+:root {
+  --text-title-wrap: balance;
+  --text-running-wrap: pretty;
+}
+
 /* ── Opacity ──────────────────────────────────────────────────────────────────
    One step, and it exists for one job: a mark used as ground rather than as a
    mark. At .06 a wordmark is a texture in the surface — legible as a shape when

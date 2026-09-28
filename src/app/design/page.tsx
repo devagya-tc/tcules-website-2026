@@ -18,7 +18,7 @@ const SPECIMENS = [
       {
         href: '/design/typography',
         name: 'Typography',
-        note: 'every --text-* role, the ladders under them, and the Prose rich-text flow',
+        note: 'every --text-* role, the ladders under them, title and running-text wrap at the CU04 ceilings, and the Prose rich-text flow',
       },
     ],
   },

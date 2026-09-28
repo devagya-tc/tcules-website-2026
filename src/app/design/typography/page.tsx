@@ -327,14 +327,14 @@ function WidthSample() {
   return (
     <Prose>
       <p>
-        Prose declares no measure. A reading column is a property of the page type rather than of
-        the rich-text component, so the container decides how wide this paragraph gets and the
-        component decides nothing about it.
+        Prose declares no measure. A reading column is a property of the page type rather than
+        of the rich-text component, so the container decides how wide this paragraph gets and
+        the component decides nothing about it.
       </p>
       <p>
         A cap on the component could only ever be narrowed by a caller and never widened, which
-        made the primitive answer a page-type question for every route that renders a body field.
-        Half of them are not reading columns at all.
+        made the primitive answer a page-type question for every route that renders a body
+        field. Half of them are not reading columns at all.
       </p>
     </Prose>
   );
@@ -569,6 +569,92 @@ export default function TypographySpecimenPage() {
             note="Titles break by phrase, not by column. A headline running the full content width reads as a paragraph that happens to be large."
           >
             <p className={`${t.h2} ${t.measureTitle}`}>A title breaks where the sense breaks</p>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      {/* ── Wrap, at the ceilings ─────────────────────────────────────────────────────────────
+          Every other title on this page is short enough to sit on one line, which proves nothing
+          about wrapping. These rows are the CU04 ceilings — the longest a title of each kind is
+          allowed to be — so a widow, an orphan or a ragged stack shows here before a route has it. */}
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <p className={t.eyebrow}>Wrap</p>
+            <h2>Titles balance, and running text wraps pretty</h2>
+            <p>
+              Wrap is a property of the role, not of the component that consumed it. Every rule
+              that sets a title role writes <code>text-wrap: var(--text-title-wrap)</code>{' '}
+              beside its font, so a ten-word heading breaks into even lines wherever it lands.
+              Every rule that sets a lead or body role for sentences writes{' '}
+              <code>var(--text-running-wrap)</code>, which keeps the measure and only stops a
+              paragraph ending on one word.
+            </p>
+          </Layout>
+
+          <Specimen
+            title="h1 · 10 words, at --measure-title"
+            note="The ceiling for a page title. Balanced, the lines come out near-equal inside the 22ch cap rather than two full lines and one stranded word."
+          >
+            <p className={`${t.h1} ${t.measureTitle}`}>
+              Product design for regulated teams that cannot afford a rework
+            </p>
+          </Specimen>
+
+          <Specimen
+            title="h2 · 10 words, at --measure-title"
+            note="A bare h2 element, so this row proves the base layer in globals.css as well as the role."
+          >
+            <h2 className={t.measureTitle}>
+              What changes when the design system becomes the delivery contract
+            </h2>
+          </Specimen>
+
+          <Specimen
+            title="Card title · h4 · 8 words, in a set of three"
+            note="The ceiling beside two shorter titles in the same 3-up set, which is how a card title is actually read. The long one balances to two even lines; the short ones are not stretched to match."
+          >
+            <Layout columns={3} colGap="gutter" rowGap="stack">
+              <p className={t.h4}>How we rebuilt onboarding for a lending platform</p>
+              <p className={t.h4}>Design systems that ship</p>
+              <p className={t.h4}>Research ops</p>
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="A 30-character proper noun"
+            note="Two ways a name reaches the ceiling. Spaced, it is kept together where it can be and balancing works round it. Unbroken, no wrap rule can help: the reset's break-word folds it rather than letting it widen the band, and a title that needs that is a content fault that should look like one."
+          >
+            <Layout rowGap="block">
+              <h2 className={t.measureTitle}>
+                Why Commonwealth Bank of Australia chose a slower launch
+              </h2>
+              <h3 className={t.measureTitle}>Inside Hyperautomationintelligencelab</h3>
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="The 390 column · a 320 frame"
+            note="A 390 phone leaves 326px inside the 32 gutters. The frame is Layout's md track, 320 — six pixels stricter than the phone — because the harness has no 326 track of its own yet. Type steps down at 767px by viewport, not by container, so at 1440 this shows desktop sizes in a phone-width column: harsher than any real phone, which is the point. The lead and body beneath show pretty on running text."
+          >
+            <div className={s.narrowMd}>
+              <Layout rowGap="block">
+                <p className={t.h1}>
+                  Product design for regulated teams that cannot afford a rework
+                </p>
+                <h2>What changes when the design system becomes the delivery contract</h2>
+                <p className={t.h4}>How we rebuilt onboarding for a lending platform</p>
+                <h3>Why Commonwealth Bank of Australia chose a slower launch</h3>
+                <p className={t.lead}>
+                  A lead set for sentences keeps its measure and never ends on a single word.
+                </p>
+                <p className={t.body}>
+                  Body copy wraps the same way. The last few lines are adjusted so the paragraph
+                  closes on a phrase, and every line above them keeps the full width of the
+                  column.
+                </p>
+              </Layout>
+            </div>
           </Specimen>
         </Layout>
       </Section>
@@ -876,9 +962,9 @@ export default function TypographySpecimenPage() {
             </p>
             <p>
               The cost is the first specimen and it is not hidden. Dropped into the full content
-              column with nothing around it, the flow runs about 145 characters a line — which is
-              the caller&rsquo;s omission to fix, and the second specimen is how the frame fixes
-              it without anybody declaring a distance.
+              column with nothing around it, the flow runs about 145 characters a line — which
+              is the caller&rsquo;s omission to fix, and the second specimen is how the frame
+              fixes it without anybody declaring a distance.
             </p>
           </Layout>
 
@@ -893,7 +979,12 @@ export default function TypographySpecimenPage() {
             title="A track — columns={{ base: 1, lg: [2, 3] }}"
             note="The frame produces the measure instead of a declaration: 1176 less the 64 column gap, split 2:3, puts the flow track at 667px against a 68ch body measure of about 666. This is the long-form page with its outline rail; the box stands in for TableOfContents."
           >
-            <Layout columns={{ base: 1, lg: [2, 3] }} colGap="column" rowGap="stack" align="start">
+            <Layout
+              columns={{ base: 1, lg: [2, 3] }}
+              colGap="column"
+              rowGap="stack"
+              align="start"
+            >
               <Box>Outline rail</Box>
               <WidthSample />
             </Layout>

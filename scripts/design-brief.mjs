@@ -142,11 +142,11 @@ function gapScale() {
 const CASE_EXEMPT = new Set(['--text-code']);
 
 function textRoles() {
-  /* -tracking and -case are COMPANIONS, not roles. A companion left in this list prints as a role
+  /* -tracking, -case and -wrap are COMPANIONS, not roles. A companion left in this list prints as a role
      with no size, ratio, family or weight — four question marks in the one table a designer sizes
      type from, which reads as a broken token rather than as a companion. */
   const roles = namesMatching(/^--text-/).filter(
-    (n) => !n.endsWith('-tracking') && !n.endsWith('-case'),
+    (n) => !n.endsWith('-tracking') && !n.endsWith('-case') && !n.endsWith('-wrap'),
   );
   const withTracking = roles.filter((n) => tokens.has(`${n}-tracking`));
   const without = roles.filter((n) => !tokens.has(`${n}-tracking`));
@@ -395,6 +395,24 @@ resolution, not an exemption: mono has exactly ${type.exempt.length}, ${type.exe
 **content** rather than a label and case is semantic — \`Section\` and \`SECTION\` are different
 identifiers. Numerals have no case, so the transform is a no-op on a stat's digits and normalises an
 alphabetic suffix: "12k" sets as "12K".
+
+### Titles balance, running text wraps pretty
+
+Wrap is a property of the role, like case, and it has two answers. **Every title role** (display,
+h1–h6) is balanced, so a long title breaks into near-equal lines instead of leaving one word on the
+last. **Running text** — lead, body-lg, body, body-sm and quote, wherever they set sentences — wraps
+pretty: every line keeps the measure and only a closing single word is avoided. A UI line that
+borrows a body size (a nav row, a field label, a crumb) takes neither, and neither do mono labels.
+
+\`\`\`css
+font: var(--text-h2);
+letter-spacing: var(--text-h2-tracking);
+text-wrap: var(--text-title-wrap);
+\`\`\`
+
+Two tokens, one per decision: \`--text-title-wrap\` and \`--text-running-wrap\`. Design titles
+against their longest real copy — a ten-word h1 or h2, an eight-word card title — not a four-word
+placeholder that never wraps.
 
 ${simpleFamily(/^--measure-/, 'Measure (line length)') ?? ''}
 ${simpleFamily(/^--radius-/, 'Radius') ?? ''}

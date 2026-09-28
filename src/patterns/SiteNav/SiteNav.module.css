@@ -437,6 +437,7 @@
   gap: var(--gap-text);
   font: var(--nav-rail-title-text);
   letter-spacing: var(--nav-rail-title-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 
 .cardArrow {

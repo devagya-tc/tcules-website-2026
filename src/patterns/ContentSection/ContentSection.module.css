@@ -19,6 +19,7 @@
 .heading {
   font: var(--csec-heading-text);
   letter-spacing: var(--csec-heading-tracking);
+  text-wrap: var(--text-title-wrap);
   color: var(--csec-heading-ink);
 
   /* The title measure, so a full-sentence section heading breaks early and reads as a shape
@@ -28,6 +29,7 @@
 
 .lead {
   font: var(--csec-lead-text);
+  text-wrap: var(--text-running-wrap);
   color: var(--csec-lead-ink);
   max-inline-size: var(--csec-lead-measure);
 }

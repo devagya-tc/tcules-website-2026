@@ -81,7 +81,8 @@
    appears once or twice per route, so it can never be the page's title. `offer` renders it at h3
    SCALE, which is a type role rather than a level; the remap is in the token layer.
 
-   `text-wrap: balance` because this is the loudest line in the band and a widow in it is visible
+   Balanced, because every title role is (--text-title-wrap, tokens/primitives.css § Type · wrap),
+   and it matters most here: this is the loudest line in the band and a widow in it is visible
    across a room. It wraps to at most three lines inside the title measure. Never clamped and never
    truncated: `heading=""` renders an empty `h2` on purpose, because the region is labelled from it
    and an unnamed region is a findable fault where a placeholder string is a shipped one. */
@@ -90,7 +91,7 @@
   color: var(--cta-heading-ink);
   font: var(--cta-heading-text);
   letter-spacing: var(--cta-heading-tracking);
-  text-wrap: balance;
+  text-wrap: var(--text-title-wrap);
 }
 
 /* ── The copy · two roles, one measure ─────────────────────────────────────────
@@ -104,12 +105,14 @@
   max-inline-size: var(--cta-body-measure);
   color: var(--cta-body-ink);
   font: var(--cta-lead-text);
+  text-wrap: var(--text-running-wrap);
 }
 
 .body {
   max-inline-size: var(--cta-body-measure);
   color: var(--cta-body-ink);
   font: var(--cta-body-text);
+  text-wrap: var(--text-running-wrap);
 }
 
 /* ── The points · marker, label, detail ────────────────────────────────────────
@@ -137,4 +140,5 @@
   max-inline-size: var(--cta-body-measure);
   color: var(--cta-point-ink);
   font: var(--cta-detail-text);
+  text-wrap: var(--text-running-wrap);
 }

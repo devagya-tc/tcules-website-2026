@@ -83,7 +83,7 @@
    A mono, tracked, uppercase run-in is the honest sixth. */
 .prose :is(h1, h2, h3, h4, h5, h6) {
   color: var(--prose-ink-heading);
-  text-wrap: balance;
+  text-wrap: var(--text-title-wrap);
 }
 .prose h1 {
   font: var(--text-h1);
@@ -112,10 +112,12 @@
 }
 
 /* ── Paragraph ───────────────────────────────────────────────────────────────────────────────
-   `pretty` costs nothing and removes the single-word last line, which is the most visible
-   typographic fault in a long body field. */
-.prose p {
-  text-wrap: pretty;
+   Running text wraps pretty — the role's decision, read from --text-running-wrap (see
+   tokens/primitives.css § Type · wrap). It costs nothing and removes the single-word last line,
+   which is the most visible typographic fault in a long body field. A list item and a definition
+   are running text too, and a CMS does not always wrap them in a <p>, so they name themselves. */
+.prose :is(p, li, dd) {
+  text-wrap: var(--text-running-wrap);
 }
 
 /* ── Lists ───────────────────────────────────────────────────────────────────────────────────
