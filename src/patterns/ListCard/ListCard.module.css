@@ -12,7 +12,8 @@
    A ground under the pointer is an affordance; a ground at rest would be a finish, and a filled
    object at rest is still BlockCard's job. Nothing here paints until :hover.
    No surrounding edge. The one border is the row's block-end rule.
-   No margin. The parent Layout owns the list axis and uses rowGap="none".
+   No margin. The parent Layout owns the list axis and uses rowGap="none". The one margin below is
+     the visually-hidden hint's clip technique, not outer spacing.
    No display:grid or display:flex. Layout and Cluster own both axes; flex values below size their
    children inside those primitives and do not arrange siblings by themselves.
    No responsive type or distance override. Layout collapses the split at its md boundary, and the
@@ -138,21 +139,15 @@
    A `line-height: 0` stood here and could never have applied — the wrapper is a Cluster flex item,
    so it is blockified, and its only child is a block-level svg, so no line box ever forms. */
 
-/* A content image rather than a panel. The wrapper supplies one invariant crop; the native image
-   supplies source, alternative text and intrinsic dimensions. */
+/* The thumbnail's BOX, and nothing inside it. ListCard owns the placement — 160 inline, the shared
+   3:2 cover crop — and Media fills it (`fit="fill"`) with its own crop, srcset and edge by kind.
+   overflow:hidden is what makes the cover crop a crop: Media's fill image is 100% of this box, and
+   a cut-out's drop-shadow is clipped to it rather than bleeding into the copy's seam. */
 .thumbnail {
   display: block;
   inline-size: var(--lcrd-thumbnail-inline-md);
   aspect-ratio: var(--lcrd-thumbnail-ratio);
   overflow: hidden;
-}
-
-.thumbnailImage {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-  object-position: center;
 }
 
 .title {
@@ -233,4 +228,20 @@
   box-shadow:
     0 0 0 var(--lcrd-ring-offset) var(--lcrd-ring-gap-color),
     0 0 0 calc(var(--lcrd-ring-offset) + var(--lcrd-ring-width)) var(--lcrd-ring-color);
+}
+
+/* Visually hidden, still announced: an external row's "(opens in a new tab)". Not display:none and
+   not visibility:hidden — both remove it from the accessibility tree, which is the opposite of the
+   point. The negative margin is not outer spacing: it pulls the 1px clip box out of the flow so the
+   cue's box does not grow by a pixel nobody can see. */
+.hint {
+  position: absolute;
+  inline-size: var(--lcrd-hidden-size);
+  block-size: var(--lcrd-hidden-size);
+  margin: calc(-1 * var(--lcrd-hidden-size));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }

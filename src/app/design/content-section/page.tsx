@@ -39,7 +39,7 @@ function Steps() {
           title={step.title}
           body={step.body}
           titleAs="h3"
-          marker={{ kind: 'number', value: index + 1 }}
+          marker={{ type: 'number', value: index + 1 }}
         />
       ))}
     </Layout>

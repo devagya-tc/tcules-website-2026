@@ -1,5 +1,6 @@
-import { Cluster, Icon, Layout, type IconName } from '@/components';
+import { Cluster, Icon, Layout, Media, type IconName, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
+import { LIST_CARD_THUMBNAIL } from '@/lib/image-sizes';
 
 import styles from './ListCard.module.css';
 
@@ -7,15 +8,28 @@ import styles from './ListCard.module.css';
  * One slot, three fills. The discriminator is content, not a visual variant: every member lands in
  * the same leading position and the row around it keeps the same rule, inset and type.
  *
- * Thumbnail fields are owned here rather than accepted as a node. That makes the native image,
- * intrinsic ratio, centre crop and blank-source behaviour one decision across every caller. `alt`
- * stays required even when its correct value is an empty string, so decoration has to be chosen
- * explicitly rather than arriving through an omitted attribute.
+ * The discriminant is `type`, not `kind`, for the reason PageHero's and BlockCard's media unions
+ * switched (docs/specs/Media.md § 17 Q7): the thumbnail carries an image RECORD, and the record has
+ * its own `kind` — capture, cut-out, illustration, photograph — which decides the image's edge.
+ * Two fields called `kind` one level apart is a spread away from one overwriting the other.
+ *
+ * `number` is the ordered-steps fill (the Mechanism's semantic variant). It is only legal inside an
+ * `<ol>`: the numeral is aria-hidden because the list announces position, so in a `<ul>` the order
+ * would be visual only. The caller's `Layout as="ol"` owns that — see the component comment.
+ *
+ * `thumbnail` takes `Media`'s own `MediaImage` record, whole and untouched, exactly as a page
+ * received it from `@/content`. ListCard owns the box — 160 inline, the shared 3:2 cover crop — and
+ * `Media` owns everything inside it: the srcset, the lazy load and the edge by kind. `alt` is
+ * required by the record even when its right value is `""`, so decoration is chosen, never omitted.
+ *
+ * Per ch05 § 9 and ruling C1 a thumbnail is for case-study and insight/resource rows only, and it
+ * carries one cut-out part or one illustration shape. That is a supply rule, not a type: the
+ * pattern cannot tell a case study from a glossary term, so the route decides whether to pass one.
  */
 export type ListCardMarker =
-  | { kind: 'number'; value: number }
-  | { kind: 'icon'; name: IconName }
-  | { kind: 'thumbnail'; src: string; alt: string };
+  | { type: 'number'; value: number }
+  | { type: 'icon'; name: IconName }
+  | { type: 'thumbnail'; image: MediaImage };
 
 export type ListCardArrangement = 'split' | 'stacked';
 export type ListCardTitleElement = 'span' | 'h3' | 'h4';
@@ -37,7 +51,11 @@ export type ListCardProps = {
   titleAs?: ListCardTitleElement;
   /** A non-blank destination turns the entire row into one native link and adds its cue. */
   href?: string;
-  /** Opens a linked row in a new tab when its CMS destination is explicitly external. */
+  /**
+   * The destination leaves tcules.com. Opens in a new tab, swaps the cue for ch04's "leaves the
+   * site" glyph and appends a visually hidden "(opens in a new tab)" to the row's accessible name.
+   * Ignored on a row with no destination.
+   */
   external?: boolean;
 };
 
@@ -47,7 +65,7 @@ function warn(message: string) {
 
 /** The marker slot. Blank thumbnail sources collapse rather than leaving a broken-image frame. */
 function Marker({ marker }: { marker: ListCardMarker }) {
-  if (marker.kind === 'number') {
+  if (marker.type === 'number') {
     /* At least two digits, not exactly two: the expected 01–12 align, while an out-of-range 100
        stays honest rather than being truncated. The <ol> announces position, so the visual copy
        is hidden and cannot be read twice. */
@@ -60,7 +78,7 @@ function Marker({ marker }: { marker: ListCardMarker }) {
     );
   }
 
-  if (marker.kind === 'icon') {
+  if (marker.type === 'icon') {
     /* The title names the subject, so Icon's unlabelled form is the right one: it emits
        aria-hidden and cannot duplicate the row name. */
     return (
@@ -70,27 +88,19 @@ function Marker({ marker }: { marker: ListCardMarker }) {
     );
   }
 
-  if (marker.src.trim().length === 0) {
+  if (marker.image.src.trim().length === 0) {
     warn('thumbnail marker received a blank src; omitting the marker.');
     return null;
   }
 
+  /* The box is ListCard's and Media fills it: `fill` covers a ratio the PARENT set, from the centre,
+     which is the whole of what a mechanical crop is (Media.md § 3). The record's own width and height
+     still reach the <img>, so the browser reserves the right box before the file lands, and the
+     160 `sizes` means a 2× screen asks for the ladder's 320 rung rather than the 2560 master.
+     Never `priority`: a thumbnail is never a page's LCP image, so it stays lazy and async. */
   return (
     <span className={cx(styles.marker, styles.thumbnail)}>
-      {/* This contract deliberately owns a native image: the repository has no Image primitive or
-          next/image precedent, and the accepted spec chose src/alt fields over a caller-owned
-          media node. Intrinsic dimensions encode the same 3:2 ratio as the crop frame and prevent
-          layout shift before the stylesheet arrives. */}
-      {/* eslint-disable-next-line @next/next/no-img-element -- accepted native-image contract */}
-      <img
-        className={styles.thumbnailImage}
-        src={marker.src}
-        alt={marker.alt}
-        width={480}
-        height={320}
-        loading="lazy"
-        decoding="async"
-      />
+      <Media image={marker.image} sizes={LIST_CARD_THUMBNAIL} fit="fill" />
     </span>
   );
 }
@@ -98,7 +108,14 @@ function Marker({ marker }: { marker: ListCardMarker }) {
 /**
  * ListCard — one ruled row, built to docs/specs/ListCard.md.
  *
- * The root is always an <li>; its parent decides whether the list is ordered. A non-blank href
+ * The root is always an <li>; its parent decides whether the list is ordered. That is the caller's
+ * on purpose: the set is a `Layout as="ol" | "ul"` with `rowGap="none"`, because Layout owns the list
+ * axis and the seam between rows, and a row cannot see its siblings. Every route composes it that
+ * way today — `as={numbered ? 'ol' : 'ul'}` beside `marker={numbered ? { type: 'number', … } : …}`,
+ * one boolean driving both — so a numbered set is a real <ol> and an unordered one a <ul>. A
+ * wrapper pattern that owned the list would be a pattern importing a pattern, or a second Layout.
+ *
+ * A non-blank href
  * changes only the frame element and the cue: one <a> wraps the row, giving it one focus stop and
  * one accessible name, while the static shape is an inert <div> with no pointer states.
  *
@@ -126,6 +143,7 @@ export function ListCard({
 
   const destination = href?.trim() ? href : undefined;
   const isSplit = arrangement === 'split';
+  const leaves = destination !== undefined && external;
 
   const row = (
     <Cluster colGap="block" rowGap="block" align="start">
@@ -142,7 +160,14 @@ export function ListCard({
         </Layout>
         {destination ? (
           <span className={styles.cue}>
-            <Icon name="arrow-right" size="lg" />
+            {/* One glyph per meaning (ch04): `arrow-right` is "go, next", `square-arrow-right-up`
+                is "leaves the site". The cue is replaced, never doubled — one icon per row — and it
+                keeps the cue's slot, size and ink, so an external row differs from an internal one
+                by its glyph alone. Trailing either way: both are movement. */}
+            <Icon name={leaves ? 'square-arrow-right-up' : 'arrow-right'} size="lg" />
+            {/* The glyph is aria-hidden, so the new tab is said in words, at the END of the
+                accessible name so the title is still what a screen reader leads with. */}
+            {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}
           </span>
         ) : null}
       </Cluster>
@@ -155,8 +180,8 @@ export function ListCard({
         <a
           className={cx(styles.frame, styles.link)}
           href={destination}
-          target={external ? '_blank' : undefined}
-          rel={external ? 'noreferrer' : undefined}
+          target={leaves ? '_blank' : undefined}
+          rel={leaves ? 'noreferrer' : undefined}
         >
           {row}
         </a>
