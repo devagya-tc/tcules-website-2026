@@ -502,6 +502,21 @@
   --opacity-faint: 0.06;
 }
 
+/* ── Media · ratio ────────────────────────────────────────────────────────────
+   One ratio, and it is here only because two components must agree on it. Only a
+   CROPPING placement owns a ratio at all: full-column media (Figure, PageHero stills)
+   renders at the asset's intrinsic ratio and never crops (ch05 §9), so there is no
+   hero or banner ratio and there should not be one.
+
+   The cover crop is shared because one cover asset serves both BlockCard's vertical
+   media and ListCard's thumbnail (ch05 §9a). Two local 3/2s would let one card be
+   re-cut without the other and the shared asset would then be wrong in one of them.
+   Both alias this rather than reading each other (token rule 6). A crop with one
+   reader — BlockCard's horizontal 4/3, the nav card's 16/7 — stays in its own layer. */
+:root {
+  --ratio-cover: 3 / 2;
+}
+
 /* ── Radius ───────────────────────────────────────────────────────────────────
    Small and purposeful. 0 is a real choice, not an absence: grid cells and code
    panels are square. --radius-full is the pill — status, and the footer's

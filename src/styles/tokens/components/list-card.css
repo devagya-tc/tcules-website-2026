@@ -85,9 +85,11 @@
   --lcrd-content-min-xs: 192px;
 
   /* The accepted native-image contract. 160px was measured as a recognisable landscape sample in
-     the 1240px row while still leaving the 192px content core room before Cluster wraps it. */
+     the 1240px row while still leaving the 192px content core room before Cluster wraps it.
+     The ratio is the shared cover crop — BlockCard's vertical media serves the same cover asset,
+     so both alias --ratio-cover (primitives.css § Media · ratio). */
   --lcrd-thumbnail-inline-md: 160px;
-  --lcrd-thumbnail-ratio: 3 / 2;
+  --lcrd-thumbnail-ratio: var(--ratio-cover);
 
   /* ── The hover fill ───────────────────────────────────────────────────────────
      A whole-row anchor up to 1240px wide needs a whole-row affordance. Hover used to be carried by

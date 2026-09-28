@@ -34,8 +34,11 @@
   /* One ratio per orientation, and both are named, because neither is the fallback for the other.
      A vertical tile in a 286px four-across track wants the wider 3:2 crop so the image does not
      dominate the copy beneath it; a horizontal tile owns half the card's inline size, where 3:2
-     would leave the media column shorter than the copy beside it and 4:3 matches its height. */
-  --bcrd-media-ratio-vertical: 3 / 2;
+     would leave the media column shorter than the copy beside it and 4:3 matches its height.
+     The vertical crop is the shared cover ratio: ListCard's thumbnail crops the same cover
+     asset, so both alias --ratio-cover (primitives.css § Media · ratio). The horizontal crop has
+     one reader and stays here. */
+  --bcrd-media-ratio-vertical: var(--ratio-cover);
   --bcrd-media-ratio-horizontal: 4 / 3;
 
   --bcrd-radius: var(--radius-0);
