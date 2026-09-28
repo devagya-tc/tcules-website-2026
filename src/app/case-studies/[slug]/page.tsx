@@ -214,13 +214,7 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
   const published = dateOnly(caseStudy.publishedAt);
   const updated = dateOnly(caseStudy.updatedAt);
   const heroMedia = caseStudy.heroImage
-    ? {
-        kind: 'image' as const,
-        src: caseStudy.heroImage.src,
-        alt: caseStudy.heroImage.alt,
-        width: caseStudy.heroImage.width,
-        height: caseStudy.heroImage.height,
-      }
+    ? { type: 'image' as const, image: caseStudy.heroImage }
     : undefined;
 
   return (

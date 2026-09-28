@@ -90,18 +90,9 @@ export default async function AboutPage() {
         title={page.hero.heading}
         body={[page.hero.description]}
         media={
-          /* Fields named rather than spread: the hero's `kind: 'image'` is PageHero's media
-             discriminant, and the record's own `kind` (capture, cut-out…) is a different field
-             with the same name. A spread would let one overwrite the other. */
-          page.hero.image
-            ? {
-                kind: 'image',
-                src: page.hero.image.src,
-                alt: page.hero.image.alt,
-                width: page.hero.image.width,
-                height: page.hero.image.height,
-              }
-            : undefined
+          /* The record nested, never spread: the hero's `type: 'image'` discriminates the media
+             union, and the record keeps its own `kind` (capture, cut-out…), which is Media's. */
+          page.hero.image ? { type: 'image', image: page.hero.image } : undefined
         }
         surface="paper"
       />

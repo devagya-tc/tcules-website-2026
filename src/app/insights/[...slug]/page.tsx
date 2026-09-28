@@ -276,18 +276,12 @@ export default async function BlogPage({ params }: BlogPageProps) {
     : undefined;
   const heroMedia = blog.heroVideo
     ? {
-        kind: 'youtube' as const,
+        type: 'youtube' as const,
         id: blog.heroVideo.id,
         title: blog.heroVideo.title,
       }
     : blog.featureImage
-      ? {
-          kind: 'image' as const,
-          src: blog.featureImage.src,
-          alt: blog.featureImage.alt,
-          width: blog.featureImage.width,
-          height: blog.featureImage.height,
-        }
+      ? { type: 'image' as const, image: blog.featureImage }
       : undefined;
   const labels = uniqueLabels([...blog.categories, ...blog.tags]);
 
