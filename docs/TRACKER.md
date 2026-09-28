@@ -79,13 +79,13 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 ★ marks the tasks that need an owner decision before building.
 
 **Foundations: no decisions needed, so Claude runs these straight through.**
-- [ ] **2.1** Heading wrap: `text-wrap: balance` on every title role, `pretty` on lead/body. Long-title stress
-      rows in `/design/typography` at the CU04 ceilings.
-- [ ] **2.2** `_specimen` gains a 326 track. Every specimen with an image slot gets a 326 row.
-- [ ] **2.3** `--ratio-cover` 3/2 as a primitive; BlockCard and ListCard alias it.
-- [ ] **2.4** CtaSection: `open` collapses to one track when there is no proof (`CtaSection.tsx:376`, the
-      `Proof.tsx:189` idiom). ~466px of dead ground on ten routes.
-- [ ] **2.5** Tag: fix the specimen's hydration mismatch and its 18px overflow at 390 (found by `npm run shots`).
+- [x] **2.1** Heading wrap: `text-wrap: balance` on every title role, `pretty` on lead/body. Long-title stress
+      rows in `/design/typography` at the CU04 ceilings. (#61)
+- [x] **2.2** `_specimen` gains a 326 track. Every specimen with an image slot gets a 326 row. (#62)
+- [x] **2.3** `--ratio-cover` 3/2 as a primitive; BlockCard and ListCard alias it. (#64)
+- [x] **2.4** CtaSection: `open` collapses to one track when there is no proof (`CtaSection.tsx:376`, the
+      `Proof.tsx:189` idiom). ~466px of dead ground on ten routes. (#66)
+- [x] **2.5** Tag: fix the specimen's hydration mismatch and its 18px overflow at 390 (found by `npm run shots`). (#67)
 
 **Media, in dependency order.**
 - [ ] **2.6** ★ `Media` primitive (new, tier 1): responsive slot (derived widths, WebP), `kind` capture ·
@@ -102,10 +102,10 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [ ] **2.11** ListCard: onto `Media`, the ordered marker as a real `ol`, the external glyph.
 - [ ] **2.12** ★ Proof: 1:1 portrait and client mark; `role` optional.
 - [ ] **2.13** ★ ContentSection: a head-beside-body arrangement; specimen raised to the Tag standard.
-- [ ] **2.14** Icon: the ch04 glyphs the site needs (`square-arrow-right-up`, `info-circle`, `danger-triangle`);
-      check the size scale against ch04's seven; review the six service glyphs.
+- [x] **2.14** Icon: the ch04 glyphs the site needs (`square-arrow-right-up`, `info-circle`, `danger-triangle`);
+      check the size scale against ch04's seven; review the six service glyphs. (#63)
 - [ ] **2.15** ★ DataTable (brief 10): the comparison job.
-- [ ] **2.16** Texture: write its spec (decorative ground; the placement limits in audit §3).
+- [x] **2.16** Texture: write its spec (decorative ground; the placement limits in audit §3). (#65)
 
 ## Phase 3 — Slice 1: `/services/product-design`
 
