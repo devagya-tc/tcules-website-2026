@@ -332,6 +332,7 @@ function CtaActions({
  *
  *   split   closes a page that asks for an ENQUIRY — two columns, form on the right. 56 instances.
  *   open    closes a page that asks for a CLICK — actions, and proof in the right-hand column.
+ *           No proof, no right-hand column: the frame is one track rather than a reserved void.
  *   offer   INTERRUPTS a page mid-scroll with the free audit. Sets `density="tight"` itself and
  *           renders its heading one rung down, because a mid-page ask at closing-block scale
  *           competes with the section it interrupts.
@@ -362,6 +363,19 @@ export function CtaSection(props: CtaSectionProps) {
   const points = props.points ?? [];
 
   if (props.arrangement === 'open') {
+    /* The right-hand column exists only when there is something to put in it. Without proof the
+       frame is a single track — the same idiom as `Proof`'s `columns={both ? 'fit' : undefined}` —
+       because a 3:2 frame with an empty second track leaves its 470px proof track as dead ground at 1440, and
+       ten of the eleven `open` routes pass no proof. Both seams go with the second track: with one
+       child there is no column seam and no row seam to size.
+
+       Nothing needs a new measure to stop the ask running the full 1240 column. The heading
+       (`--cta-heading-measure`) and every running part (`--cta-body-measure`) are already capped
+       by their own `ch` measures. The lead grows from the 706 track to its own ≈748px measure,
+       which is accepted (spec 7(b)); only the points row takes the full column, as three 392px
+       tracks — the same full-column 3-up shape `open` already has from 768 to 1023. */
+    const hasProof = props.proof !== undefined;
+
     return (
       <Section surface={props.surface} aria-labelledby={headingId} data-arrangement="open">
         {/* This outer stack holds ONE child in this arrangement, so its gap never applies — in
@@ -369,13 +383,14 @@ export function CtaSection(props: CtaSectionProps) {
             one structural difference between this branch and the other two. It is kept so all
             three branches have the same shape at the same depth; the div is inert, not a seam. */}
         <Layout rowGap="stack">
-          {/* 3:2 from lg up and a single column below it. The lede, the points and the actions
-              travel together in the wide track; the proof sits beside them and never above them,
-              because a proof block above an ask reads as the ask's preamble. */}
+          {/* With proof: 3:2 from lg up and a single column below it. The lede, the points and the
+              actions travel together in the wide track; the proof sits beside them and never above
+              them, because a proof block above an ask reads as the ask's preamble. Without proof:
+              one track at every width. */}
           <Layout
-            columns={{ base: 1, lg: [3, 2] }}
-            colGap="column"
-            rowGap="stack"
+            columns={hasProof ? { base: 1, lg: [3, 2] } : undefined}
+            colGap={hasProof ? 'column' : undefined}
+            rowGap={hasProof ? 'stack' : undefined}
             align="start"
           >
             <Layout rowGap="stack">
@@ -388,7 +403,7 @@ export function CtaSection(props: CtaSectionProps) {
               <CtaPoints arrangement="open" points={points} />
               <CtaActions actions={props.actions} />
             </Layout>
-            {props.proof !== undefined ? <div>{props.proof}</div> : null}
+            {hasProof ? <div>{props.proof}</div> : null}
           </Layout>
         </Layout>
       </Section>
