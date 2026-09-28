@@ -181,7 +181,7 @@ export default async function ServicesPage() {
                         body={card.description}
                         media={
                           card.icon
-                            ? { kind: 'image', src: card.icon.src, alt: card.icon.alt }
+                            ? { type: 'image', image: card.icon }
                             : undefined
                         }
                         href={card.action?.href}

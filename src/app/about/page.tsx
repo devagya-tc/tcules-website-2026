@@ -267,7 +267,7 @@ export default async function AboutPage() {
                     eyebrow={card.eyebrow}
                     media={
                       card.image
-                        ? { kind: 'image', src: card.image.src, alt: card.image.alt }
+                        ? { type: 'image', image: card.image }
                         : undefined
                     }
                   />

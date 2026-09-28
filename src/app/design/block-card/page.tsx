@@ -1,53 +1,268 @@
 import type { ComponentProps, ReactNode } from 'react';
 
 import { Cluster, Layout, Section, type SectionSurface } from '@/components';
-import { BlockCard, type BlockCardMedia } from '@/patterns';
+import {
+  BlockCard,
+  BlockCardSet,
+  FEATURED_FROM,
+  type BlockCardImage,
+  type BlockCardMedia,
+  type BlockCardSetItem,
+} from '@/patterns';
 import { ROUTES } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
-const IMAGE = '/design/list-card-sample.svg';
-const WIDE_IMAGE = '/design/figure-sample-wide.svg';
+/* ── Assets ──────────────────────────────────────────────────────────────────────
+   The brand framework's own images (docs/specs/Media.md § 17 Q1): not 2560 masters, so they prove
+   the mechanism — srcset, fill, the edge by kind — rather than the ladder. */
 
-const CARDS = [
+const DERIVED = (base: string, ext: string) =>
+  [320, 652, 1240].map((width) => ({ src: `/design/media/${base}-${width}.${ext}`, width }));
+
+/** A cut-out cover: the product's own UI, lifted out, one shadow (ch05 §2a, §9a). */
+const COVER_FLOW: BlockCardImage = {
+  src: '/design/media/cutout-flow.png',
+  alt: 'Workflow node: an input connected to an AI feature card with a provider field, a file field and an output.',
+  width: 1796,
+  height: 1112,
+  kind: 'cut-out',
+  shadow: true,
+  sources: DERIVED('cutout-flow', 'png'),
+};
+
+/** A light part whose edge does not hold on paper, so it sits on a contrast panel (B5, M4). */
+const COVER_REVIEWS: BlockCardImage = {
+  src: '/design/media/cutout-reviews.png',
+  alt: 'Review-analysis panel: user reviews summarised as benefit chips beside empty benefit slots.',
+  width: 855,
+  height: 570,
+  kind: 'cut-out',
+  panel: 'paper-deep',
+};
+
+/** A tall part, to show the centre cover crop taking the middle of a portrait asset. */
+const COVER_NODE: BlockCardImage = {
+  src: '/design/media/cutout-node.png',
+  alt: 'A configuration node with a provider picker and two connected outputs.',
+  width: 902,
+  height: 1088,
+  kind: 'cut-out',
+};
+
+/** An illustration cover: unboxed, empty alt because the title names what it stands for (§9a). */
+const COVER_SEAM: BlockCardImage = {
+  src: '/design/media/illustration-seam.svg',
+  alt: '',
+  width: 881,
+  height: 544,
+  kind: 'illustration',
+};
+
+/** A capture: the one kind that takes an edge — the hairline — even inside a card. */
+const CAPTURE: BlockCardImage = {
+  src: '/design/media/capture-listing.webp',
+  alt: 'Listing editor with four bullet fields beside an AI assistance panel.',
+  width: 1436,
+  height: 883,
+  kind: 'capture',
+  sources: DERIVED('capture-listing', 'jpg'),
+};
+
+/** The old 480×320 card sample, as a record that arrives with NO dimensions (spec § 17 Q15). */
+const NO_DIMENSIONS: BlockCardImage = {
+  src: '/design/list-card-sample.svg',
+  alt: '',
+};
+
+/** A 1600×900 screenshot with small type — the asset that fails at 326 (B3). */
+const WIDE_CAPTURE: BlockCardImage = {
+  src: '/design/figure-sample-wide.svg',
+  alt: '',
+  width: 1600,
+  height: 900,
+  kind: 'capture',
+};
+
+const cover = (image: BlockCardImage): BlockCardMedia => ({ type: 'image', image });
+
+/** One item of a list by position, for the specimens that reorder or reuse a set's members. Its
+    `id` rides along into a lone card's props, where it is unused. */
+function item(list: readonly BlockCardSetItem[], index: number): BlockCardSetItem {
+  const found = list[index];
+  if (!found) throw new Error(`BlockCard specimen: no item ${index}`);
+  return found;
+}
+
+/* ── Content ─────────────────────────────────────────────────────────────────────
+   Realistic families, at realistic lengths, because ruling C2 is judged on how a set READS. */
+
+/** Service and capability cards — media-less by ruling C1. */
+const SERVICES: readonly BlockCardSetItem[] = [
   {
-    title: 'Product direction',
-    body: 'Frame the decision, the evidence it needs and the outcome a customer should notice.',
-    media: { kind: 'icon', name: 'document-text' },
+    id: 'product-design',
+    eyebrow: 'Service',
+    title: 'Product design',
+    body: 'Frame the decision, the evidence it needs and the outcome a customer should notice, then design the thing that earns it.',
+    href: ROUTES.productDesign,
   },
   {
+    id: 'design-systems',
+    eyebrow: 'Service',
     title: 'Design systems',
-    body: 'Turn recurring interface decisions into a shared, durable product language.',
-    media: { kind: 'icon', name: 'check' },
+    body: 'Turn recurring interface decisions into one shared, durable language that a product team can build with.',
+    href: ROUTES.designSystems,
   },
   {
+    id: 'design-engineering',
+    eyebrow: 'Service',
     title: 'Design engineering',
-    body: 'Carry interaction intent into production with the implementation team.',
-    media: { kind: 'icon', name: 'copy' },
+    body: 'Carry interaction intent into production alongside the implementation team, in their codebase.',
+    href: ROUTES.designEngineering,
   },
   {
+    id: 'ai-product-ux',
+    eyebrow: 'Service',
     title: 'AI product UX',
-    body: 'Make model behaviour legible enough for people to judge and correct it.',
-    media: { kind: 'icon', name: 'document-text' },
+    body: 'Make model behaviour legible enough for the people using it to judge it, trust it and correct it.',
+    href: ROUTES.aiProductUx,
   },
-] as const satisfies readonly { title: string; body: string; media: BlockCardMedia }[];
+  {
+    id: 'readiness',
+    eyebrow: 'Audit',
+    title: 'AI product UX readiness',
+    body: 'A two-week review of where your product explains its model and where it asks for blind trust.',
+    href: ROUTES.aiProductUxReadiness,
+  },
+];
+
+/** Static situation items — media-less and unlinked, the other common text-only set. */
+const SITUATIONS: readonly BlockCardSetItem[] = [
+  {
+    id: 'many-owners',
+    title: 'Several teams own one decision',
+    body: 'Design, engineering and compliance each hold part of the answer and none of them holds the brief.',
+  },
+  {
+    id: 'model-changed',
+    title: 'The model changed under the interface',
+    body: 'The product still explains last quarter’s behaviour, and support is carrying the difference.',
+  },
+  {
+    id: 'acquired',
+    title: 'Four products, four design languages',
+    body: 'An acquisition brought its own components, and every shared screen is now a negotiation.',
+  },
+  {
+    id: 'no-evidence',
+    title: 'The roadmap outruns the evidence',
+    body: 'Features ship on conviction, and nobody can say which of last year’s moved a number.',
+  },
+];
+
+/** Case studies — every one carries its cover (ch05 §9a). */
+const CASE_STUDIES: readonly BlockCardSetItem[] = [
+  {
+    id: 'connectx',
+    eyebrow: 'ConnectX · Case study',
+    title: 'Rebuilding a claims workflow around the adjuster',
+    body: 'Three systems became one flow, and the average claim lost eleven minutes of re-keying.',
+    media: cover(COVER_FLOW),
+    href: ROUTES.caseStudies,
+    ctaLabel: 'Read the ConnectX case',
+  },
+  {
+    id: 'northwind',
+    eyebrow: 'Northwind · Case study',
+    title: 'One design language across four acquired products',
+    body: 'A shared component set that each product team adopted on its own release schedule.',
+    media: cover(COVER_SEAM),
+    href: ROUTES.caseStudies,
+    ctaLabel: 'Read the Northwind case',
+  },
+  {
+    id: 'halden',
+    eyebrow: 'Halden · Case study',
+    title: 'Making a forecasting model’s reasoning legible',
+    body: 'Planners can now see which inputs moved a forecast, and overrule it with a reason.',
+    media: cover(COVER_REVIEWS),
+    href: ROUTES.caseStudies,
+    ctaLabel: 'Read the Halden case',
+  },
+  {
+    id: 'orbit',
+    eyebrow: 'Orbit · Case study',
+    title: 'A configuration tool that explains its own defaults',
+    body: 'Setup calls halved once every default said why it was the default.',
+    media: cover(COVER_NODE),
+    href: ROUTES.caseStudies,
+    ctaLabel: 'Read the Orbit case',
+  },
+  {
+    id: 'meridian',
+    eyebrow: 'Meridian · Case study',
+    title: 'Field operations on one screen, offline first',
+    body: 'Crews close jobs without signal, and the office sees them the moment they reconnect.',
+    media: cover(COVER_FLOW),
+    href: ROUTES.caseStudies,
+    ctaLabel: 'Read the Meridian case',
+  },
+];
+
+/** Insights — the family ruling C1 adds: a cover where the resource has one, none where not. */
+const INSIGHTS: readonly BlockCardSetItem[] = [
+  {
+    id: 'article-seams',
+    eyebrow: 'Article',
+    title: 'Where design and build meet, and why the seam matters',
+    body: 'A component is a contract. The seam between the file and the codebase is where it breaks.',
+    media: cover(COVER_SEAM),
+    href: ROUTES.articles,
+    ctaLabel: 'Read article',
+  },
+  {
+    id: 'podcast-trust',
+    eyebrow: 'Podcast',
+    title: 'Designing for a model you cannot fully predict',
+    body: 'Forty minutes on confidence, correction and the interface’s job when the model is wrong.',
+    href: ROUTES.podcasts,
+    ctaLabel: 'Listen to the episode',
+  },
+  {
+    id: 'video-review',
+    eyebrow: 'Video',
+    title: 'A design review, recorded end to end',
+    body: 'One real review of one real flow, with the decisions and the arguments left in.',
+    media: cover(COVER_REVIEWS),
+    href: ROUTES.videos,
+    ctaLabel: 'Watch the video',
+  },
+  {
+    id: 'article-evidence',
+    eyebrow: 'Article',
+    title: 'The roadmap is a claim about evidence',
+    body: 'How to read a roadmap for what it assumes, and what to ask for before a feature ships.',
+    href: ROUTES.articles,
+    ctaLabel: 'Read article',
+  },
+];
 
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
-    note: 'Neutral title and icon, body at 700, eyebrow at 600. The cta is a link Button and takes its ramp from Button.',
+    note: 'Title at neutral-900, body at 700, eyebrow at 600. The cta is a link Button and takes its ramp from Button. Covers are legal here.',
   },
   {
     surface: 'tint',
-    note: 'The light-surface text inks hold; the eyebrow steps to neutral-700 because 600 would be 4.39:1 here.',
+    note: 'The light-surface text inks hold; the eyebrow steps to neutral-700 because 600 would be 4.39:1. Covers are legal here — the cut-out shows the tint through its alpha.',
   },
   {
     surface: 'ink',
-    note: 'Title and icon lift to white, body to neutral-300, eyebrow to 400; Button lifts the cta on its own ink block.',
+    note: 'Title to white, body to neutral-300, eyebrow to 400; Button lifts the cta on its own ink block. Text-only: a cover is not placed on ink (ch05 §9a), so a reserved band carries the media-less set.',
   },
   {
     surface: 'blue',
-    note: 'White and the light Brandeis steps carry title, body, eyebrow and focus; Button carries the cta.',
+    note: 'White and the light Brandeis steps carry title, body, eyebrow and focus; Button carries the cta. Text-only for the same reason as ink, and an illustration is never placed on blue (§4a).',
   },
 ] as const;
 
@@ -56,7 +271,6 @@ const NESTED_SURFACE_TOKENS = {
     ['--bcrd-title-ink', '--color-neutral-900'],
     ['--bcrd-body-ink', '--color-neutral-700'],
     ['--bcrd-eyebrow-ink', '--color-neutral-700'],
-    ['--bcrd-media-ink', '--color-neutral-900'],
     ['--btn-link-primary-fg', '--color-brandeis-500'],
     ['--btn-link-primary-fg-hover', '--color-brandeis-600'],
     ['--btn-link-primary-fg-pressed', '--color-brandeis-700'],
@@ -67,7 +281,6 @@ const NESTED_SURFACE_TOKENS = {
     ['--bcrd-title-ink', '--color-white'],
     ['--bcrd-body-ink', '--color-neutral-300'],
     ['--bcrd-eyebrow-ink', '--color-neutral-400'],
-    ['--bcrd-media-ink', '--color-white'],
     ['--btn-link-primary-fg', '--color-brandeis-300'],
     ['--btn-link-primary-fg-hover', '--color-brandeis-200'],
     ['--btn-link-primary-fg-pressed', '--color-brandeis-100'],
@@ -78,7 +291,7 @@ const NESTED_SURFACE_TOKENS = {
 
 type CardColumns = ComponentProps<typeof Layout>['columns'];
 
-/** The vertical grid: the parent owns columns, both gutter seams and equal rows. */
+/** A hand-built grid: the parent owns columns, both gutter seams and equal rows. */
 function Cards({
   columns = { base: 1, md: 2 },
   gap = true,
@@ -114,26 +327,42 @@ function Rows({ children }: { children: ReactNode }) {
   );
 }
 
-/** Identical three-card markup for every surface proof. */
-function SurfaceCards() {
+/** A band heading: the number and name, and the paragraph that says what to look for. */
+function BandHead({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <Layout rowGap="block">
+      <h2>{title}</h2>
+      <p>{children}</p>
+    </Layout>
+  );
+}
+
+/** Identical markup for every surface proof; covers only where a cover may be placed. */
+function SurfaceCards({ covers }: { covers: boolean }) {
   return (
     <Cards columns={{ base: 1, lg: 3 }}>
       <BlockCard
-        eyebrow="Capability"
-        title="Static icon card"
-        body="Title, eyebrow, icon and body resolve without any interactive ink."
-        media={{ kind: 'icon', name: 'check' }}
+        eyebrow="Service"
+        title="Static text-only card"
+        body="Title, eyebrow and body resolve without any interactive ink."
       />
       <BlockCard
-        title="Static no-media card"
-        body="Omitting media removes the slot and its seam; the object stays complete."
+        eyebrow="Service"
+        title="Linked text-only card"
+        body="One anchor resolves the cta ink and the keyboard focus ring. The title stays dark."
+        href={ROUTES.productDesign}
       />
       <BlockCard
         eyebrow="Case study"
-        title="Linked image card"
-        body="One anchor resolves the cta ink and the keyboard focus ring. The title stays dark."
-        media={{ kind: 'image', src: IMAGE, alt: '' }}
+        title={covers ? 'Linked cover card' : 'The same card, its cover withheld'}
+        body={
+          covers
+            ? 'A cut-out cover: no edge, the band showing through its alpha.'
+            : 'A cover is not placed on ink or blue, so this band shows the card without one.'
+        }
+        media={covers ? cover(COVER_FLOW) : undefined}
         href={ROUTES.caseStudies}
+        tracks={3}
       />
     </Cards>
   );
@@ -164,7 +393,7 @@ function ManyCards({ count }: { count: number }) {
           key={index}
           title={`Card ${index + 1}`}
           body="The component does not clamp, paginate, count siblings or hide later rows."
-          media={index % 3 === 0 ? { kind: 'icon', name: 'document-text' } : undefined}
+          media={index % 3 === 0 ? cover(COVER_FLOW) : undefined}
         />
       ))}
     </Cards>
@@ -178,25 +407,172 @@ export default function BlockCardSpecimenPage() {
         <Layout rowGap="block">
           <h1>BlockCard</h1>
           <p>
-            One borderless card in a semantic grid: an optional eyebrow, title and body, an
-            optional icon or image, and a whole-card link whose destination is named by a
-            read-more cta. It has no edge and no fill, and it never decides its grid.
+            One borderless card: an optional eyebrow, a title and body, an optional cover image
+            through <code>Media</code>, and a whole-card link whose destination is named by a
+            read-more cta. It has no edge and no fill, and it never decides its grid —{' '}
+            <code>BlockCardSet</code> does, and is the one place that knows the count.
           </p>
+        </Layout>
+      </Section>
+
+      {/* ── The three rulings, first, because they are what is judged ─────────────── */}
+
+      <Section>
+        <Layout rowGap="stack">
+          <BandHead title="1 · Text-only sets (ruling C2)">
+            Service, audit, glossary and capability cards carry no media (C1), so for most
+            families the text-only set is the common case, and it has to read as more than
+            identical boxes. It does that with scale and position and nothing else: no box, no
+            fill and no border are added. The h4 title carries the weight, the body stays tight
+            under it in one copy group, and the whole card is the link. Variety comes from the
+            set&rsquo;s arrangement: 3-up, 2-up, and from four items the first card featured
+            across the row as a head beside its body.
+          </BandHead>
+          <Specimen
+            title="3 items · BlockCardSet · two from md, three from lg"
+            note="Linked service cards. Squint: three columns of dark type with a blue line at the foot of each, separated by the 32 gutter alone."
+          >
+            <BlockCardSet items={SERVICES.slice(0, 3)} />
+          </Specimen>
+          <Specimen
+            title="2 items · BlockCardSet · two from md"
+            note="Static situation items, no cta. The object is the title and its paragraph; nothing marks a card's edge, and nothing needs to."
+          >
+            <BlockCardSet items={SITUATIONS.slice(0, 2)} />
+          </Specimen>
+          <Specimen
+            title={`4 items · the first featured (C3: from ${FEATURED_FROM})`}
+            note="The featured card is the horizontal arrangement without an image: its head (eyebrow and h3 title) in the first half, its body and cta in the second, spanning the row. The three peers sit below it. One list, one grid: Layout's lead puts the first item in a row of its own."
+          >
+            <BlockCardSet items={SERVICES.slice(0, 4)} />
+          </Specimen>
+          <Specimen
+            title="5 items · featured + 2×2, four across from xl"
+            note="Five service and audit cards. The four peers take the four-card shape: 2×2 through 1439, one row at 1440."
+          >
+            <BlockCardSet items={SERVICES} />
+          </Specimen>
+          <Specimen
+            title="4 static items · featured"
+            note="The same arrangement with no links: the featured card has no cta, so its second half is the body alone."
+          >
+            <BlockCardSet items={SITUATIONS} />
+          </Specimen>
         </Layout>
       </Section>
 
       <Section surface="tint">
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>1 · Identity and finish</h2>
-            <p>
-              Neither object draws a border on any side, in any state. The tile is bounded by
-              the parent gutter alone, and its copy is flush to the media rather than inset from
-              an edge that no longer exists. Compare the two titles: the linked one is the same
-              dark ink as the static one, and only the cta &mdash; a real link Button &mdash; is
-              blue.
-            </p>
-          </Layout>
+          <BandHead title="2 · Cover-image sets (ruling C1)">
+            Case studies carry their cover, and so does every insight or resource that has one —
+            articles, videos, podcasts. The image goes through <code>Media</code> with{' '}
+            <code>fit=&quot;fill&quot;</code> inside the card&rsquo;s own ratio box: 3:2 in a
+            tile (<code>--ratio-cover</code>), 4:3 in the featured row. Media draws the edge by
+            kind, so a cut-out and an illustration are unboxed and only a capture keeps its
+            hairline.
+          </BandHead>
+          <Specimen
+            title="3 case studies · three from lg"
+            note="A shadowed cut-out, an illustration (empty alt: the title names it) and a light cut-out on its paper-deep contrast panel. The illustration is a hero export cropped to 3:2, which is why its labels clip: a card illustration is recomposed at the card ratio at supply (B4), and Media leaves it unboxed either way."
+          >
+            <BlockCardSet items={CASE_STUDIES.slice(0, 3)} />
+          </Specimen>
+          <Specimen
+            title="2 case studies · two from md"
+            note="The two-track sizes value: 604 at the cap."
+          >
+            <BlockCardSet items={CASE_STUDIES.slice(0, 2)} />
+          </Specimen>
+          <Specimen
+            title="4 case studies · the first featured"
+            note="The featured card is media beside copy, the cover at 4:3 in half the row, the title stepped to h3. Its image reads the two-track sizes value; the three peers read the three-track one."
+          >
+            <BlockCardSet items={CASE_STUDIES.slice(0, 4)} />
+          </Specimen>
+          <Specimen title="5 case studies · featured + 2×2, four across from xl">
+            <BlockCardSet items={CASE_STUDIES} />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <BandHead title="3 · Mixed sets">
+            An insights index is where covers and text-only cards meet, because a resource has a
+            cover or it does not. A card without one starts its copy where its peers&rsquo;
+            images start, so its title sits higher than theirs: the honest reading of
+            &ldquo;this one has no picture&rdquo;, with no placeholder standing in for it.
+          </BandHead>
+          <Specimen
+            title="3 insights · two covers, one without"
+            note="Article, podcast (no cover), video."
+          >
+            <BlockCardSet items={INSIGHTS.slice(0, 3)} />
+          </Specimen>
+          <Specimen
+            title="4 insights · the featured one has a cover"
+            note="The first item decides the featured arrangement: media beside copy here."
+          >
+            <BlockCardSet items={INSIGHTS} />
+          </Specimen>
+          <Specimen
+            title="4 insights · the featured one has none"
+            note="Same set, reordered so the podcast leads: the featured card falls to head-beside-body, and the covers sit below it."
+          >
+            <BlockCardSet items={[1, 0, 2, 3].map((index) => item(INSIGHTS, index))} />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <BandHead title="4 · The 326 row">
+            Every image placed on the site is approved at 326px, a 390 viewport&rsquo;s column
+            (ch05 B3). The frame cannot fire a media query, so the featured card in it still
+            splits at this window&rsquo;s width; the 390 capture of this page shows the real
+            collapse, where the featured card becomes a stack like any other card.
+          </BandHead>
+          <Specimen
+            title="326 · cover cards"
+            note="A cut-out, an illustration, a panelled cut-out, and the wide capture — whose small type is what fails at 326, and is the asset to judge."
+          >
+            <div className={s.trackMobile}>
+              <Cards columns={{ base: 1 }}>
+                {CASE_STUDIES.slice(0, 3).map(({ id, ...card }) => (
+                  <BlockCard key={id} {...card} />
+                ))}
+                <BlockCard
+                  eyebrow="Case study"
+                  title="A wide capture in the phone's column"
+                  body="The cover crop at 326, from a 1600×900 screenshot with small type."
+                  media={cover(WIDE_CAPTURE)}
+                  href={ROUTES.caseStudies}
+                />
+              </Cards>
+            </div>
+          </Specimen>
+          <Specimen title="326 · text-only cards">
+            <div className={s.trackMobile}>
+              <Cards columns={{ base: 1 }}>
+                {SERVICES.slice(0, 3).map(({ id, ...card }) => (
+                  <BlockCard key={id} {...card} />
+                ))}
+              </Cards>
+            </div>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      {/* ── The card itself ──────────────────────────────────────────────────────── */}
+
+      <Section>
+        <Layout rowGap="stack">
+          <BandHead title="5 · Identity and finish">
+            Neither object draws a border on any side, in any state. The tile is bounded by the
+            parent gutter alone, and its copy is flush to the media rather than inset from an
+            edge that no longer exists. Compare the two titles: the linked one is the same dark
+            ink as the static one, and only the cta &mdash; a real link Button &mdash; is blue.
+          </BandHead>
           <Cards>
             <BlockCard
               title="Static and complete"
@@ -210,21 +586,74 @@ export default function BlockCardSpecimenPage() {
           </Cards>
           <Specimen
             title="Title ink · linked and static, side by side"
-            note="Inspect both computed colours. Both must be --bcrd-title-ink. The card declares no link ink at all now: only the cta is blue, and Button owns that."
+            note="Inspect both computed colours. Both must be --bcrd-title-ink. Only the cta is blue, and Button owns that."
           >
             <Cards>
               <BlockCard
                 eyebrow="Case study"
                 title="The same title ink when linked"
                 body="The card navigates and the heading stays dark."
-                media={{ kind: 'image', src: IMAGE, alt: '' }}
+                media={cover(COVER_FLOW)}
                 href={ROUTES.caseStudies}
               />
               <BlockCard
                 eyebrow="Case study"
                 title="The same title ink when static"
                 body="Identical markup with the destination removed."
-                media={{ kind: 'image', src: IMAGE, alt: '' }}
+                media={cover(COVER_FLOW)}
+              />
+            </Cards>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <BandHead title="6 · Media by kind, and the record">
+            The card owns the box and the ratio; <code>Media</code> owns the file and the edge.
+            Five records in one 3:2 box each. The kind is a content fact on the record, never a
+            card prop.
+          </BandHead>
+          <Cards columns={{ base: 1, md: 2, xl: 4 }}>
+            <BlockCard
+              eyebrow="cut-out · shadow"
+              title="The silhouette is the frame"
+              body="No edge; one drop shadow following the alpha."
+              media={cover(COVER_FLOW)}
+            />
+            <BlockCard
+              eyebrow="cut-out · panel"
+              title="On its contrast panel"
+              body="The panel fills the box; the part is inset by the gutter (Media § 17 Q2)."
+              media={cover(COVER_REVIEWS)}
+            />
+            <BlockCard
+              eyebrow="illustration"
+              title="Never boxed"
+              body="No edge, no panel, no shadow, in any placement (B4)."
+              media={cover(COVER_SEAM)}
+            />
+            <BlockCard
+              eyebrow="capture"
+              title="The one kind with an edge"
+              body="The hairline is Media's, in the surface's rule ink."
+              media={cover(CAPTURE)}
+            />
+          </Cards>
+          <Specimen
+            title="A record with no dimensions · a blank source"
+            note="Several view models still arrive without width and height. The card gives such a record its box's proportions and drops its sources — a srcset needs the master's true width. A blank src omits the media and warns, and no placeholder ships."
+          >
+            <Cards>
+              <BlockCard
+                title="No width, no height"
+                body="Rendered at the box's 3:2; the file is fetched as-is, with no srcset."
+                media={cover(NO_DIMENSIONS)}
+              />
+              <BlockCard
+                title="Blank image source"
+                body="No broken image and no empty frame remain."
+                media={cover({ src: '   ', alt: '' })}
               />
             </Cards>
           </Specimen>
@@ -233,41 +662,37 @@ export default function BlockCardSpecimenPage() {
 
       <Section>
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>2 · Eyebrow ladder</h2>
-            <p>
-              One optional plain string above the title, in uppercase mono at the quiet-label
-              ink. What it holds is the caller&rsquo;s composition — a client, a content type, a
-              topic or a kicker — because the right line differs by page and a structured record
-              would have to guess.
-            </p>
-          </Layout>
+          <BandHead title="7 · Eyebrow ladder">
+            One optional plain string above the title, in uppercase mono at the quiet-label ink.
+            What it holds is the caller&rsquo;s composition — a client, a content type, a topic
+            or a kicker.
+          </BandHead>
           <Cards columns={{ base: 1, md: 2, xl: 4 }}>
             <BlockCard
               eyebrow="ConnectX"
               title="A client name"
               body="The eyebrow names whose work this is."
-              media={{ kind: 'image', src: IMAGE, alt: '' }}
+              media={cover(COVER_FLOW)}
               href={ROUTES.caseStudies}
             />
             <BlockCard
               eyebrow="Case study"
               title="A content type"
               body="The eyebrow names what kind of page this is."
-              media={{ kind: 'image', src: IMAGE, alt: '' }}
+              media={cover(COVER_SEAM)}
               href={ROUTES.caseStudies}
             />
             <BlockCard
               eyebrow="Featured —"
               title="A kicker"
               body="The eyebrow is editorial rather than taxonomic."
-              media={{ kind: 'image', src: IMAGE, alt: '' }}
+              media={cover(COVER_REVIEWS)}
               href={ROUTES.caseStudies}
             />
             <BlockCard
               title="Eyebrow omitted"
               body="No element and no seam remain; the title starts the copy group."
-              media={{ kind: 'image', src: IMAGE, alt: '' }}
+              media={cover(COVER_NODE)}
               href={ROUTES.caseStudies}
             />
           </Cards>
@@ -293,44 +718,39 @@ export default function BlockCardSpecimenPage() {
 
       <Section surface="tint">
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>3 · The cta</h2>
-            <p>
-              The shipped link <code>Button</code>, rendered <code>as=&quot;span&quot;</code>{' '}
-              inside the one frame anchor so it is a label for that anchor rather than a second
-              control: it never enters the tab order and there is no nested link. Button owns
-              the type, the case, the seam, the glyph size, the colour ramp and the underline.
-              It renders exactly when a non-blank destination does, defaults to a
-              content-type-agnostic label, and takes a caller&rsquo;s wording where the page can
-              name where it goes. Tab to a card and count focus stops: one.
-            </p>
-          </Layout>
+          <BandHead title="8 · The cta">
+            The shipped link <code>Button</code>, rendered <code>as=&quot;span&quot;</code>{' '}
+            inside the one frame anchor, so it is a label for that anchor rather than a second
+            control: it never enters the tab order and there is no nested link. Tab to a card
+            and count focus stops: one.
+          </BandHead>
           <Cards columns={{ base: 1, lg: 3 }}>
             <BlockCard
               eyebrow="Case study"
               title="Default label"
               body="No ctaLabel passed, so the component supplies its own."
-              media={{ kind: 'image', src: IMAGE, alt: '' }}
+              media={cover(COVER_FLOW)}
               href={ROUTES.caseStudies}
+              tracks={3}
             />
             <BlockCard
               eyebrow="ConnectX"
               title="Caller-named label"
               body="The page knows the destination well enough to say so."
-              media={{ kind: 'image', src: IMAGE, alt: '' }}
+              media={cover(COVER_FLOW)}
               href={ROUTES.caseStudies}
               ctaLabel="Read the ConnectX case"
+              tracks={3}
             />
             <BlockCard
-              eyebrow="Capability"
+              eyebrow="Service"
               title="No destination, no cta"
               body="A static card is complete without an empty action row."
-              media={{ kind: 'image', src: IMAGE, alt: '' }}
             />
           </Cards>
           <Specimen
             title="Blank ctaLabel · long ctaLabel in a narrow track"
-            note="A whitespace-only label falls back to the default and warns. Button keeps its label and glyph on one line by design, so a long label in a narrow track is the case to watch here."
+            note="A whitespace-only label falls back to the default and warns. Button keeps its label and glyph on one line by design, so a long label in a narrow track is the case to watch."
           >
             <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="block">
               <Cards columns={{ base: 1 }}>
@@ -358,98 +778,51 @@ export default function BlockCardSpecimenPage() {
 
       <Section>
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>4 · Orientation</h2>
-            <p>
-              One anatomy, two arrangements. Vertical fills a grid track with media above copy;
-              horizontal takes two equal tracks with the media and copy centred against each
-              other and the crop stepped to 4:3. <code>imageSide</code> is set per card — there
-              is no alternation logic inside the component, because a card that alternated would
-              have to know its own index.
-            </p>
-          </Layout>
+          <BandHead title="9 · Orientation">
+            One anatomy, two arrangements, and a presentation prop rather than a CMS field.
+            Vertical fills a grid track. Horizontal takes two equal tracks from md and steps the
+            title to h3: media beside copy at 4:3 when there is a cover, head beside body when
+            there is not. <code>imageSide</code> is set per card — there is no alternation logic
+            inside the component, because a card that alternated would have to know its index.
+          </BandHead>
 
           <Specimen
             title='orientation="horizontal" · imageSide="left" and "right"'
             note="Inspect the DOM order: it follows the visual order, so no CSS order property is needed and the reading order is never reversed."
           >
             <Rows>
+              <BlockCard {...item(CASE_STUDIES, 0)} orientation="horizontal" imageSide="left" />
               <BlockCard
-                orientation="horizontal"
-                imageSide="left"
-                eyebrow="ConnectX · Case study"
-                title="Media on the inline start"
-                body="The copy column holds the same eyebrow, title, body and cta as a grid tile. Nothing about the anatomy changes; only the axis it arranges on does."
-                media={{ kind: 'image', src: WIDE_IMAGE, alt: '' }}
-                href={ROUTES.caseStudies}
-                ctaLabel="Read the ConnectX case"
-              />
-              <BlockCard
+                {...item(CASE_STUDIES, 1)}
                 orientation="horizontal"
                 imageSide="right"
-                eyebrow="Northwind · Case study"
-                title="Media on the inline end"
-                body="The same card with the media side flipped. The DOM puts the copy first, so a screen reader reaches the title before the image either way."
-                media={{ kind: 'image', src: WIDE_IMAGE, alt: '' }}
-                href={ROUTES.caseStudies}
-                ctaLabel="Read the Northwind case"
               />
             </Rows>
           </Specimen>
 
           <Specimen
-            title="A stacked horizontal group · no separator rule"
-            note={`rowGap="section" is the only thing between these rows. There is no border, and a rule here would put ListCard's finish on BlockCard's object.`}
+            title="A stacked horizontal group · alternated by the caller · no separator rule"
+            note={`rowGap="section" is the only thing between these rows. The caller alternates the side by index; the alternation comes from the composition rather than a card prop.`}
           >
             <Rows>
-              {[
-                {
-                  client: 'ConnectX',
-                  title: 'Rebuilding a claims workflow around the adjuster',
-                },
-                {
-                  client: 'Northwind',
-                  title: 'One design language across four acquired products',
-                },
-                { client: 'Halden', title: "Making a forecasting model's reasoning legible" },
-              ].map(({ client, title }, index) => (
+              {CASE_STUDIES.slice(0, 3).map(({ id, ...card }, index) => (
                 <BlockCard
-                  key={client}
+                  key={id}
+                  {...card}
                   orientation="horizontal"
                   imageSide={index % 2 === 0 ? 'left' : 'right'}
-                  eyebrow={`${client} · Case study`}
-                  title={title}
-                  body="The caller alternates the side by index. Squint at the group: the alternation is the only rhythm, and it comes from the composition rather than from a card prop."
-                  media={{ kind: 'image', src: WIDE_IMAGE, alt: '' }}
-                  href={ROUTES.caseStudies}
-                  ctaLabel={`Read the ${client} case`}
                 />
               ))}
             </Rows>
           </Specimen>
 
           <Specimen
-            title="Horizontal without an image · both fall back to the stack"
-            note="The row needs something to fill its media track. An icon is a mark rather than a picture and stays in the copy stack; no media at all leaves no second track. Neither renders a row with an empty half."
+            title="Horizontal without an image · head beside body"
+            note="The copy splits across the two tracks instead of leaving one empty: eyebrow and title first, body and cta second, top-aligned. imageSide has nothing to place and is ignored. Below md it collapses to the vertical card's order."
           >
             <Rows>
-              <BlockCard
-                orientation="horizontal"
-                imageSide="left"
-                eyebrow="Capability"
-                title="Icon media, horizontal requested"
-                body="The icon keeps its place at the head of the copy stack and the card stays single-column."
-                media={{ kind: 'icon', name: 'document-text' }}
-                href={ROUTES.aiProductUx}
-              />
-              <BlockCard
-                orientation="horizontal"
-                imageSide="right"
-                eyebrow="Capability"
-                title="No media, horizontal requested"
-                body="Same fallback for the same reason."
-                href={ROUTES.designSystems}
-              />
+              <BlockCard {...item(SERVICES, 3)} orientation="horizontal" />
+              <BlockCard {...item(SITUATIONS, 0)} orientation="horizontal" imageSide="right" />
             </Rows>
           </Specimen>
 
@@ -463,14 +836,14 @@ export default function BlockCardSpecimenPage() {
                   eyebrow="Vertical · 3:2"
                   title="The grid tile crop"
                   body="Wide enough that the image does not dominate the copy beneath it."
-                  media={{ kind: 'image', src: WIDE_IMAGE, alt: '' }}
+                  media={cover(COVER_FLOW)}
                   href={ROUTES.caseStudies}
                 />
                 <BlockCard
                   eyebrow="Vertical · 3:2"
                   title="Its grid peer"
                   body="Both tracks resolve the same vertical ratio."
-                  media={{ kind: 'image', src: WIDE_IMAGE, alt: '' }}
+                  media={cover(COVER_FLOW)}
                   href={ROUTES.caseStudies}
                 />
               </Cards>
@@ -480,7 +853,7 @@ export default function BlockCardSpecimenPage() {
                   eyebrow="Horizontal · 4:3"
                   title="The row crop"
                   body="Taller, so the media column is not left shorter than the copy beside it."
-                  media={{ kind: 'image', src: WIDE_IMAGE, alt: '' }}
+                  media={cover(COVER_FLOW)}
                   href={ROUTES.caseStudies}
                 />
               </Rows>
@@ -491,30 +864,28 @@ export default function BlockCardSpecimenPage() {
 
       <Section surface="tint">
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>5 · Grid-count ladder</h2>
-            <p>
-              The parent states columns, gutter seams and equal rows; no card knows its count.
-            </p>
-          </Layout>
+          <BandHead title="10 · Hand-built grid-count ladder">
+            A caller that is not a <code>BlockCardSet</code> still states columns, gutter seams
+            and equal rows itself; no card knows its count.
+          </BandHead>
           <Specimen title="2 cards · md:2">
             <Cards>
-              {CARDS.slice(0, 2).map((card) => (
-                <BlockCard key={card.title} {...card} />
+              {SITUATIONS.slice(0, 2).map(({ id, ...card }) => (
+                <BlockCard key={id} {...card} />
               ))}
             </Cards>
           </Specimen>
           <Specimen title="3 cards · md:2, lg:3">
             <Cards columns={{ base: 1, md: 2, lg: 3 }}>
-              {CARDS.slice(0, 3).map((card) => (
-                <BlockCard key={card.title} {...card} />
+              {SITUATIONS.slice(0, 3).map(({ id, ...card }) => (
+                <BlockCard key={id} {...card} />
               ))}
             </Cards>
           </Specimen>
-          <Specimen title="4 cards · md:2, xl:4">
+          <Specimen title="4 cards · md:2, xl:4 · no featured, because nothing asked for one">
             <Cards columns={{ base: 1, md: 2, xl: 4 }}>
-              {CARDS.map((card) => (
-                <BlockCard key={card.title} {...card} />
+              {SITUATIONS.map(({ id, ...card }) => (
+                <BlockCard key={id} {...card} />
               ))}
             </Cards>
           </Specimen>
@@ -523,39 +894,9 @@ export default function BlockCardSpecimenPage() {
 
       <Section>
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>6 · Media fill ladder</h2>
-            <p>
-              Icon, image and absence fill one optional slot. The image is edge-to-edge with the
-              copy flush beneath it at one <code>--gap-block</code> seam; the icon heads the
-              copy stack. Both distances belong to a container, not to a child&rsquo;s padding.
-            </p>
-          </Layout>
-          <Cards columns={{ base: 1, lg: 3 }}>
-            <BlockCard
-              title="Icon fill"
-              body="A decorative xl glyph begins the copy stack."
-              media={{ kind: 'icon', name: 'document-text' }}
-            />
-            <BlockCard
-              title="Image fill"
-              body="The owned native image is a centred 3:2 cover crop above copy."
-              media={{ kind: 'image', src: IMAGE, alt: 'Abstract product decision landscape' }}
-            />
-            <BlockCard
-              title="Media omitted"
-              body="No empty frame or placeholder remains when the optional slot is absent."
-            />
-          </Cards>
-        </Layout>
-      </Section>
-
-      <Section surface="tint">
-        <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>7 · Static majority and linked minority</h2>
-            <p>Eight cards, exactly two links: six static objects remain visually complete.</p>
-          </Layout>
+          <BandHead title="11 · Static majority and linked minority">
+            Eight cards, exactly two links: six static objects remain visually complete.
+          </BandHead>
           <Cards columns={{ base: 1, md: 2, xl: 4 }}>
             {Array.from({ length: 8 }, (_, index) => {
               const linked = index === 1 || index === 5;
@@ -563,8 +904,7 @@ export default function BlockCardSpecimenPage() {
                 <BlockCard
                   key={index}
                   title={linked ? `Linked card ${index + 1}` : `Static card ${index + 1}`}
-                  body="The same title ink, copy and flush media hold whether or not navigation exists."
-                  media={index % 2 === 0 ? { kind: 'icon', name: 'copy' } : undefined}
+                  body="The same title ink and copy hold whether or not navigation exists."
                   href={linked ? ROUTES.designEngineering : undefined}
                 />
               );
@@ -573,26 +913,20 @@ export default function BlockCardSpecimenPage() {
         </Layout>
       </Section>
 
-      <Section>
+      <Section surface="tint">
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>8 · States</h2>
-            <p>
-              Point at, hold and Tab to the linked card. The cta is the only part that moves,
-              and it is the shipped link <code>Button</code>: pointing anywhere on the card
-              wipes its underline in and steps its label colour, because the frame carries{' '}
-              <code>data-btn-link-group</code> and Button reads the card&rsquo;s states from it.
-              Nothing else in the card moves and no part of it transforms. Keyboard focus adds
-              the surface-aware two-part ring around the whole card, so focus is never carried
-              by colour alone.
-            </p>
-          </Layout>
+          <BandHead title="12 · States">
+            Point at, hold and Tab to the linked card. The cta is the only part that moves:
+            pointing anywhere on the card wipes its underline in and steps its label colour,
+            because the frame carries <code>data-btn-link-group</code>. Keyboard focus adds the
+            surface-aware two-part ring around the whole card.
+          </BandHead>
           <Cards columns={{ base: 1, md: 2 }}>
             <BlockCard
               eyebrow="Case study"
               title="Point, hold and Tab"
               body="Rest, hover, focus and pressed all come from this one native link."
-              media={{ kind: 'image', src: IMAGE, alt: '' }}
+              media={cover(COVER_FLOW)}
               href={ROUTES.caseStudies}
             />
             <Layout rowGap="tight">
@@ -622,28 +956,24 @@ export default function BlockCardSpecimenPage() {
         <Section key={surface} surface={surface}>
           <Layout rowGap="block">
             <Layout rowGap="tight">
-              {index === 0 ? <h2>9 · Four surfaces · identical markup</h2> : null}
+              {index === 0 ? <h2>13 · Four surfaces</h2> : null}
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>
               <p className={s.specNote}>{note}</p>
             </Layout>
-            <SurfaceCards />
+            <SurfaceCards covers={surface === 'paper' || surface === 'tint'} />
           </Layout>
         </Section>
       ))}
 
       <Section surface="ink">
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>10 · Nested surfaces</h2>
-            <p>
-              The nearest surface resolves every colour below, the cta&rsquo;s three Button
-              steps included; no outer palette leaks in. The card&rsquo;s own set is six tokens
-              now that the link inks belong to <code>Button</code>.
-            </p>
-          </Layout>
+          <BandHead title="14 · Nested surfaces">
+            The nearest surface resolves every colour below, the cta&rsquo;s three Button steps
+            included; no outer palette leaks in. The card&rsquo;s own set is five tokens.
+          </BandHead>
           <Section as="div" surface="tint" density="tight">
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="gutter" rowGap="block">
-              <SurfaceCards />
+              <SurfaceCards covers />
               <ResolvedTokens surface="tint" />
             </Layout>
           </Section>
@@ -654,7 +984,7 @@ export default function BlockCardSpecimenPage() {
           <p>The ink panel below is nested back inside paper and must invert in full.</p>
           <Section as="div" surface="ink" density="tight">
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="gutter" rowGap="block">
-              <SurfaceCards />
+              <SurfaceCards covers={false} />
               <ResolvedTokens surface="ink" />
             </Layout>
           </Section>
@@ -663,13 +993,10 @@ export default function BlockCardSpecimenPage() {
 
       <Section surface="tint">
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>11 · Equal-height challenge</h2>
-            <p>
-              The parent&rsquo;s <code>equalRows</code> makes every root and frame fill the row.
-              Inspect their computed heights: all four must match despite the copy lengths.
-            </p>
-          </Layout>
+          <BandHead title="15 · Equal-height challenge">
+            The parent&rsquo;s <code>equalRows</code> makes every root and frame fill the row.
+            Inspect their computed heights: all four must match despite the copy lengths.
+          </BandHead>
           <Cards columns={{ base: 1, xl: 4 }}>
             <BlockCard title="One line" body="Short body." />
             <BlockCard title="A title intended to wrap across two lines" body="Short body." />
@@ -679,7 +1006,7 @@ export default function BlockCardSpecimenPage() {
             />
             <BlockCard
               title="Long body"
-              body="This longer paragraph challenges the shared row height with substantially more supporting copy while preserving the same copy group, type, flush media and natural wrapping behaviour."
+              body="This longer paragraph challenges the shared row height with substantially more supporting copy while preserving the same copy group, type and natural wrapping behaviour."
             />
           </Cards>
         </Layout>
@@ -687,14 +1014,11 @@ export default function BlockCardSpecimenPage() {
 
       <Section>
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>12 · Content edge cases</h2>
-            <p>
-              All thirteen section 12 cases are rendered or named where the API rejects them.
-            </p>
-          </Layout>
+          <BandHead title="16 · Content edge cases">
+            Every section 12 case is rendered, or named where the API rejects it.
+          </BandHead>
 
-          <Specimen title="1 · Long title/body · 2 · unbroken URL">
+          <Specimen title="Long title/body · unbroken URL">
             <Cards columns={{ base: 1, md: 2 }}>
               <BlockCard
                 eyebrow="Product modernisation"
@@ -709,38 +1033,52 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="3 · Zero items"
-            note="No ul is rendered inside this visible empty harness."
+            title="Long copy in the featured row"
+            note="The featured card at the CU04 ceilings: its h3 title balances across lines in its half, and the body wraps beside it."
           >
-            <Box>Caller omitted the empty grid.</Box>
+            <BlockCardSet
+              items={[
+                {
+                  id: 'long',
+                  eyebrow: 'A long eyebrow that names the client and the practice area',
+                  title:
+                    'Interaction design for regulated products with several operational owners',
+                  body: 'This long supporting paragraph keeps every part of the content visible while it explains the evidence, constraints, decision owners, handoffs and customer outcome that a service team must align before implementation begins.',
+                  href: ROUTES.productDesign,
+                },
+                ...SERVICES.slice(1, 4),
+              ]}
+            />
           </Specimen>
 
-          <Specimen title="4 · One item · 5 · sixteen items">
+          <Specimen
+            title="Zero items"
+            note="BlockCardSet with an empty list renders nothing — no empty ul inside this harness."
+          >
+            <Box>
+              <BlockCardSet items={[]} />
+              Caller passed zero items.
+            </Box>
+          </Specimen>
+
+          <Specimen title="One item · sixteen items">
             <Layout rowGap="stack">
-              <Cards columns={{ base: 1, md: 2, xl: 4 }}>
-                <BlockCard title="One item" body="It reads as one object alone in its track." />
-              </Cards>
+              <BlockCardSet
+                items={[
+                  {
+                    id: 'one',
+                    title: 'One item',
+                    body: 'It sits in half the row rather than stretching across it.',
+                  },
+                ]}
+              />
               <ManyCards count={16} />
             </Layout>
           </Specimen>
 
           <Specimen
-            title="6 · Omitted media and blank image source"
-            note="Both remove the media element and seam; blank runtime src also warns in development. A horizontal card with a blank src falls back to the stack for the same reason an icon does."
-          >
-            <Cards>
-              <BlockCard title="Media omitted" body="The copy group starts the card." />
-              <BlockCard
-                title="Blank image source"
-                body="No broken image or placeholder frame remains."
-                media={{ kind: 'image', src: '   ', alt: '' }}
-              />
-            </Cards>
-          </Specimen>
-
-          <Specimen
-            title="7 · Blank title, body, eyebrow, href and ctaLabel"
-            note="Blank title returns null; blank body keeps the heading; blank eyebrow omits the label; blank href remains a static div with no cta; blank ctaLabel falls back to the default. All five warn in development."
+            title="Blank title, body, eyebrow and href"
+            note="Blank title returns null; blank body keeps the heading; blank eyebrow omits the label; blank href remains a static div with no cta. All warn in development."
           >
             <Cards>
               <BlockCard title="   " body="This card must not render." />
@@ -751,7 +1089,7 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="8 · Single track through 767 · 9 · unsized wrapping parent · 10 · logical placement"
+            title="Single track through 767 · unsized wrapping parent"
             note="Narrow the viewport through 767. The horizontal card collapses to one track and its rowGap takes over from the column gutter; imageSide describes nothing below that boundary, so a right-side card reads copy-then-image."
           >
             <Layout rowGap="block">
@@ -761,7 +1099,7 @@ export default function BlockCardSpecimenPage() {
                     eyebrow="Case study"
                     title="Narrow image card"
                     body="Copy wraps without changing the fixed content relationships."
-                    media={{ kind: 'image', src: IMAGE, alt: '' }}
+                    media={cover(COVER_FLOW)}
                     href={ROUTES.caseStudies}
                   />
                 </Cards>
@@ -773,7 +1111,7 @@ export default function BlockCardSpecimenPage() {
                   eyebrow="Case study"
                   title="Horizontal collapsing to one track"
                   body="Below md there are no sides, so DOM order decides and the copy comes first."
-                  media={{ kind: 'image', src: WIDE_IMAGE, alt: '' }}
+                  media={cover(COVER_FLOW)}
                   href={ROUTES.caseStudies}
                 />
               </Rows>
@@ -788,8 +1126,8 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="11 · Nested surface · 12 · zero-gap adjacent cards"
-            note="With no edge to meet, two cards at zero gap run together — which is exactly why the gutter is required rather than optional. This is a stress harness, not a composition."
+            title="Nested surface · zero-gap adjacent cards"
+            note="With no edge to meet, two cards at zero gap run together — which is exactly why the gutter is required. This is a stress harness, not a composition."
           >
             <Section as="div" surface="ink" density="tight">
               <Cards columns={2} gap={false}>
@@ -800,8 +1138,8 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="13 · Interactive slot — rejected"
-            note="Title, body, eyebrow and ctaLabel are strings and media is a closed union. The public type cannot accept a nested link, Button, control or arbitrary child, and the cta is a span rather than a second anchor."
+            title="Interactive slot — rejected"
+            note="Title, body, eyebrow and ctaLabel are strings and media is a closed record. The public type cannot accept a nested link, Button, control or arbitrary child, and the cta is a span rather than a second anchor."
           >
             <Box>One linked card means exactly one focus stop.</Box>
           </Specimen>
@@ -810,55 +1148,10 @@ export default function BlockCardSpecimenPage() {
 
       <Section surface="tint">
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>13 · Four-card breakpoint proof</h2>
-            <p>
-              The same group is 2×2 at exactly 1439 and one row at 1440. Resize the viewport to
-              both values and inspect the computed <code>grid-template-columns</code>.
-            </p>
-          </Layout>
-          <Cards columns={{ base: 1, md: 2, xl: 4 }}>
-            {CARDS.map((card) => (
-              <BlockCard key={card.title} {...card} />
-            ))}
-          </Cards>
-        </Layout>
-      </Section>
-
-      <Section>
-        <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>14 · Narrow tracks</h2>
-            <p>
-              Image cards at the phone&rsquo;s 326px column, then icon, image and no-media cards
-              at Layout&rsquo;s 256px and 192px track sizes. Text
-              wraps, the image shrinks and the cta never collides or widens the page.
-            </p>
-          </Layout>
-          <Specimen
-            title="326 · mobile column"
-            note="The width every card image is approved at (ch05 B3 — full-column and card placements alike): a 390 viewport less two 32px gutters, derived by the harness rather than written. Vertical only, and on purpose: the frame cannot fire a media query, so a horizontal card in it would still split at this window width. Below 767 the horizontal card collapses to this same stack, which band 8's 390 capture shows at the real width. The wide capture is the asset to judge here — its type is what fails at 326."
-          >
-            <div className={s.trackMobile}>
-              <Cards columns={{ base: 1 }}>
-                <BlockCard
-                  eyebrow="ConnectX · Case study"
-                  title="A wide capture in the phone's column"
-                  body="The cover crop at 326, from a 1600×900 screenshot."
-                  media={{ kind: 'image', src: WIDE_IMAGE, alt: '' }}
-                  href={ROUTES.caseStudies}
-                  ctaLabel="Read the ConnectX case"
-                />
-                <BlockCard
-                  eyebrow="Case study"
-                  title="The card sample"
-                  body="The same crop from the smaller card asset."
-                  media={{ kind: 'image', src: IMAGE, alt: '' }}
-                  href={ROUTES.caseStudies}
-                />
-              </Cards>
-            </div>
-          </Specimen>
+          <BandHead title="17 · Narrow tracks">
+            Cover, linked text-only and static cards at Layout&rsquo;s 256px and 192px track
+            sizes. Text wraps, the image shrinks and the cta never collides or widens the page.
+          </BandHead>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
             {(
               [
@@ -870,19 +1163,19 @@ export default function BlockCardSpecimenPage() {
                 <div className={className}>
                   <Cards columns={{ base: 1 }}>
                     <BlockCard
-                      eyebrow="Capability"
-                      title="Icon"
-                      body="Compact subject copy."
-                      media={{ kind: 'icon', name: 'document-text' }}
-                    />
-                    <BlockCard
                       eyebrow="Case study"
-                      title="Image link"
+                      title="Cover link"
                       body="Compact linked copy."
-                      media={{ kind: 'image', src: IMAGE, alt: '' }}
+                      media={cover(COVER_FLOW)}
                       href={ROUTES.caseStudies}
                     />
-                    <BlockCard title="No media" body="Compact text-only copy." />
+                    <BlockCard
+                      eyebrow="Service"
+                      title="Text link"
+                      body="Compact linked copy."
+                      href={ROUTES.productDesign}
+                    />
+                    <BlockCard title="Static" body="Compact text-only copy." />
                   </Cards>
                 </div>
               </Specimen>
@@ -893,10 +1186,10 @@ export default function BlockCardSpecimenPage() {
 
       <Section surface="ink">
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>15 · Heading map</h2>
-            <p>H3 and h4 elements retain the same h4 visual type; only the outline changes.</p>
-          </Layout>
+          <BandHead title="18 · Heading map">
+            H3 and h4 elements retain the same h4 visual type; only the outline changes. The
+            horizontal row steps both to the h3 role.
+          </BandHead>
           <Cards>
             <BlockCard titleAs="h3" title="H3 element" body="Directly below a section h2." />
             <BlockCard titleAs="h4" title="H4 element" body="Available below an h3 grouping." />
@@ -906,15 +1199,10 @@ export default function BlockCardSpecimenPage() {
 
       <Section>
         <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>16 · Adjacent boundary</h2>
-            <p>
-              A borderless card is separated by distance and nothing else, so the gutter is the
-              boundary rather than a decoration on top of one. Compare the two harnesses: at
-              zero gap the objects merge, and at the required gutter they read as separate
-              without a single rule between them.
-            </p>
-          </Layout>
+          <BandHead title="19 · Adjacent boundary">
+            A borderless card is separated by distance and nothing else, so the gutter is the
+            boundary rather than a decoration on top of one.
+          </BandHead>
           <Specimen title="zero gap · stress only">
             <Cards columns={2} gap={false}>
               <BlockCard title="First card" body="Its copy runs into the next card's." />
@@ -932,13 +1220,12 @@ export default function BlockCardSpecimenPage() {
 
       <Section surface="tint">
         <Layout rowGap="block">
-          <h2>17 · What this static page cannot force</h2>
+          <h2>20 · What this static page cannot force</h2>
           <p>
             Hold the pointer for pressed, Tab for keyboard focus, and test viewport widths 767,
-            1439 and 1440 exactly. Reduced motion is no longer on the list: the wipe transform
-            was the component&rsquo;s only motion and it is gone, so there is nothing left for
-            the preference to shorten. None of these has a component prop; the absence is part
-            of the contract.
+            1439 and 1440 exactly. Reduced motion is answered inside Button, which owns the one
+            animation a card shows. None of these has a component prop; the absence is part of
+            the contract.
           </p>
         </Layout>
       </Section>

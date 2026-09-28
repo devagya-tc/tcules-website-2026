@@ -122,6 +122,20 @@
   align-items: stretch;
 }
 
+/* lead — the first child spans every track in a row of its own (a featured item above its peers).
+   `grid-template-rows: auto` makes that first row EXPLICIT and content-sized; every later row is
+   implicit and takes grid-auto-rows — `1fr` under equalRows, `auto` otherwise. A flexible row is
+   sized only by the items inside flexible rows, so the lead's height never leaks into the peers'
+   equal rows. The span is written here, on the container, because it is the container's statement
+   about its first child: no child sets its own placement. */
+.lead {
+  grid-template-rows: auto;
+}
+
+.lead > :first-child {
+  grid-column: 1 / -1;
+}
+
 @media (min-width: 768px) {
   .layout { grid-template-columns: var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr))); }
 }
