@@ -114,6 +114,7 @@ export type {
   Page,
   PageBlock,
   PageSeo,
+  ContentTable,
   AboutPage,
   AboutImageSection,
   AboutCard,

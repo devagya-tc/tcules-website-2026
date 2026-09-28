@@ -161,7 +161,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
+`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -174,6 +174,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
 - **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-measure` 22ch · `--csec-lead-measure` 40ch
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.01em · `--cta-marker-tracking` 0.1em · `--cta-heading-measure` 22ch · `--cta-body-measure` 68ch
+- **data-table.css** — `--dtab-rule-width` 1px · `--dtab-hold-size` 192px · `--dtab-hidden-size` 1px
 - **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-max-inline` 470px · `--enq-message-reserve` 19px
 - **figure.css** — `--fig-min-xs` 192px · `--fig-rule-width` 1px · `--fig-image-radius` 0px
 - **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-badge-padding-inline` 14px · `--foot-badge-radius` 999px · `--foot-watermark-size` 160px · `--foot-tagline-measure` 40ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 68ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em
@@ -214,6 +215,6 @@ seam to size.
 ### What already exists — check these before specifying anything new
 
 - **Primitives** (`src/components/`): `Button` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Prose` · `Section` · `Tag` · `Texture`
-- **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaSection` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav` · `TableOfContents`
+- **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaSection` · `DataTable` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav` · `TableOfContents`
 - **Templates** (`src/templates/`): — none yet
 
