@@ -26,25 +26,25 @@ const CAPABILITIES = [
     title: 'Product design',
     body: 'Turn a difficult workflow into a product people can understand and operate on their first day.',
     href: '/services/product-design',
-    icon: 'product-design',
+    icon: 'document-text',
   },
   {
     title: 'Design systems',
     body: 'Build the decisions and reusable parts that keep a product coherent as the team grows.',
     href: '/services/design-systems',
-    icon: 'design-systems',
+    icon: 'check',
   },
   {
     title: 'AI product UX',
     body: 'Make a probabilistic system legible enough that people can tell when to trust it.',
     href: '/services/ai-product-ux',
-    icon: 'ai-product-ux',
+    icon: 'document-text',
   },
   {
     title: 'Modernisation',
     body: 'Move a system people depend on without asking them to relearn their own job.',
     href: '/services/modernisation',
-    icon: 'modernisation',
+    icon: 'copy',
   },
 ];
 
@@ -171,7 +171,7 @@ export function Default() {
 
 /**
  * The highest-value shape in the component: an icon-led linked set, four across. The icon is a
- * subject mark and is unlabelled — the title already names the card, so the glyph renders
+ * decorative glyph and is unlabelled — the title already names the card, so the glyph renders
  * `aria-hidden` and is never read out beside it.
  *
  * One anchor per card, and the cta inside it is a `span` rather than a second link: the whole card
@@ -329,7 +329,7 @@ export function StaticAndLinked() {
       <BlockCard
         title="Linked card"
         body="One native anchor over the whole card, one focus stop, and a cta that names where it goes."
-        media={{ kind: 'icon', name: 'design-engineering' }}
+        media={{ kind: 'icon', name: 'copy' }}
         href="/case-studies"
         ctaLabel="Read the write-up"
       />

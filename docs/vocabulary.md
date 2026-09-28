@@ -132,9 +132,9 @@ alphabetic suffix: "12k" sets as "12K".
 - **Families:** `--font-family-display` 'Newsreader', Georgia, 'Times New Roman', serif · `--font-family-sans` 'Public Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif · `--font-family-mono` 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace
 - **Weights:** `--font-weight-regular` 400 · `--font-weight-medium` 500 · `--font-weight-semibold` 600
 
-### The glyph set — exactly these 17
+### The glyph set — exactly these 14
 
-`ai-product-ux` · `arrow-left` · `arrow-right` · `check` · `chevron-down` · `chevron-right` · `close` · `close-circle` · `copy` · `design-engineering` · `design-systems` · `document-text` · `download` · `menu` · `modernisation` · `product-design` · `software-development`
+`arrow-left` · `arrow-right` · `check` · `chevron-down` · `chevron-right` · `close` · `close-circle` · `copy` · `danger-triangle` · `document-text` · `download` · `info-circle` · `menu` · `square-arrow-right-up`
 
 Glyphs are **solid shapes** on a 24 box, filled in `currentColor` with counters cut through the
 mass (`fill-rule: evenodd`) so they show whatever is behind them. **No stroke** — there is no

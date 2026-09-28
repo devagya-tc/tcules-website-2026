@@ -54,19 +54,19 @@ const SERVICES: { title: string; body: string; href: string; marker: ListCardMar
     title: 'Product design',
     body: 'Turn a difficult workflow into a product people can understand and operate.',
     href: '/services/product-design',
-    marker: { kind: 'icon', name: 'product-design' },
+    marker: { kind: 'icon', name: 'document-text' },
   },
   {
     title: 'Design systems',
     body: 'Build the decisions and reusable parts that keep a product coherent as it grows.',
     href: '/services/design-systems',
-    marker: { kind: 'icon', name: 'design-systems' },
+    marker: { kind: 'icon', name: 'check' },
   },
   {
     title: 'AI product UX',
     body: 'Make a probabilistic system legible enough that people can tell when to trust it.',
     href: '/services/ai-product-ux',
-    marker: { kind: 'icon', name: 'ai-product-ux' },
+    marker: { kind: 'icon', name: 'document-text' },
   },
 ];
 
@@ -205,8 +205,8 @@ export function MarkerKinds() {
       <ListCard
         arrangement="stacked"
         title="Icon"
-        body="A subject mark, unlabelled — the title already names the row, so the glyph stays decorative."
-        marker={{ kind: 'icon', name: 'design-engineering' }}
+        body="A decorative glyph, unlabelled — the title already names the row, so the glyph stays decorative."
+        marker={{ kind: 'icon', name: 'copy' }}
       />
       <ListCard
         arrangement="stacked"

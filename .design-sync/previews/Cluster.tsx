@@ -42,7 +42,7 @@ export function Metadata() {
         <span>Shipped 2026</span>
       </Cluster>
       <Cluster colGap="inline">
-        <Icon name="modernisation" size="sm" />
+        <Icon name="document-text" size="sm" />
         <span>Product modernisation</span>
       </Cluster>
       <Cluster colGap="inline">

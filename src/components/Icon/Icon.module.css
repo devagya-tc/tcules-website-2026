@@ -20,7 +20,7 @@
 
   fill: currentColor;
   /* Solid glyphs have COUNTERS — the cross inside close-circle, the lines inside document-text,
-     the prompt inside software-development — and every one of them is a subpath enclosed by the
+     the mark inside info-circle — and every one of them is a subpath enclosed by the
      mass in the same `d`. evenodd is what turns an enclosed subpath into a hole; under the
      default nonzero it fills solid instead, and the glyph silently becomes a blob.
 

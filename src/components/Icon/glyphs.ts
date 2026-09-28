@@ -7,21 +7,27 @@
  * tokens/components/button.css).
  *
  * Counters are cut out of the mass rather than drawn on top of it: the cross inside `close-circle`,
- * the lines inside `document-text`, the prompt inside `software-development`. Each of those glyphs
+ * the lines inside `document-text`, the mark inside `info-circle`. Each of those glyphs
  * is ONE `d` string carrying several subpaths, and `Icon.module.css` sets `fill-rule: evenodd` so
  * the enclosed subpath knocks a hole through. A counter drawn as a second path in the ground colour
  * would only work on one surface, and the whole point of the set is that it works on four.
  *
- * ── Why these are drawn rather than imported ─────────────────────────────────────
- * These follow Solar's Bold conventions but are not Solar's paths, and that is a licence decision
- * rather than a stylistic one: Solar ships under CC BY 4.0, which carries an attribution
- * obligation. Drawing to the same conventions keeps this repo free of an icon dependency and of a
- * licence to track — conventions are not the artwork.
+ * ── Two provenances, and which way the set is moving ────────────────────────────
+ * The brand fixes the set as Solar Icons, Bold (DBF ch04 · Iconography): "never redraw, trace or
+ * combine them". Solar Icons are by 480 Design and licensed CC BY 4.0, which carries an
+ * attribution obligation; ch04 carries the credit, and the site owes one too.
  *
- * If pixel-exact Solar paths are ever wanted, the move is a devDependency on
- * `@iconify-json/solar`, a build step that writes this file from the `*-bold` variants, and an
- * attribution line the site has to actually carry. A dev dependency, so the
- * three-runtime-dependency rule still holds, and nothing outside this file changes.
+ *   SOLAR       `square-arrow-right-up`, `info-circle`, `danger-triangle`. Solar Bold's own path
+ *               data, copied verbatim — `square-arrow-right-up` and `danger-triangle` as ch04
+ *               embeds them, `info-circle` from `@iconify-json/solar` (`info-circle-bold`),
+ *               because ch04's cell for it carries the check-circle path by mistake. Never
+ *               hand-edit these; replace them from source.
+ *   DRAWN       everything else. Drawn to Solar's Bold conventions before ch04 existed, so they
+ *               are not Solar's artwork, and several sit under a different name from ch04's fixed
+ *               choice for the same meaning (`chevron-down` / `alt-arrow-down`, `menu` /
+ *               `hamburger-menu`, `check` / `check-circle`, `close` / `close-circle`). Moving
+ *               each onto its ch04 glyph is a visual change at every call site, so it is done one
+ *               meaning at a time with the call sites checked — not silently here.
  *
  * Each entry is a list of `d` strings rather than mixed SVG elements, so the renderer is one
  * `<path>` map with no element switch. A circle is expressed as an arc pair for that reason.
@@ -35,12 +41,14 @@
  *   DISCLOSURE   chevron, menu and close. A mega-menu trigger has to SAY it opens something and
  *                a drawer has to say it shuts, and neither claim can be made in words without
  *                putting two labels on one control.
- *   SUBJECTS     six marks, one per service. These are the only glyphs in the set that stand for
- *                a THING rather than an act, and they exist because the navigation panel gives
- *                each service a row of its own: at six rows in two columns, a mark is what lets
- *                the eye find "Design Systems" without reading all six labels. They are drawn to
- *                the same 24-box convention as the rest, so they are legible at 24 and hold at
- *                16 — no glyph here carries detail that only survives at native size.
+ *   STATUS       ch04's "leaves the site", "information" and "warning" — the external-link cue a
+ *                ListCard row and an off-site link need, and the two marks a notice leads with.
+ *
+ * Note what is no longer here: the six service marks (product design, modernisation, design
+ * systems, AI product UX, design engineering, software development). They were drawn, not Solar,
+ * and they were illustration jobs at icon scale — ch04 says anything above 64px, or more than one
+ * element, is illustration, and that is chapter 05. Retired by ruling O1
+ * (docs/phase-2-decisions.md); service lines get illustrations instead.
  *
  * Note what is NOT here: brand marks. LinkedIn, YouTube and Clutch are trademarks with their own
  * usage rules and their own proportions — they are not drawn on this 24 box, they cannot be
@@ -51,8 +59,14 @@ export const glyphs = {
   /* Movement. The trailing glyph on an action that changes where you are, and its mirror. A shaft
      and a head as two shapes: one closed outline around both would need eight collinear points
      kept in agreement by hand, and the union renders identically. */
-  'arrow-right': ['M4 10.5h10a1.5 1.5 0 0 1 0 3H4a1.5 1.5 0 0 1 0-3Z', 'M12.5 4.9 21.4 12l-8.9 7.1Z'],
-  'arrow-left': ['M20 10.5H10a1.5 1.5 0 0 0 0 3h10a1.5 1.5 0 0 0 0-3Z', 'M11.5 4.9 2.6 12l8.9 7.1Z'],
+  'arrow-right': [
+    'M4 10.5h10a1.5 1.5 0 0 1 0 3H4a1.5 1.5 0 0 1 0-3Z',
+    'M12.5 4.9 21.4 12l-8.9 7.1Z',
+  ],
+  'arrow-left': [
+    'M20 10.5H10a1.5 1.5 0 0 0 0 3h10a1.5 1.5 0 0 0 0-3Z',
+    'M11.5 4.9 2.6 12l8.9 7.1Z',
+  ],
 
   /* Named actions. A leading glyph says what KIND of action, never which direction it goes. */
   download: [
@@ -98,45 +112,20 @@ export const glyphs = {
     'M17.9 3.9 20.1 6.1 14.19 12 20.1 17.9 17.9 20.1 12 14.19 6.1 20.1 3.9 17.9 9.81 12 3.9 6.1 6.1 3.9 12 9.81Z',
   ],
 
-  /* Subjects — one mark per service, for the navigation panel's rows. Each is a distinct
-     silhouette at 16px, which is the whole test: two marks that read alike at row size are worse
-     than none, because the eye stops trusting them. */
+  /* Status and leaving — Solar Bold's own paths, copied verbatim (see the header). One `d` each,
+     the mark cut out of the mass under evenodd, like every counter in the set.
 
-  /* An artboard on a stand, with a toolbar knocked out of it — the screen the work lands in. */
-  'product-design': [
-    'M5 3h14a2.5 2.5 0 0 1 2.5 2.5v8A2.5 2.5 0 0 1 19 16H5a2.5 2.5 0 0 1-2.5-2.5v-8A2.5 2.5 0 0 1 5 3Zm.5 3.5v1.6h13V6.5Z',
-    'M10.5 16h3v3.5h-3Z',
-    'M7.5 19.5h9a1.25 1.25 0 0 1 0 2.5h-9a1.25 1.25 0 0 1 0-2.5Z',
+     `square-arrow-right-up` is ch04's "leaves the site": the trailing glyph on a link or a row
+     whose destination is off tcules.com. `info-circle` is "information" and `danger-triangle`
+     is "warning" — status marks, leading, beside the words that carry the meaning. */
+  'square-arrow-right-up': [
+    'M20.5355 20.5355C22 19.0711 22 16.714 22 12C22 7.28595 22 4.92893 20.5355 3.46447C19.0711 2 16.714 2 12 2C7.28595 2 4.92893 2 3.46447 3.46447C2 4.92893 2 7.28595 2 12C2 16.714 2 19.0711 3.46447 20.5355C4.92893 22 7.28595 22 12 22C16.714 22 19.0711 22 20.5355 20.5355ZM14.8284 8.42157C15.2426 8.42157 15.5784 8.75736 15.5784 9.17157L15.5784 13.4142C15.5784 13.8284 15.2426 14.1642 14.8284 14.1642C14.4142 14.1642 14.0784 13.8284 14.0784 13.4142L14.0784 10.9822L9.7019 15.3588C9.40901 15.6517 8.93414 15.6517 8.64124 15.3588C8.34835 15.0659 8.34835 14.591 8.64124 14.2981L13.0178 9.92157H10.5858C10.1716 9.92157 9.83579 9.58579 9.83579 9.17157C9.83579 8.75736 10.1716 8.42157 10.5858 8.42157L14.8284 8.42157Z',
   ],
-  /* Two chevrons climbing. Forward, not merely again — and unmistakable against the single
-     disclosure chevron, which is one mark pointing the other way. */
-  modernisation: [
-    'M12 3.6a2 2 0 0 1 1.42.59l5.6 5.6a2 2 0 0 1-2.83 2.83L12 8.43l-4.19 4.19a2 2 0 0 1-2.83-2.83l5.6-5.6A2 2 0 0 1 12 3.6Z',
-    'M12 11a2 2 0 0 1 1.42.59l5.6 5.6a2 2 0 0 1-2.83 2.83L12 15.83l-4.19 4.19a2 2 0 0 1-2.83-2.83l5.6-5.6A2 2 0 0 1 12 11Z',
+  'info-circle': [
+    'M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM12 17.75C12.4142 17.75 12.75 17.4142 12.75 17V11C12.75 10.5858 12.4142 10.25 12 10.25C11.5858 10.25 11.25 10.5858 11.25 11V17C11.25 17.4142 11.5858 17.75 12 17.75ZM12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8C11 7.44772 11.4477 7 12 7Z',
   ],
-  /* Four equal tiles: parts that are interchangeable because they are the same part. */
-  'design-systems': [
-    'M4.5 2.5h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2Z',
-    'M15.5 2.5h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2Z',
-    'M4.5 13.5h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2Z',
-    'M15.5 13.5h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2Z',
-  ],
-  /* Two sparks, unequal — the system's only glyph that means "generated". The quadratic control
-     points sit 2.7 units off centre rather than 1.3: pulled further in, the waist thins the arms
-     to hairlines and the mark reads as drawn in a different weight from every glyph beside it. */
-  'ai-product-ux': [
-    'M9.9 2.5Q12.6 7.2 17.3 9.9Q12.6 12.6 9.9 17.3Q7.2 12.6 2.5 9.9Q7.2 7.2 9.9 2.5Z',
-    'M18.1 14.6Q19.38 16.82 21.6 18.1Q19.38 19.38 18.1 21.6Q16.82 19.38 14.6 18.1Q16.82 16.82 18.1 14.6Z',
-  ],
-  /* Brackets around a slash: a design decision written down as code. */
-  'design-engineering': [
-    'M9.2 4.9 2.2 12 9.2 19.1 9.2 15.4 6 12 9.2 8.6Z',
-    'M14.8 4.9 21.8 12 14.8 19.1 14.8 15.4 18 12 14.8 8.6Z',
-    'M14.97 3.86 11.77 20.66 9.03 20.14 12.23 3.34Z',
-  ],
-  /* A prompt in a window. Building the thing, not the picture of it. */
-  'software-development': [
-    'M5 3.5h14a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-11a3 3 0 0 1 3-3ZM7.4 9.3v1.8L9.1 12 7.4 12.9v1.8L11.9 12ZM13.5 13.2a1 1 0 0 0 0 2h4a1 1 0 0 0 0-2Z',
+  'danger-triangle': [
+    'M5.31171 10.7615C8.23007 5.58716 9.68925 3 12 3C14.3107 3 15.7699 5.58716 18.6883 10.7615L19.0519 11.4063C21.4771 15.7061 22.6897 17.856 21.5937 19.428C20.4978 21 17.7864 21 12.3637 21H11.6363C6.21356 21 3.50217 21 2.40626 19.428C1.31034 17.856 2.52291 15.7061 4.94805 11.4063L5.31171 10.7615ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V8C11.25 7.58579 11.5858 7.25 12 7.25ZM12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z',
   ],
 } as const;
 
