@@ -39,7 +39,10 @@ const LINK_QUOTE = {
 
 /* ── Portrait and client-mark fixtures ─────────────────────────────────────────────────────────
    The people and clients below are FICTIONAL, and so are their marks (public/design/client-mark-*,
-   drawn for /design/client-mark). The photograph is the brand chapter's stand-in portrait, reused
+   drawn as stress files: -mid (3:1, Dunmere) and -wide (6:1, Aldermoor) for this route, -square
+   for /design/client-mark). A real client's file from public/clients/ is never used here: a real
+   logo under a fictional quote would be a fabricated attribution, specimen or not. -mid and -wide
+   were referenced before they existed, so until 2.17 no mark on this route had ever rendered. The photograph is the brand chapter's stand-in portrait, reused
    for every speaker, so it is never attached to the real Auxentios quote above: a real client's
    name beside a stranger's face would be a fabricated attribution, specimen or not.
 
@@ -165,6 +168,13 @@ const FIGURES = [
     checkedOn: 'checked on 8 August 2026',
     sourceHref: UNRESOLVED_EXTERNAL,
   },
+] as const satisfies readonly ProofFigure[];
+
+/* Two dates in one set: the per-figure line comes back, because no single caption is true of all. */
+const MIXED_DATE_FIGURES = [
+  FIGURES[0],
+  { ...FIGURES[1], checkedOn: 'checked on 2 September 2026' },
+  FIGURES[3],
 ] as const satisfies readonly ProofFigure[];
 
 const EIGHT_FIGURES = [
@@ -313,7 +323,8 @@ export default function ProofSpecimenPage() {
             <h2>1 · Identity</h2>
             <p>
               This combined block is why Testimonial and Stat ship as one pattern. The rating is
-              an ordinary checked figure, not a third component.
+              an ordinary checked figure, not a third component. From lg the quote leads in the
+              wide track of a 2:1 and the figures stack beside it; below lg, one column.
             </p>
           </Layout>
           <Proof quote={THREE_SENTENCE_QUOTE} figures={FIGURES} />
@@ -351,17 +362,18 @@ export default function ProofSpecimenPage() {
           <Layout rowGap="block">
             <h2>3 · Quote length ladder</h2>
             <p>
-              Display remains h3 from one sentence through six. Compact uses the established
-              quote composite; neither path sniffs length or clamps content.
+              Display is the display quote role, --text-quote-lg (43 / 34 / 25, italic in the
+              composite), from one sentence through six. Compact keeps the reading-flow quote
+              composite (28 / 22); neither path sniffs length or clamps content.
             </p>
           </Layout>
-          <Specimen title="display · one sentence" note="Resolved role: --text-h3">
+          <Specimen title="display · one sentence" note="Resolved role: --text-quote-lg">
             <Proof quote={ONE_SENTENCE_QUOTE} />
           </Specimen>
-          <Specimen title="display · three sentences" note="Resolved role: --text-h3">
+          <Specimen title="display · three sentences" note="Resolved role: --text-quote-lg">
             <Proof quote={THREE_SENTENCE_QUOTE} />
           </Specimen>
-          <Specimen title="display · six sentences" note="Resolved role: --text-h3">
+          <Specimen title="display · six sentences" note="Resolved role: --text-quote-lg">
             <Proof quote={SIX_SENTENCE_QUOTE} />
           </Specimen>
           <Specimen title="compact · six sentences" note="Resolved role: --text-quote">
@@ -375,8 +387,9 @@ export default function ProofSpecimenPage() {
           <Layout rowGap="block">
             <h2>4 · Figure count ladder</h2>
             <p>
-              Values keep one stat role while tile tracks prevent a partial final row from
-              stretching. Dates remain visible per item at every count.
+              Values keep one role, --text-stat-lg (54 / 43 / 40), while tile tracks prevent a
+              partial final row from stretching. A date every figure shares is said once, as the
+              set&apos;s caption; one figure keeps its own line, and mixed dates keep one each.
             </p>
           </Layout>
           {([1, 2, 3, 4] as const).map((count) => (
@@ -384,6 +397,12 @@ export default function ProofSpecimenPage() {
               <Proof figures={FIGURES.slice(0, count)} />
             </Specimen>
           ))}
+          <Specimen
+            title="mixed dates · per-figure lines"
+            note="Two dates in one set, so no caption is true of all three: each figure keeps its own."
+          >
+            <Proof figures={MIXED_DATE_FIGURES} />
+          </Specimen>
           <Specimen
             title="8 figures · 2× expected"
             note="All records render; development warns."
@@ -616,7 +635,9 @@ export default function ProofSpecimenPage() {
             <h2>12 · Narrow and unsized parents</h2>
             <p>
               Display reflows through existing Layout tracks. The root fills a wrapping parent
-              rather than collapsing to the intrinsic width of `4.8/5`.
+              rather than collapsing to the intrinsic width of `4.8/5`. Known cost (spec §17
+              Q13): the combined pair&apos;s 2:1 is breakpoint-driven, so at lg and above it
+              holds even in these narrow tracks — shown as it is, for the owner to rule on.
             </p>
           </Layout>
           {[

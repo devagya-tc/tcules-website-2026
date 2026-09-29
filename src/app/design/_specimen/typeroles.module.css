@@ -50,6 +50,11 @@
   font: var(--text-quote);
   text-wrap: var(--text-running-wrap);
 }
+.quoteLg {
+  font: var(--text-quote-lg);
+  letter-spacing: var(--text-quote-lg-tracking);
+  text-wrap: var(--text-running-wrap);
+}
 .lead {
   font: var(--text-lead);
   text-wrap: var(--text-running-wrap);
@@ -115,6 +120,11 @@
 .stat {
   font: var(--text-stat);
   letter-spacing: var(--text-stat-tracking);
+  text-transform: var(--text-mono-case);
+}
+.statLg {
+  font: var(--text-stat-lg);
+  letter-spacing: var(--text-stat-lg-tracking);
   text-transform: var(--text-mono-case);
 }
 /* The system's one exemption, and the specimen proves it by rendering `const gap = 24` verbatim

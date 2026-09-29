@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 21 roles, consumed as composites
+### Type — 23 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -75,6 +75,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-h5` | 22px | 1.28 | display | medium | `--text-h5-tracking` | verbatim |
 | `--text-h6` | 18px | 1.35 | display | medium | `--text-h6-tracking` | verbatim |
 | `--text-quote` | 28px | 1.35 | display | regular | **none** | verbatim |
+| `--text-quote-lg` | 43px | 1.2 | display | regular | `--text-quote-lg-tracking` | verbatim |
 | `--text-lead` | 20px | 1.5 | sans | regular | **none** | verbatim |
 | `--text-body-lg` | 18px | 1.55 | sans | regular | **none** | verbatim |
 | `--text-body` | 16px | 1.6 | sans | regular | **none** | verbatim |
@@ -87,18 +88,19 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-index` | 20px | 1.2 | mono | semibold | `--text-index-tracking` | `--text-mono-case` |
 | `--text-micro` | 11px | 1.2 | mono | semibold | `--text-micro-tracking` | `--text-mono-case` |
 | `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` | `--text-mono-case` |
+| `--text-stat-lg` | 54px | 1 | mono | medium | `--text-stat-lg-tracking` | `--text-mono-case` |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**14 roles have a tracking companion. 7 have none** — pairing one with a role in that
+**16 roles have a tracking companion. 7 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
 
 Mono is this system's label voice: chrome, eyebrows, keys, control labels, stats. All
-8 mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
+9 mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
 correction for the side bearings of capitals — so set lower-case, a mono role reads as
 letter-spaced body text rather than as a label. **The case belongs to the role, not to the
-component.** 7 of the 8 take it: `--text-ui-sm`, `--text-ui`, `--text-ui-lg`, `--text-eyebrow`, `--text-index`, `--text-micro`, `--text-stat`.
+component.** 8 of the 9 take it: `--text-ui-sm`, `--text-ui`, `--text-ui-lg`, `--text-eyebrow`, `--text-index`, `--text-micro`, `--text-stat`, `--text-stat-lg`.
 
 Write it beside the font, exactly as you write tracking, and for the same reason — `font:` carries
 a family, weight, size and ratio, and no transform:

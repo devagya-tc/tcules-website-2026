@@ -34,10 +34,11 @@
   overflow-wrap: anywhere;
 }
 
+/* Display is the moment on a page, so it takes the display quote role at h2 scale (43 / 34 / 25),
+   well clear of compact's reading-flow 28 / 22. Its italic is in the composite, so no font-style. */
 .display .quoteText {
-  font: var(--text-h3);
-  font-style: italic;
-  letter-spacing: var(--text-h3-tracking);
+  font: var(--text-quote-lg);
+  letter-spacing: var(--text-quote-lg-tracking);
   text-wrap: var(--text-title-wrap);
 }
 
@@ -113,6 +114,7 @@
   justify-self: start;
 }
 
+.figureGroup,
 .figures {
   inline-size: 100%;
   min-inline-size: 0;
@@ -126,12 +128,14 @@
 
 /* Mono, so it takes the mono case, and the transform is a no-op on "4.9" or "120" — it earns its
    line on the value that carries a letter. "12k" sets as "12K", in the same voice as the label
-   under it, rather than as the one lower-case glyph in a band of capitals. */
+   under it, rather than as the one lower-case glyph in a band of capitals. Figures exist only in
+   display, so the value is always the display stat role (54 / 43 / 40): the number outranks the
+   title beside it. */
 .value {
   min-inline-size: 0;
   overflow-wrap: anywhere;
-  font: var(--text-stat);
-  letter-spacing: var(--text-stat-tracking);
+  font: var(--text-stat-lg);
+  letter-spacing: var(--text-stat-lg-tracking);
   text-transform: var(--text-mono-case);
   color: var(--proof-value-ink);
 }
