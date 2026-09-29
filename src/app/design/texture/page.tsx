@@ -1,35 +1,35 @@
-import { Layout, Section, Texture, TextureShape, type SectionSurface } from '@/components';
+import { Layout, Section, Texture, TextureShape } from '@/components';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 /**
  * Texture specimen — the pixel grid, shown through shapes.
  *
- * The Figma workflow, one step at a time: a shape, then the same shape blurred, then the frame the
- * texture was measured from, rebuilt. Each band is a real Section with real content over the field,
- * because the thing to check is not the grid alone but that the grid sits UNDER the content and
- * never over it.
+ * PARKED (owner, 29 Sep 2026, tracker 2.17) until a real placement exists. This page is kept to
+ * the rules rather than grown: nothing here makes Texture stronger or more visible.
  *
- * Tint and the dark grounds come last and are a question rather than an answer: their ink is provisional in
- * tokens/components/texture.css, and the candidates are printed side by side here to choose from.
+ * The Figma workflow, one step at a time: a shape, then the same shape blurred, then the frame the
+ * texture was measured from, rebuilt. Steps 1 and 2 are MECHANISM bands and carry no content,
+ * because a hard shape inside the content column is outside the rules (spec §1, limit 6). Every
+ * band that does carry content keeps every shape's full-strength box in the band's air — the 128
+ * above and below an open band — so no shape sits under a heading or body at any width.
+ *
+ * ── Why each caption band is `flush` ─────────────────────────────────────────────
+ * Two adjacent bands on the same ground merge their seam: the second drops its TOP padding
+ * (Section.module.css, tracker 2.17). A textured paper band after a paper caption band therefore
+ * started at y = 0, and every top-anchored shape landed behind its heading — the breach this page
+ * was showing at 390. A flush band is excluded from that merge (it has no bottom padding to be the
+ * seam), so the textured band after it keeps its full 128 of top air, which is what the top shapes
+ * are measured against.
+ *
+ * Only paper and tint appear. Ink and blue are banned by limit 3, so their bands and their ink
+ * candidates are gone rather than printed as options.
  */
 
-const INK_CANDIDATES = {
-  tint: [
-    { className: s.texInkNeutral300, label: 'neutral-300 — 1.07:1, quieter' },
-    { className: s.texInkNeutral400, label: 'neutral-400 — 1.13:1, current default' },
-  ],
-  ink: [
-    { className: s.texInkBrandeis500, label: 'brandeis-500 — the paper value, unchanged' },
-    { className: s.texInkBrandeis300, label: 'brandeis-300' },
-    { className: s.texInkWhite, label: 'white' },
-  ],
-  blue: [
-    { className: s.texInkWhite, label: 'white — current default' },
-    { className: s.texInkBrandeis200, label: 'brandeis-200' },
-    { className: s.texInkBrandeis800, label: 'brandeis-800 — darker than the ground' },
-  ],
-} as const;
+const TINT_CANDIDATES = [
+  { className: s.texInkNeutral300, label: 'neutral-300 — 1.07:1, quieter' },
+  { className: s.texInkNeutral400, label: 'neutral-400 — 1.13:1, current default' },
+] as const;
 
 function Copy({ title, children }: { title: string; children: string }) {
   return (
@@ -55,45 +55,47 @@ export default function TextureSpecimenPage() {
   return (
     <>
       <Section>
-        <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h1>Texture</h1>
-            <p>
-              The pixel grid as a decorative field. It fills the band edge to edge, sits between
-              the band&rsquo;s ground and its content, and shows only through the shapes placed
-              in it. Blur a shape and the grid fades with it. The grid itself is never blurred.
-            </p>
-            <p>
-              Shapes are placed like absolutely positioned boxes: <code>top</code> /{' '}
-              <code>bottom</code>, <code>left</code> / <code>right</code>, and a size, each in
-              px or % of the band. An axis with neither side given is centred. <code>blur</code>{' '}
-              takes Figma&rsquo;s number. The grid&rsquo;s geometry comes from{' '}
-              <code>src/styles/textures/pixel-grid.json</code>, the same spec{' '}
-              <code>npm run texture</code> exports from.
-            </p>
-          </Layout>
-          <Specimen
-            title="Step 1 · a hard shape, blur 0"
-            note="Centred, 471 wide and 80% of the band tall — the last frame of the Figma walkthrough. The grid stops at the shape's edge on a whole cell, because the pattern is anchored to the band, not to the shape."
-          >
-            <p className={s.specNote}>The band below.</p>
-          </Specimen>
+        <Layout rowGap="block">
+          <h1>Texture</h1>
+          <p>
+            The pixel grid as a decorative field. It fills the band edge to edge, sits between
+            the band&rsquo;s ground and its content, and shows only through the shapes placed in
+            it. Blur a shape and the grid fades with it. The grid itself is never blurred.
+          </p>
+          <p>
+            Shapes are placed like absolutely positioned boxes: <code>top</code> /{' '}
+            <code>bottom</code>, <code>left</code> / <code>right</code>, and a size, each in px
+            or % of the band. An axis with neither side given is centred. <code>blur</code>{' '}
+            takes Figma&rsquo;s number. The grid&rsquo;s geometry comes from{' '}
+            <code>src/styles/textures/pixel-grid.json</code>, the same spec{' '}
+            <code>npm run texture</code> exports from.
+          </p>
+          <p>
+            <strong>Parked</strong> (owner, 29 Sep 2026) until a real placement exists. Paper
+            and tint only — ink and blue are banned by limit 3.
+          </p>
         </Layout>
+      </Section>
+
+      <Section flush>
+        <Specimen
+          title="Step 1 · a hard shape, blur 0 — mechanism, not a placement"
+          note="Centred, 471 wide and 80% of the band tall — the last frame of the Figma walkthrough. The grid stops at the shape's edge on a whole cell, because the pattern is anchored to the band, not to the shape. The band carries no content: blur 0 inside the content column is outside the rules (limit 6)."
+        >
+          <p className={s.specNote}>The band below.</p>
+        </Specimen>
       </Section>
 
       <Section density="open">
         <Texture>
           <TextureShape width={471} height="80%" />
         </Texture>
-        <Copy title="A hard shape">
-          The same field with no blur — the texture&rsquo;s raw strength, 21% at the dashes.
-        </Copy>
       </Section>
 
-      <Section>
+      <Section flush>
         <Specimen
-          title="Step 2 · the same shape, blur 100"
-          note="The shape becomes a soft field and the grid thins toward its edges — the grid's cells stay crisp at every strength."
+          title="Step 2 · the same shape, blur 100 — mechanism, not a placement"
+          note="The shape becomes a soft field and the grid thins toward its edges — the grid's cells stay crisp at every strength. Still centred, so still behind wherever content would sit: the band carries none."
         >
           <p className={s.specNote}>The band below.</p>
         </Specimen>
@@ -103,16 +105,12 @@ export default function TextureSpecimenPage() {
         <Texture>
           <TextureShape width={471} height="80%" blur={100} />
         </Texture>
-        <Copy title="A blurred shape">
-          The shape is the mask. Wherever it is opaque the grid is at full strength; where the
-          blur feathers it, the grid fades with it.
-        </Copy>
       </Section>
 
-      <Section>
+      <Section flush>
         <Specimen
           title="Step 3 · the measured frame, rebuilt"
-          note="Figma node 385:72 — two bands blurred 164, anchored top and bottom and hanging 180 off each edge. Compared numerically against Figma's render, the grid's tone lands within 2.5/255 at every row. Resize the window: the bands hold their edges, because they are placed from the top and from the bottom."
+          note="Figma node 385:72 — two bands blurred 164, anchored top and bottom and hanging 180 off each edge, so each box ends 108 into the band: inside the 128 of air, clear of the heading and the last line at every width. Only the feather reaches the copy, which is what §1 allows. Compared numerically against Figma's render, the grid's tone lands within 2.5/255 at every row."
         >
           <p className={s.specNote}>The band below.</p>
         </Specimen>
@@ -129,10 +127,10 @@ export default function TextureSpecimenPage() {
         </Layout>
       </Section>
 
-      <Section>
+      <Section flush>
         <Specimen
-          title="Placement · corners, an ellipse, rounded, percent-sized"
-          note="An ellipse off the top-left, a rounded rect pinned bottom-right with no blur, and a percent-sized glow centred. Each is placed from a different side; together they cover every anchor the API has."
+          title="Placement · a corner, an edge, rounded, percent-sized"
+          note="An ellipse hung off the top-left so its box ends at 120, inside the 128 of top air; a rounded rect, 30% wide, hung off the bottom-right corner; and a 40%-wide glow centred on the bottom edge. Every box sits in the band's air, so none is under the heading or body at 1440 or at 390. Each is blurred ≥ 100, because each enters the content column."
         >
           <p className={s.specNote}>The band below.</p>
         </Specimen>
@@ -142,45 +140,48 @@ export default function TextureSpecimenPage() {
         <Texture>
           <TextureShape
             kind="ellipse"
-            top={-120}
+            top={-300}
             left={-120}
             width={420}
             height={420}
             blur={120}
           />
-          <TextureShape bottom={48} right={48} width={320} height={200} radius={24} />
-          <TextureShape width="40%" height="50%" blur={200} />
+          <TextureShape
+            bottom={-96}
+            right={-48}
+            width="30%"
+            height={200}
+            radius={24}
+            blur={100}
+          />
+          <TextureShape bottom={-120} width="40%" height={200} blur={200} />
         </Texture>
         <Copy title="Three shapes, three anchors">
-          Top-left, bottom-right, and centred. Content stays above all of them.
+          Top-left, bottom-right, and bottom-centre, each in the band&rsquo;s air. Content stays
+          clear of every full-strength box.
         </Copy>
       </Section>
 
-      {(['tint', 'ink', 'blue'] as SectionSurface[]).map((surface) => (
-        <Section key={surface} surface={surface} density="open">
-          <Edges />
-          <Copy title={`Surface · ${surface}`}>
-            {surface === 'tint'
-              ? 'Neutral-400, not blue, and quieter than paper on purpose — a strength-matched 700 read as pattern rather than texture. Candidates follow.'
-              : `The ${surface} value from texture.css — provisional. The candidates follow.`}
-          </Copy>
-        </Section>
-      ))}
+      <Section surface="tint" density="open">
+        <Edges />
+        <Copy title="Surface · tint">
+          Neutral-400, not blue, and quieter than paper on purpose — a strength-matched 700 read
+          as pattern rather than texture. The two candidates follow.
+        </Copy>
+      </Section>
 
-      {(['tint', 'ink', 'blue'] as const).map((surface) => (
-        <Section key={`candidates-${surface}`} surface={surface} flush>
-          <Layout columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="gutter">
-            {INK_CANDIDATES[surface].map((c) => (
-              <Section key={c.label} as="div" surface={surface} density="open">
-                <Texture className={c.className}>
-                  <TextureShape width="80%" height="60%" blur={120} />
-                </Texture>
-                <p className={s.specTitle}>{`${surface} · ${c.label}`}</p>
-              </Section>
-            ))}
-          </Layout>
-        </Section>
-      ))}
+      <Section surface="tint" flush>
+        <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+          {TINT_CANDIDATES.map((c) => (
+            <Section key={c.label} as="div" surface="tint" density="open">
+              <Texture className={c.className}>
+                <TextureShape bottom={-40} width="80%" height={160} blur={120} />
+              </Texture>
+              <p className={s.specTitle}>{`tint · ${c.label}`}</p>
+            </Section>
+          ))}
+        </Layout>
+      </Section>
     </>
   );
 }
