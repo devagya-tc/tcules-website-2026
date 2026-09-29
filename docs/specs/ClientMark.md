@@ -2,15 +2,16 @@
 
 ## 0 · Front matter
 
-|                     |                                                                                                                                                                                                                                                                                                                                    |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Component**       | ClientMark                                                                                                                                                                                                                                                                                                                         |
-| **Tier**            | 1 · primitive (`src/components/`)                                                                                                                                                                                                                                                                                                  |
-| **Status**          | `implemented` — accepted without a design round on owner ruling **P2** (`docs/phase-2-decisions.md`: "capped at ~40px tall, and sized to equal visual weight by area") and **DBF ch05 §10** (client logos: source, colour, size, never). See §17 Q1.                                                                               |
-| **Token prefix**    | `--cmark-`                                                                                                                                                                                                                                                                                                                         |
-| **Designer / date** | None. Written by Claude Code on 2026-09-28 from ch05 §10, ruling P2 and the audit's §4 "Client logos" row (`docs/component-audit.md`). Tracker 2.8.                                                                                                                                                                                |
-| **Implements**      | `docs/component-audit.md` §4, job "Client logos": "a tier-1 primitive, `ClientMark`… The _strip_ is still not a component."                                                                                                                                                                                                        |
-| **Implemented at**  | `src/components/ClientMark/ClientMark.tsx` · `src/components/ClientMark/ClientMark.module.css` · `src/styles/tokens/components/client-mark.css` · specimen `src/app/design/client-mark/page.tsx` · client set `public/clients/*.svg` · stress marks `public/design/client-mark-*.svg` · `scripts/tokens-check.mjs` (`JS_INJECTED`) |
+|                     |                                                                                                                                                                                                                                                                                                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Component**       | ClientMark                                                                                                                                                                                                                                                                                                                                                         |
+| **Tier**            | 1 · primitive (`src/components/`)                                                                                                                                                                                                                                                                                                                                  |
+| **Status**          | `implemented` — accepted without a design round on owner ruling **P2** (`docs/phase-2-decisions.md`: "capped at ~40px tall, and sized to equal visual weight by area") and **DBF ch05 §10** (client logos: source, colour, size, never). See §17 Q1.                                                                                                               |
+| **Token prefix**    | `--cmark-`                                                                                                                                                                                                                                                                                                                                                         |
+| **Designer / date** | None. Written by Claude Code on 2026-09-28 from ch05 §10, ruling P2 and the audit's §4 "Client logos" row (`docs/component-audit.md`). Tracker 2.8.                                                                                                                                                                                                                |
+| **Amended**         | 29 Sep 2026, tracker 2.17 (visual overhaul), owner-approved: `--cmark-ink` one step quieter on every surface (§6); equal cells in a `Layout` as the recommended composition for a set of known size, and when to use which (§10); LatitudePay's weight correction recorded (§12, §17 Q10); `max-inline-size: 100%` so a mark never spills out of a grid cell (§7). |
+| **Implements**      | `docs/component-audit.md` §4, job "Client logos": "a tier-1 primitive, `ClientMark`… The _strip_ is still not a component."                                                                                                                                                                                                                                        |
+| **Implemented at**  | `src/components/ClientMark/ClientMark.tsx` · `src/components/ClientMark/ClientMark.module.css` · `src/styles/tokens/components/client-mark.css` · specimen `src/app/design/client-mark/page.tsx` · client set `public/clients/*.svg` · stress marks `public/design/client-mark-*.svg` · `scripts/tokens-check.mjs` (`JS_INJECTED`)                                 |
 
 > Contrast figures marked **[c]** were computed for this spec from the ramp hexes in
 > `primitives.css` (WCAG 2.x relative luminance) and agree with ch02's pairing tables.
@@ -111,18 +112,30 @@ link owns hover and focus; the mark's ink does not move (it is a token, not `cur
 
 ## 6 · Per-surface colour
 
-| Token         | paper                                   | tint                                                  | ink                                              | blue                                             |
-| ------------- | --------------------------------------- | ----------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------ |
-| `--cmark-ink` | `--color-neutral-900` · 14.62:1 **[c]** | `--color-neutral-900` · 13.06:1 on paper-deep **[c]** | `--color-white` · 17.26:1 on neutral-950 **[c]** | `--color-white` · 6.23:1 on brandeis-500 **[c]** |
+| Token         | paper                                  | tint                                                 | ink                                                    | blue                                                    |
+| ------------- | -------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------- |
+| `--cmark-ink` | `--color-neutral-600` · 4.92:1 **[c]** | `--color-neutral-600` · 4.39:1 on paper-deep **[c]** | `--color-neutral-300` · 11.07:1 on neutral-950 **[c]** | `--color-brandeis-200` · 3.78:1 on brandeis-500 **[c]** |
 
-Logotypes are exempt from SC 1.4.3, and SC 1.4.11 does not apply to a logo; the ratios are
-recorded, not floors.
+**Amended 29 Sep 2026 (tracker 2.17, owner).** The ink was the ground's full ink — neutral-900
+(14.62 / 13.06:1) and white (17.26 / 6.23:1). At that ink a strip of nine marks is nine
+near-black shapes at the section heading's colour, and it competes with the heading for the first
+read. It now steps down once on every surface, so the strip sits under its heading. Still **one
+solid colour per strip**: a ramp step, never an opacity of the mark.
 
-- **paper, tint:** ch05 §10 verbatim ("neutral-900 on paper and paper-deep").
-- **ink:** ch05 §10 verbatim ("white on ink").
-- **blue:** ch05 §10 names no value for blue. "The ground's ink" there is white (`--sec-ink`), and
-  ch02 puts our own wordmark "white throughout" on blue. Never a blue step: a mark in blue on blue
-  is a tint, which §10 bans. §17 Q2.
+Logotypes are exempt from SC 1.4.3, and SC 1.4.11 does not apply to a logo, so WCAG sets no
+floor. The component holds itself to **3:1** (1.4.11's non-text figure) on every surface anyway:
+below it a mark stops being legible as a name, which is its whole job.
+
+- **paper, tint:** neutral-600 on both, as ch05 names one ink for paper and paper-deep. It is
+  `--sec-ink-muted`'s step on paper.
+- **ink:** neutral-300 — visibly quieter than white, far clear of the floor.
+- **blue:** brandeis-200, **chosen by measurement** against brandeis-500: 50 is 5.57:1 and 100 is
+  4.91:1, and both read as white beside white at strip size; 300 is 2.64:1, under the floor; 200
+  is 3.78:1 and reads as a quieter white. A neutral grey was rejected: grey on brand blue reads as
+  dirt, not as a quieter white. It is a pale tint of the ground, not a brand-blue mark on brand
+  blue, so it is not the tint ch05 §10 rules out. §17 Q2.
+- **ch05 §10 still names the full inks.** This amendment supersedes it on the website on the
+  owner's ruling; the chapter needs the same edit at its next revision. §17 Q9.
 
 **Why a token and not `currentColor`.** Inside a link to a case study, `currentColor` is link blue,
 which recolours the client's mark in our brand colour. The token keeps it the ground's ink. It
@@ -141,7 +154,14 @@ neutral-900 marks (specimen, last band).
 ## 7 · Geometry & spacing
 
 **(a) Distances.** None. The mark owns no gap and sets no margin. The strip's gap is the
-Cluster's (`colGap` / `rowGap` = `block`, the Cluster's ceiling; §17 Q5).
+container's — the Cluster's or the Layout's, `colGap` / `rowGap` = `stack` (48) either way
+(§10, §17 Q5).
+
+**Never wider than its box.** `max-inline-size: 100%` (2.17). In a Cluster the box is the mark's
+own `li`, so it does nothing; in equal grid cells at the 326 column (two tracks, ~139 wide) it
+stops a 160-wide mark spilling out of its track. The `block-size` does not follow, on purpose: the
+mask is `contain`, so the artwork shrinks to the width and letterboxes in a box a few px taller —
+the designed failure mode, never a crop or a stretch.
 
 **(b) Component sizes** (explicit names, literals in the token file with their measurement):
 
@@ -206,6 +226,51 @@ needs the link to meet 24 × 24, which a 12:1 mark (13 tall) does not on its own
 The Cluster provides the inline axis and both seams; `align="center"` sets the marks on a common
 centre line. No hand-rolled flex, no margins on the marks, nothing overriding Section.
 
+### Equal cells — the recommended composition for a set of known size (29 Sep 2026, 2.17)
+
+A Cluster packs marks by their own widths, so the last row takes whatever is left: the nine-mark
+set leaves **7 + 2 at 1440 and one mark alone at 390**. When the count is known, give each mark an
+equal cell in a `Layout` and choose a count the columns divide:
+
+```tsx
+<Layout as="ul" columns={{ base: 2, lg: 4 }} colGap="stack" rowGap="stack" align="center">
+  {clients.map((c) => (
+    <li key={c.name}>
+      <ClientMark
+        src={c.logo}
+        name={c.name}
+        width={c.w}
+        height={c.h}
+        correction={c.correction}
+      />
+    </li>
+  ))}
+</Layout>
+```
+
+- **Counts that fill every row.** `{ base: 2, lg: 4 }` takes **4, 8 or 12**; `{ base: 2, md: 3 }`
+  takes **6 or 12**. Nine fills no two-track grid, so a nine-client set is trimmed to 8 or grown
+  to 12 — which mark waits is a content decision, not the layout's.
+- **Why not more tracks, sooner.** Tracks narrower than the widest mark (160) shrink it: four
+  tracks at md (704 column) are ~140, and eight at 1240 are ~113. Two tracks at the 326 column
+  (~139) shrink only LatitudePay, by `max-inline-size` (§7).
+- **`justifyItems` stays at stretch**, so each `li` fills its track and each mark sits at its
+  cell's start edge: the first column lines up with the section heading, and every column starts
+  on a track line. A centred `li` sizes to the mark and a mark wider than its cell would spill.
+- **Still not a component.** It is `ClientMark` × n in a `Layout`, exactly as the Cluster strip is
+  `ClientMark` × n in a `Cluster`. A `ClientStrip` would own one of two arrangements and hide the
+  count decision, which is the whole point.
+
+**Which to use when:**
+
+| Use                     | When                                                                                                                                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Layout, equal cells** | The default for a strip or client wall whose count is known when the page is composed. Pick a count from the list above so no row is part-full at any width.                               |
+| **Cluster**             | The count is not the page's to choose (a CMS list of any length), or the set is short enough to sit on one row at every width (≤ 2 marks at 326; ≤ 7 at 1240). Orphans are accepted there. |
+
+Specimen: "Equal cells — a set that fills its rows", beside the Cluster strip, and "The 326
+column, equal cells". Every surface band renders the Layout under a section heading.
+
 ---
 
 ## 11 · Accessibility
@@ -238,8 +303,9 @@ centre line. No hand-rolled flex, no margins on the marks, nothing overriding Se
 | Square / tall                 | Height cap 40; reads a little lighter than wordmarks, as ch05 orders (area, then caps).                                                                                                                                                                                                             |
 | Zero marks                    | The caller renders no strip.                                                                                                                                                                                                                                                                        |
 | One mark                      | Same size and ink as in a set (specimen "A lone mark").                                                                                                                                                                                                                                             |
-| Many marks (2×)               | The Cluster wraps.                                                                                                                                                                                                                                                                                  |
-| Narrow track (326)            | Wraps into rows (specimen).                                                                                                                                                                                                                                                                         |
+| Many marks (2×)               | The Cluster wraps; in a Layout, pick a count the columns divide (§10).                                                                                                                                                                                                                              |
+| Narrow track (326)            | Cluster: wraps into rows. Layout `{ base: 2 }`: ~139 cells, a wider mark shrinks to its cell and letterboxes (§7). Both in the specimen.                                                                                                                                                            |
+| Hairline / letter-spaced mark | A recorded `correction`. LatitudePay (7.4:1, hairline spaced capitals) carries **+0.05**, judged by eye at 1440 and 390; it is also the most that takes effect under the 160 width cap (§17 Q10).                                                                                                   |
 | Parent that does not size it  | Content-sized in flex and grid (`flex: none`, `justify-self: start`); `block-size` stated so `align="stretch"` cannot stretch it.                                                                                                                                                                   |
 | Logical properties            | `inline-size` / `block-size`.                                                                                                                                                                                                                                                                       |
 | Nested surface                | Takes the nearest `data-surface` (§6).                                                                                                                                                                                                                                                              |
@@ -256,7 +322,8 @@ None. ch05 §10: never animated. No transition, no hover colour change, no marqu
 
 ## 14 · Do's and Don'ts
 
-- **Do** put marks in a set in a `Cluster` (`as="ul"`, each in an `li`).
+- **Do** put a set of known size in equal cells — a `Layout` (`as="ul"`, each in an `li`) with a
+  count the columns divide; use a `Cluster` when the count is not yours to choose (§10).
 - **Do** pass the viewBox width and height as `width` / `height`.
 - **Do** record a correction beside the asset, and only for unusually heavy or light strokes.
 - **Don't** set `margin`, `padding`, `background`, `border`, `box-shadow`, `border-radius` or
@@ -275,7 +342,9 @@ None. ch05 §10: never animated. No transition, no hover colour change, no marqu
 heavy −10%, hairline +12%); the arithmetic per mark with computed sizes; the correction with and
 without, and a clamped 0.4; the width cap (12:1); a lone mark; marks inside links; a 404 src
 between two marks, outlined; the 326 column; paper, tint, ink and blue bands with identical markup;
-a tint band nested in ink. The strip is the real client set (`public/clients/*.svg`, nine
+a tint band nested in ink. Added 29 Sep 2026 (2.17): equal cells in a `Layout` beside the Cluster
+strip, the same at the 326 column, and a section heading above the marks on every surface band, so
+the stepped-down ink is judged against the thing it must not compete with. The strip is the real client set (`public/clients/*.svg`, nine
 wordmarks from the previous site's logo wall); the shapes it lacks (square, stacked, 12:1, heavy,
 hairline) are fictional stress files (`public/design/client-mark-*.svg`, drawn black). Blueghost
 and Rudo are held back: their files paint knock-outs white (§14). Forced colours is checked by emulation, not on the page.
@@ -291,7 +360,7 @@ Added in `src/styles/tokens/components/client-mark.css`, registered in `tokens/i
 --cmark-height-max    40px          geometry, :root (P2)
 --cmark-width-max     160px         geometry, :root
 --cmark-ink-forced    CanvasText    forced colours, :root
---cmark-ink           per surface   neutral-900 · neutral-900 · white · white
+--cmark-ink           per surface   neutral-600 · neutral-600 · neutral-300 · brandeis-200   (2.17; was 900 · 900 · white · white)
 ```
 
 ---
@@ -302,8 +371,10 @@ All non-blocking. Each records the choice built.
 
 1. **Status word.** The brief asked for `approved`; the lifecycle is `draft | accepted |
 implemented`. Built, so `implemented`, with the acceptance cited. **non-blocking**
-2. **Ink on blue.** ch05 §10 names paper, paper-deep and ink only. _Built:_ white, the ground's ink
-   there and ch02's wordmark rule. _Alternative:_ forbid marks on blue. **non-blocking**
+2. **Ink on blue.** ch05 §10 names paper, paper-deep and ink only. _Built (28 Sep):_ white.
+   _Rebuilt (29 Sep, 2.17):_ brandeis-200, 3.78:1 — the quieter-than-white step that still clears
+   3:1 (measured against 50, 100 and 300 in §6). _Alternative:_ forbid marks on blue.
+   **non-blocking**
 3. **Correction vs caps.** _Built:_ correction applies to the fitted size and the caps apply again,
    so P2's 40px cap is absolute. _Alternative:_ correction after the caps (a +15% capped mark
    reaches 46). **non-blocking**
@@ -321,6 +392,14 @@ implemented`. Built, so `implemented`, with the acceptance cited. **non-blocking
 8. **Test asset location.** The brief said `public/design-assets/`; the repo's specimen assets live
    in `public/design/`. _Built:_ stress marks in `public/design/client-mark-*.svg`; real client files in
    `public/clients/`, since a page will place them too. **non-blocking**
+9. **ch05 §10 names the full inks.** It still says "neutral-900 on paper and paper-deep,
+   white on ink". _Built (2.17, owner):_ one step quieter (§6). The chapter needs the same
+   amendment at its next revision, or the two disagree. **non-blocking** — flagged to the owner.
+10. **LatitudePay's correction and the width cap.** _Built:_ +0.05. Its fitted width is 152, and
+    the caps apply again after the correction (Q3), so the most any upward correction can do is
+    160 (+0.053). It still reads a little lighter than its neighbours after that: the rest is the
+    file's hairline, spaced capitals, which a size correction cannot reach. _Alternative:_ raise
+    the width cap, which changes every wide mark — not approved. **non-blocking**
 
 ---
 
@@ -331,7 +410,7 @@ implemented`. Built, so `implemented`, with the acceptance cited. **non-blocking
 | Sections 0–17 present       | 18 of 18                                                            |
 | Tokens named                | 1 surface-dependent (`--cmark-ink`, 4 of 4 surfaces) + 4 in `:root` |
 | Colour cells                | 4 of 4 with an existing `--color-*`; 0 blank; 0 deltas              |
-| Contrast figures            | 4, recorded (logotype exemption)                                    |
+| Contrast figures            | 4, recorded; all ≥ 3:1 (logotype exemption, self-imposed floor)     |
 | Distances off the gap scale | 0 (owns no gap)                                                     |
 | `--space-*` reaches         | 0                                                                   |
 | Type roles                  | 0                                                                   |
