@@ -5,9 +5,9 @@
    states no distance and no colour.
 
    The letterforms and the bar are separated into two classes rather than one element with an
-   override, because they answer different questions: the letterforms are TEXT and follow the ink
-   of wherever they land, while the bar is the one piece of brand colour in the mark and is
-   remapped per surface. */
+   override, because they answer different questions: the letterforms are always the wordmark's
+   ink, while the bar is the one element that can carry brand colour, at marketing scale on a
+   light ground. */
 .logo {
   /* Kills the inline baseline gap. An inline SVG reserves descender space below itself, which
      leaves the mark sitting a couple of pixels high in an otherwise centred bar row — the same
@@ -38,20 +38,22 @@
   height: var(--logo-height-lg);
 }
 
-/* The letterforms. `currentColor` is the whole colour model: the mark takes the ink of the surface
-   or the foreground of the link it sits in, and is therefore correct on all four surfaces with no
-   per-surface rule in this file. */
+/* The letterforms. --logo-ink, remapped per surface in the token layer: neutral-950 on the light
+   grounds and white on the dark ones, as ch02 names them. Not `currentColor` — the wordmark is a
+   fixed artwork per ground, and inheriting made it Section's neutral-900 on paper and a wrapping
+   link's colour on hover. Still no per-surface rule in this file. */
 .mark {
-  fill: currentColor;
+  fill: var(--logo-ink);
 }
 
-/* The bar above the "u" — brand colour, remapped per surface in the token layer. */
+/* variant="accent" — the bar above the "u" in brand colour, for the mark at marketing scale on a
+   light ground. Remapped per surface in the token layer, where the dark grounds take ink. */
 .bar {
   fill: var(--logo-bar);
 }
 
-/* variant="mono" — the bar joins the letterforms. For a surface that IS the accent, where an
-   accent bar has nothing to contrast against. */
+/* variant="mono", the default — the bar joins the letterforms, so the whole mark is one colour.
+   The chrome treatment ch02 asks for: neutral-950 on the light grounds, white on the dark ones. */
 .barMono {
-  fill: currentColor;
+  fill: var(--logo-ink);
 }

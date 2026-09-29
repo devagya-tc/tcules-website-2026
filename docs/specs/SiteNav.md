@@ -815,3 +815,27 @@ consumer away. Flagged, not implemented.
 **One more, smaller.** §10.2 asserts one `role="banner"` per route. True on every site route; the
 proving ground at `/design/site-nav` mounts eleven on purpose, because it is a measuring rig rather
 than a page. That was already true of the previous specimen and is stated in its own header.
+
+### 12.34 · The wordmark is mono in chrome, and the closed sheet is hidden, not just collapsed
+
+*29 Sep 2026 · tracker 2.17.*
+
+**The wordmark.** ch02 v1.0, "The wordmark on grounds": *"In UI chrome — nav, footer, favicon and
+anything at that size, where the blue thins out — the whole wordmark is neutral-950. On blue and on
+ink it is white throughout."* The bar's brandeis-500 is for the mark at marketing scale on paper, and
+peridot is "never in the wordmark". The bar renders `variant="mono"` — now the `Logo` default, and
+written explicitly here and in `SiteFooter` because in chrome it is a brand rule rather than a
+default. `logo.css` now carries the wordmark's colour outright as `--logo-ink` — neutral-950 on paper
+and tint, white on ink and blue — rather than letting the letterforms inherit `currentColor`, which
+had rendered them Section's neutral-900 on paper (a step off ch02) and is what let a wrapping link
+recolour the mark in §12.28. `--logo-bar` on ink and blue is white, replacing the brandeis-300 lift
+and the peridot-400 bar, so an `accent` on a dark ground renders white throughout too. There is no `Logo.md` or `SiteFooter.md`
+spec; the ruling is recorded here, in `logo.css` and in `Logo.tsx`.
+
+**The closed sheet.** Closed, `.sheet` is `block-size: 0` and `translateY(100%)` — 100% of zero is
+zero, so the transform moved nothing and the rows overflowed downward from the viewport's foot. Any
+capture taller than the viewport (and any page shorter than it) painted the grab handle and the
+sticky foot mid-page. The fix is `visibility: hidden` on the closed sheet, restored on `[data-open]`,
+with the visibility transition delayed by `--nav-sheet-surface` on close and undelayed on open — the
+`.stage` arrangement, so the slide still plays out both ways. Reduced motion zeroes the delay with
+the durations. Nothing else in the sheet's mechanics moved.

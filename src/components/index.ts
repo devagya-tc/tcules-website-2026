@@ -24,8 +24,8 @@
  * Logo is a third kind: a MARK. Not an Icon, and the line between them is no longer fill versus
  * stroke now that the glyph set is solid too — it is PROPORTION and OWNERSHIP OF COLOUR. An icon
  * is drawn on the system's own 24-unit box and takes currentColor entirely; the wordmark has its
- * own aspect ratio (675×177) and one element, the bar above the "u", that is painted from
- * --logo-bar rather than inherited. Neither of those survives being filed as a glyph.
+ * own aspect ratio (675×177) and paints itself from its own tokens (--logo-ink, --logo-bar)
+ * rather than inheriting, because ch02 names its colour per ground. Neither of those survives being filed as a glyph.
  *
  * Prose is neither. It is the rich-text flow — the one component that styles markup it did not
  * write, because a CMS body field arrives as a string. It is the documented exception to the
