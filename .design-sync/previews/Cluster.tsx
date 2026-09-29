@@ -38,7 +38,7 @@ export function Metadata() {
   return (
     <Cluster colGap="text" rowGap="tight">
       <Cluster colGap="inline">
-        <Icon name="check" size="sm" />
+        <Icon name="check-circle" />
         <span>Shipped 2026</span>
       </Cluster>
       <Cluster colGap="inline">
@@ -76,10 +76,10 @@ export function Justify() {
 export function NoWrap() {
   return (
     <Cluster colGap="tight" nowrap>
-      <Button iconOnly emphasis="ghost" tone="neutral" size="sm" icon={<Icon name="copy" />} aria-label="Copy" />
-      <Button iconOnly emphasis="ghost" tone="neutral" size="sm" icon={<Icon name="download" />} aria-label="Download" />
-      <Button iconOnly emphasis="ghost" tone="neutral" size="sm" icon={<Icon name="check" />} aria-label="Approve" />
-      <Button iconOnly emphasis="ghost" tone="neutral" size="sm" icon={<Icon name="close" />} aria-label="Dismiss" />
+      <Button iconOnly emphasis="ghost" tone="neutral" icon={<Icon name="copy" />} aria-label="Copy" />
+      <Button iconOnly emphasis="ghost" tone="neutral" icon={<Icon name="download" />} aria-label="Download" />
+      <Button iconOnly emphasis="ghost" tone="neutral" icon={<Icon name="check-circle" />} aria-label="Approve" />
+      <Button iconOnly emphasis="ghost" tone="neutral" icon={<Icon name="close-circle" />} aria-label="Dismiss" />
     </Cluster>
   );
 }

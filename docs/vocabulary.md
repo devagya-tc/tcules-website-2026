@@ -152,7 +152,7 @@ placeholder that never wraps.
 
 ### The glyph set — exactly these 14
 
-`arrow-left` · `arrow-right` · `check` · `chevron-down` · `chevron-right` · `close` · `close-circle` · `copy` · `danger-triangle` · `document-text` · `download` · `info-circle` · `menu` · `square-arrow-right-up`
+`alt-arrow-down` · `alt-arrow-right` · `alt-arrow-up` · `arrow-left` · `arrow-right` · `check-circle` · `close-circle` · `copy` · `danger-triangle` · `document-text` · `download` · `hamburger-menu` · `info-circle` · `square-arrow-right-up`
 
 Glyphs are **solid shapes** on a 24 box, filled in `currentColor` with counters cut through the
 mass (`fill-rule: evenodd`) so they show whatever is behind them. **No stroke** — there is no
@@ -191,7 +191,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px
 - **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
 - **table-of-contents.css** — `--toc-mono-tracking` 0.1em · `--toc-max-inline` 180px · `--toc-min-inline` 160px · `--toc-ordinal-inline` 24px · `--toc-entry-padding-block` 12px · `--toc-rule-width` 1px · `--toc-current-rule-width` 3px · `--toc-underline-width` 1px · `--toc-underline-width-pressed` 2px · `--toc-underline-offset` 2px · `--toc-entry-radius-focus` 4px · `--toc-ring-width` 2px · `--toc-ring-offset` 2px
-- **tag.css** — `--tag-size-md` 24px · `--tag-radius` 4px · `--tag-edge-width` 1px · `--tag-glyph-size` 14px · `--tag-ring-width` 2px · `--tag-ring-offset` 2px · `--tag-label-trim` 1px · `--tag-glyph-gap` 4px
+- **tag.css** — `--tag-size-md` 24px · `--tag-radius` 4px · `--tag-edge-width` 1px · `--tag-glyph-size` 16px · `--tag-ring-width` 2px · `--tag-ring-offset` 2px · `--tag-label-trim` 1px · `--tag-glyph-gap` 4px
 
 ### The three layout primitives — their real prop APIs
 

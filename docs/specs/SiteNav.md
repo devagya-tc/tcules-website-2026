@@ -125,9 +125,9 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `root` | `<header role="banner">` | sticky, `--nav-z`, surface scope |
 | `bar` | `Section as="div" flush` | `--nav-bar-height` (72 desktop, 64 compact), bottom hairline |
 | `brand` | `<a>` + `Logo` | home link; inert while the mobile sheet is open (§5) |
-| `items` | `<ul>` centred in the bar | `Button` per item — ghost + neutral + `sm`; megas take `icon={<Icon name="chevron-down"/>}`, `active`, `aria-expanded`; links render `as={Link}` with no icon |
+| `items` | `<ul>` centred in the bar | `Button` per item — ghost + neutral + `sm`; megas take `icon={<Icon name="alt-arrow-down"/>}`, `active`, `aria-expanded`; links render `as={Link}` with no icon |
 | `cta` | `Button` solid primary `sm` | right of the bar |
-| `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `menu` ↔ `close` |
+| `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `hamburger-menu` ↔ `close-circle` |
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
 | `pane` | one per mega section | 1056 / 780 / 560px wide; two label + link columns, plus the rail in Services |
 | `hubBar` | `Cluster` + `Button emphasis="link"` | the way through to the section index — Services and Insights only. Hairline above, `--gap-text` under it |
@@ -277,7 +277,7 @@ Recorded in §12.6.
    §6 names six distinct durations and two ramp steps cannot carry them, so the plate fade is
    derived (half the morph) and the two mobile surface values are component tokens. See §12.2.
 2. **Six icon glyphs — not added, not needed.** The settled shortlist drops the first-level
-   glyphs, so nothing renders them. `menu`, `close`, `chevron-down`, `chevron-right`,
+   glyphs, so nothing renders them. `hamburger-menu`, `close-circle`, `alt-arrow-down`, `alt-arrow-right`,
    `arrow-right` and `arrow-left` all already ship.
 3. **`--nav-item-bg-hover` stands.** Two hover languages accepted: bar items keep `Button`'s ghost
    fill, panel rows take direction B. A control and a row are different things and reading them

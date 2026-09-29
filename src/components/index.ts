@@ -63,7 +63,14 @@ export {
   type ButtonTone,
   type ButtonSize,
 } from './Button';
-export { Icon, iconNames, type IconProps, type IconName, type IconSize } from './Icon';
+export {
+  Icon,
+  hasCounter,
+  iconNames,
+  type IconProps,
+  type IconName,
+  type IconSize,
+} from './Icon';
 export { Input, type InputEmphasis, type InputProps } from './Input';
 export { Logo, type LogoProps, type LogoSize, type LogoVariant } from './Logo';
 export { Prose, type ProseProps } from './Prose';

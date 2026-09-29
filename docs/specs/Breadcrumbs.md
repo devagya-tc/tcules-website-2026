@@ -462,7 +462,7 @@ Nothing here is BLOCKING, which is what `Status: accepted` requires.
 > The reason this is not a blocking change to the component: `Breadcrumbs` renders no `Section` and never did. The band is the caller's, so (a), (b) and (c) all build the same component — the decision moves 128 call sites, not one line of this component.
 
 **2 · What the divider is drawn as. Resolved — non-blocking.**
-Options: a text solidus; `Icon name="chevron-right"`; a new glyph. **Recommendation: the text solidus**, aria-hidden. It is in the label's own face, so it aligns on the baseline and scales with the type for free; it needs no glyph request; and it does not imply a direction or a control, which a chevron does everywhere else in this system (`SiteNav` rows, `Button` icons). A chevron would also mean a `Cluster align="center"` and an icon-size decision for a 13px row.
+Options: a text solidus; `Icon name="alt-arrow-right"`; a new glyph. **Recommendation: the text solidus**, aria-hidden. It is in the label's own face, so it aligns on the baseline and scales with the type for free; it needs no glyph request; and it does not imply a direction or a control, which a chevron does everywhere else in this system (`SiteNav` rows, `Button` icons). A chevron would also mean a `Cluster align="center"` and an icon-size decision for a 13px row.
 
 > **Resolved: the text solidus**, U+002F, as recommended and as sections 2, 6 and 16 already specify. No glyph request, no change to the 17-glyph set.
 
@@ -542,7 +542,7 @@ NAMES
     --crumb-shadow and a z-index, each argued in section 7.
 [x] Every glyph I named is in the glyph set, or is a NEW GLYPH REQUEST describing a filled
     shape. I named no Icon glyph at all: the divider is U+002F text and the collapse mark is
-    U+2026 text. chevron-right is named once, in Q2, as the option NOT taken.
+    U+2026 text. alt-arrow-right is named once, in Q2, as the option NOT taken.
 [x] Every prop and every prop VALUE I gave for Section, Layout or Cluster appears in the prop
     unions: Section surface=paper|tint|ink|blue, density=tight, flush; Layout rowGap=block|
     stack, colGap=gutter, columns={[1,2]}|"tile", minTrack=sm; Cluster as, colGap=inline,

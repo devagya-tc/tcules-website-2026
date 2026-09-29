@@ -98,8 +98,10 @@ Two more rules that decide whether a composition is right:
 A button that navigates is an anchor: `as="a" href="…"`. It never sets its own outer spacing —
 put it in a `Cluster`.
 
-`Icon` — `name` is a 14-value union (`arrow-right`, `check`, `chevron-down`, `square-arrow-right-up`,
-`info-circle`, …; the full list is in `Icon.d.ts`). Decorative and `aria-hidden` by
+`Icon` — `name` is a 14-value union of Solar Bold glyphs under their ch04 names (`arrow-right`,
+`check-circle`, `alt-arrow-down`, `square-arrow-right-up`, `info-circle`, …; the full list is in
+`Icon.d.ts`). A glyph with a counter (a hole: `close-circle`, `check-circle`, `info-circle`, …) is
+never set below 16, so not at `size="sm"` and not in an `sm` Button. Decorative and `aria-hidden` by
 default; pass `label` only when the glyph carries meaning alone. Inside a Button the button
 decides the size.
 

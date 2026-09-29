@@ -15,7 +15,7 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
  *
  * `selected` IS a real prop and is printed on every surface, because the held chip is the one
  * state this component's argument turns on: an outline and a label both drawn in the surface's own
- * ink, plus a `close` glyph, and no fill anywhere but blue.
+ * ink, plus a `close-circle` glyph, and no fill anywhere but blue.
  */
 
 /* Eight labels spanning the measured range: 3 characters to 32, including both 31-character
@@ -67,7 +67,7 @@ const FILTER_GROUPS = [
   },
 ] as const;
 
-const CLEAR = <Icon name="close" label="Clear filter" />;
+const CLEAR = <Icon name="close-circle" label="Clear filter" />;
 
 /** A row of marks. The row is always a Cluster — the component owns no distance outside its box. */
 function Marks({ items }: { items: readonly string[] }) {
@@ -381,7 +381,7 @@ export default function TagSpecimenPage() {
 
           <Specimen
             title="6 · Missing optional slot — a chip with no glyph"
-            note="The empty case is the ordinary one: every chip but the held one passes no glyph. No reserved space, no placeholder box, no layout shift for the chips that never get one. The held chip beside it is 19px wider — 14 glyph, 4 gap, and the 1px label trim restored, because the trailing element is no longer a tracked capital."
+            note="The empty case is the ordinary one: every chip but the held one passes no glyph. No reserved space, no placeholder box, no layout shift for the chips that never get one. The held chip beside it is 21px wider — 16 glyph (the counter floor, Icon.md), 4 gap, and the 1px label trim restored, because the trailing element is no longer a tracked capital."
           >
             <Cluster colGap="text" rowGap="text">
               <Tag variant="filter" href={ROUTES.insights}>
@@ -486,7 +486,7 @@ export default function TagSpecimenPage() {
 
           <Specimen
             title="Measured boxes — the numbers the spec quotes, so they can be checked rather than believed"
-            note="These are the spec’s § 7(b) figures, and every box that produces them is on this page. Measure them in devtools; if a box disagrees with a number here, the spec is wrong and not the code. mark 3 chars 38.24 × 24.00 · mark 32 chars 229.88 × 24.00 · filter 8 chars 80.28 × 24.00 · filter 8 chars held 99.28 × 24.00 · filter 1 char 24.00 × 24.00 · filter 31 chars 267.96 × 24.00. Every height is 24, at every width, which is what the nowrap rule buys."
+            note="These are the spec’s § 7(b) figures, and every box that produces them is on this page. Measure them in devtools; if a box disagrees with a number here, the spec is wrong and not the code. mark 3 chars 38.24 × 24.00 · mark 32 chars 229.88 × 24.00 · filter 8 chars 80.28 × 24.00 · filter 8 chars held 101.28 × 24.00 · filter 1 char 24.00 × 24.00 · filter 31 chars 267.96 × 24.00. Every height is 24, at every width, which is what the nowrap rule buys."
           >
             <Cluster colGap="text" rowGap="text">
               <Tag>Lab</Tag>
