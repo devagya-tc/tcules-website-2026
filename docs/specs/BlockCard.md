@@ -1080,6 +1080,13 @@ drop the "Read the case study" line; a subtle image zoom; the listing descriptio
    it was designed for, and the overlay doubles as the content team's worked example. Other page
    types get the same pair — a template and an ideal overlay — as they are built.
 
+9. **One media ratio, 3:2, in both orientations** (owner, 29 Sep). `--bcrd-media-ratio-vertical` and
+   `-horizontal` collapse to `--bcrd-media-ratio` (→ `--ratio-cover`), and `.imageMediaHorizontal` is
+   gone. The row's 4:3 existed to match a tall copy column; one-line copy no longer needs it, and one
+   crop means a cover reads alike in the featured row and the tile. It supersedes the 4:3 rows in
+   sections 2, 4 and 7 and the amendment-4 inset arithmetic for the row.
+10. **The fill crop is anchored at `0 20%`**, not the centre (Media's `--media-fill-position`).
+
 Specimen: band 21 (the case-study card at the corpus's extremes, the 87-character title at 326, no
 eyebrow);
 bands 6, 8 and 12 re-captioned for the rule, the cta rule and the new states.

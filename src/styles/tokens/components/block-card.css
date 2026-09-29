@@ -3,7 +3,7 @@
    whole-card link — carrying a read-more cue when it has no cover.
 
    Naming: --bcrd-{part}-{role}-{state}, with an orientation suffix where the horizontal row
-   differs from the tile (--bcrd-media-ratio-horizontal, --bcrd-title-text-horizontal)
+   differs from the tile (--bcrd-title-text-horizontal)
      parts: title | body | eyebrow | media | ring
      states: none. No colour moves on the card; the cover zoom is geometry, and the text-only cta's
      steps are Button's.
@@ -41,22 +41,19 @@
   --bcrd-title-tracking: var(--text-h4-tracking);
   --bcrd-body-text: var(--text-body);
   /* The horizontal row — the featured card — steps its title up one role. A row spanning the
-     column beside a 4:3 image is a heavier object than a 286px tile, and weight comes from type
+     column beside its image is a heavier object than a 286px tile, and weight comes from type
      scale, not from a box (ruling C2). h3 re-declares itself at 1023 and 767 like every title role. */
   --bcrd-title-text-horizontal: var(--text-h3);
   --bcrd-title-tracking-horizontal: var(--text-h3-tracking);
   --bcrd-eyebrow-text: var(--text-eyebrow);
   --bcrd-eyebrow-tracking: var(--text-eyebrow-tracking);
 
-  /* One ratio per orientation, and both are named, because neither is the fallback for the other.
-     A vertical tile in a 286px four-across track wants the wider 3:2 crop so the image does not
-     dominate the copy beneath it; a horizontal tile owns half the card's inline size, where 3:2
-     would leave the media column shorter than the copy beside it and 4:3 matches its height.
-     The vertical crop is the shared cover ratio: ListCard's thumbnail crops the same cover
-     asset, so both alias --ratio-cover (primitives.css § Media · ratio). The horizontal crop has
-     one reader and stays here. */
-  --bcrd-media-ratio-vertical: var(--ratio-cover);
-  --bcrd-media-ratio-horizontal: 4 / 3;
+  /* One ratio for both orientations: the shared cover ratio, 3:2 (owner, 29 Sep). The row had its
+     own 4:3 so the media column matched the copy's height; with one-line descriptions the copy is
+     short and centred against the image, and one crop means a cover is authored once and reads the
+     same in the featured row as in the tile below it. ListCard's thumbnail crops the same asset,
+     so all three alias --ratio-cover (primitives.css § Media · ratio). */
+  --bcrd-media-ratio: var(--ratio-cover);
 
   --bcrd-media-rule-width: var(--border-width-hairline);
   /* 1.03 reads as the image leaning in, not as a zoom control: at a 392px tile it moves each edge

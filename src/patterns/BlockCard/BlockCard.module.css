@@ -62,7 +62,7 @@
 .imageMedia {
   display: block;
   inline-size: 100%;
-  aspect-ratio: var(--bcrd-media-ratio-vertical);
+  aspect-ratio: var(--bcrd-media-ratio);
   overflow: hidden;
   border: var(--bcrd-media-rule-width) solid var(--bcrd-media-rule-ink);
   border-radius: var(--bcrd-radius);
@@ -75,13 +75,6 @@
   display: block;
   block-size: 100%;
   transition: transform var(--bcrd-media-zoom-duration) var(--bcrd-media-zoom-easing);
-}
-
-/* The one orientation difference below the frame. It is a class on the media element rather than a
-   `.horizontal .imageMedia` descendant rule so the two ratios have equal specificity and neither
-   can win by nesting. */
-.imageMediaHorizontal {
-  aspect-ratio: var(--bcrd-media-ratio-horizontal);
 }
 
 /* The quiet label above the title. Uppercase is not this component's decision: mono is always
@@ -105,7 +98,7 @@
 }
 
 /* The horizontal arrangement's title role. A class beside .title rather than a descendant rule, for
-   the same equal-specificity reason as .imageMediaHorizontal; it comes after .title so it wins. */
+   an equal-specificity reason; it comes after .title so it wins. */
 .titleHorizontal {
   font: var(--bcrd-title-text-horizontal);
   letter-spacing: var(--bcrd-title-tracking-horizontal);

@@ -519,10 +519,9 @@ export default function BlockCardSpecimenPage() {
           <BandHead title="2 · Cover-image sets (ruling C1)">
             Case studies carry their cover, and so does every insight or resource that has one —
             articles, videos, podcasts. The image goes through <code>Media</code> with{' '}
-            <code>fit=&quot;fill&quot;</code> inside the card&rsquo;s own ratio box: 3:2 in a
-            tile (<code>--ratio-cover</code>), 4:3 in the featured row. Media draws the edge by
-            kind, so a cut-out and an illustration are unboxed and only a capture keeps its
-            hairline.
+            <code>fit=&quot;fill&quot;</code> inside the card&rsquo;s own ratio box: 3:2 (
+            <code>--ratio-cover</code>) in the tile and the featured row alike. The box draws
+            one hairline round every kind; Media draws none of its own inside a card.
           </BandHead>
           <Specimen
             title="3 case studies · three from lg"
@@ -538,7 +537,7 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
           <Specimen
             title="4 case studies · the first featured"
-            note="The featured card is media beside copy, the cover at 4:3 in half the row, the title stepped to h3. Its image reads the two-track sizes value; the three peers read the three-track one."
+            note="The featured card is media beside copy, the cover at 3:2 in half the row, the title stepped to h3. Its image reads the two-track sizes value; the three peers read the three-track one."
           >
             <BlockCardSet items={CASE_STUDIES.slice(0, 4)} />
           </Specimen>
@@ -836,7 +835,7 @@ export default function BlockCardSpecimenPage() {
           <BandHead title="9 · Orientation">
             One anatomy, two arrangements, and a presentation prop rather than a CMS field.
             Vertical fills a grid track. Horizontal takes two equal tracks from md and steps the
-            title to h3: media beside copy at 4:3 when there is a cover, head beside body when
+            title to h3: media beside copy at 3:2 when there is a cover, head beside body when
             there is not. <code>imageSide</code> is set per card — there is no alternation logic
             inside the component, because a card that alternated would have to know its index.
           </BandHead>
@@ -882,8 +881,8 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="Media ratio · 3:2 vertical against 4:3 horizontal"
-            note="Inspect the two wrappers' computed aspect-ratio. Both ratios are named tokens; neither is a fallback for the other."
+            title="Media ratio · 3:2 in both orientations"
+            note="Inspect the wrappers' computed aspect-ratio: one token, --bcrd-media-ratio, aliasing --ratio-cover, for the tile and the row (29 Sep)."
           >
             <Layout rowGap="stack">
               <Cards columns={{ base: 1, md: 2 }}>
@@ -905,9 +904,9 @@ export default function BlockCardSpecimenPage() {
               <Rows>
                 <BlockCard
                   orientation="horizontal"
-                  eyebrow="Horizontal · 4:3"
+                  eyebrow="Horizontal · 3:2"
                   title="The row crop"
-                  body="Taller, so the media column is not left shorter than the copy beside it."
+                  body="The same crop as the tile, so one cover reads alike in both."
                   media={cover(COVER_FLOW)}
                   href={ROUTES.caseStudies}
                 />

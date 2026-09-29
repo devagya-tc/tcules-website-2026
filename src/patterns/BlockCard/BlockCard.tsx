@@ -43,7 +43,7 @@ export type BlockCardTitleElement = 'h3' | 'h4';
  *
  *   vertical    the grid tile: media above copy, filling one track of a multi-column Layout.
  *   horizontal  the row: two equal tracks from md, 64 apart. With an image, media beside copy at
- *               4:3. Without one, the copy splits instead — eyebrow and title in the first track,
+ *               3:2, the tile's own crop. Without one, the copy splits instead — eyebrow and title in the first track,
  *               body and cta in the second — so a text-only row is a head beside its body rather
  *               than a single column with an empty half. Either way the title steps up to the h3
  *               role, because a row spanning the column carries more weight than a tile. This is
@@ -77,14 +77,11 @@ const DEFAULT_CTA_LABEL = 'Read more';
 
 /**
  * The attributes a record with no intrinsic size is given: the proportions of the box it fills,
- * restating --bcrd-media-ratio-vertical (--ratio-cover, 3/2) and --bcrd-media-ratio-horizontal
- * (4/3) by hand, because TypeScript cannot read a custom property. They never lay anything out —
- * `fill` sizes the image to the box — so they are a well-formed pair, not a measurement.
+ * restating --bcrd-media-ratio (--ratio-cover, 3/2) by hand, because TypeScript cannot read a
+ * custom property. They never lay anything out — `fill` sizes the image to the box — so they are a
+ * well-formed pair, not a measurement.
  */
-const FILL_BOX = {
-  vertical: { width: 3, height: 2 },
-  horizontal: { width: 4, height: 3 },
-} as const;
+const FILL_BOX = { width: 3, height: 2 } as const;
 
 /**
  * A closed card record. Grid geometry, surface and action rendering all stay outside the public
@@ -136,25 +133,18 @@ function warn(message: string) {
 }
 
 /** The record `Media` receives: the caller's, with the box's proportions where it had none. */
-function mediaRecord(image: BlockCardImage, box: keyof typeof FILL_BOX): MediaImage {
+function mediaRecord(image: BlockCardImage): MediaImage {
   if (image.width && image.height) {
     return { ...image, width: image.width, height: image.height };
   }
-  return { ...image, ...FILL_BOX[box], sources: undefined };
+  return { ...image, ...FILL_BOX, sources: undefined };
 }
 
-function ImageMedia({
-  image,
-  horizontal,
-  sizes,
-}: {
-  image: BlockCardImage;
-  horizontal: boolean;
-  sizes: string;
-}) {
+function ImageMedia({ image, sizes }: { image: BlockCardImage; sizes: string }) {
   return (
-    /* The card owns the ratio box and Media fills it: `fit="fill"` is a cover crop (anchored top-left, Media's) of a box
-       the parent has already sized, which is exactly what this wrapper is.
+    /* The card owns the ratio box and Media fills it: `fit="fill"` is a cover crop, anchored where
+       Media anchors it, of a box the parent has already sized — which is what this wrapper is. One
+       ratio in both orientations (3:2, 29 Sep), so a cover crops alike in the row and the tile.
 
        The box also owns the EDGE, for every kind (29 Sep, ch05 amendment 5a). A card crops every
        asset mechanically to its own ratio, so the boundary is a cut the card made, not the
@@ -164,14 +154,9 @@ function ImageMedia({
        The inner span is what zooms. It scales inside the box, so the ruled edge never moves and
        the overflow is clipped at it; scaling the <img> itself would reach into Media's element.
        Lazy is Media's default: a card is never the page's LCP. */
-    <span className={cx(styles.imageMedia, horizontal && styles.imageMediaHorizontal)}>
+    <span className={styles.imageMedia}>
       <span className={styles.imageZoom}>
-        <Media
-          image={mediaRecord(image, horizontal ? 'horizontal' : 'vertical')}
-          sizes={sizes}
-          fit="fill"
-          edge="placement"
-        />
+        <Media image={mediaRecord(image)} sizes={sizes} fit="fill" edge="placement" />
       </span>
     </span>
   );
@@ -228,7 +213,6 @@ export function BlockCard({
   const imageNode = hasImage ? (
     <ImageMedia
       image={image}
-      horizontal={horizontal}
       sizes={horizontal || tracks === 2 ? CARD_TWO_TRACKS : CARD_THREE_TRACKS}
     />
   ) : null;
