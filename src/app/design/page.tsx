@@ -33,7 +33,7 @@ const SPECIMENS = [
       {
         href: '/design/layout',
         name: 'Layout',
-        note: 'columnar axis — tracks and the two seams',
+        note: 'columnar axis — tracks, the two seams and a leading item',
       },
       { href: '/design/cluster', name: 'Cluster', note: 'inline axis — wrapping rows' },
       {
@@ -115,7 +115,7 @@ const SPECIMENS = [
       {
         href: '/design/block-card',
         name: 'BlockCard',
-        note: 'the bounded tile — 3 media fills, responsive grids, linked states, 4 surfaces',
+        note: 'the borderless card — cover media via Media, text-only sets, the featured set, 4 surfaces',
       },
       {
         href: '/design/accordion',
@@ -135,7 +135,7 @@ const SPECIMENS = [
       {
         href: '/design/figure',
         name: 'Figure',
-        note: 'the captioned image — slot ladder, 3 intrinsic ratios uncropped, the empty state, 4 surfaces',
+        note: 'the captioned image — slot ladder, 3 intrinsic ratios uncropped, the empty state, 4 surfaces, a row per Media kind',
       },
       {
         href: '/design/data-table',
@@ -145,7 +145,7 @@ const SPECIMENS = [
       {
         href: '/design/page-hero',
         name: 'PageHero',
-        note: 'the page opening — slot ladder, paragraph ladder, byline shapes, 4 surfaces, its own band',
+        note: 'the page opening — stacked · beside × every media kind, CU04 budgets, slot and paragraph ladders, 4 surfaces, 326',
       },
       {
         href: '/design/site-nav',

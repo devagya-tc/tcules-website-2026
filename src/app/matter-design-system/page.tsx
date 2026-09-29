@@ -4,9 +4,22 @@ import { notFound } from 'next/navigation';
 import { Cluster, Layout, Section } from '@/components';
 import { getMatterDesignSystemPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { BlockCard, Breadcrumbs, CtaSection, Figure, PageHero } from '@/patterns';
+import {
+  BlockCard,
+  Breadcrumbs,
+  CtaSection,
+  Figure,
+  PageHero,
+  type BlockCardImage,
+  type BlockCardMedia,
+} from '@/patterns';
 
 const MATTER_DESIGN_SYSTEM_SLUG = ROUTES.matterDesignSystem.slice(1);
+
+/** A card's image, or its uploaded icon when it has none, as BlockCard media. */
+function cardMedia(image: BlockCardImage | undefined): BlockCardMedia | undefined {
+  return image ? { type: 'image', image } : undefined;
+}
 
 function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
   return JSON.stringify(data).replaceAll('<', '\\u003c');
@@ -61,13 +74,7 @@ export default async function MatterDesignSystemPage() {
     ? ([{ label: page.hero.action.label, href: page.hero.action.href }] as const)
     : ([] as const);
   const heroMedia = page.hero.image
-    ? {
-        kind: 'image' as const,
-        src: page.hero.image.src,
-        alt: page.hero.image.alt,
-        width: page.hero.image.width,
-        height: page.hero.image.height,
-      }
+    ? { type: 'image' as const, image: page.hero.image }
     : undefined;
 
   return (
@@ -129,15 +136,7 @@ export default async function MatterDesignSystemPage() {
                     key={card.id}
                     title={card.title}
                     body={card.body}
-                    media={
-                      card.image || card.icon
-                        ? {
-                            kind: 'image',
-                            src: (card.image || card.icon)?.src || '',
-                            alt: (card.image || card.icon)?.alt || '',
-                          }
-                        : undefined
-                    }
+                    media={cardMedia(card.image || card.icon)}
                     href={card.action?.href}
                     ctaLabel={card.action?.label}
                   />
@@ -170,15 +169,7 @@ export default async function MatterDesignSystemPage() {
                     key={card.id}
                     title={card.title}
                     body={card.body}
-                    media={
-                      card.image || card.icon
-                        ? {
-                            kind: 'image',
-                            src: (card.image || card.icon)?.src || '',
-                            alt: (card.image || card.icon)?.alt || '',
-                          }
-                        : undefined
-                    }
+                    media={cardMedia(card.image || card.icon)}
                     href={card.action?.href}
                     ctaLabel={card.action?.label}
                   />
@@ -299,15 +290,7 @@ export default async function MatterDesignSystemPage() {
                     key={card.id}
                     title={card.title}
                     body={card.body}
-                    media={
-                      card.image || card.icon
-                        ? {
-                            kind: 'image',
-                            src: (card.image || card.icon)?.src || '',
-                            alt: (card.image || card.icon)?.alt || '',
-                          }
-                        : undefined
-                    }
+                    media={cardMedia(card.image || card.icon)}
                     href={card.action?.href}
                     ctaLabel={card.action?.label}
                   />

@@ -9,7 +9,7 @@
 | **Status**          | implemented                                                                                                            |
 | **Token prefix**    | `--lcrd-*`                                                                                                             |
 | **Designer / date** | Codex / 21 Aug 2026                                                                                                    |
-| **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug |
+| **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug. **Phase 2 task 2.11 / 28 Sep 2026** — the thumbnail moves onto `Media` (`fit="fill"`, `LIST_CARD_THUMBNAIL`, lazy); the marker union discriminates on `type`; `external` takes ch04's `square-arrow-right-up` and a visually hidden new-tab hint; the ordered set is confirmed as a real `ol`; contact cards lose their icon thumbnails (C1). Rulings: `docs/phase-2-decisions.md` C1, M1–M4 |
 | **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
 | **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
 
@@ -42,11 +42,11 @@ parent list.
 | --------- | ---------------: | -------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `root`    |              yes | One `li`; the only legal outer element                                           | Full available inline size; no colour of its own                  |
 | `frame`   |              yes | An `a` when `href` is present, otherwise an inert `div`                          | Row inset, focus ring and interactive state boundary              |
-| `marker`  |               no | One slot filled by a formatted number, an `Icon`, or one thumbnail media element | `--lcrd-marker-ink` for the icon fill, `--lcrd-number-ink` for the number; fill-specific geometry |
+| `marker`  |               no | One slot filled by a formatted number, an `Icon`, or one `Media` in `fit="fill"` | `--lcrd-marker-ink` for the icon fill, `--lcrd-number-ink` for the number; the thumbnail BOX (`--lcrd-thumbnail-*`) — never the image's edge, which is Media's by kind |
 | `content` |              yes | The group containing `title` and `body`                                          | `split` or `stacked` arrangement; no colour of its own            |
 | `title`   |              yes | A `span`, `h3` or `h4`, selected by `titleAs`                                    | `--lcrd-title-ink`, linked or not                                 |
 | `body`    |   yes in the API | One paragraph; whitespace-only content emits no element                          | `--lcrd-body-ink` and `--measure-body`                            |
-| `cue`     | linked rows only | `Icon name="arrow-right" size="lg"`, hidden from assistive technology            | The row's only link ink, and the row's only state                 |
+| `cue`     | linked rows only | `Icon name="arrow-right" size="lg"`, or `square-arrow-right-up` when `external`, hidden from assistive technology; an external row adds a visually hidden "(opens in a new tab)" | The row's only link ink, and the row's only state                 |
 | `rule`    |              yes | The root's block-end hairline                                                    | `--lcrd-rule-ink`; one width and one colour in every state         |
 | `ground`  | linked rows only | No element of its own — the frame's own background, painted only under a pointer  | `--lcrd-ground-hover`, `--lcrd-ground-pressed`                    |
 
@@ -83,14 +83,27 @@ element and the `--gap-block` seam beside it.
 | ------------- | -------------------------------------------------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------- |
 | `title`       | `string`                                                                                                                   | required  | The row's primary label                                                            |
 | `body`        | `string`                                                                                                                   | required  | The one explanatory paragraph                                                      |
-| `marker`      | `{ kind: 'number'; value: number } \| { kind: 'icon'; name: IconName } \| { kind: 'thumbnail'; src: string; alt: string }` | absent    | Which one fill occupies the marker slot; `IconName` is the existing 17-glyph union |
+| `marker`      | `{ type: 'number'; value: number } \| { type: 'icon'; name: IconName } \| { type: 'thumbnail'; image: MediaImage }` | absent    | Which one fill occupies the marker slot; `IconName` is Icon's glyph union, `MediaImage` is Media's record |
 | `arrangement` | `'split' \| 'stacked'`                                                                                                     | `'split'` | Whether title and body are two tracks from `md`, or one stack at every width       |
 | `titleAs`     | `'span' \| 'h3' \| 'h4'`                                                                                                   | `'span'`  | Heading semantics only; visual type does not change                                |
 | `href`        | `string`                                                                                                                   | absent    | A non-blank value makes the whole frame one anchor and causes the cue to render    |
+| `external`    | `boolean`                                                                                                                  | `false`   | The destination leaves tcules.com: new tab, the "leaves the site" cue glyph and the hidden new-tab hint. Ignored without a destination |
 
-The thumbnail member makes ListCard responsible for the native image element, crop, intrinsic
-dimensions and empty-source handling. `alt` is required even when its correct value is the empty
-string, so every call site must make the decorative-versus-informative decision explicitly.
+**28 Sep 2026 (2.11).** The thumbnail member carries a whole `MediaImage` record — the shape a page
+receives from `@/content` — and ListCard hands it to `Media` untouched with `fit="fill"`,
+`sizes={LIST_CARD_THUMBNAIL}` (`src/lib/image-sizes.ts`, never a restated literal) and no `priority`, so
+it is lazy and async. ListCard owns the **box** (160 inline, `--ratio-cover` 3:2, `overflow: hidden`) and
+the blank-source guard; `Media` owns the srcset, the loading and the **edge by kind**. The record's `alt`
+is required even when its correct value is the empty string.
+
+The discriminant is **`type`**, not `kind` (Media § 17 Q7): the record has its own `kind` — capture,
+cut-out, illustration, photograph — and two fields of that name one level apart invite a spread that
+overwrites one with the other. PageHero and BlockCard made the same switch. Every route call site was
+migrated in the same change (`kind: 'number'` → `type: 'number'`, ten files).
+
+*Which rows may carry one* is a supply rule, not a type: per ruling C1 and ch05 § 9, only case-study and
+insight/resource rows, and the image is one cut-out part or one illustration shape. The pattern cannot
+tell a case study from a glossary term, so the route decides whether to pass one.
 
 Deliberately not props:
 
@@ -110,10 +123,10 @@ Deliberately not props:
 
 Compile errors, not review comments:
 
-1. A marker cannot carry more than one of `value`, `name`, `src` or `alt`; the discriminated union
+1. A marker cannot carry more than one of `value`, `name` or `image`; the discriminated union
    makes the other members impossible.
-2. A thumbnail marker without `src` or `alt`, an icon marker without `name`, or a number marker
-   without `value` cannot compile.
+2. A thumbnail marker without a complete `MediaImage` (`src`, `alt`, `width`, `height`), an icon
+   marker without `name`, or a number marker without `value` cannot compile.
 3. A third arrangement, title element or arbitrary glyph name cannot compile.
 4. A missing `title` or `body` cannot compile.
 5. There is no cue prop, so a static row with a cue and a linked row without one are both
@@ -336,7 +349,11 @@ The component does not receive a `surface` prop and never paints the panel groun
 - Cue: `Icon size="lg"`, resolving to `--icon-size-18`.
 - Thumbnail marker: `--lcrd-thumbnail-inline-md` is 160px and `--lcrd-thumbnail-ratio` is 3:2,
   measured as a recognisable landscape sample at the full 1240px row while still wrapping cleanly
-  before a 192px content core is squeezed. The native image covers that frame from its centre.
+  before a 192px content core is squeezed. `Media` in `fit="fill"` covers that box from its centre;
+  a B5 cut-out on its contrast panel keeps Media's `--gap-gutter` inset inside it, leaving 96 × 43 of
+  part (§ 17 q8).
+- Hidden hint: `--lcrd-hidden-size` is `--space-1`, the clip technique's own 1px geometry, duplicated
+  by value from `--crumb-hidden-size` and SiteFooter's hidden label.
 
 ### (c) Optical corrections
 
@@ -451,7 +468,7 @@ or duplicate action. `Prose` is not used: one plain paragraph is not a CMS rich-
   <li>
     <Frame as={href ? 'a' : 'div'}>
       <Cluster colGap="block" rowGap="block" align="start">
-        {marker}
+        {marker /* number · Icon · <span box><Media fit="fill" sizes={LIST_CARD_THUMBNAIL} /></span> */}
         <Cluster colGap="block" align="start" nowrap>
           <Layout
             columns={split ? { base: 1, md: [2, 3] } : undefined}
@@ -461,13 +478,26 @@ or duplicate action. `Prose` is not used: one plain paragraph is not a CMS rich-
             {title}
             {body}
           </Layout>
-          {href ? <Icon name="arrow-right" size="lg" /> : null}
+          {href ? (
+            <span>
+              <Icon name={external ? 'square-arrow-right-up' : 'arrow-right'} size="lg" />
+              {external ? <span className="hint"> (opens in a new tab)</span> : null}
+            </span>
+          ) : null}
         </Cluster>
       </Cluster>
     </Frame>
   </li>
 </Layout>
 ```
+
+**Who owns the list element — the caller, and on purpose (28 Sep 2026, 2.11).** The `ol`/`ul` is
+the caller's `Layout as`, not the row's. `Layout` owns the list axis and the zero seam, and a row
+cannot see its siblings; a pattern that wrapped the list would be a pattern importing a pattern or a
+second `Layout`. It is also how every set is composed today, checked across all 22 route call sites:
+each numbered set is `Layout as={numbered ? 'ol' : 'ul'}` with `marker={numbered ? { type: 'number', … }
+: undefined}`, one boolean driving both, and the three always-numbered sets (about, future-interfaces-lab
+join, the ContentSection specimen) are `Layout as="ol"`. No numbered set renders as a `ul`.
 
 `Frame` above names the component's conditional native `a` or `div`; it is not a new primitive.
 The core receives only local child sizing so it can grow and keep its 192px minimum; all actual
@@ -499,8 +529,12 @@ ARIA is deliberately small:
 - Number markers are `aria-hidden="true"`; the parent `ol` supplies order semantics without
   announcing “one” twice. The visual value must match the row's authored order.
 - Icon markers have no label because the title names the same subject; they are decorative.
-- Thumbnail alternative text comes from required `marker.alt` on the native image. An empty string
-  is allowed only when the title/body fully repeat the image's information.
+- Thumbnail alternative text comes from the record's required `alt`, rendered by `Media`. An empty
+  string is allowed only when the title/body fully repeat the image's information — which is the
+  usual case for a cover (ch05 § 9a: the title names what it stands for).
+- An **external** row's name ends with a visually hidden "(opens in a new tab)", inside the anchor
+  after the aria-hidden glyph, so a screen reader hears the title first and the new tab last. It is
+  clipped (`clip-path: inset(50%)`, 1px), never `display: none`, which would drop it from the tree.
 - No `role`, `aria-current`, `aria-disabled`, `aria-expanded`, `aria-controls`, `aria-describedby`
   or busy attribute is emitted.
 
@@ -520,7 +554,8 @@ on all four surfaces rather than treated as a default.
 
 A screen reader encounters a static numbered item as: “List, 12 items. Research plan. Define who
 needs to be represented before recruitment.” It encounters a linked item as: “Service design. Map
-the end-to-end service and expose operational breaks, link.” It does not announce the visual number,
+the end-to-end service and expose operational breaks, link.” An external one adds “(opens in a new
+tab)” before “link”. It does not announce the visual number,
 subject icon or arrow a second time.
 
 ## 12 · Content edge cases
@@ -532,7 +567,7 @@ subject icon or arrow a second time.
 | Zero items                                | The caller omits the parent list; do not render an empty `ul` or `ol`. `ListCard` itself is not called.                                                                                                                                                                                                              |
 | One item                                  | Render one `li` with its bottom rule. The rule is the row's finish, not a separator inserted only between siblings.                                                                                                                                                                                                  |
 | Many items (2× expected)                  | Render 24 rows in one vertical `Layout rowGap="none"`; no pagination, clamping, equal-height rule or multi-column tiling.                                                                                                                                                                                            |
-| Missing image or missing optional slot    | Omitting `marker` removes its element and seam. A thumbnail member requires `src` and `alt`; a blank runtime `src` is treated as no marker with a development warning, never as an empty frame or placeholder.                                                                                                       |
+| Missing image or missing optional slot    | Omitting `marker` removes its element and seam. A thumbnail member requires a whole `MediaImage`; a blank runtime `src` is treated as no marker with a development warning, never as an empty frame or placeholder. A record with no `kind` renders as a capture (M3), hairline included — off-brand in a thumbnail (§ 17 q9).                                                                                                       |
 | Empty required-ish text                   | A whitespace-only title makes the component render nothing and warn in development; an empty body omits the paragraph and warns but keeps the titled row. A blank `href` is treated as absent, so no anchor and no cue render.                                                                                       |
 | Narrow track at 767                       | `split` is stacked; number/icon remain beside the core when they fit, and thumbnail may wrap above it. Measures and token-aware breaking prevent overflow.                                                                                                                                                           |
 | Parent that does not size it              | The root fills one available line in a wrapping parent. The content core's named minimum is `xs` (192px), which forces the marker to wrap before copy becomes unreadable. The root has no hard minimum beyond the parent's available inline size, so a sub-192px parent wraps text instead of causing page overflow. |
@@ -561,7 +596,7 @@ query in the same change.
 
 1. Put every group of rows in `Layout as="ol"` or `"ul"` with `rowGap="none"`; inspect the rendered
    tree and the call-site diff.
-2. Use `marker.kind="number"` only inside an ordered list and keep the visual values in authored
+2. Use `marker.type="number"` only inside an ordered list and keep the visual values in authored
    order; compare the marker text with the DOM item order.
 3. Render the cue exactly when a non-blank `href` produces an anchor; count anchors and cues in the
    rendered tree and expect equal totals.
@@ -626,6 +661,13 @@ The exact block list, in order:
    invalid markup.
 9. **Two adjacent.** Two rows in `Layout rowGap="none"`, with the shared seam and final rule called
    out.
+2a–2d (added 28 Sep 2026, 2.11). **The thumbnail by kind** — cut-out (one part), illustration
+    (one shape), capture and a kind-less record, the last two labelled off-brand; **the panel inset at
+    160** — shipped `--gap-gutter`, the rejected `--gap-text` as a harness-only override, and the
+    unpanelled part; **ordered and unordered sets** — `Layout as="ol"` with numbers beside `as="ul"`;
+    **external rows** — internal, external, external with a thumbnail, and `external` without `href`.
+    Block 5's surface bands gain a third row, an external cut-out thumbnail row, on all four grounds, and
+    block 10's 326 row gains an external cut-out and a capture.
 10. **Narrow tracks.** The same numbered, icon and thumbnail rows at 256px and 192px. The thumbnail
     must wrap before the content core collapses; the smaller track must wrap text without page
     overflow.
@@ -641,7 +683,12 @@ shared cadence, not twelve repeated boxes.
 
 ## 16 · New token requests
 
-**None — and the Cards 1a redesign removes one rather than adding any.**
+**28 Sep 2026 (2.11): one component-layer geometry token, no request.** `--lcrd-hidden-size`
+(`--space-1`) is the visually hidden hint's clip box — a technique's own geometry, duplicated by value
+from Breadcrumbs rather than read (token rule 6). Nothing in the primitive or usage layers changed;
+`npm run vocabulary` was re-run for it.
+
+**Earlier: none — and the Cards 1a redesign removes one rather than adding any.**
 
 The `--lcrd-*` names are this component's expected component-layer declarations, not new primitive
 or usage requests. They resolve to existing colour ramps, type roles, measures, gap roles, icon
@@ -722,13 +769,64 @@ one whole-row anchor. **Recommendation and draft decision: one whole-row native 
 the large row target honest, gives one focus stop, and lets `href` control cue presence without a
 second prop.
 
+**7 · Where an external row's glyph goes — non-blocking, 28 Sep 2026 (2.11).** Options: (a) replace
+the trailing cue with `square-arrow-right-up`; (b) keep the arrow and add the glyph after the title; (c)
+both. **Chosen: (a).** ch04 fixes one glyph per meaning (`arrow-right` "go, next", `square-arrow-right-up`
+"leaves the site"), one icon per line, and never an icon in a heading, which rules out (b) and (c). The
+glyph keeps the cue's slot, size (lg, 18 — ch04's "beside body text") and ink. On ch04's pairing gap —
+a quarter of the icon in a control, half in a line — the cue is not paired with a label: it is the row's
+trailing affordance, justified to the core's inline end by the nowrap `Cluster`'s `--gap-block` seam,
+which is at least 24 and already exceeds either pairing value. Stated so a later reader does not
+"correct" it to 4 or 9. The cue's blue on a neutral-text row is ch04's "blue on an icon beside neutral
+text" don't, read strictly; it predates this task, the cue is the row's action, and it is left as it was.
+
+**8 · The cut-out panel inset at thumbnail size (Media § 17 Q2) — non-blocking, 28 Sep 2026 (2.11).**
+Media's `--media-panel-inset` is `--gap-gutter` at every size, so in a 160 × 107 thumbnail a panelled
+part gets 96 × 43 — which cannot pass ch05 § 9's 160 check (one recognisable shape). Options: (a) leave
+Media alone and make it a supply rule; (b) a Media `inset` prop or a per-placement Media token; (c)
+ListCard sets `--media-panel-inset` on its box. **Chosen: (a).** Media cannot know the size of the box it
+fills, so a per-size token has nothing to key on; (c) is a component writing another component's token,
+which rule 6 forbids in spirit; (b) is a presentation knob on a primitive whose contract is that no
+placement restyles an image's edge. **The supply rule:** a thumbnail's cut-out is a part that holds its
+own edge on the ground (no panel), or the row takes the case's illustration. `/design/list-card` § 2b
+shows the shipped 32, the rejected `--gap-text` 16 (128 × 75, "cell padding" — the step a smaller inset
+would take by relationship) and the unpanelled part side by side, for the owner to judge. If the owner
+prefers the smaller inset, it is (b) as a `fill`-only inset step owned by Media, argued there.
+
+**9 · A kind-less or capture record in a thumbnail — non-blocking, 28 Sep 2026 (2.11).** Before 2.11 the
+thumbnail drew no edge. `Media` draws a capture's hairline, and M3 renders a record with no `kind` as a
+capture, so a kind-less thumbnail now has a hairline — while ch05 § 9 gives the thumbnail "no edge" and
+§ 2 keeps captures to the full column. **Chosen: leave it to the record**, as M3 intends: ListCard does
+not override Media's edge (it has no way to, by design), and the only route that passed a thumbnail was
+contact, which no longer does (q10). The capture and kind-less rows in § 2a are labelled off-brand so the
+failure is recognisable; the fix is recording `kind` (strapi-changes.md 3).
+
+**10 · The contact page's thumbnails — non-blocking, 28 Sep 2026 (2.11).** `/contact` passed its CMS
+`card.icon` / `action.icon` — 69–96px line-icon PNGs — as 160px thumbnails, upscaled and cropped.
+Options: (a) migrate them onto Media as they were; (b) drop the marker; (c) map each channel to a ch04
+glyph (`letter`, `phone`) in code. **Chosen: (b).** C1 limits thumbnails to case-study and
+insight/resource rows, and a non-Solar glyph is not a legal icon marker (ch04); the heading already
+names the channel. (c) needs glyphs Icon does not ship yet and is left for the owner. Logged as
+strapi-changes.md 10.
+
+**11 · The Solar credit — non-blocking, 28 Sep 2026 (2.11).** `square-arrow-right-up` on an external row
+is the first Solar Bold glyph a route can show, and Solar Icons are CC BY 4.0 (ch04). **Chosen:** the
+credit rides SiteFooter's existing legal notice — "Icons: Solar Icons by 480 Design, CC BY 4.0." — set in
+the navigation fixture, so the footer's code and layout are untouched. Title, author and licence are what
+CC BY asks for. A link to the licence would need a new utility item or a rich legal field; not done.
+
+**12 · The list element — non-blocking, 28 Sep 2026 (2.11).** Options: the caller's `Layout as`, or a
+ListCard-owned list. **Chosen: the caller's**, per § 10; every route already composes it correctly, and
+there is no runtime check (a server component cannot see its parent element).
+
 ---
 
 ## Decisions the build made that this document did not
 
 Four implementation details complete the accepted contract without changing it:
 
-1. **Native thumbnail metadata is 480 × 320, lazy and asynchronous.** The intrinsic dimensions
+1. **SUPERSEDED 28 Sep 2026 (2.11) — the thumbnail is `Media` now, with the record's own intrinsic
+   size.** Kept for the record: **Native thumbnail metadata is 480 × 320, lazy and asynchronous.** The intrinsic dimensions
    preserve the accepted 3:2 frame before CSS loads; `loading="lazy"` and `decoding="async"` keep a
    row image from blocking the surrounding list. The repository still has no Image primitive or
    `next/image` precedent, so the one native-image lint suppression is local to this documented
@@ -739,7 +837,8 @@ Four implementation details complete the accepted contract without changing it:
 3. **`position: relative` left the frame with the overlay.** It was there only to be the containing
    block for the absolutely positioned wipe. The focus ring is a `box-shadow` and needs no
    positioning, so it went in the same edit rather than lingering as a stacking context nothing uses.
-4. **The specimen adds an xs track and a neutral image fixture.** The route-local harness gains a
+4. **The specimen adds an xs track and a neutral image fixture** (since 2.11 the fixture is also the
+   kind-less record, and the Media specimen's brand assets supply the kinds). The route-local harness gains a
    192px `trackXs` beside its existing 256px track, and `/public/design/list-card-sample.svg`
    supplies predictable 3:2 content. Neither is product API or component styling.
 
@@ -760,7 +859,7 @@ NAMES
     names are this component's declared layer. Checked one at a time by `npm run design:check`.
     `--lcrd-rule-width-pressed` was removed from both the layer and this document, so the vocabulary
     must be regenerated and pushed — section 16 says so.
-[x] Named glyphs are existing: arrow-right, arrow-left, and the IconName union's 17 glyphs.
+[x] Named glyphs are existing: arrow-right, arrow-left, square-arrow-right-up (2.11), and the IconName union.
 [x] Section, Layout and Cluster props/values are existing unions: as, rowGap, colGap, columns,
     align, nowrap; none, tight, block, column, start; base, md; ol, ul, li.
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS rule blocks or media-query blocks.

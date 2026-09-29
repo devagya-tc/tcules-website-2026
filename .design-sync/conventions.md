@@ -246,36 +246,39 @@ Four things to get right:
 reach for `h3` or `h4` when the rows are page landmarks, not when they are prose. And like `Button`,
 `ListCard` takes no `surface`: it paints no ground and reads `data-surface` from the band above it.
 
-`BlockCard` — **one edge-bounded tile in a grid.** `title`, `body`, an optional `media`,
-`titleAs="h3" | "h4"` and an optional `href`. Closed like `ListCard`: no `children`, no `className`,
-no DOM spread, and no `surface`, `columns` or `equalHeight` — those describe a relationship between
-cards, so they live on the parent.
+`BlockCard` — **one borderless card in a grid.** `title`, `body`, an optional `eyebrow`, an optional
+cover `media`, `titleAs="h3" | "h4"`, an optional `href` and `ctaLabel`, and three presentation props:
+`orientation`, `imageSide`, `tracks`. Closed like `ListCard`: no `children`, no `className`, no DOM
+spread, and no `surface`, `columns` or `equalHeight` — those describe a relationship between cards.
+
+**For a card group, reach for `BlockCardSet` first.** `<BlockCardSet items={[{ id, title, body, … }]} />`
+renders the `Layout as="ul"` grid, picks the columns and image sizes from the count, and — from four
+items — features the first card: the horizontal arrangement spanning the row above its peers (media
+beside copy with a cover, head beside body without). Featuring is by position, never a field. An item
+cannot carry `orientation`, `imageSide` or `tracks`; the set decides them.
 
 `ListCard` and `BlockCard` are the two card shapes and picking between them is one question: **is
-this a ladder or a grid?** A ladder of ruled rows down one column is `ListCard`. A set of tiles
-across two or four tracks, each a complete object with its own four-sided edge, is `BlockCard`.
-Neither paints a ground — both show the band through — so do not choose by colour.
+this a ladder or a grid?** A ladder of ruled rows down one column is `ListCard`. A set of objects
+across two to four tracks is `BlockCard`. Neither draws a box or paints a ground — both show the band
+through — so do not choose by colour.
 
 Four things to get right:
 
-1. **It renders an `<li>`, so the grid is yours, and it is a `Layout`.** `<Layout as="ul"
-   columns={{ base: 1, md: 2, xl: 4 }} colGap="gutter" rowGap="gutter" equalRows>`. `equalRows` is
-   what makes every tile in a row the same height regardless of copy length — without it a
-   four-across set is four different rectangles and the edges stop lining up, which is the one
-   thing a bordered tile cannot survive.
-2. **`media` is one optional slot with two closed fills**, `{kind:'icon', name}` or
-   `{kind:'image', src, alt}` — never a node, so a tile cannot acquire an overlay, a control or a
-   call-site crop. An icon sits *inside* the inset content above the title; an image sits
-   *edge-to-edge above* it in a fixed 3:2 crop. `alt` is required even when the right value is `''`.
-3. **`href` turns the WHOLE tile into one native link**, with one focus stop and an arrow cue at the
-   inline end of the content. Without it the tile is inert and complete — there is no empty action
-   row where the cue would have been. Never put a second link or a `Button` inside one.
-4. **Title text never goes over the image.** Image above, content below, always; the component has
-   no overlay mode and adding one at the call site is not available to you.
+1. **Which cards carry media is decided by family**: case studies and every article, video or podcast
+   with a cover carry one; service, audit, glossary and capability cards carry none. A text-only set is
+   the common case and is designed: weight from the title and position, never a box, fill or border.
+2. **`media` is one closed record**, `{ type: 'image', image: { src, alt, width, height, kind, … } }` —
+   never a node, and there is no icon fill. The card owns the crop (3:2 tile, 4:3 row); the image's
+   edge comes from its `kind` (a cut-out or an illustration is unboxed, a capture keeps a hairline).
+   `alt` is required even when the right value is `''` — an illustration cover takes `''`.
+3. **`href` turns the WHOLE card into one native link**, with one focus stop and a named cta. Without
+   it the card is inert and complete. Never put a second link or a `Button` inside one.
+4. **Title text never goes over the image**, and a cover is never placed on ink or blue — a reserved
+   band carries a text-only set.
 
-`titleAs` gives the title heading semantics without changing its type — the tile's title is always
-set at h4 scale. Like `Button` and `ListCard`, `BlockCard` reads `data-surface` from the band above
-it, so set the surface once on the `Section`.
+`titleAs` gives the title heading semantics without changing its type — h4 scale in a tile, h3 in a
+row. Like `Button` and `ListCard`, `BlockCard` reads `data-surface` from the band above it, so set the
+surface once on the `Section`.
 
 `Accordion` — **one multi-open question-and-answer set**, and the only component here built on a
 native browser control. One prop: `items`, an array of `{ question, answerHtml }`.

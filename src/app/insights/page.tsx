@@ -268,7 +268,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
                     eyebrow={eyebrow}
                     media={
                       resource.image
-                        ? { kind: 'image', src: resource.image.src, alt: resource.image.alt }
+                        ? { type: 'image', image: resource.image }
                         : undefined
                     }
                     href={blogPath(resource.slug)}

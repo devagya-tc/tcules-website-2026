@@ -22,6 +22,12 @@ function figureImage(image: CaseStudyImage) {
     alt: image.alt,
     width: image.width,
     height: image.height,
+    /* The derived widths and the kind fields travel with the record so Figure's Media can serve
+       a srcset and draw the edge by kind; `mime` is the one field left behind. */
+    sources: image.sources,
+    kind: image.kind,
+    panel: image.panel,
+    shadow: image.shadow,
   };
 }
 
@@ -214,13 +220,7 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
   const published = dateOnly(caseStudy.publishedAt);
   const updated = dateOnly(caseStudy.updatedAt);
   const heroMedia = caseStudy.heroImage
-    ? {
-        kind: 'image' as const,
-        src: caseStudy.heroImage.src,
-        alt: caseStudy.heroImage.alt,
-        width: caseStudy.heroImage.width,
-        height: caseStudy.heroImage.height,
-      }
+    ? { type: 'image' as const, image: caseStudy.heroImage }
     : undefined;
 
   return (

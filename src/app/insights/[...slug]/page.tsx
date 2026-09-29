@@ -32,6 +32,12 @@ function figureImage(image: BlogImage) {
     alt: image.alt,
     width: image.width,
     height: image.height,
+    /* The derived widths and the kind fields travel with the record so Figure's Media can serve
+       a srcset and draw the edge by kind; `mime` is the one field left behind. */
+    sources: image.sources,
+    kind: image.kind,
+    panel: image.panel,
+    shadow: image.shadow,
   };
 }
 
@@ -276,18 +282,12 @@ export default async function BlogPage({ params }: BlogPageProps) {
     : undefined;
   const heroMedia = blog.heroVideo
     ? {
-        kind: 'youtube' as const,
+        type: 'youtube' as const,
         id: blog.heroVideo.id,
         title: blog.heroVideo.title,
       }
     : blog.featureImage
-      ? {
-          kind: 'image' as const,
-          src: blog.featureImage.src,
-          alt: blog.featureImage.alt,
-          width: blog.featureImage.width,
-          height: blog.featureImage.height,
-        }
+      ? { type: 'image' as const, image: blog.featureImage }
       : undefined;
   const labels = uniqueLabels([...blog.categories, ...blog.tags]);
 
@@ -371,7 +371,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                   eyebrow={resource.categories.join(' · ') || 'Insight'}
                   media={
                     resource.image
-                      ? { kind: 'image', src: resource.image.src, alt: resource.image.alt }
+                      ? { type: 'image', image: resource.image }
                       : undefined
                   }
                   href={blogPath(resource.slug)}

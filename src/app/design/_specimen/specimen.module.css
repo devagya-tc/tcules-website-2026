@@ -230,3 +230,11 @@
   inline-size: var(--lcrd-thumbnail-inline-md);
   aspect-ratio: var(--lcrd-thumbnail-ratio);
 }
+
+/* ListCard § 2b only: the REJECTED alternative for Media's panel inset at thumbnail size
+   (docs/specs/ListCard.md § 17, Media.md § 17 Q2), set here so the owner can compare it with the
+   shipped --gap-gutter. A harness reaching into Media's layer is exactly what no site code may do,
+   and that is why it lives in the proving ground and nowhere else. */
+.panelInsetCell {
+  --media-panel-inset: var(--gap-text);
+}

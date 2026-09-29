@@ -7,7 +7,8 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 /* Three assets of deliberately different intrinsic ratio, all on a near-white ground. That ground
    is the point rather than a convenience: it is what has no edge of its own on paper, which is the
-   whole argument for --fig-rule-ink existing (spec § 17 Q5). Cover the hairline on the paper band
+   whole argument for the capture hairline existing (spec § 17 Q5) — since tracker 2.7 it is Media's
+   --media-capture-rule-ink, drawn because these records carry no kind and so render as captures (M3). Cover the hairline on the paper band
    below and the screenshot has no bottom edge at all. It is also deliberately the QUIETEST
    rule that still does that: a first pass held the hairline to 3:1 on every surface and it
    read as a frame competing with the screenshot inside it. */
@@ -31,6 +32,78 @@ const SMALL: FigureImage = {
   width: 320,
   height: 200,
 };
+
+/* One record per kind, from the Media specimen's brand-framework assets. The caption follows ch05
+   §7's structure per category. */
+const KINDS: readonly { title: string; note: string; image: FigureImage; caption: string }[] = [
+  {
+    title: 'capture',
+    note: 'The hairline in the surface’s rule ink — the one edge cue, identical to every untagged figure above.',
+    image: {
+      src: '/design/media/capture-listing.webp',
+      alt: 'Listing editor with four bullet fields beside an AI assistance panel of benefit chips.',
+      width: 1436,
+      height: 883,
+      kind: 'capture',
+      sources: [320, 652, 1240].map((width) => ({
+        src: `/design/media/capture-listing-${width}.jpg`,
+        width,
+      })),
+    },
+    caption:
+      'Fictional marketplace · listing editor · the whole layout, which is the subject here.',
+  },
+  {
+    title: 'cut-out',
+    note: 'No edge: the silhouette is the frame. This record also sets shadow, so it carries the one --shadow-crop.',
+    image: {
+      src: '/design/media/cutout-flow.png',
+      alt: 'Workflow node: an input connected to an AI feature card and an output.',
+      width: 1796,
+      height: 1112,
+      kind: 'cut-out',
+      shadow: true,
+    },
+    caption: 'Fictional workflow tool · one AI step, composed from the live product.',
+  },
+  {
+    title: 'cut-out on a panel',
+    note: 'The part’s pale edge does not hold against paper, so the asset is supplied with panel: paper-deep (B5, M4).',
+    image: {
+      src: '/design/media/cutout-reviews.png',
+      alt: 'Review-analysis panel summarising 64 user reviews as benefit chips.',
+      width: 855,
+      height: 570,
+      kind: 'cut-out',
+      panel: 'paper-deep',
+    },
+    caption: 'Fictional review tool · the benefit picker, composed from the live product.',
+  },
+  {
+    title: 'illustration',
+    note: 'Never boxed — no edge, no panel, no shadow (§4a, B4).',
+    image: {
+      src: '/design/media/illustration-seam.svg',
+      alt: 'Illustration: a design plane and a build plane meeting at one seam.',
+      width: 881,
+      height: 544,
+      kind: 'illustration',
+    },
+    caption: 'Design and build meeting at one seam',
+  },
+  {
+    title: 'photograph',
+    note: 'No edge, radius 0, never masked (§3).',
+    image: {
+      src: '/design/media/photograph-portrait.png',
+      alt: 'Portrait, head and shoulders, facing the camera.',
+      width: 292,
+      height: 292,
+      kind: 'photograph',
+    },
+    caption: 'A studio portrait, stand-in.',
+  },
+];
 
 /* The brief's own reference lines, split into the two fields as spec § 8 reads them. */
 const CAPTION = 'Fictional approval-queue surface.';
@@ -56,13 +129,7 @@ const EVIDENCE_NOTE =
  * track and should not become one: it is the phone's content column (ch05 B3), and .trackMobile is
  * the harness frame that stands in for it — not an illegal-placement frame.
  */
-function Track({
-  size,
-  children,
-}: {
-  size: 'xs' | 'md' | 'lg';
-  children: ReactNode;
-}) {
+function Track({ size, children }: { size: 'xs' | 'md' | 'lg'; children: ReactNode }) {
   return (
     <Layout columns="tile" minTrack={size} colGap="gutter" rowGap="gutter">
       {children}
@@ -92,7 +159,7 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
 const NESTED_TINT_TOKENS: readonly (readonly [string, string])[] = [
   ['--fig-caption-ink', '--color-neutral-800'],
   ['--fig-note-ink', '--color-neutral-700'],
-  ['--fig-rule-ink', '--color-neutral-400'],
+  ['--media-capture-rule-ink', '--color-neutral-400'],
 ] as const;
 
 function ResolvedTokens() {
@@ -119,10 +186,10 @@ export default function FigureSpecimenPage() {
         <Layout rowGap="block">
           <h1>Figure</h1>
           <p>
-            An image with a required caption and an optional quieter note, filling whatever inline
-            space its parent gives it. It paints no ground, owns no width, crops nothing and has no
-            state to be in — so the variety below comes from the shapes it is proven against and
-            the tracks it is given, not from variants it does not have.
+            An image with a required caption and an optional quieter note, filling whatever
+            inline space its parent gives it. It paints no ground, owns no width, crops nothing
+            and has no state to be in — so the variety below comes from the shapes it is proven
+            against and the tracks it is given, not from variants it does not have.
           </p>
         </Layout>
       </Section>
@@ -133,10 +200,10 @@ export default function FigureSpecimenPage() {
             <h2>1 · The matrix</h2>
             <p>
               One variant × one size. There is no size axis because the component has no size of
-              its own to step — its one dimension is 100% of what the parent gave it, which is the
-              absence of a scale rather than a step on one. There is no variant axis because an
-              optional image, a required caption and an optional note is the only arrangement, and
-              nothing about which container holds it changes that shape. A{' '}
+              its own to step — its one dimension is 100% of what the parent gave it, which is
+              the absence of a scale rather than a step on one. There is no variant axis because
+              an optional image, a required caption and an optional note is the only
+              arrangement, and nothing about which container holds it changes that shape. A{' '}
               <code>variant=&quot;hero&quot; | &quot;card&quot;</code> would be this component
               naming its container, which the container already knows.
             </p>
@@ -158,11 +225,11 @@ export default function FigureSpecimenPage() {
               Two optional slots, four combinations, all in one 384px track so the four are
               comparable at a glance. An absent slot renders no element <em>and no seam</em> —
               inspect the DOM and expect zero <code>img</code> elements in the third and fourth
-              bands, and one <code>p</code> rather than two in the first. Every image on this page
-              also carries an <code>alt</code> that does not restate its caption — read the two
-              together: the <code>alt</code> says what the picture shows, the caption says what it
-              means. A screenshot here is evidence, so the empty <code>alt</code> that suits{' '}
-              <code>ListCard</code>&rsquo;s decorative thumbnail would be wrong.
+              bands, and one <code>p</code> rather than two in the first. Every image on this
+              page also carries an <code>alt</code> that does not restate its caption — read the
+              two together: the <code>alt</code> says what the picture shows, the caption says
+              what it means. A screenshot here is evidence, so the empty <code>alt</code> that
+              suits <code>ListCard</code>&rsquo;s decorative thumbnail would be wrong.
             </p>
           </Layout>
           <Specimen
@@ -205,14 +272,14 @@ export default function FigureSpecimenPage() {
           <Layout rowGap="block">
             <h2>3 · The shape-stress set</h2>
             <p>
-              The same caption and note under three assets of very different intrinsic ratio, all
-              at the one full-width track. Nothing is cropped, letterboxed or padded to a common
-              shape: each renders at its own ratio, which is why a fixed frame was rejected. Grep
-              the module for <code>object-fit</code>, <code>aspect-ratio</code>,{' '}
-              <code>max-block-size</code> and <code>min-block-size</code> and expect zero matches.
-              The <code>width</code> and <code>height</code> attributes on each <code>img</code>{' '}
-              are the asset&rsquo;s own numbers — 1600×900, 720×1040, 320×200 — and nothing in CSS
-              overrides them.
+              The same caption and note under three assets of very different intrinsic ratio,
+              all at the one full-width track. Nothing is cropped, letterboxed or padded to a
+              common shape: each renders at its own ratio, which is why a fixed frame was
+              rejected. Grep Media&rsquo;s module for <code>object-fit</code> outside{' '}
+              <code>.fill</code>, <code>aspect-ratio</code>, <code>max-block-size</code> and{' '}
+              <code>min-block-size</code> and expect zero matches. The <code>width</code> and{' '}
+              <code>height</code> attributes on each <code>img</code> are the asset&rsquo;s own
+              numbers — 1600×900, 720×1040, 320×200 — and nothing in CSS overrides them.
             </p>
           </Layout>
           <Specimen title="Wide — 1600×900" note="A landscape screenshot at the full track.">
@@ -242,7 +309,7 @@ export default function FigureSpecimenPage() {
             </Layout>
             <Specimen
               title={`Identical markup on ${surface}`}
-              note="No surface prop, no className, no ground of its own: the three --fig-* colours resolve from the Section's data-surface and nothing else."
+              note="No surface prop, no className, no ground of its own: the two --fig-* inks and Media's capture rule resolve from the Section's data-surface and nothing else."
             >
               <Figure image={WIDE} caption={CAPTION} note={NOTE} />
             </Specimen>
@@ -254,10 +321,10 @@ export default function FigureSpecimenPage() {
         <Layout rowGap="block">
           <h2>5 · Nested surface</h2>
           <p>
-            An ink band, immediately above a tint one holding the same figure. The tint figure must
-            resolve the tint column throughout — a 10.54:1 caption on a light ground — and not an
-            ink-tuned value stranded on the wrong ground. That is what every surface block
-            restating every token buys; a deltas-only block would inherit ink here.
+            An ink band, immediately above a tint one holding the same figure. The tint figure
+            must resolve the tint column throughout — a 10.54:1 caption on a light ground — and
+            not an ink-tuned value stranded on the wrong ground. That is what every surface
+            block restating every token buys; a deltas-only block would inherit ink here.
           </p>
         </Layout>
       </Section>
@@ -293,16 +360,17 @@ export default function FigureSpecimenPage() {
           <h2>6 · States: there are none to force</h2>
           <p>
             Every other specimen in this proving ground has a state column, and this one
-            deliberately does not. Nothing <code>Figure</code> renders is interactive: no link, no
-            button, no <code>tabindex</code>, nothing focusable. So there is nothing here to point
-            at, nothing to hold the pointer down on and nothing to tab to — and unlike hover and
-            focus elsewhere in this proving ground, that is not a limitation of a static page. It
-            is the component. Zero <code>--fig-*</code> state tokens exist, and their absence is
-            the assertion that, given the same three props, this draws the same pixels forever.
+            deliberately does not. Nothing <code>Figure</code> renders is interactive: no link,
+            no button, no <code>tabindex</code>, nothing focusable. So there is nothing here to
+            point at, nothing to hold the pointer down on and nothing to tab to — and unlike
+            hover and focus elsewhere in this proving ground, that is not a limitation of a
+            static page. It is the component. Zero <code>--fig-*</code> state tokens exist, and
+            their absence is the assertion that, given the same three props, this draws the same
+            pixels forever.
           </p>
           <p>
-            A click-to-enlarge or lightbox treatment is a plausible future ask, and it would be a
-            new mechanism with its own spec — not a state this component grows quietly.
+            A click-to-enlarge or lightbox treatment is a plausible future ask, and it would be
+            a new mechanism with its own spec — not a state this component grows quietly.
           </p>
         </Layout>
       </Section>
@@ -339,7 +407,7 @@ export default function FigureSpecimenPage() {
             <Figure caption={EVIDENCE_CAPTION} note={EVIDENCE_NOTE} />
           </Specimen>
           <Specimen
-            title="Row 7 — caption=&quot;&quot; renders the empty paragraph anyway"
+            title='Row 7 — caption="" renders the empty paragraph anyway'
             note="Visible and auditable: an empty required field is a content defect, and substituting a fallback string would hide it. Inspect the DOM and expect an empty p element where the caption belongs, and the 8px seam still holding the note below it."
           >
             <Track size="lg">
@@ -347,7 +415,7 @@ export default function FigureSpecimenPage() {
             </Track>
           </Specimen>
           <Specimen
-            title="Row 7 — note=&quot;&quot; is treated as absent"
+            title='Row 7 — note="" is treated as absent'
             note="The other half of the asymmetry: note is genuinely optional, so an empty one is indistinguishable from no note at all. Expect one p element rather than two, and no seam."
           >
             <Track size="lg">
@@ -405,9 +473,9 @@ export default function FigureSpecimenPage() {
             <h2>9 · Narrow tracks — rows 8 and 9</h2>
             <p>
               The image scales down with its track at its own ratio, the{' '}
-              <code>--measure-body</code> cap on the legend goes inert once the column is narrower
-              than the measure, and nothing reorders: there is no media query in this component to
-              fire. 192px is the named floor — <code>--fig-min-xs</code>, matching{' '}
+              <code>--measure-body</code> cap on the legend goes inert once the column is
+              narrower than the measure, and nothing reorders: there is no media query in this
+              component to fire. 192px is the named floor — <code>--fig-min-xs</code>, matching{' '}
               <code>ListCard</code>&rsquo;s content core by value rather than by reading another
               component&rsquo;s token.
             </p>
@@ -463,6 +531,28 @@ export default function FigureSpecimenPage() {
               </Cluster>
             </Track>
           </Specimen>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>10 · Kinds, through Media</h2>
+            <p>
+              Since tracker 2.7 the image is a <code>Media</code>, so its edge follows the
+              asset&rsquo;s <code>kind</code> (ch05 §2, §2a, §4a) and Figure draws none of its
+              own. Every figure above carries no kind and renders as a capture (ruling M3),
+              which is why those bands look exactly as they did. Radius is 0 on every kind (§6).
+              The caption is still required, and caption-only is still first-class (band 2).
+            </p>
+          </Layout>
+          <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack" align="start">
+            {KINDS.map(({ title, note, image, caption }) => (
+              <Specimen key={title} title={title} note={note}>
+                <Figure image={image} caption={caption} />
+              </Specimen>
+            ))}
+          </Layout>
         </Layout>
       </Section>
     </>

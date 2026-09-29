@@ -1,33 +1,90 @@
-import { Button, Cluster, Icon, Layout, type IconName } from '@/components';
+import { Button, Cluster, Icon, Layout, Media, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
+import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
 
 import styles from './BlockCard.module.css';
 
 /**
- * One optional media slot with two deliberately closed fills. Callers cannot pass a React node,
- * so the slot cannot acquire controls, overlays or call-site crop behaviour.
+ * The card's image record: `Media`'s own `MediaImage` — master `src`, `alt`, derived `sources`, and
+ * the `kind` that decides its edge — with the intrinsic `width` and `height` OPTIONAL.
+ *
+ * They are optional here, and required on `Media`, because a card never lays out by them: the
+ * image fills a box whose ratio the CARD owns (`fit="fill"`), so the two numbers are only the
+ * attributes on the `<img>`, which the fill rule overrides. Several view models still arrive
+ * without them (spec § 17 Q15). A record with no dimensions is given the box's own proportions and
+ * loses its `sources`, because a srcset needs the master's true width for its `w` descriptor and
+ * a guessed one would make the browser pick the wrong file.
  */
-export type BlockCardMedia =
-  { kind: 'icon'; name: IconName } | { kind: 'image'; src: string; alt: string };
+export type BlockCardImage = Omit<MediaImage, 'width' | 'height'> & {
+  width?: number;
+  height?: number;
+};
+
+/**
+ * The one media slot, and one closed fill: the card's cover image, nested as a record. Callers
+ * cannot pass a React node, so the slot cannot acquire controls, overlays or call-site crop
+ * behaviour.
+ *
+ * The discriminant is `type`, not `kind`, because the record carries its own `kind` (capture,
+ * cut-out, illustration, photograph) and `media.kind === 'image'` beside `media.image.kind` would
+ * read as one field twice — PageHero's A3, followed here for one vocabulary.
+ *
+ * There is no icon fill any more. Under ruling C1 the families that carry media carry a cover
+ * image, and the service, audit, glossary and capability cards that used to be the icon's home are
+ * media-less; ch04 wants one icon per tile in ink, and a 24px glyph heading a card is not what any
+ * family is now given. It had no route use (spec § 17 Q14).
+ */
+export type BlockCardMedia = { type: 'image'; image: BlockCardImage };
 
 export type BlockCardTitleElement = 'h3' | 'h4';
 
 /**
- * Which axis the card arranges on. `vertical` is the grid tile: media above copy, filling one
- * track of a multi-column Layout. `horizontal` is the stacked row: media beside copy in two equal
- * tracks, for lists of a few substantial items rather than a grid of many.
+ * Which axis the card arranges on. A PRESENTATION choice, never a CMS field.
+ *
+ *   vertical    the grid tile: media above copy, filling one track of a multi-column Layout.
+ *   horizontal  the row: two equal tracks from md, 64 apart. With an image, media beside copy at
+ *               4:3. Without one, the copy splits instead — eyebrow and title in the first track,
+ *               body and cta in the second — so a text-only row is a head beside its body rather
+ *               than a single column with an empty half. Either way the title steps up to the h3
+ *               role, because a row spanning the column carries more weight than a tile. This is
+ *               the featured arrangement `BlockCardSet` gives its first item (ruling C3).
  */
 export type BlockCardOrientation = 'vertical' | 'horizontal';
 
 /**
- * Which side the media takes when the card is horizontal. Caller-set per card on purpose: there is
- * no alternation logic here, because a component that alternated would have to know its own index
- * and the parent already does.
+ * Which side the media takes when the card is horizontal and has an image. Caller-set per card on
+ * purpose: there is no alternation logic here, because a component that alternated would have to
+ * know its own index and the parent already does.
  */
 export type BlockCardImageSide = 'left' | 'right';
 
+/**
+ * How many tracks the card's set runs at its widest — which is all the card needs to know to state
+ * its image's `sizes` (src/lib/image-sizes.ts). A card cannot see its track, so the set says.
+ *
+ *   2  CARD_TWO_TRACKS. The default, because it never under-fetches in a set of two, three or
+ *      four tracks: at worst a 3-up card fetches the 2-up file.
+ *   3  CARD_THREE_TRACKS. For a set that reaches three tracks at lg; it over-fetches below 1024,
+ *      never under.
+ *
+ * Ignored when horizontal: the media then takes half the row, which is CARD_TWO_TRACKS's width
+ * less 16px, so the featured card always reads that one.
+ */
+export type BlockCardTracks = 2 | 3;
+
 /** The cta label a linked card uses when the caller names none. */
 const DEFAULT_CTA_LABEL = 'Read more';
+
+/**
+ * The attributes a record with no intrinsic size is given: the proportions of the box it fills,
+ * restating --bcrd-media-ratio-vertical (--ratio-cover, 3/2) and --bcrd-media-ratio-horizontal
+ * (4/3) by hand, because TypeScript cannot read a custom property. They never lay anything out —
+ * `fill` sizes the image to the box — so they are a well-formed pair, not a measurement.
+ */
+const FILL_BOX = {
+  vertical: { width: 3, height: 2 },
+  horizontal: { width: 4, height: 3 },
+} as const;
 
 /**
  * A closed card record. Grid geometry, surface and action rendering all stay outside the public
@@ -45,7 +102,10 @@ export type BlockCardProps = {
    * caller composes the line and the card only renders it.
    */
   eyebrow?: string;
-  /** Optional decorative icon or BlockCard-owned image. */
+  /**
+   * The optional cover image. Case studies and every insight or resource with a cover (articles,
+   * videos, podcasts) carry one; service, audit, glossary and capability cards do not (ruling C1).
+   */
   media?: BlockCardMedia;
   /** Heading semantics without a visual type change. Defaults to h3. */
   titleAs?: BlockCardTitleElement;
@@ -62,36 +122,42 @@ export type BlockCardProps = {
   orientation?: BlockCardOrientation;
   /** Media side in the horizontal arrangement. Ignored when vertical. Defaults to left. */
   imageSide?: BlockCardImageSide;
+  /** The widest track count of the card's set, for the image's `sizes`. Defaults to 2. */
+  tracks?: BlockCardTracks;
 };
 
 function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`BlockCard: ${message}`);
 }
 
-function IconMedia({ name }: { name: IconName }) {
-  return (
-    <span className={styles.iconMedia}>
-      <Icon name={name} size="xl" />
-    </span>
-  );
+/** The record `Media` receives: the caller's, with the box's proportions where it had none. */
+function mediaRecord(image: BlockCardImage, box: keyof typeof FILL_BOX): MediaImage {
+  if (image.width && image.height) {
+    return { ...image, width: image.width, height: image.height };
+  }
+  return { ...image, ...FILL_BOX[box], sources: undefined };
 }
 
-function ImageMedia({ src, alt, wide }: { src: string; alt: string; wide: boolean }) {
+function ImageMedia({
+  image,
+  horizontal,
+  sizes,
+}: {
+  image: BlockCardImage;
+  horizontal: boolean;
+  sizes: string;
+}) {
   return (
-    <span className={cx(styles.imageMedia, wide && styles.imageMediaHorizontal)}>
-      {/* The accepted contract owns a native image and its loading policy. `alt` remains required,
-          including an intentional empty string for decorative imagery. Intrinsic dimensions encode
-          the vertical 3:2 ratio; the horizontal card's 4:3 crop comes from the wrapper, and the
-          rendered image always fills the available inline size either way. */}
-      {/* eslint-disable-next-line @next/next/no-img-element -- accepted native-image contract */}
-      <img
-        className={styles.image}
-        src={src}
-        alt={alt}
-        width={480}
-        height={320}
-        loading="lazy"
-        decoding="async"
+    /* The card owns the ratio box and Media fills it: `fit="fill"` is a centre cover crop of a box
+       the parent has already sized, which is exactly what this wrapper is. The edge is Media's, by
+       kind — a cut-out or an illustration draws none and a capture its hairline — so the card no
+       longer decides what an image looks like, only where it goes. Lazy is Media's default: a card
+       is never the page's LCP. */
+    <span className={cx(styles.imageMedia, horizontal && styles.imageMediaHorizontal)}>
+      <Media
+        image={mediaRecord(image, horizontal ? 'horizontal' : 'vertical')}
+        sizes={sizes}
+        fit="fill"
       />
     </span>
   );
@@ -106,7 +172,9 @@ function ImageMedia({ src, alt, wide }: { src: string; alt: string; wide: boolea
  * the link colour.
  *
  * Layout owns the block-axis groups, the horizontal orientation's two tracks and the cta's inline
- * row; this module contains no hand-written sibling arrangement.
+ * row; this module contains no hand-written sibling arrangement. The card knows nothing about its
+ * siblings: whether it is featured is the set's decision (`BlockCardSet`), which it expresses by
+ * passing `orientation`.
  */
 export function BlockCard({
   title,
@@ -118,6 +186,7 @@ export function BlockCard({
   ctaLabel,
   orientation = 'vertical',
   imageSide = 'left',
+  tracks = 2,
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -134,21 +203,20 @@ export function BlockCard({
 
   const destination = href?.trim() ? href : undefined;
 
-  const image = media?.kind === 'image' ? media : undefined;
+  const image = media?.type === 'image' ? media.image : undefined;
   const hasImage = image !== undefined && image.src.trim().length > 0;
   if (image !== undefined && !hasImage) {
     warn('image media received a blank src; omitting the media.');
   }
 
-  /* The horizontal arrangement needs something to put in its media track, so it is the image that
-     earns the second column — not the prop on its own. An icon is a mark rather than a picture and
-     stays inside the copy stack where it sits vertically, and a card with no media at all has no
-     second track to fill; both fall back to the single-column stack rather than rendering a row
-     with an empty half. */
-  const isRow = orientation === 'horizontal' && hasImage;
+  const horizontal = orientation === 'horizontal';
 
   const imageNode = hasImage ? (
-    <ImageMedia src={image.src} alt={image.alt} wide={isRow} />
+    <ImageMedia
+      image={image}
+      horizontal={horizontal}
+      sizes={horizontal || tracks === 2 ? CARD_TWO_TRACKS : CARD_THREE_TRACKS}
+    />
   ) : null;
 
   const label = ctaLabel?.trim() ? ctaLabel : DEFAULT_CTA_LABEL;
@@ -167,64 +235,91 @@ export function BlockCard({
 
      A span is also never itself hovered, focused or pressed, which is what `data-btn-link-group`
      on the frame below answers: it hands the card's own states to the Button. Icon takes no size
-     here because Button sizes the glyph it contains and ignores one that is passed. */
+     here because Button sizes the glyph it contains and ignores one that is passed.
+
+     The Cluster is what keeps the cta at the copy's inline start. A grid item is blockified, so the
+     Button's `inline-flex` would become `flex` and take the whole track, centring its label; a
+     Cluster starts its items. No gap is stated because there is one child. */
   const cta = destination ? (
-    <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
-      {label}
-    </Button>
+    <Cluster>
+      <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
+        {label}
+      </Button>
+    </Cluster>
   ) : null;
 
+  const eyebrowNode = hasEyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null;
+  const titleNode = (
+    <Title className={cx(styles.title, horizontal && styles.titleHorizontal)}>{title}</Title>
+  );
+  const bodyNode = hasBody ? <p className={styles.body}>{body}</p> : null;
+
+  /* The copy: eyebrow, title and body as one tight group, then the cta a block below it. */
   const content = (
     <Layout rowGap="block" className={styles.content}>
-      {media?.kind === 'icon' ? <IconMedia name={media.name} /> : null}
       <Layout rowGap="tight">
-        {hasEyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null}
-        <Title className={styles.title}>{title}</Title>
-        {hasBody ? <p className={styles.body}>{body}</p> : null}
+        {eyebrowNode}
+        {titleNode}
+        {bodyNode}
       </Layout>
-      {/* The Cluster is what keeps the cta at the copy's inline start. A grid item is blockified,
-          so the Button's `inline-flex` becomes `flex` and the content Layout's `justify-items:
-          stretch` gave it the whole track — with Button's own centred label, that rendered the cta
-          indented to the middle of every card, against § 7's "inline start, aligned with the copy
-          above it". A Cluster is the inline axis and starts its items, so the control sits at its
-          intrinsic width where the eyebrow, title and body begin. No gap is stated because there is
-          one child. */}
-      {cta ? <Cluster>{cta}</Cluster> : null}
+      {cta}
     </Layout>
   );
 
-  /* Two arrangements, one anatomy. Both are a Layout because both are arrangements; neither is the
-     frame's own block flow.
+  /* Three arrangements, one anatomy. Every one is a Layout; none is the frame's own block flow.
 
-     Horizontal takes two equal tracks with the media and copy centred against each other. Both
-     seams are stated because Layout defaults neither: `columns={[1, 1]}` collapses to one track
-     below md, and the rowGap is what the collapsed card uses in place of the column gutter. Below
-     that boundary `imageSide` describes nothing, so DOM order decides and a right-side card reads
-     copy-then-image on a phone.
+     Horizontal with an image: two equal tracks, media and copy centred against each other, 64
+     apart. Both seams are stated because Layout defaults neither: `columns={[1, 1]}` collapses to
+     one track below md, and the rowGap is what the collapsed card uses in place of the column
+     gutter. Below that boundary `imageSide` describes nothing, so DOM order decides and a
+     right-side card reads copy-then-image on a phone.
 
-     Vertical stacks media above copy at the same `--gap-block`. The image is edge-to-edge and the
-     copy is flush to it, so this rowGap IS the image-to-copy relationship — it used to be the
-     content block's own padding, which is not where a distance between two boxes belongs. */
-  const frameContent = isRow ? (
-    <Layout columns={[1, 1]} colGap="column" rowGap="block" align="center">
-      {imageSide === 'right' ? (
-        <>
-          {content}
-          {imageNode}
-        </>
-      ) : (
-        <>
-          {imageNode}
-          {content}
-        </>
-      )}
-    </Layout>
-  ) : (
-    <Layout rowGap="block">
-      {imageNode}
-      {content}
-    </Layout>
-  );
+     Horizontal without one: the same two tracks, with the COPY split across them — the head
+     (eyebrow and title) in the first, the body and cta in the second, top-aligned so the title's
+     first line and the body's sit on one line. The row reads as a head beside its body, the
+     arrangement ContentSection uses a level up, rather than one text column with a void beside
+     it. It collapses to the same order as a vertical card.
+
+     Vertical: media above copy at `--gap-block`. The image is edge-to-edge and the copy is flush to
+     it, so this rowGap IS the image-to-copy relationship. */
+  let frameContent;
+  if (horizontal && imageNode) {
+    frameContent = (
+      <Layout columns={[1, 1]} colGap="column" rowGap="block" align="center">
+        {imageSide === 'right' ? (
+          <>
+            {content}
+            {imageNode}
+          </>
+        ) : (
+          <>
+            {imageNode}
+            {content}
+          </>
+        )}
+      </Layout>
+    );
+  } else if (horizontal) {
+    frameContent = (
+      <Layout columns={[1, 1]} colGap="column" rowGap="tight" align="start">
+        <Layout rowGap="tight" className={styles.content}>
+          {eyebrowNode}
+          {titleNode}
+        </Layout>
+        <Layout rowGap="block" className={styles.content}>
+          {bodyNode}
+          {cta}
+        </Layout>
+      </Layout>
+    );
+  } else {
+    frameContent = (
+      <Layout rowGap="block">
+        {imageNode}
+        {content}
+      </Layout>
+    );
+  }
 
   return (
     <li className={styles.root}>

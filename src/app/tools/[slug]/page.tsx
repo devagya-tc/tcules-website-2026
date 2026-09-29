@@ -113,7 +113,7 @@ function renderToolBlock(block: ToolBlock) {
               key={`${block.id}-${item.title}`}
               title={item.title}
               body={item.body}
-              marker={numbered ? { kind: 'number', value: index + 1 } : undefined}
+              marker={numbered ? { type: 'number', value: index + 1 } : undefined}
               titleAs="h3"
             />
           ))}

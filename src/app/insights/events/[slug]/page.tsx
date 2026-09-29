@@ -23,6 +23,12 @@ function figureImage(image: EventImage) {
     alt: image.alt,
     width: image.width,
     height: image.height,
+    /* The derived widths and the kind fields travel with the record so Figure's Media can serve
+       a srcset and draw the edge by kind; `mime` is the one field left behind. */
+    sources: image.sources,
+    kind: image.kind,
+    panel: image.panel,
+    shadow: image.shadow,
   };
 }
 
@@ -238,13 +244,7 @@ export default async function EventPage({ params }: EventPageProps) {
   const labels = uniqueLabels([...event.categories, ...event.tags]);
   const hasHeroDetails = event.details.length > 0 || labels.length > 0;
   const heroMedia = event.featureImage
-    ? {
-        kind: 'image' as const,
-        src: event.featureImage.src,
-        alt: event.featureImage.alt,
-        width: event.featureImage.width,
-        height: event.featureImage.height,
-      }
+    ? { type: 'image' as const, image: event.featureImage }
     : undefined;
 
   return (
@@ -361,7 +361,7 @@ export default async function EventPage({ params }: EventPageProps) {
                   eyebrow="Article"
                   media={
                     resource.image
-                      ? { kind: 'image', src: resource.image.src, alt: resource.image.alt }
+                      ? { type: 'image', image: resource.image }
                       : undefined
                   }
                   href={articlePath(resource.slug)}

@@ -1,12 +1,76 @@
 import type { ReactNode } from 'react';
 
-import { Cluster, Layout, Section, type SectionSurface } from '@/components';
+import { Cluster, Layout, Section, type MediaImage, type SectionSurface } from '@/components';
 import { ListCard, type ListCardMarker } from '@/patterns';
 import { ROUTES } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
-const THUMBNAIL = '/design/list-card-sample.svg';
+/* ── Thumbnail records ────────────────────────────────────────────────────────────
+   Whole `MediaImage` records, the shape a page receives from `@/content`. The kind is the record's,
+   and Media draws the edge from it; ListCard only owns the 160 × 3:2 box. The assets are the brand
+   framework's own (the Media specimen's set), not 2560 masters — this proves the mechanism. */
+
+/* One part, no panel: a single workflow node whose own edge holds against the light grounds. The
+   ch05 § 9 case for a case-study thumbnail. Portrait, so the 3:2 fill crops it top and bottom —
+   which is what the central-safe-area supply rule is for. */
+const CUT_OUT: MediaImage = {
+  src: '/design/media/cutout-node.png',
+  alt: 'One workflow node: an AI feature card with a provider field.',
+  width: 902,
+  height: 1088,
+  kind: 'cut-out',
+};
+
+/* A light-UI part whose pale edge does not hold 3:1 against paper — the B5 case, on a panel. It is
+   3:2 already, so the crop takes nothing and only the inset decides what is left of it. */
+const PANEL_PART: MediaImage = {
+  src: '/design/media/cutout-reviews.png',
+  alt: 'Review-analysis panel: user reviews summarised as benefit chips.',
+  width: 855,
+  height: 570,
+  kind: 'cut-out',
+  panel: 'paper-deep',
+};
+
+/* One illustration shape: never boxed, never on blue (ch05 § 4a). The insight/resource case. */
+const ILLUSTRATION: MediaImage = {
+  src: '/design/media/illustration-seam.svg',
+  alt: '',
+  width: 881,
+  height: 544,
+  kind: 'illustration',
+};
+
+/* A capture, with derived widths, so its srcset has the 320 rung a 160 `sizes` asks for at 2×.
+   OFF-BRAND at this size — a whole screen is a flat capture at full column only (ch05 § 2), and § 9
+   gives the thumbnail no edge — rendered so the hairline M3 gives it is visible, not hidden. */
+const CAPTURE: MediaImage = {
+  src: '/design/media/capture-listing.webp',
+  alt: 'Listing editor with bullet fields and an assistance panel.',
+  width: 1436,
+  height: 883,
+  kind: 'capture',
+  sources: [320, 652, 1240].map((width) => ({
+    src: `/design/media/capture-listing-${width}.jpg`,
+    width,
+  })),
+};
+
+/* No kind: what every record is until Strapi records one (strapi-changes.md 3). Renders as a
+   capture (M3), hairline and all — the same off-brand edge as above, arriving by default. */
+const KINDLESS: MediaImage = {
+  src: '/design/list-card-sample.svg',
+  alt: '',
+  width: 480,
+  height: 320,
+};
+
+const thumb = (image: MediaImage): ListCardMarker => ({ type: 'thumbnail', image });
+
+/* Off tcules.com, for the external rows. A literal on purpose: ROUTES names this site's paths, and
+   an external destination is by definition not one of them. */
+const EXTERNAL_HREF = 'https://www.figma.com/community';
 
 const TERMS = [
   {
@@ -51,19 +115,19 @@ const LINKED = [
     title: 'Product design',
     body: 'Turn a difficult workflow into a product people can understand and operate.',
     href: ROUTES.productDesign,
-    marker: { kind: 'icon', name: 'document-text' },
+    marker: { type: 'icon', name: 'document-text' },
   },
   {
     title: 'Design systems',
     body: 'Build the decisions and reusable parts that keep a product coherent as it grows.',
     href: ROUTES.designSystems,
-    marker: { kind: 'icon', name: 'check' },
+    marker: { type: 'icon', name: 'check' },
   },
   {
     title: 'Design engineering',
     body: 'Carry interaction decisions into production without losing their intent.',
     href: ROUTES.designEngineering,
-    marker: { kind: 'icon', name: 'copy' },
+    marker: { type: 'icon', name: 'copy' },
   },
 ] as const satisfies readonly {
   title: string;
@@ -149,13 +213,20 @@ function SurfaceRows() {
         arrangement="stacked"
         title="Define the decision before the interface"
         body="The static row proves title, body, number marker and base rule together."
-        marker={{ kind: 'number', value: 1 }}
+        marker={{ type: 'number', value: 1 }}
       />
       <ListCard
         title="Design systems"
         body="The linked row proves the dark title, icon marker, cue link ink and focus ring."
-        marker={{ kind: 'icon', name: 'check' }}
+        marker={{ type: 'icon', name: 'check' }}
         href={ROUTES.designSystems}
+      />
+      <ListCard
+        title="A case study, told off-site"
+        body="A cut-out thumbnail and the leaves-the-site cue: no edge on the part, and the square arrow in the cue's own ink."
+        marker={thumb(CUT_OUT)}
+        href={EXTERNAL_HREF}
+        external
       />
     </Rows>
   );
@@ -172,7 +243,7 @@ function SampleList({ count = 12 }: { count?: number }) {
             arrangement="stacked"
             title={title}
             body="Recruit this perspective before synthesis so the sample does not silently optimise for the easiest people to reach."
-            marker={{ kind: 'number', value: index + 1 }}
+            marker={{ type: 'number', value: index + 1 }}
           />
         );
       })}
@@ -242,28 +313,222 @@ export default function ListCardSpecimenPage() {
               arrangement="stacked"
               title="Number marker"
               body="A two-digit index orders the sequence without outweighing the title it indexes."
-              marker={{ kind: 'number', value: 1 }}
+              marker={{ type: 'number', value: 1 }}
             />
             <ListCard
               arrangement="stacked"
               title="Icon marker"
               body="The existing solid glyph is decorative because this title already names its subject."
-              marker={{ kind: 'icon', name: 'document-text' }}
+              marker={{ type: 'icon', name: 'document-text' }}
             />
             <ListCard
               arrangement="stacked"
               title="Thumbnail marker"
-              body="ListCard owns this native image, its intrinsic dimensions and its fixed centre crop."
-              marker={{
-                kind: 'thumbnail',
-                src: THUMBNAIL,
-                alt: 'Abstract landscape of overlapping product decisions',
-              }}
+              body="ListCard owns the 160 × 3:2 box; Media fills it with its srcset, lazy load and edge by kind."
+              marker={thumb(CUT_OUT)}
             />
             <ListCard
               arrangement="stacked"
               title="No marker"
               body="Omitting the slot also removes its 24px seam; content returns to inline start."
+            />
+          </Rows>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>2a · The thumbnail, by kind</h2>
+            <p>
+              The thumbnail is <code>Media</code> in <code>fit=&quot;fill&quot;</code>, inside
+              ListCard&rsquo;s own 160 × 3:2 box (<code>--ratio-cover</code>), lazy, with{' '}
+              <code>sizes=&quot;160px&quot;</code> from <code>LIST_CARD_THUMBNAIL</code>. The
+              edge is the record&rsquo;s kind, drawn by Media — ListCard never restyles it. Per
+              ch05 § 9 and ruling C1 a thumbnail belongs only to case-study and insight/resource
+              rows, and carries one cut-out part or one illustration shape. The last two rows
+              are the failures the pattern cannot refuse, shown so they are recognisable.
+            </p>
+          </Layout>
+          <Rows>
+            <ListCard
+              arrangement="stacked"
+              title="Cut-out · one part · legal"
+              body="No edge: the part's own silhouette is the frame. The 3:2 fill crops a portrait part top and bottom, so its subject must sit in the central safe area."
+              marker={thumb(CUT_OUT)}
+              href={ROUTES.caseStudies}
+            />
+            <ListCard
+              arrangement="stacked"
+              title="Illustration · one shape · legal"
+              body="Never boxed — no edge, no panel, no shadow — and never on a blue band. The insight/resource case."
+              marker={thumb(ILLUSTRATION)}
+              href={ROUTES.insights}
+            />
+            <ListCard
+              arrangement="stacked"
+              title="Capture · off-brand at 160"
+              body="A whole screen is a flat capture at full column only (ch05 § 2), and § 9 gives a thumbnail no edge. Media draws the capture hairline because the record says capture; the fix is the record."
+              marker={thumb(CAPTURE)}
+            />
+            <ListCard
+              arrangement="stacked"
+              title="No kind · renders as a capture (M3)"
+              body="Every record until Strapi records kind. Same hairline, arriving by default — which is why a thumbnail record should carry its kind before it ships."
+              marker={thumb(KINDLESS)}
+            />
+          </Rows>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>2b · The panel inset at 160 (Media § 17 Q2)</h2>
+            <p>
+              A B5 cut-out on its contrast panel keeps Media&rsquo;s <code>--gap-gutter</code>{' '}
+              inset at every size, so in a 160 × 107 box the part gets 96 × 43. Media cannot see
+              the box it fills, so it cannot choose a smaller step for it, and ListCard may not
+              set Media&rsquo;s token. <strong>Shipped: Media unchanged; a supply rule.</strong>{' '}
+              A thumbnail&rsquo;s part must hold its own edge (no panel), or the row takes the
+              case&rsquo;s illustration. The right-hand cell is the rejected alternative — the
+              inset at <code>--gap-text</code>, &ldquo;cell padding&rdquo; — overridden in this
+              harness only, so the owner can judge the two.
+            </p>
+          </Layout>
+          <Layout columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="stack">
+            <Specimen
+              title="panel · --gap-gutter 32 · shipped"
+              note="96 × 43 of part. Fails ch05 § 9's 160 check: not one recognisable shape."
+            >
+              <Rows>
+                <ListCard
+                  arrangement="stacked"
+                  title="Panelled part"
+                  body="The inset Media ships."
+                  marker={thumb(PANEL_PART)}
+                />
+              </Rows>
+            </Specimen>
+            <Specimen
+              title="panel · --gap-text 16 · NOT shipped"
+              note="128 × 75 of part. A harness-only override of --media-panel-inset, for comparison."
+            >
+              <div className={s.panelInsetCell}>
+                <Rows>
+                  <ListCard
+                    arrangement="stacked"
+                    title="Panelled part"
+                    body="The alternative inset."
+                    marker={thumb(PANEL_PART)}
+                  />
+                </Rows>
+              </div>
+            </Specimen>
+            <Specimen
+              title="no panel · the supply rule's answer"
+              note="A part whose own edge holds on the ground: the whole 160 × 107 box."
+            >
+              <Rows>
+                <ListCard
+                  arrangement="stacked"
+                  title="Unpanelled part"
+                  body="What the rule asks for."
+                  marker={thumb(CUT_OUT)}
+                />
+              </Rows>
+            </Specimen>
+          </Layout>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>2c · Ordered and unordered sets</h2>
+            <p>
+              The <code>number</code> fill is the Mechanism&rsquo;s &ldquo;ordered steps&rdquo;
+              variant, so a numbered set is a real <code>&lt;ol&gt;</code>: the numeral is
+              aria-hidden and the list announces position. An unordered set is a{' '}
+              <code>&lt;ul&gt;</code>. The list element is the caller&rsquo;s{' '}
+              <code>Layout as</code>, never the row&rsquo;s — one boolean on every route drives
+              both the element and the marker. A <code>&lt;ul&gt;</code> of numerals is the one
+              wrong composition, and it is named here rather than rendered.
+            </p>
+          </Layout>
+          <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
+            <Specimen
+              title={'<Layout as="ol"> · number markers'}
+              note="“List, 3 items. 1 of 3. Name the decision…” — order from the markup, not the numeral."
+            >
+              <Rows ordered>
+                {SAMPLES.slice(0, 3).map((title, index) => (
+                  <ListCard
+                    key={title}
+                    arrangement="stacked"
+                    title={title}
+                    body="Name the decision this step must make."
+                    marker={{ type: 'number', value: index + 1 }}
+                  />
+                ))}
+              </Rows>
+            </Specimen>
+            <Specimen
+              title={'<Layout as="ul"> · no marker, or an icon'}
+              note="No order to announce, so no number fill."
+            >
+              <Rows>
+                {TERMS.slice(0, 3).map((term, index) => (
+                  <ListCard
+                    key={term.title}
+                    arrangement="stacked"
+                    title={term.title}
+                    body={term.body}
+                    marker={index === 0 ? { type: 'icon', name: 'document-text' } : undefined}
+                  />
+                ))}
+              </Rows>
+            </Specimen>
+          </Layout>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>2d · External rows</h2>
+            <p>
+              <code>external</code> swaps the cue for ch04&rsquo;s &ldquo;leaves the site&rdquo;
+              glyph, <code>square-arrow-right-up</code> — one glyph per meaning, replacing the
+              arrow rather than joining it — opens a new tab, and appends a visually hidden
+              &ldquo;(opens in a new tab)&rdquo; to the row&rsquo;s accessible name. Same slot,
+              size (18) and ink as the arrow. It is the first route-visible Solar glyph, so the
+              site footer&rsquo;s legal line now carries the CC BY 4.0 credit.
+            </p>
+          </Layout>
+          <Rows>
+            <ListCard
+              title="Internal destination"
+              body="arrow-right: go, next. Same tab."
+              href={ROUTES.caseStudies}
+            />
+            <ListCard
+              title="External destination"
+              body="square-arrow-right-up: leaves the site. New tab, said in words to a screen reader."
+              href={EXTERNAL_HREF}
+              external
+            />
+            <ListCard
+              title="External with a thumbnail"
+              body="The cue and the marker are independent; the row is still one link and one focus stop."
+              marker={thumb(ILLUSTRATION)}
+              href={EXTERNAL_HREF}
+              external
+            />
+            <ListCard
+              title="An external flag with no href"
+              body="No destination, so no anchor, no cue and no hint."
+              external
             />
           </Rows>
         </Layout>
@@ -284,7 +549,7 @@ export default function ListCardSpecimenPage() {
                     arrangement="stacked"
                     title={title}
                     body="Name the evidence and owner before the next step begins."
-                    marker={{ kind: 'number', value: index + 1 }}
+                    marker={{ type: 'number', value: index + 1 }}
                   />
                 ))}
               </Rows>
@@ -332,13 +597,13 @@ export default function ListCardSpecimenPage() {
               arrangement="stacked"
               title="Static · rest only"
               body="This row is inert and never enters the tab order."
-              marker={{ kind: 'number', value: 1 }}
+              marker={{ type: 'number', value: 1 }}
             />
             <ListCard
               arrangement="stacked"
               title="Linked · point, hold and Tab"
               body="One native anchor owns the title, summary and arrow cue."
-              marker={{ kind: 'icon', name: 'copy' }}
+              marker={{ type: 'icon', name: 'copy' }}
               href={ROUTES.designEngineering}
             />
           </Rows>
@@ -437,7 +702,7 @@ export default function ListCardSpecimenPage() {
               <ListCard
                 title="Interaction and interface design for regulated financial products with several operational owners"
                 body="The complete naming record is available at https://tcules.com/services/product-design/design-systems/a-single-unbroken-token-that-must-wrap-before-it-can-widen-the-page and the row grows rather than truncating either field."
-                marker={{ kind: 'icon', name: 'document-text' }}
+                marker={{ type: 'icon', name: 'document-text' }}
               />
             </Rows>
           </Specimen>
@@ -467,7 +732,7 @@ export default function ListCardSpecimenPage() {
               <ListCard
                 title="Blank thumbnail source"
                 body="The image marker collapses without a placeholder."
-                marker={{ kind: 'thumbnail', src: '   ', alt: '' }}
+                marker={thumb({ src: '   ', alt: '', width: 480, height: 320 })}
               />
             </Rows>
           </Specimen>
@@ -493,7 +758,7 @@ export default function ListCardSpecimenPage() {
                   <ListCard
                     title="A thumbnail in a narrow parent"
                     body="The 160px image wraps above a core that keeps its readable minimum."
-                    marker={{ kind: 'thumbnail', src: THUMBNAIL, alt: '' }}
+                    marker={thumb(ILLUSTRATION)}
                     href={ROUTES.caseStudies}
                   />
                 </Rows>
@@ -551,13 +816,12 @@ export default function ListCardSpecimenPage() {
             <h2>10 · Narrow tracks</h2>
             <p>
               Thumbnail rows in the phone&rsquo;s 326px column, then the same number, icon and
-              linked thumbnail rows at Layout&rsquo;s sm and xs track
-              widths. This is where the inline inset is proved: it takes 32px from each track,
-              so the copy gets 224px at sm and 160px at xs — below the 192px core minimum at xs,
-              where the marker wraps above the core instead of squeezing it. Nothing overflows
-              at either width, because padding sits inside the border box. Markers wrap without
-              widening the page; the content core can shrink below xs only when the parent
-              itself is smaller.
+              linked thumbnail rows at Layout&rsquo;s sm and xs track widths. This is where the
+              inline inset is proved: it takes 32px from each track, so the copy gets 224px at
+              sm and 160px at xs — below the 192px core minimum at xs, where the marker wraps
+              above the core instead of squeezing it. Nothing overflows at either width, because
+              padding sits inside the border box. Markers wrap without widening the page; the
+              content core can shrink below xs only when the parent itself is smaller.
             </p>
           </Layout>
           <Specimen
@@ -570,14 +834,28 @@ export default function ListCardSpecimenPage() {
                   arrangement="stacked"
                   title="A linked thumbnail in the phone's column"
                   body="The cover crop at the thumbnail's own width, with the copy taking what is left of 326."
-                  marker={{ kind: 'thumbnail', src: THUMBNAIL, alt: '' }}
+                  marker={thumb(ILLUSTRATION)}
                   href={ROUTES.caseStudies}
                 />
                 <ListCard
                   arrangement="stacked"
                   title="The same thumbnail, unlinked"
                   body="No cue, so the core gets the cue's width back."
-                  marker={{ kind: 'thumbnail', src: THUMBNAIL, alt: '' }}
+                  marker={thumb(ILLUSTRATION)}
+                />
+                <ListCard
+                  arrangement="stacked"
+                  title="A cut-out part, off-site"
+                  body="The leaves-the-site cue at the phone's width: the square arrow keeps the arrow's slot."
+                  marker={thumb(CUT_OUT)}
+                  href={EXTERNAL_HREF}
+                  external
+                />
+                <ListCard
+                  arrangement="stacked"
+                  title="A capture — off-brand"
+                  body="The M3 hairline at 160, in the 326 column."
+                  marker={thumb(CAPTURE)}
                 />
               </Rows>
             </div>
@@ -590,19 +868,19 @@ export default function ListCardSpecimenPage() {
                     arrangement="stacked"
                     title="Step"
                     body="Compact sequence copy."
-                    marker={{ kind: 'number', value: 1 }}
+                    marker={{ type: 'number', value: 1 }}
                   />
                   <ListCard
                     arrangement="stacked"
                     title="Icon"
                     body="Compact subject copy."
-                    marker={{ kind: 'icon', name: 'document-text' }}
+                    marker={{ type: 'icon', name: 'document-text' }}
                   />
                   <ListCard
                     arrangement="stacked"
                     title="Link"
                     body="A compact linked row."
-                    marker={{ kind: 'thumbnail', src: THUMBNAIL, alt: '' }}
+                    marker={thumb(ILLUSTRATION)}
                     href={ROUTES.caseStudies}
                   />
                 </Rows>
@@ -615,19 +893,19 @@ export default function ListCardSpecimenPage() {
                     arrangement="stacked"
                     title="Step"
                     body="Compact sequence copy."
-                    marker={{ kind: 'number', value: 1 }}
+                    marker={{ type: 'number', value: 1 }}
                   />
                   <ListCard
                     arrangement="stacked"
                     title="Icon"
                     body="Compact subject copy."
-                    marker={{ kind: 'icon', name: 'document-text' }}
+                    marker={{ type: 'icon', name: 'document-text' }}
                   />
                   <ListCard
                     arrangement="stacked"
                     title="Link"
                     body="A compact linked row."
-                    marker={{ kind: 'thumbnail', src: THUMBNAIL, alt: '' }}
+                    marker={thumb(ILLUSTRATION)}
                     href={ROUTES.caseStudies}
                   />
                 </Rows>

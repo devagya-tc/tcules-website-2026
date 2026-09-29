@@ -31,6 +31,10 @@
    nothing for a variant to select and nothing for a size to step. A --hero-{variant}-*
    token would have been a name for a page family styled identically to the default.
 
+   The two ARRANGEMENTS (stacked, beside — 28 Sep 2026) add no token either. Where the media
+   stands is a Layout template and its 64 is --gap-column, a prop in the TSX; the image's
+   edge is Media's (--media-*). Nothing about an arrangement is a value this file decides.
+
    ── The state model: there isn't one ────────────────────────────────────────────
    ZERO --hero-* state tokens, and that is an assertion rather than an omission: given the
    same props this component renders the same pixels at every moment of its life, on every
@@ -121,13 +125,19 @@
 --hero-key-tracking:var(--text-micro-tracking);
 --hero-value-text:var(--text-body-sm);
 
-/* The two measures, and they are two because the title and the copy are answering
-   different questions. 22ch at --text-h1 measures 693px in Newsreader, so the title takes
-   56% of the 1240 column and leaves the right side open — that silhouette is the reason
-   the hero needs no second column to look composed. 68ch on the copy measures 832px at
-   --text-lead and 666px at --text-body, because `ch` resolves against each part's own
-   role; the lead therefore measures 166px wider than the paragraphs beneath it — a fifth
-   of its own line — which reads as a lead rather than as an error.
+/* The three measures, one per question. 22ch at --text-h1 measures 693px in Newsreader,
+   so the title takes 56% of the 1240 column and leaves the right side open — that
+   silhouette is the reason the no-visual hero needs no second column to look composed.
+   The lead takes --measure-lead, 40ch, which measures 489px at --text-lead: a compact
+   statement under the title rather than a line that runs the column. The paragraphs
+   keep 68ch, 666px at --text-body. `ch` resolves against each part's own role, so each
+   measure sits on its part.
+
+   28 Sep 2026: the lead took --hero-body-measure until then and measured 832px — 166px
+   WIDER than the paragraphs, argued at the time as what makes a lead read as a lead. At
+   CU04's 35-word ceiling that was three long lines reading as the first paragraph of the
+   body, and the no-visual hero squinted as one ragged column. It is now the shorter line
+   and the larger type, and the same measure ContentSection's lead takes.
 
    Every number in the paragraph above was measured in a browser. The spec's §7(b) had
    estimated 594 / 748 / 673 and a ~75px delta, all of them low, because a `ch` in these
@@ -139,7 +149,8 @@
    measure was 749px while the body ran at 18, and this comment kept quoting that number
    and its 83px delta for a day after the size changed. 666 and 166 are measurements now
    rather than the ≈666 the amendment scaled by hand — the hand arithmetic was right to
-   within a pixel. Nothing enforces a number written in a comment, which is the whole
+   within a pixel. The 489 above was measured on 28 Sep 2026 in the same way. Nothing
+   enforces a number written in a comment, which is the whole
    lesson: a measured value pinned in prose goes stale the moment its input moves, so it
    carries the role it was measured at, not just the pixels.
 
@@ -151,9 +162,16 @@
    PRODUCT, measures about 380px uppercased and sits on one line. The measure is there to
    cap the one that does not. */
 --hero-title-measure:var(--measure-title);
+--hero-lead-measure:var(--measure-lead);
 --hero-body-measure:var(--measure-body);
 
 /* ── The media part ──────────────────────────────────────────────────────────
+   THE VIDEO FRAME'S, and only the video's, since 28 Sep 2026: a hero image renders
+   through Media, whose edge is its kind's and whose tokens are --media-*. These four
+   (the three here and --hero-media-rule-ink per surface) edge the one box this component
+   still draws itself — the YouTube <iframe>. The name stays `media` because the part is
+   the media slot; renaming it to `video` would be churn for no reader.
+
    Three values, and only the first of them is a decision anyone will want to argue
    with. 16/9 is not a house ratio and is not applied to the image — the image renders
    at its own intrinsic ratio, uncropped, exactly as Figure's does. This ratio boxes the
@@ -170,7 +188,7 @@
    screenshot is least likely to spare, and a light UI screenshot on paper is nearly the
    colour of the ground and has no edge of its own. The values are re-derived here rather
    than read from --fig-*, because a component never reads another component's tokens —
-   the day Figure re-tunes its rule, a hero image must not move with it. */
+   the day Figure or Media re-tunes its rule, a hero video must not move with it. */
 --hero-media-ratio:16 / 9;
 --hero-media-radius:var(--radius-0);
 --hero-media-rule-width:var(--border-width-hairline);
