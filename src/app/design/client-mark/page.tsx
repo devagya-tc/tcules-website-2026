@@ -127,7 +127,7 @@ const SURFACES = ['paper', 'tint', 'ink', 'blue'] as const;
 /** The composition the site uses: a list of marks in a Cluster, which owns both seams. */
 function Strip({ marks }: { marks: readonly Mark[] }) {
   return (
-    <Cluster as="ul" colGap="block" rowGap="block" align="center">
+    <Cluster as="ul" colGap="stack" rowGap="stack" align="center">
       {marks.map((mark) => (
         <li key={mark.name}>
           <ClientMark {...bare(mark)} />
@@ -162,7 +162,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The strip — nine clients, one weight"
-            note='Cluster as="ul", colGap and rowGap "block", align center. The marks set no spacing of their own. Ratios run from 3.4:1 (GT Tools) to 7.4:1 (LatitudePay), and no two are the same width.'
+            note='Cluster as="ul", colGap and rowGap "stack" (48), align center. The marks set no spacing of their own. Ratios run from 3.4:1 (GT Tools) to 7.4:1 (LatitudePay), and no two are the same width.'
           >
             <Strip marks={STRIP} />
           </Specimen>
@@ -202,7 +202,7 @@ export default function ClientMarkSpecimenPage() {
             note="Fictional files — no real mark has a correction recorded yet. Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
           >
             <Layout rowGap="block">
-              <Cluster colGap="block" rowGap="block" align="center">
+              <Cluster colGap="stack" rowGap="stack" align="center">
                 <ClientMark
                   src={HEAVY.src}
                   name={HEAVY.name}
@@ -212,7 +212,7 @@ export default function ClientMarkSpecimenPage() {
                 <ClientMark {...bare(HEAVY)} />
                 <span className={s.specNote}>heavy · 0 → −0.1</span>
               </Cluster>
-              <Cluster colGap="block" rowGap="block" align="center">
+              <Cluster colGap="stack" rowGap="stack" align="center">
                 <ClientMark
                   src={LIGHT.src}
                   name={LIGHT.name}
@@ -222,7 +222,7 @@ export default function ClientMarkSpecimenPage() {
                 <ClientMark {...bare(LIGHT)} />
                 <span className={s.specNote}>hairline · 0 → +0.12</span>
               </Cluster>
-              <Cluster colGap="block" rowGap="block" align="center">
+              <Cluster colGap="stack" rowGap="stack" align="center">
                 <ClientMark
                   src={LIGHT.src}
                   name={LIGHT.name}
@@ -262,7 +262,7 @@ export default function ClientMarkSpecimenPage() {
             title="Inside a link"
             note="Wrapped in a link to a case study, the mark stays --cmark-ink, not link blue: the colour is the ground's ink by token, not currentColor. The link takes its accessible name from the mark."
           >
-            <Cluster colGap="block" rowGap="block" align="center">
+            <Cluster colGap="stack" rowGap="stack" align="center">
               {/* A specimen-only anchor to nowhere on this page; a real one comes from @/lib/routes. */}
               <a href="#inside-a-link" id="inside-a-link">
                 <ClientMark {...bare(LATITUDEPAY)} />
@@ -277,7 +277,7 @@ export default function ClientMarkSpecimenPage() {
             title="A file that fails to load"
             note="The middle mark's src 404s. Its box is reserved at the computed size (here 97 × 32) and paints nothing; the name is still announced. It is deliberately NOT the name set as text: that would retype the client's name in our face, which ch05 §10 forbids. A missing src, an empty name or a zero size render nothing at all."
           >
-            <Cluster as="ul" colGap="block" rowGap="block" align="center">
+            <Cluster as="ul" colGap="stack" rowGap="stack" align="center">
               <li>
                 <ClientMark {...bare(OMNY)} />
               </li>

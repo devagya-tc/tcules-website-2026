@@ -187,7 +187,7 @@ needs the link to meet 24 × 24, which a 12:1 mark (13 tall) does not on its own
 
 ```tsx
 <Section>
-  <Cluster as="ul" colGap="block" rowGap="block" align="center">
+  <Cluster as="ul" colGap="stack" rowGap="stack" align="center">
     {clients.map((c) => (
       <li key={c.name}>
         <ClientMark
@@ -310,10 +310,10 @@ implemented`. Built, so `implemented`, with the acceptance cited. **non-blocking
 4. **One target and one set of caps site-wide.** ch05 speaks of "the set's" target and caps. _Built:_
    tokens, no prop. A client wall wanting larger marks gets a `size` prop when it exists.
    **non-blocking**
-5. **Gap between marks.** Cluster caps at `block` (24). A strip may want more air (32–48). That is a
-   Cluster conversation, not a margin. _Built:_ `block`. **non-blocking**
+5. **Gap between marks.** _Resolved (29 Sep 2026, owner):_ `stack` (48) on both axes; 24 was too
+   little. Cluster's ceiling was raised from `block` to `stack` to express it. **resolved**
 6. **Linked marks and 24 × 24.** A 12:1 mark is 13 tall; as a link it misses SC 2.5.8 unless the
-   spacing exception applies (it does in a Cluster with 24 gaps). _Built:_ nothing extra.
+   spacing exception applies (it does in a Cluster with 48 gaps). _Built:_ nothing extra.
    **non-blocking**
 7. **404 behaviour.** _Built:_ reserve the box, paint nothing, keep the name. _Rejected:_ render
    nothing (needs client-side detection, shifts the row) and name-as-text (retypes the mark, banned

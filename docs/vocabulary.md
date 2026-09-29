@@ -206,7 +206,7 @@ Layout is done by these three. Always. Anything you specify is arranged by one o
 
 **`Cluster`** — `as?: ElementType` · `rowGap?: ClusterGap` · `colGap?: ClusterGap` · `align?: ClusterAlign` · `justify?: ClusterJustify` · `nowrap?: boolean` · `children: ReactNode`
 
-  where `ClusterGap` = 'inline' | 'tight' | 'text' | 'block' · `ClusterAlign` = 'start' | 'center' | 'end' | 'baseline' | 'stretch' · `ClusterJustify` = 'start' | 'center' | 'end' | 'between'
+  where `ClusterGap` = 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' · `ClusterAlign` = 'start' | 'center' | 'end' | 'baseline' | 'stretch' · `ClusterJustify` = 'start' | 'center' | 'end' | 'between'
 
 Read the unions above literally: a key that is not in them does not exist. `rowGap` and `colGap`
 take **gap-scale role names**, and neither has a default — an axis nobody states renders 0, on

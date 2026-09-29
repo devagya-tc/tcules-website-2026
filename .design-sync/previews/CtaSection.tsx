@@ -3,7 +3,7 @@ import type { CtaPoint, EnquiryContextBase } from 'tcules-website-2026';
 
 /* NOTE: these preview files are type-STRIPPED, not type-checked (see .design-sync/NOTES.md), so an
    invalid prop value fails silently at render. Two things to keep honest here:
-   `Cluster` caps at `block` (this file uses no Cluster of its own), and `body` is a 1- or 2-tuple —
+   `Cluster` caps at `stack` (this file uses no Cluster of its own), and `body` is a 1- or 2-tuple —
    a third paragraph is a compile error at a real call site even though it would render here. */
 
 const POINTS: CtaPoint[] = [

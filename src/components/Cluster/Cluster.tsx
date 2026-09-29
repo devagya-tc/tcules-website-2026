@@ -5,16 +5,19 @@ import { cx } from '@/lib/cx';
 import styles from './Cluster.module.css';
 
 /**
- * The gap scale, capped at `block` (24). A wrapping row of chips or buttons has no use for a
- * 48px block beat, let alone a 96px section one — the ceiling is the only place Cluster and
- * Layout differ, and both read the same --gap-* usage tokens.
+ * The gap scale, capped at `stack` (48). A wrapping row has no use for a 64px column gutter or a
+ * 96px section beat — the ceiling is the only place Cluster and Layout differ, and both read the
+ * same --gap-* usage tokens. The upper two steps are for rows of large, self-contained items: a
+ * strip of client marks is set at `stack`, where 24 read as one crowded word.
  *
  *   inline   4   inside a key and its value
  *   tight    8   icon to label, chip padding, a stat and its unit
  *   text    16   items in a metadata row
  *   block   24   a button group set apart from its neighbours
+ *   gutter  32   cards in a wrapping set
+ *   stack   48   marks in a logo strip
  */
-type ClusterGap = 'inline' | 'tight' | 'text' | 'block';
+type ClusterGap = 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack';
 type ClusterAlign = 'start' | 'center' | 'end' | 'baseline' | 'stretch';
 type ClusterJustify = 'start' | 'center' | 'end' | 'between';
 
