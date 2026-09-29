@@ -88,10 +88,12 @@ export function Accordion({ items, questionAs: Question = 'h3' }: AccordionProps
             <Question className={styles.question}>{item.question}</Question>
             {/* Both chevrons, always in the DOM, both decorative: [open] picks which one shows, so
                 the mark never rotates and the module carries one class instead of a pair. The
-                order is load-bearing — closed first, open second. See .mark in the stylesheet. */}
+                order is load-bearing — closed first, open second. See .mark in the stylesheet.
+                Down at rest, up when open: a right chevron is the convention for "this row
+                navigates", and a disclosure does not leave the page. */}
             <span className={styles.mark}>
-              <Icon name="chevron-right" size="lg" />
-              <Icon name="chevron-down" size="lg" />
+              <Icon name="alt-arrow-down" size="lg" />
+              <Icon name="alt-arrow-up" size="lg" />
             </span>
           </Cluster>
           <Prose html={item.answerHtml} className={styles.answer} />

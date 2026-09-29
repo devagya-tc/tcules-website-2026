@@ -201,7 +201,7 @@ export default function AccordionSpecimenPage() {
               ['hover', 'Question and mark rise to their -hover ink. No ground appears, on any surface.'],
               ['focus', 'The raised ink plus a two-part keyboard-only ring — the ring is the only Brandeis in the component.'],
               ['pressed', 'The raised ink held, plus a hairline underline at --acc-mark-ink, so press differs from hover by more than colour.'],
-              ['expanded', 'Down chevron, visible answer and the raised ink held. The rule does not change.'],
+              ['expanded', 'Up chevron, visible answer and the raised ink held. The question sits --gap-text above its answer; the rule does not change.'],
             ].map(([state, note]) => (
               <div key={state}>
                 <strong>{state}</strong>

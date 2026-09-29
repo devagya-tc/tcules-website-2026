@@ -30,16 +30,23 @@ function Enquiry({
 }) {
   const action = `${ENDPOINTS.enquiryDesign}?outcome=${outcome}`;
 
-  if (contact) return <EnquiryForm variant="contact" action={action} />;
+  if (contact)
+    return <EnquiryForm variant="contact" action={action} scheduleHref={ROUTES.contact} />;
 
   return audit ? (
     <EnquiryForm
       variant="audit"
       action={action}
       context={{ ...CONTEXT, intent: 'free-audit' }}
+      scheduleHref={ROUTES.contact}
     />
   ) : (
-    <EnquiryForm action={action} context={CONTEXT} urlLabel={urlLabel} />
+    <EnquiryForm
+      action={action}
+      context={CONTEXT}
+      urlLabel={urlLabel}
+      scheduleHref={ROUTES.contact}
+    />
   );
 }
 
@@ -62,14 +69,12 @@ export default function EnquiryFormSpecimenPage() {
         heading="Send an enquiry"
         body={['Six hidden context fields and the standard enquiry labels.']}
         form={<Enquiry />}
-        scheduleHref={ROUTES.contact}
       />
       <CtaSection
         eyebrow="Variant · audit"
         heading="Request a free audit"
         body={['Seven hidden context fields and the fixed audit URL wording.']}
         form={<Enquiry audit />}
-        scheduleHref={ROUTES.contact}
         surface="tint"
       />
       <CtaSection
@@ -77,7 +82,6 @@ export default function EnquiryFormSpecimenPage() {
         heading="Start a conversation"
         body={['Five visible contact fields mapped directly to the client-contact mutation.']}
         form={<Enquiry contact />}
-        scheduleHref={ROUTES.contact}
       />
       <Section density="tight">
         <Layout rowGap="tight">
@@ -97,14 +101,12 @@ export default function EnquiryFormSpecimenPage() {
           'Blur an empty or malformed field for Invalid. Submit the three forms below for pending Success, Error, and delayed Submitting. Point at a field, hold the submit, and Tab through the form for the native hover, pressed, and focus states.',
         ]}
         form={<Enquiry outcome="pending" />}
-        scheduleHref={ROUTES.contact}
       />
       <CtaSection
         eyebrow="State · error"
         heading="Typed answers survive a failed request"
         body={['This endpoint returns 500; the controls re-enable and keep their values.']}
         form={<Enquiry outcome="error" urlLabel="Link to the work" />}
-        scheduleHref={ROUTES.contact}
         surface="tint"
       />
       <CtaSection
@@ -112,7 +114,6 @@ export default function EnquiryFormSpecimenPage() {
         heading="The completed form becomes a next step"
         body={['This endpoint succeeds; focus moves to the replacement status region.']}
         form={<Enquiry outcome="success" urlLabel="Where can we see it?" />}
-        scheduleHref={ROUTES.contact}
       />
 
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
@@ -122,7 +123,6 @@ export default function EnquiryFormSpecimenPage() {
           heading="Start with the work as it is"
           body={BODY}
           form={<Enquiry />}
-          scheduleHref={ROUTES.contact}
           surface={surface}
         />
       ))}
@@ -137,7 +137,6 @@ export default function EnquiryFormSpecimenPage() {
         heading="A blue close between ink bands"
         body={BODY}
         form={<Enquiry />}
-        scheduleHref={ROUTES.contact}
         surface="blue"
       />
       <Section surface="ink" density="tight">
@@ -148,9 +147,9 @@ export default function EnquiryFormSpecimenPage() {
         <Layout rowGap="stack">
           <h2>Edge cases</h2>
           <p>
-            The next audit uses the longest fixed label. Scheduling remains the enclosing
-            CTA&rsquo;s single persistent action. The final rendering is deliberately
-            constrained by an illegal 256px parent to expose the documented floor.
+            The next audit uses the longest fixed label. Scheduling sits in the form&rsquo;s own
+            action row, beside the submit. The final rendering is deliberately constrained by an
+            illegal 256px parent to expose the documented floor.
           </p>
         </Layout>
       </Section>
@@ -163,9 +162,9 @@ export default function EnquiryFormSpecimenPage() {
             variant="audit"
             action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
             context={{ ...CONTEXT, intent: 'free-audit' }}
+            scheduleHref={ROUTES.contact}
           />
         }
-        scheduleHref={ROUTES.contact}
       />
       <div className={s.trackSm}>
         <CtaSection
@@ -173,7 +172,6 @@ export default function EnquiryFormSpecimenPage() {
           heading="A 256px parent that does not size the band"
           body={BODY}
           form={<Enquiry />}
-          scheduleHref={ROUTES.contact}
           surface="tint"
         />
       </div>
@@ -183,7 +181,6 @@ export default function EnquiryFormSpecimenPage() {
           heading="A Cluster does not promise a form track"
           body={BODY}
           form={<Enquiry />}
-          scheduleHref={ROUTES.contact}
           surface="blue"
         />
       </Cluster>
@@ -195,17 +192,11 @@ export default function EnquiryFormSpecimenPage() {
           even when the route rule is broken.
         </p>
       </Section>
-      <CtaSection
-        heading="The first adjacent form"
-        body={BODY}
-        form={<Enquiry />}
-        scheduleHref={ROUTES.contact}
-      />
+      <CtaSection heading="The first adjacent form" body={BODY} form={<Enquiry />} />
       <CtaSection
         heading="The second adjacent form"
         body={BODY}
         form={<Enquiry urlLabel="Link to the work" />}
-        scheduleHref={ROUTES.contact}
         surface="tint"
       />
 

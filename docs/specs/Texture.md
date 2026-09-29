@@ -6,11 +6,20 @@
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Component**       | Texture (with its child `TextureShape`)                                                                                                                                                                                                                                          |
 | **Tier**            | 1 · primitive (`src/components/`)                                                                                                                                                                                                                                                |
-| **Status**          | `implemented`                                                                                                                                                                                                                                                                    |
+| **Status**          | `implemented` · **parked** (owner, 29 Sep 2026)                                                                                                                                                                                                                                  |
 | **Token prefix**    | `--tex-`                                                                                                                                                                                                                                                                         |
 | **Designer / date** | None. This is a **reconstruction**, written from the shipped implementation by Claude Code on 2026-09-28. The texture itself was measured from a Figma shader (node `435:2744`, frame `385:72`).                                                                                 |
 | **Implements**      | Owner ruling **O3** (`docs/phase-2-decisions.md`) and the Texture entry in `docs/component-audit.md` §3 (tracker 2.16).                                                                                                                                                          |
 | **Implemented at**  | `src/components/Texture/Texture.tsx` · `src/components/Texture/Texture.module.css` · `src/styles/tokens/components/texture.css` · `src/styles/textures/pixel-grid.json` · specimen `src/app/design/texture/page.tsx` · exporter `scripts/texture.mjs` · guide `docs/textures.md` |
+| **Amended**         | 29 Sep 2026, tracker 2.17: parked; limit 6 (blur ≥ 100 in the column); no shape under a heading; ink/blue rows out                                                                                                                                                               |
+
+> **Parked — owner, 29 Sep 2026 (tracker 2.17).** Texture is parked until a real placement exists.
+> It stays in the library and in `/design/texture`, but it is not to be made stronger, more visible
+> or more capable, and no ink is to be settled, until a page composition asks for it. The 2.17 pass
+> fixed a rule breach and the specimen's hygiene only: no shape sits under a heading at any width
+> (§9 names the cause), limit 6 below was added, and the ink and blue rows the specimen printed were
+> removed because limit 3 bans those grounds. Nothing about the component or its tokens' values
+> changed.
 
 > **What this document is.** Texture shipped in #55 without a spec. The audit kept it (ruling O3,
 > 28 Sep) on one condition: its spec records **where it may sit**, so the next reader does not
@@ -53,7 +62,7 @@ rare opt-in visible in the markup. Section supplies the two things Texture needs
 
 ### Placement limits (ruling O3, audit §3; binding)
 
-These five come from `docs/component-audit.md` §3 exactly. They are what keeps Texture on the right
+Limits 1–5 come from `docs/component-audit.md` §3 exactly; limit 6 is the owner's (2.17). They are what keeps Texture on the right
 side of ch05:
 
 1. **Never under an image.**
@@ -61,6 +70,11 @@ side of ch05:
 3. **Never on ink or blue.** Those grounds are reserved.
 4. **At most one per page.**
 5. **Never as a rhythm device between bands.**
+6. **Blur ≥ 100 on any shape inside the content column.** Added by the owner, 29 Sep 2026 (tracker
+   2.17). A shape whose box enters Section's content column (the 1240 cap less its gutters, i.e.
+   anywhere text could be at some width) takes `blur` of 100 or more. A hard or lightly feathered
+   edge inside the column reads as a shape, not as texture, and at 390 the column is the whole band.
+   Only a shape wholly outside the column — in a gutter, or off the field — may be harder.
 
 **How "under" is judged.** A shape's box is the rectangle or ellipse before blur, where the grid is
 at full strength. It must not intersect the box of a heading, a body paragraph or an image. The
@@ -70,7 +84,11 @@ by the copy. A placement whose full-strength field sits behind words is the one 
 See §17 Q3.
 
 **Where it may sit, therefore:** paper (and tint), in a band's air or beside its content: an edge
-glow, a corner, or the empty half of an asymmetric `Layout`. One band per page.
+glow, a corner, or the empty half of an asymmetric `Layout`. One band per page. **The band's air is
+the only region that is clear at every width:** at 390 the content column is the whole band, so the
+top and bottom padding are all that is left. A shape that must clear content at any width is
+anchored to the top or bottom edge with its box inside that padding, or percent-sized and hung off
+an edge so that it is.
 
 ---
 
@@ -156,7 +174,9 @@ legible.
   neutral-300 (1.07:1) is the quieter alternative.
 - **ink / blue:** declared because every surface block must be self-contained (CLAUDE.md token
   rule 2), **not** because Texture may be placed there. Limit 3 forbids both. The values stay as
-  shipped. Blue cannot take brandeis-500, because that is its own ground.
+  shipped, are labelled in `texture.css` as declared for self-containment only, and are no longer
+  "provisional": there is nothing to choose, so the specimen's ink and blue candidates were removed
+  (29 Sep 2026, 2.17). Blue cannot take brandeis-500, because that is its own ground.
 
 **Nested surface.** The token re-declares on every `[data-surface]`, so a Texture inside a tint
 panel nested in a paper band takes tint's ink. Which positioned ancestor it fills is a separate
@@ -194,7 +214,15 @@ Nothing changes at 1023 or 767. Percentage shapes reflow with the band; px shape
 and anchor. So an edge glow placed `top` or `bottom` holds its edge at every width. At 767 and
 below, the content column fills the band. A shape that sat in empty space at 1440 may now sit
 behind text, so a placement must be checked at 390 against limit 2. The recommended approach is
-edge-anchored shapes in the band's air, which survive the reflow. **Touch targets:** not
+edge-anchored shapes in the band's air, which survive the reflow.
+
+**The top air is not always there — found 29 Sep 2026 (tracker 2.17).** Since the same-surface seam
+rule (`Section.module.css`), a band that directly follows a band of its own surface drops its
+**top** padding. A textured paper band placed after another paper band therefore starts its content
+at y = 0, and a shape anchored at `top` whose box was measured against 128 of air sits behind the
+heading. That is what the specimen was showing at 390. A top-anchored placement must be checked
+against the band's actual top padding in its page, not its density: follow a different surface, or
+a `flush` band, or anchor at the bottom. **Touch targets:** not
 applicable, since the element is not hit-tested.
 
 ---
@@ -282,20 +310,20 @@ under. Reduced motion needs no handling.
 
 ## 15 · Specimen plan
 
-`/design/texture` today renders:
+`/design/texture` renders, as revised 29 Sep 2026 (tracker 2.17):
 
-- the Figma workflow step by step (hard shape, blurred shape, the measured frame rebuilt);
-- every anchor (corners, ellipse, rounded, percent-sized);
-- tint, ink and blue with the measured frame;
-- the candidate inks side by side.
+- the Figma workflow step by step. Steps 1 and 2 (hard shape, blurred shape, both centred) are
+  **mechanism bands with no content**, labelled "mechanism, not a placement", because a centred
+  shape sits behind wherever content would be and a blur-0 shape in the column breaks limit 6;
+- the measured frame rebuilt, with its content: each box ends 108 into a band with 128 of top air;
+- three anchors — an ellipse hung off the top-left, a 30%-wide rounded rect off the bottom-right
+  corner, a 40%-wide glow on the bottom edge — every box in the band's air and blurred ≥ 100, so no
+  shape is under the heading or body at 1440 or 390;
+- tint with the measured frame, and tint's two candidate inks (400, 300) side by side.
 
-Gaps against this spec (§17 Q2):
-
-- Several bands set a heading and a paragraph over the field's centre. That proves layering (the
-  content paints above the field) but models a placement limit 2 forbids.
-- There is no "correct placement" band: an edge glow beside an asymmetric Layout, at 1440 and 390.
-- The ink and blue bands demonstrate grounds the ruling bans. They should be labelled "declared
-  for self-containment, not placeable" or removed.
+Every caption band before a textured band is `flush`, so the textured band keeps its full top air
+(§9). The ink and blue bands and their candidates are removed (limit 3). Still open, and parked with
+the component: a "correct placement" band beside an asymmetric Layout (§17 Q2).
 
 ---
 
@@ -316,10 +344,15 @@ would not encode anything known to be wrong.
    (b) keep choosing between the candidates.
    _Recommendation:_ (a). Settling an ink for a ground Texture may not use is wasted work, and
    rule 2 still requires the declaration. Tint's 400 vs 300 can be settled when tint first gets a
-   placement. **non-blocking**
+   placement. **non-blocking** — **Resolved (a), 29 Sep 2026 (tracker 2.17):** values kept and
+   relabelled in `texture.css`; the ink and blue candidates are deleted from the specimen and from
+   `specimen.module.css`. Tint's choice waits on the first placement, with the component parked.
 2. **The specimen models placements the limits forbid (§15).**
    _Recommendation:_ keep one layering-proof band, captioned as such, and add a correct-placement
-   band at 1440 and 390. Relabel ink and blue per Q1. **non-blocking**
+   band at 1440 and 390. Relabel ink and blue per Q1. **non-blocking** — **Partly resolved, 29 Sep
+   2026 (tracker 2.17):** no band now puts a shape under a heading or body at any width, and ink and
+   blue are gone. The correct-placement band is not added: Texture is parked until a real placement
+   exists, and that placement will be the band.
 3. **"Under" is interpreted as "the shape's full-strength box".** Without that, the measured frame
    itself would be illegal, because its feather reaches the copy.
    _Options:_ (a) the box rule in §1; (b) the feather must also clear content (so the shape box
@@ -351,5 +384,5 @@ would not encode anything known to be wrong.
 | `--space-*` reaches         | 0                                                                                                                                |
 | Type roles                  | 0 (renders no text)                                                                                                              |
 | New tokens requested        | 0                                                                                                                                |
-| Placement limits recorded   | 5 of 5, from audit §3                                                                                                            |
+| Placement limits recorded   | 6 — 5 from audit §3, 1 from the owner (2.17)                                                                                     |
 | BLOCKING questions          | 0                                                                                                                                |

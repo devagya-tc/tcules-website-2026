@@ -11,12 +11,23 @@
 | **Designer / date** | Codex / 24 Aug 2026                  |
 | **Implements**      | `docs/briefs/16-callout.md`          |
 | **Implemented at**  | `src/patterns/Callout/` · `src/styles/tokens/components/callout.css` · specimen `src/app/design/callout/page.tsx` |
+| **Amended**         | 29 Sep 2026, tracker 2.17: an optional mono `label` key (owner decision) |
 
 This spec was checked against the current repository vocabulary and the twenty shipped
 components. The brief proposes Tier 1, but the hard constraint that rich text “takes Prose” changes
 that answer: a primitive may not import another primitive, while a Tier 2 pattern may compose
 `Prose`. The owner accepted the new Tier 2 pattern in section 17 question 1; the remaining
 non-blocking recommendations are accepted as drafted.
+
+**Amended 29 Sep 2026 — tracker 2.17, an optional mono key.** On the specimen a scope note was
+visually identical to a `Figure` caption: quiet sans, body-small, no mark. The owner chose to add an
+**optional `label`** — a short key such as "Scope" or "Note", authored in sentence case and presented
+in the mono label voice (`--text-eyebrow` + `--text-eyebrow-tracking` + `text-transform:
+var(--text-mono-case)`), leading the sentence in a baseline-aligned `Cluster` at `colGap="tight"`
+(and `rowGap="tight"` when it wraps). Its ink is a new per-surface `--call-label-ink`, one rung
+stronger than the sentence, each ≥ 4.5:1. **Without `label`, the Callout renders exactly as before**
+— same DOM, same CSS. The rulings that excluded a label (§ 2, § 3, § 14 Don't 8, and § 11's "no
+fixed accessible label") are revised in place below and dated; every other exclusion stands.
 
 ## 1 · Identity
 
@@ -48,8 +59,13 @@ this record must recede from the claim it qualifies.
 | ---- | -------- | --------------- | -------------------------- |
 | root | yes | element with native-equivalent `role="note"` | Establishes one parenthetic scope note. Owns no ground, edge, outer seam or interactive behavior. |
 | content | yes | existing `Prose` | One trusted, sanitised rich-text field containing one or two paragraphs and inline rich text. Callout owns its quiet type and ink; Prose owns the HTML seam, internal flow and inline links. |
+| label | no — only when `label` is non-blank | `<span>` inside a `Cluster colGap="tight" rowGap="tight" align="baseline"` that also holds content | A short mono key ("Scope", "Note"). Added 29 Sep 2026, tracker 2.17. `--call-label-ink`, `--text-eyebrow` + tracking + `--text-mono-case`. Beside the sentence while the row keeps `--call-content-min-xs` (192px) for it; above it when it does not. |
 
-There is no eyebrow, heading, label, icon, mark, quotation glyph, attribution, portrait, logo,
+**Revised 29 Sep 2026 (tracker 2.17, owner decision).** This paragraph originally excluded a label
+along with everything else below. The owner reversed that one exclusion: without a key, a scope note
+could not be told from a caption. The label is optional, plain text and never a heading — it names
+no landmark and adds no outline entry. Everything else stays excluded: there is no eyebrow, heading,
+icon, mark, quotation glyph, attribution, portrait, logo,
 image, action, dismissal control, severity marker, panel or ground. The claim being limited is not a
 slot: it remains a preceding sibling so the content model does not duplicate page prose inside a
 note record.
@@ -60,12 +76,15 @@ note record.
 export type CalloutProps = {
   /** Trusted, content-seam-sanitised rich text for one scope limitation. */
   html: string;
+  /** Optional short key, authored in sentence case; uppercased in CSS only (2.17). */
+  label?: string;
 };
 ```
 
 | Prop | Exact type | Default | What it decides |
 | ---- | ---------- | ------- | --------------- |
 | `html` | `string` | none | The trusted rich-text limitation rendered through `Prose`. A blank value is invalid at runtime. |
+| `label` | `string \| undefined` | `undefined` | Whether a mono key leads the sentence. Blank (after trim) is treated as absent: no `Cluster`, no empty span. A plain `string`, so a key cannot carry a link, an icon or markup. Added 29 Sep 2026, tracker 2.17. |
 
 `surface`, tone, severity, size, colour, padding, gap, radius, height, width, heading, icon,
 attribution, actions, `children`, `className`, `style`, `id` and arbitrary DOM attributes are not
@@ -73,7 +92,8 @@ props. The nearest `Section` owns the surface; the parent owns placement and the
 claim; one content meaning owns the treatment; and the closed string seam prevents a caller from
 putting a control, nested landmark or unrelated block into the note.
 
-There are no valid prop combinations beyond one non-blank `html` string. Omitting `html`, passing a
+There are no valid prop combinations beyond one non-blank `html` string, with or without a `label`
+string. Omitting `html`, passing a
 React node, or passing a second content slot must be a compile error. TypeScript cannot know whether
 an HTML string is blank or contains a heading; the content seam guarantees the permitted schema,
 and runtime handles only the blank-string failure without sniffing tags or sentence count.
@@ -104,12 +124,18 @@ interaction and moves no focus.
 
 ## 6 · Per-surface colour
 
-The component introduces one surface-dependent token. Ratios are measured against the exact
+The component introduces two surface-dependent tokens (the second, `--call-label-ink`, since 2.17). Ratios are measured against the exact
 `Section` ground. All are normal text and therefore clear 4.5:1.
 
 | Token / part | paper · `--color-paper` | tint · `--color-paper-deep` | ink · `--color-neutral-950` | blue · `--color-brandeis-500` |
 | ------------ | ----------------------- | -------------------------- | ----------------------------- | ------------------------------- |
 | `--call-content-ink` · content | `--color-neutral-600` · 4.92:1 | `--color-neutral-700` · 7.27:1 | `--color-neutral-400` · 8.05:1 | `--color-brandeis-100` · 4.91:1 |
+| `--call-label-ink` · label (2.17) | `--color-neutral-700` · 8.14:1 | `--color-neutral-800` · 10.54:1 | `--color-neutral-300` · 11.07:1 | `--color-brandeis-50` · 5.57:1 |
+
+**The key, added 29 Sep 2026 (tracker 2.17).** It is surface text, so it takes `-ink`, and it sits one
+full rung stronger than the sentence on every ground: a key quieter than what it keys reads as a
+caption again, the confusion it exists to end. The four values and ratios are the ones `Figure.md`
+§ 6 already computed for its caption ink on the same four grounds. Every surface block declares it.
 
 **Paper.** Neutral-600 is the quietest neutral that still clears normal-text AA on paper. It steps
 down from the surrounding Prose body without becoming disabled-looking or borrowing blue's link
@@ -142,6 +168,9 @@ reads those Prose tokens.
   parent because the claim is not a Callout child.
 - Paragraph-to-paragraph inside the trusted field: Prose's existing `--gap-text` flow rule.
 - Root-to-content: none. There is one child and therefore no internal seam to size.
+- Label-to-content (2.17, only when keyed): the internal `Cluster`'s `colGap="tight"` beside the
+  sentence and `rowGap="tight"` when the row wraps it beneath — the step named for a key beside the
+  thing it keys. Callout's stylesheet names neither.
 - Callout-to-following-content: the containing layout's next declared gap; Callout contributes no
   outer margin.
 
@@ -150,6 +179,12 @@ reads those Prose tokens.
 - Inline size: full available parent width, capped by the content's existing `--measure-body`.
 - Narrow stress reference: `--lay-track-xs`, 192px, because it is the smallest existing layout
   track and one or two body-small sentences must wrap there without widening the page.
+- Keyed content basis (2.17): `--call-content-min-xs`, 192px — the narrowest the sentence may run
+  beside its key before the row wraps. Declared in `callout.css` rather than read from
+  `--lay-track-xs`, because a component never reads another's tokens; the same value and reasoning
+  as `--fig-min-xs`. Applied as the content's flex basis (grow 1, shrink 1), item sizing inside the
+  `Cluster`'s arrangement — without a grow factor a flex item is max-content wide and any real
+  sentence would always wrap beneath its key.
 - Minimum inline size: none beyond zero. This is text, not a control or media object; imposing a
   hard floor would create overflow in a parent narrower than 192px.
 
@@ -167,6 +202,7 @@ base-layer primitives would add names without adding meaning.
 | Part | Type role | Tracking | Measure | Case |
 | ---- | --------- | -------- | ------- | ---- |
 | content | `--text-body-sm` | none — this role has no tracking companion | `--measure-body` | authored sentence case; no transform |
+| label (2.17) | `--text-eyebrow` | `--text-eyebrow-tracking` | none — one short key | authored sentence case; `text-transform: var(--text-mono-case)` in CSS only |
 
 The one- and two-sentence examples retain the same role. Length never chooses typography and no
 line is clamped. Prose continues to own inline emphasis and links, but the field schema excludes
@@ -201,7 +237,9 @@ keyboard, pointer and underline treatment; Callout does not wrap or extend it wi
 ```
 
 The parent `Layout` owns the claim-to-note relationship. Callout has one child, so introducing an
-internal `Layout` would pretend there is an axis or gap that does not exist. There is no hand-rolled
+internal `Layout` would pretend there is an axis or gap that does not exist. **Since 2.17, a keyed
+Callout has two** — the label and the content — and they sit in one `Cluster colGap="tight"
+rowGap="tight" align="baseline"` inside the note root: `<div role="note"><Cluster><span>{label}</span><Prose/></Cluster></div>`. An unkeyed Callout renders no Cluster. There is no hand-rolled
 grid or flex, no margin on a child, and no override of Section's content column or ground. A future
 `ContentSection` may expose a `note: ReactNode` slot, but it passes `<Callout>` through that seam and
 does not import the sibling pattern.
@@ -212,6 +250,11 @@ The root uses `role="note"`, the ARIA semantic for parenthetic or ancillary cont
 `aside` landmark. That lets a screen reader identify the boundary without adding up to three
 unlabelled complementary landmarks on `/services/product-design`. Prose writes the content markup.
 There is no visible or hidden heading and no fixed accessible label that would repeat across notes.
+**Revised 29 Sep 2026 (tracker 2.17):** an authored visible `label` may lead the note. It is plain
+text read first in document order ("Note. Scope. A small qualitative study…"), not an accessible
+name: the root takes no `aria-label` or `aria-labelledby`, so the key is announced once rather than
+twice, and no id or idref is generated. The DOM carries the string as authored — "Scope", not
+"SCOPE" — so a screen reader does not spell an uppercase string letter by letter.
 
 | Key / input | Callout root | Inline Prose link | Focus after action |
 | ----------- | ------------ | ----------------- | ------------------ |
@@ -277,7 +320,9 @@ Callout adds no duration or easing token.
 7. Do not add `warning`, `error`, `success`, `info`, `tone`, `severity` or `size` props; inspect the
    public type and expect only `html`.
 8. Do not add a heading, icon, mark, quote glyph, attribution or action; inspect the rendered tree
-   and component imports.
+   and component imports. *Revised 29 Sep 2026 (tracker 2.17, owner decision):* the one addition
+   is the optional plain-string `label`, a mono key — never a heading element, never an icon, never
+   uppercased in the string.
 9. Do not paint a background, four-sided edge, leading rule, radius or shadow; inspect computed
    style and the module diff.
 10. Do not render the note at Prose's quote role or inside a `blockquote`; inspect the DOM and
@@ -324,6 +369,9 @@ The exact block list, in order:
     severity, dismissal or ground exists; no placeholder renders.
 14. **What a static page cannot force.** Manual instructions for Prose-link hover, held pointer,
     Tab focus, 1023/767 widths and reduced motion.
+15. **The optional key (2.17).** With and without `label`, a claim followed by a keyed note, a long
+    label, a blank label (absent), the phone column (326) and the 192px track, then the keyed and
+    unkeyed note side by side on all four surfaces.
 
 The squint test reads as three ideas: a full-weight claim followed by a smaller scope boundary, a
 three-way semantic routing comparison, and a quiet repeated rhythm across surfaces. No sequence of
@@ -331,7 +379,9 @@ filled rectangles is introduced to manufacture variety.
 
 ## 16 · New token requests
 
-**None — every value in this spec is an existing token.**
+**None — every value in this spec is an existing token.** Still true after 2.17: `--call-label-ink`
+and `--call-content-min-xs` are component-layer declarations of existing ramp values and an existing
+track value, not new primitives or usage tokens.
 
 `--call-content-ink` is the expected component-layer declaration mapping existing ramp values on
 four surfaces, not a new primitive or usage token. Body-small, body measure, parent gap and xs

@@ -1,6 +1,6 @@
 import { cx } from '@/lib/cx';
 
-import { glyphs, type IconName } from './glyphs';
+import { glyphs, hasCounter, type IconName } from './glyphs';
 import styles from './Icon.module.css';
 
 export type { IconName };
@@ -18,6 +18,11 @@ export type { IconName };
  * 14px glyph without the call site restating it, and a `size` passed to that Icon is ignored.
  * That is deliberate — the spec's rule is that the icon steps with the BUTTON, so the button is
  * the component that gets to decide.
+ *
+ * The 16px floor: a glyph with a counter (see `hasCounter` in glyphs.ts) is never set at `sm`.
+ * Its hole is about 1.5 units wide, which at 14px is under a device pixel and fills in. Icon warns
+ * in development when asked for one; a control that sizes its own glyph owes the same rule and is
+ * told so in docs/specs/Icon.md.
  */
 export type IconSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -57,6 +62,12 @@ export type IconProps = {
  */
 export function Icon({ name, size = 'md', label, className }: IconProps) {
   const named = label !== undefined;
+
+  if (process.env.NODE_ENV !== 'production' && size === 'sm' && hasCounter(name)) {
+    console.warn(
+      `Icon: "${name}" has a counter and is never set below 16px; use size "md" or larger.`,
+    );
+  }
 
   return (
     <svg

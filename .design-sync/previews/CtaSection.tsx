@@ -7,9 +7,15 @@ import type { CtaPoint, EnquiryContextBase } from 'tcules-website-2026';
    a third paragraph is a compile error at a real call site even though it would render here. */
 
 const POINTS: CtaPoint[] = [
-  { label: 'A named senior lead', detail: 'the person you meet is the person who does the work' },
+  {
+    label: 'A named senior lead',
+    detail: 'the person you meet is the person who does the work',
+  },
   { label: 'Two weeks to first shipped change', detail: 'not to first slide deck' },
-  { label: 'Your team keeps the system', detail: 'tokens, components and the reasoning behind both' },
+  {
+    label: 'Your team keeps the system',
+    detail: 'tokens, components and the reasoning behind both',
+  },
 ];
 
 const SPLIT_BODY: readonly [string, string] = [
@@ -50,9 +56,10 @@ function FormSlot({ audit = false }: { audit?: boolean }) {
       variant="audit"
       action="/api/audit"
       context={{ ...CONTEXT, placement: 'mid-page', intent: 'ux-audit' }}
+      scheduleHref="/contact"
     />
   ) : (
-    <EnquiryForm action="/api/enquiry" context={CONTEXT} />
+    <EnquiryForm action="/api/enquiry" context={CONTEXT} scheduleHref="/contact" />
   );
 }
 
@@ -95,12 +102,11 @@ function ProofSlot({ quote = false }: { quote?: boolean }) {
  * Pick by what the page is asking the reader to do:
  *
  *   split   (the default) closes a page that asks for an ENQUIRY. Lede and points on one side, a
- *           form and a scheduling link on the other. Takes `form` + `scheduleHref`, and may take
- *           `proof`.
+ *           form on the other — EnquiryForm, which carries its own scheduling link beside its
+ *           submit. Takes `form`, and may take `proof`.
  *   open    closes a page that asks for a CLICK. No form — one or two `actions` instead, and it
  *           may take `proof`.
- *   offer   INTERRUPTS a page mid-scroll with the free audit. Takes either a form and a schedule
- *           link, or actions — never both, and never `proof`.
+ *   offer   INTERRUPTS a page mid-scroll with the free audit. Takes either a form or actions — never both, and never `proof`.
  *
  * Those combinations are enforced by the type, not by convention: `arrangement="open"` with a
  * `form`, or `arrangement="offer"` with `proof`, does not compile. So compose by choosing the
@@ -117,7 +123,6 @@ export function Default() {
       body={SPLIT_BODY}
       points={POINTS}
       form={<FormSlot />}
-      scheduleHref="/contact"
     />
   );
 }
@@ -131,7 +136,6 @@ export function SplitWithProof() {
       body={SPLIT_BODY}
       points={POINTS}
       form={<FormSlot />}
-      scheduleHref="/contact"
       proof={<ProofSlot />}
     />
   );
@@ -178,7 +182,6 @@ export function Offer() {
       body={OFFER_BODY}
       points={POINTS}
       form={<FormSlot audit />}
-      scheduleHref="/contact"
     />
   );
 }
@@ -218,7 +221,6 @@ export function OnTint() {
       body={SPLIT_BODY}
       points={POINTS}
       form={<FormSlot />}
-      scheduleHref="/contact"
     />
   );
 }

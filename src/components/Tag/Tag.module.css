@@ -123,8 +123,8 @@
 
 /* ── Variant · filter · rest ───────────────────────────────────────────────────
    An edge with no ground. NO background is declared here and none is declared on hover, because
-   --tag-filter-bg and --tag-filter-bg-hover do not exist — the chip is an outline and a label in
-   every state, and those two absences are the assertion.
+   --tag-filter-bg and --tag-filter-bg-hover do not exist — the chip is an outline and a label
+   until it is pressed or held, and those two absences are the assertion.
 
    Mono uppercase is the label voice every control in this system speaks, and the case comes from
    the ROLE rather than from this component or from the caller's string: --text-mono-case beside
@@ -156,8 +156,9 @@
 
 /* The glyph, at the tag's size rather than its own. `> svg` is a class-plus-element selector, so
    it beats Icon's single-class size rule deliberately: the glyph steps with the TAG, which makes
-   the tag the component that decides. 14 is the smallest the set has and the only one that fits —
-   a 16px glyph in a 24px box leaves 4px of clearance and reads as an icon with a label bolted on. */
+   the tag the component that decides. 16, the floor for a glyph with a counter: the one glyph a
+   filter carries is close-circle, whose cross is a hole that fills in at 14 (docs/specs/Icon.md,
+   tracker 2.17). Solar's own 2-unit clearance means the disc itself is 13.3px in the 24 box. */
 .filter > svg {
   /* Physical rather than logical here, and it is the one place in this file that is. A glyph box
      is square, so there is no direction to be correct about — and this rule has to beat Icon's own
@@ -181,13 +182,13 @@
 }
 
 /* ── Filter · pressed ──────────────────────────────────────────────────────────
-   Not a deeper blue — the surface's own INK, in both the line and the label. Hover and pressed
-   differ in hue rather than in weight, which is legible at a glance and does not depend on
-   remembering which value was paler.
+   Not a deeper blue — a REVERSAL: the far end of the surface's ramp as a fill, with the label (and
+   the glyph, which reads currentColor) turned to the opposite end on it. Hover and pressed differ
+   in kind rather than in weight, which is legible at a glance and does not depend on remembering
+   which value was paler.
 
-   background-color is declared even though it resolves to the surface's own ground on paper, tint
-   and ink. It moves on the blue surface only, where the ramp forces a fill; declaring it here on
-   all four is what keeps that one exception from needing a surface-specific rule.
+   The fill is the same one the held chip keeps, on every surface (tracker 2.17): 950 on paper and
+   tint, paper on ink, white on blue. So a press previews exactly what selecting leaves behind.
 
    A press is immediate: easing a press makes a control feel unresponsive. */
 .filter:active {

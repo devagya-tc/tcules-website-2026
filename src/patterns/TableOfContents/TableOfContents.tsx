@@ -270,7 +270,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
         <summary className={styles.summary}>
           <span className={styles.summaryLabel}>On this page</span>
           <span className={styles.chevron}>
-            <Icon name="chevron-down" size="sm" />
+            <Icon name="alt-arrow-down" size="sm" />
           </span>
         </summary>
         {/* The head's air. A real arrangement now that no rule separates the head from the ladder —

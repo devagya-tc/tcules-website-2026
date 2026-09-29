@@ -86,26 +86,32 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [x] **2.4** CtaSection: `open` collapses to one track when there is no proof (`CtaSection.tsx:376`, the
       `Proof.tsx:189` idiom). ~466px of dead ground on ten routes. (#66)
 - [x] **2.5** Tag: fix the specimen's hydration mismatch and its 18px overflow at 390 (found by `npm run shots`). (#67)
+      A 29 Sep "regression" was `shots` screenshotting another checkout's server; fixed in the script (#80).
 
 **Media, in dependency order.**
-- [ ] **2.6** ★ `Media` primitive (new, tier 1): responsive slot (derived widths, WebP), `kind` capture ·
-      cut-out · illustration · photograph, intrinsic size, cover/contain. Everything with an image depends on it.
-- [ ] **2.7** Figure onto `Media`: edge by kind (a capture takes the hairline; a cut-out takes no edge, one
-      shadow and a contrast panel when needed; an illustration is never boxed), radius 0.
-- [ ] **2.8** ★ `ClientMark` primitive (new, tier 1): drawn in the ground's ink, sized by visual weight (ch05 §10).
-- [ ] **2.9** ★ PageHero rebuild: arrangements (stacked · media beside · media below) × media kind, media at
-      intrinsic ratio, a designed no-visual state. It unblocks 6.4.
+- [x] **2.6** ★ `Media` primitive (new, tier 1): responsive slot (derived widths, WebP), `kind` capture ·
+      cut-out · illustration · photograph, intrinsic size, cover/contain. Everything with an image depends on it. (#71)
+- [x] **2.7** Figure onto `Media`: edge by kind (a capture takes the hairline; a cut-out takes no edge, one
+      shadow and a contrast panel when needed; an illustration is never boxed), radius 0. (#72, landed via #76)
+- [x] **2.8** ★ `ClientMark` primitive (new, tier 1): drawn in the ground's ink, sized by visual weight (ch05 §10). (#69; real client set #78)
+- [x] **2.9** ★ PageHero rebuild: arrangements (stacked · media beside · media below) × media kind, media at
+      intrinsic ratio, a designed no-visual state. It unblocks 6.4. (#74, landed via #76. "Media below" is `stacked`, ruling H1)
 
 **Patterns.**
-- [ ] **2.10** ★ BlockCard: onto `Media`, a featured horizontal arrangement, a designed no-media state, and a review of
-      `media.kind: 'icon'` against ch04.
-- [ ] **2.11** ListCard: onto `Media`, the ordered marker as a real `ol`, the external glyph.
-- [ ] **2.12** ★ Proof: 1:1 portrait and client mark; `role` optional.
-- [ ] **2.13** ★ ContentSection: a head-beside-body arrangement; specimen raised to the Tag standard.
+- [x] **2.10** ★ BlockCard: onto `Media`, a featured horizontal arrangement, a designed no-media state, and a review of
+      `media.kind: 'icon'` against ch04. (#77, landed via #76. The icon fill was removed after the ch04 review)
+- [x] **2.11** ListCard: onto `Media`, the ordered marker as a real `ol`, the external glyph. (#76)
+- [x] **2.12** ★ Proof: 1:1 portrait and client mark; `role` optional. (#75, landed via #76)
+- [x] **2.13** ★ ContentSection: a head-beside-body arrangement; specimen raised to the Tag standard. (#70)
 - [x] **2.14** Icon: the ch04 glyphs the site needs (`square-arrow-right-up`, `info-circle`, `danger-triangle`);
       check the size scale against ch04's seven; review the six service glyphs. (#63)
-- [ ] **2.15** ★ DataTable (brief 10): the comparison job.
+- [x] **2.15** ★ DataTable (brief 10): the comparison job. (#73 — revised 29 Sep: boxed, scrolls sideways on narrow tracks, dividers on every column)
 - [x] **2.16** Texture: write its spec (decorative ground; the placement limits in audit §3). (#65)
+
+**Visual pass — before Phase 3 (owner, 29 Sep).** Every component works; now make each one beautiful.
+- [ ] **2.17** ★ Visual overhaul: review every shipped component's specimen at 1440 and 390 against CLAUDE.md
+      § Design quality and the brand chapters, and propose per component what to change. The owner approves each
+      proposal before it is built; one component (or one tight family) per PR, each re-shot with `npm run shots`.
 
 ## Phase 3 — Slice 1: `/services/product-design`
 

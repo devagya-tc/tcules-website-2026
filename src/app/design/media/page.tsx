@@ -316,6 +316,76 @@ export default function MediaSpecimenPage() {
         </Layout>
       </Section>
 
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>3c · The panel inset: gutter and text</h2>
+            <p>
+              <code>inset</code> is the one geometry a placement chooses, and only between two
+              gap-scale steps. <code>gutter</code> (<code>--gap-gutter</code>, 32) is the default
+              and every full-column, track and card placement keeps it. <code>text</code> (
+              <code>--gap-text</code>, 16, &ldquo;cell padding&rdquo;) is for a small box, where 32
+              on each side leaves no part to recognise — ListCard&rsquo;s 160 × 107 thumbnail kept
+              96 × 43 of part at <code>gutter</code> and keeps 128 × 75 at <code>text</code>. Only
+              a cut-out takes a panel, so it is the only kind with an inset; each panel ground is
+              shown at both steps, in <code>intrinsic</code> and in <code>fill</code> (29 Sep 2026,
+              tracker 2.17).
+            </p>
+          </Layout>
+          <Quarters>
+            {(['paper-deep', 'paper', 'ink'] as const).flatMap((panel) =>
+              (['gutter', 'text'] as const).map((inset) => (
+                <Specimen
+                  key={`${panel}-${inset}`}
+                  title={`panel: ${panel} · inset: ${inset}`}
+                  note={inset === 'gutter' ? 'The default: 32 of panel round the part.' : '16 of panel round the part.'}
+                >
+                  <Media image={{ ...PANEL_PART, panel }} sizes={SIZES_QUARTER} inset={inset} />
+                </Specimen>
+              )),
+            )}
+            {(['gutter', 'text'] as const).map((inset) => (
+              <Specimen
+                key={`fill-${inset}`}
+                title={`fill, 3:2 · inset: ${inset}`}
+                note="The panel fills the parent's box; the part covers the content box inside the inset."
+              >
+                <div className={s.ratioCard}>
+                  <Media
+                    image={{ ...PANEL_PART, panel: 'paper-deep' }}
+                    sizes={SIZES_QUARTER}
+                    fit="fill"
+                    inset={inset}
+                  />
+                </div>
+              </Specimen>
+            ))}
+          </Quarters>
+          <Halves>
+            {(['gutter', 'text'] as const).map((inset) => (
+              <Specimen
+                key={`thumb-${inset}`}
+                title={`ListCard thumbnail box — 160, 3:2 · inset: ${inset}`}
+                note={
+                  inset === 'gutter'
+                    ? '96 × 43 of part: fails ch05 § 9’s 160 check. Not what ListCard passes.'
+                    : '128 × 75 of part — what ListCard passes, and the reason the prop exists.'
+                }
+              >
+                <div className={s.ratioThumb}>
+                  <Media
+                    image={{ ...PANEL_PART, panel: 'paper-deep' }}
+                    sizes="160px"
+                    fit="fill"
+                    inset={inset}
+                  />
+                </div>
+              </Specimen>
+            ))}
+          </Halves>
+        </Layout>
+      </Section>
+
       <Section surface="tint">
         <Layout rowGap="stack">
           <Layout rowGap="block">

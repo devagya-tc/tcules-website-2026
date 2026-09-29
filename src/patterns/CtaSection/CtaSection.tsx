@@ -77,15 +77,17 @@ type CtaSectionBaseProps = {
    appear on the same 37 pages, and the fastest way to make them look like the same block twice is
    to give them both a figure row.
 
-   Two more constraints ride on the form/actions pairing. A form always carries `scheduleHref`,
-   because all 56 form instances must offer "See available times"; and a form allows only the empty
-   `actions` tuple, because the form's own submit is the primary ask and a second primary beside it
-   is two asks in one block. */
+   One more constraint rides on the form/actions pairing: a form allows only the empty `actions`
+   tuple, because the form's own submit is the primary ask and a second primary beside it is two
+   asks in one block. "See available times" used to be a second one — a form here required
+   `scheduleHref` — and it moved into EnquiryForm's own action row on 29 Sep 2026 (tracker 2.17),
+   so the link sits beside the submit rather than a --gap-stack below the form. EnquiryForm's
+   enquiry and audit variants now require `scheduleHref`, which is where the 56-instance
+   constraint lives. */
 
 type CtaSplitProps = {
   arrangement?: 'split';
   form: ReactNode;
-  scheduleHref: string;
   actions?: readonly [];
   proof?: ReactNode;
 };
@@ -93,7 +95,6 @@ type CtaSplitProps = {
 type CtaOpenProps = {
   arrangement: 'open';
   form?: never;
-  scheduleHref?: never;
   actions: readonly [CtaAction] | readonly [CtaAction, CtaAction];
   proof?: ReactNode;
 };
@@ -101,7 +102,6 @@ type CtaOpenProps = {
 type CtaOfferWithFormProps = {
   arrangement: 'offer';
   form: ReactNode;
-  scheduleHref: string;
   actions?: readonly [];
   proof?: never;
 };
@@ -109,7 +109,6 @@ type CtaOfferWithFormProps = {
 type CtaOfferWithActionsProps = {
   arrangement: 'offer';
   form?: never;
-  scheduleHref?: never;
   actions: readonly [CtaAction] | readonly [CtaAction, CtaAction];
   proof?: never;
 };
@@ -180,15 +179,16 @@ function CtaPointContent({ point }: { point: CtaPoint }) {
  * The ordered list of what happens next, rendered three ways — and the three are the same list in
  * three different tracks rather than three designs:
  *
- *   split   a single-track stack at `--gap-text`. It sits under the lede in the wide column, so it
+ *   split   a single-track stack at `--gap-block`. It sits under the lede in the wide column, so it
  *           reads as a continuation of the copy.
  *   open    a 3-up grid from md, each point stacking its marker ABOVE its label rather than beside
  *           it, because a 3-up track is too narrow to put a numeral in front of a step name.
- *   offer   a wrapping row at `--gap-block`. Mid-page, the list is a strip rather than a column.
+ *   offer   a 2-up grid from md and 3-up from lg. Mid-page, the list is a strip rather than a column.
  *
- * The marker/label relationship is the only thing that changes with the arrangement: `Layout` in
- * `open` stacks them, `Cluster` elsewhere puts them on one baseline. Nothing about the content, the
- * order or the numbering moves.
+ * The marker/label relationship is the only thing that changes with the arrangement: `open` stacks
+ * them, `split` and `offer` put them in a two-track row. Every arrangement is tracks — none of them
+ * is a wrapping row, because a wrapping row decides per point where the numeral goes. Nothing about
+ * the content, the order or the numbering moves.
  */
 function CtaPoints({
   arrangement,
@@ -224,18 +224,32 @@ function CtaPoints({
       );
     }
 
-    /* colGap only. A marker and its label share a baseline and are not meant to wrap apart, so no
-       rowGap is stated — and if a very long label does force a wrap in a narrow track, the two
-       lines meet with no seam. That is the documented behaviour rather than an omission (the spec's
-       §10 shows the same), but it is the one Cluster in this component that can wrap at all, so it
-       is the one to look at if a point ever renders as two touching lines. */
+    /* A two-track row: the marker's track, then the label's. Tracks, not a wrapping Cluster, and
+       that is the fix rather than a preference — a Cluster wraps its children independently, so at
+       390 a long label pushed its own numeral onto a line of its own while its siblings stayed
+       inline, and in a multi-row `offer` no row agreed with the next about where a label starts.
+       A grid track cannot wrap, so the numeral cannot orphan, and because every point in a list
+       takes the same ratio inside the same track width, every label starts on one vertical line.
+
+       The ratio is per arrangement because the ROW widths differ: `split` lists down its 706px
+       column (and the full column below lg), `offer` fills 392px thirds. Each ratio is chosen so the
+       marker track lands at roughly 64-90px at every width — room for a two-digit `--text-stat`
+       numeral (≈48px at 40, ≈38px at 32) with nothing to spare that reads as a gap of its own.
+       `colGap="tight"` because this is a mark and its label; the track's own slack does the rest.
+       `align="start"` so a two-line label does not drag its numeral to the middle of the row. */
     return (
-      <Cluster as="li" key={`${index}-${point.label}`} colGap="tight" align="baseline">
+      <Layout
+        as="li"
+        key={`${index}-${point.label}`}
+        columns={arrangement === 'split' ? { base: [1, 4], md: [1, 8] } : { base: [1, 4] }}
+        colGap="tight"
+        align="start"
+      >
         <span aria-hidden="true" className={styles.marker}>
           {marker}
         </span>
         <CtaPointContent point={point} />
-      </Cluster>
+      </Layout>
     );
   });
 
@@ -247,62 +261,44 @@ function CtaPoints({
     );
   }
 
+  /* Two tracks from md and three from lg, so four, five and six points fill complete columns and a
+     second row starts under the first row's first label. Three from md, as `open` has, was
+     declined: at 768 a third is 213px and the numeral's track would be narrower than the numeral. */
   if (arrangement === 'offer') {
     return (
-      <Cluster as="ol" colGap="block" rowGap="block" align="baseline">
+      <Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
         {items}
-      </Cluster>
+      </Layout>
     );
   }
 
+  /* `--gap-block` between steps, up from `--gap-text` when the points took title and stat scale
+     (2.17): at 16 a 40px numeral sat closer to the next step's numeral than to its own detail. */
   return (
-    <Layout as="ol" rowGap="text">
+    <Layout as="ol" rowGap="block">
       {items}
     </Layout>
   );
 }
 
 /**
- * The control row, and the two things in it never coexist by accident: a `scheduleHref` arrives
- * only with a form, and `actions` only without one, which the props union enforces. So this row is
- * either "See available times" beside a form, or one or two actions with no form — never both.
+ * The control row for the actions-only shapes. A form brings its own row — submit and "See
+ * available times" together, inside EnquiryForm — so this renders only when there is no form.
  *
- * "See available times" is a constant, not a prop. All 56 form instances carry it, so a label prop
- * would be 56 chances to say it differently. It is `ghost`/`neutral` because the form's own submit
- * is the primary ask standing right next to it.
- *
- * Among `actions`, POSITION decides everything: the first is `solid`/`primary` and takes the
- * `arrow-right` glyph, the second is `ghost`/`neutral` and takes none. A trailing glyph means the
- * click changes where you are, which is true of the first action and true of the second — but two
- * glyphs in one row would make the pair read as two equal offers, and the second is deliberately
- * the quieter one. There is no `emphasis` on `CtaAction` for the same reason.
+ * POSITION decides everything: the first is `solid`/`primary` and takes the `arrow-right` glyph,
+ * the second is `ghost`/`neutral` and takes none. A trailing glyph means the click changes where
+ * you are, which is true of the first action and true of the second — but two glyphs in one row
+ * would make the pair read as two equal offers, and the second is deliberately the quieter one.
+ * There is no `emphasis` on `CtaAction` for the same reason.
  *
  * Every control is `size="md"` with `extendHitArea`: the box is 40 and the touch floor is 44, so
  * the target is legal without the row growing. Stepping to `lg` would make this block's buttons
  * taller than every other button on the site.
  */
-function CtaActions({
-  actions,
-  scheduleHref,
-}: {
-  actions?: readonly CtaAction[];
-  scheduleHref?: string;
-}) {
+function CtaActions({ actions }: { actions: readonly CtaAction[] }) {
   return (
     <Cluster colGap="tight" rowGap="tight">
-      {scheduleHref ? (
-        <Button
-          as="a"
-          href={scheduleHref}
-          emphasis="link"
-          tone="neutral"
-          size="md"
-          extendHitArea
-        >
-          See available times
-        </Button>
-      ) : null}
-      {actions?.map((action, index) => (
+      {actions.map((action, index) => (
         <Button
           key={`${index}-${action.href}-${action.label}`}
           as="a"
@@ -324,7 +320,7 @@ function CtaActions({
  * CtaSection — the block that closes a commercial page, built to docs/specs/CtaSection.md.
  *
  * The page's ask, made once: an optional eyebrow, one `h2`, one or two paragraphs, an ordered list
- * of what happens next, and then either a form with a scheduling link or nought to two actions.
+ * of what happens next, and then either a form (which carries its own scheduling link) or nought to two actions.
  * 76 routes, 113 instances — 37 routes carry two, because a mid-page offer and a closing block are
  * both this component.
  *
@@ -418,7 +414,7 @@ export function CtaSection(props: CtaSectionProps) {
     const hasForm = 'form' in props && props.form !== undefined;
 
     return (
-      /* No className. The heading's step down to h3 scale is keyed on data-arrangement in the
+      /* No className. The heading's step down to h2 scale is keyed on data-arrangement in the
          token layer, so the class this used to carry had nothing left to declare — and keeping the
          size and its tracking in one place there is what stops them drifting apart. */
       <Section
@@ -436,10 +432,9 @@ export function CtaSection(props: CtaSectionProps) {
           />
           {hasForm ? <div>{props.form}</div> : null}
           <CtaPoints arrangement="offer" points={points} />
-          <CtaActions
-            actions={'actions' in props ? props.actions : undefined}
-            scheduleHref={'scheduleHref' in props ? props.scheduleHref : undefined}
-          />
+          {'actions' in props && props.actions && props.actions.length > 0 ? (
+            <CtaActions actions={props.actions} />
+          ) : null}
         </Layout>
       </Section>
     );
@@ -468,10 +463,7 @@ export function CtaSection(props: CtaSectionProps) {
             />
             <CtaPoints arrangement="split" points={points} />
           </Layout>
-          <Layout rowGap="stack">
-            <div>{props.form}</div>
-            <CtaActions scheduleHref={props.scheduleHref} />
-          </Layout>
+          <div>{props.form}</div>
         </Layout>
         {props.proof !== undefined ? <div>{props.proof}</div> : null}
       </Layout>

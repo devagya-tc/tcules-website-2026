@@ -66,6 +66,20 @@ type ColumnSpec = number | number[];
  *              and centre instead of stretching, and it is the only arrangement where
  *              `justify` does anything at all (see that prop).
  */
+/** The four breakpoints every responsive Layout prop is stated against: base, then 768 / 1024 / 1440. */
+type Breakpoint = 'base' | 'md' | 'lg' | 'xl';
+
+/**
+ * A value per breakpoint, or one bare value. The convention is the one `columns` already set: a
+ * BARE value applies from md up and leaves base alone, because base is the single-track stack in
+ * every breakpoint-driven arrangement and a placement prop has nothing to act on there. An object
+ * states each breakpoint it names; an unnamed breakpoint inherits the nearest smaller named one.
+ */
+type Responsive<T> = T | Partial<Record<Breakpoint, T>>;
+
+/** How many leading tracks `offset` leaves empty. 0 exists to switch an inherited offset off. */
+type Offset = 0 | 1 | 2 | 3;
+
 type Columns =
   | ColumnSpec
   | 'fit'
@@ -114,6 +128,60 @@ export type LayoutProps = {
    */
   lead?: boolean;
   /**
+   * Reverse the VISUAL order of the tracks, per breakpoint — the image/text pair whose image sits
+   * right on desktop and first on a phone, or a band that alternates sides down the page. Bare
+   * `true` applies from md up (see `Responsive`); `{ lg: true }` from 1024; `{ base: true, lg: false }`
+   * reverses a base-2-track row and restores it from 1024.
+   *
+   * Mechanism, two halves. The CSS places child k at the k-th track from the END
+   * (`grid-column: span 1 / -k`) and switches to `grid-auto-flow: dense`, so every child packs back
+   * into the first row instead of the cursor dropping a row each time it moves leftwards. And the
+   * template is MIRRORED wherever reverse is on, so a ratio travels with its child — `[2, 1]`
+   * reversed is `1fr 2fr` with the first child still in the 2fr track. No `direction`, no
+   * `flex-direction`, and no `order` on a child — the container states the placement, as it does
+   * for `lead`.
+   *
+   * VISUAL ONLY. DOM order, reading order and Tab order are unchanged, so a keyboard or
+   * screen-reader user meets the children in source order while a sighted user sees them mirrored.
+   * That is acceptable only where the two orders carry no meaning against each other — an image and
+   * its copy, a figure and its caption block. Never reverse a sequence (steps, a form, a ranked list)
+   * or anything whose focusable children would then tab right-to-left. Source order is the reading
+   * order: write it that way, then reverse for the eye.
+   *
+   * Scope: ONE row of breakpoint-driven tracks (a count or ratio), up to four children — a pair or
+   * a triple, as many children as tracks. It does nothing useful on `fit` / `tile` (the explicit
+   * grid there includes collapsed tracks) and a fifth child is not placed. Ignored when `lead` is set.
+   */
+  reverse?: Responsive<boolean>;
+  /**
+   * The first child starts at track n+1, leaving n leading tracks empty — editorial asymmetry, a
+   * narrow reading column set into the page rather than hung from its left edge
+   * (`columns={[1, 2]} offset={1}` → one child in the 2fr track). Children after the first flow on
+   * from where it ends. Bare values apply from md up; `0` switches an inherited offset off.
+   *
+   * Mechanism: `grid-column-start: n+1` on the first child, written by the container. State it only
+   * where there are more than n tracks — an offset past the last track makes an implicit column.
+   * Ignored when `lead` or `reverse` is set: all three place the first child, and one wins.
+   */
+  offset?: Responsive<Offset>;
+  /**
+   * Pin the LAST child to the foot of the stack — a card's call to action sitting on the card's
+   * bottom edge, so the ctas of a row of cards with different body lengths line up. For a
+   * single-track stack that is stretched taller than its content (a card in a row of cards).
+   *
+   * Mechanism: the grid template becomes `auto … auto 1fr` — one content-sized row per child, then
+   * a flexible last row that absorbs all the spare height, with the last child aligned to that
+   * row's end. No margin, no spacer element: the space is a track. `rowGap` still separates every
+   * row, so the stated seam remains the minimum above the pinned child. The row count is read from
+   * the DOM (`:has(> :last-child:nth-child(n))`), not from React, so fragments and conditionally
+   * rendered children count as what actually renders; the template covers up to eight children.
+   * With no spare height (a stack at its content height) the 1fr row is content-sized and the
+   * stack renders exactly as without the prop.
+   *
+   * Single-track only — on a multi-track grid the row count is not the child count.
+   */
+  pinLast?: boolean;
+  /**
    * Block-axis placement — how items sit vertically in their row (e.g. centre copy against a
    * taller image). Default "stretch".
    */
@@ -148,7 +216,49 @@ function track(spec: ColumnSpec): string {
     : spec.map((weight) => `minmax(0, ${weight}fr)`).join(' ');
 }
 
-function columnsToVars(columns?: Columns): CSSProperties {
+/**
+ * A responsive prop as the breakpoints it names. A bare value lands on md, the columns convention;
+ * `undefined` names none, so the prop emits no class at all and the default stands.
+ */
+function perBreakpoint<T extends boolean | number>(
+  value: Responsive<T> | undefined,
+): [Breakpoint, T][] {
+  if (value == null) return [];
+  if (typeof value !== 'object') return [['md', value]];
+  return (['base', 'md', 'lg', 'xl'] as const).flatMap((bp) =>
+    value[bp] == null ? [] : [[bp, value[bp]] as [Breakpoint, T]],
+  );
+}
+
+/**
+ * The templates for a reversed Layout. Reversing the children alone would leave the WEIGHTS where
+ * they were — `[2, 1]` reversed would put the first child in the 1fr track — so wherever `reverse`
+ * is on, the track list is mirrored too and each child keeps its own width on the other side.
+ * Both props cascade from smaller breakpoints independently, so this resolves each breakpoint in
+ * full and states all four explicitly rather than leaning on the CSS fallback chain.
+ */
+function reversedVars(
+  columns: ColumnSpec | Exclude<Columns, ColumnSpec | 'fit' | 'tile'>,
+  reversed: [Breakpoint, boolean][],
+): CSSProperties {
+  const specs: Partial<Record<Breakpoint, ColumnSpec>> =
+    typeof columns === 'number' || Array.isArray(columns) ? { md: columns } : columns;
+  const on: Partial<Record<Breakpoint, boolean>> = Object.fromEntries(reversed);
+  const vars: Record<string, string> = {};
+  let spec: ColumnSpec | undefined;
+  let flip = false;
+  for (const bp of ['base', 'md', 'lg', 'xl'] as const) {
+    spec = specs[bp] ?? spec;
+    flip = on[bp] ?? flip;
+    vars[`--tmpl-${bp}`] =
+      spec == null
+        ? 'minmax(0, 1fr)'
+        : track(flip && Array.isArray(spec) ? [...spec].reverse() : spec);
+  }
+  return vars as CSSProperties;
+}
+
+function columnsToVars(columns?: Columns, reversed: [Breakpoint, boolean][] = []): CSSProperties {
   // Always emit all four breakpoint vars. The --tmpl-* custom properties INHERIT, so a nested
   // Layout that sets no columns would otherwise pick up an ancestor's template (e.g. a vertical
   // stack inside a 2-col hero turning into 2 columns). Pinning the unused breakpoints to
@@ -183,6 +293,8 @@ function columnsToVars(columns?: Columns): CSSProperties {
     return vars as CSSProperties;
   }
 
+  if (reversed.some(([, isOn]) => isOn)) return reversedVars(columns, reversed);
+
   // Bare spec → applies from the md breakpoint up; base stays 1 track → collapses on mobile.
   if (typeof columns === 'number' || Array.isArray(columns)) {
     vars['--tmpl-md'] = track(columns);
@@ -206,6 +318,14 @@ function columnsToVars(columns?: Columns): CSSProperties {
  *
  * Non-uniform rhythm comes from NESTING, not from a rhythm knob — tighten by grouping, loosen
  * by separating. A heading's spacing is a consequence of which Layout it lives in.
+ *
+ * Varied arrangement comes from three placement props (tracker 2.17, 29 Sep 2026), so a page does
+ * not repeat one `[2, 1]` shape down its length and nothing outside Layout writes a grid to vary it:
+ * `reverse` mirrors a row per breakpoint (visual only), `offset` sets the first child n tracks in,
+ * and `pinLast` pins a stretched stack's last child to its foot. All default off, and off they
+ * emit no class and no custom property, so every existing Layout renders byte-for-byte as before.
+ * `lead`, `reverse` and `offset` all place the first child and are exclusive, in that precedence.
+ * There is no docs/specs/Layout.md — this docblock and the prop docs above are the spec.
  */
 export function Layout({
   as: Tag = 'div',
@@ -218,15 +338,22 @@ export function Layout({
   justify,
   equalRows = false,
   lead = false,
+  reverse,
+  offset,
+  pinLast = false,
   className,
   style,
   children,
   id,
 }: LayoutProps) {
+  // lead, reverse and offset all place the first child; precedence is lead > reverse > offset and
+  // the losers emit nothing, so two rules never fight over one grid-column.
+  const reversed = lead ? [] : perBreakpoint(reverse);
+  const offsets = lead || reverse != null ? [] : perBreakpoint(offset);
   return (
     <Tag
       id={id}
-      style={{ ...columnsToVars(columns), ...style }}
+      style={{ ...columnsToVars(columns, reversed), ...style }}
       className={cx(
         styles.layout,
         rowGap && styles[`rowgap-${rowGap}`],
@@ -237,6 +364,9 @@ export function Layout({
         justify && styles[`justify-${justify}`],
         equalRows && styles['equal-rows'],
         lead && styles.lead,
+        ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
+        ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
+        pinLast && styles['pin-last'],
         className,
       )}
     >

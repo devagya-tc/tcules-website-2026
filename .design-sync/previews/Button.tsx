@@ -53,7 +53,7 @@ export function WithIcons() {
   return (
     <Cluster colGap="tight" rowGap="tight">
       <Button iconLeft={<Icon name="download" />}>Download report</Button>
-      <Button emphasis="ghost" tone="neutral" icon={<Icon name="check" />}>
+      <Button emphasis="ghost" tone="neutral" icon={<Icon name="check-circle" />}>
         Mark reviewed
       </Button>
       <Button iconOnly icon={<Icon name="copy" />} aria-label="Copy link" />
@@ -61,7 +61,7 @@ export function WithIcons() {
         iconOnly
         emphasis="ghost"
         tone="neutral"
-        icon={<Icon name="close" />}
+        icon={<Icon name="close-circle" />}
         aria-label="Dismiss"
       />
     </Cluster>

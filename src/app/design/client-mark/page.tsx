@@ -9,8 +9,12 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
  *   1. equal AREA, not equal width: a 7:1 wordmark and a 3:1 lockup read as the same weight, and
  *      the ~40px height cap (ruling P2) and 160px width cap hold;
  *   2. one colour, the ground's ink, from ONE file per mark on every surface — any mark on ink or
- *      blue that renders white proves the mask is doing it, not the file;
- *   3. the strip is a Cluster of marks, not a component: the Cluster owns the gap.
+ *      blue that renders light proves the mask is doing it, not the file;
+ *   3. the strip is a Cluster of marks, not a component: the Cluster owns the gap;
+ *   4. the recommended composition for a set of known size: equal cells in a Layout, with a count
+ *      that fills every row at every breakpoint (tracker 2.17) — still not a component;
+ *   5. the ink is one step quieter than the section's heading ink, so a strip sits under its
+ *      heading rather than competing with it (tracker 2.17) — every surface band has a heading.
  *
  * The strip is the REAL client set (public/clients/*.svg), the files the previous site's logo
  * wall carried. ch05 §10 requires written client approval, filed with the asset, before any
@@ -28,21 +32,33 @@ type Mark = Omit<ClientMarkProps, 'className'> & { shape: string };
 const CLIENTS_DIR = '/clients';
 const STRESS_DIR = '/design';
 
-/* width / height are each file's viewBox. No real mark has a correction recorded yet: one is
-   "recorded with the asset" (ch05 §10) — on the site, a field beside the file in the CMS. */
-const client = (name: string, file: string, width: number, height: number): Mark => ({
+/* width / height are each file's viewBox. A correction is "recorded with the asset" (ch05 §10)
+   — here, the fifth argument; on the site, a field beside the file in the CMS. */
+const client = (
+  name: string,
+  file: string,
+  width: number,
+  height: number,
+  correction?: number,
+): Mark => ({
   name,
   src: `${CLIENTS_DIR}/${file}.svg`,
   width,
   height,
-  shape: `${(width / height).toFixed(1)}:1`,
+  correction,
+  shape: `${(width / height).toFixed(1)}:1${correction ? `, ${correction > 0 ? '+' : '−'}${Math.round(Math.abs(correction) * 100)}%` : ''}`,
 });
 
 const DOODLE = client('Doodle', 'doodle', 104, 24);
 const GT_TOOLS = client('GT Tools', 'gttools', 67.384, 19.6);
 const INCLUUDE = client('Incluude', 'incluude', 88.906, 16.851);
 const KNOVOS = client('Knovos', 'knovos', 85.232, 14);
-const LATITUDEPAY = client('LatitudePay', 'latitudepay', 133.896, 18.2);
+/* LatitudePay: hairline, widely letter-spaced capitals, so at equal area it reads lighter than
+   every neighbour. +0.05 is judged by eye against Omny and Quoter at 1440 and 390 (tracker 2.17),
+   and it is also the most that takes effect: its fitted width is 152, and the 160 width cap
+   applies again after the correction, so anything above +0.053 renders identically. The rest of
+   the lightness is the file's stroke weight, which a size correction cannot reach. */
+const LATITUDEPAY = client('LatitudePay', 'latitudepay', 133.896, 18.2, 0.05);
 const OMNY = client('Omny', 'omny', 93.982, 24.792);
 const PLEDGE = client('Pledge', 'pledge', 92.032, 19.6);
 const QUOTER = client('Quoter', 'quoter', 93.996, 28.002);
@@ -59,6 +75,11 @@ const STRIP: readonly Mark[] = [
   GT_TOOLS,
   INCLUUDE,
 ];
+
+/* The recommended composition's set: a count that fills every row. Eight fills 2 × 4 at base
+   and 4 × 2 from lg; nine would leave one mark alone at base. Incluude is the one held back only
+   because it is last in the strip's order — which mark waits is a content decision. */
+const GRID_SET: readonly Mark[] = STRIP.slice(0, 8);
 
 /* Fictional stress shapes — see the header. */
 const SQUARE: Mark = {
@@ -124,6 +145,14 @@ function bare(mark: Mark): Omit<ClientMarkProps, 'className'> {
 
 const SURFACES = ['paper', 'tint', 'ink', 'blue'] as const;
 
+/* Labels only — the values live in client-mark.css, and the rendering is the truth. */
+const INK: Record<(typeof SURFACES)[number], string> = {
+  paper: 'neutral-600, 4.92:1',
+  tint: 'neutral-600, 4.39:1',
+  ink: 'neutral-300, 11.07:1',
+  blue: 'brandeis-200, 3.78:1',
+};
+
 /** The composition the site uses: a list of marks in a Cluster, which owns both seams. */
 function Strip({ marks }: { marks: readonly Mark[] }) {
   return (
@@ -134,6 +163,26 @@ function Strip({ marks }: { marks: readonly Mark[] }) {
         </li>
       ))}
     </Cluster>
+  );
+}
+
+/**
+ * The recommended composition for a set of known size: one equal cell per mark, each mark at its
+ * cell's start edge, so the first column lines up with the heading above it and every column
+ * starts on a track line. justifyItems stays at its default (stretch) on purpose: the li fills
+ * its track, which is what lets a mark wider than the track (LatitudePay, 160, in a ~139 cell at
+ * 390) shrink to it via max-inline-size — a centred li would size to the mark and spill. Two tracks at base, four from lg, so a count of 4, 8 or 12 fills every row. md keeps 2:
+ * four tracks in the 704 column are ~140 wide, narrower than the widest marks.
+ */
+function Grid({ marks }: { marks: readonly Mark[] }) {
+  return (
+    <Layout as="ul" columns={{ base: 2, lg: 4 }} colGap="stack" rowGap="stack" align="center">
+      {marks.map((mark) => (
+        <li key={mark.name}>
+          <ClientMark {...bare(mark)} />
+        </li>
+      ))}
+    </Layout>
   );
 }
 
@@ -155,7 +204,7 @@ export default function ClientMarkSpecimenPage() {
               A logo strip is <strong>not</strong> a component. It is <code>ClientMark</code> ×
               n in a <code>Cluster</code>, which owns the gap. The strip is the real client set;
               the shapes it does not have yet are fictional stress files, drawn in black, and
-              labelled so. A mark that renders white on ink proves the mask is doing the colour,
+              labelled so. A mark that renders light on ink proves the mask is doing the colour,
               not the file.
             </p>
           </Layout>
@@ -165,6 +214,13 @@ export default function ClientMarkSpecimenPage() {
             note='Cluster as="ul", colGap and rowGap "stack" (48), align center. The marks set no spacing of their own. Ratios run from 3.4:1 (GT Tools) to 7.4:1 (LatitudePay), and no two are the same width.'
           >
             <Strip marks={STRIP} />
+          </Specimen>
+
+          <Specimen
+            title="Equal cells — a set that fills its rows"
+            note='The recommended composition when the count is known. Layout as="ul", columns {{ base: 2, lg: 4 }}, colGap and rowGap "stack", align "center", justifyItems left at stretch: one equal cell per mark, each at its cell’s start edge, so the columns line up with the heading. Eight marks fill 4 × 2 here and 2 × 4 at 390; the Cluster above, with nine, leaves 7 + 2 at 1440 and one alone at 390. Pick a count the columns divide — 4, 8 or 12 for {{ base: 2, lg: 4 }}; 6 or 12 for {{ base: 2, md: 3 }}. Still not a component: it is ClientMark × n in a Layout.'
+          >
+            <Grid marks={GRID_SET} />
           </Specimen>
 
           <Specimen
@@ -199,7 +255,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The weight correction, with and without"
-            note="Fictional files — no real mark has a correction recorded yet. Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
+            note="Fictional files (the one real correction, LatitudePay +5%, is too small to read in a pair). Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
           >
             <Layout rowGap="block">
               <Cluster colGap="stack" rowGap="stack" align="center">
@@ -297,24 +353,36 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The 326 column"
-            note="The strip in the phone's content column. It wraps into rows; the Cluster's rowGap is the seam between them, and no mark shrinks to stay on one line."
+            note="The strip in the phone's content column. It wraps into rows; the Cluster's rowGap is the seam between them, and no mark shrinks to stay on one line — which is how nine marks leave one alone on the last row."
           >
             <div className={s.trackMobile}>
               <Strip marks={STRIP} />
             </div>
           </Specimen>
+
+          <Specimen
+            title="The 326 column, equal cells"
+            note="The same eight in two tracks, ~139 wide. LatitudePay (160) is the one mark wider than its cell: it shrinks to the cell (max-inline-size: 100%) and letterboxes, never spilling into the gap."
+          >
+            <div className={s.trackMobile}>
+              <Grid marks={GRID_SET} />
+            </div>
+          </Specimen>
         </Layout>
       </Section>
 
-      {/* Same markup on every ground. ch05 §10 names neutral-900 on paper and paper-deep and white
-          on ink; blue takes white, the ground's ink there (see client-mark.css). */}
+      {/* Same markup on every ground, under a section heading, because the ink is judged against
+          the heading: one step quieter than --sec-ink on each (client-mark.css, tracker 2.17). */}
       {SURFACES.map((surface) => (
         <Section key={surface} surface={surface} density="tight">
           <Specimen
             title={`surface="${surface}"`}
-            note="Same markup, no colour prop, same files. The ink is --cmark-ink for this ground."
+            note={`Same markup, no colour prop, same files. The ink is --cmark-ink for this ground: ${INK[surface]}. The heading is the section's full ink; the marks sit a step under it.`}
           >
-            <Strip marks={STRIP} />
+            <Layout rowGap="stack">
+              <h2>Teams we have shipped with</h2>
+              <Grid marks={GRID_SET} />
+            </Layout>
           </Specimen>
         </Section>
       ))}
@@ -322,7 +390,7 @@ export default function ClientMarkSpecimenPage() {
       <Section surface="ink" density="tight">
         <Specimen
           title="Nested: a tint band inside an ink band"
-          note="The tint block in client-mark.css restates --cmark-ink, so marks inside a tint band nested in ink paint neutral-900, not ink's white."
+          note="The tint block in client-mark.css restates --cmark-ink, so marks inside a tint band nested in ink paint neutral-600, not ink's neutral-300."
         >
           <Section surface="tint" density="tight">
             <Strip marks={STRIP} />

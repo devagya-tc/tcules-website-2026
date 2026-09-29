@@ -24,6 +24,12 @@
    ordinals to map them onto — unlike the button's three heights — so a
    --prose-text:var(--text-body) would rename without meaning.
 
+   ── The table mirrors DataTable, by duplication ─────────────────────────────────
+   --prose-table-{body,head}-ground, -head-ink and -rule take the same value per
+   surface as their --dtab-* counterparts in data-table.css (29 Sep 2026, 2.17), so a
+   body-field table and a DataTable read as one boxed structure. Duplicated on purpose:
+   a component never reads another component's tokens. Change one, change both.
+
    ── Every surface restates every token ──────────────────────────────────────────
    Not just the deltas from paper. A block carrying only deltas is not self-contained:
    nest that surface inside a non-paper one and it inherits the enclosing surface's
@@ -83,7 +89,9 @@
 --prose-code-bg:var(--color-neutral-100);--prose-code-fg:var(--color-neutral-900);
 --prose-pre-bg:var(--color-neutral-950);--prose-pre-fg:var(--color-neutral-100);
 --prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
---prose-table-head-ink:var(--color-neutral-700);
+--prose-table-body-ground:var(--color-white);      /* Prose on white: ink 14.75, muted 4.97, link 6.23 */
+--prose-table-head-ground:var(--color-neutral-50);
+--prose-table-head-ink:var(--color-neutral-700);   /*  7.54:1 on the head fill */
 --prose-table-rule:var(--color-neutral-200);
 }
 
@@ -106,8 +114,10 @@
 --prose-code-bg:var(--color-neutral-200);--prose-code-fg:var(--color-neutral-900);
 --prose-pre-bg:var(--color-neutral-950);--prose-pre-fg:var(--color-neutral-100);
 --prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
---prose-table-head-ink:var(--color-neutral-700);
---prose-table-rule:var(--color-neutral-300);
+--prose-table-body-ground:var(--color-paper);      /* the frame is paper on the deeper band; muted 8.14 */
+--prose-table-head-ground:var(--color-neutral-50);
+--prose-table-head-ink:var(--color-neutral-700);   /*  7.54:1 on the head fill */
+--prose-table-rule:var(--color-neutral-200);       /* on the paper body, not the tint ground */
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
@@ -136,8 +146,10 @@
 --prose-code-bg:var(--color-neutral-800);--prose-code-fg:var(--color-neutral-100);  /* 8.63:1 */
 --prose-pre-bg:var(--color-neutral-900);--prose-pre-fg:var(--color-neutral-100);
 --prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
---prose-table-head-ink:var(--color-neutral-400);
---prose-table-rule:var(--color-neutral-800);
+--prose-table-body-ground:var(--color-neutral-900);  /* raised panel; ink 12.37, muted 6.88, link 6.26 */
+--prose-table-head-ground:var(--color-neutral-800);
+--prose-table-head-ink:var(--color-neutral-300);   /*  7.64:1 on the head fill */
+--prose-table-rule:var(--color-neutral-700);       /* visible on both 900 and 800 */
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -167,6 +179,8 @@
 --prose-code-bg:var(--color-brandeis-600);--prose-code-fg:var(--color-white);       /* 8.53:1 */
 --prose-pre-bg:var(--color-neutral-950);--prose-pre-fg:var(--color-neutral-100);
 --prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
---prose-table-head-ink:var(--color-brandeis-100);
+--prose-table-body-ground:var(--color-brandeis-700); /* one rung down; ink and link 10.16, muted 8.01 */
+--prose-table-head-ground:var(--color-brandeis-600);
+--prose-table-head-ink:var(--color-brandeis-100);  /*  5.99:1 on the head fill */
 --prose-table-rule:var(--color-brandeis-400);
 }

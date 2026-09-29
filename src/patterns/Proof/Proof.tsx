@@ -48,7 +48,11 @@ export type ProofFigure = {
   value: string;
   /** What the value counts. */
   label: string;
-  /** Visible per-figure integrity line, including "checked on". */
+  /**
+   * Visible integrity line, including "checked on". Required on every figure. When every figure in
+   * the group carries the same string it renders ONCE, as the group's caption; mixed dates render
+   * under their own figures.
+   */
   checkedOn: string;
   /** Optional source destination. External destinations are named by the caller's route layer. */
   sourceHref?: string;
@@ -213,7 +217,24 @@ function Quote({ quote }: { quote: ProofQuote }) {
   );
 }
 
-function Figures({ figures }: { figures: readonly ProofFigure[] }) {
+/**
+ * The one date every figure shares, or undefined when there is one figure or the dates differ.
+ * Compared trimmed, so a trailing space in the CMS does not split a group that reads as one date.
+ */
+function sharedCheckedOn(figures: readonly ProofFigure[]): string | undefined {
+  const [head, ...rest] = figures;
+  if (!head || rest.length === 0) return undefined;
+  const first = head.checkedOn.trim();
+  return figures.every((figure) => figure.checkedOn.trim() === first) ? first : undefined;
+}
+
+function FigureList({
+  figures,
+  showDates,
+}: {
+  figures: readonly ProofFigure[];
+  showDates: boolean;
+}) {
   return (
     <Layout
       as="ul"
@@ -231,26 +252,50 @@ function Figures({ figures }: { figures: readonly ProofFigure[] }) {
               <span className={styles.value}>{figure.value}</span>
               <span className={styles.label}>{figure.label}</span>
             </Layout>
-            <Layout rowGap="tight" className={styles.metadata}>
-              <span className={styles.checked}>{figure.checkedOn}</span>
-              {figure.sourceHref ? (
-                <Button
-                  as="a"
-                  href={figure.sourceHref}
-                  emphasis="link"
-                  tone="neutral"
-                  size="sm"
-                  extendHitArea
-                  aria-label={`View source for ${figure.label}`}
-                  className={styles.source}
-                >
-                  View source
-                </Button>
-              ) : null}
-            </Layout>
+            {/* Rendered only when it holds something: an empty grid item would still take the
+                text seam above it. */}
+            {showDates || figure.sourceHref ? (
+              <Layout rowGap="tight" className={styles.metadata}>
+                {showDates ? <span className={styles.checked}>{figure.checkedOn}</span> : null}
+                {figure.sourceHref ? (
+                  <Button
+                    as="a"
+                    href={figure.sourceHref}
+                    emphasis="link"
+                    tone="neutral"
+                    size="sm"
+                    extendHitArea
+                    aria-label={`View source for ${figure.label}`}
+                    className={styles.source}
+                  >
+                    View source
+                  </Button>
+                ) : null}
+              </Layout>
+            ) : null}
           </Layout>
         </li>
       ))}
+    </Layout>
+  );
+}
+
+/**
+ * The figure set. When every figure was checked on the same date, the date is said once: the list
+ * and the date become one `figure` whose `figcaption` is that date. The caption is the group's
+ * accessible name, so a screen reader announces "figure, checked on 8 August 2026" before the list
+ * and the date covers every item in it programmatically, with no idref and no repeated string.
+ * Mixed dates keep the per-figure line, inside each `li` beside the value it qualifies.
+ */
+function Figures({ figures }: { figures: readonly ProofFigure[] }) {
+  const shared = sharedCheckedOn(figures);
+
+  if (!shared) return <FigureList figures={figures} showDates />;
+
+  return (
+    <Layout as="figure" rowGap="gutter" className={styles.figureGroup}>
+      <FigureList figures={figures} showDates={false} />
+      <figcaption className={styles.checked}>{shared}</figcaption>
     </Layout>
   );
 }
@@ -262,7 +307,9 @@ function Figures({ figures }: { figures: readonly ProofFigure[] }) {
  * unattributed Callout; this pattern never sniffs HTML for a name. A quote follows the site
  * blockquote (ch10 B2.07): italic serif behind a 6px rule, the attribution beneath, and an optional
  * 1:1 portrait left of it and client mark under it (rulings P1, P2). Display may render quote,
- * figures, or both. Compact embeds one quote in a reading flow and forbids figures at compile
+ * figures, or both — together, the quote in a 2:1 lead track beside the stacked figures — at the
+ * display roles (--text-quote-lg, --text-stat-lg), and says a date every figure shares once, as
+ * the set's caption (tracker 2.17). Compact embeds one quote in a reading flow and forbids figures at compile
  * time. Layout owns every relationship, Prose owns trusted inline markup, Button owns source-link
  * interaction, Media owns the portrait, ClientMark owns the mark, and the nearest surface owns the
  * ground.
@@ -293,10 +340,12 @@ export function Proof({ arrangement = 'display', quote, figures }: ProofProps) {
 
   const both = Boolean(acceptedQuote && acceptedFigures.length > 0);
 
+  /* Quote plus figures: the quote leads in the wide track and the figures stack in the narrow one
+     beside it (2:1 from lg), so the testimonial is the moment and the numbers are its evidence.
+     Below lg it is one column, the quote first; the figure tiles then reflow across the width. */
   return (
     <Layout
-      columns={both ? 'fit' : undefined}
-      minTrack="md"
+      columns={both ? { base: 1, lg: [2, 1] } : undefined}
       colGap={both ? 'column' : undefined}
       rowGap={both ? 'stack' : undefined}
       className={`${styles.root} ${styles[arrangement]}`}

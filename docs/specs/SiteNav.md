@@ -125,9 +125,9 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `root` | `<header role="banner">` | sticky, `--nav-z`, surface scope |
 | `bar` | `Section as="div" flush` | `--nav-bar-height` (72 desktop, 64 compact), bottom hairline |
 | `brand` | `<a>` + `Logo` | home link; inert while the mobile sheet is open (§5) |
-| `items` | `<ul>` centred in the bar | `Button` per item — ghost + neutral + `sm`; megas take `icon={<Icon name="chevron-down"/>}`, `active`, `aria-expanded`; links render `as={Link}` with no icon |
+| `items` | `<ul>` centred in the bar | `Button` per item — ghost + neutral + `sm`; megas take `icon={<Icon name="alt-arrow-down"/>}`, `active`, `aria-expanded`; links render `as={Link}` with no icon |
 | `cta` | `Button` solid primary `sm` | right of the bar |
-| `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `menu` ↔ `close` |
+| `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `hamburger-menu` ↔ `close-circle` |
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
 | `pane` | one per mega section | 1056 / 780 / 560px wide; two label + link columns, plus the rail in Services |
 | `hubBar` | `Cluster` + `Button emphasis="link"` | the way through to the section index — Services and Insights only. Hairline above, `--gap-text` under it |
@@ -277,7 +277,7 @@ Recorded in §12.6.
    §6 names six distinct durations and two ramp steps cannot carry them, so the plate fade is
    derived (half the morph) and the two mobile surface values are component tokens. See §12.2.
 2. **Six icon glyphs — not added, not needed.** The settled shortlist drops the first-level
-   glyphs, so nothing renders them. `menu`, `close`, `chevron-down`, `chevron-right`,
+   glyphs, so nothing renders them. `hamburger-menu`, `close-circle`, `alt-arrow-down`, `alt-arrow-right`,
    `arrow-right` and `arrow-left` all already ship.
 3. **`--nav-item-bg-hover` stands.** Two hover languages accepted: bar items keep `Button`'s ghost
    fill, panel rows take direction B. A control and a row are different things and reading them
@@ -815,3 +815,27 @@ consumer away. Flagged, not implemented.
 **One more, smaller.** §10.2 asserts one `role="banner"` per route. True on every site route; the
 proving ground at `/design/site-nav` mounts eleven on purpose, because it is a measuring rig rather
 than a page. That was already true of the previous specimen and is stated in its own header.
+
+### 12.34 · The wordmark is mono in chrome, and the closed sheet is hidden, not just collapsed
+
+*29 Sep 2026 · tracker 2.17.*
+
+**The wordmark.** ch02 v1.0, "The wordmark on grounds": *"In UI chrome — nav, footer, favicon and
+anything at that size, where the blue thins out — the whole wordmark is neutral-950. On blue and on
+ink it is white throughout."* The bar's brandeis-500 is for the mark at marketing scale on paper, and
+peridot is "never in the wordmark". The bar renders `variant="mono"` — now the `Logo` default, and
+written explicitly here and in `SiteFooter` because in chrome it is a brand rule rather than a
+default. `logo.css` now carries the wordmark's colour outright as `--logo-ink` — neutral-950 on paper
+and tint, white on ink and blue — rather than letting the letterforms inherit `currentColor`, which
+had rendered them Section's neutral-900 on paper (a step off ch02) and is what let a wrapping link
+recolour the mark in §12.28. `--logo-bar` on ink and blue is white, replacing the brandeis-300 lift
+and the peridot-400 bar, so an `accent` on a dark ground renders white throughout too. There is no `Logo.md` or `SiteFooter.md`
+spec; the ruling is recorded here, in `logo.css` and in `Logo.tsx`.
+
+**The closed sheet.** Closed, `.sheet` is `block-size: 0` and `translateY(100%)` — 100% of zero is
+zero, so the transform moved nothing and the rows overflowed downward from the viewport's foot. Any
+capture taller than the viewport (and any page shorter than it) painted the grab handle and the
+sticky foot mid-page. The fix is `visibility: hidden` on the closed sheet, restored on `[data-open]`,
+with the visibility transition delayed by `--nav-sheet-surface` on close and undelayed on open — the
+`.stage` arrangement, so the slide still plays out both ways. Reduced motion zeroes the delay with
+the durations. Nothing else in the sheet's mechanics moved.
