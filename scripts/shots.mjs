@@ -4,7 +4,7 @@
  *
  *   npm run shots                        every specimen
  *   npm run shots -- page-hero figure    only these
- *   npm run shots -- --base=http://localhost:3000
+ *   npm run shots -- --base=http://localhost:3000    an explicit server, trusted as given
  *
  * Why this exists: "checked at 1440 and 390" is on every task's definition of done, and until now
  * it meant a person opening a browser and resizing it. The owner decides; they should not have to
@@ -22,18 +22,25 @@
  * viewport scrolls sideways on a phone, and CLAUDE.md requires no horizontal page scroll. The
  * process exits 1 when any capture overflows or throws, so it can gate a PR like `verify` does.
  *
- * Server: uses `--base` if it answers; otherwise starts `next dev` on a spare port and stops it at
- * the end. Routes are discovered from `src/app/design/*`, so a new specimen is covered without an
+ * Server — it must be THIS checkout's code, never whatever happens to answer on a port:
+ *   1. `--base`, if given. Explicit, so trusted.
+ *   2. Otherwise this directory's own running `next dev`, found through `.next/dev/lock` — Next 16
+ *      writes the pid and URL there, and the same lockfile stops a second `next dev` starting in
+ *      this directory, so reusing it is the only option when one is running.
+ *   3. Otherwise a fresh `next dev` on a free port, stopped at the end.
+ * It used to fall back to http://localhost:3000 when that answered. In a worktree that silently
+ * screenshotted the MAIN checkout's server — other code, other branch — and reported its problems
+ * (and its passes) as this checkout's. Never probe a well-known port. Routes are discovered from `src/app/design/*`, so a new specimen is covered without an
  * edit here. The underscore-prefixed harness (`_specimen`) is not a route and is skipped.
  */
 import { spawn } from 'node:child_process';
-import { mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { createServer } from 'node:net';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
 
 const WIDTHS = [1440, 390];
 const OUT = '.shots';
-const PORT = 3131;
 
 const args = process.argv.slice(2);
 const baseArg = args.find((a) => a.startsWith('--base='));
@@ -59,12 +66,36 @@ async function answers(url) {
   }
 }
 
+/** This directory's own running `next dev`, from the lockfile Next 16 writes — or null. */
+function ownDevServer() {
+  try {
+    const lock = JSON.parse(readFileSync('.next/dev/lock', 'utf8'));
+    process.kill(lock.pid, 0); // throws if the process is gone and the lock is stale
+    return lock.appUrl ?? `http://localhost:${lock.port}`;
+  } catch {
+    return null;
+  }
+}
+
+/** A port nothing is listening on, from the OS rather than a guess. */
+function freePort() {
+  return new Promise((resolve, reject) => {
+    const probe = createServer();
+    probe.once('error', reject);
+    probe.listen(0, () => {
+      const { port } = probe.address();
+      probe.close(() => resolve(port));
+    });
+  });
+}
+
 async function startServer() {
-  const child = spawn('npx', ['next', 'dev', '--port', String(PORT)], {
+  const port = await freePort();
+  const child = spawn('npx', ['next', 'dev', '--port', String(port)], {
     stdio: ['ignore', 'pipe', 'pipe'],
     env: { ...process.env, NEXT_TELEMETRY_DISABLED: '1' },
   });
-  const base = `http://localhost:${PORT}`;
+  const base = `http://localhost:${port}`;
   for (let i = 0; i < 120; i++) {
     if (await answers(`${base}/design`)) return { base, child };
     await new Promise((r) => setTimeout(r, 1000));
@@ -74,11 +105,18 @@ async function startServer() {
 }
 
 let server = null;
-let base = baseArg ? baseArg.slice('--base='.length) : 'http://localhost:3000';
-if (!(await answers(`${base}/design`))) {
+let base = baseArg ? baseArg.slice('--base='.length) : ownDevServer();
+if (baseArg && !(await answers(`${base}/design`))) {
+  console.error(`--base ${base} does not answer.`);
+  process.exit(1);
+}
+if (!base || !(await answers(`${base}/design`))) {
   server = await startServer();
   base = server.base;
 }
+console.log(
+  `shots: ${base} (${baseArg ? '--base' : server ? 'started here' : "this checkout's next dev"})`,
+);
 
 mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch();
@@ -104,7 +142,8 @@ try {
         // `specimen-module__<hash>__spec`; its title is the first <p>. Tag the roots, then crop each.
         await page.evaluate(() => {
           document.querySelectorAll('[class]').forEach((el) => {
-            if ([...el.classList].some((c) => /^specimen-module__\w+__spec$/.test(c))) el.setAttribute('data-shot', '');
+            if ([...el.classList].some((c) => /^specimen-module__\w+__spec$/.test(c)))
+              el.setAttribute('data-shot', '');
           });
         });
         const blocks = page.locator('[data-shot]');
@@ -114,7 +153,11 @@ try {
         for (let i = 0; i < count; i++) {
           const block = blocks.nth(i);
           const title = ((await block.locator('p').first().textContent()) ?? '').trim();
-          const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+          const slug = title
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '')
+            .slice(0, 60);
           const crop = `${dir}/${String(i + 1).padStart(2, '0')}-${slug || 'untitled'}.png`;
           await block.screenshot({ path: join(OUT, crop) });
           crops.push({ title, file: crop });
@@ -142,7 +185,13 @@ const rows = names
     const crops = WIDTHS.map((w) => report.find((x) => x.name === name && x.width === w).crops);
     const blocks = crops[0]
       .map((c, i) => {
-        const pair = crops.map((list, j) => list[i] ? `<figure><figcaption>${WIDTHS[j]}</figcaption><img src="${list[i].file}" loading="lazy" alt=""></figure>` : '').join('');
+        const pair = crops
+          .map((list, j) =>
+            list[i]
+              ? `<figure><figcaption>${WIDTHS[j]}</figcaption><img src="${list[i].file}" loading="lazy" alt=""></figure>`
+              : '',
+          )
+          .join('');
         return `<h3>${c.title}</h3><div class="row">${pair}</div>`;
       })
       .join('');
