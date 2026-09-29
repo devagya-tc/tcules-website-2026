@@ -16,12 +16,13 @@
    the spec's §14 names the grep that proves it.
 
    No `display: grid` and no `display: flex`. All three arrangements are `Layout` and `Cluster` in
-   the TSX — the two-column split, the 3-up points row in `open`, the wrapping row in `offer`.
+   the TSX — the two-column split, the 3-up points row in `open`, the 2- and 3-up points grid in `offer`, and each point's
+   two-track marker-and-label row.
    There is nothing left for a local grid to do.
 
    No margin, no padding, no reach into `--space-*`. The one optical correction available — the
-   mono numeral in `marker` sits a shade high against the sans label beside it — is declined in the
-   spec's §7(c) rather than taken.
+   40px mono numeral in `marker` and the 22px serif label beside it share a top edge rather than a
+   baseline — is declined in the spec's §7(c) rather than taken.
 
    No `@media`, no `transition`, no `transform`, no `animation`, no `opacity`. There are no states
    to interpolate between: nothing here responds to a pointer and nothing opens. The only stateful
@@ -30,8 +31,8 @@
    No `--cta-*` state token exists at all, which is that assertion in the token layer.
 
    ── Why the size and tracking pairs are NOT in this file ────────────────────────
-   `offer` renders its heading one rung down, at `--text-h3`. That remap lives in the token layer,
-   keyed on `[data-arrangement='offer']`, because a role's size and its tracking companion are one
+   `offer` renders its heading one rung down, at `--text-h2` where the close is at `--text-h1`.
+   That remap lives in the token layer, keyed on `[data-arrangement='offer']`, because a role's size and its tracking companion are one
    typographic decision and must move together. This file previously remapped the size with an
    `.offer` class and hard-wired the two tracking values in two separate selectors, which meant
    re-tuning the size in the token layer left the tracking silently at the old role's value. The
@@ -78,8 +79,9 @@
 
 /* ── The heading ───────────────────────────────────────────────────────────────
    An `h2` in all three arrangements — the page's one `h1` belongs to `PageHero`, and this block
-   appears once or twice per route, so it can never be the page's title. `offer` renders it at h3
-   SCALE, which is a type role rather than a level; the remap is in the token layer.
+   appears once or twice per route, so it can never be the page's title. `split` and `open` render
+   it at h1 SCALE and `offer` at h2 SCALE, which is a type role rather than a level; the remap is in
+   the token layer.
 
    Balanced, because every title role is (--text-title-wrap, tokens/primitives.css § Type · wrap),
    and it matters most here: this is the loudest line in the band and a widow in it is visible
@@ -134,6 +136,8 @@
 .label {
   color: var(--cta-point-ink);
   font: var(--cta-point-text);
+  letter-spacing: var(--cta-point-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 
 .detail {

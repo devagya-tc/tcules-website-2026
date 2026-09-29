@@ -287,7 +287,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="4 · Points ladder"
-        note="Zero, one, three, and six points in each arrangement. Zero renders no list; six proves split growth, open's second row without equalRows, and offer wrapping."
+        note="Zero, one, three, and six points in each arrangement, and four and five in offer as well. Zero renders no list; six proves split growth and open's second row without equalRows. Offer is 2-up from md and 3-up from lg: at 4, 5 and 6 every second-row point starts under a first-row label, and each numeral holds its own track beside its label at every width, never wrapping above it."
       />
       {([0, 1, 3, 6] as const).map((count) => {
         const points = SIX_POINTS.slice(0, count);
@@ -314,7 +314,7 @@ export default function CtaSectionSpecimenPage() {
           surface={count % 2 === 0 ? 'tint' : 'paper'}
         />
       ))}
-      {([0, 1, 3, 6] as const).map((count) => (
+      {([0, 1, 3, 4, 5, 6] as const).map((count) => (
         <CtaSection
           key={`offer-${count}`}
           arrangement="offer"
