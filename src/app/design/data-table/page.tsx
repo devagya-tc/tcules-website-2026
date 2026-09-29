@@ -401,9 +401,9 @@ export default function DataTableSpecimenPage() {
             The site’s one table: a key column of row headers, one to five data columns, three
             to eight rows, an optional caption and summary. Column count is data; column
             behaviour is presentation. It is drawn as a box — outer border, head fill, body
-            ground, row hairlines and one vertical rule after the key column — and when its
-            track is too narrow for its columns the box scrolls sideways; it never restacks. The
-            page itself never scrolls horizontally.
+            ground, and a hairline between every row and every column — and when its track is
+            too narrow for its columns the box scrolls sideways; it never restacks. The page
+            itself never scrolls horizontally.
           </p>
         </Layout>
       </Section>
@@ -553,7 +553,8 @@ export default function DataTableSpecimenPage() {
               The table keeps its shape in a narrow track: the frame scrolls sideways and its
               border stays put, so the clipped edge reads as more to come. These scroll at 1440
               as well as at 390, because the floors are the columns’, not the viewport’s. The
-              frame is a focusable region — tab to it and the arrow keys scroll it.
+              frame is a focusable region — tab to it and the arrow keys scroll it. A fade marks
+              each edge with more beyond it, and follows the scroll.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">

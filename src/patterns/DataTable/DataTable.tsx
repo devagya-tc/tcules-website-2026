@@ -82,10 +82,14 @@ function warn(message: string) {
  * trusted rich text — which a primitive may not import.
  *
  * ── One reading order, a boxed frame ───────────────────────────────────────────────────────
- * It is a table at every width. The frame — outer border, head fill, body ground, the rule that
- * sets the key column off — is what makes it readable as a structure, so a narrow track does not
+ * It is a table at every width. The frame — outer border, head fill, body ground, and a hairline
+ * between every row and every column — is what makes it readable as a structure, so a narrow track does not
  * restructure it: when its columns' floors add up to more than the track, the frame scrolls
  * sideways and the table inside keeps its shape. The body is never re-laid out as a stack.
+ *
+ * When it scrolls, a fade to the body ground marks each edge that has more beyond it, driven by the
+ * frame's own scroll position (a scroll-driven animation, so no client JS). A browser without
+ * scroll timelines shows no fade and loses nothing but the hint; the clipped edge still shows.
  *
  * The frame is a focusable, named region (`tabIndex={0}`, `role="region"`, labelled by the
  * caption), so a keyboard user can scroll it with the arrow keys — a scroll container nobody can
@@ -139,81 +143,88 @@ export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTa
             {caption}
           </p>
         ) : null}
-        <div
-          className={styles.frame}
-          role="region"
-          tabIndex={0}
-          // Without a caption the region still needs a name to be announced by; the key column's
-          // head is the nearest thing the table has to one.
-          {...(caption
-            ? { 'aria-labelledby': captionId }
-            : { 'aria-label': `${keyColumn.heading} table` })}
-        >
-          <table
-            className={styles.table}
-            {...(caption ? { 'aria-labelledby': captionId } : {})}
+        {/* The shell holds the frame and draws the scroll fades over its clipped edges. It does not
+            scroll itself, which is what keeps the fades pinned while the table moves beneath them. */}
+        <div className={styles.shell}>
+          <div
+            className={styles.frame}
+            role="region"
+            tabIndex={0}
+            // Without a caption the region still needs a name to be announced by; the key column's
+            // head is the nearest thing the table has to one.
+            {...(caption
+              ? { 'aria-labelledby': captionId }
+              : { 'aria-label': `${keyColumn.heading} table` })}
           >
-            <thead>
-              <tr>
-                <th scope="col" className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}>
-                  {keyColumn.heading}
-                </th>
-                {columns.map((column, index) => (
-                  <th
-                    key={index}
-                    scope="col"
-                    className={cx(styles.colHead, BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'])}
-                  >
-                    {column.heading}
+            <table
+              className={styles.table}
+              {...(caption ? { 'aria-labelledby': captionId } : {})}
+            >
+              <thead>
+                <tr>
+                  <th scope="col" className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}>
+                    {keyColumn.heading}
                   </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, rowIndex) => {
-                if (!row.header.trim()) warn(`row ${rowIndex + 1} has a blank row header.`);
-                if (row.cellsHtml.length !== columns.length) {
-                  warn(
-                    `row ${rowIndex + 1} has ${row.cellsHtml.length} cells for ${columns.length} data columns; ${
-                      row.cellsHtml.length < columns.length
-                        ? 'padding with empty cells'
-                        : 'truncating'
-                    }.`,
-                  );
-                }
-
-                return (
-                  <tr key={rowIndex} className={styles.row}>
-                    <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
-                      <span className={styles.keyText}>{row.header}</span>
+                  {columns.map((column, index) => (
+                    <th
+                      key={index}
+                      scope="col"
+                      className={cx(
+                        styles.colHead,
+                        BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
+                      )}
+                    >
+                      {column.heading}
                     </th>
-                    {columns.map((column, index) => {
-                      const html = row.cellsHtml[index] ?? '';
-                      return (
-                        <td
-                          key={index}
-                          className={cx(
-                            styles.cell,
-                            BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
-                          )}
-                        >
-                          {html.trim() ? (
-                            <Prose html={html} className={styles.value} />
-                          ) : (
-                            // An empty cell is still a cell: the screen reader announces it blank on
-                            // its own, and the dash is for the eye, so a gap never reads as a bug.
-                            <span className={styles.empty} aria-hidden="true">
-                              —
-                            </span>
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, rowIndex) => {
+                  if (!row.header.trim()) warn(`row ${rowIndex + 1} has a blank row header.`);
+                  if (row.cellsHtml.length !== columns.length) {
+                    warn(
+                      `row ${rowIndex + 1} has ${row.cellsHtml.length} cells for ${columns.length} data columns; ${
+                        row.cellsHtml.length < columns.length
+                          ? 'padding with empty cells'
+                          : 'truncating'
+                      }.`,
+                    );
+                  }
+
+                  return (
+                    <tr key={rowIndex} className={styles.row}>
+                      <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
+                        <span className={styles.keyText}>{row.header}</span>
+                      </th>
+                      {columns.map((column, index) => {
+                        const html = row.cellsHtml[index] ?? '';
+                        return (
+                          <td
+                            key={index}
+                            className={cx(
+                              styles.cell,
+                              BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
+                            )}
+                          >
+                            {html.trim() ? (
+                              <Prose html={html} className={styles.value} />
+                            ) : (
+                              // An empty cell is still a cell: the screen reader announces it blank on
+                              // its own, and the dash is for the eye, so a gap never reads as a bug.
+                              <span className={styles.empty} aria-hidden="true">
+                                —
+                              </span>
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </Layout>
     </Layout>

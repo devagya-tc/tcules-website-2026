@@ -7,7 +7,7 @@
      parts: head (the head row — its fill and its mono labels)
             body (the ground inside the frame)
             key  (the row headers — the first column)
-            caption | rule | empty | ring
+            caption | rule | empty | ring | fade
      No state suffixes. The table is not interactive: nothing in it has a hover, a press or a
      selection. A link inside a cell is Prose's, and moves on Prose's tokens. The ring is the
      frame's focus ring — the frame is a focusable scroll region, and focus is not a state that
@@ -27,7 +27,7 @@
    per surface.
 
    One rule ink for every line in the frame — the border, the head rule, the row hairlines and the
-   key column's vertical rule. The box is drawn by one weight of line, so no line in it outranks
+   column dividers. The box is drawn by one weight of line, so no line in it outranks
    the content it divides.
 
    Distances are not here. The module reads --gap-* directly (cell inset --gap-text / --gap-block,
@@ -53,6 +53,9 @@
      different column behaviours. */
   --dtab-fluid-size: 176px;
   --dtab-hold-size: 192px;
+  /* The width of each scroll fade — about a third of a column's text floor, so the fade softens the
+     clipped edge without hiding a whole word under it. A component size, not a layout distance. */
+  --dtab-fade-size: var(--space-48);
 }
 
 /* Paper: the body lifts to white inside the frame and the head fill is the lightest neutral —

@@ -2,21 +2,21 @@
 
 ## 0 · Front matter
 
-|                     |                                                                                                                                                                                                                                             |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Component**       | `DataTable`                                                                                                                                                                                                                                 |
-| **Tier**            | 2 pattern (`src/patterns/DataTable/`)                                                                                                                                                                                                       |
-| **Status**          | approved — brief 10 is RESOLVED (27 Aug 2026: build it); every question in § 17 is non-blocking and carries the choice that was built                                                                                                       |
-| **Token prefix**    | `--dtab-*` (no collision: `--dtab-` is unused by any other layer)                                                                                                                                                                           |
-| **Designer / date** | Claude Code, 28 Sep 2026, tracker 2.15. Written in the repo from the brief; no Claude Design spec existed for this component. **Revised 29 Sep 2026** by the owner: boxed frame, and horizontal scroll replaces the stack (§ 17 Q1, Q2, Q5) |
-| **Implements**      | `docs/briefs/10-table.md` · the Comparison job in `docs/component-audit.md` § 4 ("options × dimensions, with a caveat or source")                                                                                                           |
-| **Implemented at**  | `src/patterns/DataTable/` · `src/styles/tokens/components/data-table.css` · the seam `src/content/sources/strapi/table.ts` · view model `ContentTable` in `src/content/types.ts` · specimen `src/app/design/data-table/page.tsx`            |
+|                     |                                                                                                                                                                                                                                                                                                          |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Component**       | `DataTable`                                                                                                                                                                                                                                                                                              |
+| **Tier**            | 2 pattern (`src/patterns/DataTable/`)                                                                                                                                                                                                                                                                    |
+| **Status**          | approved — brief 10 is RESOLVED (27 Aug 2026: build it); every question in § 17 is non-blocking and carries the choice that was built                                                                                                                                                                    |
+| **Token prefix**    | `--dtab-*` (no collision: `--dtab-` is unused by any other layer)                                                                                                                                                                                                                                        |
+| **Designer / date** | Claude Code, 28 Sep 2026, tracker 2.15. Written in the repo from the brief; no Claude Design spec existed for this component. **Revised 29 Sep 2026** by the owner: boxed frame, horizontal scroll replaces the stack, dividers on every column, and the table best-practice pass (§ 17 Q1, Q2, Q5, Q10) |
+| **Implements**      | `docs/briefs/10-table.md` · the Comparison job in `docs/component-audit.md` § 4 ("options × dimensions, with a caveat or source")                                                                                                                                                                        |
+| **Implemented at**  | `src/patterns/DataTable/` · `src/styles/tokens/components/data-table.css` · the seam `src/content/sources/strapi/table.ts` · view model `ContentTable` in `src/content/types.ts` · specimen `src/app/design/data-table/page.tsx`                                                                         |
 
 ## 1 · Identity
 
 **What it is.** The site's one table: a key column whose cells are the row headers, one to five
 data columns, three to eight rows, an optional caption and an optional summary — drawn as a boxed
-frame (outer border, head fill, body ground, row hairlines, one vertical rule after the key column)
+frame (outer border, head fill, body ground, and a hairline between every row and every column)
 that scrolls sideways whenever its columns do not fit the track it is given. It is what a CMS
 `table` BLOCK becomes on every route that has one (audits, services, expertise, tools, glossary,
 how-we-work): 39 published tables on 28 Sep 2026, always as a `ContentSection` child.
@@ -36,7 +36,7 @@ trusted rich text, and the summary) — which a primitive may not import.
 **Nearest existing component, and why this is not a prop on it.** `Prose`. It is where tables
 render today, and the brief measured how it falls short: an opaque string cannot carry per-column
 behaviour — a key column that must not wrap, an aligned numeric column, a column that must not
-shrink — and it cannot draw the key column's rule, which needs to know which cells are row headers.
+shrink — and it cannot mark the key column, which needs to know which cells are row headers.
 A `variant="table"` on Prose would still receive a string. The seam already receives the structure
 from Strapi, so the answer is to stop flattening it.
 
@@ -45,20 +45,21 @@ two). Two adjacent is legal; the caller's Layout owns the seam (§ 12).
 
 ## 2 · Anatomy
 
-| Part             | Required                     | Element                                                           | CSS class                    | Token `{part}`                |
-| ---------------- | ---------------------------- | ----------------------------------------------------------------- | ---------------------------- | ----------------------------- |
-| Root             | always                       | `Layout` (div), summary → captioned frame                         | `.root`                      | —                             |
-| Summary          | optional                     | `Prose` > `<p>`, before the caption                               | — (Prose's own)              | — (Prose's ink)               |
-| Caption          | optional                     | `<p id>` above the frame, the table's name by `aria-labelledby`   | `.caption`                   | `caption`                     |
-| Frame            | always                       | `<div role="region" tabIndex={0}>` — the box and scroll container | `.frame`                     | `body-ground`, `rule`, `ring` |
-| Table            | always                       | `<table>`                                                         | `.table`                     | —                             |
-| Column head      | one per column, key included | `<th scope="col">`                                                | `.colHead`                   | `head-ground`, `head`, `rule` |
-| Row              | 1+ (3–8 designed)            | `<tr>`                                                            | `.row`                       | `rule`                        |
-| Row header       | one per row                  | `<th scope="row">` > span                                         | `.key` > `.keyText`          | `key`, `rule` (vertical)      |
-| Cell             | one per data column per row  | `<td>`                                                            | `.cell`                      | `rule`                        |
-| Cell value       | when the cell has content    | `Prose` with the cell's HTML                                      | `.value`                     | — (Prose's ink)               |
-| Empty mark       | when the cell is empty       | `<span aria-hidden="true">—</span>`                               | `.empty`                     | `empty`                       |
-| Column behaviour | per column                   | modifier class on the head AND the cells                          | `.nowrap` `.hold` `.numeric` | `fluid-size`, `hold-size`     |
+| Part             | Required                     | Element                                                           | CSS class                     | Token `{part}`                |
+| ---------------- | ---------------------------- | ----------------------------------------------------------------- | ----------------------------- | ----------------------------- |
+| Root             | always                       | `Layout` (div), summary → captioned frame                         | `.root`                       | —                             |
+| Summary          | optional                     | `Prose` > `<p>`, before the caption                               | — (Prose's own)               | — (Prose's ink)               |
+| Caption          | optional                     | `<p id>` above the frame, the table's name by `aria-labelledby`   | `.caption`                    | `caption`                     |
+| Shell            | always                       | `<div>` — non-scrolling, carries the scroll fades                 | `.shell` `::before` `::after` | `fade-size`, `body-ground`    |
+| Frame            | always                       | `<div role="region" tabIndex={0}>` — the box and scroll container | `.frame`                      | `body-ground`, `rule`, `ring` |
+| Table            | always                       | `<table>`                                                         | `.table`                      | —                             |
+| Column head      | one per column, key included | `<th scope="col">`                                                | `.colHead`                    | `head-ground`, `head`, `rule` |
+| Row              | 1+ (3–8 designed)            | `<tr>`                                                            | `.row`                        | `rule`                        |
+| Row header       | one per row                  | `<th scope="row">` > span                                         | `.key` > `.keyText`           | `key`, `rule`                 |
+| Cell             | one per data column per row  | `<td>`                                                            | `.cell`                       | `rule`                        |
+| Cell value       | when the cell has content    | `Prose` with the cell's HTML                                      | `.value`                      | — (Prose's ink)               |
+| Empty mark       | when the cell is empty       | `<span aria-hidden="true">—</span>`                               | `.empty`                      | `empty`                       |
+| Column behaviour | per column                   | modifier class on the head AND the cells                          | `.nowrap` `.hold` `.numeric`  | `fluid-size`, `hold-size`     |
 
 Content slots: `caption`, `summary`, each column's `heading`, each row's `header`, each cell's
 HTML. Nothing else is a slot; there is no action slot (§ 12, "interactive content").
@@ -107,9 +108,9 @@ does to the frame, not a variant a caller picks.
 
 Considered and rejected: a compact density (brief: nothing in the live tables asks for one, and it
 would create an arbitrary choice on every page); zebra stripes (brief: decoration standing in for
-structure); a rule between every column (vertical rules everywhere make every column look equally
-important, which is exactly what a key column says is not true — the one vertical rule is the key
-column's); an unboxed variant (the owner's ruling, 29 Sep: a table without structure is hard to
+structure); a key-column-only vertical rule (built first, replaced 29 Sep by dividers on every
+column — the key column is distinct by voice and ink, and a divider on every column lets a value be
+followed down its column as easily as across its row); an unboxed variant (the owner's ruling, 29 Sep: a table without structure is hard to
 read).
 
 ## 5 · States
@@ -182,6 +183,8 @@ ink-in-paper and blue-in-paper).
 | `--dtab-fluid-size` | 176px | Every cell's floor, inset included — 128 of text, about sixteen characters of body sans. Below it the frame scrolls rather than crushing a column.                                                          |
 | `--dtab-hold-size`  | 192px | A held column's floor, inset included — 144 of text. In the 326 phone column a held key leaves 134 of the next column in view, so the clipped edge says the table scrolls. Key + 5 in 1176 is 196 a column. |
 
+| `--dtab-fade-size` | `var(--space-48)` | Each scroll fade's width — about a third of a column's text floor, so it softens the clipped edge without hiding a whole word. |
+
 `nowrap` and `numeric` columns drop the fluid floor: their own longest line floors them.
 
 ### (c) Optical corrections
@@ -190,7 +193,10 @@ None.
 
 Radius: none — the frame is square, like a code panel. Border width: `--dtab-rule-width` =
 `--border-width-hairline`, for every line in the frame — border, head rule, row rules and the key
-column's vertical rule, all one ink. Shadow: none. Z-layer: none.
+column dividers (every column, head row included, none after the last — the border closes the
+box), all one ink. Shadow: none — the scroll hint is a fade to the body ground, not a shadow.
+Z-layer: none; the fades are positioned pseudo-elements and paint above the in-flow table without
+one.
 
 ## 8 · Typography
 
@@ -214,7 +220,13 @@ table is not a reading column; `Prose` has no measure and the cells take their c
 **The frame scrolls; the table never restacks.** Every cell floors at `--dtab-fluid-size` (a held
 column at `--dtab-hold-size`, a `nowrap` / `numeric` column at its longest line). When the floors add
 up to more than the track, the table overflows its frame and the frame scrolls sideways
-(`overflow-x: auto`). The border stays put, so the clipped edge reads as more to come. Because the
+(`overflow-x: auto`). The border stays put, so the clipped edge reads as more to come, and a fade to
+the body ground marks each edge that has more beyond it — the start fade appears once the table has
+scrolled off its start, the end fade goes when it reaches its end, and neither shows on a frame that
+fits. The fades are a scroll-driven animation on the frame's own scroll timeline (no client JS),
+inside `@supports (animation-timeline: scroll())`; a browser without scroll timelines shows no fade
+and keeps the clipped edge. A swipe that reaches the end stops there (`overscroll-behavior-inline:
+contain`) instead of carrying into the browser's history swipe. Because the
 floors are the columns', not the viewport's, the same thing happens in the 392 three-up track at
 1440 as in the 326 phone column. No breakpoint, no container query.
 
@@ -228,6 +240,10 @@ string in a fluid column breaks at the floor (`overflow-wrap: anywhere`). Checke
 **Touch targets.** The table has none of its own. The only targets are inline links inside cells,
 which are Prose's, and fall under the inline exception of WCAG 2.2 SC 2.5.8 (a target in a sentence
 or block of text). The frame scrolls by touch natively.
+
+**Print.** Paper cannot scroll: the frame lets the whole table out (`overflow: visible`), the fades
+go, rows never split across a page break, and the head row repeats on each page (the `<thead>`
+default).
 
 ## 10 · Composition
 
@@ -304,6 +320,9 @@ spacing on the root; `Section`'s column is never touched.
   then "Modernisation route comparison, table, 3 columns, 4 rows"; then for a cell "Typical
   disruption, Repair, Low".
 - **Empty cell.** Announced blank by the reader on its own; the dash is `aria-hidden`.
+- **Forced colours.** The fades are removed under `forced-colors: active` — the system replaces the
+  body ground, so a fade to it would draw a band of the wrong colour over text. Rules are borders
+  and the focus indicator is an `outline`, both of which forced colours keep.
 
 ## 12 · Content edge cases
 
@@ -343,7 +362,7 @@ nothing to reduce.
 - **Don't** paint a ground except through the two ground tokens. Check: every `background` in `DataTable.module.css` reads `--dtab-body-ground` or `--dtab-head-ground`.
 - **Don't** zebra-stripe, sort, filter or paginate. Check: no `:nth-child(odd|even)`, no `'use client'` in `DataTable.tsx`.
 - **Don't** let the page scroll horizontally — only the frame does. Check: `npm run shots -- data-table` → 0 overflow at 390.
-- **Don't** restack the table at a narrow width. Check: no `@container` or `@media` in `DataTable.module.css`.
+- **Don't** restack the table at a narrow width. Check: no `@container` in `DataTable.module.css`, and its only `@media` rules are `print` and `forced-colors`.
 - **Don't** flatten cells to plain text at the seam. Check: `grep -n richTextToPlainText src/content/sources/strapi/table.ts` finds one call, the row-header line.
 
 ## 15 · Specimen plan — `/design/data-table`
@@ -369,6 +388,7 @@ No state needs pointing at beyond the frame's focus ring, which Tab reaches on a
 --dtab-rule-width        :root  var(--border-width-hairline)
 --dtab-fluid-size        :root  176px — component size, § 7(b)
 --dtab-hold-size         :root  192px — component size, § 7(b)
+--dtab-fade-size         :root  var(--space-48) — component size, § 7(b)
 --dtab-body-ground       per surface, § 6
 --dtab-head-ground       per surface, § 6
 --dtab-head-ink          per surface, § 6
@@ -414,7 +434,7 @@ content recommendation, not a component change: every table block should carry a
 must not own a ground. **The owner overturned that: the table is boxed**, with a body ground and a
 head fill on every surface (§ 6), because a table without structure is hard to read. The key column
 is distinguished by voice — `--text-h6`, the display face at medium weight, plus the raised ink —
-and by its vertical rule. A mono uppercase key was offered and declined; the h6 voice was kept.
+A mono uppercase key was offered and declined; the h6 voice was kept.
 
 **6 · Column range — non-blocking.** The brief says "2 to 5 data columns", but its own counts (2 on
 12 tables, 3 on 34 …) and the live data (39 tables, 2–5 columns in total, key included, plus one of 7) show those are TOTAL columns. **Built: key + 1 to 5 data columns designed**, warnings outside it.
@@ -435,6 +455,20 @@ mark or link in the first column.
 structure. **Built: (a)**, through the same `richTextToHtml` every other rich-text field uses, rendered
 by Prose — one sanitiser, one set of mark styles.
 
+**10 · The table best-practice pass — 29 Sep, owner-requested.** Checked against Adrian Roselli's
+"Under-Engineered Responsive Tables", NN/g's data-table guidance and the scroll-shadow techniques
+(Lea Verou, Ben Frain). **Adopted:** a real `<table>` with scoped headers and no display reflow
+(already); a focusable, named scroll region with a visible outline (already); dividers on every row
+and column; a scroll hint on each clipped edge; overscroll containment; a print rule; a forced-colours
+rule. **Not adopted, and why:** a frozen head row (3–8 rows never outrun the viewport, and a sticky
+head inside a horizontal scroll container sticks to the frame, not the page); a frozen key column
+(the owner declined it, Q2); zebra stripes or a row hover highlight (NN/g offers them as
+alternatives to borders — with a rule on every row and column the orientation is already there, and
+a hover ground in a reference table reads as selection); a custom scrollbar (the platform's is the
+accessible one); scroll-snap (Roselli: browser bugs, and it fights the user's own scroll); sort,
+filter and column hiding (reference tables, not data grids, § 1). Right-aligned numerals with
+tabular figures and headers aligned with their content were already in place.
+
 ## Appendix · Self-audit
 
 ```text
@@ -444,10 +478,10 @@ STRUCTURE
 [x] Every Anatomy part appears in colour, geometry or typography, or is delegated to Prose.
 
 NAMES
-[x] --dtab-* tokens declared: 11 (3 geometry in :root, 8 colour × 4 surfaces).
+[x] --dtab-* tokens declared: 12 (4 geometry in :root, 8 colour × 4 surfaces).
 [x] Every existing name referenced resolves in the token layer (npm run design:check).
-[x] Every layout distance is a gap-scale role; two component sizes (fluid 176, hold 192) are stated
-    and commented.
+[x] Every layout distance is a gap-scale role; three component sizes (fluid 176, hold 192, fade 48)
+    are stated and commented.
 [x] Zero hex and zero raw px in the module.
 
 COLOUR AND CONTRAST
