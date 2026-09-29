@@ -89,7 +89,20 @@ export default async function AboutPage() {
       <PageHero
         title={page.hero.heading}
         body={[page.hero.description]}
-        media={page.hero.image ? { kind: 'image', ...page.hero.image } : undefined}
+        media={
+          /* Fields named rather than spread: the hero's `kind: 'image'` is PageHero's media
+             discriminant, and the record's own `kind` (capture, cut-out…) is a different field
+             with the same name. A spread would let one overwrite the other. */
+          page.hero.image
+            ? {
+                kind: 'image',
+                src: page.hero.image.src,
+                alt: page.hero.image.alt,
+                width: page.hero.image.width,
+                height: page.hero.image.height,
+              }
+            : undefined
+        }
         surface="paper"
       />
 

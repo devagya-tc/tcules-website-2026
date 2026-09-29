@@ -1,8 +1,21 @@
-import type { ReactNode } from 'react';
+import { Children, type ReactNode } from 'react';
 
 import { Layout, Section, type SectionDensity, type SectionSurface } from '@/components';
 
 import styles from './ContentSection.module.css';
+
+/**
+ * Where the head group sits against the blocks.
+ *
+ *   stacked  the head above the blocks, at every width. The default, and today's behaviour.
+ *   beside   from 1024 up, the head in a narrow leading track and the blocks in the wide trailing
+ *            one, tracks 1 : 2, the head static (it scrolls with the band; it does not stick).
+ *            Below 1024 it is `stacked`, exactly — same DOM order, same 48 beat.
+ *
+ * A PRESENTATION choice, and therefore never a CMS field (docs/strapi-changes.md §1): it changes
+ * how a section looks, not what it says. The template that places the band chooses it.
+ */
+export type ContentSectionArrangement = 'stacked' | 'beside';
 
 export type ContentSectionProps = {
   /**
@@ -53,7 +66,23 @@ export type ContentSectionProps = {
    * which only the caller knows.
    */
   density?: SectionDensity;
-  /** The blocks. Each becomes one row of the body stack at `--gap-stack`. */
+  /**
+   * Head above the blocks (`stacked`, the default) or beside them from 1024 up (`beside`). See
+   * `ContentSectionArrangement`.
+   *
+   * `beside` needs both halves to mean anything, so it degrades rather than drawing an empty
+   * track: with no head group the blocks take the full column, and with no blocks the head takes
+   * the full column — in both cases the band renders exactly as `stacked` would. A one-third track
+   * holding nothing, or a two-thirds track holding nothing, is a hole in the page, not a layout.
+   */
+  arrangement?: ContentSectionArrangement;
+  /**
+   * The blocks. Each becomes one row of the body stack at `--gap-stack`.
+   *
+   * "No blocks" is decided with `Children.toArray`, which drops `null`, `undefined` and booleans —
+   * so an empty array (a CMS section with zero blocks, mapped) renders no body row and no 48 seam
+   * beneath the head, the same as omitting the prop.
+   */
   children?: ReactNode;
 };
 
@@ -73,13 +102,21 @@ export type ContentSectionProps = {
  *   stack  (48)  head group → blocks    and between the blocks themselves
  *
  * So the head group reads as one object with air beneath it, rather than as three evenly spaced
- * rows. Nothing here is responsive and nothing here is a distance this file chose: all three are
- * gap-scale steps, and they do not shift at a breakpoint.
+ * rows. Nothing here is a distance this file chose: all three are gap-scale steps, and none of
+ * them shifts at a breakpoint. The one thing that does change at a breakpoint is the ARRANGEMENT
+ * under `beside` — the layout moves at 1024, the distances never do (CLAUDE.md § the gap scale,
+ * rule 3).
  *
  * It contributes TYPE AND INK only. `Section` paints the band from the `surface` handed to it,
  * `Layout` owns every seam, and the blocks own themselves. There are no state tokens, which is
  * the assertion that this component's rendering is a function of its props: nothing in it
  * responds to a pointer and nothing opens.
+ *
+ * TWO ARRANGEMENTS of the same three beats. `stacked` puts the head group above the blocks;
+ * `beside` (ruling O2) puts it in a one-third leading track from 1024 up, static, with the blocks in
+ * the two-thirds track beside it, 64 apart. It is the arrangement that breaks the "heading +
+ * paragraph + three cards" silhouette a long page otherwise repeats, and it needs no new component
+ * and no new token: it is one Layout's props.
  *
  * Route-blind and data-blind like every pattern — it never learns that Strapi exists.
  */
@@ -90,11 +127,17 @@ export function ContentSection({
   lead,
   surface,
   density,
+  arrangement = 'stacked',
   children,
 }: ContentSectionProps) {
   /* The head group is only rendered when something is in it. An untitled section is the run of
      blocks before the first heading, and it wants no empty row above it. */
   const hasHead = Boolean(eyebrow || heading || lead);
+  const hasBody = Children.toArray(children).length > 0;
+
+  /* `beside` only splits when there are two halves to split. Either one missing and the band is
+     the stacked band — see the `arrangement` prop for why an empty track is never drawn. */
+  const split = arrangement === 'beside' && hasHead && hasBody;
 
   /* A `section` element is only honest when the band has a name. Unheaded, it is a `div` —
      an unnamed <section> is a region a screen reader announces and cannot identify. */
@@ -107,7 +150,28 @@ export function ContentSection({
       density={density}
       aria-labelledby={labelled ? headingId : undefined}
     >
-      <Layout rowGap="stack">
+      {/* The outer Layout is the only thing `arrangement` touches, and it touches it through
+          Layout's own props — no local grid.
+
+            rowGap  stack (48)   head group → body when the two are rows: always under `stacked`,
+                                 and under `beside` below 1024, which is what makes the collapse
+                                 identical to `stacked` rather than merely similar.
+            colGap  column (64)  head track → body track under `beside`. Not gutter (32): that is
+                                 the seam between peers in a set, and a head and its blocks are not
+                                 peers. These are two halves that must read as separate, which is
+                                 the step the scale names for exactly that.
+            columns {lg: [1,2]}  1 : 2 from 1024 up (O2), one track below. Undefined when not
+                                 split, so the stacked band renders the Layout it always did.
+            align   start        the head is STATIC (O2): it sits at the top of its track and
+                                 scrolls away with the band. `start` sizes it to its content rather
+                                 than stretching it to the body's height, so nothing pretends to be
+                                 a rail it is not. */}
+      <Layout
+        rowGap="stack"
+        colGap={split ? 'column' : undefined}
+        columns={split ? { lg: [1, 2] } : undefined}
+        align={split ? 'start' : undefined}
+      >
         {hasHead ? (
           /* 24 between the heading and its lead. The eyebrow+heading pair nests one level
              deeper at 8, so the three rows are two groups rather than three evenly spaced
@@ -131,7 +195,7 @@ export function ContentSection({
             so the head group is ONE row of the outer stack no matter how many blocks follow —
             without it, a band with no lead would be indistinguishable from the flat composition
             this component replaces. */}
-        {children !== undefined ? <Layout rowGap="stack">{children}</Layout> : null}
+        {hasBody ? <Layout rowGap="stack">{children}</Layout> : null}
       </Layout>
     </Section>
   );

@@ -108,8 +108,8 @@ bundle from 412 KB to 54 KB.
 
 esbuild erases types without checking them, so an invalid prop value fails **silently at render**.
 This cost a debugging cycle: `<Cluster colGap="gutter">` produced no gap class at all, collapsing
-the Icon and Logo rows to zero spacing. **`Cluster` caps at `block`** — `gutter`, `stack`,
-`column`, `section` are Layout-only. Audit previews for this after editing; a quick regex over
+the Icon and Logo rows to zero spacing. **`Cluster` caps at `stack`** — `column`,
+`section`, `section-open` are Layout-only. Audit previews for this after editing; a quick regex over
 `<Cluster|Layout … rowGap/colGap="…">` against the allowed sets catches it.
 
 ## Known render warns (expected — not new)

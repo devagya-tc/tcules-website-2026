@@ -7,6 +7,7 @@ import type {
   AboutPage,
   ContentSeo,
 } from '../../types';
+import { mapUploadImage } from './image';
 import { ABOUT_QUERY } from './about-query';
 import type {
   StrapiAbout,
@@ -29,39 +30,11 @@ function getStrapiGraphqlUrl(): string {
   return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
 }
 
-function absoluteAssetUrl(candidate: string | null | undefined, graphqlUrl: string): string {
-  const path = value(candidate);
-  if (!path) return '';
-
-  try {
-    const url = new URL(path, graphqlUrl);
-    return url.protocol === 'https:' || url.protocol === 'http:' ? url.toString() : '';
-  } catch {
-    return '';
-  }
-}
-
-function positiveDimension(candidate: number | null | undefined): number | undefined {
-  return typeof candidate === 'number' && Number.isFinite(candidate) && candidate > 0
-    ? candidate
-    : undefined;
-}
-
 function mapImage(
   file: StrapiAboutFile | null | undefined,
   graphqlUrl: string,
 ): AboutImage | undefined {
-  const src = absoluteAssetUrl(file?.url, graphqlUrl);
-  const width = positiveDimension(file?.width);
-  const height = positiveDimension(file?.height);
-  if (!src || !width || !height) return undefined;
-
-  return {
-    src,
-    alt: value(file?.alternativeText),
-    width,
-    height,
-  };
+  return mapUploadImage(file, graphqlUrl);
 }
 
 function mapAction(link: StrapiAboutLink | null | undefined): AboutAction | undefined {

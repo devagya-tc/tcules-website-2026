@@ -443,7 +443,7 @@ The live `product-modernisation-assessment` audit sends 6 data columns: it rende
 
 **7 · Where column behaviour comes from on live routes — non-blocking.** Strapi has no field for it,
 so every live table renders the defaults (key `hold`, data `fluid`). **Built: presentation props,
-defaults on routes.** Logged as `docs/strapi-changes.md` § 9: an optional semantic column kind
+defaults on routes.** Logged as `docs/strapi-changes.md` § 10: an optional semantic column kind
 (text · numeric · identifier), which is content meaning, not layout. No inference from cell content —
 code does not guess.
 

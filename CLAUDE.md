@@ -47,8 +47,8 @@ a primitive. Same rule one tier up — a pattern does not import a pattern.
   `surface="paper | tint | ink | blue"` sets the ground for everything inside it.
 - **`Layout`** — the columnar axis. Tracks (`3`, `[2,1]`, per-breakpoint, `fit`, `tile`) plus
   `rowGap` / `colGap`, both taking gap-scale step names. A vertical stack is the single-track case.
-- **`Cluster`** — the inline axis. Wrapping rows: chips, button groups, metadata. Same scale,
-  capped at `block`.
+- **`Cluster`** — the inline axis. Wrapping rows: chips, button groups, metadata, logo strips.
+  Same scale, capped at `stack`.
 
 **Rules:**
 
@@ -108,7 +108,8 @@ Nine steps, named for what they separate:
    add a media query that swaps one step for another.
 
 `Layout` and `Cluster` take these names directly as `rowGap` / `colGap` values. Cluster caps at
-`block`: a wrapping chip row has no use for a 48px block beat.
+`stack`: controls and chips stop at `block`, a strip of client marks is set at `stack`, and a
+wrapping row has no use for a column or section beat.
 
 ### The other rules that matter day to day
 

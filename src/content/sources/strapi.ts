@@ -12,6 +12,7 @@ import type {
 } from '../types';
 import { AUDIT_BY_SLUG_QUERY } from './strapi/audit-query';
 import { HOW_WE_WORK_QUERY } from './strapi/how-we-work-query';
+import { mapUploadImage } from './strapi/image';
 import {
   escapeHtml,
   richTextToHtml,
@@ -136,23 +137,6 @@ function mapContentColumn(
     items: mapLabelledItems(column.labelledItems),
     links: mapActions(column.links),
   };
-}
-
-function absoluteAssetUrl(
-  url: string | null | undefined,
-  graphqlUrl: string,
-): string | undefined {
-  const path = value(url);
-  if (!path) return undefined;
-
-  try {
-    const resolved = new URL(path, graphqlUrl);
-    return resolved.protocol === 'https:' || resolved.protocol === 'http:'
-      ? resolved.toString()
-      : undefined;
-  } catch {
-    return undefined;
-  }
 }
 
 function mapBlock(
@@ -302,20 +286,10 @@ function mapBlock(
       if (!file) return undefined;
 
       const caption = value(file.caption) || value(file.alternativeText) || value(file.name);
-      const src = absoluteAssetUrl(file.url, graphqlUrl);
-      const width = typeof file.width === 'number' && file.width > 0 ? file.width : undefined;
-      const height =
-        typeof file.height === 'number' && file.height > 0 ? file.height : undefined;
-      const isImage = value(file.mime).startsWith('image/');
-      const image =
-        isImage && src && width && height
-          ? {
-              src,
-              alt: value(file.alternativeText) || caption,
-              width,
-              height,
-            }
-          : undefined;
+      const image = mapUploadImage(file, graphqlUrl, {
+        fallbackAlt: caption,
+        requireImageMime: true,
+      });
 
       return caption ? { id, type: 'media', ...(image ? { image } : {}), caption } : undefined;
     }

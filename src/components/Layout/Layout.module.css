@@ -24,8 +24,8 @@
    competing with the nine. Track widths read --lay-track-* from tokens/components/layout.css,
    because a card's comfortable width is geometry, not a distance between two things.
 
-   No literal distance appears in this file. Cluster reads the same scale, capped at block: a
-   wrapping chip row has no use for a 96px section beat. */
+   No literal distance appears in this file. Cluster reads the same scale, capped at stack: a
+   wrapping row has no use for a 96px section beat. */
 .layout {
   display: grid;
   /* Both axes zeroed HERE on every .layout, because --layout-*-gap custom properties INHERIT: a

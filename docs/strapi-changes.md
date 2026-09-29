@@ -97,7 +97,17 @@ their cards.
 
 **Found in.** `docs/phase-2-decisions.md` C1; tracker 2.10.
 
-## 9. Table columns carry a semantic kind, and the row header is stored once
+## 9. A crop-shadow flag on media, beside kind and panel
+
+**What.** An optional boolean `shadow` on media metadata, used only when `kind` is `cut-out`. Default off.
+
+**Why.** A cut-out *may* carry one shadow (ch05 §2, B2). Whether it does is a property of the asset as
+supplied, like the panel, so it is recorded with the asset rather than chosen per page. The site reads it
+through the `Media` primitive, which ignores it on every other kind.
+
+**Found in.** tracker 2.6 (`docs/specs/Media.md` §3).
+
+## 10. Table columns carry a semantic kind, and the row header is stored once
 
 **What.** Two changes to the shared table component (`ComponentAuditTable`, `ComponentServiceTable`,
 `ComponentExpertiseTable`, `ComponentToolTable`, `ComponentGlossaryTable`):
@@ -112,7 +122,7 @@ their cards.
   page never shows. Drop `rowHeading`, or make it the only home and stop authoring the first cell.
 
 Also a content trim, not a schema change: `product-modernisation-assessment` sends six data columns,
-one past DataTable's designed five. It renders and stacks, but reads as a matrix, not a comparison.
+one past DataTable's designed five. It renders and scrolls, but reads as a matrix, not a comparison.
 
 **Why.** The seam now passes the table through as structure (`ContentTable`) instead of a flattened
 string, so these fields can reach the page. A duplicated field is two sources of truth, and the

@@ -67,6 +67,7 @@ export type StrapiToolBlock = {
     caption?: string | null;
     width?: number | null;
     height?: number | null;
+    formats?: unknown;
     url?: string | null;
     mime?: string | null;
   } | null;

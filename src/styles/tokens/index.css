@@ -82,6 +82,7 @@
 @import 'components/section.css';
 @import 'components/layout.css';
 @import 'components/icon.css';
+@import 'components/media.css';
 @import 'components/button.css';
 @import 'components/input.css';
 @import 'components/prose.css';
@@ -102,6 +103,7 @@
 @import 'components/content-section.css';
 @import 'components/tag.css';
 @import 'components/texture.css';
+@import 'components/client-mark.css';
 @import 'components/data-table.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the

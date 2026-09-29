@@ -578,9 +578,25 @@
 
 /* ── Elevation ────────────────────────────────────────────────────────────────
    Declared so "no shadow" is a value a component points at, rather than an
-   omission someone fills in later. There is no second step.                   */
+   omission someone fills in later. There is one other step, and it is not for
+   UI: nothing the page is made of — a card, a panel, a control — casts a shadow.
+
+   --shadow-crop is ch05 §2's --img-crop-elevation (amendment B2): the ONE shadow
+   a cut-out of product UI may carry. "0 0 12px, 8% ink, no offset, tight spread,
+   never stacked, never coloured" — measured at the 2560 master, which is served
+   into a 1240 CSS column at about 2 device pixels per CSS pixel, so the 12px of
+   the brand record is 6 CSS px here. The colour is neutral-950 at 8%, the exact
+   rgba(27, 27, 24, .08) the chapter writes, derived rather than restated so the
+   ink and its shadow cannot drift apart.
+
+   It is written as a shadow VALUE (offset-x offset-y blur colour) with no spread,
+   so it is legal both in box-shadow and inside filter: drop-shadow(). A cut-out
+   has an alpha silhouette, and only drop-shadow() follows it — a box-shadow
+   would draw a rectangle around the transparent box, which is a frame, which
+   §2a forbids. The consumer decides which property; this token decides the look. */
 :root {
   --shadow-none: none;
+  --shadow-crop: 0 0 6px color-mix(in srgb, var(--color-neutral-950) 8%, transparent);
 }
 
 /* ── Z-index ──────────────────────────────────────────────────────────────────

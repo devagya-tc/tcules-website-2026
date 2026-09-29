@@ -4,6 +4,8 @@ export type StrapiContactImage = {
   alternativeText?: string | null;
   width?: number | null;
   height?: number | null;
+  /** Strapi's generated derived widths, a JSON scalar; read only by sources/strapi/image.ts. */
+  formats?: unknown;
   mime?: string | null;
 };
 
