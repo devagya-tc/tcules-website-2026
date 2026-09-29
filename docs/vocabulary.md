@@ -176,7 +176,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-measure` 22ch · `--csec-lead-measure` 40ch
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.01em · `--cta-marker-tracking` 0.1em · `--cta-heading-measure` 22ch · `--cta-body-measure` 68ch
 - **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-max-inline` 470px · `--enq-message-reserve` 19px
-- **figure.css** — `--fig-min-xs` 192px · `--fig-rule-width` 1px · `--fig-image-radius` 0px
+- **figure.css** — `--fig-min-xs` 192px
 - **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-badge-padding-inline` 14px · `--foot-badge-radius` 999px · `--foot-watermark-size` 160px · `--foot-tagline-measure` 40ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 68ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em
 - **icon.css** — `--icn-size-sm` 14px · `--icn-size-md` 16px · `--icn-size-lg` 18px · `--icn-size-xl` 24px
 - **input.css** — `--inp-height-md` 40px · `--inp-height-touch` 44px · `--inp-padding-x` 12px · `--inp-textarea-padding-y` 12px · `--inp-min-inline` 16rem · `--inp-textarea-min-block` 128px · `--inp-radius` 8px · `--inp-rule-width` 1px · `--inp-invalid-rule-width` 2px · `--inp-ring-width` 2px · `--inp-ring-offset` 2px

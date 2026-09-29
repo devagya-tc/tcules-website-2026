@@ -1,28 +1,25 @@
-import { Layout } from '@/components';
+import { Layout, Media, type MediaImage } from '@/components';
 
 import styles from './Figure.module.css';
 
 /**
- * The image asset, as four fields rather than a caller-owned node.
+ * The image asset — Media's record, unchanged.
  *
- * All four arrive together or not at all, which is the type-level reason there is no way to
- * ship a `src` and discover the missing dimension at runtime. `width` and `height` are the
- * asset's INTRINSIC pixel dimensions — they are not a size request. CSS scales the box to the
- * parent's track; these two are what let the browser reserve the right block-size before the
- * stylesheet arrives, so the page does not shift when the image lands. Every real asset already
- * carries both numbers before it is uploaded.
+ * Figure used to own a four-field image type and a native `<img>`; since tracker 2.7 it hands the
+ * record to `Media`, which owns delivery (srcset from the asset's `sources`) and the edge by kind.
+ * The four master fields are still required together, so there is no way to ship a `src` and
+ * discover a missing dimension at runtime.
  *
  * `alt` is required and must NOT restate the caption. `alt` describes what the image shows; the
  * caption and note explain what it means and what it does not establish. A product screenshot is
- * evidentiary content, so the empty-string convention that suits `ListCard`'s decorative
- * thumbnail is wrong here — there, the row's title and body already carry the meaning.
+ * evidentiary content, so the empty-string convention that suits a decorative thumbnail is wrong
+ * here — there, the row's title and body already carry the meaning.
+ *
+ * `kind` decides the edge (ch05 §2, §2a, §4a): a capture keeps the hairline, a cut-out and a
+ * photograph take none, an illustration is never boxed. An image with no kind is a capture (ruling
+ * M3), which is why every untagged figure on a live route looks exactly as it did.
  */
-export type FigureImage = {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-};
+export type FigureImage = MediaImage;
 
 /**
  * A closed content record. Three props, none of them a size, a position or a container hint.
@@ -54,12 +51,15 @@ export type FigureProps = {
   note?: string;
 };
 
+/* Section's column is min(100vw − 64px, 1240px): the 1240 cap is reached at 1304. */
+const FIGURE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
+
 /**
  * Figure — an image with a caption and an optional quieter note, built to docs/specs/Figure.md.
  *
  * It fills whatever inline space its parent gives it and asks nothing of that parent: no slot, no
  * context, no surface prop. Whichever `Section`, `PageHero` or future `ContentSection` established
- * `data-surface` is what the three `--fig-*` colours resolve against, so the same markup is
+ * `data-surface` is what the two `--fig-*` inks (and Media's capture rule) resolve against, so the same markup is
  * correct on paper, on a tint panel, in an ink band and on the blue pivot — including a tint panel
  * nested inside an ink section.
  *
@@ -67,10 +67,11 @@ export type FigureProps = {
  * emits no ARIA, generates no id and holds no idref. Nothing in it is focusable, nothing hovers
  * and nothing moves; the render is a pure function of the three props.
  *
- * The image renders at its own intrinsic ratio, uncropped, at 100% of the given track. Product
- * screenshots are light, detailed and full of small type, and they vary too widely in shape for
- * any one fixed ratio not to cut that type out of some of them — which is why the fixed 3:2
- * centre crop that is right for `ListCard`'s marker is deliberately not generalised here.
+ * The image renders through `Media` at its own intrinsic ratio, uncropped, at 100% of the given
+ * track. Product screenshots are light, detailed and full of small type, and they vary too widely
+ * in shape for any one fixed ratio not to cut that type out of some of them — which is why the
+ * fixed 3:2 centre crop that is right for `ListCard`'s marker is deliberately not generalised here.
+ * Its edge is Media's, by kind, and radius 0 on every kind (ch05 §6).
  */
 export function Figure({ image, caption, note }: FigureProps) {
   /* An empty note is treated as absent, an empty caption is not, and the asymmetry is deliberate
@@ -83,31 +84,12 @@ export function Figure({ image, caption, note }: FigureProps) {
   return (
     <Layout as="figure" rowGap="text" className={styles.root}>
       {image ? (
-        /* A native image, owned here rather than accepted as a node: the repository has no Image
-           primitive and no next/image precedent, and the accepted spec chose src/alt/width/height
-           fields. One src at one resolution — there is no srcset, because there is no responsive
-           image pipeline in this codebase to feed one. */
-        /* eslint-disable-next-line @next/next/no-img-element -- accepted native-image contract */
-        <img
-          className={styles.image}
-          src={image.src}
-          alt={image.alt}
-          width={image.width}
-          height={image.height}
-          /* Unconditional, as ListCard's thumbnail is. The one case this would mis-serve is an
-             above-the-fold hero image, and that case has now been RESOLVED BY SEPARATION rather
-             than by a prop: PageHero gained a `media` slot on 25 Aug 2026 and does not fill it
-             with a Figure — it owns its own <img>, eager and fetchPriority="high", because a hero
-             image is the LCP element on the routes that have one. A hero image also has no
-             caption; the copy above it is the caption, which is the distinction that makes the
-             two components separate rather than one nested in the other.
-
-             So this stays lazy and gains no `loading` or `priority` prop: every real Figure is a
-             page-body figure below the fold. The joint amendment this comment used to ask for is
-             recorded in Figure.md §17 Q7 and Q9b and in PageHero.md §17 Q3. */
-          loading="lazy"
-          decoding="async"
-        />
+        /* Media owns the delivery and the edge; Figure owns the caption. Lazy, because every real
+           Figure is a page-body figure below the fold — the above-the-fold hero image is PageHero's
+           (Figure.md §17 Q7). `sizes` is the full content column: a Figure cannot see its track, and
+           the full-column value over-fetches in a narrower track rather than ever under-fetching
+           (Media.md §9, §17 Q8). */
+        <Media image={image} sizes={FIGURE_SIZES} />
       ) : null}
       {/* <figcaption> must be the figure's first or last child. It is last, because a caption
           above an image reads as an eyebrow — a label for what is coming — and this system
