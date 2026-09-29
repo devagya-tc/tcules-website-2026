@@ -144,6 +144,15 @@ const TEXT_ROLES = [
     sample: 'The repetition is the fix, and the repetition is what makes nesting safe.',
   },
   {
+    className: t.quoteLg,
+    role: 'quote-lg',
+    px: 43,
+    lh: 1.2,
+    family: 'Newsreader italic',
+    steps: '34 / 25',
+    sample: 'They shipped the system, then the engineers kept using it.',
+  },
+  {
     className: t.lead,
     role: 'lead',
     px: 20,
@@ -248,6 +257,14 @@ const CHROME_ROLES = [
     where: 'a figure standing alone — steps to 32 on mobile',
   },
   {
+    className: t.statLg,
+    role: 'stat-lg',
+    px: 54,
+    lh: 1,
+    track: '-0.015em',
+    where: 'the figure that leads a band (display Proof) — steps to 43, then 40',
+  },
+  {
     className: t.code,
     role: 'code',
     px: 14,
@@ -257,7 +274,7 @@ const CHROME_ROLES = [
   },
 ] as const;
 
-/** Only the title roles and four text roles cut at a breakpoint. Everything else holds. */
+/** Only the title roles, quote, quote-lg, lead and the two stat roles cut at a breakpoint. The rest hold. */
 const BREAKPOINTS = [
   { role: 'display', d: '67 / 1.04', tab: '54 / 1.06', mob: '43 / 1.08' },
   { role: 'h1', d: '54 / 1.06', tab: '43 / 1.08', mob: '34 / 1.12' },
@@ -267,9 +284,11 @@ const BREAKPOINTS = [
   { role: 'h5', d: '22 / 1.28', tab: '22 / 1.28', mob: '20 / 1.3' },
   { role: 'h6', d: '18 / 1.35', tab: '18 / 1.35', mob: '18 / 1.35' },
   { role: 'quote', d: '28 / 1.35', tab: '28 / 1.35', mob: '22 / 1.4' },
+  { role: 'quote-lg', d: '43 / 1.2', tab: '34 / 1.24', mob: '25 / 1.3' },
   { role: 'lead', d: '20 / 1.5', tab: '20 / 1.5', mob: '18 / 1.55' },
   { role: 'index', d: '20 / 1.2', tab: '20 / 1.2', mob: '20 / 1.2' },
   { role: 'stat', d: '40 / 1', tab: '40 / 1', mob: '32 / 1' },
+  { role: 'stat-lg', d: '54 / 1', tab: '43 / 1', mob: '40 / 1' },
 ] as const;
 
 const SURFACES = [
@@ -460,13 +479,13 @@ export default function TypographySpecimenPage() {
             <h2>The text roles</h2>
             <p>
               What you read at length, plus the pull quote that is set in the title face on
-              purpose. Only quote and lead cut at a breakpoint; everything from body-lg down
-              holds its size at every width, because the thing that changes on a phone is the
-              column, not the reading size.
+              purpose. Only quote, quote-lg and lead cut at a breakpoint; everything from
+              body-lg down holds its size at every width, because the thing that changes on a
+              phone is the column, not the reading size.
             </p>
           </Layout>
 
-          <Specimen title="quote · lead · body-lg · body · body-sm · caption">
+          <Specimen title="quote · quote-lg · lead · body-lg · body · body-sm · caption">
             <Layout rowGap="stack">
               {TEXT_ROLES.map((r) => (
                 <Layout key={r.role} columns={[1, 3]} colGap="gutter" rowGap="tight">
@@ -502,7 +521,7 @@ export default function TypographySpecimenPage() {
                   </Layout>
                   <Layout rowGap="inline" className={t.sampleCell}>
                     <span className={r.className}>
-                      {r.role === 'stat'
+                      {r.role === 'stat' || r.role === 'stat-lg'
                         ? '2,480'
                         : r.role === 'code'
                           ? 'const gap = 24'
