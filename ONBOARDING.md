@@ -148,7 +148,7 @@ one track below; `'fit'` tracks absorb slack, `'tile'` tracks keep their width s
 something to distribute — which is the only arrangement where `justify` does anything at all.
 
 **`Cluster`** — the inline axis. Wrapping rows: chips, button groups, metadata. Props: `as`
-(`'div'`), `rowGap` / `colGap` (`'inline' | 'tight' | 'text' | 'block'` — **capped at `block`**, and
+(`'div'`), `rowGap` / `colGap` (`'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack'` — **capped at `stack`**, and
 no `'none'`), `align` (default `center`), `justify` (default `start`), `nowrap`, `className`,
 `style`, `children`, `id`.
 

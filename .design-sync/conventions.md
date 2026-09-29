@@ -52,8 +52,9 @@ axis you do not state renders 0**. The nine steps, named for what they separate:
 `inline` 4 · `tight` 8 · `text` 16 · `block` 24 · `gutter` 32 · `stack` 48 · `column` 64 ·
 `section` 96 · `section-open` 128
 
-`Layout` also accepts `none`. **`Cluster` caps at `block`** — `gutter` and above are silently
-ignored there, which renders as a collapsed row, so use `block` as Cluster's largest step.
+`Layout` also accepts `none`. **`Cluster` caps at `stack`** — `column` and above are silently
+ignored there, which renders as a collapsed row, so use `stack` as Cluster's largest step. A strip
+of client marks is `colGap="stack" rowGap="stack"`.
 
 Two more rules that decide whether a composition is right:
 

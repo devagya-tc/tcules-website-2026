@@ -549,8 +549,8 @@ no border, no outline. On a disabled button it is inert along with everything el
 
 A Button belongs **inside a `Cluster`**, and the Cluster owns the gap. A row of buttons is
 `<Cluster colGap="text" rowGap="text">`; a segmented filter set is `colGap="tight"`; a pair set
-apart from its neighbours is `colGap="block"`. Cluster caps at `block` (24), which is the right
-ceiling for a wrapping control row.
+apart from its neighbours is `colGap="block"`. `block` (24) is the right ceiling for a wrapping
+control row; Cluster's `gutter` and `stack` are for rows of larger items.
 
 **A Button sets no outer spacing of its own — ever.** No margin, on any side, in any emphasis. A
 child with a margin breaks the container primitive's only contract, and the cause is invisible in

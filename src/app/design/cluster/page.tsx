@@ -32,11 +32,11 @@ export default function ClusterSpecimenPage() {
         </Specimen>
 
         <Specimen
-          title="The scale — capped at block"
-          note="The same nine-step gap scale Layout reads, stopping at block (24). A wrapping chip row has no use for a 48px block beat, so the two primitives share one vocabulary and differ only by ceiling."
+          title="The scale — capped at stack"
+          note="The same nine-step gap scale Layout reads, stopping at stack (48). Chips and controls stop at block; gutter and stack are for rows of large items — a logo strip is set at stack. A wrapping row has no use for a column or section beat, so the two primitives share one vocabulary and differ only by ceiling."
         >
           <Layout rowGap="text">
-            {(['inline', 'tight', 'text', 'block'] as const).map((rung) => (
+            {(['inline', 'tight', 'text', 'block', 'gutter', 'stack'] as const).map((rung) => (
               <Cluster key={rung} colGap={rung}>
                 <Box>colGap=&quot;{rung}&quot;</Box>
                 <Box>·</Box>

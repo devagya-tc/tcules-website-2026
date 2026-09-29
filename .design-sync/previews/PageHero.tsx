@@ -5,7 +5,7 @@ import type { HeroCredit } from 'tcules-website-2026';
    invalid prop value fails silently at render rather than at build. Two unions to keep honest here:
    `body` is a NON-EMPTY tuple and `actions` is a 0-, 1- or 2-tuple, so neither can be widened to a
    plain array in a story without the real API rejecting it at a real call site. And Cluster caps at
-   `block` — the actions row below uses `tight`, which is inside the cap. */
+   `stack` — the actions row below uses `tight`, which is inside the cap. */
 
 const TITLE = 'A building energy product that pays for its own rollout';
 const EYEBROW = 'ConnectX · AI-native building energy product';
