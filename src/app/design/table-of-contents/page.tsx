@@ -27,12 +27,13 @@ import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
  *                                 for free at the top of the page — and one you have scrolled past
  *                                 holds its LAST entry, which is the below-the-last-heading case.
  *   the 1024 switch               needs a viewport either side of it. Narrow the window: every rail
- *                                 stops being sticky, drops its 180px cap, takes the full content
- *                                 column and stops marking anything, and the shell's second track
- *                                 disappears so the outline sits directly above the body.
+ *                                 stops being sticky, drops its 232px cap, takes the full content
+ *                                 column, collapses into a closed <details> and stops marking
+ *                                 anything, and the shell's second track disappears so the one
+ *                                 "On this page" row sits directly above the body.
  *   the computed geometry         § 14 items 2, 3 and 7 name a computed grid, a computed
  *                                 `inset-block-start` of 104px, a computed `max-inline-size` of
- *                                 180px and a 45.70px row. There is no browser test runner in this
+ *                                 232px and a 45.70px row. There is no browser test runner in this
  *                                 repo, so those four are read once in devtools rather than
  *                                 asserted. Band 1 is where to read them.
  */
@@ -134,14 +135,14 @@ export default function TableOfContentsSpecimen() {
         <Layout rowGap="stack">
           <Layout rowGap="block">
             <h1>TableOfContents</h1>
-            <Prose html="<p>The outline of a long-form document. A sticky rail beside the body at 1024 and up; the same markup as a static block immediately after the hero below that. Nine bands, and the mark in every one of them is live.</p>" />
+            <Prose html="<p>The outline of a long-form document. A sticky rail beside the body at 1024 and up; the same markup as a closed disclosure immediately after the hero below that. Nine bands, and the mark in every one of them is live.</p>" />
           </Layout>
           <div className={s.mockBar}>
             <p className={s.eyebrow}>SiteNav stand-in · --nav-bar-height</p>
           </div>
           <Specimen
             title="1 · In situ, eleven sections, paper"
-            note="The band where the mechanism is proved. Scroll and the mark tracks the reading line, 104px down — the bar's 72 plus a 32 gutter. At the very top nothing is marked, because the reader is above the first heading and marking 01 there would be a false claim. This is also the band to read the computed geometry in: the rail's inset-block-start is 104px, its max-inline-size 180px, and a one-line entry box measures 45.70px against the 44px floor."
+            note="The band where the mechanism is proved. Scroll and the mark tracks the reading line, 104px down — the bar's 72 plus a 32 gutter. At the very top nothing is marked, because the reader is above the first heading and marking 01 there would be a false claim. This is also the band to read the computed geometry in: the rail's inset-block-start is 104px, its max-inline-size 232px — wide enough that none of the eleven labels wraps — and a one-line entry box measures 45.70px against the 44px floor. Below 1024 this band shows the closed disclosure: one 44px row."
           >
             <Shell prefix="situ" labels={ELEVEN} />
           </Specimen>
@@ -155,12 +156,12 @@ export default function TableOfContentsSpecimen() {
             title={`2 · Surface: ${surface}`}
             note={
               surface === 'blue'
-                ? 'The band to read. Blue on blue is 1:1, so "blue means you are here" cannot be taken literally here — the mark becomes white on both the ordinal and the rule, and the 3px against 1px does proportionally more work than on any other surface. Unmarked rows sit at brandeis-100, 4.91:1, the tightest cell in the whole table. Hover goes to brandeis-50 rather than a neutral, because neutral-200 is 4.63:1 here and reads as muddy grey. Pressed and current are both white; the underline width is what tells them apart.'
+                ? 'The band to read. Blue on blue is 1:1, so "blue means you are here" cannot be taken literally here — the mark becomes white on both the ordinal and the rule, and the 3px against 1px does proportionally more work than on any other surface. Unmarked labels sit at brandeis-100, 4.91:1, the tightest cell in the whole table; the head and the ordinals one step up at brandeis-50, 5.57:1. Hover goes to brandeis-50 rather than a neutral, because neutral-200 is 4.63:1 here and reads as muddy grey. Pressed and current are both white; the underline width is what tells them apart.'
                 : surface === 'ink'
-                  ? 'The unmarked rows get QUIETER here, not louder — neutral-500 at 5.41:1, one step below what the surface layer would have given them, because nineteen rows at 8.05:1 on a dark ground glow and compete with the body. The mark lifts three ramp steps to brandeis-300: brandeis-500 on this ground is 2.77:1 and is exactly the failure the surface model exists to prevent. The rule travels the other way, to neutral-700, because on ink a light hairline is louder than the labels behind it.'
+                  ? 'The unmarked labels get QUIETER here, not louder — neutral-500 at 5.41:1, one step below what the surface layer would have given them, because nineteen rows at 8.05:1 on a dark ground glow and compete with the body. The head and the 12px ordinals do take neutral-400, 8.05:1 — small mono is not what glows. The mark lifts three ramp steps to brandeis-300: brandeis-500 on this ground is 2.77:1 and is exactly the failure the surface model exists to prevent. The rule travels the other way, to neutral-700, because on ink a light hairline is louder than the labels behind it.'
                   : surface === 'tint'
-                    ? 'Every muted value steps one darker because the ground did, and here it is FORCED rather than preferred: neutral-600 is 4.39:1 on paper-deep and fails the floor. Both blues hold, so the mark is the same hue as on paper — a reader moving down a page of alternating bands should not see it change colour.'
-                    : 'The baseline. Unmarked rows and the head both sit at neutral-600, 4.92:1, which is as quiet as either can legally go — neutral-500 is 3.16:1 and fails. The head still reads quieter than the ladder, and the reason is size and family, 11px mono against 14px sans, not ink.'
+                    ? 'Every muted value steps one darker because the ground did, and here it is FORCED rather than preferred: neutral-600 is 4.39:1 on paper-deep and fails the floor. The head and the ordinals step once more, to neutral-800 at 10.54:1. Both blues hold, so the mark is the same hue as on paper — a reader moving down a page of alternating bands should not see it change colour.'
+                    : 'The baseline. Unmarked labels sit at neutral-600, 4.92:1, as quiet as they can legally go — neutral-500 is 3.16:1 and fails. The head and the ordinals sit at neutral-700, 8.14:1: at 11px and 4.92:1 they read as grey on grey. They still read quieter than the ladder, by size and family — 12px mono against 14px sans.'
             }
           >
             <Shell prefix={`surface-${surface}`} labels={EIGHT} />
@@ -267,8 +268,8 @@ export default function TableOfContentsSpecimen() {
       {/* ── 8 · Below 1024 ────────────────────────────────────────────────────── */}
       <Section surface="paper">
         <Specimen
-          title="8 · Below 1024 — the other arrangement"
-          note="NARROW THE WINDOW past 1024 to see this band change, and it is only convincing if you know what to expect: the shell's second track disappears, so the outline sits directly above the body rather than beside it; the rail stops being sticky and drops its 180px cap, its block cap, its internal scroll and its scrollbar clearance; and nothing is ever marked, because the observer does not run below 1024 at all. At eleven entries the block is about 500px, which is the honest cost of the outline existing on a phone. One column at every width below 1024 — a two-column tablet arrangement was considered and declined."
+          title="8 · Below 1024 — a closed disclosure"
+          note="NARROW THE WINDOW past 1024 to see this band change: the shell's second track disappears, and the outline becomes a native <details>, CLOSED by default — one 44px 'On this page' row between two hairlines, where it used to be an eleven-row, ~500px block before the first paragraph. Tap it and the same list opens in place. No script decides this: at 1024 and up the same <details> is forced open through ::details-content and its summary hidden, which is the rail. Nothing is ever marked below 1024, open or closed, because the observer does not run there."
         >
           <Shell prefix="narrow" labels={ELEVEN} />
         </Specimen>

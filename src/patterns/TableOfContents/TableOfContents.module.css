@@ -6,18 +6,18 @@
    That is what lets the same markup answer a paper band, a tint panel, an ink band and a blue
    pivot without knowing which one it is standing on.
 
-   ── Two arrangements, one media query ───────────────────────────────────────────
-   Below 1024 the outline is a static, full-width, single-column block sitting immediately after
-   the hero, and it needs NO base declarations to be that: an unstyled <nav> holding a stacked list
-   already is one. So `.rail` appears only inside the one media query, which is where the whole
-   difference between the two arrangements lives — position, both inline caps, the block cap, the
-   internal scroll and the scrollbar's clearance. Nothing else in this file is inside a breakpoint,
-   and no gap step and no type role may ever be: the layout changes at 1024, the distances do not.
+   ── Two arrangements, one DOM ───────────────────────────────────────────────────
+   Below 1024 the outline is a native <details>, closed by default, sitting immediately after the
+   hero: one 44px "On this page" row, full width. At 1024 and up the same <details> is forced open
+   through ::details-content, its summary is hidden, and `.rail` makes it sticky — position, both
+   inline caps, the block cap, the internal scroll and the scrollbar's clearance. Those two blocks
+   at the end of the file are the whole difference between the arrangements, and no gap step and
+   no type role may ever sit inside either: the layout changes at 1024, the distances do not.
 
    ── What is NOT here, and why ───────────────────────────────────────────────────
-   No display: grid. One display: flex, inside `.link`, laying an ordinal and a label on one
-   baseline in a single control box — the case CLAUDE.md permits explicitly, named here as that
-   rule requires. It arranges nothing and no sibling depends on it. Every real arrangement is a
+   No display: grid. Two display: flex, each inside one control box — `.link`, laying an ordinal
+   and a label on one baseline, and `.summary`, holding a label and a chevron at opposite ends —
+   the case CLAUDE.md permits explicitly, named here as that rule requires. It arranges nothing and no sibling depends on it. Every real arrangement is a
    Layout: the head's air, and the ladder's contiguous rows at `rowGap="none"`.
 
    One display: -webkit-box, on `.labelInk`, because that is what -webkit-line-clamp requires. The
@@ -60,19 +60,94 @@
    renders a blue ordinal, a blue 3px rule, a dark neutral label and an underline — visibly the
    current row being pointed at, not either state alone. */
 
+/* ── The disclosure · below 1024, and wherever ::details-content is unsupported ──
+   A native <details>, closed by default, and the footer directory's idiom: no script, every link
+   in the markup whether or not it is open, and the summary is the only control. It replaces the
+   eleven-row, ~500px block a phone used to meet before the first paragraph with ONE row.
+
+   These are BASE rules rather than a below-1024 media query, and that is the fallback being
+   designed rather than tolerated: the rail undoes them only inside `@supports
+   selector(::details-content)` below, so a browser that cannot force a closed <details> open keeps
+   this working disclosure at every width instead of rendering a desktop rail with its links
+   hidden.
+
+   One hairline above and one below, so the closed row reads as a ruled line in the document — the
+   same shape the footer's accordions make — and not as a button floating in the text. --toc-rule
+   is the ladder's own hairline ink, measured per surface in the token layer. */
+.disclosure {
+  border-block: var(--toc-rule-width) solid var(--toc-rule);
+}
+
+/* The control box, and the second flex container in this file — the case CLAUDE.md permits: one
+   label and one glyph pushed to opposite ends of one control, arranging nothing and depended on by
+   no sibling. It is SiteFooter's .accordionSummary for the same reason.
+
+   The 44px floor is a MIN block size rather than padding, because the title role's line box is
+   about 14.4px and no gap step pads it to 44 without overshooting — and a floor stated as a floor
+   cannot silently disagree with the type role the day it changes.
+
+   `list-style: none` plus the WebKit pseudo-element: the two engines hide the disclosure triangle
+   differently, and both are needed for the chevron to be the only marker. */
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-text);
+  min-block-size: var(--toc-summary-min-block);
+  cursor: pointer;
+  list-style: none;
+  color: var(--toc-title-ink);
+  transition: color var(--toc-transition-duration) var(--toc-transition-easing);
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:hover {
+  color: var(--toc-label-ink-hover);
+}
+
+/* The summary's label takes the head's role, so the phone and the rail say "On this page" in one
+   voice. Mono, uppercased in presentation only. */
+.summaryLabel {
+  font: var(--toc-title-text);
+  letter-spacing: var(--toc-title-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+/* currentColor, so the glyph follows the summary's ink through hover without a token of its own. */
+.chevron {
+  display: inline-flex;
+  transition: transform var(--toc-transition-duration) var(--toc-transition-easing);
+}
+
+.disclosure[open] .chevron {
+  transform: rotate(180deg);
+}
+
+/* Air between the last row and the closing hairline when it is open. The rail zeroes it. */
+.panel {
+  padding-block-end: var(--gap-block);
+}
+
 /* ── The head ──────────────────────────────────────────────────────────────────
    It carries no rule. An earlier draft drew a hairline under it AND one down the leading edge of
    every row; the two met at a corner and read as a box nobody finished. The air below it — the
-   Layout's --gap-block — is now the only thing separating the head from the ladder, which is why
-   that step is "head to body inside a block" rather than something tighter.
+   Layout's --gap-block — is now the only thing separating the head from the ladder.
+
+   HIDDEN BY DEFAULT and shown only on the rail: in the disclosure the summary says the same thing,
+   and two "On this page" lines one above the other is a stutter. It stays the landmark's name at
+   every width, because aria-labelledby resolves a hidden element's text.
 
    Mono, and uppercased in PRESENTATION only: the string is authored "On this page" so that the
    capitalisation an editor wrote is the capitalisation a screen reader announces. text-transform
    sits beside `font` because a composite carries no transform, for the same reason letter-spacing
    does. */
 .title {
-  font: var(--toc-mono-text);
-  letter-spacing: var(--toc-mono-tracking);
+  display: none;
+  font: var(--toc-title-text);
+  letter-spacing: var(--toc-title-tracking);
   text-transform: var(--text-mono-case);
   color: var(--toc-title-ink);
 }
@@ -129,7 +204,7 @@
 }
 
 /* ── The ordinal ───────────────────────────────────────────────────────────────
-   A FIXED basis and no shrink, which is what holds the rule at one inline position on a 180px rail
+   A FIXED basis and no shrink, which is what holds the rule at one inline position on a 232px rail
    and on a 160px one alike — a ratio would move it every time the track did. Start-aligned rather
    than end-aligned: the digits stay flush with the content column's inline start, so they line up
    with the hero title, every h2 and every card edge on the page, and the slack falls where the
@@ -143,8 +218,8 @@
    same width. */
 .ordinal {
   flex: 0 0 var(--toc-ordinal-inline);
-  font: var(--toc-mono-text);
-  letter-spacing: var(--toc-mono-tracking);
+  font: var(--toc-ordinal-text);
+  letter-spacing: var(--toc-ordinal-tracking);
   text-transform: var(--text-mono-case);
   color: var(--toc-ordinal-ink);
   transition: color var(--toc-transition-duration) var(--toc-transition-easing);
@@ -173,8 +248,8 @@
    setting the rail's minimum to the length of one unbreakable token and pushing it past its cap.
 
    Both spellings of the clamp are declared. The prefixed pair is the one that works — unprefixed
-   `line-clamp` is not Baseline in 2026 — and `display: -webkit-box` is the second and last
-   `display` in this file. */
+   `line-clamp` is not Baseline in 2026 — and `display: -webkit-box` is the one
+   non-flex `display` that arranges anything in this file. */
 .labelInk {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -290,11 +365,13 @@
 
    A row has no corner of its own, but a 2px ring drawing a hard rectangle around bare text reads
    as a rendering artefact, so the ring alone takes a radius. */
-.link:focus {
+.link:focus,
+.summary:focus {
   outline: none;
 }
 
-.list .link:focus-visible {
+.list .link:focus-visible,
+.summary:focus-visible {
   outline: none;
   border-radius: var(--toc-entry-radius-focus);
   color: var(--toc-label-ink-hover);
@@ -344,6 +421,47 @@
   }
 }
 
+/* ── The rail · the disclosure forced open ─────────────────────────────────────
+   At 1024 and up the <details> stops disclosing. ::details-content is the part the UA hides a
+   closed <details>' content through, as `content-visibility: hidden`, and an author rule setting it
+   visible is the one override that works — which `display` on the children does not, as
+   SiteFooter.tsx records from having tried it in Chrome. The summary goes, the rail's own title
+   comes back, and the disclosure's hairlines and closing air are undone, so what renders is the
+   rail exactly as it was.
+
+   `open` stays false and that is correct rather than tolerated: nothing on the rail is collapsible,
+   the summary that would expose aria-expanded is display: none and therefore out of the
+   accessibility tree, and the content is laid out, visible and keyboard-focusable in Chromium,
+   WebKit and Firefox, and exposed as ordinary content in the Chromium and Firefox accessibility
+   trees — measured, not assumed. WebKit's own tree could not be read headlessly (Playwright
+   substitutes an "is the <details> open" heuristic there), so VoiceOver on Safari is the one
+   check still owed by hand.
+
+   Inside @supports so the fallback is the working disclosure above rather than a hidden rail. */
+@supports selector(::details-content) {
+  @media (min-width: 1024px) {
+    .disclosure {
+      border-block-style: none;
+    }
+
+    .disclosure::details-content {
+      content-visibility: visible;
+    }
+
+    .summary {
+      display: none;
+    }
+
+    .panel {
+      padding-block-end: 0;
+    }
+
+    .title {
+      display: block;
+    }
+  }
+}
+
 /* The wipe is the one motion here, so it is the one thing to answer for. Reduced motion keeps the
    underline — it is the affordance — and simply stops it travelling.
 
@@ -352,6 +470,8 @@
    reader scrolls is the one place in this system where a 140ms colour tween could read as movement
    to a motion-sensitive reader. */
 @media (prefers-reduced-motion: reduce) {
+  .summary,
+  .chevron,
   .link,
   .ordinal,
   .link::before,

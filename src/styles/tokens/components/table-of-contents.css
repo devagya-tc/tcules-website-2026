@@ -4,8 +4,9 @@
    immediately below the hero under that width. Built to docs/specs/TableOfContents.md.
 
    This file is the only place a --toc- value is decided, and it decides every colour four
-   times: once per surface. Every value is a primitive or a usage token, and exactly TWO are
-   literals: --toc-max-inline (180) and --toc-min-inline (160). Both are CAPS, which is the
+   times: once per surface. Every value is a primitive or a usage token, and exactly THREE are
+   literals: --toc-max-inline (232), --toc-min-inline (160) and --toc-summary-min-block (44).
+   All three are CAPS or FLOORS, which is the
    one place this repo writes a number — --btn-height-md is 40px, --nav-bar-height is 72px and
    --crumb-hit-min is 44px, all literals, because a cap is a decision rather than a step. Every
    other number here reads the ramp step it would otherwise have restated: the sticky inset
@@ -127,8 +128,21 @@
    at 12-13px; --text-micro at 11px is the nearest role and is also the smallest label in the
    system. Owner-confirmed 26 Aug 2026, spec §17 Q18. */
 :root {
-  --toc-mono-text: var(--text-micro);
-  --toc-mono-tracking: var(--text-micro-tracking);
+  /* 29 Sep 2026, tracker 2.17 — the two mono parts were one 11px --text-micro token and are now
+     two, because at 11px in a muted grey they read as grey on grey and a reader navigating by
+     the digits could not find them. The ordinal takes --text-ui-sm (12px mono semibold, 0.08em):
+     the mono role at caption size, and the step ListCard's ratio argument above lands on. Its
+     tracking is the correction --text-index borrows for the same reason — 0.08em keeps "04"
+     reading as one token where eyebrow's 0.12em splits it. Two digits measure about 16.3px in
+     the 24px column, leaving the rule 7.7px of clearance.
+     The title takes --text-eyebrow (12px mono semibold, 0.12em), which is what it is: a label
+     over a block. It is also the summary's label below 1024, so the phone and the rail say "On
+     this page" in the same voice. Both stay below the 14px sans label, so the digit column and
+     the head still read as quieter than the ladder — by size and family, not by being faint. */
+  --toc-title-text: var(--text-eyebrow);
+  --toc-title-tracking: var(--text-eyebrow-tracking);
+  --toc-ordinal-text: var(--text-ui-sm);
+  --toc-ordinal-tracking: var(--text-ui-sm-tracking);
   --toc-label-text: var(--text-body-sm);
 
   /* Where the sticky rail's top edge lands: the nav bar, plus a gutter of air.
@@ -147,26 +161,39 @@
      inside the below-1024 branch. */
   --toc-sticky-inset: calc(var(--space-72) + var(--gap-gutter));
 
-  /* The rail's inline cap. 180px, which is also what --sec-rail declares for "the left
-     column a running head or margin note sits in" — the same intent, quoted by value for
-     the reason above, and Section never consumes it.
-     Measured against the shell: inside the 1240 content column with colGap="column" (64),
-     a [1, 4] track is 235.2px at 1240 and 179.2px at a 1024 viewport. So at the width
-     where the rail is tightest the track binds at 0.8px under this cap, and above about
-     1030 this cap binds and the slack sits at the rail's inline end — which widens the
-     apparent gutter and keeps the title and ordinals flush with the content column's
-     inline start, aligned with the hero title, every h2 and every card edge. */
-  --toc-max-inline: 180px;
+  /* The rail's inline cap. 232px, raised from 180 on 29 Sep 2026 (tracker 2.17), MEASURED:
+     the label column is this cap less 56 (16 scrollbar clearance, 24 ordinal, 16 seam). At
+     180 it was 124px and six of the eleven realistic labels in the specimen wrapped to two
+     lines — beside about 55px of dead track the cap was refusing to use. The widest of the
+     eleven, "Governance and ownership" at --text-body-sm, measures 175.6px, so the column
+     needs 176 and the cap 232. 220 was the first guess and still wrapped two
+     ("Performance and payload" 166.5, "Governance and ownership" 175.6).
+     It does not crowd the body: inside the 1240 content column with colGap="column" (64), a
+     [1, 4] track is 235.2px, and the BODY track is 940.8px whatever this cap says — the cap
+     only decides how much of the first track the rail fills. At 232 it fills all but 3.2px
+     of it, so the visible gutter is the column step itself (64 + 3.2) rather than 64 + 55.
+     Below a 1304px viewport the track, not this cap, binds — 179.2px at 1024 — and labels
+     wrap there because the grid does not allow them the width, which is the only place they
+     should. The slack, where there is any, still sits at the rail's inline end, keeping the
+     title and ordinals flush with the content column's inline start.
+     No longer equal to --sec-rail's 180, and that is fine: that token was quoted by value,
+     never read, and the rail's cap is decided by its labels. */
+  --toc-max-inline: 232px;
 
   /* The floor, and a real one rather than a formality. In a Cluster or a columns="fit"
      track the rail's intrinsic minimum would be its widest unbreakable word, about 60px,
      which is not a narrow rail but a broken one. At this floor the label column is
-     180 - 16 (inline-end padding) - 24 (ordinal) - 16 (column seam) = 124px at the cap and
+     232 - 16 (inline-end padding) - 24 (ordinal) - 16 (column seam) = 176px at the cap and
      104px here, which at --text-body-sm holds 14 characters a line and 28 across the
      two-line clamp — the longest three-word navigation label in the corpus. Also the width
      a [1, 6] track computes to inside the 1240 column (160.6px), which is where the
      specimen renders it. */
   --toc-min-inline: 160px;
+  /* The disclosure summary's floor below 1024 — the 44px touch target, stated as a FLOOR
+     like --crumb-hit-min rather than reached through padding, because the title role's line
+     box is about 14.4px and no gap step pads that to 44 without overshooting. A floor cannot
+     silently disagree with the type role the day it changes; padding arithmetic can. */
+  --toc-summary-min-block: 44px;
 
   /* The visible viewport below the sticky inset, less the same gutter of air at the block
      end. dvh rather than vh so retracting browser chrome cannot clip the last entry.
@@ -178,12 +205,12 @@
   --toc-max-block: calc(100dvh - var(--toc-sticky-inset) - var(--gap-gutter));
 
   /* The digit column, as a FIXED flex basis rather than a ratio — which is what holds the
-     rule at one inline position on a 180px rail and on a 160px one alike. --space-24 is the
+     rule at one inline position on a 232px rail and on a 160px one alike. --space-24 is the
      step --prose-marker-inset reads for the same geometry — how far a list marker sits from
      its text — so this reads the same primitive rather than restating its value or reading
      Prose's token. NOT --gap-block, which is the same 24: this is the WIDTH OF a column, not
      the distance BETWEEN two things, and the gap scale names only the second. Two digits at
-     --text-micro measure about 15.4px, so the rule has 8.6px of clearance before it. */
+     --text-ui-sm measure about 16.3px, so the rule has 7.7px of clearance before it. */
   --toc-ordinal-inline: var(--space-24);
 
   /* --space-12, the step --nav-sheet-row-padding-block reads — the closest analogue in the
@@ -243,10 +270,12 @@
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────
-   The baseline. The unmarked rows sit at neutral-600 — the quietest ink that still clears
-   AA on this ground — and the title sits there too, which is as quiet as it can legally go:
-   neutral-500 is 3.16:1 here and fails the text floor. What still makes the head read as
-   quieter than the ladder is 11px mono against 14px sans, not ink.
+   The baseline. The unmarked labels sit at neutral-600 — the quietest ink that still clears
+   AA on this ground. The title and the ordinals sit two steps darker at neutral-700, 8.14:1:
+   at 11px mono and 4.92:1 they read as grey on grey (tracker 2.17, 29 Sep 2026), so the
+   small mono parts now take the step --sec-ink-label takes on this surface, for the same
+   reason — a small label needs more ink than a 14px one to read. What still makes them read
+   as quieter than the ladder is 12px mono against 14px sans.
 
    Currency is brandeis-500 on the ordinal and the rule with the label at neutral-900 —
    three times the contrast of its neighbours, and the only blue in the rail. The pointer
@@ -259,13 +288,11 @@
    surface, because it runs the ladder's full height rather than separating two items. */
 :root,
 [data-surface='paper'] {
-  --toc-title-ink: var(--color-neutral-600); /*  4.92:1 — the floor of AA, do not lighten */
+  --toc-title-ink: var(--color-neutral-700); /*  8.14:1 — was 600 at 4.92, grey on grey */
   --toc-label-ink: var(--color-neutral-600); /*  4.92:1 — the floor of AA, do not lighten */
   --toc-label-ink-hover: var(--color-neutral-900); /* 14.62:1 */
   --toc-label-ink-pressed: var(--color-neutral-950); /* 17.10:1 */
-  --toc-ordinal-ink: var(
-    --color-neutral-600
-  ); /*  4.92:1 — a text floor, not decoration; see below */
+  --toc-ordinal-ink: var(--color-neutral-700); /*  8.14:1 — a text floor, not decoration */
   --toc-current-label-ink: var(--color-neutral-900); /* 14.62:1 */
   --toc-current-ordinal-ink: var(--color-brandeis-500); /*  6.17:1 */
   --toc-rule: var(--color-neutral-300); /*  1.54:1 — decoration, exempt */
@@ -279,21 +306,23 @@
 /* ── Surface: tint ────────────────────────────────────────────────────────────
    Every muted value steps one darker, because the ground did, and here it is FORCED rather
    than preferred: neutral-600 measures 4.39:1 on paper-deep and fails the floor. So the
-   title, the labels and the ordinals sit at neutral-700, which is also what section.css
-   steps --sec-ink-muted to on this surface — so the outline and the body copy beside it are
-   the same grey rather than two greys. The honest cost: the rail cannot be as quiet on tint
-   as it is on paper.
+   labels sit at neutral-700, which is also what section.css steps --sec-ink-muted to on
+   this surface — so the outline and the body copy beside it are the same grey rather than
+   two greys. The title and the ordinals step once more, to neutral-800 (10.54:1), holding
+   the same one-role-darker relationship to the labels that they have on paper — the step
+   --sec-ink-label takes here. The honest cost: the rail cannot be as quiet on tint as it is
+   on paper.
 
    Both blues hold. brandeis-500 still clears at 5.51:1 on the deeper ground, so the mark is
    the same blue on tint as on paper, which matters more than a tuned value would — a reader
    moving down a page of alternating bands should not see the mark change hue. Restated
    anyway, because a surface that omits a token is not self-contained. */
 [data-surface='tint'] {
-  --toc-title-ink: var(--color-neutral-700); /*  7.27:1 — stepped; 600 would be 4.39:1 */
+  --toc-title-ink: var(--color-neutral-800); /* 10.54:1 — was 700 at 7.27 */
   --toc-label-ink: var(--color-neutral-700); /*  7.27:1 — stepped; 600 would be 4.39:1 */
   --toc-label-ink-hover: var(--color-neutral-900); /* 13.06:1 */
   --toc-label-ink-pressed: var(--color-neutral-950); /* 15.27:1 */
-  --toc-ordinal-ink: var(--color-neutral-700); /*  7.27:1 — stepped; 600 would be 4.39:1 */
+  --toc-ordinal-ink: var(--color-neutral-800); /* 10.54:1 — was 700 at 7.27 */
   --toc-current-label-ink: var(--color-neutral-900); /* 13.06:1 */
   --toc-current-ordinal-ink: var(--color-brandeis-500); /*  5.51:1 */
   --toc-rule: var(--color-neutral-400); /*  1.90:1 — decoration, exempt */
@@ -306,7 +335,9 @@
    The direction inverts, and the unmarked rows get QUIETER rather than louder: neutral-500
    at 5.41:1, one step below --sec-ink-muted's neutral-400 (8.05:1) on this surface. That is
    a deliberate departure from the surface layer's own answer — up to nineteen rows at
-   8.05:1 on a dark ground glow, and compete with the body copy beside them.
+   8.05:1 on a dark ground glow, and compete with the body copy beside them. The title and
+   the ordinals DO take 400, 8.05:1 (tracker 2.17): they are 12px mono, a glow is not their
+   risk, and at 500 they were the grey-on-grey the owner flagged.
 
    The mark lifts three ramp steps to brandeis-300, because brandeis-500 on neutral-950 is
    2.77:1 and is exactly the failure the surface model exists to prevent — the same floor
@@ -320,11 +351,11 @@
    behind. This is the Callout trap, and what carries this component through it is that
    there is no fill to get wrong: only inks, and every ink moves AWAY from the ground. */
 [data-surface='ink'] {
-  --toc-title-ink: var(--color-neutral-500); /*  5.41:1 */
+  --toc-title-ink: var(--color-neutral-400); /*  8.05:1 — was 500 at 5.41 */
   --toc-label-ink: var(--color-neutral-500); /*  5.41:1 */
   --toc-label-ink-hover: var(--color-neutral-200); /* 12.83:1 */
   --toc-label-ink-pressed: var(--color-white); /* 17.26:1 */
-  --toc-ordinal-ink: var(--color-neutral-500); /*  5.41:1 */
+  --toc-ordinal-ink: var(--color-neutral-400); /*  8.05:1 — was 500 at 5.41 */
   --toc-current-label-ink: var(--color-neutral-100); /* 14.47:1 — not white; white is pressed */
   --toc-current-ordinal-ink: var(
     --color-brandeis-300
@@ -345,15 +376,15 @@
    is 5.57:1, 100 is 4.91:1, and 200 is already 3.78:1. So the unmarked rows sit at 100 —
    the tightest cell in this table and the reason nothing quieter is allowed here. Hover goes
    to 50 rather than to a neutral, because neutral-200 measures 4.63:1 on this ground and
-   reads as muddy grey on a saturated one; pressed then reaches white.
+   reads as muddy grey on a saturated one; pressed then reaches white. The title and the
+   ordinals take 50 as well (tracker 2.17) — one step above the labels, as on every other
+   surface, and the only step there is between 100 and the white the mark is spent on.
 
    One consequence to accept knowingly: pressed and current hold the same white here. They
    stay distinguishable because pressed draws a 2px underline while current draws a 3px rule
    and a white ordinal, and because a press lasts only as long as a finger is down. */
 [data-surface='blue'] {
-  --toc-title-ink: var(
-    --color-brandeis-100
-  ); /*  4.91:1 — the tightest cell here, do not lighten */
+  --toc-title-ink: var(--color-brandeis-50); /*  5.57:1 — was 100 at 4.91 */
   --toc-label-ink: var(
     --color-brandeis-100
   ); /*  4.91:1 — the tightest cell here, do not lighten */
@@ -361,9 +392,7 @@
     --color-brandeis-50
   ); /*  5.57:1 — not a neutral; 200 is 4.63:1 and muddy */
   --toc-label-ink-pressed: var(--color-white); /*  6.23:1 */
-  --toc-ordinal-ink: var(
-    --color-brandeis-100
-  ); /*  4.91:1 — the tightest cell here, do not lighten */
+  --toc-ordinal-ink: var(--color-brandeis-50); /*  5.57:1 — was 100 at 4.91 */
   --toc-current-label-ink: var(--color-white); /*  6.23:1 */
   --toc-current-ordinal-ink: var(
     --color-white
@@ -378,5 +407,7 @@
    aria-hidden, and that is worth stating once here rather than four times above. A sighted
    reader navigates by those digits. aria-hidden describes what a screen reader skips — the
    <ol> already announces "4 of 11", so "zero four" before every label is noise — not what a
-   designer may under-contrast. The reason the digit column still reads as quieter than the
-   labels is SIZE AND FAMILY, 11px mono against 14px sans, not ink. */
+   designer may under-contrast. Since 29 Sep 2026 (tracker 2.17) it is held ABOVE the floor:
+   one step darker than the labels on every surface, because an 11-12px mono digit at the
+   bare 4.5:1 floor read as grey on grey. The reason the digit column still reads as quieter
+   than the labels is SIZE AND FAMILY, 12px mono against 14px sans, not ink. */

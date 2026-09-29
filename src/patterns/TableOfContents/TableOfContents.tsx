@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react';
 
-import { Layout } from '@/components';
+import { Icon, Layout } from '@/components';
 
 import styles from './TableOfContents.module.css';
 
@@ -60,8 +60,8 @@ export type TableOfContentsProps = {
 const hasLabel = (item: TocItem) => item.label.trim().length > 0;
 
 /**
- * The width at and above which the outline is a sticky rail. Below it the same markup is a static
- * block and nothing is ever marked, so the observer does not run at all.
+ * The width at and above which the outline is a sticky rail. Below it the same markup is a closed
+ * <details> and nothing is ever marked, so the observer does not run at all.
  *
  * This literal is the one duplication in the component, and it is deliberate: `Layout`'s `lg`
  * breakpoint is `min-width: 1024px` and the module's one media query is the same, so the track
@@ -88,9 +88,12 @@ const warn = (message: string) => {
  * becoming a crawler later.
  *
  * Two arrangements, and neither is a prop. At 1024 and up it is a sticky rail in the first track
- * of the page's two-column shell. Below that it is a static, full-width block sitting immediately
- * after the hero — the same markup under one media query, with nothing moved in the DOM, because
- * the shell's first track IS the first block of the body Section once the columns collapse.
+ * of the page's two-column shell. Below that it is a native <details>, closed by default, sitting
+ * immediately after the hero — one 44px "On this page" row rather than an eleven-row block before
+ * the first paragraph (29 Sep 2026, tracker 2.17). The same markup under one media query, with
+ * nothing moved in the DOM: the rail is that <details> with its content forced open through
+ * ::details-content and its summary hidden, so there is one landmark, one list and no script
+ * deciding which arrangement a viewport gets.
  *
  * It contributes no colour and no distance: every value comes from --toc-* in
  * tokens/components/table-of-contents.css, which re-declares the whole colour set once per
@@ -131,7 +134,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
      changed: a heading crossing the reading line IS the event, so there is nothing to throttle and
      no layout thrash. The recompute is O(n) with n at most 19, on a crossing.
 
-     GATED TO THE RAIL WIDTH. Below 1024 the outline is a static block that marks nothing, so
+     GATED TO THE RAIL WIDTH. Below 1024 the outline is a disclosure that marks nothing, so
      without this gate the observer would mount, resolve up to nineteen ids and stay live on every
      phone visit to five page types in order to produce a mark that is never rendered.
 
@@ -244,30 +247,56 @@ export function TableOfContents({ items }: TableOfContentsProps) {
        editor can see is the name a screen reader says. `aria-labelledby` can never dangle here
        because the title is not a prop and cannot be switched off. */
     <nav ref={railRef} aria-labelledby={titleId} className={styles.rail}>
-      {/* The head's air. A real arrangement now that no rule separates the head from the ladder —
-          --gap-block, the step that means "head to body inside a block". */}
-      <Layout rowGap="block">
-        <p id={titleId} className={styles.title}>
-          On this page
-        </p>
+      {/* ONE DOM, AND CSS DECIDES WHETHER IT DISCLOSES. Below 1024 this is a native <details>,
+          closed by default, so the outline costs a phone one 44px row before the first paragraph
+          instead of an eleven-row block — no script, the footer directory's idiom. At 1024 and up
+          the module forces its content open through ::details-content and hides the summary, so
+          the rail is what it always was. That is the honest mechanism because it is the only one
+          that keeps ONE landmark, ONE list and ONE set of links for the observer to mark: the
+          footer renders its directory twice because it had to (a closed <details> cannot be forced
+          open with `display`), and ::details-content is what removed that constraint.
 
-        {/* Contiguous rows, stated as `none` rather than omitted. The zero is load-bearing twice:
-            it is what makes the per-entry rule segments butt into one unbroken line, and it is
-            what makes the row pitch equal the touch target.
+          Where ::details-content is unsupported the desktop keeps the summary and simply stays a
+          closed disclosure — a working outline one click away, never a vanished one. The @supports
+          gate in the module is what decides that, not a script.
 
-            No list reset here. reset.css already zeroes an <ol>'s margin, padding and marker —
-            both elements, with a comment naming `Layout as="ul"` as the reason it exists — so
-            restating them would be a second answer to a settled question. An earlier draft of the
-            spec used a bare <ol> on the belief that the reset covered `ul` only; it does not. */}
-        <Layout as="ol" rowGap="none" className={styles.list}>
-          {outline.map((item, index) => (
-            /* Keyed on the fragment, which is unique per page by construction: the ids are derived
+          `open` is never set here and never read: whether it is open is the reader's state on a
+          phone and meaningless on the rail, and a prop for it would reintroduce the viewport
+          question this component answers in CSS. */}
+      <details className={styles.disclosure}>
+        {/* The phone's head, and its only control. Sentence case in source, mono in presentation —
+            the same string the rail's title carries. aria-hidden is NOT used: the summary is the
+            disclosure button and its text is its accessible name. */}
+        <summary className={styles.summary}>
+          <span className={styles.summaryLabel}>On this page</span>
+          <span className={styles.chevron}>
+            <Icon name="chevron-down" size="sm" />
+          </span>
+        </summary>
+        {/* The head's air. A real arrangement now that no rule separates the head from the ladder —
+            --gap-block, the step that means "head to body inside a block". */}
+        <Layout rowGap="block" className={styles.panel}>
+          {/* The rail's visible title, and the landmark's name at every width. Hidden below 1024,
+              where the summary above says the same thing — aria-labelledby still resolves a hidden
+              element's text, so the nav is "On this page" on a phone too. */}
+          <p id={titleId} className={styles.title}>
+            On this page
+          </p>
+
+          {/* Contiguous rows, stated as `none` rather than omitted. The zero is load-bearing twice:
+              it is what makes the per-entry rule segments butt into one unbroken line, and it is
+              what makes the row pitch equal the touch target.
+
+              No list reset here. reset.css already zeroes an <ol>'s margin, padding and marker. */}
+          <Layout as="ol" rowGap="none" className={styles.list}>
+            {outline.map((item, index) => (
+              /* Keyed on the fragment, which is unique per page by construction: the ids are derived
                and de-duplicated at the content seam (anchorSlug / uniqueAnchor in strapi.ts). */
-            <li key={item.href} className={index === current ? styles.current : undefined}>
-              {/* A bare anchor rather than a Button, and the sheet decided it rather than taste:
+              <li key={item.href} className={index === current ? styles.current : undefined}>
+                {/* A bare anchor rather than a Button, and the sheet decided it rather than taste:
                   Button's label is --text-ui — MONO — with white-space: nowrap, so a sentence-case
                   navigationLabel would be shouted in a role the type system says is not for
-                  sentence case, a 22-character label could not wrap in a 180px rail, and there is
+                  sentence case, a 24-character label could not wrap in the rail, and there is
                   no slot for the ordinal and no two-line clamp. What this component takes from
                   Button instead is its geometry and its habits: the ring width and offset, the bare
                   focus radius, and the 44px target floor.
@@ -277,30 +306,31 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   "page": SiteNav already marks the current page and Breadcrumbs marks the current
                   crumb, a reader can meet all three at once, and this one marks a position WITHIN
                   the current page. */}
-              <a
-                className={styles.link}
-                href={item.href}
-                aria-current={index === current ? 'location' : undefined}
-              >
-                {/* Generated from position, zero-padded, and hidden from the accessibility tree:
+                <a
+                  className={styles.link}
+                  href={item.href}
+                  aria-current={index === current ? 'location' : undefined}
+                >
+                  {/* Generated from position, zero-padded, and hidden from the accessibility tree:
                     the <ol> already announces "4 of 11", so "zero four" before every label is
                     noise. Hidden is not the same as under-contrasted — a sighted reader navigates
                     by these digits, so the ink is held to the text floor on all four surfaces. */}
-                <span aria-hidden="true" className={styles.ordinal}>
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                {/* Two spans, and the split is the same one Button makes for the same reason: the
+                  <span aria-hidden="true" className={styles.ordinal}>
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  {/* Two spans, and the split is the same one Button makes for the same reason: the
                     clamp needs `overflow: hidden`, which would crop an underline drawn at the
                     outer box's edge. So `label` is the underline's positioning context and takes
                     the remaining inline space, and `labelInk` is the box that clips. */}
-                <span className={styles.label}>
-                  <span className={styles.labelInk}>{item.label}</span>
-                </span>
-              </a>
-            </li>
-          ))}
+                  <span className={styles.label}>
+                    <span className={styles.labelInk}>{item.label}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </Layout>
         </Layout>
-      </Layout>
+      </details>
     </nav>
   );
 }
