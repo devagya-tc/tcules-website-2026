@@ -2,15 +2,15 @@
 
 ## 0 · Front matter
 
-|                     |                                                                                                                                                                                                                                                                                              |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Component**       | ClientMark                                                                                                                                                                                                                                                                                   |
-| **Tier**            | 1 · primitive (`src/components/`)                                                                                                                                                                                                                                                            |
-| **Status**          | `implemented` — accepted without a design round on owner ruling **P2** (`docs/phase-2-decisions.md`: "capped at ~40px tall, and sized to equal visual weight by area") and **DBF ch05 §10** (client logos: source, colour, size, never). See §17 Q1.                                         |
-| **Token prefix**    | `--cmark-`                                                                                                                                                                                                                                                                                   |
-| **Designer / date** | None. Written by Claude Code on 2026-09-28 from ch05 §10, ruling P2 and the audit's §4 "Client logos" row (`docs/component-audit.md`). Tracker 2.8.                                                                                                                                          |
-| **Implements**      | `docs/component-audit.md` §4, job "Client logos": "a tier-1 primitive, `ClientMark`… The _strip_ is still not a component."                                                                                                                                                                  |
-| **Implemented at**  | `src/components/ClientMark/ClientMark.tsx` · `src/components/ClientMark/ClientMark.module.css` · `src/styles/tokens/components/client-mark.css` · specimen `src/app/design/client-mark/page.tsx` · test marks `public/design/client-mark-*.svg` · `scripts/tokens-check.mjs` (`JS_INJECTED`) |
+|                     |                                                                                                                                                                                                                                                                                                                                    |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Component**       | ClientMark                                                                                                                                                                                                                                                                                                                         |
+| **Tier**            | 1 · primitive (`src/components/`)                                                                                                                                                                                                                                                                                                  |
+| **Status**          | `implemented` — accepted without a design round on owner ruling **P2** (`docs/phase-2-decisions.md`: "capped at ~40px tall, and sized to equal visual weight by area") and **DBF ch05 §10** (client logos: source, colour, size, never). See §17 Q1.                                                                               |
+| **Token prefix**    | `--cmark-`                                                                                                                                                                                                                                                                                                                         |
+| **Designer / date** | None. Written by Claude Code on 2026-09-28 from ch05 §10, ruling P2 and the audit's §4 "Client logos" row (`docs/component-audit.md`). Tracker 2.8.                                                                                                                                                                                |
+| **Implements**      | `docs/component-audit.md` §4, job "Client logos": "a tier-1 primitive, `ClientMark`… The _strip_ is still not a component."                                                                                                                                                                                                        |
+| **Implemented at**  | `src/components/ClientMark/ClientMark.tsx` · `src/components/ClientMark/ClientMark.module.css` · `src/styles/tokens/components/client-mark.css` · specimen `src/app/design/client-mark/page.tsx` · client set `public/clients/*.svg` · stress marks `public/design/client-mark-*.svg` · `scripts/tokens-check.mjs` (`JS_INJECTED`) |
 
 > Contrast figures marked **[c]** were computed for this spec from the ramp hexes in
 > `primitives.css` (WCAG 2.x relative luminance) and agree with ch02's pairing tables.
@@ -275,8 +275,10 @@ None. ch05 §10: never animated. No transition, no hover colour change, no marqu
 heavy −10%, hairline +12%); the arithmetic per mark with computed sizes; the correction with and
 without, and a clamped 0.4; the width cap (12:1); a lone mark; marks inside links; a 404 src
 between two marks, outlined; the 326 column; paper, tint, ink and blue bands with identical markup;
-a tint band nested in ink. All marks are fictional (`public/design/client-mark-*.svg`, drawn black
-so white-on-ink proves the mask). Forced colours is checked by emulation, not on the page.
+a tint band nested in ink. The strip is the real client set (`public/clients/*.svg`, nine
+wordmarks from the previous site's logo wall); the shapes it lacks (square, stacked, 12:1, heavy,
+hairline) are fictional stress files (`public/design/client-mark-*.svg`, drawn black). Blueghost
+and Rudo are held back: their files paint knock-outs white (§14). Forced colours is checked by emulation, not on the page.
 
 ---
 
@@ -317,7 +319,8 @@ implemented`. Built, so `implemented`, with the acceptance cited. **non-blocking
    nothing (needs client-side detection, shifts the row) and name-as-text (retypes the mark, banned
    by ch05 §10). **non-blocking**
 8. **Test asset location.** The brief said `public/design-assets/`; the repo's specimen assets live
-   in `public/design/`. _Built:_ `public/design/client-mark-*.svg`. **non-blocking**
+   in `public/design/`. _Built:_ stress marks in `public/design/client-mark-*.svg`; real client files in
+   `public/clients/`, since a page will place them too. **non-blocking**
 
 ---
 
