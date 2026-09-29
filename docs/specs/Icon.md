@@ -24,6 +24,12 @@ a 16px floor for glyphs with a counter is written down and warned on. Owner ruli
 "glyphs in coloured discs" don't bans putting a glyph INTO a badge; these are single glyphs as
 Solar draws them. Sections 2, 3, 4 and 7 carry the detail.
 
+**Amended again 29 Sep 2026 — tracker 2.17, ListCard's off-site cue.** `arrow-right-up` (Iconify
+`solar:arrow-right-up-bold`) is added as the trailing form of "leaves the site". Owner ruling: the
+filled `square-arrow-right-up` beside plain `arrow-right` cues read as a badge among arrows, so a
+trailing cue that sits beside `arrow-right` takes the plain arrow of the same family. One meaning at
+two weights, not two meanings; `square-arrow-right-up` stays ch04's standalone mark. § 2 carries it.
+
 ## 1 · Identity
 
 A solid glyph from Solar Icons, **Bold** (480 Design, CC BY 4.0), on a 24-unit box, filled with
@@ -32,7 +38,7 @@ not already carry (ch04). It has no colour of its own and takes no colour prop.
 
 ## 2 · The set
 
-Fourteen glyphs, each ch04's fixed choice for its meaning, and none used for another meaning.
+Fifteen glyphs, each ch04's fixed choice for its meaning, and none used for another meaning.
 
 | Glyph | Meaning (ch04) | Path source |
 |---|---|---|
@@ -41,7 +47,8 @@ Fourteen glyphs, each ch04's fixed choice for its meaning, and none used for ano
 | `alt-arrow-down` | Opens, expands | ch04 embed |
 | `alt-arrow-up` | The open state of a control that swaps rather than turns | Iconify `solar:alt-arrow-up-bold` (not in ch04's starter set) |
 | `alt-arrow-right` | Leads to a page | ch04 embed |
-| `square-arrow-right-up` | Leaves the site | ch04 embed |
+| `square-arrow-right-up` | Leaves the site — the standalone mark | ch04 embed |
+| `arrow-right-up` | Leaves the site — trailing, beside `arrow-right` (ListCard's external row) | Iconify `solar:arrow-right-up-bold` (not in ch04's starter set) |
 | `close-circle` | Close, dismiss | Iconify `solar:close-circle-bold` (ch04's cell carries check-circle by mistake) |
 | `check-circle` | Done, included | ch04 embed |
 | `download` | Download a file | ch04 embed |

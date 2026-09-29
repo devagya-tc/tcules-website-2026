@@ -223,7 +223,7 @@ function SurfaceRows() {
       />
       <ListCard
         title="A case study, told off-site"
-        body="A cut-out thumbnail and the leaves-the-site cue: no edge on the part, and the square arrow in the cue's own ink."
+        body="A cut-out thumbnail and the leaves-the-site cue: no edge on the part, and the up-right arrow in the cue's own ink."
         marker={thumb(CUT_OUT)}
         href={EXTERNAL_HREF}
         external
@@ -280,7 +280,7 @@ export default function ListCardSpecimenPage() {
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
             <Specimen
               title="split × md"
-              note="The default: a 2:3 title/body split from md, one track below it."
+              note="The default: title and body side by side while both minimum tracks fit the row's own width, one track once they do not. In this half-column cell the row is too narrow, so it stacks — see 1a."
             >
               <Rows>
                 <ListCard title={TERMS[0].title} body={TERMS[0].body} />
@@ -297,6 +297,84 @@ export default function ListCardSpecimenPage() {
               </Rows>
             </Specimen>
           </Layout>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>1a · The split reads its own width</h2>
+            <p>
+              The split is a wrapping <code>Cluster</code>: title and body share a line only while{' '}
+              <code>--lcrd-title-min</code> + the block seam + <code>--lcrd-body-min</code> (256 +
+              24 + 256) fits the row&rsquo;s own content width, and the body wraps under the title
+              the moment it does not. It used to switch on at the md <em>viewport</em>, so a row in
+              a 392px grid track was split into a ~150px title track and the h4 broke mid-word
+              (&ldquo;Produ/ct&rdquo;, &ldquo;Interactio/n&rdquo;). The title&rsquo;s wrap is now{' '}
+              <code>break-word</code>, so its words stay whole at every track below. On a wide row
+              the title stops at <code>--measure-title</code> and the body at{' '}
+              <code>--measure-body</code>, so the leftover collects before the cue instead of
+              opening a channel between a title and its sentence. The frames below stand in for
+              the content column at 1440, 1023, 768 and 390, and for grid tracks inside them; none
+              can fire a media query, which is now the point — the row does not need one.
+            </p>
+          </Layout>
+          {(
+            [
+              ['1240 · the column at 1440', undefined],
+              ['960 · the column at 1023', s.trackTablet],
+              ['704 · the column at 768', s.trackTabletNarrow],
+              ['326 · the column at 390', s.trackMobile],
+            ] as const
+          ).map(([label, frame]) => (
+            <Specimen key={label} title={label}>
+              <div className={frame}>
+                <Rows>
+                  <ListCard
+                    title="Product"
+                    body="Turn a difficult workflow into a product people can understand and operate."
+                    marker={{ type: 'icon', name: 'document-text' }}
+                    href={ROUTES.productDesign}
+                  />
+                  <ListCard
+                    title="Interaction contract"
+                    body="The states, language and response a control promises before visual treatment is added."
+                  />
+                  <ListCard
+                    title="A case study, told off-site"
+                    body="A thumbnail row, linked away: the split has what is left after the 160 marker and the cue."
+                    marker={thumb(CUT_OUT)}
+                    href={EXTERNAL_HREF}
+                    external
+                  />
+                </Rows>
+              </div>
+            </Specimen>
+          ))}
+          <Specimen
+            title="Grid tracks · 3 across the column, 2 across 768"
+            note="The shape that broke: ListCards in a lg:3 grid (~392px tracks at 1440) and a 2-up grid inside the 768 column (~336px). Every row stacks, because neither track holds 536px of copy."
+          >
+            <Layout rowGap="stack">
+              <Layout columns={3} colGap="gutter" rowGap="gutter">
+                {LINKED.map((item) => (
+                  <Rows key={item.title}>
+                    <ListCard {...item} titleAs="h3" />
+                    <ListCard title="Interaction" body="One word, long enough to have broke." />
+                  </Rows>
+                ))}
+              </Layout>
+              <div className={s.trackTabletNarrow}>
+                <Layout columns={2} colGap="gutter" rowGap="gutter">
+                  {LINKED.slice(0, 2).map((item) => (
+                    <Rows key={item.title}>
+                      <ListCard {...item} />
+                    </Rows>
+                  ))}
+                </Layout>
+              </div>
+            </Layout>
+          </Specimen>
         </Layout>
       </Section>
 
@@ -386,44 +464,30 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>2b · The panel inset at 160 (Media § 17 Q2)</h2>
             <p>
-              A B5 cut-out on its contrast panel keeps Media&rsquo;s <code>--gap-gutter</code>{' '}
-              inset at every size, so in a 160 × 107 box the part gets 96 × 43. Media cannot see
-              the box it fills, so it cannot choose a smaller step for it, and ListCard may not
-              set Media&rsquo;s token. <strong>Shipped: Media unchanged; a supply rule.</strong>{' '}
-              A thumbnail&rsquo;s part must hold its own edge (no panel), or the row takes the
-              case&rsquo;s illustration. The right-hand cell is the rejected alternative — the
-              inset at <code>--gap-text</code>, &ldquo;cell padding&rdquo; — overridden in this
-              harness only, so the owner can judge the two.
+              A B5 cut-out on its contrast panel took Media&rsquo;s <code>--gap-gutter</code>{' '}
+              inset at every size, so in a 160 × 107 box the part got 96 × 43 — not one
+              recognisable shape. <strong>Shipped 29 Sep 2026 (2.17):</strong> Media gained{' '}
+              <code>inset</code>, and the thumbnail passes <code>inset=&quot;text&quot;</code>{' '}
+              (<code>--gap-text</code>, 16, &ldquo;cell padding&rdquo;), which leaves 128 × 75. The
+              value stays Media&rsquo;s; ListCard names the step because only the placement knows
+              its box is small. The <code>gutter</code> rendering at 160 is on /design/media § 3c
+              for comparison. The supply rule still stands beside it: a part whose own edge holds
+              needs no panel at all.
             </p>
           </Layout>
-          <Layout columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="stack">
+          <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
             <Specimen
-              title="panel · --gap-gutter 32 · shipped"
-              note="96 × 43 of part. Fails ch05 § 9's 160 check: not one recognisable shape."
+              title="panel · inset text · shipped"
+              note="128 × 75 of part inside 16 of paper-deep panel."
             >
               <Rows>
                 <ListCard
                   arrangement="stacked"
                   title="Panelled part"
-                  body="The inset Media ships."
+                  body="The inset ListCard passes."
                   marker={thumb(PANEL_PART)}
                 />
               </Rows>
-            </Specimen>
-            <Specimen
-              title="panel · --gap-text 16 · NOT shipped"
-              note="128 × 75 of part. A harness-only override of --media-panel-inset, for comparison."
-            >
-              <div className={s.panelInsetCell}>
-                <Rows>
-                  <ListCard
-                    arrangement="stacked"
-                    title="Panelled part"
-                    body="The alternative inset."
-                    marker={thumb(PANEL_PART)}
-                  />
-                </Rows>
-              </div>
             </Specimen>
             <Specimen
               title="no panel · the supply rule's answer"
@@ -433,7 +497,7 @@ export default function ListCardSpecimenPage() {
                 <ListCard
                   arrangement="stacked"
                   title="Unpanelled part"
-                  body="What the rule asks for."
+                  body="What the rule asks for first."
                   marker={thumb(CUT_OUT)}
                 />
               </Rows>
@@ -498,9 +562,11 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>2d · External rows</h2>
             <p>
-              <code>external</code> swaps the cue for ch04&rsquo;s &ldquo;leaves the site&rdquo;
-              glyph, <code>square-arrow-right-up</code> — one glyph per meaning, replacing the
-              arrow rather than joining it — opens a new tab, and appends a visually hidden
+              <code>external</code> swaps the cue for the &ldquo;leaves the site&rdquo; arrow,{' '}
+              <code>arrow-right-up</code> — Solar Bold&rsquo;s plain arrow of the same family as{' '}
+              <code>arrow-right</code>, so an off-site row differs from its neighbours by the
+              arrow&rsquo;s angle, not by a filled square among bare arrows (29 Sep 2026, 2.17).
+              One glyph per meaning, replacing the arrow rather than joining it. It opens a new tab, and appends a visually hidden
               &ldquo;(opens in a new tab)&rdquo; to the row&rsquo;s accessible name. Same slot,
               size (18) and ink as the arrow. It is the first route-visible Solar glyph, so the
               site footer&rsquo;s legal line now carries the CC BY 4.0 credit.
@@ -514,7 +580,7 @@ export default function ListCardSpecimenPage() {
             />
             <ListCard
               title="External destination"
-              body="square-arrow-right-up: leaves the site. New tab, said in words to a screen reader."
+              body="arrow-right-up: leaves the site. New tab, said in words to a screen reader."
               href={EXTERNAL_HREF}
               external
             />
@@ -679,8 +745,8 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>7 · Twelve-row sample-finding block</h2>
             <p>
-              One full-width ordered list with zero row gap. Narrow through 767: title/body
-              stacks, two-digit markers hold the left rhythm quietly and the rules keep one list
+              One full-width ordered list with zero row gap. Narrow the window: title/body
+              stacks when the row runs out of room, two-digit markers hold the left rhythm quietly and the rules keep one list
               intact.
             </p>
           </Layout>
@@ -826,7 +892,7 @@ export default function ListCardSpecimenPage() {
           </Layout>
           <Specimen
             title="326 · mobile column"
-            note="The width every card image is approved at (ch05 B3): a 390 viewport less two 32px gutters, derived by the harness rather than written. Stacked only — the frame cannot fire a media query, and split collapses to stacked below 767 anyway. The thumbnail keeps its own 160px slot at this width, so the asset is judged at 160, not 326: that is the narrowest it renders anywhere, and the reason a cover asset shared with BlockCard has to read at both sizes."
+            note="The width every card image is approved at (ch05 B3): a 390 viewport less two 32px gutters, derived by the harness rather than written. Stacked only here; § 1a shows split rows at this width, where they stack on their own. The thumbnail keeps its own 160px slot at this width, so the asset is judged at 160, not 326: that is the narrowest it renders anywhere, and the reason a cover asset shared with BlockCard has to read at both sizes."
           >
             <div className={s.trackMobile}>
               <Rows>
@@ -846,7 +912,7 @@ export default function ListCardSpecimenPage() {
                 <ListCard
                   arrangement="stacked"
                   title="A cut-out part, off-site"
-                  body="The leaves-the-site cue at the phone's width: the square arrow keeps the arrow's slot."
+                  body="The leaves-the-site cue at the phone's width: the up-right arrow keeps the arrow's slot."
                   marker={thumb(CUT_OUT)}
                   href={EXTERNAL_HREF}
                   external
@@ -933,8 +999,8 @@ export default function ListCardSpecimenPage() {
         <Layout rowGap="block">
           <h2>12 · What this static page cannot force</h2>
           <p>
-            Hold the pointer for pressed, Tab for keyboard focus, and narrow through exactly 767
-            for the split collapse. Reduced motion is no longer on the list: the rule wipe was
+            Hold the pointer for pressed and Tab for keyboard focus. The split collapse is no
+            longer on the list: it follows the row&rsquo;s own width, so § 1a renders it. Reduced motion is no longer on the list: the rule wipe was
             the row&rsquo;s only transform and it is gone, so there is nothing left for the
             preference to shorten. None has a prop; the absence is part of the contract.
           </p>

@@ -3,6 +3,7 @@
 
    Naming: --lcrd-{part}-{role}-{state}
      parts: title | body | marker | number | ground | link | rule | ring | thumbnail | content
+     (title and body also carry the split's -min geometry)
      states: rest (no suffix) | hover | pressed
 
    There is no variant slot. split/stacked changes Layout props, marker kind changes content, and
@@ -83,6 +84,17 @@
      reading --lay-track-xs: a component never reads another component's tokens. It is the minimum
      readable copy core beside a 24px marker; below it the outer Cluster wraps the marker first. */
   --lcrd-content-min-xs: 192px;
+
+  /* The split's two minimum tracks — component geometry, the flex bases of the title and body in
+     the split's wrapping Cluster (29 Sep 2026, tracker 2.17). The split happens only while both fit
+     beside each other on the row's OWN line, so these replace the md viewport boundary Layout used
+     to apply regardless of how wide the row's track actually was. 256 for the title because it has
+     to hold an h4's longest word whole (an unbroken 14-letter word is ~200px at h4); 256 for the
+     body because below ~28ch a sentence beside a title reads as a column of fragments, and stacking
+     it under the title is the better row. By value, not --lay-track-sm: a component never reads
+     another component's tokens. */
+  --lcrd-title-min: 256px;
+  --lcrd-body-min: 256px;
 
   /* The accepted native-image contract. 160px was measured as a recognisable landscape sample in
      the 1240px row while still leaving the 192px content core room before Cluster wraps it.

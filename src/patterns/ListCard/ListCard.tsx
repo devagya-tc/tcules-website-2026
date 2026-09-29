@@ -52,8 +52,8 @@ export type ListCardProps = {
   /** A non-blank destination turns the entire row into one native link and adds its cue. */
   href?: string;
   /**
-   * The destination leaves tcules.com. Opens in a new tab, swaps the cue for ch04's "leaves the
-   * site" glyph and appends a visually hidden "(opens in a new tab)" to the row's accessible name.
+   * The destination leaves tcules.com. Opens in a new tab, swaps the cue for the "leaves the
+   * site" arrow (`arrow-right-up`) and appends a visually hidden "(opens in a new tab)" to the row's accessible name.
    * Ignored on a row with no destination.
    */
   external?: boolean;
@@ -97,10 +97,15 @@ function Marker({ marker }: { marker: ListCardMarker }) {
      which is the whole of what a mechanical crop is (Media.md § 3). The record's own width and height
      still reach the <img>, so the browser reserves the right box before the file lands, and the
      160 `sizes` means a 2× screen asks for the ladder's 320 rung rather than the 2560 master.
-     Never `priority`: a thumbnail is never a page's LCP image, so it stays lazy and async. */
+     Never `priority`: a thumbnail is never a page's LCP image, so it stays lazy and async.
+
+     `inset="text"`: a B5 cut-out on its contrast panel keeps 16px of panel round it here rather than
+     the 32 a full-column placement takes, because at 160 × 107 the gutter inset left the part
+     96 × 43 — not one recognisable shape (ch05 § 9). Media owns the value; ListCard only names the
+     step, since only the placement knows how small its box is (29 Sep 2026, 2.17). */
   return (
     <span className={cx(styles.marker, styles.thumbnail)}>
-      <Media image={marker.image} sizes={LIST_CARD_THUMBNAIL} fit="fill" />
+      <Media image={marker.image} sizes={LIST_CARD_THUMBNAIL} fit="fill" inset="text" />
     </span>
   );
 }
@@ -121,8 +126,10 @@ function Marker({ marker }: { marker: ListCardMarker }) {
  *
  * Every arrangement is a primitive. The outer Cluster puts marker beside the content core and may
  * wrap the larger thumbnail above it. The inner nowrap Cluster keeps the cue at the core's inline
- * end. Layout owns the 2:3 title/body split and its single-track collapse. The module contains no
- * grid or flex arrangement; its flex declarations only size children inside those primitives.
+ * end. The title/body split is a third, wrapping Cluster whose break point is the two children's
+ * minimum tracks — the row's own width decides, never the viewport's (29 Sep 2026, 2.17). A stacked
+ * row is a single-track Layout. The module contains no grid or flex arrangement; its flex
+ * declarations only size children inside those primitives.
  */
 export function ListCard({
   title,
@@ -149,22 +156,33 @@ export function ListCard({
     <Cluster colGap="block" rowGap="block" align="start">
       {marker ? <Marker marker={marker} /> : null}
       <Cluster colGap="block" align="start" nowrap className={styles.core}>
-        <Layout
-          columns={isSplit ? { base: 1, md: [2, 3] } : undefined}
-          colGap={isSplit ? 'column' : undefined}
-          rowGap="tight"
-          className={styles.content}
-        >
-          <Title className={styles.title}>{title}</Title>
-          {hasBody ? <p className={styles.body}>{body}</p> : null}
-        </Layout>
+        {isSplit ? (
+          /* The split reads the row's OWN width, not the viewport's. A wrapping Cluster puts title
+             and body side by side only while both of their minimum tracks fit on one line, and
+             wraps the body under the title the moment they do not — so a row in a 390px grid
+             track stacks even on a 1440 screen, and the title is never squeezed into a track
+             narrower than its words. The two maxima (--measure-title, --measure-body) are the cap:
+             past them the leftover stays at the core's inline end instead of prising the title
+             and its sentence apart. The module only sizes the two children inside Cluster. */
+          <Cluster colGap="block" rowGap="tight" align="start" className={styles.content}>
+            <Title className={cx(styles.title, styles.splitTitle)}>{title}</Title>
+            {hasBody ? <p className={cx(styles.body, styles.splitBody)}>{body}</p> : null}
+          </Cluster>
+        ) : (
+          <Layout rowGap="tight" className={styles.content}>
+            <Title className={styles.title}>{title}</Title>
+            {hasBody ? <p className={styles.body}>{body}</p> : null}
+          </Layout>
+        )}
         {destination ? (
           <span className={styles.cue}>
-            {/* One glyph per meaning (ch04): `arrow-right` is "go, next", `square-arrow-right-up`
-                is "leaves the site". The cue is replaced, never doubled — one icon per row — and it
-                keeps the cue's slot, size and ink, so an external row differs from an internal one
-                by its glyph alone. Trailing either way: both are movement. */}
-            <Icon name={leaves ? 'square-arrow-right-up' : 'arrow-right'} size="lg" />
+            {/* One glyph per meaning (ch04): `arrow-right` is "go, next", `arrow-right-up` is
+                "leaves the site". Both are Solar Bold's plain arrows, the same drawing turned 45°,
+                so an off-site row sits in a list of internal ones without a filled square among
+                bare arrows (29 Sep 2026, 2.17). The cue is replaced, never doubled — one icon per
+                row — and it keeps the cue's slot, size and ink, so an external row differs from an
+                internal one by its glyph's angle alone. Trailing either way: both are movement. */}
+            <Icon name={leaves ? 'arrow-right-up' : 'arrow-right'} size="lg" />
             {/* The glyph is aria-hidden, so the new tab is said in words, at the END of the
                 accessible name so the title is still what a screen reader leads with. */}
             {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}

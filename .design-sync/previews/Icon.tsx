@@ -6,6 +6,7 @@ import { Button, Cluster, Icon, Layout, Section } from 'tcules-website-2026';
 const NAMES = [
   'arrow-right',
   'arrow-left',
+  'arrow-right-up',
   'download',
   'copy',
   'check-circle',
@@ -20,7 +21,7 @@ const NAMES = [
   'danger-triangle',
 ] as const;
 
-/** All fourteen glyphs at the default 16. Every one is solid and filled with currentColor. */
+/** All fifteen glyphs at the default 16. Every one is solid and filled with currentColor. */
 export function TheSet() {
   return (
     <Cluster colGap="text" rowGap="text">
