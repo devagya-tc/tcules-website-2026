@@ -1,0 +1,82 @@
+/* ClientMark — a client's logo, drawn in the ground's ink and sized to equal visual weight.
+
+   The drawing is a MASK, not an image. The client's SVG is the mask; the element's own
+   background is the paint. So the mark is one colour — --cmark-ink, remapped per surface in
+   tokens/components/client-mark.css — whatever colours the file itself carries, and one file
+   serves all four grounds. An <img> cannot do that: an SVG file cannot read a custom property
+   from the page that embeds it, and a CSS filter that forces it dark or white is a recolour
+   by approximation, not a named ink.
+
+   Four custom properties arrive from ClientMark.tsx on the style prop, because they are
+   per-asset data and there is no finite set of classes to enumerate:
+     --cmark-src          url("…") of the client's SVG
+     --cmark-ratio        intrinsic width / height
+     --cmark-ratio-root   √ratio, computed in TSX (see the TSX for why not CSS sqrt())
+     --cmark-correction   1 + the recorded weight correction, already clamped to ±0.15
+   They are listed in JS_INJECTED in scripts/tokens-check.mjs. Every other value here is a
+   token; this file states no distance and no colour.
+
+   What this file does NOT do, by ch05 §10 "never": no box, no tile, no border, no shadow, no
+   radius, no transition, no animation, and no crop — the mask is `contain`, so a mark whose
+   stated ratio is slightly off letterboxes inside its box rather than losing an edge. */
+.mark {
+  /* Equal AREA first: a mark of ratio r whose area is side² is side·√r wide. Then the two
+     caps, each keeping the ratio: at the height cap the width is height-max·r. The order of
+     the terms is irrelevant to min(); the order of the STEPS is ch05's (area, then caps). */
+  --cmark-width-fitted: min(
+    calc(var(--cmark-target-side) * var(--cmark-ratio-root)),
+    calc(var(--cmark-height-max) * var(--cmark-ratio)),
+    var(--cmark-width-max)
+  );
+  /* The recorded correction scales the fitted size, and the caps apply AGAIN, so a +15% on a
+     mark already at the cap does nothing: the caps are the ruling (P2), the correction is a
+     fine adjustment inside them. A negative correction always takes effect. */
+  --cmark-width: min(
+    calc(var(--cmark-width-fitted) * var(--cmark-correction)),
+    calc(var(--cmark-height-max) * var(--cmark-ratio)),
+    var(--cmark-width-max)
+  );
+
+  /* Content-sized in either primitive, for the reasons Logo.module.css gives: never squeezed
+     by a flex row, never stretched to a grid track. The strip is a Cluster, which owns the
+     gap and the cross-axis alignment (ch05 §10). */
+  display: block;
+  flex: none;
+  justify-self: start;
+  inline-size: var(--cmark-width);
+  /* Height stated rather than left to aspect-ratio: a Cluster with align="stretch" would
+     otherwise stretch the box, and the mask would letterbox inside a taller rectangle. */
+  block-size: calc(var(--cmark-width) / var(--cmark-ratio));
+
+  background-color: var(--cmark-ink);
+
+  -webkit-mask-image: var(--cmark-src);
+  mask-image: var(--cmark-src);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  /* The alpha channel is the mark; the file's own colours are ignored. That is the whole
+     colour model: "never the clients' own colours inside a set". */
+  mask-mode: alpha;
+
+  /* The paint is a background, and a browser drops backgrounds when printing unless told
+     otherwise. A client wall printed as an empty row is a blank where a name was. */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Forced colours (Windows High Contrast). The UA replaces every background-color with the
+   system Canvas colour, which is the ground — so an unadjusted mark would vanish into it with
+   its name still announced and nothing on screen. Opting out of the adjustment and painting
+   --cmark-ink-forced (CanvasText) puts the mark in the user's own text colour, which is the
+   forced-colours reading of "the ground's ink". Verified in Chromium with forcedColors
+   emulation: the marks paint the system text colour on the system ground. */
+@media (forced-colors: active) {
+  .mark {
+    forced-color-adjust: none;
+    background-color: var(--cmark-ink-forced);
+  }
+}

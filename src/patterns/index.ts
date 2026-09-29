@@ -32,8 +32,9 @@
  * bare <li> — the list element belongs to the caller, as a Layout with rowGap="none", because the
  * row finishes itself with its own block-end rule and a gap would break the ladder. It is a pattern
  * for the usual two reasons (it consumes a content shape, and it arranges with Cluster and Layout).
- * BlockCard is its bounded sibling: an edge-defined TILE that fills a parent-owned grid track. It
- * still paints no ground; the complete four-sided edge, media scale and h4 title make the object.
+ * BlockCard is its sibling OBJECT: a borderless tile that fills a parent-owned grid track, with no
+ * edge and no ground; its title scale, cover media and position make the object. BlockCardSet is its
+ * set, the one place that knows the count and so the one place the featured first card is decided.
  * Accordion is a DISCLOSURE SET: one continuous rule ladder of native details/summary pairs. It
  * owns a CMS-shaped question/answer array and composes Layout, Cluster, Icon and Prose while
  * leaving surface and surrounding page rhythm to its caller.
@@ -48,7 +49,9 @@
  * It takes `surface` like the other band-owning patterns and paints nothing itself. What it owns
  * is the grouping: the head group nests at 8 and 24 so it reads as one object, and the blocks are
  * a separate 48 beat beneath it. A flat Layout cannot say that, which is why this is a component
- * and not three lines at a call site repeated on every long-form route.
+ * and not three lines at a call site repeated on every long-form route. It has two arrangements of
+ * those beats — the head above the blocks, or beside them from 1024 up — and the second is one
+ * Layout's props rather than a second component.
  *
  * Figure is the quietest thing in the tier and the first to hold an IMAGE as its subject rather
  * than as a marker: an asset, its caption and an optional quieter note, filling whatever inline
@@ -117,17 +120,33 @@ export type {
   ListCardTitleElement,
 } from './ListCard';
 
-export { BlockCard } from './BlockCard';
-export type { BlockCardProps, BlockCardMedia, BlockCardTitleElement } from './BlockCard';
+export { BlockCard, BlockCardSet, FEATURED_FROM } from './BlockCard';
+export type {
+  BlockCardProps,
+  BlockCardMedia,
+  BlockCardImage,
+  BlockCardImageSide,
+  BlockCardOrientation,
+  BlockCardTitleElement,
+  BlockCardTracks,
+  BlockCardSetProps,
+  BlockCardSetItem,
+} from './BlockCard';
 
 export { Accordion } from './Accordion';
 export type { AccordionProps, AccordionItem, AccordionQuestionElement } from './Accordion';
 
 export { Proof } from './Proof';
-export type { ProofProps, ProofQuote, ProofFigure } from './Proof';
+export type {
+  ProofProps,
+  ProofQuote,
+  ProofFigure,
+  ProofPortrait,
+  ProofClientMark,
+} from './Proof';
 
 export { ContentSection } from './ContentSection';
-export type { ContentSectionProps } from './ContentSection';
+export type { ContentSectionArrangement, ContentSectionProps } from './ContentSection';
 
 export { Callout } from './Callout';
 export type { CalloutProps } from './Callout';

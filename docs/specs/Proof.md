@@ -6,11 +6,12 @@
 | ------------------- | ----------------------------------------------------- |
 | **Component**       | `Proof`                                               |
 | **Tier**            | 2 pattern (`src/patterns/Proof/`)                     |
-| **Status**          | implemented                                           |
+| **Status**          | implemented · amended 28 Sep 2026 (tracker 2.12) — shown to the owner, not merged until approved (★, ruling W1) |
 | **Token prefix**    | `--proof-*`                                           |
 | **Designer / date** | Codex / 24 Aug 2026                                   |
 | **Implements**      | `docs/briefs/15-testimonial.md` and `docs/briefs/17-stat.md` together, as required by `docs/briefs/README.md` |
 | **Implemented at**  | `src/patterns/Proof/` · `src/styles/tokens/components/proof.css` · specimen `src/app/design/proof/page.tsx` |
+| **Amended**         | **28 Sep 2026** (tracker 2.12; rulings P1, P2; audit §3 Proof, §4) — an optional 1:1 `portrait` through `Media`, an optional `clientMark` through `ClientMark`, `role` optional, and the quote brought onto ch10 B2.07's site blockquote: italic, a 6px rule beside the quote only, the attribution beneath with the name on the quote's first letter, and a white rule on blue. Every section below is amended in place; the changes are collected in **Amendment · 28 Sep 2026** before the self-audit. |
 
 The owner accepted the shared component identity in section 17 question 1. The public API, folder,
 token prefix and specimen route therefore use `Proof` rather than separate Testimonial and Stat
@@ -22,6 +23,11 @@ names.
 together. `quote` is the Testimonial case, `figures` is the Stat case, and both populated is the
 combined evidence block already anticipated by `CtaSection`. It is Tier 2 because it accepts
 CMS-shaped records and composes the Tier 1 `Layout`, `Prose` and `Button` components.
+
+**28 Sep 2026.** The quote is now the site's own blockquote as ch10 B2.07 draws it — Newsreader italic
+behind a 6px rule, the attribution beneath, an optional square portrait left of it — and may carry
+one client mark. A testimonial group and a stat group are still compositions of Proof, not variants
+(audit §4); the specimen proves both.
 
 It is not an arbitrary blockquote: `Prose` owns ordinary rich-text blockquotes and their internal
 flow. The content seam routes an attributed quotation here and leaves an unattributed quotation to
@@ -49,10 +55,15 @@ variant.
 | ---- | -------- | --------------- | -------------------------- |
 | root | yes | `Layout` | Owns the relationship between the optional quote figure and optional figures list. Carries no ground. |
 | quote | required in `compact`; optional in `display` | `Layout as="figure"` | One quotation and its attribution as one semantic unit, with both semantic children kept direct. |
-| quote-rule | whenever quote renders | quote logical leading edge | Deck-weight leading rule; decoration only, never an oversized quotation glyph. |
+| quote-rule | whenever quote renders | the `blockquote`'s logical leading edge | The 6px site-blockquote rule (ch10 B2.07), beside the quote text only — not the attribution. Decoration only, never an oversized quotation glyph. *Amended 28 Sep: was deck weight (2px) and ran beside the whole figure.* |
 | quote-text | whenever quote renders | native `blockquote` containing `Prose` | One trusted, sanitised rich-text field of one to six sentences. `Prose` owns its markup and inline-link behavior; Proof owns the arrangement-specific quote scale. |
-| attribution | whenever quote renders | native `figcaption` | Name, role and company emitted from three required strings in that order, separated by commas. |
-| attribution-media | provision only; not rendered | future position before attribution text | Reserved position for a future portrait or logo. There is no prop, DOM node, class or token until real content and an image contract exist. |
+| attribution | whenever quote renders | native `figcaption`, rendered by `Cluster nowrap` | The attribution row. Without a portrait it is indented by the rule plus its inset so the name starts on the quote's first letter; with one, the indent is dropped and the portrait takes the left margin. |
+| portrait | optional | `span` box containing `Media` | A 64px square photograph, radius 0, never masked, `alt=""` (ruling P1; ch05 §3, §6). Absent → no element and no gap. |
+| attribution-text | whenever quote renders | nested `Layout` | The text column beside the portrait: name-and-role, then the mark. |
+| name | whenever quote renders | text `span` | Required. Display serif, roman — the second voice under the italic quote. |
+| role-company | whenever quote renders | text `span` | `role, company`, or `company` alone when role is missing or blank. |
+| client-mark | optional | `span aria-hidden` containing `ClientMark` | One mark per quote, under the name and role, in the ground's ink, capped at 40px tall (ruling P2). Hidden from AT because it repeats `company`. |
+| ~~attribution-media~~ | — | — | *Superseded 28 Sep 2026* by portrait and client-mark above. It was a reserved position with no prop, pending "real content and an image contract"; `Media` and `ClientMark` are that contract. |
 | figures | optional in `display`; forbidden in `compact` | `Layout as="ul"` | Ordered one-to-four checked figures. The parent owns the item gaps and reflow. |
 | figure | for every figures record | native `li` containing `Layout` | One value/label unit plus its own checked metadata and optional source. |
 | value-label | for every figure | nested `Layout` | Keeps the audited value and what it counts as one visual unit. |
@@ -61,18 +72,23 @@ variant.
 | checked | for every figure | text `span` | Required per-item checked date, authored as a complete phrase such as “checked on 8 August 2026”. |
 | source | optional per figure | existing `Button as="a"` | Fixed visible label “View source”; Button owns every link state and the extended touch target. |
 
-There is no eyebrow, heading, body-copy, image, logo, avatar, rating mark, review-theme list, action
-slot, decorative quote glyph, panel, surface or set wrapper. A containing content pattern owns the
+There is no eyebrow, heading, body-copy, avatar (a circle-masked portrait), rating mark, review-theme
+list, action slot, decorative quote glyph, panel, surface or set wrapper. A containing content pattern owns the
 heading; a rating is an ordinary figure whose value happens to be `4.8/5`.
 
 ## 3 · Props / API
 
 ```ts
+export type ProofPortrait = Pick<MediaImage, 'src' | 'width' | 'height' | 'sources'>;
+export type ProofClientMark = Pick<ClientMarkProps, 'src' | 'width' | 'height' | 'correction'>;
+
 export type ProofQuote = {
   quoteHtml: string;
   name: string;
-  role: string;
+  role?: string; // optional since 28 Sep 2026
   company: string;
+  portrait?: ProofPortrait; // 28 Sep 2026
+  clientMark?: ProofClientMark; // 28 Sep 2026
 };
 
 export type ProofFigure = {
@@ -101,19 +117,24 @@ export type ProofProps = ProofCompactProps | ProofDisplayProps;
 | `quote` | `ProofQuote` | none | Whether the attributed quotation figure renders. Required for compact. |
 | `figures` | `readonly ProofFigure[]` | none | Whether the checked-figure list renders. Expected count one to four; forbidden for compact. |
 | `quoteHtml` | `string` | none | Trusted, content-seam-sanitised quote body handed to `Prose html`; it does not contain the attribution. |
-| `name` | `string` | none | First attribution field. |
-| `role` | `string` | none | Second attribution field. |
-| `company` | `string` | none | Third attribution field. |
+| `name` | `string` | none | The speaker. Required: named attribution is mandatory (CS). |
+| `role` | `string \| undefined` | none | The speaker's title. **Optional since 28 Sep 2026** (HO §4, strapi-changes.md entry 4). Missing or blank → the company stands alone on the second line, with no separator. |
+| `company` | `string` | none | The client. Required. Also the client mark's name, so the mark and the text can never name two clients. |
+| `portrait` | `ProofPortrait \| undefined` | none | The speaker's photograph. `kind` is not a field: Proof always passes `photograph`. `alt` is not a field: Proof always passes `""` (§11). Blank src or a non-positive dimension → omitted with a development warning; a non-square master → centre-cropped to 1:1 with a warning. |
+| `clientMark` | `ProofClientMark \| undefined` | none | The client's SVG mark, ClientMark's asset fields without `name`. Blank src or a non-positive dimension → omitted with a warning, so no empty row is left. |
 | `value` | `string` | none | Verbatim audited figure value. |
 | `label` | `string` | none | What the figure counts. |
 | `checkedOn` | `string` | none | Required per-figure integrity line, including “checked on”. |
 | `sourceHref` | `string` | none | Optional source destination. Call sites use the named Clutch destination from the routes module once its exact URL is supplied. |
 
 The API deliberately has no `size`, `tone`, `surface`, `color`, `ground`, `padding`, `gap`, `radius`,
-`height`, `width`, `columns`, `align`, `quoteMark`, `avatar`, `portrait`, `logo`, `rating`, `set`,
-`sourceLabel`, `checkedDateShared`, `children`, `className` or `style`. Arrangement is semantic,
-not a visual size picker. The component owns its internal geometry. Surface comes only from the
-nearest `data-surface`. Portrait and logo are provisions, not speculative API.
+`height`, `width`, `columns`, `align`, `quoteMark`, `avatar`, `portraitSize`, `portraitShape`,
+`markPosition`, `rating`, `set`, `sourceLabel`, `checkedDateShared`, `children`, `className` or
+`style`. Arrangement is semantic, not a visual size picker. The component owns its internal
+geometry, including the portrait's size and the mark's position. Surface comes only from the nearest
+`data-surface`. *Amended 28 Sep 2026:* portrait and mark were provisions; they are now content fields
+on the quote record, because they are facts about the testimonial (who said it, for whom), not
+presentation (strapi-changes.md entry 10).
 
 `arrangement="compact"` with `figures`, compact without `quote`, and display without either key
 must be compile errors. A quote with a React-node attribution or figures with a row-level checked
@@ -134,7 +155,8 @@ and is quote-only. Display uses the h3 composite for the quotation; compact uses
 composite. The attribution, rule weight and measure do not step.
 
 Rejected variants are `set`, `feature`, `rating`, `logo-led`, `portrait-led`, boxed, filled,
-centred and decorative-mark. Six quotations across the whole corpus do not justify a two- or
+centred and decorative-mark. The portrait and mark are optional content in both arrangements and do
+not change the arrangement: a quote with a portrait is the same `compact` or `display` Proof. Six quotations across the whole corpus do not justify a two- or
 three-up API. A feature figure is the same value/label/date/source anatomy at a different scale,
 and no resolved route requires it. Parent `Layout` can compose several Proof instances later
 without making the individual component know it is in a set.
@@ -156,18 +178,21 @@ colour-only state and no content-sniffed state.
 
 ## 6 · Per-surface colour
 
-The six tokens below are the complete colour contribution of Proof. `Prose` still owns inline-link
+The seven tokens below are the complete colour contribution of Proof (six until 28 Sep 2026, when
+`--proof-name-ink` was added). `Media` owns the portrait's edge (a photograph has none) and
+`ClientMark` owns the mark's ink (`--cmark-ink`, the ground's ink). `Prose` still owns inline-link
 colours and Button owns source-link colours and focus geometry. Text ratios are measured against
 the exact Section ground; the quote rule is decoration.
 
 | Token | paper | tint | ink | blue |
 | ----- | ----- | ---- | --- | ---- |
 | `--proof-quote-ink` | `--color-neutral-800` — 11.81:1 | `--color-neutral-800` — 10.54:1 | `--color-white` — 17.26:1 | `--color-white` — 6.23:1 |
+| `--proof-name-ink` | `--color-neutral-900` — 14.62:1 | `--color-neutral-900` — 13.06:1 | `--color-white` — 17.26:1 | `--color-white` — 6.23:1 |
 | `--proof-attribution-ink` | `--color-neutral-600` — 4.92:1 | `--color-neutral-700` — 7.27:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
 | `--proof-value-ink` | `--color-neutral-950` — 17.10:1 | `--color-neutral-950` — 15.27:1 | `--color-white` — 17.26:1 | `--color-white` — 6.23:1 |
 | `--proof-label-ink` | `--color-neutral-700` — 8.14:1 | `--color-neutral-800` — 10.54:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
 | `--proof-checked-ink` | `--color-neutral-600` — 4.92:1 | `--color-neutral-700` — 7.27:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
-| `--proof-quote-rule` | `--color-brandeis-500` — n/a, decoration | `--color-brandeis-500` — n/a, decoration | `--color-brandeis-300` — n/a, decoration | `--color-peridot-400` — n/a, decoration |
+| `--proof-quote-rule` | `--color-brandeis-500` — n/a, decoration | `--color-brandeis-500` — n/a, decoration | `--color-brandeis-300` — n/a, decoration | `--color-white` — n/a, decoration (*was `--color-peridot-400` until 28 Sep 2026*) |
 
 **Paper.** The quotation softens to neutral-800 so long display copy does not compete with the
 page heading; the audited value takes neutral-950. Attribution, dates and labels step down through
@@ -182,11 +207,19 @@ edge rather than a second ground.
 neutral-400. Brandeis-300 lifts the rule enough to remain visibly distinct without turning the
 whole block into a blue panel.
 
-**Blue.** Quote and value remain white. Supporting copy uses Brandeis-100, the lightest quiet step
-that still clears 4.5:1 on Brandeis-500. The peridot-400 rule provides a non-action accent; no
-peridot fills a control and the real source link retains Button's complete blue-surface treatment.
+**Blue.** Quote, name and value remain white. Supporting copy uses Brandeis-100, the lightest quiet
+step that still clears 4.5:1 on Brandeis-500. **Amended 28 Sep 2026:** the rule is white. ch10 B2.07
+draws the site blockquote "lifted to brandeis-300 on ink and white on brandeis-500", and C.07 repeats
+it ("on brandeis-500 the action line, an inline link and the quote rule are white"). The previous
+peridot-400 followed `prose.css`'s blockquote, but ch02 v1.0 gives peridot exactly two uses — a
+marked phrase and an illustration's carried item — and a quote rule is neither. The real source link
+retains Button's complete blue-surface treatment.
 
-Every surface block redeclares all six tokens. A tint Proof inside an ink parent resolves the full
+**Name.** One step stronger than the quote on the light grounds (neutral-900 over neutral-800), and
+white with the quote on the dark ones. The name's weight comes mostly from the change of voice —
+roman serif under italic — not from the ink.
+
+Every surface block redeclares all seven tokens. A tint Proof inside an ink parent resolves the full
 tint column from its nearest surface scope; an ink Proof inside a paper parent resolves the full ink
 column. Proof never caches an outer value, paints a nested ground or relies on a deltas-only table.
 
@@ -197,8 +230,15 @@ column. Proof never caches an outer value, paints a nested ground or relies on a
 - Display quote-to-figures relationship: root `Layout columns="fit" minTrack="md"`
   with `colGap="column"` and `rowGap="stack"`; one child naturally renders one track.
 - Compact root: one track and no vacant seam.
-- Quote leading inset: `--gap-block` between the rule and quote content.
+- Quote leading inset: `--gap-block` between the rule and quote content, on the `blockquote`.
 - Quote-text-to-attribution relationship: nested `Layout rowGap="block"`.
+- Attribution indent, no portrait: `padding-inline-start: calc(--proof-quote-rule-width + --gap-block)`,
+  so the name starts on the quote's first letter (ch10 B2.07: "indented 54 — the rule's 6 plus the
+  quote's 48"). Padding aligns content inside the part's own box; it separates nothing.
+- Portrait to text: `Cluster nowrap colGap="block"` — ch10's "a 24 bind". No portrait → the Cluster
+  has one child and no seam; the indent above applies instead.
+- Name to role-company: nested `Layout rowGap="inline"` — one key and its value.
+- Name-and-role to client mark: `Layout rowGap="text"`. No mark → no seam.
 - Figures: `Layout columns="tile" minTrack="sm" colGap="gutter" rowGap="block"`
   with `justify="between"`. Fixed-width tile tracks keep a partial last row from stretching.
 - Value-to-label relationship: nested `Layout rowGap="tight"`, one audited unit.
@@ -221,8 +261,14 @@ column. Proof never caches an outer value, paints a nested ground or relies on a
   than growing to the 1240px cap.
 - Attribution measure: `--measure-body`. “Ashok Mohanty, Founder, Auxentios” is authored as one
   content line but may wrap rather than overflow in a 192px stress track.
-- Rule: `--proof-quote-rule-width` resolves to `--border-width-hairline-deck`, measured against the
-  quote composite and matching Prose's established blockquote rule.
+- Rule: `--proof-quote-rule-width` resolves to `--border-width-rule-quote` → `--border-width-6`,
+  6px, the site blockquote's rule (ch10 B2.07). *Amended 28 Sep 2026: was `--border-width-hairline-deck`
+  (2px), matching Prose, which still reads it — see §17 Q9.*
+- Portrait: `--proof-portrait-size` 64px square (`--proof-portrait-ratio` → `--ratio-portrait`, 1 / 1).
+  Small (P1): a little taller than the two attribution lines (≈ 50), and under a fifth of a 326
+  column, leaving the text a 238 measure on a phone. `sizes` is `PROOF_PORTRAIT` from
+  `src/lib/image-sizes.ts` ('64px'), which restates the token by hand.
+- Client mark: ClientMark's own geometry — equal area, 40px height cap, 160px width cap (P2).
 - Radius: `--proof-radius` resolves to `--radius-0`.
 - Shadow: `--proof-shadow` resolves to `--shadow-none`.
 - Layer: `--proof-layer` resolves to `--z-base`; no part overlaps another.
@@ -230,16 +276,17 @@ column. Proof never caches an outer value, paints a nested ground or relies on a
 ### (c) Optical corrections
 
 None. Proof does not reach the space ramp. Every inset and seam is a gap-scale relationship, the
-rule uses an existing border-width token and the two track minima come from Layout's existing
-component geometry.
+attribution indent is the rule width plus the same gap-block inset, and the two track minima come
+from Layout's existing component geometry.
 
 ## 8 · Typography
 
 | Part | Role | Tracking companion | Measure |
 | ---- | ---- | ------------------ | ------- |
-| display quote-text | `--text-h3` | `--text-h3-tracking` | `--measure-body` |
-| compact quote-text | `--text-quote` | none — this role has no tracking companion | `--measure-body` |
-| attribution | `--text-body-sm` | none — this role has no tracking companion | `--measure-body` |
+| display quote-text | `--text-h3`, **italic** | `--text-h3-tracking` | `--measure-body` |
+| compact quote-text | `--text-quote`, **italic** | none — this role has no tracking companion | `--measure-body` |
+| name | `--text-h6` (display serif, roman) | `--text-h6-tracking` | the attribution text column |
+| role-company | `--text-body-sm` | none — this role has no tracking companion | the attribution text column, `--measure-body` cap on the row |
 | value | `--text-stat` | `--text-stat-tracking` | intrinsic inside one figure tile |
 | label | `--text-micro` | `--text-micro-tracking` | one figure tile |
 | checked | `--text-caption` | none — this role has no tracking companion | one figure tile |
@@ -249,6 +296,13 @@ Quote, attribution and checked-date copy stay in authored sentence case: “The 
 complicated workflow clear.” and “Ashok Mohanty, Founder, Auxentios”. Figure labels are supplied in
 sentence case — “completed projects” — and uppercased at render by `--text-mono-case` to bind four
 differently shaped values into one row. Values and names are never transformed.
+
+**Italic, amended 28 Sep 2026.** Both arrangements set the quote italic — `font-style: italic` after
+the `font:` composite, which would otherwise reset it. ch10 B2.07: "Fails when it is set roman at
+heading size. The italic and the rule are what make it read as reported speech." Display was roman
+h3, which is exactly that failure. Newsreader italic 400 and 500 are both loaded by the root layout.
+The name is roman serif under the italic, which ch10 counts as a change of voice (A1.06); the role is
+sans, a third.
 
 Display deliberately stops at h3 rather than h2 or a one-off display role. The 34px serif scale
 has enough position and weight to lead a section while holding the measured six-sentence quote;
@@ -277,8 +331,14 @@ touch contract. The gap scale does not shift responsively.
 <Layout columns={both ? 'fit' : undefined} minTrack="md" colGap={both ? 'column' : undefined} rowGap={both ? 'stack' : undefined}>
   {quote && (
     <Layout as="figure" rowGap="block">
-      <blockquote><Prose html={quote.quoteHtml} /></blockquote>
-      <figcaption>{quote.name}, {quote.role}, {quote.company}</figcaption>
+      <blockquote /* 6px rule + inset */><Prose html={quote.quoteHtml} /></blockquote>
+      <Cluster as="figcaption" nowrap colGap="block" align="start" /* indented when no portrait */>
+        {portrait && <span /* 64 square */><Media image={{ ...portrait, alt: '', kind: 'photograph' }} sizes={PROOF_PORTRAIT} fit="fill" /></span>}
+        <Layout rowGap="text">
+          <Layout rowGap="inline"><span>{name}</span><span>{role ? `${role}, ${company}` : company}</span></Layout>
+          {mark && <span aria-hidden="true"><ClientMark {...mark} name={company} /></span>}
+        </Layout>
+      </Cluster>
     </Layout>
   )}
   {figures && (
@@ -293,7 +353,8 @@ touch contract. The gap scale does not shift responsively.
 
 The conditional axis props express that an absent child leaves no seam; the implementation may
 split the branches rather than pass conditional props. `Layout` owns every block and column
-relationship. `Prose` owns trusted inline markup, and `Button` owns the optional link. There is no
+relationship; `Cluster` owns the portrait beside the attribution text. `Prose` owns trusted inline
+markup, `Button` owns the optional link, `Media` the portrait and `ClientMark` the mark. There is no
 hand-written grid or flex arrangement, no margin on any child and no external override of Section's
 ground, padding or content column.
 
@@ -315,8 +376,14 @@ unless the application explicitly adopts a site-wide external-link policy.
 | `Escape` | Unbound; Proof is not a modal or disclosure. | Unbound. | Unchanged. |
 | Arrow/Home/End | Unbound; Proof is not a composite widget. | Unbound. | Unchanged. |
 
+**Portrait and mark, 28 Sep 2026.** The portrait renders `alt=""`: it sits beside the name it depicts,
+so any text alternative could only restate that name and a screen reader would hear it twice (ch05
+§7's decorative case). The client mark is wrapped in `aria-hidden="true"` for the same reason — its
+accessible name is `company`, which is text one line above. Both are therefore silent, and the
+figcaption reads exactly as before: name, then role and company.
+
 Proof authors no `role`, `tabIndex`, live region, `aria-labelledby`, `aria-describedby`,
-`aria-controls`, `aria-expanded` or IDs. There is therefore no generated idref and no attribute
+`aria-controls`, `aria-expanded` or IDs; its one ARIA attribute is the mark's `aria-hidden`. There is therefore no generated idref and no attribute
 that can point at an absent quote or source. The content seam sanitises `quoteHtml`; Proof does not
 claim that untrusted HTML is safe.
 
@@ -342,8 +409,8 @@ language behavior; no hidden replacement rewrites audited values.
 | Zero items | Display with no valid quote and zero valid figures warns in development and renders `null`, with no empty root or seam. The public union prevents the ordinary no-content call. |
 | One item | One valid figure renders one 256px tile in the parent-owned list without stretching to imitate four; one quote renders its own figure without a vacant second track. |
 | Many items (2× expected) | Render all eight valid figures in tile rows and warn above the expected maximum of four. Do not truncate, carousel or invent pagination. Eight quotes are eight parent-composed Proof instances; there is no set prop. |
-| Missing image or missing optional slot | No image is built. Missing quote leaves figures only; missing figures leaves the quote only; missing source leaves no Button and no source seam. Future portrait/logo position is before attribution text, but no placeholder renders. |
-| Empty required-ish text | Blank quote body or any blank attribution field invalidates the quote. Blank value, label or checked date invalidates that figure. Warn in development, retain other valid evidence and render `null` if none remains. |
+| Missing image or missing optional slot | Missing portrait → no box and no bind; the name returns to the quote's first letter (P1: "no portrait means no gap"). Missing mark → no row. An invalid portrait or mark (blank src, non-positive dimension) is treated as missing, with a development warning. A portrait whose URL 404s keeps its 64px box, empty, which is the honest failure; a mark whose URL 404s is ClientMark's case (its box paints nothing). Missing quote leaves figures only; missing figures leaves the quote only; missing source leaves no Button and no source seam. |
+| Empty required-ish text | Blank quote body, blank name or blank company invalidates the quote; a blank role does not (it is optional). Blank value, label or checked date invalidates that figure. Warn in development, retain other valid evidence and render `null` if none remains. |
 | Narrow track at 767 | Display pair stacks when two md tracks no longer fit; four figures become two-by-two through tile/sm. Type roles and gap steps remain unchanged. |
 | Parent that does not size it | Root requests the full available inline size with `min-inline-size: 0`; tile tracks keep their existing 256px preferred minimum and can shrink to 100%. In a wrapping `Cluster`, full inline sizing prevents intrinsic collapse. No hard component minimum is needed; the parent supplies the explicit 192px stress track. |
 | Logical properties rather than left/right | Quote rule and inset use the logical inline-start edge; all spacing is block/inline. RTL moves the rule and inset together without reordering authored attribution fields. |
@@ -388,8 +455,10 @@ with `--duration-fast` and `--easing-standard`. Under reduced motion those exist
    child walking and regular expressions and expect none.
 10. Do not paint a ground, card edge or oversized quotation mark; computed background remains
     transparent and the glyph/asset tree contains no quote decoration.
-11. Do not add portrait/logo props or placeholders before real content and an image contract exist;
-    the public type and rendered tree contain neither.
+11. Do not mask the portrait to a circle, give it a radius, letterbox it or reserve its box when it is
+    absent; computed `border-radius` on the `img` is 0, its box is square, and a quote with no
+    portrait contains no portrait element. *(Amended 28 Sep 2026: this read "do not add portrait/logo
+    props" while no image contract existed.)*
 12. Do not colour a non-clickable value with any Brandeis token; only the decorative rule and
     delegated links may use that family.
 13. Do not share one checked date across a row, infer it from the current day, or hide it visually;
@@ -432,8 +501,14 @@ The exact block list, in order:
     proving neither paints a joining ground or accidental separator.
 14. **Semantics and focus order.** Print figure/blockquote/figcaption and ul/li maps, then include
     an inline quote link and two source links for Tab/Shift+Tab testing.
-15. **Portrait/logo provisions.** A text-only annotation marks the future location before
-    attribution; no placeholder, prop or image renders.
+15. **Portrait × client mark** (amended 28 Sep 2026; was "provisions"). Text only, portrait, mark,
+    and both, in compact and display.
+    Then **attribution stress** (16): long name and long role beside a portrait, missing role, blank
+    role string, one-line and six-sentence quotes, an off-square master, a blank portrait src, a
+    mark with no dimensions. Then **326** (17): the phone column via the harness's `.trackMobile`.
+    Then **compositions** (18): a testimonial group — Proof compact × 3 in `Layout columns="fit"
+    colGap="gutter"` — and a stat group — Proof display, figures only (audit §4). The four-surface
+    bands (7) render a portrait-and-mark quote in both arrangements.
 16. **What a static page cannot force.** Manual instructions for hover, held pointer, Tab focus,
     1023/767 widths and reduced motion.
 
@@ -443,7 +518,18 @@ hierarchy; no repeated boxes or alternating grounds do it.
 
 ## 16 · New token requests
 
-**None — every value in this spec is an existing token.**
+**Amended 28 Sep 2026 — three primitives and three component tokens.**
+
+| Token | Layer | Value | Why |
+| ----- | ----- | ----- | --- |
+| `--border-width-6` | primitive | 6px | The border ramp stopped at 3. |
+| `--border-width-rule-quote` | primitive (usage alias, like `--border-width-hairline-deck`) | `--border-width-6` | The site blockquote's rule (ch10 B2.07), named once so Prose can adopt it (§17 Q9). |
+| `--ratio-portrait` | primitive | 1 / 1 | "Portraits are 1:1 everywhere" (ch05 §3, §12 11) — a brand fact, not one placement's crop, so shared the way `--ratio-cover` is. |
+| `--proof-name-ink` | component | per surface, §6 | The name's own ink. |
+| `--proof-portrait-size` | component | 64px | Component size. |
+| `--proof-portrait-ratio` | component | `--ratio-portrait` | The box's ratio. |
+
+*Before 28 Sep 2026:* **None — every value in this spec is an existing token.**
 
 The `--proof-*` component layer maps existing ramp colours, h3/quote/stat/body-sm/micro/caption type
 roles, measures, Layout track sizes, gap roles, deck rule, radius, shadow and z-layer into Proof's
@@ -495,12 +581,67 @@ position before attribution text and build nothing.** No portrait or logo appear
 files and the repository has no image contract. A prop without content would manufacture crop,
 aspect-ratio and empty-state decisions.
 
+**6, resolved 28 Sep 2026 (rulings P1, P2; audit §3).** Both are built: `portrait` through `Media`,
+`clientMark` through `ClientMark`. The draft decision stood only while there was no image contract;
+Media (2.6) and ClientMark (2.8) are that contract.
+
 **7 · Figure sources and the Clutch URL — non-blocking.** Options: style a raw anchor locally; use
 the existing link Button and accept `sourceHref`; or make the entire value clickable.
 **Recommendation and draft decision: `Button as="a" emphasis="link" tone="neutral" size="sm"`
 with `extendHitArea`, and keep the value non-interactive.** The caller passes the named Clutch route
 once its exact external URL is supplied; Proof must not guess a literal or substitute
 `UNRESOLVED_EXTERNAL` in production content.
+
+**8 · Where the client mark sits — non-blocking; decided by the build (P2 left placement open).**
+Options: (a) beneath the name and role, in the text column; (b) at the inline end of the attribution
+row; (c) above the quote. **Choice: (a).** It keeps the attribution one left-aligned column that
+starts on the quote's first letter (or beside the portrait), so the mark reads as part of "who said
+it" rather than as a logo strip. (b) squeezes the name at 326 and in a three-up group; (c) makes the
+client's mark the first thing read, which turns a testimonial into a logo placement. One mark per
+quote: the type holds one.
+
+**9 · Prose's blockquote still diverges from the site blockquote — non-blocking; owner to decide.**
+`prose.css` draws a 2px rule, roman type and a peridot rule on blue. ch10 B2.07 says 6px, italic and
+white on blue. Proof now follows ch10; Prose was left alone because it is out of this task's scope and
+a rich-text blockquote is often an unattributed callout rather than a testimonial. The shared
+`--border-width-rule-quote` exists so Prose can adopt the weight in one line if the owner rules the
+chapter applies to it too.
+
+**10 · The portrait is decorative (`alt=""`) and the mark is `aria-hidden` — non-blocking.** Options:
+pass the record's alt; synthesise "Portrait of {name}"; or decorative. **Choice: decorative**, because
+both would repeat text immediately beside them. The portrait type therefore has no `alt` field.
+
+**11 · Portrait size 64px — non-blocking.** ch10's 160 portrait beside a 52px quote scales to roughly
+86 at the web's 28px quote; P1 says *small*. 64 is a little taller than the two attribution lines and
+keeps the text column at 238 in a 326 column. Owner to confirm on the crops.
+
+**12 · The Media specimen's stand-in portrait is circle-masked — non-blocking; owner to note.**
+`public/design/media/photograph-portrait.png` (and `docs/brand/v3-portrait.png`) have the circle baked
+into the file, which ch05 §6 forbids. ch10 hides it by scaling the image 142% in its box. This
+specimen uses a square crop of the same photograph (`photograph-portrait-square.png`); the Media
+specimen still shows the circle.
+
+## Amendment · 28 Sep 2026 (tracker 2.12)
+
+What changed, in one place:
+
+1. **Portrait.** Optional `quote.portrait` — a 64px square, radius 0, never masked, through `Media`
+   (`kind: 'photograph'`, `fit: 'fill'`, lazy, `sizes` = `PROOF_PORTRAIT`). Flush on the left margin
+   under the rule, the text a 24 bind to its right. No portrait, no gap (P1).
+2. **Client mark.** Optional `quote.clientMark` through `ClientMark` (40px cap, ground's ink), beneath
+   the name and role, `aria-hidden` (§17 Q8, Q10).
+3. **Role optional.** A missing or blank role leaves `company` alone, no separator
+   (strapi-changes.md entry 4).
+4. **Site blockquote (ch10 B2.07).** Italic in both arrangements; a 6px rule beside the quote only;
+   the attribution beneath, indented onto the quote's first letter; the name on its own line in roman
+   serif (`--text-h6`), role and company beneath in `--text-body-sm`.
+5. **Blue rule white**, not peridot (ch10 B2.07, C.07; ch02 v1.0 peridot uses).
+6. **Tokens.** §16.
+7. **Specimen.** §15 item 15: the media matrix, attribution stress, 326, the testimonial-group and
+   stat-group compositions.
+8. **Routes.** None migrated: every change to the prop shape is additive or loosens a requirement,
+   so the seven compact call sites type-check unchanged. The view model (`src/content/types.ts`) still
+   types `role` as required and carries no portrait or mark; that is Phase 5.1's view-model work.
 
 ## Appendix · Self-audit
 

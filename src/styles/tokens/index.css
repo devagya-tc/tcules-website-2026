@@ -103,6 +103,7 @@
 @import 'components/content-section.css';
 @import 'components/tag.css';
 @import 'components/texture.css';
+@import 'components/client-mark.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */

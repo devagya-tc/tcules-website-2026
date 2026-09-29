@@ -33,7 +33,7 @@ const SPECIMENS = [
       {
         href: '/design/layout',
         name: 'Layout',
-        note: 'columnar axis — tracks and the two seams',
+        note: 'columnar axis — tracks, the two seams and a leading item',
       },
       { href: '/design/cluster', name: 'Cluster', note: 'inline axis — wrapping rows' },
       {
@@ -63,6 +63,11 @@ const SPECIMENS = [
         note: 'the wordmark — 3 heights, 2 bar treatments, 4 surfaces',
       },
       {
+        href: '/design/client-mark',
+        name: 'ClientMark',
+        note: "a client's logo in a set — mask in the ground's ink, equal area, capped 40 × 160, ±15% correction, 4 surfaces",
+      },
+      {
         href: '/design/texture',
         name: 'Texture',
         note: 'the pixel grid through placed, blurred shapes — 4 anchors, 4 surfaces, dark-ground candidates',
@@ -90,7 +95,7 @@ const SPECIMENS = [
       {
         href: '/design/content-section',
         name: 'ContentSection',
-        note: 'one CMS section as one band — head group, lead, block beat, 4 surfaces, 2 densities',
+        note: 'one CMS section as one band — stacked | beside × 4 surfaces, stress copy, absent slots, 390',
       },
       {
         href: '/design/cta-section',
@@ -110,7 +115,7 @@ const SPECIMENS = [
       {
         href: '/design/block-card',
         name: 'BlockCard',
-        note: 'the bounded tile — 3 media fills, responsive grids, linked states, 4 surfaces',
+        note: 'the borderless card — cover media via Media, text-only sets, the featured set, 4 surfaces',
       },
       {
         href: '/design/accordion',
@@ -130,7 +135,7 @@ const SPECIMENS = [
       {
         href: '/design/figure',
         name: 'Figure',
-        note: 'the captioned image — slot ladder, 3 intrinsic ratios uncropped, the empty state, 4 surfaces',
+        note: 'the captioned image — slot ladder, 3 intrinsic ratios uncropped, the empty state, 4 surfaces, a row per Media kind',
       },
       {
         href: '/design/page-hero',

@@ -23,6 +23,12 @@ function figureImage(image: PodcastImage) {
     alt: image.alt,
     width: image.width,
     height: image.height,
+    /* The derived widths and the kind fields travel with the record so Figure's Media can serve
+       a srcset and draw the edge by kind; `mime` is the one field left behind. */
+    sources: image.sources,
+    kind: image.kind,
+    panel: image.panel,
+    shadow: image.shadow,
   };
 }
 
@@ -321,7 +327,7 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
                   eyebrow="Article"
                   media={
                     resource.image
-                      ? { kind: 'image', src: resource.image.src, alt: resource.image.alt }
+                      ? { type: 'image', image: resource.image }
                       : undefined
                   }
                   href={articlePath(resource.slug)}

@@ -1,4 +1,4 @@
-import { BlockCard, Layout, Section } from 'tcules-website-2026';
+import { BlockCard, BlockCardSet, Layout, Section } from 'tcules-website-2026';
 
 /* NOTE: these preview files are type-STRIPPED, not type-checked (see .design-sync/NOTES.md), so an
    invalid prop value fails silently at render. Two things to keep honest here: `BlockCard` has NO
@@ -21,30 +21,31 @@ const IMAGE =
       '</svg>',
   );
 
+/* The cover as a record, the way a page receives it from the content seam: master src, alt and the
+   intrinsic size. `kind` is omitted, so it renders as a capture (a hairline) — a real cut-out or
+   illustration cover would say so and render unboxed. */
+const COVER = { type: 'image', image: { src: IMAGE, alt: '', width: 480, height: 320 } };
+
 const CAPABILITIES = [
   {
     title: 'Product design',
     body: 'Turn a difficult workflow into a product people can understand and operate on their first day.',
     href: '/services/product-design',
-    icon: 'document-text',
   },
   {
     title: 'Design systems',
     body: 'Build the decisions and reusable parts that keep a product coherent as the team grows.',
     href: '/services/design-systems',
-    icon: 'check',
   },
   {
     title: 'AI product UX',
     body: 'Make a probabilistic system legible enough that people can tell when to trust it.',
     href: '/services/ai-product-ux',
-    icon: 'document-text',
   },
   {
     title: 'Modernisation',
     body: 'Move a system people depend on without asking them to relearn their own job.',
     href: '/services/modernisation',
-    icon: 'copy',
   },
 ];
 
@@ -129,11 +130,12 @@ function Grid({ columns = { base: 1, md: 2, xl: 4 }, children }) {
  *
  *   the parent grid  `Layout as="ul"` with `columns`, `colGap="gutter"`, `rowGap="gutter"` and
  *                    `equalRows` — see `Grid` above. Required.
- *   `media`          one optional slot, two closed fills: `{kind:'icon', name}` heads the copy
- *                    stack, `{kind:'image', src, alt}` sits edge-to-edge with the copy flush
- *                    beneath it. Never a node — a card cannot acquire an overlay, a control, or a
- *                    call-site crop. The ratio belongs to the orientation: 3:2 vertical, 4:3
- *                    horizontal.
+ *   `media`          one optional cover, one closed record: `{ type: 'image', image }`, edge-to-edge
+ *                    with the copy flush beneath it. Never a node, and no icon fill — a card
+ *                    cannot acquire an overlay, a control, or a call-site crop. The ratio belongs
+ *                    to the orientation: 3:2 vertical, 4:3 horizontal. Case studies and articles,
+ *                    videos and podcasts with a cover carry one; services, audits, glossary and
+ *                    capabilities never do.
  *   `eyebrow`        one optional quiet label above the title — a client, a category, a content
  *                    type, an editorial kicker. A plain string, so the caller composes the line;
  *                    pass "Case study", not "CASE STUDY", because mono is uppercased by the
@@ -147,10 +149,9 @@ function Grid({ columns = { base: 1, md: 2, xl: 4 }, children }) {
  *                    card's only link-coloured part, and naming the destination is what marks a
  *                    card as navigable.
  *   `orientation`    `vertical` (default) fills one grid track, media above copy. `horizontal`
- *                    takes two equal tracks with the media beside the copy, for a stack of three
- *                    or four substantial items a grid would shrink to thumbnails. `imageSide`
- *                    picks the media track and is a call-site decision, so alternation stays with
- *                    the parent that can see all the siblings.
+ *                    takes two equal tracks at h3 scale: media beside copy with a cover, head
+ *                    beside body without. It is what `BlockCardSet` gives the first of four or
+ *                    more items — the featured card. `imageSide` picks the media track.
  *
  * `titleAs` (`h3` default, or `h4`) gives the title heading semantics without changing its type:
  * the title is always set at h4 scale, and this is the page outline rather than the size.
@@ -170,9 +171,8 @@ export function Default() {
 }
 
 /**
- * The highest-value shape in the component: an icon-led linked set, four across. The icon is a
- * decorative glyph and is unlabelled — the title already names the card, so the glyph renders
- * `aria-hidden` and is never read out beside it.
+ * The highest-value shape in the component: a text-only linked set, four across. Service cards
+ * carry no media, so weight comes from the title and the set's arrangement — never a box.
  *
  * One anchor per card, and the cta inside it is a `span` rather than a second link: the whole card
  * already navigates, so a nested anchor would be invalid markup and a second focus stop for one
@@ -183,14 +183,7 @@ export function Linked() {
   return (
     <Grid>
       {CAPABILITIES.map((c) => (
-        <BlockCard
-          key={c.title}
-          title={c.title}
-          body={c.body}
-          href={c.href}
-          media={{ kind: 'icon', name: c.icon }}
-          titleAs="h3"
-        />
+        <BlockCard key={c.title} title={c.title} body={c.body} href={c.href} titleAs="h3" />
       ))}
     </Grid>
   );
@@ -216,7 +209,7 @@ export function WithEyebrow() {
           body={c.body}
           href={c.href}
           ctaLabel={c.ctaLabel}
-          media={{ kind: 'image', src: IMAGE, alt: '' }}
+          media={COVER}
         />
       ))}
     </Grid>
@@ -224,8 +217,9 @@ export function WithEyebrow() {
 }
 
 /**
- * Image media in a vertical card. The 3:2 crop and the `object-fit: cover` centre position are the
- * component's decision rather than the caller's, so a mixed set stays aligned. `alt` is required
+ * Image media in a vertical card. The 3:2 crop box is the component's decision rather than the
+ * caller's, so a mixed set stays aligned; the image inside it is `Media`, which covers the box from
+ * the centre and draws the edge the record's `kind` asks for. `alt` is required
  * even when the correct value is `''` — decoration has to be chosen, not omitted.
  *
  * The image is edge-to-edge and the copy is flush beneath it at `--gap-block`: with no border and no
@@ -241,7 +235,7 @@ export function WithImage() {
           title={note.title}
           body={note.body}
           href="/case-studies"
-          media={{ kind: 'image', src: IMAGE, alt: '' }}
+          media={COVER}
         />
       ))}
     </Grid>
@@ -278,9 +272,31 @@ export function Horizontal() {
           body={c.body}
           href={c.href}
           ctaLabel={c.ctaLabel}
-          media={{ kind: 'image', src: IMAGE, alt: '' }}
+          media={COVER}
         />
       ))}
+    </Layout>
+  );
+}
+
+/**
+ * `BlockCardSet` — the card group a page actually renders. From four items the FIRST is featured:
+ * the horizontal arrangement spanning the row above its peers, with no field and no prop. One list,
+ * one grid. Below, a text-only set of four (head beside body) and a cover set of four.
+ */
+export function FeaturedSet() {
+  return (
+    <Layout rowGap="section">
+      <BlockCardSet
+        items={CAPABILITIES.map((c) => ({ id: c.title, eyebrow: 'Service', ...c }))}
+      />
+      <BlockCardSet
+        items={[...CASES, CASES[0]].map((c, i) => ({
+          id: `${c.title}-${i}`,
+          ...c,
+          media: COVER,
+        }))}
+      />
     </Layout>
   );
 }
@@ -324,12 +340,10 @@ export function StaticAndLinked() {
       <BlockCard
         title="Static card"
         body="Complete as an object. Inert, with no cta and no gap left where one would sit."
-        media={{ kind: 'icon', name: 'document-text' }}
       />
       <BlockCard
         title="Linked card"
         body="One native anchor over the whole card, one focus stop, and a cta that names where it goes."
-        media={{ kind: 'icon', name: 'copy' }}
         href="/case-studies"
         ctaLabel="Read the write-up"
       />
@@ -338,7 +352,7 @@ export function StaticAndLinked() {
 }
 
 /**
- * On tint: title and icon media hold at neutral-900 and the body at neutral-700, because both still
+ * On tint: the title holds at neutral-900 and the body at neutral-700, because both still
  * clear their floors on paper-deep. The eyebrow is what moves — neutral-600 would be 4.39:1 here, so
  * it steps to 700 and shares the body's ink, which it can afford because mono, semibold and the
  * eyebrow's tracking already tell the two apart. With no edge left, nothing in the card dissolves
@@ -353,15 +367,15 @@ export function OnTint() {
 }
 
 /**
- * On ink the direction inverts. Title and icon media lift to white, body to neutral-300 and the
- * eyebrow to neutral-400; the cta's ramp is Button's, which lifts to the light Brandeis steps here
- * because brandeis-500 is only 2.77:1 on this ground. Nothing becomes a light lattice across a dark
- * band, because there is no lattice.
+ * On ink the direction inverts. The title lifts to white, body to neutral-300 and the eyebrow to
+ * neutral-400; the cta's ramp is Button's, which lifts to the light Brandeis steps here because
+ * brandeis-500 is only 2.77:1 on this ground. Text-only, because a cover is never placed on ink or
+ * blue: a reserved band carries a media-less set.
  */
 export function OnInk() {
   return (
     <Section surface="ink">
-      <WithEyebrow />
+      <Linked />
     </Section>
   );
 }
@@ -374,7 +388,7 @@ export function OnInk() {
 export function OnBlue() {
   return (
     <Section surface="blue">
-      <WithImage />
+      <Default />
     </Section>
   );
 }

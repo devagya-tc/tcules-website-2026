@@ -2,8 +2,9 @@
    Tier 2. One borderless tile with an optional media fill, an optional eyebrow and an optional
    whole-card link carrying its own read-more cue.
 
-   Naming: --bcrd-{part}-{role}-{state}
-     parts: title | body | eyebrow | media | ring | image
+   Naming: --bcrd-{part}-{role}-{state}, with an orientation suffix where the horizontal row
+   differs from the tile (--bcrd-media-ratio-horizontal, --bcrd-title-text-horizontal)
+     parts: title | body | eyebrow | media | ring
      states: rest (no suffix) | hover | pressed
 
    There is no background or ground token: BlockCard never paints a fill and keeps the nearest
@@ -21,13 +22,20 @@
    rather than left declared: the card has no link-coloured part of its own any more, and a colour
    nothing paints is a colour something will paint again.
    No transition tokens. Nothing in the component changes colour or moves; the cta's underline is
-   Button's animation, on Button's duration and easing. */
+   Button's animation, on Button's duration and easing.
+   No media ink. --bcrd-media-ink coloured the icon fill, which was removed (spec § 17 Q14); an
+   image's edge colour is Media's (--media-capture-rule-ink). */
 
 /* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
   --bcrd-title-text: var(--text-h4);
   --bcrd-title-tracking: var(--text-h4-tracking);
   --bcrd-body-text: var(--text-body);
+  /* The horizontal row — the featured card — steps its title up one role. A row spanning the
+     column beside a 4:3 image is a heavier object than a 286px tile, and weight comes from type
+     scale, not from a box (ruling C2). h3 re-declares itself at 1023 and 767 like every title role. */
+  --bcrd-title-text-horizontal: var(--text-h3);
+  --bcrd-title-tracking-horizontal: var(--text-h3-tracking);
   --bcrd-eyebrow-text: var(--text-eyebrow);
   --bcrd-eyebrow-tracking: var(--text-eyebrow-tracking);
 
@@ -47,14 +55,13 @@
   --bcrd-ring-offset: var(--focus-ring-offset);
 }
 
-/* Paper: title, body and icon media hold their static inks whether or not the card is linked. The
+/* Paper: title, body and eyebrow hold their static inks whether or not the card is linked. The
    only part that moves is the cta, and Button's layer owns its ramp. */
 :root,
 [data-surface='paper'] {
   --bcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --bcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — the floor of AA, do not lighten */
-  --bcrd-media-ink: var(--color-neutral-900); /* 14.62:1 */
   --bcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --bcrd-ring-gap-color: var(--color-paper);
 }
@@ -65,18 +72,16 @@
   --bcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --bcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
-  --bcrd-media-ink: var(--color-neutral-900); /* 13.06:1 */
   --bcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --bcrd-ring-gap-color: var(--color-paper-deep);
 }
 
-/* Ink: the direction inverts. Title and icon media lift to white, body to neutral-300 and the
+/* Ink: the direction inverts. Title lifts to white, body to neutral-300 and the
    eyebrow to 400. Button lifts the cta on this surface through its own ink block. */
 [data-surface='ink'] {
   --bcrd-title-ink: var(--color-white); /* 17.26:1 */
   --bcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
-  --bcrd-media-ink: var(--color-white); /* 17.26:1 */
   --bcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --bcrd-ring-gap-color: var(--color-neutral-950);
 }
@@ -89,7 +94,6 @@
   --bcrd-eyebrow-ink: var(
     --color-brandeis-100
   ); /* 4.91:1 — the tightest cell here, do not lighten */
-  --bcrd-media-ink: var(--color-white); /* 6.23:1 */
   --bcrd-ring-color: var(--color-white); /* 6.23:1 against gap */
   --bcrd-ring-gap-color: var(--color-brandeis-500);
 }

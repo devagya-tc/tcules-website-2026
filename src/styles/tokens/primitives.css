@@ -512,9 +512,16 @@
    media and ListCard's thumbnail (ch05 §9a). Two local 3/2s would let one card be
    re-cut without the other and the shared asset would then be wrong in one of them.
    Both alias this rather than reading each other (token rule 6). A crop with one
-   reader — BlockCard's horizontal 4/3, the nav card's 16/7 — stays in its own layer. */
+   reader — BlockCard's horizontal 4/3, the nav card's 16/7 — stays in its own layer.
+
+   The portrait square is here for the other reason a ratio can be shared: it is a
+   BRAND fact, not one placement's crop. "Portraits are 1:1 everywhere" (ch05 §3,
+   §12 11) — a quote's portrait today, a profile or a team grid later — and a
+   portrait is shot square once and reused, so two placements that disagreed would
+   be cropping the same face twice. Proof is its first reader. */
 :root {
   --ratio-cover: 3 / 2;
+  --ratio-portrait: 1 / 1;
 }
 
 /* ── Radius ───────────────────────────────────────────────────────────────────
@@ -541,6 +548,17 @@
   --border-width-hairline-deck: var(--border-width-2);
   --border-width-hairline-social: var(--border-width-3);
   --border-width-hairline-print: 0.75pt;
+}
+
+/* The quote rule is not a hairline at another medium's weight: it is a MARK, the
+   one thing that makes a block of italic serif read as reported speech (ch10
+   B2.07, the site's own blockquote: "behind a 6px brandeis-500 rule"). Stated
+   once here, so every quote that follows the site blockquote pattern reads the
+   same weight. Proof reads it; Prose's rich-text blockquote still reads the deck
+   hairline, which is a known divergence (docs/specs/Proof.md §17). */
+:root {
+  --border-width-6: 6px;
+  --border-width-rule-quote: var(--border-width-6);
 }
 
 /* ── Focus ring ───────────────────────────────────────────────────────────────
