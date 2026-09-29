@@ -11,10 +11,11 @@
  * download, copy, check-circle, document-text, alt-arrow-down, alt-arrow-right, hamburger-menu,
  * square-arrow-right-up and danger-triangle are exactly as ch04 draws them.
  *
- * Three come from `@iconify-json/solar` (the `-bold` icon of the same name) instead:
- *   close-circle   ch04's cell carries the check-circle path by mistake
- *   info-circle    ch04's cell carries the check-circle path by mistake
- *   alt-arrow-up   not in ch04's starter set; the Accordion's open mark needs it next
+ * Four come from `@iconify-json/solar` (the `-bold` icon of the same name) instead:
+ *   close-circle     ch04's cell carries the check-circle path by mistake
+ *   info-circle      ch04's cell carries the check-circle path by mistake
+ *   alt-arrow-up     not in ch04's starter set; the Accordion's open mark needs it next
+ *   arrow-right-up   not in ch04's starter set; ListCard's off-site cue needs it (see below)
  * Where both sources carry a glyph they are the same drawing and differ only in coordinate rounding
  * (a few ten-thousandths of a unit), so mixing them is not mixing artwork.
  *
@@ -51,6 +52,12 @@
  *                and neither claim can be made in words without two labels on one control.
  *   STATUS       square-arrow-right-up (leaves the site) · info-circle · danger-triangle
  *
+ * Leaving the site has two drawings, and they are one meaning at two weights, not two meanings.
+ * `square-arrow-right-up` is ch04's standalone mark. `arrow-right-up` is the same arrow without the
+ * square, and it is the form a TRAILING cue takes wherever it sits beside `arrow-right`: a filled
+ * square among bare arrows reads as a different kind of object — a badge — when the only difference
+ * to state is direction (owner ruling, 29 Sep 2026, tracker 2.17). ListCard's external row uses it.
+ *
  * Solar's solid-disc glyphs (close-circle, check-circle, info-circle) are Solar's shapes, not
  * badges: ch04's "never a glyph in a coloured disc" bans putting a glyph INTO a disc, and these
  * are single glyphs as Solar draws them (owner ruling, 29 Sep 2026, tracker 2.17).
@@ -69,6 +76,11 @@ export const glyphs = {
   /* Movement. The trailing glyph on an action that changes where you are, and its mirror. */
   'arrow-right': [
     'M4 11.25C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H13.25V18C13.25 18.3034 13.4327 18.5768 13.713 18.6929C13.9932 18.809 14.3158 18.7449 14.5303 18.5304L20.5303 12.5304C20.671 12.3897 20.75 12.1989 20.75 12C20.75 11.8011 20.671 11.6103 20.5303 11.4697L14.5303 5.46969C14.3158 5.25519 13.9932 5.19103 13.713 5.30711C13.4327 5.4232 13.25 5.69668 13.25 6.00002V11.25H4Z',
+  ],
+  /* Leaves the site, as a trailing cue beside arrow-right: the same Solar Bold arrow family, turned
+     up and right. See the header for why it is not square-arrow-right-up in that position. */
+  'arrow-right-up': [
+    'M5.46967 17.4697C5.17678 17.7626 5.17678 18.2374 5.46967 18.5303C5.76256 18.8232 6.23744 18.8232 6.53033 18.5303L13.5 11.5607L17.4697 15.5303C17.6842 15.7448 18.0068 15.809 18.287 15.6929C18.5673 15.5768 18.75 15.3033 18.75 15V6C18.75 5.58579 18.4142 5.25 18 5.25L9 5.25C8.69665 5.25 8.42318 5.43273 8.30709 5.71299C8.19101 5.99324 8.25517 6.31583 8.46967 6.53033L12.4393 10.5L5.46967 17.4697Z',
   ],
   'arrow-left': [
     'M20 11.25C20.4142 11.25 20.75 11.5858 20.75 12C20.75 12.4142 20.4142 12.75 20 12.75H10.75L10.75 18C10.75 18.3034 10.5673 18.5768 10.287 18.6929C10.0068 18.809 9.68417 18.7449 9.46967 18.5304L3.46967 12.5304C3.32902 12.3897 3.25 12.1989 3.25 12C3.25 11.8011 3.32902 11.6103 3.46967 11.4697L9.46967 5.46969C9.68417 5.25519 10.0068 5.19103 10.287 5.30711C10.5673 5.4232 10.75 5.69668 10.75 6.00002L10.75 11.25H20Z',

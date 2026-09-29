@@ -27,7 +27,11 @@ const MEANINGS = [
   { name: 'alt-arrow-right', meaning: 'Leads to a page' },
   {
     name: 'square-arrow-right-up',
-    meaning: 'Leaves the site — trailing, on a link or row going off tcules.com',
+    meaning: 'Leaves the site — the standalone mark',
+  },
+  {
+    name: 'arrow-right-up',
+    meaning: 'Leaves the site — trailing, beside arrow-right (ListCard’s external row, 2.17)',
   },
   { name: 'close-circle', meaning: 'Close, dismiss' },
   { name: 'check-circle', meaning: 'Done, included' },

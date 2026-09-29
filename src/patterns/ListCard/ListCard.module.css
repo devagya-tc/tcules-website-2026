@@ -16,8 +16,12 @@
      the visually-hidden hint's clip technique, not outer spacing.
    No display:grid or display:flex. Layout and Cluster own both axes; flex values below size their
    children inside those primitives and do not arrange siblings by themselves.
-   No responsive type or distance override. Layout collapses the split at its md boundary, and the
-   type composites step in the shared type layer.
+   No responsive type or distance override, and no media query at all. The split collapses when
+   the ROW runs out of room for its two minimum tracks — a wrapping Cluster, not a viewport
+   boundary — and the type composites step in the shared type layer.
+   No container query either. It was the fallback for reading the row's own width, and it is not
+   needed: flex-wrap already answers "do both tracks fit on this line", and it answers it inside a
+   primitive rather than in a local arrangement.
    No rule wipe. Hover used to animate a hairline across the row's block-end and double it on press.
    The row's own rule stays — it was always decoration, never the interactive element — but the
    trailing cue is now the only part that moves, and it moves in colour alone.
@@ -101,7 +105,8 @@
   min-inline-size: min(100%, var(--lcrd-content-min-xs));
 }
 
-/* The title/body Layout receives all remaining core width while the cue keeps its own box. */
+/* The title/body container — the split's Cluster or the stacked Layout — receives all remaining
+   core width while the cue keeps its own box. */
 .content {
   flex: 1 1 auto;
   min-inline-size: 0;
@@ -150,9 +155,16 @@
   overflow: hidden;
 }
 
+/* The title breaks only BETWEEN words. `anywhere` stood here and was the mid-word bug ("Produ/ct",
+   "Interactio/n"): it lets a word break at any character and, worse, it drops the title's
+   min-content to one glyph, so nothing ever pushed back when the old viewport-driven split squeezed
+   the title into a 150px track. `break-word` keeps the words whole and still breaks one as a last
+   resort when a single word is wider than the whole row — an illegal sub-xs parent, and the only
+   place a mid-word break can now happen. The body keeps `anywhere`: its stress case is an unbroken
+   URL, and a URL has no words to keep. */
 .title {
   max-inline-size: var(--measure-title);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   color: var(--lcrd-title-ink);
   font: var(--lcrd-title-text);
   letter-spacing: var(--lcrd-title-tracking);
@@ -165,6 +177,34 @@
   color: var(--lcrd-body-ink);
   font: var(--lcrd-body-text);
   text-wrap: var(--text-running-wrap);
+}
+
+/* ── The split: sizing inside the Cluster, not a second layout ───────────────────
+   The Cluster wraps; these give its two children a minimum track (the flex basis) and a maximum
+   (their measures), and nothing else.
+
+   The BASES decide when the split happens. Both children stay on one line only while
+   --lcrd-title-min + the block seam + --lcrd-body-min fits the row's own content width, so a row
+   in a 392px grid track stacks at any viewport and a 1240 row splits. The title's basis is also
+   what keeps its words whole: no title word at h4 comes near 256px, so a title in a split never
+   needs to break one.
+
+   The GROWTH keeps the 2:3 weighting the split always had, until the MAXIMA stop it: the title at
+   --measure-title, the body at --measure-body (.title / .body above). That is the width cap — the
+   split can never be wider than the title track plus the seam plus the body's measure — so on a wide
+   row the leftover collects at the core's inline end, before the cue, instead of opening a 500px
+   channel between a title and the sentence it heads.
+
+   min-inline-size:0 on both, so a child alone on its line after the wrap can shrink to the row
+   rather than holding its basis and overflowing a narrow parent. */
+.splitTitle {
+  flex: 2 1 var(--lcrd-title-min);
+  min-inline-size: 0;
+}
+
+.splitBody {
+  flex: 3 1 var(--lcrd-body-min);
+  min-inline-size: 0;
 }
 
 /* The row's only link-coloured part. It holds this ink through hover and steps once on press, which

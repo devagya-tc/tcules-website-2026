@@ -79,6 +79,7 @@ export {
   mediaSrcSet,
   type MediaFit,
   type MediaImage,
+  type MediaInset,
   type MediaKind,
   type MediaPanel,
   type MediaProps,
