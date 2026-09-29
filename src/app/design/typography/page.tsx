@@ -159,7 +159,7 @@ const TEXT_ROLES = [
     lh: 1.55,
     family: 'Public Sans',
     steps: 'holds',
-    sample: 'The long-form default. This is what a rich-text field is set in.',
+    sample: 'The long-form step up, for a caller that sets it. A rich-text field is body, at 16.',
   },
   {
     className: t.body,
@@ -168,7 +168,7 @@ const TEXT_ROLES = [
     lh: 1.6,
     family: 'Public Sans',
     steps: 'holds',
-    sample: 'The interface default, and what the document body inherits.',
+    sample: 'The interface default, what the document inherits, and what Prose sets a body field in.',
   },
   {
     className: t.bodySm,
@@ -317,6 +317,29 @@ function SurfaceFlow() {
           Muted text — <small>a caption, a note, a source</small>
         </li>
       </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>What it holds</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Ground</th>
+            <td>
+              The body of the frame, one rung off the section: <code>--prose-table-body-ground</code>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Rule</th>
+            <td>
+              One hairline for the border, the head rule, every row and every column — see{' '}
+              <a href="/design/data-table">DataTable</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </Prose>
   );
 }
@@ -720,7 +743,7 @@ export default function TypographySpecimenPage() {
 
           <Specimen
             title="The whole flow"
-            note="Rhythm to check by eye: 16 between paragraphs, 24 around any set piece and after a heading, 32 before a subhead, 48 before an h2 and around a rule. More air above a heading than below it, so it belongs to what follows."
+            note="Rhythm to check by eye: 16 between paragraphs, 24 around any set piece and after an h1 or h2, 32 before a subhead and 16 after it, 48 before an h2 and around a rule. A subhead sits 2:1 closer to its own body than to the block above, so it belongs to what follows."
           >
             <Prose as="article">
               <h2>What the flow has to survive</h2>
@@ -734,9 +757,9 @@ export default function TypographySpecimenPage() {
 
               <h3>Headings, and the sixth step</h3>
               <p>
-                The ladder has five title steps. A sixth serif step below 22px would be smaller
-                than the body it heads, so <code>h6</code> takes the mono chrome role instead —
-                a tracked, uppercase run-in, which is what a sixth-level heading actually is.
+                Every level is the display serif. <code>h6</code> is the 18px medium step — the
+                same voice a bare <code>h6</code> and a DataTable key column take, so there is one
+                sixth-level heading on the site rather than a label here and a title elsewhere.
               </p>
               <h4>A fourth-level heading</h4>
               <p>
@@ -809,9 +832,9 @@ export default function TypographySpecimenPage() {
 
               <h3>A table</h3>
               <p>
-                Horizontal rules only. Vertical rules turn a table into a grid of boxes and make
-                every column look equally important, which is what a data table is trying not to
-                say.
+                Boxed, the same structure DataTable draws: an outer border, a filled head row, a
+                body ground, and a hairline between every row and every column, so a value can be
+                followed down its column as easily as across its row.
               </p>
               <table>
                 <caption>The gap scale, and what each step separates</caption>
@@ -851,6 +874,41 @@ export default function TypographySpecimenPage() {
                     <td>48</td>
                     <td>Block to block inside a section</td>
                   </tr>
+                </tbody>
+              </table>
+
+              <p>
+                A wide one scrolls inside its own frame rather than dragging the page sideways —
+                check it at 390, where these five columns cannot fit the track.
+              </p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Surface</th>
+                    <th>Body ground</th>
+                    <th>Head fill</th>
+                    <th>Head ink</th>
+                    <th>Rule</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(
+                    [
+                      ['Paper', 'white', 'neutral-50', 'neutral-700', 'neutral-200'],
+                      ['Tint', 'paper', 'neutral-50', 'neutral-700', 'neutral-200'],
+                      ['Ink', 'neutral-900', 'neutral-800', 'neutral-300', 'neutral-700'],
+                      ['Blue', 'brandeis-700', 'brandeis-600', 'brandeis-100', 'brandeis-400'],
+                    ] as const
+                  ).map(([surface, ...values]) => (
+                    <tr key={surface}>
+                      <th scope="row">{surface}</th>
+                      {values.map((v, i) => (
+                        <td key={i}>
+                          <code>--color-{v}</code>
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
 

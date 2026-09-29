@@ -62,3 +62,33 @@
 .flush {
   padding-block: 0;
 }
+
+/* ── One seam between two bands of the same surface (29 Sep 2026, tracker 2.17) ──────────────
+   Two adjacent bands on the SAME ground read as one field, so stacking both bands' air doubles
+   the seam: 96 + 96 = 192 of identical paper. A band that directly follows a band of its own
+   surface therefore drops its TOP padding, and the seam is the preceding band's bottom padding —
+   one --sec-padding-y. Where the surface changes, the tone marks the boundary and both bands keep
+   their full air, so nothing here touches a paper → tint seam.
+
+   Density: the PRECEDING band governs. Its bottom padding is the seam whatever the following
+   band's density — tight → standard is 64, open → standard 128, standard → tight 96. The
+   following band's density still sets its own bottom, so the rule never invents a value: every
+   seam is one of the four steps a band already has.
+
+   Two exclusions, both load-bearing:
+     :not(.flush) on the preceding band — a flush band has no bottom padding to be the seam. It
+       is flush because it supplies its own air (Breadcrumbs hands the air below the trail to the
+       hero band, by design), so the band after it keeps its top padding.
+     :not(.section *) on the following band — only sibling bands at page level merge. A Section
+       nested inside another Section (a panel, a card rendered `as="li"` in a grid) is a box with
+       its own ground on all four sides, and a gap between siblings belongs to Layout, not here.
+
+   One rule per surface rather than an attribute-matching trick: CSS cannot compare two
+   attributes, and four lines are honest about the four grounds. No token, no media query — the
+   seam is a gap-scale step at every width (gap scale, rule 3). */
+.section[data-surface='paper']:not(.flush) + .section[data-surface='paper']:not(.section *),
+.section[data-surface='tint']:not(.flush) + .section[data-surface='tint']:not(.section *),
+.section[data-surface='ink']:not(.flush) + .section[data-surface='ink']:not(.section *),
+.section[data-surface='blue']:not(.flush) + .section[data-surface='blue']:not(.section *) {
+  padding-block-start: 0;
+}

@@ -19,7 +19,8 @@
      scales with its track and the browser picks the file from srcset and sizes.
    No :hover or :focus. An image is not a control; a link around one is the pattern's.
 
-   Rule order is not load-bearing: no two rules here set the same property on the same element. */
+   Rule order is load-bearing in one place: .insetText must follow .panel, since both set padding on
+   the panel at equal specificity. Nothing else here sets one property twice on one element. */
 
 /* Every kind: the full inline size of whatever box contains it, and square corners (ch05 §6 —
    radius 0 on every image). The width is 100% of the parent's track at every width, border
@@ -55,11 +56,19 @@
 }
 
 /* The contrast panel (ch05 §2a, B5): a flat field filling the slot, the cut-out inset by the
-   container gutter. No border, no radius beyond the image's own zero, no shadow of its own. */
+   container gutter by default (see .insetText for the small-box step). No border, no radius beyond the image's own zero, no shadow of its own. */
 .panel {
   display: block;
   padding: var(--media-panel-inset);
   border-radius: var(--media-radius);
+}
+
+/* inset="text" — the small-box step. Read from the gap scale directly rather than through a second
+   --media-* name: it is a distance, the scale's --gap-text already names it ("cell padding"), and a
+   component token that only renamed it would be the --sec-gap mistake. A later rule than .panel at
+   equal specificity, so source order is what makes it win — do not move it above .panel. */
+.insetText {
+  padding: var(--gap-text);
 }
 
 /* In `fill`, the panel is what fills the parent's box, and the image covers the panel's content

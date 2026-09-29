@@ -6,21 +6,22 @@ import { Button, Cluster, Icon, Layout, Section } from 'tcules-website-2026';
 const NAMES = [
   'arrow-right',
   'arrow-left',
+  'arrow-right-up',
   'download',
   'copy',
-  'close-circle',
+  'check-circle',
   'document-text',
-  'check',
-  'chevron-down',
-  'chevron-right',
-  'menu',
-  'close',
+  'alt-arrow-down',
+  'alt-arrow-up',
+  'alt-arrow-right',
+  'hamburger-menu',
+  'close-circle',
   'square-arrow-right-up',
   'info-circle',
   'danger-triangle',
 ] as const;
 
-/** All fourteen glyphs at the default 16. Every one is solid and filled with currentColor. */
+/** All fifteen glyphs at the default 16. Every one is solid and filled with currentColor. */
 export function TheSet() {
   return (
     <Cluster colGap="text" rowGap="text">
@@ -101,11 +102,11 @@ export function Labelled() {
   return (
     <Cluster colGap="block" rowGap="text" align="center">
       <Cluster colGap="tight">
-        <Icon name="check" label="Passing" size="lg" />
+        <Icon name="check-circle" label="Passing" size="lg" />
         <span>labelled — announced</span>
       </Cluster>
       <Cluster colGap="tight">
-        <Icon name="check" size="lg" />
+        <Icon name="check-circle" size="lg" />
         <span>decorative — hidden</span>
       </Cluster>
     </Cluster>

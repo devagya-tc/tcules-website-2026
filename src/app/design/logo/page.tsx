@@ -5,10 +5,11 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 /**
  * Logo specimen — three heights, two bar treatments, four grounds.
  *
- * The claim this page has to actually show: the letterforms take `currentColor` and the bar takes
- * --logo-bar, so one piece of markup is correct on every surface. The blue band is the one that
- * matters — blue cannot accent itself, so the bar goes to Peridot there, and `mono` is the
- * alternative for when the mark should read as a single silhouette instead.
+ * The claim this page has to actually show: the mark reads --logo-ink per surface, so one piece of
+ * markup is correct on every surface. `mono` is the default and the chrome treatment — ch02 v1.0
+ * makes the whole wordmark neutral-950 in UI chrome and white throughout on ink and on blue.
+ * `accent` (the bar in brandeis-500) is shown only on paper and tint, because marketing scale on a
+ * light ground is the only place the brand allows it; peridot is never in the wordmark.
  */
 
 const SIZES = [
@@ -18,6 +19,9 @@ const SIZES = [
 ] as const;
 
 const SURFACES = ['paper', 'tint', 'ink', 'blue'] as const;
+
+/** The grounds the accent bar is allowed on — marketing scale, light grounds only (ch02). */
+const ACCENT_SURFACES: ReadonlySet<(typeof SURFACES)[number]> = new Set(['paper', 'tint']);
 
 export default function LogoSpecimenPage() {
   return (
@@ -30,14 +34,15 @@ export default function LogoSpecimenPage() {
               The Tcules wordmark, and specifically <strong>not</strong> an Icon. Both are
               filled, so the difference is not the paint: an icon is drawn on the
               system&rsquo;s own 24-unit box and takes <code>currentColor</code> entirely, while
-              this is a logotype at its own aspect ratio with one element — the bar above the
-              &ldquo;u&rdquo; — painted from <code>--logo-bar</code> rather than inherited.
-              Filing it as a glyph would have cost it both.
+              this is a logotype at its own aspect ratio, painted from its own tokens —
+              <code>--logo-ink</code> for the whole mark, <code>--logo-bar</code> for the bar
+              above the &ldquo;u&rdquo; in the accent variant — rather than inherited. Filing it
+              as a glyph would have cost it both.
             </p>
             <p>
-              Inline SVG rather than an <code>&lt;img&gt;</code> for one reason: the letterforms
-              take <code>currentColor</code> and the bar reads <code>--logo-bar</code>, so the
-              mark is correct on all four surfaces without four files. An SVG file cannot read a
+              Inline SVG rather than an <code>&lt;img&gt;</code> for one reason: the mark reads
+              tokens remapped per surface — neutral-950 on paper and tint, white throughout on
+              ink and blue (ch02) — so it is correct on all four surfaces without four files. An SVG file cannot read a
               custom property from the page that embeds it.
             </p>
           </Layout>
@@ -79,27 +84,32 @@ export default function LogoSpecimenPage() {
         </Layout>
       </Section>
 
-      {/* The whole point of the layer, band by band. Ink lifts the bar to brandeis-300 because 500
-          reaches only 2.77:1 there; blue sends it to Peridot, because blue cannot accent itself. */}
+      {/* The whole point of the layer, band by band. Mono first on every ground, because it is the
+          default and what chrome renders. Accent appears only where the brand allows it — paper
+          and tint, at marketing scale. On ink and blue --logo-bar is the wordmark's own ink, so an
+          accent there would render identically; it is not shown, so nobody reads it as an option. */}
       {SURFACES.map((surface) => (
         <Section key={surface} surface={surface} density="tight">
           <Layout rowGap="block">
             <Layout rowGap="tight">
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>
               <p className={s.specNote}>
-                Same markup, no colour prop. Letterforms take the band&rsquo;s ink; the bar
-                takes --logo-bar, remapped for this ground.
+                {ACCENT_SURFACES.has(surface)
+                  ? 'Same markup, no colour prop. Mono is neutral-950 throughout; accent paints the bar brandeis-500.'
+                  : 'Same markup, no colour prop. White throughout — the only treatment on this ground.'}
               </p>
             </Layout>
             <Cluster colGap="block" rowGap="block" align="center">
               <Cluster colGap="tight" rowGap="tight">
                 <Logo size="lg" title="" />
-                <span className={s.specNote}>accent</span>
+                <span className={s.specNote}>mono · default · UI chrome</span>
               </Cluster>
-              <Cluster colGap="tight" rowGap="tight">
-                <Logo size="lg" variant="mono" title="" />
-                <span className={s.specNote}>mono</span>
-              </Cluster>
+              {ACCENT_SURFACES.has(surface) ? (
+                <Cluster colGap="tight" rowGap="tight">
+                  <Logo size="lg" variant="accent" title="" />
+                  <span className={s.specNote}>accent · marketing scale only</span>
+                </Cluster>
+              ) : null}
             </Cluster>
           </Layout>
         </Section>

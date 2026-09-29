@@ -330,7 +330,12 @@
   --text-h6: var(--font-weight-medium) var(--font-size-h6)/var(--line-height-h6)
     var(--font-family-display);
   --text-h6-tracking: var(--letter-spacing-none);
-  --text-quote: var(--font-weight-regular) var(--font-size-quote)/var(--line-height-quote)
+  /* Italic is part of the ROLE (ch03's table: Newsreader 400 italic), so it lives in the composite
+     rather than in every consumer — a `font: var(--text-quote)` that then had to remember
+     `font-style: italic` is the restated-value mistake the composites exist to prevent. The
+     italic 400 cut is loaded in app/layout.tsx (`1,6..72,400`). The -m step below restates it,
+     because `font:` resets font-style and a breakpoint composite without it would go roman. */
+  --text-quote: italic var(--font-weight-regular) var(--font-size-quote)/var(--line-height-quote)
     var(--font-family-display);
   --text-lead: var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead)
     var(--font-family-sans);
@@ -401,7 +406,7 @@
       var(--font-family-display);
     --text-h5: var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-h5-m)
       var(--font-family-display);
-    --text-quote: var(--font-weight-regular) var(--font-size-quote-m)/var(--line-height-quote-m)
+    --text-quote: italic var(--font-weight-regular) var(--font-size-quote-m)/var(--line-height-quote-m)
       var(--font-family-display);
     --text-lead: var(--font-weight-regular) var(--font-size-lead-m)/var(--line-height-lead-m)
       var(--font-family-sans);

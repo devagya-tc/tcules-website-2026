@@ -98,8 +98,10 @@ Two more rules that decide whether a composition is right:
 A button that navigates is an anchor: `as="a" href="…"`. It never sets its own outer spacing —
 put it in a `Cluster`.
 
-`Icon` — `name` is a 14-value union (`arrow-right`, `check`, `chevron-down`, `square-arrow-right-up`,
-`info-circle`, …; the full list is in `Icon.d.ts`). Decorative and `aria-hidden` by
+`Icon` — `name` is a 14-value union of Solar Bold glyphs under their ch04 names (`arrow-right`,
+`check-circle`, `alt-arrow-down`, `square-arrow-right-up`, `info-circle`, …; the full list is in
+`Icon.d.ts`). A glyph with a counter (a hole: `close-circle`, `check-circle`, `info-circle`, …) is
+never set below 16, so not at `size="sm"` and not in an `sm` Button. Decorative and `aria-hidden` by
 default; pass `label` only when the glyph carries meaning alone. Inside a Button the button
 decides the size.
 
@@ -163,9 +165,9 @@ what the page is asking the reader to do:
 
 | `arrangement` | The page asks for | Takes |
 |---|---|---|
-| `split` (default) | an **enquiry** | `form` + `scheduleHref`, optionally `proof` |
+| `split` (default) | an **enquiry** | `form`, optionally `proof` |
 | `open` | a **click** | one or two `actions`, optionally `proof` |
-| `offer` | an **interruption** — the free audit, mid-scroll | either `form` + `scheduleHref` **or** `actions`; never `proof` |
+| `offer` | an **interruption** — the free audit, mid-scroll | either `form` **or** `actions`; never `proof` |
 
 Two things follow, and both are load-bearing:
 
@@ -179,7 +181,7 @@ Two things follow, and both are load-bearing:
    This passage used to say no field or form component existed; both do now, so do not hand-roll
    one. `proof` is still genuinely caller-supplied until a `Proof` pattern exists.
 
-`Input` — **the control box, and nothing else.** `emphasis="standard | quiet"`, `invalid`, and
+`Input` — **the control box, and nothing else.** One treatment (no `emphasis` prop), `invalid`, and
 `as="textarea"` for the multiline variant; every applicable native attribute passes through. It
 renders no label, no validation message and no spacing to its siblings — those belong to whatever
 composes it.
@@ -187,16 +189,15 @@ composes it.
 Two things to get right:
 
 1. **Always give it a label.** A wrapping `<label>` or an external `<label for>` is what supplies
-   the accessible name, and for the 40px `quiet` emphasis it also supplies the touch target — the
-   label forwards a tap natively and is comfortably over 44px, which the control alone is not. No
-   prop can enforce this: both wiring routes are invisible to the type.
-2. **`standard` is the one to reach for.** `quiet` exists to preserve `SiteFooter`'s lower-chrome
-   row and stays 40px at every width; `standard` steps to 44 on a phone. Choosing `quiet` for a
-   form is choosing the footer's compromise for no reason.
+   the accessible name. No prop can enforce this: both wiring routes are invisible to the type.
+2. **There is one treatment.** A `quiet` emphasis existed for `SiteFooter`'s row and rendered
+   nearly identically to the standard one on paper and ink, so it was merged in and deleted
+   (29 Sep 2026). Do not pass `emphasis`. The field is 40px, stepping to 44 on a phone.
 
 `EnquiryForm` — **the enquiry, as a form.** `action` (required), `variant="enquiry | audit"`,
-`urlLabel` (one of three fixed phrasings, or the audit one), a required `context` object, and an
-optional `onSubmitted`. It renders the fields, the labels, the validation copy and the submit.
+`urlLabel` (one of three fixed phrasings, or the audit one), a required `context` object, a
+required `scheduleHref`, and an optional `onSubmitted`. It renders the fields, the labels, the
+validation copy, and one action row: the submit with "See available times" beside it.
 
 Three things to know:
 

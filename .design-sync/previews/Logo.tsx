@@ -19,28 +19,29 @@ export function Sizes() {
 }
 
 /**
- * The two bar treatments. `accent` paints the bar above the "u" from --logo-bar; `mono` takes
- * currentColor so the mark reads as a single silhouette.
+ * The two bar treatments. `mono` is the default and the UI-chrome treatment — the whole mark in one
+ * colour (ch02 v1.0: neutral-950 in chrome, white throughout on ink and blue). `accent` paints the
+ * bar brandeis-500 and is for marketing scale on paper or tint only.
  */
 export function Variants() {
   return (
     <Cluster colGap="block" rowGap="block" align="center">
       <Cluster colGap="tight" align="center">
-        <Logo size="lg" variant="accent" title="Tcules" />
-        <span>accent</span>
+        <Logo size="lg" variant="mono" title="Tcules" />
+        <span>mono · default · UI chrome</span>
       </Cluster>
       <Cluster colGap="tight" align="center">
-        <Logo size="lg" variant="mono" title="Tcules" />
-        <span>mono</span>
+        <Logo size="lg" variant="accent" title="Tcules" />
+        <span>accent · marketing scale only</span>
       </Cluster>
     </Cluster>
   );
 }
 
 /**
- * All four grounds. The letterforms take currentColor and only the bar reads a token, which is
- * why one inline mark is correct everywhere instead of four files. On the blue pivot the accent
- * bar would vanish into the ground, which is what `mono` is for.
+ * All four grounds, in the default. The mark reads --logo-ink per surface, so one inline mark is
+ * correct everywhere: neutral-950 on paper and tint, white throughout on ink and blue. Peridot is
+ * never in the wordmark.
  */
 export function OnSurfaces() {
   return (
@@ -48,7 +49,7 @@ export function OnSurfaces() {
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
         <Section key={surface} surface={surface} density="tight">
           <Layout rowGap="block">
-            <Logo size="lg" variant={surface === 'blue' ? 'mono' : 'accent'} title="Tcules" />
+            <Logo size="lg" title="Tcules" />
             <span>{surface}</span>
           </Layout>
         </Section>

@@ -266,6 +266,7 @@ const CTA_FORM_PROPS = {
     referrer: '',
     campaign: '',
   },
+  scheduleHref: ROUTES.contact,
 } as const;
 
 function ResolvedTokens({ tokens }: { tokens: TokenRows }) {
@@ -535,7 +536,6 @@ export default function ProofSpecimenPage() {
             { label: 'A delivery window' },
           ]}
           form={<EnquiryForm {...CTA_FORM_PROPS} />}
-          scheduleHref={ROUTES.contact}
           proof={<ProofFixture shape={shape} />}
           surface="tint"
         />

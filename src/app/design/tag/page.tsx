@@ -14,8 +14,8 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
  * them five. Point at a chip, hold it down, and tab to it, on each of the four surfaces below.
  *
  * `selected` IS a real prop and is printed on every surface, because the held chip is the one
- * state this component's argument turns on: an outline and a label both drawn in the surface's own
- * ink, plus a `close` glyph, and no fill anywhere but blue.
+ * state this component's argument turns on: a REVERSED FILL on every surface — blue's model carried
+ * to all four (tracker 2.17) — with the label and a `close-circle` glyph turned to the opposite end.
  */
 
 /* Eight labels spanning the measured range: 3 characters to 32, including both 31-character
@@ -34,19 +34,19 @@ const HERO_TAGS = [
 const SURFACES = [
   {
     surface: 'paper',
-    note: 'The only ground either row stands on today, and the trap is exactly that. The mark sits on the system’s own warm tint at 1.12:1 — a change of paper rather than a drawn box. The chip is the inverse and paints nothing: one neutral-500 hairline at 3.16:1, chosen because 400 measures 2.13:1 here and falls below the 3:1 an outline needs to read as an outline. Hover a chip: blue arrives, and it arrives nowhere else.',
+    note: 'The only ground either row stands on today, and the trap is exactly that. The mark sits on the system’s own warm tint at 1.12:1 — a change of paper rather than a drawn box. The chip is the inverse and paints nothing at rest: one neutral-600 hairline at 4.92:1, a box rather than a hint (400 measures 2.13:1 and fails the 3:1 outline floor). Hover a chip: blue arrives, and it arrives nowhere else. Held reverses: a neutral-950 fill under a paper label at 17.10:1 — the opposite end of the ramp from the mark’s 1.12:1 tint.',
   },
   {
     surface: 'tint',
-    note: 'Two values move and each has a measurement behind it. The mark’s ground goes to neutral-200, because paper-deep on paper-deep is 1.00:1 — this surface IS the mark’s paper colour. The chip’s hairline steps to neutral-600, because 500 measures 2.82:1 here. Nothing else moves; the rest is restated rather than inherited.',
+    note: 'Two values move and each has a measurement behind it. The mark’s ground goes to neutral-200, because paper-deep on paper-deep is 1.00:1 — this surface IS the mark’s paper colour. The chip’s hairline steps to neutral-700 at 7.27:1, one firmer than paper’s, because this ground is one step down. Held is paper’s reversal unchanged — neutral-950 under a paper label. The rest is restated rather than inherited.',
   },
   {
     surface: 'ink',
-    note: 'Every step runs the other way up. The chip’s rest label LIFTS to neutral-200 at 12.83:1 over a neutral-600 hairline — the paper relationship inverted. Hover takes the pale end of the blue ramp, not the deep end: brandeis-950 measures 1.07:1 on this ground. Held draws label and line in paper at 17.11:1, because on a dark section the loud state is the light one.',
+    note: 'Every step runs the other way up. The chip’s rest label LIFTS to neutral-200 at 12.83:1 over a neutral-500 hairline at 5.41:1 — the paper relationship inverted, firmer meaning lighter. Hover takes the pale end of the blue ramp, not the deep end: brandeis-950 measures 1.07:1 on this ground. Held fills with paper under a neutral-950 label at 17.10:1, because on a dark section the loud state is the light one.',
   },
   {
     surface: 'blue',
-    note: 'The one column where an outline cannot carry the whole ladder. Rest is brandeis-100 at 4.91:1 — the tightest text cell in the component. Hover takes it to white, and there the ramp runs out: nothing is lighter than white and no dark ink clears the floor on #0048ff. So held is the ONLY cell in this component that fills — a white ground under a brandeis-700 label at 10.17:1, forced rather than chosen. Tab to a chip here: the ring is white and its gap is the blue ground.',
+    note: 'The one column where an outline cannot carry the whole ladder. Rest is brandeis-100 at 4.91:1, line and label alike — the tightest text cell in the component. Hover takes it to white, and there the ramp runs out: nothing is lighter than white and no dark ink clears the floor on #0048ff. So held fills — a white ground under a brandeis-700 label at 10.16:1, forced here first and now the model the other three surfaces follow. Tab to a chip here: the ring is white and its gap is the blue ground.',
   },
 ] as const;
 
@@ -67,7 +67,7 @@ const FILTER_GROUPS = [
   },
 ] as const;
 
-const CLEAR = <Icon name="close" label="Clear filter" />;
+const CLEAR = <Icon name="close-circle" label="Clear filter" />;
 
 /** A row of marks. The row is always a Cluster — the component owns no distance outside its box. */
 function Marks({ items }: { items: readonly string[] }) {
@@ -95,7 +95,7 @@ function Matrix() {
         <Marks items={['Lab', 'Design systems', 'Research']} />
       </Layout>
       <Layout rowGap="tight">
-        <p className={s.specTitle}>Filter chips — an edge with no ground · rest, then held</p>
+        <p className={s.specTitle}>Filter chips — an edge with no ground at rest · rest, then held (filled)</p>
         <p className={s.specNote}>
           Hover, pressed and tab focus have no props and are not printed. Point at the first
           chip, hold it down, and tab to it — that is the rest of the specification on this
@@ -381,7 +381,7 @@ export default function TagSpecimenPage() {
 
           <Specimen
             title="6 · Missing optional slot — a chip with no glyph"
-            note="The empty case is the ordinary one: every chip but the held one passes no glyph. No reserved space, no placeholder box, no layout shift for the chips that never get one. The held chip beside it is 19px wider — 14 glyph, 4 gap, and the 1px label trim restored, because the trailing element is no longer a tracked capital."
+            note="The empty case is the ordinary one: every chip but the held one passes no glyph. No reserved space, no placeholder box, no layout shift for the chips that never get one. The held chip beside it is 21px wider — 16 glyph (the counter floor, Icon.md), 4 gap, and the 1px label trim restored, because the trailing element is no longer a tracked capital."
           >
             <Cluster colGap="text" rowGap="text">
               <Tag variant="filter" href={ROUTES.insights}>
@@ -486,7 +486,7 @@ export default function TagSpecimenPage() {
 
           <Specimen
             title="Measured boxes — the numbers the spec quotes, so they can be checked rather than believed"
-            note="These are the spec’s § 7(b) figures, and every box that produces them is on this page. Measure them in devtools; if a box disagrees with a number here, the spec is wrong and not the code. mark 3 chars 38.24 × 24.00 · mark 32 chars 229.88 × 24.00 · filter 8 chars 80.28 × 24.00 · filter 8 chars held 99.28 × 24.00 · filter 1 char 24.00 × 24.00 · filter 31 chars 267.96 × 24.00. Every height is 24, at every width, which is what the nowrap rule buys."
+            note="These are the spec’s § 7(b) figures, and every box that produces them is on this page. Measure them in devtools; if a box disagrees with a number here, the spec is wrong and not the code. mark 3 chars 38.24 × 24.00 · mark 32 chars 229.88 × 24.00 · filter 8 chars 80.28 × 24.00 · filter 8 chars held 101.28 × 24.00 · filter 1 char 24.00 × 24.00 · filter 31 chars 267.96 × 24.00. Every height is 24, at every width, which is what the nowrap rule buys."
           >
             <Cluster colGap="text" rowGap="text">
               <Tag>Lab</Tag>

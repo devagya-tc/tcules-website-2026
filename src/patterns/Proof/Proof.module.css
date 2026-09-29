@@ -23,8 +23,9 @@
 /* The site blockquote (ch10 B2.07): the rule runs beside the QUOTE only, not the attribution, and
    the inset is padding so the rule sits at the quote's own edge. Italic in both arrangements —
    "fails when it is set roman at heading size": the italic and the rule are what make it read as
-   reported speech, and the roman name under it is the second voice. `font-style` follows the
-   `font:` shorthand, which would otherwise reset it. */
+   reported speech, and the roman name under it is the second voice. Compact reads --text-quote,
+   whose composite carries the italic itself. Display borrows --text-h3, a roman role, so it states
+   `font-style` after the `font:` shorthand, which would otherwise reset it. */
 .quoteText {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
@@ -43,7 +44,6 @@
 
 .compact .quoteText {
   font: var(--text-quote);
-  font-style: italic;
   text-wrap: var(--text-running-wrap);
 }
 

@@ -216,6 +216,19 @@
   max-inline-size: var(--viewport-390);
 }
 
+/* The content column at the two tablet widths, for ListCard § 1a: the split reads the row's own
+   width, so a frame the width of the column at 1023 and at 768 shows what those viewports render
+   without resizing the window. Same derivation as .trackMobile — the breakpoint record less two
+   Section gutters — so the numbers follow the gutter. 1024 stands in for the 1023 viewport; the
+   one pixel is below anything the check can see. */
+.trackTablet {
+  max-inline-size: calc(var(--breakpoint-1024) - 2 * var(--sec-gutter));
+}
+
+.trackTabletNarrow {
+  max-inline-size: calc(var(--breakpoint-768) - 2 * var(--sec-gutter));
+}
+
 /* Parent-owned ratio boxes, for /design/media's `fit="fill"` rows. `fill` exists for the placements
    that crop mechanically — the pattern owns the ratio, the image covers it — so proving it needs a
    box that owns a ratio. .ratioCard reads --ratio-cover, the one cover crop BlockCard and ListCard
@@ -231,10 +244,3 @@
   aspect-ratio: var(--lcrd-thumbnail-ratio);
 }
 
-/* ListCard § 2b only: the REJECTED alternative for Media's panel inset at thumbnail size
-   (docs/specs/ListCard.md § 17, Media.md § 17 Q2), set here so the owner can compare it with the
-   shipped --gap-gutter. A harness reaching into Media's layer is exactly what no site code may do,
-   and that is why it lives in the proving ground and nowhere else. */
-.panelInsetCell {
-  --media-panel-inset: var(--gap-text);
-}

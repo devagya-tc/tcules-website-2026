@@ -17,14 +17,23 @@
 :root {
   --cta-eyebrow-text: var(--text-eyebrow);
   --cta-eyebrow-tracking: var(--text-eyebrow-tracking);
-  --cta-heading-text: var(--text-h2);
-  --cta-heading-tracking: var(--text-h2-tracking);
+  /* The close is set at h1 scale in `split` and `open` (29 Sep 2026, tracker 2.17): the page's
+     last word is its ask, and at h2 it read as one more section heading. It is paired with
+     PageHero moving to display scale, so the ladder holds — display opens the page, h1 closes
+     it, h2 heads everything between. Scale only: the element stays an `h2` in the outline. */
+  --cta-heading-text: var(--text-h1);
+  --cta-heading-tracking: var(--text-h1-tracking);
   --cta-lead-text: var(--text-lead);
   --cta-body-text: var(--text-body-lg);
-  --cta-point-text: var(--text-body);
+  /* A point is a step with a shape, not a line of body copy: the label takes the serif title
+     voice at h5 and the marker the mono stat numeral, so the list reads as three or six
+     numbered things at a glance rather than as a paragraph with digits in front (2.17). The
+     detail stays at body-sm — a clause under a 22px step name still sits one clear rung down. */
+  --cta-point-text: var(--text-h5);
+  --cta-point-tracking: var(--text-h5-tracking);
   --cta-detail-text: var(--text-body-sm);
-  --cta-marker-text: var(--text-micro);
-  --cta-marker-tracking: var(--text-micro-tracking);
+  --cta-marker-text: var(--text-stat);
+  --cta-marker-tracking: var(--text-stat-tracking);
 
   /* Two measures. The heading takes the title measure so a three-line close
      keeps the shape of a statement; everything that runs takes the body
@@ -39,8 +48,15 @@
 
 /* ── The offer's heading steps down, and BOTH halves step together ───────────
    `offer` interrupts a page mid-scroll rather than closing it, so its heading
-   drops one rung to --text-h3 — a mid-page ask that shouted at closing-block
+   sits one rung below the close — a mid-page ask that shouted at closing-block
    scale would compete with the section it interrupts.
+
+   That rung is h2 since 29 Sep 2026 (tracker 2.17), up from h3, and it moved
+   because the rungs around it did. The close went to h1, so h2 is still one
+   step down; and the points went to 40px stat numerals under 22px h5 labels,
+   beside which a 34px h3 was the SMALLEST display line in its own band — the
+   numerals outweighed the heading they sit under. At 43px the heading leads
+   again, and the offer stays one step quieter than the close.
 
    Size and tracking are re-declared here as one edit, keyed on the attribute
    the component already emits (data-arrangement="offer" on the band). They used
@@ -52,8 +68,8 @@
    decision for exactly this reason. Keeping them in one block is what makes
    that impossible rather than merely unlikely. */
 [data-arrangement='offer'] {
-  --cta-heading-text: var(--text-h3);
-  --cta-heading-tracking: var(--text-h3-tracking);
+  --cta-heading-text: var(--text-h2);
+  --cta-heading-tracking: var(--text-h2-tracking);
 }
 
 :root,

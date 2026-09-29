@@ -10,6 +10,7 @@
 | **Token prefix** | `--media-*` (checked against the live taken list: no collision, and no reservation — no existing layer names a Media or Image component or holds a block waiting for one) |
 | **Designer / date** | Claude Code, tracker 2.6 · 28 Sep 2026 |
 | **Implements** | tracker 2.6; `docs/component-audit.md` §1 "Responsive image slot" and "Media ratios", §2 media-kind table; `docs/phase-2-decisions.md` M1–M4, H3 |
+| **Revised** | **Tracker 2.17 / 29 Sep 2026** — `inset: 'gutter' \| 'text'` (owner-approved; § 3, § 7(a), § 17 Q2). The centre crop stays. |
 | **Implemented at** | `src/components/Media/` · `src/styles/tokens/components/media.css` · `--shadow-crop` in `src/styles/tokens/primitives.css` · `src/content/sources/strapi/image.ts` · `/design/media` |
 
 **How this spec was admitted.** Every design question in it was answered before it was written — by the owner
@@ -50,7 +51,7 @@ is exactly the duplication a primitive exists to remove.
 | Part | Element | Required | Carries |
 |---|---|---|---|
 | `image` | `<img>` | yes | `src`, `srcset`, `sizes`, `alt`, `width`, `height`, `loading`, `decoding`, `fetchpriority`; `--media-radius`; the capture hairline (`--media-capture-rule-width`, `--media-capture-rule-ink`); the cut-out shadow (`--media-cutout-shadow`) |
-| `panel` | `<span>`, `display: block` | only when a cut-out carries `panel` | `--media-panel-inset` padding; one of `--media-panel-paper-ground`, `--media-panel-paper-deep-ground`, `--media-panel-ink-ground` |
+| `panel` | `<span>`, `display: block` | only when a cut-out carries `panel` | `--media-panel-inset` padding, or `--gap-text` at `inset="text"`; one of `--media-panel-paper-ground`, `--media-panel-paper-deep-ground`, `--media-panel-ink-ground` |
 
 A `<span>` rather than a `<div>` so Media stays valid inside phrasing content (a card's link).
 
@@ -68,6 +69,7 @@ type MediaImage = {
   sources?: readonly MediaSource[]                           // Strapi's formats, any widths
 }
 type MediaFit = 'intrinsic' | 'fill'
+type MediaInset = 'gutter' | 'text'                          // 29 Sep 2026, 2.17
 ```
 
 | Prop | Union | Default | Decides |
@@ -75,6 +77,7 @@ type MediaFit = 'intrinsic' | 'fill'
 | `image` | `MediaImage` | required | the record — which file, its intrinsic size, what it is |
 | `sizes` | `string` | required | the placement's rendered width, as a `sizes` list (§9) |
 | `fit` | `'intrinsic' \| 'fill'` | `'intrinsic'` | intrinsic: 100% of the parent's inline size, height from the asset, never cropped (H3). fill: covers a parent-owned ratio box, centre crop |
+| `inset` | `'gutter' \| 'text'` | `'gutter'` | the panel inset step, and only that. gutter: `--gap-gutter` (32), every full-column, track and card placement. text: `--gap-text` (16, "cell padding"), for a small box — ListCard's 160 × 107 thumbnail. Ignored when no panel renders (29 Sep 2026, 2.17) |
 | `priority` | `boolean` | `false` | true: `loading="eager"`, `fetchpriority="high"`. false: `loading="lazy"`, `decoding="async"` |
 
 **The record, and where its type lives.** `MediaImage` is Media's. The view model's `ImageRecord`
@@ -153,6 +156,14 @@ edge, not the band's, so a `paper-deep` panel is paper-deep on every surface.
 holds, which is the container gutter by definition (Section's own gutter is the same step). Chosen by the
 relationship, not by how it looks at one width; it does not shift responsively. Nothing else: the seam around an
 image is the parent's.
+
+**Amended 29 Sep 2026 (2.17): the placement may choose `inset="text"`.** A small BOX, not a narrow viewport,
+is the one case the gutter does not serve: in ListCard's 160 × 107 thumbnail, 32 on each side left 96 × 43 of
+part, which fails ch05 § 9's 160 check. `text` takes `--gap-text` ("cell padding" — the container-inset role for
+a dense cell), leaving 128 × 75. It is read from the gap scale directly in `Media.module.css` (`.insetText`,
+after `.panel` at equal specificity), not through a second `--media-*` name, because a token that only renamed
+`--gap-text` is what token rule 6 forbids. Two named steps and no length, so a placement cannot split the
+difference, and the step still does not shift responsively — a placement states it for its box at every width.
 
 **(b) Sizes:** none of Media's own. Intrinsic: `inline-size: 100%`, `block-size: auto`. Fill: `inline-size:
 100%`, `block-size: 100%`, `object-fit: cover`. The panel in fill mode takes `block-size: 100%`.
@@ -272,7 +283,8 @@ identical markup, the illustration on blue labelled forbidden; (3) cut-out witho
 without a panel, then on each of the three panels, one with a shadow; (3b) panels on ink; (4) panel/shadow on
 kinds that refuse them, and the no-kind record beside the capture; (5) delivery — sources with the printed
 srcset, priority, and a no-sources asset; (6) intrinsic vs fill in a 3:2 card box, a capture and a panel in fill,
-and a 160 thumbnail box; (7) a 1:5 and an 8:1 asset; (8) every kind in the harness's 326 `trackMobile` column (and
+and a 160 thumbnail box; (3c, 29 Sep 2026) the panel inset — each of the three panels at `gutter` and `text`
+in intrinsic, both in a 3:2 fill box, and both in the 160 ListCard thumbnail box; (7) a 1:5 and an 8:1 asset; (8) every kind in the harness's 326 `trackMobile` column (and
 the whole page at 390, where every band is in the real 326); (9) tint nested between ink bands; states: none, said on the page.
 
 ## 16 · New token requests
@@ -287,9 +299,10 @@ All non-blocking; each records the choice the build made.
 
 1. **Specimen assets are not 2560 masters.** The brand framework's own images (1436, 1796, 855…) with derived
    widths made by `sips`. The srcset logic is width-agnostic, so this proves the mechanism, not the ladder.
-2. **The panel inset step.** `--gap-gutter` by relationship (§7). At a 160 thumbnail in `fill` it leaves 96 of
-   160 for the part; BlockCard and ListCard (2.10, 2.11) should confirm that a panelled cut-out there is supplied
-   for the box, or ask for the inset to be the placement's.
+2. **The panel inset step — ANSWERED 29 Sep 2026 (2.17).** `--gap-gutter` by relationship (§7). At a 160 thumbnail
+   in `fill` it left 96 of 160 for the part. The owner approved making the inset the placement's, as two named
+   steps: `inset: 'gutter' | 'text'`, default `gutter`, no new token. ListCard's thumbnail passes `text`; BlockCard
+   and every other placement keep the default. The centre crop is unchanged.
 3. **Illustration on blue has no runtime guard.** Media cannot see its band in JavaScript, and a CSS guard would
    hide content in production. Chosen: a review rule, shown failing in the specimen. Alternative: a per-surface
    token that outlines an illustration on blue in development only.

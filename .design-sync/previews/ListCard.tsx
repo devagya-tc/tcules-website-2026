@@ -60,7 +60,7 @@ const SERVICES: { title: string; body: string; href: string; marker: ListCardMar
     title: 'Design systems',
     body: 'Build the decisions and reusable parts that keep a product coherent as it grows.',
     href: '/services/design-systems',
-    marker: { kind: 'icon', name: 'check' },
+    marker: { kind: 'icon', name: 'check-circle' },
   },
   {
     title: 'AI product UX',
