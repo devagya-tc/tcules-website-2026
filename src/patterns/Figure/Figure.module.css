@@ -44,7 +44,7 @@
    minimum could ever be observed.
 
    Which is what min-inline-size is for. In that unsized row the box is content-sized, and this is
-   the floor: 192px is the narrowest track where a caption in --text-caption still wraps on words.
+   the floor: 192px is the narrowest track where a body-scale caption still wraps on words.
    The min(100%, xs) form is what keeps it safe in both directions — inside a parent genuinely
    narrower than 192 the 100% term wins, so the figure wraps its text rather than pushing the page
    sideways. Both halves of that are load-bearing: with `inline-size: 100%` present, the whole
@@ -72,9 +72,10 @@
   min-inline-size: 0;
 }
 
-/* Caption and note share one type role and are told apart by ink alone. Both cap at the shared
-   body measure: a Figure can be handed a 1240px track, where 13px text would otherwise run to
-   about 41 words a line. Both align to the box's own inline-start edge — the same edge the image
+/* Caption and note sit on two type steps — body and body-small (tracker 2.17) — and a full ink
+   rung apart. Both are running text, so both take the running-text wrap companion beside their
+   font. Both cap at the shared body measure: a Figure can be handed a 1240px track, where body
+   text would otherwise run to about 30 words a line. Both align to the box's own inline-start edge — the same edge the image
    starts from — because a Figure cannot see any external text column to align to.
 
    overflow-wrap:anywhere is the second half of the long-URL answer: min-inline-size:0 above lets
@@ -84,6 +85,7 @@
   overflow-wrap: anywhere;
   color: var(--fig-caption-ink);
   font: var(--fig-caption-text);
+  text-wrap: var(--text-running-wrap);
 }
 
 .note {
@@ -91,4 +93,5 @@
   overflow-wrap: anywhere;
   color: var(--fig-note-ink);
   font: var(--fig-note-text);
+  text-wrap: var(--text-running-wrap);
 }
