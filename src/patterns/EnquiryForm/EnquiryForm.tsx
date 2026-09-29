@@ -26,22 +26,33 @@ type SharedProps = {
   onSubmitted?: () => void;
 };
 
+/* "See available times" lives in the form's own action row, beside the submit, so the two asks
+   read as one group rather than as a form with a stray link under it. Amended 29 Sep 2026
+   (tracker 2.17): it used to be CtaSection's, rendered a --gap-stack below the form.
+
+   REQUIRED on enquiry and audit. Every one of the 56 enquiry/audit instances must offer it, and
+   that constraint used to be CtaSection's `scheduleHref`; it moved here with the link, so the type
+   still refuses an enquiry form without one. Optional on contact: the contact page's own form is
+   the scheduling conversation, and a link to it from itself would be a loop. */
 type EnquiryVariantProps = SharedProps & {
   variant?: 'enquiry';
   urlLabel?: EnquiryUrlLabel;
   context: EnquiryContextBase & { intent?: never };
+  scheduleHref: string;
 };
 
 type AuditVariantProps = SharedProps & {
   variant: 'audit';
   urlLabel?: AuditUrlLabel;
   context: EnquiryContextBase & { intent: string };
+  scheduleHref: string;
 };
 
 type ContactVariantProps = SharedProps & {
   variant: 'contact';
   urlLabel?: never;
   context?: never;
+  scheduleHref?: string;
 };
 
 export type EnquiryFormProps = EnquiryVariantProps | AuditVariantProps | ContactVariantProps;
@@ -209,13 +220,30 @@ export function EnquiryForm(props: EnquiryFormProps) {
           <hr className={styles.successRule} />
           <h3 className={styles.successHeading}>One reply, within a working day.</h3>
           <Cluster colGap="tight" align="center" nowrap>
-            <Icon name="check" />
+            <Icon name="check-circle" />
             <p className={styles.successBody}>
               {variant === 'contact'
                 ? 'Thanks — we have your message.'
                 : 'Thanks — we have your enquiry.'}
             </p>
           </Cluster>
+          {/* The scheduling link survives the swap. It used to, for free, because CtaSection
+              rendered it outside the form; now the form owns it, so the success view carries it
+              on — a sent enquiry does not make "talk sooner" any less of an offer. */}
+          {props.scheduleHref ? (
+            <Cluster colGap="block" rowGap="tight" align="center">
+              <Button
+                as="a"
+                href={props.scheduleHref}
+                emphasis="link"
+                tone="neutral"
+                size="lg"
+                icon={<Icon name="arrow-right" />}
+              >
+                See available times
+              </Button>
+            </Cluster>
+          ) : null}
         </Layout>
       </div>
     );
@@ -472,14 +500,36 @@ export function EnquiryForm(props: EnquiryFormProps) {
         </p>
 
         <Layout rowGap="text">
-          <Cluster rowGap="tight" colGap="tight" align="center">
-            <Button type="submit" size="md" extendHitArea busy={submitting}>
+          {/* Submit and the scheduling link in ONE row: two ways to take the same next step, so
+              they group. `block` between them, not `tight` — the link is the alternative to the
+              submit, not a part of it — and the row wraps on a narrow column, where the link drops
+              under the submit at `tight`.
+
+              Both lg. The submit is lg because it stands beside 44px phone fields and a 40px
+              button under them read as the smaller thing; the link takes the same size so the two
+              labels set at one type size across the row. lg is 48 and clears the touch floor, so
+              neither needs extendHitArea. The link keeps `neutral`: the submit is the one primary
+              ask, and blue on both would make it two. */}
+          <Cluster rowGap="tight" colGap="block" align="center">
+            <Button type="submit" size="lg" busy={submitting}>
               {variant === 'audit'
                 ? 'Request free audit'
                 : variant === 'contact'
                   ? 'Send message'
                   : 'Send enquiry'}
             </Button>
+            {props.scheduleHref ? (
+              <Button
+                as="a"
+                href={props.scheduleHref}
+                emphasis="link"
+                tone="neutral"
+                size="lg"
+                icon={<Icon name="arrow-right" />}
+              >
+                See available times
+              </Button>
+            ) : null}
           </Cluster>
           <p className={styles.caption}>
             We reply to the address you give us, and use it for nothing else.

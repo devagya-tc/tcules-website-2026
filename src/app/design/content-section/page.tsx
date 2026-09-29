@@ -4,9 +4,12 @@ import { Layout, Prose, Section, type SectionSurface } from '@/components';
 import {
   BlockCard,
   ContentSection,
+  ContentSectionText,
+  DataTable,
   ListCard,
   Proof,
   type ContentSectionArrangement,
+  type DataTableProps,
 } from '@/patterns';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
@@ -63,10 +66,48 @@ const CARDS = [
 ];
 
 const STEPS = [
-  { title: 'Read the real work', body: 'Who does what, in which order, under whose authority.' },
+  {
+    title: 'Read the real work',
+    body: 'Who does what, in which order, under whose authority.',
+  },
   { title: 'Settle the product model', body: 'Which records exist and which rules bind them.' },
   { title: 'Design the behaviour', body: 'What the interface does, not what it looks like.' },
 ];
+
+/* A four-column table: wide enough that a 68ch cap would visibly crush it, which is the failure the
+   body measure must NOT reintroduce. It is a sibling of the text, so it keeps the full track. */
+const cell = (html: string) => `<p>${html}</p>`;
+const TABLE: DataTableProps = {
+  caption: 'Where each design-system representation lives',
+  keyColumn: { heading: 'Representation' },
+  columns: [{ heading: 'Source of truth' }, { heading: 'Owner' }, { heading: 'Drift signal' }],
+  rows: [
+    {
+      header: 'Design tokens',
+      cellsHtml: [
+        cell('The token layer in the repository'),
+        cell('Design engineering'),
+        cell('A value in Figma with no token behind it'),
+      ],
+    },
+    {
+      header: 'Components',
+      cellsHtml: [
+        cell('The coded component and its specimen'),
+        cell('Product engineering'),
+        cell('A variant that exists in one tool only'),
+      ],
+    },
+    {
+      header: 'Guidance',
+      cellsHtml: [
+        cell('The documentation site'),
+        cell('Design operations'),
+        cell('A rule nobody can find the reason for'),
+      ],
+    },
+  ],
+};
 
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
 const ARRANGEMENTS: readonly ContentSectionArrangement[] = ['stacked', 'beside'];
@@ -127,14 +168,15 @@ function Label({ title, children }: { title: string; children: ReactNode }) {
  * of them and the only way `beside` can be judged against a real 1240 column.
  *
  * The page is ordered so the one comparison that matters comes first — the same content in both
- * arrangements — and everything after it is coverage: both arrangements on all four surfaces with
+ * arrangements — then the body measure (text capped at 68ch, a table and a card grid still spanning
+ * the track), and everything after it is coverage: both arrangements on all four surfaces with
  * identical markup, the stress ceilings, a short and a long body beside a head, every absent slot
  * and the two degradations `beside` makes, the densities, nested surfaces, a 390 viewport, and two
  * adjacent bands.
  *
  * `beside` is a breakpoint arrangement (1024 up), so it cannot be forced inside a narrow frame on a
  * wide window. The 390 capture of this page is the proof that every `beside` band collapses to
- * `stacked`; section 8's frame shows the stacked band at 390 for comparison inside a wide window.
+ * `stacked`; section 9's frame shows the stacked band at 390 for comparison inside a wide window.
  */
 export default function ContentSectionSpecimen() {
   return (
@@ -143,9 +185,9 @@ export default function ContentSectionSpecimen() {
         <Layout rowGap="block">
           <h1>ContentSection</h1>
           <p className={s.specNote}>
-            One CMS section as one band: an optional eyebrow, heading and lead, then the blocks the
-            caller hands it. The gap ladder is the reason it exists — 8 eyebrow to heading, 24
-            heading to lead, 48 head group to the blocks and between the blocks. The{' '}
+            One CMS section as one band: an optional eyebrow, heading and lead, then the blocks
+            the caller hands it. The gap ladder is the reason it exists — 8 eyebrow to heading,
+            24 heading to lead, 48 head group to the blocks and between the blocks. The{' '}
             <code>arrangement</code> prop places that head group above the blocks (
             <code>stacked</code>, the default) or, from 1024 up, in a one-third leading track
             beside them (<code>beside</code>, ruling O2: static, 1 : 2, 64 between the halves).
@@ -156,10 +198,11 @@ export default function ContentSectionSpecimen() {
 
       {/* ── 1 ──────────────────────────────────────────────────────────────────────────────── */}
       <Label title="1 · The two arrangements, same content">
-        Identical props but one. Stacked puts the head group above the body; beside puts it in the
-        leading third, top-aligned, and does not stick. Compare the silhouettes: stacked is a heading
-        over a paragraph over three cards, the shape a long page repeats; beside is two columns of
-        different weight. Resize below 1024 and the second band becomes the first.
+        Identical props but one. Stacked puts the head group above the body; beside puts it in
+        the leading third, top-aligned, and does not stick. Compare the silhouettes: stacked is
+        a heading over a paragraph over three cards, the shape a long page repeats; beside is
+        two columns of different weight. Resize below 1024 and the second band becomes the
+        first.
       </Label>
       {ARRANGEMENTS.map((arrangement) => (
         <ContentSection
@@ -170,18 +213,47 @@ export default function ContentSectionSpecimen() {
           headingId={`csec-compare-${arrangement}`}
           lead={LEAD}
         >
-          <Prose html={BODY_HTML} />
+          <ContentSectionText>
+            <Prose html={BODY_HTML} />
+          </ContentSectionText>
           <Cards />
         </ContentSection>
       ))}
 
       {/* ── 2 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Label title="2 · Four surfaces × two arrangements, identical markup">
-        Eight bands, one markup, the eyebrow naming the cell. Every ink is restated per surface in
-        content-section.css: heading, lead and eyebrow each hold their contrast floor on all four
-        grounds. The arrangement moves no colour — it is geometry only, so no token changes between
-        a stacked band and a beside band on the same ground. Blue follows ink here only because this
-        is a matrix; on a route the two are never adjacent.
+      <Label title="2 · Text at the body measure, every other block at the track">
+        Prose has no measure — the caller owns the reading column — and this band is the caller.
+        A rich-text block wrapped in ContentSectionText stops at 68ch, 666px at 1440, which is
+        about 90–95 characters of this face a line (a ch is the width of a zero, wider than the
+        average letter). It caps in both arrangements: stacked against the 1240 column, beside
+        against the 784 two-thirds track. The table and the card grid are siblings of the text,
+        not children, so they still run the whole track. At 1024 the beside track is narrower
+        than 68ch and the track wins — the cap is a ceiling, never a width.
+      </Label>
+      {ARRANGEMENTS.map((arrangement) => (
+        <ContentSection
+          key={arrangement}
+          arrangement={arrangement}
+          eyebrow={`Measure · ${arrangement}`}
+          heading="The model comes before the screens"
+          headingId={`csec-measure-${arrangement}`}
+          lead={LEAD}
+        >
+          <ContentSectionText>
+            <Prose html={BODY_LONG_HTML} />
+          </ContentSectionText>
+          <DataTable {...TABLE} />
+          <Cards />
+        </ContentSection>
+      ))}
+
+      {/* ── 3 ──────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="3 · Four surfaces × two arrangements, identical markup">
+        Eight bands, one markup, the eyebrow naming the cell. Every ink is restated per surface
+        in content-section.css: heading, lead and eyebrow each hold their contrast floor on all
+        four grounds. The arrangement moves no colour — it is geometry only, so no token changes
+        between a stacked band and a beside band on the same ground. Blue follows ink here only
+        because this is a matrix; on a route the two are never adjacent.
       </Label>
       {SURFACES.flatMap((surface) =>
         ARRANGEMENTS.map((arrangement) => (
@@ -194,18 +266,21 @@ export default function ContentSectionSpecimen() {
             headingId={`csec-surface-${surface}-${arrangement}`}
             lead="Heading, lead and eyebrow each hold their contrast floor on all four grounds."
           >
-            <Prose html={BODY_HTML} />
+            <ContentSectionText>
+              <Prose html={BODY_HTML} />
+            </ContentSectionText>
             <Steps />
           </ContentSection>
         )),
       )}
 
-      {/* ── 3 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Label title="3 · The longest realistic heading and lead">
-        A ten-word H2 of eighty characters and a forty-five-word lead. Stacked, the heading breaks at
-        the title measure (22ch) and balances; beside, the one-third track is narrower than that
-        measure, so the track sets the line and the heading runs to more lines — the head column is
-        allowed to be taller than a short body, and section 5 shows what that looks like.
+      {/* ── 4 ──────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="4 · The longest realistic heading and lead">
+        A ten-word H2 of eighty characters and a forty-five-word lead. Stacked, the heading
+        breaks at the title measure (22ch) and balances; beside, the one-third track is narrower
+        than that measure, so the track sets the line and the heading runs to more lines — the
+        head column is allowed to be taller than a short body, and section 6 shows what that
+        looks like.
       </Label>
       {ARRANGEMENTS.map((arrangement) => (
         <ContentSection
@@ -216,16 +291,18 @@ export default function ContentSectionSpecimen() {
           headingId={`csec-long-${arrangement}`}
           lead={LEAD_LONG}
         >
-          <Prose html={BODY_HTML} />
+          <ContentSectionText>
+            <Prose html={BODY_HTML} />
+          </ContentSectionText>
           <Cards />
         </ContentSection>
       ))}
 
-      {/* ── 4 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Label title="4 · One unbroken token">
-        A heading and a lead with no break opportunity. The tracks are minmax(0, fr), so neither can
-        widen its column, and the base element rule breaks the word rather than the page. The 390
-        capture of this page is the check that nothing scrolls sideways.
+      {/* ── 5 ──────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="5 · One unbroken token">
+        A heading and a lead with no break opportunity. The tracks are minmax(0, fr), so neither
+        can widen its column, and the base element rule breaks the word rather than the page.
+        The 390 capture of this page is the check that nothing scrolls sideways.
       </Label>
       {ARRANGEMENTS.map((arrangement) => (
         <ContentSection
@@ -237,12 +314,14 @@ export default function ContentSectionSpecimen() {
           headingId={`csec-token-${arrangement}`}
           lead={TOKEN_LEAD}
         >
-          <Prose html={BODY_SHORT_HTML} />
+          <ContentSectionText>
+            <Prose html={BODY_SHORT_HTML} />
+          </ContentSectionText>
         </ContentSection>
       ))}
 
-      {/* ── 5 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Label title="5 · Beside, with a short and a long body">
+      {/* ── 6 ──────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="6 · Beside, with a short and a long body">
         The head is static and top-aligned, so with a one-sentence body the head is the taller
         column and the band ends under the head; with a long body the head sits at the top of a
         column that is mostly air. Neither is corrected — a sticking head is ruling O2&rsquo;s
@@ -255,7 +334,9 @@ export default function ContentSectionSpecimen() {
         headingId="csec-beside-short"
         lead={LEAD}
       >
-        <Prose html={BODY_SHORT_HTML} />
+        <ContentSectionText>
+          <Prose html={BODY_SHORT_HTML} />
+        </ContentSectionText>
       </ContentSection>
       <ContentSection
         surface="tint"
@@ -265,19 +346,21 @@ export default function ContentSectionSpecimen() {
         headingId="csec-beside-long"
         lead="Three blocks of different shape in the wide track, the head static beside them."
       >
-        <Prose html={BODY_LONG_HTML} />
+        <ContentSectionText>
+          <Prose html={BODY_LONG_HTML} />
+        </ContentSectionText>
         <Cards />
         <Steps />
       </ContentSection>
 
-      {/* ── 6 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Label title="6 · Absent slots, and how beside degrades">
+      {/* ── 7 ──────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="7 · Absent slots, and how beside degrades">
         Each head slot renders no element and no seam when absent — an empty string counts as
         absent. Without an eyebrow the heading is the head&rsquo;s first row; without a lead the
         eyebrow and heading are the whole head; a lead alone is a valid head. Beside needs both
         halves: with no head the blocks take the full column, and with no blocks the head does —
-        both are the stacked band exactly, because an empty third or an empty two-thirds is a hole.
-        An empty children array counts as no blocks, so no 48 seam hangs under the head.
+        both are the stacked band exactly, because an empty third or an empty two-thirds is a
+        hole. An empty children array counts as no blocks, so no 48 seam hangs under the head.
       </Label>
       <ContentSection
         arrangement="beside"
@@ -294,7 +377,9 @@ export default function ContentSectionSpecimen() {
         heading="Eyebrow and heading only, beside"
         headingId="csec-absent-lead"
       >
-        <Prose html={BODY_HTML} />
+        <ContentSectionText>
+          <Prose html={BODY_HTML} />
+        </ContentSectionText>
       </ContentSection>
       <ContentSection
         arrangement="beside"
@@ -310,15 +395,19 @@ export default function ContentSectionSpecimen() {
         heading=""
         lead="A lead with no heading: the band is an unlabelled div, and the lead is the whole head."
       >
-        <Prose html={BODY_HTML} />
+        <ContentSectionText>
+          <Prose html={BODY_HTML} />
+        </ContentSectionText>
       </ContentSection>
       <ContentSection arrangement="beside">
-        <Prose
-          html={
-            '<p><strong>No head, beside.</strong> The blocks take the full column: nothing is ' +
-            'drawn in a leading third, and the band is a div with no accessible name.</p>'
-          }
-        />
+        <ContentSectionText>
+          <Prose
+            html={
+              '<p><strong>No head, beside.</strong> The blocks take the full column: nothing is ' +
+              'drawn in a leading third, and the band is a div with no accessible name.</p>'
+            }
+          />
+        </ContentSectionText>
         <Cards />
       </ContentSection>
       <ContentSection
@@ -339,10 +428,10 @@ export default function ContentSectionSpecimen() {
         {[]}
       </ContentSection>
 
-      {/* ── 7 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Label title="7 · Density">
-        Vertical air passes straight through to Section. It is independent of arrangement: a tight
-        band beside and an open band beside keep the same 64 between their halves.
+      {/* ── 8 ──────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="8 · Density">
+        Vertical air passes straight through to Section. It is independent of arrangement: a
+        tight band beside and an open band beside keep the same 64 between their halves.
       </Label>
       <ContentSection
         arrangement="beside"
@@ -351,7 +440,9 @@ export default function ContentSectionSpecimen() {
         lead="A band holding a paragraph does not want the air a five-card grid wants."
         density="tight"
       >
-        <Prose html={BODY_HTML} />
+        <ContentSectionText>
+          <Prose html={BODY_HTML} />
+        </ContentSectionText>
       </ContentSection>
       <ContentSection
         surface="tint"
@@ -361,18 +452,20 @@ export default function ContentSectionSpecimen() {
         lead="The other direction, for a band that carries the page's turn."
         density="open"
       >
-        <Prose html={BODY_HTML} />
+        <ContentSectionText>
+          <Prose html={BODY_HTML} />
+        </ContentSectionText>
       </ContentSection>
 
-      {/* ── 8 ──────────────────────────────────────────────────────────────────────────────── */}
+      {/* ── 9 ──────────────────────────────────────────────────────────────────────────────── */}
       <Section>
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>8 · Nested surfaces, any block, and a 390 viewport</h2>
+            <h2>9 · Nested surfaces, any block, and a 390 viewport</h2>
             <p className={s.specNote}>
               A band inside another band is not a route composition; it is here to prove that
-              every ink resolves from the NEAREST surface. The 390 frame is the phone viewport, so
-              the band&rsquo;s own gutter produces the 326 column.
+              every ink resolves from the NEAREST surface. The 390 frame is the phone viewport,
+              so the band&rsquo;s own gutter produces the 326 column.
             </p>
           </Layout>
           <Specimen
@@ -388,7 +481,9 @@ export default function ContentSectionSpecimen() {
                 headingId="csec-nested-tint"
                 lead={LEAD}
               >
-                <Prose html={BODY_HTML} />
+                <ContentSectionText>
+                  <Prose html={BODY_HTML} />
+                </ContentSectionText>
               </ContentSection>
             </Section>
           </Specimen>
@@ -403,7 +498,9 @@ export default function ContentSectionSpecimen() {
               headingId="csec-nested-ink"
               lead={LEAD}
             >
-              <Prose html={BODY_HTML} />
+              <ContentSectionText>
+                <Prose html={BODY_HTML} />
+              </ContentSectionText>
             </ContentSection>
           </Specimen>
           <Specimen
@@ -440,18 +537,20 @@ export default function ContentSectionSpecimen() {
                 headingId="csec-narrow"
                 lead={LEAD_LONG}
               >
-                <Prose html={BODY_HTML} />
+                <ContentSectionText>
+                  <Prose html={BODY_HTML} />
+                </ContentSectionText>
               </ContentSection>
             </div>
           </Specimen>
         </Layout>
       </Section>
 
-      {/* ── 9 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Label title="9 · Two adjacent bands, same ground">
-        Paper after paper, beside then stacked — the arrangement changing between two bands is what
-        a long page uses instead of changing the ground. The seam between them is Section&rsquo;s 96
-        + 96 and nothing else; neither band adds a margin.
+      {/* ── 10 ─────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="10 · Two adjacent bands, same ground">
+        Paper after paper, beside then stacked — the arrangement changing between two bands is
+        what a long page uses instead of changing the ground. The seam between them is
+        Section&rsquo;s 96 + 96 and nothing else; neither band adds a margin.
       </Label>
       <ContentSection
         arrangement="beside"

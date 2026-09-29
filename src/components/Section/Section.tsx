@@ -59,6 +59,11 @@ export type SectionProps = {
  *
  * Every value it uses comes from the --sec-* component token layer; this component contributes
  * no distances and no colours of its own.
+ *
+ * Adjacent bands on the SAME surface share one seam: a band that directly follows a non-flush
+ * sibling band of its own surface drops its top padding, so the seam is the preceding band's
+ * bottom padding (that band's density governs). Different surfaces keep full air on both sides,
+ * and a Section nested inside another Section is never affected. See Section.module.css.
  */
 export function Section({
   as: Tag = 'section',

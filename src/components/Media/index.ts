@@ -3,6 +3,7 @@ export type {
   MediaEdge,
   MediaFit,
   MediaImage,
+  MediaInset,
   MediaKind,
   MediaPanel,
   MediaProps,

@@ -35,6 +35,13 @@ const SURFACES: readonly { surface: SectionSurface; token: string; ratio: string
   { surface: 'blue', token: '--color-brandeis-100', ratio: '4.91:1' },
 ] as const;
 
+const LABEL_SURFACES: readonly { surface: SectionSurface; label: string; content: string }[] = [
+  { surface: 'paper', label: '--color-neutral-700 · 8.14:1', content: '--color-neutral-600' },
+  { surface: 'tint', label: '--color-neutral-800 · 10.54:1', content: '--color-neutral-700' },
+  { surface: 'ink', label: '--color-neutral-300 · 11.07:1', content: '--color-neutral-400' },
+  { surface: 'blue', label: '--color-brandeis-50 · 5.57:1', content: '--color-brandeis-100' },
+] as const;
+
 function ResolvedTokens({
   rows,
 }: {
@@ -397,6 +404,94 @@ export default function CalloutSpecimenPage() {
           </Specimen>
         </Layout>
       </Section>
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>12 · The optional key</h2>
+            <p>
+              Added 29 Sep 2026 (tracker 2.17, owner&rsquo;s decision): a scope note was visually
+              identical to a caption. An optional <code>label</code> leads the sentence as a mono
+              key — authored in sentence case, uppercased in CSS only — in a baseline-aligned
+              Cluster at <code>tight</code>. Beside the sentence while the line has room; above
+              it when it does not. Without a label, nothing changes.
+            </p>
+          </Layout>
+          <Layout columns={2} colGap="gutter" rowGap="stack">
+            <Specimen title="Without label" note="Exactly the Callout of sections 1–11.">
+              <Callout html={TWO_SENTENCES} />
+            </Specimen>
+            <Specimen
+              title="With label"
+              note={'label="Scope" — the string stays "Scope" in the DOM and the accessibility tree.'}
+            >
+              <Callout label="Scope" html={TWO_SENTENCES} />
+            </Specimen>
+          </Layout>
+          <Specimen
+            title="Claim followed by its keyed note"
+            note="The same parent-owned 24px seam; the key adds no outer spacing."
+          >
+            <Layout rowGap="block">
+              <Prose html="<p>A qualitative study identifies where a workflow fails and why.</p>" />
+              <Callout label="Scope" html={DIAGNOSTIC} />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="Long label"
+            note="While the line keeps 192px for the sentence beside the key, it stays beside — as here at 1440. When it cannot, the row wraps and the sentence drops beneath the key, 8 below it — as at 390 and in the phone column below."
+          >
+            <Callout
+              label="Scope of the qualitative evidence and its sample"
+              html={LONG_NOTE}
+            />
+          </Specimen>
+          <Specimen title="Label with the longest note and inline rich text">
+            <Layout rowGap="block">
+              <Callout label="Note" html={LONG_NOTE} />
+              <Callout label="Method" html={INLINE_RICH_TEXT} />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="Blank label"
+            note={'label="  " is treated as absent — no Cluster, no empty key.'}
+          >
+            <Callout label="  " html={ONE_SENTENCE} />
+          </Specimen>
+          <Specimen title="326 — the phone column" note="Short key beside, long key above.">
+            <Layout className={s.trackMobile} rowGap="block">
+              <Callout label="Scope" html={TWO_SENTENCES} />
+              <Callout label="Scope of the qualitative evidence" html={TWO_SENTENCES} />
+            </Layout>
+          </Specimen>
+          <Specimen title="192px track" note="The key leads; the sentence wraps beneath at the floor.">
+            <Layout className={s.trackXs}>
+              <Callout label="Scope" html={TWO_SENTENCES} />
+            </Layout>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      {LABEL_SURFACES.map(({ surface, label, content }) => (
+        <Section key={`label-${surface}`} surface={surface}>
+          <Layout rowGap="stack">
+            <Layout rowGap="block">
+              <h2>13 · The key on {surface}</h2>
+              <p>
+                <code>--call-label-ink</code> resolves to <code>{label}</code>, one rung stronger
+                than the sentence&rsquo;s <code>{content}</code>.
+              </p>
+            </Layout>
+            <Layout columns={2} colGap="gutter" rowGap="stack">
+              <Specimen title={`With label on ${surface}`}>
+                <Callout label="Scope" html={INLINE_RICH_TEXT} />
+              </Specimen>
+              <Specimen title={`Without label on ${surface}`}>
+                <Callout html={INLINE_RICH_TEXT} />
+              </Specimen>
+            </Layout>
+          </Layout>
+        </Section>
+      ))}
     </>
   );
 }

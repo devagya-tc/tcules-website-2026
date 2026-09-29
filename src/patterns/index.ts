@@ -151,8 +151,12 @@ export type {
   ProofClientMark,
 } from './Proof';
 
-export { ContentSection } from './ContentSection';
-export type { ContentSectionArrangement, ContentSectionProps } from './ContentSection';
+export { ContentSection, ContentSectionText } from './ContentSection';
+export type {
+  ContentSectionArrangement,
+  ContentSectionProps,
+  ContentSectionTextProps,
+} from './ContentSection';
 
 export { Callout } from './Callout';
 export type { CalloutProps } from './Callout';

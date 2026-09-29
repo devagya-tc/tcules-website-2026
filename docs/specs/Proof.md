@@ -6,12 +6,12 @@
 | ------------------- | ----------------------------------------------------- |
 | **Component**       | `Proof`                                               |
 | **Tier**            | 2 pattern (`src/patterns/Proof/`)                     |
-| **Status**          | implemented · amended 28 Sep 2026 (tracker 2.12) — shown to the owner, not merged until approved (★, ruling W1) |
+| **Status**          | implemented · amended 28 Sep 2026 (tracker 2.12) and 29 Sep 2026 (tracker 2.17) — shown to the owner, not merged until approved (★, ruling W1) |
 | **Token prefix**    | `--proof-*`                                           |
 | **Designer / date** | Codex / 24 Aug 2026                                   |
 | **Implements**      | `docs/briefs/15-testimonial.md` and `docs/briefs/17-stat.md` together, as required by `docs/briefs/README.md` |
 | **Implemented at**  | `src/patterns/Proof/` · `src/styles/tokens/components/proof.css` · specimen `src/app/design/proof/page.tsx` |
-| **Amended**         | **28 Sep 2026** (tracker 2.12; rulings P1, P2; audit §3 Proof, §4) — an optional 1:1 `portrait` through `Media`, an optional `clientMark` through `ClientMark`, `role` optional, and the quote brought onto ch10 B2.07's site blockquote: italic, a 6px rule beside the quote only, the attribution beneath with the name on the quote's first letter, and a white rule on blue. Every section below is amended in place; the changes are collected in **Amendment · 28 Sep 2026** before the self-audit. |
+| **Amended**         | **28 Sep 2026** (tracker 2.12; rulings P1, P2; audit §3 Proof, §4) — an optional 1:1 `portrait` through `Media`, an optional `clientMark` through `ClientMark`, `role` optional, and the quote brought onto ch10 B2.07's site blockquote: italic, a 6px rule beside the quote only, the attribution beneath with the name on the quote's first letter, and a white rule on blue. Every section below is amended in place; the changes are collected in **Amendment · 28 Sep 2026** before the self-audit. **29 Sep 2026** (tracker 2.17, owner-approved) — a display scale (`--text-quote-lg`, `--text-stat-lg`), the shared checked date said once, the quote beside stacked figures at 2:1 from lg, and the specimen's client marks rendering at last. Collected in **Amendment · 29 Sep 2026**. |
 
 The owner accepted the shared component identity in section 17 question 1. The public API, folder,
 token prefix and specimen route therefore use `Proof` rather than separate Testimonial and Stat
@@ -69,7 +69,8 @@ variant.
 | value-label | for every figure | nested `Layout` | Keeps the audited value and what it counts as one visual unit. |
 | value | for every figure | text `span` | Verbatim audited value such as “90+” or “4.8/5”; never inferred, rounded or coloured as a link. |
 | label | for every figure | text `span` | Verbatim sentence-case source label, uppercased at render by `--text-mono-case` — mono is always uppercase, and the string keeps its authored casing. |
-| checked | for every figure | text `span` | Required per-item checked date, authored as a complete phrase such as “checked on 8 August 2026”. |
+| checked | for every figure (authored) | text `span` in the `li`, or the group's `figcaption` | Required per-item checked date, authored as a complete phrase such as “checked on 8 August 2026”. When two or more figures carry the same string it renders once, as the figure-group caption; otherwise under each figure. *Amended 29 Sep 2026 (tracker 2.17).* |
+| figure-group | when ≥ 2 figures share one checked date | `Layout as="figure"` | Wraps the `ul` and a `figcaption` holding the shared date, so the one date is the whole set's caption. Absent otherwise — no wrapper for mixed dates or a single figure. *Amended 29 Sep 2026 (tracker 2.17).* |
 | source | optional per figure | existing `Button as="a"` | Fixed visible label “View source”; Button owns every link state and the extended touch target. |
 
 There is no eyebrow, heading, body-copy, avatar (a circle-masked portrait), rating mark, review-theme
@@ -227,8 +228,10 @@ column. Proof never caches an outer value, paints a nested ground or relies on a
 
 ### (a) Distances
 
-- Display quote-to-figures relationship: root `Layout columns="fit" minTrack="md"`
-  with `colGap="column"` and `rowGap="stack"`; one child naturally renders one track.
+- Display quote-to-figures relationship: root `Layout columns={{ base: 1, lg: [2, 1] }}`
+  with `colGap="column"` and `rowGap="stack"` — the quote in the wide track, the figures stacked in
+  the narrow one from lg; one track below lg. One child renders one track and states no seam.
+  *Amended 29 Sep 2026 (tracker 2.17).* Was `columns="fit" minTrack="md"` (two equal halves where two 320 tracks fit).
 - Compact root: one track and no vacant seam.
 - Quote leading inset: `--gap-block` between the rule and quote content, on the `blockquote`.
 - Quote-text-to-attribution relationship: nested `Layout rowGap="block"`.
@@ -244,7 +247,11 @@ column. Proof never caches an outer value, paints a nested ground or relies on a
 - Value-to-label relationship: nested `Layout rowGap="tight"`, one audited unit.
 - Value-label-to-checked relationship: outer figure `Layout rowGap="text"`.
 - Checked-to-source relationship: nested metadata `Layout rowGap="tight"`; no source means no
-  source element and no empty seam.
+  source element and no empty seam. With the date shared and no source, the metadata `Layout` is not
+  rendered at all, so no empty `text` seam hangs under the label.
+- Figure list to shared-date caption: figure-group `Layout rowGap="gutter"` — one step wider than the
+  list's own `block` row seam, so the caption reads as the set's footnote rather than a fifth item.
+  *Amended 29 Sep 2026 (tracker 2.17).*
 - Proof-to-heading, Prose sibling, CTA frame or neighbouring Proof: the parent `Layout` owns that
   block or stack relationship. Proof sets no outer margin.
 
@@ -252,8 +259,11 @@ column. Proof never caches an outer value, paints a nested ground or relies on a
 
 - `md`: the only size; inline size is the available parent track, `min-inline-size: 0`, with no
   fixed block size.
-- Display pair track: `Layout minTrack="md"`, resolving to the existing 320px layout track and
-  measured so two children fit the 1240px Section cap but collapse inside CtaSection's 470px column.
+- Display pair tracks: `[2, 1]` from lg — at the 1240 cap, (1240 − 64) × 2/3 ≈ 784 for the quote and
+  ≈ 392 for the figures, which holds one 256 tile per row, so the figures stack. *Amended 29 Sep 2026 (tracker 2.17).*
+  **Known cost:** the split is breakpoint-driven, not content-driven, so it also applies inside a narrow
+  parent at a wide viewport — CtaSection `open`'s 470 column (≈ 270 / 135) and the 320/256/192 stress
+  tracks. The old `fit`/`md` pair collapsed there by itself. See §17 Q13.
 - Figure tile: `Layout minTrack="sm"`, resolving to the existing 256px layout track. Four tiles
   fit the 1240px cap; two fit the 703px content width immediately below 767; one fits a 470px CTA
   column without compressing `4.8/5`.
@@ -283,13 +293,13 @@ from Layout's existing component geometry.
 
 | Part | Role | Tracking companion | Measure |
 | ---- | ---- | ------------------ | ------- |
-| display quote-text | `--text-h3`, **italic** | `--text-h3-tracking` | `--measure-body` |
+| display quote-text | `--text-quote-lg` (italic in the composite) — 43 / 1.2, 34 / 1.24 at ≤1023, 25 / 1.3 at ≤767. *Amended 29 Sep 2026 (tracker 2.17).* Was `--text-h3` + `font-style: italic` | `--text-quote-lg-tracking` | `--measure-body` |
 | compact quote-text | `--text-quote`, **italic** | none — this role has no tracking companion | `--measure-body` |
 | name | `--text-h6` (display serif, roman) | `--text-h6-tracking` | the attribution text column |
 | role-company | `--text-body-sm` | none — this role has no tracking companion | the attribution text column, `--measure-body` cap on the row |
-| value | `--text-stat` | `--text-stat-tracking` | intrinsic inside one figure tile |
+| value | `--text-stat-lg` — 54 / 1, 43 at ≤1023, 40 at ≤767; mono, so `--text-mono-case`. *Amended 29 Sep 2026 (tracker 2.17).* Was `--text-stat` | `--text-stat-lg-tracking` | intrinsic inside one figure tile |
 | label | `--text-micro` | `--text-micro-tracking` | one figure tile |
-| checked | `--text-caption` | none — this role has no tracking companion | one figure tile |
+| checked | `--text-caption` | none — this role has no tracking companion | one figure tile, or the figure-group caption |
 | source | owned by `Button size="sm" emphasis="link"` | owned by `Button` | intrinsic visible label |
 
 Quote, attribution and checked-date copy stay in authored sentence case: “The team helped us make a
@@ -298,16 +308,28 @@ sentence case — “completed projects” — and uppercased at render by `--te
 differently shaped values into one row. Values and names are never transformed.
 
 **Italic, amended 28 Sep 2026.** Both arrangements set the quote italic — `font-style: italic` after
-the `font:` composite, which would otherwise reset it. ch10 B2.07: "Fails when it is set roman at
+the `font:` composite, which would otherwise reset it. *(29 Sep 2026: display's italic now lives in
+`--text-quote-lg` itself, so display writes no `font-style`; compact is unchanged.)* ch10 B2.07: "Fails when it is set roman at
 heading size. The italic and the rule are what make it read as reported speech." Display was roman
 h3, which is exactly that failure. Newsreader italic 400 and 500 are both loaded by the root layout.
 The name is roman serif under the italic, which ch10 counts as a change of voice (A1.06); the role is
 sans, a third.
 
-Display deliberately stops at h3 rather than h2 or a one-off display role. The 34px serif scale
-has enough position and weight to lead a section while holding the measured six-sentence quote;
-the shared h3 composite already steps at the system breakpoints. Compact retains the established
-28px Prose blockquote scale so it embeds without becoming a second page heading.
+**Display scale, amended 29 Sep 2026 (tracker 2.17, owner-approved).** This paragraph used to argue
+that display should stop at h3. In practice 34 italic against compact's 28 italic was no contrast at
+all, and a testimonial never became the moment on a page. Display now takes two roles of its own,
+added to the ladder with their paired line heights and `-t`/`-m` steps:
+
+- `--text-quote-lg` — Newsreader 400 italic, 43 / 1.2 → 34 / 1.24 → 25 / 1.3; tracking
+  `--letter-spacing-title-tight`. h2 scale on desktop and tablet. The mobile step is h3-m's 25 rather
+  than h2-m's 28: at 28 the six-sentence quote ran 16 lines of ≈ 24 characters in the 296 text column
+  and fragmented; at 25 it is 12 lines and reads as speech.
+- `--text-stat-lg` — Geist Mono 500, 54 / 1 → 43 → 40; tracking `--letter-spacing-title`. h1 scale.
+  Like `--text-stat`, the ratio holds at 1 on every width, so it has no line-height step.
+
+The names follow the ladder's existing size-variant convention (`body-lg`, `ui-lg`); ch03 names no
+display quote or display stat. Compact keeps `--text-quote` (28 / 22) so it embeds without becoming a
+second page heading, and `--text-stat` stays for any stat outside Proof.
 
 ## 9 · Responsive
 
@@ -317,8 +339,10 @@ fits two 256px tracks in the Section content width, producing the preferred two-
 four figures. In a 470px CTA column it becomes one track; in a 192px stress track the tile shrinks
 to the parent and all text wraps without widening it.
 
-The display quote/figures pair uses `fit` with a `md` minimum: it is two columns where both 320px
-tracks plus the column seam fit and one column otherwise. Compact is always one embedded track.
+The display quote/figures pair is `{ base: 1, lg: [2, 1] }` (29 Sep 2026): quote and figures side
+by side at 2:1 from 1024, one column below it with the quote first and the figure tiles reflowing
+across the width. Because it is breakpoint-driven it does not collapse in a narrow parent at a wide
+viewport (§7(b), §17 Q13). Compact is always one embedded track.
 The quote never clamps and the component never changes its type role based on sentence count.
 
 The source `Button size="sm"` reaches the 44px touch floor through `extendHitArea` so the 32px
@@ -328,7 +352,7 @@ touch contract. The gap scale does not shift responsively.
 ## 10 · Composition
 
 ```tsx
-<Layout columns={both ? 'fit' : undefined} minTrack="md" colGap={both ? 'column' : undefined} rowGap={both ? 'stack' : undefined}>
+<Layout columns={both ? { base: 1, lg: [2, 1] } : undefined} colGap={both ? 'column' : undefined} rowGap={both ? 'stack' : undefined}>
   {quote && (
     <Layout as="figure" rowGap="block">
       <blockquote /* 6px rule + inset */><Prose html={quote.quoteHtml} /></blockquote>
@@ -341,11 +365,17 @@ touch contract. The gap scale does not shift responsively.
       </Cluster>
     </Layout>
   )}
-  {figures && (
+  {figures && !shared && (
     <Layout as="ul" columns="tile" minTrack="sm" colGap="gutter" rowGap="block" justify="between">
       {figures.map((figure) => (
         <li><Layout rowGap="text">…value/label…checked/source…</Layout></li>
       ))}
+    </Layout>
+  )}
+  {figures && shared && ( /* every figure carries the same checkedOn — 29 Sep 2026 */
+    <Layout as="figure" rowGap="gutter">
+      <Layout as="ul" /* as above, no per-item checked line */>…</Layout>
+      <figcaption>{shared}</figcaption>
     </Layout>
   )}
 </Layout>
@@ -394,10 +424,19 @@ palette. Proof text maintains at least 4.5:1 on all four surfaces; the decorativ
 contrast floor. Reduced motion changes only the delegated link transitions to their existing
 instant behavior.
 
-With quote and figures, a screen reader encounters: “The team helped us make a complicated
-workflow clear. Ashok Mohanty, Founder, Auxentios. List, four items. 90 plus, completed projects,
-checked on 8 August 2026. 4.8 out of 5, 4.8 out of 5 Clutch rating, checked on 8 August 2026, View
-source for 4.8 out of 5 Clutch rating, link.” Exact number pronunciation remains the user agent's
+With quote and figures that share one date, a screen reader encounters: “The team helped us make a
+complicated workflow clear. Ashok Mohanty, Founder, Auxentios. Figure, checked on 8 August 2026. List,
+four items. 90 plus, completed projects. 4.8 out of 5, 4.8 out of 5 Clutch rating, View source for 4.8
+out of 5 Clutch rating, link.” With mixed dates there is no figure wrapper and each item reads its own
+date after its label, as before.
+
+**The date once, 29 Sep 2026.** A shared date is programmatically the whole set's: the `ul` and a
+`figcaption` holding the date are one native `figure`, and a `figcaption` is its figure's accessible
+name, so the date is announced on entry to the set and covers every item in it. That takes no
+`aria-describedby` on each `li` (the idref this section rules out), no visually hidden duplicate and
+no string rewritten — the caption is the authored `checkedOn` verbatim. It triggers only for two or
+more figures whose trimmed strings are identical; one figure keeps its own line, and any difference
+keeps every line. Exact number pronunciation remains the user agent's
 language behavior; no hidden replacement rewrites audited values.
 
 ## 12 · Content edge cases
@@ -411,7 +450,7 @@ language behavior; no hidden replacement rewrites audited values.
 | Many items (2× expected) | Render all eight valid figures in tile rows and warn above the expected maximum of four. Do not truncate, carousel or invent pagination. Eight quotes are eight parent-composed Proof instances; there is no set prop. |
 | Missing image or missing optional slot | Missing portrait → no box and no bind; the name returns to the quote's first letter (P1: "no portrait means no gap"). Missing mark → no row. An invalid portrait or mark (blank src, non-positive dimension) is treated as missing, with a development warning. A portrait whose URL 404s keeps its 64px box, empty, which is the honest failure; a mark whose URL 404s is ClientMark's case (its box paints nothing). Missing quote leaves figures only; missing figures leaves the quote only; missing source leaves no Button and no source seam. |
 | Empty required-ish text | Blank quote body, blank name or blank company invalidates the quote; a blank role does not (it is optional). Blank value, label or checked date invalidates that figure. Warn in development, retain other valid evidence and render `null` if none remains. |
-| Narrow track at 767 | Display pair stacks when two md tracks no longer fit; four figures become two-by-two through tile/sm. Type roles and gap steps remain unchanged. |
+| Narrow track at 767 | Display pair is one track below 1024; four figures become two-by-two through tile/sm. Type roles and gap steps remain unchanged. *29 Sep 2026: at lg and above the pair is 2:1 whatever the parent's width — see §17 Q13.* |
 | Parent that does not size it | Root requests the full available inline size with `min-inline-size: 0`; tile tracks keep their existing 256px preferred minimum and can shrink to 100%. In a wrapping `Cluster`, full inline sizing prevents intrinsic collapse. No hard component minimum is needed; the parent supplies the explicit 192px stress track. |
 | Logical properties rather than left/right | Quote rule and inset use the logical inline-start edge; all spacing is block/inline. RTL moves the rule and inset together without reordering authored attribution fields. |
 | Surface nested inside a different one | The nearest surface redeclares all six Proof tokens; Prose and Button independently resolve their complete palettes from that same scope. Proof paints no intervening ground. |
@@ -461,8 +500,10 @@ with `--duration-fast` and `--easing-standard`. Under reduced motion those exist
     props" while no image contract existed.)*
 12. Do not colour a non-clickable value with any Brandeis token; only the decorative rule and
     delegated links may use that family.
-13. Do not share one checked date across a row, infer it from the current day, or hide it visually;
-    every rendered figure contains its own visible `checkedOn` string.
+13. Do not infer a checked date from the current day, merge dates that differ, or hide one visually;
+    every rendered figure is covered by a visible `checkedOn` — its own, or, when every figure's is
+    identical, the one in the set's `figcaption`. *(Amended 29 Sep 2026: this forbade sharing one date
+    across a row.)*
 14. Do not truncate figures after four, quotes after a sentence count or attribution at one visual
     line; warnings preserve content and wrapping preserves access.
 
@@ -477,7 +518,8 @@ The exact block list, in order:
 3. **Quote length ladder.** Identical attribution with real one-, three- and six-sentence bodies in
    display, followed by the six-sentence body in compact. Print the resolved quote roles.
 4. **Figure count ladder.** One, two, three and four real figures, including `90+` and `4.8/5`, then
-   eight for the 2× stress case. Dates remain per item and partial rows retain tile width.
+   eight for the 2× stress case. A shared date renders once, under the set; a mixed-dates row keeps
+   one per figure (29 Sep 2026). Partial rows retain tile width.
 5. **Source treatment.** Figures without and with the source Button, including two repeated Clutch
    destinations. Visible label, contextual accessible name and same-context navigation are noted.
 6. **States: delegated only.** Rest references plus instructions to point, hold and Tab to inline
@@ -528,6 +570,19 @@ hierarchy; no repeated boxes or alternating grounds do it.
 | `--proof-name-ink` | component | per surface, §6 | The name's own ink. |
 | `--proof-portrait-size` | component | 64px | Component size. |
 | `--proof-portrait-ratio` | component | `--ratio-portrait` | The box's ratio. |
+
+**Amended 29 Sep 2026 (tracker 2.17) — two type roles, ten primitives and four usage tokens.**
+
+| Token | Layer | Value | Why |
+| ----- | ----- | ----- | --- |
+| `--font-size-quote-lg` / `-t` / `-m` | primitive | 43px / 34px / 25px | Display quote size ladder (§8). |
+| `--line-height-quote-lg` / `-t` / `-m` | primitive | 1.2 / 1.24 / 1.3 | Its paired ratio, same edit. |
+| `--font-size-stat-lg` / `-t` / `-m` | primitive | 54px / 43px / 40px | Display stat size ladder (§8). |
+| `--line-height-stat-lg` | primitive | 1 | Holds on every width, as stat's does. |
+| `--text-quote-lg` + `--text-quote-lg-tracking` | usage | italic 400 · quote-lg · Newsreader; `--letter-spacing-title-tight` | Display quote composite; italic is in the role. |
+| `--text-stat-lg` + `--text-stat-lg-tracking` | usage | 500 · stat-lg · Geist Mono; `--letter-spacing-title` | Display stat composite. |
+
+`docs/vocabulary.md` was regenerated in the same edit and must be pushed to the Claude Design project.
 
 *Before 28 Sep 2026:* **None — every value in this spec is an existing token.**
 
@@ -621,6 +676,18 @@ into the file, which ch05 §6 forbids. ch10 hides it by scaling the image 142% i
 specimen uses a square crop of the same photograph (`photograph-portrait-square.png`); the Media
 specimen still shows the circle.
 
+**13 · The 2:1 pair does not collapse in a narrow parent — non-blocking; owner to decide (29 Sep
+2026).** `Layout`'s breakpoint columns read the viewport, not the parent. So at 1024 and above the
+quote/figures pair is 2:1 wherever Proof sits: in CtaSection `open`'s 470 column the quote gets ≈ 270
+and the figures ≈ 135 (a 54px `4.8/5` wraps onto two lines), and the §15 item 12 stress tracks squeeze
+the same way. `fit`/`md` collapsed there on its own. No production route renders a combined Proof
+today (the seven call sites are compact), so this is a specimen-visible cost, not a live one. Options:
+(a) accept it and rule that a combined Proof only goes in a full-width band, dropping the
+`open`/combined case from CtaSection's proof ladder; (b) give `Layout` a content-driven weighted mode
+(a primitive conversation — container queries or a weighted `fit`); (c) return to `fit`/`md` and lose
+the 2:1. **Recommendation: (a) now, (b) if a narrow combined placement is ever wanted.** Shipped as
+approved, with the cost visible in the specimens.
+
 ## Amendment · 28 Sep 2026 (tracker 2.12)
 
 What changed, in one place:
@@ -642,6 +709,24 @@ What changed, in one place:
 8. **Routes.** None migrated: every change to the prop shape is additive or loosens a requirement,
    so the seven compact call sites type-check unchanged. The view model (`src/content/types.ts`) still
    types `role` as required and carries no portrait or mark; that is Phase 5.1's view-model work.
+
+## Amendment · 29 Sep 2026 (tracker 2.17)
+
+Owner-approved, all four as proposed:
+
+1. **The client mark renders.** The specimen's Dunmere and Aldermoor marks pointed at
+   `/design/client-mark-mid.svg` and `/design/client-mark-wide.svg`, neither of which existed, so ruling
+   P2 had never been seen rendered. Both are now drawn as fictional stress files (3:1, 120 × 40; 6:1,
+   240 × 40, dimensions = viewBox), beside the other `client-mark-*` stress files. Not a real mark from
+   `public/clients/`: the quotes are fictional, and a real client's logo under an invented quote would
+   be a fabricated attribution — the same reason the stand-in portrait is never put beside Auxentios.
+2. **Display scale.** `--text-quote-lg` and `--text-stat-lg` (§8, §16). Compact unchanged.
+3. **The date once.** A `figure`/`figcaption` group when every figure shares one `checkedOn` (§2, §11,
+   §14 item 13).
+4. **Quote beside figures.** `Layout columns={{ base: 1, lg: [2, 1] }} colGap="column"` (§7, §9, §10).
+   Its cost in narrow parents is §17 Q13.
+5. **Specimen.** Resolved-role notes updated; a mixed-dates row added to the figure count ladder; the
+   typography specimen lists both new roles and their breakpoint cuts.
 
 ## Appendix · Self-audit
 

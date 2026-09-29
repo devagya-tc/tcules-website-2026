@@ -703,7 +703,7 @@ export default function PageHeroSpecimenPage() {
       <PageHero title={LONG_TITLE} body={paragraphs(2)} />
       <Note
         title="10 · Row 1 · the longest realistic title, 57 characters"
-        note="The corpus's longest h1 is a Service L3 name of about this length. It wraps inside --measure-title (22ch, measured 693px at --text-h1) and the lines BALANCE rather than leaving one word alone on the last — a widow in the strongest shape on the page is visible from across a room. Never truncated, never clamped: there is no line-clamp and no text-overflow anywhere in this component."
+        note="The corpus's longest h1 is a Service L3 name of about this length. It wraps inside --measure-title (22ch, measured 878px at --text-display) and the lines BALANCE rather than leaving one word alone on the last — a widow in the strongest shape on the page is visible from across a room. Never truncated, never clamped: there is no line-clamp and no text-overflow anywhere in this component."
       />
 
       <PageHero title={TITLE} body={[PARAS[0], PARAS[1], URL_PARA]} />
@@ -1148,7 +1148,7 @@ export default function PageHeroSpecimenPage() {
             of its own — and that is the assertion rather than an omission: the stack is
             single-track at every width, both Clusters wrap by themselves, and both measures are{' '}
             <code>ch</code>-based so they follow the type down with no second value to keep in
-            sync. <code>--text-h1</code> re-declares itself at 1023 and 767 in the type layer,
+            sync. <code>--text-display</code> re-declares itself at 1023 (54) and 767 (43) in the type layer,
             which is where that decision belongs.
           </p>
           <p className={s.specNote}>

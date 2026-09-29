@@ -5,7 +5,9 @@
    minimum, and nothing is derived from another component.
 
    Naming: --crumb-{part}-{role}-{state}
-           part   link | current | divider | collapse | ring
+           part   link | current | divider | ring
+                  (the collapse mark has no token of its own: it reads
+                  --crumb-divider-ink, 29 Sep 2026)
            role   ink                       — a bare text link has an INK, not an fg;
                                               -fg is for a control with a box, which is
                                               why nav.css says --nav-item-fg for its
@@ -128,7 +130,6 @@
 --crumb-link-ink-hover:var(--color-brandeis-500);   /*  6.17:1 */
 --crumb-link-ink-pressed:var(--color-brandeis-700); /* 10.07:1 */
 --crumb-current-ink:var(--color-neutral-900);       /* 14.62:1 */
---crumb-collapse-ink:var(--color-neutral-600);      /*  4.92:1 — the floor of AA, do not lighten */
 --crumb-divider-ink:var(--color-neutral-400);       /*  2.12:1 — decoration, exempt */
 --crumb-ring-color:var(--color-brandeis-500);--crumb-ring-gap-color:var(--color-paper);
 }
@@ -149,7 +150,6 @@
 --crumb-link-ink-hover:var(--color-brandeis-500);   /*  5.51:1 */
 --crumb-link-ink-pressed:var(--color-brandeis-700); /*  8.99:1 */
 --crumb-current-ink:var(--color-neutral-900);       /* 13.06:1 */
---crumb-collapse-ink:var(--color-neutral-700);      /*  7.27:1 — stepped; 600 would be 4.39:1 */
 --crumb-divider-ink:var(--color-neutral-500);       /*  2.82:1 — decoration, exempt */
 --crumb-ring-color:var(--color-brandeis-500);--crumb-ring-gap-color:var(--color-paper-deep);
 }
@@ -169,7 +169,6 @@
 --crumb-link-ink-hover:var(--color-brandeis-300);   /*  7.32:1 — floor: 500 is 2.77:1 here */
 --crumb-link-ink-pressed:var(--color-brandeis-100); /* 13.61:1 */
 --crumb-current-ink:var(--color-white);             /* 17.26:1 */
---crumb-collapse-ink:var(--color-neutral-400);      /*  8.05:1 */
 --crumb-divider-ink:var(--color-neutral-700);       /*  2.10:1 — decoration, exempt */
 --crumb-ring-color:var(--color-brandeis-300);--crumb-ring-gap-color:var(--color-neutral-950);
 }
@@ -195,7 +194,6 @@
 --crumb-link-ink-hover:var(--color-white);          /*  6.23:1 */
 --crumb-link-ink-pressed:var(--color-brandeis-50);  /*  5.57:1 — one step; the rule width carries the rest */
 --crumb-current-ink:var(--color-white);             /*  6.23:1 */
---crumb-collapse-ink:var(--color-brandeis-100);     /*  4.91:1 — the tightest cell here, do not lighten */
 --crumb-divider-ink:var(--color-brandeis-300);      /*  2.64:1 — decoration, exempt */
 --crumb-ring-color:var(--color-white);--crumb-ring-gap-color:var(--color-brandeis-500);
 }

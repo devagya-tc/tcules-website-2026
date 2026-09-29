@@ -22,8 +22,7 @@
   --enq-flag-ink: var(--color-neutral-600);
   --enq-message-invalid-ink: var(--color-danger-600);
   --enq-status-ink: var(--color-neutral-900);
-  --enq-status-rule: var(--color-neutral-300);
-  --enq-status-rule-error: var(--color-danger-600);
+  --enq-status-ink-error: var(--color-danger-600); /* 6.48:1 on paper */
   --enq-success-ink: var(--color-neutral-900);
   --enq-success-rule: var(--color-success-500);
   --enq-caption-ink: var(--color-neutral-600);
@@ -36,8 +35,7 @@
   --enq-flag-ink: var(--color-neutral-700);
   --enq-message-invalid-ink: var(--color-danger-600);
   --enq-status-ink: var(--color-neutral-900);
-  --enq-status-rule: var(--color-neutral-400);
-  --enq-status-rule-error: var(--color-danger-600);
+  --enq-status-ink-error: var(--color-danger-600); /* 5.78:1 on deep paper */
   --enq-success-ink: var(--color-neutral-900);
   --enq-success-rule: var(--color-success-500);
   --enq-caption-ink: var(--color-neutral-700);
@@ -50,8 +48,7 @@
   --enq-flag-ink: var(--color-neutral-400);
   --enq-message-invalid-ink: var(--color-danger-300);
   --enq-status-ink: var(--color-neutral-100);
-  --enq-status-rule: var(--color-neutral-700);
-  --enq-status-rule-error: var(--color-danger-300);
+  --enq-status-ink-error: var(--color-danger-300); /* 8.65:1 on neutral-950 */
   --enq-success-ink: var(--color-neutral-50);
   --enq-success-rule: var(--color-success-500);
   --enq-caption-ink: var(--color-neutral-400);
@@ -64,8 +61,7 @@
   --enq-flag-ink: var(--color-brandeis-100);
   --enq-message-invalid-ink: var(--color-danger-100);
   --enq-status-ink: var(--color-white);
-  --enq-status-rule: var(--color-brandeis-200);
-  --enq-status-rule-error: var(--color-danger-100);
+  --enq-status-ink-error: var(--color-danger-100); /* 5.03:1 on brandeis-500 */
   --enq-success-ink: var(--color-white);
   --enq-success-rule: var(--color-white);
   --enq-caption-ink: var(--color-brandeis-100);

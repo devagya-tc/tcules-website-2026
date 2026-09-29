@@ -1,8 +1,8 @@
 import { Callout, Layout, Proof, Prose, Section } from 'tcules-website-2026';
 
 /* NOTE: these preview files are type-STRIPPED, not type-checked (see .design-sync/NOTES.md), so an
-   invalid prop value fails silently at render rather than at build. There is only one prop here and
-   it is a string, so the thing to keep honest is the CONTENT contract rather than a union: `html` is
+   invalid prop value fails silently at render rather than at build. There are two props here and
+   both are strings (`label` is optional, since tracker 2.17), so the thing to keep honest is the CONTENT contract rather than a union: `html` is
    trusted, sanitised rich text carrying one or two paragraphs and inline marks — no headings, no
    figures, no blockquotes. Blank or whitespace-only content renders NOTHING and warns in
    development, which the BlankRendersNothing story below shows on purpose. */
@@ -55,8 +55,8 @@ const ATTRIBUTED = {
  * It says what the surrounding argument, example or evidence does NOT establish. Ten records across
  * eight routes today; `/services/product-design` carries three of them and the other seven carry one.
  *
- * **One prop, one part, no axis.** `html` is trusted sanitised rich text and that is the whole API.
- * There is no eyebrow, heading, label, icon, quotation glyph, attribution, severity marker, panel,
+ * **Two props, no axis.** `html` is trusted sanitised rich text; `label` is an optional short key
+ * (tracker 2.17, see the Keyed story). There is no eyebrow, heading, icon, quotation glyph, attribution, severity marker, panel,
  * ground or dismissal control — and no `variant`, `size` or `tone`, because a scope note has one
  * job and a second treatment would be a second meaning nobody has asked for.
  *
@@ -82,6 +82,19 @@ export function Default() {
     <Layout rowGap="block">
       <Prose html={CLAIM} />
       <Callout html={NOTE_TWO_SENTENCES} />
+    </Layout>
+  );
+}
+
+/** An optional mono key, added 29 Sep 2026 (tracker 2.17) because a bare scope note looked exactly
+    like a Figure caption. Pass the key in sentence case — "Scope", not "SCOPE": the mono label voice
+    uppercases it in CSS only. It leads the sentence on its baseline, 8 apart, and wraps above the
+    sentence when the line cannot hold both. Leave it off and the note is exactly the Default card. */
+export function Keyed() {
+  return (
+    <Layout rowGap="block">
+      <Prose html={CLAIM} />
+      <Callout label="Scope" html={NOTE_TWO_SENTENCES} />
     </Layout>
   );
 }

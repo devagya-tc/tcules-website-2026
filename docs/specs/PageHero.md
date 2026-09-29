@@ -6,7 +6,7 @@
 |---|---|
 | **Component** | `PageHero` |
 | **Tier** | 2 pattern (`src/patterns/PageHero/`) |
-| **Status** | implemented · amended 28 Sep 2026 (tracker 2.9) — shown to the owner, not merged until approved (★, ruling W1) |
+| **Status** | implemented · amended 28 Sep 2026 (tracker 2.9) — shown to the owner, not merged until approved (★, ruling W1) · amended 29 Sep 2026 (tracker 2.17) — the title at `--text-display` |
 | **Token prefix** | `--hero-*` (collides with none of `--btn-` `--crumb-` `--foot-` `--icn-` `--lay-` `--logo-` `--nav-` `--prose-` `--sec-`) |
 | **Designer / date** | Design · 21 Aug 2026 |
 | **Amended** | 25 Aug 2026 — three changes, all requested and all global: a `media` slot last in the band (image or YouTube embed), the `body` paragraphs from `--text-body-lg` (18) to `--text-body` (16), and the byline `key` from verbatim to uppercase. Every section below is amended in place; the changes are collected in **Amendment · 25 Aug 2026** near the end, next to the build-decisions log. **28 Sep 2026** (tracker 2.9, rulings H1–H3, M1–M4) — an `arrangement` prop (`stacked` · `beside`), image media through the `Media` primitive with the record nested, `sizes` from `src/lib/image-sizes.ts`, and the lead onto `--measure-lead`. Collected in **Amendment · 28 Sep 2026** |
@@ -44,7 +44,7 @@ The opening block of a page: one `h1`, an optional eyebrow above it, one to six 
 | `stack` | `<div>`, `Layout rowGap="stack"` | yes | none | the seam between `opening`, `byline`, `extras` and `actions` |
 | `opening` | `<div>`, `Layout rowGap="block"` | yes | none | the seams between `eyebrow`, `title` and `copy` — one step, three children |
 | `eyebrow` | `<p>` | no — 32 of 129 | `eyebrow`, uppercased | `--hero-eyebrow-ink`, `--text-eyebrow` and its tracking, `--measure-body` |
-| `title` | `<h1>` | yes — exactly one, always rendered | `title`, verbatim | `--hero-title-ink`, `--text-h1` and its tracking, `--measure-title` |
+| `title` | `<h1>` | yes — exactly one, always rendered | `title`, verbatim | `--hero-title-ink`, `--text-display` and its tracking (29 Sep 2026; `--text-h1` until then), `--measure-title` |
 | `copy` | `<div>`, `Layout rowGap="text"` | yes | none | the seam between paragraphs |
 | `lead` | `<p>` — the first paragraph | yes | `body[0]`, verbatim | `--hero-lead-ink`, `--text-lead`, `--measure-body` |
 | `body` | `<p>` — paragraphs 2…n | no — 95 of 129 have at least one | `body[1…]`, verbatim | `--hero-body-ink`, `--text-body`, `--measure-body` |
@@ -238,12 +238,12 @@ The byline's two steps are the one place the ratio does real work: 4px between a
 
 | Name | Token | Value | Measured against |
 |---|---|---|---|
-| `title` measure | `--measure-title` | 22ch — **measured 693px** at `--text-h1` in Newsreader (this row said ≈594px before the build; the `ch` in this face is wider than the estimate assumed) | `--sec-container` 1240px. The title takes **56%** of the column, not the 48% first claimed, and still leaves the right side open — which is the hero's silhouette and the reason it does not need a second column to look composed. The token is unchanged; only the arithmetic was wrong |
-| `lead` measure | `--hero-lead-measure` → `--measure-lead` | 40ch — **measured 489px** at `--text-lead` (28 Sep 2026; it was `--measure-body`, 832px, until then) | CU04's 35-word ceiling: at 832px that is three long lines reading as the first paragraph of the body; at 489 it is a compact statement under a 693px balanced title, and the two read as two shapes at squint with the band's right half open. The same measure ContentSection's lead takes |
+| `title` measure | `--measure-title` | 22ch — **measured 878px** at `--text-display` in Newsreader (29 Sep 2026; it measured 693px at `--text-h1`, and ≈594px was the pre-build estimate) | `--sec-container` 1240px. The title takes **71%** of the column and still leaves 362px of the right side open — which is the hero's silhouette and the reason it does not need a second column to look composed. Re-measured at display and **kept**: see the 29 Sep amendment for the line lengths |
+| `lead` measure | `--hero-lead-measure` → `--measure-lead` | 40ch — **measured 489px** at `--text-lead` (28 Sep 2026; it was `--measure-body`, 832px, until then) | CU04's 35-word ceiling: at 832px that is three long lines reading as the first paragraph of the body; at 489 it is a compact statement under an 878px balanced title, and the two read as two shapes at squint with the band's right half open. The same measure ContentSection's lead takes |
 | `body` measure | `--measure-body` | 68ch — **measured 666px** at `--text-body` | The same 1240px column. The measure does not narrow at six paragraphs — a hero that tightened its measure as its copy grew would turn its longest pages into ribbons |
 | `eyebrow` measure | `--measure-body` | 68ch — **measured 490px** at `--text-eyebrow` (this row said ≈548px) | The longest eyebrow in the corpus, `CONNECTX · AI-NATIVE BUILDING ENERGY PRODUCT` at 44 characters, which measures about 380px uppercased and sits on one line. The measure is there to cap the one that does not |
 | action height | `--btn-height-md` | 40px | The site's default control height. It is 4px short of `--btn-hit-min` 44px, which is why every action sets `extendHitArea` — see section 9 |
-| minimum inline size | — | 320px, `--lay-track-md` | The longest single word in a corpus `h1` — "Modernisation", 13 characters — which still fits at `--text-h1`'s 767 re-declaration. **Confirmed at build:** rendered at 320 the title breaks per word with no overflow and the band produces no horizontal scrollbar; the assumption held. Below 320 the component renders and breaks inside words |
+| minimum inline size | — | 320px, `--lay-track-md` | The longest single word in a corpus `h1` — "Modernisation", 13 characters. **29 Sep 2026, at `--text-display`:** it measures **261px** at the 767 re-declaration (43px), so it fits a 320px track and the 326px column at a 390 viewport, but not the 256px column at a **320 viewport**, where it now breaks inside the word (no overflow — the reset's break-word holds, and no horizontal scrollbar). At `--text-h1` (34px) it fit at 320 too. Logged as an open question rather than changed (A10) |
 | `media` inline size | — | `stacked`: the full content column, 1240. `beside` from 1024: one of two equal tracks, (1240 − 64) / 2 = **588** at the cap | Nothing. It is the only part of the hero that is **not** capped at a measure. Height always follows the asset's own ratio (H3): a 1:1 illustration beside the copy is 588 tall, a 16:9 banner below it 698 |
 | `media` video ratio | `--hero-media-ratio` | 16 / 9 | YouTube's own ratio, and it boxes the **frame only**. Anything else letterboxes inside the player rather than cropping it, which is a black band drawn by another origin inside our band. It is not applied to images: those render at their intrinsic ratio, uncropped |
 | two-adjacent dead air | — | 192px, 2 × `--sec-padding-y` | The visual tell of the bug in section 12 row 12: two 96px band paddings meeting between two display titles |
@@ -254,7 +254,7 @@ Eight values, of which five are declared and three are computed consequences sta
 
 **(c) Optical corrections reaching the space ramp — none, and why**
 
-There is a real correction available and this spec declines it. Newsreader at `--text-h1` carries a left side-bearing that sets the title's ink a couple of pixels inside its box, while the mono eyebrow above it starts nearly at its own box edge, so on the pages that have both, the two left edges do not quite agree. Pulling the title inline-start by `--space-2` would fix that — and would be wrong, because the eyebrow is absent on 97 of 129 heroes. A correction measured against a part that usually is not there would move the title's left edge depending on whether a route happened to fill a slot, which is a worse fault than the 2px it removes: the title's left edge is the strongest vertical line on the page and it must be in the same place on all 129 of them.
+There is a real correction available and this spec declines it. Newsreader at the title's role (`--text-display` since 29 Sep 2026) carries a left side-bearing that sets the title's ink a couple of pixels inside its box, while the mono eyebrow above it starts nearly at its own box edge, so on the pages that have both, the two left edges do not quite agree. Pulling the title inline-start by `--space-2` would fix that — and would be wrong, because the eyebrow is absent on 97 of 129 heroes. A correction measured against a part that usually is not there would move the title's left edge depending on whether a route happened to fill a slot, which is a worse fault than the 2px it removes: the title's left edge is the strongest vertical line on the page and it must be in the same place on all 129 of them.
 
 So the component reaches into `--space-*` nowhere, and it carries **no margin on any node**, which keeps layout rule 2 intact with zero exceptions. `Prose`'s documented margin exception does not apply here, because every paragraph in this component is a React child that a `Layout` can hold.
 
@@ -271,7 +271,7 @@ So the component reaches into `--space-*` nowhere, and it carries **no margin on
 | Part | Role | Tracking companion |
 |---|---|---|
 | `eyebrow` | `--hero-eyebrow-text: var(--text-eyebrow)` | `--text-eyebrow-tracking` |
-| `title` | `--hero-title-text: var(--text-h1)` | `--text-h1-tracking` |
+| `title` | `--hero-title-text: var(--text-display)` (29 Sep 2026; `--text-h1` until then) | `--text-display-tracking` |
 | `lead` | `--hero-lead-text: var(--text-lead)` | none — this role has no tracking companion |
 | `body` | `--hero-body-text: var(--text-body)` | none — this role has no tracking companion |
 | `key` | `--hero-key-text: var(--text-micro)` | `--text-micro-tracking` |
@@ -306,7 +306,7 @@ Example copy, exactly as it would be authored — the eyebrow and the key in sen
 
 ## 9 · Responsive
 
-**At 1023 — nothing in this component changes.** No DOM change, no reordering, no gap change, no type change. `--text-h1` re-declares itself at 1023 in the type layer **[assumed]**, and `PageHero` must not touch it; because both measures are `ch`-based they follow the type down on their own, with no media query and no second value to keep in sync.
+**At 1023 — nothing in this component changes.** No DOM change, no reordering, no gap change, no type change. `--text-display` re-declares itself at 1023 (67 → 54) and 767 (→ 43) in the type layer, and `PageHero` must not touch it; because both measures are `ch`-based they follow the type down on their own, with no media query and no second value to keep in sync.
 
 **At 1024 — `beside` splits (28 Sep 2026).** A `beside` hero with media goes from one track to two equal ones at Layout's `lg` breakpoint (1024), with `--gap-column` between them, top-aligned. That is the only responsive change in the component, and it is Layout's template, set by a prop — `PageHero.module.css` still contains no `@media`. Below 1024 a `beside` hero is a `stacked` hero exactly: copy, then media, 48 apart. `sizes` follows: `HERO_BESIDE` states 588 at the cap, `50vw − 64` from 1024, and the full column below.
 
@@ -422,7 +422,7 @@ Example copy, exactly as it would be authored — the eyebrow and the key in sen
 
 **Alt text on hero media.** `alt` is required by the type and says what the image shows; it never restates the h1 or the lead. **An illustration cover or banner takes `alt=""`** (ch05 §9a, §7): the h1 already names what it stands for, so the image adds nothing a screen reader has not heard — empty, never omitted, never "image". A product-UI banner (cut-out or capture) names the product and the part. A photograph names who or what is shown. A video's `title` is its frame's name.
 
-**Contrast floors, restated.** Every one of the twenty-four **text** cells in section 6 clears **4.5:1**, including the parts that would have qualified for the 3:1 large-text allowance — the title at `--text-h1` 54px is large text and sits at 14.62:1 on paper anyway, so the allowance is never used and never needed. The loosest cells in the table are 4.91:1 (`--hero-body-ink`, `--hero-eyebrow-ink` and `--hero-key-ink` on blue) and 4.92:1 (the eyebrow and the keys on paper). There is no disabled state, so the disabled exemption is not taken anywhere in this component. There is no colour-only state, vacuously: there are no states.
+**Contrast floors, restated.** Every one of the twenty-four **text** cells in section 6 clears **4.5:1**, including the parts that would have qualified for the 3:1 large-text allowance — the title at `--text-display` 67px (54px `--text-h1` until 29 Sep 2026) is large text and sits at 14.62:1 on paper anyway, so the allowance is never used and never needed. The loosest cells in the table are 4.91:1 (`--hero-body-ink`, `--hero-eyebrow-ink` and `--hero-key-ink` on blue) and 4.92:1 (the eyebrow and the keys on paper). There is no disabled state, so the disabled exemption is not taken anywhere in this component. There is no colour-only state, vacuously: there are no states.
 
 The four `--hero-media-rule-ink` cells are the only ones below 4.5:1 and they are **decoration**, exempt from the text floor: a hairline around an image is not text, it is not a control boundary, and nothing depends on perceiving it — the image's own pixels are what the reader is looking at. The 3:1 non-text floor does not apply for the same reason. Section 6 gives the four values and argues each direction.
 
@@ -442,14 +442,14 @@ Three things that sentence is meant to prove: the eyebrow arrives as plain text 
 
 | Case | Required handling |
 |---|---|
-| **1 · Longest realistic string** | The longest `h1` in the corpus is a Service L3 name of about 58 characters. It wraps inside `--measure-title` to three lines at `--text-h1`, and the lines **balance** rather than leaving one word alone on the last — the title is the strongest shape in the band and a widow in it is visible from across a room. Never truncated, never clamped, no ellipsis: no `line-clamp` and no `text-overflow` anywhere in this component |
+| **1 · Longest realistic string** | The longest `h1` in the corpus is a Service L3 name of about 58 characters. It wraps inside `--measure-title` to three lines at `--text-display` (measured 29 Sep 2026: three lines, 600px of ink at 1440), and the lines **balance** rather than leaving one word alone on the last — the title is the strongest shape in the band and a widow in it is visible from across a room. Never truncated, never clamped, no ellipsis: no `line-clamp` and no `text-overflow` anywhere in this component |
 | **2 · One long unbroken token (a URL)** | Every text part breaks inside a word rather than overflow — `eyebrow`, `title`, `lead`, `body`, `key` and `value` alike. The band never produces a horizontal scrollbar, at any width, for any content. The title is included deliberately: a 60-character unbroken token in an `h1` is a content fault and should look like one, but it must not take the page's layout with it |
 | **3 · Zero items** | `body` empty is a **compile error** (section 3), and so is a `credits` group with no people. The runtime cases that remain: `credits` empty renders no `<dl>`; `actions` empty renders no `Cluster`; and in both cases the `--gap-stack` seam disappears with the row, because a `Layout` gap exists only between rendered children. If an empty `body` reaches the renderer anyway, `copy` renders no element at all — never an empty `<div>` holding 16px of nothing |
 | **4 · One item** | One paragraph (34 pages) renders as a single `--text-lead` `<p>` and `copy` shows no seam. One credit group renders one `pair` and `byline` shows no seam. One action renders one `solid` / `primary` `Button` and no `ghost` — the second emphasis is a consequence of a second entry, not a slot waiting to be filled |
 | **5 · Many items (2× expected)** | Six paragraphs is the corpus maximum; twelve is 2×. No cap, no truncation, no warning — the stack grows and the `lead` role still applies to the first only, so a twelve-paragraph hero renders as a lead and eleven body paragraphs and looks exactly like what it is, a page whose opening should have been a section. That is a review comment, not a runtime behaviour (section 17 Q8). Four actions is a compile error |
 | **6 · Missing image or missing optional slot** | **Amended 25 Aug 2026 — there is now an image slot, and it answers this row the same way every other optional slot does.** `media` absent renders no element, no ratio reserved and no placeholder box: 129 of 129 routes are in that state today, and a hero that left room for an image it does not have would be a hero with a hole in it. For all five optional slots the rule is one sentence and it is the most important one in this section: **an absent slot renders no element and no seam.** `eyebrow` absent on 97 pages → `opening` has one child and the title sits at the top of the band with only `--sec-padding-y` above it. `credits` and `dates` absent on 114 → no `<dl>`, not an empty one. `children` absent on 128 → no `extras` div. `actions` absent on 70 → no `Cluster`. `media` absent on all 129 → no `<img>` and no `<iframe>`. No route ever renders a 48px gap above nothing. A *broken* image src is a different case and is not handled: the browser's own broken-image box renders at the reserved width and height, which is the honest failure and is findable in an audit |
 | **7 · Empty required-ish text** | `title=""` renders the `<h1>` anyway, empty. A page with no `h1` is worse than a page with a visibly empty one, and the empty element is what makes the fault findable in an audit. **No placeholder copy, ever** — no "Untitled", no em dash, no fallback string, because a fallback is how a content fault ships. An empty string inside `body` is filtered before render, so it produces no `<p>` and no seam around nothing. **The build had to fix the ORDER this happens in, which the spec did not state:** blanks are dropped BEFORE the lead and body roles are assigned. Filtering afterwards would let a blank first entry render an empty `<p>` at `--text-lead` and promote paragraph two to `--text-body`, so one route with a stray blank line in its frontmatter would open one step quieter than every other route |
-| **8 · The narrow track at 767** | The band stays full-width; the content column becomes the viewport less `--sec-gutter` on each side. Both measures exceed the column below about 800px and go inert. The title wraps to more lines and `--text-h1` re-declares itself in the type layer **[assumed]**, not here. `byline` wraps to one pair per line at `--gap-block`; `actions` wraps at `--gap-tight`, each `Button` keeping its 40px box and its 44px hit area (this row said 48px before the build, which contradicted 7(b) and 9; the box is `--btn-height-md` and the floor is reached by `extendHitArea`, not by stepping the size). Nothing reorders and no media query fires in this component |
+| **8 · The narrow track at 767** | The band stays full-width; the content column becomes the viewport less `--sec-gutter` on each side. Both measures exceed the column below about 800px and go inert. The title wraps to more lines and `--text-display` re-declares itself in the type layer (43px at 767), not here. `byline` wraps to one pair per line at `--gap-block`; `actions` wraps at `--gap-tight`, each `Button` keeping its 40px box and its 44px hit area (this row said 48px before the build, which contradicted 7(b) and 9; the box is `--btn-height-md` and the floor is reached by `extendHitArea`, not by stepping the size). Nothing reorders and no media query fires in this component |
 | **9 · A parent that does not size it** | `PageHero` is a band and may only be a direct child of the page or its template, exactly as `Breadcrumbs` may. `media` inherits this: both renderings are `inline-size: 100%`, which resolves against the band's content column and would resolve against nothing useful in a shrink-to-fit parent — one more consequence of a placement that should not exist. It must not be placed inside a `Section` (the content column would inset twice), inside a `Layout` track (a band is not a row), or inside a `Cluster` (a wrapping row does not size a band, and the hero would shrink to its longest word). For the case where it happens anyway, the named minimum is **320px, `--lay-track-md`** — the width at which the longest single word in a corpus `h1` still fits without overflow. Below 320 it renders and breaks inside words rather than overflowing |
 | **10 · Logical properties rather than left/right** | Every distance in the component is a `Layout` or `Cluster` gap, which are logical by construction, or a measure, which is `max-inline-size`. `media` is `inline-size` / `block-size`, likewise logical. There is no `margin`, no `padding` and no positioned part anywhere in `PageHero.module.css`, so there is no physical-direction property to get wrong — which is the cleanest possible answer to this row and is a consequence of 7(c) declining the one optical correction on offer |
 | **11 · This component's surface nested inside a different one** | Addressed in section 6. The band is the `[data-surface]` scope and all seven surface-dependent tokens are declared in all four blocks, so a `tint` hero between two `ink` bands renders the tint column at 11.81:1 rather than a light ink stranded on a light ground at 1.13:1. Inside the band, `extras` content reads `--sec-*` from the hero's own surface. `extras` **must not contain a `Section`** — the column would inset twice — nor a `Breadcrumbs`, nor another `PageHero` |
@@ -579,6 +579,8 @@ Three values were checked against the ramps and found: `--measure-body` is right
 
 The vocabulary has both `--text-display` (67px) and `--text-h1` (54px), and the hero is the only `h1` on the site.
 
+**Superseded 29 Sep 2026 (tracker 2.17): `--text-display`, on every hero, by the owner's ruling** — see *Amendment · 29 Sep 2026*. The original answer is kept below as the record.
+
 **Answered: `--text-h1`, on every route in scope.** `--text-display` is reserved for the home-page hero, which is out of scope for this build. The consequences, all of which are already applied above: the title measure resolves to about 594px rather than 737px, so the title takes 48% of the content column instead of 59% and the band's open right-hand half gets wider; section 4 keeps its 1 × 1 matrix, because a reserved role on an out-of-scope page is not a size axis on this component; and if the home page hero is later built on `PageHero` rather than on its own template, that is the moment a size axis gets argued for, against a real second page.
 
 No longer blocking. Nothing in this spec is gated.
@@ -626,7 +628,7 @@ As specified, `reviewer` is a role inside `credits`, so absent means no group, n
 
 They hold identical values on all four surfaces. Options: two tokens, as specified; or one `--hero-label-ink`.
 
-**Recommendation: two.** Anatomy names become token slots, the two parts take different type roles (`--text-eyebrow` and `--text-micro`), and one is a category while the other is a field label. Section 6 notes the agreement rather than aliasing it, which is the same call `Breadcrumbs.md` made for `--crumb-link-ink` and `--crumb-collapse-ink`.
+**Recommendation: two.** Anatomy names become token slots, the two parts take different type roles (`--text-eyebrow` and `--text-micro`), and one is a category while the other is a field label. Section 6 notes the agreement rather than aliasing it, which is the same call `Breadcrumbs.md` made for `--crumb-link-ink` and its collapse-mark ink (since folded into `--crumb-divider-ink`, 29 Sep 2026).
 
 **8 · The twelve-paragraph case. — non-blocking**
 
@@ -675,6 +677,34 @@ Tracker 2.9, built to the owner's rulings H1–H3 and M1–M4 (`docs/phase-2-dec
 **4 · The lead onto `--measure-lead` (40ch).** Sections 7(b) and 17 A4. New component token `--hero-lead-measure`; `docs/vocabulary.md` regenerated (and needs pushing to the Claude Design project — the one manual step).
 
 **What did not change.** The copy's parts, order, inks, type roles and gaps. The band density. The video's 16/9 box, host, parameters and hairline. The default rendering of every route: `stacked`, and an image with no kind still renders as a capture (M3), so the six routes that can carry an image look as they did — with a `srcset` now.
+
+---
+
+## Amendment · 29 Sep 2026
+
+Tracker 2.17 (visual overhaul), the owner's ruling: **display on every hero.** Global — a component-token change, applied in place in sections 0, 2, 7(b), 8, 9 and 17 Q1; this is the index.
+
+**1 · The title reads `--text-display` and `--text-display-tracking`** — 67px / 1.04 / −0.02em, 54 at 1023, 43 at 767, all from the role's own re-declarations. `--hero-title-text` and `--hero-title-tracking` are re-pointed; **no new token**. The element stays `<h1>`: the role names the scale, not the element. Q1's reason for `--text-h1` — display reserved for a home-page hero — lapses, since every hero is its page's one title and the owner wants that title at the largest step.
+
+**2 · `--measure-title` re-measured at 67px and kept at 22ch.** 22ch computes to **878px** at `--text-display` (the reviewer's estimate was ~860), 71% of the 1240 column. Measured in the browser at the CU04 stress rows (specimen blocks 10, 16 and 18), ink width of the longest line:
+
+| Row | Chars | 1440 (67px, 878 cap) | 1023 (54px, 693 cap) | 390 (43px, 326 column) |
+|---|---|---|---|---|
+| CU04 floor, 4 words | 32 | 2 lines, 486px | 2 lines, 382px | 2 lines, 298px |
+| CU04 ceiling, 10 words | 55 | 2 lines, 799px | 2 lines, 629px | 4 lines, 265px |
+| Longest realistic, 57 chars | 57 | 3 lines, 600px | 3 lines, 472px | 4 lines, 309px |
+| `beside` ceiling, 588 track | 55 | 3 lines, 550px | stacked | stacked |
+| `beside` ceiling at 1024, 448 track | 55 | 4 lines, 433px (at 1024) | — | — |
+
+Every line lands between about 19 and 29 characters — a display line's comfortable length — and every multi-line title balances (`--text-title-wrap`). The ceiling row fills 799 of 878, so the measure is doing work rather than going inert, and the right 362px of the band stays open. Nothing the rows show asks for a narrower measure, and `--measure-title` is shared with `ContentSection`, `CtaSection`, `ListCard` and `BlockCard`, so a change there would be a change to five components for a problem none of them has. **Unchanged.**
+
+**3 · The lead/body step.** 20 over 16 under a 67px title: the title-to-lead ratio goes from 2.7 to 3.35 and the lead still reads as the second voice, set at 40ch (489px) against an 878px title — two distinct shapes at squint, with the 24 between them unchanged. **Unchanged; not clearly broken.**
+
+**4 · Checked:** every arrangement × media kind × surface in the specimen at 1440, 1024, 1023, 768, 767, 390 and 320 — no title overflows its box and no page scrolls sideways (`scripts/shots.mjs`: 0 problems). `beside` stays top-aligned (H3); centring the media was not approved.
+
+**A10 · "Modernisation" at a 320 viewport. — non-blocking, owner's call.** At 43px the word is 261px and the column at a 320 viewport is 256, so it breaks inside the word there (no overflow). It fits at 390. Options: accept it (320 is below the 390 the site is checked at), or a smaller `--font-size-display-m` step, which is a type-layer change for every display user and not part of this ruling.
+
+**What did not change.** The element, the measures, every ink, every gap, the band density, the arrangement and the media.
 
 ---
 

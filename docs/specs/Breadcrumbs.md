@@ -18,6 +18,13 @@ Verified against the loaded Tcules library (`window.Tcules`, 9 components) and `
 
 **Composition changed by the owner, 20 Aug 2026, after the first build.** Q1 was re-opened and answered a third time: the trail **owns its own band** — a flush `Section`, with 64 of air above the trail and only the focus ring's reach below it — rather than being placed in a caller-composed `Section flush`. Sections 1, 2, 3, 7, 9, 10, 12, 14, 15 and 17 were re-cut for it. Two things follow that the earlier answers did not have: **`surface` is now a prop**, because a pattern that owns a band has no ancestor to read `data-surface` from (the same reason `SiteNav` and `SiteFooter` take it), and **Q9 is closed** — the 64 above the trail is what holds the hit extension's 23.15px upward reach clear of the sticky nav. The cost is that the trail can only be a direct child of the page: inside a `Section` its content column insets twice, and inside a `Layout` it is a band pretending to be a row.
 
+**Amended 29 Sep 2026 (tracker 2.17, visual overhaul) — three crumbs on a phone, and a real ellipsis.** Approved by the owner. On a 390 phone a collapsed four-crumb trail wrapped onto a second line 44.85px below the first, led by a divider, and read as two elements rather than one phrase. The `rowGap="block"` that makes that distance **stays** — it is what keeps two wrapped lines' 44px targets from overlapping (§9) — so the fix is to stop the phone trail wrapping instead. Two changes:
+
+1. **The collapse has a second depth below md.** From 768 up nothing changes: four or more levels render as four — first, collapse, parent, current. **Below 768 the parent folds into the collapse too, and the trail renders as three: first, collapse, current.** Trails of two or three levels are the same at both widths — three is already the phone's count. The mechanism is render-both-and-hide: the parent `<li>` and the wide count string carry `.wideOnly`, the narrow count carries `.narrowOnly`, and the module sets `display: none` on whichever does not apply. No prop, no client JS; it stays a server component. `display: none` rather than a visual clip is deliberate — it removes the element from the accessibility tree as well, so at any width a screen reader walks exactly one trail with exactly one count (never both counts, never a parent link that is invisible yet focusable). No id is minted, so `aria:check` has nothing new to resolve. The collapse is **still inert** (Q4 stands): the omitted levels, including the phone's folded parent, are not reachable from the trail itself — on a phone the nearest reachable ancestor is Home. That is a known cost of the owner's ruling, not an oversight; `SiteNav` remains the way to get elsewhere.
+2. **The collapse mark takes the divider's ink.** It was already U+2026, but at label ink (`--crumb-collapse-ink`, the same steps as `--crumb-link-ink`) it read as three periods typed into the trail — a fourth, truncated label. It now reads `--crumb-divider-ink`, so it is punctuation between crumbs at the solidus's weight. `--crumb-collapse-ink` is **deleted** rather than remapped: a token equal to the divider's on every surface would be a second name for one decision. The mark is `aria-hidden` and its meaning is carried by the hidden count, so like the divider it is decoration and exempt from the text floor; the glyph is emitted as the escape `'\u2026'` so an editor cannot silently turn it into three periods.
+
+§2, §3, §6, §9, §11, §12 and §17 Q4/Q7 are amended in place; each amendment is marked *29 Sep 2026*.
+
 **Built 20 Aug 2026.** Nine decisions the build had to make that this document did not, each recorded in the section it belongs to rather than only here: `hit` is a `::before` because §2 asked for two `::after` on one element (§2); two contrast figures in §6's prose were wrong and are corrected, one of them in the direction that *strengthens* the decision (§6); `root` and `crumb` emit no class because §2 says they carry nothing and a class with no rule is a dead rule (§2); no `--crumb-shadow` and no `z-index` were minted (§7); `transform-origin` is stated as `0 50%` because CSS has no logical spelling for it (§12); the dev warning names the labels rather than the route, because naming the route would mean reading it (§12); three of §14's greps needed the comment-stripping qualifier this repo's own review step prescribes (§14); the render guard carries two truthiness checks that `noUncheckedIndexedAccess` requires (§3); and three §14 items are route-level and not yet decidable (§14). Every contrast ratio in §6's table was recomputed from `primitives.css` and all 28 matched exactly.
 
 ## 1 · Identity
@@ -47,13 +54,13 @@ The ancestor trail: an ordered list of the pages above this one, ending in this 
 | `link` | `<a href>` | one per item except the last | `items[i].label`, verbatim | link inks, `rule`, `hit`, the focus ring |
 | `current` | `<span aria-current="page">` | yes — exactly one, always last | the last item's `label`, verbatim | `--crumb-current-ink` |
 | `divider` | `<span aria-hidden="true">` holding U+002F solidus | between every pair; count is always `crumb` count − 1 | none — a fixed character, not a slot | `--crumb-divider-ink` |
-| `collapse` | `<li>` holding `<span aria-hidden="true">` U+2026 plus a visually hidden count string | only when `items.length >= 4` | none — the count string is generated | `--crumb-collapse-ink` |
+| `collapse` | `<li>` holding `<span aria-hidden="true">` U+2026 plus **two** visually hidden count strings, one `.wideOnly` and one `.narrowOnly` (*29 Sep 2026*) | only when `items.length >= 4` | none — the count strings are generated | `--crumb-divider-ink` (*29 Sep 2026*; was `--crumb-collapse-ink`, deleted) |
 | `rule` | `::after` on `link`, at `inset-block-end: 0` | yes | none | `currentColor` — no token of its own, deliberately (see 6) |
 | `hit` | `::before` on `link`, anchored to the box bottom and grown upward | yes | none | no value — hit area only |
 
 > **Corrected at build.** Both were specified as `::after` on `link`, and one element has one `::after`. `Button` avoids the collision by putting its rule on an inner `.labelInk` and its hit on the outer box; here the hit takes `::before` instead, which needs no extra element and no wrapper span. Nothing else moves: the hit is invisible, so which pseudo carries it is not a visual decision.
 
-> **`root` and `crumb` emit no class.** The Carries column says both hold nothing — no colour, no distance, no box — so the module declares no rule for either, and a class with no rule is a dead rule that `classes:check` cannot see. The `<nav>` therefore carries only `aria-label`, and the first `<li>` carries nothing at all. The remaining six parts are the six classes the module defines: `trail` `link` `current` `divider` `collapse` `collapseCount`.
+> **`root` and `crumb` emit no class.** The Carries column says both hold nothing — no colour, no distance, no box — so the module declares no rule for either, and a class with no rule is a dead rule that `classes:check` cannot see. The `<nav>` therefore carries only `aria-label`, and the first `<li>` carries nothing at all. The remaining six parts are the six classes the module defines: `trail` `link` `current` `divider` `collapse` `collapseCount` — plus two breakpoint classes that are not parts, `wideOnly` and `narrowOnly` (*29 Sep 2026*). `wideOnly` sits on the collapsed trail's parent crumb and on the wide count; `narrowOnly` on the narrow count; each is `display: none` on the side of 768 where it does not apply.
 
 No part is optional in the sense of being switchable: `collapse` appears as a consequence of depth, and `divider` as a consequence of position. There are no author-facing slots at all, which is the reason section 12's slot rows read as they do.
 
@@ -65,7 +72,7 @@ type BreadcrumbItem = { label: string; href: string }
 
 | Prop | Exact literal union | Default | What it decides |
 |---|---|---|---|
-| `items` | `readonly BreadcrumbItem[]` | none — required | Everything: order, labels, hrefs, which item is `current` (always the last), and whether the middle collapses (`length >= 4`) |
+| `items` | `readonly BreadcrumbItem[]` | none — required | Everything: order, labels, hrefs, which item is `current` (always the last), and whether the middle collapses (`length >= 4`) — to four crumbs from 768 up, to three below (*29 Sep 2026*) |
 | `surface` | `'paper' \| 'tint' \| 'ink' \| 'blue'` (`SectionSurface`) | `'paper'` | The ground this component's own band paints. Must equal the `surface` of the hero band immediately below it |
 
 Two props, no knobs.
@@ -79,7 +86,7 @@ Two props, no knobs.
 | `className`, `style`, `id` | Unlike `Button`, this props type is closed. The only reason to reach in would be outer spacing, and this component's own band owns that |
 | `density`, `flush` | The band's air is not a caller decision. It is 64 above and 0 below on every route, for the two reasons section 7 gives, and a route that wanted otherwise would be a route whose trail sits differently from every other trail |
 | `separator` | The divider is a decision this spec makes once (section 6, section 17 Q2), not a per-caller choice. A trail with a different divider on one route is a bug |
-| `collapse`, `maxItems`, `expanded` | Collapse is depth-driven and unconditional. A knob would let a route opt out of the constraint that exists for mobile |
+| `collapse`, `maxItems`, `expanded` | Collapse is depth-driven and unconditional — one depth per side of the md breakpoint since 29 Sep 2026, still no knob. A knob would let a route opt out of the constraint that exists for mobile |
 | `size`, `variant` | One size, one variant — see section 4 |
 | `homeIcon` | Forbidden by the brief, and rightly: a glyph replacing the word "Home" costs a label and buys nothing |
 | `label` (the landmark name) | Constant string `"Breadcrumb"`. One per page means there is nothing to disambiguate |
@@ -135,7 +142,7 @@ A 1 × 1 matrix, stated as a decision. The trail is identical on all 128 routes;
 
 ## 6 · Per-surface colour
 
-Eight tokens, four surfaces, thirty-two cells, no deltas. `paper` values are declared on `:root, [data-surface=paper]` following `nav.css` and `button.css`.
+Seven tokens, four surfaces, twenty-eight cells, no deltas. (*29 Sep 2026:* eight until `--crumb-collapse-ink` was deleted; the collapse mark now reads `--crumb-divider-ink`.) `paper` values are declared on `:root, [data-surface=paper]` following `nav.css` and `button.css`.
 
 | Token | paper (`--color-paper`) | tint (`--color-paper-deep`) | ink (`--color-neutral-950`) | blue (`--color-brandeis-500`) |
 |---|---|---|---|---|
@@ -143,8 +150,7 @@ Eight tokens, four surfaces, thirty-two cells, no deltas. `paper` values are dec
 | `--crumb-link-ink-hover` | `--color-brandeis-500` — **6.17:1** | `--color-brandeis-500` — **5.51:1** | `--color-brandeis-300` — **7.32:1** | `--color-white` — **6.23:1** |
 | `--crumb-link-ink-pressed` | `--color-brandeis-700` — **10.07:1** | `--color-brandeis-700` — **8.99:1** | `--color-brandeis-100` — **13.61:1** | `--color-brandeis-50` — **5.57:1** |
 | `--crumb-current-ink` | `--color-neutral-900` — **14.62:1** | `--color-neutral-900` — **13.06:1** | `--color-white` — **17.26:1** | `--color-white` — **6.23:1** |
-| `--crumb-collapse-ink` | `--color-neutral-600` — **4.92:1** | `--color-neutral-700` — **7.27:1** | `--color-neutral-400` — **8.05:1** | `--color-brandeis-100` — **4.91:1** |
-| `--crumb-divider-ink` | `--color-neutral-400` — n/a — decoration (2.12:1) | `--color-neutral-500` — n/a — decoration (2.82:1) | `--color-neutral-700` — n/a — decoration (2.10:1) | `--color-brandeis-300` — n/a — decoration (2.64:1) |
+| `--crumb-divider-ink` — also the collapse mark (*29 Sep 2026*) | `--color-neutral-400` — n/a — decoration (2.12:1) | `--color-neutral-500` — n/a — decoration (2.82:1) | `--color-neutral-700` — n/a — decoration (2.10:1) | `--color-brandeis-300` — n/a — decoration (2.64:1) |
 | `--crumb-ring-color` | `--color-brandeis-500` — **6.17:1** against its gap | `--color-brandeis-500` — **5.51:1** against its gap | `--color-brandeis-300` — **7.32:1** against its gap | `--color-white` — **6.23:1** against its gap |
 | `--crumb-ring-gap-color` | `--color-paper` — n/a — this is the ground the ring is measured against, one row above | `--color-paper-deep` — n/a — same | `--color-neutral-950` — n/a — same | `--color-brandeis-500` — n/a — same |
 
@@ -162,7 +168,7 @@ The `rule` has **no colour token**. It paints `currentColor`, exactly as `Button
 
 **blue.** The ramp runs out. Ancestors sit at `--color-brandeis-100` (4.91:1 — the tightest cell in the table, and the reason nothing quieter is allowed here), hover reaches `--color-white`, and pressed steps back to `--color-brandeis-50` while the rule doubles in height, because there is no colour above white to press into. One consequence to accept knowingly: a hovered ancestor on blue is the same white as the current page. They stay distinguishable because the hovered one carries a rule and the current one never can. The ring is `--color-white` over the blue ground at 6.23:1 — blue-on-blue would have been invisible, which is why the ring is a per-surface token at all.
 
-**Nested surfaces.** The trail sets no surface and paints nothing: it reads `data-surface` from its nearest ancestor that declares one. Because all eight tokens are declared in all four blocks, a trail inside a `tint` panel nested in an `ink` `Section` renders the tint column — `--color-neutral-700` links at **7.27:1** on the tint ground, not `--color-neutral-400` stranded on `--color-paper-deep` at 1.90:1. (This spec first quoted 4.92:1 here, which is paper's number; the tint column's link ink is 700, not 600. The 1.90:1 figure it contrasts against is correct.) That is the measured failure the brief cites (a tint panel inside an ink section rendering text at 1.13:1), and it is a failure of a deltas-only table, not of a component. The specimen route has a band for exactly this case.
+**Nested surfaces.** The trail sets no surface and paints nothing: it reads `data-surface` from its nearest ancestor that declares one. Because all seven tokens are declared in all four blocks, a trail inside a `tint` panel nested in an `ink` `Section` renders the tint column — `--color-neutral-700` links at **7.27:1** on the tint ground, not `--color-neutral-400` stranded on `--color-paper-deep` at 1.90:1. (This spec first quoted 4.92:1 here, which is paper's number; the tint column's link ink is 700, not 600. The 1.90:1 figure it contrasts against is correct.) That is the measured failure the brief cites (a tint panel inside an ink section rendering text at 1.13:1), and it is a failure of a deltas-only table, not of a component. The specimen route has a band for exactly this case.
 
 **What Q1(c) adds to that.** The band the trail reads its surface from is now a `Section` containing nothing but the trail, so nothing else in it would look wrong first if the value were wrong — a mismatched trail band is legible only as a tonal seam under the nav, which is exactly the kind of defect that survives review. The trail band's `surface` and the hero band's `surface` are one decision made twice; section 14 carries the assertion that checks it.
 
@@ -230,7 +236,7 @@ The current page differs from its ancestors by **ink only** — `--color-neutral
 
 **At 1023 — nothing changes.** No DOM change, no gap change, no type change. The trail is already at most four items.
 
-**At 767 — nothing changes in the component.** The row wraps if the track is narrower than the trail, which it does at any width, at any breakpoint, with no media query: `Cluster` wraps. The collapse threshold does **not** move at a breakpoint — it is depth-driven, so a 4-level route is collapsed on a 1440px desktop too. One rule, one rendering, everywhere.
+**At 767 — the collapse takes its second depth (*29 Sep 2026*, superseding "nothing changes in the component").** The threshold does not move — four or more levels collapse at every width, so a 4-level route is collapsed on a 1440px desktop too — but *how much* collapses does: below 768 the parent folds into the collapse and a collapsed trail renders three crumbs, first / … / current. The DOM is the same at both widths; the module's two `@media` blocks set `display: none` on `.wideOnly` below 768 and on `.narrowOnly` from 768 up. A distance is not what changes — the gap steps and the type role are identical either side — the rendered COUNT is. That is why this does not break "the gap scale does not shift responsively". The row still wraps if a trail is wider than the track (a three-level trail with long labels, or one very long leaf); `Cluster` wraps, at `--gap-block`, as before.
 
 **The gap scale does not shift responsively.** `--gap-inline` on the inline axis and `--gap-block` on the block axis are the distances at every width. No media query in this component may swap a gap step or a type role.
 
@@ -329,15 +335,15 @@ The trail band takes no `Layout`. It has one child, so there is no axis to state
 
 **Focus ring.** `:focus-visible` only, never `:focus`. `--crumb-ring-width` over `--crumb-ring-offset` of `--crumb-ring-gap-color`, cornered at `--crumb-link-radius-focus`, drawn as the two-shadow pair. Focus also shows what hover shows: the hover ink and the full-width rule.
 
-**Contrast floors, restated.** Labels and the collapse mark are text at 4.5:1 minimum and the table's tightest cell is 4.91:1. Nothing here is 24px or larger, so the 3:1 large-text allowance never applies. The ring is 3:1 against its own gap colour and measures 5.51:1 at worst. The divider is decoration and exempt. No state is carried by colour alone: hover and focus add a rule, pressed thickens it, `current` is a different element with `aria-current`.
+**Contrast floors, restated.** Labels are text at 4.5:1 minimum and the table's tightest cell is 4.91:1. The collapse mark is decoration since *29 Sep 2026* — `aria-hidden`, meaning carried by the hidden count, painted in divider ink — and exempt like the divider. Nothing here is 24px or larger, so the 3:1 large-text allowance never applies. The ring is 3:1 against its own gap colour and measures 5.51:1 at worst. The divider is decoration and exempt. No state is carried by colour alone: hover and focus add a rule, pressed thickens it, `current` is a different element with `aria-current`.
 
 **Reduced motion.** Under `prefers-reduced-motion: reduce` the rule's wipe becomes an instant appearance at `--duration-instant`, matching `Button`'s own reduce block; colour still changes at `--duration-fast`, because a colour change is not motion. Nothing else in the component moves at all.
 
-**What a screen reader says** — the 8-level glossary route, collapsed to four rendered items:
+**What a screen reader says** — the 8-level glossary route, collapsed to four rendered items (from 768 up):
 
 > "Breadcrumb, navigation. List, 4 items. Home, link, 1 of 4. 5 levels omitted, 2 of 4. Design tokens, link, 3 of 4. Token naming, current page, 4 of 4. End of list, end of Breadcrumb navigation."
 
-At depth 4 the same string reads "1 level omitted". Exact phrasing varies by screen reader; what the component controls is the label, the singular/plural count string, and `aria-current`.
+Below 768 (*29 Sep 2026*) the same route reads "List, 3 items. Home, link, 1 of 3. 6 levels omitted, 2 of 3. Token naming, current page, 3 of 3." — the parent is not announced, because `display: none` takes it out of the tree, and only the narrow count is present. Never both counts at once. At depth 4 the strings read "1 level omitted" wide and "2 levels omitted" narrow. Exact phrasing varies by screen reader; what the component controls is the label, the singular/plural count string, and `aria-current`.
 
 ## 12 · Content edge cases
 
@@ -347,13 +353,13 @@ At depth 4 the same string reads "1 level omitted". Exact phrasing varies by scr
 | One long unbroken token (a URL or a slug) | The label breaks inside the word rather than pushing the row past its track. No horizontal scrollbar, no overflow out of the content column, no ellipsis |
 | Zero items | Render nothing — no `<nav>`, so no empty landmark. `/` does not render the component at all; this is the defence against a bad frontmatter record. Dev-mode warning naming **the labels it was handed**, not the route: naming the route would mean reading it, which is the one thing this component may never do, and the labels identify the offending frontmatter record anyway |
 | One item | Render nothing, same as zero, same warning. A trail of one is a statement about nothing; a lone "Home" above a hero is noise |
-| Many items (2× expected: 16) | Renders identically to depth 4 — first, `collapse`, parent, `current`. Depth is free after four, which is why there is no `maxItems` prop |
+| Many items (2× expected: 16) | Renders identically to depth 4 — first, `collapse`, parent, `current` from 768 up; first, `collapse`, `current` below (*29 Sep 2026*). Depth is free after four, which is why there is no `maxItems` prop |
 | Missing image or missing optional slot | **None, and why:** the component has no image and no optional slot. Every part is derived from `items`; a home glyph is forbidden by the brief and would be the only candidate |
 | Empty required-ish text | An item whose `label` is empty or whitespace is dropped before render, so the divider count stays correct. If dropping leaves fewer than two items, the component renders nothing, as above |
-| The narrow track at 767 | Wraps to two lines at `--gap-block`; no DOM change, no gap change, no collapse change. The 44px targets **clear each other by 0.85px** — see section 9; the earlier 1.15px overlap was a consequence of the rule hanging below the box and went away with it |
+| The narrow track at 767 | *29 Sep 2026:* a collapsed trail drops its parent and renders three crumbs, so a realistic trail holds one line. A trail that is still wider than the track — three authored levels with long labels, or a single very long leaf — wraps between crumbs at `--gap-block`; no DOM change and no gap change. The 44px targets **clear each other by 0.85px** — see section 9; the earlier 1.15px overlap was a consequence of the rule hanging below the box and went away with it |
 | A parent that does not size it | **Cannot arise, and that is now structural.** The trail brings its own full-width band, so it has no parent that could fail to size it: it is a direct child of the page. `trail` is a wrapping `Cluster` row of text, not a grid track, so nothing can collapse it to zero — its intrinsic minimum is the widest label, and a label wider than the column breaks inside the word. No `min-inline-size` token is needed and none exists. **It must not be placed in a `Layout` track at all** — not `fit`, not `tile`, not a numbered column — because a band is not a row; nor inside a `Section`, which would apply the content column a second time. The wrap is therefore driven by VIEWPORT width, exactly as it is on a real route |
 | Logical properties rather than left/right | The `divider` sits at each crumb's inline start; `rule` spans the inline axis via `inset-inline`; `hit` is pinned to the inline edges and centred on the block axis. No `left`, `right`, `margin-left` or `padding-right` anywhere — verified at build with comments stripped. (`Button`'s older `hit` uses `left`/`right`; this component uses the logical pair, and that difference is deliberate.) **Two physical values survive because CSS has no logical spelling for them:** `transform-origin` is written `0 50%` rather than `left center`, which states the origin as a position instead of as the forbidden keyword and is the inline start in LTR; and the hit's centring is `translateY(-50%)`, the block axis, exactly as `Button` does it |
-| This component's surface nested inside a different one | Correct by construction: all eight tokens declared on all four surfaces, so a trail in a `tint` panel inside an `ink` section renders the tint column. Section 6's last paragraph, and a specimen band |
+| This component's surface nested inside a different one | Correct by construction: all seven tokens declared on all four surfaces, so a trail in a `tint` panel inside an `ink` section renders the tint column. Section 6's last paragraph, and a specimen band |
 | Two of this component adjacent | Not valid on a route — one per page. The component does not defend against it and would produce two identical `Breadcrumb` landmarks, which a screen reader lists twice; since the landmark name is not a prop, there is nothing to disambiguate them with. The specimen band that shows two adjacent is labelled as a specimen-only arrangement with that consequence noted |
 | Interactive content inside a slot | Impossible by design: there are no slots and `children` is not in the props type. `items` carries strings and hrefs only. A control inside a trail would make a statement of position into a toolbar; controls belong in `SiteNav` or in a `Cluster` of `Button`s beside the hero |
 
@@ -427,7 +433,7 @@ Every trail below is the real component with real labels. **Re-cut at build for 
 
 **None — every value in this spec is an existing token.**
 
-The `--crumb-*` names in sections 6 and 7 are this component's own component-layer declarations, which is what a component spec produces; each resolves to an existing token: `--color-*` for all eight colour tokens, `--border-width-hairline` and `--border-width-2`, `--radius-4`, `--focus-ring-width`, `--focus-ring-offset`, `--text-caption`, `--duration-fast`, `--duration-instant`, `--easing-standard`, `--space-1`, `--space-2`, and the literal 44px matching `--btn-hit-min`. The Q1(c) composition adds nothing either: `flush` is an existing `Section` prop and the trail→hero seam is the hero band's own `--sec-padding-y`, so the seam is spent out of the existing band vocabulary rather than out of a new token.
+The `--crumb-*` names in sections 6 and 7 are this component's own component-layer declarations, which is what a component spec produces; each resolves to an existing token: `--color-*` for all seven colour tokens (eight before 29 Sep 2026), `--border-width-hairline` and `--border-width-2`, `--radius-4`, `--focus-ring-width`, `--focus-ring-offset`, `--text-caption`, `--duration-fast`, `--duration-instant`, `--easing-standard`, `--space-1`, `--space-2`, and the literal 44px matching `--btn-hit-min`. The Q1(c) composition adds nothing either: `flush` is an existing `Section` prop and the trail→hero seam is the hero band's own `--sec-padding-y`, so the seam is spent out of the existing band vocabulary rather than out of a new token.
 
 No new gap step: the two distances are `--gap-inline` and `--gap-block`. No new colour: every cell is an existing ramp step. **No new glyph:** the divider is U+002F in the label's own face, and the collapse mark is U+2026 — neither is an `Icon`, so neither touches the 17-glyph set. No new mechanism: the collapse is inert, so there is no disclosure, no animation beyond the existing underline precedent, no portal and no scroll behaviour.
 
@@ -462,7 +468,7 @@ Nothing here is BLOCKING, which is what `Status: accepted` requires.
 > The reason this is not a blocking change to the component: `Breadcrumbs` renders no `Section` and never did. The band is the caller's, so (a), (b) and (c) all build the same component — the decision moves 128 call sites, not one line of this component.
 
 **2 · What the divider is drawn as. Resolved — non-blocking.**
-Options: a text solidus; `Icon name="chevron-right"`; a new glyph. **Recommendation: the text solidus**, aria-hidden. It is in the label's own face, so it aligns on the baseline and scales with the type for free; it needs no glyph request; and it does not imply a direction or a control, which a chevron does everywhere else in this system (`SiteNav` rows, `Button` icons). A chevron would also mean a `Cluster align="center"` and an icon-size decision for a 13px row.
+Options: a text solidus; `Icon name="alt-arrow-right"`; a new glyph. **Recommendation: the text solidus**, aria-hidden. It is in the label's own face, so it aligns on the baseline and scales with the type for free; it needs no glyph request; and it does not imply a direction or a control, which a chevron does everywhere else in this system (`SiteNav` rows, `Button` icons). A chevron would also mean a `Cluster align="center"` and an icon-size decision for a 13px row.
 
 > **Resolved: the text solidus**, U+002F, as recommended and as sections 2, 6 and 16 already specify. No glyph request, no change to the 17-glyph set.
 
@@ -475,6 +481,8 @@ Two short labels stacked on 32 pages. Options: (a) differentiate typographically
 Options: an ellipsis that expands on click; an inert ellipsis; dropping levels silently. **Recommendation: the inert ellipsis**, with a visually hidden "{n} levels omitted". It is the honest one — it says levels were dropped without pretending to be a control — and it is the cheap one: no `aria-expanded`, no `aria-controls` pointing at a list that is not rendered at rest, no keyboard contract, no focus to place after expansion, no state token, nothing that moves. Dropping levels silently was rejected because the visual and the announced trail would then disagree with the sitemap for no gain. If the owner wants the expanding version it is a **new mechanism request** with its own argument, and that request would be blocking.
 
 > **Resolved: the inert ellipsis**, as recommended. No new mechanism request. Sections 5, 11 and 13 stand: nothing opens, nothing takes focus, nothing animates, and no `--crumb-expanded-*` token exists.
+>
+> **Still inert after 29 Sep 2026.** The phone collapse folds the parent into the same inert mark, so below 768 the parent is not reachable from the trail either. Accepted with the owner's three-crumb ruling; an expanding collapse remains a separate mechanism request.
 
 **5 · The 6- and 8-level outliers: content or design. Resolved — non-blocking.**
 **Recommendation: content, and the design already absorbs it.** After the collapse both render identically to a 4-level trail, so they cost nothing visually and need no special case. What they do reveal is an information architecture eight levels deep on a glossary term route, which is a question for the content owner, not for this component. No action here either way.
@@ -490,6 +498,8 @@ Today `items` is `readonly BreadcrumbItem[]` **[assumed]**, so depth 0 and depth
 At depth 4 the collapse hides exactly one level and saves the width of one label. The constraint says 4 or more and this spec honours it as written; the alternative is a threshold of 5, which would leave 39 pages uncollapsed on desktop and would need the mobile case handled some other way. **Recommendation: keep 4.** One rule at every depth and every width is worth more than the width of one label.
 
 > **Resolved: keep 4.** `items.length >= 4`, at every width, with no breakpoint and no prop. Sections 2, 3 and 9 stand.
+>
+> **Amended 29 Sep 2026 (tracker 2.17).** The threshold is still 4 at every width and there is still no prop, but the collapse now has a breakpoint: below 768 it also folds the parent, rendering three crumbs. "One rule at every depth and every width" gave way to a phone trail that wrapped onto two lines; see front matter.
 
 **8 · Confirm the path. Resolved — non-blocking.**
 `src/patterns/Breadcrumbs/` per section 1. If anyone reads a trail as a primitive: a primitive may not import `Cluster`, and hand-rolled flex is forbidden, so the two rules together force tier 2. Named here only so the tier is not re-litigated in review.
@@ -542,7 +552,7 @@ NAMES
     --crumb-shadow and a z-index, each argued in section 7.
 [x] Every glyph I named is in the glyph set, or is a NEW GLYPH REQUEST describing a filled
     shape. I named no Icon glyph at all: the divider is U+002F text and the collapse mark is
-    U+2026 text. chevron-right is named once, in Q2, as the option NOT taken.
+    U+2026 text. alt-arrow-right is named once, in Q2, as the option NOT taken.
 [x] Every prop and every prop VALUE I gave for Section, Layout or Cluster appears in the prop
     unions: Section surface=paper|tint|ink|blue, density=tight, flush; Layout rowGap=block|
     stack, colGap=gutter, columns={[1,2]}|"tile", minTrack=sm; Cluster as, colGap=inline,
@@ -575,8 +585,9 @@ COLOUR AND CONTRAST
     is no hover fill and no pressed fill in this component — stated as an assertion under the
     table — so the hover and pressed inks are measured on the surface ground, which is what
     is behind them.
-[x] Every text ratio is >= 4.5:1. Tightest: 4.91:1 (--crumb-link-ink and --crumb-collapse-ink
-    on blue). No disabled state exists, so the exemption is never used.
+[x] Every text ratio is >= 4.5:1. Tightest: 4.91:1 (--crumb-link-ink on blue; also
+    --crumb-collapse-ink until it was deleted on 29 Sep 2026). No disabled state exists, so
+    the exemption is never used.
 [x] The focus ring is measured against its own gap colour on every surface: 6.17 / 5.51 /
     7.32 / 6.23, floor 3:1.
 [x] Decoration is marked "n/a — decoration" rather than left blank — the divider row, with the

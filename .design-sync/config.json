@@ -100,7 +100,7 @@
     }
   },
   "dtsPropsFor": {
-    "Icon": "  /** Which glyph. The union of the set in glyphs.ts, so a typo fails to compile. */\n  name: \"arrow-right\" | \"arrow-left\" | \"download\" | \"copy\" | \"close-circle\" | \"document-text\" | \"check\" | \"chevron-down\" | \"chevron-right\" | \"menu\" | \"close\" | \"square-arrow-right-up\" | \"info-circle\" | \"danger-triangle\";\n  /** Size role. Defaults to `md` (16). Ignored inside a control that sizes its own icons. */\n  size?: \"sm\" | \"md\" | \"lg\" | \"xl\";\n  /** An accessible name, for an icon that carries meaning ON ITS OWN. Leave it off for the\n      common case — a glyph beside a label, or inside a button that already has one — where the\n      icon is decorative and is rendered aria-hidden. */\n  label?: string;\n  className?: string;"
+    "Icon": "  /** Which glyph. The union of the set in glyphs.ts, so a typo fails to compile. */\n  name: \"arrow-right\" | \"arrow-left\" | \"arrow-right-up\" | \"download\" | \"copy\" | \"check-circle\" | \"document-text\" | \"alt-arrow-down\" | \"alt-arrow-up\" | \"alt-arrow-right\" | \"hamburger-menu\" | \"close-circle\" | \"square-arrow-right-up\" | \"info-circle\" | \"danger-triangle\";\n  /** Size role. Defaults to `md` (16). Ignored inside a control that sizes its own icons. */\n  size?: \"sm\" | \"md\" | \"lg\" | \"xl\";\n  /** An accessible name, for an icon that carries meaning ON ITS OWN. Leave it off for the\n      common case — a glyph beside a label, or inside a button that already has one — where the\n      icon is decorative and is rendered aria-hidden. */\n  label?: string;\n  className?: string;"
   },
   "readmeHeader": ".design-sync/conventions.md"
 }

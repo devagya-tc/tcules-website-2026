@@ -4,11 +4,12 @@ import { cx } from '@/lib/cx';
 
 import styles from './Input.module.css';
 
-export type InputEmphasis = 'standard' | 'quiet';
-
+/* One treatment, and no `emphasis` prop. There were two — standard, and a `quiet` emphasis kept
+   for SiteFooter's newsletter row — and on paper and ink the two rendered nearly identically: the
+   same fill, the same rule, a placeholder a step apart. An emphasis nobody can see is worse than
+   none, so quiet was merged into standard and deleted (29 Sep 2026, tracker 2.17), and a prop with
+   one legal value went with it. The token names keep `standard` as the name of the treatment. */
 type SharedProps = {
-  /** Standard is the form treatment; quiet preserves the footer's lower-chrome treatment. */
-  emphasis?: InputEmphasis;
   /** Adds the invalid rule and emits aria-invalid without replacing native control semantics. */
   invalid?: boolean;
   className?: string;
@@ -32,7 +33,6 @@ export type InputProps = NativeInputProps | NativeTextareaProps;
  */
 export function Input({
   as = 'input',
-  emphasis = 'standard',
   invalid = false,
   className,
   'aria-invalid': ariaInvalid,
@@ -46,7 +46,6 @@ export function Input({
     nativeInvalid === 'spelling';
   const controlClassName = cx(
     styles.control,
-    styles[emphasis],
     as === 'textarea' && styles.textarea,
     invalidState && styles.invalid,
     className,

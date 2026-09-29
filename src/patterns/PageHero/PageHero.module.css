@@ -36,7 +36,7 @@
    band that has nothing to stack.
 
    No margin, anywhere, on any node. §7(c) of the spec names the one optical correction that was
-   available — Newsreader at --text-h1 sets the title's ink a couple of pixels inside its box
+   available — Newsreader at the title's role sets the title's ink a couple of pixels inside its box
    while the mono eyebrow above starts nearly at its own box edge, so on the pages that have both
    the two left edges do not quite agree — and declines it. Pulling the title inline-start by
    --space-2 would fix that and would be wrong: the eyebrow is absent on 97 of 129 heroes, so the
@@ -108,8 +108,9 @@
 }
 
 /* ── The title ─────────────────────────────────────────────────────────────────
-   --text-h1 and not --text-display: display is reserved for the home-page hero, which is out of
-   scope here. The composite and its tracking are restated rather than left to globals.css's bare
+   --text-display, since 29 Sep 2026 (tracker 2.17): the owner's ruling is display on every hero.
+   It was --text-h1, with display held back for a home-page hero nothing built. The element is
+   still <h1>; the role names the scale, not the element. The composite and its tracking are restated rather than left to globals.css's bare
    `h1` rule, and deliberately: that rule is documented there as a base layer and a floor, not the
    answer, and a component whose title depended on it would lose its type the day a Heading
    component replaced it.
@@ -121,8 +122,9 @@
    Never clamped and never truncated: a 60-character unbroken token in an h1 is a content fault
    and should look like one, but the reset's break-word stops it taking the page's layout with it.
 
-   22ch measures 693px at this role in Newsreader, so the title takes 56% of the 1240 column and
-   leaves the right side open. That silhouette is the reason the hero needs no second column to
+   22ch measures 878px at this role in Newsreader (693 at --text-h1), so the title takes 71% of
+   the 1240 column and still leaves the right side open; the CU04 ceiling title sets on two
+   balanced lines, 799px of ink. That silhouette is the reason the hero needs no second column to
    look composed, and it is why a `variant="split"` was rejected rather than deferred.
    The spec's §7(b) first estimated 594px and 48% and was corrected against the browser at build;
    the token did not change, the arithmetic did. */
@@ -151,13 +153,13 @@
    It was 68ch on both until then, which put the lead at 832px: at CU04's 35-word ceiling that is
    three long lines that read as the first paragraph of the body rather than as a lead, and it
    made the no-visual hero (97 of 129 routes) one ragged column at squint. At 40ch the title
-   (693px, balanced) and the lead (490px) are two distinct shapes with the band's right half
+   (878px, balanced) and the lead (490px) are two distinct shapes with the band's right half
    left open, which is the composition. It is also the measure ContentSection's lead already
    takes, so a lead is one width wherever the system sets one. `ch` still resolves against each
    part's own role, which is why the measures sit on the parts and not on the copy wrapper.
 
    In `beside` the track is 588 at the widest, so the lead's 490 still binds and the title's
-   693 and the paragraphs' 666 go inert against the track.
+   878 and the paragraphs' 666 go inert against the track.
 
    Neither role has a tracking companion — --text-lead and --text-body are two of the seven in
    the layer that ship none — so there is no letter-spacing to state, and a --hero-lead-tracking

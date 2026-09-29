@@ -9,7 +9,7 @@
 | **Status**          | implemented                                                                                                            |
 | **Token prefix**    | `--lcrd-*`                                                                                                             |
 | **Designer / date** | Codex / 21 Aug 2026                                                                                                    |
-| **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug. **Phase 2 task 2.11 / 28 Sep 2026** — the thumbnail moves onto `Media` (`fit="fill"`, `LIST_CARD_THUMBNAIL`, lazy); the marker union discriminates on `type`; `external` takes ch04's `square-arrow-right-up` and a visually hidden new-tab hint; the ordered set is confirmed as a real `ol`; contact cards lose their icon thumbnails (C1). Rulings: `docs/phase-2-decisions.md` C1, M1–M4 |
+| **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug. **Phase 2 task 2.11 / 28 Sep 2026** — the thumbnail moves onto `Media` (`fit="fill"`, `LIST_CARD_THUMBNAIL`, lazy); the marker union discriminates on `type`; `external` takes ch04's `square-arrow-right-up` and a visually hidden new-tab hint; the ordered set is confirmed as a real `ol`; contact cards lose their icon thumbnails (C1). Rulings: `docs/phase-2-decisions.md` C1, M1–M4. **Tracker 2.17 / 29 Sep 2026** — the split reads the row's own width (a wrapping `Cluster` on `--lcrd-title-min` / `--lcrd-body-min`, not Layout's md viewport boundary), so titles no longer break mid-word; the title wraps `break-word`, not `anywhere`; wide rows are capped at `--measure-title` + seam + `--measure-body`; the off-site cue is the plain `arrow-right-up`; the thumbnail passes Media `inset="text"`. See § 7, § 9, § 10 and § 17 q7, q8 |
 | **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
 | **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
 
@@ -43,10 +43,10 @@ parent list.
 | `root`    |              yes | One `li`; the only legal outer element                                           | Full available inline size; no colour of its own                  |
 | `frame`   |              yes | An `a` when `href` is present, otherwise an inert `div`                          | Row inset, focus ring and interactive state boundary              |
 | `marker`  |               no | One slot filled by a formatted number, an `Icon`, or one `Media` in `fit="fill"` | `--lcrd-marker-ink` for the icon fill, `--lcrd-number-ink` for the number; the thumbnail BOX (`--lcrd-thumbnail-*`) — never the image's edge, which is Media's by kind |
-| `content` |              yes | The group containing `title` and `body`                                          | `split` or `stacked` arrangement; no colour of its own            |
+| `content` |              yes | The group containing `title` and `body` — a wrapping `Cluster` when `split`, a one-track `Layout` when `stacked` | `split` or `stacked` arrangement; no colour of its own            |
 | `title`   |              yes | A `span`, `h3` or `h4`, selected by `titleAs`                                    | `--lcrd-title-ink`, linked or not                                 |
 | `body`    |   yes in the API | One paragraph; whitespace-only content emits no element                          | `--lcrd-body-ink` and `--measure-body`                            |
-| `cue`     | linked rows only | `Icon name="arrow-right" size="lg"`, or `square-arrow-right-up` when `external`, hidden from assistive technology; an external row adds a visually hidden "(opens in a new tab)" | The row's only link ink, and the row's only state                 |
+| `cue`     | linked rows only | `Icon name="arrow-right" size="lg"`, or `arrow-right-up` when `external` (2.17; was `square-arrow-right-up`), hidden from assistive technology; an external row adds a visually hidden "(opens in a new tab)" | The row's only link ink, and the row's only state                 |
 | `rule`    |              yes | The root's block-end hairline                                                    | `--lcrd-rule-ink`; one width and one colour in every state         |
 | `ground`  | linked rows only | No element of its own — the frame's own background, painted only under a pointer  | `--lcrd-ground-hover`, `--lcrd-ground-pressed`                    |
 
@@ -221,7 +221,7 @@ fill; `--lcrd-number-ink` is the ordinal's own. The split is deliberate: an ordi
 icon names the subject, so one token would have forced a choice between a shouting number and a
 receding subject glyph.
 
-It sits **one step quieter than the quiet-label ramp** used by `--crumb-collapse-ink`,
+It sits **one step quieter than the quiet-label ramp** used by `--crumb-link-ink`,
 `--foot-label-ink` and `--bcrd-eyebrow-ink`. A 20px numeral carries further than a 12px label and has
 to give more back, and colour — not size — is where this component gives it. On the two light
 surfaces that means stepping toward white; on ink and blue it means stepping **toward the ground**,
@@ -306,8 +306,12 @@ The component does not receive a `surface` prop and never paints the panel groun
 - Marker to the content/cue core: `Cluster colGap="block"`; when the outer cluster wraps, its
   wrapped line seam is `rowGap="block"`.
 - Stacked title to body: `Layout rowGap="tight"`.
-- Split title to body: `Layout colGap="column"`, with `rowGap="tight"` available when the tracks
-  collapse below `md`.
+- Split title to body: **`Cluster colGap="block"`, `rowGap="tight"`** (29 Sep 2026, 2.17). Was `Layout
+  colGap="column"` (64). The split is now a wrapping `Cluster`, and its seam is chosen by what it
+  separates: a title and the sentence it heads are head and body of one block, which is `--gap-block`'s
+  role, not "two halves that must read as separate", which is `--gap-column`'s — the opposite of what
+  a coupled row wants. When the body wraps under the title the line seam is `tight`, the same step the
+  stacked arrangement uses, so a split row that has wrapped is indistinguishable from a stacked one.
 - Content to cue: `Cluster colGap="block"`.
 - Frame inline inset: `--gap-block`, uniform with the block inset. This section previously read "no
   inline frame inset, `Section` already aligns the row to the 1240px content column" — which was true
@@ -343,6 +347,14 @@ The component does not receive a `surface` prop and never paints the panel groun
   copy wraps. That is the designed
   degradation rather than a new edge case, and it is why the minimum is written with `min()` rather
   than as a floor.
+- Split minimum tracks: `--lcrd-title-min` and `--lcrd-body-min`, both 256px (29 Sep 2026, 2.17). They
+  are the flex bases of the split's title and body, so they decide WHEN it splits: only while 256 +
+  24 + 256 = 536px of copy fits the row's own content width. The title's 256 also holds an h4's longest
+  word whole (a 14-letter word is about 200px at h4), and the body's keeps a sentence beside a title
+  above ~28ch. Growth runs 2:3 (the split's old weighting) until each child reaches its measure —
+  `--measure-title` and `--measure-body` — and that is the **width cap**: the split is never wider than
+  the title track plus the seam plus the body's measure, and the leftover on a wide row collects at the
+  core's inline end before the cue. By value rather than `--lay-track-sm` (token rule 6).
 - Number marker: no box size. Two-digit formatting and `--text-index` supply a stable optical column
   for the expected 1–12 range.
 - Icon marker: `Icon size="xl"`, resolving to `--icon-size-24`.
@@ -350,8 +362,8 @@ The component does not receive a `surface` prop and never paints the panel groun
 - Thumbnail marker: `--lcrd-thumbnail-inline-md` is 160px and `--lcrd-thumbnail-ratio` is 3:2,
   measured as a recognisable landscape sample at the full 1240px row while still wrapping cleanly
   before a 192px content core is squeezed. `Media` in `fit="fill"` covers that box from its centre;
-  a B5 cut-out on its contrast panel keeps Media's `--gap-gutter` inset inside it, leaving 96 × 43 of
-  part (§ 17 q8).
+  a B5 cut-out on its contrast panel takes Media's `inset="text"` (`--gap-text`, 16) inside it, leaving
+  128 × 75 of part. It kept Media's `--gap-gutter` until 29 Sep 2026 and was left 96 × 43 (§ 17 q8).
 - Hidden hint: `--lcrd-hidden-size` is `--space-1`, the clip technique's own 1px geometry, duplicated
   by value from `--crumb-hidden-size` and SiteFooter's hidden label.
 
@@ -439,8 +451,16 @@ indexes reads as a misalignment however light it is.
 At 1023, no component arrangement changes. The existing h4 and index roles resolve their
 tablet values from the type layer; `ListCard` does not restate them.
 
-At 767, `split` becomes one track because its `Layout` declares one track at base and a 2:3 split
-from `md`. `stacked` is unchanged. The outer `Cluster` remains content-driven: number and icon markers
+At 767, nothing changes either — **`split` has no breakpoint** (29 Sep 2026, 2.17). It becomes one
+track when the ROW can no longer hold both minimum tracks (§ 7(b)), whatever the viewport: a row in a
+full 1240 column splits, a row in a 392px `lg:3` grid track stacks at 1440, and a phone's 326 column
+stacks. Until 2.17 the split was Layout's `{ base: 1, md: [2, 3] }`, which switched on at the md
+viewport regardless of the row's own track, squeezed the title into ~150px beside a 390 row's body
+and, with `overflow-wrap: anywhere`, broke it mid-word ("Produ/ct", "Interactio/n"). Layout's `fit`
+was considered and does not express this: its tracks are equal, so it loses the title/body weighting,
+and it has no per-track maximum, so it cannot cap the split at the two measures. A container query
+was the other fallback and is unneeded — flex-wrap already answers "do both tracks fit on this line",
+inside a primitive. `stacked` is unchanged. The outer `Cluster` remains content-driven: number and icon markers
 fit beside the core in the normal Section track, while a thumbnail may wrap above the core when the
 combined row no longer fits.
 
@@ -459,7 +479,8 @@ size step and no extended hit pseudo-element are needed.
 ## 10 · Composition
 
 The future `ContentSection` receives the list as its child. `Layout` owns the list axis, the inner
-`Layout` owns title/body columns, and `Cluster` owns marker/content/cue relationships. `Button` is
+wrapping `Cluster` owns the split title/body (a one-track `Layout` owns the stacked one), and
+`Cluster` owns marker/content/cue relationships. `Button` is
 not used: a Button is one labelled control and cannot wrap a whole row without creating a nested
 or duplicate action. `Prose` is not used: one plain paragraph is not a CMS rich-text flow.
 
@@ -470,17 +491,21 @@ or duplicate action. `Prose` is not used: one plain paragraph is not a CMS rich-
       <Cluster colGap="block" rowGap="block" align="start">
         {marker /* number · Icon · <span box><Media fit="fill" sizes={LIST_CARD_THUMBNAIL} /></span> */}
         <Cluster colGap="block" align="start" nowrap>
-          <Layout
-            columns={split ? { base: 1, md: [2, 3] } : undefined}
-            colGap={split ? 'column' : undefined}
-            rowGap="tight"
-          >
-            {title}
-            {body}
-          </Layout>
+          {split ? (
+            /* wraps when --lcrd-title-min + block + --lcrd-body-min no longer fits the row */
+            <Cluster colGap="block" rowGap="tight" align="start">
+              {title /* flex: 2 1 --lcrd-title-min, max --measure-title */}
+              {body /* flex: 3 1 --lcrd-body-min, max --measure-body */}
+            </Cluster>
+          ) : (
+            <Layout rowGap="tight">
+              {title}
+              {body}
+            </Layout>
+          )}
           {href ? (
             <span>
-              <Icon name={external ? 'square-arrow-right-up' : 'arrow-right'} size="lg" />
+              <Icon name={external ? 'arrow-right-up' : 'arrow-right'} size="lg" />
               {external ? <span className="hint"> (opens in a new tab)</span> : null}
             </span>
           ) : null}
@@ -563,7 +588,7 @@ subject icon or arrow a second time.
 | Case                                      | Required handling                                                                                                                                                                                                                                                                                                    |
 | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Longest realistic string                  | Title and body wrap without clamp or truncation. Their measures cap line length; the row grows on the block axis and the rule stays at its bottom edge. Test an 80-character title and 240-character body.                                                                                                           |
-| One long unbroken token (a URL)           | Title and body may break the token anywhere before it overflows. The cue and marker remain in their own boxes.                                                                                                                                                                                                       |
+| One long unbroken token (a URL)           | The body may break the token anywhere before it overflows (`overflow-wrap: anywhere`). The title breaks only between words (`break-word`, 29 Sep 2026): a title word is broken only when it alone is wider than the whole row, which is an illegal sub-xs parent. The cue and marker remain in their own boxes. |
 | Zero items                                | The caller omits the parent list; do not render an empty `ul` or `ol`. `ListCard` itself is not called.                                                                                                                                                                                                              |
 | One item                                  | Render one `li` with its bottom rule. The rule is the row's finish, not a separator inserted only between siblings.                                                                                                                                                                                                  |
 | Many items (2× expected)                  | Render 24 rows in one vertical `Layout rowGap="none"`; no pagination, clamping, equal-height rule or multi-column tiling.                                                                                                                                                                                            |
@@ -668,6 +693,12 @@ The exact block list, in order:
     **external rows** — internal, external, external with a thumbnail, and `external` without `href`.
     Block 5's surface bands gain a third row, an external cut-out thumbnail row, on all four grounds, and
     block 10's 326 row gains an external cut-out and a capture.
+1a (added 29 Sep 2026, 2.17). **The split reads its own width** — the same three split rows (icon +
+    link, no marker, thumbnail + external) in frames standing for the content column at 1440 (1240),
+    1023 (960), 768 (704) and 390 (326), then ListCards in a 3-up grid across the column (~392px
+    tracks) and a 2-up grid inside the 768 column (~336px). No title may break mid-word in any of them;
+    § 2b now shows the shipped `inset="text"` panel beside the unpanelled part, with the `gutter`
+    comparison moved to `/design/media` § 3c.
 10. **Narrow tracks.** The same numbered, icon and thumbnail rows at 256px and 192px. The thumbnail
     must wrap before the content core collapses; the smaller track must wrap text without page
     overflow.
@@ -682,6 +713,10 @@ four-band surface stack, one long ruled sequence and a pair of narrow stress tra
 shared cadence, not twelve repeated boxes.
 
 ## 16 · New token requests
+
+**29 Sep 2026 (2.17): two component-layer geometry tokens, no request.** `--lcrd-title-min` and
+`--lcrd-body-min` (both 256px) are the split's minimum tracks, § 7(b). Media's `inset="text"` reads the
+existing `--gap-text`; nothing in the primitive or usage layers changed. `npm run vocabulary` was re-run.
 
 **28 Sep 2026 (2.11): one component-layer geometry token, no request.** `--lcrd-hidden-size`
 (`--space-1`) is the visually hidden hint's clip box — a technique's own geometry, duplicated by value
@@ -780,7 +815,18 @@ which is at least 24 and already exceeds either pairing value. Stated so a later
 "correct" it to 4 or 9. The cue's blue on a neutral-text row is ch04's "blue on an icon beside neutral
 text" don't, read strictly; it predates this task, the cue is the row's action, and it is left as it was.
 
-**8 · The cut-out panel inset at thumbnail size (Media § 17 Q2) — non-blocking, 28 Sep 2026 (2.11).**
+**7 — amended 29 Sep 2026 (2.17): the glyph is `arrow-right-up`.** Placement (a) stands. The owner
+ruled that the filled `square-arrow-right-up` beside plain `arrow-right` cues reads as a badge among
+arrows, so the external cue is Solar Bold's plain `arrow-right-up` — the same arrow family turned 45°,
+added to the Icon set from Iconify `solar:arrow-right-up-bold` the way `alt-arrow-up` was. Same slot,
+size (lg, 18) and ink as the arrow. One meaning at two weights: `square-arrow-right-up` stays ch04's
+standalone mark (docs/specs/Icon.md § 2).
+
+**8 · The cut-out panel inset at thumbnail size (Media § 17 Q2) — ANSWERED 29 Sep 2026 (2.17): (b).**
+The owner approved Media `inset: 'gutter' | 'text'`, default `gutter`; ListCard's thumbnail passes
+`text` (`--gap-text`, 16), leaving 128 × 75 of part. No new token; the centre crop stays. The supply
+rule below still applies first — a part that holds its own edge needs no panel. Original entry,
+28 Sep 2026 (2.11):
 Media's `--media-panel-inset` is `--gap-gutter` at every size, so in a 160 × 107 thumbnail a panelled
 part gets 96 × 43 — which cannot pass ch05 § 9's 160 check (one recognisable shape). Options: (a) leave
 Media alone and make it a supply rule; (b) a Media `inset` prop or a per-placement Media token; (c)
@@ -809,7 +855,7 @@ insight/resource rows, and a non-Solar glyph is not a legal icon marker (ch04); 
 names the channel. (c) needs glyphs Icon does not ship yet and is left for the owner. Logged as
 strapi-changes.md 10.
 
-**11 · The Solar credit — non-blocking, 28 Sep 2026 (2.11).** `square-arrow-right-up` on an external row
+**11 · The Solar credit — non-blocking, 28 Sep 2026 (2.11).** `square-arrow-right-up` (since 2.17 `arrow-right-up`, also Solar Bold) on an external row
 is the first Solar Bold glyph a route can show, and Solar Icons are CC BY 4.0 (ch04). **Chosen:** the
 credit rides SiteFooter's existing legal notice — "Icons: Solar Icons by 480 Design, CC BY 4.0." — set in
 the navigation fixture, so the footer's code and layout are untouched. Title, author and licence are what
@@ -859,7 +905,7 @@ NAMES
     names are this component's declared layer. Checked one at a time by `npm run design:check`.
     `--lcrd-rule-width-pressed` was removed from both the layer and this document, so the vocabulary
     must be regenerated and pushed — section 16 says so.
-[x] Named glyphs are existing: arrow-right, arrow-left, square-arrow-right-up (2.11), and the IconName union.
+[x] Named glyphs are existing: arrow-right, arrow-left, square-arrow-right-up (2.11), arrow-right-up (2.17), and the IconName union.
 [x] Section, Layout and Cluster props/values are existing unions: as, rowGap, colGap, columns,
     align, nowrap; none, tight, block, column, start; base, md; ol, ul, li.
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS rule blocks or media-query blocks.

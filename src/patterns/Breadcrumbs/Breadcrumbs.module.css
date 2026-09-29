@@ -215,7 +215,15 @@
 /* ── The inert parts ───────────────────────────────────────────────────────────
    Three parts, no states between them, so three declarations. `current` is the loudest ink in the
    row and its ancestors the quietest; the divider drops below both, because a separator that
-   competes with the labels it separates has failed at its one job. */
+   competes with the labels it separates has failed at its one job.
+
+   The collapse mark takes the DIVIDER's ink, not a label's (29 Sep 2026, tracker 2.17). Set at
+   label ink, U+2026 read as three periods typed into the trail — a fourth label, and a truncated
+   one. In divider ink it reads as what it is: punctuation between crumbs, the same weight as the
+   solidus either side of it. It is aria-hidden and its meaning is carried by the hidden count, so
+   like the divider it is decoration and exempt from the text floor. One token for both, because
+   they are one decision: a separate --crumb-collapse-ink equal to the divider on every surface
+   would be a second name for it. */
 .current {
   color: var(--crumb-current-ink);
 }
@@ -225,7 +233,7 @@
 }
 
 .collapse {
-  color: var(--crumb-collapse-ink);
+  color: var(--crumb-divider-ink);
 }
 
 /* Visually hidden, still announced — not `display: none` and not `visibility: hidden`, both of
@@ -245,6 +253,33 @@
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+}
+
+/* ── Three crumbs below md ─────────────────────────────────────────────────────
+   The collapse's second depth. Below 768 a collapsed trail folds its parent into the collapse too
+   and renders first / … / current, so it holds one line on a phone instead of wrapping onto a
+   second led by a divider. The parent crumb and the wide count carry `.wideOnly`; the narrow count
+   carries `.narrowOnly`; exactly one of each pair is displayed at any width.
+
+   `display: none`, and that is the accessibility half of the mechanism, not a shortcut: it removes
+   the element from the accessibility tree too, so a screen reader hears one trail with one count
+   at every width — never both counts, never a parent link the eye cannot see and a keyboard could
+   still land on. A visually hidden clip would be exactly wrong here.
+
+   768 is the md breakpoint Layout and SiteFooter step at; a media query is a query, not a distance,
+   so it is not a value this file holds. The distances do not change at it — the COUNT does.
+   Scoped `.trail .x` for the same reason as the colour rules: the parent crumb is a Cluster, and a
+   lone class would tie Cluster's own display on specificity and leave the winner to bundle order. */
+@media (max-width: 767px) {
+  .trail .wideOnly {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .trail .narrowOnly {
+    display: none;
+  }
 }
 
 /* The wipe is the one motion here, so it is the one thing to answer for. Reduced motion keeps the

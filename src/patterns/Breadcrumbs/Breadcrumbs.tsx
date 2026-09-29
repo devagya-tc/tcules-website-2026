@@ -1,5 +1,7 @@
 import { Cluster, Section, type SectionSurface } from '@/components';
 
+import { cx } from '@/lib/cx';
+
 import styles from './Breadcrumbs.module.css';
 
 /**
@@ -107,15 +109,37 @@ export function Breadcrumbs({ items, surface = 'paper' }: BreadcrumbsProps) {
     return null;
   }
 
-  /* The collapse is DEPTH-DRIVEN and unconditional: four or more authored levels always render as
-     four — first, collapse, parent, current. No prop, no breakpoint, so a four-level route is
-     collapsed on a 1440px desktop exactly as it is on a phone. One rule, one rendering, and depth
-     is free after four, which is why there is no `maxItems`. */
-  const collapsed = trail.length >= 4;
-  const omitted = trail.length - 3;
+  /* The collapse is DEPTH-DRIVEN, and it has two depths — one per side of the md breakpoint.
 
-  /* Everything between the first item and the current page, or just the parent once collapsed. */
-  const middle = collapsed ? trail.slice(-2, -1) : trail.slice(1, -1);
+     From 768 up, four or more authored levels render as four: first, collapse, parent, current.
+     Below 768 the same trail renders as THREE: first, collapse, current — the parent goes into the
+     collapse too. On a phone a four-crumb trail wrapped onto a second line 44.85px below the first,
+     led by a divider, and read as two elements rather than one phrase (29 Sep 2026, tracker 2.17).
+     The rowGap that caused that distance is not the thing to change — it is what keeps the 44px
+     targets of two wrapped lines from overlapping — so the fix is to stop the trail wrapping by
+     holding it to three crumbs where the column is narrow.
+
+     A trail of three or fewer levels is the same at both widths: three crumbs is already the phone's
+     count, and collapsing a three-level trail would trade a real link for a mark and save nothing.
+
+     No client JS and no prop. Both renderings are ONE list: the parent <li> and the two count
+     strings carry a breakpoint class, and the stylesheet removes the one that does not apply with
+     `display: none`, which takes it out of the accessibility tree as well as out of the layout. So at
+     any width a screen reader walks exactly one trail with one count in it — never both counts,
+     never a parent the eye cannot see. Depth is still free after four, which is why there is no
+     `maxItems`. */
+  const collapsed = trail.length >= 4;
+  const parent = trail[trail.length - 2];
+
+  /* Everything between the first item and the current page when the trail is short. Once collapsed
+     the middle is the parent alone, rendered separately below because it carries the wide-only
+     class. */
+  const middle = collapsed ? [] : trail.slice(1, -1);
+
+  /* Levels the collapse stands for: from 768 up it hides everything but the parent; below 768 it
+     hides the parent too. */
+  const omittedWide = trail.length - 3;
+  const omittedNarrow = trail.length - 2;
 
   return (
     /* ── The band ────────────────────────────────────────────────────────────────
@@ -168,12 +192,18 @@ export function Breadcrumbs({ items, surface = 'paper' }: BreadcrumbsProps) {
               {/* Inert, deliberately. It says levels were dropped without pretending to be a
                 control — so there is no aria-expanded, no aria-controls naming a list that is not
                 rendered, no keyboard contract and no focus to place after a state change. The
-                meaning is carried by the hidden sibling, not by the character. */}
+                meaning is carried by the hidden sibling, not by the character.
+                Two siblings, one per side of the breakpoint, because the count differs by the
+                parent. The stylesheet removes the one that does not apply, so exactly one is ever
+                in the accessibility tree. */}
               <span aria-hidden="true" className={styles.collapse}>
-                …
+                {'\u2026'}
               </span>
-              <span className={styles.collapseCount}>
-                {omitted === 1 ? '1 level omitted' : `${omitted} levels omitted`}
+              <span className={cx(styles.collapseCount, styles.wideOnly)}>
+                {levelsOmitted(omittedWide)}
+              </span>
+              <span className={cx(styles.collapseCount, styles.narrowOnly)}>
+                {levelsOmitted(omittedNarrow)}
               </span>
             </Cluster>
           ) : null}
@@ -186,6 +216,18 @@ export function Breadcrumbs({ items, surface = 'paper' }: BreadcrumbsProps) {
               </a>
             </Cluster>
           ))}
+
+          {/* The parent of a collapsed trail — shown from 768 up, folded into the collapse below it.
+            `display: none` below 768 rather than a visually hidden clip, because a link the eye
+            cannot see must not be a tab stop or an announced crumb either. */}
+          {collapsed && parent ? (
+            <Cluster as="li" colGap="inline" align="baseline" nowrap className={styles.wideOnly}>
+              <Divider />
+              <a className={styles.link} href={parent.href}>
+                {parent.label}
+              </a>
+            </Cluster>
+          ) : null}
 
           <Cluster as="li" colGap="inline" align="baseline" nowrap>
             <Divider />
@@ -202,6 +244,11 @@ export function Breadcrumbs({ items, surface = 'paper' }: BreadcrumbsProps) {
       </nav>
     </Section>
   );
+}
+
+/** The collapse's announced meaning. A sans sentence, so it is authored in sentence case. */
+function levelsOmitted(n: number) {
+  return n === 1 ? '1 level omitted' : `${n} levels omitted`;
 }
 
 /**

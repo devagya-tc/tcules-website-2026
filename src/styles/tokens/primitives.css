@@ -169,6 +169,10 @@
      five. */
   --font-size-h6: 18px;
   --font-size-quote: 28px;
+  /* The quote that IS the moment on a page — a display Proof — rather than one embedded in a
+     reading flow. h2 scale, so a testimonial can carry a band the way a heading does; the reading
+     quote above stays at h4 scale beside the body. */
+  --font-size-quote-lg: 43px;
   --font-size-lead: 20px;
   --font-size-body-lg: 18px;
   --font-size-body: 16px;
@@ -185,6 +189,9 @@
      as an index beside a 22px title without competing with it. */
   --font-size-index: 20px;
   --font-size-stat: 40px;
+  /* The figure that leads a band — a display Proof's audited value — at h1 scale, so the number
+     outranks the title beside it rather than matching a card's. The plain stat keeps 40. */
+  --font-size-stat-lg: 54px;
   --font-size-code: 14px;
   /* Breakpoint cuts. Titles step down; text and chrome hold at every width. */
   --font-size-display-t: 54px;
@@ -199,8 +206,12 @@
   --font-size-h4-m: 22px;
   --font-size-h5-m: 20px;
   --font-size-quote-m: 22px;
+  --font-size-quote-lg-t: 34px;
+  --font-size-quote-lg-m: 25px;
   --font-size-lead-m: 18px;
   --font-size-stat-m: 32px;
+  --font-size-stat-lg-t: 43px;
+  --font-size-stat-lg-m: 40px;
 }
 
 /* ── Type · line-height ladder ────────────────────────────────────────────────
@@ -231,6 +242,9 @@
      readable. Size and ratio are one decision and move together. */
   --line-height-h6: 1.35;
   --line-height-quote: 1.35;
+  /* Tighter than quote's 1.35 because it is larger, looser than h2's 1.1 because it is several
+     lines of running speech rather than a one-line title. */
+  --line-height-quote-lg: 1.2;
   --line-height-lead: 1.5;
   --line-height-body-lg: 1.55;
   --line-height-body: 1.6;
@@ -241,6 +255,7 @@
   --line-height-micro: 1.2;
   --line-height-index: 1.2; /* the chrome ratio, not stat's 1 — an index can wrap in a narrow track */
   --line-height-stat: 1;
+  --line-height-stat-lg: 1; /* one line of figures, like stat — and, like stat, no -t / -m step */
   --line-height-code: 1.6;
   /* Breakpoint steps. Only the roles whose ratio actually moves have one — stat holds
    at 1 on every width, so it has no -m step even though its SIZE has one. */
@@ -256,6 +271,8 @@
   --line-height-h4-m: 1.26;
   --line-height-h5-m: 1.3;
   --line-height-quote-m: 1.4;
+  --line-height-quote-lg-t: 1.24;
+  --line-height-quote-lg-m: 1.3;
   --line-height-lead-m: 1.55;
 }
 
@@ -336,8 +353,20 @@
   --text-h6: var(--font-weight-medium) var(--font-size-h6)/var(--line-height-h6)
     var(--font-family-display);
   --text-h6-tracking: var(--letter-spacing-none);
-  --text-quote: var(--font-weight-regular) var(--font-size-quote)/var(--line-height-quote)
+  /* Italic is part of the ROLE (ch03's table: Newsreader 400 italic), so it lives in the composite
+     rather than in every consumer — a `font: var(--text-quote)` that then had to remember
+     `font-style: italic` is the restated-value mistake the composites exist to prevent. The
+     italic 400 cut is loaded in app/layout.tsx (`1,6..72,400`). The -m step below restates it,
+     because `font:` resets font-style and a breakpoint composite without it would go roman. */
+  --text-quote: italic var(--font-weight-regular) var(--font-size-quote)/var(--line-height-quote)
     var(--font-family-display);
+  /* ITALIC IS IN THE COMPOSITE: reported speech is italic by role (ch03 lists quote as "400 italic",
+     ch10 B2.07), so the consumer writes no font-style — `font:` would reset one written before it.
+     Tracking is title-tight: at 43 the face is large enough for the negative correction to act,
+     where the 28px reading quote has no tracking companion at all. */
+  --text-quote-lg: italic var(--font-weight-regular)
+    var(--font-size-quote-lg)/var(--line-height-quote-lg) var(--font-family-display);
+  --text-quote-lg-tracking: var(--letter-spacing-title-tight);
   --text-lead: var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead)
     var(--font-family-sans);
   --text-body-lg: var(--font-weight-regular) var(--font-size-body-lg)/var(--line-height-body-lg)
@@ -374,6 +403,11 @@
   --text-stat: var(--font-weight-medium) var(--font-size-stat)/var(--line-height-stat)
     var(--font-family-mono);
   --text-stat-tracking: var(--letter-spacing-title-tight);
+  /* Mono like stat, so every rule that sets it writes text-transform: var(--text-mono-case). The
+     tracking tightens one step with the size, as h1's does against h3's. */
+  --text-stat-lg: var(--font-weight-medium) var(--font-size-stat-lg)/var(--line-height-stat-lg)
+    var(--font-family-mono);
+  --text-stat-lg-tracking: var(--letter-spacing-title);
   --text-code: var(--font-weight-regular) var(--font-size-code)/var(--line-height-code)
     var(--font-family-mono);
 }
@@ -390,6 +424,10 @@
       var(--font-family-display);
     --text-h4: var(--font-weight-medium) var(--font-size-h4-t)/var(--line-height-h4-t)
       var(--font-family-display);
+    --text-quote-lg: italic var(--font-weight-regular)
+      var(--font-size-quote-lg-t)/var(--line-height-quote-lg-t) var(--font-family-display);
+    --text-stat-lg: var(--font-weight-medium)
+      var(--font-size-stat-lg-t)/var(--line-height-stat-lg) var(--font-family-mono);
   }
 }
 /* Mobile — below 768. */
@@ -407,12 +445,16 @@
       var(--font-family-display);
     --text-h5: var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-h5-m)
       var(--font-family-display);
-    --text-quote: var(--font-weight-regular) var(--font-size-quote-m)/var(--line-height-quote-m)
+    --text-quote: italic var(--font-weight-regular) var(--font-size-quote-m)/var(--line-height-quote-m)
       var(--font-family-display);
     --text-lead: var(--font-weight-regular) var(--font-size-lead-m)/var(--line-height-lead-m)
       var(--font-family-sans);
     --text-stat: var(--font-weight-medium) var(--font-size-stat-m)/var(--line-height-stat)
       var(--font-family-mono);
+    --text-quote-lg: italic var(--font-weight-regular)
+      var(--font-size-quote-lg-m)/var(--line-height-quote-lg-m) var(--font-family-display);
+    --text-stat-lg: var(--font-weight-medium)
+      var(--font-size-stat-lg-m)/var(--line-height-stat-lg) var(--font-family-mono);
   }
 }
 

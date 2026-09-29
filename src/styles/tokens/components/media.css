@@ -51,7 +51,13 @@
    its content column — so it is --gap-gutter, not the 24 that would look balanced at one
    width. It does not shift responsively: at 326 the panel keeps 32 of air on each side,
    and a part that no longer clears the ch05 §2a type floor inside that is a supply
-   problem (fewer parts), never a smaller inset. */
+   problem (fewer parts), never a smaller inset.
+
+   The one exception is a small BOX, not a narrow viewport (29 Sep 2026, tracker 2.17):
+   Media's `inset="text"` takes --gap-text, "cell padding", for a placement like
+   ListCard's 160 × 107 thumbnail, where 32 on each side left 96 × 43 of part. That step
+   is read from the gap scale in Media.module.css, not aliased here — a second name for
+   --gap-text would be the renaming token rule 6 forbids. */
 :root {
   --media-radius: var(--radius-0);
   --media-capture-rule-width: var(--border-width-hairline);

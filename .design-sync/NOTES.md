@@ -364,7 +364,7 @@ exist, never on a doc missing one that does.
 ## A pseudo-element hit extension does NOT work on an `<input>` — measured
 
 Button reaches the 44px touch floor with `.hit::after { block-size: 44px }`, and copying that onto
-`Input`'s `quiet` emphasis looks like the obvious fix for a 40px field. It is not: **an `<input>` is
+`Input`'s `quiet` emphasis (since deleted, 29 Sep 2026 — the finding stands for any input) looked like the obvious fix for a 40px field. It is not: **an `<input>` is
 a void element and generates no pseudo-element box.** The trap is that everything *reports* fine —
 `getComputedStyle(el, '::after')` returns `content: ""` and `height: 44px`, so the declaration
 resolves, `tokens:check` passes and the CSS looks right. Measured with `elementFromPoint`, a point

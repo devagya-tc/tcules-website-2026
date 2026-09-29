@@ -6,8 +6,8 @@
    measure. The 19px message reserve is one --text-caption line: blur validation may fill it without
    moving the controls below. No margin, private flex/grid arrangement or surface paint belongs here.
 
-   State order is load-bearing: .status establishes the neutral rule, then .statusError replaces
-   only that rule. Success is a substitution performed by React, not a hidden sibling, so there is
+   State order is load-bearing: .status establishes the neutral ink, then .statusError replaces
+   only that ink. Success is a substitution performed by React, not a hidden sibling, so there is
    no opacity or height transition to coordinate. */
 
 .form,
@@ -66,17 +66,19 @@
 }
 
 .status {
-  border-block-start: var(--border-width-hairline) solid var(--enq-status-rule);
   color: var(--enq-status-ink);
   font: var(--text-body-sm);
-  /* border-color only. The rule moves from neutral to danger when the status turns into an error,
-     which is the one value in this component that has two states to travel between. The ink does
-     not move with it — one --enq-status-ink per surface — so it is not in the list. */
-  transition: border-color var(--enq-transition-duration) var(--enq-transition-easing);
+  /* color only. The sentence turns danger when the status becomes an error, which is the one
+     value in this component with two states to travel between. It used to be the hairline ABOVE
+     the sentence that moved, and the hairline is gone (29 Sep 2026, tracker 2.17): it sat directly
+     over the submit row, where the --gap-block seam already separates the fields from the actions,
+     and an idle form drew a rule over an empty line. The error now reads in the sentence itself —
+     "That did not send…" carries the meaning, and the danger ink reinforces it. */
+  transition: color var(--enq-transition-duration) var(--enq-transition-easing);
 }
 
 .statusError {
-  border-block-start-color: var(--enq-status-rule-error);
+  color: var(--enq-status-ink-error);
 }
 
 .caption {

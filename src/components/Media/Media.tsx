@@ -92,6 +92,19 @@ export type MediaFit = 'intrinsic' | 'fill';
  */
 export type MediaEdge = 'kind' | 'placement';
 
+/**
+ * How far a cut-out sits inside its contrast panel — a gap-scale step, named for what it separates.
+ *
+ *   gutter  --gap-gutter (32), the container gutter. Every full-column, track and card placement.
+ *   text    --gap-text (16), cell padding. For a SMALL box, where 32 of air on each side leaves no
+ *           part to recognise: ListCard's 160 × 107 thumbnail kept 96 × 43 of part at `gutter`.
+ *
+ * The placement chooses it, because only the placement knows how big its box is — Media fills a
+ * width it cannot see. It is a step, not a length: there is no way to pass a number, so a placement
+ * cannot split the difference. Ignored when no panel renders (29 Sep 2026, tracker 2.17).
+ */
+export type MediaInset = 'gutter' | 'text';
+
 export type MediaProps = {
   image: MediaImage;
   /**
@@ -104,6 +117,8 @@ export type MediaProps = {
   fit?: MediaFit;
   /** Who draws the edge. Defaults to `kind`; `placement` only inside a crop box that rules itself. */
   edge?: MediaEdge;
+  /** The panel inset step. Defaults to `gutter`. Only a cut-out on a panel has an inset to set. */
+  inset?: MediaInset;
   /**
    * The page's LCP image: eager, and fetched ahead of the document's other images. One per page
    * at most, and only a hero's. Everything else is lazy and decodes off the main thread.
@@ -157,7 +172,8 @@ function warn(message: string, image: MediaImage) {
  * It owns the delivery (srcset, sizes, loading) and the edge (by kind); the PLACEMENT owns
  * everything else. Width is always the parent's: intrinsic fills the parent's inline size, fill
  * fills the parent's box. There is no className, no style and no size prop, so no placement can
- * restyle an image's edge one call site at a time.
+ * restyle an image's edge one call site at a time. The one geometry a placement may choose is the
+ * panel inset, and only between two named steps (`inset`).
  *
  * It reads `data-surface` through the token layer only, like every other unit, so a capture's
  * hairline is right on paper, tint, ink and blue without being told which. It cannot see the
@@ -169,6 +185,7 @@ export function Media({
   sizes,
   fit = 'intrinsic',
   edge = 'kind',
+  inset = 'gutter',
   priority = false,
 }: MediaProps) {
   const kind: MediaKind = image.kind ?? 'capture';
@@ -220,7 +237,14 @@ export function Media({
   /* A span rather than a div so Media stays legal inside phrasing content — a card's link, a
      caption-adjacent slot — wherever a bare <img> would be. It is display:block in the module. */
   return (
-    <span className={cx(styles.panel, fit === 'fill' && styles.panelFill, PANEL_CLASS[panel])}>
+    <span
+      className={cx(
+        styles.panel,
+        inset === 'text' && styles.insetText,
+        fit === 'fill' && styles.panelFill,
+        PANEL_CLASS[panel],
+      )}
+    >
       {img}
     </span>
   );

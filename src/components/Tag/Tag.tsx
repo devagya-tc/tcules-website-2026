@@ -55,7 +55,7 @@ type FilterTag = {
    *
    * Taken as a node rather than a name because a primitive may not import `Icon` — the same
    * reason `Button` takes its own `icon`. The call site passes
-   * `<Icon name="close" label="Clear filter" />` beside an `href` that clears that group's
+   * `<Icon name="close-circle" label="Clear filter" />` beside an `href` that clears that group's
    * parameter, which is what makes the glyph a control rather than a decoration: with no "All"
    * chip in the row, it is the ONLY way back to an unfiltered group.
    *

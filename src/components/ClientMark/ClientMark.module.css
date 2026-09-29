@@ -44,6 +44,13 @@
   flex: none;
   justify-self: start;
   inline-size: var(--cmark-width);
+  /* Never wider than the box it is placed in. In a Cluster that is the mark's own li, so this
+     does nothing; in equal grid cells (Layout columns={{ base: 2 }} at the 326 column, cells
+     ~139 wide) a 160-wide mark would otherwise spill out of its track. The block-size below
+     does not follow, deliberately: the mask is `contain`, so the artwork shrinks to the width
+     and letterboxes vertically in a box a few px taller — the designed failure mode, never a
+     crop or a stretch. */
+  max-inline-size: 100%;
   /* Height stated rather than left to aspect-ratio: a Cluster with align="stretch" would
      otherwise stretch the box, and the mask would letterbox inside a taller rectangle. */
   block-size: calc(var(--cmark-width) / var(--cmark-ratio));
