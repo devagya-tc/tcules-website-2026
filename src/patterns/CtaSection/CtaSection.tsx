@@ -77,15 +77,17 @@ type CtaSectionBaseProps = {
    appear on the same 37 pages, and the fastest way to make them look like the same block twice is
    to give them both a figure row.
 
-   Two more constraints ride on the form/actions pairing. A form always carries `scheduleHref`,
-   because all 56 form instances must offer "See available times"; and a form allows only the empty
-   `actions` tuple, because the form's own submit is the primary ask and a second primary beside it
-   is two asks in one block. */
+   One more constraint rides on the form/actions pairing: a form allows only the empty `actions`
+   tuple, because the form's own submit is the primary ask and a second primary beside it is two
+   asks in one block. "See available times" used to be a second one — a form here required
+   `scheduleHref` — and it moved into EnquiryForm's own action row on 29 Sep 2026 (tracker 2.17),
+   so the link sits beside the submit rather than a --gap-stack below the form. EnquiryForm's
+   enquiry and audit variants now require `scheduleHref`, which is where the 56-instance
+   constraint lives. */
 
 type CtaSplitProps = {
   arrangement?: 'split';
   form: ReactNode;
-  scheduleHref: string;
   actions?: readonly [];
   proof?: ReactNode;
 };
@@ -93,7 +95,6 @@ type CtaSplitProps = {
 type CtaOpenProps = {
   arrangement: 'open';
   form?: never;
-  scheduleHref?: never;
   actions: readonly [CtaAction] | readonly [CtaAction, CtaAction];
   proof?: ReactNode;
 };
@@ -101,7 +102,6 @@ type CtaOpenProps = {
 type CtaOfferWithFormProps = {
   arrangement: 'offer';
   form: ReactNode;
-  scheduleHref: string;
   actions?: readonly [];
   proof?: never;
 };
@@ -109,7 +109,6 @@ type CtaOfferWithFormProps = {
 type CtaOfferWithActionsProps = {
   arrangement: 'offer';
   form?: never;
-  scheduleHref?: never;
   actions: readonly [CtaAction] | readonly [CtaAction, CtaAction];
   proof?: never;
 };
@@ -263,46 +262,23 @@ function CtaPoints({
 }
 
 /**
- * The control row, and the two things in it never coexist by accident: a `scheduleHref` arrives
- * only with a form, and `actions` only without one, which the props union enforces. So this row is
- * either "See available times" beside a form, or one or two actions with no form — never both.
+ * The control row for the actions-only shapes. A form brings its own row — submit and "See
+ * available times" together, inside EnquiryForm — so this renders only when there is no form.
  *
- * "See available times" is a constant, not a prop. All 56 form instances carry it, so a label prop
- * would be 56 chances to say it differently. It is `ghost`/`neutral` because the form's own submit
- * is the primary ask standing right next to it.
- *
- * Among `actions`, POSITION decides everything: the first is `solid`/`primary` and takes the
- * `arrow-right` glyph, the second is `ghost`/`neutral` and takes none. A trailing glyph means the
- * click changes where you are, which is true of the first action and true of the second — but two
- * glyphs in one row would make the pair read as two equal offers, and the second is deliberately
- * the quieter one. There is no `emphasis` on `CtaAction` for the same reason.
+ * POSITION decides everything: the first is `solid`/`primary` and takes the `arrow-right` glyph,
+ * the second is `ghost`/`neutral` and takes none. A trailing glyph means the click changes where
+ * you are, which is true of the first action and true of the second — but two glyphs in one row
+ * would make the pair read as two equal offers, and the second is deliberately the quieter one.
+ * There is no `emphasis` on `CtaAction` for the same reason.
  *
  * Every control is `size="md"` with `extendHitArea`: the box is 40 and the touch floor is 44, so
  * the target is legal without the row growing. Stepping to `lg` would make this block's buttons
  * taller than every other button on the site.
  */
-function CtaActions({
-  actions,
-  scheduleHref,
-}: {
-  actions?: readonly CtaAction[];
-  scheduleHref?: string;
-}) {
+function CtaActions({ actions }: { actions: readonly CtaAction[] }) {
   return (
     <Cluster colGap="tight" rowGap="tight">
-      {scheduleHref ? (
-        <Button
-          as="a"
-          href={scheduleHref}
-          emphasis="link"
-          tone="neutral"
-          size="md"
-          extendHitArea
-        >
-          See available times
-        </Button>
-      ) : null}
-      {actions?.map((action, index) => (
+      {actions.map((action, index) => (
         <Button
           key={`${index}-${action.href}-${action.label}`}
           as="a"
@@ -324,7 +300,7 @@ function CtaActions({
  * CtaSection — the block that closes a commercial page, built to docs/specs/CtaSection.md.
  *
  * The page's ask, made once: an optional eyebrow, one `h2`, one or two paragraphs, an ordered list
- * of what happens next, and then either a form with a scheduling link or nought to two actions.
+ * of what happens next, and then either a form (which carries its own scheduling link) or nought to two actions.
  * 76 routes, 113 instances — 37 routes carry two, because a mid-page offer and a closing block are
  * both this component.
  *
@@ -436,10 +412,9 @@ export function CtaSection(props: CtaSectionProps) {
           />
           {hasForm ? <div>{props.form}</div> : null}
           <CtaPoints arrangement="offer" points={points} />
-          <CtaActions
-            actions={'actions' in props ? props.actions : undefined}
-            scheduleHref={'scheduleHref' in props ? props.scheduleHref : undefined}
-          />
+          {'actions' in props && props.actions && props.actions.length > 0 ? (
+            <CtaActions actions={props.actions} />
+          ) : null}
         </Layout>
       </Section>
     );
@@ -468,10 +443,7 @@ export function CtaSection(props: CtaSectionProps) {
             />
             <CtaPoints arrangement="split" points={points} />
           </Layout>
-          <Layout rowGap="stack">
-            <div>{props.form}</div>
-            <CtaActions scheduleHref={props.scheduleHref} />
-          </Layout>
+          <div>{props.form}</div>
         </Layout>
         {props.proof !== undefined ? <div>{props.proof}</div> : null}
       </Layout>

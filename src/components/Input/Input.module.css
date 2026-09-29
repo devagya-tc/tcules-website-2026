@@ -4,12 +4,14 @@
    stay with the composing pattern. Every colour and distance comes from --inp-*; the module reads
    the current data-surface scope and never paints or selects a surface itself.
 
-   Rule order is deliberate. Emphasis establishes rest and focus, invalid replaces the rule, and
-   disabled comes last so an unavailable invalid field reads unavailable. At the phone breakpoint
-   standard single-line controls step from 40 to the 44px touch floor. Quiet stays 40px because it
-   shares a row with SiteFooter's 40px Button; that preservation is the reason quiet is a named
-   emphasis instead of a footer override. Textareas already exceed the floor through their 128px
-   minimum and remain natively resizable. */
+   Rule order is deliberate. The base rule establishes rest and focus, invalid replaces the rule,
+   and disabled comes last so an unavailable invalid field reads unavailable. At the phone
+   breakpoint single-line controls step from 40 to the 44px touch floor. Textareas already exceed
+   the floor through their 128px minimum and remain natively resizable.
+
+   One treatment. A second, `quiet`, was kept for SiteFooter's newsletter row and rendered nearly
+   identically to this one on paper and ink; it was merged in and deleted on 29 Sep 2026 (tracker
+   2.17). The --inp-standard-* token names keep `standard` as the name of the treatment. */
 
 .control {
   /* No box-sizing here: reset.css sets it on `*` already, and this was the only module in the repo
@@ -20,10 +22,12 @@
   min-inline-size: var(--inp-min-inline);
   block-size: var(--inp-height-md);
   padding-inline: var(--inp-padding-x);
-  border: var(--inp-rule-width) solid;
+  border: var(--inp-rule-width) solid var(--inp-standard-rule);
   border-radius: var(--inp-radius);
   font: var(--inp-text);
   box-shadow: var(--inp-shadow);
+  background: var(--inp-standard-bg);
+  color: var(--inp-standard-fg);
   /* border-color only. `background` was in this list and could never fire: no --inp-*-bg moves on
      hover, focus or invalid, and the one that does move is :disabled, which is not a state anything
      transitions into. A transition on a value that never changes reads as a promise the component
@@ -35,80 +39,38 @@
   /* Browsers otherwise attenuate the declared ink and invalidate its measured contrast. This is
      a rendering normalization, not a visual state or a transition. */
   opacity: 1;
-}
-
-.standard {
-  border-color: var(--inp-standard-rule);
-  background: var(--inp-standard-bg);
-  color: var(--inp-standard-fg);
-}
-
-.standard::placeholder {
   color: var(--inp-standard-placeholder-fg);
 }
 
 /* Hover and focus resolve to the same rule colour deliberately — the keyboard is shown what the
    pointer is shown. The DIFFERENCE between them is carried by the ring below, which :hover never
    draws and :focus-visible always does. */
-.standard:not(:disabled, .invalid):hover,
-.standard:not(:disabled, .invalid):focus-visible {
+.control:not(:disabled, .invalid):hover,
+.control:not(:disabled, .invalid):focus-visible {
   border-color: var(--inp-standard-rule-hover);
-}
-
-.quiet {
-  border-color: var(--inp-quiet-rule);
-  background: var(--inp-quiet-bg);
-  color: var(--inp-quiet-fg);
-}
-
-.quiet::placeholder {
-  color: var(--inp-quiet-placeholder-fg);
-}
-
-/* Same pair as standard, and the same token naming: focus takes the -hover value plus the ring.
-   This used to answer :focus-visible alone under a -focus name, which put a state suffix in the
-   layer that the state model does not have and left quiet with no hover response at all. */
-.quiet:not(:disabled, .invalid):hover,
-.quiet:not(:disabled, .invalid):focus-visible {
-  border-color: var(--inp-quiet-rule-hover);
 }
 
 .control:focus {
   outline: none;
 }
 
-.standard:focus-visible {
+.control:focus-visible {
   box-shadow:
     0 0 0 var(--inp-ring-offset) var(--inp-standard-ring-gap-color),
     0 0 0 calc(var(--inp-ring-offset) + var(--inp-ring-width)) var(--inp-standard-ring-color);
 }
 
-.quiet:focus-visible {
-  box-shadow:
-    0 0 0 var(--inp-ring-offset) var(--inp-quiet-ring-gap-color),
-    0 0 0 calc(var(--inp-ring-offset) + var(--inp-ring-width)) var(--inp-quiet-ring-color);
-}
-
 /* Width and colour move together; aria-invalid carries the same state non-visually.
 
-   The colour is per EMPHASIS, because the rule is seen against the field's own fill rather than
-   against the band — and on blue the two fills diverge (white for standard, brandeis-600 for
-   quiet), so one shared value cannot clear on both. The width is shared: it steps identically
-   whatever the fill.
+   The colour is chosen against the field's own fill rather than against the band, which is why
+   blue takes danger-600 (on the white field) and not the light danger step its ground would want.
 
-   `.standard.invalid` is (0,2,0) and `.control:disabled` below is also (0,2,0), so the disabled
+   `.control.invalid` is (0,2,0) and `.control:disabled` below is also (0,2,0), so the disabled
    block staying LAST is what keeps an unavailable invalid field reading as unavailable. Do not
    move it. */
-.invalid {
+.control.invalid {
   border-width: var(--inp-invalid-rule-width);
-}
-
-.standard.invalid {
   border-color: var(--inp-standard-invalid-rule);
-}
-
-.quiet.invalid {
-  border-color: var(--inp-quiet-invalid-rule);
 }
 
 .control:disabled {
@@ -133,28 +95,6 @@
 @media (max-width: 767px) {
   .control:not(.textarea) {
     block-size: var(--inp-height-touch);
-  }
-
-  /* Quiet keeps its 40px box, and the argument is not the one this comment used to make.
-     It is NOT "parity with SiteFooter's 40px Button", because Button's own answer to a 40px box is
-     to extend its hit area past it — citing the box and ignoring the target proves nothing.
-
-     The real reason quiet may stay at 40 is that its tap target is not the input. Its only consumer
-     wraps it in a <label>, which forwards a tap to the control natively, and that label measures
-     73.6px on the rendered page — so the target clears the floor by a wide margin and stepping the
-     box would only break the row it shares with the Button.
-
-     And the means Button uses is NOT AVAILABLE HERE. An <input> is a void element and generates no
-     pseudo-element box, so `.quiet::after { block-size: 44px }` resolves in getComputedStyle —
-     content and height both report — while producing nothing at all: measured, a point 4px above
-     the field hits the label, not the input. That is why the spec's "extend the hit area past the
-     box" is Button's means and not this component's, and why the two means it names are not two.
-
-     What this DOES leave: a bare `<Input emphasis="quiet">` with no associated label is under-target
-     as well as unnamed. The label is load-bearing for both, and no type can enforce it — a wrapping
-     <label> and an external <label for> are both invisible to the props. Wire one. */
-  .quiet:not(.textarea) {
-    block-size: var(--inp-height-md);
   }
 }
 

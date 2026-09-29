@@ -102,11 +102,7 @@ export function SiteFooter({
             rectangle. Two tracks at 2:1 rather than a Cluster, because Cluster's gap scale stops
             at 24 and the two halves need a column's worth of air to read as opposed rather than
             adjacent. One track below md, where the right group left-aligns under the tagline. */}
-        <Layout
-          columns={{ base: 1, md: [2, 1] }}
-          colGap="column"
-          rowGap="gutter"
-        >
+        <Layout columns={{ base: 1, md: [2, 1] }} colGap="column" rowGap="gutter">
           <Layout className={styles.brandIdentity} rowGap="block">
             {/* The mark carries its own name here. Unlike the header's, it is not inside a link,
                 so nothing else announces it. */}
@@ -235,7 +231,6 @@ export function SiteFooter({
               <label className={styles.fieldLabel}>
                 <span className={styles.fieldLabelText}>{newsletter.fieldLabel}</span>
                 <Input
-                  emphasis="quiet"
                   type="email"
                   name="email"
                   autoComplete="email"

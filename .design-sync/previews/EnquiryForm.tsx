@@ -37,14 +37,16 @@ const CONTEXT: EnquiryContextBase = {
  * FOUR STATES YOU WILL NOT SEE IN A CARD. Invalid, submitting, error and success all need a live
  * endpoint and a real interaction, so every story below renders the idle state. What the cards do
  * show is the shape: the field order, the label treatment, the reserved line under each field that
- * stops the layout shifting when a validation message appears, and the submit.
+ * stops the layout shifting when a validation message appears, and the action row: the submit with
+ * "See available times" beside it. `scheduleHref` is required on enquiry and audit — every one of
+ * those forms offers the scheduling link, and it lives here, in the form, not in CtaSection.
  *
  * The fields validate on blur, not on keystroke, and the message reserves its line whether or not
  * it has anything to say — so a form that fails validation does not push its own submit button
  * down the page.
  */
 export function Default() {
-  return <EnquiryForm action="/api/enquiry" context={CONTEXT} />;
+  return <EnquiryForm action="/api/enquiry" context={CONTEXT} scheduleHref="/contact" />;
 }
 
 /** The audit variant. `context.intent` is required here and forbidden on the enquiry variant, so
@@ -55,6 +57,7 @@ export function Audit() {
       variant="audit"
       action="/api/audit"
       context={{ ...CONTEXT, placement: 'mid-page', intent: 'ux-audit' }}
+      scheduleHref="/contact"
     />
   );
 }
@@ -63,16 +66,21 @@ export function Audit() {
     the same question 56 ways. */
 export function AlternateUrlLabel() {
   return (
-    <EnquiryForm action="/api/enquiry" urlLabel="Link to the work" context={CONTEXT} />
+    <EnquiryForm
+      action="/api/enquiry"
+      urlLabel="Link to the work"
+      context={CONTEXT}
+      scheduleHref="/contact"
+    />
   );
 }
 
-/** On tint. Every quiet value in the fields steps one darker because the ground did; the labels and
-    the status rule step with them. */
+/** On tint. The field rule steps one darker and the fill drops to paper because the ground did;
+    the labels step with them. */
 export function OnTint() {
   return (
     <Section surface="tint" density="tight">
-      <EnquiryForm action="/api/enquiry" context={CONTEXT} />
+      <EnquiryForm action="/api/enquiry" context={CONTEXT} scheduleHref="/contact" />
     </Section>
   );
 }
@@ -81,7 +89,7 @@ export function OnTint() {
 export function OnInk() {
   return (
     <Section surface="ink" density="tight">
-      <EnquiryForm action="/api/enquiry" context={CONTEXT} />
+      <EnquiryForm action="/api/enquiry" context={CONTEXT} scheduleHref="/contact" />
     </Section>
   );
 }
@@ -91,7 +99,12 @@ export function OnInk() {
 export function OnBlue() {
   return (
     <Section surface="blue" density="tight">
-      <EnquiryForm action="/api/audit" variant="audit" context={{ ...CONTEXT, intent: 'ux-audit' }} />
+      <EnquiryForm
+        action="/api/audit"
+        variant="audit"
+        context={{ ...CONTEXT, intent: 'ux-audit' }}
+        scheduleHref="/contact"
+      />
     </Section>
   );
 }
