@@ -65,7 +65,7 @@
   aspect-ratio: var(--bcrd-media-ratio);
   overflow: hidden;
   border: var(--bcrd-media-rule-width) solid var(--bcrd-media-rule-ink);
-  border-radius: var(--bcrd-radius);
+  border-radius: var(--bcrd-media-radius);
 }
 
 /* What scales. A span between the ruled box and Media, so the box and its edge hold still while

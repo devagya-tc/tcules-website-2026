@@ -1066,7 +1066,8 @@ drop the "Read the case study" line; a subtle image zoom; the listing descriptio
    beside empty track. The track is the measure; `--text-title-wrap` (balance) evens the lines. The h4
    role is kept: h5 was tried and saved one line only on the longest titles, at the cost of every
    approved text-only set.
-6. **`BlockCardSet` rows are a `stack` (48) apart; columns stay a `gutter` (32).** Across a row the
+6. **`BlockCardSet` rows are a `column` (64) apart; columns stay a `gutter` (32).** (`stack`, 48,
+   was tried first and still read as one field.) Across a row the
    cards are peers read together; down the grid each row is the next set of objects, and at one
    shared 32 a borderless tile's copy ran into the image below it. Every set, not only case studies.
 7. **`/case-studies` renders the `CaseStudyIndex` template** (`src/templates/`, the first template).
@@ -1086,6 +1087,9 @@ drop the "Read the case study" line; a subtle image zoom; the listing descriptio
    crop means a cover reads alike in the featured row and the tile. It supersedes the 4:3 rows in
    sections 2, 4 and 7 and the amendment-4 inset arithmetic for the row.
 10. **The fill crop is anchored at `0 20%`**, not the centre (Media's `--media-fill-position`).
+
+11. **The image's crop box takes `--radius-8`** (`--bcrd-media-radius`, owner 29 Sep, ch05 amendment
+    5b). The frame stays square (`--bcrd-radius`, 0) and so does the focus ring.
 
 Specimen: band 21 (the case-study card at the corpus's extremes, the 87-character title at 326, no
 eyebrow);

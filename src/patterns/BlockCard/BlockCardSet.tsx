@@ -69,11 +69,12 @@ export function BlockCardSet({ items }: BlockCardSetProps) {
   const { columns, tracks } = peerGrid(peers.length);
 
   return (
-    /* Rows sit a `stack` apart, columns a `gutter` (29 Sep). The two seams separate different
+    /* Rows sit a `column` apart, columns a `gutter` (29 Sep). The two seams separate different
        things: across a row the cards are peers read together, and down the grid each row is the
-       next set of objects. At one shared 32 a borderless tile's copy ran straight into the image
-       below it, so the grid read as one field rather than as rows. */
-    <Layout as="ul" columns={columns} colGap="gutter" rowGap="stack" equalRows lead={featured}>
+       next set of objects, which must read as separate — the `column` step's own job, turned to
+       the block axis. At one shared 32 a borderless tile's copy ran into the image below it;
+       `stack` (48) was tried and still read as one field. */
+    <Layout as="ul" columns={columns} colGap="gutter" rowGap="column" equalRows lead={featured}>
       {items.map(({ id, ...card }, index) =>
         featured && index === 0 ? (
           <BlockCard key={id} {...card} orientation="horizontal" imageSide="left" />

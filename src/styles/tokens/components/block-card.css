@@ -64,6 +64,11 @@
   --bcrd-media-zoom-easing: var(--easing-standard);
 
   --bcrd-radius: var(--radius-0);
+  /* The image's crop box takes a radius the frame does not (owner, 29 Sep; ch05 amendment 5b). The
+     frame is an editorial tile and stays square; the image inside it is the one object, and 8 —
+     the SiteNav card's step above 4, the largest on the ramp short of a pill — softens a 392px
+     cover without turning it into a control. The box clips the image and its zoom to it. */
+  --bcrd-media-radius: var(--radius-8);
   --bcrd-shadow: var(--shadow-none);
   --bcrd-ring-width: var(--focus-ring-width);
   --bcrd-ring-offset: var(--focus-ring-offset);

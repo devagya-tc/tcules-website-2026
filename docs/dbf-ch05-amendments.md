@@ -193,6 +193,20 @@ own box.
 
 ---
 
+## 5b · §6 — a card image takes an 8px radius (owner ruling, 29 Sep 2026)
+
+**What it changes.** §6 sets radius 0 on every image, with one exception: the SiteNav rail card at
+`--radius-4`. `BlockCard` becomes the second: its image crop box takes `--radius-8`, and the image is
+clipped to it. The card frame, the focus ring, Figure, PageHero and the ListCard thumbnail stay at 0.
+
+**Why.** The owner reviewed the case-study index and ruled that the cards read better with softened
+media. Like 5a it is a property of the card's crop, not of the asset, so no asset is authored
+differently.
+
+**Recommend: record in ch05 §6** beside the SiteNav exception.
+
+---
+
 ## 6 · §4a — "a recolour, not a re-placement" is not buildable as specified
 
 **What it says now.** §4a, Ground:
