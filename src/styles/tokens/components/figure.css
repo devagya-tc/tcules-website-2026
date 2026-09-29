@@ -31,13 +31,17 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   Caption and note share ONE type role and are told apart by ink alone. --text-caption
-   is the only sans role at or below body-small scale; the mono role at that size
-   (--text-micro) comes bundled with semibold weight and tracking meant for short
-   capitalised labels, which is the wrong voice for a sentence explaining what an image
-   does not establish. So "quieter" here is a colour decision, and the surface blocks
-   below keep the two inks a full rung apart on all four grounds. Neither token carries
-   a tracking companion, because --text-caption has none.
+   Caption and note sit on TWO type steps (29 Sep 2026, tracker 2.17). They used to share
+   --text-caption and differ by ink alone, and under a 1240 image the pair read as fine
+   print: two 13px lines a shade apart, neither of them owning the image. The caption now
+   takes --text-body — it is the sentence that says what the image is, read with the
+   weight of running prose — and the note takes --text-body-sm, one step down, so the
+   aside is quieter by size as well as by ink. The inks below keep their full rung of
+   daylight anyway: size now carries most of the distinction, ink confirms it.
+
+   Both are running text, so the rule that sets them also writes
+   text-wrap: var(--text-running-wrap). Neither token carries a tracking companion,
+   because neither sans body role has one.
 
    Both distances in this component (image→legend, caption→note) are Layout rowGap
    steps and appear nowhere in this file: there is no --fig-gap-* because there is no
@@ -46,14 +50,14 @@
    No --fig-z: nothing here is positioned, so nothing stacks. Writing z-index:0 would
    manufacture a stacking context to assert an absence. */
 :root {
-  --fig-caption-text: var(--text-caption);
-  --fig-note-text: var(--text-caption);
+  --fig-caption-text: var(--text-body);
+  --fig-note-text: var(--text-body-sm);
 
   /* Component geometry, not layout distance. 192 matches Layout's xs track by value
      rather than reading --lay-track-xs: a component never reads another component's
      tokens. It is the floor for a parent that does not size the figure — a wrapping row
      rather than a grid track — and is the same value, for the same reason, that
-     --lcrd-content-min-xs already sets: below it a caption in --text-caption starts
+     --lcrd-content-min-xs already sets: below it a body-scale caption starts
      breaking on very short lines instead of wrapping on words. */
   --fig-min-xs: 192px;
 }
@@ -75,7 +79,10 @@
    two would render in identical ink on this one surface. They share one type role with
    no family, case or tracking difference between them, so that collision would be total
    rather than partial: the caption steps to 800 to keep a full rung of daylight. The
-   cost, stated plainly, is that the caption is measurably darker on tint than on paper. */
+   cost, stated plainly, is that the caption is measurably darker on tint than on paper.
+   (Since 2.17 the two also differ by size, so the collision would no longer be total —
+   the rung is kept because the ink ladder is still the right one, not because it is now
+   the only thing telling them apart.)                                                  */
 [data-surface='tint'] {
   --fig-caption-ink: var(--color-neutral-800); /* 10.54:1 */
   --fig-note-ink: var(--color-neutral-700); /* 7.27:1 */
