@@ -1091,6 +1091,12 @@ drop the "Read the case study" line; a subtle image zoom; the listing descriptio
 11. **The image's crop box takes `--radius-8`** (`--bcrd-media-radius`, owner 29 Sep, ch05 amendment
     5b). The frame stays square (`--bcrd-radius`, 0) and so does the focus ring.
 
+12. **The index hero is name-then-message** (template, not PageHero). `CaseStudyIndex` takes
+    `hero: { name, message }`: the message is the h1, the name ("Selected case studies") the eyebrow,
+    and there is no hero action, so the page asks the visitor to read a case study before anything
+    else. The same arrangement suits every index page type whose label is not its argument; it is
+    each template's decision as it is built, not a PageHero default (strapi-changes §14).
+
 Specimen: band 21 (the case-study card at the corpus's extremes, the 87-character title at 326, no
 eyebrow);
 bands 6, 8 and 12 re-captioned for the rule, the cta rule and the new states.

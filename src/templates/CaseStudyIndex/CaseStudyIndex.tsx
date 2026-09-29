@@ -36,7 +36,14 @@ export type CaseStudyIndexClosing = {
 
 export type CaseStudyIndexProps = {
   breadcrumbs: readonly BreadcrumbItem[];
-  hero: { title: string; body: string; action?: HeroAction };
+  /**
+   * The opening, by ROLE rather than by element (29 Sep). `name` is what the page is called
+   * ("Selected case studies") and `message` is what it argues — the line a visitor should leave
+   * with. The template sets the message as the h1 and the name as the eyebrow above it, and takes
+   * no action: this page's job is to get a case study read, and a hero button ahead of the cards
+   * competes with that. A blank message falls back to the name as the h1 with no eyebrow.
+   */
+  hero: { name: string; message: string };
   items: readonly CaseStudyIndexItem[];
   closing?: CaseStudyIndexClosing;
 };
@@ -63,14 +70,16 @@ function eyebrow(item: CaseStudyIndexItem): string | undefined {
  * for rather than at whatever the CMS holds today.
  */
 export function CaseStudyIndex({ breadcrumbs, hero, items, closing }: CaseStudyIndexProps) {
+  const message = hero.message.trim();
+
   return (
     <>
       <Breadcrumbs surface="paper" items={breadcrumbs} />
 
       <PageHero
-        title={hero.title}
-        body={[hero.body]}
-        actions={hero.action ? [hero.action] : undefined}
+        eyebrow={message ? hero.name : undefined}
+        title={message || hero.name}
+        body={['']}
         surface="paper"
       />
 

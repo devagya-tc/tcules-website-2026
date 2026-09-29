@@ -180,3 +180,16 @@ the content team can apply without a judgement about each entry.
 
 **Found in.** BlockCard revision, 29 Sep 2026 (`docs/specs/BlockCard.md` § Revision 3). Content side:
 `docs/content-changes.md` §2.
+
+## 14. The case-study listing hero: name and message, no action
+
+**What.** On the case-study listing's hero, `heading` is now rendered as the eyebrow and `description`
+as the h1, and the hero `action` is no longer rendered. Recommended: rename the two fields for what they
+now are (`name` — what the page is called; `message` — the line it argues, 2–10 words, CU04's H1 range)
+and retire the hero action on this content type, or leave it empty.
+
+**Why.** The page's point is the line under "Selected case studies", not the label, so the line gets
+the h1 and the label becomes the eyebrow. A button in the hero asks the visitor to leave before they
+have read a case study, which is this page's one job. The close (the `misc` CTA) still carries the ask.
+
+**Found in.** `CaseStudyIndex` template, 29 Sep 2026 (`docs/specs/BlockCard.md` § Revision 3).

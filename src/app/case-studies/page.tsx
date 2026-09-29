@@ -53,13 +53,7 @@ export default async function CaseStudiesPage() {
         { label: 'Home', href: ROUTES.home },
         { label: page.hero.heading, href: ROUTES.caseStudies },
       ]}
-      hero={{
-        title: page.hero.heading,
-        body: page.hero.description,
-        action: page.hero.action
-          ? { label: page.hero.action.label, href: page.hero.action.href }
-          : undefined,
-      }}
+      hero={{ name: page.hero.heading, message: page.hero.description }}
       items={page.items.map((caseStudy) => ({
         id: caseStudy.documentId,
         href: caseStudyPath(caseStudy.slug),
