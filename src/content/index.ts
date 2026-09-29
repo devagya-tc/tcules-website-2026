@@ -16,6 +16,7 @@ export {
   getBlogPage,
   getCareerPage,
   getCaseStudyListingPage,
+  getIdealCaseStudyListingPage,
   getCaseStudyPage,
   getContactPage,
   createClientContact,

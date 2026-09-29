@@ -169,7 +169,7 @@ Yours must not collide with any of those, nor with a primitive family above.
 against the controls beside it — if you are specifying one, say which of these it must line up with.
 
 - **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px · `--acc-question-underline-offset` 6px
-- **block-card.css** — `--bcrd-title-tracking` -0.005em · `--bcrd-title-tracking-horizontal` -0.01em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-meta-tracking` 0.12em · `--bcrd-media-rule-width` 1px · `--bcrd-title-underline-width` 1px · `--bcrd-title-underline-offset` 4px · `--bcrd-radius` 0px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
+- **block-card.css** — `--bcrd-title-tracking` -0.005em · `--bcrd-title-tracking-horizontal` -0.01em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-rule-width` 1px · `--bcrd-radius` 0px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
 - **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
 - **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 160px
@@ -218,5 +218,5 @@ seam to size.
 
 - **Primitives** (`src/components/`): `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `Section` · `Tag` · `Texture`
 - **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaSection` · `DataTable` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav` · `TableOfContents`
-- **Templates** (`src/templates/`): — none yet
+- **Templates** (`src/templates/`): `CaseStudyIndex`
 

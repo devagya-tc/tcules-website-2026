@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Layout, Section } from '@/components';
 import { getCaseStudyListingPage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
-import { BlockCardSet, Breadcrumbs, CtaSection, PageHero } from '@/patterns';
+import { CaseStudyIndex } from '@/templates';
 
 const CASE_STUDIES_SLUG = ROUTES.caseStudies.slice(1);
 
@@ -48,70 +47,40 @@ export default async function CaseStudiesPage() {
 
   if (!page) notFound();
 
-  const heroActions = page.hero.action
-    ? ([{ label: page.hero.action.label, href: page.hero.action.href }] as const)
-    : undefined;
-
   return (
-    <>
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: page.hero.heading, href: ROUTES.caseStudies },
-        ]}
-      />
-
-      <PageHero
-        title={page.hero.heading}
-        body={[page.hero.description]}
-        actions={heroActions}
-        surface="paper"
-      />
-
-      {page.items.length > 0 ? (
-        <Section as="div" surface="paper">
-          <BlockCardSet
-            items={page.items.map((caseStudy) => ({
-              id: caseStudy.documentId,
-              title: caseStudy.title,
-              body: caseStudy.description,
-              eyebrow: caseStudy.client,
-              meta: caseStudy.categories.map((category) => category.name),
-              media: caseStudy.thumbnail
-                ? { type: 'image' as const, image: caseStudy.thumbnail }
+    <CaseStudyIndex
+      breadcrumbs={[
+        { label: 'Home', href: ROUTES.home },
+        { label: page.hero.heading, href: ROUTES.caseStudies },
+      ]}
+      hero={{
+        title: page.hero.heading,
+        body: page.hero.description,
+        action: page.hero.action
+          ? { label: page.hero.action.label, href: page.hero.action.href }
+          : undefined,
+      }}
+      items={page.items.map((caseStudy) => ({
+        id: caseStudy.documentId,
+        href: caseStudyPath(caseStudy.slug),
+        title: caseStudy.title,
+        description: caseStudy.description,
+        client: caseStudy.client,
+        categories: caseStudy.categories.map((category) => category.name),
+        cover: caseStudy.thumbnail,
+      }))}
+      closing={
+        page.misc
+          ? {
+              eyebrow: page.misc.label,
+              heading: page.misc.heading,
+              body: page.misc.description,
+              action: page.misc.action
+                ? { label: page.misc.action.label, href: page.misc.action.href }
                 : undefined,
-              href: caseStudyPath(caseStudy.slug),
-            }))}
-          />
-        </Section>
-      ) : null}
-
-      {page.misc ? (
-        page.misc.action ? (
-          <CtaSection
-            arrangement="open"
-            surface="tint"
-            eyebrow={page.misc.label || undefined}
-            heading={page.misc.heading}
-            body={[page.misc.description]}
-            actions={[
-              {
-                label: page.misc.action.label,
-                href: page.misc.action.href,
-              },
-            ]}
-          />
-        ) : (
-          <Section surface="tint" aria-labelledby="case-studies-misc-heading">
-            <Layout rowGap="block">
-              {page.misc.label ? <p>{page.misc.label}</p> : null}
-              <h2 id="case-studies-misc-heading">{page.misc.heading}</h2>
-              {page.misc.description ? <p>{page.misc.description}</p> : null}
-            </Layout>
-          </Section>
-        )
-      ) : null}
-    </>
+            }
+          : undefined
+      }
+    />
   );
 }

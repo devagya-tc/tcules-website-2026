@@ -103,12 +103,6 @@ export type BlockCardProps = {
    */
   eyebrow?: string;
   /**
-   * Optional quiet labels after the body — a case study's categories, an insight's date and read
-   * time. One line, joined by a middot; blank entries are dropped. Ordinary capitalisation: the
-   * line is mono, and mono's case is presentation.
-   */
-  meta?: readonly string[];
-  /**
    * The optional cover image. Case studies and every insight or resource with a cover (articles,
    * videos, podcasts) carry one; service, audit, glossary and capability cards do not (ruling C1).
    */
@@ -117,9 +111,9 @@ export type BlockCardProps = {
   titleAs?: BlockCardTitleElement;
   /**
    * A non-blank destination turns the entire card into one native link. A linked card WITHOUT a
-   * cover also gets its cta; one with a cover does not (29 Sep): the cover, its hover zoom and the
-   * title's underline already say the tile navigates, and a line repeated under every tile in a
-   * grid is noise. A text-only card has nothing else to say it, so it keeps the line.
+   * cover also gets its cta; one with a cover does not (29 Sep): the cover and its hover zoom
+   * already say the tile navigates, and a line repeated under every tile in a grid is noise. A
+   * text-only card has nothing else to say it, so it keeps the line.
    */
   href?: string;
   /**
@@ -188,9 +182,8 @@ function ImageMedia({
  *
  * The root is always an <li>. A non-blank href changes the frame element and, on a card with no
  * cover, adds the cta: the linked shape has one native anchor and one focus stop, while the static
- * shape is complete without an empty action row. The title stays dark in both; a linked card says
- * it navigates by its hover — the title's underline, and a cover's ruled edge and zoom — and, when
- * it has no cover, by the cta.
+ * shape is complete without an empty action row. The title stays dark in both; a covered linked
+ * card says it navigates by its hover zoom, and a text-only one by the cta.
  *
  * Layout owns the block-axis groups, the horizontal orientation's two tracks and the cta's inline
  * row; this module contains no hand-written sibling arrangement. The card knows nothing about its
@@ -201,7 +194,6 @@ export function BlockCard({
   title,
   body,
   eyebrow,
-  meta,
   media,
   titleAs: Title = 'h3',
   href,
@@ -277,16 +269,7 @@ export function BlockCard({
   );
   const bodyNode = hasBody ? <p className={styles.body}>{body}</p> : null;
 
-  /* One line rather than a Cluster of chips: the labels are metadata, not controls, and a wrapping
-     row of them would be the heaviest thing under a two-line title. */
-  const metaLine = (meta ?? [])
-    .map((item) => item.trim())
-    .filter(Boolean)
-    .join(' · ');
-  const metaNode = metaLine ? <span className={styles.meta}>{metaLine}</span> : null;
-
-  /* The copy: eyebrow, title and body as one tight group, then the meta line and the cta each a
-     block below it — the labels are about the item, so they sit apart from what it says. */
+  /* The copy: eyebrow, title and body as one tight group, then the cta a block below it. */
   const content = (
     <Layout rowGap="block" className={styles.content}>
       <Layout rowGap="tight">
@@ -294,7 +277,6 @@ export function BlockCard({
         {titleNode}
         {bodyNode}
       </Layout>
-      {metaNode}
       {cta}
     </Layout>
   );
@@ -341,7 +323,6 @@ export function BlockCard({
         </Layout>
         <Layout rowGap="block" className={styles.content}>
           {bodyNode}
-          {metaNode}
           {cta}
         </Layout>
       </Layout>

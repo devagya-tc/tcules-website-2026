@@ -11,7 +11,7 @@
 | **Designer / date** | Codex / 24 Aug 2026                                                                                                    |
 | **Revised**         | Cards 1a redesign / 25 Aug 2026 — borderless finish, always-dark title, `eyebrow`, a read-more `cta`, horizontal orientation |
 | **Revised**         | Phase 2 · 2.10 / 28 Sep 2026 — the image onto `Media`; cover media by family (C1); text-only sets by scale and position (C2); `BlockCardSet` and the featured first card (C3); the icon fill removed; `Layout lead` |
-| **Revised**         | Case-study revision / 29 Sep 2026 — one hairline round every image kind (the crop box's, ch05 amendment 5a; `Media edge="placement"`); a hover zoom and title underline; the cta only on text-only linked cards; a `meta` line; no title measure cap; `/case-studies` onto `BlockCardSet` with a `client` eyebrow. See § Revision 3 |
+| **Revised**         | Case-study revision / 29 Sep 2026 — one hairline round every image kind (the crop box's, ch05 amendment 5a; `Media edge="placement"`); a subtle hover zoom as the only hover cue; the cta only on text-only linked cards; no title measure cap; `BlockCardSet` rows a `stack` apart; `/case-studies` onto the `CaseStudyIndex` template. See § Revision 3 |
 | **Implements**      | `docs/briefs/12-block-card.md`                                                                                         |
 | **Implemented at**  | `src/patterns/BlockCard/` (`BlockCard.tsx`, `BlockCardSet.tsx`) · `src/styles/tokens/components/block-card.css` · specimen `src/app/design/block-card/page.tsx` |
 | **Rulings**         | `docs/phase-2-decisions.md` C1, C2, C3 (28 Sep 2026); Media M1–M4 and PageHero A3 by reference                          |
@@ -70,9 +70,8 @@ full content width without making the fourth an orphan.
 | `content` | yes               | The stack containing the copy and optional cta                        | The block-axis relationships between its children. No inset       |
 | `copy`    | yes               | The tight group containing `eyebrow`, `title` and `body`              | No colour or distance outside its `Layout`                        |
 | `eyebrow` | no                | One `span` above the title; whitespace-only content emits no element  | Eyebrow ink and the eyebrow type role; the case comes from `--text-mono-case` |
-| `title`   | yes               | An `h3` or `h4`, selected by `titleAs`                                | `--bcrd-title-ink`, linked or not, and the hover underline in that ink; the h4 role in a tile, the h3 role in a row. No measure: the track is the measure |
+| `title`   | yes               | An `h3` or `h4`, selected by `titleAs`                                | `--bcrd-title-ink`, linked or not, with no hover state; the h4 role in a tile, the h3 role in a row. No measure: the track is the measure |
 | `body`    | yes in the API    | One paragraph; whitespace-only content emits no element               | Body ink and `--measure-body`                                     |
-| `meta`    | no                | One `span` after the copy group: labels joined by ` · `; blank entries dropped | `--bcrd-meta-ink`; the eyebrow's label role and case |
 | `cta`     | linked cards without a cover | One link `Button` — `emphasis="link"`, `as="span"`, trailing `arrow-right` | Nothing. `Button` owns its type, case, seam, glyph size, colour and underline |
 
 The title's ink does not depend on `href`. That is the redesign's central change: a linked card is
@@ -265,12 +264,13 @@ keyboard get the same treatment.
 | State           | Trigger                              | Parts that move |
 | --------------- | ------------------------------------ | --------------- |
 | rest            | Base rendering                       | Nothing. Inks hold; a cover sits in `--bcrd-media-rule-ink`; a text-only linked card's cta at `--btn-link-*-fg` |
-| hover           | Pointer over a linked frame          | Title underlines in its own ink. With a cover: rule → `--bcrd-media-rule-ink-hover`, image scales to `--bcrd-media-zoom` inside the box. Without one: the cta's underline wipes in (Button) |
+| hover           | Pointer over a linked frame          | With a cover: the image scales to `--bcrd-media-zoom` inside the still, ruled box — nothing else. Without one: the cta's underline wipes in (Button) |
 | focus, keyboard | `:focus-visible` on the linked frame | Everything hover does, plus the paired ring (`--bcrd-ring-color`, `--bcrd-ring-gap-color`) |
-| pressed         | Pointer activation on a linked frame | Holds hover; the text-only cta steps to its pressed colour. No card pressed token: nothing new moves (token rule 3) |
+| pressed         | Pointer activation on a linked frame | Holds hover; the text-only cta steps to its pressed colour. No card pressed token |
 
-Hover is not colour-only on either shape: the underline is a shape change, and on a cover so is the
-zoom. The ruled box never moves — only the image inside it — so nothing lifts off the surface.
+The cover's hover is deliberately one quiet movement. A darker rule and a title underline were built
+on 29 Sep and removed the same day at the owner's review as too loud; neither returns without a new
+decision. Hover is still not colour-only: the zoom is a shape change.
 
 Held, disabled, expanded, busy, loading and error are excluded. A navigation tile is neither a
 selectable option nor an unavailable action; nothing opens and nothing asynchronous happens. A
@@ -287,15 +287,12 @@ nevertheless declared again in all four surface blocks. Ratios are measured agai
 | `--bcrd-title-ink`        | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
 | `--bcrd-body-ink`         | `--color-neutral-700` — 8.14:1                  | `--color-neutral-700` — 7.27:1                  | `--color-neutral-300` — 11.07:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--bcrd-eyebrow-ink`      | `--color-neutral-600` — 4.92:1                  | `--color-neutral-700` — 7.27:1                  | `--color-neutral-400` — 8.05:1                  | `--color-brandeis-100` — 4.91:1              |
-| `--bcrd-meta-ink`         | `--color-neutral-600` — 4.92:1                  | `--color-neutral-700` — 7.27:1                  | `--color-neutral-400` — 8.05:1                  | `--color-brandeis-100` — 4.91:1              |
 | `--bcrd-media-rule-ink`   | `--color-neutral-300` — n/a, decoration         | `--color-neutral-400` — n/a, decoration         | `--color-neutral-700` — n/a, decoration         | `--color-brandeis-300` — n/a, decoration     |
-| `--bcrd-media-rule-ink-hover` | `--color-neutral-900` — n/a, decoration (hover cue beside the underline) | `--color-neutral-900` — n/a, decoration | `--color-neutral-300` — n/a, decoration | `--color-white` — n/a, decoration |
 | `--bcrd-ring-color`       | `--color-brandeis-500` — 6.17:1 against its gap | `--color-brandeis-500` — 5.51:1 against its gap | `--color-brandeis-300` — 7.32:1 against its gap | `--color-white` — 6.23:1 against its gap    |
 | `--bcrd-ring-gap-color`   | `--color-paper` — paired ring 6.17:1            | `--color-paper-deep` — paired ring 5.51:1       | `--color-neutral-950` — paired ring 7.32:1      | `--color-brandeis-500` — paired ring 6.23:1 |
 
-Eight rows. Revision 3 added the meta ink (the eyebrow's ladder, a second reader of one decision)
-and the media rule with its hover step, on the house rule ladder `--media-capture-rule-ink` also
-uses; the card declares its own rather than reading Media's (token rule 6). `--bcrd-media-ink` went
+Six rows. Revision 3 added the media rule, on the house rule ladder `--media-capture-rule-ink` also
+uses, with no hover step; the card declares its own rather than reading Media's (token rule 6). `--bcrd-media-ink` went
 with the icon fill in 2.10 (section 17 Q14). `--bcrd-link-ink`, `-hover` and `-pressed` were **deleted**: the cta is a link
 `Button`, so its three steps per surface come from `--btn-link-primary-fg{,-hover,-pressed}` in
 `button.css`. The card no longer has a link-coloured part of its own, and a colour nothing paints is
@@ -413,7 +410,6 @@ card's other drawn line is the image crop box's hairline (`--bcrd-media-rule-wid
 | `title`, horizontal | `--text-h3`   | `--text-h3-tracking`                       | none — the track (Rev. 3) |
 | `body`           | `--text-body`    | none — this role has no tracking companion | `--measure-body`  |
 | `eyebrow`        | `--text-eyebrow` | `--text-eyebrow-tracking`                  | none              |
-| `meta`           | `--text-eyebrow` (via `--bcrd-meta-text`) | `--text-eyebrow-tracking`       | none              |
 | `cta`            | `Button`'s own   | `Button`'s own                             | none              |
 | Image media      | none             | none                                       | none              |
 
@@ -696,14 +692,12 @@ Two things move on a linked card, and one of them is the card's own (Revision 3)
 - **The cover zoom** — BlockCard's. `.imageZoom` transitions `transform` to
   `scale(var(--bcrd-media-zoom))` (1.03) on `--bcrd-media-zoom-duration` (`--duration-slow`) and
   `--bcrd-media-zoom-easing` (`--easing-standard`). It scales inside the ruled, clipped box, so the box,
-  its edge and the card never move. The rule's colour step transitions on `--bcrd-media-rule-duration`
-  (`--duration-fast`).
+  its edge and the card never move. Nothing else on the card transitions.
 - **The text-only cta's underline** — Button's, triggered by `data-btn-link-group`, answered for in
   Button's own stylesheet.
 
 **Reduced motion:** the card's `prefers-reduced-motion` block removes the zoom outright (no transform,
-no transition) rather than shortening it, and keeps the underline and the darker rule, which are not
-movement. Nothing else transitions: not the title, not the copy, not the frame.
+no transition) rather than shortening it. Keyboard focus keeps its ring.
 
 ## 14 · Do's and Don'ts
 
@@ -733,8 +727,8 @@ movement. Nothing else transitions: not the title, not the copy, not the frame.
    index, count or sibling knowledge inside any card.
 10a. Render a set of four through `BlockCardSet` and expect one `ul` of four `li`, the first spanning
     every track (`grid-column: 1 / -1` from `Layout lead`) and horizontal, the peers vertical.
-10. Point anywhere on a linked card and expect the title to underline; on a covered card expect the
-    rule to darken and the image to scale inside a still box, and on a text-only card the cta's
+10. Point anywhere on a linked card: on a covered card expect only the image to scale inside a still
+    box — no underline, no rule change — and on a text-only card the cta's
     underline to wipe in and its label to step colour; point at a static card and expect nothing to
     move. This is the group contract working,
     and it is the one interaction the specimen cannot render statically.
@@ -747,8 +741,8 @@ movement. Nothing else transitions: not the title, not the copy, not the frame.
     `box-shadow` beyond the ring, no `--bcrd-edge-*` token, and no hairline drawn as a pseudo-element.
     Search the module for `border` and expect only `border-radius`. A card that needs a visible
     boundary is asking for the gutter it was given.
-13. Do not give the title a link ink, or make any part change on hover or press but the title's
-    underline, the cover's rule and zoom, and the text-only cta; inspect computed styles in every
+13. Do not give the title a link ink or an underline, or make any part change on hover or press but
+    the cover's zoom and the text-only cta; inspect computed styles in every
     state and expect only those. There is no
     `--bcrd-link-ink` to reach for any more, and re-adding one is the smell.
 14. Do not restyle the cta from this component: no `.cta` class, no colour, type, case, seam, glyph
@@ -1054,8 +1048,8 @@ drop the "Read the case study" line; a subtle image zoom; the listing descriptio
    `--bcrd-media-rule-ink`; `Media` gets `edge="placement"` (Media spec, amendment 29 Sep) so a
    capture's own rule does not double it. The argument is ch05 amendment 5a: in a card every kind is
    cropped to the card's ratio, so the edge is the card's cut, not the object's.
-2. **Hover is the link cue on a cover card.** Title underline (hairline, 4px optical offset), rule
-   darkens, image zooms 1.03. Section 5 and 13.
+2. **Hover on a cover card is one subtle zoom** (1.03, inside the still box). A darker rule and a
+   title underline were built and removed at review the same day as too loud. Sections 5 and 13.
 3. **The cta renders only on a linked card with no cover.** Global, not case-study-only: the argument
    (a line repeated under every tile says nothing the tile's hover does not) holds for every covered
    family, and a text-only card has nothing else that says it navigates, so it keeps the line.
@@ -1065,18 +1059,29 @@ drop the "Read the case study" line; a subtle image zoom; the listing descriptio
    the convention every editorial grid in the references relies on (a covered tile is read as a
    link), and it was accepted with the decision; a text-only card, which has no such convention,
    keeps the line.
-4. **`meta?: readonly string[]`** — quiet labels after the copy group at `--gap-block`, one line joined
-   by ` · `, the eyebrow's label role in `--bcrd-meta-ink`. Case studies put their categories here, so
-   the eyebrow is free for the client.
+4. **One label line, above the title.** A `meta` line below the body (categories) was built and
+   removed at review: two label lines read as stuffed. The eyebrow is the one label, and the
+   template decides what fills it (item 7).
 5. **No title measure.** `--measure-title` (22ch) broke 60–87 character titles into four ragged lines
    beside empty track. The track is the measure; `--text-title-wrap` (balance) evens the lines. The h4
    role is kept: h5 was tried and saved one line only on the longest titles, at the cost of every
    approved text-only set.
-6. **`/case-studies` uses `BlockCardSet`** — so the first item is featured — with `eyebrow: client`,
-   `meta: categories`, no `ctaLabel`. `CaseStudyListingItem.client` is optional and arrives undefined
-   until Strapi has the field (strapi-changes §13); content asks are in content-changes §2.
+6. **`BlockCardSet` rows are a `stack` (48) apart; columns stay a `gutter` (32).** Across a row the
+   cards are peers read together; down the grid each row is the next set of objects, and at one
+   shared 32 a borderless tile's copy ran into the image below it. Every set, not only case studies.
+7. **`/case-studies` renders the `CaseStudyIndex` template** (`src/templates/`, the first template).
+   The template owns the page type's decisions — `BlockCardSet` (featured first), and the eyebrow
+   rule: the client, or the categories only while the client is missing. `CaseStudyListingItem.client`
+   is optional and undefined until Strapi has the field (strapi-changes §13).
+8. **Ideal content, as a mechanism.** `/design/case-study-index` renders the same template from
+   `getIdealCaseStudyListingPage`: the live entries — covers, order, links — with an overlay of the
+   copy the content rules call for (`src/content/sources/fixtures/ideal/case-study-listing.ts`, keyed
+   by slug; client, 2–8 word title, 8–15 word line, no categories). The page is judged at the content
+   it was designed for, and the overlay doubles as the content team's worked example. Other page
+   types get the same pair — a template and an ideal overlay — as they are built.
 
-Specimen: band 21 (the case-study index, the 87-character title at 326, no client / no categories);
+Specimen: band 21 (the case-study card at the corpus's extremes, the 87-character title at 326, no
+eyebrow);
 bands 6, 8 and 12 re-captioned for the rule, the cta rule and the new states.
 
 ## Appendix — self-audit

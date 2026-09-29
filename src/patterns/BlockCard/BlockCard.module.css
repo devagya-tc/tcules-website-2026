@@ -15,9 +15,9 @@
    copy relationship moved to the frame Layout's rowGap where a container distance belongs.
    No `position`. Its only job was to be the containing block for the removed hover wipe; the focus
    ring is a box-shadow and needs no positioning.
-   No title colour state. The title holds --bcrd-title-ink whether the card is linked or not — the
-   whole point of the redesign — so nothing sets `color: inherit` on it; on hover it underlines in
-   that same ink.
+   No title state at all. The title holds --bcrd-title-ink whether the card is linked or not — the
+   whole point of the redesign — and does not underline on hover: that was tried on 29 Sep and read
+   as heavy. The zoom is the whole hover cue on a covered card.
    No title measure. The track is the title's measure. A 22ch cap broke 60–87 character case-study
    titles into four ragged lines beside empty space in a 392px tile (29 Sep); balance evens them.
    No image rule. `Media` sizes and crops the <img> (`fit="fill"`); this module gives it the box to
@@ -66,7 +66,6 @@
   overflow: hidden;
   border: var(--bcrd-media-rule-width) solid var(--bcrd-media-rule-ink);
   border-radius: var(--bcrd-radius);
-  transition: border-color var(--bcrd-media-rule-duration) var(--bcrd-media-rule-easing);
 }
 
 /* What scales. A span between the ruled box and Media, so the box and its edge hold still while
@@ -112,14 +111,6 @@
   letter-spacing: var(--bcrd-title-tracking-horizontal);
 }
 
-.meta {
-  color: var(--bcrd-meta-ink);
-  font: var(--bcrd-meta-text);
-  letter-spacing: var(--bcrd-meta-tracking);
-  text-transform: var(--text-mono-case);
-  overflow-wrap: anywhere;
-}
-
 .body {
   max-inline-size: var(--measure-body);
   overflow-wrap: anywhere;
@@ -153,35 +144,18 @@
     0 0 0 calc(var(--bcrd-ring-offset) + var(--bcrd-ring-width)) var(--bcrd-ring-color);
 }
 
-/* A linked card's hover and keyboard focus: the title underlines in its own ink, and a cover's
-   ruled edge darkens while the image leans in. Pointer and keyboard get the same treatment, so a
-   keyboard user sees what a pointer user sees. Pressed holds it — it follows hover in source
-   order and sets nothing new, so there is no pressed token. */
-.root .link:hover .title,
-.root .link:focus-visible .title,
-.root .link:active .title {
-  text-decoration-line: underline;
-  text-decoration-thickness: var(--bcrd-title-underline-width);
-  text-underline-offset: var(--bcrd-title-underline-offset);
-}
-
-.root .link:hover .imageMedia,
-.root .link:focus-visible .imageMedia,
-.root .link:active .imageMedia {
-  border-color: var(--bcrd-media-rule-ink-hover);
-}
-
+/* A linked card's hover and keyboard focus: a cover leans in, inside its still, ruled box. That is
+   the whole cue — the rule keeps its rest ink and the title does not underline (both tried 29 Sep,
+   both too loud). Keyboard gets what the pointer gets, plus the ring. Pressed holds it. */
 .root .link:hover .imageZoom,
 .root .link:focus-visible .imageZoom,
 .root .link:active .imageZoom {
   transform: scale(var(--bcrd-media-zoom));
 }
 
-/* Reduced motion keeps every cue that is not movement — the underline and the darker edge — and
-   drops the zoom outright rather than shortening it. The cta's underline wipe is Button's, and
-   Button answers for it in its own stylesheet. */
+/* Reduced motion drops the zoom outright rather than shortening it; keyboard focus still has the
+   ring. The cta's underline wipe is Button's, and Button answers for it in its own stylesheet. */
 @media (prefers-reduced-motion: reduce) {
-  .imageMedia,
   .imageZoom {
     transition: none;
   }

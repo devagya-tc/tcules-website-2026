@@ -9,4 +9,9 @@
  * A template may import from @/patterns and @/components. It may not import @/content — the
  * page reads content and passes it in.
  */
-export {};
+export { CaseStudyIndex } from './CaseStudyIndex';
+export type {
+  CaseStudyIndexClosing,
+  CaseStudyIndexItem,
+  CaseStudyIndexProps,
+} from './CaseStudyIndex';

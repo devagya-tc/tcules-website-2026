@@ -26,4 +26,10 @@ Each entry: **page / section** · **what's needed** · **why** · **found in** (
 title, half the cards name it and half don't. A description longer than one line was the largest block
 on the card and repeated the title.
 
+- **Categories** no longer show on the card once the client is filled in: one label line per card.
+
+**Worked example.** `/design/case-study-index` shows the live index with this copy applied to every
+entry (`src/content/sources/fixtures/ideal/case-study-listing.ts`). That copy is illustrative, and the
+client names in it were read from titles, slugs and cover filenames, so they need confirming.
+
 **Found in.** BlockCard revision, 29 Sep 2026.

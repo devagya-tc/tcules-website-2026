@@ -97,7 +97,7 @@ function item(list: readonly BlockCardSetItem[], index: number): BlockCardSetIte
 /* ── Content ─────────────────────────────────────────────────────────────────────
    Realistic families, at realistic lengths, because ruling C2 is judged on how a set READS. */
 
-/** The case-study index — client, a one-line description, categories, a cover of every kind. The
+/** The case-study card — client, a one-line description, a cover of every kind. The
     titles are live ones at the corpus's extremes (37 and 87 characters, 29 Sep). */
 const CASE_INDEX: readonly BlockCardSetItem[] = [
   {
@@ -105,7 +105,6 @@ const CASE_INDEX: readonly BlockCardSetItem[] = [
     eyebrow: 'Dealpath',
     title: 'Simplifying the interface without simplifying the work',
     body: 'The problem was never the amount of data; it was an unclear decision.',
-    meta: ['Modernise & replatform'],
     media: cover(CAPTURE),
     href: ROUTES.caseStudies,
   },
@@ -114,7 +113,6 @@ const CASE_INDEX: readonly BlockCardSetItem[] = [
     eyebrow: 'BuildTwin',
     title: 'Trust needed evidence, not reassurance',
     body: 'Showing engineers what the AI checked, what it missed, and what stayed theirs.',
-    meta: ['0 → 1', 'AI-assisted workflows'],
     media: cover(COVER_FLOW),
     href: ROUTES.caseStudies,
   },
@@ -123,7 +121,6 @@ const CASE_INDEX: readonly BlockCardSetItem[] = [
     eyebrow: 'The Chain Hut',
     title: "Crafting a Seamless E-Commerce Experience for UK's Online Fashion Jewellery Market",
     body: 'A jewellery store rebuilt around product discovery on a phone.',
-    meta: ['Growth stage', 'Data-heavy'],
     media: cover(COVER_REVIEWS),
     href: ROUTES.caseStudies,
   },
@@ -132,7 +129,6 @@ const CASE_INDEX: readonly BlockCardSetItem[] = [
     eyebrow: 'Benchmark Gensuite',
     title: 'Evolving the experience across a 75+ application enterprise suite',
     body: 'Modernising a large suite is a design-systems problem, not many redesigns.',
-    meta: ['Modernise & replatform', 'AI-assisted workflows'],
     media: cover(COVER_SEAM),
     href: ROUTES.caseStudies,
   },
@@ -141,7 +137,6 @@ const CASE_INDEX: readonly BlockCardSetItem[] = [
     eyebrow: 'ConnectX',
     title: 'Building energy management as a 0 to 1 AI product',
     body: 'Adding a chatbot is not the same as building an AI-native product.',
-    meta: ['0 → 1'],
     media: cover(COVER_NODE),
     href: ROUTES.caseStudies,
   },
@@ -150,7 +145,6 @@ const CASE_INDEX: readonly BlockCardSetItem[] = [
     eyebrow: 'OmnyAI',
     title: 'Designing trust: reframing the AI–human relationship',
     body: 'Decision control moved back to the person the AI was meant to help.',
-    meta: ['Modernise & replatform', 'AI-assisted workflows'],
     media: cover(CAPTURE),
     href: ROUTES.caseStudies,
   },
@@ -977,19 +971,17 @@ export default function BlockCardSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <BandHead title="12 · States">
-            Point at, hold and Tab to both linked cards. On either, the title underlines in its
-            own ink. On the covered card the ruled edge darkens and the image leans in (1.03,
-            inside the box, which never moves); on the text-only card the cta wipes its
-            underline in, because the frame carries <code>data-btn-link-group</code>. Keyboard
-            focus shows what hover shows, plus the surface-aware two-part ring around the whole
-            card.
+            Point at, hold and Tab to both linked cards. On the covered card the image leans in
+            (1.03) inside its ruled box, which never moves, and nothing else changes — no
+            underline, no darker rule. On the text-only card the cta wipes its underline in,
+            because the frame carries <code>data-btn-link-group</code>. Keyboard focus shows
+            what hover shows, plus the surface-aware two-part ring around the whole card.
           </BandHead>
           <Cards columns={{ base: 1, md: 3 }}>
             <BlockCard
               eyebrow="ConnectX"
               title="Point, hold and Tab"
               body="Rest, hover, focus and pressed all come from this one native link."
-              meta={['0 → 1', 'AI product UX']}
               media={cover(CAPTURE)}
               href={ROUTES.caseStudies}
             />
@@ -1003,15 +995,15 @@ export default function BlockCardSpecimenPage() {
               {[
                 [
                   'rest',
-                  'Dark title, quiet labels, the image in a --bcrd-media-rule-ink hairline.',
+                  'Dark title, quiet eyebrow, the image in a --bcrd-media-rule-ink hairline.',
                 ],
                 [
                   'hover',
-                  'Title underlines; the rule steps to --bcrd-media-rule-ink-hover and the image scales to --bcrd-media-zoom. Text-only: the cta wipes in.',
+                  'The image scales to --bcrd-media-zoom inside the still box. Text-only: the cta wipes in.',
                 ],
                 ['focus', 'Everything hover does, plus the two-part ring around the card.'],
                 ['pressed', 'Holds hover; the text-only cta steps to its pressed colour.'],
-                ['reduced motion', 'No zoom at all; the underline and the darker rule remain.'],
+                ['reduced motion', 'No zoom at all; keyboard focus keeps its ring.'],
               ].map(([state, note]) => (
                 <Layout key={state} rowGap="inline">
                   <strong>{state}</strong>
@@ -1304,10 +1296,10 @@ export default function BlockCardSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <BandHead title="21 · The case-study index (29 Sep)">
-            The /case-studies arrangement: the client as the eyebrow, the categories as the meta
-            line, a one-line description (8&ndash;15 words, strapi-changes §13), no cta. Titles
-            are the live corpus&rsquo;s shortest (37 characters) and longest (87), because
-            titles run long there until the content pass lands.
+            The case-study card at the corpus&rsquo;s extremes: the client as the eyebrow above
+            the title, a one-line description (8&ndash;15 words, strapi-changes §13), no cta.
+            Titles are the live shortest (37 characters) and longest (87). The whole page with
+            ideal content is the <code>CaseStudyIndex</code> template&rsquo;s specimen.
           </BandHead>
           <Specimen title="6 case studies · featured + three from lg">
             <BlockCardSet items={CASE_INDEX} />
@@ -1323,12 +1315,12 @@ export default function BlockCardSpecimenPage() {
             </div>
           </Specimen>
           <Specimen
-            title="No client yet · no categories"
-            note="Until Strapi records the client, the eyebrow is absent and the title starts the copy. With no categories the meta line emits nothing."
+            title="No eyebrow"
+            note="With neither a client nor a category the eyebrow emits nothing and the title starts the copy."
           >
             <Cards columns={{ base: 1, md: 2, lg: 3 }}>
               <BlockCard {...item(CASE_INDEX, 1)} eyebrow={undefined} />
-              <BlockCard {...item(CASE_INDEX, 3)} meta={[]} />
+              <BlockCard {...item(CASE_INDEX, 3)} eyebrow={undefined} />
             </Cards>
           </Specimen>
         </Layout>
