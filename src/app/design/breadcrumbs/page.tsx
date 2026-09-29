@@ -72,7 +72,14 @@ function Note({
 const DEPTHS = [
   { depth: 2, note: 'No collapse. Two items, one divider.' },
   { depth: 3, note: 'No collapse. Three items, two dividers.' },
-  { depth: 4, note: 'The threshold. Collapses, hiding exactly one level — "1 level omitted".' },
+  {
+    depth: 4,
+    note: 'The threshold. From 768 up it collapses to four, hiding one level — "1 level omitted". Below 768 it collapses to three, folding the parent in too — "2 levels omitted".',
+  },
+  {
+    depth: 5,
+    note: 'Four from 768 up ("2 levels omitted"), three below it ("3 levels omitted"). The parent "Design tokens" is visible only on the wide trail.',
+  },
   {
     depth: 6,
     note: 'Three levels omitted. The same ITEM COUNT as depth 4, not the same trail — the parent is "Naming" and the hidden count differs.',
@@ -82,6 +89,24 @@ const DEPTHS = [
     note: 'Five levels omitted. Four items again; the parent is "Reservations". Depth is free after four.',
   },
 ] as const;
+
+const LONG_DEPTHS = [2, 3, 4, 5] as const;
+
+/** A trail of `depth` levels with labels at the long end of what the sitemap holds. */
+function longTrail(depth: number): BreadcrumbItem[] {
+  const ancestors = [
+    { label: 'Home', href: '/' },
+    { label: 'Services and Capabilities', href: '/services' },
+    { label: 'Product Design and Interaction Strategy', href: '/services/pd' },
+    { label: 'Design Systems for Regulated Industries', href: '/services/pd/systems' },
+  ];
+  const out = ancestors.slice(0, depth - 1);
+  out.push({
+    label: 'Interaction and UI Design for Regulated Financial Products',
+    href: '/leaf',
+  });
+  return out;
+}
 
 const STATE_REFERENCE = [
   {
@@ -164,8 +189,8 @@ export default function BreadcrumbsSpecimenPage() {
         <Breadcrumbs key={d.depth} items={trail(d.depth)} />
       ))}
       <Note
-        title="The depth ladder — depths 2, 3, 4, 6, 8 above, in order"
-        note="Rendered item counts are 2, 3, 4, 4, 4. The collapse is depth-driven and unconditional: four or more authored levels always render as four, on a 1440px desktop exactly as on a phone. Depth is free after four, which is why there is no maxItems prop. Note the invariant that holds at every depth — the divider count is always one fewer than the item count."
+        title="The depth ladder — depths 2, 3, 4, 5, 6, 8 above, in order"
+        note="Rendered item counts are 2, 3, 4, 4, 4, 4 from 768 up, and 2, 3, 3, 3, 3, 3 below it. The collapse is depth-driven with one depth per side of the md breakpoint: four or more authored levels render as four on a desktop and as three — first, collapse, current — on a phone, so a phone trail holds one line instead of wrapping onto a second led by a divider. It is CSS, not a prop and not client JS: the parent crumb and the two hidden counts carry breakpoint classes and the one that does not apply is display:none, which removes it from the accessibility tree too. Resize across 768 to watch the parent fold in. Depth is free after four, which is why there is no maxItems prop. The divider count is always one fewer than the rendered item count."
       />
 
       {/* ── States ── */}
@@ -197,6 +222,22 @@ export default function BreadcrumbsSpecimenPage() {
           <Note
             title={`Surface · ${surface.surface}`}
             note={surface.note}
+            surface={surface.surface}
+          />
+        </div>
+      ))}
+
+      {/* ── Long labels, depths 2–5, on every surface ─────────────────────────────
+          The case the phone collapse exists for. At 390 every depth from 4 up renders three
+          crumbs; depth 3 still renders all three of its own and may wrap on labels this long. */}
+      {SURFACES.map((surface) => (
+        <div key={`long-${surface.surface}`}>
+          {LONG_DEPTHS.map((depth) => (
+            <Breadcrumbs key={depth} items={longTrail(depth)} surface={surface.surface} />
+          ))}
+          <Note
+            title={`Long labels · depths 2, 3, 4, 5 · ${surface.surface}`}
+            note="Above 768: 2, 3, 4, 4 crumbs. Below: 2, 3, 3, 3. The collapse mark is U+2026 in the divider's ink on every surface — punctuation between crumbs, not a fourth label. A trail of three authored levels is not collapsed on a phone, because three is already the phone's count; with labels this long it wraps between crumbs, never inside one."
             surface={surface.surface}
           />
         </div>
@@ -287,7 +328,7 @@ export default function BreadcrumbsSpecimenPage() {
       <Breadcrumbs items={trail(16)} />
       <Note
         title="Many items — 2× expected, depth 16"
-        note="Four items again — the same COUNT as depth 4, not the same trail: the parent is 'Level 15' and the hidden string reads a different number. Only the rendered item count is invariant after four."
+        note="Four items again from 768 up, three below — the same COUNT as depth 4, not the same trail: the parent is 'Level 15' and the hidden string reads a different number (13 levels omitted wide, 14 narrow). Only the rendered item count is invariant after four."
       />
 
       <Breadcrumbs

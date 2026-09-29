@@ -307,7 +307,7 @@ a colour something paints again. `BlockCard` does not read those `--btn-*` names
 `data-btn-link-group` and `Button`'s own stylesheet resolves them.
 
 `--bcrd-eyebrow-ink` is the one new token this redesign asks for, and it is not a new colour: it is
-the same quiet-label ramp already declared by `--crumb-collapse-ink` and `--foot-label-ink`, aliased
+the same quiet-label ramp already declared by `--crumb-link-ink` and `--foot-label-ink`, aliased
 for a third consumer. Section 16 records both the addition and the removals.
 
 **Paper.** The title uses neutral-900, body drops to neutral-700 and the eyebrow to
@@ -834,7 +834,7 @@ identical rectangles.
 | `--bcrd-eyebrow-ink` | `--color-neutral-600` | `--color-neutral-700` | `--color-neutral-400` | `--color-brandeis-100` |
 
 It is a component-layer alias, not a new colour: the four values are the quiet-label ramp already
-declared by `--crumb-collapse-ink` in `breadcrumbs.css` and `--foot-label-ink` in `footer.css`, at
+declared by `--crumb-link-ink` in `breadcrumbs.css` and `--foot-label-ink` in `footer.css`, at
 the same steps and for the same reason. A third consumer of a settled ramp gets its own name because
 colour has no usage layer by design — what a colour means depends on the surface, so the component
 owns it. The measured ratios are 4.92:1, 7.27:1, 8.05:1 and 4.91:1; paper and blue sit at the AA

@@ -221,7 +221,7 @@ fill; `--lcrd-number-ink` is the ordinal's own. The split is deliberate: an ordi
 icon names the subject, so one token would have forced a choice between a shouting number and a
 receding subject glyph.
 
-It sits **one step quieter than the quiet-label ramp** used by `--crumb-collapse-ink`,
+It sits **one step quieter than the quiet-label ramp** used by `--crumb-link-ink`,
 `--foot-label-ink` and `--bcrd-eyebrow-ink`. A 20px numeral carries further than a 12px label and has
 to give more back, and colour — not size — is where this component gives it. On the two light
 surfaces that means stepping toward white; on ink and blue it means stepping **toward the ground**,

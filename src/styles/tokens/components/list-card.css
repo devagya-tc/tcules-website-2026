@@ -13,7 +13,7 @@
    ordinal is chrome and an icon marker names the subject, so they do not want the same weight. One
    token would have forced a choice between a shouting ordinal and a receding subject glyph.
 
-   It sits ONE STEP QUIETER than the quiet-label ramp used by --crumb-collapse-ink, --foot-label-ink
+   It sits ONE STEP QUIETER than the quiet-label ramp used by --crumb-link-ink, --foot-label-ink
    and --bcrd-eyebrow-ink, because a 20px numeral carries further than a 12px label and has to give
    more back. On the two light surfaces that means stepping toward white; on ink and blue it means
    stepping TOWARD THE GROUND — the opposite direction in hex, the same direction in emphasis. Every
