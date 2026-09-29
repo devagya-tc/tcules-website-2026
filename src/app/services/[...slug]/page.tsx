@@ -27,6 +27,7 @@ import {
   Callout,
   ContentSection,
   CtaSection,
+  DataTable,
   Figure,
   ListCard,
   PageHero,
@@ -144,7 +145,7 @@ function renderServiceBlock(block: ServiceBlock) {
       );
 
     case 'table':
-      return <Prose html={block.html} />;
+      return <DataTable {...block.table} />;
 
     case 'quote':
       return (

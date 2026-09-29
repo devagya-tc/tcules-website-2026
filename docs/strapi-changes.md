@@ -106,3 +106,26 @@ supplied, like the panel, so it is recorded with the asset rather than chosen pe
 through the `Media` primitive, which ignores it on every other kind.
 
 **Found in.** tracker 2.6 (`docs/specs/Media.md` §3).
+
+## 10. Table columns carry a semantic kind, and the row header is stored once
+
+**What.** Two changes to the shared table component (`ComponentAuditTable`, `ComponentServiceTable`,
+`ComponentExpertiseTable`, `ComponentToolTable`, `ComponentGlossaryTable`):
+
+- An optional **`kind` on each column: `text` (default) · `numeric` · `identifier`.** It says what the
+  column holds, which is content meaning, not layout (§ 1's test): a numeric column end-aligns with
+  tabular figures, an identifier column never wraps. The frontend maps it to `DataTable`'s column
+  behaviour; until it exists every live table renders the defaults, and code does not guess from the
+  cell text.
+- **Store the row header once.** Every one of the 39 published tables sends the row header as the
+  first cell, and 46 rows also fill `rowHeading` — 42 as a duplicate, 4 with a different string the
+  page never shows. Drop `rowHeading`, or make it the only home and stop authoring the first cell.
+
+Also a content trim, not a schema change: `product-modernisation-assessment` sends six data columns,
+one past DataTable's designed five. It renders and scrolls, but reads as a matrix, not a comparison.
+
+**Why.** The seam now passes the table through as structure (`ContentTable`) instead of a flattened
+string, so these fields can reach the page. A duplicated field is two sources of truth, and the
+four rows where they already disagree prove it.
+
+**Found in.** `docs/specs/DataTable.md` § 17 Q6–Q7; tracker 2.15.

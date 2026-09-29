@@ -1,0 +1,274 @@
+/* DataTable — the site's one table, built to docs/specs/DataTable.md (brief 10).
+
+   Layout owns the seams that are arrangement: summary to the captioned frame (--gap-block), and
+   the caption to the frame (--gap-text). This module owns the table's own markup — the frame, the
+   table layout algorithm, the cell insets, the rules, the grounds and the per-column behaviour —
+   and nothing else.
+
+   ── The boxed frame ──────────────────────────────────────────────────────────────────────────
+   A table without structure is hard to read, so the table is drawn as a box: an outer border, a
+   filled head row, a body ground, and a hairline between every row and every column, head row
+   included. Each cell is then a closed box, and the eye can follow a value down its column as
+   easily as across its row. The key column is still distinct — by voice and ink, not by a rule
+   the other columns lack.
+
+   The frame is also the scroll container. When the columns' floors add up to more than the track,
+   the frame scrolls sideways and the border stays put, so the clipped edge of the table reads as
+   "there is more" rather than as a broken layout. The table is never restacked at a narrow width.
+   A fade over each edge with more beyond it makes the scroll discoverable where the platform hides
+   its scrollbar (every touch device, and macOS by default).
+
+   ── Why the table's display is not a hand-rolled arrangement ─────────────────────────────────
+   CLAUDE.md forbids a local grid or flex for ARRANGEMENT. A `<table>` is neither: it is the
+   element whose semantics ARE the arrangement, and its layout comes from the table algorithm the
+   element carries. Nothing below writes `display` at all.
+
+   ── Why the spacing is padding ───────────────────────────────────────────────────────────────
+   A table cell's inset is the table's spacing mechanism — there is no gap property on a table, and
+   `border-spacing` does not exist under `border-collapse`. There is no margin anywhere in this
+   file. Each inset is a gap-scale step named for what it separates:
+     --gap-text   cell padding top and bottom ("cell padding on a dense table")
+     --gap-block  cell padding start and end — the seam between a value and the next column */
+
+.root {
+  min-inline-size: 0;
+}
+
+/* The caption: the table's name, above the frame. Its ink is the caption ink, the precedent Prose
+   already set for a <caption>. */
+.caption {
+  font: var(--text-caption);
+  color: var(--dtab-caption-ink);
+}
+
+/* ── The shell ──────────────────────────────────────────────────────────────────────────────────
+   A non-scrolling box the exact size of the frame, so the fades drawn on it stay pinned to the
+   frame's edges while the table scrolls underneath. `timeline-scope` lifts the frame's scroll
+   timeline up to the shell, so the fades — which are the shell's, not the frame's descendants — can
+   read it; scoping it per shell is also what keeps two tables on a page from reading each other's
+   scroll. */
+.shell {
+  position: relative;
+  min-inline-size: 0;
+  timeline-scope: --dtab-scroll;
+}
+
+/* ── The frame ──────────────────────────────────────────────────────────────────────────────────
+   The box, the body ground and the scroll container in one element. min-inline-size: 0 lets it
+   be narrower than the table it holds inside a Layout track — that is what makes it scroll rather
+   than widen the page. It is a focusable region (see DataTable.tsx), so it carries a focus ring;
+   the offset is the system's, outside the border, so the ring never sits on the table's rules. */
+.frame {
+  min-inline-size: 0;
+  overflow-x: auto;
+  /* A sideways swipe that reaches the end of the table stops there, rather than carrying on into
+     the browser's history-swipe or scrolling an ancestor. */
+  overscroll-behavior-inline: contain;
+  scroll-timeline: --dtab-scroll inline;
+  border: var(--dtab-rule-width) solid var(--dtab-rule-ink);
+  background: var(--dtab-body-ground);
+}
+
+.frame:focus-visible {
+  outline: var(--focus-ring-width) solid var(--dtab-ring-ink);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+/* ── The scroll fades ─────────────────────────────────────────────────────────────────────────────
+   A fade to the body ground over each clipped edge, inside the border. They are a hint, not
+   content, so they take no pointer events. Their opacity is driven by the frame's scroll position:
+   the start fade appears as soon as the table has scrolled off its start, the end fade disappears
+   as it reaches its end, and a frame with nothing to scroll has an inactive timeline, so both stay
+   at their resting opacity of 0. That is the whole reason for the @supports: without scroll
+   timelines the animation would run once on page load and leave the start fade showing.
+
+   A fade, not a shadow: the system has no elevation (--shadow-none is its one step), and a fade
+   says "this continues" in the table's own ground rather than lifting the edge off the page. Over
+   the head row it fades the head fill toward the body ground — one rung apart on every surface, so
+   it reads as the same fade. */
+@supports (animation-timeline: scroll()) {
+  .shell::before,
+  .shell::after {
+    content: '';
+    position: absolute;
+    inset-block: var(--dtab-rule-width);
+    inline-size: var(--dtab-fade-size);
+    opacity: 0;
+    pointer-events: none;
+    animation-timeline: --dtab-scroll;
+  }
+
+  /* Physical gradient directions, because a gradient has no logical keyword. The positions are
+     logical, so in RTL the fades land on the right edges and only their direction would need a
+     :dir(rtl) flip — the site has no RTL content today. */
+  .shell::before {
+    inset-inline-start: var(--dtab-rule-width);
+    background: linear-gradient(to right, var(--dtab-body-ground), transparent);
+    animation-name: dtab-fade-start;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+  }
+
+  .shell::after {
+    inset-inline-end: var(--dtab-rule-width);
+    background: linear-gradient(to left, var(--dtab-body-ground), transparent);
+    animation-name: dtab-fade-end;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+  }
+}
+
+/* The fades reach full strength within the first and last tenth of the scroll, so a table scrolled
+   by one column already shows that it has a start behind it. */
+@keyframes dtab-fade-start {
+  0% {
+    opacity: 0;
+  }
+  10%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes dtab-fade-end {
+  0%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ── Cells ──────────────────────────────────────────────────────────────────────────────────────
+   Every cell floors at --dtab-fluid-size, so a narrow track scrolls the frame instead of crushing
+   a column to a word a line. The floor includes the inset (border-box, from reset.css). */
+.colHead,
+.key,
+.cell {
+  min-inline-size: var(--dtab-fluid-size);
+  padding-block: var(--gap-text);
+  padding-inline: var(--gap-block);
+  border-inline-end: var(--dtab-rule-width) solid var(--dtab-rule-ink);
+  text-align: start;
+}
+
+/* The column dividers stop at the last column: the frame's own border closes the box, and a second
+   hairline beside it would draw a doubled line down the edge. */
+.colHead:last-child,
+.key:last-child,
+.cell:last-child {
+  border-inline-end: 0;
+}
+
+/* ── The head row ───────────────────────────────────────────────────────────────────────────────
+   Mono label voice on the head fill, uppercase in presentation only — the heading strings keep the
+   case somebody authored. Aligned to the bottom so a two-line head sits on the rule with its
+   one-line neighbours. */
+.colHead {
+  border-block-end: var(--dtab-rule-width) solid var(--dtab-rule-ink);
+  background: var(--dtab-head-ground);
+  font: var(--text-ui-sm);
+  letter-spacing: var(--text-ui-sm-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--dtab-head-ink);
+  vertical-align: bottom;
+}
+
+/* ── The body ───────────────────────────────────────────────────────────────────────────────────
+   A hairline between rows and none after the last — the frame's own border closes the box. No
+   zebra. Baseline-aligned: the key is the display face at 18/1.35 and the cells are body sans at
+   16/1.6, so a shared TOP puts their first lines on different baselines, measured at about 2px and
+   visible down every row. A shared baseline is what makes a row read as one line of data. */
+.key,
+.cell {
+  border-block-end: var(--dtab-rule-width) solid var(--dtab-rule-ink);
+  vertical-align: baseline;
+  /* A CMS cell can carry one unbroken string — a URL, a long identifier. `anywhere` lets it break
+     at the column's floor rather than widening the column. nowrap overrides it below. */
+  overflow-wrap: anywhere;
+}
+
+.row:last-child > .key,
+.row:last-child > .cell {
+  border-block-end: 0;
+}
+
+/* The row header is distinguished by VOICE — the h6 title composite, the display face at medium
+   weight — and by the raised ink. The class beats the bare `th` rule in
+   globals.css at (0,1,0). */
+.keyText {
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+  color: var(--dtab-key-ink);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* The cell's rich text is Prose, which owns its ink, links, marks and paragraph rhythm. This class
+   says only what a cell needs from its content box. */
+.value {
+  min-inline-size: 0;
+}
+
+/* An empty cell's mark. aria-hidden in the markup; the cell is announced blank on its own. */
+.empty {
+  font: var(--text-body);
+  color: var(--dtab-empty-ink);
+}
+
+/* ── Column behaviour ───────────────────────────────────────────────────────────────────────────
+   On the head AND the cells of a column, so the two agree. After the cell rules, so each one
+   replaces the fluid floor: nowrap and numeric are floored by their own longest line, and hold
+   raises the floor for a column a greedy neighbour must not crush. */
+.nowrap {
+  min-inline-size: 0;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+.hold {
+  min-inline-size: var(--dtab-hold-size);
+}
+
+.numeric {
+  min-inline-size: 0;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Print ──────────────────────────────────────────────────────────────────────────────────────
+   Paper cannot scroll, so the frame lets the whole table out and the fades go; a row is never split
+   across a page break, and the head row repeats on every page (a <thead> does that by default).
+   Not a breakpoint: nothing here swaps one gap step for another. */
+@media print {
+  .frame {
+    overflow: visible;
+  }
+
+  .shell::before,
+  .shell::after {
+    content: none;
+  }
+
+  .row {
+    break-inside: avoid;
+  }
+}
+
+/* ── Forced colours ─────────────────────────────────────────────────────────────────────────────
+   Windows High Contrast replaces the grounds with the system's, so a fade to --dtab-body-ground
+   would draw a band of the wrong colour over the text. The rules and the focus outline are borders
+   and outlines, which forced colours keep, so the structure survives without them. */
+@media (forced-colors: active) {
+  .shell::before,
+  .shell::after {
+    content: none;
+  }
+}

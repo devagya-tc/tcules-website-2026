@@ -10,6 +10,7 @@ import {
   Breadcrumbs,
   Callout,
   ContentSection,
+  DataTable,
   Figure,
   ListCard,
   PageHero,
@@ -95,7 +96,7 @@ function renderToolBlock(block: ToolBlock) {
       );
 
     case 'table':
-      return <Prose html={block.html} />;
+      return <DataTable {...block.table} />;
 
     case 'quote':
       return <Proof arrangement="compact" quote={block.quote} />;

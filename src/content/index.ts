@@ -38,6 +38,7 @@ export type {
   Page,
   PageBlock,
   PageSeo,
+  ContentTable,
   PageOutlineEntry,
   ImageRecord,
   ImageSource,

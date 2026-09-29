@@ -138,6 +138,11 @@ const SPECIMENS = [
         note: 'the captioned image — slot ladder, 3 intrinsic ratios uncropped, the empty state, 4 surfaces',
       },
       {
+        href: '/design/data-table',
+        name: 'DataTable',
+        note: 'the comparison table — 1 to 5 data columns, column behaviour, marks, the stacked order at 326 and 392, 4 surfaces',
+      },
+      {
         href: '/design/page-hero',
         name: 'PageHero',
         note: 'the page opening — slot ladder, paragraph ladder, byline shapes, 4 surfaces, its own band',

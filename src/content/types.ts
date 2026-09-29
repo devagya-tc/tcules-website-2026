@@ -82,6 +82,34 @@ export type PageSeo = {
   noindex?: boolean;
 };
 
+/**
+ * A comparison table — the view model of every CMS `table` block (Audit, Service, Expertise, Tool,
+ * Glossary and How-we-work all send the same structured shape). Rendered by `DataTable`; built to
+ * docs/specs/DataTable.md.
+ *
+ * It replaces a flattened `html` string. The seam used to stringify the block into a `<table>`
+ * and push every cell through plain text on the way, which discarded the links and inline marks
+ * editors had authored — and an opaque string cannot stack below md or carry per-column
+ * behaviour. The CMS already sends the structure, so the seam now passes it through instead.
+ *
+ * · `keyColumn` is the FIRST column — the row headers. It is a separate field, not `columns[0]`,
+ *   because it is semantically different (`<th scope="row">`) and cannot be numeric.
+ * · `columns` are the DATA columns, in order. The count is data, never a variant.
+ * · `rows[].header` is plain text: it is a header cell, named by its own text, and it is what the
+ *   stacked reading order uses as the title of each group.
+ * · `rows[].cellsHtml` is one TRUSTED, seam-sanitised rich-text string per data column — the same
+ *   contract as `Prose`'s `html` prop (escaped text, the six inline marks, safe links, paragraphs).
+ *   An empty string is an empty cell. The seam pads or truncates so the length always equals
+ *   `columns.length`.
+ */
+export type ContentTable = {
+  caption?: string;
+  summary?: string;
+  keyColumn: { heading: string };
+  columns: { heading: string }[];
+  rows: { header: string; cellsHtml: string[] }[];
+};
+
 export type AuditAction = {
   label: string;
   href: string;
@@ -113,7 +141,7 @@ export type AuditBlock =
   | { id: string; type: 'rich-text'; html: string }
   | { id: string; type: 'card-grid'; columns: 1 | 2 | 3 | 4; cards: AuditCard[] }
   | { id: string; type: 'comparison-cards'; cards: AuditCard[] }
-  | { id: string; type: 'table'; html: string }
+  | { id: string; type: 'table'; table: ContentTable }
   | {
       id: string;
       type: 'quote';
@@ -416,7 +444,7 @@ export type ToolBlock =
   | { id: string; type: 'rich-text'; html: string }
   | { id: string; type: 'card-grid'; columns: 1 | 2 | 3 | 4; cards: ToolCard[] }
   | { id: string; type: 'comparison-cards'; cards: ToolCard[] }
-  | { id: string; type: 'table'; html: string }
+  | { id: string; type: 'table'; table: ContentTable }
   | {
       id: string;
       type: 'quote';
@@ -529,7 +557,7 @@ export type ServiceBlock =
   | { id: string; type: 'rich-text'; html: string }
   | { id: string; type: 'card-grid'; columns: 1 | 2 | 3 | 4; cards: ServiceCard[] }
   | { id: string; type: 'comparison-cards'; cards: ServiceCard[] }
-  | { id: string; type: 'table'; html: string }
+  | { id: string; type: 'table'; table: ContentTable }
   | {
       id: string;
       type: 'quote';
@@ -867,7 +895,7 @@ export type ExpertiseBlock =
   | { id: string; type: 'rich-text'; html: string }
   | { id: string; type: 'card-grid'; columns: 1 | 2 | 3 | 4; cards: ExpertiseCard[] }
   | { id: string; type: 'comparison-cards'; cards: ExpertiseCard[] }
-  | { id: string; type: 'table'; html: string }
+  | { id: string; type: 'table'; table: ContentTable }
   | {
       id: string;
       type: 'quote';
@@ -967,7 +995,7 @@ export type GlossaryBlock =
   | { id: string; type: 'rich-text'; html: string }
   | { id: string; type: 'card-grid'; columns: 1 | 2 | 3 | 4; cards: GlossaryCard[] }
   | { id: string; type: 'comparison-cards'; cards: GlossaryCard[] }
-  | { id: string; type: 'table'; html: string }
+  | { id: string; type: 'table'; table: ContentTable }
   | {
       id: string;
       type: 'quote';
