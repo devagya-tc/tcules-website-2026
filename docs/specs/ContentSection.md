@@ -9,7 +9,7 @@
 | **Status** | approved — the `beside` arrangement implements ruling **O2** (`docs/phase-2-decisions.md`: head beside body is *static, not sticky, head 1 : body 2, from 1024 up*). No BLOCKING question is open (§17). |
 | **Token prefix** | `--csec-*` |
 | **File** | `tokens/components/content-section.css` |
-| **Designer / date** | Claude Code · 28 Sep 2026 (Phase 2 task 2.13) |
+| **Designer / date** | Claude Code · 28 Sep 2026 (Phase 2 task 2.13) · **amended 29 Sep 2026 (tracker 2.17): the body measure** |
 | **Implements** | `docs/briefs/07-content-section.md` (the band every long page is made of) · `docs/component-audit.md` §3 ContentSection: *"Extend. Add a head arrangement: head beside body ([1,2] from lg), as well as head above."* · ruling O2 |
 | **Implemented at** | `src/patterns/ContentSection/` · `src/styles/tokens/components/content-section.css` · specimen `src/app/design/content-section/page.tsx` |
 
@@ -22,6 +22,31 @@ extension Phase 2 adds: the `arrangement` prop, `stacked | beside`.
 this component — Situation, Capability set, Mechanism, Related content, Rich explanation — and the
 thing that stops those five reading as one repeated shape is an arrangement, not a new pattern. The
 `beside` arrangement is one `Layout`'s props. It adds no token, no module class, no state and no ARIA.
+
+> **Amendment · 29 Sep 2026 · tracker 2.17 (visual overhaul) — text reads at the body measure.**
+> Owner-approved. Prose has no measure by ruling — *the caller owns the reading column*
+> (`Prose.module.css`, and the memory note "Prose has no measure"). For every service, expertise,
+> audit, tool, glossary and how-we-work band **ContentSection is that caller**, and before this it
+> stated no width: a rich-text block ran the whole track, **150 characters a line** in `stacked` (the
+> 1240 column) and **112** in `beside` (the 784 two-thirds track), measured at 1440.
+>
+> The fix is a second export, **`ContentSectionText`**: a `div` whose only declaration is
+> `max-inline-size: var(--csec-body-measure)` (→ `--measure-body`, 68ch = 666px at the body
+> composite). A route wraps its `case 'rich-text'` in it; every other block — card grid, table,
+> figure, list ladder, Proof, Callout — stays a direct child and keeps the full track. Measured
+> after: **95 characters a line in both arrangements** (666px), the table and card grid still 1240
+> stacked and 784 beside.
+>
+> *Why a slot and not a rule on the band.* The band takes arbitrary children, and routes pass them
+> through keyed `Fragment`s from a block switch, so the band cannot honestly tell text from a grid:
+> `child.type === Prose` fails on the first Fragment, and capping every child re-creates the exact
+> failure the ruling removed from Prose (a five-column table crushed into a reading column). The one
+> place that knows a block is rich text is the route's switch, so the mark goes there. Not a
+> `measure` prop on the band either: bodies mix text and grids, and a band-wide cap cannot.
+>
+> *Known limit, not fixed here.* `ch` is the width of a zero, wider than an average letter, so 68ch
+> of this face is ~95 characters, not ~68. That is `--measure-body`'s calibration and it is shared
+> with `CtaSection`, `Callout` and `Proof`; retuning it is a system token decision, out of scope.
 
 ## 1 · Identity
 
@@ -60,9 +85,10 @@ matters: the same silhouette eleven times fails the squint test however correct 
 | `heading` | `h2` | no | Class `.heading`. `id={headingId}`. |
 | `lead` | `p` | no | Class `.lead`. One sentence under the heading. |
 | `body` | `div` (a `Layout`) | no | Rendered only when `children` has at least one renderable child. Each child is one row at `--gap-stack`. |
+| `text` | `div` (`ContentSectionText`) | no | **Added 2.17.** A caller-placed wrapper around a rich-text block in the body. Class `.text`: `max-inline-size: var(--csec-body-measure)` and nothing else. Its siblings keep the full track. |
 
 The class names `.eyebrow`, `.heading`, `.lead` are the token `{part}` slots
-(`--csec-eyebrow-*`, `--csec-heading-*`, `--csec-lead-*`). `head` and `body` carry no token: they
+(`--csec-eyebrow-*`, `--csec-heading-*`, `--csec-lead-*`); `.text` reads `--csec-body-measure`. `head` and `body` carry no token: they
 are arrangement, and arrangement is `Layout`'s.
 
 ## 3 · Props / API
@@ -76,7 +102,12 @@ are arrangement, and arrangement is `Layout`'s.
 | `surface` | `SectionSurface` = `'paper' \| 'tint' \| 'ink' \| 'blue'` | Section's default (paper) | Passed straight to `Section`. This component paints nothing. |
 | `density` | `SectionDensity` = `'tight' \| 'open'` | Section's default | Vertical air, passed to `Section`. |
 | `arrangement` | `ContentSectionArrangement` = `'stacked' \| 'beside'` | `'stacked'` | Where the head sits against the body. **New in 2.13.** |
-| `children` | `ReactNode` | — | The blocks. |
+| `children` | `ReactNode` | — | The blocks. Rich text goes in wrapped in `ContentSectionText` (below). |
+
+**`ContentSectionText`** (second export, **added 2.17**) — `{ children: ReactNode }`, nothing else.
+Renders `<div className={styles.text}>`. No `measure` prop and no `className`: the one width it
+knows is the body measure, and a caller wanting another width is not placing running text in a band.
+Every route's `case 'rich-text'` returns `<ContentSectionText><Prose html={block.html} /></ContentSectionText>`.
 
 **`arrangement` is a presentation prop and never a CMS field** (`docs/strapi-changes.md` §1: *"does
 it change what the section says, or only how it looks?"* — only how it looks). The template that
@@ -143,7 +174,7 @@ Unchanged by 2.13 — `arrangement` moves no colour. Ratios are against the surf
 
 **Nested surfaces.** Every surface block declares all three inks, so a tint `ContentSection` inside
 an ink `Section` resolves tint's values and nothing from ink (the measured 1.13:1 failure this rule
-exists for). The specimen's section 8 renders exactly that case.
+exists for). The specimen's section 9 renders exactly that case.
 
 ## 7 · Geometry & spacing
 
@@ -162,8 +193,10 @@ exists for). The specimen's section 8 renders exactly that case.
 
 (c) Optical corrections reaching `--space-*`: none.
 
-Measures: `--csec-heading-measure` → `--measure-title` (22ch) and `--csec-lead-measure` →
-`--measure-lead` (40ch). Under `beside` both measures exceed the head track, so the **track sets the
+Measures: `--csec-heading-measure` → `--measure-title` (22ch), `--csec-lead-measure` →
+`--measure-lead` (40ch) and, **added 2.17**, `--csec-body-measure` → `--measure-body` (68ch, 666px),
+read only by `ContentSectionText`. The body measure is a ceiling: `stacked` (1240) and `beside` at
+1440 (784) are both wider, so it caps; `beside` at 1024 (597) is narrower, so the track wins. Under `beside` both measures exceed the head track, so the **track sets the
 line** and the measures only cap `stacked`. That is intended: the head track is narrower than the
 title measure on purpose, which is what makes the head read as a column.
 
@@ -192,7 +225,7 @@ heading's importance. §17 Q1 records the alternative.
 - Touch targets: none of its own. Children own theirs.
 
 Note for templates: the body track under `beside` is 597 wide at 1024. A three-up card set
-(`columns={{ md: 3 }}`) in it gives ~178px cards with two-line titles (specimen §3 at 1024). A
+(`columns={{ md: 3 }}`) in it gives ~178px cards with two-line titles (specimen §4 at 1024). A
 template composing cards into a `beside` band should give the set `md: 2` or `xl: 3`. That is the
 caller's column choice, not this component's.
 
@@ -218,6 +251,11 @@ caller's column choice, not this component's.
     {hasBody && <Layout rowGap="stack">{children}</Layout>}   // block → block (48)
   </Layout>
 </Section>
+
+// at the call site (2.17):
+<ContentSectionText>                                      // max-inline-size: 68ch
+  <Prose html={block.html} />
+</ContentSectionText>
 ```
 
 where `split = arrangement === 'beside' && hasHead && hasBody`, and
@@ -248,9 +286,9 @@ the honest sense — sized to its content, not stretched to the body's height pr
 
 | Case | Handling |
 |---|---|
-| Longest realistic heading (10 words, 80 characters) | Balances. `stacked`: breaks at 22ch. `beside`: the track sets the line — 5 lines at 1440, 7 at 1024 (§17 Q1). Specimen §3. |
-| Longest lead (45 words) | Pretty-wraps at 40ch (`stacked`) or the track (`beside`). Specimen §3. |
-| One long unbroken token | `overflow-wrap: break-word` from `reset.css` on `p` and `h2`; every track is `minmax(0, fr)`, so nothing widens the column. Specimen §4; the 390 capture shows no horizontal overflow. |
+| Longest realistic heading (10 words, 80 characters) | Balances. `stacked`: breaks at 22ch. `beside`: the track sets the line — 5 lines at 1440, 7 at 1024 (§17 Q1). Specimen §4. |
+| Longest lead (45 words) | Pretty-wraps at 40ch (`stacked`) or the track (`beside`). Specimen §4. |
+| One long unbroken token | `overflow-wrap: break-word` from `reset.css` on `p` and `h2`; every track is `minmax(0, fr)`, so nothing widens the column. Specimen §5; the 390 capture shows no horizontal overflow. |
 | No eyebrow | No element, no 8 seam; the heading is the head's first row. |
 | No heading | No `h2`; the band is a `div`. The eyebrow (if any) and the lead remain. |
 | Empty string for eyebrow / heading / lead | Treated as absent (falsy). No empty element, no seam. |
@@ -259,13 +297,13 @@ the honest sense — sized to its content, not stretched to the body's height pr
 | No children / `children` omitted | No body row and no 48 seam under the head. Under `beside` the head takes the full column. |
 | Empty children array (`[]`, a CMS section with zero blocks) | Same as omitted — `Children.toArray` is empty. **Changed in 2.13**: previously an empty `Layout` rendered, leaving a phantom 48 seam below the head. |
 | One block / many blocks | One row per block at 48; the component never counts, clamps or paginates. |
-| `beside` with a short body | The head is the taller column; the band ends under the head. Not corrected (specimen §5). |
-| `beside` with a long body | The head sits at the top of a mostly empty column; it does not stick (O2). Specimen §5. |
-| The narrow track at 767 / 390 | One track in both arrangements; the 326 column. Specimen §8 and the 390 capture. |
+| `beside` with a short body | The head is the taller column; the band ends under the head. Not corrected (specimen §6). |
+| `beside` with a long body | The head sits at the top of a mostly empty column; it does not stick (O2). Specimen §6. |
+| The narrow track at 767 / 390 | One track in both arrangements; the 326 column. Specimen §9 and the 390 capture. |
 | A parent that does not size it | Not applicable — a band belongs to the page, never to a grid track. |
 | Logical properties | The module uses `max-inline-size` only; the leading track is the inline-start one, so an RTL page puts the head on the right with no change. |
-| Nested inside a different surface | Every ink resolves from the nearest surface (§6). Specimen §8. |
-| Two adjacent | Section's own vertical air, nothing else. Specimen §9 renders two paper bands, beside then stacked. |
+| Nested inside a different surface | Every ink resolves from the nearest surface (§6). Specimen §9. |
+| Two adjacent | Section's own vertical air, nothing else. Specimen §10 renders two paper bands, beside then stacked. |
 | Interactive content in the body | Owned by the child; this band adds nothing around it. |
 
 ## 13 · Motion
@@ -282,6 +320,7 @@ animation). Reduced motion: nothing to reduce.
 - **Don't** make the head sticky: no `position` in the module.
 - **Do** keep the column seam at `column`: `grep -n "colGap" src/patterns/ContentSection/ContentSection.tsx` shows only `'column'`.
 - **Don't** pass `className`/`style` to reach `Section` — the props type has neither.
+- **Do** wrap a rich-text block in `ContentSectionText` (2.17): `grep -n "case 'rich-text'" -A6 src/app/*/page.tsx src/app/*/*/page.tsx` shows it in every ContentSection route. **Don't** wrap a card grid, table or figure in it, and **don't** put a `max-width` on Prose instead — the ruling stands.
 - **Do** render the same DOM order in both arrangements — the head precedes the body in the source.
 - **Don't** draw a one-third track with nothing in it: a `beside` band with no head or no body
   renders no `--tmpl-lg` template (inspect the outer Layout's inline style: `--tmpl-lg: initial`).
@@ -292,31 +331,41 @@ animation). Reduced motion: nothing to reduce.
 route. Labelling bands (tight, paper) separate the groups.
 
 1. The two arrangements, same content (stacked, beside).
-2. Four surfaces × two arrangements, identical markup (8 bands), the eyebrow naming the cell.
-3. Longest realistic heading (10 words) and lead (45 words), both arrangements.
-4. One unbroken token in heading and lead, both arrangements.
-5. `beside` with a short body and with a long body (prose with an h3, cards, steps).
-6. Absent slots: no eyebrow; no lead; heading only; empty-string eyebrow and heading with a lead
+2. **Added 2.17.** The body measure: both arrangements with a long rich-text body in
+   `ContentSectionText` (capped at 68ch) above a `DataTable` and a card grid that still span the track.
+3. Four surfaces × two arrangements, identical markup (8 bands), the eyebrow naming the cell.
+4. Longest realistic heading (10 words) and lead (45 words), both arrangements.
+5. One unbroken token in heading and lead, both arrangements.
+6. `beside` with a short body and with a long body (prose with an h3, cards, steps).
+7. Absent slots: no eyebrow; no lead; heading only; empty-string eyebrow and heading with a lead
    (unlabelled div); no head under `beside` (full column); no children under `beside` (full column);
    an empty children array under `stacked` (no phantom seam).
-7. Density tight and open under `beside`.
-8. Nested surfaces (tint in ink, `beside`; ink in paper, `stacked`), a `Proof` body on blue, and a
+8. Density tight and open under `beside`.
+9. Nested surfaces (tint in ink, `beside`; ink in paper, `stacked`), a `Proof` body on blue, and a
    390 viewport frame (`viewportMobile`) with the longest copy.
-9. Two adjacent paper bands, beside then stacked.
+10. Two adjacent paper bands, beside then stacked.
 
 No states to force. `beside` cannot be forced inside a narrow frame at a wide window (a frame
 cannot fire a media query), so the 390 capture of the whole page is the proof that `beside`
-collapses; the frame in §8 is labelled as showing `stacked`.
+collapses; the frame in §9 is labelled as showing `stacked`.
+Every rich-text body on the page is wrapped in `ContentSectionText`, as the routes do.
 
 ## 16 · New token requests
 
-None — every value in this spec is an existing token. `beside` uses `--gap-column` through
+**2.17:** `--csec-body-measure: var(--measure-body)`, surface-independent, in `:root`. An alias
+rather than a raw read of `--measure-body` only so the module reads nothing but `--csec-*`, exactly
+as its two sibling measures do; a third measure read raw would make the module the odd one out in
+its own layer. (CLAUDE.md rule 6 argues against pure renames; this one is kept for symmetry with
+`--csec-heading-measure` and `--csec-lead-measure`, and `CtaSection`'s `--cta-body-measure` is the
+precedent.)
+
+Before 2.17: none — every value in this spec is an existing token. `beside` uses `--gap-column` through
 `Layout`'s `colGap` and `Layout`'s own `lg` breakpoint.
 
 ## 17 · Open questions
 
 1. **Heading scale under `beside`.** At 1024 the head track is 299px and a 10-word H2 at 43px runs to
-   seven lines (specimen §3). *Options:* (a) keep `--text-h2` in both arrangements; (b) step the
+   seven lines (specimen §4). *Options:* (a) keep `--text-h2` in both arrangements; (b) step the
    heading to h3 scale under `beside`; (c) start `beside` at 1440 (`xl`) instead of 1024.
    *Chosen:* **(a)**. O2 fixes 1024, (c) contradicts it; (b) would let an arrangement decide a
    heading's importance and needs a new `--csec-heading-text-beside` token. Section headings in the
@@ -352,7 +401,7 @@ NAMES
 [x] Component tokens named: --csec-eyebrow-text, --csec-eyebrow-tracking, --csec-heading-text,
     --csec-heading-tracking, --csec-lead-text, --csec-heading-measure, --csec-lead-measure,
     --csec-heading-ink, --csec-lead-ink, --csec-eyebrow-ink — all declared in content-section.css.
-    None added.
+    2.17 adds --csec-body-measure (→ --measure-body).
 [x] Usage tokens: --gap-tight, --gap-block, --gap-stack, --gap-column, --gap-gutter; --text-h2,
     --text-h2-tracking, --text-lead, --text-eyebrow, --text-eyebrow-tracking, --text-mono-case,
     --text-title-wrap, --text-running-wrap; --measure-title, --measure-lead. `npm run design:check`

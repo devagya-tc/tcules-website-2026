@@ -79,12 +79,46 @@ export type ContentSectionProps = {
   /**
    * The blocks. Each becomes one row of the body stack at `--gap-stack`.
    *
+   * Every block takes the full body track — the band cannot tell a paragraph from a card grid by
+   * looking at a child. Running text is therefore MARKED by the caller: wrap a rich-text block in
+   * `ContentSectionText` and it reads at the body measure (68ch) while its siblings keep the track.
+   *
    * "No blocks" is decided with `Children.toArray`, which drops `null`, `undefined` and booleans —
    * so an empty array (a CMS section with zero blocks, mapped) renders no body row and no 48 seam
    * beneath the head, the same as omitting the prop.
    */
   children?: ReactNode;
 };
+
+export type ContentSectionTextProps = {
+  /** The running text — in practice one `Prose`. */
+  children: ReactNode;
+};
+
+/**
+ * ContentSectionText — the body measure, for the rich-text blocks of a ContentSection.
+ *
+ * Prose has no measure, by ruling: a reading column belongs to whoever places the flow, because a
+ * cap inside the primitive could only be narrowed by a caller and never widened, and half the
+ * call sites are not reading columns. ContentSection is that caller for every non-long-form band,
+ * and without this its text ran the whole track — about 150 characters a line stacked in the 1240
+ * column, about 110 in `beside`'s two-thirds track.
+ *
+ * WHY A SLOT AND NOT A RULE ON THE BAND. The band receives arbitrary children, and routes hand
+ * them over through keyed Fragments from a block switch, so ContentSection has no honest way to
+ * know which child is text: matching on `child.type === Prose` breaks on the first Fragment, and
+ * capping every child would crush a card grid or a five-column table into a reading column — the
+ * exact failure the ruling removed from Prose. The one place that DOES know a block is rich text
+ * is the route's `case 'rich-text'`, so that is where the mark goes, and this is the mark.
+ *
+ * It is a ceiling, not a width: `max-inline-size` only, no grid, no margin, no alignment. The text
+ * sits at the start of the track like every other block, and in a track narrower than 68ch the
+ * track wins. It lives in ContentSection's folder and carries its name because it means nothing
+ * outside the band — a long-form route states its own reading column.
+ */
+export function ContentSectionText({ children }: ContentSectionTextProps) {
+  return <div className={styles.text}>{children}</div>;
+}
 
 /**
  * ContentSection — one CMS section as one band, built for the shape every long-form page type in

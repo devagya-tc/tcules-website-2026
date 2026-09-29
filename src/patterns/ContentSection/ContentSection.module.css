@@ -4,7 +4,7 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .heading .lead */
+   Classes: .eyebrow .heading .lead .text */
 
 .eyebrow {
   font: var(--csec-eyebrow-text);
@@ -32,4 +32,16 @@
   text-wrap: var(--text-running-wrap);
   color: var(--csec-lead-ink);
   max-inline-size: var(--csec-lead-measure);
+}
+
+/* The reading column for running text in the body. Prose has no measure by ruling — the caller
+   owns the width — and this band is the caller, so the cap lives here and applies only to what a
+   route marks as text with ContentSectionText. A card grid, a table or a figure is a sibling of
+   this element, never inside it, so it keeps the full track.
+
+   `ch` resolves against this element's own font, which is the inherited body composite — the
+   same one Prose sets — so 68ch here is 68ch of the text inside it. The cap is a ceiling, not a
+   width: in `beside`'s narrower track at 1024 the track is the tighter of the two and wins. */
+.text {
+  max-inline-size: var(--csec-body-measure);
 }
