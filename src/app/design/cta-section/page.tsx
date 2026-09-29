@@ -44,6 +44,7 @@ const FORM_CONTEXT = {
 const ENQUIRY_FORM_PROPS = {
   action: `${ENDPOINTS.enquiryDesign}?outcome=success`,
   context: FORM_CONTEXT,
+  scheduleHref: ROUTES.contact,
 } as const;
 
 const AUDIT_FORM_PROPS = {
@@ -173,7 +174,6 @@ export default function CtaSectionSpecimenPage() {
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        scheduleHref={ROUTES.contact}
         proof={<ProofFixture kind="figures" />}
         surface="paper"
       />
@@ -209,14 +209,12 @@ export default function CtaSectionSpecimenPage() {
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        scheduleHref={ROUTES.contact}
       />
       <CtaSection
         heading="Request a free audit"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...AUDIT_FORM_PROPS} />}
-        scheduleHref={ROUTES.contact}
         surface="tint"
       />
       <CtaSection
@@ -225,7 +223,6 @@ export default function CtaSectionSpecimenPage() {
         body={OFFER_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...AUDIT_FORM_PROPS} />}
-        scheduleHref={ROUTES.contact}
       />
       <CtaSection
         arrangement="offer"
@@ -255,14 +252,12 @@ export default function CtaSectionSpecimenPage() {
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        scheduleHref={ROUTES.contact}
       />
       <CtaSection
         heading="Turn the next product decision into a plan"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} urlLabel="Link to the work" />}
-        scheduleHref={ROUTES.contact}
         surface="tint"
       />
       <CtaSection
@@ -298,7 +293,6 @@ export default function CtaSectionSpecimenPage() {
             body={SPLIT_BODY}
             points={points}
             form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-            scheduleHref={ROUTES.contact}
             surface={count % 2 === 0 ? 'paper' : 'tint'}
           />
         );
@@ -343,7 +337,6 @@ export default function CtaSectionSpecimenPage() {
             body={SPLIT_BODY}
             points={STANDARD_POINTS}
             form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-            scheduleHref={ROUTES.contact}
             proof={<ProofFixture kind="figures" />}
             surface={surface}
           />
@@ -381,7 +374,6 @@ export default function CtaSectionSpecimenPage() {
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        scheduleHref={ROUTES.contact}
         proof={<ProofFixture />}
         surface="tint"
       />
@@ -415,7 +407,6 @@ export default function CtaSectionSpecimenPage() {
           body={SPLIT_BODY}
           points={STANDARD_POINTS}
           form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-          scheduleHref={ROUTES.contact}
           proof={<ProofFixture kind={kind} />}
         />
       ))}
@@ -490,7 +481,6 @@ export default function CtaSectionSpecimenPage() {
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        scheduleHref={ROUTES.contact}
         proof={<ProofFixture />}
         surface="tint"
       />
@@ -504,14 +494,12 @@ export default function CtaSectionSpecimenPage() {
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        scheduleHref={ROUTES.contact}
       />
       <CtaSection
         heading="Start the second project conversation"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        scheduleHref={ROUTES.contact}
         surface="tint"
       />
 
@@ -573,7 +561,6 @@ export default function CtaSectionSpecimenPage() {
           body={SPLIT_BODY}
           points={STANDARD_POINTS}
           form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-          scheduleHref={ROUTES.contact}
         />
       </div>
       <div className={s.narrowSm}>
@@ -582,7 +569,6 @@ export default function CtaSectionSpecimenPage() {
           body={SPLIT_BODY}
           points={STANDARD_POINTS}
           form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-          scheduleHref={ROUTES.contact}
           surface="tint"
         />
       </div>

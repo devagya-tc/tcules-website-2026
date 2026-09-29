@@ -12,7 +12,7 @@
 
    ── The field ───────────────────────────────────────────────────────────────────
    The wrapper owns only the label relationship and its place in the wrapping row. Input owns the
-   control box through its quiet emphasis; the footer no longer styles a native input privately. */
+   control box; the footer no longer styles a native input privately. */
 
 /* ── Band separators ───────────────────────────────────────────────────────────
    A hairline with air on both sides, and nothing else. The Layout above supplies the 48 ABOVE the

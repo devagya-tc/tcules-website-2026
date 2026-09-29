@@ -1,21 +1,19 @@
 /* ══ Component layer — input ═════════════════════════════════════════════════════
-   Tier 3. A native input or textarea control, with two reusable emphases:
-   standard for forms and quiet for low-chrome bands such as SiteFooter.
+   Tier 3. A native input or textarea control, with ONE treatment.
 
-   Naming: --inp-{emphasis}-{part}-{state}. Shared disabled and invalid tokens omit
-   the emphasis because both treatments answer those semantic states identically.
-   Every surface restates every colour token so nested surfaces remain independent. 
-   The invalid rule is named PER EMPHASIS — --inp-standard-invalid-rule and
-   --inp-quiet-invalid-rule — like every other rule in this file, and on three surfaces the two
-   hold the same value. It was one shared --inp-invalid-rule, and blue is why that could not stand:
-   the rule is drawn at the edge of the FIELD and is therefore seen against the field's fill, not
-   against the band. On blue those two fills diverge — standard is white, quiet is brandeis-600 —
-   so no single danger step clears on both. danger-600 measures 6.54:1 on white and 1.16:1 on
-   brandeis-600; danger-100 measures 6.13:1 and 1.24:1 the other way. The shared token shipped
-   danger-100, chosen against the blue GROUND (5.03:1) rather than against the white field it
-   actually borders, where it is 1.24:1 — invisible, leaving the width step as the only carrier of
-   the state, which this component's own spec forbids. Each surface below now names the step that
-   contrasts with the fill it sits on, and the measured ratio says which fill that is.
+   Naming: --inp-standard-{part}-{state} for the treatment, --inp-disabled-* for the disabled
+   state. There were two emphases — standard, and a `quiet` one kept for SiteFooter's newsletter
+   row — and on paper and ink they rendered nearly identically: the same fill, the same rule, a
+   placeholder a step apart. An emphasis nobody can see is worse than none, so quiet was merged
+   into standard and its tokens deleted from every block (29 Sep 2026, tracker 2.17). `standard`
+   stays in the names as the name of the treatment; renaming eight tokens for no visual change was
+   not worth the churn. Every surface restates every colour token so nested surfaces remain
+   independent.
+
+   The invalid rule is chosen against the FIELD's fill, not against the band: it is drawn at the
+   field's edge. That is why blue takes danger-600 (6.54:1 on the white field) rather than the
+   danger-100 its blue ground would suggest, which measures 1.24:1 against the white it actually
+   borders — invisible, leaving the width step as the only carrier of the state.
 
    --inp-disabled-fg is BELOW the 4.5 contrast floor on every surface — 2.67 / 2.37 / 3.48 / 2.67,
    marked on each declaration. That is deliberate and it is the one place in this layer where a
@@ -26,9 +24,8 @@
 */
 
 :root {
-  /* 40px agrees with the md Button beside quiet fields; standard controls step to the explicit
-     44px touch size below 768. The 16rem minimum is the last width at which the field remains
-     usable, and 128px gives textarea four body lines plus its optical insets. */
+  /* 40px agrees with the md Button; controls step to the explicit 44px touch size below 768.
+     The 16rem minimum is the last width at which the field remains usable, and 128px gives textarea four body lines plus its optical insets. */
   --inp-height-md: 40px;
   --inp-height-touch: 44px;
   --inp-padding-x: var(--space-12); /* optical control inset, not layout spacing */
@@ -61,21 +58,11 @@
   --inp-disabled-fg: var(--color-neutral-500); /* 2.67:1 — exempt, see header */
   --inp-disabled-rule: var(--color-neutral-200);
   --inp-standard-invalid-rule: var(--color-danger-600); /* 6.54:1 on the white fill */
-  --inp-quiet-invalid-rule: var(--color-danger-600); /* 6.54:1 on the white fill */
-  --inp-quiet-bg: var(--color-white);
-  --inp-quiet-fg: var(--color-neutral-900);
-  --inp-quiet-placeholder-fg: var(
-    --color-neutral-600
-  ); /* 4.97:1 on white; 500 failed at 3.19:1 */
-  --inp-quiet-rule: var(--color-neutral-300);
-  --inp-quiet-rule-hover: var(--color-brandeis-500);
-  --inp-quiet-ring-color: var(--color-brandeis-500);
-  --inp-quiet-ring-gap-color: var(--color-paper);
 }
 
 [data-surface='tint'] {
-  /* Standard uses paper on deep paper, while quiet preserves the footer's white field. Both light
-     fields need neutral-600 placeholder ink: the previous neutral-500 measured only 3.19:1. */
+  /* Paper on deep paper. The placeholder needs neutral-600: the previous neutral-500 measured only
+     3.19:1. */
   --inp-standard-bg: var(--color-paper);
   --inp-standard-fg: var(--color-neutral-900);
   --inp-standard-placeholder-fg: var(--color-neutral-600);
@@ -87,21 +74,11 @@
   --inp-disabled-fg: var(--color-neutral-500); /* 2.37:1 — exempt, see header */
   --inp-disabled-rule: var(--color-neutral-300);
   --inp-standard-invalid-rule: var(--color-danger-600); /* 6.54:1 on the paper fill */
-  --inp-quiet-invalid-rule: var(--color-danger-600); /* 6.54:1 on the white fill */
-  --inp-quiet-bg: var(--color-white);
-  --inp-quiet-fg: var(--color-neutral-900);
-  --inp-quiet-placeholder-fg: var(
-    --color-neutral-600
-  ); /* 4.97:1 on white; 500 failed at 3.19:1 */
-  --inp-quiet-rule: var(--color-neutral-400);
-  --inp-quiet-rule-hover: var(--color-brandeis-500);
-  --inp-quiet-ring-color: var(--color-brandeis-500);
-  --inp-quiet-ring-gap-color: var(--color-paper-deep);
 }
 
 [data-surface='ink'] {
-  /* The field recesses to neutral-900. Placeholder neutral-400 (standard) and neutral-500 (quiet)
-     clear 4.5:1 on that fill; the ring lifts to Brandeis-300 for the dark gap. */
+  /* The field recesses to neutral-900. Placeholder neutral-400 clears 4.5:1 on that fill; the ring
+     lifts to Brandeis-300 for the dark gap. */
   --inp-standard-bg: var(--color-neutral-900);
   --inp-standard-fg: var(--color-neutral-50);
   --inp-standard-placeholder-fg: var(--color-neutral-400);
@@ -113,19 +90,11 @@
   --inp-disabled-fg: var(--color-neutral-600); /* 3.48:1 — exempt, see header */
   --inp-disabled-rule: var(--color-neutral-800);
   --inp-standard-invalid-rule: var(--color-danger-300); /* 7.39:1 on the neutral-900 fill */
-  --inp-quiet-invalid-rule: var(--color-danger-300); /* 7.39:1 on the neutral-900 fill */
-  --inp-quiet-bg: var(--color-neutral-900);
-  --inp-quiet-fg: var(--color-white);
-  --inp-quiet-placeholder-fg: var(--color-neutral-500);
-  --inp-quiet-rule: var(--color-neutral-700);
-  --inp-quiet-rule-hover: var(--color-brandeis-300);
-  --inp-quiet-ring-color: var(--color-brandeis-300);
-  --inp-quiet-ring-gap-color: var(--color-neutral-950);
 }
 
 [data-surface='blue'] {
-  /* Standard returns to white; quiet recesses one brand step to Brandeis-600. Brandeis-200 is the
-     quiet placeholder floor at 4.61:1, and a white ring is required against the blue gap. */
+  /* The field returns to white — the calmest rectangle in the band — and a white ring is required
+     against the blue gap. */
   --inp-standard-bg: var(--color-white);
   --inp-standard-fg: var(--color-neutral-900);
   --inp-standard-placeholder-fg: var(--color-neutral-600);
@@ -137,12 +106,4 @@
   --inp-disabled-fg: var(--color-neutral-500); /* 2.67:1 — exempt, see header */
   --inp-disabled-rule: var(--color-neutral-300);
   --inp-standard-invalid-rule: var(--color-danger-600); /* 6.54:1 on the white fill */
-  --inp-quiet-invalid-rule: var(--color-danger-100); /* 6.13:1 on the brandeis-600 fill */
-  --inp-quiet-bg: var(--color-brandeis-600);
-  --inp-quiet-fg: var(--color-white);
-  --inp-quiet-placeholder-fg: var(--color-brandeis-200);
-  --inp-quiet-rule: var(--color-brandeis-400);
-  --inp-quiet-rule-hover: var(--color-white);
-  --inp-quiet-ring-color: var(--color-white);
-  --inp-quiet-ring-gap-color: var(--color-brandeis-500);
 }

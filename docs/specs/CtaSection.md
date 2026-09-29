@@ -1,5 +1,14 @@
 # CtaSection
 
+> **Amended 29 Sep 2026 (tracker 2.17) — `scheduleHref` removed.** "See available times" moved into
+> `EnquiryForm`'s own action row, beside its submit (see `docs/specs/EnquiryForm.md`, amendment at
+> the top). `CtaSection` no longer takes `scheduleHref` or renders the link; the `form` members of
+> the union are `{ form: ReactNode; actions?: readonly [] }`. The hard constraint — every one of the
+> 56 form instances offers the link — now lives in `EnquiryForm`, whose `enquiry` and `audit`
+> variants require `scheduleHref`. The exactly-one-per-band test in §15 still holds. Where this
+> document says otherwise below (§3 props, §3 rejected combination 1, §10 composition), this note
+> supersedes it.
+
 ## 0 · Front matter
 
 | | |

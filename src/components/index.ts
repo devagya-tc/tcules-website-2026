@@ -71,7 +71,7 @@ export {
   type IconName,
   type IconSize,
 } from './Icon';
-export { Input, type InputEmphasis, type InputProps } from './Input';
+export { Input, type InputProps } from './Input';
 export { Logo, type LogoProps, type LogoSize, type LogoVariant } from './Logo';
 export { Prose, type ProseProps } from './Prose';
 export {
