@@ -3,7 +3,6 @@ import {
   CtaSection,
   EnquiryForm,
   Proof,
-  type ProofClientMark,
   type ProofFigure,
   type ProofPortrait,
   type ProofQuote,
@@ -64,24 +63,6 @@ const PORTRAIT_OFF_SQUARE = {
   height: 401,
 } as const satisfies ProofPortrait;
 
-const MARK_DUNMERE = {
-  src: '/design/client-mark-mid.svg',
-  width: 120,
-  height: 40,
-} as const satisfies ProofClientMark;
-
-const MARK_ALDERMOOR = {
-  src: '/design/client-mark-wide.svg',
-  width: 240,
-  height: 40,
-} as const satisfies ProofClientMark;
-
-const MARK_BRIGHTWELL = {
-  src: '/design/client-mark-square.svg',
-  width: 64,
-  height: 64,
-} as const satisfies ProofClientMark;
-
 const DUNMERE_QUOTE = {
   quoteHtml:
     '<p>They showed us which half of the roadmap was habit, and we cut it in a week.</p>',
@@ -102,7 +83,6 @@ const ALDERMOOR_QUOTE = {
   role: 'Engineering Lead',
   company: 'Aldermoor',
   portrait: PORTRAIT,
-  clientMark: MARK_ALDERMOOR,
 } as const satisfies ProofQuote;
 
 const BRIGHTWELL_QUOTE = {
@@ -111,7 +91,6 @@ const BRIGHTWELL_QUOTE = {
   name: 'Priya Anand-Whitcombe',
   company: 'Brightwell',
   portrait: PORTRAIT,
-  clientMark: MARK_BRIGHTWELL,
 } as const satisfies ProofQuote;
 
 const LONG_ATTRIBUTION_QUOTE = {
@@ -120,24 +99,19 @@ const LONG_ATTRIBUTION_QUOTE = {
   role: 'Vice President, Customer Operations and Service Design, Europe, Middle East and Africa',
   company: 'Dunmere',
   portrait: PORTRAIT,
-  clientMark: MARK_DUNMERE,
 } as const satisfies ProofQuote;
 
-/** The four corners of the portrait × mark matrix, on one fictional quote. */
+/** With and without the portrait, on one fictional quote. (The client-mark half of this matrix
+    was removed with the mark, 30 Sep 2026.) */
 const MEDIA_MATRIX = [
   { title: 'text only', quote: DUNMERE_QUOTE },
   { title: 'portrait', quote: { ...DUNMERE_QUOTE, portrait: PORTRAIT } },
-  { title: 'client mark', quote: { ...DUNMERE_QUOTE, clientMark: MARK_DUNMERE } },
-  {
-    title: 'portrait + client mark',
-    quote: { ...DUNMERE_QUOTE, portrait: PORTRAIT, clientMark: MARK_DUNMERE },
-  },
 ] as const satisfies readonly { title: string; quote: ProofQuote }[];
 
-const FULL_QUOTE = MEDIA_MATRIX[3].quote;
+const FULL_QUOTE = MEDIA_MATRIX[1].quote;
 
 const PHONE_ROWS = [
-  { title: 'compact · portrait + mark', quote: FULL_QUOTE, arrangement: 'compact' },
+  { title: 'compact · portrait', quote: FULL_QUOTE, arrangement: 'compact' },
   {
     title: 'compact · long attribution',
     quote: LONG_ATTRIBUTION_QUOTE,
@@ -708,15 +682,14 @@ export default function ProofSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>15 · Portrait × client mark</h2>
+            <h2>15 · Portrait</h2>
             <p>
               The site blockquote (ch10 B2.07): italic serif behind the 6px rule, attribution
               beneath. A portrait is small, 1:1 and radius 0, flush on the left margin under the
               rule, with the name a bind to its right (ruling P1). Without one, the name is
-              indented onto the quote&apos;s first letter and no gap is left. The client mark
-              sits under the attribution text, one per quote, in the ground&apos;s ink
-              (ClientMark, 40px cap), and is hidden from assistive technology because the
-              company is text one line above it.
+              indented onto the quote&apos;s first letter and no gap is left. There is no client
+              mark: it was removed on 30 Sep 2026, because the company is already named in the
+              role line.
             </p>
           </Layout>
           <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
@@ -748,10 +721,10 @@ export default function ProofSpecimenPage() {
             </p>
           </Layout>
           <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
-            <Specimen title="long name + long role · portrait + mark">
+            <Specimen title="long name + long role · portrait">
               <Proof arrangement="compact" quote={LONG_ATTRIBUTION_QUOTE} />
             </Specimen>
-            <Specimen title="missing role · portrait + mark">
+            <Specimen title="missing role · portrait">
               <Proof arrangement="compact" quote={BRIGHTWELL_QUOTE} />
             </Specimen>
             <Specimen title="blank role string · text only">
@@ -760,16 +733,15 @@ export default function ProofSpecimenPage() {
             <Specimen title="missing role · display">
               <Proof quote={BRIGHTWELL_QUOTE} />
             </Specimen>
-            <Specimen title="one line · portrait + mark">
+            <Specimen title="one line · portrait">
               <Proof arrangement="compact" quote={FULL_QUOTE} />
             </Specimen>
-            <Specimen title="six sentences · portrait + mark">
+            <Specimen title="six sentences · portrait">
               <Proof
                 arrangement="compact"
                 quote={{
                   ...DUNMERE_SIX_SENTENCES,
                   portrait: PORTRAIT,
-                  clientMark: MARK_DUNMERE,
                 }}
               />
             </Specimen>
@@ -791,15 +763,6 @@ export default function ProofSpecimenPage() {
               <Proof
                 arrangement="compact"
                 quote={{ ...DUNMERE_QUOTE, portrait: { ...PORTRAIT, src: ' ' } }}
-              />
-            </Specimen>
-            <Specimen
-              title="mark with no dimensions"
-              note="Omitted with a warning, so the attribution has no empty row beneath it."
-            >
-              <Proof
-                arrangement="compact"
-                quote={{ ...DUNMERE_QUOTE, clientMark: { ...MARK_DUNMERE, width: 0 } }}
               />
             </Specimen>
           </Layout>

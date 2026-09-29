@@ -2,12 +2,10 @@
 
    Every colour is --svc-*, re-declared per surface in tokens/components/service-page.css. Type is
    consumed as composites. Layout and Cluster own every arrangement and every seam; this module
-   owns edges (rules), ink, type roles and the few positioned marks the diagrams draw. No margins.
+   owns edges (rules), ink and type roles. No margins, and no marks that do not carry meaning —
+   every rule here opens or closes an item, and nothing is drawn for texture. */
 
-   The one exception taken on purpose: the rail node (`.step::before`) is positioned on the step's
-   top rule. That is a mark on an edge, not an arrangement of siblings. */
-
-/* ── Shared ─────────────────────────────────────────────────────────────────── */
+/* ── Shared roles ─────────────────────────────────────────────────────────────── */
 .key {
   font: var(--text-eyebrow);
   letter-spacing: var(--text-eyebrow-tracking);
@@ -15,21 +13,72 @@
   color: var(--svc-ink-label);
 }
 
-/* ── Signals ──────────────────────────────────────────────────────────────────── */
-.signals {
+.body {
+  font: var(--text-body);
+  text-wrap: pretty;
+  color: var(--svc-ink-muted);
+}
+
+.bodySmall {
+  font: var(--text-body-sm);
+  text-wrap: pretty;
+  color: var(--svc-ink-muted);
+}
+
+.number {
+  font: var(--text-index);
+  letter-spacing: var(--text-index-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--svc-ink-label);
+}
+
+.glyph {
   color: var(--svc-ink);
 }
 
-.signal {
+.itemTitle {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+  text-wrap: balance;
+  color: var(--svc-ink);
+}
+
+.grow {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
+/* A tile in a grid opens on a rule: the rule is where the item starts. */
+.tile {
   border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
   padding-block-start: var(--gap-block);
   min-inline-size: 0;
 }
 
-.signalIcon {
+/* A list in one column opens on a strong rule and closes each row with a hairline. */
+.rows {
+  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+}
+
+.row {
+  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
+  padding-block: var(--gap-block);
+}
+
+.rowTight {
+  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
+  padding-block: var(--gap-text);
+}
+
+.rowText {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  font: var(--text-body-lg);
+  text-wrap: pretty;
   color: var(--svc-ink);
 }
 
+/* ── Signals ──────────────────────────────────────────────────────────────────── */
 .signalTitle {
   font: var(--text-h4);
   letter-spacing: var(--text-h4-tracking);
@@ -37,183 +86,66 @@
   color: var(--svc-ink);
 }
 
-.signalBody {
-  font: var(--text-body);
-  text-wrap: pretty;
-  color: var(--svc-ink-muted);
-}
-
-/* ── Statement ───────────────────────────────────────────────────────────────── */
-.statement {
-  font: var(--text-h2);
-  letter-spacing: var(--text-h2-tracking);
-  text-wrap: balance;
-  color: var(--svc-ink);
-  max-inline-size: var(--measure-title);
-}
-
-/* The marked phrase (ch10 A5, ch02 peridot use one): a band behind the words, cloned per line so a
-   phrase that wraps is marked on every line it occupies. */
-.mark {
-  background: var(--svc-mark-ground);
-  color: var(--svc-mark-ink);
-  padding-inline: var(--svc-mark-bearing);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-}
-
 /* ── Steps ────────────────────────────────────────────────────────────────────── */
-.example {
+.exampleBody {
   font: var(--text-lead);
   text-wrap: pretty;
   color: var(--svc-ink);
   max-inline-size: var(--measure-lead);
 }
 
-.steps {
-  color: var(--svc-ink);
-}
-
-/* The rail: every step's top rule, and a node sitting on it at the step's start. Adjacent rules
-   are separated by the column gap, so the rail reads as a dashed sequence of segments — one per
-   step — rather than one line the steps hang from. */
-.step {
-  position: relative;
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  padding-block-start: var(--gap-block);
-  min-inline-size: 0;
-}
-
-.step::before {
-  content: '';
-  position: absolute;
-  inset-block-start: calc(var(--svc-node-size) / -2);
-  inset-inline-start: 0;
-  inline-size: var(--svc-node-size);
-  block-size: var(--svc-node-size);
-  border-radius: var(--radius-full);
-  background: var(--svc-node);
-}
-
-.stepNumber {
-  font: var(--text-index);
-  letter-spacing: var(--text-index-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--svc-ink-label);
-}
-
-.stepTitle {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
-  text-wrap: balance;
-  color: var(--svc-ink);
-}
-
-.stepBody {
-  font: var(--text-body-sm);
-  text-wrap: pretty;
-  color: var(--svc-ink-muted);
-}
-
-/* ── Ledger ───────────────────────────────────────────────────────────────────── */
-.ledgerRows {
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-}
-
-.ledgerRow {
-  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
-  padding-block: var(--gap-block);
-}
-
-.ledgerTile {
-  border-block-start: var(--svc-rule-width) solid var(--svc-rule);
-  padding-block-start: var(--gap-block);
-  min-inline-size: 0;
-}
-
-.ledgerMarker {
-  color: var(--svc-ink);
-}
-
-.ledgerCopy {
-  flex: 1 1 0;
-  min-inline-size: 0;
-}
-
-.ledgerTitle {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
-  text-wrap: balance;
-  color: var(--svc-ink);
-}
-
-.ledgerBody {
-  font: var(--text-body);
-  text-wrap: pretty;
-  color: var(--svc-ink-muted);
-}
-
 /* ── Router ───────────────────────────────────────────────────────────────────── */
-.router {
-  color: var(--svc-ink);
-}
-
-.routerHead {
-  padding-block-end: var(--gap-text);
-  border-block-end: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-}
-
-@media (max-width: 1023px) {
-  .routerHead {
-    display: none;
-  }
-
-  .router {
-    border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  }
+.routeItem {
+  min-inline-size: 0;
 }
 
 .route {
   display: block;
-  padding-block: var(--gap-block);
-  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
+  block-size: 100%;
+  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+  padding-block-start: var(--gap-block);
   color: inherit;
   text-decoration: none;
+  transition: border-color var(--duration-fast);
+}
+
+.routeInner {
+  block-size: 100%;
 }
 
 .routeWhen {
-  font: var(--text-body-lg);
+  font: var(--text-lead);
   text-wrap: pretty;
-  color: var(--svc-ink-muted);
-  max-inline-size: var(--measure-body);
+  color: var(--svc-ink);
+  max-inline-size: var(--measure-lead);
+}
+
+/* The destination: a link line in the body voice, the arrow trailing the last word so it travels
+   with the name when it wraps. ch04's "half its size in a line of text" — 8 beside a 16 glyph. */
+.routeTo {
+  font: var(--text-body);
+  color: var(--svc-link-ink);
 }
 
 .routeName {
-  font: var(--text-h4);
-  letter-spacing: var(--text-h4-tracking);
-  text-wrap: balance;
-  color: var(--svc-ink);
-  transition: color var(--duration-fast);
+  text-decoration: underline;
+  text-decoration-thickness: var(--border-width-hairline);
+  text-underline-offset: var(--svc-link-underline-offset);
 }
 
-/* The arrow trails the last word and travels with it when the name wraps. The gap is ch04's
-   "half its size in a line of text" — 8 beside a 16 glyph. */
 .routeArrow {
   display: inline-block;
   padding-inline-start: var(--gap-tight);
-  color: var(--svc-link-ink);
   line-height: 0;
   vertical-align: middle;
 }
 
-.routeSettles {
-  font: var(--text-body-sm);
-  color: var(--svc-ink-muted);
+.route:hover {
+  border-block-start-color: var(--svc-link-ink);
 }
 
-.route:hover .routeName,
-.route:focus-visible .routeName {
-  color: var(--svc-link-ink);
+.route:hover .routeTo {
+  color: var(--svc-link-ink-hover);
 }
 
 .route:focus-visible {
@@ -221,66 +153,18 @@
   outline-offset: var(--focus-ring-offset);
 }
 
-.alsoBody {
-  font: var(--text-body);
-  color: var(--svc-ink-muted);
-  max-inline-size: var(--measure-body);
-}
-
-/* ── Fit and contrast ─────────────────────────────────────────────────────────── */
-.fitHeading {
+/* ── Fit ──────────────────────────────────────────────────────────────────────── */
+.listHeading {
   font: var(--text-h4);
   letter-spacing: var(--text-h4-tracking);
   text-wrap: balance;
   color: var(--svc-ink);
 }
 
-.checks {
+/* ── Contrast: one rule over both halves ──────────────────────────────────────── */
+.split {
   border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-}
-
-.check {
-  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
-  padding-block: var(--gap-text);
-}
-
-.checkIcon {
-  color: var(--svc-ink);
-}
-
-.checkText {
-  flex: 1 1 0;
-  min-inline-size: 0;
-  font: var(--text-body-lg);
-  text-wrap: pretty;
-  color: var(--svc-ink);
-}
-
-.contrastSide {
-  min-inline-size: 0;
-}
-
-.runIn {
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  padding-block-start: var(--gap-text);
-  font: var(--text-h4);
-  letter-spacing: var(--text-h4-tracking);
-  text-wrap: pretty;
-  color: var(--svc-ink);
-}
-
-.runInItem {
-  /* Atomic, so a term wraps to the next line whole rather than mid-term — and still wraps inside
-     itself if one term alone is wider than a 326 track. */
-  display: inline-block;
-  max-inline-size: 100%;
-}
-
-/* The separator belongs to the item before it, so a line never starts on a dot. */
-.runInItem:not(:last-child)::after {
-  content: '·';
-  padding-inline: var(--gap-tight);
-  color: var(--svc-node);
+  padding-block-start: var(--gap-block);
 }
 
 /* ── Stat ─────────────────────────────────────────────────────────────────────── */
@@ -301,29 +185,6 @@
   text-wrap: pretty;
   color: var(--svc-ink);
   max-inline-size: var(--measure-lead);
-}
-
-/* ── Links ────────────────────────────────────────────────────────────────────── */
-.links {
-  color: var(--svc-ink);
-}
-
-.link {
-  font: var(--text-body);
-  color: var(--svc-link-ink);
-  text-decoration: underline;
-  text-decoration-thickness: var(--border-width-hairline);
-  text-underline-offset: var(--svc-link-underline-offset);
-  text-wrap: pretty;
-}
-
-.link:hover {
-  color: var(--svc-link-ink-hover);
-}
-
-.link:focus-visible {
-  outline: var(--focus-ring-width) solid var(--svc-link-ink);
-  outline-offset: var(--focus-ring-offset);
 }
 
 /* ── Nudge ────────────────────────────────────────────────────────────────────── */

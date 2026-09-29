@@ -6,24 +6,16 @@ import styles from './Diagrams.module.css';
 type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
 
 /* ── Spectrum ─────────────────────────────────────────────────────────────────
-   Options ordered on ONE scale, and the scale drawn: a meter of n pips per row, filled to the
-   row's position. The CMS sent these as a table in no order; ordered, the table stops being a
-   menu and becomes the page's argument — take the least disruptive change that works. The meter
-   is decoration (aria-hidden) and the position is stated in words for assistive technology. */
+   Options ordered on ONE scale. The CMS sent these as a table in no order; ordered, the table stops
+   being a menu and becomes the page's argument — take the least disruptive change that works. The
+   order is stated once, in words, over the list; there is no per-row meter (30 Sep 2026: a filled
+   bar per row read as progress, which is a claim the list does not make). */
 export function Spectrum({ block }: { block: Of<'spectrum'> }) {
-  const total = block.items.length;
   return (
-    <Layout rowGap="block">
-      <Cluster justify="between" colGap="block" rowGap="tight" className={styles.axis}>
-        <span className={styles.key}>
-          <span aria-hidden="true">← </span>
-          {block.axis.from}
-        </span>
-        <span className={styles.key}>
-          {block.axis.to}
-          <span aria-hidden="true"> →</span>
-        </span>
-      </Cluster>
+    <Layout rowGap="text">
+      <span className={styles.key}>
+        Ordered from {block.axis.from.toLowerCase()} to {block.axis.to.toLowerCase()}
+      </span>
       <Layout as="ol" rowGap="none" className={styles.rows}>
         <li className={styles.headRow} aria-hidden="true">
           <Layout columns={{ base: 1, lg: [4, 5, 5] }} colGap="gutter">
@@ -32,22 +24,10 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
             <span className={styles.key}>{block.columns.settles}</span>
           </Layout>
         </li>
-        {block.items.map((item, index) => (
+        {block.items.map((item) => (
           <li key={item.name} className={styles.row}>
             <Layout columns={{ base: 1, lg: [4, 5, 5] }} colGap="gutter" rowGap="text">
-              <Layout rowGap="text">
-                <span className={styles.meter} aria-hidden="true">
-                  {Array.from({ length: total }, (_, pip) => (
-                    <span key={pip} className={pip <= index ? styles.pipOn : styles.pip} />
-                  ))}
-                </span>
-                <h3 className={styles.rowTitle}>
-                  {item.name}
-                  <span className={styles.visuallyHidden}>
-                    {`, ${index + 1} of ${total} from ${block.axis.from.toLowerCase()}`}
-                  </span>
-                </h3>
-              </Layout>
+              <h3 className={styles.rowTitle}>{item.name}</h3>
               <p className={styles.rowBody}>{item.when}</p>
               <p className={styles.rowQuestion}>{item.settles}</p>
             </Layout>
@@ -60,11 +40,11 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
 
 /* ── Representations ──────────────────────────────────────────────────────────
    One decision, carried through every representation of it. The decision is DRAWN — the same chip
-   in every row, on one vertical thread — so the claim "it must survive every representation" is
+   in every row — so the claim "it must survive every representation" is
    something the reader sees hold before reading why it breaks. */
 export function Representations({ block }: { block: Of<'representations'> }) {
   return (
-    <Layout as="ol" rowGap="none" className={styles.thread}>
+    <Layout as="ol" rowGap="none">
       <li className={styles.headRow} aria-hidden="true">
         <Layout columns={{ base: 1, lg: [4, 5, 5] }} colGap="gutter">
           <span className={styles.key}>{block.columns.name}</span>
@@ -73,7 +53,7 @@ export function Representations({ block }: { block: Of<'representations'> }) {
         </Layout>
       </li>
       {block.items.map((item) => (
-        <li key={item.name} className={styles.threadRow}>
+        <li key={item.name} className={styles.row}>
           <Layout columns={{ base: 1, lg: [4, 5, 5] }} colGap="gutter" rowGap="text">
             <Layout rowGap="text">
               <h3 className={styles.rowTitle}>{item.name}</h3>
@@ -98,7 +78,8 @@ export function Representations({ block }: { block: Of<'representations'> }) {
 
 /* ── Record ───────────────────────────────────────────────────────────────────
    A record with fields, drawn as the document it is: a sheet on its own ground, a header strip,
-   and one row per field — the field keyed in mono with its glyph, the question it holds in serif.
+   and one row per field — the field keyed in mono with its glyph ABOVE the question it holds, in
+   serif. Stacked, not side by side: a key and its question are one item, not two columns.
    It is the one place in the template that paints a ground, and it earns it: a record is an
    OBJECT the team keeps, and the sheet is what says so. */
 export function Record({ block }: { block: Of<'record'> }) {
@@ -116,14 +97,7 @@ export function Record({ block }: { block: Of<'record'> }) {
       </Cluster>
       <Layout as="dl" rowGap="none">
         {block.items.map((item) => (
-          <Layout
-            key={item.field}
-            columns={{ base: 1, md: [1, 2] }}
-            colGap="gutter"
-            rowGap="tight"
-            align="center"
-            className={styles.sheetRow}
-          >
+          <Layout key={item.field} rowGap="tight" className={styles.sheetRow}>
             <dt className={styles.sheetField}>
               <Cluster nowrap colGap="tight" align="center">
                 <span className={styles.icon} aria-hidden="true">
@@ -240,7 +214,7 @@ export function Bridge({ block }: { block: Of<'bridge'> }) {
           <span className={styles.key} aria-hidden="true">
             {block.label}
           </span>
-          <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="text">
+          <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="none">
             {block.items.map((item) => (
               <li key={item} className={styles.state}>
                 {item}

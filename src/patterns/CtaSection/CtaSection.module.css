@@ -133,6 +133,11 @@
   text-transform: var(--text-mono-case);
 }
 
+.pointContent {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
 .label {
   color: var(--cta-point-ink);
   font: var(--cta-point-text);

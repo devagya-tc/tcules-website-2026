@@ -186,8 +186,8 @@ function CtaPointContent({ point }: { point: CtaPoint }) {
  *   offer   a 2-up grid from md and 3-up from lg. Mid-page, the list is a strip rather than a column.
  *
  * The marker/label relationship is the only thing that changes with the arrangement: `open` stacks
- * them, `split` and `offer` put them in a two-track row. Every arrangement is tracks — none of them
- * is a wrapping row, because a wrapping row decides per point where the numeral goes. Nothing about
+ * them, `split` and `offer` put them on one non-wrapping row. None of them is a wrapping row,
+ * because a wrapping row decides per point where the numeral goes. Nothing about
  * the content, the order or the numbering moves.
  */
 function CtaPoints({
@@ -224,32 +224,21 @@ function CtaPoints({
       );
     }
 
-    /* A two-track row: the marker's track, then the label's. Tracks, not a wrapping Cluster, and
-       that is the fix rather than a preference — a Cluster wraps its children independently, so at
-       390 a long label pushed its own numeral onto a line of its own while its siblings stayed
-       inline, and in a multi-row `offer` no row agreed with the next about where a label starts.
-       A grid track cannot wrap, so the numeral cannot orphan, and because every point in a list
-       takes the same ratio inside the same track width, every label starts on one vertical line.
-
-       The ratio is per arrangement because the ROW widths differ: `split` lists down its 706px
-       column (and the full column below lg), `offer` fills 392px thirds. Each ratio is chosen so the
-       marker track lands at roughly 64-90px at every width — room for a two-digit `--text-stat`
-       numeral (≈48px at 40, ≈38px at 32) with nothing to spare that reads as a gap of its own.
-       `colGap="tight"` because this is a mark and its label; the track's own slack does the rest.
-       `align="start"` so a two-line label does not drag its numeral to the middle of the row. */
+    /* The marker, then the label, on one line: a nowrap Cluster, so the numeral can never orphan
+       onto a line of its own (the failure a wrapping Cluster had at 390), and because every marker
+       is two mono digits wide, every label in the list starts on one vertical line without a
+       track to enforce it. The fixed-ratio tracks this replaced were sized for the 40px stat
+       numeral and left a 64–90px gutter beside a 20px one. `baseline` sets the index on the label's
+       first line. */
     return (
-      <Layout
-        as="li"
-        key={`${index}-${point.label}`}
-        columns={arrangement === 'split' ? { base: [1, 4], md: [1, 8] } : { base: [1, 4] }}
-        colGap="tight"
-        align="start"
-      >
+      <Cluster as="li" key={`${index}-${point.label}`} nowrap colGap="text" align="baseline">
         <span aria-hidden="true" className={styles.marker}>
           {marker}
         </span>
-        <CtaPointContent point={point} />
-      </Layout>
+        <span className={styles.pointContent}>
+          <CtaPointContent point={point} />
+        </span>
+      </Cluster>
     );
   });
 

@@ -1,5 +1,5 @@
 import type { ServiceStory } from '@/lib/service-story';
-import { articlePath, auditPath, servicePath } from '@/lib/routes';
+import { articlePath, auditPath, ROUTES, servicePath } from '@/lib/routes';
 
 /**
  * /services/product-design, designed. Copy is the CMS's own, re-cut where a shape needed it; every
@@ -33,6 +33,7 @@ export const productDesign: ServiceStory = {
       id: 'signals',
       eyebrow: 'What the interface may be telling you',
       heading: 'The screen is often where a deeper product problem becomes visible.',
+      lead: 'A visual change may reveal a workflow, data or authority problem that the same project must resolve.',
       blocks: [
         {
           kind: 'signals',
@@ -56,11 +57,6 @@ export const productDesign: ServiceStory = {
               body: 'hiding what the model used, what it changed, and who is accountable when it is wrong.',
             },
           ],
-        },
-        {
-          kind: 'statement',
-          before: 'A visual change may reveal a workflow, data or authority problem ',
-          marked: 'that the same project must resolve.',
         },
       ],
     },
@@ -104,15 +100,6 @@ export const productDesign: ServiceStory = {
           kind: 'nudge',
           body: 'A workflow that keeps raising questions about rules, roles or recovery? Examine that slice before the team commits to more screens.',
           action: { label: 'Start a project', href: '#enquiry' },
-        },
-        {
-          kind: 'links',
-          items: [
-            {
-              label: 'Scope versus approach: UX, CX and design thinking',
-              href: articlePath('design-thinking-vs-cx-vs-ux-explained'),
-            },
-          ],
         },
         {
           kind: 'slot',
@@ -211,6 +198,10 @@ export const productDesign: ServiceStory = {
               },
             },
           ],
+          also: {
+            when: 'You can see the problem but not yet where it sits: research, model, behaviour or evidence.',
+            link: { label: 'UX Product Audit', href: auditPath('ux-product-audit') },
+          },
         },
       ],
     },
@@ -252,18 +243,20 @@ export const productDesign: ServiceStory = {
             text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
             name: 'Ashok Mohanty',
             company: 'Auxentios',
+            /* STAND-IN. The brand chapter's stand-in portrait (ch05 §3), so the layout can be judged
+               with a photograph in it. It is not Ashok Mohanty; the real 1:1 portrait is a content ask
+               (docs/service-pages-design.md § 3) and must replace this before any page ships. */
+            portrait: {
+              src: '/design/media/photograph-portrait-square.png',
+              width: 204,
+              height: 204,
+            },
           },
           case: {
             slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
             client: 'Auxentios · Industrial CPQ',
             title: 'A quotation model from eight specialist interviews',
             body: 'Qualitative research across specialist roles, carried into a product model and component-led interface work.',
-          },
-          portrait: {
-            kind: 'portrait',
-            ratio: '1/1',
-            brief:
-              'Ashok Mohanty, 1:1, shot square (ch05 §3). And his role — the quote carries none.',
           },
         },
       ],
@@ -297,13 +290,44 @@ export const productDesign: ServiceStory = {
         },
       ],
     },
+    {
+      type: 'section',
+      id: 'go-deeper',
+      eyebrow: 'Go deeper',
+      arrangement: 'beside',
+      heading: 'Read before you brief',
+      blocks: [
+        {
+          kind: 'resources',
+          items: [
+            {
+              type: 'Article',
+              title: 'Design thinking vs CX vs UX',
+              body: 'Separates the scope of the experience from the approach used to investigate it.',
+              href: articlePath('design-thinking-vs-cx-vs-ux-explained'),
+              cta: 'Read the article',
+            },
+            {
+              type: 'Method',
+              title: 'How we work',
+              body: 'How a Product Design engagement runs, from the first question to the build.',
+              href: ROUTES.howWeWork,
+              cta: 'See how we work',
+            },
+          ],
+        },
+      ],
+    },
   ],
   close: {
     heading: 'Share the product decision that needs settling',
     body: 'The decision, the roles it affects and the evidence you already have. A rough brief is enough.',
     points: [
-      { label: 'A reply within one business day' },
-      { label: 'A rough brief is enough', detail: 'We ask for what is missing.' },
+      { label: 'Send the decision and what you know', detail: 'A rough brief is enough.' },
+      {
+        label: 'A reply within one business day',
+        detail: 'With the questions we need answered.',
+      },
     ],
     note: 'Do not include credentials, regulated records or confidential source material.',
   },

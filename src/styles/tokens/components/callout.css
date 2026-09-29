@@ -12,16 +12,6 @@
    Every surface restates every token so a surface nested inside a different surface cannot
    inherit the wrong ink from its outer ancestor. */
 
-/* ── Geometry · identical on every surface ─────────────────────────────────────
-   Only a keyed Callout reads this (tracker 2.17): the narrowest the sentence may run beside its
-   mono key before the row wraps and the sentence drops beneath it. 192 matches Layout's xs track
-   by value rather than reading --lay-track-xs — a component never reads another component's
-   tokens — and is the same floor, for the same reason, that --fig-min-xs sets: below it a
-   body-small sentence breaks on very short lines instead of wrapping on words. */
-:root {
-  --call-content-min-xs: 192px;
-}
-
 /* ── Surfaces ─────────────────────────────────────────────────────────────────
    The key is surface text, so it takes -ink. It sits one full rung stronger than the sentence
    on every ground: a key that is quieter than what it keys reads as a caption again, which is

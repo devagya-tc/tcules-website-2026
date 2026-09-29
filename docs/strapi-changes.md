@@ -198,13 +198,14 @@ have read a case study, which is this page's one job. The close (the `misc` CTA)
 
 **What.** Replace the service page's generic block union (`rich-text`, `card-grid`, `table`, `quote`,
 `labelled-list`, `two-column`, `link-group`) with components named for the job the block does. The set
-is `src/lib/service-story.ts`: `signals`, `statement`, `steps`, `ledger`, `router`, `cases`, `proof`,
-`fit`, `spectrum`, `representations`, `record`, `contrast`, `parts`, `slice`, `bridge`, `thread`,
-`nudge`, `faq`, `note`, `links`, with `text` kept as the fallback. Each maps to one Strapi component
+is `src/lib/service-story.ts`: `signals`, `steps`, `ledger`, `router`, `cases`, `proof`, `fit`,
+`spectrum`, `representations`, `record`, `contrast`, `parts`, `slice`, `bridge`, `thread`, `nudge`,
+`faq`, `note`, `resources` (revised 30 Sep: `statement` and `links` dropped, `resources` added). Each maps to one Strapi component
 whose fields are the type's fields. Two field-level asks come with it:
 - `cases` reference case-study records by relation, not by typed slug, so a renamed slug cannot break
   the link.
-- `statement` carries its marked phrase as its own field, not as markup inside the text.
+- `resources` reference their target records (article, glossary term, tool) by relation, so the
+  type label and path come from the record rather than being typed.
 
 **Why.** The translation layer has to *guess* what a block is for. It guesses wrong in five recurring
 ways (`docs/service-pages-design.md` §1): an unattributed quote used as a pull-line, an eyebrow as the

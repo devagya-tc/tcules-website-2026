@@ -64,14 +64,10 @@ export const designEngineering: ServiceStory = {
           sides: [
             {
               label: 'Static screens answer',
-              heading: 'How it should look and read',
-              style: 'chips',
               items: ['Hierarchy', 'Flow', 'Visual direction'],
             },
             {
               label: 'A coded slice answers',
-              heading: 'Whether it holds when it moves',
-              style: 'chips',
               items: [
                 'Dynamic layout',
                 'Data density',
@@ -110,7 +106,7 @@ export const designEngineering: ServiceStory = {
       id: 'declared-first',
       eyebrow: 'Its job is declared first',
       heading: 'Not every line of code is production code',
-      lead: 'Before anything is built, the output’s job and its acceptance criteria are stated. Prototype code may be discarded; the durable output is the clarified decision.',
+      lead: 'Before anything is built, the output’s job and its acceptance criteria are stated — so nobody mistakes a proof for a release.',
       blocks: [
         {
           kind: 'steps',
@@ -186,7 +182,7 @@ export const designEngineering: ServiceStory = {
       type: 'section',
       id: 'one-decision',
       heading: 'Keep one decision alive across every representation',
-      lead: 'Design Engineering keeps the open product question connected from the first coded probe to the accepted decision.',
+      lead: 'The open product question stays connected from the first coded probe to the accepted decision. Prototype code may be discarded; the durable output is the clarified decision, and the evidence that the implemented behaviour meets it.',
       blocks: [
         {
           kind: 'thread',
@@ -197,22 +193,6 @@ export const designEngineering: ServiceStory = {
             { title: 'Running behaviour' },
             { title: 'Review finding' },
             { title: 'Accepted decision' },
-          ],
-        },
-        {
-          kind: 'statement',
-          before: 'Prototype code may be discarded. ',
-          marked: 'The durable output is the clarified decision',
-          after: ', and the evidence that the implemented behaviour meets it.',
-        },
-        {
-          kind: 'links',
-          items: [
-            {
-              label: 'Definition: design engineering',
-              href: glossaryPath('design-engineering'),
-            },
-            { label: 'Definition: design intent', href: glossaryPath('design-intent') },
           ],
         },
       ],
@@ -229,8 +209,6 @@ export const designEngineering: ServiceStory = {
           sides: [
             {
               label: 'AI accelerates',
-              heading: 'Getting to a candidate',
-              style: 'chips',
               items: [
                 'Code understanding',
                 'Option generation',
@@ -241,8 +219,6 @@ export const designEngineering: ServiceStory = {
             },
             {
               label: 'A practitioner accepts',
-              heading: 'Whether the candidate is right',
-              style: 'checks',
               items: [
                 'Product behaviour and component choice',
                 'Semantics and accessibility',
@@ -359,7 +335,7 @@ export const designEngineering: ServiceStory = {
             },
           ],
           also: {
-            body: 'Not sure where intent is being lost? Start with a diagnosis.',
+            when: 'Not sure where intent is being lost? Start with a diagnosis.',
             link: { label: 'Design-to-Code Audit', href: auditPath('design-to-code-audit') },
           },
         },
@@ -388,13 +364,47 @@ export const designEngineering: ServiceStory = {
         },
       ],
     },
+    {
+      type: 'section',
+      id: 'go-deeper',
+      eyebrow: 'Go deeper',
+      arrangement: 'beside',
+      heading: 'What has to survive the move into code',
+      blocks: [
+        {
+          kind: 'resources',
+          items: [
+            {
+              type: 'Definition',
+              title: 'Design engineering',
+              body: 'Product reasoning and frontend reasoning, held as one responsibility.',
+              href: glossaryPath('design-engineering'),
+              cta: 'Read the definition',
+            },
+            {
+              type: 'Definition',
+              title: 'Design intent',
+              body: 'The decision a design exists to carry, as distinct from how it looks.',
+              href: glossaryPath('design-intent'),
+              cta: 'Read the definition',
+            },
+          ],
+        },
+      ],
+    },
   ],
   close: {
     heading: 'Show us where product intent is getting lost in implementation',
     body: 'The implementation point where accepted product intent is being lost. A rough brief is enough.',
     points: [
-      { label: 'A reply within one business day' },
-      { label: 'One disputed interaction is enough', detail: 'It defines the first slice.' },
+      {
+        label: 'Send the point where intent is lost',
+        detail: 'One disputed interaction is enough.',
+      },
+      {
+        label: 'A reply within one business day',
+        detail: 'With the first slice it points to.',
+      },
     ],
     note: 'Do not include credentials, regulated records or confidential source material.',
   },

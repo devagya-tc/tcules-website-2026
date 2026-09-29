@@ -26,14 +26,15 @@
   --cta-lead-text: var(--text-lead);
   --cta-body-text: var(--text-body-lg);
   /* A point is a step with a shape, not a line of body copy: the label takes the serif title
-     voice at h5 and the marker the mono stat numeral, so the list reads as three or six
-     numbered things at a glance rather than as a paragraph with digits in front (2.17). The
-     detail stays at body-sm — a clause under a 22px step name still sits one clear rung down. */
+     voice at h5 and the marker the mono INDEX numeral (30 Sep 2026: it was the 40px stat
+     numeral, and a close's numbers out-shouted its heading and its form). At 20 the numeral
+     counts the steps without competing with them. The detail stays at body-sm — a clause under
+     a 22px step name still sits one clear rung down. */
   --cta-point-text: var(--text-h5);
   --cta-point-tracking: var(--text-h5-tracking);
   --cta-detail-text: var(--text-body-sm);
-  --cta-marker-text: var(--text-stat);
-  --cta-marker-tracking: var(--text-stat-tracking);
+  --cta-marker-text: var(--text-index);
+  --cta-marker-tracking: var(--text-index-tracking);
 
   /* Two measures. The heading takes the title measure so a three-line close
      keeps the shape of a statement; everything that runs takes the body

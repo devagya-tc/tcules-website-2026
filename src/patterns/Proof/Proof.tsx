@@ -1,13 +1,4 @@
-import {
-  Button,
-  ClientMark,
-  Cluster,
-  Layout,
-  Media,
-  Prose,
-  type ClientMarkProps,
-  type MediaImage,
-} from '@/components';
+import { Button, Cluster, Layout, Media, Prose, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
 import { PROOF_PORTRAIT } from '@/lib/image-sizes';
 
@@ -22,12 +13,6 @@ import styles from './Proof.module.css';
  */
 export type ProofPortrait = Pick<MediaImage, 'src' | 'width' | 'height' | 'sources'>;
 
-/**
- * The client's mark: ClientMark's asset fields. The NAME is not here because it is the quote's
- * `company` — one field, so the mark and the attribution can never name two different clients.
- */
-export type ProofClientMark = Pick<ClientMarkProps, 'src' | 'width' | 'height' | 'correction'>;
-
 export type ProofQuote = {
   /** Trusted, content-seam-sanitised rich text. Attribution never belongs in this field. */
   quoteHtml: string;
@@ -35,12 +20,12 @@ export type ProofQuote = {
   name: string;
   /** The speaker's title. Optional (HO §4): a blank or missing role leaves no separator or gap. */
   role?: string;
-  /** The client. Required, and the mark's accessible name when a mark is supplied. */
+  /** The client, named in the attribution line. */
   company: string;
   /** Optional 1:1 photograph beside the attribution (ruling P1). No portrait, no gap. */
   portrait?: ProofPortrait;
-  /** Optional client mark beneath the attribution text, one per quote. */
-  clientMark?: ProofClientMark;
+  /* No client mark (removed 30 Sep 2026, owner): the company is already named in the role line,
+     and a logo under a person's name competes with the portrait beside it. */
 };
 
 export type ProofFigure = {
@@ -147,16 +132,6 @@ function acceptPortrait(portrait: ProofPortrait | undefined, name: string) {
   return portrait;
 }
 
-/** A mark that can render, so an invalid one leaves no empty row in the attribution. */
-function acceptMark(mark: ProofClientMark | undefined, company: string) {
-  if (!mark) return undefined;
-  if (!isFilled(mark.src) || !hasDimensions(mark)) {
-    warn(`client mark for "${company}" needs a src, width and height; omitting the mark.`);
-    return undefined;
-  }
-  return mark;
-}
-
 /**
  * The portrait: small, square, radius 0, through Media as a photograph (no edge, never masked).
  *
@@ -178,7 +153,6 @@ function Portrait({ portrait }: { portrait: ProofPortrait }) {
 
 function Quote({ quote }: { quote: ProofQuote }) {
   const portrait = acceptPortrait(quote.portrait, quote.name);
-  const mark = acceptMark(quote.clientMark, quote.company);
   const role = isFilled(quote.role) ? quote.role : undefined;
 
   return (
@@ -197,20 +171,11 @@ function Quote({ quote }: { quote: ProofQuote }) {
         className={cx(styles.attribution, !portrait && styles.attributionIndented)}
       >
         {portrait ? <Portrait portrait={portrait} /> : null}
-        <Layout rowGap="text" className={styles.attributionText}>
-          <Layout rowGap="inline">
-            <span className={styles.name}>{quote.name}</span>
-            <span className={styles.role}>
-              {role ? `${role}, ${quote.company}` : quote.company}
-            </span>
-          </Layout>
-          {/* Hidden from assistive technology because it repeats the company, which is text one
-              line above: announced, it would read the client's name twice. */}
-          {mark ? (
-            <span aria-hidden="true" className={styles.mark}>
-              <ClientMark {...mark} name={quote.company} />
-            </span>
-          ) : null}
+        <Layout rowGap="inline" className={styles.attributionText}>
+          <span className={styles.name}>{quote.name}</span>
+          <span className={styles.role}>
+            {role ? `${role}, ${quote.company}` : quote.company}
+          </span>
         </Layout>
       </Cluster>
     </Layout>
@@ -306,13 +271,12 @@ function Figures({ figures }: { figures: readonly ProofFigure[] }) {
  * The content seam decides whether a markdown blockquote is an attributed Proof or an
  * unattributed Callout; this pattern never sniffs HTML for a name. A quote follows the site
  * blockquote (ch10 B2.07): italic serif behind a 6px rule, the attribution beneath, and an optional
- * 1:1 portrait left of it and client mark under it (rulings P1, P2). Display may render quote,
+ * 1:1 portrait left of it (ruling P1; the client mark of P2 was removed 30 Sep 2026). Display may render quote,
  * figures, or both — together, the quote in a 2:1 lead track beside the stacked figures — at the
  * display roles (--text-quote-lg, --text-stat-lg), and says a date every figure shares once, as
  * the set's caption (tracker 2.17). Compact embeds one quote in a reading flow and forbids figures at compile
  * time. Layout owns every relationship, Prose owns trusted inline markup, Button owns source-link
- * interaction, Media owns the portrait, ClientMark owns the mark, and the nearest surface owns the
- * ground.
+ * interaction, Media owns the portrait, and the nearest surface owns the ground.
  */
 export function Proof({ arrangement = 'display', quote, figures }: ProofProps) {
   const acceptedQuote = validQuote(quote) ? quote : undefined;

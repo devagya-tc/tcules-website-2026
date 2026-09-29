@@ -30,7 +30,7 @@ export const designSystems: ServiceStory = {
       id: 'library-is-one-representation',
       eyebrow: 'Why libraries fail as infrastructure',
       heading: 'A component library is only one representation of the system',
-      lead: 'A library can be visually consistent and still fail as shared infrastructure.',
+      lead: 'A library can be visually consistent and still fail as shared infrastructure. A local workaround can be rational; a system earns use only when the supported route is easier to understand, extend and release than the workaround.',
       blocks: [
         {
           kind: 'signals',
@@ -54,12 +54,6 @@ export const designSystems: ServiceStory = {
             },
           ],
         },
-        {
-          kind: 'statement',
-          before: 'A local workaround can be rational. A system earns use when ',
-          marked: 'the supported route is easier',
-          after: ' to understand, extend and release than the workaround.',
-        },
       ],
     },
     {
@@ -79,17 +73,6 @@ export const designSystems: ServiceStory = {
             { title: 'What happens when the shared answer does not fit?', body: '' },
             { title: 'Who owns the change, and the migration?', body: '' },
             { title: 'What evidence shows use inside released products?', body: '' },
-          ],
-        },
-        {
-          kind: 'links',
-          items: [
-            {
-              label: 'Adoption and operation, beyond the library',
-              href: articlePath(
-                'design-systems-for-saas-boosting-efficiency-and-ux-consistency',
-              ),
-            },
           ],
         },
       ],
@@ -252,7 +235,7 @@ export const designSystems: ServiceStory = {
             },
           ],
           also: {
-            body: 'The cause of drift is disputed? Diagnose it before further investment.',
+            when: 'The cause of drift is disputed? Diagnose it before further investment.',
             link: { label: 'Design System Audit', href: auditPath('design-system-audit') },
           },
         },
@@ -268,34 +251,29 @@ export const designSystems: ServiceStory = {
           kind: 'contrast',
           sides: [
             {
-              label: 'Tcules can own',
-              heading: 'The shared system, and its operating path',
-              style: 'chips',
+              label: 'Tcules · Assess',
+              items: ['System assessment', 'Investment scope', 'Product semantics'],
+            },
+            {
+              label: 'Tcules · Build',
               items: [
-                'System assessment',
-                'Investment scope',
-                'Product semantics',
-                'Foundations',
-                'Components',
+                'Foundations and components',
                 'Figma architecture',
                 'Coded components',
-                'Storybook',
-                'Documentation',
-                'Contribution',
-                'Release and migration',
-                'Adoption',
-                'Implementation QA',
+                'Storybook and documentation',
               ],
             },
             {
+              label: 'Tcules · Operate',
+              items: ['Contribution', 'Release and migration', 'Adoption', 'Implementation QA'],
+            },
+            {
               label: 'Product teams keep',
-              heading: 'What only a product team can know',
-              style: 'checks',
               items: [
                 'Product-specific composition',
                 'User evidence',
-                'The complete accessibility of their released experience',
-                'A named owner with decision and release authority after delivery',
+                'Accessibility of what they release',
+                'Decision and release authority',
               ],
             },
           ],
@@ -325,12 +303,6 @@ export const designSystems: ServiceStory = {
           ],
           note: 'Neither record establishes coded implementation or organisation-wide adoption. Matter, Tcules’ own open-source system, demonstrates foundations, components and design-to-development intent — not client adoption or coded parity.',
         },
-        {
-          kind: 'links',
-          items: [
-            { label: 'Matter, the Tcules design system', href: ROUTES.matterDesignSystem },
-          ],
-        },
       ],
     },
     {
@@ -345,8 +317,6 @@ export const designSystems: ServiceStory = {
           sides: [
             {
               label: 'Better context than a screenshot',
-              heading: 'What a system gives people and agents',
-              style: 'chips',
               items: [
                 'Tokens',
                 'Semantic component names',
@@ -358,8 +328,6 @@ export const designSystems: ServiceStory = {
             },
             {
               label: 'Still accountable review',
-              heading: 'What generation does not make correct',
-              style: 'checks',
               items: [
                 'Product-specific composition',
                 'Real content and exceptional state',
@@ -399,13 +367,49 @@ export const designSystems: ServiceStory = {
         },
       ],
     },
+    {
+      type: 'section',
+      id: 'go-deeper',
+      eyebrow: 'Go deeper',
+      arrangement: 'beside',
+      heading: 'Beyond the library',
+      blocks: [
+        {
+          kind: 'resources',
+          items: [
+            {
+              type: 'Article',
+              title: 'Design systems for SaaS',
+              body: 'The adoption and operating questions a component library does not answer.',
+              href: articlePath(
+                'design-systems-for-saas-boosting-efficiency-and-ux-consistency',
+              ),
+              cta: 'Read the article',
+            },
+            {
+              type: 'Open source',
+              title: 'Matter, the Tcules design system',
+              body: 'Foundations and components, published as a Figma Community Edition.',
+              href: ROUTES.matterDesignSystem,
+              cta: 'See Matter',
+            },
+          ],
+        },
+      ],
+    },
   ],
   close: {
     heading: 'Start with the part of the system teams keep working around',
     body: 'The decision, component family or adoption path teams keep working around. A rough brief is enough.',
     points: [
-      { label: 'A reply within one business day' },
-      { label: 'One repeated decision is enough', detail: 'It finds the first scope.' },
+      {
+        label: 'Send the decision teams keep remaking',
+        detail: 'One component family is enough.',
+      },
+      {
+        label: 'A reply within one business day',
+        detail: 'With the first scope it points to.',
+      },
     ],
     note: 'Do not include credentials, regulated records or confidential source material.',
   },

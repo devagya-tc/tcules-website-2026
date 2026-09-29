@@ -1,5 +1,5 @@
 import type { ServiceStory } from '@/lib/service-story';
-import { servicePath } from '@/lib/routes';
+import { ROUTES, servicePath } from '@/lib/routes';
 
 /** /services/software-development, designed. Edits: docs/service-pages-design.md § Software Development. */
 export const softwareDevelopment: ServiceStory = {
@@ -243,8 +243,6 @@ export const softwareDevelopment: ServiceStory = {
           sides: [
             {
               label: 'AI accelerates',
-              heading: 'Exploring and producing',
-              style: 'chips',
               items: [
                 'Architecture exploration',
                 'Implementation',
@@ -254,8 +252,6 @@ export const softwareDevelopment: ServiceStory = {
             },
             {
               label: 'Tcules reviews it against',
-              heading: 'The standards it has to meet',
-              style: 'checks',
               items: [
                 'The product and system model',
                 'Security and data requirements',
@@ -320,7 +316,35 @@ export const softwareDevelopment: ServiceStory = {
             {
               question: 'Where does accessibility acceptance come from?',
               answerHtml:
-                '<p>From a real workflow, not a checklist alone: acceptance connects the standard to what the intended role has to complete. The guide to inclusive product design covers that connection.</p>',
+                '<p>From a real workflow, not a checklist alone: acceptance connects the standard to what the intended role has to complete. The guide to inclusive product design, below, covers that connection.</p>',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'go-deeper',
+      eyebrow: 'Go deeper',
+      arrangement: 'beside',
+      heading: 'Acceptance and method',
+      blocks: [
+        {
+          kind: 'resources',
+          items: [
+            {
+              type: 'Guide',
+              title: 'Inclusive product design',
+              body: 'Connecting accessibility standards to a real workflow, which is where acceptance comes from.',
+              href: `${ROUTES.guides}/inclusive-product-design-for-older-and-disabled-people`,
+              cta: 'Read the guide',
+            },
+            {
+              type: 'Method',
+              title: 'How we work',
+              body: 'How design and engineering stay in one delivery path, from brief to release.',
+              href: ROUTES.howWeWork,
+              cta: 'See how we work',
             },
           ],
         },
@@ -331,8 +355,14 @@ export const softwareDevelopment: ServiceStory = {
     heading: 'Start with the product slice that needs to ship',
     body: 'The slice, its users, the system constraints and the release outcome. A rough brief is enough.',
     points: [
-      { label: 'A reply within one business day' },
-      { label: 'One release slice is enough', detail: 'It makes the responsibility concrete.' },
+      {
+        label: 'Send the slice that needs to ship',
+        detail: 'Its users, constraints and release outcome.',
+      },
+      {
+        label: 'A reply within one business day',
+        detail: 'With the responsibility it points to.',
+      },
     ],
     note: 'Do not include credentials, regulated records or confidential source material.',
   },

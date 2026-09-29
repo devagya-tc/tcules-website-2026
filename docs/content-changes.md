@@ -42,7 +42,8 @@ client names in it were read from titles, slugs and cover filenames, so they nee
 **What's needed.** Approve, rewrite or reject every item marked **NEW COPY** there. The largest are the
 AI Product UX model-role rows (four of seven "what the product needs" cells, and every "introduces"
 cell, are new), the Software Development router conditions, and the case titles on every page. The
-re-cut copy (tightened leads, split lists) needs a lighter read.
+re-cut copy (tightened leads, split lists) needs a lighter read. Added 30 Sep: every resources
+card's one-line description, and each close's two steps (the second step's detail is new copy).
 
 **Why.** The designed pages give each block a job, and some jobs need words the CMS never held: a
 condition for each route, a title that says what a case shows *on this page*, a short line under each

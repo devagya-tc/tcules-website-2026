@@ -9,6 +9,29 @@ layer. The copy is the CMS's own wherever possible. Every change is listed per p
 
 ---
 
+## 0 · Second pass, 30 September 2026
+
+The owner's review of the first iteration, and what changed.
+
+| Note | Change | Where it lives |
+|---|---|---|
+| Section seams felt crammed | **Global.** The single-seam rule of 2.17 is reverted: same-ground bands keep both paddings, 96 + 96 | `Section.module.css`, Section specimen |
+| "Read next" rows looked bad, mid-page | A **Go deeper** resources section before the close: text BlockCards with the content type as eyebrow and a named cta, beside its heading | `resources` block |
+| Peridot statements out of place | Removed. Each thesis line became its section's lead; peridot now appears on no service page | `statement` block deleted |
+| Run-in list beside a checklist | **Contrast** is one list split into 2–4 columns under one rule, the same row on every side. Design Systems' ownership split became Assess · Build · Operate · Product teams keep | `contrast` block |
+| Key + text laid out left and right | **Global.** Callout's key sits above its sentence. Also stacked: the record's field above its question, the ledger's title above its line, the worked example's label above its text, the stat above its sentence | `Callout`, record, ledger, steps, stat |
+| Serif titles used as links, in the right half | **Router** is a grid of tiles. The condition is the content and the service is a plain link line at the foot. The audit or self-check leads as a full-width "Not sure yet" tile when it would otherwise leave a hole | `router` block |
+| Decorative marks | Each mark was kept only if it says something. **Kept:** the parts bracket, the slice, the bridge's dashed zone, the thread arrows. **Cut:** the per-row disruption meter (it read as progress), the dashed thread and its nodes, the dot on every step's rule, the bridge's dashed bullets | Diagrams |
+| Form numerals too loud | **Global.** CtaSection's marker drops from the 40px stat numeral to the 20px index role, on one non-wrapping row with the label. The six closes now list a real two-step sequence (send, then reply) | `CtaSection`, closes |
+| Portrait left of name and role; no client logo | **Global.** Proof's client mark is removed. Product Design shows the ch05 **stand-in** portrait until Ashok Mohanty's is supplied | `Proof`, Product Design proof |
+
+Also in this pass, for density:
+- Modernisation's "wrong intervention" and "choose an intervention" merged into one section (labels fail, so choose per capability).
+- AI Product UX's evaluation became a checklist beside its heading, with approvals as a note, because the old contrast was not two halves of one statement.
+
+The tables in §2 and §4 below describe the first pass. Where they disagree with this section, this
+section wins.
+
 ## 1 · What was pulling the pages down
 
 Read on the live `/services/product-design` at 1440, and true of all six:
@@ -41,22 +64,22 @@ list of sections where every block names its job, and the template gives each jo
 | Job | Shape | Used where the content is… |
 |---|---|---|
 | `signals` | 2–5 tiles on a top rule: the thing you see (h4), then keyed "may be" meaning | symptoms, viewpoints, pressures |
-| `statement` | the page's thesis at h2 scale, set into the right two-thirds, with **one peridot marked phrase** | one line per page, at most |
 | `steps` | numbered rail with a node per step; horizontal at five or fewer | a method, where order matters |
 | `ledger` | glyph- or number-marked rows or tiles, in 1, 2 or 3 columns | deliverables, dimensions, questions |
-| `router` | condition first ("When…") and route second (serif destination and arrow); the whole row is one link | "which specialist service is mine" |
+| `router` | tiles: the condition is the content, the service a link line at the foot; each tile is one link | "which specialist service is mine" |
 | `cases` | `BlockCardSet` with **real covers**, then a scope Callout | client work |
 | `proof` | quote beside the case it came from | the testimonial |
 | `fit` | check-circle list against close-circle list | "what we need from you / not the right service" |
-| `spectrum` | rows ordered on one scale, with a filled meter per row | interventions, model roles |
-| `representations` | one decision as the **same chip in every row**, on a dashed thread | design systems' "Partly complete" |
+| `spectrum` | rows ordered on one scale, the order stated once over the list | interventions, model roles |
+| `representations` | one decision as the **same chip in every row** | design systems' "Partly complete" |
 | `record` | a sheet with a header strip and one row per field | the AI responsibility record |
-| `contrast` | a serif run-in vocabulary against a checked list of claims | every "where AI changes the work" section |
+| `contrast` | one list split into 2–4 columns under one rule | every "where AI changes the work" section; ownership splits |
 | `parts` | four peers and a **bracketing frame** beneath them | the five parts of a design system |
 | `slice` | layers stacked, with the release cut through all of them | software development |
 | `bridge` | two solid ends and a dashed temporary zone between them | modernisation's transition states |
 | `thread` | stages joined by arrows, with an optional return path | delivery trace, design-to-code chain |
 | `nudge` | a one-line ask between two rules, inside the section that earned it | mid-page CTA |
+| `resources` | text BlockCards, content type as eyebrow, beside the heading, once per page | further reading, near the end |
 | `faq` | Accordion, heading beside it | the question-shaped sections, gathered |
 
 **Where the brand lets visual weight come from** (ch02, CLAUDE.md § Design quality):
@@ -67,7 +90,7 @@ list of sections where every block names its job, and the template gives each jo
 
 Grounds stay out of it. Every page is paper except two tint bands: the proof band on Product Design,
 and the close on all six. There is no ink or blue anywhere, because both are reserved and the close
-sits above the ink footer. Peridot appears exactly once per page, in the statement.
+sits above the ink footer. There is no peridot either (removed in the second pass).
 
 **Icons** follow ch04: one glyph per row, in the text's ink, never on a heading, never in a disc. I
 added 24 Solar Bold glyphs verbatim from `@iconify-json/solar` (see `glyphs.ts`); 11 of them are
@@ -93,8 +116,10 @@ ch04's starter set.
 
 **Asked and answered:**
 - *Should the testimonial have an image though there isn't one?* **Yes, a 1:1 portrait.** Proof already
-  supports one and has a designed no-portrait state, so the page ships correctly without it. Until
-  then, the quote stands **beside the Auxentios case cover**, which is the image it has. Auxentios was
+  supports one and has a designed no-portrait state, so the page ships correctly without it. The
+  design route now shows the ch05 **stand-in** portrait so the layout can be judged; it is not the
+  client and must be replaced before shipping. The quote also stands **beside the Auxentios case
+  cover**. Auxentios was
   moved out of the cases grid so its cover isn't shown twice.
 - *Illustrations in the body?* Only where a body section argues something the hero doesn't: the two
   slots above. Everywhere else a diagram does the job in type and rules, and costs nothing to produce.
@@ -214,11 +239,11 @@ headings.
 
 | Rule | Where | Argument |
 |---|---|---|
-| Layout rule 1 (no hand-rolled flex/grid) | meter pips (`inline-flex`), bridge end label (`grid` to centre) | each is the inside of one mark, not an arrangement of siblings |
+| Layout rule 1 (no hand-rolled flex/grid) | bridge end label (`grid` to centre) | it is the inside of one mark, not an arrangement of siblings |
 | Components own no ground | the `record` sheet paints `--svc-sheet-ground` | a record is an object the team keeps; the sheet is what says so |
 | One layer per component | `service-page.css` serves every composition | they live and die together as the template's vocabulary; a composition that graduates to a pattern takes its tokens with it |
 | Types live in `@/content` | `src/lib/service-story.ts` | content and templates can't import each other, and one definition beats two copies of a 25-case union |
-| Button labels are 2–4 words | `links` renders text links, not Buttons | read-next titles are page names |
+| Headings aren't actions | router destinations are sans link lines, not serif titles | owner, 30 Sep |
 
 ## 6 · What this means for the CMS
 

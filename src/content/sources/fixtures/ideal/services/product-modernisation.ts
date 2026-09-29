@@ -52,9 +52,10 @@ export const productModernisation: ServiceStory = {
     },
     {
       type: 'section',
-      id: 'the-wrong-intervention',
-      heading: 'The wrong intervention can cost more than the old product',
-      lead: 'Each of these is the right answer somewhere, and the wrong one when it is applied to the whole product.',
+      id: 'choose-an-intervention',
+      eyebrow: 'Capability by capability',
+      heading: 'Choose the least disruptive change that resolves the real constraint',
+      lead: 'Every intervention is right somewhere, and expensive when one label is applied to the whole product. A programme may use several: the point is the right change for each meaningful capability.',
       blocks: [
         {
           kind: 'ledger',
@@ -83,15 +84,6 @@ export const productModernisation: ServiceStory = {
             },
           ],
         },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'choose-an-intervention',
-      eyebrow: 'Capability by capability',
-      heading: 'Choose the least disruptive change that resolves the real constraint',
-      lead: 'One programme may use several of these. The point is not a fashionable label for the whole product; it is the right change for each meaningful capability.',
-      blocks: [
         {
           kind: 'spectrum',
           axis: { from: 'Least disruptive', to: 'Most disruptive' },
@@ -135,19 +127,6 @@ export const productModernisation: ServiceStory = {
               name: 'Retire',
               when: 'Cost and complexity exceed present value.',
               settles: 'Who depends on it, and what migration or substitute do they need?',
-            },
-          ],
-        },
-        {
-          kind: 'links',
-          items: [
-            {
-              label: 'Run it: the Audit, Redesign, Modernise or Rebuild worksheet',
-              href: toolPath('audit-redesign-modernise-rebuild'),
-            },
-            {
-              label: 'Definition: product modernisation',
-              href: glossaryPath('product-modernisation'),
             },
           ],
         },
@@ -208,7 +187,7 @@ export const productModernisation: ServiceStory = {
       id: 'diagnose',
       eyebrow: 'From the shared layer into real work',
       heading: 'Test the decision inside a feature that matters',
-      lead: 'Shared foundations reveal inconsistency. A product slice reveals whether those foundations can express the behaviour people rely on.',
+      lead: 'Judge modernisation not by how much visibly changes, but by whether the product changes at the layer causing the cost. A product slice is where that shows.',
       blocks: [
         {
           kind: 'cases',
@@ -226,12 +205,6 @@ export const productModernisation: ServiceStory = {
               body: 'Listings kept their useful density and gained a clearer reading order. One pipeline path changed because it opened creation before checking existing records; three actions around it stayed.',
             },
           ],
-        },
-        {
-          kind: 'statement',
-          before:
-            'Judge modernisation not by how much visibly changes, but by whether the product changes ',
-          marked: 'at the layer causing the cost.',
         },
       ],
     },
@@ -328,8 +301,6 @@ export const productModernisation: ServiceStory = {
           sides: [
             {
               label: 'AI accelerates',
-              heading: 'Understanding and preparation',
-              style: 'chips',
               items: [
                 'Code understanding',
                 'Interface exploration',
@@ -340,8 +311,6 @@ export const productModernisation: ServiceStory = {
             },
             {
               label: 'A person still decides',
-              heading: 'Whether a change is safe to advance',
-              style: 'checks',
               items: [
                 'Product, architecture, code and release decisions keep human review',
                 'Existing-user learning decides what stays familiar',
@@ -424,14 +393,45 @@ export const productModernisation: ServiceStory = {
         },
       ],
     },
+    {
+      type: 'section',
+      id: 'go-deeper',
+      eyebrow: 'Go deeper',
+      arrangement: 'beside',
+      heading: 'Run the comparison yourself',
+      blocks: [
+        {
+          kind: 'resources',
+          items: [
+            {
+              type: 'Worksheet',
+              title: 'Audit, Redesign, Modernise or Rebuild',
+              body: 'Compare the interventions capability by capability — usually what settles the argument.',
+              href: toolPath('audit-redesign-modernise-rebuild'),
+              cta: 'Open the worksheet',
+            },
+            {
+              type: 'Definition',
+              title: 'Product modernisation',
+              body: 'Why redesign, replatforming and rebuilding are different interventions.',
+              href: glossaryPath('product-modernisation'),
+              cta: 'Read the definition',
+            },
+          ],
+        },
+      ],
+    },
   ],
   close: {
     heading: 'Start with the capability that cannot safely stay as it is',
     body: 'The capability, the operational dependency and the change that can no longer be deferred. A rough brief is enough.',
     points: [
-      { label: 'A reply within one business day' },
       {
-        label: 'One workflow is enough to start',
+        label: 'Send the capability and what depends on it',
+        detail: 'One workflow is enough to start.',
+      },
+      {
+        label: 'A reply within one business day',
         detail: 'Incomplete evidence becomes uncertainty to test.',
       },
     ],

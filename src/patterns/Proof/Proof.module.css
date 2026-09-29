@@ -107,13 +107,6 @@
   color: var(--proof-attribution-ink);
 }
 
-/* The hidden wrapper around ClientMark. ClientMark sizes itself and sets justify-self: start, so
-   the wrapper only has to be a block that does not stretch the mark across the column. */
-.mark {
-  display: block;
-  justify-self: start;
-}
-
 .figureGroup,
 .figures {
   inline-size: 100%;

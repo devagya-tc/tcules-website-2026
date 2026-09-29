@@ -2,13 +2,15 @@
 
    The compositions that DRAW an argument rather than list it: a scale, a thread, a sheet, a
    bracket, a slice, a bridge. Colour from --svc-*, type from the composites, arrangement from
-   Layout and Cluster. Positioned pseudo-elements draw marks on edges (nodes, ticks, a thread
-   line); they never place siblings.
+   Layout and Cluster. Positioned pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
 
-   Two deliberate departures from the letter of CLAUDE.md § Layout rule 1: the disruption meter's
-   pips are laid out with inline-flex, and a bridge end centres its one label with grid. Neither
-   arranges siblings: each is the inside of one mark. The meter is one mark — like a glyph — not an arrangement of
-   content, and a Cluster would give each pip a list-item's semantics it does not have. */
+   One deliberate departure from the letter of CLAUDE.md § Layout rule 1: a bridge end centres its
+   one label with grid. It arranges no siblings; it is the inside of one mark.
+
+   Every mark here says something (30 Sep 2026 review): the bracket says the operating model spans
+   the four parts; the slice says a release cuts through every layer; the dashed span says its
+   states are temporary; an arrow says one stage feeds the next. Marks that said nothing — a
+   progress meter per row, a dashed thread with nodes, a dot on every step's rule — were cut. */
 
 .key {
   font: var(--text-eyebrow);
@@ -59,9 +61,6 @@
 }
 
 /* ── Spectrum ─────────────────────────────────────────────────────────────────── */
-.axis {
-  padding-block-end: var(--gap-tight);
-}
 
 .rows {
   color: var(--svc-ink);
@@ -83,55 +82,6 @@
 .row {
   padding-block: var(--gap-block);
   border-block-end: var(--svc-rule-width) solid var(--svc-rule);
-}
-
-.meter {
-  display: inline-flex;
-  gap: var(--svc-meter-gap);
-}
-
-.pip,
-.pipOn {
-  inline-size: var(--svc-meter-pip-inline);
-  block-size: var(--svc-meter-pip-block);
-  background: var(--svc-meter-off);
-}
-
-.pipOn {
-  background: var(--svc-meter-on);
-}
-
-/* ── Representations: one thread through every row ───────────────────────────── */
-.thread {
-  color: var(--svc-ink);
-}
-
-.threadRow {
-  position: relative;
-  padding-block: var(--gap-block);
-  padding-inline-start: var(--gap-gutter);
-  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
-}
-
-/* The thread: a dashed line at the rows' inline start, continuous across every row because each
-   row draws its own full-height segment. */
-.threadRow::before {
-  content: '';
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: calc(var(--svc-node-size) / 2 - var(--svc-rule-strong-width) / 2);
-  border-inline-start: var(--svc-rule-strong-width) dashed var(--svc-node);
-}
-
-.threadRow::after {
-  content: '';
-  position: absolute;
-  inset-block-start: var(--svc-node-offset);
-  inset-inline-start: 0;
-  inline-size: var(--svc-node-size);
-  block-size: var(--svc-node-size);
-  border-radius: var(--radius-full);
-  background: var(--svc-node);
 }
 
 /* ── Record: a sheet ──────────────────────────────────────────────────────────── */
@@ -255,10 +205,10 @@
 .layer::after {
   content: '';
   position: absolute;
-  inset-block-start: calc(50% - var(--svc-meter-pip-block) / 2);
+  inset-block-start: calc(50% - var(--svc-slice-piece) / 2);
   inset-inline-start: calc(var(--svc-slice-start) + var(--gap-text));
   inline-size: calc(var(--svc-slice-size) - var(--gap-text) * 2);
-  block-size: var(--svc-meter-pip-block);
+  block-size: var(--svc-slice-piece);
   background: var(--svc-node);
 }
 
@@ -306,22 +256,11 @@
 }
 
 .state {
-  position: relative;
-  padding-inline-start: var(--gap-block);
+  padding-block: var(--gap-text);
+  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
   font: var(--text-body);
   text-wrap: pretty;
   color: var(--svc-ink);
-}
-
-/* Each state takes a small dashed square: the mark of something temporary. */
-.state::before {
-  content: '';
-  position: absolute;
-  inset-inline-start: 0;
-  inset-block-start: calc(0.5lh - var(--svc-node-size) / 2);
-  inline-size: var(--svc-node-size);
-  block-size: var(--svc-node-size);
-  border: var(--svc-rule-strong-width) dashed var(--svc-node);
 }
 
 /* ── Thread ───────────────────────────────────────────────────────────────────── */

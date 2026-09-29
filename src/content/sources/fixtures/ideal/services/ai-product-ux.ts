@@ -74,16 +74,6 @@ export const aiProductUx: ServiceStory = {
             },
           ],
         },
-        {
-          kind: 'links',
-          items: [
-            {
-              label: 'Compare the roles: generative AI patterns for SaaS',
-              href: articlePath('generative-ai-product-patterns-for-saas'),
-            },
-            { label: 'Definition: AI Product UX', href: glossaryPath('ai-product-ux') },
-          ],
-        },
       ],
     },
     {
@@ -91,7 +81,7 @@ export const aiProductUx: ServiceStory = {
       id: 'authority',
       eyebrow: 'Authority changes with consequence',
       heading: 'Inform, suggest, prepare, execute',
-      lead: 'Four different product roles. For each: the consequence, whether it can be reversed, the evidence a person can inspect, the human gate, and the recovery path.',
+      lead: 'Four different product roles. For each: the consequence, whether it can be reversed, the evidence a person can inspect, the human gate and the recovery path — decided per action, not as one label for the whole feature.',
       blocks: [
         {
           kind: 'steps',
@@ -113,12 +103,6 @@ export const aiProductUx: ServiceStory = {
               body: 'The model acts. The person can see it happen, stop it, and undo it.',
             },
           ],
-        },
-        {
-          kind: 'statement',
-          before: 'A system that acts across several steps needs those decisions ',
-          marked: 'per action',
-          after: ', not one blanket label for the feature.',
         },
       ],
     },
@@ -178,34 +162,26 @@ export const aiProductUx: ServiceStory = {
       id: 'evaluation',
       eyebrow: 'Evaluation before release',
       heading: 'Evaluate against real decisions, not model accuracy alone',
+      lead: 'The acceptance set starts from representative user decisions and failure conditions.',
+      arrangement: 'beside',
       blocks: [
         {
-          kind: 'contrast',
-          sides: [
-            {
-              label: 'The acceptance set tests',
-              heading: 'Representative decisions and failure conditions',
-              style: 'chips',
-              items: [
-                'Source coverage',
-                'Useful output',
-                'Missing evidence',
-                'Appropriate human review',
-                'Action scope',
-                'Correction',
-                'Recovery',
-              ],
-            },
-            {
-              label: 'Who approves what',
-              heading: 'Evidence Tcules makes reviewable',
-              style: 'checks',
-              items: [
-                'Technical and operational checks follow the agreed delivery scope',
-                'Client owners keep approval of domain, policy and residual risk',
-              ],
-            },
+          kind: 'ledger',
+          columns: 2,
+          marker: 'icon',
+          items: [
+            { icon: 'check-circle', title: 'Source coverage', body: '' },
+            { icon: 'check-circle', title: 'Useful output', body: '' },
+            { icon: 'check-circle', title: 'Missing evidence', body: '' },
+            { icon: 'check-circle', title: 'Appropriate human review', body: '' },
+            { icon: 'check-circle', title: 'Action scope', body: '' },
+            { icon: 'check-circle', title: 'Correction and recovery', body: '' },
           ],
+        },
+        {
+          kind: 'note',
+          label: 'Who approves',
+          html: '<p>Technical and operational checks follow the agreed delivery scope. Tcules makes the evidence reviewable; client owners keep approval of domain, policy and residual risk.</p>',
         },
       ],
     },
@@ -321,12 +297,47 @@ export const aiProductUx: ServiceStory = {
             },
           ],
           also: {
-            body: 'Scope still uncertain? The readiness check is a free self-assessment; the readiness assessment creates the first evidence.',
+            when: 'The scope is still uncertain, and the first evidence has to be created before the route can be chosen.',
             link: {
-              label: 'AI Product UX Readiness Check',
-              href: toolPath('ai-product-ux-readiness-check'),
+              label: 'AI Product UX Readiness assessment',
+              href: auditPath('ai-product-ux-readiness'),
             },
           },
+        },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'go-deeper',
+      eyebrow: 'Go deeper',
+      arrangement: 'beside',
+      heading: 'Before the first scenario',
+      blocks: [
+        {
+          kind: 'resources',
+          items: [
+            {
+              type: 'Self-assessment',
+              title: 'AI Product UX Readiness Check',
+              body: 'A free check of how ready the product is to give AI a role, before anyone is briefed.',
+              href: toolPath('ai-product-ux-readiness-check'),
+              cta: 'Take the check',
+            },
+            {
+              type: 'Article',
+              title: 'Generative AI patterns for SaaS',
+              body: 'The common product roles a model plays, compared before a team settles the interaction.',
+              href: articlePath('generative-ai-product-patterns-for-saas'),
+              cta: 'Read the article',
+            },
+            {
+              type: 'Definition',
+              title: 'AI Product UX',
+              body: 'The relationship between people, models and product state, defined.',
+              href: glossaryPath('ai-product-ux'),
+              cta: 'Read the definition',
+            },
+          ],
         },
       ],
     },
@@ -335,11 +346,11 @@ export const aiProductUx: ServiceStory = {
     heading: 'Share the AI interaction that needs clearer rules',
     body: 'The interaction, the evidence behind it and the decision rule that needs to become explicit. A rough brief is enough.',
     points: [
-      { label: 'A reply within one business day' },
       {
-        label: 'One consequential scenario is enough',
-        detail: 'It defines what the model may do.',
+        label: 'Send one consequential scenario',
+        detail: 'What the model does, and what it may affect.',
       },
+      { label: 'A reply within one business day', detail: 'With what the record needs next.' },
     ],
     note: 'Do not include credentials, regulated records or confidential source material.',
   },

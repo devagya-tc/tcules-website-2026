@@ -1,12 +1,5 @@
-import { Button, Cluster, Icon, Layout, Prose } from '@/components';
-import {
-  Accordion,
-  BlockCard,
-  BlockCardSet,
-  Callout,
-  ContentSectionText,
-  Proof,
-} from '@/patterns';
+import { Button, Cluster, Icon, Layout } from '@/components';
+import { Accordion, BlockCard, BlockCardSet, Callout, Proof } from '@/patterns';
 import type { StoryBlock, StoryCase, StorySlot } from '@/lib/service-story';
 
 import { Bridge, Parts, Record, Representations, Slice, Spectrum, Thread } from './Diagrams';
@@ -14,32 +7,35 @@ import styles from './Blocks.module.css';
 
 type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
 
+/* What is NOT in this file (30 Sep 2026 pass): a side-by-side pair of two text items. A key beside
+   its sentence, a title beside its one-line body, a number beside its paragraph — each read as two
+   columns of one thing. Two tracks are for two blocks that each hold several items; anything
+   smaller stacks. */
+
 /* ── Signals ──────────────────────────────────────────────────────────────────
    A thing a reader can see, then what it may mean. The symptom is the title at h4, because the
    reader recognises it; the meaning is quieter and keyed, because it is the hypothesis. A top rule
    per tile, not a card: the row reads as one instrument with N readings. */
 function Signals({ block }: { block: Of<'signals'> }) {
-  const lg = block.columns;
   return (
     <Layout
       as="ul"
-      columns={{ base: 1, md: 2, lg }}
+      columns={{ base: 1, md: 2, lg: block.columns }}
       colGap="gutter"
       rowGap="stack"
-      className={styles.signals}
     >
       {block.items.map((item) => (
-        <li key={item.title} className={styles.signal}>
+        <li key={item.title} className={styles.tile}>
           <Layout rowGap="text">
             {item.icon ? (
-              <span className={styles.signalIcon} aria-hidden="true">
+              <span className={styles.glyph} aria-hidden="true">
                 <Icon name={item.icon} size="xl" />
               </span>
             ) : null}
             <h3 className={styles.signalTitle}>{item.title}</h3>
             <Layout rowGap="inline">
               {block.key ? <span className={styles.key}>{block.key}</span> : null}
-              <p className={styles.signalBody}>{item.body}</p>
+              <p className={styles.body}>{item.body}</p>
             </Layout>
           </Layout>
         </li>
@@ -48,51 +44,34 @@ function Signals({ block }: { block: Of<'signals'> }) {
   );
 }
 
-/* ── Statement ────────────────────────────────────────────────────────────────
-   The page's thesis, once. Set into the right two-thirds rather than hung from the left edge, so
-   it reads as a conclusion drawn from what sits above it — and so it is never the same shape as
-   the section heading it follows. Its one marked phrase is the page's one peridot mark. */
-function Statement({ block }: { block: Of<'statement'> }) {
-  return (
-    <Layout columns={{ base: 1, lg: [1, 2] }} colGap="column" offset={{ base: 0, lg: 1 }}>
-      <p className={styles.statement}>
-        {block.before}
-        <mark className={styles.mark}>{block.marked}</mark>
-        {block.after}
-      </p>
-    </Layout>
-  );
-}
-
 /* ── Steps ────────────────────────────────────────────────────────────────────
-   A method: order matters, so the list is an <ol> and the number is visible. From lg the steps
-   run as one rail — a rule through a node per step — so the sequence is seen before it is read. */
+   A method: order matters, so the list is an <ol> and the number is visible — and the number is
+   the only mark, because it is the only thing that carries the order. A worked example, when there
+   is one, sits ABOVE the steps as the scene they are walked through. */
 function Steps({ block }: { block: Of<'steps'> }) {
   const count = block.items.length;
-  const horizontal = count <= 5;
   return (
     <Layout rowGap="stack">
       {block.example ? (
-        <Layout columns={{ base: 1, lg: [1, 2] }} colGap="column" rowGap="text" align="start">
+        <Layout rowGap="tight">
           <span className={styles.key}>{block.example.label}</span>
-          <p className={styles.example}>{block.example.body}</p>
+          <p className={styles.exampleBody}>{block.example.body}</p>
         </Layout>
       ) : null}
       <Layout
         as="ol"
-        columns={horizontal ? { base: 1, md: 2, lg: count } : { base: 1, md: 2 }}
+        columns={count <= 5 ? { base: 1, md: 2, lg: count } : { base: 1, md: 2, lg: 3 }}
         colGap="gutter"
         rowGap="stack"
-        className={styles.steps}
       >
         {block.items.map((item, index) => (
-          <li key={item.title} className={styles.step}>
+          <li key={item.title} className={styles.tile}>
             <Layout rowGap="text">
-              <span className={styles.stepNumber} aria-hidden="true">
+              <span className={styles.number} aria-hidden="true">
                 {String(index + 1).padStart(2, '0')}
               </span>
-              <h3 className={styles.stepTitle}>{item.title}</h3>
-              <p className={styles.stepBody}>{item.body}</p>
+              <h3 className={styles.itemTitle}>{item.title}</h3>
+              <p className={styles.bodySmall}>{item.body}</p>
             </Layout>
           </li>
         ))}
@@ -102,45 +81,38 @@ function Steps({ block }: { block: Of<'steps'> }) {
 }
 
 /* ── Ledger ───────────────────────────────────────────────────────────────────
-   Named things with a marker each — a glyph for a kind of artefact, a number for a sequence. Not
-   ListCard: ListCard is a row that finishes itself with a rule and hands its title the h3 scale;
-   a ledger in a grid of three wants the glyph standing above the name, at 24, alone (ch04). */
+   Named things with one marker each — a glyph for a kind of artefact, a number for a position.
+   The marker leads; the title and its line stack beside it. In one column the rows close with a
+   hairline; in two or three they are tiles on a top rule. */
 function Ledger({ block }: { block: Of<'ledger'> }) {
+  const single = block.columns === 1;
   const columns =
     block.columns === 1
       ? { base: 1 }
       : block.columns === 2
         ? { base: 1, md: 2 }
         : { base: 1, md: 2, lg: 3 };
-  const single = block.columns === 1;
-  /* A title-only ledger (a list of questions) has nothing for a second track to hold. */
-  const split = single && block.items.some((item) => item.body);
   return (
     <Layout
       as={block.marker === 'number' ? 'ol' : 'ul'}
       columns={columns}
-      colGap="column"
+      colGap="gutter"
       rowGap={single ? 'none' : 'stack'}
-      className={single ? styles.ledgerRows : undefined}
+      className={single ? styles.rows : undefined}
     >
       {block.items.map((item, index) => (
-        <li key={item.title} className={single ? styles.ledgerRow : styles.ledgerTile}>
+        <li key={item.title} className={single ? styles.row : styles.tile}>
           <Cluster nowrap colGap="block" align="start">
-            <span className={styles.ledgerMarker} aria-hidden="true">
+            <span className={styles.glyph} aria-hidden="true">
               {block.marker === 'icon' && item.icon ? (
                 <Icon name={item.icon} size="xl" />
               ) : (
-                <span className={styles.stepNumber}>{String(index + 1).padStart(2, '0')}</span>
+                <span className={styles.number}>{String(index + 1).padStart(2, '0')}</span>
               )}
             </span>
-            <Layout
-              columns={split ? { base: 1, md: [2, 3] } : undefined}
-              colGap={split ? 'gutter' : undefined}
-              rowGap="tight"
-              className={styles.ledgerCopy}
-            >
-              <h3 className={styles.ledgerTitle}>{item.title}</h3>
-              {item.body ? <p className={styles.ledgerBody}>{item.body}</p> : null}
+            <Layout rowGap="tight" className={styles.grow}>
+              <h3 className={styles.itemTitle}>{item.title}</h3>
+              {item.body ? <p className={styles.body}>{item.body}</p> : null}
             </Layout>
           </Cluster>
         </li>
@@ -150,81 +122,88 @@ function Ledger({ block }: { block: Of<'ledger'> }) {
 }
 
 /* ── Router ───────────────────────────────────────────────────────────────────
-   "Which one is mine?" is answered by the condition, not by the service name — nobody arrives
-   knowing the name. So the condition leads, in the reader's own terms, and the route is the
-   destination: serif, trailing an arrow, the whole row one link. */
-function Router({ block }: { block: Of<'router'> }) {
+   "Which one is mine?" is answered by the condition, so the condition is the tile's content, in
+   the reader's own words, and the service is where it leads: a plain link line at the tile's foot,
+   never a heading. Each tile is one link. The non-service route (an audit, a self-check) is for
+   the reader who cannot name their condition yet; it leads the set when the routes are an even
+   count, so the grid never has a hole, and closes it when they are odd. */
+function RouteTile({
+  keyLabel,
+  when,
+  settles,
+  label,
+  href,
+}: {
+  keyLabel: string;
+  when: string;
+  settles?: string;
+  label: string;
+  href: string;
+}) {
   return (
-    <Layout rowGap="stack">
-      <Layout as="ul" rowGap="none" className={styles.router}>
-        <li className={styles.routerHead} aria-hidden="true">
-          <Layout columns={{ base: 1, lg: [3, 2] }} colGap="column">
-            <span className={styles.key}>When</span>
-            <span className={styles.key}>Go to</span>
+    <li className={styles.routeItem}>
+      <a href={href} className={styles.route}>
+        <Layout rowGap="block" pinLast className={styles.routeInner}>
+          <Layout rowGap="text">
+            <span className={styles.key}>{keyLabel}</span>
+            <p className={styles.routeWhen}>{when}</p>
+            {settles ? <p className={styles.bodySmall}>{settles}</p> : null}
           </Layout>
-        </li>
-        {block.items.map((item) => (
-          <li key={item.route.href}>
-            <a href={item.route.href} className={styles.route}>
-              <Layout
-                columns={{ base: 1, lg: [3, 2] }}
-                colGap="column"
-                rowGap="tight"
-                align="center"
-              >
-                <p className={styles.routeWhen}>{item.when}</p>
-                <Layout rowGap="inline">
-                  <span className={styles.routeName}>
-                    {item.route.label}
-                    <span className={styles.routeArrow} aria-hidden="true">
-                      <Icon name="arrow-right" size="md" />
-                    </span>
-                  </span>
-                  {item.settles ? (
-                    <span className={styles.routeSettles}>{item.settles}</span>
-                  ) : null}
-                </Layout>
-              </Layout>
-            </a>
-          </li>
-        ))}
-      </Layout>
-      {block.also ? (
-        <Layout columns={{ base: 1, lg: [3, 2] }} colGap="column" rowGap="text" align="center">
-          <p className={styles.alsoBody}>{block.also.body}</p>
-          <Cluster>
-            <Button
-              as="a"
-              href={block.also.link.href}
-              emphasis="ghost"
-              tone="neutral"
-              size="md"
-              icon={<Icon name="arrow-right" />}
-            >
-              {block.also.link.label}
-            </Button>
-          </Cluster>
+          <span className={styles.routeTo}>
+            <span className={styles.routeName}>{label}</span>
+            <span className={styles.routeArrow} aria-hidden="true">
+              <Icon name="arrow-right" size="md" />
+            </span>
+          </span>
         </Layout>
-      ) : null}
+      </a>
+    </li>
+  );
+}
+
+function Router({ block }: { block: Of<'router'> }) {
+  const alsoLeads = Boolean(block.also) && block.items.length % 2 === 0;
+  const total = block.items.length + (block.also ? 1 : 0);
+  const columns =
+    !alsoLeads && total % 3 === 0 ? { base: 1, md: 2, lg: 3 } : { base: 1, md: 2 };
+  const also = block.also ? (
+    <RouteTile
+      key="also"
+      keyLabel="Not sure yet"
+      when={block.also.when}
+      label={block.also.link.label}
+      href={block.also.link.href}
+    />
+  ) : null;
+
+  return (
+    <Layout as="ul" columns={columns} colGap="gutter" rowGap="stack" equalRows lead={alsoLeads}>
+      {alsoLeads ? also : null}
+      {block.items.map((item) => (
+        <RouteTile
+          key={item.route.href}
+          keyLabel="When"
+          when={item.when}
+          settles={item.settles}
+          label={item.route.label}
+          href={item.route.href}
+        />
+      ))}
+      {!alsoLeads ? also : null}
     </Layout>
   );
 }
 
 function caseMedia(item: StoryCase) {
-  if (!item.cover) return undefined;
-  return {
-    type: 'image' as const,
-    image: item.cover,
-  };
+  return item.cover ? { type: 'image' as const, image: item.cover } : undefined;
 }
 
 /* ── Cases ────────────────────────────────────────────────────────────────────
-   BlockCardSet, unchanged: it already features the first card and lays the rest two-up. The page's
-   contribution is the copy — a title that says what the case shows for THIS service, not the
-   case's own listing title — and the boundary note under the set. */
+   BlockCardSet, unchanged: it features the first card and lays the rest out. The page's
+   contribution is the copy — what the case shows for THIS service — and the boundary note. */
 function Cases({ block }: { block: Of<'cases'> }) {
   return (
-    <Layout rowGap="block">
+    <Layout rowGap="gutter">
       <BlockCardSet
         items={block.items.map((item) => ({
           id: item.slug,
@@ -242,8 +221,8 @@ function Cases({ block }: { block: Of<'cases'> }) {
 }
 
 /* ── Fit ──────────────────────────────────────────────────────────────────────
-   Two lists that mean opposite things. The glyph carries the polarity (check-circle / close-circle,
-   ch04's fixed choices) in the text's own ink — never green and red, which are status colours. */
+   Two lists that mean opposite things. The glyph carries the polarity (check-circle and
+   close-circle, ch04's fixed choices) in the text's own ink — never green and red. */
 function FitList({
   heading,
   items,
@@ -255,15 +234,15 @@ function FitList({
 }) {
   return (
     <Layout rowGap="block">
-      <h3 className={styles.fitHeading}>{heading}</h3>
-      <Layout as="ul" rowGap="none" className={styles.checks}>
+      <h3 className={styles.listHeading}>{heading}</h3>
+      <Layout as="ul" rowGap="none" className={styles.rows}>
         {items.map((item) => (
-          <li key={item} className={styles.check}>
+          <li key={item} className={styles.rowTight}>
             <Cluster nowrap colGap="text" align="start">
-              <span className={styles.checkIcon} aria-hidden="true">
+              <span className={styles.glyph} aria-hidden="true">
                 <Icon name={glyph} size="xl" />
               </span>
-              <span className={styles.checkText}>{item}</span>
+              <span className={styles.rowText}>{item}</span>
             </Cluster>
           </li>
         ))}
@@ -281,15 +260,45 @@ function Fit({ block }: { block: Of<'fit'> }) {
   );
 }
 
+/* ── Contrast ─────────────────────────────────────────────────────────────────
+   One statement in parts — what one party does and what the other keeps. So it is drawn as ONE
+   list split into two to four columns — one rule over all of them, the same row in each — and the
+   key over each part is the only thing that differs. Two representations would say two ideas. */
+function Contrast({ block }: { block: Of<'contrast'> }) {
+  const count = block.sides.length;
+  return (
+    <Layout
+      columns={count > 2 ? { base: 1, md: 2, lg: count } : { base: 1, lg: 2 }}
+      colGap={count > 2 ? 'gutter' : 'column'}
+      rowGap="stack"
+      className={styles.split}
+    >
+      {block.sides.map((side) => (
+        <Layout key={side.label} rowGap="text">
+          <span className={styles.key}>{side.label}</span>
+          <Layout as="ul" rowGap="none">
+            {side.items.map((item) => (
+              <li key={item} className={styles.rowTight}>
+                <span className={styles.rowText}>{item}</span>
+              </li>
+            ))}
+          </Layout>
+        </Layout>
+      ))}
+    </Layout>
+  );
+}
+
 /* ── Proof ────────────────────────────────────────────────────────────────────
-   The quotation beside the work it is about. A quote alone is a claim about a relationship; the
-   case beside it is where a reader goes to check it. */
-function ProofBlock({ block, slots }: { block: Of<'proof'>; slots: boolean }) {
+   The quotation beside the work it is about: a quote is a claim about a relationship, and the case
+   beside it is where a reader goes to check it. The portrait sits left of the name (Proof's own). */
+function ProofBlock({ block }: { block: Of<'proof'> }) {
   const quote = {
     quoteHtml: `<p>${block.quote.text}</p>`,
     name: block.quote.name,
     role: block.quote.role,
     company: block.quote.company,
+    portrait: block.quote.portrait,
   };
   const caseCard = block.case;
   return (
@@ -299,10 +308,7 @@ function ProofBlock({ block, slots }: { block: Of<'proof'>; slots: boolean }) {
       rowGap="stack"
       align="center"
     >
-      <Layout rowGap="block">
-        <Proof arrangement="display" quote={quote} />
-        {slots && block.portrait ? <Slot slot={block.portrait} /> : null}
-      </Layout>
+      <Proof arrangement="display" quote={quote} />
       {caseCard ? (
         <Layout as="ul" rowGap="none">
           <BlockCard
@@ -319,60 +325,11 @@ function ProofBlock({ block, slots }: { block: Of<'proof'>; slots: boolean }) {
   );
 }
 
-/* ── Contrast ─────────────────────────────────────────────────────────────── */
-function Contrast({ block }: { block: Of<'contrast'> }) {
-  return (
-    <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack" align="start">
-      {block.sides.map((side) => (
-        <Layout key={side.label} rowGap="block" className={styles.contrastSide}>
-          <Layout rowGap="tight">
-            <span className={styles.key}>{side.label}</span>
-            <h3 className={styles.fitHeading}>{side.heading}</h3>
-          </Layout>
-          {side.style === 'chips' ? (
-            /* A vocabulary, set as a run-in list at title scale rather than as chips: a row of 12px
-               tags beside a column of checked claims read as the lighter half, which is backwards —
-               these are the nouns the claims are about. */
-            <ul className={styles.runIn}>
-              {side.items.map((item) => (
-                <li key={item} className={styles.runInItem}>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <Layout as="ul" rowGap="none" className={styles.checks}>
-              {side.items.map((item) => (
-                <li key={item} className={styles.check}>
-                  <Cluster nowrap colGap="text" align="start">
-                    <span className={styles.checkIcon} aria-hidden="true">
-                      <Icon
-                        name={side.style === 'checks' ? 'check-circle' : 'close-circle'}
-                        size="xl"
-                      />
-                    </span>
-                    <span className={styles.checkText}>{item}</span>
-                  </Cluster>
-                </li>
-              ))}
-            </Layout>
-          )}
-        </Layout>
-      ))}
-    </Layout>
-  );
-}
-
-/* ── Stat ─────────────────────────────────────────────────────────────────── */
+/* ── Stat ─────────────────────────────────────────────────────────────────────
+   The figure, what it counts, then the sentence that qualifies it — stacked, one reading order. */
 function Stat({ block }: { block: Of<'stat'> }) {
   return (
-    <Layout
-      columns={{ base: 1, lg: [1, 2] }}
-      colGap="column"
-      rowGap="block"
-      align="end"
-      className={styles.stat}
-    >
+    <Layout rowGap="text" className={styles.stat}>
       <Layout rowGap="tight">
         <span className={styles.statValue}>{block.value}</span>
         <span className={styles.key}>{block.label}</span>
@@ -382,10 +339,32 @@ function Stat({ block }: { block: Of<'stat'> }) {
   );
 }
 
+/* ── Resources ────────────────────────────────────────────────────────────────
+   Where to read further, placed once, near the end, as its own section: text BlockCards with the
+   content type as the eyebrow and a named cta. A row of links in the middle of an argument pulled
+   the reader out of it before the argument was made. */
+function Resources({ block }: { block: Of<'resources'> }) {
+  const lg: 2 | 3 = block.items.length >= 3 ? 3 : 2;
+  return (
+    <Layout as="ul" columns={{ base: 1, md: 2, lg }} colGap="gutter" rowGap="stack" equalRows>
+      {block.items.map((item) => (
+        <BlockCard
+          key={item.href}
+          eyebrow={item.type}
+          title={item.title}
+          body={item.body}
+          href={item.href}
+          ctaLabel={item.cta}
+          tracks={lg}
+        />
+      ))}
+    </Layout>
+  );
+}
+
 /* ── Nudge ────────────────────────────────────────────────────────────────────
-   The mid-page ask, at the size of a sentence rather than a band. It sits inside the section whose
-   argument earned it, between two rules, so it reads as the conclusion of that section and not as
-   a new one. A CtaSection here was tried first and read as a stray heading. */
+   The mid-page ask, at the size of a sentence rather than a band, inside the section whose
+   argument earned it, between two rules. */
 function Nudge({ block }: { block: Of<'nudge'> }) {
   return (
     <Layout
@@ -412,34 +391,9 @@ function Nudge({ block }: { block: Of<'nudge'> }) {
   );
 }
 
-/* ── Links ────────────────────────────────────────────────────────────────── */
-function Links({ block }: { block: Of<'links'> }) {
-  /* Text links, not Buttons: these are titles of other pages, often six or eight words, and a
-     Button label is two to four and never wraps. */
-  return (
-    <Layout
-      columns={{ base: 1, lg: [1, 5] }}
-      colGap="gutter"
-      rowGap="tight"
-      className={styles.links}
-    >
-      <span className={styles.key}>Read next</span>
-      <Cluster as="ul" colGap="gutter" rowGap="tight">
-        {block.items.map((link) => (
-          <li key={link.href}>
-            <a href={link.href} className={styles.link}>
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </Cluster>
-    </Layout>
-  );
-}
-
 /* ── Slot ─────────────────────────────────────────────────────────────────────
-   REVIEW MODE ONLY. Where an image should exist and does not yet: its kind, its ratio and the
-   brief. Never rendered on a shipped page — a hole marked "image goes here" is the hole. */
+   REVIEW MODE ONLY. Where an image should exist and does not yet. Never rendered on a shipped
+   page — a hole marked "image goes here" is the hole. */
 export function Slot({ slot }: { slot: StorySlot }) {
   return (
     <aside
@@ -462,8 +416,6 @@ export function StoryBlockView({ block, slots }: { block: StoryBlock; slots: boo
   switch (block.kind) {
     case 'signals':
       return <Signals block={block} />;
-    case 'statement':
-      return <Statement block={block} />;
     case 'steps':
       return <Steps block={block} />;
     case 'ledger':
@@ -475,7 +427,7 @@ export function StoryBlockView({ block, slots }: { block: StoryBlock; slots: boo
     case 'fit':
       return <Fit block={block} />;
     case 'proof':
-      return <ProofBlock block={block} slots={slots} />;
+      return <ProofBlock block={block} />;
     case 'spectrum':
       return <Spectrum block={block} />;
     case 'representations':
@@ -498,14 +450,8 @@ export function StoryBlockView({ block, slots }: { block: StoryBlock; slots: boo
       return <Accordion items={block.items} />;
     case 'note':
       return <Callout label={block.label} html={block.html} />;
-    case 'text':
-      return (
-        <ContentSectionText>
-          <Prose html={block.html} />
-        </ContentSectionText>
-      );
-    case 'links':
-      return <Links block={block} />;
+    case 'resources':
+      return <Resources block={block} />;
     case 'nudge':
       return <Nudge block={block} />;
     case 'slot':

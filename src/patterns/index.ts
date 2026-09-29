@@ -148,7 +148,6 @@ export type {
   ProofQuote,
   ProofFigure,
   ProofPortrait,
-  ProofClientMark,
 } from './Proof';
 
 export { ContentSection, ContentSectionText } from './ContentSection';

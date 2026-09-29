@@ -1,5 +1,4 @@
-import { Cluster, Prose } from '@/components';
-import { cx } from '@/lib/cx';
+import { Layout, Prose } from '@/components';
 
 import styles from './Callout.module.css';
 
@@ -16,7 +15,7 @@ export type CalloutProps = {
    * An optional short key naming what kind of boundary this is — "Scope", "Note", "Method".
    * Authored in sentence case and passed as written: the mono label voice uppercases it in CSS,
    * never in the string (tracker 2.17). Absent — or blank — renders the note exactly as it was
-   * before the key existed: no Cluster, no empty span, no seam.
+   * before the key existed: no Layout, no empty span, no seam.
    */
   label?: string;
 };
@@ -29,9 +28,10 @@ export type CalloutProps = {
  * Section supplies the palette and the parent Layout supplies the seam. Prose remains the one
  * place that renders and styles trusted rich text.
  *
- * With a `label`, a mono key leads the sentence in a baseline-aligned Cluster at `tight`: beside
- * the text while the line has room, wrapping above it when it does not. The key tells a scope note
- * from a caption at a glance, which ink and size alone did not (owner decision, tracker 2.17).
+ * With a `label`, a mono key sits above the sentence, 8 apart (`Layout rowGap="tight"`). The key
+ * tells a scope note from a caption at a glance, which ink and size alone did not (tracker 2.17);
+ * it went from beside the sentence to above it on 30 Sep 2026, because a key and a sentence set
+ * side by side read as two columns of one thing.
  */
 export function Callout({ html, label }: CalloutProps) {
   if (html.trim().length === 0) {
@@ -53,10 +53,13 @@ export function Callout({ html, label }: CalloutProps) {
 
   return (
     <div role="note" className={styles.root}>
-      <Cluster colGap="tight" rowGap="tight" align="baseline">
+      {/* The key sits ABOVE the sentence, never beside it (owner, 30 Sep 2026): two lines of
+          text set left and right read as two columns of one thing. The 8 seam is the key's bind
+          to what it keys. */}
+      <Layout rowGap="tight">
         <span className={styles.label}>{keyText}</span>
-        <Prose html={html} className={cx(styles.content, styles.keyed)} />
-      </Cluster>
+        <Prose html={html} className={styles.content} />
+      </Layout>
     </div>
   );
 }

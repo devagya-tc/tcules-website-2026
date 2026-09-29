@@ -80,13 +80,11 @@ export type StoryBlock =
       columns: 2 | 3 | 4 | 5;
       items: readonly { title: string; body: string; icon?: StoryGlyph }[];
     }
-  /** The page's thesis in one line, at display scale, with its one marked phrase (peridot). */
-  | { kind: 'statement'; before: string; marked: string; after?: string }
   /** A sequence where order matters. Horizontal from lg at five or fewer, a ladder beyond. */
   | {
       kind: 'steps';
       items: readonly { title: string; body: string }[];
-      /** A worked example the steps are walked through, set beside them. */
+      /** A worked example the steps are walked through, set above them. */
       example?: { label: string; body: string };
     }
   /** Rows of named things, each with a glyph or a number. The deliverables shape. */
@@ -94,14 +92,15 @@ export type StoryBlock =
       kind: 'ledger';
       columns: 1 | 2 | 3;
       marker: 'icon' | 'number';
-      items: readonly { title: string; body: string; icon?: StoryGlyph; href?: string }[];
+      items: readonly { title: string; body: string; icon?: StoryGlyph }[];
     }
   /** Which route to take, chosen by the condition you are in. Condition first, route second. */
   | {
       kind: 'router';
       items: readonly { when: string; route: StoryLink; settles?: string }[];
-      /** A trailing route that is not a service: an audit, a self-assessment. */
-      also?: { body: string; link: StoryLink };
+      /** A route that is not a service — an audit, a self-assessment — for the reader who cannot
+          yet name their condition. Leads the set when it would otherwise leave a hole. */
+      also?: { when: string; link: StoryLink };
     }
   /** Client work that evidences the page's claim, with the boundary of what it proves. */
   | { kind: 'cases'; items: readonly StoryCase[]; note?: string }
@@ -114,9 +113,14 @@ export type StoryBlock =
   /** One attributed quotation, optionally beside the case it came from. */
   | {
       kind: 'proof';
-      quote: { text: string; name: string; role?: string; company: string };
+      quote: {
+        text: string;
+        name: string;
+        role?: string;
+        company: string;
+        portrait?: { src: string; width: number; height: number };
+      };
       case?: StoryCase;
-      portrait?: StorySlot;
     }
   /** Options on one scale — least to most disruptive — each with its condition and its question. */
   | {
@@ -139,10 +143,12 @@ export type StoryBlock =
       meta: string;
       items: readonly { field: string; question: string; icon: StoryGlyph }[];
     }
-  /** Two lists that mean opposite things, side by side. Chips for a vocabulary, rows for claims. */
+  /** One statement in two halves — what one party does, what the other keeps — as one list split
+      into two columns under one rule, the same row style on both sides. */
   | {
       kind: 'contrast';
-      sides: readonly [ContrastSide, ContrastSide];
+      /** Two to four columns of one list. */
+      sides: readonly [ContrastSide, ContrastSide, ...ContrastSide[]];
     }
   /** Several parts inside one frame that keeps them current — the five-part system. */
   | {
@@ -166,19 +172,24 @@ export type StoryBlock =
   | { kind: 'faq'; items: readonly { question: string; answerHtml: string }[] }
   /** A quiet boundary on the claim before it (Callout). */
   | { kind: 'note'; label?: string; html: string }
-  /** Running text, at the body measure. The fallback, used sparingly. */
-  | { kind: 'text'; html: string }
   /** A one-line ask inside a section, where the argument has just earned it. Not a band. */
   | { kind: 'nudge'; body: string; action: StoryLink }
-  /** A row of onward links: further reading, a worksheet, a definition. */
-  | { kind: 'links'; items: readonly StoryLink[] }
+  /** Where to read further: articles, definitions, tools. Placed once, near the end of the page. */
+  | {
+      kind: 'resources';
+      items: readonly {
+        type: string;
+        title: string;
+        body: string;
+        href: string;
+        cta: string;
+      }[];
+    }
   /** An image that should exist here. Invisible unless the page is in review mode. */
   | { kind: 'slot'; slot: StorySlot };
 
 export type ContrastSide = {
   label: string;
-  heading: string;
-  style: 'chips' | 'checks' | 'crosses';
   items: readonly string[];
 };
 
