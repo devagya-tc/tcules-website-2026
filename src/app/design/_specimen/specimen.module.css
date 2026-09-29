@@ -159,37 +159,17 @@
   max-inline-size: var(--lay-track-xs);
 }
 
-/* Texture ink candidates for the grounds that are not decided yet — tint's neutral, and the two
-   dark grounds. These override
-   --tex-ink on one Texture so /design/texture can print the options side by side — a measuring
-   instrument, not a treatment. Delete them when tokens/components/texture.css settles its ink and
-   tint, ink and blue blocks. */
-.texInkBrandeis200 {
-  --tex-ink: var(--color-brandeis-200);
-}
-
-.texInkBrandeis300 {
-  --tex-ink: var(--color-brandeis-300);
-}
-
-.texInkBrandeis500 {
-  --tex-ink: var(--color-brandeis-500);
-}
-
-.texInkBrandeis800 {
-  --tex-ink: var(--color-brandeis-800);
-}
-
+/* Texture ink candidates for tint, the one undecided ground Texture may sit on. These override
+   --tex-ink on one Texture so /design/texture can print the two options side by side — a measuring
+   instrument, not a treatment. The ink and blue candidates were removed on 29 Sep 2026 (tracker
+   2.17): limit 3 bans Texture on both grounds, so there is nothing there to choose. Delete these two
+   when tokens/components/texture.css settles tint. */
 .texInkNeutral300 {
   --tex-ink: var(--color-neutral-300);
 }
 
 .texInkNeutral400 {
   --tex-ink: var(--color-neutral-400);
-}
-
-.texInkWhite {
-  --tex-ink: var(--color-white);
 }
 
 /* The mobile column — ch05 B3 / addendum D: every image placed on the site is approved at 326px,

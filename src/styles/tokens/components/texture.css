@@ -7,11 +7,12 @@
 
    Naming: --tex-{part}. A texture is a mark on a surface, so its colour is an INK.
 
-   ── Provisional ─────────────────────────────────────────────────────────────────
-   Tint's neutral is a first pick and the dark-ground colours are not decided.
-   /design/texture prints the candidates side by side; pick there, then settle the tint,
-   ink and blue blocks below. Blue CANNOT keep brandeis-500
-   — it is the ground, and the grid would be drawn in the colour it sits on.
+   ── Parked (owner, 29 Sep 2026, tracker 2.17) ──────────────────────────────────
+   Texture is parked until a real placement exists; nothing here is to be tuned before
+   then. Tint's neutral is still a first pick — /design/texture prints 400 and 300 side
+   by side. The ink and blue blocks are declared for self-containment ONLY (CLAUDE.md
+   token rule 2): limit 3 in docs/specs/Texture.md bans Texture on both grounds, so their
+   values are not a choice anyone needs to make, and the specimen no longer offers one.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
@@ -39,15 +40,14 @@
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
-   PROVISIONAL — held at 500 as the first guess. At the grid's 21% peak, 500 over
-   neutral-950 is a faint cool haze; the specimen shows 300 and white beside it.        */
+   Declared for self-containment, not placeable (limit 3). Held at 500 as shipped.      */
 [data-surface="ink"]{
 --tex-ink:var(--color-brandeis-500);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
-   PROVISIONAL — white, because 500 is this ground and would draw nothing. The
-   specimen shows 200 and 800 beside it.                                                */
+   Declared for self-containment, not placeable (limit 3). White, as shipped — 500 is
+   this ground and would draw nothing.                                                  */
 [data-surface="blue"]{
 --tex-ink:var(--color-white);
 }
