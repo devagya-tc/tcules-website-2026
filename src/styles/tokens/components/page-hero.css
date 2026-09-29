@@ -85,7 +85,8 @@
    --hero-eyebrow-ink and --hero-key-ink never diverge. They stay two tokens: anatomy names
    become token slots, the two parts take different type roles (--text-eyebrow at 12 and
    --text-micro at 11), and one is a category while the other is a field label. Same call
-   breadcrumbs.css made for --crumb-link-ink and --crumb-collapse-ink.
+   breadcrumbs.css made for --crumb-link-ink and --crumb-collapse-ink (the latter since folded
+   into --crumb-divider-ink, 29 Sep 2026, when the collapse mark and the divider became one decision).
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────

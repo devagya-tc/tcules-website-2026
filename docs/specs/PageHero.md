@@ -626,7 +626,7 @@ As specified, `reviewer` is a role inside `credits`, so absent means no group, n
 
 They hold identical values on all four surfaces. Options: two tokens, as specified; or one `--hero-label-ink`.
 
-**Recommendation: two.** Anatomy names become token slots, the two parts take different type roles (`--text-eyebrow` and `--text-micro`), and one is a category while the other is a field label. Section 6 notes the agreement rather than aliasing it, which is the same call `Breadcrumbs.md` made for `--crumb-link-ink` and `--crumb-collapse-ink`.
+**Recommendation: two.** Anatomy names become token slots, the two parts take different type roles (`--text-eyebrow` and `--text-micro`), and one is a category while the other is a field label. Section 6 notes the agreement rather than aliasing it, which is the same call `Breadcrumbs.md` made for `--crumb-link-ink` and its collapse-mark ink (since folded into `--crumb-divider-ink`, 29 Sep 2026).
 
 **8 · The twelve-paragraph case. — non-blocking**
 
