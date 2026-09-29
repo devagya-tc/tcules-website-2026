@@ -130,9 +130,10 @@
 --hero-key-tracking:var(--text-micro-tracking);
 --hero-value-text:var(--text-body-sm);
 
-/* The three measures, one per question. 22ch at --text-display measures 878px in
-   Newsreader (it was 693 at --text-h1 until 29 Sep 2026), so the title takes 71% of the
-   1240 column and still leaves the right side open — that silhouette is the reason the no-visual hero needs no second column to look composed.
+/* The three measures, one per question. The title takes --measure-display, 26ch, since 29 Sep
+   2026: ~1040px at --text-display in Newsreader, so the title takes 84% of the 1240 column and
+   still leaves the right side open (22ch was 878px and read cramped; the shared 32ch title
+   measure filled the column) — that silhouette is the reason the no-visual hero needs no second column to look composed.
    The lead takes --measure-lead, 40ch, which measures 489px at --text-lead: a compact
    statement under the title rather than a line that runs the column. The paragraphs
    keep 68ch, 666px at --text-body. `ch` resolves against each part's own role, so each
@@ -166,7 +167,7 @@
    however small it is set — the corpus's longest, CONNECTX · AI-NATIVE BUILDING ENERGY
    PRODUCT, measures about 380px uppercased and sits on one line. The measure is there to
    cap the one that does not. */
---hero-title-measure:var(--measure-title);
+--hero-title-measure:var(--measure-display);
 --hero-lead-measure:var(--measure-lead);
 --hero-body-measure:var(--measure-body);
 

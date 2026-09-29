@@ -37,11 +37,13 @@
   block-size: auto;
 }
 
-/* The parent owns the ratio; the image covers it from the centre. Only the placements that crop
-   mechanically use this, and they are supplied an asset authored at their ratio (ch05 B4, §9a). */
+/* The parent owns the ratio; the image covers it, anchored at --media-fill-position (the inline
+   start, 20% down) rather than the centre. Only the placements that crop mechanically use this,
+   and they are supplied an asset authored at their ratio (ch05 B4, §9a). */
 .fill {
   block-size: 100%;
   object-fit: cover;
+  object-position: var(--media-fill-position);
 }
 
 /* A capture's one edge cue: the placement's hairline in the surface's rule ink (ch05 §2). */

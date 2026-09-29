@@ -70,6 +70,14 @@
   --media-panel-paper-ground: var(--color-paper);
   --media-panel-paper-deep-ground: var(--color-paper-deep);
   --media-panel-ink-ground: var(--color-neutral-950);
+
+  /* Where `fill` anchors its cover crop: the inline start, a fifth of the way down (owner, 29 Sep).
+     Case-study covers are product UI, and UI reads from its top-left — the nav, the header, the
+     first row — so a crop anchored there keeps what orients a reader, where a centre crop cut
+     every cover through its middle. One anchor for every cropping placement (BlockCard, the
+     ListCard thumbnail, the SiteNav card), so one cover crops alike wherever it appears. A 1:1
+     portrait in a 1:1 box (Proof) does not crop, so it is unaffected. */
+  --media-fill-position: 0 20%;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────

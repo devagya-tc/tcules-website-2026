@@ -1,11 +1,12 @@
 /* ══ Component layer — BlockCard ═════════════════════════════════════════════════
    Tier 2. One borderless tile with an optional media fill, an optional eyebrow and an optional
-   whole-card link carrying its own read-more cue.
+   whole-card link — carrying a read-more cue when it has no cover.
 
    Naming: --bcrd-{part}-{role}-{state}, with an orientation suffix where the horizontal row
-   differs from the tile (--bcrd-media-ratio-horizontal, --bcrd-title-text-horizontal)
+   differs from the tile (--bcrd-title-text-horizontal)
      parts: title | body | eyebrow | media | ring
-     states: rest (no suffix) | hover | pressed
+     states: none. No colour moves on the card; the cover zoom is geometry, and the text-only cta's
+     steps are Button's.
 
    There is no background or ground token: BlockCard never paints a fill and keeps the nearest
    Section visible behind it. Every surface block redeclares every colour token so a nested surface
@@ -21,10 +22,18 @@
    from --btn-link-primary-fg{,-hover,-pressed}. --bcrd-link-ink, -hover and -pressed were deleted
    rather than left declared: the card has no link-coloured part of its own any more, and a colour
    nothing paints is a colour something will paint again.
-   No transition tokens. Nothing in the component changes colour or moves; the cta's underline is
-   Button's animation, on Button's duration and easing.
-   No media ink. --bcrd-media-ink coloured the icon fill, which was removed (spec § 17 Q14); an
-   image's edge colour is Media's (--media-capture-rule-ink). */
+   No media ink. --bcrd-media-ink coloured the icon fill, which was removed (spec § 17 Q14).
+
+   ── What was added on 29 Sep, and why ──────────────────────────────────────────
+   A media rule. The card's crop box draws one hairline round every image, whatever its kind
+   (owner ruling, ch05 amendment 5a): in a card every kind is cropped to the card's ratio, so the
+   edge is a cut the card made, and the rule gives every tile in a set one boundary. Media is told
+   `edge="placement"` and draws none of its own. It does not change on hover (a darker rule was
+   tried and read as heavy, 29 Sep), so it has no state step.
+   A zoom. The image scales inside the unscaled, ruled box on hover and keyboard focus. Nothing
+   lifts and the box never moves, so the card still sits on its surface. It is the whole hover cue
+   on a covered card: the title underline was tried too and removed.
+   */
 
 /* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
@@ -32,36 +41,47 @@
   --bcrd-title-tracking: var(--text-h4-tracking);
   --bcrd-body-text: var(--text-body);
   /* The horizontal row — the featured card — steps its title up one role. A row spanning the
-     column beside a 4:3 image is a heavier object than a 286px tile, and weight comes from type
+     column beside its image is a heavier object than a 286px tile, and weight comes from type
      scale, not from a box (ruling C2). h3 re-declares itself at 1023 and 767 like every title role. */
   --bcrd-title-text-horizontal: var(--text-h3);
   --bcrd-title-tracking-horizontal: var(--text-h3-tracking);
   --bcrd-eyebrow-text: var(--text-eyebrow);
   --bcrd-eyebrow-tracking: var(--text-eyebrow-tracking);
 
-  /* One ratio per orientation, and both are named, because neither is the fallback for the other.
-     A vertical tile in a 286px four-across track wants the wider 3:2 crop so the image does not
-     dominate the copy beneath it; a horizontal tile owns half the card's inline size, where 3:2
-     would leave the media column shorter than the copy beside it and 4:3 matches its height.
-     The vertical crop is the shared cover ratio: ListCard's thumbnail crops the same cover
-     asset, so both alias --ratio-cover (primitives.css § Media · ratio). The horizontal crop has
-     one reader and stays here. */
-  --bcrd-media-ratio-vertical: var(--ratio-cover);
-  --bcrd-media-ratio-horizontal: 4 / 3;
+  /* One ratio for both orientations: the shared cover ratio, 3:2 (owner, 29 Sep). The row had its
+     own 4:3 so the media column matched the copy's height; with one-line descriptions the copy is
+     short and centred against the image, and one crop means a cover is authored once and reads the
+     same in the featured row as in the tile below it. ListCard's thumbnail crops the same asset,
+     so all three alias --ratio-cover (primitives.css § Media · ratio). */
+  --bcrd-media-ratio: var(--ratio-cover);
+
+  --bcrd-media-rule-width: var(--border-width-hairline);
+  /* 1.03 reads as the image leaning in, not as a zoom control: at a 392px tile it moves each edge
+     about 6px, all of it clipped by the ruled box. The slow step because a large image moving fast
+     reads as a jolt; the same step returns it. */
+  --bcrd-media-zoom: 1.03;
+  --bcrd-media-zoom-duration: var(--duration-slow);
+  --bcrd-media-zoom-easing: var(--easing-standard);
 
   --bcrd-radius: var(--radius-0);
+  /* The image's crop box takes a radius the frame does not (owner, 29 Sep; ch05 amendment 5b). The
+     frame is an editorial tile and stays square; the image inside it is the one object, and 8 —
+     the SiteNav card's step above 4, the largest on the ramp short of a pill — softens a 392px
+     cover without turning it into a control. The box clips the image and its zoom to it. */
+  --bcrd-media-radius: var(--radius-8);
   --bcrd-shadow: var(--shadow-none);
   --bcrd-ring-width: var(--focus-ring-width);
   --bcrd-ring-offset: var(--focus-ring-offset);
 }
 
-/* Paper: title, body and eyebrow hold their static inks whether or not the card is linked. The
-   only part that moves is the cta, and Button's layer owns its ramp. */
+/* Paper: every ink holds whether or not the card is linked. The only colour that moves is the
+   text-only cta's, and Button's layer owns its ramp. */
 :root,
 [data-surface='paper'] {
   --bcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --bcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — the floor of AA, do not lighten */
+  --bcrd-media-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
   --bcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --bcrd-ring-gap-color: var(--color-paper);
 }
@@ -72,6 +92,7 @@
   --bcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --bcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
+  --bcrd-media-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
   --bcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --bcrd-ring-gap-color: var(--color-paper-deep);
 }
@@ -82,6 +103,7 @@
   --bcrd-title-ink: var(--color-white); /* 17.26:1 */
   --bcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+  --bcrd-media-rule-ink: var(--color-neutral-700); /* 2.10:1 vs the ground — decoration */
   --bcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --bcrd-ring-gap-color: var(--color-neutral-950);
 }
@@ -94,6 +116,7 @@
   --bcrd-eyebrow-ink: var(
     --color-brandeis-100
   ); /* 4.91:1 — the tightest cell here, do not lighten */
+  --bcrd-media-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
   --bcrd-ring-color: var(--color-white); /* 6.23:1 against gap */
   --bcrd-ring-gap-color: var(--color-brandeis-500);
 }

@@ -77,6 +77,7 @@ export { Prose, type ProseProps } from './Prose';
 export {
   Media,
   mediaSrcSet,
+  type MediaEdge,
   type MediaFit,
   type MediaImage,
   type MediaInset,

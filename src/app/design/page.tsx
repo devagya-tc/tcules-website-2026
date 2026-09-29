@@ -159,7 +159,16 @@ const SPECIMENS = [
       },
     ],
   },
-  { tier: 'Templates', items: [] },
+  {
+    tier: 'Templates',
+    items: [
+      {
+        href: '/design/case-study-index',
+        name: 'CaseStudyIndex',
+        note: 'the case-study index page type, with the live entries and their ideal copy',
+      },
+    ],
+  },
 ] as const;
 
 export default function DesignIndexPage() {
@@ -178,20 +187,18 @@ export default function DesignIndexPage() {
         {SPECIMENS.map((group) => (
           <Layout key={group.tier} rowGap="block">
             <h2>{group.tier}</h2>
-            {group.items.length === 0 ? (
-              <p>None yet.</p>
-            ) : (
-              <Layout as="ul" rowGap="tight">
-                {group.items.map((item) => (
-                  <li key={item.href}>
-                    <Cluster colGap="tight" align="baseline">
-                      <Link href={item.href}>{item.name}</Link>
-                      <span>— {item.note}</span>
-                    </Cluster>
-                  </li>
-                ))}
-              </Layout>
-            )}
+            {/* Every tier has a specimen now, so there is no empty branch; a tier with none yet is
+                left out of SPECIMENS until it has one. */}
+            <Layout as="ul" rowGap="tight">
+              {group.items.map((item) => (
+                <li key={item.href}>
+                  <Cluster colGap="tight" align="baseline">
+                    <Link href={item.href}>{item.name}</Link>
+                    <span>— {item.note}</span>
+                  </Cluster>
+                </li>
+              ))}
+            </Layout>
           </Layout>
         ))}
       </Layout>

@@ -1,4 +1,5 @@
 import { fixtureSource } from './sources/fixtures';
+import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
 import { aboutSource } from './sources/strapi/about';
 import { blogSource } from './sources/strapi/blog';
 import { careersSource } from './sources/strapi/careers';
@@ -83,6 +84,15 @@ export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesS
 export const getCaseStudyListingPage =
   caseStudiesSource.getCaseStudyListingPage.bind(caseStudiesSource);
 export const getCaseStudyPage = caseStudiesSource.getCaseStudyPage.bind(caseStudiesSource);
+/**
+ * The case-study listing with its IDEAL copy laid over the live entries — for the template's
+ * specimen only, never a live route. Real entries, covers and links; the copy the content rules
+ * govern, as they say it should read (sources/fixtures/ideal/case-study-listing.ts).
+ */
+export async function getIdealCaseStudyListingPage(slug: string) {
+  const page = await getCaseStudyListingPage(slug);
+  return page ? withIdealCaseStudyCopy(page) : null;
+}
 export const getContactPage = contactPagesSource.getContactPage.bind(contactPagesSource);
 export const createClientContact =
   contactPagesSource.createClientContact.bind(contactPagesSource);

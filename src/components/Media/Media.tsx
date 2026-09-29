@@ -72,11 +72,25 @@ export type MediaImage = {
  *
  *   intrinsic  100% of the parent's inline size, height from the asset's own ratio, never
  *              cropped (ruling H3, ch05 §9). Every full-column and track placement.
- *   fill       fills a box the PARENT has already given a ratio, with a centre cover crop. For the
- *              placements that crop mechanically — BlockCard, ListCard's thumbnail, the nav card —
- *              where the pattern owns the ratio and the asset is authored for it (ch05 B4, §9a).
+ *   fill       fills a box the PARENT has already given a ratio, with a cover crop anchored at
+ *              --media-fill-position (inline start, 20% down). For the placements that crop
+ *              mechanically — BlockCard, ListCard's thumbnail, the nav card — where the pattern
+ *              owns the ratio and the asset is authored for it (ch05 B4, §9a).
  */
 export type MediaFit = 'intrinsic' | 'fill';
+
+/**
+ * Who draws the image's edge.
+ *
+ *   kind       Media does, by kind: a capture its hairline, everything else none. Every placement
+ *              that shows the asset as itself.
+ *   placement  the crop box around it does, and Media draws none — not even a capture's hairline,
+ *              which would otherwise sit inside the placement's rule as a second line. For a
+ *              placement that crops every kind mechanically to a ratio of its own, where the edge
+ *              is a cut the placement made rather than the object's own boundary (BlockCard, ch05
+ *              amendment 5a). A cut-out's panel and shadow are unaffected: they are not edges.
+ */
+export type MediaEdge = 'kind' | 'placement';
 
 /**
  * How far a cut-out sits inside its contrast panel — a gap-scale step, named for what it separates.
@@ -101,6 +115,8 @@ export type MediaProps = {
    */
   sizes: string;
   fit?: MediaFit;
+  /** Who draws the edge. Defaults to `kind`; `placement` only inside a crop box that rules itself. */
+  edge?: MediaEdge;
   /** The panel inset step. Defaults to `gutter`. Only a cut-out on a panel has an inset to set. */
   inset?: MediaInset;
   /**
@@ -168,6 +184,7 @@ export function Media({
   image,
   sizes,
   fit = 'intrinsic',
+  edge = 'kind',
   inset = 'gutter',
   priority = false,
 }: MediaProps) {
@@ -200,7 +217,7 @@ export function Media({
       className={cx(
         styles.image,
         fit === 'fill' ? styles.fill : styles.intrinsic,
-        kind === 'capture' && styles.capture,
+        edge === 'kind' && kind === 'capture' && styles.capture,
         shadow && styles.shadow,
       )}
       src={image.src}

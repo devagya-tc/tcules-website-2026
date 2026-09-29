@@ -113,6 +113,8 @@ export type StrapiCaseStudyListingItem = {
   documentId?: string | null;
   title?: string | null;
   slug?: string | null;
+  /** Not in the model yet (strapi-changes.md §13); the listing query selects it once it is. */
+  client?: string | null;
   description?: string | null;
   thumbnail?: Pick<
     StrapiCaseStudyFile,

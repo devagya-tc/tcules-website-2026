@@ -594,7 +594,7 @@ export default function TypographySpecimenPage() {
           </Layout>
 
           <Specimen
-            title="--measure-body · 68ch"
+            title="--measure-body · 75ch"
             note="The reading cap. Past roughly 75 characters the eye loses the return sweep and re-reads a line it has already read."
           >
             <p className={`${t.bodyLg} ${t.measureBody}`}>
@@ -607,7 +607,7 @@ export default function TypographySpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="--measure-title · 22ch"
+            title="--measure-title · 32ch"
             note="Titles break by phrase, not by column. A headline running the full content width reads as a paragraph that happens to be large."
           >
             <p className={`${t.h2} ${t.measureTitle}`}>A title breaks where the sense breaks</p>
@@ -636,7 +636,7 @@ export default function TypographySpecimenPage() {
 
           <Specimen
             title="h1 · 10 words, at --measure-title"
-            note="The ceiling for a page title. Balanced, the lines come out near-equal inside the 22ch cap rather than two full lines and one stranded word."
+            note="The ceiling for a page title. Balanced, the lines come out near-equal inside the 32ch cap rather than two full lines and one stranded word."
           >
             <p className={`${t.h1} ${t.measureTitle}`}>
               Product design for regulated teams that cannot afford a rework
