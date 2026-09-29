@@ -8,7 +8,7 @@
 | **Tier**            | 2 pattern (`src/patterns/Accordion/`)                                                                                   |
 | **Status**          | implemented                                                                                                             |
 | **Token prefix**    | `--acc-*`                                                                                                               |
-| **Designer / date** | Codex / 24 Aug 2026 · redesign resolved 25 Aug 2026 (Direction A)                                                       |
+| **Designer / date** | Codex / 24 Aug 2026 · redesign resolved 25 Aug 2026 (Direction A) · amended 29 Sep 2026 (tracker 2.17: mark, open seam)   |
 | **Implements**      | `docs/briefs/14-accordion.md`                                                                                           |
 | **Implemented at**  | `src/patterns/Accordion/` · `src/styles/tokens/components/accordion.css` · specimen `src/app/design/accordion/page.tsx` |
 
@@ -118,11 +118,11 @@ are deleted; there is nothing to search the module for.
 
 | State              | Trigger / owner                | What visibly or semantically changes |
 | ------------------ | ------------------------------ | ------------------------------------- |
-| rest · closed      | native base state              | Question at `--acc-question-ink` and right chevron at the quieter `--acc-mark-ink`, over the inherited ground; the quiet rule closes the row. |
+| rest · closed      | native base state              | Question at `--acc-question-ink` and down chevron (`alt-arrow-down`) at the quieter `--acc-mark-ink`, over the inherited ground; the quiet rule closes the row. |
 | hover              | trigger pointer hover          | Question and mark rise to `--acc-question-ink-hover` and `--acc-mark-ink-hover`. No ground appears. |
 | focus · keyboard   | trigger `focus-visible`        | The raised ink plus the two-part surface ring. Native focus remains on the summary. |
 | pressed            | trigger pointer down           | The raised ink is held and the question gains a hairline underline at `--acc-mark-ink`, so pressed differs from hover by more than colour. |
-| expanded · open    | native item open state         | Answer becomes available, mark swaps to `alt-arrow-down`, and question and mark hold the raised ink. The rule does not change. |
+| expanded · open    | native item open state         | Answer becomes available, mark swaps to `alt-arrow-up`, the summary's block-end inset drops to `--gap-text`, and question and mark hold the raised ink. The rule does not change. |
 
 Hover, pressed and expanded resolve the question to one raised ink, so the set holds two ink values
 rather than five. That is why there is no `--acc-question-ink-pressed` or `-expanded`: token rule 3
@@ -199,9 +199,12 @@ outer ink value may leak through an omitted declaration.
   floor with room to spare.
 - Question-to-mark seam: `Cluster colGap="block"`, `justify="between"`, `nowrap`, `align="start"`,
   on the `summary` itself.
-- Trigger-to-answer seam: **0** at the answer's block start. The trigger's own `--gap-block` inset
-  is the whole seam now, and it has to be, because that inset is also the hit area. The total
-  distance from question to answer is unchanged at 24; what changed is which element owns it.
+- Trigger-to-answer seam: **0** at the answer's block start. The open trigger's own block-end
+  inset is the whole seam, and it has to be, because that inset is also the hit area. **Amended
+  29 Sep 2026 (tracker 2.17):** for an open item that inset is `--gap-text` (16), not
+  `--gap-block`. At 24 the answer sat exactly as far from its question as from the next rule, so it
+  read as floating between two questions; at 16 it attaches to its own. Closed items keep
+  `--gap-block` both ways. An existing gap step, so no new token.
 - Answer-to-item edge inset: `--gap-block` at block end. `Prose` owns every internal paragraph
   relationship and Accordion adds no margin inside it.
 - Production Accordion-to-neighbour relationship: the containing page `Layout` chooses its normal
@@ -283,9 +286,10 @@ At 767 the component shrinks to the parent track. At the 192px stress track, ful
 hard component minimum: a disclosure remains operable below 192px, so inventing one would only
 widen an illegal parent.
 
-The trigger clears the 44px touch floor through its h5 line plus two `--gap-block` insets: 22/1.28
-is a 28.16px line, so the summary measures ~76px, and ~74px at the mobile h5 step where 20/1.3 gives
-26px. No invisible hit extension or responsive size step is needed. The gap scale does not shift
+The trigger clears the 44px touch floor through its h5 line plus its insets: 22/1.28 is a 28.16px
+line, so a closed summary (two `--gap-block` insets) measures ~76px, and ~74px at the mobile h5 step
+where 20/1.3 gives 26px. An open summary (`--gap-block` above, `--gap-text` below) measures ~68px,
+and ~66px at the mobile step. No invisible hit extension or responsive size step is needed. The gap scale does not shift
 responsively, the answer never clamps, and the mark never overlaps the question.
 
 ## 10 · Composition
@@ -297,8 +301,8 @@ responsively, the answer never clamps, and the mark never overlaps the question.
       <Cluster as="summary" colGap="block" justify="between" align="start" nowrap>
         <Question>{item.question}</Question>
         <span>
-          <Icon name="alt-arrow-right" size="lg" />
           <Icon name="alt-arrow-down" size="lg" />
+          <Icon name="alt-arrow-up" size="lg" />
         </span>
       </Cluster>
       <Prose html={item.answerHtml} />
@@ -523,6 +527,11 @@ existing chevrons; or a new plus/minus glyph request. **Recommendation and draft
 revealed axis without rotation, and trailing placement preserves one clean question start across
 wrapped rows. Plus/minus adds glyphs while conveying no more state.
 
+**Amended 29 Sep 2026 (tracker 2.17, owner decision): `alt-arrow-down` closed, `alt-arrow-up`
+open.** A resting right chevron is the convention for "this row navigates", and a disclosure does
+not leave the page. Down says "opens here", up says "closes". Still trailing, still two glyphs in
+the DOM with `[open]` choosing, still no rotation.
+
 **4 · Item separation — non-blocking.** Options: one rule ladder; a gap; or a ground per item.
 **Recommendation and draft decision: one leading rule and one block-end rule per item.** Rules
 preserve a single set at 5–7 rows. A gap weakens the question/answer grouping, and repeated grounds
@@ -559,7 +568,7 @@ NAMES
     Seven --acc-* names appear ONLY in prose recording what was deleted or never built —
     --acc-trigger-fg, --acc-trigger-bg-hover, --acc-trigger-bg-pressed, --acc-rule-ink-expanded,
     --acc-question-ink-pressed, --acc-answer-ink and --acc-layer. The token layer declares 12.
-[x] Glyphs are existing: alt-arrow-right and alt-arrow-down.
+[x] Glyphs are existing: alt-arrow-down and alt-arrow-up (ch04 names; amended 29 Sep 2026).
 [x] Section, Layout and Cluster prop/value names are existing unions: as, rowGap, colGap, justify,
     align, nowrap; div, span, none, block, between, start.
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS declarations, selectors or media blocks.
@@ -592,8 +601,8 @@ LAYOUT, TYPE, SEMANTICS
 [x] Every arrangement belongs to Layout or Cluster; no columns declaration requires a colGap.
 [x] No child margin and no responsive gap/type-role swap.
 [x] Question and answer name measures.
-[x] Native summary clears the 44px floor through its line plus two --gap-block insets: ~76px, and
-    ~74px at the mobile h5 step.
+[x] Native summary clears the 44px floor: ~76px closed (two --gap-block insets), ~74px at the
+    mobile h5 step; ~68px / ~66px open (--gap-block above, --gap-text below).
 [x] Native details/summary needs no authored ARIA idref or upward-walking selector.
 
 COMPLETENESS
