@@ -107,7 +107,30 @@ through the `Media` primitive, which ignores it on every other kind.
 
 **Found in.** tracker 2.6 (`docs/specs/Media.md` §3).
 
-## 10. Testimonials carry an optional portrait and an optional client mark
+## 10. Table columns carry a semantic kind, and the row header is stored once
+
+**What.** Two changes to the shared table component (`ComponentAuditTable`, `ComponentServiceTable`,
+`ComponentExpertiseTable`, `ComponentToolTable`, `ComponentGlossaryTable`):
+
+- An optional **`kind` on each column: `text` (default) · `numeric` · `identifier`.** It says what the
+  column holds, which is content meaning, not layout (§ 1's test): a numeric column end-aligns with
+  tabular figures, an identifier column never wraps. The frontend maps it to `DataTable`'s column
+  behaviour; until it exists every live table renders the defaults, and code does not guess from the
+  cell text.
+- **Store the row header once.** Every one of the 39 published tables sends the row header as the
+  first cell, and 46 rows also fill `rowHeading` — 42 as a duplicate, 4 with a different string the
+  page never shows. Drop `rowHeading`, or make it the only home and stop authoring the first cell.
+
+Also a content trim, not a schema change: `product-modernisation-assessment` sends six data columns,
+one past DataTable's designed five. It renders and scrolls, but reads as a matrix, not a comparison.
+
+**Why.** The seam now passes the table through as structure (`ContentTable`) instead of a flattened
+string, so these fields can reach the page. A duplicated field is two sources of truth, and the
+four rows where they already disagree prove it.
+
+**Found in.** `docs/specs/DataTable.md` § 17 Q6–Q7; tracker 2.15.
+
+## 11. Testimonials carry an optional portrait and an optional client mark
 
 **What.** Two optional relations on the testimonial record: `portrait` (a media asset, shot square per
 ch05 §3, no alt needed — the site renders it as decorative beside the name) and `clientMark` (the
@@ -120,7 +143,7 @@ test. `Proof` renders them (rulings P1, P2); without the fields there is nothing
 
 **Found in.** tracker 2.12 (`docs/specs/Proof.md` §3, Amendment · 28 Sep 2026).
 
-## 11. The contact cards' icon field is no longer rendered
+## 12. The contact cards' icon field is no longer rendered
 
 **What.** The contact page's `card.icon` and `action.icon` uploads can be retired (or left empty). The site
 stopped rendering them in 2.11. No replacement field is needed: the card's heading names the channel.

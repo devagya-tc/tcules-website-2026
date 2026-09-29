@@ -20,6 +20,7 @@ import type {
 } from './expertise-types';
 import { markdownToHtml } from './markdown';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
+import { mapTable } from './table';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const EXPERTISE_REVALIDATE_SECONDS = 300;
@@ -108,33 +109,6 @@ function mapGridColumns(columns: string | null | undefined): 1 | 2 | 3 | 4 {
 
 function blockId(block: StrapiExpertiseBlock, index: number): string {
   return `${value(block.__typename) || 'expertise-block'}-${value(block.id) || index}`;
-}
-
-function renderTable(block: StrapiExpertiseBlock): string {
-  const caption = value(block.caption);
-  const summary = value(block.summary);
-  const headings = (block.tableColumns ?? []).map((column) => value(column.heading));
-  const rows = (block.tableRows ?? []).map((row) => {
-    const rowHeading = value(row.rowHeading);
-    const cells = (row.cells ?? []).map((cell) => richTextToPlainText(cell.content));
-    const cellsAlreadyIncludeHeading = headings.length > 0 && cells.length >= headings.length;
-    const firstCell = cellsAlreadyIncludeHeading ? cells[0] || rowHeading : rowHeading;
-    const remainingCells = cellsAlreadyIncludeHeading ? cells.slice(1) : cells;
-
-    return `<tr><th scope="row">${escapeHtml(firstCell)}</th>${remainingCells
-      .map((cell) => `<td>${escapeHtml(cell)}</td>`)
-      .join('')}</tr>`;
-  });
-
-  const summaryHtml = summary ? `<p>${escapeHtml(summary)}</p>` : '';
-  const captionHtml = caption ? `<caption>${escapeHtml(caption)}</caption>` : '';
-  const headHtml = headings.length
-    ? `<thead><tr>${headings
-        .map((heading) => `<th scope="col">${escapeHtml(heading)}</th>`)
-        .join('')}</tr></thead>`
-    : '';
-
-  return `${summaryHtml}<table>${captionHtml}${headHtml}<tbody>${rows.join('')}</tbody></table>`;
 }
 
 function mapContentColumn(
@@ -226,8 +200,8 @@ function mapBlock(
     }
 
     case 'ComponentExpertiseTable': {
-      const html = renderTable(block);
-      return html ? { id, type: 'table', html } : undefined;
+      const table = mapTable(block);
+      return table ? { id, type: 'table', table } : undefined;
     }
 
     case 'ComponentExpertiseQuote': {

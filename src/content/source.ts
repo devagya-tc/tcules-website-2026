@@ -114,6 +114,7 @@ export type {
   Page,
   PageBlock,
   PageSeo,
+  ContentTable,
   ImageRecord,
   ImageSource,
   ImageKind,

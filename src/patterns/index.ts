@@ -81,6 +81,12 @@
  * visible: a `ProofFigure` is a CHECKED STATISTIC — a value, a label and the date it was verified
  * — while `Figure` is a captioned image. Neither renders the other, and nothing but the noun is
  * common to them.
+ *
+ * DataTable is TABULAR DATA, and the one case in the component audit that qualified as new on
+ * markup and behaviour rather than on look: options against dimensions, whose semantics are a
+ * `<table>` with scoped header cells that no card can express honestly. It owns no band and no
+ * ground, composes Layout and Prose, and changes reading order — row by row, each value under its
+ * column head — when the track it is given is narrower than the md content column.
  */
 export { SiteNav } from './SiteNav';
 export type {
@@ -150,6 +156,16 @@ export type { ContentSectionArrangement, ContentSectionProps } from './ContentSe
 
 export { Callout } from './Callout';
 export type { CalloutProps } from './Callout';
+
+export { DataTable } from './DataTable';
+export type {
+  DataTableProps,
+  DataTableKeyColumn,
+  DataTableColumn,
+  DataTableRow,
+  DataTableKeyBehaviour,
+  DataTableColumnBehaviour,
+} from './DataTable';
 
 export { Figure } from './Figure';
 export type { FigureProps, FigureImage } from './Figure';

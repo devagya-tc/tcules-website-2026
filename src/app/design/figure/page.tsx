@@ -514,8 +514,7 @@ export default function FigureSpecimenPage() {
             title="Row 9 — a parent that does not size it"
             note="A Cluster is a wrapping row, not a grid: it hands its children no track at all, so each figure is sized by its own content — the image one by its 320px asset, the text one by its longest line. Nothing collapses, because a figure's content is self-sizing."
           >
-            {/* block, not gutter: Cluster caps at block on purpose — a wrapping row has no use
-                for a 48px block beat. The seam is the parent's either way. */}
+            {/* The seam is the parent's either way. */}
             <Cluster colGap="block" rowGap="block" align="start">
               <Figure image={SMALL} caption={CAPTION} note={NOTE} />
               <Figure caption="No image, in the same unsized row." note={NOTE} />

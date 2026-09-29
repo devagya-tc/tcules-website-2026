@@ -17,6 +17,7 @@ import {
   Callout,
   ContentSection,
   CtaSection,
+  DataTable,
   Figure,
   ListCard,
   PageHero,
@@ -128,7 +129,7 @@ function renderHowWeWorkBlock(block: HowWeWorkBlock) {
       );
 
     case 'table':
-      return <Prose html={block.html} />;
+      return <DataTable {...block.table} />;
 
     case 'quote':
       return (

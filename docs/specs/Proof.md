@@ -134,7 +134,7 @@ The API deliberately has no `size`, `tone`, `surface`, `color`, `ground`, `paddi
 geometry, including the portrait's size and the mark's position. Surface comes only from the nearest
 `data-surface`. *Amended 28 Sep 2026:* portrait and mark were provisions; they are now content fields
 on the quote record, because they are facts about the testimonial (who said it, for whom), not
-presentation (strapi-changes.md entry 10).
+presentation (strapi-changes.md entry 11).
 
 `arrangement="compact"` with `figures`, compact without `quote`, and display without either key
 must be compile errors. A quote with a React-node attribution or figures with a row-level checked

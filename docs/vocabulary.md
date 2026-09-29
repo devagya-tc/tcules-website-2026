@@ -161,7 +161,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
+`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -175,6 +175,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 160px
 - **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-measure` 22ch · `--csec-lead-measure` 40ch
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.01em · `--cta-marker-tracking` 0.1em · `--cta-heading-measure` 22ch · `--cta-body-measure` 68ch
+- **data-table.css** — `--dtab-rule-width` 1px · `--dtab-fluid-size` 176px · `--dtab-hold-size` 192px · `--dtab-fade-size` 48px
 - **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-max-inline` 470px · `--enq-message-reserve` 19px
 - **figure.css** — `--fig-min-xs` 192px
 - **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-badge-padding-inline` 14px · `--foot-badge-radius` 999px · `--foot-watermark-size` 160px · `--foot-tagline-measure` 40ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 68ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em
@@ -206,7 +207,7 @@ Layout is done by these three. Always. Anything you specify is arranged by one o
 
 **`Cluster`** — `as?: ElementType` · `rowGap?: ClusterGap` · `colGap?: ClusterGap` · `align?: ClusterAlign` · `justify?: ClusterJustify` · `nowrap?: boolean` · `children: ReactNode`
 
-  where `ClusterGap` = 'inline' | 'tight' | 'text' | 'block' · `ClusterAlign` = 'start' | 'center' | 'end' | 'baseline' | 'stretch' · `ClusterJustify` = 'start' | 'center' | 'end' | 'between'
+  where `ClusterGap` = 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' · `ClusterAlign` = 'start' | 'center' | 'end' | 'baseline' | 'stretch' · `ClusterJustify` = 'start' | 'center' | 'end' | 'between'
 
 Read the unions above literally: a key that is not in them does not exist. `rowGap` and `colGap`
 take **gap-scale role names**, and neither has a default — an axis nobody states renders 0, on
@@ -216,6 +217,6 @@ seam to size.
 ### What already exists — check these before specifying anything new
 
 - **Primitives** (`src/components/`): `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `Section` · `Tag` · `Texture`
-- **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaSection` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav` · `TableOfContents`
+- **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaSection` · `DataTable` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav` · `TableOfContents`
 - **Templates** (`src/templates/`): — none yet
 

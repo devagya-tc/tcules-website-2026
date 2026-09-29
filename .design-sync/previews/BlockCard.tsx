@@ -4,7 +4,7 @@ import { BlockCard, BlockCardSet, Layout, Section } from 'tcules-website-2026';
    invalid prop value fails silently at render. Two things to keep honest here: `BlockCard` has NO
    `className`, `children` or DOM spread — it is a closed record — and the parent grid is always
    `Layout as="ul"` with `equalRows`, never a bare <ul> and never a hand-rolled grid. Layout's gap
-   names are the full nine-step scale; Cluster is the one that caps at `block`. */
+   names are the full nine-step scale; Cluster is the one that caps at `stack`. */
 
 /* A media source has to be self-contained here: a preview card renders outside the Next app, so a
    `/public` path resolves to nothing and fails as a broken frame the render check does not flag.
