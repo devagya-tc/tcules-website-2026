@@ -8,6 +8,7 @@ import type {
   ExpertiseSection,
   ExpertiseSeo,
 } from '../../types';
+import { absoluteAssetUrl, mapUploadImage } from './image';
 import { EXPERTISE_BY_SLUG_QUERY } from './expertise-query';
 import type {
   StrapiExpertise,
@@ -153,23 +154,6 @@ function mapContentColumn(
     items: mapLabelledItems(column.labelledItems),
     links: mapActions(column.links),
   };
-}
-
-function absoluteAssetUrl(
-  rawUrl: string | null | undefined,
-  graphqlUrl: string,
-): string | undefined {
-  const path = value(rawUrl);
-  if (!path) return undefined;
-
-  try {
-    const resolved = new URL(path, graphqlUrl);
-    return resolved.protocol === 'https:' || resolved.protocol === 'http:'
-      ? resolved.toString()
-      : undefined;
-  } catch {
-    return undefined;
-  }
 }
 
 function mapBlock(
@@ -325,19 +309,10 @@ function mapBlock(
 
       const caption = value(file.caption) || value(file.alternativeText) || value(file.name);
       const src = absoluteAssetUrl(file.url, graphqlUrl);
-      const width = typeof file.width === 'number' && file.width > 0 ? file.width : undefined;
-      const height =
-        typeof file.height === 'number' && file.height > 0 ? file.height : undefined;
-      const isImage = value(file.mime).startsWith('image/');
-      const image =
-        isImage && src && width && height
-          ? {
-              src,
-              alt: value(file.alternativeText) || value(file.name),
-              width,
-              height,
-            }
-          : undefined;
+      const image = mapUploadImage(file, graphqlUrl, {
+        fallbackAlt: value(file.name),
+        requireImageMime: true,
+      });
       const download =
         !image && src
           ? {

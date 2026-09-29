@@ -7,6 +7,7 @@ import type {
   PodcastImage,
   PodcastPage,
 } from '../../types';
+import { mapUploadImage } from './image';
 import { markdownToHtml, type BodyHeading } from './markdown';
 import { PODCAST_BY_SLUG_QUERY } from './podcast-query';
 import type {
@@ -68,20 +69,11 @@ function mapImage(
   context: string,
   graphqlUrl: string,
 ): PodcastImage | undefined {
-  if (!file || !value(file.mime).startsWith('image/')) return undefined;
-
-  const src = absoluteUrl(file.url, graphqlUrl);
-  const width = typeof file.width === 'number' && file.width > 0 ? file.width : undefined;
-  const height = typeof file.height === 'number' && file.height > 0 ? file.height : undefined;
-  if (!src || !width || !height) return undefined;
-
-  return {
-    src,
-    alt: value(file.alternativeText) || `${title} — ${context}`,
-    width,
-    height,
-    mime: value(file.mime),
-  };
+  const image = mapUploadImage(file, graphqlUrl, {
+    fallbackAlt: `${title} — ${context}`,
+    requireImageMime: true,
+  });
+  return image && file ? { ...image, mime: value(file.mime) } : undefined;
 }
 
 function mapAction(link: StrapiPodcastLink | null | undefined): PodcastAction | undefined {

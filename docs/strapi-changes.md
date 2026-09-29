@@ -96,3 +96,13 @@ their cards.
 **Why.** Owner ruling C1 (28 Sep): any insight or resource with a cover image shows it on its card.
 
 **Found in.** `docs/phase-2-decisions.md` C1; tracker 2.10.
+
+## 9. A crop-shadow flag on media, beside kind and panel
+
+**What.** An optional boolean `shadow` on media metadata, used only when `kind` is `cut-out`. Default off.
+
+**Why.** A cut-out *may* carry one shadow (ch05 §2, B2). Whether it does is a property of the asset as
+supplied, like the panel, so it is recorded with the asset rather than chosen per page. The site reads it
+through the `Media` primitive, which ignores it on every other kind.
+
+**Found in.** tracker 2.6 (`docs/specs/Media.md` §3).

@@ -116,6 +116,7 @@ export const FUTURE_INTERFACES_LAB_QUERY = /* GraphQL */ `
     alternativeText
     width
     height
+    formats
     mime
     caption
   }

@@ -109,6 +109,7 @@ export const ABOUT_QUERY = /* GraphQL */ `
     alternativeText
     width
     height
+    formats
     mime
   }
 

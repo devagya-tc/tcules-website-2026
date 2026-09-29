@@ -7,6 +7,7 @@ import type {
   CareerPage,
   ContentSeo,
 } from '../../types';
+import { absoluteAssetUrl } from './image';
 import { CAREERS_QUERY } from './careers-query';
 import type {
   StrapiCareersCard,
@@ -41,21 +42,6 @@ function normaliseSlug(candidate: string | null | undefined): string {
 
 function getStrapiGraphqlUrl(): string {
   return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
-
-function absoluteAssetUrl(
-  candidate: string | null | undefined,
-  graphqlUrl: string,
-): string | undefined {
-  const path = value(candidate);
-  if (!path) return undefined;
-
-  try {
-    const url = new URL(path, graphqlUrl);
-    return url.protocol === 'https:' || url.protocol === 'http:' ? url.toString() : undefined;
-  } catch {
-    return undefined;
-  }
 }
 
 function mapImage(

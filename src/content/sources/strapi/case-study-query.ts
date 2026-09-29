@@ -166,6 +166,7 @@ export const CASE_STUDY_BY_SLUG_QUERY = /* GraphQL */ `
     alternativeText
     width
     height
+    formats
     mime
   }
 `;
@@ -233,6 +234,7 @@ export const CASE_STUDY_LISTING_QUERY = /* GraphQL */ `
           alternativeText
           width
           height
+          formats
         }
         tags {
           documentId

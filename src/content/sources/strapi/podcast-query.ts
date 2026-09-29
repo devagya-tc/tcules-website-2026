@@ -130,6 +130,7 @@ export const PODCAST_BY_SLUG_QUERY = /* GraphQL */ `
     alternativeText
     width
     height
+    formats
     mime
   }
 `;
