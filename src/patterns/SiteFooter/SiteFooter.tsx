@@ -56,11 +56,6 @@ export function SiteFooter({
   legal,
   surface = 'ink',
 }: SiteFooterProps) {
-  /* The bar over the "u" is the brand blue, and on a dark ground it is the one element of the mark
-     that does not simply invert. `mono` drops it to currentColor so the wordmark reads as one
-     white shape. Light grounds keep the accent, which is where it was drawn to sit. */
-  const logoVariant = surface === 'ink' || surface === 'blue' ? 'mono' : 'accent';
-
   /* Rendered at the foot of the last directory column on desktop, and as its own row on mobile.
      One list, declared once, placed twice — see the note on the directory above. */
   const socialList = (
@@ -110,7 +105,10 @@ export function SiteFooter({
           <Layout className={styles.brandIdentity} rowGap="block">
             {/* The mark carries its own name here. Unlike the header's, it is not inside a link,
                 so nothing else announces it. */}
-            <Logo size="lg" variant={logoVariant} />
+            {/* Mono on every ground, the light ones included: the footer is UI chrome, where ch02
+                v1.0 makes the whole wordmark neutral-950 — and white on ink and blue. The accent
+                bar is for the mark at marketing scale, which this is not. */}
+            <Logo size="lg" variant="mono" />
             <p className={styles.tagline}>{brand.tagline}</p>
           </Layout>
 

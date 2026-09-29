@@ -510,9 +510,16 @@
   border-start-end-radius: var(--nav-sheet-radius);
   transform: translateY(100%);
   pointer-events: none;
+  /* Hidden as well as collapsed. A zero-height box translated by 100% of zero moves nowhere, and
+     its rows overflow downward from the viewport's foot — so a full-page capture, or any viewport
+     taller than the document, painted the grab handle and the sticky foot mid-page. `visibility`
+     is delayed by the close so the slide still plays out; on the way in the delay is dropped. The
+     same arrangement as .stage. */
+  visibility: hidden;
   transition:
     transform var(--nav-sheet-surface) var(--nav-transition-easing),
-    block-size var(--nav-sheet-surface) var(--nav-transition-easing);
+    block-size var(--nav-sheet-surface) var(--nav-transition-easing),
+    visibility 0s linear var(--nav-sheet-surface);
 }
 
 /* PLUS THE SHEET'S OWN TOP HAIRLINE, in both rules below. Both measured values are sums of border
@@ -527,6 +534,8 @@
   );
   transform: translateY(var(--nav-sheet-drag));
   pointer-events: auto;
+  visibility: visible;
+  transition-delay: 0s;
 }
 
 /* While a finger is on it the sheet is under direct manipulation, so every transition comes off —
@@ -851,7 +860,8 @@
     transition-duration: var(--duration-instant);
   }
 
-  .stage {
+  .stage,
+  .sheet {
     transition-delay: var(--duration-instant);
   }
 

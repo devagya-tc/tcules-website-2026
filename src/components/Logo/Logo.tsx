@@ -15,17 +15,22 @@ export type LogoSize = 'sm' | 'md' | 'lg';
 /**
  * What paints the bar above the "u".
  *
- *   accent  the brand blue, remapped per surface by --logo-bar. The default.
- *   mono    currentColor, so the bar disappears into the letterforms. For a surface that IS the
- *           accent — a blue pivot band — where a blue bar would vanish into the ground anyway,
- *           and for anywhere the mark has to read as a single silhouette.
+ *   mono    --logo-ink, so the bar joins the letterforms and the mark is one colour — neutral-950
+ *           on paper and tint, white on ink and blue. THE DEFAULT, because it is what the brand
+ *           asks for everywhere the site draws the mark: ch02 v1.0 says that in UI chrome — nav,
+ *           footer, favicon and anything at that size — "the whole wordmark is neutral-950", and
+ *           that on blue and on ink "it is white throughout".
+ *   accent  the bar in brandeis-500, via --logo-bar. For the mark at MARKETING SCALE on paper or
+ *           tint only (ch02: "on paper at marketing scale the letters stay neutral-950 and the bar
+ *           is brandeis-500"). On ink and blue --logo-bar is the wordmark's own ink, so accent
+ *           there renders exactly as mono — safe, but never the reason to pass it.
  */
 export type LogoVariant = 'accent' | 'mono';
 
 export type LogoProps = {
   /** Height role. Defaults to `md` (24). Width follows from the mark's own proportions. */
   size?: LogoSize;
-  /** Bar treatment. Defaults to `accent`. */
+  /** Bar treatment. Defaults to `mono` — the chrome treatment; `accent` is marketing scale only. */
   variant?: LogoVariant;
   /**
    * Accessible name. Pass `""` to render the mark decoratively, for the common case where a
@@ -37,7 +42,7 @@ export type LogoProps = {
 };
 
 /* The wordmark, as path data on a 675×177 box. Inline rather than an <img> for one reason: the
-   letterforms take `currentColor` and the bar takes a token, so the mark is correct on all four
+   letterforms and the bar take tokens remapped per surface, so the mark is correct on all four
    surfaces without four files and without knowing which surface it is on. An SVG file cannot read
    a custom property from the page that embeds it.
 
@@ -59,17 +64,18 @@ const BAR_PATH = 'M351.86 0.139648H225.23V27.1396H351.86V0.139648Z';
  *
  * A primitive, and specifically not an `Icon`. Both are filled now, so the difference is not the
  * paint: an icon is drawn on the system's own 24-unit box and takes `currentColor` entirely,
- * whereas this is a logotype at its own aspect ratio with one element — the bar above the "u" —
- * painted from a token rather than inherited. Filing it as a glyph would have cost it both.
+ * whereas this is a logotype at its own aspect ratio, painted from its own tokens rather than
+ * inherited. Filing it as a glyph would have cost it both.
  *
- * It sets no outer spacing and no colour of its own beyond the bar. The letterforms take
- * `currentColor`, so the mark reads correctly in the header, in the ink footer and on a blue
- * pivot without being told which; the bar reads --logo-bar, remapped per surface in
- * tokens/components/logo.css.
+ * It sets no outer spacing. The letterforms read --logo-ink — neutral-950 on paper and tint, white
+ * on ink and blue, as ch02 names them — so the mark is correct in the header, in the ink footer and
+ * on a blue pivot without being told which, and does not take the colour of a link that wraps it.
+ * By default (mono) the bar does too; `accent` reads --logo-bar, which is brandeis-500 on the light
+ * grounds and white on the dark ones — see tokens/components/logo.css.
  */
 export function Logo({
   size = 'md',
-  variant = 'accent',
+  variant = 'mono',
   title = 'Tcules',
   className,
 }: LogoProps) {
