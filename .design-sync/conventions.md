@@ -41,8 +41,13 @@ Never write `display: grid` or `display: flex` yourself.
 
 - **`Layout`** — the columnar axis and the vertical stack. `columns={3}`, `columns={[2,1]}`,
   `columns="fit"` / `"tile"` (with `minTrack="xs|sm|md|lg"`), or per-breakpoint
-  `{base, md, lg, xl}`. Also `align`, `justifyItems`, `justify`, `equalRows`. Omit `columns` for
-  a vertical stack — that is the most common Layout in the system.
+  `{base, md, lg, xl}`. Also `align`, `justifyItems`, `justify`, `equalRows`, `lead`. Omit
+  `columns` for a vertical stack — that is the most common Layout in the system.
+  To vary the arrangement rather than repeat one `[2,1]` down the page: `reverse` mirrors a row
+  of tracks from a breakpoint (bare = md up; the ratio travels with its child; **visual only**, so
+  image/copy pairs, never a sequence), `offset={1|2|3}` sets the first child n tracks in (an offset
+  reading column), and `pinLast` on a single-track stack pins its last child to the foot (a card's
+  cta, aligned across a row of cards). All three are off by default.
 - **`Cluster`** — the inline axis: wrapping rows of buttons, chips, metadata. `align`, `justify`,
   `nowrap`.
 
