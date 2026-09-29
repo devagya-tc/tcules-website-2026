@@ -112,8 +112,12 @@
 :root{
 --hero-eyebrow-text:var(--text-eyebrow);
 --hero-eyebrow-tracking:var(--text-eyebrow-tracking);
---hero-title-text:var(--text-h1);
---hero-title-tracking:var(--text-h1-tracking);
+/* Display, not h1, since 29 Sep 2026 (tracker 2.17, owner: display on every hero). The
+   element stays <h1> — only the scale moves, 54 → 67 (54 at 1023, 43 at 767, from the role's
+   own re-declarations). No new token: --text-display was already in the layer, reserved for
+   a home-page hero that nothing built, and every hero is the page's one title. */
+--hero-title-text:var(--text-display);
+--hero-title-tracking:var(--text-display-tracking);
 --hero-lead-text:var(--text-lead);
 /* 16, and the same role the page's Prose body takes. It was --text-body-lg at 18,
    chosen so hero copy stayed a step above body scale; the copy now MEETS body scale
@@ -125,9 +129,9 @@
 --hero-key-tracking:var(--text-micro-tracking);
 --hero-value-text:var(--text-body-sm);
 
-/* The three measures, one per question. 22ch at --text-h1 measures 693px in Newsreader,
-   so the title takes 56% of the 1240 column and leaves the right side open — that
-   silhouette is the reason the no-visual hero needs no second column to look composed.
+/* The three measures, one per question. 22ch at --text-display measures 878px in
+   Newsreader (it was 693 at --text-h1 until 29 Sep 2026), so the title takes 71% of the
+   1240 column and still leaves the right side open — that silhouette is the reason the no-visual hero needs no second column to look composed.
    The lead takes --measure-lead, 40ch, which measures 489px at --text-lead: a compact
    statement under the title rather than a line that runs the column. The paragraphs
    keep 68ch, 666px at --text-body. `ch` resolves against each part's own role, so each
