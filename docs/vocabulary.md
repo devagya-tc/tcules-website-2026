@@ -152,9 +152,9 @@ placeholder that never wraps.
 - **Families:** `--font-family-display` 'Newsreader', Georgia, 'Times New Roman', serif · `--font-family-sans` 'Public Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif · `--font-family-mono` 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace
 - **Weights:** `--font-weight-regular` 400 · `--font-weight-medium` 500 · `--font-weight-semibold` 600
 
-### The glyph set — exactly these 15
+### The glyph set — exactly these 39
 
-`alt-arrow-down` · `alt-arrow-right` · `alt-arrow-up` · `arrow-left` · `arrow-right` · `arrow-right-up` · `check-circle` · `close-circle` · `copy` · `danger-triangle` · `document-text` · `download` · `hamburger-menu` · `info-circle` · `square-arrow-right-up`
+`alt-arrow-down` · `alt-arrow-right` · `alt-arrow-up` · `arrow-left` · `arrow-right` · `arrow-right-up` · `chat-round-dots` · `check-circle` · `checklist` · `clock-circle` · `close-circle` · `code` · `copy` · `cpu` · `danger-triangle` · `database` · `document-text` · `download` · `eye` · `flag` · `graph-up` · `hamburger-menu` · `info-circle` · `key` · `layers` · `lock` · `monitor` · `notebook` · `question-circle` · `refresh` · `ruler-pen` · `server` · `shield-check` · `smartphone` · `square-arrow-right-up` · `undo-left` · `user` · `users-group-rounded` · `widget`
 
 Glyphs are **solid shapes** on a 24 box, filled in `currentColor` with counters cut through the
 mass (`fill-rule: evenodd`) so they show whatever is behind them. **No stroke** — there is no
@@ -163,7 +163,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
+`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--svc-` (components/service-page.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -193,6 +193,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **proof.css** — `--proof-quote-rule-width` 6px · `--proof-portrait-size` 64px · `--proof-radius` 0px
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px
 - **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
+- **service-page.css** — `--svc-meter-pip-inline` 12px · `--svc-meter-pip-block` 4px · `--svc-meter-gap` 2px · `--svc-bracket-tick` 12px · `--svc-mark-bearing` 4px · `--svc-slice-start` 58% · `--svc-slice-size` 22% · `--svc-link-underline-offset` 4px · `--svc-hidden-size` 1px · `--svc-rule-width` 1px · `--svc-rule-strong-width` 1px · `--svc-slice-width` 2px
 - **table-of-contents.css** — `--toc-title-tracking` 0.12em · `--toc-ordinal-tracking` 0.08em · `--toc-max-inline` 232px · `--toc-min-inline` 160px · `--toc-summary-min-block` 44px · `--toc-ordinal-inline` 24px · `--toc-entry-padding-block` 12px · `--toc-rule-width` 1px · `--toc-current-rule-width` 3px · `--toc-underline-width` 1px · `--toc-underline-width-pressed` 2px · `--toc-underline-offset` 2px · `--toc-entry-radius-focus` 4px · `--toc-ring-width` 2px · `--toc-ring-offset` 2px
 - **tag.css** — `--tag-size-md` 24px · `--tag-radius` 4px · `--tag-edge-width` 1px · `--tag-glyph-size` 16px · `--tag-ring-width` 2px · `--tag-ring-offset` 2px · `--tag-label-trim` 1px · `--tag-glyph-gap` 4px
 
@@ -221,5 +222,5 @@ seam to size.
 
 - **Primitives** (`src/components/`): `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `Section` · `Tag` · `Texture`
 - **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaSection` · `DataTable` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav` · `TableOfContents`
-- **Templates** (`src/templates/`): `CaseStudyIndex`
+- **Templates** (`src/templates/`): `CaseStudyIndex` · `ServicePage`
 

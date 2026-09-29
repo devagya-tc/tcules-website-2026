@@ -19,9 +19,33 @@ const NAMES = [
   'square-arrow-right-up',
   'info-circle',
   'danger-triangle',
+  'widget',
+  'layers',
+  'code',
+  'ruler-pen',
+  'monitor',
+  'smartphone',
+  'graph-up',
+  'shield-check',
+  'lock',
+  'clock-circle',
+  'database',
+  'server',
+  'users-group-rounded',
+  'user',
+  'checklist',
+  'key',
+  'refresh',
+  'undo-left',
+  'chat-round-dots',
+  'question-circle',
+  'notebook',
+  'flag',
+  'cpu',
+  'eye',
 ] as const;
 
-/** All fifteen glyphs at the default 16. Every one is solid and filled with currentColor. */
+/** All thirty-nine glyphs at the default 16. Every one is solid and filled with currentColor. */
 export function TheSet() {
   return (
     <Cluster colGap="text" rowGap="text">

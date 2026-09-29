@@ -33,3 +33,19 @@ entry (`src/content/sources/fixtures/ideal/case-study-listing.ts`). That copy is
 client names in it were read from titles, slugs and cover filenames, so they need confirming.
 
 **Found in.** BlockCard revision, 29 Sep 2026.
+
+## 3. Six service pages: re-cut copy and new copy to approve
+
+**Page / section.** All six service lines. Each section's changes are listed in
+`docs/service-pages-design.md` §4.
+
+**What's needed.** Approve, rewrite or reject every item marked **NEW COPY** there. The largest are the
+AI Product UX model-role rows (four of seven "what the product needs" cells, and every "introduces"
+cell, are new), the Software Development router conditions, and the case titles on every page. The
+re-cut copy (tightened leads, split lists) needs a lighter read.
+
+**Why.** The designed pages give each block a job, and some jobs need words the CMS never held: a
+condition for each route, a title that says what a case shows *on this page*, a short line under each
+stage. The pages were designed against realistic copy rather than waiting for it.
+
+**Found in.** Service pages designed from content, 29 Sep 2026.

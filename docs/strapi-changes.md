@@ -193,3 +193,23 @@ the h1 and the label becomes the eyebrow. A button in the hero asks the visitor 
 have read a case study, which is this page's one job. The close (the `misc` CTA) still carries the ask.
 
 **Found in.** `CaseStudyIndex` template, 29 Sep 2026 (`docs/specs/BlockCard.md` § Revision 3).
+
+## 15. Service sections say what job each block does
+
+**What.** Replace the service page's generic block union (`rich-text`, `card-grid`, `table`, `quote`,
+`labelled-list`, `two-column`, `link-group`) with components named for the job the block does. The set
+is `src/lib/service-story.ts`: `signals`, `statement`, `steps`, `ledger`, `router`, `cases`, `proof`,
+`fit`, `spectrum`, `representations`, `record`, `contrast`, `parts`, `slice`, `bridge`, `thread`,
+`nudge`, `faq`, `note`, `links`, with `text` kept as the fallback. Each maps to one Strapi component
+whose fields are the type's fields. Two field-level asks come with it:
+- `cases` reference case-study records by relation, not by typed slug, so a renamed slug cannot break
+  the link.
+- `statement` carries its marked phrase as its own field, not as markup inside the text.
+
+**Why.** The translation layer has to *guess* what a block is for. It guesses wrong in five recurring
+ways (`docs/service-pages-design.md` §1): an unattributed quote used as a pull-line, an eyebrow as the
+first line of rich text, a CTA as a paragraph, a closing paragraph inside a card, and a duplicated row
+header (§10). A block that names its job removes the guess. Ordering, too, becomes content: a
+`spectrum` is ordered by its authors on purpose.
+
+**Found in.** Service pages designed from content, 29 Sep 2026 (`/design/service-page`).

@@ -167,6 +167,11 @@ const SPECIMENS = [
         name: 'CaseStudyIndex',
         note: 'the case-study index page type, with the live entries and their ideal copy',
       },
+      {
+        href: '/design/service-page',
+        name: 'ServicePage',
+        note: 'the six service lines, designed from their own content rather than the CMS translation; ?slots=1 shows the images each is designed to carry',
+      },
     ],
   },
 ] as const;

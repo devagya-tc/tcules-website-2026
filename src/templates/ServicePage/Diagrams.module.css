@@ -1,0 +1,358 @@
+/* ServicePage · diagrams.
+
+   The compositions that DRAW an argument rather than list it: a scale, a thread, a sheet, a
+   bracket, a slice, a bridge. Colour from --svc-*, type from the composites, arrangement from
+   Layout and Cluster. Positioned pseudo-elements draw marks on edges (nodes, ticks, a thread
+   line); they never place siblings.
+
+   Two deliberate departures from the letter of CLAUDE.md § Layout rule 1: the disruption meter's
+   pips are laid out with inline-flex, and a bridge end centres its one label with grid. Neither
+   arranges siblings: each is the inside of one mark. The meter is one mark — like a glyph — not an arrangement of
+   content, and a Cluster would give each pip a list-item's semantics it does not have. */
+
+.key {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--svc-ink-label);
+}
+
+.visuallyHidden {
+  position: absolute;
+  inline-size: var(--svc-hidden-size);
+  block-size: var(--svc-hidden-size);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.icon {
+  display: inline-block;
+  color: var(--svc-ink);
+}
+
+.rowTitle {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+  text-wrap: balance;
+  color: var(--svc-ink);
+}
+
+.rowBody {
+  font: var(--text-body);
+  text-wrap: pretty;
+  color: var(--svc-ink-muted);
+}
+
+/* The question a row must settle: the reader's own words, so it takes the ink, not the muted. */
+.rowQuestion {
+  font: var(--text-body);
+  text-wrap: pretty;
+  color: var(--svc-ink);
+}
+
+.rowFail {
+  font: var(--text-body);
+  font-style: italic;
+  text-wrap: pretty;
+  color: var(--svc-ink-muted);
+}
+
+/* ── Spectrum ─────────────────────────────────────────────────────────────────── */
+.axis {
+  padding-block-end: var(--gap-tight);
+}
+
+.rows {
+  color: var(--svc-ink);
+}
+
+.headRow {
+  padding-block-end: var(--gap-text);
+  border-block-end: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+}
+
+/* Column heads name tracks; below lg there is one track, so they would stack into a list of
+   labels over nothing. The cells' own roles (title, muted condition, inked question) carry it. */
+@media (max-width: 1023px) {
+  .headRow {
+    display: none;
+  }
+}
+
+.row {
+  padding-block: var(--gap-block);
+  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
+}
+
+.meter {
+  display: inline-flex;
+  gap: var(--svc-meter-gap);
+}
+
+.pip,
+.pipOn {
+  inline-size: var(--svc-meter-pip-inline);
+  block-size: var(--svc-meter-pip-block);
+  background: var(--svc-meter-off);
+}
+
+.pipOn {
+  background: var(--svc-meter-on);
+}
+
+/* ── Representations: one thread through every row ───────────────────────────── */
+.thread {
+  color: var(--svc-ink);
+}
+
+.threadRow {
+  position: relative;
+  padding-block: var(--gap-block);
+  padding-inline-start: var(--gap-gutter);
+  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
+}
+
+/* The thread: a dashed line at the rows' inline start, continuous across every row because each
+   row draws its own full-height segment. */
+.threadRow::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--svc-node-size) / 2 - var(--svc-rule-strong-width) / 2);
+  border-inline-start: var(--svc-rule-strong-width) dashed var(--svc-node);
+}
+
+.threadRow::after {
+  content: '';
+  position: absolute;
+  inset-block-start: var(--svc-node-offset);
+  inset-inline-start: 0;
+  inline-size: var(--svc-node-size);
+  block-size: var(--svc-node-size);
+  border-radius: var(--radius-full);
+  background: var(--svc-node);
+}
+
+/* ── Record: a sheet ──────────────────────────────────────────────────────────── */
+.sheet {
+  background: var(--svc-sheet-ground);
+  border: var(--svc-rule-width) solid var(--svc-rule-strong);
+  color: var(--svc-ink);
+}
+
+.sheetHead {
+  padding: var(--gap-block) var(--gap-gutter);
+  border-block-end: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+}
+
+.sheetTitle {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+  color: var(--svc-ink);
+}
+
+.sheetRow {
+  padding: var(--gap-text) var(--gap-gutter);
+  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
+}
+
+.sheetRow:last-child {
+  border-block-end: 0;
+}
+
+.sheetField {
+  font: var(--text-ui);
+  letter-spacing: var(--text-ui-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--svc-ink-label);
+}
+
+.sheetQuestion {
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+  text-wrap: pretty;
+  color: var(--svc-ink);
+}
+
+/* ── Parts and the frame that brackets them ───────────────────────────────────── */
+.part {
+  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+  padding-block-start: var(--gap-block);
+  min-inline-size: 0;
+}
+
+.frame {
+  position: relative;
+  border-block-start: var(--svc-rule-strong-width) solid var(--svc-node);
+  padding-block-start: var(--gap-block);
+}
+
+/* The bracket's two ticks, rising from each end of the frame's rule toward the parts it holds. */
+.frame::before,
+.frame::after {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(var(--svc-bracket-tick) * -1);
+  block-size: var(--svc-bracket-tick);
+  border-inline-start: var(--svc-rule-strong-width) solid var(--svc-node);
+}
+
+.frame::before {
+  inset-inline-start: 0;
+}
+
+.frame::after {
+  inset-inline-end: 0;
+}
+
+.frameTitle {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+  color: var(--svc-ink);
+}
+
+.frameBody {
+  font: var(--text-body-lg);
+  text-wrap: pretty;
+  color: var(--svc-ink);
+  max-inline-size: var(--measure-body);
+}
+
+/* ── Slice ────────────────────────────────────────────────────────────────────── */
+.slice {
+  position: relative;
+  padding-block-start: var(--gap-stack);
+  color: var(--svc-ink);
+}
+
+.sliceColumn {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--svc-slice-start);
+  inline-size: var(--svc-slice-size);
+  background: var(--svc-slice-ground);
+  border: var(--svc-slice-width) solid var(--svc-node);
+  padding: var(--gap-text);
+}
+
+.sliceLabel {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--svc-ink);
+}
+
+/* Layers draw over the slice, so their rules visibly cross it: the slice cuts THROUGH them. */
+.layer {
+  position: relative;
+  padding-block: var(--gap-block);
+  border-block-end: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+}
+
+/* The release's piece of each layer: a solid bar inside the slice. The slice does not sit beside
+   the layers — it takes something from every one of them. */
+.layer::after {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(50% - var(--svc-meter-pip-block) / 2);
+  inset-inline-start: calc(var(--svc-slice-start) + var(--gap-text));
+  inline-size: calc(var(--svc-slice-size) - var(--gap-text) * 2);
+  block-size: var(--svc-meter-pip-block);
+  background: var(--svc-node);
+}
+
+.layer:first-child {
+  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+}
+
+.layerName {
+  font: var(--text-ui-lg);
+  letter-spacing: var(--text-ui-lg-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--svc-ink);
+}
+
+/* ── Bridge ───────────────────────────────────────────────────────────────────── */
+.bridge {
+  color: var(--svc-ink);
+}
+
+/* The two ends: solid, on the sheet ground, the label centred in its box. */
+.end {
+  display: grid;
+  place-items: center;
+  padding: var(--gap-block);
+  background: var(--svc-sheet-ground);
+  border: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+  font: var(--text-ui-lg);
+  letter-spacing: var(--text-ui-lg-tracking);
+  text-transform: var(--text-mono-case);
+  text-align: center;
+  color: var(--svc-ink);
+}
+
+/* The span between them: dashed on the long edges, open at the ends where it meets them, so the
+   three read as one bridge. Below lg the three stack and the dashes close all four sides. */
+.span {
+  padding: var(--gap-gutter);
+  border-block: var(--svc-rule-strong-width) dashed var(--svc-node);
+}
+
+@media (max-width: 1023px) {
+  .span {
+    border-inline: var(--svc-rule-strong-width) dashed var(--svc-node);
+  }
+}
+
+.state {
+  position: relative;
+  padding-inline-start: var(--gap-block);
+  font: var(--text-body);
+  text-wrap: pretty;
+  color: var(--svc-ink);
+}
+
+/* Each state takes a small dashed square: the mark of something temporary. */
+.state::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: calc(0.5lh - var(--svc-node-size) / 2);
+  inline-size: var(--svc-node-size);
+  block-size: var(--svc-node-size);
+  border: var(--svc-rule-strong-width) dashed var(--svc-node);
+}
+
+/* ── Thread ───────────────────────────────────────────────────────────────────── */
+.threadStage {
+  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+  padding-block-start: var(--gap-text);
+  min-inline-size: 0;
+}
+
+.chain {
+  min-inline-size: 0;
+}
+
+.node {
+  padding: var(--gap-tight) var(--gap-text);
+  border: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+  font: var(--text-ui);
+  letter-spacing: var(--text-ui-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--svc-ink);
+}
+
+.arrow {
+  color: var(--svc-node);
+}
+
+.loop {
+  color: var(--svc-ink-muted);
+}
+
+.loopText {
+  font: var(--text-body-sm);
+  color: var(--svc-ink-muted);
+}
