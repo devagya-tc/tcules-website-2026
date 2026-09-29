@@ -140,7 +140,7 @@ const SPECIMENS = [
       {
         href: '/design/page-hero',
         name: 'PageHero',
-        note: 'the page opening — slot ladder, paragraph ladder, byline shapes, 4 surfaces, its own band',
+        note: 'the page opening — stacked · beside × every media kind, CU04 budgets, slot and paragraph ladders, 4 surfaces, 326',
       },
       {
         href: '/design/site-nav',

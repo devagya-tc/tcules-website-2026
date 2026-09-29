@@ -126,7 +126,13 @@ export { Accordion } from './Accordion';
 export type { AccordionProps, AccordionItem, AccordionQuestionElement } from './Accordion';
 
 export { Proof } from './Proof';
-export type { ProofProps, ProofQuote, ProofFigure } from './Proof';
+export type {
+  ProofProps,
+  ProofQuote,
+  ProofFigure,
+  ProofPortrait,
+  ProofClientMark,
+} from './Proof';
 
 export { ContentSection } from './ContentSection';
 export type { ContentSectionArrangement, ContentSectionProps } from './ContentSection';
@@ -144,6 +150,7 @@ export type {
   HeroCreditRole,
   HeroDates,
   HeroAction,
+  HeroArrangement,
   HeroMedia,
   HeroImage,
   HeroVideo,

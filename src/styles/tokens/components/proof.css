@@ -2,56 +2,79 @@
    Tier 2. One attributed client quotation, a set of checked figures, or both.
 
    Naming: --proof-{part}-{role}
-     parts: quote | attribution | value | label | checked
+     parts: quote | name | attribution | portrait | value | label | checked
 
    Proof paints no ground and owns no interactive state. Prose owns links inside quote HTML and
-   Button owns the optional figure-source link. Every surface block below redeclares all six Proof
-   colours so a nested surface cannot inherit evidence ink or the quote rule from its parent. */
+   Button owns the optional figure-source link; Media owns the portrait's delivery and edge, and
+   ClientMark owns the client mark's ink and size. Every surface block below redeclares all seven
+   Proof colours so a nested surface cannot inherit evidence ink or the quote rule from its parent. */
 
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   --proof-quote-rule-width   the site blockquote's 6px rule (ch10 B2.07), through the shared
+                              --border-width-rule-quote primitive.
+   --proof-portrait-size      a component SIZE, not a distance, so a literal with an explicit name
+                              (the --cmark-height-max shape). Ruling P1: "small, 1:1, beside the name
+                              and role". 64 sits a little taller than the two attribution lines
+                              (h6 name over body-sm role, ≈ 50) — ch10's portrait is likewise larger
+                              than the attribution it sits beside — and stays under a fifth of a 326
+                              column, so the name keeps a readable measure beside it on a phone.
+                              RESTATED in src/lib/image-sizes.ts as PROOF_PORTRAIT: change both.
+   --proof-portrait-ratio     portraits are 1:1 everywhere (ch05 §3, §12 11).                      */
 :root {
-  --proof-quote-rule-width: var(--border-width-hairline-deck);
+  --proof-quote-rule-width: var(--border-width-rule-quote);
+  --proof-portrait-size: 64px;
+  --proof-portrait-ratio: var(--ratio-portrait);
   --proof-radius: var(--radius-0);
   --proof-shadow: var(--shadow-none);
   --proof-layer: var(--z-base);
 }
 
-/* Paper: long quote copy is quiet neutral; the audited value carries the strongest ink. */
+/* Paper: long quote copy is quiet neutral; the audited value carries the strongest ink. The name is
+   one step above the quote so the attribution reads as a second voice, not a fainter echo. */
 :root,
 [data-surface='paper'] {
   --proof-quote-ink: var(--color-neutral-800); /* 11.81:1 */
+  --proof-name-ink: var(--color-neutral-900); /* 14.62:1 */
   --proof-attribution-ink: var(--color-neutral-600); /* 4.92:1 */
   --proof-value-ink: var(--color-neutral-950); /* 17.10:1 */
   --proof-label-ink: var(--color-neutral-700); /* 8.14:1 */
   --proof-checked-ink: var(--color-neutral-600); /* 4.92:1 */
-  --proof-quote-rule: var(--color-brandeis-500); /* decoration */
+  --proof-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
 }
 
 /* Tint: supporting copy deepens against paper-deep while the audited value stays neutral-950. */
 [data-surface='tint'] {
   --proof-quote-ink: var(--color-neutral-800); /* 10.54:1 */
+  --proof-name-ink: var(--color-neutral-900); /* 13.06:1 */
   --proof-attribution-ink: var(--color-neutral-700); /* 7.27:1 */
   --proof-value-ink: var(--color-neutral-950); /* 15.27:1 */
   --proof-label-ink: var(--color-neutral-800); /* 10.54:1 */
   --proof-checked-ink: var(--color-neutral-700); /* 7.27:1 */
-  --proof-quote-rule: var(--color-brandeis-500); /* decoration */
+  --proof-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
 }
 
-/* Ink: quotation and value lift to white; quiet evidence copy uses neutral-400. */
+/* Ink: quotation, name and value lift to white; quiet evidence copy uses neutral-400. The rule
+   lifts to brandeis-300, as ch10 B2.07 names it ("lifted to brandeis-300 on ink"). */
 [data-surface='ink'] {
   --proof-quote-ink: var(--color-white); /* 17.26:1 */
+  --proof-name-ink: var(--color-white); /* 17.26:1 */
   --proof-attribution-ink: var(--color-neutral-400); /* 8.05:1 */
   --proof-value-ink: var(--color-white); /* 17.26:1 */
   --proof-label-ink: var(--color-neutral-400); /* 8.05:1 */
   --proof-checked-ink: var(--color-neutral-400); /* 8.05:1 */
-  --proof-quote-rule: var(--color-brandeis-300); /* decoration */
+  --proof-quote-rule: var(--color-brandeis-300); /* decoration — ch10 B2.07 */
 }
 
-/* Blue: white leads, Brandeis-100 supports, and peridot accents only the decorative quote rule. */
+/* Blue: white leads, Brandeis-100 supports. The rule is WHITE: ch10 B2.07 and C.07 ("on
+   brandeis-500 the action line, an inline link and the quote rule are white"). It was peridot-400,
+   following prose.css — but ch02 v1.0 gives peridot two uses only (a marked phrase and an
+   illustration's carried item), and a quote rule is neither. */
 [data-surface='blue'] {
   --proof-quote-ink: var(--color-white); /* 6.23:1 */
+  --proof-name-ink: var(--color-white); /* 6.23:1 */
   --proof-attribution-ink: var(--color-brandeis-100); /* 4.91:1 */
   --proof-value-ink: var(--color-white); /* 6.23:1 */
   --proof-label-ink: var(--color-brandeis-100); /* 4.91:1 */
   --proof-checked-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --proof-quote-rule: var(--color-peridot-400); /* decoration */
+  --proof-quote-rule: var(--color-white); /* decoration — ch10 B2.07 */
 }

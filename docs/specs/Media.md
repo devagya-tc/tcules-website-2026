@@ -197,6 +197,9 @@ gutters, divided:
 | SiteNav rail card | about `300px` beside the rail; the sheet width below it. Set when SiteNav migrates |
 
 Each pattern states its own when it moves onto Media (2.7, 2.9–2.11); these are the derivations it starts from.
+**28 Sep 2026 (2.9):** these values now live once in `src/lib/image-sizes.ts` (`FULL_COLUMN`, `HERO_BESIDE`,
+`CARD_TWO_TRACKS`, `CARD_THREE_TRACKS`, `LIST_CARD_THUMBNAIL`, `NAV_CARD`), each commented with the tokens it restates.
+PageHero reads it; Figure, BlockCard, ListCard and SiteNav should import from it as they migrate rather than restate a string.
 At 390 the column is 326, so a 3× phone asks for 978 and gets 1240; a 2× desktop at the full column asks for
 2480 and gets the 2560 master.
 

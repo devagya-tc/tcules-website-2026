@@ -61,13 +61,7 @@ export default async function MatterDesignSystemPage() {
     ? ([{ label: page.hero.action.label, href: page.hero.action.href }] as const)
     : ([] as const);
   const heroMedia = page.hero.image
-    ? {
-        kind: 'image' as const,
-        src: page.hero.image.src,
-        alt: page.hero.image.alt,
-        width: page.hero.image.width,
-        height: page.hero.image.height,
-      }
+    ? { type: 'image' as const, image: page.hero.image }
     : undefined;
 
   return (

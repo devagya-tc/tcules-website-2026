@@ -239,7 +239,7 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
   const published = dateOnly(podcast.publishedAt);
   const heroMedia = podcast.heroVideo
     ? {
-        kind: 'youtube' as const,
+        type: 'youtube' as const,
         id: podcast.heroVideo.id,
         title: podcast.heroVideo.title,
       }
