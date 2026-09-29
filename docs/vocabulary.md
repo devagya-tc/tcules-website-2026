@@ -201,9 +201,9 @@ Layout is done by these three. Always. Anything you specify is arranged by one o
 
   where `SectionSurface` = 'paper' | 'tint' | 'ink' | 'blue' · `SectionDensity` = 'tight' | 'open'
 
-**`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean` · `align?: Place` · `justifyItems?: Place` · `justify?: Distribute` · `children: ReactNode`
+**`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `align?: Place` · `justifyItems?: Place` · `justify?: Distribute` · `children: ReactNode`
 
-  where `Gap` = 'none' | 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' | 'column' | 'section' | 'section-open' · `Columns` = (number | number[]) | 'fit' | 'tile' | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec } · `MinTrack` = 'xs' | 'sm' | 'md' | 'lg' · `Place` = 'stretch' | 'start' | 'center' | 'end' · `Distribute` = 'start' | 'center' | 'end' | 'between'
+  where `Gap` = 'none' | 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' | 'column' | 'section' | 'section-open' · `Columns` = (number | number[]) | 'fit' | 'tile' | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec } · `MinTrack` = 'xs' | 'sm' | 'md' | 'lg' · `Offset` = 0 | 1 | 2 | 3 · `Place` = 'stretch' | 'start' | 'center' | 'end' · `Distribute` = 'start' | 'center' | 'end' | 'between'
 
 **`Cluster`** — `as?: ElementType` · `rowGap?: ClusterGap` · `colGap?: ClusterGap` · `align?: ClusterAlign` · `justify?: ClusterJustify` · `nowrap?: boolean` · `children: ReactNode`
 
