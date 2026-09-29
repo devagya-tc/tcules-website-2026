@@ -170,6 +170,29 @@ rule, and a hairline added to the two card components.
 
 ---
 
+## 5a · §2 — a card's crop box rules every kind (owner ruling, 29 Sep 2026)
+
+**What it changes.** Amendment 5 holds everywhere except the cards. In `BlockCard` the image takes one
+hairline **whatever its kind**: capture, cut-out, illustration or photograph. The card's crop box draws
+it, and the image draws none of its own (`Media edge="placement"`).
+
+**Why the exception is principled, not a patch.** Amendment 5's rule is about an object's *own* edge:
+a drawing has none, so it is never boxed. A card does not show the object as itself. It crops every
+asset mechanically to the card's ratio (3:2 in a tile, 4:3 in a row, B4), so the boundary a reader
+sees is a cut the card made. The hairline marks that cut. It also gives every tile in a set the same
+boundary, so a cut-out on paper, an illustration and a capture read as one row of objects rather than
+three treatments.
+
+**What it does not change.** No panel for an illustration, and no second shadow. A cut-out keeps its
+one shadow and its contrast panel inside the rule. Full-column placements (`Figure`, `PageHero`) and
+the ListCard thumbnail keep the edge by kind. The rule ink is the house rule ladder: neutral-300 /
+400 / 700 / brandeis-300 by surface, and it darkens on hover as the card's hover cue.
+
+**Recommend: record in ch05 §2** beside the capture's hairline, as the one placement that rules its
+own box.
+
+---
+
 ## 6 · §4a — "a recolour, not a re-placement" is not buildable as specified
 
 **What it says now.** §4a, Ground:

@@ -151,6 +151,7 @@ function mapListingItem(
     documentId: value(item.documentId) || `case-study-${index + 1}`,
     title,
     slug,
+    ...(value(item.client) ? { client: value(item.client) } : {}),
     description: value(item.description),
     ...(thumbnail ? { thumbnail } : {}),
     tags,

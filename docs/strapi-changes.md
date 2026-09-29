@@ -154,3 +154,29 @@ ch05 §9), and a glyph that is not Solar Bold is not a legal icon either (ch04).
 glyph per channel, it is `letter` / `phone` / `calendar` chosen in code from ch04's fixed set, not an upload.
 
 **Found in.** tracker 2.11 (`docs/specs/ListCard.md` §17).
+
+## 13. Case studies carry a `client` field, and the listing description is one line
+
+**What.** Two changes to the case-study content type:
+
+- **A `client` field** (short text, required for new entries; about 40 characters max). The client's
+  name as it should be read — `ConnectX`, `Benchmark Gensuite`, `The Chain Hut` — and nothing else. It
+  is a fact about the work, not presentation, so it passes entry 1's test. If clients later become an
+  entity (entry 11 notes the client mark wants one home), this becomes a relation to it; the site reads
+  a name either way.
+- **`description` limited to 8–15 words**, enforced as a field limit (Strapi's max length on a short
+  text, about 110 characters, plus the word range in the field's help text). It is the one line under
+  the title on the case-study card.
+
+Once the field exists, the listing query adds `client` (`src/content/sources/strapi/case-study-query.ts`);
+the type and the mapper already read it, so that is a one-line change.
+
+**Why.** On the case-study index the client is the first thing a visitor scans for, and today it only
+appears when an editor happened to put it at the front of the title ("ConnectX: …", "Benchmark Gensuite:
+…"), so half the cards name their client and half do not. With its own field the card shows it as its
+first line on every card, and titles can stop carrying it. The description today is either a 15–17-word
+restatement of the title or a 40-word paragraph; a card has room for one line, and a limit is a rule
+the content team can apply without a judgement about each entry.
+
+**Found in.** BlockCard revision, 29 Sep 2026 (`docs/specs/BlockCard.md` § Revision 3). Content side:
+`docs/content-changes.md` §2.

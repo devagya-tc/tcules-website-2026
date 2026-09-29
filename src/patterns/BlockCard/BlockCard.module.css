@@ -1,23 +1,28 @@
 /* BlockCard — one borderless tile, built to docs/specs/BlockCard.md.
 
    Layout owns every block-axis group and the horizontal orientation's two tracks; Button owns the
-   cta entirely; Media owns the image — its delivery and its edge by kind. This module supplies the
-   crop box, child sizing, the orientation's ratio and title-role swaps, and link rendering. It deliberately has no background, margin, hand-written grid or flex
-   arrangement, surface selector or breakpoint.
+   cta entirely; Media owns the image's delivery, panel and shadow. This module supplies the ruled
+   crop box and its zoom, child sizing, the orientation's ratio and title-role swaps, and link
+   rendering. It deliberately has no background, margin, hand-written grid or flex arrangement,
+   surface selector or breakpoint.
 
    ── What is absent, and why ────────────────────────────────────────────────────
-   No edge. The tile was bounded by a four-sided hairline and is now bounded by the parent Layout's
-   gutter alone. Nothing here paints a border on any surface or in any state.
+   No card edge. The tile was bounded by a four-sided hairline and is now bounded by the parent
+   Layout's gutter alone. The one border here is the IMAGE's crop box (.imageMedia), never the card's.
    No content inset. The inset existed to hold copy off that edge; with the edge gone it would set
    text 24px in from a boundary that no longer exists, putting neighbouring cards' images 32px
    apart while their titles sat 80px apart. Copy is flush to the media instead, and the image-to-
    copy relationship moved to the frame Layout's rowGap where a container distance belongs.
    No `position`. Its only job was to be the containing block for the removed hover wipe; the focus
    ring is a box-shadow and needs no positioning.
-   No title state rule. The title holds --bcrd-title-ink whether the card is linked or not — the
-   whole point of the redesign — so nothing sets `color: inherit` on it.
-   No image rule. `Media` sizes, crops and edges the <img> (`fit="fill"`); this module only gives it
-   the box to fill. No icon media rule either: the icon fill was removed (spec § 17 Q14).
+   No title colour state. The title holds --bcrd-title-ink whether the card is linked or not — the
+   whole point of the redesign — so nothing sets `color: inherit` on it; on hover it underlines in
+   that same ink.
+   No title measure. The track is the title's measure. A 22ch cap broke 60–87 character case-study
+   titles into four ragged lines beside empty space in a 392px tile (29 Sep); balance evens them.
+   No image rule. `Media` sizes and crops the <img> (`fit="fill"`); this module gives it the box to
+   fill, rules that box, and zooms the span between them. It never selects Media's own element.
+   No icon media rule either: the icon fill was removed (spec § 17 Q14).
    No cta rule at all. The cta is a link `Button` rendered `as="span"`, so Button owns its type,
    case, colour, glyph size, seam and underline. This module styles no part of it and declares no
    colour for it; the frame anchor carries `data-btn-link-group` and Button's own stylesheet reads
@@ -50,13 +55,27 @@
   min-inline-size: 0;
 }
 
-/* The crop box Media fills. It owns the ratio — the card's, not the asset's — and clips the
-   cover crop to it. The edge inside it is Media's, by kind. */
+/* The crop box Media fills. It owns the ratio — the card's, not the asset's — clips the cover
+   crop and the zoom to it, and draws the one hairline every kind takes in a card (ch05 amendment
+   5a; Media is passed `edge="placement"` and draws none). The border sits inside the box under the
+   global border-box, so a ruled tile and its neighbour's copy stay on one inline edge. */
 .imageMedia {
   display: block;
   inline-size: 100%;
   aspect-ratio: var(--bcrd-media-ratio-vertical);
   overflow: hidden;
+  border: var(--bcrd-media-rule-width) solid var(--bcrd-media-rule-ink);
+  border-radius: var(--bcrd-radius);
+  transition: border-color var(--bcrd-media-rule-duration) var(--bcrd-media-rule-easing);
+}
+
+/* What scales. A span between the ruled box and Media, so the box and its edge hold still while
+   the image leans in, and nothing here selects Media's <img>. `display: block` de-inlines it and
+   the block size fills the box's content area; it arranges nothing. */
+.imageZoom {
+  display: block;
+  block-size: 100%;
+  transition: transform var(--bcrd-media-zoom-duration) var(--bcrd-media-zoom-easing);
 }
 
 /* The one orientation difference below the frame. It is a class on the media element rather than a
@@ -79,7 +98,6 @@
 }
 
 .title {
-  max-inline-size: var(--measure-title);
   overflow-wrap: anywhere;
   color: var(--bcrd-title-ink);
   font: var(--bcrd-title-text);
@@ -92,6 +110,14 @@
 .titleHorizontal {
   font: var(--bcrd-title-text-horizontal);
   letter-spacing: var(--bcrd-title-tracking-horizontal);
+}
+
+.meta {
+  color: var(--bcrd-meta-ink);
+  font: var(--bcrd-meta-text);
+  letter-spacing: var(--bcrd-meta-tracking);
+  text-transform: var(--text-mono-case);
+  overflow-wrap: anywhere;
 }
 
 .body {
@@ -127,6 +153,42 @@
     0 0 0 calc(var(--bcrd-ring-offset) + var(--bcrd-ring-width)) var(--bcrd-ring-color);
 }
 
-/* No prefers-reduced-motion block, and nothing in this module to put in one. The card's own edge
-   wipe is gone and no rule here transforms. The one animation a linked card shows — the cta's
-   underline — belongs to Button, which answers for it in its own stylesheet. */
+/* A linked card's hover and keyboard focus: the title underlines in its own ink, and a cover's
+   ruled edge darkens while the image leans in. Pointer and keyboard get the same treatment, so a
+   keyboard user sees what a pointer user sees. Pressed holds it — it follows hover in source
+   order and sets nothing new, so there is no pressed token. */
+.root .link:hover .title,
+.root .link:focus-visible .title,
+.root .link:active .title {
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--bcrd-title-underline-width);
+  text-underline-offset: var(--bcrd-title-underline-offset);
+}
+
+.root .link:hover .imageMedia,
+.root .link:focus-visible .imageMedia,
+.root .link:active .imageMedia {
+  border-color: var(--bcrd-media-rule-ink-hover);
+}
+
+.root .link:hover .imageZoom,
+.root .link:focus-visible .imageZoom,
+.root .link:active .imageZoom {
+  transform: scale(var(--bcrd-media-zoom));
+}
+
+/* Reduced motion keeps every cue that is not movement — the underline and the darker edge — and
+   drops the zoom outright rather than shortening it. The cta's underline wipe is Button's, and
+   Button answers for it in its own stylesheet. */
+@media (prefers-reduced-motion: reduce) {
+  .imageMedia,
+  .imageZoom {
+    transition: none;
+  }
+
+  .root .link:hover .imageZoom,
+  .root .link:focus-visible .imageZoom,
+  .root .link:active .imageZoom {
+    transform: none;
+  }
+}

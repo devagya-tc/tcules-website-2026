@@ -68,6 +68,7 @@ type MediaImage = {
   sources?: readonly MediaSource[]                           // Strapi's formats, any widths
 }
 type MediaFit = 'intrinsic' | 'fill'
+type MediaEdge = 'kind' | 'placement'
 ```
 
 | Prop | Union | Default | Decides |
@@ -75,6 +76,7 @@ type MediaFit = 'intrinsic' | 'fill'
 | `image` | `MediaImage` | required | the record — which file, its intrinsic size, what it is |
 | `sizes` | `string` | required | the placement's rendered width, as a `sizes` list (§9) |
 | `fit` | `'intrinsic' \| 'fill'` | `'intrinsic'` | intrinsic: 100% of the parent's inline size, height from the asset, never cropped (H3). fill: covers a parent-owned ratio box, centre crop |
+| `edge` | `'kind' \| 'placement'` | `'kind'` | kind: Media draws the edge the image's kind calls for. placement: the crop box around it rules every kind itself, so Media draws none — amendment · 29 Sep below |
 | `priority` | `boolean` | `false` | true: `loading="eager"`, `fetchpriority="high"`. false: `loading="lazy"`, `decoding="async"` |
 
 **The record, and where its type lives.** `MediaImage` is Media's. The view model's `ImageRecord`
@@ -85,13 +87,14 @@ is the one place a Strapi upload file (`url`, `width`, `height`, `alternativeTex
 do not exist in Strapi yet (strapi-changes.md entries 3, 7 and 9) and arrive undefined.
 
 **`kind`, `panel` and `shadow` are content, not presentation.** They say what the asset is and how it was
-supplied, so they ride on the record. A placement cannot override them: there is no prop that changes an
-image's edge.
+supplied, so they ride on the record. A placement cannot override them. The one thing a placement may say about the edge is
+*who draws it* (`edge`), never *what it is*: `placement` hands the whole edge to the crop box and is closed,
+so no call site can restyle a hairline, only take it over whole.
 
 **Deliberately NOT props:** `surface` (read from the ancestor's `data-surface` through the token layer, like
 every unit); `className`, `style`, `id` (a closed record — no call site can restyle an edge); `width`/`size`
 (width is the parent's); `ratio`/`aspectRatio` (the parent owns it in `fill`, the asset in `intrinsic`);
-`radius` (0 on every image, ch05 §6); `border` (decided by kind); `loading` (derived from `priority`);
+`radius` (0 on every image, ch05 §6); `border` (decided by kind, or taken over whole by `edge`); `loading` (derived from `priority`);
 `caption` (Figure's).
 
 **Compile errors:** a partial master (any of `src`, `alt`, `width`, `height` missing); `sizes` omitted; a
@@ -318,3 +321,18 @@ All non-blocking; each records the choice the build made.
     is derived in primitives.css.                [x] 326 row: trackMobile, plus the 390 capture.
 [x] Do's and Don'ts are greps or specimen bands. [x] §17: 9 questions, none blocking.
 ```
+
+## Amendment · 29 Sep 2026 — `edge`
+
+**What changed.** A closed `edge?: 'kind' | 'placement'` prop, default `kind`. `placement` suppresses the
+capture's hairline; nothing else moves (a cut-out keeps its panel and shadow, which are not edges).
+
+**Why.** The owner ruled that a BlockCard image takes a hairline whatever its kind (29 Sep, ch05 amendment
+5a). In a card every kind is cropped mechanically to the card's ratio, so the edge is a cut the card made,
+not the object's own; the card's crop box draws it. Media's own capture rule would then sit inside the
+card's as a second line, and under the card's hover zoom it would scale and be clipped at the box. The
+alternative — a `className` on Media — reopens every edge from every call site, which is exactly what §3
+closes. A closed prop naming *who* draws the edge keeps the edge decided in two places only: by kind here,
+or by the one placement that rules its own box.
+
+**Readers.** `BlockCard` only. ListCard's thumbnail and Figure keep `kind`.

@@ -103,19 +103,30 @@ export type BlockCardProps = {
    */
   eyebrow?: string;
   /**
+   * Optional quiet labels after the body — a case study's categories, an insight's date and read
+   * time. One line, joined by a middot; blank entries are dropped. Ordinary capitalisation: the
+   * line is mono, and mono's case is presentation.
+   */
+  meta?: readonly string[];
+  /**
    * The optional cover image. Case studies and every insight or resource with a cover (articles,
    * videos, podcasts) carry one; service, audit, glossary and capability cards do not (ruling C1).
    */
   media?: BlockCardMedia;
   /** Heading semantics without a visual type change. Defaults to h3. */
   titleAs?: BlockCardTitleElement;
-  /** A non-blank destination turns the entire card into one native link and adds its cta. */
+  /**
+   * A non-blank destination turns the entire card into one native link. A linked card WITHOUT a
+   * cover also gets its cta; one with a cover does not (29 Sep): the cover, its hover zoom and the
+   * title's underline already say the tile navigates, and a line repeated under every tile in a
+   * grid is noise. A text-only card has nothing else to say it, so it keeps the line.
+   */
   href?: string;
   /**
-   * The cta wording on a linked card. Defaults to "Read more", which is content-type-agnostic;
-   * pass a specific line ("Read the ConnectX case") where the page can name its destination.
-   * Ignored without `href`, because there is nothing for it to describe. `Button` uppercases it,
-   * so pass ordinary capitalisation.
+   * The cta wording on a linked text-only card. Defaults to "Read more", which is
+   * content-type-agnostic; pass a specific line where the page can name its destination. Ignored
+   * without `href`, and ignored on a card with a cover, because neither renders a cta. `Button`
+   * uppercases it, so pass ordinary capitalisation.
    */
   ctaLabel?: string;
   /** Arrangement axis. Defaults to the grid tile. */
@@ -149,16 +160,25 @@ function ImageMedia({
 }) {
   return (
     /* The card owns the ratio box and Media fills it: `fit="fill"` is a centre cover crop of a box
-       the parent has already sized, which is exactly what this wrapper is. The edge is Media's, by
-       kind — a cut-out or an illustration draws none and a capture its hairline — so the card no
-       longer decides what an image looks like, only where it goes. Lazy is Media's default: a card
-       is never the page's LCP. */
+       the parent has already sized, which is exactly what this wrapper is.
+
+       The box also owns the EDGE, for every kind (29 Sep, ch05 amendment 5a). A card crops every
+       asset mechanically to its own ratio, so the boundary is a cut the card made, not the
+       object's: the box draws one hairline, and Media is told `edge="placement"` so a capture's
+       own rule does not sit inside it as a second line. A cut-out keeps its panel and shadow.
+
+       The inner span is what zooms. It scales inside the box, so the ruled edge never moves and
+       the overflow is clipped at it; scaling the <img> itself would reach into Media's element.
+       Lazy is Media's default: a card is never the page's LCP. */
     <span className={cx(styles.imageMedia, horizontal && styles.imageMediaHorizontal)}>
-      <Media
-        image={mediaRecord(image, horizontal ? 'horizontal' : 'vertical')}
-        sizes={sizes}
-        fit="fill"
-      />
+      <span className={styles.imageZoom}>
+        <Media
+          image={mediaRecord(image, horizontal ? 'horizontal' : 'vertical')}
+          sizes={sizes}
+          fit="fill"
+          edge="placement"
+        />
+      </span>
     </span>
   );
 }
@@ -166,10 +186,11 @@ function ImageMedia({
 /**
  * BlockCard — one borderless card, built to docs/specs/BlockCard.md.
  *
- * The root is always an <li>. A non-blank href changes only the frame element and adds the cta:
- * the linked shape has one native anchor and one focus stop, while the static shape is complete
- * without an empty action row. The title stays dark in both — the cta, not the heading, carries
- * the link colour.
+ * The root is always an <li>. A non-blank href changes the frame element and, on a card with no
+ * cover, adds the cta: the linked shape has one native anchor and one focus stop, while the static
+ * shape is complete without an empty action row. The title stays dark in both; a linked card says
+ * it navigates by its hover — the title's underline, and a cover's ruled edge and zoom — and, when
+ * it has no cover, by the cta.
  *
  * Layout owns the block-axis groups, the horizontal orientation's two tracks and the cta's inline
  * row; this module contains no hand-written sibling arrangement. The card knows nothing about its
@@ -180,6 +201,7 @@ export function BlockCard({
   title,
   body,
   eyebrow,
+  meta,
   media,
   titleAs: Title = 'h3',
   href,
@@ -240,13 +262,14 @@ export function BlockCard({
      The Cluster is what keeps the cta at the copy's inline start. A grid item is blockified, so the
      Button's `inline-flex` would become `flex` and take the whole track, centring its label; a
      Cluster starts its items. No gap is stated because there is one child. */
-  const cta = destination ? (
-    <Cluster>
-      <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
-        {label}
-      </Button>
-    </Cluster>
-  ) : null;
+  const cta =
+    destination && !imageNode ? (
+      <Cluster>
+        <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
+          {label}
+        </Button>
+      </Cluster>
+    ) : null;
 
   const eyebrowNode = hasEyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null;
   const titleNode = (
@@ -254,7 +277,16 @@ export function BlockCard({
   );
   const bodyNode = hasBody ? <p className={styles.body}>{body}</p> : null;
 
-  /* The copy: eyebrow, title and body as one tight group, then the cta a block below it. */
+  /* One line rather than a Cluster of chips: the labels are metadata, not controls, and a wrapping
+     row of them would be the heaviest thing under a two-line title. */
+  const metaLine = (meta ?? [])
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .join(' · ');
+  const metaNode = metaLine ? <span className={styles.meta}>{metaLine}</span> : null;
+
+  /* The copy: eyebrow, title and body as one tight group, then the meta line and the cta each a
+     block below it — the labels are about the item, so they sit apart from what it says. */
   const content = (
     <Layout rowGap="block" className={styles.content}>
       <Layout rowGap="tight">
@@ -262,6 +294,7 @@ export function BlockCard({
         {titleNode}
         {bodyNode}
       </Layout>
+      {metaNode}
       {cta}
     </Layout>
   );
@@ -308,6 +341,7 @@ export function BlockCard({
         </Layout>
         <Layout rowGap="block" className={styles.content}>
           {bodyNode}
+          {metaNode}
           {cta}
         </Layout>
       </Layout>
@@ -326,8 +360,13 @@ export function BlockCard({
       {destination ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it
            declares that this anchor's hover, focus-visible and pressed states are the states of
-           every link Button inside it. Without it the cta would sit at rest forever. */
-        <a className={cx(styles.frame, styles.link)} href={destination} data-btn-link-group>
+           every link Button inside it. Without it the cta would sit at rest forever. Emitted only
+           when there is a cta: a covered card contains no Button for it to address. */
+        <a
+          className={cx(styles.frame, styles.link)}
+          href={destination}
+          data-btn-link-group={cta ? true : undefined}
+        >
           {frameContent}
         </a>
       ) : (

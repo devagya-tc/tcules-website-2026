@@ -1251,6 +1251,12 @@ export type CaseStudyListingItem = {
   documentId: string;
   title: string;
   slug: string;
+  /**
+   * Who the work was for, as its own field rather than a prefix on the title ("ConnectX: …").
+   * The card's first line. Undefined until Strapi records it (strapi-changes.md §13).
+   */
+  client?: string;
+  /** The card's one line under the title: 8–15 words (strapi-changes.md §13). */
   description: string;
   thumbnail?: CaseStudyListingImage;
   tags: Array<{ documentId: string; name: string }>;

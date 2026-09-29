@@ -78,6 +78,19 @@ export type MediaImage = {
  */
 export type MediaFit = 'intrinsic' | 'fill';
 
+/**
+ * Who draws the image's edge.
+ *
+ *   kind       Media does, by kind: a capture its hairline, everything else none. Every placement
+ *              that shows the asset as itself.
+ *   placement  the crop box around it does, and Media draws none — not even a capture's hairline,
+ *              which would otherwise sit inside the placement's rule as a second line. For a
+ *              placement that crops every kind mechanically to a ratio of its own, where the edge
+ *              is a cut the placement made rather than the object's own boundary (BlockCard, ch05
+ *              amendment 5a). A cut-out's panel and shadow are unaffected: they are not edges.
+ */
+export type MediaEdge = 'kind' | 'placement';
+
 export type MediaProps = {
   image: MediaImage;
   /**
@@ -88,6 +101,8 @@ export type MediaProps = {
    */
   sizes: string;
   fit?: MediaFit;
+  /** Who draws the edge. Defaults to `kind`; `placement` only inside a crop box that rules itself. */
+  edge?: MediaEdge;
   /**
    * The page's LCP image: eager, and fetched ahead of the document's other images. One per page
    * at most, and only a hero's. Everything else is lazy and decodes off the main thread.
@@ -148,7 +163,13 @@ function warn(message: string, image: MediaImage) {
  * surface in JavaScript, which is why "no illustration on blue" is a review rule rather than a
  * runtime guard (spec § 17 Q3).
  */
-export function Media({ image, sizes, fit = 'intrinsic', priority = false }: MediaProps) {
+export function Media({
+  image,
+  sizes,
+  fit = 'intrinsic',
+  edge = 'kind',
+  priority = false,
+}: MediaProps) {
   const kind: MediaKind = image.kind ?? 'capture';
   const isCutOut = kind === 'cut-out';
   const article = kind === 'illustration' ? 'an' : 'a';
@@ -178,7 +199,7 @@ export function Media({ image, sizes, fit = 'intrinsic', priority = false }: Med
       className={cx(
         styles.image,
         fit === 'fill' ? styles.fill : styles.intrinsic,
-        kind === 'capture' && styles.capture,
+        edge === 'kind' && kind === 'capture' && styles.capture,
         shadow && styles.shadow,
       )}
       src={image.src}

@@ -1,11 +1,11 @@
 /* ══ Component layer — BlockCard ═════════════════════════════════════════════════
    Tier 2. One borderless tile with an optional media fill, an optional eyebrow and an optional
-   whole-card link carrying its own read-more cue.
+   whole-card link — carrying a read-more cue when it has no cover.
 
    Naming: --bcrd-{part}-{role}-{state}, with an orientation suffix where the horizontal row
    differs from the tile (--bcrd-media-ratio-horizontal, --bcrd-title-text-horizontal)
-     parts: title | body | eyebrow | media | ring
-     states: rest (no suffix) | hover | pressed
+     parts: title | body | eyebrow | meta | media | ring
+     states: rest (no suffix) | hover. Pressed holds hover and has no token of its own.
 
    There is no background or ground token: BlockCard never paints a fill and keeps the nearest
    Section visible behind it. Every surface block redeclares every colour token so a nested surface
@@ -21,10 +21,18 @@
    from --btn-link-primary-fg{,-hover,-pressed}. --bcrd-link-ink, -hover and -pressed were deleted
    rather than left declared: the card has no link-coloured part of its own any more, and a colour
    nothing paints is a colour something will paint again.
-   No transition tokens. Nothing in the component changes colour or moves; the cta's underline is
-   Button's animation, on Button's duration and easing.
-   No media ink. --bcrd-media-ink coloured the icon fill, which was removed (spec § 17 Q14); an
-   image's edge colour is Media's (--media-capture-rule-ink). */
+   No media ink. --bcrd-media-ink coloured the icon fill, which was removed (spec § 17 Q14).
+
+   ── What was added on 29 Sep, and why ──────────────────────────────────────────
+   A media rule. The card's crop box draws one hairline round every image, whatever its kind
+   (owner ruling, ch05 amendment 5a): in a card every kind is cropped to the card's ratio, so the
+   edge is a cut the card made, and the rule gives every tile in a set one boundary. Media is told
+   `edge="placement"` and draws none of its own. The rule is the one part that moves on hover, so
+   it carries a hover step; pressed holds the hover value and has no token (token rule 3).
+   A zoom. The image scales inside the unscaled, ruled box on hover and keyboard focus. Nothing
+   lifts and the box never moves, so the card still sits on its surface.
+   A title underline on hover. It is drawn in the title's own ink, so the title stays dark.
+   A meta line. Quiet labels after the body — a case study's categories, an insight's date. */
 
 /* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
@@ -49,19 +57,44 @@
   --bcrd-media-ratio-vertical: var(--ratio-cover);
   --bcrd-media-ratio-horizontal: 4 / 3;
 
+  /* The meta line shares the eyebrow's label role: a card carries three sizes — heading, body,
+     label (ch03) — and two labels at two sizes would be a fourth. It is quieter by ink, not size. */
+  --bcrd-meta-text: var(--text-eyebrow);
+  --bcrd-meta-tracking: var(--text-eyebrow-tracking);
+
+  --bcrd-media-rule-width: var(--border-width-hairline);
+  /* 1.03 reads as the image leaning in, not as a zoom control: at a 392px tile it moves each edge
+     about 6px, all of it clipped by the ruled box. The slow step because a large image moving fast
+     reads as a jolt; the same step returns it. */
+  --bcrd-media-zoom: 1.03;
+  --bcrd-media-zoom-duration: var(--duration-slow);
+  --bcrd-media-zoom-easing: var(--easing-standard);
+  --bcrd-media-rule-duration: var(--duration-fast);
+  --bcrd-media-rule-easing: var(--easing-standard);
+
+  /* The title's hover underline. Hairline weight so it marks the title without becoming a second
+     heading rule; the offset is an optical correction off the space ramp — 4px clears the serif's
+     descenders at h4 and h5 without detaching the line from the word. */
+  --bcrd-title-underline-width: var(--border-width-hairline);
+  --bcrd-title-underline-offset: var(--space-4);
+
   --bcrd-radius: var(--radius-0);
   --bcrd-shadow: var(--shadow-none);
   --bcrd-ring-width: var(--focus-ring-width);
   --bcrd-ring-offset: var(--focus-ring-offset);
 }
 
-/* Paper: title, body and eyebrow hold their static inks whether or not the card is linked. The
-   only part that moves is the cta, and Button's layer owns its ramp. */
+/* Paper: title, body, eyebrow and meta hold their static inks whether or not the card is linked.
+   What moves is the media rule (its hover step below) and, on a text-only card, the cta, whose
+   ramp is Button's. */
 :root,
 [data-surface='paper'] {
   --bcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --bcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — the floor of AA, do not lighten */
+  --bcrd-meta-ink: var(--color-neutral-600); /* 4.92:1 — the floor of AA, do not lighten */
+  --bcrd-media-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
+  --bcrd-media-rule-ink-hover: var(--color-neutral-900); /* decoration; the hover cue */
   --bcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --bcrd-ring-gap-color: var(--color-paper);
 }
@@ -72,6 +105,9 @@
   --bcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --bcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
+  --bcrd-meta-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
+  --bcrd-media-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
+  --bcrd-media-rule-ink-hover: var(--color-neutral-900); /* decoration; the hover cue */
   --bcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --bcrd-ring-gap-color: var(--color-paper-deep);
 }
@@ -82,6 +118,9 @@
   --bcrd-title-ink: var(--color-white); /* 17.26:1 */
   --bcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+  --bcrd-meta-ink: var(--color-neutral-400); /* 8.05:1 */
+  --bcrd-media-rule-ink: var(--color-neutral-700); /* 2.10:1 vs the ground — decoration */
+  --bcrd-media-rule-ink-hover: var(--color-neutral-300); /* decoration; the hover cue */
   --bcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --bcrd-ring-gap-color: var(--color-neutral-950);
 }
@@ -94,6 +133,9 @@
   --bcrd-eyebrow-ink: var(
     --color-brandeis-100
   ); /* 4.91:1 — the tightest cell here, do not lighten */
+  --bcrd-meta-ink: var(--color-brandeis-100); /* 4.91:1 — do not lighten */
+  --bcrd-media-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
+  --bcrd-media-rule-ink-hover: var(--color-white); /* decoration; the hover cue */
   --bcrd-ring-color: var(--color-white); /* 6.23:1 against gap */
   --bcrd-ring-gap-color: var(--color-brandeis-500);
 }

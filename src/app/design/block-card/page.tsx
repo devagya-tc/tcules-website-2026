@@ -59,7 +59,7 @@ const COVER_SEAM: BlockCardImage = {
   kind: 'illustration',
 };
 
-/** A capture: the one kind that takes an edge — the hairline — even inside a card. */
+/** A capture: the one kind whose edge is its own. In a card the crop box rules every kind (5a). */
 const CAPTURE: BlockCardImage = {
   src: '/design/media/capture-listing.webp',
   alt: 'Listing editor with four bullet fields beside an AI assistance panel.',
@@ -96,6 +96,65 @@ function item(list: readonly BlockCardSetItem[], index: number): BlockCardSetIte
 
 /* ── Content ─────────────────────────────────────────────────────────────────────
    Realistic families, at realistic lengths, because ruling C2 is judged on how a set READS. */
+
+/** The case-study index — client, a one-line description, categories, a cover of every kind. The
+    titles are live ones at the corpus's extremes (37 and 87 characters, 29 Sep). */
+const CASE_INDEX: readonly BlockCardSetItem[] = [
+  {
+    id: 'cs-dealpath',
+    eyebrow: 'Dealpath',
+    title: 'Simplifying the interface without simplifying the work',
+    body: 'The problem was never the amount of data; it was an unclear decision.',
+    meta: ['Modernise & replatform'],
+    media: cover(CAPTURE),
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'cs-buildtwin',
+    eyebrow: 'BuildTwin',
+    title: 'Trust needed evidence, not reassurance',
+    body: 'Showing engineers what the AI checked, what it missed, and what stayed theirs.',
+    meta: ['0 → 1', 'AI-assisted workflows'],
+    media: cover(COVER_FLOW),
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'cs-chain-hut',
+    eyebrow: 'The Chain Hut',
+    title: "Crafting a Seamless E-Commerce Experience for UK's Online Fashion Jewellery Market",
+    body: 'A jewellery store rebuilt around product discovery on a phone.',
+    meta: ['Growth stage', 'Data-heavy'],
+    media: cover(COVER_REVIEWS),
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'cs-benchmark',
+    eyebrow: 'Benchmark Gensuite',
+    title: 'Evolving the experience across a 75+ application enterprise suite',
+    body: 'Modernising a large suite is a design-systems problem, not many redesigns.',
+    meta: ['Modernise & replatform', 'AI-assisted workflows'],
+    media: cover(COVER_SEAM),
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'cs-connectx',
+    eyebrow: 'ConnectX',
+    title: 'Building energy management as a 0 to 1 AI product',
+    body: 'Adding a chatbot is not the same as building an AI-native product.',
+    meta: ['0 → 1'],
+    media: cover(COVER_NODE),
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'cs-omny',
+    eyebrow: 'OmnyAI',
+    title: 'Designing trust: reframing the AI–human relationship',
+    body: 'Decision control moved back to the person the AI was meant to help.',
+    meta: ['Modernise & replatform', 'AI-assisted workflows'],
+    media: cover(CAPTURE),
+    href: ROUTES.caseStudies,
+  },
+];
 
 /** Service and capability cards — media-less by ruling C1. */
 const SERVICES: readonly BlockCardSetItem[] = [
@@ -610,33 +669,34 @@ export default function BlockCardSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <BandHead title="6 · Media by kind, and the record">
-            The card owns the box and the ratio; <code>Media</code> owns the file and the edge.
-            Five records in one 3:2 box each. The kind is a content fact on the record, never a
-            card prop.
+            The card owns the box, the ratio and — since 29 Sep — the edge: one hairline round
+            every kind, because the card crops every kind to its own ratio (ch05 amendment 5a).{' '}
+            <code>Media</code> is passed <code>edge=&quot;placement&quot;</code> and draws none,
+            so a capture shows one line, not two. A cut-out keeps its shadow and panel.
           </BandHead>
           <Cards columns={{ base: 1, md: 2, xl: 4 }}>
             <BlockCard
               eyebrow="cut-out · shadow"
-              title="The silhouette is the frame"
-              body="No edge; one drop shadow following the alpha."
+              title="Shadow inside the rule"
+              body="The card's hairline; the one drop shadow still follows the alpha."
               media={cover(COVER_FLOW)}
             />
             <BlockCard
               eyebrow="cut-out · panel"
               title="On its contrast panel"
-              body="The panel fills the box; the part is inset by the gutter (Media § 17 Q2)."
+              body="The panel fills the ruled box; the part is inset by the gutter (Media § 17 Q2)."
               media={cover(COVER_REVIEWS)}
             />
             <BlockCard
               eyebrow="illustration"
-              title="Never boxed"
-              body="No edge, no panel, no shadow, in any placement (B4)."
+              title="Ruled as a crop"
+              body="Cropped to the card's ratio, so the card marks the cut. No panel, no shadow."
               media={cover(COVER_SEAM)}
             />
             <BlockCard
               eyebrow="capture"
-              title="The one kind with an edge"
-              body="The hairline is Media's, in the surface's rule ink."
+              title="One line, not two"
+              body="The capture's own hairline is handed to the box, so it is not doubled."
               media={cover(CAPTURE)}
             />
           </Cards>
@@ -719,16 +779,18 @@ export default function BlockCardSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <BandHead title="8 · The cta">
-            The shipped link <code>Button</code>, rendered <code>as=&quot;span&quot;</code>{' '}
-            inside the one frame anchor, so it is a label for that anchor rather than a second
-            control: it never enters the tab order and there is no nested link. Tab to a card
-            and count focus stops: one.
+            Text-only linked cards only (29 Sep). A card with a cover says it navigates by its
+            hover — the ruled edge darkens, the image leans in, the title underlines — so the
+            first two cards here render no cta. On a text-only card it is the shipped link{' '}
+            <code>Button</code>, rendered <code>as=&quot;span&quot;</code> inside the one frame
+            anchor: never in the tab order, no nested link. Tab to a card and count focus stops:
+            one.
           </BandHead>
           <Cards columns={{ base: 1, lg: 3 }}>
             <BlockCard
               eyebrow="Case study"
-              title="Default label"
-              body="No ctaLabel passed, so the component supplies its own."
+              title="Cover, no cta"
+              body="Linked and covered: hover it — no cta line is rendered."
               media={cover(COVER_FLOW)}
               href={ROUTES.caseStudies}
               tracks={3}
@@ -736,8 +798,7 @@ export default function BlockCardSpecimenPage() {
             <BlockCard
               eyebrow="ConnectX"
               title="Caller-named label"
-              body="The page knows the destination well enough to say so."
-              media={cover(COVER_FLOW)}
+              body="Text-only, so the page's named line renders."
               href={ROUTES.caseStudies}
               ctaLabel="Read the ConnectX case"
               tracks={3}
@@ -916,31 +977,41 @@ export default function BlockCardSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <BandHead title="12 · States">
-            Point at, hold and Tab to the linked card. The cta is the only part that moves:
-            pointing anywhere on the card wipes its underline in and steps its label colour,
-            because the frame carries <code>data-btn-link-group</code>. Keyboard focus adds the
-            surface-aware two-part ring around the whole card.
+            Point at, hold and Tab to both linked cards. On either, the title underlines in its
+            own ink. On the covered card the ruled edge darkens and the image leans in (1.03,
+            inside the box, which never moves); on the text-only card the cta wipes its
+            underline in, because the frame carries <code>data-btn-link-group</code>. Keyboard
+            focus shows what hover shows, plus the surface-aware two-part ring around the whole
+            card.
           </BandHead>
-          <Cards columns={{ base: 1, md: 2 }}>
+          <Cards columns={{ base: 1, md: 3 }}>
             <BlockCard
-              eyebrow="Case study"
+              eyebrow="ConnectX"
               title="Point, hold and Tab"
               body="Rest, hover, focus and pressed all come from this one native link."
-              media={cover(COVER_FLOW)}
+              meta={['0 → 1', 'AI product UX']}
+              media={cover(CAPTURE)}
+              href={ROUTES.caseStudies}
+            />
+            <BlockCard
+              eyebrow="Service"
+              title="The text-only linked card"
+              body="No cover, so the cta says it navigates."
               href={ROUTES.caseStudies}
             />
             <Layout rowGap="tight">
               {[
-                ['rest', 'Dark title, quiet eyebrow, and the cta at --btn-link-primary-fg.'],
+                [
+                  'rest',
+                  'Dark title, quiet labels, the image in a --bcrd-media-rule-ink hairline.',
+                ],
                 [
                   'hover',
-                  'The cta underline wipes in and its label steps to --btn-link-primary-fg-hover.',
+                  'Title underlines; the rule steps to --bcrd-media-rule-ink-hover and the image scales to --bcrd-media-zoom. Text-only: the cta wipes in.',
                 ],
-                [
-                  'focus',
-                  'The hover cta plus the keyboard-only two-part ring around the card.',
-                ],
-                ['pressed', 'The cta steps to --btn-link-primary-fg-pressed, underline held.'],
+                ['focus', 'Everything hover does, plus the two-part ring around the card.'],
+                ['pressed', 'Holds hover; the text-only cta steps to its pressed colour.'],
+                ['reduced motion', 'No zoom at all; the underline and the darker rule remain.'],
               ].map(([state, note]) => (
                 <Layout key={state} rowGap="inline">
                   <strong>{state}</strong>
@@ -1223,10 +1294,43 @@ export default function BlockCardSpecimenPage() {
           <h2>20 · What this static page cannot force</h2>
           <p>
             Hold the pointer for pressed, Tab for keyboard focus, and test viewport widths 767,
-            1439 and 1440 exactly. Reduced motion is answered inside Button, which owns the one
-            animation a card shows. None of these has a component prop; the absence is part of
-            the contract.
+            1439 and 1440 exactly. Reduced motion drops the cover zoom (the card&rsquo;s own
+            stylesheet) and the cta wipe (Button&rsquo;s). None of these has a component prop;
+            the absence is part of the contract.
           </p>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <BandHead title="21 · The case-study index (29 Sep)">
+            The /case-studies arrangement: the client as the eyebrow, the categories as the meta
+            line, a one-line description (8&ndash;15 words, strapi-changes §13), no cta. Titles
+            are the live corpus&rsquo;s shortest (37 characters) and longest (87), because
+            titles run long there until the content pass lands.
+          </BandHead>
+          <Specimen title="6 case studies · featured + three from lg">
+            <BlockCardSet items={CASE_INDEX} />
+          </Specimen>
+          <Specimen
+            title="Longest real title in a 326 track"
+            note="87 characters at the h4 role: balanced, no cap, no clamp."
+          >
+            <div className={s.trackMobile}>
+              <Cards columns={{ base: 1 }}>
+                <BlockCard {...item(CASE_INDEX, 2)} />
+              </Cards>
+            </div>
+          </Specimen>
+          <Specimen
+            title="No client yet · no categories"
+            note="Until Strapi records the client, the eyebrow is absent and the title starts the copy. With no categories the meta line emits nothing."
+          >
+            <Cards columns={{ base: 1, md: 2, lg: 3 }}>
+              <BlockCard {...item(CASE_INDEX, 1)} eyebrow={undefined} />
+              <BlockCard {...item(CASE_INDEX, 3)} meta={[]} />
+            </Cards>
+          </Specimen>
         </Layout>
       </Section>
     </>

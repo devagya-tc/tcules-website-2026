@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { Layout, Section } from '@/components';
 import { getCaseStudyListingPage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
-import { BlockCard, Breadcrumbs, CtaSection, PageHero } from '@/patterns';
+import { BlockCardSet, Breadcrumbs, CtaSection, PageHero } from '@/patterns';
 
 const CASE_STUDIES_SLUG = ROUTES.caseStudies.slice(1);
 
@@ -71,27 +71,19 @@ export default async function CaseStudiesPage() {
 
       {page.items.length > 0 ? (
         <Section as="div" surface="paper">
-          <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="stack">
-            {page.items.map((caseStudy) => (
-              <BlockCard
-                key={caseStudy.documentId}
-                title={caseStudy.title}
-                body={caseStudy.description}
-                eyebrow={
-                  caseStudy.categories.length > 0
-                    ? caseStudy.categories.map((category) => category.name).join(' · ')
-                    : undefined
-                }
-                media={
-                  caseStudy.thumbnail
-                    ? { type: 'image', image: caseStudy.thumbnail }
-                    : undefined
-                }
-                href={caseStudyPath(caseStudy.slug)}
-                ctaLabel="Read the case study"
-              />
-            ))}
-          </Layout>
+          <BlockCardSet
+            items={page.items.map((caseStudy) => ({
+              id: caseStudy.documentId,
+              title: caseStudy.title,
+              body: caseStudy.description,
+              eyebrow: caseStudy.client,
+              meta: caseStudy.categories.map((category) => category.name),
+              media: caseStudy.thumbnail
+                ? { type: 'image' as const, image: caseStudy.thumbnail }
+                : undefined,
+              href: caseStudyPath(caseStudy.slug),
+            }))}
+          />
         </Section>
       ) : null}
 
