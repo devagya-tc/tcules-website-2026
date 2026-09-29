@@ -327,7 +327,7 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
                   eyebrow="Article"
                   media={
                     resource.image
-                      ? { kind: 'image', src: resource.image.src, alt: resource.image.alt }
+                      ? { type: 'image', image: resource.image }
                       : undefined
                   }
                   href={articlePath(resource.slug)}

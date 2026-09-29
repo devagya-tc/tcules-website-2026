@@ -80,6 +80,21 @@ export default function LayoutSpecimenPage() {
         </Specimen>
 
         <Specimen
+          title="columns={{ base: 1, md: 3 }} lead equalRows"
+          note="The first child spans every track in a row of its own; the rest fill the tracks below. The lead is tall, and the rows under it are still equal only to each other: the lead's row is explicit and auto, the later rows are 1fr, so its height never leaks into theirs."
+        >
+          <Layout columns={{ base: 1, md: 3 }} colGap="block" rowGap="block" equalRows lead>
+            <Box tall accent>
+              lead — spans the row
+            </Box>
+            <Box>short</Box>
+            <Box>a longer peer that sets its own row height for the two beside it</Box>
+            <Box>short</Box>
+            <Box>short</Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
           title="columns={3} align='center'"
           note="Without equalRows, align places each item in its row instead of stretching it. Centre: the short boxes sit mid-height against the tall one."
         >
@@ -123,17 +138,19 @@ export default function LayoutSpecimenPage() {
           note="All nine steps, in order: 4 · 8 · 16 · 24 · 32 · 48 · 64 · 96 · 128. The scale does not shift responsively — a step is chosen by what it separates, and the layout changes at a breakpoint, not the distance."
         >
           <Layout rowGap="block">
-            {([
-              'inline',
-              'tight',
-              'text',
-              'block',
-              'gutter',
-              'stack',
-              'column',
-              'section',
-              'section-open',
-            ] as const).map((rung) => (
+            {(
+              [
+                'inline',
+                'tight',
+                'text',
+                'block',
+                'gutter',
+                'stack',
+                'column',
+                'section',
+                'section-open',
+              ] as const
+            ).map((rung) => (
               <Layout key={rung} rowGap={rung}>
                 <div className={s.ruler}>rowGap=&quot;{rung}&quot;</div>
                 <div className={s.ruler} />

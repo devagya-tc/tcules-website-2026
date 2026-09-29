@@ -1,8 +1,8 @@
 /* BlockCard — one borderless tile, built to docs/specs/BlockCard.md.
 
    Layout owns every block-axis group and the horizontal orientation's two tracks; Button owns the
-   cta entirely. This module supplies the object's crop, child sizing, orientation ratio swap and
-   link rendering. It deliberately has no background, margin, hand-written grid or flex
+   cta entirely; Media owns the image — its delivery and its edge by kind. This module supplies the
+   crop box, child sizing, the orientation's ratio and title-role swaps, and link rendering. It deliberately has no background, margin, hand-written grid or flex
    arrangement, surface selector or breakpoint.
 
    ── What is absent, and why ────────────────────────────────────────────────────
@@ -15,7 +15,9 @@
    No `position`. Its only job was to be the containing block for the removed hover wipe; the focus
    ring is a box-shadow and needs no positioning.
    No title state rule. The title holds --bcrd-title-ink whether the card is linked or not — the
-   whole point of the redesign — so nothing sets `color: inherit` on it. Same for icon media.
+   whole point of the redesign — so nothing sets `color: inherit` on it.
+   No image rule. `Media` sizes, crops and edges the <img> (`fit="fill"`); this module only gives it
+   the box to fill. No icon media rule either: the icon fill was removed (spec § 17 Q14).
    No cta rule at all. The cta is a link `Button` rendered `as="span"`, so Button owns its type,
    case, colour, glyph size, seam and underline. This module styles no part of it and declares no
    colour for it; the frame anchor carries `data-btn-link-group` and Button's own stylesheet reads
@@ -48,11 +50,8 @@
   min-inline-size: 0;
 }
 
-.iconMedia {
-  display: block;
-  color: var(--bcrd-media-ink);
-}
-
+/* The crop box Media fills. It owns the ratio — the card's, not the asset's — and clips the
+   cover crop to it. The edge inside it is Media's, by kind. */
 .imageMedia {
   display: block;
   inline-size: 100%;
@@ -65,14 +64,6 @@
    can win by nesting. */
 .imageMediaHorizontal {
   aspect-ratio: var(--bcrd-media-ratio-horizontal);
-}
-
-.image {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-  object-position: center;
 }
 
 /* The quiet label above the title. Uppercase is not this component's decision: mono is always
@@ -94,6 +85,13 @@
   font: var(--bcrd-title-text);
   letter-spacing: var(--bcrd-title-tracking);
   text-wrap: var(--text-title-wrap);
+}
+
+/* The horizontal arrangement's title role. A class beside .title rather than a descendant rule, for
+   the same equal-specificity reason as .imageMediaHorizontal; it comes after .title so it wins. */
+.titleHorizontal {
+  font: var(--bcrd-title-text-horizontal);
+  letter-spacing: var(--bcrd-title-tracking-horizontal);
 }
 
 .body {

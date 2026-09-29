@@ -84,11 +84,7 @@ export default async function CaseStudiesPage() {
                 }
                 media={
                   caseStudy.thumbnail
-                    ? {
-                        kind: 'image',
-                        src: caseStudy.thumbnail.src,
-                        alt: caseStudy.thumbnail.alt,
-                      }
+                    ? { type: 'image', image: caseStudy.thumbnail }
                     : undefined
                 }
                 href={caseStudyPath(caseStudy.slug)}
