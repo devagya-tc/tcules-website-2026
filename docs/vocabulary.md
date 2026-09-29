@@ -140,7 +140,7 @@ placeholder that never wraps.
 
 - **Measure (line length):** `--measure-title` 22ch · `--measure-lead` 40ch · `--measure-body` 68ch
 - **Radius:** `--radius-0` 0px · `--radius-4` 4px · `--radius-8` 8px · `--radius-full` 999px
-- **Border width:** `--border-width-0` 0px · `--border-width-1` 1px · `--border-width-2` 2px · `--border-width-3` 3px · `--border-width-hairline` 1px · `--border-width-hairline-deck` 2px · `--border-width-hairline-social` 3px · `--border-width-hairline-print` 0.75pt
+- **Border width:** `--border-width-0` 0px · `--border-width-1` 1px · `--border-width-2` 2px · `--border-width-3` 3px · `--border-width-hairline` 1px · `--border-width-hairline-deck` 2px · `--border-width-hairline-social` 3px · `--border-width-hairline-print` 0.75pt · `--border-width-6` 6px · `--border-width-rule-quote` 6px
 - **Focus ring:** `--focus-ring-width` 2px · `--focus-ring-offset` 2px
 - **Motion:** `--duration-instant` 0ms · `--duration-fast` 140ms · `--duration-medium` 240ms · `--duration-slow` 360ms · `--easing-standard` cubic-bezier(0.2, 0, 0, 1)
 - **Elevation:** `--shadow-none` none · `--shadow-crop` 0 0 6px color-mix(in srgb, #1b1b18 8%, transparent)
@@ -161,7 +161,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
+`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -172,6 +172,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **block-card.css** — `--bcrd-title-tracking` -0.005em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-radius` 0px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
 - **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
+- **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 160px
 - **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-measure` 22ch · `--csec-lead-measure` 40ch
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.01em · `--cta-marker-tracking` 0.1em · `--cta-heading-measure` 22ch · `--cta-body-measure` 68ch
 - **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-max-inline` 470px · `--enq-message-reserve` 19px
@@ -185,7 +186,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **media.css** — `--media-radius` 0px · `--media-capture-rule-width` 1px · `--media-panel-inset` 32px
 - **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 16px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-plate-width-lg` 1056px · `--nav-plate-width-md` 780px · `--nav-plate-width-sm` 560px · `--nav-plate-radius` 8px · `--nav-plate-inset` 16px · `--nav-row-padding-block` 8px · `--nav-row-padding-inline` 16px · `--nav-row-radius` 8px · `--nav-row-arrow-size` 14px · `--nav-row-arrow-travel` 4px · `--nav-rail-title-tracking` 0em · `--nav-card-radius` 8px · `--nav-card-padding` 16px · `--nav-card-image-radius` 4px · `--nav-card-arrow-size` 16px · `--nav-label-tracking` 0.12em · `--nav-sheet-reserve` 88px · `--nav-sheet-radius` 8px · `--nav-sheet-padding-inline` 20px · `--nav-sheet-row-padding-block` 12px · `--nav-sheet-foot-padding-block` 12px · `--nav-sheet-link-padding-block` 12px · `--nav-sheet-chevron-size` 16px · `--nav-grab-width` 36px · `--nav-grab-height` 4px · `--nav-sheet-dismiss-distance` 56px · `--nav-sheet-dismiss-flick-distance` 24px · `--nav-drag-slop` 8px · `--nav-row-lift` 6px
 - **page-hero.css** — `--hero-eyebrow-tracking` 0.12em · `--hero-title-tracking` -0.018em · `--hero-key-tracking` 0.1em · `--hero-title-measure` 22ch · `--hero-lead-measure` 40ch · `--hero-body-measure` 68ch · `--hero-media-radius` 0px · `--hero-media-rule-width` 1px
-- **proof.css** — `--proof-quote-rule-width` 2px · `--proof-radius` 0px
+- **proof.css** — `--proof-quote-rule-width` 6px · `--proof-portrait-size` 64px · `--proof-radius` 0px
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px
 - **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
 - **table-of-contents.css** — `--toc-mono-tracking` 0.1em · `--toc-max-inline` 180px · `--toc-min-inline` 160px · `--toc-ordinal-inline` 24px · `--toc-entry-padding-block` 12px · `--toc-rule-width` 1px · `--toc-current-rule-width` 3px · `--toc-underline-width` 1px · `--toc-underline-width-pressed` 2px · `--toc-underline-offset` 2px · `--toc-entry-radius-focus` 4px · `--toc-ring-width` 2px · `--toc-ring-offset` 2px
@@ -214,7 +215,7 @@ seam to size.
 
 ### What already exists — check these before specifying anything new
 
-- **Primitives** (`src/components/`): `Button` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `Section` · `Tag` · `Texture`
+- **Primitives** (`src/components/`): `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `Section` · `Tag` · `Texture`
 - **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaSection` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav` · `TableOfContents`
 - **Templates** (`src/templates/`): — none yet
 
