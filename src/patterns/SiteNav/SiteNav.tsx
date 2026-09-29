@@ -600,7 +600,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                       emphasis="ghost"
                       tone="neutral"
                       size="sm"
-                      icon={<Icon name="chevron-down" />}
+                      icon={<Icon name="alt-arrow-down" />}
                       active={active || isOpen}
                       aria-expanded={isOpen}
                       /* aria-controls only while the pane is the open one. Pointing it at a pane
@@ -652,7 +652,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
               emphasis="ghost"
               tone="neutral"
               iconOnly
-              icon={<Icon name={sheetOpen ? 'close' : 'menu'} />}
+              icon={<Icon name={sheetOpen ? 'close-circle' : 'hamburger-menu'} />}
               aria-label={sheetOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={sheetOpen}
               aria-controls={sheetOpen ? sheetId : undefined}
@@ -763,7 +763,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                         onClick={() => setNav({ section: item.key })}
                       >
                         <span className={styles.sheetControlLabel}>{item.label}</span>
-                        <Icon name="chevron-right" className={styles.sheetChevron} />
+                        <Icon name="alt-arrow-right" className={styles.sheetChevron} />
                       </button>
                     ) : (
                       <Link

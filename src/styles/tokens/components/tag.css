@@ -83,7 +83,9 @@
   --tag-size-md: 24px; /* the minimum in BOTH axes; see above */
   --tag-radius: var(--radius-4);
   --tag-edge-width: var(--border-width-hairline);
-  --tag-glyph-size: var(--icon-size-14);
+  --tag-glyph-size: var(
+    --icon-size-16
+  ); /* the 16px floor for a glyph with a counter — see Icon.md */
   --tag-shadow: var(--shadow-none);
   --tag-transition-duration: var(--duration-fast);
   --tag-transition-easing: var(--easing-standard);

@@ -156,8 +156,9 @@
 
 /* The glyph, at the tag's size rather than its own. `> svg` is a class-plus-element selector, so
    it beats Icon's single-class size rule deliberately: the glyph steps with the TAG, which makes
-   the tag the component that decides. 14 is the smallest the set has and the only one that fits —
-   a 16px glyph in a 24px box leaves 4px of clearance and reads as an icon with a label bolted on. */
+   the tag the component that decides. 16, the floor for a glyph with a counter: the one glyph a
+   filter carries is close-circle, whose cross is a hole that fills in at 14 (docs/specs/Icon.md,
+   tracker 2.17). Solar's own 2-unit clearance means the disc itself is 13.3px in the 24 box. */
 .filter > svg {
   /* Physical rather than logical here, and it is the one place in this file that is. A glyph box
      is square, so there is no direction to be correct about — and this rule has to beat Icon's own

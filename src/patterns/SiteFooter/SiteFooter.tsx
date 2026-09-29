@@ -188,7 +188,7 @@ export function SiteFooter({
                 <summary className={styles.accordionSummary}>
                   <span className={styles.label}>{group.title}</span>
                   <span className={styles.accordionChevron}>
-                    <Icon name="chevron-down" size="sm" />
+                    <Icon name="alt-arrow-down" size="sm" />
                   </span>
                 </summary>
                 <Layout as="ul" className={styles.accordionPanel} rowGap="tight">

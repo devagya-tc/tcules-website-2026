@@ -209,7 +209,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
           <hr className={styles.successRule} />
           <h3 className={styles.successHeading}>One reply, within a working day.</h3>
           <Cluster colGap="tight" align="center" nowrap>
-            <Icon name="check" />
+            <Icon name="check-circle" />
             <p className={styles.successBody}>
               {variant === 'contact'
                 ? 'Thanks — we have your message.'

@@ -1030,7 +1030,7 @@ prevent. They are marked **BLOCKING**, and each names who has to decide.
    for a toggle, which is what a filter chip is; (b) add a prop to choose between `aria-pressed`
    and `aria-current`, since the JSDoc names both a selected filter (pressed) and the current nav
    item (current); (c) leave the ARIA to the caller through `…rest` and document that `active` is
-   presentation only; (d) add a non-colour visual cue as well — a `check` glyph, or a weight change.
+   presentation only; (d) add a non-colour visual cue as well — a `check-circle` glyph, or a weight change.
    _Recommendation:_ (b) plus (d). The two meanings are genuinely different and the JSDoc already
    names both, so one attribute cannot serve them; and the visual cue is what the audit rule
    actually asks for.
@@ -1116,7 +1116,7 @@ stop: this spec is a record of what exists, not a licence to rebuild. A rebuild 
   geometry tokens in `:root`. Not one declared token is undocumented, and not one documented token
   is undeclared.
 - **Every glyph named is in the glyph set** — PASS. Five named, all from the set of 17:
-  `arrow-right`, `download`, `close-circle`, `copy`, `check`. No new glyph request. (`check` is
+  `arrow-right`, `download`, `close-circle`, `copy`, `check-circle`. No new glyph request. (`check-circle` is
   named once, in open question 9, as a candidate non-colour cue.)
 - **Every prop and prop value given for Section, Layout or Cluster appears in the prop unions** —
   PASS, and the list is short because Button specifies no arrangement of its own. `Section`:

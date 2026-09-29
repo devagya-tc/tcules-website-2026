@@ -199,7 +199,7 @@ One row per token, four columns, every cell a real name. The control rows are ow
 
 **ink.** The polarity inverts and nothing else survives translation. The field ground is `--color-neutral-900` — one step off the `--color-neutral-950` band, which is not enough separation on its own, so the rest rule carries the box at `--color-neutral-700` and hover _lightens_ to `--color-neutral-500` rather than darkening. The ring cannot be `--color-brandeis-500` here (3.28:1 against the band, and it disappears against a dark field) so it lifts three steps to `--color-brandeis-300` at 7.32:1. Disabled is the only place where a field is allowed to equal the band: `--color-neutral-950` ground with a `--color-neutral-800` rule reads as an empty outline, which is what unavailable should look like.
 
-**blue.** The loudest ground gets the quietest form: the control returns to `--color-white`, so rows 4–5 are the paper values again and the field is the calmest rectangle in the band. The ring cannot be blue on blue, so it is `--color-white` at 6.23:1. This is the tightest column in the table — the label at `--color-brandeis-50` is 5.57:1 and the flag and caption at `--color-brandeis-100` are 4.91:1, with no rung left below them, which is why `--color-brandeis-200` (3.78:1) appears here only as a rule and never as text. `--enq-success-rule` is the one row where the value is not the semantic colour: `--color-success-500` measures 2.05:1 on `--color-brandeis-500` and would read as dirt, so the rule goes `--color-white` and the success meaning is carried by the sentence and the `check` glyph.
+**blue.** The loudest ground gets the quietest form: the control returns to `--color-white`, so rows 4–5 are the paper values again and the field is the calmest rectangle in the band. The ring cannot be blue on blue, so it is `--color-white` at 6.23:1. This is the tightest column in the table — the label at `--color-brandeis-50` is 5.57:1 and the flag and caption at `--color-brandeis-100` are 4.91:1, with no rung left below them, which is why `--color-brandeis-200` (3.78:1) appears here only as a rule and never as text. `--enq-success-rule` is the one row where the value is not the semantic colour: `--color-success-500` measures 2.05:1 on `--color-brandeis-500` and would read as dirt, so the rule goes `--color-white` and the success meaning is carried by the sentence and the `check-circle` glyph.
 
 **Nested surface.** Neither component paints a ground: `EnquiryForm` and its child `Input` inherit whichever `data-surface` `CtaSection` emitted, and both token layers restate their complete sets on all four surfaces. The case that actually occurs is the reverse: **this component inside a band whose surface differs from the page's other bands** — e.g. the closing `CtaSection surface="blue"` under a page of `paper` sections. The specimen's nested band (§15) renders the whole form inside a `blue` band inside an `ink` page to prove no value leaked in from the level above.
 
@@ -334,7 +334,7 @@ What stays mono, and therefore uppercase: the `flag` — "Optional" is a field's
   <Layout rowGap="block">
     <hr />                                           {/* success rule */}
     <h3 />                                           {/* Q6 */}
-    <Cluster colGap="tight" align="center"><Icon name="check" /><p /></Cluster>
+    <Cluster colGap="tight" align="center"><Icon name="check-circle" /><p /></Cluster>
   </Layout>
 </div>
 ```
@@ -664,7 +664,7 @@ NAMES
     --easing-standard, --shadow-none, --z-base, --btn-height-md, --btn-hit-min, --btn-radius,
     --crumb-hit-min, --foot-field-height, --foot-field-padding-x, --foot-field-radius,
     --foot-field-min-inline, --nav-item-padding-x, --sec-container, --lay-track-sm.
-[x] Every glyph named (close-circle, check) is in the 17-glyph set. No new glyph requested.
+[x] Every glyph named (close-circle, check-circle) is in the 17-glyph set. No new glyph requested.
 [x] Every prop and prop VALUE given for Section, Layout or Cluster is in the published unions:
     Layout rowGap tight|text|block, columns={2}|"tile", minTrack="sm", colGap="gutter",
     as="form"; Cluster colGap="tight" rowGap="tight" align="center"; CtaSection

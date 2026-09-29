@@ -213,7 +213,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
                         return (
                           <li key={option.id}>
                             {/* The held chip's href CLEARS its group — `filterHref` with no
-                                option id deletes the key — which is what makes the `close` glyph
+                                option id deletes the key — which is what makes the `close-circle` glyph
                                 a control rather than a decoration, and what replaced the "All"
                                 chip. "All" is the absence of a filter, not a filter: rendering it
                                 as a held, aria-current chip told a reader that "no constraint" was
@@ -232,7 +232,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
                               selected={isActive}
                               icon={
                                 isActive ? (
-                                  <Icon name="close" label="Clear filter" />
+                                  <Icon name="close-circle" label="Clear filter" />
                                 ) : undefined
                               }
                             >

@@ -121,7 +121,7 @@ const LINKED = [
     title: 'Design systems',
     body: 'Build the decisions and reusable parts that keep a product coherent as it grows.',
     href: ROUTES.designSystems,
-    marker: { type: 'icon', name: 'check' },
+    marker: { type: 'icon', name: 'check-circle' },
   },
   {
     title: 'Design engineering',
@@ -218,7 +218,7 @@ function SurfaceRows() {
       <ListCard
         title="Design systems"
         body="The linked row proves the dark title, icon marker, cue link ink and focus ring."
-        marker={{ type: 'icon', name: 'check' }}
+        marker={{ type: 'icon', name: 'check-circle' }}
         href={ROUTES.designSystems}
       />
       <ListCard

@@ -8,13 +8,13 @@ const NAMES = [
   'arrow-left',
   'download',
   'copy',
-  'close-circle',
+  'check-circle',
   'document-text',
-  'check',
-  'chevron-down',
-  'chevron-right',
-  'menu',
-  'close',
+  'alt-arrow-down',
+  'alt-arrow-up',
+  'alt-arrow-right',
+  'hamburger-menu',
+  'close-circle',
   'square-arrow-right-up',
   'info-circle',
   'danger-triangle',
@@ -101,11 +101,11 @@ export function Labelled() {
   return (
     <Cluster colGap="block" rowGap="text" align="center">
       <Cluster colGap="tight">
-        <Icon name="check" label="Passing" size="lg" />
+        <Icon name="check-circle" label="Passing" size="lg" />
         <span>labelled — announced</span>
       </Cluster>
       <Cluster colGap="tight">
-        <Icon name="check" size="lg" />
+        <Icon name="check-circle" size="lg" />
         <span>decorative — hidden</span>
       </Cluster>
     </Cluster>

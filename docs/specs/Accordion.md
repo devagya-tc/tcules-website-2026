@@ -122,7 +122,7 @@ are deleted; there is nothing to search the module for.
 | hover              | trigger pointer hover          | Question and mark rise to `--acc-question-ink-hover` and `--acc-mark-ink-hover`. No ground appears. |
 | focus · keyboard   | trigger `focus-visible`        | The raised ink plus the two-part surface ring. Native focus remains on the summary. |
 | pressed            | trigger pointer down           | The raised ink is held and the question gains a hairline underline at `--acc-mark-ink`, so pressed differs from hover by more than colour. |
-| expanded · open    | native item open state         | Answer becomes available, mark swaps to `chevron-down`, and question and mark hold the raised ink. The rule does not change. |
+| expanded · open    | native item open state         | Answer becomes available, mark swaps to `alt-arrow-down`, and question and mark hold the raised ink. The rule does not change. |
 
 Hover, pressed and expanded resolve the question to one raised ink, so the set holds two ink values
 rather than five. That is why there is no `--acc-question-ink-pressed` or `-expanded`: token rule 3
@@ -297,8 +297,8 @@ responsively, the answer never clamps, and the mark never overlaps the question.
       <Cluster as="summary" colGap="block" justify="between" align="start" nowrap>
         <Question>{item.question}</Question>
         <span>
-          <Icon name="chevron-right" size="lg" />
-          <Icon name="chevron-down" size="lg" />
+          <Icon name="alt-arrow-right" size="lg" />
+          <Icon name="alt-arrow-down" size="lg" />
         </span>
       </Cluster>
       <Prose html={item.answerHtml} />
@@ -519,7 +519,7 @@ does not prevent any other answer opening.
 
 **3 · Disclosure mark and placement — non-blocking.** Options: trailing existing chevrons; leading
 existing chevrons; or a new plus/minus glyph request. **Recommendation and draft decision: trailing
-`chevron-right` closed and `chevron-down` open.** Both glyphs exist, their direction describes the
+`alt-arrow-right` closed and `alt-arrow-down` open.** Both glyphs exist, their direction describes the
 revealed axis without rotation, and trailing placement preserves one clean question start across
 wrapped rows. Plus/minus adds glyphs while conveying no more state.
 
@@ -559,7 +559,7 @@ NAMES
     Seven --acc-* names appear ONLY in prose recording what was deleted or never built —
     --acc-trigger-fg, --acc-trigger-bg-hover, --acc-trigger-bg-pressed, --acc-rule-ink-expanded,
     --acc-question-ink-pressed, --acc-answer-ink and --acc-layer. The token layer declares 12.
-[x] Glyphs are existing: chevron-right and chevron-down.
+[x] Glyphs are existing: alt-arrow-right and alt-arrow-down.
 [x] Section, Layout and Cluster prop/value names are existing unions: as, rowGap, colGap, justify,
     align, nowrap; div, span, none, block, between, start.
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS declarations, selectors or media blocks.

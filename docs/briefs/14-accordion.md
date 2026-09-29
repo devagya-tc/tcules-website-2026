@@ -70,7 +70,7 @@ HARD CONSTRAINTS (must / must not):
 OPEN TO YOUR JUDGEMENT (what I have not decided):
 - Single-open or multi-open. Recommend one and give the reason; I will take it.
 - Whether the disclosure mark is a chevron from the glyph set or a plus/minus. The glyph set has
-  chevron-down and chevron-right; a plus/minus pair would be a new glyph request.
+  alt-arrow-down and alt-arrow-right; a plus/minus pair would be a new glyph request.
 - Whether the mark sits at the leading or the trailing edge.
 - Whether all items closed is the right initial state on a page where the accordion is the last
   block. An FAQ that is entirely closed at the foot of a long page may read as the page ending
