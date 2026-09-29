@@ -11,10 +11,9 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
  * headers, and one seam-sanitised rich-text string per data cell. Nothing is styled from this file.
  *
  * ── Reading the two widths ────────────────────────────────────────────────────────────────────
- * The stacked reading order is a CONTAINER query on the table's own track (< 704px), not a media
- * query, so it is visible at 1440 as well as at 390: every table inside `.trackMobile` (the 326
- * phone column) and inside the 392 three-up track is stacked at any window width. At 390 every
- * table on the page is stacked, which is the phone.
+ * The table never restacks. When its columns' floors add up to more than its track, the frame
+ * scrolls sideways — so every table inside `.trackMobile` (the 326 phone column) and inside the
+ * 392 three-up track scrolls at any window width, and at 390 most tables on the page do.
  */
 
 const p = (html: string) => `<p>${html}</p>`;
@@ -376,19 +375,19 @@ const MISMATCH: DataTableProps = {
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
-    note: 'Heads neutral-700 8.14:1 · keys neutral-950 17.10:1 · caption neutral-600 4.92:1 · head rule neutral-800 · row rule neutral-200.',
+    note: 'Body white · head fill neutral-50 · heads neutral-700 7.54:1 · keys neutral-950 17.26:1 · caption neutral-600 4.92:1 · rules neutral-200.',
   },
   {
     surface: 'tint',
-    note: 'Caption steps to neutral-700 (600 is 4.39:1 here) and the row rule to neutral-300. Heads 7.27:1, keys 15.27:1.',
+    note: 'Body paper on paper-deep · head fill neutral-50 · caption steps to neutral-700 (600 is 4.39:1 here) · heads 7.54:1 · keys 17.10:1.',
   },
   {
     surface: 'ink',
-    note: 'The ladder inverts: keys white 17.26:1, heads and caption neutral-400 8.05:1, head rule neutral-300, row rule neutral-800.',
+    note: 'The frame steps up the ramp: body neutral-900, head fill neutral-800 · keys white 14.75:1 · heads neutral-300 7.64:1 · rules neutral-700.',
   },
   {
     surface: 'blue',
-    note: 'Brandeis tints only: heads, caption and head rule brandeis-100 4.91:1, keys white 6.23:1, row rule brandeis-400.',
+    note: 'The frame steps down the ramp: body brandeis-700, head fill brandeis-600 · keys white 10.16:1 · heads brandeis-100 5.99:1 · rules brandeis-400.',
   },
 ];
 
@@ -401,9 +400,10 @@ export default function DataTableSpecimenPage() {
           <p>
             The site’s one table: a key column of row headers, one to five data columns, three
             to eight rows, an optional caption and summary. Column count is data; column
-            behaviour is presentation. When its track is narrower than the md content column
-            (704) every row becomes a group — the row header, then each column head above its
-            value — so there is no horizontal scroll at any width.
+            behaviour is presentation. It is drawn as a box — outer border, head fill, body
+            ground, row hairlines and one vertical rule after the key column — and when its
+            track is too narrow for its columns the box scrolls sideways; it never restacks. The
+            page itself never scrolls horizontally.
           </p>
         </Layout>
       </Section>
@@ -446,7 +446,10 @@ export default function DataTableSpecimenPage() {
               Three rows is the floor, eight the ceiling. Nothing sorts, filters or paginates.
             </p>
           </Layout>
-          <Specimen title="8 rows" note="No zebra: rows are separated by the hairline only.">
+          <Specimen
+            title="8 rows"
+            note="No zebra: rows are separated by the hairline only, inside the frame."
+          >
             <DataTable {...EIGHT_ROWS} />
           </Specimen>
           <Specimen
@@ -465,7 +468,8 @@ export default function DataTableSpecimenPage() {
             <p>
               <code>fluid</code> (the data default), <code>hold</code> (the key default),{' '}
               <code>nowrap</code> and <code>numeric</code>. Head and cells of a column always
-              agree. All four are released in the stacked order.
+              agree. Every cell floors at 176 unless it is nowrap or numeric, which floor at
+              their own longest line.
             </p>
           </Layout>
           <Specimen
@@ -544,12 +548,12 @@ export default function DataTableSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>6 · The stacked reading order</h2>
+            <h2>6 · Narrow tracks scroll</h2>
             <p>
-              A container query on the table’s own track, so these render stacked at 1440 as
-              well as at 390. Each row is a group: the row header as its title, then every
-              column head above its value. The head row is visually hidden but stays in the
-              accessibility tree.
+              The table keeps its shape in a narrow track: the frame scrolls sideways and its
+              border stays put, so the clipped edge reads as more to come. These scroll at 1440
+              as well as at 390, because the floors are the columns’, not the viewport’s. The
+              frame is a focusable region — tab to it and the arrow keys scroll it.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
@@ -566,7 +570,7 @@ export default function DataTableSpecimenPage() {
                 </Layout>
               </div>
             </Specimen>
-            <Specimen title="326 phone column · numeric and nowrap released">
+            <Specimen title="326 phone column · numeric and nowrap">
               <div className={s.trackMobile}>
                 <Layout rowGap="stack">
                   <DataTable {...NUMERIC} />
@@ -577,7 +581,7 @@ export default function DataTableSpecimenPage() {
           </Layout>
           <Specimen
             title="The 392 three-up track"
-            note="The brief’s open question: a five-column table in a three-up grid. It works because it stacks — the query reads the track, not the viewport."
+            note="The brief’s open question: a five-column table in a three-up grid. Each frame scrolls inside its own track; the grid does not widen."
           >
             <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="stack">
               <DataTable {...FIVE_COLUMNS} />
@@ -610,7 +614,7 @@ export default function DataTableSpecimenPage() {
             <h2>8 · Nested surfaces</h2>
             <p>
               A tint panel inside ink resolves every DataTable token from itself; no ink value
-              leaks into its heads, keys, caption or rules.
+              leaks into its grounds, heads, keys, caption or rules.
             </p>
           </Layout>
           <Section as="div" surface="tint" density="tight">
@@ -655,13 +659,13 @@ export default function DataTableSpecimenPage() {
           </Specimen>
           <Specimen
             title="6 data columns"
-            note="Warns: the designed maximum is five. The live product-modernisation-assessment audit sends this; it still fits 1176 and still stacks."
+            note="Warns: the designed maximum is five. The live product-modernisation-assessment audit sends this; it still fits 1176, and scrolls below it."
           >
             <DataTable {...SIX_DATA} />
           </Specimen>
           <Specimen
             title="Cell counts that disagree, and a blank row header"
-            note="Warns per row. A short row is padded with empty cells; a long one is truncated, because a cell with no column head cannot be read in the stacked order. The seam already makes them agree for CMS content."
+            note="Warns per row. A short row is padded with empty cells; a long one is truncated, because a cell with no column head has no header to be read against. The seam already makes them agree for CMS content."
           >
             <DataTable {...MISMATCH} />
           </Specimen>

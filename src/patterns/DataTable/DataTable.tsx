@@ -1,3 +1,5 @@
+import { useId } from 'react';
+
 import { Layout, Prose } from '@/components';
 import { cx } from '@/lib/cx';
 
@@ -7,7 +9,8 @@ import styles from './DataTable.module.css';
  * How one column's cells behave. Column behaviour is PRESENTATION, set by the caller per column —
  * the column COUNT is data and is never a variant.
  *
- *   fluid    wraps and shrinks to share the width. The default for a data column.
+ *   fluid    wraps and shrinks to share the width, down to --dtab-fluid-size (176). The default
+ *            for a data column. Below that floor the table scrolls rather than crushing it.
  *   nowrap   never wraps, so never narrows below its longest line. For short keys and
  *            identifiers — "SC 2.5.8", "v2.4", a code span. A long nowrap cell widens the table:
  *            that is an authoring error the specimen shows, not a case this handles.
@@ -15,8 +18,6 @@ import styles from './DataTable.module.css';
  *            crushed by a greedy neighbour. The default for the key column.
  *   numeric  end-aligned with tabular figures, and nowrap. Head and cells align together. A data
  *            column only — the key column is a row header, and a number is not a name.
- *
- * Below the stacking threshold every behaviour is released: one value per line, start-aligned.
  */
 export type DataTableKeyBehaviour = 'fluid' | 'nowrap' | 'hold';
 export type DataTableColumnBehaviour = DataTableKeyBehaviour | 'numeric';
@@ -36,7 +37,7 @@ export type DataTableColumn = {
 };
 
 export type DataTableRow = {
-  /** Plain-text row header — `<th scope="row">`, and the title of the row's group when stacked. */
+  /** Plain-text row header — `<th scope="row">`. */
   header: string;
   /**
    * One TRUSTED, seam-sanitised rich-text string per data column, in column order — the same
@@ -77,24 +78,20 @@ function warn(message: string) {
  *
  * ── Why it is a pattern ─────────────────────────────────────────────────────────────────────
  * It consumes a content shape (columns × rows of rich text), and it composes two primitives —
- * `Layout` for the summary-to-table seam and each label/value pair, `Prose` for every cell's
+ * `Layout` for the summary, caption and frame seams, `Prose` for every cell's
  * trusted rich text — which a primitive may not import.
  *
- * ── Two reading orders, one markup ──────────────────────────────────────────────────────────
- * Wide, it is a table. Narrower than the md content column (703px and below — see the module),
- * every row becomes a group: the row header as its title, then each data cell as a key-above-value
- * pair whose key is the column head. The head row is then visually hidden but stays in the
- * accessibility tree, so a screen reader still reads a table with its header associations intact.
- * The repeated labels that make the stack readable by eye are `aria-hidden`, so they are not read
- * twice. No horizontal scroll at any width: the stack is the answer to a narrow track, never a
- * scroll container.
+ * ── One reading order, a boxed frame ───────────────────────────────────────────────────────
+ * It is a table at every width. The frame — outer border, head fill, body ground, the rule that
+ * sets the key column off — is what makes it readable as a structure, so a narrow track does not
+ * restructure it: when its columns' floors add up to more than the track, the frame scrolls
+ * sideways and the table inside keeps its shape. The body is never re-laid out as a stack.
  *
- * ── Why the ARIA table roles are written out ────────────────────────────────────────────────
- * `role="table"`, `rowgroup`, `row`, `columnheader`, `rowheader` and `cell` restate what the
- * elements already mean, and at the wide arrangement they are redundant. They are here for the
- * stacked one: changing `display` on table elements makes WebKit drop their table semantics from
- * the accessibility tree, and the explicit roles are what keep the table a table in Safari once
- * its cells are blocks. Harmless where they are redundant; load-bearing where they are not.
+ * The frame is a focusable, named region (`tabIndex={0}`, `role="region"`, labelled by the
+ * caption), so a keyboard user can scroll it with the arrow keys — a scroll container nobody can
+ * focus is a WCAG 2.1.1 failure. It is focusable at every width, including where nothing
+ * overflows: knowing whether it overflows needs client JS, and one extra tab stop is the cheaper
+ * error than a keyboard trap.
  *
  * ── What it tolerates ───────────────────────────────────────────────────────────────────────
  * It never drops content and never throws. Out-of-contract input renders and warns in
@@ -104,6 +101,8 @@ function warn(message: string) {
  * the stacked order). Zero rows renders nothing.
  */
 export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTableProps) {
+  const captionId = useId();
+
   if (rows.length === 0) {
     warn('received no rows; rendering nothing.');
     return null;
@@ -130,86 +129,93 @@ export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTa
           <p>{summary}</p>
         </Prose>
       ) : null}
-      <table className={styles.table} role="table">
-        {caption ? <caption className={styles.caption}>{caption}</caption> : null}
-        <thead className={styles.head} role="rowgroup">
-          <tr role="row">
-            <th
-              scope="col"
-              role="columnheader"
-              className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}
-            >
-              {keyColumn.heading}
-            </th>
-            {columns.map((column, index) => (
-              <th
-                key={index}
-                scope="col"
-                role="columnheader"
-                className={cx(styles.colHead, BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'])}
-              >
-                {column.heading}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className={styles.body} role="rowgroup">
-          {rows.map((row, rowIndex) => {
-            if (!row.header.trim()) warn(`row ${rowIndex + 1} has a blank row header.`);
-            if (row.cellsHtml.length !== columns.length) {
-              warn(
-                `row ${rowIndex + 1} has ${row.cellsHtml.length} cells for ${columns.length} data columns; ${
-                  row.cellsHtml.length < columns.length
-                    ? 'padding with empty cells'
-                    : 'truncating'
-                }.`,
-              );
-            }
-
-            return (
-              <tr key={rowIndex} className={styles.row} role="row">
-                <th
-                  scope="row"
-                  role="rowheader"
-                  className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}
-                >
-                  {/* No stacked label here, deliberately: the row header is the NAME of its group,
-                      not a value in it, and a key-column label repeated over every group title
-                      ("Route", "Route", "Route") buried the one line that says which row this is. */}
-                  <span className={styles.keyText}>{row.header}</span>
+      {/* The caption is the table's name, set above the frame rather than as a <caption> inside it:
+          a <caption> would sit inside the border and scroll away with the columns. It stays the
+          accessible name through aria-labelledby, and sits a --gap-text beat from the frame — it
+          belongs to the table, so it is closer to it than the summary is. */}
+      <Layout rowGap="text">
+        {caption ? (
+          <p id={captionId} className={styles.caption}>
+            {caption}
+          </p>
+        ) : null}
+        <div
+          className={styles.frame}
+          role="region"
+          tabIndex={0}
+          // Without a caption the region still needs a name to be announced by; the key column's
+          // head is the nearest thing the table has to one.
+          {...(caption
+            ? { 'aria-labelledby': captionId }
+            : { 'aria-label': `${keyColumn.heading} table` })}
+        >
+          <table
+            className={styles.table}
+            {...(caption ? { 'aria-labelledby': captionId } : {})}
+          >
+            <thead>
+              <tr>
+                <th scope="col" className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}>
+                  {keyColumn.heading}
                 </th>
-                {columns.map((column, index) => {
-                  const html = row.cellsHtml[index] ?? '';
-                  return (
-                    <td
-                      key={index}
-                      role="cell"
-                      className={cx(styles.cell, BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'])}
-                    >
-                      <Layout rowGap="inline">
-                        {column.heading ? (
-                          <span className={styles.label} aria-hidden="true">
-                            {column.heading}
-                          </span>
-                        ) : null}
-                        {html.trim() ? (
-                          <Prose html={html} className={styles.value} />
-                        ) : (
-                          // An empty cell is still a cell: the screen reader announces it blank on
-                          // its own, and the dash is for the eye, so a gap never reads as a bug.
-                          <span className={styles.empty} aria-hidden="true">
-                            —
-                          </span>
-                        )}
-                      </Layout>
-                    </td>
-                  );
-                })}
+                {columns.map((column, index) => (
+                  <th
+                    key={index}
+                    scope="col"
+                    className={cx(styles.colHead, BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'])}
+                  >
+                    {column.heading}
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {rows.map((row, rowIndex) => {
+                if (!row.header.trim()) warn(`row ${rowIndex + 1} has a blank row header.`);
+                if (row.cellsHtml.length !== columns.length) {
+                  warn(
+                    `row ${rowIndex + 1} has ${row.cellsHtml.length} cells for ${columns.length} data columns; ${
+                      row.cellsHtml.length < columns.length
+                        ? 'padding with empty cells'
+                        : 'truncating'
+                    }.`,
+                  );
+                }
+
+                return (
+                  <tr key={rowIndex} className={styles.row}>
+                    <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
+                      <span className={styles.keyText}>{row.header}</span>
+                    </th>
+                    {columns.map((column, index) => {
+                      const html = row.cellsHtml[index] ?? '';
+                      return (
+                        <td
+                          key={index}
+                          className={cx(
+                            styles.cell,
+                            BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
+                          )}
+                        >
+                          {html.trim() ? (
+                            <Prose html={html} className={styles.value} />
+                          ) : (
+                            // An empty cell is still a cell: the screen reader announces it blank on
+                            // its own, and the dash is for the eye, so a gap never reads as a bug.
+                            <span className={styles.empty} aria-hidden="true">
+                              —
+                            </span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </Layout>
     </Layout>
   );
 }

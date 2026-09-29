@@ -1,49 +1,58 @@
 /* DataTable — the site's one table, built to docs/specs/DataTable.md (brief 10).
 
-   Layout owns the two seams that are arrangement: summary to table (--gap-block), and inside every
-   cell the label above its value (--gap-inline, the step named "inside a key and its value"). This
-   module owns the table's own markup — the table layout algorithm, the cell insets, the rules, the
-   per-column behaviour and the stacked reading order — and nothing else.
+   Layout owns the seams that are arrangement: summary to the captioned frame (--gap-block), and
+   the caption to the frame (--gap-text). This module owns the table's own markup — the frame, the
+   table layout algorithm, the cell insets, the rules, the grounds and the per-column behaviour —
+   and nothing else.
+
+   ── The boxed frame ──────────────────────────────────────────────────────────────────────────
+   A table without structure is hard to read, so the table is drawn as a box: an outer border, a
+   filled head row, a body ground, a hairline between rows, and one vertical rule that sets the key
+   column off from the data. Only the key column gets a vertical rule — a rule between every data
+   column turns the table into a grid of equal boxes, which is what a key column says is not true.
+
+   The frame is also the scroll container. When the columns' floors add up to more than the track,
+   the frame scrolls sideways and the border stays put, so the clipped edge of the table reads as
+   "there is more" rather than as a broken layout. The table is never restacked at a narrow width.
 
    ── Why the table's display is not a hand-rolled arrangement ─────────────────────────────────
    CLAUDE.md forbids a local grid or flex for ARRANGEMENT. A `<table>` is neither: it is the
    element whose semantics ARE the arrangement, and its layout comes from the table algorithm the
-   element carries. Nothing below writes `display: grid` or `display: flex`, at any width.
-
-   The stacked order is the same argument run the other way. Below the threshold the table's own
-   elements are set to `display: block` — the table stops laying out as a table, and every row,
-   header and cell becomes an ordinary block in document order, which already IS the reading order
-   the brief asks for (row header, then each head/value pair). No primitive is being replaced,
-   because there is no arrangement left to do: blocks in order, one per line. A `Layout` cannot
-   stand in for it — a `<tr>` cannot be a Layout at one width and a table row at the other.
+   element carries. Nothing below writes `display` at all.
 
    ── Why the spacing is padding ───────────────────────────────────────────────────────────────
-   A table cell's inset is the table's spacing mechanism at every width — there is no gap property
-   on a table, and `border-spacing` does not exist under `border-collapse`. So the cells keep their
-   inset in the stacked order too, rather than switching mechanism to margins. There is no margin
-   anywhere in this file. Each inset is a gap-scale step named for what it separates:
-     --gap-text   cell padding top and bottom ("cell padding on a dense table"), and the
-                  pair-to-pair seam when stacked
-     --gap-block  the column seam (end-padding of every cell but the last), and the group
-                  padding when stacked
-
-   ── Why a container query and not @media ─────────────────────────────────────────────────────
-   Whether a table can stay tabular is a question about the TRACK it is given, not the viewport.
-   The threshold is the md content column: 768 − 2 × 32 gutter = 704, so in the case every live
-   table is actually in — a ContentSection child at the full column — `width < 704px` fires at
-   exactly the viewports `@media (max-width: 767px)` would. It also answers a question a media query
-   cannot: a five-column table dropped into a 392px three-up track stacks, instead of being crushed.
-   The root is the container. Nothing inside it is one, so the query cannot resolve against the
-   wrong box. px in an at-rule prelude is exempt from tokens:check — a custom property cannot be
-   read there. */
+   A table cell's inset is the table's spacing mechanism — there is no gap property on a table, and
+   `border-spacing` does not exist under `border-collapse`. There is no margin anywhere in this
+   file. Each inset is a gap-scale step named for what it separates:
+     --gap-text   cell padding top and bottom ("cell padding on a dense table")
+     --gap-block  cell padding start and end — the seam between a value and the next column */
 
 .root {
-  /* The container the stacked query reads. inline-size containment means the root's width cannot
-     come from its content, which is exactly right for a block that fills its track — and is why a
-     DataTable needs a parent that SIZES it (a block, or a Layout track). In a Cluster row it would
-     have no width to measure. See the spec, § 12. */
-  container-type: inline-size;
   min-inline-size: 0;
+}
+
+/* The caption: the table's name, above the frame. Its ink is the caption ink, the precedent Prose
+   already set for a <caption>. */
+.caption {
+  font: var(--text-caption);
+  color: var(--dtab-caption-ink);
+}
+
+/* ── The frame ──────────────────────────────────────────────────────────────────────────────────
+   The box, the body ground and the scroll container in one element. min-inline-size: 0 lets it
+   be narrower than the table it holds inside a Layout track — that is what makes it scroll rather
+   than widen the page. It is a focusable region (see DataTable.tsx), so it carries a focus ring;
+   the offset is the system's, outside the border, so the ring never sits on the table's rules. */
+.frame {
+  min-inline-size: 0;
+  overflow-x: auto;
+  border: var(--dtab-rule-width) solid var(--dtab-rule-ink);
+  background: var(--dtab-body-ground);
+}
+
+.frame:focus-visible {
+  outline: var(--focus-ring-width) solid var(--dtab-ring-ink);
+  outline-offset: var(--focus-ring-offset);
 }
 
 .table {
@@ -51,57 +60,44 @@
   border-collapse: collapse;
 }
 
-/* The caption is the table's name and its accessible name. It sits above, in the caption role, at
-   the caption ink — the precedent Prose already set for a <caption>. Its inset below is the head
-   seam: the caption belongs to the table, so it sits closer to it than the summary does. */
-.caption {
-  caption-side: top;
-  padding-block-end: var(--gap-text);
-  font: var(--text-caption);
-  color: var(--dtab-caption-ink);
+/* ── Cells ──────────────────────────────────────────────────────────────────────────────────────
+   Every cell floors at --dtab-fluid-size, so a narrow track scrolls the frame instead of crushing
+   a column to a word a line. The floor includes the inset (border-box, from reset.css). */
+.colHead,
+.key,
+.cell {
+  min-inline-size: var(--dtab-fluid-size);
+  padding-block: var(--gap-text);
+  padding-inline: var(--gap-block);
   text-align: start;
 }
 
 /* ── The head row ───────────────────────────────────────────────────────────────────────────────
-   Mono label voice, uppercase in presentation only — the heading strings keep the case somebody
-   authored. Aligned to the bottom so a two-line head sits on the rule with its one-line
-   neighbours. The rule beneath is the one strong line in the component. */
+   Mono label voice on the head fill, uppercase in presentation only — the heading strings keep the
+   case somebody authored. Aligned to the bottom so a two-line head sits on the rule with its
+   one-line neighbours. */
 .colHead {
-  padding-block: 0 var(--gap-text);
-  padding-inline: 0 var(--gap-block);
-  border-block-end: var(--dtab-rule-width) solid var(--dtab-head-rule-ink);
+  border-block-end: var(--dtab-rule-width) solid var(--dtab-rule-ink);
+  background: var(--dtab-head-ground);
   font: var(--text-ui-sm);
   letter-spacing: var(--text-ui-sm-tracking);
   text-transform: var(--text-mono-case);
   color: var(--dtab-head-ink);
-  text-align: start;
   vertical-align: bottom;
 }
 
 /* ── The body ───────────────────────────────────────────────────────────────────────────────────
-   Horizontal rules only, and none after the last row. Vertical rules would turn the table into a
-   grid of boxes and make every column look equally important, which is what a table with a key
-   column is trying not to say. Baseline-aligned: the key is the display face at 18/1.35 and the
-   cells are body sans at 16/1.6, so a shared TOP puts their first lines on different baselines
-   — measured at about 2px at 1440, and visible down every row. A shared baseline is what makes a
-   row read as one line of data. (Each cell's content is a Layout; a grid exports its first item's
-   baseline, and the stacked-only label is display:none here, so that item is the text.) */
+   A hairline between rows and none after the last — the frame's own border closes the box. No
+   zebra. Baseline-aligned: the key is the display face at 18/1.35 and the cells are body sans at
+   16/1.6, so a shared TOP puts their first lines on different baselines, measured at about 2px and
+   visible down every row. A shared baseline is what makes a row read as one line of data. */
 .key,
 .cell {
-  padding-block: var(--gap-text);
-  padding-inline: 0 var(--gap-block);
   border-block-end: var(--dtab-rule-width) solid var(--dtab-rule-ink);
-  text-align: start;
   vertical-align: baseline;
   /* A CMS cell can carry one unbroken string — a URL, a long identifier. `anywhere` lets it break
-     rather than widen its column past the table, and it is also what lets a fluid column's
-     min-content shrink so the table never exceeds its track. nowrap overrides it below. */
+     at the column's floor rather than widening the column. nowrap overrides it below. */
   overflow-wrap: anywhere;
-}
-
-.colHead:last-child,
-.cell:last-child {
-  padding-inline-end: 0;
 }
 
 .row:last-child > .key,
@@ -109,9 +105,15 @@
   border-block-end: 0;
 }
 
+/* The one vertical rule: the key column set off from the data. Body only — the head fill already
+   separates the head row, and a rule through it would cut the one continuous band in the frame. */
+.key {
+  border-inline-end: var(--dtab-rule-width) solid var(--dtab-rule-ink);
+}
+
 /* The row header is distinguished by VOICE — the h6 title composite, the display face at medium
-   weight — and by the raised ink. Never by a ground: the table must not own one, on any surface.
-   The class beats the bare `th` rule in globals.css at (0,1,0). */
+   weight — by the raised ink and by the rule beside it. The class beats the bare `th` rule in
+   globals.css at (0,1,0). */
 .keyText {
   font: var(--text-h6);
   letter-spacing: var(--text-h6-tracking);
@@ -125,18 +127,6 @@
   min-inline-size: 0;
 }
 
-/* The stacked label — the column head, repeated beside the value it names. It exists only in the
-   stacked order; wide, the head row does the job, so it is not rendered to the eye at all. It is
-   aria-hidden in the markup either way: the table's own header association is what a screen
-   reader uses, at every width. */
-.label {
-  display: none;
-  font: var(--text-ui-sm);
-  letter-spacing: var(--text-ui-sm-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--dtab-head-ink);
-}
-
 /* An empty cell's mark. aria-hidden in the markup; the cell is announced blank on its own. */
 .empty {
   font: var(--text-body);
@@ -144,9 +134,11 @@
 }
 
 /* ── Column behaviour ───────────────────────────────────────────────────────────────────────────
-   On the head AND the cells of a column, so the two agree. Wide arrangement only: every one is
-   released in the stacked order below. */
+   On the head AND the cells of a column, so the two agree. After the cell rules, so each one
+   replaces the fluid floor: nowrap and numeric are floored by their own longest line, and hold
+   raises the floor for a column a greedy neighbour must not crush. */
 .nowrap {
+  min-inline-size: 0;
   white-space: nowrap;
   overflow-wrap: normal;
 }
@@ -156,72 +148,9 @@
 }
 
 .numeric {
+  min-inline-size: 0;
   white-space: nowrap;
   overflow-wrap: normal;
   text-align: end;
   font-variant-numeric: tabular-nums;
-}
-
-/* ── The stacked reading order ──────────────────────────────────────────────────────────────────
-   Each row becomes a group: its header as the group's title, then every data cell as its column
-   head above its value. The groups are separated the way the rows were — by the hairline — and
-   the first group carries the strong head rule the hidden head row used to draw, so the table
-   still starts on the same line it did when wide.
-
-   The head row is visually hidden rather than removed: `display: none` would take the column
-   headers out of the accessibility tree and every cell would lose its header. The clip technique
-   is the one Breadcrumbs and SiteFooter already use. */
-@container (width < 704px) {
-  .table,
-  .body,
-  .row,
-  .key,
-  .cell {
-    display: block;
-  }
-
-  .caption {
-    display: block;
-  }
-
-  .head {
-    position: absolute;
-    inline-size: var(--dtab-hidden-size);
-    block-size: var(--dtab-hidden-size);
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .row {
-    padding-block: var(--gap-block);
-    border-block-end: var(--dtab-rule-width) solid var(--dtab-rule-ink);
-  }
-
-  .row:first-child {
-    border-block-start: var(--dtab-rule-width) solid var(--dtab-head-rule-ink);
-  }
-
-  .row:last-child {
-    padding-block-end: 0;
-    border-block-end: 0;
-  }
-
-  .key,
-  .cell {
-    padding: 0;
-    border-block-end: 0;
-    min-inline-size: 0;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    text-align: start;
-  }
-
-  .cell {
-    padding-block-start: var(--gap-text);
-  }
-
-  .label {
-    display: block;
-  }
 }
