@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Layout, Section } from '@/components';
 import { getIdealCaseStudyListingPage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import { CaseStudyIndex } from '@/templates';
@@ -31,17 +29,6 @@ export default async function CaseStudyIndexSpecimen() {
 
   return (
     <>
-      <Section surface="tint" density="tight">
-        <Layout rowGap="tight">
-          <h1>CaseStudyIndex · ideal content</h1>
-          <p>
-            The live entries with the copy the content rules call for. Compare with the live{' '}
-            <Link href={ROUTES.caseStudies}>/case-studies</Link>, which renders the same
-            template from the CMS as it stands.
-          </p>
-        </Layout>
-      </Section>
-
       <CaseStudyIndex
         breadcrumbs={[
           { label: 'Home', href: ROUTES.home },
