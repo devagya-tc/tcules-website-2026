@@ -41,7 +41,7 @@ const COVER_REVIEWS: BlockCardImage = {
   panel: 'paper-deep',
 };
 
-/** A tall part, to show the centre cover crop taking the middle of a portrait asset. */
+/** A tall part, to show the cover crop taking the upper part of a portrait asset (Media's anchor). */
 const COVER_NODE: BlockCardImage = {
   src: '/design/media/cutout-node.png',
   alt: 'A configuration node with a provider picker and two connected outputs.',

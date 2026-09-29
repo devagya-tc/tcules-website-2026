@@ -93,7 +93,7 @@ function Marker({ marker }: { marker: ListCardMarker }) {
     return null;
   }
 
-  /* The box is ListCard's and Media fills it: `fill` covers a ratio the PARENT set, from the centre,
+  /* The box is ListCard's and Media fills it: `fill` covers a ratio the PARENT set, from Media's anchor,
      which is the whole of what a mechanical crop is (Media.md § 3). The record's own width and height
      still reach the <img>, so the browser reserves the right box before the file lands, and the
      160 `sizes` means a 2× screen asks for the ladder's 320 rung rather than the 2560 master.

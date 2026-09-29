@@ -75,7 +75,7 @@ type MediaEdge = 'kind' | 'placement'
 |---|---|---|---|
 | `image` | `MediaImage` | required | the record — which file, its intrinsic size, what it is |
 | `sizes` | `string` | required | the placement's rendered width, as a `sizes` list (§9) |
-| `fit` | `'intrinsic' \| 'fill'` | `'intrinsic'` | intrinsic: 100% of the parent's inline size, height from the asset, never cropped (H3). fill: covers a parent-owned ratio box, centre crop |
+| `fit` | `'intrinsic' \| 'fill'` | `'intrinsic'` | intrinsic: 100% of the parent's inline size, height from the asset, never cropped (H3). fill: covers a parent-owned ratio box, anchored at `--media-fill-position` (0 20%, amendment 29 Sep) |
 | `edge` | `'kind' \| 'placement'` | `'kind'` | kind: Media draws the edge the image's kind calls for. placement: the crop box around it rules every kind itself, so Media draws none — amendment · 29 Sep below |
 | `priority` | `boolean` | `false` | true: `loading="eager"`, `fetchpriority="high"`. false: `loading="lazy"`, `decoding="async"` |
 
@@ -336,3 +336,12 @@ closes. A closed prop naming *who* draws the edge keeps the edge decided in two 
 or by the one placement that rules its own box.
 
 **Readers.** `BlockCard` only. ListCard's thumbnail and Figure keep `kind`.
+
+## Amendment · 29 Sep 2026 — the fill anchor
+
+`fill` anchors its cover crop at `--media-fill-position: 0 20%` (inline start, a fifth down) instead of the
+centre, at the owner's direction. Case-study covers are product UI, which reads from its top-left, so the
+crop keeps the part that orients a reader. One anchor for every cropping placement. **Brand note:** ch05 §9a
+and the amendments' inset arithmetic assume a *central* 4:3 safe area; a cover authored to that rule can now
+lose its right-hand side in a 3:2 or 4:3 crop. The supply rule should move to match — the safe area sits at
+the top-left — or covers keep their concept left of centre.

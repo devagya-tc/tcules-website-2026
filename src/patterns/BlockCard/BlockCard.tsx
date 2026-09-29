@@ -153,7 +153,7 @@ function ImageMedia({
   sizes: string;
 }) {
   return (
-    /* The card owns the ratio box and Media fills it: `fit="fill"` is a centre cover crop of a box
+    /* The card owns the ratio box and Media fills it: `fit="fill"` is a cover crop (anchored top-left, Media's) of a box
        the parent has already sized, which is exactly what this wrapper is.
 
        The box also owns the EDGE, for every kind (29 Sep, ch05 amendment 5a). A card crops every

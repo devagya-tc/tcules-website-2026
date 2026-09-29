@@ -72,9 +72,10 @@ export type MediaImage = {
  *
  *   intrinsic  100% of the parent's inline size, height from the asset's own ratio, never
  *              cropped (ruling H3, ch05 §9). Every full-column and track placement.
- *   fill       fills a box the PARENT has already given a ratio, with a centre cover crop. For the
- *              placements that crop mechanically — BlockCard, ListCard's thumbnail, the nav card —
- *              where the pattern owns the ratio and the asset is authored for it (ch05 B4, §9a).
+ *   fill       fills a box the PARENT has already given a ratio, with a cover crop anchored at
+ *              --media-fill-position (inline start, 20% down). For the placements that crop
+ *              mechanically — BlockCard, ListCard's thumbnail, the nav card — where the pattern
+ *              owns the ratio and the asset is authored for it (ch05 B4, §9a).
  */
 export type MediaFit = 'intrinsic' | 'fill';
 
