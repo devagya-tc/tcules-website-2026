@@ -10,11 +10,12 @@
    colour the element happens to inherit. `currentColor` is the ground's ink only until the
    mark sits inside a link to its case study, at which point it turns link-blue — a client's
    mark painted in our brand colour, which is exactly what "never recoloured beyond the rule"
-   forbids. A token pins it to the ground whatever wraps it. It reads the same four values
-   --sec-ink does, duplicated on purpose (a component never reads another component's
-   tokens, CLAUDE.md rule 6).
+   forbids. A token pins it to the ground whatever wraps it. Its four values are its own
+   rather than --sec-ink's (a component never reads another component's tokens, CLAUDE.md
+   rule 6) — and since 2.17 they differ from it: one step quieter on every ground (below).
 
-   The ink is a solid fill, never a tint or an opacity (ch05 §10), so there is no -muted.
+   The ink is a solid fill, never an opacity (ch05 §10), and there is one per surface, so there
+   is no -muted: the quieter step IS the ink, and a strip has no second colour to mute to.
    There are no state tokens: a mark is not a control and nothing about it moves.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
@@ -51,32 +52,52 @@
 --cmark-ink-forced:CanvasText;
 }
 
+/* ── The ink steps down from the ground's full ink (29 Sep 2026, owner, tracker 2.17) ─────
+   At neutral-900 / white, a strip of nine marks is nine near-black shapes at the section's
+   heading ink, and it competes with the heading above it for the first read. So the ink is one
+   step quieter than --sec-ink on every surface: the same move on each ground, the ratio falling
+   by roughly the same proportion. Still ONE solid colour per strip, never a tint or an opacity
+   of the mark (ch05 §10) — the mark is filled with a solid ramp step, not faded.
+
+   The floor is 3:1, SC 1.4.11's non-text figure, on every surface. Logotypes are exempt from
+   SC 1.4.3 and 1.4.11, so it is a floor we hold ourselves to rather than one WCAG sets: a mark
+   below 3:1 stops being legible as a name, which is the mark's whole job. All four figures are
+   WCAG 2.x relative luminance from the ramp hexes in primitives.css.
+
+   ch05 §10 still names the full inks (neutral-900 / white). The owner ruling supersedes it for
+   the website; the chapter needs the same amendment at its next revision.                   */
+
 /* ── Surface: paper ───────────────────────────────────────────────────────────
-   ch05 §10 names it: neutral-900 on paper. Logotypes are exempt from SC 1.4.3 and 1.4.11
-   treats them as the same, so these ratios are recorded rather than floors.                */
+   neutral-600, the step --sec-ink-muted uses here. 900 was 14.62:1.                          */
 :root,[data-surface="paper"]{
---cmark-ink:var(--color-neutral-900);         /* 14.62:1 on paper */
+--cmark-ink:var(--color-neutral-600);         /*  4.92:1 on paper */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
-   ch05 §10: neutral-900 on paper-deep too. Restated rather than inherited, so a tint panel
-   nested in an ink band still paints its marks dark.                                        */
+   neutral-600 too — the same ink on both light grounds, as ch05 names one ink for paper and
+   paper-deep. Restated rather than inherited, so a tint panel nested in an ink band still
+   paints its marks dark. 900 was 13.06:1.                                                    */
 [data-surface="tint"]{
---cmark-ink:var(--color-neutral-900);         /* 13.06:1 on paper-deep */
+--cmark-ink:var(--color-neutral-600);         /*  4.39:1 on paper-deep */
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
-   ch05 §10: white on ink. White rather than paper, for the reason section.css gives for
-   body ink on this ground.                                                                  */
+   neutral-300: visibly quieter than white, still far above the floor. White was 17.26:1.     */
 [data-surface="ink"]{
---cmark-ink:var(--color-white);               /* 17.26:1 on neutral-950 */
+--cmark-ink:var(--color-neutral-300);         /* 11.07:1 on neutral-950 */
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
-   ch05 §10 names three grounds and not blue. "The ground's ink" on blue is white (section.css
-   --sec-ink), and ch02 puts our own wordmark white throughout on blue, so a client's mark
-   takes the same. Never a blue-ramp step: a client mark in brand blue on brand blue is a
-   tint, which §10 rules out.                                                                */
+   ch05 §10 names no ink for blue. White was 6.23:1 — the ground's ink, and ch02's rule for our
+   own wordmark on blue. Stepped down, the quieter-than-white answer has to come from the
+   Brandeis ramp, because a neutral grey on brand blue reads as dirt rather than as a quieter
+   white. Measured against brandeis-500:
+     50   5.57:1   indistinguishable from white at strip size
+     100  4.91:1   the step --sec-ink-muted uses; reads as white next to white
+     200  3.78:1   chosen — visibly quieter than white, clear of 3:1
+     300  2.64:1   below the floor
+   A LIGHT tint of the ground, not a mid-blue: at 200 the mark is a pale ink on the ground, not
+   a brand-blue mark on brand blue, which is the tint §10 rules out.                         */
 [data-surface="blue"]{
---cmark-ink:var(--color-white);               /*  6.23:1 on brandeis-500 */
+--cmark-ink:var(--color-brandeis-200);        /*  3.78:1 on brandeis-500 */
 }
