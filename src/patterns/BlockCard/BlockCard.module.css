@@ -18,7 +18,7 @@
    No title state at all. The title holds --bcrd-title-ink whether the card is linked or not — the
    whole point of the redesign — and does not underline on hover: that was tried on 29 Sep and read
    as heavy. The zoom is the whole hover cue on a covered card.
-   No title measure. The track is the title's measure. A 22ch cap broke 60–87 character case-study
+   No title measure. The track is the title's measure. The title cap (22ch then) broke 60–87 character case-study
    titles into four ragged lines beside empty space in a 392px tile (29 Sep); balance evens them.
    No image rule. `Media` sizes and crops the <img> (`fit="fill"`); this module gives it the box to
    fill, rules that box, and zooms the span between them. It never selects Media's own element.

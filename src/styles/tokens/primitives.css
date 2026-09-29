@@ -283,12 +283,18 @@
   /* Measure — the three line-length limits the system enforces.
 
      `lead` sits between the other two because a lead-sized line needs a limit neither of them
-     gives: 22ch breaks a --text-lead paragraph into a stack of fragments, and 68ch lets it run
-     the width of a content column and stop reading as a statement. It arrived when the footer's
-     tagline lost the CTA that used to sit beside it. */
-  --measure-title: 22ch;
-  --measure-lead: 40ch;
-  --measure-body: 68ch;
+     gives: a title's measure breaks a --text-lead paragraph into a stack of fragments, and body's
+     lets it run the width of a content column and stop reading as a statement. It arrived when
+     the footer's tagline lost the CTA that used to sit beside it.
+
+     Widened on 29 Sep (owner): 22 / 40 / 68 → 32 / 56 / 75. 22ch set a hero title — "Work executed
+     within real constraints of teams, systems, data, and design judgment." — as four short lines
+     of display type; 32 sets it as three. Lead moves with it, keeping its place between the two.
+     Body stops at 75, the top of the comfortable range for running text, rather than scaling with
+     the others: at a proportional 99ch a paragraph's return sweep starts losing the next line. */
+  --measure-title: 32ch;
+  --measure-lead: 56ch;
+  --measure-body: 75ch;
 }
 
 /* ── Type · usage layer ───────────────────────────────────────────────────────
