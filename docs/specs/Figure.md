@@ -11,6 +11,17 @@
 | **Designer / date** | Design · 24 Aug 2026 |
 | **Implements** | `docs/briefs/13-figure.md` |
 | **Implemented at** | `src/patterns/Figure/` · `src/styles/tokens/components/figure.css` · `/design/figure` |
+| **Amended** | 28 Sep 2026, tracker 2.7: the image is a `Media` (`docs/specs/Media.md`) |
+
+**Amended 28 Sep 2026 — tracker 2.7, Figure onto Media.** The image is now rendered by the tier-1 `Media`
+primitive, not by a native `<img>` owned here. Three consequences, each edited in place below: (1) `FigureImage`
+is `MediaImage`, so a record may carry `sources` (served as a `srcset`, `sizes` = the full content column) and a
+`kind`; (2) the image's edge is Media's, by kind — a capture keeps the hairline, a cut-out and a photograph take
+none, an illustration is never boxed — and **an image with no kind renders as a capture (ruling M3)**, so every
+untagged figure looks exactly as it did; (3) the four tokens that drew the edge here (`--fig-rule-ink`,
+`--fig-rule-width`, `--fig-image-radius`, `--fig-image-shadow`) are deleted; the hairline's ladder lives on as
+`--media-capture-rule-ink`, value for value. Radius is 0 on every kind (ch05 §6). The caption is still required,
+caption-only is still first-class, and nothing else in the contract moved.
 
 Verified against the loaded Tcules library (`window.Tcules`, 15 components) and `guidelines/docs/vocabulary.md`. Every contrast ratio in section 6 was computed from the exact hexes in that document with the standard WCAG relative-luminance formula; six of the nine text-ink pairs reuse values already published and checked in `docs/specs/PageHero.md` §6 and agree with all six — `--color-neutral-{600,700}` against paper and tint, `--color-neutral-{300,400}` against ink, `--color-brandeis-{50,100}` against blue. The remaining three (one text pair, two rule pairs) are computed fresh here. Assumptions I could not check are marked **[assumed]** and collected in section 17.
 
@@ -39,7 +50,7 @@ An image with a caption and an optional quieter note, sized to whatever inline s
 | Part | Element | Required | Content slot | Carries |
 |---|---|---|---|---|
 | `root` | `<figure>`, rendered by `Layout as="figure" rowGap="text"` | yes | none | the seam between `image` and `legend` (16px). Fills 100% of the parent's given inline size. No ground, no padding, no colour of its own |
-| `image` | `<img>` | no — renders only when the `image` prop is supplied | `image.src`, `image.alt`, `image.width`, `image.height` | `--fig-rule-ink` at `--fig-rule-width` (its own hairline border); native `width`/`height` attributes; scales to the box's full inline size at its own intrinsic ratio |
+| `image` | `Media` (an `<img>`, or a cut-out's panel around one) | no — renders only when the `image` prop is supplied | the `MediaImage` record: `src`, `alt`, `width`, `height`, optional `sources`, `kind`, `panel`, `shadow` | *(amended 2.7)* nothing of Figure's: the edge by kind, the radius and the delivery are Media's (`--media-*`). Intrinsic fit, lazy, scales to the box's full inline size at its own ratio |
 | `legend` | `<figcaption>`, rendered by `Layout as="figcaption" rowGap="tight"` | yes | none | the seam between `caption` and `note` (8px). No colour or type of its own — it is a container, like `stack` or `opening` in `PageHero` |
 | `caption` | `<p>` | yes — always rendered | `caption`, verbatim | `--fig-caption-ink`, `--fig-caption-text`, `--measure-body` |
 | `note` | `<p>` | no — renders only when the `note` prop is supplied | `note`, verbatim | `--fig-note-ink`, `--fig-note-text`, `--measure-body` |
@@ -51,7 +62,7 @@ Three parts carry colour (`image`, via its rule; `caption`; `note`) and they are
 ## 3 · Props / API
 
 ```ts
-type FigureImage = { src: string; alt: string; width: number; height: number }
+type FigureImage = MediaImage  // amended 2.7 — src, alt, width, height required; sources, kind, panel, shadow optional
 ```
 
 | Prop | Exact literal union | Default | What it decides |
@@ -131,6 +142,8 @@ Three tokens, four surfaces, twelve cells, no deltas.
 | `--fig-note-ink` | `--color-neutral-600` — **4.92:1** | `--color-neutral-700` — **7.27:1** | `--color-neutral-400` — **8.05:1** | `--color-brandeis-100` — **4.91:1** |
 | `--fig-rule-ink` | `--color-neutral-300` — **1.54:1** | `--color-neutral-400` — **1.90:1** | `--color-neutral-700` — **2.10:1** | `--color-brandeis-300` — **2.64:1** |
 
+**Amended 2.7:** the `--fig-rule-ink` row above is historical. The token is deleted; the same four values are `--media-capture-rule-ink` in `media.css`, drawn only on a capture (and on an image with no kind, M3). Figure's own layer now declares two per-surface inks.
+
 **Built as `--fig-rule-ink`, not `--fig-rule`.** The spec named one token for the hairline's colour; the build split it into `--fig-rule-ink` (the colour, per surface) and `--fig-rule-width` (`--border-width-hairline`, geometry). Every other hairline in the system is already shaped that way — `--acc-rule-ink`, `--bcrd-edge-ink`, `--lcrd-rule-ink`, each paired with its own `-width` — and a bare `--fig-rule` would have been the only colour token in the layer carrying no register suffix. Read `--fig-rule` below as `--fig-rule-ink` throughout; every value and every measured ratio is unchanged. One thing this layer does NOT copy from those three: they are all annotated `decoration`, because they confirm a boundary the layout has already made. This one carries the boundary itself, which is why it is held to 3:1 rather than exempted.
 
 `--fig-caption-ink` and `--fig-note-ink` are text and are held to the **4.5:1** floor; every cell clears it, the tightest being 4.91:1 (note on blue) and 4.92:1 (note on paper) — both values this system has already validated at exactly this ratio in `PageHero.md` §6. **`--fig-rule-ink` is the decoration row, and the values above are the second set.** This spec first argued the rule was non-text meaningful content and held it to the **3:1** floor this vocabulary uses for a focus ring against its own gap, which put it at `--color-neutral-500` on paper (3.16:1), `--color-neutral-600` on tint (4.39:1) and on ink (3.48:1), and `--color-brandeis-200` on blue (3.78:1). **Reviewed on the specimen and rejected by the owner, 24 Aug 2026:** at those steps the rule takes more attention than the screenshot it surrounds, and its only job is a slight distinction from the ground where one is needed. That is decoration by this system's own definition, so the floor does not apply and every cell above now sits deliberately below 3:1.
@@ -165,9 +178,9 @@ Two steps, and the ratio between them (16px to 8px, 2:1) is what keeps the capti
 
 There is exactly one: **inline-size 100% of the parent's given track, block-size auto.**
 
-This is not t-shirt-named because there is nothing to name — `Figure` has no fixed box, by the hard constraint, so "the size" is a rule (fill what you're given) rather than a value. The image inherits this directly: `inline-size: 100%`, `block-size: auto`, `box-sizing: border-box` so that its 1px `--fig-rule-ink` border sits inside the 100% rather than adding to it — the rendered box is exactly the parent's track at every width, border included. (`box-sizing` is not restated in the module: `reset.css` sets it globally.)
+This is not t-shirt-named because there is nothing to name — `Figure` has no fixed box, by the hard constraint, so "the size" is a rule (fill what you're given) rather than a value. The image inherits this directly: `inline-size: 100%`, `block-size: auto`, `box-sizing: border-box` so that its 1px `--fig-rule-ink` border sits inside the 100% rather than adding to it — the rendered box is exactly the parent's track at every width, border included. (`box-sizing` is not restated in the module: `reset.css` sets it globally.) *Amended 2.7:* the image's `inline-size: 100%`, `block-size: auto` and its hairline are now Media's (`Media.module.css`), with the same behaviour; Figure's module has no image rule.
 
-**As built, `root` carries no `inline-size` declaration at all, and that absence is deliberate — do not add one.** Filling the track needs no declaration: `root` is a `Layout`, so it is a grid container and therefore a block-level box, which a block parent already sizes to full width and a `Layout` track already stretches (`Layout`'s `justifyItems` defaults to `stretch`). An `inline-size: 100%` was written here first and removed after looking at it: in the one parent that does NOT size its children — a `Cluster`, i.e. a wrapping flex row — 100% resolves against the whole row, so every figure claimed the full width, forced a wrap, and made the minimum below unobservable. The image keeps its own `inline-size: 100%`; that one is filling the figure's box and is a different declaration.
+**As built, `root` carries no `inline-size` declaration at all, and that absence is deliberate — do not add one.** Filling the track needs no declaration: `root` is a `Layout`, so it is a grid container and therefore a block-level box, which a block parent already sizes to full width and a `Layout` track already stretches (`Layout`'s `justifyItems` defaults to `stretch`). An `inline-size: 100%` was written here first and removed after looking at it: in the one parent that does NOT size its children — a `Cluster`, i.e. a wrapping flex row — 100% resolves against the whole row, so every figure claimed the full width, forced a wrap, and made the minimum below unobservable. The image keeps its own `inline-size: 100%`; that one is filling the figure's box and is a different declaration. *(Amended 2.7: "the image" here is Media's element.)*
 
 **Minimum, for a parent that does not size it.** 192px, declared here as **`--fig-min-xs`** — the same value and the same reasoning `ListCard.md` §7 already established for its own content core: it is `Layout`'s own smallest named track, small enough to be a real constraint and large enough that a caption in `--text-caption` still wraps on real words rather than one character per line.
 
@@ -179,11 +192,11 @@ This is not t-shirt-named because there is nothing to name — `Figure` has no f
 
 Both seams in this component (16px, 8px) are used exactly as declared gap-scale steps. There is no rule, no panel and no second box anywhere in the component whose edge could visually disagree with another's, so there is no misalignment here for a `--space-*` reach to correct — unlike `PageHero`'s Newsreader-versus-mono left edge, `Figure` has no two type families sharing a visual edge that could drift apart.
 
-**Radius.** `--radius-0`. Rounding the image's corners would clip screenshot content at exactly the corners a screenshot is least likely to spare — the same family of reasoning that rules out cropping generally (section 17 Q2).
+**Radius.** `--radius-0` — *amended 2.7:* now Media's `--media-radius`, 0 on every kind (ch05 §6). Rounding the image's corners would clip screenshot content at exactly the corners a screenshot is least likely to spare — the same family of reasoning that rules out cropping generally (section 17 Q2).
 
-**Border width.** `--border-width-hairline` (1px), on `image` only, as a decision rather than an omission (section 17 Q5). `root` and `legend` carry no border.
+**Border width.** *Amended 2.7:* none of Figure's. The hairline is Media's `--media-capture-rule-width` (`--border-width-hairline`), on a capture only (section 17 Q5 as amended). `root` and `legend` carry no border.
 
-**Shadow.** `--shadow-none`. Nothing here is elevated; `Figure` is not a bounded card (Identity, point 2).
+**Shadow.** None of Figure's (*amended 2.7*: a cut-out record with `shadow: true` carries Media's one `--shadow-crop`; Figure adds nothing). Nothing here is elevated; `Figure` is not a bounded card (Identity, point 2).
 
 **Z-layer.** `--z-base`. Nothing in this component stacks above anything else.
 
@@ -214,16 +227,14 @@ Example copy, exactly as it would be authored (from the brief's own reference li
 
 **Touch targets.** Not applicable. `Figure` renders no interactive element at any width (section 5), so the 44px floor has nothing to check.
 
-**Image delivery, stated as a boundary rather than a gap.** `Figure` renders one `<img src>` at one resolution — no `srcset`, no `sizes`. There is no responsive-image pipeline anywhere in this codebase yet (vocabulary: "no `next/image` usage anywhere yet"), so this is out of scope by the same fact that makes an image component new work in the first place, not a hole this spec is leaving open.
+**Image delivery — amended 2.7.** The image is a `Media`, so a record with `sources` is served as a native `srcset` (ruling M1) with `sizes="(min-width: 1304px) 1240px, calc(100vw - 64px)"`, the full content column. Figure cannot see its own track, and the full-column value over-fetches in a narrower track rather than ever under-fetching (`Media.md` §9, §17 Q8). A record with no `sources` renders a single `src`, as before. Loading stays lazy.
 
 ## 10 · Composition
 
 ```jsx
 // image, caption and note are this component's own props.
 <Layout as="figure" rowGap="text">                          {/* root — 16: image to legend */}
-  {image && (
-    <img src={image.src} alt={image.alt} width={image.width} height={image.height} />
-  )}
+  {image && <Media image={image} sizes={FIGURE_SIZES} />}     {/* amended 2.7 */}
   <Layout as="figcaption" rowGap="tight">                    {/* legend — 8: caption to note */}
     <p>{caption}</p>
     {note && <p>{note}</p>}
@@ -276,14 +287,14 @@ The image's `alt` is announced first, as its accessible name; the caption and th
 | **3 · Zero items** | The image and the note are both optional; `caption` cannot be zero by type (section 3). With both optional slots empty, `Figure` renders `<figure><figcaption><p>{caption}</p></figcaption></figure>` — a caption alone, with no image element, no placeholder box and no broken-image glyph. This is the brief's own most-consequential question, and it is answered as a first-class, intentional rendering, not a degraded one: the 21 existing lines that name their own missing artefact (e.g. "the original screenshot is omitted because…") are written to be read exactly this way, alone |
 | **4 · One item** | Image and caption, no note: `legend` renders one `<p>`, no 8px seam. Caption and note, no image: `root` renders one child, no 16px seam, and `legend` sits at the top of whatever space `root` was given |
 | **5 · Many items (2× expected)** | Does not apply structurally — `image`, `caption` and `note` are each exactly one value, never a list, so there is nothing here that repeats. The nearest real question is caption/note length, which row 1 answers: no cap, no truncation, at any length |
-| **6 · Missing image or missing optional slot** | This is row 3, restated as the general rule: **an absent optional slot renders no element and no seam.** `image` absent → no `<img>`, no `--fig-rule-ink`, no 16px gap. `note` absent → no second `<p>`, no 8px gap |
+| **6 · Missing image or missing optional slot** | This is row 3, restated as the general rule: **an absent optional slot renders no element and no seam.** `image` absent → no `<img>`, no `--fig-rule-ink`, no 16px gap. `note` absent → no second `<p>`, no 8px gap | *Amended 2.7:* read "no hairline" — the token is gone; an absent image renders no Media.
 | **7 · Empty required-ish text** | `caption=""` renders the empty `<p>` anyway — visible and auditable, never substituted with a fallback string, the same rule `PageHero.md` §12 row 7 applies to an empty `title`. `note=""`, by contrast, is treated as absent (filtered before render, no element, no seam) because `note` is genuinely optional and an empty note is indistinguishable from no note at all. **As built this is a `trim()` test, so a whitespace-only `note` is also absent** — one step beyond what this row asked for, and the same reading `ListCard` already applies to its own optional body. `caption` is deliberately NOT trimmed: a whitespace-only caption renders its `<p>`, because the whole point of the asymmetry is that a required field's emptiness stays visible |
 | **8 · The narrow track at 767** | The image scales down with its track at its own intrinsic ratio; `--measure-body` on the legend exceeds the column below about 800px and goes inert, exactly as in `PageHero` and `Breadcrumbs`. Nothing reorders and no media query fires |
 | **9 · A parent that does not size it** | Named minimum: **192px, `--fig-min-xs`** (section 7b), matching `ListCard`'s own content-core minimum by value. Below that, `caption` in `--text-caption` starts breaking on very short lines rather than overflowing |
 | **10 · Logical properties rather than left/right** | `Figure` has no `margin`, no `padding` and no positioned part anywhere — its only distances are the two `Layout` gaps in 7(a), which are logical by construction, and its only measure is `max-inline-size`. There is no physical-direction property in this component to get wrong |
-| **11 · This component's surface nested inside a different one** | Addressed in section 6. All three tokens are declared on all four surfaces, so a `Figure` in a `tint` block between two `ink` sections renders the tint column throughout with no additional handling |
+| **11 · This component's surface nested inside a different one** | Addressed in section 6. All three tokens are declared on all four surfaces, so a `Figure` in a `tint` block between two `ink` sections renders the tint column throughout with no additional handling | *Amended 2.7:* two `--fig-*` tokens now, both on all four surfaces; the capture rule is Media's `--media-capture-rule-ink`, also on all four.
 | **12 · Two of this component adjacent** | Unlike `PageHero`, this is an expected, encouraged pattern, not a bug. Stacked in sequence, each `Figure` sets no outer margin, so whatever `Layout rowGap` contains the pair decides the seam between them cleanly — no margin-collapse risk, because gaps are not margins. Side by side in a `Layout columns={2}` for comparison, each `Figure` fills its own track independently; if the two source images differ in intrinsic ratio their bottom edges will not align, which is the honest, accepted cost of never cropping (section 17 Q2) — a caller who wants matched heights reaches for `Layout`'s own `equalRows`, which is the parent's tool, not `Figure`'s |
-| **13 · Interactive content inside a slot** | Structurally impossible. `image` is a plain data object of a string and three primitives, `caption` and `note` are `string`s — none of the three props can carry a `ReactNode`, so no control, no link, and no second heading can be passed into any of them. This is the same enforcement mechanism `PageHero.md` §12 row 13 relies on for `title` and `body` |
+| **13 · Interactive content inside a slot** | Structurally impossible. `image` is a plain data object of a string and three primitives, `caption` and `note` are `string`s — none of the three props can carry a `ReactNode`, so no control, no link, and no second heading can be passed into any of them. This is the same enforcement mechanism `PageHero.md` §12 row 13 relies on for `title` and `body` | *Amended 2.7:* `image` is now `MediaImage`, which adds `kind`, `panel`, `shadow` and a `sources` array of `{ src, width }` — still data only, so no `ReactNode` can enter.
 
 ## 13 · Motion
 
@@ -295,7 +306,7 @@ The image's `alt` is announced first, as its accessible name; the caption and th
 
 **Do**
 
-1. An absent `image` renders no `<img>` and no `--fig-rule-ink` — inspect the rendered DOM and expect zero `img` elements when the prop is undefined.
+1. An absent `image` renders no `<img>` and no hairline — inspect the rendered DOM and expect zero `img` elements when the prop is undefined.
 2. An absent `note` renders no second `<p>` and no 8px seam.
 3. `caption=""` still renders an empty `<p>` — grep the rendered DOM; it must not be replaced with a fallback string.
 4. The rendered `<img>`, when present, carries `width` and `height` attributes matching `image.width`/`image.height` exactly, and no CSS `aspect-ratio` or fixed `height` overrides them.
@@ -304,7 +315,7 @@ The image's `alt` is announced first, as its accessible name; the caption and th
 
 **Don't**
 
-7. No `object-fit: cover`, no `object-fit: contain`, no crop of any kind on the image — grep the module and expect zero matches (section 17 Q2).
+7. No `object-fit: cover`, no `object-fit: contain`, no crop of any kind on the image — grep `Figure.module.css` and expect zero matches, and Figure never passes `fit="fill"` to Media (section 17 Q2).
 8. No `max-height`, `min-height` or fixed `aspect-ratio` on the image — grep and expect zero matches.
 9. No `position: absolute` or `position: fixed` text node inside the `image` part's box — enforces MUST NOT put text over the image.
 10. No `background` or fill colour on `root` — enforces MUST NOT own its ground.
@@ -333,6 +344,8 @@ The block list for `/design/figure`, in order.
 
 **None — every value in this spec is an existing token.**
 
+*Amended 2.7:* four of the declarations listed below — `--fig-rule-ink`, `--fig-rule-width`, `--fig-image-radius`, `--fig-image-shadow` — are deleted; Figure's layer now holds `--fig-caption-ink`, `--fig-note-ink`, `--fig-caption-text`, `--fig-note-text` and `--fig-min-xs`.
+
 `--fig-caption-ink`, `--fig-note-ink`, `--fig-rule-ink`, `--fig-rule-width`, `--fig-caption-text`, `--fig-note-text`, `--fig-min-xs`, `--fig-image-radius` and `--fig-image-shadow` are this component's own component-layer declarations, the layer a new component is expected to add — each resolves to a `--color-*` or `--text-*` name that appears verbatim in `guidelines/docs/vocabulary.md`, and none of them is a request in the sense this section means. Checked against the ramps and found unnecessary: a caption-specific measure narrower than `--measure-body` (the longest reference line still sits comfortably inside 68ch); a new gap step between `--gap-tight` and `--gap-text` for the two seams (the existing 8px/16px pair already gives the 2:1 ratio section 7(a) wants); and a dedicated hairline token narrower than `--border-width-hairline` (1px is already the thinnest border this system draws). No glyph appears in this component at all.
 
 ## 17 · Open questions
@@ -358,6 +371,8 @@ Options: centre the legend under the image; or cap it at a measure and left-alig
 Options: no edge at all; a filled inset panel behind the image; or a hairline border on the image itself. **Answered: a hairline border, `--fig-rule-ink`, always present** (section 6, section 7b). The brief names the real problem directly — "on paper a light screenshot has no edge at all" — and a light-UI screenshot on `--color-paper` is close enough in value that its boundary can otherwise disappear. A filled panel was rejected as the kind of decorative ground this system's design bar already argues against (`PageHero.md` §2 cut the same idea for its own byline); a 1px rule on the image itself is a boundary, not a ground, and costs nothing on the three surfaces that do not need it.
 
 **Amended 24 Aug 2026, after looking at it: the rule stays, its weight does not.** The first answer treated the hairline as meaningful and held it to 3:1 on every surface. On the specimen that read as a frame competing with the screenshot inside it. The owner's correction is that the rule's only job is a slight distinction from the ground where one is needed, which makes it decoration — so it now takes the house's decorative ladder (300 / 400 / 700 / brandeis-300) and every cell sits below 3:1 on purpose. Section 6 carries both sets of values and the reasoning for the move.
+
+**Amended again 28 Sep 2026 (tracker 2.7): the hairline now depends on what the image is.** ch05 v1.0 gives each kind its own edge (§2, §2a, §4a; audit §2). A capture keeps this rule, a cut-out and a photograph take none, and an illustration is never boxed. The rule moved into `Media` with its values unchanged, and a record with no `kind` renders as a capture (M3), so the answer above still holds for every image that exists today.
 
 **6 · Whether `image.width`/`image.height` should be required. — non-blocking. ACCEPTED as recommended, 24 Aug 2026.**
 
@@ -461,6 +476,7 @@ COLOUR AND CONTRAST
     ladder at 1.54 / 1.90 / 2.10 / 2.64. Both sets of values and the argument are in § 6, and
     § 17 Q5 carries the amendment. Text was untouched: all six caption/note cells still clear
     4.5:1.
+    (Amended 2.7: the next item is historical — --fig-rule-ink is deleted; the rule is Media's.)
 [x] Decoration: --fig-rule-ink is it, marked as such in § 6 and in every surface block of
     figure.css. root and legend carry no colour token at all, decorative or otherwise, and
     section 2 says so rather than giving them "n/a" cells here.

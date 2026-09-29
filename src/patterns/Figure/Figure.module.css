@@ -1,6 +1,7 @@
 /* Figure — an image with a caption and an optional quieter note, built to docs/specs/Figure.md.
 
-   Every colour, width, radius and shadow comes from --fig-*, declared in
+   The image is a Media (tracker 2.7), so its edge, radius and delivery are not in this file. Every
+   colour and width that IS here comes from --fig-*, declared in
    tokens/components/figure.css and re-declared once per surface there. One usage token is read
    unaliased, and the spec names it that way: --measure-body, on both lines of the legend. A token
    only one component could read, that merely renames a usage token, is not worth having. The two
@@ -9,11 +10,10 @@
    ── What is absent, and why ────────────────────────────────────────────────────
    No background. A Figure never owns its ground; the filled or edged tile is BlockCard's job.
    No margin, anywhere. The two seams inside are Layout's; the seam AROUND is the parent's.
-   No display:grid or display:flex. Both arrangements are Layout single-track stacks. The one
-     display:block below de-inlines the image; it arranges nothing.
-   No object-fit, aspect-ratio, max-block-size or min-block-size on the image. The intrinsic
-     ratio IS the decision — a crop mode would cut small type out of some screenshots, which is
-     the one thing this component exists not to do.
+   No display:grid or display:flex. Both arrangements are Layout single-track stacks.
+   No image rule at all. Media renders the image at its intrinsic ratio (fit="intrinsic", the
+     default), uncropped — a crop mode would cut small type out of some screenshots, which is the
+     one thing this component exists not to do.
    No @media query of any kind, including a reduced-motion one. Nothing here moves, so there is
      nothing to switch off, and the gap scale does not shift responsively.
    No position, so no z-index. Nothing stacks.
@@ -59,23 +59,11 @@
   min-inline-size: min(100%, var(--fig-min-xs));
 }
 
-/* The image at its own intrinsic ratio, scaled to the track. block-size:auto with the width and
-   height attributes present is what preserves that ratio — the attributes reserve the space, the
-   percentage does the scaling, and neither one crops.
-
-   display:block removes the inline baseline gap under the image; it arranges nothing.
-
-   The rule sits INSIDE the 100% rather than adding to it, so the rendered box is exactly the
-   parent's track at every width, border included. That is reset.css's global border-box doing the
-   work, which is why this file does not restate box-sizing. */
-.image {
-  display: block;
-  inline-size: 100%;
-  block-size: auto;
-  border: var(--fig-rule-width) solid var(--fig-rule-ink);
-  border-radius: var(--fig-image-radius);
-  box-shadow: var(--fig-image-shadow);
-}
+/* No image rule here, and that is the 2.7 change. The image is Media's: its width, its intrinsic
+   ratio, its edge by kind (the capture hairline, nothing on a cut-out, never a box on an
+   illustration) and radius 0 all come from Media.module.css and tokens/components/media.css.
+   A rule here would be a second place an image's edge is decided — the failure Media exists to
+   remove — and a component never reaches into another's element to restyle it. */
 
 /* The legend is a container and carries no colour and no type of its own — only the 8px seam,
    which is its Layout's rowGap. min-inline-size:0 overrides a grid item's auto minimum, so a
