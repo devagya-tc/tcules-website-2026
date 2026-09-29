@@ -10,6 +10,7 @@ import {
   Breadcrumbs,
   Callout,
   ContentSection,
+  ContentSectionText,
   DataTable,
   Figure,
   ListCard,
@@ -59,7 +60,12 @@ function renderColumn(column: ToolContentColumn) {
 function renderToolBlock(block: ToolBlock) {
   switch (block.type) {
     case 'rich-text':
-      return <Prose html={block.html} />;
+      /* Running text reads at the body measure; every other block keeps the full track. */
+      return (
+        <ContentSectionText>
+          <Prose html={block.html} />
+        </ContentSectionText>
+      );
 
     case 'card-grid':
       return (
@@ -257,7 +263,6 @@ export default async function ToolPage({ params }: PageProps<'/tools/[slug]'>) {
         dates={tool.publishedAt ? { published: tool.publishedAt } : undefined}
         surface="paper"
       />
-
 
       {/* ONE BAND PER SECTION. Every band is paper: tint marks a section that matters and the
           page's asks, and nothing here has a field that could say which section that is — so the

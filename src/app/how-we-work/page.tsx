@@ -16,6 +16,7 @@ import {
   Breadcrumbs,
   Callout,
   ContentSection,
+  ContentSectionText,
   CtaSection,
   DataTable,
   Figure,
@@ -97,7 +98,12 @@ function renderColumn(column: HowWeWorkContentColumn) {
 function renderHowWeWorkBlock(block: HowWeWorkBlock) {
   switch (block.type) {
     case 'rich-text':
-      return <Prose html={block.html} />;
+      /* Running text reads at the body measure; every other block keeps the full track. */
+      return (
+        <ContentSectionText>
+          <Prose html={block.html} />
+        </ContentSectionText>
+      );
 
     case 'card-grid':
       return (
