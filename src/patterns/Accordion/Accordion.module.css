@@ -84,6 +84,16 @@
   list-style: none;
 }
 
+/* Open, the question belongs to its answer: the block-end inset drops to --gap-text, so the
+   question sits 16 from its answer and the answer sits --gap-block (24, .answer's block-end) from
+   the next rule. At --gap-block both ways it read as equidistant — the answer floated between its
+   own question and the next one. Closed items keep --gap-block both ways; nothing follows the
+   summary for it to attach to. The hit area still clears the 44px floor with room: 24 + 28.16 + 16
+   is ~68px (~66px at the mobile h5 step). An existing gap step, so no token. */
+.item[open] > .trigger {
+  padding-block-end: var(--gap-text);
+}
+
 .trigger::-webkit-details-marker {
   display: none;
 }
@@ -194,9 +204,10 @@
 .answer {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
-  /* 0 at the block start: the trigger's own --gap-block inset is the whole trigger-to-answer seam
-     now, and it has to be, because that inset is also the hit area. --gap-block at the block end
-     is what separates the answer from the next item's rule. */
+  /* 0 at the block start: the open trigger's own --gap-text block-end inset is the whole
+     trigger-to-answer seam, and it has to be, because that inset is also the hit area. --gap-block
+     at the block end is what separates the answer from the next item's rule — the larger of the
+     two, so the answer attaches to its question rather than to the next one. */
   padding-block: 0 var(--gap-block);
   overflow-wrap: anywhere;
   font: var(--text-body);
