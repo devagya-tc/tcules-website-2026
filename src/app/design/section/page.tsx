@@ -1,4 +1,4 @@
-import { Layout, Section } from '@/components';
+import { Layout, Section, type SectionDensity, type SectionSurface } from '@/components';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
@@ -8,6 +8,63 @@ const SURFACE_NOTES = {
   ink: 'The footer and the closing panel. Blue holds at 500 as a field, and lifts to 200 as text, because blue ink on neutral-950 reaches only 2.7:1.',
   blue: 'A pivot — one appearance per page, and it never touches an ink section. Blue cannot accent itself, so the accent goes to paper.',
 } as const;
+
+type SeamBand = {
+  label: string;
+  note: string;
+  surface: SectionSurface;
+  density?: SectionDensity;
+  flush?: boolean;
+};
+
+/**
+ * The seam sequence (29 Sep 2026, tracker 2.17). Order matters — every note describes the seam
+ * between this band and the one before it, so the list is the proof and cannot be sorted.
+ */
+const SEAMS: readonly SeamBand[] = [
+  {
+    label: 'Seam · after a flush band — full air',
+    note: 'The band above is flush: it has no bottom padding to serve as the seam, and it is flush because it hands the air to the next band (Breadcrumbs does exactly this). So this band keeps its top 96.',
+    surface: 'paper',
+  },
+  {
+    label: 'Seam · paper + paper — one seam, 96',
+    note: 'Follows a paper band, so its top padding drops and the seam is the preceding band’s bottom 96 — not 96 + 96 = 192 of identical ground.',
+    surface: 'paper',
+  },
+  {
+    label: 'Seam · paper → tint — full air, 96 + 96',
+    note: 'The surface changes, so the tone marks the boundary and both bands keep their full air. Different grounds are never merged.',
+    surface: 'tint',
+  },
+  {
+    label: 'Seam · tint + tint — one seam, 96',
+    note: 'The same rule on every surface: a tint band after a tint band drops its top.',
+    surface: 'tint',
+  },
+  {
+    label: 'Seam · standard → tight — 96, the preceding band governs',
+    note: 'This band is tight, but the seam above it is the preceding band’s bottom, 96. Its own tightness shows below it.',
+    surface: 'tint',
+    density: 'tight',
+  },
+  {
+    label: 'Seam · tight → open — 64',
+    note: 'The preceding band is tight, so the seam is its 64. This open band’s 128 governs its own bottom.',
+    surface: 'tint',
+    density: 'open',
+  },
+  {
+    label: 'Seam · open → standard — 128',
+    note: 'The open band above sets the seam at 128.',
+    surface: 'tint',
+  },
+  {
+    label: 'Seam · tint → ink — full air again',
+    note: 'The surface changes back; both sides keep their air.',
+    surface: 'ink',
+  },
+];
 
 /**
  * Section specimen. The dashed outline on the bands below is measuring chrome — it marks where
@@ -36,7 +93,7 @@ export default function SectionSpecimenPage() {
 
           <Specimen
             title="Vertical air — --sec-padding-y, 96 flat"
-            note="One value at every width, and a gap-scale step: --gap-section. The token layer declares tight (64, --gap-column) and open (128, --gap-section-open) beside it, reachable via the density prop, and flush zeroes it. There is no arbitrary value: a band is one of those four."
+            note="One value at every width, and a gap-scale step: --gap-section. The token layer declares tight (64, --gap-column) and open (128, --gap-section-open) beside it, reachable via the density prop, and flush zeroes it. There is no arbitrary value: a band is one of those four. Two adjacent bands on the same surface share ONE seam — the following band drops its top padding; see the seam sequence below."
           >
             <div className={s.ruler}>content sits inside the vertical air</div>
           </Specimen>
@@ -56,8 +113,9 @@ export default function SectionSpecimenPage() {
           <p className={s.specNote}>
             The dashed outline is chrome, not a border the primitive draws. Bands are separated by
             ground and whitespace, never by a rule — the surface specimens below show the tone
-            doing that work. This one and the next are adjacent, so the space between them is both
-            bands&apos; vertical air.
+            doing that work. This band follows the paper band above and precedes another, so both
+            of its seams are ONE band&apos;s air, not two: a band that follows a band of its own
+            surface drops its top padding.
           </p>
           <Box>band A</Box>
         </Layout>
@@ -81,6 +139,29 @@ export default function SectionSpecimenPage() {
           <Box>flush band</Box>
         </Layout>
       </Section>
+
+      {/* ── The seam between bands ─────────────────────────────────────────────────────────────
+          Each band states its own surface and density, and its note says what the seam ABOVE it
+          measures. Read the sequence top to bottom: the dashed outlines are the band edges. */}
+      {SEAMS.map((band) => (
+        <Section
+          key={band.label}
+          surface={band.surface}
+          density={band.density}
+          flush={band.flush}
+          className={s.bandOutline}
+        >
+          <Layout rowGap="text">
+            <p className={s.specTitle}>{band.label}</p>
+            <p className={s.specNote}>{band.note}</p>
+            <Box>
+              surface=&quot;{band.surface}&quot;
+              {band.density ? ` · density="${band.density}"` : ''}
+              {band.flush ? ' · flush' : ''}
+            </Box>
+          </Layout>
+        </Section>
+      ))}
 
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
         <Section key={surface} surface={surface}>
