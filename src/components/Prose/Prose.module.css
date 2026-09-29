@@ -40,10 +40,16 @@
 
      p to p                16   the beat
      around a set piece    24   list, quote, figure, table, code panel
-     after any heading     24   the head-to-body step
+     after an h1 or h2     24   the head-to-body step
+     after an h3 to h6     16   the subhead attaches: 32 above, 16 below, 2:1 toward its own body
      before a subhead      32   more air above than below, so it belongs to what follows
      before an h2          48   a new idea
      around a rule         48   the strongest break the flow has
+
+   The 2:1 is the point of the subhead rows. At 32 above and 24 below (4:3, until 29 Sep 2026) a
+   subhead read as floating between two paragraphs rather than as the head of the one under it.
+   h1 and h2 keep the head-to-body step: they head a whole run of blocks, not the next paragraph,
+   and the 48 above an h2 already makes the 2:1.
 
    Prose itself never sets an outer margin — the first child is zeroed, and the Layout holding
    Prose still owns the gap above it. */
@@ -56,8 +62,11 @@
 .prose > :is(ul, ol, dl, blockquote, figure, table, pre) + * {
   margin-block-start: var(--gap-block);
 }
-.prose > :is(h1, h2, h3, h4, h5, h6) + * {
+.prose > :is(h1, h2) + * {
   margin-block-start: var(--gap-block);
+}
+.prose > :is(h3, h4, h5, h6) + * {
+  margin-block-start: var(--gap-text);
 }
 .prose > * + :is(h3, h4, h5, h6) {
   margin-block-start: var(--gap-gutter);
@@ -78,9 +87,11 @@
 }
 
 /* ── Headings ────────────────────────────────────────────────────────────────────────────────
-   h1 to h5 take the display composites; h6 takes the mono chrome role, because the ladder has
-   five title steps and a sixth serif step below 22px would be smaller than the body it heads.
-   A mono, tracked, uppercase run-in is the honest sixth. */
+   Every level takes its display composite, h6 included: --text-h6 is the serif at 18, medium,
+   which is also what globals.css gives a bare h6 and what DataTable sets its key column in. One
+   h6 voice site-wide. Until 29 Sep 2026 a Prose h6 took the mono chrome role instead, which made
+   the same element a label here and a title everywhere else; 18 medium serif still clears the 16
+   body it heads by size, weight and family at once. */
 .prose :is(h1, h2, h3, h4, h5, h6) {
   color: var(--prose-ink-heading);
   text-wrap: var(--text-title-wrap);
@@ -106,9 +117,8 @@
   letter-spacing: var(--text-h5-tracking);
 }
 .prose h6 {
-  font: var(--text-ui);
-  letter-spacing: var(--text-ui-tracking);
-  text-transform: var(--text-mono-case);
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
 }
 
 /* ── Paragraph ───────────────────────────────────────────────────────────────────────────────
@@ -243,39 +253,60 @@
 }
 
 /* ── Table ───────────────────────────────────────────────────────────────────────────────────
-   A CMS table has no wrapper to scroll inside, so the table becomes its own scroll container.
-   `display: block` is the price of that and it is worth paying: the alternative is a wide table
-   dragging the whole page sideways, which reads as a broken layout rather than a wide table.
+   The boxed table, the same structure DataTable draws (docs/specs/DataTable.md): an outer border,
+   a filled head row, a body ground, and a hairline between every row and every column, head row
+   included. Each cell is a closed box, so a value can be followed down its column as easily as
+   across its row. Prose does not import DataTable — a primitive may not reach up a tier — and the
+   values are Prose's own --prose-table-* tokens, mirroring data-table.css per surface on purpose.
 
-   Rules are horizontal only. Vertical rules turn a table into a grid of boxes and make every
-   column look equally important, which is exactly what a data table is trying not to say. */
+   ── Why the table is its own scroll container ───────────────────────────────────────────────
+   DataTable scrolls a wrapper <div> it writes. Prose writes no markup: a body field arrives as an
+   opaque string, and rewriting that string to insert a wrapper would make a presentation unit a
+   transformer of content it is only meant to style (and would still miss a table composed as
+   JSX children). So the table becomes its own scroll container with `display: block`, which is
+   the price of it — a wide table dragging the whole page sideways reads as a broken layout, and a
+   scrolling one reads as a wide table. Current engines keep a <table>'s semantics under a display
+   change, and the rows, cells and headers keep theirs because only the outer box changes.
+
+   Two consequences, both accepted:
+   · The rows sit in an anonymous table box inside the block, and that box is shrink-to-fit, so a
+     table whose content is narrower than the flow hugs its content rather than spanning it.
+   · The box is therefore drawn by the CELLS, not by the table: every cell carries all four
+     hairlines and border-collapse (inherited into the anonymous box) merges them into one line
+     each, the outermost ones forming the frame. The grounds are on the cells for the same reason.
+     When the table scrolls, the frame scrolls with it and the clipped edge is the signal. */
 .prose table {
   display: block;
+  max-inline-size: 100%;
   overflow-x: auto;
-  width: 100%;
+  overscroll-behavior-inline: contain;
   border-collapse: collapse;
   font: var(--text-body-sm);
 }
 .prose :is(th, td) {
-  padding: var(--gap-tight) var(--gap-text);
-  border-block-end: var(--prose-table-rule-width) solid var(--prose-table-rule);
+  padding-block: var(--gap-tight);
+  padding-inline: var(--gap-text);
+  border: var(--prose-table-rule-width) solid var(--prose-table-rule);
+  background: var(--prose-table-body-ground);
   text-align: start;
   vertical-align: baseline;
 }
-.prose :is(th, td):first-child {
-  padding-inline-start: 0;
-}
-.prose :is(th, td):last-child {
-  padding-inline-end: 0;
-}
-.prose th {
+/* The head row: the mono label voice on the head fill, uppercase in presentation only, bottom-
+   aligned so a two-line head sits on its rule beside one-line neighbours. */
+.prose thead th {
+  background: var(--prose-table-head-ground);
   font: var(--text-ui-sm);
   letter-spacing: var(--text-ui-sm-tracking);
   text-transform: var(--text-mono-case);
   color: var(--prose-table-head-ink);
+  vertical-align: bottom;
 }
-.prose tbody tr:last-child :is(th, td) {
-  border-block-end: 0;
+/* A row header in the body is DataTable's key column: the h6 title voice at the raised ink. */
+.prose tbody th {
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+  color: var(--prose-ink-heading);
+  text-wrap: var(--text-title-wrap);
 }
 
 /* ── Links ───────────────────────────────────────────────────────────────────────────────────
@@ -358,7 +389,7 @@
    NO --text-mono-case here, and it is the system's one exemption rather than an omission. Mono is
    always uppercase (tokens/primitives.css § Type · case) because mono is the label voice — but in
    these four rules mono is CONTENT, and case is semantic in content: `Section` and `SECTION` are
-   different identifiers, and `npm` is not `NPM`. h6 and th above are labels and do take the case;
+   different identifiers, and `npm` is not `NPM`. a head-row th above is a label and does take the case;
    code, kbd and samp are the sample of something real and must render it verbatim. */
 .prose :not(pre) > code,
 .prose kbd,
