@@ -14,12 +14,10 @@
 
 /* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
-  /* The slice column in the slice diagram, as a share of the layer width. */
-  --svc-slice-start: 58%;
-  /* The release's piece of each layer: a short bar, one step off a hairline, so it reads as a cut
-     mark rather than as a filled slab (blue stays under 5% of a page, ch02). */
-  --svc-slice-piece: var(--space-4);
-  --svc-slice-size: 22%;
+  /* The matrix's answer mark: a component size. */
+  --svc-mark-size: var(--space-12);
+  /* One cell of the slice grids: a component size. */
+  --svc-slice-cell: var(--space-24);
   /* A route's destination underline, clear of descenders at body size. Optical. */
   --svc-link-underline-offset: var(--space-4);
   /* Review-mode portrait slot: a 1:1 box at the size a portrait brief can be read in, 320. */
@@ -28,7 +26,6 @@
   --svc-hidden-size: 1px;
   --svc-rule-width: var(--border-width-hairline);
   --svc-rule-strong-width: var(--border-width-1);
-  --svc-slice-width: var(--border-width-2);
   /* The disruption trace: its box, a component size rather than a distance, and its line. */
   --svc-meter-width: var(--space-96);
   --svc-meter-height: var(--space-24);
@@ -52,7 +49,6 @@
   --svc-link-ink: var(--color-brandeis-500);
   --svc-link-ink-hover: var(--color-brandeis-600);
   --svc-sheet-ground: var(--color-paper-deep);
-  --svc-slice-ground: var(--color-brandeis-50);
   --svc-slot-edge: var(--color-neutral-400);
   --svc-bar-live-ground: var(--color-neutral-900);
   --svc-bar-live-ink: var(--color-paper);
@@ -69,7 +65,6 @@
   --svc-link-ink: var(--color-brandeis-500);
   --svc-link-ink-hover: var(--color-brandeis-600);
   --svc-sheet-ground: var(--color-paper);
-  --svc-slice-ground: var(--color-brandeis-100); /* brandeis-50 disappears on paper-deep */
   --svc-slot-edge: var(--color-neutral-500);
   --svc-bar-live-ground: var(--color-neutral-900);
   --svc-bar-live-ink: var(--color-paper);
@@ -86,7 +81,6 @@
   --svc-link-ink: var(--color-brandeis-300);
   --svc-link-ink-hover: var(--color-brandeis-200);
   --svc-sheet-ground: var(--color-neutral-900);
-  --svc-slice-ground: var(--color-neutral-900);
   --svc-slot-edge: var(--color-neutral-600);
   --svc-bar-live-ground: var(--color-white);
   --svc-bar-live-ink: var(--color-neutral-950);
@@ -103,7 +97,6 @@
   --svc-link-ink: var(--color-white);
   --svc-link-ink-hover: var(--color-brandeis-100);
   --svc-sheet-ground: var(--color-brandeis-600);
-  --svc-slice-ground: var(--color-brandeis-600);
   --svc-slot-edge: var(--color-brandeis-300);
   --svc-bar-live-ground: var(--color-white);
   --svc-bar-live-ink: var(--color-brandeis-500);

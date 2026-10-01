@@ -140,6 +140,35 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
   );
 }
 
+/* ── Matrix ───────────────────────────────────────────────────────────────────
+   A comparison laid out on the rows it compares (1 Oct 2026, owner: "could comparisons be done in a
+   better way than just 2 lists side by side?"). Two lists made the READER line them up — and a
+   3-item list beside a 7-item one read as an imbalance, not an argument. Here each thing to decide
+   is a row, and one mark sits in the column of the evidence that answers it, so the comparison is
+   done row by row and the split is visible at a glance. A real table, so it holds at every width. */
+export function Matrix({ block }: { block: Of<'matrix'> }) {
+  return (
+    <DataTable
+      keyColumn={{ heading: block.keyColumn }}
+      columns={block.columns.map((heading) => ({ heading, behaviour: 'nowrap' as const }))}
+      rows={block.rows.map((row) => ({
+        header: row.header,
+        cellsHtml: block.columns.map((_, index) => ({
+          node:
+            index === row.answeredBy ? (
+              <span className={styles.mark}>
+                <span className={styles.markDot} aria-hidden="true" />
+                <span className={styles.visuallyHidden}>{block.markLabel}</span>
+              </span>
+            ) : (
+              <span className={styles.visuallyHidden}>—</span>
+            ),
+        })),
+      }))}
+    />
+  );
+}
+
 /* ── Record ───────────────────────────────────────────────────────────────────
    A record with fields, drawn as the document it is: a sheet on its own ground, a header strip,
    and one row per field — the field keyed in mono with its glyph ABOVE the question it holds, in
@@ -216,44 +245,89 @@ export function Parts({ block }: { block: Of<'parts'> }) {
   );
 }
 
-/* ── Slice ────────────────────────────────────────────────────────────────────
-   Layers stacked as a system is organised, and the release cut vertically through all of them.
-   The diagram is the argument: organise only by layer and every layer is locally complete while
-   the product path that crosses them is not. */
-export function Slice({ block }: { block: Of<'slice'> }) {
+/* ── Slice: the same work, organised two ways ─────────────────────────────────
+   The section argues a PROBLEM and its answer: "organised only by layer, every team can be locally
+   complete while the product path stays unusable", so a release is a slice through every layer. The
+   first drawing showed only the answer — a column through five bands — and read as a grid with a
+   stripe in it (1 Oct 2026, owner: "i can't tell what it is trying to communicate").
+
+   Now it is the same grid twice, layers down the side and user paths across. By layer: every layer
+   is nearly built, but each path is missing a different piece, so none works. By release: one path is
+   built through every layer, and it is the one that can ship. Peers being compared, so `column` apart.
+   The grid keeps its columns at every width (`base`): a bare track list applies from md, and on a
+   phone the cells stacked into bars and the grid stopped being a grid. The grid is illustrative — the gaps step one path per layer, which is the pattern the sentence
+   describes — so it draws from the layer names alone. */
+function SliceGrid({
+  layers,
+  view,
+  done,
+}: {
+  layers: readonly string[];
+  view: { title: string; note: string };
+  done: (layer: number, path: number) => boolean;
+}) {
+  const paths = Math.max(3, layers.length - 1);
+  const tracks = [3, ...Array.from({ length: paths }, () => 1)];
   return (
-    <Layout rowGap="stack">
-      <figure
-        className={styles.slice}
-        aria-label={`${block.label}, cut through ${block.layers.join(', ')}`}
-      >
-        <span className={styles.sliceColumn} aria-hidden="true">
-          <span className={styles.sliceLabel}>{block.label}</span>
-        </span>
-        <Layout as="ul" rowGap="none">
-          {block.layers.map((layer) => (
-            <li key={layer} className={styles.layer}>
+    <figure className={styles.sliceView} aria-label={`${view.title}. ${view.note}`}>
+      <Layout rowGap="block">
+        <Layout as="figcaption" rowGap="tight">
+          <span className={styles.sliceTitle}>{view.title}</span>
+          <span className={styles.sliceNote}>{view.note}</span>
+        </Layout>
+        <Layout rowGap="tight" aria-hidden="true">
+          {layers.map((layer, layerIndex) => (
+            <Layout key={layer} columns={{ base: tracks }} colGap="tight" align="center">
               <span className={styles.layerName}>{layer}</span>
-            </li>
+              {Array.from({ length: paths }, (_, path) => (
+                <span
+                  key={path}
+                  className={styles.sliceCell}
+                  data-done={done(layerIndex, path) ? 'yes' : 'no'}
+                />
+              ))}
+            </Layout>
           ))}
         </Layout>
-      </figure>
-      <Layout
-        as="ul"
-        columns={{ base: 1, md: block.levels.length }}
-        colGap="gutter"
-        rowGap="stack"
-      >
-        {block.levels.map((level) => (
-          <ListCard
-            key={level.title}
-            form="tile"
-            titleAs="h3"
-            title={level.title}
-            body={level.body}
-            marker={{ type: 'icon', name: level.icon }}
-          />
-        ))}
+      </Layout>
+    </figure>
+  );
+}
+
+export function Slice({ block }: { block: Of<'slice'> }) {
+  return (
+    <Layout rowGap="section">
+      <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
+        <SliceGrid
+          layers={block.layers}
+          view={block.views.layer}
+          done={(layer, path) => layer === 0 || path !== layer - 1}
+        />
+        <SliceGrid
+          layers={block.layers}
+          view={block.views.slice}
+          done={(_, path) => path === 0}
+        />
+      </Layout>
+      <Layout rowGap="block">
+        <h3 className={styles.levelsLabel}>{block.levelsLabel}</h3>
+        <Layout
+          as="ul"
+          columns={{ base: 1, md: block.levels.length }}
+          colGap="gutter"
+          rowGap="stack"
+        >
+          {block.levels.map((level) => (
+            <ListCard
+              key={level.title}
+              form="tile"
+              titleAs="h4"
+              title={level.title}
+              body={level.body}
+              marker={{ type: 'icon', name: level.icon }}
+            />
+          ))}
+        </Layout>
       </Layout>
     </Layout>
   );

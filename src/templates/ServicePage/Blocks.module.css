@@ -43,10 +43,11 @@
   color: var(--svc-ink);
 }
 
-/* ── Contrast: one rule over both halves ──────────────────────────────────────── */
-.split {
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  padding-block-start: var(--gap-block);
+/* ── Ledger ───────────────────────────────────────────────────────────────────── */
+.setHeading {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+  color: var(--svc-ink);
 }
 
 /* ── Stat ─────────────────────────────────────────────────────────────────────── */

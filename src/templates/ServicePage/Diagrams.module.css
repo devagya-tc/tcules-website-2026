@@ -5,7 +5,7 @@
    Layout and Cluster. Positioned pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
 
    Every mark here says something (30 Sep 2026 review): the holding panel says the operating model
-   contains the four parts; the slice says a release cuts through every layer; the dashed bars say a product
+   contains the four parts; the paired grids say a release is one path built through every layer, where layers alone leave every path broken; the dashed bars say a product
    is half-present while the move is under way; an arrow says one stage feeds the next; the
    disruption trace is how much an option shakes the product, more ink for more. Marks that said nothing — a
    progress meter per row, a dashed thread with nodes, a dot on every step's rule — were cut. */
@@ -42,6 +42,20 @@
   font: var(--text-body);
   text-wrap: var(--text-running-wrap);
   color: var(--svc-ink-muted);
+}
+
+/* ── Matrix ──────────────────────────────────────────────────────────────────────
+   One solid dot in the column that answers the row; nothing in the column that does not. */
+.mark {
+  display: block;
+}
+
+.markDot {
+  display: block;
+  inline-size: var(--svc-mark-size);
+  block-size: var(--svc-mark-size);
+  border-radius: var(--radius-full);
+  background: var(--svc-ink);
 }
 
 /* ── Record: a sheet ──────────────────────────────────────────────────────────── */
@@ -112,57 +126,48 @@
   max-inline-size: var(--measure-body);
 }
 
-/* ── Slice ────────────────────────────────────────────────────────────────────── */
-.slice {
-  position: relative;
-  padding-block-start: var(--gap-stack);
-  color: var(--svc-ink);
-}
-
-.sliceColumn {
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: var(--svc-slice-start);
-  inline-size: var(--svc-slice-size);
-  background: var(--svc-slice-ground);
-  border: var(--svc-slice-width) solid var(--svc-node);
-  padding: var(--gap-text);
-}
-
-.sliceLabel {
-  font: var(--text-eyebrow);
-  letter-spacing: var(--text-eyebrow-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--svc-ink);
-}
-
-/* Layers draw over the slice, so their rules visibly cross it: the slice cuts THROUGH them. */
-.layer {
-  position: relative;
-  padding-block: var(--gap-block);
-  border-block-end: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-}
-
-/* The release's piece of each layer: a solid bar inside the slice. The slice does not sit beside
-   the layers — it takes something from every one of them. */
-.layer::after {
-  content: '';
-  position: absolute;
-  inset-block-start: calc(50% - var(--svc-slice-piece) / 2);
-  inset-inline-start: calc(var(--svc-slice-start) + var(--gap-text));
-  inline-size: calc(var(--svc-slice-size) - var(--gap-text) * 2);
-  block-size: var(--svc-slice-piece);
-  background: var(--svc-node);
-}
-
-.layer:first-child {
+/* ── Slice: the same work, organised two ways ──────────────────────────────────── */
+.sliceView {
+  min-inline-size: 0;
+  padding-block-start: var(--gap-block);
   border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
 }
 
+.sliceTitle {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+  color: var(--svc-ink);
+}
+
+.sliceNote {
+  font: var(--text-body);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink-muted);
+}
+
 .layerName {
-  font: var(--text-ui-lg);
-  letter-spacing: var(--text-ui-lg-tracking);
+  font: var(--text-micro);
+  letter-spacing: var(--text-micro-tracking);
   text-transform: var(--text-mono-case);
+  color: var(--svc-ink-label);
+}
+
+/* One piece of one path in one layer: built is solid, missing is an outline — the gap a user falls
+   through. */
+.sliceCell {
+  display: block;
+  block-size: var(--svc-slice-cell);
+  border: var(--svc-rule-width) solid var(--svc-rule-strong);
+}
+
+.sliceCell[data-done='yes'] {
+  background: var(--svc-ink);
+  border-color: var(--svc-ink);
+}
+
+.levelsLabel {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
   color: var(--svc-ink);
 }
 

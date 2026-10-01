@@ -58,6 +58,14 @@ Fifth batch, same day:
 | 12 then eight numbered items feels wrong | **Numbers doing two jobs:** 12 is a count, 01–08 were ordinals on items with no order, so the eye read one meaningless sequence | A split: the 12 and its sentence lead; the eight responsibilities sit beside it as unnumbered rows (`stat.items`) |
 | ProcessFlow: black bars, lane | The 2px ink bar is foreign to a system where items open on a hairline; the lane read as a footer box, not a duration | Stages open on the tile hairline; the lane is a span line ticked at both ends with the held things as Tags |
 
+Sixth batch, same day:
+
+| Note | Underlying issue | Fix |
+|---|---|---|
+| "A release is a…" — can't tell what it says | **The drawing showed only the answer.** The section argues a problem (by layer, every team is locally complete while no path works) and its answer (a slice through every layer); the diagram drew the slice alone, so it read as a grid with a stripe | The same grid twice, layers × user paths. *By layer:* every layer nearly built, each path missing a different piece. *By release:* one path built through every layer. The acceptance levels follow under their own heading |
+| Comparisons as two lists side by side | **The reader had to do the comparing.** `contrast` was carrying two different things: a routing question and a handover | Static vs coded is a **matrix** — each thing to decide is a row, one mark in the column of the evidence that answers it. The four "AI accelerates / a person decides" splits are **handovers**, so they are two-stage ProcessFlows. `contrast` is gone |
+| Questions after the comparison don't flow | Unframed and numbered: a run of h4 questions with ordinals they don't have | Headed "What a coded slice settles in practice" — the worked examples of the matrix's right-hand column — unnumbered tiles (`ledger.heading`, `marker: 'none'`) |
+
 **Copy re-cut in this pass:** Product Design's four signal bodies take back "May be" (it was the template's key, now the body's first words). Router conditions that had a separate `settles` line now carry it as a second sentence ("It settles scope, authority, ownership and investment."), on Modernisation and Design Systems.
 
 **Still bespoke, and next in line for the same question:** `fit` and `contrast` (lists of sentences, no titles), `stat`, `nudge`, and the seven diagrams. The diagrams are drawings and probably earn their place. The four text blocks should be checked against Prose lists, Proof figures and CtaSection before they're kept.

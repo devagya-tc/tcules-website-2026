@@ -148,8 +148,18 @@ export const softwareDevelopment: ServiceStory = {
       blocks: [
         {
           kind: 'slice',
-          label: 'One release',
           layers: ['Interface', 'Services', 'Integrations', 'AI service', 'Data'],
+          views: {
+            layer: {
+              title: 'Organised by layer',
+              note: 'Every layer is nearly done. No user path works end to end.',
+            },
+            slice: {
+              title: 'Organised by release',
+              note: 'One path works through every layer, and can ship.',
+            },
+          },
+          levelsLabel: 'A release is accepted at three levels',
           levels: [
             {
               icon: 'user',
@@ -239,8 +249,8 @@ export const softwareDevelopment: ServiceStory = {
       lead: 'Versatility matters more as frameworks change. Accountability does not.',
       blocks: [
         {
-          kind: 'contrast',
-          sides: [
+          kind: 'flow',
+          stages: [
             {
               label: 'AI accelerates',
               items: [

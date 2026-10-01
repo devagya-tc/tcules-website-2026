@@ -60,30 +60,28 @@ export const designEngineering: ServiceStory = {
       lead: 'Static screens are good evidence for hierarchy, flow and visual direction. They are weak evidence when the decision depends on how the thing behaves.',
       blocks: [
         {
-          kind: 'contrast',
-          sides: [
-            {
-              label: 'Static screens answer',
-              items: ['Hierarchy', 'Flow', 'Visual direction'],
-            },
-            {
-              label: 'A coded slice answers',
-              items: [
-                'Dynamic layout',
-                'Data density',
-                'Drag and drop',
-                'Model response',
-                'Animation',
-                'Keyboard operation',
-                'Component constraints',
-              ],
-            },
+          kind: 'matrix',
+          keyColumn: 'To decide',
+          columns: ['Static screens', 'A coded slice'],
+          markLabel: 'Answers this',
+          rows: [
+            { header: 'Hierarchy', answeredBy: 0 },
+            { header: 'Flow', answeredBy: 0 },
+            { header: 'Visual direction', answeredBy: 0 },
+            { header: 'Dynamic layout', answeredBy: 1 },
+            { header: 'Data density', answeredBy: 1 },
+            { header: 'Drag and drop', answeredBy: 1 },
+            { header: 'Model response', answeredBy: 1 },
+            { header: 'Animation', answeredBy: 1 },
+            { header: 'Keyboard operation', answeredBy: 1 },
+            { header: 'Component constraints', answeredBy: 1 },
           ],
         },
         {
           kind: 'ledger',
-          columns: 2,
-          marker: 'number',
+          heading: 'What a coded slice settles in practice',
+          columns: 3,
+          marker: 'none',
           items: [
             {
               title: 'Does the interaction stay understandable with realistic data?',
@@ -205,8 +203,8 @@ export const designEngineering: ServiceStory = {
       lead: 'AI makes plausible output easier to produce outside the product’s actual contracts. Tcules uses it inside the approved client environment, and a practitioner still accepts what ships.',
       blocks: [
         {
-          kind: 'contrast',
-          sides: [
+          kind: 'flow',
+          stages: [
             {
               label: 'AI accelerates',
               items: [

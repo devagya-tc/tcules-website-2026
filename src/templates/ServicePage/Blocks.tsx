@@ -11,7 +11,7 @@ import {
 } from '@/patterns';
 import type { StoryBlock, StoryCase, StorySlot } from '@/lib/service-story';
 
-import { Bridge, Parts, Record, Slice, Spectrum, Thread } from './Diagrams';
+import { Bridge, Matrix, Parts, Record, Slice, Spectrum, Thread } from './Diagrams';
 import { paragraph } from './text';
 import styles from './Blocks.module.css';
 
@@ -96,7 +96,7 @@ function Ledger({ block }: { block: Of<'ledger'> }) {
       : block.columns === 2
         ? { base: 1, md: 2 }
         : { base: 1, md: 2, lg: 3 };
-  return (
+  const set = (
     <Layout
       as={block.marker === 'number' ? 'ol' : 'ul'}
       columns={columns}
@@ -107,16 +107,28 @@ function Ledger({ block }: { block: Of<'ledger'> }) {
         <ListCard
           key={item.title}
           {...(single ? { arrangement: 'stacked' as const } : { form: 'tile' as const })}
-          titleAs="h3"
+          titleAs={block.heading ? 'h4' : 'h3'}
           title={item.title}
-          body={item.body}
+          body={item.body || undefined}
           marker={
-            block.marker === 'icon' && item.icon
-              ? { type: 'icon', name: item.icon }
-              : { type: 'number', value: index + 1 }
+            block.marker === 'none'
+              ? undefined
+              : block.marker === 'icon' && item.icon
+                ? { type: 'icon', name: item.icon }
+                : { type: 'number', value: index + 1 }
           }
         />
       ))}
+    </Layout>
+  );
+  /* A heading when the set is a sub-part of its section — the worked examples under a comparison —
+     so the reader is told what the set is before reading it, rather than meeting a run of questions
+     with no frame. */
+  if (!block.heading) return set;
+  return (
+    <Layout rowGap="block">
+      <h3 className={styles.setHeading}>{block.heading}</h3>
+      {set}
     </Layout>
   );
 }
@@ -213,35 +225,6 @@ function Fit({ block }: { block: Of<'fit'> }) {
     <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack" align="start">
       <FitList heading={block.yes.heading} items={block.yes.items} glyph="check-circle" />
       <FitList heading={block.no.heading} items={block.no.items} glyph="close-circle" />
-    </Layout>
-  );
-}
-
-/* ── Contrast ─────────────────────────────────────────────────────────────────
-   One statement in parts — what one party does and what the other keeps. So it is drawn as ONE
-   list split into two to four columns — one rule over all of them, the same row in each — and the
-   key over each part is the only thing that differs. Two representations would say two ideas. */
-function Contrast({ block }: { block: Of<'contrast'> }) {
-  const count = block.sides.length;
-  return (
-    <Layout
-      columns={count > 2 ? { base: 1, md: 2, lg: count } : { base: 1, lg: 2 }}
-      colGap={count > 2 ? 'gutter' : 'column'}
-      rowGap="stack"
-      className={styles.split}
-    >
-      {block.sides.map((side) => (
-        <Layout key={side.label} rowGap="text">
-          <span className={styles.key}>{side.label}</span>
-          <Layout as="ul" rowGap="none">
-            {side.items.map((item) => (
-              <li key={item} className={styles.rowTight}>
-                <span className={styles.rowText}>{item}</span>
-              </li>
-            ))}
-          </Layout>
-        </Layout>
-      ))}
     </Layout>
   );
 }
@@ -439,8 +422,8 @@ export function StoryBlockView({ block, slots }: { block: StoryBlock; slots: boo
       );
     case 'record':
       return <Record block={block} />;
-    case 'contrast':
-      return <Contrast block={block} />;
+    case 'matrix':
+      return <Matrix block={block} />;
     case 'flow':
       return (
         <ProcessFlow actor={block.actor} stages={block.stages} throughout={block.throughout} />

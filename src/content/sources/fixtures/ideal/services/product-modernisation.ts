@@ -303,8 +303,8 @@ export const productModernisation: ServiceStory = {
       lead: 'AI can also reproduce old assumptions faster, or generate plausible components that bypass the product system. Tcules uses it inside the agreed client environment.',
       blocks: [
         {
-          kind: 'contrast',
-          sides: [
+          kind: 'flow',
+          stages: [
             {
               label: 'AI accelerates',
               items: [

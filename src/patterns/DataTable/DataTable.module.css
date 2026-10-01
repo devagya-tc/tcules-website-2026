@@ -186,7 +186,12 @@
    16/1.6, so a shared TOP puts their first lines on different baselines, measured at about 2px and
    visible down every row. A shared baseline is what makes a row read as one line of data. */
 .key,
+/* `position: relative` makes every cell a containing block (1 Oct 2026). A composed `{ node }` cell
+   often carries a visually-hidden text alternative, which is absolutely positioned; without a
+   positioned cell it resolved against the page rather than the scroll frame, escaped the frame and
+   widened a 390px page by 24px. Inside the cell it scrolls with the table like everything else. */
 .cell {
+  position: relative;
   border-block-end: var(--dtab-rule-width) solid var(--dtab-rule-ink);
   vertical-align: baseline;
   /* A CMS cell can carry one unbroken string — a URL, a long identifier. `anywhere` lets it break

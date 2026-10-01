@@ -301,8 +301,8 @@ export const designSystems: ServiceStory = {
       lead: 'Faster generation raises the cost of unclear semantics: an ambiguous rule is repeated across more surfaces, sooner.',
       blocks: [
         {
-          kind: 'contrast',
-          sides: [
+          kind: 'flow',
+          stages: [
             {
               label: 'Better context than a screenshot',
               items: [

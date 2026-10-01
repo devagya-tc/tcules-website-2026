@@ -63,7 +63,7 @@ export type DataTableProps = {
   keyColumn: DataTableKeyColumn;
   /** The data columns. One to five is the designed range; the count is data, never a variant. */
   columns: readonly DataTableColumn[];
-  /** Three to eight is the designed range. Never sorted, filtered or paginated. */
+  /** Three to twelve is the designed range (eight until 1 Oct 2026). Never sorted, filtered or paginated. */
   rows: readonly DataTableRow[];
 };
 
@@ -129,8 +129,8 @@ export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTa
     warn(`received ${columns.length} data columns; the designed maximum is five.`);
   }
 
-  if (rows.length < 3 || rows.length > 8) {
-    warn(`received ${rows.length} rows; the designed range is three to eight.`);
+  if (rows.length < 3 || rows.length > 12) {
+    warn(`received ${rows.length} rows; the designed range is three to twelve.`);
   }
 
   const keyBehaviour = keyColumn.behaviour ?? 'hold';

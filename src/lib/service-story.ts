@@ -105,8 +105,10 @@ export type StoryBlock =
   /** Rows of named things, each with a glyph or a number. The deliverables shape. */
   | {
       kind: 'ledger';
+      /** A heading over the set, when the set is a sub-part of its section (h3). */
+      heading?: string;
       columns: 1 | 2 | 3;
-      marker: 'icon' | 'number';
+      marker: 'icon' | 'number' | 'none';
       items: readonly { title: string; body: string; icon?: StoryGlyph }[];
     }
   /** Which route to take, chosen by the condition you are in. Condition first, route second. */
@@ -176,12 +178,16 @@ export type StoryBlock =
       stages: readonly { label: string; items: readonly string[] }[];
       throughout?: { label: string; items: readonly string[] };
     }
-  /** One statement in two halves — what one party does, what the other keeps — as one list split
-      into two columns under one rule, the same row style on both sides. */
+  /** Which side answers each row: a comparison laid out on the rows it compares, one mark per row
+      in the column that answers it. Not two lists side by side — the reader should not have to
+      line them up. */
   | {
-      kind: 'contrast';
-      /** Two to four columns of one list. */
-      sides: readonly [ContrastSide, ContrastSide, ...ContrastSide[]];
+      kind: 'matrix';
+      keyColumn: string;
+      columns: readonly string[];
+      /** Screen-reader words for a mark, e.g. "Answers this". */
+      markLabel: string;
+      rows: readonly { header: string; answeredBy: number }[];
     }
   /** Several parts inside one frame that keeps them current — the five-part system. */
   | {
@@ -189,11 +195,16 @@ export type StoryBlock =
       items: readonly { name: string; body: string; icon: StoryGlyph }[];
       frame: { name: string; body: string; icon: StoryGlyph };
     }
-  /** A slice cut through layers, with the levels it is accepted at. */
+  /** The same work organised two ways — by layer, then by release — and the levels a release is
+      accepted at. The pair is the argument: the first shows the problem the second solves. */
   | {
       kind: 'slice';
       layers: readonly string[];
-      label: string;
+      views: {
+        layer: { title: string; note: string };
+        slice: { title: string; note: string };
+      };
+      levelsLabel: string;
       levels: readonly { title: string; body: string; icon: StoryGlyph }[];
     }
   /** The temporary states that live between the current product and the target one. */
@@ -236,10 +247,6 @@ export type StoryBlock =
   /** An image that should exist here. Invisible unless the page is in review mode. */
   | { kind: 'slot'; slot: StorySlot };
 
-export type ContrastSide = {
-  label: string;
-  items: readonly string[];
-};
 
 export type StorySection = {
   type: 'section';

@@ -516,3 +516,8 @@ trusted HTML string: a mark the caller composes, placed in the cell as given. Th
 alternative (the disruption meter carries a visually hidden "Disruption: 3 of 6"). Strings keep their
 contract unchanged. Give a mark column `behaviour: 'nowrap'`.
 
+**Row range, 1 Oct 2026.** Three to twelve, up from eight. The cap was a content estimate, not a
+layout limit — rows are one ruled line each and nothing in the frame depends on the count — and the
+first comparison matrix (Design Engineering: ten things to decide, each answered by static screens or
+a coded slice) is a legitimate ten-row table. Above twelve the warning still fires.
+
