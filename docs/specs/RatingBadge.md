@@ -42,8 +42,9 @@ brandeis star; ink lifts to neutral-300 with a brandeis-300 star; blue runs bran
 ## Placements
 
 - SiteFooter brand block, beside the primary action.
-- ServicePage proof band: under the client's quote, a stack below it — the client's words, then the
-  market's score (`proof.rating`).
+- ServicePage proof band: under the client's quote, a block (24) below the attribution — the client's
+  words, then the market's score, read as one piece of evidence (`proof.rating`; was a stack until the
+  owner's note, 1 Oct 2026).
 
 ## Content rule
 
@@ -62,4 +63,9 @@ prevents. A checked-on date is not shown, matching the footer; if the owner want
 - **No placement of its own.** The component set `justify-self: start`, which overrode the footer
   column's `justify-items: end` and moved the badge off its right edge. Where a badge sits is the parent's
   decision; the proof band wraps it in a Cluster so its grid cell does not stretch it.
+- **Centring, verified two ways.** Layout boxes: the trimmed text box and the icons share one centre
+  (16.0px in a 32px badge). Rendered ink at 8×: WebKit puts star, capitals and mark on one centre
+  exactly; Chromium leaves the icons 0.3px low, under a device pixel, from the face's cap-height metric
+  sitting a hair inside its drawn capitals. The trim (`text-box: trim-both cap alphabetic`) is what makes
+  the result independent of the line box; where it is unsupported (Firefox today) the line box returns.
 

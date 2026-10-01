@@ -47,6 +47,18 @@
   color: var(--rbadge-star-ink);
 }
 
+/* The text's box, trimmed to the capitals (1 Oct 2026, owner: the star sat low). `align-items:
+   center` centres each item's BOX; a text box is the line box, and in this mono face that carries
+   descender space under capitals that have no descenders, so its centre sits below the middle of
+   the caps and the icons, centred on it, sat low and hung under the baseline. Trimmed to cap height
+   over the alphabetic baseline, the box IS the capitals, and centring is exact whatever metrics the
+   face resolves to — ch04: an icon centres on the text beside it, not on the line box. Where
+   `text-box` is unsupported the line box remains, and the icons sit as they did before. */
+.text {
+  display: block;
+  text-box: trim-both cap alphabetic;
+}
+
 /* Tighter than the badge's own gap, so the mark and the name read as one lockup. */
 .lockup {
   display: inline-flex;

@@ -46,14 +46,17 @@ export function RatingBadge({ score, platform, href, icon, mark }: RatingBadgePr
           {icon}
         </span>
       ) : null}
-      {score} on
+      {/* Each run of text is its own box, trimmed to the capitals (see .text), so the flex row
+          centres the star and the mark on the middle of the caps rather than on a line box that
+          carries the face's descender space below them. */}
+      <span className={styles.text}>{score} on</span>
       <span className={styles.lockup}>
         {mark ? (
           <span className={styles.mark} aria-hidden="true">
             {mark}
           </span>
         ) : null}
-        {platform}
+        <span className={styles.text}>{platform}</span>
       </span>
       <span className={styles.hint}> (opens in a new tab)</span>
     </a>

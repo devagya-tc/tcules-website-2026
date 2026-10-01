@@ -274,10 +274,11 @@ function ProofBlock({ block }: { block: Of<'proof'> }) {
         />
       </Layout>
       {block.rating ? (
-        /* The client's words, then the market's score: the rating sits under the attribution, at
-           a stack's distance, because it is a second piece of evidence rather than part of the
-           quote. One score source, shared with the footer (fixtures/ratings.ts). */
-        <Layout rowGap="stack">
+        /* The client's words, then the market's score, as ONE piece of evidence: the badge sits a
+           block (24) under the attribution, the same beat as the quote to its attribution. It was
+           a stack (48) and read as a separate block floating below (1 Oct 2026, owner). One score
+           source, shared with the footer (fixtures/ratings.ts). */
+        <Layout rowGap="block">
           <Proof arrangement="compact" quote={quote} />
           {/* A Cluster around the badge so the grid cell does not stretch it across the column:
               the parent decides where the badge sits, and the badge sizes to its content. */}
