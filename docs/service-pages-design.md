@@ -30,6 +30,16 @@ Second batch, same day:
 | Accordion is jumpy (global) | **An old trade-off that no longer holds.** Height animation was ruled out because faking it on `<details>` costs native behaviour. CSS now animates the native element (`::details-content`, `interpolate-size`) | 240ms ease on the answer's height and opacity, and on the question's inset; reduced motion is instant; unsupported browsers open at once, as before | `Accordion`, spec §13 |
 | Form labels, "optional", errors, reserved hint space | **One anatomy for every field.** Every field got a label, an optional mono flag and an always-reserved message row, whatever it did. The URL field only had an error row because it rejected anything without `https://` | **A field contract**, recorded in the component: label is the noun; "(optional)" inside the label, quieter; a hint row only when there's a hint; a message row only when the field validates; errors say what to do in a few words; normalise rather than reject (URL gets `https://` added) | `EnquiryForm` `FieldGroup`, spec amendment |
 
+Third batch, same day:
+
+| Note | Underlying issue | Fix |
+|---|---|---|
+| Text selection should be peridot (global) | — a shell decision, not a component's | `::selection` peridot-500 under neutral-950 on every surface, in `globals.css` |
+| Process items should run vertically | **A row is how these pages show peers.** Five 220px columns broke every step title in two and read as options to compare, not an order to follow | `steps` is an `<ol>` of numbered ListCard rows on every page |
+| Disruption meter reads wrong | **Ink is read as quantity.** The squares put the most ink on "no disruption", and tilted outlines read as noise | A tremor trace: flat for "Leave unchanged", a swelling seismograph burst down to "Retire". More ink, more disruption, and a sign already read as disturbance |
+| Transition still unclear | **Shared seams made three states read as one table** | Three separate panels with a gutter — Before · During the move · After — each opening on a rule; solid bar = the product in use, dashed = half-present |
+| Proof: case first | The eye should enter on the work, then hear about it | Case card in the narrow leading track, quote after it in the wide one |
+
 **Copy re-cut in this pass:** Product Design's four signal bodies take back "May be" (it was the template's key, now the body's first words). Router conditions that had a separate `settles` line now carry it as a second sentence ("It settles scope, authority, ownership and investment."), on Modernisation and Design Systems.
 
 **Still bespoke, and next in line for the same question:** `fit` and `contrast` (lists of sentences, no titles), `stat`, `nudge`, and the seven diagrams. The diagrams are drawings and probably earn their place. The four text blocks should be checked against Prose lists, Proof figures and CtaSection before they're kept.

@@ -31,13 +31,10 @@
   --svc-rule-width: var(--border-width-hairline);
   --svc-rule-strong-width: var(--border-width-1);
   --svc-slice-width: var(--border-width-2);
-  /* The transition timeline: one product's bar for one phase, tall enough for a mono label. */
-  --svc-bar-height: var(--space-48);
-  /* The disruption meter: one part of the product, how far a disturbed part is lifted off the
-     line, and how far it tilts. Component sizes, not distances. */
-  --svc-meter-part: var(--space-12);
-  --svc-meter-lift: var(--space-8);
-  --svc-meter-tilt: 14deg;
+  /* The disruption trace: its box, a component size rather than a distance, and its line. */
+  --svc-meter-width: var(--space-96);
+  --svc-meter-height: var(--space-24);
+  --svc-meter-stroke: var(--border-width-2);
 }
 
 /* ── Surfaces ──────────────────────────────────────────────────────────────────

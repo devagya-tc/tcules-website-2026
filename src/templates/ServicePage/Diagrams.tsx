@@ -1,42 +1,56 @@
 import { Cluster, Icon, Layout, Tag } from '@/components';
-import { cx } from '@/lib/cx';
 import type { StoryBlock } from '@/lib/service-story';
 
 import styles from './Diagrams.module.css';
 
 type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
 
-/* ── Spectrum ─────────────────────────────────────────────────────────────────
-   Options ordered on ONE scale. The CMS sent these as a table in no order; ordered, the table stops
-   being a menu and becomes the page's argument — take the least disruptive change that works. The
-   order is stated once, in words, over the list; there is no per-row meter (30 Sep 2026: a filled
-   bar per row read as progress, which is a claim the list does not make). */
 /* ── Disruption meter ─────────────────────────────────────────────────────────
-   How much of the CURRENT PRODUCT an option disturbs, drawn as the product itself: six parts
-   sitting on one line. A part the option leaves alone sits solid on the line; a part it disturbs is
-   knocked loose — lifted off the line, tilted, emptied to an outline. "Leave unchanged" has none
-   loose, "Retire" has all six. Nothing fills toward a goal, so it cannot read as progress, which is
-   what got the first meter cut (30 Sep): the more of it is loose, the worse for the people using it.
+   A tremor trace: the line a seismograph draws. Flat for an option that disturbs nothing, a
+   growing burst for each step down the list, the widest for "Retire". Two things decided the form
+   (1 Oct 2026, owner, on the first meter):
+   - INK GROWS WITH DISRUPTION. Every reader takes more ink to mean more. The first meter put the
+     most ink (six solid squares) on "Leave unchanged" and outlines on "Retire", so it read
+     backwards — and its tilted outlines read as noise rather than as a quantity.
+   - THE SIGN ALREADY MEANS DISTURBANCE. A seismograph trace is read as "how much shaking" without
+     a legend, and it has no goal to fill toward, so it cannot be mistaken for progress — which is
+     what got the meter before that one cut (30 Sep).
 
-   The level is the row's rank on the ordered list, spread across the six parts — a rank, not a
-   measurement, which is all the content claims. Hidden from assistive technology; the row states
-   it in words ("Disruption: 3 of 6 parts"). */
-const METER_PARTS = 6;
+   The amplitude is the row's rank on the ordered list, spread over six steps — a rank, not a
+   measurement, which is all the content claims. The burst is shaped by a sine envelope so it swells
+   and settles like a tremor rather than buzzing at one height. Hidden from assistive technology;
+   the row states the level in words. */
+const METER_STEPS = 6;
+const TRACE_WIDTH = 96;
+const TRACE_HEIGHT = 24;
+const TRACE_PEAKS = 16;
+
+function tracePoints(level: number): string {
+  const mid = TRACE_HEIGHT / 2;
+  const reach = (mid - 1) * (level / METER_STEPS);
+  return Array.from({ length: TRACE_PEAKS + 1 }, (_, index) => {
+    const x = (index / TRACE_PEAKS) * TRACE_WIDTH;
+    const envelope = Math.sin((Math.PI * index) / TRACE_PEAKS);
+    const sign = index % 2 === 0 ? -1 : 1;
+    const y = mid + sign * reach * envelope;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+}
 
 function DisruptionMeter({ level, label }: { level: number; label: string }) {
   return (
     <>
-      <Cluster as="span" nowrap colGap="inline" align="end" aria-hidden="true" className={styles.meter}>
-        {Array.from({ length: METER_PARTS }, (_, index) => (
-          <span
-            key={index}
-            className={styles.meterPart}
-            data-loose={index < level ? (index % 2 === 0 ? 'left' : 'right') : undefined}
-          />
-        ))}
-      </Cluster>
+      <svg
+        className={styles.meter}
+        viewBox={`0 0 ${TRACE_WIDTH} ${TRACE_HEIGHT}`}
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <polyline className={styles.meterTrace} points={tracePoints(level)} />
+      </svg>
       <span className={styles.visuallyHidden}>
-        {label}: {level} of {METER_PARTS} parts
+        {label}: {level} of {METER_STEPS}
       </span>
     </>
   );
@@ -74,7 +88,7 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
               {meter ? (
                 <DisruptionMeter
                   label={meter.label}
-                  level={last > 0 ? Math.round((index / last) * METER_PARTS) : 0}
+                  level={last > 0 ? Math.round((index / last) * METER_STEPS) : 0}
                 />
               ) : null}
               <p className={styles.rowBody}>{item.when}</p>
@@ -247,61 +261,65 @@ export function Slice({ block }: { block: Of<'slice'> }) {
   );
 }
 
-/* ── Bridge: the transition as a timeline ─────────────────────────────────────
+/* ── Bridge: the transition in three states ───────────────────────────────────
    A move from the current product to the target one is not a jump: for a while BOTH are live, and
-   that overlap is what has to be designed. So it is drawn as time, read left to right — Before,
-   During the move, After — with each product as a bar. The current product runs solid before the
-   move and dashed during it ("still running"); the target starts dashed during it ("already
-   running") and runs solid after. The two dashed bars stacked in the middle phase ARE the
-   transition, and the temporary states sit directly under them, because they exist only there
-   (1 Oct 2026, owner: "it just looks like boxes and text").
+   that overlap is what has to be designed. So the diagram is three separate states, read left to
+   right — Before, During the move, After — each its own panel with a gutter between, because a
+   transition is a change from one state to the next and separate panels make the change visible
+   (1 Oct 2026, owner: bars running across shared seams read as one table).
 
-   Three phase columns rather than two spanning bars, so it stacks honestly below lg: Before with the
-   current product, During with both and its states, After with the target. Each bar is a fixed
-   height and an empty phase holds a spacer of the same height, so the two products keep their own
-   rows across the three columns. */
+   What is live in each state is a bar: solid when a product is the one people use, dashed when it
+   is half-present. Before holds the current product; During holds both, dashed — still running,
+   already running — with the temporary work under them, because it exists only there; After holds
+   the target. Below lg the three stack in the same order. */
 export function Bridge({ block }: { block: Of<'bridge'> }) {
   return (
     <figure
       aria-label={`${block.label}: ${block.phases.during.toLowerCase()}, ${block.from.toLowerCase()} and ${block.to.toLowerCase()} are both live`}
       className={styles.bridge}
     >
-      <Layout columns={{ base: 1, lg: [1, 2, 1] }} colGap="none" rowGap="stack">
-        <Layout rowGap="tight" className={styles.phase}>
-          <span className={cx(styles.key, styles.phaseHead)}>{block.phases.before}</span>
-          <span className={styles.bar} data-product="current" data-state="live">
-            {block.from}
-          </span>
-          <span className={styles.barSpacer} aria-hidden="true" />
-        </Layout>
-        <Layout rowGap="block" className={styles.phase}>
-          <Layout rowGap="tight">
-            <span className={cx(styles.key, styles.phaseHead)}>{block.phases.during}</span>
-            <span className={styles.bar} data-product="current" data-state="ending">
-              {block.from}, still running
-            </span>
-            <span className={styles.bar} data-product="target" data-state="starting">
-              {block.to}, already running
+      <Layout as="ol" columns={{ base: 1, lg: [1, 2, 1] }} colGap="gutter" rowGap="stack" align="start">
+        <li className={styles.phase}>
+          <Layout rowGap="text">
+            <span className={styles.key}>{block.phases.before}</span>
+            <span className={styles.bar} data-state="live">
+              {block.from}
             </span>
           </Layout>
-          <Layout rowGap="text" className={styles.between}>
-            <span className={styles.key}>{block.label}</span>
-            <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="none">
-              {block.items.map((item) => (
-                <li key={item} className={styles.state}>
-                  {item}
-                </li>
-              ))}
+        </li>
+        <li className={styles.phase}>
+          <Layout rowGap="block">
+            <Layout rowGap="text">
+              <span className={styles.key}>{block.phases.during}</span>
+              <Layout rowGap="tight">
+                <span className={styles.bar} data-state="partial">
+                  {block.from}, still running
+                </span>
+                <span className={styles.bar} data-state="partial">
+                  {block.to}, already running
+                </span>
+              </Layout>
+            </Layout>
+            <Layout rowGap="text">
+              <span className={styles.key}>{block.label}</span>
+              <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="none">
+                {block.items.map((item) => (
+                  <li key={item} className={styles.state}>
+                    {item}
+                  </li>
+                ))}
+              </Layout>
             </Layout>
           </Layout>
-        </Layout>
-        <Layout rowGap="tight" className={styles.phase}>
-          <span className={cx(styles.key, styles.phaseHead)}>{block.phases.after}</span>
-          <span className={styles.barSpacer} aria-hidden="true" />
-          <span className={styles.bar} data-product="target" data-state="live">
-            {block.to}
-          </span>
-        </Layout>
+        </li>
+        <li className={styles.phase}>
+          <Layout rowGap="text">
+            <span className={styles.key}>{block.phases.after}</span>
+            <span className={styles.bar} data-state="live">
+              {block.to}
+            </span>
+          </Layout>
+        </li>
       </Layout>
     </figure>
   );

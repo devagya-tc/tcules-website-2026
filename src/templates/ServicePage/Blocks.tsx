@@ -60,26 +60,21 @@ function Signals({ block }: { block: Of<'signals'> }) {
 }
 
 /* ── Steps ────────────────────────────────────────────────────────────────────
-   A method: order matters, so the set is an <ol> and the number is the marker — the only mark,
-   because it is the only thing that carries the order. A worked example, when there is one, is a
-   Callout above the steps: the scene they are walked through, keyed, then the method. */
+   A method, read top to bottom (1 Oct 2026, owner): ListCard rows in an <ol>, the number as the
+   marker, the step's name beside the line that says what happens in it. It was five tiles across
+   a row, and a row is how this page shows PEERS — five 220px columns broke every title onto two
+   lines and read as five options to compare rather than one order to follow. The worked example,
+   when there is one, is a Callout above the steps: the scene they are walked through. */
 function Steps({ block }: { block: Of<'steps'> }) {
-  const count = block.items.length;
   return (
     <Layout rowGap="stack">
       {block.example ? (
         <Callout label={block.example.label} html={paragraph(block.example.body)} />
       ) : null}
-      <Layout
-        as="ol"
-        columns={count <= 5 ? { base: 1, md: 2, lg: count } : { base: 1, md: 2, lg: 3 }}
-        colGap="gutter"
-        rowGap="stack"
-      >
+      <Layout as="ol" rowGap="none">
         {block.items.map((item, index) => (
           <ListCard
             key={item.title}
-            form="tile"
             titleAs="h3"
             title={item.title}
             body={item.body}
@@ -255,13 +250,12 @@ function Contrast({ block }: { block: Of<'contrast'> }) {
 /* ── Proof ────────────────────────────────────────────────────────────────────
    A quote is a claim about a relationship; the case it came from is where a reader checks it.
 
-   With a case: the quote BESIDE the work. The case card carries the image, so the visual weight is
-   the work's; the quote is compact (28), because a quote beside something takes the reading size —
-   size follows a quote's length and width, never its importance (Proof.md, Amendment 1 Oct). Two
-   tracks to one, a split (--gap-section), tops aligned: both start where the eye enters the band.
+   With a case: the WORK first, then what the client said about it (1 Oct 2026, owner). The case
+   card leads in the narrow track and carries the band's image, so the eye enters on the work; the
+   quote follows in the wide track at the compact size (28) — a quote beside something takes the
+   reading size (Proof.md, Amendment 1 Oct). A split, so --gap-section; tops aligned.
 
-   Without a case: the quote ALONE, wide, at display (34), and a source link in its attribution row
-   when the quote carries one. */
+   Without a case: the quote ALONE, wide, at display (34). */
 function ProofBlock({ block }: { block: Of<'proof'> }) {
   const quote = {
     quoteHtml: paragraph(block.quote.text),
@@ -273,8 +267,7 @@ function ProofBlock({ block }: { block: Of<'proof'> }) {
   const caseCard = block.case;
   if (!caseCard) return <Proof arrangement="display" quote={quote} />;
   return (
-    <Layout columns={{ base: 1, lg: [2, 1] }} colGap="section" rowGap="stack" align="start">
-      <Proof arrangement="compact" quote={quote} />
+    <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="stack" align="start">
       <Layout as="ul" rowGap="none">
         <BlockCard
           eyebrow={caseCard.client}
@@ -286,6 +279,7 @@ function ProofBlock({ block }: { block: Of<'proof'> }) {
           tracks={3}
         />
       </Layout>
+      <Proof arrangement="compact" quote={quote} />
     </Layout>
   );
 }

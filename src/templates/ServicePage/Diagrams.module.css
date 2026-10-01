@@ -6,8 +6,8 @@
 
    Every mark here says something (30 Sep 2026 review): the bracket says the operating model spans
    the four parts; the slice says a release cuts through every layer; the dashed bars say a product
-   is half-present while the move is under way; an arrow says one stage feeds the next; a loose part
-   on the disruption meter is a part of the product the option disturbs. Marks that said nothing — a
+   is half-present while the move is under way; an arrow says one stage feeds the next; the
+   disruption trace is how much an option shakes the product, more ink for more. Marks that said nothing — a
    progress meter per row, a dashed thread with nodes, a dot on every step's rule — were cut. */
 
 .key {
@@ -222,39 +222,27 @@
 }
 
 /* ── Bridge ───────────────────────────────────────────────────────────────────── */
-/* ── Bridge: the transition as a timeline ─────────────────────────────────────────
-   Phases are columns; each starts on a hairline, the boundary between one period and the next. The
-   bars run straight across those boundaries — that continuity is what makes two bars one product
-   over time — so the phase has no inline padding and only its head is inset. */
+/* ── Bridge: three states ────────────────────────────────────────────────────────
+   Each state is its own panel opening on a strong rule — the same opening a tile has — so the
+   three read as separate states with a gutter between, not as one table. */
 .bridge {
   color: var(--svc-ink);
 }
 
 .phase {
   min-inline-size: 0;
-  border-inline-start: var(--svc-rule-width) solid var(--svc-rule-strong);
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
 }
 
-/* Every label and the states list sit one tight step inside the phase line, so text never touches
-   the boundary it starts from; only the bars run edge to edge. */
-.phaseHead {
-  padding-inline: var(--gap-tight);
-}
-
-/* A product, for one phase. Live is solid: the product people are using. Ending and starting are
-   dashed, the same product half-present — still running, already running. Fixed height so the two
-   products keep their own rows across the three columns, spacers included. */
+/* A product, as it is in one state. Live is solid: the product people use. Partial is dashed: the
+   same product half-present while the move is under way. */
 .bar {
   display: block;
-  block-size: var(--svc-bar-height);
-  padding-inline: var(--gap-text);
-  overflow: hidden;
+  padding: var(--gap-text);
   font: var(--text-ui);
   letter-spacing: var(--text-ui-tracking);
   text-transform: var(--text-mono-case);
-  line-height: var(--svc-bar-height);
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .bar[data-state='live'] {
@@ -262,47 +250,9 @@
   color: var(--svc-bar-live-ink);
 }
 
-.bar[data-state='ending'],
-.bar[data-state='starting'] {
+.bar[data-state='partial'] {
   border: var(--svc-rule-strong-width) dashed var(--svc-bar-edge);
   color: var(--svc-ink);
-}
-
-/* The current product's dashed bar continues from the solid one on its left, and the target's
-   dashed bar runs into the solid one on its right: the open end faces the bar it joins. */
-.bar[data-state='ending'] {
-  border-inline-start: none;
-}
-
-.bar[data-state='starting'] {
-  border-inline-end: none;
-}
-
-.barSpacer {
-  display: block;
-  block-size: var(--svc-bar-height);
-}
-
-.between {
-  padding-inline: var(--gap-tight);
-}
-
-/* The states' own label already sits inside .between's inset. */
-.between > .key {
-  padding-inline: 0;
-}
-
-/* One column below lg: each phase stacks, so a spacer would be an empty band, and the open ends
-   would face nothing. Every bar closes and the spacers go. */
-@media (max-width: 1023px) {
-  .barSpacer {
-    display: none;
-  }
-
-  .bar[data-state='ending'],
-  .bar[data-state='starting'] {
-    border: var(--svc-rule-strong-width) dashed var(--svc-bar-edge);
-  }
 }
 
 .state {
@@ -314,33 +264,21 @@
 }
 
 /* ── Disruption meter ──────────────────────────────────────────────────────────────
-   Six parts on one line. A settled part sits solid on the line; a loose part is lifted off it,
-   tilted, and emptied to an outline. The padding above the line is the room a loose part is lifted
-   into, so a row of loose parts never collides with the row above. */
+   The trace keeps its stroke width however the box scales (non-scaling-stroke), in the row's ink. */
 .meter {
-  inline-size: max-content;
-  padding-block-start: var(--svc-meter-lift);
-  border-block-end: var(--svc-rule-width) solid var(--svc-rule-strong);
-}
-
-.meterPart {
   display: block;
-  inline-size: var(--svc-meter-part);
-  block-size: var(--svc-meter-part);
-  background: var(--svc-ink);
+  inline-size: var(--svc-meter-width);
+  block-size: var(--svc-meter-height);
+  overflow: visible;
 }
 
-.meterPart[data-loose] {
-  background: transparent;
-  border: var(--svc-rule-strong-width) solid var(--svc-ink);
-}
-
-.meterPart[data-loose='left'] {
-  transform: translateY(calc(-1 * var(--svc-meter-lift))) rotate(calc(-1 * var(--svc-meter-tilt)));
-}
-
-.meterPart[data-loose='right'] {
-  transform: translateY(calc(-1 * var(--svc-meter-lift))) rotate(var(--svc-meter-tilt));
+.meterTrace {
+  fill: none;
+  stroke: var(--svc-ink);
+  stroke-width: var(--svc-meter-stroke);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
 }
 
 /* ── Thread ───────────────────────────────────────────────────────────────────── */
