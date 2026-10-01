@@ -129,6 +129,7 @@ export function SiteFooter({
                 score={brand.rating.score}
                 platform={brand.rating.platform}
                 href={brand.rating.href}
+                icon={<Icon name="star" size="sm" />}
                 mark={<BrandMark name={brand.rating.mark} />}
               />
             ) : null}

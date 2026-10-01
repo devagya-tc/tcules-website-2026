@@ -279,12 +279,17 @@ function ProofBlock({ block }: { block: Of<'proof'> }) {
            quote. One score source, shared with the footer (fixtures/ratings.ts). */
         <Layout rowGap="stack">
           <Proof arrangement="compact" quote={quote} />
-          <RatingBadge
-            score={block.rating.score}
-            platform={block.rating.platform}
-            href={block.rating.href}
-            mark={<BrandMark name={block.rating.mark} />}
-          />
+          {/* A Cluster around the badge so the grid cell does not stretch it across the column:
+              the parent decides where the badge sits, and the badge sizes to its content. */}
+          <Cluster>
+            <RatingBadge
+              score={block.rating.score}
+              platform={block.rating.platform}
+              href={block.rating.href}
+              icon={<Icon name="star" size="sm" />}
+              mark={<BrandMark name={block.rating.mark} />}
+            />
+          </Cluster>
         </Layout>
       ) : (
         <Proof arrangement="compact" quote={quote} />

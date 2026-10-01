@@ -19,9 +19,9 @@ never print different numbers.
 
 ## Anatomy and API
 
-`{ score: string; platform: string; href: string; mark?: ReactNode }`. One `<a>` (new tab, `rel=
-"noreferrer noopener"`): an aria-hidden ★ at 1.35em (an optical correction against the numeral), the
-score, "on", then the mark and the platform name as one lockup, then a visually hidden "(opens in a new
+`{ score: string; platform: string; href: string; icon?: ReactNode; mark?: ReactNode }`. One `<a>`
+(new tab, `rel="noreferrer noopener"`): the leading icon (in practice `<Icon name="star" size="sm" />`,
+aria-hidden), the score, "on", then the mark and the platform name as one lockup, then a visually hidden "(opens in a new
 tab)". The accessible name reads "4.8 on Clutch (opens in a new tab)".
 
 The mark is a node the caller composes — in practice `<BrandMark name="clutch" />` — because a
@@ -51,3 +51,15 @@ The score is copy, not arithmetic: a string as published ("4.8", "5.0"). Re-read
 updating `fixtures/ratings.ts`; a score that drifts from its source is the failure the single source
 prevents. A checked-on date is not shown, matching the footer; if the owner wants one, it belongs in
 `ratings.ts` and both placements get it together.
+
+## Amendment · 1 Oct 2026 — alignment pass (owner: "the star doesn't align well … the badge itself moved")
+
+- **The star is a glyph, not a character.** It was a `★` at 1.35em in the mono face, which has no ★, so
+  each browser fell back to a different font and the star's centre landed differently on each. It is now
+  Solar's `star-bold` in the glyph set, passed as `icon` (a primitive does not import a sibling), at the
+  same 14px as the platform mark beside the name. Measured at 4×: star, mark and badge centres sit within
+  about half a pixel of the capitals' centre.
+- **No placement of its own.** The component set `justify-self: start`, which overrode the footer
+  column's `justify-items: end` and moved the badge off its right edge. Where a badge sits is the parent's
+  decision; the proof band wraps it in a Cluster so its grid cell does not stretch it.
+

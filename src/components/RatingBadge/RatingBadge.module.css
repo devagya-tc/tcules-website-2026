@@ -8,7 +8,6 @@
   display: inline-flex;
   gap: var(--gap-tight);
   align-items: center;
-  justify-self: start;
   padding-block: var(--gap-tight);
   padding-inline: var(--rbadge-padding-inline);
   color: var(--rbadge-ink);
@@ -39,12 +38,12 @@
     0 0 0 calc(var(--rbadge-ring-offset) + var(--rbadge-ring-width)) var(--rbadge-ring-color);
 }
 
-/* Larger than the digits beside it, in em: a ★ is drawn well inside its em box where a digit fills
-   the cap height, so equal font sizes do not look equal. 1.35 is the optical correction, by eye
-   against the numeral — relative to its context, like Prose's sub and sup. */
+/* The star's box. The glyph is an Icon the caller passes; this wrapper gives it the star's ink and
+   takes the inline box's line height out of play, so `align-items: center` centres the glyph
+   itself, the same way the mark beside the platform name is centred. */
 .star {
-  font-size: 1.35em;
-  line-height: 1;
+  display: block;
+  line-height: 0;
   color: var(--rbadge-star-ink);
 }
 

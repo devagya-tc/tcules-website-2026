@@ -1,4 +1,12 @@
-import { BrandMark, Layout, RatingBadge, Section, type SectionSurface } from '@/components';
+import {
+  BrandMark,
+  Cluster,
+  Icon,
+  Layout,
+  RatingBadge,
+  Section,
+  type SectionSurface,
+} from '@/components';
 import { EXTERNAL } from '@/lib/routes';
 
 import { Specimen } from '../_specimen/Specimen';
@@ -28,15 +36,16 @@ export default function RatingBadgeSpecimen() {
           <Layout rowGap="stack">
             {index === 0 ? <h2>1 · Four surfaces · identical markup</h2> : null}
             <Specimen title={surface} note="with the Clutch mark, and without a mark">
-              <Layout rowGap="block">
+              <Cluster colGap="block" rowGap="block">
                 <RatingBadge
                   score={SCORE}
                   platform="Clutch"
                   href={EXTERNAL.clutch}
+                  icon={<Icon name="star" size="sm" />}
                   mark={<BrandMark name="clutch" />}
                 />
                 <RatingBadge score="5.0" platform="Clutch" href={EXTERNAL.clutch} />
-              </Layout>
+              </Cluster>
             </Specimen>
           </Layout>
         </Section>
