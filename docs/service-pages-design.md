@@ -66,6 +66,15 @@ Sixth batch, same day:
 | Comparisons as two lists side by side | **The reader had to do the comparing.** `contrast` was carrying two different things: a routing question and a handover | Static vs coded is a **matrix** — each thing to decide is a row, one mark in the column of the evidence that answers it. The four "AI accelerates / a person decides" splits are **handovers**, so they are two-stage ProcessFlows. `contrast` is gone |
 | Questions after the comparison don't flow | Unframed and numbered: a run of h4 questions with ordinals they don't have | Headed "What a coded slice settles in practice" — the worked examples of the matrix's right-hand column — unnumbered tiles (`ledger.heading`, `marker: 'none'`) |
 
+Seventh batch, same day:
+
+| Note | Underlying issue | Fix |
+|---|---|---|
+| Matrix: checks and crosses; a coded slice answers hierarchy too | A dot can only say "this one", never "not this one" | A check (text ink) or a cross (one step quieter, `--svc-ink-quiet`) in every cell; the coded column is all checks |
+| Questions: numbered, heading left, list right | — | A ledger with a heading and one column is a split: heading in the leading track, numbered rows beside it (a list reads down, so it can stand beside its heading) |
+| "A release…" still unclear — which is better, why filled and empty? | **No legend and no verdict.** The reader had to infer what a cell is, what a column is, and which arrangement wins | A legend over both grids (built / not built yet), columns named Path 1–4, and a "Works end to end" row under each grid, derived from its cells: four crosses by layer, one check by release. Notes rewritten to say it in words |
+| Mobile nav's Solar hamburger loses the intent | **Consistency applied to the wrong layer.** Chrome is read by convention, not style | Solar Bold stays the content set; the nav toggle takes `chrome-menu` / `chrome-close`, the universal bars and cross (Icon.md amendment) |
+
 **Copy re-cut in this pass:** Product Design's four signal bodies take back "May be" (it was the template's key, now the body's first words). Router conditions that had a separate `settles` line now carry it as a second sentence ("It settles scope, authority, ownership and investment."), on Modernisation and Design Systems.
 
 **Still bespoke, and next in line for the same question:** `fit` and `contrast` (lists of sentences, no titles), `stat`, `nudge`, and the seven diagrams. The diagrams are drawings and probably earn their place. The four text blocks should be checked against Prose lists, Proof figures and CtaSection before they're kept.

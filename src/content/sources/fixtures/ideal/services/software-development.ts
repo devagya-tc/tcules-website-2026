@@ -152,12 +152,18 @@ export const softwareDevelopment: ServiceStory = {
           views: {
             layer: {
               title: 'Organised by layer',
-              note: 'Every layer is nearly done. No user path works end to end.',
+              note: 'Every team finishes most of its layer, but each path is missing a different piece. Nothing a user can do works yet, so nothing can ship.',
             },
             slice: {
               title: 'Organised by release',
-              note: 'One path works through every layer, and can ship.',
+              note: 'Every layer builds the same path first. One thing a user can do works end to end and ships; the next path follows.',
             },
+          },
+          legend: {
+            built: 'Built',
+            missing: 'Not built yet',
+            path: 'Path',
+            works: 'Works end to end',
           },
           levelsLabel: 'A release is accepted at three levels',
           levels: [

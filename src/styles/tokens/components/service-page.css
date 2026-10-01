@@ -53,6 +53,7 @@
   --svc-bar-live-ground: var(--color-neutral-900);
   --svc-bar-live-ink: var(--color-paper);
   --svc-bar-edge: var(--color-neutral-500);
+  --svc-ink-quiet: var(--color-neutral-400); /* a cross: decoration beside a check, its words are the label */
 }
 
 [data-surface='tint'] {
@@ -69,6 +70,7 @@
   --svc-bar-live-ground: var(--color-neutral-900);
   --svc-bar-live-ink: var(--color-paper);
   --svc-bar-edge: var(--color-neutral-600);
+  --svc-ink-quiet: var(--color-neutral-500); /* a cross: decoration beside a check, its words are the label */
 }
 
 [data-surface='ink'] {
@@ -85,6 +87,7 @@
   --svc-bar-live-ground: var(--color-white);
   --svc-bar-live-ink: var(--color-neutral-950);
   --svc-bar-edge: var(--color-neutral-400);
+  --svc-ink-quiet: var(--color-neutral-600); /* a cross: decoration beside a check, its words are the label */
 }
 
 [data-surface='blue'] {
@@ -101,4 +104,5 @@
   --svc-bar-live-ground: var(--color-white);
   --svc-bar-live-ink: var(--color-brandeis-500);
   --svc-bar-edge: var(--color-brandeis-100);
+  --svc-ink-quiet: var(--color-brandeis-300); /* a cross: decoration beside a check, its words are the label */
 }

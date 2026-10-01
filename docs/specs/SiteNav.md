@@ -127,7 +127,7 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `brand` | `<a>` + `Logo` | home link; inert while the mobile sheet is open (§5) |
 | `items` | `<ul>` centred in the bar | `Button` per item — ghost + neutral + `sm`; megas take `icon={<Icon name="alt-arrow-down"/>}`, `active`, `aria-expanded`; links render `as={Link}` with no icon |
 | `cta` | `Button` solid primary `sm` | right of the bar |
-| `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `hamburger-menu` ↔ `close-circle` |
+| `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `chrome-menu` ↔ `chrome-close` (1 Oct 2026: chrome takes the universal marks, not Solar's — see Icon.md) |
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
 | `pane` | one per mega section | 1056 / 780 / 560px wide; two label + link columns, plus the rail in Services |
 | `hubBar` | `Cluster` + `Button emphasis="link"` | the way through to the section index — Services and Insights only. Hairline above, `--gap-text` under it |

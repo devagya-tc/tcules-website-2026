@@ -654,7 +654,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
               emphasis="ghost"
               tone="neutral"
               iconOnly
-              icon={<Icon name={sheetOpen ? 'close-circle' : 'hamburger-menu'} />}
+              icon={<Icon name={sheetOpen ? 'chrome-close' : 'chrome-menu'} />}
               aria-label={sheetOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={sheetOpen}
               aria-controls={sheetOpen ? sheetId : undefined}

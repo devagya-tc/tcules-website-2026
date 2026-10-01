@@ -152,9 +152,9 @@ placeholder that never wraps.
 - **Families:** `--font-family-display` 'Newsreader', Georgia, 'Times New Roman', serif · `--font-family-sans` 'Public Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif · `--font-family-mono` 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace
 - **Weights:** `--font-weight-regular` 400 · `--font-weight-medium` 500 · `--font-weight-semibold` 600
 
-### The glyph set — exactly these 39
+### The glyph set — exactly these 41
 
-`alt-arrow-down` · `alt-arrow-right` · `alt-arrow-up` · `arrow-left` · `arrow-right` · `arrow-right-up` · `chat-round-dots` · `check-circle` · `checklist` · `clock-circle` · `close-circle` · `code` · `copy` · `cpu` · `danger-triangle` · `database` · `document-text` · `download` · `eye` · `flag` · `graph-up` · `hamburger-menu` · `info-circle` · `key` · `layers` · `lock` · `monitor` · `notebook` · `question-circle` · `refresh` · `ruler-pen` · `server` · `shield-check` · `smartphone` · `square-arrow-right-up` · `undo-left` · `user` · `users-group-rounded` · `widget`
+`alt-arrow-down` · `alt-arrow-right` · `alt-arrow-up` · `arrow-left` · `arrow-right` · `arrow-right-up` · `chat-round-dots` · `check-circle` · `checklist` · `chrome-close` · `chrome-menu` · `clock-circle` · `close-circle` · `code` · `copy` · `cpu` · `danger-triangle` · `database` · `document-text` · `download` · `eye` · `flag` · `graph-up` · `hamburger-menu` · `info-circle` · `key` · `layers` · `lock` · `monitor` · `notebook` · `question-circle` · `refresh` · `ruler-pen` · `server` · `shield-check` · `smartphone` · `square-arrow-right-up` · `undo-left` · `user` · `users-group-rounded` · `widget`
 
 Glyphs are **solid shapes** on a 24 box, filled in `currentColor` with counters cut through the
 mass (`fill-rule: evenodd`) so they show whatever is behind them. **No stroke** — there is no

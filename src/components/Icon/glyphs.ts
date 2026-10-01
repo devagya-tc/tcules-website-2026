@@ -19,6 +19,16 @@
  * Where both sources carry a glyph they are the same drawing and differ only in coordinate rounding
  * (a few ten-thousandths of a unit), so mixing them is not mixing artwork.
  *
+ * ── Content glyphs and chrome glyphs (1 Oct 2026, owner) ────────────────────────
+ * Solar Bold is the CONTENT set: every glyph that marks a thing on a page — a deliverable, a check,
+ * an off-site link, a disclosure in an FAQ. CHROME is different: the menu and close controls of the
+ * site's own navigation are read by CONVENTION, not by style, so they take the universally recognised
+ * marks — three plain bars, a plain cross — rather than Solar's bars-in-a-rounded-square and
+ * cross-in-a-circle, which kept the family consistent and lost the intent ("i noticed you replaced
+ * the hamburger icon with a filled icon from solar … the intent is lost"). The two chrome glyphs are
+ * the house drawings the site shipped before the Solar move, restored under a `chrome-` prefix so a
+ * call site cannot reach for one by accident in the content area.
+ *
  * ── The idiom, and the one presentation rule it needs ───────────────────────────
  * Drawn on a 24×24 box, filled with `currentColor`, no stroke, and roughly 2 units of clearance
  * inside the box on each edge. That clearance is load-bearing — it is the reason a button gives
@@ -113,6 +123,16 @@ export const glyphs = {
   ],
   'alt-arrow-right': [
     'M15.8351 11.6296L9.20467 5.1999C8.79094 4.79869 8 5.04189 8 5.5703L8 18.4297C8 18.9581 8.79094 19.2013 9.20467 18.8001L15.8351 12.3704C16.055 12.1573 16.0549 11.8427 15.8351 11.6296Z',
+  ],
+  /* CHROME — the site's own controls, not content. The universal marks: three bars, a cross. House
+     drawings on the same 24 box and solid idiom (see the header); not Solar artwork. */
+  'chrome-menu': [
+    'M3.5 5h17a1.5 1.5 0 0 1 0 3h-17a1.5 1.5 0 0 1 0-3Z',
+    'M3.5 10.5h17a1.5 1.5 0 0 1 0 3h-17a1.5 1.5 0 0 1 0-3Z',
+    'M3.5 16h17a1.5 1.5 0 0 1 0 3h-17a1.5 1.5 0 0 1 0-3Z',
+  ],
+  'chrome-close': [
+    'M17.9 3.9 20.1 6.1 14.19 12 20.1 17.9 17.9 20.1 12 14.19 6.1 20.1 3.9 17.9 9.81 12 3.9 6.1 6.1 3.9 12 9.81Z',
   ],
   'hamburger-menu': [
     'M3.46447 20.5355C4.92893 22 7.28595 22 12 22C16.714 22 19.0711 22 20.5355 20.5355C22 19.0711 22 16.714 22 12C22 7.28595 22 4.92893 20.5355 3.46447C19.0711 2 16.714 2 12 2C7.28595 2 4.92893 2 3.46447 3.46447C2 4.92893 2 7.28595 2 12C2 16.714 2 19.0711 3.46447 20.5355ZM18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16ZM18 12.75C18.4142 12.75 18.75 12.4142 18.75 12C18.75 11.5858 18.4142 11.25 18 11.25H6C5.58579 11.25 5.25 11.5858 5.25 12C5.25 12.4142 5.58579 12.75 6 12.75H18ZM18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z',

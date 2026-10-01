@@ -125,6 +125,18 @@ function Ledger({ block }: { block: Of<'ledger'> }) {
      so the reader is told what the set is before reading it, rather than meeting a run of questions
      with no frame. */
   if (!block.heading) return set;
+  /* One column with a heading is a split: the heading in the narrow leading track, the rows reading
+     down beside it (1 Oct 2026, owner: "header on left and questions as a list on right"). A list
+     reads down, so it can stand beside its heading — the same test ContentSection's `beside` uses.
+     A grid with a heading stacks, because a grid reads across. */
+  if (single) {
+    return (
+      <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="block" align="start">
+        <h3 className={styles.setHeading}>{block.heading}</h3>
+        {set}
+      </Layout>
+    );
+  }
   return (
     <Layout rowGap="block">
       <h3 className={styles.setHeading}>{block.heading}</h3>

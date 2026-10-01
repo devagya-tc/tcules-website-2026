@@ -178,16 +178,15 @@ export type StoryBlock =
       stages: readonly { label: string; items: readonly string[] }[];
       throughout?: { label: string; items: readonly string[] };
     }
-  /** Which side answers each row: a comparison laid out on the rows it compares, one mark per row
-      in the column that answers it. Not two lists side by side — the reader should not have to
-      line them up. */
+  /** A comparison laid out on the rows it compares: a check or a cross in every cell. Not two lists
+      side by side — the reader should not have to line them up. */
   | {
       kind: 'matrix';
       keyColumn: string;
       columns: readonly string[];
-      /** Screen-reader words for a mark, e.g. "Answers this". */
-      markLabel: string;
-      rows: readonly { header: string; answeredBy: number }[];
+      /** Screen-reader words for a check and a cross, e.g. "Answers it" / "Does not". */
+      labels: { yes: string; no: string };
+      rows: readonly { header: string; marks: readonly boolean[] }[];
     }
   /** Several parts inside one frame that keeps them current — the five-part system. */
   | {
@@ -204,6 +203,8 @@ export type StoryBlock =
         layer: { title: string; note: string };
         slice: { title: string; note: string };
       };
+      /** The words the grids need: a legend for a cell, the column name, the result row. */
+      legend: { built: string; missing: string; path: string; works: string };
       levelsLabel: string;
       levels: readonly { title: string; body: string; icon: StoryGlyph }[];
     }

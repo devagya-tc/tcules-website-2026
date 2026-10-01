@@ -144,8 +144,8 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
    A comparison laid out on the rows it compares (1 Oct 2026, owner: "could comparisons be done in a
    better way than just 2 lists side by side?"). Two lists made the READER line them up — and a
    3-item list beside a 7-item one read as an imbalance, not an argument. Here each thing to decide
-   is a row, and one mark sits in the column of the evidence that answers it, so the comparison is
-   done row by row and the split is visible at a glance. A real table, so it holds at every width. */
+   is a row with a check or a cross under each side, so the comparison is done row by row. A real
+   table, so it holds at every width. */
 export function Matrix({ block }: { block: Of<'matrix'> }) {
   return (
     <DataTable
@@ -153,17 +153,22 @@ export function Matrix({ block }: { block: Of<'matrix'> }) {
       columns={block.columns.map((heading) => ({ heading, behaviour: 'nowrap' as const }))}
       rows={block.rows.map((row) => ({
         header: row.header,
-        cellsHtml: block.columns.map((_, index) => ({
-          node:
-            index === row.answeredBy ? (
-              <span className={styles.mark}>
-                <span className={styles.markDot} aria-hidden="true" />
-                <span className={styles.visuallyHidden}>{block.markLabel}</span>
+        cellsHtml: block.columns.map((_, index) => {
+          const yes = row.marks[index] === true;
+          /* A check in the text's ink, a cross one step quieter: the checks carry the comparison,
+             the crosses only say "not this one" (1 Oct 2026, owner). Icon's label names each. */
+          return {
+            node: (
+              <span className={yes ? styles.markYes : styles.markNo}>
+                <Icon
+                  name={yes ? 'check-circle' : 'close-circle'}
+                  size="lg"
+                  label={yes ? block.labels.yes : block.labels.no}
+                />
               </span>
-            ) : (
-              <span className={styles.visuallyHidden}>—</span>
             ),
-        })),
+          };
+        }),
       }))}
     />
   );
@@ -251,7 +256,9 @@ export function Parts({ block }: { block: Of<'parts'> }) {
    first drawing showed only the answer — a column through five bands — and read as a grid with a
    stripe in it (1 Oct 2026, owner: "i can't tell what it is trying to communicate").
 
-   Now it is the same grid twice, layers down the side and user paths across. By layer: every layer
+   Now it is the same grid twice, layers down the side and user paths across, under one legend (built
+   / not built yet), each grid closing on a verdict row — does each path work end to end? — derived
+   from its cells, so the reader is told which arrangement wins rather than left to infer it. By layer: every layer
    is nearly built, but each path is missing a different piece, so none works. By release: one path is
    built through every layer, and it is the one that can ship. Peers being compared, so `column` apart.
    The grid keeps its columns at every width (`base`): a bare track list applies from md, and on a
@@ -260,14 +267,17 @@ export function Parts({ block }: { block: Of<'parts'> }) {
 function SliceGrid({
   layers,
   view,
+  legend,
   done,
 }: {
   layers: readonly string[];
   view: { title: string; note: string };
+  legend: { path: string; works: string };
   done: (layer: number, path: number) => boolean;
 }) {
   const paths = Math.max(3, layers.length - 1);
-  const tracks = [3, ...Array.from({ length: paths }, () => 1)];
+  const tracks = { base: [3, ...Array.from({ length: paths }, () => 1)] };
+  const pathWorks = (path: number) => layers.every((_, layer) => done(layer, path));
   return (
     <figure className={styles.sliceView} aria-label={`${view.title}. ${view.note}`}>
       <Layout rowGap="block">
@@ -276,8 +286,17 @@ function SliceGrid({
           <span className={styles.sliceNote}>{view.note}</span>
         </Layout>
         <Layout rowGap="tight" aria-hidden="true">
+          {/* Each column is one user path, named over it. */}
+          <Layout columns={tracks} colGap="tight" align="end">
+            <span />
+            {Array.from({ length: paths }, (_, path) => (
+              <span key={path} className={styles.layerName}>
+                {legend.path} {path + 1}
+              </span>
+            ))}
+          </Layout>
           {layers.map((layer, layerIndex) => (
-            <Layout key={layer} columns={{ base: tracks }} colGap="tight" align="center">
+            <Layout key={layer} columns={tracks} colGap="tight" align="center">
               <span className={styles.layerName}>{layer}</span>
               {Array.from({ length: paths }, (_, path) => (
                 <span
@@ -288,6 +307,16 @@ function SliceGrid({
               ))}
             </Layout>
           ))}
+          {/* The verdict: does each path work end to end? Derived from the cells above, so it can
+              never disagree with them. */}
+          <Layout columns={tracks} colGap="tight" align="center" className={styles.sliceResult}>
+            <span className={styles.layerName}>{legend.works}</span>
+            {Array.from({ length: paths }, (_, path) => (
+              <span key={path} className={pathWorks(path) ? styles.markYes : styles.markNo}>
+                <Icon name={pathWorks(path) ? 'check-circle' : 'close-circle'} size="lg" />
+              </span>
+            ))}
+          </Layout>
         </Layout>
       </Layout>
     </figure>
@@ -297,17 +326,33 @@ function SliceGrid({
 export function Slice({ block }: { block: Of<'slice'> }) {
   return (
     <Layout rowGap="section">
-      <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
-        <SliceGrid
-          layers={block.layers}
-          view={block.views.layer}
-          done={(layer, path) => layer === 0 || path !== layer - 1}
-        />
-        <SliceGrid
-          layers={block.layers}
-          view={block.views.slice}
-          done={(_, path) => path === 0}
-        />
+      <Layout rowGap="block">
+        {/* The key, once, over both grids: what a cell is, before either grid asks the reader to
+            read one. */}
+        <Cluster as="p" colGap="block" rowGap="tight" className={styles.sliceLegend}>
+          <Cluster as="span" nowrap colGap="tight">
+            <span className={styles.sliceSwatch} data-done="yes" aria-hidden="true" />
+            {block.legend.built}
+          </Cluster>
+          <Cluster as="span" nowrap colGap="tight">
+            <span className={styles.sliceSwatch} data-done="no" aria-hidden="true" />
+            {block.legend.missing}
+          </Cluster>
+        </Cluster>
+        <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
+          <SliceGrid
+            layers={block.layers}
+            view={block.views.layer}
+            legend={block.legend}
+            done={(layer, path) => layer === 0 || path !== layer - 1}
+          />
+          <SliceGrid
+            layers={block.layers}
+            view={block.views.slice}
+            legend={block.legend}
+            done={(_, path) => path === 0}
+          />
+        </Layout>
       </Layout>
       <Layout rowGap="block">
         <h3 className={styles.levelsLabel}>{block.levelsLabel}</h3>

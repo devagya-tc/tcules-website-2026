@@ -37,7 +37,9 @@ const MEANINGS = [
   { name: 'check-circle', meaning: 'Done, included' },
   { name: 'download', meaning: 'Download a file — leading' },
   { name: 'copy', meaning: 'Copy to clipboard — leading' },
-  { name: 'hamburger-menu', meaning: 'Menu' },
+  { name: 'hamburger-menu', meaning: 'Menu — content only; the nav uses chrome-menu' },
+  { name: 'chrome-menu', meaning: 'CHROME · the site nav’s menu toggle — the universal three bars' },
+  { name: 'chrome-close', meaning: 'CHROME · the site nav’s close — the universal cross' },
   { name: 'info-circle', meaning: 'Information — leading, beside the words of a notice' },
   { name: 'danger-triangle', meaning: 'Warning — leading, beside the words of a notice' },
 ] as const;

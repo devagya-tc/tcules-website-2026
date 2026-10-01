@@ -44,18 +44,17 @@
   color: var(--svc-ink-muted);
 }
 
-/* ── Matrix ──────────────────────────────────────────────────────────────────────
-   One solid dot in the column that answers the row; nothing in the column that does not. */
-.mark {
+/* ── Matrix, and the slice verdicts ─────────────────────────────────────────────────
+   A check in the text's ink; a cross one step quieter — the checks carry the comparison, a cross
+   only says "not this one". */
+.markYes {
   display: block;
+  color: var(--svc-ink);
 }
 
-.markDot {
+.markNo {
   display: block;
-  inline-size: var(--svc-mark-size);
-  block-size: var(--svc-mark-size);
-  border-radius: var(--radius-full);
-  background: var(--svc-ink);
+  color: var(--svc-ink-quiet);
 }
 
 /* ── Record: a sheet ──────────────────────────────────────────────────────────── */
@@ -160,9 +159,29 @@
   border: var(--svc-rule-width) solid var(--svc-rule-strong);
 }
 
-.sliceCell[data-done='yes'] {
+.sliceCell[data-done='yes'],
+.sliceSwatch[data-done='yes'] {
   background: var(--svc-ink);
   border-color: var(--svc-ink);
+}
+
+/* The legend's swatch: a cell at legend size. */
+.sliceSwatch {
+  display: block;
+  inline-size: var(--svc-mark-size);
+  block-size: var(--svc-mark-size);
+  border: var(--svc-rule-width) solid var(--svc-rule-strong);
+}
+
+.sliceLegend {
+  font: var(--text-body-sm);
+  color: var(--svc-ink-muted);
+}
+
+/* The verdict row sits under a rule: it is the sum of the cells above it. */
+.sliceResult {
+  padding-block-start: var(--gap-tight);
+  border-block-start: var(--svc-rule-width) solid var(--svc-rule-strong);
 }
 
 .levelsLabel {
