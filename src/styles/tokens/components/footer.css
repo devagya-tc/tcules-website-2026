@@ -34,12 +34,7 @@
  band, which no primitive owns. */
   --foot-band-inset: var(--gap-stack);
 
-  /* The rating badge. Its block padding is --gap-tight, which the gap scale already names as chip
- padding; only the inline half needs a token, because 14 is not a step on that scale. It is the
- ramp's documented exception — an optical correction inside a component — and it is here rather
- than inline in the module so the module keeps stating no values of its own. */
-  --foot-badge-padding-inline: var(--space-14);
-  --foot-badge-radius: var(--radius-full);
+  /* The rating badge's geometry and inks moved to rating-badge.css with RatingBadge (1 Oct 2026). */
 
   /* The watermark. Rendered at its true size rather than transformed: a transform contributes
  nothing to layout height, so a scaled mark paints outside the document and cannot be scrolled
@@ -90,7 +85,6 @@
   --foot-meta-value-ink: var(--color-neutral-900);
   --foot-legal-ink: var(--color-neutral-600);
   --foot-ring-color: var(--color-brandeis-500);
-  --foot-badge-star-ink: var(--color-brandeis-500);
   --foot-ring-gap-color: var(--color-paper);
 }
 
@@ -111,7 +105,6 @@
   --foot-meta-value-ink: var(--color-neutral-900);
   --foot-legal-ink: var(--color-neutral-700);
   --foot-ring-color: var(--color-brandeis-500);
-  --foot-badge-star-ink: var(--color-brandeis-500);
   --foot-ring-gap-color: var(--color-paper-deep);
 }
 
@@ -136,7 +129,6 @@
   --foot-meta-value-ink: var(--color-white);
   --foot-legal-ink: var(--color-neutral-500);
   --foot-ring-color: var(--color-brandeis-300);
-  --foot-badge-star-ink: var(--color-brandeis-300);
   --foot-ring-gap-color: var(--color-neutral-950);
 }
 
@@ -160,8 +152,5 @@
   --foot-meta-value-ink: var(--color-white);
   --foot-legal-ink: var(--color-brandeis-100);
   --foot-ring-color: var(--color-white);
-  /* White, not a blue step: the star is the one graphic in the badge, and every blue below 200
- disappears into this ground. */
-  --foot-badge-star-ink: var(--color-white);
   --foot-ring-gap-color: var(--color-brandeis-500);
 }

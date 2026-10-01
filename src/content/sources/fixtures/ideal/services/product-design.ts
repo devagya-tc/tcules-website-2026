@@ -1,6 +1,8 @@
 import type { ServiceStory } from '@/lib/service-story';
 import { articlePath, auditPath, ROUTES, servicePath } from '@/lib/routes';
 
+import { CLUTCH_RATING } from '../../ratings';
+
 /**
  * /services/product-design, designed. Copy is the CMS's own, re-cut where a shape needed it; every
  * edit is listed in docs/service-pages-design.md § Product Design.
@@ -276,6 +278,7 @@ export const productDesign: ServiceStory = {
               height: 204,
             },
           },
+          rating: CLUTCH_RATING,
           case: {
             slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
             client: 'Auxentios · Industrial CPQ',

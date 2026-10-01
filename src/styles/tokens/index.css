@@ -105,6 +105,8 @@
 @import 'components/texture.css';
 @import 'components/client-mark.css';
 @import 'components/data-table.css';
+@import 'components/brand-mark.css';
+@import 'components/rating-badge.css';
 @import 'components/process-flow.css';
 @import 'components/service-page.css';
 

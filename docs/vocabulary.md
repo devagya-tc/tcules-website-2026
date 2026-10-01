@@ -163,7 +163,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--flow-` (components/process-flow.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--svc-` (components/service-page.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
+`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--bmark-` (components/brand-mark.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--flow-` (components/process-flow.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--rbadge-` (components/rating-badge.css) · `--sec-` (components/section.css) · `--svc-` (components/service-page.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -172,6 +172,7 @@ against the controls beside it — if you are specifying one, say which of these
 
 - **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px · `--acc-question-underline-offset` 6px
 - **block-card.css** — `--bcrd-title-tracking` -0.005em · `--bcrd-title-tracking-horizontal` -0.01em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-rule-width` 1px · `--bcrd-radius` 0px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
+- **brand-mark.css** — `--bmark-size` 14px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
 - **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
 - **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 160px
@@ -180,7 +181,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **data-table.css** — `--dtab-rule-width` 1px · `--dtab-fluid-size` 176px · `--dtab-hold-size` 192px · `--dtab-fade-size` 48px
 - **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-max-inline` 470px · `--enq-message-reserve` 19px
 - **figure.css** — `--fig-min-xs` 192px
-- **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-badge-padding-inline` 14px · `--foot-badge-radius` 999px · `--foot-watermark-size` 160px · `--foot-tagline-measure` 56ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 75ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em
+- **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-watermark-size` 160px · `--foot-tagline-measure` 56ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 75ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em
 - **icon.css** — `--icn-size-sm` 14px · `--icn-size-md` 16px · `--icn-size-lg` 18px · `--icn-size-xl` 24px
 - **input.css** — `--inp-height-md` 40px · `--inp-height-touch` 44px · `--inp-padding-x` 12px · `--inp-textarea-padding-y` 12px · `--inp-min-inline` 16rem · `--inp-textarea-min-block` 128px · `--inp-radius` 8px · `--inp-rule-width` 1px · `--inp-invalid-rule-width` 2px · `--inp-ring-width` 2px · `--inp-ring-offset` 2px
 - **layout.css** — `--lay-track-xs` 192px · `--lay-track-sm` 256px · `--lay-track-md` 320px · `--lay-track-lg` 384px
@@ -192,6 +193,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **process-flow.css** — `--flow-rule-width` 1px · `--flow-item-rule-width` 1px · `--flow-span-width` 1px · `--flow-span-tick` 12px
 - **proof.css** — `--proof-quote-rule-width` 6px · `--proof-portrait-size` 64px · `--proof-radius` 0px
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px
+- **rating-badge.css** — `--rbadge-padding-inline` 14px · `--rbadge-radius` 999px · `--rbadge-rule-width` 1px · `--rbadge-tracking` 0.08em · `--rbadge-ring-width` 2px · `--rbadge-ring-offset` 2px · `--rbadge-hidden-size` 1px
 - **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
 - **service-page.css** — `--svc-mark-size` 12px · `--svc-slice-cell` 24px · `--svc-link-underline-offset` 4px · `--svc-hidden-size` 1px · `--svc-rule-width` 1px · `--svc-rule-strong-width` 1px · `--svc-meter-width` 96px · `--svc-meter-height` 24px · `--svc-meter-stroke` 2px · `--svc-authority-slot` 12px
 - **table-of-contents.css** — `--toc-title-tracking` 0.12em · `--toc-ordinal-tracking` 0.08em · `--toc-max-inline` 232px · `--toc-min-inline` 160px · `--toc-summary-min-block` 44px · `--toc-ordinal-inline` 24px · `--toc-entry-padding-block` 12px · `--toc-rule-width` 1px · `--toc-current-rule-width` 3px · `--toc-underline-width` 1px · `--toc-underline-width-pressed` 2px · `--toc-underline-offset` 2px · `--toc-entry-radius-focus` 4px · `--toc-ring-width` 2px · `--toc-ring-offset` 2px
@@ -220,7 +222,7 @@ seam to size.
 
 ### What already exists — check these before specifying anything new
 
-- **Primitives** (`src/components/`): `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `Section` · `Tag` · `Texture`
+- **Primitives** (`src/components/`): `BrandMark` · `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `RatingBadge` · `Section` · `Tag` · `Texture`
 - **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaSection` · `DataTable` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `ProcessFlow` · `Proof` · `SiteFooter` · `SiteNav` · `TableOfContents`
 - **Templates** (`src/templates/`): `CaseStudyIndex` · `ServicePage`
 

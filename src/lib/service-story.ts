@@ -138,6 +138,13 @@ export type StoryBlock =
         portrait?: { src: string; width: number; height: number };
       };
       case?: StoryCase;
+      /** A third-party rating shown with the quote — the client's words, and the market's score. */
+      rating?: {
+        platform: string;
+        mark: 'clutch' | 'linkedin' | 'youtube';
+        score: string;
+        href: string;
+      };
     }
   /** Options on one scale — least to most disruptive — each with its condition and its question. */
   | {

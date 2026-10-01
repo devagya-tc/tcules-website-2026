@@ -68,6 +68,16 @@ const SPECIMENS = [
         note: "a client's logo in a set — mask in the ground's ink, equal area, capped 40 × 160, ±15% correction, 4 surfaces",
       },
       {
+        href: '/design/brand-mark',
+        name: 'BrandMark',
+        note: 'third-party marks (LinkedIn, YouTube, Clutch) at their own proportions, monochrome, 4 surfaces',
+      },
+      {
+        href: '/design/rating-badge',
+        name: 'RatingBadge',
+        note: 'a third-party score and its source as one outline pill, mark passed in, 4 surfaces',
+      },
+      {
         href: '/design/texture',
         name: 'Texture',
         note: 'the pixel grid through placed, blurred shapes — 4 anchors, 4 surfaces, dark-ground candidates',

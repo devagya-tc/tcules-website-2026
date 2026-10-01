@@ -1,6 +1,6 @@
 import type { SectionSurface } from '@/components';
 
-import type { BrandMarkName } from './BrandMark';
+import type { BrandMarkName } from '@/components';
 
 /**
  * The site footer's information architecture, as a shape.

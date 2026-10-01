@@ -1,4 +1,4 @@
-import { Cluster, Icon, Layout } from '@/components';
+import { BrandMark, Cluster, Icon, Layout, RatingBadge } from '@/components';
 import {
   Accordion,
   BlockCard,
@@ -273,7 +273,22 @@ function ProofBlock({ block }: { block: Of<'proof'> }) {
           tracks={3}
         />
       </Layout>
-      <Proof arrangement="compact" quote={quote} />
+      {block.rating ? (
+        /* The client's words, then the market's score: the rating sits under the attribution, at
+           a stack's distance, because it is a second piece of evidence rather than part of the
+           quote. One score source, shared with the footer (fixtures/ratings.ts). */
+        <Layout rowGap="stack">
+          <Proof arrangement="compact" quote={quote} />
+          <RatingBadge
+            score={block.rating.score}
+            platform={block.rating.platform}
+            href={block.rating.href}
+            mark={<BrandMark name={block.rating.mark} />}
+          />
+        </Layout>
+      ) : (
+        <Proof arrangement="compact" quote={quote} />
+      )}
     </Layout>
   );
 }

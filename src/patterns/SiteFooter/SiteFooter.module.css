@@ -62,57 +62,6 @@
   text-wrap: var(--text-running-wrap);
 }
 
-/* The rating badge. An outline pill, not a fill: it is a claim with a source, and a filled chip
-   beside a solid button would read as a second action. */
-.ratingBadge {
-  display: inline-flex;
-  gap: var(--gap-tight);
-  align-items: center;
-  padding-block: var(--gap-tight);
-  padding-inline: var(--foot-badge-padding-inline);
-  color: var(--foot-link-ink);
-  font: var(--foot-social-text);
-  letter-spacing: var(--foot-social-tracking);
-  text-transform: var(--text-mono-case);
-  text-decoration: none;
-  border: var(--foot-rule-width) solid var(--foot-rule);
-  border-radius: var(--foot-badge-radius);
-  transition:
-    color var(--foot-transition-duration) var(--foot-transition-easing),
-    border-color var(--foot-transition-duration) var(--foot-transition-easing);
-}
-
-.ratingBadge:hover,
-.ratingBadge:focus-visible {
-  color: var(--foot-link-ink-hover);
-  border-color: var(--foot-link-ink-hover);
-}
-
-/* The one graphic in the badge, and the only thing in the footer that is neither type nor rule.
-
-   Set larger than the text it sits beside, and in `em` so it stays that way whatever the badge's
-   own role resolves to. At 1em a ★ reads noticeably smaller than the digits next to it: the glyph
-   is drawn well inside its em box, where a digit fills the cap height, so matching the font sizes
-   does NOT match the optical sizes. 1.35 is the correction, arrived at by eye against the numeral.
-
-   `em` rather than a token deliberately — this is an optical correction relative to its context,
-   which is the same reason Prose sets its sub, sup and inline code in em. A px here would be a
-   distance the scale has no answer for, and a size token would break the moment the badge's type
-   role changed. `line-height: 1` keeps the taller glyph from adding leading to the row. */
-.ratingStar {
-  font-size: 1.35em;
-  line-height: 1;
-  color: var(--foot-badge-star-ink);
-}
-
-/* Tighter than the badge's own padding, so the mark and the word read as one lockup rather than
-   as a third item in the row. */
-.ratingLockup {
-  display: inline-flex;
-  gap: var(--gap-inline);
-  align-items: center;
-}
-
 /* ── 2 · Directory ─────────────────────────────────────────────────────────────
    Two renderings of one list, and CSS picks. See the note in SiteFooter.tsx for why this cannot
    be one rendering: a closed <details> cannot be forced visually open in Chrome.
@@ -397,7 +346,6 @@
 .socialLink:focus,
 .metaLink:focus,
 .utilityLink:focus,
-.ratingBadge:focus,
 .accordionSummary:focus {
   outline: none;
 }
@@ -406,7 +354,6 @@
 .socialLink:focus-visible,
 .metaLink:focus-visible,
 .utilityLink:focus-visible,
-.ratingBadge:focus-visible,
 .accordionSummary:focus-visible {
   outline: none;
   box-shadow:
@@ -419,7 +366,6 @@
   .socialLink,
   .metaLink,
   .utilityLink,
-  .ratingBadge,
   .accordionChevron {
     transition-duration: var(--duration-instant);
   }

@@ -1,8 +1,17 @@
 import Link from 'next/link';
 
-import { Button, Cluster, Icon, Input, Layout, Logo, Section } from '@/components';
+import {
+  BrandMark,
+  Button,
+  Cluster,
+  Icon,
+  Input,
+  Layout,
+  Logo,
+  RatingBadge,
+  Section,
+} from '@/components';
 
-import { BrandMark } from './BrandMark';
 import styles from './SiteFooter.module.css';
 import type { SiteFooterProps, SiteFooterSocial } from './types';
 
@@ -116,25 +125,12 @@ export function SiteFooter({
               {cta.label}
             </Button>
             {brand.rating ? (
-              <a
-                className={styles.ratingBadge}
+              <RatingBadge
+                score={brand.rating.score}
+                platform={brand.rating.platform}
                 href={brand.rating.href}
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                {/* Decorative: "4.8 on Clutch" is already the whole claim, and a star announced as
-                    "black star" adds nothing a screen reader needs. */}
-                <span className={styles.ratingStar} aria-hidden="true">
-                  ★
-                </span>
-                {brand.rating.score} on
-                {/* Mark and word tighter than the badge's own padding, so the two read as one
-                    lockup rather than as a third item in the row. */}
-                <span className={styles.ratingLockup}>
-                  <BrandMark name={brand.rating.mark} />
-                  {brand.rating.platform}
-                </span>
-              </a>
+                mark={<BrandMark name={brand.rating.mark} />}
+              />
             ) : null}
           </Layout>
         </Layout>

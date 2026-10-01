@@ -95,3 +95,9 @@ export {
   type TextureShapeProps,
 } from './Texture';
 export { ClientMark, type ClientMarkProps } from './ClientMark';
+
+/* BrandMark is a THIRD-PARTY mark (LinkedIn, YouTube, Clutch) at its owner's proportions, monochrome
+   on currentColor — moved up from SiteFooter on 1 Oct 2026 when a second consumer needed it.
+   RatingBadge is a score and its source as one outline pill; it takes the mark as a node. */
+export { BrandMark, type BrandMarkName } from './BrandMark';
+export { RatingBadge, type RatingBadgeProps } from './RatingBadge';

@@ -1,6 +1,8 @@
 import type { SiteFooterProps, SiteNavItem, SiteNavLink, SiteNavProps } from '@/patterns';
 import { ENDPOINTS, EXTERNAL, ROUTES } from '@/lib/routes';
 
+import { CLUTCH_RATING } from './ratings';
+
 import type { Navigation } from '../../types';
 
 /**
@@ -291,12 +293,8 @@ const FOOTER: SiteFooterProps = {
       { label: 'LinkedIn', href: EXTERNAL.linkedin, mark: 'linkedin' },
       { label: 'YouTube', href: EXTERNAL.youtube, mark: 'youtube' },
     ],
-    /* Read off the real profile on 2026-08-26, which is now linked from EXTERNAL.clutch — the
-       redesign's invented 4.9 is gone. A STRING, not a number: nothing formats or averages it, and
-       Clutch publishes one decimal place, so a score that lands on a whole number must still print
-       as "5.0" rather than collapsing to "5". Re-read the profile when updating it; a score that
-       drifts from its own source is the failure this pairing exists to prevent. */
-    rating: { platform: 'Clutch', mark: 'clutch', score: '4.8', href: EXTERNAL.clutch },
+    /* One source for the score, shared with the service pages' testimonial band: see ratings.ts. */
+    rating: CLUTCH_RATING,
   },
   groups: [
     {

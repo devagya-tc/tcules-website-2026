@@ -103,7 +103,6 @@ export function markdownToHtml(
   const source = typeof markdown === 'string' ? markdown.replaceAll('\r\n', '\n').trim() : '';
   if (!source) return '';
 
-
   if (/!\[[^\]]*\]\([^)]+\)/u.test(source)) {
     throw new Error(
       `Strapi Markdown in ${context} contains embedded media. Use the section-image block instead.`,

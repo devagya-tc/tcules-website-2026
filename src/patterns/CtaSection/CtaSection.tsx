@@ -1,6 +1,6 @@
 import { useId, type ReactNode } from 'react';
 
-import { Button, Cluster, Icon, Layout, Section, type SectionSurface } from '@/components';
+import { Button, Cluster, Layout, Section, type SectionSurface } from '@/components';
 
 import styles from './CtaSection.module.css';
 
@@ -274,11 +274,13 @@ function CtaPoints({
  * The control row for the actions-only shapes. A form brings its own row — submit and "See
  * available times" together, inside EnquiryForm — so this renders only when there is no form.
  *
- * POSITION decides everything: the first is `solid`/`primary` and takes the `arrow-right` glyph,
- * the second is `ghost`/`neutral` and takes none. A trailing glyph means the click changes where
- * you are, which is true of the first action and true of the second — but two glyphs in one row
- * would make the pair read as two equal offers, and the second is deliberately the quieter one.
- * There is no `emphasis` on `CtaAction` for the same reason.
+ * POSITION decides emphasis: the first is `solid`/`primary`, the second `ghost`/`neutral`. There
+ * is no `emphasis` on `CtaAction` for that reason.
+ *
+ * NO GLYPH on either (1 Oct 2026, owner: "no arrow here"). The first action used to take
+ * `arrow-right` by position, so "Start a project" carried an arrow in this block and none in the
+ * hero or the nav — the same action looking different by where it sat. These are the page's asks;
+ * the label carries them.
  *
  * Every control is `size="md"` with `extendHitArea`: the box is 40 and the touch floor is 44, so
  * the target is legal without the row growing. Stepping to `lg` would make this block's buttons
@@ -295,7 +297,6 @@ function CtaActions({ actions }: { actions: readonly CtaAction[] }) {
           emphasis={index === 0 ? 'solid' : 'ghost'}
           tone={index === 0 ? 'primary' : 'neutral'}
           size="md"
-          icon={index === 0 ? <Icon name="arrow-right" /> : undefined}
           extendHitArea
         >
           {action.label}

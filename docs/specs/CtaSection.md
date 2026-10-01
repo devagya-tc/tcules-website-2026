@@ -118,7 +118,7 @@ type CtaFormSlot =
 | `body` | `readonly [string] \| readonly [string, string]` | none — required | One or two paragraphs. `body[0]` renders as `lead`, `body[1]` as `body`. A third paragraph does not compile — this block asks, it does not explain |
 | `eyebrow` | `string \| undefined` | `undefined` | Whether the `eyebrow` part exists. Absent renders no element and no seam |
 | `points` | `readonly CtaPoint[]` | `[]` | What happens next, in order. Empty renders no `<ol>` at all. Order is meaning, which is why it is an ordered list and why `marker` is an index rather than a glyph |
-| `actions` | see `CtaFormSlot` | `[]` | Nought, one or two controls. Position decides emphasis: the first is `solid` / `primary` with `arrow-right`, the second is `ghost` / `neutral` with no glyph |
+| `actions` | see `CtaFormSlot` | `[]` | Nought, one or two controls. Position decides emphasis: the first is `solid` / `primary`, the second `ghost` / `neutral`. Neither carries a glyph (1 Oct 2026, owner: the first used to take `arrow-right` by position, so the same action looked different here than in the hero and the nav) |
 | `form` | `ReactNode` (in `CtaFormSlot`) | `undefined` | Whether the block asks in place or asks by link. Present in 56 of 113 instances |
 | `scheduleHref` | `string` (required when `form` is present) | none | Where "See available times" goes. Required by the type whenever a form is rendered, which is the mechanism for the hard constraint that all 56 form instances carry it |
 | `proof` | `ReactNode` | `undefined` | The `Proof` block. Full-width row beneath `frame` in `split`; the right-hand column in `open`; a compile error in `offer` |
@@ -547,7 +547,7 @@ Four values were checked against the ramps and found, and the near-misses are wo
 - **A step between `--gap-gutter` 32 and `--gap-stack` 48** for the seam between the two halves when `frame` wraps. Declined: `--gap-stack` is the block-to-block step and a wrapped half is a block, so 48 is the relationship and not a compromise. A new step here would be splitting the difference, which is forbidden.
 - **A dedicated measure role for the point labels.** Declined: `label` needs no measure at all, because its track caps it in all three arrangements.
 - **A `--cta-rule` hairline above the proof row.** Declined on the design bar, and the 48px seam does the work. Its absence is why `--border-width-0` is a decision in 7 rather than an omission.
-- **A glyph for the point markers** — a numbered-circle or a `check`. Declined: `check` is in the glyph set but means "included", not "third", and the points are a sequence. Two-digit mono numerals carry the order and need no glyph, so this component requests none. The one glyph it does render is `arrow-right`, which is in the set of 17.
+- **A glyph for the point markers** — a numbered-circle or a `check`. Declined: `check` is in the glyph set but means "included", not "third", and the points are a sequence. Two-digit mono numerals carry the order and need no glyph, so this component requests none. It rendered `arrow-right` on the primary action until 1 Oct 2026; it now renders no glyph.
 
 ## 17 · Open questions
 

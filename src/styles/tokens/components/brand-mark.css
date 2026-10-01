@@ -1,0 +1,30 @@
+/* ══ Component layer — BrandMark ═══════════════════════════════════════════════════
+   Tier 1. The third-party marks (LinkedIn, YouTube, Clutch), monochrome on currentColor.
+
+   Naming: --bmark-{part}. The mark's own ink is currentColor — it inherits whatever it sits in —
+   so the only surface-dependent value is the knockout: LinkedIn's letters, cut out of its tile,
+   take the SURFACE's ground so one asset inverts on every surface. It used to read --sec-ground,
+   Section's token; a component never reads another component's tokens, so it is declared here,
+   per surface, with the same values Section paints. */
+
+:root {
+  /* The icon ramp's small step, by value. */
+  --bmark-size: var(--icon-size-14);
+}
+
+:root,
+[data-surface='paper'] {
+  --bmark-knockout: var(--color-paper);
+}
+
+[data-surface='tint'] {
+  --bmark-knockout: var(--color-paper-deep);
+}
+
+[data-surface='ink'] {
+  --bmark-knockout: var(--color-neutral-950);
+}
+
+[data-surface='blue'] {
+  --bmark-knockout: var(--color-brandeis-500);
+}

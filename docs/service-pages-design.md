@@ -90,6 +90,13 @@ Ninth batch, same day:
 
 **NEW COPY:** the offer's eyebrow ("Recognise the workflow?") and its three points (the workflow walked through · the rules it depends on · what to design first).
 
+Tenth batch, same day:
+
+| Note | Underlying issue | Fix |
+|---|---|---|
+| Arrow on the offer's "Start a project" — why? | **The glyph was assigned by position**: CtaSection gave its first action `arrow-right`, so the same action had an arrow there and none in the hero or the nav | CtaSection's actions carry no glyph (owner: "no arrow here") |
+| Clutch rating badge in the testimonial band | **The badge existed, but as private footer markup** with its mark private to the footer folder — a second placement would have been a copy | `BrandMark` moved up to components (as its own note anticipated); new `RatingBadge` component used by the footer and the proof band; the score has one source, `fixtures/ratings.ts` |
+
 **Copy re-cut in this pass:** Product Design's four signal bodies take back "May be" (it was the template's key, now the body's first words). Router conditions that had a separate `settles` line now carry it as a second sentence ("It settles scope, authority, ownership and investment."), on Modernisation and Design Systems.
 
 **Still bespoke, and next in line for the same question:** `fit` and `contrast` (lists of sentences, no titles), `stat`, `nudge`, and the seven diagrams. The diagrams are drawings and probably earn their place. The four text blocks should be checked against Prose lists, Proof figures and CtaSection before they're kept.
