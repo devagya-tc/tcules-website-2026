@@ -151,12 +151,14 @@ export type StoryBlock =
       columns: { name: string; when: string; settles: string };
       items: readonly { name: string; when: string; settles: string }[];
     }
-  /** One decision carried through every representation, drawn as the same chip in every row. */
+  /** Comparison data — every row the same attributes, read across. A real table (DataTable). */
   | {
-      kind: 'representations';
-      specimen: string;
-      columns: { name: string; holds: string; fails: string };
-      items: readonly { name: string; holds: string; fails: string }[];
+      kind: 'table';
+      /** One line before the table, when it needs one. */
+      summary?: string;
+      keyColumn: string;
+      columns: readonly string[];
+      rows: readonly { header: string; cells: readonly string[] }[];
     }
   /** A record with named fields — a spec sheet, not a table of options. */
   | {
@@ -164,6 +166,14 @@ export type StoryBlock =
       title: string;
       meta: string;
       items: readonly { field: string; question: string; icon: StoryGlyph }[];
+    }
+  /** Work moving through stages, each with its items; optionally what another party keeps
+      throughout. A process, not steps (ProcessFlow). */
+  | {
+      kind: 'flow';
+      actor?: string;
+      stages: readonly { label: string; items: readonly string[] }[];
+      throughout?: { label: string; items: readonly string[] };
     }
   /** One statement in two halves — what one party does, what the other keeps — as one list split
       into two columns under one rule, the same row style on both sides. */

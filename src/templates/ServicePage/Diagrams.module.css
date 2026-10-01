@@ -1,11 +1,11 @@
 /* ServicePage · diagrams.
 
    The compositions that DRAW an argument rather than list it: a scale, a thread, a sheet, a
-   bracket, a slice, a bridge. Colour from --svc-*, type from the composites, arrangement from
+   holding panel, a slice, a bridge. Colour from --svc-*, type from the composites, arrangement from
    Layout and Cluster. Positioned pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
 
-   Every mark here says something (30 Sep 2026 review): the bracket says the operating model spans
-   the four parts; the slice says a release cuts through every layer; the dashed bars say a product
+   Every mark here says something (30 Sep 2026 review): the holding panel says the operating model
+   contains the four parts; the slice says a release cuts through every layer; the dashed bars say a product
    is half-present while the move is under way; an arrow says one stage feeds the next; the
    disruption trace is how much an option shakes the product, more ink for more. Marks that said nothing — a
    progress meter per row, a dashed thread with nodes, a dot on every step's rule — were cut. */
@@ -42,44 +42,6 @@
   font: var(--text-body);
   text-wrap: var(--text-running-wrap);
   color: var(--svc-ink-muted);
-}
-
-/* The question a row must settle: the reader's own words, so it takes the ink, not the muted. */
-.rowQuestion {
-  font: var(--text-body);
-  text-wrap: var(--text-running-wrap);
-  color: var(--svc-ink);
-}
-
-.rowFail {
-  font: var(--text-body);
-  font-style: italic;
-  text-wrap: var(--text-running-wrap);
-  color: var(--svc-ink-muted);
-}
-
-/* ── Spectrum ─────────────────────────────────────────────────────────────────── */
-
-.rows {
-  color: var(--svc-ink);
-}
-
-.headRow {
-  padding-block-end: var(--gap-text);
-  border-block-end: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-}
-
-/* Column heads name tracks; below lg there is one track, so they would stack into a list of
-   labels over nothing. The cells' own roles (title, muted condition, inked question) carry it. */
-@media (max-width: 1023px) {
-  .headRow {
-    display: none;
-  }
-}
-
-.row {
-  padding-block: var(--gap-block);
-  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
 }
 
 /* ── Record: a sheet ──────────────────────────────────────────────────────────── */
@@ -123,35 +85,15 @@
   color: var(--svc-ink);
 }
 
-/* ── Parts and the frame that brackets them ───────────────────────────────────── */
-.part {
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  padding-block-start: var(--gap-block);
-  min-inline-size: 0;
-}
-
-.frame {
-  position: relative;
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-node);
-  padding-block-start: var(--gap-block);
-}
-
-/* The bracket's two ticks, rising from each end of the frame's rule toward the parts it holds. */
-.frame::before,
-.frame::after {
-  content: '';
-  position: absolute;
-  inset-block-start: calc(var(--svc-bracket-tick) * -1);
-  block-size: var(--svc-bracket-tick);
-  border-inline-start: var(--svc-rule-strong-width) solid var(--svc-node);
-}
-
-.frame::before {
-  inset-inline-start: 0;
-}
-
-.frame::after {
-  inset-inline-end: 0;
+/* ── Parts: four held by a fifth ─────────────────────────────────────────────────── */
+/* The operating model as the panel that holds the four parts: the record sheet's ground and edge,
+   because it is the same kind of object — the thing that contains and keeps the rest. Inset at the
+   container gutter so the tiles inside sit clear of its edge. */
+.holder {
+  padding: var(--gap-gutter);
+  background: var(--svc-sheet-ground);
+  border: var(--svc-rule-width) solid var(--svc-rule-strong);
+  color: var(--svc-ink);
 }
 
 .frameTitle {
@@ -221,7 +163,6 @@
   color: var(--svc-ink);
 }
 
-/* ── Bridge ───────────────────────────────────────────────────────────────────── */
 /* ── Bridge: three states ────────────────────────────────────────────────────────
    Each state is its own panel opening on a strong rule — the same opening a tile has — so the
    three read as separate states with a gutter between, not as one table. */

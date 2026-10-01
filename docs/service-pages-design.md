@@ -40,6 +40,15 @@ Third batch, same day:
 | Transition still unclear | **Shared seams made three states read as one table** | Three separate panels with a gutter — Before · During the move · After — each opening on a rule; solid bar = the product in use, dashed = half-present |
 | Proof: case first | The eye should enter on the work, then hear about it | Case card in the narrow leading track, quote after it in the wide one |
 
+Fourth batch, same day:
+
+| Note | Underlying issue | Fix |
+|---|---|---|
+| Should the disruption list be a table? Both it and the cards stack on a phone | **Comparison data was drawn as rows to fit a custom cell**, so it lost table semantics and collapsed like the peer cards above it | **The rule:** content compared across rows is a table at every width (scrolls sideways on a phone); peers stack. DataTable cells can now hold a composed mark, so Spectrum is a DataTable with the meter in a column |
+| "Partly complete" chips; should this be a table? | **A drawing device standing in for a sentence.** The decision is named in the lead; the chip repeated it five times and said nothing | A DataTable: representation · what must stay true · when it changes alone. The `representations` block is gone; a generic `table` block replaces it |
+| Five parts is crowded; heading-left/body-right still used | **Three ideas at one weight** — four parts, a bracket frame set left/right, and failure tiles with titles larger than the parts' | One drawing for the one idea: the operating model is the panel that HOLDS the four parts (tiles inside it). The three failures are one quiet note, "Any one part alone" |
+| "Who owns what" doesn't read as a process | **Four peer columns for an ordered flow** — and "Product teams keep" is not a fourth stage, it is what the client holds throughout | **New pattern: ProcessFlow.** Stages in order with their items, an arrow at each head pointing to the next (down, below lg), an optional lane for what another party keeps throughout. Spec, tokens, specimen `/design/process-flow` |
+
 **Copy re-cut in this pass:** Product Design's four signal bodies take back "May be" (it was the template's key, now the body's first words). Router conditions that had a separate `settles` line now carry it as a second sentence ("It settles scope, authority, ownership and investment."), on Modernisation and Design Systems.
 
 **Still bespoke, and next in line for the same question:** `fit` and `contrast` (lists of sentences, no titles), `stat`, `nudge`, and the seven diagrams. The diagrams are drawings and probably earn their place. The four text blocks should be checked against Prose lists, Proof figures and CtaSection before they're kept.

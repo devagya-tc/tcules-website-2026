@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId, type ReactNode } from 'react';
 
 import { Layout, Prose } from '@/components';
 import { cx } from '@/lib/cx';
@@ -36,14 +36,23 @@ export type DataTableColumn = {
   behaviour?: DataTableColumnBehaviour;
 };
 
+/**
+ * A cell that is not text: a mark the caller composes — a meter, a glyph — passed as a node, the way
+ * a primitive takes a sibling (CLAUDE.md § Sideways has an idiom). Added 1 Oct 2026 so a table that
+ * needs one encoded column can stay a table instead of being redrawn as rows. The node owns its own
+ * text alternative; the table only places it.
+ */
+export type DataTableNodeCell = { node: ReactNode };
+
 export type DataTableRow = {
   /** Plain-text row header — `<th scope="row">`. */
   header: string;
   /**
-   * One TRUSTED, seam-sanitised rich-text string per data column, in column order — the same
-   * contract as `Prose`'s `html`. An empty string is an empty cell.
+   * One cell per data column, in column order. A string is TRUSTED, seam-sanitised rich text — the
+   * same contract as `Prose`'s `html` — and an empty string is an empty cell. A `{ node }` is a
+   * composed mark (see DataTableNodeCell).
    */
-  cellsHtml: readonly string[];
+  cellsHtml: readonly (string | DataTableNodeCell)[];
 };
 
 export type DataTableProps = {
@@ -198,7 +207,8 @@ export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTa
                         <span className={styles.keyText}>{row.header}</span>
                       </th>
                       {columns.map((column, index) => {
-                        const html = row.cellsHtml[index] ?? '';
+                        const cell = row.cellsHtml[index] ?? '';
+                        const html = typeof cell === 'string' ? cell : '';
                         return (
                           <td
                             key={index}
@@ -207,7 +217,9 @@ export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTa
                               BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
                             )}
                           >
-                            {html.trim() ? (
+                            {typeof cell !== 'string' ? (
+                              cell.node
+                            ) : html.trim() ? (
                               <Prose html={html} className={styles.value} />
                             ) : (
                               // An empty cell is still a cell: the screen reader announces it blank on

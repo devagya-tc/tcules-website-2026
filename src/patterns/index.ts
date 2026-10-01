@@ -27,6 +27,10 @@
  * EnquiryForm is a BEHAVIOURAL FORM: route-blind in what it renders, but responsible for the
  * blur-validation and asynchronous lifecycle shared by every page that collects an enquiry.
  *
+ * ProcessFlow is a DIAGRAM OF ORDER: stages the work passes through, each with its items, and an
+ * optional lane for what another party holds throughout. A pattern because it takes a content
+ * shape and composes Layout, Cluster and Icon; not steps (ListCard rows) and not peers (tiles).
+ *
  * ListCard is the fifth kind, and the only one here that is not a block: it is a ROW, and the
  * smallest thing in this tier. It owns no band, takes no `surface`, paints no ground, and renders a
  * bare <li> — the list element belongs to the caller, as a Layout with rowGap="none", because the
@@ -118,6 +122,13 @@ export type {
   EnquiryUrlLabel,
 } from './EnquiryForm';
 
+export { ProcessFlow } from './ProcessFlow';
+export type {
+  ProcessFlowProps,
+  ProcessFlowStage,
+  ProcessFlowLane,
+  ProcessFlowStageHeading,
+} from './ProcessFlow';
 export { ListCard } from './ListCard';
 export type {
   ListCardProps,
@@ -166,6 +177,7 @@ export type {
   DataTableKeyColumn,
   DataTableColumn,
   DataTableRow,
+  DataTableNodeCell,
   DataTableKeyBehaviour,
   DataTableColumnBehaviour,
 } from './DataTable';

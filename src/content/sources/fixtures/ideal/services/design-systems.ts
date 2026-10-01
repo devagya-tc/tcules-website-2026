@@ -114,26 +114,9 @@ export const designSystems: ServiceStory = {
           },
         },
         {
-          kind: 'ledger',
-          columns: 3,
-          marker: 'icon',
-          items: [
-            {
-              icon: 'close-circle',
-              title: 'A design-only library',
-              body: 'cannot govern runtime behaviour.',
-            },
-            {
-              icon: 'close-circle',
-              title: 'A code library without semantics',
-              body: 'makes local composition the place meaning diverges.',
-            },
-            {
-              icon: 'close-circle',
-              title: 'Documentation without a change path',
-              body: 'becomes a record of decisions nobody can maintain.',
-            },
-          ],
+          kind: 'note',
+          label: 'Any one part alone',
+          html: '<ul><li>A design-only library cannot govern runtime behaviour.</li><li>A code library without semantics makes local composition the place meaning diverges.</li><li>Documentation without a change path becomes a record of decisions nobody can maintain.</li></ul>',
         },
       ],
     },
@@ -145,43 +128,51 @@ export const designSystems: ServiceStory = {
       lead: 'A process status, Partly complete, needed by three products. A change is complete only when every representation — and every product consuming it — has a governed path.',
       blocks: [
         {
-          kind: 'representations',
-          specimen: 'Partly complete',
-          columns: {
-            name: 'Representation',
-            holds: 'What must stay true',
-            fails: 'When it changes alone',
-          },
-          items: [
+          kind: 'table',
+          keyColumn: 'Representation',
+          columns: ['What must stay true', 'When it changes alone'],
+          rows: [
             {
-              name: 'Semantic definition',
-              holds: 'Some required work is complete; some remains actionable.',
-              fails: 'Teams use the status for unrelated partial states.',
+              header: 'Semantic definition',
+              cells: [
+                'Some required work is complete; some remains actionable.',
+                'Teams use the status for unrelated partial states.',
+              ],
             },
             {
-              name: 'Token and visual language',
-              holds: 'The status is distinguishable without colour alone.',
-              fails: 'Its appearance implies warning or success, inconsistently.',
+              header: 'Token and visual language',
+              cells: [
+                'The status is distinguishable without colour alone.',
+                'Its appearance implies warning or success, inconsistently.',
+              ],
             },
             {
-              name: 'Figma component',
-              holds: 'Properties cover label, detail, action and assistive text.',
-              fails: 'Designers detach, or simulate the missing behaviour.',
+              header: 'Figma component',
+              cells: [
+                'Properties cover label, detail, action and assistive text.',
+                'Designers detach, or simulate the missing behaviour.',
+              ],
             },
             {
-              name: 'Runtime component',
-              holds: 'API and state expose the same meaning and actions.',
-              fails: 'Code accepts combinations the design contract forbids.',
+              header: 'Runtime component',
+              cells: [
+                'API and state expose the same meaning and actions.',
+                'Code accepts combinations the design contract forbids.',
+              ],
             },
             {
-              name: 'Documentation and tests',
-              holds: 'Usage, non-usage, keyboard and content cases are explicit.',
-              fails: 'Consumers infer behaviour from one happy-path story.',
+              header: 'Documentation and tests',
+              cells: [
+                'Usage, non-usage, keyboard and content cases are explicit.',
+                'Consumers infer behaviour from one happy-path story.',
+              ],
             },
             {
-              name: 'Release and migration',
-              holds: 'Consuming products know the version and the change required.',
-              fails: 'Publication is mistaken for adoption.',
+              header: 'Release and migration',
+              cells: [
+                'Consuming products know the version and the change required.',
+                'Publication is mistaken for adoption.',
+              ],
             },
           ],
         },
@@ -244,14 +235,15 @@ export const designSystems: ServiceStory = {
       lead: 'Design Systems owns the shared system as a maintained product. Design Engineering owns product decisions embodied in running frontend work. One engagement can hold both; they stay distinct responsibilities.',
       blocks: [
         {
-          kind: 'contrast',
-          sides: [
+          kind: 'flow',
+          actor: 'Tcules',
+          stages: [
             {
-              label: 'Tcules · Assess',
+              label: 'Assess',
               items: ['System assessment', 'Investment scope', 'Product semantics'],
             },
             {
-              label: 'Tcules · Build',
+              label: 'Build',
               items: [
                 'Foundations and components',
                 'Figma architecture',
@@ -260,19 +252,19 @@ export const designSystems: ServiceStory = {
               ],
             },
             {
-              label: 'Tcules · Operate',
+              label: 'Operate',
               items: ['Contribution', 'Release and migration', 'Adoption', 'Implementation QA'],
             },
-            {
-              label: 'Product teams keep',
-              items: [
-                'Product-specific composition',
-                'User evidence',
-                'Accessibility of what they release',
-                'Decision and release authority',
-              ],
-            },
           ],
+          throughout: {
+            label: 'Product teams keep, throughout',
+            items: [
+              'Product-specific composition',
+              'User evidence',
+              'Accessibility of what they release',
+              'Decision and release authority',
+            ],
+          },
         },
       ],
     },

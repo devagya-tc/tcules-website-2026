@@ -72,7 +72,7 @@ HTML. Nothing else is a slot; there is no action slot (§ 12, "interactive conte
 | `summary`   | `string`                                                                                 | —                   | A plain-text lead-in paragraph before the table. Omitted → none.                                               |
 | `keyColumn` | `{ heading: string; behaviour?: 'fluid' \| 'nowrap' \| 'hold' }`                         | behaviour `'hold'`  | The first column's head and how the row headers behave.                                                        |
 | `columns`   | `readonly { heading: string; behaviour?: 'fluid' \| 'nowrap' \| 'hold' \| 'numeric' }[]` | behaviour `'fluid'` | The data columns, in order. The COUNT is data, never a variant.                                                |
-| `rows`      | `readonly { header: string; cellsHtml: readonly string[] }[]`                            | —                   | Each row: a plain-text header and one trusted rich-text string per data column.                                |
+| `rows`      | `readonly { header: string; cellsHtml: readonly (string \| { node: ReactNode })[] }[]` | —                   | Each row: a plain-text header and, per data column, a trusted rich-text string or (1 Oct 2026) a composed mark `{ node }`. |
 
 **Column behaviour** (presentation, set by the caller):
 
@@ -498,3 +498,21 @@ LAYOUT
 [x] No display grid/flex, no margins, no Section override. Grounds only through --dtab-*-ground.
 [x] No horizontal page overflow at 390 (npm run shots: 0 problems); the frame scrolls instead.
 ```
+
+## Amendment · 1 Oct 2026 — a cell may be a composed mark
+
+**Why.** The service pages drew two tables as hand-made rows (Modernisation's interventions, Design
+Systems' representations) because one column needed a mark DataTable could not hold — a disruption
+meter, a chip. Drawn as rows they lost table semantics, and on a phone they collapsed into the same
+stacked blocks as the cards above them, so comparison data and peer items looked alike. Owner: *"the
+disruption table should be a table?"*
+
+**The rule this settles:** content a reader compares ACROSS rows — every row the same attributes — is a
+table and stays one at every width (DataTable scrolls sideways on a phone, behind its edge fades). Peers,
+each a name and a line, are cards or rows and stack.
+
+**The change.** A `cellsHtml` entry may be `{ node: ReactNode }` (`DataTableNodeCell`) instead of a
+trusted HTML string: a mark the caller composes, placed in the cell as given. The node owns its own text
+alternative (the disruption meter carries a visually hidden "Disruption: 3 of 6"). Strings keep their
+contract unchanged. Give a mark column `behaviour: 'nowrap'`.
+

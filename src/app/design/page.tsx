@@ -108,6 +108,11 @@ const SPECIMENS = [
         note: 'enquiry, audit, and contact field sets — async lifecycle, 4 surfaces',
       },
       {
+        href: '/design/process-flow',
+        name: 'ProcessFlow',
+        note: 'stages in order with their items, arrows between, an optional lane held throughout — 4 surfaces',
+      },
+      {
         href: '/design/list-card',
         name: 'ListCard',
         note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces',

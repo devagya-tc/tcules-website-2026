@@ -1,0 +1,68 @@
+/* ══ Component layer — ProcessFlow ═════════════════════════════════════════════════
+   Tier 2. Stages in order, each with its items, and an optional lane held throughout.
+
+   Naming: --flow-{part}-{role}
+     parts: rule | number | label | arrow | item | actor | lane
+
+   No state tokens: nothing in a flow responds to a pointer. Every surface block declares every
+   surface-dependent token (CLAUDE.md § Tokens rule 2). */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   --flow-rule-width       the stage rule, two steps over a hairline: it is the flow's track,
+                           and has to read as one line broken at each handover.
+   --flow-item-rule-width  the hairline closing each item row. */
+:root {
+  --flow-rule-width: var(--border-width-2);
+  --flow-item-rule-width: var(--border-width-hairline);
+}
+
+/* Paper: the track and the stage names carry full ink; the arrow is the direction, in the same
+   ink as the track it sits on; items are body ink; the lane is one step of ground off the band. */
+:root,
+[data-surface='paper'] {
+  --flow-rule-ink: var(--color-neutral-900);
+  --flow-number-ink: var(--color-neutral-500); /* 3.16:1 — aria-hidden, the <ol> carries order */
+  --flow-label-ink: var(--color-neutral-900); /* 14.62:1 */
+  --flow-arrow-ink: var(--color-neutral-900);
+  --flow-item-ink: var(--color-neutral-800); /* 11.81:1 */
+  --flow-item-rule-ink: var(--color-neutral-200);
+  --flow-actor-ink: var(--color-neutral-700); /* 8.14:1 */
+  --flow-lane-ground: var(--color-paper-deep);
+  --flow-lane-label-ink: var(--color-neutral-700); /* 7.27:1 on paper-deep */
+}
+
+[data-surface='tint'] {
+  --flow-rule-ink: var(--color-neutral-900);
+  --flow-number-ink: var(--color-neutral-600);
+  --flow-label-ink: var(--color-neutral-900);
+  --flow-arrow-ink: var(--color-neutral-900);
+  --flow-item-ink: var(--color-neutral-800); /* 10.54:1 */
+  --flow-item-rule-ink: var(--color-neutral-300);
+  --flow-actor-ink: var(--color-neutral-800);
+  --flow-lane-ground: var(--color-paper);
+  --flow-lane-label-ink: var(--color-neutral-700);
+}
+
+[data-surface='ink'] {
+  --flow-rule-ink: var(--color-white);
+  --flow-number-ink: var(--color-neutral-500);
+  --flow-label-ink: var(--color-white);
+  --flow-arrow-ink: var(--color-white);
+  --flow-item-ink: var(--color-neutral-200);
+  --flow-item-rule-ink: var(--color-neutral-700);
+  --flow-actor-ink: var(--color-neutral-400);
+  --flow-lane-ground: var(--color-neutral-900);
+  --flow-lane-label-ink: var(--color-neutral-400);
+}
+
+[data-surface='blue'] {
+  --flow-rule-ink: var(--color-white);
+  --flow-number-ink: var(--color-brandeis-200);
+  --flow-label-ink: var(--color-white);
+  --flow-arrow-ink: var(--color-white);
+  --flow-item-ink: var(--color-white);
+  --flow-item-rule-ink: var(--color-brandeis-400);
+  --flow-actor-ink: var(--color-brandeis-100);
+  --flow-lane-ground: var(--color-brandeis-600);
+  --flow-lane-label-ink: var(--color-brandeis-100);
+}

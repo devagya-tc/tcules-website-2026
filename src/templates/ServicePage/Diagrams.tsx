@@ -1,7 +1,9 @@
-import { Cluster, Icon, Layout, Tag } from '@/components';
+import { Cluster, Icon, Layout } from '@/components';
+import { DataTable, ListCard } from '@/patterns';
 import type { StoryBlock } from '@/lib/service-story';
 
 import styles from './Diagrams.module.css';
+import { paragraph } from './text';
 
 type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
 
@@ -19,7 +21,7 @@ type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
    The amplitude is the row's rank on the ordered list, spread over six steps — a rank, not a
    measurement, which is all the content claims. The burst is shaped by a sine envelope so it swells
    and settles like a tremor rather than buzzing at one height. Hidden from assistive technology;
-   the row states the level in words. */
+   the meter's own hidden span states the level ("3 of 6"); the column head says what it measures. */
 const METER_STEPS = 6;
 const TRACE_WIDTH = 96;
 const TRACE_HEIGHT = 24;
@@ -37,7 +39,7 @@ function tracePoints(level: number): string {
   }).join(' ');
 }
 
-function DisruptionMeter({ level, label }: { level: number; label: string }) {
+function DisruptionMeter({ level }: { level: number }) {
   return (
     <>
       <svg
@@ -50,92 +52,55 @@ function DisruptionMeter({ level, label }: { level: number; label: string }) {
         <polyline className={styles.meterTrace} points={tracePoints(level)} />
       </svg>
       <span className={styles.visuallyHidden}>
-        {label}: {level} of {METER_STEPS}
+        {level} of {METER_STEPS}
       </span>
     </>
   );
 }
 
 /* ── Spectrum ─────────────────────────────────────────────────────────────────
-   Options on one scale. With a meter, the scale is a column — every row shows where it sits — and
-   the caption goes: an order a reader has to be told in a sentence is an order the rows failed to
-   show (1 Oct 2026, owner: the "ordered from least … to most" line made the section look bad).
-   Without one, the order is stated once over the list. */
+   Options on one scale, as a TABLE (1 Oct 2026, owner). Every row has the same attributes and a
+   reader compares across rows, which is what a table is for — so it is DataTable, a real <table>
+   that keeps its shape at every width and scrolls sideways on a phone, rather than rows drawn to
+   look like one that dissolved into the same stacked blocks as the cards above them.
+
+   With a meter, the scale is a column: every row shows where it sits, and the order needs no
+   sentence. Without one, the order is said once, as the table's summary. */
 export function Spectrum({ block }: { block: Of<'spectrum'> }) {
   const meter = block.meter;
   const last = block.items.length - 1;
-  const tracks = meter ? [4, 2, 5, 5] : [4, 5, 5];
   return (
-    <Layout rowGap="text">
-      {meter ? null : (
-        <span className={styles.key}>
-          Ordered from {block.axis.from.toLowerCase()} to {block.axis.to.toLowerCase()}
-        </span>
-      )}
-      <Layout as="ol" rowGap="none" className={styles.rows}>
-        <li className={styles.headRow} aria-hidden="true">
-          <Layout columns={{ base: 1, lg: tracks }} colGap="gutter">
-            <span className={styles.key}>{block.columns.name}</span>
-            {meter ? <span className={styles.key}>{meter.label}</span> : null}
-            <span className={styles.key}>{block.columns.when}</span>
-            <span className={styles.key}>{block.columns.settles}</span>
-          </Layout>
-        </li>
-        {block.items.map((item, index) => (
-          <li key={item.name} className={styles.row}>
-            <Layout columns={{ base: 1, lg: tracks }} colGap="gutter" rowGap="text">
-              <h3 className={styles.rowTitle}>{item.name}</h3>
-              {meter ? (
-                <DisruptionMeter
-                  label={meter.label}
-                  level={last > 0 ? Math.round((index / last) * METER_STEPS) : 0}
-                />
-              ) : null}
-              <p className={styles.rowBody}>{item.when}</p>
-              <p className={styles.rowQuestion}>{item.settles}</p>
-            </Layout>
-          </li>
-        ))}
-      </Layout>
-    </Layout>
-  );
-}
-
-/* ── Representations ──────────────────────────────────────────────────────────
-   One decision, carried through every representation of it. The decision is DRAWN — the same chip
-   in every row — so the claim "it must survive every representation" is
-   something the reader sees hold before reading why it breaks. */
-export function Representations({ block }: { block: Of<'representations'> }) {
-  return (
-    <Layout as="ol" rowGap="none">
-      <li className={styles.headRow} aria-hidden="true">
-        <Layout columns={{ base: 1, lg: [4, 5, 5] }} colGap="gutter">
-          <span className={styles.key}>{block.columns.name}</span>
-          <span className={styles.key}>{block.columns.holds}</span>
-          <span className={styles.key}>{block.columns.fails}</span>
-        </Layout>
-      </li>
-      {block.items.map((item) => (
-        <li key={item.name} className={styles.row}>
-          <Layout columns={{ base: 1, lg: [4, 5, 5] }} colGap="gutter" rowGap="text">
-            <Layout rowGap="text">
-              <h3 className={styles.rowTitle}>{item.name}</h3>
-              <Cluster>
-                <Tag>{block.specimen}</Tag>
-              </Cluster>
-            </Layout>
-            <p className={styles.rowBody}>
-              <span className={styles.visuallyHidden}>{block.columns.holds}: </span>
-              {item.holds}
-            </p>
-            <p className={styles.rowFail}>
-              <span className={styles.visuallyHidden}>{block.columns.fails}: </span>
-              {item.fails}
-            </p>
-          </Layout>
-        </li>
-      ))}
-    </Layout>
+    <DataTable
+      summary={
+        meter
+          ? undefined
+          : `Ordered from ${block.axis.from.toLowerCase()} to ${block.axis.to.toLowerCase()}.`
+      }
+      keyColumn={{ heading: block.columns.name }}
+      columns={[
+        ...(meter ? [{ heading: meter.label, behaviour: 'nowrap' as const }] : []),
+        { heading: block.columns.when },
+        { heading: block.columns.settles },
+      ]}
+      rows={block.items.map((item, index) => ({
+        header: item.name,
+        cellsHtml: [
+          ...(meter
+            ? [
+                {
+                  node: (
+                    <DisruptionMeter
+                      level={last > 0 ? Math.round((index / last) * METER_STEPS) : 0}
+                    />
+                  ),
+                },
+              ]
+            : []),
+          paragraph(item.when),
+          paragraph(item.settles),
+        ],
+      }))}
+    />
   );
 }
 
@@ -177,43 +142,45 @@ export function Record({ block }: { block: Of<'record'> }) {
   );
 }
 
-/* ── Parts ────────────────────────────────────────────────────────────────────
-   Four parts in a row, and the fifth drawn as the frame beneath them: a rule that spans all four
-   with a tick at each end, a bracket, because the operating model is not a fifth peer — it is what
-   keeps the other four current. */
+/* ── Parts: four held by a fifth ──────────────────────────────────────────────
+   "Four of them are the system. The fifth decides whether the other four stay current." So the
+   fifth HOLDS the four: the operating model is the panel, named at its head, and the four parts are
+   tiles inside it (1 Oct 2026, owner: the section was crowded and unreadable). It used to be four
+   tiles, a thin bracket under them with the operating model set heading-left/body-right, and three
+   failure tiles whose titles were larger than the parts' — three ideas at one weight. Now one
+   drawing carries the one idea, and the failures are a note after it. */
 export function Parts({ block }: { block: Of<'parts'> }) {
   return (
-    <Layout rowGap="gutter">
-      <Layout
-        as="ul"
-        columns={{ base: 1, md: 2, lg: block.items.length }}
-        colGap="gutter"
-        rowGap="stack"
-      >
-        {block.items.map((item) => (
-          <li key={item.name} className={styles.part}>
-            <Layout rowGap="text">
-              <span className={styles.icon} aria-hidden="true">
-                <Icon name={item.icon} size="xl" />
-              </span>
-              <h3 className={styles.rowTitle}>{item.name}</h3>
-              <p className={styles.rowBody}>{item.body}</p>
-            </Layout>
-          </li>
-        ))}
-      </Layout>
-      <div className={styles.frame}>
-        <Layout columns={{ base: 1, lg: [1, 2] }} colGap="column" rowGap="text" align="start">
-          <Cluster nowrap colGap="text" align="center">
-            <span className={styles.icon} aria-hidden="true">
-              <Icon name={block.frame.icon} size="xl" />
-            </span>
+    <div className={styles.holder}>
+      <Layout rowGap="stack">
+        <Layout rowGap="text">
+          <span className={styles.icon} aria-hidden="true">
+            <Icon name={block.frame.icon} size="xl" />
+          </span>
+          <Layout rowGap="tight">
             <h3 className={styles.frameTitle}>{block.frame.name}</h3>
-          </Cluster>
-          <p className={styles.frameBody}>{block.frame.body}</p>
+            <p className={styles.frameBody}>{block.frame.body}</p>
+          </Layout>
         </Layout>
-      </div>
-    </Layout>
+        <Layout
+          as="ul"
+          columns={{ base: 1, md: 2, lg: block.items.length }}
+          colGap="gutter"
+          rowGap="stack"
+        >
+          {block.items.map((item) => (
+            <ListCard
+              key={item.name}
+              form="tile"
+              titleAs="h4"
+              title={item.name}
+              body={item.body}
+              marker={{ type: 'icon', name: item.icon }}
+            />
+          ))}
+        </Layout>
+      </Layout>
+    </div>
   );
 }
 
@@ -246,15 +213,14 @@ export function Slice({ block }: { block: Of<'slice'> }) {
         rowGap="stack"
       >
         {block.levels.map((level) => (
-          <li key={level.title} className={styles.part}>
-            <Layout rowGap="text">
-              <span className={styles.icon} aria-hidden="true">
-                <Icon name={level.icon} size="xl" />
-              </span>
-              <h3 className={styles.rowTitle}>{level.title}</h3>
-              <p className={styles.rowBody}>{level.body}</p>
-            </Layout>
-          </li>
+          <ListCard
+            key={level.title}
+            form="tile"
+            titleAs="h3"
+            title={level.title}
+            body={level.body}
+            marker={{ type: 'icon', name: level.icon }}
+          />
         ))}
       </Layout>
     </Layout>
@@ -278,7 +244,13 @@ export function Bridge({ block }: { block: Of<'bridge'> }) {
       aria-label={`${block.label}: ${block.phases.during.toLowerCase()}, ${block.from.toLowerCase()} and ${block.to.toLowerCase()} are both live`}
       className={styles.bridge}
     >
-      <Layout as="ol" columns={{ base: 1, lg: [1, 2, 1] }} colGap="gutter" rowGap="stack" align="start">
+      <Layout
+        as="ol"
+        columns={{ base: 1, lg: [1, 2, 1] }}
+        colGap="gutter"
+        rowGap="stack"
+        align="start"
+      >
         <li className={styles.phase}>
           <Layout rowGap="text">
             <span className={styles.key}>{block.phases.before}</span>

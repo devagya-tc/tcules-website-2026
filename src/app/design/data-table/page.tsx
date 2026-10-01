@@ -1,4 +1,4 @@
-import { Layout, Section, type SectionSurface } from '@/components';
+import { Icon, Layout, Section, type SectionSurface } from '@/components';
 import { auditPath, ROUTES, servicePath } from '@/lib/routes';
 import { DataTable, type DataTableProps, type DataTableRow } from '@/patterns';
 
@@ -391,6 +391,37 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
 ];
 
+/* A composed-mark column (1 Oct 2026): a cell may be `{ node }` — here a glyph with its own words —
+   placed as given while the other cells keep the trusted-HTML contract. Rendered on every surface
+   below, so the mark takes each surface's ink. */
+function Mark({ yes }: { yes: boolean }) {
+  return (
+    <span>
+      <Icon name={yes ? 'check-circle' : 'close-circle'} label={yes ? 'Yes' : 'No'} />
+    </span>
+  );
+}
+
+const NODE_TABLE: DataTableProps = {
+  caption: 'A composed mark in a column',
+  keyColumn: { heading: 'Representation' },
+  columns: [{ heading: 'Governed', behaviour: 'nowrap' }, { heading: 'What must stay true' }],
+  rows: [
+    {
+      header: 'Semantic definition',
+      cellsHtml: [{ node: <Mark yes /> }, '<p>Some work is complete; some remains.</p>'],
+    },
+    {
+      header: 'Figma component',
+      cellsHtml: [{ node: <Mark yes={false} /> }, '<p>Properties cover label and detail.</p>'],
+    },
+    {
+      header: 'Runtime component',
+      cellsHtml: [{ node: <Mark yes /> }, '<p>API exposes the same meaning.</p>'],
+    },
+  ],
+};
+
 export default function DataTableSpecimenPage() {
   return (
     <>
@@ -603,7 +634,7 @@ export default function DataTableSpecimenPage() {
             </Layout>
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="gutter" rowGap="stack">
               <DataTable {...SURFACE_TABLE} />
-              <DataTable {...SURFACE_TABLE} />
+              <DataTable {...NODE_TABLE} />
             </Layout>
           </Layout>
         </Section>

@@ -14,8 +14,6 @@
 
 /* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
-  /* The frame bracket on a parts diagram: the tick height at each end of its top rule. */
-  --svc-bracket-tick: var(--space-12);
   /* The slice column in the slice diagram, as a share of the layer width. */
   --svc-slice-start: 58%;
   /* The release's piece of each layer: a short bar, one step off a hairline, so it reads as a cut

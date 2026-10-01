@@ -1,22 +1,21 @@
 import { Button, Cluster, Icon, Layout } from '@/components';
-import { Accordion, BlockCard, BlockCardSet, Callout, ListCard, Proof } from '@/patterns';
+import {
+  Accordion,
+  BlockCard,
+  BlockCardSet,
+  Callout,
+  DataTable,
+  ListCard,
+  ProcessFlow,
+  Proof,
+} from '@/patterns';
 import type { StoryBlock, StoryCase, StorySlot } from '@/lib/service-story';
 
-import { Bridge, Parts, Record, Representations, Slice, Spectrum, Thread } from './Diagrams';
+import { Bridge, Parts, Record, Slice, Spectrum, Thread } from './Diagrams';
+import { paragraph } from './text';
 import styles from './Blocks.module.css';
 
 type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
-
-/* Story fields are PLAIN TEXT, and Callout and Proof take trusted HTML through Prose. So every plain
-   field is escaped on its way into a paragraph: a quote with "<" or "&" in it is text, not markup. */
-function paragraph(text: string): string {
-  const escaped = text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-  return `<p>${escaped}</p>`;
-}
 
 /* What is NOT in this file (30 Sep 2026 pass): a side-by-side pair of two text items. A key beside
    its sentence, a title beside its one-line body, a number beside its paragraph — each read as two
@@ -410,12 +409,26 @@ export function StoryBlockView({ block, slots }: { block: StoryBlock; slots: boo
       return <ProofBlock block={block} />;
     case 'spectrum':
       return <Spectrum block={block} />;
-    case 'representations':
-      return <Representations block={block} />;
+    case 'table':
+      return (
+        <DataTable
+          summary={block.summary}
+          keyColumn={{ heading: block.keyColumn }}
+          columns={block.columns.map((heading) => ({ heading }))}
+          rows={block.rows.map((row) => ({
+            header: row.header,
+            cellsHtml: row.cells.map(paragraph),
+          }))}
+        />
+      );
     case 'record':
       return <Record block={block} />;
     case 'contrast':
       return <Contrast block={block} />;
+    case 'flow':
+      return (
+        <ProcessFlow actor={block.actor} stages={block.stages} throughout={block.throughout} />
+      );
     case 'parts':
       return <Parts block={block} />;
     case 'slice':
