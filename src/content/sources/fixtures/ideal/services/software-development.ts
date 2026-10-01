@@ -152,11 +152,11 @@ export const softwareDevelopment: ServiceStory = {
           views: {
             layer: {
               title: 'Organised by layer',
-              note: 'Each team builds part of its layer, each on different paths. No path has every piece, so nothing a user can do works yet, and nothing can ship.',
+              note: 'Each team builds half its layer, each on different paths. No path has every piece, so nothing a user can do works yet, and nothing can ship.',
             },
             slice: {
               title: 'Organised by release',
-              note: 'Every layer builds the same path first. One thing a user can do works end to end and ships; the next path follows.',
+              note: 'The same amount of work, with every layer building the same paths. Two things a user can do work end to end, and ship.',
             },
           },
           legend: {

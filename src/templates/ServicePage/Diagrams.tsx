@@ -279,7 +279,7 @@ function SliceGrid({
   legend: { path: string; works: string };
   done: (layer: number, path: number) => boolean;
 }) {
-  const paths = Math.max(3, layers.length - 1);
+  const paths = Math.max(3, layers.length - 1); // the same count Slice computes
   const tracks = { base: [3, ...Array.from({ length: paths }, () => 1)] };
   const pathWorks = (path: number) => layers.every((_, layer) => done(layer, path));
   return (
@@ -328,6 +328,12 @@ function SliceGrid({
 }
 
 export function Slice({ block }: { block: Of<'slice'> }) {
+  /* SAME WORK IN BOTH GRIDS (1 Oct 2026, owner: "should they both reflect the same amount of
+     work?"). Each layer builds `built` pieces in both: by layer they land on different paths, so no
+     path has every piece; by release they land on the same paths, so those paths work. Equal by
+     construction — the only thing that differs between the two grids is where the work went. */
+  const paths = Math.max(3, block.layers.length - 1);
+  const built = Math.floor(paths / 2);
   return (
     <Layout rowGap="section">
       <Layout rowGap="block">
@@ -348,13 +354,13 @@ export function Slice({ block }: { block: Of<'slice'> }) {
             layers={block.layers}
             view={block.views.layer}
             legend={block.legend}
-            done={(layer, path) => (((path - layer) % 4) + 4) % 4 < 2}
+            done={(layer, path) => (((path - layer) % paths) + paths) % paths < built}
           />
           <SliceGrid
             layers={block.layers}
             view={block.views.slice}
             legend={block.legend}
-            done={(_, path) => path === 0}
+            done={(_, path) => path < built}
           />
         </Layout>
       </Layout>
