@@ -58,6 +58,39 @@ function DisruptionMeter({ level }: { level: number }) {
   );
 }
 
+/* ── Authority meter ──────────────────────────────────────────────────────────
+   How much of the decision the MODEL holds rather than a person: one slot per role on the list,
+   filled from the model's side. "Generates a candidate" fills one — the person still decides almost
+   everything; "Acts with delegated authority" fills them all. One slot per row, not a fixed six, so
+   no two roles are drawn as a tie the content does not claim. More fill, more of the decision handed over: the direction
+   readers already take ink in. It is not the disruption trace because it is not the same quantity —
+   one meter per meaning (1 Oct 2026). Hidden from assistive technology; the hidden span says it in
+   words under the column head. */
+function AuthorityMeter({ level, slots }: { level: number; slots: number }) {
+  return (
+    <>
+      <Cluster
+        as="span"
+        nowrap
+        colGap="inline"
+        aria-hidden="true"
+        className={styles.authoritySlots}
+      >
+        {Array.from({ length: slots }, (_, index) => (
+          <span
+            key={index}
+            className={styles.authoritySlot}
+            data-held={index < level ? 'model' : 'person'}
+          />
+        ))}
+      </Cluster>
+      <span className={styles.visuallyHidden}>
+        {level} of {slots}
+      </span>
+    </>
+  );
+}
+
 /* ── Spectrum ─────────────────────────────────────────────────────────────────
    Options on one scale, as a TABLE (1 Oct 2026, owner). Every row has the same attributes and a
    reader compares across rows, which is what a table is for — so it is DataTable, a real <table>
@@ -88,11 +121,14 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
           ...(meter
             ? [
                 {
-                  node: (
-                    <DisruptionMeter
-                      level={last > 0 ? Math.round((index / last) * METER_STEPS) : 0}
-                    />
-                  ),
+                  node:
+                    meter.kind === 'authority' ? (
+                      <AuthorityMeter level={index + 1} slots={block.items.length} />
+                    ) : (
+                      <DisruptionMeter
+                        level={last > 0 ? Math.round((index / last) * METER_STEPS) : 0}
+                      />
+                    ),
                 },
               ]
             : []),
@@ -113,16 +149,12 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
 export function Record({ block }: { block: Of<'record'> }) {
   return (
     <figure className={styles.sheet}>
-      <Cluster
-        as="figcaption"
-        justify="between"
-        colGap="block"
-        rowGap="tight"
-        className={styles.sheetHead}
-      >
-        <span className={styles.sheetTitle}>{block.title}</span>
+      {/* Stacked: what the record is for, then its name — a label over the thing it labels. It was
+          title left, mono meta right, the left/right pairing the owner rejected (1 Oct 2026). */}
+      <Layout as="figcaption" rowGap="tight" className={styles.sheetHead}>
         <span className={styles.key}>{block.meta}</span>
-      </Cluster>
+        <span className={styles.sheetTitle}>{block.title}</span>
+      </Layout>
       <Layout as="dl" rowGap="none">
         {block.items.map((item) => (
           <Layout key={item.field} rowGap="tight" className={styles.sheetRow}>

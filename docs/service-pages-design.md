@@ -49,6 +49,15 @@ Fourth batch, same day:
 | Five parts is crowded; heading-left/body-right still used | **Three ideas at one weight** — four parts, a bracket frame set left/right, and failure tiles with titles larger than the parts' | One drawing for the one idea: the operating model is the panel that HOLDS the four parts (tiles inside it). The three failures are one quiet note, "Any one part alone" |
 | "Who owns what" doesn't read as a process | **Four peer columns for an ordered flow** — and "Product teams keep" is not a fourth stage, it is what the client holds throughout | **New pattern: ProcessFlow.** Stages in order with their items, an arrow at each head pointing to the next (down, below lg), an optional lane for what another party keeps throughout. Spec, tokens, specimen `/design/process-flow` |
 
+Fifth batch, same day:
+
+| Note | Underlying issue | Fix |
+|---|---|---|
+| AI Product UX: ordered by authority, like disruption | Same cause as disruption: the order was a sentence, not in the rows | A **Model authority** column: one slot per role, filled from the model's side — more fill, more of the decision handed over. Its own meter, because authority is not disruption |
+| Responsibility record: left/right head, small questions | The head paired title left with mono meta right; the questions — the record's content — sat at h6, quieter than the mono keys over them | Head stacked (meta over title, title at h4); questions at h5 |
+| 12 then eight numbered items feels wrong | **Numbers doing two jobs:** 12 is a count, 01–08 were ordinals on items with no order, so the eye read one meaningless sequence | A split: the 12 and its sentence lead; the eight responsibilities sit beside it as unnumbered rows (`stat.items`) |
+| ProcessFlow: black bars, lane | The 2px ink bar is foreign to a system where items open on a hairline; the lane read as a footer box, not a duration | Stages open on the tile hairline; the lane is a span line ticked at both ends with the held things as Tags |
+
 **Copy re-cut in this pass:** Product Design's four signal bodies take back "May be" (it was the template's key, now the body's first words). Router conditions that had a separate `settles` line now carry it as a second sentence ("It settles scope, authority, ownership and investment."), on Modernisation and Design Systems.
 
 **Still bespoke, and next in line for the same question:** `fit` and `contrast` (lists of sentences, no titles), `stat`, `nudge`, and the seven diagrams. The diagrams are drawings and probably earn their place. The four text blocks should be checked against Prose lists, Proof figures and CtaSection before they're kept.

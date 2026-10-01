@@ -8,61 +8,66 @@
    surface-dependent token (CLAUDE.md § Tokens rule 2). */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   --flow-rule-width       the stage rule, two steps over a hairline: it is the flow's track,
-                           and has to read as one line broken at each handover.
-   --flow-item-rule-width  the hairline closing each item row. */
+   --flow-rule-width       the hairline a stage opens on — the system's item opening (it was a 2px
+                           ink bar until 1 Oct 2026).
+   --flow-item-rule-width  the hairline closing each item row.
+   --flow-span-width       the lane's span line and its two ticks: one step over a hairline, so the
+                           duration reads as a measurement mark rather than another item rule.
+   --flow-span-tick        each tick's height: a component size. */
 :root {
-  --flow-rule-width: var(--border-width-2);
+  --flow-rule-width: var(--border-width-hairline);
   --flow-item-rule-width: var(--border-width-hairline);
+  --flow-span-width: var(--border-width-1);
+  --flow-span-tick: var(--space-12);
 }
 
-/* Paper: the track and the stage names carry full ink; the arrow is the direction, in the same
-   ink as the track it sits on; items are body ink; the lane is one step of ground off the band. */
+/* Paper: stage names and the arrow carry full ink — the arrow is the direction; stages open on the
+   tile hairline; items are body ink; the lane's span line sits between the hairline and the ink. */
 :root,
 [data-surface='paper'] {
-  --flow-rule-ink: var(--color-neutral-900);
+  --flow-rule-ink: var(--color-neutral-300); /* decoration, the tile hairline */
   --flow-number-ink: var(--color-neutral-500); /* 3.16:1 — aria-hidden, the <ol> carries order */
   --flow-label-ink: var(--color-neutral-900); /* 14.62:1 */
   --flow-arrow-ink: var(--color-neutral-900);
   --flow-item-ink: var(--color-neutral-800); /* 11.81:1 */
   --flow-item-rule-ink: var(--color-neutral-200);
   --flow-actor-ink: var(--color-neutral-700); /* 8.14:1 */
-  --flow-lane-ground: var(--color-paper-deep);
+  --flow-span-ink: var(--color-neutral-500);
   --flow-lane-label-ink: var(--color-neutral-700); /* 7.27:1 on paper-deep */
 }
 
 [data-surface='tint'] {
-  --flow-rule-ink: var(--color-neutral-900);
+  --flow-rule-ink: var(--color-neutral-400); /* decoration, the tile hairline */
   --flow-number-ink: var(--color-neutral-600);
   --flow-label-ink: var(--color-neutral-900);
   --flow-arrow-ink: var(--color-neutral-900);
   --flow-item-ink: var(--color-neutral-800); /* 10.54:1 */
   --flow-item-rule-ink: var(--color-neutral-300);
   --flow-actor-ink: var(--color-neutral-800);
-  --flow-lane-ground: var(--color-paper);
+  --flow-span-ink: var(--color-neutral-600);
   --flow-lane-label-ink: var(--color-neutral-700);
 }
 
 [data-surface='ink'] {
-  --flow-rule-ink: var(--color-white);
+  --flow-rule-ink: var(--color-neutral-700); /* decoration, the tile hairline */
   --flow-number-ink: var(--color-neutral-500);
   --flow-label-ink: var(--color-white);
   --flow-arrow-ink: var(--color-white);
   --flow-item-ink: var(--color-neutral-200);
   --flow-item-rule-ink: var(--color-neutral-700);
   --flow-actor-ink: var(--color-neutral-400);
-  --flow-lane-ground: var(--color-neutral-900);
+  --flow-span-ink: var(--color-neutral-400);
   --flow-lane-label-ink: var(--color-neutral-400);
 }
 
 [data-surface='blue'] {
-  --flow-rule-ink: var(--color-white);
+  --flow-rule-ink: var(--color-brandeis-300); /* decoration, the tile hairline */
   --flow-number-ink: var(--color-brandeis-200);
   --flow-label-ink: var(--color-white);
   --flow-arrow-ink: var(--color-white);
   --flow-item-ink: var(--color-white);
   --flow-item-rule-ink: var(--color-brandeis-400);
   --flow-actor-ink: var(--color-brandeis-100);
-  --flow-lane-ground: var(--color-brandeis-600);
+  --flow-span-ink: var(--color-brandeis-100);
   --flow-lane-label-ink: var(--color-brandeis-100);
 }

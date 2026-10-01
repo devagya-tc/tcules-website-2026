@@ -36,12 +36,12 @@ grew four bespoke items before.
 |---|---|---|---|
 | `actor` | no | `<p>` | who carries the stages, said once over the flow; `--flow-actor-ink` |
 | `stages` | yes | `<ol>` from a `Layout` | order; 1 track below lg, N from lg |
-| `stage` | 2–5 | `<li>` | the opening thick rule `--flow-rule-*`, `--gap-block` under it |
+| `stage` | 2–5 | `<li>` | the opening hairline `--flow-rule-*` (the tile opening), `--gap-block` under it |
 | `number` | yes | `<span aria-hidden>` | `--text-index`, `--flow-number-ink`; the `<ol>` carries order |
 | `label` | yes | `h3` (or `h4`) | `--text-h4`, `--flow-label-ink` |
 | `arrow` | every stage but the last | `Icon arrow-right`, aria-hidden | `--flow-arrow-ink`; turned 90° below lg |
 | `items` | ≥ 1 per stage | `<ul>` of `<li>` rows | `--text-body`, hairline `--flow-item-rule-*` |
-| `lane` | no | `<div>` | `--flow-lane-ground`; label in the eyebrow voice, items in a 1/2/N-track list |
+| `lane` | no | `<div>` | a span line `--flow-span-*` the full width with a tick at each end — a duration; label in the eyebrow voice; items as `Tag`s in a Cluster, named by the label |
 
 ## 3 · Props / API
 
@@ -89,7 +89,7 @@ the lane takes `neutral-900` / `brandeis-600`.
 | item rows | `text` padding, hairline between |
 | lane inset | `block` × `gutter` |
 
-Rule `--border-width-2`; item hairline `--border-width-hairline`.
+Stage rule and item rows `--border-width-hairline`; span line and ticks `--border-width-1`, ticks `--space-12` tall.
 
 ## 8 · Typography
 
@@ -141,6 +141,16 @@ identical markup; a blank stage omitted. Resize below 1024 for the turned arrows
 `--flow-rule-width`, `--flow-item-rule-width`; per surface `--flow-rule-ink`, `--flow-number-ink`,
 `--flow-label-ink`, `--flow-arrow-ink`, `--flow-item-ink`, `--flow-item-rule-ink`, `--flow-actor-ink`,
 `--flow-lane-ground`, `--flow-lane-label-ink`. Registered in `tokens/index.css` in the same edit.
+
+## Amendment · 1 Oct 2026 (owner, second look)
+
+*"the lane module could be designed better and perhaps the bold black bars above the process item titles
+could be removed since it isn't fitting the design system."*
+- The 2px ink bar was the only heavy rule in a system where an item opens on a hairline; stages now open
+  on the tile hairline and the arrows alone carry direction.
+- The lane was a grey box that read as a footer. It is a duration, so it is drawn as one: a span line
+  with a tick at each end under the whole flow, and the held things as Tags. `--flow-lane-ground` is
+  gone; `--flow-span-ink`, `--flow-span-width`, `--flow-span-tick` replace it.
 
 ## 17 · Open questions
 

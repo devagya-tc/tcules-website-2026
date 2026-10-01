@@ -1,6 +1,6 @@
 import { useId } from 'react';
 
-import { Cluster, Icon, Layout } from '@/components';
+import { Cluster, Icon, Layout, Tag } from '@/components';
 
 import styles from './ProcessFlow.module.css';
 
@@ -54,7 +54,7 @@ function filled(items: readonly string[]): string[] {
  *
  * THE LANE. Some flows have a party that is not a stage: what the client keeps while the work
  * moves. Drawing it as a fourth column made it read as a fourth step; it is drawn instead beneath
- * every stage, on its own ground, labelled once.
+ * every stage as a span line ticked at both ends — a duration — labelled once.
  *
  * Layout owns every arrangement: the stage columns, each stage's head-to-items stack, the item
  * rows, the lane. The module owns rules, grounds, type and ink, and the one rotation of the arrow.
@@ -132,24 +132,21 @@ export function ProcessFlow({
         </Layout>
       </Layout>
       {lane ? (
+        /* The lane is a DURATION, so it is drawn as one: a span line the full width of the flow,
+           ticked at both ends — "from the first stage to the last" — with its label and what is held
+           beneath it, the items as Tags because they are things held, not rows to read in order. */
         <div className={styles.lane}>
           <Layout rowGap="text">
             <p className={styles.laneLabel} id={laneLabelId}>
               {lane.label}
             </p>
-            <Layout
-              as="ul"
-              aria-labelledby={laneLabelId}
-              columns={{ base: 1, md: 2, lg: Math.min(lane.items.length, 4) }}
-              colGap="gutter"
-              rowGap="tight"
-            >
+            <Cluster as="ul" aria-labelledby={laneLabelId} colGap="tight" rowGap="tight">
               {lane.items.map((item, itemIndex) => (
-                <li key={`${itemIndex}-${item}`} className={styles.laneItem}>
-                  {item}
+                <li key={`${itemIndex}-${item}`}>
+                  <Tag>{item}</Tag>
                 </li>
               ))}
-            </Layout>
+            </Cluster>
           </Layout>
         </div>
       ) : null}

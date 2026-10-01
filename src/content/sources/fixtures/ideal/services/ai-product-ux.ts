@@ -35,6 +35,7 @@ export const aiProductUx: ServiceStory = {
         {
           kind: 'spectrum',
           axis: { from: 'Least authority', to: 'Most authority' },
+          meter: { kind: 'authority', label: 'Model authority' },
           columns: { name: 'The model', when: 'Introduces', settles: 'So the product needs' },
           items: [
             {
@@ -194,12 +195,7 @@ export const aiProductUx: ServiceStory = {
           kind: 'stat',
           value: '12',
           label: 'AI products',
-          body: 'Tcules has worked on twelve AI products — copilots, AI-native tools, AI-powered products and integrations. The work below is what those engagements combined.',
-        },
-        {
-          kind: 'ledger',
-          columns: 2,
-          marker: 'number',
+          body: 'Tcules has worked on twelve AI products — copilots, AI-native tools, AI-powered products and integrations. These are the responsibilities those engagements combined.',
           items: [
             { title: 'Opportunity framing', body: 'The product boundary, before the model.' },
             { title: 'Research', body: 'With target users and domain experts.' },

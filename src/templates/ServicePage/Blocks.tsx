@@ -284,15 +284,31 @@ function ProofBlock({ block }: { block: Of<'proof'> }) {
 }
 
 /* ── Stat ─────────────────────────────────────────────────────────────────────
-   The figure, what it counts, then the sentence that qualifies it — stacked, one reading order. */
+   The figure, what it counts, then the sentence that qualifies it — stacked, one reading order.
+
+   With items, the figure and what the counted work consisted of are a SPLIT: the evidence in the
+   narrow leading track, the responsibilities beside it as unnumbered rows (1 Oct 2026). They were a
+   stat over eight numbered tiles, and the numbers did two jobs at once — 12 is a count, 01–08 were
+   ordinals on items with no order — so the eye read one numeric sequence that meant nothing. */
 function Stat({ block }: { block: Of<'stat'> }) {
-  return (
+  const figure = (
     <Layout rowGap="text" className={styles.stat}>
       <Layout rowGap="tight">
         <span className={styles.statValue}>{block.value}</span>
         <span className={styles.key}>{block.label}</span>
       </Layout>
       <p className={styles.statBody}>{block.body}</p>
+    </Layout>
+  );
+  if (!block.items || block.items.length === 0) return figure;
+  return (
+    <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="stack" align="start">
+      {figure}
+      <Layout as="ul" rowGap="none">
+        {block.items.map((item) => (
+          <ListCard key={item.title} titleAs="h3" title={item.title} body={item.body} />
+        ))}
+      </Layout>
     </Layout>
   );
 }

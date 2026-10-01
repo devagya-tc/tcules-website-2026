@@ -143,11 +143,12 @@ export type StoryBlock =
       axis: { from: string; to: string };
       /**
        * A column that SHOWS the axis, row by row, instead of stating it once in a caption. Only
-       * `disruption` exists: how much of the current product a row's option disturbs. The meter is
-       * drawn for that one meaning (Diagrams.tsx, DisruptionMeter) — a generic bar would read as
-       * progress, which is what got the first meter cut (30 Sep). Absent, the axis is a caption.
+       * meter is drawn for ONE meaning, never a generic bar (a generic bar reads as progress, which
+       * got the first meter cut, 30 Sep): `disruption` — how much of the current product an option
+       * shakes, a tremor trace; `authority` — how much of the decision the model holds rather than a
+       * person, six slots filled from the model's side. Absent, the axis is a caption.
        */
-      meter?: { kind: 'disruption'; label: string };
+      meter?: { kind: 'disruption' | 'authority'; label: string };
       columns: { name: string; when: string; settles: string };
       items: readonly { name: string; when: string; settles: string }[];
     }
@@ -208,7 +209,14 @@ export type StoryBlock =
   /** Linked stages the same decision passes through, with an optional return path. */
   | { kind: 'thread'; items: readonly { title: string; body?: string }[]; loop?: string }
   /** One figure, stated in words beside it. */
-  | { kind: 'stat'; value: string; label: string; body: string }
+  | {
+      kind: 'stat';
+      value: string;
+      label: string;
+      body: string;
+      /** What the counted work consisted of. Unordered: these are rows, never numbered. */
+      items?: readonly { title: string; body: string }[];
+    }
   | { kind: 'faq'; items: readonly { question: string; answerHtml: string }[] }
   /** A quiet boundary on the claim before it (Callout). */
   | { kind: 'note'; label?: string; html: string }

@@ -57,8 +57,8 @@
 }
 
 .sheetTitle {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
   color: var(--svc-ink);
 }
 
@@ -78,9 +78,12 @@
   color: var(--svc-ink-label);
 }
 
+/* The question is the record's content; the field name is its key. So the question takes a heading
+   role (h5, 22) and the key stays the quiet mono label above it — it was h6, 18, barely above body
+   and quieter than the mono over it (1 Oct 2026). */
 .sheetQuestion {
-  font: var(--text-h6);
-  letter-spacing: var(--text-h6-tracking);
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
   text-wrap: var(--text-running-wrap);
   color: var(--svc-ink);
 }
@@ -202,6 +205,23 @@
   font: var(--text-body);
   text-wrap: var(--text-running-wrap);
   color: var(--svc-ink);
+}
+
+/* ── Authority meter ───────────────────────────────────────────────────────────────
+   Six slots: filled where the model holds the decision, outlined where a person still does. */
+.authoritySlots {
+  inline-size: max-content;
+}
+
+.authoritySlot {
+  display: block;
+  inline-size: var(--svc-authority-slot);
+  block-size: var(--svc-authority-slot);
+  border: var(--svc-rule-strong-width) solid var(--svc-ink);
+}
+
+.authoritySlot[data-held='model'] {
+  background: var(--svc-ink);
 }
 
 /* ── Disruption meter ──────────────────────────────────────────────────────────────

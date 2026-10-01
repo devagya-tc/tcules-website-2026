@@ -17,8 +17,9 @@
   color: var(--flow-actor-ink);
 }
 
-/* A stage opens on the flow's thick rule. Side by side, the rules read as one track broken at each
-   handover — the gutter is the handover, and the arrow at the head's end points across it. */
+/* A stage opens on a hairline, as a tile does: the system's one way to start an item. It was a 2px
+   ink bar (1 Oct 2026, owner: "isn't fitting the design system"). The direction is the arrow's job;
+   the gutter between stages is the handover it points across. */
 .stage {
   min-inline-size: 0;
   padding-block-start: var(--gap-block);
@@ -59,11 +60,30 @@
   color: var(--flow-item-ink);
 }
 
-/* The lane: what another party holds for the whole flow. Its own ground, because it is underneath
-   every stage rather than after the last one; inset at the container gutter. */
+/* The lane: a duration. A span line across the whole flow with a tick rising at each end, so it
+   reads "from the first stage to the last". Ticks are positioned pseudo-elements on the line's own
+   edge — marks, not siblings. The label and items sit a block under the line. */
 .lane {
-  padding: var(--gap-block) var(--gap-gutter);
-  background: var(--flow-lane-ground);
+  position: relative;
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--flow-span-width) solid var(--flow-span-ink);
+}
+
+.lane::before,
+.lane::after {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(-1 * var(--flow-span-tick));
+  block-size: var(--flow-span-tick);
+  border-inline-start: var(--flow-span-width) solid var(--flow-span-ink);
+}
+
+.lane::before {
+  inset-inline-start: 0;
+}
+
+.lane::after {
+  inset-inline-end: 0;
 }
 
 .laneLabel {
@@ -71,10 +91,4 @@
   letter-spacing: var(--text-eyebrow-tracking);
   text-transform: var(--text-mono-case);
   color: var(--flow-lane-label-ink);
-}
-
-.laneItem {
-  font: var(--text-body);
-  text-wrap: var(--text-running-wrap);
-  color: var(--flow-item-ink);
 }

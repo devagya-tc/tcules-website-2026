@@ -33,6 +33,8 @@
   --svc-meter-width: var(--space-96);
   --svc-meter-height: var(--space-24);
   --svc-meter-stroke: var(--border-width-2);
+  /* The authority meter: one slot of the decision, a component size. */
+  --svc-authority-slot: var(--space-12);
 }
 
 /* ── Surfaces ──────────────────────────────────────────────────────────────────
