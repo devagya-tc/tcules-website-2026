@@ -233,7 +233,16 @@ export type StoryBlock =
   /** A quiet boundary on the claim before it (Callout). */
   | { kind: 'note'; label?: string; html: string }
   /** A one-line ask inside a section, where the argument has just earned it. Not a band. */
-  | { kind: 'nudge'; body: string; action: StoryLink }
+  | {
+      kind: 'nudge';
+      /** The condition, as the reader would say it — set at heading scale. */
+      question: string;
+      /** What to do about it, one line. */
+      body: string;
+      action: StoryLink;
+      /** The softer way in, for a reader not ready for the main action. */
+      secondary?: StoryLink;
+    }
   /** Where to read further: articles, definitions, tools. Placed once, near the end of the page. */
   | {
       kind: 'resources';

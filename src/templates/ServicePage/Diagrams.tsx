@@ -261,6 +261,10 @@ export function Parts({ block }: { block: Of<'parts'> }) {
    from its cells, so the reader is told which arrangement wins rather than left to infer it. By layer: every layer
    is nearly built, but each path is missing a different piece, so none works. By release: one path is
    built through every layer, and it is the one that can ship. Peers being compared, so `column` apart.
+   By layer is SPARSE on purpose (1 Oct 2026, owner): each team has built about half of its layer, on
+   different paths — a diagonal stagger — so the grid reads "busy everywhere, finished nowhere". When
+   every layer was four-fifths built it read as "nearly done", which is the opposite of the point.
+
    The grid keeps its columns at every width (`base`): a bare track list applies from md, and on a
    phone the cells stacked into bars and the grid stopped being a grid. The grid is illustrative — the gaps step one path per layer, which is the pattern the sentence
    describes — so it draws from the layer names alone. */
@@ -344,7 +348,7 @@ export function Slice({ block }: { block: Of<'slice'> }) {
             layers={block.layers}
             view={block.views.layer}
             legend={block.legend}
-            done={(layer, path) => layer === 0 || path !== layer - 1}
+            done={(layer, path) => (((path - layer) % 4) + 4) % 4 < 2}
           />
           <SliceGrid
             layers={block.layers}

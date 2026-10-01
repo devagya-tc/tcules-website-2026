@@ -71,16 +71,18 @@
 }
 
 /* ── Nudge ────────────────────────────────────────────────────────────────────── */
-.nudge {
-  border-block: var(--svc-rule-width) solid var(--svc-rule-strong);
-  padding-block: var(--gap-gutter);
+.nudgeQuestion {
+  max-inline-size: var(--measure-title);
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--svc-ink);
 }
 
 .nudgeBody {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
-  text-wrap: var(--text-title-wrap);
-  color: var(--svc-ink);
+  font: var(--text-lead);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink-muted);
 }
 
 /* ── Slot (review mode only) ──────────────────────────────────────────────────── */

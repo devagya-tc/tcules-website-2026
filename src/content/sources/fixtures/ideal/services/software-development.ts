@@ -152,7 +152,7 @@ export const softwareDevelopment: ServiceStory = {
           views: {
             layer: {
               title: 'Organised by layer',
-              note: 'Every team finishes most of its layer, but each path is missing a different piece. Nothing a user can do works yet, so nothing can ship.',
+              note: 'Each team builds part of its layer, each on different paths. No path has every piece, so nothing a user can do works yet, and nothing can ship.',
             },
             slice: {
               title: 'Organised by release',

@@ -338,29 +338,42 @@ function Resources({ block }: { block: Of<'resources'> }) {
 }
 
 /* ── Nudge ────────────────────────────────────────────────────────────────────
-   The mid-page ask, at the size of a sentence rather than a band, inside the section whose
-   argument earned it, between two rules. */
+   The mid-page ask, closing the section whose argument earned it (1 Oct 2026, owner: "could that be
+   designed better?"). It was a sentence at h5 between two hairlines with one button floating in an
+   empty column — the hairlines are the system's mark for a section break, so it read as a divider,
+   and at h5 the ask was quieter than the steps above it. Now its weight comes from scale and position
+   rather than from rules: the condition at heading scale, what to do about it under it, and the two
+   ways in — the main action and the softer one — beside it, tops aligned. A split, so --gap-section. */
 function Nudge({ block }: { block: Of<'nudge'> }) {
   return (
-    <Layout
-      columns={{ base: 1, lg: [2, 1] }}
-      colGap="section"
-      rowGap="block"
-      align="center"
-      className={styles.nudge}
-    >
-      <p className={styles.nudgeBody}>{block.body}</p>
-      <Cluster>
+    <Layout columns={{ base: 1, lg: [2, 1] }} colGap="section" rowGap="block" align="end">
+      <Layout rowGap="text">
+        <p className={styles.nudgeQuestion}>{block.question}</p>
+        <p className={styles.nudgeBody}>{block.body}</p>
+      </Layout>
+      <Cluster colGap="block" rowGap="text">
         <Button
           as="a"
           href={block.action.href}
           emphasis="solid"
           tone="primary"
-          size="md"
+          size="lg"
           icon={<Icon name="arrow-right" />}
         >
           {block.action.label}
         </Button>
+        {block.secondary ? (
+          <Button
+            as="a"
+            href={block.secondary.href}
+            emphasis="link"
+            tone="neutral"
+            size="lg"
+            icon={<Icon name="arrow-right" />}
+          >
+            {block.secondary.label}
+          </Button>
+        ) : null}
       </Cluster>
     </Layout>
   );

@@ -96,11 +96,6 @@ export const productDesign: ServiceStory = {
           ],
         },
         {
-          kind: 'nudge',
-          body: 'A workflow that keeps raising questions about rules, roles or recovery? Examine that slice before the team commits to more screens.',
-          action: { label: 'Start a project', href: '#enquiry' },
-        },
-        {
           kind: 'slot',
           slot: {
             kind: 'illustration',
@@ -110,7 +105,17 @@ export const productDesign: ServiceStory = {
             shows:
               'The worked example as the product would present it: the job that cannot go ahead because an input is missing, the new date proposed for it, the three pieces of work that depend on it and would move too, and the person who has to approve before it happens.',
             placement:
-              'Under the five steps, so the reader sees the decision the steps are walking through. Wide, because it follows a row.',
+              'Under the five steps and before the ask, so the reader sees the decision the steps walk through before being asked to act on it. Wide, because it follows a list.',
+          },
+        },
+        {
+          kind: 'nudge',
+          question: 'A workflow that keeps raising questions about rules, roles or recovery?',
+          body: 'Examine that slice before the team commits to more screens.',
+          action: { label: 'Start a project', href: '#enquiry' },
+          secondary: {
+            label: 'Start with a UX Product Audit',
+            href: auditPath('ux-product-audit'),
           },
         },
       ],

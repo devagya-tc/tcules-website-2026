@@ -75,6 +75,13 @@ Seventh batch, same day:
 | "A release…" still unclear — which is better, why filled and empty? | **No legend and no verdict.** The reader had to infer what a cell is, what a column is, and which arrangement wins | A legend over both grids (built / not built yet), columns named Path 1–4, and a "Works end to end" row under each grid, derived from its cells: four crosses by layer, one check by release. Notes rewritten to say it in words |
 | Mobile nav's Solar hamburger loses the intent | **Consistency applied to the wrong layer.** Chrome is read by convention, not style | Solar Bold stays the content set; the nav toggle takes `chrome-menu` / `chrome-close`, the universal bars and cross (Icon.md amendment) |
 
+Eighth batch, same day:
+
+| Note | Underlying issue | Fix |
+|---|---|---|
+| "Organised by layer" should be sparser | Four-fifths built read as "nearly done" — the opposite of the point | Each layer about half built, on different paths (a diagonal stagger): busy everywhere, finished nowhere. Note rewritten |
+| Mid-page "A workflow that keeps…" | **It read as a divider:** hairlines above and below are the system's section break, the ask was at h5 (quieter than the steps), and the button floated alone. And it sat between the steps and the image of their decision | No rules; the condition at h3, what to do under it, and two ways in — Start a project and the UX Product Audit — beside it (`nudge.question`, `nudge.secondary`). It closes the section, after the illustration slot |
+
 **Copy re-cut in this pass:** Product Design's four signal bodies take back "May be" (it was the template's key, now the body's first words). Router conditions that had a separate `settles` line now carry it as a second sentence ("It settles scope, authority, ownership and investment."), on Modernisation and Design Systems.
 
 **Still bespoke, and next in line for the same question:** `fit` and `contrast` (lists of sentences, no titles), `stat`, `nudge`, and the seven diagrams. The diagrams are drawings and probably earn their place. The four text blocks should be checked against Prose lists, Proof figures and CtaSection before they're kept.
