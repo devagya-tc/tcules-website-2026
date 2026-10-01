@@ -386,16 +386,31 @@ expanded, button”, followed by the answer in normal reading order.
 
 ## 13 · Motion
 
-Question ink and mark ink transition with `--acc-transition-duration: --duration-fast` and
-`--acc-transition-easing: --easing-standard`. Those are the only two transitions in the component:
-the trigger background they used to describe no longer exists, and the item border no longer changes
-colour, so neither is animated. The disclosure opens and closes at native layout speed with no
-height interpolation. The chevron swap is immediate.
+**Amended 1 Oct 2026 (owner: "add subtle motion to the opening and closing … so it doesn't feel so
+jumpy", global).** The answer now opens and closes with motion, on the native element:
 
-There is no transform, translation, rotation, scale, rule wipe, fade, opacity change, height
-animation, max-height animation, answer slide or mark movement. Reduced motion resolves the two
-colour transitions to `--duration-instant`; content visibility and native keyboard behavior are
-unchanged.
+- `.item { interpolate-size: allow-keywords }` lets `block-size` transition to `auto`, scoped to the
+  component rather than set on `:root`.
+- `.item::details-content` (the UA box around everything after the summary) goes from `block-size: 0;
+  opacity: 0; overflow: clip` to `block-size: auto; opacity: 1` under `[open]`, over
+  `--acc-reveal-duration` (`--duration-medium`, 240ms) with `--acc-transition-easing`.
+  `content-visibility` is transitioned `allow-discrete`, so a closing answer stays painted until its
+  height has gone.
+- The open state's tighter inset under the question (`padding-block-end` 24 → 16) eases on the same
+  duration, so it does not arrive as a second, smaller jump.
+
+Why 240: the answer travels its own height, often 150–300px; at 140 that reads as a snap, and 360 made
+a seven-item FAQ heavy to scan.
+
+**Progressive, not polyfilled.** Where `::details-content` or `interpolate-size` is unsupported, the
+answer appears at once, as it did before. No JavaScript, no height measurement, no max-height guess,
+so the native behaviour this component exists to keep (find-in-page, keyboard, independent items) is
+untouched. This supersedes the earlier "no height interpolation" ruling, which was right while the
+only way to animate `<details>` was to fake it.
+
+Unchanged: question and mark ink transition on `--acc-transition-duration` (`--duration-fast`); the
+chevron swap is immediate; no transform, rotation, slide or rule wipe. Reduced motion resolves every
+transition, the answer's included, to `--duration-instant`.
 
 ## 14 · Do's and Don'ts
 

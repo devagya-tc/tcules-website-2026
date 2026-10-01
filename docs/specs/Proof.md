@@ -11,11 +11,14 @@
 | **Designer / date** | Codex / 24 Aug 2026                                   |
 | **Implements**      | `docs/briefs/15-testimonial.md` and `docs/briefs/17-stat.md` together, as required by `docs/briefs/README.md` |
 | **Implemented at**  | `src/patterns/Proof/` · `src/styles/tokens/components/proof.css` · specimen `src/app/design/proof/page.tsx` |
-| **Amended**         | **28 Sep 2026** (tracker 2.12; rulings P1, P2; audit §3 Proof, §4) — an optional 1:1 `portrait` through `Media`, an optional `clientMark` through `ClientMark`, `role` optional, and the quote brought onto ch10 B2.07's site blockquote: italic, a 6px rule beside the quote only, the attribution beneath with the name on the quote's first letter, and a white rule on blue. Every section below is amended in place; the changes are collected in **Amendment · 28 Sep 2026** before the self-audit. **29 Sep 2026** (tracker 2.17, owner-approved) — a display scale (`--text-quote-lg`, `--text-stat-lg`), the shared checked date said once, the quote beside stacked figures at 2:1 from lg, and the specimen's client marks rendering at last. Collected in **Amendment · 29 Sep 2026**. **30 Sep 2026** (owner) — **the client mark is removed**: `clientMark`, `ProofClientMark` and the ClientMark render are gone. The company is named in the role line, and a logo under the person's name competed with the portrait beside it. Every `clientMark` reference below is superseded. A broader Proof overhaul is planned. |
+| **Amended**         | **28 Sep 2026** (tracker 2.12; rulings P1, P2; audit §3 Proof, §4) — an optional 1:1 `portrait` through `Media`, an optional `clientMark` through `ClientMark`, `role` optional, and the quote brought onto ch10 B2.07's site blockquote: italic, a 6px rule beside the quote only, the attribution beneath with the name on the quote's first letter, and a white rule on blue. Every section below is amended in place; the changes are collected in **Amendment · 28 Sep 2026** before the self-audit. **29 Sep 2026** (tracker 2.17, owner-approved) — a display scale (`--text-quote-lg`, `--text-stat-lg`), the shared checked date said once, the quote beside stacked figures at 2:1 from lg, and the specimen's client marks rendering at last. Collected in **Amendment · 29 Sep 2026**. **30 Sep 2026** (owner) — **the client mark is removed**: `clientMark`, `ProofClientMark` and the ClientMark render are gone. The company is named in the role line, and a logo under the person's name competed with the portrait beside it. Every `clientMark` reference below is superseded. A broader Proof overhaul is planned. **1 Oct 2026** (owner) — **the display quote leaves heading scale**: `--text-quote-lg` 43 → 34 (h3 scale, 34 / 28 / 22), the figure loses its body-font measure cap, display sets at `--measure-lead`, an optional `quote.source` link joins the attribution row, and the quote/figures split takes `--gap-section`. Collected in **Amendment · 1 Oct 2026**. |
 
 The owner accepted the shared component identity in section 17 question 1. The public API, folder,
 token prefix and specimen route therefore use `Proof` rather than separate Testimonial and Stat
 names.
+
+
+> **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
 
 ## 1 · Identity
 
@@ -89,7 +92,8 @@ export type ProofQuote = {
   role?: string; // optional since 28 Sep 2026
   company: string;
   portrait?: ProofPortrait; // 28 Sep 2026
-  clientMark?: ProofClientMark; // 28 Sep 2026
+  clientMark?: ProofClientMark; // 28 Sep 2026 — removed 30 Sep 2026
+  source?: { label: string; href: string }; // 1 Oct 2026: link in the attribution row
 };
 
 export type ProofFigure = {
@@ -117,6 +121,7 @@ export type ProofProps = ProofCompactProps | ProofDisplayProps;
 | `arrangement` | `'display' \| 'compact'` | `'display'` | Section-scale evidence versus an embedded quotation. It decides composition and quote type, not a free size axis. |
 | `quote` | `ProofQuote` | none | Whether the attributed quotation figure renders. Required for compact. |
 | `figures` | `readonly ProofFigure[]` | none | Whether the checked-figure list renders. Expected count one to four; forbidden for compact. |
+| `source` | `{ label: string; href: string } \| undefined` | none | 1 Oct 2026. A neutral link-emphasis Button (md, `arrow-right`) in the attribution row: beside the speaker while the row has room, beneath when not, at `gutter` from it. Blank label or href → omitted with a warning. Leave it off when the caller shows the case beside the quote. |
 | `quoteHtml` | `string` | none | Trusted, content-seam-sanitised quote body handed to `Prose html`; it does not contain the attribution. |
 | `name` | `string` | none | The speaker. Required: named attribution is mandatory (CS). |
 | `role` | `string \| undefined` | none | The speaker's title. **Optional since 28 Sep 2026** (HO §4, strapi-changes.md entry 4). Missing or blank → the company stands alone on the second line, with no separator. |
@@ -229,7 +234,7 @@ column. Proof never caches an outer value, paints a nested ground or relies on a
 ### (a) Distances
 
 - Display quote-to-figures relationship: root `Layout columns={{ base: 1, lg: [2, 1] }}`
-  with `colGap="column"` and `rowGap="stack"` — the quote in the wide track, the figures stacked in
+  with `colGap="section"` (96 since 1 Oct 2026; was `column`) and `rowGap="stack"` — the quote in the wide track, the figures stacked in
   the narrow one from lg; one track below lg. One child renders one track and states no seam.
   *Amended 29 Sep 2026 (tracker 2.17).* Was `columns="fit" minTrack="md"` (two equal halves where two 320 tracks fit).
 - Compact root: one track and no vacant seam.
@@ -267,8 +272,10 @@ column. Proof never caches an outer value, paints a nested ground or relies on a
 - Figure tile: `Layout minTrack="sm"`, resolving to the existing 256px layout track. Four tiles
   fit the 1240px cap; two fit the 703px content width immediately below 767; one fits a 470px CTA
   column without compressing `4.8/5`.
-- Quote and quote-text measure: `--measure-body` so the six-sentence case stays readable rather
-  than growing to the 1240px cap.
+- Quote-text measure, in the quote's OWN font (amended 1 Oct 2026): display `--measure-lead` (about
+  860px at 34), compact `--measure-body` (at 28). The figure itself has no measure: `ch` resolves in
+  the element's font, and a cap on the figure resolved in body type, about 640px, which is what
+  squeezed the old 43px quote to about 30 characters a line.
 - Attribution measure: `--measure-body`. “Ashok Mohanty, Founder, Auxentios” is authored as one
   content line but may wrap rather than overflow in a 192px stress track.
 - Rule: `--proof-quote-rule-width` resolves to `--border-width-rule-quote` → `--border-width-6`,
@@ -293,7 +300,7 @@ from Layout's existing component geometry.
 
 | Part | Role | Tracking companion | Measure |
 | ---- | ---- | ------------------ | ------- |
-| display quote-text | `--text-quote-lg` (italic in the composite) — 43 / 1.2, 34 / 1.24 at ≤1023, 25 / 1.3 at ≤767. *Amended 29 Sep 2026 (tracker 2.17).* Was `--text-h3` + `font-style: italic` | `--text-quote-lg-tracking` | `--measure-body` |
+| display quote-text | `--text-quote-lg` (italic in the composite) — 34 / 1.3, 28 / 1.35 at ≤1023, 22 / 1.4 at ≤767. *Amended 1 Oct 2026; was 43 / 34 / 25.* | `--text-quote-lg-tracking` (title-fine) | `--measure-lead` |
 | compact quote-text | `--text-quote`, **italic** | none — this role has no tracking companion | `--measure-body` |
 | name | `--text-h6` (display serif, roman) | `--text-h6-tracking` | the attribution text column |
 | role-company | `--text-body-sm` | none — this role has no tracking companion | the attribution text column, `--measure-body` cap on the row |
@@ -320,7 +327,7 @@ that display should stop at h3. In practice 34 italic against compact's 28 itali
 all, and a testimonial never became the moment on a page. Display now takes two roles of its own,
 added to the ladder with their paired line heights and `-t`/`-m` steps:
 
-- `--text-quote-lg` — Newsreader 400 italic, 43 / 1.2 → 34 / 1.24 → 25 / 1.3; tracking
+- `--text-quote-lg` — Newsreader 400 italic, 34 / 1.3 → 28 / 1.35 → 22 / 1.4 (1 Oct 2026; was 43 / 34 / 25); tracking
   `--letter-spacing-title-tight`. h2 scale on desktop and tablet. The mobile step is h3-m's 25 rather
   than h2-m's 28: at 28 the six-sentence quote ran 16 lines of ≈ 24 characters in the 296 text column
   and fragmented; at 25 it is 12 lines and reads as speech.
@@ -352,7 +359,7 @@ touch contract. The gap scale does not shift responsively.
 ## 10 · Composition
 
 ```tsx
-<Layout columns={both ? { base: 1, lg: [2, 1] } : undefined} colGap={both ? 'column' : undefined} rowGap={both ? 'stack' : undefined}>
+<Layout columns={both ? { base: 1, lg: [2, 1] } : undefined} colGap={both ? 'section' : undefined} rowGap={both ? 'stack' : undefined}>
   {quote && (
     <Layout as="figure" rowGap="block">
       <blockquote /* 6px rule + inset */><Prose html={quote.quoteHtml} /></blockquote>
@@ -575,11 +582,11 @@ hierarchy; no repeated boxes or alternating grounds do it.
 
 | Token | Layer | Value | Why |
 | ----- | ----- | ----- | --- |
-| `--font-size-quote-lg` / `-t` / `-m` | primitive | 43px / 34px / 25px | Display quote size ladder (§8). |
-| `--line-height-quote-lg` / `-t` / `-m` | primitive | 1.2 / 1.24 / 1.3 | Its paired ratio, same edit. |
+| `--font-size-quote-lg` / `-t` / `-m` | primitive | 34px / 28px / 22px (1 Oct; was 43 / 34 / 25) | Display quote size ladder (§8). |
+| `--line-height-quote-lg` / `-t` / `-m` | primitive | 1.3 / 1.35 / 1.4 (1 Oct; was 1.2 / 1.24 / 1.3) | Its paired ratio, same edit. |
 | `--font-size-stat-lg` / `-t` / `-m` | primitive | 54px / 43px / 40px | Display stat size ladder (§8). |
 | `--line-height-stat-lg` | primitive | 1 | Holds on every width, as stat's does. |
-| `--text-quote-lg` + `--text-quote-lg-tracking` | usage | italic 400 · quote-lg · Newsreader; `--letter-spacing-title-tight` | Display quote composite; italic is in the role. |
+| `--text-quote-lg` + `--text-quote-lg-tracking` | usage | italic 400 · quote-lg · Newsreader; `--letter-spacing-title-fine` (1 Oct; was title-tight) | Display quote composite; italic is in the role. |
 | `--text-stat-lg` + `--text-stat-lg-tracking` | usage | 500 · stat-lg · Geist Mono; `--letter-spacing-title` | Display stat composite. |
 
 `docs/vocabulary.md` was regenerated in the same edit and must be pushed to the Claude Design project.
@@ -727,6 +734,28 @@ Owner-approved, all four as proposed:
    Its cost in narrow parents is §17 Q13.
 5. **Specimen.** Resolved-role notes updated; a mixed-dates row added to the figure count ladder; the
    typography specimen lists both new roles and their breakpoint cuts.
+
+## Amendment · 1 Oct 2026 (owner: "the testimonial text is too big and too condensed")
+
+Two causes, both fixed here, and a rule that comes out of them.
+
+1. **Heading scale.** `--text-quote-lg` was 43 — h2, the same size as the section heading over it,
+   so a band read as two headings stacked. Brand ch03 defines one quote role (28); the display step
+   is now 34 / 28 / 22, h3 scale, at 1.3 leading. Tracking moves to title-fine.
+2. **A measure in the wrong font.** `.quote` capped the whole figure at `--measure-body`, and `ch`
+   resolves in the element's own font — body, 16px — so the figure was about 640px wide and a 43px
+   italic set about 30 characters a line. The figure has no cap now; display's quote text sets at
+   `--measure-lead` in its own 34px font (about 860px), compact's at `--measure-body` in its 28.
+3. **The rule.** Size follows the quote's length and width, never its importance. A quote with a
+   band's column to itself is `display`; a quote beside anything else — a case, a form, figures in a
+   template's own composition — is `compact`. Measured against references: proof bands set a quote
+   at 27–34px across 800–960px; a quote beside other content drops to 16–22px.
+4. **`quote.source`** (`{ label, href }`, optional). A neutral link-emphasis Button with the
+   `arrow-right` glyph in the attribution row: beside the speaker while the row has room, beneath it
+   when not. Blank label or href → omitted with a warning. The caller leaves it off when the case is
+   already shown beside the quote.
+5. **Split gap.** Quote beside figures takes `--gap-section` (CLAUDE.md § gap scale, rule 2).
+6. Display wraps `pretty`, not balanced — ch10: quotes wrap pretty.
 
 ## Appendix · Self-audit
 

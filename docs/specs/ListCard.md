@@ -9,7 +9,7 @@
 | **Status**          | implemented                                                                                                            |
 | **Token prefix**    | `--lcrd-*`                                                                                                             |
 | **Designer / date** | Codex / 21 Aug 2026                                                                                                    |
-| **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug. **Phase 2 task 2.11 / 28 Sep 2026** — the thumbnail moves onto `Media` (`fit="fill"`, `LIST_CARD_THUMBNAIL`, lazy); the marker union discriminates on `type`; `external` takes ch04's `square-arrow-right-up` and a visually hidden new-tab hint; the ordered set is confirmed as a real `ol`; contact cards lose their icon thumbnails (C1). Rulings: `docs/phase-2-decisions.md` C1, M1–M4. **Tracker 2.17 / 29 Sep 2026** — the split reads the row's own width (a wrapping `Cluster` on `--lcrd-title-min` / `--lcrd-body-min`, not Layout's md viewport boundary), so titles no longer break mid-word; the title wraps `break-word`, not `anywhere`; wide rows are capped at `--measure-title` + seam + `--measure-body`; the off-site cue is the plain `arrow-right-up`; the thumbnail passes Media `inset="text"`. See § 7, § 9, § 10 and § 17 q7, q8 |
+| **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug. **Phase 2 task 2.11 / 28 Sep 2026** — the thumbnail moves onto `Media` (`fit="fill"`, `LIST_CARD_THUMBNAIL`, lazy); the marker union discriminates on `type`; `external` takes ch04's `square-arrow-right-up` and a visually hidden new-tab hint; the ordered set is confirmed as a real `ol`; contact cards lose their icon thumbnails (C1). Rulings: `docs/phase-2-decisions.md` C1, M1–M4. **Tracker 2.17 / 29 Sep 2026** — the split reads the row's own width (a wrapping `Cluster` on `--lcrd-title-min` / `--lcrd-body-min`, not Layout's md viewport boundary), so titles no longer break mid-word; the title wraps `break-word`, not `anywhere`; wide rows are capped at `--measure-title` + seam + `--measure-body`; the off-site cue is the plain `arrow-right-up`; the thumbnail passes Media `inset="text"`. See § 7, § 9, § 10 and § 17 q7, q8. **1 Oct 2026 (owner)** — a second **form**, `tile`, for an item in a grid track, and `body` optional. Collected in **Amendment · 1 Oct 2026**. |
 | **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
 | **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
 
@@ -82,8 +82,9 @@ element and the `--gap-block` seam beside it.
 | Prop          | Exact type / literal union                                                                                                 | Default   | What it decides                                                                    |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------- |
 | `title`       | `string`                                                                                                                   | required  | The row's primary label                                                            |
-| `body`        | `string`                                                                                                                   | required  | The one explanatory paragraph                                                      |
+| `body`        | `string`                                                                                                                   | absent    | The one explanatory paragraph. Optional since 1 Oct 2026: absent renders no paragraph and no seam; present but blank warns |
 | `marker`      | `{ type: 'number'; value: number } \| { type: 'icon'; name: IconName } \| { type: 'thumbnail'; image: MediaImage }` | absent    | Which one fill occupies the marker slot; `IconName` is Icon's glyph union, `MediaImage` is Media's record |
+| `form`        | `'row' \| 'tile'` | `'row'` | 1 Oct 2026. `row`: a row of a one-column list, rule at block-end, marker beside. `tile`: an item in a grid track, rule at block-start, marker above, always stacked, flush — `arrangement` is `never` with it. See Amendment · 1 Oct 2026 |
 | `arrangement` | `'split' \| 'stacked'`                                                                                                     | `'split'` | Whether title and body are two tracks from `md`, or one stack at every width       |
 | `titleAs`     | `'span' \| 'h3' \| 'h4'`                                                                                                   | `'span'`  | Heading semantics only; visual type does not change                                |
 | `href`        | `string`                                                                                                                   | absent    | A non-blank value makes the whole frame one anchor and causes the cue to render    |
@@ -128,7 +129,7 @@ Compile errors, not review comments:
 2. A thumbnail marker without a complete `MediaImage` (`src`, `alt`, `width`, `height`), an icon
    marker without `name`, or a number marker without `value` cannot compile.
 3. A third arrangement, title element or arbitrary glyph name cannot compile.
-4. A missing `title` or `body` cannot compile.
+4. A missing `title` cannot compile. (`body` is optional since 1 Oct 2026.) `form="tile"` with any `arrangement` cannot compile.
 5. There is no cue prop, so a static row with a cue and a linked row without one are both
    unrepresentable.
 
@@ -154,7 +155,7 @@ Static rows have only rest. They do not respond to a pointer and do not enter th
 | State           | Trigger                              | Parts that move                                                                              |
 | --------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
 | rest            | Base rendering                       | Nothing moves. Title, body and marker hold their own inks; the cue holds `--lcrd-link-ink`   |
-| hover           | Pointer over a linked frame          | The frame paints `--lcrd-ground-hover`. Nothing else moves — the cue holds its rest ink        |
+| hover           | Pointer over a linked frame          | Row: the frame paints `--lcrd-ground-hover`. Tile (1 Oct 2026): no ground; the opening rule takes `--lcrd-link-ink`. Nothing else moves — the cue holds its rest ink |
 | focus, keyboard | `:focus-visible` on a linked frame   | Exactly the hover rendering plus the two-part ring from `--lcrd-ring-color` and `--lcrd-ring-gap-color` |
 | pressed         | Pointer activation on a linked frame | The ground steps to `--lcrd-ground-pressed` and the cue to `--lcrd-link-ink-pressed`           |
 
@@ -638,8 +639,9 @@ query in the same change.
 
 8. Do not add a background, surrounding edge or filled finish; inspect the module and expect no
    background token and no finish prop.
-9. Do not give the title the link ink, or make any part but the cue change on hover or press;
-   inspect computed styles in every state and expect only the cue to move.
+9. Do not give the title the link ink, or make any part but the cue — and, on a tile, the opening
+   rule — change on hover or press; inspect computed styles in every state. A row's ground and a
+   tile's rule are the two state carriers, and nothing else moves (amended 1 Oct 2026).
 10. Do not restore the rule wipe or a pressed rule width, and do not confuse either with the row's
     own block-end rule, which stays; search the module for `::after` and `scaleX` and expect none.
 11. Do not put a Button inside a linked row or interactive content in thumbnail media; tab order
@@ -971,3 +973,39 @@ COMPLETENESS
 [x] Squint test: five shapes, with scale and position supplied by marker fills and arrangements rather
     than bounded rectangles.
 ```
+
+## Amendment · 1 Oct 2026 — the tile form, and an optional body
+
+**Why.** The service pages needed items in a grid — symptoms, steps, deliverables — and ListCard could
+only make a row: a rule that closes it, a marker beside the copy, a 16px inline inset for the hover
+ground. So the template drew its own tile three times over (Signals, Steps, Ledger) and its own linked
+tile once more (Router), each a marker, a title, a line and sometimes a destination. Four jobs, one
+item. Owner: *"we have similar components that i think can be used here and perhaps be added as
+variants? listcard is one such example."*
+
+**`form?: 'row' | 'tile'`**, default `row`. A placement, not a finish — both are the same groundless
+ruled item, with the same rule ink and width, type, marker fills and cue.
+
+| | `row` (unchanged) | `tile` |
+|---|---|---|
+| Where | one row of a one-column list | one item in a grid track |
+| Rule | block-end — rows end on the same line as their neighbours | block-start — tiles of unequal height only line up at the top |
+| Marker | beside the copy (`--gap-block`) | above the title (`--gap-text`); the number's baseline offset is dropped, there is no baseline to sit on |
+| Title / body | `split` or `stacked` | always stacked; `arrangement` is `never` at the type level |
+| Inset | `--gap-gutter` block, `--gap-text` inline | `--gap-block` above the copy, none inline or below: flush with the track, so the grid aligns with the heading over it; the grid's rowGap is the space after |
+| Linked: hover | the ground (`--lcrd-ground-hover`) | no ground — on a 220–390px column with flush copy a ground reads as a highlighted paragraph. The opening rule takes `--lcrd-link-ink`, and `--lcrd-link-ink-pressed` on press. No new token: the rule borrows the cue's ink while the tile is the active target |
+| Linked: cue | trailing, at the core's inline end | at the foot, pinned (`Layout pinLast`) so every cue in a grid row shares one line |
+
+The caller chooses the form, because a row cannot see its parent's column count. The rule for
+choosing is mechanical: **a set in one column is rows; a set in a grid is tiles.**
+
+**`body?: string`.** An item can be its name alone. Absent → no paragraph, no seam, no warning. Present
+but whitespace-only stays a CMS fault: omitted with a warning, as before.
+
+**Specimen:** `/design/list-card` § 1b — icon tiles in four tracks, number tiles in an ordered five,
+linked tiles with unequal bodies, and title-only rows and tiles.
+
+**Not taken into ListCard**, and why: a key line above the body (Signals' "May be", Router's "When").
+Both were the template's device, not the item's: "May be" reads as the first words of the body, and
+a route's condition is its body. No `eyebrow` prop was added.
+

@@ -7,10 +7,11 @@ import { Button, Cluster, Icon, Input, Layout } from '@/components';
 
 import styles from './EnquiryForm.module.css';
 
-export type EnquiryUrlLabel =
-  'Site or product URL' | 'Link to the work' | 'Where can we see it?';
+/* The plain noun first; the two longer labels stay for the placements whose page asks a different
+   question of the link. See § Field labels on FieldGroup. */
+export type EnquiryUrlLabel = 'Website' | 'Link to the work' | 'Where can we see it?';
 
-export type AuditUrlLabel = 'URL of the site to audit';
+export type AuditUrlLabel = 'Site to audit';
 
 export type EnquiryContextBase = {
   originRoute: string;
@@ -61,7 +62,6 @@ type Lifecycle = 'idle' | 'submitting' | 'error' | 'success';
 type FieldMessages = {
   email: string;
   work: string;
-  url: string;
   name: string;
   company: string;
   contact: string;
@@ -71,64 +71,82 @@ type FieldMessages = {
 const EMPTY_MESSAGES: FieldMessages = {
   email: '',
   work: '',
-  url: '',
   name: '',
   company: '',
   contact: '',
   comments: '',
 };
 
-function validHttpsUrl(value: string): boolean {
-  if (value === '') return true;
-  if (!value.startsWith('https://')) return false;
-
-  try {
-    return new URL(value).protocol === 'https:';
-  } catch {
-    return false;
-  }
+/**
+ * A URL as people type it — "acme.com", "www.acme.com/app" — made into the full address the form
+ * sends. The field used to REJECT anything not starting with https://, which made a person learn a
+ * rule the form could apply itself, and is the only reason the optional URL field carried an error
+ * row (1 Oct 2026). Normalise, don't reject: a scheme-less value gets https:// in front; anything
+ * that already has a scheme is left as typed. Blank stays blank.
+ */
+function normaliseUrl(value: string): string {
+  const trimmed = value.trim();
+  if (trimmed === '' || /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
 }
 
+/**
+ * One field's frame: label, control, and only the rows the field can actually use (1 Oct 2026).
+ *
+ * The frame used to be the same for every field: a label, an optional mono flag beside it, and a
+ * message row ALWAYS reserved under the control. So a field that could never fail still held an
+ * empty error line, and "Optional" was a separate shouted chip. Now each field declares its
+ * contract and the anatomy follows from it:
+ *
+ *   label     the NOUN for the value — Email, Name, Company, Phone, Website. A longer label only
+ *             where the noun is ambiguous or the field asks for free text ("What are you working
+ *             on?" tells a person what to write; "Message" would not). Never "Your …", never
+ *             "… Address", never Title Case.
+ *   optional  said inside the label, in the label's own voice and a quieter ink: "Website
+ *             (optional)". Only the minority is marked — on these forms, the optional field.
+ *   hint      a row under the label, only when the field has something to explain.
+ *   validates the field can fail, so it reserves one caption line under the control and blur
+ *             errors land without moving anything below. A field that cannot fail has no row.
+ *
+ * Errors say what to do, in a few words, no period, no blame: "Enter your email", "Enter a valid
+ * email". Prefer normalising over rejecting (see normaliseUrl): every rule the form can apply
+ * itself is an error a person never sees.
+ */
 type FieldGroupProps = {
   id: string;
-  messageId: string;
   label: string;
-  flagId?: string;
-  flag?: string;
-  message: string;
+  optional?: boolean;
+  hint?: { id: string; text: string };
+  /** Present when the field validates: the id of its reserved message row, and the message. */
+  validation?: { id: string; message: string };
   children: ReactNode;
 };
 
-function FieldGroup({
-  id,
-  messageId,
-  label,
-  flagId,
-  flag,
-  message,
-  children,
-}: FieldGroupProps) {
+function FieldGroup({ id, label, optional = false, hint, validation, children }: FieldGroupProps) {
   return (
     <Layout rowGap="tight">
-      {flag ? (
-        <Cluster colGap="tight" align="baseline" nowrap>
-          <label className={styles.label} htmlFor={id}>
-            {label}
-          </label>
-          <span className={styles.flag} id={flagId}>
-            {flag}
-          </span>
-        </Cluster>
-      ) : (
-        <label className={styles.label} htmlFor={id}>
-          {label}
-        </label>
-      )}
+      <label className={styles.label} htmlFor={id}>
+        {label}
+        {optional ? <span className={styles.optional}> (optional)</span> : null}
+      </label>
+      {hint ? (
+        <p className={styles.hint} id={hint.id}>
+          {hint.text}
+        </p>
+      ) : null}
       {children}
-      <Cluster className={styles.message} id={messageId} colGap="tight" align="center" nowrap>
-        {message ? <Icon name="close-circle" /> : null}
-        <span>{message}</span>
-      </Cluster>
+      {validation ? (
+        <Cluster
+          className={styles.message}
+          id={validation.id}
+          colGap="tight"
+          align="center"
+          nowrap
+        >
+          {validation.message ? <Icon name="close-circle" /> : null}
+          <span>{validation.message}</span>
+        </Cluster>
+      ) : null}
     </Layout>
   );
 }
@@ -149,7 +167,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const onSubmitted = props.onSubmitted;
   const urlLabel =
     props.urlLabel ??
-    (variant === 'audit' ? 'URL of the site to audit' : 'Site or product URL');
+    (variant === 'audit' ? 'Site to audit' : 'Website');
   const submitting = lifecycle === 'submitting';
 
   const ids = {
@@ -166,8 +184,6 @@ export function EnquiryForm(props: EnquiryFormProps) {
     work: `${instanceId}-work`,
     workMessage: `${instanceId}-work-msg`,
     url: `${instanceId}-url`,
-    urlFlag: `${instanceId}-url-flag`,
-    urlMessage: `${instanceId}-url-msg`,
     status: `${instanceId}-status`,
   };
 
@@ -280,9 +296,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
             <>
               <FieldGroup
                 id={ids.name}
-                messageId={ids.nameMessage}
-                label="Your Name"
-                message={messages.name}
+                label="Name"
+                validation={{ id: ids.nameMessage, message: messages.name }}
               >
                 <Input
                   id={ids.name}
@@ -295,7 +310,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
                   onBlur={(event) =>
                     setMessage(
                       'name',
-                      event.currentTarget.value.trim() === '' ? 'Enter your name.' : '',
+                      event.currentTarget.value.trim() === '' ? 'Enter your name' : '',
                     )
                   }
                 />
@@ -303,9 +318,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
               <FieldGroup
                 id={ids.company}
-                messageId={ids.companyMessage}
-                label="Company Name"
-                message={messages.company}
+                label="Company"
+                validation={{ id: ids.companyMessage, message: messages.company }}
               >
                 <Input
                   id={ids.company}
@@ -318,7 +332,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
                   onBlur={(event) =>
                     setMessage(
                       'company',
-                      event.currentTarget.value.trim() === '' ? 'Enter your company name.' : '',
+                      event.currentTarget.value.trim() === '' ? 'Enter your company' : '',
                     )
                   }
                 />
@@ -326,9 +340,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
               <FieldGroup
                 id={ids.email}
-                messageId={ids.emailMessage}
-                label="Email Address"
-                message={messages.email}
+                label="Email"
+                validation={{ id: ids.emailMessage, message: messages.email }}
               >
                 <Input
                   id={ids.email}
@@ -343,10 +356,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
                   onBlur={(event) =>
                     setMessage(
                       'email',
-                      event.currentTarget.value.trim() === '' ||
-                        event.currentTarget.validity.typeMismatch
-                        ? 'That does not look like an email address.'
-                        : '',
+                      event.currentTarget.value.trim() === ''
+                        ? 'Enter your email'
+                        : event.currentTarget.validity.typeMismatch
+                          ? 'Enter a valid email'
+                          : '',
                     )
                   }
                 />
@@ -354,9 +368,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
               <FieldGroup
                 id={ids.contact}
-                messageId={ids.contactMessage}
-                label="Contact Number"
-                message={messages.contact}
+                label="Phone"
+                validation={{ id: ids.contactMessage, message: messages.contact }}
               >
                 <Input
                   id={ids.contact}
@@ -371,7 +384,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
                     setMessage(
                       'contact',
                       event.currentTarget.value.trim() === ''
-                        ? 'Enter your contact number.'
+                        ? 'Enter your phone number'
                         : '',
                     )
                   }
@@ -380,9 +393,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
               <FieldGroup
                 id={ids.comments}
-                messageId={ids.commentsMessage}
-                label="Let’s talk about your product"
-                message={messages.comments}
+                label="Message"
+                validation={{ id: ids.commentsMessage, message: messages.comments }}
               >
                 <Input
                   as="textarea"
@@ -396,7 +408,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
                     setMessage(
                       'comments',
                       event.currentTarget.value.trim() === ''
-                        ? 'Tell us about your product.'
+                        ? 'Add a message'
                         : '',
                     )
                   }
@@ -407,9 +419,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
             <>
               <FieldGroup
                 id={ids.email}
-                messageId={ids.emailMessage}
-                label="Email address"
-                message={messages.email}
+                label="Email"
+                validation={{ id: ids.emailMessage, message: messages.email }}
               >
                 <Input
                   id={ids.email}
@@ -424,10 +435,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
                   onBlur={(event) =>
                     setMessage(
                       'email',
-                      event.currentTarget.value.trim() === '' ||
-                        event.currentTarget.validity.typeMismatch
-                        ? 'That does not look like an email address.'
-                        : '',
+                      event.currentTarget.value.trim() === ''
+                        ? 'Enter your email'
+                        : event.currentTarget.validity.typeMismatch
+                          ? 'Enter a valid email'
+                          : '',
                     )
                   }
                 />
@@ -435,9 +447,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
               <FieldGroup
                 id={ids.work}
-                messageId={ids.workMessage}
                 label="What are you working on?"
-                message={messages.work}
+                validation={{ id: ids.workMessage, message: messages.work }}
               >
                 <Input
                   as="textarea"
@@ -451,37 +462,24 @@ export function EnquiryForm(props: EnquiryFormProps) {
                     setMessage(
                       'work',
                       event.currentTarget.value.trim() === ''
-                        ? 'Tell us what you are working on.'
+                        ? 'Add a line about it'
                         : '',
                     )
                   }
                 />
               </FieldGroup>
 
-              <FieldGroup
-                id={ids.url}
-                messageId={ids.urlMessage}
-                label={urlLabel}
-                flag="Optional"
-                flagId={ids.urlFlag}
-                message={messages.url}
-              >
+              <FieldGroup id={ids.url} label={urlLabel} optional>
                 <Input
                   id={ids.url}
                   type="url"
                   inputMode="url"
                   name="url"
+                  autoComplete="url"
                   disabled={submitting}
-                  invalid={Boolean(messages.url)}
-                  aria-describedby={`${ids.urlFlag} ${ids.urlMessage}`}
-                  onBlur={(event) =>
-                    setMessage(
-                      'url',
-                      validHttpsUrl(event.currentTarget.value.trim())
-                        ? ''
-                        : 'Use a full address beginning with https://.',
-                    )
-                  }
+                  onBlur={(event) => {
+                    event.currentTarget.value = normaliseUrl(event.currentTarget.value);
+                  }}
                 />
               </FieldGroup>
             </>

@@ -220,7 +220,7 @@
 
 /* ── The media · one slot, two renderings ──────────────────────────────────────
    Below the copy in `stacked`, beside it from 1024 in `beside` — and neither arrangement is set
-   here. The split is a Layout in the TSX (`columns={{ lg: [1, 1] }}`, `colGap="column"`), which is
+   here. The split is a Layout in the TSX (`columns={{ lg: [1, 1] }}`, `colGap="section"`), which is
    why this file still has no @media block: the one thing that changes at 1024 is a primitive's.
 
    ── The image ────────────────────────────────────────────────────────────────

@@ -62,7 +62,7 @@ primitive-owned `control` and `submit` read `--inp-*`/`--btn-*`, and hidden inpu
 | `fieldset` | required                   | —                                 | The three groups as one visual unit. Arrangement only — **no value of its own**                                                              |
 | `group`    | required, ×3               | —                                 | Label + control + message as one unit. Arrangement only — **no value of its own**                                                            |
 | `label`    | required                   | label text (from the label set)   | Always visible. Never a placeholder standing in for a label                                                                                  |
-| `flag`     | optional (URL group only)  | the word "Optional"               | Sits with the label, quieter than it                                                                                                         |
+| `optional` | optional fields only        | " (optional)" inside the label    | The label's own role, `--enq-hint-ink`. Was a separate mono "Optional" flag until 1 Oct 2026 |
 | `control`  | required                   | user text                         | `input[type=email]`, `textarea`, `input[type=url]`                                                                                           |
 | `message`  | required (rendered always) | the validity sentence             | Always in the DOM, empty at rest — that is what reserves its line and what makes its id a safe `aria-describedby` target                     |
 | `status`   | required (rendered always) | the submitting / error sentence   | `role="status"`, empty at Idle                                                                                                               |
@@ -81,7 +81,7 @@ Caller inputs are the field set (§3 `variant`, `urlLabel`), `context` for enqui
 | Prop          | Exact literal union                                                                                                                                                                | Default                 | What it decides                                                                                                                                     |
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `variant`     | `"enquiry" \| "audit" \| "contact"`                                                                                                                                                | `"enquiry"`             | Selects the closed field set and submit copy; audit adds `intent`, while contact maps five visible controls directly to the client-contact mutation |
-| `urlLabel`    | `"Site or product URL" \| "Link to the work" \| "Where can we see it?" \| "URL of the site to audit"`                                                                              | `"Site or product URL"` | The one wording that varies across the 56 routes. Four values, closed union — a fifth wording is a code change and a review, which is the point     |
+| `urlLabel`    | `"Website" \| "Link to the work" \| "Where can we see it?" \| "Site to audit"` | variant default (`Website` / `Site to audit`) | 1 Oct 2026: the plain noun is the default; the two longer labels stay for placements whose page asks a different question of the link |
 | `context`     | `EnquiryContext` (object: `originRoute: string` · `placement: string` · `family: string` · `serviceOrAudit: string` · `referrer: string` · `campaign: string` · `intent?: string`) | Required except contact | The six or seven hidden fields. `intent` is required for audit; the entire object is forbidden for contact                                          |
 | `action`      | `string`                                                                                                                                                                           | — (required)            | The endpoint. The component posts; it does not know what is on the other end                                                                        |
 | `onSubmitted` | `(() => void) \| undefined`                                                                                                                                                        | `undefined`             | Analytics hook. Fires once, after Success renders                                                                                                   |
@@ -168,7 +168,7 @@ One row per token, four columns, every cell a real name. The control rows are ow
 | Token                                                                                | paper                                                                                                  | tint                                                                               | ink                                                                                | blue                                                                               |
 | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | `--enq-label-ink`                                                                    | `--color-neutral-700` · 8.14:1 on `--color-paper`                                                      | `--color-neutral-700` · 7.27:1 on `--color-paper-deep`                             | `--color-neutral-200` · 12.83:1 on `--color-neutral-950`                           | `--color-brandeis-50` · 5.57:1 on `--color-brandeis-500`                           |
-| `--enq-flag-ink`                                                                     | `--color-neutral-600` · 4.92:1 on `--color-paper`                                                      | `--color-neutral-700` · 7.27:1 on `--color-paper-deep`                             | `--color-neutral-400` · 8.05:1 on `--color-neutral-950`                            | `--color-brandeis-100` · 4.91:1 on `--color-brandeis-500`                          |
+| `--enq-hint-ink` (was `--enq-flag-ink`, renamed 1 Oct 2026: the "(optional)" and a hint) | `--color-neutral-600` · 4.92:1 on `--color-paper` | `--color-neutral-700` | `--color-neutral-400` | `--color-brandeis-100` |
 | `--inp-standard-bg`                                                                  | `--color-white` · n/a — decoration                                                                     | `--color-paper` · n/a — decoration                                                 | `--color-neutral-900` · n/a — decoration                                           | `--color-white` · n/a — decoration                                                 |
 | `--inp-standard-fg`                                                                  | `--color-neutral-900` · 14.75:1 on `--color-white`                                                     | `--color-neutral-900` · 14.62:1 on `--color-paper`                                 | `--color-neutral-50` · 13.53:1 on `--color-neutral-900`                            | `--color-neutral-900` · 14.75:1 on `--color-white`                                 |
 | `--inp-standard-placeholder-fg`                                                      | `--color-neutral-600` · 4.97:1 on `--color-white`                                                      | `--color-neutral-600` · 4.92:1 on `--color-paper`                                  | `--color-neutral-400` · 6.88:1 on `--color-neutral-900`                            | `--color-neutral-600` · 4.97:1 on `--color-white`                                  |
@@ -193,7 +193,7 @@ One row per token, four columns, every cell a real name. The control rows are ow
 
 **paper.** The control lifts off the band rather than sinking into it: `--color-white` against `--color-paper` is a half-step of warmth, enough to read as an inset without a shadow (there is only `--shadow-none`). Because the field ground is whiter than the band, the placeholder can sit at `--color-neutral-600` and still clear the floor at 4.97:1 — measured on white, not on paper, which is the distinction the delta-table failure was made of. The ring is `--color-brandeis-500` at 6.18:1 against the band showing through the 2px offset.
 
-**tint.** Everything steps one rung darker because the ground came up. The field ground is `--color-paper` — the trick that works on paper (white on paper) has no room left here, so the field takes the lighter _paper_ and the band keeps the deeper one. `--enq-flag-ink` is the one row that had to move for contrast rather than for taste: `--color-neutral-600` measures **4.39:1** on `--color-paper-deep` and fails, so the flag lifts to `--color-neutral-700` at 7.27:1 and reads slightly louder than it does on paper. The rest rule moves to `--color-neutral-400` and hover to `--color-neutral-600`, keeping the same one-rung separation the paper column has.
+**tint.** Everything steps one rung darker because the ground came up. The field ground is `--color-paper` — the trick that works on paper (white on paper) has no room left here, so the field takes the lighter _paper_ and the band keeps the deeper one. `--enq-hint-ink` is the one row that had to move for contrast rather than for taste: `--color-neutral-600` measures **4.39:1** on `--color-paper-deep` and fails, so the flag lifts to `--color-neutral-700` at 7.27:1 and reads slightly louder than it does on paper. The rest rule moves to `--color-neutral-400` and hover to `--color-neutral-600`, keeping the same one-rung separation the paper column has.
 
 **ink.** The polarity inverts and nothing else survives translation. The field ground is `--color-neutral-900` — one step off the `--color-neutral-950` band, which is not enough separation on its own, so the rest rule carries the box at `--color-neutral-700` and hover _lightens_ to `--color-neutral-500` rather than darkening. The ring cannot be `--color-brandeis-500` here (3.28:1 against the band, and it disappears against a dark field) so it lifts three steps to `--color-brandeis-300` at 7.32:1. Disabled is the only place where a field is allowed to equal the band: `--color-neutral-950` ground with a `--color-neutral-800` rule reads as an empty outline, which is what unavailable should look like.
 
@@ -211,7 +211,7 @@ One row per token, four columns, every cell a real name. The control rows are ow
 | ------------------------------------------------ | ----------------- | ----------------------------------------------------------- |
 | `group` → `group` inside `fieldset`              | `text`            | `Layout rowGap="text"`                                      |
 | `label` → `control` → `message` inside a `group` | `tight`           | `Layout rowGap="tight"`                                     |
-| `label` → `flag` (inline)                        | `tight`           | `Cluster colGap="tight"`                                    |
+| `label` → "(optional)" | none — one text run inside the `<label>` | — |
 | `fieldset` → `status` → `actions` group          | `block`           | `Layout rowGap="block"` on `form`                           |
 | `submit` → schedule link (inline, wraps)         | `block` / `tight` | `Cluster colGap="block" rowGap="tight"` — added 29 Sep 2026 |
 | `submit` → `caption`                             | `text`            | `Layout rowGap="text"` on the actions group                 |
@@ -257,10 +257,10 @@ Two, both inside `Input`: `--inp-padding-x` and `--inp-textarea-padding-y` reach
 | Part                  | Role              | Tracking companion                         | Case                                                                                                                        |
 | --------------------- | ----------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
 | `label`               | `--text-body-sm`  | none — this role has no tracking companion | Sentence case: "What are you working on?". **Amended 25 Aug 2026** — was `--text-ui` (mono); see _Case as a decision_ below |
-| `flag`                | `--text-micro`    | `--text-micro-tracking`                    | Authored "Optional", rendered "OPTIONAL" by `--text-mono-case`                                                              |
+| `optional`            | the label's role, `--text-body-sm` | none | Sentence case, quieter ink: "Website (optional)" |
 | `control` value       | `--text-body`     | none — this role has no tracking companion | As typed                                                                                                                    |
 | `control` placeholder | `--text-body`     | none — this role has no tracking companion | Sentence case. Used only for a format example ("you@company.com"), never to replace a label                                 |
-| `message`             | `--text-caption`  | none — this role has no tracking companion | Sentence case: "That does not look like an email address."                                                                  |
+| `message`             | `--text-caption`  | none — this role has no tracking companion | Says what to do, a few words, no period: "Enter your email", "Enter a valid email" |
 | `status`              | `--text-body-sm`  | none — this role has no tracking companion | Sentence case: "Sending your enquiry." / "That did not send. Your answers are still here — try again."                      |
 | `success` sentence    | `--text-lead`     | none — this role has no tracking companion | Sentence case: "Thanks — we have your enquiry."                                                                             |
 | `success` heading     | `--text-h5`       | `--text-h5-tracking`                       | Sentence case: "One reply, within a working day." See Q6 — the element level is an open question, the role is not           |
@@ -643,6 +643,36 @@ Options: (a) keep `Field` / `--fld-*`, supersede the reservation, and let the fo
 **Superseded 29 Sep 2026 (tracker 2.17).** `quiet` rendered nearly identically to `standard` on paper and ink; the owner merged it into standard and deleted it, with the `emphasis` prop. `SiteFooter` uses the standard field. The reservation discharge stands.
 
 ---
+
+## Amendment · 1 Oct 2026 — the field contract (owner)
+
+Owner: *"i'd like the field labels to be much simpler. Email Address could simply be Email … the
+'optional' label is also not very pretty. the error messages could also be much much simpler. some
+fields don't need to reserve space for hints like the Site URL field … fields that need validation can
+have that other fields don't."* Asked to be recorded as a pattern in the component.
+
+**The cause.** `FieldGroup` gave every field one anatomy: a label, an optional mono flag beside it, and
+a message row always reserved under the control. A field that could never fail still held an empty
+error line; "Optional" was a third voice in capitals; nothing in the frame pushed labels or errors to
+be short. The URL field only had an error row because it rejected anything not starting with
+`https://` — a rule a person had to learn that the form could apply itself.
+
+**The pattern** — every field declares its contract, and the anatomy follows:
+
+| Part | Rule |
+|---|---|
+| Label | The **noun** for the value: Email, Name, Company, Phone, Website. A longer label only where the noun is ambiguous or the field asks for free text ("What are you working on?" tells a person what to write). Never "Your …", never "… Address", never Title Case |
+| Optional | Said **inside** the label, in the label's own role and `--enq-hint-ink`: "Website (optional)". Mark the minority only |
+| Hint | A row under the label, `--text-caption` in `--enq-hint-ink`, **only when the field has something to explain**. The control's `aria-describedby` names it |
+| Validation | **Only a field that can fail reserves the message row** (`--enq-message-reserve`, one caption line). A field that cannot fail has no row and no describedby to it |
+| Errors | Say what to do, in a few words, no period, no blame: "Enter your email", "Enter a valid email", "Enter your phone number", "Add a message" |
+| Normalise, don't reject | Every rule the form can apply itself is an error nobody sees. URL: a scheme-less value gets `https://` on blur; the field no longer validates |
+
+**Applied:** enquiry/audit — Email · What are you working on? · Website (optional) / Site to audit
+(optional). Contact — Name · Company · Email · Phone · Message. `FieldGroup` takes `label`,
+`optional`, `hint?: { id, text }` and `validation?: { id, message }`; the `flag` slot and its id are
+gone. §2, §3, §6, §7 and §8 rows are amended in place; where older prose below still says "flag" or
+quotes an old label, this amendment wins.
 
 ## Appendix — self-audit
 

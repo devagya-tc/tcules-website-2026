@@ -1,5 +1,5 @@
 import { Button, Cluster, Icon, Layout } from '@/components';
-import { Accordion, BlockCard, BlockCardSet, Callout, Proof } from '@/patterns';
+import { Accordion, BlockCard, BlockCardSet, Callout, ListCard, Proof } from '@/patterns';
 import type { StoryBlock, StoryCase, StorySlot } from '@/lib/service-story';
 
 import { Bridge, Parts, Record, Representations, Slice, Spectrum, Thread } from './Diagrams';
@@ -7,15 +7,36 @@ import styles from './Blocks.module.css';
 
 type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
 
+/* Story fields are PLAIN TEXT, and Callout and Proof take trusted HTML through Prose. So every plain
+   field is escaped on its way into a paragraph: a quote with "<" or "&" in it is text, not markup. */
+function paragraph(text: string): string {
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+  return `<p>${escaped}</p>`;
+}
+
 /* What is NOT in this file (30 Sep 2026 pass): a side-by-side pair of two text items. A key beside
    its sentence, a title beside its one-line body, a number beside its paragraph — each read as two
    columns of one thing. Two tracks are for two blocks that each hold several items; anything
    smaller stacks. */
 
+/* ── Item sets ────────────────────────────────────────────────────────────────
+   Signals, steps, ledgers and routes are four JOBS and one ITEM. Each is a set of named things —
+   a marker, a title, a line under it, sometimes a destination — and that item is ListCard. What the
+   job decides is the set: one column or a grid, ordered or not, which marker. It never decides the
+   item's anatomy, which is how this file came to draw four tiles of its own (1 Oct 2026, owner:
+   "we have similar components that i think can be used here").
+
+   One rule picks the form. A set in one column is rows; a set in a grid is tiles. A row closes on
+   its rule and keeps its marker beside the copy; a tile opens on its rule and stands its marker
+   above, because in a grid only the tops of unequal items line up. */
+
 /* ── Signals ──────────────────────────────────────────────────────────────────
-   A thing a reader can see, then what it may mean. The symptom is the title at h4, because the
-   reader recognises it; the meaning is quieter and keyed, because it is the hypothesis. A top rule
-   per tile, not a card: the row reads as one instrument with N readings. */
+   A thing a reader can see, then what it may mean: the symptom is the title, the hypothesis the
+   body. Tiles, because the point is to see them side by side as one instrument with N readings. */
 function Signals({ block }: { block: Of<'signals'> }) {
   return (
     <Layout
@@ -25,38 +46,29 @@ function Signals({ block }: { block: Of<'signals'> }) {
       rowGap="stack"
     >
       {block.items.map((item) => (
-        <li key={item.title} className={styles.tile}>
-          <Layout rowGap="text">
-            {item.icon ? (
-              <span className={styles.glyph} aria-hidden="true">
-                <Icon name={item.icon} size="xl" />
-              </span>
-            ) : null}
-            <h3 className={styles.signalTitle}>{item.title}</h3>
-            <Layout rowGap="inline">
-              {block.key ? <span className={styles.key}>{block.key}</span> : null}
-              <p className={styles.body}>{item.body}</p>
-            </Layout>
-          </Layout>
-        </li>
+        <ListCard
+          key={item.title}
+          form="tile"
+          titleAs="h3"
+          title={item.title}
+          body={item.body}
+          marker={item.icon ? { type: 'icon', name: item.icon } : undefined}
+        />
       ))}
     </Layout>
   );
 }
 
 /* ── Steps ────────────────────────────────────────────────────────────────────
-   A method: order matters, so the list is an <ol> and the number is visible — and the number is
-   the only mark, because it is the only thing that carries the order. A worked example, when there
-   is one, sits ABOVE the steps as the scene they are walked through. */
+   A method: order matters, so the set is an <ol> and the number is the marker — the only mark,
+   because it is the only thing that carries the order. A worked example, when there is one, is a
+   Callout above the steps: the scene they are walked through, keyed, then the method. */
 function Steps({ block }: { block: Of<'steps'> }) {
   const count = block.items.length;
   return (
     <Layout rowGap="stack">
       {block.example ? (
-        <Layout rowGap="tight">
-          <span className={styles.key}>{block.example.label}</span>
-          <p className={styles.exampleBody}>{block.example.body}</p>
-        </Layout>
+        <Callout label={block.example.label} html={paragraph(block.example.body)} />
       ) : null}
       <Layout
         as="ol"
@@ -65,15 +77,14 @@ function Steps({ block }: { block: Of<'steps'> }) {
         rowGap="stack"
       >
         {block.items.map((item, index) => (
-          <li key={item.title} className={styles.tile}>
-            <Layout rowGap="text">
-              <span className={styles.number} aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <h3 className={styles.itemTitle}>{item.title}</h3>
-              <p className={styles.bodySmall}>{item.body}</p>
-            </Layout>
-          </li>
+          <ListCard
+            key={item.title}
+            form="tile"
+            titleAs="h3"
+            title={item.title}
+            body={item.body}
+            marker={{ type: 'number', value: index + 1 }}
+          />
         ))}
       </Layout>
     </Layout>
@@ -81,14 +92,13 @@ function Steps({ block }: { block: Of<'steps'> }) {
 }
 
 /* ── Ledger ───────────────────────────────────────────────────────────────────
-   Named things with one marker each — a glyph for a kind of artefact, a number for a position.
-   The marker leads; the title and its line stack beside it. In one column the rows close with a
-   hairline; in two or three they are tiles on a top rule. */
+   Named things with one marker each — a glyph for a kind of artefact, a number for a position. One
+   column is a list of rows; two or three columns is a grid of tiles. */
 function Ledger({ block }: { block: Of<'ledger'> }) {
   const single = block.columns === 1;
   const columns =
     block.columns === 1
-      ? { base: 1 }
+      ? undefined
       : block.columns === 2
         ? { base: 1, md: 2 }
         : { base: 1, md: 2, lg: 3 };
@@ -96,100 +106,53 @@ function Ledger({ block }: { block: Of<'ledger'> }) {
     <Layout
       as={block.marker === 'number' ? 'ol' : 'ul'}
       columns={columns}
-      colGap="gutter"
+      colGap={single ? undefined : 'gutter'}
       rowGap={single ? 'none' : 'stack'}
-      className={single ? styles.rows : undefined}
     >
       {block.items.map((item, index) => (
-        <li key={item.title} className={single ? styles.row : styles.tile}>
-          <Cluster nowrap colGap="block" align="start">
-            <span className={styles.glyph} aria-hidden="true">
-              {block.marker === 'icon' && item.icon ? (
-                <Icon name={item.icon} size="xl" />
-              ) : (
-                <span className={styles.number}>{String(index + 1).padStart(2, '0')}</span>
-              )}
-            </span>
-            <Layout rowGap="tight" className={styles.grow}>
-              <h3 className={styles.itemTitle}>{item.title}</h3>
-              {item.body ? <p className={styles.body}>{item.body}</p> : null}
-            </Layout>
-          </Cluster>
-        </li>
+        <ListCard
+          key={item.title}
+          {...(single ? { arrangement: 'stacked' as const } : { form: 'tile' as const })}
+          titleAs="h3"
+          title={item.title}
+          body={item.body}
+          marker={
+            block.marker === 'icon' && item.icon
+              ? { type: 'icon', name: item.icon }
+              : { type: 'number', value: index + 1 }
+          }
+        />
       ))}
     </Layout>
   );
 }
 
 /* ── Router ───────────────────────────────────────────────────────────────────
-   "Which one is mine?" is answered by the condition, so the condition is the tile's content, in
-   the reader's own words, and the service is where it leads: a plain link line at the tile's foot,
-   never a heading. Each tile is one link. The non-service route (an audit, a self-check) is for
-   the reader who cannot name their condition yet; it leads the set when the routes are an even
-   count, so the grid never has a hole, and closes it when they are odd. */
-function RouteTile({
-  keyLabel,
-  when,
-  settles,
-  label,
-  href,
-}: {
-  keyLabel: string;
-  when: string;
-  settles?: string;
-  label: string;
-  href: string;
-}) {
-  return (
-    <li className={styles.routeItem}>
-      <a href={href} className={styles.route}>
-        <Layout rowGap="block" pinLast className={styles.routeInner}>
-          <Layout rowGap="text">
-            <span className={styles.key}>{keyLabel}</span>
-            <p className={styles.routeWhen}>{when}</p>
-            {settles ? <p className={styles.bodySmall}>{settles}</p> : null}
-          </Layout>
-          <span className={styles.routeTo}>
-            <span className={styles.routeName}>{label}</span>
-            <span className={styles.routeArrow} aria-hidden="true">
-              <Icon name="arrow-right" size="md" />
-            </span>
-          </span>
-        </Layout>
-      </a>
-    </li>
-  );
-}
-
+   "Which one is mine?" One column of linked rows, split: the service on the left, the condition
+   that sends you there on the right, the arrow at the end. The condition is the longer column and
+   the one a reader scans; the service is the row's name, because it is where the row goes — a
+   link is named by its destination. The non-service route (an audit, a self-check) is the last
+   row, for the reader who cannot name their condition yet. */
 function Router({ block }: { block: Of<'router'> }) {
-  const alsoLeads = Boolean(block.also) && block.items.length % 2 === 0;
-  const total = block.items.length + (block.also ? 1 : 0);
-  const columns =
-    !alsoLeads && total % 3 === 0 ? { base: 1, md: 2, lg: 3 } : { base: 1, md: 2 };
-  const also = block.also ? (
-    <RouteTile
-      key="also"
-      keyLabel="Not sure yet"
-      when={block.also.when}
-      label={block.also.link.label}
-      href={block.also.link.href}
-    />
-  ) : null;
-
   return (
-    <Layout as="ul" columns={columns} colGap="gutter" rowGap="stack" equalRows lead={alsoLeads}>
-      {alsoLeads ? also : null}
+    <Layout as="ul" rowGap="none">
       {block.items.map((item) => (
-        <RouteTile
+        <ListCard
           key={item.route.href}
-          keyLabel="When"
-          when={item.when}
-          settles={item.settles}
-          label={item.route.label}
+          titleAs="h3"
+          title={item.route.label}
+          body={item.when}
           href={item.route.href}
         />
       ))}
-      {!alsoLeads ? also : null}
+      {block.also ? (
+        <ListCard
+          titleAs="h3"
+          title={block.also.link.label}
+          body={block.also.when}
+          href={block.also.link.href}
+        />
+      ) : null}
     </Layout>
   );
 }
@@ -215,7 +178,7 @@ function Cases({ block }: { block: Of<'cases'> }) {
           media: caseMedia(item),
         }))}
       />
-      {block.note ? <Callout label="Scope" html={`<p>${block.note}</p>`} /> : null}
+      {block.note ? <Callout label="Scope" html={paragraph(block.note)} /> : null}
     </Layout>
   );
 }
@@ -290,37 +253,39 @@ function Contrast({ block }: { block: Of<'contrast'> }) {
 }
 
 /* ── Proof ────────────────────────────────────────────────────────────────────
-   The quotation beside the work it is about: a quote is a claim about a relationship, and the case
-   beside it is where a reader goes to check it. The portrait sits left of the name (Proof's own). */
+   A quote is a claim about a relationship; the case it came from is where a reader checks it.
+
+   With a case: the quote BESIDE the work. The case card carries the image, so the visual weight is
+   the work's; the quote is compact (28), because a quote beside something takes the reading size —
+   size follows a quote's length and width, never its importance (Proof.md, Amendment 1 Oct). Two
+   tracks to one, a split (--gap-section), tops aligned: both start where the eye enters the band.
+
+   Without a case: the quote ALONE, wide, at display (34), and a source link in its attribution row
+   when the quote carries one. */
 function ProofBlock({ block }: { block: Of<'proof'> }) {
   const quote = {
-    quoteHtml: `<p>${block.quote.text}</p>`,
+    quoteHtml: paragraph(block.quote.text),
     name: block.quote.name,
     role: block.quote.role,
     company: block.quote.company,
     portrait: block.quote.portrait,
   };
   const caseCard = block.case;
+  if (!caseCard) return <Proof arrangement="display" quote={quote} />;
   return (
-    <Layout
-      columns={caseCard ? { base: 1, lg: [3, 2] } : undefined}
-      colGap={caseCard ? 'column' : undefined}
-      rowGap="stack"
-      align="center"
-    >
-      <Proof arrangement="display" quote={quote} />
-      {caseCard ? (
-        <Layout as="ul" rowGap="none">
-          <BlockCard
-            eyebrow={caseCard.client}
-            title={caseCard.title}
-            body={caseCard.body}
-            href={caseCard.href}
-            media={caseMedia(caseCard)}
-            tracks={3}
-          />
-        </Layout>
-      ) : null}
+    <Layout columns={{ base: 1, lg: [2, 1] }} colGap="section" rowGap="stack" align="start">
+      <Proof arrangement="compact" quote={quote} />
+      <Layout as="ul" rowGap="none">
+        <BlockCard
+          eyebrow={caseCard.client}
+          title={caseCard.title}
+          body={caseCard.body}
+          href={caseCard.href}
+          ctaLabel="Read the case"
+          media={caseMedia(caseCard)}
+          tracks={3}
+        />
+      </Layout>
     </Layout>
   );
 }
@@ -342,9 +307,15 @@ function Stat({ block }: { block: Of<'stat'> }) {
 /* ── Resources ────────────────────────────────────────────────────────────────
    Where to read further, placed once, near the end, as its own section: text BlockCards with the
    content type as the eyebrow and a named cta. A row of links in the middle of an argument pulled
-   the reader out of it before the argument was made. */
+   the reader out of it before the argument was made.
+
+   ALWAYS THREE TRACKS from lg, however many cards there are (1 Oct 2026). A card's width comes from
+   the page's grid, not from its count: two cards stretched to halves were 604px objects on a page
+   whose every other card set is 392, and the band read as a different kind of thing. Two cards
+   leave the third track open, which is the honest shape of two. Stacked under its heading, never
+   beside it — see ContentSection's `arrangement`. */
 function Resources({ block }: { block: Of<'resources'> }) {
-  const lg: 2 | 3 = block.items.length >= 3 ? 3 : 2;
+  const lg = 3;
   return (
     <Layout as="ul" columns={{ base: 1, md: 2, lg }} colGap="gutter" rowGap="stack" equalRows>
       {block.items.map((item) => (
@@ -369,7 +340,7 @@ function Nudge({ block }: { block: Of<'nudge'> }) {
   return (
     <Layout
       columns={{ base: 1, lg: [2, 1] }}
-      colGap="column"
+      colGap="section"
       rowGap="block"
       align="center"
       className={styles.nudge}
@@ -401,12 +372,27 @@ export function Slot({ slot }: { slot: StorySlot }) {
       data-ratio={slot.ratio ?? 'auto'}
       aria-label="Image recommendation"
     >
-      <Layout rowGap="text">
+      {/* What the image is for, then what is in it, then why it is here — the order a reviewer
+          decides in. The message leads at the lead role because it is the decision. */}
+      <Layout rowGap="block">
         <span className={styles.key}>
           Image slot · {slot.kind}
           {slot.ratio ? ` · ${slot.ratio.replace('/', ':')}` : ''}
         </span>
-        <p className={styles.slotBrief}>{slot.brief}</p>
+        <Layout rowGap="tight">
+          <span className={styles.key}>What it says</span>
+          <p className={styles.slotMessage}>{slot.message}</p>
+        </Layout>
+        <Layout rowGap="tight">
+          <span className={styles.key}>What it shows</span>
+          <p className={styles.slotBrief}>{slot.shows}</p>
+        </Layout>
+        {slot.placement ? (
+          <Layout rowGap="tight">
+            <span className={styles.key}>Why here</span>
+            <p className={styles.slotBrief}>{slot.placement}</p>
+          </Layout>
+        ) : null}
       </Layout>
     </aside>
   );

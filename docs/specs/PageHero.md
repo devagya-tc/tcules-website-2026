@@ -19,6 +19,9 @@ Verified against the loaded Tcules library (`window.Tcules`, 10 components) and 
 
 **The headline finding, before the form starts.** The brief describes three arrangements — text-left, article hero, case-study hero. There are not three. There is **one arrangement with two independent optional slots**, and the case-study hero is not one of them: 13 of its 14 pages are bare title and body, which is byte-for-byte the text-left hero, and the 14th fills the `eyebrow` slot that 31 other pages already fill. So section 4 is a 1 × 1 matrix, and the brief's lean — one arrangement with a slot that switches — is right but does not go far enough. The author line and the client eyebrow are not two settings of one slot. They are two slots, they are independent, and a podcast episode with a client eyebrow and a host-and-guests byline renders both, in order, with no new code and no new prop.
 
+
+> **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
+
 ## 1 · Identity
 
 The opening block of a page: one `h1`, an optional eyebrow above it, one to six paragraphs of lead copy, an optional byline of credits and dates, an optional caller-supplied block, nought to two actions, and — last in the band — an optional image or YouTube embed. It paints its own band. It is the first thing inside `<main>` on all 129 routes and there is never a second one.
@@ -40,7 +43,7 @@ The opening block of a page: one `h1`, an optional eyebrow above it, one to six 
 | Part | Element | Required | Content slot | Carries |
 |---|---|---|---|---|
 | `root` | `<section>`, rendered by `Section surface={surface}` | yes | none | the band — ground, content column and vertical air, all from `--sec-*`. No `--hero-*` value of its own |
-| `split` | `<div>`, `Layout rowGap="stack" align="start"`, and in `beside` with media `columns={{ lg: [1, 1] }} colGap="column"` | yes | none | the seam between the copy `stack` and `media` — 48 stacked; 64 across from 1024 in `beside` (added 28 Sep 2026) |
+| `split` | `<div>`, `Layout rowGap="stack" align="start"`, and in `beside` with media `columns={{ lg: [1, 1] }} colGap="section"` | yes | none | the seam between the copy `stack` and `media` — 48 stacked; 64 across from 1024 in `beside` (added 28 Sep 2026) |
 | `stack` | `<div>`, `Layout rowGap="stack"` | yes | none | the seam between `opening`, `byline`, `extras` and `actions` |
 | `opening` | `<div>`, `Layout rowGap="block"` | yes | none | the seams between `eyebrow`, `title` and `copy` — one step, three children |
 | `eyebrow` | `<p>` | no — 32 of 129 | `eyebrow`, uppercased | `--hero-eyebrow-ink`, `--text-eyebrow` and its tracking, `--measure-body` |
@@ -221,7 +224,7 @@ Every text ratio is measured against **the ground it actually sits on**, which h
 | paragraph → paragraph inside `copy` | `--gap-text` | `copy`'s `rowGap` |
 | `opening` → `byline` → `extras` → `actions` | `--gap-stack` | `stack`'s `rowGap` — block to block inside a section |
 | copy `stack` → `media`, stacked (and `beside` below 1024) | `--gap-stack` | `split`'s `rowGap` — the media is one more block |
-| copy `stack` ↔ `media`, `beside` from 1024 | `--gap-column` (64) | `split`'s `colGap` — two halves that must read as separate, which is what this step is for. The copy does not run into the image, and the image does not read as a figure in the copy's column |
+| copy `stack` ↔ `media`, `beside` from 1024 | `--gap-section` (96; 64 until 1 Oct) | `split`'s `colGap` — two halves that must read as separate, which is what this step is for. The copy does not run into the image, and the image does not read as a figure in the copy's column |
 | `key` → `value` inside a `pair` | `--gap-inline` | `pair`'s `rowGap` — a key and its value, which is what this step is for |
 | `pair` → `pair`, both axes | `--gap-block` | `byline`'s `colGap` and `rowGap` |
 | action → action, both axes | `--gap-tight` | `actions`' `colGap` and `rowGap` |
@@ -244,7 +247,7 @@ The byline's two steps are the one place the ratio does real work: 4px between a
 | `eyebrow` measure | `--measure-body` | 68ch — **measured 490px** at `--text-eyebrow` (this row said ≈548px) | The longest eyebrow in the corpus, `CONNECTX · AI-NATIVE BUILDING ENERGY PRODUCT` at 44 characters, which measures about 380px uppercased and sits on one line. The measure is there to cap the one that does not |
 | action height | `--btn-height-md` | 40px | The site's default control height. It is 4px short of `--btn-hit-min` 44px, which is why every action sets `extendHitArea` — see section 9 |
 | minimum inline size | — | 320px, `--lay-track-md` | The longest single word in a corpus `h1` — "Modernisation", 13 characters. **29 Sep 2026, at `--text-display`:** it measures **261px** at the 767 re-declaration (43px), so it fits a 320px track and the 326px column at a 390 viewport, but not the 256px column at a **320 viewport**, where it now breaks inside the word (no overflow — the reset's break-word holds, and no horizontal scrollbar). At `--text-h1` (34px) it fit at 320 too. Logged as an open question rather than changed (A10) |
-| `media` inline size | — | `stacked`: the full content column, 1240. `beside` from 1024: one of two equal tracks, (1240 − 64) / 2 = **588** at the cap | Nothing. It is the only part of the hero that is **not** capped at a measure. Height always follows the asset's own ratio (H3): a 1:1 illustration beside the copy is 588 tall, a 16:9 banner below it 698 |
+| `media` inline size | — | `stacked`: the full content column, 1240. `beside` from 1024: one of two equal tracks, (1240 − 96) / 2 = **572** at the cap | Nothing. It is the only part of the hero that is **not** capped at a measure. Height always follows the asset's own ratio (H3): a 1:1 illustration beside the copy is 588 tall, a 16:9 banner below it 698 |
 | `media` video ratio | `--hero-media-ratio` | 16 / 9 | YouTube's own ratio, and it boxes the **frame only**. Anything else letterboxes inside the player rather than cropping it, which is a black band drawn by another origin inside our band. It is not applied to images: those render at their intrinsic ratio, uncropped |
 | two-adjacent dead air | — | 192px, 2 × `--sec-padding-y` | The visual tell of the bug in section 12 row 12: two 96px band paddings meeting between two display titles |
 

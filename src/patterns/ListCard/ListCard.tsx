@@ -32,21 +32,54 @@ export type ListCardMarker =
   | { type: 'thumbnail'; image: MediaImage };
 
 export type ListCardArrangement = 'split' | 'stacked';
+
+/**
+ * Where the item sits, which decides where its rule and marker go (1 Oct 2026).
+ *
+ *   row   one row of a one-column list. The rule CLOSES the row (block-end), the marker stands
+ *         beside the content, and the title and body split or stack (`arrangement`). The default.
+ *   tile  one item in a grid track. The rule OPENS the item (block-start), the marker stands above
+ *         the title, and the title and body always stack. The copy sits flush with the track, so a
+ *         grid of tiles aligns with the section heading over it.
+ *
+ * A form, not a finish: both are the same ruled, groundless item. The rule moves because of what it
+ * has to line up with. Rows close on a rule so every row ends on the same line as its neighbour;
+ * tiles in a grid have unequal heights, so only their TOPS align, and an opening rule is the edge
+ * that does. The service pages drew their own tile for this (Signals, Steps, Ledger) because
+ * ListCard could not; this is that tile, once.
+ */
+export type ListCardForm = 'row' | 'tile';
 export type ListCardTitleElement = 'span' | 'h3' | 'h4';
 
 /**
  * A closed content record. There is no `children`, `className` or DOM-attribute spread: allowing
  * any of them would reopen nested controls, call-site geometry and a second source for the cue.
  */
-export type ListCardProps = {
+type ListCardFormProps =
+  | {
+      /** A row in a one-column list. See `ListCardForm`. */
+      form?: 'row';
+      /** Title/body geometry only. Defaults to the corpus's highest-volume split arrangement. */
+      arrangement?: ListCardArrangement;
+    }
+  | {
+      /** An item in a grid track. See `ListCardForm`. */
+      form: 'tile';
+      /** A tile always stacks: a split needs a row's width, and a grid track never has it. */
+      arrangement?: never;
+    };
+
+export type ListCardProps = ListCardFormProps & {
   /** Primary label. Whitespace-only values render nothing and warn in development. */
   title: string;
-  /** One explanatory paragraph. Whitespace-only values omit the paragraph and warn. */
-  body: string;
+  /**
+   * One explanatory paragraph. Optional (1 Oct 2026): an item can be its name alone — a checklist
+   * line, a deliverable that needs no gloss. Absent renders no paragraph and no seam; a value that
+   * is present but whitespace-only is a CMS fault, so it is omitted with a warning.
+   */
+  body?: string;
   /** Optional leading content. Absence removes both the slot and its adjacent seam. */
   marker?: ListCardMarker;
-  /** Title/body geometry only. Defaults to the corpus's highest-volume split arrangement. */
-  arrangement?: ListCardArrangement;
   /** Heading semantics without a visual type change. */
   titleAs?: ListCardTitleElement;
   /** A non-blank destination turns the entire row into one native link and adds its cue. */
@@ -64,7 +97,7 @@ function warn(message: string) {
 }
 
 /** The marker slot. Blank thumbnail sources collapse rather than leaving a broken-image frame. */
-function Marker({ marker }: { marker: ListCardMarker }) {
+function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }) {
   if (marker.type === 'number') {
     /* At least two digits, not exactly two: the expected 01–12 align, while an out-of-range 100
        stays honest rather than being truncated. The <ol> announces position, so the visual copy
@@ -72,7 +105,10 @@ function Marker({ marker }: { marker: ListCardMarker }) {
     const value = String(marker.value).padStart(2, '0');
 
     return (
-      <span aria-hidden="true" className={cx(styles.marker, styles.number)}>
+      <span
+        aria-hidden="true"
+        className={cx(styles.marker, styles.number, form === 'tile' && styles.numberAbove)}
+      >
         {value}
       </span>
     );
@@ -135,6 +171,7 @@ export function ListCard({
   title,
   body,
   marker,
+  form = 'row',
   arrangement = 'split',
   titleAs: Title = 'span',
   href,
@@ -145,16 +182,49 @@ export function ListCard({
     return null;
   }
 
-  const hasBody = body.trim().length > 0;
-  if (!hasBody) warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
+  const hasBody = body !== undefined && body.trim().length > 0;
+  if (body !== undefined && !hasBody) {
+    warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
+  }
+  const isTile = form === 'tile';
 
   const destination = href?.trim() ? href : undefined;
-  const isSplit = arrangement === 'split';
+  const isSplit = !isTile && arrangement === 'split';
   const leaves = destination !== undefined && external;
+
+  const cue = destination ? (
+    <span className={styles.cue}>
+      {/* One glyph per meaning (ch04): `arrow-right` is "go, next", `arrow-right-up` is
+          "leaves the site". Both are Solar Bold's plain arrows, the same drawing turned 45°,
+          so an off-site row sits in a list of internal ones without a filled square among
+          bare arrows (29 Sep 2026, 2.17). The cue is replaced, never doubled — one icon per
+          row — and it keeps the cue's slot, size and ink, so an external row differs from an
+          internal one by its glyph's angle alone. Trailing either way: both are movement. */}
+      <Icon name={leaves ? 'arrow-right-up' : 'arrow-right'} size="lg" />
+      {/* The glyph is aria-hidden, so the new tab is said in words, at the END of the
+          accessible name so the title is still what a screen reader leads with. */}
+      {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}
+    </span>
+  ) : null;
+
+  /* The tile: marker, then the title over its body, then — on a linked tile — the cue at the foot,
+     pinned there so every cue in a grid row sits on one line however long its body runs. Three
+     beats nested two deep: marker to copy is `text` (16), title to body is `tight` (8), the same
+     pair the stacked row uses, so a tile and a row of the same record read as one voice. */
+  const tile = (
+    <Layout rowGap="text" pinLast={destination !== undefined} className={styles.tileInner}>
+      {marker ? <Marker marker={marker} form={form} /> : null}
+      <Layout rowGap="tight" className={styles.content}>
+        <Title className={styles.title}>{title}</Title>
+        {hasBody ? <p className={styles.body}>{body}</p> : null}
+      </Layout>
+      {cue}
+    </Layout>
+  );
 
   const row = (
     <Cluster colGap="block" rowGap="block" align="start">
-      {marker ? <Marker marker={marker} /> : null}
+      {marker ? <Marker marker={marker} form={form} /> : null}
       <Cluster colGap="block" align="start" nowrap className={styles.core}>
         {isSplit ? (
           /* The split reads the row's OWN width, not the viewport's. A wrapping Cluster puts title
@@ -174,26 +244,13 @@ export function ListCard({
             {hasBody ? <p className={styles.body}>{body}</p> : null}
           </Layout>
         )}
-        {destination ? (
-          <span className={styles.cue}>
-            {/* One glyph per meaning (ch04): `arrow-right` is "go, next", `arrow-right-up` is
-                "leaves the site". Both are Solar Bold's plain arrows, the same drawing turned 45°,
-                so an off-site row sits in a list of internal ones without a filled square among
-                bare arrows (29 Sep 2026, 2.17). The cue is replaced, never doubled — one icon per
-                row — and it keeps the cue's slot, size and ink, so an external row differs from an
-                internal one by its glyph's angle alone. Trailing either way: both are movement. */}
-            <Icon name={leaves ? 'arrow-right-up' : 'arrow-right'} size="lg" />
-            {/* The glyph is aria-hidden, so the new tab is said in words, at the END of the
-                accessible name so the title is still what a screen reader leads with. */}
-            {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}
-          </span>
-        ) : null}
+        {cue}
       </Cluster>
     </Cluster>
   );
 
   return (
-    <li className={styles.root}>
+    <li className={cx(styles.root, isTile && styles.tile)}>
       {destination ? (
         <a
           className={cx(styles.frame, styles.link)}
@@ -201,10 +258,10 @@ export function ListCard({
           target={leaves ? '_blank' : undefined}
           rel={leaves ? 'noreferrer' : undefined}
         >
-          {row}
+          {isTile ? tile : row}
         </a>
       ) : (
-        <div className={styles.frame}>{row}</div>
+        <div className={styles.frame}>{isTile ? tile : row}</div>
       )}
     </li>
   );

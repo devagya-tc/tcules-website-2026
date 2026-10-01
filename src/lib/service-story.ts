@@ -63,10 +63,27 @@ export type StoryCase = {
   };
 };
 
-/** Where an image should go that does not exist yet. Rendered only in review mode (`?slots=1`). */
+/**
+ * Where an image should go that does not exist yet. Rendered only in review mode (`?slots=1`).
+ *
+ * A slot is read by someone deciding whether the image is worth making, so it says what the image
+ * is FOR before anything about how it looks (1 Oct 2026, owner: "i'd appreciate if the description
+ * told me what the illustration/image would describe and not what the drawing looks like"). It was
+ * one `brief` written as drawing instructions in the illustration system's own vocabulary — "UI
+ * shorthand", "peridot", "dashed outline" — which skipped the step ch05 §4 puts first: the message.
+ * How it is drawn belongs to the illustration concept, written after the message is agreed.
+ *
+ * Every field is plain language a reader of the page would understand: no brand-system terms, no
+ * colours, no drawing devices.
+ */
 export type StorySlot = {
   kind: 'illustration' | 'cut-out' | 'photograph' | 'portrait';
-  brief: string;
+  /** The one thing a reader should understand from the image. One or two sentences. */
+  message: string;
+  /** What is in the picture, named as things in the page's own story — not shapes or styles. */
+  shows: string;
+  /** Why it sits here rather than anywhere else on the page. */
+  placement?: string;
   /** The ratio the placement fixes, if it fixes one. */
   ratio?: '1/1' | '3/2' | '4/3' | '16/9';
 };
@@ -75,8 +92,6 @@ export type StoryBlock =
   /** Things a reader can see, and what each may mean. The symptom leads; the meaning qualifies it. */
   | {
       kind: 'signals';
-      /** The mono key over each meaning, e.g. "May be". */
-      key?: string;
       columns: 2 | 3 | 4 | 5;
       items: readonly { title: string; body: string; icon?: StoryGlyph }[];
     }
@@ -97,7 +112,7 @@ export type StoryBlock =
   /** Which route to take, chosen by the condition you are in. Condition first, route second. */
   | {
       kind: 'router';
-      items: readonly { when: string; route: StoryLink; settles?: string }[];
+      items: readonly { when: string; route: StoryLink }[];
       /** A route that is not a service — an audit, a self-assessment — for the reader who cannot
           yet name their condition. Leads the set when it would otherwise leave a hole. */
       also?: { when: string; link: StoryLink };
@@ -126,6 +141,13 @@ export type StoryBlock =
   | {
       kind: 'spectrum';
       axis: { from: string; to: string };
+      /**
+       * A column that SHOWS the axis, row by row, instead of stating it once in a caption. Only
+       * `disruption` exists: how much of the current product a row's option disturbs. The meter is
+       * drawn for that one meaning (Diagrams.tsx, DisruptionMeter) — a generic bar would read as
+       * progress, which is what got the first meter cut (30 Sep). Absent, the axis is a caption.
+       */
+      meter?: { kind: 'disruption'; label: string };
       columns: { name: string; when: string; settles: string };
       items: readonly { name: string; when: string; settles: string }[];
     }
@@ -164,7 +186,15 @@ export type StoryBlock =
       levels: readonly { title: string; body: string; icon: StoryGlyph }[];
     }
   /** The temporary states that live between the current product and the target one. */
-  | { kind: 'bridge'; from: string; to: string; label: string; items: readonly string[] }
+  | {
+      kind: 'bridge';
+      from: string;
+      to: string;
+      label: string;
+      items: readonly string[];
+      /** The three phase heads over the timeline: before, during and after the move. */
+      phases: { before: string; during: string; after: string };
+    }
   /** Linked stages the same decision passes through, with an optional return path. */
   | { kind: 'thread'; items: readonly { title: string; body?: string }[]; loop?: string }
   /** One figure, stated in words beside it. */

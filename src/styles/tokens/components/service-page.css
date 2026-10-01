@@ -31,6 +31,13 @@
   --svc-rule-width: var(--border-width-hairline);
   --svc-rule-strong-width: var(--border-width-1);
   --svc-slice-width: var(--border-width-2);
+  /* The transition timeline: one product's bar for one phase, tall enough for a mono label. */
+  --svc-bar-height: var(--space-48);
+  /* The disruption meter: one part of the product, how far a disturbed part is lifted off the
+     line, and how far it tilts. Component sizes, not distances. */
+  --svc-meter-part: var(--space-12);
+  --svc-meter-lift: var(--space-8);
+  --svc-meter-tilt: 14deg;
 }
 
 /* ── Surfaces ──────────────────────────────────────────────────────────────────
@@ -50,6 +57,9 @@
   --svc-sheet-ground: var(--color-paper-deep);
   --svc-slice-ground: var(--color-brandeis-50);
   --svc-slot-edge: var(--color-neutral-400);
+  --svc-bar-live-ground: var(--color-neutral-900);
+  --svc-bar-live-ink: var(--color-paper);
+  --svc-bar-edge: var(--color-neutral-500);
 }
 
 [data-surface='tint'] {
@@ -64,6 +74,9 @@
   --svc-sheet-ground: var(--color-paper);
   --svc-slice-ground: var(--color-brandeis-100); /* brandeis-50 disappears on paper-deep */
   --svc-slot-edge: var(--color-neutral-500);
+  --svc-bar-live-ground: var(--color-neutral-900);
+  --svc-bar-live-ink: var(--color-paper);
+  --svc-bar-edge: var(--color-neutral-600);
 }
 
 [data-surface='ink'] {
@@ -78,6 +91,9 @@
   --svc-sheet-ground: var(--color-neutral-900);
   --svc-slice-ground: var(--color-neutral-900);
   --svc-slot-edge: var(--color-neutral-600);
+  --svc-bar-live-ground: var(--color-white);
+  --svc-bar-live-ink: var(--color-neutral-950);
+  --svc-bar-edge: var(--color-neutral-400);
 }
 
 [data-surface='blue'] {
@@ -92,4 +108,7 @@
   --svc-sheet-ground: var(--color-brandeis-600);
   --svc-slice-ground: var(--color-brandeis-600);
   --svc-slot-edge: var(--color-brandeis-300);
+  --svc-bar-live-ground: var(--color-white);
+  --svc-bar-live-ink: var(--color-brandeis-500);
+  --svc-bar-edge: var(--color-brandeis-100);
 }

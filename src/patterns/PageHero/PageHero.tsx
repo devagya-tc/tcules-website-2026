@@ -432,7 +432,7 @@ export function PageHero({
       <Layout
         rowGap="stack"
         columns={split ? { lg: [1, 1] } : undefined}
-        colGap={split ? 'column' : undefined}
+        colGap={split ? 'section' : undefined}
         align="start"
       >
         {/* ── stack · 48 between blocks ──────────────────────────────────────────

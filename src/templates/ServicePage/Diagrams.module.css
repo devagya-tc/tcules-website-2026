@@ -4,12 +4,10 @@
    bracket, a slice, a bridge. Colour from --svc-*, type from the composites, arrangement from
    Layout and Cluster. Positioned pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
 
-   One deliberate departure from the letter of CLAUDE.md § Layout rule 1: a bridge end centres its
-   one label with grid. It arranges no siblings; it is the inside of one mark.
-
    Every mark here says something (30 Sep 2026 review): the bracket says the operating model spans
-   the four parts; the slice says a release cuts through every layer; the dashed span says its
-   states are temporary; an arrow says one stage feeds the next. Marks that said nothing — a
+   the four parts; the slice says a release cuts through every layer; the dashed bars say a product
+   is half-present while the move is under way; an arrow says one stage feeds the next; a loose part
+   on the disruption meter is a part of the product the option disturbs. Marks that said nothing — a
    progress meter per row, a dashed thread with nodes, a dot on every step's rule — were cut. */
 
 .key {
@@ -36,27 +34,27 @@
 .rowTitle {
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
-  text-wrap: balance;
+  text-wrap: var(--text-title-wrap);
   color: var(--svc-ink);
 }
 
 .rowBody {
   font: var(--text-body);
-  text-wrap: pretty;
+  text-wrap: var(--text-running-wrap);
   color: var(--svc-ink-muted);
 }
 
 /* The question a row must settle: the reader's own words, so it takes the ink, not the muted. */
 .rowQuestion {
   font: var(--text-body);
-  text-wrap: pretty;
+  text-wrap: var(--text-running-wrap);
   color: var(--svc-ink);
 }
 
 .rowFail {
   font: var(--text-body);
   font-style: italic;
-  text-wrap: pretty;
+  text-wrap: var(--text-running-wrap);
   color: var(--svc-ink-muted);
 }
 
@@ -121,7 +119,7 @@
 .sheetQuestion {
   font: var(--text-h6);
   letter-spacing: var(--text-h6-tracking);
-  text-wrap: pretty;
+  text-wrap: var(--text-running-wrap);
   color: var(--svc-ink);
 }
 
@@ -164,7 +162,7 @@
 
 .frameBody {
   font: var(--text-body-lg);
-  text-wrap: pretty;
+  text-wrap: var(--text-running-wrap);
   color: var(--svc-ink);
   max-inline-size: var(--measure-body);
 }
@@ -224,34 +222,86 @@
 }
 
 /* ── Bridge ───────────────────────────────────────────────────────────────────── */
+/* ── Bridge: the transition as a timeline ─────────────────────────────────────────
+   Phases are columns; each starts on a hairline, the boundary between one period and the next. The
+   bars run straight across those boundaries — that continuity is what makes two bars one product
+   over time — so the phase has no inline padding and only its head is inset. */
 .bridge {
   color: var(--svc-ink);
 }
 
-/* The two ends: solid, on the sheet ground, the label centred in its box. */
-.end {
-  display: grid;
-  place-items: center;
-  padding: var(--gap-block);
-  background: var(--svc-sheet-ground);
-  border: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  font: var(--text-ui-lg);
-  letter-spacing: var(--text-ui-lg-tracking);
+.phase {
+  min-inline-size: 0;
+  border-inline-start: var(--svc-rule-width) solid var(--svc-rule-strong);
+}
+
+/* Every label and the states list sit one tight step inside the phase line, so text never touches
+   the boundary it starts from; only the bars run edge to edge. */
+.phaseHead {
+  padding-inline: var(--gap-tight);
+}
+
+/* A product, for one phase. Live is solid: the product people are using. Ending and starting are
+   dashed, the same product half-present — still running, already running. Fixed height so the two
+   products keep their own rows across the three columns, spacers included. */
+.bar {
+  display: block;
+  block-size: var(--svc-bar-height);
+  padding-inline: var(--gap-text);
+  overflow: hidden;
+  font: var(--text-ui);
+  letter-spacing: var(--text-ui-tracking);
   text-transform: var(--text-mono-case);
-  text-align: center;
+  line-height: var(--svc-bar-height);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bar[data-state='live'] {
+  background: var(--svc-bar-live-ground);
+  color: var(--svc-bar-live-ink);
+}
+
+.bar[data-state='ending'],
+.bar[data-state='starting'] {
+  border: var(--svc-rule-strong-width) dashed var(--svc-bar-edge);
   color: var(--svc-ink);
 }
 
-/* The span between them: dashed on the long edges, open at the ends where it meets them, so the
-   three read as one bridge. Below lg the three stack and the dashes close all four sides. */
-.span {
-  padding: var(--gap-gutter);
-  border-block: var(--svc-rule-strong-width) dashed var(--svc-node);
+/* The current product's dashed bar continues from the solid one on its left, and the target's
+   dashed bar runs into the solid one on its right: the open end faces the bar it joins. */
+.bar[data-state='ending'] {
+  border-inline-start: none;
 }
 
+.bar[data-state='starting'] {
+  border-inline-end: none;
+}
+
+.barSpacer {
+  display: block;
+  block-size: var(--svc-bar-height);
+}
+
+.between {
+  padding-inline: var(--gap-tight);
+}
+
+/* The states' own label already sits inside .between's inset. */
+.between > .key {
+  padding-inline: 0;
+}
+
+/* One column below lg: each phase stacks, so a spacer would be an empty band, and the open ends
+   would face nothing. Every bar closes and the spacers go. */
 @media (max-width: 1023px) {
-  .span {
-    border-inline: var(--svc-rule-strong-width) dashed var(--svc-node);
+  .barSpacer {
+    display: none;
+  }
+
+  .bar[data-state='ending'],
+  .bar[data-state='starting'] {
+    border: var(--svc-rule-strong-width) dashed var(--svc-bar-edge);
   }
 }
 
@@ -259,8 +309,38 @@
   padding-block: var(--gap-text);
   border-block-end: var(--svc-rule-width) solid var(--svc-rule);
   font: var(--text-body);
-  text-wrap: pretty;
+  text-wrap: var(--text-running-wrap);
   color: var(--svc-ink);
+}
+
+/* ── Disruption meter ──────────────────────────────────────────────────────────────
+   Six parts on one line. A settled part sits solid on the line; a loose part is lifted off it,
+   tilted, and emptied to an outline. The padding above the line is the room a loose part is lifted
+   into, so a row of loose parts never collides with the row above. */
+.meter {
+  inline-size: max-content;
+  padding-block-start: var(--svc-meter-lift);
+  border-block-end: var(--svc-rule-width) solid var(--svc-rule-strong);
+}
+
+.meterPart {
+  display: block;
+  inline-size: var(--svc-meter-part);
+  block-size: var(--svc-meter-part);
+  background: var(--svc-ink);
+}
+
+.meterPart[data-loose] {
+  background: transparent;
+  border: var(--svc-rule-strong-width) solid var(--svc-ink);
+}
+
+.meterPart[data-loose='left'] {
+  transform: translateY(calc(-1 * var(--svc-meter-lift))) rotate(calc(-1 * var(--svc-meter-tilt)));
+}
+
+.meterPart[data-loose='right'] {
+  transform: translateY(calc(-1 * var(--svc-meter-lift))) rotate(var(--svc-meter-tilt));
 }
 
 /* ── Thread ───────────────────────────────────────────────────────────────────── */

@@ -17,15 +17,18 @@
 
 .quote {
   min-inline-size: 0;
-  max-inline-size: var(--measure-body);
 }
 
 /* The site blockquote (ch10 B2.07): the rule runs beside the QUOTE only, not the attribution, and
    the inset is padding so the rule sits at the quote's own edge. Italic in both arrangements —
    "fails when it is set roman at heading size": the italic and the rule are what make it read as
-   reported speech, and the roman name under it is the second voice. Compact reads --text-quote,
-   whose composite carries the italic itself. Display borrows --text-h3, a roman role, so it states
-   `font-style` after the `font:` shorthand, which would otherwise reset it. */
+   reported speech, and the roman name under it is the second voice. Both quote roles carry the
+   italic in their composite, so neither arrangement writes font-style.
+
+   NO MEASURE ON THE FIGURE (1 Oct 2026). `.quote` used to cap the whole figure at --measure-body,
+   and `ch` resolves in the element's OWN font: the figure's font is body (16), so the cap came to
+   about 640px, and a 43px quote inside it set about 30 characters a line. Each part now owns a
+   measure in its own type — the quote below, the attribution further down. */
 .quoteText {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
@@ -35,12 +38,16 @@
   overflow-wrap: anywhere;
 }
 
-/* Display is the moment on a page, so it takes the display quote role at h2 scale (43 / 34 / 25),
-   well clear of compact's reading-flow 28 / 22. Its italic is in the composite, so no font-style. */
+/* Display is a quote with a band's column to itself: the large quote role (34 / 28 / 22) at the
+   lead measure, which at 34 is about 860px — inside the 800–960 that reference proof bands set a
+   quote across. Wrapped `pretty`, not balanced: it is three or four lines of speech, and ch10
+   wraps quotes pretty ("the lines stay full and only the last one shortens"). A quote beside
+   something else is compact's 28, not this — size follows length and width, not importance. */
 .display .quoteText {
+  max-inline-size: var(--measure-lead);
   font: var(--text-quote-lg);
   letter-spacing: var(--text-quote-lg-tracking);
-  text-wrap: var(--text-title-wrap);
+  text-wrap: var(--text-running-wrap);
 }
 
 .compact .quoteText {
@@ -82,8 +89,16 @@
   aspect-ratio: var(--proof-portrait-ratio);
 }
 
+/* The speaker group sizes to its content and never shrinks below it; the source link takes what
+   is left or wraps beneath. */
+.speaker {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+}
+
 /* The text column takes whatever the portrait leaves; min-inline-size 0 lets a long name wrap
    rather than push the row wider than a 326 column. */
+
 .attributionText {
   flex: 1 1 auto;
   min-inline-size: 0;

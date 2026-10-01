@@ -326,7 +326,6 @@ export const softwareDevelopment: ServiceStory = {
       type: 'section',
       id: 'go-deeper',
       eyebrow: 'Go deeper',
-      arrangement: 'beside',
       heading: 'Acceptance and method',
       blocks: [
         {

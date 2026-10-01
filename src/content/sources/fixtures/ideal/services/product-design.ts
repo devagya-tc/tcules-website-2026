@@ -37,24 +37,23 @@ export const productDesign: ServiceStory = {
       blocks: [
         {
           kind: 'signals',
-          key: 'May be',
           columns: 4,
           items: [
             {
               title: 'A confusing action',
-              body: 'expressing an ownership or permission rule nobody has settled.',
+              body: 'May be expressing an ownership or permission rule nobody has settled.',
             },
             {
               title: 'A slow workflow',
-              body: 'protecting a real control, or compensating for a hand-off the product never modelled.',
+              body: 'May be protecting a real control, or compensating for a hand-off the product never modelled.',
             },
             {
               title: 'A crowded dashboard',
-              body: 'trying to serve several decisions without defining any of them.',
+              body: 'May be trying to serve several decisions without defining any of them.',
             },
             {
               title: 'A polished AI interaction',
-              body: 'hiding what the model used, what it changed, and who is accountable when it is wrong.',
+              body: 'May be hiding what the model used, what it changed, and who is accountable when it is wrong.',
             },
           ],
         },
@@ -106,8 +105,12 @@ export const productDesign: ServiceStory = {
           slot: {
             kind: 'illustration',
             ratio: '16/9',
-            brief:
-              'The reschedule, drawn in UI shorthand: one job tile (peridot) moving from a blocked slot to a proposed one, three dependent tiles previewed in dashed outline, and an owner seat that has to respond. Wide, not square — it sits under a horizontal sequence.',
+            message:
+              'Moving one job is never only moving one job. Before anyone confirms the change, the product has to show what else moves with it and who has to agree.',
+            shows:
+              'The worked example as the product would present it: the job that cannot go ahead because an input is missing, the new date proposed for it, the three pieces of work that depend on it and would move too, and the person who has to approve before it happens.',
+            placement:
+              'Under the five steps, so the reader sees the decision the steps are walking through. Wide, because it follows a row.',
           },
         },
       ],
@@ -294,7 +297,6 @@ export const productDesign: ServiceStory = {
       type: 'section',
       id: 'go-deeper',
       eyebrow: 'Go deeper',
-      arrangement: 'beside',
       heading: 'Read before you brief',
       blocks: [
         {

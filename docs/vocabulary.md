@@ -50,8 +50,8 @@ hex in the spec — write the token name.
 | `--gap-block` | 24px | head to body inside a block — the most used step |
 | `--gap-gutter` | 32px | container gutter, and the gap between cards in a set |
 | `--gap-stack` | 48px | block to block inside a section |
-| `--gap-column` | 64px | column gutter where two halves must read as separate |
-| `--gap-section` | 96px | section padding, tight |
+| `--gap-column` | 64px | column gutter between two peer halves that must read as separate |
+| `--gap-section` | 96px | section padding, tight; and a split — two regions of different kind side by side |
 | `--gap-section-open` | 128px | section padding, open |
 
 ### The space ramp — NOT for layout
@@ -75,7 +75,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-h5` | 22px | 1.28 | display | medium | `--text-h5-tracking` | verbatim |
 | `--text-h6` | 18px | 1.35 | display | medium | `--text-h6-tracking` | verbatim |
 | `--text-quote` | 28px | 1.35 | display | regular | **none** | verbatim |
-| `--text-quote-lg` | 43px | 1.2 | display | regular | `--text-quote-lg-tracking` | verbatim |
+| `--text-quote-lg` | 34px | 1.3 | display | regular | `--text-quote-lg-tracking` | verbatim |
 | `--text-lead` | 20px | 1.5 | sans | regular | **none** | verbatim |
 | `--text-body-lg` | 18px | 1.55 | sans | regular | **none** | verbatim |
 | `--text-body` | 16px | 1.6 | sans | regular | **none** | verbatim |
@@ -192,7 +192,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **proof.css** — `--proof-quote-rule-width` 6px · `--proof-portrait-size` 64px · `--proof-radius` 0px
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px
 - **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
-- **service-page.css** — `--svc-bracket-tick` 12px · `--svc-slice-start` 58% · `--svc-slice-piece` 4px · `--svc-slice-size` 22% · `--svc-link-underline-offset` 4px · `--svc-hidden-size` 1px · `--svc-rule-width` 1px · `--svc-rule-strong-width` 1px · `--svc-slice-width` 2px
+- **service-page.css** — `--svc-bracket-tick` 12px · `--svc-slice-start` 58% · `--svc-slice-piece` 4px · `--svc-slice-size` 22% · `--svc-link-underline-offset` 4px · `--svc-hidden-size` 1px · `--svc-rule-width` 1px · `--svc-rule-strong-width` 1px · `--svc-slice-width` 2px · `--svc-bar-height` 48px · `--svc-meter-part` 12px · `--svc-meter-lift` 8px
 - **table-of-contents.css** — `--toc-title-tracking` 0.12em · `--toc-ordinal-tracking` 0.08em · `--toc-max-inline` 232px · `--toc-min-inline` 160px · `--toc-summary-min-block` 44px · `--toc-ordinal-inline` 24px · `--toc-entry-padding-block` 12px · `--toc-rule-width` 1px · `--toc-current-rule-width` 3px · `--toc-underline-width` 1px · `--toc-underline-width-pressed` 2px · `--toc-underline-offset` 2px · `--toc-entry-radius-focus` 4px · `--toc-ring-width` 2px · `--toc-ring-offset` 2px
 - **tag.css** — `--tag-size-md` 24px · `--tag-radius` 4px · `--tag-edge-width` 1px · `--tag-glyph-size` 16px · `--tag-ring-width` 2px · `--tag-ring-offset` 2px · `--tag-label-trim` 1px · `--tag-glyph-gap` 4px
 

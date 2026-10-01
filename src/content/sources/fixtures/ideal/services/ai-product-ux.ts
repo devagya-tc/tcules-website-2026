@@ -310,7 +310,6 @@ export const aiProductUx: ServiceStory = {
       type: 'section',
       id: 'go-deeper',
       eyebrow: 'Go deeper',
-      arrangement: 'beside',
       heading: 'Before the first scenario',
       blocks: [
         {

@@ -9,6 +9,31 @@ layer. The copy is the CMS's own wherever possible. Every change is listed per p
 
 ---
 
+## 0 · Third pass, 1 October 2026 — causes, not symptoms
+
+The owner asked for the underlying issue behind each note before any fix. Five notes, four causes.
+
+| Note | Underlying issue | Fundamental fix | Where it lives |
+|---|---|---|---|
+| Testimonial "too big and too condensed" | **Size was chosen by importance, not by length and width.** The display quote was 43px, h2 scale, the same size as the heading above it. Brand ch03 has one quote role, 28. And the figure was capped at `--measure-body` in the *body* font, about 640px, so 43px italic set about 30 characters a line. References (Vercel, Pentagram, YC, thoughtbot, Figma) set a lone quote at 27–34px across 800–960px, and a quote beside anything at 16–22px | **Global.** Display quote 34 / 28 / 22 at `--measure-lead`; no measure on the figure; a quote beside something is `compact` (28). Optional `quote.source` link in the attribution row. Product Design: compact quote beside the Auxentios case, a split, tops aligned | `Proof`, `--text-quote-lg`, Proof.md amendment |
+| "Go deeper": heading left, two cards right | **`beside` was chosen to vary the silhouette, not by how the body reads.** A head beside its body only works when the body reads *down* (a list, an accordion, a sheet), so the head labels one long column. A row of peer cards reads *across*: the head became a third column, and the cards took their width from the two-thirds track, not from the page's grid | **Global rule** on ContentSection's `arrangement`: `beside` only for a body that reads down. Resources always sit on three tracks, so two cards are two grid cards, not two halves | `ContentSection` prop doc; `resources`; six fixtures |
+| Strong splits want 96, not 64 | **One step was doing two jobs.** `--gap-column` (64) served both *peers* (two lists, the sides of a contrast) and *splits* (copy beside a form, an image, its body, a case). A split is two kinds of thing sharing a row, in effect two sections side by side | **Global.** The scale names the difference: peers take `column` (64), splits take `section` (96). Applied in every pattern that owns a split: PageHero, ContentSection, CtaSection (form and proof), Proof, SiteFooter (both rows), and the template's proof band | CLAUDE.md § gap scale rule 2; `primitives.css`; five patterns; specs |
+| Specialist services uses bespoke components | **The vocabulary was designed job-first, so every job drew its own item.** Signals, Steps, Ledger and Router are four jobs and *one* item: marker, title, line, sometimes a destination. ListCard couldn't make a grid item, so the template made four. That is the 111-sections failure in miniature, inside one template file | **ListCard gains a `tile` form** (rule opens the item, marker above, flush with the track) and an optional `body`. The four jobs are now compositions: the job picks the set (columns, ordered or not, which marker), never the item. Router is ListCard rows; the worked example is a Callout | `ListCard` (spec amendment, specimen § 1b), `Blocks.tsx` |
+| Image slot briefs say how the image is drawn | **The slot skipped the message.** ch05 §4 starts every image with its message; the slot was one `brief` of drawing instructions in the illustration system's own vocabulary ("UI shorthand", "peridot"), written for an illustrator rather than for the person deciding if the image is worth making | **The slot type changed:** `message` (what a reader should understand), `shows` (what's in it, named as things in the page's story), `placement` (why here). Drawing belongs in the illustration concept, after the message is agreed | `StorySlot`; both slots rewritten |
+
+Second batch, same day:
+
+| Note | Underlying issue | Fundamental fix | Where it lives |
+|---|---|---|---|
+| Modernisation: "ordered from least to most disruptive" looks bad | **The order is the argument, and only a caption encoded it.** A reader had to be told in a sentence what the rows should have shown. The first meter was cut because a filling bar reads as *progress* | A **Disruption** column with a meter drawn for that one meaning: six parts of the current product on a line; a disturbed part is knocked loose — lifted, tilted, emptied. None loose for "Leave unchanged", all six for "Retire". The caption goes when a meter is present; the row states its level in words for screen readers | `spectrum.meter`, `DisruptionMeter` |
+| "The transition is part of the product" reads as boxes and text | **Nothing in the drawing encoded time or direction.** A transition is the old product still running while the new one starts; the in-between is their *overlap*, and the drawing never showed it | A three-phase timeline — Before · During the move · After. Current runs solid, then dashed ("still running"); target starts dashed ("already running"), then solid. The temporary states sit under the overlap, because they exist only there. Stacks by phase on a phone | `Bridge`, `bridge.phases` |
+| Accordion is jumpy (global) | **An old trade-off that no longer holds.** Height animation was ruled out because faking it on `<details>` costs native behaviour. CSS now animates the native element (`::details-content`, `interpolate-size`) | 240ms ease on the answer's height and opacity, and on the question's inset; reduced motion is instant; unsupported browsers open at once, as before | `Accordion`, spec §13 |
+| Form labels, "optional", errors, reserved hint space | **One anatomy for every field.** Every field got a label, an optional mono flag and an always-reserved message row, whatever it did. The URL field only had an error row because it rejected anything without `https://` | **A field contract**, recorded in the component: label is the noun; "(optional)" inside the label, quieter; a hint row only when there's a hint; a message row only when the field validates; errors say what to do in a few words; normalise rather than reject (URL gets `https://` added) | `EnquiryForm` `FieldGroup`, spec amendment |
+
+**Copy re-cut in this pass:** Product Design's four signal bodies take back "May be" (it was the template's key, now the body's first words). Router conditions that had a separate `settles` line now carry it as a second sentence ("It settles scope, authority, ownership and investment."), on Modernisation and Design Systems.
+
+**Still bespoke, and next in line for the same question:** `fit` and `contrast` (lists of sentences, no titles), `stat`, `nudge`, and the seven diagrams. The diagrams are drawings and probably earn their place. The four text blocks should be checked against Prose lists, Proof figures and CtaSection before they're kept.
+
 ## 0 · Second pass, 30 September 2026
 
 The owner's review of the first iteration, and what changed.
@@ -110,9 +135,9 @@ ch04's starter set.
 
 | Page | Slot | Kind | Brief |
 |---|---|---|---|
-| Product Design | under the method rail | illustration, 16:9 | The reschedule in UI shorthand: the job tile (peridot) moving from blocked to proposed, three dependent tiles previewed dashed, and the owner seat that must respond |
+| Product Design | under the method rail | illustration, 16:9 | *Says:* moving one job is never only moving one job; before anyone confirms, the product has to show what else moves and who must agree. *Shows:* the worked example as the product would present it (rewritten 1 Oct) |
 | Product Design | beside the quote | portrait, 1:1 | Ashok Mohanty (and his role: the quote has none) |
-| Modernisation | transition section | illustration, 16:9 | Current and target planes side by side, one record converted on one and unconverted on the other, with a dashed compatibility layer between. It replaces the chip bridge if it reads back |
+| Modernisation | transition section | illustration, 16:9 | *Says:* old and new are both live, and the same customer data has to stay correct in both until the move is done. *Shows:* the two products side by side and one record that exists in both (rewritten 1 Oct) |
 
 **Asked and answered:**
 - *Should the testimonial have an image though there isn't one?* **Yes, a 1:1 portrait.** Proof already

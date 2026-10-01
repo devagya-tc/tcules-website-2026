@@ -1,4 +1,5 @@
 import { Cluster, Icon, Layout, Tag } from '@/components';
+import { cx } from '@/lib/cx';
 import type { StoryBlock } from '@/lib/service-story';
 
 import styles from './Diagrams.module.css';
@@ -10,24 +11,72 @@ type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
    being a menu and becomes the page's argument — take the least disruptive change that works. The
    order is stated once, in words, over the list; there is no per-row meter (30 Sep 2026: a filled
    bar per row read as progress, which is a claim the list does not make). */
+/* ── Disruption meter ─────────────────────────────────────────────────────────
+   How much of the CURRENT PRODUCT an option disturbs, drawn as the product itself: six parts
+   sitting on one line. A part the option leaves alone sits solid on the line; a part it disturbs is
+   knocked loose — lifted off the line, tilted, emptied to an outline. "Leave unchanged" has none
+   loose, "Retire" has all six. Nothing fills toward a goal, so it cannot read as progress, which is
+   what got the first meter cut (30 Sep): the more of it is loose, the worse for the people using it.
+
+   The level is the row's rank on the ordered list, spread across the six parts — a rank, not a
+   measurement, which is all the content claims. Hidden from assistive technology; the row states
+   it in words ("Disruption: 3 of 6 parts"). */
+const METER_PARTS = 6;
+
+function DisruptionMeter({ level, label }: { level: number; label: string }) {
+  return (
+    <>
+      <Cluster as="span" nowrap colGap="inline" align="end" aria-hidden="true" className={styles.meter}>
+        {Array.from({ length: METER_PARTS }, (_, index) => (
+          <span
+            key={index}
+            className={styles.meterPart}
+            data-loose={index < level ? (index % 2 === 0 ? 'left' : 'right') : undefined}
+          />
+        ))}
+      </Cluster>
+      <span className={styles.visuallyHidden}>
+        {label}: {level} of {METER_PARTS} parts
+      </span>
+    </>
+  );
+}
+
+/* ── Spectrum ─────────────────────────────────────────────────────────────────
+   Options on one scale. With a meter, the scale is a column — every row shows where it sits — and
+   the caption goes: an order a reader has to be told in a sentence is an order the rows failed to
+   show (1 Oct 2026, owner: the "ordered from least … to most" line made the section look bad).
+   Without one, the order is stated once over the list. */
 export function Spectrum({ block }: { block: Of<'spectrum'> }) {
+  const meter = block.meter;
+  const last = block.items.length - 1;
+  const tracks = meter ? [4, 2, 5, 5] : [4, 5, 5];
   return (
     <Layout rowGap="text">
-      <span className={styles.key}>
-        Ordered from {block.axis.from.toLowerCase()} to {block.axis.to.toLowerCase()}
-      </span>
+      {meter ? null : (
+        <span className={styles.key}>
+          Ordered from {block.axis.from.toLowerCase()} to {block.axis.to.toLowerCase()}
+        </span>
+      )}
       <Layout as="ol" rowGap="none" className={styles.rows}>
         <li className={styles.headRow} aria-hidden="true">
-          <Layout columns={{ base: 1, lg: [4, 5, 5] }} colGap="gutter">
+          <Layout columns={{ base: 1, lg: tracks }} colGap="gutter">
             <span className={styles.key}>{block.columns.name}</span>
+            {meter ? <span className={styles.key}>{meter.label}</span> : null}
             <span className={styles.key}>{block.columns.when}</span>
             <span className={styles.key}>{block.columns.settles}</span>
           </Layout>
         </li>
-        {block.items.map((item) => (
+        {block.items.map((item, index) => (
           <li key={item.name} className={styles.row}>
-            <Layout columns={{ base: 1, lg: [4, 5, 5] }} colGap="gutter" rowGap="text">
+            <Layout columns={{ base: 1, lg: tracks }} colGap="gutter" rowGap="text">
               <h3 className={styles.rowTitle}>{item.name}</h3>
+              {meter ? (
+                <DisruptionMeter
+                  label={meter.label}
+                  level={last > 0 ? Math.round((index / last) * METER_PARTS) : 0}
+                />
+              ) : null}
               <p className={styles.rowBody}>{item.when}</p>
               <p className={styles.rowQuestion}>{item.settles}</p>
             </Layout>
@@ -198,31 +247,61 @@ export function Slice({ block }: { block: Of<'slice'> }) {
   );
 }
 
-/* ── Bridge ───────────────────────────────────────────────────────────────────
-   Current and target as two solid ends, and between them a DASHED zone holding the temporary
-   states — dashed because it is meant to be retired. The part of a modernisation a final mock-up
-   never shows sits literally between the before and the after. */
+/* ── Bridge: the transition as a timeline ─────────────────────────────────────
+   A move from the current product to the target one is not a jump: for a while BOTH are live, and
+   that overlap is what has to be designed. So it is drawn as time, read left to right — Before,
+   During the move, After — with each product as a bar. The current product runs solid before the
+   move and dashed during it ("still running"); the target starts dashed during it ("already
+   running") and runs solid after. The two dashed bars stacked in the middle phase ARE the
+   transition, and the temporary states sit directly under them, because they exist only there
+   (1 Oct 2026, owner: "it just looks like boxes and text").
+
+   Three phase columns rather than two spanning bars, so it stacks honestly below lg: Before with the
+   current product, During with both and its states, After with the target. Each bar is a fixed
+   height and an empty phase holds a spacer of the same height, so the two products keep their own
+   rows across the three columns. */
 export function Bridge({ block }: { block: Of<'bridge'> }) {
   return (
     <figure
-      aria-label={`${block.label}, from ${block.from.toLowerCase()} to ${block.to.toLowerCase()}`}
+      aria-label={`${block.label}: ${block.phases.during.toLowerCase()}, ${block.from.toLowerCase()} and ${block.to.toLowerCase()} are both live`}
       className={styles.bridge}
     >
-      <Layout columns={{ base: 1, lg: [1, 3, 1] }} colGap="none" rowGap="none">
-        <span className={styles.end}>{block.from}</span>
-        <Layout rowGap="block" className={styles.span}>
-          <span className={styles.key} aria-hidden="true">
-            {block.label}
+      <Layout columns={{ base: 1, lg: [1, 2, 1] }} colGap="none" rowGap="stack">
+        <Layout rowGap="tight" className={styles.phase}>
+          <span className={cx(styles.key, styles.phaseHead)}>{block.phases.before}</span>
+          <span className={styles.bar} data-product="current" data-state="live">
+            {block.from}
           </span>
-          <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="none">
-            {block.items.map((item) => (
-              <li key={item} className={styles.state}>
-                {item}
-              </li>
-            ))}
+          <span className={styles.barSpacer} aria-hidden="true" />
+        </Layout>
+        <Layout rowGap="block" className={styles.phase}>
+          <Layout rowGap="tight">
+            <span className={cx(styles.key, styles.phaseHead)}>{block.phases.during}</span>
+            <span className={styles.bar} data-product="current" data-state="ending">
+              {block.from}, still running
+            </span>
+            <span className={styles.bar} data-product="target" data-state="starting">
+              {block.to}, already running
+            </span>
+          </Layout>
+          <Layout rowGap="text" className={styles.between}>
+            <span className={styles.key}>{block.label}</span>
+            <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="none">
+              {block.items.map((item) => (
+                <li key={item} className={styles.state}>
+                  {item}
+                </li>
+              ))}
+            </Layout>
           </Layout>
         </Layout>
-        <span className={styles.end}>{block.to}</span>
+        <Layout rowGap="tight" className={styles.phase}>
+          <span className={cx(styles.key, styles.phaseHead)}>{block.phases.after}</span>
+          <span className={styles.barSpacer} aria-hidden="true" />
+          <span className={styles.bar} data-product="target" data-state="live">
+            {block.to}
+          </span>
+        </Layout>
       </Layout>
     </figure>
   );

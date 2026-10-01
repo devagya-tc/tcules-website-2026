@@ -7,7 +7,7 @@ import {
   type ProofPortrait,
   type ProofQuote,
 } from '@/patterns';
-import { ENDPOINTS, ROUTES, UNRESOLVED_EXTERNAL } from '@/lib/routes';
+import { caseStudyPath, ENDPOINTS, ROUTES, UNRESOLVED_EXTERNAL } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
@@ -91,6 +91,16 @@ const BRIGHTWELL_QUOTE = {
   name: 'Priya Anand-Whitcombe',
   company: 'Brightwell',
   portrait: PORTRAIT,
+} as const satisfies ProofQuote;
+
+/* The quote that stands alone, with the case it came from as a link in its attribution row. */
+const SOURCED_QUOTE = {
+  quoteHtml:
+    '<p>The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.</p>',
+  name: 'Ashok Mohanty',
+  company: 'Auxentios',
+  portrait: PORTRAIT,
+  source: { label: 'Read the Auxentios case study', href: caseStudyPath('auxentios') },
 } as const satisfies ProofQuote;
 
 const LONG_ATTRIBUTION_QUOTE = {
@@ -337,11 +347,20 @@ export default function ProofSpecimenPage() {
           <Layout rowGap="block">
             <h2>3 · Quote length ladder</h2>
             <p>
-              Display is the display quote role, --text-quote-lg (43 / 34 / 25, italic in the
-              composite), from one sentence through six. Compact keeps the reading-flow quote
-              composite (28 / 22); neither path sniffs length or clamps content.
+              Display is the large quote role, --text-quote-lg (34 / 28 / 22, italic in the
+              composite), at the lead measure, from one sentence through six. Compact keeps the
+              reading-flow quote composite (28 / 22); neither path sniffs length or clamps
+              content. Size follows the quote&apos;s length and width, never its importance: a
+              quote with the column to itself is display, a quote beside anything else is
+              compact (1 Oct 2026).
             </p>
           </Layout>
+          <Specimen
+            title="display · with source"
+            note="The case it came from, as a link beside the speaker. Wraps beneath at 390."
+          >
+            <Proof quote={SOURCED_QUOTE} />
+          </Specimen>
           <Specimen title="display · one sentence" note="Resolved role: --text-quote-lg">
             <Proof quote={ONE_SENTENCE_QUOTE} />
           </Specimen>

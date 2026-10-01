@@ -1,4 +1,4 @@
-import { Button, Cluster, Layout, Media, Prose, type MediaImage } from '@/components';
+import { Button, Cluster, Icon, Layout, Media, Prose, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
 import { PROOF_PORTRAIT } from '@/lib/image-sizes';
 
@@ -24,6 +24,13 @@ export type ProofQuote = {
   company: string;
   /** Optional 1:1 photograph beside the attribution (ruling P1). No portrait, no gap. */
   portrait?: ProofPortrait;
+  /**
+   * Optional link to where the quote is documented — in practice the case study it came from. It
+   * sits in the attribution row beside the speaker, so the claim and the place to check it read as
+   * one line (1 Oct 2026). Leave it off when the caller already shows the case beside the quote:
+   * the same destination twice is noise.
+   */
+  source?: { label: string; href: string };
   /* No client mark (removed 30 Sep 2026, owner): the company is already named in the role line,
      and a logo under a person's name competes with the portrait beside it. */
 };
@@ -154,6 +161,13 @@ function Portrait({ portrait }: { portrait: ProofPortrait }) {
 function Quote({ quote }: { quote: ProofQuote }) {
   const portrait = acceptPortrait(quote.portrait, quote.name);
   const role = isFilled(quote.role) ? quote.role : undefined;
+  const source =
+    quote.source && isFilled(quote.source.label) && isFilled(quote.source.href)
+      ? quote.source
+      : undefined;
+  if (quote.source && !source) {
+    warn(`source for "${quote.name}" needs a label and an href; omitting the link.`);
+  }
 
   return (
     <Layout as="figure" rowGap="block" className={styles.quote}>
@@ -165,18 +179,36 @@ function Quote({ quote }: { quote: ProofQuote }) {
           one, the text is indented so the name lands on the quote's first letter (ch10 B2.07). */}
       <Cluster
         as="figcaption"
-        nowrap
-        colGap="block"
-        align="start"
+        colGap="gutter"
+        rowGap="text"
+        align="center"
         className={cx(styles.attribution, !portrait && styles.attributionIndented)}
       >
-        {portrait ? <Portrait portrait={portrait} /> : null}
-        <Layout rowGap="inline" className={styles.attributionText}>
-          <span className={styles.name}>{quote.name}</span>
-          <span className={styles.role}>
-            {role ? `${role}, ${quote.company}` : quote.company}
-          </span>
-        </Layout>
+        {/* The speaker — portrait and name never part, so they are a nowrap Cluster of their own.
+            The source link is the figcaption's second child: beside the speaker while the row has
+            room, beneath when it does not. Who said it, then where to check it. */}
+        <Cluster nowrap colGap="block" align="start" className={styles.speaker}>
+          {portrait ? <Portrait portrait={portrait} /> : null}
+          <Layout rowGap="inline" className={styles.attributionText}>
+            <span className={styles.name}>{quote.name}</span>
+            <span className={styles.role}>
+              {role ? `${role}, ${quote.company}` : quote.company}
+            </span>
+          </Layout>
+        </Cluster>
+        {source ? (
+          <Button
+            as="a"
+            href={source.href}
+            emphasis="link"
+            tone="neutral"
+            size="md"
+            extendHitArea
+            icon={<Icon name="arrow-right" />}
+          >
+            {source.label}
+          </Button>
+        ) : null}
       </Cluster>
     </Layout>
   );
@@ -310,7 +342,7 @@ export function Proof({ arrangement = 'display', quote, figures }: ProofProps) {
   return (
     <Layout
       columns={both ? { base: 1, lg: [2, 1] } : undefined}
-      colGap={both ? 'column' : undefined}
+      colGap={both ? 'section' : undefined}
       rowGap={both ? 'stack' : undefined}
       className={`${styles.root} ${styles[arrangement]}`}
     >

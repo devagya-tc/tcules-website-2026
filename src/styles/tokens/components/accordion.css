@@ -43,6 +43,10 @@
   --acc-question-underline-offset: var(--space-6);
   --acc-transition-duration: var(--duration-fast);
   --acc-transition-easing: var(--easing-standard);
+  /* The answer's open and close (1 Oct 2026). Medium, not fast: the answer travels its own height,
+     often 150–300px, and at 140ms that distance reads as a snap — the jump this replaces. Slow
+     (360) made a seven-item FAQ feel heavy to scan. */
+  --acc-reveal-duration: var(--duration-medium);
 }
 
 /* Paper: the question rests one step below full ink and rises to it. The mark rests quieter still

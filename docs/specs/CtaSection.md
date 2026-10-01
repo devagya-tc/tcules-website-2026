@@ -36,6 +36,9 @@ orphan the numeral, and two mono digits are a constant width, so labels still st
 
 **Two.** `Stat` and `Testimonial` should not both be built. The proof slot holds one thing — a **`Proof`** pattern with a `figures` slot and a `quote` slot, either of which may be empty — because `/how-we-work` and `/clients` already put the 4.8/5 rating, the review themes and a client quote in one block, and two components cannot render one block. Section 1 specifies the three together, as the brief requires, and section 3 says why `CtaSection` still takes it as a `ReactNode` rather than as a typed union: a pattern may not import a pattern, so a typed union would name a component this one is forbidden to render.
 
+
+> **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
+
 ## 1 · Identity
 
 The block that closes a commercial page: an optional eyebrow, one `h2`, one or two paragraphs, a short ordered list of what happens next, nought to two actions, an optional enquiry form and an optional proof block. It paints no ground of its own — it hands a `surface` to `Section` and `Section` paints the band. It appears **once or twice per route**: 76 routes, 113 instances, because 37 routes carry a mid-page free-audit offer as well as the closing block.
@@ -256,7 +259,7 @@ Every ratio is text against **the ground it actually sits on**, which here is al
 | `eyebrow` → `heading` → `copy` | `--gap-block` | `lede`'s `rowGap` — head to body inside a block, the most used step |
 | paragraph → paragraph | `--gap-text` | `copy`'s `rowGap` |
 | `lede` → `points` → `actions` | `--gap-stack` | `column`'s `rowGap` — block to block inside a section |
-| content column → form column (`split`), content column → proof column (`open`) | `--gap-column` | `frame`'s `colGap` — the step for two halves that must read as separate. Not stated in `open` without proof: one track has no column seam |
+| content column → form column (`split`), content column → proof column (`open`) | `--gap-section` (96; `--gap-column` until 1 Oct) | `frame`'s `colGap` — the step for two halves that must read as separate. Not stated in `open` without proof: one track has no column seam |
 | the columns when `frame` wraps at 1023 | `--gap-stack` | `frame`'s `rowGap` |
 | `frame` → full-width `proof` row (`split`) | `--gap-stack` | `stack`'s `rowGap` |
 | point → point, vertical list (`split`) | `--gap-block` | `points`' `rowGap`. Amended 29 Sep 2026 from `--gap-text`: at 16 a 40px numeral sat nearer the next step's numeral than its own detail |

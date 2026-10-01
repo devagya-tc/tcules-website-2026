@@ -368,7 +368,6 @@ export const designEngineering: ServiceStory = {
       type: 'section',
       id: 'go-deeper',
       eyebrow: 'Go deeper',
-      arrangement: 'beside',
       heading: 'What has to survive the move into code',
       blocks: [
         {

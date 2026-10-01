@@ -31,7 +31,7 @@
 /** The unit, as a number, so the derivations below read as arithmetic rather than as strings. */
 const CONTAINER = 1240; // --sec-container
 const GUTTER = 32; // --sec-gutter, --gap-gutter
-const COLUMN_GAP = 64; // --gap-column
+const SPLIT_GAP = 96; // --gap-section, the split seam (CLAUDE.md § gap scale, rule 2)
 const CAP = CONTAINER + 2 * GUTTER; // 1304: the width at which the column stops growing
 
 /** The column below the cap, as a CSS length: the viewport less both gutters. */
@@ -44,13 +44,13 @@ const FLUID_COLUMN = `calc(100vw - ${2 * GUTTER}px)`;
 export const FULL_COLUMN = `(min-width: ${CAP}px) ${CONTAINER}px, ${FLUID_COLUMN}`;
 
 /**
- * PageHero `beside`: two equal tracks from 1024 (ruling H2), `colGap="column"` 64 between them.
- * (1240 − 64) / 2 = 588 at the cap; (100vw − 64 − 64) / 2 = 50vw − 64 from 1024; below 1024 the
+ * PageHero `beside`: two equal tracks from 1024 (ruling H2), `colGap="section"` 96 between them.
+ * (1240 − 96) / 2 = 572 at the cap; (100vw − 64 − 96) / 2 = 50vw − 80 from 1024; below 1024 the
  * arrangement stacks and the media takes the full column.
  */
 export const HERO_BESIDE =
-  `(min-width: ${CAP}px) ${(CONTAINER - COLUMN_GAP) / 2}px, ` +
-  `(min-width: 1024px) calc(50vw - ${GUTTER + COLUMN_GAP / 2}px), ${FLUID_COLUMN}`;
+  `(min-width: ${CAP}px) ${(CONTAINER - SPLIT_GAP) / 2}px, ` +
+  `(min-width: 1024px) calc(50vw - ${GUTTER + SPLIT_GAP / 2}px), ${FLUID_COLUMN}`;
 
 /**
  * A card in two equal tracks from 768 (`md`), `colGap="gutter"` 32.

@@ -13,56 +13,13 @@
   color: var(--svc-ink-label);
 }
 
-.body {
-  font: var(--text-body);
-  text-wrap: pretty;
-  color: var(--svc-ink-muted);
-}
-
-.bodySmall {
-  font: var(--text-body-sm);
-  text-wrap: pretty;
-  color: var(--svc-ink-muted);
-}
-
-.number {
-  font: var(--text-index);
-  letter-spacing: var(--text-index-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--svc-ink-label);
-}
-
 .glyph {
   color: var(--svc-ink);
-}
-
-.itemTitle {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
-  text-wrap: balance;
-  color: var(--svc-ink);
-}
-
-.grow {
-  flex: 1 1 0;
-  min-inline-size: 0;
-}
-
-/* A tile in a grid opens on a rule: the rule is where the item starts. */
-.tile {
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  padding-block-start: var(--gap-block);
-  min-inline-size: 0;
 }
 
 /* A list in one column opens on a strong rule and closes each row with a hairline. */
 .rows {
   border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-}
-
-.row {
-  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
-  padding-block: var(--gap-block);
 }
 
 .rowTight {
@@ -74,90 +31,15 @@
   flex: 1 1 0;
   min-inline-size: 0;
   font: var(--text-body-lg);
-  text-wrap: pretty;
+  text-wrap: var(--text-running-wrap);
   color: var(--svc-ink);
-}
-
-/* ── Signals ──────────────────────────────────────────────────────────────────── */
-.signalTitle {
-  font: var(--text-h4);
-  letter-spacing: var(--text-h4-tracking);
-  text-wrap: balance;
-  color: var(--svc-ink);
-}
-
-/* ── Steps ────────────────────────────────────────────────────────────────────── */
-.exampleBody {
-  font: var(--text-lead);
-  text-wrap: pretty;
-  color: var(--svc-ink);
-  max-inline-size: var(--measure-lead);
-}
-
-/* ── Router ───────────────────────────────────────────────────────────────────── */
-.routeItem {
-  min-inline-size: 0;
-}
-
-.route {
-  display: block;
-  block-size: 100%;
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  padding-block-start: var(--gap-block);
-  color: inherit;
-  text-decoration: none;
-  transition: border-color var(--duration-fast);
-}
-
-.routeInner {
-  block-size: 100%;
-}
-
-.routeWhen {
-  font: var(--text-lead);
-  text-wrap: pretty;
-  color: var(--svc-ink);
-  max-inline-size: var(--measure-lead);
-}
-
-/* The destination: a link line in the body voice, the arrow trailing the last word so it travels
-   with the name when it wraps. ch04's "half its size in a line of text" — 8 beside a 16 glyph. */
-.routeTo {
-  font: var(--text-body);
-  color: var(--svc-link-ink);
-}
-
-.routeName {
-  text-decoration: underline;
-  text-decoration-thickness: var(--border-width-hairline);
-  text-underline-offset: var(--svc-link-underline-offset);
-}
-
-.routeArrow {
-  display: inline-block;
-  padding-inline-start: var(--gap-tight);
-  line-height: 0;
-  vertical-align: middle;
-}
-
-.route:hover {
-  border-block-start-color: var(--svc-link-ink);
-}
-
-.route:hover .routeTo {
-  color: var(--svc-link-ink-hover);
-}
-
-.route:focus-visible {
-  outline: var(--focus-ring-width) solid var(--svc-link-ink);
-  outline-offset: var(--focus-ring-offset);
 }
 
 /* ── Fit ──────────────────────────────────────────────────────────────────────── */
 .listHeading {
   font: var(--text-h4);
   letter-spacing: var(--text-h4-tracking);
-  text-wrap: balance;
+  text-wrap: var(--text-title-wrap);
   color: var(--svc-ink);
 }
 
@@ -182,7 +64,7 @@
 
 .statBody {
   font: var(--text-lead);
-  text-wrap: pretty;
+  text-wrap: var(--text-running-wrap);
   color: var(--svc-ink);
   max-inline-size: var(--measure-lead);
 }
@@ -196,7 +78,7 @@
 .nudgeBody {
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
-  text-wrap: balance;
+  text-wrap: var(--text-title-wrap);
   color: var(--svc-ink);
 }
 
@@ -224,9 +106,16 @@
   max-inline-size: var(--svc-slot-size-portrait);
 }
 
+.slotMessage {
+  font: var(--text-lead);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink);
+  max-inline-size: var(--measure-lead);
+}
+
 .slotBrief {
   font: var(--text-body);
-  text-wrap: pretty;
+  text-wrap: var(--text-running-wrap);
   color: var(--svc-ink-muted);
   max-inline-size: var(--measure-body);
 }

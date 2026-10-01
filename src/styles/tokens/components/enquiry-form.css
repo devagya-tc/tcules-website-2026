@@ -16,10 +16,10 @@
 
 :root,
 [data-surface='paper'] {
-  /* Neutral-600 is the text floor for flag/caption at 4.92:1 on paper. Danger-600 carries invalid
+  /* Neutral-600 is the text floor for hint/caption at 4.92:1 on paper. Danger-600 carries invalid
      copy at 6.48:1; the success rule is decorative while the check glyph and sentence carry meaning. */
   --enq-label-ink: var(--color-neutral-700);
-  --enq-flag-ink: var(--color-neutral-600);
+  --enq-hint-ink: var(--color-neutral-600);
   --enq-message-invalid-ink: var(--color-danger-600);
   --enq-status-ink: var(--color-neutral-900);
   --enq-status-ink-error: var(--color-danger-600); /* 6.48:1 on paper */
@@ -29,10 +29,10 @@
 }
 
 [data-surface='tint'] {
-  /* Deep paper raises the ground: flag and caption step to neutral-700 because neutral-600 would
+  /* Deep paper raises the ground: hint and caption step to neutral-700 because neutral-600 would
      fail at 4.39:1. Danger-600 remains 5.78:1 for invalid and error copy. */
   --enq-label-ink: var(--color-neutral-700);
-  --enq-flag-ink: var(--color-neutral-700);
+  --enq-hint-ink: var(--color-neutral-700);
   --enq-message-invalid-ink: var(--color-danger-600);
   --enq-status-ink: var(--color-neutral-900);
   --enq-status-ink-error: var(--color-danger-600); /* 5.78:1 on deep paper */
@@ -42,10 +42,10 @@
 }
 
 [data-surface='ink'] {
-  /* Text polarity inverts without borrowing Input tokens. Neutral-400 keeps flag/caption above the
+  /* Text polarity inverts without borrowing Input tokens. Neutral-400 keeps hint/caption above the
      text floor, while danger-300 carries error copy at 8.65:1 on neutral-950. */
   --enq-label-ink: var(--color-neutral-200);
-  --enq-flag-ink: var(--color-neutral-400);
+  --enq-hint-ink: var(--color-neutral-400);
   --enq-message-invalid-ink: var(--color-danger-300);
   --enq-status-ink: var(--color-neutral-100);
   --enq-status-ink-error: var(--color-danger-300); /* 8.65:1 on neutral-950 */
@@ -58,7 +58,7 @@
   /* Brand-100 is the quiet text floor at 4.91:1. Danger-100 reaches 5.03:1; the success rule turns
      white because semantic success-500 would be only 2.05:1 on this ground. */
   --enq-label-ink: var(--color-brandeis-50);
-  --enq-flag-ink: var(--color-brandeis-100);
+  --enq-hint-ink: var(--color-brandeis-100);
   --enq-message-invalid-ink: var(--color-danger-100);
   --enq-status-ink: var(--color-white);
   --enq-status-ink-error: var(--color-danger-100); /* 5.03:1 on brandeis-500 */

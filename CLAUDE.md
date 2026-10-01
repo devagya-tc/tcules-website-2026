@@ -93,17 +93,23 @@ Nine steps, named for what they separate:
 | `--gap-block` | 24 | head to body inside a block — the most used step |
 | `--gap-gutter` | 32 | container gutter, and the gap between cards in a set |
 | `--gap-stack` | 48 | block to block inside a section |
-| `--gap-column` | 64 | column gutter where two halves must read as separate |
-| `--gap-section` | 96 | section padding, tight |
+| `--gap-column` | 64 | column gutter between two **peer** halves that must read as separate |
+| `--gap-section` | 96 | section padding, tight — and a **split**: two regions of different kind side by side |
 | `--gap-section-open` | 128 | section padding, open |
 
 1. **Layout distance never comes from `--space-*`.** The space ramp exists so the gap scale can be
    built from it. A component may reach the ramp for an **optical correction** — a label's
    side-bearing margin, a ring offset — and must say so in a comment on the token, as
    `button.css` does.
-2. **A distance that is not one of these nine is a mistake or a new step.** Decide which. Do not
+2. **Peer or split — decide which before reaching for a column gap.** Two halves of the same kind
+   (two lists, the sides of one contrast) are peers and take `column` (64). Two regions of different
+   kind side by side — copy beside a form, copy beside an image, a head beside its body, a quote
+   beside its case — are a split: two sections sharing a row, so they take `section` (96). The
+   patterns that own a split (`PageHero` beside, `ContentSection` beside, `CtaSection`, `Proof`)
+   already set it; a template composing its own split states it the same way.
+3. **A distance that is not one of these nine is a mistake or a new step.** Decide which. Do not
    split the difference.
-3. **A step is chosen by what it separates, never by how it looks at one width.** The scale does
+4. **A step is chosen by what it separates, never by how it looks at one width.** The scale does
    not shift responsively — the *layout* changes at a breakpoint, the distance does not. Do not
    add a media query that swaps one step for another.
 

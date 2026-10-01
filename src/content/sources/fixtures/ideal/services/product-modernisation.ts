@@ -87,6 +87,7 @@ export const productModernisation: ServiceStory = {
         {
           kind: 'spectrum',
           axis: { from: 'Least disruptive', to: 'Most disruptive' },
+          meter: { kind: 'disruption', label: 'Disruption' },
           columns: {
             name: 'Intervention',
             when: 'When',
@@ -219,6 +220,7 @@ export const productModernisation: ServiceStory = {
           from: 'Current product',
           to: 'Target product',
           label: 'Designed in between',
+          phases: { before: 'Before', during: 'During the move', after: 'After' },
           items: [
             'Old and new navigation together',
             'Converted and unconverted records',
@@ -234,8 +236,12 @@ export const productModernisation: ServiceStory = {
           slot: {
             kind: 'illustration',
             ratio: '16/9',
-            brief:
-              'Two planes side by side, current and target, with one record (peridot) shown twice — converted on the right, unconverted on the left — and a dashed compatibility layer bridging them. The navigation of both visible at once. Replaces the chip bridge above if it reads back.',
+            message:
+              'During a modernisation the old product and the new one are both live, and the same customer data has to stay correct in both until the move is finished.',
+            shows:
+              'The current product and the new one next to each other, one customer record that exists in both — already moved in the new product, not yet in the old one — and the link between them that keeps the two in step while both are in use.',
+            placement:
+              'In the section on transition states, where the page argues that the in-between period is designed, not endured. If it says that more clearly than the before-and-after diagram above it, it replaces that diagram.',
           },
         },
       ],
@@ -331,12 +337,11 @@ export const productModernisation: ServiceStory = {
           kind: 'router',
           items: [
             {
-              when: 'The team still disagrees about repair, redesign, progressive change, replatforming or rebuild.',
+              when: 'The team still disagrees about repair, redesign, progressive change, replatforming or rebuild. It settles the boundary, before delivery starts.',
               route: {
                 label: 'Product Modernisation Assessment',
                 href: auditPath('product-modernisation-assessment'),
               },
-              settles: 'The boundary, before delivery starts',
             },
             {
               when: 'The problem is a contained experience problem.',
@@ -346,20 +351,18 @@ export const productModernisation: ServiceStory = {
               },
             },
             {
-              when: 'Dependencies and accumulated change cost are the constraint.',
+              when: 'Dependencies and accumulated change cost are the constraint. It settles staged continuity.',
               route: {
                 label: 'Legacy Software Modernisation',
                 href: servicePath('product-modernisation/legacy-software-modernisation'),
               },
-              settles: 'Staged continuity',
             },
             {
-              when: 'The platform move is already decided.',
+              when: 'The platform move is already decided. It settles the behaviour that must survive the move.',
               route: {
                 label: 'Replatforming Product Design',
                 href: servicePath('product-modernisation/replatforming-product-design'),
               },
-              settles: 'The behaviour that must survive the move',
             },
           ],
         },
@@ -397,7 +400,6 @@ export const productModernisation: ServiceStory = {
       type: 'section',
       id: 'go-deeper',
       eyebrow: 'Go deeper',
-      arrangement: 'beside',
       heading: 'Run the comparison yourself',
       blocks: [
         {

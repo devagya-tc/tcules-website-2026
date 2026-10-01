@@ -121,8 +121,13 @@
    --gap-block         24px  Head to body inside a block. The most used step.
    --gap-gutter        32px  Container gutter, and the gap between cards in a set.
    --gap-stack         48px  Block to block inside a section.
-   --gap-column        64px  Column gutter where two halves must read as separate.
-   --gap-section       96px  Section padding, tight.
+   --gap-column        64px  Column gutter between two PEER halves that must read as
+                             separate: two lists, two sides of one contrast.
+   --gap-section       96px  Section padding, tight; and a SPLIT — two regions of
+                             different kind side by side (copy and form, copy and
+                             image, a head and its body, a quote and its case).
+                             They are two sections sharing a row, so they take a
+                             section's own distance.
    --gap-section-open 128px  Section padding, open.
 
    Two rules. A layout value that is not one of these nine is a mistake or a new
@@ -169,10 +174,14 @@
      five. */
   --font-size-h6: 18px;
   --font-size-quote: 28px;
-  /* The quote that IS the moment on a page — a display Proof — rather than one embedded in a
-     reading flow. h2 scale, so a testimonial can carry a band the way a heading does; the reading
-     quote above stays at h4 scale beside the body. */
-  --font-size-quote-lg: 43px;
+  /* The quote that has a band's full column to itself — a display Proof standing alone. h3 scale,
+     not h2 (1 Oct 2026): it was 43, the same size as the section heading above it, and a 20-word
+     quote at heading scale read as a second heading set in a condensed italic, about 30 characters
+     a line in a two-thirds track. Brand ch03 defines one quote role (28); this is its step up for
+     a quote with room, measured against reference proof bands that set 27–34 across 800–960px. A
+     quote BESIDE something takes the 28 reading quote; size follows the quote's length and width,
+     never its importance. */
+  --font-size-quote-lg: 34px;
   --font-size-lead: 20px;
   --font-size-body-lg: 18px;
   --font-size-body: 16px;
@@ -206,8 +215,8 @@
   --font-size-h4-m: 22px;
   --font-size-h5-m: 20px;
   --font-size-quote-m: 22px;
-  --font-size-quote-lg-t: 34px;
-  --font-size-quote-lg-m: 25px;
+  --font-size-quote-lg-t: 28px;
+  --font-size-quote-lg-m: 22px;
   --font-size-lead-m: 18px;
   --font-size-stat-m: 32px;
   --font-size-stat-lg-t: 43px;
@@ -242,9 +251,10 @@
      readable. Size and ratio are one decision and move together. */
   --line-height-h6: 1.35;
   --line-height-quote: 1.35;
-  /* Tighter than quote's 1.35 because it is larger, looser than h2's 1.1 because it is several
-     lines of running speech rather than a one-line title. */
-  --line-height-quote-lg: 1.2;
+  /* A step tighter than the reading quote's 1.35 because it is larger, and still a running-text
+     leading rather than a title's, because it is three or four lines of speech, not one line of
+     heading. */
+  --line-height-quote-lg: 1.3;
   --line-height-lead: 1.5;
   --line-height-body-lg: 1.55;
   --line-height-body: 1.6;
@@ -271,8 +281,8 @@
   --line-height-h4-m: 1.26;
   --line-height-h5-m: 1.3;
   --line-height-quote-m: 1.4;
-  --line-height-quote-lg-t: 1.24;
-  --line-height-quote-lg-m: 1.3;
+  --line-height-quote-lg-t: 1.35;
+  --line-height-quote-lg-m: 1.4;
   --line-height-lead-m: 1.55;
 }
 
@@ -369,11 +379,11 @@
     var(--font-family-display);
   /* ITALIC IS IN THE COMPOSITE: reported speech is italic by role (ch03 lists quote as "400 italic",
      ch10 B2.07), so the consumer writes no font-style — `font:` would reset one written before it.
-     Tracking is title-tight: at 43 the face is large enough for the negative correction to act,
-     where the 28px reading quote has no tracking companion at all. */
+     Tracking is title-fine, h4's light correction: italic sets tighter than roman already, so h3's
+     tighter step would close it up. The 28px reading quote has no tracking companion at all. */
   --text-quote-lg: italic var(--font-weight-regular)
     var(--font-size-quote-lg)/var(--line-height-quote-lg) var(--font-family-display);
-  --text-quote-lg-tracking: var(--letter-spacing-title-tight);
+  --text-quote-lg-tracking: var(--letter-spacing-title-fine);
   --text-lead: var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead)
     var(--font-family-sans);
   --text-body-lg: var(--font-weight-regular) var(--font-size-body-lg)/var(--line-height-body-lg)

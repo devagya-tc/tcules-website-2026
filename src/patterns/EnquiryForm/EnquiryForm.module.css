@@ -3,8 +3,8 @@
    Layout and Cluster own every sibling seam in the JSX. This module only applies the component's
    inline cap, reserved feedback line, type roles and per-surface inks. The form and its success
    replacement share the same 256–470px bounds so completion does not change the CTA column's
-   measure. The 19px message reserve is one --text-caption line: blur validation may fill it without
-   moving the controls below. No margin, private flex/grid arrangement or surface paint belongs here.
+   measure. The 19px message reserve is one --text-caption line, held only by a field that validates:
+   blur validation may fill it without moving the controls below. No margin, private flex/grid arrangement or surface paint belongs here.
 
    State order is load-bearing: .status establishes the neutral ink, then .statusError replaces
    only that ink. Success is a substitution performed by React, not a hidden sibling, so there is
@@ -24,19 +24,26 @@
    here on exactly that ground; under the rule, a label that must stay sentence case is not a mono
    label. --text-body-sm at 14/1.5 keeps it: one step up in size from the 13px it left, no tracking
    companion to restate, and a different voice from the --text-caption message below it, which is
-   the one distinction the two lines have to keep. The mono voice stays on the flag beside it. */
+   the one distinction the two lines have to keep. */
 .label {
   color: var(--enq-label-ink);
   font: var(--text-body-sm);
 }
 
-/* "Optional" is a field's status rather than part of the question, which is exactly the job the
-   mono micro role names — so it takes the mono case with everything else in that voice. */
-.flag {
-  color: var(--enq-flag-ink);
-  font: var(--text-micro);
-  letter-spacing: var(--text-micro-tracking);
-  text-transform: var(--text-mono-case);
+/* "(optional)" is said INSIDE the label, in the label's own voice and a quieter ink (1 Oct 2026).
+   It used to be a separate mono chip beside the label — a third voice in a two-line field, shouting
+   in capitals about the least important fact on it. Same role as the label, so it needs no font of
+   its own; only the ink steps down. */
+.optional {
+  color: var(--enq-hint-ink);
+}
+
+/* A hint, when a field has one: under the label, in the caption voice the error also uses, in the
+   quiet ink rather than the error's. Absent on every field that has nothing to explain. */
+.hint {
+  color: var(--enq-hint-ink);
+  font: var(--text-caption);
+  text-wrap: var(--text-running-wrap);
 }
 
 /* No colour transition on the label or here, and that is a correction rather than an omission.

@@ -202,36 +202,32 @@ export const designSystems: ServiceStory = {
           kind: 'router',
           items: [
             {
-              when: 'Teams disagree about what should become shared.',
+              when: 'Teams disagree about what should become shared. It settles scope, authority, ownership and investment.',
               route: {
                 label: 'Design System Strategy',
                 href: servicePath('design-systems/design-system-strategy'),
               },
-              settles: 'Scope, authority, ownership and investment',
             },
             {
-              when: 'The shared scope is agreed and needs a maintained system.',
+              when: 'The shared scope is agreed and needs a maintained system. It settles foundations, components, code, documentation, release.',
               route: {
                 label: 'Design System Implementation',
                 href: servicePath('design-systems/design-system-implementation'),
               },
-              settles: 'Foundations, components, code, documentation, release',
             },
             {
-              when: 'Figma and code describe different contracts.',
+              when: 'Figma and code describe different contracts. It settles source authority, mapping and change flow.',
               route: {
                 label: 'Figma and Storybook Alignment',
                 href: servicePath('design-systems/figma-storybook-alignment'),
               },
-              settles: 'Source authority, mapping and change flow',
             },
             {
-              when: 'Teams bypass, fork, or stay on old versions.',
+              when: 'Teams bypass, fork, or stay on old versions. It settles contribution, exceptions, release and evidence of use.',
               route: {
                 label: 'Governance and Adoption',
                 href: servicePath('design-systems/governance-adoption'),
               },
-              settles: 'Contribution, exceptions, release and evidence of use',
             },
           ],
           also: {
@@ -371,7 +367,6 @@ export const designSystems: ServiceStory = {
       type: 'section',
       id: 'go-deeper',
       eyebrow: 'Go deeper',
-      arrangement: 'beside',
       heading: 'Beyond the library',
       blocks: [
         {

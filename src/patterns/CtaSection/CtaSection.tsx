@@ -374,7 +374,7 @@ export function CtaSection(props: CtaSectionProps) {
               one track at every width. */}
           <Layout
             columns={hasProof ? { base: 1, lg: [3, 2] } : undefined}
-            colGap={hasProof ? 'column' : undefined}
+            colGap={hasProof ? 'section' : undefined}
             rowGap={hasProof ? 'stack' : undefined}
             align="start"
           >
@@ -438,11 +438,11 @@ export function CtaSection(props: CtaSectionProps) {
           right-hand column is the form's and evidence under both halves reads as evidence for the
           whole ask. */}
       <Layout rowGap="stack">
-        {/* 3:2 from lg, one column below. --gap-column between the halves rather than --gap-gutter,
-            because these two must read as separate things: copy that persuades on the left, a form
-            that collects on the right. `align="start"` so a short form does not stretch to the
+        {/* 3:2 from lg, one column below. A split (CLAUDE.md § gap scale, rule 2), so --gap-section
+            between the halves: copy that persuades on the left and a form that collects on the
+            right are two different kinds of thing sharing a row, not two peers. `align="start"` so a short form does not stretch to the
             height of a long lede. */}
-        <Layout columns={{ base: 1, lg: [3, 2] }} colGap="column" rowGap="stack" align="start">
+        <Layout columns={{ base: 1, lg: [3, 2] }} colGap="section" rowGap="stack" align="start">
           <Layout rowGap="stack">
             <CtaLede
               headingId={headingId}

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { Button, Cluster, Layout, Section } from '@/components';
-import { CtaSection, EnquiryForm } from '@/patterns';
+import { CtaSection, EnquiryForm, type EnquiryUrlLabel } from '@/patterns';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
 import { specimenStyles as s } from '../_specimen/Specimen';
@@ -26,7 +26,7 @@ function Enquiry({
   outcome?: 'success' | 'error' | 'pending';
   audit?: boolean;
   contact?: boolean;
-  urlLabel?: 'Site or product URL' | 'Link to the work' | 'Where can we see it?';
+  urlLabel?: EnquiryUrlLabel;
 }) {
   const action = `${ENDPOINTS.enquiryDesign}?outcome=${outcome}`;
 

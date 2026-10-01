@@ -95,9 +95,9 @@ export function SiteFooter({
             Opposed rather than stacked: the mark and its sentence read left, the thing to DO reads
             right, and the gap between them is what stops the band being one more full-width
             rectangle. Two tracks at 2:1 rather than a Cluster, because Cluster's gap scale stops
-            at 24 and the two halves need a column's worth of air to read as opposed rather than
-            adjacent. One track below md, where the right group left-aligns under the tagline. */}
-        <Layout columns={{ base: 1, md: [2, 1] }} colGap="column" rowGap="gutter">
+            at 24 and the two halves are a split (CLAUDE.md § gap scale, rule 2) — the mark and the
+            action are different kinds of thing, so they take a section's distance. One track below md, where the right group left-aligns under the tagline. */}
+        <Layout columns={{ base: 1, md: [2, 1] }} colGap="section" rowGap="gutter">
           <Layout className={styles.brandIdentity} rowGap="block">
             {/* The mark carries its own name here. Unlike the header's, it is not inside a link,
                 so nothing else announces it. */}
@@ -204,7 +204,7 @@ export function SiteFooter({
         </div>
 
         {/* ── 3 · Newsletter ──────────────────────────────────────────────────────── */}
-        <Layout className={styles.band} columns={[1, 1]} colGap="column" rowGap="stack">
+        <Layout className={styles.band} columns={[1, 1]} colGap="section" rowGap="stack">
           <Layout rowGap="block">
             {/* The label and title nest at tight INSIDE a block stack. Flattening all three to
                 block makes them read as three unrelated lines rather than an eyebrow on a title

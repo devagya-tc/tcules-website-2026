@@ -48,6 +48,9 @@ thing that stops those five reading as one repeated shape is an arrangement, not
 > of this face is ~95 characters, not ~68. That is `--measure-body`'s calibration and it is shared
 > with `CtaSection`, `Callout` and `Proof`; retuning it is a system token decision, out of scope.
 
+
+> **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
+
 ## 1 · Identity
 
 `ContentSection` is **one CMS section as one band**: an optional eyebrow, one optional `h2`, an
@@ -185,7 +188,7 @@ exists for). The specimen's section 9 renders exactly that case.
 | eyebrow → heading | `--gap-tight` (8) | a label and the thing it labels |
 | heading → lead | `--gap-block` (24) | head to body inside a block |
 | head → body (rows) | `--gap-stack` (48) | block to block inside a section — `stacked`, and `beside` below 1024 |
-| head track → body track | `--gap-column` (64) | **new in 2.13.** Two halves that must read as separate. Not `--gap-gutter` (32): that is the seam between peers in a set, and a head is not a peer of its blocks — at 32 the head reads as a narrow first card. |
+| head track → body track | `--gap-section` (96, was `--gap-column` 64 until 1 Oct) | **new in 2.13.** Two halves that must read as separate. Not `--gap-gutter` (32): that is the seam between peers in a set, and a head is not a peer of its blocks — at 32 the head reads as a narrow first card. |
 | block → block | `--gap-stack` (48) | between the blocks in the body |
 
 (b) Component sizes: none of its own. The tracks are `Layout`'s `[1, 2]` fr ratio, so at a 1440 window
@@ -216,7 +219,7 @@ heading's importance. §17 Q1 records the alternative.
 
 ## 9 · Responsive
 
-- **1024 up** (`Layout` `lg`): `beside` splits 1 : 2 with a 64 column seam. `stacked` does not change.
+- **1024 up** (`Layout` `lg`): `beside` splits 1 : 2 with a 96 split seam. `stacked` does not change.
 - **1023 and below**: `beside` is one track, and the head-to-body seam is `--gap-stack` — the same
   `Layout`, the same `rowGap`, the same DOM order as `stacked`. Identical, not similar.
 - Type re-declares at 1023 and 767 through the title roles (`--font-size-h2` → `-t` 34 → `-m` 28);
@@ -235,7 +238,7 @@ caller's column choice, not this component's.
 <Section as={labelled ? 'section' : 'div'} surface={surface} density={density}
          aria-labelledby={labelled ? headingId : undefined}>
   <Layout rowGap="stack"                                  // head → body as rows (48)
-          colGap={split ? 'column' : undefined}           // head track → body track (64)
+          colGap={split ? 'section' : undefined}          // head track → body track (96)
           columns={split ? { lg: [1, 2] } : undefined}    // 1 : 2 from 1024, O2
           align={split ? 'start' : undefined}>            // static, top-aligned head
     {hasHead && (
@@ -318,7 +321,7 @@ animation). Reduced motion: nothing to reduce.
 - **Don't** hand-roll the split: `perl -0pe 's{/\*.*?\*/}{}gs' src/patterns/ContentSection/ContentSection.module.css | grep -nE 'display|grid|flex'` returns nothing.
 - **Don't** give any part a margin: the same grep for `margin` returns nothing.
 - **Don't** make the head sticky: no `position` in the module.
-- **Do** keep the column seam at `column`: `grep -n "colGap" src/patterns/ContentSection/ContentSection.tsx` shows only `'column'`.
+- **Do** keep the split seam at `section`: `grep -n "colGap" src/patterns/ContentSection/ContentSection.tsx` shows only `'section'`.
 - **Don't** pass `className`/`style` to reach `Section` — the props type has neither.
 - **Do** wrap a rich-text block in `ContentSectionText` (2.17): `grep -n "case 'rich-text'" -A6 src/app/*/page.tsx src/app/*/*/page.tsx` shows it in every ContentSection route. **Don't** wrap a card grid, table or figure in it, and **don't** put a `max-width` on Prose instead — the ruling stands.
 - **Do** render the same DOM order in both arrangements — the head precedes the body in the source.

@@ -97,6 +97,60 @@
   box-shadow: var(--lcrd-shadow);
 }
 
+/* ── The tile form (1 Oct 2026) ────────────────────────────────────────────────────
+   One item in a grid track. Everything below is the row's frame turned for a grid, and nothing
+   else: the same rule ink and width, the same type, the same marker and cue.
+
+   The rule OPENS the item. Tiles in a grid row have unequal heights, so their bottoms never line up
+   and only their tops do; a block-start rule is the edge that aligns across the row. The rule-to-
+   content distance is --gap-block, "head to body inside a block": the rule heads the item.
+
+   No inline inset and no block-end inset. The row's 16px inline inset exists to clear its hover
+   ground; a tile has no ground (below), so its copy sits flush with the track and a grid of tiles
+   aligns with the section heading over it. The space after a tile is the grid's rowGap.
+
+   The frame fills the li, and the li fills the grid's stretched cell, so a linked tile's whole cell
+   is the target and the pinned cue can sit at the cell's foot. */
+.tile .frame {
+  block-size: 100%;
+  padding-block: var(--gap-block) 0;
+  padding-inline: 0;
+  border-block-end: none;
+  border-block-start: var(--lcrd-rule-width) solid var(--lcrd-rule-ink);
+}
+
+.tile {
+  block-size: 100%;
+}
+
+.tileInner {
+  block-size: 100%;
+}
+
+/* Above the title there is no baseline to sit on, so the row's optical offset does not apply. Two
+   classes, so it outranks `.number` (later in this file, equal specificity on one class) without
+   depending on source order. */
+.number.numberAbove {
+  padding-block-start: 0;
+}
+
+/* A linked tile has NO hover ground. The row's ground answers a target up to 1240px wide whose only
+   other signal is an 18px arrow at its far end; a tile is a 220–390px column, and a ground flush
+   with copy that has no inset reads as a highlighted paragraph rather than a target. Its signal is
+   the edge it already has: the opening rule takes the link ink, across the whole tile, at the top
+   where the eye enters it. It reads --lcrd-link-ink rather than a rule state token, because the
+   rule has no state of its own — it borrows the cue's colour while the tile is the active target. */
+.root.tile .link:hover,
+.root.tile .link:focus-visible {
+  background-color: transparent;
+  border-block-start-color: var(--lcrd-link-ink);
+}
+
+.root.tile .link:active {
+  background-color: transparent;
+  border-block-start-color: var(--lcrd-link-ink-pressed);
+}
+
 /* The content/cue core is a Cluster child. Its basis is the named xs component minimum; flex-grow
    takes the rest of the row, and min(100%, xs) is what lets it shrink in a parent narrower than
    the minimum without horizontal overflow. This is sizing inside Cluster, not a second layout. */
@@ -226,7 +280,9 @@
 .root .link {
   color: inherit;
   text-decoration: none;
-  transition: background-color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
+  transition:
+    background-color var(--lcrd-transition-duration) var(--lcrd-transition-easing),
+    border-color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
 }
 
 /* The hover affordance, and the reason it is a ground: the target is the whole row — up to 1240px wide

@@ -70,6 +70,12 @@ export type ContentSectionProps = {
    * Head above the blocks (`stacked`, the default) or beside them from 1024 up (`beside`). See
    * `ContentSectionArrangement`.
    *
+   * `beside` is for a body that READS DOWN — a list of rows, an accordion, a record sheet — so the
+   * head labels one long column. It is wrong for a body that reads ACROSS, a set of peer cards or
+   * tiles (1 Oct 2026, owner, on "Go deeper"): the head becomes one more column of the row, the
+   * squint reads three equal blocks where there is one heading and two cards, and the cards take
+   * their width from the two-thirds track instead of the page's grid. A set goes `stacked`.
+   *
    * `beside` needs both halves to mean anything, so it degrades rather than drawing an empty
    * track: with no head group the blocks take the full column, and with no blocks the head takes
    * the full column — in both cases the band renders exactly as `stacked` would. A one-third track
@@ -148,7 +154,7 @@ export function ContentSectionText({ children }: ContentSectionTextProps) {
  *
  * TWO ARRANGEMENTS of the same three beats. `stacked` puts the head group above the blocks;
  * `beside` (ruling O2) puts it in a one-third leading track from 1024 up, static, with the blocks in
- * the two-thirds track beside it, 64 apart. It is the arrangement that breaks the "heading +
+ * the two-thirds track beside it, 96 apart. It is the arrangement that breaks the "heading +
  * paragraph + three cards" silhouette a long page otherwise repeats, and it needs no new component
  * and no new token: it is one Layout's props.
  *
@@ -190,10 +196,10 @@ export function ContentSection({
             rowGap  stack (48)   head group → body when the two are rows: always under `stacked`,
                                  and under `beside` below 1024, which is what makes the collapse
                                  identical to `stacked` rather than merely similar.
-            colGap  column (64)  head track → body track under `beside`. Not gutter (32): that is
-                                 the seam between peers in a set, and a head and its blocks are not
-                                 peers. These are two halves that must read as separate, which is
-                                 the step the scale names for exactly that.
+            colGap  section (96) head track → body track under `beside`. A head and its blocks
+                                 are not peers, so neither gutter (32, cards in a set) nor column
+                                 (64, peer halves) — they are a split, two kinds of thing sharing a
+                                 row (CLAUDE.md § gap scale, rule 2).
             columns {lg: [1,2]}  1 : 2 from 1024 up (O2), one track below. Undefined when not
                                  split, so the stacked band renders the Layout it always did.
             align   start        the head is STATIC (O2): it sits at the top of its track and
@@ -202,7 +208,7 @@ export function ContentSection({
                                  a rail it is not. */}
       <Layout
         rowGap="stack"
-        colGap={split ? 'column' : undefined}
+        colGap={split ? 'section' : undefined}
         columns={split ? { lg: [1, 2] } : undefined}
         align={split ? 'start' : undefined}
       >

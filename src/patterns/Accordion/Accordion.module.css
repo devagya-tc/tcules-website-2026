@@ -32,9 +32,14 @@
    token aliasing `--z-base`; both were inert, and the token was a second name for one primitive of
    the kind CLAUDE.md deletes. Breadcrumbs and Figure had already answered this the same way.
 
-   No height, max-height or transform animation on the answer. `<details>` has no animatable
-   intrinsic size, and faking one costs the native behaviour this component exists to keep. The
-   mark still does not rotate: both chevrons are in the DOM and `[open]` picks which one shows.
+   The answer opens and closes with motion (1 Oct 2026, owner: "so it doesn't feel so jumpy"), and
+   without giving up the native element. The original ruling — no height animation, because
+   `<details>` had no animatable intrinsic size and faking one (JS measurement, max-height guesses)
+   costs the native behaviour — was right when it was written. CSS has since grown the two pieces
+   that make it native: `::details-content`, the box the UA wraps around everything after the
+   summary, and `interpolate-size: allow-keywords`, which lets `block-size` transition to `auto`.
+   Where either is unsupported the answer appears at once, exactly as before: progressive, not
+   polyfilled. The mark still does not rotate: both chevrons are in the DOM and `[open]` picks.
 
    ── Rule order is load-bearing ──────────────────────────────────────────────────
    `.trigger:hover`/`:focus-visible`/`.item[open]`, then `:active`. All of the state selectors
@@ -59,10 +64,32 @@
   box-shadow: var(--acc-shadow);
 }
 
-/* No transition and no [open] rule: the ink of this border never moves, in any state. */
+/* No transition and no [open] rule on the border: its ink never moves, in any state.
+   `interpolate-size` is set here rather than on :root so the permission to animate to `auto` is
+   this component's decision, not a page-wide one. */
 .item {
   min-inline-size: 0;
   border-block-end: var(--acc-rule-width) solid var(--acc-rule-ink);
+  interpolate-size: allow-keywords;
+}
+
+/* The answer's box. Closed it is zero tall and clipped; open it is its own height. The block size
+   eases between the two, the content fades with it, and content-visibility is transitioned as a
+   discrete property so the closing answer stays painted until the height has finished — without
+   `allow-discrete` it would vanish on the first frame and only the empty box would close. */
+.item::details-content {
+  block-size: 0;
+  overflow: clip;
+  opacity: 0;
+  transition:
+    block-size var(--acc-reveal-duration) var(--acc-transition-easing),
+    opacity var(--acc-reveal-duration) var(--acc-transition-easing),
+    content-visibility var(--acc-reveal-duration) allow-discrete;
+}
+
+.item[open]::details-content {
+  block-size: auto;
+  opacity: 1;
 }
 
 .trigger {
@@ -76,6 +103,9 @@
      void element. See .design-sync/NOTES.md. */
   padding-block: var(--gap-block);
   cursor: pointer;
+  /* The open state tightens the inset under the question (below); easing it with the answer's
+     height keeps the two from arriving at different times, which read as a second, smaller jump. */
+  transition: padding-block-end var(--acc-reveal-duration) var(--acc-transition-easing);
   /* Three rules for one marker, because the engines disagree about which handle exists.
      `list-style` is the standard removal and is what current Chromium and Firefox honour;
      ::-webkit-details-marker is the legacy WebKit pseudo-element that predates it and is the only
@@ -216,7 +246,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .question,
-  .mark {
+  .mark,
+  .trigger,
+  .item::details-content {
     transition-duration: var(--duration-instant);
   }
 }

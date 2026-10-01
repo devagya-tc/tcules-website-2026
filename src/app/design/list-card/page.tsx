@@ -155,6 +155,29 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
 ] as const;
 
+const TILES_ICON = [
+  { title: 'Sales', body: 'Sees an ageing product.', marker: { type: 'icon', name: 'graph-up' } },
+  { title: 'Support', body: 'Sees recurring exceptions.', marker: { type: 'icon', name: 'chat-round-dots' } },
+  {
+    title: 'Engineering',
+    body: 'Sees dependencies that make every change expensive.',
+    marker: { type: 'icon', name: 'code' },
+  },
+  {
+    title: 'A polished AI interaction',
+    body: 'May be hiding what the model used, what it changed, and who is accountable when it is wrong.',
+    marker: { type: 'icon', name: 'users-group-rounded' },
+  },
+] as const satisfies readonly { title: string; body: string; marker: ListCardMarker }[];
+
+const TILES_STEPS = [
+  { title: 'Read the real work', body: 'What triggers the change, who decides, who is affected.' },
+  { title: 'Settle the product model', body: 'The job, dependency, owner and committed date.' },
+  { title: 'Design the behaviour', body: 'Preview affected work before confirming.' },
+  { title: 'Test the risky scenario', body: 'Conflicting jobs, limited permissions, partial updates.' },
+  { title: 'Keep the rule in the build', body: 'States, responses and history use the same rule.' },
+] as const;
+
 const NESTED_SURFACE_TOKENS = {
   tint: [
     ['--lcrd-title-ink', '--color-neutral-900'],
@@ -373,6 +396,61 @@ export default function ListCardSpecimenPage() {
                   ))}
                 </Layout>
               </div>
+            </Layout>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>1b · Tile form</h2>
+            <p>
+              <code>form=&quot;tile&quot;</code> is the item in a grid track. The rule opens the
+              item instead of closing it, because tiles in a grid row only line up at the top; the
+              marker stands above the title; the copy sits flush with the track, so the grid
+              aligns with the heading over it; title and body always stack. A linked tile has no
+              hover ground: its opening rule takes the link ink, and the cue sits at the foot,
+              pinned so every cue in the row shares a line.
+            </p>
+          </Layout>
+          <Specimen title="icon tiles · four tracks" note="Signals: a thing a reader can see, then what it may mean">
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
+              {TILES_ICON.map((tile) => (
+                <ListCard key={tile.title} form="tile" titleAs="h3" {...tile} />
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen title="number tiles · five tracks, ordered" note="A method: the <ol> carries the order">
+            <Layout as="ol" columns={{ base: 1, md: 2, lg: 5 }} colGap="gutter" rowGap="stack">
+              {TILES_STEPS.map((tile, index) => (
+                <ListCard
+                  key={tile.title}
+                  form="tile"
+                  titleAs="h3"
+                  marker={{ type: 'number', value: index + 1 }}
+                  {...tile}
+                />
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen title="linked tiles · three tracks, unequal bodies" note="Cues pinned to the foot">
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="stack">
+              {LINKED.slice(0, 3).map((row) => (
+                <ListCard key={row.title} form="tile" {...row} />
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen title="title only · rows and tiles" note="body is optional: no paragraph, no seam">
+            <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
+              <Layout as="ul" rowGap="none">
+                <ListCard title="Realistic access to the product" marker={{ type: 'icon', name: 'check-circle' }} />
+                <ListCard title="Time with people who understand the system" marker={{ type: 'icon', name: 'check-circle' }} />
+              </Layout>
+              <Layout as="ul" columns={2} colGap="gutter" rowGap="stack">
+                <ListCard form="tile" title="Product model" marker={{ type: 'icon', name: 'widget' }} />
+                <ListCard form="tile" title="Research record" marker={{ type: 'icon', name: 'document-text' }} />
+              </Layout>
             </Layout>
           </Specimen>
         </Layout>
