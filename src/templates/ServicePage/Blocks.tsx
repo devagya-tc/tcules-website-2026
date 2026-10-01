@@ -1,4 +1,4 @@
-import { Button, Cluster, Icon, Layout } from '@/components';
+import { Cluster, Icon, Layout } from '@/components';
 import {
   Accordion,
   BlockCard,
