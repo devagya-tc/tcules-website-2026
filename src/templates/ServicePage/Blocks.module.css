@@ -70,21 +70,6 @@
   max-inline-size: var(--measure-lead);
 }
 
-/* ── Nudge ────────────────────────────────────────────────────────────────────── */
-.nudgeQuestion {
-  max-inline-size: var(--measure-title);
-  font: var(--text-h3);
-  letter-spacing: var(--text-h3-tracking);
-  text-wrap: var(--text-title-wrap);
-  color: var(--svc-ink);
-}
-
-.nudgeBody {
-  font: var(--text-lead);
-  text-wrap: var(--text-running-wrap);
-  color: var(--svc-ink-muted);
-}
-
 /* ── Slot (review mode only) ──────────────────────────────────────────────────── */
 .slot {
   border: var(--border-width-1) dashed var(--svc-slot-edge);

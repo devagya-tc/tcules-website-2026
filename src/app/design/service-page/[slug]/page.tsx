@@ -54,15 +54,19 @@ export default async function ServicePageSpecimen({
 
   const resolved: ServiceStory = {
     ...story,
-    sections: story.sections.map((section) => ({
-      ...section,
-      blocks: section.blocks.map((block) => {
-        if (block.kind === 'cases') return { ...block, items: block.items.map(resolve) };
-        if (block.kind === 'proof' && block.case)
-          return { ...block, case: resolve(block.case) };
-        return block;
-      }),
-    })),
+    sections: story.sections.map((section) =>
+      section.type === 'offer'
+        ? section
+        : {
+            ...section,
+            blocks: section.blocks.map((block) => {
+              if (block.kind === 'cases') return { ...block, items: block.items.map(resolve) };
+              if (block.kind === 'proof' && block.case)
+                return { ...block, case: resolve(block.case) };
+              return block;
+            }),
+          },
+    ),
   };
 
   return (

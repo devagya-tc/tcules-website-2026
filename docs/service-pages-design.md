@@ -82,6 +82,14 @@ Eighth batch, same day:
 | "Organised by layer" should be sparser | Four-fifths built read as "nearly done" — the opposite of the point | Each layer about half built, on different paths (a diagonal stagger): busy everywhere, finished nowhere. Note rewritten |
 | Mid-page "A workflow that keeps…" | **It read as a divider:** hairlines above and below are the system's section break, the ask was at h5 (quieter than the steps), and the button floated alone. And it sat between the steps and the image of their decision | No rules; the condition at h3, what to do under it, and two ways in — Start a project and the UX Product Audit — beside it (`nudge.question`, `nudge.secondary`). It closes the section, after the illustration slot |
 
+Ninth batch, same day:
+
+| Note | Underlying issue | Fix |
+|---|---|---|
+| Mid-page ask: paper-deep? Buttons stacked; standard structure, right half empty | **The template invented an ask beside the one the system already has.** CtaSection's `offer` arrangement is specced as "the mid-page offer"; `nudge` duplicated it inside a content section, so it never got the band, the ground or the structure | The ask is its own band: a `StoryOffer` section rendered as CtaSection `offer` on tint — eyebrow, heading, line, a three-point strip of what the reader gets (which fills the width, so no empty right half), then the actions under it. `nudge` is deleted. Tint is earned: the page's rule gives it to its asks |
+
+**NEW COPY:** the offer's eyebrow ("Recognise the workflow?") and its three points (the workflow walked through · the rules it depends on · what to design first).
+
 **Copy re-cut in this pass:** Product Design's four signal bodies take back "May be" (it was the template's key, now the body's first words). Router conditions that had a separate `settles` line now carry it as a second sentence ("It settles scope, authority, ownership and investment."), on Modernisation and Design Systems.
 
 **Still bespoke, and next in line for the same question:** `fit` and `contrast` (lists of sentences, no titles), `stat`, `nudge`, and the seven diagrams. The diagrams are drawings and probably earn their place. The four text blocks should be checked against Prose lists, Proof figures and CtaSection before they're kept.

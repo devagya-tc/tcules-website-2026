@@ -33,7 +33,8 @@ export type ServicePageProps = {
  *      image — ch05 §1 and visual-assets-plan § The mapping.
  *   2. Every section is a ContentSection, and every block inside it is a named job with its own
  *      shape (Blocks.tsx, Diagrams.tsx). Variety comes from the ARRANGEMENT of those jobs, never
- *      from the ground: paper throughout, tint earned by the proof band and the close.
+ *      from the ground: paper throughout, tint earned by the proof band and the page's asks — a mid-page
+ *      offer band (CtaSection `offer`, a `StoryOffer` section) and the close.
  *   3. It closes on the ask as a form, not as a paragraph. The CMS close was heading, text and a
  *      disclaimer with nothing to act on.
  */
@@ -79,24 +80,37 @@ export function ServicePage({
         ) : null}
       </PageHero>
 
-      {sections.map((section) => (
-        <ContentSection
-          key={section.id}
-          heading={section.heading}
-          headingId={section.id}
-          eyebrow={section.eyebrow}
-          lead={section.lead}
-          surface={section.surface ?? 'paper'}
-          density={section.density}
-          arrangement={section.arrangement}
-        >
-          {section.blocks.map((block, index) => (
-            <Fragment key={`${section.id}-${index}`}>
-              <StoryBlockView block={block} slots={slots} />
-            </Fragment>
-          ))}
-        </ContentSection>
-      ))}
+      {sections.map((section) =>
+        section.type === 'offer' ? (
+          <CtaSection
+            key={section.id}
+            arrangement="offer"
+            surface="tint"
+            eyebrow={section.eyebrow}
+            heading={section.heading}
+            body={[section.body]}
+            points={section.points}
+            actions={section.actions}
+          />
+        ) : (
+          <ContentSection
+            key={section.id}
+            heading={section.heading}
+            headingId={section.id}
+            eyebrow={section.eyebrow}
+            lead={section.lead}
+            surface={section.surface ?? 'paper'}
+            density={section.density}
+            arrangement={section.arrangement}
+          >
+            {section.blocks.map((block, index) => (
+              <Fragment key={`${section.id}-${index}`}>
+                <StoryBlockView block={block} slots={slots} />
+              </Fragment>
+            ))}
+          </ContentSection>
+        ),
+      )}
 
       <div id="enquiry">
         <CtaSection

@@ -232,17 +232,6 @@ export type StoryBlock =
   | { kind: 'faq'; items: readonly { question: string; answerHtml: string }[] }
   /** A quiet boundary on the claim before it (Callout). */
   | { kind: 'note'; label?: string; html: string }
-  /** A one-line ask inside a section, where the argument has just earned it. Not a band. */
-  | {
-      kind: 'nudge';
-      /** The condition, as the reader would say it — set at heading scale. */
-      question: string;
-      /** What to do about it, one line. */
-      body: string;
-      action: StoryLink;
-      /** The softer way in, for a reader not ready for the main action. */
-      secondary?: StoryLink;
-    }
   /** Where to read further: articles, definitions, tools. Placed once, near the end of the page. */
   | {
       kind: 'resources';
@@ -257,7 +246,6 @@ export type StoryBlock =
   /** An image that should exist here. Invisible unless the page is in review mode. */
   | { kind: 'slot'; slot: StorySlot };
 
-
 export type StorySection = {
   type: 'section';
   id: string;
@@ -268,6 +256,22 @@ export type StorySection = {
   surface?: 'paper' | 'tint';
   density?: 'tight' | 'open';
   blocks: readonly StoryBlock[];
+};
+
+/**
+ * The mid-page ask, as its own band: CtaSection's `offer` arrangement on tint (1 Oct 2026). It was a
+ * `nudge` block inside the section before it — a template-made ask beside a pattern that already
+ * existed for exactly this job ("the mid-page offer"). The points are what the reader gets from
+ * taking it; they fill the band's width as a strip, so the right half is never left empty.
+ */
+export type StoryOffer = {
+  type: 'offer';
+  id: string;
+  eyebrow?: string;
+  heading: string;
+  body: string;
+  points?: readonly { label: string; detail?: string }[];
+  actions: readonly [StoryLink] | readonly [StoryLink, StoryLink];
 };
 
 export type ServiceStory = {
@@ -283,7 +287,7 @@ export type ServiceStory = {
     illustration: { src: string; width: number; height: number };
     tags?: readonly string[];
   };
-  sections: readonly StorySection[];
+  sections: readonly (StorySection | StoryOffer)[];
   close: {
     heading: string;
     body: string;
