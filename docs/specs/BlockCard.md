@@ -556,7 +556,7 @@ orientations; everything below it is identical.
 The vertical grid tile:
 
 ```jsx
-<Layout as="ul" columns={{ base: 1, md: 2, xl: 4 }} colGap="gutter" rowGap="gutter" equalRows>
+<Layout as="ul" columns={{ base: 1, md: 2, xl: 4 }} colGap="gutter" rowGap="column" equalRows>
   <li>
     <Frame as={href ? 'a' : 'div'} data-btn-link-group={href ? true : undefined}>
       <Layout rowGap="block">
