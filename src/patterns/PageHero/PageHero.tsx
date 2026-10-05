@@ -171,15 +171,16 @@ export type PageHeroProps = {
    */
   body: readonly [string, ...string[]];
   /**
-   * A category or format the trail cannot say (`Fintech · Platform rebuild`, `Ep 12 · 48 min`).
-   * Never a crumb's words, and that includes the format a parent crumb already names: `Case study`
-   * under Home / Case studies is the crumb read twice.
+   * A category or format the trail cannot say (`Fintech · Platform rebuild`, `Ep 12 · 48 min`,
+   * `Case study · Fintech`). Never a crumb's words: a name the trail says ("Product Design
+   * specialist" under "… / Product design"), or a section crumb on its own (`Case study` under
+   * Home / Case studies is the crumb read twice; `Case study · Fintech` adds what it cannot).
    *
    * That rule leads for the design agent's `.prompt.md`. Since the trail moved inside the hero
    * (kit `fdn-top`, 5 Oct 2026), an eyebrow that repeats a crumb stands 32px under the trail that
-   * already said it; PageHero warns in development when it says any of `trail.labels` as a
-   * whole-word phrase ("Product Design specialist" under "Product design"), by the same comparison
-   * `eyebrowBesideTrail` uses (`repeatsTrail`, `@/lib/trail`).
+   * already said it; PageHero warns in development when it says a named crumb as a whole-word
+   * phrase ("Product Design specialist" under "Product design") or equals a structural one
+   * ("Services"), by the same comparison `eyebrowBesideTrail` uses (`repeatsTrail`, `@/lib/trail`).
    * Uppercased by the stylesheet, not by the data, so the frontmatter keeps its authored casing.
    *
    * A slot, not a variant: absent renders no element and no seam, which is why there is no
@@ -445,10 +446,12 @@ export function PageHero({
 
        eyebrow  owner, 5 Oct 2026: the hero eyebrow never repeats the crumb — any crumb, since a
                 format eyebrow ("Audits") repeats a parent as surely as a name repeats the leaf.
+                A crumb that names something is repeated by being said; the site's structure
+                ("Home", a section index, `trail.structural`) only by being equalled.
        title    the last crumb names the page only when the h1 does not. `heroTrail` drops a leaf
                 that repeats the title, so this fires only on a trail built by hand. */
   if (process.env.NODE_ENV !== 'production' && trail !== undefined) {
-    if (eyebrow !== undefined && repeatsTrail(eyebrow, trail.labels)) {
+    if (eyebrow !== undefined && repeatsTrail(eyebrow, trail.labels, trail.structural)) {
       console.warn(
         `PageHero: eyebrow "${eyebrow}" repeats a crumb in the trail. Drop it, or replace it ` +
           `with a category or format the trail cannot say (for example "Fintech · Platform rebuild").`,

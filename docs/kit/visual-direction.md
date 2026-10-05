@@ -421,6 +421,12 @@ of the hero proposal, with the split kept at **[1, 1]** (ruling H2).
   - a photograph is top-aligned, at a ratio chosen so its height matches the copy (§ 2.5).
 - `eyebrow?` stays, for heroes where it adds what the trail cannot (`Podcast · Ep 12`,
   `Case study · Fintech`).
+  - *Built 6 Oct 2026 (`fdn-top`):* "repeats" is decided in `src/lib/trail.ts`. An eyebrow repeats a
+    crumb that names something when it says that crumb's words ("Product Design specialist" under
+    "Product design"). It repeats a section crumb ("Home", "Services", "Case studies") only when it
+    equals it. So both models above stand, and a bare "Case study" under Home / Case studies does not.
+    The warning compares with every crumb in `trail.labels`, not `trail.current`; see
+    `docs/specs/PageHero.md` items 1 and 2.
 - `texture?: ReactNode` (`fdn-texture`): only on a hero with no media or with a photograph, never with an
   illustration.
 

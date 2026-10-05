@@ -151,8 +151,8 @@ phone it wraps. A top-level page whose h1 is its name gets no trail at all.
 `PageHero` — **the opening of a page, and the component that owns its `h1`.** `title` (a string),
 `body` (one to six paragraph strings, the first of which renders as the lead), plus four optional
 slots: `trail` (the Breadcrumbs, above everything), `eyebrow` (a category or format label above
-the title — never the page's own name and never any crumb's words, so not "Case study" under
-Home / Case studies: the trail already says them), `credits` (role groups — `author`, `host`,
+the title — never the page's own name or a named crumb's words, and never a section crumb on its
+own: "Case study · Fintech" under Home / Case studies, not "Case study"), `credits` (role groups — `author`, `host`,
 `guest`, `reviewer` — each with its own `people`), `dates` (`published`, optional `modified`), and
 `actions` (nought, one or two `{ label, href }`; the first renders solid, the second a neutral link).
 `children` is a free slot between the byline and the actions. And `surface`, because this one
