@@ -8,6 +8,7 @@ import {
   ListCard,
   ProcessFlow,
   Proof,
+  type ListCardForm,
   type ListCardSize,
 } from '@/patterns';
 import type { StoryBlock, StoryCase, StorySlot } from '@/lib/service-story';
@@ -39,7 +40,7 @@ type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
    rows keeps `md` (h4 over body). Card titles sit at least two rungs under the band's h2. */
 const SMALL_SET_FROM = 4;
 
-function setSize(count: number, form: 'row' | 'tile'): ListCardSize {
+function setSize(count: number, form: ListCardForm): ListCardSize {
   return form === 'tile' || count >= SMALL_SET_FROM ? 'sm' : 'md';
 }
 

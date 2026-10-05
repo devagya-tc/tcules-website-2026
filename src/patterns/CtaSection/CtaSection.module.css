@@ -2,7 +2,8 @@
 
    This file owns TYPE AND INK, and nothing else. `Section` paints the band and owns the content
    column; `Layout` and `Cluster` own every seam and every arrangement; `Button` owns every
-   interactive value. Seven rules, seven parts that carry colour or type, and no fourth thing.
+   interactive value. Seven parts that carry colour or type, plus one sizing rule for the point's
+   copy column (`.pointContent`), and no fourth thing.
 
    Every value it reads is a `var(--cta-*)` declared in tokens/components/cta-section.css, which
    re-declares the five inks once per surface. So the same markup answers paper, tint, an ink band
@@ -16,13 +17,14 @@
    the spec's §14 names the grep that proves it.
 
    No `display: grid` and no `display: flex`. All three arrangements are `Layout` and `Cluster` in
-   the TSX — the two-column split, the 3-up points row in `open`, the 2- and 3-up points grid in `offer`, and each point's
-   two-track marker-and-label row.
-   There is nothing left for a local grid to do.
+   the TSX — the two-column split, the 3-up points row in `open`, the 2- and 3-up points grid in
+   `offer`, and each point's marker-and-label row, a nowrap baseline `Cluster` (30 Sep 2026; it was a
+   two-track `Layout`). There is nothing left for a local grid to do.
 
-   No margin, no padding, no reach into `--space-*`. The one optical correction available — the
-   40px mono numeral in `marker` and the 22px serif label beside it share a top edge rather than a
-   baseline — is declined in the spec's §7(c) rather than taken.
+   No margin, no padding, no reach into `--space-*`. The ~20px `--text-index` numeral in `marker`
+   sits on the label's first baseline because the row's `Cluster` is `align="baseline"`, so no
+   optical correction is needed. (The 40px stat numeral it replaced shared a top edge with the label,
+   and the spec's §7(c) declined to correct that.)
 
    No `@media`, no `transition`, no `transform`, no `animation`, no `opacity`. There are no states
    to interpolate between: nothing here responds to a pointer and nothing opens. The only stateful
@@ -40,14 +42,16 @@
    the spec's own acceptance check, so the discriminator was there to be used.
 
    ── Rule order is not load-bearing ─────────────────────────────────────────────
-   One shared wrapping rule, then seven part rules with distinct selectors, no shared property
-   between any two and no state pair decided by source order. A consequence of having no states. */
+   One shared wrapping rule, then the part rules with distinct selectors and no state pair decided
+   by source order — a consequence of having no states. Parts may share a property (`.lead` and
+   `.body` both set a measure, an ink and a wrap); no two rules set the same property on the same
+   element, so their order cannot matter. */
 
 /* ── Every text part breaks inside a word ───────────────────────────────────────
    Six parts, one rule. A 60-character unbroken token in an `h2` is a content fault and should look
    like one, but it must not take the page's layout with it — the band never produces a horizontal
    scrollbar, at any width, for any content. `anywhere` rather than `break-word` because these
-   parts sit in narrow tracks (the 470px form column, the 3-up points row) where a token can be
+   parts sit in narrow tracks (the ~458px form column, the 3-up points row) where a token can be
    wider than its track while still being narrower than the band.
 
    A `Button` label is deliberately NOT in this list. It is typed `string`, it never wraps and
@@ -133,6 +137,9 @@
   text-transform: var(--text-mono-case);
 }
 
+/* Sizing one flex item, not arranging siblings: the point's copy column grows from a zero basis
+   beside the fixed two-digit marker, and `min-inline-size: 0` lets a long label wrap inside it
+   instead of pushing the nowrap row past its track. The same idiom as ListCard's `.content`. */
 .pointContent {
   flex: 1 1 0;
   min-inline-size: 0;

@@ -20,8 +20,11 @@
 > 1. **S3 — title → body is `text` (16), not `tight` (8)**, in the stacked row, the wrapped split
 >    (the Cluster's `rowGap`) and the tile. Ink gap after: ~25 → ~33. It puts ListCard and BlockCard
 >    on one card rhythm (BlockCard's S2).
-> 2. **A `size` prop: `'md' | 'sm'`**, default `md` — the title and body roles together, a component
->    size and so a t-shirt name. A row cannot see its siblings, so the composing route passes it.
+> 2. **A `size` prop: `'md' | 'sm'`** — the title and body roles together, a component size and so a
+>    t-shirt name. A row cannot see its siblings, so the composing route passes it. **The default
+>    follows the form:** `md` for `form="row"`, `sm` for `form="tile"`, so the rule that every tile
+>    takes `sm` holds without a call site remembering it. A row set of four or more still passes
+>    `sm`, because only the route can count.
 >
 >    | Size | Title | Body | Ordinal offset | Set |
 >    |---|---|---|---|---|
@@ -113,7 +116,7 @@ element and the `--gap-block` seam beside it.
 | `form`        | `'row' \| 'tile'` | `'row'` | 1 Oct 2026. `row`: a row of a one-column list, rule at block-end, marker beside. `tile`: an item in a grid track, rule at block-start, marker above, always stacked, flush — `arrangement` is `never` with it. See Amendment · 1 Oct 2026 |
 | `arrangement` | `'split' \| 'stacked'`                                                                                                     | `'split'` | Whether title and body are two tracks from `md`, or one stack at every width       |
 | `titleAs`     | `'span' \| 'h3' \| 'h4'`                                                                                                   | `'span'`  | Heading semantics only; visual type does not change                                |
-| `size`        | `'md' \| 'sm'`                                                                                                             | `'md'`    | 5 Oct 2026. The type step, passed by the set: `sm` for four rows or more, and tiles. See Amendment · 5 Oct 2026 |
+| `size`        | `'md' \| 'sm'`                                                                                                             | `'md'` on a row, `'sm'` on a tile | 5 Oct 2026. The type step, passed by the set: `sm` for four rows or more, and every tile. See Amendment · 5 Oct 2026 |
 | `href`        | `string`                                                                                                                   | absent    | A non-blank value makes the whole frame one anchor and causes the cue to render    |
 | `external`    | `boolean`                                                                                                                  | `false`   | The destination leaves tcules.com: new tab, the "leaves the site" cue glyph and the hidden new-tab hint. Ignored without a destination |
 
@@ -140,8 +143,10 @@ Deliberately not props:
 - `finish`, `filled`, `selected` and `active`: only ruled ships; no selected content need exists.
 - `cue`, `cueIcon` and `cueLabel`: `href` is the single source of truth, and `arrow-right` is one
   system decision.
-- `size`, density, padding, gap, radius, height and width: one row size and one rhythm prevent a
-  12-row list becoming twelve individually tuned objects.
+- density, padding, gap, radius, height and width: one rhythm prevents a 12-row list becoming
+  twelve individually tuned objects. `size` is the exception, and a narrow one (5 Oct 2026): it
+  steps the title and body roles only, `md | sm`, and is set once per set by the route, so a list
+  still has one size, never twelve.
 - `className`, `style` and arbitrary DOM attributes: they would reopen colour, distance and box
   geometry from the call site.
 - `children`: the closed strings prevent a second heading, nested action or rich-text flow from
@@ -162,7 +167,7 @@ Compile errors, not review comments:
 
 ## 4 · Variants × sizes
 
-| Arrangement | `md` — the only size                                                                            | Intended use                                                                                     |
+| Arrangement | At either size (`md` or `sm`, 5 Oct 2026)                                                       | Intended use                                                                                     |
 | ----------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | `split`     | Title takes two fractional tracks and body three from `md`; they collapse to one track below it | The 21 title-left / body-right sections; default because it is the highest-volume arrangement    |
 | `stacked`   | Title above body at every width                                                                 | The 11 title-plus-body sections and sequences whose lead-in must remain attached to its sentence |
@@ -365,10 +370,10 @@ The component does not receive a `surface` prop and never paints the panel groun
 
 ### (b) Component sizes
 
-- `md` row: the only size; it has no fixed height and fills the available inline size. A title-only
-  linked row measures about 98px high: one h4 line at 33.6px plus two `--gap-gutter` insets, so the
-  whole-row target clears 44px with room to spare and needs no hit extension. It was ~56px at the h5
-  title and the `--gap-text` inset.
+- A row, at either size, has no fixed height and fills the available inline size. A title-only
+  linked `md` row measures about 98px high: one h4 line at 33.6px plus two `--gap-gutter` insets; an
+  `sm` row about 92px (one h5 line at 28.2px plus the same insets). Both clear 44px with room to
+  spare and need no hit extension. It was ~56px at the h5 title and the old `--gap-text` inset.
 - `xs` content core minimum: `--lcrd-content-min-xs` is 192px, measured against Layout's existing
   `xs` track. It keeps a number or 24px icon beside readable copy and causes the larger thumbnail to
   wrap above the core before the copy collapses. Since the inline inset arrived, a 192px *track* hands the row 160px of content, which is below that
@@ -416,9 +421,10 @@ is what actually sits the numeral on the title's baseline when looked at. **An o
 measured, not derived** — a value computed from nominal metrics and never checked against a render is
 not an optical correction, it is a guess with arithmetic attached.
 
-The value is a function of **both** type roles, which is the thing to remember about it: 8px against
-a 13px number, 2px against an h5 title, 6px now. Change either role and recompute it in the same
-edit.
+The value is a function of **both** type roles, which is the thing to remember about it. It was 8px
+against the old 13px number; against the 20px number it is now **4 at `md` (h4) and 0 at `sm` (h5)**,
+both measured in the browser on 5 Oct 2026 (at `sm`, 2 put the numeral 2px low). Change the number's
+role or either title role and re-measure both values in the same edit.
 
 `align="baseline"` on that `Cluster` is the typographically correct relationship and cannot be used:
 the same marker slot holds a 160px thumbnail whose baseline is its bottom edge, so baseline-aligning
@@ -659,8 +665,8 @@ query in the same change.
    inspect the target overlay.
 5. Render identical ListCard markup on all four surface bands and inspect resolved `--lcrd-*`
    values rather than passing a surface prop.
-6. Use `titleAs` to match the page outline while preserving h4 visual type; compare the heading map
-   with the computed type token.
+6. Use `titleAs` to match the page outline while preserving the visual type `size` sets (h4 at
+   `md`, h5 at `sm`); compare the heading map with the computed type token.
 7. Prove the title's ink does not depend on `href`: render the same row linked and static side by
    side and expect both computed title colours to be `--lcrd-title-ink`.
 
@@ -682,7 +688,8 @@ query in the same change.
 14. Do not change a gap or type role in a component breakpoint; compare the responsive rules with
     sections 8 and 9.
 15. Do not clamp titles/bodies or hide rows after 12; the 24-row specimen must expose all content.
-16. Do not add `surface`, `size`, `finish`, `cue`, `className` or `style` to the public props; type
+16. Do not add `surface`, `finish`, `cue`, `className` or `style` to the public props, and do not
+    widen `size` past `'md' | 'sm'` (5 Oct 2026: `size` is public, and there is no `lg`); type
     checking an attempted call must fail.
 17. Do not introduce a second marker slot or branch into marker-specific row components; inspect
     the public export and expect one `ListCard` and one `marker` prop.
@@ -691,8 +698,10 @@ query in the same change.
 
 The exact block list, in order:
 
-1. **Arrangement × size matrix.** Two cells: `split × md` and `stacked × md`, with identical term
-   and definition copy. A note states there is no size prop.
+1. **Arrangement × size matrix.** Four cells: `split × md`, `stacked × md`, `split × sm` and
+   `stacked × sm`, with identical term and definition copy, then numbered rows at `md` and `sm`
+   side by side to prove the ordinal's baseline offset at each step (5 Oct 2026). The note states
+   that the composing route passes the step, that `md` is a row's default and `sm` a tile's.
 2. **Marker fill ladder.** Four rows in one list: number, icon, thumbnail and omitted marker. Label
    them as fills of one slot, not variants.
 3. **Content-shape set.** A 5-row numbered sequence, a 5-row term list and a 3-row linked set. Use
@@ -938,9 +947,9 @@ NAMES
     must be regenerated and pushed — section 16 says so.
 [x] Named glyphs are existing: arrow-right, arrow-left, square-arrow-right-up (2.11), arrow-right-up (2.17), and the IconName union.
 [x] Section, Layout and Cluster props/values are existing unions: as, rowGap, colGap, columns,
-    align, nowrap; none, tight, block, column, start; base, md; ol, ul, li.
+    align, nowrap; none, text, block, column, start; base, md; ol, ul, li (`tight` became `text` 5 Oct, S3).
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS rule blocks or media-query blocks.
-[x] Tracking companions are used only with h4 and index, both of which have one. The marker moved
+[x] Tracking companions are used only with h4, h5 (`sm`, 5 Oct 2026) and index, each of which has one. The marker moved
     off stat on 25 Aug 2026; size and tracking moved together, and --text-index borrows ui's 0.08em
     rather than declaring a third correction.
 [x] Every layout distance is a gap-scale role.
@@ -994,7 +1003,7 @@ COMPLETENESS
 [x] All thirteen required content edge cases are answered.
 [x] The unsized-parent row names the 192px core minimum and explains why the root has no hard floor.
 [x] Do's and Don'ts name a rendered-tree, type-check, search or computed-style decision.
-[x] Specimen plan covers 2 arrangements × 1 size, all four surfaces, manual states, nested surfaces,
+[x] Specimen plan covers 2 arrangements × 2 sizes (5 Oct 2026), all four surfaces, manual states, nested surfaces,
     every edge case, adjacent rows and narrow tracks.
 [x] Section 16 asks for nothing, explains why component tokens do not constitute a request, and
     records the one removal and the vocabulary push it requires.

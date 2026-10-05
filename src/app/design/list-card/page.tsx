@@ -297,9 +297,10 @@ export default function ListCardSpecimenPage() {
             <h2>1 · Arrangement × size</h2>
             <p>
               Two arrangements and two type steps (visual-direction § 7.2, 5 Oct).{' '}
-              <code>md</code> (h4 over body) is the default; <code>sm</code> (h5 over body-sm) is
-              what any set of four rows or more passes, and tiles. A row cannot see its siblings,
-              so the composing route passes the step. The copy is identical so the title/body
+              <code>md</code> (h4 over body) is a row&rsquo;s default; <code>sm</code> (h5 over
+              body-sm) is what any set of four rows or more passes, and it is a tile&rsquo;s
+              default (§ 1b). A row cannot see its siblings, so the composing route passes the
+              step. The copy is identical so the title/body
               relationship is the only visible difference; title to body is <code>text</code>{' '}
               (16) in every cell.
             </p>
@@ -464,10 +465,13 @@ export default function ListCardSpecimenPage() {
               marker stands above the title; the copy sits flush with the track, so the grid
               aligns with the heading over it; title and body always stack. A linked tile has no
               hover ground: its opening rule takes the link ink, and the cue sits at the foot,
-              pinned so every cue in the row shares a line.
+              pinned so every cue in the row shares a line. A tile defaults to{' '}
+              <code>size=&quot;sm&quot;</code> (h5 over body-sm, § 7.2), so every tile below is at
+              the small step without being told; the third cell passes <code>md</code> to
+              show the override.
             </p>
           </Layout>
-          <Specimen title="icon tiles · four tracks" note="Signals: a thing a reader can see, then what it may mean">
+          <Specimen title="icon tiles · four tracks · sm by default" note="Signals: a thing a reader can see, then what it may mean. No size passed: a tile is sm.">
             <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
               {TILES_ICON.map((tile) => (
                 <ListCard key={tile.title} form="tile" titleAs="h3" {...tile} />
@@ -488,12 +492,12 @@ export default function ListCardSpecimenPage() {
             </Layout>
           </Specimen>
           <Specimen
-            title="icon tiles · four tracks · sm"
-            note="What a tile set passes on a page (§ 7.2): h5 over body-sm, so the tiles sit two rungs under the band's h2."
+            title="icon tiles · four tracks · md, passed explicitly"
+            note="The override, for comparison only. § 7.2 gives every tile sm, so h5 sits two rungs under the band's h2; at md the tiles' h4 competes with it. No page passes this."
           >
             <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
               {TILES_ICON.map((tile) => (
-                <ListCard key={tile.title} form="tile" size="sm" titleAs="h3" {...tile} />
+                <ListCard key={tile.title} form="tile" size="md" titleAs="h3" {...tile} />
               ))}
             </Layout>
           </Specimen>

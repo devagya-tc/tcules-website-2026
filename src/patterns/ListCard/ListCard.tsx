@@ -54,8 +54,13 @@ export type ListCardForm = 'row' | 'tile';
  * The row's type step: title and body roles together (visual-direction § 7.2, 5 Oct 2026). A
  * COMPONENT SIZE, so a t-shirt name. A row cannot see its siblings, so the composing route passes it.
  *
- *   md  h4 title, body      the default: a set of up to three rows
- *   sm  h5 title, body-sm   any set of four rows or more, and tiles
+ *   md  h4 title, body      a set of up to three rows; the default for `form="row"`
+ *   sm  h5 title, body-sm   any set of four rows or more, and every tile; the default for
+ *                           `form="tile"`
+ *
+ * The default follows the form (5 Oct 2026), so the rule that tiles take `sm` is the path of least
+ * resistance rather than something every grid has to remember. A route still passes `sm` to a row
+ * set of four or more, because only it can count.
  *
  * There is no `lg`. § 7.2's large step is the one featured, horizontal card, which is BlockCard's
  * arrangement; a ListCard is never featured, so a third step would be a size nothing may use.
@@ -94,7 +99,7 @@ export type ListCardProps = ListCardFormProps & {
   marker?: ListCardMarker;
   /** Heading semantics without a visual type change. */
   titleAs?: ListCardTitleElement;
-  /** The type step, passed by the set. Defaults to `md`. */
+  /** The type step, passed by the set. Defaults to `sm` on a tile and `md` on a row. */
   size?: ListCardSize;
   /** A non-blank destination turns the entire row into one native link and adds its cue. */
   href?: string;
@@ -194,7 +199,7 @@ export function ListCard({
   form = 'row',
   arrangement = 'split',
   titleAs: Title = 'span',
-  size = 'md',
+  size,
   href,
   external = false,
 }: ListCardProps) {
@@ -208,6 +213,7 @@ export function ListCard({
     warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
   }
   const isTile = form === 'tile';
+  const step: ListCardSize = size ?? (isTile ? 'sm' : 'md');
 
   const destination = href?.trim() ? href : undefined;
   const isSplit = !isTile && arrangement === 'split';
@@ -275,7 +281,7 @@ export function ListCard({
   );
 
   return (
-    <li className={cx(styles.root, SIZE_CLASS[size], isTile && styles.tile)}>
+    <li className={cx(styles.root, SIZE_CLASS[step], isTile && styles.tile)}>
       {destination ? (
         <a
           className={cx(styles.frame, styles.link)}

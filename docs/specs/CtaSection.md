@@ -6,8 +6,18 @@
 > seam in `split` stays `--gap-block` (24, amended 29 Sep), so the bind-and-separate ratio in § 7 is
 > now 8:24 — three-fold, still enough to bind a pair and separate a row. The lede (`block` for
 > eyebrow → heading → copy) does not change: it is the rhythm `ContentSection` now adopts (S1).
-> § 7's table and § 10's composition are amended in place; visual-direction.md wins where this
-> document still differs.
+> § 7's table, its ratio paragraph and § 10's composition are amended in place; visual-direction.md
+> wins where this document still differs.
+>
+> **Audit pass, same day.** `/audit-component CtaSection` found older drift the S5 edit had walked
+> past, now amended in place: § 2's point row and § 10's compositions (a nowrap baseline `Cluster`
+> since 30 Sep, not a two-track `Layout`), § 7's halves seam and the tracks measured from it
+> (`--gap-section` 96 since 1 Oct: content 686, form/proof 458, not 706/470), § 8's marker role
+> (`--text-index`) and the `offer` heading's key (`[data-arrangement='offer']`), and § 10's `open`
+> primary action (no glyph since 1 Oct). The point's label-and-detail wrapper is a `<div>`, not a
+> `<span>`: it holds a `Layout`, and a div inside a span is invalid HTML. Later sections that quote
+> 706 or 470 as an aside (§ 4's rejected variants, § 12, § 15, § 17) predate 1 Oct and read ~20 and
+> ~13px wide; no conclusion drawn from them changes.
 
 > **Amended 29 Sep 2026 (tracker 2.17) — `scheduleHref` removed.** "See available times" moved into
 > `EnquiryForm`'s own action row, beside its submit (see `docs/specs/EnquiryForm.md`, amendment at
@@ -97,7 +107,7 @@ Section 17 Q3 carries that recommendation as a question addressed to briefs 15 a
 | `lead` | `<p>` — the first paragraph | yes | `body[0]`, verbatim | `--cta-body-ink`, `--cta-lead-text`, `--measure-body` |
 | `body` | `<p>` — the second paragraph | no | `body[1]`, verbatim | `--cta-body-ink`, `--cta-body-text`, `--measure-body` |
 | `points` | `<ol>`, a `Layout` — single-track in `split`, `columns={{base:1,md:3}}` in `open`, `columns={{base:1,md:2,lg:3}}` in `offer` (amended 29 Sep 2026; was a `Cluster`) | no | none | both seams between points |
-| `point` | `<li>`, a two-track `Layout` in `split` (`{base:[1,4], md:[1,8]}`) and `offer` (`{base:[1,4]}`), a single-track `Layout` in `open` (amended 29 Sep 2026; was a `Cluster`) | one per entry | none | the seam between `marker`, `label` and `detail` |
+| `point` | `<li>`, a nowrap `Cluster` with `colGap="text"` and `align="baseline"` in `split` and `offer` (amended 30 Sep 2026; it was a two-track `Layout`, `{base:[1,4], md:[1,8]}`), a single-track `Layout` in `open`; the label and detail sit in one `<div>` that grows from a zero basis beside the marker | one per entry | none | the seam between `marker`, `label` and `detail` |
 | `marker` | `<span aria-hidden>` — the position numeral | one per `point` | none — the component writes it from the index | `--cta-marker-ink`, `--cta-marker-text`, `--cta-marker-tracking` |
 | `label` | `<span>` | one per `point` | `points[n].label`, verbatim | `--cta-point-ink`, `--cta-point-text`, `--cta-point-tracking` |
 | `detail` | `<span>` | no | `points[n].detail`, verbatim | `--cta-point-ink`, `--cta-detail-text`, `--measure-body` |
@@ -282,19 +292,19 @@ Every ratio is text against **the ground it actually sits on**, which here is al
 | the band's vertical air, `offer` | `--sec-padding-y-tight` (64px) | `Section density="tight"` |
 | `root` → whatever precedes or follows it | none | **the page**, by ordering its bands. `CtaSection` sets no outer spacing |
 
-Seven of the nine steps, and the non-uniform rhythm comes entirely from nesting rather than from a knob: 4 inside a point, 8 beside a numeral, 16 between paragraphs and between list rows, 24 inside the lede, 32 between the cards of a step row, 48 between blocks, 64 between the halves. Tighten by grouping, loosen by separating — which is why `stack`, `frame`, `column`, `lede` and `copy` all exist as parts even though none renders anything visible. They are the five levels the rhythm needs.
+The non-uniform rhythm comes entirely from nesting rather than from a knob: 8 inside a point (label to detail, S5), 16 beside a numeral and between paragraphs, 24 inside the lede and between `split`'s steps, 32 between the cards of a step row, 48 between blocks, 96 between the halves (the split seam, 1 Oct 2026; it was 4 inside a point, 8 beside a numeral and 64 between the halves). Tighten by grouping, loosen by separating — which is why `stack`, `frame`, `column`, `lede` and `copy` all exist as parts even though none renders anything visible. They are the five levels the rhythm needs.
 
-**`--gap-column` between the halves, not `--gap-gutter`.** 32px between a paragraph of copy and a form field reads as one dense two-column block, and the reader's eye runs the wrong way across it — from the end of a sentence into a field label. 64px is the step the vocabulary names for two halves that must read as separate, and separate is exactly what these are: one asks, the other answers. It also costs the form 21px of track and gains the copy nothing, which is the trade being made deliberately.
+**`--gap-section` between the halves, not `--gap-gutter` (amended 1 Oct 2026; it was `--gap-column`).** 32px between a paragraph of copy and a form field reads as one dense two-column block, and the reader's eye runs the wrong way across it — from the end of a sentence into a field label. The copy and the form are two regions of different kind side by side — one asks, the other answers — which is a *split*, and a split takes 96 (CLAUDE.md § gap scale). 64 is for peer halves only. It costs the form about 13px of track against the 64 it replaced, which is the trade being made deliberately.
 
-**The points in `split` are the brief's open question, answered by the ratio rather than by a shape.** In a 706px column, a numeral 8px from its label with 4px to a detail line under it and 16px to the next step reads as a numbered sequence with no rule, no dot and no bullet character. The 4:16 ratio does the same work `SiteFooter` gets from its meta-key tracking: a four-fold difference is enough to bind a pair and separate a row. That is why the narrow column does not need the 3-up row's 32px, and why the answer is one `rowGap` value rather than a second arrangement.
+**The points in `split` are the brief's open question, answered by the ratio rather than by a shape.** In a 706px column, a numeral 16px beside its label (`--gap-text`, a nowrap `Cluster` since 30 Sep), with 8px to a detail line under it (`--gap-tight`, S5, 5 Oct 2026) and 24px to the next step (`--gap-block`, 29 Sep), reads as a numbered sequence with no rule, no dot and no bullet character. The 8:24 ratio does the same work `SiteFooter` gets from its meta-key tracking: a three-fold difference is enough to bind a pair and separate a row. (It was 4:16 — four-fold — before both seams moved; the ratio narrowed and the argument did not change.) That is why the narrow column does not need the 3-up row's 32px, and why the answer is one `rowGap` value rather than a second arrangement.
 
 **(b) Component sizes — t-shirt named, each measured against something real**
 
 | Name | Value | Measured against |
 |---|---|---|
-| `content` track, `split` and `open` with proof | **706px** | `--sec-container` 1240px less `--gap-column` 64px, at `columns={[3,2]}`: 1176 × 3/5 = 705.6. Every measure in this component was measured against this track, not against the 1240 column |
-| `form` track, `split`; `proof` track, `open` | **470px** | the same arithmetic, 1176 × 2/5 = 470.4. It is 214px wider than `--foot-field-min-inline` 256px, so a two-field row inside the form still fits — which is the reason the ratio is 3:2 and not 2:1 |
-| `point` track, `open` | **392px** without proof · **~214px** with it | without proof the frame is one track, so the 3-up row divides the whole 1240 content column less two `--gap-gutter` 32px: (1240 − 64) / 3 = 392, the brief's own figure. With proof it divides the 706 track: (706 − 64) / 3 ≈ 214. Below 1024 both are the same full-column 3-up shape, ≈298px at 1023, until it drops at 767 |
+| `content` track, `split` and `open` with proof | **686px** (706 before 1 Oct) | `--sec-container` 1240px less `--gap-section` 96px, at `columns={[3,2]}`: 1144 × 3/5 = 686.4. Every measure in this component was measured against this track (then 706, with `--gap-column`), not against the 1240 column |
+| `form` track, `split`; `proof` track, `open` | **458px** (470 before 1 Oct) | the same arithmetic, 1144 × 2/5 = 457.6. It is 202px wider than `--foot-field-min-inline` 256px, so a two-field row inside the form still fits — which is the reason the ratio is 3:2 and not 2:1 |
+| `point` track, `open` | **392px** without proof · **~214px** with it | without proof the frame is one track, so the 3-up row divides the whole 1240 content column less two `--gap-gutter` 32px: (1240 − 64) / 3 = 392, the brief's own figure. With proof it divides the 686 track: (686 − 64) / 3 ≈ 207 (≈214 in the 706 track before 1 Oct). Below 1024 both are the same full-column 3-up shape, ≈298px at 1023, until it drops at 767 |
 | `heading` measure | `--measure-title`, 22ch ≈ **473px** at `--text-h2` | the 706px content track. The heading takes 67% of its track and wraps to two or three lines, which is the shape a closing ask should have — a one-line heading in a 706px track reads as a section label |
 | `copy` measure | `--measure-body`, 68ch ≈ **748px** at `--text-lead` | the same 706px track, which it exceeds and therefore goes inert. Stated because a reviewer will find it: the measure is there for `offer`, whose copy runs the full 1240px column and needs the cap |
 | `detail` measure | `--measure-body`, 68ch ≈ **535px** at `--text-body-sm` | the 392px (or ~214px) `open` point track, which it exceeds and goes inert, and the 1240px `offer` row, where it is the only thing stopping a detail line running the full band |
@@ -303,13 +313,13 @@ Seven of the nine steps, and the non-uniform rhythm comes entirely from nesting 
 
 Eight values, of which three are declared and five are computed consequences stated so a reviewer can check them.
 
-**Which track this component was measured against:** the **706px** content track of `columns={[3,2]}` inside `--sec-container` 1240px with `--gap-column` 64px between the halves. Not the 1240px column, and not the three-up point track except where 7(b) names it for `open`'s points.
+**Which track this component was measured against:** the **706px** content track of `columns={[3,2]}` inside `--sec-container` 1240px with `--gap-column` 64px between the halves — **686px** since the 1 Oct split seam (96). The measures are `ch` caps, so none of them moved; only the track they sit in narrowed by 20px. Not the 1240px column, and not the three-up point track except where 7(b) names it for `open`'s points.
 
 **`open` without proof is one track, and it needs no new measure.** The frame reserves a second track only when `proof` is passed — the same idiom as `Proof`'s `columns={both ? 'fit' : undefined}` — because a 3:2 frame with an empty right-hand track left the 470px proof track (534 with its gap) as dead ground at 1440 on ten of the eleven `open` routes (tracker 2.4). The one-track frame does not let the ask run to 1240: the heading keeps `--measure-title` (≈473px), and `body` (≈673px) and `detail` (≈535px) keep `--measure-body` at the widths they had. The one running part that grows is the `lead`: 68ch at `--text-lead` is ≈748px, which the 706 track used to clamp, and it now renders at its own measure. That is accepted rather than corrected — 748 is the body measure doing its job, not a new width, and inventing a narrower lead measure for one arrangement would be a second answer to one question. Only the points row takes the full column, as three 392px tracks, which is the same full-column 3-up shape `open` has always had between 768 and 1023. So the band reads as a capped statement over a wide sequence of steps, and the empty column is gone rather than filled.
 
 **(c) Optical corrections reaching the space ramp — none, and why**
 
-**Amended 29 Sep 2026:** the marker is now `--text-stat` (40px, line-height 1) beside a `--text-h5` label (22px), and the row is a `Layout` with `align="start"` — the two share a top edge, not a baseline, and the numeral's cap top sits within a few pixels of the label's. The correction below stays declined for the same reason, and its sizes are historical. There is a real correction available and this spec declines it. Geist Mono's numerals at `--text-micro` sit a fraction above the baseline of Public Sans at `--text-body`, so in `split` and `offer` a numeral and its label do not quite share a baseline; `align="baseline"` on the `point` `Cluster` fixes the alignment but not the optical rise, and pulling the marker down by `--space-1` would. It is declined because the numeral is 11px against a 16px label and the rise is under a pixel at the sizes that ship — a correction that small is a value someone will later read as a layout distance in disguise, which is the failure mode the justification-sentence rule exists to catch. It is also the wrong axis: if the numerals ever look wrong it will be in `open`, where they sit *above* their labels and the correction would not apply at all.
+**Amended 30 Sep 2026:** the marker is `--text-index` (≈20px) and the row is a nowrap `Cluster` with `align="baseline"`, so the numeral sits on the label's first baseline and the paragraph below is history. **Amended 29 Sep 2026:** the marker is now `--text-stat` (40px, line-height 1) beside a `--text-h5` label (22px), and the row is a `Layout` with `align="start"` — the two share a top edge, not a baseline, and the numeral's cap top sits within a few pixels of the label's. The correction below stays declined for the same reason, and its sizes are historical. There is a real correction available and this spec declines it. Geist Mono's numerals at `--text-micro` sit a fraction above the baseline of Public Sans at `--text-body`, so in `split` and `offer` a numeral and its label do not quite share a baseline; `align="baseline"` on the `point` `Cluster` fixes the alignment but not the optical rise, and pulling the marker down by `--space-1` would. It is declined because the numeral is 11px against a 16px label and the rise is under a pixel at the sizes that ship — a correction that small is a value someone will later read as a layout distance in disguise, which is the failure mode the justification-sentence rule exists to catch. It is also the wrong axis: if the numerals ever look wrong it will be in `open`, where they sit *above* their labels and the correction would not apply at all.
 
 So the component reaches into `--space-*` nowhere, and it carries **no margin on any node**, which keeps layout rule 2 intact with zero exceptions. `Prose`'s documented margin exception applies only inside a `Prose`, which this component renders only if the caller puts one in a slot.
 
@@ -332,10 +342,10 @@ So the component reaches into `--space-*` nowhere, and it carries **no margin on
 | `body` | `--cta-body-text: var(--text-body-lg)` | none — this role has no tracking companion |
 | `label` | `--cta-point-text: var(--text-h5)` | `--cta-point-tracking: var(--text-h5-tracking)`; `text-wrap: var(--text-title-wrap)` |
 | `detail` | `--cta-detail-text: var(--text-body-sm)` | none — this role has no tracking companion |
-| `marker` | `--cta-marker-text: var(--text-stat)` | `--text-stat-tracking`; `text-transform: var(--text-mono-case)` |
+| `marker` | `--cta-marker-text: var(--text-index)` (30 Sep 2026; was `--text-stat`) | `--text-index-tracking`; `text-transform: var(--text-mono-case)` |
 | `actions` | — | `Button` owns it, through `--btn-text-tracking` |
 
-`--cta-heading-text` is one token re-declared under the `offer` arrangement's own class, which is the component layer doing what it is for: one name, one meaning — "the size this block's heading is" — with a different answer in one arrangement. It is not a second token and it is not a media query.
+`--cta-heading-text` is one token re-declared under `[data-arrangement='offer']` (the band's own data attribute; there is no `.offer` class, § 14 Do 8), which is the component layer doing what it is for: one name, one meaning — "the size this block's heading is" — with a different answer in one arrangement. It is not a second token and it is not a media query.
 
 **Three families in one band, and that is the design.** The heading and the point labels are display serif, the copy and the point details are sans, the eyebrow and the numerals are mono (amended 29 Sep 2026: the labels were sans). A CTA built from one family has to earn its structure from rules and boxes, which section 2 refused; a CTA with three families gets it from the type. Squint at `split` and it reads as four things — a big serif ask, a grey paragraph, a numbered sequence in two sizes, and a form — not as one rectangle.
 
@@ -374,8 +384,8 @@ Numerals render two-digit and zero-padded (`01`, `02`, `03`) rather than `1.` �
 <Section surface={surface}>                                    {/* root — band, column, 96 of air */}
   <Layout rowGap="stack">                                      {/* stack — 48: frame to proof row */}
 
-    <Layout columns={{ base: 1, lg: [3, 2] }} colGap="column" rowGap="stack" align="start">
-      {/* frame — 64 between the halves, 48 when it wraps at 1023 */}
+    <Layout columns={{ base: 1, lg: [3, 2] }} colGap="section" rowGap="stack" align="start">
+      {/* frame — 96 between the halves (split seam, 1 Oct), 48 when it wraps at 1023 */}
 
       <Layout rowGap="stack">                                  {/* column — 48: block to block */}
         <Layout rowGap="block">                                {/* lede — 24: label, heading, copy */}
@@ -388,14 +398,16 @@ Numerals render two-digit and zero-padded (`01`, `02`, `03`) rather than `1.` �
         </Layout>
 
         <Layout as="ol" rowGap="block">                         {/* points — 24 between steps */}
-          <Layout as="li" columns={{ base: [1, 4], md: [1, 8] }} colGap="tight" align="start">
-                                                                {/* point — marker track, label track */}
+          <Cluster as="li" nowrap colGap="text" align="baseline">
+                                                                {/* point — marker beside label, 30 Sep */}
             <span aria-hidden="true">01</span>                  {/* marker */}
-            <Layout rowGap="tight">                             {/* 8: label to detail (S5) */}
-              <span>{points[0].label}</span>
-              <span>{points[0].detail}</span>
-            </Layout>
-          </Layout>
+            <div>                                               {/* grows from 0 beside the marker */}
+              <Layout rowGap="tight">                           {/* 8: label to detail (S5) */}
+                <span>{points[0].label}</span>
+                <span>{points[0].detail}</span>
+              </Layout>
+            </div>
+          </Cluster>
         </Layout>
       </Layout>
 
@@ -414,19 +426,19 @@ Numerals render two-digit and zero-padded (`01`, `02`, `03`) rather than `1.` �
 </Section>
 
 // arrangement="open" — the action close. 20 instances. Same slot set; three positions move.
-//   frame: with proof   — columns={{ base: 1, lg: [3, 2] }} colGap="column" rowGap="stack"; proof takes the right half
+//   frame: with proof   — columns={{ base: 1, lg: [3, 2] }} colGap="section" rowGap="stack"; proof takes the right half
 //          without proof — no columns, no colGap, no rowGap: one track, the ask alone
 //   points: Layout as="ol" columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="gutter"
 //           point: Layout rowGap="tight" — marker ABOVE label
 //   actions: in the content column, under the points —
-//           Button emphasis="solid" tone="primary" icon={<Icon name="arrow-right" />} then
+//           Button emphasis="solid" tone="primary" (no glyph since 1 Oct, § 16) then
 //           Button emphasis="ghost" tone="neutral"
 //   stack: one child, so its 48 seam does not render
 
 // arrangement="offer" — the mid-page audit interrupt. 37 instances. One column, tight band.
 //   Section density="tight"; heading at --text-h2; proof is a compile error
 //   points: Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter"
-//           point: Layout columns={{ base: [1, 4] }} colGap="tight" align="start" — marker BESIDE label
+//           point: Cluster nowrap colGap="text" align="baseline" — marker BESIDE label, as split
 //   form optional, under the copy; actions under the points
 ```
 

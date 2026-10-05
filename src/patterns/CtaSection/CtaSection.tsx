@@ -238,9 +238,10 @@ function CtaPoints({
         <span aria-hidden="true" className={styles.marker}>
           {marker}
         </span>
-        <span className={styles.pointContent}>
+        {/* A div, not a span: CtaPointContent is a Layout, and a div inside a span is invalid. */}
+        <div className={styles.pointContent}>
           <CtaPointContent point={point} />
-        </span>
+        </div>
       </Cluster>
     );
   });
@@ -354,13 +355,14 @@ export function CtaSection(props: CtaSectionProps) {
   if (props.arrangement === 'open') {
     /* The right-hand column exists only when there is something to put in it. Without proof the
        frame is a single track — the same idiom as `Proof`'s `columns={both ? 'fit' : undefined}` —
-       because a 3:2 frame with an empty second track leaves its 470px proof track as dead ground at 1440, and
+       because a 3:2 frame with an empty second track leaves its ~458px proof track as dead ground at 1440, and
        ten of the eleven `open` routes pass no proof. Both seams go with the second track: with one
        child there is no column seam and no row seam to size.
 
        Nothing needs a new measure to stop the ask running the full 1240 column. The heading
        (`--cta-heading-measure`) and every running part (`--cta-body-measure`) are already capped
-       by their own `ch` measures. The lead grows from the 706 track to its own ≈748px measure,
+       by their own `ch` measures. The lead grows from the ~686 track (3:2 of 1240 less the 96 split
+       seam) to its own ≈748px measure,
        which is accepted (spec 7(b)); only the points row takes the full column, as three 392px
        tracks — the same full-column 3-up shape `open` already has from 768 to 1023. */
     const hasProof = props.proof !== undefined;

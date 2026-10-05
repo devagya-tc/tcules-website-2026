@@ -127,8 +127,9 @@ export function ContentSectionText({ children }: ContentSectionTextProps) {
 }
 
 /**
- * ContentSection — one CMS section as one band, built for the shape every long-form page type in
- * this repo produces: an optional eyebrow, one heading, an optional lead, then a run of blocks.
+ * ContentSection — one CMS section as one band, built for the shape every non-long-form page type
+ * in this repo produces (services, expertise, audits, tools: see `ContentSectionText`): an optional
+ * eyebrow, one heading, an optional lead, then a run of blocks.
  *
  * IT EXISTS FOR THE RHYTHM, and the rhythm is nesting rather than a knob. The old composition put
  * the h2 and every block in one `Layout rowGap="stack"`, so all of them were flat siblings and

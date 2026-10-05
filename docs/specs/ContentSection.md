@@ -9,7 +9,7 @@
 | **Status** | approved — the `beside` arrangement implements ruling **O2** (`docs/phase-2-decisions.md`: head beside body is *static, not sticky, head 1 : body 2, from 1024 up*). No BLOCKING question is open (§17). |
 | **Token prefix** | `--csec-*` |
 | **File** | `tokens/components/content-section.css` |
-| **Designer / date** | Claude Code · 28 Sep 2026 (Phase 2 task 2.13) · **amended 29 Sep 2026 (tracker 2.17): the body measure** |
+| **Designer / date** | Claude Code · 28 Sep 2026 (Phase 2 task 2.13) · **amended 29 Sep 2026 (tracker 2.17): the body measure** · **1 Oct 2026: the split seam (96), and `beside` reads down** · **5 Oct 2026 (`fdn-spacing`, S1): one head rhythm at 24** |
 | **Implements** | `docs/briefs/07-content-section.md` (the band every long page is made of) · `docs/component-audit.md` §3 ContentSection: *"Extend. Add a head arrangement: head beside body ([1,2] from lg), as well as head above."* · ruling O2 |
 | **Implemented at** | `src/patterns/ContentSection/` · `src/styles/tokens/components/content-section.css` · specimen `src/app/design/content-section/page.tsx` |
 
@@ -21,7 +21,8 @@ extension Phase 2 adds: the `arrangement` prop, `stacked | beside`.
 **Nothing new is needed beyond one prop.** The audit's §4 composition table routes five jobs through
 this component — Situation, Capability set, Mechanism, Related content, Rich explanation — and the
 thing that stops those five reading as one repeated shape is an arrangement, not a new pattern. The
-`beside` arrangement is one `Layout`'s props. It adds no token, no module class, no state and no ARIA.
+`beside` arrangement is one `Layout`'s props. It added no token, no module class, no state and no ARIA
+(2.17 later added `--csec-body-measure` and the `ContentSectionText` class, for the body measure).
 
 > **Amendment · 29 Sep 2026 · tracker 2.17 (visual overhaul) — text reads at the body measure.**
 > Owner-approved. Prose has no measure by ruling — *the caller owns the reading column*
@@ -56,8 +57,8 @@ thing that stops those five reading as one repeated shape is an arrangement, not
 > **eyebrow → title 24, title → lead 24**, and neither of the other two changes. Nothing is tighter
 > than it was, which the owner's "eyebrow too close" note (1 Oct review) requires. The hierarchy
 > between the eyebrow and the lead comes from scale — a 12px mono label against a 20px lead — not
-> from a second gap. § 7 and § 10 below are amended in place. visual-direction.md wins over this
-> spec where they still differ.
+> from a second gap. § 1, § 7, § 10, § 12 and the appendix below are amended in place.
+> visual-direction.md wins over this spec where they still differ.
 
 > **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
 
@@ -65,8 +66,9 @@ thing that stops those five reading as one repeated shape is an arrangement, not
 
 `ContentSection` is **one CMS section as one band**: an optional eyebrow, one optional `h2`, an
 optional lead, then the blocks the caller hands it as children. It exists for the rhythm — the head
-group nests at 8 and 24 so it reads as one object, and the blocks are a separate 48 beat beneath (or,
-under `beside`, 64 beside) it. A flat `Layout` cannot say that.
+is one group at 24 (eyebrow → heading → lead, S1, 5 Oct 2026) so it reads as one object, and the
+blocks are a separate 48 beat beneath it (or, under `beside`, 96 beside it, the split seam of 1 Oct).
+One flat `Layout` cannot say that: the head and the blocks are two groups at two steps.
 
 It is a Tier 2 pattern because it composes `Section` and `Layout` (a primitive may not import a
 sibling primitive), and because it consumes a content shape — the section record's heading, anchor
@@ -145,10 +147,16 @@ One size. Two arrangements.
 | | below 1024 | 1024 up |
 |---|---|---|
 | `stacked` | head above body, 48 | head above body, 48 |
-| `beside` | head above body, 48 — **identical to stacked** | head in the leading 1/3, body in the trailing 2/3, 64 between, head top-aligned and static |
+| `beside` | head above body, 48 — **identical to stacked** | head in the leading 1/3, body in the trailing 2/3, 96 between (the split seam, 1 Oct), head top-aligned and static |
 
 `beside` **degrades to `stacked`** whenever one half is absent (§12): no head → the body takes the
 full column; no body → the head takes the full column. An empty track is never drawn.
+
+**`beside` is for a body that reads down** — rows, an accordion, a record sheet — so the head labels
+one long column. It is wrong for a body that reads across, a set of peer cards or tiles (1 Oct 2026,
+owner, on "Go deeper"): the head becomes one more column of the row, the squint reads three equal
+blocks where there is one heading and two cards, and the cards take their width from the two-thirds
+track instead of the page's grid. **A card set goes `stacked`.**
 
 Considered and rejected:
 
@@ -198,7 +206,7 @@ exists for). The specimen's section 9 renders exactly that case.
 | eyebrow → heading | `--gap-block` (24; was `--gap-tight` 8 until 5 Oct, S1) | the section head is one group at one step, the rhythm `PageHero` and `CtaSection` already carried |
 | heading → lead | `--gap-block` (24) | head to body inside a block |
 | head → body (rows) | `--gap-stack` (48) | block to block inside a section — `stacked`, and `beside` below 1024 |
-| head track → body track | `--gap-section` (96, was `--gap-column` 64 until 1 Oct) | **new in 2.13.** Two halves that must read as separate. Not `--gap-gutter` (32): that is the seam between peers in a set, and a head is not a peer of its blocks — at 32 the head reads as a narrow first card. |
+| head track → body track | `--gap-section` (96, was `--gap-column` 64 until 1 Oct) | **new in 2.13.** Two regions of different kind side by side — a head and the body it labels — which is a *split*, and a split takes 96 (CLAUDE.md § gap scale; `--gap-column` is for peer halves only). Not `--gap-gutter` (32): that is the seam between peers in a set, and a head is not a peer of its blocks — at 32 the head reads as a narrow first card. |
 | block → block | `--gap-stack` (48) | between the blocks in the body |
 
 (b) Component sizes: none of its own. The tracks are `Layout`'s `[1, 2]` fr ratio, so at a 1440 window
@@ -237,10 +245,9 @@ heading's importance. §17 Q1 records the alternative.
 - No distance swaps at a breakpoint. The layout changes at 1024; the steps do not.
 - Touch targets: none of its own. Children own theirs.
 
-Note for templates: the body track under `beside` is 597 wide at 1024. A three-up card set
-(`columns={{ md: 3 }}`) in it gives ~178px cards with two-line titles (specimen §4 at 1024). A
-template composing cards into a `beside` band should give the set `md: 2` or `xl: 3`. That is the
-caller's column choice, not this component's.
+Note for templates: the body track under `beside` is 576 wide at 1024 (597 before the 1 Oct split
+seam). A card set does not go in it at all: a set reads across, so it takes `stacked` (§4, 1 Oct
+2026). What goes beside a head is a body that reads down — rows, an accordion, a record.
 
 ## 10 · Composition
 
@@ -299,10 +306,10 @@ the honest sense — sized to its content, not stretched to the body's height pr
 | Longest realistic heading (10 words, 80 characters) | Balances. `stacked`: breaks at 22ch. `beside`: the track sets the line — 5 lines at 1440, 7 at 1024 (§17 Q1). Specimen §4. |
 | Longest lead (45 words) | Pretty-wraps at 40ch (`stacked`) or the track (`beside`). Specimen §4. |
 | One long unbroken token | `overflow-wrap: break-word` from `reset.css` on `p` and `h2`; every track is `minmax(0, fr)`, so nothing widens the column. Specimen §5; the 390 capture shows no horizontal overflow. |
-| No eyebrow | No element, no 8 seam; the heading is the head's first row. |
+| No eyebrow | No element, no 24 seam; the heading is the head's first row. |
 | No heading | No `h2`; the band is a `div`. The eyebrow (if any) and the lead remain. |
 | Empty string for eyebrow / heading / lead | Treated as absent (falsy). No empty element, no seam. |
-| No lead | The eyebrow+heading group is the whole head. |
+| No lead | The eyebrow and heading are the whole head, at the same 24 seam. |
 | No head at all | No head row. Under `beside` the body takes the full column (degrades to `stacked`). |
 | No children / `children` omitted | No body row and no 48 seam under the head. Under `beside` the head takes the full column. |
 | Empty children array (`[]`, a CMS section with zero blocks) | Same as omitted — `Children.toArray` is empty. **Changed in 2.13**: previously an empty `Layout` rendered, leaving a phantom 48 seam below the head. |
@@ -369,7 +376,7 @@ its own layer. (CLAUDE.md rule 6 argues against pure renames; this one is kept f
 `--csec-heading-measure` and `--csec-lead-measure`, and `CtaSection`'s `--cta-body-measure` is the
 precedent.)
 
-Before 2.17: none — every value in this spec is an existing token. `beside` uses `--gap-column` through
+Before 2.17: none — every value in this spec is an existing token. `beside` uses `--gap-section` (`--gap-column` until 1 Oct) through
 `Layout`'s `colGap` and `Layout`'s own `lg` breakpoint.
 
 ## 17 · Open questions
@@ -385,15 +392,17 @@ Before 2.17: none — every value in this spec is an existing token. `beside` us
    (b) keep the empty track so a run of `beside` bands aligns its body column. *Chosen:* **(a)** —
    an empty third is a hole in the page, and alignment across bands is not something this band can
    know about. *Non-blocking.*
-3. **Column seam: `column` (64) or `gutter` (32).** *Chosen:* **`column`**. The scale names 64 for
-   "two halves that must read as separate"; 32 is between peers in a set, and at 32 the head reads as
-   a narrow first card. *Non-blocking.*
+3. **Column seam: `column` (64) or `gutter` (32).** *Chosen (2.13):* **`column`**. The scale named 64
+   for "two halves that must read as separate"; 32 is between peers in a set, and at 32 the head reads
+   as a narrow first card. **Superseded 1 Oct 2026: `section` (96).** A head beside its body is two
+   regions of different kind, a split, and a split takes 96; `column` is now for peer halves only.
+   Owner: "64px is fine but 96px … gives it just a bit more breathing space." *Non-blocking.*
 4. **Empty children array.** *Chosen:* treat `[]` as no body (removes a phantom 48 seam that
    `stacked` used to render). No route renders a zero-block section today, so no route output
    changes. *Non-blocking.*
-5. **Card sets inside a `beside` body.** The 597 body track at 1024 cramps a three-up set. *Chosen:*
-   leave it to the caller's `columns` (§9 note), not a prop here. *Non-blocking; a Phase 3 template
-   note.*
+5. **Card sets inside a `beside` body.** The body track at 1024 (597, now 576) cramps a three-up set.
+   *Chosen (2.13):* leave it to the caller's `columns`. **Superseded 1 Oct 2026 (owner):** a card set
+   does not go in a `beside` body at all; it goes `stacked` (§4). *Non-blocking.*
 6. **Brief 07's Note slot and the "rail" arrangement.** Brief 07 asked for a Callout slot and asked
    whether a sticky rail is worth specifying. *Chosen:* no Note slot — a `Callout` is a child in the
    body, which already takes any block; the rail is rejected by O2. *Non-blocking.*
@@ -412,11 +421,12 @@ NAMES
     --csec-heading-tracking, --csec-lead-text, --csec-heading-measure, --csec-lead-measure,
     --csec-heading-ink, --csec-lead-ink, --csec-eyebrow-ink — all declared in content-section.css.
     2.17 adds --csec-body-measure (→ --measure-body).
-[x] Usage tokens: --gap-tight, --gap-block, --gap-stack, --gap-column, --gap-gutter; --text-h2,
+[x] Usage tokens: --gap-block, --gap-stack, --gap-section (--gap-tight left with S1, 5 Oct 2026;
+    --gap-column with the 1 Oct split seam; --gap-gutter is the specimen's, not the component's); --text-h2,
     --text-h2-tracking, --text-lead, --text-eyebrow, --text-eyebrow-tracking, --text-mono-case,
     --text-title-wrap, --text-running-wrap; --measure-title, --measure-lead. `npm run design:check`
     resolves every one.
-[x] Layout props used are in its unions: rowGap stack|block|tight, colGap column, columns {lg:[1,2]},
+[x] Layout props used are in its unions: rowGap stack|block, colGap section, columns {lg:[1,2]},
     align start.
 
 COLOUR

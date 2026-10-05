@@ -51,11 +51,11 @@
  * ContentSection is a BAND, and the only pattern here whose reason for existing is a distance:
  * one CMS section — eyebrow, heading, lead, then a run of blocks the caller supplies as children.
  * It takes `surface` like the other band-owning patterns and paints nothing itself. What it owns
- * is the grouping: the head group nests at 8 and 24 so it reads as one object, and the blocks are
- * a separate 48 beat beneath it. A flat Layout cannot say that, which is why this is a component
- * and not three lines at a call site repeated on every long-form route. It has two arrangements of
- * those beats — the head above the blocks, or beside them from 1024 up — and the second is one
- * Layout's props rather than a second component.
+ * is the grouping: the head is one group at 24 (eyebrow → heading → lead) so it reads as one
+ * object, and the blocks are a separate 48 beat beneath it. One flat Layout cannot say that, which
+ * is why this is a component and not three lines at a call site repeated on every route. It has
+ * two arrangements of those beats — the head above the blocks, or beside them from 1024 up — and
+ * the second is one Layout's props rather than a second component.
  *
  * Figure is the quietest thing in the tier and the first to hold an IMAGE as its subject rather
  * than as a marker: an asset, its caption and an optional quieter note, filling whatever inline
@@ -134,6 +134,7 @@ export type {
   ListCardProps,
   ListCardMarker,
   ListCardArrangement,
+  ListCardForm,
   ListCardSize,
   ListCardTitleElement,
 } from './ListCard';

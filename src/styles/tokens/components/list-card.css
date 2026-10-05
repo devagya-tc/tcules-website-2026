@@ -52,12 +52,13 @@
   /* The row's type steps with its set (visual-direction § 7.2, 5 Oct 2026). The row does not
      know its count, so it takes the step as a component size and the composing route passes it:
 
-       md  h4 + body      the default. A row up to 1240px wide carries a 28px title, and it carries
-                          the three jobs this row does: a step in a process, a clickable article or
-                          guide on a listing page, and an item in a plain content list.
-       sm  h5 + body-sm   any set of four rows or more, and tiles. Card titles sit at least two
-                          rungs under the section's 43px h2, and a run of 28px titles down a long
-                          set made every row a heading competing with the band's.
+       md  h4 + body      a row's default. A row up to 1240px wide carries a 28px title, and it
+                          carries the three jobs this row does: a step in a process, a clickable
+                          article or guide on a listing page, and an item in a plain content list.
+       sm  h5 + body-sm   any set of four rows or more, and every tile (a tile's default). Card
+                          titles sit at least two rungs under the section's 43px h2, and a run of
+                          28px titles down a long set made every row a heading competing with the
+                          band's.
 
      It was h4 alone, set against BlockCard's h4 in a 286px track: at h5 the narrower object had the
      larger title. The two now step together, by the same rule, so the inversion cannot return. */
@@ -77,25 +78,24 @@
   --lcrd-marker-tracking: var(--text-index-tracking);
 
   /* Optical, not --gap-*. This is not a distance between two things; it is a baseline correction.
-     The number is a 13px/1.2 box (15.6px, baseline ~11px down) sitting beside a 22px/1.28 title box
-     (28.2px, baseline ~19.6px down) in a Cluster aligned to `start`, so without it the ordinal
-     floats ~8px above the line it indexes. `align="baseline"` on that Cluster would be the correct
-     relationship and cannot be used: the same marker slot holds a 160px thumbnail, whose baseline
-     is its bottom edge, so baseline-aligning the slot would shove every thumbnail row. The
-     correction therefore belongs to the number alone. At 20px/1.2 the number's baseline sits ~17.6px
-     down and an h4 title's ~23px, a computed difference of ~5.4px. The shipped value is --space-4, set
-     by eye against the real faces rather than by that arithmetic: the calculation assumes an ascent
-     ratio per family and the two here do not match it, so 4px is what actually sits the numeral on
-     the title's baseline. An optical correction is measured, not derived — that is what makes it
-     optical. This value
-     is a function of BOTH type sizes: it was 8px against a 13px number, 2px against an h5 title, and
-     6px now. Change either role and recompute it in the same edit.
+     The 20px/1.2 number sits beside the title in a Cluster aligned to `start`, so its baseline lands
+     wherever the two line boxes put it, not on the line it indexes. `align="baseline"` on that
+     Cluster would be the correct relationship and cannot be used: the same marker slot holds a 160px
+     thumbnail, whose baseline is its bottom edge, so baseline-aligning the slot would shove every
+     thumbnail row. The correction therefore belongs to the number alone.
 
-     So it steps with the size: 4 against the md row's h4, 0 against the sm row's h5 (5 Oct 2026).
-     Both were measured in the browser, the numeral's baseline against the title's first baseline:
-     4 lands the md pair at 0.00px; against h5 the 20px numeral's baseline already sits on the
-     title's, and 2 put it 2px low. The sm token stays, at zero, so the correction is one decision
-     per size and nobody reads its absence as an omission. */
+     It is a function of BOTH type sizes, so it steps with `size` (5 Oct 2026):
+
+       md  4   against an h4 title. Arithmetic gives ~5.4 (number baseline ~17.6px down, h4 ~23px),
+               but it assumes one ascent ratio per family and the two faces here do not share one;
+               4 is what lands the numeral's baseline on the title's first baseline (0.00px,
+               measured in the browser).
+       sm  0   against an h5 title. The numeral's baseline already sits on the title's; 2 put it
+               2px low. The token stays, at zero, so the correction is one decision per size and
+               nobody reads its absence as an omission.
+
+     An optical correction is measured, not derived — that is what makes it optical. Change the
+     number's role or either title role and re-measure both values in the same edit. */
   --lcrd-number-baseline-offset-md: var(--space-4);
   --lcrd-number-baseline-offset-sm: var(--space-0);
 

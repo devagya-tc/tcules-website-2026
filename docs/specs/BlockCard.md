@@ -103,7 +103,7 @@ full content width without making the fourth an orphan.
 | `frame`   | yes               | An `a` when `href` is present, otherwise an inert `div`               | The state boundary, the focus ring and full height. No edge       |
 | `media`   | no                | One card-owned ratio box holding a zoom span holding `Media` (`fit="fill"`, `edge="placement"`) | The box, its ratio (3:2 / 4:3), its hairline on every kind and the zoom. The file, `srcset`, panel and shadow are `Media`'s; never a second action |
 | `content` | yes               | The stack containing the copy and optional cta                        | The block-axis relationships between its children. No inset       |
-| `copy`    | yes               | The tight group containing `eyebrow`, `title` and `body`              | No colour or distance outside its `Layout`                        |
+| `copy`    | yes               | The one group (`text`, 16) containing `eyebrow`, `title` and `body`   | No colour or distance outside its `Layout`                        |
 | `eyebrow` | no                | One `span` above the title; whitespace-only content emits no element  | Eyebrow ink and the eyebrow type role; the case comes from `--text-mono-case` |
 | `title`   | yes               | An `h3` or `h4`, selected by `titleAs`                                | `--bcrd-title-ink`, linked or not, with no hover state; the h4 role in a tile, the h3 role in a row. No measure: the track is the measure |
 | `body`    | yes in the API    | One paragraph; whitespace-only content emits no element               | Body ink and `--measure-body`                                     |
@@ -220,8 +220,10 @@ Deliberately not props:
   `equalRows`, so it belongs to the composition that can see them all.
 - `columns`, `width`, `minWidth` and `equalHeight`: the parent `Layout` owns track count, gutter and
   equal rows. The card fills the track it receives.
-- `size`, density, padding, gap, radius and height: one card rhythm prevents members of one grid
-  being tuned independently.
+- density, padding, gap, radius and height: one card rhythm prevents members of one grid being
+  tuned independently. `size` is the narrow exception (5 Oct 2026): it steps the title and body
+  roles only, `lg | md | sm`, and `BlockCardSet` sets it per set by count, so peers in one row
+  always share a step.
 - `className`, `style` and arbitrary DOM attributes: these reopen colour, edge and geometry from
   the call site.
 - `children`, rich body content and a second action: closed strings make a nested link, Button or
@@ -241,22 +243,22 @@ Compile errors, not review comments:
 5. A static card with a cta is unrepresentable. A linked card without one is the covered card, by rule (Rev. 3), not by the caller's choice.
 6. A third orientation, a third image side, a third track count or a cta glyph override cannot
    compile.
-7. A `BlockCardSet` item with `orientation`, `imageSide` or `tracks` cannot compile.
+7. A `BlockCardSet` item with `orientation`, `imageSide`, `tracks` or `size` cannot compile.
 
 ## 4 · Variants × sizes
 
-One finish, one size, two orientations.
+One finish, three type steps (`lg | md | sm`, 5 Oct 2026), two orientations.
 
-| Orientation  | `md` — the only size                                                                                                            | Intended use                                                                                     |
+| Orientation  | Default step: `lg` horizontal, `md` vertical                                                                                    | Intended use                                                                                     |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `vertical`   | No edge, no inset. Media above copy at 3:2, h4 visual title, optional eyebrow, optional cta. Fills one track of a parent grid   | Every card grid, 2–8 across the 78 clusters; content and grid density, not a prop, set its role  |
+| `vertical`   | No edge, no inset. Media above copy at 3:2, h4 visual title (h5 at `sm`), optional eyebrow, optional cta. Fills one track of a parent grid   | Every card grid, 2–8 across the 78 clusters; content and grid density, not a prop, set its role  |
 | `horizontal` | Two equal tracks from `md`, 64 apart, the title at the h3 role. With a cover: media at 4:3 beside the copy, centred against each other. Without one: the head (eyebrow, title) beside the body and cta, top-aligned. Fills a single track | The featured first card of a set of four or more (C3), and a stack of a few substantial items |
 
 There is no public `variant` or `finish` prop. **`size` was added on 5 Oct 2026** (Amendment): the
 type steps with the count of the set, and the set passes it. Icon, image and omitted media are fills of
 one slot. Link presence changes semantics and the cta, not the card's visual category. Heading
-semantics do not change visual type. The title role, body role, eyebrow role, cta size and the two
-media ratios do not step between content shapes.
+semantics do not change visual type. The eyebrow role, cta size and the two media ratios do not
+step between content shapes or sizes; the title and body roles step with `size` and nothing else.
 
 **The edge was removed.** The shipped card carried a four-sided hairline plus a hover/pressed
 block-end overlay, and the direction the two reference decks set is a card bounded by distance
@@ -401,8 +403,8 @@ eyebrow, ring and gap, and the cta resolves tint's link steps; no value leaks fr
 
 ### (b) Component sizes
 
-- `md` card: the only size. It has no fixed inline or block size and fills the track and equal row
-  its parent `Layout` provides.
+- A card, at any `size`, has no fixed inline or block size and fills the track and equal row its
+  parent `Layout` provides. `size` steps type only (Amendment · 5 Oct 2026).
 - Four-card track: 286px at the 1240px Section content cap after three 32px gutter relationships.
   This is the smallest intended four-across desktop track and is the measurement for the content
   inset and type choice.
@@ -555,7 +557,7 @@ The vertical grid tile:
       <Layout rowGap="block">
         {image}
         <Layout rowGap="block">
-          <Layout rowGap="tight">
+          <Layout rowGap="text">{/* tight until 5 Oct 2026, S2 */}
             {eyebrow}
             {title}
             {body}
@@ -798,8 +800,10 @@ no transition) rather than shortening it. Keyboard focus keeps its ring.
 18. Do not add margin, a content inset or hand-written grid/flex arrangement; search the module and
     expect no child margin, no `padding` on the content block and no display mode used to arrange
     siblings.
-19. Do not add `surface`, `size`, `finish`, `bordered`, `columns`, `equalHeight`, `cue`, `imageRatio`,
-    `children`, `className` or `style` to the public props; type-checking attempted calls must fail.
+19. Do not add `surface`, `finish`, `bordered`, `columns`, `equalHeight`, `cue`, `imageRatio`,
+    `children`, `className` or `style` to the public props, and do not widen `size` past
+    `'lg' | 'md' | 'sm'` (5 Oct 2026: `size` is public; a `BlockCardSet` item still cannot carry
+    it); type-checking attempted calls must fail.
 20. Do not clamp titles/bodies/eyebrows or hide cards after eight; the 16-card specimen exposes
     every row.
 21. Do not place a link, Button or control in body/media; inspect the rendered tab order and expect
@@ -837,7 +841,9 @@ owner judges.
     blue, because a cover is not placed on a reserved band (ch05 §9a). 14. **Nested surfaces** with
     the resolved tokens. 15. **Equal heights.** 16. **Every section 12 edge case**, including long
     copy in the featured row and a zero-item set. 17. **Narrow tracks** at 256 and 192. 18. **Heading
-    map.** 19. **Adjacent boundary.** 20. **What a static page cannot force.**
+    map.** 19. **Adjacent boundary.** 20. **What a static page cannot force.** 21. **The case-study
+    index** (29 Sep). 22. **Size steps with the count** (5 Oct 2026): one record at `lg`, `md` and
+    `sm`, with a cover and text-only, then `BlockCardSet` at 3, 4, 5 and 6 items picking the step.
 
 `/design/layout` gains one row for `lead`: a tall lead above five peers under `equalRows`, proving
 the lead's height does not reach the peer rows.
@@ -1161,7 +1167,7 @@ NAMES
     not by reading Button's tokens.
 [x] Named glyphs are existing: arrow-right, arrow-left, and the IconName union's 17 glyphs.
 [x] Section, Layout and Button props/values are existing unions: as, rowGap, colGap, columns,
-    equalRows, align, emphasis, tone, icon; tight, block, gutter, column, section, center; base, md,
+    equalRows, align, emphasis, tone, icon; text, block, gutter, column, section, center; base, md,
     lg, xl; ul, li, span; link, primary. Cluster is no longer used — Button owns the one inline row
     this component used to build.
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS rule blocks or media-query blocks.
@@ -1221,7 +1227,7 @@ COMPLETENESS
 [x] Do's and Don'ts name a rendered-tree, type-check, search or computed-style decision, and two of
     the Don'ts are searches for the specific regressions this redesign invites: `border` in the
     module, and `cta`/`--btn-` in the module.
-[x] Specimen plan covers the one finish/size, both orientations and both image sides, all media
+[x] Specimen plan covers the one finish, all three sizes (5 Oct 2026), both orientations and both image sides, all media
     fills, the eyebrow and cta ladders, four surfaces, manual states, nested surfaces, every edge
     case, equal rows, adjacent cards and narrow tracks.
 [x] Section 16 states the one new token, its four surface values, its measured ratios and its

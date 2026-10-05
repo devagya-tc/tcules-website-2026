@@ -186,12 +186,13 @@ export default function ContentSectionSpecimen() {
           <h1>ContentSection</h1>
           <p className={s.specNote}>
             One CMS section as one band: an optional eyebrow, heading and lead, then the blocks
-            the caller hands it. The gap ladder is the reason it exists — 8 eyebrow to heading,
-            24 heading to lead, 48 head group to the blocks and between the blocks. The{' '}
+            the caller hands it. The gap ladder is the reason it exists — 24 eyebrow to heading
+            to lead (one head group, one step, as PageHero and CtaSection), 48 head group to the
+            blocks and between the blocks. The{' '}
             <code>arrangement</code> prop places that head group above the blocks (
             <code>stacked</code>, the default) or, from 1024 up, in a one-third leading track
-            beside them (<code>beside</code>, ruling O2: static, 1 : 2, 64 between the halves).
-            Below 1024 the two are identical.
+            beside them (<code>beside</code>, ruling O2: static, 1 : 2, 96 between the halves,
+            the split seam). Below 1024 the two are identical.
           </p>
         </Layout>
       </Section>
@@ -431,7 +432,7 @@ export default function ContentSectionSpecimen() {
       {/* ── 8 ──────────────────────────────────────────────────────────────────────────────── */}
       <Label title="8 · Density">
         Vertical air passes straight through to Section. It is independent of arrangement: a
-        tight band beside and an open band beside keep the same 64 between their halves.
+        tight band beside and an open band beside keep the same 96 between their halves.
       </Label>
       <ContentSection
         arrangement="beside"
