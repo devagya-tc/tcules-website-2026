@@ -105,7 +105,9 @@ export function Default() {
 
 /** The trail, inside the hero: Breadcrumbs in the `trail` slot, 32 above the title. `labels` are
     the rendered crumbs' labels (the site derives both from one array with `heroTrail`); in
-    development PageHero warns when the eyebrow or the title repeats one of them. */
+    development PageHero warns when the eyebrow says one of them as a phrase, or the title equals
+    the last. So the eyebrow is a category and format the trail cannot say: "Case study" under
+    Home / Case studies would be the crumb read twice. */
 export function WithTrail() {
   const items = [
     { label: 'Home', href: '/' },
@@ -117,7 +119,7 @@ export function WithTrail() {
       trail={{ crumbs: <Breadcrumbs items={items} />, labels: items.map((item) => item.label) }}
       title={TITLE}
       body={[LEAD]}
-      eyebrow="Case study · Energy"
+      eyebrow="Energy · Platform rebuild"
     />
   );
 }

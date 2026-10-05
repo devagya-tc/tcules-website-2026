@@ -275,7 +275,11 @@ const TRAIL = [
   { label: 'Case studies', href: ROUTES.caseStudies },
   { label: 'ConnectX', href: CASE_STUDY },
 ] as const;
-const TRAIL_CURRENT = 'ConnectX';
+
+/* The eyebrow a hero under TRAIL may carry: a category and a format, neither of which the trail
+   says. EYEBROW cannot stand there — it opens with 'ConnectX', the trail's last crumb, and the
+   deliberately wrong block below uses it for exactly that reason. */
+const TRAIL_EYEBROW = 'Climate tech · Platform rebuild';
 
 /* A page whose only name IS its h1 — a glossary term. Its whole trail ends in that name, and
    heroTrail drops the leaf because the title says it, so the trail ends at the parent. */
@@ -716,12 +720,12 @@ export default function PageHeroSpecimenPage() {
           trail={heroTrail(TRAIL, TITLE, crumbs)}
           title={TITLE}
           body={paragraphs(2)}
-          eyebrow={EYEBROW}
+          eyebrow={TRAIL_EYEBROW}
         />
       ))}
       <Note
         title="9 · The trail inside the hero — paper, tint, ink and blue, above"
-        note="Breadcrumbs in the trail slot: 96 of the hero's own padding above it, 32 (gutter) from the trail to the eyebrow. One band, so the trail reads the hero's ground and a two-tone seam can no longer be written — the four bands above pass nothing to the crumbs but the items. The eyebrow here is a category the trail cannot say, which is the only kind an eyebrow under a trail may carry."
+        note="Breadcrumbs in the trail slot: 96 of the hero's own padding above it, 32 (gutter) from the trail to the eyebrow. One band, so the trail reads the hero's ground and a two-tone seam can no longer be written — the four bands above pass nothing to the crumbs but the items. The eyebrow here is a category and a format the trail cannot say, which is the only kind an eyebrow under a trail may carry."
       />
 
       <PageHero
@@ -762,11 +766,11 @@ export default function PageHeroSpecimenPage() {
         trail={heroTrail(TRAIL, TITLE, crumbs)}
         title={TITLE}
         body={paragraphs(1)}
-        eyebrow={TRAIL_CURRENT}
+        eyebrow={EYEBROW}
       />
       <Note
         title="9 · Deliberately WRONG — an eyebrow that repeats the last crumb"
-        note="The eyebrow says 'ConnectX' 32px under a trail that ends in 'ConnectX'. In development PageHero logs a warning naming the eyebrow, and the band still renders, so the fault is visible on the page as well as in the console. The comparison is sameLabel from @/lib/trail, the same one the routes' eyebrowBesideTrail uses: zero-width characters, punctuation, case and a trailing 's' are ignored, so 'Audit' under 'Audits' is caught too. The fix is to drop the eyebrow, or to replace it with a category or format the trail cannot say: 'Case study · Fintech', 'Podcast · Ep 12'."
+        note="The eyebrow opens with 'ConnectX' 32px under a trail that ends in 'ConnectX', so the crumb reads twice even though the two strings are not equal. In development PageHero logs a warning naming the eyebrow, and the band still renders, so the fault is visible on the page as well as in the console. The comparison is repeatsTrail from @/lib/trail, the same one the routes' eyebrowBesideTrail uses: an eyebrow repeats a crumb when it says the crumb's words as a whole-word phrase, with zero-width characters, punctuation, case and plurals ignored. So 'Product Design specialist' under 'Product design', 'Product audit' under 'Audits' and 'Case study' under 'Case studies' are all caught, while 'Designer' under 'Design' is not. The fix is to drop the eyebrow, or to replace it with a category or format the trail cannot say, like block 9's 'Climate tech · Platform rebuild'."
       />
 
       {/* ── 10 · Every edge case from §12 ───────────────────────────────────────── */}

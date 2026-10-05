@@ -171,12 +171,15 @@ export type PageHeroProps = {
    */
   body: readonly [string, ...string[]];
   /**
-   * A category or format the trail cannot say (`Case study`, `Podcast`). Never the last crumb.
+   * A category or format the trail cannot say (`Fintech · Platform rebuild`, `Ep 12 · 48 min`).
+   * Never a crumb's words, and that includes the format a parent crumb already names: `Case study`
+   * under Home / Case studies is the crumb read twice.
    *
    * That rule leads for the design agent's `.prompt.md`. Since the trail moved inside the hero
    * (kit `fdn-top`, 5 Oct 2026), an eyebrow that repeats a crumb stands 32px under the trail that
-   * already said it; PageHero warns in development when it equals any of `trail.labels`, by the
-   * same comparison `eyebrowBesideTrail` uses (`sameLabel`, `@/lib/trail`).
+   * already said it; PageHero warns in development when it says any of `trail.labels` as a
+   * whole-word phrase ("Product Design specialist" under "Product design"), by the same comparison
+   * `eyebrowBesideTrail` uses (`repeatsTrail`, `@/lib/trail`).
    * Uppercased by the stylesheet, not by the data, so the frontmatter keeps its authored casing.
    *
    * A slot, not a variant: absent renders no element and no seam, which is why there is no
@@ -432,9 +435,11 @@ export function PageHero({
   const centred = split && media.type === 'image' && media.image.kind === 'illustration';
 
   /* The trail stands 32px above the copy, so anything in the copy that says a crumb's words again
-     reads twice. Two warnings, one definition of "the same words" — `sameLabel` in @/lib/trail,
-     which the routes' own `heroTrail` and `eyebrowBesideTrail` use, so the warning cannot disagree
-     with the fix (zero-width characters, punctuation, case and a trailing "s" all ignored).
+     reads twice. Two warnings, and each asks the question the routes' own fix asks, from
+     @/lib/trail, so the warning cannot disagree with the fix (zero-width characters, punctuation,
+     case and a trailing "s" all ignored): `repeatsTrail` for the eyebrow, which `eyebrowBesideTrail`
+     uses and which catches a crumb said INSIDE the eyebrow, and `sameLabel` for the title, which
+     `heroTrail` uses.
      Warnings rather than refusals: the band renders, so the fault is visible on the page as well
      as in the console.
 
@@ -446,7 +451,7 @@ export function PageHero({
     if (eyebrow !== undefined && repeatsTrail(eyebrow, trail.labels)) {
       console.warn(
         `PageHero: eyebrow "${eyebrow}" repeats a crumb in the trail. Drop it, or replace it ` +
-          `with a category or format the trail cannot say (for example "Case study · Fintech").`,
+          `with a category or format the trail cannot say (for example "Fintech · Platform rebuild").`,
       );
     }
     const last = trail.labels.at(-1);

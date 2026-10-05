@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 /**
- * The trail at the top of a page, and the one definition of "says the same thing".
+ * The trail at the top of a page, and the one place that defines "says the same thing".
  *
  * Since 5 Oct 2026 (kit `fdn-top`) the trail sits inside the hero, 32px above the title (or the
  * eyebrow). Two things follow from standing that close, and both live here so that every route,
@@ -12,6 +12,11 @@ import type { ReactNode } from 'react';
  *      phone (tracker 2.17). So `heroTrail` drops the leaf when it repeats the title, and the trail
  *      then ENDS AT THE PARENT, as a link: the h1 directly below is the current page.
  *   2. The hero eyebrow never repeats a crumb (owner, 5 Oct 2026). `eyebrowBesideTrail` drops it.
+ *      "Repeats" means the eyebrow SAYS the crumb's words, not only that it equals them: "Product
+ *      Design specialist" 32px under a trail ending "Product design" reads the crumb twice as surely
+ *      as "Product design" would (fix round, 6 Oct 2026). So the eyebrow question is `containsLabel`,
+ *      a whole-word phrase match, while the title question stays `sameLabel`: an h1 is a sentence
+ *      and routinely uses a crumb's words without repeating the crumb.
  *
  * A leaf: strings in, strings out, plus one render callback the caller supplies. It knows nothing
  * of Breadcrumbs or PageHero — the shapes below are structural, so neither has to import the other.
@@ -48,8 +53,11 @@ export type HeroTrail = { crumbs: ReactNode; labels: readonly string[] };
  * Zero-width characters dropped (the Matter record carries a U+200D); punctuation and runs of
  * space folded to one space (a CMS heading arrives as "Future , Interfaces Lab", and "Matter |
  * Design System" is the nav's "Matter Design System"); case folded (eyebrows are uppercased by the
- * stylesheet, so a repeat in another casing is still a repeat); and a trailing "s" dropped from
- * every word, so "Audit" under "Audits" is still a repeat.
+ * stylesheet, so a repeat in another casing is still a repeat); and every word reduced to its
+ * singular the cheap way, "-ies" to "-y" and then a trailing "s" dropped, so "Audit" under "Audits"
+ * and "Case study" under "Case studies" are still repeats. Both sides go through the same
+ * reduction, so a word it mangles ("services" to "service" is right, "series" to "sery" is not)
+ * still compares equal to itself.
  */
 export function normaliseLabel(label: string): string {
   return label
@@ -58,19 +66,36 @@ export function normaliseLabel(label: string): string {
     .replace(/[^\p{L}\p{N}]+/gu, ' ')
     .trim()
     .split(' ')
-    .map((word) => word.replace(/s$/, ''))
+    .map((word) => word.replace(/ies$/, 'y').replace(/s$/, ''))
     .join(' ');
 }
 
-/** Whether two labels say the same thing. The ONE definition every check here uses. */
+/** Whether two labels say the same thing. The question asked of a crumb and the h1. */
 export function sameLabel(a: string, b: string): boolean {
   const key = normaliseLabel(a);
   return key.length > 0 && key === normaliseLabel(b);
 }
 
-/** Whether `text` repeats any of `labels`. PageHero's development warning asks exactly this. */
+/**
+ * Whether `text` says `label`: the label's words appear in it, in order, as whole words. The
+ * question asked of an eyebrow and a crumb.
+ *
+ * Whole words on the normalised form, so "Product Design specialist" says "Product design",
+ * "Design-System Strategy" says "Design systems" and "Product audit" says "Audits", while
+ * "Designer" does not say "Design". Equality is the special case, so everything `sameLabel`
+ * catches this catches too.
+ */
+export function containsLabel(text: string, label: string): boolean {
+  const key = normaliseLabel(label);
+  return key.length > 0 && ` ${normaliseLabel(text)} `.includes(` ${key} `);
+}
+
+/**
+ * Whether an eyebrow `text` repeats any of `labels`. `eyebrowBesideTrail` and PageHero's
+ * development warning both ask exactly this, so the warning cannot disagree with the fix.
+ */
 export function repeatsTrail(text: string, labels: readonly string[]): boolean {
-  return labels.some((label) => sameLabel(label, text));
+  return labels.some((label) => containsLabel(text, label));
 }
 
 /**
@@ -110,7 +135,9 @@ export function heroTrail(
  * an eyebrow that repeats a leaf `heroTrail` dropped repeats the h1, which is no better.
  *
  * It compares against EVERY crumb, not only the last: a format eyebrow ("Audits") repeats the
- * parent crumb as surely as a name repeats the current one.
+ * parent crumb as surely as a name repeats the current one. And it asks whether the eyebrow SAYS a
+ * crumb (`containsLabel`), not whether it equals one: "Product Design services" under Home /
+ * Services is the parent's word read twice.
  */
 export function eyebrowBesideTrail(
   eyebrow: string | null | undefined,
