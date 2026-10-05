@@ -111,6 +111,28 @@ export const ROUTES = {
 
 export type RouteKey = keyof typeof ROUTES;
 
+/**
+ * The site's section indexes: the pages that exist to list a family ("Services", "Case studies",
+ * "Insights"), as against a top-level page that NAMES something ("How we work", "Future Interfaces
+ * Lab", "Matter Design System").
+ *
+ * Named once, here, because the difference decides what a hero eyebrow may say. `@/lib/trail`
+ * treats Home and these crumbs as the site's structure, which an eyebrow repeats only by equalling
+ * ("Case study · Fintech" stands under Home / Case studies, a bare "Case study" does not); every
+ * other crumb is a name, which an eyebrow repeats by saying it. It used to be inferred from href
+ * depth, which counted every top-level page as structure. A new family's index joins this list in
+ * the same edit that names its route.
+ */
+export const SECTION_INDEXES: readonly string[] = [
+  ROUTES.services,
+  ROUTES.audits,
+  ROUTES.caseStudies,
+  ROUTES.expertise,
+  ROUTES.insights,
+  ROUTES.tools,
+  ROUTES.glossary,
+];
+
 /** Build one canonical audit-detail path without duplicating the route family at call sites. */
 export function auditPath(slug: string): string {
   return `${ROUTES.audits}/${encodeURIComponent(slug)}`;

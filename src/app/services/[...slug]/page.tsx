@@ -20,7 +20,7 @@ import {
   type ServiceSection,
 } from '@/content';
 import { ROUTES, servicePath } from '@/lib/routes';
-import { eyebrowBesideTrail, heroTrail, normaliseLabel } from '@/lib/trail';
+import { eyebrowBesideTrail, heroTrail, pageName, slugLabel } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -302,95 +302,41 @@ function sectionSurfaces(
   });
 }
 
-const ACRONYMS: Record<string, string> = {
-  ai: 'AI',
-  api: 'API',
-  b2b: 'B2B',
-  qa: 'QA',
-  saas: 'SaaS',
-  ui: 'UI',
-  ux: 'UX',
-};
-
 /**
- * Words in the trail's case: sentence case, the first word capitalised and acronyms restored, so a
- * slug-built crumb and an authored one read as one trail ("AI product UX", "Human-in-the-loop
- * workflows"). Hyphenated words are cased part by part.
- */
-function trailCase(words: readonly string[]): string {
-  return words
-    .map((word, index) =>
-      word
-        .split('-')
-        .map((part, partIndex) => {
-          const acronym = ACRONYMS[part.toLowerCase()];
-          if (acronym) return acronym;
-          const lower = part.toLowerCase();
-          return index === 0 && partIndex === 0
-            ? `${lower.charAt(0).toUpperCase()}${lower.slice(1)}`
-            : lower;
-        })
-        .join('-'),
-    )
-    .join(' ');
-}
-
-function breadcrumbLabel(segment: string): string {
-  return trailCase(segment.split('-').filter(Boolean));
-}
-
-/** Words a slug drops without changing the name: "trust-control-recovery" is "Trust, Control and Recovery". */
-const CONNECTIVES = new Set(['a', 'and', 'for', 'in', 'of', 'the', 'to']);
-
-/** A name reduced to the words that carry it, for comparing a slug with an authored label. */
-function nameWords(label: string): string {
-  return normaliseLabel(label)
-    .split(' ')
-    .filter((word) => !CONNECTIVES.has(word))
-    .join(' ');
-}
-
-/**
- * The page's own crumb: its name from the slug, unless the CMS eyebrow is that same name as its
- * author spelled it, with the hyphens and the words a slug drops. Then the eyebrow's wording is
- * used, in the trail's case, so the trail reads "Trust, control and recovery" rather than "Trust
- * control recovery". Either way the eyebrow then says the leaf and `eyebrowBesideTrail` drops it.
- * An eyebrow that is not the page's name ("Product Design specialist" on UX research) never
- * becomes a crumb.
- */
-function serviceName(segment: string, eyebrow: string | undefined): string {
-  const fromSlug = breadcrumbLabel(segment);
-  const spelled = eyebrow?.trim();
-  return spelled && nameWords(spelled) === nameWords(fromSlug)
-    ? trailCase(spelled.split(/\s+/))
-    : fromSlug;
-}
-
-/**
- * The service's whole trail, every level named, the page's own included.
+ * The service's whole trail, every level named, the page's own included, and what is left of the
+ * CMS eyebrow for the hero.
  *
- * The leaf is the page's NAME ("Product design", "Design system strategy"), never its `title`: the
- * title is a headline, so as the leaf `heroTrail` dropped it and the trail ended at the parent,
- * leaving the CMS eyebrow as the only thing in the hero that named the page — and where that
- * eyebrow said a crumb (`eyebrowBesideTrail`) it went too, and the page's name went with it (fix
- * round, 6 Oct 2026). Named from the slug, the trail reads "Home / Services / Product design",
- * the shape the ServicePage template gets from `story.name`, so an eyebrow that only restated the
- * name drops legitimately. The record's short `name` replaces both the slug label and the eyebrow
- * reading when it exists (`docs/strapi-changes.md` § 16).
+ * The leaf is the page's NAME ("Product design", "Trust, control and recovery"), never its
+ * `title`: the title is a headline, which `heroTrail` would drop, ending the trail at the parent
+ * (fix round, 6 Oct 2026). `pageName` (`@/lib/trail`) chooses the name, from the eyebrow where it
+ * spells the slug's name, from the slug otherwise. The parent passed to it is the named parent
+ * service, never the Services index. The record's short `name` replaces all of this when it
+ * exists (`docs/strapi-changes.md` § 16).
  */
-function serviceBreadcrumbs(slug: string, eyebrow: string | undefined): BreadcrumbItem[] {
+function serviceTrail(
+  slug: string,
+  eyebrow: string | undefined,
+): { crumbs: BreadcrumbItem[]; eyebrow: string | undefined } {
   const segments = slug.split('/').filter(Boolean);
-  const levels = segments.map((segment, index) => ({
-    label:
-      index === segments.length - 1 ? serviceName(segment, eyebrow) : breadcrumbLabel(segment),
+  const parents = segments.slice(0, -1).map((segment, index) => ({
+    label: slugLabel(segment),
     href: servicePath(segments.slice(0, index + 1).join('/')),
   }));
+  const page = pageName({
+    name: slugLabel(segments.at(-1) ?? ''),
+    eyebrow,
+    parent: parents.at(-1)?.label,
+  });
 
-  return [
-    { label: 'Home', href: ROUTES.home },
-    { label: 'Services', href: ROUTES.services },
-    ...levels,
-  ];
+  return {
+    crumbs: [
+      { label: 'Home', href: ROUTES.home },
+      { label: 'Services', href: ROUTES.services },
+      ...parents,
+      { label: page.label, href: servicePath(slug) },
+    ],
+    eyebrow: page.eyebrow,
+  };
 }
 
 function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
@@ -449,7 +395,7 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
   const tintFollowsRun = Boolean(service.faq || service.capabilitiesCta || service.cta);
   const surfaces = sectionSurfaces(service.sections, tintFollowsRun);
 
-  const crumbs: BreadcrumbItem[] = serviceBreadcrumbs(service.slug, service.hero.eyebrow);
+  const { crumbs, eyebrow } = serviceTrail(service.slug, service.hero.eyebrow);
 
   return (
     <>
@@ -465,7 +411,7 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
           <Breadcrumbs {...t} />
         ))}
         title={title}
-        eyebrow={eyebrowBesideTrail(service.hero.eyebrow, crumbs)}
+        eyebrow={eyebrowBesideTrail(eyebrow, crumbs)}
         body={[service.hero.description]}
         actions={heroActions}
         surface="paper"

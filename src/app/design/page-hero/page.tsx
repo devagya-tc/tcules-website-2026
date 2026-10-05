@@ -281,6 +281,11 @@ const TRAIL = [
    deliberately wrong block below uses it for exactly that reason. */
 const TRAIL_EYEBROW = 'Climate tech · Platform rebuild';
 
+/* Two eyebrows against TRAIL's section crumb, 'Case studies'. The first holds its word and adds
+   what the trail cannot say, so it stands; the second is the crumb alone, so it is a repeat. */
+const STRUCTURE_EYEBROW = 'Case study · Fintech';
+const BARE_STRUCTURE_EYEBROW = 'Case study';
+
 /* A page whose only name IS its h1 — a glossary term. Its whole trail ends in that name, and
    heroTrail drops the leaf because the title says it, so the trail ends at the parent. */
 const TERM = 'Design intent';
@@ -771,6 +776,28 @@ export default function PageHeroSpecimenPage() {
       <Note
         title="9 · Deliberately WRONG — an eyebrow that repeats the last crumb"
         note="The eyebrow opens with 'ConnectX' 32px under a trail that ends in 'ConnectX', so the crumb reads twice even though the two strings are not equal. In development PageHero logs a warning naming the eyebrow, and the band still renders, so the fault is visible on the page as well as in the console. The comparison is repeatsTrail from @/lib/trail, the same one the routes' eyebrowBesideTrail uses: an eyebrow repeats a crumb that names something when it says the crumb's words as a whole-word phrase, and repeats the site's structure (Home, a section index such as Case studies) only when it equals it, with zero-width characters, punctuation, case and plurals ignored throughout. So 'Product Design specialist' under 'Product design' and a bare 'Case study' under 'Case studies' are caught, while 'Case study · Fintech' under 'Case studies' and 'Designer' under 'Design' are not. The fix is to drop the eyebrow, or to replace it with a category or format the trail cannot say, like block 9's 'Climate tech · Platform rebuild'."
+      />
+
+      <PageHero
+        trail={heroTrail(TRAIL, TITLE, crumbs)}
+        title={TITLE}
+        body={paragraphs(1)}
+        eyebrow={STRUCTURE_EYEBROW}
+      />
+      <Note
+        title="9 · An eyebrow that holds a section crumb's word and stands — 'Case study · Fintech' under Home / Case studies"
+        note="'Case studies' is the site's structure, a section index named once in SECTION_INDEXES (@/lib/routes), so an eyebrow repeats it only by equalling it. 'Case study · Fintech' says the format and the category, which the trail cannot, so it stands with no warning. The same rule lets 'Product audit' stand under Home / Audits. Against a crumb that NAMES something, 'ConnectX' here, or a top-level page such as 'Future Interfaces Lab', the eyebrow is a repeat as soon as it says the name, which is the next block's ConnectX case."
+      />
+
+      <PageHero
+        trail={heroTrail(TRAIL, TITLE, crumbs)}
+        title={TITLE}
+        body={paragraphs(1)}
+        eyebrow={BARE_STRUCTURE_EYEBROW}
+      />
+      <Note
+        title="9 · Deliberately WRONG — a bare 'Case study' under Home / Case studies"
+        note="The eyebrow equals the section crumb once plurals are folded ('Case study' and 'Case studies' normalise alike), so it is the crumb read twice, 32px apart. In development PageHero logs a warning naming it, and the band still renders so the fault shows on the page. On a live route eyebrowBesideTrail drops it before PageHero sees it, and reports the drop once per server process. The fix is to add what the trail cannot say, as the block above does."
       />
 
       {/* ── 10 · Every edge case from §12 ───────────────────────────────────────── */}

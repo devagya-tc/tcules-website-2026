@@ -106,7 +106,8 @@ export type HeroMedia = HeroImage | HeroVideo;
 
 /**
  * The page's ancestor trail, inside the hero's band (kit `fdn-top`, 5 Oct 2026):
- * `{ crumbs: ReactNode; labels: readonly string[] }`, declared in `@/lib/trail` and re-exported here.
+ * `{ crumbs: ReactNode; labels: readonly string[]; structural?: number }`, declared in `@/lib/trail`
+ * and re-exported here.
  *
  * `crumbs` is a slot: the rendered `<Breadcrumbs …/>`. A slot rather than the items, because a
  * pattern does not import a pattern — the caller composes, and PageHero only places what it is
@@ -114,8 +115,10 @@ export type HeroMedia = HeroImage | HeroVideo;
  *
  * `labels` are the rendered crumbs' labels, beside the slot because a ReactNode cannot be read.
  * They are used for one thing: in development PageHero warns when the eyebrow or the title says
- * the same words as a crumb. Neither is written by hand — `heroTrail(items, title, render)` builds
- * both from one array, and drops a last crumb that repeats the title before either is made.
+ * the same words as a crumb. `structural` is how many of them, from the start, are the site's
+ * structure (Home and a section index from `SECTION_INDEXES`), which the eyebrow repeats only by
+ * equalling. None is written by hand — `heroTrail(items, title, render)` builds all three from one
+ * array, and drops a last crumb that repeats the title before any is made.
  */
 export type { HeroTrail };
 

@@ -10,7 +10,7 @@ import {
   type HowWeWorkContentColumn,
 } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
+import { eyebrowBesideTrail, heroTrail, pageName } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -269,9 +269,12 @@ export default async function HowWeWorkPage() {
 
   const heroActions = firstTwoHeroActions(page.hero.actions);
 
+  /* The page's name, from the record's eyebrow when it spells it ("How We Work", in the trail's
+     case), so the eyebrow becomes the crumb rather than a repeat of it. */
+  const name = pageName({ name: 'How we work', eyebrow: page.hero.eyebrow });
   const crumbs: BreadcrumbItem[] = [
     { label: 'Home', href: ROUTES.home },
-    { label: page.hero.eyebrow || page.title, href: ROUTES.howWeWork },
+    { label: name.label, href: ROUTES.howWeWork },
   ];
 
   return (
@@ -288,7 +291,7 @@ export default async function HowWeWorkPage() {
           <Breadcrumbs {...t} />
         ))}
         title={page.title}
-        eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
+        eyebrow={eyebrowBesideTrail(name.eyebrow, crumbs)}
         body={[page.hero.description]}
         actions={heroActions}
         surface="paper"
