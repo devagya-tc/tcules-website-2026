@@ -125,6 +125,10 @@
      so both alias --ratio-cover (primitives.css § Media · ratio). */
   --lcrd-thumbnail-inline-md: 160px;
   --lcrd-thumbnail-ratio: var(--ratio-cover);
+  /* The thumbnail's corner: 8, no frame, for every kind (visual-direction § 5.3, fdn-media, 6 Oct
+     2026) — the photograph radius every image box now takes, so a row's 160px thumbnail and the
+     card photos above it on one page have one corner. On the box, not the image: the box clips. */
+  --lcrd-thumbnail-radius: var(--radius-8);
 
   /* The clipped box that keeps an external row's "opens in a new tab" hint out of the layout while
      leaving it in the accessibility tree. Not an optical correction and not a layout distance — a

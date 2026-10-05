@@ -321,8 +321,10 @@ get a spec. That step was manual, and Claude Design cannot see this repo.)
 the chain. `docs/briefs/` is the record of what was asked for under the old workflow; `docs/briefs/README.md`
 indexes it.
 
-**`npm run verify`** chains six checks: `lint`, `typecheck`, `tokens:check`, `classes:check`,
-`specimens:check` and `design:check`. Two more gates run separately:
+**`npm run verify`** chains seven checks: `lint`, `typecheck`, `tokens:check`, `classes:check`,
+`specimens:check`, `design:check` and `photos:check` (the kit photo catalogue's measured tone tags,
+derived widths and generated registry are current; `npm run photos:tone && npm run photos:derive`
+refreshes them). Two more gates run separately:
 - `npm run build && npm run aria:check` proves every ARIA idref in the rendered output resolves and that
   no id is duplicated. It needs a build.
 - `npm run shots` catches horizontal overflow and page errors. It needs a server.

@@ -201,12 +201,15 @@
 /* The thumbnail's BOX, and nothing inside it. ListCard owns the placement — 160 inline, the shared
    3:2 cover crop — and Media fills it (`fit="fill"`) with its own crop, srcset and edge by kind.
    overflow:hidden is what makes the cover crop a crop: Media's fill image is 100% of this box, and
-   a cut-out's drop-shadow is clipped to it rather than bleeding into the copy's seam. */
+   a cut-out's drop-shadow is clipped to it rather than bleeding into the copy's seam. It is also
+   what applies the radius to whatever fills the box — photograph, capture or a cut-out's panel —
+   since Media is passed `edge="placement"` and draws no edge of its own (visual-direction § 5.3). */
 .thumbnail {
   display: block;
   inline-size: var(--lcrd-thumbnail-inline-md);
   aspect-ratio: var(--lcrd-thumbnail-ratio);
   overflow: hidden;
+  border-radius: var(--lcrd-thumbnail-radius);
 }
 
 /* The title breaks only BETWEEN words. `anywhere` stood here and was the mid-word bug ("Produ/ct",

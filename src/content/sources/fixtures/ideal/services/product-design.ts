@@ -28,6 +28,20 @@ export const productDesign: ServiceStory = {
       height: 714,
     },
   },
+  /* Photographs (visual-direction § 5.5, § 5.6): a warm-family page. The stand-in pool is in order of
+     preference, studio first, and leaves out this page's own § 5.6 picks so no photo appears twice. */
+  photos: {
+    family: 'warm',
+    standIns: [
+      'studio-whiteboard-crit',
+      'hand-mouse-detail',
+      'workshop-brick-room',
+      'board-review-backs',
+      'workshop-whiteboard-lounge',
+      'office-calm-interior',
+      'whiteboard-two-hands',
+    ],
+  },
   sections: [
     {
       type: 'section',

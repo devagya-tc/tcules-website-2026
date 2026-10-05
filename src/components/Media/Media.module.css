@@ -8,9 +8,11 @@
    No margin. The seam around an image is the parent's.
    No display:grid or display:flex. The two display:block declarations below de-inline an
      element (the <img>'s baseline gap, the panel <span>); neither arranges anything.
-   No aspect-ratio. In `intrinsic` the ratio is the asset's own, carried by the width and height
+   One aspect-ratio, and only for a photograph cut to a `ratio` (.crop, visual-direction § 5.3,
+     6 Oct 2026). In `intrinsic` the ratio is the asset's own, carried by the width and height
      attributes; in `fill` the ratio is the PARENT's box, which is the whole point of `fill` —
-     the pattern that crops owns the crop.
+     the pattern that crops owns the crop. `ratio` is the third case: a photograph whose box is
+     Media's own (B, K, the banner, the aside), so the ratio has nowhere else to live.
    No max-inline-size, no max-block-size. A very tall asset renders tall: that is a supply
      problem the 326 check catches (ch05 §2, B3), not something to clip here.
    No box-shadow. A cut-out's silhouette is its alpha, and only filter: drop-shadow() follows it;
@@ -23,7 +25,7 @@
    the panel at equal specificity. Nothing else here sets one property twice on one element. */
 
 /* Every kind: the full inline size of whatever box contains it, and square corners (ch05 §6 —
-   radius 0 on every image). The width is 100% of the parent's track at every width, border
+   radius 0 on every image; a photograph takes --media-photo-radius below, § 5.3). The width is 100% of the parent's track at every width, border
    included, because reset.css's global border-box puts the capture's hairline inside it. */
 .image {
   display: block;
@@ -37,13 +39,66 @@
   block-size: auto;
 }
 
-/* The parent owns the ratio; the image covers it, anchored at --media-fill-position (the inline
-   start, 20% down) rather than the centre. Only the placements that crop mechanically use this,
-   and they are supplied an asset authored at their ratio (ch05 B4, §9a). */
+/* The parent owns the ratio; the image covers it, anchored at the record's focal point when it has
+   one and otherwise at --media-fill-position. --media-focus is declared here with that default, and
+   Media.tsx writes the record's point on the element's style, which outranks any class — so the one
+   property the crop reads is always defined, and per-asset where the asset says so. The default is
+   the inline start, 20% down — the anchor for product UI, which reads from its top-left. Only
+   the placements that crop mechanically use this, and they are supplied an asset authored at
+   their ratio (ch05 B4, §9a). A photograph in a card carries a focal point; a cover does not. */
 .fill {
+  --media-focus: var(--media-fill-position);
   block-size: 100%;
   object-fit: cover;
-  object-position: var(--media-fill-position);
+  object-position: var(--media-focus);
+}
+
+/* `ratio`: a photograph cut to one of § 5.4's ratios in its own box — the full inline size, the
+   block size from the ratio, a cover crop anchored at the focal point, or at the centre
+   (--media-crop-position) where the record names none. Anchored, as object-position anchors: the
+   point x% across the image sits x% across the box, so the focus is always inside the crop — the same local-default-then-inline
+   mechanism as .fill. The ratio itself is one modifier below. */
+.crop {
+  --media-focus: var(--media-crop-position);
+  block-size: auto;
+  object-fit: cover;
+  object-position: var(--media-focus);
+}
+
+.ratio4x5 {
+  aspect-ratio: var(--media-ratio-4x5);
+}
+
+.ratio5x4 {
+  aspect-ratio: var(--media-ratio-5x4);
+}
+
+.ratio3x1 {
+  aspect-ratio: var(--media-ratio-3x1);
+}
+
+.ratio3x2 {
+  aspect-ratio: var(--media-ratio-3x2);
+}
+
+.ratio16x9 {
+  aspect-ratio: var(--media-ratio-16x9);
+}
+
+.ratio4x3 {
+  aspect-ratio: var(--media-ratio-4x3);
+}
+
+.ratio1x1 {
+  aspect-ratio: var(--media-ratio-1x1);
+}
+
+/* A photograph's one edge treatment: no frame, the photograph radius (visual-direction § 5.3). A
+   later rule than .image, at equal specificity, so it overrides --media-radius's zero; emitted only
+   when Media draws the edge (`edge="kind"`) — a placement that rules its own crop box draws its own
+   radius on that box, and a second one here would round the image inside it. */
+.photograph {
+  border-radius: var(--media-photo-radius);
 }
 
 /* A capture's one edge cue: the placement's hairline in the surface's rule ink (ch05 §2). */

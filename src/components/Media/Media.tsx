@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 import { cx } from '@/lib/cx';
 
 import styles from './Media.module.css';
@@ -13,7 +15,11 @@ import styles from './Media.module.css';
  *                 contrast panel when its own edge does not hold against the ground (B5).
  *   illustration  our own line-led drawing (ch05 §4a). Never boxed: no edge, no panel, no
  *                 shadow, in any placement (B4). Never placed on blue.
- *   photograph    team and studio (ch05 §3). No edge, radius 0, never masked.
+ *   photograph    team, studio and stock (ch05 §3). No edge, never masked, and the photograph
+ *                 radius --media-photo-radius (8) on its own box (visual-direction § 5.3, fdn-media,
+ *                 6 Oct 2026): the 29 Sep card-image radius extended to every photograph, so a page
+ *                 never shows rounded card photos beside a square split photo. The only kind that
+ *                 takes `ratio`.
  *
  * A kind is a CONTENT fact about the asset — it passes the Strapi test in strapi-changes.md §1
  * because it changes what the image is, not how one page wants it to look — so it arrives on
@@ -27,6 +33,37 @@ export type MediaKind = 'capture' | 'cut-out' | 'illustration' | 'photograph';
  * guesses it from the surface, because the surface does not know what colour the product's edge is.
  */
 export type MediaPanel = 'paper' | 'paper-deep' | 'ink';
+
+/**
+ * A crop ratio a photograph may be cut to, inline over block. The closed set of § 5.4's placements:
+ *
+ *   4/5   B, K and L-photo, the media split         5/4   the photograph hero
+ *   3/1   I banner below its head                    3/2   I banner beside, the head-track aside, a pair
+ *   16/9  card sets of three or more                 4/3   the horizontal card
+ *   1/1   portraits
+ *
+ * A placement states one; Media does not choose. Each maps to a `--media-ratio-*` token.
+ */
+export type MediaRatio = '4/5' | '5/4' | '3/1' | '3/2' | '16/9' | '4/3' | '1/1';
+
+/**
+ * A focal point, each axis 0 to 1 from the image's top-left: where a crop is anchored. It is an
+ * object-position, so the point x% across the image sits x% across the box and the focus always
+ * stays inside the crop; it is not centred unless it is at 0.5. A fact about the
+ * ASSET (the catalogue's `focalPoint`), so it arrives on the record; a placement may override it on
+ * the prop when its own crop needs a different anchor ("crop from the right", § 5.6).
+ */
+export type MediaFocus = { x: number; y: number };
+
+/**
+ * A photograph's measured tone (`npm run photos:tone`, visual-direction § 5.5). Media renders nothing
+ * from it; it emits it as `data-photo-temp` / `data-photo-sat` so `fold:check` can count a page's
+ * families and vivid photographs from the rendered DOM.
+ */
+export type MediaTone = {
+  temperature: 'warm' | 'neutral' | 'cool';
+  saturation: 'vivid' | 'quiet';
+};
 
 /** One derived width of the master, resized and never recomposed (ch05 §9). */
 export type MediaSource = {
@@ -65,6 +102,16 @@ export type MediaImage = {
   /** Cut-outs only: the one `--shadow-crop`. Ignored, with a development warning, elsewhere. */
   shadow?: boolean;
   sources?: readonly MediaSource[];
+  /** Where a crop is anchored (`ratio`, or `fill`). Absent: the centre for `ratio`, the fill anchor for `fill`. */
+  focus?: MediaFocus;
+  /** Photographs only: the measured tone tags, emitted for the gate. */
+  tone?: MediaTone;
+  /**
+   * True when this photograph stands in for a cover that does not exist yet (§ 5.7). Never shown to
+   * a reader — a stand-in is not labelled on the page — but emitted as `data-stand-in` so a gate or
+   * a reviewer can find every one before the real covers replace them.
+   */
+  standIn?: boolean;
 };
 
 /**
@@ -120,6 +167,17 @@ export type MediaProps = {
   /** The panel inset step. Defaults to `gutter`. Only a cut-out on a panel has an inset to set. */
   inset?: MediaInset;
   /**
+   * Crop a PHOTOGRAPH to this ratio, in its own box: full width of the parent, height from the
+   * ratio, a cover crop anchored at `focus`. For the placements where the image's box is Media's own
+   * rather than a pattern's (§ 5.3: B, K, the banner, the aside, the hero photograph). Only a
+   * photograph is ever cropped this way — a capture, a cut-out and an illustration render whole
+   * (ruling H3), so on any other kind it is ignored with a development warning. Ignored under
+   * `fit="fill"` too, where the parent already owns the ratio.
+   */
+  ratio?: MediaRatio;
+  /** Override the record's focal point for this placement only. */
+  focus?: MediaFocus;
+  /**
    * The page's LCP image: eager, and fetched ahead of the document's other images. One per page
    * at most, and only a hero's. Everything else is lazy and decodes off the main thread.
    */
@@ -150,6 +208,21 @@ export function mediaSrcSet(image: MediaImage): string | undefined {
     .map(([width, src]) => `${src} ${width}w`)
     .join(', ');
 }
+
+/** One class per ratio; each reads its `--media-ratio-*` token. */
+const RATIO_CLASS: Record<MediaRatio, string | undefined> = {
+  '4/5': styles.ratio4x5,
+  '5/4': styles.ratio5x4,
+  '3/1': styles.ratio3x1,
+  '3/2': styles.ratio3x2,
+  '16/9': styles.ratio16x9,
+  '4/3': styles.ratio4x3,
+  '1/1': styles.ratio1x1,
+};
+
+/** A 0–1 axis as a percentage, clamped: a CMS value of 1.2 must not push the crop off the image. */
+const percent = (value: number) =>
+  `${Math.round(Math.min(1, Math.max(0, value)) * 1000) / 10}%`;
 
 const PANEL_CLASS: Record<MediaPanel, string | undefined> = {
   paper: styles.panelPaper,
@@ -187,10 +260,24 @@ export function Media({
   edge = 'kind',
   inset = 'gutter',
   priority = false,
+  ratio,
+  focus,
 }: MediaProps) {
   const kind: MediaKind = image.kind ?? 'capture';
   const isCutOut = kind === 'cut-out';
+  const isPhotograph = kind === 'photograph';
   const article = kind === 'illustration' ? 'an' : 'a';
+
+  if (ratio && !isPhotograph) {
+    warn(
+      `${article} ${kind} is never cropped to a ratio — only a photograph is (H3). Ignored`,
+      image,
+    );
+  }
+  if (ratio && isPhotograph && fit === 'fill') {
+    warn('`ratio` with `fit="fill"`: the parent already owns the ratio. Ignored', image);
+  }
+  const cropRatio = isPhotograph && fit !== 'fill' ? ratio : undefined;
 
   if (!isCutOut && image.panel) {
     warn(
@@ -209,6 +296,15 @@ export function Media({
   const shadow = isCutOut && image.shadow === true;
   const srcSet = mediaSrcSet(image);
 
+  /* The focal point, as the one custom property the crop reads. On the style prop because a class
+     cannot express a per-asset value (ClientMark's precedent); absent, the stylesheet's anchor
+     stands — the centre for a ratio crop, --media-fill-position for a fill. */
+  const anchor = focus ?? image.focus;
+  const style =
+    anchor && (cropRatio || fit === 'fill')
+      ? ({ '--media-focus': `${percent(anchor.x)} ${percent(anchor.y)}` } as CSSProperties)
+      : undefined;
+
   const img = (
     /* A native image rather than next/image: ruling M1 serves Strapi's own formats as a native
        srcset, with no build-time pipeline, and next/image would add one. */
@@ -216,10 +312,13 @@ export function Media({
     <img
       className={cx(
         styles.image,
-        fit === 'fill' ? styles.fill : styles.intrinsic,
+        fit === 'fill' ? styles.fill : cropRatio ? styles.crop : styles.intrinsic,
+        cropRatio && RATIO_CLASS[cropRatio],
         edge === 'kind' && kind === 'capture' && styles.capture,
+        edge === 'kind' && isPhotograph && styles.photograph,
         shadow && styles.shadow,
       )}
+      style={style}
       src={image.src}
       srcSet={srcSet}
       sizes={srcSet ? sizes : undefined}
@@ -229,6 +328,15 @@ export function Media({
       loading={priority ? 'eager' : 'lazy'}
       decoding={priority ? undefined : 'async'}
       fetchPriority={priority ? 'high' : undefined}
+      /* What the gates read off the rendered page (visual-direction § 5.4, § 5.5): the master's
+         pixels, to compare the crop against the box the image actually got, and the measured tone.
+         Photographs only — the resolution and tone rules are about photographs, and a record
+         without real dimensions (a BlockCard cover with none) must not report fake ones. */
+      data-src-w={isPhotograph ? image.width : undefined}
+      data-src-h={isPhotograph ? image.height : undefined}
+      data-photo-temp={isPhotograph ? image.tone?.temperature : undefined}
+      data-photo-sat={isPhotograph ? image.tone?.saturation : undefined}
+      data-stand-in={image.standIn ? '' : undefined}
     />
   );
 

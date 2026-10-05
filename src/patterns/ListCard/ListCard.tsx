@@ -19,7 +19,8 @@ import styles from './ListCard.module.css';
  *
  * `thumbnail` takes `Media`'s own `MediaImage` record, whole and untouched, exactly as a page
  * received it from `@/content`. ListCard owns the box — 160 inline, the shared 3:2 cover crop — and
- * `Media` owns everything inside it: the srcset, the lazy load and the edge by kind. `alt` is
+ * `Media` owns everything inside it: the srcset, the lazy load, the panel. The edge is the box's: a
+ * radius and no frame, for every kind (§ 5.3). `alt` is
  * required by the record even when its right value is `""`, so decoration is chosen, never omitted.
  *
  * Per ch05 § 9 and ruling C1 a thumbnail is for case-study and insight/resource rows only, and it
@@ -166,10 +167,20 @@ function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }
      `inset="text"`: a B5 cut-out on its contrast panel keeps 16px of panel round it here rather than
      the 32 a full-column placement takes, because at 160 × 107 the gutter inset left the part
      96 × 43 — not one recognisable shape (ch05 § 9). Media owns the value; ListCard only names the
-     step, since only the placement knows how small its box is (29 Sep 2026, 2.17). */
+     step, since only the placement knows how small its box is (29 Sep 2026, 2.17).
+
+     `edge="placement"`: the box draws the thumbnail's edge, and that edge is a radius with no frame,
+     for every kind (visual-direction § 5.3, fdn-media, 6 Oct 2026). A capture's own hairline would
+     otherwise run round a 160px crop the row made, which is a frame (spec § 17 q9). */
   return (
     <span className={cx(styles.marker, styles.thumbnail)}>
-      <Media image={marker.image} sizes={LIST_CARD_THUMBNAIL} fit="fill" inset="text" />
+      <Media
+        image={marker.image}
+        sizes={LIST_CARD_THUMBNAIL}
+        fit="fill"
+        edge="placement"
+        inset="text"
+      />
     </span>
   );
 }

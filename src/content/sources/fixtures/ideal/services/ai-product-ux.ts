@@ -23,6 +23,20 @@ export const aiProductUx: ServiceStory = {
       height: 747,
     },
   },
+  /* Photographs (visual-direction § 5.5, § 5.6): a cool-family page. The stand-in pool is in order of
+     preference, studio first, and leaves out this page's own § 5.6 picks so no photo appears twice. */
+  photos: {
+    family: 'cool',
+    standIns: [
+      'studio-session-talk',
+      'pencil-wireframe-violet',
+      'whiteboard-two-hands',
+      'board-review-backs',
+      'workshop-brick-room',
+      'office-calm-interior',
+      'pair-desk-through-plants',
+    ],
+  },
   sections: [
     {
       type: 'section',

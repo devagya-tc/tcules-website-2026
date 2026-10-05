@@ -79,12 +79,15 @@ export {
   mediaSrcSet,
   type MediaEdge,
   type MediaFit,
+  type MediaFocus,
   type MediaImage,
   type MediaInset,
   type MediaKind,
   type MediaPanel,
   type MediaProps,
+  type MediaRatio,
   type MediaSource,
+  type MediaTone,
 } from './Media';
 export { Tag, type TagProps, type TagVariant } from './Tag';
 export {

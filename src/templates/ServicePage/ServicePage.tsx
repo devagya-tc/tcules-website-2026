@@ -14,6 +14,7 @@ import { ROUTES, servicePath } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 
 import { StoryBlockView } from './Blocks';
+import { withStandIns } from './standIns';
 
 export type ServicePageProps = {
   story: ServiceStory;
@@ -48,7 +49,9 @@ export function ServicePage({
   formAction,
   slots = false,
 }: ServicePageProps) {
-  const { hero, sections, close } = story;
+  /* Every coverless case and resource card takes a stand-in from the story's pool before anything
+     renders (visual-direction § 5.7), so no block below ever sees a card it would draw half-empty. */
+  const { hero, sections, close } = withStandIns(story);
 
   return (
     <>

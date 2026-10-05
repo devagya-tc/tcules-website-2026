@@ -8,10 +8,11 @@
  * picks it, an intervention on a scale of disruption — so the template can give each job its own
  * shape.
  *
- * Types only, and a leaf: `@/content` fixtures are typed against it and `@/templates/ServicePage`
- * renders it, and neither can import the other (CLAUDE.md § Scope), so the one definition lives
- * below both. Nothing here is Strapi's; the mapping to it is `docs/strapi-changes.md`'s problem.
+ * Types only, and a leaf (it reads only the photo registry's types, a sibling leaf): `@/content`
+ * fixtures are typed against it and `@/templates/ServicePage` renders it, and neither can import the
+ * other (CLAUDE.md § Scope), so the one definition lives below both. Nothing here is Strapi's; the mapping to it is `docs/strapi-changes.md`'s problem.
  */
+import type { PhotoFamily, PhotoId } from '@/lib/photos';
 
 /** The glyphs a story may name. A subset of the Icon set, checked where the template renders it. */
 export type StoryGlyph =
@@ -45,6 +46,26 @@ export type StoryGlyph =
 
 export type StoryLink = { label: string; href: string };
 
+/**
+ * A card's cover image: the case study's real cover (resolved by the page from the listing), or a
+ * catalogue photograph standing in for one that does not exist yet (visual-direction § 5.7).
+ *
+ * A stand-in carries `standIn: true` and is never labelled on the page; it is replaced the day the
+ * real cover exists. The rest is Media's image record — the photograph fields (`kind`, `focus`,
+ * `tone`) arrive only on a stand-in, from the registry.
+ */
+export type StoryCover = {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  sources?: { src: string; width: number }[];
+  kind?: 'photograph';
+  focus?: { x: number; y: number };
+  tone?: { temperature: 'warm' | 'neutral' | 'cool'; saturation: 'vivid' | 'quiet' };
+  standIn?: boolean;
+};
+
 /** A case study as a page cites it. The page resolves `slug` to the cover and the path. */
 export type StoryCase = {
   slug: string;
@@ -54,13 +75,8 @@ export type StoryCase = {
   body: string;
   /** Resolved by the page from the listing, never authored. */
   href?: string;
-  cover?: {
-    src: string;
-    alt: string;
-    width?: number;
-    height?: number;
-    sources?: { src: string; width: number }[];
-  };
+  /** Resolved: the listing's cover, else a stand-in from the story's pool. Never authored. */
+  cover?: StoryCover;
 };
 
 /**
@@ -248,6 +264,8 @@ export type StoryBlock =
         body: string;
         href: string;
         cta: string;
+        /** Resolved: a stand-in from the story's pool until resources have covers. Never authored. */
+        cover?: StoryCover;
       }[];
     }
   /** An image that should exist here. Invisible unless the page is in review mode. */
@@ -305,6 +323,17 @@ export type ServiceStory = {
     tags?: readonly string[];
   };
   sections: readonly (StorySection | StoryOffer)[];
+  /**
+   * The page's photographs (visual-direction § 5.5 to § 5.7).
+   *
+   *   family    warm or cool: the temperature family every photograph on the page belongs to, with
+   *             neutral in both. From § 5.6's table.
+   *   standIns  the photos a card with no cover may take, in order of preference — studio first,
+   *             because a studio photo shows our own work. The template assigns them in page order,
+   *             each at most once, skipping any that is out of family, vivid, or under 1.9× its slot
+   *             (`pickStandIn`). Exclude the page's own § 5.6 picks: no photo appears twice on a page.
+   */
+  photos: { family: PhotoFamily; standIns: readonly PhotoId[] };
   close: {
     heading: string;
     body: string;

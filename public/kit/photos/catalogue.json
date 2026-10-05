@@ -17,7 +17,18 @@
       "banner",
       "figure"
     ],
-    "notes": "Posed group shot, kept because it is the only high-res studio frame and it is real. Culture only: About/careers banner or a team figure; not for service pages. Faces cluster in the middle band, keep 0.3-0.6 vertical in any crop."
+    "notes": "Posed group shot, kept because it is the only high-res studio frame and it is real. Culture only: About/careers banner or a team figure; not for service pages. Faces cluster in the middle band, keep 0.3-0.6 vertical in any crop.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.124,
+      "sat": 0.341
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "studio-sticky-board-ux.webp",
@@ -39,7 +50,17 @@
       "hero-beside",
       "figure"
     ],
-    "notes": "Strongest studio work shot. Portrait 922px wide: fine up to ~460 CSS px at 2x. Column headings are handwritten board labels, not overlay type."
+    "notes": "Strongest studio work shot. Portrait 922px wide: fine up to ~460 CSS px at 2x. Column headings are handwritten board labels, not overlay type.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.131,
+      "sat": 0.255
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "studio-session-talk.webp",
@@ -60,7 +81,17 @@
       "feature-media",
       "figure"
     ],
-    "notes": "Shows the studio room and its colour-grid shelving. 946px: card or half-column only."
+    "notes": "Shows the studio room and its colour-grid shelving. 946px: card or half-column only.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.084,
+      "sat": 0.35
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "studio-pair-at-monitor.webp",
@@ -80,7 +111,16 @@
       "card",
       "feature-media"
     ],
-    "notes": "Exactly the ch05 two-people-at-one-screen brief. Near-square, 622px: card size only."
+    "notes": "Exactly the ch05 two-people-at-one-screen brief. Near-square, 622px: card size only.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.073,
+      "sat": 0.161
+    },
+    "derived": [
+      320
+    ]
   },
   {
     "file": "studio-whiteboard-crit.webp",
@@ -101,7 +141,17 @@
       "feature-media",
       "figure"
     ],
-    "notes": "Boards mid-argument. Diagrams are illegible at size. 898px: card only."
+    "notes": "Boards mid-argument. Diagrams are illegible at size. 898px: card only.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.044,
+      "sat": 0.183
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "studio-offsite-talk.webp",
@@ -120,7 +170,16 @@
     "bestPlacements": [
       "card"
     ],
-    "notes": "Warm tungsten cast; pairs well with paper-deep grounds. Weakest of the studio set; use as a supporting card."
+    "notes": "Warm tungsten cast; pairs well with paper-deep grounds. Weakest of the studio set; use as a supporting card.",
+    "temperature": "warm",
+    "saturation": "vivid",
+    "tone": {
+      "rb": 0.275,
+      "sat": 0.501
+    },
+    "derived": [
+      320
+    ]
   },
   {
     "file": "studio-desk-pairing.webp",
@@ -140,7 +199,16 @@
       "card",
       "feature-media"
     ],
-    "notes": "Good studio context with the room legible. 622px: card only."
+    "notes": "Good studio context with the room legible. 622px: card only.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.086,
+      "sat": 0.226
+    },
+    "derived": [
+      320
+    ]
   },
   {
     "file": "studio-workshop-presenting.webp",
@@ -160,7 +228,16 @@
       "card",
       "feature-media"
     ],
-    "notes": "Projected slide is a Tcules workshop, illegible at card size. 622px: card only."
+    "notes": "Projected slide is a Tcules workshop, illegible at card size. 622px: card only.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.146,
+      "sat": 0.394
+    },
+    "derived": [
+      320
+    ]
   },
   {
     "file": "studio-portrait-rushali.webp",
@@ -179,7 +256,14 @@
     "bestPlacements": [
       "testimonial-portrait"
     ],
-    "notes": "Delivered pre-masked as a circle with transparent corners (alpha kept). 292px: max 140 CSS px at 2x. Render in a circular frame; a square frame will show the transparent corners."
+    "notes": "Delivered pre-masked as a circle with transparent corners (alpha kept). 292px: max 140 CSS px at 2x. Render in a circular frame; a square frame will show the transparent corners.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.01,
+      "sat": 0.165
+    },
+    "derived": []
   },
   {
     "file": "studio-portrait-mihir.webp",
@@ -198,7 +282,14 @@
     "bestPlacements": [
       "testimonial-portrait"
     ],
-    "notes": "Pre-masked circle, alpha kept. 292px: max 140 CSS px at 2x."
+    "notes": "Pre-masked circle, alpha kept. 292px: max 140 CSS px at 2x.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.014,
+      "sat": 0.11
+    },
+    "derived": []
   },
   {
     "file": "studio-portrait-shoghi.webp",
@@ -217,7 +308,14 @@
     "bestPlacements": [
       "testimonial-portrait"
     ],
-    "notes": "Pre-masked circle, alpha kept. 292px: max 140 CSS px at 2x. Blue door ground echoes brandeis without being it."
+    "notes": "Pre-masked circle, alpha kept. 292px: max 140 CSS px at 2x. Blue door ground echoes brandeis without being it.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.02,
+      "sat": 0.316
+    },
+    "derived": []
   },
   {
     "file": "wall-sketching-portrait.webp",
@@ -238,7 +336,17 @@
       "feature-media",
       "card"
     ],
-    "notes": "Tall portrait; works as the tall image beside a hero title."
+    "notes": "Tall portrait; works as the tall image beside a hero title.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.027,
+      "sat": 0.091
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "whiteboard-two-hands.webp",
@@ -260,7 +368,18 @@
       "card",
       "figure"
     ],
-    "notes": "Mostly white; reads as calm negative space with a figure in it. Handwriting is illegible at size."
+    "notes": "Mostly white; reads as calm negative space with a figure in it. Handwriting is illegible at size.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.044,
+      "sat": 0.109
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "whiteboard-pair-laptop.webp",
@@ -281,7 +400,18 @@
       "cta-media",
       "card"
     ],
-    "notes": "Two people in conversation at a board, no pointing, no eye contact."
+    "notes": "Two people in conversation at a board, no pointing, no eye contact.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.051,
+      "sat": 0.3
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "wireframe-wall.webp",
@@ -302,7 +432,18 @@
       "feature-media",
       "card"
     ],
-    "notes": "Subject sits right; room on the left for a cropped banner."
+    "notes": "Subject sits right; room on the left for a cropped banner.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.064,
+      "sat": 0.126
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "hand-sketch-wireframe.webp",
@@ -323,7 +464,18 @@
       "feature-media",
       "figure"
     ],
-    "notes": "Best sketch close-up; dupes of the same series were rejected."
+    "notes": "Best sketch close-up; dupes of the same series were rejected.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.054,
+      "sat": 0.36
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "desk-sketch-flatlay.webp",
@@ -345,7 +497,18 @@
       "card",
       "form-media"
     ],
-    "notes": "Flat-lay on dark ground; strong at banner width."
+    "notes": "Flat-lay on dark ground; strong at banner width.",
+    "temperature": "neutral",
+    "saturation": "vivid",
+    "tone": {
+      "rb": 0.063,
+      "sat": 0.401
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "designer-monitor-ui.webp",
@@ -365,7 +528,17 @@
       "card",
       "feature-media"
     ],
-    "notes": "Screen UI is generic; not legible at card size."
+    "notes": "Screen UI is generic; not legible at card size.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.046,
+      "sat": 0.149
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "sticky-notes-mass.webp",
@@ -385,7 +558,17 @@
       "card",
       "figure"
     ],
-    "notes": "Pure texture-like detail; use small, it is loud at banner size."
+    "notes": "Pure texture-like detail; use small, it is loud at banner size.",
+    "temperature": "warm",
+    "saturation": "vivid",
+    "tone": {
+      "rb": 0.147,
+      "sat": 0.416
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "sticky-notes-wall-dense.webp",
@@ -404,7 +587,17 @@
     "bestPlacements": [
       "card"
     ],
-    "notes": "Alternative to sticky-notes-mass with a warmer palette."
+    "notes": "Alternative to sticky-notes-mass with a warmer palette.",
+    "temperature": "warm",
+    "saturation": "vivid",
+    "tone": {
+      "rb": 0.297,
+      "sat": 0.47
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "sticky-grid-minimal.webp",
@@ -425,7 +618,17 @@
       "form-media",
       "cta-media"
     ],
-    "notes": "Lots of negative space; a calm partner to a form or CTA."
+    "notes": "Lots of negative space; a calm partner to a form or CTA.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.202,
+      "sat": 0.277
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "sticky-wall-soft-focus.webp",
@@ -446,7 +649,18 @@
       "cta-media",
       "card"
     ],
-    "notes": "Shallow focus makes it a gentle background-weight image beside text (never under it)."
+    "notes": "Shallow focus makes it a gentle background-weight image beside text (never under it).",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.125,
+      "sat": 0.269
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "pair-at-laptop-sticky-wall.webp",
@@ -468,7 +682,18 @@
       "feature-media",
       "cta-media"
     ],
-    "notes": "Closest stock match to two-people-at-one-screen. 16:9."
+    "notes": "Closest stock match to two-people-at-one-screen. 16:9.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.022,
+      "sat": 0.169
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "pair-desk-through-plants.webp",
@@ -489,7 +714,18 @@
       "feature-media",
       "card"
     ],
-    "notes": "Leaves on the left act as natural framing; crop from the right side carefully."
+    "notes": "Leaves on the left act as natural framing; crop from the right side carefully.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.049,
+      "sat": 0.3
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "conversation-chalkboard.webp",
@@ -510,7 +746,18 @@
       "card",
       "cta-media"
     ],
-    "notes": "Good for discovery/workshop service content."
+    "notes": "Good for discovery/workshop service content.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.018,
+      "sat": 0.231
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "pair-laptop-notebook.webp",
@@ -530,7 +777,18 @@
       "feature-media",
       "card"
     ],
-    "notes": "Bright window light; slightly staged, acceptable."
+    "notes": "Bright window light; slightly staged, acceptable.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.064,
+      "sat": 0.23
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "pencil-wireframe-violet.webp",
@@ -552,7 +810,18 @@
       "card",
       "form-media"
     ],
-    "notes": "Abstract and nearly empty: excellent quiet media. Violet cast sits near brandeis without competing."
+    "notes": "Abstract and nearly empty: excellent quiet media. Violet cast sits near brandeis without competing.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.106,
+      "sat": 0.23
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "pencil-wireframe-red.webp",
@@ -572,7 +841,18 @@
       "card",
       "form-media"
     ],
-    "notes": "Warm twin of the violet shot; use one per page."
+    "notes": "Warm twin of the violet shot; use one per page.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.063,
+      "sat": 0.112
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "stylus-tablet-sketch.webp",
@@ -593,7 +873,18 @@
       "feature-media",
       "figure"
     ],
-    "notes": "Striped sleeve in the foreground gives depth."
+    "notes": "Striped sleeve in the foreground gives depth.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.074,
+      "sat": 0.348
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "designer-tablet-monitor.webp",
@@ -613,7 +904,18 @@
       "card",
       "feature-media"
     ],
-    "notes": "Monitor top-left has a legible headline; crop from the right or keep at card size."
+    "notes": "Monitor top-left has a legible headline; crop from the right or keep at card size.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.041,
+      "sat": 0.272
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "desk-flatlay-devices.webp",
@@ -634,7 +936,18 @@
       "card",
       "figure"
     ],
-    "notes": "A large printed \"to\" is legible top-right; crop it out or use where incidental text is acceptable."
+    "notes": "A large printed \"to\" is legible top-right; crop it out or use where incidental text is acceptable.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.002,
+      "sat": 0.04
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "moodboard-wall-desk.webp",
@@ -654,7 +967,17 @@
       "card",
       "hero-beside"
     ],
-    "notes": "Studio detail with a lot of texture."
+    "notes": "Studio detail with a lot of texture.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.111,
+      "sat": 0.243
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "hands-sketches-markers.webp",
@@ -674,7 +997,17 @@
       "card",
       "feature-media"
     ],
-    "notes": "Portrait detail; good small."
+    "notes": "Portrait detail; good small.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.051,
+      "sat": 0.268
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "desk-minimal-white.webp",
@@ -694,7 +1027,17 @@
       "card",
       "form-media"
     ],
-    "notes": "Very quiet; tall 9:16."
+    "notes": "Very quiet; tall 9:16.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.002,
+      "sat": 0.045
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "workshop-hands-writing.webp",
@@ -715,7 +1058,18 @@
       "card",
       "feature-media"
     ],
-    "notes": "Faces out of frame; strong for workshop/training content."
+    "notes": "Faces out of frame; strong for workshop/training content.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.028,
+      "sat": 0.201
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "workshop-sticky-sort.webp",
@@ -736,7 +1090,18 @@
       "feature-media",
       "card"
     ],
-    "notes": "Affinity mapping in action. Blue paper is not brandeis but reads as blue; keep it off blue-accented blocks."
+    "notes": "Affinity mapping in action. Blue paper is not brandeis but reads as blue; keep it off blue-accented blocks.",
+    "temperature": "warm",
+    "saturation": "vivid",
+    "tone": {
+      "rb": 0.154,
+      "sat": 0.523
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "workshop-brick-room.webp",
@@ -756,7 +1121,17 @@
       "card",
       "feature-media"
     ],
-    "notes": "Tall; room legible around people."
+    "notes": "Tall; room legible around people.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.021,
+      "sat": 0.273
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "workshop-whiteboard-lounge.webp",
@@ -777,7 +1152,18 @@
       "feature-media",
       "card"
     ],
-    "notes": "Wide room shot; good establishing image."
+    "notes": "Wide room shot; good establishing image.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.033,
+      "sat": 0.267
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "team-laptops-table.webp",
@@ -797,7 +1183,18 @@
       "card",
       "feature-media"
     ],
-    "notes": "Group at work; no eye contact."
+    "notes": "Group at work; no eye contact.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.043,
+      "sat": 0.267
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "board-review-backs.webp",
@@ -817,7 +1214,18 @@
       "card",
       "feature-media"
     ],
-    "notes": "Backs to camera keeps faces unrecognisable."
+    "notes": "Backs to camera keeps faces unrecognisable.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.029,
+      "sat": 0.263
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "hand-mouse-detail.webp",
@@ -836,7 +1244,18 @@
     "bestPlacements": [
       "card"
     ],
-    "notes": "Small detail card."
+    "notes": "Small detail card.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.164,
+      "sat": 0.268
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "hands-trackpad.webp",
@@ -856,7 +1275,17 @@
       "card",
       "form-media"
     ],
-    "notes": "Tall detail."
+    "notes": "Tall detail.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.08,
+      "sat": 0.211
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "screen-over-shoulder.webp",
@@ -877,7 +1306,18 @@
       "feature-media",
       "figure"
     ],
-    "notes": "Screen content is generic tool chrome; nothing legible that belongs to anyone."
+    "notes": "Screen content is generic tool chrome; nothing legible that belongs to anyone.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.014,
+      "sat": 0.095
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "designer-desk-monitor.webp",
@@ -897,7 +1337,17 @@
       "card",
       "hero-beside"
     ],
-    "notes": "Tall 9:16."
+    "notes": "Tall 9:16.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.046,
+      "sat": 0.21
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "pair-testing-overhead.webp",
@@ -917,7 +1367,18 @@
       "card",
       "feature-media"
     ],
-    "notes": "Good for research/testing services."
+    "notes": "Good for research/testing services.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.018,
+      "sat": 0.304
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "hands-sticky-blue-pen.webp",
@@ -938,7 +1399,18 @@
       "figure",
       "cta-media"
     ],
-    "notes": "Close detail; white ground helps it sit on paper."
+    "notes": "Close detail; white ground helps it sit on paper.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0,
+      "sat": 0.273
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "office-calm-interior.webp",
@@ -959,7 +1431,18 @@
       "cta-media",
       "form-media"
     ],
-    "notes": "Mostly empty space: the calmest wide image in the set. No people."
+    "notes": "Mostly empty space: the calmest wide image in the set. No people.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.062,
+      "sat": 0.172
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   },
   {
     "file": "portrait-man-blue-office.webp",
@@ -978,7 +1461,17 @@
     "bestPlacements": [
       "testimonial-portrait"
     ],
-    "notes": "Shot 2:3, centre-cropped to 1:1."
+    "notes": "Shot 2:3, centre-cropped to 1:1.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.105,
+      "sat": 0.318
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "portrait-man-glasses.webp",
@@ -997,7 +1490,17 @@
     "bestPlacements": [
       "testimonial-portrait"
     ],
-    "notes": "Studio grey ground; slight smile."
+    "notes": "Studio grey ground; slight smile.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.023,
+      "sat": 0.143
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "portrait-man-green.webp",
@@ -1016,7 +1519,17 @@
     "bestPlacements": [
       "testimonial-portrait"
     ],
-    "notes": "Eye line off camera; reads editorial rather than corporate."
+    "notes": "Eye line off camera; reads editorial rather than corporate.",
+    "temperature": "neutral",
+    "saturation": "vivid",
+    "tone": {
+      "rb": 0.085,
+      "sat": 0.461
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "portrait-woman-grey.webp",
@@ -1035,7 +1548,17 @@
     "bestPlacements": [
       "testimonial-portrait"
     ],
-    "notes": "Low-key; pair with a measured quote."
+    "notes": "Low-key; pair with a measured quote.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.045,
+      "sat": 0.22
+    },
+    "derived": [
+      652,
+      320
+    ]
   },
   {
     "file": "portrait-woman-laughing.webp",
@@ -1054,6 +1577,16 @@
     "bestPlacements": [
       "testimonial-portrait"
     ],
-    "notes": "Most expressive portrait."
+    "notes": "Most expressive portrait.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.024,
+      "sat": 0.199
+    },
+    "derived": [
+      652,
+      320
+    ]
   }
 ]

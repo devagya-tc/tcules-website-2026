@@ -50,7 +50,7 @@ const SPECIMENS = [
       {
         href: '/design/media',
         name: 'Media',
-        note: 'the image asset — 4 kinds × 4 surfaces, cut-out shadow and panels, srcset, intrinsic vs fill, stress shapes',
+        note: 'the image asset — 4 kinds × 4 surfaces, cut-out shadow and panels, srcset, intrinsic vs fill, photograph ratio · focus · radius, stress shapes',
       },
       {
         href: '/design/tag',

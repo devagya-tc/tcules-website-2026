@@ -358,3 +358,51 @@ crop keeps the part that orients a reader. One anchor for every cropping placeme
 and the amendments' inset arithmetic assume a *central* 4:3 safe area; a cover authored to that rule can now
 lose its right-hand side in a 3:2 or 4:3 crop. The supply rule should move to match — the safe area sits at
 the top-left — or covers keep their concept left of centre.
+
+## Amendment · 6 Oct 2026 — `fdn-media`: `ratio`, `focus`, the photograph radius, the gate attributes
+
+Built to `docs/kit/visual-direction.md` § 5.3 to § 5.7, which wins where it conflicts with this spec.
+
+**`ratio?: MediaRatio`** — `'4/5' | '5/4' | '3/1' | '3/2' | '16/9' | '4/3' | '1/1'`, the closed set of § 5.4's
+placements, each read from a `--media-ratio-*` token. A photograph whose box is Media's own (B, K and
+L-photo at 4:5, the hero photograph at 5:4, the I banner at 3:1 or 3:2, the head-track aside at 3:2) is
+cut to the ratio in its own box: full inline size, block size from the ratio, `object-fit: cover`.
+- **Photographs only.** A capture, a cut-out and an illustration still render whole (ruling H3); on them
+  `ratio` is ignored with a development warning. This is the one change to § 3's "no aspect-ratio":
+  the ratio has nowhere else to live when the box is Media's.
+- **Ignored under `fit="fill"`**, with a warning: the parent already owns that ratio.
+
+**`focus`** — `{ x, y }`, each 0 to 1 from the top-left, on the record (`MediaImage.focus`, the
+catalogue's `focalPoint`) and optionally on the prop, which wins for one placement ("crop from the
+right", § 5.6). It is an `object-position`, so the point x% across the image sits x% across the box and
+the focus is always inside the crop. Written as one custom property on the element's style
+(`--media-focus`, ClientMark's per-asset idiom) over a stylesheet default: the centre
+(`--media-crop-position`) for a ratio crop, `--media-fill-position` (0 20%) for a fill. So a card's
+stand-in photograph crops on its subject, and a product-UI cover keeps the 29 Sep top-left anchor.
+
+**The photograph radius.** `kind: 'photograph'` with `edge="kind"` takes `--media-photo-radius:
+var(--radius-8)` and no frame. This revises § 7's "radius 0 on every image" for photographs only: the
+29 Sep 8px on card images is extended to every photograph, so a page never shows rounded card photos
+beside a square 4:5 photo (§ 5.3). Captures stay at radius 0 with the hairline; cut-outs and
+illustrations are unchanged. A placement that rules its own crop box (`edge="placement"`: BlockCard,
+now ListCard's thumbnail) draws its own radius on the box, and Media adds none inside it.
+
+**New optional record fields.** `focus`, `tone` (`{ temperature, saturation }`, measured by
+`npm run photos:tone`) and `standIn` (a catalogue photo standing in for a missing cover, § 5.7). None
+renders anything a reader sees.
+
+**Gate attributes.** A photograph's `<img>` carries `data-src-w` and `data-src-h` (the master's pixels)
+and `data-photo-temp` / `data-photo-sat` (its tone), and a stand-in carries `data-stand-in`. They are
+what `fold:check` (`fdn-gates`) reads to compare the crop with the rendered box (≥ 1.9×, § 5.4) and to
+count a page's photo families and vivid photos (§ 5.5). Photographs only: a BlockCard cover with no
+dimensions is given placeholder ones, and must not report them.
+
+**Where the photos come from.** `src/lib/photos.ts` (`getKitPhoto`, `cropScale`, `qualifies`,
+`pickStandIn`) over the generated `src/lib/photo-catalogue.ts`. The data is never typed by hand:
+`npm run photos:tone` measures the tags into `public/kit/photos/catalogue.json`, and
+`npm run photos:derive` writes the 1240 · 652 · 320 rungs (`public/kit/photos/derived/`) and the
+registry. `npm run photos:check`, in `verify`, fails when either is stale.
+
+**Specimen:** `/design/media` § 9 — one photo per ratio with its crop scale at 1470, the record's focus
+against a prop override, a photograph intrinsic beside a capture (radius 8 against 0 and the hairline,
+and `ratio` ignored on the capture), and the gate attributes on a stand-in.

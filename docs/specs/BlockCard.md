@@ -1270,3 +1270,25 @@ COMPLETENESS
 [x] Nothing this component could get from a lower tier is re-declared here. That is the test the
     first pass failed and this one passes: the cta is Button's, and the module styles no part of it.
 ```
+
+## Amendment · 6 Oct 2026 — `fdn-media`: the empty frame, and stand-in covers (visual-direction § 5.7)
+
+**The empty frame was the capture, not the card.** The review shots showed every case card on a service
+page as a hairline box with nothing in it. BlockCard already renders no media slot when a card has no
+image (`hasImage`), and the covers were real: each is a `loading="lazy"` image, and a full-page screenshot
+never scrolls, so nothing below the first viewport was ever requested. `scripts/shots.mjs` now switches
+every lazy image to eager and awaits `decode()` before capturing. No component change was needed; the
+contract stands and is restated: **no image means no media slot, never an empty one.**
+
+**Stand-in covers.** A card with no cover now takes a catalogue photograph instead of losing its image
+(§ 5.7), assigned by the page — on service pages by `templates/ServicePage/standIns.ts`, from the story's
+pool, in the page's tone family, quiet, at ≥ 1.9× the card's box. It reaches BlockCard as an ordinary
+`media.image` record with `kind: 'photograph'`, a `focus` and `standIn: true`; it is not labelled. Because
+Media's `fill` now anchors at the record's focus when it has one, a stand-in crops on its subject while a
+product-UI cover keeps the 29 Sep top-left anchor. The card's crop box keeps its own hairline and 8px
+radius (ch05 amendment 5a), so a stand-in looks like any other cover.
+
+**Known gap, not this package's.** A covered linked card shows no cta (29 Sep), so a resources card that
+gains a stand-in also loses its named line ("Read the article"), and until § 3.1's arrow cue lands
+(`cmp-feature`) its only rest affordance is the image. On a service page the Resources band is linked
+cards only, so this is visible there.

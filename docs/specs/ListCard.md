@@ -1089,3 +1089,14 @@ a route's condition is its body. No `eyebrow` prop was added.
   token.
 - `--lcrd-number-ink` was already neutral on paper and tint (3.16 and 4.39:1); § 4.4's inventory lists it
   and it needed no change.
+
+## Amendment · 6 Oct 2026 — `fdn-media` (visual-direction § 5.3)
+
+- **The thumbnail's edge is the box's: radius 8, no frame, for every kind.** New
+  `--lcrd-thumbnail-radius: var(--radius-8)` on `.thumbnail`, which already clips (`overflow: hidden`),
+  so the radius applies to a photograph, a capture or a cut-out's panel alike. Media is passed
+  `edge="placement"`, so a capture no longer draws its hairline round a 160px crop the row made. This
+  closes § 17 q9 ("a record with no `kind` renders as a capture, hairline included — off-brand in a
+  thumbnail"): an untagged record is still a capture, and in a thumbnail it now has no frame.
+- The radius matches every other photograph box on the page (BlockCard's `--bcrd-media-radius`, Media's
+  `--media-photo-radius`), duplicated by value under token rule 6.

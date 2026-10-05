@@ -11,7 +11,7 @@ import {
   type ListCardForm,
   type ListCardSize,
 } from '@/patterns';
-import type { StoryBlock, StoryCase, StorySlot } from '@/lib/service-story';
+import type { StoryBlock, StoryCover, StorySlot } from '@/lib/service-story';
 
 import { Bridge, Matrix, Parts, Record, Slice, Spectrum, Thread } from './Diagrams';
 import { paragraph } from './text';
@@ -199,8 +199,10 @@ function Router({ block }: { block: Of<'router'> }) {
   );
 }
 
-function caseMedia(item: StoryCase) {
-  return item.cover ? { type: 'image' as const, image: item.cover } : undefined;
+/* A card's cover as BlockCard's media slot: the real cover or its stand-in (standIns.ts), and no
+   slot at all without one — never an empty frame (visual-direction § 5.7). */
+function coverMedia(cover: StoryCover | undefined) {
+  return cover ? { type: 'image' as const, image: cover } : undefined;
 }
 
 /* ── Cases ────────────────────────────────────────────────────────────────────
@@ -220,7 +222,7 @@ function Cases({ block }: { block: Of<'cases'> }) {
           body: item.body,
           href: item.href,
           ctaLabel: 'Read the case',
-          media: caseMedia(item),
+          media: coverMedia(item.cover),
         }))}
       />
       {block.note ? <Callout label="Scope" html={paragraph(block.note)} /> : null}
@@ -296,7 +298,7 @@ function ProofBlock({ block }: { block: Of<'proof'> }) {
           body={caseCard.body}
           href={caseCard.href}
           ctaLabel="Read the case"
-          media={caseMedia(caseCard)}
+          media={coverMedia(caseCard.cover)}
           tracks={3}
         />
       </Layout>
@@ -365,8 +367,11 @@ function Stat({ block }: { block: Of<'stat'> }) {
 }
 
 /* ── Resources ────────────────────────────────────────────────────────────────
-   Where to read further, placed once, near the end, as its own section: text BlockCards with the
-   content type as the eyebrow and a named cta. A row of links in the middle of an argument pulled
+   Where to read further, placed once, near the end, as its own section: BlockCards with the
+   content type as the eyebrow, each under its cover — a stand-in photograph until resources have
+   covers of their own (visual-direction § 5.2, § 5.7; fdn-media, 6 Oct 2026). A covered linked card
+   says it navigates by its cover and hover zoom, so the named cta renders only on a card that ends
+   up with no image. A row of links in the middle of an argument pulled
    the reader out of it before the argument was made.
 
    ALWAYS THREE TRACKS from lg, however many cards there are (1 Oct 2026). A card's width comes from
@@ -377,8 +382,8 @@ function Stat({ block }: { block: Of<'stat'> }) {
 
    Rows a `column` (64) apart, the row seam of every borderless card set (visual-direction § 1.2,
    CLAUDE.md § the gap scale): down the grid each row is the next set of objects and must read as
-   separate. It was `stack` (48), the step BlockCardSet tried and rejected on 29 Sep. Text cards
-   keep BlockCard's default `md` step at any count (§ 7.2). */
+   separate. It was `stack` (48), the step BlockCardSet tried and rejected on 29 Sep. The cards keep
+   BlockCard's default `md` step: two or three across (§ 7.2). */
 function Resources({ block }: { block: Of<'resources'> }) {
   const lg = 3;
   return (
@@ -391,6 +396,7 @@ function Resources({ block }: { block: Of<'resources'> }) {
           body={item.body}
           href={item.href}
           ctaLabel={item.cta}
+          media={coverMedia(item.cover)}
           tracks={lg}
         />
       ))}

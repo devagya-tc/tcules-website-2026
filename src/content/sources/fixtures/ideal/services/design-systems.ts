@@ -23,6 +23,20 @@ export const designSystems: ServiceStory = {
       height: 569,
     },
   },
+  /* Photographs (visual-direction § 5.5, § 5.6): a cool-family page. The stand-in pool is in order of
+     preference, studio first, and leaves out this page's own § 5.6 picks so no photo appears twice. */
+  photos: {
+    family: 'cool',
+    standIns: [
+      'studio-whiteboard-crit',
+      'hands-sticky-blue-pen',
+      'board-review-backs',
+      'workshop-brick-room',
+      'workshop-whiteboard-lounge',
+      'conversation-chalkboard',
+      'office-calm-interior',
+    ],
+  },
   sections: [
     {
       type: 'section',

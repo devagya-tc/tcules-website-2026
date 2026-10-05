@@ -104,6 +104,31 @@ async function startServer() {
   throw new Error('next dev did not answer within 120s');
 }
 
+/**
+ * Load every image on the page before it is captured.
+ *
+ * A full-page screenshot never scrolls, so a `loading="lazy"` image below the first viewport is never
+ * requested: it was captured as its empty box. Every BlockCard cover is lazy, so every case card on a
+ * service page came out as a hairline frame with nothing in it, and the frames were read as an
+ * empty-frame bug in the component (visual-direction § 5.7). The page was fine; the capture was not.
+ * Each lazy image is switched to eager and awaited until decoded, capped so one stalled CDN request
+ * cannot hang the run.
+ */
+async function loadEveryImage(page) {
+  await page.evaluate(async () => {
+    const images = [...document.images];
+    for (const img of images) if (img.loading === 'lazy') img.loading = 'eager';
+    /* decode() settles once the file has loaded AND decoded — rejecting for a broken one, which is
+       left broken so it shows as broken. `complete` alone was not enough: an image switched from
+       lazy could report complete before its pixels were painted, and was captured blank. */
+    const settle = (img) => img.decode().catch(() => undefined);
+    await Promise.race([
+      Promise.all(images.map(settle)),
+      new Promise((resolve) => setTimeout(resolve, 15000)),
+    ]);
+  });
+}
+
 let server = null;
 let base = baseArg ? baseArg.slice('--base='.length) : ownDevServer();
 if (baseArg && !(await answers(`${base}/design`))) {
@@ -131,6 +156,7 @@ try {
       page.on('pageerror', (e) => errors.push(e.message));
       await page.goto(base + path, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts.ready);
+      await loadEveryImage(page);
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
       );
@@ -155,7 +181,9 @@ try {
           });
           // Next's dev indicator draws its fixed badge inside a shadow root, which the walk above
           // cannot see into, so its host is hidden by name.
-          document.querySelectorAll('nextjs-portal').forEach((el) => (el.style.visibility = 'hidden'));
+          document
+            .querySelectorAll('nextjs-portal')
+            .forEach((el) => (el.style.visibility = 'hidden'));
         });
         const blocks = page.locator('[data-shot]');
         const count = await blocks.count();
@@ -183,7 +211,12 @@ try {
             const end = next
               ? band(next).getBoundingClientRect().top + window.scrollY
               : document.documentElement.scrollHeight;
-            return { x: 0, y: top, width: document.documentElement.clientWidth, height: end - top };
+            return {
+              x: 0,
+              y: top,
+              width: document.documentElement.clientWidth,
+              height: end - top,
+            };
           });
           if (clip && clip.height > 0) {
             await page.screenshot({ path: join(OUT, crop), fullPage: true, clip });
