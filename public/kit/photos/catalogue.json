@@ -1,0 +1,1059 @@
+[
+  {
+    "file": "studio-team-holi.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186940/Hero_Section_Page_2_8ed0367d92.webp",
+    "subject": "Whole team in the studio after Holi, colour on faces, arms up",
+    "mood": "joyful, celebratory, warm",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1358,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.42
+    },
+    "bestPlacements": [
+      "banner",
+      "figure"
+    ],
+    "notes": "Posed group shot, kept because it is the only high-res studio frame and it is real. Culture only: About/careers banner or a team figure; not for service pages. Faces cluster in the middle band, keep 0.3-0.6 vertical in any crop."
+  },
+  {
+    "file": "studio-sticky-board-ux.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186507/Image_1_c048010957.webp",
+    "subject": "Studio whiteboard sorted into Research / Strategy-UX / Visual-UI-Design columns of sticky notes, a hand adding one",
+    "mood": "focused, mid-project, bright",
+    "orientation": "portrait",
+    "width": 922,
+    "height": 1248,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "feature-media",
+      "card",
+      "hero-beside",
+      "figure"
+    ],
+    "notes": "Strongest studio work shot. Portrait 922px wide: fine up to ~460 CSS px at 2x. Column headings are handwritten board labels, not overlay type."
+  },
+  {
+    "file": "studio-session-talk.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186528/Image_2_6b09ca7e30.webp",
+    "subject": "Team session in the studio lounge, one person speaking to the group seated around",
+    "mood": "open, conversational, warm light",
+    "orientation": "landscape",
+    "width": 946,
+    "height": 706,
+    "focalPoint": {
+      "x": 0.3,
+      "y": 0.55
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media",
+      "figure"
+    ],
+    "notes": "Shows the studio room and its colour-grid shelving. 946px: card or half-column only."
+  },
+  {
+    "file": "studio-pair-at-monitor.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186770/Image_Grid_2_0a225c3d79.webp",
+    "subject": "Two designers at one monitor, one leaning in over the other's shoulder",
+    "mood": "candid, collaborative",
+    "orientation": "square",
+    "width": 622,
+    "height": 610,
+    "focalPoint": {
+      "x": 0.55,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "Exactly the ch05 two-people-at-one-screen brief. Near-square, 622px: card size only."
+  },
+  {
+    "file": "studio-whiteboard-crit.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186795/Image_Grid_3_0332b16e8f.webp",
+    "subject": "Design crit: three seated, one presenting at a wall of whiteboard diagrams",
+    "mood": "attentive, mid-argument",
+    "orientation": "landscape",
+    "width": 898,
+    "height": 610,
+    "focalPoint": {
+      "x": 0.6,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media",
+      "figure"
+    ],
+    "notes": "Boards mid-argument. Diagrams are illegible at size. 898px: card only."
+  },
+  {
+    "file": "studio-offsite-talk.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186846/Image_Grid_5_1ac167a547.webp",
+    "subject": "Three team members standing and talking in a heritage room at an offsite",
+    "mood": "warm, informal, tungsten light",
+    "orientation": "square",
+    "width": 622,
+    "height": 610,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "card"
+    ],
+    "notes": "Warm tungsten cast; pairs well with paper-deep grounds. Weakest of the studio set; use as a supporting card."
+  },
+  {
+    "file": "studio-desk-pairing.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186862/Image_Grid_6_7c6a7dfd49.webp",
+    "subject": "Two designers at adjacent desks turned to each other mid-conversation, open studio behind",
+    "mood": "candid, daylight",
+    "orientation": "square",
+    "width": 622,
+    "height": 610,
+    "focalPoint": {
+      "x": 0.55,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "Good studio context with the room legible. 622px: card only."
+  },
+  {
+    "file": "studio-workshop-presenting.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186750/Rectangle_926_e1619b80d2.webp",
+    "subject": "Two designers presenting at a projected screen in a workshop",
+    "mood": "engaged, teaching",
+    "orientation": "square",
+    "width": 622,
+    "height": 610,
+    "focalPoint": {
+      "x": 0.6,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "Projected slide is a Tcules workshop, illegible at card size. 622px: card only."
+  },
+  {
+    "file": "studio-portrait-rushali.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1772781875/Rushali_e5d0d050d9.png",
+    "subject": "Team member headshot, glasses, laughing, light grey ground",
+    "mood": "warm, open",
+    "orientation": "square",
+    "width": 292,
+    "height": 292,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "testimonial-portrait"
+    ],
+    "notes": "Delivered pre-masked as a circle with transparent corners (alpha kept). 292px: max 140 CSS px at 2x. Render in a circular frame; a square frame will show the transparent corners."
+  },
+  {
+    "file": "studio-portrait-mihir.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1772781920/Mihir_a5ff99b7f8.png",
+    "subject": "Team member headshot, white shirt, smiling, light grey ground",
+    "mood": "friendly, direct",
+    "orientation": "square",
+    "width": 292,
+    "height": 292,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "testimonial-portrait"
+    ],
+    "notes": "Pre-masked circle, alpha kept. 292px: max 140 CSS px at 2x."
+  },
+  {
+    "file": "studio-portrait-shoghi.webp",
+    "source": "tcules-about",
+    "sourceUrl": "https://tcules.com/about",
+    "originalUrl": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1772781947/Shoghi_679209d715.png",
+    "subject": "Team member headshot in front of a weathered blue door",
+    "mood": "warm, grounded",
+    "orientation": "square",
+    "width": 292,
+    "height": 292,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.42
+    },
+    "bestPlacements": [
+      "testimonial-portrait"
+    ],
+    "notes": "Pre-masked circle, alpha kept. 292px: max 140 CSS px at 2x. Blue door ground echoes brandeis without being it."
+  },
+  {
+    "file": "wall-sketching-portrait.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/man-with-pen-writing-on-wall-1lGeOg6IULc",
+    "originalUrl": "https://images.unsplash.com/photo-1574100004472-e536d3b6bacc",
+    "subject": "Designer pinning and sketching on a long wall of printouts in a bright corridor",
+    "mood": "focused, daylight, cool",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.55,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "hero-beside",
+      "feature-media",
+      "card"
+    ],
+    "notes": "Tall portrait; works as the tall image beside a hero title."
+  },
+  {
+    "file": "whiteboard-two-hands.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/two-people-drawing-on-whiteboard-26MJGnCM0Wc",
+    "originalUrl": "https://images.unsplash.com/photo-1532622785990-d2c36a76f5a6",
+    "subject": "Two hands with markers drawing a flow on a whiteboard, close crop",
+    "mood": "mid-argument, crisp, white",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1601,
+    "focalPoint": {
+      "x": 0.6,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "banner",
+      "feature-media",
+      "card",
+      "figure"
+    ],
+    "notes": "Mostly white; reads as calm negative space with a figure in it. Handwriting is illegible at size."
+  },
+  {
+    "file": "whiteboard-pair-laptop.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/man-wearing-gray-polo-shirt-beside-dry-erase-board-3V8xo5Gbusk",
+    "originalUrl": "https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0",
+    "subject": "Two people at a whiteboard of sketches, one holding a laptop",
+    "mood": "collaborative, bright",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1601,
+    "focalPoint": {
+      "x": 0.4,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "feature-media",
+      "cta-media",
+      "card"
+    ],
+    "notes": "Two people in conversation at a board, no pointing, no eye contact."
+  },
+  {
+    "file": "wireframe-wall.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/man-in-gray-sweater-standing-beside-wall-QPRd_UC3nE4",
+    "originalUrl": "https://images.unsplash.com/photo-1574556132185-5f4a6ffa80c6",
+    "subject": "Designer arranging a wall of printed wireframes",
+    "mood": "methodical, daylight",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.75,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "banner",
+      "feature-media",
+      "card"
+    ],
+    "notes": "Subject sits right; room on the left for a cropped banner."
+  },
+  {
+    "file": "hand-sketch-wireframe.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/person-writing-on-white-paper-v9FQR4tbIq8",
+    "originalUrl": "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e",
+    "subject": "Hand drawing a mobile wireframe on paper, warm dark desk",
+    "mood": "tactile, warm, close",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.62,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media",
+      "figure"
+    ],
+    "notes": "Best sketch close-up; dupes of the same series were rejected."
+  },
+  {
+    "file": "desk-sketch-flatlay.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-person-writing-on-a-piece-of-paper-next-to-a-keyboard-ml1IgjV8OvY",
+    "originalUrl": "https://images.unsplash.com/photo-1634245482394-1bcf5ccffcc0",
+    "subject": "Top-down desk: wireframe sketch pad, sticky notes, keyboard, tea",
+    "mood": "composed, calm, dark wood",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.55
+    },
+    "bestPlacements": [
+      "banner",
+      "feature-media",
+      "card",
+      "form-media"
+    ],
+    "notes": "Flat-lay on dark ground; strong at banner width."
+  },
+  {
+    "file": "designer-monitor-ui.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-man-sitting-at-a-desk-in-front-of-a-computer-71trKpjAeY4",
+    "originalUrl": "https://images.unsplash.com/photo-1648109941110-d30f859426ea",
+    "subject": "Designer at a monitor showing a half-built product UI",
+    "mood": "focused, natural light",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.4,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "Screen UI is generic; not legible at card size."
+  },
+  {
+    "file": "sticky-notes-mass.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-large-amount-of-post-it-notes-on-a-wall-HUuWNQmW58A",
+    "originalUrl": "https://images.unsplash.com/photo-1641355527446-232d7f1f2c10",
+    "subject": "A whole wall of hundreds of coloured sticky notes",
+    "mood": "abundant, abstract, vivid",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "card",
+      "figure"
+    ],
+    "notes": "Pure texture-like detail; use small, it is loud at banner size."
+  },
+  {
+    "file": "sticky-notes-wall-dense.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-bulletin-board-covered-in-lots-of-post-it-notes-7Nu_TageB3U",
+    "originalUrl": "https://images.unsplash.com/photo-1702294469103-d684deb28316",
+    "subject": "Dense wall of handwritten sticky notes in warm colours",
+    "mood": "research-heavy, warm",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "card"
+    ],
+    "notes": "Alternative to sticky-notes-mass with a warmer palette."
+  },
+  {
+    "file": "sticky-grid-minimal.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/yellow-sticky-notes-on-white-wall-zIgmSQdTIpA",
+    "originalUrl": "https://images.unsplash.com/photo-1585692614056-d0bbd2d5069b",
+    "subject": "Twelve yellow sticky notes in a neat grid on a pale wall",
+    "mood": "quiet, minimal, ordered",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.35
+    },
+    "bestPlacements": [
+      "card",
+      "form-media",
+      "cta-media"
+    ],
+    "notes": "Lots of negative space; a calm partner to a form or CTA."
+  },
+  {
+    "file": "sticky-wall-soft-focus.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-wall-with-a-bunch-of-sticky-notes-on-it-fQOyF0D0cDU",
+    "originalUrl": "https://images.unsplash.com/photo-1735639013995-086e648eaa38",
+    "subject": "Soft-focus wall of sticky notes and pinned cards",
+    "mood": "soft, airy, process",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.4,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "banner",
+      "cta-media",
+      "card"
+    ],
+    "notes": "Shallow focus makes it a gentle background-weight image beside text (never under it)."
+  },
+  {
+    "file": "pair-at-laptop-sticky-wall.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/two-colleagues-collaborating-on-a-project-at-a-desk-UUcgVSq2m3g",
+    "originalUrl": "https://images.unsplash.com/photo-1758876203342-fc14c0bba67c",
+    "subject": "Two colleagues at one laptop, sticky notes on the wall behind",
+    "mood": "collaborative, warm daylight",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1350,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "hero-beside",
+      "banner",
+      "feature-media",
+      "cta-media"
+    ],
+    "notes": "Closest stock match to two-people-at-one-screen. 16:9."
+  },
+  {
+    "file": "pair-desk-through-plants.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/two-women-collaborate-at-a-desk-in-a-modern-office-yTFJkulaUyI",
+    "originalUrl": "https://images.unsplash.com/photo-1752650735496-7cf951aef58f",
+    "subject": "Two people at a desk shot through foreground leaves",
+    "mood": "calm, natural, studio",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1350,
+    "focalPoint": {
+      "x": 0.6,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "banner",
+      "feature-media",
+      "card"
+    ],
+    "notes": "Leaves on the left act as natural framing; crop from the right side carefully."
+  },
+  {
+    "file": "conversation-chalkboard.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/two-colleagues-discussing-ideas-in-a-modern-office-EQJbQS0tUic",
+    "originalUrl": "https://images.unsplash.com/photo-1758873268315-59a677aec4ba",
+    "subject": "Two people talking at a table in front of a chalkboard of sketches",
+    "mood": "thoughtful, conversational",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1350,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "feature-media",
+      "card",
+      "cta-media"
+    ],
+    "notes": "Good for discovery/workshop service content."
+  },
+  {
+    "file": "pair-laptop-notebook.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/two-women-collaborate-on-a-laptop-at-a-desk-LV8BFKZNRG0",
+    "originalUrl": "https://images.unsplash.com/photo-1783094268476-cb3d881f4fe3",
+    "subject": "Two women reviewing a laptop and notebook at a sunny desk",
+    "mood": "warm, bright, review",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.6,
+      "y": 0.55
+    },
+    "bestPlacements": [
+      "feature-media",
+      "card"
+    ],
+    "notes": "Bright window light; slightly staged, acceptable."
+  },
+  {
+    "file": "pencil-wireframe-violet.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/pencil-on-website-wireframe-sketch-ii_KJyGe2ew",
+    "originalUrl": "https://images.unsplash.com/photo-1790861286837-3580e5c91683",
+    "subject": "Blue pencil lying on a sheet of faint wireframes under violet light",
+    "mood": "abstract, calm, cool",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.65,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "banner",
+      "cta-media",
+      "card",
+      "form-media"
+    ],
+    "notes": "Abstract and nearly empty: excellent quiet media. Violet cast sits near brandeis without competing."
+  },
+  {
+    "file": "pencil-wireframe-red.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/pink-pencil-on-grid-paper-wireframes-Jz6ol2vASgw",
+    "originalUrl": "https://images.unsplash.com/photo-1790861878557-ceac982b7c4b",
+    "subject": "Red pencil on a sheet of faint wireframes under warm light",
+    "mood": "abstract, calm, warm",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.35,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "card",
+      "form-media"
+    ],
+    "notes": "Warm twin of the violet shot; use one per page."
+  },
+  {
+    "file": "stylus-tablet-sketch.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/person-writing-on-white-paper-IUwX_P80DEU",
+    "originalUrl": "https://images.unsplash.com/photo-1593619296822-174a3cb020f5",
+    "subject": "Over-the-shoulder hand sketching a UI on a tablet with a stylus",
+    "mood": "intimate, process",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1603,
+    "focalPoint": {
+      "x": 0.65,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media",
+      "figure"
+    ],
+    "notes": "Striped sleeve in the foreground gives depth."
+  },
+  {
+    "file": "designer-tablet-monitor.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/man-working-at-a-desk-with-computer-and-tablet-Mo08jadTWYc",
+    "originalUrl": "https://images.unsplash.com/photo-1761122827167-159d1d272313",
+    "subject": "Designer in a cap sketching on a tablet with a dark monitor beside",
+    "mood": "focused, moody",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1996,
+    "focalPoint": {
+      "x": 0.6,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "Monitor top-left has a legible headline; crop from the right or keep at card size."
+  },
+  {
+    "file": "desk-flatlay-devices.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/silver-macbook-air-on-table-near-imac-jJT2r2n7lYA",
+    "originalUrl": "https://images.unsplash.com/photo-1541462608143-67571c6738dd",
+    "subject": "Top-down white desk: monitor, phones, wireframe stencils, coffee",
+    "mood": "clean, systematic",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1601,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "banner",
+      "card",
+      "figure"
+    ],
+    "notes": "A large printed \"to\" is legible top-right; crop it out or use where incidental text is acceptable."
+  },
+  {
+    "file": "moodboard-wall-desk.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/man-writing-beside-wall-with-car-photos-uIZFx2kvqHI",
+    "originalUrl": "https://images.unsplash.com/photo-1574856049959-d3134a3e592f",
+    "subject": "Designer drawing at a desk in front of a floor-to-ceiling moodboard wall",
+    "mood": "studio, creative, warm",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.4,
+      "y": 0.6
+    },
+    "bestPlacements": [
+      "card",
+      "hero-beside"
+    ],
+    "notes": "Studio detail with a lot of texture."
+  },
+  {
+    "file": "hands-sketches-markers.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/white-printer-paper-on-brown-wooden-table-aJYO8JmVodY",
+    "originalUrl": "https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0",
+    "subject": "Hand over architectural sketches with markers and a tablet on a wooden table",
+    "mood": "tactile, warm",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.6
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "Portrait detail; good small."
+  },
+  {
+    "file": "desk-minimal-white.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-desk-with-a-computer-and-a-chair--a1HpH8uLjU",
+    "originalUrl": "https://images.unsplash.com/photo-1656259145847-81bcdac8f0f3",
+    "subject": "Minimal white desk with monitor in a white room",
+    "mood": "calm, empty, bright",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 2132,
+    "focalPoint": {
+      "x": 0.45,
+      "y": 0.35
+    },
+    "bestPlacements": [
+      "card",
+      "form-media"
+    ],
+    "notes": "Very quiet; tall 9:16."
+  },
+  {
+    "file": "workshop-hands-writing.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/people-sitting-on-chair-in-front-of-table-while-holding-pens-during-daytime-KdeqA3aTnBY",
+    "originalUrl": "https://images.unsplash.com/photo-1517048676732-d65bc937f952",
+    "subject": "Row of hands writing in notebooks along a long wooden table",
+    "mood": "workshop, low sun",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.4,
+      "y": 0.55
+    },
+    "bestPlacements": [
+      "banner",
+      "card",
+      "feature-media"
+    ],
+    "notes": "Faces out of frame; strong for workshop/training content."
+  },
+  {
+    "file": "workshop-sticky-sort.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/person-holding-yellow-sticky-notes-MDu-53qRVr4",
+    "originalUrl": "https://images.unsplash.com/photo-1623652554515-91c833e3080e",
+    "subject": "Several hands sorting yellow sticky notes on a blue paper sheet",
+    "mood": "workshop, energetic",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1602,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "banner",
+      "feature-media",
+      "card"
+    ],
+    "notes": "Affinity mapping in action. Blue paper is not brandeis but reads as blue; keep it off blue-accented blocks."
+  },
+  {
+    "file": "workshop-brick-room.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-group-of-people-sitting-around-a-white-table-T74mVg__F_k",
+    "originalUrl": "https://images.unsplash.com/photo-1681949103006-70066fb25dfe",
+    "subject": "Small group at a whiteboard in a bright brick-walled room",
+    "mood": "workshop, airy",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 1799,
+    "focalPoint": {
+      "x": 0.6,
+      "y": 0.35
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "Tall; room legible around people."
+  },
+  {
+    "file": "workshop-whiteboard-lounge.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/three-men-sitting-while-using-laptops-and-watching-man-beside-whiteboard-wD1LRb9OeEo",
+    "originalUrl": "https://images.unsplash.com/photo-1557804506-669a67965ba0",
+    "subject": "Team on sofas around a whiteboard of sticky notes in a loft studio",
+    "mood": "informal, workshop",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.55,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "banner",
+      "feature-media",
+      "card"
+    ],
+    "notes": "Wide room shot; good establishing image."
+  },
+  {
+    "file": "team-laptops-table.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/group-of-people-using-laptop-computer-QckxruozjRg",
+    "originalUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c",
+    "subject": "Overhead-angle team at a wooden table with laptops",
+    "mood": "busy, working",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1601,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "Group at work; no eye contact."
+  },
+  {
+    "file": "board-review-backs.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/man-in-white-dress-shirt-standing-beside-woman-in-black-shirt-V197_623ih8",
+    "originalUrl": "https://images.unsplash.com/photo-1623652653308-d49d335c92eb",
+    "subject": "Group reviewing a sticky-note board, backs to camera",
+    "mood": "mid-review, focused",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1602,
+    "focalPoint": {
+      "x": 0.4,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "Backs to camera keeps faces unrecognisable."
+  },
+  {
+    "file": "hand-mouse-detail.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-womans-hand-on-a-mouse-pad-next-to-a-laptop-PpPnA-Na2_E",
+    "originalUrl": "https://images.unsplash.com/photo-1650094980773-0bb3d0f6a48b",
+    "subject": "Hand on a mouse beside a laptop, colour blur behind",
+    "mood": "detail, bright",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.55,
+      "y": 0.6
+    },
+    "bestPlacements": [
+      "card"
+    ],
+    "notes": "Small detail card."
+  },
+  {
+    "file": "hands-trackpad.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/woman-working-on-a-laptop-with-notebook-and-notebook-WMUjulF5wOY",
+    "originalUrl": "https://images.unsplash.com/photo-1770871821208-a2098b16c7fd",
+    "subject": "Hands on a laptop trackpad and keyboard, notebook beside",
+    "mood": "detail, calm",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.6,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "card",
+      "form-media"
+    ],
+    "notes": "Tall detail."
+  },
+  {
+    "file": "screen-over-shoulder.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-woman-is-looking-at-a-computer-screen-xPjsMamUBK4",
+    "originalUrl": "https://images.unsplash.com/photo-1653647054667-c99dc7f914ef",
+    "subject": "Over-the-shoulder view of a design-tool canvas with component frames",
+    "mood": "process, focused",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.4,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media",
+      "figure"
+    ],
+    "notes": "Screen content is generic tool chrome; nothing legible that belongs to anyone."
+  },
+  {
+    "file": "designer-desk-monitor.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-man-sitting-at-a-desk-using-a-computer-x0YNF7uY0is",
+    "originalUrl": "https://images.unsplash.com/photo-1690369519543-c81a2121f740",
+    "subject": "Designer at a home-studio desk with a monitor and phone",
+    "mood": "calm, daylight",
+    "orientation": "portrait",
+    "width": 1200,
+    "height": 2133,
+    "focalPoint": {
+      "x": 0.55,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "card",
+      "hero-beside"
+    ],
+    "notes": "Tall 9:16."
+  },
+  {
+    "file": "pair-testing-overhead.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/person-in-blue-long-sleeve-shirt-using-black-laptop-computer-5QiGvmyJTsc",
+    "originalUrl": "https://images.unsplash.com/photo-1585624882829-f92c2d4cd89d",
+    "subject": "Overhead: two people with a phone and laptop, testing a flow",
+    "mood": "usability testing, candid",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "Good for research/testing services."
+  },
+  {
+    "file": "hands-sticky-blue-pen.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/person-holding-blue-pen-writing-on-white-paper-67kCaNkqVwI",
+    "originalUrl": "https://images.unsplash.com/photo-1620206299334-6378dde8c8e1",
+    "subject": "Hands writing on blue and yellow sticky notes on white",
+    "mood": "tactile, crisp",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "card",
+      "figure",
+      "cta-media"
+    ],
+    "notes": "Close detail; white ground helps it sit on paper."
+  },
+  {
+    "file": "office-calm-interior.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/brown-wooden-table-with-chairs-near-clear-glass-window-oa1IiRUHCAM",
+    "originalUrl": "https://images.unsplash.com/photo-1497366616365-e78dd380d3dd",
+    "subject": "Empty concrete-and-wood studio interior with a long table",
+    "mood": "calm, spacious, neutral",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1602,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.55
+    },
+    "bestPlacements": [
+      "banner",
+      "cta-media",
+      "form-media"
+    ],
+    "notes": "Mostly empty space: the calmest wide image in the set. No people."
+  },
+  {
+    "file": "portrait-man-blue-office.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-man-in-a-blue-shirt-smiling-at-the-camera-zNxOw2JFNKs",
+    "originalUrl": "https://images.unsplash.com/photo-1705645930353-0e335311ef20",
+    "subject": "Man in a blue shirt, office bokeh behind, slight smile",
+    "mood": "approachable, natural",
+    "orientation": "square",
+    "width": 1200,
+    "height": 1200,
+    "focalPoint": {
+      "x": 0.45,
+      "y": 0.38
+    },
+    "bestPlacements": [
+      "testimonial-portrait"
+    ],
+    "notes": "Shot 2:3, centre-cropped to 1:1."
+  },
+  {
+    "file": "portrait-man-glasses.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/man-in-black-dress-shirt-wearing-black-framed-eyeglasses-_ObjhzjnMmc",
+    "originalUrl": "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04",
+    "subject": "Man in glasses and dark shirt, arms folded, grey ground",
+    "mood": "confident, warm",
+    "orientation": "square",
+    "width": 1200,
+    "height": 1200,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.32
+    },
+    "bestPlacements": [
+      "testimonial-portrait"
+    ],
+    "notes": "Studio grey ground; slight smile."
+  },
+  {
+    "file": "portrait-man-green.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-man-in-a-green-shirt-looking-off-into-the-distance-kwKAvFdfWg8",
+    "originalUrl": "https://images.unsplash.com/photo-1714750977930-e7a7f4611257",
+    "subject": "Man with curly hair in a green overshirt, looking off camera",
+    "mood": "thoughtful, natural",
+    "orientation": "square",
+    "width": 1200,
+    "height": 1200,
+    "focalPoint": {
+      "x": 0.45,
+      "y": 0.35
+    },
+    "bestPlacements": [
+      "testimonial-portrait"
+    ],
+    "notes": "Eye line off camera; reads editorial rather than corporate."
+  },
+  {
+    "file": "portrait-woman-grey.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-woman-with-a-straight-face-JRa8lCQQhSs",
+    "originalUrl": "https://images.unsplash.com/photo-1667053508464-eb11b394df83",
+    "subject": "Woman in a grey sweater, neutral expression, dark ground",
+    "mood": "calm, serious",
+    "orientation": "square",
+    "width": 1200,
+    "height": 1200,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.32
+    },
+    "bestPlacements": [
+      "testimonial-portrait"
+    ],
+    "notes": "Low-key; pair with a measured quote."
+  },
+  {
+    "file": "portrait-woman-laughing.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/smiling-woman-in-white-and-black-checkered-dress-shirt-MQ2xYBHImKM",
+    "originalUrl": "https://images.unsplash.com/photo-1607990283143-e81e7a2c9349",
+    "subject": "Woman laughing in a blue shirt, dark ground",
+    "mood": "warm, open",
+    "orientation": "square",
+    "width": 1200,
+    "height": 1200,
+    "focalPoint": {
+      "x": 0.45,
+      "y": 0.38
+    },
+    "bestPlacements": [
+      "testimonial-portrait"
+    ],
+    "notes": "Most expressive portrait."
+  }
+]
