@@ -30,7 +30,10 @@ export type ServicePageProps = {
  *
  *   1. It opens on the line's illustration, beside the copy (ruling H1: the template chooses the
  *      arrangement per family). A method has no screen to show, so the illustration IS the hero's
- *      image — ch05 §1 and visual-assets-plan § The mapping.
+ *      image — ch05 §1 and visual-assets-plan § The mapping. The trail sits inside the hero, and
+ *      there is no hero eyebrow: the last crumb is the service's name, and an eyebrow under it
+ *      would say it twice (kit `fdn-top`, visual-direction § 2.3). One solid action, one neutral
+ *      link; the hero spends its Accent and the illustration is its Field.
  *   2. Every section is a ContentSection, and every block inside it is a named job with its own
  *      shape (Blocks.tsx, Diagrams.tsx). Variety comes from the ARRANGEMENT of those jobs, never
  *      from the ground: paper throughout, tint earned by the proof band and the page's asks — a mid-page
@@ -45,17 +48,17 @@ export function ServicePage({
   slots = false,
 }: ServicePageProps) {
   const { hero, sections, close } = story;
-  const body = hero.body ? ([hero.lead, hero.body] as const) : ([hero.lead] as const);
 
   return (
     <>
-      <Breadcrumbs surface="paper" items={[...breadcrumbs]} />
-
       <PageHero
         surface="paper"
-        eyebrow={hero.eyebrow}
+        trail={{
+          crumbs: <Breadcrumbs items={breadcrumbs} />,
+          current: breadcrumbs.at(-1)?.label ?? story.name,
+        }}
         title={hero.title}
-        body={body}
+        body={[hero.lead]}
         actions={hero.actions}
         arrangement="beside"
         media={{

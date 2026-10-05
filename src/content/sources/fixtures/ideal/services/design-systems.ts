@@ -4,16 +4,15 @@ import { articlePath, auditPath, ROUTES, servicePath } from '@/lib/routes';
 /** /services/design-systems, designed. Edits: docs/service-pages-design.md § Design Systems. */
 export const designSystems: ServiceStory = {
   slug: 'design-systems',
+  name: 'Design Systems',
   seo: {
     title: 'Design system strategy, implementation and adoption | Tcules',
     description:
       'Build or repair shared product infrastructure across semantics, tokens, Figma, code, documentation, contribution and adoption.',
   },
   hero: {
-    eyebrow: 'Design Systems',
-    title: 'A design system must earn its place in product work',
+    title: 'A design system must earn its place in the work',
     lead: 'The goal is not a larger library. It is a dependable answer to product decisions that several teams would otherwise keep making alone.',
-    body: 'Tcules helps product organisations define, build and operate design systems — across product semantics, foundations, tokens, components, Figma, code, documentation, contribution, release and adoption.',
     actions: [
       { label: 'Start a project', href: '#enquiry' },
       { label: 'Request free audit', href: auditPath('design-system-audit') },
@@ -30,7 +29,7 @@ export const designSystems: ServiceStory = {
       id: 'library-is-one-representation',
       eyebrow: 'Why libraries fail as infrastructure',
       heading: 'A component library is only one representation of the system',
-      lead: 'A library can be visually consistent and still fail as shared infrastructure. A local workaround can be rational; a system earns use only when the supported route is easier to understand, extend and release than the workaround.',
+      lead: 'Tcules helps teams define, build and operate the whole system, from product semantics and tokens to Figma, code, release and adoption. A system earns use only when its route is easier than the workaround.',
       blocks: [
         {
           kind: 'signals',

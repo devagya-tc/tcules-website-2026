@@ -4,16 +4,15 @@ import { articlePath, auditPath, glossaryPath, servicePath, toolPath } from '@/l
 /** /services/ai-product-ux, designed. Edits: docs/service-pages-design.md § AI Product UX. */
 export const aiProductUx: ServiceStory = {
   slug: 'ai-product-ux',
+  name: 'AI Product UX',
   seo: {
     title: 'AI Product UX: people, models and product state | Tcules',
     description:
       'Tcules helps teams create AI-native products, add AI to established software and redesign workflows where probabilistic output changes how people decide or act.',
   },
   hero: {
-    eyebrow: 'AI Product UX',
-    title: 'Design the relationship between people, models and product state',
+    title: 'Design how people, models and product state meet',
     lead: 'For AI-native products, AI added to established software, and workflows where probabilistic output changes how people decide or act.',
-    body: 'The work combines product strategy, UX, interaction, evaluation and implementation responsibility.',
     actions: [
       { label: 'Start a project', href: '#enquiry' },
       { label: 'Request free audit', href: auditPath('ai-product-ux-readiness') },
@@ -30,7 +29,7 @@ export const aiProductUx: ServiceStory = {
       id: 'model-roles',
       eyebrow: 'Before chat, copilot or agent',
       heading: 'Define the role the model plays',
-      lead: 'AI Product UX is the wider relationship: how people understand, direct, evaluate, control and recover from model behaviour. It starts with what the model is allowed to do.',
+      lead: 'The work combines product strategy, UX, interaction, evaluation and implementation: how people understand, direct, control and recover from model behaviour. It starts with what the model may do.',
       blocks: [
         {
           kind: 'spectrum',

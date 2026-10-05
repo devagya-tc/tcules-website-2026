@@ -24,7 +24,7 @@ type SeamBand = {
 const SEAMS: readonly SeamBand[] = [
   {
     label: 'Seam · after a flush band — full air',
-    note: 'The band above is flush: it has no bottom padding to serve as the seam, and it is flush because it hands the air to the next band (Breadcrumbs does exactly this). So this band keeps its top 96.',
+    note: 'The band above is flush: it has no bottom padding to serve as the seam, and it is flush because it hands the air to the next band. So this band keeps its top 96.',
     surface: 'paper',
   },
   {

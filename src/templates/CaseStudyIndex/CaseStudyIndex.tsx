@@ -39,9 +39,13 @@ export type CaseStudyIndexProps = {
   /**
    * The opening, by ROLE rather than by element (29 Sep). `name` is what the page is called
    * ("Selected case studies") and `message` is what it argues — the line a visitor should leave
-   * with. The template sets the message as the h1 and the name as the eyebrow above it, and takes
-   * no action: this page's job is to get a case study read, and a hero button ahead of the cards
-   * competes with that. A blank message falls back to the name as the h1 with no eyebrow.
+   * with. The template sets the message as the h1, and takes no action: this page's job is to get a
+   * case study read, and a hero button ahead of the cards competes with that. A blank message falls
+   * back to the name as the h1.
+   *
+   * The name is no longer an eyebrow (kit `fdn-top`, 5 Oct 2026). It is the trail's last crumb,
+   * which now sits inside the hero 32 above the title, so an eyebrow saying it again repeated the
+   * line directly over it.
    */
   hero: { name: string; message: string };
   items: readonly CaseStudyIndexItem[];
@@ -61,7 +65,7 @@ function eyebrow(item: CaseStudyIndexItem): string | undefined {
 }
 
 /**
- * CaseStudyIndex — the case-study index page type: breadcrumbs, the opening, the set of case-study
+ * CaseStudyIndex — the case-study index page type: the opening with its trail, the set of case-study
  * cards (featured first, from BlockCardSet), and an optional close.
  *
  * It exists so that the live route and its specimen render one composition. The route passes what
@@ -74,10 +78,11 @@ export function CaseStudyIndex({ breadcrumbs, hero, items, closing }: CaseStudyI
 
   return (
     <>
-      <Breadcrumbs surface="paper" items={breadcrumbs} />
-
       <PageHero
-        eyebrow={message ? hero.name : undefined}
+        trail={{
+          crumbs: <Breadcrumbs items={breadcrumbs} />,
+          current: breadcrumbs.at(-1)?.label ?? hero.name,
+        }}
         title={message || hero.name}
         body={['']}
         surface="paper"

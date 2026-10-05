@@ -9,4 +9,5 @@ export type {
   HeroMedia,
   HeroImage,
   HeroVideo,
+  HeroTrail,
 } from './PageHero';

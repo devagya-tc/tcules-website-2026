@@ -256,19 +256,21 @@ export default async function EventPage({ params }: EventPageProps) {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Insights', href: ROUTES.insights },
-          { label: 'Events', href: ROUTES.events },
-          { label: event.title, href: eventPath(event.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: 'Insights', href: ROUTES.insights },
+                { label: 'Events', href: ROUTES.events },
+                { label: event.title, href: eventPath(event.slug) },
+              ]}
+            />
+          ),
+          current: event.title,
+        }}
         title={event.title}
-        eyebrow="Event"
         body={[event.description || `Explore ${event.title}.`]}
         dates={published ? { published } : undefined}
         media={heroMedia}
@@ -359,11 +361,7 @@ export default async function EventPage({ params }: EventPageProps) {
                   title={resource.title}
                   body={displayDate(resource.publishedAt)}
                   eyebrow="Article"
-                  media={
-                    resource.image
-                      ? { type: 'image', image: resource.image }
-                      : undefined
-                  }
+                  media={resource.image ? { type: 'image', image: resource.image } : undefined}
                   href={articlePath(resource.slug)}
                   ctaLabel="Read article"
                 />

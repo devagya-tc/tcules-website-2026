@@ -90,7 +90,7 @@
    text rather than as a label. That is the reason the case belongs to the role rather than to
    this component, and the token is now where it is stated.
 
-   It is also what keeps this label distinguishable from the Breadcrumbs trail 96px above it —
+   It is also what keeps this label distinguishable from the Breadcrumbs trail 32px above it —
    that is sans, verbatim, untracked and 13px, this is mono, uppercase, tracked and 12px, so the
    two differ in four ways and the air between them is the fourth defence rather than the only
    one. The transform is applied here rather than in the data, so the frontmatter keeps its

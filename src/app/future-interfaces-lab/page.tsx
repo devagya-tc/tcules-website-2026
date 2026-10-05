@@ -81,15 +81,18 @@ export default async function FutureInterfacesLabPage() {
 
   return (
     <>
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: page.hero.heading, href: ROUTES.futureInterfacesLab },
-        ]}
-      />
-
       <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: page.hero.heading, href: ROUTES.futureInterfacesLab },
+              ]}
+            />
+          ),
+          current: page.hero.heading,
+        }}
         title={page.hero.heading}
         body={page.hero.body}
         actions={firstTwoActions(page.hero.actions)}
@@ -136,11 +139,7 @@ export default async function FutureInterfacesLabPage() {
                           key={card.id}
                           title={card.title}
                           body={card.body}
-                          media={
-                            media
-                              ? { type: 'image', image: media }
-                              : undefined
-                          }
+                          media={media ? { type: 'image', image: media } : undefined}
                           href={card.action?.href}
                           ctaLabel={card.action?.label}
                         />
@@ -246,11 +245,7 @@ export default async function FutureInterfacesLabPage() {
                 key={card.id}
                 title={card.title}
                 body={card.action?.description || ''}
-                media={
-                  card.icon
-                    ? { type: 'image', image: card.icon }
-                    : undefined
-                }
+                media={card.icon ? { type: 'image', image: card.icon } : undefined}
                 href={card.action?.href}
                 ctaLabel={card.action?.label}
               />
@@ -275,7 +270,10 @@ export default async function FutureInterfacesLabPage() {
             ]}
           />
         ) : (
-          <Section surface="tint" aria-labelledby={`future-interfaces-lab-misc-${page.misc.id}`}>
+          <Section
+            surface="tint"
+            aria-labelledby={`future-interfaces-lab-misc-${page.misc.id}`}
+          >
             <Layout rowGap="block">
               {page.misc.eyebrow ? <p>{page.misc.eyebrow}</p> : null}
               <h2 id={`future-interfaces-lab-misc-${page.misc.id}`}>{page.misc.heading}</h2>

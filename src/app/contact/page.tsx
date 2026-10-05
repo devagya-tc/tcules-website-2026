@@ -63,15 +63,22 @@ export default async function ContactPage() {
         />
       ) : null}
 
-      <Breadcrumbs
+      <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: 'Contact', href: ROUTES.contact },
+              ]}
+            />
+          ),
+          current: 'Contact',
+        }}
+        title={page.heading}
+        body={[page.description]}
         surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Contact', href: ROUTES.contact },
-        ]}
-      />
-
-      <PageHero title={page.heading} body={[page.description]} surface="paper">
+      >
         <EnquiryForm variant="contact" action={ENDPOINTS.contact} />
       </PageHero>
 

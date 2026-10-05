@@ -10,10 +10,12 @@ import {
   type GlossaryContentColumn,
 } from '@/content';
 import { glossaryPath, ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -285,6 +287,12 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
 
   const heroActions = firstTwoHeroActions(glossary.hero.actions);
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: 'Glossary', href: ROUTES.glossary },
+    { label: glossary.title, href: glossaryPath(glossary.slug) },
+  ];
+
   return (
     <>
       {glossary.seo?.structuredData ? (
@@ -294,18 +302,10 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Glossary', href: ROUTES.glossary },
-          { label: glossary.title, href: glossaryPath(glossary.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: glossary.title }}
         title={glossary.title}
-        eyebrow={glossary.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(glossary.hero.eyebrow, crumbs)}
         body={[glossary.hero.description]}
         actions={heroActions}
         surface="paper"

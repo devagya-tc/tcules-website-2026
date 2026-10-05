@@ -283,12 +283,22 @@ export type StoryOffer = {
 
 export type ServiceStory = {
   slug: string;
+  /**
+   * The service line's name — "Product Design". The trail's last crumb and the specimen index's
+   * title. Not rendered in the hero: it was the hero eyebrow until 5 Oct 2026 (kit `fdn-top`), where
+   * it stood 32px under the trail that already said it. A story-level field rather than a hero one,
+   * because it names the page, not its opening.
+   */
+  name: string;
   seo: { title: string; description: string };
+  /**
+   * The opening. A title of at most 48 characters (three lines at 572) and a lead of at most 26 words
+   * (visual-direction § 2.3). There is no second paragraph: the old `hero.body` moved to the first
+   * band's lead, which is where an argument's second sentence belongs.
+   */
   hero: {
-    eyebrow: string;
     title: string;
     lead: string;
-    body?: string;
     actions: readonly [StoryLink] | readonly [StoryLink, StoryLink];
     /** A service-line illustration: `public/illustrations/services/<name>.paper.svg`. */
     illustration: { src: string; width: number; height: number };

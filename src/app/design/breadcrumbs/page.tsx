@@ -1,17 +1,16 @@
-import { Cluster, Layout, Section, type SectionSurface } from '@/components';
-import { Breadcrumbs, type BreadcrumbItem } from '@/patterns';
+import { Cluster, Layout, Section } from '@/components';
+import { Breadcrumbs, PageHero, type BreadcrumbItem } from '@/patterns';
 
-import { specimenStyles as s } from '../_specimen/Specimen';
+import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 /**
  * Breadcrumbs specimen — one variant, one size, and DEPTH as the only thing that actually varies.
  *
- * Every trail below is a BAND, at the top level of this page and never nested inside another
- * Section — the component owns its band, so nesting it would inset its content column a second
- * time inside the outer one. That is also why this page does not use the `Specimen` wrapper the
- * other routes use: `Specimen` is a Layout, and a Layout cannot contain a band. The note for each
- * trail therefore sits in its own band BELOW it, which gives 68 between a trail and its note and
- * 132 between one group and the next — the trail contributes only the focus ring's 4px downward.
+ * Since 5 Oct 2026 (kit fdn-top) the trail renders only its <nav>: no band, no air and no surface
+ * prop. On a page it lives in PageHero's `trail` slot. So this page can do what it could not while
+ * the trail was a band — set every case in an ordinary Specimen inside a Section — and the
+ * surfaces are proved the way a Button's are, by the band the trail stands in. The real
+ * composition, trail inside hero, is the in-situ block near the end.
  *
  * Three states have no props: hover, pressed and tab focus are the stylesheet's business, driven
  * by :hover, :active and :focus-visible. Nothing here can be forced from the outside at all —
@@ -19,9 +18,8 @@ import { specimenStyles as s } from '../_specimen/Specimen';
  * this page cannot print a state column, and it says so rather than showing three states and
  * calling it six. Point at a crumb, hold it down, and tab to it, on each of the four surfaces.
  *
- * The trail is a full-width band, so it can no longer be dropped into a narrow grid track — the
- * wrap is driven by VIEWPORT width now, exactly as it is on a real route. Narrow the window to
- * see it, and to see that consecutive lines' targets clear each other by 0.85px rather than overlapping.
+ * The wrap is driven by the column the trail stands in. Narrow the window to see it, and to see
+ * that consecutive lines' targets clear each other by 0.85px rather than overlapping.
  */
 
 /** A trail of `depth` levels, ending in a plausible leaf. Real labels, not lorem. */
@@ -44,31 +42,6 @@ function trail(depth: number): BreadcrumbItem[] {
   return out;
 }
 
-/**
- * The note for the trail above it, in its own band on the same ground. Below rather than above,
- * because the trail band gives 64 above and only the ring's 4px below: putting the note underneath makes the
- * 64 the gap BETWEEN groups and the 0 the seam within one, which is the rhythm the real
- * composition has.
- */
-function Note({
-  title,
-  note,
-  surface = 'paper',
-}: {
-  title: string;
-  note: string;
-  surface?: SectionSurface;
-}) {
-  return (
-    <Section surface={surface} density="tight">
-      <Layout rowGap="tight">
-        <p className={s.specTitle}>{title}</p>
-        <p className={s.specNote}>{note}</p>
-      </Layout>
-    </Section>
-  );
-}
-
 const DEPTHS = [
   { depth: 2, note: 'No collapse. Two items, one divider.' },
   { depth: 3, note: 'No collapse. Three items, two dividers.' },
@@ -86,7 +59,7 @@ const DEPTHS = [
   },
   {
     depth: 8,
-    note: 'Five levels omitted. Four items again; the parent is "Reservations". Depth is free after four.',
+    note: 'Five levels omitted. Four items again; the parent is "Collisions". Depth is free after four.',
   },
 ] as const;
 
@@ -150,234 +123,226 @@ export default function BreadcrumbsSpecimenPage() {
   return (
     <>
       <Section>
-        <Layout rowGap="block">
-          <h1>Breadcrumbs</h1>
-          <p>
-            The ancestor trail: an ordered list of the pages above this one, ending in this one.
-            It states position — it is not a way of getting elsewhere, which is what{' '}
-            <code>SiteNav</code> is for. Generated entirely from{' '}
-            <code>navigation.breadcrumb</code> in frontmatter, so it takes an array and renders
-            it, and it never reads the URL.
-          </p>
-          <p>
-            It owns its band, which is what makes the composition unforgeable: a{' '}
-            <code>Section</code> with <code>density=&quot;tight&quot;</code> above and zero
-            below. The 64 above separates it from the sticky nav — it has to, because the 44px
-            hit extension reaches 23.15px above the label and a flush band would push that under
-            a bar which stacks above it. The zero below is because the air between the trail and
-            the hero is the <em>hero band&apos;s</em> to give; contribute any here and the two
-            paddings add.
-          </p>
-          <p>
-            So there are two props, not one: <code>items</code>, and <code>surface</code> —
-            which a band-owning pattern needs because it has no ancestor to read{' '}
-            <code>data-surface</code> from, exactly as <code>SiteNav</code> and{' '}
-            <code>SiteFooter</code> do. It must match the hero band below it.
-          </p>
-        </Layout>
-      </Section>
-
-      {/* ── One variant, one size ── */}
-      <Breadcrumbs items={trail(4)} />
-      <Note
-        title="One variant, one size"
-        note="A 1 × 1 matrix, stated as a decision rather than an omission. The trail is identical on every route; the only dimension that actually varies is DEPTH, and depth is data, not a variant. The size is named sm because it lines up with Button size='sm' — the trail is the smallest interactive type on the page and should read as smaller than any control near it."
-      />
-
-      {/* ── The depth ladder ── */}
-      {DEPTHS.map((d) => (
-        <Breadcrumbs key={d.depth} items={trail(d.depth)} />
-      ))}
-      <Note
-        title="The depth ladder — depths 2, 3, 4, 5, 6, 8 above, in order"
-        note="Rendered item counts are 2, 3, 4, 4, 4, 4 from 768 up, and 2, 3, 3, 3, 3, 3 below it. The collapse is depth-driven with one depth per side of the md breakpoint: four or more authored levels render as four on a desktop and as three — first, collapse, current — on a phone, so a phone trail holds one line instead of wrapping onto a second led by a divider. It is CSS, not a prop and not client JS: the parent crumb and the two hidden counts carry breakpoint classes and the one that does not apply is display:none, which removes it from the accessibility tree too. Resize across 768 to watch the parent fold in. Depth is free after four, which is why there is no maxItems prop. The divider count is always one fewer than the rendered item count."
-      />
-
-      {/* ── States ── */}
-      <Breadcrumbs items={trail(4)} />
-      <Section density="tight">
-        <Layout rowGap="block">
-          <p className={s.specTitle}>States — and why there is no state column here</p>
-          <p className={s.specNote}>
-            Rest is what the band above renders, and it needs no prop. NO STATE IN THIS
-            COMPONENT CAN BE FORCED FROM OUTSIDE — there is no <code>active</code>, no{' '}
-            <code>disabled</code>, no <code>expanded</code>, because nothing here opens. So in
-            place of a state column, here is what to look for and where, on the trail above.
-          </p>
-          <Layout rowGap="text">
-            {STATE_REFERENCE.map((row) => (
-              <Layout key={row.state} columns={[1, 3]} colGap="gutter" rowGap="tight">
-                <p className={s.eyebrow}>{row.state}</p>
-                <p className={s.specNote}>{row.what}</p>
-              </Layout>
-            ))}
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h1>Breadcrumbs</h1>
+            <p>
+              The ancestor trail: an ordered list of the pages above this one, ending in this
+              one. It states position — it is not a way of getting elsewhere, which is what{' '}
+              <code>SiteNav</code> is for. Generated entirely from{' '}
+              <code>navigation.breadcrumb</code> in frontmatter, so it takes an array and
+              renders it, and it never reads the URL.
+            </p>
+            <p>
+              It renders only the <code>&lt;nav&gt;</code> and its trail. It used to own a band
+              — 64 above, the focus ring&apos;s reach below — and that band&apos;s padding
+              stacked on the hero&apos;s 96 to push a service page&apos;s h1 down to 296. Now it
+              sits in <code>PageHero</code>&apos;s <code>trail</code> slot, 32 above the split,
+              inside the hero&apos;s own band, and the h1 starts at 222.
+            </p>
+            <p>
+              So there is one prop, <code>items</code>. The colour comes from the enclosing
+              band&apos;s <code>data-surface</code>, exactly as a Button&apos;s does, so a trail
+              can no longer be painted a different ground from the hero it introduces.
+            </p>
           </Layout>
+
+          <Specimen
+            title="One variant, one size"
+            note="A 1 × 1 matrix, stated as a decision rather than an omission. The trail is identical on every route; the only dimension that actually varies is DEPTH, and depth is data, not a variant. The size is named sm because it lines up with Button size='sm' — the trail is the smallest interactive type on the page and should read as smaller than any control near it."
+          >
+            <Breadcrumbs items={trail(4)} />
+          </Specimen>
+
+          <Specimen
+            title="The depth ladder — depths 2, 3, 4, 5, 6, 8"
+            note="Rendered item counts are 2, 3, 4, 4, 4, 4 from 768 up, and 2, 3, 3, 3, 3, 3 below it. The collapse is depth-driven with one depth per side of the md breakpoint: four or more authored levels render as four on a desktop and as three — first, collapse, current — on a phone, so a phone trail holds one line instead of wrapping onto a second led by a divider. It is CSS, not a prop and not client JS: the parent crumb and the two hidden counts carry breakpoint classes and the one that does not apply is display:none, which removes it from the accessibility tree too. Depth is free after four, which is why there is no maxItems prop."
+          >
+            <Layout rowGap="block">
+              {DEPTHS.map((d) => (
+                <Layout key={d.depth} rowGap="tight">
+                  <Breadcrumbs items={trail(d.depth)} />
+                  <p className={s.specNote}>
+                    Depth {d.depth}. {d.note}
+                  </p>
+                </Layout>
+              ))}
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="States — and why there is no state column here"
+            note="Rest is what every trail on this page renders, and it needs no prop. No state in this component can be forced from outside — there is no active, no disabled, no expanded, because nothing here opens. So in place of a state column, here is what to look for on the trail below."
+          >
+            <Layout rowGap="block">
+              <Breadcrumbs items={trail(4)} />
+              <Layout rowGap="text">
+                {STATE_REFERENCE.map((row) => (
+                  <Layout key={row.state} columns={[1, 3]} colGap="gutter" rowGap="tight">
+                    <p className={s.eyebrow}>{row.state}</p>
+                    <p className={s.specNote}>{row.what}</p>
+                  </Layout>
+                ))}
+              </Layout>
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="Longest realistic label"
+            note="No truncation, ever, and no ellipsis on a label — there is already an ellipsis in this component and it means something else. The trail wraps BETWEEN crumbs and never inside one, so a divider is never stranded from the label it belongs to. Narrow the window until it wraps."
+          >
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: '/' },
+                { label: 'Services', href: '/services' },
+                { label: 'Product Design and Interaction Strategy', href: '/services/pd' },
+                {
+                  label: 'Interaction and UI Design for Regulated Financial Products',
+                  href: '/leaf',
+                },
+              ]}
+            />
+          </Specimen>
+
+          <Specimen
+            title="One long unbroken token — a slug"
+            note="Breaks inside the word rather than pushing the row past its track. No horizontal scrollbar, no overflow out of the content column, no ellipsis. Its intrinsic minimum is the widest label, and a label wider than the column breaks inside itself."
+          >
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: '/' },
+                { label: 'Glossary', href: '/glossary' },
+                {
+                  label: 'design-tokens-naming-prefixes-collisions-and-reservations-explained',
+                  href: '/leaf',
+                },
+              ]}
+            />
+          </Specimen>
+
+          <Specimen
+            title="Many items — 2× expected, depth 16"
+            note="Four items again from 768 up, three below — the same COUNT as depth 4, not the same trail: the parent is 'Level 15' and the hidden string reads a different number (13 levels omitted wide, 14 narrow). Only the rendered item count is invariant after four."
+          >
+            <Breadcrumbs items={trail(16)} />
+          </Specimen>
+
+          <Specimen
+            title="An item with an empty label, above the same trail without it"
+            note="Dropped before render, so the divider count stays correct — both trails render three items and two dividers, and they are identical. A whitespace-only label is the failure mode a CMS produces, not a hand-authored one."
+          >
+            <Layout rowGap="block">
+              <Breadcrumbs
+                items={[
+                  { label: 'Home', href: '/' },
+                  { label: '   ', href: '/blank' },
+                  { label: 'Services', href: '/services' },
+                  { label: 'Interaction and UI Design', href: '/leaf' },
+                ]}
+              />
+              <Breadcrumbs
+                items={[
+                  { label: 'Home', href: '/' },
+                  { label: 'Services', href: '/services' },
+                  { label: 'Interaction and UI Design', href: '/leaf' },
+                ]}
+              />
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="Zero items, and one item — each renders nothing at all"
+            note="Two calls sit between this note and the next specimen, and neither renders: not an empty <nav>, because an empty landmark is worse than no landmark — a screen reader lists it and it answers nothing. Both log a dev warning naming the labels they were handed, since naming the route would mean reading it. If anything renders below this note, the test has failed."
+          >
+            <Breadcrumbs items={[]} />
+            <Breadcrumbs items={[{ label: 'Home', href: '/' }]} />
+          </Specimen>
+
+          <Specimen
+            title="Two adjacent — specimen only, invalid on a route"
+            note="One per page. The component does not defend against two, and two produce two identical Breadcrumb landmarks, which a screen reader lists twice; since the landmark name is not a prop there is nothing to disambiguate them with. Shown because the spec's don'ts have to be decidable from a rendered page, and this is the page. PageHero's trail slot holds one, which is the structural answer."
+          >
+            <Layout rowGap="block">
+              <Breadcrumbs items={trail(4)} />
+              <Breadcrumbs items={trail(3)} />
+            </Layout>
+          </Specimen>
         </Layout>
       </Section>
 
-      {/* ── Four surfaces, identical markup, one prop apart ── */}
+      {/* ── Four surfaces: the trail reads the band it stands in ── */}
       {SURFACES.map((surface) => (
-        <div key={surface.surface}>
-          <Breadcrumbs items={trail(4)} surface={surface.surface} />
-          <Note
-            title={`Surface · ${surface.surface}`}
-            note={surface.note}
-            surface={surface.surface}
-          />
-        </div>
-      ))}
-
-      {/* ── Long labels, depths 2–5, on every surface ─────────────────────────────
-          The case the phone collapse exists for. At 390 every depth from 4 up renders three
-          crumbs; depth 3 still renders all three of its own and may wrap on labels this long. */}
-      {SURFACES.map((surface) => (
-        <div key={`long-${surface.surface}`}>
-          {LONG_DEPTHS.map((depth) => (
-            <Breadcrumbs key={depth} items={longTrail(depth)} surface={surface.surface} />
-          ))}
-          <Note
-            title={`Long labels · depths 2, 3, 4, 5 · ${surface.surface}`}
-            note="Above 768: 2, 3, 4, 4 crumbs. Below: 2, 3, 3, 3. The collapse mark is U+2026 in the divider's ink on every surface — punctuation between crumbs, not a fourth label. A trail of three authored levels is not collapsed on a phone, because three is already the phone's count; with labels this long it wraps between crumbs, never inside one."
-            surface={surface.surface}
-          />
-        </div>
+        <Section key={surface.surface} surface={surface.surface}>
+          <Layout rowGap="stack">
+            <Specimen title={`Surface · ${surface.surface}`} note={surface.note}>
+              <Breadcrumbs items={trail(4)} />
+            </Specimen>
+            <Specimen
+              title={`Long labels · depths 2, 3, 4, 5 · ${surface.surface}`}
+              note="Above 768: 2, 3, 4, 4 crumbs. Below: 2, 3, 3, 3. The collapse mark is U+2026 in the divider's ink on every surface — punctuation between crumbs, not a fourth label. A trail of three authored levels is not collapsed on a phone, because three is already the phone's count; with labels this long it wraps between crumbs, never inside one."
+            >
+              <Layout rowGap="block">
+                {LONG_DEPTHS.map((depth) => (
+                  <Breadcrumbs key={depth} items={longTrail(depth)} />
+                ))}
+              </Layout>
+            </Specimen>
+          </Layout>
+        </Section>
       ))}
 
       {/* ── The nested-surface case ──────────────────────────────────────────────
-          A tint trail inside an ink band. The component's own Section declares tint, so the token
-          layer's tint column applies — which is only true because every surface block restates
-          every token. */}
-      <Section surface="ink" flush>
-        <Breadcrumbs items={trail(4)} surface="tint" />
-      </Section>
-      <Note
-        surface="ink"
-        title="Nested surface · a tint trail inside an ink band"
-        note="SPECIMEN-ONLY ARRANGEMENT: this is the one place a trail is deliberately nested inside another Section, which is otherwise forbidden — so its content column insets twice and it sits a gutter in from the ink band's. That misalignment is the cost of the test, not a defect. What it proves: this trail reads the TINT column, not ink's — ancestors at neutral-700 on paper-deep, 7.27:1. Had the tint block carried only its deltas from paper it would have inherited ink's values for whatever it omitted and stranded neutral-400 on this light ground at 1.90:1. That failure is measured, not hypothetical — elsewhere in this system a tint panel inside an ink section rendered text at 1.13:1, and the repetition in the token layer is the fix."
-      />
-
-      {/* ── In situ, at real hero scale ── */}
-      <Breadcrumbs items={trail(4)} />
-      <Section density="tight">
-        <Layout rowGap="stack">
-          <Layout rowGap="block">
-            <h2>Interaction and UI Design</h2>
+          A tint band inside an ink band, and the trail inside the tint. Specimen-only: a Section
+          inside a Section insets its column twice. The trail reads the NEAREST data-surface, so it
+          takes tint's column — which is only true because every surface block restates every
+          token. */}
+      <Section surface="ink">
+        <Layout rowGap="block">
+          <Section surface="tint" density="tight">
+            <Breadcrumbs items={trail(4)} />
+          </Section>
+          <Layout rowGap="tight">
+            <p className={s.specTitle}>Nested surface · a tint band inside an ink band</p>
             <p className={s.specNote}>
-              In situ, and this is the real composition rather than an approximation of it: the
-              trail band above, this band below, nothing between them but the two paddings that
-              face each other. The trail gives only the focus ring&apos;s 4px downward and this
-              band gives 64 upward, so the seam you are looking at is 68 — 64 of it from the
-              hero&apos;s band, which is the half that should own it, and 4 that exists so a
-              focus ring on the last crumb is not painted over. Above the trail is its own 64,
-              which on a real route is what holds it clear of the sticky nav.
-            </p>
-          </Layout>
-          <Layout rowGap="block">
-            <p className={s.specTitle}>
-              The same thing WITH a hero eyebrow — the band that settles Q3
-            </p>
-            <p className={s.eyebrow}>Interaction design</p>
-            <h2 className={s.titleScale}>Interaction and UI Design</h2>
-            <p className={s.specNote}>
-              The line above the title is the real <code>--text-eyebrow</code> role: mono,
-              uppercase, tracked, <code>--sec-ink-label</code>. Compare it with the trail at the
-              top of this group — sans, verbatim, untracked, muted. They differ in family, case,
-              tracking AND ink, which is the whole of Q3: two mono labels stacked 24px apart
-              would have read as one broken line, and sans over mono reads as apparatus over
-              category. Resolved inside this component, so no prop on the hero and no page loses
-              its eyebrow. Note also that the two say different things — &quot;Services&quot; as
-              an ancestor and &quot;Interaction design&quot; as a category are not the same
-              fact, which is why the trail cannot replace the eyebrow.
+              SPECIMEN-ONLY ARRANGEMENT: the tint band is nested inside the ink one, so its
+              content column insets twice. What it proves: the trail reads the TINT column, not
+              ink&apos;s — ancestors at neutral-700 on paper-deep, 7.27:1. Had the tint block
+              carried only its deltas from paper it would have inherited ink&apos;s values for
+              whatever it omitted and stranded neutral-400 on this light ground at 1.90:1.
             </p>
           </Layout>
         </Layout>
       </Section>
 
-      {/* ── Edge cases ── */}
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Services', href: '/services' },
-          { label: 'Product Design and Interaction Strategy', href: '/services/pd' },
-          {
-            label: 'Interaction and UI Design for Regulated Financial Products',
-            href: '/leaf',
-          },
-        ]}
-      />
-      <Note
-        title="Longest realistic label"
-        note="No truncation, ever, and no ellipsis on a label — there is already an ellipsis in this component and it means something else. The trail wraps BETWEEN crumbs and never inside one, so a divider is never stranded from the label it belongs to. Narrow the window until it wraps."
-      />
-
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Glossary', href: '/glossary' },
-          {
-            label: 'design-tokens-naming-prefixes-collisions-and-reservations-explained',
-            href: '/leaf',
-          },
-        ]}
-      />
-      <Note
-        title="One long unbroken token — a slug"
-        note="Breaks inside the word rather than pushing the row past its track. No horizontal scrollbar, no overflow out of the content column, no ellipsis. This is the case that proves nothing can collapse the trail to zero: its intrinsic minimum is the widest label, and a label wider than the column breaks inside itself."
-      />
-
-      <Breadcrumbs items={trail(16)} />
-      <Note
-        title="Many items — 2× expected, depth 16"
-        note="Four items again from 768 up, three below — the same COUNT as depth 4, not the same trail: the parent is 'Level 15' and the hidden string reads a different number (13 levels omitted wide, 14 narrow). Only the rendered item count is invariant after four."
-      />
-
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: '   ', href: '/blank' },
-          { label: 'Services', href: '/services' },
-          { label: 'Interaction and UI Design', href: '/leaf' },
-        ]}
-      />
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Services', href: '/services' },
-          { label: 'Interaction and UI Design', href: '/leaf' },
-        ]}
-      />
-      <Note
-        title="An item with an empty label, above the same trail without it"
-        note="Dropped before render, so the divider count stays correct — both trails above render three items and two dividers, and they are identical. A whitespace-only label is the failure mode a CMS produces, not a hand-authored one."
-      />
-
-      <Breadcrumbs items={[]} />
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }]} />
-      <Note
-        title="Zero items, and one item — each renders nothing at all"
-        note="There is no band above this note, and that is the specimen: not an empty <nav> and not an empty Section either, because an empty landmark is worse than no landmark — a screen reader lists it and it answers nothing. Both also log a dev warning naming the labels they were handed, since naming the route would mean reading it. If you can see a gap above, something rendered and this test has failed."
-      />
-
+      {/* ── In situ: the real composition, trail inside the hero ── */}
       <Section flush>
         <div className={s.mockBar} />
       </Section>
-      <Breadcrumbs items={trail(4)} />
+      <PageHero
+        trail={{
+          crumbs: <Breadcrumbs items={trail(4)} />,
+          current: 'Interaction and UI Design',
+        }}
+        title="Interaction and UI Design"
+        body={[
+          'The real composition: the trail in PageHero’s trail slot, inside the hero’s band.',
+        ]}
+      />
       <Section density="tight">
         <Layout rowGap="block">
-          <p className={s.specTitle}>
-            Touch · the 44px floor, under a stand-in for the sticky nav
+          <p className={s.specTitle}>In situ · under a stand-in for the sticky nav</p>
+          <p className={s.specNote}>
+            The bar above stands in for <code>SiteNav</code>. The hero&apos;s 96 of top padding
+            is the air above the trail, and 32 (<code>gutter</code>) separates the trail from
+            the title. No eyebrow: the last crumb already names the page, and PageHero warns in
+            development when an eyebrow repeats it.
           </p>
           <p className={s.specNote}>
-            The bar above stands in for <code>SiteNav</code>, which on a real route is sticky
-            and stacks over this band. The hit area is extended past the box with a
-            pseudo-element — the label&apos;s own inline extent, 44 tall — so the row does not
-            move, and it is inset to the anchor&apos;s inline edges so it cannot reach over the
-            crumb beside it. It is anchored to the BOTTOM of that box and grown upward rather
-            than centred on it, so the whole 44 sits inside the band&apos;s 64 of top air.
-            Centred, 11.575px would fall below the box, which is below the band, where the next
-            band paints over it: the target would be quietly cut to about 36px with every check
-            still green. Reaching <strong>23.15px</strong> above the box, it clears the bar
-            comfortably. That is Q9, and it is why this band&apos;s air is asymmetric.
+            Touch: the hit area is extended past the label&apos;s box with a pseudo-element —
+            the label&apos;s own inline extent, 44 tall — anchored to the BOTTOM of the box and
+            grown upward, so it reaches 23.15px into the hero&apos;s 96 and leaves about 73
+            clear of the bar. Centred, 11.575px would hang into the 32 below, over the
+            title&apos;s cap height.
           </p>
           <Cluster colGap="text" rowGap="text" align="center">
             <div className={s.hitFloor}>
@@ -386,20 +351,11 @@ export default function BreadcrumbsSpecimenPage() {
             <p className={s.specNote}>
               Narrow the window until the trail wraps: the pitch is 44.85px (a 20.85px box plus{' '}
               <code>--gap-block</code>), which is MORE than the 44px target, so consecutive
-              lines&apos; targets clear each other by 0.85px. The 1.15px overlap this spec used
-              to document went away with the underline fix — both were one defect, geometry
-              hanging below a box that had nothing below it.
+              lines&apos; targets clear each other by 0.85px.
             </p>
           </Cluster>
         </Layout>
       </Section>
-
-      <Breadcrumbs items={trail(4)} />
-      <Breadcrumbs items={trail(3)} />
-      <Note
-        title="Two adjacent — specimen only, invalid on a route"
-        note="One per page. The component does not defend against two, and two produce two identical `Breadcrumb` landmarks, which a screen reader lists twice; since the landmark name is not a prop there is nothing to disambiguate them with. Shown because the spec's don'ts have to be decidable from a rendered page, and this is the page. Note also that two adjacent trail bands touch with no air between them at all — 4 below the first meeting 64 above the second — which is a second reason two is wrong."
-      />
     </>
   );
 }

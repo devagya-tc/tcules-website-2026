@@ -78,15 +78,18 @@ export default async function AboutPage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: breadcrumbLabel, href: ROUTES.about },
-        ]}
-      />
-
       <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: breadcrumbLabel, href: ROUTES.about },
+              ]}
+            />
+          ),
+          current: breadcrumbLabel,
+        }}
         title={page.hero.heading}
         body={[page.hero.description]}
         media={
@@ -265,11 +268,7 @@ export default async function AboutPage() {
                     title={card.title}
                     body={card.body}
                     eyebrow={card.eyebrow}
-                    media={
-                      card.image
-                        ? { type: 'image', image: card.image }
-                        : undefined
-                    }
+                    media={card.image ? { type: 'image', image: card.image } : undefined}
                   />
                 ))}
               </Layout>

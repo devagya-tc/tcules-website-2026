@@ -4,15 +4,15 @@ import { auditPath, glossaryPath, servicePath, toolPath } from '@/lib/routes';
 /** /services/product-modernisation, designed. Edits: docs/service-pages-design.md § Modernisation. */
 export const productModernisation: ServiceStory = {
   slug: 'product-modernisation',
+  name: 'Product Modernisation',
   seo: {
     title: 'Product modernisation for established software | Tcules',
     description:
       'Decide what to repair, redesign, replatform, rebuild or leave alone while protecting continuity in an established software product.',
   },
   hero: {
-    eyebrow: 'Product Modernisation',
-    title: 'Change the product without losing the work it carries',
-    lead: 'Tcules helps the team find the layer causing the cost, protect what still works, and carry the right intervention through product design, design systems, coded evidence or software delivery.',
+    title: 'Change the product, keep the work it carries',
+    lead: 'Tcules helps the team find the layer causing the cost, protect what still works, and carry the right change through design, systems, code or delivery.',
     actions: [
       { label: 'Start a project', href: '#enquiry' },
       { label: 'Request free audit', href: auditPath('product-modernisation-assessment') },

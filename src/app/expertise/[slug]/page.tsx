@@ -10,10 +10,12 @@ import {
   type ExpertiseContentColumn,
 } from '@/content';
 import { expertisePath, ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -312,6 +314,12 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
   const title = expertise.title || expertise.hero.highlightedText || '';
   const heroActions = firstTwoHeroActions(expertise.hero.actions);
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: 'Expertise', href: ROUTES.expertise },
+    { label: title, href: expertisePath(expertise.slug) },
+  ];
+
   return (
     <>
       {expertise.seo?.structuredData ? (
@@ -321,18 +329,10 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Expertise', href: ROUTES.expertise },
-          { label: title, href: expertisePath(expertise.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: title }}
         title={title}
-        eyebrow={expertise.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(expertise.hero.eyebrow, crumbs)}
         body={[expertise.hero.description]}
         actions={heroActions}
         surface="paper"

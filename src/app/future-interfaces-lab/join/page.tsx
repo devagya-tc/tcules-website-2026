@@ -8,10 +8,12 @@ import {
   type FutureInterfacesLabJoinCard,
 } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   ListCard,
   PageHero,
   type HeroAction,
@@ -132,19 +134,17 @@ export default async function FutureInterfacesLabJoinPage() {
 
   if (!page) notFound();
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: 'Future Interfaces Lab', href: ROUTES.futureInterfacesLab },
+    { label: page.hero.heading, href: ROUTES.futureInterfacesLabJoin },
+  ];
+
   return (
     <>
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Future Interfaces Lab', href: ROUTES.futureInterfacesLab },
-          { label: page.hero.heading, href: ROUTES.futureInterfacesLabJoin },
-        ]}
-      />
-
       <PageHero
-        eyebrow={page.hero.eyebrow}
+        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: page.hero.heading }}
+        eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
         title={page.hero.heading}
         body={page.hero.body}
         actions={firstTwoActions(page.hero.actions)}

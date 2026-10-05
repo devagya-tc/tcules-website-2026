@@ -98,15 +98,18 @@ export default async function PrivacyPolicyPage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: privacyPolicy.title, href: ROUTES.privacy },
-        ]}
-      />
-
       <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: privacyPolicy.title, href: ROUTES.privacy },
+              ]}
+            />
+          ),
+          current: privacyPolicy.title,
+        }}
         title={privacyPolicy.title}
         body={[privacyPolicy.description]}
         dates={

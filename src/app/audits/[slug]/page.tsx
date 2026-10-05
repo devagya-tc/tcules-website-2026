@@ -10,10 +10,12 @@ import {
   type AuditContentColumn,
 } from '@/content';
 import { auditPath, ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -269,6 +271,12 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
 
   const heroActions = firstTwoHeroActions(audit.hero.actions);
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: 'Audits', href: ROUTES.audits },
+    { label: audit.title, href: auditPath(audit.slug) },
+  ];
+
   return (
     <>
       {audit.seo?.structuredData ? (
@@ -278,18 +286,10 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Audits', href: ROUTES.audits },
-          { label: audit.title, href: auditPath(audit.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: audit.title }}
         title={audit.title}
-        eyebrow={audit.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(audit.hero.eyebrow, crumbs)}
         body={[audit.hero.description]}
         actions={heroActions}
         surface="paper"

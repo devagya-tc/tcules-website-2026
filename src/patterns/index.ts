@@ -11,12 +11,14 @@
  * Breadcrumbs is the third kind here: not chrome like the nav and the footer, and not a block a
  * page is built out of, but a STATEMENT OF POSITION — an ordered list of the pages above this one.
  * It is a pattern for two independent reasons: it consumes a content shape (`{ label, href }` from
- * frontmatter), and it arranges itself with Cluster, which a primitive may not import.
+ * frontmatter), and it arranges itself with Cluster, which a primitive may not import. It owns no
+ * band (since 5 Oct 2026): it is placed in PageHero's `trail` slot and reads the hero's ground.
  *
  * PageHero is the first of the fourth kind — an OPENING: the one block every page begins with,
- * carrying its single h1. Like Breadcrumbs it owns its band and takes `surface` as a prop, and for
- * the same reason (a pattern that paints a band has no ancestor to read data-surface from); unlike
- * it, it is a block a page is built out of rather than apparatus around one.
+ * carrying its single h1 and, in its `trail` slot, the Breadcrumbs. Like SiteNav and SiteFooter it
+ * owns its band and takes `surface` as a prop, and for the same reason (a pattern that paints a
+ * band has no ancestor to read data-surface from); unlike them, it is a block a page is built out
+ * of rather than apparatus around one.
  *
  * CtaSection is its bookend — a CLOSE, the page's ask made once, carrying an h2 and never an h1.
  * It is the third pattern here to take `surface` as a prop, for the same reason as the other two,
@@ -199,6 +201,7 @@ export type {
   HeroMedia,
   HeroImage,
   HeroVideo,
+  HeroTrail,
 } from './PageHero';
 
 export { SiteFooter } from './SiteFooter';

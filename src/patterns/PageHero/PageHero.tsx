@@ -104,6 +104,19 @@ export type HeroVideo = {
 export type HeroMedia = HeroImage | HeroVideo;
 
 /**
+ * The page's ancestor trail, inside the hero's band (kit `fdn-top`, 5 Oct 2026).
+ *
+ * `crumbs` is a slot: the route or template passes `<Breadcrumbs items={…} />`. A slot rather than
+ * the items, because a pattern does not import a pattern — the caller composes, and PageHero only
+ * places what it is handed, 32 above the split.
+ *
+ * `current` is the last crumb's label, stated beside the slot because a ReactNode cannot be read.
+ * It is used for one thing: in development, PageHero warns when `eyebrow` says the same words, since
+ * an eyebrow that repeats the trail spends a line saying nothing new.
+ */
+export type HeroTrail = { crumbs: ReactNode; current: string };
+
+/**
  * Where the media sits against the copy. A PRESENTATION choice, made by the page-type template per
  * family, in code (ruling H1) — never a CMS field, because it says nothing about the content.
  *
@@ -112,8 +125,9 @@ export type HeroMedia = HeroImage | HeroVideo;
  *            media below the copy is today's single column with the media slot filled, so it has
  *            one name rather than two (spec § 4).
  *   beside   from 1024 up, the copy and the media in two equal tracks (text 1 : media 1, ruling H2),
- *            64 apart, top-aligned, the media at its own ratio inside its track (H3). Below 1024 it
- *            stacks — copy, then media — and renders exactly as `stacked`.
+ *            96 apart (`section`: a split, not peer halves), the media at its own ratio inside its
+ *            track (H3). An illustration is centred on the copy; any other image is top-aligned.
+ *            Below 1024 it stacks — copy, then media — and renders exactly as `stacked`.
  *
  * `beside` with no media renders `stacked`: there is nothing to put beside the copy, and a
  * template that sets `beside` for a family must still render the member that has no image. That is
@@ -154,14 +168,26 @@ export type PageHeroProps = {
    */
   body: readonly [string, ...string[]];
   /**
-   * The category this page belongs to — filled on 32 of 129 routes. Uppercased by the
-   * stylesheet, not by the data, so the frontmatter keeps its authored casing.
+   * A category or format the trail cannot say (`Case study`, `Podcast`). Never the last crumb.
+   *
+   * That rule leads for the design agent's `.prompt.md`. Since the trail moved inside the hero
+   * (kit `fdn-top`, 5 Oct 2026), an eyebrow that repeats the page's own name stands 32px under the
+   * trail that already said it; PageHero warns in development when it equals `trail.current`.
+   * Uppercased by the stylesheet, not by the data, so the frontmatter keeps its authored casing.
    *
    * A slot, not a variant: absent renders no element and no seam, which is why there is no
    * `variant="caseStudy"` selecting it. It sits 24px above the title rather than 8, because 8
    * under a 12px label reads as a caption stuck to the title and 24 reads as a label above one.
    */
   eyebrow?: string;
+  /**
+   * The ancestor trail: `{ crumbs: <Breadcrumbs items={…} />, current: <last label> }`. Sits 32 above the split.
+   *
+   * Inside the hero's band rather than in a band of its own, so the hero's 96 of top padding is
+   * the air above the trail and nothing stacks a second band's padding on top of it. See
+   * `HeroTrail`. Absent renders no element and no seam.
+   */
+  trail?: HeroTrail;
   /**
    * The credit groups, in array order, before the dates. Empty renders no `<dl>` at all — not
    * an empty one, and no 48px seam above nothing.
@@ -171,7 +197,11 @@ export type PageHeroProps = {
   dates?: HeroDates;
   /**
    * Nought, one or two. Position decides emphasis: the first renders solid/primary, the second
-   * ghost/neutral.
+   * a neutral link-style action.
+   *
+   * The second was ghost/neutral until 5 Oct 2026. The hero spends one Accent (the solid button)
+   * and, beside media, one Field; a neutral link is ink and spends nothing (visual-direction § 4.2),
+   * so the pair reads as one action and one alternative rather than as two buttons.
    *
    * Those are the three counts the corpus has, as a type — a third entry has no member of the
    * union to match, so it is a compile error rather than a review comment. The second emphasis is
@@ -180,21 +210,14 @@ export type PageHeroProps = {
    */
   actions?: readonly [] | readonly [HeroAction] | readonly [HeroAction, HeroAction];
   /**
-   * The ground this band paints. It must match the `Breadcrumbs` above it, or the seam goes
-   * two-tone. Defaults to `paper`.
+   * The ground this band paints, and therefore the trail's too. Defaults to `paper`.
    *
-   * That instruction leads deliberately: a prop doc is truncated at 127 characters in the
-   * `.prompt.md` the design agent reads, so the first sentence is the only part that reaches it,
-   * and this is the one thing about this prop that no check and neither component can catch.
-   *
-   * A prop here rather than an inherited attribute, and it is the same answer SiteNav,
-   * SiteFooter and Breadcrumbs already give: a control reads `data-surface` from an ancestor
-   * because it sits inside somebody else's band, and a pattern that OWNS a band has no ancestor
-   * to ask. PageHero IS the band.
-   *
-   * It must equal the `surface` of the Breadcrumbs immediately above, or the seam between the
-   * two bands reads as a two-tone split. Hold one constant in the page template and pass it
-   * twice — that mismatch is the one thing neither component can check for itself.
+   * A prop here rather than an inherited attribute, and it is the same answer SiteNav and
+   * SiteFooter give: a control reads `data-surface` from an ancestor because it sits inside
+   * somebody else's band, and a pattern that OWNS a band has no ancestor to ask. PageHero IS the
+   * band. Since the trail moved inside it (5 Oct 2026) there is no second band to keep in step —
+   * the crumbs read this one's ground, so a two-tone seam at the top of a page can no longer be
+   * written.
    */
   surface?: SectionSurface;
   /**
@@ -300,7 +323,8 @@ type BylinePair = { id: string; label: string; value: ReactNode };
 /**
  * PageHero — the opening block of a page, built to docs/specs/PageHero.md.
  *
- * One h1, an optional eyebrow above it, one to six paragraphs of lead copy, an optional byline
+ * An optional ancestor trail, one h1, an optional eyebrow above it, one to six paragraphs of lead
+ * copy, an optional byline
  * of credits and dates, an optional caller block, nought to two actions and an optional image or
  * YouTube embed, below the copy or beside it. It is the first thing inside <main> on all 129 routes
  * and there is never a second one: two heroes are two h1s, and the `string` typing of `title` is
@@ -318,14 +342,15 @@ type BylinePair = { id: string; label: string; value: ReactNode };
  * an ink band and on the blue pivot — including a tint hero standing between two ink bands.
  *
  * The non-uniform rhythm comes entirely from NESTING rather than from a knob, which is why
- * `stack`, `opening` and `copy` all exist as levels even though none of them renders anything
- * visible: 24 inside the opening, 16 between paragraphs, 48 between blocks, and 64 between the
- * copy and the media when they stand side by side. Tighten by grouping, loosen by separating.
+ * `top`, `stack`, `opening` and `copy` all exist as levels even though none of them renders
+ * anything visible: 16 between paragraphs, 24 inside the opening, 32 from the trail to the split,
+ * 48 between blocks, and 96 between the copy and the media when they stand side by side. Tighten
+ * by grouping, loosen by separating.
  *
- * It renders its OWN band — a Section at default density, so 96 of air above the title — which
- * is what discharges the obligation Breadcrumbs' band leaves: the trail contributes nothing
- * downward beyond its focus ring's reach, because the air between the trail and the hero is the
- * hero band's to give. Being a band, it can only be a direct child of the page or its template.
+ * It renders its OWN band — a Section at default density, so 96 of air above the trail (or the
+ * title, with no trail). The trail lives inside that band (kit `fdn-top`, 5 Oct 2026): it was a
+ * band of its own with 64 above it, and the two paddings stacked to put a service page's h1 at
+ * 296. Being a band, the hero can only be a direct child of the page or its template.
  * It must not go inside a Section (the column would inset twice), a Layout track (a band is not
  * a row) or a Cluster (which would shrink it to its longest word).
  *
@@ -344,6 +369,7 @@ export function PageHero({
   title,
   body,
   eyebrow,
+  trail,
   credits = [],
   dates,
   actions = [],
@@ -395,6 +421,202 @@ export function PageHero({
      single column, and so is `stacked` with or without it. */
   const split = arrangement === 'beside' && media !== undefined;
 
+  /* Against media, the copy's alignment follows what the media IS (visual-direction § 3.2). An
+     illustration has no box, so the copy is centred on it and the two read as one pair; a
+     photograph, a capture or a video has an edge, so the h1 and that top edge share a line. */
+  const centred = split && media.type === 'image' && media.image.kind === 'illustration';
+
+  /* The trail already names the page. An eyebrow that says the same words stands 32px under it and
+     tells the reader nothing new (owner, 5 Oct 2026: the eyebrow never repeats the crumb). Trimmed
+     and case-folded, because the eyebrow is uppercased by the stylesheet and a repeat in another
+     casing is still a repeat. A warning rather than a refusal: the eyebrow renders, so the fault is
+     visible on the page as well as in the console. */
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    eyebrow !== undefined &&
+    trail !== undefined &&
+    sameWords(eyebrow, trail.current)
+  ) {
+    console.warn(
+      `PageHero: eyebrow "${eyebrow}" repeats the trail's last crumb. Drop it, or replace it ` +
+        `with a category or format the trail cannot say (for example "Case study · Fintech").`,
+    );
+  }
+
+  /* ── split · the arrangement ──────────────────────────────────────────────
+      The one Layout that `arrangement` touches. Two children at most — the copy stack and
+      the media — so DOM order is reading order at every width: copy, then media.
+
+      stacked  single track at every width, 48 between the copy and the media. This is the
+               "below" of ruling H1: media as a full-column block under the copy.
+      beside   from 1024 (`lg`), two EQUAL tracks — text 1 : media 1, ruling H2 — with 96
+               between them, --gap-section: copy beside an image is a split, two regions of
+               different kind, and only peer halves take --gap-column (1 Oct 2026). Below
+               1024 it is the stacked single track exactly, 48 and all.
+
+      The alignment is never stretch: the copy and the media are unequal heights by design (H3 —
+      the media keeps its own ratio), and the default stretch would pull the shorter cell to the
+      row's height. Which of the other two follows the media's kind (visual-direction § 3.2):
+        an illustration  centred on the copy. It has no box, so there is no edge to share, and a
+                         drawing hung from the title's top line reads as dropped into a corner.
+        anything else    top-aligned. A photograph, capture or video has an edge, and the h1 and
+                         that top edge share a line; the difference in height is left as air.
+      In `stacked` both are inert: a single-track row is always its content's height.
+
+      `beside` with no media is not split: there is nothing to stand beside the copy, so the
+      single track renders and the hero is the no-visual hero, which is the common one. */
+  const content = (
+    <Layout
+      rowGap="stack"
+      columns={split ? { lg: [1, 1] } : undefined}
+      colGap={split ? 'section' : undefined}
+      align={centred ? 'center' : 'start'}
+    >
+      {/* ── stack · 48 between blocks ──────────────────────────────────────────
+          Single-track at every width. Every child below is conditional except the opening,
+          and each renders NO ELEMENT when its slot is empty rather than an empty one — a Layout
+          gap exists only between rendered children, so an absent slot costs no seam. No route
+          ever shows 48px of air above nothing. */}
+      <Layout rowGap="stack">
+        {/* ── opening · 24 between label, title and copy ─────────────────────────
+            One Layout with three children rather than two nested ones, because the
+            eyebrow-to-title seam and the title-to-copy seam are the same step. */}
+        <Layout rowGap="block">
+          {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
+          <h1 className={styles.title}>{title}</h1>
+          {/* copy · 16 between paragraphs. Absent entirely when every entry was blank —
+              never an empty <div> holding 16px of nothing. */}
+          {lead === undefined ? null : (
+            <Layout rowGap="text">
+              <p className={styles.lead}>{lead}</p>
+              {/* The index is the key. These rows are static frontmatter copy in array order —
+                  they never reorder, they are never inserted into, and two paragraphs may be
+                  identical strings, which makes the content itself a worse key than the position. */}
+              {rest.map((paragraph, index) => (
+                <p key={index} className={styles.body}>
+                  {paragraph}
+                </p>
+              ))}
+            </Layout>
+          )}
+        </Layout>
+
+        {/* ── byline · 24 both axes ─────────────────────────────────────────────
+            A <dl> rather than a Cluster of spans, because each <dt> is then announced
+            immediately before its own <dd> — "Written by, Alice Chen and Ben Ndlovu" — instead
+            of a row of unlabelled strings. <div> inside <dl> is valid and is what lets each
+            pair be a Layout, which is the same shape SiteFooter's contact block takes.
+
+            The ratio is what removes the need for decoration: 4px between a key and its value
+            against 24px between one pair and the next is a six-fold difference, so each pair
+            reads as one unit and the row reads as a row — no rule, no dot, no separator. */}
+        {pairs.length > 0 ? (
+          <Cluster as="dl" colGap="block" rowGap="block" align="start">
+            {pairs.map((pair) => (
+              <Layout key={pair.id} rowGap="inline">
+                <dt className={styles.key}>{pair.label}</dt>
+                <dd className={styles.value}>{pair.value}</dd>
+              </Layout>
+            ))}
+          </Cluster>
+        ) : null}
+
+        {/* ── extras ───────────────────────────────────────────────────────────
+            The one part that carries nothing at all — no class, because it has no rule to
+            carry. The <div> exists only to group whatever is passed into ONE row of the stack;
+            without it a fragment of three elements would become three rows at 48px each. */}
+        {children == null ? null : <div>{children}</div>}
+
+        {/* ── actions · one solid, one neutral link ─────────────────────────────────
+            Anchors, because a hero action always navigates — which is why Space does nothing on
+            them and why that is correct rather than a gap.
+
+            The first is solid/primary, the hero's one Accent. The second is link-style and
+            neutral: ink, not blue, so it spends nothing (visual-direction § 4.2) and reads as an
+            alternative rather than as a second button competing with the first (5 Oct 2026; it
+            was ghost/neutral). 24 between them, `block`, because a bare label 8 from a filled box
+            reads as part of it; centred on the cross axis, because the link has no box of its
+            own and its label must sit on the button's label line. 24 between wrapped rows too, so a
+            link that wraps under the button keeps its 44px target clear of the button's box.
+
+            size="md" with extendHitArea, not size="lg". The box is 40 and the touch floor is
+            44, so the extension reaches the floor without moving the row: the alternative would
+            make the hero's controls 48 while every other control on the site stayed at 40, and
+            the hero would be claiming a loudness the design does not intend. An action missing
+            the extension is the one failure this component can ship that a screenshot will not
+            show. */}
+        {controls.length > 0 ? (
+          <Cluster colGap="block" rowGap="block" align="center">
+            {controls.map((action, index) => (
+              <Button
+                key={action.href}
+                as="a"
+                href={action.href}
+                emphasis={index === 0 ? 'solid' : 'link'}
+                tone={index === 0 ? 'primary' : 'neutral'}
+                size="md"
+                extendHitArea
+              >
+                {action.label}
+              </Button>
+            ))}
+          </Cluster>
+        ) : null}
+      </Layout>
+
+      {/* ── media · below the copy, or beside it ─────────────────────────────────
+          One slot, two renderings, mutually exclusive by the union — so there is no wrapper
+          element and no class of PageHero's on the image. Each IS the split's second child.
+
+          The width is the track's in both arrangements: the full content column in `stacked`,
+          half of it less 48 in `beside`. The height is the asset's own (H3) — Media renders
+          intrinsic, uncropped, and a tall asset is tall.
+
+          Nothing here is conditional on `surface`. The image's edge is Media's, by kind, read
+          from the band's data-surface through --media-*; the video's hairline is
+          --hero-media-rule-ink, re-declared once per surface in this component's token layer. */}
+      {media === undefined ? null : media.type === 'image' ? (
+        /* Through Media, which owns the edge (a capture takes the hairline; a cut-out, an
+           illustration and a photograph take none — ch05 §2, §2a, §4a), the srcset and the
+           loading. PageHero owns the two things Media cannot know:
+
+           `sizes` — the arrangement's width, from src/lib/image-sizes.ts. The beside value is
+           only right when the split is real, which is why it follows `split` and not
+           `arrangement`: a `beside` hero with its media stacked is a full-column image.
+
+           `priority` — always. A hero image is the LCP element on every route that has one, so
+           it is eager and fetched ahead of the document's other images. It is the one priority
+           image on a page because there is one hero on a page. */
+        <Media image={media.image} sizes={split ? HERO_BESIDE : FULL_COLUMN} priority />
+      ) : (
+        /* youtube-nocookie.com rather than youtube.com: it withholds the tracking cookies until
+           a visitor actually presses play, and nothing about the embed needs them before then.
+           The whole URL is built here rather than taken from the caller, so all 129 routes embed
+           the same way — see HeroVideo's doc. There are no query parameters, deliberately: every
+           one YouTube offers changes the player's behaviour, and a default nobody chose is
+           better than one this component chose for 129 pages without being asked.
+
+           loading="lazy" here and NOT on the image, which looks inconsistent and is not. A video
+           frame is never the paint a reader is waiting for — it is an object they have to decide
+           to press — and the embed pulls the player's own scripts from another origin, which is
+           real weight to keep off the critical path of every hero that has one.
+
+           `title` is the frame's accessible name and is required by the type. `allow` is the
+           player's own feature list, minus autoplay: a hero that started playing on load would
+           be the loudest thing on the site and nobody asked for it. */
+        <iframe
+          className={styles.video}
+          src={`https://www.youtube-nocookie.com/embed/${media.id}`}
+          title={media.title}
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          loading="lazy"
+          allowFullScreen
+        />
+      )}
+    </Layout>
+  );
+
   return (
     /* ── The band ────────────────────────────────────────────────────────────────
        The hero owns its band, at Section's DEFAULT density — 96 of air, one band shape on 129
@@ -411,165 +633,22 @@ export function PageHero({
        <div> because the hero is a self-contained thematic opening, and because that leaves
        aria-labelledby on the always-rendered h1 as a one-line change if it is ever wanted. */
     <Section surface={surface}>
-      {/* ── split · the arrangement ──────────────────────────────────────────────
-          The one Layout that `arrangement` touches. Two children at most — the copy stack and
-          the media — so DOM order is reading order at every width: copy, then media.
-
-          stacked  single track at every width, 48 between the copy and the media. This is the
-                   "below" of ruling H1: media as a full-column block under the copy.
-          beside   from 1024 (`lg`), two EQUAL tracks — text 1 : media 1, ruling H2 — with 64
-                   between them, --gap-column, the step for two halves that must read as
-                   separate. Below 1024 it is the stacked single track exactly, 48 and all.
-
-          align="start" is load-bearing in `beside`: the copy and the media are unequal heights by
-          design (H3 — the media keeps its own ratio), and the default stretch would pull the
-          shorter cell to the row's height. Top-aligned, the h1 and the top of the image share a
-          line, and the difference in height is left as air rather than filled. In `stacked` it is
-          inert: a single-track row is always its content's height.
-
-          `beside` with no media is not split: there is nothing to stand beside the copy, so the
-          single track renders and the hero is the no-visual hero, which is the common one. */}
-      <Layout
-        rowGap="stack"
-        columns={split ? { lg: [1, 1] } : undefined}
-        colGap={split ? 'section' : undefined}
-        align="start"
-      >
-        {/* ── stack · 48 between blocks ──────────────────────────────────────────
-            Single-track at every width. Every child below is conditional except the opening,
-            and each renders NO ELEMENT when its slot is empty rather than an empty one — a Layout
-            gap exists only between rendered children, so an absent slot costs no seam. No route
-            ever shows 48px of air above nothing. */}
-        <Layout rowGap="stack">
-          {/* ── opening · 24 between label, title and copy ─────────────────────────
-              One Layout with three children rather than two nested ones, because the
-              eyebrow-to-title seam and the title-to-copy seam are the same step. */}
-          <Layout rowGap="block">
-            {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-            <h1 className={styles.title}>{title}</h1>
-            {/* copy · 16 between paragraphs. Absent entirely when every entry was blank —
-                never an empty <div> holding 16px of nothing. */}
-            {lead === undefined ? null : (
-              <Layout rowGap="text">
-                <p className={styles.lead}>{lead}</p>
-                {/* The index is the key. These rows are static frontmatter copy in array order —
-                    they never reorder, they are never inserted into, and two paragraphs may be
-                    identical strings, which makes the content itself a worse key than the position. */}
-                {rest.map((paragraph, index) => (
-                  <p key={index} className={styles.body}>
-                    {paragraph}
-                  </p>
-                ))}
-              </Layout>
-            )}
-          </Layout>
-
-          {/* ── byline · 24 both axes ─────────────────────────────────────────────
-              A <dl> rather than a Cluster of spans, because each <dt> is then announced
-              immediately before its own <dd> — "Written by, Alice Chen and Ben Ndlovu" — instead
-              of a row of unlabelled strings. <div> inside <dl> is valid and is what lets each
-              pair be a Layout, which is the same shape SiteFooter's contact block takes.
-
-              The ratio is what removes the need for decoration: 4px between a key and its value
-              against 24px between one pair and the next is a six-fold difference, so each pair
-              reads as one unit and the row reads as a row — no rule, no dot, no separator. */}
-          {pairs.length > 0 ? (
-            <Cluster as="dl" colGap="block" rowGap="block" align="start">
-              {pairs.map((pair) => (
-                <Layout key={pair.id} rowGap="inline">
-                  <dt className={styles.key}>{pair.label}</dt>
-                  <dd className={styles.value}>{pair.value}</dd>
-                </Layout>
-              ))}
-            </Cluster>
-          ) : null}
-
-          {/* ── extras ───────────────────────────────────────────────────────────
-              The one part that carries nothing at all — no class, because it has no rule to
-              carry. The <div> exists only to group whatever is passed into ONE row of the stack;
-              without it a fragment of three elements would become three rows at 48px each. */}
-          {children == null ? null : <div>{children}</div>}
-
-          {/* ── actions · 8 both axes ─────────────────────────────────────────────
-              Anchors, because a hero action always navigates — which is why Space does nothing on
-              them and why that is correct rather than a gap.
-
-              size="md" with extendHitArea, not size="lg". The box is 40 and the touch floor is
-              44, so the extension reaches the floor without moving the row: the alternative would
-              make the hero's controls 48 while every other control on the site stayed at 40, and
-              the hero would be claiming a loudness the design does not intend. An action missing
-              the extension is the one failure this component can ship that a screenshot will not
-              show. */}
-          {controls.length > 0 ? (
-            <Cluster colGap="tight" rowGap="tight">
-              {controls.map((action, index) => (
-                <Button
-                  key={action.href}
-                  as="a"
-                  href={action.href}
-                  emphasis={index === 0 ? 'solid' : 'ghost'}
-                  tone={index === 0 ? 'primary' : 'neutral'}
-                  size="md"
-                  extendHitArea
-                >
-                  {action.label}
-                </Button>
-              ))}
-            </Cluster>
-          ) : null}
+      {trail === undefined ? (
+        content
+      ) : (
+        /* ── top · the trail, 32 above the split ────────────────────────────────────
+           `gutter`: the trail is a 13px apparatus line and the split opens on a 67px title, so the
+           step that separates peers in a row is enough — the scale difference does the rest. The
+           wrapper is a <div> because the crumbs bring their own landmark. */
+        <Layout rowGap="gutter">
+          {trail.crumbs}
+          {content}
         </Layout>
-
-        {/* ── media · below the copy, or beside it ─────────────────────────────────
-            One slot, two renderings, mutually exclusive by the union — so there is no wrapper
-            element and no class of PageHero's on the image. Each IS the split's second child.
-
-            The width is the track's in both arrangements: the full content column in `stacked`,
-            half of it less 32 in `beside`. The height is the asset's own (H3) — Media renders
-            intrinsic, uncropped, and a tall asset is tall.
-
-            Nothing here is conditional on `surface`. The image's edge is Media's, by kind, read
-            from the band's data-surface through --media-*; the video's hairline is
-            --hero-media-rule-ink, re-declared once per surface in this component's token layer. */}
-        {media === undefined ? null : media.type === 'image' ? (
-          /* Through Media, which owns the edge (a capture takes the hairline; a cut-out, an
-             illustration and a photograph take none — ch05 §2, §2a, §4a), the srcset and the
-             loading. PageHero owns the two things Media cannot know:
-
-             `sizes` — the arrangement's width, from src/lib/image-sizes.ts. The beside value is
-             only right when the split is real, which is why it follows `split` and not
-             `arrangement`: a `beside` hero with its media stacked is a full-column image.
-
-             `priority` — always. A hero image is the LCP element on every route that has one, so
-             it is eager and fetched ahead of the document's other images. It is the one priority
-             image on a page because there is one hero on a page. */
-          <Media image={media.image} sizes={split ? HERO_BESIDE : FULL_COLUMN} priority />
-        ) : (
-          /* youtube-nocookie.com rather than youtube.com: it withholds the tracking cookies until
-             a visitor actually presses play, and nothing about the embed needs them before then.
-             The whole URL is built here rather than taken from the caller, so all 129 routes embed
-             the same way — see HeroVideo's doc. There are no query parameters, deliberately: every
-             one YouTube offers changes the player's behaviour, and a default nobody chose is
-             better than one this component chose for 129 pages without being asked.
-
-             loading="lazy" here and NOT on the image, which looks inconsistent and is not. A video
-             frame is never the paint a reader is waiting for — it is an object they have to decide
-             to press — and the embed pulls the player's own scripts from another origin, which is
-             real weight to keep off the critical path of every hero that has one.
-
-             `title` is the frame's accessible name and is required by the type. `allow` is the
-             player's own feature list, minus autoplay: a hero that started playing on load would
-             be the loudest thing on the site and nobody asked for it. */
-          <iframe
-            className={styles.video}
-            src={`https://www.youtube-nocookie.com/embed/${media.id}`}
-            title={media.title}
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            loading="lazy"
-            allowFullScreen
-          />
-        )}
-      </Layout>
+      )}
     </Section>
   );
+}
+
+function sameWords(a: string, b: string) {
+  return a.trim().toLowerCase() === b.trim().toLowerCase();
 }

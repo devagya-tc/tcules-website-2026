@@ -132,15 +132,22 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
 
   return (
     <>
-      <Breadcrumbs
+      <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: page.hero.heading, href: ROUTES.insights },
+              ]}
+            />
+          ),
+          current: page.hero.heading,
+        }}
+        title={page.hero.heading}
+        body={[page.hero.description]}
         surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: page.hero.heading, href: ROUTES.insights },
-        ]}
       />
-
-      <PageHero title={page.hero.heading} body={[page.hero.description]} surface="paper" />
 
       {page.formatCards.length > 0 ? (
         <Section as="div" surface="tint">
@@ -267,9 +274,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
                     body={resource.description}
                     eyebrow={eyebrow}
                     media={
-                      resource.image
-                        ? { type: 'image', image: resource.image }
-                        : undefined
+                      resource.image ? { type: 'image', image: resource.image } : undefined
                     }
                     href={blogPath(resource.slug)}
                     ctaLabel={resourceCta(resource.kind)}

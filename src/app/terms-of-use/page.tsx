@@ -98,15 +98,18 @@ export default async function TermsOfUsePage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: termsOfUse.title, href: ROUTES.terms },
-        ]}
-      />
-
       <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: termsOfUse.title, href: ROUTES.terms },
+              ]}
+            />
+          ),
+          current: termsOfUse.title,
+        }}
         title={termsOfUse.title}
         body={[termsOfUse.description]}
         dates={

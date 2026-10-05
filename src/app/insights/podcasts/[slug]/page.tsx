@@ -255,19 +255,21 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Insights', href: ROUTES.insights },
-          { label: 'Podcasts', href: ROUTES.podcasts },
-          { label: podcast.title, href: podcastPath(podcast.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: 'Insights', href: ROUTES.insights },
+                { label: 'Podcasts', href: ROUTES.podcasts },
+                { label: podcast.title, href: podcastPath(podcast.slug) },
+              ]}
+            />
+          ),
+          current: podcast.title,
+        }}
         title={podcast.title}
-        eyebrow="Podcast"
         body={[podcast.description || `Listen to ${podcast.title}.`]}
         dates={published ? { published } : undefined}
         media={heroMedia}
@@ -325,11 +327,7 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
                   title={resource.title}
                   body={displayDate(resource.publishedAt)}
                   eyebrow="Article"
-                  media={
-                    resource.image
-                      ? { type: 'image', image: resource.image }
-                      : undefined
-                  }
+                  media={resource.image ? { type: 'image', image: resource.image } : undefined}
                   href={articlePath(resource.slug)}
                   ctaLabel="Read article"
                 />

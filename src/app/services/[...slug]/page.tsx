@@ -20,6 +20,7 @@ import {
   type ServiceSection,
 } from '@/content';
 import { ROUTES, servicePath } from '@/lib/routes';
+import { eyebrowBesideTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -394,6 +395,8 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
   const tintFollowsRun = Boolean(service.faq || service.capabilitiesCta || service.cta);
   const surfaces = sectionSurfaces(service.sections, tintFollowsRun);
 
+  const crumbs: BreadcrumbItem[] = serviceBreadcrumbs(service.slug, title);
+
   return (
     <>
       {service.seo?.structuredData ? (
@@ -403,11 +406,10 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
         />
       ) : null}
 
-      <Breadcrumbs surface="paper" items={serviceBreadcrumbs(service.slug, title)} />
-
       <PageHero
+        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: title }}
         title={title}
-        eyebrow={service.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(service.hero.eyebrow, crumbs)}
         body={[service.hero.description]}
         actions={heroActions}
         surface="paper"

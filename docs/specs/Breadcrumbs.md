@@ -6,7 +6,7 @@
 |---|---|
 | **Component** | `Breadcrumbs` |
 | **Tier** | 2 pattern (`src/patterns/Breadcrumbs/`) |
-| **Status** | implemented |
+| **Status** | implemented · **amended 5 Oct 2026 (kit `fdn-top`)** — no band, no `surface`; lives in PageHero's `trail` slot |
 | **Token prefix** | `--crumb-*` (collides with none of `--btn-` `--foot-` `--icn-` `--lay-` `--logo-` `--nav-` `--prose-` `--sec-`) |
 | **Designer / date** | Design · 20 Aug 2026 |
 | **Implements** | COMPONENT NAME: Breadcrumbs — the ancestor trail above the page hero (128 of 129 routes) |
@@ -26,6 +26,34 @@ Verified against the loaded Tcules library (`window.Tcules`, 9 components) and `
 §2, §3, §6, §9, §11, §12 and §17 Q4/Q7 are amended in place; each amendment is marked *29 Sep 2026*.
 
 **Built 20 Aug 2026.** Nine decisions the build had to make that this document did not, each recorded in the section it belongs to rather than only here: `hit` is a `::before` because §2 asked for two `::after` on one element (§2); two contrast figures in §6's prose were wrong and are corrected, one of them in the direction that *strengthens* the decision (§6); `root` and `crumb` emit no class because §2 says they carry nothing and a class with no rule is a dead rule (§2); no `--crumb-shadow` and no `z-index` were minted (§7); `transform-origin` is stated as `0 50%` because CSS has no logical spelling for it (§12); the dev warning names the labels rather than the route, because naming the route would mean reading it (§12); three of §14's greps needed the comment-stripping qualifier this repo's own review step prescribes (§14); the render guard carries two truthiness checks that `noUncheckedIndexedAccess` requires (§3); and three §14 items are route-level and not yet decidable (§14). Every contrast ratio in §6's table was recomputed from `primitives.css` and all 28 matched exactly.
+
+**Amended 5 Oct 2026 (kit `fdn-top`, visual-direction § 2.1, § 2.6) — read this first; it supersedes the band decision of 20 Aug.** The 1 Oct review found the top of every page read as a document: the trail's own band (64 above) stacked on the hero's 96 and put a service page's h1 at 296. Rulings: the trail moves **inside the hero**, and the hero eyebrow never repeats the crumb.
+
+1. **`Breadcrumbs` renders only `<nav aria-label="Breadcrumb">` and its trail.** No `Section`. `.root` (64 above, the focus-ring clearance below) is deleted, and so is `--crumb-ring-clearance`, which existed only to keep the ring inside the old band.
+2. **`surface` is deleted.** The colour comes from the enclosing band's `data-surface`, as a Button's does (token rule 7). Every per-surface token in `breadcrumbs.css` keeps its value. A trail can no longer be painted a different ground from the hero it introduces, so the "deliberately mismatched" specimen and §14's surface-match check are retired.
+3. **Placement:** `PageHero`'s `trail` slot — `trail={{ crumbs: <Breadcrumbs items={…} />, current: <last label> }}`. The hero sets it 32 (`gutter`) above its split, inside its own 96 of top padding. The 44px hit extension reaches 23.15px up into that padding and leaves about 73 clear of the sticky nav; the rule offset and the hit geometry are unchanged.
+4. **Measured on the six service pages at 1470 × 830:** trail top 169, split top 222 (was 296), every hero ends at or above 823. At 390 the trail starts at 161 and the h1 at 214.
+
+**Migration (§ 2.6).** Every rendering consumer moved its crumbs into the hero's `trail`: 20 live routes (about, audits/[slug], careers, case-studies/[slug], contact, expertise/[slug], future-interfaces-lab, future-interfaces-lab/join, glossary/[slug], how-we-work, insights, insights/[...slug], insights/events/[slug], insights/podcasts/[slug], matter-design-system, privacy-policy, services, services/[...slug], terms-of-use, tools/[slug]), 2 templates (CaseStudyIndex, ServicePage, so also /case-studies and the six /design/service-page pages), 3 specimens (design/breadcrumbs rewritten as Specimens inside Sections, design/page-hero block 9, design/section's note) and the two `.design-sync` previews. A crawl of 162 pages from `/` finds the trail on 132, always inside the hero, never twice. No route's first band is something other than a PageHero.
+
+Eyebrows fixed on the way (the owner's ruling is "never repeats the crumb", so a repeat of the PARENT crumb counts as well as the last):
+
+| Route | Before | After |
+|---|---|---|
+| how-we-work | eyebrow "How We Work" under a trail ending "How We Work" | dropped (`eyebrowBesideTrail`) |
+| glossary/[slug] | "Glossary" under Home / Glossary / term | dropped (`eyebrowBesideTrail`) |
+| audits/[slug] | "Audits" / "Audit" under Home / Audits / title (4 of 5) | dropped; "Product audit" kept on ai-product-ux-readiness |
+| case-studies/[slug] | "Case study" under Home / Case studies / title | removed from the route |
+| insights/[...slug] | "Insight" under Home / Insights / … | removed |
+| insights/events/[slug] | "Event" under … / Events / title | removed |
+| insights/podcasts/[slug] | "Podcast" under … / Podcasts / title | removed |
+| /case-studies (CaseStudyIndex) | the page name as eyebrow over the message, and the same name as the last crumb | eyebrow dropped |
+| six service pages (ServicePage) | the service name as eyebrow, and as the last crumb | eyebrow dropped; `hero.eyebrow` renamed `story.name` |
+| expertise, tools, services/[...slug], matter-design-system, future-interfaces-lab/join | CMS eyebrow, never equal to a crumb today | passed through `eyebrowBesideTrail`, unchanged on screen |
+
+`src/lib/trail.ts` (`eyebrowBesideTrail`) is the route-side check: it compares against every crumb, case-folded, zero-width characters dropped and a trailing "s" ignored. PageHero's own development warning sees only `trail.current`.
+
+Sections 1, 3, 7, 9, 10, 14 and 15 below still describe the band; where they disagree with this block, this block wins.
 
 ## 1 · Identity
 

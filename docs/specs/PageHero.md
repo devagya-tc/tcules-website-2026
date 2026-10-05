@@ -6,7 +6,7 @@
 |---|---|
 | **Component** | `PageHero` |
 | **Tier** | 2 pattern (`src/patterns/PageHero/`) |
-| **Status** | implemented · amended 28 Sep 2026 (tracker 2.9) — shown to the owner, not merged until approved (★, ruling W1) · amended 29 Sep 2026 (tracker 2.17) — the title at `--text-display` |
+| **Status** | implemented · **amended 5 Oct 2026 (kit `fdn-top`)** — `trail` slot, eyebrow-repeat warning, media-kind alignment, neutral link second action · amended 28 Sep 2026 (tracker 2.9) — shown to the owner, not merged until approved (★, ruling W1) · amended 29 Sep 2026 (tracker 2.17) — the title at `--text-display` |
 | **Token prefix** | `--hero-*` (collides with none of `--btn-` `--crumb-` `--foot-` `--icn-` `--lay-` `--logo-` `--nav-` `--prose-` `--sec-`) |
 | **Designer / date** | Design · 21 Aug 2026 |
 | **Amended** | 25 Aug 2026 — three changes, all requested and all global: a `media` slot last in the band (image or YouTube embed), the `body` paragraphs from `--text-body-lg` (18) to `--text-body` (16), and the byline `key` from verbatim to uppercase. Every section below is amended in place; the changes are collected in **Amendment · 25 Aug 2026** near the end, next to the build-decisions log. **28 Sep 2026** (tracker 2.9, rulings H1–H3, M1–M4) — an `arrangement` prop (`stacked` · `beside`), image media through the `Media` primitive with the record nested, `sizes` from `src/lib/image-sizes.ts`, and the lead onto `--measure-lead`. Collected in **Amendment · 28 Sep 2026** |
@@ -21,6 +21,17 @@ Verified against the loaded Tcules library (`window.Tcules`, 10 components) and 
 
 
 > **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
+
+**Amended 5 Oct 2026 (kit `fdn-top`, visual-direction § 2.2–2.4) — read this first.**
+
+1. **New prop `trail?: { crumbs: ReactNode; current: string }`** (`HeroTrail`). The route or template passes `crumbs: <Breadcrumbs items={…} />` and `current`, the last crumb's label. No pattern imports another: PageHero places the node it is handed. Structure: `<Section><Layout rowGap="gutter">{trail.crumbs}{split}</Layout></Section>` — 96 of the band's padding above the trail, 32 between the 13px trail and the split. Absent renders the split alone, exactly as before.
+2. **In development PageHero warns** when `eyebrow` equals `trail.current` (trimmed, case ignored). The eyebrow still renders, so the fault shows on the page too. `eyebrow?` stays, for what the trail cannot say (`Case study · Fintech`, `Podcast · Ep 12`). Routes whose eyebrow comes from the CMS pass it through `eyebrowBesideTrail` (`src/lib/trail.ts`), which compares against every crumb.
+3. **`surface` no longer has a partner.** It was "must match the Breadcrumbs above"; the trail is now inside this band and reads its ground.
+4. **Alignment against media follows the kind** (§ 3.2): `beside` with an illustration is `align="center"` — the copy centred on the drawing, which has no box to share an edge with; every other image, and the video, stays top-aligned. `beside` keeps `{ lg: [1, 1] }` and `colGap="section"` (96); the comment that said 64 is fixed.
+5. **The second action is `emphasis="link" tone="neutral"`**, not ghost/neutral. A neutral link is ink and spends no blue (§ 4.2), so a hero spends one Accent (the solid button) plus, beside media, one Field. The actions row is a `Cluster colGap="block" rowGap="block" align="center"`: 24 so a bare label does not read as part of the filled box beside it, and 24 between wrapped rows so a link that wraps under the button keeps its 44px target clear of the button's box.
+6. **Service-page budget (§ 2.4), measured at 1470 × 830 on all six:** split top 222 (was 296); h1 at 224 to 269 because the copy is centred on the illustration; titles 3 lines (43 to 48 characters); leads 2 or 3 lines (14 to 26 words); illustration 425 to 505 tall; hero bottom 742 to 823 (was 859 to 1014). At 390: trail 161, h1 214. Shots: `scratchpad/kit/fdn/fdn-top/{before,after}`.
+
+Sections 3, 7 and 10 below predate this block; where they disagree, this block wins.
 
 ## 1 · Identity
 

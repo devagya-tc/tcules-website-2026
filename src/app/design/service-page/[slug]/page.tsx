@@ -16,7 +16,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const story = getIdealServiceStory(slug);
   return {
-    title: story ? `${story.hero.eyebrow} · designed | Design` : 'ServicePage | Design',
+    title: story ? `${story.name} · designed | Design` : 'ServicePage | Design',
     robots: { index: false, follow: false },
   };
 }
@@ -77,7 +77,7 @@ export default async function ServicePageSpecimen({
       breadcrumbs={[
         { label: 'Home', href: ROUTES.home },
         { label: 'Services', href: ROUTES.services },
-        { label: story.hero.eyebrow, href: `/design/service-page/${story.slug}` },
+        { label: story.name, href: `/design/service-page/${story.slug}` },
       ]}
     />
   );

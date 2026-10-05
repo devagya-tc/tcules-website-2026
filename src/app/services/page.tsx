@@ -72,15 +72,18 @@ export default async function ServicesPage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Services', href: ROUTES.services },
-        ]}
-      />
-
       <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: 'Services', href: ROUTES.services },
+              ]}
+            />
+          ),
+          current: 'Services',
+        }}
         title={page.hero.heading}
         body={page.hero.body}
         actions={heroActions}
@@ -179,11 +182,7 @@ export default async function ServicesPage() {
                         key={card.id}
                         title={card.title}
                         body={card.description}
-                        media={
-                          card.icon
-                            ? { type: 'image', image: card.icon }
-                            : undefined
-                        }
+                        media={card.icon ? { type: 'image', image: card.icon } : undefined}
                         href={card.action?.href}
                         ctaLabel={card.action?.label}
                       />

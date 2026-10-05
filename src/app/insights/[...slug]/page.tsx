@@ -300,11 +300,12 @@ export default async function BlogPage({ params }: BlogPageProps) {
         />
       ) : null}
 
-      <Breadcrumbs surface="paper" items={blogBreadcrumbs(blog.slug, blog.title)} />
-
       <PageHero
+        trail={{
+          crumbs: <Breadcrumbs items={blogBreadcrumbs(blog.slug, blog.title)} />,
+          current: blog.title,
+        }}
         title={blog.title}
-        eyebrow="Insight"
         body={[blog.description || `Read ${blog.title}.`]}
         credits={credits}
         dates={
@@ -369,11 +370,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                     .filter(Boolean)
                     .join(' — ')}
                   eyebrow={resource.categories.join(' · ') || 'Insight'}
-                  media={
-                    resource.image
-                      ? { type: 'image', image: resource.image }
-                      : undefined
-                  }
+                  media={resource.image ? { type: 'image', image: resource.image } : undefined}
                   href={blogPath(resource.slug)}
                   ctaLabel="Read insight"
                 />

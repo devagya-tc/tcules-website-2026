@@ -52,15 +52,22 @@ export default async function CareersPage() {
 
   return (
     <>
-      <Breadcrumbs
+      <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: 'Careers', href: ROUTES.careers },
+              ]}
+            />
+          ),
+          current: 'Careers',
+        }}
+        title={page.hero.heading}
+        body={[page.hero.description]}
         surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Careers', href: ROUTES.careers },
-        ]}
       />
-
-      <PageHero title={page.hero.heading} body={[page.hero.description]} surface="paper" />
 
       {page.secondSection ? (
         <Section

@@ -9,16 +9,15 @@ import { CLUTCH_RATING } from '../../ratings';
  */
 export const productDesign: ServiceStory = {
   slug: 'product-design',
+  name: 'Product Design',
   seo: {
     title: 'Product design for B2B, workflow and AI products | Tcules',
     description:
       'Tcules connects research, product structure, workflow, interaction, prototyping and implementation in one accountable Product Design engagement.',
   },
   hero: {
-    eyebrow: 'Product Design',
-    title: 'A finished interface can still contain an unresolved product.',
-    lead: 'Tcules takes responsibility for the product beneath the screens: who does what, which records and rules make it possible, how the experience behaves, and what the team must learn before it commits.',
-    body: 'For new products, and for established B2B, workflow, data-rich and AI-enabled software where the interface shows only part of the problem.',
+    title: 'Finished screens can hide an unresolved product.',
+    lead: 'Tcules takes responsibility for the product beneath the screens: who does what, the records and rules behind it, how it behaves, and what to learn first.',
     actions: [
       { label: 'Start a project', href: '#enquiry' },
       { label: 'Start with a UX Product Audit', href: auditPath('ux-product-audit') },
@@ -35,7 +34,7 @@ export const productDesign: ServiceStory = {
       id: 'signals',
       eyebrow: 'What the interface may be telling you',
       heading: 'The screen is often where a deeper product problem becomes visible.',
-      lead: 'A visual change may reveal a workflow, data or authority problem that the same project must resolve.',
+      lead: 'For new products and for established B2B, workflow, data-rich and AI-enabled software, where a visual change may reveal a workflow, data or authority problem.',
       blocks: [
         {
           kind: 'signals',

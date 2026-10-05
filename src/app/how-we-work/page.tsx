@@ -10,10 +10,12 @@ import {
   type HowWeWorkContentColumn,
 } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -267,6 +269,11 @@ export default async function HowWeWorkPage() {
 
   const heroActions = firstTwoHeroActions(page.hero.actions);
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: page.hero.eyebrow || page.title, href: ROUTES.howWeWork },
+  ];
+
   return (
     <>
       {page.seo?.structuredData ? (
@@ -276,17 +283,13 @@ export default async function HowWeWorkPage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: page.hero.eyebrow || page.title, href: ROUTES.howWeWork },
-        ]}
-      />
-
       <PageHero
+        trail={{
+          crumbs: <Breadcrumbs items={crumbs} />,
+          current: page.hero.eyebrow || page.title,
+        }}
         title={page.title}
-        eyebrow={page.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
         body={[page.hero.description]}
         actions={heroActions}
         surface="paper"

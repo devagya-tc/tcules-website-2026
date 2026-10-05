@@ -16,7 +16,7 @@ import {
   type PageHeroProps,
 } from '@/patterns';
 
-import { ROUTES } from '@/lib/routes';
+import { ROUTES, servicePath } from '@/lib/routes';
 
 import { specimenStyles as s } from '../_specimen/Specimen';
 
@@ -274,6 +274,22 @@ const TRAIL = [
   { label: 'Case studies', href: ROUTES.caseStudies },
   { label: 'ConnectX', href: CASE_STUDY },
 ] as const;
+const TRAIL_CURRENT = 'ConnectX';
+
+/* A real service-line illustration, so block 9's service hero is the shape the six pages render. */
+const SERVICE_ILLUSTRATION: MediaImage = {
+  src: '/illustrations/services/product-design.paper.svg',
+  alt: '',
+  width: 962,
+  height: 714,
+  kind: 'illustration',
+};
+
+const SERVICE_TRAIL = [
+  { label: 'Home', href: ROUTES.home },
+  { label: 'Services', href: ROUTES.services },
+  { label: 'Product Design', href: servicePath('product-design') },
+] as const;
 
 /**
  * The note for the band above it, in its own band on the same ground. Below rather than above,
@@ -334,13 +350,13 @@ const LADDER: readonly { key: string; title: string; note: string; props: HeroSl
   {
     key: 'one-action',
     title: '+ one action — 59 routes have at least one',
-    note: 'One action renders one solid/primary Button and no ghost. The second emphasis is a consequence of a second array entry, not a slot waiting to be filled.',
+    note: 'One action renders one solid/primary Button and no link. The second emphasis is a consequence of a second array entry, not a slot waiting to be filled.',
     props: { actions: ONE_ACTION },
   },
   {
     key: 'two-actions',
     title: '+ two actions',
-    note: 'Position decides emphasis: first solid/primary, second ghost/neutral. Both are size="md" with extendHitArea, both anchors. Four actions is a compile error, not a runtime cap.',
+    note: 'Position decides emphasis: first solid/primary, second a neutral link — ink, so it spends no blue (visual-direction § 4.2). Both are size="md" with extendHitArea, both anchors. Four actions is a compile error, not a runtime cap.',
     props: { actions: TWO_ACTIONS },
   },
   {
@@ -475,7 +491,7 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
   {
     surface: 'ink',
-    note: 'The direction inverts and the ramp gets more room. Title to white (17.26:1), lead and byline values to neutral-100 (14.47:1), body to neutral-300 (11.07:1), mono labels to neutral-400 (8.05:1) — the same step Breadcrumbs lifts its links to on this ground, so a trail and an eyebrow standing 96 apart are the same grey rather than two greys. Every cell here is at least 8:1, which matters on the surface where a serif title is most at risk of looking thin.',
+    note: 'The direction inverts and the ramp gets more room. Title to white (17.26:1), lead and byline values to neutral-100 (14.47:1), body to neutral-300 (11.07:1), mono labels to neutral-400 (8.05:1) — the same step Breadcrumbs lifts its links to on this ground, so a trail and an eyebrow standing 32 apart are the same grey rather than two greys. Every cell here is at least 8:1, which matters on the surface where a serif title is most at risk of looking thin.',
   },
   {
     surface: 'blue',
@@ -490,11 +506,11 @@ export default function PageHeroSpecimenPage() {
         <Layout rowGap="block">
           <h2 className={s.titleScale}>PageHero</h2>
           <p>
-            The opening block of a page: one <code>h1</code>, an optional eyebrow above it, one
-            to six paragraphs of lead copy, an optional byline of credits and dates, an optional
-            caller block, nought to two actions and — last — an optional image or YouTube embed.
-            It paints its own band and it is the first thing inside <code>main</code> on all 129
-            routes.
+            The opening block of a page: an optional ancestor trail, one <code>h1</code>, an
+            optional eyebrow above it, one to six paragraphs of lead copy, an optional byline of
+            credits and dates, an optional caller block, nought to two actions and — last — an
+            optional image or YouTube embed. It paints its own band and it is the first thing
+            inside <code>main</code> on all 129 routes.
           </p>
           <p>
             <strong>This route renders many h1 elements on purpose.</strong> Every band below is
@@ -679,24 +695,49 @@ export default function PageHeroSpecimenPage() {
         note="The same test in the other direction: white title (17.26:1), neutral-100 lead (14.47:1), neutral-400 eyebrow (8.05:1). The seam above and below is two 96px paddings meeting, which is what every band-to-band seam on a real route looks like."
       />
 
-      {/* ── 9 · The Breadcrumbs seam ────────────────────────────────────────────── */}
+      {/* ── 9 · The trail inside the hero ──────────────────────────────────────── */}
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
-        <div key={surface}>
-          <Breadcrumbs items={TRAIL} surface={surface} />
-          <PageHero surface={surface} title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
-        </div>
+        <PageHero
+          key={surface}
+          surface={surface}
+          trail={{ crumbs: <Breadcrumbs items={TRAIL} />, current: TRAIL_CURRENT }}
+          title={TITLE}
+          body={paragraphs(2)}
+          eyebrow={EYEBROW}
+        />
       ))}
       <Note
-        title="9 · The Breadcrumbs seam — matched on all four surfaces, above"
-        note="The real composition: the trail band, then the hero band, nothing between them but the two paddings that face each other. The trail gives only its focus ring's 4px downward, so the 96 above the eyebrow is the HERO band's — which is the half that should own it. Look at the trail and the eyebrow together: sans over mono, verbatim over uppercase, untracked over tracked, 13px over 12px. Four differences, and the 96 between them is the fourth defence rather than the only one."
+        title="9 · The trail inside the hero — paper, tint, ink and blue, above"
+        note="Breadcrumbs in the trail slot: 96 of the hero's own padding above it, 32 (gutter) from the trail to the eyebrow. One band, so the trail reads the hero's ground and a two-tone seam can no longer be written — the four bands above pass nothing to the crumbs but the items. The eyebrow here is a category the trail cannot say, which is the only kind an eyebrow under a trail may carry."
       />
 
-      <Breadcrumbs items={TRAIL} surface="paper" />
-      <PageHero surface="ink" title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
+      <PageHero
+        arrangement="beside"
+        trail={{ crumbs: <Breadcrumbs items={SERVICE_TRAIL} />, current: 'Product Design' }}
+        title="Finished screens can hide an unresolved product."
+        body={[
+          'Tcules takes responsibility for the product beneath the screens: who does what, the records and rules behind it, how it behaves, and what to learn first.',
+        ]}
+        actions={[
+          { label: 'Start a project', href: ROUTES.contact },
+          { label: 'Start with a UX Product Audit', href: ROUTES.audits },
+        ]}
+        media={asHero(SERVICE_ILLUSTRATION)}
+      />
       <Note
-        surface="ink"
-        title="9 · Deliberately MISMATCHED — a paper trail over an ink hero"
-        note="THIS IS THE BUG, rendered. Neither component can detect it: each paints its own band and neither can see its sibling. The fix is one template constant passed to both, which is why the spec's §14 check reads 'the hero's surface equals the Breadcrumbs surface immediately above it' and is a diff over the template rather than a runtime guard."
+        title="9 · The service hero — trail, no eyebrow, one solid and one neutral link, illustration centred"
+        note="The locked [1, 1] shape (ruling H2) as the six service pages render it (visual-direction § 2.3–2.4). No eyebrow: the last crumb is the service's name. A title of at most 48 characters on three lines, a lead of at most 26 words, the solid action as the band's one Accent and the illustration as its Field, so the second action is a neutral link. The illustration is centred on the copy because it has no box to share an edge with. At 1470 × 830 the h1 starts at 222 and the band ends at or above 823."
+      />
+
+      <PageHero
+        trail={{ crumbs: <Breadcrumbs items={TRAIL} />, current: TRAIL_CURRENT }}
+        title={TITLE}
+        body={paragraphs(1)}
+        eyebrow={TRAIL_CURRENT}
+      />
+      <Note
+        title="9 · Deliberately WRONG — an eyebrow that repeats the last crumb"
+        note="The eyebrow says 'ConnectX' 32px under a trail that ends in 'ConnectX'. In development PageHero logs a warning naming the eyebrow (trimmed, case ignored), and the band still renders, so the fault is visible on the page as well as in the console. The fix is to drop the eyebrow, or to replace it with a category or format the trail cannot say: 'Case study · Fintech', 'Podcast · Ep 12'."
       />
 
       {/* ── 10 · Every edge case from §12 ───────────────────────────────────────── */}
@@ -1007,7 +1048,7 @@ export default function PageHeroSpecimenPage() {
               title={`17 · arrangement="${arrangement}" · ${entry.label}`}
               note={
                 arrangement === 'beside' && entry.media
-                  ? `From 1024: copy and media in two equal tracks, 64 apart (--gap-column), top-aligned, the media at its own ratio inside a 588 track (sizes: HERO_BESIDE). ${entry.note}`
+                  ? `From 1024: copy and media in two equal tracks, 96 apart (--gap-section), the media at its own ratio inside a 572 track (sizes: HERO_BESIDE). An illustration is centred on the copy; every other kind is top-aligned. ${entry.note}`
                   : arrangement === 'stacked' && entry.media
                     ? `The media below the copy as a full-column block, 48 under the actions (sizes: FULL_COLUMN). This is ruling H1's "below". ${entry.note}`
                     : entry.note
@@ -1148,8 +1189,8 @@ export default function PageHeroSpecimenPage() {
             of its own — and that is the assertion rather than an omission: the stack is
             single-track at every width, both Clusters wrap by themselves, and both measures are{' '}
             <code>ch</code>-based so they follow the type down with no second value to keep in
-            sync. <code>--text-display</code> re-declares itself at 1023 (54) and 767 (43) in the type layer,
-            which is where that decision belongs.
+            sync. <code>--text-display</code> re-declares itself at 1023 (54) and 767 (43) in
+            the type layer, which is where that decision belongs.
           </p>
           <p className={s.specNote}>
             <strong>The Buttons&apos; three stateless states.</strong> Hover, pressed and{' '}

@@ -54,7 +54,7 @@ type CtaSectionBaseProps = {
   /**
    * Which ground `Section` paints under this band. Passed straight through and read nowhere else.
    *
-   * A prop here rather than an inherited attribute, and it is the same conclusion `Breadcrumbs` and
+   * A prop here rather than an inherited attribute, and it is the same conclusion `SiteNav` and
    * `PageHero` reached: this component IS the band, so it has no ancestor to read `data-surface`
    * from. Passing it through is not the same as owning the ground — the stylesheet paints nothing.
    */

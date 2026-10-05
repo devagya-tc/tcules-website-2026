@@ -4,16 +4,15 @@ import { ROUTES, servicePath } from '@/lib/routes';
 /** /services/software-development, designed. Edits: docs/service-pages-design.md § Software Development. */
 export const softwareDevelopment: ServiceStory = {
   slug: 'software-development',
+  name: 'Design-led Software Development',
   seo: {
     title: 'Design-led Software Development | Tcules',
     description:
       'Design and build running software with product decisions accountable through frontend, backend, APIs, integrations, testing, release and continuing change.',
   },
   hero: {
-    eyebrow: 'Design-led Software Development',
-    title: 'Software development under product-design responsibility',
+    title: 'Software development, led by product design',
     lead: 'Tcules builds software where product behaviour, interaction and implementation need one accountable delivery path.',
-    body: 'Product Design stays the centre of gravity. Engineering carries its decisions into running software, as agreed:',
     actions: [{ label: 'Start a project', href: '#enquiry' }],
     illustration: {
       src: '/illustrations/services/software-development.paper.svg',
@@ -38,7 +37,7 @@ export const softwareDevelopment: ServiceStory = {
       id: 'what-changes',
       eyebrow: 'What design-led development changes',
       heading: 'Engineering receives the decisions, not only the screens',
-      lead: 'The delivery record keeps these connected, so edge states and change can be implemented rather than guessed.',
+      lead: 'Product Design stays the centre of gravity and engineering carries its decisions into running software. The delivery record keeps them connected, so edge states are implemented, not guessed.',
       blocks: [
         {
           kind: 'thread',

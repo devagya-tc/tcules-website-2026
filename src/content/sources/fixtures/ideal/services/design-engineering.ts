@@ -4,16 +4,15 @@ import { auditPath, glossaryPath, servicePath } from '@/lib/routes';
 /** /services/design-engineering, designed. Edits: docs/service-pages-design.md § Design Engineering. */
 export const designEngineering: ServiceStory = {
   slug: 'design-engineering',
+  name: 'Design Engineering',
   seo: {
     title: 'Design engineering from intent to production | Tcules',
     description:
       'Use coded prototypes, design-to-code practice, frontend systems and implementation QA to keep product intent alive in software.',
   },
   hero: {
-    eyebrow: 'Design Engineering',
-    title: 'Keep product intent alive when the work becomes software',
+    title: 'Keep product intent alive as it becomes software',
     lead: 'A design decision can be persuasive in a prototype and still weaken on the way into software.',
-    body: 'Design Engineering keeps product thinking and frontend reasoning in one responsibility. Tcules uses it to create coded evidence before a roadmap commits, implement shared frontend systems, and check the running product still carries the intended behaviour.',
     actions: [{ label: 'Start a project', href: '#enquiry' }],
     illustration: {
       src: '/illustrations/services/design-engineering.paper.svg',
@@ -27,6 +26,7 @@ export const designEngineering: ServiceStory = {
       id: 'pressures',
       eyebrow: 'What pushes on a design in code',
       heading: 'Five pressures a static screen never meets',
+      lead: 'Design Engineering keeps product thinking and frontend reasoning in one responsibility: coded evidence before a roadmap commits, shared frontend systems, and a running product that still behaves as intended.',
       blocks: [
         {
           kind: 'signals',

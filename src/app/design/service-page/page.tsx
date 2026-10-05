@@ -31,7 +31,7 @@ export default function ServicePageIndex() {
           {stories.map((story) => (
             <ListCard
               key={story.slug}
-              title={story.hero.eyebrow}
+              title={story.name}
               body={story.hero.title}
               titleAs="h3"
               href={`/design/service-page/${story.slug}`}

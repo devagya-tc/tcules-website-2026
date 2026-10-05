@@ -232,18 +232,20 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Case studies', href: ROUTES.caseStudies },
-          { label: caseStudy.title, href: caseStudyPath(caseStudy.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={{
+          crumbs: (
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: ROUTES.home },
+                { label: 'Case studies', href: ROUTES.caseStudies },
+                { label: caseStudy.title, href: caseStudyPath(caseStudy.slug) },
+              ]}
+            />
+          ),
+          current: caseStudy.title,
+        }}
         title={caseStudy.title}
-        eyebrow="Case study"
         body={[caseStudy.description]}
         dates={
           published

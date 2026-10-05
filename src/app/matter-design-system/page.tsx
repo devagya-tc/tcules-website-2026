@@ -4,9 +4,11 @@ import { notFound } from 'next/navigation';
 import { Cluster, Layout, Section } from '@/components';
 import { getMatterDesignSystemPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   CtaSection,
   Figure,
   PageHero,
@@ -77,6 +79,14 @@ export default async function MatterDesignSystemPage() {
     ? { type: 'image' as const, image: page.hero.image }
     : undefined;
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    {
+      label: page.hero.headingTwo || page.hero.headingOne,
+      href: ROUTES.matterDesignSystem,
+    },
+  ];
+
   return (
     <>
       {page.seo?.structuredData ? (
@@ -86,20 +96,13 @@ export default async function MatterDesignSystemPage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          {
-            label: page.hero.headingTwo || page.hero.headingOne,
-            href: ROUTES.matterDesignSystem,
-          },
-        ]}
-      />
-
       <PageHero
+        trail={{
+          crumbs: <Breadcrumbs items={crumbs} />,
+          current: page.hero.headingTwo || page.hero.headingOne,
+        }}
         title={heroTitle}
-        eyebrow={page.hero.eyebrow || undefined}
+        eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
         body={[page.hero.description]}
         actions={heroActions}
         media={heroMedia}

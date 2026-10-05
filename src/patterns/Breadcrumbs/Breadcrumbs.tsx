@@ -1,4 +1,4 @@
-import { Cluster, Section, type SectionSurface } from '@/components';
+import { Cluster } from '@/components';
 
 import { cx } from '@/lib/cx';
 
@@ -16,13 +16,17 @@ import styles from './Breadcrumbs.module.css';
 export type BreadcrumbItem = { label: string; href: string };
 
 /**
- * Two props, and the closed props type is the point rather than an oversight.
+ * One prop, and the closed props type is the point rather than an oversight.
  *
  * There is no index signature and no HTMLAttributes spread, so `className`, `style`, `separator`,
- * `size`, `density` and `children` are all excess-property errors at the call site rather than
- * review comments. Each is answered somewhere else: colour and distance by the token layer and the
- * primitives, the divider by one decision made once, the band's air by this component because the
- * band is now its own, and outer spacing by nobody — there is none.
+ * `size`, `density`, `surface` and `children` are all excess-property errors at the call site
+ * rather than review comments. Each is answered somewhere else: colour by the token layer, read
+ * from the enclosing band's `data-surface`; distance by the primitives and by the hero that places
+ * the trail; the divider by one decision made once; and outer spacing by nobody — there is none.
+ *
+ * `surface` was a prop until 5 Oct 2026 (kit `fdn-top`), when the trail owned its own band. It no
+ * longer does — it sits inside the hero's — so it reads its ground the way a Button does (token
+ * rule 7), and a trail can no longer be painted a different ground from the hero it introduces.
  *
  * `pathname` is absent for the hardest reason: the trail comes from frontmatter, and a component
  * that COULD derive a trail from a URL would eventually be asked to.
@@ -37,18 +41,6 @@ export type BreadcrumbsProps = {
    * four whether the route is six levels deep or sixteen. Fewer than two renders nothing.
    */
   items: readonly BreadcrumbItem[];
-  /**
-   * The ground this component's own band paints. Defaults to `paper`.
-   *
-   * A prop here rather than an inherited attribute, and that is not an exception to the surface
-   * model — it is the same answer `SiteNav` and `SiteFooter` already give. A control reads
-   * `data-surface` from an ancestor because it sits inside somebody else's band; a pattern that
-   * OWNS a band has to be told which ground to paint, because there is no ancestor to ask.
-   *
-   * It must match the `surface` of the hero band immediately below, or the seam between the two
-   * bands reads as a two-tone split. That is the one thing this component cannot check for itself.
-   */
-  surface?: SectionSurface;
 };
 
 /** Whitespace-only labels are dropped, so a bad frontmatter record cannot skew the divider count. */
@@ -67,19 +59,17 @@ const hasLabel = (item: BreadcrumbItem) => item.label.trim().length > 0;
  * band and on the blue pivot — including a tint panel nested inside an ink section — without being
  * told where it is standing.
  *
- * It renders its OWN band — a flush `Section`, with 64 of air above the trail and only the focus
- * ring's reach below it — which is what makes the placement unforgeable: there is one way a trail
- * can sit on a page and this is it. That band is why `surface` is a prop: a pattern that owns a band has no ancestor to read `data-surface`
- * from. Its value must match the hero band immediately below, or the seam between the two reads as
- * a two-tone split, and that is the one thing this component cannot check for itself.
- *
- * Because it is a band it can only be a direct child of the page. It must not be put inside a
- * `Section` (the content column would inset twice) or inside a `Layout` (a band is not a row).
+ * It renders ONLY the landmark and its trail — no `Section`, no band, no air of its own (kit
+ * `fdn-top`, 5 Oct 2026). Its one placement is `PageHero`'s `trail` slot: the route or template
+ * passes `trail={{ crumbs: <Breadcrumbs items={…} />, current }}`, and the hero sets it 32 above
+ * the split inside its own band. That is what moved the h1 from 296 to 222 on a service page: the
+ * trail's own 64-above band and the hero's 96 no longer stack. The hero's 96 of top padding is now
+ * the air above the trail, and the 44px hit extension reaches 23.15px up into it.
  *
  * A server component. No state, no effect, no ref, no DOM handler — hover, press and focus are the
  * stylesheet's business and take no props, and nothing in this component ever opens.
  */
-export function Breadcrumbs({ items, surface = 'paper' }: BreadcrumbsProps) {
+export function Breadcrumbs({ items }: BreadcrumbsProps) {
   const trail = items.filter(hasLabel);
   const first = trail[0];
   const current = trail[trail.length - 1];
@@ -142,107 +132,80 @@ export function Breadcrumbs({ items, surface = 'paper' }: BreadcrumbsProps) {
   const omittedNarrow = trail.length - 2;
 
   return (
-    /* ── The band ────────────────────────────────────────────────────────────────
-       The trail owns its band, which is what makes the composition unforgeable: there is exactly
-       one way a trail can be placed on a page, and it is this one. Previously the band was the
-       caller's, which meant 128 route files each had a chance to get the padding, the surface or
-       the ordering wrong, and no check could see it.
+    /* The landmark, and nothing around it — no band, no colour, no box and no air. The name is a
+       constant: one trail per page means there is nothing to disambiguate. */
+    <nav aria-label="Breadcrumb">
+      {/* Both axes stated. colGap on the inline seam either side of every solidus, so the trail
+        reads as one phrase rather than as four separated items; rowGap between WRAPPED lines,
+        which is Cluster's largest step and is there for the touch targets. */}
+      <Cluster as="ol" colGap="inline" rowGap="block" align="baseline" className={styles.trail}>
+        {/* The first crumb has one child and no divider, so it needs no arrangement and stays a
+          bare <li>. Every other crumb is a nowrap Cluster: the trail wraps BETWEEN crumbs and
+          never inside one, so a divider can never be stranded at the end of a line from the
+          label it belongs to. A single label longer than the track still breaks inside itself —
+          nowrap governs the flex children, not the text inside one of them. */}
+        <li>
+          <a className={styles.link} href={first.href}>
+            {first.label}
+          </a>
+        </li>
 
-       `flush` because the air here is asymmetric and Section's three densities are not — flush is
-       documented for exactly this, "a composition that supplies its own". This component supplies
-       it on the <nav> INSIDE the band rather than on the Section, which is why no className appears
-       here; the module explains why that placement rather than a longhand override.
-
-       Each half has its own reason. ABOVE, 64 holds the trail clear of the sticky nav, and it has
-       to: the hit extension reaches 23.15px above the label, and a band with nothing added would
-       put that under a bar which stacks over it. BELOW, the focus ring's reach and nothing more —
-       the air between the trail and the hero is the HERO band's to give, and contributing a seam's
-       worth here would make the two paddings add.
-
-       `as="div"` because the landmark is the <nav> inside. Section takes no aria-label and should
-       not: it paints bands, it does not name regions. */
-    <Section as="div" surface={surface} flush>
-      {/* The landmark, and the band's vertical air — no colour and no box. The name is a constant:
-          one trail per page means there is nothing to disambiguate. */}
-      <nav aria-label="Breadcrumb" className={styles.root}>
-        {/* Both axes stated. colGap on the inline seam either side of every solidus, so the trail
-          reads as one phrase rather than as four separated items; rowGap between WRAPPED lines,
-          which is Cluster's largest step and is there for the touch targets. */}
-        <Cluster
-          as="ol"
-          colGap="inline"
-          rowGap="block"
-          align="baseline"
-          className={styles.trail}
-        >
-          {/* The first crumb has one child and no divider, so it needs no arrangement and stays a
-            bare <li>. Every other crumb is a nowrap Cluster: the trail wraps BETWEEN crumbs and
-            never inside one, so a divider can never be stranded at the end of a line from the
-            label it belongs to. A single label longer than the track still breaks inside itself —
-            nowrap governs the flex children, not the text inside one of them. */}
-          <li>
-            <a className={styles.link} href={first.href}>
-              {first.label}
-            </a>
-          </li>
-
-          {collapsed ? (
-            <Cluster as="li" colGap="inline" align="baseline" nowrap>
-              <Divider />
-              {/* Inert, deliberately. It says levels were dropped without pretending to be a
-                control — so there is no aria-expanded, no aria-controls naming a list that is not
-                rendered, no keyboard contract and no focus to place after a state change. The
-                meaning is carried by the hidden sibling, not by the character.
-                Two siblings, one per side of the breakpoint, because the count differs by the
-                parent. The stylesheet removes the one that does not apply, so exactly one is ever
-                in the accessibility tree. */}
-              <span aria-hidden="true" className={styles.collapse}>
-                {'\u2026'}
-              </span>
-              <span className={cx(styles.collapseCount, styles.wideOnly)}>
-                {levelsOmitted(omittedWide)}
-              </span>
-              <span className={cx(styles.collapseCount, styles.narrowOnly)}>
-                {levelsOmitted(omittedNarrow)}
-              </span>
-            </Cluster>
-          ) : null}
-
-          {middle.map((item) => (
-            <Cluster key={item.href} as="li" colGap="inline" align="baseline" nowrap>
-              <Divider />
-              <a className={styles.link} href={item.href}>
-                {item.label}
-              </a>
-            </Cluster>
-          ))}
-
-          {/* The parent of a collapsed trail — shown from 768 up, folded into the collapse below it.
-            `display: none` below 768 rather than a visually hidden clip, because a link the eye
-            cannot see must not be a tab stop or an announced crumb either. */}
-          {collapsed && parent ? (
-            <Cluster as="li" colGap="inline" align="baseline" nowrap className={styles.wideOnly}>
-              <Divider />
-              <a className={styles.link} href={parent.href}>
-                {parent.label}
-              </a>
-            </Cluster>
-          ) : null}
-
+        {collapsed ? (
           <Cluster as="li" colGap="inline" align="baseline" nowrap>
             <Divider />
-            {/* Never an <a>, and never a link that has merely been marked: currency here is
-              STRUCTURAL — it is the last item — so it is a different element with its own token,
-              which is why no --crumb-link-ink-current exists. It differs from its ancestors by ink
-              alone and does not need more: it is not focusable, it gains no rule on hover, and it
-              carries aria-current, so nothing about it is carried by colour only. */}
-            <span aria-current="page" className={styles.current}>
-              {current.label}
+            {/* Inert, deliberately. It says levels were dropped without pretending to be a
+              control — so there is no aria-expanded, no aria-controls naming a list that is not
+              rendered, no keyboard contract and no focus to place after a state change. The
+              meaning is carried by the hidden sibling, not by the character.
+              Two siblings, one per side of the breakpoint, because the count differs by the
+              parent. The stylesheet removes the one that does not apply, so exactly one is ever
+              in the accessibility tree. */}
+            <span aria-hidden="true" className={styles.collapse}>
+              {'\u2026'}
+            </span>
+            <span className={cx(styles.collapseCount, styles.wideOnly)}>
+              {levelsOmitted(omittedWide)}
+            </span>
+            <span className={cx(styles.collapseCount, styles.narrowOnly)}>
+              {levelsOmitted(omittedNarrow)}
             </span>
           </Cluster>
+        ) : null}
+
+        {middle.map((item) => (
+          <Cluster key={item.href} as="li" colGap="inline" align="baseline" nowrap>
+            <Divider />
+            <a className={styles.link} href={item.href}>
+              {item.label}
+            </a>
+          </Cluster>
+        ))}
+
+        {/* The parent of a collapsed trail — shown from 768 up, folded into the collapse below it.
+          `display: none` below 768 rather than a visually hidden clip, because a link the eye
+          cannot see must not be a tab stop or an announced crumb either. */}
+        {collapsed && parent ? (
+          <Cluster as="li" colGap="inline" align="baseline" nowrap className={styles.wideOnly}>
+            <Divider />
+            <a className={styles.link} href={parent.href}>
+              {parent.label}
+            </a>
+          </Cluster>
+        ) : null}
+
+        <Cluster as="li" colGap="inline" align="baseline" nowrap>
+          <Divider />
+          {/* Never an <a>, and never a link that has merely been marked: currency here is
+            STRUCTURAL — it is the last item — so it is a different element with its own token,
+            which is why no --crumb-link-ink-current exists. It differs from its ancestors by ink
+            alone and does not need more: it is not focusable, it gains no rule on hover, and it
+            carries aria-current, so nothing about it is carried by colour only. */}
+          <span aria-current="page" className={styles.current}>
+            {current.label}
+          </span>
         </Cluster>
-      </nav>
-    </Section>
+      </Cluster>
+    </nav>
   );
 }
 
