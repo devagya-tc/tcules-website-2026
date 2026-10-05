@@ -118,7 +118,7 @@ const ARRANGEMENTS: readonly ContentSectionArrangement[] = ['stacked', 'beside']
 
 function Cards() {
   return (
-    <Layout as="ul" columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="gutter" equalRows>
+    <Layout as="ul" columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="column" equalRows>
       {CARDS.map((card) => (
         <BlockCard key={card.title} title={card.title} body={card.body} />
       ))}

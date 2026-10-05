@@ -84,7 +84,7 @@ export default async function CareersPage() {
                 as="ul"
                 columns={{ base: 1, md: 2, lg: 4 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.secondSection.cards.map((card) => (
@@ -145,7 +145,7 @@ export default async function CareersPage() {
                 as="ul"
                 columns={{ base: 1, md: 2 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.thirdSection.openings.map((opening) => {
@@ -216,7 +216,7 @@ export default async function CareersPage() {
                 as="ul"
                 columns={{ base: 1, md: 3 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.fourthSection.cards.map((card) => (

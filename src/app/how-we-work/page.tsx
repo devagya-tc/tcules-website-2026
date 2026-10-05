@@ -113,7 +113,7 @@ function renderHowWeWorkBlock(block: HowWeWorkBlock) {
           as="ul"
           columns={cardColumns(block.columns)}
           colGap="gutter"
-          rowGap="gutter"
+          rowGap="column"
           equalRows
         >
           {block.cards.map((card) => (
@@ -129,7 +129,7 @@ function renderHowWeWorkBlock(block: HowWeWorkBlock) {
 
     case 'comparison-cards':
       return (
-        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="gutter" equalRows>
+        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="column" equalRows>
           {block.cards.map((card) => (
             <BlockCard key={`${block.id}-${card.title}`} title={card.title} body={card.body} />
           ))}

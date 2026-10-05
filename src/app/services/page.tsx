@@ -140,7 +140,7 @@ export default async function ServicesPage() {
                   as="ul"
                   columns={{ base: 1, md: 2, lg: section.cards.length >= 3 ? 3 : 2 }}
                   colGap="gutter"
-                  rowGap="gutter"
+                  rowGap="column"
                   equalRows
                 >
                   {section.cards.map((card) =>

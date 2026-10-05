@@ -40,7 +40,7 @@ function cardGrid(cards: readonly FutureInterfacesLabJoinCard[]) {
       as="ul"
       columns={{ base: 1, md: 2, lg: cards.length >= 3 ? 3 : 2 }}
       colGap="gutter"
-      rowGap="gutter"
+      rowGap="column"
       equalRows
     >
       {cards.map((card) => {

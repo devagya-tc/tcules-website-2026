@@ -463,16 +463,22 @@ export function Bridge({ block }: { block: Of<'bridge'> }) {
 /* ── Thread ───────────────────────────────────────────────────────────────────
    Named stages joined by arrows, wrapping as the width runs out — a flow of artefacts, lighter
    than Steps (no bodies unless given, no numbers), with an optional return path drawn as its own
-   line beneath: what production shows feeds the next decision. */
+   line beneath: what production shows feeds the next decision.
+
+   With bodies, the stages are a grid of rule-opened tiles, so they carry the card rhythm
+   (visual-direction § 1.1 S2, § 1.2): key → title → body at `text`, and the row seam of the set at
+   `column`, the same as the ListCard tile grids in this file. At 1440 they read as a card set
+   beside the re-spaced cards, so they take the card set's steps until cmp-service-pages replaces
+   Thread. */
 export function Thread({ block }: { block: Of<'thread'> }) {
   const withBodies = block.items.some((item) => item.body);
   return (
     <Layout rowGap="block">
       {withBodies ? (
-        <Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="stack">
+        <Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
           {block.items.map((item, index) => (
             <li key={item.title} className={styles.threadStage}>
-              <Layout rowGap="tight">
+              <Layout rowGap="text">
                 <span className={styles.key}>{String(index + 1).padStart(2, '0')}</span>
                 <h3 className={styles.rowTitle}>{item.title}</h3>
                 {item.body ? <p className={styles.rowBody}>{item.body}</p> : null}

@@ -352,7 +352,7 @@ export default async function EventPage({ params }: EventPageProps) {
               as="ul"
               columns={{ base: 1, md: 2, lg: 3 }}
               colGap="gutter"
-              rowGap="gutter"
+              rowGap="column"
               equalRows
             >
               {event.resources.map((resource) => (

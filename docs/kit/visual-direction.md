@@ -1317,6 +1317,31 @@ ListCard set of four rows or more (`services/[...slug]`, `expertise/[slug]`, `au
 `tools/[slug]`, `how-we-work`, `glossary`) pass no `size`, so their rows stay at `md`. Each adopts the
 rule when it is recomposed from the kit. Nothing breaks meanwhile: `md` is the row's prior look.
 
+**The § 1.2 row seam, by contrast, is applied everywhere now (`fdn-spacing` fix round, 6 Oct 2026).**
+CLAUDE.md states it as a system rule, so it holds on every live route and not only in the kit:
+- **Moved to `column`:** every borderless card set on a live route (BlockCard sets and the routes' own
+  hand-built card `li`s):
+  - the `card-grid` and `comparison-cards` blocks on `services/[...slug]`, `expertise/[slug]`,
+    `audits/[slug]`, `tools/[slug]`, `how-we-work` and `glossary/[slug]`;
+  - the section cards, nested tiles and interface-lab cards on `future-interfaces-lab`;
+  - the cards on `future-interfaces-lab/join`, `services`, `careers`, `matter-design-system` and
+    `about` (voices);
+  - the resource grids on `insights`, `insights/[...slug]`, `insights/events/[slug]` and
+    `insights/podcasts/[slug]`, and the format cards on `insights`;
+  - the statements on `case-studies/[slug]`;
+  - the ContentSection specimen's card set, and the service template's Thread stages (below).
+- **Left at `gutter`, because they are not card sets:** Figure groups (`figures` blocks), the about
+  galleries (an image mosaic), the insights filter groups (form controls), the join page's two-panel
+  split, and the about closing cards (grounded Sections with a surface of their own; § 1.2 covers
+  borderless sets only).
+- **Thread** (`ServicePage/Diagrams.tsx`) was first scoped out as "not a card set". At 1440 its
+  bodied stages read as one: rule-opened tiles, three across. They now take the card steps (row seam
+  `column`, key → title → body `text`) until `cmp-service-pages` replaces Thread.
+- **Still open, recorded rather than fixed:** the hand-built card `li`s on `services`,
+  `future-interfaces-lab`, `future-interfaces-lab/join` and the `about` closing cards keep their title → body at `tight` 8, where § 1.1 S2 puts a card's at `text`. They are
+  inline one-offs that BlockCard replaces when each route is recomposed from the kit. They take the
+  card rhythm then, rather than through a second hand-tuned copy now.
+
 **Who edits what:**
 - **`src/templates/ServicePage/*` is edited only by foundations** (serially: `fdn-spacing`, `fdn-top`,
   `fdn-colour`, `fdn-media`, `fdn-gates`) **and by `cmp-service-pages`.**

@@ -155,7 +155,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
             as="ul"
             columns={{ base: 1, md: 2, lg: 4 }}
             colGap="gutter"
-            rowGap="gutter"
+            rowGap="column"
             equalRows
           >
             {page.formatCards.map((card) => (
@@ -260,7 +260,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
               as="ul"
               columns={{ base: 1, md: 2, lg: 3 }}
               colGap="gutter"
-              rowGap="gutter"
+              rowGap="column"
               equalRows
             >
               {visibleResources.map((resource) => {

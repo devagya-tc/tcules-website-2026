@@ -118,7 +118,7 @@ export default async function FutureInterfacesLabPage() {
                   as="ul"
                   columns={{ base: 1, md: 2, lg: section.cards.length >= 3 ? 3 : 2 }}
                   colGap="gutter"
-                  rowGap="gutter"
+                  rowGap="column"
                   equalRows
                 >
                   {section.cards.map((card) => {
@@ -183,7 +183,7 @@ export default async function FutureInterfacesLabPage() {
                         {card.pointsHtml ? <Prose html={card.pointsHtml} /> : null}
 
                         {card.tiles.length > 0 ? (
-                          <Layout as="ul" columns="fit" colGap="gutter" rowGap="gutter">
+                          <Layout as="ul" columns="fit" colGap="gutter" rowGap="column">
                             {card.tiles.map((tile) => (
                               <BlockCard
                                 key={tile.id}
@@ -241,7 +241,7 @@ export default async function FutureInterfacesLabPage() {
 
       {page.interfaceLabs && page.interfaceLabs.cards.length > 0 ? (
         <Section as="div" id={page.interfaceLabs.id} surface="tint">
-          <Layout as="ul" columns="fit" colGap="gutter" rowGap="gutter" equalRows>
+          <Layout as="ul" columns="fit" colGap="gutter" rowGap="column" equalRows>
             {page.interfaceLabs.cards.map((card) => (
               <BlockCard
                 key={card.id}

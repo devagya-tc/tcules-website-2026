@@ -318,7 +318,7 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
               as="ul"
               columns={{ base: 1, md: 2, lg: 3 }}
               colGap="gutter"
-              rowGap="gutter"
+              rowGap="column"
               equalRows
             >
               {podcast.resources.map((resource) => (

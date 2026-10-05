@@ -359,7 +359,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
               as="ul"
               columns={{ base: 1, md: 2, lg: 3 }}
               colGap="gutter"
-              rowGap="gutter"
+              rowGap="column"
               equalRows
             >
               {blog.resources.map((resource) => (

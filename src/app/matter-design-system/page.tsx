@@ -129,7 +129,7 @@ export default async function MatterDesignSystemPage() {
                 as="ul"
                 columns={{ base: 1, md: 3 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.secondSection.cards.map((card) => (
@@ -164,7 +164,7 @@ export default async function MatterDesignSystemPage() {
               <h2 id={`matter-third-${page.thirdSection.id}`}>{page.thirdSection.heading}</h2>
             </Cluster>
             {page.thirdSection.cards.length > 0 ? (
-              <Layout as="ul" columns="fit" minTrack="lg" colGap="gutter" rowGap="gutter">
+              <Layout as="ul" columns="fit" minTrack="lg" colGap="gutter" rowGap="column">
                 {page.thirdSection.cards.map((card) => (
                   <BlockCard
                     key={card.id}
@@ -222,7 +222,7 @@ export default async function MatterDesignSystemPage() {
                 as="ul"
                 columns={{ base: 1, md: 2, lg: 4 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
               >
                 {page.fourthSection.cards.map((card) => (
                   <Layout as="li" key={card.id} rowGap="block">
@@ -283,7 +283,7 @@ export default async function MatterDesignSystemPage() {
                 as="ul"
                 columns={{ base: 1, md: 2 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.fifthSection.cards.map((card) => (

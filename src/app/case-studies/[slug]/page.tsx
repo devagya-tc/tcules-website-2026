@@ -290,7 +290,7 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
               as="ul"
               columns={caseStudy.statements.length > 1 ? { base: 1, md: 2 } : { base: 1 }}
               colGap="gutter"
-              rowGap="gutter"
+              rowGap="column"
               equalRows
             >
               {caseStudy.statements.map((statement) => (
