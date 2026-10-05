@@ -2,8 +2,8 @@
    Tier 2. One borderless tile with an optional media fill, an optional eyebrow and an optional
    whole-card link — carrying a read-more cue when it has no cover.
 
-   Naming: --bcrd-{part}-{role}-{state}, with an orientation suffix where the horizontal row
-   differs from the tile (--bcrd-title-text-horizontal)
+   Naming: --bcrd-{part}-{role}-{state}, with a size suffix where the type steps with the set
+   (--bcrd-title-text-lg | -md | -sm)
      parts: title | body | eyebrow | media | ring
      states: none. No colour moves on the card; the cover zoom is geometry, and the text-only cta's
      steps are Button's.
@@ -37,14 +37,28 @@
 
 /* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
-  --bcrd-title-text: var(--text-h4);
-  --bcrd-title-tracking: var(--text-h4-tracking);
-  --bcrd-body-text: var(--text-body);
-  /* The horizontal row — the featured card — steps its title up one role. A row spanning the
-     column beside its image is a heavier object than a 286px tile, and weight comes from type
-     scale, not from a box (ruling C2). h3 re-declares itself at 1023 and 767 like every title role. */
-  --bcrd-title-text-horizontal: var(--text-h3);
-  --bcrd-title-tracking-horizontal: var(--text-h3-tracking);
+  /* The card's type steps with its set (visual-direction § 7.2, 5 Oct 2026). The card does not
+     know its count, so it takes the step as a component size and the set passes it — BlockCardSet,
+     or the composing route. A section h2 is 43px, so its cards sit at least two rungs below it:
+
+       lg  h3 + body-lg   the one featured, horizontal card. A row spanning the column beside its
+                          image is a heavier object than a tile, and weight comes from type scale,
+                          not from a box (ruling C2). It was the horizontal arrangement's own swap
+                          (--bcrd-title-text-horizontal) with the tile's 16px body; the body now
+                          steps with the title.
+       md  h4 + body      two to three cards; text cards. The default.
+       sm  h5 + body-sm   four to six cards across — a 286px track, where h4 set five words a line.
+
+     Every title role re-declares itself at 1023 and 767, so no step needs a breakpoint here. */
+  --bcrd-title-text-lg: var(--text-h3);
+  --bcrd-title-tracking-lg: var(--text-h3-tracking);
+  --bcrd-body-text-lg: var(--text-body-lg);
+  --bcrd-title-text-md: var(--text-h4);
+  --bcrd-title-tracking-md: var(--text-h4-tracking);
+  --bcrd-body-text-md: var(--text-body);
+  --bcrd-title-text-sm: var(--text-h5);
+  --bcrd-title-tracking-sm: var(--text-h5-tracking);
+  --bcrd-body-text-sm: var(--text-body-sm);
   --bcrd-eyebrow-text: var(--text-eyebrow);
   --bcrd-eyebrow-tracking: var(--text-eyebrow-tracking);
 

@@ -49,6 +49,18 @@ export type ListCardArrangement = 'split' | 'stacked';
  * ListCard could not; this is that tile, once.
  */
 export type ListCardForm = 'row' | 'tile';
+
+/**
+ * The row's type step: title and body roles together (visual-direction § 7.2, 5 Oct 2026). A
+ * COMPONENT SIZE, so a t-shirt name. A row cannot see its siblings, so the composing route passes it.
+ *
+ *   md  h4 title, body      the default: a set of up to three rows
+ *   sm  h5 title, body-sm   any set of four rows or more, and tiles
+ *
+ * There is no `lg`. § 7.2's large step is the one featured, horizontal card, which is BlockCard's
+ * arrangement; a ListCard is never featured, so a third step would be a size nothing may use.
+ */
+export type ListCardSize = 'md' | 'sm';
 export type ListCardTitleElement = 'span' | 'h3' | 'h4';
 
 /**
@@ -82,6 +94,8 @@ export type ListCardProps = ListCardFormProps & {
   marker?: ListCardMarker;
   /** Heading semantics without a visual type change. */
   titleAs?: ListCardTitleElement;
+  /** The type step, passed by the set. Defaults to `md`. */
+  size?: ListCardSize;
   /** A non-blank destination turns the entire row into one native link and adds its cue. */
   href?: string;
   /**
@@ -90,6 +104,12 @@ export type ListCardProps = ListCardFormProps & {
    * Ignored on a row with no destination.
    */
   external?: boolean;
+};
+
+/** One modifier per step, on the root; the module sets title, body and ordinal offset under it. */
+const SIZE_CLASS: Record<ListCardSize, string | undefined> = {
+  md: styles.sizeMd,
+  sm: styles.sizeSm,
 };
 
 function warn(message: string) {
@@ -174,6 +194,7 @@ export function ListCard({
   form = 'row',
   arrangement = 'split',
   titleAs: Title = 'span',
+  size = 'md',
   href,
   external = false,
 }: ListCardProps) {
@@ -209,12 +230,16 @@ export function ListCard({
 
   /* The tile: marker, then the title over its body, then — on a linked tile — the cue at the foot,
      pinned there so every cue in a grid row sits on one line however long its body runs. Three
-     beats nested two deep: marker to copy is `text` (16), title to body is `tight` (8), the same
-     pair the stacked row uses, so a tile and a row of the same record read as one voice. */
+     beats nested two deep: marker to copy is `text` (16), title to body is `text` (16), the same
+     pair the stacked row uses, so a tile and a row of the same record read as one voice.
+
+     Title to body is `text`, not `tight` (8), in every form (visual-direction § 1.1, S3): it puts
+     ListCard and BlockCard on one card rhythm, and at 8 a two-line title and its sentence read as
+     one paragraph in two faces. */
   const tile = (
     <Layout rowGap="text" pinLast={destination !== undefined} className={styles.tileInner}>
       {marker ? <Marker marker={marker} form={form} /> : null}
-      <Layout rowGap="tight" className={styles.content}>
+      <Layout rowGap="text" className={styles.content}>
         <Title className={styles.title}>{title}</Title>
         {hasBody ? <p className={styles.body}>{body}</p> : null}
       </Layout>
@@ -234,12 +259,12 @@ export function ListCard({
              narrower than its words. The two maxima (--measure-title, --measure-body) are the cap:
              past them the leftover stays at the core's inline end instead of prising the title
              and its sentence apart. The module only sizes the two children inside Cluster. */
-          <Cluster colGap="block" rowGap="tight" align="start" className={styles.content}>
+          <Cluster colGap="block" rowGap="text" align="start" className={styles.content}>
             <Title className={cx(styles.title, styles.splitTitle)}>{title}</Title>
             {hasBody ? <p className={cx(styles.body, styles.splitBody)}>{body}</p> : null}
           </Cluster>
         ) : (
-          <Layout rowGap="tight" className={styles.content}>
+          <Layout rowGap="text" className={styles.content}>
             <Title className={styles.title}>{title}</Title>
             {hasBody ? <p className={styles.body}>{body}</p> : null}
           </Layout>
@@ -250,7 +275,7 @@ export function ListCard({
   );
 
   return (
-    <li className={cx(styles.root, isTile && styles.tile)}>
+    <li className={cx(styles.root, SIZE_CLASS[size], isTile && styles.tile)}>
       {destination ? (
         <a
           className={cx(styles.frame, styles.link)}

@@ -10,8 +10,34 @@
 | **Token prefix**    | `--lcrd-*`                                                                                                             |
 | **Designer / date** | Codex / 21 Aug 2026                                                                                                    |
 | **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug. **Phase 2 task 2.11 / 28 Sep 2026** — the thumbnail moves onto `Media` (`fit="fill"`, `LIST_CARD_THUMBNAIL`, lazy); the marker union discriminates on `type`; `external` takes ch04's `square-arrow-right-up` and a visually hidden new-tab hint; the ordered set is confirmed as a real `ol`; contact cards lose their icon thumbnails (C1). Rulings: `docs/phase-2-decisions.md` C1, M1–M4. **Tracker 2.17 / 29 Sep 2026** — the split reads the row's own width (a wrapping `Cluster` on `--lcrd-title-min` / `--lcrd-body-min`, not Layout's md viewport boundary), so titles no longer break mid-word; the title wraps `break-word`, not `anywhere`; wide rows are capped at `--measure-title` + seam + `--measure-body`; the off-site cue is the plain `arrow-right-up`; the thumbnail passes Media `inset="text"`. See § 7, § 9, § 10 and § 17 q7, q8. **1 Oct 2026 (owner)** — a second **form**, `tile`, for an item in a grid track, and `body` optional. Collected in **Amendment · 1 Oct 2026**. |
+| **Revised**         | `fdn-spacing` / 5 Oct 2026 — title → body at `text` in every form (S3); the `size` prop (`md \| sm`), passed by the composing route (visual-direction § 7.2). See **Amendment · 5 Oct 2026** |
 | **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
 | **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
+
+> **Amendment · 5 Oct 2026 · `fdn-spacing` (visual-direction § 1.1 S3, § 7.2).** Where this spec
+> still differs, `docs/kit/visual-direction.md` wins.
+>
+> 1. **S3 — title → body is `text` (16), not `tight` (8)**, in the stacked row, the wrapped split
+>    (the Cluster's `rowGap`) and the tile. Ink gap after: ~25 → ~33. It puts ListCard and BlockCard
+>    on one card rhythm (BlockCard's S2).
+> 2. **A `size` prop: `'md' | 'sm'`**, default `md` — the title and body roles together, a component
+>    size and so a t-shirt name. A row cannot see its siblings, so the composing route passes it.
+>
+>    | Size | Title | Body | Ordinal offset | Set |
+>    |---|---|---|---|---|
+>    | `md` | `--text-h4` | `--text-body` | `--space-4` | up to three rows |
+>    | `sm` | `--text-h5` | `--text-body-sm` | `--space-0` | any set of four rows or more, and tiles |
+>
+>    There is no `lg`: § 7.2's large step is the one featured, horizontal card, which is BlockCard's
+>    arrangement, and a ListCard is never featured. Tokens `--lcrd-title-text-{md,sm}`,
+>    `--lcrd-title-tracking-{md,sm}`, `--lcrd-body-text-{md,sm}` and
+>    `--lcrd-number-baseline-offset-{md,sm}` replace the unsuffixed four. The ordinal's correction is a
+>    function of the title's size (§ 7c), so it steps with it; both values were measured in the browser
+>    (numeral baseline minus title baseline: 0.00px at md with 4, and 0 needed at sm, where 2 sat 2px low). The module sets the roles under one root modifier per step (`.sizeMd` / `.sizeSm`),
+>    and `.numberAbove` takes a third class so a tile's ordinal still drops the offset at `sm`.
+> 3. **The service-page template passes it:** tiles (Signals, Ledger grids, the Parts and Slice
+>    diagram tiles) take `sm`; Steps, Router, the Stat rows and a one-column Ledger take `sm` from four
+>    rows, else `md`.
 
 ## 1 · Identity
 
@@ -87,6 +113,7 @@ element and the `--gap-block` seam beside it.
 | `form`        | `'row' \| 'tile'` | `'row'` | 1 Oct 2026. `row`: a row of a one-column list, rule at block-end, marker beside. `tile`: an item in a grid track, rule at block-start, marker above, always stacked, flush — `arrangement` is `never` with it. See Amendment · 1 Oct 2026 |
 | `arrangement` | `'split' \| 'stacked'`                                                                                                     | `'split'` | Whether title and body are two tracks from `md`, or one stack at every width       |
 | `titleAs`     | `'span' \| 'h3' \| 'h4'`                                                                                                   | `'span'`  | Heading semantics only; visual type does not change                                |
+| `size`        | `'md' \| 'sm'`                                                                                                             | `'md'`    | 5 Oct 2026. The type step, passed by the set: `sm` for four rows or more, and tiles. See Amendment · 5 Oct 2026 |
 | `href`        | `string`                                                                                                                   | absent    | A non-blank value makes the whole frame one anchor and causes the cue to render    |
 | `external`    | `boolean`                                                                                                                  | `false`   | The destination leaves tcules.com: new tab, the "leaves the site" cue glyph and the hidden new-tab hint. Ignored without a destination |
 
@@ -140,7 +167,7 @@ Compile errors, not review comments:
 | `split`     | Title takes two fractional tracks and body three from `md`; they collapse to one track below it | The 21 title-left / body-right sections; default because it is the highest-volume arrangement    |
 | `stacked`   | Title above body at every width                                                                 | The 11 title-plus-body sections and sequences whose lead-in must remain attached to its sentence |
 
-There is no `sm` or `lg` row size and therefore no `size` prop. Marker fill, link presence and
+**Amended 5 Oct 2026:** there is a `size` prop, `md | sm`, and no `lg` (Amendment · 5 Oct 2026). Marker fill, link presence and
 heading semantics do not create variants: they change content or semantics, not the row's design
 role. The title/body role, row inset, rule, cue and icon sizes do not step between arrangements.
 
@@ -306,12 +333,13 @@ The component does not receive a `surface` prop and never paints the panel groun
   two things sharing a number is not a reason.
 - Marker to the content/cue core: `Cluster colGap="block"`; when the outer cluster wraps, its
   wrapped line seam is `rowGap="block"`.
-- Stacked title to body: `Layout rowGap="tight"`.
-- Split title to body: **`Cluster colGap="block"`, `rowGap="tight"`** (29 Sep 2026, 2.17). Was `Layout
+- Stacked title to body: `Layout rowGap="text"` (`tight` until 5 Oct, S3).
+- Split title to body: **`Cluster colGap="block"`, `rowGap="text"`** (29 Sep 2026, 2.17; the wrapped
+  seam `tight` until 5 Oct, S3). Was `Layout
   colGap="column"` (64). The split is now a wrapping `Cluster`, and its seam is chosen by what it
   separates: a title and the sentence it heads are head and body of one block, which is `--gap-block`'s
   role, not "two halves that must read as separate", which is `--gap-column`'s — the opposite of what
-  a coupled row wants. When the body wraps under the title the line seam is `tight`, the same step the
+  a coupled row wants. When the body wraps under the title the line seam is `text`, the same step the
   stacked arrangement uses, so a split row that has wrapped is indistinguishable from a stacked one.
 - Content to cue: `Cluster colGap="block"`.
 - Frame inline inset: `--gap-block`, uniform with the block inset. This section previously read "no
@@ -370,8 +398,9 @@ The component does not receive a `surface` prop and never paints the panel groun
 
 ### (c) Optical corrections
 
-**One, and it is the number's baseline.** `--lcrd-number-baseline-offset` is `--space-4`, applied as
-`padding-block-start` on the number fill alone. Every other inset and seam is a gap-scale
+**One, and it is the number's baseline.** `--lcrd-number-baseline-offset-md` is `--space-4` and
+`-sm` is `--space-0` (5 Oct 2026: the correction is a function of the title's size, so it steps with
+`size`), applied as `padding-block-start` on the number fill alone. Every other inset and seam is a gap-scale
 relationship, every icon is sized by `Icon`, and the rule and focus ring use their own system
 geometry.
 
@@ -405,14 +434,14 @@ at `--z-base`.
 
 | Part                     | Type role        | Tracking                                   | Measure                              |
 | ------------------------ | ---------------- | ------------------------------------------ | ------------------------------------ |
-| `title`                  | `--text-h4`      | `--text-h4-tracking`                       | `--measure-title`                    |
-| `body`                   | `--text-body`    | none — this role has no tracking companion | `--measure-body`                     |
+| `title`, `md` / `sm`     | `--text-h4` / `--text-h5` | `--text-h4-tracking` / `--text-h5-tracking` | `--measure-title`           |
+| `body`, `md` / `sm`      | `--text-body` / `--text-body-sm` | none — these roles have no tracking companion | `--measure-body`     |
 | Number fill in `marker`  | `--text-index`   | `--text-index-tracking`                    | none — one expected two-digit marker |
 | Icon and thumbnail fills | none             | none                                       | none                                 |
 | `cue`                    | none — an `Icon` | none                                       | none                                 |
 
-The component aliases the first three roles through `--lcrd-title-text`,
-`--lcrd-title-tracking`, `--lcrd-body-text`, `--lcrd-marker-text` and
+The component aliases the first three roles through `--lcrd-title-text-{md,sm}`,
+`--lcrd-title-tracking-{md,sm}`, `--lcrd-body-text-{md,sm}`, `--lcrd-marker-text` and
 `--lcrd-marker-tracking`. `titleAs` changes element semantics, never the visual role.
 
 All copy renders verbatim in sentence case: the title and body are sans, so the mono rule does not
@@ -494,12 +523,12 @@ or duplicate action. `Prose` is not used: one plain paragraph is not a CMS rich-
         <Cluster colGap="block" align="start" nowrap>
           {split ? (
             /* wraps when --lcrd-title-min + block + --lcrd-body-min no longer fits the row */
-            <Cluster colGap="block" rowGap="tight" align="start">
+            <Cluster colGap="block" rowGap="text" align="start">
               {title /* flex: 2 1 --lcrd-title-min, max --measure-title */}
               {body /* flex: 3 1 --lcrd-body-min, max --measure-body */}
             </Cluster>
           ) : (
-            <Layout rowGap="tight">
+            <Layout rowGap="text">
               {title}
               {body}
             </Layout>

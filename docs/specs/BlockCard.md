@@ -12,9 +12,44 @@
 | **Revised**         | Cards 1a redesign / 25 Aug 2026 — borderless finish, always-dark title, `eyebrow`, a read-more `cta`, horizontal orientation |
 | **Revised**         | Phase 2 · 2.10 / 28 Sep 2026 — the image onto `Media`; cover media by family (C1); text-only sets by scale and position (C2); `BlockCardSet` and the featured first card (C3); the icon fill removed; `Layout lead` |
 | **Revised**         | Case-study revision / 29 Sep 2026 — one hairline round every image kind (the crop box's, ch05 amendment 5a; `Media edge="placement"`); a subtle hover zoom as the only hover cue; the cta only on text-only linked cards; no title measure cap; `BlockCardSet` rows a `stack` apart; `/case-studies` onto the `CaseStudyIndex` template. See § Revision 3 |
+| **Revised**         | `fdn-spacing` / 5 Oct 2026 — the copy group at `text` (S2); the `size` prop (`lg \| md \| sm`) and `BlockCardSet` passing it by count (visual-direction § 7.2); the set's row seam recorded as `column`. See **Amendment · 5 Oct 2026** below |
 | **Implements**      | `docs/briefs/12-block-card.md`                                                                                         |
 | **Implemented at**  | `src/patterns/BlockCard/` (`BlockCard.tsx`, `BlockCardSet.tsx`) · `src/styles/tokens/components/block-card.css` · specimen `src/app/design/block-card/page.tsx` |
 | **Rulings**         | `docs/phase-2-decisions.md` C1, C2, C3 (28 Sep 2026); Media M1–M4 and PageHero A3 by reference                          |
+
+> **Amendment · 5 Oct 2026 · `fdn-spacing` (visual-direction § 1.1 S2, § 1.2, § 7.2).** Where this
+> spec still differs, `docs/kit/visual-direction.md` wins.
+>
+> 1. **S2 — the copy group is `text` (16), not `tight` (8).** Eyebrow → title and title → body, in
+>    the tile and in both halves of the horizontal text-only row (and the collapsed row's seam between
+>    them). Ink gaps after: ~16 → ~24 and ~25 → ~33. Three rows at one step had no hierarchy, and a
+>    12px label 8px over a 28px serif read as cramped. 16 is one step under the section head's 24
+>    (S1), so a card reads as a smaller unit of the same system. Copy → cta and media → copy stay
+>    `block` (24).
+> 2. **A `size` prop: `'lg' | 'md' | 'sm'`** — the title and body roles together, a component size
+>    and so a t-shirt name. Defaults to `lg` when horizontal and `md` when vertical, which is the
+>    weight each arrangement had before; nothing that states neither prop changes, except that a
+>    horizontal card's body now steps with its title (body-lg, not body).
+>
+>    | Size | Title | Body | Set |
+>    |---|---|---|---|
+>    | `lg` | `--text-h3` | `--text-body-lg` | the one featured, horizontal card |
+>    | `md` | `--text-h4` | `--text-body` | 2 to 3 cards; text cards |
+>    | `sm` | `--text-h5` | `--text-body-sm` | 4 to 6 cards across |
+>
+>    Tokens `--bcrd-title-text-{lg,md,sm}`, `--bcrd-title-tracking-{lg,md,sm}`,
+>    `--bcrd-body-text-{lg,md,sm}` replace `--bcrd-title-text`, `--bcrd-title-tracking`,
+>    `--bcrd-body-text`, `--bcrd-title-text-horizontal` and `--bcrd-title-tracking-horizontal`. The
+>    module sets them under one root modifier per step (`.sizeLg` / `.sizeMd` / `.sizeSm`).
+> 3. **`BlockCardSet` passes the step.** `size` joins the props an item cannot carry. The featured
+>    card takes `lg`; the peers take `sm` from `SMALL_FROM` (4) **peers**, else `md`. Counted on the
+>    peers, not the set, because the row a title sits in decides its line length: four items are a
+>    featured row over three 392px peers (the 2-to-3 shape, `md`), five are a featured row over four
+>    286px peers (`sm`). A text-only set stays `md` at any count (§ 7.2: text cards take the h4 step).
+>    `SMALL_FROM` is exported beside `FEATURED_FROM`.
+> 4. **The set's row seam is `column` (64)**, the step `BlockCardSet` has used since 29 Sep, now
+>    written into CLAUDE.md's gap-scale table: "and the row seam of a borderless card set". § 7's
+>    "`rowGap="gutter"`" lines describe the shape before 29 Sep.
 
 ## 1 · Identity
 
@@ -127,19 +162,21 @@ The image member is accepted under question 1(a).
 | `orientation` | `'vertical' \| 'horizontal'`                                                      | `'vertical'` | Which axis the card arranges on                                                   |
 | `imageSide`   | `'left' \| 'right'`                                                               | `'left'`     | Which track the media takes when horizontal; ignored when vertical or imageless   |
 | `tracks`      | `2 \| 3`                                                                          | `2`          | The widest track count of the card's set, which picks the image `sizes` (`CARD_TWO_TRACKS` / `CARD_THREE_TRACKS`); ignored when horizontal |
+| `size`        | `'lg' \| 'md' \| 'sm'`                                                             | `'lg'` horizontal, `'md'` vertical | The type step: title and body roles together (Amendment · 5 Oct 2026, visual-direction § 7.2) |
 
-`orientation`, `imageSide` and `tracks` are presentation props: they describe the card's place
-among its siblings, never the content, so none is ever a CMS field. `BlockCardSet` sets all three.
+`orientation`, `imageSide`, `tracks` and `size` are presentation props: they describe the card's
+place among its siblings, never the content, so none is ever a CMS field. `BlockCardSet` sets all
+four.
 
 **`BlockCardSet`**
 
 | Prop    | Exact type                                                                                    | Default  | What it decides |
 | ------- | --------------------------------------------------------------------------------------------- | -------- | --------------- |
-| `items` | `readonly BlockCardSetItem[]` — `Omit<BlockCardProps, 'orientation' \| 'imageSide' \| 'tracks'> & { id: string }` | required | The cards, in order. Zero renders nothing |
+| `items` | `readonly BlockCardSetItem[]` — `Omit<BlockCardProps, 'orientation' \| 'imageSide' \| 'tracks' \| 'size'> & { id: string }` | required | The cards, in order. Zero renders nothing |
 
-An item cannot carry the three presentation props, so no caller can contradict the set one item at
-a time. `FEATURED_FROM` (4) is exported so a template or specimen can name the threshold rather than
-restate it.
+An item cannot carry the four presentation props, so no caller can contradict the set one item at
+a time. `FEATURED_FROM` (4) and `SMALL_FROM` (4 peers, 5 Oct) are exported so a template or
+specimen can name the thresholds rather than restate them.
 
 The media discriminant is `type`, not `kind`: the record carries its own `kind` (capture, cut-out,
 illustration, photograph), and `media.kind === 'image'` beside `media.image.kind` read as one field
@@ -215,7 +252,8 @@ One finish, one size, two orientations.
 | `vertical`   | No edge, no inset. Media above copy at 3:2, h4 visual title, optional eyebrow, optional cta. Fills one track of a parent grid   | Every card grid, 2–8 across the 78 clusters; content and grid density, not a prop, set its role  |
 | `horizontal` | Two equal tracks from `md`, 64 apart, the title at the h3 role. With a cover: media at 4:3 beside the copy, centred against each other. Without one: the head (eyebrow, title) beside the body and cta, top-aligned. Fills a single track | The featured first card of a set of four or more (C3), and a stack of a few substantial items |
 
-There is no public `variant`, `finish` or `size` prop. Icon, image and omitted media are fills of
+There is no public `variant` or `finish` prop. **`size` was added on 5 Oct 2026** (Amendment): the
+type steps with the count of the set, and the set passes it. Icon, image and omitted media are fills of
 one slot. Link presence changes semantics and the cta, not the card's visual category. Heading
 semantics do not change visual type. The title role, body role, eyebrow role, cta size and the two
 media ratios do not step between content shapes.
@@ -340,8 +378,8 @@ eyebrow, ring and gap, and the cta resolves tint's link steps; no value leaks fr
 - Image to copy: `Layout rowGap="block"` on the frame's own stack. This is the same 24px that used
   to be the content block's block-start padding, restated as what it actually is — a distance
   between two boxes, which belongs to their container.
-- Eyebrow to title, and title to body: one nested `Layout rowGap="tight"`. All three copy parts are
-  one tight group; the eyebrow is a label on the title, not a third block.
+- Eyebrow to title, and title to body: one nested `Layout rowGap="text"` (16; `tight` until 5 Oct,
+  S2). All three copy parts are one group; the eyebrow is a label on the title, not a third block.
 - Copy to cta: `Layout rowGap="block"`.
 - Cta label to glyph: `--btn-gap-bare`, inside `Button`. The card states no distance here, and that
   is the point of using the primitive: a `Cluster colGap="tight"` around a hand-built label and
@@ -355,8 +393,8 @@ eyebrow, ring and gap, and the cta resolves tint's link steps; no value leaks fr
   `columns={[1, 1]}` collapses to one track below `md` and Layout defaults neither axis — see
   section 9.
 - Head-to-body seam, horizontal without an image: `Layout columns={[1, 1]} colGap="column"
-  rowGap="tight" align="start"`. The same 64 between the halves; collapsed, the head and body meet
-  at `tight`, which is exactly the eyebrow/title/body relationship of a tile, so a collapsed
+  rowGap="text" align="start"` (`tight` until 5 Oct, S2). The same 64 between the halves; collapsed,
+  the head and body meet at `text`, which is exactly the eyebrow/title/body relationship of a tile, so a collapsed
   featured card reads as a vertical one. Body to cta inside the second half stays `block`.
 - Featured row to its peers: the set's `rowGap="gutter"`, the same 32 as between any two rows of
   cards. The featured card is one of the set, not a band above it, so it takes the set's seam.
@@ -406,20 +444,22 @@ card's other drawn line is the image crop box's hairline (`--bcrd-media-rule-wid
 
 | Part             | Type role        | Tracking                                   | Measure           |
 | ---------------- | ---------------- | ------------------------------------------ | ----------------- |
-| `title`          | `--text-h4`      | `--text-h4-tracking`                       | none — the track (Rev. 3) |
-| `title`, horizontal | `--text-h3`   | `--text-h3-tracking`                       | none — the track (Rev. 3) |
-| `body`           | `--text-body`    | none — this role has no tracking companion | `--measure-body`  |
+| `title`, `lg`    | `--text-h3`      | `--text-h3-tracking`                       | none — the track (Rev. 3) |
+| `title`, `md`    | `--text-h4`      | `--text-h4-tracking`                       | none — the track (Rev. 3) |
+| `title`, `sm`    | `--text-h5`      | `--text-h5-tracking`                       | none — the track (Rev. 3) |
+| `body`, `lg` / `md` / `sm` | `--text-body-lg` / `--text-body` / `--text-body-sm` | none — these roles have no tracking companion | `--measure-body`  |
 | `eyebrow`        | `--text-eyebrow` | `--text-eyebrow-tracking`                  | none              |
 | `cta`            | `Button`'s own   | `Button`'s own                             | none              |
 | Image media      | none             | none                                       | none              |
 
-The horizontal row steps its title to the h3 role through `--bcrd-title-text-horizontal` and
-`--bcrd-title-tracking-horizontal` (2.10). A row spanning the column beside a 4:3 cover, or a head
-set beside its body, is a heavier object than a 286px tile, and ruling C2 puts that weight in type
-scale rather than in a box. The role re-declares itself at 1023 and 767 like every title role.
+The horizontal row defaults to the `lg` step (it was the h3 role through
+`--bcrd-title-text-horizontal`, 2.10, until 5 Oct). A row spanning the column beside its cover, or a
+head set beside its body, is a heavier object than a 286px tile, and ruling C2 puts that weight in
+type scale rather than in a box. Every title role re-declares itself at 1023 and 767.
 
-The component aliases its three roles through `--bcrd-title-text`, `--bcrd-title-tracking`,
-`--bcrd-body-text`, `--bcrd-eyebrow-text` and `--bcrd-eyebrow-tracking`. It declares nothing for the
+The component aliases its roles through `--bcrd-title-text-{lg,md,sm}`,
+`--bcrd-title-tracking-{lg,md,sm}`, `--bcrd-body-text-{lg,md,sm}`, `--bcrd-eyebrow-text` and
+`--bcrd-eyebrow-tracking`. It declares nothing for the
 cta: `--bcrd-cta-text` and `--bcrd-cta-tracking` were deleted along with the bespoke cue, because
 `Button` reads `--btn-text-md` and `--btn-text-tracking` and a card-side alias could only disagree
 with it. `titleAs` changes the heading level, never the visual role. H4 scale is

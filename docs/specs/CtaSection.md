@@ -1,5 +1,14 @@
 # CtaSection
 
+> **Amended 5 Oct 2026 (`fdn-spacing`, visual-direction § 1.1 S5) — label → detail is `--gap-tight`.**
+> A point's label over its detail line moves from `--gap-inline` (4) to `--gap-tight` (8). `inline` is
+> a key and its value; a step name over the sentence describing it is a tight pair. The point → point
+> seam in `split` stays `--gap-block` (24, amended 29 Sep), so the bind-and-separate ratio in § 7 is
+> now 8:24 — three-fold, still enough to bind a pair and separate a row. The lede (`block` for
+> eyebrow → heading → copy) does not change: it is the rhythm `ContentSection` now adopts (S1).
+> § 7's table and § 10's composition are amended in place; visual-direction.md wins where this
+> document still differs.
+
 > **Amended 29 Sep 2026 (tracker 2.17) — `scheduleHref` removed.** "See available times" moved into
 > `EnquiryForm`'s own action row, beside its submit (see `docs/specs/EnquiryForm.md`, amendment at
 > the top). `CtaSection` no longer takes `scheduleHref` or renders the link; the `form` members of
@@ -267,7 +276,7 @@ Every ratio is text against **the ground it actually sits on**, which here is al
 | point → point, grid (`offer`) | `--gap-gutter` both axes | `points`' `Layout` `colGap` and `rowGap` — the same step as `open`'s, cards in a set. Amended 29 Sep 2026 from a `Cluster` at `--gap-block` |
 | `marker` → `label` (`split`, `offer`) | `--gap-tight`, plus the marker track's slack | Superseded 30 Sep 2026: now `--gap-text` in a nowrap `Cluster`, no marker track. Was: `point`'s `Layout` `colGap` — the marker's track was an fr share (`[1,4]`, or `[1,8]` in `split` from md) sized to land at 64–106px at every width, wide enough for a two-digit `--text-stat` numeral (≈48px at 40, ≈38px at 32). A track cannot wrap, so the numeral cannot orphan, and every point in one list takes the same share of the same track width, so every label starts on one line — including a second row of `offer` points under the first |
 | `marker` → `label` (`open`, stacked) | `--gap-tight` | `point`'s `Layout` `rowGap` |
-| `label` → `detail` | `--gap-inline` | the inner `Layout`'s `rowGap` — a key and its value, which is what a step and its explanation are |
+| `label` → `detail` | `--gap-tight` (was `--gap-inline` until 5 Oct, S5) | the inner `Layout`'s `rowGap` — a label over its description is a tight pair, not a key and its value |
 | action → action, both axes | `--gap-tight` | `actions`' `colGap` and `rowGap` |
 | the band's vertical air, `split` and `open` | `--sec-padding-y` (96px) | `Section` at its default density. Not this component's to set |
 | the band's vertical air, `offer` | `--sec-padding-y-tight` (64px) | `Section density="tight"` |
@@ -382,7 +391,7 @@ Numerals render two-digit and zero-padded (`01`, `02`, `03`) rather than `1.` �
           <Layout as="li" columns={{ base: [1, 4], md: [1, 8] }} colGap="tight" align="start">
                                                                 {/* point — marker track, label track */}
             <span aria-hidden="true">01</span>                  {/* marker */}
-            <Layout rowGap="inline">                            {/* 4: label to detail */}
+            <Layout rowGap="tight">                             {/* 8: label to detail (S5) */}
               <span>{points[0].label}</span>
               <span>{points[0].detail}</span>
             </Layout>

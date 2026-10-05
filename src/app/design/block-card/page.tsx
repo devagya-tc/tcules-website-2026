@@ -5,6 +5,7 @@ import {
   BlockCard,
   BlockCardSet,
   FEATURED_FROM,
+  SMALL_FROM,
   type BlockCardImage,
   type BlockCardMedia,
   type BlockCardSetItem,
@@ -344,7 +345,8 @@ const NESTED_SURFACE_TOKENS = {
 
 type CardColumns = ComponentProps<typeof Layout>['columns'];
 
-/** A hand-built grid: the parent owns columns, both gutter seams and equal rows. */
+/** A hand-built grid: the parent owns columns, both seams and equal rows. Rows sit a `column`
+    apart, the row seam of every borderless card set (CLAUDE.md § the gap scale, 29 Sep). */
 function Cards({
   columns = { base: 1, md: 2 },
   gap = true,
@@ -359,7 +361,7 @@ function Cards({
       as="ul"
       columns={columns}
       colGap={gap ? 'gutter' : 'none'}
-      rowGap={gap ? 'gutter' : 'none'}
+      rowGap={gap ? 'column' : 'none'}
       equalRows
     >
       {children}
@@ -537,11 +539,14 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
           <Specimen
             title="4 case studies · the first featured"
-            note="The featured card is media beside copy, the cover at 3:2 in half the row, the title stepped to h3. Its image reads the two-track sizes value; the three peers read the three-track one."
+            note="The featured card is media beside copy, the cover at 3:2 in half the row, at the lg size (h3 over body-lg). Its image reads the two-track sizes value; the three peers read the three-track one and keep md: three peers is the two-to-three shape."
           >
             <BlockCardSet items={CASE_STUDIES.slice(0, 4)} />
           </Specimen>
-          <Specimen title="5 case studies · featured + 2×2, four across from xl">
+          <Specimen
+            title="5 case studies · featured + 2×2, four across from xl"
+            note={`Four peers, so they step to sm (h5 over body-sm; from ${SMALL_FROM} peers, § 7.2): at 1440 they are four 286px tracks.`}
+          >
             <BlockCardSet items={CASE_STUDIES} />
           </Specimen>
         </Layout>
@@ -834,9 +839,9 @@ export default function BlockCardSpecimenPage() {
         <Layout rowGap="stack">
           <BandHead title="9 · Orientation">
             One anatomy, two arrangements, and a presentation prop rather than a CMS field.
-            Vertical fills a grid track. Horizontal takes two equal tracks from md and steps the
-            title to h3: media beside copy at 3:2 when there is a cover, head beside body when
-            there is not. <code>imageSide</code> is set per card — there is no alternation logic
+            Vertical fills a grid track. Horizontal takes two equal tracks from md and defaults to
+            the <code>lg</code> size (band 22): media beside copy at 3:2 when there is a cover,
+            head beside body when there is not. <code>imageSide</code> is set per card — there is no alternation logic
             inside the component, because a card that alternated would have to know its index.
           </BandHead>
 
@@ -1314,6 +1319,16 @@ export default function BlockCardSpecimenPage() {
             </div>
           </Specimen>
           <Specimen
+            title="The same title at sm in a 326 track"
+            note="What the index's peers carry: h5 over body-sm. Five peers under the featured row step down, so the band's h2 stands two rungs clear of every card."
+          >
+            <div className={s.trackMobile}>
+              <Cards columns={{ base: 1 }}>
+                <BlockCard {...item(CASE_INDEX, 2)} size="sm" />
+              </Cards>
+            </div>
+          </Specimen>
+          <Specimen
             title="No eyebrow"
             note="With neither a client nor a category the eyebrow emits nothing and the title starts the copy."
           >
@@ -1321,6 +1336,78 @@ export default function BlockCardSpecimenPage() {
               <BlockCard {...item(CASE_INDEX, 1)} eyebrow={undefined} />
               <BlockCard {...item(CASE_INDEX, 3)} eyebrow={undefined} />
             </Cards>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <BandHead title="22 · Size steps with the count (visual-direction § 7.2, 5 Oct)">
+            The card does not know its count, so it takes its type step as a component size and
+            the set passes it. <code>lg</code> is the one featured, horizontal card (h3 over
+            body-lg); <code>md</code> is two to three cards and every text card (h4 over body);{' '}
+            <code>sm</code> is four to six across (h5 over body-sm). A section&rsquo;s h2 is 43, so
+            card titles always sit at least two rungs below it. Inside every size the copy is one
+            group at <code>text</code> (16): eyebrow, title, body.
+          </BandHead>
+          <Specimen
+            title='size="lg" · md · sm, one record'
+            note="The same case-study record at each step. lg is shown in its own arrangement, the horizontal row; md and sm in tracks of the widths their sets give them (392 and 286 at the cap)."
+          >
+            <Layout rowGap="column">
+              <Rows>
+                <BlockCard {...item(CASE_STUDIES, 1)} orientation="horizontal" size="lg" />
+              </Rows>
+              <Cards columns={{ base: 1, md: 2, lg: 3 }}>
+                <BlockCard {...item(CASE_STUDIES, 1)} size="md" tracks={3} />
+                <BlockCard {...item(CASE_STUDIES, 2)} size="md" tracks={3} />
+                <BlockCard {...item(CASE_STUDIES, 3)} size="md" tracks={3} />
+              </Cards>
+              <Cards columns={{ base: 1, md: 2, xl: 4 }}>
+                <BlockCard {...item(CASE_STUDIES, 1)} size="sm" />
+                <BlockCard {...item(CASE_STUDIES, 2)} size="sm" />
+                <BlockCard {...item(CASE_STUDIES, 3)} size="sm" />
+                <BlockCard {...item(CASE_STUDIES, 4)} size="sm" />
+              </Cards>
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="Text-only at each size"
+            note="The same steps without media. A text card's title is its only object, so a text-only set stays md at any count; sm here is the step proven, not a set's choice."
+          >
+            <Layout rowGap="column">
+              <Rows>
+                <BlockCard {...item(SERVICES, 0)} orientation="horizontal" size="lg" />
+              </Rows>
+              <Cards columns={{ base: 1, md: 2, lg: 3 }}>
+                <BlockCard {...item(SERVICES, 1)} size="md" />
+                <BlockCard {...item(SERVICES, 2)} size="md" />
+                <BlockCard {...item(SERVICES, 3)} size="md" />
+              </Cards>
+              <Cards columns={{ base: 1, md: 2, xl: 4 }}>
+                <BlockCard {...item(SERVICES, 1)} size="sm" />
+                <BlockCard {...item(SERVICES, 2)} size="sm" />
+                <BlockCard {...item(SERVICES, 3)} size="sm" />
+                <BlockCard {...item(SERVICES, 4)} size="sm" />
+              </Cards>
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="BlockCardSet picks the step · 3, 4, 5 and 6 items"
+            note={`3 items: md. 4: lg featured over three md peers (three is the two-to-three shape). 5: lg over four sm peers. 6: lg over five sm peers. From ${SMALL_FROM} peers the step is sm — except a text-only set, which stays md.`}
+          >
+            <Layout rowGap="section">
+              <BlockCardSet items={CASE_STUDIES.slice(0, 3)} />
+              <BlockCardSet items={CASE_STUDIES.slice(0, 4)} />
+              <BlockCardSet items={CASE_STUDIES} />
+              <BlockCardSet items={CASE_INDEX} />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="A text-only set of five · stays md"
+            note="Four text peers, h4 still: the text card row of § 7.2."
+          >
+            <BlockCardSet items={SERVICES} />
           </Specimen>
         </Layout>
       </Section>

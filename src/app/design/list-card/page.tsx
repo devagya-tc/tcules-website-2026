@@ -296,8 +296,12 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>1 · Arrangement × size</h2>
             <p>
-              Two arrangements, one md row size. The copy is identical so the title/body
-              relationship is the only visible difference.
+              Two arrangements and two type steps (visual-direction § 7.2, 5 Oct).{' '}
+              <code>md</code> (h4 over body) is the default; <code>sm</code> (h5 over body-sm) is
+              what any set of four rows or more passes, and tiles. A row cannot see its siblings,
+              so the composing route passes the step. The copy is identical so the title/body
+              relationship is the only visible difference; title to body is <code>text</code>{' '}
+              (16) in every cell.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
@@ -319,7 +323,56 @@ export default function ListCardSpecimenPage() {
                 <ListCard arrangement="stacked" title={TERMS[1].title} body={TERMS[1].body} />
               </Rows>
             </Specimen>
+            <Specimen
+              title="split × sm"
+              note="The small step in the same cell. The split's minimum tracks are unchanged, so it stacks here too."
+            >
+              <Rows>
+                <ListCard size="sm" title={TERMS[0].title} body={TERMS[0].body} />
+                <ListCard size="sm" title={TERMS[1].title} body={TERMS[1].body} />
+              </Rows>
+            </Specimen>
+            <Specimen
+              title="stacked × sm"
+              note="h5 over body-sm: a long set's rows stop competing with the band's h2."
+            >
+              <Rows>
+                <ListCard
+                  size="sm"
+                  arrangement="stacked"
+                  title={TERMS[0].title}
+                  body={TERMS[0].body}
+                />
+                <ListCard
+                  size="sm"
+                  arrangement="stacked"
+                  title={TERMS[1].title}
+                  body={TERMS[1].body}
+                />
+              </Rows>
+            </Specimen>
           </Layout>
+          <Specimen
+            title="Numbered rows · md and sm · the ordinal's baseline"
+            note="The ordinal's optical offset is a function of the title's size, so it steps too: 4 against h4, 0 against h5. The numeral's baseline sits on the title's first baseline in both."
+          >
+            <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
+              {(['md', 'sm'] as const).map((size) => (
+                <Rows key={size} ordered>
+                  {TILES_STEPS.slice(0, 4).map((step, index) => (
+                    <ListCard
+                      key={step.title}
+                      size={size}
+                      arrangement="stacked"
+                      title={step.title}
+                      body={step.body}
+                      marker={{ type: 'number', value: index + 1 }}
+                    />
+                  ))}
+                </Rows>
+              ))}
+            </Layout>
+          </Specimen>
         </Layout>
       </Section>
 
@@ -431,6 +484,16 @@ export default function ListCardSpecimenPage() {
                   marker={{ type: 'number', value: index + 1 }}
                   {...tile}
                 />
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="icon tiles · four tracks · sm"
+            note="What a tile set passes on a page (§ 7.2): h5 over body-sm, so the tiles sit two rungs under the band's h2."
+          >
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
+              {TILES_ICON.map((tile) => (
+                <ListCard key={tile.title} form="tile" size="sm" titleAs="h3" {...tile} />
               ))}
             </Layout>
           </Specimen>

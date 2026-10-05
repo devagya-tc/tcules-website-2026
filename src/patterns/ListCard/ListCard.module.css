@@ -127,10 +127,10 @@
   block-size: 100%;
 }
 
-/* Above the title there is no baseline to sit on, so the row's optical offset does not apply. Two
-   classes, so it outranks `.number` (later in this file, equal specificity on one class) without
-   depending on source order. */
-.number.numberAbove {
+/* Above the title there is no baseline to sit on, so the row's optical offset does not apply.
+   Three classes, so it outranks both `.number` and the size step's `.sizeSm .number` (later in this
+   file) without depending on source order. */
+.root .number.numberAbove {
   padding-block-start: 0;
 }
 
@@ -185,7 +185,7 @@
   /* Later than .marker in this file and at equal specificity, which is what lets the ordinal take
      its own quiet ink while an icon marker keeps .marker's. Source order is the mechanism, so do
      not reorder these two rules. */
-  padding-block-start: var(--lcrd-number-baseline-offset);
+  padding-block-start: var(--lcrd-number-baseline-offset-md);
   color: var(--lcrd-number-ink);
   font: var(--lcrd-marker-text);
   letter-spacing: var(--lcrd-marker-tracking);
@@ -220,8 +220,6 @@
   max-inline-size: var(--measure-title);
   overflow-wrap: break-word;
   color: var(--lcrd-title-ink);
-  font: var(--lcrd-title-text);
-  letter-spacing: var(--lcrd-title-tracking);
   text-wrap: var(--text-title-wrap);
 }
 
@@ -229,8 +227,33 @@
   max-inline-size: var(--measure-body);
   overflow-wrap: anywhere;
   color: var(--lcrd-body-ink);
-  font: var(--lcrd-body-text);
   text-wrap: var(--text-running-wrap);
+}
+
+/* The size step: title and body roles together, set on the root by the `size` prop (visual-
+   direction § 7.2). One modifier on the root, because the step is one decision about the row.
+   Exactly one of the two is always present. The ordinal's baseline correction is a function of the
+   title's size, so the small step restates it; `.number` above carries the md value. */
+.sizeMd .title {
+  font: var(--lcrd-title-text-md);
+  letter-spacing: var(--lcrd-title-tracking-md);
+}
+
+.sizeMd .body {
+  font: var(--lcrd-body-text-md);
+}
+
+.sizeSm .title {
+  font: var(--lcrd-title-text-sm);
+  letter-spacing: var(--lcrd-title-tracking-sm);
+}
+
+.sizeSm .body {
+  font: var(--lcrd-body-text-sm);
+}
+
+.sizeSm .number {
+  padding-block-start: var(--lcrd-number-baseline-offset-sm);
 }
 
 /* ── The split: sizing inside the Cluster, not a second layout ───────────────────

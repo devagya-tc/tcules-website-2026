@@ -163,12 +163,15 @@ function CtaLede({
 
 function CtaPointContent({ point }: { point: CtaPoint }) {
   /* Whitespace-only detail is treated as absent, not rendered empty — otherwise a bad record puts
-     an empty span under a step name and the 4px seam appears around nothing. The ORIGINAL string
-     is rendered, not the trimmed one: trimming is the test, not the transform. */
+     an empty span under a step name and the 8px seam appears around nothing. The ORIGINAL string
+     is rendered, not the trimmed one: trimming is the test, not the transform.
+
+     Label to detail is `tight` (8), not `inline` (4): `inline` is a key and its value, and a step
+     name over the sentence describing it is a tight pair (visual-direction § 1.1, S5). */
   const detail = point.detail?.trim() ? point.detail : undefined;
 
   return (
-    <Layout rowGap="inline">
+    <Layout rowGap="tight">
       <span className={styles.label}>{point.label}</span>
       {detail ? <span className={styles.detail}>{detail}</span> : null}
     </Layout>

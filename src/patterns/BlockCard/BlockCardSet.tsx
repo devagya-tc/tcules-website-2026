@@ -2,15 +2,23 @@ import type { ComponentProps } from 'react';
 
 import { Layout } from '@/components';
 
-import { BlockCard, type BlockCardProps, type BlockCardTracks } from './BlockCard';
+import {
+  BlockCard,
+  type BlockCardProps,
+  type BlockCardSize,
+  type BlockCardTracks,
+} from './BlockCard';
 
 /**
- * One card in a set: a BlockCard record with an `id` for its key, and WITHOUT the three
- * presentation props. Orientation, image side and track count describe a card's place among its
- * siblings, which is exactly what the set knows and the card does not — so the set decides them
- * and a caller cannot contradict it one item at a time.
+ * One card in a set: a BlockCard record with an `id` for its key, and WITHOUT the four
+ * presentation props. Orientation, image side, track count and type size describe a card's place
+ * among its siblings, which is exactly what the set knows and the card does not — so the set
+ * decides them and a caller cannot contradict it one item at a time.
  */
-export type BlockCardSetItem = Omit<BlockCardProps, 'orientation' | 'imageSide' | 'tracks'> & {
+export type BlockCardSetItem = Omit<
+  BlockCardProps,
+  'orientation' | 'imageSide' | 'tracks' | 'size'
+> & {
   id: string;
 };
 
@@ -46,10 +54,32 @@ function peerGrid(count: number): { columns: Columns; tracks: BlockCardTracks } 
 }
 
 /**
+ * From how many PEERS the cards step down to `sm` (visual-direction § 7.2). Card titles sit at
+ * least two rungs under the section's h2: h4 for two or three cards, h5 for four to six.
+ */
+export const SMALL_FROM = 4;
+
+/**
+ * The peers' type step (§ 7.2), by the peers' own count — the featured card is not one of them,
+ * it takes `lg` — because the count that decides a title's line length is the row it sits in.
+ * Five items is a featured row over four peers, which reach four 286px tracks at xl, so they step
+ * to `sm`; four items is a featured row over three peers at 392, the 2-to-3 shape, so they stay
+ * `md`.
+ *
+ * A text-only set stays `md` at any count: § 7.2 puts text cards on the h4 step, because a text
+ * card's title is its only object and has no image above it to carry the tile (§ 3.1).
+ */
+function peerSize(peers: readonly BlockCardSetItem[]): BlockCardSize {
+  if (peers.length < SMALL_FROM) return 'md';
+  const textOnly = peers.every((item) => !item.media?.image.src.trim());
+  return textOnly ? 'md' : 'sm';
+}
+
+/**
  * BlockCardSet — a set of BlockCards, and the one place that knows how many there are.
  *
  * A card does not know its siblings (spec § 10), so the rules that depend on the count live here:
- * the grid shape, the image `sizes`, and whether the first item is featured. From four items it is
+ * the grid shape, the image `sizes`, the type step, and whether the first item is featured. From four items it is
  * (ruling C3): the first card takes the horizontal arrangement and spans the row above its peers —
  * media beside copy when it has a cover, head beside body when it does not — and the rest fill the
  * grid below.
@@ -67,6 +97,7 @@ export function BlockCardSet({ items }: BlockCardSetProps) {
   const featured = items.length >= FEATURED_FROM;
   const peers = featured ? items.slice(1) : items;
   const { columns, tracks } = peerGrid(peers.length);
+  const size = peerSize(peers);
 
   return (
     /* Rows sit a `column` apart, columns a `gutter` (29 Sep). The two seams separate different
@@ -77,9 +108,9 @@ export function BlockCardSet({ items }: BlockCardSetProps) {
     <Layout as="ul" columns={columns} colGap="gutter" rowGap="column" equalRows lead={featured}>
       {items.map(({ id, ...card }, index) =>
         featured && index === 0 ? (
-          <BlockCard key={id} {...card} orientation="horizontal" imageSide="left" />
+          <BlockCard key={id} {...card} orientation="horizontal" imageSide="left" size="lg" />
         ) : (
-          <BlockCard key={id} {...card} tracks={tracks} />
+          <BlockCard key={id} {...card} tracks={tracks} size={size} />
         ),
       )}
     </Layout>

@@ -45,9 +45,9 @@ export type BlockCardTitleElement = 'h3' | 'h4';
  *   horizontal  the row: two equal tracks from md, 64 apart. With an image, media beside copy at
  *               3:2, the tile's own crop. Without one, the copy splits instead — eyebrow and title in the first track,
  *               body and cta in the second — so a text-only row is a head beside its body rather
- *               than a single column with an empty half. Either way the title steps up to the h3
- *               role, because a row spanning the column carries more weight than a tile. This is
- *               the featured arrangement `BlockCardSet` gives its first item (ruling C3).
+ *               than a single column with an empty half. Either way it defaults to the `lg` size,
+ *               because a row spanning the column carries more weight than a tile. This is the
+ *               featured arrangement `BlockCardSet` gives its first item (ruling C3).
  */
 export type BlockCardOrientation = 'vertical' | 'horizontal';
 
@@ -71,6 +71,26 @@ export type BlockCardImageSide = 'left' | 'right';
  * less 16px, so the featured card always reads that one.
  */
 export type BlockCardTracks = 2 | 3;
+
+/**
+ * The card's type step: title and body roles together (visual-direction § 7.2, 5 Oct 2026). A
+ * COMPONENT SIZE, so a t-shirt name. The card does not know its count, so the set passes it.
+ *
+ *   lg  h3 title, body-lg   the one featured, horizontal card
+ *   md  h4 title, body      two to three cards; text cards
+ *   sm  h5 title, body-sm   four to six cards across
+ *
+ * Defaults by orientation — `lg` when horizontal, `md` when vertical — so a caller that states
+ * neither gets the arrangement's own weight. The set, not the card, decides `sm`.
+ */
+export type BlockCardSize = 'lg' | 'md' | 'sm';
+
+/** One modifier per step, on the root; the module sets title and body roles under it. */
+const SIZE_CLASS: Record<BlockCardSize, string | undefined> = {
+  lg: styles.sizeLg,
+  md: styles.sizeMd,
+  sm: styles.sizeSm,
+};
 
 /** The cta label a linked card uses when the caller names none. */
 const DEFAULT_CTA_LABEL = 'Read more';
@@ -126,6 +146,8 @@ export type BlockCardProps = {
   imageSide?: BlockCardImageSide;
   /** The widest track count of the card's set, for the image's `sizes`. Defaults to 2. */
   tracks?: BlockCardTracks;
+  /** The type step. Defaults to `lg` when horizontal and `md` when vertical. */
+  size?: BlockCardSize;
 };
 
 function warn(message: string) {
@@ -186,6 +208,7 @@ export function BlockCard({
   orientation = 'vertical',
   imageSide = 'left',
   tracks = 2,
+  size,
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -209,6 +232,7 @@ export function BlockCard({
   }
 
   const horizontal = orientation === 'horizontal';
+  const step = size ?? (horizontal ? 'lg' : 'md');
 
   const imageNode = hasImage ? (
     <ImageMedia
@@ -248,15 +272,16 @@ export function BlockCard({
     ) : null;
 
   const eyebrowNode = hasEyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null;
-  const titleNode = (
-    <Title className={cx(styles.title, horizontal && styles.titleHorizontal)}>{title}</Title>
-  );
+  const titleNode = <Title className={styles.title}>{title}</Title>;
   const bodyNode = hasBody ? <p className={styles.body}>{body}</p> : null;
 
-  /* The copy: eyebrow, title and body as one tight group, then the cta a block below it. */
+  /* The copy: eyebrow, title and body as one group at `text` (16), then the cta a block (24) below
+     it. 16 is one step under the section head's 24, so a card reads as a smaller unit of the same
+     system (visual-direction § 1.1, S2). It was `tight` (8): three rows at one step have no
+     hierarchy, and a 12px label 8px over a 28px serif read as cramped. */
   const content = (
     <Layout rowGap="block" className={styles.content}>
-      <Layout rowGap="tight">
+      <Layout rowGap="text">
         {eyebrowNode}
         {titleNode}
         {bodyNode}
@@ -300,8 +325,8 @@ export function BlockCard({
     );
   } else if (horizontal) {
     frameContent = (
-      <Layout columns={[1, 1]} colGap="column" rowGap="tight" align="start">
-        <Layout rowGap="tight" className={styles.content}>
+      <Layout columns={[1, 1]} colGap="column" rowGap="text" align="start">
+        <Layout rowGap="text" className={styles.content}>
           {eyebrowNode}
           {titleNode}
         </Layout>
@@ -321,7 +346,7 @@ export function BlockCard({
   }
 
   return (
-    <li className={styles.root}>
+    <li className={cx(styles.root, SIZE_CLASS[step])}>
       {destination ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it
            declares that this anchor's hover, focus-visible and pressed states are the states of

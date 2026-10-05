@@ -8,6 +8,7 @@ import {
   ListCard,
   ProcessFlow,
   Proof,
+  type ListCardSize,
 } from '@/patterns';
 import type { StoryBlock, StoryCase, StorySlot } from '@/lib/service-story';
 
@@ -31,7 +32,16 @@ type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
 
    One rule picks the form. A set in one column is rows; a set in a grid is tiles. A row closes on
    its rule and keeps its marker beside the copy; a tile opens on its rule and stands its marker
-   above, because in a grid only the tops of unequal items line up. */
+   above, because in a grid only the tops of unequal items line up.
+
+   One rule picks the type step (visual-direction § 7.2). A row cannot see its siblings, so the set
+   passes it: tiles, and any set of four rows or more, take `sm` (h5 over body-sm); a shorter set of
+   rows keeps `md` (h4 over body). Card titles sit at least two rungs under the band's h2. */
+const SMALL_SET_FROM = 4;
+
+function setSize(count: number, form: 'row' | 'tile'): ListCardSize {
+  return form === 'tile' || count >= SMALL_SET_FROM ? 'sm' : 'md';
+}
 
 /* ── Signals ──────────────────────────────────────────────────────────────────
    A thing a reader can see, then what it may mean: the symptom is the title, the hypothesis the
@@ -48,6 +58,7 @@ function Signals({ block }: { block: Of<'signals'> }) {
         <ListCard
           key={item.title}
           form="tile"
+          size={setSize(block.items.length, 'tile')}
           titleAs="h3"
           title={item.title}
           body={item.body}
@@ -74,6 +85,7 @@ function Steps({ block }: { block: Of<'steps'> }) {
         {block.items.map((item, index) => (
           <ListCard
             key={item.title}
+            size={setSize(block.items.length, 'row')}
             titleAs="h3"
             title={item.title}
             body={item.body}
@@ -107,6 +119,7 @@ function Ledger({ block }: { block: Of<'ledger'> }) {
         <ListCard
           key={item.title}
           {...(single ? { arrangement: 'stacked' as const } : { form: 'tile' as const })}
+          size={setSize(block.items.length, single ? 'row' : 'tile')}
           titleAs={block.heading ? 'h4' : 'h3'}
           title={item.title}
           body={item.body || undefined}
@@ -152,11 +165,13 @@ function Ledger({ block }: { block: Of<'ledger'> }) {
    link is named by its destination. The non-service route (an audit, a self-check) is the last
    row, for the reader who cannot name their condition yet. */
 function Router({ block }: { block: Of<'router'> }) {
+  const size = setSize(block.items.length + (block.also ? 1 : 0), 'row');
   return (
     <Layout as="ul" rowGap="none">
       {block.items.map((item) => (
         <ListCard
           key={item.route.href}
+          size={size}
           titleAs="h3"
           title={item.route.label}
           body={item.when}
@@ -165,6 +180,7 @@ function Router({ block }: { block: Of<'router'> }) {
       ))}
       {block.also ? (
         <ListCard
+          size={size}
           titleAs="h3"
           title={block.also.link.label}
           body={block.also.when}
@@ -181,10 +197,13 @@ function caseMedia(item: StoryCase) {
 
 /* ── Cases ────────────────────────────────────────────────────────────────────
    BlockCardSet, unchanged: it features the first card and lays the rest out. The page's
-   contribution is the copy — what the case shows for THIS service — and the boundary note. */
+   contribution is the copy — what the case shows for THIS service — and the boundary note.
+
+   The set and the note are a `stack` (48) apart, not a `gutter` (32): `gutter` separates peers
+   inside a set, and this seam is block to block (visual-direction § 1.1, S4). */
 function Cases({ block }: { block: Of<'cases'> }) {
   return (
-    <Layout rowGap="gutter">
+    <Layout rowGap="stack">
       <BlockCardSet
         items={block.items.map((item) => ({
           id: item.slug,
@@ -316,13 +335,21 @@ function Stat({ block }: { block: Of<'stat'> }) {
       <p className={styles.statBody}>{block.body}</p>
     </Layout>
   );
-  if (!block.items || block.items.length === 0) return figure;
+  const items = block.items ?? [];
+  if (items.length === 0) return figure;
+  const size = setSize(items.length, 'row');
   return (
     <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="stack" align="start">
       {figure}
       <Layout as="ul" rowGap="none">
-        {block.items.map((item) => (
-          <ListCard key={item.title} titleAs="h3" title={item.title} body={item.body} />
+        {items.map((item) => (
+          <ListCard
+            key={item.title}
+            size={size}
+            titleAs="h3"
+            title={item.title}
+            body={item.body}
+          />
         ))}
       </Layout>
     </Layout>
@@ -338,11 +365,16 @@ function Stat({ block }: { block: Of<'stat'> }) {
    the page's grid, not from its count: two cards stretched to halves were 604px objects on a page
    whose every other card set is 392, and the band read as a different kind of thing. Two cards
    leave the third track open, which is the honest shape of two. Stacked under its heading, never
-   beside it — see ContentSection's `arrangement`. */
+   beside it — see ContentSection's `arrangement`.
+
+   Rows a `column` (64) apart, the row seam of every borderless card set (visual-direction § 1.2,
+   CLAUDE.md § the gap scale): down the grid each row is the next set of objects and must read as
+   separate. It was `stack` (48), the step BlockCardSet tried and rejected on 29 Sep. Text cards
+   keep BlockCard's default `md` step at any count (§ 7.2). */
 function Resources({ block }: { block: Of<'resources'> }) {
   const lg = 3;
   return (
-    <Layout as="ul" columns={{ base: 1, md: 2, lg }} colGap="gutter" rowGap="stack" equalRows>
+    <Layout as="ul" columns={{ base: 1, md: 2, lg }} colGap="gutter" rowGap="column" equalRows>
       {block.items.map((item) => (
         <BlockCard
           key={item.href}

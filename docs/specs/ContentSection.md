@@ -49,6 +49,16 @@ thing that stops those five reading as one repeated shape is an arrangement, not
 > with `CtaSection`, `Callout` and `Proof`; retuning it is a system token decision, out of scope.
 
 
+> **Amendment · 5 Oct 2026 · `fdn-spacing` (visual-direction § 1.1, S1) — one head rhythm.**
+> The eyebrow → heading seam moves from `--gap-tight` (8), in a nested `Layout`, to `--gap-block`
+> (24), flat: one `rowGap="block"` `Layout` holds eyebrow, heading and lead. Ink gap after: ~16 →
+> ~32. Every section head in the kit (`PageHero`, `CtaSection`, this one) now carries one rhythm,
+> **eyebrow → title 24, title → lead 24**, and neither of the other two changes. Nothing is tighter
+> than it was, which the owner's "eyebrow too close" note (1 Oct review) requires. The hierarchy
+> between the eyebrow and the lead comes from scale — a 12px mono label against a 20px lead — not
+> from a second gap. § 7 and § 10 below are amended in place. visual-direction.md wins over this
+> spec where they still differ.
+
 > **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
 
 ## 1 · Identity
@@ -185,7 +195,7 @@ exists for). The specimen's section 9 renders exactly that case.
 
 | Seam | Step | Why that step |
 |---|---|---|
-| eyebrow → heading | `--gap-tight` (8) | a label and the thing it labels |
+| eyebrow → heading | `--gap-block` (24; was `--gap-tight` 8 until 5 Oct, S1) | the section head is one group at one step, the rhythm `PageHero` and `CtaSection` already carried |
 | heading → lead | `--gap-block` (24) | head to body inside a block |
 | head → body (rows) | `--gap-stack` (48) | block to block inside a section — `stacked`, and `beside` below 1024 |
 | head track → body track | `--gap-section` (96, was `--gap-column` 64 until 1 Oct) | **new in 2.13.** Two halves that must read as separate. Not `--gap-gutter` (32): that is the seam between peers in a set, and a head is not a peer of its blocks — at 32 the head reads as a narrow first card. |
@@ -242,12 +252,9 @@ caller's column choice, not this component's.
           columns={split ? { lg: [1, 2] } : undefined}    // 1 : 2 from 1024, O2
           align={split ? 'start' : undefined}>            // static, top-aligned head
     {hasHead && (
-      <Layout rowGap="block">                             // heading → lead (24)
-        {(eyebrow || heading) && (
-          <Layout rowGap="tight">                         // eyebrow → heading (8)
-            <p className={styles.eyebrow} /> <h2 className={styles.heading} />
-          </Layout>
-        )}
+      <Layout rowGap="block">                             // eyebrow → heading → lead (24), S1
+        <p className={styles.eyebrow} />
+        <h2 className={styles.heading} />
         <p className={styles.lead} />
       </Layout>
     )}

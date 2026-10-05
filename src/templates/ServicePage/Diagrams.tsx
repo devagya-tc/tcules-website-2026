@@ -238,6 +238,7 @@ export function Parts({ block }: { block: Of<'parts'> }) {
             <ListCard
               key={item.name}
               form="tile"
+              size="sm"
               titleAs="h4"
               title={item.name}
               body={item.body}
@@ -376,6 +377,7 @@ export function Slice({ block }: { block: Of<'slice'> }) {
             <ListCard
               key={level.title}
               form="tile"
+              size="sm"
               titleAs="h4"
               title={level.title}
               body={level.body}

@@ -122,7 +122,9 @@
    --gap-gutter        32px  Container gutter, and the gap between cards in a set.
    --gap-stack         48px  Block to block inside a section.
    --gap-column        64px  Column gutter between two PEER halves that must read as
-                             separate: two lists, two sides of one contrast.
+                             separate: two lists, two sides of one contrast. And the
+                             row seam of a borderless card set (29 Sep 2026): down
+                             the set each row is the next set of objects.
    --gap-section       96px  Section padding, tight; and a SPLIT — two regions of
                              different kind side by side (copy and form, copy and
                              image, a head and its body, a quote and its case).

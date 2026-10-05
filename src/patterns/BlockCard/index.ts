@@ -5,8 +5,9 @@ export type {
   BlockCardImage,
   BlockCardImageSide,
   BlockCardOrientation,
+  BlockCardSize,
   BlockCardTitleElement,
   BlockCardTracks,
 } from './BlockCard';
-export { BlockCardSet, FEATURED_FROM } from './BlockCardSet';
+export { BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCardSet';
 export type { BlockCardSetProps, BlockCardSetItem } from './BlockCardSet';

@@ -1,7 +1,8 @@
 /* ══ Component layer — ListCard ══════════════════════════════════════════════════
    Tier 2. One ruled list row, with one marker slot and an optional whole-row link.
 
-   Naming: --lcrd-{part}-{role}-{state}
+   Naming: --lcrd-{part}-{role}-{state}, with a size suffix where the type steps with the set
+   (--lcrd-title-text-md | -sm)
      parts: title | body | marker | number | ground | link | rule | ring | thumbnail | content
      (title and body also carry the split's -min geometry)
      states: rest (no suffix) | hover | pressed
@@ -48,13 +49,24 @@
 
 /* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
-  /* h4, not h5. The row is up to 1240px wide and BlockCard's title is h4 in a 286px track, so at
-     h5 the narrower object had the larger title — an inversion, not a preference. 28px also carries
-     the three jobs this row does: a step in a process, a clickable article or guide on a listing
-     page, and an item in a plain content list. */
-  --lcrd-title-text: var(--text-h4);
-  --lcrd-title-tracking: var(--text-h4-tracking);
-  --lcrd-body-text: var(--text-body);
+  /* The row's type steps with its set (visual-direction § 7.2, 5 Oct 2026). The row does not
+     know its count, so it takes the step as a component size and the composing route passes it:
+
+       md  h4 + body      the default. A row up to 1240px wide carries a 28px title, and it carries
+                          the three jobs this row does: a step in a process, a clickable article or
+                          guide on a listing page, and an item in a plain content list.
+       sm  h5 + body-sm   any set of four rows or more, and tiles. Card titles sit at least two
+                          rungs under the section's 43px h2, and a run of 28px titles down a long
+                          set made every row a heading competing with the band's.
+
+     It was h4 alone, set against BlockCard's h4 in a 286px track: at h5 the narrower object had the
+     larger title. The two now step together, by the same rule, so the inversion cannot return. */
+  --lcrd-title-text-md: var(--text-h4);
+  --lcrd-title-tracking-md: var(--text-h4-tracking);
+  --lcrd-body-text-md: var(--text-body);
+  --lcrd-title-text-sm: var(--text-h5);
+  --lcrd-title-tracking-sm: var(--text-h5-tracking);
+  --lcrd-body-text-sm: var(--text-body-sm);
   /* The number is an INDEX, not a measurement. It shipped at --text-stat, 40px against a 22px h5
      title, which made the ordinal the loudest thing in a row whose content is the title. The fix is
      NOT to shrink it to a control label: at 13px it stopped competing and stopped indexing. It stays
@@ -77,8 +89,15 @@
      the title's baseline. An optical correction is measured, not derived — that is what makes it
      optical. This value
      is a function of BOTH type sizes: it was 8px against a 13px number, 2px against an h5 title, and
-     6px now. Change either role and recompute it in the same edit. */
-  --lcrd-number-baseline-offset: var(--space-4);
+     6px now. Change either role and recompute it in the same edit.
+
+     So it steps with the size: 4 against the md row's h4, 0 against the sm row's h5 (5 Oct 2026).
+     Both were measured in the browser, the numeral's baseline against the title's first baseline:
+     4 lands the md pair at 0.00px; against h5 the 20px numeral's baseline already sits on the
+     title's, and 2 put it 2px low. The sm token stays, at zero, so the correction is one decision
+     per size and nobody reads its absence as an omission. */
+  --lcrd-number-baseline-offset-md: var(--space-4);
+  --lcrd-number-baseline-offset-sm: var(--space-0);
 
   /* Component geometry, not layout distance. 192 matches Layout's xs track by value rather than
      reading --lay-track-xs: a component never reads another component's tokens. It is the minimum

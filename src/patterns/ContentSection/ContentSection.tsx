@@ -137,12 +137,15 @@ export function ContentSectionText({ children }: ContentSectionTextProps) {
  * is the fix and this component is where it is applied — tighten by grouping, loosen by
  * separating:
  *
- *   tight  (8)   eyebrow → heading      a label and the thing it labels
- *   block  (24)  heading → lead         a statement and its own opening line
- *   stack  (48)  head group → blocks    and between the blocks themselves
+ *   block  (24)  eyebrow → heading → lead   the section head, one group
+ *   stack  (48)  head group → blocks        and between the blocks themselves
  *
- * So the head group reads as one object with air beneath it, rather than as three evenly spaced
- * rows. Nothing here is a distance this file chose: all three are gap-scale steps, and none of
+ * So the head group reads as one object with air beneath it. Inside the head, the eyebrow-to-title
+ * seam and the title-to-lead seam are the same step, so the head is one Layout — PageHero's and
+ * CtaSection's head rhythm, and the one every section head in the kit carries (visual-direction
+ * § 1.1, S1). It used to nest the eyebrow and heading at `tight` (8), and a 12px label 16px of ink
+ * above a 43px serif read as stuck to it. Hierarchy inside the head comes from scale, not from a
+ * second gap. Nothing here is a distance this file chose: both are gap-scale steps, and neither of
  * them shifts at a breakpoint. The one thing that does change at a breakpoint is the ARRANGEMENT
  * under `beside` — the layout moves at 1024, the distances never do (CLAUDE.md § the gap scale,
  * rule 3).
@@ -213,19 +216,14 @@ export function ContentSection({
         align={split ? 'start' : undefined}
       >
         {hasHead ? (
-          /* 24 between the heading and its lead. The eyebrow+heading pair nests one level
-             deeper at 8, so the three rows are two groups rather than three evenly spaced
-             lines — which is the whole reason this component is not a flat Layout. */
+          /* The eyebrow-to-title seam and the title-to-lead seam are the same step, so one
+             Layout at `block` (24): the rhythm PageHero and CtaSection already use (S1). */
           <Layout rowGap="block">
-            {eyebrow || heading ? (
-              <Layout rowGap="tight">
-                {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-                {heading ? (
-                  <h2 id={headingId} className={styles.heading}>
-                    {heading}
-                  </h2>
-                ) : null}
-              </Layout>
+            {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
+            {heading ? (
+              <h2 id={headingId} className={styles.heading}>
+                {heading}
+              </h2>
             ) : null}
             {lead ? <p className={styles.lead}>{lead}</p> : null}
           </Layout>

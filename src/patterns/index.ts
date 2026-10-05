@@ -134,16 +134,18 @@ export type {
   ListCardProps,
   ListCardMarker,
   ListCardArrangement,
+  ListCardSize,
   ListCardTitleElement,
 } from './ListCard';
 
-export { BlockCard, BlockCardSet, FEATURED_FROM } from './BlockCard';
+export { BlockCard, BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCard';
 export type {
   BlockCardProps,
   BlockCardMedia,
   BlockCardImage,
   BlockCardImageSide,
   BlockCardOrientation,
+  BlockCardSize,
   BlockCardTitleElement,
   BlockCardTracks,
   BlockCardSetProps,

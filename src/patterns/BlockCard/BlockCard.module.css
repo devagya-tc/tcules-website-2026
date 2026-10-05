@@ -2,9 +2,9 @@
 
    Layout owns every block-axis group and the horizontal orientation's two tracks; Button owns the
    cta entirely; Media owns the image's delivery, panel and shadow. This module supplies the ruled
-   crop box and its zoom, child sizing, the orientation's ratio and title-role swaps, and link
-   rendering. It deliberately has no background, margin, hand-written grid or flex arrangement,
-   surface selector or breakpoint.
+   crop box and its zoom, child sizing, the size step's type roles, and link rendering. It
+   deliberately has no background, margin, hand-written grid or flex arrangement, surface selector
+   or breakpoint.
 
    ── What is absent, and why ────────────────────────────────────────────────────
    No card edge. The tile was bounded by a four-sided hairline and is now bounded by the parent
@@ -92,24 +92,44 @@
 .title {
   overflow-wrap: anywhere;
   color: var(--bcrd-title-ink);
-  font: var(--bcrd-title-text);
-  letter-spacing: var(--bcrd-title-tracking);
   text-wrap: var(--text-title-wrap);
-}
-
-/* The horizontal arrangement's title role. A class beside .title rather than a descendant rule, for
-   an equal-specificity reason; it comes after .title so it wins. */
-.titleHorizontal {
-  font: var(--bcrd-title-text-horizontal);
-  letter-spacing: var(--bcrd-title-tracking-horizontal);
 }
 
 .body {
   max-inline-size: var(--measure-body);
   overflow-wrap: anywhere;
   color: var(--bcrd-body-ink);
-  font: var(--bcrd-body-text);
   text-wrap: var(--text-running-wrap);
+}
+
+/* The size step: title and body roles together, set on the root by the `size` prop (§ 7.2). One
+   modifier on the root rather than one per part, because the step is one decision about the card,
+   not two about its title and its body. Exactly one of the three is always present. */
+.sizeLg .title {
+  font: var(--bcrd-title-text-lg);
+  letter-spacing: var(--bcrd-title-tracking-lg);
+}
+
+.sizeLg .body {
+  font: var(--bcrd-body-text-lg);
+}
+
+.sizeMd .title {
+  font: var(--bcrd-title-text-md);
+  letter-spacing: var(--bcrd-title-tracking-md);
+}
+
+.sizeMd .body {
+  font: var(--bcrd-body-text-md);
+}
+
+.sizeSm .title {
+  font: var(--bcrd-title-text-sm);
+  letter-spacing: var(--bcrd-title-tracking-sm);
+}
+
+.sizeSm .body {
+  font: var(--bcrd-body-text-sm);
 }
 
 /* Higher specificity than the global anchor rule. The anchor carries NO link colour of its own —
