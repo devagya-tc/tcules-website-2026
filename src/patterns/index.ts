@@ -32,7 +32,7 @@
  * shape and composes Layout, Cluster and Icon; not steps (ListCard rows) and not peers (tiles).
  *
  * ListCard is the fifth kind, and the only one here that is not a block: it is a ROW, and the
- * smallest thing in this tier. It owns no band, takes no `surface`, paints no ground, and renders a
+ * smallest thing in this tier. It owns no band, takes no `surface`, paints no ground at rest, and renders a
  * bare <li> — the list element belongs to the caller, as a Layout with rowGap="none", because the
  * row finishes itself with its own block-end rule and a gap would break the ladder. It is a pattern
  * for the usual two reasons (it consumes a content shape, and it arranges with Cluster and Layout).

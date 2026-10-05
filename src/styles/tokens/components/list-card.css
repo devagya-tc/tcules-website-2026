@@ -17,8 +17,9 @@
    It sits ONE STEP QUIETER than the quiet-label ramp used by --crumb-link-ink, --foot-label-ink
    and --bcrd-eyebrow-ink, because a 20px numeral carries further than a 12px label and has to give
    more back. On the two light surfaces that means stepping toward white; on ink and blue it means
-   stepping TOWARD THE GROUND — the opposite direction in hex, the same direction in emphasis. Every
-   cell clears 3:1 and none clears 4.5:1, which is the deliberate part: the numeral is aria-hidden and
+   stepping TOWARD THE GROUND — the opposite direction in hex, the same direction in emphasis. At
+   rest every cell clears 3:1 (3.16 to 5.41:1; only ink's clears 4.5), and on paper's hover and
+   pressed grounds the numeral falls below 3:1, accepted in spec § 6. That is the deliberate part: the numeral is aria-hidden and
    the parent <ol> carries the order, so it is a visible mark duplicating semantics the markup already
    states — the same argument --fig-rule-ink makes at 1.90:1. If it ever becomes the only source of
    the order, it has to come back up to 4.5:1.
@@ -159,8 +160,8 @@
 }
 
 /* ── Surface: paper ─────────────────────────────────────────────────────────────
-   Title, body and marker use their own inks whether or not the row is linked. The brandeis
-   500 → 600 → 700 ramp now lands on the trailing cue alone, and the neutral-300 hairline is
+   Title, body and marker use their own inks whether or not the row is linked. The cue alone takes
+   brandeis, rest → pressed 500 → 700 (it holds through hover; the ground carries hover), and the neutral-300 hairline is
    decoration at one width in every state. */
 :root,
 [data-surface='paper'] {
@@ -195,8 +196,8 @@
 }
 
 /* ── Surface: ink ───────────────────────────────────────────────────────────────
-   The direction inverts. Static title/marker lift to white and body to neutral-300. The linked
-   ramp lifts to brandeis 300 → 100 → 50 because brandeis-500 is only 2.77:1 here. The rule drops
+   The direction inverts. Static title/marker lift to white and body to neutral-300. The cue
+   lifts to brandeis 300 → 50, rest → pressed, because brandeis-500 is only 2.77:1 here. The rule drops
    to neutral-700 so a twelve-row block does not become a light ladder. */
 [data-surface='ink'] {
   --lcrd-title-ink: var(--color-white); /* 17.26:1 */
@@ -213,8 +214,8 @@
 }
 
 /* ── Surface: blue ──────────────────────────────────────────────────────────────
-   The light end is the only end that clears AA: cue 100 → white → 50, title/marker white, body 50.
-   Pressed stays distinct from hover through ink alone, which is all the cue now changes. */
+   The light end is the only end that clears AA: cue 100 → 50 rest → pressed, title/marker white,
+   body 50. Hover is the ground (600), pressed the ground (700) plus the cue's step. */
 [data-surface='blue'] {
   --lcrd-title-ink: var(--color-white); /* 6.23:1 */
   --lcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */

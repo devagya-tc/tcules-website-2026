@@ -169,7 +169,7 @@ Compile errors, not review comments:
 
 | Arrangement | At either size (`md` or `sm`, 5 Oct 2026)                                                       | Intended use                                                                                     |
 | ----------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `split`     | Title takes two fractional tracks and body three from `md`; they collapse to one track below it | The 21 title-left / body-right sections; default because it is the highest-volume arrangement    |
+| `split`     | Title and body share a line while both minimum tracks fit the row's own width, and stack when not (2.17; no breakpoint) | The 21 title-left / body-right sections; default because it is the highest-volume arrangement    |
 | `stacked`   | Title above body at every width                                                                 | The 11 title-plus-body sections and sequences whose lead-in must remain attached to its sentence |
 
 **Amended 5 Oct 2026:** there is a `size` prop, `md | sm`, and no `lg` (Amendment · 5 Oct 2026). Marker fill, link presence and
@@ -245,8 +245,9 @@ ground: `--color-paper`, `--color-paper-deep`, `--color-neutral-950` and
 | `--lcrd-ring-gap-color`   | `--color-paper` — paired ring 6.17:1            | `--color-paper-deep` — paired ring 5.51:1       | `--color-neutral-950` — paired ring 7.32:1      | `--color-brandeis-500` — paired ring 6.23:1 |
 
 **Paper.** The title sits at neutral-900 whether or not the row navigates, while the body drops to
-neutral-700 so a row reads title first without sacrificing AA. The cue starts at brandeis-500 and
-advances through 600 and 700, and it is the only part of the row that does. The neutral-300 rule is
+neutral-700 so a row reads title first without sacrificing AA. The cue is brandeis-500 at rest and
+holds through hover, stepping to 700 on press; hover is carried by the row's neutral-100 ground
+(§ 5, 26 Aug). The cue is the only ink in the row that moves. The neutral-300 rule is
 deliberately quieter than text and stays at that one value in every state.
 
 **The number is not the marker, for colour.** `--lcrd-marker-ink` keeps the title's ink for the icon
@@ -260,25 +261,26 @@ to give more back, and colour — not size — is where this component gives it.
 surfaces that means stepping toward white; on ink and blue it means stepping **toward the ground**,
 which is the opposite direction in hex and the same direction in emphasis.
 
-Every cell clears 3:1 and none clears 4.5:1, and that is the deliberate part rather than an
-oversight. The numeral is `aria-hidden` and the parent `<ol>` carries the order, so it is a visible
+At rest every cell clears 3:1 (3.16 to 5.41:1; only ink's clears 4.5), and on paper's hover and
+pressed grounds the numeral falls to 2.68 and 2.37:1, an accepted cost. That is the deliberate part
+rather than an oversight. The numeral is `aria-hidden` and the parent `<ol>` carries the order, so it is a visible
 mark duplicating semantics the markup already states — the same argument `--fig-rule-ink` makes at
 1.90:1. The moment it becomes the only source of the order, it has to come back up to 4.5:1.
 
 **Tint.** Title, body and marker can keep their paper steps: each still clears its floor on
-paper-deep. The cue ramp is also restated unchanged because brandeis-500, 600 and 700 all clear AA
-here. The rule moves to neutral-400 so it remains present against the deeper ground without
+paper-deep. The cue is also restated unchanged because brandeis-500 and 700 both clear AA here. The rule moves to neutral-400 so it remains present against the deeper ground without
 competing with the copy.
 
-**Ink.** Title and marker lift to white and body to neutral-300. The cue ramp lifts to brandeis-300
-at rest, 100 on hover and 50 on press because brandeis-500 reaches only 2.77:1 on this ground. The
+**Ink.** Title and marker lift to white and body to neutral-300. The cue lifts to brandeis-300
+at rest, holding through hover, and 50 on press, because brandeis-500 reaches only 2.77:1 on this
+ground. The
 rule drops to neutral-700 so twelve adjacent separators do not turn into a ladder louder than the
 content.
 
-**Blue.** The available light ramp is narrow: the cue starts at brandeis-100, reaches white on hover
-and returns to brandeis-50 on press; all three clear 4.5:1. The title and marker are white, body is
-brandeis-50, and the decorative rule is brandeis-300. With the pressed rule width gone, these three
-light steps are the whole of the state model on this surface, which is why none may be lightened and
+**Blue.** The available light ramp is narrow: the cue is brandeis-100 at rest and through hover, and
+brandeis-50 on press; both clear 4.5:1, and hover is the brandeis-600 ground. The title and marker are white, body is
+brandeis-50, and the decorative rule is brandeis-300. With the pressed rule width gone, the two cue steps and the
+two ground steps are the whole of the state model on this surface, which is why none may be lightened and
 why the white focus ring against its brandeis-500 gap matters most here.
 
 **The ground re-measures every ink above it.** The table's ratios are against the surface. On hover
@@ -395,7 +397,7 @@ The component does not receive a `surface` prop and never paints the panel groun
 - Cue: `Icon size="lg"`, resolving to `--icon-size-18`.
 - Thumbnail marker: `--lcrd-thumbnail-inline-md` is 160px and `--lcrd-thumbnail-ratio` is 3:2,
   measured as a recognisable landscape sample at the full 1240px row while still wrapping cleanly
-  before a 192px content core is squeezed. `Media` in `fit="fill"` covers that box from its centre;
+  before a 192px content core is squeezed. `Media` in `fit="fill"` covers that box from `--media-fill-position` (inline start, 20% down);
   a B5 cut-out on its contrast panel takes Media's `inset="text"` (`--gap-text`, 16) inside it, leaving
   128 × 75 of part. It kept Media's `--gap-gutter` until 29 Sep 2026 and was left 96 × 43 (§ 17 q8).
 - Hidden hint: `--lcrd-hidden-size` is `--space-1`, the clip technique's own 1px geometry, duplicated
@@ -465,7 +467,9 @@ almost twice the size of the content it indexes, and the loudest element in ever
 inversion rather than a matter of taste. The role was the mistake, not the size: `--text-stat` is for
 a number that IS the content, the way a metric is in `Proof`, and a position in a list is a label.
 
-There is deliberately no middle step. The mono ramp runs 11, 12, 13, 14 and then jumps to 40, so a
+*Historical (superseded 25 Aug 2026 by `--text-index`, the 20px mono role added for exactly this
+gap; the two paragraphs below record the reasoning that led to it).* There was deliberately no
+middle step. The mono ramp ran 11, 12, 13, 14 and then jumped to 40, so a
 mono numeral is either a metric or a label with nothing in between to retreat to. Inventing a 24px
 mono step to split the difference is what the token rules forbid: a size that is not on the ramp is
 a mistake or a new step, and this is neither.
@@ -633,14 +637,15 @@ subject icon or arrow a second time.
 | Narrow track at 767                       | `split` is stacked; number/icon remain beside the core when they fit, and thumbnail may wrap above it. Measures and token-aware breaking prevent overflow.                                                                                                                                                           |
 | Parent that does not size it              | The root fills one available line in a wrapping parent. The content core's named minimum is `xs` (192px), which forces the marker to wrap before copy becomes unreadable. The root has no hard minimum beyond the parent's available inline size, so a sub-192px parent wraps text instead of causing page overflow. |
 | Logical properties rather than left/right | Marker is at inline start, cue at inline end, inset is block-axis and the rule is at block end. The current site is LTR; an RTL site must swap the directional cue to the existing `arrow-left` glyph at the composition boundary.                                                                                   |
-| Surface nested inside a different one     | The nearest `data-surface` block redeclares all nine colour tokens. A tint row inside ink uses the tint column in full.                                                                                                                                                                                              |
+| Surface nested inside a different one     | The nearest `data-surface` block redeclares all eleven colour tokens. A tint row inside ink uses the tint column in full.                                                                                                                                                                                              |
 | Two components adjacent                   | Two rows in the same zero-gap parent produce one rule at their shared seam and one rule at the end of the second row; there is no top edge to double the seam.                                                                                                                                                       |
 | Interactive content inside a slot         | Rejected. `title` and `body` are strings, icon/number fills are inert, and thumbnail media must not contain a link, button or control. The row anchor is the only possible focus target.                                                                                                                             |
 
 ## 13 · Motion
 
-The cue's ink transitions with `--duration-fast` and `--easing-standard`, aliased as
-`--lcrd-transition-duration` and `--lcrd-transition-easing`. That is the whole of it.
+The cue's ink and the linked row's ground (`background-color`, since 26 Aug) transition with
+`--duration-fast` and `--easing-standard`, aliased as `--lcrd-transition-duration` and
+`--lcrd-transition-easing`. That is the whole of it.
 
 The interactive overlay rule — the `Button`/`Breadcrumbs` wipe precedent along the row's own inline
 axis — is gone, and with it the pressed width step. Nothing in the component transforms, translates,
@@ -672,17 +677,19 @@ query in the same change.
 
 **Don't**
 
-8. Do not add a background, surrounding edge or filled finish; inspect the module and expect no
-   background token and no finish prop.
-9. Do not give the title the link ink, or make any part but the cue — and, on a tile, the opening
-   rule — change on hover or press; inspect computed styles in every state. A row's ground and a
+8. Do not add a rest background, surrounding edge or filled finish; inspect the module and expect
+   no background at rest, no finish prop, and only the two state grounds (`--lcrd-ground-hover`,
+   `--lcrd-ground-pressed`, § 5) on a linked row.
+9. Do not give the title the link ink, or make any part but the row's ground, the cue and, on a
+   tile, the opening rule change on hover or press; inspect computed styles in every state. A row's ground and a
    tile's rule are the two state carriers, and nothing else moves (amended 1 Oct 2026).
 10. Do not restore the rule wipe or a pressed rule width, and do not confuse either with the row's
     own block-end rule, which stays; search the module for `::after` and `scaleX` and expect none.
 11. Do not put a Button inside a linked row or interactive content in thumbnail media; tab order
     must contain one focus stop per linked row.
-12. Do not add margin to any ListCard node; search the module for margin and expect zero
-    declarations.
+12. Do not add margin to any ListCard node; search the module for margin and expect exactly one
+    declaration, the visually hidden `.hint`'s clip-technique margin (2.11, argued in its comment),
+    and no layout margin.
 13. Do not add hand-written grid or flex arrangement; search the module for those display modes and
     expect zero. `Layout` and `Cluster` must own every arrangement.
 14. Do not change a gap or type role in a component breakpoint; compare the responsive rules with
@@ -716,7 +723,7 @@ The exact block list, in order:
    exercise the dark title, cue ink and ring together. Print the matching section 6 surface paragraph
    beside each band.
 6. **Nested surface.** A tint panel inside an ink band and an ink panel inside a paper band, with the
-   nine resolved colour tokens listed beside each rendering.
+   eleven resolved colour tokens listed beside each rendering.
 7. **Twelve-row sample-finding block.** Numbered `01`–`12`, full width, zero row gap. Inspect at
    desktop and at 767 to prove it remains one list rather than twelve tiles.
 8. **Every section 12 edge case.** Thirteen labelled rows/blocks: long title/body; unbroken URL;

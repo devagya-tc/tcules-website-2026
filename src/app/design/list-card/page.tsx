@@ -139,7 +139,7 @@ const LINKED = [
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
-    note: 'Neutral-900 title and marker, neutral-700 body, and a 500 → 600 → 700 ramp on the cue alone.',
+    note: 'Neutral-900 title and marker, neutral-700 body; the cue alone is brandeis, 500 → 700 rest to pressed, and hover is a neutral-100 ground.',
   },
   {
     surface: 'tint',
@@ -147,11 +147,11 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
   {
     surface: 'ink',
-    note: 'Title and marker lift to white, body to neutral-300, and the cue ramp lifts to 300 → 100 → 50.',
+    note: 'Title and marker lift to white, body to neutral-300, and the cue lifts to 300 → 50 rest to pressed.',
   },
   {
     surface: 'blue',
-    note: 'Only the light end clears AA: cue 100 → white → 50, with a white focus ring against its blue gap.',
+    note: 'Only the light end clears AA: cue 100 → 50 rest to pressed, with a white focus ring against its blue gap.',
   },
 ] as const;
 
@@ -183,10 +183,12 @@ const NESTED_SURFACE_TOKENS = {
     ['--lcrd-title-ink', '--color-neutral-900'],
     ['--lcrd-body-ink', '--color-neutral-700'],
     ['--lcrd-marker-ink', '--color-neutral-900'],
+    ['--lcrd-number-ink', '--color-neutral-600'],
     ['--lcrd-link-ink', '--color-brandeis-500'],
-    ['--lcrd-link-ink-hover', '--color-brandeis-600'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-700'],
     ['--lcrd-rule-ink', '--color-neutral-400'],
+    ['--lcrd-ground-hover', '--color-neutral-200'],
+    ['--lcrd-ground-pressed', '--color-neutral-300'],
     ['--lcrd-ring-color', '--color-brandeis-500'],
     ['--lcrd-ring-gap-color', '--color-paper-deep'],
   ],
@@ -194,10 +196,12 @@ const NESTED_SURFACE_TOKENS = {
     ['--lcrd-title-ink', '--color-white'],
     ['--lcrd-body-ink', '--color-neutral-300'],
     ['--lcrd-marker-ink', '--color-white'],
+    ['--lcrd-number-ink', '--color-neutral-500'],
     ['--lcrd-link-ink', '--color-brandeis-300'],
-    ['--lcrd-link-ink-hover', '--color-brandeis-100'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-50'],
     ['--lcrd-rule-ink', '--color-neutral-700'],
+    ['--lcrd-ground-hover', '--color-neutral-900'],
+    ['--lcrd-ground-pressed', '--color-neutral-800'],
     ['--lcrd-ring-color', '--color-brandeis-300'],
     ['--lcrd-ring-gap-color', '--color-neutral-950'],
   ],
@@ -861,7 +865,7 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>6 · Nested surfaces</h2>
             <p>
-              The tint panel below resolves all nine ListCard colour tokens from itself; no ink
+              The tint panel below resolves all eleven ListCard colour tokens from itself; no ink
               value may leak through an omitted declaration.
             </p>
           </Layout>
