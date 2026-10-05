@@ -286,8 +286,10 @@
   color: var(--svc-ink);
 }
 
+/* The connector is ink at rest, as every arrow is (visual-direction § 4.3): blue on paper is
+   where you act, and a diagram's arrow is not a control. */
 .arrow {
-  color: var(--svc-node);
+  color: var(--svc-ink);
 }
 
 .loop {

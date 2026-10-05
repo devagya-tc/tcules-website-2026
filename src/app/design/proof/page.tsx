@@ -184,7 +184,7 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
   {
     surface: 'blue',
-    note: 'White leads, Brandeis-100 supports, and the quote rule is white (ch10 B2.07) — no longer peridot, which ch02 v1.0 keeps for a marked phrase.',
+    note: 'White leads, Brandeis-100 supports, and the quote rule is white (ch10 B2.07) — no longer peridot, which on the website is ::selection and an illustration’s carried item only.',
   },
 ] as const;
 

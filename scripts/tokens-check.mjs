@@ -215,6 +215,57 @@ for (const file of tokenFiles.filter((f) => f.includes('/components/'))) {
   }
 }
 
+/**
+ * THE PERIDOT GATE (visual-direction § 4.4, 6 Oct 2026).
+ *
+ * On the website peridot has exactly two uses: `::selection` in globals.css, and the carried item
+ * inside an illustration. Everything else it used to paint — a `<mark>` ground, a quote rule on
+ * blue, an unused --sec-highlight pair — read as a highlighter, and the website does not highlight
+ * text. So nothing outside primitives.css may READ the ramp:
+ *   · every token file except primitives.css (whose declarations of the ramp stay), so a component
+ *     layer cannot alias it — `--x-mark: var(--color-peridot-300)` is consumption;
+ *   · every consumer stylesheet (*.module.css, globals.css, reset.css);
+ *   · every .ts/.tsx under src/, so an inline style cannot route around the CSS check.
+ * The one exemption is a declaration inside a rule whose selector is `::selection`, in globals.css.
+ * Comments are stripped first: a comment that names peridot is not consumption. Illustration SVGs
+ * are files in public/ and are not scanned, which is the exemption § 4.4 asks for.
+ */
+const PERIDOT = /var\(\s*--color-peridot-/;
+const peridotFiles = [
+  ...tokenFiles.filter((f) => !f.endsWith('/primitives.css')),
+  ...consumers,
+  ...globSync('src/**/*.{ts,tsx}'),
+].sort();
+for (const file of peridotFiles) {
+  const isCss = file.endsWith('.css');
+  /* Strip comments, keeping line numbers. TS/TSX also loses `//` line comments — a crude strip,
+     whose only failure is missing a peridot var() written after a `//` inside a string. */
+  let code = stripKeepLines(read(file));
+  if (!isCss) code = code.replace(/(^|[^:'"`])\/\/[^\n]*/g, (m, pre) => pre);
+  if (!PERIDOT.test(code)) continue;
+  if (isCss) {
+    for (const m of code.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      if (!PERIDOT.test(m[2])) continue;
+      const selector = m[1].trim().replace(/\s+/g, ' ');
+      if (file === 'src/app/globals.css' && selector === '::selection') continue;
+      const line = code.slice(0, m.index + m[0].search(PERIDOT)).split('\n').length;
+      problems.push(
+        `${file}:${line}  reads the peridot ramp in \`${selector}\` — peridot on the website is ` +
+          `::selection (globals.css) and an illustration's carried item only (visual-direction § 4.4)`,
+      );
+    }
+  } else {
+    code.split('\n').forEach((l, i) => {
+      if (PERIDOT.test(l)) {
+        problems.push(
+          `${file}:${i + 1}  reads the peridot ramp from script — peridot on the website is ` +
+            `::selection (globals.css) and an illustration's carried item only (visual-direction § 4.4)`,
+        );
+      }
+    });
+  }
+}
+
 console.log(
   `tokens:check — ${tokens.size} tokens defined across ${tokenFiles.length} files, ` +
     `${consumers.length} consumer stylesheets checked`,
@@ -227,5 +278,5 @@ if (problems.length) {
 }
 
 console.log(
-  'all custom properties resolve; every component layer is registered; no literal colours or raw distances outside the token layer',
+  'all custom properties resolve; every component layer is registered; no literal colours or raw distances outside the token layer; peridot read only by ::selection',
 );

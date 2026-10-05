@@ -163,15 +163,17 @@
 }
 
 /* ── Surface: paper ─────────────────────────────────────────────────────────────
-   Title, body and marker use their own inks whether or not the row is linked. The cue alone takes
-   brandeis, rest → pressed 500 → 700 (it holds through hover; the ground carries hover), and the neutral-300 hairline is
-   decoration at one width in every state. */
+   Title, body and marker use their own inks whether or not the row is linked. The cue (the arrow)
+   is ink at rest like every arrow (visual-direction § 4.3, 6 Oct 2026), and takes brandeis on hover
+   and focus, 500, stepping to 700 on press: the whole-card hover cue is blue's Free row (§ 4.2).
+   The neutral-300 hairline is decoration at one width in every state. */
 :root,
 [data-surface='paper'] {
   --lcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --lcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --lcrd-marker-ink: var(--color-neutral-900); /* 14.62:1 */
   --lcrd-number-ink: var(--color-neutral-500); /* 3.16:1 — quiet mark, clears 3:1 */
+  --lcrd-cue-ink: var(--color-neutral-900); /* 14.62:1 — the arrow at rest is ink */
   --lcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
   --lcrd-rule-ink: var(--color-neutral-300); /* decoration */
@@ -189,6 +191,7 @@
   --lcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --lcrd-marker-ink: var(--color-neutral-900); /* 13.06:1 */
   --lcrd-number-ink: var(--color-neutral-600); /* 4.39:1 — stepped on the deeper ground */
+  --lcrd-cue-ink: var(--color-neutral-900); /* 13.06:1 */
   --lcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --lcrd-rule-ink: var(--color-neutral-400); /* decoration */
@@ -199,14 +202,15 @@
 }
 
 /* ── Surface: ink ───────────────────────────────────────────────────────────────
-   The direction inverts. Static title/marker lift to white and body to neutral-300. The cue
-   lifts to brandeis 300 → 50, rest → pressed, because brandeis-500 is only 2.77:1 here. The rule drops
+   The direction inverts. Static title/marker/cue lift to white and body to neutral-300. The cue's
+   hover and press lift to brandeis 300 → 50, because brandeis-500 is only 2.77:1 here. The rule drops
    to neutral-700 so a twelve-row block does not become a light ladder. */
 [data-surface='ink'] {
   --lcrd-title-ink: var(--color-white); /* 17.26:1 */
   --lcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --lcrd-marker-ink: var(--color-white); /* 17.26:1 */
   --lcrd-number-ink: var(--color-neutral-500); /* 5.41:1 — quieter, toward the ground */
+  --lcrd-cue-ink: var(--color-white); /* 17.26:1 */
   --lcrd-link-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 15.44:1 */
   --lcrd-rule-ink: var(--color-neutral-700); /* decoration */
@@ -217,13 +221,14 @@
 }
 
 /* ── Surface: blue ──────────────────────────────────────────────────────────────
-   The light end is the only end that clears AA: cue 100 → 50 rest → pressed, title/marker white,
-   body 50. Hover is the ground (600), pressed the ground (700) plus the cue's step. */
+   The light end is the only end that clears AA: the cue white at rest, 100 on hover and focus, 50
+   on press; title/marker white, body 50. Hover is the ground (600), pressed the ground (700) plus the cue's step. */
 [data-surface='blue'] {
   --lcrd-title-ink: var(--color-white); /* 6.23:1 */
   --lcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-marker-ink: var(--color-white); /* 6.23:1 */
   --lcrd-number-ink: var(--color-brandeis-200); /* 3.78:1 — quieter than 100's, clear of 3:1 */
+  --lcrd-cue-ink: var(--color-white); /* 6.23:1 */
   --lcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-rule-ink: var(--color-brandeis-300); /* decoration */

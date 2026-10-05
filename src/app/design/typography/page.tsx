@@ -306,7 +306,7 @@ const SURFACES = [
   },
   {
     surface: 'blue',
-    note: 'nothing may be blue to mean clickable, so the link is white and the underline carries the whole affordance. The quote rule is the one peridot in the system.',
+    note: 'nothing may be blue to mean clickable, so the link is white and the underline carries the whole affordance. The quote rule is white, as on Proof.',
   },
 ] as const;
 
@@ -328,9 +328,6 @@ function SurfaceFlow() {
       <ul>
         <li>
           Inline code takes a ground: <code>--prose-code-bg</code>
-        </li>
-        <li>
-          A <mark>highlighted passage</mark> is peridot on every surface
         </li>
         <li>
           Muted text — <small>a caption, a note, a source</small>
@@ -974,7 +971,7 @@ export default function TypographySpecimenPage() {
               <h3>Inline marks</h3>
               <p>
                 The set an editor can actually produce: <strong>strong</strong>,{' '}
-                <em>emphasis</em>, <mark>a highlight</mark>, <del>a deletion</del>,{' '}
+                <em>emphasis</em>, <del>a deletion</del>,{' '}
                 <ins>an insertion</ins>, <a href="/design/icon">a link</a>, <code>code</code>,
                 an abbreviation like <abbr title="Cascading Style Sheets">CSS</abbr>, a footnote
                 marker<sup>1</sup>, a subscript<sub>2</sub>, and <small>small print</small>.

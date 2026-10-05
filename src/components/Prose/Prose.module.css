@@ -327,8 +327,14 @@
 }
 
 /* ── Inline marks ────────────────────────────────────────────────────────────────────────────
-   The six a rich-text editor can actually produce, plus abbr. `small` reads as the caption role
-   rather than a percentage of whatever it sits in, so it holds its size inside a heading. */
+   The ones a rich-text editor can actually produce, plus abbr. `small` reads as the caption role
+   rather than a percentage of whatever it sits in, so it holds its size inside a heading.
+
+   No `mark` rule, on purpose. The website does not highlight text — the band behind a marked
+   phrase is a social-media device (ch10), and peridot on the website is ::selection and an
+   illustration's carried item only (visual-direction § 4.4, 6 Oct 2026). A <mark> an editor
+   produces keeps its semantics and renders as the text around it; reset.css removes the UA's
+   yellow everywhere, so the answer does not depend on the element arriving through Prose. */
 .prose strong,
 .prose b {
   font-weight: var(--font-weight-semibold);
@@ -337,11 +343,6 @@
 .prose em,
 .prose i {
   font-style: italic;
-}
-.prose mark {
-  background: var(--prose-mark-bg);
-  color: var(--prose-mark-ink);
-  padding-inline: var(--prose-code-padding-x);
 }
 .prose del {
   text-decoration: line-through;

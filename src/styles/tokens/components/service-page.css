@@ -4,13 +4,17 @@
    service lines' designed copies (tracker 3.1/3.2 proposal, 29 Sep 2026).
 
    Naming: --svc-{part}-{role}
-     parts: ink | rule | node | link | sheet | slot | slice
+     parts: ink | rule | link | sheet | slot | slice
 
    One layer for the template rather than one per composition: the compositions live and die
    together as the service page's vocabulary, and every one of them draws from the same six
    surface roles. If one graduates into a pattern, its tokens move with it.
 
-   Every surface restates every token (CLAUDE.md § Tokens rule 2). */
+   Every surface restates every token (CLAUDE.md § Tokens rule 2).
+
+   No --svc-node. It painted Thread's connecting arrows brandeis-500 at rest on paper and tint
+   (brandeis-200 on ink), and an arrow at rest is ink (visual-direction § 4.3, 6 Oct 2026): the
+   arrows now read --svc-ink, the nodes' own label ink, so a token that only restated it went. */
 
 /* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
@@ -45,7 +49,6 @@
   --svc-ink-label: var(--color-neutral-700); /* 8.14:1 */
   --svc-rule: var(--color-neutral-200);
   --svc-rule-strong: var(--color-neutral-400);
-  --svc-node: var(--color-brandeis-500);
   --svc-link-ink: var(--color-brandeis-500);
   --svc-link-ink-hover: var(--color-brandeis-600);
   --svc-sheet-ground: var(--color-paper-deep);
@@ -62,7 +65,6 @@
   --svc-ink-label: var(--color-neutral-800); /* 10.54:1 */
   --svc-rule: var(--color-neutral-300);
   --svc-rule-strong: var(--color-neutral-500);
-  --svc-node: var(--color-brandeis-500);
   --svc-link-ink: var(--color-brandeis-500);
   --svc-link-ink-hover: var(--color-brandeis-600);
   --svc-sheet-ground: var(--color-paper);
@@ -79,7 +81,6 @@
   --svc-ink-label: var(--color-neutral-300); /* 11.07:1 */
   --svc-rule: var(--color-neutral-800);
   --svc-rule-strong: var(--color-neutral-700);
-  --svc-node: var(--color-brandeis-200);
   --svc-link-ink: var(--color-brandeis-300);
   --svc-link-ink-hover: var(--color-brandeis-200);
   --svc-sheet-ground: var(--color-neutral-900);
@@ -96,7 +97,6 @@
   --svc-ink-label: var(--color-brandeis-50); /* 5.57:1 */
   --svc-rule: var(--color-brandeis-400);
   --svc-rule-strong: var(--color-brandeis-300);
-  --svc-node: var(--color-paper);
   --svc-link-ink: var(--color-white);
   --svc-link-ink-hover: var(--color-brandeis-100);
   --svc-sheet-ground: var(--color-brandeis-600);

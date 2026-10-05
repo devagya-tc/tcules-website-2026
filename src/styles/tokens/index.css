@@ -59,6 +59,23 @@
    · A genuinely one-off value — a logotype, a diagram label — stays inline with a
      comment. It does not get a name that suggests it is reusable.
 
+   ── Blue, and peridot ───────────────────────────────────────────────────────────
+   Blue means "this is where you act" or "this is the system": actions, links, our
+   drawings and the texture (visual-direction § 4, 6 Oct 2026). It is spent in
+   tiers. FREE, never counted: focus rings, link hover and pressed, the current
+   marker in nav, TOC and slider pager, input focus, the whole-card hover cue.
+   ACCENT: the solid primary button. SIGNAL: primary-tone links (one kind per
+   band), a Proof's quote rule, a diagram's blue line. FIELD: an illustration.
+   TEXTURE: a Texture placement.
+   The band rule: a band spends at most two of Accent, Signal, Field and Texture.
+   Never blue at rest on paper or tint: headings, eyebrows, card titles, body,
+   stat numerals, Tag chips, list markers, step numbers, icons, card arrows and
+   hairline rules — each of those takes the surface's ink, and goes blue only as a
+   Free state. No band ground is blue.
+   Peridot is ::selection (globals.css) and an illustration's carried item, nothing
+   else. tokens:check fails any component layer or *.module.css that reads
+   --color-peridot-*; the ramp's declarations in primitives.css stay.
+
    ── Adding a component layer ───────────────────────────────────────────────────
    Copy the shape of tokens/components/button.css: geometry in :root, then one block
    per surface. Name tokens --{abbrev}-{variant}-{part}-{state}, add the file to the

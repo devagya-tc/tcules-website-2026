@@ -204,8 +204,8 @@ Static rows have only rest. They do not respond to a pointer and do not enter th
 
 | State           | Trigger                              | Parts that move                                                                              |
 | --------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
-| rest            | Base rendering                       | Nothing moves. Title, body and marker hold their own inks; the cue holds `--lcrd-link-ink`   |
-| hover           | Pointer over a linked frame          | Row: the frame paints `--lcrd-ground-hover`. Tile (1 Oct 2026): no ground; the opening rule takes `--lcrd-link-ink`. Nothing else moves — the cue holds its rest ink |
+| rest            | Base rendering                       | Nothing moves. Title, body and marker hold their own inks; the cue is ink, `--lcrd-cue-ink` (6 Oct 2026) |
+| hover           | Pointer over a linked frame          | Row: the frame paints `--lcrd-ground-hover`. Tile (1 Oct 2026): no ground; the opening rule takes `--lcrd-link-ink`. Both: the cue takes `--lcrd-link-ink` (6 Oct 2026) |
 | focus, keyboard | `:focus-visible` on a linked frame   | Exactly the hover rendering plus the two-part ring from `--lcrd-ring-color` and `--lcrd-ring-gap-color` |
 | pressed         | Pointer activation on a linked frame | The ground steps to `--lcrd-ground-pressed` and the cue to `--lcrd-link-ink-pressed`           |
 
@@ -254,6 +254,7 @@ ground: `--color-paper`, `--color-paper-deep`, `--color-neutral-950` and
 | `--lcrd-body-ink`         | `--color-neutral-700` — 8.14:1                  | `--color-neutral-700` — 7.27:1                  | `--color-neutral-300` — 11.07:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--lcrd-marker-ink`       | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
 | `--lcrd-number-ink`       | `--color-neutral-500` — 3.16:1                  | `--color-neutral-600` — 4.39:1                  | `--color-neutral-500` — 5.41:1                  | `--color-brandeis-200` — 3.78:1             |
+| `--lcrd-cue-ink`          | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
 | `--lcrd-link-ink`         | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-brandeis-100` — 4.91:1             |
 | `--lcrd-link-ink-pressed` | `--color-brandeis-700` — 10.07:1                | `--color-brandeis-700` — 8.99:1                 | `--color-brandeis-50` — 15.44:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--lcrd-rule-ink`         | `--color-neutral-300` — n/a, decoration         | `--color-neutral-400` — n/a, decoration         | `--color-neutral-700` — n/a, decoration         | `--color-brandeis-300` — n/a, decoration    |
@@ -263,9 +264,9 @@ ground: `--color-paper`, `--color-paper-deep`, `--color-neutral-950` and
 | `--lcrd-ring-gap-color`   | `--color-paper` — paired ring 6.17:1            | `--color-paper-deep` — paired ring 5.51:1       | `--color-neutral-950` — paired ring 7.32:1      | `--color-brandeis-500` — paired ring 6.23:1 |
 
 **Paper.** The title sits at neutral-900 whether or not the row navigates, while the body drops to
-neutral-700 so a row reads title first without sacrificing AA. The cue is brandeis-500 at rest and
-holds through hover, stepping to 700 on press; hover is carried by the row's neutral-100 ground
-(§ 5, 26 Aug). The cue is the only ink in the row that moves. The neutral-300 rule is
+neutral-700 so a row reads title first without sacrificing AA. The cue is neutral-900 at rest, takes
+brandeis-500 on hover and focus and 700 on press (6 Oct 2026, below); hover is also carried by the
+row's neutral-100 ground (§ 5, 26 Aug). The cue is the only ink in the row that moves. The neutral-300 rule is
 deliberately quieter than text and stays at that one value in every state.
 
 **The number is not the marker, for colour.** `--lcrd-marker-ink` keeps the title's ink for the icon
@@ -1074,3 +1075,17 @@ linked tiles with unequal bodies, and title-only rows and tiles.
 Both were the template's device, not the item's: "May be" reads as the first words of the body, and
 a route's condition is its body. No `eyebrow` prop was added.
 
+## Amendment · 6 Oct 2026 — `fdn-colour` (visual-direction § 4.2, § 4.3)
+
+- **The cue is ink at rest.** New `--lcrd-cue-ink`: neutral-900 on paper and tint, white on ink and blue.
+  `--lcrd-link-ink` (unchanged values) is now the cue's hover and focus ink as well as the tile rule's;
+  `--lcrd-link-ink-pressed` is unchanged. "Card arrows at rest are ink. They go blue on hover or focus"
+  (§ 4.3); the whole-card hover cue is blue's Free row (§ 4.2), so it spends nothing in the band rule.
+- **This supersedes "the cue holds through hover"** in § 5 and § 6. That model worked because the rest
+  ink was already blue; once rest is ink, holding through hover would leave a linked row with no blue at
+  all until the click. Hover now moves two things (ground and cue) and press steps both once more. The
+  hover-column ratios in § 6 for the cue are now `--lcrd-link-ink` on the hover ground — the same values
+  the table gives for the rest ink on that ground (5.22, 4.63, 6.26, 5.99), because they are the same
+  token.
+- `--lcrd-number-ink` was already neutral on paper and tint (3.16 and 4.39:1); § 4.4's inventory lists it
+  and it needed no change.

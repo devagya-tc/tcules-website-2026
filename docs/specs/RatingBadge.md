@@ -37,7 +37,8 @@ together; the star holds. Focus ring per surface. Reduced motion: instant.
 ## Surfaces
 
 All four declare every token (values as the footer badge shipped): paper and tint in neutral ink with a
-brandeis star; ink lifts to neutral-300 with a brandeis-300 star; blue runs brandeis-50 with a white star.
+neutral-900 star (brandeis-500 until 6 Oct 2026, see the amendment below); ink lifts to neutral-300 with a
+brandeis-300 star; blue runs brandeis-50 with a white star.
 
 ## Placements
 
@@ -69,3 +70,11 @@ prevents. A checked-on date is not shown, matching the footer; if the owner want
   sitting a hair inside its drawn capitals. The trim (`text-box: trim-both cap alphabetic`) is what makes
   the result independent of the line box; where it is unsupported (Firefox today) the line box returns.
 
+## Amendment · 6 Oct 2026 — `fdn-colour` (visual-direction § 4.3)
+
+- **The star is ink on paper and tint.** `--rbadge-star-ink` brandeis-500 → neutral-900 on both. An icon
+  at rest is never blue on a light ground (§ 4.3, "icons are ink"); blue is spent on where you act, and the
+  badge's link state already takes it on hover (`--rbadge-ink-hover`), so nothing about the affordance
+  changes.
+- **Ink and blue are unchanged.** The live badge sits in the ink footer, and chrome keeps its approved
+  colours (§ 4.3). Blue's star was already white.

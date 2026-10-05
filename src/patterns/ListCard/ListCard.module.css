@@ -286,13 +286,19 @@
   min-inline-size: 0;
 }
 
-/* The row's only link-coloured part. It holds this ink through hover and steps once on press, which
-   is ghost's model: a Button's background moves under the pointer and its foreground waits for the
-   click. A ground arriving across 1240px and a glyph changing shade are one event, so they are not
-   signalled twice. */
+/* The row's only link-coloured part, and only while it is the target. At rest the arrow is ink,
+   like every card arrow (visual-direction § 4.3, 6 Oct 2026): a column of blue arrows down a set is
+   exactly the spray § 4 rules out. It takes the link ink on hover and focus — the whole-card hover
+   cue is blue's Free row (§ 4.2) — and steps once more on press. This replaces the earlier "holds
+   through hover" model (25–26 Aug), which only worked because the rest ink was already blue. */
 .cue {
-  color: var(--lcrd-link-ink);
+  color: var(--lcrd-cue-ink);
   transition: color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
+}
+
+.root .link:hover .cue,
+.root .link:focus-visible .cue {
+  color: var(--lcrd-link-ink);
 }
 
 /* Higher specificity than globals.css's bare anchor rules. The anchor carries NO link colour of its
@@ -333,7 +339,7 @@
   background-color: var(--lcrd-ground-pressed);
 }
 
-/* Press alone. There is deliberately no `:hover .cue` rule above this one — see .cue. */
+/* Press steps the cue past its hover ink — see .cue. */
 .root .link:active .cue {
   color: var(--lcrd-link-ink-pressed);
 }

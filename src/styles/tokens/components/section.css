@@ -45,12 +45,9 @@
 --sec-rail:180px;        /* literal: the left column a running head or margin note sits
                             in. Column geometry, like --lay-track-*. */
 
-/* Highlight — surface-INDEPENDENT, so it lives here rather than in the surface blocks.
-   A highlight brings its own ground (Peridot) and its own ink, so the pair is legible
-   wherever it lands and does not need restating per surface. Marker/emphasis only;
-   Peridot never fills an action. */
---sec-highlight:var(--color-peridot-500);
---sec-highlight-ink:var(--color-neutral-900);
+/* No highlight pair. --sec-highlight / --sec-highlight-ink (peridot-500 under neutral-900) were
+   deleted on 6 Oct 2026: nothing read them, and the website does not highlight text
+   (visual-direction § 4.4). Selection is globals.css's one ::selection rule. */
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────

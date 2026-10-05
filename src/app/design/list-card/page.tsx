@@ -139,19 +139,19 @@ const LINKED = [
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
-    note: 'Neutral-900 title and marker, neutral-700 body; the cue alone is brandeis, 500 → 700 rest to pressed, and hover is a neutral-100 ground.',
+    note: 'Neutral-900 title, marker and cue at rest, neutral-700 body; the cue takes brandeis-500 on hover and focus and 700 on press, and hover is also a neutral-100 ground.',
   },
   {
     surface: 'tint',
-    note: 'The text and cue ramps still pass unchanged; the decorative rule steps to neutral-400.',
+    note: 'The text and cue ramps still pass unchanged — the cue neutral-900 at rest, brandeis on hover; the decorative rule steps to neutral-400.',
   },
   {
     surface: 'ink',
-    note: 'Title and marker lift to white, body to neutral-300, and the cue lifts to 300 → 50 rest to pressed.',
+    note: 'Title, marker and the resting cue lift to white, body to neutral-300, and the cue goes 300 on hover, 50 on press.',
   },
   {
     surface: 'blue',
-    note: 'Only the light end clears AA: cue 100 → 50 rest to pressed, with a white focus ring against its blue gap.',
+    note: 'Only the light end clears AA: the cue white at rest, 100 on hover, 50 on press, with a white focus ring against its blue gap.',
   },
 ] as const;
 
@@ -184,6 +184,7 @@ const NESTED_SURFACE_TOKENS = {
     ['--lcrd-body-ink', '--color-neutral-700'],
     ['--lcrd-marker-ink', '--color-neutral-900'],
     ['--lcrd-number-ink', '--color-neutral-600'],
+    ['--lcrd-cue-ink', '--color-neutral-900'],
     ['--lcrd-link-ink', '--color-brandeis-500'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-700'],
     ['--lcrd-rule-ink', '--color-neutral-400'],
@@ -197,6 +198,7 @@ const NESTED_SURFACE_TOKENS = {
     ['--lcrd-body-ink', '--color-neutral-300'],
     ['--lcrd-marker-ink', '--color-white'],
     ['--lcrd-number-ink', '--color-neutral-500'],
+    ['--lcrd-cue-ink', '--color-white'],
     ['--lcrd-link-ink', '--color-brandeis-300'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-50'],
     ['--lcrd-rule-ink', '--color-neutral-700'],
@@ -814,10 +816,10 @@ export default function ListCardSpecimenPage() {
             <p>
               The static row has rest only. Point at, hold and Tab to the linked row: a{' '}
               <strong>ground</strong> appears under the whole row on hover and the{' '}
-              <strong>cue holds still</strong> — then press deepens the ground and steps the cue
-              together. That is <code>Button</code>&rsquo;s ghost model, values and state
-              machine both: a ghost button moves its background under the pointer and its label
-              only on the click. Hover moves one thing, press moves two. The target is up to
+              <strong>ink arrow turns blue</strong> — then press deepens the ground and steps the
+              cue again. The ground is <code>Button</code>&rsquo;s ghost steps; the arrow is ink at
+              rest like every card arrow, and blue only while the row is the target (the
+              whole-card hover cue, blue&rsquo;s free row, 6 Oct 2026). The target is up to
               1240px wide and about 82px tall, so the signal has to cover it, and it paints only
               under a pointer — a list of these is still a list of ruled rows, not a stack of
               tiles. Focus adds the surface-aware two-part ring on top, so keyboard focus is
@@ -843,11 +845,11 @@ export default function ListCardSpecimenPage() {
             {[
               [
                 'rest',
-                'Dark h4 title, quiet numeral, quiet base hairline, cue at --lcrd-link-ink.',
+                'Dark h4 title, quiet numeral, quiet base hairline, the arrow cue in ink (--lcrd-cue-ink).',
               ],
               [
                 'hover',
-                'The frame paints --lcrd-ground-hover across the whole row. The cue holds.',
+                'The frame paints --lcrd-ground-hover across the whole row and the cue takes --lcrd-link-ink.',
               ],
               ['focus', 'Exactly the hover rendering plus the two-part keyboard ring.'],
               [
