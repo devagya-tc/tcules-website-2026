@@ -56,7 +56,7 @@ Eyebrows fixed on the way (the owner's ruling is "never repeats the crumb", so a
 
 `src/lib/trail.ts` holds the one definition of "the same words", `sameLabel`, and everything that asks the question uses it: `heroTrail` (does the leaf repeat the title?), `eyebrowBesideTrail` (does the eyebrow repeat any crumb?) and PageHero's two development warnings (the same two questions, for a hero built by hand).
 
-Sections 1, 7, 9, 10, 14 and 15 below still describe the band; where they disagree with this block, this block wins. § 3 is amended in place.
+Sections 1, 2, 3, 6, 7, 9, 10, 14 and 15 below are amended in place for this block; each amendment is marked *5 Oct 2026*. Section 17 keeps its history: Q1 carries a note that the placement it settled is now option (b). Re-verified on 6 Oct 2026 after `fdn-spacing` and `fdn-colour` landed: a crawl from `/` over 168 pages finds 131 trails, every one inside the hero's band, none twice, every one a single line at 390, trail top 169 at 1470 and 161 at 390, no last crumb repeating its h1, no eyebrow repeating a crumb, and no PageHero or Breadcrumbs warning on any live route. These counts supersede the 5 Oct ones above (128 of 162, and the migration paragraph's 132): three more insight pages are reachable from `/` today, and each carries a trail. The crawl script and its output are in the session scratchpad, `kit/fdn/fdn-top/crawl-r3.json`.
 
 ## 1 · Identity
 
@@ -72,14 +72,14 @@ The ancestor trail: an ordered list of the pages above this one, ending in this 
 
 **Nearest existing component, and why this is not a prop on it.** `SiteNav`. It is the wrong home for three separate reasons: a trail is a statement about where this page sits rather than a control for going elsewhere; `SiteNav` renders once in the layout shell above the route, so a per-route value would have to be threaded through the shell to reach it; and it is a pattern, so it may not import this pattern — a `breadcrumb` prop would have to accept a rendered `ReactNode`, which is a worse API than a component that takes an array.
 
-**How many appear on a page.** Exactly one, on 128 of 129 routes, alone in its own `Section flush` band immediately above the hero's band (section 17 Q1, option c). Zero on `/`. Never two.
+**How many appear on a page.** Exactly one on every page whose hero has a trail of two or more items (131 of 168 crawled pages, 6 Oct 2026), always inside `PageHero`'s band, in its `trail` slot, 32 above the split (*5 Oct 2026*; until then alone in its own `Section flush` band immediately above the hero's, section 17 Q1). Zero on `/`, and zero on a top-level page whose h1 is its name, where `heroTrail` leaves a lone "Home" and renders nothing. Never two.
 
 ## 2 · Anatomy
 
 | Part | Element | Required | Content slot | Carries |
 |---|---|---|---|---|
-| `band` | `<Section as="div" surface flush>` | yes | none | the ground and the content column, nothing else. Genuinely `flush`: **no class on it, and no rule in this component touches a `Section`** |
-| `root` | `<nav aria-label="Breadcrumb">` | yes | none | the landmark, **and the band's vertical air** — `--gap-column` above, `--crumb-ring-clearance` below. Carried here rather than on the `Section` because `Section`'s `.flush` is the shorthand `padding-block: 0`, so a longhand on the band would tie it at (0,1,0) and let stylesheet order decide the trail's air. On the nav there is no contest to lose |
+| ~~`band`~~ | — | — | — | **Deleted 5 Oct 2026 (kit `fdn-top`).** The component renders no `Section`. It sits in `PageHero`'s band and reads that band's ground |
+| `root` | `<nav aria-label="Breadcrumb">` | yes | none | the landmark, and nothing else (*5 Oct 2026*). It held the band's vertical air until then (`--gap-column` above, `--crumb-ring-clearance` below), and both are deleted: the hero's 96 of top padding is the air above the trail, and the hero's `gutter` (32) the seam below it |
 | `trail` | `<ol>`, rendered by `Cluster as="ol"` | yes | none | both gaps: `colGap="inline"`, `rowGap="block"` |
 | `crumb` | `<li>` — bare for the first, `Cluster as="li"` for every other | yes, 2 or more | none | nothing of its own |
 | `link` | `<a href>` | one per item except the last | `items[i].label`, verbatim | link inks, `rule`, `hit`, the focus ring |
@@ -113,10 +113,10 @@ Two props, no knobs.
 
 | Not a prop | Why |
 |---|---|
-| ~~`surface`~~ | **Struck at build — it IS a prop, see the table above.** The claim that surface is "never a prop on anything" is true of a *control*, which sits inside somebody else's band and reads `data-surface` from an ancestor. It is false of a pattern that OWNS a band, and both shipped ones prove it: `SiteFooter` takes `surface` (defaulting to `ink`) and `SiteNav` takes it (defaulting to `paper`), because neither has an ancestor to ask. Once the trail owns its band it joins them. What remains true is that nothing sets `data-surface` on the *control* — this component sets it on its own `Section`, which is the sanctioned place |
+| `surface` | **Not a prop again since 5 Oct 2026.** From 20 Aug it was one, because a pattern that OWNS a band has no ancestor to read `data-surface` from (`SiteFooter` and `SiteNav` take it for that reason). Inside the hero's band the trail has that ancestor again, so it reads the ground as a `Button` does (token rule 7), and the original claim, true of anything that sits inside somebody else's band, holds |
 | colour, padding, gap, radius, height, width | The token layer owns colour; the primitives own distance; the component owns its own sizes. A caller with an opinion about any of these has an argument with the system, not a prop |
-| `className`, `style`, `id` | Unlike `Button`, this props type is closed. The only reason to reach in would be outer spacing, and this component's own band owns that |
-| `density`, `flush` | The band's air is not a caller decision. It is 64 above and 0 below on every route, for the two reasons section 7 gives, and a route that wanted otherwise would be a route whose trail sits differently from every other trail |
+| `className`, `style`, `id` | Unlike `Button`, this props type is closed. The only reason to reach in would be outer spacing, and the hero that places the trail owns that (*5 Oct 2026*; it was "this component's own band") |
+| `density`, `flush` | There is no band to set them on (*5 Oct 2026*). The air above the trail is the hero's top padding and the seam below it the hero's `gutter`, the same on every page, so a route that wanted otherwise would be a route whose trail sits differently from every other trail |
 | `separator` | The divider is a decision this spec makes once (section 6, section 17 Q2), not a per-caller choice. A trail with a different divider on one route is a bug |
 | `collapse`, `maxItems`, `expanded` | Collapse is depth-driven and unconditional — one depth per side of the md breakpoint since 29 Sep 2026, still no knob. A knob would let a route opt out of the constraint that exists for mobile |
 | `size`, `variant` | One size, one variant — see section 4 |
@@ -127,7 +127,7 @@ Two props, no knobs.
 
 **Compile errors, not review comments**
 
-1. Any prop other than `items` — the props interface is closed, no index signature, no `HTMLAttributes` spread. `surface`, `className`, `separator`, `size`, `children` all fail excess-property checking at the call site.
+1. Any prop other than `items` and `endsWith` (*5 Oct 2026*) — the props interface is closed, no index signature, no `HTMLAttributes` spread. `surface`, `className`, `separator`, `size`, `children` all fail excess-property checking at the call site.
 2. An item missing `label` or missing `href` — both are required on `BreadcrumbItem`. The last item's `href` is required and deliberately ignored at render, so the frontmatter mapper stays uniform and needs no special case for the leaf.
 3. Passing a mutable array where the component would mutate it is prevented by `readonly`; there is no in-place sort.
 4. Depth 0 and depth 1 are **runtime** cases, not compile errors, because the frontmatter loader's return type is `BreadcrumbItem[]` **[assumed]** — a non-empty tuple prop type would fail at all 128 call sites. Section 17 Q6 asks for the loader's type to be tightened, which would move both cases into this list.
@@ -202,7 +202,7 @@ The `rule` has **no colour token**. It paints `currentColor`, exactly as `Button
 
 **Nested surfaces.** The trail sets no surface and paints nothing: it reads `data-surface` from its nearest ancestor that declares one. Because all seven tokens are declared in all four blocks, a trail inside a `tint` panel nested in an `ink` `Section` renders the tint column — `--color-neutral-700` links at **7.27:1** on the tint ground, not `--color-neutral-400` stranded on `--color-paper-deep` at 1.90:1. (This spec first quoted 4.92:1 here, which is paper's number; the tint column's link ink is 700, not 600. The 1.90:1 figure it contrasts against is correct.) That is the measured failure the brief cites (a tint panel inside an ink section rendering text at 1.13:1), and it is a failure of a deltas-only table, not of a component. The specimen route has a band for exactly this case.
 
-**What Q1(c) adds to that.** The band the trail reads its surface from is now a `Section` containing nothing but the trail, so nothing else in it would look wrong first if the value were wrong — a mismatched trail band is legible only as a tonal seam under the nav, which is exactly the kind of defect that survives review. The trail band's `surface` and the hero band's `surface` are one decision made twice; section 14 carries the assertion that checks it.
+**What the hero placement adds to that (*5 Oct 2026*).** The trail and the h1 share one band, so they cannot disagree about the ground. Under Q1(c) the trail band's `surface` and the hero band's were one decision made twice, and a mismatch was legible only as a tonal seam under the nav, the kind of defect that survives review. That defect can no longer be expressed, so section 14's surface-match assertion is retired.
 
 ## 7 · Geometry & spacing
 
@@ -212,9 +212,9 @@ The `rule` has **no colour token**. It paints `currentColor`, exactly as `Button
 |---|---|---|
 | `link` → `divider` → `link` along the row | `--gap-inline` | `trail`'s `colGap`, and the inner `Cluster as="li"`'s `colGap`, both `inline`, so the divider has equal air on both sides |
 | Wrapped line to wrapped line | `--gap-block` | `trail`'s `rowGap` |
-| `band` to the hero below it | `--sec-padding-y` — 96, or 64 `tight` / 128 `open` | **the hero's own `Section`**. The trail contributes nothing to the *seam* — only the focus ring's 4px, the row below — so the gap that reads as the seam is the hero band's top padding, 64 with the hero at `tight`, for 68 in total. Contributing any here would make the two paddings add, which is the doubled seam that argued against a separate band in the first place |
-| `band` to the trail's own focus ring, below | `--crumb-band-ring-clearance` — 4 | **this component's own band.** Not a contribution to the seam; the hero band still supplies the 64 that reads as the gap. This is the ring's own reach, and the total distance from the trail's baseline row to the hero's first line is therefore 4 + 64 = 68 |
-| `band` to whatever precedes it (the sticky `SiteNav`) | `--gap-column` — 64 | **this component's own band.** Carried on the `<nav>` inside a `flush` `Section`, not on the `Section` — see the `root` row in section 2 for why a longhand on the band would have been decided by stylesheet order. 64 is required, not chosen: the `hit` extension reaches 23.15px above the label, and a band with no air there puts that under a bar which stacks above it. This is what closes Q9 |
+| trail to the hero's split below it (*5 Oct 2026*) | `--gap-gutter` — 32 | **`PageHero`'s** `Layout rowGap="gutter"`, its `top` part. The trail contributes nothing. The focus ring's 4px reach falls inside those 32, inside the same band, so nothing paints over it. Until 5 Oct the seam was the hero band's own top padding (64 at `tight`, plus the ring's 4) |
+| ~~`band` to the trail's own focus ring, below~~ | ~~`--crumb-band-ring-clearance`~~ | **Deleted 5 Oct 2026.** With the trail inside the hero the ring falls into the 32 above, which is the same band, so no clearance has to be held |
+| the sticky `SiteNav` to the trail (*5 Oct 2026*) | `--sec-padding-y` — 96 | **`PageHero`'s** `Section`. The `hit` extension reaches 23.15px above the label into those 96 and leaves about 73 clear of the nav, which is what keeps Q9 closed now that the trail owns no air. Until 5 Oct this was the trail band's own 64, carried on the `<nav>` inside a `flush` `Section` |
 
 `--gap-inline` on both sides of the solidus makes the trail read as one phrase — the way `Home / Services / Product Design` reads when it is typed — rather than as four separated items, which is what `--gap-tight` on both sides gave. `--gap-block` between wrapped lines is not a rhythm choice: it is the largest step `Cluster` accepts, and it is there for the touch targets (section 9).
 
@@ -223,7 +223,7 @@ The `rule` has **no colour token**. It paints `currentColor`, exactly as `Button
 | Name | Token | Value | Measured against |
 |---|---|---|---|
 | `sm` label box | — | **20.85px** — an 18.85px line box plus 2px | `--text-caption` 13px × 1.45 gives the 18.85px line box; `link` then carries `--crumb-link-rule-offset` as `padding-block-end`, which is what holds the rule INSIDE the box. Corrected at build from a flat 18.85: with the band contributing nothing downward, a rule positioned below the box was outside the band and was painted over by the next one, so the underline rendered nowhere. Every number below derives from 20.85, not 18.85 |
-| band ring clearance | `--crumb-band-ring-clearance` | 4px | `--crumb-ring-offset` + `--crumb-ring-width`. The focus ring is a box-shadow and always draws outside the label's box; below the box that is outside the *band*, so without this the bottom of a focus ring is painted over |
+| ~~band ring clearance~~ | ~~`--crumb-band-ring-clearance`~~ | — | **Deleted 5 Oct 2026** with the band (section 7(a)) |
 | hit floor | `--crumb-hit-min` | 44px | `--btn-hit-min` 44px. A trail link and a `Button` with `extendHitArea` have the same touch target, so a thumb learns one size for the whole site |
 | narrowest specified track | — | 256px (`--lay-track-sm`) | a 4-item collapsed trail measures about 317px at `--text-caption`, so 256px is the width at which it takes two lines and still overflows nothing. Below that it renders, breaking inside labels |
 
@@ -274,33 +274,37 @@ The current page differs from its ancestors by **ink only** — `--color-neutral
 
 **Touch targets — 44px, by extending the hit area past the box.** `link` carries the `hit` extension: a transparent `::before` pinned to the inline edges of the label, `--crumb-hit-min` tall — the same mechanism `Button` uses for `extendHitArea`, and the reason the row does not move. The alternative, stepping the size up on touch, is not available: it would mean changing a type role or a box height at a breakpoint.
 
-**It is anchored to the bottom of the box and grown UPWARD, not centred on it**, and that is a build correction rather than a detail. Centred, (44 − 20.85) / 2 = 11.575px of the target sits below the box — which is below the *band*, because the band contributes nothing downward, and the next band paints over it. The target would have been silently cut to about 36px on the one component whose targets are already the tightest on the site, with every check green. Anchored to the bottom it reaches 44 − 20.85 = **23.15px above the box**, entirely inside the band's own 64 of top air.
+**It is anchored to the bottom of the box and grown UPWARD, not centred on it**, and that is a build correction rather than a detail. Centred, (44 − 20.85) / 2 = 11.575px of the target sits below the box — which is below the *band*, because the band contributes nothing downward, and the next band paints over it. The target would have been silently cut to about 36px on the one component whose targets are already the tightest on the site, with every check green. Anchored to the bottom it reaches 44 − 20.85 = **23.15px above the box**, entirely inside the air above it: the band's own 64 until 5 Oct 2026, the hero's 96 since.
 
 **The wrapped-line overlap is gone, and it was removed rather than argued away.** This spec previously recorded a defect it accepted: at an 18.85px box the wrapped line pitch was 42.85px, under the 44px target, so two adjacent lines' targets overlapped by 1.15px, and the spec reasoned about which crumb won the ambiguous band. Holding the rule inside the box makes the box 20.85px, so the pitch is **44.85px** — greater than the target — and consecutive lines now clear each other by **0.85px**. Nothing overlaps, so there is no tie to break. That the fix for the invisible underline also removed this is not a coincidence: both were caused by the same thing, geometry hanging below a box that had nothing below it.
 
-**The other consequence — raised as Q9, now closed inside the component.** The `hit` extension reaches 23.15px above the label box. When the band was `flush` that overshoot lay under the sticky `SiteNav`, which carries a higher stacking level (`--nav-z` against this component's `--z-base`), and the top of every trail link's target was occluded. **The band's own 64 of top air is what fixes it** — 64 against 23.15 clears it comfortably — and that is the reason the band's air is asymmetric rather than flush. Q9 is closed.
+**The other consequence — raised as Q9, now closed inside the component.** The `hit` extension reaches 23.15px above the label box. When the band was `flush` that overshoot lay under the sticky `SiteNav`, which carries a higher stacking level (`--nav-z` against this component's `--z-base`), and the top of every trail link's target was occluded. **The band's own 64 of top air is what fixed it** — 64 against 23.15 cleared it comfortably — and that was the reason the band's air was asymmetric rather than flush. *5 Oct 2026:* the trail has no band now, and the hero's 96 of top padding does the same job with more room, so Q9 stays closed.
 
 **One thing that had to be fixed for either number to be true.** The 18.85px label box is only the label box if every anchor has the same box, and at first they did not: the first crumb is a bare `<li>`, so its anchor was an ordinary inline box (~13px, the font's content area), while every other anchor is a direct child of a `Cluster as="li"` and was blockified to the full 18.85px line box. Both pseudo-elements are positioned against that box, so the rule sat tight under the first label and ~5px below all the others — which reads as the underline working on the first crumb and nowhere else — and the 44px hit was centred on two different boxes. `link` therefore takes `display: inline-block`, which makes the box the line box in both contexts. `SiteFooter`'s `.link` and `Button`'s `.label` do the same, for the same reason: a text link that draws its own rule needs a box it can rely on.
 
 ## 10 · Composition
 
 ```jsx
-// The page (or the template) writes two siblings, and the trail brings its own band with it.
-// PageHero is a pattern and Breadcrumbs is a pattern, so neither may import the other; with a
-// band each, neither has to. The two `surface` values are one decision made twice: they must
-// match, or the seam between the bands reads as a two-tone split.
-//
-// Direct children of the page. NOT inside a Section — the content column would inset twice —
-// and NOT inside a Layout, which arranges rows, not bands.
-<Breadcrumbs items={frontmatter.navigation.breadcrumb} surface="paper" />
+// The route or template writes ONE thing, the hero, and hands it the trail (5 Oct 2026, kit
+// fdn-top; until then two sibling bands). PageHero is a pattern and Breadcrumbs is a pattern, so
+// neither imports the other: the caller renders the trail and passes the node into the slot.
+// heroTrail (src/lib/trail.ts) builds the node and its labels from one array, drops a last item
+// that repeats the title (so the trail ends at the parent), and returns undefined for a lone Home.
+<PageHero
+  trail={heroTrail(frontmatter.navigation.breadcrumb, title, (t) => <Breadcrumbs {...t} />)}
+  title={title}
+  …
+/>
 
-<Section surface="paper" density="tight">
-  <PageHero … />                       {/* this band's TOP padding IS the trail → hero seam: 64,
-                                            because the trail's band gives 0 downward */}
+// Inside PageHero: 96 of the band's padding above the trail, 32 (gutter) to the split
+<Section surface={surface}>
+  <Layout rowGap="gutter">
+    {trail.crumbs}
+    {split}
+  </Layout>
 </Section>
 
-// Inside Breadcrumbs
-<Section as="div" surface={surface} flush className={band}>            {/* band: 64 above, 0 below */}
+// Inside Breadcrumbs: no Section, no air of its own
 <nav aria-label="Breadcrumb">                                          {/* root: landmark only */}
   <Cluster as="ol" colGap="inline" rowGap="block" align="baseline">    {/* trail: both axes */}
 
@@ -326,12 +330,11 @@ The current page differs from its ancestors by **ink only** — `--color-neutral
 
   </Cluster>
 </nav>
-</Section>
 ```
 
 `Cluster` provides every arrangement, on both axes: `colGap="inline"` on the inline axis of `trail` and of each multi-child `crumb`, `rowGap="block"` on the block axis of `trail`. The first `crumb` has one child and needs no arrangement, so it is a bare `<li>`. Each other `crumb` is `nowrap`: **the trail wraps between crumbs, never inside one**, so a divider can never be stranded at the end of a line from the label it belongs to. A single label longer than the track still wraps inside itself — `nowrap` governs the two flex children, not the text inside one of them. `colGap` is stated wherever a `Cluster` has more than one child on the inline axis, and `columns` is never set anywhere in this component, so no `colGap` is stated for a column seam that does not exist.
 
-The trail band takes no `Layout`. It has one child, so there is no axis to state, and an axis nobody states renders 0 — which is the right answer for a band holding a single element rather than an omission.
+The component takes no `Layout`. The `<nav>` has one child, so there is no axis to state, and an axis nobody states renders 0 — which is the right answer for a landmark holding a single list rather than an omission. The seam below the trail is the hero's (*5 Oct 2026*; this paragraph used to say the same of the trail's own band).
 
 **Restated:** no hand-rolled grid or flex — every gap above comes from `Cluster`. No margins on any child, anywhere; the container owns the gap, and the only `margin` in the module is the negative `--space-1` inside the visually hidden count string, which is a clipping technique and not spacing. Nothing in this component sets a background, a colour, a horizontal padding or a `max-width` on or over a `Section`.
 
@@ -412,13 +415,13 @@ The rule's wipe is **the existing precedent, not a second one**: it is the same 
 
 **Do**
 
-1. Every route except `/` renders exactly one `<nav aria-label="Breadcrumb">`. *Decided by:* a route-level test over all 129 routes counting the landmark. **Not yet decidable — deferred:** no page consumes `Breadcrumbs` yet, so there is nothing to count. This becomes live the day a template adopts it.
+1. Every page renders at most one `<nav aria-label="Breadcrumb">`, and every page whose hero is handed a trail renders exactly one. *Decided by:* the crawl from `/` (*6 Oct 2026*: 168 pages, 131 with one landmark, none with two). It was deferred until a page consumed the component; all 20 live routes and both templates do now.
 2. `items` at every call site is the frontmatter value. *Decided by:* `grep -rn "items={\[" src/app` returning no `Breadcrumbs` call site. **Not yet decidable — deferred, same reason.** The specimen route is the one legitimate exception in perpetuity: `/design/breadcrumbs` builds its trails from local fixture data on purpose, because a proving ground has no frontmatter, and its deep paths are deliberately absent from `src/lib/routes.ts` rather than polluting the route table with paths the site does not have.
 3. Depth 4, 6, 8 and 16 all render exactly 4 `<li>`. *Decided by:* a rendered-DOM snapshot per depth.
 4. The `<li>` count minus the `divider` count is exactly 1, at every depth. *Decided by:* the same snapshots.
-5. The last `<li>` contains no `<a>` and carries `aria-current="page"`. *Decided by:* a rendered-DOM assertion.
-6. All eight `--crumb-*` colour tokens appear in all four surface blocks — 32 declarations. *Decided by:* the existing build check, or `grep -c "\-\-crumb-" src/styles/tokens/components/breadcrumbs.css` per block.
-7. Every `Breadcrumbs` call site is a **direct child of the page** — never inside a `Section` and never inside a `Layout` — and its `surface` equals that of the `Section` immediately after it. *Decided by:* a rendered-DOM assertion per route — the `<nav>` inside the trail's band has a computed `padding-block-start` of `64px` and `padding-block-end` of `4px` (the air is on the nav, not the `Section`, which is genuinely `flush`), the trail's nearest enclosing `[data-surface]` **is its own band**, and that value matches the next sibling band's. Re-cut at build: the trail owns its band now, so the old form of this item ("the only child of a `<Section flush>`") is false by construction, and Q9 no longer bears on it. **Route coverage is still deferred with 1 and 2** — no page consumes the component yet — but the assertion itself is now decidable on the specimen route.
+5. With `endsWith="page"` the last `<li>` contains no `<a>` and carries `aria-current="page"`; with `endsWith="parent"` (*5 Oct 2026*) the last `<li>` is a link and nothing in the trail is `aria-current`. *Decided by:* a rendered-DOM assertion, and the specimen's endsWith band.
+6. All seven `--crumb-*` colour tokens appear in all four surface blocks — 28 declarations (eight and 32 until `--crumb-collapse-ink` was deleted on 29 Sep 2026). *Decided by:* `tokens:check`, which fails a surface block that omits one.
+7. Every `Breadcrumbs` renders inside `PageHero`'s band, in its `trail` slot (*5 Oct 2026*; this item asserted the opposite, a direct child of the page in a band of its own, until then). *Decided by:* the crawl, which checks that each `<nav aria-label="Breadcrumb">` has the h1's `<section>` as its nearest band and that band's `data-surface` as its nearest surface (*6 Oct 2026*: 131 of 131). The surface-match half is retired: one band cannot disagree with itself.
 
 **Every grep below strips comments first.** Added at build, and it is not a loosening: this file's
 module comments name what is deliberately absent — "No `text-transform`", "No `display: grid`" —
@@ -444,12 +447,12 @@ Verified at build with comments stripped: `text-transform` 0 · `display` 0 · `
 11. No `display: grid` or `display: flex` in the module. *Decided by:* grep → zero. Arrangement is `Cluster`.
 12. No `:has(`, no `@container`, no selector that walks upward. *Decided by:* grep → zero.
 13. No `surface`, `className`, `style` or `separator` on any `Breadcrumbs` call site. *Decided by:* the type check failing the diff.
-14. No `Breadcrumbs` inside `SiteNav`, `SiteFooter` or `PageHero`. *Decided by:* `grep -rn "Breadcrumbs" src/patterns` → zero, plus the pattern-import lint rule.
+14. No pattern imports `Breadcrumbs`, and nothing renders it inside `SiteNav` or `SiteFooter`. `PageHero` places the node it is handed in `trail`; the routes and the two templates (ServicePage, CaseStudyIndex) render it only to hand it over (*5 Oct 2026*). *Decided by:* the pattern-import lint rule (a pattern may not import `@/patterns`), plus PageHero's imports: `@/components` and `@/lib` only.
 15. No second `--crumb-*` colour token introduced without its four declarations. *Decided by:* the build check that fails on a token declared on one surface only.
 
 ## 15 · Specimen plan — `/design/breadcrumbs`
 
-Every trail below is the real component with real labels. **Re-cut at build for the owned band:** the trail brings its own `Section`, so it can only be a top-level sibling on this route — never inside a `Specimen`, which is a `Layout`, and never inside another `Section`. Each trail's note therefore sits in its own band *below* it, which puts 64 between a trail and its note and 128 between groups, because the trail band gives 0 downward. The route reads as five shapes: a surface ladder, a depth ladder, a hero-scale in-situ band, a state reference table, and a stress list.
+Every trail below is the real component with real labels. **Re-cut 5 Oct 2026 (kit `fdn-top`):** the trail renders no band now, so every band on the route is a `Section` holding `Specimen`s, and a trail sits inside a `Specimen` like any other control. The four surface ladders are four `Section`s; the in-situ band is a real `PageHero` with a `trail`, under the harness's stand-in for the sticky nav. The list below describes the 20 Aug cut where it differs; the route is the authority. *(20 Aug text:* the trail brings its own `Section`, so it can only be a top-level sibling on this route — never inside a `Specimen`, which is a `Layout`, and never inside another `Section`. Each trail's note therefore sits in its own band *below* it, which puts 64 between a trail and its note and 128 between groups, because the trail band gives 0 downward. The route reads as five shapes: a surface ladder, a depth ladder, a hero-scale in-situ band, a state reference table, and a stress list.*)*
 
 1. **Matrix — variant × size.** One cell, labelled "one variant, one size", with the sentence from section 4 about depth being the real dimension. Beside it, the depth ladder: depths 2, 3, 4, 6, 8 stacked in a `Layout rowGap="stack"`, each labelled with its authored depth and its rendered item count (2, 3, 4, 4, 4).
 2. **States.** Rest is the default and needs no prop. **No state in this component can be forced from outside** — there is no `active`, no `disabled`, no `expanded`. Hover, pressed and keyboard focus must be **pointed at, held, and tabbed to**; the band carries that note in place of the labelled state columns, plus **one reference row per state** — rest, hover, pressed, focus — each naming what moves and where to look, set in the eyebrow role against a description. Built as a four-row `Layout columns={[1, 3]}` rather than a drawing: a diagram of a colour change is less use than the sentence saying which two ramp steps it travels.
@@ -479,6 +482,8 @@ Nothing here is BLOCKING, which is what `Status: accepted` requires.
 **1 · Where the trail↔hero seam lives. Resolved — was BLOCKING.**
 `PageHero` is a pattern and so is this, so neither may import the other; something has to own the distance between them on 128 routes. Options: (a) the page template composes them as siblings in a `Layout rowGap="block"` inside the hero's `Section`; (b) `PageHero` gains a `breadcrumbs?: ReactNode` prop and the page passes the element in, the documented sibling escape hatch; (c) the trail gets its own `Section flush` band above the hero. **Recommendation was (a).** It changes no other component's API, keeps the trail inside the hero's `Section` so it inherits the hero's surface (some heroes are `blue`), and puts the one distance in the template that all 128 routes already share. (c) was argued against on the grounds that a separate band either doubles the vertical air or has to be flushed to fake being in the same one.
 
+> **Superseded 5 Oct 2026 (kit `fdn-top`, visual-direction § 2.1–2.2): option (b) is in effect.** `PageHero` has a `trail` slot and the caller passes the rendered trail into it, so the trail sits inside the hero's band, 32 above the split, under the band's 96 of top padding. The 1 Oct review found the trail's own 64-above band stacked on the hero's 96 and put a service page's h1 at 296; it is 222 now. What the 20 Aug recommendation wanted from (a), a trail that inherits the hero's surface, is what (b) now delivers. The (d) and (c) records below are history.
+>
 > **Re-resolved 20 Aug 2026, after the first build — a fourth option (d): the trail owns its band.** The owner's second instruction was that the trail sits in its own `Section` with tight air above and zero below, and that this is the only way it may ever be placed. Under (c) the *caller* wrote that `Section`; under (d) the *component* does. The difference is not cosmetic — it is what makes "the only way" true by construction rather than by convention, and it removes 128 chances to get the padding, the surface or the ordering wrong on a band no check can see.
 >
 > What (d) settles that (c) left open:
