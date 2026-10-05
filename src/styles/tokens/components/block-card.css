@@ -19,7 +19,8 @@
    No title state tokens. The title holds --bcrd-title-ink linked or not.
    No cta tokens, and no --bcrd-link-ink either. The cta is the shipped link Button rendered as a
    span, so Button's own layer supplies its type, its case and its three colour steps per surface
-   from --btn-link-primary-fg{,-hover,-pressed}. --bcrd-link-ink, -hover and -pressed were deleted
+   from --btn-link-neutral-fg{,-hover,-pressed}: ink at rest, blue on the card's hover, focus and
+   press (visual-direction § 4.2, § 4.3, 6 Oct 2026; it was the primary tone until then). --bcrd-link-ink, -hover and -pressed were deleted
    rather than left declared: the card has no link-coloured part of its own any more, and a colour
    nothing paints is a colour something will paint again.
    No media ink. --bcrd-media-ink coloured the icon fill, which was removed (spec § 17 Q14).

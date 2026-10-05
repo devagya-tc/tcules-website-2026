@@ -348,9 +348,12 @@
   text-decoration: line-through;
   color: var(--prose-ink-muted);
 }
+/* An insertion is underlined in the muted ink, as abbr is, and never in the link rule: a blue
+   underline at rest on text that does not navigate is a fake link, and a rule that is not an
+   action is neutral on paper and tint (visual-direction § 4.3, 6 Oct 2026). */
 .prose ins {
   text-decoration: underline;
-  text-decoration-color: var(--prose-link-rule);
+  text-decoration-color: var(--prose-ink-muted);
   text-underline-offset: var(--prose-link-underline-offset);
 }
 .prose small {

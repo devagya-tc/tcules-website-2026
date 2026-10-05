@@ -212,8 +212,8 @@ Deliberately not props:
 - `cue` and `cueIcon`: `href` is the single source of truth for whether the cta renders, and
   `arrow-right` is the system decision. `ctaLabel` opens the wording and nothing else — not the
   glyph, not the presence, not the placement.
-- `ctaEmphasis`, `ctaTone` and `ctaSize`: the cta is a link-emphasis primary `Button` and that is
-  the whole of it. A solid or ghost cta would be a real control inside a whole-card anchor, which
+- `ctaEmphasis`, `ctaTone` and `ctaSize`: the cta is a link-emphasis neutral `Button` and that is
+  the whole of it (primary until 6 Oct 2026; see the `fdn-colour` amendment at the end). A solid or ghost cta would be a real control inside a whole-card anchor, which
   section 11 forbids; a tone switch would put a second action colour in a card that has one link.
 - `imageRatio`: the two ratios belong to the two orientations, so a caller who wants the other one
   is asking for the other arrangement.
@@ -335,8 +335,8 @@ nevertheless declared again in all four surface blocks. Ratios are measured agai
 Six rows. Revision 3 added the media rule, on the house rule ladder `--media-capture-rule-ink` also
 uses, with no hover step; the card declares its own rather than reading Media's (token rule 6). `--bcrd-media-ink` went
 with the icon fill in 2.10 (section 17 Q14). `--bcrd-link-ink`, `-hover` and `-pressed` were **deleted**: the cta is a link
-`Button`, so its three steps per surface come from `--btn-link-primary-fg{,-hover,-pressed}` in
-`button.css`. The card no longer has a link-coloured part of its own, and a colour nothing paints is
+`Button`, so its three steps per surface come from `--btn-link-neutral-fg{,-hover,-pressed}` in
+`button.css` (`-primary-` until 6 Oct 2026, `fdn-colour`). The card no longer has a link-coloured part of its own, and a colour nothing paints is
 a colour something paints again. `BlockCard` does not read those `--btn-*` names either — it carries
 `data-btn-link-group` and `Button`'s own stylesheet resolves them.
 
@@ -568,7 +568,7 @@ The vertical grid tile:
             {body}
           </Layout>
           {href ? (
-            <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
+            <Button as="span" emphasis="link" tone="neutral" icon={<Icon name="arrow-right" />}>
               {ctaLabel}
             </Button>
           ) : null}
@@ -767,7 +767,7 @@ no transition) rather than shortening it. Keyboard focus keeps its ring.
 5. Show a static no-media card as a complete object with no blank action row; inspect its content
    box beside a linked peer and expect no border on either.
 6. Render identical markup on all four surface bands and inspect all five resolved `--bcrd-*`
-   colours plus the cta's three `--btn-link-primary-fg*` steps, including the two nested-surface
+   colours plus the cta's three `--btn-link-neutral-fg*` steps, including the two nested-surface
    proofs.
 7. Use `titleAs` to match the page outline while preserving h4 visual type; compare the heading map
    with the computed type token.
@@ -1155,6 +1155,22 @@ drop the "Read the case study" line; a subtle image zoom; the listing descriptio
 Specimen: band 21 (the case-study card at the corpus's extremes, the 87-character title at 326, no
 eyebrow);
 bands 6, 8 and 12 re-captioned for the rule, the cta rule and the new states.
+
+## Amendment · 6 Oct 2026 — `fdn-colour` (visual-direction § 4.2, § 4.3)
+
+- **The cta takes the neutral tone.** `tone="primary"` → `tone="neutral"` in `BlockCard.tsx`, so the
+  label and its `arrow-right` are `--btn-link-neutral-fg` at rest (neutral-900 on paper and tint, white
+  on ink and blue) and step to blue only through `data-btn-link-group` on the card's hover, focus and
+  press (brandeis-500 / 600 on paper and tint, 300 / 200 on ink, 50 / 100 on blue).
+- **Why.** § 4.2 puts "every per-card CTA" on the neutral link, and § 4.3 says "card arrows at rest are
+  ink". A primary cta painted one blue label and one blue arrow per linked card at rest, which is the
+  spray § 4 rules out; the whole-card hover cue is blue's Free row, so a linked set now spends nothing
+  in the band rule.
+- **What does not change.** Still no `ctaTone` prop: the tone is the system's decision, not the
+  caller's. The title still holds `--bcrd-title-ink` linked or not. The whole-card arrow after the
+  title (§ 3.1) is `cmp-feature`'s, and lands with its BlockCard changes.
+- Updated in place: § 3's "Deliberately not props", the § 6 colour-table note, the § 10 sketch, § 14
+  check 6, the `block-card.css` comment, and the specimen's nested-surface token list and notes.
 
 ## Appendix — self-audit
 

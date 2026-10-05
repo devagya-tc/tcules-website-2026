@@ -325,9 +325,9 @@ const NESTED_SURFACE_TOKENS = {
     ['--bcrd-title-ink', '--color-neutral-900'],
     ['--bcrd-body-ink', '--color-neutral-700'],
     ['--bcrd-eyebrow-ink', '--color-neutral-700'],
-    ['--btn-link-primary-fg', '--color-brandeis-500'],
-    ['--btn-link-primary-fg-hover', '--color-brandeis-600'],
-    ['--btn-link-primary-fg-pressed', '--color-brandeis-700'],
+    ['--btn-link-neutral-fg', '--color-neutral-900'],
+    ['--btn-link-neutral-fg-hover', '--color-brandeis-500'],
+    ['--btn-link-neutral-fg-pressed', '--color-brandeis-600'],
     ['--bcrd-ring-color', '--color-brandeis-500'],
     ['--bcrd-ring-gap-color', '--color-paper-deep'],
   ],
@@ -335,9 +335,9 @@ const NESTED_SURFACE_TOKENS = {
     ['--bcrd-title-ink', '--color-white'],
     ['--bcrd-body-ink', '--color-neutral-300'],
     ['--bcrd-eyebrow-ink', '--color-neutral-400'],
-    ['--btn-link-primary-fg', '--color-brandeis-300'],
-    ['--btn-link-primary-fg-hover', '--color-brandeis-200'],
-    ['--btn-link-primary-fg-pressed', '--color-brandeis-100'],
+    ['--btn-link-neutral-fg', '--color-white'],
+    ['--btn-link-neutral-fg-hover', '--color-brandeis-300'],
+    ['--btn-link-neutral-fg-pressed', '--color-brandeis-200'],
     ['--bcrd-ring-color', '--color-brandeis-300'],
     ['--bcrd-ring-gap-color', '--color-neutral-950'],
   ],
@@ -485,7 +485,7 @@ export default function BlockCardSpecimenPage() {
           </BandHead>
           <Specimen
             title="3 items · BlockCardSet · two from md, three from lg"
-            note="Linked service cards. Squint: three columns of dark type with a blue line at the foot of each, separated by the 32 gutter alone."
+            note="Linked service cards. Squint: three columns of dark type, each ending in an ink cta that goes blue on hover, separated by the 32 gutter alone."
           >
             <BlockCardSet items={SERVICES.slice(0, 3)} />
           </Specimen>
@@ -628,7 +628,8 @@ export default function BlockCardSpecimenPage() {
             Neither object draws a border on any side, in any state. The tile is bounded by the
             parent gutter alone, and its copy is flush to the media rather than inset from an
             edge that no longer exists. Compare the two titles: the linked one is the same dark
-            ink as the static one, and only the cta &mdash; a real link Button &mdash; is blue.
+            ink as the static one, and the cta &mdash; a real link Button in the neutral tone &mdash; is
+            ink too until the card is hovered or focused, when it goes blue.
           </BandHead>
           <Cards>
             <BlockCard
@@ -643,7 +644,7 @@ export default function BlockCardSpecimenPage() {
           </Cards>
           <Specimen
             title="Title ink · linked and static, side by side"
-            note="Inspect both computed colours. Both must be --bcrd-title-ink. Only the cta is blue, and Button owns that."
+            note="Inspect both computed colours. Both must be --bcrd-title-ink. The cta is --btn-link-neutral-fg at rest and goes blue only on hover, focus and press; Button owns that."
           >
             <Cards>
               <BlockCard

@@ -261,11 +261,17 @@ export function BlockCard({
 
      The Cluster is what keeps the cta at the copy's inline start. A grid item is blockified, so the
      Button's `inline-flex` would become `flex` and take the whole track, centring its label; a
-     Cluster starts its items. No gap is stated because there is one child. */
+     Cluster starts its items. No gap is stated because there is one child.
+
+     The tone is neutral: ink at rest, blue on the card's hover, focus and press (visual-direction
+     § 4.2, § 4.3, 6 Oct 2026). A per-card cta is the "every per-card CTA" § 4.2 names, and its arrow
+     is a card arrow, which is ink at rest. A primary cta painted one blue label and one blue arrow per
+     card at rest — six of each down a set — which is the spray § 4 rules out. The blue it keeps is
+     the whole-card hover cue, blue's Free row, so a linked set spends nothing in the band rule. */
   const cta =
     destination && !imageNode ? (
       <Cluster>
-        <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
+        <Button as="span" emphasis="link" tone="neutral" icon={<Icon name="arrow-right" />}>
           {label}
         </Button>
       </Cluster>

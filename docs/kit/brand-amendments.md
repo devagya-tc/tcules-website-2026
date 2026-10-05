@@ -30,8 +30,17 @@ Inventoried across every component layer, paper and tint blocks. Old → new.
 | `--lcrd-number-ink` | ListCard ordinal | neutral-500 / neutral-600 | unchanged, already ink | — |
 | `--flow-number-ink` | ProcessFlow step number | neutral-500 / neutral-600 | unchanged, already ink | — |
 | `--prose-marker-ink` | Prose list marker | neutral-600 / neutral-700 | unchanged, already ink | — |
+| `--btn-link-primary-fg` → `--btn-link-neutral-fg` (BlockCard's cta) | The read-more label and `arrow-right` on a linked text-only BlockCard | brandeis-500 / brandeis-500 | neutral-900 / neutral-900; brandeis-500 / 600 on the card's hover, focus and press | ink white (hover 300), blue white (hover 50). A call-site tone change in `BlockCard.tsx`, not a token edit: § 4.2 puts every per-card CTA on the neutral link and § 4.3 makes card arrows ink at rest. Second pass, 6 Oct |
+| `--prose-link-rule` → `--prose-ink-muted` (Prose `<ins>`) | The underline under inserted text | brandeis-300 / brandeis-300 | neutral-600 / neutral-700 | ink neutral-400, blue brandeis-100. A blue underline at rest on text that does not navigate read as a link; the rule now matches `abbr`'s. Second pass, 6 Oct |
 
 Kept blue at rest, because § 4.2 spends them: `--prose-quote-rule` and `--proof-quote-rule` (Signal, the
 quote rule), `--toc-current-*` (Free, the current marker), every link and solid-primary token (Signal and
 Accent), `--tex-ink` (Texture), `--logo-bar` (the wordmark), and SiteNav and SiteFooter (chrome, exempt).
 `--sec-accent` / `--sec-accent-ink` are read only by the design specimen harness, not by the site.
+
+**Second pass (6 Oct), method.** The first pass inventoried the token layer. The second also rendered
+every specimen and the six service pages at 1440 and read the computed colour, fill, stroke, border and
+text-decoration of every element and pseudo-element on paper and tint (chrome excluded). Outside the
+spends listed above, it found the two rows marked "second pass": the BlockCard cta and Prose's `<ins>`.
+`--svc-link-ink` / `-hover` in `service-page.css` are declared and read by nothing; they paint nothing,
+so they are left for `cmp-service-pages`, which owns that file's next shape.
