@@ -48,8 +48,9 @@
 >    286px peers (`sm`). A text-only set stays `md` at any count (§ 7.2: text cards take the h4 step).
 >    `SMALL_FROM` is exported beside `FEATURED_FROM`.
 > 4. **The set's row seam is `column` (64)**, the step `BlockCardSet` has used since 29 Sep, now
->    written into CLAUDE.md's gap-scale table: "and the row seam of a borderless card set". § 7's
->    "`rowGap="gutter"`" lines describe the shape before 29 Sep.
+>    written into CLAUDE.md's gap-scale table: "and the row seam of a borderless card set". § 7(a),
+>    § 10's set sample and § 14 Do 1 were brought into line on 6 Oct; § 17 Q19 is kept as the record
+>    of the 32 it started at.
 
 ## 1 · Identity
 
@@ -367,9 +368,11 @@ eyebrow, ring and gap, and the cta resolves tint's link steps; no value leaks fr
 
 ### (a) Distances — gap-scale roles
 
-- Card-to-card seam, vertical grid: parent `Layout colGap="gutter" rowGap="gutter"`; no BlockCard
-  node carries outer spacing. With the edge gone this gutter is the entire boundary between two
-  cards, which is why it is required rather than conventional.
+- Card-to-card seam, vertical grid: parent `Layout colGap="gutter" rowGap="column"`; no BlockCard
+  node carries outer spacing. With the edge gone these two gaps are the entire boundary between two
+  cards, which is why they are required rather than conventional. Across a row the cards are peers
+  at 32; down the grid each row is the next set of objects at 64, the row seam of every borderless
+  card set (CLAUDE.md's `--gap-column` row; `gutter` until 29 Sep, written in on 5 Oct).
 - Card-to-card seam, horizontal stack: parent `Layout rowGap="section"`, and no separator rule. A
   rule between rows would be `ListCard`'s finish on `BlockCard`'s object, and the borderless grid's
   reasoning applies unchanged on the block axis: distance separates, lines decorate.
@@ -398,7 +401,7 @@ eyebrow, ring and gap, and the cta resolves tint's link steps; no value leaks fr
   rowGap="text" align="start"` (`tight` until 5 Oct, S2). The same 64 between the halves; collapsed,
   the head and body meet at `text`, which is exactly the eyebrow/title/body relationship of a tile, so a collapsed
   featured card reads as a vertical one. Body to cta inside the second half stays `block`.
-- Featured row to its peers: the set's `rowGap="gutter"`, the same 32 as between any two rows of
+- Featured row to its peers: the set's `rowGap="column"`, the same 64 as between any two rows of
   cards. The featured card is one of the set, not a band above it, so it takes the set's seam.
 
 ### (b) Component sizes
@@ -464,10 +467,12 @@ The component aliases its roles through `--bcrd-title-text-{lg,md,sm}`,
 `--bcrd-eyebrow-tracking`. It declares nothing for the
 cta: `--bcrd-cta-text` and `--bcrd-cta-tracking` were deleted along with the bespoke cue, because
 `Button` reads `--btn-text-md` and `--btn-text-tracking` and a card-side alias could only disagree
-with it. `titleAs` changes the heading level, never the visual role. H4 scale is
-deliberate at a 286px four-card track: it gives a text-only card enough weight to remain an object
-without relying on a fill, and it is what keeps the horizontal orientation from reading as a
-`ListCard` row.
+with it. `titleAs` changes the heading level, never the visual role. The vertical card's scale
+steps with its row (5 Oct 2026, visual-direction § 7.2): `md` (h4) for two or three peers and for
+every text-only card, `sm` (h5) at a 286px four-across track, where an h4 title on two lines
+outweighed the 286px object it named. A text-only card stays at h4 at any count: with no image to
+carry it, that weight is what keeps it an object without relying on a fill. The horizontal
+orientation's `lg` (h3) is what keeps it from reading as a `ListCard` row.
 
 Title and body render verbatim in sentence case with no text transform. Examples: “When this is
 useful” and “Map the decision, evidence and owner before work begins.”
@@ -606,9 +611,11 @@ The set, which is what a template renders for a card group:
 ```jsx
 <BlockCardSet items={items} />
 // renders, for four or more items:
-<Layout as="ul" columns={peerColumns} colGap="gutter" rowGap="gutter" equalRows lead>
-  <BlockCard {...items[0]} orientation="horizontal" imageSide="left" />
-  {items.slice(1).map((item) => <BlockCard key={item.id} {...item} tracks={peerTracks} />)}
+<Layout as="ul" columns={peerColumns} colGap="gutter" rowGap="column" equalRows lead>
+  <BlockCard {...items[0]} orientation="horizontal" imageSide="left" size="lg" />
+  {items.slice(1).map((item) => (
+    <BlockCard key={item.id} {...item} tracks={peerTracks} size={peerSize} />
+  ))}
 </Layout>
 ```
 
@@ -746,7 +753,8 @@ no transition) rather than shortening it. Keyboard focus keeps its ring.
 **Do**
 
 1. Put every group in `Layout as="ul"` with explicit columns, `colGap="gutter"`,
-   `rowGap="gutter"` and `equalRows`; inspect the call-site tree and computed tracks.
+   `rowGap="column"` and `equalRows`, and pass the `size` the row's count calls for (§ 7.2);
+   inspect the call-site tree and computed tracks.
 2. Render four cards as two columns from `md` and four only from `xl`; inspect 1023, 1439 and 1440
    to prove the fourth never becomes a three-column orphan.
 3. Render image media above the title at 3:2 in a vertical card and beside it at 4:3 in a
@@ -1072,7 +1080,8 @@ passes the right one. The horizontal card always reads `CARD_TWO_TRACKS` (604 at
 588 media column). A lone card stretched across the full column (a one-track hand-built stack of
 vertical cards) under-fetches with the default; no route does that, and the set never does.
 
-**19 · The featured row's seam — `gutter`. Non-blocking.** The featured card takes the set's 32 like
+**19 · The featured row's seam — `gutter`. Non-blocking. Superseded 29 Sep 2026: every row of the
+set, the featured one included, is `column` (64) apart; see the 5 Oct amendment, item 4.** The featured card takes the set's 32 like
 any row of cards, because it is one of the set. Alternative: `stack` (48) above the peers, which
 would need a second `Layout` and so two lists (Q13, section 10). Flagged for the owner's screenshot
 review: if the featured row reads as crowded against its peers, the answer is a `leadGap` on `Layout`,
@@ -1158,7 +1167,11 @@ STRUCTURE
     The removed `edge` part is named as removed rather than deleted silently.
 
 NAMES
-[x] The component layer DECLARES 18 --bcrd-* tokens after 2.10 (was 17: +2 horizontal title, −1 media ink). The document names 26, because it names the
+[x] The component layer DECLARES 27 distinct --bcrd-* tokens after fdn-spacing (recounted from the
+    layer on 6 Oct 2026). It held 23 before this package; the size step's nine
+    --bcrd-{title-text,title-tracking,body-text}-{lg,md,sm} replaced the five unsuffixed and
+    -horizontal names, net +4. The 18 this line carried was 2.10's count and was not updated as the
+    media rule, zoom and ring tokens arrived. The document also names the
     nine removed ones as removed rather than deleting the record of them; section 16 lists both
     groups. Every declared name appears verbatim in docs/vocabulary.md AFTER regeneration, so the
     vocabulary must be regenerated and pushed — section 16 says so.

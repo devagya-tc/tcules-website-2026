@@ -225,22 +225,24 @@
 
 .body {
   max-inline-size: var(--measure-body);
+  font: var(--lcrd-body-text-md);
   overflow-wrap: anywhere;
   color: var(--lcrd-body-ink);
   text-wrap: var(--text-running-wrap);
 }
 
-/* The size step: title and body roles together, set on the root by the `size` prop (visual-
-   direction § 7.2). One modifier on the root, because the step is one decision about the row.
-   Exactly one of the two is always present. The ordinal's baseline correction is a function of the
-   title's size, so the small step restates it; `.number` above carries the md value. */
+/* The size step, set on the root by the `size` prop (visual-direction § 7.2). One modifier on the
+   root, because the step is one decision about the item. Exactly one of the two is always present.
+
+   The title steps in every form. The body steps in a TILE only: a tile's body runs in a 286 to 392
+   track, where body-sm is the right size, but a row's body runs at up to --measure-body beside or
+   under its title, and body-sm at that measure read as fine print under an h2 band (6 Oct 2026,
+   fdn-spacing review; § 1.4's F step row and one-column D row are h5 over body). So `.body` above
+   carries the md role and only `.sizeSm.tile` restates it. The ordinal's baseline correction is a
+   function of the title's size, so the small step restates it; `.number` above carries the md value. */
 .sizeMd .title {
   font: var(--lcrd-title-text-md);
   letter-spacing: var(--lcrd-title-tracking-md);
-}
-
-.sizeMd .body {
-  font: var(--lcrd-body-text-md);
 }
 
 .sizeSm .title {
@@ -248,7 +250,7 @@
   letter-spacing: var(--lcrd-title-tracking-sm);
 }
 
-.sizeSm .body {
+.sizeSm.tile .body {
   font: var(--lcrd-body-text-sm);
 }
 

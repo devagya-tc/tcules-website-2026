@@ -51,12 +51,15 @@ export type ListCardArrangement = 'split' | 'stacked';
 export type ListCardForm = 'row' | 'tile';
 
 /**
- * The row's type step: title and body roles together (visual-direction § 7.2, 5 Oct 2026). A
- * COMPONENT SIZE, so a t-shirt name. A row cannot see its siblings, so the composing route passes it.
+ * The item's type step (visual-direction § 7.2, 5 Oct 2026). A COMPONENT SIZE, so a t-shirt name. A
+ * row cannot see its siblings, so the composing route passes it.
  *
  *   md  h4 title, body      a set of up to three rows; the default for `form="row"`
- *   sm  h5 title, body-sm   any set of four rows or more, and every tile; the default for
- *                           `form="tile"`
+ *   sm  h5 title            any set of four rows or more, and every tile; the default for
+ *                           `form="tile"`. A tile's body steps to body-sm with it; a row's body
+ *                           stays at body, because it runs at up to --measure-body and body-sm at
+ *                           that measure read as fine print (6 Oct 2026; § 1.4's F step row and
+ *                           one-column D row are h5 over body)
  *
  * The default follows the form (5 Oct 2026), so the rule that tiles take `sm` is the path of least
  * resistance rather than something every grid has to remember. A route still passes `sm` to a row

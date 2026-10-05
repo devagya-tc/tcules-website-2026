@@ -230,7 +230,7 @@ archetypes. The ai-product-ux *evidence* band (1341) and *product-responsibility
 | Text card (392) | hairline 1; 24; index/eyebrow 14 + 16; h4 on 2 lines = 68; 16; body on 3 lines = 78 | **217** (191 with a 2-line body) |
 | Icon card (365) | icon 32; 16; h5 on 1 line = 28; 16; body-sm on 2 lines = 44 | **136** |
 | B tile (317) | h5 on 1 line = 28; 16; body-sm on 3 lines = 66 | **110** |
-| D row (349, 2 columns) | h5 = 28; 16; body-sm on 3 lines = 66; padding 64 | **174** |
+| D row (349, 2 columns) | h5 = 28; 16; body on 3 lines = 78; padding 64 | **186** (body-sm, 174, until 6 Oct: § 7.2) |
 | D row (763, 1 column) | h5 = 28; 16; body on 2 lines = 52; padding 64 | **160** |
 | F step row (ListCard, split form) | max(h5 28, body on 2 lines 52) + padding 64 | **116** (90 with a 1-line body) |
 | CTA point | h6 = 24; 8; detail = 22 (1 line) or 44 (2 lines) | **54 / 76** |
@@ -257,7 +257,7 @@ archetypes. The ai-product-ux *evidence* band (1341) and *product-responsibility
 | **C-icon-4** | head track: H-beside-aside 240 + 48 + 254 = **542**. Body: 2 × 136 + 64 = 336, + CtaRow 96 = 432 | 542 | ✓ |
 | **C-icon-6** | head track 542. Body: 3 × 136 + 2 × 64 = 536. **No CtaRow** (632) | 542 | ✓ |
 | **C-pair** | head track H-beside-actions 411; body: 2 pair cards = 429 | **429** | ✓ |
-| **D**, 2 columns | head track: H-beside-aside 240 + 48 + photo 254 (or stat 114) = 542 (402). Body: 3 rows × 174 = 522; with a CtaRow, ≤ 2 rows: 348 + 96 = 444 | **542** | ✓ |
+| **D**, 2 columns | head track: H-beside-aside 240 + 48 + photo 254 (or stat 114) = 542 (402). Body: 3 rows × 186 = 558; with a CtaRow, ≤ 2 rows: 372 + 96 = 468 | **558** | ✓ 40 |
 | **D**, 1 column | head track as above. Body: ≤ 3 rows × 160 = 480, + CtaRow = 576 | **576** | ✓ |
 | **D-faq** | centred H-title 133 + ≤ 7 closed items × 64 = **581**. With a CtaRow: ≤ 5 items: 133 + 320 + 96 = **549** | | ✓ |
 | **N** contrast | H-title 133 + [1, 1] at `column`: h4 34 + 24 + ≤ 4 rows × 84 = 394 | **527** | ✓ |
@@ -333,7 +333,7 @@ Patterns emit `data-copy="<role>"` on copy elements so the gate can find them (`
 | Text card title / body | 2 / 3 | ≤ 8 / ≤ 22 (≤ 14 in C-text-6) |
 | Icon card title / body | 1 / 2 | ≤ 5 / ≤ 14 |
 | B tile title / body | 1 / 3 | ≤ 4 / ≤ 20 |
-| D row (2 columns) title / body | 1 / 3 | ≤ 5 / ≤ 22 |
+| D row (2 columns) title / body | 1 / 3 | ≤ 5 / ≤ 19 (body, not body-sm, from 6 Oct: § 7.2) |
 | D row (1 column) title / body | 1 / 2 | ≤ 5 / ≤ 28 |
 | F step title / body | 1 / 2 (1 line in a set of 5) | ≤ 4 / ≤ 18 (≤ 9) |
 | N contrast item | 2 | ≤ 14 |
@@ -1057,7 +1057,19 @@ No new type roles. The roles exist; the kit uses them with more contrast.
 |---|---|---|
 | 1 featured, horizontal | `--text-h3` (34) | `--text-body-lg` |
 | 2 to 3 cards; text cards | `--text-h4` (28) | `--text-body` |
-| 4 to 6 cards; icon cards; tiles; any ListCard set of ≥ 4 rows | `--text-h5` (22) | `--text-body-sm` |
+| 4 to 6 cards; icon cards; tiles | `--text-h5` (22) | `--text-body-sm` |
+| any ListCard set of ≥ 4 **rows** (ruled, D and F) | `--text-h5` (22) | `--text-body` |
+
+**Amended 6 Oct 2026 (`fdn-spacing` review): a row's body does not step.** As first written, the last
+row coupled h5 with body-sm for ListCard rows too, which contradicted § 1.4: the F step row and the
+one-column D row are h5 over **body**. Built that way, product-design's five numbered steps and its
+"What you receive" rows read as fine print beside an h2 band at 1440. **The title steps with the
+count; the body steps with the track.** A card or tile body runs in a 286 to 392 track, where body-sm
+is right. A ruled row's body runs at up to `--measure-body`, beside or under its title, and is a reading
+line, so it stays at body at either size. § 1.4's two-column D row is re-derived at body (186; the band
+is 558, still 40 under the target), and its word ceiling in § 1.5 drops from 22 to 19. ListCard
+implements this as "at `sm`, only a tile's body steps". **Owner check:** if body-sm rows were
+intended, the alternative is to keep § 7.2 as first written and correct § 1.4's F and D rows instead.
 
 The card does not know its count. It takes the step as a component-size prop (`size="lg" | "md" |
 "sm"`), and the set passes it (BlockCardSet, or the composing route). `fdn-spacing` adds the prop to
@@ -1298,6 +1310,12 @@ until `fdn-gates` has merged**, so every family is built against `fold:check`.
 **One waits:** `cmp-services` waits on `cmp-feature`'s BlockCard changes.
 
 **Then:** `cmp-service-pages` recomposes the six pages, and `cmp-showcase` builds the kit pages.
+
+**Recorded follow-up (`fdn-spacing`, 6 Oct 2026), outside this kit's scope.** The § 7.2 count rule is
+wired for the six service pages, the specimens and `BlockCardSet` only. The live routes that render a
+ListCard set of four rows or more (`services/[...slug]`, `expertise/[slug]`, `audits/[slug]`,
+`tools/[slug]`, `how-we-work`, `glossary`) pass no `size`, so their rows stay at `md`. Each adopts the
+rule when it is recomposed from the kit. Nothing breaks meanwhile: `md` is the row's prior look.
 
 **Who edits what:**
 - **`src/templates/ServicePage/*` is edited only by foundations** (serially: `fdn-spacing`, `fdn-top`,

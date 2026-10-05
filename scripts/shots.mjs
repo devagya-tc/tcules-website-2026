@@ -145,6 +145,17 @@ try {
             if ([...el.classList].some((c) => /^specimen-module__\w+__spec$/.test(c)))
               el.setAttribute('data-shot', '');
           });
+          // A sticky or fixed element OUTSIDE every block (the SiteNav) is painted over whatever a
+          // block crop scrolls under it, so the crop showed the nav across the thing under test.
+          // Hidden, not unstuck: `visibility` keeps its box, so nothing below it moves.
+          document.querySelectorAll('body *').forEach((el) => {
+            const { position } = getComputedStyle(el);
+            if ((position === 'sticky' || position === 'fixed') && !el.closest('[data-shot]'))
+              el.style.visibility = 'hidden';
+          });
+          // Next's dev indicator draws its fixed badge inside a shadow root, which the walk above
+          // cannot see into, so its host is hidden by name.
+          document.querySelectorAll('nextjs-portal').forEach((el) => (el.style.visibility = 'hidden'));
         });
         const blocks = page.locator('[data-shot]');
         const count = await blocks.count();
@@ -159,7 +170,26 @@ try {
             .replace(/^-|-$/g, '')
             .slice(0, 60);
           const crop = `${dir}/${String(i + 1).padStart(2, '0')}-${slug || 'untitled'}.png`;
-          await block.screenshot({ path: join(OUT, crop) });
+          // A block that holds only its title and note is a band-level specimen note: what it
+          // describes follows it as full-width Sections (CtaSection's ladders), so a crop of the
+          // block alone was the note and nothing else. Crop from the note's band to the next
+          // block's band instead, full width, out of a full-page capture.
+          const clip = await block.evaluate((el) => {
+            if ([...el.children].some((c) => c.tagName !== 'P')) return null;
+            const band = (n) => n.closest('[data-surface]') ?? n;
+            const all = [...document.querySelectorAll('[data-shot]')];
+            const next = all[all.indexOf(el) + 1];
+            const top = band(el).getBoundingClientRect().top + window.scrollY;
+            const end = next
+              ? band(next).getBoundingClientRect().top + window.scrollY
+              : document.documentElement.scrollHeight;
+            return { x: 0, y: top, width: document.documentElement.clientWidth, height: end - top };
+          });
+          if (clip && clip.height > 0) {
+            await page.screenshot({ path: join(OUT, crop), fullPage: true, clip });
+          } else {
+            await block.screenshot({ path: join(OUT, crop) });
+          }
           crops.push({ title, file: crop });
         }
       }

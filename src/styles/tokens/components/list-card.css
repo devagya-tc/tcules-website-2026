@@ -59,7 +59,10 @@
        sm  h5 + body-sm   any set of four rows or more, and every tile (a tile's default). Card
                           titles sit at least two rungs under the section's 43px h2, and a run of
                           28px titles down a long set made every row a heading competing with the
-                          band's.
+                          band's. The body step applies to a TILE only: a row at sm keeps
+                          --lcrd-body-text-md, because its body runs at up to --measure-body and
+                          body-sm at that measure read as fine print (6 Oct 2026; § 1.4's F step
+                          row and one-column D row are h5 over body).
 
      It was h4 alone, set against BlockCard's h4 in a 286px track: at h5 the narrower object had the
      larger title. The two now step together, by the same rule, so the inversion cannot return. */

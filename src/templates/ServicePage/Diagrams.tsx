@@ -232,7 +232,7 @@ export function Parts({ block }: { block: Of<'parts'> }) {
           as="ul"
           columns={{ base: 1, md: 2, lg: block.items.length }}
           colGap="gutter"
-          rowGap="stack"
+          rowGap="column"
         >
           {block.items.map((item) => (
             <ListCard
@@ -371,7 +371,7 @@ export function Slice({ block }: { block: Of<'slice'> }) {
           as="ul"
           columns={{ base: 1, md: block.levels.length }}
           colGap="gutter"
-          rowGap="stack"
+          rowGap="column"
         >
           {block.levels.map((level) => (
             <ListCard

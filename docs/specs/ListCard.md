@@ -10,7 +10,7 @@
 | **Token prefix**    | `--lcrd-*`                                                                                                             |
 | **Designer / date** | Codex / 21 Aug 2026                                                                                                    |
 | **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug. **Phase 2 task 2.11 / 28 Sep 2026** — the thumbnail moves onto `Media` (`fit="fill"`, `LIST_CARD_THUMBNAIL`, lazy); the marker union discriminates on `type`; `external` takes ch04's `square-arrow-right-up` and a visually hidden new-tab hint; the ordered set is confirmed as a real `ol`; contact cards lose their icon thumbnails (C1). Rulings: `docs/phase-2-decisions.md` C1, M1–M4. **Tracker 2.17 / 29 Sep 2026** — the split reads the row's own width (a wrapping `Cluster` on `--lcrd-title-min` / `--lcrd-body-min`, not Layout's md viewport boundary), so titles no longer break mid-word; the title wraps `break-word`, not `anywhere`; wide rows are capped at `--measure-title` + seam + `--measure-body`; the off-site cue is the plain `arrow-right-up`; the thumbnail passes Media `inset="text"`. See § 7, § 9, § 10 and § 17 q7, q8. **1 Oct 2026 (owner)** — a second **form**, `tile`, for an item in a grid track, and `body` optional. Collected in **Amendment · 1 Oct 2026**. |
-| **Revised**         | `fdn-spacing` / 5 Oct 2026 — title → body at `text` in every form (S3); the `size` prop (`md \| sm`), passed by the composing route (visual-direction § 7.2). See **Amendment · 5 Oct 2026** |
+| **Revised**         | `fdn-spacing` / 5 Oct 2026 — title → body at `text` in every form (S3); the `size` prop (`md \| sm`), passed by the composing route (visual-direction § 7.2). See **Amendment · 5 Oct 2026**. 6 Oct 2026 — at `sm` only a tile's body steps to body-sm; a row's body stays at body (item 2), and grids of tiles take a `column` row seam (item 4) |
 | **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
 | **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
 
@@ -29,7 +29,16 @@
 >    | Size | Title | Body | Ordinal offset | Set |
 >    |---|---|---|---|---|
 >    | `md` | `--text-h4` | `--text-body` | `--space-4` | up to three rows |
->    | `sm` | `--text-h5` | `--text-body-sm` | `--space-0` | any set of four rows or more, and tiles |
+>    | `sm` | `--text-h5` | `--text-body-sm` on a tile; `--text-body` on a row | `--space-0` | any set of four rows or more, and tiles |
+>
+>    **6 Oct 2026 — the body steps in a tile only.** As shipped on 5 Oct, `sm` set body-sm on a row
+>    too, and on product-design at 1440 the five numbered steps and the "What you receive" rows read
+>    as fine print beside an h2 band: a row's body runs at up to `--measure-body`, beside or under its
+>    title, and that is a reading line, not a tile's caption. Visual-direction § 1.4 already assumed
+>    it (the F step row and the one-column D row are h5 over **body**), so § 7.2 is reconciled to
+>    § 1.4: the title steps with the count in every form; the body steps with the track, so only a
+>    tile's does. The module sets the md body role on `.body` and restates it only under
+>    `.sizeSm.tile`. No token changes: `--lcrd-body-text-sm` is now read by tiles alone.
 >
 >    There is no `lg`: § 7.2's large step is the one featured, horizontal card, which is BlockCard's
 >    arrangement, and a ListCard is never featured. Tokens `--lcrd-title-text-{md,sm}`,
@@ -41,6 +50,15 @@
 > 3. **The service-page template passes it:** tiles (Signals, Ledger grids, the Parts and Slice
 >    diagram tiles) take `sm`; Steps, Router, the Stat rows and a one-column Ledger take `sm` from four
 >    rows, else `md`.
+> 4. **Grids of tiles take `rowGap="column"` (64), 6 Oct 2026** — the row seam of every borderless
+>    card set (CLAUDE.md's `--gap-column` row; visual-direction § 1.2). Signals, Ledger grids, the
+>    Parts and Slice diagram tiles and every tile grid in the specimen moved from `stack` (48). A tile
+>    has no box, so at 48 its last line ran into the opening rule of the tile below. A column of
+>    ruled rows is not covered: its rule and padding are its seam, and it stays at `none`.
+> 5. **Follow-up, not in this package:** routes outside the six service pages that render a ListCard
+>    set of four rows or more (`services/[...slug]`, `expertise/[slug]`, `audits/[slug]`,
+>    `tools/[slug]`, `how-we-work`, `glossary`) do not pass `size` yet, so they stay at `md`. Each
+>    route adopts the count rule when it is recomposed from the kit.
 
 ## 1 · Identity
 
@@ -443,7 +461,7 @@ at `--z-base`.
 | Part                     | Type role        | Tracking                                   | Measure                              |
 | ------------------------ | ---------------- | ------------------------------------------ | ------------------------------------ |
 | `title`, `md` / `sm`     | `--text-h4` / `--text-h5` | `--text-h4-tracking` / `--text-h5-tracking` | `--measure-title`           |
-| `body`, `md` / `sm`      | `--text-body` / `--text-body-sm` | none — these roles have no tracking companion | `--measure-body`     |
+| `body`, `md` / `sm`      | `--text-body` / `--text-body-sm` on a tile, `--text-body` on a row (6 Oct 2026) | none — these roles have no tracking companion | `--measure-body`     |
 | Number fill in `marker`  | `--text-index`   | `--text-index-tracking`                    | none — one expected two-digit marker |
 | Icon and thumbnail fills | none             | none                                       | none                                 |
 | `cue`                    | none — an `Icon` | none                                       | none                                 |
@@ -960,8 +978,10 @@ NAMES
     off stat on 25 Aug 2026; size and tracking moved together, and --text-index borrows ui's 0.08em
     rather than declaring a third correction.
 [x] Every layout distance is a gap-scale role.
-[x] Space-ramp reaches: 1 — --lcrd-number-baseline-offset (--space-2), argued in section 7(c) as a
-    baseline correction rather than a distance, and commented as optical on its own token.
+[x] Space-ramp reaches: 3 — --lcrd-number-baseline-offset-md (--space-4) and -sm (--space-0),
+    argued in section 7(c) as a baseline correction rather than a distance and commented as optical
+    on their tokens; and --lcrd-hidden-size (--space-1), the visually hidden clip box's own geometry
+    (section 7(b)). Recounted 6 Oct 2026; it said 1 (--space-2) since before the size step.
 [x] One new USAGE role was added for this component's sake: --text-index, 20px mono. Section 8 and
     docs/vocabulary.md carry it, /design/typography renders it, and the justification is a genuine
     hole in the ramp (mono ran 11, 12, 13, 14, then 40) rather than this component's convenience.

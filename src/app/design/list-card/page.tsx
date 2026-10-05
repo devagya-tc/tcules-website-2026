@@ -301,9 +301,11 @@ export default function ListCardSpecimenPage() {
             <h2>1 · Arrangement × size</h2>
             <p>
               Two arrangements and two type steps (visual-direction § 7.2, 5 Oct).{' '}
-              <code>md</code> (h4 over body) is a row&rsquo;s default; <code>sm</code> (h5 over
-              body-sm) is what any set of four rows or more passes, and it is a tile&rsquo;s
-              default (§ 1b). A row cannot see its siblings, so the composing route passes the
+              <code>md</code> (h4 over body) is a row&rsquo;s default; <code>sm</code> (h5) is
+              what any set of four rows or more passes, and it is a tile&rsquo;s default (§ 1b).
+              The title steps in every form; the body steps in a tile only, so a row at{' '}
+              <code>sm</code> keeps body, since its body is a reading line at up to the body
+              measure (6 Oct). A row cannot see its siblings, so the composing route passes the
               step. The copy is identical so the title/body
               relationship is the only visible difference; title to body is <code>text</code>{' '}
               (16) in every cell.
@@ -339,7 +341,7 @@ export default function ListCardSpecimenPage() {
             </Specimen>
             <Specimen
               title="stacked × sm"
-              note="h5 over body-sm: a long set's rows stop competing with the band's h2."
+              note="h5 over body: a long set's titles stop competing with the band's h2, and the body keeps its reading size."
             >
               <Rows>
                 <ListCard
@@ -472,18 +474,33 @@ export default function ListCardSpecimenPage() {
               pinned so every cue in the row shares a line. A tile defaults to{' '}
               <code>size=&quot;sm&quot;</code> (h5 over body-sm, § 7.2), so every tile below is at
               the small step without being told; the third cell passes <code>md</code> to
-              show the override.
+              show the override. Rows of tiles are <code>column</code> (64) apart, the row seam
+              of every borderless card set (§ 1.2, 6 Oct); the two-track cell shows it at
+              every width.
             </p>
           </Layout>
           <Specimen title="icon tiles · four tracks · sm by default" note="Signals: a thing a reader can see, then what it may mean. No size passed: a tile is sm.">
-            <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="column">
               {TILES_ICON.map((tile) => (
                 <ListCard key={tile.title} form="tile" titleAs="h3" {...tile} />
               ))}
             </Layout>
           </Specimen>
+          <Specimen
+            title="icon tiles · two tracks, two rows · the row seam"
+            note="Rows of tiles are column (64) apart, the seam of every borderless card set; columns stay gutter (32). The B shape: the box stands in for the photo, the tiles sit two across in the 667 copy track."
+          >
+            <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack">
+              <Box tall />
+              <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="column">
+                {TILES_ICON.map((tile) => (
+                  <ListCard key={tile.title} form="tile" titleAs="h3" {...tile} />
+                ))}
+              </Layout>
+            </Layout>
+          </Specimen>
           <Specimen title="number tiles · five tracks, ordered" note="A method: the <ol> carries the order">
-            <Layout as="ol" columns={{ base: 1, md: 2, lg: 5 }} colGap="gutter" rowGap="stack">
+            <Layout as="ol" columns={{ base: 1, md: 2, lg: 5 }} colGap="gutter" rowGap="column">
               {TILES_STEPS.map((tile, index) => (
                 <ListCard
                   key={tile.title}
@@ -499,14 +516,14 @@ export default function ListCardSpecimenPage() {
             title="icon tiles · four tracks · md, passed explicitly"
             note="The override, for comparison only. § 7.2 gives every tile sm, so h5 sits two rungs under the band's h2; at md the tiles' h4 competes with it. No page passes this."
           >
-            <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="column">
               {TILES_ICON.map((tile) => (
                 <ListCard key={tile.title} form="tile" size="md" titleAs="h3" {...tile} />
               ))}
             </Layout>
           </Specimen>
           <Specimen title="linked tiles · three tracks, unequal bodies" note="Cues pinned to the foot">
-            <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="stack">
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
               {LINKED.slice(0, 3).map((row) => (
                 <ListCard key={row.title} form="tile" {...row} />
               ))}
@@ -518,7 +535,7 @@ export default function ListCardSpecimenPage() {
                 <ListCard title="Realistic access to the product" marker={{ type: 'icon', name: 'check-circle' }} />
                 <ListCard title="Time with people who understand the system" marker={{ type: 'icon', name: 'check-circle' }} />
               </Layout>
-              <Layout as="ul" columns={2} colGap="gutter" rowGap="stack">
+              <Layout as="ul" columns={2} colGap="gutter" rowGap="column">
                 <ListCard form="tile" title="Product model" marker={{ type: 'icon', name: 'widget' }} />
                 <ListCard form="tile" title="Research record" marker={{ type: 'icon', name: 'document-text' }} />
               </Layout>

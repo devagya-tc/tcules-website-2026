@@ -35,9 +35,16 @@ type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
    its rule and keeps its marker beside the copy; a tile opens on its rule and stands its marker
    above, because in a grid only the tops of unequal items line up.
 
+   Rows of tiles are `column` (64) apart, the row seam of every borderless card set (CLAUDE.md's
+   gap table; visual-direction § 1.2). A tile has no box, so at `stack` (48) a tile's last line ran
+   into the opening rule of the one under it and the grid read as one field. Ruled rows take
+   `none`: the rule and the row's own padding are their seam.
+
    One rule picks the type step (visual-direction § 7.2). A row cannot see its siblings, so the set
-   passes it: tiles, and any set of four rows or more, take `sm` (h5 over body-sm); a shorter set of
-   rows keeps `md` (h4 over body). Card titles sit at least two rungs under the band's h2. */
+   passes it: tiles, and any set of four rows or more, take `sm`; a shorter set of rows keeps `md`
+   (h4 over body). At `sm` a tile sets h5 over body-sm and a row sets h5 over body: the title steps
+   with the count, and a row's body keeps the reading size its wide measure needs (visual-direction
+   § 7.2, 6 Oct 2026). Card titles sit at least two rungs under the band's h2. */
 const SMALL_SET_FROM = 4;
 
 function setSize(count: number, form: ListCardForm): ListCardSize {
@@ -53,7 +60,7 @@ function Signals({ block }: { block: Of<'signals'> }) {
       as="ul"
       columns={{ base: 1, md: 2, lg: block.columns }}
       colGap="gutter"
-      rowGap="stack"
+      rowGap="column"
     >
       {block.items.map((item) => (
         <ListCard
@@ -114,7 +121,7 @@ function Ledger({ block }: { block: Of<'ledger'> }) {
       as={block.marker === 'number' ? 'ol' : 'ul'}
       columns={columns}
       colGap={single ? undefined : 'gutter'}
-      rowGap={single ? 'none' : 'stack'}
+      rowGap={single ? 'none' : 'column'}
     >
       {block.items.map((item, index) => (
         <ListCard
