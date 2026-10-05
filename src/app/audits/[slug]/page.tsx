@@ -10,7 +10,7 @@ import {
   type AuditContentColumn,
 } from '@/content';
 import { auditPath, ROUTES } from '@/lib/routes';
-import { eyebrowBesideTrail } from '@/lib/trail';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -287,7 +287,9 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
       ) : null}
 
       <PageHero
-        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: audit.title }}
+        trail={heroTrail(crumbs, audit.title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={audit.title}
         eyebrow={eyebrowBesideTrail(audit.hero.eyebrow, crumbs)}
         body={[audit.hero.description]}

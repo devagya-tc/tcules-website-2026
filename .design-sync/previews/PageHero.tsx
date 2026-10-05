@@ -103,23 +103,18 @@ export function Default() {
   return <PageHero title={TITLE} body={[LEAD, SECOND, THIRD]} />;
 }
 
-/** The trail, inside the hero: Breadcrumbs in the `trail` slot, 32 above the title. `current` is
-    the last crumb's label — in development PageHero warns when the eyebrow repeats it. */
+/** The trail, inside the hero: Breadcrumbs in the `trail` slot, 32 above the title. `labels` are
+    the rendered crumbs' labels (the site derives both from one array with `heroTrail`); in
+    development PageHero warns when the eyebrow or the title repeats one of them. */
 export function WithTrail() {
+  const items = [
+    { label: 'Home', href: '/' },
+    { label: 'Case studies', href: '/case-studies' },
+    { label: 'ConnectX', href: '/case-studies/connectx' },
+  ];
   return (
     <PageHero
-      trail={{
-        crumbs: (
-          <Breadcrumbs
-            items={[
-              { label: 'Home', href: '/' },
-              { label: 'Case studies', href: '/case-studies' },
-              { label: 'ConnectX', href: '/case-studies/connectx' },
-            ]}
-          />
-        ),
-        current: 'ConnectX',
-      }}
+      trail={{ crumbs: <Breadcrumbs items={items} />, labels: items.map((item) => item.label) }}
       title={TITLE}
       body={[LEAD]}
       eyebrow="Case study · Energy"

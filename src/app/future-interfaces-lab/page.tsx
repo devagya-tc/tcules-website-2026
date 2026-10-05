@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Layout, Prose, Section } from '@/components';
 import { getFutureInterfacesLabPage, type FutureInterfacesLabAction } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -82,17 +83,18 @@ export default async function FutureInterfacesLabPage() {
   return (
     <>
       <PageHero
-        trail={{
-          crumbs: (
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: ROUTES.home },
-                { label: page.hero.heading, href: ROUTES.futureInterfacesLab },
-              ]}
-            />
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            /* The CMS heading is this page's NAME (decorated), not a message, so it is the leaf,
+               and heroTrail drops it as a repeat of the h1: a lone Home renders no trail. */
+            { label: page.hero.heading, href: ROUTES.futureInterfacesLab },
+          ],
+          page.hero.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
           ),
-          current: page.hero.heading,
-        }}
+        )}
         title={page.hero.heading}
         body={page.hero.body}
         actions={firstTwoActions(page.hero.actions)}

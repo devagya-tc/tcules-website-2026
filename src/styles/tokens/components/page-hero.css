@@ -32,7 +32,7 @@
    token would have been a name for a page family styled identically to the default.
 
    The two ARRANGEMENTS (stacked, beside — 28 Sep 2026) add no token either. Where the media
-   stands is a Layout template and its 64 is --gap-column, a prop in the TSX; the image's
+   stands is a Layout template and its 96 is --gap-section, a prop in the TSX; the image's
    edge is Media's (--media-*). Nothing about an arrangement is a value this file decides.
 
    ── The state model: there isn't one ────────────────────────────────────────────

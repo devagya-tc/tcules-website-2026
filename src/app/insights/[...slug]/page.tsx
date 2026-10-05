@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getBlogPage, type BlogBlock, type BlogImage } from '@/content';
 import { blogPath, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
@@ -301,10 +302,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
       ) : null}
 
       <PageHero
-        trail={{
-          crumbs: <Breadcrumbs items={blogBreadcrumbs(blog.slug, blog.title)} />,
-          current: blog.title,
-        }}
+        trail={heroTrail(blogBreadcrumbs(blog.slug, blog.title), blog.title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={blog.title}
         body={[blog.description || `Read ${blog.title}.`]}
         credits={credits}

@@ -8,6 +8,7 @@ import {
   type BreadcrumbItem,
   type HeroAction,
 } from '@/patterns';
+import { heroTrail } from '@/lib/trail';
 
 /**
  * One case study as the index shows it. The template's own shape, not the view model's: a template
@@ -43,9 +44,9 @@ export type CaseStudyIndexProps = {
    * case study read, and a hero button ahead of the cards competes with that. A blank message falls
    * back to the name as the h1.
    *
-   * The name is no longer an eyebrow (kit `fdn-top`, 5 Oct 2026). It is the trail's last crumb,
-   * which now sits inside the hero 32 above the title, so an eyebrow saying it again repeated the
-   * line directly over it.
+   * The name is no longer an eyebrow (kit `fdn-top`, 5 Oct 2026). The trail names the page (the
+   * route passes its nav label, "Case studies", as the last crumb) and now sits inside the hero 32
+   * above the title, so an eyebrow saying the name again repeated the line directly over it.
    */
   hero: { name: string; message: string };
   items: readonly CaseStudyIndexItem[];
@@ -79,10 +80,9 @@ export function CaseStudyIndex({ breadcrumbs, hero, items, closing }: CaseStudyI
   return (
     <>
       <PageHero
-        trail={{
-          crumbs: <Breadcrumbs items={breadcrumbs} />,
-          current: breadcrumbs.at(-1)?.label ?? hero.name,
-        }}
+        trail={heroTrail(breadcrumbs, message || hero.name, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={message || hero.name}
         body={['']}
         surface="paper"

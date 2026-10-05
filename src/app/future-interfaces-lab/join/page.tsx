@@ -8,7 +8,7 @@ import {
   type FutureInterfacesLabJoinCard,
 } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { eyebrowBesideTrail } from '@/lib/trail';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -143,7 +143,9 @@ export default async function FutureInterfacesLabJoinPage() {
   return (
     <>
       <PageHero
-        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: page.hero.heading }}
+        trail={heroTrail(crumbs, page.hero.heading, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
         title={page.hero.heading}
         body={page.hero.body}

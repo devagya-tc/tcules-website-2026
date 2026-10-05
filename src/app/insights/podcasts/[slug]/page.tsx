@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getPodcastPage, type PodcastBlock, type PodcastImage } from '@/content';
 import { articlePath, podcastPath, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
@@ -256,19 +257,18 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
       ) : null}
 
       <PageHero
-        trail={{
-          crumbs: (
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: ROUTES.home },
-                { label: 'Insights', href: ROUTES.insights },
-                { label: 'Podcasts', href: ROUTES.podcasts },
-                { label: podcast.title, href: podcastPath(podcast.slug) },
-              ]}
-            />
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Insights', href: ROUTES.insights },
+            { label: 'Podcasts', href: ROUTES.podcasts },
+            { label: podcast.title, href: podcastPath(podcast.slug) },
+          ],
+          podcast.title,
+          (t) => (
+            <Breadcrumbs {...t} />
           ),
-          current: podcast.title,
-        }}
+        )}
         title={podcast.title}
         body={[podcast.description || `Listen to ${podcast.title}.`]}
         dates={published ? { published } : undefined}

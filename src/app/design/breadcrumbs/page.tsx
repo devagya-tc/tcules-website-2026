@@ -1,4 +1,5 @@
 import { Cluster, Layout, Section } from '@/components';
+import { heroTrail } from '@/lib/trail';
 import { Breadcrumbs, PageHero, type BreadcrumbItem } from '@/patterns';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
@@ -64,6 +65,9 @@ const DEPTHS = [
 ] as const;
 
 const LONG_DEPTHS = [2, 3, 4, 5] as const;
+
+/* The in-situ hero's h1: a headline, so the trail's last crumb (the page's name) is not a repeat. */
+const IN_SITU_TITLE = 'Design the screens, and the rules that decide them';
 
 /** A trail of `depth` levels with labels at the long end of what the sitemap holds. */
 function longTrail(depth: number): BreadcrumbItem[] {
@@ -141,9 +145,10 @@ export default function BreadcrumbsSpecimenPage() {
               inside the hero&apos;s own band, and the h1 starts at 222.
             </p>
             <p>
-              So there is one prop, <code>items</code>. The colour comes from the enclosing
-              band&apos;s <code>data-surface</code>, exactly as a Button&apos;s does, so a trail
-              can no longer be painted a different ground from the hero it introduces.
+              So there are two props, <code>items</code> and <code>endsWith</code>. The colour
+              comes from the enclosing band&apos;s <code>data-surface</code>, exactly as a
+              Button&apos;s does, so a trail can no longer be painted a different ground from
+              the hero it introduces.
             </p>
           </Layout>
 
@@ -164,6 +169,23 @@ export default function BreadcrumbsSpecimenPage() {
                   <Breadcrumbs items={trail(d.depth)} />
                   <p className={s.specNote}>
                     Depth {d.depth}. {d.note}
+                  </p>
+                </Layout>
+              ))}
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="endsWith — page, and parent · pages at depths 3, 4 and 6"
+            note="Each pair is one page's trail, first as endsWith='page' (the default: the last item is this page, as text, aria-current) and then as endsWith='parent' (the last item is this page's parent, as a link, and nothing is current). Parent is for a page whose only name IS its h1 (an article, an audit, a glossary term, a legal page): standing 32px above that h1, a current crumb would say the headline twice, and a headline-length one wraps on a phone. Routes never choose it by hand — heroTrail in @/lib/trail drops the leaf when it repeats the title and passes endsWith='parent'. The collapse is unchanged: it counts rendered items, so the depth-6 page's five-item parent trail collapses exactly as any trail of five does, and a depth-2 page's parent trail would be a lone Home, which renders nothing (heroTrail gives such a hero no trail at all)."
+          >
+            <Layout rowGap="block">
+              {([3, 4, 6] as const).map((depth) => (
+                <Layout key={depth} rowGap="tight">
+                  <Breadcrumbs items={trail(depth)} />
+                  <Breadcrumbs items={trail(depth).slice(0, -1)} endsWith="parent" />
+                  <p className={s.specNote}>
+                    Depth {depth}, then the same page&apos;s trail ending at its parent.
                   </p>
                 </Layout>
               ))}
@@ -319,13 +341,12 @@ export default function BreadcrumbsSpecimenPage() {
         <div className={s.mockBar} />
       </Section>
       <PageHero
-        trail={{
-          crumbs: <Breadcrumbs items={trail(4)} />,
-          current: 'Interaction and UI Design',
-        }}
-        title="Interaction and UI Design"
+        trail={heroTrail(trail(4), IN_SITU_TITLE, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
+        title={IN_SITU_TITLE}
         body={[
-          'The real composition: the trail in PageHero’s trail slot, inside the hero’s band.',
+          'The real composition: the trail in PageHero’s trail slot, inside the hero’s band, built by heroTrail.',
         ]}
       />
       <Section density="tight">
@@ -335,7 +356,9 @@ export default function BreadcrumbsSpecimenPage() {
             The bar above stands in for <code>SiteNav</code>. The hero&apos;s 96 of top padding
             is the air above the trail, and 32 (<code>gutter</code>) separates the trail from
             the title. No eyebrow: the last crumb already names the page, and PageHero warns in
-            development when an eyebrow repeats it.
+            development when an eyebrow repeats it. The h1 is a headline, not the name, so the
+            trail keeps its last crumb; were the h1 &lsquo;Interaction and UI Design&rsquo;,
+            heroTrail would end the trail at &lsquo;Product Design&rsquo;, as a link.
           </p>
           <p className={s.specNote}>
             Touch: the hit area is extended past the label&apos;s box with a pseudo-element —

@@ -20,7 +20,7 @@ import {
   type ServiceSection,
 } from '@/content';
 import { ROUTES, servicePath } from '@/lib/routes';
-import { eyebrowBesideTrail } from '@/lib/trail';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -407,7 +407,9 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
       ) : null}
 
       <PageHero
-        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: title }}
+        trail={heroTrail(crumbs, title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={title}
         eyebrow={eyebrowBesideTrail(service.hero.eyebrow, crumbs)}
         body={[service.hero.description]}

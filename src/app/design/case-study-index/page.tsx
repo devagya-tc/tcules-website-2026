@@ -32,7 +32,7 @@ export default async function CaseStudyIndexSpecimen() {
       <CaseStudyIndex
         breadcrumbs={[
           { label: 'Home', href: ROUTES.home },
-          { label: page.hero.heading, href: ROUTES.caseStudies },
+          { label: 'Case studies', href: ROUTES.caseStudies },
         ]}
         hero={{ name: page.hero.heading, message: page.hero.description }}
         items={page.items.map((caseStudy) => ({

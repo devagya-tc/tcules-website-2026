@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import { getCareerPage, type CareerAction } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { BlockCard, Breadcrumbs, PageHero } from '@/patterns';
 
 const CAREERS_SLUG = ROUTES.careers.slice(1);
@@ -53,17 +54,16 @@ export default async function CareersPage() {
   return (
     <>
       <PageHero
-        trail={{
-          crumbs: (
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: ROUTES.home },
-                { label: 'Careers', href: ROUTES.careers },
-              ]}
-            />
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Careers', href: ROUTES.careers },
+          ],
+          page.hero.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
           ),
-          current: 'Careers',
-        }}
+        )}
         title={page.hero.heading}
         body={[page.hero.description]}
         surface="paper"

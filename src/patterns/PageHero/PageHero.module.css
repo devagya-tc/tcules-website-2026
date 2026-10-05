@@ -7,16 +7,19 @@
    which one it is standing on.
 
    ── Seven rules, and the count is the design ────────────────────────────────────
-   Sixteen parts, seven of which carry a value here: six inks on the six text parts, and the video
+   Eighteen parts, seven of which carry a value here: six inks on the six text parts, and the video
    frame, which is the only box the component draws. The image is a Media and carries its own.
-   Eight more — root, split, stack, opening, copy, byline, pair, actions — carry DISTANCE ONLY, and
-   every one of those distances is a Section, Layout or Cluster gap prop in the TSX. The
-   sixteenth, extras, carries NOTHING AT ALL, which is the point of it: a slot that imposed an
-   ink or a step would be a slot the caller had to fight.
+   Nine more — root, top, split, stack, opening, copy, byline, pair, actions — carry DISTANCE ONLY,
+   and every one of those distances is a Section, Layout or Cluster gap prop in the TSX. The last
+   two carry NOTHING AT ALL, which is the point of them: extras, the caller's block, and trail (kit
+   `fdn-top`, 5 Oct 2026), the Breadcrumbs the caller hands in, which own every value they paint
+   and read this band's ground. A slot that imposed an ink or a step would be a slot the caller
+   had to fight.
 
-   So eight of the sixteen emit no class and appear nowhere in this file: a rule for them would
-   be a rule with nothing to say. If you are looking for where the 48, the 24, the 16, the 8 and
-   the 4 — and the 64 between copy and media in `beside` — are set, they are in the JSX, which is where the arrangement belongs.
+   So eleven of the eighteen emit no class and appear nowhere in this file: a rule for them would
+   be a rule with nothing to say. If you are looking for where the 32 from the trail to the split,
+   the 48, the 24, the 16, the 8 and the 4 — and the 96 between copy and media in `beside` — are
+   set, they are in the JSX, which is where the arrangement belongs.
 
    The media part takes no class of its own and has no wrapper. The image is a Media, whose module
    owns it; `.video` is the other rendering of the same slot, mutually exclusive by the prop's

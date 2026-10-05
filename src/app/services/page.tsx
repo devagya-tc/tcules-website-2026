@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getServicesMasterPage, type ServicesMasterAction } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { BlockCard, Breadcrumbs, CtaSection, PageHero, type HeroAction } from '@/patterns';
 
 const SERVICES_SLUG = ROUTES.services.slice(1);
@@ -73,17 +74,16 @@ export default async function ServicesPage() {
       ) : null}
 
       <PageHero
-        trail={{
-          crumbs: (
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: ROUTES.home },
-                { label: 'Services', href: ROUTES.services },
-              ]}
-            />
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Services', href: ROUTES.services },
+          ],
+          page.hero.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
           ),
-          current: 'Services',
-        }}
+        )}
         title={page.hero.heading}
         body={page.hero.body}
         actions={heroActions}

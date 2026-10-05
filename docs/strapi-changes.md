@@ -214,3 +214,11 @@ header (§10). A block that names its job removes the guess. Ordering, too, beco
 `spectrum` is ordered by its authors on purpose.
 
 **Found in.** Service pages designed from content, 29 Sep 2026 (`/design/service-page`).
+
+## 16. Records carry a short `name` beside their headline
+
+**What.** A `name` field (short text, required, about 40 characters max) on the service, expertise and case-study content types: what the page is *called* ("Product Design", "HealthTech", "ConnectX"), as distinct from its `title`, which is the line the page argues. For case studies this is the `client` field (§ 13); it need not be a second field. Once it exists, each source maps it onto the view model (`ServicePage`, `ExpertisePage`, `CaseStudyPage`) and the route passes it as the trail's last crumb.
+
+**Why.** The trail sits 32px above the h1 (kit `fdn-top`), and its last crumb names the page only when the h1 does not. Today these records have only a title, so their trails stop at the parent ("Home / Services") rather than repeating the headline. With a name the trail can say where you are *and* what the page is called, as the six designed service pages already do from `story.name`. The hero eyebrow on services and expertise ("Product Design services", "Product Design specialist") is doing this job today without being meant for it.
+
+**Found in.** Kit `fdn-top` review round, 5 Oct 2026. Content side: `docs/content-changes.md` § 5.

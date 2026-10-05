@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
@@ -233,18 +234,17 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
       ) : null}
 
       <PageHero
-        trail={{
-          crumbs: (
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: ROUTES.home },
-                { label: 'Case studies', href: ROUTES.caseStudies },
-                { label: caseStudy.title, href: caseStudyPath(caseStudy.slug) },
-              ]}
-            />
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Case studies', href: ROUTES.caseStudies },
+            { label: caseStudy.title, href: caseStudyPath(caseStudy.slug) },
+          ],
+          caseStudy.title,
+          (t) => (
+            <Breadcrumbs {...t} />
           ),
-          current: caseStudy.title,
-        }}
+        )}
         title={caseStudy.title}
         body={[caseStudy.description]}
         dates={

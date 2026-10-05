@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Layout, Prose, type LayoutProps } from '@/components';
 import { getToolPage, type ToolBlock, type ToolContentColumn } from '@/content';
 import { ROUTES, toolPath } from '@/lib/routes';
-import { eyebrowBesideTrail } from '@/lib/trail';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
@@ -256,7 +256,9 @@ export default async function ToolPage({ params }: PageProps<'/tools/[slug]'>) {
       ) : null}
 
       <PageHero
-        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: title }}
+        trail={heroTrail(crumbs, title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={title}
         eyebrow={eyebrowBesideTrail(tool.hero.eyebrow, crumbs)}
         body={[tool.hero.description]}

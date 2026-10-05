@@ -16,7 +16,7 @@ import styles from './Breadcrumbs.module.css';
 export type BreadcrumbItem = { label: string; href: string };
 
 /**
- * One prop, and the closed props type is the point rather than an oversight.
+ * Two props, and the closed props type is the point rather than an oversight.
  *
  * There is no index signature and no HTMLAttributes spread, so `className`, `style`, `separator`,
  * `size`, `density`, `surface` and `children` are all excess-property errors at the call site
@@ -33,14 +33,26 @@ export type BreadcrumbItem = { label: string; href: string };
  */
 export type BreadcrumbsProps = {
   /**
-   * The ancestors, in order, ending with this page. Everything is derived from it: which item is
-   * current (always the last), how many dividers there are (always one fewer than the rendered
-   * items), and whether the middle collapses (at four or more).
+   * The ancestors, in order, ending with this page (or, with `endsWith="parent"`, with its
+   * parent). Everything else is derived from it: which item is last, how many dividers there are
+   * (always one fewer than the rendered items), and whether the middle collapses (at four or more).
    *
    * Two or more items, and depth beyond four is free — the collapse holds the rendered count at
    * four whether the route is six levels deep or sixteen. Fewer than two renders nothing.
    */
   items: readonly BreadcrumbItem[];
+  /**
+   * What the last item is. `page` (the default): this page, rendered as text with
+   * `aria-current="page"`. `parent`: this page's parent, rendered as a link like every other crumb,
+   * and no item is current.
+   *
+   * `parent` exists because the trail sits 32px above the h1 (kit `fdn-top`, 5 Oct 2026). On a page
+   * whose only name IS its h1 (an article, an audit, a glossary term, a legal page) a current crumb
+   * repeats the headline directly below it, and a headline-length crumb wraps on a phone. Such a
+   * page's trail stops at its parent and the h1 is the current page. Routes do not choose this by
+   * hand: `heroTrail` in `@/lib/trail` decides it by comparing the last label with the title.
+   */
+  endsWith?: 'page' | 'parent';
 };
 
 /** Whitespace-only labels are dropped, so a bad frontmatter record cannot skew the divider count. */
@@ -49,7 +61,8 @@ const hasLabel = (item: BreadcrumbItem) => item.label.trim().length > 0;
 /**
  * Breadcrumbs — the ancestor trail, built to docs/specs/Breadcrumbs.md.
  *
- * An ordered list of the pages above this one, ending in this one. It states position; it is not a
+ * An ordered list of the pages above this one, ending in this one or, when the h1 below names it,
+ * in its parent (`endsWith`). It states position; it is not a
  * way of getting elsewhere — SiteNav does that, and the trail's links are a by-product of saying
  * where you are rather than the point of it.
  *
@@ -61,15 +74,16 @@ const hasLabel = (item: BreadcrumbItem) => item.label.trim().length > 0;
  *
  * It renders ONLY the landmark and its trail — no `Section`, no band, no air of its own (kit
  * `fdn-top`, 5 Oct 2026). Its one placement is `PageHero`'s `trail` slot: the route or template
- * passes `trail={{ crumbs: <Breadcrumbs items={…} />, current }}`, and the hero sets it 32 above
- * the split inside its own band. That is what moved the h1 from 296 to 222 on a service page: the
+ * passes `trail={heroTrail(items, title, (t) => <Breadcrumbs {...t} />)}` (`@/lib/trail`), and the
+ * hero sets it 32 above the split inside its own band. `heroTrail` drops the last item when it
+ * repeats the h1, which is when `endsWith` becomes `parent`. That is what moved the h1 from 296 to 222 on a service page: the
  * trail's own 64-above band and the hero's 96 no longer stack. The hero's 96 of top padding is now
  * the air above the trail, and the 44px hit extension reaches 23.15px up into it.
  *
  * A server component. No state, no effect, no ref, no DOM handler — hover, press and focus are the
  * stylesheet's business and take no props, and nothing in this component ever opens.
  */
-export function Breadcrumbs({ items }: BreadcrumbsProps) {
+export function Breadcrumbs({ items, endsWith = 'page' }: BreadcrumbsProps) {
   const trail = items.filter(hasLabel);
   const first = trail[0];
   const current = trail[trail.length - 1];
@@ -199,10 +213,19 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
             STRUCTURAL — it is the last item — so it is a different element with its own token,
             which is why no --crumb-link-ink-current exists. It differs from its ancestors by ink
             alone and does not need more: it is not focusable, it gains no rule on hover, and it
-            carries aria-current, so nothing about it is carried by colour only. */}
-          <span aria-current="page" className={styles.current}>
-            {current.label}
-          </span>
+            carries aria-current, so nothing about it is carried by colour only.
+
+            With `endsWith="parent"` the last item is an ancestor like the rest, so it is a link
+            like the rest, and nothing in the trail is current: the h1 below is. */}
+          {endsWith === 'parent' ? (
+            <a className={styles.link} href={current.href}>
+              {current.label}
+            </a>
+          ) : (
+            <span aria-current="page" className={styles.current}>
+              {current.label}
+            </span>
+          )}
         </Cluster>
       </Cluster>
     </nav>

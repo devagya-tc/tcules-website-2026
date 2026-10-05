@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { Cluster, Layout, Section } from '@/components';
 import { getMatterDesignSystemPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { eyebrowBesideTrail } from '@/lib/trail';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
@@ -81,10 +81,9 @@ export default async function MatterDesignSystemPage() {
 
   const crumbs: BreadcrumbItem[] = [
     { label: 'Home', href: ROUTES.home },
-    {
-      label: page.hero.headingTwo || page.hero.headingOne,
-      href: ROUTES.matterDesignSystem,
-    },
+    /* The composed heading is this page's NAME, not a message, so it is the leaf, and heroTrail
+       drops it as a repeat of the h1: a lone Home renders no trail. */
+    { label: heroTitle, href: ROUTES.matterDesignSystem },
   ];
 
   return (
@@ -97,10 +96,9 @@ export default async function MatterDesignSystemPage() {
       ) : null}
 
       <PageHero
-        trail={{
-          crumbs: <Breadcrumbs items={crumbs} />,
-          current: page.hero.headingTwo || page.hero.headingOne,
-        }}
+        trail={heroTrail(crumbs, heroTitle, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={heroTitle}
         eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
         body={[page.hero.description]}

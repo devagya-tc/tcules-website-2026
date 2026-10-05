@@ -9,6 +9,7 @@ import {
   type InsightResourceKind,
 } from '@/content';
 import { blogPath, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { BlockCard, Breadcrumbs, CtaSection, PageHero } from '@/patterns';
 
 const INSIGHTS_SLUG = ROUTES.insights.slice(1);
@@ -133,17 +134,16 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
   return (
     <>
       <PageHero
-        trail={{
-          crumbs: (
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: ROUTES.home },
-                { label: page.hero.heading, href: ROUTES.insights },
-              ]}
-            />
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Insights', href: ROUTES.insights },
+          ],
+          page.hero.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
           ),
-          current: page.hero.heading,
-        }}
+        )}
         title={page.hero.heading}
         body={[page.hero.description]}
         surface="paper"

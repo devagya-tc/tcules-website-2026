@@ -29,9 +29,9 @@ const DEEP: BreadcrumbItem[] = [
  * elsewhere, which is what SiteNav is for.
  *
  * It renders only the <nav> and its trail: no band, no air, no surface prop. On a page it goes in
- * PageHero's `trail` slot — `trail={{ crumbs: <Breadcrumbs items={…} />, current: '…' }}` — and
- * reads its colours from the hero band's ground, as a Button does. These previews put it in a
- * Section so it has a ground to read.
+ * PageHero's `trail` slot — `trail={{ crumbs: <Breadcrumbs items={ITEMS} />, labels: ITEMS.map(
+ * (i) => i.label) }}`, which the site builds with `heroTrail` — and reads its colours from the hero
+ * band's ground, as a Button does. These previews put it in a Section so it has a ground to read.
  */
 export function Default() {
   return (
@@ -50,6 +50,23 @@ export function Shallow() {
           { label: 'Home', href: '/' },
           { label: 'Case Studies', href: '/case-studies' },
         ]}
+      />
+    </Section>
+  );
+}
+
+/** A page whose h1 IS its name (an article, an audit, a glossary term): the trail ends at the
+    PARENT, as a link, and nothing in it is current — the h1 directly below is the current page. */
+export function EndsAtParent() {
+  return (
+    <Section>
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Insights', href: '/insights' },
+          { label: 'Guides', href: '/insights/guides' },
+        ]}
+        endsWith="parent"
       />
     </Section>
   );

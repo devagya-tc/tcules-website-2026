@@ -10,7 +10,7 @@ import {
   type HowWeWorkContentColumn,
 } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { eyebrowBesideTrail } from '@/lib/trail';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -284,10 +284,9 @@ export default async function HowWeWorkPage() {
       ) : null}
 
       <PageHero
-        trail={{
-          crumbs: <Breadcrumbs items={crumbs} />,
-          current: page.hero.eyebrow || page.title,
-        }}
+        trail={heroTrail(crumbs, page.title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={page.title}
         eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
         body={[page.hero.description]}

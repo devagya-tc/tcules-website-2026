@@ -16,7 +16,8 @@ import {
   type PageHeroProps,
 } from '@/patterns';
 
-import { ROUTES, servicePath } from '@/lib/routes';
+import { ROUTES, glossaryPath, servicePath } from '@/lib/routes';
+import { heroTrail, type Trail } from '@/lib/trail';
 
 import { specimenStyles as s } from '../_specimen/Specimen';
 
@@ -275,6 +276,18 @@ const TRAIL = [
   { label: 'ConnectX', href: CASE_STUDY },
 ] as const;
 const TRAIL_CURRENT = 'ConnectX';
+
+/* A page whose only name IS its h1 — a glossary term. Its whole trail ends in that name, and
+   heroTrail drops the leaf because the title says it, so the trail ends at the parent. */
+const TERM = 'Design intent';
+const TERM_TRAIL = [
+  { label: 'Home', href: ROUTES.home },
+  { label: 'Glossary', href: ROUTES.glossary },
+  { label: TERM, href: glossaryPath('design-intent') },
+] as const;
+
+/* The one render every hero below hands to heroTrail. */
+const crumbs = (trail: Trail) => <Breadcrumbs {...trail} />;
 
 /* A real service-line illustration, so block 9's service hero is the shape the six pages render. */
 const SERVICE_ILLUSTRATION: MediaImage = {
@@ -700,7 +713,7 @@ export default function PageHeroSpecimenPage() {
         <PageHero
           key={surface}
           surface={surface}
-          trail={{ crumbs: <Breadcrumbs items={TRAIL} />, current: TRAIL_CURRENT }}
+          trail={heroTrail(TRAIL, TITLE, crumbs)}
           title={TITLE}
           body={paragraphs(2)}
           eyebrow={EYEBROW}
@@ -713,7 +726,11 @@ export default function PageHeroSpecimenPage() {
 
       <PageHero
         arrangement="beside"
-        trail={{ crumbs: <Breadcrumbs items={SERVICE_TRAIL} />, current: 'Product Design' }}
+        trail={heroTrail(
+          SERVICE_TRAIL,
+          'Finished screens can hide an unresolved product.',
+          crumbs,
+        )}
         title="Finished screens can hide an unresolved product."
         body={[
           'Tcules takes responsibility for the product beneath the screens: who does what, the records and rules behind it, how it behaves, and what to learn first.',
@@ -730,14 +747,26 @@ export default function PageHeroSpecimenPage() {
       />
 
       <PageHero
-        trail={{ crumbs: <Breadcrumbs items={TRAIL} />, current: TRAIL_CURRENT }}
+        trail={heroTrail(TERM_TRAIL, TERM, crumbs)}
+        title={TERM}
+        body={[
+          'The decision a design records about how the product should behave, as distinct from how one screen of it looks.',
+        ]}
+      />
+      <Note
+        title="9 · A page whose h1 is its name — the trail ends at the parent"
+        note="The page's whole trail is Home / Glossary / Design intent, and its h1 is 'Design intent'. A current crumb would say the headline 32px above it, and a headline-length one wraps on a phone, so heroTrail drops the leaf when it repeats the title and Breadcrumbs renders endsWith='parent': every crumb is a link and none is aria-current, because the h1 is the current page. The same rule ends an article, an audit, a tool, a case study and a legal page at its parent; a top-level page whose h1 is its name is left a lone 'Home' and gets no trail at all."
+      />
+
+      <PageHero
+        trail={heroTrail(TRAIL, TITLE, crumbs)}
         title={TITLE}
         body={paragraphs(1)}
         eyebrow={TRAIL_CURRENT}
       />
       <Note
         title="9 · Deliberately WRONG — an eyebrow that repeats the last crumb"
-        note="The eyebrow says 'ConnectX' 32px under a trail that ends in 'ConnectX'. In development PageHero logs a warning naming the eyebrow (trimmed, case ignored), and the band still renders, so the fault is visible on the page as well as in the console. The fix is to drop the eyebrow, or to replace it with a category or format the trail cannot say: 'Case study · Fintech', 'Podcast · Ep 12'."
+        note="The eyebrow says 'ConnectX' 32px under a trail that ends in 'ConnectX'. In development PageHero logs a warning naming the eyebrow, and the band still renders, so the fault is visible on the page as well as in the console. The comparison is sameLabel from @/lib/trail, the same one the routes' eyebrowBesideTrail uses: zero-width characters, punctuation, case and a trailing 's' are ignored, so 'Audit' under 'Audits' is caught too. The fix is to drop the eyebrow, or to replace it with a category or format the trail cannot say: 'Case study · Fintech', 'Podcast · Ep 12'."
       />
 
       {/* ── 10 · Every edge case from §12 ───────────────────────────────────────── */}
@@ -839,16 +868,18 @@ export default function PageHeroSpecimenPage() {
             13 · The 44px touch floor, which a screenshot will not show
           </p>
           <p className={s.specNote}>
-            Every action is <code>Button size=&quot;md&quot;</code> with{' '}
-            <code>extendHitArea</code>. The box is <code>--btn-height-md</code> 40 and the floor
-            is <code>--btn-hit-min</code> 44, so the extension covers the missing 4 without
-            moving the row — and the row not moving is the point: stepping to{' '}
-            <code>size=&quot;lg&quot;</code> would make the hero&apos;s controls 48 while every
-            other control on the site stayed at 40, and the hero would be claiming a loudness
-            the design does not intend. The dashed box below is 44 tall, for comparison against
-            the actions above. An action missing the extension is the one failure this component
-            can ship that a screenshot will not show, so assert both numbers in the rendered
-            DOM.
+            Both actions are <code>Button size=&quot;md&quot;</code> with{' '}
+            <code>extendHitArea</code>, and the floor is <code>--btn-hit-min</code> 44 for both.
+            The solid&apos;s box is <code>--btn-height-md</code> 40, so for it the extension
+            covers the missing 4 without moving the row — and the row not moving is the point:
+            stepping to <code>size=&quot;lg&quot;</code> would make the hero&apos;s button 48
+            while every other control on the site stayed at 40, and the hero would be claiming a
+            loudness the design does not intend. The neutral link has no box: it is its label
+            line, about 16 tall, so for it the extension IS the 44 target, centred on the label.
+            The dashed box below is 44 tall, for comparison against the actions above. An action
+            missing the extension is the one failure this component can ship that a screenshot
+            will not show, so assert the 44 in the rendered DOM: the solid&apos;s box is 40, the
+            link&apos;s is its line, and both hit areas are 44.
           </p>
           <div className={s.hitFloor} />
         </Layout>

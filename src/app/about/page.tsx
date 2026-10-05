@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import { getAboutPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { BlockCard, Breadcrumbs, ListCard, PageHero } from '@/patterns';
 
 const ABOUT_SLUG = ROUTES.about.slice(1);
@@ -79,17 +80,16 @@ export default async function AboutPage() {
       ) : null}
 
       <PageHero
-        trail={{
-          crumbs: (
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: ROUTES.home },
-                { label: breadcrumbLabel, href: ROUTES.about },
-              ]}
-            />
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: breadcrumbLabel, href: ROUTES.about },
+          ],
+          page.hero.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
           ),
-          current: breadcrumbLabel,
-        }}
+        )}
         title={page.hero.heading}
         body={[page.hero.description]}
         media={

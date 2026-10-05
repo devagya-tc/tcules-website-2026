@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import { getContactPage, type ContactAction } from '@/content';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { Breadcrumbs, EnquiryForm, ListCard, PageHero } from '@/patterns';
 
 const CONTACT_SLUG = ROUTES.contact.slice(1);
@@ -64,17 +65,16 @@ export default async function ContactPage() {
       ) : null}
 
       <PageHero
-        trail={{
-          crumbs: (
-            <Breadcrumbs
-              items={[
-                { label: 'Home', href: ROUTES.home },
-                { label: 'Contact', href: ROUTES.contact },
-              ]}
-            />
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Contact', href: ROUTES.contact },
+          ],
+          page.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
           ),
-          current: 'Contact',
-        }}
+        )}
         title={page.heading}
         body={[page.description]}
         surface="paper"

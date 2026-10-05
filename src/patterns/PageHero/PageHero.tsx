@@ -10,6 +10,7 @@ import {
   type SectionSurface,
 } from '@/components';
 import { FULL_COLUMN, HERO_BESIDE } from '@/lib/image-sizes';
+import { repeatsTrail, sameLabel, type HeroTrail } from '@/lib/trail';
 
 import styles from './PageHero.module.css';
 
@@ -104,17 +105,19 @@ export type HeroVideo = {
 export type HeroMedia = HeroImage | HeroVideo;
 
 /**
- * The page's ancestor trail, inside the hero's band (kit `fdn-top`, 5 Oct 2026).
+ * The page's ancestor trail, inside the hero's band (kit `fdn-top`, 5 Oct 2026):
+ * `{ crumbs: ReactNode; labels: readonly string[] }`, declared in `@/lib/trail` and re-exported here.
  *
- * `crumbs` is a slot: the route or template passes `<Breadcrumbs items={…} />`. A slot rather than
- * the items, because a pattern does not import a pattern — the caller composes, and PageHero only
- * places what it is handed, 32 above the split.
+ * `crumbs` is a slot: the rendered `<Breadcrumbs …/>`. A slot rather than the items, because a
+ * pattern does not import a pattern — the caller composes, and PageHero only places what it is
+ * handed, 32 above the split.
  *
- * `current` is the last crumb's label, stated beside the slot because a ReactNode cannot be read.
- * It is used for one thing: in development, PageHero warns when `eyebrow` says the same words, since
- * an eyebrow that repeats the trail spends a line saying nothing new.
+ * `labels` are the rendered crumbs' labels, beside the slot because a ReactNode cannot be read.
+ * They are used for one thing: in development PageHero warns when the eyebrow or the title says
+ * the same words as a crumb. Neither is written by hand — `heroTrail(items, title, render)` builds
+ * both from one array, and drops a last crumb that repeats the title before either is made.
  */
-export type HeroTrail = { crumbs: ReactNode; current: string };
+export type { HeroTrail };
 
 /**
  * Where the media sits against the copy. A PRESENTATION choice, made by the page-type template per
@@ -171,8 +174,9 @@ export type PageHeroProps = {
    * A category or format the trail cannot say (`Case study`, `Podcast`). Never the last crumb.
    *
    * That rule leads for the design agent's `.prompt.md`. Since the trail moved inside the hero
-   * (kit `fdn-top`, 5 Oct 2026), an eyebrow that repeats the page's own name stands 32px under the
-   * trail that already said it; PageHero warns in development when it equals `trail.current`.
+   * (kit `fdn-top`, 5 Oct 2026), an eyebrow that repeats a crumb stands 32px under the trail that
+   * already said it; PageHero warns in development when it equals any of `trail.labels`, by the
+   * same comparison `eyebrowBesideTrail` uses (`sameLabel`, `@/lib/trail`).
    * Uppercased by the stylesheet, not by the data, so the frontmatter keeps its authored casing.
    *
    * A slot, not a variant: absent renders no element and no seam, which is why there is no
@@ -181,7 +185,8 @@ export type PageHeroProps = {
    */
   eyebrow?: string;
   /**
-   * The ancestor trail: `{ crumbs: <Breadcrumbs items={…} />, current: <last label> }`. Sits 32 above the split.
+   * The ancestor trail, built by `heroTrail(items, title, (t) => <Breadcrumbs {...t} />)`. Sits 32
+   * above the split.
    *
    * Inside the hero's band rather than in a band of its own, so the hero's 96 of top padding is
    * the air above the trail and nothing stacks a second band's padding on top of it. See
@@ -426,21 +431,31 @@ export function PageHero({
      photograph, a capture or a video has an edge, so the h1 and that top edge share a line. */
   const centred = split && media.type === 'image' && media.image.kind === 'illustration';
 
-  /* The trail already names the page. An eyebrow that says the same words stands 32px under it and
-     tells the reader nothing new (owner, 5 Oct 2026: the eyebrow never repeats the crumb). Trimmed
-     and case-folded, because the eyebrow is uppercased by the stylesheet and a repeat in another
-     casing is still a repeat. A warning rather than a refusal: the eyebrow renders, so the fault is
-     visible on the page as well as in the console. */
-  if (
-    process.env.NODE_ENV !== 'production' &&
-    eyebrow !== undefined &&
-    trail !== undefined &&
-    sameWords(eyebrow, trail.current)
-  ) {
-    console.warn(
-      `PageHero: eyebrow "${eyebrow}" repeats the trail's last crumb. Drop it, or replace it ` +
-        `with a category or format the trail cannot say (for example "Case study · Fintech").`,
-    );
+  /* The trail stands 32px above the copy, so anything in the copy that says a crumb's words again
+     reads twice. Two warnings, one definition of "the same words" — `sameLabel` in @/lib/trail,
+     which the routes' own `heroTrail` and `eyebrowBesideTrail` use, so the warning cannot disagree
+     with the fix (zero-width characters, punctuation, case and a trailing "s" all ignored).
+     Warnings rather than refusals: the band renders, so the fault is visible on the page as well
+     as in the console.
+
+       eyebrow  owner, 5 Oct 2026: the hero eyebrow never repeats the crumb — any crumb, since a
+                format eyebrow ("Audits") repeats a parent as surely as a name repeats the leaf.
+       title    the last crumb names the page only when the h1 does not. `heroTrail` drops a leaf
+                that repeats the title, so this fires only on a trail built by hand. */
+  if (process.env.NODE_ENV !== 'production' && trail !== undefined) {
+    if (eyebrow !== undefined && repeatsTrail(eyebrow, trail.labels)) {
+      console.warn(
+        `PageHero: eyebrow "${eyebrow}" repeats a crumb in the trail. Drop it, or replace it ` +
+          `with a category or format the trail cannot say (for example "Case study · Fintech").`,
+      );
+    }
+    const last = trail.labels.at(-1);
+    if (last !== undefined && sameLabel(last, title)) {
+      console.warn(
+        `PageHero: the trail's last crumb "${last}" repeats the title. Build the trail with ` +
+          `heroTrail (@/lib/trail), which ends it at the parent when the h1 names the page.`,
+      );
+    }
   }
 
   /* ── split · the arrangement ──────────────────────────────────────────────
@@ -539,12 +554,14 @@ export function PageHero({
             own and its label must sit on the button's label line. 24 between wrapped rows too, so a
             link that wraps under the button keeps its 44px target clear of the button's box.
 
-            size="md" with extendHitArea, not size="lg". The box is 40 and the touch floor is
-            44, so the extension reaches the floor without moving the row: the alternative would
-            make the hero's controls 48 while every other control on the site stayed at 40, and
-            the hero would be claiming a loudness the design does not intend. An action missing
-            the extension is the one failure this component can ship that a screenshot will not
-            show. */}
+            size="md" with extendHitArea on both, not size="lg". The solid's box is 40 and the
+            touch floor is 44, so the extension covers the missing 4 without moving the row: lg
+            would make the hero's button 48 while every other control on the site stayed at 40,
+            and the hero would be claiming a loudness the design does not intend. The link has no
+            box: it is its label line, about 16 tall, so for it the extension is the whole of the
+            44 target, centred on the label and reaching 14 above and below it, which is why the
+            rows are 24 apart. An action missing the extension is the one failure this component
+            can ship that a screenshot will not show. */}
         {controls.length > 0 ? (
           <Cluster colGap="block" rowGap="block" align="center">
             {controls.map((action, index) => (
@@ -647,8 +664,4 @@ export function PageHero({
       )}
     </Section>
   );
-}
-
-function sameWords(a: string, b: string) {
-  return a.trim().toLowerCase() === b.trim().toLowerCase();
 }

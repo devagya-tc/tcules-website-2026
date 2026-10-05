@@ -31,8 +31,11 @@ Verified against the loaded Tcules library (`window.Tcules`, 9 components) and `
 
 1. **`Breadcrumbs` renders only `<nav aria-label="Breadcrumb">` and its trail.** No `Section`. `.root` (64 above, the focus-ring clearance below) is deleted, and so is `--crumb-ring-clearance`, which existed only to keep the ring inside the old band.
 2. **`surface` is deleted.** The colour comes from the enclosing band's `data-surface`, as a Button's does (token rule 7). Every per-surface token in `breadcrumbs.css` keeps its value. A trail can no longer be painted a different ground from the hero it introduces, so the "deliberately mismatched" specimen and §14's surface-match check are retired.
-3. **Placement:** `PageHero`'s `trail` slot — `trail={{ crumbs: <Breadcrumbs items={…} />, current: <last label> }}`. The hero sets it 32 (`gutter`) above its split, inside its own 96 of top padding. The 44px hit extension reaches 23.15px up into that padding and leaves about 73 clear of the sticky nav; the rule offset and the hit geometry are unchanged.
+3. **Placement:** `PageHero`'s `trail` slot — `trail={heroTrail(items, title, (t) => <Breadcrumbs {...t} />)}` (`src/lib/trail.ts`; it was `{ crumbs, current }` until the fix round, item 5). The hero sets it 32 (`gutter`) above its split, inside its own 96 of top padding. The 44px hit extension reaches 23.15px up into that padding and leaves about 73 clear of the sticky nav; the rule offset and the hit geometry are unchanged.
 4. **Measured on the six service pages at 1470 × 830:** trail top 169, split top 222 (was 296), every hero ends at or above 823. At 390 the trail starts at 161 and the h1 at 214.
+5. **Fix round, 5 Oct 2026 — a second prop, `endsWith?: 'page' | 'parent'`.** On most trail pages the last crumb was the page's full title: 32px above the h1 the headline read twice, and at 390 the long crumb wrapped onto a second line led by a divider (this spec's tracker 2.17 defect, moved inside the hero). The last crumb now names the page only when the h1 does not. `heroTrail` drops a last item whose label repeats the title (`sameLabel`: zero-width characters, punctuation, case and a trailing "s" ignored) and renders `endsWith="parent"`: the last item is the parent, rendered as a **link** like every other ancestor, and nothing is `aria-current` — the h1 directly below is the current page (the GOV.UK pattern for a trail directly above its page's title). A trail left as a lone "Home" is not rendered at all, which § 12 already rules: a trail of one is noise. Where the page has a name shorter than its h1 the route passes it as the leaf (`story.name`; the nav labels "Insights", "Case studies") and it stays as the current page. The collapse is unchanged: it counts rendered items. No token, no class and no CSS changed: the parent reuses `link`.
+
+   Result, crawled from `/` over 162 pages: 128 carry a trail, all inside the hero, none twice; 7 end at the page (the top-level pages whose h1 is a message: about, contact, careers, how-we-work, services, insights, case-studies; the six `/design/service-page` pages end at the service's name too), the other 121 end at the parent; no last crumb repeats its h1; no eyebrow repeats a crumb; every trail is one line at 390. Pages that now carry no trail because their h1 is their name: terms-of-use, privacy-policy, future-interfaces-lab, matter-design-system.
 
 **Migration (§ 2.6).** Every rendering consumer moved its crumbs into the hero's `trail`: 20 live routes (about, audits/[slug], careers, case-studies/[slug], contact, expertise/[slug], future-interfaces-lab, future-interfaces-lab/join, glossary/[slug], how-we-work, insights, insights/[...slug], insights/events/[slug], insights/podcasts/[slug], matter-design-system, privacy-policy, services, services/[...slug], terms-of-use, tools/[slug]), 2 templates (CaseStudyIndex, ServicePage, so also /case-studies and the six /design/service-page pages), 3 specimens (design/breadcrumbs rewritten as Specimens inside Sections, design/page-hero block 9, design/section's note) and the two `.design-sync` previews. A crawl of 162 pages from `/` finds the trail on 132, always inside the hero, never twice. No route's first band is something other than a PageHero.
 
@@ -51,9 +54,9 @@ Eyebrows fixed on the way (the owner's ruling is "never repeats the crumb", so a
 | six service pages (ServicePage) | the service name as eyebrow, and as the last crumb | eyebrow dropped; `hero.eyebrow` renamed `story.name` |
 | expertise, tools, services/[...slug], matter-design-system, future-interfaces-lab/join | CMS eyebrow, never equal to a crumb today | passed through `eyebrowBesideTrail`, unchanged on screen |
 
-`src/lib/trail.ts` (`eyebrowBesideTrail`) is the route-side check: it compares against every crumb, case-folded, zero-width characters dropped and a trailing "s" ignored. PageHero's own development warning sees only `trail.current`.
+`src/lib/trail.ts` holds the one definition of "the same words", `sameLabel`, and everything that asks the question uses it: `heroTrail` (does the leaf repeat the title?), `eyebrowBesideTrail` (does the eyebrow repeat any crumb?) and PageHero's two development warnings (the same two questions, for a hero built by hand).
 
-Sections 1, 3, 7, 9, 10, 14 and 15 below still describe the band; where they disagree with this block, this block wins.
+Sections 1, 7, 9, 10, 14 and 15 below still describe the band; where they disagree with this block, this block wins. § 3 is amended in place.
 
 ## 1 · Identity
 
@@ -80,7 +83,7 @@ The ancestor trail: an ordered list of the pages above this one, ending in this 
 | `trail` | `<ol>`, rendered by `Cluster as="ol"` | yes | none | both gaps: `colGap="inline"`, `rowGap="block"` |
 | `crumb` | `<li>` — bare for the first, `Cluster as="li"` for every other | yes, 2 or more | none | nothing of its own |
 | `link` | `<a href>` | one per item except the last | `items[i].label`, verbatim | link inks, `rule`, `hit`, the focus ring |
-| `current` | `<span aria-current="page">` | yes — exactly one, always last | the last item's `label`, verbatim | `--crumb-current-ink` |
+| `current` | `<span aria-current="page">` | exactly one, always last — and none with `endsWith="parent"` (*5 Oct 2026*) | the last item's `label`, verbatim | `--crumb-current-ink` |
 | `divider` | `<span aria-hidden="true">` holding U+002F solidus | between every pair; count is always `crumb` count − 1 | none — a fixed character, not a slot | `--crumb-divider-ink` |
 | `collapse` | `<li>` holding `<span aria-hidden="true">` U+2026 plus **two** visually hidden count strings, one `.wideOnly` and one `.narrowOnly` (*29 Sep 2026*) | only when `items.length >= 4` | none — the count strings are generated | `--crumb-divider-ink` (*29 Sep 2026*; was `--crumb-collapse-ink`, deleted) |
 | `rule` | `::after` on `link`, at `inset-block-end: 0` | yes | none | `currentColor` — no token of its own, deliberately (see 6) |
@@ -100,8 +103,9 @@ type BreadcrumbItem = { label: string; href: string }
 
 | Prop | Exact literal union | Default | What it decides |
 |---|---|---|---|
-| `items` | `readonly BreadcrumbItem[]` | none — required | Everything: order, labels, hrefs, which item is `current` (always the last), and whether the middle collapses (`length >= 4`) — to four crumbs from 768 up, to three below (*29 Sep 2026*) |
-| `surface` | `'paper' \| 'tint' \| 'ink' \| 'blue'` (`SectionSurface`) | `'paper'` | The ground this component's own band paints. Must equal the `surface` of the hero band immediately below it |
+| `items` | `readonly BreadcrumbItem[]` | none — required | Everything: order, labels, hrefs, which item is last, and whether the middle collapses (`length >= 4`) — to four crumbs from 768 up, to three below (*29 Sep 2026*) |
+| `endsWith` | `'page' \| 'parent'` (*5 Oct 2026*) | `'page'` | What the last item is. `page`: this page, the `current` part, text with `aria-current="page"`. `parent`: this page's parent, a `link` like the other ancestors, and no `current` part at all — for a page whose h1 is its name and says it directly below. Set by `heroTrail`, never by hand |
+| ~~`surface`~~ | — | — | **Deleted 5 Oct 2026.** The colour comes from the enclosing band's `data-surface` |
 
 Two props, no knobs.
 

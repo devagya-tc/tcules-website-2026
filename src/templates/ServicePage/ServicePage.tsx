@@ -11,6 +11,7 @@ import {
 } from '@/patterns';
 import type { ServiceStory } from '@/lib/service-story';
 import { ROUTES, servicePath } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 
 import { StoryBlockView } from './Blocks';
 
@@ -53,10 +54,9 @@ export function ServicePage({
     <>
       <PageHero
         surface="paper"
-        trail={{
-          crumbs: <Breadcrumbs items={breadcrumbs} />,
-          current: breadcrumbs.at(-1)?.label ?? story.name,
-        }}
+        trail={heroTrail(breadcrumbs, hero.title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={hero.title}
         body={[hero.lead]}
         actions={hero.actions}

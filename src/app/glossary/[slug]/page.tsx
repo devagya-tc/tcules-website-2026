@@ -10,7 +10,7 @@ import {
   type GlossaryContentColumn,
 } from '@/content';
 import { glossaryPath, ROUTES } from '@/lib/routes';
-import { eyebrowBesideTrail } from '@/lib/trail';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -303,7 +303,9 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
       ) : null}
 
       <PageHero
-        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: glossary.title }}
+        trail={heroTrail(crumbs, glossary.title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={glossary.title}
         eyebrow={eyebrowBesideTrail(glossary.hero.eyebrow, crumbs)}
         body={[glossary.hero.description]}

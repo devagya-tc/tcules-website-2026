@@ -122,8 +122,15 @@ one component allowed to use margins internally.
 four or more levels collapse to four with the middle elided, so depth costs nothing.
 
 It renders **only the `<nav>` and its trail** — no band, no air and no `surface` (5 Oct 2026). Put
-it in `PageHero`'s `trail` slot, with `current` set to the last crumb's label; the hero places it
-32 above the title inside its own band, and the trail reads that band's ground like a Button does.
+it in `PageHero`'s `trail` slot, with `labels` set to the crumbs' labels; the hero places it 32
+above the title inside its own band, and the trail reads that band's ground like a Button does.
+
+**The last crumb names the page only when the h1 does not.** A service page's h1 is a headline, so
+its trail ends in the service's name (`Home / Services / Product Design`). An article's, an
+audit's, a glossary term's or a legal page's h1 IS its name, so its trail stops at the parent and
+renders `endsWith="parent"`: every crumb a link, none current (`Home / Insights / Guides` above the
+article's title). Never put the headline in the trail — 32px above the h1 it reads twice, and on a
+phone it wraps. A top-level page whose h1 is its name gets no trail at all.
 
 ```jsx
 <PageHero
@@ -134,9 +141,9 @@ it in `PageHero`'s `trail` slot, with `current` set to the last crumb's label; t
       { label: 'Services', href: '/services' },
       { label: 'Interaction and UI Design', href: '/services/interaction-ui-design' },
     ]} />,
-    current: 'Interaction and UI Design',
+    labels: ['Home', 'Services', 'Interaction and UI Design'],
   }}
-  title="Interaction and UI Design"
+  title="Design the screens, and the rules that decide them"
   body={['…the opening…']}
 />
 ```

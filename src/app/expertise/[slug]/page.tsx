@@ -10,7 +10,7 @@ import {
   type ExpertiseContentColumn,
 } from '@/content';
 import { expertisePath, ROUTES } from '@/lib/routes';
-import { eyebrowBesideTrail } from '@/lib/trail';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -330,7 +330,9 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
       ) : null}
 
       <PageHero
-        trail={{ crumbs: <Breadcrumbs items={crumbs} />, current: title }}
+        trail={heroTrail(crumbs, title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={title}
         eyebrow={eyebrowBesideTrail(expertise.hero.eyebrow, crumbs)}
         body={[expertise.hero.description]}
