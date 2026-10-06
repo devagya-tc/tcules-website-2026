@@ -185,7 +185,8 @@ function settleMedia(
  * On a phone a LINKED set of more than three scrolls sideways (§ 3.7 item 2: Layout
  * `scroll="until-md"`, one card per view with the next peeking): every card is then a link, so Tab
  * moves the row. An unlinked set stays stacked, because a scroll row of things nobody can focus
- * fails WCAG 2.1.1 — and so does an icon set of up to six, which is short enough stacked.
+ * fails WCAG 2.1.1 — and so does an icon set of up to six, which is short enough stacked, and a set
+ * under a featured lead (the case-study index), which is a page's list rather than a band's row.
  *
  * A set of five or more IMAGE cards in a feature band is a Slider showing three (§ 1.4 rule 3). The
  * Slider is composed by the caller around BlockCards; this set never imports it, because a pattern
@@ -217,7 +218,10 @@ export function BlockCardSet({
   const iconSet = !covered && items.every((item) => item.icon !== undefined);
   /* § 3.7 item 2: a linked set of more than three scrolls below 768; icon sets of up to six stay
      stacked (136 each, so six stacked is one phone screen, and a glyph row is not a gallery). */
-  const scrolls = linked && items.length > 3 && !(iconSet && items.length <= 6);
+  /* Never under a featured lead: Layout ignores `lead` wherever `scroll` is set (a scroll row has no
+     grid to span), and it reads the prop, not the breakpoint — so a scrolling index would lose its
+     featured row at every width. The case-study index is a page-long list, read stacked anyway. */
+  const scrolls = linked && items.length > 3 && !featured && !(iconSet && items.length <= 6);
 
   return (
     /* Rows sit a `column` apart, columns a `gutter` (29 Sep). The two seams separate different
