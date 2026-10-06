@@ -108,6 +108,21 @@ const SPECIMENS = [
         note: 'one CMS section as one band — stacked | beside | split-head | media, align center, aside, actions, footer, 4 surfaces, stress copy, absent slots, 390',
       },
       {
+        href: '/design/banner',
+        name: 'Banner',
+        note: 'the I band and the announcement strip — below (H-row over 3:1) | beside (3:2 or illustration, both sides) | strip, absent slots, stress, 3 surfaces',
+      },
+      {
+        href: '/design/statement',
+        name: 'Statement',
+        note: 'the J band — one sentence at the h1 role as h2 | p, blue mark, head-half texture, action, 3 surfaces',
+      },
+      {
+        href: '/design/kit/banner',
+        name: 'Kit · cmp-banner',
+        note: 'the family page — every Banner, Statement and strip variation as a page would place it',
+      },
+      {
         href: '/design/cta-row',
         name: 'CtaRow',
         note: 'a band’s row of actions — rule, note, link | solid, neutral | primary, centred cap, narrow tracks, 4 surfaces, in a band',

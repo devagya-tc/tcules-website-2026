@@ -127,6 +127,8 @@
 @import 'components/rating-badge.css';
 @import 'components/process-flow.css';
 @import 'components/service-page.css';
+@import 'components/banner.css';
+@import 'components/statement.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */

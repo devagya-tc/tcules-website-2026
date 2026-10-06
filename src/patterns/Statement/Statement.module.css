@@ -1,0 +1,54 @@
+/* Statement — type, ink and the mark.
+
+   Section paints the band and its open air; Layout and Cluster own every seam; Texture owns its
+   field. Every value is a --stmt-* token in tokens/components/statement.css.
+
+   Classes: .eyebrow .sentence .mark .texture .headEmpty
+
+   One @media query: the head-half texture and the empty head cell exist from 1024 only (§ 6.3:
+   "below 1024: none"). It swaps visibility, never a distance. */
+
+.eyebrow {
+  font: var(--stmt-eyebrow-text);
+  letter-spacing: var(--stmt-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--stmt-eyebrow-ink);
+}
+
+.sentence {
+  font: var(--stmt-sentence-text);
+  letter-spacing: var(--stmt-sentence-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--stmt-sentence-ink);
+  max-inline-size: var(--stmt-sentence-measure);
+}
+
+/* The blue mark: a short rule, the band's foreground accent (§ 4.2, small graphic marks). Sized,
+   not spaced — the Cluster around it owns the seam to the eyebrow. */
+.mark {
+  display: block;
+  inline-size: var(--stmt-mark-width);
+  block-size: var(--stmt-mark-height);
+  background: var(--stmt-mark-ink);
+}
+
+/* The head-half field (§ 6.3) sits on the band's own field — Texture fills Section's padding box —
+   so nothing here places it. It only switches on at 1024, where the band has the [1, 2] row and an
+   empty top-end corner for it. */
+.texture {
+  display: none;
+}
+
+/* The empty head cell when there is no eyebrow: it holds the 1 track so the sentence keeps the 2
+   track from 1024. Below 1024 there is one column and no track to hold, and an empty grid item
+   would add a `block` of air above the sentence, so it is not rendered there. */
+.headEmpty {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .texture,
+  .headEmpty {
+    display: block;
+  }
+}

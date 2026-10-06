@@ -1,0 +1,63 @@
+/* ══ Component layer — Statement ═════════════════════════════════════════════════
+   Tier 2. The J statement (visual-direction § 3.4): one sentence at the h1 ROLE, set in the
+   two-thirds track, with its eyebrow and a short blue mark in the head track. Built by cmp-banner,
+   6 Oct 2026, to docs/specs/Statement.md.
+
+   Naming: --stmt-{part}-{role}
+     parts  eyebrow · sentence · mark
+     roles  text · tracking · measure · ink · width · height
+
+   It is an EXCEPTION band (§ 3.3): no image, so its one large thing is the type. The mark is the
+   band's foreground accent (§ 4.2 "small graphic marks"), so a statement never reads black and
+   white even without its texture; the sentence itself stays ink (§ 4.3: the words stay ink).
+
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry and type · identical on every surface ──────────────────────────── */
+:root {
+  --stmt-eyebrow-text: var(--text-eyebrow);
+  --stmt-eyebrow-tracking: var(--text-eyebrow-tracking);
+  /* The h1 ROLE on an h2 or a p (§ 3.4: the page's only <h1> is the hero's). */
+  --stmt-sentence-text: var(--text-h1);
+  --stmt-sentence-tracking: var(--text-h1-tracking);
+  /* A ceiling, not a width. In the 763 track (the column caps at 1240) 32ch at 54 is ~860, so the
+     track wins from 1024; it binds only in the one-column layout from 768 to 1023, where the
+     sentence would otherwise run the whole column in two long lines. */
+  --stmt-sentence-measure: var(--measure-title);
+
+  /* The mark: a short rule before the eyebrow. A component SIZE, not a distance, so it is not a
+     gap step; the length is the eyebrow's cap height × ~4 at 12px, chosen to read as a dash. Read
+     from the space ramp as a length (fix round 1: it was a raw literal), as --bnr-mark-width is. */
+  --stmt-mark-width: var(--space-32);
+  --stmt-mark-height: var(--border-width-2);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --stmt-sentence-ink: var(--color-neutral-900); /* 14.62:1 */
+  --stmt-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
+  --stmt-mark-ink: var(--color-brandeis-500); /* 6.17:1, a mark ≥ 3:1 */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --stmt-sentence-ink: var(--color-neutral-900); /* 13.05:1 */
+  --stmt-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 */
+  --stmt-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --stmt-sentence-ink: var(--color-white); /* 17.26:1 */
+  --stmt-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+  --stmt-mark-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
+[data-surface='blue'] {
+  --stmt-sentence-ink: var(--color-white); /* 6.23:1 */
+  --stmt-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --stmt-mark-ink: var(--color-white); /* blue cannot accent itself */
+}

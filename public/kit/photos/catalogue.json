@@ -1420,7 +1420,7 @@
     "subject": "Empty concrete-and-wood studio interior with a long table",
     "mood": "calm, spacious, neutral",
     "orientation": "landscape",
-    "width": 2400,
+    "width": 2376,
     "height": 1602,
     "focalPoint": {
       "x": 0.5,
@@ -1436,7 +1436,7 @@
     "saturation": "quiet",
     "tone": {
       "rb": 0.062,
-      "sat": 0.172
+      "sat": 0.173
     },
     "derived": [
       1240,

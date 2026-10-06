@@ -163,7 +163,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--bmark-` (components/brand-mark.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--ctarow-` (components/cta-row.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--flow-` (components/process-flow.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--rbadge-` (components/rating-badge.css) · `--sec-` (components/section.css) · `--svc-` (components/service-page.css) · `--sld-` (components/slider.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
+`--acc-` (components/accordion.css) · `--bnr-` (components/banner.css) · `--bcrd-` (components/block-card.css) · `--bmark-` (components/brand-mark.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--ctarow-` (components/cta-row.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--flow-` (components/process-flow.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--rbadge-` (components/rating-badge.css) · `--sec-` (components/section.css) · `--svc-` (components/service-page.css) · `--sld-` (components/slider.css) · `--stmt-` (components/statement.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -171,6 +171,7 @@ Yours must not collide with any of those, nor with a primitive family above.
 against the controls beside it — if you are specifying one, say which of these it must line up with.
 
 - **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px · `--acc-question-underline-offset` 6px
+- **banner.css** — `--bnr-eyebrow-tracking` 0.12em · `--bnr-heading-tracking` -0.015em · `--bnr-heading-measure` 32ch · `--bnr-lead-measure` 56ch · `--bnr-strip-label-tracking` 0.12em · `--bnr-mark-width` 32px · `--bnr-mark-height` 2px · `--bnr-illustration-zoom-phone` 180% · `--bnr-illustration-shift` 0%
 - **block-card.css** — `--bcrd-title-tracking-lg` -0.01em · `--bcrd-title-tracking-md` -0.005em · `--bcrd-title-tracking-sm` 0em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-rule-width` 1px · `--bcrd-radius` 0px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
 - **brand-mark.css** — `--bmark-size` 14px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
@@ -195,9 +196,10 @@ against the controls beside it — if you are specifying one, say which of these
 - **proof.css** — `--proof-quote-rule-width` 6px · `--proof-portrait-size` 64px · `--proof-portrait-radius-compact` 4px · `--proof-radius` 0px
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px
 - **rating-badge.css** — `--rbadge-padding-inline` 14px · `--rbadge-radius` 999px · `--rbadge-rule-width` 1px · `--rbadge-tracking` 0.08em · `--rbadge-ring-width` 2px · `--rbadge-ring-offset` 2px · `--rbadge-hidden-size` 1px
-- **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
+- **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-padding-y-strip` 24px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
 - **service-page.css** — `--svc-mark-size` 12px · `--svc-slice-cell` 24px · `--svc-link-underline-offset` 4px · `--svc-hidden-size` 1px · `--svc-rule-width` 1px · `--svc-rule-strong-width` 1px · `--svc-meter-width` 96px · `--svc-meter-height` 24px · `--svc-meter-stroke` 2px · `--svc-authority-slot` 12px
 - **slider.css** — `--sld-progress-length` 240px · `--sld-progress-thickness` 2px · `--sld-progress-radius` 999px · `--sld-ring-width` 2px · `--sld-ring-offset` 2px · `--sld-hidden-size` 1px
+- **statement.css** — `--stmt-eyebrow-tracking` 0.12em · `--stmt-sentence-tracking` -0.018em · `--stmt-sentence-measure` 32ch · `--stmt-mark-width` 32px · `--stmt-mark-height` 2px
 - **table-of-contents.css** — `--toc-title-tracking` 0.12em · `--toc-ordinal-tracking` 0.08em · `--toc-max-inline` 232px · `--toc-min-inline` 160px · `--toc-summary-min-block` 44px · `--toc-ordinal-inline` 24px · `--toc-entry-padding-block` 12px · `--toc-rule-width` 1px · `--toc-current-rule-width` 3px · `--toc-underline-width` 1px · `--toc-underline-width-pressed` 2px · `--toc-underline-offset` 2px · `--toc-entry-radius-focus` 4px · `--toc-ring-width` 2px · `--toc-ring-offset` 2px
 - **tag.css** — `--tag-size-md` 24px · `--tag-radius` 4px · `--tag-edge-width` 1px · `--tag-glyph-size` 16px · `--tag-ring-width` 2px · `--tag-ring-offset` 2px · `--tag-label-trim` 1px · `--tag-glyph-gap` 4px
 
@@ -205,9 +207,9 @@ against the controls beside it — if you are specifying one, say which of these
 
 Layout is done by these three. Always. Anything you specify is arranged by one of them.
 
-**`Section`** — `as?: ElementType` · `surface?: SectionSurface` · `density?: SectionDensity` · `flush?: boolean` · `children: ReactNode` · `'aria-labelledby'?: string` · `'data-arrangement'?: string`
+**`Section`** — `as?: ElementType` · `surface?: SectionSurface` · `density?: SectionDensity` · `flush?: boolean` · `children: ReactNode` · `'aria-labelledby'?: string` · `'aria-label'?: string` · `'data-band'?: string` · `'data-arrangement'?: string`
 
-  where `SectionSurface` = 'paper' | 'tint' | 'ink' | 'blue' · `SectionDensity` = 'tight' | 'open'
+  where `SectionSurface` = 'paper' | 'tint' | 'ink' | 'blue' · `SectionDensity` = 'tight' | 'open' | 'strip'
 
 **`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `align?: Place` · `justifyItems?: Place` · `justify?: Distribute` · `scroll?: Scroll` · `ref?: Ref<HTMLElement>` · `tabIndex?: 0 | -1` · `children: ReactNode`
 
@@ -225,6 +227,6 @@ seam to size.
 ### What already exists — check these before specifying anything new
 
 - **Primitives** (`src/components/`): `BrandMark` · `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `RatingBadge` · `Section` · `Tag` · `Texture`
-- **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaRow` · `CtaSection` · `DataTable` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `ProcessFlow` · `Proof` · `SiteFooter` · `SiteNav` · `Slider` · `TableOfContents`
+- **Patterns** (`src/patterns/`): `Accordion` · `Banner` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaRow` · `CtaSection` · `DataTable` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `ProcessFlow` · `Proof` · `SiteFooter` · `SiteNav` · `Slider` · `Statement` · `TableOfContents`
 - **Templates** (`src/templates/`): `CaseStudyIndex` · `ServicePage`
 

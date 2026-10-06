@@ -110,6 +110,13 @@
  * `<table>` with scoped header cells that no card can express honestly. It owns no band and no
  * ground, composes Layout and Prose, and changes reading order — row by row, each value under its
  * column head — when the track it is given is narrower than the md content column.
+ *
+ * Banner and Statement are two BANDS of the kit (cmp-banner, 6 Oct 2026; visual-direction § 3.4 I
+ * and J). Each owns its band and ground, and composes Section and Layout. Banner gives one
+ * photograph (or an illustration) the band's whole weight under or beside a head, or renders the
+ * one-line announcement strip at Section's `strip` density; Statement sets one sentence at the h1
+ * role in the two-thirds track with a blue mark and, optionally, the head-half texture. Both take
+ * their action as a ReactNode slot, because a pattern does not import a pattern.
  */
 export { SiteNav } from './SiteNav';
 export type {
@@ -241,3 +248,7 @@ export type {
   SiteFooterNewsletter,
   SiteFooterSocial,
 } from './SiteFooter';
+export { Banner } from './Banner';
+export type { BannerProps, BannerForm, BannerMediaSide, BannerLink } from './Banner';
+export { Statement } from './Statement';
+export type { StatementProps, StatementElement, StatementTexture } from './Statement';

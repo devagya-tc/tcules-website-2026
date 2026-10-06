@@ -93,7 +93,7 @@ export default function SectionSpecimenPage() {
 
           <Specimen
             title="Vertical air — --sec-padding-y, 96 flat"
-            note="One value at every width, and a gap-scale step: --gap-section. The token layer declares tight (64, --gap-column) and open (128, --gap-section-open) beside it, reachable via the density prop, and flush zeroes it. There is no arbitrary value: a band is one of those four. Two adjacent bands keep both paddings, on any surface; see the seam sequence below."
+            note="One value at every width, and a gap-scale step: --gap-section. The token layer declares tight (64, --gap-column), open (128, --gap-section-open) and strip (24, --gap-block) beside it, reachable via the density prop, and flush zeroes it. There is no arbitrary value: a band is one of those five. Two adjacent bands keep both paddings, on any surface; see the seam sequence below."
           >
             <div className={s.ruler}>content sits inside the vertical air</div>
           </Specimen>
@@ -194,6 +194,20 @@ export default function SectionSpecimenPage() {
         <Layout rowGap="text">
           <p className={s.specTitle}>density=&quot;open&quot; — 128</p>
           <Box>open band</Box>
+        </Layout>
+      </Section>
+
+      <Section density="strip" surface="tint" className={s.bandOutline}>
+        <Layout rowGap="text">
+          <p className={s.specTitle}>density=&quot;strip&quot; — 24, the announcement strip</p>
+          <Box>strip band (one line; Banner form=&quot;strip&quot; is its only caller)</Box>
+        </Layout>
+      </Section>
+
+      <Section density="strip" flush className={s.bandOutline}>
+        <Layout rowGap="text">
+          <p className={s.specTitle}>density=&quot;strip&quot; flush — flush wins, 0</p>
+          <Box>flush overrides every density, strip included</Box>
         </Layout>
       </Section>
 
