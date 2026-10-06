@@ -84,7 +84,7 @@
   text-align: center;
 }
 
-/* The quote rule on its side: the same 6px, the same blue, a short mark above a centred quote.
+/* The quote rule on its side: the same width, the same blue, a short mark above a centred quote.
    A mark, never a divider (§ 4.3), which is why it is this short. */
 .mark {
   display: block;
@@ -110,7 +110,7 @@
 }
 
 /* No portrait: the text is indented by the rule plus its inset, so the name starts on the quote's
-   first letter (ch10 B2.07, "indented 54 — the rule's 6 plus the quote's 48"). With a portrait the
+   first letter (ch10 B2.07: the rule's width plus the quote's inset). With a portrait the
    indent is dropped and the portrait takes the left margin instead; that class is simply absent.
    Padding, not margin: it aligns content inside the part's own box and spaces nothing apart. */
 .attributionIndented {

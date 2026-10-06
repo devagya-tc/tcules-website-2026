@@ -231,3 +231,51 @@
     transform: rotate(45deg);
   }
 }
+
+/* ── Centred on the track (`align="center"`, from 1024) ──────────────────────────
+   The node and the copy centre on each stage's track, so a thread under a centred head is
+   symmetric about the column's axis. The forward line runs node edge to node edge: it starts a
+   `tight` past this node's centre-plus-half and ends a `tight` short of the next node, whose centre
+   is one track (100% of the stage) and one gutter further on — so its end inset is −(half a track
+   + gutter − node-half − tight). The arc's legs move to the first and the last node's centres,
+   half a track in from each end of the row. Positioning of marks on the stage's own box only. */
+@media (min-width: 1024px) {
+  .centred .stage {
+    text-align: center;
+  }
+
+  .centred .node {
+    inset-inline-start: calc(50% - var(--thread-node-half));
+  }
+
+  .centred .stage:not(:last-child)::before {
+    inset-inline-start: calc(50% + var(--thread-node-half) + var(--gap-tight));
+    inset-inline-end: calc(
+      -50% - var(--gap-gutter) + var(--thread-node-half) + var(--gap-tight)
+    );
+  }
+
+  .centred .stage:not(:last-child)::after {
+    inset-inline-end: calc(
+      -50% - var(--gap-gutter) + var(--thread-node-half) + var(--gap-tight)
+    );
+  }
+
+  .centred.arc::before {
+    inset-inline-start: calc(
+      (100% - (var(--thread-n) - 1) * var(--gap-gutter)) / var(--thread-n) / 2 -
+        var(--thread-line-width) / 2
+    );
+    inset-inline-end: calc(
+      (100% - (var(--thread-n) - 1) * var(--gap-gutter)) / var(--thread-n) / 2 -
+        var(--thread-line-width) / 2
+    );
+  }
+
+  .centred.arc::after {
+    inset-inline-start: calc(
+      (100% - (var(--thread-n) - 1) * var(--gap-gutter)) / var(--thread-n) / 2 -
+        var(--thread-head-size) / 2
+    );
+  }
+}

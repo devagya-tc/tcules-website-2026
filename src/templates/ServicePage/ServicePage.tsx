@@ -11,8 +11,22 @@ import { ANCHORS, ROUTES, servicePath } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 
 import { BandView } from './Bands';
-import { planBands } from './plan';
+import { planBands, type Band } from './plan';
 import { withStandIns } from './standIns';
+
+/** A band's React key: the id of the story entry it renders. */
+function bandKey(band: Band): string {
+  switch (band.kind) {
+    case 'section':
+      return band.section.id;
+    case 'offer':
+      return band.offer.id;
+    case 'banner':
+      return band.banner.id;
+    case 'statement':
+      return band.statement.id;
+  }
+}
 
 export type ServicePageProps = {
   story: ServiceStory;
@@ -57,6 +71,8 @@ export function ServicePage({
     <>
       <PageHero
         surface="paper"
+        data-band="A"
+        data-fold-hero=""
         trail={heroTrail(breadcrumbs, hero.title, (t) => (
           <Breadcrumbs {...t} />
         ))}
@@ -78,22 +94,13 @@ export function ServicePage({
       />
 
       {bands.map((band) => (
-        <BandView
-          key={
-            band.kind === 'section'
-              ? band.section.id
-              : band.kind === 'offer'
-                ? band.offer.id
-                : band.banner.id
-          }
-          band={band}
-          labels={resolved.labels}
-          slots={slots}
-        />
+        <BandView key={bandKey(band)} band={band} labels={resolved.labels} slots={slots} />
       ))}
 
       <CtaSection
         id={ANCHORS.enquiry}
+        data-band="L"
+        eyebrow={close.eyebrow}
         heading={close.heading}
         body={[close.body, close.note]}
         points={close.points}

@@ -1,2 +1,7 @@
 export { Statement } from './Statement';
-export type { StatementProps, StatementElement, StatementTexture } from './Statement';
+export type {
+  StatementProps,
+  StatementElement,
+  StatementSize,
+  StatementTexture,
+} from './Statement';

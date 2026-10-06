@@ -24,6 +24,14 @@ export type ThreadProps = {
   loop?: string;
   /** The stage titles' element. Default `h3`; `h4` when the thread sits under an h3. */
   stageHeading?: ThreadStageHeading;
+  /**
+   * From 1024, where each stage sits on its track (page-product-design fix round 1, 7 Oct 2026).
+   * `start` (default) puts the node at the track's start, the copy flush under it. `center` centres
+   * the node and the copy on the track, for a thread under a centred head: start-anchored, the last
+   * node sat at the start of the last track and the row ended ~215 short of the column, off the
+   * head's axis. Below 1024 the thread is vertical on the start edge either way.
+   */
+  align?: 'start' | 'center';
 };
 
 /** Stages per row from 1024: one row up to six; beyond, two balanced rows (9 → 5 + 4). */
@@ -66,7 +74,7 @@ function warn(message: string) {
  * return path with positioned pseudo-elements and one aria-hidden node per stage — marks on the
  * stage's own edges; it places no sibling and sets no margin.
  */
-export function Thread({ stages, loop, stageHeading = 'h3' }: ThreadProps) {
+export function Thread({ stages, loop, stageHeading = 'h3', align = 'start' }: ThreadProps) {
   const valid = stages
     .map((stage) => ({ title: stage.title.trim(), body: stage.body?.trim() || undefined }))
     .filter((stage, index) => {
@@ -79,7 +87,8 @@ export function Thread({ stages, loop, stageHeading = 'h3' }: ThreadProps) {
     warn('fewer than two stages: a thread needs somewhere to go. Rendering nothing.');
     return null;
   }
-  if (valid.length > 12) warn(`received ${valid.length} stages; the designed maximum is twelve.`);
+  if (valid.length > 12)
+    warn(`received ${valid.length} stages; the designed maximum is twelve.`);
 
   const across = perRow(valid.length);
   const Heading = stageHeading;
@@ -94,7 +103,12 @@ export function Thread({ stages, loop, stageHeading = 'h3' }: ThreadProps) {
         columns={{ lg: across }}
         colGap="gutter"
         rowGap="stack"
-        className={cx(ROW_CLASS[across], across >= 5 && styles.dense, arc && styles.arc)}
+        className={cx(
+          ROW_CLASS[across],
+          across >= 5 && styles.dense,
+          arc && styles.arc,
+          align === 'center' && styles.centred,
+        )}
       >
         {valid.map((stage, index) => (
           <li key={`${index}-${stage.title}`} className={styles.stage}>
@@ -107,7 +121,12 @@ export function Thread({ stages, loop, stageHeading = 'h3' }: ThreadProps) {
         ))}
       </Layout>
       {returnPath ? (
-        <Cluster nowrap colGap="tight" align="start">
+        <Cluster
+          nowrap
+          colGap="tight"
+          align="start"
+          justify={align === 'center' ? { base: 'start', lg: 'center' } : 'start'}
+        >
           <span className={styles.loopGlyph} aria-hidden="true">
             <Icon name="undo-left" size="md" />
           </span>

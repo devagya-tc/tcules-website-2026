@@ -291,7 +291,12 @@ export type {
 export { Banner } from './Banner';
 export type { BannerProps, BannerForm, BannerMediaSide, BannerLink } from './Banner';
 export { Statement } from './Statement';
-export type { StatementProps, StatementElement, StatementTexture } from './Statement';
+export type {
+  StatementProps,
+  StatementElement,
+  StatementSize,
+  StatementTexture,
+} from './Statement';
 
 /* Thread — stages one decision passes through, on one blue line, with a return path (E band). */
 export { Thread, type ThreadProps, type ThreadStage, type ThreadStageHeading } from './Thread';

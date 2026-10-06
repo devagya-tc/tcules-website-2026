@@ -12,18 +12,19 @@ const ENQUIRY = anchorHref(ANCHORS.enquiry);
  * docs/content-changes.md § 6. The sections say what the page argues; the template decides how each
  * is laid out from the job its blocks do (ServicePage plan.ts), so no field here is a layout.
  *
- *   hero     the claim
- *   signals  what the screen may be telling you — B, beside the studio board
- *   clients  who we have shipped with — H, with the sourced rating
- *   method   five steps, each leaving an artefact — F (the old "What you receive" folded in)
- *   example  the worked example as the chain one decision moves through — E, a Thread
- *   proof    the work, then the client's words — G-case, the tint band
- *   work     two more cases — C-pair
- *   offer    examine the slice first — K
- *   routes   the specialist services — the C-icon router
- *   fit      who is involved — N
- *   read     how an engagement runs — I
- *   close    the form — L
+ *   hero      the claim
+ *   signals   what the screen may be telling you — B, beside the studio board
+ *   clients   who we have shipped with — H, with the sourced rating
+ *   method    five steps, each leaving an artefact — F, beside the wireframe sketch
+ *   example   the worked example as the chain one decision moves through — E, a Thread
+ *   proof     the work, then the client's words — G-case, the tint band
+ *   work      two more cases — C-pair
+ *   statement how the work runs, said once at scale — J (fix round 1: the I banner's job, which
+ *             spent a 660-tall band and a soft photograph on one link)
+ *   offer     examine the slice first — K, beside a screen-work photograph
+ *   routes    the specialist services — the C-icon router
+ *   fit       who is involved — N
+ *   close     the form — L
  */
 export const productDesign: ServiceStory = {
   slug: 'product-design',
@@ -52,7 +53,6 @@ export const productDesign: ServiceStory = {
   photos: {
     family: 'warm',
     standIns: [
-      'studio-whiteboard-crit',
       'studio-session-talk',
       'studio-team-holi',
       'hand-mouse-detail',
@@ -71,7 +71,7 @@ export const productDesign: ServiceStory = {
       id: 'signals',
       eyebrow: 'What the screen says',
       heading: 'Where the problem shows first',
-      lead: 'In B2B, workflow, data-rich and AI products, a visual complaint points at a workflow, data or authority problem.',
+      lead: 'A visual complaint often points at a rule underneath.',
       blocks: [
         {
           kind: 'signals',
@@ -184,6 +184,7 @@ export const productDesign: ServiceStory = {
     {
       type: 'section',
       id: 'client-view',
+      eyebrow: 'Proof',
       heading: 'In a client’s words',
       blocks: [
         {
@@ -193,7 +194,6 @@ export const productDesign: ServiceStory = {
             name: 'Ashok Mohanty',
             company: 'Auxentios',
           },
-          rating: CLUTCH_RATING,
           case: {
             slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
             client: 'Auxentios · Industrial CPQ',
@@ -208,7 +208,7 @@ export const productDesign: ServiceStory = {
       id: 'work',
       eyebrow: 'Connected product decisions',
       heading: 'Relevant Product Design work',
-      lead: 'Two more products where the model was settled before the screens were drawn.',
+      lead: 'Two more products where the model was settled before the screens were drawn. Each case claims only what its own record shows.',
       blocks: [
         {
           kind: 'cases',
@@ -226,9 +226,15 @@ export const productDesign: ServiceStory = {
               body: 'Research and heuristic review behind an object-oriented redesign of the whole product.',
             },
           ],
-          note: 'Each case proves the research, modelling and design it names; outcomes are bounded by its own record.',
         },
       ],
+    },
+    {
+      type: 'statement',
+      id: 'how-we-work',
+      eyebrow: 'How we work',
+      text: 'One accountable team, from the first question to the shipped build.',
+      action: { label: 'See how we work', href: ROUTES.howWeWork },
     },
     {
       type: 'offer',
@@ -241,10 +247,7 @@ export const productDesign: ServiceStory = {
         { label: 'The rules, roles and way back beneath it' },
         { label: 'What to design first, and what can wait' },
       ],
-      actions: [
-        { label: 'Start a project', href: ENQUIRY },
-        { label: 'Start with a UX Product Audit', href: auditPath('ux-product-audit') },
-      ],
+      actions: [{ label: 'Start with a UX Product Audit', href: auditPath('ux-product-audit') }],
     },
     {
       type: 'section',
@@ -331,16 +334,9 @@ export const productDesign: ServiceStory = {
         },
       ],
     },
-    {
-      type: 'banner',
-      id: 'how-we-work',
-      eyebrow: 'Before you brief',
-      heading: 'How an engagement runs',
-      lead: 'How a Product Design engagement runs, from the first question to the build.',
-      action: { label: 'See how we work', href: ROUTES.howWeWork },
-    },
   ],
   close: {
+    eyebrow: 'Start a project',
     heading: 'Share the product decision that needs settling',
     body: 'The decision, the roles it affects and the evidence you already have.',
     points: [

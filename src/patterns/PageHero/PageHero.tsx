@@ -179,6 +179,10 @@ export type HeroArrangement = 'stacked' | 'beside' | 'wide' | 'centred' | 'displ
 export type HeroAnnouncement = { label: string; text: string; action: HeroAction };
 
 export type PageHeroProps = {
+  /** The band's archetype for `fold:check` (§ 1.3) — `A` — passed to Section's `data-band`. */
+  'data-band'?: string;
+  /** Marks this hero for `fold:check`'s hero rule (it + the nav end inside the first screen). */
+  'data-fold-hero'?: '';
   /**
    * The page's one `h1`, rendered verbatim.
    *
@@ -462,6 +466,8 @@ export function PageHero({
   texture = false,
   announcement,
   children,
+  'data-band': dataBand,
+  'data-fold-hero': dataFoldHero,
 }: PageHeroProps) {
   /* Blank entries are dropped BEFORE the roles are assigned, not after: an empty first string
      would otherwise make the lead an empty <p> and promote paragraph two to body scale, so the
@@ -757,20 +763,20 @@ export function PageHero({
           </picture>
           {/* aria-hidden on the wrapper: Cluster passes no ARIA through. */}
           <div className={styles.legend} aria-hidden="true">
-          <Cluster as="ol" colGap="block" rowGap="tight">
-            {legend.items.map((item, index) => (
-              <li key={`${index}-${item.label}`}>
-                <Cluster colGap="tight" align="center" nowrap>
-                  <span
-                    className={item.tone === 'accent' ? styles.numeralAccent : styles.numeral}
-                  >
-                    {index + 1}
-                  </span>
-                  <span className={styles.tag}>{item.label}</span>
-                </Cluster>
-              </li>
-            ))}
-          </Cluster>
+            <Cluster as="ol" colGap="block" rowGap="tight">
+              {legend.items.map((item, index) => (
+                <li key={`${index}-${item.label}`}>
+                  <Cluster colGap="tight" align="center" nowrap>
+                    <span
+                      className={item.tone === 'accent' ? styles.numeralAccent : styles.numeral}
+                    >
+                      {index + 1}
+                    </span>
+                    <span className={styles.tag}>{item.label}</span>
+                  </Cluster>
+                </li>
+              ))}
+            </Cluster>
           </div>
         </Layout>
       ) : (
@@ -967,6 +973,8 @@ export function PageHero({
        landmarks. A <section> because the hero is a self-contained thematic opening. */
     <Section
       surface={surface}
+      data-band={dataBand}
+      data-fold-hero={dataFoldHero}
       data-arrangement={
         centredHead
           ? 'hero-centred'

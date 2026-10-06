@@ -172,12 +172,13 @@ type ProofFeaturedProps = {
  * The quote is the display role (34), not the reading one (fix round 1): at 28 it matched the
  * card's title and neither led.
  *
- * The two tracks share a top AND a bottom line (fix round 2, 6 Oct 2026). The quote column is
- * stretched to the card's height and its attribution and score are pinned to its foot, so the
- * client's words start level with the cover and the name lands level with the card's "Read the
- * case" — the pinned-foot rule of the group and of every card row. Before, the column stopped about
- * 200px above the card's description and left the band's lower right an empty well. Below 1024
- * the tracks stack, the column is its own height and the pin is a no-op.
+ * The quote column is CENTRED on the card (page-product-design fix round 1, 7 Oct 2026), and the
+ * attribution follows the quote a `block` under it. Fix round 2 had stretched the column to the
+ * card and pinned the attribution to its foot, and under a three-line quote that opened a ~200 void
+ * between the words and the name — the quote and who said it read as two objects. Centred, the
+ * quote and its speaker are one group, and the card's height is shared as air above and below it,
+ * the way a quote beside a picture sits in the references. Below 1024 the tracks stack and the
+ * centring is a no-op.
  */
 type ProofCaseProps = {
   arrangement: 'case';
@@ -701,7 +702,9 @@ function Evidence(props: ProofCompactProps | ProofDisplayProps) {
           trailing={validRating(props.rating) ? ratingBadge(props.rating) : undefined}
         />
       ) : null}
-      {acceptedFigures.length > 0 ? <Figures figures={acceptedFigures} size={figureSize} /> : null}
+      {acceptedFigures.length > 0 ? (
+        <Figures figures={acceptedFigures} size={figureSize} />
+      ) : null}
     </Layout>
   );
 }
@@ -763,20 +766,20 @@ function Case({ work, quote, rating }: ProofCaseProps) {
     warn('case arrangement has no valid quote; rendering nothing.');
     return null;
   }
-  /* Stretched (Layout's default `align`), so the quote figure is the card's height; `pin` sends
-     its figcaption — the attribution and, under it, the score — to that foot. */
+  /* Centred on the card (`align="center"`): the quote and its attribution are one group, set in
+     the middle of the card's height (see ProofCaseProps). */
   return (
     <Layout
       columns={{ base: 1, lg: [1, 2] }}
       colGap="section"
       rowGap="stack"
+      align="center"
       className={styles.root}
     >
       {work}
       <Quote
         quote={quote}
         size="lg"
-        pin
         trailing={validRating(rating) ? ratingBadge(rating) : undefined}
       />
     </Layout>

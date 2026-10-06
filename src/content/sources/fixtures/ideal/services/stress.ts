@@ -159,14 +159,52 @@ const blocks: [string, StoryBlock][] = [
   ['stat-alone', EXTRA['stat-alone']],
 ];
 
-const sections: StorySection[] = blocks.map(([id, block]) => ({
-  type: 'section',
-  id: `stress-${id}`,
-  eyebrow: 'Stress',
-  heading: `Block · ${id}`,
-  lead: 'One block of the content model in the band its job is given.',
-  blocks: [block],
-}));
+/* A spectrum holds six options in its band (Diagrams `SPECTRUM_MAX`); a longer one keeps six and
+   links the rest from the band's foot — the `more` route, shown here on the story that has seven. */
+const SPECTRUM_MAX = 6;
+
+/* The same route for a slice: its grids hold the band, and its acceptance levels take a band of
+   their own as an icon ledger directly after it (StoryBlock `slice.levels` is optional for this). */
+function fitted(block: StoryBlock): StoryBlock {
+  if (block.kind === 'spectrum' && block.items.length > SPECTRUM_MAX)
+    return { ...block, items: block.items.slice(0, SPECTRUM_MAX) };
+  return block;
+}
+
+const levelsOf = (block: StoryBlock): StoryBlock | undefined =>
+  block.kind === 'slice' && block.levels
+    ? {
+        kind: 'ledger',
+        columns: 3,
+        marker: 'icon',
+        items: block.levels.map((level) => ({ ...level })),
+      }
+    : undefined;
+
+const split: [string, StoryBlock][] = blocks.flatMap(([id, block]): [string, StoryBlock][] => {
+  const levels = levelsOf(block);
+  if (!levels || block.kind !== 'slice') return [[id, block]];
+  return [
+    [id, { ...block, levels: undefined, levelsLabel: undefined }],
+    [`${id}-levels`, levels],
+  ];
+});
+
+const sections: StorySection[] = split.map(([id, block]) => {
+  const capped = fitted(block);
+  return {
+    type: 'section',
+    id: `stress-${id}`,
+    eyebrow: 'Stress',
+    heading: `Block · ${id}`,
+    lead: 'One block of the content model in the band its job is given.',
+    blocks: [capped],
+    more:
+      capped === block
+        ? undefined
+        : { label: 'Every option, on the deep page', href: ROUTES.howWeWork },
+  };
+});
 
 export const stressStory: ServiceStory = {
   slug: 'stress',
@@ -187,8 +225,20 @@ export const stressStory: ServiceStory = {
   sections: [
     ...sections.slice(0, 6),
     ...productDesign.sections.filter((section) => section.type === 'offer'),
-    ...sections.slice(6),
-    ...productDesign.sections.filter((section) => section.type === 'banner'),
+    ...sections.slice(6, 12),
+    /* The two bands that are not sections: the J statement (product-design's) and an I banner —
+       no story carries one since product-design's moved to the statement, so it is authored here,
+       and with no § 5.6 slot it proves the banner's no-photograph path. */
+    ...productDesign.sections.filter((section) => section.type === 'statement'),
+    ...sections.slice(12),
+    {
+      type: 'banner',
+      id: 'stress-banner',
+      eyebrow: 'Stress',
+      heading: 'Block · banner',
+      lead: 'A pause in the argument that says where to read on.',
+      action: { label: 'See how we work', href: ROUTES.howWeWork },
+    },
   ],
   close: productDesign.close,
 };

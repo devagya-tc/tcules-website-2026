@@ -563,12 +563,28 @@ export function BlockCard({
      it. 16 is one step under the section head's 24, so a card reads as a smaller unit of the same
      system (visual-direction § 1.1, S2). It was `tight` (8): three rows at one step have no
      hierarchy, and a 12px label 8px over a 28px serif read as cramped. */
-  const content = (
-    <Layout rowGap="block" className={styles.content}>
-      <Layout rowGap="text">
+  /* An icon card on a phone sets its glyph BEFORE the title, on the title's row (page-product-design
+     fix round 1, 7 Oct 2026): stacked, six icon cards at 390 ran the router band to 1757, past the
+     1700 phone ceiling, and each glyph took a 48 row of its own above a one-line title. [1, 7] at
+     the 326 column is a 41 track for the 32 glyph, `tight` to the title, centred on its first line;
+     from md the pair is one track again and the glyph heads the card, `text` above the title. */
+  const head =
+    iconNode && !eyebrowNode ? (
+      <Layout columns={{ base: [1, 7], md: 1 }} colGap="tight" rowGap="text" align="center">
+        {iconNode}
+        {titleNode}
+      </Layout>
+    ) : (
+      <>
         {iconNode}
         {eyebrowNode}
         {titleNode}
+      </>
+    );
+  const content = (
+    <Layout rowGap="block" className={styles.content}>
+      <Layout rowGap="text">
+        {head}
         {bodyNode}
       </Layout>
       {cta}

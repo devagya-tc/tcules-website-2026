@@ -65,6 +65,11 @@ export type SectionProps = {
    * which measures every band by it (§ 1.3). A marker for the gate, never a style hook.
    */
   'data-band'?: string;
+  /**
+   * Marks the band as a page's opening for `fold:check`'s hero rule (§ 1.3: the hero + the nav end
+   * inside the first screen). Present (`""`) or absent; a marker for the gate, never a style hook.
+   */
+  'data-fold-hero'?: '';
   /** Optional component-owned arrangement marker for rendered-output acceptance checks. */
   'data-arrangement'?: string;
 };
@@ -93,6 +98,7 @@ export function Section({
   'aria-label': ariaLabel,
   'data-arrangement': dataArrangement,
   'data-band': dataBand,
+  'data-fold-hero': dataFoldHero,
 }: SectionProps) {
   return (
     <Tag
@@ -101,6 +107,7 @@ export function Section({
       aria-label={ariaLabel}
       data-arrangement={dataArrangement}
       data-band={dataBand}
+      data-fold-hero={dataFoldHero}
       data-surface={surface}
       className={cx(
         styles.section,

@@ -245,8 +245,11 @@ export type StoryBlock =
       };
       /** The words the grids need: a legend for a cell, the column name, the result row. */
       legend: { built: string; missing: string; path: string; works: string };
-      levelsLabel: string;
-      levels: readonly { title: string; body: string; icon: StoryGlyph }[];
+      /** The levels a release is accepted at, under the grids. Optional (fix round 1, 7 Oct 2026):
+          with them the band runs ~980 at 1470, so a page that needs the fold gives them a band of
+          their own — a `ledger` with icons, directly after the slice. */
+      levelsLabel?: string;
+      levels?: readonly { title: string; body: string; icon: StoryGlyph }[];
     }
   /** The temporary states that live between the current product and the target one. */
   | {
@@ -313,6 +316,12 @@ export type StorySection = {
   eyebrow?: string;
   lead?: string;
   blocks: readonly StoryBlock[];
+  /**
+   * Where the rest of this argument lives — the deep page (fix round 1, 7 Oct 2026). Rendered as the
+   * band's foot, one blue link under the body. The route § 1.3 prefers when a band runs past the
+   * fold: keep what the band needs, move the detail to the deep page, and say where it went.
+   */
+  more?: StoryLink;
 };
 
 /**
@@ -327,6 +336,22 @@ export type StoryBanner = {
   heading: string;
   lead: string;
   action: StoryLink;
+};
+
+/**
+ * One sentence the page stands on, set large (the J statement, visual-direction § 3.4): the band
+ * that gives a service page its one display-scale moment (fix round 1, 7 Oct 2026 — "the H2s are
+ * all the same size … there is no oversized statement"). ≤ 14 words, so it holds three lines at the
+ * h1 role in the 763 track. An optional link under it says where the claim is shown in full — the
+ * old I banner's job ("How an engagement runs"), which needed a band of its own for one link.
+ * The texture and the element are the template's; the story names only the words.
+ */
+export type StoryStatement = {
+  type: 'statement';
+  id: string;
+  eyebrow?: string;
+  text: string;
+  action?: StoryLink;
 };
 
 /**
@@ -368,7 +393,7 @@ export type ServiceStory = {
     illustration: { src: string; width: number; height: number };
     tags?: readonly string[];
   };
-  sections: readonly (StorySection | StoryOffer | StoryBanner)[];
+  sections: readonly (StorySection | StoryOffer | StoryBanner | StoryStatement)[];
   /**
    * The page's photographs (visual-direction § 5.5 to § 5.7).
    *
@@ -393,6 +418,9 @@ export type ServiceStory = {
     allCases: StoryLink;
   };
   close: {
+    /** The close's label. Every band after the hero carries one (fix round 1: the template decides
+        the eyebrow treatment by rule, so a band without one read as an accident). */
+    eyebrow?: string;
     heading: string;
     body: string;
     points: readonly { label: string; detail?: string }[];

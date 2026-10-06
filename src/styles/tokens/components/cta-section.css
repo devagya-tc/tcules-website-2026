@@ -18,6 +18,11 @@
 :root {
   --cta-eyebrow-text: var(--text-eyebrow);
   --cta-eyebrow-tracking: var(--text-eyebrow-tracking);
+  /* The eyebrow's mark (page-product-design fix round 1, 7 Oct 2026): the blue square every band
+     eyebrow in the kit carries — ContentSection's, Statement's and Banner's — so the offer and the
+     close no longer read as the two grey labels on a page of marked ones. A glyph's size, not a
+     distance; the same 6 as --csec-mark-size, duplicated on purpose (token rule 6). */
+  --cta-mark-size: var(--space-6);
   /* The OFFER's heading — the K band only (`.heading`). h2, because the offer interrupts a page
      mid-scroll and must not outweigh the heads around it (visual-direction § 7.1, and § 1.4's K
      arithmetic, which budgets an h2 on two lines). The closes do not read this pair: since cmp-cta
@@ -91,6 +96,7 @@
   --cta-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
   /* 6.17:1 — the points' numerals and glyphs carry the accent */
   --cta-marker-ink: var(--color-brandeis-500);
+  --cta-mark-ink: var(--color-brandeis-500); /* decoration — the eyebrow's blue square */
   --cta-rule-ink: var(--color-neutral-300); /* decoration */
 }
 
@@ -100,6 +106,7 @@
   --cta-point-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
   --cta-marker-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --cta-mark-ink: var(--color-brandeis-500); /* decoration */
   --cta-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
 }
 
@@ -109,6 +116,7 @@
   --cta-point-ink: var(--color-neutral-300); /* 11.07:1 */
   --cta-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --cta-marker-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --cta-mark-ink: var(--color-brandeis-300); /* decoration — 500 sinks into neutral-950 */
   --cta-rule-ink: var(--color-neutral-700); /* decoration */
 }
 
@@ -118,5 +126,6 @@
   --cta-point-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --cta-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --cta-marker-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --cta-mark-ink: var(--color-white); /* decoration — on blue the accent is the ground */
   --cta-rule-ink: var(--color-brandeis-300); /* decoration */
 }

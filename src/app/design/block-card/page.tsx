@@ -1689,6 +1689,17 @@ export default function BlockCardSpecimenPage() {
             </Layout>
           </Specimen>
           <Specimen
+            title="A linked icon set kept stacked on a phone · scroll never"
+            note="A router shows every route at once: below 768 the set stacks instead of scrolling, and every icon card sets its glyph beside the title there, so six stacked cards stay short. From 768 the glyph heads the card again."
+          >
+            <BlockCardSet
+              lead="none"
+              across={2}
+              scroll="never"
+              items={SHAPE_ICONS.map((card) => ({ ...card, href: ROUTES.services }))}
+            />
+          </Specimen>
+          <Specimen
             title="A text-only set of five · stays md"
             note="Four text peers, h4 still: the text card row of § 7.2."
           >

@@ -947,7 +947,7 @@ any photo for a better catalogue match, as long as the gate still passes.
 
 | Page (family) | B 4:5 | I 3:1 | K 4:5 | Aside 1 (C-icon) | Aside 2 (F or D) | Studio |
 |---|---|---|---|---|---|---|
-| product-design (warm) | `studio-sticky-board-ux` | `sticky-wall-soft-focus` | `pair-laptop-notebook` | `hand-sketch-wireframe` | `moodboard-wall-desk` | B |
+| product-design (warm) | `studio-sticky-board-ux` | — (no banner; fix round 1, 7 Oct) | `designer-tablet-monitor` (3:2, landscape offer) | `studio-whiteboard-crit` | `hand-sketch-wireframe` | B, aside 1 |
 | software-development (warm) | `designer-desk-monitor` | `workshop-hands-writing` | `whiteboard-pair-laptop` | `studio-session-talk` | `team-laptops-table` | aside 1 |
 | design-engineering (warm) | `stylus-tablet-sketch` | `whiteboard-two-hands` | `sticky-grid-minimal` | `studio-whiteboard-crit` | `hands-sketches-markers` | aside 1 |
 | design-systems (cool) | `screen-over-shoulder` | `wireframe-wall` | `desk-minimal-white` | `desk-flatlay-devices` (crop out the printed "to") | `designer-monitor-ui` (crop from the right) | `studio-whiteboard-crit` as a stand-in cover |

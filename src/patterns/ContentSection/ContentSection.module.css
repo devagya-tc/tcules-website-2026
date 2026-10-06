@@ -5,12 +5,13 @@
    tokens/components/content-section.css.
 
    Classes: .eyebrow .mark .heading .headingMd .headingDisplay .asideFill .lead .leadBeside .centred
-   .bodyCentred .text .textureLg .eyebrowAccent .photoTrack .photo .photoLeads .photoToCopy
+   .centredLg .itemsCentredLg .bodyCentred .bodyCentredLg .text .textureLg .photoTrack .photo
+   .photoLeads .photoToCopy
 
-   Three @media queries, all from 1024 and none swapping a distance: .leadBeside (the lead's ROLE
-   follows the arrangement, and the beside arrangement only exists from 1024), .textureLg (the
-   media split's texture has no phone form) and .photo (the media split's crop is 4:3 above the
-   copy and 4:5 beside it). */
+   The @media queries swap a role, a crop or an alignment, never a distance: .leadBeside (the
+   lead's ROLE follows the arrangement, and the beside arrangement only exists from 1024),
+   .textureLg (the media split's texture has no phone form), .photo (4:3 above the copy, 4:5 beside
+   it), the `center-lg` classes (centred from 1024 only) and .asideFill (its phone crop). */
 
 .eyebrow {
   font: var(--csec-eyebrow-text);
@@ -76,6 +77,25 @@
   text-align: center;
 }
 
+/* `align="center-lg"`: the same centring, from 1024 only. Below it the band is start-aligned like
+   the body it sits over (a thread down the start edge, stacked lists). `justify-self` on the head's
+   and the body's rows is the head Layout's `justifyItems="center"` restated at one breakpoint —
+   placement inside the container's own grid, never a distance. */
+@media (min-width: 1024px) {
+  .centredLg {
+    text-align: center;
+  }
+
+  .itemsCentredLg > *,
+  .bodyCentredLg > * {
+    justify-self: center;
+  }
+
+  .bodyCentredLg > * {
+    inline-size: 100%;
+  }
+}
+
 /* A centred head's body, centred AS A BLOCK. The body Layout centres each row (justifyItems), and
    this gives every row the column as its width, so a row with no cap of its own (a card set, a
    table) still spans the column while a row that caps itself (ContentSectionText around an
@@ -114,16 +134,11 @@
   }
 }
 
-/* The accent eyebrow and the display head. The eyebrow (fix round 1, cmp-media-split) keeps its mono
-   role and case and takes the surface's accent ink. The heading steps to the display role on the
-   display measure, set by the media split's head and by `headingSize="display"` (cmp-feature); after
-   .heading and .headingMd at equal specificity, so it wins by order. Both are role swaps, not sizes:
-   the display role re-declares itself at 1023 and 767 like every title role, so neither needs a
-   breakpoint here. */
-.eyebrowAccent {
-  color: var(--csec-eyebrow-accent-ink);
-}
-
+/* The display head. The heading steps to the display role on the display measure, set by the media
+   split's head and by `headingSize="display"` (cmp-feature); after .heading and .headingMd at equal
+   specificity, so it wins by order. A role swap, not a size: the display role re-declares itself at
+   1023 and 767 like every title role, so it needs no breakpoint here. (The media split's accent
+   eyebrow went in page-product-design fix round 1: the blue is the mark on every band.) */
 .headingDisplay {
   font: var(--csec-heading-text-display);
   letter-spacing: var(--csec-heading-tracking-display);
@@ -186,14 +201,22 @@
   min-block-size: var(--csec-aside-min-size);
 }
 
-/* Below 1024 the band is stacked and the aside has no body beside it to end on: it takes the head
-   aside's own 3:2 instead of the floor, which letterboxed it to 4.4:1 at 768 (cmp-services fix
-   round 1). `contain: size` stays, so the photograph's intrinsic height still sets nothing; the
-   ratio sizes the box from its width. */
+/* Below 1024 the band is stacked and the aside has no body beside it to end on: it takes a ratio of
+   its own instead of the floor, which letterboxed it to 4.4:1 at 768 (cmp-services fix round 1).
+   `contain: size` stays, so the photograph's intrinsic height still sets nothing; the ratio sizes
+   the box from its width. From 768 to 1023 the panorama (a 704 × 469 3:2 outweighed the six cards
+   under it); below 768 the phone's 4:3, B's and K's (page-product-design fix round 1: at 326 the
+   panorama was a 326 × 140 strip that showed a slice of the scene). An art-direction swap. */
 @media (max-width: 1023.98px) {
   .asideFill {
     block-size: auto;
     min-block-size: 0;
     aspect-ratio: var(--csec-aside-ratio);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .asideFill {
+    aspect-ratio: var(--csec-aside-ratio-phone);
   }
 }

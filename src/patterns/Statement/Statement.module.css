@@ -3,7 +3,7 @@
    Section paints the band and its open air; Layout and Cluster own every seam; Texture owns its
    field. Every value is a --stmt-* token in tokens/components/statement.css.
 
-   Classes: .eyebrow .sentence .mark .texture .headEmpty
+   Classes: .eyebrow .sentence .sentenceDisplay .mark .texture .headEmpty
 
    One @media query: the head-half texture and the empty head cell exist from 1024 only (§ 6.3:
    "below 1024: none"). It swaps visibility, never a distance. */
@@ -23,7 +23,15 @@
   max-inline-size: var(--stmt-sentence-measure);
 }
 
-/* The blue mark: a short rule, the band's foreground accent (§ 4.2, small graphic marks). Sized,
+/* `size="display"`: the sentence at the display role. A role swap, never a distance; the role
+   re-declares itself at 1023 and 767 like every title role. */
+.sentenceDisplay {
+  font: var(--stmt-sentence-text-display);
+  letter-spacing: var(--stmt-sentence-tracking-display);
+  max-inline-size: var(--stmt-sentence-measure-display);
+}
+
+/* The blue mark: the kit's eyebrow square, the band's foreground accent (§ 4.2, small graphic marks). Sized,
    not spaced — the Cluster around it owns the seam to the eyebrow. */
 .mark {
   display: block;

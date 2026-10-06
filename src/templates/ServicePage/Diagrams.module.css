@@ -36,8 +36,8 @@
 }
 
 /* ── Matrix, and the slice verdicts ─────────────────────────────────────────────────
-   A check in the text's ink; a cross one step quieter — the checks carry the comparison, a cross
-   only says "not this one". */
+   A check in the blue accent (--svc-mark); a cross in the quiet ink (--svc-ink-quiet, held at 3:1
+   as a graphic) — the checks carry the comparison, a cross only says "not this one". */
 .markYes {
   display: block;
   color: var(--svc-mark);
@@ -73,6 +73,20 @@
 
 .sheetRow:last-child {
   border-block-end: 0;
+}
+
+/* A record of four or more fields reads in two columns from 1024 (fix round 1, 7 Oct 2026: one
+   column of eight fields was a 716-tall sheet, past the E diagram's 380 and the band's fold). The
+   last ROW loses its rule, which in two columns is the last two cells when the count is even; the
+   column seam is the second cell's own start rule, so the two columns read as one sheet. */
+@media (min-width: 1024px) {
+  .sheetRowsPaired > .sheetRow:nth-child(even) {
+    border-inline-start: var(--svc-rule-width) solid var(--svc-rule);
+  }
+
+  .sheetRowsPaired > .sheetRow:nth-child(odd):nth-last-child(2) {
+    border-block-end: 0;
+  }
 }
 
 .sheetField {

@@ -9,6 +9,8 @@ import {
   type SectionSurface,
 } from '@/components';
 
+import { cx } from '@/lib/cx';
+
 import styles from './Statement.module.css';
 
 /**
@@ -29,7 +31,15 @@ export type StatementElement = 'h2' | 'p';
  */
 export type StatementTexture = 'head-half';
 
+/**
+ * The sentence's scale. `h1` (default) the h1 role; `display` the display role, the hero's — for
+ * the one band on a page that restates its argument at the scale of its opening.
+ */
+export type StatementSize = 'h1' | 'display';
+
 export type StatementProps = {
+  /** Default `h1`. See `StatementSize`. */
+  size?: StatementSize;
   /** The sentence, ≤ 14 words so it holds ≤ 3 lines at the h1 role in the 763 track (§ 1.5). */
   children: string;
   /** The label in the head track. Never repeats the band before it (§ 7.3). */
@@ -69,6 +79,7 @@ export function Statement({
   actions,
   texture,
   surface = 'paper',
+  size = 'h1',
 }: StatementProps) {
   const heading = Tag === 'h2';
   const labelled = heading && Boolean(id);
@@ -79,7 +90,11 @@ export function Statement({
   }
 
   const sentence = (
-    <Tag id={heading ? id : undefined} className={styles.sentence} data-copy="statement">
+    <Tag
+      id={heading ? id : undefined}
+      className={cx(styles.sentence, size === 'display' && styles.sentenceDisplay)}
+      data-copy="statement"
+    >
       {children}
     </Tag>
   );
@@ -108,10 +123,10 @@ export function Statement({
       ) : null}
       <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
         {/* The mark belongs to the eyebrow: it is the label's lead-in. With no eyebrow there is
-            nothing for it to lead into, and a 32 rule alone at the sentence's cap height read as
+            nothing for it to lead into, and a mark alone at the sentence's cap height read as
             a stray dash (fix round 2) — so the head track stays empty and the air holds it. */}
         {eyebrow ? (
-          <Cluster colGap="text" align="center" nowrap>
+          <Cluster colGap="tight" align="center" nowrap>
             <span aria-hidden="true" className={styles.mark} />
             <p className={styles.eyebrow} data-copy="eyebrow">
               {eyebrow}

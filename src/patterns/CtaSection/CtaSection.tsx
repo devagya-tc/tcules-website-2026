@@ -131,6 +131,9 @@ type CtaSectionBaseProps = {
    * region and is generated.
    */
   id?: string;
+  /** The band's archetype for `fold:check` (§ 1.3) — `K` for an offer, `L` for a close — passed to
+      Section's `data-band`. A marker for the gate, never a style hook. */
+  'data-band'?: string;
 };
 
 /**
@@ -312,7 +315,21 @@ function CtaLede({
 
   return (
     <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
-      {eyebrow !== undefined ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
+      {/* The eyebrow carries the kit's blue mark, as every band eyebrow does (fix round 1, 7 Oct
+          2026): one rule for the label's accent, so no band reads as the unmarked one. */}
+      {eyebrow !== undefined ? (
+        <Cluster
+          as="p"
+          colGap="tight"
+          align="center"
+          nowrap
+          justify={centred ? 'center' : 'start'}
+          className={styles.eyebrow}
+        >
+          <span className={styles.mark} aria-hidden="true" />
+          <span>{eyebrow}</span>
+        </Cluster>
+      ) : null}
       <h2 id={headingId} className={HEADING_CLASS[scale]}>
         {heading}
       </h2>
@@ -633,8 +650,8 @@ const LANDSCAPE_FRAMES = [3 / 2, 3 / 2, 4 / 3] as const;
  *           left-aligned and the proof beside.
  *   offer   K, which INTERRUPTS a page mid-scroll. Sets `density="tight"` itself. Three shapes:
  *             with `media`   [7, 5]: H-full, ≤ 3 one-line points (`line`) and the actions in 7, a quiet 4:5
- *                            photograph in 5 (`media.side` flips it). The copy column stretches to
- *                            the photo and pins the actions to its foot (§ 3.2 rule 1). With
+ *                            photograph in 5 (`media.side` flips it). The copy column is centred on
+ *                            the photo, the actions a `stack` under the points (fix round 1). With
  *                            `media.frame="landscape"`, [5, 7]: the lede and actions beside a 3:2
  *                            photo in 7, the points a ruled 3-up strip under both.
  *             without        [1, 2]: head and actions in the 381 head track (H-beside-actions), the
@@ -686,6 +703,7 @@ export function CtaSection(props: CtaSectionProps) {
         <Section
           surface={props.surface}
           id={props.id}
+          data-band={props['data-band']}
           aria-labelledby={headingId}
           data-arrangement="open"
         >
@@ -719,6 +737,7 @@ export function CtaSection(props: CtaSectionProps) {
       <Section
         surface={props.surface}
         id={props.id}
+        data-band={props['data-band']}
         density="open"
         aria-labelledby={headingId}
         data-arrangement="open"
@@ -759,6 +778,7 @@ export function CtaSection(props: CtaSectionProps) {
         <Section
           surface={props.surface}
           id={props.id}
+          data-band={props['data-band']}
           density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
@@ -796,18 +816,19 @@ export function CtaSection(props: CtaSectionProps) {
        the copy stays first in the DOM, which is the phone's order (photo BELOW the copy in K, § 3.7
        item 4) and carries no meaning against an atmosphere photo (alt="").
 
-       § 3.2 rule 1: the copy column ends in an action with points between, so it stretches to the
-       photo's height, its head on the photo's top edge and its actions pinned to the photo's foot.
-       The photo FILLS a frame whose ratio is a floor (`.photoFrame`): where the copy is taller than
-       a 4:5 photo — 1024 to 1279, where the 7 track is ~500 — the frame stretches with it and the
-       crop grows taller, so the edge alignment holds at every width from 1024 rather than leaving
-       the photo ~105 short of the actions (fix round 1). A copy column that is a head and its
-       actions and nothing else is CENTRED on the photo instead. */
+       The copy column is CENTRED on the photo and the actions FOLLOW the points, a `stack` under
+       them (page-product-design fix round 1, 7 Oct 2026). It used to stretch to the photo and pin
+       the actions to its foot (§ 3.2 rule 1), and with three one-line points that opened a ~160 hole
+       between the list and the buttons at 1470 — the dead column § 3.2 warns about. The ask belongs
+       to the list it closes. The photo FILLS a frame whose ratio is a floor (`.photoFrame`): where
+       the copy is taller than a 4:5 photo — 1024 to 1279, where the 7 track is ~500 — the frame
+       stretches with it, so the photo never ends short of the copy. */
     if (media && !hasForm) {
       return (
         <Section
           surface={props.surface}
           id={props.id}
+          data-band={props['data-band']}
           density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
@@ -817,9 +838,9 @@ export function CtaSection(props: CtaSectionProps) {
             colGap="section"
             rowGap="stack"
             reverse={media.side === 'start' ? { lg: true } : undefined}
-            align={hasPoints ? 'stretch' : 'center'}
+            align="center"
           >
-            <Layout rowGap="stack" pinLast={hasPoints}>
+            <Layout rowGap="stack">
               {lede()}
               <CtaPoints shape="line" markers={markers} points={points} />
               {actions.length > 0 ? <CtaActions actions={actions} /> : null}
@@ -850,6 +871,7 @@ export function CtaSection(props: CtaSectionProps) {
         <Section
           surface={props.surface}
           id={props.id}
+          data-band={props['data-band']}
           density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
@@ -877,6 +899,7 @@ export function CtaSection(props: CtaSectionProps) {
       <Section
         surface={props.surface}
         id={props.id}
+        data-band={props['data-band']}
         density="tight"
         aria-labelledby={headingId}
         data-arrangement="offer"
@@ -908,7 +931,7 @@ export function CtaSection(props: CtaSectionProps) {
      TOP-ALIGNED (final fix round). The copy no longer stretches to pin its last part to the form's
      foot: pinned, the points left ~110 of bare paper between the lede and point 01, and the contact
      strip ~250 — unfilled, not composed. The copy reads down from the form's first label, and the
-     air falls at the foot of the column, where the `closing` texture rises into it.
+     air falls at the foot of the band, where the `closing` texture rises into it.
 
      No proof row: see `CtaSplitProps.proof`. */
   const contact = props.contact ?? [];
@@ -920,32 +943,25 @@ export function CtaSection(props: CtaSectionProps) {
     <Section
       surface={props.surface}
       id={props.id}
+      data-band={props['data-band']}
       density={hasTexture ? 'open' : undefined}
       aria-labelledby={headingId}
       data-arrangement="split"
     >
+      {/* The `closing` field: the band's foot, edge to edge, a direct child of the Section so it is
+          placed against the band (`.textureField`). It sits in the open padding a `stack` under
+          the lowest line of either column, so it never runs under text. */}
+      {hasTexture ? <div className={styles.textureField}>{props.texture}</div> : null}
       <Layout
         columns={hasForm ? { base: 1, lg: [1, 1], xl: [10, 7] } : undefined}
         colGap={hasForm ? 'section' : undefined}
         rowGap="stack"
-        align="stretch"
+        align="start"
       >
-        {/* The copy cell: the copy, then — with a texture — the field it rises in. `pinLast` with
-            no row gap makes the field the cell's flexible last row, so it is exactly the air the
-            form leaves under the copy; the 48 between the copy and the texture is the field's own
-            inset, not a seam (`.textureField`). Below 1024 the well and the field are
-            `display: contents` and the texture covers the band instead. */}
-        <Layout rowGap="none" pinLast={hasTexture}>
-          <Layout rowGap="stack">
-            {lede({ scale: 'close' })}
-            <CtaPoints shape="stack" markers={markers} points={points} />
-            {hasContact ? <CtaContactStrip contact={contact} /> : null}
-          </Layout>
-          {hasTexture ? (
-            <div className={styles.textureWell}>
-              <div className={styles.textureField}>{props.texture}</div>
-            </div>
-          ) : null}
+        <Layout rowGap="stack">
+          {lede({ scale: 'close' })}
+          <CtaPoints shape="stack" markers={markers} points={points} />
+          {hasContact ? <CtaContactStrip contact={contact} /> : null}
         </Layout>
         {hasForm ? <div>{props.form}</div> : null}
       </Layout>

@@ -99,8 +99,17 @@ function AuthorityMeter({ level, slots }: { level: number; slots: number }) {
 
    With a meter, the scale is a column: every row shows where it sits, and the order needs no
    sentence. Without one, the order is said once, as the table's summary. */
+/* Six options is the most a spectrum holds in its band at 1470 (fix round 1, 7 Oct 2026: seven
+   ran the band to 892). A seventh belongs on the deep page, linked from the band (`more`). */
+const SPECTRUM_MAX = 6;
+
 export function Spectrum({ block }: { block: Of<'spectrum'> }) {
   const meter = block.meter;
+  if (process.env.NODE_ENV !== 'production' && block.items.length > SPECTRUM_MAX) {
+    console.warn(
+      `ServicePage: a spectrum of ${block.items.length} options runs its band past the fold; keep ${SPECTRUM_MAX} and link the rest from the band's \`more\`.`,
+    );
+  }
   const last = block.items.length - 1;
   return (
     <DataTable
@@ -145,12 +154,31 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
    3-item list beside a 7-item one read as an imbalance, not an argument. Here each thing to decide
    is a row with a check or a cross under each side, so the comparison is done row by row. A real
    table, so it holds at every width. */
+/* A matrix of more than six rows sets them in two tables side by side from 1024 (fix round 1, 7 Oct
+   2026): a ten-row matrix was a 639-tall table, the band 1021 to 1890 at 1470. The marks are a
+   narrow column each, so one table used a fifth of the 1240; two halves use it all and the band is
+   half as tall. The second half repeats the column heads, because each half is a table a reader
+   (and a screen reader) can read on its own. */
+const MATRIX_SPLIT_FROM = 7;
+
 export function Matrix({ block }: { block: Of<'matrix'> }) {
+  if (block.rows.length < MATRIX_SPLIT_FROM)
+    return <MatrixTable block={block} rows={block.rows} />;
+  const half = Math.ceil(block.rows.length / 2);
+  return (
+    <Layout columns={{ lg: 2 }} colGap="column" rowGap="stack" align="start">
+      <MatrixTable block={block} rows={block.rows.slice(0, half)} />
+      <MatrixTable block={block} rows={block.rows.slice(half)} />
+    </Layout>
+  );
+}
+
+function MatrixTable({ block, rows }: { block: Of<'matrix'>; rows: Of<'matrix'>['rows'] }) {
   return (
     <DataTable
       keyColumn={{ heading: block.keyColumn }}
       columns={block.columns.map((heading) => ({ heading, behaviour: 'nowrap' as const }))}
-      rows={block.rows.map((row) => ({
+      rows={rows.map((row) => ({
         header: row.header,
         cellsHtml: block.columns.map((_, index) => {
           const yes = row.marks[index] === true;
@@ -179,7 +207,10 @@ export function Matrix({ block }: { block: Of<'matrix'> }) {
    serif. Stacked, not side by side: a key and its question are one item, not two columns.
    It is the one place in the template that paints a ground, and it earns it: a record is an
    OBJECT the team keeps, and the sheet is what says so. */
+const RECORD_PAIRED_FROM = 4;
+
 export function Record({ block }: { block: Of<'record'> }) {
+  const paired = block.items.length >= RECORD_PAIRED_FROM;
   return (
     <figure className={styles.sheet}>
       {/* Stacked: what the record is for, then its name — a label over the thing it labels. It was
@@ -188,7 +219,14 @@ export function Record({ block }: { block: Of<'record'> }) {
         <span className={styles.key}>{block.meta}</span>
         <span className={styles.sheetTitle}>{block.title}</span>
       </Layout>
-      <Layout as="dl" rowGap="none">
+      {/* Four or more fields pair up from 1024, so the sheet is half as tall (fix round 1). */}
+      <Layout
+        as="dl"
+        rowGap="none"
+        colGap="none"
+        columns={paired ? { lg: 2 } : undefined}
+        className={paired ? styles.sheetRowsPaired : undefined}
+      >
         {block.items.map((item) => (
           <Layout key={item.field} rowGap="tight" className={styles.sheetRow}>
             <dt className={styles.sheetField}>
@@ -369,27 +407,34 @@ export function Slice({ block }: { block: Of<'slice'> }) {
           />
         </Layout>
       </Layout>
-      <Layout rowGap="block">
-        <h3 className={styles.levelsLabel}>{block.levelsLabel}</h3>
-        <Layout
-          as="ul"
-          columns={{ base: 1, md: block.levels.length }}
-          colGap="gutter"
-          rowGap="column"
-        >
-          {block.levels.map((level) => (
-            <ListCard
-              key={level.title}
-              form="tile"
-              size="sm"
-              titleAs="h4"
-              title={level.title}
-              body={level.body}
-              marker={{ type: 'icon', name: level.icon }}
-            />
-          ))}
+      {block.levels && block.levels.length > 0 ? (
+        <Layout rowGap="block">
+          {block.levelsLabel ? (
+            <h3 className={styles.levelsLabel}>{block.levelsLabel}</h3>
+          ) : null}
+          {/* Rows, the glyph beside the copy, side by side from md (fix round 1, 7 Oct 2026): as tiles
+              with the glyph above, the three levels took ~250 of a band the two grids already fill,
+              and the slice band ran to 990 at 1470 and 1833 at 390. */}
+          <Layout
+            as="ul"
+            columns={{ base: 1, md: block.levels.length }}
+            colGap="gutter"
+            rowGap="none"
+          >
+            {block.levels.map((level) => (
+              <ListCard
+                key={level.title}
+                arrangement="stacked"
+                size="sm"
+                titleAs="h4"
+                title={level.title}
+                body={level.body}
+                marker={{ type: 'icon', name: level.icon }}
+              />
+            ))}
+          </Layout>
         </Layout>
-      </Layout>
+      ) : null}
     </Layout>
   );
 }

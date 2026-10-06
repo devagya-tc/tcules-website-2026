@@ -209,7 +209,9 @@ export function Router({ block }: { block: Of<'router'> }) {
       body: item.when,
       href: item.link.href,
     }));
-    return <BlockCardSet items={items} lead="none" across={2} />;
+    /* Stacked on a phone (`scroll="never"`): a router shows every route at once, never one and a
+       fifth of six behind a gesture (fix round 1). */
+    return <BlockCardSet items={items} lead="none" across={2} scroll="never" />;
   }
   const size = setSize(all.length, 'row');
   return (
@@ -307,19 +309,38 @@ export function ProofBlock({ block, labels }: { block: Of<'proof'>; labels: Labe
 }
 
 /* ── Logos (H) ────────────────────────────────────────────────────────────────
-   The client marks as a centred strip (§ 5.9: ClientMark × n in a Cluster at `stack` both ways),
-   the sourced rating a `stack` under it, so a real mark sits beside a real figure (§ 5.8). */
+   The client marks as a centred set (§ 5.9), the sourced rating a `stack` under it, so a real mark
+   sits beside a real figure (§ 5.8). Equal tracks rather than a wrapping Cluster (fix round 1, 7 Oct
+   2026): wrapping, six marks broke 5 + 1 at 1024 and left one mark alone on a second row. The
+   tracks keep the rows whole at every width — two at a phone, three from md, the whole set on one
+   row from xl (two balanced rows past six) — and each mark centres in its track at its own area. */
+function logoColumns(count: number) {
+  const row = count <= 6 ? count : Math.ceil(count / 2);
+  return { base: 2, md: count % 2 === 0 && count % 3 !== 0 ? Math.min(count, 4) : 3, xl: row };
+}
+
 export function Logos({ block }: { block: Of<'logos'> }) {
   return (
-    <Layout rowGap="stack" justifyItems="center">
-      <Cluster as="ul" colGap="stack" rowGap="stack" align="center" justify="center">
+    <Layout rowGap="stack">
+      <Layout
+        as="ul"
+        columns={logoColumns(block.marks.length)}
+        colGap="stack"
+        rowGap="stack"
+        align="center"
+        justifyItems="center"
+      >
         {block.marks.map((mark) => (
           <li key={mark.name}>
             <ClientMark {...mark} />
           </li>
         ))}
-      </Cluster>
-      {block.rating ? <RatingPill rating={block.rating} /> : null}
+      </Layout>
+      {block.rating ? (
+        <Cluster justify="center">
+          <RatingPill rating={block.rating} />
+        </Cluster>
+      ) : null}
     </Layout>
   );
 }

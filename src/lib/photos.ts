@@ -154,6 +154,8 @@ export const PHOTO_PLACEMENTS = {
   bannerBeside: { ratio: '3/2', width: 667 },
   /** The head-track aside. */
   aside: { ratio: '3/2', width: 381 },
+  /** K's landscape frame: a 3:2 photo in 7 of [5, 7] (CtaSection `media.frame="landscape"`). */
+  offerWide: { ratio: '3/2', width: 667 },
   /** A card in a set of three across. */
   card3: { ratio: CARD_RATIO, width: 392 },
   /** A card in a set of four across. */
@@ -183,7 +185,9 @@ export function qualifies(id: PhotoId, placement: PhotoPlacement): boolean {
 /** The five large photo slots a service page carries outside its card sets. */
 export type ServicePhotoSlots = {
   b: PhotoId;
-  i: PhotoId;
+  /** Optional: a page with no I banner names no banner photo (product-design, fix round 1 — the
+      banner was one link under a soft photo, and its job moved to the J statement's link). */
+  i?: PhotoId;
   k: PhotoId;
   aside1: PhotoId;
   aside2: PhotoId;
@@ -196,12 +200,15 @@ export type ServicePhotoSlots = {
  * stand-in can never land on a photo another page has just been given.
  */
 export const SERVICE_PHOTO_SLOTS = {
+  /* product-design, fix round 1 (7 Oct 2026): § 5.6's I, K and aside 2 swapped. The banner is gone
+     (its soft sticky wall repeated B's subject at the page's largest size), K's lifestyle desk and
+     F's car-design moodboard read as off-brand for a B2B product studio. K is screen work at a
+     landscape 3:2, the aside the studio's own crit, F the wireframe sketch. */
   'product-design': {
     b: 'studio-sticky-board-ux',
-    i: 'sticky-wall-soft-focus',
-    k: 'pair-laptop-notebook',
-    aside1: 'hand-sketch-wireframe',
-    aside2: 'moodboard-wall-desk',
+    k: 'designer-tablet-monitor',
+    aside1: 'studio-whiteboard-crit',
+    aside2: 'hand-sketch-wireframe',
   },
   'software-development': {
     b: 'designer-desk-monitor',
