@@ -42,9 +42,29 @@
   --inp-transition-easing: var(--easing-standard);
   --inp-ring-width: var(--focus-ring-width);
   --inp-ring-offset: var(--focus-ring-offset);
-  /* appearance="line": no fill on any surface, and a three-line textarea floor. */
+  /* appearance="line": no fill on any surface.
+
+     The line control is SHORTER than the box (32, not 40) and its value sits on its rule
+     (cmp-form final round, 6 Oct 2026). At 40 with the value centred, an empty line field put its
+     label 59px above its own rule and 53 below the rule above it, so the label read as belonging
+     to either, and a form of them read as a ruled notepad. Executra (ref-executra-11) sets the
+     value on the rule. 32 holds one --text-body line (24) and the rule inset under it; the label
+     sits a `--gap-inline` over the value (EnquiryForm), so label → own rule is ~36 and own rule →
+     next label is the row's step plus the reserved message line, ~51.
+
+     The 44px touch floor is met by the label + control together: every line field is labelled with
+     `for`, so the label is part of the hit area, and label (21) + gap (4) + control (32) is 57.
+
+     The textarea floor is two lines (64, from 104): at three lines an empty lined textarea was
+     ~100px of nothing over a hairline, and at a squint it read as a spacing bug. It still grows
+     with what is typed (field-sizing: content). */
   --inp-line-bg: transparent;
-  --inp-line-textarea-min-block: 104px;
+  --inp-line-height-md: 32px;
+  --inp-line-inset-bottom: var(--space-6); /* optical: the value's descenders clear the rule */
+  --inp-line-inset-top: var(
+    --space-4
+  ); /* optical: the textarea's first line clears the label */
+  --inp-line-textarea-min-block: 64px;
 }
 
 :root,
@@ -70,6 +90,8 @@
   --inp-line-rule-hover: var(--color-neutral-600);
   --inp-line-rule-focus: var(--color-brandeis-500);
   --inp-line-invalid-rule: var(--color-danger-600);
+  --inp-line-disabled-fg: var(--color-neutral-500); /* 3.16:1 on paper — exempt, see header */
+  --inp-line-disabled-rule: var(--color-neutral-200);
 }
 
 [data-surface='tint'] {
@@ -93,6 +115,10 @@
   --inp-line-rule-hover: var(--color-neutral-700);
   --inp-line-rule-focus: var(--color-brandeis-500);
   --inp-line-invalid-rule: var(--color-danger-600);
+  --inp-line-disabled-fg: var(
+    --color-neutral-500
+  ); /* 2.82:1 on deep paper — exempt, see header */
+  --inp-line-disabled-rule: var(--color-neutral-300);
 }
 
 [data-surface='ink'] {
@@ -116,6 +142,10 @@
   --inp-line-rule-hover: var(--color-neutral-400);
   --inp-line-rule-focus: var(--color-brandeis-300);
   --inp-line-invalid-rule: var(--color-danger-300);
+  --inp-line-disabled-fg: var(
+    --color-neutral-600
+  ); /* 3.48:1 on neutral-950 — exempt, see header */
+  --inp-line-disabled-rule: var(--color-neutral-800);
 }
 
 [data-surface='blue'] {
@@ -132,11 +162,20 @@
   --inp-disabled-fg: var(--color-neutral-500); /* 2.67:1 — exempt, see header */
   --inp-disabled-rule: var(--color-neutral-300);
   --inp-standard-invalid-rule: var(--color-danger-600); /* 6.54:1 on the white fill */
-  /* line: directly on brandeis-500, so the value is white and the focus rule is white. */
+  /* line: directly on brandeis-500, so the value is white and the focus rule is white.
+
+     Invalid is danger-300, not danger-100 (cmp-form final round): danger-100 is a near-white pink,
+     and beside the brandeis-200 rest rule the invalid line read as the same rule drawn heavier, with
+     no change of colour. Danger-300 is a visible change of hue and 3.12:1 on the ground. Disabled
+     takes its own line tokens on every surface for the same reason: --inp-disabled-fg is chosen
+     against the WHITE box fill (neutral-500), and with no fill under it the disabled placeholder
+     rendered a muddy olive on blue. Brandeis-300 / 400 read as unavailable on blue's own terms. */
   --inp-line-fg: var(--color-white);
   --inp-line-placeholder-fg: var(--color-brandeis-100);
   --inp-line-rule: var(--color-brandeis-200);
   --inp-line-rule-hover: var(--color-brandeis-50);
   --inp-line-rule-focus: var(--color-white);
-  --inp-line-invalid-rule: var(--color-danger-100);
+  --inp-line-invalid-rule: var(--color-danger-300); /* 3.12:1 on brandeis-500 */
+  --inp-line-disabled-fg: var(--color-brandeis-300); /* 2.64:1 — exempt, see header */
+  --inp-line-disabled-rule: var(--color-brandeis-400);
 }

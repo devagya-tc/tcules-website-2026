@@ -42,7 +42,34 @@ type SharedProps = {
    * reading as a stack of default white boxes. `box` keeps Input's filled control.
    */
   fields?: 'line' | 'box';
+  /**
+   * Number the fields (cmp-form final round): a blue mono numeral leads each label — 01 Name,
+   * 02 Email, 03 What are you working on? The form's own structural mark, for the placements where
+   * nothing else in the band carries the accent (a standalone ask with no photograph, no texture
+   * and no points), so the band does not read black and white plus one blue button. The numerals
+   * are aria-hidden: the label is the field's name, and the count is visual order, not content.
+   */
+  numbered?: boolean;
+  /**
+   * How the submit sets. `inline` (default) is the button at its own width, the caption (compact)
+   * or the scheduling link (full) beside it. `full` sets the button across the form's whole track
+   * with the line under it — the reference move (Executra) for a form that ends a column, and the
+   * variation that stops every compact form on a page being the same rectangle.
+   */
+  submit?: 'inline' | 'full';
+  /**
+   * What happens after a send, shown in the success view as numbered steps. The CALLER's copy,
+   * never the pattern's: on a close it is the same list the band's points promise (pass
+   * CtaSection's `points` straight through), so the success view keeps the band's promise and
+   * cannot drift from it. Absent, the success view is the thanks and one line. Structurally
+   * CtaSection's CtaPoint — a pattern does not import a pattern, so the shape is restated, not the
+   * type.
+   */
+  nextSteps?: readonly EnquiryNextStep[];
 };
+
+/** One step in the success view's "what happens next". */
+export type EnquiryNextStep = { label: string; detail?: string };
 
 /* "See available times" lives in the form's own action row, beside the submit, so the two asks
    read as one group rather than as a form with a stray link under it. Amended 29 Sep 2026
@@ -151,6 +178,10 @@ function normaliseUrl(value: string): string {
 type FieldGroupProps = {
   id: string;
   label: string;
+  /** The blue numeral leading the label, when the form is `numbered`. */
+  index?: string;
+  /** The field treatment, which sets the label-to-control step (see below). */
+  appearance: 'line' | 'box';
   optional?: boolean;
   hint?: { id: string; text: string };
   /** Present when the field validates: the id of its reserved message row, and the message. */
@@ -161,25 +192,50 @@ type FieldGroupProps = {
 function FieldGroup({
   id,
   label,
+  index,
+  appearance,
   optional = false,
   hint,
   validation,
   children,
 }: FieldGroupProps) {
+  const text = (
+    <>
+      {label}
+      {optional ? <span className={styles.optional}> (optional)</span> : null}
+    </>
+  );
   return (
     /* `.field` so the label can take the accent while its control has focus: the blue lands on the
-       question being answered, beside the blue rule under the value. */
+       question being answered, beside the blue rule under the value.
+
+       Two steps, nested (cmp-form final round). The label, its hint and the control are ONE group
+       at `inline` on a line field — the label sits on the value and the value on its rule, so the
+       three read as one answer — and the message row is a `tight` below the rule. On a box field
+       the label keeps `tight` over the box: a box is its own edge and needs no pulling in. With the
+       label at `tight` over a centred value, an empty line field's label sat as far from its own
+       rule as from the rule above it. */
     <Layout rowGap="tight" className={styles.field}>
-      <label className={styles.label} htmlFor={id}>
-        {label}
-        {optional ? <span className={styles.optional}> (optional)</span> : null}
-      </label>
-      {hint ? (
-        <p className={styles.hint} id={hint.id}>
-          {hint.text}
-        </p>
-      ) : null}
-      {children}
+      <Layout rowGap={appearance === 'line' ? 'inline' : 'tight'}>
+        <label className={styles.label} htmlFor={id}>
+          {index ? (
+            <Cluster as="span" nowrap colGap="tight" align="baseline">
+              <span aria-hidden="true" className={styles.fieldIndex}>
+                {index}
+              </span>
+              <span>{text}</span>
+            </Cluster>
+          ) : (
+            text
+          )}
+        </label>
+        {hint ? (
+          <p className={styles.hint} id={hint.id}>
+            {hint.text}
+          </p>
+        ) : null}
+        {children}
+      </Layout>
       {validation ? (
         <Cluster
           className={styles.message}
@@ -198,27 +254,6 @@ function FieldGroup({
 
 /** The reassurance line under (or, compact, beside) the submit. One sentence, said once. */
 const CAPTION = 'We reply to the address you give us, and use it for nothing else.';
-
-/**
- * What happens after a send, shown in the success view (cmp-form fix round). The same three steps
- * the L close promises in its points, so the success state keeps the promise the band made rather
- * than restating it as one serif line. Blue numerals, as on CtaSection's points: the accent marks
- * the sequence, the ink carries the words.
- */
-const NEXT_STEPS = [
-  {
-    label: 'A reply within a working day',
-    detail: 'From the designer who would lead the work.',
-  },
-  {
-    label: 'A thirty-minute call',
-    detail: 'What exists, what is stuck, and what a first fortnight would change.',
-  },
-  {
-    label: 'A written proposal',
-    detail: 'Scope, team and timeline on two pages. No obligation.',
-  },
-] as const;
 
 /** The validating text fields, keyed by the message slot each one fills. */
 type FieldKey = keyof FieldMessages;
@@ -239,6 +274,8 @@ type FieldSpec = {
   type?: 'text' | 'email' | 'tel';
   as?: 'textarea';
   autoComplete?: string;
+  /** The hint inside an empty field. Every textarea carries one: a lined textarea with no hint
+      reads as empty space rather than as a field (cmp-form final round). */
   placeholder?: string;
   /** The message on an empty blur. */
   empty: string;
@@ -281,6 +318,7 @@ const FIELD = {
     label: 'What are you working on?',
     name: 'what_are_you_working_on',
     as: 'textarea',
+    placeholder: 'A line or two: the product, and what is stuck',
     empty: 'Add a line about it',
   } satisfies FieldSpec,
   message: {
@@ -288,6 +326,7 @@ const FIELD = {
     label: 'Message',
     name: 'clientComments',
     as: 'textarea',
+    placeholder: 'What would you like to talk about?',
     empty: 'Add a message',
   } satisfies FieldSpec,
 };
@@ -360,6 +399,31 @@ export function EnquiryForm(props: EnquiryFormProps) {
     }
   }
 
+  /* The rows, in order. A row is one field or a PAIR side by side: compact pairs name and email,
+     contact pairs name with company and email with phone (cmp-form final round — stacked one per
+     row, the five-field set was 1021 tall and ran past the fold). A pair sits side by side wherever
+     the form's own width holds two 192px tracks (`fit`, `xs`) and stacks where it does not, so the
+     form decides from its track, not from the viewport. The optional link field is a row of its
+     own at the end of the enquiry and audit sets. */
+  type Row = readonly FieldSpec[] | 'url';
+  const rows: Row[] =
+    variant === 'contact'
+      ? [
+          [FIELD.name('clientName'), FIELD.company],
+          [FIELD.email('clientEmail'), FIELD.phone],
+          [FIELD.message],
+        ]
+      : variant === 'compact'
+        ? [[FIELD.name('name'), FIELD.email('email')], [FIELD.work]]
+        : [[FIELD.email('email')], [FIELD.work], 'url'];
+
+  /* The numeral each field takes when the form is `numbered`, counted in reading order. */
+  const indexFor = (() => {
+    const order = rows.flatMap((row) => (row === 'url' ? ['url'] : row.map((f) => f.key)));
+    return (key: string) =>
+      props.numbered ? String(order.indexOf(key) + 1).padStart(2, '0') : undefined;
+  })();
+
   /** One validating field, from its spec. The only place a FieldGroup + Input pair is written. */
   function renderField(spec: FieldSpec) {
     const id = idFor(spec.key);
@@ -390,6 +454,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
         key={spec.key}
         id={id}
         label={spec.label}
+        index={indexFor(spec.key)}
+        appearance={appearance}
         validation={{ id: messageId, message: messages[spec.key] }}
       >
         {spec.as === 'textarea' ? (
@@ -405,7 +471,48 @@ export function EnquiryForm(props: EnquiryFormProps) {
     );
   }
 
+  function renderRow(row: Row) {
+    if (row === 'url') {
+      return (
+        <FieldGroup
+          key="url"
+          id={urlId}
+          label={urlLabel}
+          index={indexFor('url')}
+          appearance={appearance}
+          optional
+        >
+          <Input
+            id={urlId}
+            type="url"
+            inputMode="url"
+            name="url"
+            autoComplete="url"
+            /* A scheme-less example, because the field accepts one (normaliseUrl). */
+            placeholder="yourproduct.com"
+            appearance={appearance}
+            disabled={submitting}
+            onBlur={(event) => {
+              event.currentTarget.value = normaliseUrl(event.currentTarget.value);
+            }}
+          />
+        </FieldGroup>
+      );
+    }
+    const [first, second] = row;
+    if (!first) return null;
+    if (!second) return renderField(first);
+    /* `block` between the two: a pair of fields is two answers, and closer the two labels read as
+       one run. The stacked pair keeps the form's own row step. */
+    return (
+      <Layout key={first.key} columns="fit" minTrack="xs" colGap="block" rowGap="block">
+        {row.map(renderField)}
+      </Layout>
+    );
+  }
+
   if (lifecycle === 'success') {
+    const steps = props.nextSteps ?? [];
     return (
       <div
         className={cx(styles.success, bounds)}
@@ -415,8 +522,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         ref={successRef}
       >
         {/* The moment the form earns, in reading order: the mark, the THANKS at title scale, then
-            what happens next as the same numbered steps the close promised. It used to open on the
-            promise and bury the thanks in one small line under it, with a black check. */}
+            what happens next — the caller's steps, numbered in blue, when it passes them. */}
         <Layout rowGap="stack">
           <Layout rowGap="block">
             <span className={styles.successMark}>
@@ -428,24 +534,32 @@ export function EnquiryForm(props: EnquiryFormProps) {
                   ? 'Thanks. We have your message.'
                   : 'Thanks. We have your enquiry.'}
               </h3>
-              <p className={styles.successBody}>Here is what happens next.</p>
+              <p className={styles.successBody}>
+                {steps.length > 0
+                  ? 'Here is what happens next.'
+                  : 'We will reply to the address you gave us.'}
+              </p>
             </Layout>
           </Layout>
-          <Layout as="ol" rowGap="block">
-            {NEXT_STEPS.map((step, index) => (
-              <li key={step.label}>
-                <Cluster nowrap colGap="text" align="baseline">
-                  <span aria-hidden="true" className={styles.stepMarker}>
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <Layout rowGap="inline" className={styles.stepContent}>
-                    <span className={styles.stepLabel}>{step.label}</span>
-                    <span className={styles.stepDetail}>{step.detail}</span>
-                  </Layout>
-                </Cluster>
-              </li>
-            ))}
-          </Layout>
+          {steps.length > 0 ? (
+            <Layout as="ol" rowGap="block">
+              {steps.map((step, index) => (
+                <li key={step.label}>
+                  <Cluster nowrap colGap="text" align="baseline">
+                    <span aria-hidden="true" className={styles.stepMarker}>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <Layout rowGap="inline" className={styles.stepContent}>
+                      <span className={styles.stepLabel}>{step.label}</span>
+                      {step.detail ? (
+                        <span className={styles.stepDetail}>{step.detail}</span>
+                      ) : null}
+                    </Layout>
+                  </Cluster>
+                </li>
+              ))}
+            </Layout>
+          ) : null}
           {/* The scheduling link survives the swap. It used to, for free, because CtaSection
               rendered it outside the form; now the form owns it, so the success view carries it
               on — a sent enquiry does not make "talk sooner" any less of an offer. */}
@@ -478,21 +592,39 @@ export function EnquiryForm(props: EnquiryFormProps) {
         : '';
 
   const submitLabel =
-    variant === 'audit' ? 'Request free audit' : variant === 'contact' ? 'Send message' : 'Send enquiry';
+    variant === 'audit'
+      ? 'Request free audit'
+      : variant === 'contact'
+        ? 'Send message'
+        : 'Send enquiry';
 
   /* The submit carries the trailing arrow on every variant: the click takes the step forward, and
      the arrow is the band's blue-adjacent mark on the one solid control (the glyph takes the
      button's own fg). */
-  const submit = (
+  const submitButton = (
     <Button type="submit" size="lg" busy={submitting} icon={<Icon name="arrow-right" />}>
       {submitLabel}
     </Button>
   );
 
+  const scheduleLink = props.scheduleHref ? (
+    <Button
+      as="a"
+      href={props.scheduleHref}
+      emphasis="link"
+      tone="primary"
+      size="lg"
+      icon={<Icon name="arrow-right" />}
+    >
+      See available times
+    </Button>
+  ) : null;
+
   /* The caption line, led by a blue mark. The mark is the shield at rest — the sentence is a
      promise about the address — and the danger triangle when the line has become an error. The
      paragraph is the live region, so the status is announced where the reassurance sat. */
-  const captionLine = (text: string, error: boolean) => (
+  const error = lifecycle === 'error';
+  const captionLine = (
     <Cluster nowrap colGap="tight" align="start" className={styles.note}>
       <span className={cx(styles.noteMark, error && styles.statusError)}>
         <Icon name={error ? 'danger-triangle' : 'shield-check'} />
@@ -503,17 +635,44 @@ export function EnquiryForm(props: EnquiryFormProps) {
         role="status"
         aria-live="polite"
       >
-        {text}
+        {status || CAPTION}
       </p>
     </Cluster>
   );
 
-  const fields: FieldSpec[] =
-    variant === 'contact'
-      ? [FIELD.name('clientName'), FIELD.company, FIELD.email('clientEmail'), FIELD.phone, FIELD.message]
-      : variant === 'compact'
-        ? [FIELD.work]
-        : [FIELD.email('email'), FIELD.work];
+  /* The action row's three shapes.
+
+       full     the submit across the track (a one-track Layout stretches it), the scheduling link
+                under it, then the line — every row at `text`.
+       compact  the submit and ONE line beside it: the caption at rest, the status once there is
+                one, in the same live region. The row WRAPS: the line asks for at least
+                --enq-note-min-inline beside the submit, and in a track that cannot give it that (a
+                phone column, a 392 card track) it drops under the submit at `text` and takes the
+                whole width, rather than wrapping to three ragged lines beside a 48px button.
+       enquiry  the submit and the scheduling link in ONE row — two ways to take the same next
+                step, so they group, at `block`, wrapping to `tight` on a narrow column; the line
+                under them at `text`. Both lg (48, clears the touch floor). */
+  const actions =
+    props.submit === 'full' ? (
+      <Layout rowGap="text">
+        {submitButton}
+        {scheduleLink}
+        {captionLine}
+      </Layout>
+    ) : variant === 'compact' ? (
+      <Cluster colGap="block" rowGap="text" align="center">
+        {submitButton}
+        {captionLine}
+      </Cluster>
+    ) : (
+      <Layout rowGap="text">
+        <Cluster rowGap="tight" colGap="block" align="center">
+          {submitButton}
+          {scheduleLink}
+        </Cluster>
+        {captionLine}
+      </Layout>
+    );
 
   return (
     <form
@@ -531,82 +690,14 @@ export function EnquiryForm(props: EnquiryFormProps) {
       aria-busy={submitting || undefined}
       onSubmit={handleSubmit}
     >
-      {/* Two groups, and the seam between them is what groups them (cmp-form fix round): the
-          fields at `text` inside, the actions a `stack` below. Field-to-field and field-to-submit
-          used to measure the same ~52, so the submit read as one more block in a uniform stack. */}
-      <Layout rowGap="stack">
-        <Layout rowGap="text">
-          {variant === 'compact' ? (
-            /* Name and email as a pair, side by side wherever the form's own width holds two 192px
-               tracks (`fit`, `xs`), and stacked where it does not — the form decides from its
-               track, not from the viewport. `block` between the two: a pair of fields is two
-               answers, and at `text` the two labels read as one run. */
-            <Layout columns="fit" minTrack="xs" colGap="block" rowGap="text">
-              {renderField(FIELD.name('name'))}
-              {renderField(FIELD.email('email'))}
-            </Layout>
-          ) : null}
-
-          {fields.map(renderField)}
-
-          {variant === 'enquiry' || variant === 'audit' ? (
-            <FieldGroup id={urlId} label={urlLabel} optional>
-              <Input
-                id={urlId}
-                type="url"
-                inputMode="url"
-                name="url"
-                autoComplete="url"
-                appearance={appearance}
-                disabled={submitting}
-                onBlur={(event) => {
-                  event.currentTarget.value = normaliseUrl(event.currentTarget.value);
-                }}
-              />
-            </FieldGroup>
-          ) : null}
-        </Layout>
-
-        {variant === 'compact' ? (
-          /* Compact: the submit and ONE line beside it — the caption at rest, the status once there
-             is one, in the same live region, so an idle form spends no row on an empty status line.
-
-             The row WRAPS. The line asks for at least --enq-note-min-inline beside the submit; in
-             a track that cannot give it that (a 326 phone column, a 392 card track) the line drops
-             under the submit at `text` and takes the whole width, rather than wrapping to three
-             ragged lines in 165px beside a 48px button. */
-          <Cluster colGap="block" rowGap="text" align="center">
-            {submit}
-            {captionLine(status || CAPTION, lifecycle === 'error')}
-          </Cluster>
-        ) : (
-          <Layout rowGap="text">
-            {/* Submit and the scheduling link in ONE row: two ways to take the same next step, so
-                they group. `block` between them — the link is the alternative to the submit, not a
-                part of it — and the row wraps on a narrow column, where the link drops under the
-                submit at `tight`. Both lg (48, clears the touch floor). The link is `primary`: a
-                text link is blue at rest (visual-direction § 4.2). */}
-            <Cluster rowGap="tight" colGap="block" align="center">
-              {submit}
-              {props.scheduleHref ? (
-                <Button
-                  as="a"
-                  href={props.scheduleHref}
-                  emphasis="link"
-                  tone="primary"
-                  size="lg"
-                  icon={<Icon name="arrow-right" />}
-                >
-                  See available times
-                </Button>
-              ) : null}
-            </Cluster>
-            {/* The line under the actions: the caption at rest, the status once there is one, in
-                one live region — the same mechanism as compact's, so the two cannot disagree about
-                where "That did not send" is announced. */}
-            {captionLine(status || CAPTION, lifecycle === 'error')}
-          </Layout>
-        )}
+      {/* ONE row step for every row, the actions included (cmp-form final round). Each field row
+          ends in its reserved message line, so field → field and field → submit both measure the
+          message reserve plus `block` (~51). The actions used to sit a `stack` below the fields,
+          ~76 from the last rule against ~53 between fields, and read as a separate block rather
+          than as the end of the form. */}
+      <Layout rowGap="block">
+        {rows.map(renderRow)}
+        {actions}
       </Layout>
 
       {props.variant === 'contact' ? null : (

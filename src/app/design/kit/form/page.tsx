@@ -1,8 +1,7 @@
 import Link from 'next/link';
 
-import { Button, Layout, Media, Section, Texture, TextureShape } from '@/components';
+import { Button, Icon, Layout, Section, Texture, TextureShape } from '@/components';
 import { ContentSection, CtaSection, EnquiryForm, type EnquiryContextBase } from '@/patterns';
-import { MEDIA_SPLIT } from '@/lib/image-sizes';
 import { getKitPhoto } from '@/lib/photos';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
@@ -16,7 +15,8 @@ import t from '../../_specimen/typeroles.module.css';
  *
  * Every band is a real pattern composed with real props: CtaSection's split and offer, and
  * ContentSection's media, centred and beside arrangements, each holding an EnquiryForm. Nothing on
- * this route arranges a form by hand. Showcase copy is inline (visual-direction § 8.4); photographs
+ * this route arranges a form by hand: the offer is CtaSection's own offer-with-form shape, the
+ * compact form handed to its `form` slot and nothing else. Showcase copy is inline (visual-direction § 8.4); photographs
  * come from the kit registry, one temperature family (warm + neutral, § 5.5).
  *
  * Posts go to the proving ground's own endpoint; `?outcome=` picks what it answers. The error-state
@@ -43,7 +43,7 @@ const VARIATIONS = [
   { id: 'beside', title: 'Compact beside its head' },
   { id: 'offer', title: 'The offer, with the compact form' },
   { id: 'full-sets', title: 'Enquiry and audit' },
-  { id: 'short-sets', title: 'Compact and contact' },
+  { id: 'contact', title: 'Contact, and what it becomes' },
   { id: 'states', title: 'Error and success' },
 ] as const;
 
@@ -57,6 +57,52 @@ const FILLED = {
   email: 'maya@northwind.studio',
   what_are_you_working_on: 'A billing redesign for a B2B payments product.',
 };
+
+const FILLED_CONTACT = {
+  clientName: 'Maya Fernandes',
+  clientCompany: 'Northwind',
+  clientEmail: 'maya@northwind.studio',
+  clientContact: '+44 20 7946 0000',
+  clientComments: 'We would like to talk about a design partnership from January.',
+};
+
+/* What happens after an enquiry, said ONCE: the close's points promise it, and the success view
+   keeps the promise by reading the same list (EnquiryForm `nextSteps`). It used to be a second
+   copy inside the pattern, and the two had already drifted. */
+const ENQUIRY_STEPS = [
+  {
+    label: 'A reply within a working day',
+    detail: 'From the person who would lead the work, with the questions we would ask first.',
+  },
+  {
+    label: 'A thirty-minute call',
+    detail: 'What exists, what is stuck, and what a first fortnight would change.',
+  },
+  {
+    label: 'A written proposal',
+    detail: 'Scope, team and timeline on two pages. No deck, and no obligation.',
+  },
+] as const;
+
+/* A plain message promises less than an enquiry, so contact says less: no proposal. */
+const CONTACT_STEPS = [
+  {
+    label: 'A reply within a working day',
+    detail: 'From a person at the studio, not a queue.',
+  },
+  {
+    label: 'A call, if it helps',
+    detail: 'Thirty minutes at a time that suits you. Nothing to prepare.',
+  },
+] as const;
+
+/* The compact ask promises the first step only. */
+const COMPACT_STEPS = [
+  {
+    label: 'A reply within a working day',
+    detail: 'With what we would look at first, and whether we are the right team.',
+  },
+] as const;
 
 /** The L close's texture, § 6.3 `closing`: under the copy column's foot, the form column clean. */
 function ClosingTexture() {
@@ -137,7 +183,7 @@ export default function KitFormPage() {
       {/* ── 01 · L close ────────────────────────────────────────────────────────────── */}
       <Plate
         id="close"
-        note="CtaSection split (archetype L): the head, one paragraph and three points in 7; the full enquiry form, with its scheduling link, filling 5. Paper, as on a page's last band, with the closing texture under the copy column's foot (§ 6.3) and the form column clean."
+        note="CtaSection split (archetype L): the head, one paragraph and three points in 7; the full enquiry form, with its scheduling link, filling 5. Paper, as on a page's last band, with the closing texture under the copy column's foot (§ 6.3) and the form column clean. The form's success view reads the same three points, so the promise is said once."
       />
       <CtaSection
         eyebrow="Start a project"
@@ -145,26 +191,13 @@ export default function KitFormPage() {
         body={[
           'A designer reads every enquiry, not a queue. Here is what happens after you send it.',
         ]}
-        points={[
-          {
-            label: 'A reply within a working day',
-            detail:
-              'From the person who would lead the work, with the questions we would ask first.',
-          },
-          {
-            label: 'A thirty-minute call',
-            detail: 'What exists, what is stuck, and what a first fortnight would change.',
-          },
-          {
-            label: 'A written proposal',
-            detail: 'Scope, team and timeline on two pages. No deck, and no obligation.',
-          },
-        ]}
+        points={ENQUIRY_STEPS}
         form={
           <EnquiryForm
             action={action()}
             context={context('kit-close')}
             scheduleHref={ROUTES.contact}
+            nextSteps={ENQUIRY_STEPS}
           />
         }
         texture={<ClosingTexture />}
@@ -173,22 +206,36 @@ export default function KitFormPage() {
       {/* ── 02 · L beside a studio photo ────────────────────────────────────────────── */}
       <Plate
         id="studio"
-        note="ContentSection media, photo at the start: the 4:5 photograph in 477 beside an H-title and the compact form filling 667. studio-sticky-board-ux is the one studio photo that resolves at 4:5 (§ 5.4), as the brief asks. It is tagged quiet (saturation 0.255), but its pink, yellow and cyan notes read loud beside a calm form: compare it with 03 before choosing the default."
+        note="ContentSection media, photo at the start: the 4:5 photograph in 477 beside an H-title, its lead and the compact form filling 667. studio-sticky-board-ux is the one studio photo that resolves at 4:5 (§ 5.4), as the brief asks. It measures quiet (mean saturation 0.255, mostly white board) but its notes read loud; grading is banned, so the lever is the crop: anchored low, on the hand, the marker and the blue writing. Compare it with 03 before choosing the default."
       />
+      {/* The photo's focal point is moved DOWN for this placement (0.4 → 0.9). At 4:5 the master has
+          only 96px of vertical slack, so it changes little at 1440; below 1024 ContentSection crops
+          it 4:3, and there the low anchor keeps the hand, the marker and the blue handwriting and
+          drops two rows of notes. A tighter crop than that is a new, sub-2× master (§ 5.4) and a
+          grade is banned (ch05 § 5), so this is the whole of what the placement can do; the
+          remaining loudness is an owner call, flagged in the note above. */}
       <ContentSection
         arrangement="media"
-        media={{ image: getKitPhoto('studio-sticky-board-ux') }}
+        media={{
+          image: { ...getKitPhoto('studio-sticky-board-ux'), focus: { x: 0.3, y: 0.9 } },
+        }}
         eyebrow="Write to the studio"
         heading="Bring us the hard part"
         headingId="studio-heading"
+        lead="The flow nobody wants to own, the screen support hears about most. Three lines are enough to start."
       >
-        <EnquiryForm variant="compact" action={action()} context={context('kit-l-studio')} />
+        <EnquiryForm
+          variant="compact"
+          action={action()}
+          context={context('kit-l-studio')}
+          nextSteps={COMPACT_STEPS}
+        />
       </ContentSection>
 
       {/* ── 03 · L beside a stock photo, flipped ────────────────────────────────────── */}
       <Plate
         id="stock"
-        note="The same composition flipped, the photo at the end: hand-sketch-wireframe, quiet stock at 2.7× for 4:5. Consecutive media bands alternate side. Below 1024 the photo sits above the copy at 4:3, and the form fills the same track, so the two share both edges."
+        note={`The photo at the end (hand-sketch-wireframe, quiet stock at 2.7× for 4:5), and a different form: submit="full", the button across the track with the caption under it, as Executra ends its form. Consecutive media bands alternate side; the form changes shape so the pair is not one composition mirrored.`}
       />
       <ContentSection
         arrangement="media"
@@ -197,13 +244,19 @@ export default function KitFormPage() {
         heading="Start with three lines"
         headingId="stock-heading"
       >
-        <EnquiryForm variant="compact" action={action()} context={context('kit-l-stock')} />
+        <EnquiryForm
+          variant="compact"
+          submit="full"
+          action={action()}
+          context={context('kit-l-stock')}
+          nextSteps={COMPACT_STEPS}
+        />
       </ContentSection>
 
       {/* ── 04 · Compact standalone, centred head ───────────────────────────────────── */}
       <Plate
         id="centred"
-        note={`ContentSection, align center (H-compact): the head centred on its measures, the compact form beneath it as a block. The one placement that opts into the form's 667 measure (width="measure"), because a centred body row is the whole column. The fields stay start-aligned.`}
+        note={`ContentSection, align center (H-compact): the head centred on its measures, the compact form beneath it as a block at its 667 measure (width="measure"), its fields numbered (numbered): the blue numerals are the band's structural mark where it has no photograph, texture or points. The fields stay start-aligned.`}
       />
       <ContentSection
         align="center"
@@ -215,45 +268,67 @@ export default function KitFormPage() {
         <EnquiryForm
           variant="compact"
           width="measure"
+          numbered
           action={action()}
           context={context('kit-centred')}
+          nextSteps={COMPACT_STEPS}
         />
       </ContentSection>
 
       {/* ── 05 · Compact standalone, beside head ────────────────────────────────────── */}
       <Plate
         id="beside"
-        note="ContentSection beside: the head and its lead in 381, the compact form filling the 763 body track, so its right edge is the band's. No aside photograph: under the lead it read as an afterthought and hung 150px below the form."
+        note="ContentSection beside: the head, its lead and two blue ways to reach the studio under it in 381, as Executra pins its contact items, so the head column is a shape and not three lines over a dead quadrant; the compact form, numbered, filling the 763 body track to the band's edge."
       />
       <ContentSection
         arrangement="beside"
         eyebrow="Design partnership"
         heading="A second pair of hands"
         headingId="beside-heading"
-        lead="For teams with a design lead and more roadmap than people. Tell us what is slipping and who owns it today; we will say how we would join, and how soon."
+        lead="For teams with a design lead and more roadmap than people. Tell us what is slipping and who owns it today."
+        actions={
+          <Layout rowGap="text" justifyItems="start">
+            <Button
+              as="a"
+              href="mailto:hello@tcules.com"
+              emphasis="link"
+              tone="primary"
+              iconLeft={<Icon name="chat-round-dots" />}
+            >
+              Write to the studio
+            </Button>
+            <Button
+              as={Link}
+              href={ROUTES.contact}
+              emphasis="link"
+              tone="primary"
+              iconLeft={<Icon name="clock-circle" />}
+            >
+              See available times
+            </Button>
+          </Layout>
+        }
       >
-        <EnquiryForm variant="compact" action={action()} context={context('kit-beside')} />
+        <EnquiryForm
+          variant="compact"
+          numbered
+          action={action()}
+          context={context('kit-beside')}
+          nextSteps={COMPACT_STEPS}
+        />
       </ContentSection>
 
       {/* ── 06 · Offer with the compact form ────────────────────────────────────────── */}
       <Plate
         id="offer"
-        note={`CtaSection arrangement="offer" with form={<EnquiryForm variant="compact" />}: the mid-page ask, tight, its heading one rung down. The form in 7 beside one quiet, product-specific 4:3 photograph in 5 (screen-over-shoulder, a design-tool canvas), the two one height, then the three points as a strip. Below 1024 the photo sits under the lede at 16:9 and the form follows it unbroken into the points.`}
+        note={`CtaSection arrangement="offer" with form={<EnquiryForm variant="compact" />}, exactly: the mid-page ask, tight. The lede, then the compact form filling the column (name and email a pair at 608, the question across the band), then the three points as a strip. The page's one wide form: every other placement sets it in a track.`}
       />
-      {/* The form row is composed in the slot: CtaSection's media slot is the K offer's, with
-          actions, and its type refuses a photo beside a form (cmp-cta). If the offer-with-form-and-
-          photo recurs on pages, it belongs in CtaSection as that slot's second shape, not in every
-          call site: recorded for cmp-cta, whose file this is.
-
-          Three points: at 768 the strip is CtaSection's two tracks from md, so the third point
-          starts a second row there. cmp-cta declined three at 768, where a 213px track is
-          narrower than the numeral's row (CtaSection.tsx, shape "grid"). */}
       <CtaSection
         arrangement="offer"
-        eyebrow="Free audit"
-        heading="A review of one flow, free"
+        eyebrow="A first read"
+        heading="Send us the flow that loses people"
         body={[
-          'Send us the flow that loses people. Within a week you get a written read of where, and why.',
+          'A designer reads it and replies within a working day: where we would start, and whether a fortnight would move it.',
         ]}
         points={[
           {
@@ -261,34 +336,21 @@ export default function KitFormPage() {
             detail: 'Sign-up, checkout, or the screen support hears about.',
           },
           {
-            label: 'Findings, ranked',
-            detail: 'What to fix first, and what it is likely to move.',
+            label: 'A first read, in writing',
+            detail: 'Where people drop, and the likely reason.',
           },
           {
-            label: 'A call to walk it',
-            detail: 'Thirty minutes with the designer who wrote it.',
+            label: 'A call, if it helps',
+            detail: 'Thirty minutes with the designer who read it.',
           },
         ]}
         form={
-          /* Photo FIRST in the DOM and [5, 7] mirrored from 1024, so the form takes 7 at the start
-             and the photo 5 at the end, while below 1024 the photo sits under the lede rather than
-             between the form and the points. The photo is decorative (alt=""), so the order
-             carries no meaning. Centred on each other: the 4:3 at 477 is 358, within a line of the
-             compact form's 369. */
-          <Layout
-            columns={{ lg: [5, 7] }}
-            reverse={{ lg: true }}
-            colGap="section"
-            rowGap="stack"
-            align="center"
-          >
-            <Media
-              image={getKitPhoto('screen-over-shoulder')}
-              ratio={{ base: '16/9', lg: '4/3' }}
-              sizes={MEDIA_SPLIT}
-            />
-            <EnquiryForm variant="compact" action={action()} context={context('kit-offer')} />
-          </Layout>
+          <EnquiryForm
+            variant="compact"
+            action={action()}
+            context={context('kit-offer')}
+            nextSteps={COMPACT_STEPS}
+          />
         }
       />
 
@@ -304,6 +366,7 @@ export default function KitFormPage() {
               action={action()}
               context={context('kit-variants')}
               scheduleHref={ROUTES.contact}
+              nextSteps={ENQUIRY_STEPS}
             />
           </Specimen>
           <Specimen title="audit" note="The audit wording, and the intent field it posts.">
@@ -317,26 +380,36 @@ export default function KitFormPage() {
         </Layout>
       </Section>
 
-      {/* ── 08 · Compact and contact ────────────────────────────────────────────────── */}
+      {/* ── 08 · Contact, and its success ───────────────────────────────────────────── */}
       <Plate
-        id="short-sets"
-        note="Compact (name and email as a pair, then the question, ≤ 400 tall) beside contact (five fields). Contact is taller than a page band may be: it is the contact page's whole body, never a band on another page."
+        id="contact"
+        note="The five-field contact set, its fields paired (name with company, email with phone) so it fits a band, beside the same form sent: the thanks and the caller's two steps. A plain message promises less than an enquiry, so it says less."
       />
-      <div data-fold-exempt="specimen comparison: the five-field contact set is the contact page's body, not a band">
-        <Section>
-          <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="column">
-            <Specimen
-              title="compact"
-              note="Three fields and the submit; the caption beside it, or under it in a narrow track."
-            >
-              <EnquiryForm variant="compact" action={action()} context={context('kit-variants')} />
-            </Specimen>
-            <Specimen title="contact" note="Five fields; the contact page is the conversation.">
-              <EnquiryForm variant="contact" action={action()} />
-            </Specimen>
-          </Layout>
-        </Section>
-      </div>
+      <Section>
+        <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="column">
+          <Specimen
+            title="contact"
+            note="Five fields in three rows; the contact page is the conversation."
+          >
+            <EnquiryForm
+              variant="contact"
+              action={action()}
+              scheduleHref={ROUTES.contact}
+              nextSteps={CONTACT_STEPS}
+            />
+          </Specimen>
+          <Specimen title="contact · sent" note="The thanks, then what happens next.">
+            <Rehearse submit fill={FILLED_CONTACT}>
+              <EnquiryForm
+                variant="contact"
+                action={action()}
+                scheduleHref={ROUTES.contact}
+                nextSteps={CONTACT_STEPS}
+              />
+            </Rehearse>
+          </Specimen>
+        </Layout>
+      </Section>
 
       {/* ── 09 · Error and success ──────────────────────────────────────────────────── */}
       <Plate
@@ -372,13 +445,14 @@ export default function KitFormPage() {
             </Specimen>
             <Specimen
               title="Success · sent"
-              note="The form gives way to the thanks, then what happens next."
+              note="The form gives way to the thanks, then the one step the compact ask promises."
             >
               <Rehearse submit fill={FILLED}>
                 <EnquiryForm
                   variant="compact"
                   action={action()}
                   context={context('kit-states')}
+                  nextSteps={COMPACT_STEPS}
                 />
               </Rehearse>
             </Specimen>

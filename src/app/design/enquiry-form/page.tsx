@@ -204,7 +204,10 @@ export default function EnquiryFormSpecimenPage() {
           />
         }
       />
-      <div className={s.trackSm}>
+      <div
+        className={s.trackSm}
+        data-fold-exempt="stress specimen: an illegal 256px parent squeezes the band to expose the form's floor"
+      >
         <CtaSection
           eyebrow="Edge · illegal parent"
           heading="A 256px parent that does not size the band"

@@ -128,6 +128,7 @@ export function ServicePage({
             <EnquiryForm
               action={formAction}
               scheduleHref={ROUTES.contact}
+              nextSteps={close.points}
               context={{
                 originRoute: servicePath(story.slug),
                 placement: 'service-close',

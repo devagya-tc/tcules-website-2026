@@ -642,10 +642,12 @@ export function CtaSection(props: CtaSectionProps) {
 
      [7, 5] at `section` from 1024: the copy and its points in 7 (667 at 1470), the full EnquiryForm
      in 5 (477). It was [3, 2] (686 | 458) until cmp-cta. § 3.4 L draws the close as [5, 7] with
-     the form in 667, but the FULL form holds its own 470 measure (`--enq-form-max-inline`:
-     one-field rows read as stretched any wider), so in 667 it left ~197 of dead track at the
-     band's end edge, the one edge every other band meets. In 477 the form meets that edge, and the
-     copy column takes the points' details on one line. The compact form at 667 is cmp-form's
+     the form in 667; the close keeps the full form in 5 because a one-field row of the FULL set
+     (email, the question, the link) reads as stretched at 667, and the copy column needs the 7 to
+     take the points' details on one line. EnquiryForm has no measure of its own since the cmp-form
+     fix round (6 Oct 2026: one width policy, every variant fills its track; the old 470
+     `--enq-form-max-inline` is deleted), so in 477 the form meets the band's end edge by filling
+     the track, not by a cap that happened to match it. The compact form at 667 is cmp-form's
      L-photo (§ 3.4 L, second form). `align="start"` so a short form does not stretch to the height
      of a long lede. The proof, when there is one, spans both halves a `stack` under them: evidence
      under both halves reads as evidence for the whole ask. */

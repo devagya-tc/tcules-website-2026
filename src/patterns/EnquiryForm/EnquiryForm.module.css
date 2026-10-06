@@ -59,6 +59,16 @@
   color: var(--enq-hint-ink);
 }
 
+/* The blue numeral leading a label on a `numbered` form: the mono index voice at ui-sm (12), on
+   the label's baseline (its Cluster is `align="baseline"`), in the accent. It does not take the
+   label's focus colour — it is the form's mark, not the active state's. */
+.fieldIndex {
+  color: var(--enq-accent-ink);
+  font: var(--text-ui-sm);
+  letter-spacing: var(--text-ui-sm-tracking);
+  text-transform: var(--text-mono-case);
+}
+
 /* A hint, when a field has one: under the label, in the caption voice the error also uses, in the
    quiet ink rather than the error's. Absent on every field that has nothing to explain. */
 .hint {
@@ -118,7 +128,10 @@
   max-inline-size: var(--measure-body);
   color: var(--enq-caption-ink);
   font: var(--text-caption);
-  text-wrap: var(--text-running-wrap);
+  /* `balance`, not the running-text `pretty` (cmp-form final round): this is ONE sentence that
+     breaks to two lines in a narrow track, and `pretty` left "nothing else." alone on the second at
+     1024, 768, 390 and in the 1440 state columns. Balanced, the two lines share the words. */
+  text-wrap: balance;
   transition: color var(--enq-transition-duration) var(--enq-transition-easing);
 }
 

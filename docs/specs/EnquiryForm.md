@@ -37,6 +37,15 @@
 > 8. **Grouping.** Fields at `text` inside; the actions a `stack` below them. The caption/status is one live line under the actions on the full sets and beside the submit on compact; on compact it asks for `--enq-note-min-inline` (15rem) beside the submit and otherwise wraps under it.
 > 9. **Success.** Reads mark → thanks at `--text-h4` ("Thanks. We have your enquiry.") → "Here is what happens next." → three numbered steps (blue `--text-index` numerals, `--text-h6` labels, `--text-body-sm` clauses) → the scheduling link where there is one. The success rule and `--enq-success-rule`, and the unused `--enq-status-ink`, are deleted.
 > 10. **Fields are declared once.** Each variant is a list of field specs rendered by one function, so the compact and contact Name and Email (and their blur validators) cannot drift.
+>
+> **Amended 6 Oct 2026 (cmp-form final round).** Supersedes items 6, 8 and 9 where they disagree:
+>
+> 11. **The value sits on its rule.** Input's line control is 32 tall (`--inp-line-height-md`) with a 6px optical inset under the value, and the label sits a `--gap-inline` over it (box fields keep `tight`). Label to own rule is about 36; own rule to the next label is the reserved message line plus `block`, about 51. At 40 with the value centred the two were 59 and 53, and a label read as belonging to either rule. The lined textarea floors at 64 (two lines) and every textarea carries a placeholder hint, so an empty one reads as a field.
+> 12. **One row step.** Every row, the actions included, is one `Layout rowGap="block"`: field to field and last field to submit both measure the message reserve plus 24. Pairs (`fit`, `xs`) sit side by side where the track holds two 192px fields: compact pairs Name/Email, and **contact pairs Name/Company and Email/Phone** (five fields in three rows; one per row it was 1021 tall at 1470).
+> 13. **`nextSteps`** (`{ label, detail? }[]`) is the caller's copy, not the pattern's: the success view numbers the steps it is given, and with none it says "We will reply to the address you gave us." On a close, pass CtaSection's `points` straight through so the promise is written once; ServicePage passes `close.points`.
+> 14. **`numbered`** leads each label with a blue `--text-ui-sm` numeral (aria-hidden), for placements with no other accent. **`submit="full"`** sets the submit across the track with the line under it.
+> 15. **The caption balances** (`text-wrap: balance`), so one sentence over two lines no longer leaves "nothing else." alone.
+> 16. **Line invalid with keyboard focus** keeps the doubled danger rule and adds the focus ring under it as a second rule (the ground's gap, then the ring colour). Line disabled reads `--inp-line-disabled-fg` / `--inp-line-disabled-rule` per surface; on blue the line invalid rule is danger-300.
 
 Three things were read rather than assumed, and they change the shape of this document:
 

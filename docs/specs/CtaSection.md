@@ -18,9 +18,10 @@
 >   body-lg) and actions in 381, the points as ruled rows in 763 (§ 1.4 "K without a photo"). With a
 >   form: unchanged, stacked, the points as a 2- and 3-up strip.
 > - **§ 7(b) measures.** `split` is `[7, 5]` (was `[3, 2]`): content **667**, form **477**. § 3.4 L
->   draws the close as `[5, 7]` with the form in 667, but the full EnquiryForm holds its own 470
->   measure (`--enq-form-max-inline`, cmp-form keeps it: one-field rows read as stretched wider), so
->   in 667 it left ~197 of dead track at the band's end edge. In 477 the form meets that edge. The
+>   draws the close as `[5, 7]` with the form in 667; the full set's one-field rows read as stretched
+>   at 667, so the close keeps the form in 5. EnquiryForm no longer carries a measure (cmp-form, 6 Oct
+>   2026: `--enq-form-max-inline` 470 is deleted and every variant fills its track), so in 477 the
+>   form meets the band's end edge by filling the track. The
 >   offer's copy column is 667 beside media, 381 | 763 beside nothing. `open` is unchanged.
 > - **§ 8 type.** Every heading is `--text-h2` (§ 7.1: "Close: `--text-h2`"); the
 >   `[data-arrangement='offer']` remap is deleted, so § 8's "offer selector" no longer exists and the

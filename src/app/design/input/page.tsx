@@ -61,8 +61,8 @@ export default function InputSpecimenPage() {
           <p>
             The native control shared by enquiry forms and the footer, in two appearances on
             every surface: the filled box, and the unboxed line the enquiry forms use (one rule
-            under the value, blue and doubled on focus). Labels, flags, messages, and arrangement
-            stay with the pattern that composes it.
+            under the value, blue and doubled on focus). Labels, flags, messages, and
+            arrangement stay with the pattern that composes it.
           </p>
         </Layout>
       </Section>
@@ -70,7 +70,10 @@ export default function InputSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <h2>Native shapes and states</h2>
-          <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
+          {/* Four across from lg (cmp-form final round): two by two, the band was 948 at 1470 and
+              ran past the fold. Each track is 286 at 1440 and 216 at 1024, and the control has no
+              minimum width, so all four fit. */}
+          <Layout columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
             <Specimen
               title="Standard · input"
               note="Point, tab, type, and disable from markup."
@@ -94,7 +97,7 @@ export default function InputSpecimenPage() {
             </Specimen>
             <Specimen
               title="Line · input and textarea"
-              note={`appearance="line": no fill and no box, one rule under the value. Focus turns it blue and doubles it without moving anything; the textarea grows with its text instead of carrying a grip.`}
+              note={`appearance="line": no fill, no box, the value on its one rule. Focus turns it blue and doubles it; the two-line textarea grows with its text and needs its placeholder to read as a field.`}
             >
               <Layout rowGap="block">
                 <LabelledInput label="Email" appearance="line" />
@@ -105,52 +108,61 @@ export default function InputSpecimenPage() {
         </Layout>
       </Section>
 
-      {/* Every surface renders every STATE, not just rest, for BOTH shapes. Ten of the seventeen
+      {/* Every surface renders every STATE, not just rest, for BOTH shapes. Twelve of the nineteen
           surface-dependent tokens (--inp-standard-invalid-rule, the three --inp-disabled-* and the
-          six --inp-line-*) move per surface, and with invalid and disabled shown on one surface only they were never
+          eight --inp-line-*) move per surface, and with invalid and disabled shown on one surface only they were never
           looked at on ink or blue. The invalid rule steps danger-600 / 600 / 300 / 600 across the
           four: on blue it is chosen against the WHITE field it borders, not against the blue
           ground. The LINE field has no fill, so its invalid rule is chosen against the ground
-          itself: danger-600 / 600 / 300 and danger-100 on blue. The textarea row is here because the textarea is the shape the enquiry forms
+          itself: danger-600 / 600 / 300 and danger-300 on blue (danger-100 read as the rest rule drawn heavier). The textarea row is here because the textarea is the shape the enquiry forms
           lean on, and its invalid rule had only ever been seen on paper.
 
           Three tracks from lg, not md: at 768 a third of the column is 213px, and the row was the
           one place on the route that scrolled sideways (768–899) while Input carried a 16rem
           floor. The floor has since moved to the composing patterns; the row still waits for room. */}
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
-        <Section key={surface} surface={surface} density="tight">
-          <Specimen
-            title={`Surface · ${surface}`}
-            note="Identical markup on all four: rest, invalid and disabled, as an input and as a textarea, boxed and lined. Every one of the 17 surface-dependent tokens renders in this band."
-          >
-            <Layout rowGap="stack">
-              <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
-                <LabelledInput label="Rest" />
-                <LabelledInput label="Invalid" invalid />
-                <LabelledInput label="Disabled" disabled />
+        <div
+          key={surface}
+          data-fold-exempt="surface proof: twelve states on one ground, which at 390 stack one per row"
+        >
+          <Section surface={surface} density="tight">
+            <Specimen
+              title={`Surface · ${surface}`}
+              note="Identical markup on all four: rest, invalid and disabled, as an input and as a textarea, boxed and lined. Every surface-dependent token renders in this band. On blue the line invalid rule is danger-300, a change of hue rather than a heavier pale rule, and the line disabled field reads its own brandeis-300 / 400 tokens."
+            >
+              <Layout rowGap="stack">
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <LabelledInput label="Rest" />
+                  <LabelledInput label="Invalid" invalid />
+                  <LabelledInput label="Disabled" disabled />
+                </Layout>
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <LabelledTextarea label="Rest · textarea" />
+                  <LabelledTextarea label="Invalid · textarea" invalid />
+                  <LabelledTextarea label="Disabled · textarea" disabled />
+                </Layout>
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <LabelledInput label="Rest · line" appearance="line" />
+                  <LabelledInput label="Invalid · line" appearance="line" invalid />
+                  <LabelledInput label="Disabled · line" appearance="line" disabled />
+                </Layout>
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <LabelledTextarea label="Rest · line textarea" appearance="line" />
+                  <LabelledTextarea label="Invalid · line textarea" appearance="line" invalid />
+                  <LabelledTextarea
+                    label="Disabled · line textarea"
+                    appearance="line"
+                    disabled
+                  />
+                </Layout>
               </Layout>
-              <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
-                <LabelledTextarea label="Rest · textarea" />
-                <LabelledTextarea label="Invalid · textarea" invalid />
-                <LabelledTextarea label="Disabled · textarea" disabled />
-              </Layout>
-              <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
-                <LabelledInput label="Rest · line" appearance="line" />
-                <LabelledInput label="Invalid · line" appearance="line" invalid />
-                <LabelledInput label="Disabled · line" appearance="line" disabled />
-              </Layout>
-              <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
-                <LabelledTextarea label="Rest · line textarea" appearance="line" />
-                <LabelledTextarea label="Invalid · line textarea" appearance="line" invalid />
-                <LabelledTextarea label="Disabled · line textarea" appearance="line" disabled />
-              </Layout>
-            </Layout>
-          </Specimen>
-        </Section>
+            </Specimen>
+          </Section>
+        </div>
       ))}
 
       {/* ── The nested-surface band ───────────────────────────────────────────────
-          The reason all four blocks restate all seventeen tokens rather than carrying deltas. A blue
+          The reason all four blocks restate all nineteen tokens rather than carrying deltas. A blue
           Section inside an ink one must render the BLUE column; if any token were missing from the
           blue block it would inherit ink's value and the mismatch would show here as a field that
           does not match its own ground. Input owns more surface-dependent tokens than any other
