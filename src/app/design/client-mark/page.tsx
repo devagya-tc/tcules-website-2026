@@ -56,20 +56,22 @@ const client = (
   shape: `${(width / height).toFixed(1)}:1${correction ? `, ${correction > 0 ? '+' : '−'}${Math.round(Math.abs(correction) * 100)}%` : ''}`,
 });
 
-const DOODLE = client('Doodle', 'doodle', 104, 24);
-const GT_TOOLS = client('GT Tools', 'gttools', 67.384, 19.6);
-const INCLUUDE = client('Incluude', 'incluude', 88.906, 16.851);
-const KNOVOS = client('Knovos', 'knovos', 85.232, 14);
+const DOODLE = client('Doodle', 'doodle', 104, 24, -0.13);
+const GT_TOOLS = client('GT Tools', 'gttools', 67.384, 19.6, -0.12);
+const INCLUUDE = client('Incluude', 'incluude', 88.906, 16.851, -0.12);
+const KNOVOS = client('Knovos', 'knovos', 85.232, 14, 0.04);
 /* LatitudePay: hairline, widely letter-spaced capitals, so at equal area it reads lighter than
    every neighbour. +0.05 is judged by eye against Omny and Quoter at 1440 and 390 (tracker 2.17),
    and it is also the most that takes effect: its fitted width is 152, and the 160 width cap
    applies again after the correction, so anything above +0.053 renders identically. The rest of
-   the lightness is the file's stroke weight, which a size correction cannot reach. */
+   the lightness is the file's stroke weight, which a size correction cannot reach — so the heavy
+   bold wordmarks come DOWN to it instead (fix round 1, 6 Oct: Doodle −13%, GT Tools and Incluude
+   −12%, Quoter −6%), and the light SafeXpay and Knovos come up (+10%, +4%). */
 const LATITUDEPAY = client('LatitudePay', 'latitudepay', 133.896, 18.2, 0.05);
 const OMNY = client('Omny', 'omny', 93.982, 24.792);
 const PLEDGE = client('Pledge', 'pledge', 92.032, 19.6);
-const QUOTER = client('Quoter', 'quoter', 93.996, 28.002);
-const SAFEXPAY = client('SafeXpay', 'safexpay', 83.02, 22.398);
+const QUOTER = client('Quoter', 'quoter', 93.996, 28.002, -0.06);
+const SAFEXPAY = client('SafeXpay', 'safexpay', 83.02, 22.398, 0.1);
 
 const STRIP: readonly Mark[] = [
   OMNY,
@@ -270,7 +272,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The weight correction, with and without"
-            note="Fictional files (the one real correction, LatitudePay +5%, is too small to read in a pair). Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
+            note="Fictional files (the real corrections, LatitudePay +5% to Doodle −13%, are too small to read in a pair). Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
           >
             <Layout rowGap="block">
               <Cluster colGap="stack" rowGap="stack" align="center">

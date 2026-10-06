@@ -52,6 +52,20 @@
 --cmark-ink-forced:CanvasText;
 }
 
+/* ── Geometry below 768 (fix round 1, 6 Oct 2026) ─────────────────────────────
+   At the desktop sizes a nine-mark set at 390 is five courses of two near-desktop marks, ~700
+   tall, and the band reads as a list of logos that dwarfs its heading. The marks step down with
+   the column, the way the title roles re-declare at 767: one size decision, three numbers kept
+   in proportion (44 / 56 ≈ 32 / 40 ≈ 128 / 160 ≈ 0.79). A 4:1 wordmark lands at 88 × 22. These
+   are SIZES, not distances: the Cluster's gap stays `stack` at every width.                 */
+@media (max-width: 767px){
+:root{
+--cmark-target-side:44px;
+--cmark-height-max:32px;
+--cmark-width-max:128px;
+}
+}
+
 /* ── The ink steps down from the ground's full ink (29 Sep 2026, owner, tracker 2.17) ─────
    At neutral-900 / white, a strip of nine marks is nine near-black shapes at the section's
    heading ink, and it competes with the heading above it for the first read. So the ink is one
