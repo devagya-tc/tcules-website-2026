@@ -197,7 +197,7 @@ const AUDITS: readonly BlockCardSetItem[] = [
     id: 'si-audit-ai',
     title: 'AI product UX readiness',
     body: 'Whether an AI feature is ready for the people who must trust it.',
-    media: cover('whiteboard-two-hands'),
+    media: cover('whiteboard-pair-laptop'),
     href: ROUTES.aiProductUxReadiness,
     ctaLabel: 'See the audit',
   },

@@ -149,7 +149,7 @@ const STATS = [
     label: 'Designers, researchers and design engineers in one studio.',
   },
   {
-    value: '40',
+    value: '64',
     unit: 'products',
     label: 'Designed and shipped with product teams since the studio opened.',
   },

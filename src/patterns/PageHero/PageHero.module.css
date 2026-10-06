@@ -367,14 +367,8 @@
 .field {
   aspect-ratio: var(--hero-field-ratio);
 }
-.foot .fieldTexture {
-  block-size: calc(100% + var(--gap-section));
-}
-/* The pixel field's box (TextureField fills it): the track, run one band padding into the floor. */
-.fieldBox {
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline: 0;
+.foot .fieldTexture,
+.field .fieldTexture {
   block-size: calc(100% + var(--gap-section));
 }
 

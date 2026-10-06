@@ -11,7 +11,6 @@ import {
   Section,
   Stat,
   TextureClosing,
-  TextureHorizon,
   type IconName,
 } from '@/components';
 import { getNavigation } from '@/content';
@@ -61,16 +60,15 @@ export const metadata: Metadata = {
  * The page judged against the references, so it opens on a photograph. Twelve bands, every one a
  * kit band fed showcase copy written inline (§ 8.4 — never the content fixtures a live route reads):
  *
- *    1  A   the announcement strip, then the photograph hero (5:4)
+ *    1  A   the announcement strip, then the photograph hero (5:4) with its foot field
  *    2  H   the real client marks and the real Clutch rating, centred
  *    3  C   three services as image cards under the H-row and its section action
- *    4  J   one sentence at display scale, the corner field in its empty corner
+ *    4  J   one sentence at display scale, the head-half field in its empty top-end corner
  *    5  B   the wireframe wall at the photograph's weight (6:5 in the 7), END, two tiles beside it
  *    6  G   the proof band on tint: a slider of fictional clients, the portrait at the start
  *    7  F   the method, read down, its photograph at the END, cut to the steps' height
  *    8  S   the studio in four numerals: a beside head and a 2 × 2 at the display stat role — the
- *           Executra stat row, not a centred four-up — the horizon field at its foot (§ 5.8: no
- *           mark shares it)
+ *           Executra stat row, not a centred four-up (§ 5.8: no mark shares it)
  *    9  I   THE IMAGE MOMENT: the studio at offset scale — a 4:3 photograph across the 763 track
  *           beside a head and a second, smaller photograph that ends on its foot
  *   10  D   the questions, centred
@@ -79,9 +77,8 @@ export const metadata: Metadata = {
  *
  * Signatures this page alone carries: the photograph-weighted split (5), the stat row at display
  * scale (8) and the offset-scale studio pair (9). Media sides alternate down the page (5 end, 6
- * start, 7 end, 9 start). Texture (§ 6.4): corner on J, horizon on S, closing on L — three, never
- * adjacent. The photograph hero carries none (fix round 1: the stepped foot field sat under the copy
- * only, stopped short of the photograph and read as an accident). Photographs are one warm family
+ * start, 7 end, 9 start). Texture signature (§ 6.4): the hero's foot field, head-half on J, closing
+ * on L — three placements, never adjacent. Photographs are one warm family
  * (warm + neutral) with one vivid frame, a portrait in the slider (§ 5.5); none appears twice, or on
  * the other two showcase pages. Every photograph is atmosphere, so `alt=""` (photos.ts).
  */
@@ -146,16 +143,17 @@ const HOW: readonly Tile[] = [
 /* ── 6 · G slider ──────────────────────────────────────────────────────────────────────────
    Fictional people at fictional companies, stock portraits in the warm family (§ 5.8, § 8.3).
    Featured quotes ≤ 40 words. Never beside a real mark or the real score. Two, because the catalogue
-   holds three warm-or-neutral portraits and the about page's client takes the third: no person,
+   holds three warm-or-neutral portraits and the about page's client (portrait-man-blue-office)
+   takes the third: no person,
    and no face, appears on two showcase pages (fix round 1). */
 const SLIDES: readonly ProofQuote[] = [
   {
-    name: 'Daniel Okafor',
-    role: 'Chief Product Officer',
-    company: 'Brightwater Labs',
-    portrait: portrait('portrait-man-blue-office'),
+    name: 'Hannah Reiss',
+    role: 'Head of Product',
+    company: 'Fernbrook Health',
+    portrait: portrait('portrait-woman-grey'),
     quoteHtml:
-      '<p>They asked better questions about our product in the first week than we had asked in a year. The redesign was the visible part; the decisions under it are what we still use.</p>',
+      '<p>Every screen they cut was one our clinicians never had to learn, and every screen that stayed had been argued for with evidence from the ward.</p>',
   },
   {
     name: 'Arjun Mehta',
@@ -315,6 +313,7 @@ export default async function KitHomePage() {
         ]}
         arrangement="beside"
         media={{ type: 'image', ratio: '5/4', image: photo('pair-at-laptop-sticky-wall') }}
+        texture
       />
 
       {/* 2 · H — the real marks and the real rating. */}
@@ -363,12 +362,12 @@ export default async function KitHomePage() {
         <BlockCardSet items={SERVICES} lead="none" />
       </ContentSection>
 
-      {/* 4 · J — one sentence at display scale; the corner field in the empty corner. */}
+      {/* 4 · J — one sentence at display scale; the head-half field in the empty top-end corner. */}
       <Statement
         id="home-belief"
         eyebrow="What we believe"
         size="display"
-        texture="corner"
+        texture="head-half"
         actions={
           <CtaRow rule={false} actions={[{ label: 'How we work', href: ROUTES.howWeWork }]} />
         }
@@ -437,7 +436,6 @@ export default async function KitHomePage() {
         actions={
           <CtaRow rule={false} actions={[{ label: 'See the work', href: ROUTES.caseStudies }]} />
         }
-        texture={<TextureHorizon />}
       >
         <Layout as="ul" columns={2} colGap="gutter" rowGap="stack">
           {STATS.map((stat) => (
