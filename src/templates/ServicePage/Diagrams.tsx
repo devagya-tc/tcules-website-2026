@@ -99,20 +99,32 @@ function AuthorityMeter({ level, slots }: { level: number; slots: number }) {
 
    With a meter, the scale is a column: every row shows where it sits, and the order needs no
    sentence. Without one, the order is said once, as the table's summary. */
-/* Six options is the most a spectrum holds in its band at 1470 (fix round 1, 7 Oct 2026: seven
-   ran the band to 892). A seventh belongs on the deep page, linked from the band (`more`). */
-const SPECTRUM_MAX = 6;
+/* Five options is the most a spectrum holds in its band at 1470 WITH SLACK, and the template
+   enforces it rather than trusting copy to fit (fix round 2, 6 Oct 2026). Six two-line rows ran the
+   stress band to 829 of 830 — a fixture one line longer failed — and seven ran it to 892 (fix round
+   1). The rest belong on the deep page, linked from the band (`more`); the template renders the
+   first five and warns, so a sixth never silently pushes the band past the fold. */
+export const SPECTRUM_MAX = 5;
+
+/** The first `max` of a list, with a development warning when it was longer: a structural cap. */
+function capped<T>(items: readonly T[], max: number, what: string): readonly T[] {
+  if (items.length <= max) return items;
+  if (process.env.NODE_ENV !== 'production')
+    console.warn(
+      `ServicePage: a ${what} of ${items.length} runs its band past the fold; the first ${max} render. Link the rest from the band's \`more\`.`,
+    );
+  return items.slice(0, max);
+}
 
 export function Spectrum({ block }: { block: Of<'spectrum'> }) {
   const meter = block.meter;
-  if (process.env.NODE_ENV !== 'production' && block.items.length > SPECTRUM_MAX) {
-    console.warn(
-      `ServicePage: a spectrum of ${block.items.length} options runs its band past the fold; keep ${SPECTRUM_MAX} and link the rest from the band's \`more\`.`,
-    );
-  }
-  const last = block.items.length - 1;
+  const items = capped(block.items, SPECTRUM_MAX, 'spectrum');
+  const last = items.length - 1;
   return (
     <DataTable
+      /* Ruled, not boxed (fix round 2): the spectrum is the band's diagram, and a boxed table with a
+         grey head row was a box around text content (owner ruling). */
+      frame="ruled"
       /* The order, said once, when no meter shows it row by row: the story's own sentence. It was
          assembled here from the axis labels, lower-cased — which rewrote authored strings (an
          acronym or a name in an axis label came out wrong) and put template copy on the page. */
@@ -123,7 +135,7 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
         { heading: block.columns.when },
         { heading: block.columns.settles },
       ]}
-      rows={block.items.map((item, index) => ({
+      rows={items.map((item, index) => ({
         header: item.name,
         cellsHtml: [
           ...(meter
@@ -131,7 +143,7 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
                 {
                   node:
                     meter.kind === 'authority' ? (
-                      <AuthorityMeter level={index + 1} slots={block.items.length} />
+                      <AuthorityMeter level={index + 1} slots={items.length} />
                     ) : (
                       <DisruptionMeter
                         level={last > 0 ? Math.round((index / last) * METER_STEPS) : 0}
@@ -176,6 +188,7 @@ export function Matrix({ block }: { block: Of<'matrix'> }) {
 function MatrixTable({ block, rows }: { block: Of<'matrix'>; rows: Of<'matrix'>['rows'] }) {
   return (
     <DataTable
+      frame="ruled"
       keyColumn={{ heading: block.keyColumn }}
       columns={block.columns.map((heading) => ({ heading, behaviour: 'nowrap' as const }))}
       rows={rows.map((row) => ({
@@ -202,15 +215,19 @@ function MatrixTable({ block, rows }: { block: Of<'matrix'>; rows: Of<'matrix'>[
 }
 
 /* ── Record ───────────────────────────────────────────────────────────────────
-   A record with fields, drawn as the document it is: a sheet on its own ground, a header strip,
-   and one row per field — the field keyed in mono with its glyph ABOVE the question it holds, in
-   serif. Stacked, not side by side: a key and its question are one item, not two columns.
-   It is the one place in the template that paints a ground, and it earns it: a record is an
-   OBJECT the team keeps, and the sheet is what says so. */
+   A record with fields, drawn as the document it is: a head naming the record, and one row per
+   field — the field keyed in mono with its glyph ABOVE the question it holds, in serif. Stacked,
+   not side by side: a key and its question are one item, not two columns.
+   Drawn with rules only (fix round 2, 6 Oct 2026, owner ruling: no boxes around text content): the
+   head closes on the strong rule and every field on a hairline. It used to paint a ground inside a
+   full border, the one sheet in the template, and that box was a box around questions. */
 const RECORD_PAIRED_FROM = 4;
+/* Eight fields — four paired rows — is the most a record holds in its band with slack. */
+const RECORD_MAX = 8;
 
 export function Record({ block }: { block: Of<'record'> }) {
-  const paired = block.items.length >= RECORD_PAIRED_FROM;
+  const items = capped(block.items, RECORD_MAX, 'record');
+  const paired = items.length >= RECORD_PAIRED_FROM;
   return (
     <figure className={styles.sheet}>
       {/* Stacked: what the record is for, then its name — a label over the thing it labels. It was
@@ -219,15 +236,15 @@ export function Record({ block }: { block: Of<'record'> }) {
         <span className={styles.key}>{block.meta}</span>
         <span className={styles.sheetTitle}>{block.title}</span>
       </Layout>
-      {/* Four or more fields pair up from 1024, so the sheet is half as tall (fix round 1). */}
+      {/* Four or more fields pair up from 1024, so the sheet is half as tall (fix round 1), the two
+          columns a `column` apart — two halves of one sheet that must read as separate lists. */}
       <Layout
         as="dl"
         rowGap="none"
-        colGap="none"
+        colGap={paired ? 'column' : undefined}
         columns={paired ? { lg: 2 } : undefined}
-        className={paired ? styles.sheetRowsPaired : undefined}
       >
-        {block.items.map((item) => (
+        {items.map((item) => (
           <Layout key={item.field} rowGap="tight" className={styles.sheetRow}>
             <dt className={styles.sheetField}>
               <Cluster nowrap colGap="tight" align="center">
@@ -247,8 +264,10 @@ export function Record({ block }: { block: Of<'record'> }) {
 
 /* ── Parts: four held by a fifth ──────────────────────────────────────────────
    "Four of them are the system. The fifth decides whether the other four stay current." So the
-   fifth HOLDS the four: the operating model is the panel, named at its head, and the four parts are
-   tiles inside it (1 Oct 2026, owner: the section was crowded and unreadable). It used to be four
+   fifth HOLDS the four: the operating model is named at the head of a bracket, two strong rules
+   across the whole measure, and the four parts are tiles between them (1 Oct 2026, owner: the
+   section was crowded and unreadable; fix round 2: the bracket replaced a panel with a ground and
+   a border, which boxed text content). It used to be four
    tiles, a thin bracket under them with the operating model set heading-left/body-right, and three
    failure tiles whose titles were larger than the parts' — three ideas at one weight. Now one
    drawing carries the one idea, and the failures are a note after it. */
@@ -269,7 +288,7 @@ export function Parts({ block }: { block: Of<'parts'> }) {
           as="ul"
           columns={{ base: 1, md: 2, lg: block.items.length }}
           colGap="gutter"
-          rowGap="column"
+          rowGap="stack"
         >
           {block.items.map((item) => (
             <ListCard
@@ -314,7 +333,7 @@ function SliceGrid({
 }: {
   layers: readonly string[];
   view: { title: string; note: string };
-  legend: { path: string; works: string };
+  legend: { path: string; works: string; missing: string };
   done: (layer: number, path: number) => boolean;
 }) {
   const paths = Math.max(3, layers.length - 1); // the same count Slice computes
@@ -362,6 +381,16 @@ function SliceGrid({
             ))}
           </Layout>
         </Layout>
+        {/* The verdict in words, for assistive technology (fix round 2): the drawn grid is hidden,
+            and without this a screen reader got the title and the note but not which paths work.
+            Built from `pathWorks` and the story's own legend, so it cannot disagree with the grid. */}
+        <ul className={styles.visuallyHidden}>
+          {Array.from({ length: paths }, (_, path) => (
+            <li key={path}>
+              {legend.path} {path + 1}: {pathWorks(path) ? legend.works : legend.missing}
+            </li>
+          ))}
+        </ul>
       </Layout>
     </figure>
   );
@@ -450,7 +479,12 @@ export function Slice({ block }: { block: Of<'slice'> }) {
    is half-present. Before holds the current product; During holds both, dashed — still running,
    already running — with the temporary work under them, because it exists only there; After holds
    the target. Below lg the three stack in the same order. */
+/* Six things designed in between — three paired rows — hold the bridge band with slack (fix round
+   2: seven ran the stress band to 803). The rest are the deep page's. */
+const BRIDGE_MAX = 6;
+
 export function Bridge({ block }: { block: Of<'bridge'> }) {
+  const items = capped(block.items, BRIDGE_MAX, 'bridge');
   return (
     /* Named by the story's own sentence. It was assembled from four labels, lower-cased (ServicePage
        audit, 6 Oct 2026: never re-case an authored string). */
@@ -486,7 +520,7 @@ export function Bridge({ block }: { block: Of<'bridge'> }) {
             <Layout rowGap="text">
               <span className={styles.key}>{block.label}</span>
               <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="none">
-                {block.items.map((item) => (
+                {items.map((item) => (
                   <li key={item} className={styles.state}>
                     {item}
                   </li>

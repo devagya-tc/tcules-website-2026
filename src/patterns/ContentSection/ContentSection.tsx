@@ -20,7 +20,7 @@ import styles from './ContentSection.module.css';
  * moves at 1024 and nowhere else, and below 1024 every one of them is a single column in DOM order.
  *
  *   stacked     the head above the blocks, at every width. The default.
- *   beside      from 1024, the head in a 1 : 2 leading track and the blocks in the trailing one, 96
+ *   beside      from 1024, the head in a leading track (5 : 7, then 1 : 2 from 1440) and the blocks in the trailing one, 96
  *               apart, the head static (it scrolls with the band; it does not stick, ruling O2). The
  *               head track may carry an `aside` (a 3:2 photograph or one stat figure) OR `actions`,
  *               never both (visual-direction § 1.4 rule 6). Below 1024 it is `stacked`, with the aside
@@ -403,6 +403,16 @@ export function ContentSectionText({ children }: ContentSectionTextProps) {
   return <div className={styles.text}>{children}</div>;
 }
 
+/**
+ * The head track against the body, in `beside` and `split-head`: 1 : 2 from 1440 (O2), and 5 : 7
+ * from 1024 to 1439 (page-product-design fix round 2, 6 Oct 2026). At 1024 a third of the column is
+ * 288, and a 43 h2 broke there into one- and two-word lines ("Relevant / Product / Design work",
+ * "From the / real work / to the build") across four bands. 5 of 12 is 360, which holds the same
+ * heads to two lines; the body keeps 504. The MediaSplit and the K offer already step the same way.
+ * The arrangement changes at a breakpoint; no distance does.
+ */
+const HEAD_TRACKS = { lg: [5, 7], xl: [1, 2] };
+
 /** A development-only warning, prefixed with the component's name. */
 const warn = (message: string) => {
   if (process.env.NODE_ENV !== 'production') console.warn(`ContentSection: ${message}`);
@@ -612,7 +622,7 @@ export function ContentSection(props: ContentSectionProps) {
   } else if (headSplit) {
     /* split-head (the H-row). The eyebrow keeps its own row above the split — it labels the whole
        row, not the title's column — and then the heading and the lead (with the actions under it)
-       sit side by side: [1, 2] from 1024 at the split seam (96), TOP-aligned, so the heading's line
+       sit side by side: HEAD_TRACKS from 1024 at the split seam (96), TOP-aligned, so the heading's line
        box and the lead's start on one edge and the row reads as one horizontal unit.
 
        Why not the eyebrow inside the leading track: whichever way that pair is aligned, the two
@@ -628,7 +638,7 @@ export function ContentSection(props: ContentSectionProps) {
       <Layout rowGap="stack">
         <Layout rowGap="block">
           {eyebrowEl}
-          <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
+          <Layout columns={HEAD_TRACKS} colGap="section" rowGap="block" align="start">
             {headingEl}
             {/* Lead → action at `block` here, not the stacked head's `stack` (cmp-feature fix round
                 2): beside a heading the trailing track is short, and at 48 a one-link action hung
@@ -652,7 +662,8 @@ export function ContentSection(props: ContentSectionProps) {
                               `stacked` rather than merely similar.
          colGap  section (96) head track → body track under `beside` — a split, two kinds of thing
                               sharing a row (CLAUDE.md § gap scale, rule 2).
-         columns {lg: [1,2]}  1 : 2 from 1024 (O2), one track below. Undefined when not split.
+         columns HEAD_TRACKS  1 : 2 from 1440 (O2), 5 : 7 from 1024, one track below. Undefined
+                              when not split.
          align   start        the head is STATIC (O2): it sits at the top of its track and scrolls
                               away with the band, sized to its content rather than stretched to the
                               body's height.
@@ -682,7 +693,7 @@ export function ContentSection(props: ContentSectionProps) {
       <Layout
         rowGap="stack"
         colGap={besideSplit ? 'section' : undefined}
-        columns={besideSplit ? { lg: [1, 2] } : undefined}
+        columns={besideSplit ? HEAD_TRACKS : undefined}
         align={besideSplit ? (asideFill ? 'stretch' : 'start') : undefined}
         reverse={headAtEnd ? { lg: true } : undefined}
       >

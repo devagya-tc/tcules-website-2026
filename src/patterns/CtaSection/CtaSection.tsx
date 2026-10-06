@@ -77,6 +77,14 @@ export type CtaMedia = {
    *              the column. For an offer whose photo carries it (a workshop, a product on a screen).
    */
   frame?: 'portrait' | 'landscape';
+  /**
+   * Below 1024, where the photo sits against the copy (page-product-design fix round 2). Default
+   * `after`: the copy, then the photo (§ 3.7 item 4). `before` sets the photo first, for an offer a
+   * template places beside another head → photo → list band, where at 390 the two read as one
+   * repeated rectangle. The photo is decorative (alt=""), so its DOM position carries no meaning;
+   * from 1024 `side` alone decides where it sits.
+   */
+  phone?: 'after' | 'before';
 };
 
 /**
@@ -773,7 +781,17 @@ export function CtaSection(props: CtaSectionProps) {
        different rectangle from the portrait offer, so a page with two offers can vary them. The
        copy column centres on the photo (§ 3.2 rule 2: a head and its actions and nothing between
        them centre rather than stretch). `reverse` for `side="start"` as in the portrait shape. */
+    const photoFirst = media?.phone === 'before';
     if (media && !hasForm && media.frame === 'landscape') {
+      const landscapePhoto = (
+        <div className={cx(styles.photoFrame, styles.photoLandscape)}>
+          <Media
+            image={media.image}
+            fit="fill"
+            sizes={coverSizes(MEDIA_SPLIT_WIDE, ratioOf(media.image), LANDSCAPE_FRAMES)}
+          />
+        </div>
+      );
       return (
         <Section
           surface={props.surface}
@@ -784,24 +802,21 @@ export function CtaSection(props: CtaSectionProps) {
           data-arrangement="offer"
         >
           <Layout rowGap="stack">
+            {/* `phone="before"` writes the photo first and mirrors the row from 1024, so the
+                photo keeps its 7 and its `side` (Layout reverse carries the weights with it). */}
             <Layout
-              columns={{ lg: [5, 7] }}
+              columns={photoFirst ? { lg: [7, 5] } : { lg: [5, 7] }}
               colGap="section"
               rowGap="stack"
-              reverse={media.side === 'start' ? { lg: true } : undefined}
+              reverse={(media.side === 'start') !== photoFirst ? { lg: true } : undefined}
               align="center"
             >
+              {photoFirst ? landscapePhoto : null}
               <Layout rowGap="stack">
                 {lede()}
                 {actions.length > 0 ? <CtaActions actions={actions} /> : null}
               </Layout>
-              <div className={cx(styles.photoFrame, styles.photoLandscape)}>
-                <Media
-                  image={media.image}
-                  fit="fill"
-                  sizes={coverSizes(MEDIA_SPLIT_WIDE, ratioOf(media.image), LANDSCAPE_FRAMES)}
-                />
-              </div>
+              {photoFirst ? null : landscapePhoto}
             </Layout>
             <CtaPoints shape="row" markers={markers} points={points} />
           </Layout>
@@ -824,6 +839,18 @@ export function CtaSection(props: CtaSectionProps) {
        the copy is taller than a 4:5 photo — 1024 to 1279, where the 7 track is ~500 — the frame
        stretches with it, so the photo never ends short of the copy. */
     if (media && !hasForm) {
+      /* 4:5 beside the copy, 4:3 against it below 1024: a 4:5 at the 326 phone column would be 408
+         tall under a band that has already made its ask. `sizes` accounts for the cover crop
+         (`coverSizes`), or a landscape master is fetched too short for the frame. */
+      const portraitPhoto = (
+        <div className={cx(styles.photoFrame, styles.photoPortrait)}>
+          <Media
+            image={media.image}
+            fit="fill"
+            sizes={coverSizes(MEDIA_SPLIT, ratioOf(media.image), PORTRAIT_FRAMES)}
+          />
+        </div>
+      );
       return (
         <Section
           surface={props.surface}
@@ -834,27 +861,19 @@ export function CtaSection(props: CtaSectionProps) {
           data-arrangement="offer"
         >
           <Layout
-            columns={{ lg: [7, 5] }}
+            columns={photoFirst ? { lg: [5, 7] } : { lg: [7, 5] }}
             colGap="section"
             rowGap="stack"
-            reverse={media.side === 'start' ? { lg: true } : undefined}
+            reverse={(media.side === 'start') !== photoFirst ? { lg: true } : undefined}
             align="center"
           >
+            {photoFirst ? portraitPhoto : null}
             <Layout rowGap="stack">
               {lede()}
               <CtaPoints shape="line" markers={markers} points={points} />
               {actions.length > 0 ? <CtaActions actions={actions} /> : null}
             </Layout>
-            {/* 4:5 beside the copy, 4:3 under it below 1024: a 4:5 at the 326 phone column would
-                be 408 tall under a band that has already made its ask. `sizes` accounts for the
-                cover crop (`coverSizes`), or a landscape master is fetched too short for the frame. */}
-            <div className={cx(styles.photoFrame, styles.photoPortrait)}>
-              <Media
-                image={media.image}
-                fit="fill"
-                sizes={coverSizes(MEDIA_SPLIT, ratioOf(media.image), PORTRAIT_FRAMES)}
-              />
-            </div>
+            {photoFirst ? null : portraitPhoto}
           </Layout>
         </Section>
       );

@@ -657,7 +657,7 @@ Every band on a kit page is one of these. Rules for the sequence:
 | J | Statement | [1, 2]: eyebrow in the head track, h1-role sentence in the body track; `open` | left | exception | `cmp-banner` |
 | K | Offer | [7, 5]: head + 3 points + actions, beside a 4:5 photo; or beside head + points (no photo) | left | photograph | `cmp-cta` |
 | L | Close | [10, 7] from 1280 ([1, 1] from 1024): copy + points beside the full EnquiryForm on paper, top-aligned, the `closing` equaliser under the copy (amended 6 Oct 2026, cmp-cta: the full form holds its own 470, so the 7 is sized to it); or [5, 7], a photo beside a compact form | left | exception (or the photo) | `cmp-cta`, `cmp-form` |
-| M | Resources | head + 3 cover cards, whole-card links | centred | covers | `cmp-feature` |
+| M | Resources | head + 3 cover cards, whole-card links | centred (on a service page: the H-row, title left and intro right, over a full-width card row; page-product-design fix round 2) | covers | `cmp-feature` |
 | N | Contrast (Fit) | H-title + two lists in peer halves, check and close glyphs | left | exception | `cmp-readdown` |
 | S | Stats | H-compact + one row of 3 or 4 stats | centred | numerals | `cmp-process-stats` |
 | — | Announcement strip | `Section density="strip"` on tint: body-sm + one blue link; showcase only | — | — | `cmp-banner` |
@@ -947,7 +947,7 @@ any photo for a better catalogue match, as long as the gate still passes.
 
 | Page (family) | B 4:5 | I 3:1 | K 4:5 | Aside 1 (C-icon) | Aside 2 (F or D) | Studio |
 |---|---|---|---|---|---|---|
-| product-design (warm) | `studio-sticky-board-ux` | — (no banner; fix round 1, 7 Oct) | `designer-tablet-monitor` (3:2, landscape offer) | `studio-whiteboard-crit` | `hand-sketch-wireframe` | B, aside 1 |
+| product-design (warm) | `hands-trackpad` (fix round 2: the sticky wall was the page's one off-key, saturated frame) | — (no banner; fix round 1, 7 Oct) | `designer-tablet-monitor` (3:2, landscape offer) | `studio-whiteboard-crit` | `hand-sketch-wireframe` | B, aside 1 |
 | software-development (warm) | `designer-desk-monitor` | `workshop-hands-writing` | `whiteboard-pair-laptop` | `studio-session-talk` | `team-laptops-table` | aside 1 |
 | design-engineering (warm) | `stylus-tablet-sketch` | `whiteboard-two-hands` | `sticky-grid-minimal` | `studio-whiteboard-crit` | `hands-sketches-markers` | aside 1 |
 | design-systems (cool) | `screen-over-shoulder` | `wireframe-wall` | `desk-minimal-white` | `desk-flatlay-devices` (crop out the printed "to") | `designer-monitor-ui` (crop from the right) | `studio-whiteboard-crit` as a stand-in cover |

@@ -13,7 +13,7 @@ const ENQUIRY = anchorHref(ANCHORS.enquiry);
  * is laid out from the job its blocks do (ServicePage plan.ts), so no field here is a layout.
  *
  *   hero      the claim
- *   signals   what the screen may be telling you — B, beside the studio board
+ *   signals   what the screen may be telling you — B, beside a screen in use
  *   clients   who we have shipped with — H, with the sourced rating
  *   method    five steps, each leaving an artefact — F, beside the wireframe sketch
  *   example   the worked example as the chain one decision moves through — E, a Thread
@@ -57,7 +57,6 @@ export const productDesign: ServiceStory = {
       'studio-team-holi',
       'hand-mouse-detail',
       'workshop-brick-room',
-      'hands-trackpad',
     ],
   },
   labels: {

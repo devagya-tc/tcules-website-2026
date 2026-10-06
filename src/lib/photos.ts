@@ -203,9 +203,12 @@ export const SERVICE_PHOTO_SLOTS = {
   /* product-design, fix round 1 (7 Oct 2026): § 5.6's I, K and aside 2 swapped. The banner is gone
      (its soft sticky wall repeated B's subject at the page's largest size), K's lifestyle desk and
      F's car-design moodboard read as off-brand for a B2B product studio. K is screen work at a
-     landscape 3:2, the aside the studio's own crit, F the wireframe sketch. */
+     landscape 3:2, the aside the studio's own crit, F the wireframe sketch. Fix round 2: B was the
+     candy sticky-note wall, the page's most saturated frame beside the blue icon tiles and the one
+     off-key image once K, F and the aside were tonal screen and studio frames; B is now a screen in
+     use, hands on a trackpad, in the same neutral key. */
   'product-design': {
-    b: 'studio-sticky-board-ux',
+    b: 'hands-trackpad',
     k: 'designer-tablet-monitor',
     aside1: 'studio-whiteboard-crit',
     aside2: 'hand-sketch-wireframe',

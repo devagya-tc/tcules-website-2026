@@ -1523,3 +1523,15 @@ lives.
 overflow at 1470, 1440, 1024 or 390; every phone scroll row's first card starts at the 32 column edge
 and its box spans 0 to 390. `/case-studies`' card list is the fold rule's stated exception (an index
 list, `data-fold-exempt` in CaseStudyIndex) and the route is now in `fold.config.json`.
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix rounds 1 and 2
+
+- **`BlockCardSet scroll?: 'auto' | 'never'`.** `auto` (default) keeps the § 3.7 phone scroll row for
+  a linked set of four or more and a covered set of three or more. `never` keeps the set stacked
+  below 768. The service page passes it for its router (fix round 1: one and a fifth of six services
+  showed above a progress bar), its cases and its resources (fix round 2: a page's cases are its
+  proof, and a scroll row hid two of three behind a gesture).
+- **Phone icon-card head.** Below 768 an icon card sets its glyph BEFORE the title, on the title's
+  row (`[1, 7]`), rather than on a 48 row of its own above it. A six-card router stacked at 390 ran
+  past the 1700 phone ceiling with the glyph above; beside the title it holds. From 768 the glyph
+  sits above the title as specified.

@@ -35,7 +35,7 @@ Plus the announcement strip, which is the same family's one-line form.
 - Rhythm is ContentSection's: `block` inside the head, `stack` head to image, `section` across a
   split. Lead to action is `stack` in `beside` and `block` in `below`, where the lead and its link
   are one trailing unit against the heading (fix round 1).
-- The eyebrow carries a blue mark (the Statement's 32 × 2 rule) and the strip's mono label is blue:
+- The eyebrow carries a blue mark (the kit's 6px eyebrow square, the one every eyebrow carries — it was the Statement's 32 × 2 rule until `cmp-services` fix round 2) and the strip's mono label is blue:
   one accent grammar across I and J (fix round 1). Below 768 the lead steps to the body role
   (28 : 16 rather than 28 : 18).
 - A solid ask is the blue solid primary (`CtaRow emphasis="solid" tone="primary"`), the hero's

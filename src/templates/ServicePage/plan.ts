@@ -32,10 +32,16 @@ import type {
  *   § 6.4  the texture signature: `counterweight` on B where its copy column has room, `horizon` on
  *          the band directly above the tint proof band unless it ends in ruled rows, `closing` on L.
  *          A page whose B has no room for the counterweight spends that placement on its J statement
- *          (`head-half`, end side) instead, so every page still carries three (fix round 1).
+ *          instead — the stepped `corner` field in the band's top-end corner (fix round 2; it was
+ *          `head-half`, which read as a pale smudge and ran behind the sentence's first line).
+ *   § 3.5  J centres its sentence across the full measure unless a neighbour is centred (fix round
+ *          2): a split J between two beside bands put four bands' content on one 1/3 line.
  *   § 7.1  the head form follows the body: a thread's E band centres its head from 1024 (start below,
  *          over the vertical thread); every other diagram takes the H-row, the head split beside its
  *          lead, because a diagram is the band's large thing and a stacked head spent 100 of its fold.
+ *          M (a set of covers) and a G with a lead take the H-row too (fix round 2): the card row
+ *          gets the whole measure under a title-left, intro-right head, a different shape from the
+ *          centred H and D-faq heads, and both bands keep ~70 of headroom under the fold.
  *
  * Pure: the same story always gets the same plan. Every decision a renderer needs is on the band,
  * so Bands.tsx only places what it is told.
@@ -54,9 +60,9 @@ export type Archetype =
   | 'G' // the proof band, on tint
   | 'H' // client marks
   | 'I' // the banner
-  | 'J' // the statement: one sentence at the h1 role
+  | 'J' // the statement: one sentence at the display role
   | 'K' // the mid-page offer
-  | 'M' // a centred set of linked covers
+  | 'M' // a full-width row of linked covers under the H-row
   | 'N'; // the contrast pair
 
 type BandBase = {
@@ -87,13 +93,16 @@ export type OfferBand = BandBase & {
   photo?: PhotoId;
   /** The photograph's frame: landscape where the master resolves at the 667 track (§ 5.4). */
   frame: 'portrait' | 'landscape';
+  /** Below 1024, the photo above the copy: set where a neighbour is a head → photo → body band,
+      which at 390 would otherwise repeat K's shape (fix round 2). */
+  photoFirst: boolean;
 };
 export type BannerBand = BandBase & { kind: 'banner'; banner: StoryBanner; photo?: PhotoId };
 export type StatementBand = BandBase & {
   kind: 'statement';
   statement: StoryStatement;
-  /** `head-half` (§ 6.3), when the page's texture budget has the placement to spend here. */
-  headHalf: boolean;
+  /** The `corner` field, when the page's texture budget has the placement to spend here. */
+  corner: boolean;
 };
 export type Band = SectionBand | OfferBand | BannerBand | StatementBand;
 
@@ -104,7 +113,10 @@ const QUIET: ReadonlySet<StoryBlock['kind']> = new Set(['note', 'slot']);
 const RULED: ReadonlySet<Archetype> = new Set(['D', 'D-faq', 'F', 'N']);
 
 /** Bands that are always centred, and bands that centre unless their neighbour already does. */
-const ALWAYS_CENTRED: ReadonlySet<Archetype> = new Set(['H', 'M', 'D-faq']);
+/* M is not among them (fix round 2): a set of covers is a full-width image-card row under the
+   H-row — title left, intro right — so its frames take the whole measure and the band is a
+   different shape from the centred H and D-faq heads (and ~70 shorter than a stacked head). */
+const ALWAYS_CENTRED: ReadonlySet<Archetype> = new Set(['H', 'D-faq']);
 const MAY_CENTRE: ReadonlySet<Archetype> = new Set(['E', 'N', 'C-text']);
 
 /** Texture placements per page at 8 or more bands (§ 6.4). */
@@ -187,6 +199,7 @@ export function planBands(story: ServiceStory): Band[] {
         horizon: false,
         photo,
         frame: photo && qualifies(photo, 'offerWide') ? 'landscape' : 'portrait',
+        photoFirst: false,
       };
     }
     if (entry.type === 'statement') {
@@ -196,7 +209,7 @@ export function planBands(story: ServiceStory): Band[] {
         archetype: 'J',
         centred: false,
         horizon: false,
-        headHalf: false,
+        corner: false,
       };
     }
     if (entry.type === 'banner') {
@@ -240,6 +253,16 @@ export function planBands(story: ServiceStory): Band[] {
   bands.forEach((band, index) => {
     const before = bands[index - 1];
     const after = bands[index + 1];
+    /* § 3.7 cadence at 390: a beside band with an aside stacks head → photo → body on a phone, and
+       so does K. Beside each other they read as one rectangle twice, so K leads with its photo. */
+    if (band.kind === 'offer' && band.photo) {
+      const asideBand = (b: Band | undefined) =>
+        b?.kind === 'section' && ASIDE.has(b.archetype) && Boolean(b.photo);
+      band.photoFirst = asideBand(before) || asideBand(after);
+    }
+    if (band.kind === 'statement') {
+      band.centred = !before?.centred && !(after && ALWAYS_CENTRED.has(after.archetype));
+    }
     if (band.kind === 'section') {
       /* § 3.5: a band that may centre does so only where neither neighbour is centred. An E band
          centres only over a thread, whose rail centres with it; any other diagram is a full-column
@@ -249,6 +272,7 @@ export function planBands(story: ServiceStory): Band[] {
         band.centred = !before?.centred && !(after && ALWAYS_CENTRED.has(after.archetype));
       }
       if (band.archetype === 'E' && !band.centred && !thread) band.headRow = true;
+      if (band.archetype === 'M') band.headRow = true;
       /* § 3.2: beside-with-aside bands alternate the head's side down the page. */
       if (ASIDE.has(band.archetype) && band.photo) {
         band.headSide = asideCount % 2 === 0 ? 'start' : 'end';
@@ -269,14 +293,14 @@ export function planBands(story: ServiceStory): Band[] {
   });
 
   /* Pass 3: § 6.4's budget. `closing` on L always counts (the close is the page's last band); a J
-     statement takes `head-half` only with a placement left over, never beside another textured
+     statement takes `corner` only with a placement left over, never beside another textured
      band or directly above the close, and never on a page whose B carries the counterweight — both
      are end-side, and successive side-anchored placements zig-zag. */
   const textured = (band: Band | undefined): boolean => {
     if (!band) return false;
     if (band.horizon) return true;
     if (band.kind === 'section') return band.counterweight;
-    return band.kind === 'statement' && band.headHalf;
+    return band.kind === 'statement' && band.corner;
   };
   const spent = () => 1 + bands.filter(textured).length;
   const counterweightUsed = bands.some((band) => band.kind === 'section' && band.counterweight);
@@ -289,7 +313,7 @@ export function planBands(story: ServiceStory): Band[] {
       !textured(bands[index - 1]) &&
       !textured(bands[index + 1])
     ) {
-      band.headHalf = true;
+      band.corner = true;
     }
   });
 

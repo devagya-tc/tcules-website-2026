@@ -48,3 +48,20 @@ empty cell holds the 1 track; below 1024 nothing is rendered).
 ## Open questions
 
 None blocking.
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix rounds 1 and 2
+
+- **`size?: 'h1' | 'display'`** (fix round 1). `display` sets the sentence at the hero's display role,
+  measure `--stmt-sentence-measure-display` (26ch): for the one J a page spends as its display-scale
+  moment. Default `h1`, as specified above.
+- **`align?: 'split' | 'center'`** (fix round 2). `split` (default) is the `[1, 2]` arrangement above.
+  `center` is one column at every width — eyebrow, sentence and action centred on the band's axis
+  across the full measure (Meridian's overview line). For a page whose neighbouring bands already
+  start their content on the 1/3 line: a split J between two beside bands read as one long split.
+- **`texture?: 'head-half' | 'corner'`** (fix round 2). `corner` is TextureCorner: a stepped pixel
+  field (10px pixels, no blur) in the band's top-end corner, `min(280px, 40%)` × 80, dense at the
+  corner and dithering out. At `open` density it ends 48 above the eyebrow, so it is drawn at every
+  width, 390 included. It replaces `head-half` on the service page's J: at 1470 the blurred head-half
+  read as a pale gradient smudge, its feather reached the sentence's first line, and below 1024 it
+  was not drawn. Paper only, like every texture.
+- Specimen: `/design/statement` § 4 (display) and § 5 (centre + corner, and centre at h1).

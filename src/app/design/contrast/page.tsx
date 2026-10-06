@@ -61,6 +61,16 @@ export default function ContrastSpecimen() {
       </ContentSection>
 
       <ContentSection
+        eyebrow={'1b · emphasis="yes"'}
+        heading="Real access, people who decide"
+        headingId="cntr-emphasis"
+      >
+        {/* The needs are the primary column, [2, 1], two up at the h5 role; the exclusions the
+            narrower, quieter boundary. The service page's N band (page-product-design fix round 2). */}
+        <Contrast yes={YES} no={NO} emphasis="yes" />
+      </ContentSection>
+
+      <ContentSection
         eyebrow="2 · With a CtaRow"
         heading="What we need from you"
         headingId="cntr-cta"

@@ -3,7 +3,7 @@
    Section paints the band and its open air; Layout and Cluster own every seam; Texture owns its
    field. Every value is a --stmt-* token in tokens/components/statement.css.
 
-   Classes: .eyebrow .sentence .sentenceDisplay .mark .texture .headEmpty
+   Classes: .eyebrow .sentence .sentenceDisplay .centred .mark .texture .headEmpty
 
    One @media query: the head-half texture and the empty head cell exist from 1024 only (§ 6.3:
    "below 1024: none"). It swaps visibility, never a distance. */
@@ -29,6 +29,12 @@
   font: var(--stmt-sentence-text-display);
   letter-spacing: var(--stmt-sentence-tracking-display);
   max-inline-size: var(--stmt-sentence-measure-display);
+}
+
+/* `align="center"`: the sentence's lines centre on its measure. The Layout around it centres the
+   box itself; this centres the text inside it. */
+.centred {
+  text-align: center;
 }
 
 /* The blue mark: the kit's eyebrow square, the band's foreground accent (§ 4.2, small graphic marks). Sized,

@@ -189,7 +189,12 @@ export type {
 } from './ListCard';
 
 export { Contrast } from './Contrast';
-export type { ContrastProps, ContrastList, ContrastHeadingElement } from './Contrast';
+export type {
+  ContrastProps,
+  ContrastList,
+  ContrastHeadingElement,
+  ContrastEmphasis,
+} from './Contrast';
 
 export { BlockCard, BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCard';
 export type {
@@ -253,6 +258,7 @@ export type { CalloutProps, CalloutTone } from './Callout';
 export { DataTable } from './DataTable';
 export type {
   DataTableProps,
+  DataTableFrame,
   DataTableKeyColumn,
   DataTableColumn,
   DataTableRow,
@@ -294,6 +300,7 @@ export { Statement } from './Statement';
 export type {
   StatementProps,
   StatementElement,
+  StatementAlign,
   StatementSize,
   StatementTexture,
 } from './Statement';

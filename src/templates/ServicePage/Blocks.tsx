@@ -137,13 +137,15 @@ export function StepsBlock({ block }: { block: Of<'steps'> }) {
    four (§ 1.4 rule 8). A read-down set never exceeds six, so a longer ledger is a grid of tiles
    (the set reads across, two or three up), and a story that hits it should be cut to the six that
    matter. A numbered ledger keeps ListCard's numbered rows. A ledger with a heading names its set
-   with an h3 over it. */
+   with an h3 over it. A tile set's rows sit a `stack` apart, block to block (fix round 2: they were
+   `column`, 64, which on a phone put a column gutter between every stacked tile and ran the stress
+   stat band to 1699 of 1700). A tile opens on its own rule, so 48 still reads as the next object. */
 const READ_DOWN_MAX = 6;
 
 export function Ledger({ block }: { block: Of<'ledger'> }) {
   const tiles = block.marker !== 'number' && block.items.length > READ_DOWN_MAX;
   const rows = tiles ? (
-    <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
+    <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="stack">
       {block.items.map((item) => (
         <ListCard
           key={item.title}
@@ -243,9 +245,12 @@ export function Cases({
   labels: Labels;
   withNote: boolean;
 }) {
+  /* Stacked on a phone (`scroll="never"`, fix round 2): a page's cases are its proof, and a scroll
+     row showed one card and a sliver of the next, two of three behind a gesture. */
   const set = (
     <BlockCardSet
       lead="none"
+      scroll="never"
       items={block.items.map((item) => ({
         id: item.slug,
         eyebrow: item.client,
@@ -364,7 +369,7 @@ export function StatRows({ block }: { block: Of<'stat'> }) {
   }
   if (items.length > READ_DOWN_MAX) {
     return (
-      <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="column">
+      <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
         {items.map((item) => (
           <ListCard
             key={item.title}
@@ -394,6 +399,7 @@ export function Resources({ block }: { block: Of<'resources'> }) {
     <BlockCardSet
       lead="none"
       across={3}
+      scroll="never"
       items={block.items.map((item) => ({
         id: item.href,
         eyebrow: item.type,
@@ -467,7 +473,9 @@ export function StoryBlockView({
     case 'cases':
       return <Cases block={block} labels={labels} withNote />;
     case 'fit':
-      return <Contrast yes={block.yes} no={block.no} />;
+      /* The needs lead and the exclusions are its quieter boundary (fix round 2): two equal text
+         lists read as a document table. */
+      return <Contrast yes={block.yes} no={block.no} emphasis="yes" />;
     case 'proof':
       return <ProofBlock block={block} labels={labels} />;
     case 'spectrum':

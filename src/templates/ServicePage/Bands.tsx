@@ -212,6 +212,28 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
 
     /* G — the proof band, the page's one tint band (§ 1.7). */
     case 'G':
+      /* With a lead, the H-row (fix round 2): the head beside its lead, so the case and the quote
+         — the band's large things — keep the ~70 a stacked head spent. Stacked, the stress proof
+         band ran to 823 of 830, no headroom for a fixture a line longer. */
+      if (section.lead) {
+        return (
+          <ContentSection
+            {...head}
+            footer={undefined}
+            surface="tint"
+            arrangement="split-head"
+            actions={
+              section.more ? <CtaRow rule={false} actions={[section.more]} /> : undefined
+            }
+          >
+            {section.blocks.map((block, index) => (
+              <Fragment key={index}>
+                <StoryBlockView block={block} labels={ctx.labels} slots={ctx.slots} />
+              </Fragment>
+            ))}
+          </ContentSection>
+        );
+      }
       return (
         <ContentSection {...head} surface="tint">
           {section.blocks.map((block, index) => (
@@ -227,7 +249,8 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
   }
 
   /* Everything else is a stacked band — centred or start-aligned as planned — with every block in
-     order: E (a diagram), H (marks), M (covers), N (the contrast pair), D-faq, C-text. A centred
+     order: E (a diagram), H (marks), M (covers, under the H-row), N (the contrast pair), D-faq,
+     C-text. A centred
      thread centres its stages on their tracks, so the rail sits on the head's axis. */
   const blocks = section.blocks.map((block, index) => (
     <Fragment key={index}>
@@ -260,9 +283,7 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
         footer={undefined}
         arrangement="split-head"
         texture={texture}
-        actions={
-          section.more ? <CtaRow rule={false} actions={[section.more]} /> : undefined
-        }
+        actions={section.more ? <CtaRow rule={false} actions={[section.more]} /> : undefined}
       >
         {blocks}
       </ContentSection>
@@ -291,11 +312,21 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
         eyebrow={offer.eyebrow}
         heading={offer.heading}
         body={[offer.body]}
-        points={offer.points}
+        /* The offer's points are what the reader gets, so they are a CHECK ROW, not a numbered
+           list (fix round 2): the 01/02 numeral is the page's sequence device — the method's steps
+           and the close's next steps — and on the offer's deliverables a third run of numerals made
+           the accent repetition. One glyph for every point, so no story has to choose icons. */
+        markers="icon"
+        points={offer.points?.map((point) => ({ ...point, icon: 'check-circle' as const }))}
         actions={offer.actions}
         media={
           band.photo
-            ? { image: getKitPhoto(band.photo), side: 'end', frame: band.frame }
+            ? {
+                image: getKitPhoto(band.photo),
+                side: 'end',
+                frame: band.frame,
+                phone: band.photoFirst ? 'before' : 'after',
+              }
             : undefined
         }
       />
@@ -304,14 +335,17 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
 
   if (band.kind === 'statement') {
     const { statement } = band;
-    /* J — one sentence at the h1 role, the page's display-scale moment, with the link that says
-       where the claim is shown in full (§ 3.4 J). `head-half` when the plan spent the texture here. */
+    /* J — one sentence at the display role, the page's display-scale moment, with the link that
+       says where the claim is shown in full (§ 3.4 J). Centred across the full measure where the
+       plan centred it, so it breaks the 1/3 line the beside bands share; the `corner` field when the
+       plan spent the texture here. */
     return (
       <Statement
         id={statement.id}
         eyebrow={statement.eyebrow}
         size="display"
-        texture={band.headHalf ? 'head-half' : undefined}
+        align={band.centred ? 'center' : 'split'}
+        texture={band.corner ? 'corner' : undefined}
         actions={
           statement.action ? <CtaRow rule={false} actions={[statement.action]} /> : undefined
         }

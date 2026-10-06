@@ -19,6 +19,11 @@
   --cntr-heading-text: var(--text-h4);
   --cntr-heading-tracking: var(--text-h4-tracking);
   --cntr-item-text: var(--text-body-lg);
+  /* `emphasis="yes"` (page-product-design fix round 2): the primary side's items at the h5 role,
+     the quiet side's items at body. Both headings keep the h4 role, so their rules align. */
+  --cntr-item-text-primary: var(--text-h5);
+  --cntr-item-tracking-primary: var(--text-h5-tracking);
+  --cntr-item-text-quiet: var(--text-body);
   --cntr-rule-width: var(--border-width-hairline);
   --cntr-rule-strong-width: var(--border-width-1);
 }
@@ -32,6 +37,8 @@
   --cntr-no-ink: var(--color-neutral-600); /* 4.92:1 */
   --cntr-rule: var(--color-neutral-200); /* decoration */
   --cntr-rule-strong: var(--color-neutral-400); /* decoration */
+  --cntr-heading-ink-quiet: var(--color-neutral-700); /* 8.14:1 */
+  --cntr-item-ink-quiet: var(--color-neutral-700); /* 8.14:1 */
 }
 
 /* ── Surface: tint ──────────────────────────────────────────────────────────── */
@@ -42,6 +49,8 @@
   --cntr-no-ink: var(--color-neutral-700); /* 7.27:1 */
   --cntr-rule: var(--color-neutral-300); /* decoration */
   --cntr-rule-strong: var(--color-neutral-500); /* decoration */
+  --cntr-heading-ink-quiet: var(--color-neutral-800); /* 10.54:1 */
+  --cntr-item-ink-quiet: var(--color-neutral-800); /* 10.54:1 */
 }
 
 /* ── Surface: ink ───────────────────────────────────────────────────────────── */
@@ -52,6 +61,8 @@
   --cntr-no-ink: var(--color-neutral-400); /* 8.05:1 */
   --cntr-rule: var(--color-neutral-800); /* decoration */
   --cntr-rule-strong: var(--color-neutral-700); /* decoration */
+  --cntr-heading-ink-quiet: var(--color-neutral-300); /* 11.07:1 */
+  --cntr-item-ink-quiet: var(--color-neutral-300); /* 11.07:1 */
 }
 
 /* ── Surface: blue ──────────────────────────────────────────────────────────── */
@@ -62,4 +73,6 @@
   --cntr-no-ink: var(--color-brandeis-100); /* 4.91:1 */
   --cntr-rule: var(--color-brandeis-400); /* decoration */
   --cntr-rule-strong: var(--color-brandeis-300); /* decoration */
+  --cntr-heading-ink-quiet: var(--color-brandeis-50); /* 5.57:1 */
+  --cntr-item-ink-quiet: var(--color-brandeis-50); /* 5.57:1 */
 }

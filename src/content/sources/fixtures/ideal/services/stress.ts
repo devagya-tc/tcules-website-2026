@@ -159,15 +159,20 @@ const blocks: [string, StoryBlock][] = [
   ['stat-alone', EXTRA['stat-alone']],
 ];
 
-/* A spectrum holds six options in its band (Diagrams `SPECTRUM_MAX`); a longer one keeps six and
-   links the rest from the band's foot — the `more` route, shown here on the story that has seven. */
-const SPECTRUM_MAX = 6;
+/* The template caps a spectrum at five options and a bridge at six things between (ServicePage
+   Diagrams `SPECTRUM_MAX`, `BRIDGE_MAX`, fix round 2) and warns past them. A story keeps that many
+   and links the rest from the band's foot — the `more` route, shown here on the stories that carry
+   seven. The numbers are restated rather than imported: content never imports a template. */
+const SPECTRUM_MAX = 5;
+const BRIDGE_MAX = 6;
 
 /* The same route for a slice: its grids hold the band, and its acceptance levels take a band of
    their own as an icon ledger directly after it (StoryBlock `slice.levels` is optional for this). */
 function fitted(block: StoryBlock): StoryBlock {
   if (block.kind === 'spectrum' && block.items.length > SPECTRUM_MAX)
     return { ...block, items: block.items.slice(0, SPECTRUM_MAX) };
+  if (block.kind === 'bridge' && block.items.length > BRIDGE_MAX)
+    return { ...block, items: block.items.slice(0, BRIDGE_MAX) };
   return block;
 }
 
@@ -202,7 +207,7 @@ const sections: StorySection[] = split.map(([id, block]) => {
     more:
       capped === block
         ? undefined
-        : { label: 'Every option, on the deep page', href: ROUTES.howWeWork },
+        : { label: 'The full list, on the deep page', href: ROUTES.howWeWork },
   };
 });
 

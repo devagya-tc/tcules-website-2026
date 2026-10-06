@@ -911,3 +911,22 @@ COMPLETENESS
     and the three arrangements put those four in three different places. The specimen route
     reads as five shapes, not one rectangle repeated.
 ```
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix rounds 1 and 2
+
+Supersedes the K and close notes in § 0's amendment block where they differ:
+
+- **The landscape offer is centred, not stretched.** The copy column (lede then actions, a `stack`
+  apart) centres on the 3:2 photo (`align="center"`); nothing is pinned. Stretched, with the actions
+  pinned to the photo's foot, the K CTA hung in a dead hole under a short lede (fix round 1).
+- **The close's texture is a horizon across the band**, not pinned under the copy: `TextureClosing`
+  spans the full width in the band's bottom air (fix round 1).
+- **`media.phone?: 'after' | 'before'`** (fix round 2). Below 1024 where the photo sits against the
+  copy. `after` (default) is § 3.7 item 4. `before` sets the photo first, for an offer placed beside
+  a head → photo → body band, where at 390 the two read as one repeated rectangle. The photo is
+  decorative (`alt=""`), so DOM order carries no meaning; from 1024 `side` alone decides.
+- **Point ink is the step-title ink** (fix round 2). `--cta-point-ink` is neutral-900 on paper and
+  tint, white on ink and blue: at neutral-700 the offer's and the close's lists read greyed out
+  beside the method's steps rather than deliberately quiet.
+- The service page sets the offer's points as a check row (`markers="icon"`, `check-circle`): the
+  01/02 numeral is the page's sequence device and a third run of it made the accent repetition.
