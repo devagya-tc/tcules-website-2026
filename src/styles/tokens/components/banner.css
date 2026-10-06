@@ -1,0 +1,75 @@
+/* ══ Component layer — Banner ════════════════════════════════════════════════════
+   Tier 2. The I banner (visual-direction § 3.4): one photograph at the band's full weight with a
+   head beside or above it, and the slim announcement strip. Built by cmp-banner, 6 Oct 2026, to
+   docs/specs/Banner.md.
+
+   Naming: --bnr-{part}-{role}
+     parts  eyebrow · heading · lead · strip · strip-label
+     roles  text (a type composite) · tracking · measure · ink
+
+   Type and ink only. Section paints the band (density `tight` for the banner, `strip` for the
+   strip), Layout owns every seam, Media owns the photograph's crop and its 8 radius (§ 5.3:
+   photographs carry no frame). This layer has no distance and no state: nothing in a banner
+   responds to a pointer except the action, and the action is a Button that owns its own states.
+
+   The head's values match ContentSection's by VALUE, not by reference — a component never reads
+   another component's tokens (CLAUDE.md, token rule 6). One head rhythm across the kit is a
+   decision made twice on purpose.
+
+   Every surface block declares every surface-dependent token. Deltas-only is not self-contained:
+   nest this inside a non-paper surface and it inherits the enclosing surface's values.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry and type · identical on every surface ──────────────────────────── */
+:root {
+  --bnr-eyebrow-text: var(--text-eyebrow);
+  --bnr-eyebrow-tracking: var(--text-eyebrow-tracking);
+  --bnr-heading-text: var(--text-h2);
+  --bnr-heading-tracking: var(--text-h2-tracking);
+  --bnr-heading-measure: var(--measure-title);
+  /* --text-lead is a body role and carries no tracking companion. */
+  --bnr-lead-text: var(--text-lead);
+  --bnr-lead-measure: var(--measure-lead);
+
+  /* The strip: one line of body-sm, and an optional mono label before it. */
+  --bnr-strip-text: var(--text-body-sm);
+  --bnr-strip-label-text: var(--text-eyebrow);
+  --bnr-strip-label-tracking: var(--text-eyebrow-tracking);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --bnr-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --bnr-lead-ink: var(--color-neutral-700); /* 8.15:1 */
+  --bnr-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
+  --bnr-strip-ink: var(--color-neutral-800);
+  --bnr-strip-label-ink: var(--color-neutral-600); /* 4.92:1 */
+}
+
+/* ── Surface: tint ── the strip's home ground (§ 1.7) ─────────────────────────── */
+[data-surface='tint'] {
+  --bnr-heading-ink: var(--color-neutral-900); /* 13.05:1 */
+  --bnr-lead-ink: var(--color-neutral-700); /* 7.27:1 */
+  --bnr-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails at 4.39:1 */
+  --bnr-strip-ink: var(--color-neutral-800);
+  --bnr-strip-label-ink: var(--color-neutral-700); /* 7.27:1 */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --bnr-heading-ink: var(--color-white); /* 17.26:1 */
+  --bnr-lead-ink: var(--color-neutral-300); /* 11.07:1 */
+  --bnr-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+  --bnr-strip-ink: var(--color-neutral-200);
+  --bnr-strip-label-ink: var(--color-neutral-400);
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band (§ 4.3) ── */
+[data-surface='blue'] {
+  --bnr-heading-ink: var(--color-white); /* 6.23:1 */
+  --bnr-lead-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --bnr-eyebrow-ink: var(--color-brandeis-100);
+  --bnr-strip-ink: var(--color-white);
+  --bnr-strip-label-ink: var(--color-brandeis-100);
+}

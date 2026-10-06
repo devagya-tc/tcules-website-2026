@@ -241,3 +241,7 @@ export type {
   SiteFooterNewsletter,
   SiteFooterSocial,
 } from './SiteFooter';
+export { Banner } from './Banner';
+export type { BannerProps, BannerForm, BannerMediaSide, BannerLink } from './Banner';
+export { Statement } from './Statement';
+export type { StatementProps, StatementElement, StatementTexture } from './Statement';

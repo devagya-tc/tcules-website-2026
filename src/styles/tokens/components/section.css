@@ -37,6 +37,11 @@
 --sec-padding-y:var(--gap-section);
 --sec-padding-y-tight:var(--gap-column);
 --sec-padding-y-open:var(--gap-section-open);
+/* The announcement strip (visual-direction § 3.4, cmp-banner, 6 Oct 2026): a slim band of one line,
+   not an argument, so its air is the head-to-body step rather than a section beat. A fourth density
+   rather than flush plus inner padding, so no element inside a strip writes a padding-block that
+   would collide with Section's own (the shorthand collision Breadcrumbs.module.css documents). */
+--sec-padding-y-strip:var(--gap-block);
 --sec-gutter:var(--gap-gutter);
 --sec-rule-width:var(--border-width-hairline);
 --sec-container:1240px;  /* literal: the content column. Not a scale step — it is the

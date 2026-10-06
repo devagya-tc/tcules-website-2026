@@ -49,14 +49,19 @@
   padding-block: var(--sec-padding-y);
 }
 
-/* Vertical air — the two variants the token layer declares, both gap-scale steps. There is no
-   arbitrary value: a band is standard (96), tight (64), open (128), or flush (0). */
+/* Vertical air — the three variants the token layer declares, all gap-scale steps. There is no
+   arbitrary value: a band is standard (96), tight (64), open (128), a strip (24), or flush (0). */
 .tight {
   padding-block: var(--sec-padding-y-tight);
 }
 
 .open {
   padding-block: var(--sec-padding-y-open);
+}
+
+/* The announcement strip: one line of copy on its own ground (cmp-banner, 6 Oct 2026). */
+.strip {
+  padding-block: var(--sec-padding-y-strip);
 }
 
 .flush {

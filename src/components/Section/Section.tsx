@@ -14,10 +14,16 @@ import styles from './Section.module.css';
 export type SectionSurface = 'paper' | 'tint' | 'ink' | 'blue';
 
 /**
- * Vertical air. Omit for the standard band (--sec-padding-y, 96). The two variants are the token
- * layer's own, and there is no arbitrary value: a band is standard, tight, open, or flush.
+ * Vertical air. Omit for the standard band (--sec-padding-y, 96). The variants are the token
+ * layer's own, and there is no arbitrary value: a band is standard, tight, open, a strip, or flush.
+ *
+ *   tight  64   the I banner, and other bands whose content is one large object
+ *   open   128  the J statement: an exception band that breathes (visual-direction § 1.2)
+ *   strip  24   the announcement strip (§ 3.4): one line of copy, not an argument. Added by
+ *               cmp-banner (6 Oct 2026) so a strip needs neither `flush` plus an inner padding
+ *               (the padding-block collision) nor a padding through `className` (rule 5)
  */
-export type SectionDensity = 'tight' | 'open';
+export type SectionDensity = 'tight' | 'open' | 'strip';
 
 export type SectionProps = {
   /** Element to render. Defaults to a semantic <section>; use "div"/"header"/"footer" as needed. */
@@ -31,7 +37,7 @@ export type SectionProps = {
    * inheriting dark roles.
    */
   surface?: SectionSurface;
-  /** Vertical air — `tight` (64) or `open` (128) against the standard 96. */
+  /** Vertical air — `tight` (64), `open` (128) or `strip` (24) against the standard 96. */
   density?: SectionDensity;
   /**
    * Drop the vertical air to zero, for a composition that supplies its own — a full-bleed
@@ -48,6 +54,17 @@ export type SectionProps = {
   id?: string;
   /** Accessible name relationship for a band that is exposed as a labelled region. */
   'aria-labelledby'?: string;
+  /**
+   * An accessible name for a band with no heading to point at — an announcement strip rendered as
+   * an `aside`, a landmark that would otherwise be announced without a name. Prefer
+   * `aria-labelledby` whenever the band has a heading.
+   */
+  'aria-label'?: string;
+  /**
+   * The band's archetype (visual-direction § 3.4: `A` to `S`, or `strip`), emitted for `fold:check`,
+   * which measures every band by it (§ 1.3). A marker for the gate, never a style hook.
+   */
+  'data-band'?: string;
   /** Optional component-owned arrangement marker for rendered-output acceptance checks. */
   'data-arrangement'?: string;
 };
@@ -73,13 +90,17 @@ export function Section({
   children,
   id,
   'aria-labelledby': ariaLabelledBy,
+  'aria-label': ariaLabel,
   'data-arrangement': dataArrangement,
+  'data-band': dataBand,
 }: SectionProps) {
   return (
     <Tag
       id={id}
       aria-labelledby={ariaLabelledBy}
+      aria-label={ariaLabel}
       data-arrangement={dataArrangement}
+      data-band={dataBand}
       data-surface={surface}
       className={cx(
         styles.section,

@@ -58,7 +58,8 @@ for (const href of hrefs) {
 const notARouteSegment = (d) => d.startsWith('_') || d.startsWith('(');
 
 for (const dir of dirs('src/app/design').filter((d) => !notARouteSegment(d))) {
-  if (!hrefs.includes(dir)) {
+  /* A nested specimen (`/design/kit/<family>`, the kit's family pages) registers its parent too. */
+  if (!hrefs.includes(dir) && !hrefs.some((h) => h.startsWith(`${dir}/`))) {
     problems.push(`src/app/design/${dir}  exists but nothing in SPECIMENS links to it`);
   }
 }
