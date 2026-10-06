@@ -246,3 +246,18 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 **Why.** The 1 Oct review: the page read as a document. Now every band is ≤ 789 at 1470 and ≤ 1671 at 390. No two bands without an image sit next to each other. Seven of the ten bands between hero and close carry a photograph, a diagram or covers. The § 6.4 texture signature is in place: counterweight on B, horizon above G, closing on L.
 
 **Found in.** `kit/page-software-development`, 6 Oct 2026.
+
+### 7.1 Fix round 1 (6 Oct 2026)
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| B signals | eyebrow | Where builds go wrong | Design to code (the old one restated the heading) |
+| B signals | tiles | two: Every layer is done · Edge states are guessed | four, adding "Contracts are assumed — Each side guessed what the other would send, so integration found the gaps." (icon code) and "Done was never agreed — No one set what a release must prove, so acceptance became a debate." (icon checklist), both NEW COPY. Four tiles fill the copy column, so B's head is the h2 role, not display, and the texture placement moves from B's counterweight to J's corner |
+| C-icon router | position | after the J statement | after the clients band, before the method: the first head-track band, so its head sits on the start side and F's photo moves to the end side (copy unchanged) |
+| G proof | case beside the quote | Auxentios · Industrial CPQ / A quotation model, carried into components / Research across specialist roles, carried into a product model and component-led interface work. | removed: the quote is the band's point, so it takes the display role alone. The case stays on Product Design, which carries the same card |
+| M evidence | ConnectX meta | ConnectX · Integrated product and software | ConnectX · Product and software (one line at 390) |
+| M evidence | Benchmark meta | Benchmark Gensuite · Feasibility in code | Benchmark Gensuite · Feasibility (one line at 390) |
+| K offer | heading | Choose how much responsibility to hand over | Choose how much of the build we own (two balanced lines) |
+| L close | eyebrow | Start a project | Next step (the old one repeated the CTA label) |
+
+**Why.** Fix round 1 review. **Found in.** `kit/page-software-development`, fix round 1.

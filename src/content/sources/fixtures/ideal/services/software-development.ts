@@ -9,22 +9,30 @@ const ENQUIRY = anchorHref(ANCHORS.enquiry);
 /**
  * /services/software-development, designed — recomposed from the UI kit on 6 Oct 2026
  * (visual-direction § 8.2). Copy is the CMS's own, re-cut to the § 1.5 budgets; every edit is
- * logged, old and new, in docs/content-changes.md § 6. The sections say what the page argues; the
- * template decides how each is laid out from the job its blocks do (ServicePage plan.ts), so no
- * field here is a layout.
+ * logged, old and new, in docs/content-changes.md § 7. The sections say what the page argues; the
+ * template decides how each is laid out from the job its blocks do (ServicePage plan.ts). One field
+ * here is still arrangement: `signals.columns`, which the ServiceStory type requires and the B band
+ * ignores — on the template's fix list (ServicePage audit, 6 Oct), not removable from a story.
  *
  *   hero      the claim
- *   signals   where builds break — B, beside a screen-work photograph
+ *   signals   where builds break, four tiles — B, beside a screen-work photograph
  *   clients   who we have shipped with — H, with the sourced rating
+ *   routes    the specialist services, by where the risk sits — the C-icon router
  *   method    the delivery trace as five steps, each citing the one before — F, beside a photo
  *   slice     a release is a complete product slice — E, the layer / release grids
- *   proof     the client's words beside their case — G-case, the tint band
+ *   proof     the client's words, alone at the quote's display role — G, the tint band
  *   evidence  three cases, each bounded by its record — M
  *   statement production responsibility does not move to the model — J
- *   routes    the specialist services — the C-icon router
  *   offer     three ways to hand over responsibility — K
  *   questions ownership, acceptance (with accessibility), AI, infrastructure — D-faq
  *   close     the form — L
+ *
+ * Order (fix round 1): the router sits before the method, so it is the page's first head-track
+ * band and the F photograph lands on the end side — B, the router and F no longer stack three
+ * left-weighted splits, and the router's head reads before its cards. B carries four tiles, so
+ * its head keeps the h2 role (two tiles gave it the display head, louder than the bands that answer
+ * it) and the texture placement goes to J's corner instead of a counterweight. G is the typographic
+ * quote: the quote is the band's point, so it takes the display role alone.
  *
  * What left a band of its own, and where it went: the "what changes" thread and the delivery trace
  * were one argument told twice, now the F steps; the acceptance levels, the ownership ledger and the
@@ -86,7 +94,7 @@ export const softwareDevelopment: ServiceStory = {
     {
       type: 'section',
       id: 'what-breaks',
-      eyebrow: 'Where builds go wrong',
+      eyebrow: 'Design to code',
       heading: 'Where builds break',
       lead: 'The trouble starts where a decision never reached the code.',
       blocks: [
@@ -103,6 +111,16 @@ export const softwareDevelopment: ServiceStory = {
               icon: 'question-circle',
               title: 'Edge states are guessed',
               body: 'The screens showed the happy path, so the code had to invent the rest.',
+            },
+            {
+              icon: 'code',
+              title: 'Contracts are assumed',
+              body: 'Each side guessed what the other would send, so integration found the gaps.',
+            },
+            {
+              icon: 'checklist',
+              title: 'Done was never agreed',
+              body: 'No one set what a release must prove, so acceptance became a debate.',
             },
           ],
         },
@@ -125,6 +143,68 @@ export const softwareDevelopment: ServiceStory = {
             CLIENT_MARKS.knovos,
           ],
           rating: CLUTCH_RATING,
+        },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'specialist-routes',
+      eyebrow: 'Where the risk sits',
+      heading: 'Specialist software services',
+      lead: 'When one part of the system carries the risk, a narrower service settles it faster.',
+      blocks: [
+        {
+          kind: 'router',
+          items: [
+            {
+              icon: 'widget',
+              when: 'When a SaaS product or web application is the binding part.',
+              route: {
+                label: 'SaaS and Web Apps',
+                href: servicePath('software-development/saas-web-app-development'),
+              },
+            },
+            {
+              icon: 'cpu',
+              when: 'When the model, its data and its interaction are the product.',
+              route: {
+                label: 'AI Product Engineering',
+                href: servicePath('software-development/ai-product-engineering'),
+              },
+            },
+            {
+              icon: 'monitor',
+              when: 'When the interface layer carries the risk.',
+              route: {
+                label: 'Frontend Development',
+                href: servicePath('software-development/frontend-development'),
+              },
+            },
+            {
+              icon: 'server',
+              when: 'When services, data and integrations carry it.',
+              route: {
+                label: 'Backend and API',
+                href: servicePath('software-development/backend-api-development'),
+              },
+            },
+            {
+              icon: 'smartphone',
+              when: 'When it has to run on a phone.',
+              route: {
+                label: 'Mobile App Development',
+                href: servicePath('software-development/mobile-app-development'),
+              },
+            },
+            {
+              icon: 'refresh',
+              when: 'When the product has launched and has to keep changing.',
+              route: {
+                label: 'Maintenance and Evolution',
+                href: servicePath('software-development/product-maintenance'),
+              },
+            },
+          ],
         },
       ],
     },
@@ -204,12 +284,6 @@ export const softwareDevelopment: ServiceStory = {
             name: 'Ashok Mohanty',
             company: 'Auxentios',
           },
-          case: {
-            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
-            client: 'Auxentios · Industrial CPQ',
-            title: 'A quotation model, carried into components',
-            body: 'Research across specialist roles, carried into a product model and component-led interface work.',
-          },
         },
       ],
     },
@@ -225,13 +299,13 @@ export const softwareDevelopment: ServiceStory = {
           items: [
             {
               slug: 'ai-native-building-energy-product-connectx',
-              client: 'ConnectX · Integrated product and software',
+              client: 'ConnectX · Product and software',
               title: 'AI architecture in a hybrid workspace',
               body: 'A coded demonstration of AI architecture, scenario modelling and a hybrid workspace.',
             },
             {
               slug: 'legacy-saas-modernisation-information-architecture',
-              client: 'Benchmark Gensuite · Feasibility in code',
+              client: 'Benchmark Gensuite · Feasibility',
               title: 'Coded prototypes during modernisation',
               body: 'Used to test feasibility while the direction could still change.',
             },
@@ -256,72 +330,10 @@ export const softwareDevelopment: ServiceStory = {
       },
     },
     {
-      type: 'section',
-      id: 'specialist-routes',
-      eyebrow: 'Where the risk sits',
-      heading: 'Specialist software services',
-      lead: 'When one part of the system carries the risk, a narrower service settles it faster.',
-      blocks: [
-        {
-          kind: 'router',
-          items: [
-            {
-              icon: 'widget',
-              when: 'When a SaaS product or web application is the binding part.',
-              route: {
-                label: 'SaaS and Web Apps',
-                href: servicePath('software-development/saas-web-app-development'),
-              },
-            },
-            {
-              icon: 'cpu',
-              when: 'When the model, its data and its interaction are the product.',
-              route: {
-                label: 'AI Product Engineering',
-                href: servicePath('software-development/ai-product-engineering'),
-              },
-            },
-            {
-              icon: 'monitor',
-              when: 'When the interface layer carries the risk.',
-              route: {
-                label: 'Frontend Development',
-                href: servicePath('software-development/frontend-development'),
-              },
-            },
-            {
-              icon: 'server',
-              when: 'When services, data and integrations carry it.',
-              route: {
-                label: 'Backend and API',
-                href: servicePath('software-development/backend-api-development'),
-              },
-            },
-            {
-              icon: 'smartphone',
-              when: 'When it has to run on a phone.',
-              route: {
-                label: 'Mobile App Development',
-                href: servicePath('software-development/mobile-app-development'),
-              },
-            },
-            {
-              icon: 'refresh',
-              when: 'When the product has launched and has to keep changing.',
-              route: {
-                label: 'Maintenance and Evolution',
-                href: servicePath('software-development/product-maintenance'),
-              },
-            },
-          ],
-        },
-      ],
-    },
-    {
       type: 'offer',
       id: 'responsibility-options',
       eyebrow: 'Ways to engage',
-      heading: 'Choose how much responsibility to hand over',
+      heading: 'Choose how much of the build we own',
       body: 'Tcules can own a whole product, one technical surface, or a launched product’s next change.',
       points: [
         {
@@ -377,7 +389,7 @@ export const softwareDevelopment: ServiceStory = {
     },
   ],
   close: {
-    eyebrow: 'Start a project',
+    eyebrow: 'Next step',
     heading: 'Start with the slice that needs to ship',
     body: 'The slice, its users, the system constraints and the release outcome. A rough brief is enough.',
     points: [
