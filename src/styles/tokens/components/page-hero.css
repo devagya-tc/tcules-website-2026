@@ -221,8 +221,10 @@
      src/lib/image-sizes.ts (which builds the `sizes` from it); change both in one edit. */
   --hero-media-size-centred: 860px;
   /* The no-media field below 1024, where it is a block under the actions rather than a track:
-     2:1, 358 × 179 at 390 (Quantum's phone strip is 358 × 193). A ratio, not a distance. */
-  --hero-field-ratio: 2 / 1;
+     4:1, 358 × 90 at 390, plus the band's foot padding it sinks into (page-showcase fix round 1:
+     at 2:1 it was ~270 of pure texture under the ask before the first band). A ratio, not a
+     distance. */
+  --hero-field-ratio: 4 / 1;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────

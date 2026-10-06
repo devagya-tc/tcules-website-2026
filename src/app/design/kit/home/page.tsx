@@ -11,6 +11,7 @@ import {
   Section,
   Stat,
   TextureClosing,
+  TextureHorizon,
   type IconName,
 } from '@/components';
 import { getNavigation } from '@/content';
@@ -35,7 +36,7 @@ import {
   type ProofQuote,
   type Step,
 } from '@/patterns';
-import { HEAD_TRACK } from '@/lib/image-sizes';
+import { HEAD_TRACK, READ_DOWN_PHOTO } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
@@ -60,23 +61,29 @@ export const metadata: Metadata = {
  * The page judged against the references, so it opens on a photograph. Twelve bands, every one a
  * kit band fed showcase copy written inline (§ 8.4 — never the content fixtures a live route reads):
  *
- *    1  A   the announcement strip on tint, then the photograph hero (5:4) with its foot field
+ *    1  A   the announcement strip, then the photograph hero (5:4)
  *    2  H   the real client marks and the real Clutch rating, centred
  *    3  C   three services as image cards under the H-row and its section action
- *    4  J   one sentence at display scale, the head-half field in its empty corner
- *    5  B   the studio's own board at 4:5, four tiles beside it
- *    6  G   the proof band on tint: a slider of fictional clients with stock portraits
- *    7  F   the method, read down, beside its photograph
- *    8  S   four illustrative numerals, centred — no client mark in this band (§ 5.8)
- *    9  I   one 3:1 photograph under its H-row
- *   10  D   the questions, centred, before the last image band
+ *    4  J   one sentence at display scale, the corner field in its empty corner
+ *    5  B   the wireframe wall at the photograph's weight (6:5 in the 7), END, two tiles beside it
+ *    6  G   the proof band on tint: a slider of fictional clients, the portrait at the start
+ *    7  F   the method, read down, its photograph at the END, cut to the steps' height
+ *    8  S   the studio in four numerals: a beside head and a 2 × 2 at the display stat role — the
+ *           Executra stat row, not a centred four-up — the horizon field at its foot (§ 5.8: no
+ *           mark shares it)
+ *    9  I   THE IMAGE MOMENT: the studio at offset scale — a 4:3 photograph across the 763 track
+ *           beside a head and a second, smaller photograph that ends on its foot
+ *   10  D   the questions, centred
  *   11  C   two pieces of writing beside a head that carries the way to all of them
- *   12  L   the close, the form beside the copy, the closing equaliser under it
+ *   12  L   the close, the numbered next steps beside the form, the closing equaliser under them
  *
- * Texture signature (§ 6.4): the hero's foot field, head-half on the statement, closing on the
- * close — three placements, never adjacent. Photographs are one warm family (warm + neutral) with
- * one vivid frame, a portrait in the slider (§ 5.5); none appears twice. Every photograph is
- * atmosphere, so `alt=""` (photos.ts).
+ * Signatures this page alone carries: the photograph-weighted split (5), the stat row at display
+ * scale (8) and the offset-scale studio pair (9). Media sides alternate down the page (5 end, 6
+ * start, 7 end, 9 start). Texture (§ 6.4): corner on J, horizon on S, closing on L — three, never
+ * adjacent. The photograph hero carries none (fix round 1: the stepped foot field sat under the copy
+ * only, stopped short of the photograph and read as an accident). Photographs are one warm family
+ * (warm + neutral) with one vivid frame, a portrait in the slider (§ 5.5); none appears twice, or on
+ * the other two showcase pages. Every photograph is atmosphere, so `alt=""` (photos.ts).
  */
 
 const photo = (id: PhotoId) => getKitPhoto(id);
@@ -114,25 +121,16 @@ const SERVICES: readonly BlockCardSetItem[] = [
     id: 'home-svc-modernisation',
     title: 'Product modernisation',
     body: 'An ageing product rebuilt around the work it supports, with no freeze.',
-    media: cover('board-review-backs'),
+    media: cover('team-laptops-table'),
     href: ROUTES.productModernisation,
   },
 ];
 
-/* ── 5 · B ─────────────────────────────────────────────────────────────────────────────────
-   Four tiles fill the 667 copy column, so the head keeps the h2 role (tiles ≤ 4 / ≤ 20 words). */
+/* ── 5 · B, the photograph's weight ───────────────────────────────────────────────────────
+   The photograph takes the 7 (6:5, 667 × 556) and the copy the 477: a display head, its lead, two
+   tiles and a CtaRow fill it (ContentSection `weight`). Tiles ≤ 4 / ≤ 20 words. */
 type Tile = { icon: IconName; title: string; body: string };
 const HOW: readonly Tile[] = [
-  {
-    icon: 'users-group-rounded',
-    title: 'The people who ship',
-    body: 'The designers and engineers in the first workshop are the ones who release the work.',
-  },
-  {
-    icon: 'chat-round-dots',
-    title: 'Weekly working sessions',
-    body: 'Ninety minutes at the board with your team, deciding rather than presenting.',
-  },
   {
     icon: 'notebook',
     title: 'A written trail',
@@ -144,12 +142,12 @@ const HOW: readonly Tile[] = [
     body: 'Rough prototypes meet real users before anyone spends a week on pixels.',
   },
 ];
-/* The board is the subject: anchored high so the column headings stay in the 4:3 phone crop. */
-const STUDIO_BOARD = { ...photo('studio-sticky-board-ux'), focus: { x: 0.62, y: 0.2 } };
 
 /* ── 6 · G slider ──────────────────────────────────────────────────────────────────────────
    Fictional people at fictional companies, stock portraits in the warm family (§ 5.8, § 8.3).
-   Featured quotes ≤ 40 words. Never beside a real mark or the real score. */
+   Featured quotes ≤ 40 words. Never beside a real mark or the real score. Two, because the catalogue
+   holds three warm-or-neutral portraits and the about page's client takes the third: no person,
+   and no face, appears on two showcase pages (fix round 1). */
 const SLIDES: readonly ProofQuote[] = [
   {
     name: 'Daniel Okafor',
@@ -158,14 +156,6 @@ const SLIDES: readonly ProofQuote[] = [
     portrait: portrait('portrait-man-blue-office'),
     quoteHtml:
       '<p>They asked better questions about our product in the first week than we had asked in a year. The redesign was the visible part; the decisions under it are what we still use.</p>',
-  },
-  {
-    name: 'Hannah Reiss',
-    role: 'Head of Product',
-    company: 'Fernbrook Health',
-    portrait: portrait('portrait-woman-grey'),
-    quoteHtml:
-      '<p>Every screen they cut was one our clinicians never had to learn, and every screen that stayed had been argued for with evidence from the ward.</p>',
   },
   {
     name: 'Arjun Mehta',
@@ -199,7 +189,8 @@ const STEPS: readonly Step[] = [
 ];
 
 /* ── 8 · S ─────────────────────────────────────────────────────────────────────────────────
-   Illustrative numerals (§ 8.4), labels ≤ 12 words. No mark shares this band. */
+   Illustrative numerals (§ 8.4), labels ≤ 12 words. No mark shares this band. One set of studio
+   figures across the showcase pages, so the about page's 64 and 18 are these (fix round 1). */
 const STATS = [
   {
     value: '64',
@@ -209,13 +200,13 @@ const STATS = [
   {
     value: '6–8',
     unit: 'weeks',
-    label: 'From the first question to a prototype users can test.',
+    label: 'From the first question to a prototype real users can test.',
   },
   { value: '9/10', label: 'Engagements extended past their first agreed phase.' },
   {
-    value: '1',
-    unit: 'record',
-    label: 'Every decision and state, kept where both teams read it.',
+    value: '18',
+    unit: 'people',
+    label: 'Designers, researchers and design engineers, in one studio.',
   },
 ] as const;
 
@@ -251,14 +242,14 @@ const FAQ: readonly AccordionItem[] = [
 
 /* ── 11 · C-pair ───────────────────────────────────────────────────────────────────────────
    Pair cards: titles ≤ 8, bodies ≤ 20. The writing has no covers yet, so each takes a stand-in from
-   the page's family, the studio's own crit first (§ 5.7) — never labelled. */
+   the page's family (§ 5.7) — never labelled. */
 const THINKING: readonly BlockCardSetItem[] = [
   {
     id: 'home-read-crit',
     eyebrow: 'Article',
     title: 'Why we run design crits in the open',
     body: 'Reviewing work daily, with engineers in the room, costs an hour and saves the week that follows.',
-    media: cover('studio-whiteboard-crit', true),
+    media: cover('hand-mouse-detail', true),
     href: ROUTES.articles,
   },
   {
@@ -266,7 +257,7 @@ const THINKING: readonly BlockCardSetItem[] = [
     eyebrow: 'Guide',
     title: 'Model the product before the screens',
     body: 'A field guide to settling records, rules and owners before anyone opens a design file.',
-    media: cover('pencil-wireframe-red', true),
+    media: cover('stylus-tablet-sketch', true),
     href: ROUTES.guides,
   },
 ];
@@ -289,7 +280,7 @@ const NEXT: readonly CtaPoint[] = [
 ];
 
 const FORM_CONTEXT = {
-  originRoute: '/design/kit/home',
+  originRoute: ROUTES.designKitHome,
   placement: 'kit-home-close',
   family: 'home',
   serviceOrAudit: 'kit-home',
@@ -324,7 +315,6 @@ export default async function KitHomePage() {
         ]}
         arrangement="beside"
         media={{ type: 'image', ratio: '5/4', image: photo('pair-at-laptop-sticky-wall') }}
-        texture
       />
 
       {/* 2 · H — the real marks and the real rating. */}
@@ -373,12 +363,12 @@ export default async function KitHomePage() {
         <BlockCardSet items={SERVICES} lead="none" />
       </ContentSection>
 
-      {/* 4 · J — one sentence at display scale; the head-half field in the empty corner. */}
+      {/* 4 · J — one sentence at display scale; the corner field in the empty corner. */}
       <Statement
         id="home-belief"
         eyebrow="What we believe"
         size="display"
-        texture="head-half"
+        texture="corner"
         actions={
           <CtaRow rule={false} actions={[{ label: 'How we work', href: ROUTES.howWeWork }]} />
         }
@@ -386,15 +376,15 @@ export default async function KitHomePage() {
         A good interface is a product decision someone finally made.
       </Statement>
 
-      {/* 5 · B — the studio's own board, four tiles beside it. */}
+      {/* 5 · B — the wireframe wall at the photograph's weight, at the END; two tiles in the 477. */}
       <ContentSection
         data-band="B"
         arrangement="media"
-        media={{ image: STUDIO_BOARD, side: 'start', head: 'title' }}
+        media={{ image: photo('wireframe-wall'), side: 'end', weight: 'photo' }}
         eyebrow="How we work"
         heading="Every screen points to a reason"
         headingId="home-how"
-        lead="Research, product rules and interface design share one wall, so nothing is decided twice."
+        lead="Research, rules and interface design share one wall, so nothing is decided twice."
       >
         <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
           {HOW.map((tile) => (
@@ -410,7 +400,7 @@ export default async function KitHomePage() {
         </Layout>
       </ContentSection>
 
-      {/* 6 · G — the page's one tint band: fictional clients, one per view. */}
+      {/* 6 · G — the page's one tint band: fictional clients, one per view, the portrait first. */}
       <Section surface="tint" data-band="G-slider">
         <Slider label="Client stories" perView={1}>
           {SLIDES.map((quote) => (
@@ -421,10 +411,11 @@ export default async function KitHomePage() {
         </Slider>
       </Section>
 
-      {/* 7 · F — the method beside its photograph. */}
+      {/* 7 · F — the method, read down; the head and its photograph close the row at the END. */}
       <ContentSection
         data-band="F"
         arrangement="beside"
+        headSide="end"
         eyebrow="An engagement"
         heading="From first call to shipped build"
         headingId="home-method"
@@ -435,34 +426,42 @@ export default async function KitHomePage() {
         <Steps steps={STEPS} />
       </ContentSection>
 
-      {/* 8 · S — illustrative numerals, centred. */}
+      {/* 8 · S — the stat row: a beside head, four numerals at the display stat role, 2 × 2. */}
       <ContentSection
         data-band="S"
-        align="center"
-        headingSize="md"
+        arrangement="beside"
         eyebrow="In numbers"
         heading="Eight years of shipped work"
         headingId="home-numbers"
         lead="Counted the same way every quarter, from the first call to the release after ours."
+        actions={
+          <CtaRow rule={false} actions={[{ label: 'See the work', href: ROUTES.caseStudies }]} />
+        }
+        texture={<TextureHorizon />}
       >
-        <Layout as="ul" columns={{ md: 2, lg: 4 }} colGap="gutter" rowGap="gutter">
+        <Layout as="ul" columns={2} colGap="gutter" rowGap="stack">
           {STATS.map((stat) => (
-            <Stat key={stat.label} as="li" align="center" {...stat} />
+            <Stat key={stat.label} as="li" size="lg" {...stat} />
           ))}
         </Layout>
       </ContentSection>
 
-      {/* 9 · I — one 3:1 photograph under its H-row. */}
-      <Banner
+      {/* 9 · I — the image moment: the studio at offset scale, the large frame leading. */}
+      <ContentSection
+        data-band="I"
+        arrangement="beside"
+        headSide="end"
         eyebrow="The studio"
         heading="Small rooms, careful decisions"
         headingId="home-studio"
         lead="We keep teams small and calendars sparse, so the hard product calls get the attention they need."
-        actions={
-          <CtaRow rule={false} actions={[{ label: 'Meet the studio', href: ROUTES.about }]} />
+        asideFill
+        aside={
+          <Media image={photo('workshop-whiteboard-lounge')} fit="fill" sizes={HEAD_TRACK} />
         }
-        image={photo('office-calm-interior')}
-      />
+      >
+        <Media image={photo('office-calm-interior')} ratio="4/3" sizes={READ_DOWN_PHOTO} />
+      </ContentSection>
 
       {/* 10 · D-faq — centred, then an image band, then the close (§ 3.3). */}
       <ContentSection

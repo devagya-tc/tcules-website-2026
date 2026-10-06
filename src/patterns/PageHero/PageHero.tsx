@@ -8,6 +8,7 @@ import {
   Media,
   Section,
   Texture,
+  TextureField,
   TextureShape,
   type MediaImage,
   type MediaRatioSpec,
@@ -924,15 +925,13 @@ export function PageHero({
     const field =
       recipe === 'field' ? (
         <div className={styles.field}>
-          <Texture className={styles.fieldTexture}>
-            {/* Three steps rising to the column's end edge, the last full height from the title's
-                top: a clearing at the track's start for the copy beside it to stand in. Hard edges;
-                the field sinks into the band's foot padding (fieldTexture), so it rises from the
-                floor rather than floating as a panel. */}
-            <TextureShape left={0} top="56%" width="34%" height="100%" />
-            <TextureShape left="34%" top="28%" width="33%" height="100%" />
-            <TextureShape left="67%" top={0} width="33%" height="100%" />
-          </Texture>
+          {/* The pixel field (page-showcase fix round 1): a solid mass on the column's end edge,
+              dithering toward the copy, and a floor that runs under the clearing — the copy stands
+              in the top-start the field leaves empty. It sinks into the band's foot padding
+              (fieldTexture), so it rises from the floor rather than floating as a panel. */}
+          <div className={styles.fieldBox}>
+            <TextureField />
+          </div>
         </div>
       ) : null;
 

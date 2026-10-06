@@ -111,6 +111,9 @@ export const ROUTES = {
   designCallout: '/design/callout',
   designKitProcess: '/design/kit/process',
   designSteps: '/design/steps',
+  designKitHome: '/design/kit/home',
+  designKitAbout: '/design/kit/about',
+  designKitServicesIndex: '/design/kit/services-index',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
