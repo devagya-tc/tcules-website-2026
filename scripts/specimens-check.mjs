@@ -25,7 +25,9 @@ const TIERS = ['components', 'patterns', 'templates'];
 
 const index = readFileSync(INDEX, 'utf8');
 const names = new Set([...index.matchAll(/name:\s*'([^']+)'/g)].map((m) => m[1]));
-const hrefs = [...new Set([...index.matchAll(/href:\s*'\/design\/([^']+)'/g)].map((m) => m[1]))];
+const hrefs = [
+  ...new Set([...index.matchAll(/href:\s*'\/design\/([^']+)'/g)].map((m) => m[1])),
+];
 
 const dirs = (p) =>
   existsSync(p)
@@ -58,7 +60,8 @@ for (const href of hrefs) {
 const notARouteSegment = (d) => d.startsWith('_') || d.startsWith('(');
 
 for (const dir of dirs('src/app/design').filter((d) => !notARouteSegment(d))) {
-  if (!hrefs.includes(dir)) {
+  /* A family folder (`kit/`) is linked through its children (`/design/kit/cta`). */
+  if (!hrefs.some((href) => href === dir || href.startsWith(`${dir}/`))) {
     problems.push(`src/app/design/${dir}  exists but nothing in SPECIMENS links to it`);
   }
 }

@@ -199,6 +199,16 @@ const SPECIMENS = [
       },
     ],
   },
+  {
+    tier: 'UI kit',
+    items: [
+      {
+        href: '/design/kit/cta',
+        name: 'Kit · CTA',
+        note: 'the K offer (photo, icon, plain and beside) and the L close (form, no points, two actions) as finished bands, the closing texture, and CtaRow inside two ContentSections',
+      },
+    ],
+  },
 ] as const;
 
 export default function DesignIndexPage() {

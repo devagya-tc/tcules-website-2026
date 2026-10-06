@@ -1,10 +1,11 @@
 /* ══ Component layer — CTA section ════════════════════════════════════════════
    Tier 2. The commercial close contributes type and ink only. Section owns the
    band and its ground; Layout and Cluster own every seam; Button owns every
-   control value. There are deliberately no CTA background, border, radius,
-   shadow, state, or spacing tokens.
+   control value. There are deliberately no CTA background, radius, shadow,
+   state, or spacing tokens; the one border is the hairline that opens a ruled
+   point (cmp-cta), neutral on every surface.
 
-   The type and measure tokens are surface-independent. The five ink tokens are
+   The type and measure tokens are surface-independent. The six ink tokens are
    repeated in full on every surface so a nested surface cannot inherit a value
    from the surrounding band.
 
@@ -12,26 +13,32 @@
    read from --text-* or --measure-* in the module, following --foot-title-
    tracking and --foot-body-measure, so CtaSection.module.css reads nothing but
    --cta-*. That is not tidiness: it is what keeps a role and its tracking one
-   decision in one place, which the `offer` block below depends on. */
+   decision in one place. */
 
 :root {
   --cta-eyebrow-text: var(--text-eyebrow);
   --cta-eyebrow-tracking: var(--text-eyebrow-tracking);
-  /* The close is set at h1 scale in `split` and `open` (29 Sep 2026, tracker 2.17): the page's
-     last word is its ask, and at h2 it read as one more section heading. It is paired with
-     PageHero moving to display scale, so the ladder holds — display opens the page, h1 closes
-     it, h2 heads everything between. Scale only: the element stays an `h2` in the outline. */
-  --cta-heading-text: var(--text-h1);
-  --cta-heading-tracking: var(--text-h1-tracking);
+  /* h2 scale in every arrangement (cmp-cta, 6 Oct 2026; visual-direction § 7.1 "Close:
+     --text-h2", and § 1.4's K and L arithmetic, which budget an h2 on two lines). The close was h1
+     from 29 Sep: in the kit's [5, 7] close its copy track is 477, where an h1 ask ran to three
+     lines and broke L's 570, and the close's weight now comes from its form, its points and its
+     texture. Scale only: the element is an `h2` in the outline either way. */
+  --cta-heading-text: var(--text-h2);
+  --cta-heading-tracking: var(--text-h2-tracking);
   --cta-lead-text: var(--text-lead);
   --cta-body-text: var(--text-body-lg);
   /* A point is a step with a shape, not a line of body copy: the label takes the serif title
-     voice at h5 and the marker the mono INDEX numeral (30 Sep 2026: it was the 40px stat
-     numeral, and a close's numbers out-shouted its heading and its form). At 20 the numeral
-     counts the steps without competing with them. The detail stays at body-sm — a clause under
-     a 22px step name still sits one clear rung down. */
+     voice and the marker the mono INDEX numeral (30 Sep 2026: it was the 40px stat numeral, and a
+     close's numbers out-shouted its heading and its form). The label stays h5 (22), where it was
+     approved on 30 Sep, rather than § 7.1's h6: at 18 the serif label sat UNDER the 20px numeral
+     beside it and the marker led the point. § 1.4's point (h6 24 + 8 + 22 = 54) becomes 58, 12
+     across three points, inside every band's slack. The detail stays at body-sm. */
   --cta-point-text: var(--text-h5);
   --cta-point-tracking: var(--text-h5-tracking);
+  /* A RULED point's detail (the beside offer's body track) is a reading line at up to the body
+     measure, so it stays at body (§ 7.2: "a row's body steps with the track"). */
+  --cta-detail-reading-text: var(--text-body);
+  --cta-rule-width: var(--border-width-hairline);
   --cta-detail-text: var(--text-body-sm);
   --cta-marker-text: var(--text-index);
   --cta-marker-tracking: var(--text-index-tracking);
@@ -47,39 +54,15 @@
   --cta-body-measure: var(--measure-body);
 }
 
-/* ── The offer's heading steps down, and BOTH halves step together ───────────
-   `offer` interrupts a page mid-scroll rather than closing it, so its heading
-   sits one rung below the close — a mid-page ask that shouted at closing-block
-   scale would compete with the section it interrupts.
-
-   That rung is h2 since 29 Sep 2026 (tracker 2.17), up from h3, and it moved
-   because the rungs around it did. The close went to h1, so h2 is still one
-   step down; and the points went to 40px stat numerals under 22px h5 labels,
-   beside which a 34px h3 was the SMALLEST display line in its own band — the
-   numerals outweighed the heading they sit under. At 43px the heading leads
-   again, and the offer stays one step quieter than the close.
-
-   Size and tracking are re-declared here as one edit, keyed on the attribute
-   the component already emits (data-arrangement="offer" on the band). They used
-   to be split: the size remapped by a class in the module and the tracking
-   hard-wired in two separate module selectors. That is the one arrangement in
-   this system where a role's size and its correction can drift apart —
-   re-tune --cta-heading-text and the tracking silently keeps the old role's
-   value — and the token rules call size and its companion one typographic
-   decision for exactly this reason. Keeping them in one block is what makes
-   that impossible rather than merely unlikely. */
-[data-arrangement='offer'] {
-  --cta-heading-text: var(--text-h2);
-  --cta-heading-tracking: var(--text-h2-tracking);
-}
-
 :root,
 [data-surface='paper'] {
   --cta-heading-ink: var(--color-neutral-900); /* 14.62:1 */
   --cta-body-ink: var(--color-neutral-800); /* 11.81:1 */
   --cta-point-ink: var(--color-neutral-700); /* 8.15:1 */
   --cta-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
-  --cta-marker-ink: var(--color-brandeis-500); /* 6.17:1 — the points' numerals carry the accent */
+  /* 6.17:1 — the points' numerals and glyphs carry the accent */
+  --cta-marker-ink: var(--color-brandeis-500);
+  --cta-rule-ink: var(--color-neutral-300); /* decoration */
 }
 
 [data-surface='tint'] {
@@ -88,6 +71,7 @@
   --cta-point-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
   --cta-marker-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --cta-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
 }
 
 [data-surface='ink'] {
@@ -96,6 +80,7 @@
   --cta-point-ink: var(--color-neutral-300); /* 11.07:1 */
   --cta-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --cta-marker-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --cta-rule-ink: var(--color-neutral-700); /* decoration */
 }
 
 [data-surface='blue'] {
@@ -104,4 +89,5 @@
   --cta-point-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --cta-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --cta-marker-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --cta-rule-ink: var(--color-brandeis-300); /* decoration */
 }
