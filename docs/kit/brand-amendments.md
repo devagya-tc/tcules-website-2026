@@ -102,3 +102,12 @@ blue underline would read as a link. Chrome (SiteNav, SiteFooter) is unchanged.
 The B media split's head takes the display role when it is ≤ 22 characters (one display line at
 1280+), and its eyebrow takes the accent ink (`--csec-eyebrow-accent-ink`). The fold holds the photo
 at 477 (a [5, 4] split at 4:5 is 987 tall), so the head's scale is the band's dominant element.
+
+## visual-direction § 6.3 · `counterweight`, redrawn (cmp-media-split, final fix round, 6 Oct 2026)
+
+| Was | Now | Why |
+|---|---|---|
+| a blurred ellipse in the band's bottom padding, leaving by the viewport's side; lg only | `media.counterweight`: a 160-tall field in the copy column, pinned on the photo's bottom edge, hard at both sides and the foot, feathered at the top; every width | At the grid's 21% peak a feathered shape with no edge read as moiré, ran past the content column under empty space, and weighed nothing. In flow, its edges are the column's. Bands whose copy fills the photo (four tiles, a ruled list) carry none. |
+
+The B band's photograph may take the wide track (`media.weight="photo"`, 6:5 in 667) when its copy is
+short, and the head's scale is an explicit `media.head`, not a length rule.

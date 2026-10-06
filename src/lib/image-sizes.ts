@@ -63,6 +63,40 @@ export const MEDIA_SPLIT =
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 5 / 12), ${FLUID_COLUMN}`;
 
 /**
+ * ContentSection `media`, as the image is DRAWN rather than as its box is sized (final fix round,
+ * 6 Oct 2026). The photograph is cover-cropped from a master of any shape, so wherever the master is
+ * wider than the slot the browser draws it wider than the box: a 3:2 master in the 4:5 slot at 477
+ * is drawn 477 × (1.5 / 0.8) ≈ 894 wide. MEDIA_SPLIT states the box, so a landscape master there
+ * loaded the 652 derivative at DPR 1 and was upscaled ~1.4×, soft at 1440. Each term below is the
+ * box's width times that master-to-slot factor, never less than 1.
+ *
+ *   weight  copy   the photo in 5 of [5, 7] — 4:5 from 1024, (1240 − 96) × 5 / 12 ≈ 477 at the cap
+ *           photo  the photo in 7 of [7, 5] — 6:5 from 1024, (1240 − 96) × 7 / 12 ≈ 667 at the cap
+ *   below 1024     the full column at 4:3, above the copy
+ *
+ * The factor is taken at the slot's FLOOR ratio (4:5, 6:5, 4:3): a copy column taller than the
+ * photo stretches the box toward its ceiling and the drawn width grows with it, but the ladder
+ * (2400 · 1240 · 652 · 320) is coarse enough that the floor picks the same file at 1440 at DPR 1
+ * and 2 as the ceiling would. These ratios restate --csec-photo-ratio{,-beside,-lead} by hand.
+ */
+export function mediaSplitSizes(
+  weight: 'copy' | 'photo',
+  master: { width: number; height: number },
+): string {
+  const aspect = master.width / master.height;
+  const cover = (slot: number) => Math.max(1, aspect / slot);
+  const tracks = weight === 'photo' ? 7 : 5;
+  const lg = cover(weight === 'photo' ? 6 / 5 : 4 / 5);
+  const base = cover(4 / 3);
+  const r = (n: number) => Math.round(n * 1000) / 1000;
+  return (
+    `(min-width: ${CAP}px) ${Math.round((((CONTAINER - SPLIT_GAP) * tracks) / 12) * lg)}px, ` +
+    `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * ${r((tracks / 12) * lg)}), ` +
+    `calc((100vw - ${2 * GUTTER}px) * ${r(base)})`
+  );
+}
+
+/**
  * ContentSection `beside`: the head track, 1 of [1, 2] from 1024 with the 96 split seam — where a
  * head-track aside photograph sits (visual-direction § 1.4, 3:2 at 381). (1240 − 96) / 3 ≈ 381 at the
  * cap; (100vw − 64 − 96) / 3 from 1024; below it the aside takes the full column between the head and

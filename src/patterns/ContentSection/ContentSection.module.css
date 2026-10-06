@@ -5,7 +5,7 @@
    tokens/components/content-section.css.
 
    Classes: .eyebrow .heading .lead .leadBeside .centred .bodyCentred .text .textureLg
-   .eyebrowAccent .headingDisplay .photo
+   .eyebrowAccent .headingDisplay .photoTrack .photo .photoLeads
 
    Three @media queries, all from 1024 and none swapping a distance: .leadBeside (the lead's ROLE
    follows the arrangement, and the beside arrangement only exists from 1024), .textureLg (the
@@ -108,18 +108,41 @@
   max-inline-size: var(--csec-heading-measure-display);
 }
 
-/* The media split's photograph box: at least the arrangement's ratio, and otherwise as tall as the
-   row (see MediaSplit in the TSX). `aspect-ratio` gives the box its height and its contribution to
-   the row; `align-self: stretch` lets a taller copy column grow it, and the image fills it (Media
-   `fit="fill"`). Sizing, not arrangement: it places nothing and states no distance. The ratio
-   follows the ARRANGEMENT, which changes at 1024 — 4:3 above the copy, 4:5 beside it. */
-.photo {
+/* The media split's photograph: a track and a box (see MediaSplit in the TSX).
+
+   .photoTrack is the grid item. It stretches to the row (`align-self`, argued in MediaSplit: the
+   photo fills the row while the copy is centred in it, two placements one `align` cannot state) and
+   it is an inline-size container, so the box inside can be capped against its own width.
+
+   .photo is the box. Its ratio is the FLOOR — `aspect-ratio` sets its height, and its contribution
+   to the row, whenever the copy is shorter. A taller copy column stretches the track and the box
+   follows it (`block-size: 100%`) up to a CEILING, `max-block-size` in the track's own width, so a
+   narrow photo track at 1024 never becomes a 1 : 2 strip. The image fills the box (Media
+   `fit="fill"`). Sizing, not arrangement: nothing here places anything or states a distance. Ratio
+   and ceiling follow the ARRANGEMENT, which changes at 1024 — 4:3 above the copy, then 4:5 in the
+   copy-led 5 or 6:5 in the photo-led 7 (.photoLeads) beside it. */
+.photoTrack {
   align-self: stretch;
+  container-type: inline-size;
+}
+
+/* Both sizes are stated: with only a block size, `aspect-ratio` derives the box's WIDTH from the
+   stretched height and the photo overflows its track (500 in a 477 track at 1440). With both, the
+   ratio applies only while the height is still auto — the row's sizing pass, where it is the floor. */
+.photo {
+  inline-size: 100%;
+  block-size: 100%;
   aspect-ratio: var(--csec-photo-ratio);
 }
 
 @media (min-width: 1024px) {
   .photo {
     aspect-ratio: var(--csec-photo-ratio-beside);
+    max-block-size: calc(100cqi * var(--csec-photo-stretch-max-beside));
+  }
+
+  .photoLeads {
+    aspect-ratio: var(--csec-photo-ratio-lead);
+    max-block-size: calc(100cqi * var(--csec-photo-stretch-max-lead));
   }
 }

@@ -95,11 +95,9 @@ export {
   Texture,
   TextureCounterweight,
   TextureShape,
-  type TextureCounterweightProps,
   type TextureLength,
   type TextureProps,
   type TextureShapeProps,
-  type TextureSide,
 } from './Texture';
 export { ClientMark, type ClientMarkProps } from './ClientMark';
 

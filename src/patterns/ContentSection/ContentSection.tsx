@@ -4,12 +4,13 @@ import {
   Layout,
   Media,
   Section,
+  TextureCounterweight,
   type MediaImage,
   type SectionDensity,
   type SectionSurface,
 } from '@/components';
 import { cx } from '@/lib/cx';
-import { MEDIA_SPLIT } from '@/lib/image-sizes';
+import { mediaSplitSizes } from '@/lib/image-sizes';
 
 import styles from './ContentSection.module.css';
 
@@ -74,6 +75,47 @@ export type ContentSectionMedia = {
    * owner's answer.
    */
   pin?: boolean;
+  /**
+   * Which track the photograph takes from 1024 (final fix round, 6 Oct 2026). Default `copy`.
+   *
+   *   copy   the photo in 5 of [5, 7], 4:5 (477 × 596 at 1470), the copy in 667. For copy that
+   *          needs the width: H-full and four tiles in a 2 × 2, or a ruled list.
+   *   photo  the photo in 7 of [7, 5], 6:5 (667 × 556 at 1470), the copy in 477. The photograph
+   *          sets the band's weight, as Executra's and Meridian's do at ~55% of the width — for
+   *          copy that is short: a head and a CtaRow, an accordion, two tiles and a CtaRow.
+   *
+   * Why 6:5 and not 4:5 in the 7: a 4:5 at 667 is 834 tall, past the 830 fold before the band's
+   * 192 of padding. 6:5 is the tallest ratio whose band fits (556 + 192 = 748), leaving the copy
+   * ~80 to grow into before the photo has to stretch with it.
+   *
+   * A copy-led band with two tiles and a CtaRow leaves the copy ~160 short of a 596 photo, and
+   * pinning that copy to the photo's edges opens a hole in its middle; two tiles and a CtaRow take
+   * `photo`, where the copy fills the photo's height and there is nothing to pin.
+   */
+  weight?: 'copy' | 'photo';
+  /**
+   * The head's scale (final fix round, 6 Oct 2026). Default `display`: in a media split the head is
+   * the copy column's one large element. `title` keeps the band's h2 role, for a head that would
+   * run past two display lines in its track, or a copy column (an accordion) that needs the height.
+   *
+   * An explicit choice rather than a rule on the heading's length, which this used to be: a hidden
+   * character cutoff dropped a whole role at 23 characters for a reason no author could see, and
+   * two B bands on one page set their heads at different scales. The fold is the check instead —
+   * a display head that runs long makes its band too tall, and `npm run fold:check` fails it.
+   */
+  head?: 'display' | 'title';
+  /**
+   * The band's `counterweight` texture (visual-direction § 6.3): a defined field of the pixel grid
+   * at the FOOT of the copy column, on the photograph's bottom edge — the copy column's mass,
+   * opposite the photo, as QuantumLab's pixel strip sits under its text. When it is present the
+   * copy column stretches to the photo and the field is pinned last, so the head text sits on the
+   * photo's top edge and the field on its bottom edge.
+   *
+   * For a copy column with room for it: a head and its CtaRow, or a head and its actions. Beside
+   * four tiles or a list the column is already full (594 of 596 at 1470) and the band carries
+   * none. Paper only (§ 6.2); on any other surface it is dropped with a development warning.
+   */
+  counterweight?: boolean;
 };
 
 type ContentSectionBaseProps = {
@@ -250,17 +292,16 @@ type GroundProps =
       /** A textured band is a paper band (§ 6.2). */
       surface?: 'paper';
       /**
-       * The band's Texture placement (visual-direction § 6): a `<Texture>` composed by the caller —
-       * in practice one of Texture's named placements (`<TextureCounterweight side="end" />`) —
+       * The band's Texture placement (visual-direction § 6): a `<Texture>` composed by the caller,
        * rendered as the band's first child so it fills the band edge to edge beneath the content. A
        * slot and not a recipe name, because the recipes are Texture's to own and a pattern takes its
        * sibling as a node. Paper only, by type (§ 6.2): beside `surface="tint"` it does not compile.
        *
-       * In `media` it is shown from 1024 only. The B band's one placement is `counterweight`, in the
-       * corner opposite the photograph, and it has no phone form (§ 6.3, § 3.7 item 5): below 1024
-       * the photo sits above the copy and there is no opposite corner left to weigh. Every other
-       * arrangement shows it at every width — `horizon`, the one recipe that runs below 1024, sits
-       * on a stacked band.
+       * In `media` it is shown from 1024 only (below it the photo sits above the copy). The B
+       * band's own placement is NOT this slot: it is `media.counterweight`, a defined field in the
+       * copy column (final fix round, 6 Oct 2026), because a band-level field in the padding read
+       * as a smear and ran past the content column. Every other arrangement shows the slot at every
+       * width.
        */
       texture: ReactNode;
     };
@@ -300,8 +341,10 @@ export function ContentSectionText({ children }: ContentSectionTextProps) {
   return <div className={styles.text}>{children}</div>;
 }
 
-/** The longest `media` heading that takes the display role — see `displayHead` in ContentSection. */
-const MEDIA_DISPLAY_MAX = 22;
+/** A development-only warning, prefixed with the component's name. */
+const warn = (message: string) => {
+  if (process.env.NODE_ENV !== 'production') console.warn(`ContentSection: ${message}`);
+};
 
 /** Is there anything here to render? `Children.toArray` drops null, undefined and booleans. */
 const present = (node: ReactNode) => Children.toArray(node).length > 0;
@@ -381,19 +424,17 @@ export function ContentSection(props: ContentSectionProps) {
   /* ── The head text's three parts ─────────────────────────────────────────────
      Built once, placed by the arrangement. `.centred` sets the text centred inside each part's own
      measure; the Layout holding the parts centres the parts themselves (justifyItems). */
-  /* In `media` the eyebrow takes the accent ink and the heading the display role (fix round 1,
-     cmp-media-split). The photograph is a 477 track beside 667 of copy — the fold caps it there,
-     see MediaSplit — so the band's one dominant element has to come from the head's SCALE, as
-     Meridian's does, wherever the head is short enough to carry it (below); and the eyebrow carries the blue, so a B band with no tile icons (head and
-     CtaRow only) still shows the accent above its title rather than reading black and white. */
+  /* In `media` the eyebrow takes the accent ink, so a B band with no tile icons (a head and its
+     CtaRow) still shows blue above its title rather than reading black and white; and the heading
+     takes the display role unless the caller set `media.head="title"` (see ContentSectionMedia). */
   const inMedia = arrangement === 'media' && Boolean(media);
-  /* Display scale only for a head that sets on ONE display line at the 653–667 copy track (≥ 1280):
-     22 characters. One line is what the fold budgets for — eyebrow 14 + 24 + 70 + 24 + a two-line
-     lead 60 + 48 + four tiles 354 = 594, inside the 596 photo. A longer head (the § 1.5 ceiling is
-     ten words) would run three or four display lines and push H-full + tiles ~250 past the fold, so
-     it keeps the h2 role. A rule on LENGTH rather than a prop, because the fold is what decides it
-     and a CMS author cannot see the fold. */
-  const displayHead = inMedia && Boolean(heading) && (heading?.length ?? 0) <= MEDIA_DISPLAY_MAX;
+  const displayHead = inMedia && Boolean(heading) && media?.head !== 'title';
+  /* The counterweight is a texture, and a texture sits on paper only (§ 6.2). */
+  const onPaper = (surface ?? 'paper') === 'paper';
+  if (inMedia && media?.counterweight && !onPaper) {
+    warn(`media.counterweight is paper-only (§ 6.2); dropped on surface="${surface}".`);
+  }
+  const counterweight = inMedia && media?.counterweight === true && onPaper;
   const eyebrowEl = eyebrow ? (
     <p className={cx(styles.eyebrow, inMedia && styles.eyebrowAccent, centred && styles.centred)}>
       {eyebrow}
@@ -461,6 +502,7 @@ export function ContentSection(props: ContentSectionProps) {
            copy that does not end in an action — and any whose caller passed `media.pin: false`
            (the owner comparison, open question 7 in the spec). */
         pinFooter={hasBlocks && hasFooter && media.pin !== false}
+        counterweight={counterweight}
       />
     );
   } else if (headSplit) {
@@ -555,40 +597,47 @@ export function ContentSection(props: ContentSectionProps) {
 /**
  * The `media` arrangement's two tracks: the photograph and the copy column (§ 3.2, § 3.4 B).
  *
- *   columns {lg: [5, 7]}    the photo in 5 (477 at 1470), the copy in 7 (667), from 1024
+ *   columns {lg: [5, 7]}    `weight="copy"`: the photo in 5 (477 at 1470), the copy in 7 (667)
+ *           {lg: [7, 5]}    `weight="photo"`: the photo in 7 (667), the copy in 5 (477)
  *   colGap  section (96)    a split: copy beside an image (CLAUDE.md gap rule 2)
  *   rowGap  stack (48)      below 1024, photo above copy — a block-to-block seam
- *   reverse {lg: true}      `side="end"`: the photo moves to the end track AND keeps its 5 — Layout
- *                           mirrors the template with the children. Visual only: the photo stays
- *                           first in the DOM, which is the phone's order (photo above the copy in B,
- *                           § 3.7), and it carries no meaning against the copy (an atmosphere photo,
- *                           alt="").
- *   align   stretch|center  the copy column stretches to the photo's height when blocks sit above
- *                           a footer (unless `media.pin` is false), and is centred on it otherwise
- *                           (§ 3.2 rules 1 and 2)
+ *   reverse {lg: true}      `side="end"`: the photo moves to the end track AND keeps its width —
+ *                           Layout mirrors the template with the children. Visual only: the photo
+ *                           stays first in the DOM, which is the phone's order (photo above the
+ *                           copy in B, § 3.7), and it carries no meaning against the copy.
+ *   align   stretch|center  the copy column stretches to the photo's height when it pins something
+ *                           to the photo's bottom edge (a footer under blocks, or the counterweight),
+ *                           and is centred on it otherwise (§ 3.2 rules 1 and 2)
  *
- * WHY NOT [5, 4] (fix round 1 asked for the photo as the larger track, as Executra's 56%). At 4:5 a
- * 5-of-9 photo is 636 × 795 at 1470, and the band 795 + 192 = 987 — past the 830 fold by 157 on its
- * own. A 1:1 crop would fit (636 + 192 = 828) but leaves a 508 copy column that cannot hold H-full
- * and four tiles in 636. The fold fixes the photo near 477 wide at 4:5, so the band's one dominant
- * element is the head instead: display scale (`.headingDisplay`), as Meridian's is.
+ * THE PHOTO'S WEIGHT (final fix round, 6 Oct 2026). At 477 against 667 of copy the text led every
+ * band and B read as a document with a picture. `weight="photo"` gives the photograph the 7, at 6:5
+ * because a 4:5 at 667 is past the fold on its own (see ContentSectionMedia). Four tiles still need
+ * the 667, so the copy-led band stays, for the copy that needs it.
  *
- * THE PHOTOGRAPH IS AT LEAST 4:5, AND OTHERWISE AS TALL AS THE ROW. Its box (`.photo`) states the
- * ratio and stretches; the image FILLS it. At 1470 the copy is shorter than 596 and the box is
- * exactly 4:5. Between 1024 and ~1280 the photo track narrows faster than the copy shortens (the
- * 7-track text rewraps, the photo only scales), and with a fixed 4:5 the copy overran the photo by
- * 90–104 at top and bottom at 1024 (fix round 1). Now the box grows to the copy's height and the
- * crop narrows to keep it, so the two tracks always share their top and bottom edges — which is
- * also what keeps the pinned footer on the photo's bottom edge at every width from 1024. Below 1024
- * the box is 4:3 above the copy, and nothing stretches it.
+ * THE PHOTOGRAPH'S BOX HAS A FLOOR AND A CEILING. Its ratio is the floor: at 1470 a copy column
+ * shorter than the photo leaves the box at exactly 4:5 (or 6:5). A taller copy column stretches the
+ * box to its height so the two tracks share their top and bottom edges — which is what keeps a
+ * pinned footer on the photo's bottom edge — but only up to a ceiling of 3:5 (copy-led) or 4:5
+ * (photo-led). Without the ceiling, at 1024 the copy-led photo became a 360 × 706 strip (1 : 2) and
+ * a two-hands crop read as an abstract blur (final fix round). Past the ceiling the copy runs on
+ * below the photo, which keeps its top edge. The ceiling needs the box's own width, so the track
+ * (`.photoTrack`) is an inline-size container and the box reads `cqi`.
  *
- * The photograph sits in a plain `div` because the row may STRETCH: the div stretches, and the
- * image covers it at the record's focal point.
+ * WHY `align-self` ON THE TRACK, and not Layout's `align`. The two tracks want different block
+ * placements in one row: the photo fills the row, the copy is centred in it. `align` states one
+ * placement for every item, so it cannot say both; the photo track is MediaSplit's own element,
+ * styled by MediaSplit's own module beside the Layout it renders, so this is the container stating
+ * its children's placement, not a child arranging itself. When the copy is pinned the whole row is
+ * `stretch` anyway and the declaration agrees with it.
+ *
+ * THE SIZES. The photograph is cover-cropped from a master of any shape, so the image the browser
+ * draws is wider than its box whenever the master is wider than the slot: a 3:2 master in a 4:5 box
+ * at 477 is drawn 894 wide. `sizes` states that drawn width (mediaSplitSizes), or a landscape
+ * master in the portrait slot loads the 652 derivative and is upscaled ~1.4× (final fix round).
  *
  * The copy column is head text, actions, then the body. When the footer is pinned the body — the
- * blocks AND the footer — is ONE group, pinned to the photo's bottom edge, so the stretch opens
- * between the lead and the blocks (Meridian's tension) rather than between the last block and the
- * footer, where it read as missing content (fix round 1: ~135 of dead column above the CtaRow).
+ * blocks AND the footer — is ONE group, pinned to the photo's bottom edge. With a counterweight the
+ * body follows the head and the counterweight is pinned instead.
  */
 function MediaSplit({
   media,
@@ -597,6 +646,7 @@ function MediaSplit({
   blocks,
   footer,
   pinFooter,
+  counterweight,
 }: {
   media: ContentSectionMedia;
   headText: ReactNode;
@@ -604,7 +654,10 @@ function MediaSplit({
   blocks: ReactNode;
   footer: ReactNode;
   pinFooter: boolean;
+  counterweight: boolean;
 }) {
+  const photoLeads = media.weight === 'photo';
+  const pinned = pinFooter || counterweight;
   const body =
     blocks && footer ? (
       <Layout rowGap="stack">
@@ -616,19 +669,26 @@ function MediaSplit({
     );
   return (
     <Layout
-      columns={{ lg: [5, 7] }}
+      columns={{ lg: photoLeads ? [7, 5] : [5, 7] }}
       colGap="section"
       rowGap="stack"
       reverse={media.side === 'end' ? { lg: true } : undefined}
-      align={pinFooter ? 'stretch' : 'center'}
+      align={pinned ? 'stretch' : 'center'}
     >
-      <div className={styles.photo}>
-        <Media image={media.image} fit="fill" sizes={MEDIA_SPLIT} />
+      <div className={styles.photoTrack}>
+        <div className={cx(styles.photo, photoLeads && styles.photoLeads)}>
+          <Media
+            image={media.image}
+            fit="fill"
+            sizes={mediaSplitSizes(photoLeads ? 'photo' : 'copy', media.image)}
+          />
+        </div>
       </div>
-      <Layout rowGap="stack" pinLast={pinFooter}>
+      <Layout rowGap="stack" pinLast={pinned}>
         {headText}
         {actions}
         {body}
+        {counterweight ? <TextureCounterweight /> : null}
       </Layout>
     </Layout>
   );

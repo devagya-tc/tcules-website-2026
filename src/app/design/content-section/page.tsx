@@ -5,7 +5,8 @@ import {
   Media,
   Prose,
   Section,
-  TextureCounterweight,
+  Texture,
+  TextureShape,
   type IconName,
   type SectionSurface,
 } from '@/components';
@@ -380,6 +381,16 @@ function Label({ title, children }: { title: string; children: ReactNode }) {
  * wide window. The 390 capture of this page is the proof that every `beside` band collapses to
  * `stacked`; section 9's frame shows the stacked band at 390 for comparison inside a wide window.
  */
+/** 14b's band-level texture: a soft glow in one bottom corner, inside the padding. */
+function CornerTexture({ side }: { side: 'start' | 'end' }) {
+  const across = side === 'end' ? { right: '-12%' as const } : { left: '-12%' as const };
+  return (
+    <Texture>
+      <TextureShape kind="ellipse" bottom={20} {...across} width="48%" height={56} blur={16} />
+    </Texture>
+  );
+}
+
 export default function ContentSectionSpecimen() {
   return (
     <>
@@ -437,7 +448,7 @@ export default function ContentSectionSpecimen() {
       </ContentSection>
       <ContentSection
         arrangement="media"
-        media={{ image: photo('studio-sticky-board-ux') }}
+        media={{ head: 'title', image: photo('studio-sticky-board-ux') }}
         eyebrow='arrangement="media"'
         heading="How a week with us actually runs"
         headingId="csec-compare-media"
@@ -1037,7 +1048,7 @@ export default function ContentSectionSpecimen() {
       </Label>
       <ContentSection
         arrangement="media"
-        media={{ image: photo('studio-sticky-board-ux') }}
+        media={{ head: 'title', image: photo('studio-sticky-board-ux') }}
         eyebrow="Photo start · 4 tiles · centred"
         heading="How a week with us actually runs"
         headingId="csec-media-tiles"
@@ -1047,7 +1058,7 @@ export default function ContentSectionSpecimen() {
       </ContentSection>
       <ContentSection
         arrangement="media"
-        media={{ image: photo('designer-desk-monitor'), side: 'end' }}
+        media={{ head: 'title', image: photo('designer-desk-monitor'), side: 'end' }}
         eyebrow="Photo end · 2 tiles + CtaRow · pinned (the default)"
         heading="The team you work with is the team that ships"
         headingId="csec-media-ctarow"
@@ -1059,7 +1070,7 @@ export default function ContentSectionSpecimen() {
       {/* The owner comparison: identical band, same side, so alignment is the only difference. */}
       <ContentSection
         arrangement="media"
-        media={{ image: photo('designer-desk-monitor'), side: 'end', pin: false }}
+        media={{ head: 'title', image: photo('designer-desk-monitor'), side: 'end', pin: false }}
         eyebrow="Photo end · 2 tiles + CtaRow · media.pin=false, centred"
         heading="The team you work with is the team that ships"
         headingId="csec-media-ctarow-centred"
@@ -1070,7 +1081,7 @@ export default function ContentSectionSpecimen() {
       </ContentSection>
       <ContentSection
         arrangement="media"
-        media={{ image: photo('stylus-tablet-sketch') }}
+        media={{ head: 'title', image: photo('stylus-tablet-sketch') }}
         eyebrow="No blocks + CtaRow · centred · degrade case"
         heading="Drawn first, then built properly"
         headingId="csec-media-lead"
@@ -1085,7 +1096,7 @@ export default function ContentSectionSpecimen() {
       />
       <ContentSection
         arrangement="media"
-        media={{ image: photo('whiteboard-two-hands'), side: 'end' }}
+        media={{ head: 'title', image: photo('whiteboard-two-hands'), side: 'end' }}
         eyebrow="Head actions, no blocks · centred · degrade case"
         heading="Start with the decision in front of you"
         headingId="csec-media-actions"
@@ -1094,7 +1105,7 @@ export default function ContentSectionSpecimen() {
       />
       <ContentSection
         arrangement="media"
-        media={{ image: photo('studio-sticky-board-ux') }}
+        media={{ head: 'title', image: photo('studio-sticky-board-ux') }}
         surface="tint"
         eyebrow="Copy at the ceiling · 2 tiles + CtaRow"
         heading={HEADING_LONG}
@@ -1110,7 +1121,7 @@ export default function ContentSectionSpecimen() {
       <FoldExempt reason={`${OVER_BUDGET}: proves a copy column taller than the photo`}>
         <ContentSection
           arrangement="media"
-          media={{ image: photo('stylus-tablet-sketch'), side: 'end' }}
+          media={{ head: 'title', image: photo('stylus-tablet-sketch'), side: 'end' }}
           eyebrow="CMS stress · copy taller than the photo · fold-exempt"
           heading={HEADING_LONG}
           headingId="csec-media-overflow"
@@ -1127,15 +1138,16 @@ export default function ContentSectionSpecimen() {
         band&rsquo;s first child, beneath the content. In media it shows from 1024 only (the
         counterweight has no phone form); in stacked, beside and a centred head it shows at every
         width, which these three bands prove at 390. Paper only, by type: beside any other surface
-        the prop does not compile. Shown with TextureCounterweight because it is the placement
-        Texture owns today; it sits in the bottom padding and leaves by the side.
+        the prop does not compile. Shown with a corner glow composed in place, in the bottom padding
+        and leaving by the side. The media split&rsquo;s own counterweight is not this slot: it is
+        media.counterweight, a field in the copy column (/design/kit/media-split).
       </Label>
       <ContentSection
         eyebrow="Stacked · texture"
         heading="Three places products slow down"
         headingId="csec-texture-stacked"
         lead={LEAD}
-        texture={<TextureCounterweight side="end" />}
+        texture={<CornerTexture side="end" />}
       >
         <Cards />
       </ContentSection>
@@ -1145,7 +1157,7 @@ export default function ContentSectionSpecimen() {
         heading="What changes in the first month"
         headingId="csec-texture-beside"
         lead={LEAD}
-        texture={<TextureCounterweight side="start" />}
+        texture={<CornerTexture side="start" />}
       >
         <Tiles count={2} />
       </ContentSection>
@@ -1155,7 +1167,7 @@ export default function ContentSectionSpecimen() {
         heading="One team from the first workshop"
         headingId="csec-texture-centred"
         lead={LEAD}
-        texture={<TextureCounterweight side="end" />}
+        texture={<CornerTexture side="end" />}
       >
         <Cards />
       </ContentSection>

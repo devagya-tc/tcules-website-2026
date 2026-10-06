@@ -182,40 +182,34 @@ export function TextureShape({
   );
 }
 
-/** Which inline end of the band a placement weighs — the B band's copy side, opposite its photo. */
-export type TextureSide = 'start' | 'end';
-
-export type TextureCounterweightProps = {
-  /** The corner it sits in: the end corner beside a photo on the start side, and the reverse. */
-  side: TextureSide;
-};
-
 /**
  * TextureCounterweight — the `counterweight` placement (visual-direction § 6.3), owned here so every
- * band that spends it reads one recipe rather than restating its numbers.
+ * band that spends it reads one recipe rather than restating its numbers. The B media split's one
+ * blue mass, in its copy column, opposite the photograph.
  *
- * It is the B media split's one blue mass, on the side OPPOSITE the photograph, and its rule is that
- * it never sits behind a glyph (owner ruling: texture never behind text it hurts). The § 6.3 recipe
- * as first drawn (ellipse, bottom −260, side −180, 34% × 340, blur 180) failed that on the page: a
- * 180 feather reached ~90 past its box, under the last tile row, at a strength so low it read as a
- * rendering fault, and it was cut flat by the band's bottom edge (fix round 1, 6 Oct 2026).
+ * A DEFINED FIELD, not a haze (final fix round, 6 Oct 2026). The first two drawings were blurred
+ * ellipses in the band's bottom padding, bled off the viewport's side: at the grid's 21% peak a
+ * feathered shape with no edge read as a moiré or a compression smear, ran past the content column
+ * under empty space, and counterweighed nothing. This one is QuantumLab's pixel strip in Tcules'
+ * grid — an in-flow block in the copy column, so its edges ARE the column's: hard at the inline
+ * start, the inline end and the foot, where it sits on the photo's bottom edge, and feathered only
+ * at the top, where it rises out of the copy's air. (Hard on all four sides was tried: a flat
+ * rectangle of a grid this quiet read as an empty image slot.)
  *
- * Redrawn to live ENTIRELY in the band's bottom padding (96), the one strip the content never
- * enters at any width, and to leave the band by its SIDE — the viewport's edge, where a bleed reads
- * as intended — rather than by its bottom, where it met the next band in a hard line:
+ *   rect, left −25%, width 150%, top 35%, height 100%, blur 48
  *
- *   ellipse, bottom 20, side −12%, 48% × 56, blur 16
- *
- * Its box runs from 20 to 76 above the band's foot; the blur is an 8 deviation, so the grid is at
- * full strength through the middle of the padding, fades out ~16 beyond the box, and is spent
- * before both the content's foot (96) and the band's edge. Across, it starts at 64% of the band and
- * runs off the side. Below 1024 it is not shown: the photo sits above the copy (ContentSection).
+ * The rect runs past the field on three sides, so the blur's falloff on those sides is outside the
+ * field and clipped: the grid is at full strength to each edge. Its top edge is 35% down with a 24
+ * deviation, so the field rises from clear to full strength over its upper half.
+ * The field's height is --tex-counterweight-block-size; its width is the column it is placed in.
+ * Its rule is still that it never sits behind a glyph: it is a block of its own, after the copy.
  */
-export function TextureCounterweight({ side }: TextureCounterweightProps) {
-  const across = side === 'end' ? { right: '-12%' as const } : { left: '-12%' as const };
+export function TextureCounterweight() {
   return (
-    <Texture>
-      <TextureShape kind="ellipse" bottom={20} {...across} width="48%" height={56} blur={16} />
-    </Texture>
+    <div className={styles.counterweight}>
+      <Texture>
+        <TextureShape left="-25%" width="150%" top="35%" height="100%" blur={48} />
+      </Texture>
+    </div>
   );
 }

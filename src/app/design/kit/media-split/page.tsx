@@ -8,7 +8,6 @@ import {
   Layout,
   Section,
   Tag,
-  TextureCounterweight,
   type IconName,
   type MediaFocus,
 } from '@/components';
@@ -27,29 +26,29 @@ export const metadata: Metadata = {
  * /design/kit/media-split — band B of the Tcules UI kit (visual-direction § 3.2, § 3.4 B, § 1.4).
  *
  * B is a COMPOSITION, not a unit: ContentSection `arrangement="media"` with a body the route
- * chooses — ListCard tiles in a 2 × 2, a ruled ListCard list, or an Accordion — and, where the band
- * ends in an ask, a CtaRow footer. Every band below is a live ContentSection, edge to edge as on a
- * route, so each can be measured against the fold (≤ 830 at 1470 × 830, ≤ 1700 at 390;
+ * chooses — ListCard tiles, a ruled ListCard list, an Accordion, or nothing but a CtaRow — and the
+ * photograph's WEIGHT chosen to match. Every band below is a live ContentSection, edge to edge as on
+ * a route, so each can be measured against the fold (≤ 830 at 1470 × 830, ≤ 1700 at 390;
  * fold.config.json lists the route and `npm run fold:check` measures it).
  *
  * Laid out as a showcase: an intro band that indexes the family, then each variation as a tint
  * label strip followed by the band itself. Each pair is one `data-shot` block, so `npm run shots --
  * kit/media-split` crops it at 1440 and 390 under its own name; the 390 crops are the phone proof.
  *
- * The rules each band carries:
- *   - the photo is at least 4:5 in 5 of [5, 7] (477 × 596 at 1470) and as tall as the copy where
- *     the copy is taller (1024–1280), 4:3 above the copy below 1024, radius 8, no frame (§ 5.3);
- *   - the head is display scale, the band's one dominant element beside a photo the fold holds at
- *     477 (see MediaSplit in ContentSection.tsx for the [5, 4] arithmetic);
- *   - the copy in 7 (667) is H-full plus ≤ 4 tiles, a ruled list or an accordion, or ≤ 2 tiles and a
- *     CtaRow. Ending in a CtaRow under blocks, the blocks and the CtaRow are pinned TOGETHER to the
- *     photo's bottom edge, so the stretch opens under the lead; otherwise the copy is centred (§ 3.2);
- *   - `TextureCounterweight` sits in the bottom corner opposite the photo, inside the padding and
- *     the end gutter, clear of every glyph, and is the band's one blue mass: no solid button (§ 4.3);
- *   - blue is the foreground accent in every band: the eyebrow, the markers, every link.
+ * The rules each band carries (final fix round, 6 Oct 2026):
+ *   - copy that needs the width (four tiles, a ruled list) takes the 667 and the photo 4:5 in 477;
+ *     copy that is short (a head and a CtaRow, an accordion, two tiles and a CtaRow) gives the photo
+ *     the 667 at 6:5 (`media.weight="photo"`), so the photograph sets the band's weight;
+ *   - the head is display scale unless the band sets `media.head="title"` — an explicit choice, and
+ *     fold:check fails a head that runs long;
+ *   - a copy column with room for it ends in the counterweight (`media.counterweight`), a defined
+ *     field of the pixel grid on the photo's bottom edge; a full copy column carries none;
+ *   - tiles are a mark over a head-and-body group, and an icon-and-title row on a phone;
+ *   - blue is the foreground accent in every band: the eyebrow, the 32 icons, every link.
  *
  * Photographs: one temperature family for the whole page (§ 5.5 rule 1) — warm and neutral, every
- * one `quiet`, none twice.
+ * one `quiet`, none twice. Landscape masters sit in the 6:5 photo-led slot and portrait masters in
+ * the 4:5 one, so no frame is upscaled.
  */
 
 const photo = (id: PhotoId, focus?: MediaFocus) => {
@@ -57,25 +56,33 @@ const photo = (id: PhotoId, focus?: MediaFocus) => {
   return focus ? { ...image, focus } : image;
 };
 
-/* The studio board's master carries a dark wedge of ceiling in its top-left corner. At 4:5 the crop
-   loses 8% of its height, and anchoring it low (y 0.8) spends most of that on the wedge while the 4:3 phone crop still keeps the hand at the board; when
-   the box grows taller than 4:5 (1024–1280) the crop narrows instead, and x 0.62 spends it on the
-   left edge where the wedge sits, keeping the hand at the board. A placement override (Media's
-   `focus`), because the catalogue's own point serves its other crops. */
-const STUDIO_BOARD = photo('studio-sticky-board-ux', { x: 0.62, y: 0.8 });
+/* The studio board (922 × 1248) is narrower than both of its slots, so the crop only ever trims its
+   HEIGHT and only `y` matters: 8% at 4:5, 45% at the phone's 4:3. y 0.2 keeps the three column
+   headings (Discovery, Strategy/UX, Visual/UI design) in the 4:3 crop, where the panel found them
+   cut off — the board is the subject, not the hand. x 0.62 serves the 1024 case, where the box can
+   stretch past 4:5 and the crop narrows instead. */
+const STUDIO_BOARD = photo('studio-sticky-board-ux', { x: 0.62, y: 0.2 });
 
 type Tile = { icon: IconName; title: string; body: string };
 
 /**
- * The B tiles: ListCard `form="tile"` in a 2 × 2 Layout — `gutter` (32) across, `stack` (48) down
- * (fix round 1: the `column` seam stacked four tiles 64 apart on a phone, ~1500 of band, each icon
- * floating over its own seam; `stack` is the block-to-block step inside a section at every width,
- * and the 2 × 2 reads as one set rather than two rows). Every marker is a BARE Solar glyph — no
- * filled square or disc silhouettes — so a row of four reads as one system at 24.
+ * The B tiles: ListCard `form="tile"` in a Layout — `gutter` (32) across, `stack` (48) down. Every
+ * marker is a SOLID Solar Bold glyph with a mass of its own (no `refresh` or `code`, whose bold
+ * drawings are line-weight arrows and chevrons), at the tile's 32, so a set reads as one system and
+ * the blue reads as a mark rather than a speck. On a phone each tile is an icon-and-title row.
+ *
+ * `columns` is the set's, because the track it sits in is: two up from md in the copy-led 667,
+ * and two up only from xl in the photo-led 477, which at 1024–1439 is too narrow for two.
  */
-function Tiles({ tiles }: { tiles: readonly Tile[] }) {
+function Tiles({
+  tiles,
+  columns = { base: 1, md: 2 },
+}: {
+  tiles: readonly Tile[];
+  columns?: { base: number; md: number; lg?: number; xl?: number };
+}) {
   return (
-    <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
+    <Layout as="ul" columns={columns} colGap="gutter" rowGap="stack">
       {tiles.map((tile) => (
         <ListCard
           key={tile.title}
@@ -94,6 +101,7 @@ function Tiles({ tiles }: { tiles: readonly Tile[] }) {
  * The second copy-side form: Meridian's single-column ruled list with a tick, as ListCard rows. Each
  * row closes on its hairline, the blue tick stands beside the copy, title over body. Reads DOWN, so
  * a page with two B bands gives one tiles and one a list and they no longer read as one shape.
+ * Unlinked rows sit flush with the column (ListCard `.still`), so the ticks hold the head's edge.
  */
 function Ticks({ items }: { items: readonly { title: string; body: string }[] }) {
   return (
@@ -126,12 +134,12 @@ const HOW_WE_WORK = {
       body: 'The designers and engineers in the first workshop are the ones who ship.',
     },
     {
-      icon: 'refresh',
+      icon: 'chat-round-dots',
       title: 'Weekly working sessions',
       body: 'Ninety minutes a week at the board with your team, deciding, not presenting.',
     },
     {
-      icon: 'flag',
+      icon: 'notebook',
       title: 'A written trail',
       body: 'Every decision is logged with its reason, so a new hire can follow it later.',
     },
@@ -222,32 +230,10 @@ const QUESTIONS = [
   },
 ];
 
-const ENGINEERING_TILES: readonly Tile[] = [
-  {
-    icon: 'code',
-    title: 'Components, not mockups',
-    body: 'Screens are built from the real library, so a review sees production behaviour.',
-  },
-  {
-    icon: 'shield-check',
-    title: 'Accessible from day one',
-    body: 'Contrast, focus order and names are checked in every review, not at launch.',
-  },
-  {
-    icon: 'database',
-    title: 'Real data early',
-    body: 'Prototypes run on a copy of your data, so crowded states show up in week two.',
-  },
-  {
-    icon: 'layers',
-    title: 'One source of truth',
-    body: 'Design files and code share one set of tokens, so one change is both.',
-  },
-];
-
 const PLAN_DISCOVERY = { label: 'Plan a discovery', href: ROUTES.contact };
 const SEE_PLAN = { label: 'See a sample plan', href: ROUTES.caseStudies };
 const SEE_WORK = { label: 'See the work', href: ROUTES.caseStudies };
+const TALK_ENGINEERING = { label: 'Talk to an engineer', href: ROUTES.contact };
 
 /* ── The specimen chrome ─────────────────────────────────────────────────────────────────── */
 
@@ -264,58 +250,58 @@ const V = {
   studio: {
     id: 'photo-start-four-tiles',
     short: 'Studio · 4 tiles',
-    name: 'Photo left, four tiles, the counterweight at the end',
-    note: 'The default B band, as product-design sets it. Our own studio board at 477 × 596 beside a display head and a 2 × 2 of tiles. The copy ends in tiles, not an action, so it is centred on the photograph. The texture sits in the far corner, inside the padding and clear of the copy.',
-    facts: ['studio-sticky-board-ux', 'display head', 'counterweight · end'],
+    name: 'Photo left, four tiles',
+    note: 'The copy-led band, as product design sets it: our own studio board at 4:5 in 477 beside a display head and a 2 × 2 of tiles in 667. The copy fills the photograph’s height, so it is centred on it and needs no counterweight — the tiles are the mass. On a phone each tile becomes an icon-and-title row.',
+    facts: ['weight · copy', 'studio-sticky-board-ux', 'no texture'],
   },
   stock: {
     id: 'studio-against-stock',
     short: 'Stock · 4 tiles',
     name: 'The same band with a stock photograph',
     note: 'Identical copy and placement, so the photograph is the only difference. Studio comes first wherever it resolves, because it shows our own work; stock takes over everywhere else, chosen as a calm product scene from the page’s temperature family.',
-    facts: ['designer-desk-monitor', 'neutral · quiet', 'counterweight · end'],
+    facts: ['weight · copy', 'designer-desk-monitor', 'neutral · quiet'],
   },
   end: {
     id: 'photo-end-four-tiles',
     short: 'Photo end · 4 tiles',
-    name: 'Photo right, four tiles, the counterweight at the start',
-    note: 'media.side="end" mirrors the tracks and keeps the photo’s 5; the counterweight follows to the opposite corner. Consecutive media bands on a page alternate side (§ 3.2 rule 4). Below 1024 the photo still leads the copy.',
-    facts: ['side · end', 'designer-monitor-ui', 'counterweight · start'],
+    name: 'Photo right, four tiles',
+    note: 'media.side="end" mirrors the tracks and keeps the photo’s width. Consecutive media bands on a page alternate side (§ 3.2 rule 4). Below 1024 the photo still leads the copy.',
+    facts: ['side · end', 'hands-sketches-markers', 'no texture'],
   },
   ask: {
     id: 'two-tiles-ctarow',
     short: 'Two tiles · CtaRow',
-    name: 'Photo left, two tiles and a CtaRow, edge-aligned',
-    note: 'Copy that ends in an action under blocks stretches to the photograph: the eyebrow sits on its top edge, and the tiles and the CtaRow are pinned together to its bottom edge, so the stretch opens under the lead. The ask is a blue link, never a solid: the texture is the band’s blue mass.',
-    facts: ['pinLast', 'two shared edges', 'counterweight · end'],
+    name: 'Photo leads, two tiles and a CtaRow, edge-aligned',
+    note: 'Short copy gives the photograph the 667 at 6:5. Two tiles and a CtaRow in 477 then fill the photo’s height, so the copy shares its top and bottom edges with nothing left to pin: the gap that pinning opened beside a 596 photo (open question 7) does not arise, and pinned and centred render alike.',
+    facts: ['weight · photo', 'head · title', 'pinLast'],
   },
   lead: {
     id: 'lead-ctarow',
     short: 'Lead · CtaRow',
-    name: 'Photo left, the head and a CtaRow, centred',
-    note: 'With nothing between the head and the action there is nothing to fill a stretch, so the copy is centred on the photograph and the CtaRow drops its rule. The blue eyebrow carries the accent above the display head.',
-    facts: ['centred', 'rule={false}', 'counterweight · end'],
+    name: 'Photo leads, the head and a CtaRow, the counterweight at the end',
+    note: 'The shortest copy and the largest photograph. The display head, its lead and one link sit on the photo’s top edge; the counterweight, a defined field of the pixel grid, sits on its bottom edge in the copy column, as QuantumLab’s strip sits under its text. The ask is a blue link, never a solid: the field is the band’s blue mass.',
+    facts: ['weight · photo', 'counterweight · end', 'display head'],
   },
   list: {
     id: 'ruled-list',
     short: 'Ruled list',
-    name: 'Photo left, a ruled list with ticks',
-    note: 'The second copy-side shape. Three ListCard rows, each closing on its hairline with a blue tick beside the copy: the set reads down rather than across, so a page with two B bands gives one tiles and the other this.',
-    facts: ['ListCard row · sm', 'check-circle', 'counterweight · end'],
+    name: 'Photo right, a ruled list with ticks, no texture',
+    note: 'The second copy-side shape. Three ListCard rows, each closing on its hairline with a blue tick on the column’s edge: the set reads down rather than across, so a page with two B bands gives one tiles and the other this. The column is full, so the band goes bare.',
+    facts: ['weight · copy', 'ListCard row · sm', 'no texture'],
   },
   faq: {
     id: 'accordion',
     short: 'Accordion',
-    name: 'Photo right, an accordion with the first row open',
-    note: 'The third shape, after Executra: the copy column holds an Accordion, its first answer open so the band never lands closed. The open row is the one block of running text; the rest are questions a reader can scan.',
-    facts: ['Accordion', 'first open', 'counterweight · start'],
+    name: 'Photo leads, an accordion with the first row open',
+    note: 'After Executra: the photograph at 6:5 in 667, the copy column an Accordion with its first answer open so the band never lands closed. The head keeps the h2 role (head="title") so four questions fit the photo’s height.',
+    facts: ['weight · photo', 'head · title', 'Accordion'],
   },
-  bare: {
-    id: 'no-texture',
-    short: 'No texture',
-    name: 'Photo right, four tiles, no texture',
-    note: 'The band is complete without its texture. A page spends at most three placements and never two in adjacent bands (§ 6.4), so a B band after a textured band goes bare and keeps its shape. Blue stays in the foreground: the eyebrow and the icons.',
-    facts: ['side · end', 'hands-trackpad', 'no blue mass'],
+  mirror: {
+    id: 'counterweight-start',
+    short: 'Counterweight start',
+    name: 'Photo right, a head and two actions, the counterweight at the start',
+    note: 'The counterweight follows the copy, so with the photo at the end it sits at the start. The head carries its actions (rule off) under the lead; the field closes the column on the photo’s bottom edge.',
+    facts: ['side · end', 'weight · photo', 'counterweight · start'],
   },
 } as const satisfies Record<string, Variation>;
 
@@ -327,7 +313,7 @@ const ORDER: readonly Variation[] = [
   V.lead,
   V.list,
   V.faq,
-  V.bare,
+  V.mirror,
 ];
 
 const number = (variation: Variation) => String(ORDER.indexOf(variation) + 1).padStart(2, '0');
@@ -335,7 +321,7 @@ const number = (variation: Variation) => String(ORDER.indexOf(variation) + 1).pa
 /**
  * One variation: its tint label strip, then the band. The wrapper is the `data-shot` block the
  * shots gate crops, and its first `<p>` — the index line — names the crop, so the file is called
- * what the band is (fix round 1: crops were named off by one, and band 01 had no name at all).
+ * what the band is.
  */
 function Variant({ variation, children }: { variation: Variation; children: ReactNode }) {
   return (
@@ -373,9 +359,10 @@ export default function MediaSplitKitSpecimen() {
             <p className={t.eyebrow}>UI kit · Band B</p>
             <h1 className={t.display}>The photograph and the argument</h1>
             <p className={t.lead}>
-              One ContentSection, one 4:5 photograph and a display head over a short body: tiles,
-              a ruled list or an accordion. Blue marks where to look. Every band is shot at 390
-              too, where the photo moves above the copy at 4:3.
+              One ContentSection, one photograph and a short body: tiles, a ruled list, an
+              accordion or a single ask. Long copy takes the wide column; short copy hands it to the
+              photograph. Blue marks where to look. Every band is shot at 390 too, where the photo
+              moves above the copy at 4:3.
             </p>
           </Layout>
           <Layout as="ol" rowGap="text">
@@ -404,7 +391,6 @@ export default function MediaSplitKitSpecimen() {
           heading={HOW_WE_WORK.heading}
           headingId="b-studio"
           lead={HOW_WE_WORK.lead}
-          texture={<TextureCounterweight side="end" />}
         >
           <Tiles tiles={HOW_WE_WORK.tiles} />
         </ContentSection>
@@ -418,7 +404,6 @@ export default function MediaSplitKitSpecimen() {
           heading={HOW_WE_WORK.heading}
           headingId="b-stock"
           lead={HOW_WE_WORK.lead}
-          texture={<TextureCounterweight side="end" />}
         >
           <Tiles tiles={HOW_WE_WORK.tiles} />
         </ContentSection>
@@ -427,12 +412,11 @@ export default function MediaSplitKitSpecimen() {
       <Variant variation={V.end}>
         <ContentSection
           arrangement="media"
-          media={{ image: photo('designer-monitor-ui'), side: 'end' }}
+          media={{ image: photo('hands-sketches-markers'), side: 'end' }}
           eyebrow={DIRECTION.eyebrow}
           heading={DIRECTION.heading}
           headingId="b-end"
           lead={DIRECTION.lead}
-          texture={<TextureCounterweight side="start" />}
         >
           <Tiles tiles={DIRECTION.tiles} />
         </ContentSection>
@@ -441,12 +425,11 @@ export default function MediaSplitKitSpecimen() {
       <Variant variation={V.ask}>
         <ContentSection
           arrangement="media"
-          media={{ image: photo('workshop-brick-room') }}
+          media={{ image: photo('workshop-whiteboard-lounge'), weight: 'photo', head: 'title' }}
           eyebrow="Discovery"
           heading="Two weeks, one plan"
           headingId="b-ask"
-          lead="A short, fixed engagement that ends with a ranked plan and the evidence behind every item on it."
-          texture={<TextureCounterweight side="end" />}
+          lead="A fixed engagement that ends in a ranked plan, with the evidence for every item on it."
           footer={
             <CtaRow
               actions={[PLAN_DISCOVERY, SEE_PLAN]}
@@ -454,19 +437,18 @@ export default function MediaSplitKitSpecimen() {
             />
           }
         >
-          <Tiles tiles={DISCOVERY_TILES} />
+          <Tiles tiles={DISCOVERY_TILES} columns={{ base: 1, md: 2, lg: 1, xl: 2 }} />
         </ContentSection>
       </Variant>
 
       <Variant variation={V.lead}>
         <ContentSection
           arrangement="media"
-          media={{ image: photo('hands-sketches-markers') }}
+          media={{ image: photo('hand-sketch-wireframe'), weight: 'photo', counterweight: true }}
           eyebrow="Sketch first"
           heading="Paper before pixels"
           headingId="b-lead"
-          lead="A sketch is cheap to throw away and a coded screen is not, so every interface we make starts as one."
-          texture={<TextureCounterweight side="end" />}
+          lead="A sketch is cheap to throw away and a coded screen is not, so every interface we make starts on paper."
           footer={<CtaRow actions={[SEE_WORK]} rule={false} />}
         />
       </Variant>
@@ -474,12 +456,11 @@ export default function MediaSplitKitSpecimen() {
       <Variant variation={V.list}>
         <ContentSection
           arrangement="media"
-          media={{ image: photo('whiteboard-two-hands') }}
+          media={{ image: photo('workshop-brick-room'), side: 'end' }}
           eyebrow="User research"
           heading="Research on a rhythm"
           headingId="b-list"
           lead="Research runs on a fixed rhythm beside the design work, not as a phase before it."
-          texture={<TextureCounterweight side="end" />}
         >
           <Ticks items={RESEARCH_TICKS} />
         </ContentSection>
@@ -488,27 +469,30 @@ export default function MediaSplitKitSpecimen() {
       <Variant variation={V.faq}>
         <ContentSection
           arrangement="media"
-          media={{ image: photo('wireframe-wall'), side: 'end' }}
+          media={{ image: photo('pair-laptop-notebook'), weight: 'photo', head: 'title' }}
           eyebrow="Working together"
           heading="Before we start"
           headingId="b-faq"
-          texture={<TextureCounterweight side="start" />}
         >
           <Accordion items={QUESTIONS} />
         </ContentSection>
       </Variant>
 
-      <Variant variation={V.bare}>
+      <Variant variation={V.mirror}>
         <ContentSection
           arrangement="media"
-          media={{ image: photo('hands-trackpad'), side: 'end' }}
+          media={{
+            image: photo('pair-at-laptop-sticky-wall'),
+            side: 'end',
+            weight: 'photo',
+            counterweight: true,
+          }}
           eyebrow="Design engineering"
           heading="Designed to ship"
-          headingId="b-bare"
-          lead="Engineers join the design reviews from the first week, so what we draw can ship on time."
-        >
-          <Tiles tiles={ENGINEERING_TILES} />
-        </ContentSection>
+          headingId="b-mirror"
+          lead="Engineers sit in the design reviews from the first week, so what we draw is what ships."
+          actions={<CtaRow actions={[TALK_ENGINEERING, SEE_WORK]} rule={false} />}
+        />
       </Variant>
     </>
   );
