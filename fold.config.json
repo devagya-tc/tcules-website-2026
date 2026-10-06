@@ -1,3 +1,8 @@
 {
-  "routes": ["/design/kit/form"]
+  "$comment": "Routes fold:check measures (visual-direction § 1.3): every band <= 830 at 1470 x 830 and <= 1700 at 390; the hero ends <= 830. A block carrying data-fold-exempt is reported, not failed. Each family adds its specimen route.",
+  "viewports": [
+    { "width": 1470, "height": 830, "maxBand": 830 },
+    { "width": 390, "height": 844, "maxBand": 1700 }
+  ],
+  "routes": ["/design/kit/cta", "/design/kit/form"]
 }

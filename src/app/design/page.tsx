@@ -203,6 +203,11 @@ const SPECIMENS = [
     tier: 'UI kit',
     items: [
       {
+        href: '/design/kit/cta',
+        name: 'Kit · CTA',
+        note: 'the K offer (photo, icon, plain and beside) and the L close (form, no points, two actions) as finished bands, the closing texture, and CtaRow inside two ContentSections',
+      },
+      {
         href: '/design/kit/form',
         name: 'Kit · Form',
         note: 'the enquiry form family — the L close beside copy, the compact form beside a 4:5 photo (both sides), standalone under a centred and a beside head, the offer, every variant, error and success',
