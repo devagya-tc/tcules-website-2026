@@ -105,3 +105,7 @@ export { ClientMark, type ClientMarkProps } from './ClientMark';
    RatingBadge is a score and its source as one outline pill; it takes the mark as a node. */
 export { BrandMark, type BrandMarkName } from './BrandMark';
 export { RatingBadge, type RatingBadgeProps } from './RatingBadge';
+
+/* Stat is one figure, its unit and what it counts — the S band's numerals and the D band's stat
+   aside (cmp-process-stats, 6 Oct 2026). */
+export { Stat, type StatAlign, type StatElement, type StatProps, type StatSize } from './Stat';

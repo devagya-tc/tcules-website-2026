@@ -78,6 +78,11 @@ const SPECIMENS = [
         note: 'a third-party score and its source as one outline pill, mark passed in, 4 surfaces',
       },
       {
+        href: '/design/stat',
+        name: 'Stat',
+        note: 'one figure, its unit and what it counts — lg and md, start or centred, beside its label below 768, ink numeral, blue mark on the opening rule, 3 surfaces',
+      },
+      {
         href: '/design/texture',
         name: 'Texture',
         note: 'the pixel grid through placed, blurred shapes — 4 anchors, 4 surfaces, dark-ground candidates',
@@ -148,6 +153,16 @@ const SPECIMENS = [
         note: 'stages in order with their items, arrows between, an optional lane held throughout — 4 surfaces',
       },
       {
+        href: '/design/thread',
+        name: 'Thread',
+        note: 'stages one decision passes through on one blue line — 2 to 12 stages, the return arc, vertical below 1024, 3 surfaces',
+      },
+      {
+        href: '/design/steps',
+        name: 'Steps',
+        note: "ListCard's set mode, the approved F body — 2 to 5 numbered rows, one title size, one title track, two body budgets",
+      },
+      {
         href: '/design/list-card',
         name: 'ListCard',
         note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces',
@@ -211,6 +226,16 @@ const SPECIMENS = [
         href: '/design/service-page',
         name: 'ServicePage',
         note: 'the six service lines, designed from their own content rather than the CMS translation; ?slots=1 shows the images each is designed to carry',
+      },
+    ],
+  },
+  {
+    tier: 'Kit families',
+    items: [
+      {
+        href: '/design/kit/process',
+        name: 'Kit · process and stats',
+        note: 'F process (Steps: 4 / 5 / example / CtaRow), S stats (4 centred, 3 + CtaRow), the D stat aside, Stat sizes, a Thread E band, ProcessFlow for comparison',
       },
     ],
   },

@@ -26,3 +26,23 @@
   text-transform: var(--text-mono-case);
   color: var(--call-label-ink);
 }
+
+/* ── tone="example" ──────────────────────────────────────────────────────────────
+   The worked example that leads a set. A blue rule down the start edge is its mark — one edge, not
+   a box — and the copy sits a block (24) inside it. The sentence steps to body-lg in the surface's
+   full ink, and the key takes the accent, so the example reads as the scene the steps walk through
+   rather than a footnote above them. Inner inset, not outer spacing: the parent Layout keeps every
+   seam. */
+.example {
+  padding-inline-start: var(--gap-block);
+  border-inline-start: var(--call-example-rule-width) solid var(--call-example-rule-ink);
+}
+
+.example .content {
+  font: var(--text-body-lg);
+  color: var(--call-example-content-ink);
+}
+
+.example .label {
+  color: var(--call-example-label-ink);
+}

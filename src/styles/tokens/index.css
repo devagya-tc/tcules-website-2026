@@ -126,6 +126,8 @@
 @import 'components/brand-mark.css';
 @import 'components/rating-badge.css';
 @import 'components/process-flow.css';
+@import 'components/stat.css';
+@import 'components/thread.css';
 @import 'components/service-page.css';
 @import 'components/banner.css';
 @import 'components/statement.css';

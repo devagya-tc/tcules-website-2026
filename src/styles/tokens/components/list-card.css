@@ -119,6 +119,10 @@
   --lcrd-title-min: 256px;
   --lcrd-body-min: 256px;
 
+  /* A Steps body's measure (ListCard/Steps.tsx, final fix round): the lead measure, so a step's
+     sentence makes two lines at 12–20 words and one at ≤ 10, under its title. */
+  --lcrd-step-body-measure: var(--measure-lead);
+
   /* The accepted native-image contract. 160px was measured as a recognisable landscape sample in
      the 1240px row while still leaving the 192px content core room before Cluster wraps it.
      The ratio is the shared cover crop — BlockCard's vertical media serves the same cover asset,
@@ -164,6 +168,23 @@
   --lcrd-ring-offset: var(--focus-ring-offset);
   --lcrd-transition-duration: var(--duration-fast);
   --lcrd-transition-easing: var(--easing-standard);
+}
+
+/* The md correction re-measured at the h4 role's breakpoint steps (final fix round, 6 Oct 2026),
+   because h4 re-declares at 1023 and 767 and the numeral does not: at 4 the "01" sat 3px under an
+   h4-t title and 5px under an h4-m one. 1 lands it on the tablet baseline; at phone width the
+   arithmetic asks for −1, which padding cannot take, so 0 (1px high, measured). Geometry, so
+   :root only — no surface re-declares it. */
+@media (max-width: 1023px) {
+  :root {
+    --lcrd-number-baseline-offset-md: var(--space-1);
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --lcrd-number-baseline-offset-md: var(--space-0);
+  }
 }
 
 /* ── Surface: paper ─────────────────────────────────────────────────────────────

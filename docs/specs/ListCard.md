@@ -59,6 +59,14 @@
 >    set of four rows or more (`services/[...slug]`, `expertise/[slug]`, `audits/[slug]`,
 >    `tools/[slug]`, `how-we-work`, `glossary`) do not pass `size` yet, so they stay at `md`. Each
 >    route adopts the count rule when it is recomposed from the kit.
+> 6. **Steps, the set mode (`Steps.tsx`), final fix round 6 Oct 2026.** A Steps row is `md` and
+>    `stacked` at every count — the blue index beside an h4 title, the body under it at
+>    `--lcrd-step-body-measure` (the lead measure, 56ch) — the editorial process list of
+>    ref-meridian-04, replacing the h5 split in a 184 title track that read as a three-cell spec table.
+>    The set drops the row's 16 inline inset (it is never linked, so it paints no hover ground), takes
+>    `--gap-block` (24) as its block inset, and starts its first row on the set's top edge.
+>    `--lcrd-step-title-track` is deleted. `--lcrd-number-baseline-offset-md` now steps at the h4
+>    role's breakpoints (4 / 1 / 0, measured: at 4 the numeral sat 3px low at 1023 and 5px at 767).
 
 ## 1 · Identity
 

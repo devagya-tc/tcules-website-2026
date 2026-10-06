@@ -30,10 +30,24 @@
    the wrong value from an outer ancestor. */
 
 :root {
+  /* The media split's photograph when it runs the copy's height (`media.height: 'copy'`,
+     cmp-process-stats, 6 Oct 2026): HEIGHT OVER WIDTH, because the box is sized from its track's
+     width (cqi) rather than by aspect-ratio. The floors are the crops it never goes below — 4:3
+     above the copy, 4:5 beside it — the same pair Media cuts by default. By value, not
+     --media-ratio-*: a component never reads another component's tokens. */
+  --csec-media-height-base: 0.75; /* 4:3, height over width */
+  --csec-media-floor-lg: 1.25; /* 4:5 */
+  /* The ceiling (final fix round): 2:3. Past it the stretch stops and the photo keeps the eyebrow's
+     line with air beneath — at 1024, where the copy wraps taller, it had run to ~2:5. */
+  --csec-media-ceiling-lg: 1.5;
+
   --csec-eyebrow-text: var(--text-eyebrow);
   --csec-eyebrow-tracking: var(--text-eyebrow-tracking);
   --csec-heading-text: var(--text-h2);
   --csec-heading-tracking: var(--text-h2-tracking);
+  /* headingSize="md": the h2 element at the h3 role, for the S band (final fix round, 6 Oct 2026). */
+  --csec-heading-text-md: var(--text-h3);
+  --csec-heading-tracking-md: var(--text-h3-tracking);
 
   /* --csec-lead-text has no tracking companion: --text-lead is a body role and carries no
      optical correction, so a --csec-lead-tracking would name a value that does not exist. */

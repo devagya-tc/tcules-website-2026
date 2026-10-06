@@ -1,0 +1,80 @@
+/* ══ Component layer — Thread ═══════════════════════════════════════════════════
+   Tier 2. Named stages one decision passes through, strung on one blue line, with an optional
+   return arc over the row, from the last node back into the first (visual-direction § 3.4 E: a full-column diagram ≤ 380 tall; § 4.2
+   "ProcessFlow and Thread connectors" carry the accent). Built to docs/specs/Thread.md
+   (cmp-process-stats, 6 Oct 2026). Promoted from the ServicePage template's local diagram.
+
+   Naming: --thread-{part}-{role}
+     parts: line | head | node | title | body | loop
+
+   What it owns: the line, its arrowheads and the nodes (geometry and ink), the stage type and its
+   inks, and the return path's corner. What it does not: any distance between stages (Layout, from
+   the gap scale), any ground (the Section's). No state tokens: nothing here responds to a pointer.
+
+   THE THREAD IS THE ACCENT. Line, arrowheads and nodes are blue on every light surface — they are
+   marks, not dividers (§ 4.3) — and the words stay ink. A node is hollow (the band's ground shows
+   through it) except the last, which is filled: where the thread lands.
+
+   Every surface restates every ink, so a Thread inside a band nested in a different surface cannot
+   inherit the wrong value from an outer ancestor. */
+
+:root {
+  /* Component geometry, not distances between things — which is why these read the ramp. The
+     thread is the band's FIGURE (panel note, 6 Oct 2026: 8px hollow nodes on a hairline read as a
+     wireframe connector), so the line is 2 and a node 16 with a 2 ring. */
+  --thread-line-width: var(--border-width-2);
+  --thread-node-size: var(--space-16);
+  --thread-node-border: var(--border-width-2);
+  --thread-head-size: var(--space-10);
+  --thread-node-radius: var(--radius-full);
+  --thread-loop-radius: var(--radius-8);
+  /* How high the return arc rises over the nodes: a mark's own height, the room the arc needs to
+     read as a loop rather than an underline of the band head above it. */
+  --thread-arc-rise: var(--space-40);
+
+  /* The stage title steps with the count across, as card titles do (§ 7.2): h5 up to four a row,
+     h6 at five or six, where a track is 180 to 220 wide. */
+  --thread-title-text-md: var(--text-h5);
+  --thread-title-tracking-md: var(--text-h5-tracking);
+  --thread-title-text-sm: var(--text-h6);
+  --thread-title-tracking-sm: var(--text-h6-tracking);
+  --thread-body-text: var(--text-body-sm);
+  --thread-loop-text: var(--text-body-sm);
+}
+
+:root,
+[data-surface='paper'] {
+  --thread-line-ink: var(--color-brandeis-500); /* 6.17:1 — a mark */
+  --thread-node-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --thread-node-fill: var(--color-paper); /* the hollow: the band's own ground */
+  --thread-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --thread-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --thread-loop-ink: var(--color-neutral-700); /* 8.14:1 */
+}
+
+[data-surface='tint'] {
+  --thread-line-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --thread-node-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --thread-node-fill: var(--color-paper-deep);
+  --thread-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --thread-body-ink: var(--color-neutral-700); /* 7.27:1 */
+  --thread-loop-ink: var(--color-neutral-700); /* 7.27:1 */
+}
+
+[data-surface='ink'] {
+  --thread-line-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
+  --thread-node-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --thread-node-fill: var(--color-neutral-950);
+  --thread-title-ink: var(--color-white); /* 17.26:1 */
+  --thread-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --thread-loop-ink: var(--color-neutral-300); /* 11.07:1 */
+}
+
+[data-surface='blue'] {
+  --thread-line-ink: var(--color-white); /* 6.23:1 */
+  --thread-node-ink: var(--color-white); /* 6.23:1 */
+  --thread-node-fill: var(--color-brandeis-500);
+  --thread-title-ink: var(--color-white); /* 6.23:1 */
+  --thread-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --thread-loop-ink: var(--color-brandeis-50); /* 5.57:1 */
+}

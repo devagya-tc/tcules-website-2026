@@ -1,0 +1,233 @@
+/* Thread — stages strung on one line, an arrowhead into every next node, an optional return path.
+
+   Every colour and size is --thread-*, declared in tokens/components/thread.css and re-declared per
+   surface there. Layout owns the tracks and the seams between stages (gutter across, stack down);
+   this module draws marks on each stage's own edges with positioned pseudo-elements and one
+   aria-hidden node. No margin; no grid or flex of its own.
+
+   The connector's reach is the seam it crosses, so it reads the same gap-scale step the Layout was
+   handed (gutter across, stack down) — one decision, stated in the TSX and read here. */
+
+.root {
+  --thread-node-half: calc(var(--thread-node-size) / 2);
+  min-inline-size: 0;
+}
+
+.stage {
+  position: relative;
+  min-inline-size: 0;
+}
+
+/* ── The node ────────────────────────────────────────────────────────────────── */
+.node {
+  position: absolute;
+  inset-inline-start: 0;
+  display: block;
+  inline-size: var(--thread-node-size);
+  block-size: var(--thread-node-size);
+  border: var(--thread-node-border) solid var(--thread-node-ink);
+  border-radius: var(--thread-node-radius);
+  background: var(--thread-node-fill);
+}
+
+/* Where the thread lands: the last node is filled. */
+.stage:last-child .node {
+  background: var(--thread-node-ink);
+}
+
+/* ── The line and its arrowhead ─────────────────────────────────────────────────
+   ::before is the line, ::after the arrowhead: a square with two borders, turned. The last stage
+   has neither — nothing follows it. */
+.stage:not(:last-child)::before,
+.stage:not(:last-child)::after {
+  content: '';
+  position: absolute;
+}
+
+.stage:not(:last-child)::before {
+  border-color: var(--thread-line-ink);
+  border-style: solid;
+  border-width: 0;
+}
+
+.stage:not(:last-child)::after {
+  inline-size: var(--thread-head-size);
+  block-size: var(--thread-head-size);
+  border-block-start: var(--thread-line-width) solid var(--thread-line-ink);
+  border-inline-end: var(--thread-line-width) solid var(--thread-line-ink);
+}
+
+/* ── Copy ────────────────────────────────────────────────────────────────────── */
+.title {
+  font: var(--thread-title-text-md);
+  letter-spacing: var(--thread-title-tracking-md);
+  text-wrap: var(--text-title-wrap);
+  color: var(--thread-title-ink);
+}
+
+.body {
+  font: var(--thread-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--thread-body-ink);
+}
+
+/* ── Below 1024: vertical. The line runs down the start edge, node centre to node centre. ── */
+@media (max-width: 1023px) {
+  .stage {
+    padding-inline-start: calc(var(--thread-node-size) + var(--gap-text));
+  }
+
+  /* The node centres on the title's first line: 1lh of the title's own font. */
+  .node {
+    font: var(--thread-title-text-md);
+    inset-block-start: calc((1lh - var(--thread-node-size)) / 2);
+  }
+
+  .stage:not(:last-child)::before {
+    inset-block-start: calc(var(--thread-node-size) + var(--gap-tight));
+    inset-block-end: calc(-1 * var(--gap-stack) + var(--gap-tight));
+    inset-inline-start: calc(var(--thread-node-half) - var(--thread-line-width) / 2);
+    border-inline-start-width: var(--thread-line-width);
+  }
+
+  .stage:not(:last-child)::after {
+    inset-block-end: calc(-1 * var(--gap-stack) + var(--gap-tight));
+    inset-inline-start: calc(var(--thread-node-half) - var(--thread-head-size) / 2);
+    transform: rotate(135deg);
+    transform-origin: center;
+  }
+}
+
+/* ── From 1024: across. The node sits on the line above the copy. ───────────── */
+@media (min-width: 1024px) {
+  .stage {
+    padding-block-start: calc(var(--thread-node-size) + var(--gap-block));
+  }
+
+  .node {
+    inset-block-start: 0;
+  }
+
+  /* Five or six across, a track is 180 to 220 wide: the title steps to h6 (§ 7.2). */
+  .dense .title {
+    font: var(--thread-title-text-sm);
+    letter-spacing: var(--thread-title-tracking-sm);
+  }
+
+  .stage:not(:last-child)::before {
+    inset-block-start: calc(var(--thread-node-half) - var(--thread-line-width) / 2);
+    inset-inline-start: calc(var(--thread-node-size) + var(--gap-tight));
+    inset-inline-end: calc(-1 * var(--gap-gutter) + var(--gap-tight));
+    border-block-start-width: var(--thread-line-width);
+  }
+
+  .stage:not(:last-child)::after {
+    inset-block-start: calc(var(--thread-node-half) - var(--thread-head-size) / 2);
+    inset-inline-end: calc(-1 * var(--gap-gutter) + var(--gap-tight));
+    transform: rotate(45deg);
+  }
+
+  /* The last stage of a row that is not the last stage: no connector. Its line used to run to the
+     track's edge and point on, which at two rows pointed off the column while the next stage sat at
+     the far start of the row below (panel note, 6 Oct 2026). The row break itself is the turn; the
+     next row's first node, on the same start line as row one's, is where the eye goes. */
+  .across2 > .stage:nth-child(2n)::before,
+  .across3 > .stage:nth-child(3n)::before,
+  .across4 > .stage:nth-child(4n)::before,
+  .across5 > .stage:nth-child(5n)::before,
+  .across6 > .stage:nth-child(6n)::before,
+  .across2 > .stage:nth-child(2n)::after,
+  .across3 > .stage:nth-child(3n)::after,
+  .across4 > .stage:nth-child(4n)::after,
+  .across5 > .stage:nth-child(5n)::after,
+  .across6 > .stage:nth-child(6n)::after {
+    content: none;
+  }
+}
+
+/* The count across, for the return arc's arithmetic. A unitless count, not a distance. */
+.across2 {
+  --thread-n: 2;
+}
+
+.across3 {
+  --thread-n: 3;
+}
+
+.across4 {
+  --thread-n: 4;
+}
+
+.across5 {
+  --thread-n: 5;
+}
+
+.across6 {
+  --thread-n: 6;
+}
+
+/* ── The return path ─────────────────────────────────────────────────────────────
+   The sentence sits under the stages on the column line, a return glyph at its start, at every
+   width. From 1024, on a ONE-row thread, the path itself is drawn as an arc OVER the nodes: it
+   rises from the last node — where the thread lands — runs back above the stages and comes down
+   into the first node, an arrowhead on it. Above the row there is nothing to cross, so the loop
+   can start and end ON the two nodes it joins; drawn beneath, it had to start under copy and stop
+   short of node one, and read as a detached bracket (panel note, 6 Oct 2026).
+
+   The arc's far leg is the last track's node: every track is (100% − (n − 1) × gutter) / n, and
+   the last one starts exactly one track from the end, so the leg sits a track minus a node-half in
+   from the column's end. Two-row threads draw no arc — no path from row two's end to row one's
+   start avoids the copy — and keep the sentence and its glyph alone. */
+.loopGlyph {
+  display: block;
+  color: var(--thread-line-ink);
+}
+
+.loopText {
+  font: var(--thread-loop-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--thread-loop-ink);
+}
+
+@media (min-width: 1024px) {
+  .arc {
+    position: relative;
+    padding-block-start: var(--thread-arc-rise);
+  }
+
+  .arc::before,
+  .arc::after {
+    content: '';
+    position: absolute;
+  }
+
+  /* The arc: top and both sides of one box, its corners rounded, each leg stopping a tight above
+     its node — the same clearance the forward line keeps from the nodes it joins. */
+  .arc::before {
+    inset-block-start: 0;
+    inset-inline-start: calc(var(--thread-node-half) - var(--thread-line-width) / 2);
+    inset-inline-end: calc(
+      (100% - (var(--thread-n) - 1) * var(--gap-gutter)) / var(--thread-n) -
+        var(--thread-node-half) - var(--thread-line-width) / 2
+    );
+    block-size: calc(var(--thread-arc-rise) - var(--gap-tight));
+    border: var(--thread-line-width) solid var(--thread-line-ink);
+    border-block-end: 0;
+    border-start-start-radius: var(--thread-loop-radius);
+    border-start-end-radius: var(--thread-loop-radius);
+  }
+
+  /* The arrowhead into node one: the forward head's square, turned to point down. Its tip lands
+     where the leg ends — a square of side s turned 45° reaches 1.2 s below its own top. */
+  .arc::after {
+    inset-block-start: calc(
+      var(--thread-arc-rise) - var(--gap-tight) - var(--thread-head-size) * 1.2
+    );
+    inset-inline-start: calc(var(--thread-node-half) - var(--thread-head-size) / 2);
+    inline-size: var(--thread-head-size);
+    block-size: var(--thread-head-size);
+    border-block-end: var(--thread-line-width) solid var(--thread-line-ink);
+    border-inline-end: var(--thread-line-width) solid var(--thread-line-ink);
+    transform: rotate(45deg);
+  }
+}

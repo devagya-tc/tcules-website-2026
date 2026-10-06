@@ -370,3 +370,34 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* ── Steps: the set mode (Steps.tsx) ─────────────────────────────────────────────
+   A Steps row is never linked, so it never paints the hover ground the row's 16 inline inset exists
+   to clear: the inset goes, and the numeral sits on the content edge the band's head and the rules
+   share (final fix round, 6 Oct 2026 — at 16 the numerals stood at 689 against a head at 673).
+
+   Block: --gap-block (24) rather than the row's --gap-gutter (32). The tile's reading, not the
+   list row's: in a method the rule HEADS the next step, so rule-to-content is "head to body inside
+   a block" — the reference process list's own 24 row padding. It is also what holds F inside its
+   arithmetic with h4 titles (§ 1.4: four two-line rows 4 × 150 − 24 = 576, five one-line rows 596).
+
+   The first row starts on the set's top edge: the ladder's rules sit between steps and after the
+   last, so the 24 above the first title would be air with no rule to head. Inner inset only; the
+   set's Layout still owns every seam between rows (rowGap none). */
+.steps .frame {
+  padding-block: var(--gap-block);
+  padding-inline: 0;
+}
+
+.steps > :first-child .frame {
+  padding-block-start: 0;
+}
+
+/* A step's body is a sentence about one action, read under its title, so it takes the LEAD measure
+   (56ch, ~520) rather than the row's 75ch: at 75ch a two-line budget meant 30 words a step and the
+   ladder became a wall, and a ten-word body left two thirds of a 700 line empty. At 56ch twelve to
+   twenty words make two lines and ten make one — at 1440 and at 1024 alike, since the 547 body of
+   the beside track at 1024 is wider than the cap. The rules still run the full track. */
+.steps .body {
+  max-inline-size: var(--lcrd-step-body-measure);
+}

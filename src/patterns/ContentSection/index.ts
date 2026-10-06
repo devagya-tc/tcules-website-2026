@@ -4,6 +4,7 @@ export type {
   ContentSectionArrangement,
   ContentSectionMedia,
   ContentSectionMediaSide,
+  ContentSectionMediaHeight,
   ContentSectionProps,
   ContentSectionTextProps,
 } from './ContentSection';

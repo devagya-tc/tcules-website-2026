@@ -116,6 +116,16 @@ export default function CalloutSpecimenPage() {
           <Specimen title="Two sentences" note="The common complete shape.">
             <Callout html={TWO_SENTENCES} />
           </Specimen>
+          <Specimen
+            title="tone=example · the worked example a set walks through"
+            note="F's scene above the steps: body-lg in ink, a blue key, a blue rule down the start edge — a mark on one edge, not a box. The default tone stays the quiet note."
+          >
+            <Callout
+              tone="example"
+              label="Worked example"
+              html="<p>A dispatch screen where three teams edit one order, and nobody trusts its status. We followed a single order through all of them.</p>"
+            />
+          </Specimen>
         </Layout>
       </Section>
 

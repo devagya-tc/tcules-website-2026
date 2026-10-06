@@ -74,7 +74,32 @@ export type ContentSectionMedia = {
    * owner's answer.
    */
   pin?: boolean;
+  /**
+   * What decides the photograph's height from 1024 (cmp-process-stats fix round, 6 Oct 2026).
+   *
+   *   ratio  its own 4:5. The copy is centred on it, or stretched to it (`pin`). The default.
+   *   copy   the copy column's full height: the photo starts on the eyebrow's line and ends on the
+   *          copy's last edge — a ladder's closing rule, a CtaRow — as the reference process splits
+   *          pin their text to the image's two edges. A cover crop, never shorter than 4:5, so a
+   *          copy column shorter than that keeps today's band. For a copy column that is a body in
+   *          itself (F: the head over Steps), where a fixed 4:5 left the photo ending 50–70 short
+   *          of, or past, the last row.
+   *
+   * Below 1024 the photo sits above the copy at 4:3 either way.
+   */
+  height?: ContentSectionMediaHeight;
 };
+
+export type ContentSectionMediaHeight = 'ratio' | 'copy';
+
+/**
+ * The heading's type step (a component size, so a t-shirt name). `lg` is the section h2 (43), the
+ * default. `md` sets the same `h2` element at the h3 role (34), for a band whose large thing is not
+ * its heading: the S stats band, where a 43 head over 54 mono figures read as a heading over its
+ * captions (final fix round, 6 Oct 2026 — the figures must clearly win, § 3.3 "one large thing per
+ * band"). The element never changes: the band's place in the outline is not its scale.
+ */
+export type ContentSectionHeadingSize = 'lg' | 'md';
 
 type ContentSectionBaseProps = {
   /**
@@ -96,6 +121,8 @@ type ContentSectionBaseProps = {
    * honour.
    */
   headingId?: string;
+  /** Default `lg`. See `ContentSectionHeadingSize`. */
+  headingSize?: ContentSectionHeadingSize;
   /** The category label above the heading. Absent renders no element and no seam. */
   eyebrow?: string;
   /**
@@ -307,7 +334,8 @@ const present = (node: ReactNode) => Children.toArray(node).length > 0;
  * Route-blind and data-blind like every pattern — it never learns that Strapi exists.
  */
 export function ContentSection(props: ContentSectionProps) {
-  const { heading, headingId, eyebrow, lead, surface, density, footer, children } = props;
+  const { heading, headingId, headingSize, eyebrow, lead, surface, density, footer, children } =
+    props;
   const arrangement: ContentSectionArrangement = props.arrangement ?? 'stacked';
   const centred = props.align === 'center';
   const actions = props.actions;
@@ -351,7 +379,14 @@ export function ContentSection(props: ContentSectionProps) {
     <p className={cx(styles.eyebrow, centred && styles.centred)}>{eyebrow}</p>
   ) : null;
   const headingEl = heading ? (
-    <h2 id={headingId} className={cx(styles.heading, centred && styles.centred)}>
+    <h2
+      id={headingId}
+      className={cx(
+        styles.heading,
+        headingSize === 'md' && styles.headingMd,
+        centred && styles.centred,
+      )}
+    >
       {heading}
     </h2>
   ) : null;
@@ -533,18 +568,31 @@ function MediaSplit({
   footer: ReactNode;
   pinFooter: boolean;
 }) {
+  /* `height: 'copy'`: the row stretches, and the photo's box takes the row's height between a
+     floor and a ceiling — 4:5 and 2:3 beside the copy, 4:3 above it — and Media fills it with a
+     cover crop. Two boxes because the ceiling is a function of the TRACK's width: the outer div is
+     the inline-size container, the inner one reads it (cqi). Without the ceiling, at 1024 the copy
+     grows (the h2 wraps) and the photo became a 360 × 906 sliver, roughly 2:5 (final fix round).
+     Sizing on the track's own child, not an arrangement: Layout still owns both tracks and the seam. */
+  const toCopy = media.height === 'copy';
   return (
     <Layout
       columns={{ lg: [5, 7] }}
       colGap="section"
       rowGap="stack"
       reverse={media.side === 'end' ? { lg: true } : undefined}
-      align={pinFooter ? 'stretch' : 'center'}
+      align={pinFooter || toCopy ? 'stretch' : 'center'}
     >
-      <div>
+      <div className={toCopy ? styles.mediaToCopy : undefined}>
         {/* 4:5 beside the copy, 4:3 above it (§ 3.7 item 4): a 4:5 at the 326 phone column would be
             408 tall before the first word of the copy. */}
-        <Media image={media.image} ratio={{ base: '4/3', lg: '4/5' }} sizes={MEDIA_SPLIT} />
+        {toCopy ? (
+          <div className={styles.mediaBox}>
+            <Media image={media.image} fit="fill" sizes={MEDIA_SPLIT} />
+          </div>
+        ) : (
+          <Media image={media.image} ratio={{ base: '4/3', lg: '4/5' }} sizes={MEDIA_SPLIT} />
+        )}
       </div>
       <Layout rowGap="stack" pinLast={pinFooter}>
         {headText}

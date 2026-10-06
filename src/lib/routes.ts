@@ -107,6 +107,8 @@ export const ROUTES = {
   designEnquiryForm: '/design/enquiry-form',
   designProof: '/design/proof',
   designCallout: '/design/callout',
+  designKitProcess: '/design/kit/process',
+  designSteps: '/design/steps',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

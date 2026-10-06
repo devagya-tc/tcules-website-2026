@@ -1,4 +1,5 @@
 import { Layout, Prose } from '@/components';
+import { cx } from '@/lib/cx';
 
 import styles from './Callout.module.css';
 
@@ -18,7 +19,20 @@ export type CalloutProps = {
    * before the key existed: no Layout, no empty span, no seam.
    */
   label?: string;
+  /**
+   * What kind of note it is (cmp-process-stats fix round, 6 Oct 2026).
+   *
+   *   note     the quiet boundary on the claim before it: body-sm in a secondary ink. The default.
+   *   example  the worked example a set is walked through — F's scene above the steps (§ 3.3). It
+   *            leads the body track rather than trailing a claim, so it takes a voice: body-lg in
+   *            the surface's ink, a blue key, and a blue rule down its start edge (a mark, not a
+   *            box — nothing closes the other three sides). As a footnote-quiet note it read as a
+   *            caption floating above the steps.
+   */
+  tone?: CalloutTone;
 };
+
+export type CalloutTone = 'note' | 'example';
 
 /**
  * Callout — a quiet boundary on the claim immediately before it.
@@ -33,7 +47,7 @@ export type CalloutProps = {
  * it went from beside the sentence to above it on 30 Sep 2026, because a key and a sentence set
  * side by side read as two columns of one thing.
  */
-export function Callout({ html, label }: CalloutProps) {
+export function Callout({ html, label, tone = 'note' }: CalloutProps) {
   if (html.trim().length === 0) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn('Callout: html must contain visible content; rendering nothing.');
@@ -42,17 +56,18 @@ export function Callout({ html, label }: CalloutProps) {
   }
 
   const keyText = label?.trim();
+  const root = cx(styles.root, tone === 'example' && styles.example);
 
   if (!keyText) {
     return (
-      <div role="note" className={styles.root}>
+      <div role="note" className={root}>
         <Prose html={html} className={styles.content} />
       </div>
     );
   }
 
   return (
-    <div role="note" className={styles.root}>
+    <div role="note" className={root}>
       {/* The key sits ABOVE the sentence, never beside it (owner, 30 Sep 2026): two lines of
           text set left and right read as two columns of one thing. The 8 seam is the key's bind
           to what it keys. */}
