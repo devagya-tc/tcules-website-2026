@@ -1,0 +1,65 @@
+/* ══ Component layer — Contrast ═══════════════════════════════════════════════════
+   Tier 2. Two opposite lists in peer halves: the N band's body (visual-direction § 3.4 N).
+
+   Naming: --cntr-{part}-{role}
+     parts: heading | item | yes | no | rule
+
+   Promoted from the service page's Fit with its values unchanged (--svc-ink, --svc-ink-muted,
+   --svc-mark, --svc-rule, --svc-rule-strong): the look was approved on 1 Oct 2026 and moved, not
+   restyled. A component never reads another component's tokens, so the values are restated here.
+
+   The check is the blue accent (--cntr-yes-ink, § 4.2); the cross is quiet ink (--cntr-no-ink,
+   § 4.3: it only says "not this one"). Glyphs are marks, so ≥ 3:1 on every surface.
+
+   No state tokens: nothing in a Contrast responds to a pointer.
+   Every surface below declares every surface-dependent token (CLAUDE.md § Tokens rule 2). */
+
+/* ── Geometry · identical on every surface ───────────────────────────────────── */
+:root {
+  --cntr-heading-text: var(--text-h4);
+  --cntr-heading-tracking: var(--text-h4-tracking);
+  --cntr-item-text: var(--text-body-lg);
+  --cntr-rule-width: var(--border-width-hairline);
+  --cntr-rule-strong-width: var(--border-width-1);
+}
+
+/* ── Surface: paper ─────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --cntr-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --cntr-item-ink: var(--color-neutral-900); /* 14.62:1 */
+  --cntr-yes-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --cntr-no-ink: var(--color-neutral-600); /* 4.92:1 */
+  --cntr-rule: var(--color-neutral-200); /* decoration */
+  --cntr-rule-strong: var(--color-neutral-400); /* decoration */
+}
+
+/* ── Surface: tint ──────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --cntr-heading-ink: var(--color-neutral-900); /* 13.06:1 */
+  --cntr-item-ink: var(--color-neutral-900); /* 13.06:1 */
+  --cntr-yes-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --cntr-no-ink: var(--color-neutral-700); /* 7.27:1 */
+  --cntr-rule: var(--color-neutral-300); /* decoration */
+  --cntr-rule-strong: var(--color-neutral-500); /* decoration */
+}
+
+/* ── Surface: ink ───────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --cntr-heading-ink: var(--color-white); /* 17.26:1 */
+  --cntr-item-ink: var(--color-white); /* 17.26:1 */
+  --cntr-yes-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
+  --cntr-no-ink: var(--color-neutral-400); /* 8.05:1 */
+  --cntr-rule: var(--color-neutral-800); /* decoration */
+  --cntr-rule-strong: var(--color-neutral-700); /* decoration */
+}
+
+/* ── Surface: blue ──────────────────────────────────────────────────────────── */
+[data-surface='blue'] {
+  --cntr-heading-ink: var(--color-white); /* 6.23:1 */
+  --cntr-item-ink: var(--color-white); /* 6.23:1 */
+  --cntr-yes-ink: var(--color-white); /* 6.23:1 */
+  --cntr-no-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --cntr-rule: var(--color-brandeis-400); /* decoration */
+  --cntr-rule-strong: var(--color-brandeis-300); /* decoration */
+}

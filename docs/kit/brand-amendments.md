@@ -106,3 +106,11 @@ finds them in one place.
 | Never two `beside` banners within sight of each other on a page (adjacent, or split only by a strip or a short band). Separate them by a band of another arrangement, or make one `below`. | `Banner.tsx` (`BesideProps`); `docs/specs/Banner.md` | `cmp-banner` |
 | **Open proposal:** the Banner lead steps from the lead role to the body role below 768 (`banner.css`). If a second head wants the same phone step, move it into `--text-lead`'s own `-m` ladder and delete the component-layer block. | `tokens/components/banner.css` | `cmp-banner` |
 | Statement `head-half` follows § 6.3 exactly: rect, top −200, end −120, 34% × 296, blur 160, on the band's field. | `Statement.tsx` | `cmp-banner` (fix round 2) |
+
+## Kit layout notes recorded by `cmp-readdown`
+
+| Rule | Where it lives | Package |
+|---|---|---|
+| **D-faq ceilings re-derived from the Accordion as it renders: ≤ 5 questions, ≤ 4 with a CtaRow** (was ≤ 7 / ≤ 5). § 1.4 budgets a closed item at 64; the shipped Accordion row is 77 (24 + h5 28 + 24 + rule), and its first answer is open on arrival (+ ~93). Seven measured 960 at 1470 (seven closed would still be 864), five with a CtaRow 844. Five alone is 805, four with a CtaRow 767. Density stays default (§ 1.3: density is never a squeeze). | `src/app/design/kit/readdown/page.tsx` (captions); § 1.4 D-faq row and § 1.5 to be amended by the integrator | `cmp-readdown` |
+| **D's body is the ReadDown set mode** (ListCard folder): rows on the content edge, ≤ 3 in one column at h4, two columns as one list with level rules at h5. The `rail` texture is the set's `rail` prop, shown from 1440 only. | `src/patterns/ListCard/ReadDown.tsx`; `docs/specs/ListCard.md` | `cmp-readdown` |
+| **N's body is the Contrast pattern**, Fit's look moved unchanged (`--svc-*` values restated as `--cntr-*`). | `src/patterns/Contrast/`; `docs/specs/Contrast.md` | `cmp-readdown` |

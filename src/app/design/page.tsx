@@ -165,12 +165,17 @@ const SPECIMENS = [
       {
         href: '/design/list-card',
         name: 'ListCard',
-        note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces',
+        note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces, the ReadDown set (1 or 2 columns)',
       },
       {
         href: '/design/block-card',
         name: 'BlockCard',
         note: 'the borderless card — cover media via Media, text-only sets, the featured set, 4 surfaces',
+      },
+      {
+        href: '/design/contrast',
+        name: 'Contrast',
+        note: 'the N band body — two opposite lists in peer halves, check blue and cross quiet ink, unequal sides, stress, with a CtaRow, 4 surfaces',
       },
       {
         href: '/design/accordion',
@@ -236,6 +241,11 @@ const SPECIMENS = [
         href: '/design/kit/process',
         name: 'Kit · process and stats',
         note: 'F process (Steps: 4 / 5 / example / CtaRow), S stats (4 centred, 3 + CtaRow), the D stat aside, Stat sizes, a Thread E band, ProcessFlow for comparison',
+      },
+      {
+        href: '/design/kit/readdown',
+        name: 'Kit · read-down, FAQ and contrast',
+        note: 'D read-down (ReadDown: 1 or 2 columns, photo or stat aside, CtaRow, rail texture), D-faq (5 centred, 4 + CtaRow, each followed by an image band), N contrast (4 + 4, with a CtaRow), D on tint',
       },
     ],
   },

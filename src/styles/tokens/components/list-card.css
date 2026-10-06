@@ -119,8 +119,9 @@
   --lcrd-title-min: 256px;
   --lcrd-body-min: 256px;
 
-  /* A Steps body's measure (ListCard/Steps.tsx, final fix round): the lead measure, so a step's
-     sentence makes two lines at 12–20 words and one at ≤ 10, under its title. */
+  /* The measure of a body set UNDER its title by a set mode — a Steps body (Steps.tsx, final fix
+     round) and a ReadDown body (ReadDown.tsx, cmp-readdown): the lead measure, so the sentence makes
+     two lines at 12–20 words and one at ≤ 10. Named for Steps, which introduced it; both read it. */
   --lcrd-step-body-measure: var(--measure-lead);
 
   /* The accepted native-image contract. 160px was measured as a recognisable landscape sample in

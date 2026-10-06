@@ -1,0 +1,42 @@
+/* Contrast — two opposite lists in peer halves, built to docs/specs/Contrast.md.
+
+   Every colour and type role is --cntr-*, declared in tokens/components/contrast.css and
+   re-declared once per surface there. Layout and Cluster own every arrangement and seam; this
+   module owns the rules, the inks and the type. The values are the ones the service page's Fit
+   shipped with (owner-approved, 1 Oct 2026), moved, not restyled. No margin, no grid, no flex
+   arrangement: the one flex declaration sizes the item's text inside its Cluster. */
+
+.heading {
+  font: var(--cntr-heading-text);
+  letter-spacing: var(--cntr-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--cntr-heading-ink);
+}
+
+/* The list's top edge: one strong rule. */
+.rows {
+  border-block-start: var(--cntr-rule-strong-width) solid var(--cntr-rule-strong);
+}
+
+/* Each item closes on a hairline. The inset is --gap-text, "cell padding on a dense table": an
+   item is a line or two of body-lg, and the pair must hold four of them in a fold (§ 1.4 N). */
+.row {
+  padding-block: var(--gap-text);
+  border-block-end: var(--cntr-rule-width) solid var(--cntr-rule);
+}
+
+.markYes {
+  color: var(--cntr-yes-ink);
+}
+
+.markNo {
+  color: var(--cntr-no-ink);
+}
+
+.text {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  font: var(--cntr-item-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--cntr-item-ink);
+}

@@ -1114,3 +1114,28 @@ Owner: blue is the recurring FOREGROUND accent; the reservation is only for grou
 is deleted and the cue reads `--lcrd-link-ink` at rest again, holding through hover and stepping on
 press (the original model). `--lcrd-marker-ink` and `--lcrd-number-ink` move to the accent: brandeis-500
 on paper and tint, brandeis-300 on ink; blue keeps white and brandeis-200.
+
+## Amendment · 6 Oct 2026 — `cmp-readdown`: ReadDown, the D set mode
+
+`ReadDown.tsx` in ListCard's folder, exported beside `Steps` (a pattern beside it would be a pattern
+importing a pattern). It is the D band's body (visual-direction § 3.4 D): ruled rows of PEERS in a
+`<ul>`, one column or two, each row a blue glyph (or none — a set is all-icon or all-text) beside its
+title with the sentence under it.
+
+- **Size is the set's** (§ 7.2): ≤ 3 rows in one column take `md` (h4); four or more, or two columns,
+  take `sm` (h5), body at body. Rows are always `stacked`, the body capped at `--lcrd-step-body-measure`.
+- **Two columns are one list**, laid out `{ md: 2 }` at `column` in reading order. Each frame fills its
+  grid cell (`block-size: 100%`), so the closing rules run level across the seam.
+- **On the content edge:** no inline inset (rows never link, so no hover ground), the 32 block inset kept
+  (§ 1.4's D row, padding 64), and the first row of each column starts on the set's top edge.
+- **`rail`**: the § 6.3 `rail` texture (rect, side −140, top 15 %, 220 × 70 %, blur 120) in the outer
+  margin, rendered by the set because Texture fills its nearest positioned ancestor (the Section), and
+  shown from 1440 only (`.rail`, the file's second media query).
+- **Ceilings warned in development:** > 3 rows in a column, > 6 rows in a set, mixed glyph / no glyph.
+- **A positional exception to § 9 and § 14 Don't 14** (no inset change at a breakpoint): in two
+  columns, from 768 (Layout's md, where the second track begins) the SECOND item is also first in its
+  column, so it drops its top inset with the first. The query follows the arrangement — below 768 the
+  item is the second row of one column and keeps its 32 — and swaps no step for another. Measured at
+  1440 / 768 / 390: both column tops at 0 from 768, the closing rules level across the seam.
+- No row change to ListCard itself; its tokens are unchanged (`--lcrd-step-body-measure`'s comment now
+  names both set modes). The module's "no media query" note now scopes to the row.

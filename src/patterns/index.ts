@@ -38,6 +38,9 @@
  * bare <li> — the list element belongs to the caller, as a Layout with rowGap="none", because the
  * row finishes itself with its own block-end rule and a gap would break the ladder. It is a pattern
  * for the usual two reasons (it consumes a content shape, and it arranges with Cluster and Layout).
+ * Its two SET MODES live in its folder: `Steps` (a method, an <ol> of numbered rows) and `ReadDown`
+ * (the D body, a <ul> of peer rows in one column or two) own the list element because they own the
+ * count — the type step and the ceilings — while each row inside them is still the bare <li>.
  * BlockCard is its sibling OBJECT: a borderless tile that fills a parent-owned grid track, with no
  * edge and no ground; its title scale, cover media and position make the object. BlockCardSet is its
  * set, the one place that knows the count and so the one place the featured first card is decided.
@@ -155,7 +158,7 @@ export type {
   ProcessFlowLane,
   ProcessFlowStageHeading,
 } from './ProcessFlow';
-export { ListCard, Steps } from './ListCard';
+export { ListCard, ReadDown, Steps } from './ListCard';
 export type {
   ListCardProps,
   ListCardMarker,
@@ -165,7 +168,14 @@ export type {
   ListCardTitleElement,
   Step,
   StepsProps,
+  ReadDownRow,
+  ReadDownProps,
+  ReadDownColumns,
+  ReadDownRail,
 } from './ListCard';
+
+export { Contrast } from './Contrast';
+export type { ContrastProps, ContrastList, ContrastHeadingElement } from './Contrast';
 
 export { BlockCard, BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCard';
 export type {
