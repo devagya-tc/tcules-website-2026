@@ -48,7 +48,7 @@ function warn(message: string) {
 
 /**
  * Thread — named stages one decision passes through, strung on one blue line, with an optional
- * return path drawn beneath. Built to docs/specs/Thread.md (cmp-process-stats, 6 Oct 2026);
+ * return arc rising from the last node, back over the row, down into the first. Built to docs/specs/Thread.md (cmp-process-stats, 6 Oct 2026);
  * promoted from the ServicePage template's local diagram for the E band (§ 3.4).
  *
  * NOT STEPS, AND NOT A PROCESSFLOW. Steps are a method — numbered ListCard rows read top to bottom,

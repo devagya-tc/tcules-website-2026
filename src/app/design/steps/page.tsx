@@ -27,7 +27,7 @@ const FIVE: readonly Step[] = [
 ];
 
 const STRESS: readonly Step[] = [
-  { title: 'Cross-functional acceptance review', body: 'A title past the track balances onto two lines inside it; the body column does not move.' },
+  { title: 'Cross-functional acceptance review', body: 'A long title balances onto two lines; the body stays under it.' },
   { title: 'Ship', body: 'One word.' },
   { title: 'Observe' },
 ];
@@ -39,27 +39,27 @@ export default function StepsSpecimenPage() {
         <Layout rowGap="block">
           <h1>Steps</h1>
           <p>
-            Numbered ListCard rows in an ordered list, read top to bottom: a method. One title size
-            (h5) at every count, one 184 title track so every body starts on the same line, and the
-            body budget set by the count — two lines at four rows or fewer, one line at five. Seen in
-            its bands on <a href={ROUTES.designKitProcess}>the process and stats family page</a>.
+            Numbered ListCard rows in an ordered list, read top to bottom: a method. The blue index
+            beside an h4 title at every count, the body under the title at the lead measure, the
+            numeral on the content edge, and the body budget set by the count — two lines at four
+            rows or fewer, one line at five. Seen in its bands on <a href={ROUTES.designKitProcess}>the process and stats family page</a>.
           </p>
         </Layout>
       </Section>
 
       <Section>
         <Layout rowGap="stack">
-          <Specimen title="four steps · two-line bodies · the beside body track (763)" note="≤ 12 words a body.">
+          <Specimen title="four steps · two-line bodies · the beside body track (763)" note="12–20 words a body: two lines at the 56ch cap.">
             <Layout columns={{ lg: [1, 2] }} offset={{ lg: 1 }} colGap="section">
               <Steps steps={FOUR} />
             </Layout>
           </Specimen>
-          <Specimen title="five steps · one-line bodies · the beside body track" note="≤ 6 words a body: five two-line rows read as a wall.">
+          <Specimen title="five steps · one-line bodies · the beside body track" note="≤ 10 words a body: five two-line rows read as a wall.">
             <Layout columns={{ lg: [1, 2] }} offset={{ lg: 1 }} colGap="section">
               <Steps steps={FIVE} />
             </Layout>
           </Specimen>
-          <Specimen title="four steps · the media copy column (667)" note="The F media split's copy column: the body column narrows, the title track does not.">
+          <Specimen title="four steps · the media copy column (667)" note="The F media split's copy column: the body keeps its 56ch cap, so the rows read the same as in the wider track.">
             <Layout columns={{ lg: [5, 7] }} offset={{ lg: 1 }} colGap="section">
               <Steps steps={FOUR} />
             </Layout>

@@ -38,7 +38,7 @@ Seams: rule → value `block` (24, padding), value → label `text` (16). No mar
 | `unit` | `string?` | — | a WORD that counts the figure (weeks, products); sentence case, uppercase is presentation |
 | `label` | `string` | — | what the figure means; blank warns |
 | `size` | `'lg' \| 'md'` | `lg` | lg = the band's large thing; md = beside other content, never in one row with an lg (54 vs 40 is too close a step) |
-| `align` | `'start' \| 'center'` | `start` | from 768; `center` under a centred head (S) centres figure, label and mark. Below 768 every stat sets its figure beside its label (2 : 3), start-aligned |
+| `align` | `'start' \| 'center'` | `start` | at every width; `center` under a centred head (S) centres figure, label and mark. One form at every width — figure line (unit inline, nowrap), then label; the beside-below-768 form was removed in the final fix round (6 Oct 2026): units wrapped in some cells and not others, and a centred head sat over start-set rows |
 | `as` | `'div' \| 'li'` | `div` | `li` inside `<Layout as="ul">` |
 
 ## 4 · Surfaces

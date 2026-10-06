@@ -9,8 +9,10 @@ import styles from './ListCard.module.css';
 export type Step = {
   title: string;
   /**
-   * One sentence. At four rows or fewer it may run to two lines (≤ 12 words in a 583 copy column);
-   * at five or more it must hold one line (≤ 6 words), or the ladder reads as a wall (§ 3.6).
+   * One sentence, set UNDER the title at the lead measure (56ch, ~11 words a line). At four rows or
+   * fewer it may run to two lines (≤ 20 words); at five it must hold one line (≤ 10 words — the cap
+   * is narrower than the beside body track at 1024, so it holds there too), or the ladder reads as
+   * a wall (§ 3.6).
    */
   body?: string;
 };
@@ -33,14 +35,23 @@ function warn(message: string) {
  * Promoted from the two private copies (the kit specimen and ServicePage's Blocks) in the
  * cmp-process-stats fix round, 6 Oct 2026, so the rules about a method live here once:
  *
- *   ONE TITLE SIZE. Every Steps set takes `sm` (h5 over body) whatever its count. ListCard's own
- *   rule (`md` up to three rows) is about a list's weight; a method is read against the other
- *   methods on the same page, and a three-step set at h4 beside a four-step set at h5 read as two
- *   systems ("Trace the record" at 28 against "Frame the decision" at 22, panel note).
+ *   AN EDITORIAL ROW, NOT A SPEC TABLE (final fix round). Each row is the blue index beside an h4
+ *   title (`md`), the body set UNDER the title — the reference process list (ref-meridian-04: a
+ *   28px serif title over its body, 24 row padding). The split form it replaced put an h5 title in
+ *   a 184 track and the body in a third column, so every row read as three equal-weight cells; now
+ *   the title is each row's focal point and the body reads as its sentence. Stacking also means a
+ *   one-line body never re-wraps when the track narrows at 1024 — the split's ~200 body column did.
  *
- *   A COMPACT TITLE TRACK. A step title is an action of one to three words. In the plain split it
- *   grew to its 340 measure and left ~150 of nothing before the body; here it holds one fixed track
- *   (--lcrd-step-title-track), so every body in the set starts on one line, close to its title.
+ *   ONE TITLE SIZE. Every Steps set takes `md` whatever its count, so a three-step set and a
+ *   five-step set on one page read as one system. ListCard's own count rule (`sm` from four rows)
+ *   is about a list of PEERS competing with the band's h2; a method's steps are read one after
+ *   another, and the band's h2 is two rungs above h4 (43 against 28) in every arrangement F takes.
+ *
+ *   ON THE CONTENT EDGE. The set paints no ground (its rows never take `href`), so the row's 16
+ *   inline inset — which exists only to clear a hover ground — is dropped: the numeral sits on the
+ *   edge the band's eyebrow, heading and the rows' own rules already share. The first row also
+ *   drops its top inset, so the first title starts on the head's top line rather than 24 under it;
+ *   the ladder's rules are BETWEEN steps and after the last, never above the first.
  *
  *   ROW COUNT. Two to five. The body budget per count is the caller's copy, stated on `Step.body`.
  */
@@ -53,7 +64,8 @@ export function Steps({ steps, titleAs = 'h3' }: StepsProps) {
       {steps.map((step, index) => (
         <Row
           key={`${index}-${step.title}`}
-          size="sm"
+          size="md"
+          arrangement="stacked"
           titleAs={titleAs}
           title={step.title}
           body={step.body}

@@ -92,6 +92,15 @@ export type ContentSectionMedia = {
 
 export type ContentSectionMediaHeight = 'ratio' | 'copy';
 
+/**
+ * The heading's type step (a component size, so a t-shirt name). `lg` is the section h2 (43), the
+ * default. `md` sets the same `h2` element at the h3 role (34), for a band whose large thing is not
+ * its heading: the S stats band, where a 43 head over 54 mono figures read as a heading over its
+ * captions (final fix round, 6 Oct 2026 — the figures must clearly win, § 3.3 "one large thing per
+ * band"). The element never changes: the band's place in the outline is not its scale.
+ */
+export type ContentSectionHeadingSize = 'lg' | 'md';
+
 type ContentSectionBaseProps = {
   /**
    * The band's `h2`, verbatim. Absent renders no heading and no seam — an untitled section is a
@@ -112,6 +121,8 @@ type ContentSectionBaseProps = {
    * honour.
    */
   headingId?: string;
+  /** Default `lg`. See `ContentSectionHeadingSize`. */
+  headingSize?: ContentSectionHeadingSize;
   /** The category label above the heading. Absent renders no element and no seam. */
   eyebrow?: string;
   /**
@@ -323,7 +334,8 @@ const present = (node: ReactNode) => Children.toArray(node).length > 0;
  * Route-blind and data-blind like every pattern — it never learns that Strapi exists.
  */
 export function ContentSection(props: ContentSectionProps) {
-  const { heading, headingId, eyebrow, lead, surface, density, footer, children } = props;
+  const { heading, headingId, headingSize, eyebrow, lead, surface, density, footer, children } =
+    props;
   const arrangement: ContentSectionArrangement = props.arrangement ?? 'stacked';
   const centred = props.align === 'center';
   const actions = props.actions;
@@ -367,7 +379,14 @@ export function ContentSection(props: ContentSectionProps) {
     <p className={cx(styles.eyebrow, centred && styles.centred)}>{eyebrow}</p>
   ) : null;
   const headingEl = heading ? (
-    <h2 id={headingId} className={cx(styles.heading, centred && styles.centred)}>
+    <h2
+      id={headingId}
+      className={cx(
+        styles.heading,
+        headingSize === 'md' && styles.headingMd,
+        centred && styles.centred,
+      )}
+    >
       {heading}
     </h2>
   ) : null;
@@ -549,9 +568,12 @@ function MediaSplit({
   footer: ReactNode;
   pinFooter: boolean;
 }) {
-  /* `height: 'copy'`: the row stretches, and the photo's box — a div holding the 4:3 / 4:5 floor
-     as its aspect-ratio — takes the row's height; Media fills it with a cover crop. Sizing on the
-     track's own child, not an arrangement: Layout still owns both tracks and the seam. */
+  /* `height: 'copy'`: the row stretches, and the photo's box takes the row's height between a
+     floor and a ceiling — 4:5 and 2:3 beside the copy, 4:3 above it — and Media fills it with a
+     cover crop. Two boxes because the ceiling is a function of the TRACK's width: the outer div is
+     the inline-size container, the inner one reads it (cqi). Without the ceiling, at 1024 the copy
+     grows (the h2 wraps) and the photo became a 360 × 906 sliver, roughly 2:5 (final fix round).
+     Sizing on the track's own child, not an arrangement: Layout still owns both tracks and the seam. */
   const toCopy = media.height === 'copy';
   return (
     <Layout
@@ -565,7 +587,9 @@ function MediaSplit({
         {/* 4:5 beside the copy, 4:3 above it (§ 3.7 item 4): a 4:5 at the 326 phone column would be
             408 tall before the first word of the copy. */}
         {toCopy ? (
-          <Media image={media.image} fit="fill" sizes={MEDIA_SPLIT} />
+          <div className={styles.mediaBox}>
+            <Media image={media.image} fit="fill" sizes={MEDIA_SPLIT} />
+          </div>
         ) : (
           <Media image={media.image} ratio={{ base: '4/3', lg: '4/5' }} sizes={MEDIA_SPLIT} />
         )}

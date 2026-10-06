@@ -35,7 +35,7 @@ export default function StatSpecimenPage() {
           <h1>Stat</h1>
           <p>
             One figure, its unit, and the line that says what it counts, opening on a hairline with a
-            short blue mark at its start. Below 768 the figure sits beside its label. The numeral is ink at every size: it is the band&rsquo;s
+            short blue mark at its start. One form at every width: the figure line, then the label. The numeral is ink at every size: it is the band&rsquo;s
             large thing, and blue at 54px would be a mass, not an accent. Seen in its bands on{' '}
             <a href={ROUTES.designKitProcess}>the process and stats family page</a>.
           </p>
@@ -60,7 +60,7 @@ export default function StatSpecimenPage() {
             </Layout>
           </Specimen>
 
-          <Specimen title="align · center" note="For a row under a centred head (S): figure, label and the blue mark centre on the track, so the band has one axis. From 768; below it every stat sets its figure beside its label, start-aligned.">
+          <Specimen title="align · center" note="For a row under a centred head (S): figure, label and the blue mark centre on the track, so the band has one axis — at every width, so an S band at 390 stays centred.">
             <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="stack">
               <Stat as="li" align="center" value="40%" label="Fewer support tickets in the first quarter." />
               <Stat as="li" align="center" value="3×" label="Faster from approved design to reviewed code." />

@@ -30,6 +30,13 @@
   max-inline-size: var(--csec-heading-measure);
 }
 
+/* `headingSize="md"`: the same h2 at the h3 role, for a band whose large thing is not its heading
+   (the S stats band). A type role swap, never a distance. */
+.headingMd {
+  font: var(--csec-heading-text-md);
+  letter-spacing: var(--csec-heading-tracking-md);
+}
+
 .lead {
   font: var(--csec-lead-text);
   text-wrap: var(--text-running-wrap);
@@ -78,15 +85,32 @@
 }
 
 /* The media split's photo box when it runs the copy's height (`media.height: 'copy'`). The row
-   stretches it; the aspect-ratio is its floor (4:3 above the copy, 4:5 beside it) and the track's
-   min-content contribution, so a short copy column keeps the ordinary band. Media fills it with a
-   cover crop. Sizing only: no display, no margin. */
+   stretches the outer box; the inner box fills it (block-size 100%) between a FLOOR and a CEILING,
+   both multiples of the track's own width (cqi, against the outer box as the inline-size container):
+
+     floor    4:3 above the copy, 4:5 beside it. It is the inner box's min-content contribution, so a
+              copy column shorter than the floor keeps the ordinary band.
+     ceiling  2:3 beside the copy. A copy column taller than that (1024, where the h2 wraps and the
+              track is 360) leaves the photo at 2:3 on the eyebrow's line with air beneath, rather
+              than stretching it into a sliver. Below 1024 the floor is the height: the photo sits
+              above the copy at 4:3.
+
+   Media fills the inner box with a cover crop. Sizing only: no display, no margin. */
 .mediaToCopy {
-  aspect-ratio: var(--csec-media-ratio-base);
+  container-type: inline-size;
 }
 
+.mediaBox {
+  block-size: calc(var(--csec-media-height-base) * 100cqi);
+}
+
+/* `contain: size` beside the copy: the photograph's own intrinsic height (a 2:3 master is 715 tall
+   at 477) must not size the row — only the floor and the copy do. */
 @media (min-width: 1024px) {
-  .mediaToCopy {
-    aspect-ratio: var(--csec-media-ratio-lg);
+  .mediaBox {
+    contain: size;
+    block-size: 100%;
+    min-block-size: calc(var(--csec-media-floor-lg) * 100cqi);
+    max-block-size: calc(var(--csec-media-ceiling-lg) * 100cqi);
   }
 }

@@ -1,6 +1,6 @@
 /* ══ Component layer — Thread ═══════════════════════════════════════════════════
    Tier 2. Named stages one decision passes through, strung on one blue line, with an optional
-   return path drawn beneath (visual-direction § 3.4 E: a full-column diagram ≤ 380 tall; § 4.2
+   return arc over the row, from the last node back into the first (visual-direction § 3.4 E: a full-column diagram ≤ 380 tall; § 4.2
    "ProcessFlow and Thread connectors" carry the accent). Built to docs/specs/Thread.md
    (cmp-process-stats, 6 Oct 2026). Promoted from the ServicePage template's local diagram.
 

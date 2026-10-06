@@ -11,10 +11,9 @@ import styles from './Stat.module.css';
 export type StatSize = 'lg' | 'md';
 
 /**
- * Where the stat's parts sit in its track, from 768. `center` for a row under a centred head (S,
- * § 3.5): figure, label and the blue mark centre on the track, so the band has one axis rather
- * than a centred head over start-set numerals. Below 768 every stat sets its figure BESIDE its
- * label, start-aligned, whatever this says — see `.stat` in the module.
+ * Where the stat's parts sit in its track, at every width. `center` for a row under a centred head
+ * (S, § 3.5): figure, label and the blue mark centre on the track, so the band has one axis rather
+ * than a centred head over start-set numerals — at 390 too, where the set is one column.
  */
 export type StatAlign = 'start' | 'center';
 
