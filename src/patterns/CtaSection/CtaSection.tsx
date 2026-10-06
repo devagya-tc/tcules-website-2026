@@ -77,6 +77,14 @@ export type CtaMedia = {
    *              the column. For an offer whose photo carries it (a workshop, a product on a screen).
    */
   frame?: 'portrait' | 'landscape';
+  /**
+   * Below 1024, where the photo sits against the copy (page-product-design fix round 2). Default
+   * `after`: the copy, then the photo (§ 3.7 item 4). `before` sets the photo first, for an offer a
+   * template places beside another head → photo → list band, where at 390 the two read as one
+   * repeated rectangle. The photo is decorative (alt=""), so its DOM position carries no meaning;
+   * from 1024 `side` alone decides where it sits.
+   */
+  phone?: 'after' | 'before';
 };
 
 /**
@@ -123,6 +131,17 @@ type CtaSectionBaseProps = {
    * The close sits on paper (§ 3.4 L); tint is a specimen's surface proof only.
    */
   surface?: SectionSurface;
+  /**
+   * The band's id, passed to `Section`: the in-page anchor a page's actions link to — the close's
+   * `enquiry` (src/lib/routes.ts `ANCHORS`), so "Start a project" lands on the form. On the band
+   * itself rather than a wrapper `div` around it, which added an element that was neither the band
+   * nor its content (ServicePage audit, 6 Oct 2026). Distinct from the heading's id, which names the
+   * region and is generated.
+   */
+  id?: string;
+  /** The band's archetype for `fold:check` (§ 1.3) — `K` for an offer, `L` for a close — passed to
+      Section's `data-band`. A marker for the gate, never a style hook. */
+  'data-band'?: string;
 };
 
 /**
@@ -304,7 +323,21 @@ function CtaLede({
 
   return (
     <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
-      {eyebrow !== undefined ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
+      {/* The eyebrow carries the kit's blue mark, as every band eyebrow does (fix round 1, 7 Oct
+          2026): one rule for the label's accent, so no band reads as the unmarked one. */}
+      {eyebrow !== undefined ? (
+        <Cluster
+          as="p"
+          colGap="tight"
+          align="center"
+          nowrap
+          justify={centred ? 'center' : 'start'}
+          className={styles.eyebrow}
+        >
+          <span className={styles.mark} aria-hidden="true" />
+          <span>{eyebrow}</span>
+        </Cluster>
+      ) : null}
       <h2 id={headingId} className={HEADING_CLASS[scale]}>
         {heading}
       </h2>
@@ -625,8 +658,8 @@ const LANDSCAPE_FRAMES = [3 / 2, 3 / 2, 4 / 3] as const;
  *           left-aligned and the proof beside.
  *   offer   K, which INTERRUPTS a page mid-scroll. Sets `density="tight"` itself. Three shapes:
  *             with `media`   [7, 5]: H-full, ≤ 3 one-line points (`line`) and the actions in 7, a quiet 4:5
- *                            photograph in 5 (`media.side` flips it). The copy column stretches to
- *                            the photo and pins the actions to its foot (§ 3.2 rule 1). With
+ *                            photograph in 5 (`media.side` flips it). The copy column is centred on
+ *                            the photo, the actions a `stack` under the points (fix round 1). With
  *                            `media.frame="landscape"`, [5, 7]: the lede and actions beside a 3:2
  *                            photo in 7, the points a ruled 3-up strip under both.
  *             without        [1, 2]: head and actions in the 381 head track (H-beside-actions), the
@@ -675,9 +708,20 @@ export function CtaSection(props: CtaSectionProps) {
        2. Evidence beside the ask needs a column, so this shape stays left-aligned. */
     if (hasProof) {
       return (
-        <Section surface={props.surface} aria-labelledby={headingId} data-arrangement="open">
+        <Section
+          surface={props.surface}
+          id={props.id}
+          data-band={props['data-band']}
+          aria-labelledby={headingId}
+          data-arrangement="open"
+        >
           {present(props.texture) ? props.texture : null}
-          <Layout columns={{ base: 1, lg: [3, 2] }} colGap="section" rowGap="stack" align="start">
+          <Layout
+            columns={{ base: 1, lg: [3, 2] }}
+            colGap="section"
+            rowGap="stack"
+            align="start"
+          >
             <Layout rowGap="stack">
               {lede({ scale: 'close' })}
               <CtaPoints shape="row" markers={markers} points={points} />
@@ -700,6 +744,8 @@ export function CtaSection(props: CtaSectionProps) {
     return (
       <Section
         surface={props.surface}
+        id={props.id}
+        data-band={props['data-band']}
         density="open"
         aria-labelledby={headingId}
         data-arrangement="open"
@@ -735,33 +781,42 @@ export function CtaSection(props: CtaSectionProps) {
        different rectangle from the portrait offer, so a page with two offers can vary them. The
        copy column centres on the photo (§ 3.2 rule 2: a head and its actions and nothing between
        them centre rather than stretch). `reverse` for `side="start"` as in the portrait shape. */
+    const photoFirst = media?.phone === 'before';
     if (media && !hasForm && media.frame === 'landscape') {
+      const landscapePhoto = (
+        <div className={cx(styles.photoFrame, styles.photoLandscape)}>
+          <Media
+            image={media.image}
+            fit="fill"
+            sizes={coverSizes(MEDIA_SPLIT_WIDE, ratioOf(media.image), LANDSCAPE_FRAMES)}
+          />
+        </div>
+      );
       return (
         <Section
           surface={props.surface}
+          id={props.id}
+          data-band={props['data-band']}
           density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
         >
           <Layout rowGap="stack">
+            {/* `phone="before"` writes the photo first and mirrors the row from 1024, so the
+                photo keeps its 7 and its `side` (Layout reverse carries the weights with it). */}
             <Layout
-              columns={{ lg: [5, 7] }}
+              columns={photoFirst ? { lg: [7, 5] } : { lg: [5, 7] }}
               colGap="section"
               rowGap="stack"
-              reverse={media.side === 'start' ? { lg: true } : undefined}
+              reverse={(media.side === 'start') !== photoFirst ? { lg: true } : undefined}
               align="center"
             >
+              {photoFirst ? landscapePhoto : null}
               <Layout rowGap="stack">
                 {lede()}
                 {actions.length > 0 ? <CtaActions actions={actions} /> : null}
               </Layout>
-              <div className={cx(styles.photoFrame, styles.photoLandscape)}>
-                <Media
-                  image={media.image}
-                  fit="fill"
-                  sizes={coverSizes(MEDIA_SPLIT_WIDE, ratioOf(media.image), LANDSCAPE_FRAMES)}
-                />
-              </div>
+              {photoFirst ? null : landscapePhoto}
             </Layout>
             <CtaPoints shape="row" markers={markers} points={points} />
           </Layout>
@@ -776,43 +831,49 @@ export function CtaSection(props: CtaSectionProps) {
        the copy stays first in the DOM, which is the phone's order (photo BELOW the copy in K, § 3.7
        item 4) and carries no meaning against an atmosphere photo (alt="").
 
-       § 3.2 rule 1: the copy column ends in an action with points between, so it stretches to the
-       photo's height, its head on the photo's top edge and its actions pinned to the photo's foot.
-       The photo FILLS a frame whose ratio is a floor (`.photoFrame`): where the copy is taller than
-       a 4:5 photo — 1024 to 1279, where the 7 track is ~500 — the frame stretches with it and the
-       crop grows taller, so the edge alignment holds at every width from 1024 rather than leaving
-       the photo ~105 short of the actions (fix round 1). A copy column that is a head and its
-       actions and nothing else is CENTRED on the photo instead. */
+       The copy column is CENTRED on the photo and the actions FOLLOW the points, a `stack` under
+       them (page-product-design fix round 1, 7 Oct 2026). It used to stretch to the photo and pin
+       the actions to its foot (§ 3.2 rule 1), and with three one-line points that opened a ~160 hole
+       between the list and the buttons at 1470 — the dead column § 3.2 warns about. The ask belongs
+       to the list it closes. The photo FILLS a frame whose ratio is a floor (`.photoFrame`): where
+       the copy is taller than a 4:5 photo — 1024 to 1279, where the 7 track is ~500 — the frame
+       stretches with it, so the photo never ends short of the copy. */
     if (media && !hasForm) {
+      /* 4:5 beside the copy, 4:3 against it below 1024: a 4:5 at the 326 phone column would be 408
+         tall under a band that has already made its ask. `sizes` accounts for the cover crop
+         (`coverSizes`), or a landscape master is fetched too short for the frame. */
+      const portraitPhoto = (
+        <div className={cx(styles.photoFrame, styles.photoPortrait)}>
+          <Media
+            image={media.image}
+            fit="fill"
+            sizes={coverSizes(MEDIA_SPLIT, ratioOf(media.image), PORTRAIT_FRAMES)}
+          />
+        </div>
+      );
       return (
         <Section
           surface={props.surface}
+          id={props.id}
+          data-band={props['data-band']}
           density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
         >
           <Layout
-            columns={{ lg: [7, 5] }}
+            columns={photoFirst ? { lg: [5, 7] } : { lg: [7, 5] }}
             colGap="section"
             rowGap="stack"
-            reverse={media.side === 'start' ? { lg: true } : undefined}
-            align={hasPoints ? 'stretch' : 'center'}
+            reverse={(media.side === 'start') !== photoFirst ? { lg: true } : undefined}
+            align="center"
           >
-            <Layout rowGap="stack" pinLast={hasPoints}>
+            {photoFirst ? portraitPhoto : null}
+            <Layout rowGap="stack">
               {lede()}
               <CtaPoints shape="line" markers={markers} points={points} />
               {actions.length > 0 ? <CtaActions actions={actions} /> : null}
             </Layout>
-            {/* 4:5 beside the copy, 4:3 under it below 1024: a 4:5 at the 326 phone column would
-                be 408 tall under a band that has already made its ask. `sizes` accounts for the
-                cover crop (`coverSizes`), or a landscape master is fetched too short for the frame. */}
-            <div className={cx(styles.photoFrame, styles.photoPortrait)}>
-              <Media
-                image={media.image}
-                fit="fill"
-                sizes={coverSizes(MEDIA_SPLIT, ratioOf(media.image), PORTRAIT_FRAMES)}
-              />
-            </div>
+            {photoFirst ? null : portraitPhoto}
           </Layout>
         </Section>
       );
@@ -828,6 +889,8 @@ export function CtaSection(props: CtaSectionProps) {
       return (
         <Section
           surface={props.surface}
+          id={props.id}
+          data-band={props['data-band']}
           density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
@@ -854,6 +917,8 @@ export function CtaSection(props: CtaSectionProps) {
     return (
       <Section
         surface={props.surface}
+        id={props.id}
+        data-band={props['data-band']}
         density="tight"
         aria-labelledby={headingId}
         data-arrangement="offer"
@@ -885,7 +950,7 @@ export function CtaSection(props: CtaSectionProps) {
      TOP-ALIGNED (final fix round). The copy no longer stretches to pin its last part to the form's
      foot: pinned, the points left ~110 of bare paper between the lede and point 01, and the contact
      strip ~250 — unfilled, not composed. The copy reads down from the form's first label, and the
-     air falls at the foot of the column, where the `closing` texture rises into it.
+     air falls at the foot of the band, where the `closing` texture rises into it.
 
      No proof row: see `CtaSplitProps.proof`. */
   const contact = props.contact ?? [];
@@ -896,32 +961,26 @@ export function CtaSection(props: CtaSectionProps) {
   return (
     <Section
       surface={props.surface}
+      id={props.id}
+      data-band={props['data-band']}
       density={hasTexture ? 'open' : undefined}
       aria-labelledby={headingId}
       data-arrangement="split"
     >
+      {/* The `closing` field: the band's foot, edge to edge, a direct child of the Section so it is
+          placed against the band (`.textureField`). It sits in the open padding a `stack` under
+          the lowest line of either column, so it never runs under text. */}
+      {hasTexture ? <div className={styles.textureField}>{props.texture}</div> : null}
       <Layout
         columns={hasForm ? { base: 1, lg: [1, 1], xl: [10, 7] } : undefined}
         colGap={hasForm ? 'section' : undefined}
         rowGap="stack"
-        align="stretch"
+        align="start"
       >
-        {/* The copy cell: the copy, then — with a texture — the field it rises in. `pinLast` with
-            no row gap makes the field the cell's flexible last row, so it is exactly the air the
-            form leaves under the copy; the 48 between the copy and the texture is the field's own
-            inset, not a seam (`.textureField`). Below 1024 the well and the field are
-            `display: contents` and the texture covers the band instead. */}
-        <Layout rowGap="none" pinLast={hasTexture}>
-          <Layout rowGap="stack">
-            {lede({ scale: 'close' })}
-            <CtaPoints shape="stack" markers={markers} points={points} />
-            {hasContact ? <CtaContactStrip contact={contact} /> : null}
-          </Layout>
-          {hasTexture ? (
-            <div className={styles.textureWell}>
-              <div className={styles.textureField}>{props.texture}</div>
-            </div>
-          ) : null}
+        <Layout rowGap="stack">
+          {lede({ scale: 'close' })}
+          <CtaPoints shape="stack" markers={markers} points={points} />
+          {hasContact ? <CtaContactStrip contact={contact} /> : null}
         </Layout>
         {hasForm ? <div>{props.form}</div> : null}
       </Layout>

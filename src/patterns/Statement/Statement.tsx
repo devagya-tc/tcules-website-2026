@@ -5,9 +5,12 @@ import {
   Layout,
   Section,
   Texture,
+  TextureCorner,
   TextureShape,
   type SectionSurface,
 } from '@/components';
+
+import { cx } from '@/lib/cx';
 
 import styles from './Statement.module.css';
 
@@ -27,9 +30,31 @@ export type StatementElement = 'h2' | 'p';
  * corner, bleeding off its top and end edges, from 1024 only, and spends the band's one blue mass
  * (§ 4.3: J with head-half — the sentence stays ink). Paper only.
  */
-export type StatementTexture = 'head-half';
+export type StatementTexture = 'head-half' | 'corner';
+
+/**
+ * Where the sentence sits (page-product-design fix round 2, 6 Oct 2026).
+ *
+ *   split   default. [1, 2] from 1024: the eyebrow in the head track, the sentence in the 763.
+ *   center  one column at every width, eyebrow, sentence and action centred on the band's axis
+ *           across the full measure — Meridian's overview line. For a page whose neighbouring bands
+ *           already start their content on the 1/3 line: a split J between two beside bands read as
+ *           one long split. Pair it with `texture="corner"`, the corner being the only ground a
+ *           centred sentence leaves clear.
+ */
+export type StatementAlign = 'split' | 'center';
+
+/**
+ * The sentence's scale. `h1` (default) the h1 role; `display` the display role, the hero's — for
+ * the one band on a page that restates its argument at the scale of its opening.
+ */
+export type StatementSize = 'h1' | 'display';
 
 export type StatementProps = {
+  /** Default `split`. See `StatementAlign`. */
+  align?: StatementAlign;
+  /** Default `h1`. See `StatementSize`. */
+  size?: StatementSize;
   /** The sentence, ≤ 14 words so it holds ≤ 3 lines at the h1 role in the 763 track (§ 1.5). */
   children: string;
   /** The label in the head track. Never repeats the band before it (§ 7.3). */
@@ -40,7 +65,11 @@ export type StatementProps = {
   id?: string;
   /** One action under the sentence, a `stack` beneath — in practice a CtaRow, `rule={false}`. */
   actions?: ReactNode;
-  /** `head-half` adds the texture (paper only; it is ignored with a warning on any other ground). */
+  /**
+   * The texture (paper only; ignored with a warning on any other ground). `head-half` is § 6.3's
+   * blurred field, from 1024; `corner` the stepped pixel field in the band's top-end corner, at
+   * every width, clear of the type (TextureCorner).
+   */
   texture?: StatementTexture;
   /** Default `paper`. */
   surface?: SectionSurface;
@@ -69,17 +98,30 @@ export function Statement({
   actions,
   texture,
   surface = 'paper',
+  size = 'h1',
+  align = 'split',
 }: StatementProps) {
   const heading = Tag === 'h2';
   const labelled = heading && Boolean(id);
-  const textured = texture === 'head-half' && surface === 'paper';
+  const onPaper = surface === 'paper';
+  const textured = texture === 'head-half' && onPaper;
+  const cornered = texture === 'corner' && onPaper;
+  const centred = align === 'center';
 
   if (process.env.NODE_ENV !== 'production' && texture && surface !== 'paper') {
     console.warn(`Statement: texture sits on paper only (§ 6.2); ignored on "${surface}".`);
   }
 
   const sentence = (
-    <Tag id={heading ? id : undefined} className={styles.sentence} data-copy="statement">
+    <Tag
+      id={heading ? id : undefined}
+      className={cx(
+        styles.sentence,
+        size === 'display' && styles.sentenceDisplay,
+        centred && styles.centred,
+      )}
+      data-copy="statement"
+    >
       {children}
     </Tag>
   );
@@ -106,29 +148,49 @@ export function Statement({
           <TextureShape top={-200} right={-120} width="34%" height={296} blur={160} />
         </Texture>
       ) : null}
-      <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
-        {/* The mark belongs to the eyebrow: it is the label's lead-in. With no eyebrow there is
-            nothing for it to lead into, and a 32 rule alone at the sentence's cap height read as
-            a stray dash (fix round 2) — so the head track stays empty and the air holds it. */}
-        {eyebrow ? (
-          <Cluster colGap="text" align="center" nowrap>
-            <span aria-hidden="true" className={styles.mark} />
-            <p className={styles.eyebrow} data-copy="eyebrow">
-              {eyebrow}
-            </p>
-          </Cluster>
-        ) : (
-          <div className={styles.headEmpty} />
-        )}
-        {actions ? (
-          <Layout rowGap="stack">
+      {cornered ? <TextureCorner /> : null}
+      {centred ? (
+        /* Centred: one column, every part on the band's axis. The eyebrow-to-sentence seam is the
+           head rhythm's `block`, the sentence-to-action seam the band's `stack`, as in the split. */
+        <Layout rowGap="stack" justifyItems="center">
+          <Layout rowGap="block" justifyItems="center">
+            {eyebrow ? (
+              <Cluster colGap="tight" align="center" nowrap>
+                <span aria-hidden="true" className={styles.mark} />
+                <p className={styles.eyebrow} data-copy="eyebrow">
+                  {eyebrow}
+                </p>
+              </Cluster>
+            ) : null}
             {sentence}
-            {actions}
           </Layout>
-        ) : (
-          sentence
-        )}
-      </Layout>
+          {actions ?? null}
+        </Layout>
+      ) : (
+        <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
+          {/* The mark belongs to the eyebrow: it is the label's lead-in. With no eyebrow there is
+            nothing for it to lead into, and a mark alone at the sentence's cap height read as
+            a stray dash (fix round 2) — so the head track stays empty and the air holds it. */}
+          {eyebrow ? (
+            <Cluster colGap="tight" align="center" nowrap>
+              <span aria-hidden="true" className={styles.mark} />
+              <p className={styles.eyebrow} data-copy="eyebrow">
+                {eyebrow}
+              </p>
+            </Cluster>
+          ) : (
+            <div className={styles.headEmpty} />
+          )}
+          {actions ? (
+            <Layout rowGap="stack">
+              {sentence}
+              {actions}
+            </Layout>
+          ) : (
+            sentence
+          )}
+        </Layout>
+      )}
     </Section>
   );
 }

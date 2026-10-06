@@ -40,6 +40,15 @@
 --tex-horizon-block-size:40px;
 }
 
+/* The corner field's box (TextureCorner, page-product-design fix round 2). 28 × 8 of the recipe's
+   10px pixels at most: 80 tall, so in a band's 128 of open top air it ends 48 above the eyebrow —
+   past a `stack` — and never half the band's width, so on a phone it keeps to the end corner, clear
+   of a centred eyebrow. Component sizes, named for the placement as the horizon's is.          */
+:root{
+--tex-corner-inline-size:min(280px, 40%);
+--tex-corner-block-size:80px;
+}
+
 /* ── Surface: paper ───────────────────────────────────────────────────────────
    The measured value — the Figma render this was taken from is blue on paper.        */
 :root,[data-surface="paper"]{

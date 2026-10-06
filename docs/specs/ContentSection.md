@@ -579,7 +579,7 @@ LAYOUT, TYPE, SEMANTICS
   the image filling it, so photo and copy share both edges at every width from 1024.
 - `media` with blocks and a pinned footer pins the blocks AND the footer as one group; the stretch
   opens under the lead.
-- ~~`media` heads of ≤ 22 characters take `--text-display`~~ (superseded below); the eyebrow takes `--csec-eyebrow-accent-ink`.
+- ~~`media` heads of ≤ 22 characters take `--text-display`~~ (superseded below); ~~the eyebrow takes `--csec-eyebrow-accent-ink`~~ (deleted: every eyebrow carries the kit’s 6px blue square, `cmp-services` fix round 2).
 - Placement: `TextureCounterweight` in Texture (docs/kit/brand-amendments.md).
 
 ## Amendment — media arrangement, final fix round (cmp-media-split, 6 Oct 2026)
@@ -610,3 +610,16 @@ LAYOUT, TYPE, SEMANTICS
 - **`asideFill` below 1024 is 21:9** (`--csec-aside-ratio`, was 3:2). At 768 the 3:2 photo was
   704 × 469 and outweighed the six icon cards under it; at 390 the band read as head, photo, card — the
   image routers' silhouette. As a 21:9 banner the photograph stays, and the band still reads as a router.
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix rounds 1 and 2
+
+- **`align: 'center-lg'`** (fix round 1). Centres the head from 1024 and starts it below, for a
+  centred band whose body becomes a start-aligned column on a phone — a vertical thread, stacked
+  contrast lists, stacked text cards. A centred head over a start-aligned column read as two axes.
+  `center` keeps centring at every width (marks, covers, an accordion).
+- **The head track steps at 1440** (fix round 2). `beside` and `split-head` are `[5, 7]` from 1024
+  and `[1, 2]` from 1440 (`HEAD_TRACKS`). At 1024 a third of the column is 288, and a 43 h2 broke
+  there into one- and two-word lines across four service-page bands ("Relevant / Product / Design
+  work"). 5 of 12 is 360, which holds the same heads to two lines. The arrangement changes at a
+  breakpoint; no distance does. Every 1440+ measurement above is unchanged.
+- `--csec-eyebrow-accent-ink` is gone (see the struck line in the media amendment).

@@ -10,7 +10,7 @@
    Proof colours so a nested surface cannot inherit evidence ink or the quote rule from its parent. */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   --proof-quote-rule-width   the site blockquote's 6px rule (ch10 B2.07), through the shared
+   --proof-quote-rule-width   the site blockquote's rule (ch10 B2.07, 2 since fix round 1), through the shared
                               --border-width-rule-quote primitive.
    --proof-portrait-size      a component SIZE, not a distance, so a literal with an explicit name
                               (the --cmark-height-max shape). Ruling P1: "small, 1:1, beside the name
@@ -32,7 +32,7 @@
                               featured quote and on its full-column square below 1024. No frame:
                               a portrait is a photograph, and photographs carry none (cmp-testimonials).
    --proof-mark-inline-size   the quote rule turned on its side: a CENTRED quote has no inline-start
-                              edge to run a rule down, so the same 6px blue rule sits above it, this
+                              edge to run a rule down, so the same blue rule sits above it, this
                               long. A component SIZE, a literal with an explicit name. 48 is about
                               one capital of the 43 centred quote (--text-quote-xl) — long enough to read as the
                               rule and not as a dash, short enough not to read as a divider (§ 4.3:

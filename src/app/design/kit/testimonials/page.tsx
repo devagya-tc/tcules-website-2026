@@ -39,6 +39,21 @@ function realProof() {
 
 const REAL = realProof();
 
+/* The page's sourced score: the proof block's own, or — since product-design's fix round 1 moved
+   the one Clutch pill to its logo band, a band above the proof — the logo band's. One source, so
+   the score here is always the score the page shows. */
+function realRating() {
+  if (REAL?.rating) return REAL.rating;
+  const story = getIdealServiceStory('product-design');
+  for (const section of story?.sections ?? []) {
+    if (!('blocks' in section)) continue;
+    for (const block of section.blocks)
+      if (block.kind === 'logos' && block.rating) return block.rating;
+  }
+  return undefined;
+}
+const RATING = realRating();
+
 const REAL_QUOTE: ProofQuote | undefined = REAL && {
   quoteHtml: `<p>${REAL.quote.text}</p>`,
   name: REAL.quote.name,
@@ -46,11 +61,11 @@ const REAL_QUOTE: ProofQuote | undefined = REAL && {
   company: REAL.quote.company,
 };
 
-const REAL_RATING: ProofRating | undefined = REAL?.rating && {
-  score: REAL.rating.score,
-  platform: REAL.rating.platform,
-  href: REAL.rating.href,
-  mark: REAL.rating.mark,
+const REAL_RATING: ProofRating | undefined = RATING && {
+  score: RATING.score,
+  platform: RATING.platform,
+  href: RATING.href,
+  mark: RATING.mark,
 };
 
 const REAL_CASE = REAL?.case;

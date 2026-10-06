@@ -1,14 +1,22 @@
 /* ServicePage · diagrams.
 
-   The compositions that DRAW an argument rather than list it: a scale, a thread, a sheet, a
-   holding panel, a slice, a bridge. Colour from --svc-*, type from the composites, arrangement from
-   Layout and Cluster. Positioned pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
+   The six template-local E diagrams (visual-direction § 3.4 E): a scale (Spectrum), a check matrix
+   (Matrix), a sheet (Record), a holding bracket (Parts), a slice (Slice) and a bridge (Bridge). Each
+   is one service page's argument rather than a reusable unit, so it stays in the template; Thread
+   was promoted to a pattern (cmp-process-stats) and its rules left this file on 6 Oct 2026. Colour
+   from --svc-*, type from the composites, arrangement from Layout and Cluster. Positioned
+   pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
 
-   Every mark here says something (30 Sep 2026 review): the holding panel says the operating model
-   contains the four parts; the paired grids say a release is one path built through every layer, where layers alone leave every path broken; the dashed bars say a product
-   is half-present while the move is under way; an arrow says one stage feeds the next; the
-   disruption trace is how much an option shakes the product, more ink for more. Marks that said nothing — a
-   progress meter per row, a dashed thread with nodes, a dot on every step's rule — were cut. */
+   No diagram boxes its text (owner ruling, fix round 2): the sheet and the holder are drawn with
+   rules only, and the two tables (Spectrum, Matrix) take DataTable's `ruled` frame. The only grounds
+   are data marks — a live bar, a built cell, a filled slot — never a panel behind copy.
+
+   Every mark here says something (30 Sep 2026 review): the holding bracket says the operating model
+   contains the four parts; the paired grids say a release is one path built through every layer,
+   where layers alone leave every path broken; the dashed bars say a product is half-present while
+   the move is under way; the disruption trace is how much an option shakes the product, more ink
+   for more; a check is blue and a cross quiet ink. Marks that said nothing — a progress meter per
+   row, a dashed thread with nodes, a dot on every step's rule — were cut. */
 
 .key {
   font: var(--text-eyebrow);
@@ -31,22 +39,9 @@
   color: var(--svc-mark);
 }
 
-.rowTitle {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
-  text-wrap: var(--text-title-wrap);
-  color: var(--svc-ink);
-}
-
-.rowBody {
-  font: var(--text-body);
-  text-wrap: var(--text-running-wrap);
-  color: var(--svc-ink-muted);
-}
-
 /* ── Matrix, and the slice verdicts ─────────────────────────────────────────────────
-   A check in the text's ink; a cross one step quieter — the checks carry the comparison, a cross
-   only says "not this one". */
+   A check in the blue accent (--svc-mark); a cross in the quiet ink (--svc-ink-quiet, held at 3:1
+   as a graphic) — the checks carry the comparison, a cross only says "not this one". */
 .markYes {
   display: block;
   color: var(--svc-mark);
@@ -57,15 +52,17 @@
   color: var(--svc-ink-quiet);
 }
 
-/* ── Record: a sheet ──────────────────────────────────────────────────────────── */
+/* ── Record: a sheet drawn with rules ────────────────────────────────────────────
+   No ground and no outer border (page-product-design fix round 2, owner ruling: no boxes around text
+   content). The sheet is said by its rules alone: the head closes on the strong rule, every field
+   closes on a hairline, and the last hairline closes the sheet. Paired from 1024, the two columns
+   sit a `column` apart (Diagrams.tsx), so no seam rule is needed between them. */
 .sheet {
-  background: var(--svc-sheet-ground);
-  border: var(--svc-rule-width) solid var(--svc-rule-strong);
   color: var(--svc-ink);
 }
 
 .sheetHead {
-  padding: var(--gap-block) var(--gap-gutter);
+  padding-block-end: var(--gap-block);
   border-block-end: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
 }
 
@@ -76,12 +73,8 @@
 }
 
 .sheetRow {
-  padding: var(--gap-text) var(--gap-gutter);
+  padding-block: var(--gap-text);
   border-block-end: var(--svc-rule-width) solid var(--svc-rule);
-}
-
-.sheetRow:last-child {
-  border-block-end: 0;
 }
 
 .sheetField {
@@ -101,14 +94,15 @@
   color: var(--svc-ink);
 }
 
-/* ── Parts: four held by a fifth ─────────────────────────────────────────────────── */
-/* The operating model as the panel that holds the four parts: the record sheet's ground and edge,
-   because it is the same kind of object — the thing that contains and keeps the rest. Inset at the
-   container gutter so the tiles inside sit clear of its edge. */
+/* ── Parts: four held by a fifth ───────────────────────────────────────────────────
+   The operating model HOLDS the four parts, said with two strong rules rather than a panel (fix
+   round 2: the panel's ground and border boxed text content). The fifth's rules span the whole
+   measure, above its own head and under the four tiles, so the four sit between them — a bracket,
+   not a box. Each tile still opens on its own hairline inside it. Padding, because the rule is
+   the holder's own edge and the content sits a `block` inside it. */
 .holder {
-  padding: var(--gap-gutter);
-  background: var(--svc-sheet-ground);
-  border: var(--svc-rule-width) solid var(--svc-rule-strong);
+  padding-block: var(--gap-block);
+  border-block: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
   color: var(--svc-ink);
 }
 
@@ -218,6 +212,8 @@
   color: var(--svc-bar-live-ink);
 }
 
+/* The dashed edge is the blue accent: the one mark in the bridge that says "in motion" (fix round 2:
+   the bridge read entirely black and white). A line, never a ground. */
 .bar[data-state='partial'] {
   border: var(--svc-rule-strong-width) dashed var(--svc-bar-edge);
   color: var(--svc-ink);
@@ -232,7 +228,9 @@
 }
 
 /* ── Authority meter ───────────────────────────────────────────────────────────────
-   Six slots: filled where the model holds the decision, outlined where a person still does. */
+   One slot per role: filled where the model holds the decision, outlined where a person still
+   does. In the blue accent (fix round 2): the meter is the spectrum's mark, and in ink it read as
+   black squares on a black-and-white table. */
 .authoritySlots {
   inline-size: max-content;
 }
@@ -241,15 +239,16 @@
   display: block;
   inline-size: var(--svc-authority-slot);
   block-size: var(--svc-authority-slot);
-  border: var(--svc-rule-strong-width) solid var(--svc-ink);
+  border: var(--svc-rule-strong-width) solid var(--svc-mark);
 }
 
 .authoritySlot[data-held='model'] {
-  background: var(--svc-ink);
+  background: var(--svc-mark);
 }
 
 /* ── Disruption meter ──────────────────────────────────────────────────────────────
-   The trace keeps its stroke width however the box scales (non-scaling-stroke), in the row's ink. */
+   The trace keeps its stroke width however the box scales (non-scaling-stroke), in the blue accent
+   the authority meter takes: one colour for a spectrum's mark, whichever meter it carries. */
 .meter {
   display: block;
   inline-size: var(--svc-meter-width);
@@ -259,43 +258,9 @@
 
 .meterTrace {
   fill: none;
-  stroke: var(--svc-ink);
+  stroke: var(--svc-mark);
   stroke-width: var(--svc-meter-stroke);
   stroke-linejoin: round;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
-}
-
-/* ── Thread ───────────────────────────────────────────────────────────────────── */
-.threadStage {
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  padding-block-start: var(--gap-text);
-  min-inline-size: 0;
-}
-
-.chain {
-  min-inline-size: 0;
-}
-
-.node {
-  padding: var(--gap-tight) var(--gap-text);
-  border: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  font: var(--text-ui);
-  letter-spacing: var(--text-ui-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--svc-ink);
-}
-
-/* The connector carries the blue accent, as every arrow does (visual-direction § 4). */
-.arrow {
-  color: var(--svc-mark);
-}
-
-.loop {
-  color: var(--svc-ink-muted);
-}
-
-.loopText {
-  font: var(--text-body-sm);
-  color: var(--svc-ink-muted);
 }

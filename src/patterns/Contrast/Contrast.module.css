@@ -25,6 +25,12 @@
   border-block-end: var(--cntr-rule-width) solid var(--cntr-rule);
 }
 
+/* The quiet side's heading keeps the h4 role — the two headings and their opening rules share one
+   line across the row — and steps down in ink only. */
+.headingQuiet {
+  color: var(--cntr-heading-ink-quiet);
+}
+
 .markYes {
   color: var(--cntr-yes-ink);
 }
@@ -39,4 +45,16 @@
   font: var(--cntr-item-text);
   text-wrap: var(--text-running-wrap);
   color: var(--cntr-item-ink);
+}
+
+/* `emphasis="yes"`: the primary side's items at the h5 role, the quiet side's at body in quiet ink.
+   Role swaps, never a distance. */
+.textPrimary {
+  font: var(--cntr-item-text-primary);
+  letter-spacing: var(--cntr-item-tracking-primary);
+}
+
+.textQuiet {
+  font: var(--cntr-item-text-quiet);
+  color: var(--cntr-item-ink-quiet);
 }

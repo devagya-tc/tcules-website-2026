@@ -218,6 +218,23 @@ export default function KitBannerSpecimen() {
         A small senior team, working in the open from week one.
       </Statement>
 
+      <Caption index="J.4" title="Statement at display scale, with its link">
+        size=&quot;display&quot;: the hero&rsquo;s display role on the display measure, for the one
+        band that restates a page&rsquo;s argument at the scale of its opening (the service
+        pages&rsquo; J). One link a stack under the sentence.
+      </Caption>
+      <Statement
+        eyebrow="How we work"
+        id="kit-statement-display"
+        size="display"
+        texture="head-half"
+        actions={
+          <CtaRow rule={false} actions={[{ label: 'See how we work', href: ROUTES.howWeWork }]} />
+        }
+      >
+        One accountable team, from the first question to the shipped build.
+      </Statement>
+
       {/* ── The announcement strip ────────────────────────────────────────────────────── */}
       <Caption index="S.1" title="Announcement strip">
         Section density=&quot;strip&quot;: 24 of air, on tint, a blue mono label, one line of

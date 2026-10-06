@@ -386,3 +386,12 @@ would not encode anything known to be wrong.
 | New tokens requested        | 0                                                                                                                                |
 | Placement limits recorded   | 6 — 5 from audit §3, 1 from the owner (2.17)                                                                                     |
 | BLOCKING questions          | 0                                                                                                                                |
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix round 2: TextureCorner
+
+A named recipe beside TextureHorizon and TextureClosing: a stepped pixel field (10px pixels, two grid
+pitches, no blur) in a band's top-end corner, `--tex-corner-inline-size` (`min(280px, 40%)`) ×
+`--tex-corner-block-size` (80), dense where the top and end edges meet and dithering out on both axes
+(a seeded field, the same every render). For a band whose type is centred and leaves the corner as
+the only clear ground — the Statement's `texture="corner"`. In an `open` band it ends 48 above the
+eyebrow, so it is drawn at every width. Paper only. Specimen: `/design/statement` § 5.

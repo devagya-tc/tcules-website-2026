@@ -521,3 +521,12 @@ layout limit — rows are one ruled line each and nothing in the frame depends o
 first comparison matrix (Design Engineering: ten things to decide, each answered by static screens or
 a coded slice) is a legitimate ten-row table. Above twelve the warning still fires.
 
+## Amendment · 6 Oct 2026 — `page-product-design` fix round 2: `frame="ruled"`
+
+`frame?: 'boxed' | 'ruled'`, default `boxed` (everything above). `ruled` draws no box: no outer
+border, no head fill, no body ground, no column dividers. The head row closes on the strong rule
+(`--dtab-rule-strong-width`, `--dtab-rule-strong-ink`), the rows on the hairline, the key starts on
+the band's text edge, and the scroll fades fade to the band's own ground (`--dtab-band-ground`,
+restated per surface by value). For a table that IS a band's diagram — the service page's spectrum
+and check matrix — where the owner's ruling "no boxes around text content" holds and the columns
+are few enough to read by alignment. Specimen: `/design/data-table` § 2.

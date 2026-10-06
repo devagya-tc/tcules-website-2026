@@ -859,6 +859,15 @@ export default function ContentSectionSpecimen() {
           <Accordion items={FAQ} />
         </ContentSectionText>
       </ContentSection>
+      <ContentSection
+        align="center-lg"
+        eyebrow="Centred from 1024 · center-lg"
+        heading="Centred over the row, start-aligned over the stack"
+        headingId="csec-centre-lg"
+        lead="From 1024 the head centres; below it the head starts on the column edge, like the stacked body under it."
+      >
+        <Cards />
+      </ContentSection>
       <FoldExempt reason={OVER_BUDGET}>
         <ContentSection
           align="center"
@@ -1070,7 +1079,12 @@ export default function ContentSectionSpecimen() {
       {/* The owner comparison: identical band, same side, so alignment is the only difference. */}
       <ContentSection
         arrangement="media"
-        media={{ head: 'title', image: photo('designer-desk-monitor'), side: 'end', pin: false }}
+        media={{
+          head: 'title',
+          image: photo('designer-desk-monitor'),
+          side: 'end',
+          pin: false,
+        }}
         eyebrow="Photo end · 2 tiles + CtaRow · media.pin=false, centred"
         heading="The team you work with is the team that ships"
         headingId="csec-media-ctarow-centred"
@@ -1136,11 +1150,12 @@ export default function ContentSectionSpecimen() {
       <Label title="14b · texture, in every arrangement">
         The texture slot takes one of Texture&rsquo;s named placements and renders it as the
         band&rsquo;s first child, beneath the content. In media it shows from 1024 only (the
-        counterweight has no phone form); in stacked, beside and a centred head it shows at every
-        width, which these three bands prove at 390. Paper only, by type: beside any other surface
-        the prop does not compile. Shown with a corner glow composed in place, in the bottom padding
-        and leaving by the side. The media split&rsquo;s own counterweight is not this slot: it is
-        media.counterweight, a field in the copy column (/design/kit/media-split).
+        counterweight has no phone form); in stacked, beside and a centred head it shows at
+        every width, which these three bands prove at 390. Paper only, by type: beside any other
+        surface the prop does not compile. Shown with a corner glow composed in place, in the
+        bottom padding and leaving by the side. The media split&rsquo;s own counterweight is not
+        this slot: it is media.counterweight, a field in the copy column
+        (/design/kit/media-split).
       </Label>
       <ContentSection
         eyebrow="Stacked · texture"

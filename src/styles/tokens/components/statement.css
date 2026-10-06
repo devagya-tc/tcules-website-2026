@@ -25,12 +25,20 @@
      track wins from 1024; it binds only in the one-column layout from 768 to 1023, where the
      sentence would otherwise run the whole column in two long lines. */
   --stmt-sentence-measure: var(--measure-title);
+  /* `size="display"` (page-product-design fix round 1, 7 Oct 2026): the display role, the hero's,
+     on the display measure — for the page whose argument needs one sentence at the scale of its
+     opening (the references' overview lines run ~70, against the 54 of h1). */
+  --stmt-sentence-text-display: var(--text-display);
+  --stmt-sentence-tracking-display: var(--text-display-tracking);
+  --stmt-sentence-measure-display: var(--measure-display);
 
-  /* The mark: a short rule before the eyebrow. A component SIZE, not a distance, so it is not a
-     gap step; the length is the eyebrow's cap height × ~4 at 12px, chosen to read as a dash. Read
-     from the space ramp as a length (fix round 1: it was a raw literal), as --bnr-mark-width is. */
-  --stmt-mark-width: var(--space-32);
-  --stmt-mark-height: var(--border-width-2);
+  /* The mark: the blue square before the eyebrow — the one eyebrow mark every band in the kit
+     carries (page-product-design fix round 1, 7 Oct 2026). It was a 32 × 2 rule here while
+     ContentSection, PageHero and the closes set a 6 square, and on one page the two read as drift.
+     One square of the texture's grid; a glyph's SIZE, not a distance, duplicated by value from
+     --csec-mark-size (token rule 6). */
+  --stmt-mark-width: var(--space-6);
+  --stmt-mark-height: var(--space-6);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

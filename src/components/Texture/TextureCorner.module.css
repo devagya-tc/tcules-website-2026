@@ -1,0 +1,13 @@
+/* TextureCorner — the stepped corner field's box: the top-end corner of its positioned ancestor (a
+   Section), --tex-corner-inline-size × --tex-corner-block-size. Positioned so the Texture inside
+   fills IT rather than the band. Sizing and placement of a decorative layer only; it states no
+   distance, and no z-index — the Texture inside keeps --tex-layer, which resolves within the
+   Section's isolation. */
+.corner {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  inline-size: var(--tex-corner-inline-size);
+  block-size: var(--tex-corner-block-size);
+  pointer-events: none;
+}

@@ -137,6 +137,26 @@ export const SECTION_INDEXES: readonly string[] = [
   ROUTES.glossary,
 ];
 
+/**
+ * In-page anchors, named once. A page's enquiry form is the target of every "Start a project" on
+ * it, so the id the close band carries and the fragment every action links to are one string —
+ * the ServicePage close used to wrap itself in `<div id="enquiry">` while six fixtures wrote
+ * `'#enquiry'` by hand (ServicePage audit, 6 Oct 2026).
+ */
+export const ANCHORS = {
+  enquiry: 'enquiry',
+} as const;
+
+/** The fragment href for an in-page anchor: `#enquiry`. */
+export function anchorHref(id: (typeof ANCHORS)[keyof typeof ANCHORS]): `#${string}` {
+  return `#${id}`;
+}
+
+/** The designed service page in the proving ground: `/design/service-page/<slug>`. */
+export function designServicePagePath(slug: string): string {
+  return `${ROUTES.design}/service-page/${encodeURIComponent(slug)}`;
+}
+
 /** Build one canonical audit-detail path without duplicating the route family at call sites. */
 export function auditPath(slug: string): string {
   return `${ROUTES.audits}/${encodeURIComponent(slug)}`;

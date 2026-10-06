@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { getCaseStudyListingPage, getIdealServiceStory, idealServiceSlugs } from '@/content';
 import type { ServiceStory, StoryCase } from '@/lib/service-story';
-import { caseStudyPath, ENDPOINTS, ROUTES } from '@/lib/routes';
+import { caseStudyPath, designServicePagePath, ENDPOINTS, ROUTES } from '@/lib/routes';
 import { ServicePage } from '@/templates';
 
 export function generateStaticParams() {
@@ -55,7 +55,7 @@ export default async function ServicePageSpecimen({
   const resolved: ServiceStory = {
     ...story,
     sections: story.sections.map((section) =>
-      section.type === 'offer'
+      section.type !== 'section'
         ? section
         : {
             ...section,
@@ -77,7 +77,7 @@ export default async function ServicePageSpecimen({
       breadcrumbs={[
         { label: 'Home', href: ROUTES.home },
         { label: 'Services', href: ROUTES.services },
-        { label: story.name, href: `/design/service-page/${story.slug}` },
+        { label: story.name, href: designServicePagePath(story.slug) },
       ]}
     />
   );

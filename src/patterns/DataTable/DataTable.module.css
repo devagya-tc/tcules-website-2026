@@ -248,6 +248,42 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* ── The ruled frame (`frame="ruled"`) ──────────────────────────────────────────────────────────
+   No box: no outer border, no grounds, no column dividers. The head row closes on the strong rule,
+   the rows on the hairline, and the fades fade to the BAND's ground, since there is no body ground
+   for them to fade to. Overrides only; every rule above still sets the cell insets and behaviours. */
+.ruled .frame {
+  border: 0;
+  background: none;
+}
+
+.ruled .colHead {
+  background: none;
+  border-block-end: var(--dtab-rule-strong-width) solid var(--dtab-rule-strong-ink);
+}
+
+.ruled .colHead,
+.ruled .key,
+.ruled .cell {
+  border-inline-end: 0;
+}
+
+/* The first column starts on the band's text edge: the cell inset stays between columns only. */
+.ruled .colHead:first-child,
+.ruled .key {
+  padding-inline-start: 0;
+}
+
+@supports (animation-timeline: scroll()) {
+  .ruled::before {
+    background: linear-gradient(to right, var(--dtab-band-ground), transparent);
+  }
+
+  .ruled::after {
+    background: linear-gradient(to left, var(--dtab-band-ground), transparent);
+  }
+}
+
 /* ── Print ──────────────────────────────────────────────────────────────────────────────────────
    Paper cannot scroll, so the frame lets the whole table out and the fades go; a row is never split
    across a page break, and the head row repeats on every page (a <thead> does that by default).

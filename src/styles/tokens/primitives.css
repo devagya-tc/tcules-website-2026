@@ -678,15 +678,16 @@
   --border-width-hairline-print: 0.75pt;
 }
 
-/* The quote rule is not a hairline at another medium's weight: it is a MARK, the
-   one thing that makes a block of italic serif read as reported speech (ch10
-   B2.07, the site's own blockquote: "behind a 6px brandeis-500 rule"). Stated
-   once here, so every quote that follows the site blockquote pattern reads the
-   same weight. Proof reads it; Prose's rich-text blockquote still reads the deck
-   hairline, which is a known divergence (docs/specs/Proof.md §17). */
+/* The quote rule is a MARK, the one thing that makes a block of italic serif read
+   as reported speech (ch10 B2.07). Stated once here, so every quote that follows
+   the site blockquote pattern reads the same weight. It was ch10's 6px; at 6 the
+   bar beside a 34px quote was the heaviest line on a page whose every other rule
+   is a hairline (page-product-design fix round 1, 7 Oct 2026), so it is the deck
+   hairline's 2 — still blue, still a mark, and now the weight Prose's rich-text
+   blockquote already read, which closes docs/specs/Proof.md §17's divergence.
+   Recorded as a brand amendment (docs/kit/brand-amendments.md). */
 :root {
-  --border-width-6: 6px;
-  --border-width-rule-quote: var(--border-width-6);
+  --border-width-rule-quote: var(--border-width-2);
 }
 
 /* ── Focus ring ───────────────────────────────────────────────────────────────

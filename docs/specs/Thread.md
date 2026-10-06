@@ -54,3 +54,12 @@ numbered and nothing is boxed (the old template drew boxed node chips; owner rul
 
 E: H-compact (left) + Thread full column, ≤ 380 tall at 1470. The `horizon` texture may sit in the
 band's bottom padding (§ 4.3: E with horizon).
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix round 1: `align`
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `align` | `'start' \| 'center'` | `start` | `center` centres the stages on their tracks from 1024, so the rail sits on a centred head's axis; below 1024 the vertical thread starts at the column edge whatever the value |
+
+The service page passes `center` when its E band centres its head over a thread (ContentSection
+`center-lg`). § 5's "H-compact (left)" stays the default band.

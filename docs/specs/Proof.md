@@ -284,9 +284,10 @@ column. Proof never caches an outer value, paints a nested ground or relies on a
   squeezed the old 43px quote to about 30 characters a line.
 - Attribution measure: `--measure-body`. “Ashok Mohanty, Founder, Auxentios” is authored as one
   content line but may wrap rather than overflow in a 192px stress track.
-- Rule: `--proof-quote-rule-width` resolves to `--border-width-rule-quote` → `--border-width-6`,
-  6px, the site blockquote's rule (ch10 B2.07). *Amended 28 Sep 2026: was `--border-width-hairline-deck`
-  (2px), matching Prose, which still reads it — see §17 Q9.*
+- Rule: `--proof-quote-rule-width` resolves to `--border-width-rule-quote` → `--border-width-2`,
+  2px. *Amended 7 Oct 2026 (page-product-design fix round 1): it was 6px from 28 Sep (ch10 B2.07),
+  and beside a 34px quote on a page of hairlines the 6 read as the heaviest line in the band. 2 is
+  the deck hairline Prose already reads, so §17 Q9's divergence is closed.*
 - Portrait: `--proof-portrait-size` 64px square (`--proof-portrait-ratio` → `--ratio-portrait`, 1 / 1).
   Small (P1): a little taller than the two attribution lines (≈ 50), and under a fifth of a 326
   column, leaving the text a 238 measure on a phone. `sizes` is `PROOF_PORTRAIT` from
@@ -586,8 +587,7 @@ hierarchy; no repeated boxes or alternating grounds do it.
 
 | Token | Layer | Value | Why |
 | ----- | ----- | ----- | --- |
-| `--border-width-6` | primitive | 6px | The border ramp stopped at 3. |
-| `--border-width-rule-quote` | primitive (usage alias, like `--border-width-hairline-deck`) | `--border-width-6` | The site blockquote's rule (ch10 B2.07), named once so Prose can adopt it (§17 Q9). |
+| `--border-width-rule-quote` | primitive (usage alias, like `--border-width-hairline-deck`) | `--border-width-2` (6 until 7 Oct 2026) | The site blockquote's rule (ch10 B2.07), named once so Prose can adopt it (§17 Q9). |
 | `--ratio-portrait` | primitive | 1 / 1 | "Portraits are 1:1 everywhere" (ch05 §3, §12 11) — a brand fact, not one placement's crop, so shared the way `--ratio-cover` is. |
 | `--proof-name-ink` | component | per surface, §6 | The name's own ink. |
 | `--proof-portrait-size` | component | 64px | Component size. |

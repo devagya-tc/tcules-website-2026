@@ -59,3 +59,13 @@ heading → `block` (24) → the ruled list (`rowGap="none"`). No margin, no loc
 - A footer CtaRow under it takes `rule={false}`: the lists' last hairlines already close the body (§ 3.1).
 - The glyph is `aria-hidden`; the heading states the polarity in words, so neither colour nor glyph is
   the only signal.
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix round 2: `emphasis`
+
+`emphasis?: 'peer' | 'yes'`, default `peer` (the halves above). `yes` makes the needs the primary
+column — `[2, 1]` from 1024, its items two up from md at the h5 role — and the exclusions the
+narrower, quieter boundary: the heading at the same h4 role in quiet ink (so the two opening rules
+share a line), items at body in quiet ink (`--cntr-item-ink-quiet`), a `lg` cross. Two equal text
+lists of hairline rows read as a document table, with dead runs beside the short items. New tokens:
+`--cntr-item-text-primary`, `--cntr-item-tracking-primary`, `--cntr-item-text-quiet`,
+`--cntr-heading-ink-quiet`, `--cntr-item-ink-quiet`, every surface. Specimen: `/design/contrast` 1b.

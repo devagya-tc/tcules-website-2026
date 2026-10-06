@@ -119,7 +119,11 @@ export function withStandIns(story: ServiceStory): ServiceStory {
         };
       case 'proof': {
         if (!block.case) return block;
-        const [item] = coverSet<StoryCase>('the proof case', [block.case], () => CARD_WIDTH.proof);
+        const [item] = coverSet<StoryCase>(
+          'the proof case',
+          [block.case],
+          () => CARD_WIDTH.proof,
+        );
         return { ...block, case: item };
       }
       case 'resources':
@@ -146,14 +150,16 @@ export function withStandIns(story: ServiceStory): ServiceStory {
           : '',
       ].filter(Boolean);
       if (reasons.length > 0)
-        warn(`stand-in ${id} in the ${story.slug} pool is never usable: ${reasons.join(', ')}.`);
+        warn(
+          `stand-in ${id} in the ${story.slug} pool is never usable: ${reasons.join(', ')}.`,
+        );
     }
   }
 
   return {
     ...story,
     sections: story.sections.map((section) =>
-      section.type === 'offer' ? section : { ...section, blocks: section.blocks.map(fill) },
+      section.type === 'section' ? { ...section, blocks: section.blocks.map(fill) } : section,
     ),
   };
 }

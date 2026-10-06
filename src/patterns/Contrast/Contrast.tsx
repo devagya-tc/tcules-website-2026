@@ -1,5 +1,7 @@
 import { Cluster, Icon, Layout } from '@/components';
 
+import { cx } from '@/lib/cx';
+
 import styles from './Contrast.module.css';
 
 /** One side of the contrast: a heading that says which side it is, and its items. */
@@ -13,7 +15,23 @@ export type ContrastList = {
 /** The two list headings' element: `h3` under a band's h2, `h4` when the pair sits under an h3. */
 export type ContrastHeadingElement = 'h3' | 'h4';
 
+/**
+ * How the two sides weigh against each other (page-product-design fix round 2, 6 Oct 2026).
+ *
+ *   peer  default. Peer halves, [1, 1] at `column`: two lists of one weight.
+ *   yes   the `yes` side is the primary column — [2, 1] from 1024, its items two up from md at the
+ *         h5 role (the needs read as claims, each a shape of its own) — and the `no` side the
+ *         narrower, quieter one: its heading in quiet ink at the same role (so the two opening
+ *         rules share a line), body-size items in quiet ink, a smaller cross. For a band whose
+ *         argument is what the work needs, with the exclusions as its boundary. Two equal
+ *         text lists of hairline rows read as a document table, with dead runs beside the short
+ *         items (the 6 Oct review).
+ */
+export type ContrastEmphasis = 'peer' | 'yes';
+
 export type ContrastProps = {
+  /** Default `peer`. See `ContrastEmphasis`. */
+  emphasis?: ContrastEmphasis;
   /** What it is for, or needs: every item takes `check-circle`, blue. */
   yes: ContrastList;
   /** What it is not for: every item takes `close-circle`, quiet ink. */
@@ -30,14 +48,19 @@ function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`Contrast: ${message}`);
 }
 
+/** A list's weight: `peer` in peer halves, `primary` the emphasised side, `quiet` the other. */
+type Weight = 'peer' | 'primary' | 'quiet';
+
 function List({
   list,
   polarity,
   Heading,
+  weight,
 }: {
   list: ContrastList;
   polarity: Polarity;
   Heading: ContrastHeadingElement;
+  weight: Weight;
 }) {
   const items = list.items.filter((item) => item.trim().length > 0);
   if (items.length !== list.items.length)
@@ -47,8 +70,18 @@ function List({
 
   return (
     <Layout rowGap="block">
-      <Heading className={styles.heading}>{list.heading}</Heading>
-      <Layout as="ul" rowGap="none" className={styles.rows}>
+      <Heading className={cx(styles.heading, weight === 'quiet' && styles.headingQuiet)}>
+        {list.heading}
+      </Heading>
+      {/* The primary side's items run two up from md, the column gutter between them: each need is
+          a claim with its own rule, not a row of a table. */}
+      <Layout
+        as="ul"
+        rowGap="none"
+        colGap={weight === 'primary' ? 'gutter' : undefined}
+        columns={weight === 'primary' ? { base: 1, md: 2 } : undefined}
+        className={styles.rows}
+      >
         {items.map((item, index) => (
           <li key={`${index}-${item}`} className={styles.row}>
             <Cluster nowrap colGap="text" align="start">
@@ -58,9 +91,17 @@ function List({
                 className={polarity === 'yes' ? styles.markYes : styles.markNo}
                 aria-hidden="true"
               >
-                <Icon name={GLYPH[polarity]} size="xl" />
+                <Icon name={GLYPH[polarity]} size={weight === 'quiet' ? 'lg' : 'xl'} />
               </span>
-              <span className={styles.text}>{item}</span>
+              <span
+                className={cx(
+                  styles.text,
+                  weight === 'primary' && styles.textPrimary,
+                  weight === 'quiet' && styles.textQuiet,
+                )}
+              >
+                {item}
+              </span>
             </Cluster>
           </li>
         ))}
@@ -88,11 +129,17 @@ function List({
  * A block, not a band: it goes in a ContentSection's body under an H-title, and a footer CtaRow under
  * it takes `rule={false}`, because the ladder's last hairline already closes the body (§ 3.1).
  */
-export function Contrast({ yes, no, headingAs = 'h3' }: ContrastProps) {
+export function Contrast({ yes, no, headingAs = 'h3', emphasis = 'peer' }: ContrastProps) {
+  const weighted = emphasis === 'yes';
   return (
-    <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack" align="start">
-      <List list={yes} polarity="yes" Heading={headingAs} />
-      <List list={no} polarity="no" Heading={headingAs} />
+    <Layout
+      columns={{ base: 1, lg: weighted ? [2, 1] : 2 }}
+      colGap="column"
+      rowGap="stack"
+      align="start"
+    >
+      <List list={yes} polarity="yes" Heading={headingAs} weight={weighted ? 'primary' : 'peer'} />
+      <List list={no} polarity="no" Heading={headingAs} weight={weighted ? 'quiet' : 'peer'} />
     </Layout>
   );
 }

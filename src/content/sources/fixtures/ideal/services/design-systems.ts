@@ -1,5 +1,5 @@
 import type { ServiceStory } from '@/lib/service-story';
-import { articlePath, auditPath, ROUTES, servicePath } from '@/lib/routes';
+import { articlePath, auditPath, ROUTES, servicePath, ANCHORS, anchorHref } from '@/lib/routes';
 
 /** /services/design-systems, designed. Edits: docs/service-pages-design.md § Design Systems. */
 export const designSystems: ServiceStory = {
@@ -14,7 +14,7 @@ export const designSystems: ServiceStory = {
     title: 'A design system must earn its place in the work',
     lead: 'The goal is not a larger library. It is a dependable answer to product decisions that several teams would otherwise keep making alone.',
     actions: [
-      { label: 'Start a project', href: '#enquiry' },
+      { label: 'Start a project', href: anchorHref(ANCHORS.enquiry) },
       { label: 'Request free audit', href: auditPath('design-system-audit') },
     ],
     illustration: {
@@ -73,7 +73,6 @@ export const designSystems: ServiceStory = {
       type: 'section',
       id: 'six-questions',
       heading: 'Six questions the system has to answer',
-      arrangement: 'beside',
       blocks: [
         {
           kind: 'ledger',
@@ -344,7 +343,6 @@ export const designSystems: ServiceStory = {
       type: 'section',
       id: 'questions',
       heading: 'Questions teams ask first',
-      arrangement: 'beside',
       blocks: [
         {
           kind: 'faq',
@@ -398,6 +396,11 @@ export const designSystems: ServiceStory = {
       ],
     },
   ],
+  labels: {
+    caseCta: 'Read the case',
+    scope: 'Scope',
+    allCases: { label: 'All case studies', href: ROUTES.caseStudies },
+  },
   close: {
     heading: 'Start with the part of the system teams keep working around',
     body: 'The decision, component family or adoption path teams keep working around. A rough brief is enough.',

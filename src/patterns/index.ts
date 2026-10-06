@@ -189,7 +189,12 @@ export type {
 } from './ListCard';
 
 export { Contrast } from './Contrast';
-export type { ContrastProps, ContrastList, ContrastHeadingElement } from './Contrast';
+export type {
+  ContrastProps,
+  ContrastList,
+  ContrastHeadingElement,
+  ContrastEmphasis,
+} from './Contrast';
 
 export { BlockCard, BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCard';
 export type {
@@ -253,6 +258,7 @@ export type { CalloutProps, CalloutTone } from './Callout';
 export { DataTable } from './DataTable';
 export type {
   DataTableProps,
+  DataTableFrame,
   DataTableKeyColumn,
   DataTableColumn,
   DataTableRow,
@@ -291,7 +297,13 @@ export type {
 export { Banner } from './Banner';
 export type { BannerProps, BannerForm, BannerMediaSide, BannerLink } from './Banner';
 export { Statement } from './Statement';
-export type { StatementProps, StatementElement, StatementTexture } from './Statement';
+export type {
+  StatementProps,
+  StatementElement,
+  StatementAlign,
+  StatementSize,
+  StatementTexture,
+} from './Statement';
 
 /* Thread — stages one decision passes through, on one blue line, with a return path (E band). */
 export { Thread, type ThreadProps, type ThreadStage, type ThreadStageHeading } from './Thread';

@@ -120,6 +120,14 @@ export type BlockCardSetProps = {
    * its cards, and a list that is not focusable is named by the band's heading.
    */
   label?: string;
+  /**
+   * The phone row (page-product-design fix round 1, 7 Oct 2026). `auto` (default) scrolls a linked
+   * set of four or more and a covered set of three or more sideways below 768 (§ 3.7 item 2).
+   * `never` keeps the set stacked: for a ROUTER, whose job is to show every route at once — as a
+   * scroll row it showed one and a fifth of six services above a progress bar, and hid five of them
+   * behind a gesture.
+   */
+  scroll?: 'auto' | 'never';
 };
 
 /** From how many items the first one is featured (ruling C3, 28 Sep 2026), under `lead="auto"`. */
@@ -271,6 +279,7 @@ export function BlockCardSet({
   titleAs,
   stagger = false,
   label,
+  scroll = 'auto',
 }: BlockCardSetProps) {
   if (given.length === 0) return null;
 
@@ -370,7 +379,10 @@ export function BlockCardSet({
      Never under a featured lead: Layout ignores `lead` wherever `scroll` is set (a scroll row has
      no grid to span), and it reads the prop, not the breakpoint — so a scrolling index would lose
      its featured row at every width. The case-study index is a page-long list, read stacked. */
-  const scrolls = !featured && ((covered && items.length >= 3) || (linked && items.length > 3));
+  const scrolls =
+    scroll === 'auto' &&
+    !featured &&
+    ((covered && items.length >= 3) || (linked && items.length > 3));
   /* Icon cards are smaller objects than covered or text tiles — a 32 glyph, an h5 and two lines —
      and at a `column` (64) apart a stacked 2×2 read as four loose items. They sit a `stack` (48)
      apart down the grid: the block-to-block step, still clearly more than the 16 inside a card. */

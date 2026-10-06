@@ -20,7 +20,7 @@ import styles from './ContentSection.module.css';
  * moves at 1024 and nowhere else, and below 1024 every one of them is a single column in DOM order.
  *
  *   stacked     the head above the blocks, at every width. The default.
- *   beside      from 1024, the head in a 1 : 2 leading track and the blocks in the trailing one, 96
+ *   beside      from 1024, the head in a leading track (5 : 7, then 1 : 2 from 1440) and the blocks in the trailing one, 96
  *               apart, the head static (it scrolls with the band; it does not stick, ruling O2). The
  *               head track may carry an `aside` (a 3:2 photograph or one stat figure) OR `actions`,
  *               never both (visual-direction § 1.4 rule 6). Below 1024 it is `stacked`, with the aside
@@ -44,8 +44,13 @@ export type ContentSectionArrangement = 'stacked' | 'beside' | 'split-head' | 'm
  * measure, and centres the body beneath it AS A BLOCK — text inside the blocks stays start-aligned.
  * A centred head is always `stacked`, never beside, and never carries actions in its column: the
  * props union makes each of those a type error. Presentation, never a CMS field.
+ *
+ * `center-lg` centres from 1024 and starts below it (page-product-design fix round 1, 7 Oct 2026),
+ * for a band whose body turns into a start-aligned column on a phone — a thread that runs down the
+ * start edge, two contrast lists stacked. Centred at 390 over that body, the band carried two
+ * alignments at once. A band whose body stays centred on a phone (a strip of marks) keeps `center`.
  */
-export type ContentSectionAlign = 'start' | 'center';
+export type ContentSectionAlign = 'start' | 'center' | 'center-lg';
 
 /** Which inline end of the band the `media` photograph takes from 1024. Below 1024 it is always first. */
 export type ContentSectionMediaSide = 'start' | 'end';
@@ -262,7 +267,7 @@ type PlainProps = {
 };
 
 type CentredProps = {
-  align: 'center';
+  align: 'center' | 'center-lg';
   arrangement?: 'stacked';
   actions?: never;
   aside?: never;
@@ -398,6 +403,16 @@ export function ContentSectionText({ children }: ContentSectionTextProps) {
   return <div className={styles.text}>{children}</div>;
 }
 
+/**
+ * The head track against the body, in `beside` and `split-head`: 1 : 2 from 1440 (O2), and 5 : 7
+ * from 1024 to 1439 (page-product-design fix round 2, 6 Oct 2026). At 1024 a third of the column is
+ * 288, and a 43 h2 broke there into one- and two-word lines ("Relevant / Product / Design work",
+ * "From the / real work / to the build") across four bands. 5 of 12 is 360, which holds the same
+ * heads to two lines; the body keeps 504. The MediaSplit and the K offer already step the same way.
+ * The arrangement changes at a breakpoint; no distance does.
+ */
+const HEAD_TRACKS = { lg: [5, 7], xl: [1, 2] };
+
 /** A development-only warning, prefixed with the component's name. */
 const warn = (message: string) => {
   if (process.env.NODE_ENV !== 'production') console.warn(`ContentSection: ${message}`);
@@ -443,7 +458,11 @@ export function ContentSection(props: ContentSectionProps) {
   const { heading, headingId, headingSize, eyebrow, lead, surface, density, footer, children } =
     props;
   const arrangement: ContentSectionArrangement = props.arrangement ?? 'stacked';
-  const centred = props.align === 'center';
+  /* `center` centres at every width; `center-lg` from 1024 only (ContentSectionAlign). The alignment
+     is stated per width below — Layout's justifyItems for `center`, a class with its own breakpoint
+     for `center-lg`, because Layout's placement props hold one value for every width. */
+  const centredLg = props.align === 'center-lg';
+  const centredAll = props.align === 'center';
   const actions = props.actions;
   const media = props.arrangement === 'media' ? props.media : undefined;
   const texture = props.texture;
@@ -484,9 +503,10 @@ export function ContentSection(props: ContentSectionProps) {
   /* ── The head text's three parts ─────────────────────────────────────────────
      Built once, placed by the arrangement. `.centred` sets the text centred inside each part's own
      measure; the Layout holding the parts centres the parts themselves (justifyItems). */
-  /* In `media` the eyebrow takes the accent ink, so a B band with no tile icons (a head and its
-     CtaRow) still shows blue above its title rather than reading black and white; and the heading
-     takes the display role unless the caller set `media.head="title"` (see ContentSectionMedia). */
+  /* In `media` the heading takes the display role unless the caller set `media.head="title"` (see
+     ContentSectionMedia). The eyebrow is the same in every arrangement: its blue is the mark, not
+     the label (fix round 1, 7 Oct 2026 — the media eyebrow's accent ink made one band's label blue
+     and every other band's grey, which read as drift rather than a rule). */
   const inMedia = arrangement === 'media' && Boolean(media);
   const displayHead = inMedia && Boolean(heading) && media?.head !== 'title';
   /* The counterweight is a texture, and a texture sits on paper only (§ 6.2). */
@@ -506,8 +526,12 @@ export function ContentSection(props: ContentSectionProps) {
       colGap="tight"
       align="center"
       nowrap
-      justify={centred ? 'center' : 'start'}
-      className={cx(styles.eyebrow, inMedia && styles.eyebrowAccent, centred && styles.centred)}
+      justify={centredAll ? 'center' : centredLg ? { base: 'start', lg: 'center' } : 'start'}
+      className={cx(
+        styles.eyebrow,
+        centredAll && styles.centred,
+        centredLg && styles.centredLg,
+      )}
     >
       <span className={styles.mark} aria-hidden="true" />
       <span>{eyebrow}</span>
@@ -520,14 +544,22 @@ export function ContentSection(props: ContentSectionProps) {
         styles.heading,
         (displayHead || headingSize === 'display') && styles.headingDisplay,
         headingSize === 'md' && styles.headingMd,
-        centred && styles.centred,
+        centredAll && styles.centred,
+        centredLg && styles.centredLg,
       )}
     >
       {heading}
     </h2>
   ) : null;
   const leadEl = lead ? (
-    <p className={cx(styles.lead, besideSplit && styles.leadBeside, centred && styles.centred)}>
+    <p
+      className={cx(
+        styles.lead,
+        besideSplit && styles.leadBeside,
+        centredAll && styles.centred,
+        centredLg && styles.centredLg,
+      )}
+    >
       {lead}
     </p>
   ) : null;
@@ -535,7 +567,11 @@ export function ContentSection(props: ContentSectionProps) {
   /* The eyebrow-to-title seam and the title-to-lead seam are the same step, so one Layout at
      `block` (24): the rhythm PageHero and CtaSection already use (S1). */
   const headText = hasText ? (
-    <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
+    <Layout
+      rowGap="block"
+      justifyItems={centredAll ? 'center' : undefined}
+      className={centredLg ? styles.itemsCentredLg : undefined}
+    >
       {eyebrowEl}
       {headingEl}
       {leadEl}
@@ -554,8 +590,8 @@ export function ContentSection(props: ContentSectionProps) {
   const body = hasBody ? (
     <Layout
       rowGap="stack"
-      justifyItems={centred ? 'center' : undefined}
-      className={centred ? styles.bodyCentred : undefined}
+      justifyItems={centredAll ? 'center' : undefined}
+      className={centredAll ? styles.bodyCentred : centredLg ? styles.bodyCentredLg : undefined}
     >
       {children}
       {footer}
@@ -586,7 +622,7 @@ export function ContentSection(props: ContentSectionProps) {
   } else if (headSplit) {
     /* split-head (the H-row). The eyebrow keeps its own row above the split — it labels the whole
        row, not the title's column — and then the heading and the lead (with the actions under it)
-       sit side by side: [1, 2] from 1024 at the split seam (96), TOP-aligned, so the heading's line
+       sit side by side: HEAD_TRACKS from 1024 at the split seam (96), TOP-aligned, so the heading's line
        box and the lead's start on one edge and the row reads as one horizontal unit.
 
        Why not the eyebrow inside the leading track: whichever way that pair is aligned, the two
@@ -602,7 +638,7 @@ export function ContentSection(props: ContentSectionProps) {
       <Layout rowGap="stack">
         <Layout rowGap="block">
           {eyebrowEl}
-          <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
+          <Layout columns={HEAD_TRACKS} colGap="section" rowGap="block" align="start">
             {headingEl}
             {/* Lead → action at `block` here, not the stacked head's `stack` (cmp-feature fix round
                 2): beside a heading the trailing track is short, and at 48 a one-link action hung
@@ -626,7 +662,8 @@ export function ContentSection(props: ContentSectionProps) {
                               `stacked` rather than merely similar.
          colGap  section (96) head track → body track under `beside` — a split, two kinds of thing
                               sharing a row (CLAUDE.md § gap scale, rule 2).
-         columns {lg: [1,2]}  1 : 2 from 1024 (O2), one track below. Undefined when not split.
+         columns HEAD_TRACKS  1 : 2 from 1440 (O2), 5 : 7 from 1024, one track below. Undefined
+                              when not split.
          align   start        the head is STATIC (O2): it sits at the top of its track and scrolls
                               away with the band, sized to its content rather than stretched to the
                               body's height.
@@ -656,7 +693,7 @@ export function ContentSection(props: ContentSectionProps) {
       <Layout
         rowGap="stack"
         colGap={besideSplit ? 'section' : undefined}
-        columns={besideSplit ? { lg: [1, 2] } : undefined}
+        columns={besideSplit ? HEAD_TRACKS : undefined}
         align={besideSplit ? (asideFill ? 'stretch' : 'start') : undefined}
         reverse={headAtEnd ? { lg: true } : undefined}
       >
@@ -689,7 +726,10 @@ export function ContentSection(props: ContentSectionProps) {
 /**
  * The `media` arrangement's two tracks: the photograph and the copy column (§ 3.2, § 3.4 B).
  *
- *   columns {lg: [5, 7]}    `weight="copy"`: the photo in 5 (477 at 1470), the copy in 7 (667)
+ *   columns {lg: [4, 8],    `weight="copy"`: the photo in 5 (477 at 1470), the copy in 7 (667);
+ *            xl: [5, 7]}    from 1024 to 1439 the copy takes 8 (page-product-design fix round 1:
+ *                           at 1024 four tiles in a 504 copy column wrapped to four lines each and
+ *                           B ran to 885 — the 576 of an 8 holds them to three)
  *           {lg: [7, 5]}    `weight="photo"`: the photo in 7 (667), the copy in 5 (477)
  *   colGap  section (96)    a split: copy beside an image (CLAUDE.md gap rule 2)
  *   rowGap  stack (48)      below 1024, photo above copy — a block-to-block seam
@@ -764,7 +804,7 @@ function MediaSplit({
     );
   return (
     <Layout
-      columns={{ lg: photoLeads ? [7, 5] : [5, 7] }}
+      columns={photoLeads ? { lg: [7, 5] } : { lg: [4, 8], xl: [5, 7] }}
       colGap="section"
       rowGap="stack"
       reverse={media.side === 'end' ? { lg: true } : undefined}

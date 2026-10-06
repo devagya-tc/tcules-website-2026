@@ -43,7 +43,7 @@
   color: var(--bnr-strip-label-ink);
 }
 
-/* The blue mark before the eyebrow: the family's foreground accent, the Statement's short rule.
+/* The blue mark before the eyebrow: the family's foreground accent, the kit's eyebrow square.
    Sized, not spaced — the Cluster around it owns the seam to the label. */
 .mark {
   display: block;

@@ -44,7 +44,10 @@ const FOUR: readonly ThreadStage[] = [
 const STRESS: readonly ThreadStage[] = [
   { title: 'Cross-functional acceptance and release-readiness review' },
   { title: 'Implementation' },
-  { title: 'Observability instrumentation', body: 'Every event the review will need, named before the build.' },
+  {
+    title: 'Observability instrumentation',
+    body: 'Every event the review will need, named before the build.',
+  },
 ];
 
 /* Paper, tint and ink. Blue is never a ground (owner, 6 Oct 2026): its tokens are declared, so a
@@ -58,30 +61,64 @@ export default function ThreadSpecimenPage() {
         <Layout rowGap="block">
           <h1>Thread</h1>
           <p>
-            Named stages one decision passes through, strung on one blue line, with an arrowhead into
-            every next node and the last node filled where the thread lands. Nothing is numbered and
-            nothing is boxed: it is a chain of artefacts, not a method (Steps) and not stages with
-            contents (ProcessFlow). Seen in its band on{' '}
-            <a href={`${ROUTES.designKitProcess}#e-thread`}>the process and stats family page</a>.
+            Named stages one decision passes through, strung on one blue line, with an arrowhead
+            into every next node and the last node filled where the thread lands. Nothing is
+            numbered and nothing is boxed: it is a chain of artefacts, not a method (Steps) and
+            not stages with contents (ProcessFlow). Seen in its band on{' '}
+            <a href={`${ROUTES.designKitProcess}#e-thread`}>
+              the process and stats family page
+            </a>
+            .
           </p>
         </Layout>
       </Section>
 
       <Section>
         <Layout rowGap="stack">
-          <Specimen title="six stages, with bodies · one row" note="Five or six across, a track is 180 to 220 wide and the title steps to h6.">
+          <Specimen
+            title="six stages, with bodies · one row"
+            note="Five or six across, a track is 180 to 220 wide and the title steps to h6."
+          >
             <Thread stages={SIX} />
           </Specimen>
-          <Specimen title="four stages, with bodies, and a return path" note="Up to four across, h5 titles. From 1024 the return path is an arc over the row: it rises from the last node, where the thread lands, and comes down into the first. The sentence sits on the column line under the stages, a return glyph at its start, at every width.">
-            <Thread stages={FOUR} loop="What production shows returns to the next product decision." />
+          <Specimen
+            title="four stages, with bodies, and a return path"
+            note="Up to four across, h5 titles. From 1024 the return path is an arc over the row: it rises from the last node, where the thread lands, and comes down into the first. The sentence sits on the column line under the stages, a return glyph at its start, at every width."
+          >
+            <Thread
+              stages={FOUR}
+              loop="What production shows returns to the next product decision."
+            />
           </Specimen>
-          <Specimen title="nine stages, titles only · two balanced rows" note="Seven to twelve stages break into two rows (9 → 5 + 4). A row's last stage carries no connector — the row break is the turn — and no arc is drawn: no path from row two's end to row one's start avoids the copy, so the return is the sentence and its glyph.">
-            <Thread stages={NINE} loop="Production observation returns to the next product decision." />
+          <Specimen
+            title="five stages, centred on their tracks, with a return path · align center"
+            note="From 1024 each node and its copy centre on the stage's track, and the arc's legs land on the first and last node centres, so a thread under a centred head sits on the column's axis. Below 1024 it is the vertical thread on the start edge."
+          >
+            <Thread
+              stages={SIX.slice(0, 5)}
+              loop="A mistaken change has a safe way back to the last accepted plan."
+              align="center"
+            />
           </Specimen>
-          <Specimen title="two stages · the minimum" note="Fewer than two renders nothing and warns.">
+          <Specimen
+            title="nine stages, titles only · two balanced rows"
+            note="Seven to twelve stages break into two rows (9 → 5 + 4). A row's last stage carries no connector — the row break is the turn — and no arc is drawn: no path from row two's end to row one's start avoids the copy, so the return is the sentence and its glyph."
+          >
+            <Thread
+              stages={NINE}
+              loop="Production observation returns to the next product decision."
+            />
+          </Specimen>
+          <Specimen
+            title="two stages · the minimum"
+            note="Fewer than two renders nothing and warns."
+          >
             <Thread stages={[{ title: 'Approved design' }, { title: 'Running software' }]} />
           </Specimen>
-          <Specimen title="stress · long titles, a mixed set" note="A seven-word title wraps inside its track; a stage without a body sits beside one with a body, top edges level.">
+          <Specimen
+            title="stress · long titles, a mixed set"
+            note="A seven-word title wraps inside its track; a stage without a body sits beside one with a body, top edges level."
+          >
             <Thread stages={STRESS} />
           </Specimen>
         </Layout>

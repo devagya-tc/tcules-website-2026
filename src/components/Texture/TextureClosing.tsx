@@ -32,13 +32,15 @@ export type TextureClosingProps = {
    height sits clear under the copy; in the centred close it is the whole band. A fraction scales the
    same skyline into either without a breakpoint of its own.
 
-   Below 1024 only `horizon` runs (§ 3.7 rule 5), so `closing` becomes § 6.3's `horizon` there,
-   unchanged: rect, bottom −200, 110% × 260, blur 200 — full-bleed, 60 into the band, centred. */
+   Below 1024 a single-edge close draws the same equaliser at half the columns (fix round 1: the
+   band's foot is its field at every width, so it reads as § 3.7 rule 5's horizon there — a field
+   on the band's bottom edge, full width). A centred close keeps § 6.3's horizon below 1024:
+   rect, bottom −200, 110% × 260, blur 200. */
 
 /** Bar heights for a single-edge field, edge first: ~22 columns falling from 0.86 to nothing. */
 const FIELD_BARS = [
-  0.86, 0.7, 0.8, 0.62, 0.72, 0.5, 0.6, 0.44, 0.52, 0.34, 0.42, 0.28, 0.34, 0.2, 0.25, 0.14, 0.18,
-  0.1, 0.12, 0.06, 0.08, 0.04,
+  0.86, 0.7, 0.8, 0.62, 0.72, 0.5, 0.6, 0.44, 0.52, 0.34, 0.42, 0.28, 0.34, 0.2, 0.25, 0.14,
+  0.18, 0.1, 0.12, 0.06, 0.08, 0.04,
 ] as const;
 
 /**
@@ -46,7 +48,9 @@ const FIELD_BARS = [
  * columns over the outer 24% of its width, tallest (~0.58 — about 444 in a 760 close) at the edge
  * and under ~0.12 by the time they reach the centred column's track.
  */
-const FLANK_BARS = [0.58, 0.47, 0.54, 0.4, 0.45, 0.31, 0.36, 0.22, 0.25, 0.14, 0.11, 0.07] as const;
+const FLANK_BARS = [
+  0.58, 0.47, 0.54, 0.4, 0.45, 0.31, 0.36, 0.22, 0.25, 0.14, 0.11, 0.07,
+] as const;
 const FLANK_SPAN = 0.24;
 
 /** A bar's share of its pitch: the rest is the dark gap that makes the columns read as columns. */
@@ -88,53 +92,96 @@ const pct = (fraction: number) => `${(fraction * 100).toFixed(3)}%`;
  * band that places it (CtaSection's split close gives it a field under the copy column).
  */
 export function TextureClosing({ side = 'start' }: TextureClosingProps) {
-  const fade = `tex-closing-fade-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
+  const id = useId().replace(/[^a-zA-Z0-9_-]/g, '');
 
-  const columns =
-    side === 'both'
-      ? [...bars(FLANK_BARS, FLANK_SPAN, false), ...bars(FLANK_BARS, FLANK_SPAN, true)]
-      : bars(FIELD_BARS, 1, side === 'end');
-
+  /* A single-edge close draws the equaliser at every width (page-product-design fix round 1, 7 Oct
+     2026): the band's foot is its field from 390 up (CtaSection), and the blurred horizon that stood
+     in below 1024 was all but invisible under the form. Below 1024 it draws every other column, so
+     a bar keeps a width of whole grid cells in a 390 field. A centred close keeps § 6.3's horizon
+     below 1024: its flanks are the band's outer quarters, and at 390 there are none. */
+  if (side === 'both') {
+    return (
+      <>
+        <Equaliser
+          fade={`tex-closing-fade-${id}`}
+          columns={[
+            ...bars(FLANK_BARS, FLANK_SPAN, false),
+            ...bars(FLANK_BARS, FLANK_SPAN, true),
+          ]}
+          className={styles.wide}
+        />
+        <Texture className={styles.narrow}>
+          <TextureShape bottom={-200} width="110%" height={260} blur={200} />
+        </Texture>
+      </>
+    );
+  }
+  const fromEnd = side === 'end';
   return (
     <>
-      <Texture className={styles.wide}>
-        <defs>
-          {/* userSpaceOnUse, so the fade is the FIELD's: a tall column fades further than a short
-              one, which is what makes the skyline rise rather than sit as a row of equal blocks. */}
-          <linearGradient id={fade} gradientUnits="userSpaceOnUse" x1="0" y1="100%" x2="0" y2="0">
-            {FADE.map(([offset, opacity]) => (
-              <stop key={offset} offset={offset} stopColor="white" stopOpacity={opacity} />
-            ))}
-          </linearGradient>
-        </defs>
-        {columns.map((bar, index) => (
-          <g key={index}>
-            <rect
-              x={pct(bar.x)}
-              y={pct(1 - bar.height)}
-              width={pct(bar.width)}
-              height={pct(bar.height)}
-              fill={`url(#${fade})`}
-            />
-            {/* The peak dash sits a fixed distance above a fractional top, which one SVG attribute
-                cannot say, so a nested viewport moves the origin to the bar's top first. Its
-                strength is the fade's at that height, solid, because a gradient in user space
-                would restart inside the nested viewport. */}
-            <svg x={pct(bar.x)} y={pct(1 - bar.height)} overflow="visible">
-              <rect
-                y={-PEAK_LIFT - PEAK_HEIGHT}
-                width={pct(bar.width)}
-                height={PEAK_HEIGHT}
-                fill="white"
-                fillOpacity={fadeAt(bar.height)}
-              />
-            </svg>
-          </g>
-        ))}
-      </Texture>
-      <Texture className={styles.narrow}>
-        <TextureShape bottom={-200} width="110%" height={260} blur={200} />
-      </Texture>
+      <Equaliser
+        fade={`tex-closing-fade-${id}`}
+        columns={bars(FIELD_BARS, 1, fromEnd)}
+        className={styles.wide}
+      />
+      <Equaliser
+        fade={`tex-closing-fade-narrow-${id}`}
+        columns={bars(
+          FIELD_BARS.filter((_, index) => index % 2 === 0),
+          1,
+          fromEnd,
+        )}
+        className={styles.narrow}
+      />
     </>
+  );
+}
+
+/** The equaliser's columns on the grid: hard-sided bars under one upward fade, each with its peak. */
+function Equaliser({
+  fade,
+  columns,
+  className,
+}: {
+  fade: string;
+  columns: readonly Bar[];
+  className?: string;
+}) {
+  return (
+    <Texture className={className}>
+      <defs>
+        {/* userSpaceOnUse, so the fade is the FIELD's: a tall column fades further than a short
+            one, which is what makes the skyline rise rather than sit as a row of equal blocks. */}
+        <linearGradient id={fade} gradientUnits="userSpaceOnUse" x1="0" y1="100%" x2="0" y2="0">
+          {FADE.map(([offset, opacity]) => (
+            <stop key={offset} offset={offset} stopColor="white" stopOpacity={opacity} />
+          ))}
+        </linearGradient>
+      </defs>
+      {columns.map((bar, index) => (
+        <g key={index}>
+          <rect
+            x={pct(bar.x)}
+            y={pct(1 - bar.height)}
+            width={pct(bar.width)}
+            height={pct(bar.height)}
+            fill={`url(#${fade})`}
+          />
+          {/* The peak dash sits a fixed distance above a fractional top, which one SVG attribute
+              cannot say, so a nested viewport moves the origin to the bar's top first. Its
+              strength is the fade's at that height, solid, because a gradient in user space
+              would restart inside the nested viewport. */}
+          <svg x={pct(bar.x)} y={pct(1 - bar.height)} overflow="visible">
+            <rect
+              y={-PEAK_LIFT - PEAK_HEIGHT}
+              width={pct(bar.width)}
+              height={PEAK_HEIGHT}
+              fill="white"
+              fillOpacity={fadeAt(bar.height)}
+            />
+          </svg>
+        </g>
+      ))}
+    </Texture>
   );
 }

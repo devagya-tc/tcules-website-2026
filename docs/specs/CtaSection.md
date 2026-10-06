@@ -256,6 +256,7 @@ type CtaFormSlot =   // amended 29 Sep: no scheduleHref — EnquiryForm owns "Se
 | `contact` | `readonly CtaContact[]` | `undefined` | `split` only: the contact strip at the copy's foot |
 | `texture` | `ReactNode` | `undefined` | `split` and `open` only: a `<Texture>`, the band's first child |
 | `surface` | `'paper' \| 'tint' \| 'ink' \| 'blue'` | `'paper'` | Which ground `Section` paints under this band. Passed straight through and read nowhere else in the component |
+| `id` | `string` | — | The band's id, passed to `Section`: the in-page anchor a page's actions link to (the close's `ANCHORS.enquiry`, `src/lib/routes.ts`). On the band itself, never a wrapper `div` (ServicePage audit, 6 Oct 2026). Distinct from the generated heading id that names the region |
 
 **`surface` is a pass-through prop, and that is not the same thing as owning the ground.** The rule says `surface` is never a prop, and it is right for everything that stands inside a band: a `Button` three levels down reads `data-surface` and is correct without being told. This component **is** the band. It has no ancestor that declares a surface, so there is nothing to inherit and the value must arrive as a prop — the same conclusion `Breadcrumbs` and `PageHero` reached, so this is a precedent followed rather than one set. What the hard constraint forbids is the component painting anything: `CtaSection.module.css` contains no `background`, no `color` on the root, no `padding-inline`, no `max-width` and no `--cta-*-bg-*` token, so the ground is `--sec-ground` and nothing else. Section 14 item 8 names the grep. Section 17 Q5 records the stricter reading of the constraint and why it is not the one taken.
 
@@ -910,3 +911,22 @@ COMPLETENESS
     and the three arrangements put those four in three different places. The specimen route
     reads as five shapes, not one rectangle repeated.
 ```
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix rounds 1 and 2
+
+Supersedes the K and close notes in § 0's amendment block where they differ:
+
+- **The landscape offer is centred, not stretched.** The copy column (lede then actions, a `stack`
+  apart) centres on the 3:2 photo (`align="center"`); nothing is pinned. Stretched, with the actions
+  pinned to the photo's foot, the K CTA hung in a dead hole under a short lede (fix round 1).
+- **The close's texture is a horizon across the band**, not pinned under the copy: `TextureClosing`
+  spans the full width in the band's bottom air (fix round 1).
+- **`media.phone?: 'after' | 'before'`** (fix round 2). Below 1024 where the photo sits against the
+  copy. `after` (default) is § 3.7 item 4. `before` sets the photo first, for an offer placed beside
+  a head → photo → body band, where at 390 the two read as one repeated rectangle. The photo is
+  decorative (`alt=""`), so DOM order carries no meaning; from 1024 `side` alone decides.
+- **Point ink is the step-title ink** (fix round 2). `--cta-point-ink` is neutral-900 on paper and
+  tint, white on ink and blue: at neutral-700 the offer's and the close's lists read greyed out
+  beside the method's steps rather than deliberately quiet.
+- The service page sets the offer's points as a check row (`markers="icon"`, `check-circle`): the
+  01/02 numeral is the page's sequence device and a third run of it made the accent repetition.

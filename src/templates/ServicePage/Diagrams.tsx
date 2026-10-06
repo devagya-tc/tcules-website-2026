@@ -99,23 +99,43 @@ function AuthorityMeter({ level, slots }: { level: number; slots: number }) {
 
    With a meter, the scale is a column: every row shows where it sits, and the order needs no
    sentence. Without one, the order is said once, as the table's summary. */
+/* Five options is the most a spectrum holds in its band at 1470 WITH SLACK, and the template
+   enforces it rather than trusting copy to fit (fix round 2, 6 Oct 2026). Six two-line rows ran the
+   stress band to 829 of 830 — a fixture one line longer failed — and seven ran it to 892 (fix round
+   1). The rest belong on the deep page, linked from the band (`more`); the template renders the
+   first five and warns, so a sixth never silently pushes the band past the fold. */
+export const SPECTRUM_MAX = 5;
+
+/** The first `max` of a list, with a development warning when it was longer: a structural cap. */
+function capped<T>(items: readonly T[], max: number, what: string): readonly T[] {
+  if (items.length <= max) return items;
+  if (process.env.NODE_ENV !== 'production')
+    console.warn(
+      `ServicePage: a ${what} of ${items.length} runs its band past the fold; the first ${max} render. Link the rest from the band's \`more\`.`,
+    );
+  return items.slice(0, max);
+}
+
 export function Spectrum({ block }: { block: Of<'spectrum'> }) {
   const meter = block.meter;
-  const last = block.items.length - 1;
+  const items = capped(block.items, SPECTRUM_MAX, 'spectrum');
+  const last = items.length - 1;
   return (
     <DataTable
-      summary={
-        meter
-          ? undefined
-          : `Ordered from ${block.axis.from.toLowerCase()} to ${block.axis.to.toLowerCase()}.`
-      }
+      /* Ruled, not boxed (fix round 2): the spectrum is the band's diagram, and a boxed table with a
+         grey head row was a box around text content (owner ruling). */
+      frame="ruled"
+      /* The order, said once, when no meter shows it row by row: the story's own sentence. It was
+         assembled here from the axis labels, lower-cased — which rewrote authored strings (an
+         acronym or a name in an axis label came out wrong) and put template copy on the page. */
+      summary={meter ? undefined : block.summary}
       keyColumn={{ heading: block.columns.name }}
       columns={[
         ...(meter ? [{ heading: meter.label, behaviour: 'nowrap' as const }] : []),
         { heading: block.columns.when },
         { heading: block.columns.settles },
       ]}
-      rows={block.items.map((item, index) => ({
+      rows={items.map((item, index) => ({
         header: item.name,
         cellsHtml: [
           ...(meter
@@ -123,7 +143,7 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
                 {
                   node:
                     meter.kind === 'authority' ? (
-                      <AuthorityMeter level={index + 1} slots={block.items.length} />
+                      <AuthorityMeter level={index + 1} slots={items.length} />
                     ) : (
                       <DisruptionMeter
                         level={last > 0 ? Math.round((index / last) * METER_STEPS) : 0}
@@ -146,12 +166,32 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
    3-item list beside a 7-item one read as an imbalance, not an argument. Here each thing to decide
    is a row with a check or a cross under each side, so the comparison is done row by row. A real
    table, so it holds at every width. */
+/* A matrix of more than six rows sets them in two tables side by side from 1024 (fix round 1, 7 Oct
+   2026): a ten-row matrix was a 639-tall table, the band 1021 to 1890 at 1470. The marks are a
+   narrow column each, so one table used a fifth of the 1240; two halves use it all and the band is
+   half as tall. The second half repeats the column heads, because each half is a table a reader
+   (and a screen reader) can read on its own. */
+const MATRIX_SPLIT_FROM = 7;
+
 export function Matrix({ block }: { block: Of<'matrix'> }) {
+  if (block.rows.length < MATRIX_SPLIT_FROM)
+    return <MatrixTable block={block} rows={block.rows} />;
+  const half = Math.ceil(block.rows.length / 2);
+  return (
+    <Layout columns={{ lg: 2 }} colGap="column" rowGap="stack" align="start">
+      <MatrixTable block={block} rows={block.rows.slice(0, half)} />
+      <MatrixTable block={block} rows={block.rows.slice(half)} />
+    </Layout>
+  );
+}
+
+function MatrixTable({ block, rows }: { block: Of<'matrix'>; rows: Of<'matrix'>['rows'] }) {
   return (
     <DataTable
+      frame="ruled"
       keyColumn={{ heading: block.keyColumn }}
       columns={block.columns.map((heading) => ({ heading, behaviour: 'nowrap' as const }))}
-      rows={block.rows.map((row) => ({
+      rows={rows.map((row) => ({
         header: row.header,
         cellsHtml: block.columns.map((_, index) => {
           const yes = row.marks[index] === true;
@@ -175,12 +215,19 @@ export function Matrix({ block }: { block: Of<'matrix'> }) {
 }
 
 /* ── Record ───────────────────────────────────────────────────────────────────
-   A record with fields, drawn as the document it is: a sheet on its own ground, a header strip,
-   and one row per field — the field keyed in mono with its glyph ABOVE the question it holds, in
-   serif. Stacked, not side by side: a key and its question are one item, not two columns.
-   It is the one place in the template that paints a ground, and it earns it: a record is an
-   OBJECT the team keeps, and the sheet is what says so. */
+   A record with fields, drawn as the document it is: a head naming the record, and one row per
+   field — the field keyed in mono with its glyph ABOVE the question it holds, in serif. Stacked,
+   not side by side: a key and its question are one item, not two columns.
+   Drawn with rules only (fix round 2, 6 Oct 2026, owner ruling: no boxes around text content): the
+   head closes on the strong rule and every field on a hairline. It used to paint a ground inside a
+   full border, the one sheet in the template, and that box was a box around questions. */
+const RECORD_PAIRED_FROM = 4;
+/* Eight fields — four paired rows — is the most a record holds in its band with slack. */
+const RECORD_MAX = 8;
+
 export function Record({ block }: { block: Of<'record'> }) {
+  const items = capped(block.items, RECORD_MAX, 'record');
+  const paired = items.length >= RECORD_PAIRED_FROM;
   return (
     <figure className={styles.sheet}>
       {/* Stacked: what the record is for, then its name — a label over the thing it labels. It was
@@ -189,8 +236,15 @@ export function Record({ block }: { block: Of<'record'> }) {
         <span className={styles.key}>{block.meta}</span>
         <span className={styles.sheetTitle}>{block.title}</span>
       </Layout>
-      <Layout as="dl" rowGap="none">
-        {block.items.map((item) => (
+      {/* Four or more fields pair up from 1024, so the sheet is half as tall (fix round 1), the two
+          columns a `column` apart — two halves of one sheet that must read as separate lists. */}
+      <Layout
+        as="dl"
+        rowGap="none"
+        colGap={paired ? 'column' : undefined}
+        columns={paired ? { lg: 2 } : undefined}
+      >
+        {items.map((item) => (
           <Layout key={item.field} rowGap="tight" className={styles.sheetRow}>
             <dt className={styles.sheetField}>
               <Cluster nowrap colGap="tight" align="center">
@@ -210,8 +264,10 @@ export function Record({ block }: { block: Of<'record'> }) {
 
 /* ── Parts: four held by a fifth ──────────────────────────────────────────────
    "Four of them are the system. The fifth decides whether the other four stay current." So the
-   fifth HOLDS the four: the operating model is the panel, named at its head, and the four parts are
-   tiles inside it (1 Oct 2026, owner: the section was crowded and unreadable). It used to be four
+   fifth HOLDS the four: the operating model is named at the head of a bracket, two strong rules
+   across the whole measure, and the four parts are tiles between them (1 Oct 2026, owner: the
+   section was crowded and unreadable; fix round 2: the bracket replaced a panel with a ground and
+   a border, which boxed text content). It used to be four
    tiles, a thin bracket under them with the operating model set heading-left/body-right, and three
    failure tiles whose titles were larger than the parts' — three ideas at one weight. Now one
    drawing carries the one idea, and the failures are a note after it. */
@@ -232,7 +288,7 @@ export function Parts({ block }: { block: Of<'parts'> }) {
           as="ul"
           columns={{ base: 1, md: 2, lg: block.items.length }}
           colGap="gutter"
-          rowGap="column"
+          rowGap="stack"
         >
           {block.items.map((item) => (
             <ListCard
@@ -277,14 +333,16 @@ function SliceGrid({
 }: {
   layers: readonly string[];
   view: { title: string; note: string };
-  legend: { path: string; works: string };
+  legend: { path: string; works: string; missing: string };
   done: (layer: number, path: number) => boolean;
 }) {
   const paths = Math.max(3, layers.length - 1); // the same count Slice computes
   const tracks = { base: [3, ...Array.from({ length: paths }, () => 1)] };
   const pathWorks = (path: number) => layers.every((_, layer) => done(layer, path));
   return (
-    <figure className={styles.sliceView} aria-label={`${view.title}. ${view.note}`}>
+    /* Named by its figcaption, the title and the note, and nothing else: an aria-label repeating
+       the same words named the figure twice to a screen reader (ServicePage audit, 6 Oct 2026). */
+    <figure className={styles.sliceView}>
       <Layout rowGap="block">
         <Layout as="figcaption" rowGap="tight">
           <span className={styles.sliceTitle}>{view.title}</span>
@@ -323,6 +381,16 @@ function SliceGrid({
             ))}
           </Layout>
         </Layout>
+        {/* The verdict in words, for assistive technology (fix round 2): the drawn grid is hidden,
+            and without this a screen reader got the title and the note but not which paths work.
+            Built from `pathWorks` and the story's own legend, so it cannot disagree with the grid. */}
+        <ul className={styles.visuallyHidden}>
+          {Array.from({ length: paths }, (_, path) => (
+            <li key={path}>
+              {legend.path} {path + 1}: {pathWorks(path) ? legend.works : legend.missing}
+            </li>
+          ))}
+        </ul>
       </Layout>
     </figure>
   );
@@ -335,8 +403,11 @@ export function Slice({ block }: { block: Of<'slice'> }) {
      construction — the only thing that differs between the two grids is where the work went. */
   const paths = Math.max(3, block.layers.length - 1);
   const built = Math.floor(paths / 2);
+  /* The paired grids and the acceptance levels are two blocks of one band, so they sit a `stack`
+     (48) apart (§ 1.2 block → block). They were `section` (96), the split and band-padding step,
+     which opened a band-sized hole inside the band (ServicePage audit, 6 Oct 2026). */
   return (
-    <Layout rowGap="section">
+    <Layout rowGap="stack">
       <Layout rowGap="block">
         {/* The key, once, over both grids: what a cell is, before either grid asks the reader to
             read one. */}
@@ -365,27 +436,34 @@ export function Slice({ block }: { block: Of<'slice'> }) {
           />
         </Layout>
       </Layout>
-      <Layout rowGap="block">
-        <h3 className={styles.levelsLabel}>{block.levelsLabel}</h3>
-        <Layout
-          as="ul"
-          columns={{ base: 1, md: block.levels.length }}
-          colGap="gutter"
-          rowGap="column"
-        >
-          {block.levels.map((level) => (
-            <ListCard
-              key={level.title}
-              form="tile"
-              size="sm"
-              titleAs="h4"
-              title={level.title}
-              body={level.body}
-              marker={{ type: 'icon', name: level.icon }}
-            />
-          ))}
+      {block.levels && block.levels.length > 0 ? (
+        <Layout rowGap="block">
+          {block.levelsLabel ? (
+            <h3 className={styles.levelsLabel}>{block.levelsLabel}</h3>
+          ) : null}
+          {/* Rows, the glyph beside the copy, side by side from md (fix round 1, 7 Oct 2026): as tiles
+              with the glyph above, the three levels took ~250 of a band the two grids already fill,
+              and the slice band ran to 990 at 1470 and 1833 at 390. */}
+          <Layout
+            as="ul"
+            columns={{ base: 1, md: block.levels.length }}
+            colGap="gutter"
+            rowGap="none"
+          >
+            {block.levels.map((level) => (
+              <ListCard
+                key={level.title}
+                arrangement="stacked"
+                size="sm"
+                titleAs="h4"
+                title={level.title}
+                body={level.body}
+                marker={{ type: 'icon', name: level.icon }}
+              />
+            ))}
+          </Layout>
         </Layout>
-      </Layout>
+      ) : null}
     </Layout>
   );
 }
@@ -401,12 +479,16 @@ export function Slice({ block }: { block: Of<'slice'> }) {
    is half-present. Before holds the current product; During holds both, dashed — still running,
    already running — with the temporary work under them, because it exists only there; After holds
    the target. Below lg the three stack in the same order. */
+/* Six things designed in between — three paired rows — hold the bridge band with slack (fix round
+   2: seven ran the stress band to 803). The rest are the deep page's. */
+const BRIDGE_MAX = 6;
+
 export function Bridge({ block }: { block: Of<'bridge'> }) {
+  const items = capped(block.items, BRIDGE_MAX, 'bridge');
   return (
-    <figure
-      aria-label={`${block.label}: ${block.phases.during.toLowerCase()}, ${block.from.toLowerCase()} and ${block.to.toLowerCase()} are both live`}
-      className={styles.bridge}
-    >
+    /* Named by the story's own sentence. It was assembled from four labels, lower-cased (ServicePage
+       audit, 6 Oct 2026: never re-case an authored string). */
+    <figure aria-label={block.summary} className={styles.bridge}>
       <Layout
         as="ol"
         columns={{ base: 1, lg: [1, 2, 1] }}
@@ -428,17 +510,17 @@ export function Bridge({ block }: { block: Of<'bridge'> }) {
               <span className={styles.key}>{block.phases.during}</span>
               <Layout rowGap="tight">
                 <span className={styles.bar} data-state="partial">
-                  {block.from}, still running
+                  {block.states.from}
                 </span>
                 <span className={styles.bar} data-state="partial">
-                  {block.to}, already running
+                  {block.states.to}
                 </span>
               </Layout>
             </Layout>
             <Layout rowGap="text">
               <span className={styles.key}>{block.label}</span>
               <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="none">
-                {block.items.map((item) => (
+                {items.map((item) => (
                   <li key={item} className={styles.state}>
                     {item}
                   </li>
@@ -457,59 +539,5 @@ export function Bridge({ block }: { block: Of<'bridge'> }) {
         </li>
       </Layout>
     </figure>
-  );
-}
-
-/* ── Thread ───────────────────────────────────────────────────────────────────
-   Named stages joined by arrows, wrapping as the width runs out — a flow of artefacts, lighter
-   than Steps (no bodies unless given, no numbers), with an optional return path drawn as its own
-   line beneath: what production shows feeds the next decision.
-
-   With bodies, the stages are a grid of rule-opened tiles, so they carry the card rhythm
-   (visual-direction § 1.1 S2, § 1.2): key → title → body at `text`, and the row seam of the set at
-   `column`, the same as the ListCard tile grids in this file. At 1440 they read as a card set
-   beside the re-spaced cards, so they take the card set's steps until cmp-service-pages replaces
-   Thread. */
-export function Thread({ block }: { block: Of<'thread'> }) {
-  const withBodies = block.items.some((item) => item.body);
-  return (
-    <Layout rowGap="block">
-      {withBodies ? (
-        <Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
-          {block.items.map((item, index) => (
-            <li key={item.title} className={styles.threadStage}>
-              <Layout rowGap="text">
-                <span className={styles.key}>{String(index + 1).padStart(2, '0')}</span>
-                <h3 className={styles.rowTitle}>{item.title}</h3>
-                {item.body ? <p className={styles.rowBody}>{item.body}</p> : null}
-              </Layout>
-            </li>
-          ))}
-        </Layout>
-      ) : (
-        <Cluster as="ol" colGap="tight" rowGap="text" align="center">
-          {block.items.map((item, index) => (
-            <li key={item.title} className={styles.chain}>
-              <Cluster nowrap colGap="tight" align="center">
-                <span className={styles.node}>{item.title}</span>
-                {index < block.items.length - 1 ? (
-                  <span className={styles.arrow} aria-hidden="true">
-                    <Icon name="arrow-right" size="md" />
-                  </span>
-                ) : null}
-              </Cluster>
-            </li>
-          ))}
-        </Cluster>
-      )}
-      {block.loop ? (
-        <Cluster nowrap colGap="tight" align="center" className={styles.loop}>
-          <span className={styles.icon} aria-hidden="true">
-            <Icon name="undo-left" size="lg" />
-          </span>
-          <span className={styles.loopText}>{block.loop}</span>
-        </Cluster>
-      ) : null}
-    </Layout>
   );
 }

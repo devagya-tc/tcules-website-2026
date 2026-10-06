@@ -36,10 +36,13 @@
   --bnr-strip-label-text: var(--text-eyebrow);
   --bnr-strip-label-tracking: var(--text-eyebrow-tracking);
 
-  /* The blue mark before the eyebrow — the Statement's rule, by value (token rule 6). A component
-     SIZE, not a distance: the space ramp read as a length, as --stmt-mark-width does. */
-  --bnr-mark-width: var(--space-32);
-  --bnr-mark-height: var(--border-width-2);
+  /* The mark: the blue square before the eyebrow — the one eyebrow mark every band in the kit
+     carries (page-product-design fix round 1, 7 Oct 2026). It was a 32 × 2 rule here while
+     ContentSection, PageHero and the closes set a 6 square, and on one page the two read as drift.
+     One square of the texture's grid; a glyph's SIZE, not a distance, duplicated by value from
+     --csec-mark-size (token rule 6). */
+  --bnr-mark-width: var(--space-6);
+  --bnr-mark-height: var(--space-6);
 
   /* The illustration's phone art direction (below 768): the drawing at 180% of the column, so a
      962-wide drawing's 18px callouts land near 11px rather than 6. --bnr-illustration-shift is set

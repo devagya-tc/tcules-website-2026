@@ -8,7 +8,8 @@ import { specimenStyles as s } from '../_specimen/Specimen';
 
 /**
  * Statement — the proving ground. Coverage beside the family page (/design/kit/banner): both
- * elements, the texture, an action, absent eyebrow, the 3-line ceiling, and three surfaces.
+ * elements, both textures, an action, absent eyebrow, the 3-line ceiling, the display size, the
+ * centred alignment, and three surfaces.
  */
 
 const SENTENCE =
@@ -46,6 +47,9 @@ export default function StatementSpecimen() {
             <code>p</code>, never an h1. [1, 2] from 1024: eyebrow and a short blue mark in the
             head track, the sentence in the two-thirds track. Open density (128). Optional
             head-half texture (paper, from 1024) and one optional action. ≤ 14 words, ≤ 3 lines.
+            Two variations for a page&rsquo;s display-scale moment:{' '}
+            <code>size=&quot;display&quot;</code> and <code>align=&quot;center&quot;</code> with
+            the <code>corner</code> texture.
           </p>
         </Layout>
       </Section>
@@ -82,8 +86,8 @@ export default function StatementSpecimen() {
       </Statement>
 
       <Label title="3 · absent eyebrow, and the ceiling">
-        Without an eyebrow the head track is empty: the mark leads its label and goes with it. Then 14 words, the § 1.5
-        ceiling, on 3 lines.
+        Without an eyebrow the head track is empty: the mark leads its label and goes with it.
+        Then 14 words, the § 1.5 ceiling, on 3 lines.
       </Label>
       <Statement id="stmt-no-eyebrow">
         Good products are mostly decisions, made early, kept.
@@ -92,7 +96,39 @@ export default function StatementSpecimen() {
         A product slows down where nobody owns the decision its interface is asking for.
       </Statement>
 
-      <Label title="4 · three surfaces">
+      <Label title='4 · size="display"'>
+        The sentence at the display role, the hero&rsquo;s, in the split: for the one J a page
+        spends as its display-scale moment. Measure --stmt-sentence-measure-display.
+      </Label>
+      <Statement eyebrow="How we work" id="stmt-display" size="display">
+        One accountable team, from the first question to the shipped build.
+      </Statement>
+
+      <Label title='5 · align="center", texture="corner"'>
+        One column on the band&rsquo;s axis at every width — the service page&rsquo;s J, between
+        beside bands that already start on the 1/3 line. The corner field sits in the top-end
+        corner, clear of the eyebrow at 1470 and at 390. Then the same without an action.
+      </Label>
+      <Statement
+        eyebrow="How we work"
+        id="stmt-centre"
+        size="display"
+        align="center"
+        texture="corner"
+        actions={
+          <CtaRow
+            actions={[{ label: 'See how we work', href: ROUTES.howWeWork }]}
+            rule={false}
+          />
+        }
+      >
+        One accountable team, from the first question to the shipped build.
+      </Statement>
+      <Statement eyebrow="Our view" id="stmt-centre-h1" align="center">
+        A product slows down where nobody owns the decision its interface is asking for.
+      </Statement>
+
+      <Label title="6 · three surfaces">
         Identical markup; texture is paper only and is ignored elsewhere.
       </Label>
       {SURFACES.map((surface) => (

@@ -484,6 +484,12 @@ export default function DataTableSpecimenPage() {
             <DataTable {...EIGHT_ROWS} />
           </Specimen>
           <Specimen
+            title='frame="ruled" · no box'
+            note="For a table that is a band's diagram (the service page's spectrum and matrix): no outer border, no head fill, no column dividers. The head closes on the strong rule, the rows on hairlines, and the key starts on the band's text edge."
+          >
+            <DataTable {...THREE_COLUMNS} frame="ruled" />
+          </Specimen>
+          <Specimen
             title="Long row headers"
             note="The h6 title voice wraps inside the held key column; cells stay top-aligned with the header’s first line."
           >
