@@ -54,12 +54,7 @@ export function RatingBadge({
   showScore = true,
 }: RatingBadgeProps) {
   return (
-    <a
-      className={styles.badge}
-      href={href}
-      target="_blank"
-      rel="noreferrer noopener"
-    >
+    <a className={styles.badge} href={href} target="_blank" rel="noreferrer noopener">
       {/* Decorative: "4.8 on Clutch" is the whole claim. A glyph from the set, not a ★ character:
           the mono face has no ★, so every browser fell back to a different font and the star's
           centre landed somewhere different on each (1 Oct 2026). An SVG centres exactly. */}

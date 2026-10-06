@@ -21,14 +21,15 @@ import styles from './Slider.module.css';
  * caller states one number and every breakpoint follows (visual-direction § 1.4, § 3.7):
  *
  *            base (+ peek)   md 768   lg 1024   xl 1440
- *   1        1               1        1         1         a G testimonial: one featured slide
+ *   1        1 (no peek)     1        1         1         a G testimonial: one featured slide
  *   2        1               2        2         2         pair cards, 365 / 572 wide
  *   3        1               2        3         3         C-image-5+, "a Slider showing 3" — 392
  *   4        1               2        3         4         Card-4 sets, 286 at 1440
  *
- * Below md the row always shows one slide and a 24px peek of the next, because at 326 a second
- * card would be 147 wide. From md up the count is exact and there is no peek: the controls say
- * there is more.
+ * Below md the row shows one slide and a 24px peek of the next, because at 326 a second card would
+ * be 147 wide. From md up the count is exact and there is no peek: the controls say there is more.
+ * At one per view there is never a peek (cmp-testimonials, 6 Oct 2026): the slide is a composite,
+ * and its neighbour's start edge read as a stray portrait sliver and a loose quote rule.
  */
 export type SliderPerView = 1 | 2 | 3 | 4;
 
@@ -286,6 +287,7 @@ export function Slider({ label, children, perView = 3, align = 'start' }: Slider
           ref={rowRef}
           scroll="always"
           columns={LADDER[perView]}
+          peek={perView !== 1}
           colGap="gutter"
           tabIndex={tabStop ? 0 : undefined}
           className={styles.row}

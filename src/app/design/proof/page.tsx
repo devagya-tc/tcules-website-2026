@@ -321,7 +321,11 @@ const G_QUOTES = [
   },
 ] as const satisfies readonly ProofQuote[];
 
-const G_RATING: ProofRating = { score: '4.9', platform: 'Example Reviews', href: UNRESOLVED_EXTERNAL };
+const G_RATING: ProofRating = {
+  score: '4.9',
+  platform: 'Example Reviews',
+  href: UNRESOLVED_EXTERNAL,
+};
 
 function GSurface({ surface }: { surface: SectionSurface }) {
   const [ines, tobias, maren] = G_QUOTES;
@@ -336,7 +340,12 @@ function GSurface({ surface }: { surface: SectionSurface }) {
           <Proof
             arrangement="featured"
             quote={maren}
-            footer={<CtaRow actions={[{ label: 'Read the case', href: ROUTES.caseStudies }]} />}
+            footer={
+              <CtaRow
+                rule={false}
+                actions={[{ label: 'Read the case', href: ROUTES.caseStudies }]}
+              />
+            }
           />
         </Specimen>
         <Specimen title={`${surface} · case, with a score`}>
@@ -349,7 +358,10 @@ function GSurface({ surface }: { surface: SectionSurface }) {
                   title="Dispatch screens rebuilt around the driver’s day"
                   body="Field research with twelve dispatchers, carried into a routing model."
                   href={ROUTES.caseStudies}
-                  media={{ type: 'image', image: getKitPhoto('studio-whiteboard-crit', { standIn: true }) }}
+                  media={{
+                    type: 'image',
+                    image: getKitPhoto('designer-tablet-monitor', { standIn: true }),
+                  }}
                   tracks={3}
                 />
               </Layout>
@@ -384,8 +396,8 @@ export default function ProofSpecimenPage() {
           <p>
             One evidence pattern with three display shapes: an attributed quotation, checked
             figures, or both. Compact is the embedded quote-only arrangement; featured, case,
-            group and rating-led are the G bands (§ 19). Proof owns no
-            ground; the nearest surface supplies it.
+            group and rating-led are the G bands (§ 19). Proof owns no ground; the nearest
+            surface supplies it.
           </p>
         </Layout>
       </Section>
@@ -905,8 +917,8 @@ export default function ProofSpecimenPage() {
             <h2>18 · Testimonial group and stat group are compositions</h2>
             <p>
               Audit §4: a testimonial group is Proof compact × n in a Layout, and a stat group
-              is Proof display with figures only. (Superseded for the testimonial group on 6 Oct:
-              the G band is <code>arrangement=&quot;group&quot;</code>, § 19.) Here three
+              is Proof display with figures only. (Superseded for the testimonial group on 6
+              Oct: the G band is <code>arrangement=&quot;group&quot;</code>, § 19.) Here three
               compact quotes share a <code>fit</code> Layout with a gutter between them; the
               marks are one colour, the ground&apos;s ink, because together they are a set (ch05
               §10).
@@ -927,10 +939,11 @@ export default function ProofSpecimenPage() {
         <Layout rowGap="block">
           <h2>19 · The G arrangements on four surfaces</h2>
           <p>
-            Featured, case, group, rating-led and the centred display, identical markup on paper,
-            tint, ink and blue: every Proof token is redeclared per surface, so the quote rule, the
-            centred mark, the score and the badge resolve on each. The bands themselves, at 1470
-            and 390, are proven on <a href={ROUTES.designKitTestimonials}>the testimonials kit</a>.
+            Featured, case, group, rating-led and the centred display, identical markup on
+            paper, tint, ink and blue: every Proof token is redeclared per surface, so the quote
+            rule, the centred mark, the score and the badge resolve on each. The bands
+            themselves, at 1470 and 390, are proven on{' '}
+            <a href={ROUTES.designKitTestimonials}>the testimonials kit</a>.
           </p>
         </Layout>
       </Section>

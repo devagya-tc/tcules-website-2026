@@ -1,14 +1,6 @@
 import type { ReactNode } from 'react';
 
-import {
-  Button,
-  Layout,
-  Media,
-  Section,
-  Texture,
-  TextureShape,
-  type SectionSurface,
-} from '@/components';
+import { Button, Layout, Media, Section, Texture, TextureShape } from '@/components';
 import { getIdealServiceStory } from '@/content';
 import { MEDIA_SPLIT } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
@@ -150,7 +142,7 @@ const VARIATIONS = {
   typographic: {
     id: 'typographic',
     title: 'Typographic, centred, with the rating',
-    note: 'A real quote with no portrait, the quote rule turned on its side above it, the Clutch badge a block under the attribution. § 1.4 budget 421.',
+    note: 'A real quote with no portrait at the centred role (43), the quote rule turned on its side above it, the Clutch badge a block under the attribution. § 1.4 budget 421.',
   },
   typographicCta: {
     id: 'typographic-cta',
@@ -160,12 +152,12 @@ const VARIATIONS = {
   case: {
     id: 'case',
     title: 'G-case: the work first, then the words',
-    note: 'The owner-approved composition (1 Oct): the case card in the 381 track carrying the band’s image, the compact quote in the 763, the score a block under the attribution. Real quote, real score, stand-in cover. § 1.4 budget 508.',
+    note: 'The owner-approved composition (1 Oct): the case card in the 381 track carrying the band’s image, the quote at the display role in the 763 so the client’s words lead the card’s title, the score a block under the attribution. Real quote, real score, stand-in cover. § 1.4 budget 508.',
   },
   caseBare: {
     id: 'case-without-rating',
     title: 'G-case without the rating',
-    note: 'When there is no score to show, the quote ends at its attribution and nothing takes the badge’s place.',
+    note: 'When there is no score to show, the quote ends at its attribution and nothing takes the badge’s place. Fictional speaker, so a stock cover rather than a studio photograph.',
   },
   featured: {
     id: 'featured',
@@ -175,12 +167,12 @@ const VARIATIONS = {
   featuredCta: {
     id: 'featured-cta',
     title: 'Featured, with a CtaRow',
-    note: 'With an ask, the copy column stretches to the portrait: the quote’s top on its top edge, the row pinned to its bottom edge (§ 3.2 rule 1).',
+    note: 'With an ask: the link a block under the attribution, on the name’s indent, and the whole stack still centred on the portrait — the ask travels with the testimonial.',
   },
   group3: {
     id: 'group-of-3',
     title: 'Group of three',
-    note: 'Three compact quotes as peers, 32 apart, each opened by its 64 portrait (radius 4) on the rule’s edge. Centred head, start-aligned items. § 1.4 budget 485.',
+    note: 'Three compact quotes as peers, 32 apart. Each 64 portrait (radius 4) sits beside its name, so face and name read as one person, and the attributions are pinned to one baseline however long each quote runs. § 1.4 budget 485.',
   },
   group2: {
     id: 'group-of-2',
@@ -195,12 +187,12 @@ const VARIATIONS = {
   slider: {
     id: 'slider',
     title: 'Slider of featured slides',
-    note: 'The testimonial use of Slider: one per view, no autoplay, controls centred under a centred head. Arrow keys are not hijacked; Tab reaches the controls and Previous / Next move one slide. § 1.4 budget 579.',
+    note: 'The testimonial use of Slider: one per view, no peek, no autoplay. Eyebrow and rail on the container’s start edge, controls on its end. Arrow keys are not hijacked; Tab reaches the controls and Previous / Next move one slide. § 1.4 budget 579.',
   },
   rating: {
     id: 'rating-led',
     title: 'Rating-led',
-    note: 'The score is the band’s large thing: stat-lg, then its platform line (the badge, which carries the score in its link name), then one quote. Real score, real quote. § 1.4 budget 347.',
+    note: 'The score is the band’s large thing: the numeral at the score role (105, serif, so the point sits close) over its pill, which carries the score in its link name; [5, 7] with the quote — its own silhouette, not the centred column. Real score, real quote. § 1.4 budget 347.',
   },
   ratingCta: {
     id: 'rating-led-cta',
@@ -231,13 +223,7 @@ function Label({ variation }: { variation: Variation }) {
   );
 }
 
-function Band({
-  variation,
-  children,
-}: {
-  variation: Variation;
-  children: ReactNode;
-}) {
+function Band({ variation, children }: { variation: Variation; children: ReactNode }) {
   return (
     <>
       <Label variation={variation} />
@@ -288,9 +274,9 @@ function RealCaseCard() {
   );
 }
 
-function featuredSlides(surface?: SectionSurface) {
+function featuredSlides() {
   return [MAREN, DANIEL, ARJUN].map((quote) => (
-    <li key={`${surface ?? 'tint'}-${quote.name}`}>
+    <li key={quote.name}>
       <Proof arrangement="featured" quote={quote} />
     </li>
   ));
@@ -314,9 +300,21 @@ export default function TestimonialsKitPage() {
       <Section>
         {/* hero-foot (§ 6.3): a hero with a photograph, at the copy side's foot, clear of it. */}
         <Texture>
-          <TextureShape kind="ellipse" bottom={-300} left={-200} width="50%" height={380} blur={180} />
+          <TextureShape
+            kind="ellipse"
+            bottom={-300}
+            left={-200}
+            width="50%"
+            height={380}
+            blur={180}
+          />
         </Texture>
-        <Layout columns={{ base: 1, lg: [7, 5] }} colGap="section" rowGap="stack" align="center">
+        <Layout
+          columns={{ base: 1, lg: [7, 5] }}
+          colGap="section"
+          rowGap="stack"
+          align="center"
+        >
           <Layout rowGap="stack">
             <Layout rowGap="block">
               <p className={s.eyebrow}>UI kit · Family G</p>
@@ -324,8 +322,8 @@ export default function TestimonialsKitPage() {
               <p className={s.specNote}>
                 What clients said, set so it reads as evidence. The work first where there is a
                 case; the speaker’s face where we may show one; the score only where it is real.
-                Six arrangements of one Proof pattern, each a band on tint that fits one screen at
-                1470.
+                Six arrangements of one Proof pattern, each a band on tint that fits one screen
+                at 1470.
               </p>
             </Layout>
             <Layout as="ol" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="text">
@@ -338,7 +336,7 @@ export default function TestimonialsKitPage() {
               ))}
             </Layout>
           </Layout>
-          <Media image={getKitPhoto('portrait-woman-laughing')} ratio="4/5" sizes={MEDIA_SPLIT} />
+          <Media image={getKitPhoto('workshop-brick-room')} ratio="4/5" sizes={MEDIA_SPLIT} />
         </Layout>
       </Section>
 
@@ -355,7 +353,10 @@ export default function TestimonialsKitPage() {
           align="center"
           eyebrow="In a client’s words"
           footer={
-            <CtaRow align="center" actions={[{ label: 'Read the case', href: ROUTES.caseStudies }]} />
+            <CtaRow
+              align="center"
+              actions={[{ label: 'Read the case', href: ROUTES.caseStudies }]}
+            />
           }
         >
           <Proof quote={TOBIAS_TYPOGRAPHIC} align="center" />
@@ -392,7 +393,7 @@ export default function TestimonialsKitPage() {
                 title="Dispatch screens rebuilt around the driver’s day"
                 body="Field research with twelve dispatchers, carried into a routing model and a component library."
                 href={ROUTES.caseStudies}
-                cover="studio-whiteboard-crit"
+                cover="pair-at-laptop-sticky-wall"
               />
             }
             quote={MAREN_CASE}
@@ -412,7 +413,12 @@ export default function TestimonialsKitPage() {
           <Proof
             arrangement="featured"
             quote={DANIEL}
-            footer={<CtaRow actions={[{ label: 'Read the case', href: ROUTES.caseStudies }]} />}
+            footer={
+              <CtaRow
+                rule={false}
+                actions={[{ label: 'Read the case', href: ROUTES.caseStudies }]}
+              />
+            }
           />
         </Section>
       </Band>
@@ -450,7 +456,10 @@ export default function TestimonialsKitPage() {
           heading="Three teams, in their words"
           headingId="kit-g-group-3-cta"
           footer={
-            <CtaRow align="center" actions={[{ label: 'See the work', href: ROUTES.caseStudies }]} />
+            <CtaRow
+              align="center"
+              actions={[{ label: 'See the work', href: ROUTES.caseStudies }]}
+            />
           }
         >
           <Proof arrangement="group" quotes={GROUP} />
@@ -459,8 +468,8 @@ export default function TestimonialsKitPage() {
 
       {/* ── 10 Slider ─────────────────────────────────────────────────────────────── */}
       <Band variation={VARIATIONS.slider}>
-        <ContentSection surface="tint" align="center" eyebrow="Client stories">
-          <Slider label="Client stories" perView={1} align="center">
+        <ContentSection surface="tint" eyebrow="Client stories">
+          <Slider label="Client stories" perView={1}>
             {featuredSlides()}
           </Slider>
         </ContentSection>
@@ -468,7 +477,7 @@ export default function TestimonialsKitPage() {
 
       {/* ── 11 Rating-led ─────────────────────────────────────────────────────────── */}
       <Band variation={VARIATIONS.rating}>
-        <ContentSection surface="tint" align="center" eyebrow="Independent reviews">
+        <ContentSection surface="tint" eyebrow="Independent reviews">
           <Proof arrangement="rating" rating={REAL_RATING} quote={REAL_QUOTE} />
         </ContentSection>
       </Band>
@@ -476,11 +485,8 @@ export default function TestimonialsKitPage() {
       <Band variation={VARIATIONS.ratingCta}>
         <ContentSection
           surface="tint"
-          align="center"
           eyebrow="Independent reviews"
-          footer={
-            <CtaRow align="center" actions={[{ label: 'Read the case', href: REAL_CASE_HREF }]} />
-          }
+          footer={<CtaRow actions={[{ label: 'Read the case', href: REAL_CASE_HREF }]} />}
         >
           <Proof arrangement="rating" rating={REAL_RATING} quote={REAL_QUOTE} />
         </ContentSection>
@@ -492,7 +498,12 @@ export default function TestimonialsKitPage() {
           <Proof
             arrangement="featured"
             quote={ARJUN}
-            footer={<CtaRow actions={[{ label: 'Read the case', href: ROUTES.caseStudies }]} />}
+            footer={
+              <CtaRow
+                rule={false}
+                actions={[{ label: 'Read the case', href: ROUTES.caseStudies }]}
+              />
+            }
           />
         </Section>
       </Band>

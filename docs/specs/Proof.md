@@ -772,23 +772,28 @@ value), which the owner's 6 Oct blue ruling (visual-direction § 4) and § 5.3's
 
 - **Six arrangements.** `display` (now with `align: 'start' | 'center'` and an optional `rating`),
   `compact` (optional `rating`), and four new ones: `featured` (1:1 portrait in the 5 of [5, 7] at
-  `section`, optional `footer` slot; without a portrait it falls back to `display`, footer kept),
-  `case` (`work` slot in 381 beside the compact quote in 763, tops aligned, optional `rating`),
-  `group` (2 or 3 quotes, 64 portrait above each quote, `gutter` across from lg, `column` down below
-  it), and `rating` (score at `--text-stat-lg`, the badge as its platform line, one centred display
-  quote). Slots take what a pattern may not import: BlockCard (`work`), CtaRow (`footer`). The
+  `section`, optional `footer` slot a `block` under the attribution on the name's indent, the stack
+  always centred on the portrait; without a portrait it falls back to `display`, footer kept),
+  `case` (`work` slot in 381 beside the display quote in 763, tops aligned, optional `rating`),
+  `group` (2 or 3 quotes, each 64 portrait beside its name, attributions pinned to the row's foot,
+  `gutter` across from lg, `column` down below it), and `rating` ([5, 7] at `section`: the score at
+  `--text-score` over its pill in the 5, the display quote in the 7, centred on each other). Slots take what a pattern may not import: BlockCard (`work`), CtaRow (`footer`). The
   testimonial slider is a composition: `Slider perView={1}` of `featured` slides.
 - **`ProofRating`** `{ score, platform, href, mark? }`. Proof composes the RatingBadge a `block`
   under the attribution, indented to the name when the attribution is. Real ratings only beside real
   quotes (§ 5.8).
 - **Centred quote.** The rule leaves the quote's side and sits above it as a 48 × 6 mark
   (`--proof-mark-inline-size`, `--proof-quote-rule`); the quote balances; attribution centres.
-  The rating-led quote draws no mark — the score marks the top.
 - **Tokens.** `--proof-portrait-radius` (8, featured) beside `--proof-portrait-radius-compact` (4);
   portraits have no frame. `--proof-mark-inline-size` 48. No new colour token: the score reads
   `--proof-value-ink`.
-- **Type.** The quote's size is the arrangement's: display role in display, featured and rating;
-  reading role (28) in compact, case and group.
+- **Type.** The quote's size is the arrangement's: `--text-quote-xl` (43 / 34 / 25, new) for the
+  centred typographic band; the display role (34) in start display, featured, case and rating; the
+  reading role (28) in compact and group. The rating's numeral takes `--text-score` (105 / 84 / 67,
+  new, serif): mono gave the full stop a whole cell and "4.8" read as three glyphs.
+- **Slider.** At `perView={1}` the Slider never peeks (Layout `peek={false}`): the next slide's
+  start edge was a portrait sliver and a loose quote rule. Fictional cases take a stock cover, never
+  a studio photograph.
 - **RatingBadge** gains `showScore` (default true). `false` prints "Rated on Clutch" and keeps the
   score in visually hidden text after the platform, so the name starts with the visible words.
 - **Specimens.** `/design/kit/testimonials` (every band at 1470 and 390, fold-measured); `/design/proof`

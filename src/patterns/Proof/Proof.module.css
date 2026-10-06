@@ -52,6 +52,17 @@
   text-wrap: var(--text-running-wrap);
 }
 
+/* The centred role (43 / 34 / 25): the typographic band's quote is the band's one idea, alone on
+   the column under an eyebrow, so it takes the step above the display role (fix round 1, 6 Oct
+   2026 — at 34 across 1010 it read modest beside Meridian's 36 across 1248). At the lead measure
+   in its own font it runs about 1070, three lines for a 25-word quote. */
+.sizeXl .quoteText {
+  max-inline-size: var(--measure-lead);
+  font: var(--text-quote-xl);
+  letter-spacing: var(--text-quote-xl-tracking);
+  text-wrap: var(--text-running-wrap);
+}
+
 .sizeMd .quoteText {
   font: var(--text-quote);
   text-wrap: var(--text-running-wrap);
@@ -120,12 +131,9 @@
 
 /* The featured portrait: the whole 5 of [5, 7] (477 at 1470), square, the photograph radius
    (--proof-portrait-radius, 8) and no frame — a portrait is a photograph (§ 5.3). Below 1024 it is
-   the full column, still square: a phone sees the person first, then what they said. `start` in its
-   own cell, because with a footer the row stretches (the copy column pins its CtaRow to the
-   portrait's foot), and a stretched portrait taller than its track is no longer square. */
+   the full column, still square: a phone sees the person first, then what they said. */
 .portraitFeatured {
   display: block;
-  align-self: start;
   inline-size: 100%;
   aspect-ratio: var(--proof-portrait-ratio);
   border-radius: var(--proof-portrait-radius);
@@ -136,12 +144,21 @@
   min-inline-size: 0;
 }
 
-/* The rating-led score: the band's large thing (§ 3.3), the stat role a Proof figure's value
-   takes, in the same accent ink. Mono, so it takes the mono case (a no-op on "4.8"). */
+/* A group peer's figure fills its item, which the row stretches to the tallest peer — a stretched
+   grid item has a definite height, so 100% resolves — and the figure's pinLast then has the spare
+   height to push the attribution to the foot. Sizing, not spacing: no seam changes. */
+.groupItem > .quote {
+  block-size: 100%;
+}
+
+/* The rating-led score: the band's large thing (§ 3.3), at the score role (105 / 84 / 67) in the
+   accent ink — three times the quote beside it. The role is serif (see --font-size-score): in mono
+   the full stop takes a whole cell and "4.8" read as three spaced glyphs. Lining figures, so the
+   numeral stands on the baseline at cap height rather than in old-style descenders. */
 .score {
-  font: var(--text-stat-lg);
-  letter-spacing: var(--text-stat-lg-tracking);
-  text-transform: var(--text-mono-case);
+  font: var(--text-score);
+  letter-spacing: var(--text-score-tracking);
+  font-variant-numeric: lining-nums;
   color: var(--proof-value-ink);
 }
 

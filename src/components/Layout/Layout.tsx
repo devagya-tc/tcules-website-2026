@@ -241,6 +241,14 @@ export type LayoutProps = {
    */
   scroll?: Scroll;
   /**
+   * Whether a scroll row shows `--lay-scroll-peek` of the next item below md. Default `true`. The
+   * Slider turns it off at one per view (cmp-testimonials, 6 Oct 2026): a one-up slide is a
+   * composite — a portrait over a quote — so its peeking start edge is a sliver of photograph and a
+   * loose quote rule, not a card's edge, and the Slider's controls already say there is more.
+   * Ignored without `scroll`.
+   */
+  peek?: boolean;
+  /**
    * The rendered element, for a caller that drives a scroll row (the Slider reads its scroll
    * position and scrolls it). A plain prop, as React 19 passes refs.
    */
@@ -428,6 +436,7 @@ export function Layout({
   offset,
   pinLast = false,
   scroll,
+  peek = true,
   ref,
   tabIndex,
   className,
@@ -470,6 +479,7 @@ export function Layout({
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast && styles['pin-last'],
         scroll && styles[`scroll-${scroll}`],
+        scroll && !peek && styles['no-peek'],
         className,
       )}
     >

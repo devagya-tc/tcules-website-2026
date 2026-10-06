@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 23 roles, consumed as composites
+### Type — 25 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -76,6 +76,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-h6` | 18px | 1.35 | display | medium | `--text-h6-tracking` | verbatim |
 | `--text-quote` | 28px | 1.35 | display | regular | **none** | verbatim |
 | `--text-quote-lg` | 34px | 1.3 | display | regular | `--text-quote-lg-tracking` | verbatim |
+| `--text-quote-xl` | 43px | 1.25 | display | regular | `--text-quote-xl-tracking` | verbatim |
 | `--text-lead` | 20px | 1.5 | sans | regular | **none** | verbatim |
 | `--text-body-lg` | 18px | 1.55 | sans | regular | **none** | verbatim |
 | `--text-body` | 16px | 1.6 | sans | regular | **none** | verbatim |
@@ -89,9 +90,10 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-micro` | 11px | 1.2 | mono | semibold | `--text-micro-tracking` | `--text-mono-case` |
 | `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` | `--text-mono-case` |
 | `--text-stat-lg` | 54px | 1 | mono | medium | `--text-stat-lg-tracking` | `--text-mono-case` |
+| `--text-score` | 105px | 1 | display | regular | `--text-score-tracking` | verbatim |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**16 roles have a tracking companion. 7 have none** — pairing one with a role in that
+**18 roles have a tracking companion. 7 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
@@ -209,7 +211,7 @@ Layout is done by these three. Always. Anything you specify is arranged by one o
 
   where `SectionSurface` = 'paper' | 'tint' | 'ink' | 'blue' · `SectionDensity` = 'tight' | 'open'
 
-**`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `align?: Place` · `justifyItems?: Place` · `justify?: Distribute` · `scroll?: Scroll` · `ref?: Ref<HTMLElement>` · `tabIndex?: 0 | -1` · `children: ReactNode`
+**`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `align?: Place` · `justifyItems?: Place` · `justify?: Distribute` · `scroll?: Scroll` · `peek?: boolean` · `ref?: Ref<HTMLElement>` · `tabIndex?: 0 | -1` · `children: ReactNode`
 
   where `Gap` = 'none' | 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' | 'column' | 'section' | 'section-open' · `Columns` = (number | number[]) | 'fit' | 'tile' | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec } · `MinTrack` = 'xs' | 'sm' | 'md' | 'lg' · `Offset` = 0 | 1 | 2 | 3 · `Place` = 'stretch' | 'start' | 'center' | 'end' · `Distribute` = 'start' | 'center' | 'end' | 'between' · `Scroll` = 'until-md' | 'always'
 
