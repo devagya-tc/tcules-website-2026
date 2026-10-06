@@ -82,6 +82,12 @@ Token changes, old → new (paper / tint; ink in the last column):
 Kept: Prose `<ins>` underline stays neutral (`fdn-colour` second pass) — it does not navigate, and a
 blue underline would read as a link. Chrome (SiteNav, SiteFooter) is unchanged.
 
+## ch03 Typography
+
+| § | Brand guide says | The website now does | Package |
+|---|---|---|---|
+| type ladder, stats | the mono stat roles stop at `--text-stat-lg` (54 / 43 / 40) | `--text-stat-xl` (96 / 80 / 64, line height 1, `--letter-spacing-display`) for ONE sourced figure set as a band's hero — read only by Proof's `figureSize="xl"`. Above display (67) on purpose: three mono characters at h1 scale read as a label beside a serif h2, not as the band's one idea. | `cmp-logos` |
+
 ## ch05 Imagery
 
 | § | Brand guide says | The website now does | Package |
@@ -92,3 +98,4 @@ blue underline would read as a link. Chrome (SiteNav, SiteFooter) is unchanged.
 | new § 11 Tone | — | Every kit photograph carries measured `temperature` (warm ≥ 0.10 r−b, cool < 0.02, neutral between) and `saturation` (vivid ≥ 0.40 mean HSV S) in `catalogue.json`, written by `npm run photos:tone`; the result matches visual-direction § 5.5's table exactly. A page is one family (warm + neutral or cool + neutral) with ≤ 1 vivid photo; each service story names its family, and its stand-in pool is filtered by it. | `fdn-media` (tags); `fdn-gates` (the page check) |
 | § 7 Captions | every non-decorative image has a caption | Kit photographs are atmosphere photographs: `getKitPhoto` returns `alt: ""` unless a placement passes one. | `fdn-media` |
 | intro note, § 10 Sourcing | "Stock photography is not published…" | Unchanged in code: kit stock reaches only `/design/**` routes. Public use is visual-direction § 10 item 3. | — (doc only) |
+| § 10 Client logos · size | "scaled so its bounding-box area matches the set's target area, then capped at the set's maximum height and width… corrected by up to ±15% of that size" | Read in that order: the correction scales the capped size, and only the height cap (ruling P2, ~40) applies again. The width cap is the set's limit before correction, so a mark with a recorded upward correction may reach 184 (LatitudePay, +15%, 175). Recorded corrections: LatitudePay +15%, SafeXpay +8%, Doodle, GT Tools and Incluude −15%. Below 768 the target and caps step down to 44 / 32 / 128. | `cmp-logos` |

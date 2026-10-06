@@ -203,6 +203,11 @@
   /* The figure that leads a band — a display Proof's audited value — at h1 scale, so the number
      outranks the title beside it rather than matching a card's. The plain stat keeps 40. */
   --font-size-stat-lg: 54px;
+  /* The figure that IS the band — one sourced number set as the band's hero beside its title (the
+     H band's rating, kit cmp-logos, 6 Oct 2026). Above display (67) on purpose: three characters
+     of mono at h1 scale read as a label, not as the band's one idea. Read only through
+     --text-stat-xl, by Proof's figureSize="xl". */
+  --font-size-stat-xl: 96px;
   --font-size-code: 14px;
   /* Breakpoint cuts. Titles step down; text and chrome hold at every width. */
   --font-size-display-t: 54px;
@@ -223,6 +228,8 @@
   --font-size-stat-m: 32px;
   --font-size-stat-lg-t: 43px;
   --font-size-stat-lg-m: 40px;
+  --font-size-stat-xl-t: 80px;
+  --font-size-stat-xl-m: 64px;
 }
 
 /* ── Type · line-height ladder ────────────────────────────────────────────────
@@ -268,6 +275,7 @@
   --line-height-index: 1.2; /* the chrome ratio, not stat's 1 — an index can wrap in a narrow track */
   --line-height-stat: 1;
   --line-height-stat-lg: 1; /* one line of figures, like stat — and, like stat, no -t / -m step */
+  --line-height-stat-xl: 1; /* the same: one line of figures, no -t / -m step */
   --line-height-code: 1.6;
   /* Breakpoint steps. Only the roles whose ratio actually moves have one — stat holds
    at 1 on every width, so it has no -m step even though its SIZE has one. */
@@ -427,6 +435,10 @@
   --text-stat-lg: var(--font-weight-medium) var(--font-size-stat-lg)/var(--line-height-stat-lg)
     var(--font-family-mono);
   --text-stat-lg-tracking: var(--letter-spacing-title);
+  /* Mono like stat. At 96 the tracking closes to display's, the tightest step, as the ladder does. */
+  --text-stat-xl: var(--font-weight-medium) var(--font-size-stat-xl)/var(--line-height-stat-xl)
+    var(--font-family-mono);
+  --text-stat-xl-tracking: var(--letter-spacing-display);
   --text-code: var(--font-weight-regular) var(--font-size-code)/var(--line-height-code)
     var(--font-family-mono);
 }
@@ -447,6 +459,8 @@
       var(--font-size-quote-lg-t)/var(--line-height-quote-lg-t) var(--font-family-display);
     --text-stat-lg: var(--font-weight-medium)
       var(--font-size-stat-lg-t)/var(--line-height-stat-lg) var(--font-family-mono);
+    --text-stat-xl: var(--font-weight-medium)
+      var(--font-size-stat-xl-t)/var(--line-height-stat-xl) var(--font-family-mono);
   }
 }
 /* Mobile — below 768. */
@@ -474,6 +488,8 @@
       var(--font-size-quote-lg-m)/var(--line-height-quote-lg-m) var(--font-family-display);
     --text-stat-lg: var(--font-weight-medium)
       var(--font-size-stat-lg-m)/var(--line-height-stat-lg) var(--font-family-mono);
+    --text-stat-xl: var(--font-weight-medium)
+      var(--font-size-stat-xl-m)/var(--line-height-stat-xl) var(--font-family-mono);
   }
 }
 

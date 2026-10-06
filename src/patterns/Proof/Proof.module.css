@@ -151,6 +151,13 @@
   color: var(--proof-value-ink);
 }
 
+/* figureSize="xl": the figure as the band's hero. Same ink, case and wrap as .value; only the
+   role changes, so this rule states the composite and its tracking and nothing else. */
+.valueXl {
+  font: var(--text-stat-xl);
+  letter-spacing: var(--text-stat-xl-tracking);
+}
+
 .label {
   min-inline-size: 0;
   overflow-wrap: anywhere;

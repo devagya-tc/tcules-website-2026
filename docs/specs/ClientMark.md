@@ -90,12 +90,18 @@ None. There is one treatment and one size rule. The rendered size is **computed*
 
 ```
 fitted = min( side × √r ,  height-max × r ,  width-max )        r = width / height
-width  = min( fitted × (1 + correction) ,  height-max × r ,  width-max )
+width  = min( fitted × (1 + correction) ,  height-max × r )
 height = width / r
 ```
 
-The caps apply again after the correction, so a correction never breaks P2's 40px cap: a
-downward correction always takes effect, an upward one only up to the cap (§17 Q3).
+The correction scales the CAPPED size, ch05 §10's order ("corrected by up to ±15% of that size"),
+and only the height cap applies again, so a correction never breaks P2's 40px cap. The width cap is
+not re-applied (fix round 2, kit cmp-logos, 6 Oct 2026): a wide mark may reach 160 × 1.15 = 184,
+and only when its file records an upward correction (§17 Q3, Q10).
+
+Below 768 the three sizes step down together (`--cmark-target-side-m` 44, `--cmark-height-max-m`
+32, `--cmark-width-max-m` 128), so a nine-mark set at 390 is a compact set rather than a wall; the
+specimen renders both steps side by side by swapping the `-m` tokens in.
 
 **Rejected:** a `size` t-shirt prop (sets differ in density, but no job asks for a second size
 yet, §17 Q4); a full-colour variant (that is a Figure, §1); a hover-to-colour variant (ch05 §10:
@@ -305,7 +311,7 @@ column, equal cells". Every surface band renders the Layout under a section head
 | One mark                      | Same size and ink as in a set (specimen "A lone mark").                                                                                                                                                                                                                                             |
 | Many marks (2×)               | The Cluster wraps; in a Layout, pick a count the columns divide (§10).                                                                                                                                                                                                                              |
 | Narrow track (326)            | Cluster: wraps into rows. Layout `{ base: 2 }`: ~139 cells, a wider mark shrinks to its cell and letterboxes (§7). Both in the specimen.                                                                                                                                                            |
-| Hairline / letter-spaced mark | A recorded `correction`. LatitudePay (7.4:1, hairline spaced capitals) carries **+0.05**, judged by eye at 1440 and 390; it is also the most that takes effect under the 160 width cap (§17 Q10).                                                                                                   |
+| Hairline / letter-spaced mark | A recorded `correction`. LatitudePay (7.4:1, hairline spaced capitals) carries **+0.15**, judged by eye at 1440 and 390, and renders 175 wide now the width cap does not re-apply after a correction (§17 Q10).                                                                                                   |
 | Parent that does not size it  | Content-sized in flex and grid (`flex: none`, `justify-self: start`); `block-size` stated so `align="stretch"` cannot stretch it.                                                                                                                                                                   |
 | Logical properties            | `inline-size` / `block-size`.                                                                                                                                                                                                                                                                       |
 | Nested surface                | Takes the nearest `data-surface` (§6).                                                                                                                                                                                                                                                              |
@@ -375,9 +381,11 @@ implemented`. Built, so `implemented`, with the acceptance cited. **non-blocking
    _Rebuilt (29 Sep, 2.17):_ brandeis-200, 3.78:1 — the quieter-than-white step that still clears
    3:1 (measured against 50, 100 and 300 in §6). _Alternative:_ forbid marks on blue.
    **non-blocking**
-3. **Correction vs caps.** _Built:_ correction applies to the fitted size and the caps apply again,
-   so P2's 40px cap is absolute. _Alternative:_ correction after the caps (a +15% capped mark
-   reaches 46). **non-blocking**
+3. **Correction vs caps.** _Built (6 Oct, kit cmp-logos fix round 2):_ correction applies to the
+   capped size (ch05 §10's order) and only the height cap applies again, so P2's 40px cap stays
+   absolute while the width cap is the set's limit before correction. _Was:_ both caps re-applied,
+   which held LatitudePay to +5%. _Alternative:_ neither cap re-applied (a +15% capped mark reaches
+   46 tall). **non-blocking** — owner to confirm on the kit review.
 4. **One target and one set of caps site-wide.** ch05 speaks of "the set's" target and caps. _Built:_
    tokens, no prop. A client wall wanting larger marks gets a `size` prop when it exists.
    **non-blocking**
@@ -395,11 +403,11 @@ implemented`. Built, so `implemented`, with the acceptance cited. **non-blocking
 9. **ch05 §10 names the full inks.** It still says "neutral-900 on paper and paper-deep,
    white on ink". _Built (2.17, owner):_ one step quieter (§6). The chapter needs the same
    amendment at its next revision, or the two disagree. **non-blocking** — flagged to the owner.
-10. **LatitudePay's correction and the width cap.** _Built:_ +0.05. Its fitted width is 152, and
-    the caps apply again after the correction (Q3), so the most any upward correction can do is
-    160 (+0.053). It still reads a little lighter than its neighbours after that: the rest is the
-    file's hairline, spaced capitals, which a size correction cannot reach. _Alternative:_ raise
-    the width cap, which changes every wide mark — not approved. **non-blocking**
+10. **LatitudePay's correction and the width cap.** _Built (6 Oct):_ +0.15, 175 wide, because the
+    width cap no longer re-applies after a correction (Q3); the heavy bold marks (Doodle, GT Tools,
+    Incluude) come down the full −0.15, so a course reads as one even grey line. _Was:_ +0.05, the
+    most that took effect at 160, and it read visibly lighter than its neighbours. _Rejected:_
+    raising the width cap, which changes every wide mark. **non-blocking**
 
 ---
 

@@ -167,6 +167,12 @@ three-up API. A feature figure is the same value/label/date/source anatomy at a 
 and no resolved route requires it. Parent `Layout` can compose several Proof instances later
 without making the individual component know it is in a set.
 
+**Amended 6 Oct 2026 (kit cmp-logos): `figureSize`.** That feature figure now has a consumer — the H
+band's sourced rating set as the band's hero beside its head — so figures-only display takes
+`figureSize?: 'lg' | 'xl'` (default `lg`). `xl` sets the value at `--text-stat-xl` (96 / 80 / 64,
+line height 1, display tracking); label, date and source are unchanged. Figures-only by type: beside
+a quote the quote is the moment, so the figures stay `lg`. The anatomy, ink and states do not change.
+
 ## 5 · States
 
 Proof itself has only rest state. Quote, attribution, figure values, labels, dates and the leading

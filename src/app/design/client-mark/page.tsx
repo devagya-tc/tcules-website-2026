@@ -6,8 +6,10 @@ import {
   type ClientMarkProps,
   type LayoutProps,
 } from '@/components';
+import { cx } from '@/lib/cx';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
+import * as C from '../_specimen/clients';
 
 /**
  * ClientMark specimen — the client set at one visual weight, on four grounds.
@@ -36,54 +38,26 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 type Mark = Omit<ClientMarkProps, 'className'> & { shape: string };
 
-const CLIENTS_DIR = '/clients';
 const STRESS_DIR = '/design';
 
-/* width / height are each file's viewBox. A correction is "recorded with the asset" (ch05 §10)
-   — here, the fifth argument; on the site, a field beside the file in the CMS. */
-const client = (
-  name: string,
-  file: string,
-  width: number,
-  height: number,
-  correction?: number,
-): Mark => ({
-  name,
-  src: `${CLIENTS_DIR}/${file}.svg`,
-  width,
-  height,
-  correction,
-  shape: `${(width / height).toFixed(1)}:1${correction ? `, ${correction > 0 ? '+' : '−'}${Math.round(Math.abs(correction) * 100)}%` : ''}`,
-});
+/* The real set and its recorded corrections live in ../_specimen/clients.ts, shared with the kit's H
+   family, so a correction judged on one specimen is the one rendered on the other. Here each record
+   also carries its shape label. */
+const label = (mark: C.ClientRecord): Mark => {
+  const { width, height, correction } = mark;
+  const k = correction
+    ? `, ${correction > 0 ? '+' : '−'}${Math.round(Math.abs(correction) * 100)}%`
+    : '';
+  return { ...mark, shape: `${(width / height).toFixed(1)}:1${k}` };
+};
 
-const DOODLE = client('Doodle', 'doodle', 104, 24, -0.13);
-const GT_TOOLS = client('GT Tools', 'gttools', 67.384, 19.6, -0.12);
-const INCLUUDE = client('Incluude', 'incluude', 88.906, 16.851, -0.12);
-const KNOVOS = client('Knovos', 'knovos', 85.232, 14, 0.04);
-/* LatitudePay: hairline, widely letter-spaced capitals, so at equal area it reads lighter than
-   every neighbour. +0.05 is judged by eye against Omny and Quoter at 1440 and 390 (tracker 2.17),
-   and it is also the most that takes effect: its fitted width is 152, and the 160 width cap
-   applies again after the correction, so anything above +0.053 renders identically. The rest of
-   the lightness is the file's stroke weight, which a size correction cannot reach — so the heavy
-   bold wordmarks come DOWN to it instead (fix round 1, 6 Oct: Doodle −13%, GT Tools and Incluude
-   −12%, Quoter −6%), and the light SafeXpay and Knovos come up (+10%, +4%). */
-const LATITUDEPAY = client('LatitudePay', 'latitudepay', 133.896, 18.2, 0.05);
-const OMNY = client('Omny', 'omny', 93.982, 24.792);
-const PLEDGE = client('Pledge', 'pledge', 92.032, 19.6);
-const QUOTER = client('Quoter', 'quoter', 93.996, 28.002, -0.06);
-const SAFEXPAY = client('SafeXpay', 'safexpay', 83.02, 22.398, 0.1);
+const OMNY = label(C.OMNY);
+const LATITUDEPAY = label(C.LATITUDEPAY);
+const QUOTER = label(C.QUOTER);
+const KNOVOS = label(C.KNOVOS);
+const DOODLE = label(C.DOODLE);
 
-const STRIP: readonly Mark[] = [
-  OMNY,
-  LATITUDEPAY,
-  QUOTER,
-  KNOVOS,
-  SAFEXPAY,
-  DOODLE,
-  PLEDGE,
-  GT_TOOLS,
-  INCLUUDE,
-];
+const STRIP: readonly Mark[] = C.CLIENTS.map(label);
 
 /* The grid's set: all nine (visual-direction § 5.9, 6 Oct 2026). Nine fill 3 × 3 at md, sit 5 + 4
    from lg and leave the last mark alone at base — a start-aligned grid reads that as the end of the
@@ -137,11 +111,13 @@ const STRESS: readonly Mark[] = [SQUARE, TALL, HEAVY, LIGHT];
 const SIDE = 56;
 const H_MAX = 40;
 const W_MAX = 160;
+/* The correction scales the capped size, and only the height cap applies again (ch05 §10's order,
+   fix round 2) — so a corrected wide mark may pass 160. */
 function computed({ width, height, correction = 0 }: Mark) {
   const r = width / height;
   const k = 1 + Math.max(-0.15, Math.min(0.15, correction));
   const fitted = Math.min(SIDE * Math.sqrt(r), H_MAX * r, W_MAX);
-  const w = Math.min(fitted * k, H_MAX * r, W_MAX);
+  const w = Math.min(fitted * k, H_MAX * r);
   return `${Math.round(w)} × ${Math.round(w / r)}`;
 }
 
@@ -242,7 +218,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The arithmetic, per mark"
-            note="width = 56 × √ratio (equal area, 56² px²), capped so height ≤ 40 and width ≤ 160, then × (1 + correction) and capped again. Every real mark lands inside both caps. The fictional square and stacked lockup reach the height cap first, which is why they are a little lighter than the wordmarks: the cap outranks the area, in ch05's order."
+            note="width = 56 × √ratio (equal area, 56² px²), capped so height ≤ 40 and width ≤ 160, then × (1 + correction) of that capped size, and the height cap again (P2). The width cap is not re-applied, so LatitudePay’s +15% takes effect (175 wide). The fictional square and stacked lockup reach the height cap first, which is why they are a little lighter than the wordmarks: the cap outranks the area, in ch05's order."
           >
             <Layout rowGap="block">
               {[...STRIP, SQUARE, TALL].map((mark) => (
@@ -272,7 +248,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The weight correction, with and without"
-            note="Fictional files (the real corrections, LatitudePay +5% to Doodle −13%, are too small to read in a pair). Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
+            note="Fictional files, so the pairs read at a glance (the real set runs from LatitudePay +15% to Doodle, GT Tools and Incluude −15%). Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
           >
             <Layout rowGap="block">
               <Cluster colGap="stack" rowGap="stack" align="center">
@@ -319,7 +295,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The width cap"
-            note={`A 12:1 wordmark would be ${Math.round(SIDE * Math.sqrt(12))} wide at the target area. It stops at 160, and its height follows (${computed(ULTRAWIDE)}). Shown beside LatitudePay, the widest real mark at 7.4:1, which stays under the cap at its target area.`}
+            note={`A 12:1 wordmark would be ${Math.round(SIDE * Math.sqrt(12))} wide at the target area. It stops at 160, and its height follows (${computed(ULTRAWIDE)}). Shown beside LatitudePay, the widest real mark at 7.4:1: fitted at 152, then corrected +15% to 175, because the correction scales the capped size and only the height cap applies again.`}
           >
             <Strip marks={[LATITUDEPAY, ULTRAWIDE]} />
           </Specimen>
@@ -355,12 +331,7 @@ export default function ClientMarkSpecimenPage() {
                 <ClientMark {...bare(OMNY)} />
               </li>
               <li className={s.bandOutline}>
-                <ClientMark
-                  src={`${CLIENTS_DIR}/missing.svg`}
-                  name="Hollins"
-                  width={120}
-                  height={40}
-                />
+                <ClientMark src="/clients/missing.svg" name="Hollins" width={120} height={40} />
               </li>
               <li>
                 <ClientMark {...bare(QUOTER)} />
@@ -369,19 +340,31 @@ export default function ClientMarkSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="The 326 column"
-            note="The strip in the phone's content column. It wraps into rows; the Cluster's rowGap is the seam between them, and no mark shrinks to stay on one line — which is how nine marks leave one alone on the last row."
+            title="Desktop and phone sizes, side by side"
+            note="Below 768 the three sizes step down together (target side 56 → 44, height cap 40 → 32, width cap 160 → 128), so a 4:1 wordmark is 88 × 22. The upper row is the desktop size, the lower the phone step, rendered here at one viewport by swapping in the -m tokens."
           >
-            <div className={s.trackMobile}>
+            <Layout rowGap="stack">
+              <Strip marks={STRIP} />
+              <div className={s.cmarkPhone}>
+                <Strip marks={STRIP} />
+              </div>
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="The 326 column, at the phone sizes"
+            note="The strip in the phone's content column, at the -m sizes a 390 window renders. It wraps into rows; the Cluster's rowGap is the seam between them, and no mark shrinks to stay on one line."
+          >
+            <div className={cx(s.trackMobile, s.cmarkPhone)}>
               <Strip marks={STRIP} />
             </div>
           </Specimen>
 
           <Specimen
             title="The 326 column, equal cells"
-            note="The same nine in two tracks, ~139 wide. LatitudePay (160) is the one mark wider than its cell: it shrinks to the cell (max-inline-size: 100%) and letterboxes, never spilling into the gap."
+            note="The § 5.9 grid at base: two tracks, ~139 wide, at the phone sizes. The widest mark, LatitudePay at 137, fits its cell, so equal area holds at 390."
           >
-            <div className={s.trackMobile}>
+            <div className={cx(s.trackMobile, s.cmarkPhone)}>
               {/* Two tracks at every width: the frame is 326 wide inside a wide window, so the
                   viewport breakpoints would otherwise give it five. */}
               <Grid marks={GRID_SET} columns={{ base: 2 }} />

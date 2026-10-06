@@ -67,7 +67,18 @@ type ProofDisplayProps =
       arrangement?: 'display';
       quote?: never;
       figures: readonly ProofFigure[];
+      /**
+       * The figures' scale. `lg` (default) is the display stat role, 54 — a figure that leads a
+       * band beside its title. `xl` is --text-stat-xl, 96 / 80 / 64: a figure that IS the band's
+       * one idea, set as its hero (the H band's sourced rating beside the head, kit cmp-logos).
+       * Figures-only by type: beside a quote the quote is the moment and a 96 numeral would
+       * outshout it.
+       */
+      figureSize?: ProofFigureSize;
     };
+
+/** The figures' scale — see `figureSize`. */
+export type ProofFigureSize = 'lg' | 'xl';
 
 export type ProofProps = ProofCompactProps | ProofDisplayProps;
 
@@ -239,9 +250,11 @@ function sharedCheckedOn(figures: readonly ProofFigure[]): string | undefined {
 function FigureList({
   figures,
   showDates,
+  size,
 }: {
   figures: readonly ProofFigure[];
   showDates: boolean;
+  size: ProofFigureSize;
 }) {
   return (
     <Layout
@@ -257,7 +270,9 @@ function FigureList({
         <li className={styles.figure} key={`${index}-${figure.value}-${figure.label}`}>
           <Layout rowGap="text">
             <Layout rowGap="tight" className={styles.valueLabel}>
-              <span className={styles.value}>{figure.value}</span>
+              <span className={cx(styles.value, size === 'xl' && styles.valueXl)}>
+                {figure.value}
+              </span>
               <span className={styles.label}>{figure.label}</span>
             </Layout>
             {/* Rendered only when it holds something: an empty grid item would still take the
@@ -295,14 +310,20 @@ function FigureList({
  * and the date covers every item in it programmatically, with no idref and no repeated string.
  * Mixed dates keep the per-figure line, inside each `li` beside the value it qualifies.
  */
-function Figures({ figures }: { figures: readonly ProofFigure[] }) {
+function Figures({
+  figures,
+  size,
+}: {
+  figures: readonly ProofFigure[];
+  size: ProofFigureSize;
+}) {
   const shared = sharedCheckedOn(figures);
 
-  if (!shared) return <FigureList figures={figures} showDates />;
+  if (!shared) return <FigureList figures={figures} showDates size={size} />;
 
   return (
     <Layout as="figure" rowGap="gutter" className={styles.figureGroup}>
-      <FigureList figures={figures} showDates={false} />
+      <FigureList figures={figures} showDates={false} size={size} />
       <figcaption className={styles.checked}>{shared}</figcaption>
     </Layout>
   );
@@ -321,7 +342,11 @@ function Figures({ figures }: { figures: readonly ProofFigure[] }) {
  * time. Layout owns every relationship, Prose owns trusted inline markup, Button owns source-link
  * interaction, Media owns the portrait, and the nearest surface owns the ground.
  */
-export function Proof({ arrangement = 'display', quote, figures }: ProofProps) {
+export function Proof(props: ProofProps) {
+  const { arrangement = 'display', quote, figures } = props;
+  /* Only the figures-only member carries it; a quote beside it keeps the figures at lg. */
+  const figureSize: ProofFigureSize =
+    'figureSize' in props && props.figureSize && !quote ? props.figureSize : 'lg';
   const acceptedQuote = validQuote(quote) ? quote : undefined;
   const acceptedFigures = arrangement === 'compact' ? [] : normaliseFigures(figures);
 
@@ -358,7 +383,9 @@ export function Proof({ arrangement = 'display', quote, figures }: ProofProps) {
       className={`${styles.root} ${styles[arrangement]}`}
     >
       {acceptedQuote ? <Quote quote={acceptedQuote} /> : null}
-      {acceptedFigures.length > 0 ? <Figures figures={acceptedFigures} /> : null}
+      {acceptedFigures.length > 0 ? (
+        <Figures figures={acceptedFigures} size={figureSize} />
+      ) : null}
     </Layout>
   );
 }

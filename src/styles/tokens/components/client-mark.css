@@ -27,7 +27,8 @@
    How the three combine (ClientMark.module.css does the arithmetic):
      width  = √(target-side² × ratio) = target-side × √ratio   — equal AREA, not equal width
      then   capped so height ≤ height-max and width ≤ width-max, the ratio kept
-     then   × (1 + correction), the recorded ±15%, and capped again
+     then   × (1 + correction), the recorded ±15% of THAT size (ch05 §10's order), and the
+            height cap applied again — P2 is absolute; the width cap is not (fix round 2, 6 Oct)
 
    --cmark-target-side   the side of the square whose area every mark in a set matches. The
                          target is stated as a side rather than an area because an area is
@@ -45,6 +46,11 @@
 --cmark-target-side:56px;
 --cmark-height-max:40px;
 --cmark-width-max:160px;
+/* The phone step of all three (see the block below), named once so a specimen can render it
+   beside the desktop sizes at one viewport. -m as the type ladder names its 767 step. */
+--cmark-target-side-m:44px;
+--cmark-height-max-m:32px;
+--cmark-width-max-m:128px;
 /* Forced colours (Windows High Contrast) — surface-independent, because in that mode the
    user's palette replaces every ground. CanvasText is a system colour KEYWORD, not a palette
    value: the one colour correct there by definition, since the user chose it. Read only
@@ -60,9 +66,9 @@
    are SIZES, not distances: the Cluster's gap stays `stack` at every width.                 */
 @media (max-width: 767px){
 :root{
---cmark-target-side:44px;
---cmark-height-max:32px;
---cmark-width-max:128px;
+--cmark-target-side:var(--cmark-target-side-m);
+--cmark-height-max:var(--cmark-height-max-m);
+--cmark-width-max:var(--cmark-width-max-m);
 }
 }
 
