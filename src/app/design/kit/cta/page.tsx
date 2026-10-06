@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Media, Section, Texture, TextureShape } from '@/components';
+import { Layout, Section, TextureClosing } from '@/components';
 import {
   BlockCard,
   ContentSection,
@@ -9,10 +9,11 @@ import {
   EnquiryForm,
   ListCard,
   PageHero,
+  Proof,
   type CtaIconPoint,
   type CtaPoint,
+  type ProofFigure,
 } from '@/patterns';
-import { HEAD_TRACK } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
@@ -28,42 +29,14 @@ import t from '../../_specimen/typeroles.module.css';
  * /design/cta-section. Every band here is copy at its § 1.5 ceiling or under it, and fits the
  * 1470 × 830 fold with its slack (visual-direction § 1.3).
  *
- * Photographs: one per band and none twice (§ 5.1), every one `quiet` (§ 5.5 rule 3: the offer
- * takes quiet only), all from the neutral family so the page never mixes warm and cool (§ 5.5
- * rule 1). Texture: the `closing` placement on two closes, on paper only, its box in the band's
- * bottom padding (§ 6.3). Blue: the solid ask, the point markers and glyphs, every link.
+ * Photographs: one per band, none twice and no two from one shoot (§ 5.1; the final fix round
+ * swapped a second frame of the whiteboard session and a frame whose black-and-white striped sleeve
+ * filled a third of the crop), every one `quiet` (§ 5.5 rule 3), all from the neutral family so the
+ * page never mixes warm and cool (§ 5.5 rule 1). Portrait masters where the frame is 4:5, so the
+ * crop is drawn from pixels rather than upscaled. Texture: the `closing` recipe (TextureClosing,
+ * § 6.3 as amended) on the three closes — no number is written here. Blue: the solid ask, the point
+ * markers and glyphs, every link and its arrow.
  */
-
-/* ── The `closing` placement, redrawn (fix round 1) ────────────────────────────────────────────
-   § 6.3's numbers (rect, bottom −260, start −120, 44% × 320, blur 200) drew a ~200 × 200 haze in
-   the corner that read as a rendering smudge: a 200 blur on a box that only enters the band by 60
-   never reaches full strength anywhere on screen. Redrawn as a FIELD the band's bottom edge owns:
-   a near-hard rect filling the bottom padding (96, or the open close's 128) for the width of the
-   copy track, at the grid's full strength, its top edge feathered just enough to read as texture
-   rather than a strip. Its box stops 16 inside the padding's top edge, so only the tail of the
-   24-blur feather (σ 12) meets content, and nothing at all behind the form column (it stops at 58%, the form starts at
-   ~61%). The open close takes it full width, rising behind the centred column's foot.
-
-   PROPOSED RECIPE VALUES, handed to whoever owns Texture: the constant belongs in
-   src/components/Texture/recipes.ts (§ 6.3, "call sites never write a raw number"), which does not
-   exist yet. Until it does, these two are the one place the numbers live, and the six service-page
-   closes must not copy them — they take the recipe when it lands. */
-function ClosingTexture() {
-  return (
-    <Texture>
-      <TextureShape bottom={-56} left={-40} width="58%" height={136} blur={24} />
-    </Texture>
-  );
-}
-
-function OpenClosingTexture() {
-  return (
-    <Texture>
-      <TextureShape bottom={-64} width="110%" height={176} blur={32} />
-      <TextureShape kind="ellipse" bottom={-200} width="52%" height={300} blur={64} />
-    </Texture>
-  );
-}
 
 const photo = (id: PhotoId) => getKitPhoto(id);
 
@@ -80,45 +53,21 @@ const FORM_CONTEXT = {
    K: label ≤ 4 words / detail ≤ 12 words, one line each. L: detail ≤ 18 words, two lines. */
 
 const AUDIT_POINTS = [
-  {
-    label: 'One journey, end to end',
-    detail: 'Sign-up, checkout or approval: the flow that costs you most.',
-  },
-  {
-    label: 'A ranked findings report',
-    detail: 'Every issue scored against the metric you asked us to move.',
-  },
-  {
-    label: 'A thirty-minute readout',
-    detail: 'We walk your team through it and take the hard questions.',
-  },
+  { label: 'One critical journey, end to end' },
+  { label: 'A ranked list of what to fix first' },
+  { label: 'A readout with your team' },
 ] as const satisfies readonly CtaPoint[];
 
 const HEALTH_POINTS = [
-  {
-    icon: 'layers',
-    label: 'Drift, measured',
-    detail: 'Where Figma, code and production have quietly come apart.',
-  },
-  {
-    icon: 'graph-up',
-    label: 'Adoption by product',
-    detail: 'Which teams build on the system, and which work around it.',
-  },
-  {
-    icon: 'document-text',
-    label: 'A sequenced fix list',
-    detail: 'Ordered so the first changes pay for the rest.',
-  },
+  { icon: 'layers', label: 'Drift between Figma, code and production' },
+  { icon: 'graph-up', label: 'Adoption, product by product' },
+  { icon: 'document-text', label: 'A fix list in the order it pays back' },
 ] as const satisfies readonly CtaIconPoint[];
 
 const SPRINT_POINTS = [
-  {
-    label: 'Stakeholder interviews',
-    detail: 'Six to eight conversations, synthesised into one problem.',
-  },
-  { label: 'A tested concept', detail: 'Prototyped and put in front of five real users.' },
-  { label: 'A costed roadmap', detail: 'What to build first, and what it will take.' },
+  { label: 'Eight stakeholder interviews' },
+  { label: 'A concept tested with five users' },
+  { label: 'A costed roadmap for what comes next' },
 ] as const satisfies readonly CtaPoint[];
 
 const REVIEW_POINTS = [
@@ -138,18 +87,9 @@ const REVIEW_POINTS = [
 ] as const satisfies readonly CtaPoint[];
 
 const MODERNISE_POINTS = [
-  {
-    label: 'Map the real workflow',
-    detail: 'Who does what, in which order, on whose authority.',
-  },
-  {
-    label: 'Name the hidden rules',
-    detail: 'The decisions the old system makes that nobody wrote down.',
-  },
-  {
-    label: 'Sequence the rebuild',
-    detail: 'A migration path that keeps operations running every week.',
-  },
+  { label: 'The real workflow, mapped' },
+  { label: 'The rules nobody wrote down' },
+  { label: 'A rebuild that never stops operations' },
 ] as const satisfies readonly CtaPoint[];
 
 const WORKSHOP_POINTS = [
@@ -229,6 +169,16 @@ const PHASES = [
     body: 'Interface, components and code, released in increments your team can run without us.',
   },
 ] as const;
+
+/* The D band's aside in its other form (§ 3.3: "D always has an aside: a photograph or one
+   --text-stat-lg figure"). A figure rather than a photograph here because a 3:2 photo at 381 ran
+   the head column ~100 past the CtaRow and neither foot aligned (final fix round); the figure
+   ends above the body's foot, so the band closes on one line — the CtaRow. */
+const PHASE_STAT: ProofFigure = {
+  value: '0',
+  label: 'handoffs between the people who research, design and build',
+  checkedOn: 'checked on 6 October 2026',
+};
 
 const VARIATIONS = [
   { id: 'k-offer', index: '01', name: 'K offer\u00a0· numbered' },
@@ -310,8 +260,8 @@ export default function KitCtaSpecimen() {
       <Title id="k-offer">
         [7, 5]: H-full, a lede held narrower than its heading, three one-line numbered points and
         the actions in the 667 copy column; a quiet 4:5 photograph in the 477 track. The head sits
-        on the photo&rsquo;s top edge and the actions on its foot at every width from 1024 (§ 3.2
-        rule 1). Solid first, a blue link second.
+        on the photo&rsquo;s top edge and the actions on its foot (§ 3.2 rule 1). Solid first, then
+        the family&rsquo;s one second action: a blue link with its arrow.
       </Title>
       <CtaSection
         arrangement="offer"
@@ -325,7 +275,7 @@ export default function KitCtaSpecimen() {
           { label: 'Request the audit', href: ROUTES.uxProductAudit },
           { label: 'See a sample report', href: ROUTES.audits },
         ]}
-        media={{ image: photo('stylus-tablet-sketch') }}
+        media={{ image: photo('designer-monitor-ui') }}
       />
 
       {/* ── 02 · K offer, icon points, one action ──────────────────────────────────────────── */}
@@ -344,13 +294,13 @@ export default function KitCtaSpecimen() {
         ]}
         points={HEALTH_POINTS}
         actions={[{ label: 'Book a health check', href: ROUTES.designSystemAudit }]}
-        media={{ image: photo('designer-desk-monitor') }}
+        media={{ image: photo('pencil-wireframe-red') }}
       />
 
       {/* ── 03 · K offer, plain points ─────────────────────────────────────────────────────── */}
       <Title id="k-plain">
-        Plain points: the serif label carries each one on its own. For short claims a numeral or
-        a glyph would over-dress.
+        Plain points: the serif label carries each one on its own, for short claims a numeral or a
+        glyph would over-dress. Three lines, so the head and the photograph carry the band.
       </Title>
       <CtaSection
         arrangement="offer"
@@ -365,7 +315,7 @@ export default function KitCtaSpecimen() {
           { label: 'Plan a sprint', href: ROUTES.contact },
           { label: 'How discovery works', href: ROUTES.howWeWork },
         ]}
-        media={{ image: photo('whiteboard-pair-laptop') }}
+        media={{ image: photo('pair-at-laptop-sticky-wall') }}
       />
 
       {/* ── 04 · K offer without a photograph ──────────────────────────────────────────────── */}
@@ -433,9 +383,10 @@ export default function KitCtaSpecimen() {
       {/* ── 07 · L close with the form ─────────────────────────────────────────────────────── */}
       <Title id="l-close">
         On paper, at h1: the page&rsquo;s last ask outweighs every head above it. [10, 7] — copy
-        and three points in 673, the full EnquiryForm filling its 471 to the column edge. The
-        points end on the form&rsquo;s last line; the <code>closing</code> field fills the bottom
-        padding under the copy, and the form column stays clean.
+        and three two-line points in 673, read down from the form&rsquo;s first label; the full
+        EnquiryForm fills its 471 to the column edge. The <code>closing</code> equaliser rises from
+        the band&rsquo;s edge into the air under the copy, a gap step clear of it, and the form
+        column stays clean. Below 1024 it becomes the full-bleed <code>horizon</code>.
       </Title>
       <CtaSection
         eyebrow="Start a project"
@@ -451,14 +402,15 @@ export default function KitCtaSpecimen() {
             scheduleHref={ROUTES.contact}
           />
         }
-        texture={<ClosingTexture />}
+        texture={<TextureClosing />}
       />
 
       {/* ── 08 · L close, contact strip ─────────────────────────────────────────────────────── */}
       <Title id="l-no-points">
-        No points: the lede, and a contact strip pinned to the form&rsquo;s foot — where to
-        write, how fast we answer, which hours we keep — so the copy column ends where the form
-        does. No texture passed, so none renders.
+        No points: the lede and a contact strip a <code>stack</code> under it — where to write,
+        how fast we answer, which hours we keep. The strip follows the copy rather than pinning to
+        the form&rsquo;s foot (it ends in a key and a value, not an action), and the deeper air
+        under it is where the equaliser stands tallest.
       </Title>
       <CtaSection
         eyebrow="Hiring a design partner"
@@ -480,14 +432,15 @@ export default function KitCtaSpecimen() {
           { label: 'Reply', value: 'Within one working day' },
           { label: 'Hours', value: 'IST, GMT and ET' },
         ]}
+        texture={<TextureClosing />}
       />
 
       {/* ── 09 · L close, centred, two actions ──────────────────────────────────────────────────── */}
       <Title id="l-open">
-        <code>arrangement=&quot;open&quot;</code>: the close that asks for a click, as a centred
-        column at display scale — the lede, three centred points and two actions on one axis —
-        with the <code>closing</code> field rising from the band&rsquo;s bottom edge behind the
-        column&rsquo;s foot.
+        <code>arrangement=&quot;open&quot;</code>: the close that asks for a click, as one centred
+        object at display scale — the lede, three points held to the middle 8 of 12, and two
+        actions on one axis — with the <code>closing</code> equaliser rising at both flanks, clear
+        of the column.
       </Title>
       <CtaSection
         arrangement="open"
@@ -501,7 +454,7 @@ export default function KitCtaSpecimen() {
           { label: 'Book a call', href: ROUTES.contact },
           { label: 'See case studies', href: ROUTES.caseStudies },
         ]}
-        texture={<OpenClosingTexture />}
+        texture={<TextureClosing side="both" />}
       />
 
       {/* ── 10 · CtaRow under a card set ───────────────────────────────────────────────────── */}
@@ -539,19 +492,26 @@ export default function KitCtaSpecimen() {
 
       {/* ── 11 · CtaRow under ruled rows ───────────────────────────────────────────────────── */}
       <Title id="row-rows">
-        A D band: beside head with a photograph aside, three numbered rows, and a neutral link
-        CtaRow — rule off, because the last row&rsquo;s own rule already closes the body.
+        A D band: beside head with a stat aside, three numbered rows, and a neutral link CtaRow
+        with its note — rule off, because the last row&rsquo;s own rule closes the body. The aside
+        ends above the body&rsquo;s foot, so the band closes on the CtaRow&rsquo;s one line.
       </Title>
       <ContentSection
         arrangement="beside"
         eyebrow="How an engagement runs"
         heading="Three phases, one team throughout"
         lead="The people who interview your users are the people who ship your interface."
-        aside={<Media image={photo('workshop-brick-room')} ratio="3/2" sizes={HEAD_TRACK} />}
+        aside={<Proof figures={[PHASE_STAT]} />}
         footer={
+          /* Neutral, and argued (final fix round asked for one second-action treatment): this is
+             not a second action beside a solid — it is the band's only link, and the band already
+             spends its Signal on the rows' blue numerals and the figure, so CtaRow's own rule
+             (CtaRowTone: neutral "when the band already spends a different KIND of Signal") keeps
+             it ink. It follows the family's ARROW rule: a link carries its trailing arrow. */
           <CtaRow
             tone="neutral"
             rule={false}
+            note="Each phase ends in something your team can run without us."
             actions={[{ label: 'How we work', href: ROUTES.howWeWork }]}
           />
         }
@@ -583,18 +543,9 @@ export default function KitCtaSpecimen() {
           'We compare your Figma library with production and show exactly where the two disagree.',
         ]}
         points={[
-          {
-            label: 'A component census',
-            detail: 'Every component, in design and in code, side by side.',
-          },
-          {
-            label: 'Drift, ranked',
-            detail: 'Which differences users see, and which only engineers do.',
-          },
-          {
-            label: 'A handoff fix',
-            detail: 'The process change that stops the gap reopening.',
-          },
+          { label: 'A census of every component' },
+          { label: 'Drift, ranked by who sees it' },
+          { label: 'A handoff fix that holds' },
         ]}
         actions={[
           { label: 'Request the audit', href: ROUTES.designToCodeAudit },

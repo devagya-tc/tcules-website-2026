@@ -20,22 +20,11 @@ const STANDARD_POINTS = [
   { label: 'A fixed price', detail: 'The scope and the commercial terms arrive together.' },
 ] as const satisfies readonly CtaPoint[];
 
-const ICON_POINTS = [
-  {
-    icon: 'layers',
-    label: 'Drift, measured',
-    detail: 'Where design, code and production diverge.',
-  },
-  {
-    icon: 'graph-up',
-    label: 'Adoption by product',
-    detail: 'Who builds on the system, and who around it.',
-  },
-  {
-    icon: 'checklist',
-    label: 'A sequenced fix list',
-    detail: 'Ordered so the first changes pay for the rest.',
-  },
+/* The K offer beside a photograph sets one-line points (§ 3.4 K): the label alone. */
+const K_ICON_POINTS = [
+  { icon: 'layers', label: 'Drift between design and code' },
+  { icon: 'graph-up', label: 'Adoption, product by product' },
+  { icon: 'checklist', label: 'A fix list in payback order' },
 ] as const satisfies readonly CtaIconPoint[];
 
 const SIX_POINTS = [
@@ -405,7 +394,7 @@ export default function CtaSectionSpecimenPage() {
             eyebrow={`Offer · media · ${surface}`}
             heading="Know what your design system is costing you"
             body={OFFER_BODY}
-            points={ICON_POINTS}
+            points={K_ICON_POINTS}
             actions={[
               { label: 'Request free audit', href: ROUTES.audits },
               { label: 'See how we work', href: ROUTES.howWeWork },

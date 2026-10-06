@@ -27,8 +27,9 @@
    optical correction is needed. (The 40px stat numeral it replaced shared a top edge with the label,
    and the spec's §7(c) declined to correct that.)
 
-   One `@media`, at 1024 (Layout's `lg`): the K photo frame's crop, which follows the arrangement
-   — 4:3 under the copy, 4:5 or 3:2 beside it (§ 3.7 item 4). No `transition`, no `transform`, no
+   Two `@media` blocks, both at 1024 (Layout's `lg`): the K photo frame's crop, which follows the arrangement
+   — 4:3 under the copy, 4:5 or 3:2 beside it (§ 3.7 item 4) — and the split close's texture field,
+   which exists only beside the form (below). No `transition`, no `transform`, no
    `animation`, no `opacity`. There are no states to interpolate between: nothing here responds to
    a pointer and nothing opens. The only stateful
    things in the band are the `Button`s and whatever the caller passes into the form slot.
@@ -252,4 +253,41 @@
 .contactValue {
   color: var(--cta-body-ink);
   font: var(--cta-body-text);
+}
+
+/* ── The split close's texture field ───────────────────────────────────────────
+   Where the `closing` equaliser rises (final fix round). The well is the copy cell's flexible last
+   row (Layout `pinLast`, no row gap), so it is exactly the air the form leaves under the copy; the
+   field inside it is the box the Texture fills. Sizing and positioning two boxes for a bleed layer,
+   not arranging siblings — the same escape Section documents for its own bleed layers.
+
+     top     a `stack` (48) under the copy's last line: the texture can never sit under text, and
+             one gap step is the clearance the owner's "never behind text it hurts" asks for.
+     bottom  the band's own bottom edge: past the cell by the open band's padding (--gap-section-
+             open, 128 — what Section's `density="open"` resolves to; CtaSection sets that density
+             whenever it renders a texture), so the columns rise FROM the band edge.
+     inline  the copy column, so the form column stays clean (§ 6.3).
+
+   Below 1024 the copy stacks above the form and there is no air beside it: both boxes are
+   `display: contents`, the field is no longer a containing block, and the Texture covers the whole
+   band — where TextureClosing draws § 6.3's `horizon`, full-bleed, inside the bottom padding. */
+.textureWell,
+.textureField {
+  display: contents;
+}
+
+@media (min-width: 1024px) {
+  .textureWell {
+    display: block;
+    position: relative;
+    block-size: 100%;
+  }
+
+  .textureField {
+    display: block;
+    position: absolute;
+    inset-block-start: var(--gap-stack);
+    inset-block-end: calc(-1 * var(--gap-section-open));
+    inset-inline: 0;
+  }
 }

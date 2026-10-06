@@ -92,3 +92,14 @@ blue underline would read as a link. Chrome (SiteNav, SiteFooter) is unchanged.
 | new § 11 Tone | — | Every kit photograph carries measured `temperature` (warm ≥ 0.10 r−b, cool < 0.02, neutral between) and `saturation` (vivid ≥ 0.40 mean HSV S) in `catalogue.json`, written by `npm run photos:tone`; the result matches visual-direction § 5.5's table exactly. A page is one family (warm + neutral or cool + neutral) with ≤ 1 vivid photo; each service story names its family, and its stand-in pool is filtered by it. | `fdn-media` (tags); `fdn-gates` (the page check) |
 | § 7 Captions | every non-decorative image has a caption | Kit photographs are atmosphere photographs: `getKitPhoto` returns `alt: ""` unless a placement passes one. | `fdn-media` |
 | intro note, § 10 Sourcing | "Stock photography is not published…" | Unchanged in code: kit stock reaches only `/design/**` routes. Public use is visual-direction § 10 item 3. | — (doc only) |
+
+## Kit amendments (visual-direction, not the brand guide)
+
+Recorded here so the kit doc and the components agree; each is also amended in place in
+`docs/kit/visual-direction.md`.
+
+| § | Kit doc said | The kit now does | Package |
+|---|---|---|---|
+| § 3.4 L | `[5, 7]`: copy + points beside the EnquiryForm | `[10, 7]` from 1280 (copy 673, form 471) and `[1, 1]` from 1024, top-aligned. The full form holds its own 470 measure (`--enq-form-max-inline`), so in a 667 track it left ~197 of dead track at the band's end edge, and at 1024 a 356 track wrapped its two actions. `[5, 7]` stays for the photo + compact-form close (cmp-form). | `cmp-cta` |
+| § 6.3 `closing` | rect, bottom −260, start −120, 44% × 320, blur 200 | A pixel equaliser that rises from the band's edge and fades (`TextureClosing`; the full geometry is in § 6.3's row). The haze had no silhouette and, at the texture's fixed cell alpha, read as a pale tinted strip — close to the banned blue ground. Placed by CtaSection in a field a `stack` clear of the copy; `horizon` below 1024. | `cmp-cta` |
+

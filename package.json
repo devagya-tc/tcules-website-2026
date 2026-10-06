@@ -14,6 +14,7 @@
     "classes:check": "node scripts/classes-check.mjs",
     "aria:check": "node scripts/aria-check.mjs",
     "shots": "node scripts/shots.mjs",
+    "fold:check": "node scripts/fold-check.mjs",
     "design:brief": "node scripts/design-brief.mjs",
     "design:check": "node scripts/design-brief.mjs --check",
     "vocabulary": "node scripts/design-brief.mjs --vocabulary > docs/vocabulary.md",

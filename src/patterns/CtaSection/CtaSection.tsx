@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react';
+import { isValidElement, useId, type ReactElement, type ReactNode } from 'react';
 
 import {
   Button,
@@ -12,7 +12,7 @@ import {
   type SectionSurface,
 } from '@/components';
 import { cx } from '@/lib/cx';
-import { MEDIA_SPLIT, MEDIA_SPLIT_WIDE } from '@/lib/image-sizes';
+import { coverSizes, MEDIA_SPLIT, MEDIA_SPLIT_WIDE } from '@/lib/image-sizes';
 
 import styles from './CtaSection.module.css';
 
@@ -172,7 +172,12 @@ type CtaPointsProps =
 
 type CtaSplitProps = {
   arrangement?: 'split';
-  form: ReactNode;
+  /**
+   * The full EnquiryForm. A `ReactElement`, not a `ReactNode`, so `form={null}` (or `false`) does
+   * not compile: a split close with nothing in its 7-track reserved the track and its 96 seam for
+   * nothing. The runtime test is `isValidElement` as well, for a value that escaped the types.
+   */
+  form: ReactElement;
   actions?: readonly [];
   /**
    * Refused since cmp-cta fix round 1. A close with the FULL form and a proof row ran 880–1104 at
@@ -182,17 +187,21 @@ type CtaSplitProps = {
   proof?: never;
   media?: never;
   /**
-   * The contact strip at the copy column's foot, pinned to the form's foot (§ 3.2 rule 1): how to
-   * reach the studio, how fast it answers, which hours it keeps. One to three cells, side by side
-   * from md. For a close whose copy is short — without it, a pointless close left ~300 of dead
-   * ground under its lede beside a 510-tall form (cmp-cta fix round 1).
+   * The contact strip, a `stack` under the lede (or the points): how to reach the studio, how fast
+   * it answers, which hours it keeps. One to three cells, side by side from md. It FOLLOWS the copy
+   * rather than being pinned to the form's foot (final fix round): it ends in a key and a value, not
+   * an action, so § 3.2 rule 1 does not call for the pin, and pinned it opened ~244 of bare paper
+   * between the lede and the strip at 1470 — the dead column § 3.2 warns about.
    */
   contact?: readonly CtaContact[];
   /**
-   * A `<Texture>` composed by the caller, rendered as the band's first child so it fills the band
-   * edge to edge beneath the content. The L close takes the `closing` placement (§ 6.3): under the
-   * copy column's foot, running into the footer seam, the form column clean. A slot and not a
-   * recipe name, because the recipes are Texture's and a pattern takes its sibling as a node.
+   * The close's texture — `<TextureClosing />`, the `closing` recipe (§ 6.3). A node, so the recipe
+   * and its numbers stay Texture's; the PLACEMENT is this band's. From 1024 it fills a field that
+   * starts a `stack` (48) under the copy's last line and runs to the band's bottom edge, the width
+   * of the copy column — so it can never sit under text, and the form column stays clean. Below
+   * 1024 the field dissolves and the texture covers the band, where the recipe draws `horizon`.
+   * Present, it sets the band at `density="open"` (128): the close is the page's last beat, and the
+   * deeper foot is the ground the equaliser rises from.
    */
   texture?: ReactNode;
 };
@@ -346,11 +355,15 @@ function CtaPointContent({ point, reading = false }: { point: CtaPoint; reading?
  *          opened by a hairline the width of its track, the text-only card's top edge (§ 3.1), and
  *          the 32 gutter breaks the rule between them so the row reads as three objects. `open`.
  *   grid   2-up from md and 3-up from lg. The offer with a form, where the list is a strip under it.
+ *   line   the K offer beside its photograph: the marker and the label, ONE line each, no detail
+ *          (§ 3.4 K: "≤ 3 one-line points"; final fix round). With a detail under every label the
+ *          copy column became a six-line list and the band read as a document beside a photo; the
+ *          head and the photograph carry the offer, and two-line points belong to the close.
  *   centred  3-up from md, the marker above its label, NO rule, every line centred on its track:
  *          the open close's centred column (cmp-cta fix round 1). A rule under a centred column
  *          reads as a table's header line; the centring and the 32 gutter separate the three.
  */
-type CtaPointsShape = 'stack' | 'rows' | 'row' | 'grid' | 'centred';
+type CtaPointsShape = 'line' | 'stack' | 'rows' | 'row' | 'grid' | 'centred';
 
 /**
  * The points, in one of four shapes with one of three markers. Nothing about the content, the
@@ -376,6 +389,18 @@ function CtaPoints({
   const visiblePoints = points.filter((point) => point.label.trim().length > 0);
   if (visiblePoints.length === 0) return null;
 
+  /* A detail handed to a one-line list is not rendered — the arrangement has no line for it — and
+     in development it says so, so the omission is findable rather than silent. */
+  if (
+    shape === 'line' &&
+    process.env.NODE_ENV !== 'production' &&
+    visiblePoints.some((point) => point.detail?.trim())
+  ) {
+    console.warn(
+      'CtaSection: the offer beside a photograph sets one-line points; `detail` is not rendered.',
+    );
+  }
+
   /* An ordered list only when the marker IS the order. Icons and plain points are an offer's
      contents, not a sequence, and an `<ol>` would announce a position nobody can see. */
   const listElement = markers === 'number' ? 'ol' : 'ul';
@@ -399,7 +424,12 @@ function CtaPoints({
       ) : null;
 
     const reading = shape === 'rows';
-    const content = <CtaPointContent point={point} reading={reading} />;
+    const content =
+      shape === 'line' ? (
+        <span className={styles.label}>{point.label}</span>
+      ) : (
+        <CtaPointContent point={point} reading={reading} />
+      );
 
     /* The point's body: the marker above the copy in a 3-up row, in front of it everywhere else —
        a nowrap Cluster, so a marker can never orphan onto a line of its own. */
@@ -495,8 +525,12 @@ function CtaPoints({
  * boxes in one row read as two asks of equal standing. A link is plainly the alternative. There is
  * no `emphasis` on `CtaAction` for that reason.
  *
- * NO GLYPH on either (1 Oct 2026, owner: "no arrow here"). These are the page's asks; the label
- * carries them.
+ * THE ARROW RULE (final fix round): the solid takes no glyph — 1 Oct 2026, owner, on the offer's
+ * "Start a project": "no arrow here"; the ask's label carries it, as in the hero and the nav — and
+ * the second action, a link, takes the trailing `arrow-right`, the kit's one link cue. That is the
+ * same rule EnquiryForm's "See available times →" and CtaRow's link rows follow, so every second
+ * action in the family is one treatment: link-style, blue at rest, arrow. It had no arrow here while
+ * the form's link beside it had one.
  *
  * Every control is `size="md"` with `extendHitArea`: the box is 40 and the touch floor is 44, so
  * the target is legal without the row growing. `block` (24) between them, as CtaRow and PageHero
@@ -521,6 +555,7 @@ function CtaActions({
           tone="primary"
           size="md"
           extendHitArea
+          icon={index === 0 ? undefined : <Icon name="arrow-right" />}
         >
           {action.label}
         </Button>
@@ -559,6 +594,16 @@ function CtaContactStrip({ contact }: { contact: readonly CtaContact[] }) {
   );
 }
 
+/** A master's ratio, width ÷ height, for `coverSizes`. */
+const ratioOf = (image: MediaImage) => image.width / image.height;
+
+/* The K frame's ratio per `sizes` entry (MEDIA_SPLIT and MEDIA_SPLIT_WIDE: cap, from 1024, below),
+   restating --cta-photo-ratio-* (TypeScript cannot read a custom property). The portrait frame is a
+   FLOOR, and from 1024 to 1303 the copy column can stretch it to ~0.62, so that entry states the
+   tallest it gets: an over-ask by one rung, never an under-ask. */
+const PORTRAIT_FRAMES = [4 / 5, 0.62, 4 / 3] as const;
+const LANDSCAPE_FRAMES = [3 / 2, 3 / 2, 4 / 3] as const;
+
 /**
  * CtaSection — the page's ask, built to docs/specs/CtaSection.md and visual-direction § 3.4 K / L.
  *
@@ -568,14 +613,15 @@ function CtaContactStrip({ contact }: { contact: readonly CtaContact[] }) {
  *
  * THREE ARRANGEMENTS, and they are three jobs rather than three densities of one shape:
  *
- *   split   L, the close that asks for an ENQUIRY — [10, 7]: copy, points and an optional contact
- *           strip in 10 (673 at 1470), the full EnquiryForm filling 7 (471) to the column edge, on
- *           paper, with the `closing` texture in the bottom padding under the copy. No proof.
+ *   split   L, the close that asks for an ENQUIRY — [10, 7] from 1280 ([1, 1] from 1024): copy,
+ *           points and an optional contact strip in 10 (673 at 1470), top-aligned, the full
+ *           EnquiryForm filling 7 (471) to the column edge, on paper; with `texture`, at
+ *           `density="open"`, the `closing` equaliser rising in the copy column's foot. No proof.
  *   open    the close that asks for a CLICK — a centred column: display heading, lede, a centred
  *           3-up row of points, the actions on the axis, at `density="open"`. With proof, [3, 2]
  *           left-aligned and the proof beside.
  *   offer   K, which INTERRUPTS a page mid-scroll. Sets `density="tight"` itself. Three shapes:
- *             with `media`   [7, 5]: H-full, ≤ 3 one-line points and the actions in 7, a quiet 4:5
+ *             with `media`   [7, 5]: H-full, ≤ 3 one-line points (`line`) and the actions in 7, a quiet 4:5
  *                            photograph in 5 (`media.side` flips it). The copy column stretches to
  *                            the photo and pins the actions to its foot (§ 3.2 rule 1). With
  *                            `media.frame="landscape"`, [5, 7]: the lede and actions beside a 3:2
@@ -657,9 +703,17 @@ export function CtaSection(props: CtaSectionProps) {
       >
         {present(props.texture) ? props.texture : null}
         <div className={styles.centred}>
-          <Layout rowGap="stack" justifyItems="center">
+          <Layout rowGap="stack">
             {lede({ scale: 'open', centred: true })}
-            <CtaPoints shape="centred" markers={markers} points={points} />
+            {/* The points take the middle 4 of [1, 4, 1] — about 8/12, 784 at 1470 — so the row
+                stays inside the centred column's silhouette rather than spreading the full 1240
+                (final fix round: at full width it read as a three-feature strip under a narrow
+                column). `offset` places the one child; the outer tracks stay empty. */}
+            {hasPoints ? (
+              <Layout columns={{ lg: [1, 4, 1] }} offset={{ lg: 1 }} colGap="gutter">
+                <CtaPoints shape="centred" markers={markers} points={points} />
+              </Layout>
+            ) : null}
             <CtaActions actions={props.actions} justify="center" />
           </Layout>
         </div>
@@ -699,7 +753,11 @@ export function CtaSection(props: CtaSectionProps) {
                 {actions.length > 0 ? <CtaActions actions={actions} /> : null}
               </Layout>
               <div className={cx(styles.photoFrame, styles.photoLandscape)}>
-                <Media image={media.image} fit="fill" sizes={MEDIA_SPLIT_WIDE} />
+                <Media
+                  image={media.image}
+                  fit="fill"
+                  sizes={coverSizes(MEDIA_SPLIT_WIDE, ratioOf(media.image), LANDSCAPE_FRAMES)}
+                />
               </div>
             </Layout>
             <CtaPoints shape="row" markers={markers} points={points} />
@@ -739,13 +797,18 @@ export function CtaSection(props: CtaSectionProps) {
           >
             <Layout rowGap="stack" pinLast={hasPoints}>
               {lede()}
-              <CtaPoints shape="stack" markers={markers} points={points} />
+              <CtaPoints shape="line" markers={markers} points={points} />
               {actions.length > 0 ? <CtaActions actions={actions} /> : null}
             </Layout>
             {/* 4:5 beside the copy, 4:3 under it below 1024: a 4:5 at the 326 phone column would
-                be 408 tall under a band that has already made its ask. */}
+                be 408 tall under a band that has already made its ask. `sizes` accounts for the
+                cover crop (`coverSizes`), or a landscape master is fetched too short for the frame. */}
             <div className={cx(styles.photoFrame, styles.photoPortrait)}>
-              <Media image={media.image} fit="fill" sizes={MEDIA_SPLIT} />
+              <Media
+                image={media.image}
+                fit="fill"
+                sizes={coverSizes(MEDIA_SPLIT, ratioOf(media.image), PORTRAIT_FRAMES)}
+              />
             </div>
           </Layout>
         </Section>
@@ -794,7 +857,7 @@ export function CtaSection(props: CtaSectionProps) {
       >
         <Layout rowGap="stack">
           {lede()}
-          <div>{props.form}</div>
+          {hasForm ? <div>{props.form}</div> : null}
           <CtaPoints shape="grid" markers={markers} points={points} />
         </Layout>
       </Section>
@@ -804,32 +867,58 @@ export function CtaSection(props: CtaSectionProps) {
   /* `split` is the default and the fall-through, which is why it needs no discriminator check: the
      union's first member has `arrangement?: 'split'`, so an omitted arrangement lands here.
 
-     [10, 7] at `section` from 1024: the copy, its points and its contact strip in 10 (673 at 1470),
+     [10, 7] at `section` from 1280: the copy, its points and its contact strip in 10 (673 at 1470),
      the full EnquiryForm in 7 (471). The 7 is sized TO THE FORM: the full form holds its own 470
      measure (`--enq-form-max-inline`: one-field rows read as stretched any wider), so in [7, 5]'s
-     477 its fields stopped 7 short of the column's end edge, ragged against every photo band on
-     the page (fix round 1). At 471 the fields meet the edge to the pixel's rounding; below 1440 the
-     track is narrower than 470 and the form simply fills it. It was [3, 2] (686 | 458) until
-     cmp-cta. § 3.4 L draws the close as [5, 7] with the form in 667 — that is the COMPACT form, and
-     cmp-form's L-photo.
+     477 its fields stopped 7 short of the column's end edge (fix round 1). § 3.4 L draws the close
+     as [5, 7] with the form in 667 — that is the COMPACT form, and cmp-form's L-photo; the full-form
+     close's [10, 7] is recorded as an amendment to § 3.4 L (docs/kit/brand-amendments.md).
+     [1, 1] from 1024 to 1279 (final fix round): at 1024 the 7 is 356, too narrow for the form's
+     "Send enquiry" and "See available times" on one row, and the link wrapped under the submit.
+     Halves give it 432.
 
-     Stretched, with the copy's last part pinned to its foot, so the heading sits on the form's
-     first label and the points (or the contact strip) end on the form's last line — § 3.2 rule 1,
-     and the cure for the ~120–300 of dead ground the copy left under itself beside a taller form.
+     TOP-ALIGNED (final fix round). The copy no longer stretches to pin its last part to the form's
+     foot: pinned, the points left ~110 of bare paper between the lede and point 01, and the contact
+     strip ~250 — unfilled, not composed. The copy reads down from the form's first label, and the
+     air falls at the foot of the column, where the `closing` texture rises into it.
+
      No proof row: see `CtaSplitProps.proof`. */
   const contact = props.contact ?? [];
   const hasContact = contact.some((cell) => cell.label.trim() && cell.value.trim());
+  const hasTexture = present(props.texture);
+  const hasForm = isValidElement(props.form);
 
   return (
-    <Section surface={props.surface} aria-labelledby={headingId} data-arrangement="split">
-      {present(props.texture) ? props.texture : null}
-      <Layout columns={{ base: 1, lg: [10, 7] }} colGap="section" rowGap="stack" align="stretch">
-        <Layout rowGap="stack" pinLast={hasPoints || hasContact}>
-          {lede({ scale: 'close' })}
-          <CtaPoints shape="stack" markers={markers} points={points} />
-          {hasContact ? <CtaContactStrip contact={contact} /> : null}
+    <Section
+      surface={props.surface}
+      density={hasTexture ? 'open' : undefined}
+      aria-labelledby={headingId}
+      data-arrangement="split"
+    >
+      <Layout
+        columns={hasForm ? { base: 1, lg: [1, 1], xl: [10, 7] } : undefined}
+        colGap={hasForm ? 'section' : undefined}
+        rowGap="stack"
+        align="stretch"
+      >
+        {/* The copy cell: the copy, then — with a texture — the field it rises in. `pinLast` with
+            no row gap makes the field the cell's flexible last row, so it is exactly the air the
+            form leaves under the copy; the 48 between the copy and the texture is the field's own
+            inset, not a seam (`.textureField`). Below 1024 the well and the field are
+            `display: contents` and the texture covers the band instead. */}
+        <Layout rowGap="none" pinLast={hasTexture}>
+          <Layout rowGap="stack">
+            {lede({ scale: 'close' })}
+            <CtaPoints shape="stack" markers={markers} points={points} />
+            {hasContact ? <CtaContactStrip contact={contact} /> : null}
+          </Layout>
+          {hasTexture ? (
+            <div className={styles.textureWell}>
+              <div className={styles.textureField}>{props.texture}</div>
+            </div>
+          ) : null}
         </Layout>
-        <div>{props.form}</div>
+        {hasForm ? <div>{props.form}</div> : null}
       </Layout>
     </Section>
   );

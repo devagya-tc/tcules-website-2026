@@ -18,11 +18,11 @@
 :root {
   --cta-eyebrow-text: var(--text-eyebrow);
   --cta-eyebrow-tracking: var(--text-eyebrow-tracking);
-  /* h2 scale in every arrangement (cmp-cta, 6 Oct 2026; visual-direction § 7.1 "Close:
-     --text-h2", and § 1.4's K and L arithmetic, which budget an h2 on two lines). The close was h1
-     from 29 Sep: in the kit's [5, 7] close its copy track is 477, where an h1 ask ran to three
-     lines and broke L's 570, and the close's weight now comes from its form, its points and its
-     texture. Scale only: the element is an `h2` in the outline either way. */
+  /* The OFFER's heading — the K band only (`.heading`). h2, because the offer interrupts a page
+     mid-scroll and must not outweigh the heads around it (visual-direction § 7.1, and § 1.4's K
+     arithmetic, which budgets an h2 on two lines). The closes do not read this pair: since cmp-cta
+     fix round 1 they take the --cta-close-heading-* and --cta-open-heading-* pairs below. Scale
+     only: the element is an `h2` in the outline in every arrangement. */
   --cta-heading-text: var(--text-h2);
   --cta-heading-tracking: var(--text-h2-tracking);
   /* The CLOSES step up (cmp-cta fix round 1, 6 Oct 2026): at h2 the page's last ask carried no

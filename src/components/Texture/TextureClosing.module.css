@@ -1,0 +1,16 @@
+/* TextureClosing — which of its two drawings shows. The equaliser from 1024 (Layout's `lg`), § 6.3's
+   `horizon` below it (visual-direction § 3.7 rule 5: only `horizon` runs below 1024). Display only:
+   Texture owns the layer's position, size, stacking and ink. */
+.wide {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .wide {
+    display: block;
+  }
+
+  .narrow {
+    display: none;
+  }
+}
