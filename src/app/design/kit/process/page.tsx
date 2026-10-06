@@ -1,14 +1,15 @@
-import { Layout, Media, Section, Stat, Texture, TextureShape } from '@/components';
+import { Layout, Section, Stat, Texture, TextureShape } from '@/components';
 import {
   Callout,
   ContentSection,
   CtaRow,
   ListCard,
   ProcessFlow,
+  Steps,
   Thread,
+  type Step,
   type ThreadStage,
 } from '@/patterns';
-import { HEAD_TRACK } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 
@@ -30,10 +31,6 @@ import t from '../../_specimen/typeroles.module.css';
 
 const photo = (id: PhotoId) => getKitPhoto(id);
 
-function AsidePhoto({ id }: { id: PhotoId }) {
-  return <Media image={photo(id)} ratio="3/2" sizes={HEAD_TRACK} />;
-}
-
 /** A caption strip above a band: the variation's name and what to look for. Scaffolding. */
 function Variation({ id, title, note }: { id: string; title: string; note: string }) {
   return (
@@ -45,69 +42,33 @@ function Variation({ id, title, note }: { id: string; title: string; note: strin
   );
 }
 
-/* ── Steps: the approved F body (§ 3.6) ─────────────────────────────────────────────────────
-   Numbered ListCard rows in an <ol>, read top to bottom. Four rows or more take `sm` (h5 over
-   body, § 7.2); three keep `md`. */
-type Step = { title: string; body: string };
-
-function Steps({ steps }: { steps: readonly Step[] }) {
-  const size = steps.length >= 4 ? 'sm' : 'md';
-  return (
-    <Layout as="ol" rowGap="none">
-      {steps.map((step, index) => (
-        <ListCard
-          key={step.title}
-          size={size}
-          titleAs="h3"
-          title={step.title}
-          body={step.body}
-          marker={{ type: 'number', value: index + 1 }}
-        />
-      ))}
-    </Layout>
-  );
-}
-
+/* Body budgets (Steps.tsx): ≤ 12 words for two lines in the 583 media copy row, ≤ 6 for one line. */
 const FOUR_STEPS: readonly Step[] = [
-  {
-    title: 'Frame the decision',
-    body: 'We agree what the product must decide, who owns it, and what evidence would settle it.',
-  },
-  {
-    title: 'Probe the risk',
-    body: 'Coded probes and user sessions test the riskiest assumption before anything is specified.',
-  },
-  {
-    title: 'Specify and build',
-    body: 'Design and engineering build from one record of states, rules and contracts.',
-  },
-  {
-    title: 'Ship and observe',
-    body: 'Release against a measure agreed up front, and carry what we learn forward.',
-  },
+  { title: 'Frame the decision', body: 'What the product must decide, who owns it, and what would settle it.' },
+  { title: 'Probe the risk', body: 'A coded probe puts the riskiest assumption in front of real users.' },
+  { title: 'Specify and build', body: 'Design and engineering build from one record of states and rules.' },
+  { title: 'Ship and observe', body: 'Released against a measure agreed up front, and read again after.' },
 ];
 
 const FIVE_STEPS: readonly Step[] = [
-  { title: 'Map', body: 'The problem, the people and the one question to answer.' },
-  { title: 'Sketch', body: 'Competing answers, each drawn by a different hand.' },
-  { title: 'Decide', body: 'One direction, chosen against the question we framed.' },
-  { title: 'Prototype', body: 'A realistic surface, built in a single working day.' },
-  { title: 'Test', body: 'Five people use it; we watch where it breaks.' },
+  { title: 'Map', body: 'The problem, the people, the question.' },
+  { title: 'Sketch', body: 'Competing answers from different hands.' },
+  { title: 'Decide', body: 'One direction, chosen against the question.' },
+  { title: 'Prototype', body: 'A realistic surface, built in a day.' },
+  { title: 'Test', body: 'Five people use it; we watch.' },
 ];
 
 const THREE_STEPS: readonly Step[] = [
-  {
-    title: 'Trace the record',
-    body: 'Follow one order from intake to invoice, marking every screen where its status changes.',
-  },
-  {
-    title: 'Name the owner',
-    body: 'For each change of status, find the team that decides it, and the ones that only see it.',
-  },
-  {
-    title: 'Redraw the seam',
-    body: 'Design the one screen where the decision actually happens, and retire the copies of it.',
-  },
+  { title: 'Trace the record', body: 'Follow one order from intake to invoice, marking each status change.' },
+  { title: 'Name the owner', body: 'For every change, find the one team that actually decides it.' },
+  { title: 'Redraw the seam', body: 'Design the screen where the decision happens, and retire its copies.' },
+];
+
+const MONTH_STEPS: readonly Step[] = [
+  { title: 'Week one', body: 'Interviews, and the product as it ships.' },
+  { title: 'Week two', body: 'A map of who decides what.' },
+  { title: 'Week three', body: 'A coded probe, in front of users.' },
+  { title: 'Week four', body: 'A readout, a plan and a cost.' },
 ];
 
 /* ── Stats: illustrative numerals (§ 5.8, § 8.4) ──────────────────────────────────────────── */
@@ -125,13 +86,14 @@ const THREE_STATS = [
 ] as const;
 
 /* ── Thread: one decision across its representations ──────────────────────────────────────── */
+/* Titles that hold one line in a 165 track at 1024, so every body in the row starts level. */
 const THREAD: readonly ThreadStage[] = [
   { title: 'Open question', body: 'What the product must decide.' },
   { title: 'Coded probe', body: 'The cheapest version that could answer it.' },
   { title: 'Contract', body: 'States, rules and data the build owes.' },
-  { title: 'Running behaviour', body: 'Shipped behind a measure.' },
-  { title: 'Review finding', body: 'What production showed us.' },
-  { title: 'Accepted decision', body: 'Recorded, and cited by the next.' },
+  { title: 'Live code', body: 'Shipped behind an agreed measure.' },
+  { title: 'Finding', body: 'What production showed us.' },
+  { title: 'Decision', body: 'Recorded, and cited by the next.' },
 ];
 
 export default function KitProcessPage() {
@@ -148,12 +110,12 @@ export default function KitProcessPage() {
             <h1>Process and stats</h1>
             <p className={t.lead}>
               How the work runs, read top to bottom, and the few numbers that say what it returned.
-              Steps for a method, a thread for a chain of artefacts, a flow for stages with contents,
-              and a stat that keeps its numeral in ink.
+              Steps for a method, a thread for a chain of artefacts, a flow for stages with
+              contents, and a stat that keeps its numeral in ink.
             </p>
           </Layout>
           <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="tight" className={t.uiLg}>
-            <li><a href="#f-four">F · four steps, photo aside</a></li>
+            <li><a href="#f-four">F · four steps, a tall photograph</a></li>
             <li><a href="#f-five">F · five one-line steps</a></li>
             <li><a href="#f-example">F · worked example above</a></li>
             <li><a href="#f-cta">F · with a CtaRow</a></li>
@@ -170,16 +132,17 @@ export default function KitProcessPage() {
       {/* ── F · four steps ─────────────────────────────────────────────────────────────── */}
       <Variation
         id="f-four"
-        title="F · four steps, two-line bodies, photo aside"
-        note="The approved Steps (§ 3.6): numbered ListCard rows in the body track of a beside head, a 3:2 photograph in the head track. Head track 542, body 4 × 116 = 464. Steps carry blue numerals; the words stay ink."
+        title="F · four steps, two-line bodies, a tall photograph"
+        note="Steps (ListCard's set mode) in the copy column of a media split, the photograph running the copy's height: it starts on the eyebrow's line and ends on the last row's rule (media.height = copy). Every step title one size (h5), one 184 title track, the body a block after it."
       />
       <ContentSection
-        arrangement="beside"
+        arrangement="media"
+        density="tight"
+        media={{ image: photo('workshop-brick-room'), height: 'copy' }}
         eyebrow="How an engagement runs"
-        heading="From one question to a shipped decision"
+        heading="Four stages, each one reviewed"
         headingId="kit-f-four"
-        lead="Four stages, each ending in something you can review, so nothing moves on until it is agreed."
-        aside={<AsidePhoto id="moodboard-wall-desk" />}
+        lead="Each stage ends in something you can read and push back on before the next begins."
       >
         <Steps steps={FOUR_STEPS} />
       </ContentSection>
@@ -188,7 +151,7 @@ export default function KitProcessPage() {
       <Variation
         id="f-five"
         title="F · five steps, one-line bodies"
-        note="Five rows take one-line bodies (≤ 9 words, § 1.5): 5 × 90 = 450 beside the 542 head track."
+        note="The approved beside form: the head static in its track, five rows in the body track. Five rows hold one-line bodies (≤ 6 words). No photograph here; the generated texture weighs the head track's empty lower corner, clear of every line of copy."
       />
       <ContentSection
         arrangement="beside"
@@ -196,8 +159,10 @@ export default function KitProcessPage() {
         heading="Five days, one tested answer"
         headingId="kit-f-five"
         lead="A sprint compresses months of debate into a week, and ends with real people using the result."
-        aside={<AsidePhoto id="studio-whiteboard-crit" />}
       >
+        <Texture>
+          <TextureShape kind="ellipse" bottom={-180} left={-200} width="44%" height={320} blur={180} />
+        </Texture>
         <Steps steps={FIVE_STEPS} />
       </ContentSection>
 
@@ -205,19 +170,20 @@ export default function KitProcessPage() {
       <Variation
         id="f-example"
         title="F · three steps, worked example above"
-        note="The Callout sets the scene the steps are walked through, a stack above them (§ 3.3: F's example goes above the rows). With it, three rows at most: ≈ 158 + 48 + 3 × 116."
+        note="The photograph at the end this time. Callout tone=example sets the scene the steps walk through: body-lg in ink, a blue key and a blue rule down its start edge — a mark, not a box. Three rows at most beneath it, at the family's one title size."
       />
       <ContentSection
-        arrangement="beside"
+        arrangement="media"
+        density="tight"
+        media={{ image: photo('hands-sketches-markers'), side: 'end', height: 'copy' }}
         eyebrow="How an audit reads a product"
         heading="Follow one record, not every screen"
         headingId="kit-f-example"
-        lead="Most product problems live between screens. We follow one real record until we find the seam."
-        aside={<AsidePhoto id="hands-sketches-markers" />}
       >
         <Callout
+          tone="example"
           label="Worked example"
-          html="<p>A logistics team’s dispatch screen: three teams edit one order, and nobody trusts its status. We traced a single order through all of them.</p>"
+          html="<p>A dispatch screen where three teams edit one order, and nobody trusts its status. We followed a single order through all of them.</p>"
         />
         <Steps steps={THREE_STEPS} />
       </ContentSection>
@@ -226,48 +192,41 @@ export default function KitProcessPage() {
       <Variation
         id="f-cta"
         title="F · four steps and a CtaRow"
-        note="The CtaRow is the body's last row, a stack under the steps: 464 + 96 = 560. Its rule is off, because the last row's rule already closes the ladder (§ 3.1)."
+        note="One-line weeks, then the CtaRow a stack under the ladder; its rule is off, because the last row's rule already closes the ladder (§ 3.1). The photograph ends on the button's foot."
       />
       <ContentSection
-        arrangement="beside"
+        arrangement="media"
+        density="tight"
+        media={{ image: photo('moodboard-wall-desk'), height: 'copy' }}
         eyebrow="Working together"
         heading="What the first month looks like"
         headingId="kit-f-cta"
-        lead="A fixed first month, so you can judge the work before committing to a longer engagement."
-        aside={<AsidePhoto id="workshop-whiteboard-lounge" />}
-        footer={
-          <CtaRow
-            rule={false}
-            actions={[{ label: 'See how we work', href: ROUTES.howWeWork }]}
-          />
-        }
+        lead="A fixed first month, so you can judge the work before you commit to more."
+        footer={<CtaRow rule={false} actions={[{ label: 'See how we work', href: ROUTES.howWeWork }]} />}
       >
-        <Steps
-          steps={[
-            { title: 'Week one', body: 'Interviews with your team and users, and a walk through the product as it ships today.' },
-            { title: 'Week two', body: 'The decision map: what is being decided, by whom, and where the evidence is missing.' },
-            { title: 'Week three', body: 'A coded probe of the riskiest answer, put in front of five real users.' },
-            { title: 'Week four', body: 'A readout with a plan, a cost, and the first release we would make together.' },
-          ]}
-        />
+        <Steps steps={MONTH_STEPS} />
       </ContentSection>
 
       {/* ── S · four stats ─────────────────────────────────────────────────────────────── */}
       <Variation
         id="s-four"
         title="S · four stats, centred"
-        note="H-compact centred over one row of four Stats at 286: 217 + 114 = 331 (§ 1.4). Numerals are ink at stat-lg; the blue is the mark on each stat's opening rule. Illustrative numerals, and no client mark in the band (§ 5.8)."
+        note="H-compact centred over one row of four Stats, each centred on its track (align=center), so the band has one axis. The band takes the open padding, and the generated texture fills the bottom of it under the row — the band's visual event — clear of the labels. Numerals ink at stat-lg; the blue is each stat's mark. Illustrative numerals, no client mark (§ 5.8)."
       />
       <ContentSection
         align="center"
+        density="open"
         eyebrow="In numbers"
         heading="A year of work, counted"
         headingId="kit-s-four"
-        lead="What twelve months of product engagements added up to, measured the same way every quarter."
+        lead="Twelve months of product engagements, measured the same way every quarter."
       >
-        <Layout as="ul" columns={{ base: 2, lg: 4 }} colGap="gutter" rowGap="column">
+        <Texture>
+          <TextureShape bottom={-150} width="96%" height={200} blur={80} />
+        </Texture>
+        <Layout as="ul" columns={{ md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
           {FOUR_STATS.map((stat) => (
-            <Stat key={stat.label} as="li" {...stat} />
+            <Stat key={stat.label} as="li" align="center" {...stat} />
           ))}
         </Layout>
       </ContentSection>
@@ -276,24 +235,29 @@ export default function KitProcessPage() {
       <Variation
         id="s-three"
         title="S · three stats and a CtaRow"
-        note="Three Stats at 392, then a centred CtaRow a stack under the row: 331 + 96 = 427. The row's rule is on: the stats end on copy, not on a rule."
+        note="Three centred Stats, then a centred CtaRow a stack under the row with its rule OFF: the stats' own rules already mark the row, and a shorter centred rule under them aligned with nothing. Below 768 every stat sets its figure beside its label, so three and four keep one compact rhythm."
       />
       <ContentSection
         align="center"
+        density="open"
         eyebrow="After the redesign"
         heading="What changed in one quarter"
         headingId="kit-s-three"
-        lead="Three measures we agreed before the work started, read again ninety days after release."
+        lead="Three measures agreed before the work started, read again ninety days after release."
         footer={
           <CtaRow
             align="center"
+            rule={false}
             actions={[{ label: 'Read the case study', href: ROUTES.caseStudies }]}
           />
         }
       >
-        <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
+        <Texture>
+          <TextureShape kind="ellipse" bottom={-150} width="80%" height={200} blur={80} />
+        </Texture>
+        <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="stack">
           {THREE_STATS.map((stat) => (
-            <Stat key={stat.label} as="li" {...stat} />
+            <Stat key={stat.label} as="li" align="center" {...stat} />
           ))}
         </Layout>
       </ContentSection>
@@ -302,7 +266,7 @@ export default function KitProcessPage() {
       <Variation
         id="d-stat"
         title="Stat as the D head aside"
-        note="One stat-lg figure as the head track's large thing (§ 3.3: D always has an aside). Head track 240 + 48 + 114 = 402; body three one-column rows."
+        note="One stat-lg figure as the head track's large thing (§ 3.3: D always has an aside). The body is three icon rows, their glyphs blue."
       />
       <ContentSection
         arrangement="beside"
@@ -344,30 +308,25 @@ export default function KitProcessPage() {
       <Variation
         id="stat-sizes"
         title="Stat · stat-lg and stat"
-        note="lg (54) is a band's large thing; md (40) sits beside other content. Same rule, mark, unit and label at both sizes. On tint below: surface proof — on pages, tint is the proof band only (§ 1.7)."
+        note="Two sizes for two jobs, never one row: lg (54) is a band's large thing — the S row, the D aside; md (40) sits beside other content, here a paragraph. 54 against 40 is too close a step to read as a hierarchy side by side, so the two never share a row."
       />
       <Section>
-        <Layout columns={{ md: [1, 1] }} colGap="column" rowGap="stack">
+        <Layout columns={{ lg: [1, 1] }} colGap="column" rowGap="stack">
           <Layout rowGap="block">
-            <p className={t.eyebrow}>size=&quot;lg&quot; · stat-lg</p>
+            <p className={t.eyebrow}>size=&quot;lg&quot; · stat-lg · the band&rsquo;s large thing</p>
             <Stat value="6–8" unit="weeks" label="From the first question to a tested, reviewable prototype." />
           </Layout>
           <Layout rowGap="block">
-            <p className={t.eyebrow}>size=&quot;md&quot; · stat</p>
-            <Stat
-              size="md"
-              value="6–8"
-              unit="weeks"
-              label="From the first question to a tested, reviewable prototype."
-            />
+            <p className={t.eyebrow}>size=&quot;md&quot; · stat · beside other content</p>
+            <Layout columns={{ md: [3, 2] }} colGap="gutter" rowGap="block" align="start">
+              <p>
+                The first engagement is fixed: four weeks, one decision, and a prototype your team can
+                put in front of users. Most teams decide on the next phase from what that prototype
+                shows them.
+              </p>
+              <Stat size="md" value="4" unit="weeks" label="A fixed first engagement." />
+            </Layout>
           </Layout>
-        </Layout>
-      </Section>
-      <Section surface="tint" density="tight">
-        <Layout columns={{ md: 4 }} colGap="gutter" rowGap="column" as="ul">
-          {FOUR_STATS.map((stat) => (
-            <Stat key={stat.label} as="li" size="md" {...stat} />
-          ))}
         </Layout>
       </Section>
 
@@ -375,7 +334,7 @@ export default function KitProcessPage() {
       <Variation
         id="e-thread"
         title="Thread in a full-column E band"
-        note="H-compact over a Thread of six stages, the full 1240 column (§ 3.4 E: a diagram ≤ 380). One blue line, an arrowhead into each next node, the last node filled where the thread lands. The horizon texture sits in the bottom padding, clear of the copy."
+        note="H-compact over a Thread of six stages, the full 1240 column (§ 3.4 E). The thread is the figure: a 2px blue line, 16px nodes, an arrowhead into each next node, the last node filled where it lands — and the return arc rising from that node, back over the row, down into the first. The sentence sits on the column line beneath; the texture rises from the bottom corner under the last stages, clear of the sentence and every body."
       />
       <ContentSection
         eyebrow="One decision, every representation"
@@ -384,7 +343,7 @@ export default function KitProcessPage() {
         lead="Prototype code may be thrown away. What survives is the decision, and the evidence that what shipped meets it."
       >
         <Texture>
-          <TextureShape bottom={-200} width="110%" height={260} blur={200} />
+          <TextureShape kind="ellipse" bottom={-250} right={-120} width="64%" height={300} blur={120} />
         </Texture>
         <Thread stages={THREAD} loop="What production shows becomes the next open question." />
       </ContentSection>

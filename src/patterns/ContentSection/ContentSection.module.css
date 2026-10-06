@@ -76,3 +76,17 @@
 .text {
   max-inline-size: var(--csec-body-measure);
 }
+
+/* The media split's photo box when it runs the copy's height (`media.height: 'copy'`). The row
+   stretches it; the aspect-ratio is its floor (4:3 above the copy, 4:5 beside it) and the track's
+   min-content contribution, so a short copy column keeps the ordinary band. Media fills it with a
+   cover crop. Sizing only: no display, no margin. */
+.mediaToCopy {
+  aspect-ratio: var(--csec-media-ratio-base);
+}
+
+@media (min-width: 1024px) {
+  .mediaToCopy {
+    aspect-ratio: var(--csec-media-ratio-lg);
+  }
+}

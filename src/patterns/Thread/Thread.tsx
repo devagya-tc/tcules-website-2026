@@ -17,8 +17,9 @@ export type ThreadProps = {
   stages: readonly ThreadStage[];
   /**
    * The return path, in one sentence: what the last stage feeds back into the first ("Production
-   * observation returns to the next product decision."). Drawn from 1024 as a line running back
-   * beneath the stages; below 1024 it is the sentence under a return glyph. Absent draws no path.
+   * observation returns to the next product decision."), set under the stages beside a return
+   * glyph. From 1024, on a one-row thread, the path is also drawn: an arc over the nodes from the
+   * last node back down into the first. Absent draws no path.
    */
   loop?: string;
   /** The stage titles' element. Default `h3`; `h4` when the thread sits under an h3. */
@@ -58,7 +59,7 @@ function warn(message: string) {
  * filled where the thread lands. The words stay ink; line, arrowheads and nodes are the accent.
  *
  * From 1024 the stages run across the column, one row up to six; seven to twelve break into two
- * balanced rows, and the line at the end of a row runs to its track's edge and points on. Below
+ * balanced rows, and a row's last stage carries no connector (the row break is the turn). Below
  * 1024 the thread turns vertical: the line runs down the start edge, the copy beside each node.
  *
  * Layout owns the tracks and every seam. The module draws the line, arrowheads, nodes and the
@@ -83,6 +84,8 @@ export function Thread({ stages, loop, stageHeading = 'h3' }: ThreadProps) {
   const across = perRow(valid.length);
   const Heading = stageHeading;
   const returnPath = loop?.trim();
+  /* The arc is drawn on a one-row thread only; see Thread.module.css § The return path. */
+  const arc = Boolean(returnPath) && valid.length <= across;
 
   return (
     <Layout rowGap="stack" className={styles.root}>
@@ -91,7 +94,7 @@ export function Thread({ stages, loop, stageHeading = 'h3' }: ThreadProps) {
         columns={{ lg: across }}
         colGap="gutter"
         rowGap="stack"
-        className={cx(ROW_CLASS[across], across >= 5 && styles.dense)}
+        className={cx(ROW_CLASS[across], across >= 5 && styles.dense, arc && styles.arc)}
       >
         {valid.map((stage, index) => (
           <li key={`${index}-${stage.title}`} className={styles.stage}>
@@ -104,14 +107,12 @@ export function Thread({ stages, loop, stageHeading = 'h3' }: ThreadProps) {
         ))}
       </Layout>
       {returnPath ? (
-        <div className={styles.loop}>
-          <Cluster nowrap colGap="tight" align="start">
-            <span className={styles.loopGlyph} aria-hidden="true">
-              <Icon name="undo-left" size="md" />
-            </span>
-            <p className={styles.loopText}>{returnPath}</p>
-          </Cluster>
-        </div>
+        <Cluster nowrap colGap="tight" align="start">
+          <span className={styles.loopGlyph} aria-hidden="true">
+            <Icon name="undo-left" size="md" />
+          </span>
+          <p className={styles.loopText}>{returnPath}</p>
+        </Cluster>
       ) : null}
     </Layout>
   );

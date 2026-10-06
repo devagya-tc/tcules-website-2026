@@ -30,6 +30,13 @@
    the wrong value from an outer ancestor. */
 
 :root {
+  /* The media split's photograph when it runs the copy's height (`media.height: 'copy'`,
+     cmp-process-stats, 6 Oct 2026): the crops it never goes below — 4:3 above the copy, 4:5 beside
+     it — the same pair Media cuts by default. By value, not --media-ratio-*: a component never
+     reads another component's tokens. */
+  --csec-media-ratio-base: 4 / 3;
+  --csec-media-ratio-lg: 4 / 5;
+
   --csec-eyebrow-text: var(--text-eyebrow);
   --csec-eyebrow-tracking: var(--text-eyebrow-tracking);
   --csec-heading-text: var(--text-h2);

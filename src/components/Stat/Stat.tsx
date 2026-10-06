@@ -10,6 +10,14 @@ import styles from './Stat.module.css';
  */
 export type StatSize = 'lg' | 'md';
 
+/**
+ * Where the stat's parts sit in its track, from 768. `center` for a row under a centred head (S,
+ * § 3.5): figure, label and the blue mark centre on the track, so the band has one axis rather
+ * than a centred head over start-set numerals. Below 768 every stat sets its figure BESIDE its
+ * label, start-aligned, whatever this says — see `.stat` in the module.
+ */
+export type StatAlign = 'start' | 'center';
+
 /** `li` when the stat is one of a set (`<Layout as="ul">`); `div` when it stands alone. */
 export type StatElement = 'div' | 'li';
 
@@ -34,6 +42,8 @@ export type StatProps = {
   size?: StatSize;
   /** Default `div`. See `StatElement`. */
   as?: StatElement;
+  /** Default `start`. See `StatAlign`. */
+  align?: StatAlign;
 };
 
 const SIZE_CLASS: Record<StatSize, string | undefined> = {
@@ -64,7 +74,14 @@ function warn(message: string) {
  * Illustrative numerals never share a band with real client marks (§ 5.8). That is a supply rule
  * the component cannot see, so the composing page keeps it.
  */
-export function Stat({ value, unit, label, size = 'lg', as: Tag = 'div' }: StatProps) {
+export function Stat({
+  value,
+  unit,
+  label,
+  size = 'lg',
+  as: Tag = 'div',
+  align = 'start',
+}: StatProps) {
   const figure = value.trim();
   const meaning = label.trim();
   if (!figure) {
@@ -75,7 +92,7 @@ export function Stat({ value, unit, label, size = 'lg', as: Tag = 'div' }: StatP
   const word = unit?.trim();
 
   return (
-    <Tag className={cx(styles.stat, SIZE_CLASS[size])}>
+    <Tag className={cx(styles.stat, SIZE_CLASS[size], align === 'center' && styles.centred)}>
       <p className={styles.figure}>
         <span className={styles.value}>{figure}</span>
         {word ? <span className={styles.unit}>{word}</span> : null}

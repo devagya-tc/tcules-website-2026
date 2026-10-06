@@ -26,17 +26,17 @@ numbered and nothing is boxed (the old template drew boxed node chips; owner rul
 
 | Part | Drawn as | Ink |
 |---|---|---|
-| Node | 12px ring, `--thread-node-border` 2px, hollow in the band's ground; the **last node filled** | blue |
-| Line | hairline from each node to the next, across the `gutter` (lg) or down the `stack` (below lg) | blue (a connector is a mark, § 4.3) |
-| Arrowhead | 8px two-border chevron at the line's end, pointing into the next node | blue |
+| Node | 16px ring, `--thread-node-border` 2px, hollow in the band's ground; the **last node filled** | blue |
+| Line | 2px (`--border-width-2`) from each node to the next, across the `gutter` (lg) or down the `stack` (below lg) | blue (a connector is a mark, § 4.3) |
+| Arrowhead | 10px two-border chevron at the line's end, pointing into the next node | blue |
 | Title | h5 (≤ 4 across), h6 (5 or 6 across, lg only) | ink |
 | Body | body-sm, optional, ≤ 9 words | ink, muted |
-| Return path | lg: a line drawn back beneath the stages (down at the far end, along, up into the first node's column, arrowhead up), sentence under it. Below lg: `undo-left` glyph beside the sentence | blue line / muted text |
+| Return path | `undo-left` glyph beside the sentence, on the column line under the stages, at every width. From lg on a ONE-row thread, also an arc over the row: rising from the last node, back above the stages, down into the first node with an arrowhead (fix round 1, 6 Oct: drawn beneath it could not start or end on a node). Two-row threads draw no arc | blue line / muted text |
 
 ## 3 · Arrangement
 
 - From 1024: one row up to six stages; 7–12 break into two balanced rows (`ceil(n / 2)`); the line at
-  a row's end runs to its own track edge and points on. `colGap="gutter"`, `rowGap="stack"`.
+  a row's last stage carries no connector (fix round 1: it pointed off the column). `colGap="gutter"`, `rowGap="stack"`.
 - Below 1024: vertical — node at the start edge centred on the title's first line, line down to the
   next node, copy beside.
 - Layout owns tracks and seams; the module draws marks with positioned pseudo-elements and one

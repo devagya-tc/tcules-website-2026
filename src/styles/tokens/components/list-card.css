@@ -119,6 +119,12 @@
   --lcrd-title-min: 256px;
   --lcrd-body-min: 256px;
 
+  /* A Steps set's title track (ListCard/Steps.tsx, 6 Oct 2026). Component geometry: one fixed track
+     wide enough for a three-word action at h5 ("Frame the decision", 172 measured) on one line, so the body
+     column of a ladder starts on one line, a block (24) after its title. A longer title balances
+     onto two lines inside it rather than widening it. */
+  --lcrd-step-title-track: 184px;
+
   /* The accepted native-image contract. 160px was measured as a recognisable landscape sample in
      the 1240px row while still leaving the 192px content core room before Cluster wraps it.
      The ratio is the shared cover crop — BlockCard's vertical media serves the same cover asset,

@@ -1,6 +1,8 @@
 import { Layout, Section, type SectionSurface } from '@/components';
 import { Thread, type ThreadStage } from '@/patterns';
 
+import { ROUTES } from '@/lib/routes';
+
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 /**
@@ -45,7 +47,9 @@ const STRESS: readonly ThreadStage[] = [
   { title: 'Observability instrumentation', body: 'Every event the review will need, named before the build.' },
 ];
 
-const SURFACES: SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
+/* Paper, tint and ink. Blue is never a ground (owner, 6 Oct 2026): its tokens are declared, so a
+   nested blue band could not inherit a wrong ink, but the site has no blue surface to show. */
+const SURFACES: SectionSurface[] = ['paper', 'tint', 'ink'];
 
 export default function ThreadSpecimenPage() {
   return (
@@ -58,7 +62,7 @@ export default function ThreadSpecimenPage() {
             every next node and the last node filled where the thread lands. Nothing is numbered and
             nothing is boxed: it is a chain of artefacts, not a method (Steps) and not stages with
             contents (ProcessFlow). Seen in its band on{' '}
-            <a href="/design/kit/process#e-thread">the process and stats family page</a>.
+            <a href={`${ROUTES.designKitProcess}#e-thread`}>the process and stats family page</a>.
           </p>
         </Layout>
       </Section>
@@ -68,10 +72,10 @@ export default function ThreadSpecimenPage() {
           <Specimen title="six stages, with bodies · one row" note="Five or six across, a track is 180 to 220 wide and the title steps to h6.">
             <Thread stages={SIX} />
           </Specimen>
-          <Specimen title="four stages, with bodies, and a return path" note="Up to four across, h5 titles. The return path is drawn back beneath the stages from the far end into the first node's column, the sentence under it. Below 1024 it is the sentence beside a return glyph.">
+          <Specimen title="four stages, with bodies, and a return path" note="Up to four across, h5 titles. From 1024 the return path is an arc over the row: it rises from the last node, where the thread lands, and comes down into the first. The sentence sits on the column line under the stages, a return glyph at its start, at every width.">
             <Thread stages={FOUR} loop="What production shows returns to the next product decision." />
           </Specimen>
-          <Specimen title="nine stages, titles only · two balanced rows" note="Seven to twelve stages break into two rows (9 → 5 + 4). The line at the end of the first row runs to its track's edge and points on.">
+          <Specimen title="nine stages, titles only · two balanced rows" note="Seven to twelve stages break into two rows (9 → 5 + 4). A row's last stage carries no connector — the row break is the turn — and no arc is drawn: no path from row two's end to row one's start avoids the copy, so the return is the sentence and its glyph.">
             <Thread stages={NINE} loop="Production observation returns to the next product decision." />
           </Specimen>
           <Specimen title="two stages · the minimum" note="Fewer than two renders nothing and warns.">

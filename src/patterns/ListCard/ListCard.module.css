@@ -370,3 +370,18 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* ── Steps: the set mode (Steps.tsx) ─────────────────────────────────────────────
+   A step title is an action of one to three words. In the plain split it grows (flex 2) to its
+   32ch measure, about 340 at h5, and leaves a dead channel before the body. In a Steps set the
+   title holds ONE fixed track instead, so every body in the ladder starts on the same line and
+   close to its title, and the body takes the rest of the row. The bases still decide the wrap:
+   the row stacks only when the track, the seam and --lcrd-body-min no longer fit its own width.
+   Sizing inside the split Cluster, as above; no arrangement of its own. */
+.steps .splitTitle {
+  flex: 0 0 var(--lcrd-step-title-track);
+}
+
+.steps .splitBody {
+  flex: 1 1 var(--lcrd-body-min);
+}

@@ -1,5 +1,7 @@
 import { Layout, Section, Stat, type SectionSurface } from '@/components';
 
+import { ROUTES } from '@/lib/routes';
+
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 /**
@@ -21,7 +23,9 @@ const SET = [
   { value: '1', unit: 'record', label: 'Every decision, kept where both teams read it.' },
 ] as const;
 
-const SURFACES: SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
+/* Paper, tint and ink. Blue is never a ground (owner, 6 Oct 2026): its tokens are declared, so a
+   nested blue band could not inherit a wrong ink, but the site has no blue surface to show. */
+const SURFACES: SectionSurface[] = ['paper', 'tint', 'ink'];
 
 export default function StatSpecimenPage() {
   return (
@@ -31,19 +35,36 @@ export default function StatSpecimenPage() {
           <h1>Stat</h1>
           <p>
             One figure, its unit, and the line that says what it counts, opening on a hairline with a
-            short blue mark at its start. The numeral is ink at every size: it is the band&rsquo;s
+            short blue mark at its start. Below 768 the figure sits beside its label. The numeral is ink at every size: it is the band&rsquo;s
             large thing, and blue at 54px would be a mass, not an accent. Seen in its bands on{' '}
-            <a href="/design/kit/process">the process and stats family page</a>.
+            <a href={ROUTES.designKitProcess}>the process and stats family page</a>.
           </p>
         </Layout>
       </Section>
 
       <Section>
         <Layout rowGap="stack">
-          <Specimen title="size · lg and md" note="lg is --text-stat-lg (54): the S row and the D aside. md is --text-stat (40), for a stat beside other content. Rule, mark, unit and label are the same at both.">
-            <Layout columns={{ md: 2 }} colGap="column" rowGap="stack">
+          <Specimen title="size · lg, a band's large thing" note="--text-stat-lg (54): the S row and the D aside. lg and md never share a row — 54 against 40 is too close a step to read as a hierarchy side by side.">
+            <Layout columns={{ md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
               <Stat value="6–8" unit="weeks" label={LABEL} />
-              <Stat size="md" value="6–8" unit="weeks" label={LABEL} />
+            </Layout>
+          </Specimen>
+
+          <Specimen title="size · md, beside other content" note="--text-stat (40), for a stat that sits beside a paragraph or a card rather than carrying the band.">
+            <Layout columns={{ md: [2, 1], lg: [2, 1, 1] }} colGap="gutter" rowGap="stack" align="start">
+              <p>
+                The first engagement is fixed: four weeks, one decision, and a prototype your team can
+                put in front of users.
+              </p>
+              <Stat size="md" value="4" unit="weeks" label="A fixed first engagement." />
+            </Layout>
+          </Specimen>
+
+          <Specimen title="align · center" note="For a row under a centred head (S): figure, label and the blue mark centre on the track, so the band has one axis. From 768; below it every stat sets its figure beside its label, start-aligned.">
+            <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="stack">
+              <Stat as="li" align="center" value="40%" label="Fewer support tickets in the first quarter." />
+              <Stat as="li" align="center" value="3×" label="Faster from approved design to reviewed code." />
+              <Stat as="li" align="center" value="11" unit="days" label="Median time to the first visible change." />
             </Layout>
           </Specimen>
 
@@ -63,12 +84,16 @@ export default function StatSpecimenPage() {
             </Layout>
           </Specimen>
 
-          <Specimen title="stress · the label ceiling and a wide value" note="A 12-word label (the § 1.5 ceiling) wraps to two lines at 286; a seven-character value with its unit wraps the unit under the figure rather than overflowing the track.">
-            <Layout as="ul" columns={{ md: 2, lg: 4 }} colGap="gutter" rowGap="column">
-              <Stat as="li" value="92%" label={LABEL_CEILING} />
-              <Stat as="li" value="1,240+" unit="releases" label="Shipped to production through the same review." />
-              <Stat as="li" size="md" value="92%" label={LABEL_CEILING} />
-              <Stat as="li" size="md" value="1,240+" unit="releases" label="Shipped through the same review." />
+          <Specimen title="stress · the label ceiling and a wide value" note="A 12-word label (the § 1.5 ceiling) wraps to two lines at 286; a seven-character value with its unit wraps the unit under the figure rather than overflowing the track. One size per row.">
+            <Layout rowGap="column">
+              <Layout as="ul" columns={{ md: 2, lg: 4 }} colGap="gutter" rowGap="column">
+                <Stat as="li" value="92%" label={LABEL_CEILING} />
+                <Stat as="li" value="1,240+" unit="releases" label="Shipped to production through the same review." />
+              </Layout>
+              <Layout as="ul" columns={{ md: 2, lg: 4 }} colGap="gutter" rowGap="column">
+                <Stat as="li" size="md" value="92%" label={LABEL_CEILING} />
+                <Stat as="li" size="md" value="1,240+" unit="releases" label="Shipped through the same review." />
+              </Layout>
             </Layout>
           </Specimen>
         </Layout>

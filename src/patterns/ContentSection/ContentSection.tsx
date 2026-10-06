@@ -74,7 +74,23 @@ export type ContentSectionMedia = {
    * owner's answer.
    */
   pin?: boolean;
+  /**
+   * What decides the photograph's height from 1024 (cmp-process-stats fix round, 6 Oct 2026).
+   *
+   *   ratio  its own 4:5. The copy is centred on it, or stretched to it (`pin`). The default.
+   *   copy   the copy column's full height: the photo starts on the eyebrow's line and ends on the
+   *          copy's last edge — a ladder's closing rule, a CtaRow — as the reference process splits
+   *          pin their text to the image's two edges. A cover crop, never shorter than 4:5, so a
+   *          copy column shorter than that keeps today's band. For a copy column that is a body in
+   *          itself (F: the head over Steps), where a fixed 4:5 left the photo ending 50–70 short
+   *          of, or past, the last row.
+   *
+   * Below 1024 the photo sits above the copy at 4:3 either way.
+   */
+  height?: ContentSectionMediaHeight;
 };
+
+export type ContentSectionMediaHeight = 'ratio' | 'copy';
 
 type ContentSectionBaseProps = {
   /**
@@ -533,18 +549,26 @@ function MediaSplit({
   footer: ReactNode;
   pinFooter: boolean;
 }) {
+  /* `height: 'copy'`: the row stretches, and the photo's box — a div holding the 4:3 / 4:5 floor
+     as its aspect-ratio — takes the row's height; Media fills it with a cover crop. Sizing on the
+     track's own child, not an arrangement: Layout still owns both tracks and the seam. */
+  const toCopy = media.height === 'copy';
   return (
     <Layout
       columns={{ lg: [5, 7] }}
       colGap="section"
       rowGap="stack"
       reverse={media.side === 'end' ? { lg: true } : undefined}
-      align={pinFooter ? 'stretch' : 'center'}
+      align={pinFooter || toCopy ? 'stretch' : 'center'}
     >
-      <div>
+      <div className={toCopy ? styles.mediaToCopy : undefined}>
         {/* 4:5 beside the copy, 4:3 above it (§ 3.7 item 4): a 4:5 at the 326 phone column would be
             408 tall before the first word of the copy. */}
-        <Media image={media.image} ratio={{ base: '4/3', lg: '4/5' }} sizes={MEDIA_SPLIT} />
+        {toCopy ? (
+          <Media image={media.image} fit="fill" sizes={MEDIA_SPLIT} />
+        ) : (
+          <Media image={media.image} ratio={{ base: '4/3', lg: '4/5' }} sizes={MEDIA_SPLIT} />
+        )}
       </div>
       <Layout rowGap="stack" pinLast={pinFooter}>
         {headText}

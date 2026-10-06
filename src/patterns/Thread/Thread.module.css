@@ -127,8 +127,10 @@
     transform: rotate(45deg);
   }
 
-  /* The last stage of a row that is not the last stage: its line stops at its own track's end and
-     points on to the next row. */
+  /* The last stage of a row that is not the last stage: no connector. Its line used to run to the
+     track's edge and point on, which at two rows pointed off the column while the next stage sat at
+     the far start of the row below (panel note, 6 Oct 2026). The row break itself is the turn; the
+     next row's first node, on the same start line as row one's, is where the eye goes. */
   .across2 > .stage:nth-child(2n)::before,
   .across3 > .stage:nth-child(3n)::before,
   .across4 > .stage:nth-child(4n)::before,
@@ -139,18 +141,43 @@
   .across4 > .stage:nth-child(4n)::after,
   .across5 > .stage:nth-child(5n)::after,
   .across6 > .stage:nth-child(6n)::after {
-    inset-inline-end: 0;
+    content: none;
   }
 }
 
-/* ── The return path ─────────────────────────────────────────────────────────────
-   Below 1024: a return glyph beside the sentence. From 1024: a line drawn back beneath the stages —
-   down from the far end, along, and up into the first node's column, an arrowhead pointing up —
-   with the sentence under it. */
-.loop {
-  position: relative;
+/* The count across, for the return arc's arithmetic. A unitless count, not a distance. */
+.across2 {
+  --thread-n: 2;
 }
 
+.across3 {
+  --thread-n: 3;
+}
+
+.across4 {
+  --thread-n: 4;
+}
+
+.across5 {
+  --thread-n: 5;
+}
+
+.across6 {
+  --thread-n: 6;
+}
+
+/* ── The return path ─────────────────────────────────────────────────────────────
+   The sentence sits under the stages on the column line, a return glyph at its start, at every
+   width. From 1024, on a ONE-row thread, the path itself is drawn as an arc OVER the nodes: it
+   rises from the last node — where the thread lands — runs back above the stages and comes down
+   into the first node, an arrowhead on it. Above the row there is nothing to cross, so the loop
+   can start and end ON the two nodes it joins; drawn beneath, it had to start under copy and stop
+   short of node one, and read as a detached bracket (panel note, 6 Oct 2026).
+
+   The arc's far leg is the last track's node: every track is (100% − (n − 1) × gutter) / n, and
+   the last one starts exactly one track from the end, so the leg sits a track minus a node-half in
+   from the column's end. Two-row threads draw no arc — no path from row two's end to row one's
+   start avoids the copy — and keep the sentence and its glyph alone. */
 .loopGlyph {
   display: block;
   color: var(--thread-line-ink);
@@ -163,38 +190,44 @@
 }
 
 @media (min-width: 1024px) {
-  .loop {
-    padding-block-start: calc(var(--gap-block) + var(--gap-text));
-    padding-inline-start: calc(var(--thread-node-size) + var(--gap-text));
+  .arc {
+    position: relative;
+    padding-block-start: var(--thread-arc-rise);
   }
 
-  .loopGlyph {
-    display: none;
-  }
-
-  .loop::before,
-  .loop::after {
+  .arc::before,
+  .arc::after {
     content: '';
     position: absolute;
   }
 
-  .loop::before {
-    inset-block-start: calc(-1 * var(--gap-text));
-    inset-inline: calc(var(--thread-node-half) - var(--thread-line-width) / 2) 0;
-    block-size: calc(var(--gap-block) + var(--gap-text));
+  /* The arc: top and both sides of one box, its corners rounded, each leg stopping a tight above
+     its node — the same clearance the forward line keeps from the nodes it joins. */
+  .arc::before {
+    inset-block-start: 0;
+    inset-inline-start: calc(var(--thread-node-half) - var(--thread-line-width) / 2);
+    inset-inline-end: calc(
+      (100% - (var(--thread-n) - 1) * var(--gap-gutter)) / var(--thread-n) -
+        var(--thread-node-half) - var(--thread-line-width) / 2
+    );
+    block-size: calc(var(--thread-arc-rise) - var(--gap-tight));
     border: var(--thread-line-width) solid var(--thread-line-ink);
-    border-block-start: 0;
-    border-end-start-radius: var(--thread-loop-radius);
-    border-end-end-radius: var(--thread-loop-radius);
+    border-block-end: 0;
+    border-start-start-radius: var(--thread-loop-radius);
+    border-start-end-radius: var(--thread-loop-radius);
   }
 
-  .loop::after {
-    inset-block-start: calc(-1 * var(--gap-text));
+  /* The arrowhead into node one: the forward head's square, turned to point down. Its tip lands
+     where the leg ends — a square of side s turned 45° reaches 1.2 s below its own top. */
+  .arc::after {
+    inset-block-start: calc(
+      var(--thread-arc-rise) - var(--gap-tight) - var(--thread-head-size) * 1.2
+    );
     inset-inline-start: calc(var(--thread-node-half) - var(--thread-head-size) / 2);
     inline-size: var(--thread-head-size);
     block-size: var(--thread-head-size);
-    border-block-start: var(--thread-line-width) solid var(--thread-line-ink);
-    border-inline-start: var(--thread-line-width) solid var(--thread-line-ink);
+    border-block-end: var(--thread-line-width) solid var(--thread-line-ink);
+    border-inline-end: var(--thread-line-width) solid var(--thread-line-ink);
     transform: rotate(45deg);
   }
 }

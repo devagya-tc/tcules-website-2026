@@ -19,13 +19,18 @@
    inherit the wrong value from an outer ancestor. */
 
 :root {
-  /* Component geometry, not distances between things — which is why these read the ramp. */
-  --thread-line-width: var(--border-width-hairline);
-  --thread-node-size: var(--space-12);
+  /* Component geometry, not distances between things — which is why these read the ramp. The
+     thread is the band's FIGURE (panel note, 6 Oct 2026: 8px hollow nodes on a hairline read as a
+     wireframe connector), so the line is 2 and a node 16 with a 2 ring. */
+  --thread-line-width: var(--border-width-2);
+  --thread-node-size: var(--space-16);
   --thread-node-border: var(--border-width-2);
-  --thread-head-size: var(--space-8);
+  --thread-head-size: var(--space-10);
   --thread-node-radius: var(--radius-full);
   --thread-loop-radius: var(--radius-8);
+  /* How high the return arc rises over the nodes: a mark's own height, the room the arc needs to
+     read as a loop rather than an underline of the band head above it. */
+  --thread-arc-rise: var(--space-40);
 
   /* The stage title steps with the count across, as card titles do (§ 7.2): h5 up to four a row,
      h6 at five or six, where a track is 180 to 220 wide. */

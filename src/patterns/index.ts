@@ -148,7 +148,7 @@ export type {
   ProcessFlowLane,
   ProcessFlowStageHeading,
 } from './ProcessFlow';
-export { ListCard } from './ListCard';
+export { ListCard, Steps } from './ListCard';
 export type {
   ListCardProps,
   ListCardMarker,
@@ -156,6 +156,8 @@ export type {
   ListCardForm,
   ListCardSize,
   ListCardTitleElement,
+  Step,
+  StepsProps,
 } from './ListCard';
 
 export { BlockCard, BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCard';
@@ -184,6 +186,7 @@ export type {
   ContentSectionArrangement,
   ContentSectionMedia,
   ContentSectionMediaSide,
+  ContentSectionMediaHeight,
   ContentSectionProps,
   ContentSectionTextProps,
 } from './ContentSection';
@@ -201,7 +204,7 @@ export { Slider } from './Slider';
 export type { SliderProps, SliderPerView, SliderAlign } from './Slider';
 
 export { Callout } from './Callout';
-export type { CalloutProps } from './Callout';
+export type { CalloutProps, CalloutTone } from './Callout';
 
 export { DataTable } from './DataTable';
 export type {

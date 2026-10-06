@@ -63,3 +63,36 @@
   text-wrap: var(--text-running-wrap);
   color: var(--stat-label-ink);
 }
+
+/* ── Below 768: the figure BESIDE its label ─────────────────────────────────────
+   At a phone's 326 column a stat stacked figure-over-label is ~190 tall and a set of three reads as
+   a sparse column; two up, a 54 figure in a 147 track is small against its own column. Beside, one
+   stat is one line of figure and two of label, so three and four sit at the same compact rhythm
+   (panel note, 6 Oct 2026). The figure takes 2 of 5 and wraps its unit under the value; the label
+   the rest. The inside of one unit, as the stacked grid above is — the ARRANGEMENT changes at the
+   breakpoint, the seams do not: block (24) between the two, as head to body inside a block. */
+@media (max-width: 767px) {
+  .stat {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: var(--gap-block);
+    align-items: baseline;
+  }
+}
+
+/* ── align="center", from 768 ────────────────────────────────────────────────────
+   Under a centred head the stat centres in its track: figure, label and the mark on the rule. The
+   rule still runs the track's full width, so a row of them keeps its four objects. */
+@media (min-width: 768px) {
+  .centred {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .centred .figure {
+    justify-content: center;
+  }
+
+  .centred::before {
+    inset-inline-start: calc(50% - var(--stat-mark-length) / 2);
+  }
+}

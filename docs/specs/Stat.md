@@ -37,7 +37,8 @@ Seams: rule → value `block` (24, padding), value → label `text` (16). No mar
 | `value` | `string` | — | the figure verbatim; symbols that belong to it (%, ×, +) are part of it. Blank renders nothing |
 | `unit` | `string?` | — | a WORD that counts the figure (weeks, products); sentence case, uppercase is presentation |
 | `label` | `string` | — | what the figure means; blank warns |
-| `size` | `'lg' \| 'md'` | `lg` | lg = the band's large thing; md = beside other content |
+| `size` | `'lg' \| 'md'` | `lg` | lg = the band's large thing; md = beside other content, never in one row with an lg (54 vs 40 is too close a step) |
+| `align` | `'start' \| 'center'` | `start` | from 768; `center` under a centred head (S) centres figure, label and mark. Below 768 every stat sets its figure beside its label (2 : 3), start-aligned |
 | `as` | `'div' \| 'li'` | `div` | `li` inside `<Layout as="ul">` |
 
 ## 4 · Surfaces
@@ -47,6 +48,7 @@ All four declare every token (`stat.css`). The mark lifts to brandeis-300 on ink
 ## 5 · Rules the composition keeps
 
 - S: centred H-compact over one row of 3 (`columns={{ md: 3 }}`) or 4 (`columns={{ base: 2, lg: 4 }}`)
-  stats, `colGap="gutter"`, `rowGap="column"`; text stays start-aligned inside each stat (§ 3.5).
+  stats, `colGap="gutter"`, `rowGap="stack"`, each `align="center"` so the band has one axis (fix
+  round 1, 6 Oct); `density="open"`, with the generated texture in the bottom padding under the row.
 - Illustrative numerals never share a band with real client marks (§ 5.8).
 - A stat set is never a box: no ground, no border beyond the opening rule.
