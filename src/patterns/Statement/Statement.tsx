@@ -23,9 +23,9 @@ import styles from './Statement.module.css';
 export type StatementElement = 'h2' | 'p';
 
 /**
- * The texture recipe a statement may carry (§ 6.3, as amended by cmp-banner). `head-half` fills the
- * head track under the eyebrow, the empty half of the [1, 2] row, from 1024 only, and spends the
- * band's one blue mass (§ 4.3: J with head-half — the sentence stays ink). Paper only.
+ * The texture recipe a statement may carry (§ 6.3). `head-half` is a field in the band's empty top-end
+ * corner, bleeding off its top and end edges, from 1024 only, and spends the band's one blue mass
+ * (§ 4.3: J with head-half — the sentence stays ink). Paper only.
  */
 export type StatementTexture = 'head-half';
 
@@ -92,40 +92,34 @@ export function Statement({
       aria-labelledby={labelled ? id : undefined}
       data-band="J"
     >
-      {/* `stretch` when textured, so the head cell is the row's full height and the field has a
-          box to fill; the Cluster stays at the cell's top either way. */}
-      <Layout
-        columns={{ lg: [1, 2] }}
-        colGap="section"
-        rowGap="block"
-        align={textured ? 'stretch' : 'start'}
-      >
-        <div className={textured ? styles.head : undefined}>
-          {textured ? (
-            /* head-half, rebuilt in fix round 1. The first build hung a 160-tall ellipse blurred
-               160 off the viewport's start edge: a thin shape under that much blur never reaches
-               the grid's strength, so it read as a ~3% smudge with no edge, and its feather rose
-               behind the eyebrow. Now the field belongs to the HEAD CELL. The cell is positioned
-               (not isolated, so the layer still resolves against Section's stacking context); the
-               Texture's box starts a `stack` (48) under the cell's top and runs to the band's
-               bottom edge (Statement.module.css). One rect, centred in that box at 80% × 62%, blur
-               40 (a 20 deviation): the core reaches the grid's full strength, the feather is spent
-               before the box's edges, so nothing is cut hard, and the nearest feather stops ~30
-               under the eyebrow's line and ~80 short of the sentence. A deliberate field under the
-               mark, in the head track's empty half, touching no text. From 1024 only. */
-            <Texture className={styles.texture}>
-              <TextureShape width="80%" height="62%" blur={40} />
-            </Texture>
-          ) : null}
+      {textured ? (
+        /* head-half, as § 6.3 specifies it (fix round 2): one rect at top −200, end −120, 34% × 296,
+           blur 160, on the BAND's field. The box runs off the band's top edge and past its end
+           edge and stops 96 into the band, inside the 128 of open air, so it clears the sentence
+           box at every width from 1024; only the feather reaches the sentence's first line, at
+           the strength limit 2 allows. Anchored to two edges, it reads as atmosphere arriving
+           from outside the band rather than as an object set in it — the first two builds hung
+           a field mid-track under the eyebrow, and with no edge to bleed from it read as a
+           smudge. A direct child of Section, so the field is the band's padding box and nothing
+           here restates Section's density. From 1024 only (§ 6.3: below 1024, none). */
+        <Texture className={styles.texture}>
+          <TextureShape top={-200} right={-120} width="34%" height={296} blur={160} />
+        </Texture>
+      ) : null}
+      <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
+        {/* The mark belongs to the eyebrow: it is the label's lead-in. With no eyebrow there is
+            nothing for it to lead into, and a 32 rule alone at the sentence's cap height read as
+            a stray dash (fix round 2) — so the head track stays empty and the air holds it. */}
+        {eyebrow ? (
           <Cluster colGap="text" align="center" nowrap>
             <span aria-hidden="true" className={styles.mark} />
-            {eyebrow ? (
-              <p className={styles.eyebrow} data-copy="eyebrow">
-                {eyebrow}
-              </p>
-            ) : null}
+            <p className={styles.eyebrow} data-copy="eyebrow">
+              {eyebrow}
+            </p>
           </Cluster>
-        </div>
+        ) : (
+          <div className={styles.headEmpty} />
+        )}
         {actions ? (
           <Layout rowGap="stack">
             {sentence}

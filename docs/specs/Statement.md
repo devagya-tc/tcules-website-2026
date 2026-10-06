@@ -30,18 +30,16 @@ never `h1` — the page's only h1 is the hero's), `id` (the h2's id and the band
 - Texture is paper only (development warning elsewhere) and from 1024 only.
 - Emits `data-band="J"` and `data-copy="statement"`.
 
-## Deviation recorded: the head-half placement
+## The head-half placement
 
-§ 6.3 places `head-half` at "rect, top −200, end −120, 34% × 296, blur 160". Built that way, the
-band's own clip cut the grid at its top edge at ~88% strength: a hard line across a paper-to-paper
-seam. Nothing lower is free in the end track, which the sentence's box fills. The built placement
-(fix round 1) is the HEAD CELL's own field: the cell is positioned, the Texture's box runs from a
-`stack` under the cell's top to the band's bottom edge, and one rect sits centred in it at 80% × 62%,
-blur 40. The core reaches the grid's strength, the feather is spent inside the box, and the nearest
-feather stops ~30 under the eyebrow. (The first build's ellipse, blurred 160 off the viewport edge,
-read as a ~3% smudge.) Consequence for the kit/home signature (§ 6.4): head-half is a START-side
-placement, so `cmp-showcase` should pair it with an end-side hero-foot or accept start, start,
-start. Owner check.
+Built to § 6.3 exactly (fix round 2): rect, top −200, end −120, 34% × 296, blur 160, on the band's own
+field (a direct child of Section). It arrives from the band's top-end corner, off both edges, and its
+box stops 96 into the band, inside the 128 of open air, so only the feather reaches the sentence. Two
+earlier builds hung a field mid-track under the eyebrow; with no edge to bleed from it read as a
+smudge rather than as atmosphere. The kit/home signature (§ 6.4) is end-side again, as written.
+
+The mark leads the eyebrow and goes with it: with no eyebrow the head track is empty (from 1024 an
+empty cell holds the 1 track; below 1024 nothing is rendered).
 
 ## Measured (1470 × 830)
 
@@ -49,5 +47,4 @@ start. Owner check.
 
 ## Open questions
 
-1. Owner: is the head-track placement of head-half (above) acceptable, or should the recipe keep the
-   end side and accept the seam line? Not blocking.
+None blocking.

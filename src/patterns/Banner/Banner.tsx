@@ -53,6 +53,12 @@ type BannerHeadProps = {
   /**
    * The head's action, a `stack` under the lead — in practice a `CtaRow` with `rule={false}`, so the
    * blue link (or one solid) is the caller's composition and a pattern never imports a pattern.
+   *
+   * A solid ask is the BLUE solid primary — `<CtaRow emphasis="solid" tone="primary" … />` — the
+   * same treatment as the hero's first action (fix round 2). CtaRow's solid default is the neutral
+   * (ink) solid, and on a page that put an ink "Book an audit" a scroll above a blue "Start a
+   * project" the two asks read as two systems. One band, one ask, one colour for it: blue (§ 4.2,
+   * "the ask: the solid primary button").
    */
   actions?: ReactNode;
   /**
@@ -76,6 +82,13 @@ type BelowProps = BannerHeadProps & {
   mediaSide?: never;
 };
 
+/**
+ * Placement rule for `beside`: never two beside banners within sight of each other on a page —
+ * not adjacent, and not separated only by a strip or a short band. Mirrored with `mediaSide`, two
+ * of them are still the same copy-beside-photo rectangle flipped, and the page reads as one shape
+ * repeated (CLAUDE.md § Design quality). Separate them by a band of a different arrangement, or make
+ * one of them `below`. The family specimen shows three in a row as a specimen set only.
+ */
 type BesideProps = BannerHeadProps & {
   form: 'beside';
   /** Default `end`: copy first, photograph after, as it reads. Consecutive media bands alternate. */

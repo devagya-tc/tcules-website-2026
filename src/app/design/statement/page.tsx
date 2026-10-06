@@ -82,7 +82,7 @@ export default function StatementSpecimen() {
       </Statement>
 
       <Label title="3 · absent eyebrow, and the ceiling">
-        Without an eyebrow the mark holds the head track alone. Then 14 words, the § 1.5
+        Without an eyebrow the head track is empty: the mark leads its label and goes with it. Then 14 words, the § 1.5
         ceiling, on 3 lines.
       </Label>
       <Statement id="stmt-no-eyebrow">

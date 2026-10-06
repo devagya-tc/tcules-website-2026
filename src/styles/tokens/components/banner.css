@@ -52,7 +52,11 @@
 /* The lead steps down to the body role on a phone (fix round 1). At 390 the h2 role is 28 and the
    lead role 18, a 1.56 ratio, and heading and lead read as two sizes of body text; at body (16) the
    ratio is 1.75 and the band keeps its one large voice (§ 7.1). A role swap at the ladder's own
-   767 breakpoint, as the type ladder re-declares its roles — never a distance. */
+   767 breakpoint, as the type ladder re-declares its roles — never a distance.
+   Kept here, argued (fix round 2): it swaps which ROLE the banner's lead reads, not a size, so the
+   usage layer's ladders are untouched. If a second head wants the same phone step, the step moves
+   into --text-lead's own -m ladder and this block is deleted — recorded as an open proposal in
+   docs/kit/brand-amendments.md so it is not found again by accident. */
 @media (max-width: 767px) {
   :root {
     --bnr-lead-text: var(--text-body);

@@ -24,11 +24,13 @@ const ILLUSTRATION: MediaImage = {
   width: 962,
   height: 714,
   kind: 'illustration',
-  /* The main object, for the phone zoom: the blue model panel and the screen it drives, with
-     PRODUCT MODEL above them; both stay whole at 390. EVIDENCE falls outside the crop, and only
-     the tail of MODEL FIRST's arrow is left at the edge — tried at 0.472 to drop it, which cut
-     the screen in half instead. */
-  focus: { x: 0.515, y: 0.5 },
+  /* The phone zoom's window (fix round 2): 1/1.8 of the drawing, x 317 to 852 of its 290 to 1252
+     viewBox. Every callout in it keeps its label: EVIDENCE (its text starts at 318) with its arrow
+     and the dashed evidence ellipse, and PRODUCT MODEL over the whole blue model panel (its edge
+     is at 850). MODEL FIRST and the screen fall wholly outside, arrow and label together, rather
+     than leaving an arrow pointing at nothing. The yellow path runs off the end edge, which
+     reads as the model continuing into the screens the heading promises. */
+  focus: { x: 0.306, y: 0.5 },
 };
 
 /**
@@ -97,9 +99,11 @@ export default function KitBannerSpecimen() {
           />
         }
         image={{
-          ...getKitPhoto('conversation-chalkboard'),
-          /* Anchored high, so the 3:1 crop keeps both faces and the board behind them. */
-          focus: { x: 0.5, y: 0.2 },
+          /* The work itself, not people posing beside it (fix round 2): hands and notebooks along
+             a workshop table, faces out of frame. Anchored a little low, so the 3:1 crop holds
+             the writing hands and the open pad rather than the shoulders above them. */
+          ...getKitPhoto('workshop-hands-writing'),
+          focus: { x: 0.45, y: 0.62 },
         }}
       />
 
@@ -135,13 +139,16 @@ export default function KitBannerSpecimen() {
             rule={false}
           />
         }
-        image={getKitPhoto('stylus-tablet-sketch')}
+        /* A flow being drawn by hand, the subject in the middle third (fix round 2): the tablet
+           shot had its stylus in the top-end corner over a blurred shirt. */
+        image={getKitPhoto('hand-sketch-wireframe')}
       />
 
       <Caption index="I.4" title="Banner beside, photo left">
         mediaSide=&quot;start&quot; mirrors the split from 1024; the copy stays first in the
-        reading order. The one solid ask a band may carry, with its blue second action. A
-        photograph with no frame needs edges that hold their own tone against the paper.
+        reading order. The one solid ask a band may carry is the blue solid primary, the
+        hero&rsquo;s, with a blue link beside it. On a page, never two beside banners within
+        sight of each other: here they are a specimen set.
       </Caption>
       <Banner
         form="beside"
@@ -153,6 +160,7 @@ export default function KitBannerSpecimen() {
         actions={
           <CtaRow
             emphasis="solid"
+            tone="primary"
             actions={[
               { label: 'Book an audit', href: ROUTES.audits },
               { label: 'See a sample report', href: ROUTES.uxProductAudit },
@@ -165,8 +173,8 @@ export default function KitBannerSpecimen() {
 
       <Caption index="I.5" title="Banner beside, illustration">
         An illustration in place of the photograph: whole, unboxed and unrounded, centred on the
-        copy, and the band&rsquo;s blue mass, so it carries no texture. At 390 it zooms into its
-        main object, so its callouts stay legible rather than shrinking to 4px.
+        copy, and the band&rsquo;s blue mass, so it carries no texture. At 390 it zooms into the
+        model panel; every callout left in the window keeps its label.
       </Caption>
       <Banner
         form="beside"
@@ -186,20 +194,20 @@ export default function KitBannerSpecimen() {
       {/* ── J · Statement ─────────────────────────────────────────────────────────────── */}
       <Caption index="J.1" title="Statement">
         One sentence at the h1 role, rendered as an h2: the page&rsquo;s only h1 is the
-        hero&rsquo;s. Eyebrow and blue mark in the head track, the sentence in 763. Two lines at 1470, three at most at 1024: 114 of the 574 an open
-        band allows. The rest is air, and the air is the design.
+        hero&rsquo;s. Eyebrow and blue mark in the head track, the sentence in 763: two lines at
+        1470, three at most at 1024. The rest is air, and the air is the design.
       </Caption>
       <Statement eyebrow="What we believe" id="kit-statement">
         Most product problems are decisions nobody has made yet.
       </Statement>
 
       <Caption index="J.2" title="Statement, head-half texture">
-        The pixel grid as a soft field in the head track&rsquo;s empty half, under the blue rule
-        and aligned to its start edge. It starts a stack below the eyebrow and fades out inside
-        the 128 of open air, so it touches no text. From 1024 only.
+        The pixel grid arriving from the band&rsquo;s top-end corner, off its top and end edges.
+        Its box stops 96 into the band, inside the 128 of open air, so only its feather reaches
+        the sentence. From 1024 only.
       </Caption>
       <Statement eyebrow="How we work" id="kit-statement-texture" texture="head-half">
-        Decide first. The screen follows from the decision.
+        Decide first. Then design what follows from it.
       </Statement>
 
       <Caption index="J.3" title="Statement as p">
@@ -223,8 +231,8 @@ export default function KitBannerSpecimen() {
       />
 
       <Caption index="S.2" title="Strip above a hero">
-        The kit/home opening (§ 8.3): the strip, then the photo hero. The strip adds 74 and the
-        hero still ends above the fold.
+        The kit/home opening (§ 8.3): the strip, then the photo hero. The strip is one line of
+        copy and its 24 of air, and the hero still ends above the fold.
       </Caption>
       {/* A plain wrapper, no box and no seam: it only lets the shot script crop the pair as one. */}
       <div data-shot="strip-above-hero">
@@ -244,7 +252,8 @@ export default function KitBannerSpecimen() {
             { label: 'See our work', href: ROUTES.caseStudies },
           ]}
           arrangement="beside"
-          media={{ type: 'image', image: getKitPhoto('pair-at-laptop-sticky-wall') }}
+          /* Process, not a posed pair (fix round 2): a wall of printed wireframes being sorted. */
+          media={{ type: 'image', image: getKitPhoto('wireframe-wall') }}
         />
       </div>
     </>

@@ -79,6 +79,8 @@ Token changes, old → new (paper / tint; ink in the last column):
 | `--bcrd-cue-ink` (new) | BlockCard's title arrow on a covered card | the title's neutral-900 | brandeis-500; the title joins it on hover | 300; blue white |
 | BlockCard cta, PageHero second action, CtaSection second action (ghost), CtaRow later links, Proof source links, EnquiryForm "See available times" | link labels and arrows | `tone="neutral"`, ink | `tone="primary"`: `--btn-link-primary-fg` / `--btn-ghost-primary-fg`, brandeis-500 | Button's ink block (300) |
 
+| new: Blue as an accent · one solid ask | — | A band's one solid ask is the **blue** solid primary wherever it appears: the hero's first action, and a Banner's solid CtaRow (`emphasis="solid" tone="primary"`). CtaRow's neutral solid default stays for callers that deliberately spend no Accent; a Banner ask does not use it, because an ink "Book an audit" a scroll above a blue "Start a project" read as two systems. Recorded in `Banner.tsx` and `docs/specs/Banner.md`. | `cmp-banner` (fix round 2) |
+
 Kept: Prose `<ins>` underline stays neutral (`fdn-colour` second pass) — it does not navigate, and a
 blue underline would read as a link. Chrome (SiteNav, SiteFooter) is unchanged.
 
@@ -92,3 +94,15 @@ blue underline would read as a link. Chrome (SiteNav, SiteFooter) is unchanged.
 | new § 11 Tone | — | Every kit photograph carries measured `temperature` (warm ≥ 0.10 r−b, cool < 0.02, neutral between) and `saturation` (vivid ≥ 0.40 mean HSV S) in `catalogue.json`, written by `npm run photos:tone`; the result matches visual-direction § 5.5's table exactly. A page is one family (warm + neutral or cool + neutral) with ≤ 1 vivid photo; each service story names its family, and its stand-in pool is filtered by it. | `fdn-media` (tags); `fdn-gates` (the page check) |
 | § 7 Captions | every non-decorative image has a caption | Kit photographs are atmosphere photographs: `getKitPhoto` returns `alt: ""` unless a placement passes one. | `fdn-media` |
 | intro note, § 10 Sourcing | "Stock photography is not published…" | Unchanged in code: kit stock reaches only `/design/**` routes. Public use is visual-direction § 10 item 3. | — (doc only) |
+
+## Kit layout notes recorded by `cmp-banner`
+
+These are kit-layout rules rather than brand-guide overrides; they are listed here so the integrator
+finds them in one place.
+
+| Rule | Where it lives | Package |
+|---|---|---|
+| The I banner's H-row is lead + 24 + action; ContentSection's stays lead + 48 + action. | `visual-direction.md` § 1.4 amendment; `Banner.tsx` | `cmp-banner` |
+| Never two `beside` banners within sight of each other on a page (adjacent, or split only by a strip or a short band). Separate them by a band of another arrangement, or make one `below`. | `Banner.tsx` (`BesideProps`); `docs/specs/Banner.md` | `cmp-banner` |
+| **Open proposal:** the Banner lead steps from the lead role to the body role below 768 (`banner.css`). If a second head wants the same phone step, move it into `--text-lead`'s own `-m` ladder and delete the component-layer block. | `tokens/components/banner.css` | `cmp-banner` |
+| Statement `head-half` follows § 6.3 exactly: rect, top −200, end −120, 34% × 296, blur 160, on the band's field. | `Statement.tsx` | `cmp-banner` (fix round 2) |

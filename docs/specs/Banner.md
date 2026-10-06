@@ -38,8 +38,14 @@ Plus the announcement strip, which is the same family's one-line form.
 - The eyebrow carries a blue mark (the Statement's 32 × 2 rule) and the strip's mono label is blue:
   one accent grammar across I and J (fix round 1). Below 768 the lead steps to the body role
   (28 : 16 rather than 28 : 18).
+- A solid ask is the blue solid primary (`CtaRow emphasis="solid" tone="primary"`), the hero's
+  treatment; one band, one ask, one colour for it (fix round 2).
+- Never two `beside` banners within sight of each other on a page (adjacent, or split only by a strip
+  or a short band): mirrored or not, they are one rectangle repeated. Separate them with a band of
+  another arrangement, or make one `below`. The family specimen shows three in a row as a set only.
 - `beside` with an illustration zooms to 180% of the column below 768, centred on the record's
-  `focus.x`, so callouts stay legible. A photograph must have defined edges: no frame, so a
+  `focus.x`, so callouts stay legible. Choose `focus.x` so every callout left in the window keeps its
+  label: drop a callout whole (arrow and label) rather than leave an arrow pointing at nothing. A photograph must have defined edges: no frame, so a
   blown-out edge dissolves into the paper. The pattern does not import ContentSection (a pattern never imports a
   pattern); it repeats the head's twelve lines of Layout.
 - Emits `data-band="I"` (or `strip`) and `data-copy` on eyebrow, h2, lead and the strip message for

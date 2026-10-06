@@ -79,7 +79,7 @@ export default function BannerSpecimen() {
             headingId={`bnr-below-${surface}`}
             lead="Before anything is drawn, we sit with the people doing the work and map the decisions they make."
             actions={CTA}
-            image={{ ...getKitPhoto('conversation-chalkboard'), focus: { x: 0.5, y: 0.2 } }}
+            image={{ ...getKitPhoto('workshop-hands-writing'), focus: { x: 0.45, y: 0.62 } }}
           />
         </Layout>
       ))}
@@ -154,7 +154,7 @@ export default function BannerSpecimen() {
         heading="Quiet rooms, slow decisions"
         headingId="bnr-beside-no-action"
         lead="We keep teams small and calendars sparse, so the hard product calls get the attention they need."
-        image={getKitPhoto('workshop-hands-writing')}
+        image={getKitPhoto('workshop-whiteboard-lounge')}
       />
       <FoldExempt reason="unbroken token: proves the heading wraps rather than widening the page">
         <Banner

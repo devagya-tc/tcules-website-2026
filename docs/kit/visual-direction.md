@@ -214,6 +214,12 @@ on its own row, then h2 (381) beside lead + 48 + action (763), top-aligned: 14 +
 **166**, + `stack` = 214. C-image-3 with an H-row is 214 + 381 = **595** (target 598); C-image-4 with
 an H-row 515. Word ceilings (§ 1.5) are unchanged.
 
+**Amended 6 Oct 2026 (`cmp-banner`): the I banner's H-row is lead + 24 + action.** In Banner `below`
+the lead and its single link are one trailing unit set against the h2, and at 48 the link floated
+loose in a mostly empty 763 track and the row read as a form. ContentSection's H-row keeps lead + 48 +
+action, where the action is a section action rather than the lead's own link. Two H-rows, two beats,
+on purpose: the banner's is a head over one photograph, ContentSection's a head over a body.
+
 **Tracks:**
 
 | Split | Tracks |
