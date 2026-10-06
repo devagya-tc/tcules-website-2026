@@ -224,12 +224,21 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'whiteboard-two-hands',
     aside2: 'stylus-tablet-sketch',
   },
+  /* design-engineering, fix round 1 (6 Oct 2026): B and K swapped. B's stylus-on-tablet frame was
+     40% out-of-focus sweater and repeated F's hands-sketching motif; K's sticky grid carried legible
+     scripture and a saturated yellow against the blue accent. Fix round 2 (6 Oct 2026): B is the
+     hand over a sketched screen, a portrait source that holds the 4:5 crop (the 16:9 pair cut a face
+     in half at 1024 and went soft at 1470); the pair at one running screen moves to the page's I
+     banner, 3:1, its one large image; K is the flow sketch beside the keyboard, landscape 3:2, the
+     page's one vivid photo spent deliberately (the lifestyle pair in blue tops had nothing to do
+     with the work and competed with the accent); F's aside is the hand at the running laptop, so the
+     two sketch frames sit eight bands apart. */
   'design-engineering': {
-    b: 'stylus-tablet-sketch',
-    i: 'whiteboard-two-hands',
-    k: 'sticky-grid-minimal',
+    b: 'hands-sketches-markers',
+    i: 'pair-at-laptop-sticky-wall',
+    k: 'desk-sketch-flatlay',
     aside1: 'studio-whiteboard-crit',
-    aside2: 'hands-sketches-markers',
+    aside2: 'hand-mouse-detail',
   },
   'design-systems': {
     b: 'screen-over-shoulder',
