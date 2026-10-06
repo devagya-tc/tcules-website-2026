@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import { Cluster, Layout, Section, type MediaImage, type SectionSurface } from '@/components';
 import { ListCard, ReadDown, type ListCardMarker, type ReadDownRow } from '@/patterns';
+import { getKitPhoto } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
@@ -1238,7 +1239,20 @@ export default function ListCardSpecimenPage() {
           <Specimen title="columns 1 · text only, no glyphs">
             <ReadDown rows={READ_DOWN.slice(0, 3).map(({ title, body }) => ({ title, body }))} />
           </Specimen>
+          <Specimen title="photo · three rows · sm — from 1440 the photo runs the rows' height in the end track and ends on the last rule; below 1440 it sits above them, 16:9 from 1024, 3:2 below">
+            <ReadDown rows={READ_DOWN.slice(0, 3)} photo={getKitPhoto('workshop-brick-room')} />
+          </Specimen>
         </Layout>
+      </Section>
+
+      <Section>
+        <Specimen title="12 · ReadDown photo + rail — the § 6.3 field on the photo's side, from 1440; its feather passes under the photograph, never under the rows">
+          <ReadDown
+            rows={READ_DOWN.slice(1, 4)}
+            photo={getKitPhoto('hands-sketches-markers')}
+            rail
+          />
+        </Specimen>
       </Section>
 
       <Section surface="ink">

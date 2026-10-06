@@ -165,7 +165,7 @@ const SPECIMENS = [
       {
         href: '/design/list-card',
         name: 'ListCard',
-        note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces, the ReadDown set (1 or 2 columns)',
+        note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces, the ReadDown set (1 or 2 columns, the photo form, the rail)',
       },
       {
         href: '/design/block-card',
@@ -245,7 +245,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/readdown',
         name: 'Kit · read-down, FAQ and contrast',
-        note: 'D read-down (ReadDown: 1 or 2 columns, photo or stat aside, CtaRow, rail texture), D-faq (5 centred, 4 + CtaRow, each followed by an image band), N contrast (4 + 4, with a CtaRow), D on tint',
+        note: 'D read-down (ReadDown: 1 or 2 columns, the photo form or a stat aside, CtaRow, rail on the photo side), D-faq (5 centred, 4 + CtaRow, each followed by an image band), N contrast (4 + 4, with a CtaRow), D on tint',
       },
     ],
   },

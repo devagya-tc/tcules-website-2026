@@ -10,4 +10,4 @@ export type {
 export { Steps } from './Steps';
 export type { Step, StepsProps } from './Steps';
 export { ReadDown } from './ReadDown';
-export type { ReadDownRow, ReadDownProps, ReadDownColumns, ReadDownRail } from './ReadDown';
+export type { ReadDownRow, ReadDownProps, ReadDownColumns } from './ReadDown';

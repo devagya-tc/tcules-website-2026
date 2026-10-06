@@ -29,6 +29,14 @@ under an H-title (§ 1.4 N: 133 + 394 = 527).
 | Check | the glyph of the `yes` list | **blue** (§ 4.2), brandeis-500 → 300 on ink → white on blue |
 | Cross | the glyph of the `no` list | **quiet ink** (§ 4.3: it only says "not this one") |
 
+**Glyph ink, and the brief's wording (fix round 1).** The kit brief asked for the glyphs "in the text's
+own ink". They are not, on purpose: Fit as the owner approved it draws the check in brandeis-500 and
+the cross in neutral-600 (`--cntr-yes-ink` / `--cntr-no-ink`), and "unchanged in look" is the binding
+half of the same brief. It is also the 6 Oct blue ruling (§ 4.1, blue is the recurring foreground
+accent, markers included). The reading this spec takes, for the integrator to confirm: **the glyph
+SIZE follows the text (xl beside body-lg), the glyph INK follows § 4.2 / § 4.3**, and "the text's own
+ink" in the brief is superseded wording.
+
 ## 3 · Props
 
 | Prop | Type | Default | |

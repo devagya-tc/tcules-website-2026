@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Media, Section, Stat } from '@/components';
+import { Layout, Section, Stat } from '@/components';
 import {
   Accordion,
   Banner,
@@ -12,7 +12,6 @@ import {
   type AccordionItem,
   type ReadDownRow,
 } from '@/patterns';
-import { HEAD_TRACK } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 
@@ -33,9 +32,6 @@ import t from '../../_specimen/typeroles.module.css';
  */
 
 const photo = (id: PhotoId) => getKitPhoto(id);
-
-/** The head-track aside: a 3:2 photograph at the 381 track (§ 1.4 "photo aside, 3:2 at 381"). */
-const asidePhoto = (id: PhotoId) => <Media image={photo(id)} ratio="3/2" sizes={HEAD_TRACK} />;
 
 /**
  * A caption band: the variation's index and name in the head track, what to look for in the body
@@ -71,8 +67,9 @@ function Caption({
 }
 
 /* ── D rows ──────────────────────────────────────────────────────────────────────────────────
-   One column (md, h4): the sentence sits under its title at the lead measure, ≤ 20 words.
-   Two columns (sm, h5): ≤ 19 words, three lines at the 349 track (§ 1.5). */
+   The photo form and two columns both set rows in the 349 track (sm, h5): ≤ 5-word titles, bodies
+   ≤ 19 words, three lines at most (§ 1.5). The tint proof's one column (md, h4) runs at the lead
+   measure, ≤ 20 words. */
 const KEEP: readonly ReadDownRow[] = [
   {
     icon: 'layers',
@@ -169,32 +166,17 @@ const SYSTEM: readonly ReadDownRow[] = [
   {
     icon: 'widget',
     title: 'Components',
-    body: 'Built once in code and design, each with a named owner.',
+    body: 'Built once in code and in design, each with a named owner and a version.',
   },
   {
     icon: 'ruler-pen',
     title: 'Tokens',
-    body: 'Named decisions, so a rebrand is an edit, not a project.',
-  },
-  {
-    icon: 'document-text',
-    title: 'Usage guidance',
-    body: 'When to reach for each part, and when not to.',
+    body: 'Every colour, size and distance a named decision, so a rebrand is an edit, not a project.',
   },
   {
     icon: 'monitor',
     title: 'A living reference',
-    body: 'One site where design, code and documentation agree.',
-  },
-  {
-    icon: 'key',
-    title: 'Contribution rules',
-    body: 'How a new part is proposed, reviewed and released.',
-  },
-  {
-    icon: 'lock',
-    title: 'Versioned releases',
-    body: 'Every change ships with notes, so nothing breaks on a Tuesday.',
+    body: 'One site where design, code and guidance agree, and say when not to reach for a part.',
   },
 ];
 
@@ -293,11 +275,11 @@ const NOT_NEEDED = {
 } as const;
 
 const INDEX = [
-  ['#d-photo', 'D · one column, photo aside'],
+  ['#d-photo', 'D · one column and a photo'],
   ['#d-cta', 'D · one column and a CtaRow'],
   ['#d-stat', 'D · two columns, stat aside'],
   ['#d-two-cta', 'D · two columns and a CtaRow'],
-  ['#d-rail', 'D · the rail texture'],
+  ['#d-rail', 'D · photo and the rail texture'],
   ['#faq-long', 'D-faq · five questions'],
   ['#faq-cta', 'D-faq · four and a CtaRow'],
   ['#n-contrast', 'N · contrast, four and four'],
@@ -331,27 +313,27 @@ export default function KitReaddownPage() {
       </Section>
 
       {/* ── D · one column, photo aside ───────────────────────────────────────────────── */}
-      <Caption id="d-photo" index="D.1" title="One column, photo aside, three rows">
-        A beside head with its 3:2 photograph, and three ruled rows in the two-thirds track. Up
-        to three rows take the h4 step, the sentence under each title at the lead measure, so
-        the rows hold the head track&rsquo;s height. Each glyph is blue; the first title starts
-        on the eyebrow&rsquo;s line.
+      <Caption id="d-photo" index="D.1" title="One column, photo, three rows">
+        The photograph is the band&rsquo;s large thing, so it stands in the body beside the
+        rows rather than under the lead: a 2:3 portrait the rows&rsquo; own height, ending on
+        the last rule. The head keeps its track; the first title and the photo&rsquo;s top
+        both start on the eyebrow&rsquo;s line. Each glyph is blue.
       </Caption>
       <ContentSection
         arrangement="beside"
         eyebrow="What you receive"
-        heading="Three things your team keeps"
+        heading="What your team keeps"
         headingId="kit-d-photo"
         lead="Everything we make is built to outlast the engagement, and to be read by people who were not in the room."
-        aside={asidePhoto('moodboard-wall-desk')}
       >
-        <ReadDown rows={KEEP} />
+        <ReadDown rows={KEEP} photo={photo('moodboard-wall-desk')} />
       </ContentSection>
 
       {/* ── D · one column + CtaRow ───────────────────────────────────────────────────── */}
       <Caption id="d-cta" index="D.2" title="One column, three rows and a CtaRow">
-        The same read-down closed by a blue link a stack under the last row. The CtaRow&rsquo;s
-        rule is off: the ladder&rsquo;s last hairline already closes the body (§ 3.1).
+        The photo form closed by a blue link a stack under the rows and the photograph, which
+        still end level. The CtaRow&rsquo;s rule is off: the ladder&rsquo;s last hairline already
+        closes the body (§ 3.1).
       </Caption>
       <ContentSection
         arrangement="beside"
@@ -359,7 +341,6 @@ export default function KitReaddownPage() {
         heading="What two weeks of audit covers"
         headingId="kit-d-cta"
         lead="A fixed scope, a fixed fee, and a readout your whole team can act on the following Monday."
-        aside={asidePhoto('hand-sketch-wireframe')}
         footer={
           <CtaRow
             rule={false}
@@ -370,7 +351,7 @@ export default function KitReaddownPage() {
           />
         }
       >
-        <ReadDown rows={AUDIT} />
+        <ReadDown rows={AUDIT} photo={photo('designer-monitor-ui')} />
       </ContentSection>
 
       {/* ── D · two columns, stat aside ───────────────────────────────────────────────── */}
@@ -427,21 +408,20 @@ export default function KitReaddownPage() {
       </ContentSection>
 
       {/* ── D · rail texture ──────────────────────────────────────────────────────────── */}
-      <Caption id="d-rail" index="D.5" title="A long read-down with the rail texture">
-        § 6.3 `rail`: one field of the Tcules grid in the outer margin beside the rows, 220 wide
-        from 140 past the band&rsquo;s edge, 15% to 85% of its height, blur 120. Only its
-        feather reaches the column. From 1440 only: below that the margin is the 32 gutter and
-        the field would sit under the rows, so at 390 the band renders without it.
+      <Caption id="d-rail" index="D.5" title="The photo form with the rail texture">
+        § 6.3 `rail`, on the photograph&rsquo;s side: one field of the Tcules grid from 140 past
+        the band&rsquo;s edge, 220 wide, blur 120. Its feather passes under the photograph, never
+        under a word, so the grid reads as coming out from behind the image into the margin. From
+        1440 only, where the photo stands in the end track; at 390 the band renders without it.
       </Caption>
       <ContentSection
         arrangement="beside"
         eyebrow="Design systems"
         heading="What a system hands over"
         headingId="kit-d-rail"
-        lead="Six parts, each one owned, versioned and written down, so the system outlives the project that built it."
-        aside={asidePhoto('whiteboard-two-hands')}
+        lead="Three parts, each one owned, versioned and written down, so the system outlives the project that built it."
       >
-        <ReadDown rows={SYSTEM} columns={2} rail="end" />
+        <ReadDown rows={SYSTEM} photo={photo('sticky-grid-minimal')} rail />
       </ContentSection>
 
       {/* ── D-faq · seven ─────────────────────────────────────────────────────────────── */}

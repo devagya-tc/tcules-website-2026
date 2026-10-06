@@ -1,5 +1,6 @@
-import { Layout, Texture, TextureShape, type IconName } from '@/components';
+import { Layout, Media, Texture, TextureShape, type IconName, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
+import { READ_DOWN_PHOTO } from '@/lib/image-sizes';
 
 /* Bound as `Row`: the set's items are ListCard rows (and classes:check reads the stylesheet's path
    below as the stylesheet, not as a member access on the component). */
@@ -27,22 +28,50 @@ export type ReadDownRow = {
  */
 export type ReadDownColumns = 1 | 2;
 
-/** Which outer margin the `rail` texture takes, from 1440 (§ 6.3 `rail`). */
-export type ReadDownRail = 'start' | 'end';
-
-export type ReadDownProps = {
+type ReadDownBase = {
   rows: readonly ReadDownRow[];
-  /** Default 1. See `ReadDownColumns`. */
-  columns?: ReadDownColumns;
   /** The row titles' element. Default `h3`, under the band's h2. */
   titleAs?: ListCardTitleElement;
-  /**
-   * The `rail` texture recipe (§ 6.3): a long D band's one placement, in the outer margin, from 1440
-   * only — below that the margin is the 32 gutter and the field would sit under the rows. The band
-   * must be on paper (§ 6.2), and it spends one of the band's two blue masses (§ 4.3).
-   */
-  rail?: ReadDownRail;
 };
+
+/**
+ * THE PHOTO FORM (fix round 1, 6 Oct 2026). A 3:2 photograph at 381 under the lead was the
+ * size of a paragraph and ended 80 to 95 below the last rule, so the band finished ragged and the
+ * image read as an attachment. In this form the photograph is the band's large thing and it lives
+ * in the BODY: from 1440 the body track splits again into the rows and the photo, 64 (`column`)
+ * apart, and the photo runs the rows' full height — about 349 × 526 with three rows, a 2:3
+ * portrait, twice the area of the old aside — so the photo and the rows end on the same line, the
+ * last rule. The caller passes no `aside`: the photo is it.
+ *
+ * One column only, two or three rows: the rows take the 349 track of the two-column set, so they
+ * take that set's step (`sm`) and its arithmetic (§ 1.4, D row 186; three rows 526, a band of 718,
+ * 814 with a CtaRow). Below 1440 the photo sits above the rows across the body track — 16:9 from
+ * 1024, 3:2 below — first in DOM order, the phone's order (§ 3.7 item 4: aside between head and
+ * body). The photograph is atmosphere (alt=""), so its visual move to the end carries no meaning.
+ */
+type ReadDownWithPhoto = ReadDownBase & {
+  columns?: 1;
+  photo: MediaImage;
+  /**
+   * The `rail` texture (§ 6.3), on the PHOTO's side: one field from 140 past the band's end edge,
+   * 220 wide, 15% to 85% of its height, blur 120. Only with the photo, because the photo is what
+   * makes the recipe honest: in the 100 to 115 margin of a 1440 to 1470 window the feather reaches
+   * about 120 into the column, and on this side it passes UNDER the photograph, never under a word.
+   * The field reads as the grid emerging from behind the image into the margin. From 1440 only,
+   * where the photo stands in the end track. Paper only (§ 6.2); it spends one of the band's two
+   * blue masses (§ 4.3).
+   */
+  rail?: boolean;
+};
+
+type ReadDownPlain = ReadDownBase & {
+  /** Default 1. See `ReadDownColumns`. */
+  columns?: ReadDownColumns;
+  photo?: never;
+  rail?: never;
+};
+
+export type ReadDownProps = ReadDownWithPhoto | ReadDownPlain;
 
 function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`ReadDown: ${message}`);
@@ -71,7 +100,7 @@ function warn(message: string) {
  *   The first row in each column drops its top inset, so the first title starts on the head's top
  *   line, and the ladder's rules sit between rows and after the last, never above the first.
  */
-export function ReadDown({ rows, columns = 1, titleAs = 'h3', rail }: ReadDownProps) {
+export function ReadDown({ rows, columns = 1, titleAs = 'h3', photo, rail }: ReadDownProps) {
   const perColumn = Math.ceil(rows.length / columns);
   if (rows.length > 6) warn(`received ${rows.length} rows; a read-down set never exceeds six.`);
   if (perColumn > 3) {
@@ -84,7 +113,12 @@ export function ReadDown({ rows, columns = 1, titleAs = 'h3', rail }: ReadDownPr
     warn('some rows carry a glyph and some do not; a set is all-icon or all-text.');
   }
 
-  const size = rows.length >= 4 || columns === 2 ? 'sm' : 'md';
+  if (photo && (rows.length < 2 || rows.length > 3)) {
+    warn(`the photo form takes two or three rows; received ${rows.length}.`);
+  }
+
+  /* The photo form's rows sit in the 349 track, the two-column set's, and take its step. */
+  const size = rows.length >= 4 || columns === 2 || photo ? 'sm' : 'md';
 
   const list = (
     <Layout
@@ -108,29 +142,39 @@ export function ReadDown({ rows, columns = 1, titleAs = 'h3', rail }: ReadDownPr
     </Layout>
   );
 
-  if (!rail) return list;
+  if (!photo) return list;
 
-  /* The rail is the band's, not the list's: Texture fills its nearest positioned ancestor, and
-     nothing between this fragment and the Section is positioned, so the field covers the band and
-     its one shape stands in the outer margin. Geometry is § 6.3's `rail`, exactly.
+  /* The photo form. Photo first in the DOM (above the rows below 1440), reversed to the end track
+     from 1440. Layout owns both tracks and the 64 seam; the rows' Layout and the photo's box are its
+     two children. `stretch`, so the photo's box takes the rows' height: the outer box is the
+     inline-size container, the inner one reads it (cqi) below 1440 and fills the row from it.
 
-     The fragment makes the svg a second child of the caller's container. Out of flow, it takes no
-     track and no gap; but a container that counts its children (`pinLast`, `reverse`, a `lead`
-     offset) would count it, so place a railed set as the LAST block of a plain body stack, as
-     ContentSection's beside body is. If ContentSection gains a texture slot, the rail moves there,
-     where the band's surface is also known (the paper-only rule, § 6.2, is the caller's here). */
+     The rail's svg is a child of the band's body stack, out of flow: Texture fills its nearest
+     positioned ancestor, and nothing between here and the Section is positioned, so the field
+     covers the band. Place a railed set as the LAST block of a plain body stack, as ContentSection's
+     beside body is. The geometry is § 6.3's `rail`, exactly; raw numbers because TextureShape takes
+     them as props (as Statement's head-half field does). */
   return (
     <>
-      <Texture className={styles.rail}>
-        <TextureShape
-          {...(rail === 'start' ? { left: -140 } : { right: -140 })}
-          top="15%"
-          width={220}
-          height="70%"
-          blur={120}
-        />
-      </Texture>
-      {list}
+      {rail ? (
+        <Texture className={styles.rail}>
+          <TextureShape right={-140} top="15%" width={220} height="70%" blur={120} />
+        </Texture>
+      ) : null}
+      <Layout
+        columns={{ xl: [1, 1] }}
+        colGap="column"
+        rowGap="stack"
+        reverse={{ xl: true }}
+        align="stretch"
+      >
+        <div className={styles.readdownPhoto}>
+          <div className={styles.readdownPhotoBox}>
+            <Media image={photo} fit="fill" sizes={READ_DOWN_PHOTO} />
+          </div>
+        </div>
+        {list}
+      </Layout>
     </>
   );
 }

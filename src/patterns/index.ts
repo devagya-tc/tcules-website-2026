@@ -176,7 +176,6 @@ export type {
   ReadDownRow,
   ReadDownProps,
   ReadDownColumns,
-  ReadDownRail,
 } from './ListCard';
 
 export { Contrast } from './Contrast';

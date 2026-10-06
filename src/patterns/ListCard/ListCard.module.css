@@ -18,7 +18,7 @@
    children inside those primitives and do not arrange siblings by themselves.
    No responsive type or distance override, and no media query on the row. (The two in this file
    belong to the ReadDown set mode at its foot: one follows its two-column arrangement, the other
-   gates its rail texture to 1440.) The split collapses when
+   gates its rail texture to 1440, the rest size its photo box.) The split collapses when
    the ROW runs out of room for its two minimum tracks — a wrapping Cluster, not a viewport
    boundary — and the type composites step in the shared type layer.
    No container query either. It was the fallback for reading the row's own width, and it is not
@@ -401,7 +401,7 @@
    twenty words make two lines and ten make one — at 1440 and at 1024 alike, since the 547 body of
    the beside track at 1024 is wider than the cap. The rules still run the full track. */
 .steps .body {
-  max-inline-size: var(--lcrd-step-body-measure);
+  max-inline-size: var(--lcrd-stacked-body-measure);
 }
 
 /* ── ReadDown: the D set mode (ReadDown.tsx) ─────────────────────────────────────
@@ -423,7 +423,7 @@
 /* A row's sentence sits under its title at the lead measure, as a step's does: at 75ch a two-line
    body in the 763 track was 28 words and half a line of empty rule under each one. */
 .readdown .body {
-  max-inline-size: var(--lcrd-step-body-measure);
+  max-inline-size: var(--lcrd-stacked-body-measure);
 }
 
 /* Two columns. Every grid row is as tall as its taller item and each frame fills its cell, so the
@@ -441,8 +441,35 @@
   }
 }
 
-/* The `rail` texture exists from 1440 only (§ 6.3): below it the outer margin is the 32 gutter,
-   and the field would stand under the rows. */
+/* The photo form (ReadDown `photo`). The outer box is the inline-size container and the grid item
+   Layout stretches; the inner box is what Media fills (a cover crop). Above the rows its height is a
+   multiple of its own width (cqi); from 1440, in the end track, it takes the stretched row's height
+   and `contain: size` keeps the master's intrinsic height (a 2:3 master is 523 tall at 349) out of
+   the row's sizing, so the ROWS set the band and the photo ends on the last rule. Sizing only: no
+   display, no margin. The queries follow the arrangement (Layout's lg and xl); no distance moves. */
+.readdownPhoto {
+  container-type: inline-size;
+}
+
+.readdownPhotoBox {
+  block-size: calc(var(--lcrd-readdown-photo-height-base) * 100cqi);
+}
+
+@media (min-width: 1024px) {
+  .readdownPhotoBox {
+    block-size: calc(var(--lcrd-readdown-photo-height-lg) * 100cqi);
+  }
+}
+
+@media (min-width: 1440px) {
+  .readdownPhotoBox {
+    contain: size;
+    block-size: 100%;
+  }
+}
+
+/* The `rail` texture exists from 1440 only (§ 6.3), where the photo it sits behind stands in the
+   end track; below it the photo sits above the rows and the field would stand under them. */
 .rail {
   display: none;
 }
