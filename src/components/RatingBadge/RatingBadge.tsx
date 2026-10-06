@@ -20,6 +20,22 @@ export type RatingBadgeProps = {
    * Sideways has an idiom). Decorative: the platform name beside it is the accessible name.
    */
   mark?: ReactNode;
+  /**
+   * Whether the score is printed inside the pill. Default `true`. `false` when the score is already
+   * set large beside the badge — the rating-led testimonial (cmp-testimonials, 6 Oct 2026) prints
+   * "4.8" at stat scale directly above it, and "4.8 / ★ 4.8 on Clutch" says the number twice. The
+   * pill then reads "Rated on Clutch". The score is never dropped from the claim: it follows the
+   * platform in visually hidden text, so the link's name starts with what the eye reads (WCAG 2.5.3,
+   * a voice user can say "Rated on Clutch") and still carries the number — "Rated on Clutch, 4.8
+   * (opens in a new tab)".
+   */
+  showScore?: boolean;
+  /**
+   * The top of the platform's scale ("5"), said after the score in the hidden text when the pill
+   * does not print the score — "Rated on Clutch, 4.8 out of 5" — because the large numeral beside it
+   * shows "/ 5" to the eye (rating-led, fix round 2). Ignored while `showScore` is on.
+   */
+  scale?: string;
 };
 
 /**
@@ -35,7 +51,15 @@ export type RatingBadgeProps = {
  * It sets NO placement of its own. Where the badge sits — start, end — is the parent's decision; a
  * `justify-self` here once overrode the footer column's `justify-items: end` and moved the badge.
  */
-export function RatingBadge({ score, platform, href, icon, mark }: RatingBadgeProps) {
+export function RatingBadge({
+  score,
+  platform,
+  href,
+  icon,
+  mark,
+  showScore = true,
+  scale,
+}: RatingBadgeProps) {
   return (
     <a className={styles.badge} href={href} target="_blank" rel="noreferrer noopener">
       {/* Decorative: "4.8 on Clutch" is the whole claim. A glyph from the set, not a ★ character:
@@ -49,7 +73,9 @@ export function RatingBadge({ score, platform, href, icon, mark }: RatingBadgePr
       {/* Each run of text is its own box, trimmed to the capitals (see .text), so the flex row
           centres the star and the mark on the middle of the caps rather than on a line box that
           carries the face's descender space below them. */}
-      <span className={styles.text}>{score} on</span>
+      <span className={styles.text}>{showScore ? `${score} on` : 'Rated on'}</span>{' '}
+      {/* A literal space, so the accessible name is "Rated on Clutch" whatever the browser makes
+          of the flex items' boundary; whitespace in a flex row renders nothing. */}
       <span className={styles.lockup}>
         {mark ? (
           <span className={styles.mark} aria-hidden="true">
@@ -58,6 +84,12 @@ export function RatingBadge({ score, platform, href, icon, mark }: RatingBadgePr
         ) : null}
         <span className={styles.text}>{platform}</span>
       </span>
+      {showScore ? null : (
+        <span className={styles.hint}>
+          , {score}
+          {scale ? ` out of ${scale}` : null}
+        </span>
+      )}
       <span className={styles.hint}> (opens in a new tab)</span>
     </a>
   );

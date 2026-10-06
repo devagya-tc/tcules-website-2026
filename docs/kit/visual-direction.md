@@ -251,7 +251,7 @@ on purpose: the banner's is a head over one photograph, ContentSection's a head 
 | CtaRow | 48 seam + one 48 row | **96** |
 | Photo aside, 3:2 at 381 | | **254** |
 | Stat aside | stat-lg 54; 16; body-sm on 2 lines = 44 | **114** (measured 123 as a Proof figure with its "checked on" line; 136 with a 12-word label on 3 lines: `fdn-section-head`, 6 Oct) |
-| Slider controls | 24 + 40 | **64** |
+| Slider controls | 24 + 48 (the steppers are 48 since 6 Oct, cmp-testimonials) | **72** |
 
 **Fit, per archetype** (§ 3.4 defines the archetypes; every row is checked against the 598 target):
 
@@ -265,7 +265,7 @@ on purpose: the banner's is a head over one photograph, ContentSection's a head 
 | **C-image-3**, per-card CTA | H-title 133 + 381 + 64 | **578** | ✓ |
 | **C-image-3**, CtaRow below | H-title 133 + card with a 1-line title (347) + 96 | **576** | ✓ |
 | **C-image-4** | H-full 264 + 301 = **565**. With a per-card CTA: H-compact 217 + 301 + 64 = **582**. H-row: 204 + 301 = **505** | ≤ 582 | ✓ |
-| **C-image-5+**, Slider showing 3 | H-title 133 + 381 + 64 | **578** | ✓ |
+| **C-image-5+**, Slider showing 3 | H-title 133 + 381 + 72 | **586** | ✓ |
 | **C-text-3** | H-compact 217 + 217 = **434**; +64 with a per-card CTA = 498 | ≤ 498 | ✓ |
 | **C-text-6** | H-title 133 + 2 × 191 + 64 = **579** | | ✓ |
 | **C-icon-4** | head track: H-beside-aside 240 + 48 + 254 = **542**. Body: 2 × 136 + 64 = 336, + CtaRow 96 = 432 | 542 | ✓ |
@@ -278,11 +278,11 @@ on purpose: the banner's is a head over one photograph, ContentSection's a head 
 | **E** diagram | H-compact 217 + a diagram ≤ 380 | **597** | ✓ |
 | **F** process | head track 542 (photo aside). Body: ≤ 4 rows × 116 = 464, or 5 one-line rows × 90 = 450; + CtaRow 96 = 560 / 546. With the worked-example Callout above the rows (≈ 158 + 48): ≤ 3 rows, 554 | **≤ 560** | ✓ |
 | **G** typographic | eyebrow 14 + 48 + quote-lg on 5 lines 221 + 24 + attribution 50 + 24 + RatingBadge 40 = **421**; + CtaRow = 517 | | ✓ |
-| **G-case** | [1, 2]: case card in 381 (3:2 254 + 24 + 30 + 68 + 16 + 52 + 24 + 40 = **508**). Quote in 763: quote on 5 lines 190 + 24 + 50 + 24 + 40 = 328 | 508 | ✓ |
+| **G-case** | H-title 48 + 48 + [1, 2]: case card in 381 (3:2 254 + 24 + 30 + 68 + 16 + 52 + 24 + 40 = 508). Quote in 763, stretched to the card and its attribution and badge pinned to the card's foot, so the tracks share a top and a bottom line (cmp-testimonials, 6 Oct). **Measured at 1470: 564** (card 467 with a 3-line body; band 756); without the rating 538 (band 730) | **564** | ✓ |
 | **G** featured with portrait | [5, 7]: portrait 1:1 at 477 = **477**. Copy: quote-lg on 6 lines 265 + 24 + 50 = 339, + CtaRow = 435 | 477 | ✓ |
 | **G** group of 3 | H-title 133 + (portrait 64 + 24 + quote on 5 lines 190 + 24 + 50 = 352) = **485**; + CtaRow = 581 | | ✓ |
-| **G** slider | eyebrow 14 + 24 + slide 477 + 64 | **579** | ✓ |
-| **G** rating-led | score 54 + 16 + platform line 22 + 48 + quote-lg on 3 lines 133 + 24 + 50 = **347**; + CtaRow = 443 | | ✓ |
+| **G** slider | slide 477 + 24 + controls 48 = **549**, no head: the one-up slide is the large object and the rail and steppers name the band (6 Oct: an eyebrow a `stack` above measured 603 against the 598 target). **Measured at 1470: 549** (band 741) | **549** | ✓ |
+| **G** rating-led | eyebrow 14 + 48 + [5, 7]: score at `--text-score` (105) with its scale and label at its side, + 24 + pill 34, beside quote-lg on 3 lines 133 + 24 + 50 = **347** budget; + CtaRow = 443. **Measured at 1470: 269**, + CtaRow 358 | | ✓ |
 | **H** strip | centred H-title 133 + 2 rows of marks (48 + 48 + 48) = **277** | | ✓ |
 | **H** grid beside a head | head 240; grid 2 × 48 + 48 = 144 | **240** | ✓ |
 | **H** marks beside a real quote | H-title 133 + max(quote on 4 lines 152 + 24 + 50 = 226, 3 × 48 + 2 × 48 = 240) | **373** | ✓ |
@@ -610,7 +610,8 @@ Every band has exactly one large object. Everything else in it is small: 12 to 1
 | A set of card images | C-image, C-pair, M |
 | A diagram | E |
 | `--text-quote-lg`, a portrait at 477, or a case card | G |
-| `--text-stat-lg` numerals | S, D (the stat aside), G rating-led (the score) |
+| `--text-stat-lg` numerals | S, D (the stat aside) |
+| `--text-score`, one numeral that is the band (105 serif) | G rating-led (the score; cmp-testimonials, 6 Oct — at stat-lg 54 it did not outrank the 34 quote) |
 
 **Declared exceptions.** These bands have no image, are bounded on both sides by image bands (§ 5.1),
 and are capped per page:
@@ -742,7 +743,7 @@ added blue where the accent belongs. The record is in `docs/kit/brand-amendments
 | Role | Where | Tokens (paper and tint → ink) |
 |---|---|---|
 | **Text links**, blue at rest | inline and Prose links; every link-style action, including a second action beside a solid, the per-card cta, "See available times", a Proof's source link, every CtaRow link | `--btn-link-primary-fg`, `--prose-link-ink`: brandeis-500 → 300 |
-| **Icons** | content icons: ListCard markers, the service page's sheet, frame and loop glyphs, a check in a needs-list or a comparison, the RatingBadge star | `--lcrd-marker-ink`, `--svc-mark`, `--rbadge-star-ink`: 500 → 300 |
+| **Icons** | content icons: ListCard markers, the service page's sheet, frame and loop glyphs, a check in a needs-list or a comparison, the RatingBadge star | `--lcrd-marker-ink`, `--svc-mark`, `--rbadge-star-fg`: 500 → 300 |
 | **Markers and numerals** | list and step markers, index numerals, a CtaSection's points, an `<ol>` numeral in Prose | `--lcrd-number-ink`, `--flow-number-ink`, `--cta-marker-ink`, `--prose-marker-ink`: 500 → 300 |
 | **Arrows and cues** | ListCard's cue, BlockCard's title arrow, ProcessFlow and Thread connectors, an accordion chevron | `--lcrd-link-ink`, `--bcrd-cue-ink`, `--flow-arrow-ink`, `--svc-mark`, `--acc-mark-ink`: 500 → 300 |
 | **Small graphic marks** | a Proof's quote rule, a diagram's blue line, the tile's opening rule on hover | `--proof-quote-rule`, … |

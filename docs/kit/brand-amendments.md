@@ -27,7 +27,7 @@ Inventoried across every component layer, paper and tint blocks. Old → new.
 |---|---|---|---|---|
 | `--lcrd-cue-ink` (new) | ListCard's arrow cue at rest | — (the cue read `--lcrd-link-ink`, brandeis-500 / 500) | neutral-900 / neutral-900 | ink white, blue white. `--lcrd-link-ink` is now the cue's hover and focus ink |
 | `--svc-node` (deleted) | Thread diagram's connecting arrows | brandeis-500 / brandeis-500 | `--svc-ink`: neutral-900 / neutral-900 | ink brandeis-200 → white, blue paper → white |
-| `--rbadge-star-ink` | RatingBadge star icon | brandeis-500 / brandeis-500 | neutral-900 / neutral-900 | ink and blue unchanged (the live badge is in the ink footer; chrome is exempt) |
+| `--rbadge-star-fg` | RatingBadge star icon | brandeis-500 / brandeis-500 | neutral-900 / neutral-900 | ink and blue unchanged (the live badge is in the ink footer; chrome is exempt) |
 | `--cta-marker-ink` | CtaSection point marker | neutral-600 / neutral-700 | unchanged, already ink | — |
 | `--lcrd-number-ink` | ListCard ordinal | neutral-500 / neutral-600 | unchanged, already ink | — |
 | `--flow-number-ink` | ProcessFlow step number | neutral-500 / neutral-600 | unchanged, already ink | — |
@@ -73,7 +73,7 @@ Token changes, old → new (paper / tint; ink in the last column):
 | `--acc-mark-ink` (`-hover`) | Accordion chevron | neutral-500 / 600 (hover 950) | brandeis-500 (hover 700) | 300 (hover 100) |
 | `--prose-marker-ink` | Prose list markers and `<ol>` numerals | neutral-600 / 700 | brandeis-500 | 300 |
 | `--crumb-current-ink` | the current breadcrumb | neutral-900 | brandeis-500 | 300 |
-| `--rbadge-star-ink` | RatingBadge star | neutral-900 | brandeis-500 | 300 (unchanged) |
+| `--rbadge-star-fg` | RatingBadge star | neutral-900 | brandeis-500 | 300 (unchanged) |
 | `--proof-value-ink` | a Proof stat's numeral | neutral-950 | brandeis-500 | 300 |
 | `--svc-mark` (new; replaces the deleted `--svc-node`) | service-page Thread arrows, sheet / frame / loop glyphs, comparison and needs-list checks | `--svc-ink` neutral-900 | brandeis-500 | 300; blue white. Crosses stay neutral (`--svc-ink-quiet` / `--svc-ink-muted`) |
 | `--bcrd-cue-ink` (new) | BlockCard's title arrow on a covered card | the title's neutral-900 | brandeis-500; the title joins it on hover | 300; blue white |
@@ -86,9 +86,13 @@ blue underline would read as a link. Chrome (SiteNav, SiteFooter) is unchanged.
 
 ## ch03 Typography
 
+Three new type roles, each a brief deviation the owner should accept knowingly (the two `cmp-testimonials` roles awaiting approval).
+
 | § | Brand guide says | The website now does | Package |
 |---|---|---|---|
 | type ladder, stats | the mono stat roles stop at `--text-stat-lg` (54 / 43 / 40) | `--text-stat-xl` (96 / 80 / 64, line height 1, `--letter-spacing-display`) for ONE sourced figure set as a band's hero — read only by Proof's `figureSize="xl"`. Above display (67) on purpose: three mono characters at h1 scale read as a label beside a serif h2, not as the band's one idea. | `cmp-logos` |
+| Type scale · stats | The stat role is mono (`--text-stat-lg`, 54) | New serif role `--text-score`, 105 / 84 / 67 (size and line height laddered, `-t` / `-m` steps, `primitives.css`), for ONE numeral that is the band: the rating-led testimonial's score. The brief asked for stat-lg; at 54, and even at display's 67, "4.8" did not outrank the 34 quote beside it, and in mono the full stop takes a whole cell so "4.8" read as three spaced glyphs. Never for a set of figures, which stays stat-lg. Its scale ("/ 5") sits at its side in the h3 serif. Reasoning in `docs/specs/Proof.md` (Amended 6 Oct). | `cmp-testimonials` |
+| Type scale · quotes | Two quote roles: `--text-quote` (28) and `--text-quote-lg` (34) | A third, `--text-quote-xl`, 43 / 34 / 25, for the centred typographic G band only: the quote is the band's one idea alone on the column, and at 34 across 1010 it read modest beside the reference bands. | `cmp-testimonials` |
 
 ## ch05 Imagery
 

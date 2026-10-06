@@ -287,6 +287,24 @@
   border-radius: var(--btn-radius-round);
 }
 
+/* The stepper's glyph steps up a size from a labelled button's (--btn-outline-icon-size-*): the
+   arrow is the whole control. After the size rules, so it wins at md by source order and at sm
+   and lg by the extra class. */
+.outline > svg {
+  width: var(--btn-outline-icon-size-md);
+  height: var(--btn-outline-icon-size-md);
+}
+
+.outline.sm > svg {
+  width: var(--btn-outline-icon-size-sm);
+  height: var(--btn-outline-icon-size-sm);
+}
+
+.outline.lg > svg {
+  width: var(--btn-outline-icon-size-lg);
+  height: var(--btn-outline-icon-size-lg);
+}
+
 .outline.primary {
   color: var(--btn-outline-primary-fg);
 }

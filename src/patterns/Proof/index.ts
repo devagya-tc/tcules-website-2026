@@ -5,4 +5,6 @@ export type {
   ProofFigure,
   ProofFigureSize,
   ProofPortrait,
+  ProofRating,
+  ProofAlign,
 } from './Proof';

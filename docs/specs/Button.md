@@ -135,6 +135,16 @@ label sits on true centre rather than half a pixel left of it.
 - **`outline` / `bordered`.** None of the three emphases carries an outline, on purpose. A ghost is
   always shown beside a solid, and two boxes of equal edge weight — one filled, one outlined — read
   as two buttons of the same rank before the label is parsed.
+  *Amended 6 Oct 2026.* One exception exists since `fdn-scroll`: `emphasis="outline"`, typed
+  icon-only and primary-only, the slider's previous / next stepper. It is never a labelled button,
+  so it never stands beside a solid as a second rank. Round (`--btn-radius-round`), a hairline rule
+  (`--btn-outline-rule-width`, `--btn-outline-primary-rule`), the glyph in `--btn-outline-primary-fg`,
+  filling with `--btn-outline-primary-bg-hover` on hover and focus and `-bg-pressed` on press.
+  Its glyph is one step above a labelled button's at each size — `--btn-outline-icon-size-sm` 16,
+  `-md` 18, `-lg` 24 (cmp-testimonials fix round 2: the arrow is the whole control) — and the
+  Slider uses `lg`, a 48 circle. Unavailable, it keeps its circle in `--btn-disabled-rule`:
+  neutral-300 on paper, neutral-400 on tint (300 all but vanished on paper-deep), neutral-800 on
+  ink, brandeis-400 on blue. Rendered in every surface band of `/design/button`.
 - **`margin` / `gap` / any spacing prop.** `Cluster` owns the gap.
 
 **Prop combinations that are a compile error, not a review comment.** `ButtonProps` is
@@ -809,7 +819,8 @@ Each of these is decidable from a diff or from a rendered page.
 4. Don't pass both `icon` and `iconLeft`. (It will not compile; it is listed here so the rule is
    findable.)
 5. Don't add a media query to `Button.module.css` for anything but motion preference.
-6. Don't add an `outline` or a `border` to any emphasis.
+6. Don't add an `outline` or a `border` to any labelled emphasis. *(Amended 6 Oct 2026: the icon-only
+   `outline` stepper is the one bordered control; see § 3.)*
 7. Don't use `active` on a call to action — it is the _held_ state of a stateful control.
 8. Don't express disabled as an `opacity`.
 9. Don't add a `-focus` or an `-active` token; focus reads `-hover`, active reads `-pressed`.

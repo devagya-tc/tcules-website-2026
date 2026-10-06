@@ -35,7 +35,10 @@ export default function RatingBadgeSpecimen() {
         <Section key={surface} surface={surface}>
           <Layout rowGap="stack">
             {index === 0 ? <h2>1 · Four surfaces · identical markup</h2> : null}
-            <Specimen title={surface} note="with the Clutch mark, and without a mark">
+            <Specimen
+              title={surface}
+              note="with the Clutch mark, without a mark, and showScore={false} (the score set large beside it; the name still carries it)"
+            >
               <Cluster colGap="block" rowGap="block">
                 <RatingBadge
                   score={SCORE}
@@ -45,6 +48,14 @@ export default function RatingBadgeSpecimen() {
                   mark={<BrandMark name="clutch" />}
                 />
                 <RatingBadge score="5.0" platform="Clutch" href={EXTERNAL.clutch} />
+                <RatingBadge
+                  score={SCORE}
+                  platform="Clutch"
+                  href={EXTERNAL.clutch}
+                  icon={<Icon name="star" size="sm" />}
+                  mark={<BrandMark name="clutch" />}
+                  showScore={false}
+                />
               </Cluster>
             </Specimen>
           </Layout>
@@ -56,7 +67,8 @@ export default function RatingBadgeSpecimen() {
           <p>
             Hover and keyboard focus move the ink and the rule together; the star holds. Tab to
             the badge to see the ring. Its accessible name is the score, the platform and
-            &ldquo;(opens in a new tab)&rdquo;.
+            &ldquo;(opens in a new tab)&rdquo;; with <code>showScore=&#123;false&#125;</code> it is
+            &ldquo;Rated on Clutch, 4.8 (opens in a new tab)&rdquo; — the visible words first.
           </p>
         </Layout>
       </Section>

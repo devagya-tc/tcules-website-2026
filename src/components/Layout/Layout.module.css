@@ -274,6 +274,12 @@
   --layout-peek: calc(var(--layout-col-gap) + var(--lay-scroll-peek));
 }
 
+/* `peek={false}`: exactly the count at every width, as from md up. After the rule above, so it wins
+   at equal specificity. */
+.no-peek {
+  --layout-peek: 0%;
+}
+
 .scroll-always {
   grid-template-columns: none;
   grid-auto-flow: column;

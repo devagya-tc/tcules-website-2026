@@ -180,7 +180,7 @@ const SPECIMENS = [
       {
         href: '/design/proof',
         name: 'Proof',
-        note: 'the evidence block — attributed quotes, checked figures, combined layouts, 4 surfaces',
+        note: 'the evidence block — display (start | center), compact, featured portrait, case, group, rating-led, checked figures, 4 surfaces',
       },
       {
         href: '/design/callout',
@@ -261,6 +261,11 @@ const SPECIMENS = [
         href: '/design/kit/cta',
         name: 'Kit · CTA',
         note: 'the K offer (photo, icon, plain and beside) and the L close (form, no points, two actions) as finished bands, the closing texture, and CtaRow inside two ContentSections',
+      },
+      {
+        href: '/design/kit/testimonials',
+        name: 'Testimonials (G)',
+        note: 'typographic, G-case, featured portrait, groups of 2 and 3, slider, rating-led — each with and without a CtaRow, on tint, at 1470 and 390',
       },
     ],
   },

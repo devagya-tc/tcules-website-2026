@@ -1,7 +1,11 @@
 import { Cluster, Layout, Prose, Section, type SectionSurface } from '@/components';
+import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import {
+  BlockCard,
+  CtaRow,
   CtaSection,
   Proof,
+  type ProofRating,
   type ProofFigure,
   type ProofPortrait,
   type ProofQuote,
@@ -268,6 +272,111 @@ function ResolvedTokens({ tokens }: { tokens: TokenRows }) {
 
 const PROOF_SHAPES = ['quote', 'figures', 'combined'] as const;
 
+/* ── The G arrangements (cmp-testimonials, 6 Oct 2026) ─────────────────────────────────
+   Fictional people, stock portraits, and a fictional platform for the score: a specimen never sets
+   a stock face or an invented quote beside the real Clutch mark or rating (§ 5.8). */
+const kitPortrait = (id: PhotoId): ProofPortrait => {
+  const { src, width, height, sources } = getKitPhoto(id);
+  return { src, width, height, sources };
+};
+
+const G_QUOTES = [
+  {
+    quoteHtml:
+      '<p>The research changed the brief, not just the screens. We built less, and it was the right less.</p>',
+    name: 'Ines Duarte',
+    role: 'Design Director',
+    company: 'Lumen Ledger',
+    portrait: kitPortrait('portrait-woman-laughing'),
+  },
+  {
+    quoteHtml:
+      '<p>Clear decisions every week, written down. Nobody on our side had to chase a status update once.</p>',
+    name: 'Tobias Reyes',
+    role: 'VP Engineering',
+    company: 'Quillstack',
+    portrait: kitPortrait('portrait-man-glasses'),
+  },
+  {
+    quoteHtml:
+      '<p>They designed with our constraints in the room, so engineering never opened a file and found a surprise.</p>',
+    name: 'Daniel Okafor',
+    role: 'Chief Product Officer',
+    company: 'Brightwater Labs',
+    /* Light ground, engaged: the grey low-key portrait read sombre under praise (fix round 2). */
+    portrait: kitPortrait('portrait-man-blue-office'),
+  },
+] as const satisfies readonly ProofQuote[];
+
+const G_RATING: ProofRating = {
+  score: '4.9',
+  platform: 'Example Reviews',
+  href: UNRESOLVED_EXTERNAL,
+};
+
+function GSurface({ surface }: { surface: SectionSurface }) {
+  const [ines, tobias, daniel] = G_QUOTES;
+  const inesText: ProofQuote = { ...ines, portrait: undefined };
+  return (
+    <Section surface={surface}>
+      <Layout rowGap="column">
+        <Specimen title={`${surface} · display, centred, with a score`}>
+          <Proof quote={inesText} align="center" rating={G_RATING} />
+        </Specimen>
+        <Specimen title={`${surface} · display, start-aligned, with a score`}>
+          <Proof quote={{ ...tobias, portrait: undefined }} rating={G_RATING} />
+        </Specimen>
+        <Specimen title={`${surface} · compact, with a portrait and a score`}>
+          <Proof arrangement="compact" quote={ines} rating={G_RATING} />
+        </Specimen>
+        <Specimen title={`${surface} · featured, with a footer`}>
+          <Proof
+            arrangement="featured"
+            quote={daniel}
+            footer={
+              <CtaRow
+                rule={false}
+                actions={[{ label: 'Read the case', href: ROUTES.caseStudies }]}
+              />
+            }
+          />
+        </Specimen>
+        <Specimen title={`${surface} · featured, reversed`}>
+          <Proof arrangement="featured" reverse quote={tobias} />
+        </Specimen>
+        <Specimen title={`${surface} · case, with a score`}>
+          <Proof
+            arrangement="case"
+            work={
+              <Layout as="ul" rowGap="none">
+                <BlockCard
+                  eyebrow="Halden Freight · Logistics"
+                  title="Dispatch screens rebuilt around the driver’s day"
+                  body="Field research with twelve dispatchers, carried into a routing model."
+                  href={ROUTES.caseStudies}
+                  media={{
+                    type: 'image',
+                    image: getKitPhoto('designer-tablet-monitor', { standIn: true }),
+                  }}
+                  tracks={3}
+                />
+              </Layout>
+            }
+            quote={{ ...tobias, portrait: undefined }}
+            rating={G_RATING}
+          />
+        </Specimen>
+        <Specimen title={`${surface} · group of three`}>
+          <Proof arrangement="group" quotes={G_QUOTES} />
+        </Specimen>
+        <Specimen title={`${surface} · rating-led`}>
+          <Proof arrangement="rating" rating={G_RATING} quote={inesText} />
+        </Specimen>
+      </Layout>
+    </Section>
+  );
+}
+
 function ProofFixture({ shape }: { shape: (typeof PROOF_SHAPES)[number] }) {
   if (shape === 'quote') return <Proof quote={ONE_SENTENCE_QUOTE} />;
   if (shape === 'figures') return <Proof figures={FIGURES.slice(0, 2)} />;
@@ -282,8 +391,9 @@ export default function ProofSpecimenPage() {
           <h1>Proof</h1>
           <p>
             One evidence pattern with three display shapes: an attributed quotation, checked
-            figures, or both. Compact is the embedded quote-only arrangement. Proof owns no
-            ground; the nearest surface supplies it.
+            figures, or both. Compact is the embedded quote-only arrangement; featured, case,
+            group and rating-led are the G bands (§ 19). Proof owns no ground; the nearest
+            surface supplies it.
           </p>
         </Layout>
       </Section>
@@ -794,7 +904,8 @@ export default function ProofSpecimenPage() {
             <h2>18 · Testimonial group and stat group are compositions</h2>
             <p>
               Audit §4: a testimonial group is Proof compact × n in a Layout, and a stat group
-              is Proof display with figures only. Neither is a variant or a new unit. Here three
+              is Proof display with figures only. (Superseded for the testimonial group on 6
+              Oct: the G band is <code>arrangement=&quot;group&quot;</code>, § 19.) Here three
               compact quotes share a <code>fit</code> Layout with a gutter between them; the
               marks are one colour, the ground&apos;s ink, because together they are a set (ch05
               §10).
@@ -811,10 +922,26 @@ export default function ProofSpecimenPage() {
         </Layout>
       </Section>
 
+      <Section>
+        <Layout rowGap="block">
+          <h2>19 · The G arrangements on four surfaces</h2>
+          <p>
+            Featured, case, group, rating-led and the centred display, identical markup on
+            paper, tint, ink and blue: every Proof token is redeclared per surface, so the quote
+            rule, the centred mark, the score and the badge resolve on each. The bands
+            themselves, at 1470 and 390, are proven on{' '}
+            <a href={ROUTES.designKitTestimonials}>the testimonials kit</a>.
+          </p>
+        </Layout>
+      </Section>
+      {SURFACES.map(({ surface }) => (
+        <GSurface key={`g-${surface}`} surface={surface} />
+      ))}
+
       <Section surface="tint">
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>19 · Manual checks</h2>
+            <h2>20 · Manual checks</h2>
             <p>
               Resize through 1023 and 767, point and hold both link types, Tab and Shift+Tab
               through the semantic specimen, and enable reduced motion. Proof changes no type

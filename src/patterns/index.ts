@@ -44,8 +44,9 @@
  * Accordion is a DISCLOSURE SET: one continuous rule ladder of native details/summary pairs. It
  * owns a CMS-shaped question/answer array and composes Layout, Cluster, Icon and Prose while
  * leaving surface and surrounding page rhythm to its caller.
- * Proof is EVIDENCE: an attributed quotation, checked figures, or both. It composes Layout,
- * Prose and Button while leaving the ground and its position in a page argument to the caller.
+ * Proof is EVIDENCE: an attributed quotation in six arrangements, checked figures, or both. It
+ * composes Layout, Cluster, Prose, Button, Media, Icon, BrandMark and RatingBadge, takes the work
+ * and the footer as slots, and leaves the ground and its position in a page argument to the caller.
  * Callout is a SCOPE NOTE: a quiet, unattributed boundary on the claim immediately before it. It
  * composes Prose inside a semantic note while leaving the ground and the claim-to-note seam to
  * its caller. It is not a quotation, alert, card or second rich-text variant.
@@ -199,6 +200,8 @@ export type {
   ProofFigure,
   ProofFigureSize,
   ProofPortrait,
+  ProofRating,
+  ProofAlign,
 } from './Proof';
 
 export { ContentSection, ContentSectionText } from './ContentSection';

@@ -21,14 +21,15 @@ import styles from './Slider.module.css';
  * caller states one number and every breakpoint follows (visual-direction § 1.4, § 3.7):
  *
  *            base (+ peek)   md 768   lg 1024   xl 1440
- *   1        1               1        1         1         a G testimonial: one featured slide
+ *   1        1 (no peek)     1        1         1         a G testimonial: one featured slide
  *   2        1               2        2         2         pair cards, 365 / 572 wide
  *   3        1               2        3         3         C-image-5+, "a Slider showing 3" — 392
  *   4        1               2        3         4         Card-4 sets, 286 at 1440
  *
- * Below md the row always shows one slide and a 24px peek of the next, because at 326 a second
- * card would be 147 wide. From md up the count is exact and there is no peek: the controls say
- * there is more.
+ * Below md the row shows one slide and a 24px peek of the next, because at 326 a second card would
+ * be 147 wide. From md up the count is exact and there is no peek: the controls say there is more.
+ * At one per view there is never a peek (cmp-testimonials, 6 Oct 2026): the slide is a composite,
+ * and its neighbour's start edge read as a stray portrait sliver and a loose quote rule.
  */
 export type SliderPerView = 1 | 2 | 3 | 4;
 
@@ -98,7 +99,8 @@ type Position = { ready: boolean; atStart: boolean; atEnd: boolean };
  *                                block (24)
  *   ━━━━━━━━ rail (thumb = what is in view)                              (←)  (→)
  *
- * § 1.4 budgets the controls at 24 + 40 = 64 under the tallest slide; that is exactly this.
+ * § 1.4 budgets the controls at 24 + 48 = 72 under the tallest slide (48 steppers since fix round 2,
+ * cmp-testimonials, 6 Oct 2026); that is exactly this.
  *
  * The scrolling is the BROWSER'S: Layout's scroll mode is a CSS scroll-snap row, so before this
  * component hydrates — and if its script never runs — the row still swipes, snaps, and moves as Tab
@@ -251,6 +253,9 @@ export function Slider({ label, children, perView = 3, align = 'start' }: Slider
     return (
       <Button
         emphasis="outline"
+        /* lg: a 48 circle with a 24 arrow (fix round 2, 6 Oct 2026). At 40 with a 16 glyph the
+           steppers read as an afterthought beside a 477 portrait or a row of 392 cards. */
+        size="lg"
         iconOnly
         icon={<Icon name={direction === -1 ? 'arrow-left' : 'arrow-right'} />}
         extendHitArea
@@ -286,6 +291,7 @@ export function Slider({ label, children, perView = 3, align = 'start' }: Slider
           ref={rowRef}
           scroll="always"
           columns={LADDER[perView]}
+          peek={perView !== 1}
           colGap="gutter"
           tabIndex={tabStop ? 0 : undefined}
           className={styles.row}

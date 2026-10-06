@@ -76,6 +76,33 @@ function SurfaceMatrix() {
           </Button>
         </Cluster>
       </Layout>
+      <Layout rowGap="tight">
+        <p className={s.specTitle}>
+          Outline stepper · sm, md, lg · rest, then disabled — the glyph a size up from a
+          labelled button&rsquo;s (16 / 18 / 24), the circle kept when unavailable
+        </p>
+        <Cluster colGap="text" rowGap="text" align="center">
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <Fragment key={size}>
+              <Button
+                emphasis="outline"
+                iconOnly
+                size={size}
+                icon={<Icon name="arrow-left" />}
+                aria-label={`Previous, ${size}`}
+              />
+              <Button
+                emphasis="outline"
+                iconOnly
+                size={size}
+                disabled
+                icon={<Icon name="arrow-right" />}
+                aria-label={`Next, ${size}, disabled`}
+              />
+            </Fragment>
+          ))}
+        </Cluster>
+      </Layout>
     </Layout>
   );
 }
@@ -103,7 +130,7 @@ export default function ButtonSpecimenPage() {
 
           <Specimen
             title="The six combinations"
-            note="Emphasis is how loud the button is; tone is what it claims. Blue claims that this is the offer, ink claims nothing and gets the work done. None of the three carries an outline — separation comes from fill and from the space around it."
+            note="Emphasis is how loud the button is; tone is what it claims. Blue claims that this is the offer, ink claims nothing and gets the work done. None of the three carries an outline — separation comes from fill and from the space around it. The fourth emphasis, outline, is the icon-only slider stepper only (fdn-scroll), rendered in each surface band below."
           >
             <Layout columns={3} colGap="gutter" rowGap="stack">
               {COMBOS.map((c) => (

@@ -10,7 +10,7 @@
   align-items: center;
   padding-block: var(--gap-tight);
   padding-inline: var(--rbadge-padding-inline);
-  color: var(--rbadge-ink);
+  color: var(--rbadge-fg);
   font: var(--rbadge-text);
   letter-spacing: var(--rbadge-tracking);
   text-transform: var(--text-mono-case);
@@ -22,10 +22,14 @@
     border-color var(--rbadge-transition-duration) var(--rbadge-transition-easing);
 }
 
+/* No pressed step, deliberately (tokens rule 3: a state token exists only if its value moves on at
+   least one surface). The pill is a link that leaves the site in a new tab: the press IS the
+   navigation, so there is no held state to show, and a pressed fg would equal the hover fg on all
+   four surfaces. Hover and focus carry the one change from rest — fg and rule together. */
 .badge:hover,
 .badge:focus-visible {
-  color: var(--rbadge-ink-hover);
-  border-color: var(--rbadge-ink-hover);
+  color: var(--rbadge-fg-hover);
+  border-color: var(--rbadge-fg-hover);
 }
 
 .badge:focus {
@@ -44,7 +48,7 @@
 .star {
   display: block;
   line-height: 0;
-  color: var(--rbadge-star-ink);
+  color: var(--rbadge-star-fg);
 }
 
 /* The text's box, trimmed to the capitals (1 Oct 2026, owner: the star sat low). `align-items:

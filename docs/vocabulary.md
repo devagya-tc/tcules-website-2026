@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 24 roles, consumed as composites
+### Type — 26 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -76,6 +76,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-h6` | 18px | 1.35 | display | medium | `--text-h6-tracking` | verbatim |
 | `--text-quote` | 28px | 1.35 | display | regular | **none** | verbatim |
 | `--text-quote-lg` | 34px | 1.3 | display | regular | `--text-quote-lg-tracking` | verbatim |
+| `--text-quote-xl` | 43px | 1.25 | display | regular | `--text-quote-xl-tracking` | verbatim |
 | `--text-lead` | 20px | 1.5 | sans | regular | **none** | verbatim |
 | `--text-body-lg` | 18px | 1.55 | sans | regular | **none** | verbatim |
 | `--text-body` | 16px | 1.6 | sans | regular | **none** | verbatim |
@@ -90,9 +91,10 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` | `--text-mono-case` |
 | `--text-stat-lg` | 54px | 1 | mono | medium | `--text-stat-lg-tracking` | `--text-mono-case` |
 | `--text-stat-xl` | 96px | 1 | mono | medium | `--text-stat-xl-tracking` | `--text-mono-case` |
+| `--text-score` | 105px | 1 | display | regular | `--text-score-tracking` | verbatim |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**17 roles have a tracking companion. 7 have none** — pairing one with a role in that
+**19 roles have a tracking companion. 7 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
@@ -176,7 +178,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **block-card.css** — `--bcrd-title-tracking-lg` -0.01em · `--bcrd-title-tracking-md` -0.005em · `--bcrd-title-tracking-sm` 0em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-rule-width` 1px · `--bcrd-radius` 0px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
 - **brand-mark.css** — `--bmark-size` 14px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
-- **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-round` 999px · `--btn-outline-rule-width` 1px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
+- **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-outline-icon-size-sm` 16px · `--btn-outline-icon-size-md` 18px · `--btn-outline-icon-size-lg` 24px · `--btn-radius` 8px · `--btn-radius-round` 999px · `--btn-outline-rule-width` 1px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
 - **callout.css** — `--call-example-rule-width` 2px
 - **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 160px · `--cmark-target-side-m` 44px · `--cmark-height-max-m` 32px · `--cmark-width-max-m` 128px
 - **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-tracking-md` -0.01em · `--csec-heading-tracking-display` -0.02em · `--csec-heading-measure-display` 26ch · `--csec-heading-measure` 32ch · `--csec-lead-measure` 56ch · `--csec-body-measure` 75ch
@@ -195,7 +197,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 16px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-plate-width-lg` 1056px · `--nav-plate-width-md` 780px · `--nav-plate-width-sm` 560px · `--nav-plate-radius` 8px · `--nav-plate-inset` 16px · `--nav-row-padding-block` 8px · `--nav-row-padding-inline` 16px · `--nav-row-radius` 8px · `--nav-row-arrow-size` 14px · `--nav-row-arrow-travel` 4px · `--nav-rail-title-tracking` 0em · `--nav-card-radius` 8px · `--nav-card-padding` 16px · `--nav-card-image-radius` 4px · `--nav-card-arrow-size` 16px · `--nav-label-tracking` 0.12em · `--nav-sheet-reserve` 88px · `--nav-sheet-radius` 8px · `--nav-sheet-padding-inline` 20px · `--nav-sheet-row-padding-block` 12px · `--nav-sheet-foot-padding-block` 12px · `--nav-sheet-link-padding-block` 12px · `--nav-sheet-chevron-size` 16px · `--nav-grab-width` 36px · `--nav-grab-height` 4px · `--nav-sheet-dismiss-distance` 56px · `--nav-sheet-dismiss-flick-distance` 24px · `--nav-drag-slop` 8px · `--nav-row-lift` 6px
 - **page-hero.css** — `--hero-eyebrow-tracking` 0.12em · `--hero-title-tracking` -0.02em · `--hero-key-tracking` 0.1em · `--hero-title-measure` 26ch · `--hero-lead-measure` 56ch · `--hero-body-measure` 75ch · `--hero-media-radius` 0px · `--hero-media-rule-width` 1px · `--hero-mark-size` 6px · `--hero-numeral-size` 20px · `--hero-numeral-radius` 999px · `--hero-numeral-tracking` 0.1em · `--hero-tag-tracking` 0.12em · `--hero-flag-tracking` 0.12em · `--hero-media-size-centred` 860px
 - **process-flow.css** — `--flow-rule-width` 1px · `--flow-item-rule-width` 1px · `--flow-span-width` 1px · `--flow-span-tick` 12px
-- **proof.css** — `--proof-quote-rule-width` 6px · `--proof-portrait-size` 64px · `--proof-portrait-radius-compact` 4px · `--proof-radius` 0px
+- **proof.css** — `--proof-quote-rule-width` 6px · `--proof-portrait-size` 64px · `--proof-portrait-radius-compact` 4px · `--proof-portrait-radius` 8px · `--proof-mark-inline-size` 48px · `--proof-radius` 0px
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px
 - **rating-badge.css** — `--rbadge-padding-inline` 14px · `--rbadge-radius` 999px · `--rbadge-rule-width` 1px · `--rbadge-tracking` 0.08em · `--rbadge-ring-width` 2px · `--rbadge-ring-offset` 2px · `--rbadge-hidden-size` 1px
 - **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-padding-y-strip` 24px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
@@ -215,7 +217,7 @@ Layout is done by these three. Always. Anything you specify is arranged by one o
 
   where `SectionSurface` = 'paper' | 'tint' | 'ink' | 'blue' · `SectionDensity` = 'tight' | 'open' | 'strip'
 
-**`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `align?: Place | 'baseline'` · `justifyItems?: Place` · `justify?: Distribute` · `scroll?: Scroll` · `ref?: Ref<HTMLElement>` · `tabIndex?: 0 | -1` · `children: ReactNode`
+**`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `align?: Place | 'baseline'` · `justifyItems?: Place` · `justify?: Distribute` · `scroll?: Scroll` · `peek?: boolean` · `ref?: Ref<HTMLElement>` · `tabIndex?: 0 | -1` · `children: ReactNode`
 
   where `Gap` = 'none' | 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' | 'column' | 'section' | 'section-open' · `Columns` = (number | number[]) | 'fit' | 'tile' | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec } · `MinTrack` = 'xs' | 'sm' | 'md' | 'lg' · `Offset` = 0 | 1 | 2 | 3 · `Place` = 'stretch' | 'start' | 'center' | 'end' · `Distribute` = 'start' | 'center' | 'end' | 'between' · `Scroll` = 'until-md' | 'always'
 

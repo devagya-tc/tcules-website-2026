@@ -74,14 +74,15 @@ Deliberately not props: autoplay, loop, a per-slide picker, a step size (always 
 | `scroll` | `'until-md' \| 'always'` | — | The row scrolls sideways below 768, or at every width. In scroll mode `columns` names how many items are **in view** per breakpoint (counts, not ratios; a bare `3` is base 1, md-up 3). |
 | `ref` | `Ref<HTMLElement>` | — | The rendered element, for a caller that drives a scroll row. |
 | `tabIndex` | `0 \| -1` | — | Only for a scroll row whose items hold nothing focusable. |
+| `peek` | `boolean` | `true` | Whether a scroll row shows `--lay-scroll-peek` of the next item below md. `false` shows exactly the count at every width. The Slider passes `false` at `perView={1}` (amended 6 Oct 2026, cmp-testimonials): a one-up slide is a composite, and its neighbour's edge read as a stray portrait sliver. Ignored without `scroll`. Rendered on `/design/layout`. |
 
 ## 4 · Variants × sizes
 
-`perView` is the size axis. Per-breakpoint counts (base shows one slide plus a 24 peek; md up is exact):
+`perView` is the size axis. Per-breakpoint counts. At 2, 3 and 4 the base shows one slide plus a 24 peek and md up is exact; at 1 there is never a peek, at any width (amended 6 Oct 2026, cmp-testimonials — `peek={false}` on the row):
 
 | `perView` | base | md 768 | lg 1024 | xl 1440 | Use | Track at 1440 |
 |---|---|---|---|---|---|---|
-| 1 | 1 | 1 | 1 | 1 | G testimonial (featured slide) | 1240 |
+| 1 | 1 (no peek) | 1 | 1 | 1 | G testimonial (featured slide) | 1240 |
 | 2 | 1 | 2 | 2 | 2 | pair cards | 604 |
 | 3 | 1 | 2 | 3 | 3 | C-image-5+ | 392 |
 | 4 | 1 | 2 | 3 | 4 | Card-4 sets (`BlockCard size="sm"`) | 286 |
@@ -123,11 +124,12 @@ contrast (WCAG 1.4.3); the rail is decoration.
 | Seam / size | Value | Why |
 |---|---|---|
 | slide ↔ slide | `--gap-gutter` (32) | peers in a row (§ 3.1) |
-| row → controls | `--gap-block` (24) | § 1.4: controls 24 + 40 |
+| row → controls | `--gap-block` (24) | § 1.4: controls 24 + 48 |
 | rail ↔ controls, control ↔ rail (center) | `--gap-block` (24) | the rail and a control are two objects |
 | control ↔ control (start) | `--gap-text` (16) | one pair, read as one group, never cramped |
 | control | hit area | `--sld-hit-min` 44 | extended past the box, never by resizing it |
-| glyph | `--icon-size-18` | |
+| control | Button `emphasis="outline"` `size="lg"`: a 48 circle | fix round 2, 6 Oct 2026 (cmp-testimonials): at 40 beside a 477 portrait the steppers read as an afterthought |
+| glyph | `--btn-outline-icon-size-lg` → `--icon-size-24`, half the circle | was 18 |
 | rail | `--sld-progress-length` 240 × `--border-width-2` | shrinks to fit a narrower row (`min()`, flex shrink) |
 | peek (base) | `--lay-scroll-peek` 24 | a sliver of the next slide; a slice of an object, not air |
 | ring room | `--lay-scroll-ring-room` = ring offset + width (4) | optical: the row pads by it and cancels it with an equal negative margin, so its clip never cuts an item's focus ring and the items stay on the column's edges |
