@@ -106,6 +106,7 @@ export const ROUTES = {
   designCtaSection: '/design/cta-section',
   designEnquiryForm: '/design/enquiry-form',
   designProof: '/design/proof',
+  designKitTestimonials: '/design/kit/testimonials',
   designCallout: '/design/callout',
 } as const;
 

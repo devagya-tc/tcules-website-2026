@@ -78,3 +78,10 @@ prevents. A checked-on date is not shown, matching the footer; if the owner want
   changes.
 - **Ink and blue are unchanged.** The live badge sits in the ink footer, and chrome keeps its approved
   colours (§ 4.3). Blue's star was already white.
+
+## Amendment · 6 Oct 2026 (cmp-testimonials)
+
+`showScore?: boolean` (default `true`). `false` is for a placement that sets the score large beside
+the badge (Proof `arrangement="rating"`): the pill reads "★ Rated on [mark] Clutch", and the score
+follows the platform in visually hidden text, so the accessible name is "Rated on Clutch, 4.8 (opens
+in a new tab)" — the visible label first (WCAG 2.5.3), the score still in the claim.

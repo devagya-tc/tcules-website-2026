@@ -1,6 +1,19 @@
-import { Button, Cluster, Icon, Layout, Media, Prose, type MediaImage } from '@/components';
+import type { ReactNode } from 'react';
+
+import {
+  BrandMark,
+  Button,
+  Cluster,
+  Icon,
+  Layout,
+  Media,
+  Prose,
+  RatingBadge,
+  type BrandMarkName,
+  type MediaImage,
+} from '@/components';
 import { cx } from '@/lib/cx';
-import { PROOF_PORTRAIT } from '@/lib/image-sizes';
+import { MEDIA_SPLIT, PROOF_PORTRAIT } from '@/lib/image-sizes';
 
 import styles from './Proof.module.css';
 
@@ -50,11 +63,37 @@ export type ProofFigure = {
   sourceHref?: string;
 };
 
+/**
+ * A third-party score, as the content seam holds it (`fixtures/ratings.ts`): Proof composes the
+ * RatingBadge from it, so every testimonial that carries the score renders the same pill, a `block`
+ * under the attribution (1 Oct 2026, owner: the client's words, then the market's score, as one
+ * piece of evidence). A REAL rating sits only beside a real quote (visual-direction § 5.8).
+ */
+export type ProofRating = {
+  /** As published, a string: "4.8", and "5.0" stays "5.0". */
+  score: string;
+  /** The platform in words, the badge's accessible name with the score. */
+  platform: string;
+  /** The profile the score is read from. */
+  href: string;
+  /** The platform's mark beside its name. */
+  mark?: BrandMarkName;
+};
+
+/**
+ * How the quote aligns in `display`. `center` is the typographic G band under a centred head
+ * (§ 3.5): the quote, its attribution and the badge centred on one axis, and the quote rule — which
+ * has no inline-start edge to run down — turned on its side above the quote. Presentation only.
+ */
+export type ProofAlign = 'start' | 'center';
+
 type ProofCompactProps = {
   /** Embedded quote treatment. Compact is quote-only by contract. */
   arrangement: 'compact';
   quote: ProofQuote;
   figures?: never;
+  /** The score, a `block` under the attribution. Real quotes only (§ 5.8). */
+  rating?: ProofRating;
 };
 
 type ProofDisplayProps =
@@ -62,14 +101,86 @@ type ProofDisplayProps =
       arrangement?: 'display';
       quote: ProofQuote;
       figures?: readonly ProofFigure[];
+      /** Default `start`. See `ProofAlign`. Ignored when figures share the band. */
+      align?: ProofAlign;
+      /** The score, a `block` under the attribution. Real quotes only (§ 5.8). */
+      rating?: ProofRating;
     }
   | {
       arrangement?: 'display';
       quote?: never;
       figures: readonly ProofFigure[];
+      align?: never;
+      rating?: never;
     };
 
-export type ProofProps = ProofCompactProps | ProofDisplayProps;
+/**
+ * G featured (§ 1.4): the speaker's portrait, 1:1 at the 5 of [5, 7] (477 at 1470), beside the
+ * quote at the display role. The portrait is required — without one this is the typographic band,
+ * and Proof renders `display` with a development warning rather than an empty square.
+ */
+type ProofFeaturedProps = {
+  arrangement: 'featured';
+  quote: ProofQuote;
+  /**
+   * The band's ask under the quote — in practice one `CtaRow`, composed by the caller (a pattern
+   * does not import a pattern). With it the copy column stretches to the portrait and pins the row
+   * to the portrait's bottom edge, the quote's top on the portrait's top (§ 3.2 rule 1); without it
+   * the quote is centred on the portrait (rule 2).
+   */
+  footer?: ReactNode;
+  figures?: never;
+};
+
+/**
+ * G-case (§ 3.6, owner 1 Oct: "the work first, then what the client said"): [1, 2] at `section`,
+ * the case in the 381 track and the compact quote in the 763, tops aligned, the score a `block`
+ * under the attribution.
+ */
+type ProofCaseProps = {
+  arrangement: 'case';
+  /**
+   * The work — in practice one linked `BlockCard` (3:2 cover, a stand-in allowed: § 5.7) inside a
+   * one-item `<ul>`, because a BlockCard is an `<li>`. A slot for the reason `footer` is one.
+   */
+  work: ReactNode;
+  quote: ProofQuote;
+  rating?: ProofRating;
+  figures?: never;
+};
+
+/**
+ * G group (§ 1.4): two or three compact quotes as peers, 3 or 2 across from 1024 at `gutter`, each
+ * with its 64 portrait ABOVE the quote rather than beside the name — in a 392 track the name beside
+ * a portrait wraps, and above it the portrait reads as the top edge the card would otherwise lack
+ * (§ 3.1: the image's edges delimit). Stacked below 1024, `column` apart (§ 1.2, the row seam of a
+ * borderless set). A quote without a portrait keeps its rule and simply starts there.
+ */
+type ProofGroupProps = {
+  arrangement: 'group';
+  quotes: readonly [ProofQuote, ProofQuote] | readonly [ProofQuote, ProofQuote, ProofQuote];
+  figures?: never;
+};
+
+/**
+ * G rating-led (§ 1.4): the score is the band's large thing (§ 3.3) — at `--text-stat-lg`, then its
+ * platform line (the RatingBadge, its score carried in the link's name), then one quote at the
+ * display role, every part centred. Real rating, real quote, no portrait (§ 5.8).
+ */
+type ProofRatingProps = {
+  arrangement: 'rating';
+  rating: ProofRating;
+  quote: ProofQuote;
+  figures?: never;
+};
+
+export type ProofProps =
+  | ProofCompactProps
+  | ProofDisplayProps
+  | ProofFeaturedProps
+  | ProofCaseProps
+  | ProofGroupProps
+  | ProofRatingProps;
 
 function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`Proof: ${message}`);
@@ -140,7 +251,8 @@ function acceptPortrait(portrait: ProofPortrait | undefined, name: string) {
 }
 
 /**
- * The portrait: small, square, radius 4, through Media as a photograph (no frame, never masked).
+ * The portrait, square, through Media: compact (64, radius 4) beside the name or above a group
+ * quote, featured (the 477 track, radius 8) beside a featured quote. Compact, at 64 as a photograph (no frame, never masked).
  *
  * `alt=""` is deliberate. The image sits beside the speaker's name, so a text alternative could only
  * restate that name ("Portrait of Ashok Mohanty") and a screen reader would hear it twice. That is
@@ -155,12 +267,18 @@ function acceptPortrait(portrait: ProofPortrait | undefined, name: string) {
    point of its own, so the centre is the whole answer. */
 const PORTRAIT_FOCUS = { x: 0.5, y: 0.5 };
 
-function Portrait({ portrait }: { portrait: ProofPortrait }) {
+function Portrait({
+  portrait,
+  size = 'compact',
+}: {
+  portrait: ProofPortrait;
+  size?: 'compact' | 'featured';
+}) {
   return (
-    <span className={styles.portrait}>
+    <span className={size === 'featured' ? styles.portraitFeatured : styles.portrait}>
       <Media
         image={{ ...portrait, alt: '', kind: 'photograph' }}
-        sizes={PROOF_PORTRAIT}
+        sizes={size === 'featured' ? MEDIA_SPLIT : PROOF_PORTRAIT}
         fit="fill"
         edge="placement"
         focus={PORTRAIT_FOCUS}
@@ -169,8 +287,35 @@ function Portrait({ portrait }: { portrait: ProofPortrait }) {
   );
 }
 
-function Quote({ quote }: { quote: ProofQuote }) {
-  const portrait = acceptPortrait(quote.portrait, quote.name);
+/**
+ * The quote's presentation, decided by the arrangement that places it — never by the caller.
+ *
+ *   size      `lg` the display role (34 / 28 / 22) where the quote has the band's column or the 667
+ *             beside a portrait; `md` the reading role (28) where it sits beside or among others.
+ *   align     `center` sets the rule above the quote and centres every part (typographic, rating).
+ *   portrait  where the quote's own portrait goes: `inline` beside the name (compact, display),
+ *             `top` above the quote (group), `none` when the arrangement shows it elsewhere
+ *             (featured) or not at all.
+ *   mark      whether a centred quote draws its rule. Off under a score, which already marks the top.
+ */
+type QuotePresentation = {
+  size: 'lg' | 'md';
+  align?: ProofAlign;
+  portrait?: 'inline' | 'top' | 'none';
+  mark?: boolean;
+};
+
+function Quote({
+  quote,
+  size,
+  align = 'start',
+  portrait: portraitPlace = 'inline',
+  mark = true,
+}: { quote: ProofQuote } & QuotePresentation) {
+  const portrait = portraitPlace === 'none' ? undefined : acceptPortrait(quote.portrait, quote.name);
+  const inlinePortrait = portraitPlace === 'inline' ? portrait : undefined;
+  const topPortrait = portraitPlace === 'top' ? portrait : undefined;
+  const centred = align === 'center';
   const role = isFilled(quote.role) ? quote.role : undefined;
   const source =
     quote.source && isFilled(quote.source.label) && isFilled(quote.source.href)
@@ -181,25 +326,43 @@ function Quote({ quote }: { quote: ProofQuote }) {
   }
 
   return (
-    <Layout as="figure" rowGap="block" className={styles.quote}>
+    <Layout
+      as="figure"
+      rowGap="block"
+      justifyItems={centred ? 'center' : undefined}
+      className={cx(
+        styles.quote,
+        size === 'lg' ? styles.sizeLg : styles.sizeMd,
+        centred && styles.centred,
+      )}
+    >
+      {/* Group: the portrait opens the item, flush on the rule's edge, a block above the quote. */}
+      {topPortrait ? <Portrait portrait={topPortrait} /> : null}
+      {/* Centred: the quote rule on its side, a block above the quote. Decorative. */}
+      {centred && mark ? <span className={styles.mark} aria-hidden="true" /> : null}
       <blockquote className={styles.quoteText}>
         <Prose html={quote.quoteHtml} className={styles.quoteProse} />
       </blockquote>
-      {/* The figcaption is the attribution row. With a portrait, the portrait sits flush on the
-          left margin, under the rule, and the text starts a bind (block, 24) to its right; without
-          one, the text is indented so the name lands on the quote's first letter (ch10 B2.07). */}
+      {/* The figcaption is the attribution row, and the figure's last child. With a portrait, the
+          portrait sits flush on the left margin, under the rule, and the text starts a bind (block,
+          24) to its right; without one, the text is indented so the name lands on the quote's first
+          letter (ch10 B2.07). Centred, there is no edge to land on: the row centres. */}
       <Cluster
         as="figcaption"
         colGap="gutter"
         rowGap="text"
         align="center"
-        className={cx(styles.attribution, !portrait && styles.attributionIndented)}
+        justify={centred ? 'center' : undefined}
+        className={cx(
+          styles.attribution,
+          !inlinePortrait && !centred && styles.attributionIndented,
+        )}
       >
         {/* The speaker — portrait and name never part, so they are a nowrap Cluster of their own.
             The source link is the figcaption's second child: beside the speaker while the row has
             room, beneath when it does not. Who said it, then where to check it. */}
         <Cluster nowrap colGap="block" align="start" className={styles.speaker}>
-          {portrait ? <Portrait portrait={portrait} /> : null}
+          {inlinePortrait ? <Portrait portrait={inlinePortrait} /> : null}
           <Layout rowGap="inline" className={styles.attributionText}>
             <span className={styles.name}>{quote.name}</span>
             <span className={styles.role}>
@@ -223,6 +386,70 @@ function Quote({ quote }: { quote: ProofQuote }) {
       </Cluster>
     </Layout>
   );
+}
+
+function validRating(rating: ProofRating | undefined): rating is ProofRating {
+  if (!rating) return false;
+  const blank = (['score', 'platform', 'href'] as const).filter((f) => !isFilled(rating[f]));
+  if (blank.length > 0) {
+    warn(`rating has blank ${blank.join(', ')}; omitting the badge.`);
+    return false;
+  }
+  return true;
+}
+
+/** The pill. Its own Cluster so the grid cell does not stretch it: the badge sizes to its content. */
+function Badge({
+  rating,
+  showScore = true,
+  className,
+}: {
+  rating: ProofRating;
+  showScore?: boolean;
+  className?: string;
+}) {
+  return (
+    <Cluster className={className}>
+      <RatingBadge
+        score={rating.score}
+        platform={rating.platform}
+        href={rating.href}
+        icon={<Icon name="star" size="sm" />}
+        mark={rating.mark ? <BrandMark name={rating.mark} /> : undefined}
+        showScore={showScore}
+      />
+    </Cluster>
+  );
+}
+
+/**
+ * A quote and, when there is one, the score a `block` under its attribution — the same beat as the
+ * quote to its attribution, so the two read as one piece of evidence (1 Oct 2026, owner). Start-
+ * aligned, the badge takes the attribution's indent, so name and pill share an edge.
+ */
+function QuoteWithRating({
+  quote,
+  rating,
+  ...presentation
+}: { quote: ProofQuote; rating?: ProofRating } & QuotePresentation) {
+  const centred = presentation.align === 'center';
+  if (!validRating(rating)) return <Quote quote={quote} {...presentation} />;
+  /* The badge shares the name's edge: indented exactly when the attribution is — start-aligned with
+     no portrait rendering beside the name. */
+  const inlinePortrait =
+    (presentation.portrait ?? 'inline') === 'inline' && acceptPortraitSilently(quote.portrait);
+  const indented = !centred && !inlinePortrait;
+  return (
+    <Layout rowGap="block" justifyItems={centred ? 'center' : undefined} className={styles.quote}>
+      <Quote quote={quote} {...presentation} />
+      <Badge rating={rating} className={cx(indented && styles.attributionIndented)} />
+    </Layout>
+  );
+}
+
+/** Whether a portrait would render, without a second development warning. */
+function acceptPortraitSilently(portrait: ProofPortrait | undefined): boolean {
+  return Boolean(portrait && isFilled(portrait.src) && hasDimensions(portrait));
 }
 
 /**
@@ -311,17 +538,43 @@ function Figures({ figures }: { figures: readonly ProofFigure[] }) {
 /**
  * Proof — attributed client evidence, checked figures, or both, built to docs/specs/Proof.md.
  *
- * The content seam decides whether a markdown blockquote is an attributed Proof or an
- * unattributed Callout; this pattern never sniffs HTML for a name. A quote follows the site
- * blockquote (ch10 B2.07): italic serif behind a 6px rule, the attribution beneath, and an optional
- * 1:1 portrait left of it (ruling P1; the client mark of P2 was removed 30 Sep 2026). Display may render quote,
- * figures, or both — together, the quote in a 2:1 lead track beside the stacked figures — at the
- * display roles (--text-quote-lg, --text-stat-lg), and says a date every figure shares once, as
- * the set's caption (tracker 2.17). Compact embeds one quote in a reading flow and forbids figures at compile
- * time. Layout owns every relationship, Prose owns trusted inline markup, Button owns source-link
- * interaction, Media owns the portrait, and the nearest surface owns the ground.
+ * The content seam decides whether a markdown blockquote is an attributed Proof or an unattributed
+ * Callout; this pattern never sniffs HTML for a name. A quote follows the site blockquote (ch10
+ * B2.07): italic serif behind a 6px rule, the attribution beneath. Six arrangements — the G family
+ * of the UI kit (visual-direction § 1.4, § 3.4 G, 6 Oct 2026):
+ *
+ *   display   the typographic band: the quote at --text-quote-lg, start or centred (`align`), with
+ *             an optional score; or checked figures; or the quote in a 2:1 lead track beside them.
+ *   compact   one quote at --text-quote embedded in a reading flow; figures are a compile error.
+ *   featured  a 1:1 portrait at 477 beside the display quote, [5, 7] at section, an optional footer.
+ *   case      the work (a BlockCard, passed in) in 381 beside the compact quote in 763 — G-case.
+ *   group     two or three compact quotes as peers, each opened by its 64 portrait.
+ *   rating    the score at --text-stat-lg, its platform line, then one display quote, centred.
+ *
+ * Layout owns every relationship, Prose owns trusted inline markup, Button owns source-link
+ * interaction, Media owns the portrait, RatingBadge owns the score's pill, and the nearest surface
+ * owns the ground. Slots (`work`, `footer`) take what a pattern may not import: BlockCard, CtaRow.
  */
-export function Proof({ arrangement = 'display', quote, figures }: ProofProps) {
+export function Proof(props: ProofProps) {
+  switch (props.arrangement) {
+    case 'featured':
+      return <Featured {...props} />;
+    case 'case':
+      return <Case {...props} />;
+    case 'group':
+      return <Group {...props} />;
+    case 'rating':
+      return <RatingLed {...props} />;
+    default:
+      return <Evidence {...props} />;
+  }
+}
+
+/* ── display and compact ─────────────────────────────────────────────────────────── */
+
+function Evidence(props: ProofCompactProps | ProofDisplayProps) {
+  const arrangement = props.arrangement ?? 'display';
+  const { quote, figures } = props;
   const acceptedQuote = validQuote(quote) ? quote : undefined;
   const acceptedFigures = arrangement === 'compact' ? [] : normaliseFigures(figures);
 
@@ -346,6 +599,12 @@ export function Proof({ arrangement = 'display', quote, figures }: ProofProps) {
   }
 
   const both = Boolean(acceptedQuote && acceptedFigures.length > 0);
+  /* Centring is the typographic band's; a quote beside figures leads its track and stays start. */
+  const align: ProofAlign = !both && 'align' in props && props.align ? props.align : 'start';
+  const centred = align === 'center';
+  if (both && 'align' in props && props.align === 'center') {
+    warn('align="center" does not apply beside figures; the quote is start-aligned.');
+  }
 
   /* Quote plus figures: the quote leads in the wide track and the figures stack in the narrow one
      beside it (2:1 from lg), so the testimonial is the moment and the numbers are its evidence.
@@ -355,10 +614,136 @@ export function Proof({ arrangement = 'display', quote, figures }: ProofProps) {
       columns={both ? { base: 1, lg: [2, 1] } : undefined}
       colGap={both ? 'section' : undefined}
       rowGap={both ? 'stack' : undefined}
-      className={`${styles.root} ${styles[arrangement]}`}
+      justifyItems={centred ? 'center' : undefined}
+      className={styles.root}
     >
-      {acceptedQuote ? <Quote quote={acceptedQuote} /> : null}
+      {acceptedQuote ? (
+        <QuoteWithRating
+          quote={acceptedQuote}
+          rating={props.rating}
+          size={arrangement === 'compact' ? 'md' : 'lg'}
+          align={align}
+        />
+      ) : null}
       {acceptedFigures.length > 0 ? <Figures figures={acceptedFigures} /> : null}
+    </Layout>
+  );
+}
+
+/* ── featured ───────────────────────────────────────────────────────────────────── */
+
+function Featured({ quote, footer }: ProofFeaturedProps) {
+  if (!validQuote(quote)) {
+    warn('featured arrangement has no valid quote; rendering nothing.');
+    return null;
+  }
+  const portrait = acceptPortrait(quote.portrait, quote.name);
+  if (!portrait) {
+    warn(
+      `featured quote from "${quote.name}" has no portrait; rendering the typographic quote${footer ? ' with its footer' : ''}.`,
+    );
+    const typographic = <Evidence arrangement="display" quote={quote} />;
+    return footer ? (
+      <Layout rowGap="stack" className={styles.root}>
+        {typographic}
+        {footer}
+      </Layout>
+    ) : (
+      typographic
+    );
+  }
+  const copy = <Quote quote={quote} size="lg" portrait="none" />;
+  return (
+    <Layout
+      columns={{ base: 1, lg: [5, 7] }}
+      colGap="section"
+      rowGap="stack"
+      align={footer ? 'stretch' : 'center'}
+      className={styles.root}
+    >
+      <Portrait portrait={portrait} size="featured" />
+      {footer ? (
+        <Layout rowGap="stack" pinLast>
+          {copy}
+          {footer}
+        </Layout>
+      ) : (
+        copy
+      )}
+    </Layout>
+  );
+}
+
+/* ── case ───────────────────────────────────────────────────────────────────────── */
+
+function Case({ work, quote, rating }: ProofCaseProps) {
+  if (!validQuote(quote)) {
+    warn('case arrangement has no valid quote; rendering nothing.');
+    return null;
+  }
+  return (
+    <Layout
+      columns={{ base: 1, lg: [1, 2] }}
+      colGap="section"
+      rowGap="stack"
+      align="start"
+      className={styles.root}
+    >
+      {work}
+      <QuoteWithRating quote={quote} rating={rating} size="md" />
+    </Layout>
+  );
+}
+
+/* ── group ──────────────────────────────────────────────────────────────────────── */
+
+function Group({ quotes }: ProofGroupProps) {
+  const accepted = quotes.filter((quote) => validQuote(quote));
+  if (accepted.length < 2) {
+    warn(`group needs two or three valid quotes (got ${accepted.length}); rendering nothing.`);
+    return null;
+  }
+  return (
+    <Layout
+      as="ul"
+      columns={{ base: 1, lg: accepted.length }}
+      colGap="gutter"
+      rowGap="column"
+      align="start"
+      className={styles.root}
+    >
+      {accepted.map((quote, index) => (
+        <li key={`${index}-${quote.name}`} className={styles.groupItem}>
+          <Quote quote={quote} size="md" portrait="top" />
+        </li>
+      ))}
+    </Layout>
+  );
+}
+
+/* ── rating-led ─────────────────────────────────────────────────────────────────── */
+
+function RatingLed({ rating, quote }: ProofRatingProps) {
+  const hasRating = validRating(rating);
+  if (!validQuote(quote)) {
+    warn('rating arrangement has no valid quote; rendering nothing.');
+    return null;
+  }
+  if (!hasRating) {
+    return <Evidence arrangement="display" align="center" quote={quote} />;
+  }
+  return (
+    <Layout rowGap="stack" justifyItems="center" className={styles.root}>
+      {/* The score and its platform line are one unit, a `text` apart: the number, then where it
+          is read. The numeral is the eye's; the badge's link text carries the score for a screen
+          reader ("4.8 on Clutch"), so the numeral is hidden from it rather than said twice. */}
+      <Layout rowGap="text" justifyItems="center">
+        <span className={styles.score} aria-hidden="true">
+          {rating.score}
+        </span>
+        <Badge rating={rating} showScore={false} />
+      </Layout>
+      <Quote quote={quote} size="lg" align="center" portrait="none" mark={false} />
     </Layout>
   );
 }

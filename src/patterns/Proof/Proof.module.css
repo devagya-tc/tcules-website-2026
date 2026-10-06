@@ -38,21 +38,47 @@
   overflow-wrap: anywhere;
 }
 
-/* Display is a quote with a band's column to itself: the large quote role (34 / 28 / 22) at the
+/* The display role is a quote with a band's column to itself (typographic), the 667 beside a
+   portrait (featured) or the score above it (rating-led): the large quote role (34 / 28 / 22) at the
    lead measure, which at 34 is about 860px — inside the 800–960 that reference proof bands set a
-   quote across. Wrapped `pretty`, not balanced: it is three or four lines of speech, and ch10
-   wraps quotes pretty ("the lines stay full and only the last one shortens"). A quote beside
-   something else is compact's 28, not this — size follows length and width, not importance. */
-.display .quoteText {
+   quote across. Wrapped `pretty`, not balanced: it is three to six lines of speech, and ch10 wraps
+   quotes pretty ("the lines stay full and only the last one shortens"). A quote beside a case or
+   among peers is the reading role's 28 — size follows length and width, not importance. The size
+   is the arrangement's decision, set on the figure, so the part never asks which band it is in. */
+.sizeLg .quoteText {
   max-inline-size: var(--measure-lead);
   font: var(--text-quote-lg);
   letter-spacing: var(--text-quote-lg-tracking);
   text-wrap: var(--text-running-wrap);
 }
 
-.compact .quoteText {
+.sizeMd .quoteText {
   font: var(--text-quote);
   text-wrap: var(--text-running-wrap);
+}
+
+/* Centred (typographic and rating-led G, under a centred head — § 3.5). There is no inline-start
+   edge to run the rule down, so the rule leaves the quote's side for the mark above it, and the
+   inset that cleared it goes too. Balanced, not pretty, here and only here: centred lines of
+   unequal length read ragged on BOTH edges, and balance is what keeps a centred block one shape. */
+.centred .quoteText {
+  border-inline-start: none;
+  padding-inline-start: 0;
+  text-align: center;
+  text-wrap: var(--text-title-wrap);
+}
+
+.centred .attributionText {
+  text-align: center;
+}
+
+/* The quote rule on its side: the same 6px, the same blue, a short mark above a centred quote.
+   A mark, never a divider (§ 4.3), which is why it is this short. */
+.mark {
+  display: block;
+  inline-size: var(--proof-mark-inline-size);
+  block-size: var(--proof-quote-rule-width);
+  background: var(--proof-quote-rule);
 }
 
 /* Prose remains the trusted-HTML seam and keeps its flow/link behavior. The two-class selector is
@@ -90,6 +116,33 @@
   aspect-ratio: var(--proof-portrait-ratio);
   border-radius: var(--proof-portrait-radius-compact);
   overflow: hidden;
+}
+
+/* The featured portrait: the whole 5 of [5, 7] (477 at 1470), square, the photograph radius
+   (--proof-portrait-radius, 8) and no frame — a portrait is a photograph (§ 5.3). Below 1024 it is
+   the full column, still square: a phone sees the person first, then what they said. `start` in its
+   own cell, because with a footer the row stretches (the copy column pins its CtaRow to the
+   portrait's foot), and a stretched portrait taller than its track is no longer square. */
+.portraitFeatured {
+  display: block;
+  align-self: start;
+  inline-size: 100%;
+  aspect-ratio: var(--proof-portrait-ratio);
+  border-radius: var(--proof-portrait-radius);
+  overflow: hidden;
+}
+
+.groupItem {
+  min-inline-size: 0;
+}
+
+/* The rating-led score: the band's large thing (§ 3.3), the stat role a Proof figure's value
+   takes, in the same accent ink. Mono, so it takes the mono case (a no-op on "4.8"). */
+.score {
+  font: var(--text-stat-lg);
+  letter-spacing: var(--text-stat-lg-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--proof-value-ink);
 }
 
 /* The speaker group sizes to its content and never shrinks below it; the source link takes what

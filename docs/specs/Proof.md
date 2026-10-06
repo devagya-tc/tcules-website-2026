@@ -11,7 +11,7 @@
 | **Designer / date** | Codex / 24 Aug 2026                                   |
 | **Implements**      | `docs/briefs/15-testimonial.md` and `docs/briefs/17-stat.md` together, as required by `docs/briefs/README.md` |
 | **Implemented at**  | `src/patterns/Proof/` · `src/styles/tokens/components/proof.css` · specimen `src/app/design/proof/page.tsx` |
-| **Amended**         | **28 Sep 2026** (tracker 2.12; rulings P1, P2; audit §3 Proof, §4) — an optional 1:1 `portrait` through `Media`, an optional `clientMark` through `ClientMark`, `role` optional, and the quote brought onto ch10 B2.07's site blockquote: italic, a 6px rule beside the quote only, the attribution beneath with the name on the quote's first letter, and a white rule on blue. Every section below is amended in place; the changes are collected in **Amendment · 28 Sep 2026** before the self-audit. **29 Sep 2026** (tracker 2.17, owner-approved) — a display scale (`--text-quote-lg`, `--text-stat-lg`), the shared checked date said once, the quote beside stacked figures at 2:1 from lg, and the specimen's client marks rendering at last. Collected in **Amendment · 29 Sep 2026**. **30 Sep 2026** (owner) — **the client mark is removed**: `clientMark`, `ProofClientMark` and the ClientMark render are gone. The company is named in the role line, and a logo under the person's name competed with the portrait beside it. Every `clientMark` reference below is superseded. A broader Proof overhaul is planned. **1 Oct 2026** (owner) — **the display quote leaves heading scale**: `--text-quote-lg` 43 → 34 (h3 scale, 34 / 28 / 22), the figure loses its body-font measure cap, display sets at `--measure-lead`, an optional `quote.source` link joins the attribution row, and the quote/figures split takes `--gap-section`. Collected in **Amendment · 1 Oct 2026**. |
+| **Amended**         | **28 Sep 2026** (tracker 2.12; rulings P1, P2; audit §3 Proof, §4) — an optional 1:1 `portrait` through `Media`, an optional `clientMark` through `ClientMark`, `role` optional, and the quote brought onto ch10 B2.07's site blockquote: italic, a 6px rule beside the quote only, the attribution beneath with the name on the quote's first letter, and a white rule on blue. Every section below is amended in place; the changes are collected in **Amendment · 28 Sep 2026** before the self-audit. **29 Sep 2026** (tracker 2.17, owner-approved) — a display scale (`--text-quote-lg`, `--text-stat-lg`), the shared checked date said once, the quote beside stacked figures at 2:1 from lg, and the specimen's client marks rendering at last. Collected in **Amendment · 29 Sep 2026**. **30 Sep 2026** (owner) — **the client mark is removed**: `clientMark`, `ProofClientMark` and the ClientMark render are gone. The company is named in the role line, and a logo under the person's name competed with the portrait beside it. Every `clientMark` reference below is superseded. A broader Proof overhaul is planned. **6 Oct 2026** (cmp-testimonials) — six arrangements, `align`, `rating`, the featured portrait radius and the centred mark; collected in **Amendment · 6 Oct 2026**. **1 Oct 2026** (owner) — **the display quote leaves heading scale**: `--text-quote-lg` 43 → 34 (h3 scale, 34 / 28 / 22), the figure loses its body-font measure cap, display sets at `--measure-lead`, an optional `quote.source` link joins the attribution row, and the quote/figures split takes `--gap-section`. Collected in **Amendment · 1 Oct 2026**. |
 
 The owner accepted the shared component identity in section 17 question 1. The public API, folder,
 token prefix and specimen route therefore use `Proof` rather than separate Testimonial and Stat
@@ -763,6 +763,36 @@ Two causes, both fixed here, and a rule that comes out of them.
    already shown beside the quote.
 5. **Split gap.** Quote beside figures takes `--gap-section` (CLAUDE.md § gap scale, rule 2).
 6. Display wraps `pretty`, not balanced — ch10: quotes wrap pretty.
+
+## Amendment · 6 Oct 2026 (cmp-testimonials: the G family)
+
+Supersedes, where they conflict: § 3's `arrangement: 'display' | 'compact'`, § 4's "one size, two
+arrangements", § 17's "no set arrangement", and § 14 Don'ts 11 (radius) and 12 (no Brandeis on a
+value), which the owner's 6 Oct blue ruling (visual-direction § 4) and § 5.3's radius table replace.
+
+- **Six arrangements.** `display` (now with `align: 'start' | 'center'` and an optional `rating`),
+  `compact` (optional `rating`), and four new ones: `featured` (1:1 portrait in the 5 of [5, 7] at
+  `section`, optional `footer` slot; without a portrait it falls back to `display`, footer kept),
+  `case` (`work` slot in 381 beside the compact quote in 763, tops aligned, optional `rating`),
+  `group` (2 or 3 quotes, 64 portrait above each quote, `gutter` across from lg, `column` down below
+  it), and `rating` (score at `--text-stat-lg`, the badge as its platform line, one centred display
+  quote). Slots take what a pattern may not import: BlockCard (`work`), CtaRow (`footer`). The
+  testimonial slider is a composition: `Slider perView={1}` of `featured` slides.
+- **`ProofRating`** `{ score, platform, href, mark? }`. Proof composes the RatingBadge a `block`
+  under the attribution, indented to the name when the attribution is. Real ratings only beside real
+  quotes (§ 5.8).
+- **Centred quote.** The rule leaves the quote's side and sits above it as a 48 × 6 mark
+  (`--proof-mark-inline-size`, `--proof-quote-rule`); the quote balances; attribution centres.
+  The rating-led quote draws no mark — the score marks the top.
+- **Tokens.** `--proof-portrait-radius` (8, featured) beside `--proof-portrait-radius-compact` (4);
+  portraits have no frame. `--proof-mark-inline-size` 48. No new colour token: the score reads
+  `--proof-value-ink`.
+- **Type.** The quote's size is the arrangement's: display role in display, featured and rating;
+  reading role (28) in compact, case and group.
+- **RatingBadge** gains `showScore` (default true). `false` prints "Rated on Clutch" and keeps the
+  score in visually hidden text after the platform, so the name starts with the visible words.
+- **Specimens.** `/design/kit/testimonials` (every band at 1470 and 390, fold-measured); `/design/proof`
+  § 19 renders the new arrangements on all four surfaces.
 
 ## Appendix · Self-audit
 
