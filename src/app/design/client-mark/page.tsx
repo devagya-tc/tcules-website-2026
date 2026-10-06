@@ -1,4 +1,11 @@
-import { ClientMark, Cluster, Layout, Section, type ClientMarkProps } from '@/components';
+import {
+  ClientMark,
+  Cluster,
+  Layout,
+  Section,
+  type ClientMarkProps,
+  type LayoutProps,
+} from '@/components';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
@@ -76,10 +83,10 @@ const STRIP: readonly Mark[] = [
   INCLUUDE,
 ];
 
-/* The recommended composition's set: a count that fills every row. Eight fills 2 × 4 at base
-   and 4 × 2 from lg; nine would leave one mark alone at base. Incluude is the one held back only
-   because it is last in the strip's order — which mark waits is a content decision. */
-const GRID_SET: readonly Mark[] = STRIP.slice(0, 8);
+/* The grid's set: all nine (visual-direction § 5.9, 6 Oct 2026). Nine fill 3 × 3 at md, sit 5 + 4
+   from lg and leave the last mark alone at base — a start-aligned grid reads that as the end of the
+   list, not a hole. The kit's H band (/design/kit/logos) composes it in every placement. */
+const GRID_SET: readonly Mark[] = STRIP;
 
 /* Fictional stress shapes — see the header. */
 const SQUARE: Mark = {
@@ -171,12 +178,20 @@ function Strip({ marks }: { marks: readonly Mark[] }) {
  * cell's start edge, so the first column lines up with the heading above it and every column
  * starts on a track line. justifyItems stays at its default (stretch) on purpose: the li fills
  * its track, which is what lets a mark wider than the track (LatitudePay, 160, in a ~139 cell at
- * 390) shrink to it via max-inline-size — a centred li would size to the mark and spill. Two tracks at base, four from lg, so a count of 4, 8 or 12 fills every row. md keeps 2:
- * four tracks in the 704 column are ~140 wide, narrower than the widest marks.
+ * 390) shrink to it via max-inline-size — a centred li would size to the mark and spill.
+ * {base: 2, md: 3, lg: 5} (§ 5.9): three tracks in the 704 column are ~202 wide and five in the
+ * 1240 column ~209, both wider than the widest mark. Inside a narrower track (the 763 body beside
+ * a head) the caller holds it at three; see the kit specimen.
  */
-function Grid({ marks }: { marks: readonly Mark[] }) {
+function Grid({
+  marks,
+  columns = { base: 2, md: 3, lg: 5 },
+}: {
+  marks: readonly Mark[];
+  columns?: LayoutProps['columns'];
+}) {
   return (
-    <Layout as="ul" columns={{ base: 2, lg: 4 }} colGap="stack" rowGap="stack" align="center">
+    <Layout as="ul" columns={columns} colGap="stack" rowGap="stack" align="center">
       {marks.map((mark) => (
         <li key={mark.name}>
           <ClientMark {...bare(mark)} />
@@ -217,8 +232,8 @@ export default function ClientMarkSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="Equal cells — a set that fills its rows"
-            note='The recommended composition when the count is known. Layout as="ul", columns {{ base: 2, lg: 4 }}, colGap and rowGap "stack", align "center", justifyItems left at stretch: one equal cell per mark, each at its cell’s start edge, so the columns line up with the heading. Eight marks fill 4 × 2 here and 2 × 4 at 390; the Cluster above, with nine, leaves 7 + 2 at 1440 and one alone at 390. Pick a count the columns divide — 4, 8 or 12 for {{ base: 2, lg: 4 }}; 6 or 12 for {{ base: 2, md: 3 }}. Still not a component: it is ClientMark × n in a Layout.'
+            title="Equal cells — the grid"
+            note='The grid of § 5.9. Layout as="ul", columns {{ base: 2, md: 3, lg: 5 }}, colGap and rowGap "stack", align "center", justifyItems left at stretch: one equal cell per mark, each at its cell’s start edge, so the columns line up with the heading. Nine marks sit 5 + 4 here, 3 × 3 at md and two to a row at 390. Still not a component: it is ClientMark × n in a Layout. Every H-band placement is composed at /design/kit/logos.'
           >
             <Grid marks={GRID_SET} />
           </Specimen>
@@ -362,10 +377,12 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The 326 column, equal cells"
-            note="The same eight in two tracks, ~139 wide. LatitudePay (160) is the one mark wider than its cell: it shrinks to the cell (max-inline-size: 100%) and letterboxes, never spilling into the gap."
+            note="The same nine in two tracks, ~139 wide. LatitudePay (160) is the one mark wider than its cell: it shrinks to the cell (max-inline-size: 100%) and letterboxes, never spilling into the gap."
           >
             <div className={s.trackMobile}>
-              <Grid marks={GRID_SET} />
+              {/* Two tracks at every width: the frame is 326 wide inside a wide window, so the
+                  viewport breakpoints would otherwise give it five. */}
+              <Grid marks={GRID_SET} columns={{ base: 2 }} />
             </div>
           </Specimen>
         </Layout>

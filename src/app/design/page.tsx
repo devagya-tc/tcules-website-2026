@@ -185,6 +185,16 @@ const SPECIMENS = [
     ],
   },
   {
+    tier: 'Kit',
+    items: [
+      {
+        href: '/design/kit/logos',
+        name: 'Kit · Client logos',
+        note: 'band H as a composition: centred strip, tint, grid beside a head, marks beside a real quote, a sourced figure, CtaRow',
+      },
+    ],
+  },
+  {
     tier: 'Templates',
     items: [
       {
