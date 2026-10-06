@@ -220,10 +220,15 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'studio-session-talk',
     aside2: 'team-laptops-table',
   },
+  /* design-engineering, fix round 1 (7 Oct 2026): B and K swapped. B's stylus-on-tablet frame was
+     40% out-of-focus sweater and repeated F's hands-sketching motif on a page arguing that static
+     screens are not enough; B is now two people at one running screen. K's sticky grid carried
+     legible scripture on the notes and a saturated yellow against the blue accent; K is a pair
+     reviewing a laptop, a landscape master that takes the 3:2 offer. The banner photo is dropped:
+     the page has no I band, and its whiteboard carries legible handwriting. */
   'design-engineering': {
-    b: 'stylus-tablet-sketch',
-    i: 'whiteboard-two-hands',
-    k: 'sticky-grid-minimal',
+    b: 'pair-at-laptop-sticky-wall',
+    k: 'pair-laptop-notebook',
     aside1: 'studio-whiteboard-crit',
     aside2: 'hands-sketches-markers',
   },

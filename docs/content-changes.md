@@ -243,3 +243,25 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 | — | `photos` stand-in pool | … `workshop-brick-room`, `hands-trackpad` | … `workshop-brick-room` (`hands-trackpad` is Product Design's B photo, reserved by § 5.6) |
 
 **Why.** The 1 Oct review: the page read as a document, with three bands over the fold (1572, 1387, 931). Each section now has its own kit shape, every band fits 1470 × 830 (tallest 788) and 390 (tallest 1499), and detail over budget moved to an accordion or the deep page. **Found in.** `kit/page-design-engineering`, 6 Oct 2026.
+
+### Design Engineering, fix round 1 (7 Oct 2026)
+
+**Page / section.** `/design/service-page/design-engineering` (`src/content/sources/fixtures/ideal/services/design-engineering.ts`; the page's photo row in `SERVICE_PHOTO_SLOTS`, `src/lib/photos.ts`).
+
+**What's needed.** Approve, rewrite or reject each edit. The page still runs 12 bands, now A, B, E (record), F, E (thread), G, C-pair, D (deliverables), K, D (list router), D-faq, L. Tallest band 795 at 1470 and 1634 at 390.
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| B pressures | lead | Product and frontend reasoning, held as one responsibility. | Four pressures a static screen never meets. We hold product and frontend reasoning as one responsibility. |
+| B pressures | tiles (2 → 4) | Real data, real waiting — Data runs past the layout drawn for it, and latency adds states nobody designed. · Permissions and contracts — Permissions remove actions the design assumed. APIs make the wrong behaviour easiest. | Real data — It runs past the layout that was drawn for it. · Real waiting — Latency adds states between the ones anybody designed. · Permissions — They remove actions the design assumed would be there. · Component APIs — They make the wrong behaviour the easiest one to build. (Four tiles fill the copy column; the counterweight field that sat in the empty space under two tiles is gone) |
+| E evidence | lead | Static screens are good evidence for hierarchy, flow and direction. Behaviour needs something that runs. | A screen settles hierarchy, flow and visual direction. These six questions need something that runs. |
+| E evidence | body | Matrix: To decide / A screen / Code, ten rows of ticks and crosses (Hierarchy, Flow, Visual direction both; Narrow widths and zoom, Data density, Drag and drop, Model response, Animation, Keyboard operation, Component constraints code only) | Record "Needs running code / What a screen leaves open": Narrow widths and zoom — Does the reading order survive a phone and 400% zoom? · Data density — Does the layout hold when the real dataset arrives? · Motion and drag — Does movement explain each change, and can a drag be undone? · Model response — What does the interface show while the model is still answering? · Keyboard operation — Can every action be reached and finished without a pointer? · Component constraints — Does the library make the intended behaviour easy to build? (The three rows a screen also answers move into the lead; Drag and drop and Animation merge into Motion and drag. The questions are NEW COPY) |
+| E thread | stage 3 title | Implementation contract | Contract (the only stop that wrapped) |
+| G proof | case | none | NEW: the quoted client's own case beside the quote: Auxentios · Industrial CPQ, "A quotation model from eight specialist interviews" (the same card Product Design's proof carries) |
+| D leaves | form | six icon tiles (C-text) | icon rows beside a photograph (D, ledger) |
+| D leaves | three bodies | Production-ready components and patterns, matched to the design both ways. · Responsive, keyboard and screen-reader acceptance, recorded against the decision. · What stays client-owned, stated, with documentation for the teams who continue. | Production-ready components, matched to the design both ways. · Responsive, keyboard and screen-reader checks, against the decision. · What your teams own next, stated and documented. |
+| D router | icons | monitor, code, widget, eye | none: the list router, linked rows under a start head |
+| L close | body | The implementation point where accepted product intent is weakening. | Name the point where accepted intent weakens. (one line at 1470) |
+| — | photos (`SERVICE_PHOTO_SLOTS`) | B `stylus-tablet-sketch` · I `whiteboard-two-hands` · K `sticky-grid-minimal` | B `pair-at-laptop-sticky-wall` · I none (no banner on the page) · K `pair-laptop-notebook` (landscape 3:2) |
+
+**Why.** The fix-round review: the same icon-title-body unit ran in three bands, two of them two bands apart; the matrix read as a spreadsheet and hid its code column at 390; the proof band set two alignment axes; B's photo was mostly out-of-focus sweater and repeated F's sketching motif; K's sticky notes carried legible scripture. **Found in.** `kit/page-design-engineering`, 7 Oct 2026.

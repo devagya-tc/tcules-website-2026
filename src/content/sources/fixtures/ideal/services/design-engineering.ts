@@ -14,16 +14,20 @@ const AUDIT = { label: 'Start with a Design-to-Code Audit', href: auditPath('des
  * field here is a layout.
  *
  *   hero        the claim
- *   pressures   what code meets that a static screen never does — B, two tiles, so the copy column
- *               has room for the display head and the counterweight field (§ 6.4 item 1)
- *   evidence    which questions a static screen answers and which need code — E, the Matrix
+ *   pressures   four pressures code meets that a static screen never does — B, four tiles filling
+ *               the copy column beside the pair at one screen (fix round 1: two tiles left a dead
+ *               field the counterweight texture was parked in, and it read as a missing image)
+ *   evidence    what only running code can settle — E, the Record: the screen's three answers are
+ *               the lead, the six code-only questions the sheet (fix round 1: a ten-row tick/cross
+ *               matrix read as a spreadsheet, and at 390 its code column scrolled off-screen)
  *   outputs     four kinds of output, each declared before it is built — F, beside the sketches
  *   thread      one decision kept alive across every form — E, a centred Thread, horizon at its foot
- *   proof       the client's words — G on tint, typographic, with the sourced rating
+ *   proof       the client's words beside that client's case — G on tint, one start axis
  *   work        two cases where code tested the decision — C-pair
- *   leaves      what the engagement leaves behind — C-text, six icon tiles under a centred head
- *   offer       the Design-to-Code Audit — K, beside the sticky grid
- *   routes      the four specialist services — the C-icon router, beside the studio crit
+ *   leaves      what the engagement leaves behind — D, icon rows beside the studio crit (fix round
+ *               1: as six icon tiles it was the router's shape two bands later)
+ *   offer       the Design-to-Code Audit — K, landscape, photo first on a phone
+ *   routes      the four specialist services — D, the list router: linked rows, head at the start
  *   questions   delivery, AI-written code and AI products — D-faq
  *   close       the form — L
  */
@@ -69,7 +73,7 @@ export const designEngineering: ServiceStory = {
       id: 'pressures',
       eyebrow: 'Where intent weakens',
       heading: 'Where screens run out',
-      lead: 'Product and frontend reasoning, held as one responsibility.',
+      lead: 'Four pressures a static screen never meets. We hold product and frontend reasoning as one responsibility.',
       blocks: [
         {
           kind: 'signals',
@@ -77,13 +81,23 @@ export const designEngineering: ServiceStory = {
           items: [
             {
               icon: 'database',
-              title: 'Real data, real waiting',
-              body: 'Data runs past the layout drawn for it, and latency adds states nobody designed.',
+              title: 'Real data',
+              body: 'It runs past the layout that was drawn for it.',
+            },
+            {
+              icon: 'clock-circle',
+              title: 'Real waiting',
+              body: 'Latency adds states between the ones anybody designed.',
             },
             {
               icon: 'lock',
-              title: 'Permissions and contracts',
-              body: 'Permissions remove actions the design assumed. APIs make the wrong behaviour easiest.',
+              title: 'Permissions',
+              body: 'They remove actions the design assumed would be there.',
+            },
+            {
+              icon: 'code',
+              title: 'Component APIs',
+              body: 'They make the wrong behaviour the easiest one to build.',
             },
           ],
         },
@@ -94,28 +108,47 @@ export const designEngineering: ServiceStory = {
       id: 'code-answers',
       eyebrow: 'Static or coded',
       heading: 'Code answers what a screen cannot',
-      lead: 'Static screens are good evidence for hierarchy, flow and direction. Behaviour needs something that runs.',
+      lead: 'A screen settles hierarchy, flow and visual direction. These six questions need something that runs.',
       more: {
         label: 'What a coded slice settles',
         href: servicePath('design-engineering/coded-prototyping'),
       },
       blocks: [
         {
-          kind: 'matrix',
-          keyColumn: 'To decide',
-          columns: ['A screen', 'Code'],
-          labels: { yes: 'Answers it', no: 'Does not' },
-          rows: [
-            { header: 'Hierarchy', marks: [true, true] },
-            { header: 'Flow', marks: [true, true] },
-            { header: 'Visual direction', marks: [true, true] },
-            { header: 'Narrow widths and zoom', marks: [false, true] },
-            { header: 'Data density', marks: [false, true] },
-            { header: 'Drag and drop', marks: [false, true] },
-            { header: 'Model response', marks: [false, true] },
-            { header: 'Animation', marks: [false, true] },
-            { header: 'Keyboard operation', marks: [false, true] },
-            { header: 'Component constraints', marks: [false, true] },
+          kind: 'record',
+          meta: 'Needs running code',
+          title: 'What a screen leaves open',
+          items: [
+            {
+              field: 'Narrow widths and zoom',
+              question: 'Does the reading order survive a phone and 400% zoom?',
+              icon: 'smartphone',
+            },
+            {
+              field: 'Data density',
+              question: 'Does the layout hold when the real dataset arrives?',
+              icon: 'database',
+            },
+            {
+              field: 'Motion and drag',
+              question: 'Does movement explain each change, and can a drag be undone?',
+              icon: 'refresh',
+            },
+            {
+              field: 'Model response',
+              question: 'What does the interface show while the model is still answering?',
+              icon: 'cpu',
+            },
+            {
+              field: 'Keyboard operation',
+              question: 'Can every action be reached and finished without a pointer?',
+              icon: 'key',
+            },
+            {
+              field: 'Component constraints',
+              question: 'Does the library make the intended behaviour easy to build?',
+              icon: 'widget',
+            },
           ],
         },
       ],
@@ -162,7 +195,7 @@ export const designEngineering: ServiceStory = {
           items: [
             { title: 'Open question', body: 'What static review could not settle.' },
             { title: 'Coded probe', body: 'The narrowest code that answers it.' },
-            { title: 'Implementation contract', body: 'The states and API it requires.' },
+            { title: 'Contract', body: 'The states and API it requires.' },
             { title: 'Running behaviour', body: 'The decision, inside the product.' },
             { title: 'Review finding', body: 'Each difference, classified.' },
             { title: 'Accepted decision', body: 'Kept, with its evidence.' },
@@ -183,6 +216,14 @@ export const designEngineering: ServiceStory = {
             text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
             name: 'Ashok Mohanty',
             company: 'Auxentios',
+          },
+          /* The quoted client's own case beside the quote (fix round 1): the typographic quote
+             centred under a start-aligned head was two axes in one band, with large empty tint. */
+          case: {
+            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+            client: 'Auxentios · Industrial CPQ',
+            title: 'A quotation model from eight specialist interviews',
+            body: 'Research across specialist roles, carried into a product model and component-led interface work.',
           },
           rating: CLUTCH_RATING,
         },
@@ -222,8 +263,9 @@ export const designEngineering: ServiceStory = {
       lead: 'A prototype is never passed off as production.',
       blocks: [
         {
-          kind: 'signals',
-          columns: 3,
+          kind: 'ledger',
+          columns: 2,
+          marker: 'icon',
           items: [
             {
               icon: 'monitor',
@@ -233,7 +275,7 @@ export const designEngineering: ServiceStory = {
             {
               icon: 'widget',
               title: 'Frontend components',
-              body: 'Production-ready components and patterns, matched to the design both ways.',
+              body: 'Production-ready components, matched to the design both ways.',
             },
             {
               icon: 'database',
@@ -243,7 +285,7 @@ export const designEngineering: ServiceStory = {
             {
               icon: 'checklist',
               title: 'Acceptance records',
-              body: 'Responsive, keyboard and screen-reader acceptance, recorded against the decision.',
+              body: 'Responsive, keyboard and screen-reader checks, against the decision.',
             },
             {
               icon: 'document-text',
@@ -253,7 +295,7 @@ export const designEngineering: ServiceStory = {
             {
               icon: 'flag',
               title: 'Hand-off boundary',
-              body: 'What stays client-owned, stated, with documentation for the teams who continue.',
+              body: 'What your teams own next, stated and documented.',
             },
           ],
         },
@@ -280,10 +322,11 @@ export const designEngineering: ServiceStory = {
       lead: 'Once you know where intent is lost, a narrower service settles it faster.',
       blocks: [
         {
+          /* No icons (fix round 1): the list router, linked rows under a start head. As icon cards
+             it was the third icon-title-body set on the page, two bands after the deliverables. */
           kind: 'router',
           items: [
             {
-              icon: 'monitor',
               when: 'When a live behaviour, a dataset or a dependency must be tested in code.',
               route: {
                 label: 'Coded Prototyping',
@@ -291,7 +334,6 @@ export const designEngineering: ServiceStory = {
               },
             },
             {
-              icon: 'code',
               when: 'When a settled interaction needs a contract the team can build to.',
               route: {
                 label: 'Design to Code',
@@ -299,7 +341,6 @@ export const designEngineering: ServiceStory = {
               },
             },
             {
-              icon: 'widget',
               when: 'When shared coded foundations keep drifting from the design.',
               route: {
                 label: 'Frontend Design Systems',
@@ -307,7 +348,6 @@ export const designEngineering: ServiceStory = {
               },
             },
             {
-              icon: 'eye',
               when: 'When the running product must be tested against its intended behaviour.',
               route: {
                 label: 'Implementation QA',
@@ -355,7 +395,7 @@ export const designEngineering: ServiceStory = {
   close: {
     eyebrow: 'Start a project',
     heading: 'Show us where product intent is getting lost',
-    body: 'The implementation point where accepted product intent is weakening.',
+    body: 'Name the point where accepted intent weakens.',
     points: [
       {
         label: 'Send the point where intent is lost',
