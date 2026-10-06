@@ -1,66 +1,103 @@
-import { BrandMark, Cluster, Icon, Layout, RatingBadge } from '@/components';
+import {
+  BrandMark,
+  ClientMark,
+  Cluster,
+  Icon,
+  Layout,
+  Media,
+  RatingBadge,
+  Stat,
+} from '@/components';
 import {
   Accordion,
   BlockCard,
   BlockCardSet,
   Callout,
+  Contrast,
+  ContentSectionText,
   DataTable,
   ListCard,
   ProcessFlow,
   Proof,
+  ReadDown,
+  Steps,
+  Thread,
+  type BlockCardSetItem,
   type ListCardForm,
   type ListCardSize,
 } from '@/patterns';
-import type { StoryBlock, StoryCover, StorySlot } from '@/lib/service-story';
+import { HEAD_TRACK } from '@/lib/image-sizes';
+import { getKitPhoto, type PhotoId } from '@/lib/photos';
+import type {
+  ServiceStory,
+  StoryBlock,
+  StoryCover,
+  StoryRating,
+  StorySlot,
+} from '@/lib/service-story';
 
-import { Bridge, Matrix, Parts, Record, Slice, Spectrum, Thread } from './Diagrams';
+import { Bridge, Matrix, Parts, Record, Slice, Spectrum } from './Diagrams';
 import { paragraph } from './text';
 import styles from './Blocks.module.css';
 
-type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
+/**
+ * The service page's blocks, as kit units (cmp-service-pages, 6 Oct 2026). Each StoryBlock is a
+ * JOB, and each job renders as the kit unit that does it — Steps (F), ReadDown (D), the icon router
+ * (C-icon), BlockCardSet (C-pair, M), Proof `case` (G-case), Contrast (N), Thread (E), a ClientMark
+ * strip (H), Stat (the D aside) — so this file draws no tile, row or card of its own. What stays
+ * template-local is the six diagrams in Diagrams.tsx (Spectrum, Matrix, Record, Parts, Slice,
+ * Bridge): each is one service page's argument, not a reusable unit (visual-direction § 3.4 E).
+ *
+ * Every word a reader sees comes from the story: the case link and the scope key are the story's
+ * `labels`, so the template carries no page copy of its own (ServicePage audit, 6 Oct 2026).
+ */
 
-/* What is NOT in this file (30 Sep 2026 pass): a side-by-side pair of two text items. A key beside
-   its sentence, a title beside its one-line body, a number beside its paragraph — each read as two
-   columns of one thing. Two tracks are for two blocks that each hold several items; anything
-   smaller stacks. */
+export type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
+export type Labels = ServiceStory['labels'];
 
 /* ── Item sets ────────────────────────────────────────────────────────────────
-   Signals, steps, ledgers and routes are four JOBS and one ITEM. Each is a set of named things —
-   a marker, a title, a line under it, sometimes a destination — and that item is ListCard. What the
-   job decides is the set: one column or a grid, ordered or not, which marker. It never decides the
-   item's anatomy, which is how this file came to draw four tiles of its own (1 Oct 2026, owner:
-   "we have similar components that i think can be used here").
-
-   One rule picks the form. A set in one column is rows; a set in a grid is tiles. A row closes on
-   its rule and keeps its marker beside the copy; a tile opens on its rule and stands its marker
-   above, because in a grid only the tops of unequal items line up.
-
-   Rows of tiles are `column` (64) apart, the row seam of every borderless card set (CLAUDE.md's
-   gap table; visual-direction § 1.2). A tile has no box, so at `stack` (48) a tile's last line ran
-   into the opening rule of the one under it and the grid read as one field. Ruled rows take
-   `none`: the rule and the row's own padding are their seam.
-
-   One rule picks the type step (visual-direction § 7.2). A row cannot see its siblings, so the set
-   passes it: tiles, and any set of four rows or more, take `sm`; a shorter set of rows keeps `md`
-   (h4 over body). At `sm` a tile sets h5 over body-sm and a row sets h5 over body: the title steps
-   with the count, and a row's body keeps the reading size its wide measure needs (visual-direction
-   § 7.2, 6 Oct 2026). Card titles sit at least two rungs under the band's h2. */
+   A set in a grid is tiles; a set in one column is rows. Tiles take `sm`; rows of four or more take
+   `sm` (h5 over body), shorter row sets keep `md` (visual-direction § 7.2). */
 const SMALL_SET_FROM = 4;
 
 function setSize(count: number, form: ListCardForm): ListCardSize {
   return form === 'tile' || count >= SMALL_SET_FROM ? 'sm' : 'md';
 }
 
+/** A photograph that fills a head-track aside box (ContentSection `asideFill`). */
+export function AsidePhoto({ id }: { id: PhotoId }) {
+  return <Media image={getKitPhoto(id)} fit="fill" sizes={HEAD_TRACK} />;
+}
+
+/** A card's cover as BlockCard's media slot: never an empty frame (§ 5.7). */
+function coverMedia(cover: StoryCover | undefined) {
+  return cover ? { type: 'image' as const, image: cover } : undefined;
+}
+
+/** The sourced rating as its pill: the score, the platform's mark and the star. */
+function RatingPill({ rating }: { rating: StoryRating }) {
+  return (
+    <RatingBadge
+      score={rating.score}
+      platform={rating.platform}
+      href={rating.href}
+      icon={<Icon name="star" size="sm" />}
+      mark={<BrandMark name={rating.mark} />}
+    />
+  );
+}
+
 /* ── Signals ──────────────────────────────────────────────────────────────────
-   A thing a reader can see, then what it may mean: the symptom is the title, the hypothesis the
-   body. Tiles, because the point is to see them side by side as one instrument with N readings. */
-function Signals({ block }: { block: Of<'signals'> }) {
+   The symptom is the title, the hypothesis the body: tiles, a blue glyph over each. In B's copy
+   column they are two up from md and a `stack` apart down (the media-split tiles); stacked under a
+   head they run as many across as the set asks for at lg, a `column` apart (the row seam, § 1.2). */
+export function Signals({ block, inSplit }: { block: Of<'signals'>; inSplit?: boolean }) {
   return (
     <Layout
       as="ul"
-      columns={{ base: 1, md: 2, lg: block.columns }}
+      columns={inSplit ? { base: 1, md: 2 } : { base: 1, md: 2, lg: block.columns }}
       colGap="gutter"
-      rowGap="column"
+      rowGap={inSplit ? 'stack' : 'column'}
     >
       {block.items.map((item) => (
         <ListCard
@@ -77,339 +114,282 @@ function Signals({ block }: { block: Of<'signals'> }) {
   );
 }
 
-/* ── Steps ────────────────────────────────────────────────────────────────────
-   A method, read top to bottom (1 Oct 2026, owner): ListCard rows in an <ol>, the number as the
-   marker, the step's name beside the line that says what happens in it. It was five tiles across
-   a row, and a row is how this page shows PEERS — five 220px columns broke every title onto two
-   lines and read as five options to compare rather than one order to follow. The worked example,
-   when there is one, is a Callout above the steps: the scene they are walked through. */
-function Steps({ block }: { block: Of<'steps'> }) {
+/* ── Steps (F) ────────────────────────────────────────────────────────────────
+   The approved method (§ 3.6): Steps, numbered rows read top to bottom, the worked example as an
+   `example` Callout above them when the story has one. */
+export function StepsBlock({ block }: { block: Of<'steps'> }) {
+  const steps = <Steps steps={block.items} />;
+  if (!block.example) return steps;
   return (
     <Layout rowGap="stack">
-      {block.example ? (
-        <Callout label={block.example.label} html={paragraph(block.example.body)} />
-      ) : null}
-      <Layout as="ol" rowGap="none">
-        {block.items.map((item, index) => (
-          <ListCard
-            key={item.title}
-            size={setSize(block.items.length, 'row')}
-            titleAs="h3"
-            title={item.title}
-            body={item.body}
-            marker={{ type: 'number', value: index + 1 }}
-          />
-        ))}
-      </Layout>
+      <Callout
+        tone="example"
+        label={block.example.label}
+        html={paragraph(block.example.body)}
+      />
+      {steps}
     </Layout>
   );
 }
 
-/* ── Ledger ───────────────────────────────────────────────────────────────────
-   Named things with one marker each — a glyph for a kind of artefact, a number for a position. One
-   column is a list of rows; two or three columns is a grid of tiles. */
-function Ledger({ block }: { block: Of<'ledger'> }) {
-  const single = block.columns === 1;
-  const columns =
-    block.columns === 1
-      ? undefined
-      : block.columns === 2
-        ? { base: 1, md: 2 }
-        : { base: 1, md: 2, lg: 3 };
-  const set = (
-    <Layout
-      as={block.marker === 'number' ? 'ol' : 'ul'}
-      columns={columns}
-      colGap={single ? undefined : 'gutter'}
-      rowGap={single ? 'none' : 'column'}
-    >
-      {block.items.map((item, index) => (
+/* ── Ledger (D) ───────────────────────────────────────────────────────────────
+   Named things with a glyph each read down as ReadDown rows: one column to three rows, two from
+   four (§ 1.4 rule 8). A read-down set never exceeds six, so a longer ledger is a grid of tiles
+   (the set reads across, two or three up), and a story that hits it should be cut to the six that
+   matter. A numbered ledger keeps ListCard's numbered rows. A ledger with a heading names its set
+   with an h3 over it. */
+const READ_DOWN_MAX = 6;
+
+export function Ledger({ block }: { block: Of<'ledger'> }) {
+  const tiles = block.marker !== 'number' && block.items.length > READ_DOWN_MAX;
+  const rows = tiles ? (
+    <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
+      {block.items.map((item) => (
         <ListCard
           key={item.title}
-          {...(single ? { arrangement: 'stacked' as const } : { form: 'tile' as const })}
-          size={setSize(block.items.length, single ? 'row' : 'tile')}
+          form="tile"
+          size="sm"
           titleAs={block.heading ? 'h4' : 'h3'}
           title={item.title}
           body={item.body || undefined}
           marker={
-            block.marker === 'none'
-              ? undefined
-              : block.marker === 'icon' && item.icon
-                ? { type: 'icon', name: item.icon }
-                : { type: 'number', value: index + 1 }
+            block.marker === 'icon' && item.icon ? { type: 'icon', name: item.icon } : undefined
           }
         />
       ))}
     </Layout>
+  ) : block.marker === 'number' ? (
+    <Layout as="ol" rowGap="none">
+      {block.items.map((item, index) => (
+        <ListCard
+          key={item.title}
+          arrangement="stacked"
+          size={setSize(block.items.length, 'row')}
+          titleAs={block.heading ? 'h4' : 'h3'}
+          title={item.title}
+          body={item.body || undefined}
+          marker={{ type: 'number', value: index + 1 }}
+        />
+      ))}
+    </Layout>
+  ) : (
+    <ReadDown
+      columns={block.items.length > 3 ? 2 : 1}
+      rows={block.items.map((item) => ({
+        title: item.title,
+        body: item.body || undefined,
+        icon: block.marker === 'icon' ? item.icon : undefined,
+      }))}
+    />
   );
-  /* A heading when the set is a sub-part of its section — the worked examples under a comparison —
-     so the reader is told what the set is before reading it, rather than meeting a run of questions
-     with no frame. */
-  if (!block.heading) return set;
-  /* One column with a heading is a split: the heading in the narrow leading track, the rows reading
-     down beside it (1 Oct 2026, owner: "header on left and questions as a list on right"). A list
-     reads down, so it can stand beside its heading — the same test ContentSection's `beside` uses.
-     A grid with a heading stacks, because a grid reads across. */
-  if (single) {
-    return (
-      <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="block" align="start">
-        <h3 className={styles.setHeading}>{block.heading}</h3>
-        {set}
-      </Layout>
-    );
-  }
+  if (!block.heading) return rows;
   return (
     <Layout rowGap="block">
       <h3 className={styles.setHeading}>{block.heading}</h3>
-      {set}
+      {rows}
     </Layout>
   );
 }
 
 /* ── Router ───────────────────────────────────────────────────────────────────
-   "Which one is mine?" One column of linked rows, split: the service on the left, the condition
-   that sends you there on the right, the arrow at the end. The condition is the longer column and
-   the one a reader scans; the service is the row's name, because it is where the row goes — a
-   link is named by its destination. The non-service route (an audit, a self-check) is the last
-   row, for the reader who cannot name their condition yet. */
-function Router({ block }: { block: Of<'router'> }) {
-  const size = setSize(block.items.length + (block.also ? 1 : 0), 'row');
+   "Which one is mine?" With a glyph on every route, the C-icon router (cmp-services): linked icon
+   cards two across in the body track, the service as the card's name and the condition that sends
+   you there as its body. Without, the list router: linked ListCard rows with the arrow cue. The
+   non-service route (an audit) is the last item, for the reader who cannot name the condition. */
+export function Router({ block }: { block: Of<'router'> }) {
+  const all = [
+    ...block.items.map((item) => ({ when: item.when, link: item.route, icon: item.icon })),
+    ...(block.also ? [block.also] : []),
+  ];
+  if (all.every((item) => item.icon)) {
+    const items: BlockCardSetItem[] = all.map((item) => ({
+      id: item.link.href,
+      icon: item.icon,
+      title: item.link.label,
+      body: item.when,
+      href: item.link.href,
+    }));
+    return <BlockCardSet items={items} lead="none" across={2} />;
+  }
+  const size = setSize(all.length, 'row');
   return (
     <Layout as="ul" rowGap="none">
-      {block.items.map((item) => (
+      {all.map((item) => (
         <ListCard
-          key={item.route.href}
+          key={item.link.href}
           size={size}
           titleAs="h3"
-          title={item.route.label}
+          title={item.link.label}
           body={item.when}
-          href={item.route.href}
+          href={item.link.href}
         />
       ))}
-      {block.also ? (
-        <ListCard
-          size={size}
-          titleAs="h3"
-          title={block.also.link.label}
-          body={block.also.when}
-          href={block.also.link.href}
-        />
-      ) : null}
     </Layout>
   );
 }
 
-/* A card's cover as BlockCard's media slot: the real cover or its stand-in (standIns.ts), and no
-   slot at all without one — never an empty frame (visual-direction § 5.7). */
-function coverMedia(cover: StoryCover | undefined) {
-  return cover ? { type: 'image' as const, image: cover } : undefined;
-}
-
-/* ── Cases ────────────────────────────────────────────────────────────────────
-   BlockCardSet, unchanged: it features the first card and lays the rest out. The page's
-   contribution is the copy — what the case shows for THIS service — and the boundary note.
-
-   The set and the note are a `stack` (48) apart, not a `gutter` (32): `gutter` separates peers
-   inside a set, and this seam is block to block (visual-direction § 1.1, S4). */
-function Cases({ block }: { block: Of<'cases'> }) {
+/* ── Cases (C-pair, M) ────────────────────────────────────────────────────────
+   BlockCardSet with `lead="none"`, peers and never a featured first card (§ 1.4 rule 4): two cards
+   are the C-pair at 3:2 beside the head, three or more the M set at 16:9 under a centred head. The
+   boundary note is the C-pair's CtaRow note, or a Callout a `stack` under the M set (§ 1.1 S4). */
+export function Cases({
+  block,
+  labels,
+  withNote,
+}: {
+  block: Of<'cases'>;
+  labels: Labels;
+  withNote: boolean;
+}) {
+  const set = (
+    <BlockCardSet
+      lead="none"
+      items={block.items.map((item) => ({
+        id: item.slug,
+        eyebrow: item.client,
+        title: item.title,
+        body: item.body,
+        href: item.href,
+        ctaLabel: labels.caseCta,
+        media: coverMedia(item.cover),
+      }))}
+    />
+  );
+  if (!withNote || !block.note) return set;
   return (
     <Layout rowGap="stack">
-      <BlockCardSet
-        items={block.items.map((item) => ({
-          id: item.slug,
-          eyebrow: item.client,
-          title: item.title,
-          body: item.body,
-          href: item.href,
-          ctaLabel: 'Read the case',
-          media: coverMedia(item.cover),
-        }))}
-      />
-      {block.note ? <Callout label="Scope" html={paragraph(block.note)} /> : null}
+      {set}
+      <Callout label={labels.scope} html={paragraph(block.note)} />
     </Layout>
   );
 }
 
-/* ── Fit ──────────────────────────────────────────────────────────────────────
-   Two lists that mean opposite things. The glyph carries the polarity (check-circle and
-   close-circle, ch04's fixed choices) in the text's own ink — never green and red. */
-function FitList({
-  heading,
-  items,
-  glyph,
-}: {
-  heading: string;
-  items: readonly string[];
-  glyph: 'check-circle' | 'close-circle';
-}) {
-  return (
-    <Layout rowGap="block">
-      <h3 className={styles.listHeading}>{heading}</h3>
-      <Layout as="ul" rowGap="none" className={styles.rows}>
-        {items.map((item) => (
-          <li key={item} className={styles.rowTight}>
-            <Cluster nowrap colGap="text" align="start">
-              <span
-                className={glyph === 'check-circle' ? styles.glyphYes : styles.glyphNo}
-                aria-hidden="true"
-              >
-                <Icon name={glyph} size="xl" />
-              </span>
-              <span className={styles.rowText}>{item}</span>
-            </Cluster>
-          </li>
-        ))}
-      </Layout>
-    </Layout>
-  );
-}
-
-function Fit({ block }: { block: Of<'fit'> }) {
-  return (
-    <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack" align="start">
-      <FitList heading={block.yes.heading} items={block.yes.items} glyph="check-circle" />
-      <FitList heading={block.no.heading} items={block.no.items} glyph="close-circle" />
-    </Layout>
-  );
-}
-
-/* ── Proof ────────────────────────────────────────────────────────────────────
-   A quote is a claim about a relationship; the case it came from is where a reader checks it.
-
-   With a case: the WORK first, then what the client said about it (1 Oct 2026, owner). The case
-   card leads in the narrow track and carries the band's image, so the eye enters on the work; the
-   quote follows in the wide track at the compact size (28) — a quote beside something takes the
-   reading size (Proof.md, Amendment 1 Oct). A split, so --gap-section; tops aligned.
-
-   Without a case: the quote ALONE, wide, at display (34). */
-function ProofBlock({ block }: { block: Of<'proof'> }) {
+/* ── Proof (G) ────────────────────────────────────────────────────────────────
+   With a case: G-case, the WORK first, then what the client said (§ 3.6, owner 1 Oct) — Proof's
+   `case` arrangement, the case card in the 381 track and the quote in the 763, the score pinned
+   under the attribution. Without one: the typographic quote, centred, with its score. No portrait:
+   a stock face beside a real name is a fabricated likeness (§ 5.8). */
+export function ProofBlock({ block, labels }: { block: Of<'proof'>; labels: Labels }) {
   const quote = {
     quoteHtml: paragraph(block.quote.text),
     name: block.quote.name,
     role: block.quote.role,
     company: block.quote.company,
-    portrait: block.quote.portrait,
+  };
+  const rating = block.rating && {
+    score: block.rating.score,
+    platform: block.rating.platform,
+    href: block.rating.href,
+    mark: block.rating.mark,
   };
   const caseCard = block.case;
-  if (!caseCard) return <Proof arrangement="display" quote={quote} />;
+  if (!caseCard) return <Proof quote={quote} align="center" rating={rating} />;
   return (
-    <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="stack" align="start">
-      <Layout as="ul" rowGap="none">
-        <BlockCard
-          eyebrow={caseCard.client}
-          title={caseCard.title}
-          body={caseCard.body}
-          href={caseCard.href}
-          ctaLabel="Read the case"
-          media={coverMedia(caseCard.cover)}
-          tracks={3}
-        />
-      </Layout>
-      {block.rating ? (
-        /* The client's words, then the market's score, as ONE piece of evidence: the badge sits a
-           block (24) under the attribution, the same beat as the quote to its attribution. It was
-           a stack (48) and read as a separate block floating below (1 Oct 2026, owner). One score
-           source, shared with the footer (fixtures/ratings.ts). */
-        <Layout rowGap="block">
-          <Proof arrangement="compact" quote={quote} />
-          {/* A Cluster around the badge so the grid cell does not stretch it across the column:
-              the parent decides where the badge sits, and the badge sizes to its content. */}
-          <Cluster>
-            <RatingBadge
-              score={block.rating.score}
-              platform={block.rating.platform}
-              href={block.rating.href}
-              icon={<Icon name="star" size="sm" />}
-              mark={<BrandMark name={block.rating.mark} />}
-            />
-          </Cluster>
+    <Proof
+      arrangement="case"
+      quote={quote}
+      rating={rating}
+      work={
+        <Layout as="ul" rowGap="none">
+          <BlockCard
+            eyebrow={caseCard.client}
+            title={caseCard.title}
+            body={caseCard.body}
+            href={caseCard.href}
+            ctaLabel={labels.caseCta}
+            media={coverMedia(caseCard.cover)}
+            tracks={3}
+          />
         </Layout>
-      ) : (
-        <Proof arrangement="compact" quote={quote} />
-      )}
+      }
+    />
+  );
+}
+
+/* ── Logos (H) ────────────────────────────────────────────────────────────────
+   The client marks as a centred strip (§ 5.9: ClientMark × n in a Cluster at `stack` both ways),
+   the sourced rating a `stack` under it, so a real mark sits beside a real figure (§ 5.8). */
+export function Logos({ block }: { block: Of<'logos'> }) {
+  return (
+    <Layout rowGap="stack" justifyItems="center">
+      <Cluster as="ul" colGap="stack" rowGap="stack" align="center" justify="center">
+        {block.marks.map((mark) => (
+          <li key={mark.name}>
+            <ClientMark {...mark} />
+          </li>
+        ))}
+      </Cluster>
+      {block.rating ? <RatingPill rating={block.rating} /> : null}
     </Layout>
   );
 }
 
-/* ── Stat ─────────────────────────────────────────────────────────────────────
-   The figure, what it counts, then the sentence that qualifies it — stacked, one reading order.
+/* ── Stat (D) ─────────────────────────────────────────────────────────────────
+   One figure is the head track's large thing (§ 3.3: D always has an aside); what the counted work
+   consisted of is the body, as ReadDown rows — unnumbered, because these are responsibilities, not
+   an order (1 Oct 2026). The sentence that qualifies the figure is the band's lead's job. */
+export function StatAside({ block }: { block: Of<'stat'> }) {
+  return <Stat value={block.value} label={block.label} />;
+}
 
-   With items, the figure and what the counted work consisted of are a SPLIT: the evidence in the
-   narrow leading track, the responsibilities beside it as unnumbered rows (1 Oct 2026). They were a
-   stat over eight numbered tiles, and the numbers did two jobs at once — 12 is a count, 01–08 were
-   ordinals on items with no order — so the eye read one numeric sequence that meant nothing. */
-function Stat({ block }: { block: Of<'stat'> }) {
-  const figure = (
-    <Layout rowGap="text" className={styles.stat}>
-      <Layout rowGap="tight">
-        <span className={styles.statValue}>{block.value}</span>
-        <span className={styles.key}>{block.label}</span>
-      </Layout>
-      <p className={styles.statBody}>{block.body}</p>
-    </Layout>
-  );
+export function StatRows({ block }: { block: Of<'stat'> }) {
   const items = block.items ?? [];
-  if (items.length === 0) return figure;
-  const size = setSize(items.length, 'row');
-  return (
-    <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="stack" align="start">
-      {figure}
-      <Layout as="ul" rowGap="none">
+  if (items.length === 0) {
+    return (
+      <ContentSectionText>
+        <p className={styles.statBody}>{block.body}</p>
+      </ContentSectionText>
+    );
+  }
+  if (items.length > READ_DOWN_MAX) {
+    return (
+      <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="column">
         {items.map((item) => (
           <ListCard
             key={item.title}
-            size={size}
+            form="tile"
+            size="sm"
             titleAs="h3"
             title={item.title}
             body={item.body}
           />
         ))}
       </Layout>
-    </Layout>
+    );
+  }
+  return (
+    <ReadDown
+      columns={items.length > 3 ? 2 : 1}
+      rows={items.map((item) => ({ title: item.title, body: item.body }))}
+    />
   );
 }
 
-/* ── Resources ────────────────────────────────────────────────────────────────
-   Where to read further, placed once, near the end, as its own section: BlockCards with the
-   content type as the eyebrow, each under its cover — a stand-in photograph until resources have
-   covers of their own (visual-direction § 5.2, § 5.7; fdn-media, 6 Oct 2026). A covered linked card
-   says it navigates by its cover and hover zoom, so the named cta renders only on a card that ends
-   up with no image. A row of links in the middle of an argument pulled
-   the reader out of it before the argument was made.
-
-   ALWAYS THREE TRACKS from lg, however many cards there are (1 Oct 2026). A card's width comes from
-   the page's grid, not from its count: two cards stretched to halves were 604px objects on a page
-   whose every other card set is 392, and the band read as a different kind of thing. Two cards
-   leave the third track open, which is the honest shape of two. Stacked under its heading, never
-   beside it — see ContentSection's `arrangement`.
-
-   Rows a `column` (64) apart, the row seam of every borderless card set (visual-direction § 1.2,
-   CLAUDE.md § the gap scale): down the grid each row is the next set of objects and must read as
-   separate. It was `stack` (48), the step BlockCardSet tried and rejected on 29 Sep. The cards keep
-   BlockCard's default `md` step: two or three across (§ 7.2). */
-function Resources({ block }: { block: Of<'resources'> }) {
-  const lg = 3;
+/* ── Resources (M) ────────────────────────────────────────────────────────────
+   Where to read further: linked covers, three tracks from lg whatever the count — a card's width
+   comes from the page's grid, not from its count (1 Oct 2026). */
+export function Resources({ block }: { block: Of<'resources'> }) {
   return (
-    <Layout as="ul" columns={{ base: 1, md: 2, lg }} colGap="gutter" rowGap="column" equalRows>
-      {block.items.map((item) => (
-        <BlockCard
-          key={item.href}
-          eyebrow={item.type}
-          title={item.title}
-          body={item.body}
-          href={item.href}
-          ctaLabel={item.cta}
-          media={coverMedia(item.cover)}
-          tracks={lg}
-        />
-      ))}
-    </Layout>
+    <BlockCardSet
+      lead="none"
+      across={3}
+      items={block.items.map((item) => ({
+        id: item.href,
+        eyebrow: item.type,
+        title: item.title,
+        body: item.body,
+        href: item.href,
+        ctaLabel: item.cta,
+        media: coverMedia(item.cover),
+      }))}
+    />
   );
 }
 
 /* ── Slot ─────────────────────────────────────────────────────────────────────
-   REVIEW MODE ONLY. Where an image should exist and does not yet. Never rendered on a shipped
-   page — a hole marked "image goes here" is the hole. */
+   REVIEW MODE ONLY (`?slots=1`): where an image should exist and does not yet. Never rendered on a
+   shipped page, so its keys are review chrome rather than page copy — they label the brief for the
+   person deciding whether to commission the image, and no reader of the page meets them. */
 export function Slot({ slot }: { slot: StorySlot }) {
   return (
     <aside
@@ -417,8 +397,6 @@ export function Slot({ slot }: { slot: StorySlot }) {
       data-ratio={slot.ratio ?? 'auto'}
       aria-label="Image recommendation"
     >
-      {/* What the image is for, then what is in it, then why it is here — the order a reviewer
-          decides in. The message leads at the lead role because it is the decision. */}
       <Layout rowGap="block">
         <span className={styles.key}>
           Image slot · {slot.kind}
@@ -443,22 +421,34 @@ export function Slot({ slot }: { slot: StorySlot }) {
   );
 }
 
-export function StoryBlockView({ block, slots }: { block: StoryBlock; slots: boolean }) {
+/**
+ * Any block, in a band that does not give it a role of its own: the body of an E band, or a block
+ * after the first in any band (a note under a set, a second diagram).
+ */
+export function StoryBlockView({
+  block,
+  labels,
+  slots,
+}: {
+  block: StoryBlock;
+  labels: Labels;
+  slots: boolean;
+}) {
   switch (block.kind) {
     case 'signals':
       return <Signals block={block} />;
     case 'steps':
-      return <Steps block={block} />;
+      return <StepsBlock block={block} />;
     case 'ledger':
       return <Ledger block={block} />;
     case 'router':
       return <Router block={block} />;
     case 'cases':
-      return <Cases block={block} />;
+      return <Cases block={block} labels={labels} withNote />;
     case 'fit':
-      return <Fit block={block} />;
+      return <Contrast yes={block.yes} no={block.no} />;
     case 'proof':
-      return <ProofBlock block={block} />;
+      return <ProofBlock block={block} labels={labels} />;
     case 'spectrum':
       return <Spectrum block={block} />;
     case 'table':
@@ -488,11 +478,17 @@ export function StoryBlockView({ block, slots }: { block: StoryBlock; slots: boo
     case 'bridge':
       return <Bridge block={block} />;
     case 'thread':
-      return <Thread block={block} />;
+      return <Thread stages={block.items} loop={block.loop} />;
+    case 'logos':
+      return <Logos block={block} />;
     case 'stat':
-      return <Stat block={block} />;
+      return <StatRows block={block} />;
     case 'faq':
-      return <Accordion items={block.items} />;
+      return (
+        <ContentSectionText>
+          <Accordion items={block.items} />
+        </ContentSectionText>
+      );
     case 'note':
       return <Callout label={block.label} html={block.html} />;
     case 'resources':

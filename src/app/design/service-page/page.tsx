@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Layout, Section } from '@/components';
 import { getIdealServiceStory, idealServiceSlugs } from '@/content';
 import { ListCard } from '@/patterns';
+import { designServicePagePath } from '@/lib/routes';
 
 export const metadata: Metadata = {
   title: 'ServicePage | Design',
@@ -34,7 +35,7 @@ export default function ServicePageIndex() {
               title={story.name}
               body={story.hero.title}
               titleAs="h3"
-              href={`/design/service-page/${story.slug}`}
+              href={designServicePagePath(story.slug)}
             />
           ))}
         </Layout>

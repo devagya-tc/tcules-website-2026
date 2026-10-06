@@ -46,6 +46,23 @@ export type StoryGlyph =
 
 export type StoryLink = { label: string; href: string };
 
+/** A third-party rating, read from its source (fixtures/ratings.ts) — the market's score. */
+export type StoryRating = {
+  platform: string;
+  mark: 'clutch' | 'linkedin' | 'youtube';
+  score: string;
+  href: string;
+};
+
+/** A client's mark: the SVG, its viewBox and its recorded weight correction (ch05 § 10). */
+export type StoryMark = {
+  name: string;
+  src: string;
+  width: number;
+  height: number;
+  correction?: number;
+};
+
 /**
  * A card's cover image: the case study's real cover (resolved by the page from the listing), or a
  * catalogue photograph standing in for one that does not exist yet (visual-direction § 5.7).
@@ -130,10 +147,12 @@ export type StoryBlock =
   /** Which route to take, chosen by the condition you are in. Condition first, route second. */
   | {
       kind: 'router';
-      items: readonly { when: string; route: StoryLink }[];
+      /** A glyph on EVERY route (and on `also`) lets the template set the router as icon cards
+          beside a photograph (the C-icon router, cmp-services); without one on each it is a list. */
+      items: readonly { when: string; route: StoryLink; icon?: StoryGlyph }[];
       /** A route that is not a service — an audit, a self-assessment — for the reader who cannot
           yet name their condition. Leads the set when it would otherwise leave a hole. */
-      also?: { when: string; link: StoryLink };
+      also?: { when: string; link: StoryLink; icon?: StoryGlyph };
     }
   /** Client work that evidences the page's claim, with the boundary of what it proves. */
   | { kind: 'cases'; items: readonly StoryCase[]; note?: string }
@@ -155,12 +174,7 @@ export type StoryBlock =
       };
       case?: StoryCase;
       /** A third-party rating shown with the quote — the client's words, and the market's score. */
-      rating?: {
-        platform: string;
-        mark: 'clutch' | 'linkedin' | 'youtube';
-        score: string;
-        href: string;
-      };
+      rating?: StoryRating;
     }
   /** Options on one scale — least to most disruptive — each with its condition and its question. */
   | {
@@ -176,6 +190,9 @@ export type StoryBlock =
       meter?: { kind: 'disruption' | 'authority'; label: string };
       columns: { name: string; when: string; settles: string };
       items: readonly { name: string; when: string; settles: string }[];
+      /** The order said once, as the table's summary, when there is no meter to show it — "Ordered
+          from the least disruptive to the most." Authored, never assembled from the axis labels. */
+      summary?: string;
     }
   /** Comparison data — every row the same attributes, read across. A real table (DataTable). */
   | {
@@ -240,9 +257,20 @@ export type StoryBlock =
       items: readonly string[];
       /** The three phase heads over the timeline: before, during and after the move. */
       phases: { before: string; during: string; after: string };
+      /** The two half-present bars during the move — "Current product, still running". */
+      states: { from: string; to: string };
+      /** The figure's accessible name: the whole transition in one sentence. */
+      summary: string;
     }
   /** Linked stages the same decision passes through, with an optional return path. */
   | { kind: 'thread'; items: readonly { title: string; body?: string }[]; loop?: string }
+  /** The client marks a page shows as a strip (the H band), and the sourced rating beside them.
+      Real marks only, sized by the asset's own viewBox and weight correction (ClientMark). */
+  | {
+      kind: 'logos';
+      marks: readonly StoryMark[];
+      rating?: StoryRating;
+    }
   /** One figure, stated in words beside it. */
   | {
       kind: 'stat';
@@ -271,16 +299,34 @@ export type StoryBlock =
   /** An image that should exist here. Invisible unless the page is in review mode. */
   | { kind: 'slot'; slot: StorySlot };
 
+/**
+ * One band of the argument: what it says, never how it is laid out. The ARRANGEMENT, the ground and
+ * the density are the template's, decided from the job the section's blocks do (ServicePage's
+ * `planBands`) — they were content fields until 6 Oct 2026 (`arrangement: 'beside'`), which let a
+ * fixture contradict the kit's band rules one page at a time (docs/strapi-changes.md § 1: a
+ * presentation choice is never a CMS field).
+ */
 export type StorySection = {
   type: 'section';
   id: string;
   heading: string;
   eyebrow?: string;
   lead?: string;
-  arrangement?: 'stacked' | 'beside';
-  surface?: 'paper' | 'tint';
-  density?: 'tight' | 'open';
   blocks: readonly StoryBlock[];
+};
+
+/**
+ * A band that is one photograph under a head and one link (the I banner, visual-direction § 3.4):
+ * a pause in the argument that says where to read on. The photograph is the page's § 5.6 banner
+ * slot, chosen by the template; the story names only the words and the destination.
+ */
+export type StoryBanner = {
+  type: 'banner';
+  id: string;
+  eyebrow?: string;
+  heading: string;
+  lead: string;
+  action: StoryLink;
 };
 
 /**
@@ -322,7 +368,7 @@ export type ServiceStory = {
     illustration: { src: string; width: number; height: number };
     tags?: readonly string[];
   };
-  sections: readonly (StorySection | StoryOffer)[];
+  sections: readonly (StorySection | StoryOffer | StoryBanner)[];
   /**
    * The page's photographs (visual-direction § 5.5 to § 5.7).
    *
@@ -336,6 +382,16 @@ export type ServiceStory = {
    *             (`SERVICE_PHOTO_SLOTS`, `RESERVED_STOCK` in src/lib/photos.ts), not just authored.
    */
   photos: { family: PhotoFamily; standIns: readonly PhotoId[] };
+  /**
+   * The page's own labels for chrome the template draws around the content: the link on a case
+   * card, the key on a case set's boundary note, the section action that leads to every case. In
+   * the story so the template carries no copy of its own (ServicePage audit, 6 Oct 2026).
+   */
+  labels: {
+    caseCta: string;
+    scope: string;
+    allCases: StoryLink;
+  };
   close: {
     heading: string;
     body: string;

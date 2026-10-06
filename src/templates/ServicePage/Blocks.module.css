@@ -2,8 +2,10 @@
 
    Every colour is --svc-*, re-declared per surface in tokens/components/service-page.css. Type is
    consumed as composites. Layout and Cluster own every arrangement and every seam; this module
-   owns edges (rules), ink and type roles. No margins, and no marks that do not carry meaning —
-   every rule here opens or closes an item, and nothing is drawn for texture. */
+   owns ink and type roles for the little the kit units do not already carry: a ledger set's h3, a
+   bare stat sentence and the review-mode slot. No margins. The Fit list (glyph rows, `.rowText`)
+   left with the swap to Contrast (6 Oct 2026), which settles the audit's flex-sizing question: the
+   template no longer sizes a row at all. */
 
 /* ── Shared roles ─────────────────────────────────────────────────────────────── */
 .key {
@@ -13,42 +15,6 @@
   color: var(--svc-ink-label);
 }
 
-/* A needs-list check carries the blue accent; a not-for cross stays ink, one step quieter — it only
-   says "not this one" (visual-direction § 4, owner 6 Oct 2026; the Diagrams comparison does the same). */
-.glyphYes {
-  color: var(--svc-mark);
-}
-
-.glyphNo {
-  color: var(--svc-ink-muted);
-}
-
-/* A list in one column opens on a strong rule and closes each row with a hairline. */
-.rows {
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-}
-
-.rowTight {
-  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
-  padding-block: var(--gap-text);
-}
-
-.rowText {
-  flex: 1 1 0;
-  min-inline-size: 0;
-  font: var(--text-body-lg);
-  text-wrap: var(--text-running-wrap);
-  color: var(--svc-ink);
-}
-
-/* ── Fit ──────────────────────────────────────────────────────────────────────── */
-.listHeading {
-  font: var(--text-h4);
-  letter-spacing: var(--text-h4-tracking);
-  text-wrap: var(--text-title-wrap);
-  color: var(--svc-ink);
-}
-
 /* ── Ledger ───────────────────────────────────────────────────────────────────── */
 .setHeading {
   font: var(--text-h5);
@@ -56,19 +22,8 @@
   color: var(--svc-ink);
 }
 
-/* ── Stat ─────────────────────────────────────────────────────────────────────── */
-.stat {
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  padding-block-start: var(--gap-block);
-}
-
-.statValue {
-  font: var(--text-stat-lg);
-  letter-spacing: var(--text-stat-lg-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--svc-ink);
-}
-
+/* ── Stat ───────────────────────────────────────────────────────────────────────
+   The sentence under a stat that has no rows to count. */
 .statBody {
   font: var(--text-lead);
   text-wrap: var(--text-running-wrap);

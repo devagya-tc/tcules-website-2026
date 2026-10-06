@@ -1,5 +1,14 @@
 import type { ServiceStory } from '@/lib/service-story';
-import { articlePath, auditPath, glossaryPath, servicePath, toolPath } from '@/lib/routes';
+import {
+  articlePath,
+  auditPath,
+  glossaryPath,
+  servicePath,
+  toolPath,
+  ANCHORS,
+  anchorHref,
+  ROUTES,
+} from '@/lib/routes';
 
 /** /services/ai-product-ux, designed. Edits: docs/service-pages-design.md § AI Product UX. */
 export const aiProductUx: ServiceStory = {
@@ -14,7 +23,7 @@ export const aiProductUx: ServiceStory = {
     title: 'Design how people, models and product state meet',
     lead: 'For AI-native products, AI added to established software, and workflows where probabilistic output changes how people decide or act.',
     actions: [
-      { label: 'Start a project', href: '#enquiry' },
+      { label: 'Start a project', href: anchorHref(ANCHORS.enquiry) },
       { label: 'Request free audit', href: auditPath('ai-product-ux-readiness') },
     ],
     illustration: {
@@ -129,7 +138,6 @@ export const aiProductUx: ServiceStory = {
       id: 'responsibility-record',
       heading: 'The AI product responsibility record',
       lead: 'It follows the product into design and engineering, and stops an interface label carrying more certainty than the system has earned.',
-      arrangement: 'beside',
       blocks: [
         {
           kind: 'record',
@@ -181,7 +189,6 @@ export const aiProductUx: ServiceStory = {
       eyebrow: 'Evaluation before release',
       heading: 'Evaluate against real decisions, not model accuracy alone',
       lead: 'The acceptance set starts from representative user decisions and failure conditions.',
-      arrangement: 'beside',
       blocks: [
         {
           kind: 'ledger',
@@ -354,6 +361,11 @@ export const aiProductUx: ServiceStory = {
       ],
     },
   ],
+  labels: {
+    caseCta: 'Read the case',
+    scope: 'Scope',
+    allCases: { label: 'All case studies', href: ROUTES.caseStudies },
+  },
   close: {
     heading: 'Share the AI interaction that needs clearer rules',
     body: 'The interaction, the evidence behind it and the decision rule that needs to become explicit. A rough brief is enough.',

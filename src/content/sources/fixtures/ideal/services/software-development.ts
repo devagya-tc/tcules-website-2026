@@ -1,5 +1,5 @@
 import type { ServiceStory } from '@/lib/service-story';
-import { ROUTES, servicePath } from '@/lib/routes';
+import { ROUTES, servicePath, ANCHORS, anchorHref } from '@/lib/routes';
 
 /** /services/software-development, designed. Edits: docs/service-pages-design.md § Software Development. */
 export const softwareDevelopment: ServiceStory = {
@@ -13,7 +13,7 @@ export const softwareDevelopment: ServiceStory = {
   hero: {
     title: 'Software development, led by product design',
     lead: 'Tcules builds software where product behaviour, interaction and implementation need one accountable delivery path.',
-    actions: [{ label: 'Start a project', href: '#enquiry' }],
+    actions: [{ label: 'Start a project', href: anchorHref(ANCHORS.enquiry) }],
     illustration: {
       src: '/illustrations/services/software-development.paper.svg',
       width: 714,
@@ -329,7 +329,6 @@ export const softwareDevelopment: ServiceStory = {
       type: 'section',
       id: 'questions',
       heading: 'Before you sign',
-      arrangement: 'beside',
       blocks: [
         {
           kind: 'faq',
@@ -381,6 +380,11 @@ export const softwareDevelopment: ServiceStory = {
       ],
     },
   ],
+  labels: {
+    caseCta: 'Read the case',
+    scope: 'Scope',
+    allCases: { label: 'All case studies', href: ROUTES.caseStudies },
+  },
   close: {
     heading: 'Start with the product slice that needs to ship',
     body: 'The slice, its users, the system constraints and the release outcome. A rough brief is enough.',

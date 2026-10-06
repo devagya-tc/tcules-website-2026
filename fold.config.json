@@ -30,6 +30,12 @@
     "/design/kit/readdown",
     "/design/contrast",
     "/design/kit/service-list",
-    "/case-studies"
+    "/case-studies",
+    "/design/service-page/product-design",
+    "/design/service-page/software-development",
+    "/design/service-page/design-engineering",
+    "/design/service-page/design-systems",
+    "/design/service-page/ai-product-ux",
+    "/design/service-page/product-modernisation"
   ]
 }

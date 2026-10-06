@@ -123,6 +123,14 @@ type CtaSectionBaseProps = {
    * The close sits on paper (§ 3.4 L); tint is a specimen's surface proof only.
    */
   surface?: SectionSurface;
+  /**
+   * The band's id, passed to `Section`: the in-page anchor a page's actions link to — the close's
+   * `enquiry` (src/lib/routes.ts `ANCHORS`), so "Start a project" lands on the form. On the band
+   * itself rather than a wrapper `div` around it, which added an element that was neither the band
+   * nor its content (ServicePage audit, 6 Oct 2026). Distinct from the heading's id, which names the
+   * region and is generated.
+   */
+  id?: string;
 };
 
 /**
@@ -675,9 +683,19 @@ export function CtaSection(props: CtaSectionProps) {
        2. Evidence beside the ask needs a column, so this shape stays left-aligned. */
     if (hasProof) {
       return (
-        <Section surface={props.surface} aria-labelledby={headingId} data-arrangement="open">
+        <Section
+          surface={props.surface}
+          id={props.id}
+          aria-labelledby={headingId}
+          data-arrangement="open"
+        >
           {present(props.texture) ? props.texture : null}
-          <Layout columns={{ base: 1, lg: [3, 2] }} colGap="section" rowGap="stack" align="start">
+          <Layout
+            columns={{ base: 1, lg: [3, 2] }}
+            colGap="section"
+            rowGap="stack"
+            align="start"
+          >
             <Layout rowGap="stack">
               {lede({ scale: 'close' })}
               <CtaPoints shape="row" markers={markers} points={points} />
@@ -700,6 +718,7 @@ export function CtaSection(props: CtaSectionProps) {
     return (
       <Section
         surface={props.surface}
+        id={props.id}
         density="open"
         aria-labelledby={headingId}
         data-arrangement="open"
@@ -739,6 +758,7 @@ export function CtaSection(props: CtaSectionProps) {
       return (
         <Section
           surface={props.surface}
+          id={props.id}
           density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
@@ -787,6 +807,7 @@ export function CtaSection(props: CtaSectionProps) {
       return (
         <Section
           surface={props.surface}
+          id={props.id}
           density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
@@ -828,6 +849,7 @@ export function CtaSection(props: CtaSectionProps) {
       return (
         <Section
           surface={props.surface}
+          id={props.id}
           density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
@@ -854,6 +876,7 @@ export function CtaSection(props: CtaSectionProps) {
     return (
       <Section
         surface={props.surface}
+        id={props.id}
         density="tight"
         aria-labelledby={headingId}
         data-arrangement="offer"
@@ -896,6 +919,7 @@ export function CtaSection(props: CtaSectionProps) {
   return (
     <Section
       surface={props.surface}
+      id={props.id}
       density={hasTexture ? 'open' : undefined}
       aria-labelledby={headingId}
       data-arrangement="split"

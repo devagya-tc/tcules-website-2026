@@ -6,6 +6,7 @@ import { designSystems } from './design-systems';
 import { productDesign } from './product-design';
 import { productModernisation } from './product-modernisation';
 import { softwareDevelopment } from './software-development';
+import { stressStory } from './stress';
 
 /**
  * IDEAL CONTENT — the six service lines, designed.
@@ -22,4 +23,6 @@ export const IDEAL_SERVICE_STORIES: Readonly<Record<string, ServiceStory>> = {
   [aiProductUx.slug]: aiProductUx,
   [designEngineering.slug]: designEngineering,
   [softwareDevelopment.slug]: softwareDevelopment,
+  /* Not a service line: every StoryBlock variant on one route, the template's own specimen. */
+  [stressStory.slug]: stressStory,
 };

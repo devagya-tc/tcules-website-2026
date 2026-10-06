@@ -1,5 +1,13 @@
 import type { ServiceStory } from '@/lib/service-story';
-import { auditPath, glossaryPath, servicePath, toolPath } from '@/lib/routes';
+import {
+  auditPath,
+  glossaryPath,
+  servicePath,
+  toolPath,
+  ANCHORS,
+  anchorHref,
+  ROUTES,
+} from '@/lib/routes';
 
 /** /services/product-modernisation, designed. Edits: docs/service-pages-design.md § Modernisation. */
 export const productModernisation: ServiceStory = {
@@ -14,7 +22,7 @@ export const productModernisation: ServiceStory = {
     title: 'Change the product, keep the work it carries',
     lead: 'Tcules helps the team find the layer causing the cost, protect what still works, and carry the right change through design, systems, code or delivery.',
     actions: [
-      { label: 'Start a project', href: '#enquiry' },
+      { label: 'Start a project', href: anchorHref(ANCHORS.enquiry) },
       { label: 'Request free audit', href: auditPath('product-modernisation-assessment') },
     ],
     illustration: {
@@ -235,6 +243,12 @@ export const productModernisation: ServiceStory = {
           to: 'Target product',
           label: 'Designed in between',
           phases: { before: 'Before', during: 'During the move', after: 'After' },
+          states: {
+            from: 'Current product, still running',
+            to: 'Target product, already running',
+          },
+          summary:
+            'Designed in between: during the move, the current product and the target product are both live.',
           items: [
             'Old and new navigation together',
             'Converted and unconverted records',
@@ -264,7 +278,6 @@ export const productModernisation: ServiceStory = {
       type: 'section',
       id: 'how-it-comes-together',
       heading: 'How the work comes together',
-      arrangement: 'beside',
       lead: 'Tcules can take end-to-end product and software responsibility, or work inside a team that keeps parts of engineering, data, infrastructure or release.',
       blocks: [
         {
@@ -386,7 +399,6 @@ export const productModernisation: ServiceStory = {
       type: 'section',
       id: 'ownership-and-acceptance',
       heading: 'Ownership and release acceptance, before the roadmap',
-      arrangement: 'beside',
       blocks: [
         {
           kind: 'faq',
@@ -438,6 +450,11 @@ export const productModernisation: ServiceStory = {
       ],
     },
   ],
+  labels: {
+    caseCta: 'Read the case',
+    scope: 'Scope',
+    allCases: { label: 'All case studies', href: ROUTES.caseStudies },
+  },
   close: {
     heading: 'Start with the capability that cannot safely stay as it is',
     body: 'The capability, the operational dependency and the change that can no longer be deferred. A rough brief is enough.',

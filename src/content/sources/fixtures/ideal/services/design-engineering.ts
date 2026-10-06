@@ -1,5 +1,12 @@
 import type { ServiceStory } from '@/lib/service-story';
-import { auditPath, glossaryPath, servicePath } from '@/lib/routes';
+import {
+  ANCHORS,
+  anchorHref,
+  auditPath,
+  glossaryPath,
+  ROUTES,
+  servicePath,
+} from '@/lib/routes';
 
 /** /services/design-engineering, designed. Edits: docs/service-pages-design.md § Design Engineering. */
 export const designEngineering: ServiceStory = {
@@ -13,7 +20,7 @@ export const designEngineering: ServiceStory = {
   hero: {
     title: 'Keep product intent alive as it becomes software',
     lead: 'A design decision can be persuasive in a prototype and still weaken on the way into software.',
-    actions: [{ label: 'Start a project', href: '#enquiry' }],
+    actions: [{ label: 'Start a project', href: anchorHref(ANCHORS.enquiry) }],
     illustration: {
       src: '/illustrations/services/design-engineering.paper.svg',
       width: 737,
@@ -359,7 +366,6 @@ export const designEngineering: ServiceStory = {
       type: 'section',
       id: 'questions',
       heading: 'Working inside your delivery',
-      arrangement: 'beside',
       blocks: [
         {
           kind: 'faq',
@@ -406,6 +412,11 @@ export const designEngineering: ServiceStory = {
       ],
     },
   ],
+  labels: {
+    caseCta: 'Read the case',
+    scope: 'Scope',
+    allCases: { label: 'All case studies', href: ROUTES.caseStudies },
+  },
   close: {
     heading: 'Show us where product intent is getting lost in implementation',
     body: 'The implementation point where accepted product intent is being lost. A rough brief is enough.',

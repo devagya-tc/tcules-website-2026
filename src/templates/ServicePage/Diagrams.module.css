@@ -1,14 +1,18 @@
 /* ServicePage · diagrams.
 
-   The compositions that DRAW an argument rather than list it: a scale, a thread, a sheet, a
-   holding panel, a slice, a bridge. Colour from --svc-*, type from the composites, arrangement from
-   Layout and Cluster. Positioned pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
+   The six template-local E diagrams (visual-direction § 3.4 E): a scale (Spectrum), a check matrix
+   (Matrix), a sheet (Record), a holding panel (Parts), a slice (Slice) and a bridge (Bridge). Each
+   is one service page's argument rather than a reusable unit, so it stays in the template; Thread
+   was promoted to a pattern (cmp-process-stats) and its rules left this file on 6 Oct 2026. Colour
+   from --svc-*, type from the composites, arrangement from Layout and Cluster. Positioned
+   pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
 
    Every mark here says something (30 Sep 2026 review): the holding panel says the operating model
-   contains the four parts; the paired grids say a release is one path built through every layer, where layers alone leave every path broken; the dashed bars say a product
-   is half-present while the move is under way; an arrow says one stage feeds the next; the
-   disruption trace is how much an option shakes the product, more ink for more. Marks that said nothing — a
-   progress meter per row, a dashed thread with nodes, a dot on every step's rule — were cut. */
+   contains the four parts; the paired grids say a release is one path built through every layer,
+   where layers alone leave every path broken; the dashed bars say a product is half-present while
+   the move is under way; the disruption trace is how much an option shakes the product, more ink
+   for more; a check is blue and a cross quiet ink. Marks that said nothing — a progress meter per
+   row, a dashed thread with nodes, a dot on every step's rule — were cut. */
 
 .key {
   font: var(--text-eyebrow);
@@ -29,19 +33,6 @@
 .icon {
   display: inline-block;
   color: var(--svc-mark);
-}
-
-.rowTitle {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
-  text-wrap: var(--text-title-wrap);
-  color: var(--svc-ink);
-}
-
-.rowBody {
-  font: var(--text-body);
-  text-wrap: var(--text-running-wrap);
-  color: var(--svc-ink-muted);
 }
 
 /* ── Matrix, and the slice verdicts ─────────────────────────────────────────────────
@@ -264,38 +255,4 @@
   stroke-linejoin: round;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
-}
-
-/* ── Thread ───────────────────────────────────────────────────────────────────── */
-.threadStage {
-  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  padding-block-start: var(--gap-text);
-  min-inline-size: 0;
-}
-
-.chain {
-  min-inline-size: 0;
-}
-
-.node {
-  padding: var(--gap-tight) var(--gap-text);
-  border: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-  font: var(--text-ui);
-  letter-spacing: var(--text-ui-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--svc-ink);
-}
-
-/* The connector carries the blue accent, as every arrow does (visual-direction § 4). */
-.arrow {
-  color: var(--svc-mark);
-}
-
-.loop {
-  color: var(--svc-ink-muted);
-}
-
-.loopText {
-  font: var(--text-body-sm);
-  color: var(--svc-ink-muted);
 }

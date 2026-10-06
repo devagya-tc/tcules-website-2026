@@ -104,11 +104,10 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
   const last = block.items.length - 1;
   return (
     <DataTable
-      summary={
-        meter
-          ? undefined
-          : `Ordered from ${block.axis.from.toLowerCase()} to ${block.axis.to.toLowerCase()}.`
-      }
+      /* The order, said once, when no meter shows it row by row: the story's own sentence. It was
+         assembled here from the axis labels, lower-cased — which rewrote authored strings (an
+         acronym or a name in an axis label came out wrong) and put template copy on the page. */
+      summary={meter ? undefined : block.summary}
       keyColumn={{ heading: block.columns.name }}
       columns={[
         ...(meter ? [{ heading: meter.label, behaviour: 'nowrap' as const }] : []),
@@ -284,7 +283,9 @@ function SliceGrid({
   const tracks = { base: [3, ...Array.from({ length: paths }, () => 1)] };
   const pathWorks = (path: number) => layers.every((_, layer) => done(layer, path));
   return (
-    <figure className={styles.sliceView} aria-label={`${view.title}. ${view.note}`}>
+    /* Named by its figcaption, the title and the note, and nothing else: an aria-label repeating
+       the same words named the figure twice to a screen reader (ServicePage audit, 6 Oct 2026). */
+    <figure className={styles.sliceView}>
       <Layout rowGap="block">
         <Layout as="figcaption" rowGap="tight">
           <span className={styles.sliceTitle}>{view.title}</span>
@@ -335,8 +336,11 @@ export function Slice({ block }: { block: Of<'slice'> }) {
      construction — the only thing that differs between the two grids is where the work went. */
   const paths = Math.max(3, block.layers.length - 1);
   const built = Math.floor(paths / 2);
+  /* The paired grids and the acceptance levels are two blocks of one band, so they sit a `stack`
+     (48) apart (§ 1.2 block → block). They were `section` (96), the split and band-padding step,
+     which opened a band-sized hole inside the band (ServicePage audit, 6 Oct 2026). */
   return (
-    <Layout rowGap="section">
+    <Layout rowGap="stack">
       <Layout rowGap="block">
         {/* The key, once, over both grids: what a cell is, before either grid asks the reader to
             read one. */}
@@ -403,10 +407,9 @@ export function Slice({ block }: { block: Of<'slice'> }) {
    the target. Below lg the three stack in the same order. */
 export function Bridge({ block }: { block: Of<'bridge'> }) {
   return (
-    <figure
-      aria-label={`${block.label}: ${block.phases.during.toLowerCase()}, ${block.from.toLowerCase()} and ${block.to.toLowerCase()} are both live`}
-      className={styles.bridge}
-    >
+    /* Named by the story's own sentence. It was assembled from four labels, lower-cased (ServicePage
+       audit, 6 Oct 2026: never re-case an authored string). */
+    <figure aria-label={block.summary} className={styles.bridge}>
       <Layout
         as="ol"
         columns={{ base: 1, lg: [1, 2, 1] }}
@@ -428,10 +431,10 @@ export function Bridge({ block }: { block: Of<'bridge'> }) {
               <span className={styles.key}>{block.phases.during}</span>
               <Layout rowGap="tight">
                 <span className={styles.bar} data-state="partial">
-                  {block.from}, still running
+                  {block.states.from}
                 </span>
                 <span className={styles.bar} data-state="partial">
-                  {block.to}, already running
+                  {block.states.to}
                 </span>
               </Layout>
             </Layout>
@@ -457,59 +460,5 @@ export function Bridge({ block }: { block: Of<'bridge'> }) {
         </li>
       </Layout>
     </figure>
-  );
-}
-
-/* ── Thread ───────────────────────────────────────────────────────────────────
-   Named stages joined by arrows, wrapping as the width runs out — a flow of artefacts, lighter
-   than Steps (no bodies unless given, no numbers), with an optional return path drawn as its own
-   line beneath: what production shows feeds the next decision.
-
-   With bodies, the stages are a grid of rule-opened tiles, so they carry the card rhythm
-   (visual-direction § 1.1 S2, § 1.2): key → title → body at `text`, and the row seam of the set at
-   `column`, the same as the ListCard tile grids in this file. At 1440 they read as a card set
-   beside the re-spaced cards, so they take the card set's steps until cmp-service-pages replaces
-   Thread. */
-export function Thread({ block }: { block: Of<'thread'> }) {
-  const withBodies = block.items.some((item) => item.body);
-  return (
-    <Layout rowGap="block">
-      {withBodies ? (
-        <Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
-          {block.items.map((item, index) => (
-            <li key={item.title} className={styles.threadStage}>
-              <Layout rowGap="text">
-                <span className={styles.key}>{String(index + 1).padStart(2, '0')}</span>
-                <h3 className={styles.rowTitle}>{item.title}</h3>
-                {item.body ? <p className={styles.rowBody}>{item.body}</p> : null}
-              </Layout>
-            </li>
-          ))}
-        </Layout>
-      ) : (
-        <Cluster as="ol" colGap="tight" rowGap="text" align="center">
-          {block.items.map((item, index) => (
-            <li key={item.title} className={styles.chain}>
-              <Cluster nowrap colGap="tight" align="center">
-                <span className={styles.node}>{item.title}</span>
-                {index < block.items.length - 1 ? (
-                  <span className={styles.arrow} aria-hidden="true">
-                    <Icon name="arrow-right" size="md" />
-                  </span>
-                ) : null}
-              </Cluster>
-            </li>
-          ))}
-        </Cluster>
-      )}
-      {block.loop ? (
-        <Cluster nowrap colGap="tight" align="center" className={styles.loop}>
-          <span className={styles.icon} aria-hidden="true">
-            <Icon name="undo-left" size="lg" />
-          </span>
-          <span className={styles.loopText}>{block.loop}</span>
-        </Cluster>
-      ) : null}
-    </Layout>
   );
 }
