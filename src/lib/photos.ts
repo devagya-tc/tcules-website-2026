@@ -240,12 +240,19 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'studio-whiteboard-crit',
     aside2: 'hand-mouse-detail',
   },
+  /* design-systems, fix round 2 (6 Oct 2026): three screen-on-a-device shots (a soft monitor
+     showing another brand's guide file, a designer's monitor, the case's laptop) read as generic
+     stock, and K's wall of paper wireframes was UX sketching, not systems work. Each slot now shows
+     the system's own artefact, crisp and type-free: B, the drift band, a colour library page by page
+     (`swatch-book-pages`); the router, unpainted components before they are composed
+     (`white-bricks-pile`); K, a whole scale laid out in order, the survey an audit makes
+     (`swatch-ring-white`). The case covers are the page's only screens. No I banner, so no banner
+     photo; aside 2 is unused (the page has no F or D band). */
   'design-systems': {
-    b: 'screen-over-shoulder',
-    i: 'wireframe-wall',
-    k: 'desk-minimal-white',
-    aside1: 'desk-flatlay-devices',
-    aside2: 'designer-monitor-ui',
+    b: 'swatch-book-pages',
+    k: 'swatch-ring-white',
+    aside1: 'white-bricks-pile',
+    aside2: 'desk-minimal-white',
   },
   /* ai-product-ux, fix round 2 (6 Oct 2026): K and aside 2 swapped, B kept. K's staged pair under a
      fake chalkboard dashboard became a pair working through notes at a laptop (landscape 3:2), a

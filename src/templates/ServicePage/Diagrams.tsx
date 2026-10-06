@@ -262,48 +262,135 @@ export function Record({ block }: { block: Of<'record'> }) {
   );
 }
 
-/* ── Parts: four held by a fifth ──────────────────────────────────────────────
+/* ── Parts: four parts in one orbit ───────────────────────────────────────────
    "Four of them are the system. The fifth decides whether the other four stay current." So the
-   fifth HOLDS the four: the operating model is named at the head of a bracket, two strong rules
-   across the whole measure, and the four parts are tiles between them (1 Oct 2026, owner: the
-   section was crowded and unreadable; fix round 2: the bracket replaced a panel with a ground and
-   a border, which boxed text content). It used to be four
-   tiles, a thin bracket under them with the operating model set heading-left/body-right, and three
-   failure tiles whose titles were larger than the parts' — three ideas at one weight. Now one
-   drawing carries the one idea, and the failures are a note after it. */
-export function Parts({ block }: { block: Of<'parts'> }) {
+   drawing is the system: the four parts are nodes on one inner orbit, joined through a hub, and the
+   operating model is the loop around them — a ring with its direction marked, because it is the
+   cycle (contribution, release, migration) that keeps the four current. The parts are named either
+   side of the ring, two and two, each beside the node on its side; the operating model is named
+   under it (page-design-systems fix round 1, 6 Oct 2026: the bracket over a row of four tiles was
+   the page's fifth tile set and read as a document, one sentence across 1240 above a hairline row).
+
+   Arrangement is three Layout tracks — parts, ring, parts — centred on the ring from 1024. Below it
+   the parts are one column, and the ring leads the set rather than falling between the two pairs,
+   where at 390 it sat unlabelled between Components and Design assets (fix round 2): the drawing is
+   the whole system, so it goes above the list of what is in it. The loop's name closes the set, a
+   `stack` under it like every part, centred from 1024 and on the start edge below. The drawing is
+   decorative (`aria-hidden`) and drawn twice, one copy per width with the other `display: none`,
+   so it never reaches the accessibility tree; every word is in the lists and headings beside it. */
+const ORBIT = 240;
+const ORBIT_C = ORBIT / 2;
+const LOOP_R = 112;
+/* The inner orbit puts each node level with the middle of its part beside the ring at lg: two
+   parts a `stack` apart centre about 68 either side of the ring's centre, 57 units at 288. */
+const INNER_R = 80;
+const NODE = 12;
+const HUB = 16;
+const ARROW = 6;
+/* The four nodes on the inner orbit at 45°: start side top and bottom, then end side. */
+const NODE_AT = INNER_R * Math.SQRT1_2;
+const NODES: readonly (readonly [number, number])[] = [
+  [ORBIT_C - NODE_AT, ORBIT_C - NODE_AT],
+  [ORBIT_C - NODE_AT, ORBIT_C + NODE_AT],
+  [ORBIT_C + NODE_AT, ORBIT_C - NODE_AT],
+  [ORBIT_C + NODE_AT, ORBIT_C + NODE_AT],
+];
+/* Where a node's horizontal leader meets the loop, on the node's own side. */
+const LEADER_X = Math.sqrt(LOOP_R * LOOP_R - NODE_AT * NODE_AT);
+
+function Orbit({ at }: { at: 'lead' | 'middle' }) {
+  const top = ORBIT_C - LOOP_R;
+  const bottom = ORBIT_C + LOOP_R;
   return (
-    <div className={styles.holder}>
-      <Layout rowGap="stack">
-        <Layout rowGap="text">
+    <svg
+      className={at === 'lead' ? styles.orbitLead : styles.orbitMiddle}
+      viewBox={`0 0 ${ORBIT} ${ORBIT}`}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle className={styles.orbitLoop} cx={ORBIT_C} cy={ORBIT_C} r={LOOP_R} />
+      {/* Clockwise: right at the top, left at the foot. */}
+      <path
+        className={styles.orbitMark}
+        d={`M${ORBIT_C - ARROW} ${top - ARROW}L${ORBIT_C + ARROW} ${top}L${ORBIT_C - ARROW} ${top + ARROW}Z`}
+      />
+      <path
+        className={styles.orbitMark}
+        d={`M${ORBIT_C + ARROW} ${bottom - ARROW}L${ORBIT_C - ARROW} ${bottom}L${ORBIT_C + ARROW} ${bottom + ARROW}Z`}
+      />
+      <circle className={styles.orbitRule} cx={ORBIT_C} cy={ORBIT_C} r={INNER_R} />
+      {NODES.map(([x, y]) => (
+        <g key={`${x}-${y}`}>
+          <line className={styles.orbitRule} x1={ORBIT_C} y1={ORBIT_C} x2={x} y2={y} />
+          <line
+            className={styles.orbitLeader}
+            x1={x}
+            y1={y}
+            x2={x < ORBIT_C ? ORBIT_C - LEADER_X : ORBIT_C + LEADER_X}
+            y2={y}
+          />
+          <rect
+            className={styles.orbitMark}
+            x={x - NODE / 2}
+            y={y - NODE / 2}
+            width={NODE}
+            height={NODE}
+          />
+        </g>
+      ))}
+      <rect
+        className={styles.orbitHub}
+        x={ORBIT_C - HUB / 2}
+        y={ORBIT_C - HUB / 2}
+        width={HUB}
+        height={HUB}
+      />
+    </svg>
+  );
+}
+
+type Part = Of<'parts'>['items'][number];
+
+function PartList({ items, side }: { items: readonly Part[]; side: 'start' | 'end' }) {
+  return (
+    <Layout as="ul" rowGap="stack" className={side === 'start' ? styles.partsStart : undefined}>
+      {items.map((item) => (
+        <li key={item.name}>
+          <Layout rowGap="tight">
+            <Cluster colGap="tight" nowrap justify={side === 'start' ? { lg: 'end' } : 'start'}>
+              <span className={styles.icon} aria-hidden="true">
+                <Icon name={item.icon} size="xl" />
+              </span>
+              <h3 className={styles.partName}>{item.name}</h3>
+            </Cluster>
+            <p className={styles.partBody}>{item.body}</p>
+          </Layout>
+        </li>
+      ))}
+    </Layout>
+  );
+}
+
+export function Parts({ block }: { block: Of<'parts'> }) {
+  const half = Math.ceil(block.items.length / 2);
+  return (
+    <Layout rowGap="stack">
+      <Orbit at="lead" />
+      <Layout columns={{ base: 1, lg: [1, 1, 1] }} colGap="column" rowGap="stack" align="center">
+        <PartList items={block.items.slice(0, half)} side="start" />
+        <Orbit at="middle" />
+        <PartList items={block.items.slice(half)} side="end" />
+      </Layout>
+      <Layout rowGap="tight" className={styles.hub}>
+        <Cluster colGap="tight" nowrap justify={{ lg: 'center' }}>
           <span className={styles.icon} aria-hidden="true">
             <Icon name={block.frame.icon} size="xl" />
           </span>
-          <Layout rowGap="tight">
-            <h3 className={styles.frameTitle}>{block.frame.name}</h3>
-            <p className={styles.frameBody}>{block.frame.body}</p>
-          </Layout>
-        </Layout>
-        <Layout
-          as="ul"
-          columns={{ base: 1, md: 2, lg: block.items.length }}
-          colGap="gutter"
-          rowGap="stack"
-        >
-          {block.items.map((item) => (
-            <ListCard
-              key={item.name}
-              form="tile"
-              size="sm"
-              titleAs="h4"
-              title={item.name}
-              body={item.body}
-              marker={{ type: 'icon', name: item.icon }}
-            />
-          ))}
-        </Layout>
+          <h3 className={styles.frameTitle}>{block.frame.name}</h3>
+        </Cluster>
+        <p className={styles.frameBody}>{block.frame.body}</p>
       </Layout>
-    </div>
+    </Layout>
   );
 }
 

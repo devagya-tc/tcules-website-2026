@@ -456,7 +456,7 @@
     "width": 2400,
     "height": 1600,
     "focalPoint": {
-      "x": 0.62,
+      "x": 0.9,
       "y": 0.5
     },
     "bestPlacements": [
@@ -1585,6 +1585,101 @@
       "sat": 0.199
     },
     "derived": [
+      652,
+      320
+    ]
+  },
+  {
+    "file": "swatch-book-pages.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-close-up-of-a-number-of-different-colored-papers-Z2QUe2JxT9U",
+    "originalUrl": "https://images.unsplash.com/photo-1702838646785-1e2379337b12",
+    "subject": "Pages of a colour-swatch book fanned on end, chips in ordered columns",
+    "mood": "precise, daylight",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.9,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "media-split",
+      "cta-media"
+    ],
+    "notes": "A colour library, page by page: tokens as a physical artefact. Left third is soft bokeh; crop from the right. No printed type at any placement size. Added for design-systems fix round 2 (6 Oct 2026).",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.048,
+      "sat": 0.143
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "white-bricks-pile.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/white-block-toy-lot-TaEd6ndkRWM",
+    "originalUrl": "https://images.unsplash.com/photo-1557774394-de53f40ccb02",
+    "subject": "A heap of identical white building bricks, close and sharp",
+    "mood": "calm, high-key",
+    "orientation": "portrait",
+    "width": 2400,
+    "height": 3600,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "media-split",
+      "aside",
+      "card"
+    ],
+    "notes": "Unpainted components before they are composed. The moulded stud lettering is unreadable below 2x zoom. Added for design-systems fix round 2 (6 Oct 2026).",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.043,
+      "sat": 0.071
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "swatch-ring-white.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://unsplash.com/photos/a-circle-of-color-swatches-on-a-white-surface-9bC6YPVk0Ts",
+    "originalUrl": "https://images.unsplash.com/photo-1716471330475-f0669db8947a",
+    "subject": "Pastel colour sample cards laid in a full ring on a white table, from above",
+    "mood": "ordered, high-key",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1461,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "cta-media",
+      "banner-beside",
+      "card"
+    ],
+    "notes": "A whole scale laid out in order: the survey before a fix. White ground, no type. Added for design-systems fix round 2 (6 Oct 2026).",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.045,
+      "sat": 0.228
+    },
+    "derived": [
+      1240,
       652,
       320
     ]

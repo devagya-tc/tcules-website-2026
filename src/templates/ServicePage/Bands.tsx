@@ -70,22 +70,23 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
   const texture = band.horizon ? <TextureHorizon /> : undefined;
 
   switch (archetype) {
-    /* B — the photograph beside the head and its tiles (§ 3.4 B). The copy column takes the 667 and
-       the photo 4:5 in 477; the counterweight field closes a column with room for it (≤ 2 tiles). */
+    /* B — the photograph beside the head and its tiles (§ 3.4 B). Four tiles fill the 667 copy
+       column (594 of the photo's 596 at 1470), so the photo takes the 477 at 4:5. Two tiles take
+       `weight: 'photo'` (plan `photoWeight`): the photograph in the 667 at 6:5, the copy in the 477
+       centred on it. Both keep the h2 role — a display head beside the hero's display h1 and the J
+       statement made three display voices, two back to back (fix round 2) — and neither carries
+       the counterweight texture (plan § 6.4). */
     case 'B': {
       if (job?.kind !== 'signals' || !photo) break;
       return (
         <ContentSection
           {...head}
           arrangement="media"
-          /* Four tiles fill the 667 copy column (594 of the photo's 596 at 1470), so their head keeps
-             the h2 role: a two-line display head took the band to 887. Two tiles leave the room a
-             display head and the counterweight field need (ContentSectionMedia `head`). */
           media={{
             image: getKitPhoto(photo),
             side: 'start',
-            counterweight: band.counterweight,
-            head: band.counterweight ? 'display' : 'title',
+            weight: band.photoWeight ? 'photo' : 'copy',
+            head: 'title',
           }}
         >
           <Signals block={job} inSplit />
@@ -94,7 +95,10 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
       );
     }
 
-    /* C-icon — the router: a beside head with its photograph, linked icon cards (cmp-services). */
+    /* C-icon — the router: linked icon cards (cmp-services). Four routes are a media split (plan
+       `split`): the photograph 4:5 in the 477 running the copy column's height, the head and the
+       2 × 2 of cards in the 667, on the side opposite the page's last photo-led band; on a phone the
+       photo leads at 4:3. Six take the beside head with its photograph in the head track. */
     case 'C-icon': {
       if (job?.kind !== 'router') break;
       const body = (
@@ -103,6 +107,22 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
           {others}
         </>
       );
+      if (photo && band.split) {
+        return (
+          <ContentSection
+            {...head}
+            arrangement="media"
+            media={{
+              image: getKitPhoto(photo),
+              side: band.headSide === 'start' ? 'end' : 'start',
+              height: 'copy',
+              head: 'title',
+            }}
+          >
+            {body}
+          </ContentSection>
+        );
+      }
       return photo ? (
         <ContentSection
           {...head}
@@ -234,15 +254,23 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
           </ContentSection>
         );
       }
-      return (
-        <ContentSection {...head} surface="tint">
-          {section.blocks.map((block, index) => (
-            <Fragment key={index}>
-              <StoryBlockView block={block} labels={ctx.labels} slots={ctx.slots} />
-            </Fragment>
-          ))}
-        </ContentSection>
-      );
+      {
+        const proofBlocks = section.blocks.map((block, index) => (
+          <Fragment key={index}>
+            <StoryBlockView block={block} labels={ctx.labels} slots={ctx.slots} />
+          </Fragment>
+        ));
+        /* Centred where the plan centred it: the typographic quote under its head (plan § 3.5). */
+        return band.centred ? (
+          <ContentSection {...head} surface="tint" align="center">
+            {proofBlocks}
+          </ContentSection>
+        ) : (
+          <ContentSection {...head} surface="tint">
+            {proofBlocks}
+          </ContentSection>
+        );
+      }
 
     default:
       break;

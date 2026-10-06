@@ -1,19 +1,20 @@
 /* ServicePage · diagrams.
 
    The six template-local E diagrams (visual-direction § 3.4 E): a scale (Spectrum), a check matrix
-   (Matrix), a sheet (Record), a holding bracket (Parts), a slice (Slice) and a bridge (Bridge). Each
+   (Matrix), a sheet (Record), an orbit (Parts), a slice (Slice) and a bridge (Bridge). Each
    is one service page's argument rather than a reusable unit, so it stays in the template; Thread
    was promoted to a pattern (cmp-process-stats) and its rules left this file on 6 Oct 2026. Colour
    from --svc-*, type from the composites, arrangement from Layout and Cluster. Positioned
    pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
 
-   No diagram boxes its text (owner ruling, fix round 2): the sheet and the holder are drawn with
-   rules only, and the two tables (Spectrum, Matrix) take DataTable's `ruled` frame. The only grounds
-   are data marks — a live bar, a built cell, a filled slot — never a panel behind copy.
+   No diagram boxes its text (owner ruling, fix round 2): the sheet is drawn with rules only, the
+   orbit is a drawing with nothing inside it, and the two tables (Spectrum, Matrix) take DataTable's
+   `ruled` frame. The only grounds are data marks — a live bar, a built cell, a filled slot — never
+   a panel behind copy.
 
-   Every mark here says something (30 Sep 2026 review): the holding bracket says the operating model
-   contains the four parts; the paired grids say a release is one path built through every layer,
-   where layers alone leave every path broken; the dashed bars say a product is half-present while
+   Every mark here says something (30 Sep 2026 review): the orbit says the operating model is the
+   loop that keeps the four parts current; the paired grids say a release is one path built through
+   every layer, where layers alone leave every path broken; the dashed bars say a product is half-present while
    the move is under way; the disruption trace is how much an option shakes the product, more ink
    for more; a check is blue and a cross quiet ink. Marks that said nothing — a progress meter per
    row, a dashed thread with nodes, a dot on every step's rule — were cut. */
@@ -94,16 +95,91 @@
   color: var(--svc-ink);
 }
 
-/* ── Parts: four held by a fifth ───────────────────────────────────────────────────
-   The operating model HOLDS the four parts, said with two strong rules rather than a panel (fix
-   round 2: the panel's ground and border boxed text content). The fifth's rules span the whole
-   measure, above its own head and under the four tiles, so the four sit between them — a bracket,
-   not a box. Each tile still opens on its own hairline inside it. Padding, because the rule is
-   the holder's own edge and the content sits a `block` inside it. */
-.holder {
-  padding-block: var(--gap-block);
-  border-block: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+/* ── Parts: four parts in one orbit ──────────────────────────────────────────────────
+   The ring is a drawing, not a frame: nothing sits inside it, so it boxes no text. The loop and its
+   direction marks are the accent (the operating model is the system's one moving part); the inner
+   orbit and the spokes are the strong rule; the nodes are accent squares, the brand's pixel; the
+   hub is ink. Every stroke keeps its width at any scale (`non-scaling-stroke`). */
+.orbitLead,
+.orbitMiddle {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: var(--svc-orbit-size-lg);
+  block-size: auto;
+  aspect-ratio: 1;
+  overflow: visible;
+}
+
+/* One drawing per width (see Parts): above the list below 1024, between the pairs from it, where
+   it is the middle track's one child and centres in it (self-alignment, not arrangement). The
+   middle copy is `display: none` below 1024, so the stacked column has no empty row. */
+.orbitMiddle {
+  display: none;
+  justify-self: center;
+}
+
+@media (min-width: 1024px) {
+  .orbitLead {
+    display: none;
+  }
+
+  .orbitMiddle {
+    display: block;
+  }
+}
+
+.orbitLoop {
+  fill: none;
+  stroke: var(--svc-mark);
+  stroke-width: var(--svc-orbit-stroke);
+  vector-effect: non-scaling-stroke;
+}
+
+.orbitRule {
+  fill: none;
+  stroke: var(--svc-rule-strong);
+  stroke-width: var(--svc-rule-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.orbitLeader {
+  stroke: var(--svc-mark);
+  stroke-width: var(--svc-rule-width);
+  stroke-dasharray: var(--svc-orbit-dash);
+  vector-effect: non-scaling-stroke;
+}
+
+.orbitMark {
+  fill: var(--svc-mark);
+}
+
+.orbitHub {
+  fill: var(--svc-ink);
+}
+
+/* The start-side pair reads toward the ring from 1024, where it stands left of it. */
+@media (min-width: 1024px) {
+  .partsStart {
+    text-align: end;
+  }
+}
+
+.partName {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
   color: var(--svc-ink);
+}
+
+.partBody {
+  font: var(--text-body);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink-muted);
+}
+
+@media (min-width: 1024px) {
+  .hub {
+    text-align: center;
+  }
 }
 
 .frameTitle {
@@ -113,10 +189,9 @@
 }
 
 .frameBody {
-  font: var(--text-body-lg);
+  font: var(--text-body);
   text-wrap: var(--text-running-wrap);
-  color: var(--svc-ink);
-  max-inline-size: var(--measure-body);
+  color: var(--svc-ink-muted);
 }
 
 /* ── Slice: the same work, organised two ways ──────────────────────────────────── */
