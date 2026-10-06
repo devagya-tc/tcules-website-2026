@@ -571,3 +571,13 @@ LAYOUT, TYPE, SEMANTICS
 [x] No hand-rolled grid, no margins, no Section override. DOM order equals visual order.
 [x] aria-labelledby only when its target renders.
 ```
+
+## Amendment — media arrangement, fix round 1 (cmp-media-split, 6 Oct 2026)
+
+- `texture` is typed paper-only: it is a type error beside `surface` tint, ink or blue.
+- `media`: the photo box is at least 4:5 (4:3 below 1024) and stretches to a taller copy column, with
+  the image filling it, so photo and copy share both edges at every width from 1024.
+- `media` with blocks and a pinned footer pins the blocks AND the footer as one group; the stretch
+  opens under the lead.
+- `media` heads of ≤ 22 characters take `--text-display`; the eyebrow takes `--csec-eyebrow-accent-ink`.
+- Placement: `TextureCounterweight` in Texture (docs/kit/brand-amendments.md).

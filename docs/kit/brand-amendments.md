@@ -92,3 +92,13 @@ blue underline would read as a link. Chrome (SiteNav, SiteFooter) is unchanged.
 | new § 11 Tone | — | Every kit photograph carries measured `temperature` (warm ≥ 0.10 r−b, cool < 0.02, neutral between) and `saturation` (vivid ≥ 0.40 mean HSV S) in `catalogue.json`, written by `npm run photos:tone`; the result matches visual-direction § 5.5's table exactly. A page is one family (warm + neutral or cool + neutral) with ≤ 1 vivid photo; each service story names its family, and its stand-in pool is filtered by it. | `fdn-media` (tags); `fdn-gates` (the page check) |
 | § 7 Captions | every non-decorative image has a caption | Kit photographs are atmosphere photographs: `getKitPhoto` returns `alt: ""` unless a placement passes one. | `fdn-media` |
 | intro note, § 10 Sourcing | "Stock photography is not published…" | Unchanged in code: kit stock reaches only `/design/**` routes. Public use is visual-direction § 10 item 3. | — (doc only) |
+
+## visual-direction § 6.3 · `counterweight` (cmp-media-split, fix round 1, 6 Oct 2026)
+
+| Was | Now | Why |
+|---|---|---|
+| ellipse, bottom −260, side −180, 34% × 340, blur 180; the box rises 80 into the band | `TextureCounterweight` (Texture): ellipse, bottom 20, side −12%, 48% × 56, blur 16 — wholly inside the 96 bottom padding, leaving the band by its side edge | The 180 feather ran under the last tile row (texture behind text) and was cut flat by the band's bottom edge, reading as an artefact. The recipe now lives in Texture, so no route restates its numbers. |
+
+The B media split's head takes the display role when it is ≤ 22 characters (one display line at
+1280+), and its eyebrow takes the accent ink (`--csec-eyebrow-accent-ink`). The fold holds the photo
+at 477 (a [5, 4] split at 4:5 is 987 tall), so the head's scale is the band's dominant element.

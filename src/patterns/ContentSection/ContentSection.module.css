@@ -5,10 +5,12 @@
    tokens/components/content-section.css.
 
    Classes: .eyebrow .heading .lead .leadBeside .centred .bodyCentred .text .textureLg
+   .eyebrowAccent .headingDisplay .photo
 
-   Two @media queries, both from 1024 and neither swapping a distance: .leadBeside (the lead's ROLE
-   follows the arrangement, and the beside arrangement only exists from 1024) and .textureLg (the
-   media split's texture has no phone form). */
+   Three @media queries, all from 1024 and none swapping a distance: .leadBeside (the lead's ROLE
+   follows the arrangement, and the beside arrangement only exists from 1024), .textureLg (the
+   media split's texture has no phone form) and .photo (the media split's crop is 4:3 above the
+   copy and 4:5 beside it). */
 
 .eyebrow {
   font: var(--csec-eyebrow-text);
@@ -89,5 +91,35 @@
 @media (min-width: 1024px) {
   .textureLg {
     display: block;
+  }
+}
+
+/* The media split's accent eyebrow and display head (fix round 1, cmp-media-split). The eyebrow keeps
+   its mono role and case and takes the surface's accent ink; the heading steps to the display role
+   on the display measure. Both are role swaps, not sizes: the display role re-declares itself at
+   1023 and 767 like every title role, so neither needs a breakpoint here. */
+.eyebrowAccent {
+  color: var(--csec-eyebrow-accent-ink);
+}
+
+.headingDisplay {
+  font: var(--csec-heading-text-display);
+  letter-spacing: var(--csec-heading-tracking-display);
+  max-inline-size: var(--csec-heading-measure-display);
+}
+
+/* The media split's photograph box: at least the arrangement's ratio, and otherwise as tall as the
+   row (see MediaSplit in the TSX). `aspect-ratio` gives the box its height and its contribution to
+   the row; `align-self: stretch` lets a taller copy column grow it, and the image fills it (Media
+   `fit="fill"`). Sizing, not arrangement: it places nothing and states no distance. The ratio
+   follows the ARRANGEMENT, which changes at 1024 — 4:3 above the copy, 4:5 beside it. */
+.photo {
+  align-self: stretch;
+  aspect-ratio: var(--csec-photo-ratio);
+}
+
+@media (min-width: 1024px) {
+  .photo {
+    aspect-ratio: var(--csec-photo-ratio-beside);
   }
 }

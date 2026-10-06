@@ -44,6 +44,18 @@
      .leadBeside. Like the lead, no tracking companion. */
   --csec-lead-text-beside: var(--text-body-lg);
 
+  /* The media split's head (fix round 1, cmp-media-split): the display role on the display
+     measure, because the fold caps the photo at 477 and the band's one large thing has to be the
+     head's scale. Read by .headingDisplay only. */
+  --csec-heading-text-display: var(--text-display);
+  --csec-heading-tracking-display: var(--text-display-tracking);
+  --csec-heading-measure-display: var(--measure-display);
+
+  /* The media split's photograph box — a ratio, inline over block: 4:3 above the copy, 4:5 beside
+     it from 1024 (§ 3.7 item 4). The box is a minimum; a taller copy column stretches it. */
+  --csec-photo-ratio: 4 / 3;
+  --csec-photo-ratio-beside: 4 / 5;
+
   --csec-heading-measure: var(--measure-title);
   --csec-lead-measure: var(--measure-lead);
   --csec-body-measure: var(--measure-body);
@@ -54,22 +66,26 @@
   --csec-heading-ink: var(--color-neutral-900); /* 14.62:1 */
   --csec-lead-ink: var(--color-neutral-700); /* 8.15:1 */
   --csec-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
+  --csec-eyebrow-accent-ink: var(--color-brandeis-500); /* 6.17:1 — the accent eyebrow (media) */
 }
 
 [data-surface='tint'] {
   --csec-heading-ink: var(--color-neutral-900); /* 13.05:1 */
   --csec-lead-ink: var(--color-neutral-700); /* 7.27:1 */
   --csec-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
+  --csec-eyebrow-accent-ink: var(--color-brandeis-500); /* 5.51:1 */
 }
 
 [data-surface='ink'] {
   --csec-heading-ink: var(--color-white); /* 17.26:1 */
   --csec-lead-ink: var(--color-neutral-300); /* 11.07:1 */
   --csec-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+  --csec-eyebrow-accent-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
 }
 
 [data-surface='blue'] {
   --csec-heading-ink: var(--color-white); /* 6.23:1 */
   --csec-lead-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --csec-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --csec-eyebrow-accent-ink: var(--color-brandeis-100); /* 4.91:1 — on blue the accent is the ground */
 }

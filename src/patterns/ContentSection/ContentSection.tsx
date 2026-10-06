@@ -113,12 +113,6 @@ type ContentSectionBaseProps = {
    */
   lead?: string;
   /**
-   * Which ground `Section` paints under this band. Passed straight through and read nowhere
-   * else — this component paints nothing, so taking the prop is not the same as owning the
-   * ground.
-   */
-  surface?: SectionSurface;
-  /**
    * Vertical air, passed through to `Section`. A band holding one paragraph and a band holding a
    * five-card grid do not want the same air, and that is a property of what is IN the band —
    * which only the caller knows.
@@ -143,20 +137,6 @@ type ContentSectionBaseProps = {
    * Scope): the caller composes `<CtaRow>` and hands it over, as `Button` takes `icon`.
    */
   footer?: ReactNode;
-  /**
-   * The band's Texture placement (visual-direction § 6): a `<Texture>` composed by the caller,
-   * rendered as the band's first child so it fills the band edge to edge beneath the content. A slot
-   * and not a recipe name, because the recipes are Texture's to own and a pattern takes its sibling
-   * as a node (CtaSection's `texture` is the same slot). On paper only (§ 6.2); the caller places
-   * the shape so its box clears every content box.
-   *
-   * In `media` it is shown from 1024 only. The B band's one placement is `counterweight`, in the
-   * corner opposite the photograph, and it has no phone form (§ 6.3, § 3.7 item 5): below 1024 the
-   * photo sits above the copy and there is no opposite corner left to weigh. Every other
-   * arrangement shows it at every width — `horizon`, the one recipe that runs below 1024, sits on a
-   * stacked band.
-   */
-  texture?: ReactNode;
   /**
    * The blocks. Each becomes one row of the body stack at `--gap-stack`.
    *
@@ -250,7 +230,43 @@ type MediaSplitProps = {
   aside?: never;
 };
 
+/* ── The ground, and whether a texture may sit on it ──────────────────────────────
+   A second union, crossed with the first, because the rule is about the SURFACE and not the
+   arrangement: § 6.2 — a texture sits on paper only. Its ink is --tex-ink per surface, so on tint or
+   ink it would still render, and nothing at runtime would say it was wrong (fix round 1). The type
+   says it instead: `texture` is a type error beside any `surface` other than paper. */
+
+type GroundProps =
+  | {
+      /**
+       * Which ground `Section` paints under this band. Passed straight through and read nowhere
+       * else — this component paints nothing, so taking the prop is not the same as owning the
+       * ground.
+       */
+      surface?: SectionSurface;
+      texture?: never;
+    }
+  | {
+      /** A textured band is a paper band (§ 6.2). */
+      surface?: 'paper';
+      /**
+       * The band's Texture placement (visual-direction § 6): a `<Texture>` composed by the caller —
+       * in practice one of Texture's named placements (`<TextureCounterweight side="end" />`) —
+       * rendered as the band's first child so it fills the band edge to edge beneath the content. A
+       * slot and not a recipe name, because the recipes are Texture's to own and a pattern takes its
+       * sibling as a node. Paper only, by type (§ 6.2): beside `surface="tint"` it does not compile.
+       *
+       * In `media` it is shown from 1024 only. The B band's one placement is `counterweight`, in the
+       * corner opposite the photograph, and it has no phone form (§ 6.3, § 3.7 item 5): below 1024
+       * the photo sits above the copy and there is no opposite corner left to weigh. Every other
+       * arrangement shows it at every width — `horizon`, the one recipe that runs below 1024, sits
+       * on a stacked band.
+       */
+      texture: ReactNode;
+    };
+
 export type ContentSectionProps = ContentSectionBaseProps &
+  GroundProps &
   (PlainProps | CentredProps | WithActionsProps | WithAsideProps | MediaSplitProps);
 
 export type ContentSectionTextProps = {
@@ -283,6 +299,9 @@ export type ContentSectionTextProps = {
 export function ContentSectionText({ children }: ContentSectionTextProps) {
   return <div className={styles.text}>{children}</div>;
 }
+
+/** The longest `media` heading that takes the display role — see `displayHead` in ContentSection. */
+const MEDIA_DISPLAY_MAX = 22;
 
 /** Is there anything here to render? `Children.toArray` drops null, undefined and booleans. */
 const present = (node: ReactNode) => Children.toArray(node).length > 0;
@@ -321,12 +340,12 @@ const present = (node: ReactNode) => Children.toArray(node).length > 0;
  * Route-blind and data-blind like every pattern — it never learns that Strapi exists.
  */
 export function ContentSection(props: ContentSectionProps) {
-  const { heading, headingId, eyebrow, lead, surface, density, footer, texture, children } =
-    props;
+  const { heading, headingId, eyebrow, lead, surface, density, footer, children } = props;
   const arrangement: ContentSectionArrangement = props.arrangement ?? 'stacked';
   const centred = props.align === 'center';
   const actions = props.actions;
   const media = props.arrangement === 'media' ? props.media : undefined;
+  const texture = props.texture;
 
   const hasText = Boolean(eyebrow || heading || lead);
   const hasActions = present(actions);
@@ -362,11 +381,29 @@ export function ContentSection(props: ContentSectionProps) {
   /* ── The head text's three parts ─────────────────────────────────────────────
      Built once, placed by the arrangement. `.centred` sets the text centred inside each part's own
      measure; the Layout holding the parts centres the parts themselves (justifyItems). */
+  /* In `media` the eyebrow takes the accent ink and the heading the display role (fix round 1,
+     cmp-media-split). The photograph is a 477 track beside 667 of copy — the fold caps it there,
+     see MediaSplit — so the band's one dominant element has to come from the head's SCALE, as
+     Meridian's does, wherever the head is short enough to carry it (below); and the eyebrow carries the blue, so a B band with no tile icons (head and
+     CtaRow only) still shows the accent above its title rather than reading black and white. */
+  const inMedia = arrangement === 'media' && Boolean(media);
+  /* Display scale only for a head that sets on ONE display line at the 653–667 copy track (≥ 1280):
+     22 characters. One line is what the fold budgets for — eyebrow 14 + 24 + 70 + 24 + a two-line
+     lead 60 + 48 + four tiles 354 = 594, inside the 596 photo. A longer head (the § 1.5 ceiling is
+     ten words) would run three or four display lines and push H-full + tiles ~250 past the fold, so
+     it keeps the h2 role. A rule on LENGTH rather than a prop, because the fold is what decides it
+     and a CMS author cannot see the fold. */
+  const displayHead = inMedia && Boolean(heading) && (heading?.length ?? 0) <= MEDIA_DISPLAY_MAX;
   const eyebrowEl = eyebrow ? (
-    <p className={cx(styles.eyebrow, centred && styles.centred)}>{eyebrow}</p>
+    <p className={cx(styles.eyebrow, inMedia && styles.eyebrowAccent, centred && styles.centred)}>
+      {eyebrow}
+    </p>
   ) : null;
   const headingEl = heading ? (
-    <h2 id={headingId} className={cx(styles.heading, centred && styles.centred)}>
+    <h2
+      id={headingId}
+      className={cx(styles.heading, displayHead && styles.headingDisplay, centred && styles.centred)}
+    >
       {heading}
     </h2>
   ) : null;
@@ -530,14 +567,28 @@ export function ContentSection(props: ContentSectionProps) {
  *                           a footer (unless `media.pin` is false), and is centred on it otherwise
  *                           (§ 3.2 rules 1 and 2)
  *
- * The photograph sits in a plain `div` because the row may STRETCH: a stretched `<img>` would take
- * the row's height and lose its 4:5. The div stretches; the image inside keeps its crop at the top
- * of it, so a copy column taller than the photo (stress copy, a narrow window) leaves air under the
- * photo rather than distorting it.
+ * WHY NOT [5, 4] (fix round 1 asked for the photo as the larger track, as Executra's 56%). At 4:5 a
+ * 5-of-9 photo is 636 × 795 at 1470, and the band 795 + 192 = 987 — past the 830 fold by 157 on its
+ * own. A 1:1 crop would fit (636 + 192 = 828) but leaves a 508 copy column that cannot hold H-full
+ * and four tiles in 636. The fold fixes the photo near 477 wide at 4:5, so the band's one dominant
+ * element is the head instead: display scale (`.headingDisplay`), as Meridian's is.
  *
- * The copy column is FLAT — head text, actions, blocks, footer as direct rows at `stack` — because
- * `pinLast` pins the last child, and the last child must be the action itself, not a group that
- * happens to end in one.
+ * THE PHOTOGRAPH IS AT LEAST 4:5, AND OTHERWISE AS TALL AS THE ROW. Its box (`.photo`) states the
+ * ratio and stretches; the image FILLS it. At 1470 the copy is shorter than 596 and the box is
+ * exactly 4:5. Between 1024 and ~1280 the photo track narrows faster than the copy shortens (the
+ * 7-track text rewraps, the photo only scales), and with a fixed 4:5 the copy overran the photo by
+ * 90–104 at top and bottom at 1024 (fix round 1). Now the box grows to the copy's height and the
+ * crop narrows to keep it, so the two tracks always share their top and bottom edges — which is
+ * also what keeps the pinned footer on the photo's bottom edge at every width from 1024. Below 1024
+ * the box is 4:3 above the copy, and nothing stretches it.
+ *
+ * The photograph sits in a plain `div` because the row may STRETCH: the div stretches, and the
+ * image covers it at the record's focal point.
+ *
+ * The copy column is head text, actions, then the body. When the footer is pinned the body — the
+ * blocks AND the footer — is ONE group, pinned to the photo's bottom edge, so the stretch opens
+ * between the lead and the blocks (Meridian's tension) rather than between the last block and the
+ * footer, where it read as missing content (fix round 1: ~135 of dead column above the CtaRow).
  */
 function MediaSplit({
   media,
@@ -554,6 +605,15 @@ function MediaSplit({
   footer: ReactNode;
   pinFooter: boolean;
 }) {
+  const body =
+    blocks && footer ? (
+      <Layout rowGap="stack">
+        {blocks}
+        {footer}
+      </Layout>
+    ) : (
+      (blocks ?? footer)
+    );
   return (
     <Layout
       columns={{ lg: [5, 7] }}
@@ -562,16 +622,13 @@ function MediaSplit({
       reverse={media.side === 'end' ? { lg: true } : undefined}
       align={pinFooter ? 'stretch' : 'center'}
     >
-      <div>
-        {/* 4:5 beside the copy, 4:3 above it (§ 3.7 item 4): a 4:5 at the 326 phone column would be
-            408 tall before the first word of the copy. */}
-        <Media image={media.image} ratio={{ base: '4/3', lg: '4/5' }} sizes={MEDIA_SPLIT} />
+      <div className={styles.photo}>
+        <Media image={media.image} fit="fill" sizes={MEDIA_SPLIT} />
       </div>
       <Layout rowGap="stack" pinLast={pinFooter}>
         {headText}
         {actions}
-        {blocks}
-        {footer}
+        {body}
       </Layout>
     </Layout>
   );

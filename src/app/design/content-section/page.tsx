@@ -5,6 +5,7 @@ import {
   Media,
   Prose,
   Section,
+  TextureCounterweight,
   type IconName,
   type SectionSurface,
 } from '@/components';
@@ -1119,6 +1120,45 @@ export default function ContentSectionSpecimen() {
           <Tiles count={2} />
         </ContentSection>
       </FoldExempt>
+
+      {/* ── 14b · the texture slot outside `media` ───────────────────────────────────────── */}
+      <Label title="14b · texture, in every arrangement">
+        The texture slot takes one of Texture&rsquo;s named placements and renders it as the
+        band&rsquo;s first child, beneath the content. In media it shows from 1024 only (the
+        counterweight has no phone form); in stacked, beside and a centred head it shows at every
+        width, which these three bands prove at 390. Paper only, by type: beside any other surface
+        the prop does not compile. Shown with TextureCounterweight because it is the placement
+        Texture owns today; it sits in the bottom padding and leaves by the side.
+      </Label>
+      <ContentSection
+        eyebrow="Stacked · texture"
+        heading="Three places products slow down"
+        headingId="csec-texture-stacked"
+        lead={LEAD}
+        texture={<TextureCounterweight side="end" />}
+      >
+        <Cards />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        eyebrow="Beside · texture"
+        heading="What changes in the first month"
+        headingId="csec-texture-beside"
+        lead={LEAD}
+        texture={<TextureCounterweight side="start" />}
+      >
+        <Tiles count={2} />
+      </ContentSection>
+      <ContentSection
+        align="center"
+        eyebrow="Centred · texture"
+        heading="One team from the first workshop"
+        headingId="csec-texture-centred"
+        lead={LEAD}
+        texture={<TextureCounterweight side="end" />}
+      >
+        <Cards />
+      </ContentSection>
 
       {/* ── 15 ─────────────────────────────────────────────────────────────────────────────── */}
       <Label title="15 · Footer in every arrangement, and footer alone">

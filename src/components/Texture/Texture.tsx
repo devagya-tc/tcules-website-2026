@@ -181,3 +181,41 @@ export function TextureShape({
     </>
   );
 }
+
+/** Which inline end of the band a placement weighs — the B band's copy side, opposite its photo. */
+export type TextureSide = 'start' | 'end';
+
+export type TextureCounterweightProps = {
+  /** The corner it sits in: the end corner beside a photo on the start side, and the reverse. */
+  side: TextureSide;
+};
+
+/**
+ * TextureCounterweight — the `counterweight` placement (visual-direction § 6.3), owned here so every
+ * band that spends it reads one recipe rather than restating its numbers.
+ *
+ * It is the B media split's one blue mass, on the side OPPOSITE the photograph, and its rule is that
+ * it never sits behind a glyph (owner ruling: texture never behind text it hurts). The § 6.3 recipe
+ * as first drawn (ellipse, bottom −260, side −180, 34% × 340, blur 180) failed that on the page: a
+ * 180 feather reached ~90 past its box, under the last tile row, at a strength so low it read as a
+ * rendering fault, and it was cut flat by the band's bottom edge (fix round 1, 6 Oct 2026).
+ *
+ * Redrawn to live ENTIRELY in the band's bottom padding (96), the one strip the content never
+ * enters at any width, and to leave the band by its SIDE — the viewport's edge, where a bleed reads
+ * as intended — rather than by its bottom, where it met the next band in a hard line:
+ *
+ *   ellipse, bottom 20, side −12%, 48% × 56, blur 16
+ *
+ * Its box runs from 20 to 76 above the band's foot; the blur is an 8 deviation, so the grid is at
+ * full strength through the middle of the padding, fades out ~16 beyond the box, and is spent
+ * before both the content's foot (96) and the band's edge. Across, it starts at 64% of the band and
+ * runs off the side. Below 1024 it is not shown: the photo sits above the copy (ContentSection).
+ */
+export function TextureCounterweight({ side }: TextureCounterweightProps) {
+  const across = side === 'end' ? { right: '-12%' as const } : { left: '-12%' as const };
+  return (
+    <Texture>
+      <TextureShape kind="ellipse" bottom={20} {...across} width="48%" height={56} blur={16} />
+    </Texture>
+  );
+}
