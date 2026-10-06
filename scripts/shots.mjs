@@ -34,7 +34,14 @@
  * edit here. The underscore-prefixed harness (`_specimen`) is not a route and is skipped.
  */
 import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { createServer } from 'node:net';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
@@ -47,11 +54,26 @@ const baseArg = args.find((a) => a.startsWith('--base='));
 const only = args.filter((a) => !a.startsWith('--'));
 
 const designDir = 'src/app/design';
-const all = readdirSync(designDir).filter(
-  (d) => !d.startsWith('_') && statSync(join(designDir, d)).isDirectory(),
-);
+/* Every specimen route under design/, nested ones included (`kit/cta`). A folder is a route only if
+   it holds a page.tsx: the top-level-only listing captured `/design/kit` (a 404, no page) and never
+   reached the eleven kit specimens under it, so a full run reported 0 problems for pages it had not
+   opened. `_`-prefixed (the harness) and `[dynamic]` segments are not specimen routes. */
+function specimenRoutes(dir, prefix = '') {
+  return readdirSync(dir)
+    .filter(
+      (d) => !d.startsWith('_') && !d.startsWith('[') && statSync(join(dir, d)).isDirectory(),
+    )
+    .flatMap((d) => {
+      const name = prefix + d;
+      const own = existsSync(join(dir, d, 'page.tsx')) ? [name] : [];
+      return [...own, ...specimenRoutes(join(dir, d), `${name}/`)];
+    });
+}
+const all = specimenRoutes(designDir);
 /* A nested specimen (`kit/cta`) is named by its path under design/ and must have a page. */
-const unknown = only.filter((n) => !all.includes(n) && !existsSync(join(designDir, n, 'page.tsx')));
+const unknown = only.filter(
+  (n) => !all.includes(n) && !existsSync(join(designDir, n, 'page.tsx')),
+);
 if (unknown.length > 0) {
   console.error(`No specimen route for: ${unknown.join(', ')}`);
   process.exit(1);
