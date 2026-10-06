@@ -10,7 +10,7 @@ const AUDIT = auditPath('design-system-audit');
 /**
  * /services/design-systems, designed — recomposed from the UI kit on 6 Oct 2026 (visual-direction
  * § 8.2). Copy is the CMS's own, re-cut to the § 1.5 budgets; every edit is logged, old and new, in
- * docs/content-changes.md § 7. The sections say what the page argues; the template decides how each
+ * docs/content-changes.md § 8. The sections say what the page argues; the template decides how each
  * is laid out from the job its blocks do (ServicePage plan.ts). The ORDER is the one thing here that
  * shapes the page, so it is chosen for the argument and the cadence together (fix round 1): a centred
  * band falls between every two beside bands, so no three in a row read as one 1/3 split.
