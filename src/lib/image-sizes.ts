@@ -138,14 +138,16 @@ export function mediaSplitSizes(
 }
 
 /**
- * ContentSection `beside`: the head track, 1 of [1, 2] from 1024 with the 96 split seam — where a
- * head-track aside photograph sits (visual-direction § 1.4, 3:2 at 381). (1240 − 96) / 3 ≈ 381 at the
- * cap; (100vw − 64 − 96) / 3 from 1024; below it the aside takes the full column between the head and
- * the body.
+ * ContentSection `beside`: the head track — 1 of [1, 2] from 1440 and 5 of [5, 7] from 1024, with the
+ * 96 split seam — where a head-track aside photograph sits (visual-direction § 1.4, 3:2 at 381).
+ * 381 from 1440; 477 between the cap and 1440; (100vw − 64 − 96) × 5/12 from 1024 (360 at 1024 —
+ * it said a third, 288, and fetched ~20% short; kit/page-showcase fix round 1); below it the aside
+ * takes the full column between the head and the body.
  */
 export const HEAD_TRACK =
-  `(min-width: ${CAP}px) ${Math.round((CONTAINER - SPLIT_GAP) / 3)}px, ` +
-  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) / 3), ${FLUID_COLUMN}`;
+  `(min-width: 1440px) ${Math.round((CONTAINER - SPLIT_GAP) / 3)}px, ` +
+  `(min-width: ${CAP}px) ${Math.round(((CONTAINER - SPLIT_GAP) * 5) / 12)}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 5 / 12), ${FLUID_COLUMN}`;
 
 /**
  * A card in two equal tracks from 768 (`md`), `colGap="gutter"` 32.

@@ -11,3 +11,12 @@
   block-size: var(--tex-corner-block-size);
   pointer-events: none;
 }
+
+/* From 1024 only (page-showcase fix round 2, 7 Oct 2026): visual-direction § 3.7 item 5 and § 6.3
+   run only `horizon` below 1024. At 1024 the box was a 280 × 80 fragment and at 390 a 156 × 80 one,
+   stranded in the gap between the band above and the eyebrow — read as a stray blob, not a corner. */
+@media (max-width: 1023.98px) {
+  .corner {
+    display: none;
+  }
+}

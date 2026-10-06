@@ -605,15 +605,30 @@ function CtaActions({
  * because each cell IS a term and its value. A cell with a blank key or value is dropped, so a bad
  * record renders no orphan key. `inline` (4) inside a cell — a key and its value — and `gutter`
  * between cells, the gap between items in a set.
+ *
+ * Beside the form (`besideForm`) the strip is one column from 1024 to 1279 (page-showcase fix round 2,
+ * 7 Oct 2026): there the close is [1, 1] and the copy track ~432, so three cells were ~130 each and
+ * the address broke mid-word ("hello@tcules.c / om") in the band whose job is to get a visitor to
+ * write in. From 1280 the 10 of [10, 7] gives each of three cells ~200 again.
  */
-function CtaContactStrip({ contact }: { contact: readonly CtaContact[] }) {
+function CtaContactStrip({
+  contact,
+  besideForm,
+}: {
+  contact: readonly CtaContact[];
+  besideForm: boolean;
+}) {
   const cells = contact.filter((cell) => cell.label.trim() && cell.value.trim());
   if (cells.length === 0) return null;
 
   return (
     <Layout
       as="dl"
-      columns={{ base: 1, md: cells.length }}
+      columns={
+        besideForm
+          ? { base: 1, md: cells.length, lg: 1, xl: cells.length }
+          : { base: 1, md: cells.length }
+      }
       colGap="gutter"
       rowGap="block"
       align="start"
@@ -980,7 +995,7 @@ export function CtaSection(props: CtaSectionProps) {
         <Layout rowGap="stack">
           {lede({ scale: 'close' })}
           <CtaPoints shape="stack" markers={markers} points={points} />
-          {hasContact ? <CtaContactStrip contact={contact} /> : null}
+          {hasContact ? <CtaContactStrip contact={contact} besideForm={hasForm} /> : null}
         </Layout>
         {hasForm ? <div>{props.form}</div> : null}
       </Layout>

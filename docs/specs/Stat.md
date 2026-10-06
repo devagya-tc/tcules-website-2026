@@ -24,7 +24,7 @@ stat-lg figure"). Promoted from the ServicePage template's local `Stat`; `cmp-se
 |---|---|---|
 | Opening rule | hairline, the stat's top edge (as a text-only card's, § 3.1) | neutral, decoration |
 | Mark | 2 × 32 segment over the rule's start | **blue** — the stat's foreground accent (§ 4.2 small graphic mark) |
-| Value | `--text-stat-lg` (`lg`) or `--text-stat` (`md`), mono, tabular | **ink, never blue** (owner brief, 6 Oct): a 54px blue figure is a mass, not a mark |
+| Value | `--text-stat-lg` (`lg`) or `--text-stat` (`md`), mono, tabular | **blue** (`--stat-value-ink`, page-showcase fix round 2, 7 Oct; brand-amendments.md): numerals are a foreground mark under the owner's blue ruling (§ 4.1). Was ink, never blue (6 Oct) |
 | Unit | `--text-ui-lg`, mono, on the value's baseline, `tight` after it | ink, muted |
 | Label | `--text-body-sm`, ≤ 2 lines, ≤ 12 words, capped at `--measure-title` | ink, muted |
 

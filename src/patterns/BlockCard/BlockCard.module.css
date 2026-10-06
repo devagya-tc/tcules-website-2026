@@ -93,6 +93,11 @@
   aspect-ratio: var(--bcrd-media-ratio-wide);
 }
 
+/* A person's face: 1:1 at every width (`headshot`), the source portrait's own square. */
+.headshot {
+  aspect-ratio: var(--bcrd-media-ratio-square);
+}
+
 @media (min-width: 1024px) {
   .double {
     aspect-ratio: var(--bcrd-media-ratio-double);

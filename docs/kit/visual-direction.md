@@ -1072,7 +1072,7 @@ centred and does not count). Each recipe appears once per page, except `horizon`
 The hero spends Field, so it carries none. Repeating the same recipe in the same slot across sibling
 pages is the continuity the review asked for.
 
-**The kit/home signature:** `hero-foot` (start), `head-half` (end) on the J statement, `closing` (start).
+**The kit/home signature:** `head-half` (end) on the J statement, `closing` (start). The `hero-foot` was dropped in page-showcase fix round 2 (brand-amendments.md): at the grid's fixed strength it read as a placeholder stripe.
 
 ---
 
@@ -1169,6 +1169,8 @@ Fit becomes N, the stat becomes S or a D stat aside, and D read-downs replace C-
 a list.
 
 ### 8.3 Showcase pages
+
+*As built (page-showcase fix round 2, 7 Oct 2026): the band lists below are the brief; each page's `page.tsx` header is the record of what renders, and brand-amendments.md § page-showcase fix round 2 lists where they differ (heroes, image moments, texture).*
 
 **`kit/home`** (warm family, 12 bands). This is the page judged against the references, so it opens on
 a photograph.

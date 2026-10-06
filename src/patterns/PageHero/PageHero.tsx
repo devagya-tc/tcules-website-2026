@@ -320,7 +320,7 @@ export type PageHeroProps = {
    *               the gutter and sinking into the band's foot padding. Needs the copy to end about
    *               100 above the photograph's foot (a two-line title); hidden below 1440.
    *   no media    `field`: the end third of a [2, 1] split from 1024, stepping up to the column's
-   *               end; a 2:1 block under the actions below 1024.
+   *               end; not drawn below 1024 (§ 3.7 item 5: only `horizon` runs there).
    * The band rule (§ 4.3): an illustration hero spends its second blue mass on the field, so
    * texture there is refused with a development warning, and so is any ground but paper (§ 6.2),
    * and the `wide` and `display` shapes, where the photograph already holds the band.
@@ -545,8 +545,8 @@ export function PageHero({
                photograph and no region is left under it, and on a phone, where it only dirtied the
                end gutter.
        field   no media: the end third of a [2, 1] split from 1024, beside the copy and stepping up
-               to the column's end edge, the copy standing in the clearing it leaves; below 1024 a
-               2:1 block 48 under the actions, the same steps at 358 wide.
+               to the column's end edge, the copy standing in the clearing it leaves; not drawn below
+               1024 (page-showcase fix round 2, § 3.7 item 5).
      Nothing else takes one — an illustration already spends the band's second blue mass (§ 4.3),
      a video is a box of another origin's pixels, the wide and display shapes give the photograph
      the band, and the grid is drawn for paper only (§ 6.2). */
@@ -908,11 +908,14 @@ export function PageHero({
           {stack}
           <div className={styles.foot}>
             <Texture className={styles.fieldTexture}>
-              {/* Three steps rising toward the photograph: 40 and 72 off the band's floor, then the
-                  last third full height to 48 under the ask. Hard edges (blur 0), so the field is
+              {/* Three steps rising toward the photograph off its foot line: a quarter and
+                  under half of the field, then the last third full height to 48 under the ask.
+                  Proportional rather than 40 / 72 px since the field stopped sinking into the
+                  padding (kit/page-showcase fix round 1): in the ~110 left under a two-line title
+                  a fixed 72 stood taller than the last step. Hard edges (blur 0), so the field is
                   a shape with an edge on the copy track rather than a smudge. */}
-              <TextureShape left={0} bottom={0} width="34%" height={40} />
-              <TextureShape left="34%" bottom={0} width="33%" height={72} />
+              <TextureShape left={0} bottom={0} width="34%" height="25%" />
+              <TextureShape left="34%" bottom={0} width="33%" height="45%" />
               <TextureShape left="67%" top={48} width="33%" height="100%" />
             </Texture>
           </div>

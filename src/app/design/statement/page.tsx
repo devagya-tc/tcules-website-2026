@@ -107,7 +107,7 @@ export default function StatementSpecimen() {
       <Label title='5 · align="center", texture="corner"'>
         One column on the band&rsquo;s axis at every width — the service page&rsquo;s J, between
         beside bands that already start on the 1/3 line. The corner field sits in the top-end
-        corner, clear of the eyebrow at 1470 and at 390. Then the same without an action.
+        corner from 1024, clear of the eyebrow; below 1024 the corner is not drawn. Then the same without an action.
       </Label>
       <Statement
         eyebrow="How we work"

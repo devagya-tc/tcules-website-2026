@@ -18,8 +18,9 @@ import styles from './TextureCorner.module.css';
 
    Its box is --tex-corner-inline-size × --tex-corner-block-size at the positioned ancestor's
    top-end corner. In a band with `open` density (128 of top air) the box is 80 tall, so it ends 48
-   above the eyebrow — past a `stack`, never behind a glyph — at every width, which is why it is
-   drawn at 390 too. Paper only, like every texture (§ 6.2); the band's slot enforces it. */
+   above the eyebrow — past a `stack`, never behind a glyph. From 1024 only (page-showcase fix round
+   2): below it the box was a stranded fragment between bands, and § 3.7 runs only `horizon` there.
+   Paper only, like every texture (§ 6.2); the band's slot enforces it. */
 
 const PIXEL = 10;
 const COLUMNS = 28;

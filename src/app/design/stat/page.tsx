@@ -35,8 +35,8 @@ export default function StatSpecimenPage() {
           <h1>Stat</h1>
           <p>
             One figure, its unit, and the line that says what it counts, opening on a hairline with a
-            short blue mark at its start. One form at every width: the figure line, then the label. The numeral is ink at every size: it is the band&rsquo;s
-            large thing, and blue at 54px would be a mass, not an accent. Seen in its bands on{' '}
+            short blue mark at its start. One form at every width: the figure line, then the label. The numeral is blue at every size, the foreground accent
+            numerals carry (§ 4.1); its unit and label stay in the quiet ink. Seen in its bands on{' '}
             <a href={ROUTES.designKitProcess}>the process and stats family page</a>.
           </p>
         </Layout>

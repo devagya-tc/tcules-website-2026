@@ -77,6 +77,13 @@
   text-align: center;
 }
 
+/* Centred, a ragged lead leaves a one- or two-word last line on the axis ("after ours.", "on it.");
+   balanced, its lines step evenly about it — PageHero's centred lead, the same reading
+   (page-showcase fix round 1). */
+.lead.centred {
+  text-wrap: var(--text-title-wrap);
+}
+
 /* `align="center-lg"`: the same centring, from 1024 only. Below it the band is start-aligned like
    the body it sits over (a thread down the start edge, stacked lists). `justify-self` on the head's
    and the body's rows is the head Layout's `justifyItems="center"` restated at one breakpoint —
@@ -84,6 +91,10 @@
 @media (min-width: 1024px) {
   .centredLg {
     text-align: center;
+  }
+
+  .lead.centredLg {
+    text-wrap: var(--text-title-wrap);
   }
 
   .itemsCentredLg > *,

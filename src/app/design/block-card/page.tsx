@@ -786,6 +786,31 @@ export default function BlockCardSpecimenPage() {
             <BlockCardSet items={SHAPE_WIDE} lead="wide" />
           </Specimen>
           <Specimen
+            title='ratio="headshot" · people, 1:1 at every width'
+            note="A person's face keeps the square portrait's own frame at every width, so no crop cuts the head at the hat or the chin. Composed in the caller's Layout (two up on a phone, four from 1024); the eyebrow is the role, the title the name."
+          >
+            <Layout as="ul" columns={{ base: 2, lg: 4 }} colGap="gutter" rowGap="stack">
+              {(
+                [
+                  ['portrait-woman-black-top', 'Principal designer', 'Meera Joshi', 'Leads the product model.'],
+                  ['portrait-man-hat', 'Design engineer', 'Tom Becker', 'Builds the component library.'],
+                  ['portrait-woman-glasses-plaid', 'Research lead', 'Lena Park', 'Runs the interviews.'],
+                  ['portrait-man-glasses-stripes', 'Design systems lead', 'Marco Reyes', 'Owns the tokens.'],
+                ] as const
+              ).map(([id, role, name, body]) => (
+                <BlockCard
+                  key={id}
+                  eyebrow={role}
+                  title={name}
+                  body={body}
+                  media={kit(id)}
+                  ratio="headshot"
+                  tracks={3}
+                />
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
             title="stagger · a pair, the second dropped a section step"
             note="From 1024 the even card drops 96 (Layout stagger: a track, not a margin). One row only. Below 1024 the two sit level."
           >
