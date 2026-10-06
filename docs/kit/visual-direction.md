@@ -951,7 +951,7 @@ any photo for a better catalogue match, as long as the gate still passes.
 | software-development (warm) | `designer-desk-monitor` | `workshop-hands-writing` | `whiteboard-pair-laptop` | `studio-session-talk` | `team-laptops-table` | aside 1 |
 | design-engineering (warm) | `stylus-tablet-sketch` | `whiteboard-two-hands` | `sticky-grid-minimal` | `studio-whiteboard-crit` | `hands-sketches-markers` | aside 1 |
 | design-systems (cool) | `screen-over-shoulder` | `wireframe-wall` | `desk-minimal-white` | `desk-flatlay-devices` (crop out the printed "to") | `designer-monitor-ui` (crop from the right) | `studio-whiteboard-crit` as a stand-in cover |
-| ai-product-ux (cool) | `pair-testing-overhead` | `workshop-whiteboard-lounge` | `conversation-chalkboard` | `hands-sticky-blue-pen` | `pencil-wireframe-red` | `studio-session-talk` as a stand-in cover |
+| ai-product-ux (cool) | `pair-testing-overhead` | `workshop-whiteboard-lounge` (no banner on the page yet) | `pair-laptop-notebook` (3:2, landscape offer; fix round 2, replacing the staged chalkboard pair) | `hands-sticky-blue-pen` (not shown: the stat band takes the slot and shows its figure) | `studio-whiteboard-crit` (the numbered record's aside; fix round 2, replacing the pink-cast pencil crop) | aside 2 |
 | product-modernisation (cool) | `wall-sketching-portrait` | `office-calm-interior` | `pencil-wireframe-violet` | `board-review-backs` | `pair-desk-through-plants` | `studio-whiteboard-crit` as a stand-in cover |
 
 - **No large slot uses a vivid photo.** Each page may spend its one vivid photo in a card set, for

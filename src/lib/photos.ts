@@ -238,12 +238,19 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'desk-flatlay-devices',
     aside2: 'designer-monitor-ui',
   },
+  /* ai-product-ux, fix round 2 (6 Oct 2026): K and aside 2 swapped, B kept. K's staged pair under a
+     fake chalkboard dashboard became a pair working through notes at a laptop (landscape 3:2), a
+     photo no other page's slot or stand-in pool names; aside 2's pink-cast pencil crop became the
+     studio's own whiteboard crit (studio frames may recur, § 5.1 rule 4), which the numbered record
+     takes. Fix round 1 had taken B to `workshop-brick-room` and K to `pair-at-laptop-sticky-wall`;
+     both went back: the first is in five pages' stand-in pools, the second is held for the home
+     hero (§ 5.6). */
   'ai-product-ux': {
     b: 'pair-testing-overhead',
     i: 'workshop-whiteboard-lounge',
-    k: 'conversation-chalkboard',
+    k: 'pair-laptop-notebook',
     aside1: 'hands-sticky-blue-pen',
-    aside2: 'pencil-wireframe-red',
+    aside2: 'studio-whiteboard-crit',
   },
   'product-modernisation': {
     b: 'wall-sketching-portrait',

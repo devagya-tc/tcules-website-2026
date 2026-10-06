@@ -278,3 +278,94 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 | Photos | router aside / F aside (src/lib/photos.ts, this page's row only) | studio-session-talk / team-laptops-table | whiteboard-two-hands / stylus-tablet-sketch: both dim frames replaced by bright process frames, both freed by design-engineering's fix round 1 |
 
 **Why.** Fix round 2 review. **Found in.** `kit/page-software-development`, fix round 2.
+
+## 8. AI Product UX recomposed from the UI kit (6 Oct 2026)
+
+**Page / section.** `/design/service-page/ai-product-ux`, every band (`src/content/sources/fixtures/ideal/services/ai-product-ux.ts`).
+
+**What's needed.** Approve, rewrite or reject each edit below. Each one meets the § 1.5 budget of the band the template now gives that section. The page runs 12 bands (hero, B, H, E, F, J, E, K, M, D-faq, C-icon, L), every one ≤ 830 at 1470 and ≤ 1700 at 390. The hero title (48 characters) and lead (20 words) were already in budget and are unchanged.
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| B signals | whole band | none | NEW COPY: eyebrow "Where trust breaks", heading "Where an AI feature loses people", lead "The symptom shows in the interface. The cause is usually the role the model was given.", four tiles: Every answer re-checked (eye) — People cannot see the sources behind an output, or what is missing from them. · Edits undone by hand (undo-left) — The model changes what a person owns without showing the difference or keeping the original. · A confident guess (question-circle) — Uncertainty is hidden where it should be stated, with a way to dispute it. · An agent nobody stops (cpu) — A run of steps has no visible state, no preview and no way to halt it. Each tile restates a row of the model-role spectrum as the symptom a user sees |
+| H clients | whole band | none | NEW: eyebrow "Clients", heading "Teams we have shipped with", the six real marks and the Clutch rating (as product-design) |
+| E model roles | eyebrow | Before chat, copilot or agent | Before chat or agent |
+| E model roles | lead | The work combines product strategy, UX, interaction, evaluation and implementation: how people understand, direct, control and recover from model behaviour. It starts with what the model may do. | Each role brings something a person must be able to inspect, direct or undo. |
+| E model roles | rows | seven: … Predicts or detects (Confidence that can be wrong in both directions / Uncertainty stated, and a way to dispute it) · Orchestrates steps (A sequence nobody watched step by step / State per step, and a way to stop) … | five (the spectrum's structural cap): Generates, Transforms, Retrieves and synthesises, Recommends, Acts with delegated authority. The two cut rows live on as the B tiles "A confident guess" and "An agent nobody stops", and on the deep page |
+| E model roles | deep-page link | none | Copilots and agents, in depth → /services/ai-product-ux/ai-copilots-agents (NEW) |
+| F authority | eyebrow | Authority changes with consequence | Authority by consequence |
+| F authority | lead | Four different product roles. For each: the consequence, whether it can be reversed, the evidence a person can inspect, the human gate and the recovery path — decided per action, not as one label for the whole feature. | Decided per action, never once per feature: the consequence, whether it reverses, the evidence and the way back. |
+| J statement | whole band | none | NEW: eyebrow "What we hold to", sentence "An interface should never sound more certain than the system has earned." (re-cut from the record's old lead), link "See how we work" |
+| E record | eyebrow / heading | none / The AI product responsibility record | Written down once / Eight questions per scenario |
+| E record | lead | It follows the product into design and engineering, and stops an interface label carrying more certainty than the system has earned. | The responsibility record follows the product into design and engineering. (its second half is now the J statement) |
+| E record | fields | seven | eight: NEW field "Accountability — Who answers for the result when it is wrong?" (flag), before Recovery; seven left a hole in the two-column sheet |
+| K offer | whole band | the readiness assessment was the router's `also` row: "The scope is still uncertain, and the first evidence has to be created before the route can be chosen." | NEW band: eyebrow "Scope still unclear?", heading "Not sure what the model should do yet?", body "The readiness assessment creates the first evidence, so the route is chosen from the work rather than the technology.", points "The user work worth assisting · The product state the model touches · The authority it should receive" (from the router's old lead), action "Request the readiness assessment" |
+| M evidence | heading | Evidence across different AI products | Evidence across AI products |
+| M evidence | lead | none | Three of the twelve AI products we have worked on, each under a different condition. (NEW, from the stat's "twelve AI products") |
+| M evidence | cases | ConnectX · BuildTwin · Eden AI (Workflow creation through search / For a developer-facing AI platform.) · Novus Insights (A survey builder that drafts, so researchers refine / Public responsibility is bounded by the available source.) | ConnectX · BuildTwin · OmnyAI (NEW: "OmnyAI · Decision support", Decision control, returned to people / The AI–human relationship reframed around the people the AI was meant to help.). Four covers stacked to 2008 at 390; OmnyAI argues the page's subject, authority. Eden AI and Novus stay on the case-study index |
+| M evidence | ConnectX client / body | ConnectX · AI-native energy product / Demonstrated in code: conversational intent connected to data, dashboard modules and a digital-twin state. | ConnectX · AI-native energy / Intent connected to data, dashboards and a digital-twin state, shown in code. |
+| M evidence | scope note | Tcules also uses AI in its own research synthesis, exploration, prototyping, coding and QA. That is a separate claim: … | moved to the FAQ as "Does Tcules use AI in its own work?" |
+| — | "Evaluate against real decisions, not model accuracy alone" band | eyebrow, heading, lead "The acceptance set starts from representative user decisions and failure conditions.", six titles-only checks and the "Who approves" note | folded into the FAQ: "How is an AI feature evaluated before release?" (the lead and the six checks as one answer) and "Who approves the residual risk?" (the note, unchanged) |
+| — | "How product responsibility combines" band | the stat 12 / AI products, its body and eight responsibilities | folded into the FAQ: "What has the work combined across twelve AI products?" (the eight responsibilities as one answer); the figure moves to the M lead |
+| — | "Before the first scenario" resources band | three cards: Readiness Check, Generative AI patterns for SaaS, AI Product UX definition | folded into the FAQ: "Where should a team read first?", the three as links; the heading becomes the FAQ's |
+| D-faq questions | whole band | none | eyebrow "Questions", heading "Before the first scenario", the five questions above |
+| C-icon router | eyebrow / heading | Define the first AI decision / Choose the route from what the product is delegating | Go narrower / Choose by what is delegated |
+| C-icon router | lead | Useful inputs are the user work, the current product state, and the authority you expect AI to receive. | Useful inputs: the user work, the current product state, and the authority you expect AI to receive. |
+| C-icon router | conditions | The product is delegating a bounded task. · Review, escalation and correction are central to the work. · Failure is consequential and oversight is the question. · Retrieval and ranking decide what a person sees, and why. | When the product is delegating a bounded task to a model. · When review, escalation and correction are central to the work. · When failure is consequential and oversight is the open question. · When retrieval and ranking decide what a person sees, and why. |
+| C-icon router | icons / also | none / the readiness assessment | cpu, users-group-rounded, shield-check, graph-up (NEW) / removed: it is the K offer |
+| L close | eyebrow | none | Start a project |
+| L close | body | The interaction, the evidence behind it and the decision rule that needs to become explicit. A rough brief is enough. | The interaction, the evidence behind it and the decision rule that needs to become explicit. |
+| L close | points | Send one consequential scenario — What the model does, and what it may affect. · A reply within one business day — With what the record needs next. | Send one scenario — What the model does, and what it may affect. A rough brief is enough. · A reply within a day — One business day, with what the record needs next. |
+
+**Not done, for content.** There is no G proof band: no attributable quote from an AI engagement exists, and the one approved quote (Auxentios) is CPQ work. A real quote from ConnectX, BuildTwin or OmnyAI, added as a `proof` section, gives the page its tint band and the `horizon` above it.
+
+**Found in.** `kit/page-ai-product-ux`, 6 Oct 2026.
+
+### 8.1 Fix round 1 (6 Oct 2026)
+
+The review found three ruled text lists in a row (spectrum, steps, record), the signals and the router as one mirrored unit, a stacked double head on the record, weak SaaS-stock photographs and no texture on B. The page now runs hero, B, H, E spectrum, E thread, C-text record, K, J, M, D-faq, D router, L: every band ≤ 830 at 1470 (tallest 805) and ≤ 1700 at 390 (tallest 1628).
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| B signals | heading | Where an AI feature loses people | Where AI loses people (one line at the display role the counterweight gives B) |
+| B signals | lead | The symptom shows in the interface. The cause is usually the role the model was given. | The symptom is in the interface. The cause is the model’s role. |
+| B signals | tiles | four: Every answer re-checked · Edits undone by hand · A confident guess · An agent nobody stops | two, so the band carries the § 6.4 counterweight: Every answer re-checked (eye) — People cannot see the sources behind an output, or how sure the model is, so they redo the work. · Changes nobody can undo (undo-left) — The model edits what a person owns, or runs steps with no preview and no way to stop. The four symptoms remain, merged in pairs, and each is a row of the spectrum below |
+| E model roles | meter label | Model authority | Authority (the header no longer clips at 390) |
+| E model roles | rows | Output a person may not have asked for in that form. / Editing, and constraints on source. · Claims that rest on evidence the reader cannot see. / The sources, and what is missing from them. · Consequence in the product, on someone’s behalf. | Output a person did not ask for in that form. / Editing, and limits on source. · Claims on evidence the reader cannot see. / The sources, and what is missing. · Consequence on someone’s behalf. (shorter cells, shorter rows at 390) |
+| E authority | block | `steps`, four numbered ruled rows beside the wireframe photo (F) | `thread`, a horizontal flow (E, centred): Inform — The model tells a person something. The person decides. · Suggest — The model proposes. A person chooses, and sees why. · Prepare — The model does the work. A person reviews it first. · Execute — The model acts. A person can watch, stop and undo it. Return path: Every level keeps a way back to a person. |
+| E authority | lead | Decided per action, never once per feature: the consequence, whether it reverses, the evidence and the way back. | Set per action, never once per feature, from what the action changes and whether it reverses. |
+| Record | block | `record` (E) with its own title "Responsibility record" and meta "One per consequential AI scenario" under the band head | an eight-tile icon grid (`signals`, four across): the record's name is the band's eyebrow, so there is one head |
+| Record | eyebrow / lead | Written down once / The responsibility record follows the product into design and engineering. | The responsibility record / One record for every AI scenario that matters, kept through design and engineering. |
+| Record | questions | Which decision or task deserves assistance? · What may the model produce or influence? · What data and sources support the output? · What can happen without human approval? · What counts as useful and safe performance here? · Who answers for the result when it is wrong? · How can a person correct or reverse the result? | Which task deserves assistance? · What may the model influence? · Which sources support the output? · What happens without human approval? · What counts as useful and safe here? · Who answers when the result is wrong? · How can a person reverse the result? (one line each at 390; Uncertainty unchanged) |
+| Record | Recovery icon | undo-left | refresh (undo-left is B's "Changes nobody can undo") |
+| Record | position | after the statement | after the thread, before the offer (no two bands without an image are adjacent, § 5.1 rule 1) |
+| K offer | points | The user work worth assisting · The product state the model touches · The authority it should receive (titles only) | The work worth assisting — The decision or task where help changes the outcome. · The state it touches — The records and screens the model may read or change. · The authority it receives — What it may do alone, and what waits for a person. |
+| Router | icons | cpu, users-group-rounded, shield-check, graph-up | none: the list router, so it no longer repeats the signals' icon tiles |
+| Router | lead | Useful inputs: the user work, the current product state, and the authority you expect AI to receive. | Bring the user work, the current product state and the authority you expect the model to receive. |
+| Router | position | before the FAQ | after the FAQ, the last band before the close |
+| — | photos (src/lib/photos.ts § 5.6 row) | B pair-testing-overhead · K conversation-chalkboard · aside 2 pencil-wireframe-red | B workshop-brick-room · K pair-at-laptop-sticky-wall · aside 2 studio-whiteboard-crit (the router's aside) |
+| — | stand-in pool | studio-session-talk, studio-whiteboard-crit, workshop-brick-room, hands-trackpad | studio-session-talk, pair-laptop-notebook (the other two are now slot photos, hands-trackpad is product-design's B) |
+
+**Found in.** `kit/page-ai-product-ux` fix round 1, 6 Oct 2026.
+
+### 8.2 Fix round 2 (6 Oct 2026)
+
+The review found no proof moment at scale, the same icon-tile shape three times in four bands (B, the 4×2 record grid, K's points), B's counterweight reading as an empty placeholder, an undersized router aside, and photo swaps with effects on other pages. The page now runs 13 bands (hero, B, H, E spectrum, E thread, E record, K, J, D stat, M, D-faq, D router, L; the owner's ruling is not to cap section counts), every one ≤ 803 at 1470 and ≤ 1628 at 390. The one tile set left is B's. B carries four tiles, so the plan spends the texture placement on J's corner field rather than the counterweight.
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| B signals | tiles | two: Every answer re-checked · Changes nobody can undo | four: the two above, plus **NEW COPY, owner sign-off needed:** "Help nobody asked for — Output arrives in a form nobody requested, and fixing it takes longer than doing the work." (chat-round-dots; from the spectrum's first row) · "Nobody owns the error — When a result is wrong, no one can say who should have caught it, or where." (close-circle; from the record's Accountability question) |
+| E record | block / eyebrow | an eight-tile icon grid (`signals`, four across) / The responsibility record | the `record` sheet: meta "One per AI scenario", title "Responsibility record", eight fields paired in two columns / Kept through delivery (the record's name is the sheet's title now) |
+| E record | Accountability field | logged as NEW in § 8 | still NEW: it is the studio's eighth question, not CMS text ("Who answers when the result is wrong?"). **Owner sign-off needed.** Without it the heading goes back to seven questions and the sheet has a hole |
+| K offer | body | The readiness assessment creates the first evidence, so the route is chosen from the work rather than the technology. | The readiness assessment names the work worth assisting, the state the model touches and the authority it receives, so the route is chosen from the work. |
+| K offer | points | The work worth assisting — The decision or task where help changes the outcome. · The state it touches — The records and screens the model may read or change. · The authority it receives — What it may do alone, and what waits for a person. | none: folded into the body above, so K is copy beside its photograph rather than a third tile row |
+| D stat | whole band | none (round 0 folded the stat into the FAQ) | eyebrow "Across AI products", heading "From framing into code", lead "Copilots, AI-native tools, AI-powered products and integrations: the same four strands of work in each.", stat 12 / "AI products we have worked on", four rows re-cut from the CMS's eight responsibilities: Framing and research · Interaction and control · Evaluation and acceptance · Prototypes into product |
+| D-faq | questions | five, including "What has the work combined across twelve AI products?" | four: that answer is the stat band now |
+| D router | lead | Bring the user work, the current product state and the authority you expect the model to receive. | none. The aside photograph takes the height instead (381 × 283, was 381 × 175), and the close already asks for the scenario |
+| D router | route label | Human-in-the-Loop Workflows | Human‑in‑the‑Loop Workflows (U+2011 non-breaking hyphens, so it no longer wraps at a hyphen at 390) |
+| Photos | B / K (src/lib/photos.ts, this page's row, and § 5.6's row) | workshop-brick-room / pair-at-laptop-sticky-wall (fix round 1) | pair-testing-overhead (back to § 5.6) / pair-laptop-notebook (3:2). Round 1's B is in five pages' stand-in pools, and its K is held for the home hero. Both swaps are reverted, and the § 5.6 note on the home hero is restored |
+| Photos | stand-in pool | studio-session-talk, pair-laptop-notebook | studio-session-talk, team-laptops-table (pair-laptop-notebook is K now) |
+
+**Template, not fixable here.** At 390 the spectrum's DataTable scrolls sideways, which hides two of its four columns. The Stat numeral is mono at ~48 px in ink, so it is not a display-scale moment. The case wells are short letterboxes. The thread is thin under a centred head. `columns` is a required content field on `signals` and `ledger`. No G band is possible until an attributable AI quote exists.
+
+**Found in.** `kit/page-ai-product-ux`, fix round 2.
