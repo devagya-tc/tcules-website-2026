@@ -201,7 +201,85 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 | stress | capped band's `more` label | Every option, on the deep page | The full list, on the deep page (it now also labels the capped bridge) |
 | stress | spectrum and bridge caps | spectrum 6 of 7 options | spectrum 5 of 7, bridge 6 of 7, matching the template's structural caps |
 
-## 7. AI Product UX recomposed from the UI kit (6 Oct 2026)
+## 7. Software Development recomposed from the UI kit (6 Oct 2026)
+
+**Page / section.** `/design/service-page/software-development`, every band (`src/content/sources/fixtures/ideal/services/software-development.ts`).
+
+**What's needed.** Approve, rewrite or reject each edit below. Each meets the § 1.5 budget of the band the template now gives that section (visual-direction § 8.2). The page goes from 12 bands of four shapes (E, D, E, E, D, E, M, D-faq, M: no photograph outside a card, two bands over the fold) to 12 bands of eleven: A, B, H, F, E, G, M, J, C-icon, K, D-faq, L, every one ≤ 789 at 1470.
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| A hero | title | Software development, led by product design | Software built on settled product decisions (43 characters) |
+| A hero | lead | Tcules builds software where product behaviour, interaction and implementation need one accountable delivery path. | Tcules designs and builds running software in one accountable path, so roles, rules and edge states reach the code decided, not guessed. (22 words) |
+| A hero | second action | none | Prototype Hardening Review → `/audits/prototype-hardening-review` (NEW; the hero carries one solid action and one link, § 2.3) |
+| B signals | whole band | none | NEW: eyebrow "Where builds go wrong", heading "Where builds break", lead "The trouble starts where a decision never reached the code.", two tiles: "Every layer is done — Each team finished its part, yet no path a user takes works end to end." (from the slice argument) and "Edge states are guessed — The screens showed the happy path, so the code had to invent the rest." (from the old what-changes lead). Icons layers, question-circle. Two tiles, so the band carries the `counterweight` (§ 6.4) |
+| H clients | whole band | none | NEW: eyebrow "Clients", heading "Teams we have shipped with", six real marks (GT Tools, Omny, LatitudePay, SafeXpay, Quoter, Knovos) and the Clutch rating |
+| — | "What design-led development changes" Thread (6 stages) | Product decision · Role, rule and state model · Interaction · Data and API contract · Implementation constraint · Acceptance and release, each with a line | folded into the F steps below: it and the delivery trace were one argument told twice |
+| F delivery trace | eyebrow / heading | Software delivery trace / Every stage cites the one before it | What design-led changes / Engineering receives the decisions |
+| F delivery trace | lead | Requirements cite product decisions. Acceptance covers behaviour and implementation. What production shows enters the next decision. | Every stage cites the one before it, so edge states are implemented, not guessed. |
+| F delivery trace | stages | a nine-stage Thread with no bodies (Requirement · Decision owner · Design state · Technical contract · Implementation · Automated and manual acceptance · Deployment · Observation · Change) and the loop "Production observation returns to the next product decision." | five steps (NEW COPY, ≤ 9 words each): Settle the behaviour — Roles, rules and states, decided with their owner. · Write the contract — The data and API terms each part owes. · Build the slice — Interface, services and data along one path. · Accept it twice — Automated and manual tests, behaviour and code. · Ship and observe — What production shows enters the next decision. |
+| E slice | eyebrow / heading | none / A release is a complete product slice | How a release is cut / A release is a complete slice |
+| E slice | lead | A credible release connects a user condition to the records, rules, interfaces and operations that complete it. Organised only by layer, every team can be locally complete while the product path stays unusable. | Organised by layer, every team can finish its part while no user path works. |
+| E slice | layer / release notes | Each team builds half its layer, each on different paths. No path has every piece, so nothing a user can do works yet, and nothing can ship. · The same amount of work, with every layer building the same paths. Two things a user can do work end to end, and ship. | Each team builds half its layer, each on different paths. Nothing a user can do works yet, and nothing can ship. · The same work, with every layer building the same paths. Two things a user can do work end to end, and ship. |
+| E slice | acceptance levels | "A release is accepted at three levels": Product behaviour · System behaviour · Release behaviour, under the grids (the band ran 1038) | moved to the FAQ "When is a release accepted?", text unchanged |
+| G proof | whole band | none | NEW: eyebrow "Proof", heading "In a client’s words", the approved Auxentios quote (Ashok Mohanty) beside the Auxentios case: "A quotation model, carried into components" (NEW title) / "Research across specialist roles, carried into a product model and component-led interface work." **Ask:** the only approved quote is Product Design's; a software-delivery quote would replace it here |
+| M evidence | eyebrow / heading | none / Evidence of implemented responsibility | Evidence / Work that reached code |
+| M evidence | lead (was the scope note) | note: Each case establishes only the responsibility stated in its record. ConnectX is not a production deployment claim. | lead: Each case claims only its own record. ConnectX is a coded demonstration, not a deployment. |
+| M evidence | ConnectX title / body | AI architecture, scenario modelling and a hybrid workspace / A coded demonstration connecting all three, for a bounded engagement. | AI architecture in a hybrid workspace / A coded demonstration of AI architecture, scenario modelling and a hybrid workspace. |
+| J statement | whole band (was the AI section, an E flow) | eyebrow AI-assisted engineering, heading "Production responsibility does not move to the model", lead "Versatility matters more as frameworks change. Accountability does not.", a two-stage flow (AI accelerates: architecture exploration, implementation, test generation, documentation · Tcules reviews it against: the product and system model, security and data requirements, coding standards, acceptance) | J: eyebrow "AI-assisted engineering", statement "Production responsibility does not move to the model.", link "AI Product Engineering". The flow and the lead move to the FAQ "How does Tcules use AI in engineering?" |
+| C-icon router | eyebrow / lead | Go to the part that binds / none | Where the risk sits / When one part of the system carries the risk, a narrower service settles it faster. (NEW) |
+| C-icon router | conditions | A SaaS product or web application is the binding part. · The model, its data and its interaction are the product. · The interface layer carries the risk. · Services, data and integrations carry it. · It has to run on a phone. · The product has launched and has to keep changing. | each now opens "When …" (same words) |
+| C-icon router | card names (≤ 5 words, one line) | SaaS and Web Application Development · Backend and API Development · Mobile Application Development · Product Maintenance and Evolution | SaaS and Web Apps · Backend and API · Mobile App Development · Maintenance and Evolution (routes unchanged) |
+| C-icon router | icons | none | widget, cpu, monitor, server, smartphone, refresh (NEW) |
+| K offer (was a D ledger) | eyebrow / heading / body | none / Three ways to hand over responsibility / none | Ways to engage / Choose how much responsibility to hand over / Tcules can own a whole product, one technical surface, or a launched product’s next change. (NEW) |
+| K offer | points | Build a product or major capability — Tcules owns product definition through implementation for an agreed scope, with your domain, product and technology leadership. · Deliver one technical surface — Frontend, backend, API, integration, AI or mobile responsibility, bounded inside your existing architecture. · Continue an existing product — Maintenance and product evolution after launch, under project-specific terms, priorities and support. | A product or capability — Definition through build, with your domain and technology leads. · One technical surface — Frontend, backend, API, AI or mobile, inside your architecture. · An existing product — Maintenance and evolution after launch, on project terms. |
+| K offer | actions | none | Start a project · See how we work (the old resources card "How we work") |
+| — | Ownership ledger (6 icon rows) | Ownership and handover are delivery decisions: Repository and environment access · Credential custody · Deployment ownership · Documentation · Third-party licences · Post-launch handover, and its lead | folded into the FAQ "Will we control the code and delivery assets?" |
+| D-faq | eyebrow | none | Questions |
+| D-faq | "Will we control the code…" answer | Yes, for the client-controlled repositories, credentials and deployment assets defined in the delivery scope — and continuously, not only at a final handover. The signed agreement states legal ownership, third-party licences, pre-existing materials and any managed-service dependency. If an asset cannot be transferred or independently controlled, that constraint is visible before the implementation choice is accepted. | Yes, from the start. You hold repository and environment access; credential custody and deployment ownership are named before work starts; documentation is enough to continue without us. The agreement states ownership and third-party licences, and any constraint is visible before a choice is accepted. |
+| D-faq | new questions | none | "When is a release accepted?" (the three levels, plus the accessibility answer and its guide link) · "How does Tcules use AI in engineering?" (the old AI flow and lead) |
+| D-faq | infrastructure answer | … not a standalone managed-cloud, enterprise-infrastructure, security-operations or penetration-testing provider … | … not a standalone managed-cloud, security-operations or penetration-testing provider … |
+| D-faq | "Where does accessibility acceptance come from?" | its own question | merged into "When is a release accepted?" (four questions keep the open answer in the fold) |
+| — | Go deeper resources (2 cards) | Inclusive product design guide · How we work | the guide is a link in the release-acceptance answer; How we work is K's link |
+| L close | eyebrow / heading | none / Start with the product slice that needs to ship | Start a project / Start with the slice that needs to ship |
+
+**Why.** The 1 Oct review: the page read as a document. Now every band is ≤ 789 at 1470 and ≤ 1671 at 390. No two bands without an image sit next to each other. Seven of the ten bands between hero and close carry a photograph, a diagram or covers. The § 6.4 texture signature is in place: counterweight on B, horizon above G, closing on L.
+
+**Found in.** `kit/page-software-development`, 6 Oct 2026.
+
+### 7.1 Fix round 1 (6 Oct 2026)
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| B signals | eyebrow | Where builds go wrong | Design to code (the old one restated the heading) |
+| B signals | tiles | two: Every layer is done · Edge states are guessed | four, adding "Contracts are assumed — Each side guessed what the other would send, so integration found the gaps." (icon code) and "Done was never agreed — No one set what a release must prove, so acceptance became a debate." (icon checklist), both NEW COPY. Four tiles fill the copy column, so B's head is the h2 role, not display, and the texture placement moves from B's counterweight to J's corner |
+| C-icon router | position | after the J statement | after the clients band, before the method: the first head-track band, so its head sits on the start side and F's photo moves to the end side (copy unchanged) |
+| G proof | case beside the quote | Auxentios · Industrial CPQ / A quotation model, carried into components / Research across specialist roles, carried into a product model and component-led interface work. | removed: the quote is the band's point, so it takes the display role alone. The case stays on Product Design, which carries the same card |
+| M evidence | ConnectX meta | ConnectX · Integrated product and software | ConnectX · Product and software (one line at 390) |
+| M evidence | Benchmark meta | Benchmark Gensuite · Feasibility in code | Benchmark Gensuite · Feasibility (one line at 390) |
+| K offer | heading | Choose how much responsibility to hand over | Choose how much of the build we own (two balanced lines) |
+| L close | eyebrow | Start a project | Next step (the old one repeated the CTA label) |
+
+**Why.** Fix round 1 review. **Found in.** `kit/page-software-development`, fix round 1.
+
+### 7.2 Fix round 2 (6 Oct 2026)
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| — | band order | A B H C-icon F E G M J K D-faq L | A B H E F M C-icon G K D-faq J L: the slice and the method argue before the router offers six services; the router's photo moves to the end side; J follows the centred FAQ, so it sets left, not as a second centred serif column after G (copy unchanged) |
+| E slice | layers | Interface · Services · Integrations · AI service · Data | Interface · Services · Integrations · Data (three paths, so "Path 1" sets on one line at 390 and the resolved grid is one full column) |
+| E slice | lead | Organised by layer, every team can finish its part while no user path works. | Cut by release, every layer builds the same path, so each release does something a user can finish. (the old lead restated B's first tile two bands up) |
+| E slice | layer note | Each team builds half its layer, each on different paths. Nothing a user can do works yet, and nothing can ship. | Each team builds a third of its layer, each on a different path. Nothing a user can do works yet, and nothing can ship. |
+| E slice | release note | The same work, with every layer building the same paths. Two things a user can do work end to end, and ship. | The same work, with every layer building the same path. One thing a user can do works end to end, and ships. |
+| F delivery trace | heading | Engineering receives the decisions | Decisions reach the code (two lines at 1024 and 1470, not three) |
+| G proof | case beside the quote | none (removed in fix round 1) | Auxentios · Industrial CPQ / Specialist research, carried into an MVP (NEW title) / Research across specialist roles, carried into a product model and its interface components. The case card brings the quote onto the head's start edge (G-case), and gives a general quote the specifics of the work it came from. **Ask:** this is still the one approved quote, shared with Product Design; a quote about decisions reaching code would replace it |
+| M evidence | GT Tools title | Web design and development, end to end | Design and build, end to end (two lines at 1024, like its neighbours) |
+| L close | step 01 | Send the slice that needs to ship — Its users, constraints and release outcome. | Attach what already exists — A prototype, a spec or screens, if there are any. (the old step repeated the heading and the body above it) |
+| Photos | router aside / F aside (src/lib/photos.ts, this page's row only) | studio-session-talk / team-laptops-table | whiteboard-two-hands / stylus-tablet-sketch: both dim frames replaced by bright process frames, both freed by design-engineering's fix round 1 |
+
+**Why.** Fix round 2 review. **Found in.** `kit/page-software-development`, fix round 2.
+
+## 8. AI Product UX recomposed from the UI kit (6 Oct 2026)
 
 **Page / section.** `/design/service-page/ai-product-ux`, every band (`src/content/sources/fixtures/ideal/services/ai-product-ux.ts`).
 

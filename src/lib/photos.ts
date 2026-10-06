@@ -213,12 +213,16 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'studio-whiteboard-crit',
     aside2: 'hand-sketch-wireframe',
   },
+  /* software-development, fix round 2 (6 Oct 2026): both asides swapped. The router's was a dim,
+     low-contrast talk in a warm room and F's a desaturated overhead table of coders, the two
+     darkest frames on the page beside clean rows. The router takes a flow being drawn on a white
+     board, F a behaviour sketched on a tablet before it is built: both bright, both process. */
   'software-development': {
     b: 'designer-desk-monitor',
     i: 'workshop-hands-writing',
     k: 'whiteboard-pair-laptop',
-    aside1: 'studio-session-talk',
-    aside2: 'team-laptops-table',
+    aside1: 'whiteboard-two-hands',
+    aside2: 'stylus-tablet-sketch',
   },
   'design-engineering': {
     b: 'stylus-tablet-sketch',
