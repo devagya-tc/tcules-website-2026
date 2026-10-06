@@ -60,19 +60,17 @@
      comment. It does not get a name that suggests it is reusable.
 
    ── Blue, and peridot ───────────────────────────────────────────────────────────
-   Blue means "this is where you act" or "this is the system": actions, links, our
-   drawings and the texture (visual-direction § 4, 6 Oct 2026). It is spent in
-   tiers. FREE, never counted: focus rings, link hover and pressed, the current
-   marker in nav, TOC and slider pager, the slider's previous / next controls
-   (blue at rest, fdn-scroll), input focus, the whole-card hover cue.
-   ACCENT: the solid primary button. SIGNAL: primary-tone links (one kind per
-   band), a Proof's quote rule, a diagram's blue line. FIELD: an illustration.
-   TEXTURE: a Texture placement.
-   The band rule: a band spends at most two of Accent, Signal, Field and Texture.
-   Never blue at rest on paper or tint: headings, eyebrows, card titles, body,
-   stat numerals, Tag chips, list markers, step numbers, icons, card arrows and
-   hairline rules — each of those takes the surface's ink, and goes blue only as a
-   Free state. No band ground is blue.
+   Blue is the recurring FOREGROUND accent (visual-direction § 4, owner 6 Oct 2026):
+   text links at rest, icons, list and step markers and numerals, arrows and cues,
+   small graphic marks, active and current states, slider controls, stat accents.
+   Coherently, not sparsely: a role that is blue is blue on every page. Paper and
+   tint read brandeis-500; ink lifts to 300 (500 is 2.77:1 there); blue goes white.
+   Text links ≥ 4.5:1, icons and marks ≥ 3:1, on every surface. The WORDS stay ink
+   — headings, eyebrows, card titles at rest, body, Tag chips — and so do neutral
+   separators and a cross beside a check.
+   Blue is NEVER a ground: no band, card fill or panel. The band rule counts blue
+   MASSES only — at most one solid primary, and at most two of solid primary,
+   illustration and Texture per band; the foreground accent is never counted.
    Peridot is ::selection (globals.css) and an illustration's carried item, nothing
    else. tokens:check fails any component layer or *.module.css that reads
    --color-peridot-*; the ramp's declarations in primitives.css stay.

@@ -325,9 +325,10 @@ const NESTED_SURFACE_TOKENS = {
     ['--bcrd-title-ink', '--color-neutral-900'],
     ['--bcrd-body-ink', '--color-neutral-700'],
     ['--bcrd-eyebrow-ink', '--color-neutral-700'],
-    ['--btn-link-neutral-fg', '--color-neutral-900'],
-    ['--btn-link-neutral-fg-hover', '--color-brandeis-500'],
-    ['--btn-link-neutral-fg-pressed', '--color-brandeis-600'],
+    ['--bcrd-cue-ink', '--color-brandeis-500'],
+    ['--btn-link-primary-fg', '--color-brandeis-500'],
+    ['--btn-link-primary-fg-hover', '--color-brandeis-600'],
+    ['--btn-link-primary-fg-pressed', '--color-brandeis-700'],
     ['--bcrd-ring-color', '--color-brandeis-500'],
     ['--bcrd-ring-gap-color', '--color-paper-deep'],
   ],
@@ -335,9 +336,10 @@ const NESTED_SURFACE_TOKENS = {
     ['--bcrd-title-ink', '--color-white'],
     ['--bcrd-body-ink', '--color-neutral-300'],
     ['--bcrd-eyebrow-ink', '--color-neutral-400'],
-    ['--btn-link-neutral-fg', '--color-white'],
-    ['--btn-link-neutral-fg-hover', '--color-brandeis-300'],
-    ['--btn-link-neutral-fg-pressed', '--color-brandeis-200'],
+    ['--bcrd-cue-ink', '--color-brandeis-300'],
+    ['--btn-link-primary-fg', '--color-brandeis-300'],
+    ['--btn-link-primary-fg-hover', '--color-brandeis-200'],
+    ['--btn-link-primary-fg-pressed', '--color-brandeis-100'],
     ['--bcrd-ring-color', '--color-brandeis-300'],
     ['--bcrd-ring-gap-color', '--color-neutral-950'],
   ],
@@ -628,8 +630,8 @@ export default function BlockCardSpecimenPage() {
             Neither object draws a border on any side, in any state. The tile is bounded by the
             parent gutter alone, and its copy is flush to the media rather than inset from an
             edge that no longer exists. Compare the two titles: the linked one is the same dark
-            ink as the static one, and the cta &mdash; a real link Button in the neutral tone &mdash; is
-            ink too until the card is hovered or focused, when it goes blue.
+            ink as the static one, and the cta &mdash; a real link Button in the primary tone
+            &mdash; is blue at rest, label and arrow.
           </BandHead>
           <Cards>
             <BlockCard
@@ -778,13 +780,13 @@ export default function BlockCardSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <BandHead title="8 · The cta and the arrow cue">
-            The cta is for text-only linked cards only (29 Sep). A card with a cover renders no cta:
-            it ends its title in an ink arrow joined by a non-breaking space, and on hover and focus
-            the title and arrow go blue while the image leans in (6 Oct, visual-direction § 3.1) —
-            so the first card here says it is a link at rest. On a text-only card it is the shipped link{' '}
-            <code>Button</code>, rendered <code>as=&quot;span&quot;</code> inside the one frame
-            anchor: never in the tab order, no nested link. Tab to a card and count focus stops:
-            one.
+            The cta is for text-only linked cards only (29 Sep). A card with a cover renders no
+            cta: it ends its title in a blue arrow joined by a non-breaking space, and on hover
+            and focus the title goes blue to meet it while the image leans in (6 Oct,
+            visual-direction § 3.1) — so the first card here says it is a link at rest. On a
+            text-only card it is the shipped link <code>Button</code>, rendered{' '}
+            <code>as=&quot;span&quot;</code> inside the one frame anchor: never in the tab
+            order, no nested link. Tab to a card and count focus stops: one.
           </BandHead>
           <Cards columns={{ base: 1, lg: 3 }}>
             <BlockCard
@@ -841,10 +843,11 @@ export default function BlockCardSpecimenPage() {
         <Layout rowGap="stack">
           <BandHead title="9 · Orientation">
             One anatomy, two arrangements, and a presentation prop rather than a CMS field.
-            Vertical fills a grid track. Horizontal takes two equal tracks from md and defaults to
-            the <code>lg</code> size (band 22): media beside copy at 3:2 when there is a cover,
-            head beside body when there is not. <code>imageSide</code> is set per card — there is no alternation logic
-            inside the component, because a card that alternated would have to know its index.
+            Vertical fills a grid track. Horizontal takes two equal tracks from md and defaults
+            to the <code>lg</code> size (band 22): media beside copy at 3:2 when there is a
+            cover, head beside body when there is not. <code>imageSide</code> is set per card —
+            there is no alternation logic inside the component, because a card that alternated
+            would have to know its index.
           </BandHead>
 
           <Specimen
@@ -1348,9 +1351,9 @@ export default function BlockCardSpecimenPage() {
             The card does not know its count, so it takes its type step as a component size and
             the set passes it. <code>lg</code> is the one featured, horizontal card (h3 over
             body-lg); <code>md</code> is two to three cards and every text card (h4 over body);{' '}
-            <code>sm</code> is four to six across (h5 over body-sm). A section&rsquo;s h2 is 43, so
-            card titles always sit at least two rungs below it. Inside every size the copy is one
-            group at <code>text</code> (16): eyebrow, title, body.
+            <code>sm</code> is four to six across (h5 over body-sm). A section&rsquo;s h2 is 43,
+            so card titles always sit at least two rungs below it. Inside every size the copy is
+            one group at <code>text</code> (16): eyebrow, title, body.
           </BandHead>
           <Specimen
             title='size="lg" · md · sm, one record'

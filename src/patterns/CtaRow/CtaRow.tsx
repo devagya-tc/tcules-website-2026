@@ -10,13 +10,14 @@ export type CtaRowAction = {
 };
 
 /**
- * How loud the FIRST action is. The second is always a neutral link, whichever this is.
+ * How loud the FIRST action is. Every later action is a link: in the first's tone on a link row, in
+ * the primary tone (blue at rest) after a solid — a text link is blue at rest (fdn-blue, 6 Oct 2026).
  *
  *   link   a navigation row — "See the work", "All services". Link-style, a trailing arrow on every
  *          action (the kit's one link cue, BlockCard's per-card CTA and ListCard's linked row). The
  *          default, because a band's foot usually points somewhere rather than asks for something.
  *   solid  an ask — the band's one Accent (visual-direction § 4.2: ≤ 1 solid primary per band). The
- *          hero's shape exactly: solid first, a neutral link second, and no glyph on either (1 Oct
+ *          hero's shape exactly: solid first, a blue link second, and no glyph on either (1 Oct
  *          2026, owner, on CtaSection: "no arrow here" — the label carries the ask).
  */
 export type CtaRowEmphasis = 'link' | 'solid';
@@ -142,7 +143,7 @@ export function CtaRow({
         as="a"
         href={action.href}
         emphasis={first && !linkRow ? 'solid' : 'link'}
-        tone={first ? firstTone : 'neutral'}
+        tone={first || linkRow ? firstTone : 'primary'}
         size="md"
         /* The box is 40 (solid) or the label line (link); the touch floor is 44 either way. */
         extendHitArea

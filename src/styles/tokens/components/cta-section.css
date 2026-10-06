@@ -79,7 +79,7 @@
   --cta-body-ink: var(--color-neutral-800); /* 11.81:1 */
   --cta-point-ink: var(--color-neutral-700); /* 8.15:1 */
   --cta-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
-  --cta-marker-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
+  --cta-marker-ink: var(--color-brandeis-500); /* 6.17:1 — the points' numerals carry the accent */
 }
 
 [data-surface='tint'] {
@@ -87,7 +87,7 @@
   --cta-body-ink: var(--color-neutral-800); /* 10.54:1 */
   --cta-point-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
-  --cta-marker-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
+  --cta-marker-ink: var(--color-brandeis-500); /* 5.51:1 */
 }
 
 [data-surface='ink'] {
@@ -95,7 +95,7 @@
   --cta-body-ink: var(--color-neutral-100); /* 14.47:1 */
   --cta-point-ink: var(--color-neutral-300); /* 11.07:1 */
   --cta-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
-  --cta-marker-ink: var(--color-neutral-400); /* 8.05:1 */
+  --cta-marker-ink: var(--color-brandeis-300); /* 7.32:1 */
 }
 
 [data-surface='blue'] {

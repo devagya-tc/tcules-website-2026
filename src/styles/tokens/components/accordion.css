@@ -57,8 +57,8 @@
 [data-surface='paper'] {
   --acc-question-ink: var(--color-neutral-800); /* 11.81:1 */
   --acc-question-ink-hover: var(--color-neutral-950); /* 17.10:1 */
-  --acc-mark-ink: var(--color-neutral-500); /* decoration; 3.16:1 clears the 3:1 non-text floor */
-  --acc-mark-ink-hover: var(--color-neutral-950); /* 17.10:1 */
+  --acc-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the chevron carries the accent */
+  --acc-mark-ink-hover: var(--color-brandeis-700); /* 10.07:1 */
   --acc-rule-ink: var(--color-neutral-200); /* decoration; 1.33:1 */
   --acc-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --acc-ring-gap-color: var(--color-paper);
@@ -69,8 +69,8 @@
 [data-surface='tint'] {
   --acc-question-ink: var(--color-neutral-800); /* 10.54:1 */
   --acc-question-ink-hover: var(--color-neutral-950); /* 15.27:1 */
-  --acc-mark-ink: var(--color-neutral-600); /* decoration; 4.39:1 */
-  --acc-mark-ink-hover: var(--color-neutral-950); /* 15.27:1 */
+  --acc-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --acc-mark-ink-hover: var(--color-brandeis-700); /* 8.99:1 */
   --acc-rule-ink: var(--color-neutral-300); /* decoration; 1.38:1 */
   --acc-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --acc-ring-gap-color: var(--color-paper-deep);
@@ -81,8 +81,8 @@
 [data-surface='ink'] {
   --acc-question-ink: var(--color-neutral-300); /* 11.07:1 */
   --acc-question-ink-hover: var(--color-white); /* 17.26:1 */
-  --acc-mark-ink: var(--color-neutral-500); /* decoration; 5.41:1 */
-  --acc-mark-ink-hover: var(--color-white); /* 17.26:1 */
+  --acc-mark-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --acc-mark-ink-hover: var(--color-brandeis-100); /* 13.61:1 */
   --acc-rule-ink: var(--color-neutral-800); /* decoration; 1.45:1 */
   --acc-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --acc-ring-gap-color: var(--color-neutral-950);

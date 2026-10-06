@@ -155,7 +155,7 @@ export function Matrix({ block }: { block: Of<'matrix'> }) {
         header: row.header,
         cellsHtml: block.columns.map((_, index) => {
           const yes = row.marks[index] === true;
-          /* A check in the text's ink, a cross one step quieter: the checks carry the comparison,
+          /* A check in the blue accent, a cross in quiet ink: the checks carry the comparison,
              the crosses only say "not this one" (1 Oct 2026, owner). Icon's label names each. */
           return {
             node: (

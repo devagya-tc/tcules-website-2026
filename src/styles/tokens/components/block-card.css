@@ -5,10 +5,10 @@
 
    Naming: --bcrd-{part}-{role}-{state}, with a size suffix where the type steps with the set
    (--bcrd-title-text-lg | -md | -sm)
-     parts: title | body | eyebrow | media | ring
-     states: hover, on one token. A covered linked card's title and its arrow cue take
-     --bcrd-title-ink-hover on hover and focus and hold it on press; nothing else on the card moves
-     colour. The cover zoom is geometry, and the text-only cta's steps are Button's.
+     parts: title | cue | body | eyebrow | media | ring
+     states: hover, on one token. A covered linked card's title takes --bcrd-title-ink-hover on
+     hover and focus and holds it on press; its arrow cue is blue at rest (--bcrd-cue-ink) and does
+     not move. The cover zoom is geometry, and the text-only cta's steps are Button's.
 
    There is no background or ground token: BlockCard never paints a fill and keeps the nearest
    Section visible behind it. Every surface block redeclares every colour token so a nested surface
@@ -20,15 +20,16 @@
    transparent and zero — a token nothing draws is a token that invites the border back.
    One title state token, and only for the covered linked card (6 Oct 2026, fdn-media fix round;
    visual-direction § 3.1). A covered card has no cta (29 Sep), so until then its only cue at rest
-   was the image. It now carries an ink arrow glyph after the title's last word, joined by a
-   non-breaking space — ListCard's link cue, so the kit has one — and the title and arrow go blue on
-   hover and focus (blue's Free row, § 4.2). A text-only card's title still holds --bcrd-title-ink:
+   was the image. It now carries an arrow glyph after the title's last word, joined by a
+   non-breaking space — ListCard's link cue, so the kit has one. The arrow is blue at rest
+   (--bcrd-cue-ink; fdn-blue, owner 6 Oct 2026: arrows carry the foreground accent), and the title
+   joins it in blue on hover and focus. A text-only card's title still holds --bcrd-title-ink:
    its cta is the cue and moves instead. No pressed step: the title holds hover on press, so a
    pressed token would equal the hover one on every surface.
    No cta tokens, and no --bcrd-link-ink either. The cta is the shipped link Button rendered as a
    span, so Button's own layer supplies its type, its case and its three colour steps per surface
-   from --btn-link-neutral-fg{,-hover,-pressed}: ink at rest, blue on the card's hover, focus and
-   press (visual-direction § 4.2, § 4.3, 6 Oct 2026; it was the primary tone until then). --bcrd-link-ink, -hover and -pressed were deleted
+   from --btn-link-primary-fg{,-hover,-pressed}: blue at rest (fdn-blue, owner 6 Oct 2026 — a text
+   link is blue at rest; fdn-colour had briefly made it neutral). --bcrd-link-ink, -hover and -pressed were deleted
    rather than left declared: the card has no link-coloured part of its own any more, and a colour
    nothing paints is a colour something will paint again.
    No media ink. --bcrd-media-ink coloured the icon fill, which was removed (spec § 17 Q14).
@@ -106,6 +107,7 @@
 [data-surface='paper'] {
   --bcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --bcrd-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 — covered linked cards only */
+  --bcrd-cue-ink: var(--color-brandeis-500); /* 6.17:1 — the arrow carries the accent at rest */
   --bcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — the floor of AA, do not lighten */
   --bcrd-media-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
@@ -118,6 +120,7 @@
 [data-surface='tint'] {
   --bcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --bcrd-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
+  --bcrd-cue-ink: var(--color-brandeis-500); /* 5.51:1 */
   --bcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
   --bcrd-media-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
@@ -130,6 +133,7 @@
 [data-surface='ink'] {
   --bcrd-title-ink: var(--color-white); /* 17.26:1 */
   --bcrd-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
+  --bcrd-cue-ink: var(--color-brandeis-300); /* 7.32:1 */
   --bcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --bcrd-media-rule-ink: var(--color-neutral-700); /* 2.10:1 vs the ground — decoration */
@@ -143,6 +147,7 @@
   --bcrd-title-ink: var(--color-white); /* 6.23:1 */
   /* Blue cannot go bluer: the lightest Brandeis step, as Button's neutral link does on blue. */
   --bcrd-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
+  --bcrd-cue-ink: var(--color-white); /* 6.23:1 */
   --bcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --bcrd-eyebrow-ink: var(
     --color-brandeis-100

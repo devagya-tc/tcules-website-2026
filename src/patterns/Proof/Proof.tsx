@@ -212,7 +212,7 @@ function Quote({ quote }: { quote: ProofQuote }) {
             as="a"
             href={source.href}
             emphasis="link"
-            tone="neutral"
+            tone="primary"
             size="md"
             extendHitArea
             icon={<Icon name="arrow-right" />}
@@ -270,7 +270,7 @@ function FigureList({
                     as="a"
                     href={figure.sourceHref}
                     emphasis="link"
-                    tone="neutral"
+                    tone="primary"
                     size="sm"
                     extendHitArea
                     aria-label={`View source for ${figure.label}`}

@@ -204,8 +204,8 @@ Static rows have only rest. They do not respond to a pointer and do not enter th
 
 | State           | Trigger                              | Parts that move                                                                              |
 | --------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
-| rest            | Base rendering                       | Nothing moves. Title, body and marker hold their own inks; the cue is ink, `--lcrd-cue-ink` (6 Oct 2026) |
-| hover           | Pointer over a linked frame          | Row: the frame paints `--lcrd-ground-hover`. Tile (1 Oct 2026): no ground; the opening rule takes `--lcrd-link-ink`. Both: the cue takes `--lcrd-link-ink` (6 Oct 2026) |
+| rest            | Base rendering                       | Nothing moves. Title and body hold their own inks; marker, numeral and cue carry the blue accent (fdn-blue, 6 Oct 2026) |
+| hover           | Pointer over a linked frame          | Row: the frame paints `--lcrd-ground-hover`. Tile (1 Oct 2026): no ground; the opening rule takes `--lcrd-link-ink`. The cue holds `--lcrd-link-ink` |
 | focus, keyboard | `:focus-visible` on a linked frame   | Exactly the hover rendering plus the two-part ring from `--lcrd-ring-color` and `--lcrd-ring-gap-color` |
 | pressed         | Pointer activation on a linked frame | The ground steps to `--lcrd-ground-pressed` and the cue to `--lcrd-link-ink-pressed`           |
 
@@ -252,9 +252,8 @@ ground: `--color-paper`, `--color-paper-deep`, `--color-neutral-950` and
 | ------------------------- | ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- | ------------------------------------------- |
 | `--lcrd-title-ink`        | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
 | `--lcrd-body-ink`         | `--color-neutral-700` — 8.14:1                  | `--color-neutral-700` — 7.27:1                  | `--color-neutral-300` — 11.07:1                 | `--color-brandeis-50` — 5.57:1              |
-| `--lcrd-marker-ink`       | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
-| `--lcrd-number-ink`       | `--color-neutral-500` — 3.16:1                  | `--color-neutral-600` — 4.39:1                  | `--color-neutral-500` — 5.41:1                  | `--color-brandeis-200` — 3.78:1             |
-| `--lcrd-cue-ink`          | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
+| `--lcrd-marker-ink`       | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-white` — 6.23:1                    |
+| `--lcrd-number-ink`       | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-brandeis-200` — 3.78:1             |
 | `--lcrd-link-ink`         | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-brandeis-100` — 4.91:1             |
 | `--lcrd-link-ink-pressed` | `--color-brandeis-700` — 10.07:1                | `--color-brandeis-700` — 8.99:1                 | `--color-brandeis-50` — 15.44:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--lcrd-rule-ink`         | `--color-neutral-300` — n/a, decoration         | `--color-neutral-400` — n/a, decoration         | `--color-neutral-700` — n/a, decoration         | `--color-brandeis-300` — n/a, decoration    |
@@ -1100,3 +1099,10 @@ a route's condition is its body. No `eyebrow` prop was added.
   thumbnail"): an untagged record is still a capture, and in a thumbnail it now has no frame.
 - The radius matches every other photograph box on the page (BlockCard's `--bcrd-media-radius`, Media's
   `--media-photo-radius`), duplicated by value under token rule 6.
+
+## Amendment · 6 Oct 2026 — `fdn-blue` (supersedes the `fdn-colour` amendment above)
+
+Owner: blue is the recurring FOREGROUND accent; the reservation is only for grounds. `--lcrd-cue-ink`
+is deleted and the cue reads `--lcrd-link-ink` at rest again, holding through hover and stepping on
+press (the original model). `--lcrd-marker-ink` and `--lcrd-number-ink` move to the accent: brandeis-500
+on paper and tint, brandeis-300 on ink; blue keeps white and brandeis-200.

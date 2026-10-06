@@ -209,11 +209,11 @@ export type PageHeroProps = {
   dates?: HeroDates;
   /**
    * Nought, one or two. Position decides emphasis: the first renders solid/primary, the second
-   * a neutral link-style action.
+   * a primary link-style action — blue at rest, as every text link is (visual-direction § 4.2,
+   * owner 6 Oct 2026).
    *
-   * The second was ghost/neutral until 5 Oct 2026. The hero spends one Accent (the solid button)
-   * and, beside media, one Field; a neutral link is ink and spends nothing (visual-direction § 4.2),
-   * so the pair reads as one action and one alternative rather than as two buttons.
+   * The second was ghost/neutral until 5 Oct 2026 and a neutral link until fdn-blue. A link has no
+   * box, so the pair still reads as one action and one alternative rather than as two buttons.
    *
    * Those are the three counts the corpus has, as a type — a third entry has no member of the
    * union to match, so it is a compile error rather than a review comment. The second emphasis is
@@ -553,14 +553,14 @@ export function PageHero({
             without it a fragment of three elements would become three rows at 48px each. */}
         {children == null ? null : <div>{children}</div>}
 
-        {/* ── actions · one solid, one neutral link ─────────────────────────────────
+        {/* ── actions · one solid, one blue link ────────────────────────────────────
             Anchors, because a hero action always navigates — which is why Space does nothing on
             them and why that is correct rather than a gap.
 
-            The first is solid/primary, the hero's one Accent. The second is link-style and
-            neutral: ink, not blue, so it spends nothing (visual-direction § 4.2) and reads as an
-            alternative rather than as a second button competing with the first (5 Oct 2026; it
-            was ghost/neutral). 24 between them, `block`, because a bare label 8 from a filled box
+            The first is solid/primary, the band's one solid. The second is link-style and
+            primary: blue at rest like every text link (visual-direction § 4.2, fdn-blue), and with
+            no box it reads as an alternative rather than as a second button competing with the
+            first (it was ghost/neutral, then a neutral link). 24 between them, `block`, because a bare label 8 from a filled box
             reads as part of it; centred on the cross axis, because the link has no box of its
             own and its label must sit on the button's label line. 24 between wrapped rows too, so a
             link that wraps under the button keeps its 44px target clear of the button's box.
@@ -581,7 +581,7 @@ export function PageHero({
                 as="a"
                 href={action.href}
                 emphasis={index === 0 ? 'solid' : 'link'}
-                tone={index === 0 ? 'primary' : 'neutral'}
+                tone="primary"
                 size="md"
                 extendHitArea
               >

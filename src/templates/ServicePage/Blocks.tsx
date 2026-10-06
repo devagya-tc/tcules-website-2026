@@ -249,7 +249,10 @@ function FitList({
         {items.map((item) => (
           <li key={item} className={styles.rowTight}>
             <Cluster nowrap colGap="text" align="start">
-              <span className={styles.glyph} aria-hidden="true">
+              <span
+                className={glyph === 'check-circle' ? styles.glyphYes : styles.glyphNo}
+                aria-hidden="true"
+              >
                 <Icon name={glyph} size="xl" />
               </span>
               <span className={styles.rowText}>{item}</span>

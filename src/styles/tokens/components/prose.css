@@ -81,7 +81,7 @@
 --prose-ink:var(--color-neutral-900);              /* 14.62:1 */
 --prose-ink-heading:var(--color-neutral-950);      /* 16.35:1 */
 --prose-ink-muted:var(--color-neutral-600);        /*  4.92:1 — the floor of AA, do not lighten */
---prose-marker-ink:var(--color-neutral-600);       /* an <ol> numeral is content, so it holds AA */
+--prose-marker-ink:var(--color-brandeis-500);       /*  6.17:1 — an <ol> numeral and a bullet carry the accent */
 --prose-link-ink:var(--color-brandeis-500);        /*  6.17:1 */
 --prose-link-ink-hover:var(--color-brandeis-600);
 --prose-link-rule:var(--color-brandeis-300);       /* the underline sits under the ink, not level with it */
@@ -105,7 +105,7 @@
 --prose-ink:var(--color-neutral-900);              /* 13.06:1 */
 --prose-ink-heading:var(--color-neutral-950);      /* 14.61:1 */
 --prose-ink-muted:var(--color-neutral-700);        /*  7.27:1 — stepped; 600 would be 4.39:1 */
---prose-marker-ink:var(--color-neutral-700);
+--prose-marker-ink:var(--color-brandeis-500);       /*  5.51:1 */
 --prose-link-ink:var(--color-brandeis-500);        /*  5.51:1 */
 --prose-link-ink-hover:var(--color-brandeis-600);
 --prose-link-rule:var(--color-brandeis-300);
@@ -136,7 +136,7 @@
 --prose-ink:var(--color-neutral-100);              /* 13.63:1 — softer than white, which haloes */
 --prose-ink-heading:var(--color-white);            /* 15.85:1 */
 --prose-ink-muted:var(--color-neutral-400);        /*  8.02:1 */
---prose-marker-ink:var(--color-neutral-500);       /*  5.36:1 */
+--prose-marker-ink:var(--color-brandeis-300);       /*  7.32:1 */
 --prose-link-ink:var(--color-brandeis-300);        /*  7.32:1 — 500 would be 2.11:1 */
 --prose-link-ink-hover:var(--color-brandeis-200);
 --prose-link-rule:var(--color-brandeis-400);

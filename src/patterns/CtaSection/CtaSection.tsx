@@ -278,7 +278,8 @@ function CtaPoints({
  * The control row for the actions-only shapes. A form brings its own row — submit and "See
  * available times" together, inside EnquiryForm — so this renders only when there is no form.
  *
- * POSITION decides emphasis: the first is `solid`/`primary`, the second `ghost`/`neutral`. There
+ * POSITION decides emphasis: the first is `solid`/`primary`, the second `ghost`/`primary`
+ * (a blue label at rest — the foreground accent, visual-direction § 4.2; it was neutral until fdn-blue). There
  * is no `emphasis` on `CtaAction` for that reason.
  *
  * NO GLYPH on either (1 Oct 2026, owner: "no arrow here"). The first action used to take
@@ -299,7 +300,7 @@ function CtaActions({ actions }: { actions: readonly CtaAction[] }) {
           as="a"
           href={action.href}
           emphasis={index === 0 ? 'solid' : 'ghost'}
-          tone={index === 0 ? 'primary' : 'neutral'}
+          tone="primary"
           size="md"
           extendHitArea
         >

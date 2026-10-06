@@ -1,4 +1,12 @@
-import { Button, Cluster, Icon, type IconSize, Layout, Media, type MediaImage } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  type IconSize,
+  Layout,
+  Media,
+  type MediaImage,
+} from '@/components';
 import { cx } from '@/lib/cx';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
 
@@ -137,7 +145,7 @@ export type BlockCardProps = {
   /**
    * A non-blank destination turns the entire card into one native link. A linked card WITHOUT a
    * cover also gets its cta; one with a cover does not (29 Sep), because a line repeated under
-   * every tile in a grid is noise. A covered linked card instead ends its title in an ink arrow
+   * every tile in a grid is noise. A covered linked card instead ends its title in an blue arrow
    * (6 Oct 2026, visual-direction § 3.1), so it says it navigates at rest as well as on hover.
    */
   href?: string;
@@ -272,22 +280,19 @@ export function BlockCard({
      Button's `inline-flex` would become `flex` and take the whole track, centring its label; a
      Cluster starts its items. No gap is stated because there is one child.
 
-     The tone is neutral: ink at rest, blue on the card's hover, focus and press (visual-direction
-     § 4.2, § 4.3, 6 Oct 2026). A per-card cta is the "every per-card CTA" § 4.2 names, and its arrow
-     is a card arrow, which is ink at rest. A primary cta painted one blue label and one blue arrow per
-     card at rest — six of each down a set — which is the spray § 4 rules out. The blue it keeps is
-     the whole-card hover cue, blue's Free row, so a linked set spends nothing in the band rule. */
+     The tone is primary: a text link is blue at rest, label and arrow (visual-direction § 4, owner
+     6 Oct 2026 — blue is the recurring foreground accent; fdn-colour's neutral tone was reversed). */
   const cta =
     destination && !imageNode ? (
       <Cluster>
-        <Button as="span" emphasis="link" tone="neutral" icon={<Icon name="arrow-right" />}>
+        <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
           {label}
         </Button>
       </Cluster>
     ) : null;
 
   const eyebrowNode = hasEyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null;
-  /* The covered linked card's rest affordance (visual-direction § 3.1, 6 Oct 2026): an ink arrow
+  /* The covered linked card's rest affordance (visual-direction § 3.1, 6 Oct 2026): a blue arrow
      after the title's last word, joined by a non-breaking space so it never wraps alone — the same
      `arrow-right` ListCard's linked rows end in, so the kit has one link cue. It is decoration inside
      the one anchor: Icon hides it, and the link's name stays the card's words. A text-only card has

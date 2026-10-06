@@ -156,8 +156,16 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
 ] as const;
 
 const TILES_ICON = [
-  { title: 'Sales', body: 'Sees an ageing product.', marker: { type: 'icon', name: 'graph-up' } },
-  { title: 'Support', body: 'Sees recurring exceptions.', marker: { type: 'icon', name: 'chat-round-dots' } },
+  {
+    title: 'Sales',
+    body: 'Sees an ageing product.',
+    marker: { type: 'icon', name: 'graph-up' },
+  },
+  {
+    title: 'Support',
+    body: 'Sees recurring exceptions.',
+    marker: { type: 'icon', name: 'chat-round-dots' },
+  },
   {
     title: 'Engineering',
     body: 'Sees dependencies that make every change expensive.',
@@ -171,20 +179,28 @@ const TILES_ICON = [
 ] as const satisfies readonly { title: string; body: string; marker: ListCardMarker }[];
 
 const TILES_STEPS = [
-  { title: 'Read the real work', body: 'What triggers the change, who decides, who is affected.' },
+  {
+    title: 'Read the real work',
+    body: 'What triggers the change, who decides, who is affected.',
+  },
   { title: 'Settle the product model', body: 'The job, dependency, owner and committed date.' },
   { title: 'Design the behaviour', body: 'Preview affected work before confirming.' },
-  { title: 'Test the risky scenario', body: 'Conflicting jobs, limited permissions, partial updates.' },
-  { title: 'Keep the rule in the build', body: 'States, responses and history use the same rule.' },
+  {
+    title: 'Test the risky scenario',
+    body: 'Conflicting jobs, limited permissions, partial updates.',
+  },
+  {
+    title: 'Keep the rule in the build',
+    body: 'States, responses and history use the same rule.',
+  },
 ] as const;
 
 const NESTED_SURFACE_TOKENS = {
   tint: [
     ['--lcrd-title-ink', '--color-neutral-900'],
     ['--lcrd-body-ink', '--color-neutral-700'],
-    ['--lcrd-marker-ink', '--color-neutral-900'],
-    ['--lcrd-number-ink', '--color-neutral-600'],
-    ['--lcrd-cue-ink', '--color-neutral-900'],
+    ['--lcrd-marker-ink', '--color-brandeis-500'],
+    ['--lcrd-number-ink', '--color-brandeis-500'],
     ['--lcrd-link-ink', '--color-brandeis-500'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-700'],
     ['--lcrd-rule-ink', '--color-neutral-400'],
@@ -196,9 +212,8 @@ const NESTED_SURFACE_TOKENS = {
   ink: [
     ['--lcrd-title-ink', '--color-white'],
     ['--lcrd-body-ink', '--color-neutral-300'],
-    ['--lcrd-marker-ink', '--color-white'],
-    ['--lcrd-number-ink', '--color-neutral-500'],
-    ['--lcrd-cue-ink', '--color-white'],
+    ['--lcrd-marker-ink', '--color-brandeis-300'],
+    ['--lcrd-number-ink', '--color-brandeis-300'],
     ['--lcrd-link-ink', '--color-brandeis-300'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-50'],
     ['--lcrd-rule-ink', '--color-neutral-700'],
@@ -308,9 +323,8 @@ export default function ListCardSpecimenPage() {
               The title steps in every form; the body steps in a tile only, so a row at{' '}
               <code>sm</code> keeps body, since its body is a reading line at up to the body
               measure (6 Oct). A row cannot see its siblings, so the composing route passes the
-              step. The copy is identical so the title/body
-              relationship is the only visible difference; title to body is <code>text</code>{' '}
-              (16) in every cell.
+              step. The copy is identical so the title/body relationship is the only visible
+              difference; title to body is <code>text</code> (16) in every cell.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
@@ -390,18 +404,19 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>1a · The split reads its own width</h2>
             <p>
-              The split is a wrapping <code>Cluster</code>: title and body share a line only while{' '}
-              <code>--lcrd-title-min</code> + the block seam + <code>--lcrd-body-min</code> (256 +
-              24 + 256) fits the row&rsquo;s own content width, and the body wraps under the title
-              the moment it does not. It used to switch on at the md <em>viewport</em>, so a row in
-              a 392px grid track was split into a ~150px title track and the h4 broke mid-word
-              (&ldquo;Produ/ct&rdquo;, &ldquo;Interactio/n&rdquo;). The title&rsquo;s wrap is now{' '}
-              <code>break-word</code>, so its words stay whole at every track below. On a wide row
-              the title stops at <code>--measure-title</code> and the body at{' '}
-              <code>--measure-body</code>, so the leftover collects before the cue instead of
-              opening a channel between a title and its sentence. The frames below stand in for
-              the content column at 1440, 1023, 768 and 390, and for grid tracks inside them; none
-              can fire a media query, which is now the point — the row does not need one.
+              The split is a wrapping <code>Cluster</code>: title and body share a line only
+              while <code>--lcrd-title-min</code> + the block seam +{' '}
+              <code>--lcrd-body-min</code> (256 + 24 + 256) fits the row&rsquo;s own content
+              width, and the body wraps under the title the moment it does not. It used to
+              switch on at the md <em>viewport</em>, so a row in a 392px grid track was split
+              into a ~150px title track and the h4 broke mid-word (&ldquo;Produ/ct&rdquo;,
+              &ldquo;Interactio/n&rdquo;). The title&rsquo;s wrap is now <code>break-word</code>
+              , so its words stay whole at every track below. On a wide row the title stops at{' '}
+              <code>--measure-title</code> and the body at <code>--measure-body</code>, so the
+              leftover collects before the cue instead of opening a channel between a title and
+              its sentence. The frames below stand in for the content column at 1440, 1023, 768
+              and 390, and for grid tracks inside them; none can fire a media query, which is
+              now the point — the row does not need one.
             </p>
           </Layout>
           {(
@@ -469,19 +484,22 @@ export default function ListCardSpecimenPage() {
             <h2>1b · Tile form</h2>
             <p>
               <code>form=&quot;tile&quot;</code> is the item in a grid track. The rule opens the
-              item instead of closing it, because tiles in a grid row only line up at the top; the
-              marker stands above the title; the copy sits flush with the track, so the grid
+              item instead of closing it, because tiles in a grid row only line up at the top;
+              the marker stands above the title; the copy sits flush with the track, so the grid
               aligns with the heading over it; title and body always stack. A linked tile has no
               hover ground: its opening rule takes the link ink, and the cue sits at the foot,
               pinned so every cue in the row shares a line. A tile defaults to{' '}
-              <code>size=&quot;sm&quot;</code> (h5 over body-sm, § 7.2), so every tile below is at
-              the small step without being told; the third cell passes <code>md</code> to
+              <code>size=&quot;sm&quot;</code> (h5 over body-sm, § 7.2), so every tile below is
+              at the small step without being told; the third cell passes <code>md</code> to
               show the override. Rows of tiles are <code>column</code> (64) apart, the row seam
-              of every borderless card set (§ 1.2, 6 Oct); the two-track cell shows it at
-              every width.
+              of every borderless card set (§ 1.2, 6 Oct); the two-track cell shows it at every
+              width.
             </p>
           </Layout>
-          <Specimen title="icon tiles · four tracks · sm by default" note="Signals: a thing a reader can see, then what it may mean. No size passed: a tile is sm.">
+          <Specimen
+            title="icon tiles · four tracks · sm by default"
+            note="Signals: a thing a reader can see, then what it may mean. No size passed: a tile is sm."
+          >
             <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="column">
               {TILES_ICON.map((tile) => (
                 <ListCard key={tile.title} form="tile" titleAs="h3" {...tile} />
@@ -501,7 +519,10 @@ export default function ListCardSpecimenPage() {
               </Layout>
             </Layout>
           </Specimen>
-          <Specimen title="number tiles · five tracks, ordered" note="A method: the <ol> carries the order">
+          <Specimen
+            title="number tiles · five tracks, ordered"
+            note="A method: the <ol> carries the order"
+          >
             <Layout as="ol" columns={{ base: 1, md: 2, lg: 5 }} colGap="gutter" rowGap="column">
               {TILES_STEPS.map((tile, index) => (
                 <ListCard
@@ -524,22 +545,42 @@ export default function ListCardSpecimenPage() {
               ))}
             </Layout>
           </Specimen>
-          <Specimen title="linked tiles · three tracks, unequal bodies" note="Cues pinned to the foot">
+          <Specimen
+            title="linked tiles · three tracks, unequal bodies"
+            note="Cues pinned to the foot"
+          >
             <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
               {LINKED.slice(0, 3).map((row) => (
                 <ListCard key={row.title} form="tile" {...row} />
               ))}
             </Layout>
           </Specimen>
-          <Specimen title="title only · rows and tiles" note="body is optional: no paragraph, no seam">
+          <Specimen
+            title="title only · rows and tiles"
+            note="body is optional: no paragraph, no seam"
+          >
             <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
               <Layout as="ul" rowGap="none">
-                <ListCard title="Realistic access to the product" marker={{ type: 'icon', name: 'check-circle' }} />
-                <ListCard title="Time with people who understand the system" marker={{ type: 'icon', name: 'check-circle' }} />
+                <ListCard
+                  title="Realistic access to the product"
+                  marker={{ type: 'icon', name: 'check-circle' }}
+                />
+                <ListCard
+                  title="Time with people who understand the system"
+                  marker={{ type: 'icon', name: 'check-circle' }}
+                />
               </Layout>
               <Layout as="ul" columns={2} colGap="gutter" rowGap="column">
-                <ListCard form="tile" title="Product model" marker={{ type: 'icon', name: 'widget' }} />
-                <ListCard form="tile" title="Research record" marker={{ type: 'icon', name: 'document-text' }} />
+                <ListCard
+                  form="tile"
+                  title="Product model"
+                  marker={{ type: 'icon', name: 'widget' }}
+                />
+                <ListCard
+                  form="tile"
+                  title="Research record"
+                  marker={{ type: 'icon', name: 'document-text' }}
+                />
               </Layout>
             </Layout>
           </Specimen>
@@ -635,12 +676,12 @@ export default function ListCardSpecimenPage() {
               A B5 cut-out on its contrast panel took Media&rsquo;s <code>--gap-gutter</code>{' '}
               inset at every size, so in a 160 × 107 box the part got 96 × 43 — not one
               recognisable shape. <strong>Shipped 29 Sep 2026 (2.17):</strong> Media gained{' '}
-              <code>inset</code>, and the thumbnail passes <code>inset=&quot;text&quot;</code>{' '}
-              (<code>--gap-text</code>, 16, &ldquo;cell padding&rdquo;), which leaves 128 × 75. The
-              value stays Media&rsquo;s; ListCard names the step because only the placement knows
-              its box is small. The <code>gutter</code> rendering at 160 is on /design/media § 3c
-              for comparison. The supply rule still stands beside it: a part whose own edge holds
-              needs no panel at all.
+              <code>inset</code>, and the thumbnail passes <code>inset=&quot;text&quot;</code> (
+              <code>--gap-text</code>, 16, &ldquo;cell padding&rdquo;), which leaves 128 × 75.
+              The value stays Media&rsquo;s; ListCard names the step because only the placement
+              knows its box is small. The <code>gutter</code> rendering at 160 is on
+              /design/media § 3c for comparison. The supply rule still stands beside it: a part
+              whose own edge holds needs no panel at all.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
@@ -734,10 +775,11 @@ export default function ListCardSpecimenPage() {
               <code>arrow-right-up</code> — Solar Bold&rsquo;s plain arrow of the same family as{' '}
               <code>arrow-right</code>, so an off-site row differs from its neighbours by the
               arrow&rsquo;s angle, not by a filled square among bare arrows (29 Sep 2026, 2.17).
-              One glyph per meaning, replacing the arrow rather than joining it. It opens a new tab, and appends a visually hidden
-              &ldquo;(opens in a new tab)&rdquo; to the row&rsquo;s accessible name. Same slot,
-              size (18) and ink as the arrow. It is the first route-visible Solar glyph, so the
-              site footer&rsquo;s legal line now carries the CC BY 4.0 credit.
+              One glyph per meaning, replacing the arrow rather than joining it. It opens a new
+              tab, and appends a visually hidden &ldquo;(opens in a new tab)&rdquo; to the
+              row&rsquo;s accessible name. Same slot, size (18) and ink as the arrow. It is the
+              first route-visible Solar glyph, so the site footer&rsquo;s legal line now carries
+              the CC BY 4.0 credit.
             </p>
           </Layout>
           <Rows>
@@ -816,9 +858,9 @@ export default function ListCardSpecimenPage() {
             <p>
               The static row has rest only. Point at, hold and Tab to the linked row: a{' '}
               <strong>ground</strong> appears under the whole row on hover and the{' '}
-              <strong>ink arrow turns blue</strong> — then press deepens the ground and steps the
-              cue again. The ground is <code>Button</code>&rsquo;s ghost steps; the arrow is ink at
-              rest like every card arrow, and blue only while the row is the target (the
+              <strong>ink arrow turns blue</strong> — then press deepens the ground and steps
+              the cue again. The ground is <code>Button</code>&rsquo;s ghost steps; the arrow is
+              ink at rest like every card arrow, and blue only while the row is the target (the
               whole-card hover cue, blue&rsquo;s free row, 6 Oct 2026). The target is up to
               1240px wide and about 82px tall, so the signal has to cover it, and it paints only
               under a pointer — a list of these is still a list of ruled rows, not a stack of
@@ -845,11 +887,11 @@ export default function ListCardSpecimenPage() {
             {[
               [
                 'rest',
-                'Dark h4 title, quiet numeral, quiet base hairline, the arrow cue in ink (--lcrd-cue-ink).',
+                'Dark h4 title, blue numeral and marker, quiet base hairline, the arrow cue blue (--lcrd-link-ink).',
               ],
               [
                 'hover',
-                'The frame paints --lcrd-ground-hover across the whole row and the cue takes --lcrd-link-ink.',
+                'The frame paints --lcrd-ground-hover across the whole row; the cue holds its blue.',
               ],
               ['focus', 'Exactly the hover rendering plus the two-part keyboard ring.'],
               [
@@ -884,8 +926,8 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>6 · Nested surfaces</h2>
             <p>
-              The tint panel below resolves all eleven ListCard colour tokens from itself; no ink
-              value may leak through an omitted declaration.
+              The tint panel below resolves all eleven ListCard colour tokens from itself; no
+              ink value may leak through an omitted declaration.
             </p>
           </Layout>
           <Section as="div" surface="tint" density="tight">
@@ -914,8 +956,8 @@ export default function ListCardSpecimenPage() {
             <h2>7 · Twelve-row sample-finding block</h2>
             <p>
               One full-width ordered list with zero row gap. Narrow the window: title/body
-              stacks when the row runs out of room, two-digit markers hold the left rhythm quietly and the rules keep one list
-              intact.
+              stacks when the row runs out of room, two-digit markers hold the left rhythm
+              quietly and the rules keep one list intact.
             </p>
           </Layout>
           <SampleList />
@@ -1168,9 +1210,10 @@ export default function ListCardSpecimenPage() {
           <h2>12 · What this static page cannot force</h2>
           <p>
             Hold the pointer for pressed and Tab for keyboard focus. The split collapse is no
-            longer on the list: it follows the row&rsquo;s own width, so § 1a renders it. Reduced motion is no longer on the list: the rule wipe was
-            the row&rsquo;s only transform and it is gone, so there is nothing left for the
-            preference to shorten. None has a prop; the absence is part of the contract.
+            longer on the list: it follows the row&rsquo;s own width, so § 1a renders it.
+            Reduced motion is no longer on the list: the rule wipe was the row&rsquo;s only
+            transform and it is gone, so there is nothing left for the preference to shorten.
+            None has a prop; the absence is part of the contract.
           </p>
         </Layout>
       </Section>

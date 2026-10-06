@@ -47,6 +47,41 @@ spends listed above, it found the two rows marked "second pass": the BlockCard c
 `--svc-link-ink` / `-hover` in `service-page.css` are declared and read by nothing; they paint nothing,
 so they are left for `cmp-service-pages`, which owns that file's next shape.
 
+### `fdn-blue` (6 Oct 2026): blue is the recurring foreground accent — supersedes the rows above
+
+Owner, 6 Oct: *"i want more blue in icons, links, and other places so it doesn't read black and white.
+the reservation is only for being in the background. no surface is ever blue."* `fdn-colour` had read
+"wisely" as "sparsely" and moved the foreground to ink; this reverses it. The **"new: Blue as an
+accent"** row above is replaced by:
+
+| § | Brand guide says | The website now does | Package |
+|---|---|---|---|
+| new: Blue as an accent | — | Blue is the recurring FOREGROUND accent, applied coherently (the same role is blue on every page): text links at rest, content icons, list and step markers and numerals, arrows and cues, small graphic marks, active and current states, slider controls, stat accents. brandeis-500 on paper and tint, brandeis-300 on ink, white on blue. Text links ≥ 4.5:1, icons and marks ≥ 3:1 on every surface. The words — headings, eyebrows, card titles at rest, body, Tag chips — stay ink. `visual-direction.md` § 4; `tokens/index.css`. | `fdn-blue` |
+| How much of each · Blue | "≤ 5%. One band per page at most, usually the ask." | **Blue is never a ground**: no blue band, card fill or panel. The band rule counts blue MASSES only — ≤ 1 solid primary and ≤ 2 of solid primary, illustration and Texture per band; the foreground accent is never counted. The 5% ceiling applies to the masses. The Free / Accent / Signal tiers are retired. | `fdn-blue` |
+| new: Cards and boxes | — | **No box around a card or text content**: a card is bounded by its gutter, rules and type, never a border or a fill. **Images keep their hairline frame** — an image is inherently a box. **Any card may carry an image.** | `fdn-blue` (recorded; already the kit's practice) |
+| Peridot | (see the rows above) | Unchanged and confirmed: **`::selection` and illustrations only**. The `tokens:check` peridot gate stays. | `fdn-blue` (confirmed) |
+
+Token changes, old → new (paper / tint; ink in the last column):
+
+| Token | Paints | Was | Now | Ink |
+|---|---|---|---|---|
+| `--lcrd-cue-ink` (deleted) | ListCard's arrow cue | neutral-900 | the cue reads `--lcrd-link-ink` at rest again: brandeis-500 / 500, holding through hover, 700 on press | 300 |
+| `--lcrd-marker-ink` | ListCard's icon marker | neutral-900 | brandeis-500 (6.17 / 5.51:1) | 300 (7.32:1) |
+| `--lcrd-number-ink` | ListCard's index numeral | neutral-500 / 600 | brandeis-500 | 300 |
+| `--flow-number-ink`, `--flow-arrow-ink` | ProcessFlow step numbers and arrows | neutral-500 / 600; neutral-900 | brandeis-500 | 300 |
+| `--cta-marker-ink` | CtaSection point numerals | neutral-600 / 700 | brandeis-500 | 300 |
+| `--acc-mark-ink` (`-hover`) | Accordion chevron | neutral-500 / 600 (hover 950) | brandeis-500 (hover 700) | 300 (hover 100) |
+| `--prose-marker-ink` | Prose list markers and `<ol>` numerals | neutral-600 / 700 | brandeis-500 | 300 |
+| `--crumb-current-ink` | the current breadcrumb | neutral-900 | brandeis-500 | 300 |
+| `--rbadge-star-ink` | RatingBadge star | neutral-900 | brandeis-500 | 300 (unchanged) |
+| `--proof-value-ink` | a Proof stat's numeral | neutral-950 | brandeis-500 | 300 |
+| `--svc-mark` (new; replaces the deleted `--svc-node`) | service-page Thread arrows, sheet / frame / loop glyphs, comparison and needs-list checks | `--svc-ink` neutral-900 | brandeis-500 | 300; blue white. Crosses stay neutral (`--svc-ink-quiet` / `--svc-ink-muted`) |
+| `--bcrd-cue-ink` (new) | BlockCard's title arrow on a covered card | the title's neutral-900 | brandeis-500; the title joins it on hover | 300; blue white |
+| BlockCard cta, PageHero second action, CtaSection second action (ghost), CtaRow later links, Proof source links, EnquiryForm "See available times" | link labels and arrows | `tone="neutral"`, ink | `tone="primary"`: `--btn-link-primary-fg` / `--btn-ghost-primary-fg`, brandeis-500 | Button's ink block (300) |
+
+Kept: Prose `<ins>` underline stays neutral (`fdn-colour` second pass) — it does not navigate, and a
+blue underline would read as a link. Chrome (SiteNav, SiteFooter) is unchanged.
+
 ## ch05 Imagery
 
 | § | Brand guide says | The website now does | Package |

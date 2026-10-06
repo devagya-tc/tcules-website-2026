@@ -122,7 +122,14 @@ type FieldGroupProps = {
   children: ReactNode;
 };
 
-function FieldGroup({ id, label, optional = false, hint, validation, children }: FieldGroupProps) {
+function FieldGroup({
+  id,
+  label,
+  optional = false,
+  hint,
+  validation,
+  children,
+}: FieldGroupProps) {
   return (
     <Layout rowGap="tight">
       <label className={styles.label} htmlFor={id}>
@@ -165,9 +172,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
   const variant = props.variant ?? 'enquiry';
   const onSubmitted = props.onSubmitted;
-  const urlLabel =
-    props.urlLabel ??
-    (variant === 'audit' ? 'Site to audit' : 'Website');
+  const urlLabel = props.urlLabel ?? (variant === 'audit' ? 'Site to audit' : 'Website');
   const submitting = lifecycle === 'submitting';
 
   const ids = {
@@ -252,7 +257,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
                 as="a"
                 href={props.scheduleHref}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="lg"
                 icon={<Icon name="arrow-right" />}
               >
@@ -383,9 +388,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
                   onBlur={(event) =>
                     setMessage(
                       'contact',
-                      event.currentTarget.value.trim() === ''
-                        ? 'Enter your phone number'
-                        : '',
+                      event.currentTarget.value.trim() === '' ? 'Enter your phone number' : '',
                     )
                   }
                 />
@@ -407,9 +410,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
                   onBlur={(event) =>
                     setMessage(
                       'comments',
-                      event.currentTarget.value.trim() === ''
-                        ? 'Add a message'
-                        : '',
+                      event.currentTarget.value.trim() === '' ? 'Add a message' : '',
                     )
                   }
                 />
@@ -461,9 +462,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
                   onBlur={(event) =>
                     setMessage(
                       'work',
-                      event.currentTarget.value.trim() === ''
-                        ? 'Add a line about it'
-                        : '',
+                      event.currentTarget.value.trim() === '' ? 'Add a line about it' : '',
                     )
                   }
                 />
@@ -506,8 +505,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
               Both lg. The submit is lg because it stands beside 44px phone fields and a 40px
               button under them read as the smaller thing; the link takes the same size so the two
               labels set at one type size across the row. lg is 48 and clears the touch floor, so
-              neither needs extendHitArea. The link keeps `neutral`: the submit is the one primary
-              ask, and blue on both would make it two. */}
+              neither needs extendHitArea. The link is `primary`: a text link is blue at rest
+              (visual-direction § 4.2, fdn-blue). It has no box, so the submit stays the one ask. */}
           <Cluster rowGap="tight" colGap="block" align="center">
             <Button type="submit" size="lg" busy={submitting}>
               {variant === 'audit'
@@ -521,7 +520,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
                 as="a"
                 href={props.scheduleHref}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="lg"
                 icon={<Icon name="arrow-right" />}
               >

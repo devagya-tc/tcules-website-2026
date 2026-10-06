@@ -448,8 +448,8 @@ Instead it changes everything that made the first viewport read as a document:
 2. **The title is rewritten to ≤ 48 characters.** That is 3 balanced lines at 572, where today's titles
    run 3 to 5 lines (51 to 64 characters). It is a sentence, not a slogan.
 3. **The lead is cut to ≤ 26 words** (3 lines). `hero.body` moves to the first band's lead.
-4. **One solid action and one neutral link-style action.** The hero spends one Accent, and the
-   illustration is its Field.
+4. **One solid action and one blue link-style action.** The hero's blue masses are the solid and the
+   illustration (§ 4.3); the link is the foreground accent (§ 4.2).
 5. **The illustration stays 572 wide and is centred on the copy.** It is unboxed at its own ratio (the
    six run 1.13 to 1.35 : 1, so 424 to 505 tall). No texture sits behind it and no type sits on it.
 6. **The next band is the B photograph.** The hero ends 7 to 88px above the fold, and on every service
@@ -554,10 +554,10 @@ Callout, the code chip, and the ch05 contrast panel behind a cut-out.
 
 **A card is never a box:** no border, no ground, no radius on the card, and no shadow.
 
-**Whole-card links carry a visible affordance at rest:** an ink arrow glyph set after the title's last
+**Whole-card links carry a visible affordance at rest:** a blue arrow glyph set after the title's last
 word, joined to it with a non-breaking space.
 - It is the same cue ListCard's linked rows already use, so the kit has one link cue.
-- On hover and focus, the arrow and title go blue (Free, § 4.2) and the image zooms (approved 29 Sep).
+- On hover and focus, the title joins the arrow in blue (§ 4.2) and the image zooms (approved 29 Sep).
 - This adds one glyph to BlockCard Revision 3, the smallest change that answers "clear affordance".
 
 ### 3.2 Asymmetry, and how copy aligns against an image
@@ -653,7 +653,7 @@ Every band on a kit page is one of these. Rules for the sequence:
 | M | Resources | head + 3 cover cards, whole-card links | centred | covers | `cmp-feature` |
 | N | Contrast (Fit) | H-title + two lists in peer halves, check and close glyphs | left | exception | `cmp-readdown` |
 | S | Stats | H-compact + one row of 3 or 4 stats | centred | numerals | `cmp-process-stats` |
-| — | Announcement strip | `Section density="strip"` on tint: body-sm + one neutral link; showcase only | — | — | `cmp-banner` |
+| — | Announcement strip | `Section density="strip"` on tint: body-sm + one blue link; showcase only | — | — | `cmp-banner` |
 
 **E draws on the template-local diagrams in `ServicePage/Diagrams.tsx`:** Spectrum, Matrix, Record,
 Parts, Slice and Bridge, whichever the page's fixture already names. They stay template-local, because
@@ -715,71 +715,68 @@ wall of text again.
 
 ---
 
-## 4 · Blue: a wise, recurring accent
+## 4 · Blue: the recurring foreground accent
 
-### 4.1 What blue is for
+### 4.1 The rule (owner, 6 Oct 2026, binding)
 
-Blue means **"this is where you act" or "this is the system"**: actions, links, our drawings and the
-texture. It recurs on every page in the same few places, so it reads as a signature and not as a
-theme.
+> "I want more blue in icons, links, and other places so it doesn't read black and white. The
+> reservation is only for being in the background. No surface is ever blue."
 
-### 4.2 One free row, three counted tiers, and texture
+**Blue is the recurring FOREGROUND accent.** It recurs in every band, in the same roles on every page,
+so nothing reads black and white. "Wisely" means **coherently, not sparsely**: a role that is blue is
+blue everywhere it appears, and a role that is ink is ink everywhere. **Blue is never a ground.**
 
-| | What | Budget |
+This replaces the 5 Oct budget (a Free row plus Accent / Signal / Field tiers, "icons are ink", "card
+arrows at rest are ink"). `fdn-colour` (85c0dea, 6d4e6ed) applied that budget and moved icon, marker,
+numeral, arrow and per-card-link tokens to ink at rest; `fdn-blue` moved every one of them back and
+added blue where the accent belongs. The record is in `docs/kit/brand-amendments.md`.
+
+### 4.2 Blue at rest, by role
+
+| Role | Where | Tokens (paper and tint → ink) |
 |---|---|---|
-| **Free** (never counted) | focus rings; link hover and pressed states; the current marker in the nav, TOC and slider pager; input focus; the whole-card hover cue (arrow and title) | unlimited |
-| **Accent** (tier 1) | the solid primary button | ≤ 1 per band |
-| **Signal** (tier 2) | primary-tone link-style actions and inline links (counted once per band, however many); the quote rule on a Proof; a diagram's blue line | ≤ 1 kind per band |
-| **Field** (tier 3) | an illustration | ≤ 1 per band; **≤ 2 per page** |
-| **Texture** | a Texture placement (§ 6) | ≤ 1 per band; page budget in § 6.4 |
+| **Text links**, blue at rest | inline and Prose links; every link-style action, including a second action beside a solid, the per-card cta, "See available times", a Proof's source link, every CtaRow link | `--btn-link-primary-fg`, `--prose-link-ink`: brandeis-500 → 300 |
+| **Icons** | content icons: ListCard markers, the service page's sheet, frame and loop glyphs, a check in a needs-list or a comparison, the RatingBadge star | `--lcrd-marker-ink`, `--svc-mark`, `--rbadge-star-ink`: 500 → 300 |
+| **Markers and numerals** | list and step markers, index numerals, a CtaSection's points, an `<ol>` numeral in Prose | `--lcrd-number-ink`, `--flow-number-ink`, `--cta-marker-ink`, `--prose-marker-ink`: 500 → 300 |
+| **Arrows and cues** | ListCard's cue, BlockCard's title arrow, ProcessFlow and Thread connectors, an accordion chevron | `--lcrd-link-ink`, `--bcrd-cue-ink`, `--flow-arrow-ink`, `--svc-mark`, `--acc-mark-ink`: 500 → 300 |
+| **Small graphic marks** | a Proof's quote rule, a diagram's blue line, the tile's opening rule on hover | `--proof-quote-rule`, … |
+| **Active and current states** | the nav and TOC current marker, the current breadcrumb, the slider thumb, focus rings, link hover and pressed, input focus, the whole-card hover | `--crumb-current-ink`, `--sld-progress-thumb`, rings |
+| **Slider controls** | previous / next, glyph and hairline rule | Button `emphasis="outline"`, `--btn-outline-primary-*` |
+| **Stat accents** | a Proof stat's numeral | `--proof-value-ink`: 500 → 300 |
+| **The ask** | the solid primary button | `--btn-solid-primary-bg` |
 
-**The band rule: a band spends at most two of Accent, Signal, Field and Texture.** `fdn-colour` writes
-exactly this wording into the blue comment it adds to `tokens/index.css`.
+**Contrast, on every surface:** text links ≥ 4.5:1; icons and marks ≥ 3:1. brandeis-500 is 6.17:1 on
+paper and 5.51:1 on tint. On ink it is 2.77:1, so the accent lifts to **brandeis-300 (7.32:1)**, or 200
+on a control. On a blue ground (none on pages; the token layer still declares one) the accent is white
+or brandeis-100.
 
-**Neutral link-style is not blue.** `emphasis="link" tone="neutral"` is ink, so it spends nothing. Every
-second action, every per-card CTA, the "schedule a call" link, and G-case's "Read the case" use it.
+### 4.3 What stays ink, and the one thing blue never is
 
-**Amended 6 Oct 2026 (`fdn-section-head`, second fix round): a band's link foot is blue by default.**
-CtaRow defaulted every action to neutral, so link feet were ink label and ink arrow; with ink icons in
-the body, a C-icon-4 band read fully black and white. The owner's binding ruling wants more blue in the
-foreground (links, arrows, small marks), so a **link-led CtaRow now defaults to `tone="primary"`**: the
-first action spends **Signal**, counted once per band. A solid-led CtaRow still defaults to neutral,
-because a solid primary is **Accent** and is spent on purpose. The second action stays neutral. A band
-that already spends a different kind of Signal (G's quote rule, E's diagram line) or has spent its two
-passes `tone="neutral"`; the band rule is unchanged.
-
-**Amended 6 Oct 2026 (`fdn-scroll`): slider controls are Free, and blue at rest.** The Free row names
-"the current marker in the … slider pager"; the Slider's previous / next controls join it. They are the
-slider's own navigation, like the nav's and TOC's markers, and they are blue at rest (glyph and hairline
-rule) because the owner wants blue on arrows and small marks. Counting them as Signal would collide with
-a G band's quote rule (≤ 1 kind per band). The rail is neutral; its thumb is the current marker
-(`docs/specs/Slider.md` § 6).
-
-| Band | Spends | Therefore |
-|---|---|---|
-| A, service hero | Accent + Field | no texture; the secondary action is neutral |
-| A, photo or no-media hero | Accent + Texture | the secondary action is neutral |
-| B with `counterweight` | Texture (+ Signal with a primary link CtaRow) | no solid button |
-| E with `horizon` | Signal (the diagram line) + Texture | nothing else |
-| G | Signal (the quote rule) | no texture (tint); the CTA is neutral |
-| J with `head-half` | Texture | the h1 is ink |
-| K offer | Accent | the secondary is neutral; no texture (the photo fills the band) |
-| L close | Accent (submit) + Texture (`closing`) | the second action and the schedule link are neutral |
-
-### 4.3 Never blue
-
-- Headings, eyebrows, card titles at rest, body text, stat numerals, Tag chips at rest, list markers,
-  step numbers, and icons in a card set.
-- **Icons are ink** (`neutral-900` on paper). A set of six blue icons is exactly the spray the owner
-  ruled out. An icon goes blue only as part of a whole-card hover (Free).
-- Card arrows at rest are ink. They go blue on hover or focus.
-- Hairline rules on paper and tint are neutral.
-- **No band ground is blue.** There are no blue bands until the owner names a purpose for one. Three live
-  routes outside this kit carry one (`insights`, `future-interfaces-lab/join`, `matter-design-system`).
-  They are left untouched (§ 10, item 4).
+- **The words stay ink:** headings, eyebrows, card titles at rest, body text, Tag chips at rest. Blue
+  marks around them. Ink words are what keep blue reading as an accent rather than a theme.
+- **A cross stays quiet ink** beside a blue check: it only says "not this one".
+- **Hairline separators on paper and tint are neutral.** A blue rule is a mark (the quote rule, the
+  tile's hover rule), never a divider.
 - **Chrome is exempt and unchanged.** SiteNav and SiteFooter keep their approved colours (nav direction
   B), including the rail arrows.
-- The ch02 5%-by-area page ceiling still holds.
+- **No ground is blue: no band, no card fill, no panel.** There are no blue bands until the owner names
+  a purpose for one. Three live routes outside this kit carry one (`insights`,
+  `future-interfaces-lab/join`, `matter-design-system`); they are left untouched (§ 10, item 4).
+- **Blue masses are not the accent and are counted.** The solid primary button, an illustration's
+  field and a Texture placement are areas, not marks. A band carries **at most one solid primary** and
+  **at most two of solid primary, illustration and Texture** (the band rule); at most two
+  illustrations per page. The foreground accent in § 4.2 is never counted. ch02's 5%-by-area ceiling
+  applies to the masses.
+
+| Band | Blue masses | Therefore |
+|---|---|---|
+| A, service hero | solid + illustration | no texture |
+| A, photo or no-media hero | solid + Texture | — |
+| B with `counterweight` | Texture | no solid button |
+| E with `horizon` | Texture | — |
+| J with `head-half` | Texture | the h1 is ink |
+| K offer | solid | no texture (the photo fills the band) |
+| L close | solid (submit) + Texture (`closing`) | — |
 
 ### 4.4 Peridot
 
@@ -802,15 +799,6 @@ Peridot has exactly two uses on the website:
 - The ramp's declarations in `primitives.css` stay.
 - Comments that mention peridot are not consumption.
 - Illustration SVGs are exempt.
-
-**Blue at rest.** `fdn-colour` inventories every paper and tint token that paints an icon, marker,
-index, arrow or rule blue at rest, and fixes each one in the token layer in the same PR, listing old →
-new. Known so far:
-- `--cta-marker-ink`;
-- `--lcrd-number-ink`;
-- `--flow-number-ink`;
-- `--prose-marker-ink`;
-- `service-page.css`.
 
 The typography specimen's `<mark>` example is deleted.
 
@@ -852,7 +840,7 @@ Read the rows top-down. The first match is the **default**. **Any card may carry
 | people working, collaborating, a workshop, how we engage | a photograph: studio first, then stock | |
 | who said it (fictional, showcase only) | a stock portrait, 1:1 | an avatar initial |
 | who said it (a real client) | no portrait unless the client supplies one; a typographic quote | a stock face beside a real name (§ 5.8) |
-| a set of ≥ 4 parallel options | a Solar Bold icon in ink, with a photo in the head track; image cards are equally allowed | blue icons |
+| a set of ≥ 4 parallel options | a Solar Bold icon in blue (§ 4.2), with a photo in the head track; image cards are equally allowed | |
 | 2 to 3 options with their own pages | card images: a photograph or an illustration; icons are equally allowed | |
 | a case study, article or resource | its cover; until covers exist, a stand-in (§ 5.7) | an empty frame |
 | an ask (offer, form) | one quiet photograph (`saturation: quiet`) | a busy scene with faces cut at the edge |
@@ -1023,7 +1011,7 @@ it does not block the build.
   box is a heading, any text, an image, a form, a ruled row or a table. Only the feather (the blur beyond
   the box) may reach content.
 - Blur ≥ 100 on any shape that enters the content column (limit 6).
-- It counts against the band rule (§ 4.2).
+- It counts against the band rule (§ 4.3).
 - It never sits on a band with an illustration, behind an image, behind a form, or under ruled rows.
 
 ### 6.3 The recipes, and where their numbers live
@@ -1144,20 +1132,20 @@ BlockCard and ListCard, because it already edits both files.
 
 ### 8.2 Service page, worked example (product-design, 12 bands)
 
-| # | Band | Head | Image | Texture | Blue spends |
+| # | Band | Head | Image | Texture | Blue masses |
 |---|---|---|---|---|---|
-| 1 | A hero, illustration | hero | illustration | — | Accent + Field |
+| 1 | A hero, illustration | hero | illustration | — | solid + illustration |
 | 2 | B media split, photo left | left | `studio-sticky-board-ux` | `counterweight` (end) | Texture |
 | 3 | H logo strip (real marks) | centred | — | — | — |
 | 4 | C-icon-6, "What you receive" | beside | aside `hand-sketch-wireframe` | — | — |
-| 5 | E diagram, "How one decision moves" | left | diagram | `horizon` | Signal + Texture |
-| 6 | G-case, on tint | left | case card (stand-in) | — | Signal (quote rule) |
+| 5 | E diagram, "How one decision moves" | left | diagram | `horizon` | Texture |
+| 6 | G-case, on tint | left | case card (stand-in) | — | — |
 | 7 | F process (Steps) | beside | aside `moodboard-wall-desk` | — | — |
 | 8 | M work, 3 linked cases | centred | stand-in covers | — | — |
-| 9 | K offer, photo right | left | `pair-laptop-notebook` | — | Accent |
+| 9 | K offer, photo right | left | `pair-laptop-notebook` | — | solid |
 | 10 | D-faq | centred | — | — | — |
 | 11 | I banner, 3:1 | left | `sticky-wall-soft-focus` | — | — |
-| 12 | L close | left | — | `closing` (start) | Accent + Texture |
+| 12 | L close | left | — | `closing` (start) | solid + Texture |
 
 **Checks on this sequence:**
 - **Cadence:** the image-less bands 3 and 10 each sit between image bands, and 12 is the close. 9 of
@@ -1246,7 +1234,7 @@ The slider portraits must sit in the warm family: `portrait-man-blue-office` (wa
 - [ ] **`cmp-service-pages` and `cmp-showcase` only: full-page shots at 390, put in front of the owner.**
       Check them for the § 3.7 item 6 cadence, and for no run of 3 bands that collapse to the same head +
       rows shape.
-- [ ] The band rule (§ 4.2) holds. The peridot gate (§ 4.4) passes.
+- [ ] The band rule (§ 4.3) holds; no ground is blue; the page does not read black and white (§ 4.2). The peridot gate (§ 4.4) passes.
 - [ ] Image cadence (§ 5.1) holds. There are no empty media frames.
 - [ ] No box on any card. No margin on any child. No hand-rolled grid or flex.
 - [ ] `npm run verify`, `npm run build && npm run aria:check`, and `/audit-component` on each new or
@@ -1273,7 +1261,7 @@ overrides the conflicting passages, and every package brief says so.
 | How much of each · Blue | "≤ 5%. One band per page at most, usually the ask." | On the website: no blue bands until a purpose is set (owner, 5 Oct). Social is unchanged. |
 | How much of each · Tint | "a proof block, a form, a reference table" | One tint band per page at most on the website (the proof band), plus an optional announcement strip. The close is on paper, because it carries the texture. |
 | What may sit on each ground | the "marked peridot-500 · highlight" swatch on each ground | Relabel it: selection (website), marked phrase (social). |
-| new: Blue as an accent | | Add § 4.2: the free row, the three counted tiers, texture, the band rule, and "icons are ink". |
+| new: Blue as an accent | | Add: blue is the recurring foreground accent (icons, text links, markers and numerals, arrows, small marks, active states, slider controls, stat accents), never a ground; the band rule counts blue masses only (§ 4, owner 6 Oct; `docs/kit/brand-amendments.md`). |
 | new: Texture on grounds | | The pixel-grid takes brandeis-500 on paper only; never tint, ink or blue on the website. |
 | Do and don't | the "one pivot band" composition | Remove the blue band from the website "Do" page rhythm. |
 
@@ -1336,7 +1324,7 @@ until `fdn-gates` has merged**, so every family is built against `fold:check`.
 
 1. `fdn-spacing`: S1 to S5, the card `size` prop, and the CLAUDE.md `column` amendment.
 2. `fdn-top`: § 2.1 to § 2.3 and § 2.6.
-3. `fdn-colour`: § 4.4, the blue-at-rest fixes, and the peridot gate.
+3. `fdn-colour`: § 4.4 and the peridot gate. (Its blue-at-rest-to-ink fixes were reversed by `fdn-blue`, § 4.1.)
 4. `fdn-media`: the photo registry, tone tags, derived widths, Media `ratio`, `focus` and
    `--media-photo-radius`, stand-ins, and the empty-frame fix.
 5. `fdn-section-head`: ContentSection `align`, `aside`, `actions`, `footer`, the `split-head` and

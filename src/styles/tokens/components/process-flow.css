@@ -26,9 +26,9 @@
 :root,
 [data-surface='paper'] {
   --flow-rule-ink: var(--color-neutral-300); /* decoration, the tile hairline */
-  --flow-number-ink: var(--color-neutral-500); /* 3.16:1 — aria-hidden, the <ol> carries order */
+  --flow-number-ink: var(--color-brandeis-500); /* 6.17:1 — aria-hidden, the <ol> carries order; the accent numeral */
   --flow-label-ink: var(--color-neutral-900); /* 14.62:1 */
-  --flow-arrow-ink: var(--color-neutral-900);
+  --flow-arrow-ink: var(--color-brandeis-500); /* 6.17:1 — arrows carry the accent */
   --flow-item-ink: var(--color-neutral-800); /* 11.81:1 */
   --flow-item-rule-ink: var(--color-neutral-200);
   --flow-actor-ink: var(--color-neutral-700); /* 8.14:1 */
@@ -38,9 +38,9 @@
 
 [data-surface='tint'] {
   --flow-rule-ink: var(--color-neutral-400); /* decoration, the tile hairline */
-  --flow-number-ink: var(--color-neutral-600);
+  --flow-number-ink: var(--color-brandeis-500); /* 5.51:1 */
   --flow-label-ink: var(--color-neutral-900);
-  --flow-arrow-ink: var(--color-neutral-900);
+  --flow-arrow-ink: var(--color-brandeis-500); /* 5.51:1 */
   --flow-item-ink: var(--color-neutral-800); /* 10.54:1 */
   --flow-item-rule-ink: var(--color-neutral-300);
   --flow-actor-ink: var(--color-neutral-800);
@@ -50,9 +50,9 @@
 
 [data-surface='ink'] {
   --flow-rule-ink: var(--color-neutral-700); /* decoration, the tile hairline */
-  --flow-number-ink: var(--color-neutral-500);
+  --flow-number-ink: var(--color-brandeis-300); /* 7.32:1 */
   --flow-label-ink: var(--color-white);
-  --flow-arrow-ink: var(--color-white);
+  --flow-arrow-ink: var(--color-brandeis-300); /* 7.32:1 */
   --flow-item-ink: var(--color-neutral-200);
   --flow-item-rule-ink: var(--color-neutral-700);
   --flow-actor-ink: var(--color-neutral-400);

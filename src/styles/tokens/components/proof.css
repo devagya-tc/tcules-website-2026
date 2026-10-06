@@ -44,7 +44,7 @@
   --proof-quote-ink: var(--color-neutral-800); /* 11.81:1 */
   --proof-name-ink: var(--color-neutral-900); /* 14.62:1 */
   --proof-attribution-ink: var(--color-neutral-600); /* 4.92:1 */
-  --proof-value-ink: var(--color-neutral-950); /* 17.10:1 */
+  --proof-value-ink: var(--color-brandeis-500); /* 6.17:1 — the stat numeral carries the accent */
   --proof-label-ink: var(--color-neutral-700); /* 8.14:1 */
   --proof-checked-ink: var(--color-neutral-600); /* 4.92:1 */
   --proof-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
@@ -55,7 +55,7 @@
   --proof-quote-ink: var(--color-neutral-800); /* 10.54:1 */
   --proof-name-ink: var(--color-neutral-900); /* 13.06:1 */
   --proof-attribution-ink: var(--color-neutral-700); /* 7.27:1 */
-  --proof-value-ink: var(--color-neutral-950); /* 15.27:1 */
+  --proof-value-ink: var(--color-brandeis-500); /* 5.51:1 */
   --proof-label-ink: var(--color-neutral-800); /* 10.54:1 */
   --proof-checked-ink: var(--color-neutral-700); /* 7.27:1 */
   --proof-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
@@ -67,7 +67,7 @@
   --proof-quote-ink: var(--color-white); /* 17.26:1 */
   --proof-name-ink: var(--color-white); /* 17.26:1 */
   --proof-attribution-ink: var(--color-neutral-400); /* 8.05:1 */
-  --proof-value-ink: var(--color-white); /* 17.26:1 */
+  --proof-value-ink: var(--color-brandeis-300); /* 7.32:1 */
   --proof-label-ink: var(--color-neutral-400); /* 8.05:1 */
   --proof-checked-ink: var(--color-neutral-400); /* 8.05:1 */
   --proof-quote-rule: var(--color-brandeis-300); /* decoration — ch10 B2.07 */

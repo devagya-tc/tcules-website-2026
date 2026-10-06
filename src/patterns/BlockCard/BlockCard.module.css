@@ -105,10 +105,12 @@
    glyph never starts a line on its own. Inline-block because Icon's <svg> is display:block, which
    inside a bare inline span would break the title's line. `middle` centres the glyph's box on the
    lower-case letters, where an arrow after a word reads as punctuation; on the baseline it sat
-   below them and read as a subscript (crops, 6 Oct). Its ink is the title's. */
+   below them and read as a subscript (crops, 6 Oct). It is blue at rest — arrows carry the
+   foreground accent (fdn-blue, 6 Oct) — and the title joins it on hover. */
 .cue {
   display: inline-block;
   vertical-align: middle;
+  color: var(--bcrd-cue-ink);
 }
 
 .body {
@@ -175,7 +177,7 @@
 }
 
 /* A linked card's hover and keyboard focus: a cover leans in, inside its still, ruled box, and the
-   title and its arrow go blue. The rule keeps its rest ink and the title does not underline (both
+   title goes blue to meet its arrow. The rule keeps its rest ink and the title does not underline (both
    tried 29 Sep, both too loud). Keyboard gets what the pointer gets, plus the ring. Pressed holds it. */
 .root .link:hover .cued,
 .root .link:focus-visible .cued,

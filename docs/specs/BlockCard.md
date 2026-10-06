@@ -571,7 +571,7 @@ The vertical grid tile:
             {body}
           </Layout>
           {href ? (
-            <Button as="span" emphasis="link" tone="neutral" icon={<Icon name="arrow-right" />}>
+            <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
               {ctaLabel}
             </Button>
           ) : null}
@@ -1332,3 +1332,11 @@ qualify on a cool page and its three Resources cards take three.
 **Placeholder sizes are flagged.** A record that arrives without dimensions is given its box's 3 × 2 and
 now `placeholderSize: true`, so Media reports no `data-src-w` / `-h` for it and the resolution gate
 never measures a 3px master.
+
+## Amendment · 6 Oct 2026 — `fdn-blue` (supersedes the `fdn-colour` neutral-tone amendment)
+
+Owner: blue is the recurring FOREGROUND accent — icons, text links, arrows, small marks — and is
+never a ground. The text-only card's cta returns to `tone="primary"` (blue label and arrow at rest,
+Button's `--btn-link-primary-fg{,-hover,-pressed}`). The covered card's arrow cue gets its own rest
+ink, `--bcrd-cue-ink` (brandeis-500 on paper and tint, 300 on ink, white on blue); the title stays
+`--bcrd-title-ink` at rest and joins the arrow in blue on hover and focus.

@@ -117,7 +117,7 @@
 --crumb-link-ink:var(--color-neutral-600);          /*  4.92:1 — the floor of AA, do not lighten */
 --crumb-link-ink-hover:var(--color-brandeis-500);   /*  6.17:1 */
 --crumb-link-ink-pressed:var(--color-brandeis-700); /* 10.07:1 */
---crumb-current-ink:var(--color-neutral-900);       /* 14.62:1 */
+--crumb-current-ink:var(--color-brandeis-500);       /*  6.17:1 — you are here: an active state carries the accent */
 --crumb-divider-ink:var(--color-neutral-400);       /*  2.12:1 — decoration, exempt */
 --crumb-ring-color:var(--color-brandeis-500);--crumb-ring-gap-color:var(--color-paper);
 }
@@ -137,7 +137,7 @@
 --crumb-link-ink:var(--color-neutral-700);          /*  7.27:1 — stepped; 600 would be 4.39:1 */
 --crumb-link-ink-hover:var(--color-brandeis-500);   /*  5.51:1 */
 --crumb-link-ink-pressed:var(--color-brandeis-700); /*  8.99:1 */
---crumb-current-ink:var(--color-neutral-900);       /* 13.06:1 */
+--crumb-current-ink:var(--color-brandeis-500);       /*  5.51:1 */
 --crumb-divider-ink:var(--color-neutral-500);       /*  2.82:1 — decoration, exempt */
 --crumb-ring-color:var(--color-brandeis-500);--crumb-ring-gap-color:var(--color-paper-deep);
 }
@@ -156,7 +156,7 @@
 --crumb-link-ink:var(--color-neutral-400);          /*  8.05:1 */
 --crumb-link-ink-hover:var(--color-brandeis-300);   /*  7.32:1 — floor: 500 is 2.77:1 here */
 --crumb-link-ink-pressed:var(--color-brandeis-100); /* 13.61:1 */
---crumb-current-ink:var(--color-white);             /* 17.26:1 */
+--crumb-current-ink:var(--color-brandeis-300);       /*  7.32:1 — 500 is 2.77:1 here */
 --crumb-divider-ink:var(--color-neutral-700);       /*  2.10:1 — decoration, exempt */
 --crumb-ring-color:var(--color-brandeis-300);--crumb-ring-gap-color:var(--color-neutral-950);
 }
