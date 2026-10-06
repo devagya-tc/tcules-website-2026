@@ -23,7 +23,9 @@
  * visible as one, and a later change to a threshold can be judged against the numbers rather than
  * re-measured by eye. Thresholds live here and in § 5.5; a change to one is a change to both.
  *
- * Uses `sharp`, which is already in the tree through Next's image stack; it is not a new dependency.
+ * Uses `sharp`, declared as a devDependency. Next also pulls it in, but only as an OPTIONAL
+ * dependency whose native binary an install may skip, and `photos:check` runs in `npm run verify`,
+ * so the gate cannot lean on a package nobody declared.
  * Run it whenever a photograph is added to or replaced in the catalogue, then `npm run photos:derive`.
  */
 import { readFileSync, writeFileSync } from 'node:fs';

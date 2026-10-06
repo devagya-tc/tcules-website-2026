@@ -80,13 +80,16 @@
 }
 
 /* The fixed square. flex: none so the nowrap Cluster can never squeeze it; the ratio is the box's,
-   and Media fills it with a centre cover crop. Radius 0 is Media's for a photograph — never a
-   circle (ch05 §6). */
+   and Media fills it with a cover crop. The corner is this box's, 4 (--proof-portrait-radius-compact,
+   visual-direction § 5.3): Proof rules the crop box and tells Media so (edge="placement"), so Media
+   draws no radius of its own and overflow clips the image to this one. Never a circle (ch05 §6). */
 .portrait {
   display: block;
   flex: none;
   inline-size: var(--proof-portrait-size);
   aspect-ratio: var(--proof-portrait-ratio);
+  border-radius: var(--proof-portrait-radius-compact);
+  overflow: hidden;
 }
 
 /* The speaker group sizes to its content and never shrinks below it; the source link takes what

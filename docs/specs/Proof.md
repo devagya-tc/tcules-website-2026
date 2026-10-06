@@ -61,7 +61,7 @@ variant.
 | quote-rule | whenever quote renders | the `blockquote`'s logical leading edge | The 6px site-blockquote rule (ch10 B2.07), beside the quote text only — not the attribution. Decoration only, never an oversized quotation glyph. *Amended 28 Sep: was deck weight (2px) and ran beside the whole figure.* |
 | quote-text | whenever quote renders | native `blockquote` containing `Prose` | One trusted, sanitised rich-text field of one to six sentences. `Prose` owns its markup and inline-link behavior; Proof owns the arrangement-specific quote scale. |
 | attribution | whenever quote renders | native `figcaption`, rendered by `Cluster nowrap` | The attribution row. Without a portrait it is indented by the rule plus its inset so the name starts on the quote's first letter; with one, the indent is dropped and the portrait takes the left margin. |
-| portrait | optional | `span` box containing `Media` | A 64px square photograph, radius 0, never masked, `alt=""` (ruling P1; ch05 §3, §6). Absent → no element and no gap. |
+| portrait | optional | `span` box containing `Media` | A 64px square photograph, radius 4 on the box (`--proof-portrait-radius-compact`, visual-direction § 5.3; was 0 until 6 Oct 2026), never masked, `alt=""` (ruling P1; ch05 §3, §6). Absent → no element and no gap. |
 | attribution-text | whenever quote renders | nested `Layout` | The text column beside the portrait: name-and-role, then the mark. |
 | name | whenever quote renders | text `span` | Required. Display serif, roman — the second voice under the italic quote. |
 | role-company | whenever quote renders | text `span` | `role, company`, or `company` alone when role is missing or blank. |
@@ -285,6 +285,12 @@ column. Proof never caches an outer value, paints a nested ground or relies on a
   Small (P1): a little taller than the two attribution lines (≈ 50), and under a fifth of a 326
   column, leaving the text a 238 measure on a phone. `sizes` is `PROOF_PORTRAIT` from
   `src/lib/image-sizes.ts` ('64px'), which restates the token by hand.
+- Portrait corner: `--proof-portrait-radius-compact` → `--radius-4`, on the portrait box, which clips
+  (`overflow: hidden`). Media is passed `edge="placement"`, so it draws no radius of its own; at the
+  default `edge="kind"` it would add the photograph radius (8) inside the box (visual-direction § 5.3,
+  fdn-media fix round, 6 Oct 2026). It also passes `focus={{ x: 0.5, y: 0.5 }}`: a fill crop otherwise
+  anchors at `--media-fill-position` (inline start, 20% down), so the "centre-cropped to 1:1" a non-square
+  master was promised in §8 and the specimen was in fact a left-anchored crop until then.
 - Client mark: ClientMark's own geometry — equal area, 40px height cap, 160px width cap (P2).
 - Radius: `--proof-radius` resolves to `--radius-0`.
 - Shadow: `--proof-shadow` resolves to `--shadow-none`.
@@ -577,6 +583,7 @@ hierarchy; no repeated boxes or alternating grounds do it.
 | `--proof-name-ink` | component | per surface, §6 | The name's own ink. |
 | `--proof-portrait-size` | component | 64px | Component size. |
 | `--proof-portrait-ratio` | component | `--ratio-portrait` | The box's ratio. |
+| `--proof-portrait-radius-compact` | component | `--radius-4` | The 64 portrait box's corner (§ 5.3). |
 
 **Amended 29 Sep 2026 (tracker 2.17) — two type roles, ten primitives and four usage tokens.**
 
@@ -699,8 +706,8 @@ approved, with the cost visible in the specimens.
 
 What changed, in one place:
 
-1. **Portrait.** Optional `quote.portrait` — a 64px square, radius 0, never masked, through `Media`
-   (`kind: 'photograph'`, `fit: 'fill'`, lazy, `sizes` = `PROOF_PORTRAIT`). Flush on the left margin
+1. **Portrait.** Optional `quote.portrait` — a 64px square, radius 0 (4 from 6 Oct 2026, § 5.3), never masked, through `Media`
+   (`kind: 'photograph'`, `fit: 'fill'`, `edge: 'placement'` from 6 Oct, lazy, `sizes` = `PROOF_PORTRAIT`). Flush on the left margin
    under the rule, the text a 24 bind to its right. No portrait, no gap (P1).
 2. **Client mark.** Optional `quote.clientMark` through `ClientMark` (40px cap, ground's ink), beneath
    the name and role, `aria-hidden` (§17 Q8, Q10).

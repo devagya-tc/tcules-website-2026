@@ -126,9 +126,11 @@ const PLACEMENT_FOR: Record<MediaRatio, string> = {
   '4/5': 'B, K and L-photo: the media split',
   '5/4': 'the photograph hero',
   '3/1': 'I banner below its head',
-  '3/2': 'banner beside, the head-track aside, a card pair',
-  '16/9': 'card sets of three or more',
-  '4/3': 'the horizontal card',
+  '3/2':
+    'banner beside, the head-track aside, and every card box (BlockCard and ListCard crop at 3:2)',
+  '16/9':
+    '§ 5.4 names it for card sets of three or more; no card renders it (cards crop at 3:2)',
+  '4/3': '§ 5.4 names it for the horizontal card; no card renders it (cards crop at 3:2)',
   '1/1': 'portraits',
 };
 
@@ -138,6 +140,20 @@ const RATIO_ROW: readonly { ratio: MediaRatio; id: PhotoId; box: number }[] = [
   { ratio: '3/2', id: 'studio-session-talk', box: 381 },
   { ratio: '1/1', id: 'portrait-woman-grey', box: 477 },
 ];
+
+/* Section 9b's row: the same three crops on tint, ink and blue, each at a placement § 5.4 admits. */
+const SURFACE_ROW: readonly { ratio: MediaRatio; id: PhotoId; box: number }[] = [
+  { ratio: '4/5', id: 'studio-sticky-board-ux', box: 477 },
+  { ratio: '3/2', id: 'studio-session-talk', box: 381 },
+  { ratio: '1/1', id: 'portrait-woman-grey', box: 477 },
+];
+
+/** The capture hairline each 9b band shows, from media.css's surface blocks. */
+const SURFACE_RULE: Record<'tint' | 'ink' | 'blue', string> = {
+  tint: 'neutral-400 on tint',
+  ink: 'neutral-700 on ink',
+  blue: 'brandeis-300 on blue',
+};
 
 const SURFACE_NOTES: Record<SectionSurface, string> = {
   paper:
@@ -632,6 +648,7 @@ export default function MediaSpecimenPage() {
           <Quarters>
             {RATIO_ROW.map(({ ratio, id, box }) => (
               <Specimen
+                label="below"
                 key={ratio}
                 title={`ratio ${ratio.replace('/', ':')} · ${id}`}
                 note={`${PLACEMENT_FOR[ratio]}. At ${box}px the crop is ${cropScale(id, ratio, box).toFixed(2)}× the box.`}
@@ -642,6 +659,7 @@ export default function MediaSpecimenPage() {
           </Quarters>
           <Halves>
             <Specimen
+              label="below"
               title="ratio 16:9 · workshop-hands-writing"
               note={`${PLACEMENT_FOR['16/9']}. At 392px the crop is ${cropScale('workshop-hands-writing', '16/9', 392).toFixed(2)}× the box.`}
             >
@@ -652,6 +670,7 @@ export default function MediaSpecimenPage() {
               />
             </Specimen>
             <Specimen
+              label="below"
               title="ratio 4:3 · pair-laptop-notebook"
               note={`${PLACEMENT_FOR['4/3']}. At 604px the crop is ${cropScale('pair-laptop-notebook', '4/3', 604).toFixed(2)}× the box.`}
             >
@@ -663,6 +682,7 @@ export default function MediaSpecimenPage() {
             </Specimen>
           </Halves>
           <Specimen
+            label="below"
             title="ratio 3:1 · sticky-wall-soft-focus"
             note={`${PLACEMENT_FOR['3/1']}. At 1240px the crop is ${cropScale('sticky-wall-soft-focus', '3/1', 1240).toFixed(2)}× the box.`}
           >
@@ -674,6 +694,7 @@ export default function MediaSpecimenPage() {
           </Specimen>
           <Quarters>
             <Specimen
+              label="below"
               title="focus from the record"
               note="pair-desk-through-plants, 4:5, anchored at its catalogue focal point (0.6, 0.45): the pair at the desk."
             >
@@ -684,6 +705,7 @@ export default function MediaSpecimenPage() {
               />
             </Specimen>
             <Specimen
+              label="below"
               title="focus on the prop — crop from the right"
               note="The same record, the placement's override { x: 1, y: 0.5 }: the crop moves off the leaves on the left (§ 5.6's 'crop from the right')."
             >
@@ -695,12 +717,14 @@ export default function MediaSpecimenPage() {
               />
             </Specimen>
             <Specimen
+              label="below"
               title="photograph, intrinsic"
               note="No ratio: the whole frame at its own 3:2, still radius 8 and no frame."
             >
               <Media image={getKitPhoto('hands-sticky-blue-pen')} sizes={SIZES_QUARTER} />
             </Specimen>
             <Specimen
+              label="below"
               title="capture beside it: radius 0, hairline"
               note="ratio is passed and IGNORED (a development warning): a capture renders whole (H3)."
             >
@@ -708,6 +732,7 @@ export default function MediaSpecimenPage() {
             </Specimen>
           </Quarters>
           <Specimen
+            label="below"
             title="what the gates read"
             note="Every photograph emits its master's pixels and its measured tone on the <img>, for fold:check's resolution and tone rules. A stand-in cover also carries data-stand-in. None of it is visible."
           >
@@ -731,6 +756,41 @@ export default function MediaSpecimenPage() {
           </Specimen>
         </Layout>
       </Section>
+
+      {(['tint', 'ink', 'blue'] as const).map((surface) => (
+        <Section key={surface} surface={surface}>
+          <Layout rowGap="stack">
+            <Layout rowGap="block">
+              <h2>9b · Photographs on {surface}</h2>
+              <p>
+                A photograph reads no surface token: no frame, the same 8px radius and the same
+                crop on every ground. The capture beside them is the control &mdash; its
+                hairline is the one edge here that steps with the surface (
+                {SURFACE_RULE[surface]}).
+              </p>
+            </Layout>
+            <Quarters>
+              {SURFACE_ROW.map(({ ratio, id, box }) => (
+                <Specimen
+                  key={ratio}
+                  label="below"
+                  title={`ratio ${ratio.replace('/', ':')} · ${id}`}
+                  note={`${PLACEMENT_FOR[ratio]}. ${cropScale(id, ratio, box).toFixed(2)}× at ${box}px.`}
+                >
+                  <Media image={getKitPhoto(id)} sizes={SIZES_QUARTER} ratio={ratio} />
+                </Specimen>
+              ))}
+              <Specimen
+                label="below"
+                title="capture: radius 0, hairline"
+                note="The surface's rule ink, and ratio ignored (H3)."
+              >
+                <Media image={CAPTURE} sizes={SIZES_QUARTER} ratio="4/5" />
+              </Specimen>
+            </Quarters>
+          </Layout>
+        </Section>
+      ))}
 
       <Section surface="ink">
         <Layout rowGap="block">

@@ -140,12 +140,21 @@ function acceptPortrait(portrait: ProofPortrait | undefined, name: string) {
 }
 
 /**
- * The portrait: small, square, radius 0, through Media as a photograph (no edge, never masked).
+ * The portrait: small, square, radius 4, through Media as a photograph (no frame, never masked).
  *
  * `alt=""` is deliberate. The image sits beside the speaker's name, so a text alternative could only
  * restate that name ("Portrait of Ashok Mohanty") and a screen reader would hear it twice. That is
- * ch05 §7's decorative case. The box owns the 1:1 ratio and Media fills it with a centre cover crop.
+ * ch05 §7's decorative case. The box owns the 1:1 ratio and the 4 corner
+ * (--proof-portrait-radius-compact, § 5.3), so Media is told the placement rules its edge
+ * (`edge="placement"`) and fills the box with a cover crop; left at `edge="kind"` it would add the
+ * photograph radius, 8, inside it.
  */
+/* Centre. Without it a fill crop anchors at --media-fill-position (inline start, 20% down), the
+   product-UI anchor — and a non-square portrait would lose the right of the face rather than be the
+   centre crop this file, the spec and the specimen all promise. A ProofPortrait carries no focal
+   point of its own, so the centre is the whole answer. */
+const PORTRAIT_FOCUS = { x: 0.5, y: 0.5 };
+
 function Portrait({ portrait }: { portrait: ProofPortrait }) {
   return (
     <span className={styles.portrait}>
@@ -153,6 +162,8 @@ function Portrait({ portrait }: { portrait: ProofPortrait }) {
         image={{ ...portrait, alt: '', kind: 'photograph' }}
         sizes={PROOF_PORTRAIT}
         fit="fill"
+        edge="placement"
+        focus={PORTRAIT_FOCUS}
       />
     </span>
   );

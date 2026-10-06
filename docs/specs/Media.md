@@ -406,3 +406,24 @@ registry. `npm run photos:check`, in `verify`, fails when either is stale.
 **Specimen:** `/design/media` § 9 — one photo per ratio with its crop scale at 1470, the record's focus
 against a prop override, a photograph intrinsic beside a capture (radius 8 against 0 and the hairline,
 and `ratio` ignored on the capture), and the gate attributes on a stand-in.
+
+### Fix round · 6 Oct 2026
+
+- **The card ratio has one answer: 3:2.** § 5.4's table gives card sets of three or more 16:9 and the
+  horizontal card 4:3, but no card renders either: BlockCard's crop box is `--bcrd-media-ratio` →
+  `--ratio-cover` (3/2) in both orientations, and ListCard's thumbnail is the same. `src/lib/photos.ts`
+  now exports `CARD_RATIO = '3/2'`, every card placement in `PHOTO_PLACEMENTS` (`card3`, `card4`,
+  `cardPair`, `cardHorizontal`, `thumbnail`) measures against it, and the stand-in picker reads the same
+  constant, so `qualifies(id, 'card3')` measures the box a card actually draws. **§ 5.4 drift:** its 16:9
+  and 4:3 card rows describe a BlockCard that does not exist; adopting them would be a BlockCard change
+  (a ratio per set size), which `CARD_RATIO` would then follow. `16/9` and `4/3` stay in `MediaRatio`
+  because the set is § 5.4's, but no shipped placement passes them.
+- **A 64 portrait is a placement-ruled box.** Proof's compact portrait now passes `edge="placement"`
+  and draws `--proof-portrait-radius-compact` (`--radius-4`, § 5.3) on its own clipping box. At the
+  default `edge="kind"` it picked up the photograph radius, 8, which § 5.3 does not give it.
+- **`--media-focus` is registered** in `scripts/tokens-check.mjs`'s `JS_INJECTED`, beside ClientMark's
+  per-asset properties, so the check no longer relies on `.fill` and `.crop` happening to declare a
+  local default.
+- **Specimen § 9** sets each label beneath its image, so a title that wraps no longer drops one image
+  below its neighbours, and § 9b renders the photographs on tint, ink and blue as well as paper.
+

@@ -122,8 +122,23 @@ export function cropScale(id: PhotoId, ratio: PhotoRatio, boxWidth: number): num
 }
 
 /**
+ * Every card's crop box: BlockCard's --bcrd-media-ratio and ListCard's --lcrd-thumbnail-ratio, both
+ * --ratio-cover, 3/2 (owner, 29 Sep), restated by hand because TypeScript cannot read a custom
+ * property. A change there is a change here. One ratio for every card placement — set, pair,
+ * horizontal and thumbnail — because that is the box the cards actually render.
+ *
+ * DRIFT, recorded 6 Oct 2026 (fdn-media fix round): visual-direction § 5.4's table gives card sets
+ * of three or more 16:9 and the horizontal card 4:3. No card renders either; BlockCard has one ratio
+ * for both orientations. Measuring against those would pass or fail a photo against a box nobody
+ * draws, so the code follows the real box. If § 5.4's ratios are wanted, they are a BlockCard
+ * change (a ratio per set size), and this constant follows it.
+ */
+export const CARD_RATIO: PhotoRatio = '3/2';
+
+/**
  * The photo placements, as they render at 1470 (§ 5.4). The inline size is the content column's
- * arithmetic (1240, 32 gutters, 96 split seams), restated by hand like src/lib/image-sizes.ts.
+ * arithmetic (1240, 32 gutters, 96 split seams), restated by hand like src/lib/image-sizes.ts. The
+ * card placements take CARD_RATIO, the box they render, not § 5.4's 16:9 and 4:3 (see above).
  */
 export const PHOTO_PLACEMENTS = {
   /** B, K and L-photo: the 4:5 media split's image track. */
@@ -137,15 +152,15 @@ export const PHOTO_PLACEMENTS = {
   /** The head-track aside. */
   aside: { ratio: '3/2', width: 381 },
   /** A card in a set of three across. */
-  card3: { ratio: '16/9', width: 392 },
+  card3: { ratio: CARD_RATIO, width: 392 },
   /** A card in a set of four across. */
-  card4: { ratio: '16/9', width: 286 },
+  card4: { ratio: CARD_RATIO, width: 286 },
   /** A card in a pair. */
-  cardPair: { ratio: '3/2', width: 365 },
+  cardPair: { ratio: CARD_RATIO, width: 365 },
   /** A horizontal card, the image half. */
-  cardHorizontal: { ratio: '4/3', width: 604 },
+  cardHorizontal: { ratio: CARD_RATIO, width: 604 },
   /** ListCard's thumbnail. */
-  thumbnail: { ratio: '3/2', width: 160 },
+  thumbnail: { ratio: CARD_RATIO, width: 160 },
   /** The featured testimonial portrait. */
   portrait: { ratio: '1/1', width: 477 },
   /** The compact proof portrait. */

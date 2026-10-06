@@ -1,10 +1,10 @@
 import {
+  CARD_RATIO,
   cropScale,
   getKitPhoto,
   MIN_CROP_SCALE,
   pickStandIn,
   type PhotoId,
-  type PhotoRatio,
 } from '@/lib/photos';
 import type { ServiceStory, StoryBlock, StoryCase, StoryCover } from '@/lib/service-story';
 
@@ -19,11 +19,8 @@ import type { ServiceStory, StoryBlock, StoryCase, StoryCover } from '@/lib/serv
    development warning — never an empty frame. A real cover always wins: the listing's cover reaches
    a case before this runs, so a stand-in fills only what the CMS does not have. */
 
-/**
- * The card image's ratio: BlockCard's crop box, restating --bcrd-media-ratio (--ratio-cover, 3/2)
- * by hand, because TypeScript cannot read a custom property. A change there is a change here.
- */
-const CARD_RATIO: PhotoRatio = '3/2';
+/* The card image's ratio is CARD_RATIO from src/lib/photos.ts — BlockCard's real crop box, 3/2 — the
+   same answer PHOTO_PLACEMENTS' card placements measure against, so there is one in the codebase. */
 
 /**
  * The inline size each cover renders at at 1470, from the content column (1240), the card gutter

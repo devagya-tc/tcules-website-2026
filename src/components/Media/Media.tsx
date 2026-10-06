@@ -43,6 +43,10 @@ export type MediaPanel = 'paper' | 'paper-deep' | 'ink';
  *   1/1   portraits
  *
  * A placement states one; Media does not choose. Each maps to a `--media-ratio-*` token.
+ *
+ * 16/9 and 4/3 are § 5.4's ratios for card sets and the horizontal card, kept because the set is
+ * § 5.4's. No card passes them: a card's image is BlockCard's own 3/2 crop box under `fit="fill"`,
+ * not a Media `ratio` (drift recorded in src/lib/photos.ts at CARD_RATIO and docs/specs/Media.md).
  */
 export type MediaRatio = '4/5' | '5/4' | '3/1' | '3/2' | '16/9' | '4/3' | '1/1';
 

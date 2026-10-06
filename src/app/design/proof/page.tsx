@@ -704,11 +704,11 @@ export default function ProofSpecimenPage() {
             <h2>15 · Portrait</h2>
             <p>
               The site blockquote (ch10 B2.07): italic serif behind the 6px rule, attribution
-              beneath. A portrait is small, 1:1 and radius 0, flush on the left margin under the
-              rule, with the name a bind to its right (ruling P1). Without one, the name is
-              indented onto the quote&apos;s first letter and no gap is left. There is no client
-              mark: it was removed on 30 Sep 2026, because the company is already named in the
-              role line.
+              beneath. A portrait is small, 1:1 and radius 4 (on its own box: Media is told the
+              placement rules the edge), flush on the left margin under the rule, with the name
+              a bind to its right (ruling P1). Without one, the name is indented onto the
+              quote&apos;s first letter and no gap is left. There is no client mark: it was
+              removed on 30 Sep 2026, because the company is already named in the role line.
             </p>
           </Layout>
           <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">

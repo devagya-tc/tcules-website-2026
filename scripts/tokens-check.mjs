@@ -28,6 +28,12 @@ const CONSUMER_GLOBS = ['src/**/*.module.css', 'src/app/globals.css', 'src/style
  *   Per-asset data: the client's SVG URL and its intrinsic ratio are continuous values from the
  *   CMS, so they cannot be classes. √ratio is computed there rather than with CSS sqrt(), which
  *   is below Next 16's Chrome 111 floor.
+ *
+ * --media-focus  written by src/components/Media/Media.tsx from the record's focal point (or the
+ *   placement's `focus` override). Per-asset and continuous — any point 0 to 1 on two axes — so it
+ *   cannot be a class. Media.module.css also declares a local default on .fill and .crop (the
+ *   stylesheet's anchor where the record names none), but the inline write is the source, and it is
+ *   listed here so the check does not depend on that default happening to exist.
  */
 const JS_INJECTED = new Set([
   '--tmpl-base',
@@ -38,6 +44,7 @@ const JS_INJECTED = new Set([
   '--cmark-ratio',
   '--cmark-ratio-root',
   '--cmark-correction',
+  '--media-focus',
 ]);
 
 const read = (f) => readFileSync(f, 'utf8');
@@ -47,7 +54,8 @@ const strip = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
    line: a 20-line header comment shifts every finding below it by 20. */
 const stripKeepLines = (css) =>
   css.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
-const definedIn = (css) => new Set([...strip(css).matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]));
+const definedIn = (css) =>
+  new Set([...strip(css).matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]));
 const usedIn = (css) => [...strip(css).matchAll(/var\(\s*(--[\w-]+)/g)].map((m) => m[1]);
 const lineOf = (css, needle) => css.slice(0, css.indexOf(needle)).split('\n').length;
 
@@ -93,12 +101,16 @@ for (const file of consumers) {
 
   for (const v of new Set(usedIn(css))) {
     if (!tokens.has(v) && !local.has(v) && !JS_INJECTED.has(v)) {
-      problems.push(`${file}:${lineOf(css, v)}  reads ${v}, which no token defines and this file does not declare`);
+      problems.push(
+        `${file}:${lineOf(css, v)}  reads ${v}, which no token defines and this file does not declare`,
+      );
     }
   }
 
   for (const hex of new Set(strip(css).match(/#[0-9a-fA-F]{3,8}\b/g) ?? [])) {
-    problems.push(`${file}:${lineOf(css, hex)}  writes the literal colour ${hex} — colour belongs to the token layer`);
+    problems.push(
+      `${file}:${lineOf(css, hex)}  writes the literal colour ${hex} — colour belongs to the token layer`,
+    );
   }
 
   /**
