@@ -737,6 +737,28 @@ Every line lands between about 19 and 29 characters — a display line's comfort
 
 ---
 
+## Amendment · 6 Oct 2026 (kit `cmp-hero`, visual-direction § 2.3 to § 2.5)
+
+PageHero is proved as a kit component on `/design/kit/hero`, nine shapes, each measured at 1470 × 830
+and 390 (`fold.config.json`). What the build added:
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `media.ratio` | `MediaRatioSpec` | — | A photograph's crop, passed to Media. The photograph hero takes `'5/4'`, 572 × 458 in the [1, 1] split, anchored at the record's `focus` (`getKitPhoto`). Top-aligned, radius 8, no frame (Media's `photograph` edge). Ignored on any other kind, with Media's warning. |
+| `arrangement` | adds `'centred'` | `'stacked'` | Trail, title, lead and actions centred on the column (Layout `justifyItems`, Cluster `justify`, `text-align` and a balanced lead in the module), then the media below at the full column. The owner comparison (§ 2.3 option, § 10 item 2); it cannot end above 830, so the specimen block carries `data-fold-exempt`. |
+| `tags` | `readonly string[]` | `[]` | Inert Tags in a `ul` Cluster (8 both axes), a stack under the copy, before the actions. Only when the title sets on ≤ 3 lines (§ 2.4): + 80. |
+| `texture` | `boolean` | `false` | The pixel-grid in the recipe the media decides — photograph beside the copy: `hero-foot` (start, lg only); no media: `hero-field` (end, lg) and `horizon` below 1024. Refused with a development warning on an illustration (the band rule: Accent + Field), a video, a stacked image and any ground but paper. A closed set rather than a ReactNode slot, so a call site cannot misplace a recipe; the numbers are § 6.3's and move to `TEXTURE_RECIPES` when `fdn-texture` lands. |
+| `announcement` | `{ label; text; action }` | — | One line above the hero (showcase only): an inert Tag, a body-sm sentence (`--hero-note-*`, new, per surface) and a link-style sm action with a trailing arrow. A `stack` (48) above the trail or the split. The photograph hero with a strip ends at 795. |
+
+Also:
+- The second action carries a trailing `arrow-right`: blue at rest, link-style (visual-direction § 4.2,
+  owner 6 Oct, which supersedes "neutral link-style" in the cmp-hero brief).
+- The band emits `data-arrangement`: `hero-illustration`, `hero-media`, `hero-text`, `hero-stacked` or
+  `hero-centred`, for the fold gate.
+- Measured at 1470 with the 73 of nav: service 742 · one action 752 · tags 807 · photograph 723 ·
+  announcement 795 · no media with trail 629 / 560 · category eyebrow 775. At 390 the h1 sits at 214
+  and every band is under 1140.
+
 ## Appendix — self-audit
 
 **This audit was written against the 21 Aug 2026 spec and is left as it was signed.** Editing a dated audit in place would make it a claim about a document it never read. The 25 Aug amendment changes eleven of its lines, and the delta is at the end of this appendix rather than spliced through it.

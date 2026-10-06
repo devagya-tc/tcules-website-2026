@@ -173,6 +173,11 @@ const SPECIMENS = [
         note: 'the page opening — stacked · beside × every media kind, CU04 budgets, slot and paragraph ladders, 4 surfaces, 326',
       },
       {
+        href: '/design/kit/hero',
+        name: 'Kit · Hero family',
+        note: 'the nine hero shapes — illustration, photograph 5:4, no media, centred comparison — with texture, tags and an announcement, measured at 1470 × 830',
+      },
+      {
         href: '/design/site-nav',
         name: 'SiteNav',
         note: 'the header — bar, the morphing plate at 3 widths, the mobile sheet, 4 surfaces',

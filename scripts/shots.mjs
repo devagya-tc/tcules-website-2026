@@ -34,7 +34,14 @@
  * edit here. The underscore-prefixed harness (`_specimen`) is not a route and is skipped.
  */
 import { spawn } from 'node:child_process';
-import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { createServer } from 'node:net';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
@@ -50,7 +57,10 @@ const designDir = 'src/app/design';
 const all = readdirSync(designDir).filter(
   (d) => !d.startsWith('_') && statSync(join(designDir, d)).isDirectory(),
 );
-const unknown = only.filter((n) => !all.includes(n));
+/* A nested specimen (`kit/hero`) is named by its path under src/app/design. */
+const unknown = only.filter(
+  (n) => !all.includes(n) && !existsSync(join(designDir, n, 'page.tsx')),
+);
 if (unknown.length > 0) {
   console.error(`No specimen route for: ${unknown.join(', ')}`);
   process.exit(1);
@@ -160,7 +170,7 @@ try {
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
       );
-      const file = `${name}-${width}.png`;
+      const file = `${name.replaceAll('/', '-')}-${width}.png`;
       await page.screenshot({ path: join(OUT, file), fullPage: true });
       const crops = [];
       if (only.length > 0) {
@@ -187,7 +197,7 @@ try {
         });
         const blocks = page.locator('[data-shot]');
         const count = await blocks.count();
-        const dir = `${name}-${width}`;
+        const dir = `${name.replaceAll('/', '-')}-${width}`;
         mkdirSync(join(OUT, dir), { recursive: true });
         for (let i = 0; i < count; i++) {
           const block = blocks.nth(i);

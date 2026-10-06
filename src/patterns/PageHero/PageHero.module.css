@@ -47,13 +47,12 @@
    slot. That edge is the strongest vertical line on the page and it must be in the same place on
    all 129 of them. So there is no reach into --space-* here either.
 
-   No @media block of ANY kind, including prefers-reduced-motion. Nothing in THIS FILE changes at
-   1023 or at 767. The one thing in the component that does — `beside` splitting into two tracks
-   at 1024 — is Layout's `lg` template, set by a prop; the copy stack is single-track at every
-   width, both Clusters wrap by themselves, and both measures are `ch`-based so they follow the type down on their own with no
-   second value to keep in sync. And nothing moves, so reduced motion has nothing to switch off —
-   the identity is structural rather than conditional, which is why asserting it with an empty
-   media query would be worse than saying it here.
+   One pair of @media blocks, and they arrange nothing: they choose which texture recipe shows
+   (hero-foot and hero-field above 1024, horizon below — visual-direction § 6.3). Every arrangement
+   that changes at 1024 — `beside` splitting into two tracks — is Layout's `lg` template, set by a
+   prop; the copy stack is single-track at every width, the Clusters wrap by themselves, and the
+   measures are `ch`-based so they follow the type down with no second value to keep in sync.
+   Nothing moves, so reduced motion has nothing to switch off.
 
    No transition, transform, animation or opacity. There are no states to interpolate between.
    The entrance animation on a page title is the most-requested hero motion and it is refused: it
@@ -259,4 +258,43 @@
   overflow: hidden;
   border: var(--hero-media-rule-width) solid var(--hero-media-rule-ink);
   border-radius: var(--hero-media-radius);
+}
+
+/* ── centred · the owner comparison (arrangement="centred") ─────────────────────
+   The copy stack centres its blocks with Layout's justifyItems; this centres the LINES inside each
+   one, which no primitive does because it is type, not arrangement. Inherited by the eyebrow, the
+   title and the lead, so none of them needs a rule of its own. */
+.centred {
+  text-align: center;
+}
+
+/* ── announcement · one line above the hero ─────────────────────────────────────
+   Body-sm at the body's ink: a sentence, a step under the lead, so it reads as news above the
+   hero rather than as part of its copy. Running-text wrap, because on a phone it
+   breaks under its mark. */
+.note {
+  color: var(--hero-note-ink);
+  font: var(--hero-note-text);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* ── texture · which breakpoint shows which recipe ──────────────────────────────
+   The field is absolutely placed against the band, so its wrapper has no box and these rules only
+   switch it: hero-foot and hero-field above 1024, horizon below (visual-direction § 6.3). The
+   breakpoint is Layout's `lg`, where the split itself starts. */
+@media (max-width: 1023.98px) {
+  .textureWide {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .textureNarrow {
+    display: none;
+  }
+}
+
+/* Centred, a ragged lead shows a widow on the axis; balanced, its lines step evenly about it. */
+.centred .lead {
+  text-wrap: var(--text-title-wrap);
 }

@@ -195,6 +195,8 @@
    colour of the ground and has no edge of its own. The values are re-derived here rather
    than read from --fig-*, because a component never reads another component's tokens —
    the day Figure or Media re-tunes its rule, a hero video must not move with it. */
+/* The announcement line above a showcase hero: a sentence at body-sm. */
+--hero-note-text:var(--text-body-sm);
 --hero-media-ratio:16 / 9;
 --hero-media-radius:var(--radius-0);
 --hero-media-rule-width:var(--border-width-hairline);
@@ -220,6 +222,7 @@
 --hero-value-ink:var(--color-neutral-800);    /* 11.81:1 */
 --hero-eyebrow-ink:var(--color-neutral-600);  /*  4.92:1 — the floor of AA, do not lighten */
 --hero-key-ink:var(--color-neutral-600);      /*  4.92:1 — the floor of AA, do not lighten */
+--hero-note-ink:var(--color-neutral-700);     /* 8.14:1 — the body's step: news, not the lead */
 --hero-media-rule-ink:var(--color-neutral-300); /* 1.54:1 — decoration, and the surface that
                                                    needs it most: a light UI screenshot on
                                                    near-white has no edge of its own */
@@ -244,6 +247,7 @@
 --hero-value-ink:var(--color-neutral-800);    /* 10.54:1 */
 --hero-eyebrow-ink:var(--color-neutral-700);  /*  7.27:1 — stepped; 600 would be 4.39:1 */
 --hero-key-ink:var(--color-neutral-700);      /*  7.27:1 — stepped; 600 would be 4.39:1 */
+--hero-note-ink:var(--color-neutral-700);     /* 7.27:1 — the body's step: news, not the lead */
 --hero-media-rule-ink:var(--color-neutral-400); /* 1.90:1 — decoration. It steps with the
                                                    ground and has less to do than on paper:
                                                    tint is already darker than a light shot */
@@ -266,6 +270,7 @@
 --hero-value-ink:var(--color-neutral-100);    /* 14.47:1 */
 --hero-eyebrow-ink:var(--color-neutral-400);  /*  8.05:1 */
 --hero-key-ink:var(--color-neutral-400);      /*  8.05:1 */
+--hero-note-ink:var(--color-neutral-300);     /* 11.07:1 — the body's step: news, not the lead */
 --hero-media-rule-ink:var(--color-neutral-700); /* 2.10:1 — decoration, and it DROPS rather
                                                    than lifting with the inks: a shot on
                                                    near-black has all the edge it needs from
@@ -292,6 +297,7 @@
 --hero-value-ink:var(--color-brandeis-50);    /*  5.57:1 */
 --hero-eyebrow-ink:var(--color-brandeis-100); /*  4.91:1 — the tightest cell here, do not lighten */
 --hero-key-ink:var(--color-brandeis-100);     /*  4.91:1 — the tightest cell here, do not lighten */
+--hero-note-ink:var(--color-brandeis-100);     /* 4.91:1 — the body's step: news, not the lead */
 --hero-media-rule-ink:var(--color-brandeis-300); /* 2.64:1 — decoration, and DARKER than
                                                     every text ink on this ground. The light
                                                     end of the ramp is spent on the type; on
