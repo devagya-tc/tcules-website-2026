@@ -15,7 +15,7 @@
    Every surface restates every token (CLAUDE.md § Tokens rule 2).
 
    --svc-mark is the blue accent the diagrams' small marks carry — a check in a matrix or a slice
-   verdict, a record's field glyph, the parts holder's glyph, the spectrum's two meters (fix round
+   verdict, a record's field glyph, the parts orbit's loop and nodes, the spectrum's two meters (fix round
    2) (visual-direction § 4, owner 6 Oct 2026:
    blue is the recurring foreground accent, never a ground). A cross stays neutral
    (--svc-ink-quiet): it only says "not this one" — but it is still a graphic mark that carries the
@@ -40,6 +40,11 @@
   --svc-meter-stroke: var(--border-width-2);
   /* The authority meter: one slot of the decision, a component size. */
   --svc-authority-slot: var(--space-12);
+  /* The parts orbit (page-design-systems fix round 1): the drawing's largest size, a component
+     size, 288; its loop line; and the dash of a node's leader to the loop. */
+  --svc-orbit-size: calc(var(--space-96) * 3);
+  --svc-orbit-stroke: var(--border-width-2);
+  --svc-orbit-dash: var(--space-4) var(--space-4);
 }
 
 /* ── Surfaces ──────────────────────────────────────────────────────────────────
@@ -47,7 +52,7 @@
    — plus the quiet ink a cross takes (--svc-ink-quiet), the slot's dashed edge and the bridge's
    bars (--svc-bar-*: a live product's solid ground and its label, and the dashed edge of a product
    half-present, in the accent). The slice's built cell is --svc-ink; it has no token of its own.
-   --svc-sheet-ground was deleted in fix round 2 (6 Oct 2026): the record and the parts holder are
+   --svc-sheet-ground was deleted in fix round 2 (6 Oct 2026): the record and the parts orbit are
    drawn with rules only, so nothing in the template paints a ground behind text. */
 :root,
 [data-surface='paper'] {

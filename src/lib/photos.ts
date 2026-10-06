@@ -227,12 +227,16 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'studio-whiteboard-crit',
     aside2: 'hands-sketches-markers',
   },
+  /* design-systems, fix round 1 (6 Oct 2026): the router's aside is a screen of product UI
+     (`designer-monitor-ui`, was aside 2 and unused) rather than the flatlay, whose printed lettering
+     broke the no-type-on-images ruling; K is the wall of printed screens being traced
+     (`wireframe-wall`, was the unused banner slot), the audit's own act, at the landscape 3:2, in
+     place of an empty white desk. No I banner on the page, so no banner photo. */
   'design-systems': {
     b: 'screen-over-shoulder',
-    i: 'wireframe-wall',
-    k: 'desk-minimal-white',
-    aside1: 'desk-flatlay-devices',
-    aside2: 'designer-monitor-ui',
+    k: 'wireframe-wall',
+    aside1: 'designer-monitor-ui',
+    aside2: 'desk-minimal-white',
   },
   'ai-product-ux': {
     b: 'pair-testing-overhead',

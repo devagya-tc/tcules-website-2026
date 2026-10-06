@@ -11,20 +11,21 @@ const AUDIT = auditPath('design-system-audit');
  * /services/design-systems, designed — recomposed from the UI kit on 6 Oct 2026 (visual-direction
  * § 8.2). Copy is the CMS's own, re-cut to the § 1.5 budgets; every edit is logged, old and new, in
  * docs/content-changes.md § 7. The sections say what the page argues; the template decides how each
- * is laid out from the job its blocks do (ServicePage plan.ts), so no field here is a layout.
+ * is laid out from the job its blocks do (ServicePage plan.ts). The ORDER is the one thing here that
+ * shapes the page, so it is chosen for the argument and the cadence together (fix round 1): a centred
+ * band falls between every two beside bands, so no three in a row read as one 1/3 split.
  *
  *   hero      the claim
- *   symptoms  where the library stops being the system — B, two tiles beside a screen in use,
- *             so the copy column has room for the counterweight field
+ *   symptoms  where the library stops being the system — B, two tiles beside a design-tool canvas
  *   clients   who we have shipped with — H, with the sourced rating
- *   parts     the five parts that must work as one — E, the parts diagram
+ *   parts     the five parts that are one system — E, the orbit: four nodes inside the operating loop
  *   statement the test a system has to pass, said once at scale — J
+ *   routes    the four responsibilities, by condition — the C-icon router, beside a screen of UI
  *   decision  one status through every representation — E, a Thread (horizon above the proof)
- *   proof     a visual system built with the MVP, and the client's words — G-case, the tint band
- *   routes    the four responsibilities, by condition — the C-icon router
- *   offer     diagnose the drift first — K, the Design System Audit
+ *   proof     a system from the first release, and the client's words — G-case, the tint band
+ *   offer     diagnose the drift first — K, the Design System Audit, beside a wall being traced
+ *   questions what teams ask first — D-faq, the detail on the deep pages
  *   evidence  two more products — C-pair, with the boundary of what they prove
- *   questions what teams ask first — D-faq
  *   close     the form — L
  */
 export const designSystems: ServiceStory = {
@@ -159,50 +160,6 @@ export const designSystems: ServiceStory = {
     },
     {
       type: 'section',
-      id: 'one-decision',
-      eyebrow: 'Representative example',
-      heading: 'One status, six places it must hold',
-      lead: 'A Partly complete status, needed by three products. It must mean the same thing everywhere it appears.',
-      blocks: [
-        {
-          kind: 'thread',
-          items: [
-            { title: 'Definition', body: 'Some required work is done; some is still open.' },
-            { title: 'Token', body: 'Readable without relying on colour alone.' },
-            { title: 'Figma', body: 'Properties for label, detail, action and assistive text.' },
-            { title: 'Code', body: 'The API exposes the same meaning and actions.' },
-            { title: 'Docs and tests', body: 'Usage, keyboard and content cases written down.' },
-            { title: 'Release', body: 'Every product knows the version and the change.' },
-          ],
-          loop: 'Change one alone and products drift: designers detach, and code accepts what design forbids.',
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'client-view',
-      eyebrow: 'Proof',
-      heading: 'Built with the MVP, not after',
-      lead: 'The visual system grew alongside the first release, from the same research, rather than being retrofitted.',
-      blocks: [
-        {
-          kind: 'proof',
-          quote: {
-            text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
-            name: 'Ashok Mohanty',
-            company: 'Auxentios',
-          },
-          case: {
-            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
-            client: 'Auxentios · Industrial CPQ',
-            title: 'A visual system built with the MVP',
-            body: 'Components, tokens, guidelines and layout rules, from domain research and eight interviews.',
-          },
-        },
-      ],
-    },
-    {
-      type: 'section',
       id: 'choose-the-responsibility',
       eyebrow: 'Start from the condition',
       heading: 'Choose by the system’s condition',
@@ -248,6 +205,50 @@ export const designSystems: ServiceStory = {
       ],
     },
     {
+      type: 'section',
+      id: 'one-decision',
+      eyebrow: 'Representative example',
+      heading: 'One status, six places it must hold',
+      lead: 'A Partly complete status, needed by three products. It must mean the same thing everywhere it appears.',
+      blocks: [
+        {
+          kind: 'thread',
+          items: [
+            { title: 'Definition', body: 'Some required work is done; some is still open.' },
+            { title: 'Token', body: 'Readable without relying on colour alone.' },
+            { title: 'Figma', body: 'Properties for label, detail, action and assistive text.' },
+            { title: 'Code', body: 'The API exposes the same meaning and actions.' },
+            { title: 'Docs and tests', body: 'Usage, keyboard and content cases written down.' },
+            { title: 'Release', body: 'Every product knows the version and the change.' },
+          ],
+          loop: 'Change one alone and products drift: designers detach, and code accepts what design forbids.',
+        },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'client-view',
+      eyebrow: 'Proof',
+      heading: 'Built with the MVP, not after',
+      lead: 'The visual system grew alongside the first release, from the same research, rather than being retrofitted.',
+      blocks: [
+        {
+          kind: 'proof',
+          quote: {
+            text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
+            name: 'Ashok Mohanty',
+            company: 'Auxentios',
+          },
+          case: {
+            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+            client: 'Auxentios · Industrial CPQ',
+            title: 'A system from day one',
+            body: 'Components, tokens, guidelines and layout rules, from domain research and eight interviews.',
+          },
+        },
+      ],
+    },
+    {
       type: 'offer',
       id: 'diagnose-the-drift',
       eyebrow: 'Not sure where it drifts?',
@@ -259,6 +260,38 @@ export const designSystems: ServiceStory = {
         { label: 'What to fix first, and who owns it' },
       ],
       actions: [{ label: 'Start with a Design System Audit', href: AUDIT }],
+    },
+    {
+      type: 'section',
+      id: 'questions',
+      eyebrow: 'Questions',
+      heading: 'Questions teams ask first',
+      blocks: [
+        {
+          kind: 'faq',
+          items: [
+            {
+              question: 'How should design-system adoption be measured?',
+              answerHtml: `<p>By whether released product work changes, not by how many components are published: which products run which version, whether migrations finish, and why teams fork. The full set of measures is on the <a href="${servicePath('design-systems/governance-adoption')}">Governance and Adoption</a> page.</p>`,
+            },
+            {
+              question: 'Where do we start?',
+              answerHtml:
+                '<p>With one decision several teams keep remaking, and the Figma and code objects that carry it. That picks the first service: an audit when the cause is unclear, strategy when ownership is disputed.</p>',
+            },
+            {
+              question: 'Who owns what once the system ships?',
+              answerHtml:
+                '<p>Tcules can build and run the shared system: foundations, components, Figma, code, docs, release and adoption. Product teams keep their own composition, research, accessibility and release authority.</p>',
+            },
+            {
+              question: 'Does AI-generated code change any of this?',
+              answerHtml:
+                '<p>It raises the stakes: faster generation repeats an ambiguous rule across more surfaces, sooner. Tokens, typed properties, examples and tests give a generator better context than a screenshot, and release still needs accountable review.</p>',
+            },
+          ],
+        },
+      ],
     },
     {
       type: 'section',
@@ -284,39 +317,6 @@ export const designSystems: ServiceStory = {
             },
           ],
           note: 'Neither record establishes coded implementation or organisation-wide adoption.',
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'questions',
-      eyebrow: 'Questions',
-      heading: 'Questions teams ask first',
-      blocks: [
-        {
-          kind: 'faq',
-          items: [
-            {
-              question: 'How should design-system adoption be measured?',
-              answerHtml:
-                '<p>By whether the system changes released product work, not by how many components are published. Useful evidence starts with the product and version consuming each shared asset, and shows whether migrations complete, why teams fork or ask for exceptions, how contributions reach a decision, and whether repeated defects or accessibility problems decline. Tcules does not substitute a universal adoption benchmark for your own operating goals.</p>',
-            },
-            {
-              question: 'Where do we start?',
-              answerHtml:
-                '<p>With a decision several teams keep remaking, the Figma and code objects that represent it, and what a product team does when the shared answer does not fit. That is enough to choose the first responsibility: diagnose when the cause of drift is unclear, set strategy when scope or ownership is disputed, implement when the contract is ready, align when design and code disagree, govern when contribution or adoption is failing.</p>',
-            },
-            {
-              question: 'Who owns what once the system ships?',
-              answerHtml:
-                '<p>Tcules can assess, build and operate the shared system: foundations, components, Figma, code, documentation, contribution, release and adoption. Product teams keep product-specific composition, user evidence, the accessibility of what they release, and decision and release authority, throughout. Design Engineering, a separate responsibility, owns product decisions embodied in running frontend work; one engagement can hold both.</p>',
-            },
-            {
-              question: 'Does AI-generated code change any of this?',
-              answerHtml:
-                '<p>It raises the stakes. Faster generation repeats an ambiguous rule across more surfaces, sooner. Tokens, semantic component names, typed properties, examples, tests and accessibility rules give a generator far better context than a screenshot. Product-specific composition, real content and exceptional states, accessibility and release acceptance still need accountable review.</p>',
-            },
-          ],
         },
       ],
     },
