@@ -32,7 +32,10 @@
      nested Layout that sets one axis would otherwise pick up an ancestor's value on the other.
      The .rowgap-* / .colgap-* opt-in classes come later in the cascade and override this. */
   --layout-row-gap: 0;
-  --layout-col-gap: 0;
+  /* 0% rather than 0, and only on this axis: the scroll row computes its item width from the
+     column seam inside a calc(), where a unitless 0 beside a length or percentage invalidates the
+     whole declaration. 0% is the same zero for `column-gap`, and is a valid calc() operand. */
+  --layout-col-gap: 0%;
   column-gap: var(--layout-col-gap);
   row-gap: var(--layout-row-gap);
   grid-template-columns: var(--tmpl-base, minmax(0, 1fr));
@@ -66,7 +69,7 @@
 .rowgap-section-open  { --layout-row-gap: var(--gap-section-open); }/* 128  section padding, open */
 
 /* colGap — the inline-axis seam, between columns. Same scale; no tracks, nothing to act on. */
-.colgap-none { --layout-col-gap: 0; }
+.colgap-none { --layout-col-gap: 0%; }                            /* 0%, not 0: see .layout */
 .colgap-inline        { --layout-col-gap: var(--gap-inline); }
 .colgap-tight         { --layout-col-gap: var(--gap-tight); }
 .colgap-text          { --layout-col-gap: var(--gap-text); }
@@ -224,4 +227,131 @@
   .offset-xl-1 > :first-child { grid-column-start: 2; }
   .offset-xl-2 > :first-child { grid-column-start: 3; }
   .offset-xl-3 > :first-child { grid-column-start: 4; }
+}
+
+/* scroll — the row scrolls sideways instead of wrapping (fdn-scroll, 6 Oct 2026). Written LAST on
+   purpose: each rule here has the specificity of `.layout`'s per-breakpoint template rules above,
+   so it wins by coming after them, at every width where the row scrolls.
+
+   The track. There is no template: every child gets an implicit column of one computed width, in
+   one row (`grid-auto-flow: column`). The width divides the box by the per-view count after the
+   seams between the visible items, and, below md, after one more seam and the peek — so the next
+   item shows `--lay-scroll-peek` of itself at the end edge and the row reads as one you swipe:
+
+     item = (100% − (view − 1) × colGap − peek) / view       peek = colGap + --lay-scroll-peek (base)
+                                                                    0%                      (md up)
+
+   `--layout-view` follows the breakpoint ladder from the `--view-*` counts Layout.tsx writes inline,
+   falling back to the nearest smaller one, and finally to 1, exactly as `--tmpl-*` does. From md
+   up the count is exact, so three in view are a 3-up grid's tracks to the pixel and the band's
+   arithmetic (visual-direction § 1.4, "Slider showing 3": 392) holds.
+
+   The box. `overflow-x: auto` makes it a scroll container, which clips anything painted outside
+   it — and an item's focus ring is a box-shadow drawn 4px outside the item. So the box is grown by
+   that ring's room on every side (`--lay-scroll-ring-room`, an optical allowance stated in
+   layout.css): padding moves its clip edge out, and an equal negative margin puts its content
+   back exactly where it was, so the items' edges stay on the column's and the band's arithmetic
+   does not gain 8px. This is the one margin in the file and it is NOT outer spacing — it moves no
+   neighbour, it cancels the box's own padding, the ListCard hint's argument. Without it the items
+   sat 4px inside the column and visibly off the head's start edge (fdn-scroll shots, 6 Oct).
+   scroll-padding keeps a snapped item's start edge on the padding edge rather than under it. The
+   4px the box reaches into the Section's gutter holds only a ring or a sliver of a scrolled card;
+   the content column is untouched (CLAUDE.md layout rule 5).
+
+   Snapping. Every child is a snap point at its start edge, written by the container like `lead`'s
+   span — a child does not decide its own placement. `mandatory`, so a swipe always lands on an
+   item rather than between two. `overscroll-behavior-inline: contain` stops a swipe that runs out
+   of row from turning into the browser's back gesture.
+
+   The scrollbar is hidden, in both syntaxes (Firefox/Chromium, then WebKit's pseudo-element): the
+   peek, the focusable items and the Slider's controls are the affordances, and a 1240 scrollbar
+   under a card row is chrome the design never asked for. Smooth scrolling only for a reader who has
+   not asked for reduced motion; otherwise every scroll — a control press, a focus move — jumps. */
+.scroll-always,
+.scroll-until-md {
+  --layout-view: var(--view-base, 1);
+  --layout-peek: calc(var(--layout-col-gap) + var(--lay-scroll-peek));
+}
+
+.scroll-always {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: calc(
+    (100% - (var(--layout-view) - 1) * var(--layout-col-gap) - var(--layout-peek)) /
+      var(--layout-view)
+  );
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline mandatory;
+  scroll-padding-inline: var(--lay-scroll-ring-room);
+  padding: var(--lay-scroll-ring-room);
+  margin: calc(-1 * var(--lay-scroll-ring-room));
+  scrollbar-width: none;
+}
+
+.scroll-always > * {
+  scroll-snap-align: start;
+}
+
+.scroll-always::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-always {
+    scroll-behavior: smooth;
+  }
+}
+
+/* until-md is the same declaration set, below 768 only. From md up nothing here applies and the
+   row is the ordinary grid its `columns` describe. Stated as a max-width query rather than reset
+   at 768, so there is no second set of declarations to keep in step with the first. */
+@media (max-width: 767.98px) {
+  .scroll-until-md {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(
+      (100% - (var(--layout-view) - 1) * var(--layout-col-gap) - var(--layout-peek)) /
+        var(--layout-view)
+    );
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    scroll-padding-inline: var(--lay-scroll-ring-room);
+    padding: var(--lay-scroll-ring-room);
+    margin: calc(-1 * var(--lay-scroll-ring-room));
+    scrollbar-width: none;
+  }
+
+  .scroll-until-md > * {
+    scroll-snap-align: start;
+  }
+
+  .scroll-until-md::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (max-width: 767.98px) and (prefers-reduced-motion: no-preference) {
+  .scroll-until-md {
+    scroll-behavior: smooth;
+  }
+}
+
+/* From md up the count is exact and there is no peek: the Slider's controls say there is more. */
+@media (min-width: 768px) {
+  .scroll-always {
+    --layout-view: var(--view-md, var(--view-base, 1));
+    --layout-peek: 0%;
+  }
+}
+@media (min-width: 1024px) {
+  .scroll-always {
+    --layout-view: var(--view-lg, var(--view-md, var(--view-base, 1)));
+  }
+}
+@media (min-width: 1440px) {
+  .scroll-always {
+    --layout-view: var(--view-xl, var(--view-lg, var(--view-md, var(--view-base, 1))));
+  }
 }

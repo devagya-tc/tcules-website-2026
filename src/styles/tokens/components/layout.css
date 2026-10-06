@@ -12,11 +12,31 @@
    card's comfortable width is not a multiple of the spacing base, and forcing it onto
    the gap scale would distort both. Same reasoning as --btn-height-md.
 
-   Naming: --lay-track-{step}.
+   Naming: --lay-track-{step}, and --lay-scroll-{part} for the scroll row (fdn-scroll).
+
+   No surface blocks, and that is a statement rather than an omission: nothing here is a colour.
+   Every value is geometry and identical on paper, tint, ink and blue, so four blocks would assert
+   a variation that does not exist (icon.css makes the same argument).
    ═══════════════════════════════════════════════════════════════════════════════ */
 :root{
 --lay-track-xs:192px;   /* small tiles, logo cells */
 --lay-track-sm:256px;   /* compact cards */
 --lay-track-md:320px;   /* standard cards — the default */
 --lay-track-lg:384px;   /* feature cards */
+
+/* The scroll row (Layout scroll, visual-direction § 3.7 item 2 and the Slider).
+
+   --lay-scroll-peek is how much of the NEXT item shows at the end edge below md — geometry, not a
+   distance between two things: the seam before it is still the caller's colGap. 24 at the 326
+   phone column leaves a 262 item (82% of the column), wide enough to read as the card and narrow
+   enough that the sliver beside it says "swipe". Not a gap step, because it is a slice of an
+   object, not air.
+
+   --lay-scroll-ring-room is an OPTICAL ALLOWANCE, which is why it reaches the focus-ring primitives
+   rather than the gap scale: a scroll container clips what paints outside it, and an item's focus
+   ring is drawn ring-offset + ring-width (2 + 2) outside the item. The row pads itself by exactly
+   that and cancels the padding with an equal negative margin, so a focused first, last, top or
+   bottom edge is never cut and the items still sit on the column's edges. */
+--lay-scroll-peek:24px;
+--lay-scroll-ring-room:calc(var(--focus-ring-offset) + var(--focus-ring-width));
 }

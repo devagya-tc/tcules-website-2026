@@ -40,6 +40,12 @@ const JS_INJECTED = new Set([
   '--tmpl-md',
   '--tmpl-lg',
   '--tmpl-xl',
+  '--view-base', // Layout scroll mode's per-view counts (viewVars in Layout.tsx)
+  '--view-md',
+  '--view-lg',
+  '--view-xl',
+  '--slider-count', // Slider: the slide count, and the scroll progress it writes on scroll
+  '--slider-progress',
   '--cmark-src',
   '--cmark-ratio',
   '--cmark-ratio-root',

@@ -1,0 +1,127 @@
+/* ══ Component layer — Slider ═══════════════════════════════════════════════════
+   Tier 2. A row of slides that scrolls sideways (Layout `scroll="always"`), with a pair of
+   previous / next controls and a progress rail under it (visual-direction § 1.4: "an image set
+   of 5 or more is a Slider showing 3"; § 3.4 G "slider"; fdn-scroll, 6 Oct 2026). Built to
+   docs/specs/Slider.md.
+
+   Naming: --sld-{part}-{state}
+     parts: control (the two buttons) | progress (the rail and its thumb) | ring | hidden
+
+   What it owns: the two controls — box, rule, glyph and their states — and the rail. What it does
+   not: the slides (the caller's: BlockCard, a testimonial, anything that is an <li>), the row's
+   tracks, seam and snapping (Layout's), and the ground (the band's Section).
+
+   ── Why the controls are their own, and not Button ─────────────────────────────
+   § 3.1 lists slider controls among the few things that keep a BOX ("boxes stay where they are
+   the thing: form fields, Tag chips, the RatingBadge, slider controls…"). Button has no outlined
+   emphasis by design ("none of the three carries an outline"), and a ghost icon-only Button is a
+   bare glyph at rest. So the control is a 40 circle with a hairline rule, the RatingBadge's
+   outline-pill family rather than Button's filled one, and it lives here.
+
+   ── Blue ────────────────────────────────────────────────────────────────────────
+   The controls are BLUE AT REST: glyph and rule (owner, 6 Oct: more blue in the foreground —
+   icons, arrows, small marks — and "slider controls take the blue accent"). They are counted
+   FREE, with the pager's current marker (§ 4.2's Free row names "the current marker in the …
+   slider pager"): they are the slider's own navigation, like the nav's and the TOC's, and a G
+   band that spends its Signal on the quote rule must still be able to show where to go next.
+   Recorded in docs/kit/brand-amendments.md (ch02). The rail is neutral; its thumb — the current
+   marker — is blue.
+
+   Hover and focus FILL the circle with the surface's primary and turn the glyph to its label
+   colour; pressed deepens the fill one step. Hover ≠ pressed on every surface. A control at the
+   end of the row is `aria-disabled` (it keeps focus, see Slider.tsx) and goes neutral.
+
+   Every surface restates every token, so a slider inside a band nested in a different surface
+   cannot inherit an outer ancestor's value. Contrast figures are the glyph against the ground at
+   rest, or against the fill when filled.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The control: 40, the md control height, so § 1.4's "slider controls 24 + 40 = 64" holds. A
+     component size, so it is this component's, duplicated from Button's md on purpose. */
+  --sld-control-size: 40px;
+  --sld-control-radius: var(--radius-full);
+  --sld-control-rule-width: var(--border-width-hairline);
+  --sld-control-icon-size: var(--icon-size-18);
+  --sld-hit-min: 44px; /* the touch floor, extended past the 40 box, never by resizing it */
+
+  /* The rail. A fixed length rather than a fill: the controls row is a Cluster (rail at one end,
+     controls at the other), and a primitive arrangement cannot grow a child to the remainder.
+     240 is a fifth of the 1240 column — long enough that the thumb's travel reads as position, not
+     as a dash. In a narrower row it shrinks to fit (min() in Slider.module.css). */
+  --sld-progress-length: 240px;
+  --sld-progress-thickness: var(--border-width-2);
+  --sld-progress-radius: var(--radius-full);
+
+  --sld-transition-duration: var(--duration-fast);
+  --sld-transition-easing: var(--easing-standard);
+  --sld-ring-width: var(--focus-ring-width);
+  --sld-ring-offset: var(--focus-ring-offset);
+
+  /* The visually hidden status line's clip box (the RatingBadge's and ListCard's technique). */
+  --sld-hidden-size: 1px;
+}
+
+:root,
+[data-surface='paper'] {
+  --sld-control-fg: var(--color-brandeis-500); /* 6.17:1 on paper */
+  --sld-control-rule: var(
+    --color-brandeis-300
+  ); /* decoration; the glyph identifies the control */
+  --sld-control-bg-hover: var(--color-brandeis-500);
+  --sld-control-bg-pressed: var(--color-brandeis-700);
+  --sld-control-fg-hover: var(--color-white); /* 6.23:1 on 500 */
+  --sld-control-fg-disabled: var(--color-neutral-400);
+  --sld-control-rule-disabled: var(--color-neutral-200);
+  --sld-progress-rail: var(--color-neutral-200);
+  --sld-progress-thumb: var(--color-brandeis-500);
+  --sld-ring-color: var(--color-brandeis-500);
+  --sld-ring-gap-color: var(--color-paper);
+}
+
+[data-surface='tint'] {
+  --sld-control-fg: var(--color-brandeis-500); /* 5.51:1 on paper-deep */
+  --sld-control-rule: var(--color-brandeis-300);
+  --sld-control-bg-hover: var(--color-brandeis-500);
+  --sld-control-bg-pressed: var(--color-brandeis-700);
+  --sld-control-fg-hover: var(--color-white);
+  --sld-control-fg-disabled: var(--color-neutral-500); /* 400 vanishes on the deeper ground */
+  --sld-control-rule-disabled: var(--color-neutral-300);
+  --sld-progress-rail: var(--color-neutral-300);
+  --sld-progress-thumb: var(--color-brandeis-500);
+  --sld-ring-color: var(--color-brandeis-500);
+  --sld-ring-gap-color: var(--color-paper-deep);
+}
+
+/* Blue as ink fails on neutral-950 (2.77:1), so the glyph lifts to 200 and the rule to 400, as
+   Button's ghost primary and ring do. The fill stays 500 — a filled control is the same object
+   on every dark ground — with a white glyph on it. */
+[data-surface='ink'] {
+  --sld-control-fg: var(--color-brandeis-200); /* 10.48:1 */
+  --sld-control-rule: var(--color-brandeis-400);
+  --sld-control-bg-hover: var(--color-brandeis-500);
+  --sld-control-bg-pressed: var(--color-brandeis-600);
+  --sld-control-fg-hover: var(--color-white);
+  --sld-control-fg-disabled: var(--color-neutral-600);
+  --sld-control-rule-disabled: var(--color-neutral-800);
+  --sld-progress-rail: var(--color-neutral-800);
+  --sld-progress-thumb: var(--color-brandeis-300);
+  --sld-ring-color: var(--color-brandeis-300);
+  --sld-ring-gap-color: var(--color-neutral-950);
+}
+
+/* The one surface where the primary cannot be blue: the control is white on the field and fills
+   white with a blue glyph, the inverted primary Button's solid takes here. */
+[data-surface='blue'] {
+  --sld-control-fg: var(--color-white); /* 6.23:1 */
+  --sld-control-rule: var(--color-brandeis-200);
+  --sld-control-bg-hover: var(--color-paper);
+  --sld-control-bg-pressed: var(--color-brandeis-100);
+  --sld-control-fg-hover: var(--color-brandeis-500); /* 6.17:1 on paper */
+  --sld-control-fg-disabled: var(--color-brandeis-300);
+  --sld-control-rule-disabled: var(--color-brandeis-400);
+  --sld-progress-rail: var(--color-brandeis-400);
+  --sld-progress-thumb: var(--color-white);
+  --sld-ring-color: var(--color-white);
+  --sld-ring-gap-color: var(--color-brandeis-500);
+}

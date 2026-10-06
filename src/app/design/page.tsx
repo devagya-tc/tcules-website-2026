@@ -33,7 +33,7 @@ const SPECIMENS = [
       {
         href: '/design/layout',
         name: 'Layout',
-        note: 'columnar axis — tracks, the two seams and a leading item',
+        note: 'columnar axis — tracks, the two seams, a leading item, and the scroll row (until-md | always)',
       },
       { href: '/design/cluster', name: 'Cluster', note: 'inline axis — wrapping rows' },
       {
@@ -111,6 +111,11 @@ const SPECIMENS = [
         href: '/design/cta-row',
         name: 'CtaRow',
         note: 'a band’s row of actions — rule, note, link | solid, neutral | primary, centred cap, narrow tracks, 4 surfaces, in a band',
+      },
+      {
+        href: '/design/slider',
+        name: 'Slider',
+        note: 'a row you move — Layout scroll, perView 1 | 2 | 3 | 4, align start | center, C-image-5+ and G bands, unfocusable slides, edge counts, 4 surfaces',
       },
       {
         href: '/design/cta-section',

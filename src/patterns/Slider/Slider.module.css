@@ -1,0 +1,182 @@
+/* Slider — the two controls, the progress rail, the row's own focus ring and the status line.
+
+   Every value comes from --sld-*, declared in tokens/components/slider.css. Layout owns the row
+   (scroll mode: tracks, seam, snapping, smooth-or-not), Cluster and Layout every seam around the
+   controls, the band its ground. No margin anywhere: the status line's negative margin below is
+   the visually-hidden clip technique, not outer spacing.
+
+   Local custom properties take the long `--slider-*` name, as Layout's do (`--layout-*` beside
+   the `--lay-*` tokens), so a reader never mistakes one for a token:
+     --slider-view      slides in view at this width (the perView ladder, restated for the rail)
+     --slider-count     the slide count, written inline by Slider.tsx
+     --slider-progress  0 → 1 across the row's scroll range, written by Slider.tsx on scroll
+     --slider-thumb     the thumb's share of the rail
+
+   Classes: .slider .view1 .view2 .view3 .view4 .row .control .rail .thumb .status */
+
+/* One in view below 768 at every perView, and always at perView 1. */
+.slider,
+.view1 {
+  --slider-view: 1;
+}
+
+/* The perView ladder (SliderPerView in Slider.tsx), restated for the rail so its thumb is the
+   right length before hydration and without a measurement. The row's own counts come from the
+   same table through Layout's `columns`; these two must change together. */
+@media (min-width: 768px) {
+  .view2,
+  .view3,
+  .view4 {
+    --slider-view: 2;
+  }
+}
+@media (min-width: 1024px) {
+  .view3,
+  .view4 {
+    --slider-view: 3;
+  }
+}
+@media (min-width: 1440px) {
+  .view4 {
+    --slider-view: 4;
+  }
+}
+
+/* The row takes a tab stop only when no slide holds anything focusable (Slider.tsx), and then it
+   needs a ring of its own. Drawn as a box-shadow like every ring in the system; the row's own
+   ring room (Layout scroll mode: 4 of padding round the slides) keeps the slides clear of it. */
+.row:focus {
+  outline: none;
+}
+
+.row:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--sld-ring-offset) var(--sld-ring-gap-color),
+    0 0 0 calc(var(--sld-ring-offset) + var(--sld-ring-width)) var(--sld-ring-color);
+}
+
+/* ── The control ──────────────────────────────────────────────────────────────
+   A 40 circle with a hairline rule and a blue glyph at rest — a BOX, because § 3.1 lets a slider
+   control keep one, and an outline rather than a fill so two of them under a card row read as
+   navigation and not as two asks competing with the band's solid. `inline-grid` + `place-items`
+   centres the glyph inside the control's own box: a control laying out its own inside, the
+   sanctioned case (Button does the same with inline-flex), not an arrangement of siblings.
+
+   Rule order is load-bearing: hover/focus, then pressed, then the end-of-row state last, so an
+   aria-disabled control answers nothing even under the pointer. */
+.control {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--sld-control-size);
+  block-size: var(--sld-control-size);
+  padding: 0;
+  border: var(--sld-control-rule-width) solid var(--sld-control-rule);
+  border-radius: var(--sld-control-radius);
+  background: transparent;
+  color: var(--sld-control-fg);
+  cursor: pointer;
+  transition:
+    background var(--sld-transition-duration) var(--sld-transition-easing),
+    border-color var(--sld-transition-duration) var(--sld-transition-easing),
+    color var(--sld-transition-duration) var(--sld-transition-easing);
+}
+
+.control > svg {
+  inline-size: var(--sld-control-icon-size);
+  block-size: var(--sld-control-icon-size);
+}
+
+/* The touch floor: the hit area reaches 44 past the 40 box without resizing it (Button's .hit). */
+.control::after {
+  content: '';
+  position: absolute;
+  inset: calc((var(--sld-control-size) - var(--sld-hit-min)) / 2);
+  border-radius: var(--sld-control-radius);
+}
+
+.control:hover,
+.control:focus-visible {
+  background: var(--sld-control-bg-hover);
+  border-color: var(--sld-control-bg-hover);
+  color: var(--sld-control-fg-hover);
+}
+
+.control:active {
+  background: var(--sld-control-bg-pressed);
+  border-color: var(--sld-control-bg-pressed);
+  color: var(--sld-control-fg-hover);
+}
+
+.control:focus {
+  outline: none;
+}
+
+.control:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--sld-ring-offset) var(--sld-ring-gap-color),
+    0 0 0 calc(var(--sld-ring-offset) + var(--sld-ring-width)) var(--sld-ring-color);
+}
+
+/* At an end (aria-disabled, focus kept) and before hydration (disabled): neutral, and no fill on
+   hover or press. A focused end control keeps its ring, so the keyboard still sees where it is. */
+.control:disabled,
+.control[aria-disabled='true'] {
+  background: transparent;
+  border-color: var(--sld-control-rule-disabled);
+  color: var(--sld-control-fg-disabled);
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control {
+    transition-duration: var(--duration-instant);
+  }
+}
+
+/* ── The rail ─────────────────────────────────────────────────────────────────
+   A neutral line with a blue thumb — the pager's current marker (Free, § 4.2). The thumb is as
+   long as the share of the slides in view and travels the rail as the row scrolls:
+
+     thumb = rail × min(1, view / count)       start = progress × (rail − thumb)
+
+   A fixed length (--sld-progress-length) that shrinks when the row is narrower: `min()` against
+   the controls row, and a flex item may shrink below its stated size, so at 390 a centred rail
+   between the two controls fits the 326 column. Decoration for the eye only — the status line is
+   what a screen reader gets. */
+.rail {
+  position: relative;
+  display: block;
+  inline-size: min(var(--sld-progress-length), 100%);
+  block-size: var(--sld-progress-thickness);
+  border-radius: var(--sld-progress-radius);
+  background: var(--sld-progress-rail);
+}
+
+.thumb {
+  --slider-thumb: calc(100% * min(1, var(--slider-view) / var(--slider-count, 1)));
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--slider-progress, 0) * (100% - var(--slider-thumb)));
+  inline-size: var(--slider-thumb);
+  border-radius: var(--sld-progress-radius);
+  background: var(--sld-progress-thumb);
+}
+
+/* ── The status line ──────────────────────────────────────────────────────────
+   Visually hidden, still announced (not display:none, which removes it from the accessibility
+   tree). Absolutely positioned, so it is out of the row's flow; the negative margin pulls the 1px
+   clip box out of the flow too, so the slider's box does not grow by a pixel nobody can see. */
+.status {
+  position: absolute;
+  inline-size: var(--sld-hidden-size);
+  block-size: var(--sld-hidden-size);
+  margin: calc(-1 * var(--sld-hidden-size));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

@@ -63,7 +63,8 @@
    Blue means "this is where you act" or "this is the system": actions, links, our
    drawings and the texture (visual-direction § 4, 6 Oct 2026). It is spent in
    tiers. FREE, never counted: focus rings, link hover and pressed, the current
-   marker in nav, TOC and slider pager, input focus, the whole-card hover cue.
+   marker in nav, TOC and slider pager, the slider's previous / next controls
+   (blue at rest, fdn-scroll), input focus, the whole-card hover cue.
    ACCENT: the solid primary button. SIGNAL: primary-tone links (one kind per
    band), a Proof's quote rule, a diagram's blue line. FIELD: an illustration.
    TEXTURE: a Texture placement.
@@ -119,6 +120,7 @@
 @import 'components/table-of-contents.css';
 @import 'components/content-section.css';
 @import 'components/cta-row.css';
+@import 'components/slider.css';
 @import 'components/tag.css';
 @import 'components/texture.css';
 @import 'components/client-mark.css';

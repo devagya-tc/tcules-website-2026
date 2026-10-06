@@ -748,6 +748,13 @@ because a solid primary is **Accent** and is spent on purpose. The second action
 that already spends a different kind of Signal (G's quote rule, E's diagram line) or has spent its two
 passes `tone="neutral"`; the band rule is unchanged.
 
+**Amended 6 Oct 2026 (`fdn-scroll`): slider controls are Free, and blue at rest.** The Free row names
+"the current marker in the … slider pager"; the Slider's previous / next controls join it. They are the
+slider's own navigation, like the nav's and TOC's markers, and they are blue at rest (glyph and hairline
+rule) because the owner wants blue on arrows and small marks. Counting them as Signal would collide with
+a G band's quote rule (≤ 1 kind per band). The rail is neutral; its thumb is the current marker
+(`docs/specs/Slider.md` § 6).
+
 | Band | Spends | Therefore |
 |---|---|---|
 | A, service hero | Accent + Field | no texture; the secondary action is neutral |

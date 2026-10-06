@@ -1,4 +1,4 @@
-import type { CSSProperties, ElementType, ReactNode } from 'react';
+import type { CSSProperties, ElementType, ReactNode, Ref } from 'react';
 
 import { cx } from '@/lib/cx';
 
@@ -85,6 +85,21 @@ type Columns =
   | 'fit'
   | 'tile'
   | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec };
+
+/**
+ * Where the row SCROLLS sideways instead of stacking or wrapping (fdn-scroll, 6 Oct 2026;
+ * visual-direction § 3.7 item 2 and the Slider, § 1.4 rule 3).
+ *
+ *   until-md  below 768 only. One item per view with the next one peeking, so a linked card set of
+ *             more than three reads as a row you swipe rather than a 2300px column; from md up the
+ *             `columns` apply exactly as they would without the prop. Only where every item is
+ *             focusable (§ 3.7): Tab is how a keyboard moves the row, so a set of unlinked cards
+ *             stays stacked.
+ *   always    every width. The Slider's mode — use it through `Slider`, which adds the controls that
+ *             say there is more from md up (below md the peek says it). On its own it is a row with
+ *             no visible affordance on a desktop without a trackpad.
+ */
+type Scroll = 'until-md' | 'always';
 
 export type LayoutProps = {
   /** Element to render (default "div"; use "ul"/"ol"/"section" etc. as needed). */
@@ -203,6 +218,39 @@ export type LayoutProps = {
    * property of fr tracks, not an oversight.
    */
   justify?: Distribute;
+  /**
+   * Scroll the row sideways instead of wrapping it — see `Scroll`. In scroll mode `columns` states
+   * how many items are IN VIEW at each breakpoint, so it takes counts, not ratios: `3` is one in
+   * view at base and three from md up, the bare-value convention; `{ base: 1, md: 2, lg: 3 }`
+   * names each step. Below md the row always shows its base count plus a peek of the next item
+   * (`--lay-scroll-peek`); from md up it shows exactly the count, so a Slider's three cards are
+   * the 392 of a 3-up grid and the band's arithmetic is unchanged.
+   *
+   * Every item is a snap point (`scroll-snap-align: start`, written by the container like `lead`'s
+   * span). `colGap` is the seam between items and is stated or 0, as everywhere; `rowGap` has one
+   * row to act on and does nothing while the row scrolls. Smooth scrolling only under
+   * `prefers-reduced-motion: no-preference`. The scrollbar is hidden: the peek, focusable items and
+   * the Slider's controls are the affordances.
+   *
+   * The scroll box is grown by `--lay-scroll-ring-room` on every side (padding, cancelled by an
+   * equal negative margin), because a scroll container clips whatever paints outside it and an
+   * item's focus ring is drawn 4px outside the item. The items stay on the column's edges; that
+   * is the one optical correction the mode makes. `lead`, `reverse` and `offset`
+   * place children in an explicit grid the scrolling row does not have, so they are ignored
+   * wherever the row scrolls.
+   */
+  scroll?: Scroll;
+  /**
+   * The rendered element, for a caller that drives a scroll row (the Slider reads its scroll
+   * position and scrolls it). A plain prop, as React 19 passes refs.
+   */
+  ref?: Ref<HTMLElement>;
+  /**
+   * Only for a scroll row whose items hold nothing focusable — testimonial slides, text cards —
+   * which a keyboard can then reach and scroll with the arrow keys. A scroll container no key can
+   * reach fails WCAG 2.1.1. Leave it off everywhere else.
+   */
+  tabIndex?: 0 | -1;
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
@@ -258,7 +306,10 @@ function reversedVars(
   return vars as CSSProperties;
 }
 
-function columnsToVars(columns?: Columns, reversed: [Breakpoint, boolean][] = []): CSSProperties {
+function columnsToVars(
+  columns?: Columns,
+  reversed: [Breakpoint, boolean][] = [],
+): CSSProperties {
   // Always emit all four breakpoint vars. The --tmpl-* custom properties INHERIT, so a nested
   // Layout that sets no columns would otherwise pick up an ancestor's template (e.g. a vertical
   // stack inside a 2-col hero turning into 2 columns). Pinning the unused breakpoints to
@@ -307,6 +358,36 @@ function columnsToVars(columns?: Columns, reversed: [Breakpoint, boolean][] = []
   return vars as CSSProperties;
 }
 
+/** A per-view count from a column shape: a ratio's length, as a safe reading of a misuse. */
+const viewCount = (spec: ColumnSpec) => (typeof spec === 'number' ? spec : spec.length);
+
+/**
+ * Scroll mode's per-view counts, one custom property per breakpoint. All four are always written,
+ * `initial` where unstated, for the reason `columnsToVars` gives: the properties inherit, and a
+ * nested scroll row must never pick up an ancestor's count. `until-md` scrolls at base only, so it
+ * needs only the base count; its md-up tracks come from the ordinary `--tmpl-*` templates.
+ */
+function viewVars(columns: Columns | undefined, scroll: Scroll): CSSProperties {
+  const vars: Record<string, string> = {
+    '--view-base': 'initial',
+    '--view-md': 'initial',
+    '--view-lg': 'initial',
+    '--view-xl': 'initial',
+  };
+  if (columns == null || columns === 'fit' || columns === 'tile') return vars as CSSProperties;
+  if (typeof columns === 'number' || Array.isArray(columns)) {
+    if (scroll === 'always') vars['--view-md'] = String(viewCount(columns));
+    return vars as CSSProperties;
+  }
+  for (const bp of ['base', 'md', 'lg', 'xl'] as const) {
+    const spec = columns[bp];
+    if (spec != null && (scroll === 'always' || bp === 'base')) {
+      vars[`--view-${bp}`] = String(viewCount(spec));
+    }
+  }
+  return vars as CSSProperties;
+}
+
 /**
  * Layout — the columnar layout primitive. Fills the content column Section gives it, owns the
  * two seams between its children, and arranges them into tracks: equal counts, fr ratios, or
@@ -325,6 +406,11 @@ function columnsToVars(columns?: Columns, reversed: [Breakpoint, boolean][] = []
  * and `pinLast` pins a stretched stack's last child to its foot. All default off, and off they
  * emit no class and no custom property, so every existing Layout renders byte-for-byte as before.
  * `lead`, `reverse` and `offset` all place the first child and are exclusive, in that precedence.
+ *
+ * The fourth arrangement is a SCROLL ROW (`scroll`, fdn-scroll, 6 Oct 2026): the same children in
+ * one sideways-scrolling, snapping row, `columns` naming how many are in view. It is how a linked
+ * card set of more than three stays one row on a phone (§ 3.7) and what the Slider pattern drives.
+ * Off, it emits no class and no custom property, so every existing Layout renders as before.
  * There is no docs/specs/Layout.md — this docblock and the prop docs above are the spec.
  */
 export function Layout({
@@ -341,19 +427,35 @@ export function Layout({
   reverse,
   offset,
   pinLast = false,
+  scroll,
+  ref,
+  tabIndex,
   className,
   style,
   children,
   id,
 }: LayoutProps) {
   // lead, reverse and offset all place the first child; precedence is lead > reverse > offset and
-  // the losers emit nothing, so two rules never fight over one grid-column.
-  const reversed = lead ? [] : perBreakpoint(reverse);
-  const offsets = lead || reverse != null ? [] : perBreakpoint(offset);
+  // the losers emit nothing, so two rules never fight over one grid-column. A scroll row has no
+  // explicit grid to place into: `always` drops all three, `until-md` drops lead and the base
+  // breakpoint's placements, and keeps md-up ones for the grid it becomes there.
+  const leads = lead && scroll == null;
+  const placeable = ([bp]: [Breakpoint, unknown]) =>
+    scroll == null || (scroll === 'until-md' && bp !== 'base');
+  const reversed = leads ? [] : perBreakpoint(reverse).filter(placeable);
+  const offsets = leads || reverse != null ? [] : perBreakpoint(offset).filter(placeable);
+  const vars =
+    scroll === 'always'
+      ? { ...columnsToVars(undefined), ...viewVars(columns, scroll) }
+      : scroll === 'until-md'
+        ? { ...columnsToVars(columns, reversed), ...viewVars(columns, scroll) }
+        : columnsToVars(columns, reversed);
   return (
     <Tag
       id={id}
-      style={{ ...columnsToVars(columns, reversed), ...style }}
+      ref={ref}
+      tabIndex={tabIndex}
+      style={{ ...vars, ...style }}
       className={cx(
         styles.layout,
         rowGap && styles[`rowgap-${rowGap}`],
@@ -363,10 +465,11 @@ export function Layout({
         styles[`justifyitems-${justifyItems}`],
         justify && styles[`justify-${justify}`],
         equalRows && styles['equal-rows'],
-        lead && styles.lead,
+        leads && styles.lead,
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast && styles['pin-last'],
+        scroll && styles[`scroll-${scroll}`],
         className,
       )}
     >

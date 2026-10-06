@@ -67,6 +67,15 @@
  * ReactNode slot, because a pattern does not import a pattern. It is a pattern for the usual two
  * reasons — a content shape (`{ label, href }`) and a composition of Button, Icon, Cluster and Layout.
  *
+ * Slider is a ROW YOU MOVE: slides in a sideways-scrolling, snapping row (Layout `scroll="always"`),
+ * with previous / next controls and a progress rail (fdn-scroll, 6 Oct 2026; visual-direction
+ * § 1.4 — an image set of five or more is a Slider showing three). It owns no band and no ground,
+ * sits in a band's body and reads data-surface from it. Its slides are the caller's `<li>`s — a
+ * BlockCard, or a testimonial wrapped in one — so it takes children rather than records, and it
+ * is a pattern because it composes Layout, Cluster and Icon. It is a client component, like SiteNav,
+ * TableOfContents and EnquiryForm, for a ref, listeners and the controls' state; the scrolling itself is CSS, so the row
+ * swipes and snaps before it hydrates.
+ *
  * Figure is the quietest thing in the tier and the first to hold an IMAGE as its subject rather
  * than as a marker: an asset, its caption and an optional quieter note, filling whatever inline
  * space it is handed and asking nothing of the container. It is presentational to the letter —
@@ -187,6 +196,9 @@ export type {
   CtaRowEmphasis,
   CtaRowTone,
 } from './CtaRow';
+
+export { Slider } from './Slider';
+export type { SliderProps, SliderPerView, SliderAlign } from './Slider';
 
 export { Callout } from './Callout';
 export type { CalloutProps } from './Callout';

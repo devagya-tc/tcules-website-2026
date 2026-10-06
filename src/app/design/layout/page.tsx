@@ -156,7 +156,12 @@ export default function LayoutSpecimenPage() {
           title="columns={{ base: 2 }} reverse={{ base: true, lg: false }}"
           note="The explicit off. Two tracks at every width, reversed at 390 and restored from 1024 — so at 1440 the accent box is back on the left."
         >
-          <Layout columns={{ base: 2 }} colGap="block" rowGap="block" reverse={{ base: true, lg: false }}>
+          <Layout
+            columns={{ base: 2 }}
+            colGap="block"
+            rowGap="block"
+            reverse={{ base: true, lg: false }}
+          >
             <Box accent>1</Box>
             <Box>2</Box>
           </Layout>
@@ -258,6 +263,44 @@ export default function LayoutSpecimenPage() {
                 <div className={s.ruler}>rowGap=&quot;{rung}&quot;</div>
                 <div className={s.ruler} />
               </Layout>
+            ))}
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="scroll='until-md' columns={4} colGap='gutter'"
+          note="Four equal tracks from 768 up, exactly as without the prop. Below 768 the same children are one sideways row: one item in view and a 24 peek of the next (--lay-scroll-peek), each item a snap point, the scrollbar hidden. visual-direction § 3.7: a linked card set of more than three, where every item is focusable so Tab moves the row. Resize below 768, or read the 390 shot."
+        >
+          <Layout scroll="until-md" columns={4} colGap="gutter" rowGap="column">
+            <Box tall>1</Box>
+            <Box tall>2</Box>
+            <Box tall>3</Box>
+            <Box tall accent>
+              4
+            </Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="scroll='always' columns={{ base: 1, md: 2, lg: 3 }} colGap='gutter'"
+          note="Scrolls at every width; columns names how many are IN VIEW per step, counts not ratios. Three in view from 1024 are a 3-up grid's tracks to the pixel, so the band arithmetic holds; below 768 the peek appears. The row grows its box by --lay-scroll-ring-room (4) on every side, padding cancelled by a negative margin, so its clip cannot cut a focus ring and the items still sit on the column edges. The Slider pattern drives this mode and adds the controls; on its own it has no affordance on a desktop without a trackpad."
+        >
+          <Layout scroll="always" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter">
+            {['1', '2', '3', '4', '5', '6'].map((n) => (
+              <Box key={n} tall accent={n === '4'}>
+                {n}
+              </Box>
+            ))}
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="scroll='always' with no colGap → items touch"
+          note="The seam is stated or it is 0, in a scroll row as everywhere. A row of edge-to-edge items is wrong on sight, which is the point."
+        >
+          <Layout scroll="always" columns={3}>
+            {['1', '2', '3', '4'].map((n) => (
+              <Box key={n}>{n}</Box>
             ))}
           </Layout>
         </Specimen>

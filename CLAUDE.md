@@ -13,7 +13,7 @@ app  →  templates  →  patterns  →  components  →  lib / styles
 |---|---|---|
 | — | `src/app/**` | routes. Composition only; read content, pass props |
 | 3 | `src/templates/**` | whole page-type layouts (article shape, service-page shape) |
-| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter`, `Breadcrumbs`, `TableOfContents`, `PageHero`, `ContentSection`, `CtaSection`, `CtaRow`, `EnquiryForm`, `ProcessFlow`, `ListCard`, `BlockCard`, `Accordion`, `Proof`, `Callout`, `DataTable` and `Figure` today; the kit's `Slider`, `Statement`, `Banner`, `Contrast` and `Thread` as they land |
+| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter`, `Breadcrumbs`, `TableOfContents`, `PageHero`, `ContentSection`, `CtaSection`, `CtaRow`, `EnquiryForm`, `ProcessFlow`, `ListCard`, `BlockCard`, `Accordion`, `Proof`, `Callout`, `DataTable`, `Figure` and the kit's `Slider` today; `Statement`, `Banner`, `Contrast` and `Thread` as they land |
 | 1 | `src/components/**` | primitives, controls and marks — `Section`, `Layout`, `Cluster`, `Button`, `Icon`, `Logo`, `Prose` |
 | — | `src/content/**` | the CMS seam. Imported by pages and nothing else |
 | — | `src/lib/**`, `src/styles/**` | leaves. Import nothing above them |
@@ -47,6 +47,8 @@ a primitive. Same rule one tier up — a pattern does not import a pattern.
   `surface="paper | tint | ink | blue"` sets the ground for everything inside it.
 - **`Layout`** — the columnar axis. Tracks (`3`, `[2,1]`, per-breakpoint, `fit`, `tile`) plus
   `rowGap` / `colGap`, both taking gap-scale step names. A vertical stack is the single-track case.
+  `scroll="until-md" | "always"` turns the tracks into one sideways scroll-snap row, `columns` then
+  naming how many items are in view; the `Slider` pattern drives `always`.
 - **`Cluster`** — the inline axis. Wrapping rows: chips, button groups, metadata, logo strips.
   Same scale, capped at `stack`.
 
