@@ -180,7 +180,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **cta-row.css** — `--ctarow-rule-width` 1px · `--ctarow-note-measure` 56ch · `--ctarow-centred-measure` 75ch
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.015em · `--cta-point-tracking` 0em · `--cta-rule-width` 1px · `--cta-marker-tracking` 0.08em · `--cta-heading-measure` 32ch · `--cta-body-measure` 75ch
 - **data-table.css** — `--dtab-rule-width` 1px · `--dtab-fluid-size` 176px · `--dtab-hold-size` 192px · `--dtab-fade-size` 48px
-- **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-measure` 667px · `--enq-note-min-inline` 15rem · `--enq-message-reserve` 19px
+- **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-measure` 667px · `--enq-note-min-inline` 15rem
 - **figure.css** — `--fig-min-xs` 192px
 - **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-field-min-inline` 16rem · `--foot-watermark-size` 160px · `--foot-tagline-measure` 56ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 75ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em
 - **icon.css** — `--icn-size-sm` 14px · `--icn-size-md` 16px · `--icn-size-lg` 18px · `--icn-size-xl` 24px

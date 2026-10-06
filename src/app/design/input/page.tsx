@@ -102,6 +102,15 @@ export default function InputSpecimenPage() {
               <Layout rowGap="block">
                 <LabelledInput label="Email" appearance="line" />
                 <LabelledTextarea label="What are you working on?" appearance="line" />
+                {/* EnquiryForm disables every field while it submits and keeps `invalid` from the
+                    blur messages, so this pair is a real state: it must read disabled, with no
+                    danger rule left under it. */}
+                <LabelledInput
+                  label="Invalid and disabled"
+                  appearance="line"
+                  invalid
+                  disabled
+                />
               </Layout>
             </Specimen>
           </Layout>

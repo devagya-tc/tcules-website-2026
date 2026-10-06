@@ -4,7 +4,8 @@ import { cx } from '@/lib/cx';
 
 import styles from './Input.module.css';
 
-/* One treatment, and no `emphasis` prop. There were two — standard, and a `quiet` emphasis kept
+/* One emphasis and no `emphasis` prop; two APPEARANCES (`appearance`, box and line). There were two
+   emphases — standard, and a `quiet` emphasis kept
    for SiteFooter's newsletter row — and on paper and ink the two rendered nearly identically: the
    same fill, the same rule, a placeholder a step apart. An emphasis nobody can see is worse than
    none, so quiet was merged into standard and deleted (29 Sep 2026, tracker 2.17), and a prop with

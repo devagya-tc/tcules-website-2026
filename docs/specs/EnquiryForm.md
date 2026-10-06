@@ -15,7 +15,7 @@
 
 > **Amended 29 Sep 2026 (tracker 2.17).** Four changes, approved by the owner, applied in place below:
 >
-> 1. **"See available times" moved into this component.** It sits in the action row beside the submit — one `Cluster colGap="block"`, wrapping on a narrow column — as `Button emphasis="link" tone="neutral" size="lg"` with a trailing `arrow-right` glyph. `scheduleHref` is now a prop: **required** on `enquiry` and `audit` (the 56-instance constraint moved here from `CtaSection`, which no longer takes `scheduleHref`), optional on `contact`. The Success view carries the same link on, so there is still exactly one per band.
+> 1. **"See available times" moved into this component.** It sits in the action row beside the submit — one `Cluster colGap="block"`, wrapping on a narrow column — as `Button emphasis="link" tone="primary" size="lg"` (primary since fdn-blue, 6 Oct 2026: a text link is blue at rest) with a trailing `arrow-right` glyph. `scheduleHref` is now a prop: **required** on `enquiry` and `audit` (the 56-instance constraint moved here from `CtaSection`, which no longer takes `scheduleHref`), optional on `contact`. The Success view carries the same link on, so there is still exactly one per band.
 > 2. **The submit is `size="lg"`** (48px). At 40 it stood under 44px phone fields and read as the smaller thing; lg clears the touch floor, so `extendHitArea` is gone.
 > 3. **The status hairline is gone.** It sat directly over the submit, where the `block` seam already separates the field set from the actions, and drew a rule over an empty line at Idle. The Error state now moves the status **ink** (`--enq-status-ink-error`) instead of its rule; `--enq-status-rule` and `--enq-status-rule-error` are deleted.
 > 4. **`Input` has one treatment.** Its `quiet` emphasis — rendered nearly identically to `standard` on paper and ink — was merged into standard and deleted, with its tokens and the `emphasis` prop. `SiteFooter` now uses the standard field.
@@ -110,8 +110,14 @@ Caller inputs are the field set (§3 `variant`, `urlLabel`), `context` for enqui
 | `context`     | `EnquiryContext` (object: `originRoute: string` · `placement: string` · `family: string` · `serviceOrAudit: string` · `referrer: string` · `campaign: string` · `intent?: string`) | Required except contact | The six or seven hidden fields. `intent` is required for audit; the entire object is forbidden for contact                                          |
 | `action`      | `string`                                                                                                                                                                           | — (required)            | The endpoint. The component posts; it does not know what is on the other end                                                                        |
 | `onSubmitted` | `(() => void) \| undefined`                                                                                                                                                        | `undefined`             | Analytics hook. Fires once, after Success renders                                                                                                   |
+| `scheduleHref` | `string` | required on enquiry and audit, optional on contact, refused on compact | The "See available times" link beside the submit and in the success view (29 Sep 2026) |
+| `width` | `"track" \| "measure"` | `"track"` | Every variant fills its track; `measure` caps it at `--enq-form-measure` (667) for a form under a centred head (6 Oct 2026) |
+| `fields` | `"line" \| "box"` | `"line"` | Input's appearance for every field (6 Oct 2026) |
+| `numbered` | `boolean` | `false` | A blue `--text-ui-sm` numeral leads each label, aria-hidden (6 Oct 2026, final round) |
+| `submit` | `"inline" \| "full"` | `"inline"` | `full` sets the submit across the track with the line under it (6 Oct 2026, final round) |
+| `nextSteps` | `readonly EnquiryNextStep[]` (`{ label: string; detail?: string }`) | none | The success view's numbered steps, the caller's copy; on a close, CtaSection's `points` passed straight through (6 Oct 2026, final round) |
 
-**Approved tier-1 dependency.** `Input` renders either an `input` or a `textarea` through a discriminated `as="input" | "textarea"` API, forwards the native attributes for that element, and has one treatment — the `emphasis="standard" | "quiet"` prop was deleted 29 Sep 2026 (tracker 2.17). `invalid` forces the invalid class and `aria-invalid="true"`; a caller's native `aria-invalid="grammar" | "spelling" | boolean` remains intact, and native `disabled` carries Submitting. Both `EnquiryForm` and `SiteFooter` use that one treatment (§17 Q9).
+**Approved tier-1 dependency.** `Input` renders either an `input` or a `textarea` through a discriminated `as="input" | "textarea"` API, forwards the native attributes for that element, and has one emphasis — the `emphasis="standard" | "quiet"` prop was deleted 29 Sep 2026 (tracker 2.17) — and two appearances since 6 Oct 2026 (`appearance="box" | "line"`, set from `fields`). `invalid` forces the invalid class and `aria-invalid="true"`; a caller's native `aria-invalid="grammar" | "spelling" | boolean` remains intact, and native `disabled` carries Submitting. Both `EnquiryForm` and `SiteFooter` use that one treatment (§17 Q9).
 
 **Deliberately NOT props, and why**
 
@@ -127,7 +133,7 @@ Caller inputs are the field set (§3 `variant`, `urlLabel`), `context` for enqui
 
 **Prop combinations that must be a COMPILE error, not a review comment**
 
-1. `variant="audit"` with any `urlLabel` other than `"URL of the site to audit"`, and `variant="enquiry"` with `"URL of the site to audit"` — a discriminated union on `variant`, not two independent props.
+1. `variant="audit"` with any `urlLabel` other than `"Site to audit"`, and `variant="enquiry"` with `"Site to audit"` — a discriminated union on `variant`, not two independent props.
 2. `variant="audit"` without `context.intent`, and `variant="enquiry"` **with** `context.intent` — the discriminant carries the context type too.
 3. `variant="contact"` with either `urlLabel` or `context` — the contact fields map directly to the mutation and carry neither enquiry-only input.
 4. Enquiry/audit `context` missing any of the six always-required keys. All six are non-optional strings; empty string is legal, absent is not.
@@ -141,7 +147,7 @@ Enquiry and audit are label sets; contact is the five-field contact shape. All t
 |                       | md (the only size)                                                                                                                        |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `enquiry` (49 routes) | email · "What are you working on?" · optional URL (three wordings) · submit "Send enquiry" · 6 hidden fields                              |
-| `audit` (7 routes)    | email · "What are you working on?" · optional URL ("URL of the site to audit") · submit "Request free audit" · 7 hidden fields (`intent`) |
+| `audit` (7 routes)    | email · "What are you working on?" · optional URL ("Site to audit") · submit "Request free audit" · 7 hidden fields (`intent`) |
 | `compact` (kit, 6 Oct 2026) | name and email as a pair (stacked under 400) · "What are you working on?" · submit "Send enquiry" with the caption/status line beside it · 6 hidden fields · no scheduling link |
 
 **Steps with size:** nothing, because there is one size. **Amended 29 Sep 2026:** the submit is `Button size="lg"` (48px), not md. The md/40 agreement with the desktop field broke on a phone, where the fields step to 44 and a 40px submit under them read as the smaller thing; lg clears the touch floor on its own. The schedule link beside it is lg too, so the two labels set at one type size.
@@ -152,7 +158,7 @@ Enquiry and audit are label sets; contact is the five-field contact shape. All t
 
 | Rejected                                                              | Why                                                                                                                                                                                            |
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `arrangement="two-column"` (email and URL side by side)               | No route resolves to it. It also breaks the 470px track it actually gets (§7): two tracks of ~203 hold neither an email address nor a URL without scrolling the value                          |
+| `arrangement="two-column"` (email and URL side by side) — **revised 6 Oct 2026:** compact and contact now PAIR fields where the form's own track holds two 192px tracks (`fit`, `xs`); the full enquiry/audit sets stay one per row, which is what this row still rejects | No route resolves to it. It also breaks the 470px track it actually gets (§7): two tracks of ~203 hold neither an email address nor a URL without scrolling the value                          |
 | `arrangement="inline-row"` (email + submit on one line, footer-style) | That is the newsletter capture, and `SiteFooter` already has it. These multi-field forms cannot be a row                                                                                       |
 | `size="sm"` for the offer arrangement                                 | `CtaSection arrangement="offer"` does not pass `form` on any of the 7 audit routes' mid-page instances; the audit form is in the closing band at full size                                     |
 | A compact "email only" variant                                        | Then the question "what are you working on?" — the only field a designer reads before replying — becomes optional, and the reply gets worse. Rejected on the value of the reply, not on layout |
@@ -347,7 +353,7 @@ What stays mono, and therefore uppercase: the `flag` — "Optional" is a field's
     <Layout rowGap="text">                           {/* actions: submit → caption */}
       <Cluster colGap="block" rowGap="tight" align="center">   {/* amended 29 Sep 2026 */}
         <Button type="submit" size="lg" busy={submitting}>Send enquiry</Button>
-        <Button as="a" href={scheduleHref} emphasis="link" tone="neutral" size="lg"
+        <Button as="a" href={scheduleHref} emphasis="link" tone="primary" size="lg"
                 icon={<Icon name="arrow-right" />}>See available times</Button>
       </Cluster>
       <p />                                          {/* caption */}
@@ -430,7 +436,7 @@ Restated, because each has already gone wrong somewhere in this codebase: **no h
 
 | Case                                                                  | Required handling                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Longest realistic string                                              | The longest label is "URL of the site to audit" (24 characters) at `--text-body-sm` — sans and untracked since 25 Aug 2026, so it sets _narrower_ than the tracked mono it replaced; it fits one line in the 470px track and wraps to two in the 256px minimum without moving the control, because the group is a `Layout rowGap="tight"` stack, not a row                                                                                                                                                                                                                              |
+| Longest realistic string                                              | The longest label was "URL of the site to audit" (24 characters; "Site to audit" since 1 Oct 2026) at `--text-body-sm` — sans and untracked since 25 Aug 2026, so it sets _narrower_ than the tracked mono it replaced; it fits one line in the 470px track and wraps to two in the 256px minimum without moving the control, because the group is a `Layout rowGap="tight"` stack, not a row                                                                                                                                                                                                                              |
 | One long unbroken token (a URL)                                       | The URL control scrolls horizontally as typed — native input behaviour, no wrapping, no `overflow-wrap`. The echoed value in `message` (if a message quotes it) is truncated with an ellipsis at the control's inline size; the `textarea` breaks a pasted URL mid-token so a paragraph cannot force a horizontal scrollbar on the form                                                                                                                                                                                                                                                 |
 | Zero items                                                            | There is no collection. Each variant selects a fixed non-empty control set, so a form with no fields cannot occur                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | One item                                                              | Not reachable. The email field alone is a different component (`SiteFooter`'s newsletter), and no prop makes this form shrink to it                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
@@ -474,9 +480,9 @@ was trimmed with the table above: it named `.label` and `.message`, which neutra
 
 |       | Statement                                                                                                  | How a reviewer decides it                                                                                                           |
 | ----- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Do    | Every surface-dependent `--enq-*` and `--inp-*` token is declared under all four `data-surface` blocks     | Count identical declarations per surface: 9 `--enq-*` plus 18 `--inp-*` = 27 × 4                                                    |
+| Do    | Every surface-dependent `--enq-*` and `--inp-*` token is declared under all four `data-surface` blocks     | Count identical declarations per surface: 7 `--enq-*` plus 19 `--inp-*` = 26 × 4                                                    |
 | Do    | `message` and `status` are in the DOM at Idle, empty (compact: `status` holds the caption)                 | Inspect the Idle specimen column; both elements exist                                                                               |
-| Do    | `Button` carries `extendHitArea` on the submit; `CtaSection` owns the same guarantee for its schedule link | Grep both component call sites for `extendHitArea`                                                                                  |
+| Do    | The submit and the scheduling link are `size="lg"` (48), clearing the touch floor without `extendHitArea` (29 Sep 2026) | Grep EnquiryForm for `size="lg"` on both; `extendHitArea` has zero uses                                                              |
 | Do    | Validation fires on `blur` and on no other event                                                           | Grep for `onBlur`; there must be no `onChange`- or `onSubmit`-driven validity call                                                  |
 | Do    | Focus lands on the submit before the controls disable                                                      | Tab into the textarea, press Enter, and check the focused element in the Submitting column                                          |
 | Do    | Every id is `useId`-derived                                                                                | Grep for `id="` with a literal string: zero hits                                                                                    |
@@ -607,7 +613,7 @@ Blast radius: Button, on all four surfaces × three emphases × two tones, plus 
 
 ## 17. Open questions
 
-All nine questions were resolved by the owner on **21 August 2026**. The original options and recommendations remain below, with the accepted decision recorded inline. Nothing remains BLOCKING.
+All nine questions were resolved by the owner on **21 August 2026**. The original options and recommendations remain below, with the accepted decision recorded inline. Nothing remains BLOCKING. **One question is open again (6 Oct 2026): Q7, for `compact` and `contact`, below.**
 
 **1. Does a tier-1 `Field` primitive get specified first? — ANSWERED, then superseded by Q9 on 21 August 2026.**
 Options: (a) specify `Field` now; `EnquiryForm` composes it and draws no input of its own; `SiteFooter`'s newsletter field is refactored onto it in the same change. (b) `EnquiryForm` owns `--enq-field-*` and the site has two bespoke field token sets.
@@ -640,7 +646,7 @@ reply sentence; the CTA-owned scheduling action remains immediately after it in 
 Options: (a) `emphasis="link"`. (b) `emphasis="ghost" tone="neutral"`. (c) `emphasis="solid" tone="primary"`.
 **Recommendation: (a)** for the action that survives Success. It remains a full-sized, focusable anchor with the system link rule and 44px hit area, while reading as a secondary navigation choice rather than another form action. Solid primary would read as a second ask.
 
-**Owner decision — revised 21 August 2026: (a).** The scheduling action remains required by brief 08 and owned by `CtaSection`, which renders it as `emphasis="link" tone="neutral"`; EnquiryForm neither duplicates nor restyles it.
+**Owner decision — revised 21 August 2026: (a).** The scheduling action remains required by brief 08 and owned by `CtaSection`, which renders it as `emphasis="link" tone="neutral"`; EnquiryForm neither duplicates nor restyles it. *Superseded:* since 29 Sep 2026 EnquiryForm renders it, and since fdn-blue (6 Oct 2026) at `tone="primary"`.
 
 **Superseded in part, 29 Sep 2026 (tracker 2.17).** Still (a), link emphasis, neutral — now `size="lg"` with a trailing `arrow-right`. Ownership moved: EnquiryForm renders it beside its submit and carries it into Success, and `CtaSection` no longer renders it, so the band still has exactly one.
 
@@ -650,12 +656,12 @@ Options: (a) `h3` at `--text-h5`. (b) no heading; the `--text-lead` sentence alo
 
 **Owner decision — accepted 21 August 2026: (a).** Render an `h3` at the `--text-h5` role.
 
-**7. Are the two-column and inline-row arrangements specified? — ANSWERED, 21 August 2026.**
+**7. Are the two-column and inline-row arrangements specified? — ANSWERED 21 August 2026; REOPENED 6 Oct 2026 for compact and contact (OPEN, non-blocking).**
 **Recommendation: no** — Stacked only, as §4 records. All 56 routes resolve to Stacked, and the 470px track cannot hold two useful tracks. Non-blocking; recorded so the next reader knows it was decided rather than forgotten.
 
 **Owner decision — accepted 21 August 2026: no.** Stacked is the only arrangement.
 
-**Reopened 6 Oct 2026 for `compact` only — OPEN, for the owner.** The kit brief asks for a compact form of name, email, message and submit at ≤ 400 tall. Stacked, those four are 480; so compact sets name and email as a pair wherever its own track holds two 192px fields (the 667 copy column beside a photo, the centred and beside bands) and stacks them below that. The full field sets stay stacked, as decided. Owner: confirm the pair, or rule a shorter textarea for compact instead.
+**Reopened 6 Oct 2026 for `compact` — OPEN, for the owner.** (Extended in the final round to `contact`, which pairs Name/Company and Email/Phone the same way so its five fields fit a band: one per row they were 1021 tall at 1470.) The kit brief asks for a compact form of name, email, message and submit at ≤ 400 tall. Stacked, those four are 480; so compact sets name and email as a pair wherever its own track holds two 192px fields (the 667 copy column beside a photo, the centred and beside bands) and stacks them below that. The full field sets stay stacked, as decided. Owner: confirm the pair, or rule a shorter textarea for compact instead.
 
 **8. Where do the four URL wordings live — a closed union in code, or a CMS field? — ANSWERED, 21 August 2026.**
 Options: (a) the union in §3. (b) a free string off the route record.

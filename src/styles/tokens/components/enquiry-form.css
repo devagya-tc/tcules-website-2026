@@ -13,7 +13,9 @@
   --enq-form-min-inline: 16rem;
   --enq-form-measure: 667px; /* width="measure": the copy track of a [5, 7] split at 1470 */
   --enq-note-min-inline: 15rem; /* the caption beside the submit, or under it */
-  --enq-message-reserve: 19px;
+  /* One --text-caption line, derived rather than restated (13 × 1.45 ≈ 19): if the caption role
+     changes, the reserve follows it. */
+  --enq-message-reserve: calc(var(--font-size-caption) * var(--line-height-caption));
   --enq-transition-duration: var(--duration-fast);
   --enq-transition-easing: var(--easing-standard);
 }

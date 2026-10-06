@@ -4,6 +4,7 @@ import { Button, Cluster, Layout, Section } from '@/components';
 import { CtaSection, EnquiryForm, type EnquiryUrlLabel } from '@/patterns';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
+import { Rehearse } from '../_specimen/Rehearse';
 import { specimenStyles as s } from '../_specimen/Specimen';
 
 const CONTEXT = {
@@ -16,6 +17,21 @@ const CONTEXT = {
 } as const;
 
 const BODY = ['Tell us what you are trying to ship and who it is for.'] as const;
+
+/* The caller's next steps: the success view numbers what it is handed. */
+const STEPS = [
+  { label: 'A reply within a working day', detail: 'From the person who would lead the work.' },
+  {
+    label: 'A thirty-minute call',
+    detail: 'What exists, and what a first fortnight would change.',
+  },
+] as const;
+
+const SENT = {
+  name: 'Maya Fernandes',
+  email: 'maya@northwind.studio',
+  what_are_you_working_on: 'A billing redesign for a B2B payments product.',
+};
 
 function Enquiry({
   outcome = 'success',
@@ -152,15 +168,45 @@ export default function EnquiryFormSpecimenPage() {
           surface={surface}
         />
       ))}
-      {/* The compact set on every surface too: its one line beside the submit is the caption ink
-          at rest, and that ink is one of the values that moves per surface. */}
+      {/* The compact set on every surface too, numbered and with the full-width submit, so the
+          accent numerals (--enq-accent-ink) and the caption ink under a full submit are seen on
+          every ground. */}
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
         <CtaSection
           key={`compact-${surface}`}
           eyebrow={`Compact · ${surface}`}
           heading="Three lines, on this ground"
           body={BODY}
-          form={<Enquiry compact />}
+          form={
+            <EnquiryForm
+              variant="compact"
+              numbered
+              submit="full"
+              action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+              context={CONTEXT}
+            />
+          }
+          surface={surface}
+        />
+      ))}
+      {/* The success view on every surface: the check, the thanks, and the caller's numbered
+          steps (.stepMarker in the accent, .stepDetail in the hint ink). */}
+      {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
+        <CtaSection
+          key={`sent-${surface}`}
+          eyebrow={`Sent · ${surface}`}
+          heading="The thanks, on this ground"
+          body={BODY}
+          form={
+            <Rehearse submit fill={SENT}>
+              <EnquiryForm
+                variant="compact"
+                action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+                context={CONTEXT}
+                nextSteps={STEPS}
+              />
+            </Rehearse>
+          }
           surface={surface}
         />
       ))}

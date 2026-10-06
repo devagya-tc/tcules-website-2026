@@ -1,8 +1,9 @@
 /* ══ Component layer — input ═════════════════════════════════════════════════════
-   Tier 3. A native input or textarea control, with ONE treatment.
+   Tier 3. A native input or textarea control: ONE emphasis, two appearances (box and line).
 
-   Naming: --inp-standard-{part}-{state} for the treatment, --inp-disabled-* for the disabled
-   state. There were two emphases — standard, and a `quiet` one kept for SiteFooter's newsletter
+   Naming: --inp-standard-{part}-{state} for the boxed treatment, --inp-disabled-* for its disabled
+   state, and --inp-line-{part}-{state} for appearance="line" (no fill, so every line ink is chosen
+   against the surface, its disabled pair included). There were two emphases — standard, and a `quiet` one kept for SiteFooter's newsletter
    row — and on paper and ink they rendered nearly identically: the same fill, the same rule, a
    placeholder a step apart. An emphasis nobody can see is worse than none, so quiet was merged
    into standard and its tokens deleted from every block (29 Sep 2026, tracker 2.17). `standard`

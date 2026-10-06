@@ -9,7 +9,8 @@
    breakpoint single-line controls step from 40 to the 44px touch floor. Textareas already exceed
    the floor through their 128px minimum and remain natively resizable.
 
-   One treatment. A second, `quiet`, was kept for SiteFooter's newsletter row and rendered nearly
+   One emphasis, two appearances: `box` (the filled control) and `line` (the unboxed field, below).
+   A second EMPHASIS, `quiet`, was kept for SiteFooter's newsletter row and rendered nearly
    identically to this one on paper and ink; it was merged in and deleted on 29 Sep 2026 (tracker
    2.17). The --inp-standard-* token names keep `standard` as the name of the treatment. */
 
@@ -155,6 +156,11 @@
 /* Disabled reads its own line tokens: the box's --inp-disabled-fg is chosen against a WHITE fill,
    and with no fill under it the disabled placeholder went muddy on blue. */
 .control.line:disabled {
+  /* Clears the doubled rule .control.line.invalid draws: EnquiryForm disables every field while
+     it submits and keeps `invalid` from the blur messages, so invalid + disabled is a real state,
+     and unavailable must read as unavailable (see the rule-order note above). */
+  box-shadow: var(--inp-shadow);
+  border-width: 0 0 var(--inp-rule-width);
   border-color: var(--inp-line-disabled-rule);
   background: var(--inp-line-bg);
   color: var(--inp-line-disabled-fg);
