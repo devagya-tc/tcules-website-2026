@@ -72,9 +72,9 @@ prevents. A checked-on date is not shown, matching the footer; if the owner want
 
 ## Amendment · 6 Oct 2026 — `fdn-colour` (visual-direction § 4.3)
 
-- **The star is ink on paper and tint.** `--rbadge-star-ink` brandeis-500 → neutral-900 on both. An icon
+- **The star is ink on paper and tint.** `--rbadge-star-fg` brandeis-500 → neutral-900 on both. An icon
   at rest is never blue on a light ground (§ 4.3, "icons are ink"); blue is spent on where you act, and the
-  badge's link state already takes it on hover (`--rbadge-ink-hover`), so nothing about the affordance
+  badge's link state already takes it on hover (`--rbadge-fg-hover`), so nothing about the affordance
   changes.
 - **Ink and blue are unchanged.** The live badge sits in the ink footer, and chrome keeps its approved
   colours (§ 4.3). Blue's star was already white.

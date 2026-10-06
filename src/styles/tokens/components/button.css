@@ -75,6 +75,13 @@
   --btn-icon-size-sm: var(--icon-size-14);
   --btn-icon-size-md: var(--icon-size-16);
   --btn-icon-size-lg: var(--icon-size-18);
+  /* The stepper's glyph, one step up from a labelled button's at each size (fix round 2,
+     cmp-testimonials, 6 Oct 2026). An icon-only control has no label to carry it, so its glyph IS
+     the control: at 18 in a 48 circle the arrow read as an afterthought beside a 477 portrait,
+     where the reference steppers set the arrow at half the circle. */
+  --btn-outline-icon-size-sm: var(--icon-size-16);
+  --btn-outline-icon-size-md: var(--icon-size-18);
+  --btn-outline-icon-size-lg: var(--icon-size-24);
   --btn-radius: var(--radius-8);
   --btn-radius-round: var(--radius-full); /* outline: the stepper is a circle (references § 10) */
   --btn-outline-rule-width: var(--border-width-hairline);
@@ -141,7 +148,7 @@
   --btn-outline-primary-bg-hover: var(--color-brandeis-500);
   --btn-outline-primary-bg-pressed: var(--color-brandeis-700);
   --btn-outline-primary-fg-hover: var(--color-white); /* 6.23:1 on 500 */
-  --btn-disabled-rule: var(--color-neutral-200);
+  --btn-disabled-rule: var(--color-neutral-300); /* the stepper's circle, off — still a circle */
   --btn-disabled-bg: var(--color-neutral-100);
   --btn-disabled-fg: var(--color-neutral-500);
   --btn-ring-color: var(--color-brandeis-500);
@@ -189,7 +196,7 @@
   --btn-outline-primary-bg-hover: var(--color-brandeis-500);
   --btn-outline-primary-bg-pressed: var(--color-brandeis-700);
   --btn-outline-primary-fg-hover: var(--color-white);
-  --btn-disabled-rule: var(--color-neutral-300); /* 200 vanishes on the deeper ground */
+  --btn-disabled-rule: var(--color-neutral-400); /* 300 all but vanished on paper-deep (fix round 2) */
   --btn-disabled-bg: var(--color-neutral-200);
   --btn-disabled-fg: var(--color-neutral-500);
   --btn-ring-color: var(--color-brandeis-500);

@@ -85,6 +85,8 @@ type ContentSectionBaseProps = {
    * a second heading impossible to smuggle into a band that already sits under a route's one h1.
    */
   heading?: string;
+  /** The band's archetype for `fold:check` (§ 1.3), passed to Section's `data-band`. */
+  'data-band'?: string;
   /**
    * The heading's id, and therefore the band's accessible name. Supplied by the CALLER rather
    * than generated with `useId`, because this id is also the in-page anchor a table of contents
@@ -488,6 +490,7 @@ export function ContentSection(props: ContentSectionProps) {
       density={density}
       aria-labelledby={labelled ? headingId : undefined}
       data-arrangement={arrangement}
+      data-band={props['data-band']}
     >
       {arranged}
     </Section>

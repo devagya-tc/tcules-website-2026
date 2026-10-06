@@ -314,10 +314,11 @@ const G_QUOTES = [
   {
     quoteHtml:
       '<p>They designed with our constraints in the room, so engineering never opened a file and found a surprise.</p>',
-    name: 'Maren Holt',
-    role: 'Head of Product',
-    company: 'Halden Freight',
-    portrait: kitPortrait('portrait-woman-grey'),
+    name: 'Daniel Okafor',
+    role: 'Chief Product Officer',
+    company: 'Brightwater Labs',
+    /* Light ground, engaged: the grey low-key portrait read sombre under praise (fix round 2). */
+    portrait: kitPortrait('portrait-man-blue-office'),
   },
 ] as const satisfies readonly ProofQuote[];
 
@@ -328,7 +329,7 @@ const G_RATING: ProofRating = {
 };
 
 function GSurface({ surface }: { surface: SectionSurface }) {
-  const [ines, tobias, maren] = G_QUOTES;
+  const [ines, tobias, daniel] = G_QUOTES;
   const inesText: ProofQuote = { ...ines, portrait: undefined };
   return (
     <Section surface={surface}>
@@ -336,10 +337,16 @@ function GSurface({ surface }: { surface: SectionSurface }) {
         <Specimen title={`${surface} · display, centred, with a score`}>
           <Proof quote={inesText} align="center" rating={G_RATING} />
         </Specimen>
+        <Specimen title={`${surface} · display, start-aligned, with a score`}>
+          <Proof quote={{ ...tobias, portrait: undefined }} rating={G_RATING} />
+        </Specimen>
+        <Specimen title={`${surface} · compact, with a portrait and a score`}>
+          <Proof arrangement="compact" quote={ines} rating={G_RATING} />
+        </Specimen>
         <Specimen title={`${surface} · featured, with a footer`}>
           <Proof
             arrangement="featured"
-            quote={maren}
+            quote={daniel}
             footer={
               <CtaRow
                 rule={false}
@@ -347,6 +354,9 @@ function GSurface({ surface }: { surface: SectionSurface }) {
               />
             }
           />
+        </Specimen>
+        <Specimen title={`${surface} · featured, reversed`}>
+          <Proof arrangement="featured" reverse quote={tobias} />
         </Specimen>
         <Specimen title={`${surface} · case, with a score`}>
           <Proof

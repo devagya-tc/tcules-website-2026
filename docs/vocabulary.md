@@ -176,7 +176,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **block-card.css** — `--bcrd-title-tracking-lg` -0.01em · `--bcrd-title-tracking-md` -0.005em · `--bcrd-title-tracking-sm` 0em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-rule-width` 1px · `--bcrd-radius` 0px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
 - **brand-mark.css** — `--bmark-size` 14px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
-- **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-round` 999px · `--btn-outline-rule-width` 1px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
+- **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-outline-icon-size-sm` 16px · `--btn-outline-icon-size-md` 18px · `--btn-outline-icon-size-lg` 24px · `--btn-radius` 8px · `--btn-radius-round` 999px · `--btn-outline-rule-width` 1px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
 - **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 160px
 - **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-measure` 32ch · `--csec-lead-measure` 56ch · `--csec-body-measure` 75ch
 - **cta-row.css** — `--ctarow-rule-width` 1px · `--ctarow-note-measure` 56ch · `--ctarow-centred-measure` 75ch
@@ -207,7 +207,7 @@ against the controls beside it — if you are specifying one, say which of these
 
 Layout is done by these three. Always. Anything you specify is arranged by one of them.
 
-**`Section`** — `as?: ElementType` · `surface?: SectionSurface` · `density?: SectionDensity` · `flush?: boolean` · `children: ReactNode` · `'aria-labelledby'?: string` · `'data-arrangement'?: string`
+**`Section`** — `as?: ElementType` · `surface?: SectionSurface` · `density?: SectionDensity` · `flush?: boolean` · `children: ReactNode` · `'aria-labelledby'?: string` · `'data-band'?: string` · `'data-arrangement'?: string`
 
   where `SectionSurface` = 'paper' | 'tint' | 'ink' | 'blue' · `SectionDensity` = 'tight' | 'open'
 

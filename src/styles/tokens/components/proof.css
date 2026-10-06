@@ -34,7 +34,7 @@
    --proof-mark-inline-size   the quote rule turned on its side: a CENTRED quote has no inline-start
                               edge to run a rule down, so the same 6px blue rule sits above it, this
                               long. A component SIZE, a literal with an explicit name. 48 is about
-                              one and a half capitals of the 34 quote — long enough to read as the
+                              one capital of the 43 centred quote (--text-quote-xl) — long enough to read as the
                               rule and not as a dash, short enough not to read as a divider (§ 4.3:
                               a blue rule is a mark, never a divider).                             */
 :root {
@@ -49,8 +49,10 @@
   --proof-layer: var(--z-base);
 }
 
-/* Paper: long quote copy is quiet neutral; the audited value carries the strongest ink. The name is
-   one step above the quote so the attribution reads as a second voice, not a fainter echo. */
+/* Paper: long quote copy is quiet neutral; the value (a figure's numeral, the rating-led score)
+   carries the blue accent — the colour, not the darkest ink (owner, 6 Oct: blue is the recurring
+   foreground accent). The name is one step above the quote so the attribution reads as a second
+   voice, not a fainter echo. */
 :root,
 [data-surface='paper'] {
   --proof-quote-ink: var(--color-neutral-800); /* 11.81:1 */
@@ -62,7 +64,7 @@
   --proof-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
 }
 
-/* Tint: supporting copy deepens against paper-deep while the audited value stays neutral-950. */
+/* Tint: supporting copy deepens against paper-deep; the value keeps brandeis-500 (5.51:1). */
 [data-surface='tint'] {
   --proof-quote-ink: var(--color-neutral-800); /* 10.54:1 */
   --proof-name-ink: var(--color-neutral-900); /* 13.06:1 */

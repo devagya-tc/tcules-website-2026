@@ -295,6 +295,19 @@ export default function LayoutSpecimenPage() {
         </Specimen>
 
         <Specimen
+          title="scroll='always' columns={1} peek={false} colGap='gutter'"
+          note="The peek switched off: exactly one item in view at every width, 390 included, and the next one wholly off the row's end. For a one-up row whose items are composites — the Slider's one-per-view testimonial, a portrait over a quote — where a 24 sliver of the neighbour reads as a stray photograph edge rather than as more to come. The controls carry that message instead. Default true; ignored without scroll. Compare the 390 shot with the row above."
+        >
+          <Layout scroll="always" columns={1} peek={false} colGap="gutter">
+            {['1', '2', '3'].map((n) => (
+              <Box key={n} tall accent={n === '2'}>
+                {n}
+              </Box>
+            ))}
+          </Layout>
+        </Specimen>
+
+        <Specimen
           title="scroll='always' with no colGap → items touch"
           note="The seam is stated or it is 0, in a scroll row as everywhere. A row of edge-to-edge items is wrong on sight, which is the point."
         >

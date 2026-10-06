@@ -6,12 +6,12 @@
 | ------------------- | ----------------------------------------------------- |
 | **Component**       | `Proof`                                               |
 | **Tier**            | 2 pattern (`src/patterns/Proof/`)                     |
-| **Status**          | implemented · amended 28 Sep 2026 (tracker 2.12) and 29 Sep 2026 (tracker 2.17) — shown to the owner, not merged until approved (★, ruling W1) |
+| **Status**          | implemented · amended 28 Sep 2026 (tracker 2.12), 29 Sep 2026 (tracker 2.17), 1 Oct 2026 and 6 Oct 2026 (cmp-testimonials, two fix rounds) — shown to the owner, not merged until approved (★, ruling W1) |
 | **Token prefix**    | `--proof-*`                                           |
 | **Designer / date** | Codex / 24 Aug 2026                                   |
 | **Implements**      | `docs/briefs/15-testimonial.md` and `docs/briefs/17-stat.md` together, as required by `docs/briefs/README.md` |
 | **Implemented at**  | `src/patterns/Proof/` · `src/styles/tokens/components/proof.css` · specimen `src/app/design/proof/page.tsx` |
-| **Amended**         | **28 Sep 2026** (tracker 2.12; rulings P1, P2; audit §3 Proof, §4) — an optional 1:1 `portrait` through `Media`, an optional `clientMark` through `ClientMark`, `role` optional, and the quote brought onto ch10 B2.07's site blockquote: italic, a 6px rule beside the quote only, the attribution beneath with the name on the quote's first letter, and a white rule on blue. Every section below is amended in place; the changes are collected in **Amendment · 28 Sep 2026** before the self-audit. **29 Sep 2026** (tracker 2.17, owner-approved) — a display scale (`--text-quote-lg`, `--text-stat-lg`), the shared checked date said once, the quote beside stacked figures at 2:1 from lg, and the specimen's client marks rendering at last. Collected in **Amendment · 29 Sep 2026**. **30 Sep 2026** (owner) — **the client mark is removed**: `clientMark`, `ProofClientMark` and the ClientMark render are gone. The company is named in the role line, and a logo under the person's name competed with the portrait beside it. Every `clientMark` reference below is superseded. A broader Proof overhaul is planned. **6 Oct 2026** (cmp-testimonials) — six arrangements, `align`, `rating`, the featured portrait radius and the centred mark; collected in **Amendment · 6 Oct 2026**. **1 Oct 2026** (owner) — **the display quote leaves heading scale**: `--text-quote-lg` 43 → 34 (h3 scale, 34 / 28 / 22), the figure loses its body-font measure cap, display sets at `--measure-lead`, an optional `quote.source` link joins the attribution row, and the quote/figures split takes `--gap-section`. Collected in **Amendment · 1 Oct 2026**. |
+| **Amended**         | **28 Sep 2026** (tracker 2.12; rulings P1, P2; audit §3 Proof, §4) — an optional 1:1 `portrait` through `Media`, an optional `clientMark` through `ClientMark`, `role` optional, and the quote brought onto ch10 B2.07's site blockquote: italic, a 6px rule beside the quote only, the attribution beneath with the name on the quote's first letter, and a white rule on blue. Every section below is amended in place; the changes are collected in **Amendment · 28 Sep 2026** before the self-audit. **29 Sep 2026** (tracker 2.17, owner-approved) — a display scale (`--text-quote-lg`, `--text-stat-lg`), the shared checked date said once, the quote beside stacked figures at 2:1 from lg, and the specimen's client marks rendering at last. Collected in **Amendment · 29 Sep 2026**. **30 Sep 2026** (owner) — **the client mark is removed**: `clientMark`, `ProofClientMark` and the ClientMark render are gone. The company is named in the role line, and a logo under the person's name competed with the portrait beside it. Every `clientMark` reference below is superseded. A broader Proof overhaul is planned. **1 Oct 2026** (owner) — **the display quote leaves heading scale**: `--text-quote-lg` 43 → 34 (h3 scale, 34 / 28 / 22), the figure loses its body-font measure cap, display sets at `--measure-lead`, an optional `quote.source` link joins the attribution row, and the quote/figures split takes `--gap-section`. Collected in **Amendment · 1 Oct 2026**. **6 Oct 2026** (cmp-testimonials) — six arrangements, `align`, `rating`, the featured portrait radius and the centred mark (fix round 2: featured `reverse`, G-case tracks sharing a foot, the score's scale beside it); collected in **Amendment · 6 Oct 2026**. |
 
 The owner accepted the shared component identity in section 17 question 1. The public API, folder,
 token prefix and specimen route therefore use `Proof` rather than separate Testimonial and Stat
@@ -121,7 +121,7 @@ export type ProofProps = ProofCompactProps | ProofDisplayProps;
 | `arrangement` | `'display' \| 'compact'` | `'display'` | Section-scale evidence versus an embedded quotation. It decides composition and quote type, not a free size axis. |
 | `quote` | `ProofQuote` | none | Whether the attributed quotation figure renders. Required for compact. |
 | `figures` | `readonly ProofFigure[]` | none | Whether the checked-figure list renders. Expected count one to four; forbidden for compact. |
-| `source` | `{ label: string; href: string } \| undefined` | none | 1 Oct 2026. A neutral link-emphasis Button (md, `arrow-right`) in the attribution row: beside the speaker while the row has room, beneath when not, at `gutter` from it. Blank label or href → omitted with a warning. Leave it off when the caller shows the case beside the quote. |
+| `source` | `{ label: string; href: string } \| undefined` | none | 1 Oct 2026. A primary link-emphasis Button (md, `arrow-right`; primary since the 6 Oct blue ruling, visual-direction § 4) in the attribution row: beside the speaker while the row has room, beneath when not, at `gutter` from it. Blank label or href → omitted with a warning. Leave it off when the caller shows the case beside the quote. |
 | `quoteHtml` | `string` | none | Trusted, content-seam-sanitised quote body handed to `Prose html`; it does not contain the attribution. |
 | `name` | `string` | none | The speaker. Required: named attribution is mandatory (CS). |
 | `role` | `string \| undefined` | none | The speaker's title. **Optional since 28 Sep 2026** (HO §4, strapi-changes.md entry 4). Missing or blank → the company stands alone on the second line, with no separator. |
@@ -174,7 +174,7 @@ rule do not respond to pointer, keyboard, selection, expansion, availability or 
 No Proof state token exists.
 
 Inline links inside `quoteHtml` keep `Prose`'s existing rest, hover, focus and pressed contract.
-The optional source is the existing `Button` with `emphasis="link"`, `tone="neutral"`, `size="sm"`
+The optional source is the existing `Button` with `emphasis="link"`, `tone="primary"` (6 Oct 2026, blue ruling), `size="sm"`
 and `extendHitArea`; Button owns its hover, keyboard focus, pressed and disabled machinery. Proof
 does not copy, recolour or force those states.
 
@@ -195,13 +195,13 @@ the exact Section ground; the quote rule is decoration.
 | `--proof-quote-ink` | `--color-neutral-800` — 11.81:1 | `--color-neutral-800` — 10.54:1 | `--color-white` — 17.26:1 | `--color-white` — 6.23:1 |
 | `--proof-name-ink` | `--color-neutral-900` — 14.62:1 | `--color-neutral-900` — 13.06:1 | `--color-white` — 17.26:1 | `--color-white` — 6.23:1 |
 | `--proof-attribution-ink` | `--color-neutral-600` — 4.92:1 | `--color-neutral-700` — 7.27:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
-| `--proof-value-ink` | `--color-neutral-950` — 17.10:1 | `--color-neutral-950` — 15.27:1 | `--color-white` — 17.26:1 | `--color-white` — 6.23:1 |
+| `--proof-value-ink` | `--color-brandeis-500` — 6.17:1 | `--color-brandeis-500` — 5.51:1 | `--color-brandeis-300` — 7.32:1 | `--color-white` — 6.23:1 |
 | `--proof-label-ink` | `--color-neutral-700` — 8.14:1 | `--color-neutral-800` — 10.54:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
 | `--proof-checked-ink` | `--color-neutral-600` — 4.92:1 | `--color-neutral-700` — 7.27:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
 | `--proof-quote-rule` | `--color-brandeis-500` — n/a, decoration | `--color-brandeis-500` — n/a, decoration | `--color-brandeis-300` — n/a, decoration | `--color-white` — n/a, decoration (*was `--color-peridot-400` until 28 Sep 2026*) |
 
 **Paper.** The quotation softens to neutral-800 so long display copy does not compete with the
-page heading; the audited value takes neutral-950. Attribution, dates and labels step down through
+page heading; the value — a figure's numeral, the rating-led score — takes the blue accent, brandeis-500 (*amended 6 Oct 2026, blue ruling; was neutral-950*). Attribution, dates and labels step down through
 neutral-600/700 while remaining above the normal-text floor. Only the decorative rule uses the
 action family, so a non-clickable number never appears clickable.
 
@@ -504,7 +504,10 @@ with `--duration-fast` and `--easing-standard`. Under reduced motion those exist
 8. Do not add separate Testimonial, Stat or rating folders if section 17 question 1 accepts Proof;
    repository paths and exports decide this test.
 9. Do not sniff `quoteHtml`, rendered children or punctuation for attribution; search for parsing,
-   child walking and regular expressions and expect none.
+   child walking and regular expressions that look for a name, a dash or a role, and expect none.
+   *(Amended 6 Oct 2026: `bindShortWords` runs a regular expression over the quote's text nodes to
+   bind a one-letter word to the next with a no-break space. That is typesetting, it reads no
+   attribution, and tags are passed through untouched.)*
 10. Do not paint a ground, card edge or oversized quotation mark; computed background remains
     transparent and the glyph/asset tree contains no quote decoration.
 11. Do not mask the portrait to a circle, give it a radius, letterbox it or reserve its box when it is
@@ -774,12 +777,12 @@ value), which the owner's 6 Oct blue ruling (visual-direction § 4) and § 5.3's
   `compact` (optional `rating`), and four new ones: `featured` (1:1 portrait in the 5 of [5, 7] at
   `section`, optional `footer` slot a `block` under the attribution on the name's indent, the stack
   always centred on the portrait; without a portrait it falls back to `display`, footer kept),
-  `case` (`work` slot in 381 beside the display quote in 763, tops aligned, optional `rating`),
+  `case` (`work` slot in 381 beside the display quote in 763, tops and feet aligned, optional `rating`),
   `group` (2 or 3 quotes, each 64 portrait beside its name, attributions pinned to the row's foot,
   `gutter` across from lg, `column` down below it), and `rating` ([5, 7] at `section`: the score at
   `--text-score` over its pill in the 5, the display quote in the 7, centred on each other). Slots take what a pattern may not import: BlockCard (`work`), CtaRow (`footer`). The
   testimonial slider is a composition: `Slider perView={1}` of `featured` slides.
-- **`ProofRating`** `{ score, platform, href, mark? }`. Proof composes the RatingBadge a `block`
+- **`ProofRating`** `{ score, platform, href, mark?, scale? }`. Proof composes the RatingBadge a `block`
   under the attribution, indented to the name when the attribution is. Real ratings only beside real
   quotes (§ 5.8).
 - **Centred quote.** The rule leaves the quote's side and sits above it as a 48 × 6 mark
@@ -796,6 +799,26 @@ value), which the owner's 6 Oct blue ruling (visual-direction § 4) and § 5.3's
   a studio photograph.
 - **RatingBadge** gains `showScore` (default true). `false` prints "Rated on Clutch" and keeps the
   score in visually hidden text after the platform, so the name starts with the visible words.
+- **Fix round 2 (6 Oct 2026).**
+  - `featured` takes **`reverse`**: the portrait at the row's end from 1024 through Layout's
+    `reverse={{ lg: true }}` (visual only; DOM and phone order keep the portrait first). Two pages
+    using G-featured take opposite sides, and the slider opens on a speaker no other band shows.
+  - **`case` shares a foot.** The quote figure is stretched to the card's height (Layout's default
+    `align`, no longer `start`) and pinned (`pinLast`), its figcaption holding the attribution and,
+    a `block` under it, the score — so the client's words start level with the cover and the name
+    and pill land level with the card's foot. Was: the column ended about 200px above the card's
+    description. The quote's `trailing` part is how the badge travels inside the pinned caption.
+  - **The score has context.** `ProofRating.scale` (default "5"): rating-led prints "/ 5" on the
+    numeral's baseline at h3 serif and "Average client rating" in the mono label voice under it; the
+    pill's hidden text says "4.8 out of 5" (`RatingBadge` `scale`).
+  - **Speaker centred on the portrait.** The name and role are centred on the 64 portrait, not hung
+    from its top edge.
+  - **No stranded one-letter word.** Quote text binds "I" and "a" to the next word with a no-break
+    space (`bindShortWords`, tags untouched): the real quote broke "seamless. I / found".
+  - **Group peers are written to one length.** The rule runs the height of its quote, so peers of
+    unequal length stagger the band's most saturated mark along the row's top edge. That is a content
+    rule (≤ 25 words, the same line count across), not a layout one: a peer cannot borrow its
+    neighbour's height without a hand-set template.
 - **Specimens.** `/design/kit/testimonials` (every band at 1470 and 390, fold-measured); `/design/proof`
   § 19 renders the new arrangements on all four surfaces.
 

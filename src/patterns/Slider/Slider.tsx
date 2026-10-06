@@ -99,7 +99,8 @@ type Position = { ready: boolean; atStart: boolean; atEnd: boolean };
  *                                block (24)
  *   ━━━━━━━━ rail (thumb = what is in view)                              (←)  (→)
  *
- * § 1.4 budgets the controls at 24 + 40 = 64 under the tallest slide; that is exactly this.
+ * § 1.4 budgets the controls at 24 + 48 = 72 under the tallest slide (48 steppers since fix round 2,
+ * cmp-testimonials, 6 Oct 2026); that is exactly this.
  *
  * The scrolling is the BROWSER'S: Layout's scroll mode is a CSS scroll-snap row, so before this
  * component hydrates — and if its script never runs — the row still swipes, snaps, and moves as Tab
@@ -252,6 +253,9 @@ export function Slider({ label, children, perView = 3, align = 'start' }: Slider
     return (
       <Button
         emphasis="outline"
+        /* lg: a 48 circle with a 24 arrow (fix round 2, 6 Oct 2026). At 40 with a 16 glyph the
+           steppers read as an afterthought beside a 477 portrait or a row of 392 cards. */
+        size="lg"
         iconOnly
         icon={<Icon name={direction === -1 ? 'arrow-left' : 'arrow-right'} />}
         extendHitArea

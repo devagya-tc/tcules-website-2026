@@ -30,6 +30,12 @@ export type RatingBadgeProps = {
    * (opens in a new tab)".
    */
   showScore?: boolean;
+  /**
+   * The top of the platform's scale ("5"), said after the score in the hidden text when the pill
+   * does not print the score — "Rated on Clutch, 4.8 out of 5" — because the large numeral beside it
+   * shows "/ 5" to the eye (rating-led, fix round 2). Ignored while `showScore` is on.
+   */
+  scale?: string;
 };
 
 /**
@@ -52,6 +58,7 @@ export function RatingBadge({
   icon,
   mark,
   showScore = true,
+  scale,
 }: RatingBadgeProps) {
   return (
     <a className={styles.badge} href={href} target="_blank" rel="noreferrer noopener">
@@ -66,7 +73,9 @@ export function RatingBadge({
       {/* Each run of text is its own box, trimmed to the capitals (see .text), so the flex row
           centres the star and the mark on the middle of the caps rather than on a line box that
           carries the face's descender space below them. */}
-      <span className={styles.text}>{showScore ? `${score} on` : 'Rated on'}</span>
+      <span className={styles.text}>{showScore ? `${score} on` : 'Rated on'}</span>{' '}
+      {/* A literal space, so the accessible name is "Rated on Clutch" whatever the browser makes
+          of the flex items' boundary; whitespace in a flex row renders nothing. */}
       <span className={styles.lockup}>
         {mark ? (
           <span className={styles.mark} aria-hidden="true">
@@ -75,7 +84,12 @@ export function RatingBadge({
         ) : null}
         <span className={styles.text}>{platform}</span>
       </span>
-      {showScore ? null : <span className={styles.hint}>, {score}</span>}
+      {showScore ? null : (
+        <span className={styles.hint}>
+          , {score}
+          {scale ? ` out of ${scale}` : null}
+        </span>
+      )}
       <span className={styles.hint}> (opens in a new tab)</span>
     </a>
   );

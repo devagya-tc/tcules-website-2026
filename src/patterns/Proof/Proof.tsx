@@ -78,6 +78,18 @@ export type ProofRating = {
   href: string;
   /** The platform's mark beside its name. */
   mark?: BrandMarkName;
+  /**
+   * The top of the platform's scale, as published — "5" for Clutch, G2 and Trustpilot. Rating-led
+   * prints it at the score's side ("4.8 / 5"), so the numeral reads as a score out of something
+   * rather than a lone number in an empty field (fix round 2, 6 Oct 2026). Default "5".
+   */
+  scale?: string;
+  /**
+   * What the score measures, in words, under the scale in rating-led. Default "Average client
+   * rating" — what Clutch, G2 and Trustpilot each publish (the mean of client reviews). Pass the
+   * platform's own phrase where its score is something else, such as a product score.
+   */
+  basis?: string;
 };
 
 /**
@@ -131,15 +143,30 @@ type ProofFeaturedProps = {
    * testimonial, so it travels with it.
    */
   footer?: ReactNode;
+  /**
+   * The mirror: the portrait at the END of the row from 1024, the quote at the start — [7, 5] with
+   * the quote in the 7 (fix round 2, 6 Oct 2026: four featured bands down a page were one
+   * silhouette). Visual only, through Layout's `reverse`, so the DOM keeps the portrait first and a
+   * phone still sees the person before what they said; the portrait is decorative (`alt=""`), so
+   * the two orders carry no meaning against each other. Two service pages that both use G-featured
+   * take opposite sides.
+   */
+  reverse?: boolean;
   figures?: never;
 };
 
 /**
  * G-case (§ 3.6, owner 1 Oct: "the work first, then what the client said"): [1, 2] at `section`,
- * the case in the 381 track and the quote in the 763, tops aligned, the score a `block` under the
- * attribution. The quote is the display role (34), not the reading one (fix round 1): at 28 it
- * matched the card's title and neither led, and the client's words stopped 260px short of the
- * card's foot. At 34 across the 763 they carry weight against the image and fill the column.
+ * the case in the 381 track and the quote in the 763, the score a `block` under the attribution.
+ * The quote is the display role (34), not the reading one (fix round 1): at 28 it matched the
+ * card's title and neither led.
+ *
+ * The two tracks share a top AND a bottom line (fix round 2, 6 Oct 2026). The quote column is
+ * stretched to the card's height and its attribution and score are pinned to its foot, so the
+ * client's words start level with the cover and the name lands level with the card's "Read the
+ * case" — the pinned-foot rule of the group and of every card row. Before, the column stopped about
+ * 200px above the card's description and left the band's lower right an empty well. Below 1024
+ * the tracks stack, the column is its own height and the pin is a no-op.
  */
 type ProofCaseProps = {
   arrangement: 'case';
@@ -311,7 +338,28 @@ type QuotePresentation = {
   align?: ProofAlign;
   portrait?: 'inline' | 'none';
   pin?: boolean;
+  /**
+   * What travels with the attribution — the score's pill (case) — set a `block` under it inside
+   * the figcaption, so a pinned attribution takes it to the foot too. Who said it, then how the
+   * market rates them, as one caption.
+   */
+  trailing?: ReactNode;
 };
+
+/**
+ * Bind a one-letter word to the word after it with a no-break space, in the text of trusted quote
+ * HTML (tags untouched). A display-size quote is the band's one idea, and a line that ends on a lone
+ * "I" or "a" — "seamless. I / found" (fix round 2, 6 Oct 2026) — is the ragged break a reader sees
+ * first. The typesetter's rule, applied once here so no CMS editor has to type an entity.
+ */
+function bindShortWords(html: string): string {
+  return html
+    .split(/(<[^>]*>)/)
+    .map((part) =>
+      part.startsWith('<') ? part : part.replace(/(^|[\s(“"‘'])(I|a|A) (?=\S)/g, '$1$2\u00a0'),
+    )
+    .join('');
+}
 
 const SIZE_CLASS = { xl: styles.sizeXl, lg: styles.sizeLg, md: styles.sizeMd } as const;
 
@@ -321,6 +369,7 @@ function Quote({
   align = 'start',
   portrait: portraitPlace = 'inline',
   pin = false,
+  trailing,
 }: { quote: ProofQuote } & QuotePresentation) {
   const inlinePortrait =
     portraitPlace === 'none' ? undefined : acceptPortrait(quote.portrait, quote.name);
@@ -334,6 +383,50 @@ function Quote({
     warn(`source for "${quote.name}" needs a label and an href; omitting the link.`);
   }
 
+  const indented = !inlinePortrait && !centred;
+  /* The speaker — portrait and name never part, so they are a nowrap Cluster of their own, the
+     two-line name and role centred on the 64 portrait so face and name read as one person (fix
+     round 2, 6 Oct 2026: top-aligned, the text hung from the portrait's top edge over dead space). */
+  const speaker = (
+    <Cluster nowrap colGap="block" align="center" className={styles.speaker}>
+      {inlinePortrait ? <Portrait portrait={inlinePortrait} /> : null}
+      <Layout rowGap="inline" className={styles.attributionText}>
+        <span className={styles.name}>{quote.name}</span>
+        <span className={styles.role}>
+          {role ? `${role}, ${quote.company}` : quote.company}
+        </span>
+      </Layout>
+    </Cluster>
+  );
+  /* The source link: beside the speaker while the row has room, beneath when it does not. Who
+     said it, then where to check it. */
+  const sourceLink = source ? (
+    <Button
+      as="a"
+      href={source.href}
+      emphasis="link"
+      tone="primary"
+      size="md"
+      extendHitArea
+      icon={<Icon name="arrow-right" />}
+    >
+      {source.label}
+    </Button>
+  ) : null;
+  const row = sourceLink ? (
+    <Cluster
+      colGap="gutter"
+      rowGap="text"
+      align="center"
+      justify={centred ? 'center' : undefined}
+    >
+      {speaker}
+      {sourceLink}
+    </Cluster>
+  ) : (
+    speaker
+  );
+
   return (
     <Layout
       as="figure"
@@ -345,49 +438,37 @@ function Quote({
       {/* Centred: the quote rule on its side, a block above the quote. Decorative. */}
       {centred ? <span className={styles.mark} aria-hidden="true" /> : null}
       <blockquote className={styles.quoteText}>
-        <Prose html={quote.quoteHtml} className={styles.quoteProse} />
+        <Prose html={bindShortWords(quote.quoteHtml)} className={styles.quoteProse} />
       </blockquote>
       {/* The figcaption is the attribution row, and the figure's last child. With a portrait, the
           portrait sits flush on the left margin, under the rule, and the text starts a bind (block,
           24) to its right; without one, the text is indented so the name lands on the quote's first
-          letter (ch10 B2.07). Centred, there is no edge to land on: the row centres. */}
-      <Cluster
-        as="figcaption"
-        colGap="gutter"
-        rowGap="text"
-        align="center"
-        justify={centred ? 'center' : undefined}
-        className={cx(
-          styles.attribution,
-          !inlinePortrait && !centred && styles.attributionIndented,
-        )}
-      >
-        {/* The speaker — portrait and name never part, so they are a nowrap Cluster of their own.
-            The source link is the figcaption's second child: beside the speaker while the row has
-            room, beneath when it does not. Who said it, then where to check it. */}
-        <Cluster nowrap colGap="block" align="start" className={styles.speaker}>
-          {inlinePortrait ? <Portrait portrait={inlinePortrait} /> : null}
-          <Layout rowGap="inline" className={styles.attributionText}>
-            <span className={styles.name}>{quote.name}</span>
-            <span className={styles.role}>
-              {role ? `${role}, ${quote.company}` : quote.company}
-            </span>
-          </Layout>
+          letter (ch10 B2.07). Centred, there is no edge to land on: the row centres. With a
+          `trailing` part the caption is a stack — the row, then the part a block under it, both on
+          the same indent. */}
+      {trailing ? (
+        <Layout
+          as="figcaption"
+          rowGap="block"
+          justifyItems={centred ? 'center' : 'start'}
+          className={cx(styles.attribution, indented && styles.attributionIndented)}
+        >
+          {row}
+          {trailing}
+        </Layout>
+      ) : (
+        <Cluster
+          as="figcaption"
+          colGap="gutter"
+          rowGap="text"
+          align="center"
+          justify={centred ? 'center' : undefined}
+          className={cx(styles.attribution, indented && styles.attributionIndented)}
+        >
+          {speaker}
+          {sourceLink}
         </Cluster>
-        {source ? (
-          <Button
-            as="a"
-            href={source.href}
-            emphasis="link"
-            tone="primary"
-            size="md"
-            extendHitArea
-            icon={<Icon name="arrow-right" />}
-          >
-            {source.label}
-          </Button>
-        ) : null}
-      </Cluster>
+      )}
     </Layout>
   );
 }
@@ -412,47 +493,14 @@ function ratingBadge(rating: ProofRating, showScore = true) {
       icon={<Icon name="star" size="sm" />}
       mark={rating.mark ? <BrandMark name={rating.mark} /> : undefined}
       showScore={showScore}
+      scale={showScore ? undefined : scaleOf(rating)}
     />
   );
 }
 
-/** The pill in its own Cluster, so the grid cell does not stretch it: it sizes to its content. */
-function Badge({ rating, className }: { rating: ProofRating; className?: string }) {
-  return <Cluster className={className}>{ratingBadge(rating)}</Cluster>;
-}
-
-/**
- * A quote and, when there is one, the score a `block` under its attribution — the same beat as the
- * quote to its attribution, so the two read as one piece of evidence (1 Oct 2026, owner). Start-
- * aligned, the badge takes the attribution's indent, so name and pill share an edge.
- */
-function QuoteWithRating({
-  quote,
-  rating,
-  ...presentation
-}: { quote: ProofQuote; rating?: ProofRating } & QuotePresentation) {
-  const centred = presentation.align === 'center';
-  if (!validRating(rating)) return <Quote quote={quote} {...presentation} />;
-  /* The badge shares the name's edge: indented exactly when the attribution is — start-aligned with
-     no portrait rendering beside the name. */
-  const inlinePortrait =
-    presentation.portrait !== 'none' && acceptPortraitSilently(quote.portrait);
-  const indented = !centred && !inlinePortrait;
-  return (
-    <Layout
-      rowGap="block"
-      justifyItems={centred ? 'center' : undefined}
-      className={styles.quote}
-    >
-      <Quote quote={quote} {...presentation} />
-      <Badge rating={rating} className={cx(indented && styles.attributionIndented)} />
-    </Layout>
-  );
-}
-
-/** Whether a portrait would render, without a second development warning. */
-function acceptPortraitSilently(portrait: ProofPortrait | undefined): boolean {
-  return Boolean(portrait && isFilled(portrait.src) && hasDimensions(portrait));
+/** The top of the rating's scale, "5" unless the platform publishes another. */
+function scaleOf(rating: ProofRating): string {
+  return isFilled(rating.scale) ? rating.scale.trim() : '5';
 }
 
 /**
@@ -622,11 +670,11 @@ function Evidence(props: ProofCompactProps | ProofDisplayProps) {
       className={styles.root}
     >
       {acceptedQuote ? (
-        <QuoteWithRating
+        <Quote
           quote={acceptedQuote}
-          rating={props.rating}
           size={arrangement === 'compact' ? 'md' : centred ? 'xl' : 'lg'}
           align={align}
+          trailing={validRating(props.rating) ? ratingBadge(props.rating) : undefined}
         />
       ) : null}
       {acceptedFigures.length > 0 ? <Figures figures={acceptedFigures} /> : null}
@@ -636,7 +684,7 @@ function Evidence(props: ProofCompactProps | ProofDisplayProps) {
 
 /* ── featured ───────────────────────────────────────────────────────────────────── */
 
-function Featured({ quote, footer }: ProofFeaturedProps) {
+function Featured({ quote, footer, reverse = false }: ProofFeaturedProps) {
   if (!validQuote(quote)) {
     warn('featured arrangement has no valid quote; rendering nothing.');
     return null;
@@ -657,9 +705,13 @@ function Featured({ quote, footer }: ProofFeaturedProps) {
     );
   }
   const copy = <Quote quote={quote} size="lg" portrait="none" />;
+  /* Reversed, the template mirrors with its children — [5, 7] becomes 7fr 5fr with the portrait
+     still in the 5, now at the row's end. From 1024 only: below it the row is one track and the
+     portrait leads, as it does forward. */
   return (
     <Layout
       columns={{ base: 1, lg: [5, 7] }}
+      reverse={reverse ? { lg: true } : undefined}
       colGap="section"
       rowGap="stack"
       align="center"
@@ -687,16 +739,22 @@ function Case({ work, quote, rating }: ProofCaseProps) {
     warn('case arrangement has no valid quote; rendering nothing.');
     return null;
   }
+  /* Stretched (Layout's default `align`), so the quote figure is the card's height; `pin` sends
+     its figcaption — the attribution and, under it, the score — to that foot. */
   return (
     <Layout
       columns={{ base: 1, lg: [1, 2] }}
       colGap="section"
       rowGap="stack"
-      align="start"
       className={styles.root}
     >
       {work}
-      <QuoteWithRating quote={quote} rating={rating} size="lg" />
+      <Quote
+        quote={quote}
+        size="lg"
+        pin
+        trailing={validRating(rating) ? ratingBadge(rating) : undefined}
+      />
     </Layout>
   );
 }
@@ -753,9 +811,21 @@ function RatingLed({ rating, quote }: ProofRatingProps) {
           screen reader ("Rated on Clutch, 4.8"), so the numeral is hidden from it rather than said
           twice. */}
       <Layout rowGap="block" justifyItems="start">
-        <span className={styles.score} aria-hidden="true">
-          {rating.score}
-        </span>
+        {/* The score with its context at its side (fix round 2, 6 Oct 2026): "/ 5" on the
+            numeral's baseline, what the number is under it. Alone, a 105 numeral over a small pill
+            read as a lone figure in an empty field rather than a confident score. All of it is the
+            eye's: the pill's link name says "Rated on Clutch, 4.8 out of 5". */}
+        <div aria-hidden="true">
+          <Cluster nowrap colGap="text" align="baseline">
+            <span className={styles.score}>{rating.score}</span>
+            <Layout rowGap="tight">
+              <span className={styles.scoreScale}>/ {scaleOf(rating)}</span>
+              <span className={styles.scoreLabel}>
+                {isFilled(rating.basis) ? rating.basis : 'Average client rating'}
+              </span>
+            </Layout>
+          </Cluster>
+        </div>
         {ratingBadge(rating, false)}
       </Layout>
       <Quote quote={quote} size="lg" portrait="none" />

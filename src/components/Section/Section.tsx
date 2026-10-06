@@ -48,6 +48,11 @@ export type SectionProps = {
   id?: string;
   /** Accessible name relationship for a band that is exposed as a labelled region. */
   'aria-labelledby'?: string;
+  /**
+   * The band's archetype (visual-direction § 3.4: `A` to `S`, or `strip`), emitted for `fold:check`,
+   * which measures every band by it (§ 1.3). A marker for the gate, never a style hook.
+   */
+  'data-band'?: string;
   /** Optional component-owned arrangement marker for rendered-output acceptance checks. */
   'data-arrangement'?: string;
 };
@@ -74,12 +79,14 @@ export function Section({
   id,
   'aria-labelledby': ariaLabelledBy,
   'data-arrangement': dataArrangement,
+  'data-band': dataBand,
 }: SectionProps) {
   return (
     <Tag
       id={id}
       aria-labelledby={ariaLabelledBy}
       data-arrangement={dataArrangement}
+      data-band={dataBand}
       data-surface={surface}
       className={cx(
         styles.section,
