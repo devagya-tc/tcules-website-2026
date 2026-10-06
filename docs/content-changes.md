@@ -343,3 +343,22 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 **Why.** The fix-round-1 review: E parts read as a document and was the page's fifth tile set; bands 7 to 12 repeated one split; the FAQ's open answer was the densest text on the page; the photographs were interchangeable office stock and one carried printed type. **Found in.** `kit/page-design-systems`, fix round 1.
 
 **Still open (content).** The Auxentios quote is the one approved client quote, so it repeats on Product Design's G band until a second quote is approved; Benchmark Gensuite's case is a C-pair card on four service pages.
+
+### 8.2 page-design-systems fix round 2 (6 Oct 2026)
+
+**Page / section.** `/design/service-page/design-systems` (`design-systems.ts`, and the page's row in `SERVICE_PHOTO_SLOTS`, `src/lib/photos.ts`).
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| — | section order | B, H, E parts, J, C-icon, E thread, G, K, D-faq, C-pair, L | B, H, E parts, J, C-icon, E thread, M, G, K, D-faq, L. The proof is one run, the work then the client's words, and the questions sit last before the form; the page no longer proves itself twice or ends on a second evidence block |
+| G proof | case beside the quote | Auxentios · Industrial CPQ / A system from day one / Components, tokens, guidelines and layout rules, from domain research and eight interviews. | none: the card moves, unchanged, to the first of the evidence covers directly above, so the quote is the band's one large thing (it was a 380-wide card beside a quote floating at mid-height) |
+| G proof | eyebrow | Proof | In their words (the band above is now "Evidence") |
+| G proof | lead | The visual system grew alongside the first release, from the same research, rather than being retrofitted. | none (the head centres over the typographic quote; the Auxentios card body says it) |
+| Evidence (C-pair, now M) | lead | Two more products where shared components and rules carried the work. Each claims only what its record shows. | Three products where shared components and rules carried the work. |
+| Evidence | cases | Doodle, Benchmark Gensuite | Auxentios, Doodle, Benchmark Gensuite (three covers, M) |
+| Evidence | Benchmark Gensuite title | One experience across 75+ applications | One experience across 75+ apps (three lines with "applications" alone at 1024) |
+| Evidence | scope note | Neither record establishes coded implementation or organisation-wide adoption. | none on the service page. **Ask:** the hedge belongs on the two case pages, where the record is |
+| C-icon router | `more` | none | Not sure which? Start with an audit (the Design System Audit). The router's foot ends on the photograph's bottom edge |
+| Photos | B / router / K | screen-over-shoulder / designer-monitor-ui / wireframe-wall | swatch-book-pages (a colour library, page by page) / white-bricks-pile (unpainted components) / swatch-ring-white (a whole scale laid out): three new Unsplash photographs, catalogued, measured neutral and quiet. The case covers are the page's only screens |
+
+**Why.** Fix round 2 review: B's counterweight read as a skeleton loader, the router and case images were postage stamps, three device shots read as generic stock, the proof was split by K and the FAQ, and the evidence band disclaimed itself. **Found in.** `kit/page-design-systems`, fix round 2.

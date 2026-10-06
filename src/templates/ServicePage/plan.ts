@@ -29,11 +29,20 @@ import type {
  *   § 5.6  the page's photographs come from its slot table (SERVICE_PHOTO_SLOTS): B, I and K by role,
  *          the two head-track asides in page order, the router preferring `aside1`. K's frame follows
  *          its photograph: landscape 3:2 where the master resolves at 667, else the portrait 4:5.
- *   § 6.4  the texture signature: `counterweight` on B where its copy column has room, `horizon` on
- *          the band directly above the tint proof band unless it ends in ruled rows, `closing` on L.
- *          A page whose B has no room for the counterweight spends that placement on its J statement
- *          instead — the stepped `corner` field in the band's top-end corner (fix round 2; it was
- *          `head-half`, which read as a pale smudge and ran behind the sentence's first line).
+ *   § 6.4  the texture signature: `horizon` on the band directly above the tint proof band unless it
+ *          ends in ruled rows, `closing` on L, and the third placement on the J statement — the
+ *          stepped `corner` field in the band's top-end corner (fix round 2; it was `head-half`, which
+ *          read as a pale smudge and ran behind the sentence's first line). B carries no texture
+ *          (page-design-systems fix round 2, 6 Oct 2026): its `counterweight` floated under two tiles
+ *          as a free-standing grey rectangle, a skeleton loader at 1470 and an orphaned block at 390.
+ *   § 3.2  a B with two tiles gives the photograph the large track (`photoWeight`, 667 at 6:5 beside
+ *          the copy's 477): two tiles leave a 667 copy column half empty, and the photograph is what
+ *          the band can spend the width on. Four tiles fill the 667, so the photo keeps the 477.
+ *   § 3.4  a C-icon router of FOUR routes is B's geometry (`split`): the photograph 4:5 beside a
+ *          2 × 2 of icon cards in the 667, ending on the cards' last line, and image-led on a phone.
+ *          The head-track aside cut it to a 381 × 160 strip under the head, and at 390 the band was
+ *          one more head-and-rows run. Six routes need the 763 for three rows of two, so they keep
+ *          the beside head with its aside.
  *   § 3.5  J centres its sentence across the full measure unless a neighbour is centred (fix round
  *          2): a split J between two beside bands put four bands' content on one 1/3 line.
  *   § 7.1  the head form follows the body: a thread's E band centres its head from 1024 (start below,
@@ -81,8 +90,10 @@ export type SectionBand = BandBase & {
   photo?: PhotoId;
   /** `headSide` for a beside band with an aside (§ 3.2 rule 4 for head tracks). */
   headSide: 'start' | 'end';
-  /** B only: the copy column has room for the counterweight field (≤ 2 tiles). */
-  counterweight: boolean;
+  /** B only: the photograph takes the large track, because the copy is two tiles (§ 3.2). */
+  photoWeight: boolean;
+  /** C-icon only: four routes take the media split, the photo beside the 2 × 2 (§ 3.4). */
+  split: boolean;
   /** E only: the head is the H-row (heading beside its lead) rather than stacked over the diagram. */
   headRow: boolean;
 };
@@ -224,26 +235,37 @@ export function planBands(story: ServiceStory): Band[] {
     }
     const archetype = archetypeOf(entry, Boolean(slots) && !bUsed);
     let photo: PhotoId | undefined;
-    let counterweight = false;
+    let photoWeight = false;
+    let split = false;
     if (archetype === 'B') {
       bUsed = true;
       photo = slots?.b;
       const signals = job(entry);
-      counterweight = signals?.kind === 'signals' && signals.items.length <= 2;
+      photoWeight = signals?.kind === 'signals' && signals.items.length <= 2;
     } else if (archetype === 'C-icon') {
       photo = takeAside(0);
+      const router = job(entry);
+      split = router?.kind === 'router' && router.items.length + (router.also ? 1 : 0) === 4;
     } else if (archetype === 'F' || archetype === 'D') {
       photo = takeAside(1);
     }
+    /* § 3.5: a G with no case beside its quote is the typographic band — the quote centred
+       (Proof `align="center"`, "the typographic G band under a centred head") — so its head centres
+       with it, unless a lead splits the head into the H-row. A start head over a centred quote was
+       two alignments in one band (page-design-systems fix round 2). */
+    const proof = job(entry);
+    const typographic =
+      archetype === 'G' && proof?.kind === 'proof' && !proof.case && !entry.lead;
     return {
       kind: 'section',
       section: entry,
       archetype,
-      centred: ALWAYS_CENTRED.has(archetype),
+      centred: ALWAYS_CENTRED.has(archetype) || typographic,
       horizon: false,
       photo,
       headSide: 'start',
-      counterweight,
+      photoWeight,
+      split,
       headRow: false,
     };
   });
@@ -293,19 +315,16 @@ export function planBands(story: ServiceStory): Band[] {
   });
 
   /* Pass 3: § 6.4's budget. `closing` on L always counts (the close is the page's last band); a J
-     statement takes `corner` only with a placement left over, never beside another textured
-     band or directly above the close, and never on a page whose B carries the counterweight — both
-     are end-side, and successive side-anchored placements zig-zag. */
+     statement takes `corner` only with a placement left over, never beside another textured band or
+     directly above the close. */
   const textured = (band: Band | undefined): boolean => {
     if (!band) return false;
     if (band.horizon) return true;
-    if (band.kind === 'section') return band.counterweight;
     return band.kind === 'statement' && band.corner;
   };
   const spent = () => 1 + bands.filter(textured).length;
-  const counterweightUsed = bands.some((band) => band.kind === 'section' && band.counterweight);
   bands.forEach((band, index) => {
-    if (band.kind !== 'statement' || counterweightUsed) return;
+    if (band.kind !== 'statement') return;
     const last = index === bands.length - 1;
     if (
       spent() < TEXTURE_BUDGET &&

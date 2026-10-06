@@ -231,15 +231,18 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'studio-whiteboard-crit',
     aside2: 'hands-sketches-markers',
   },
-  /* design-systems, fix round 1 (6 Oct 2026): the router's aside is a screen of product UI
-     (`designer-monitor-ui`, was aside 2 and unused) rather than the flatlay, whose printed lettering
-     broke the no-type-on-images ruling; K is the wall of printed screens being traced
-     (`wireframe-wall`, was the unused banner slot), the audit's own act, at the landscape 3:2, in
-     place of an empty white desk. No I banner on the page, so no banner photo. */
+  /* design-systems, fix round 2 (6 Oct 2026): three screen-on-a-device shots (a soft monitor
+     showing another brand's guide file, a designer's monitor, the case's laptop) read as generic
+     stock, and K's wall of paper wireframes was UX sketching, not systems work. Each slot now shows
+     the system's own artefact, crisp and type-free: B, the drift band, a colour library page by page
+     (`swatch-book-pages`); the router, unpainted components before they are composed
+     (`white-bricks-pile`); K, a whole scale laid out in order, the survey an audit makes
+     (`swatch-ring-white`). The case covers are the page's only screens. No I banner, so no banner
+     photo; aside 2 is unused (the page has no F or D band). */
   'design-systems': {
-    b: 'screen-over-shoulder',
-    k: 'wireframe-wall',
-    aside1: 'designer-monitor-ui',
+    b: 'swatch-book-pages',
+    k: 'swatch-ring-white',
+    aside1: 'white-bricks-pile',
     aside2: 'desk-minimal-white',
   },
   'ai-product-ux': {

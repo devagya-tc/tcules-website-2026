@@ -271,10 +271,13 @@ export function Record({ block }: { block: Of<'record'> }) {
    under it (page-design-systems fix round 1, 6 Oct 2026: the bracket over a row of four tiles was
    the page's fifth tile set and read as a document, one sentence across 1240 above a hairline row).
 
-   Arrangement is three Layout tracks — parts, ring, parts — centred on the ring, collapsing to one
-   column below 1024, where the ring falls between the two pairs; the loop's name closes the set,
-   a `stack` under it like every part, centred from 1024 and on the start edge with the parts below. The drawing is decorative (`aria-hidden`); every word
-   is in the lists and headings beside it. */
+   Arrangement is three Layout tracks — parts, ring, parts — centred on the ring from 1024. Below it
+   the parts are one column, and the ring leads the set rather than falling between the two pairs,
+   where at 390 it sat unlabelled between Components and Design assets (fix round 2): the drawing is
+   the whole system, so it goes above the list of what is in it. The loop's name closes the set, a
+   `stack` under it like every part, centred from 1024 and on the start edge below. The drawing is
+   decorative (`aria-hidden`) and drawn twice, one copy per width with the other `display: none`,
+   so it never reaches the accessibility tree; every word is in the lists and headings beside it. */
 const ORBIT = 240;
 const ORBIT_C = ORBIT / 2;
 const LOOP_R = 112;
@@ -295,12 +298,12 @@ const NODES: readonly (readonly [number, number])[] = [
 /* Where a node's horizontal leader meets the loop, on the node's own side. */
 const LEADER_X = Math.sqrt(LOOP_R * LOOP_R - NODE_AT * NODE_AT);
 
-function Orbit() {
+function Orbit({ at }: { at: 'lead' | 'middle' }) {
   const top = ORBIT_C - LOOP_R;
   const bottom = ORBIT_C + LOOP_R;
   return (
     <svg
-      className={styles.orbit}
+      className={at === 'lead' ? styles.orbitLead : styles.orbitMiddle}
       viewBox={`0 0 ${ORBIT} ${ORBIT}`}
       aria-hidden="true"
       focusable="false"
@@ -372,11 +375,10 @@ export function Parts({ block }: { block: Of<'parts'> }) {
   const half = Math.ceil(block.items.length / 2);
   return (
     <Layout rowGap="stack">
+      <Orbit at="lead" />
       <Layout columns={{ base: 1, lg: [1, 1, 1] }} colGap="column" rowGap="stack" align="center">
         <PartList items={block.items.slice(0, half)} side="start" />
-        <Layout justifyItems="center">
-          <Orbit />
-        </Layout>
+        <Orbit at="middle" />
         <PartList items={block.items.slice(half)} side="end" />
       </Layout>
       <Layout rowGap="tight" className={styles.hub}>

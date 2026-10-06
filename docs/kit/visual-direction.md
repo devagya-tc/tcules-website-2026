@@ -950,7 +950,7 @@ any photo for a better catalogue match, as long as the gate still passes.
 | product-design (warm) | `hands-trackpad` (fix round 2: the sticky wall was the page's one off-key, saturated frame) | — (no banner; fix round 1, 7 Oct) | `designer-tablet-monitor` (3:2, landscape offer) | `studio-whiteboard-crit` | `hand-sketch-wireframe` | B, aside 1 |
 | software-development (warm) | `designer-desk-monitor` | `workshop-hands-writing` | `whiteboard-pair-laptop` | `studio-session-talk` | `team-laptops-table` | aside 1 |
 | design-engineering (warm) | `stylus-tablet-sketch` | `whiteboard-two-hands` | `sticky-grid-minimal` | `studio-whiteboard-crit` | `hands-sketches-markers` | aside 1 |
-| design-systems (cool) | `screen-over-shoulder` | `wireframe-wall` | `desk-minimal-white` | `desk-flatlay-devices` (crop out the printed "to") | `designer-monitor-ui` (crop from the right) | `studio-whiteboard-crit` as a stand-in cover |
+| design-systems (cool) | `swatch-book-pages` (fix round 2, 6 Oct: the system's own artefacts, not screens) | — (no banner) | `swatch-ring-white` (3:2, landscape offer) | `white-bricks-pile` (the four-route router's media split) | — (no F or D band) | `studio-whiteboard-crit` as a stand-in cover |
 | ai-product-ux (cool) | `pair-testing-overhead` | `workshop-whiteboard-lounge` | `conversation-chalkboard` | `hands-sticky-blue-pen` | `pencil-wireframe-red` | `studio-session-talk` as a stand-in cover |
 | product-modernisation (cool) | `wall-sketching-portrait` | `office-calm-interior` | `pencil-wireframe-violet` | `board-review-backs` | `pair-desk-through-plants` | `studio-whiteboard-crit` as a stand-in cover |
 

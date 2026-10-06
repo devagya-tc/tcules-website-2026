@@ -40,9 +40,12 @@
   --svc-meter-stroke: var(--border-width-2);
   /* The authority meter: one slot of the decision, a component size. */
   --svc-authority-slot: var(--space-12);
-  /* The parts orbit (page-design-systems fix round 1): the drawing's largest size, a component
-     size, 288; its loop line; and the dash of a node's leader to the loop. */
-  --svc-orbit-size: calc(var(--space-96) * 3);
+  /* The parts orbit (page-design-systems fix round 1). Its size is a component size (t-shirt
+     name, one step today): 288, stated as three of the 96 ramp step because the drawing is laid
+     out on that unit — its inner orbit and loop are 2/3 and 14/15 of it. Its loop line. Its
+     leader's dash reaches the ramp as an OPTICAL correction: a 4-on-4 dash at the 1 px rule reads
+     as a dotted line rather than a broken rule, which is what tells a leader from a spoke. */
+  --svc-orbit-size-lg: calc(var(--space-96) * 3);
   --svc-orbit-stroke: var(--border-width-2);
   --svc-orbit-dash: var(--space-4) var(--space-4);
 }

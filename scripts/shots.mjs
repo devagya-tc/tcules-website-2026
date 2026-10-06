@@ -185,6 +185,10 @@ try {
       );
       const slug = name.replaceAll('/', '-');
       const file = `${slug}-${width}.png`;
+      // Next's dev indicator is a fixed badge in a shadow root (`nextjs-portal`): in a full-page
+      // capture it sat over the page's first band, and the owner's crops showed it as page content.
+      // Hidden before every capture, full-page and crop alike.
+      await page.addStyleTag({ content: 'nextjs-portal { visibility: hidden !important; }' });
       await page.screenshot({ path: join(OUT, file), fullPage: true });
       const crops = [];
       if (only.length > 0) {

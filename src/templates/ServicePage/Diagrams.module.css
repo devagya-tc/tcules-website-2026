@@ -7,13 +7,14 @@
    from --svc-*, type from the composites, arrangement from Layout and Cluster. Positioned
    pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
 
-   No diagram boxes its text (owner ruling, fix round 2): the sheet is drawn with rules only and
-   the orbit is a drawing with nothing inside it, and the two tables (Spectrum, Matrix) take DataTable's `ruled` frame. The only grounds
-   are data marks — a live bar, a built cell, a filled slot — never a panel behind copy.
+   No diagram boxes its text (owner ruling, fix round 2): the sheet is drawn with rules only, the
+   orbit is a drawing with nothing inside it, and the two tables (Spectrum, Matrix) take DataTable's
+   `ruled` frame. The only grounds are data marks — a live bar, a built cell, a filled slot — never
+   a panel behind copy.
 
-   Every mark here says something (30 Sep 2026 review): the orbit says the operating model is the loop
-   that keeps the four parts current; the paired grids say a release is one path built through every layer,
-   where layers alone leave every path broken; the dashed bars say a product is half-present while
+   Every mark here says something (30 Sep 2026 review): the orbit says the operating model is the
+   loop that keeps the four parts current; the paired grids say a release is one path built through
+   every layer, where layers alone leave every path broken; the dashed bars say a product is half-present while
    the move is under way; the disruption trace is how much an option shakes the product, more ink
    for more; a check is blue and a cross quiet ink. Marks that said nothing — a progress meter per
    row, a dashed thread with nodes, a dot on every step's rule — were cut. */
@@ -99,13 +100,32 @@
    direction marks are the accent (the operating model is the system's one moving part); the inner
    orbit and the spokes are the strong rule; the nodes are accent squares, the brand's pixel; the
    hub is ink. Every stroke keeps its width at any scale (`non-scaling-stroke`). */
-.orbit {
+.orbitLead,
+.orbitMiddle {
   display: block;
   inline-size: 100%;
-  max-inline-size: var(--svc-orbit-size);
+  max-inline-size: var(--svc-orbit-size-lg);
   block-size: auto;
   aspect-ratio: 1;
   overflow: visible;
+}
+
+/* One drawing per width (see Parts): above the list below 1024, between the pairs from it, where
+   it is the middle track's one child and centres in it (self-alignment, not arrangement). The
+   middle copy is `display: none` below 1024, so the stacked column has no empty row. */
+.orbitMiddle {
+  display: none;
+  justify-self: center;
+}
+
+@media (min-width: 1024px) {
+  .orbitLead {
+    display: none;
+  }
+
+  .orbitMiddle {
+    display: block;
+  }
 }
 
 .orbitLoop {

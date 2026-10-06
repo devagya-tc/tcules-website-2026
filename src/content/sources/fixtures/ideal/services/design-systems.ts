@@ -12,20 +12,20 @@ const AUDIT = auditPath('design-system-audit');
  * § 8.2). Copy is the CMS's own, re-cut to the § 1.5 budgets; every edit is logged, old and new, in
  * docs/content-changes.md § 8. The sections say what the page argues; the template decides how each
  * is laid out from the job its blocks do (ServicePage plan.ts). The ORDER is the one thing here that
- * shapes the page, so it is chosen for the argument and the cadence together (fix round 1): a centred
- * band falls between every two beside bands, so no three in a row read as one 1/3 split.
+ * shapes the page, so it is chosen for the argument and the cadence together (fix round 2): the proof
+ * is one run — the work, then the client's words — and the questions sit last, before the form.
  *
  *   hero      the claim
- *   symptoms  where the library stops being the system — B, two tiles beside a design-tool canvas
+ *   symptoms  where the library stops being the system — B, two tiles beside a colour library
  *   clients   who we have shipped with — H, with the sourced rating
  *   parts     the five parts that are one system — E, the orbit: four nodes inside the operating loop
  *   statement the test a system has to pass, said once at scale — J
- *   routes    the four responsibilities, by condition — the C-icon router, beside a screen of UI
- *   decision  one status through every representation — E, a Thread (horizon above the proof)
- *   proof     a system from the first release, and the client's words — G-case, the tint band
- *   offer     diagnose the drift first — K, the Design System Audit, beside a wall being traced
+ *   routes    the four responsibilities, by condition — C-icon, a 2 × 2 beside unpainted components
+ *   decision  one status through every representation — E, a Thread
+ *   evidence  three products the work shipped in — M, the covers (horizon above the proof)
+ *   proof     what the client said — G, the tint band
+ *   offer     diagnose the drift first — K, the Design System Audit, beside a scale laid out
  *   questions what teams ask first — D-faq, the detail on the deep pages
- *   evidence  two more products — C-pair, with the boundary of what they prove
  *   close     the form — L
  */
 export const designSystems: ServiceStory = {
@@ -164,6 +164,7 @@ export const designSystems: ServiceStory = {
       eyebrow: 'Start from the condition',
       heading: 'Choose by the system’s condition',
       lead: 'Each service settles one kind of drift. Pick the one your teams are living with.',
+      more: { label: 'Not sure which? Start with an audit', href: AUDIT },
       blocks: [
         {
           kind: 'router',
@@ -227,10 +228,41 @@ export const designSystems: ServiceStory = {
     },
     {
       type: 'section',
+      id: 'evidence',
+      eyebrow: 'Evidence',
+      heading: 'Design-system work in practice',
+      lead: 'Three products where shared components and rules carried the work.',
+      blocks: [
+        {
+          kind: 'cases',
+          items: [
+            {
+              slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+              client: 'Auxentios · Industrial CPQ',
+              title: 'A system from day one',
+              body: 'Components, tokens, guidelines and layout rules, from domain research and eight interviews.',
+            },
+            {
+              slug: 'doodle-case-study-automating-enterprise-meeting-scheduling',
+              client: 'Doodle · Enterprise scheduling',
+              title: 'New UI inside an existing system',
+              body: 'Bounded interface work that used the existing components, and added the ones it needed.',
+            },
+            {
+              slug: 'legacy-saas-modernisation-information-architecture',
+              client: 'Benchmark Gensuite · Enterprise suite',
+              title: 'One experience across 75+ apps',
+              body: 'An enterprise suite modernised as one design-systems problem, not many redesigns.',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'section',
       id: 'client-view',
-      eyebrow: 'Proof',
+      eyebrow: 'In their words',
       heading: 'Built with the MVP, not after',
-      lead: 'The visual system grew alongside the first release, from the same research, rather than being retrofitted.',
       blocks: [
         {
           kind: 'proof',
@@ -238,12 +270,6 @@ export const designSystems: ServiceStory = {
             text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
             name: 'Ashok Mohanty',
             company: 'Auxentios',
-          },
-          case: {
-            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
-            client: 'Auxentios · Industrial CPQ',
-            title: 'A system from day one',
-            body: 'Components, tokens, guidelines and layout rules, from domain research and eight interviews.',
           },
         },
       ],
@@ -290,33 +316,6 @@ export const designSystems: ServiceStory = {
                 '<p>It raises the stakes: faster generation repeats an ambiguous rule across more surfaces, sooner. Tokens, typed properties, examples and tests give a generator better context than a screenshot, and release still needs accountable review.</p>',
             },
           ],
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'evidence',
-      eyebrow: 'Evidence',
-      heading: 'Design-system work in practice',
-      lead: 'Two more products where shared components and rules carried the work. Each claims only what its record shows.',
-      blocks: [
-        {
-          kind: 'cases',
-          items: [
-            {
-              slug: 'doodle-case-study-automating-enterprise-meeting-scheduling',
-              client: 'Doodle · Enterprise scheduling',
-              title: 'New UI inside an existing system',
-              body: 'Bounded interface work that used the existing components, and added the ones it needed.',
-            },
-            {
-              slug: 'legacy-saas-modernisation-information-architecture',
-              client: 'Benchmark Gensuite · Enterprise suite',
-              title: 'One experience across 75+ applications',
-              body: 'An enterprise suite modernised as one design-systems problem, not many redesigns.',
-            },
-          ],
-          note: 'Neither record establishes coded implementation or organisation-wide adoption.',
         },
       ],
     },
