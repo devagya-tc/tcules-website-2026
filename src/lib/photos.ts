@@ -238,15 +238,17 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'desk-flatlay-devices',
     aside2: 'designer-monitor-ui',
   },
-  /* ai-product-ux, fix round 1 (6 Oct 2026): B, K and aside 2 swapped. B was a washed-out overhead
-     desk, K a staged pair under a fake chalkboard dashboard, the aside a small pink-cast pencil crop
-     — SaaS stock beside the strongest hero on the site. B is now a team reviewing screens on a wall
-     (portrait, so the 4:5 crop keeps the room), K a pair working a screen at the studio's sticky
-     wall (landscape 3:2), aside 2 the studio's own whiteboard crit, which the list router takes. */
+  /* ai-product-ux, fix round 2 (6 Oct 2026): K and aside 2 swapped, B kept. K's staged pair under a
+     fake chalkboard dashboard became a pair working through notes at a laptop (landscape 3:2), a
+     photo no other page's slot or stand-in pool names; aside 2's pink-cast pencil crop became the
+     studio's own whiteboard crit (studio frames may recur, § 5.1 rule 4), which the numbered record
+     takes. Fix round 1 had taken B to `workshop-brick-room` and K to `pair-at-laptop-sticky-wall`;
+     both went back: the first is in five pages' stand-in pools, the second is held for the home
+     hero (§ 5.6). */
   'ai-product-ux': {
-    b: 'workshop-brick-room',
+    b: 'pair-testing-overhead',
     i: 'workshop-whiteboard-lounge',
-    k: 'pair-at-laptop-sticky-wall',
+    k: 'pair-laptop-notebook',
     aside1: 'hands-sticky-blue-pen',
     aside2: 'studio-whiteboard-crit',
   },

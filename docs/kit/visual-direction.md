@@ -951,7 +951,7 @@ any photo for a better catalogue match, as long as the gate still passes.
 | software-development (warm) | `designer-desk-monitor` | `workshop-hands-writing` | `whiteboard-pair-laptop` | `studio-session-talk` | `team-laptops-table` | aside 1 |
 | design-engineering (warm) | `stylus-tablet-sketch` | `whiteboard-two-hands` | `sticky-grid-minimal` | `studio-whiteboard-crit` | `hands-sketches-markers` | aside 1 |
 | design-systems (cool) | `screen-over-shoulder` | `wireframe-wall` | `desk-minimal-white` | `desk-flatlay-devices` (crop out the printed "to") | `designer-monitor-ui` (crop from the right) | `studio-whiteboard-crit` as a stand-in cover |
-| ai-product-ux (cool) | `workshop-brick-room` (fix round 1: the overhead desk was washed out and said nothing about product work) | `workshop-whiteboard-lounge` (no banner on the page yet) | `pair-at-laptop-sticky-wall` (3:2, landscape offer; fix round 1, replacing the staged chalkboard pair) | `hands-sticky-blue-pen` (unused: the router is the list router) | `studio-whiteboard-crit` (the list router's aside; fix round 1, replacing the pink-cast pencil crop) | aside 2 |
+| ai-product-ux (cool) | `pair-testing-overhead` | `workshop-whiteboard-lounge` (no banner on the page yet) | `pair-laptop-notebook` (3:2, landscape offer; fix round 2, replacing the staged chalkboard pair) | `hands-sticky-blue-pen` (not shown: the stat band takes the slot and shows its figure) | `studio-whiteboard-crit` (the numbered record's aside; fix round 2, replacing the pink-cast pencil crop) | aside 2 |
 | product-modernisation (cool) | `wall-sketching-portrait` | `office-calm-interior` | `pencil-wireframe-violet` | `board-review-backs` | `pair-desk-through-plants` | `studio-whiteboard-crit` as a stand-in cover |
 
 - **No large slot uses a vivid photo.** Each page may spend its one vivid photo in a card set, for
@@ -959,7 +959,7 @@ any photo for a better catalogue match, as long as the gate still passes.
 - **Card images and stand-in covers** come from the rest of the catalogue in the page's family, at the
   resolution § 5.4 allows.
 - **The close (L) carries no photograph** on service pages. The close is copy, form and texture.
-- `pair-at-laptop-sticky-wall` was kept for the kit/home hero; ai-product-ux's K took it in fix round 1 (6 Oct), so the home hero needs another frame or the owner gives it back (§ 10).
+- `pair-at-laptop-sticky-wall` is kept for the kit/home hero.
 
 ### 5.7 Case-study and resource covers: stand-ins are permitted
 

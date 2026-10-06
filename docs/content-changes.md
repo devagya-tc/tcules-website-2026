@@ -321,7 +321,7 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 
 **Found in.** `kit/page-ai-product-ux`, 6 Oct 2026.
 
-### 7.1 Fix round 1 (6 Oct 2026)
+### 8.1 Fix round 1 (6 Oct 2026)
 
 The review found three ruled text lists in a row (spectrum, steps, record), the signals and the router as one mirrored unit, a stacked double head on the record, weak SaaS-stock photographs and no texture on B. The page now runs hero, B, H, E spectrum, E thread, C-text record, K, J, M, D-faq, D router, L: every band ≤ 830 at 1470 (tallest 805) and ≤ 1700 at 390 (tallest 1628).
 
@@ -347,3 +347,25 @@ The review found three ruled text lists in a row (spectrum, steps, record), the 
 | — | stand-in pool | studio-session-talk, studio-whiteboard-crit, workshop-brick-room, hands-trackpad | studio-session-talk, pair-laptop-notebook (the other two are now slot photos, hands-trackpad is product-design's B) |
 
 **Found in.** `kit/page-ai-product-ux` fix round 1, 6 Oct 2026.
+
+### 8.2 Fix round 2 (6 Oct 2026)
+
+The review found no proof moment at scale, the same icon-tile shape three times in four bands (B, the 4×2 record grid, K's points), B's counterweight reading as an empty placeholder, an undersized router aside, and photo swaps with effects on other pages. The page now runs 13 bands (hero, B, H, E spectrum, E thread, E record, K, J, D stat, M, D-faq, D router, L; the owner's ruling is not to cap section counts), every one ≤ 803 at 1470 and ≤ 1628 at 390. The one tile set left is B's. B carries four tiles, so the plan spends the texture placement on J's corner field rather than the counterweight.
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| B signals | tiles | two: Every answer re-checked · Changes nobody can undo | four: the two above, plus **NEW COPY, owner sign-off needed:** "Help nobody asked for — Output arrives in a form nobody requested, and fixing it takes longer than doing the work." (chat-round-dots; from the spectrum's first row) · "Nobody owns the error — When a result is wrong, no one can say who should have caught it, or where." (close-circle; from the record's Accountability question) |
+| E record | block / eyebrow | an eight-tile icon grid (`signals`, four across) / The responsibility record | the `record` sheet: meta "One per AI scenario", title "Responsibility record", eight fields paired in two columns / Kept through delivery (the record's name is the sheet's title now) |
+| E record | Accountability field | logged as NEW in § 8 | still NEW: it is the studio's eighth question, not CMS text ("Who answers when the result is wrong?"). **Owner sign-off needed.** Without it the heading goes back to seven questions and the sheet has a hole |
+| K offer | body | The readiness assessment creates the first evidence, so the route is chosen from the work rather than the technology. | The readiness assessment names the work worth assisting, the state the model touches and the authority it receives, so the route is chosen from the work. |
+| K offer | points | The work worth assisting — The decision or task where help changes the outcome. · The state it touches — The records and screens the model may read or change. · The authority it receives — What it may do alone, and what waits for a person. | none: folded into the body above, so K is copy beside its photograph rather than a third tile row |
+| D stat | whole band | none (round 0 folded the stat into the FAQ) | eyebrow "Across AI products", heading "From framing into code", lead "Copilots, AI-native tools, AI-powered products and integrations: the same four strands of work in each.", stat 12 / "AI products we have worked on", four rows re-cut from the CMS's eight responsibilities: Framing and research · Interaction and control · Evaluation and acceptance · Prototypes into product |
+| D-faq | questions | five, including "What has the work combined across twelve AI products?" | four: that answer is the stat band now |
+| D router | lead | Bring the user work, the current product state and the authority you expect the model to receive. | none. The aside photograph takes the height instead (381 × 283, was 381 × 175), and the close already asks for the scenario |
+| D router | route label | Human-in-the-Loop Workflows | Human‑in‑the‑Loop Workflows (U+2011 non-breaking hyphens, so it no longer wraps at a hyphen at 390) |
+| Photos | B / K (src/lib/photos.ts, this page's row, and § 5.6's row) | workshop-brick-room / pair-at-laptop-sticky-wall (fix round 1) | pair-testing-overhead (back to § 5.6) / pair-laptop-notebook (3:2). Round 1's B is in five pages' stand-in pools, and its K is held for the home hero. Both swaps are reverted, and the § 5.6 note on the home hero is restored |
+| Photos | stand-in pool | studio-session-talk, pair-laptop-notebook | studio-session-talk, team-laptops-table (pair-laptop-notebook is K now) |
+
+**Template, not fixable here.** At 390 the spectrum's DataTable scrolls sideways, which hides two of its four columns. The Stat numeral is mono at ~48 px in ink, so it is not a display-scale moment. The case wells are short letterboxes. The thread is thin under a centred head. `columns` is a required content field on `signals` and `ledger`. No G band is possible until an attributable AI quote exists.
+
+**Found in.** `kit/page-ai-product-ux`, fix round 2.

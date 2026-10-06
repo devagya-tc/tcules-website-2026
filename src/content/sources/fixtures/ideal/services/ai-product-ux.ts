@@ -15,27 +15,33 @@ import { CLUTCH_RATING } from '../../ratings';
 
 /**
  * /services/ai-product-ux, designed — recomposed from the UI kit on 6 Oct 2026 (visual-direction
- * § 8.2), fix round 1 the same day. Copy is the CMS's own, re-cut to the § 1.5 budgets; every edit is
- * logged, old and new, in docs/content-changes.md § 7. The sections say what the page argues; the
- * template decides how each is laid out from the job its blocks do (ServicePage plan.ts), so no field
- * here is a layout.
+ * § 8.2), fix rounds 1 and 2 the same day. Copy is the CMS's own, re-cut to the § 1.5 budgets, except
+ * the fields content-changes.md § 8 marks NEW (two B signals, the record's Accountability question),
+ * which are the studio's writing and wait for the owner's sign-off. Every edit is logged there, old
+ * and new. The sections say what the page argues and the template decides how each is laid out
+ * (ServicePage plan.ts), with one exception the schema still forces: `columns` on `signals` and
+ * `ledger` is a column count, which is layout. service-story.ts makes it a required content field,
+ * against the 6 Oct ruling that the template decides arrangement; it is set here only because the
+ * type demands it (the B split and the numbered ledger both ignore it).
  *
  *   hero      the claim
- *   signals   where an AI feature loses people — B, two tiles, so the band carries the counterweight
+ *   signals   where an AI feature loses people — B, four tiles beside the photograph
  *   clients   who we have shipped with — H, with the sourced rating
  *   roles     the role the model plays, least authority to most — E, the authority spectrum
  *   authority inform, suggest, prepare, execute — E, the thread, with its way back
- *   record    the responsibility record's eight questions — C-text, an icon grid
- *   offer     the readiness assessment, for the scope not yet known — K
- *   statement the claim the page stands on, at scale — J
- *   evidence  three AI products under different conditions — M, the real covers
+ *   record    the responsibility record, 01 to 08 — D, numbered rows beside the studio crit
+ *   offer     the readiness assessment, for the scope not yet known — K, copy beside a landscape photo
+ *   statement the claim the page stands on, at scale — J, with the texture's corner field
+ *   scale     twelve AI products, and what the work combined — D, the figure as the aside
+ *   evidence  three of the twelve, under different conditions — M, the real covers
  *   questions evaluation, approval, our own AI use, where to read — D-faq
- *   routes    the four specialisms — the list router, beside the studio crit
+ *   routes    the four specialisms — the list router
  *   close     the form — L
  *
  * There is no G proof band: no attributable quote from an AI engagement exists yet, and the one
- * approved quote (Auxentios, CPQ) is not AI work. When one does, a `proof` section between the
- * statement and the evidence gets the tint band and the `horizon` above it from the plan.
+ * approved quote (Auxentios, CPQ) is not AI work. The scale moment is the stat band instead. When a
+ * quote exists, a `proof` section between the statement and the evidence gets the tint band and the
+ * `horizon` above it from the plan.
  */
 export const aiProductUx: ServiceStory = {
   slug: 'ai-product-ux',
@@ -59,13 +65,14 @@ export const aiProductUx: ServiceStory = {
     },
   },
   /* Photographs (visual-direction § 5.5 to § 5.7): a cool-family page. The B, K and aside photos are
-     § 5.6's (SERVICE_PHOTO_SLOTS in src/lib/photos.ts, swapped in fix round 1 for studio and
-     screen-led frames). The stand-in pool is in order of preference, studio first, drawn from the
-     rest of the catalogue; pickStandIn enforces that. The three case cards take their real covers
-     from the listing, so the pool is only the fallback. */
+     § 5.6's (SERVICE_PHOTO_SLOTS in src/lib/photos.ts; fix round 2 took K to `pair-laptop-notebook`,
+     a photo no other page's pool names, and gave B back its § 5.6 frame). The stand-in pool is in
+     order of preference, studio first, drawn from the rest of the catalogue; pickStandIn enforces
+     that. The three case cards take their real covers from the listing, so the pool is only the
+     fallback. */
   photos: {
     family: 'cool',
-    standIns: ['studio-session-talk', 'pair-laptop-notebook'],
+    standIns: ['studio-session-talk', 'team-laptops-table'],
   },
   labels: {
     caseCta: 'Read the case',
@@ -93,6 +100,16 @@ export const aiProductUx: ServiceStory = {
               icon: 'undo-left',
               title: 'Changes nobody can undo',
               body: 'The model edits what a person owns, or runs steps with no preview and no way to stop.',
+            },
+            {
+              icon: 'chat-round-dots',
+              title: 'Help nobody asked for',
+              body: 'Output arrives in a form nobody requested, and fixing it takes longer than doing the work.',
+            },
+            {
+              icon: 'close-circle',
+              title: 'Nobody owns the error',
+              body: 'When a result is wrong, no one can say who should have caught it, or where.',
             },
           ],
         },
@@ -174,7 +191,10 @@ export const aiProductUx: ServiceStory = {
         {
           kind: 'thread',
           items: [
-            { title: 'Inform', body: 'The model tells a person something. The person decides.' },
+            {
+              title: 'Inform',
+              body: 'The model tells a person something. The person decides.',
+            },
             { title: 'Suggest', body: 'The model proposes. A person chooses, and sees why.' },
             { title: 'Prepare', body: 'The model does the work. A person reviews it first.' },
             { title: 'Execute', body: 'The model acts. A person can watch, stop and undo it.' },
@@ -186,53 +206,46 @@ export const aiProductUx: ServiceStory = {
     {
       type: 'section',
       id: 'responsibility-record',
-      eyebrow: 'The responsibility record',
+      eyebrow: 'Kept through delivery',
       heading: 'Eight questions per scenario',
       lead: 'One record for every AI scenario that matters, kept through design and engineering.',
       blocks: [
         {
-          kind: 'signals',
-          columns: 4,
+          kind: 'record',
+          meta: 'One per AI scenario',
+          title: 'Responsibility record',
           items: [
+            { field: 'User work', question: 'Which task deserves assistance?', icon: 'user' },
+            { field: 'Model role', question: 'What may the model influence?', icon: 'cpu' },
             {
-              icon: 'user',
-              title: 'User work',
-              body: 'Which task deserves assistance?',
-            },
-            {
-              icon: 'cpu',
-              title: 'Model role',
-              body: 'What may the model influence?',
-            },
-            {
+              field: 'Evidence',
+              question: 'Which sources support the output?',
               icon: 'document-text',
-              title: 'Evidence',
-              body: 'Which sources support the output?',
             },
             {
+              field: 'Uncertainty',
+              question: 'What can be missing, wrong or unstable?',
               icon: 'question-circle',
-              title: 'Uncertainty',
-              body: 'What can be missing, wrong or unstable?',
             },
             {
+              field: 'Authority',
+              question: 'What happens without human approval?',
               icon: 'key',
-              title: 'Authority',
-              body: 'What happens without human approval?',
             },
             {
+              field: 'Evaluation',
+              question: 'What counts as useful and safe here?',
               icon: 'checklist',
-              title: 'Evaluation',
-              body: 'What counts as useful and safe here?',
             },
             {
+              field: 'Accountability',
+              question: 'Who answers when the result is wrong?',
               icon: 'flag',
-              title: 'Accountability',
-              body: 'Who answers when the result is wrong?',
             },
             {
+              field: 'Recovery',
+              question: 'How can a person reverse the result?',
               icon: 'refresh',
-              title: 'Recovery',
-              body: 'How can a person reverse the result?',
             },
           ],
         },
@@ -243,23 +256,12 @@ export const aiProductUx: ServiceStory = {
       id: 'readiness',
       eyebrow: 'Scope still unclear?',
       heading: 'Not sure what the model should do yet?',
-      body: 'The readiness assessment creates the first evidence, so the route is chosen from the work rather than the technology.',
-      points: [
-        {
-          label: 'The work worth assisting',
-          detail: 'The decision or task where help changes the outcome.',
-        },
-        {
-          label: 'The state it touches',
-          detail: 'The records and screens the model may read or change.',
-        },
-        {
-          label: 'The authority it receives',
-          detail: 'What it may do alone, and what waits for a person.',
-        },
-      ],
+      body: 'The readiness assessment names the work worth assisting, the state the model touches and the authority it receives, so the route is chosen from the work.',
       actions: [
-        { label: 'Request the readiness assessment', href: auditPath('ai-product-ux-readiness') },
+        {
+          label: 'Request the readiness assessment',
+          href: auditPath('ai-product-ux-readiness'),
+        },
       ],
     },
     {
@@ -268,6 +270,39 @@ export const aiProductUx: ServiceStory = {
       eyebrow: 'What we hold to',
       text: 'An interface should never sound more certain than the system has earned.',
       action: { label: 'See how we work', href: ROUTES.howWeWork },
+    },
+    {
+      type: 'section',
+      id: 'scale',
+      eyebrow: 'Across AI products',
+      heading: 'From framing into code',
+      lead: 'Copilots, AI-native tools, AI-powered products and integrations: the same four strands of work in each.',
+      blocks: [
+        {
+          kind: 'stat',
+          value: '12',
+          label: 'AI products we have worked on',
+          body: 'Copilots, AI-native tools, AI-powered products and integrations.',
+          items: [
+            {
+              title: 'Framing and research',
+              body: 'Opportunity framing, and research with target users and domain experts.',
+            },
+            {
+              title: 'Interaction and control',
+              body: 'Source, confidence and explanation patterns, with human review and control.',
+            },
+            {
+              title: 'Evaluation and acceptance',
+              body: 'Acceptance sets built from real decisions and the conditions where they fail.',
+            },
+            {
+              title: 'Prototypes into product',
+              body: 'Coded prototypes and engineering, integrated into existing roles, state and design systems.',
+            },
+          ],
+        },
+      ],
     },
     {
       type: 'section',
@@ -321,11 +356,6 @@ export const aiProductUx: ServiceStory = {
                 '<p>Technical and operational checks follow the agreed delivery scope. Tcules makes the evidence reviewable; client owners keep approval of domain, policy and residual risk.</p>',
             },
             {
-              question: 'What has the work combined across twelve AI products?',
-              answerHtml:
-                '<p>Across copilots, AI-native tools, AI-powered products and integrations: opportunity framing, research with target users and domain experts, AI interaction and workflow, source, confidence and explanation patterns, human review and control, evaluation and acceptance, coded prototypes and engineering, and integration into existing roles, state and design systems.</p>',
-            },
-            {
               question: 'Does Tcules use AI in its own work?',
               answerHtml:
                 '<p>Yes, in research synthesis, exploration, prototyping, coding and QA. That is a separate claim from the client work: generated work is reviewed against the product model, source evidence, implementation constraints and client requirements, and client AI restrictions override delivery defaults.</p>',
@@ -343,7 +373,6 @@ export const aiProductUx: ServiceStory = {
       id: 'first-decision',
       eyebrow: 'Go narrower',
       heading: 'Choose by what is delegated',
-      lead: 'Bring the user work, the current product state and the authority you expect the model to receive.',
       blocks: [
         {
           kind: 'router',
@@ -358,7 +387,7 @@ export const aiProductUx: ServiceStory = {
             {
               when: 'When review, escalation and correction are central to the work.',
               route: {
-                label: 'Human-in-the-Loop Workflows',
+                label: 'Human‑in‑the‑Loop Workflows',
                 href: servicePath('ai-product-ux/human-in-the-loop-workflows'),
               },
             },
