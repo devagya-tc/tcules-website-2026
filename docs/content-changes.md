@@ -261,3 +261,20 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 | L close | eyebrow | Start a project | Next step (the old one repeated the CTA label) |
 
 **Why.** Fix round 1 review. **Found in.** `kit/page-software-development`, fix round 1.
+
+### 7.2 Fix round 2 (6 Oct 2026)
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| — | band order | A B H C-icon F E G M J K D-faq L | A B H E F M C-icon G K D-faq J L: the slice and the method argue before the router offers six services; the router's photo moves to the end side; J follows the centred FAQ, so it sets left, not as a second centred serif column after G (copy unchanged) |
+| E slice | layers | Interface · Services · Integrations · AI service · Data | Interface · Services · Integrations · Data (three paths, so "Path 1" sets on one line at 390 and the resolved grid is one full column) |
+| E slice | lead | Organised by layer, every team can finish its part while no user path works. | Cut by release, every layer builds the same path, so each release does something a user can finish. (the old lead restated B's first tile two bands up) |
+| E slice | layer note | Each team builds half its layer, each on different paths. Nothing a user can do works yet, and nothing can ship. | Each team builds a third of its layer, each on a different path. Nothing a user can do works yet, and nothing can ship. |
+| E slice | release note | The same work, with every layer building the same paths. Two things a user can do work end to end, and ship. | The same work, with every layer building the same path. One thing a user can do works end to end, and ships. |
+| F delivery trace | heading | Engineering receives the decisions | Decisions reach the code (two lines at 1024 and 1470, not three) |
+| G proof | case beside the quote | none (removed in fix round 1) | Auxentios · Industrial CPQ / Specialist research, carried into an MVP (NEW title) / Research across specialist roles, carried into a product model and its interface components. The case card brings the quote onto the head's start edge (G-case), and gives a general quote the specifics of the work it came from. **Ask:** this is still the one approved quote, shared with Product Design; a quote about decisions reaching code would replace it |
+| M evidence | GT Tools title | Web design and development, end to end | Design and build, end to end (two lines at 1024, like its neighbours) |
+| L close | step 01 | Send the slice that needs to ship — Its users, constraints and release outcome. | Attach what already exists — A prototype, a spec or screens, if there are any. (the old step repeated the heading and the body above it) |
+| Photos | router aside / F aside (src/lib/photos.ts, this page's row only) | studio-session-talk / team-laptops-table | whiteboard-two-hands / stylus-tablet-sketch: both dim frames replaced by bright process frames, both freed by design-engineering's fix round 1 |
+
+**Why.** Fix round 2 review. **Found in.** `kit/page-software-development`, fix round 2.

@@ -17,22 +17,24 @@ const ENQUIRY = anchorHref(ANCHORS.enquiry);
  *   hero      the claim
  *   signals   where builds break, four tiles — B, beside a screen-work photograph
  *   clients   who we have shipped with — H, with the sourced rating
- *   routes    the specialist services, by where the risk sits — the C-icon router
- *   method    the delivery trace as five steps, each citing the one before — F, beside a photo
  *   slice     a release is a complete product slice — E, the layer / release grids
- *   proof     the client's words, alone at the quote's display role — G, the tint band
+ *   method    the delivery trace as five steps, each citing the one before — F, beside a photo
  *   evidence  three cases, each bounded by its record — M
- *   statement production responsibility does not move to the model — J
+ *   routes    the specialist services, by where the risk sits — the C-icon router
+ *   proof     the client's words beside the case they came from — G-case, the tint band
  *   offer     three ways to hand over responsibility — K
  *   questions ownership, acceptance (with accessibility), AI, infrastructure — D-faq
+ *   statement production responsibility does not move to the model — J
  *   close     the form — L
  *
- * Order (fix round 1): the router sits before the method, so it is the page's first head-track
- * band and the F photograph lands on the end side — B, the router and F no longer stack three
- * left-weighted splits, and the router's head reads before its cards. B carries four tiles, so
- * its head keeps the h2 role (two tiles gave it the display head, louder than the bands that answer
- * it) and the texture placement goes to J's corner instead of a counterweight. G is the typographic
- * quote: the quote is the band's point, so it takes the display role alone.
+ * Order (fix round 2): the argument comes before the menu. The slice and the method make the case,
+ * the cases evidence it, and only then does the router offer the narrower services. With the slice
+ * between B and F, the two start-side photographs have two bands between them, and the router, the
+ * second head-track band, takes its photograph on the end side. The router sits above the tint
+ * proof band, so it carries the horizon. The statement follows the centred FAQ, so it sets left
+ * (split) rather than repeating the centred column, and as the last band before the close it
+ * takes no corner field. The slice has four layers, so three paths: each column head sets on one
+ * line at 390, and the resolved grid is one full column, the answer at a squint.
  *
  * What left a band of its own, and where it went: the "what changes" thread and the delivery trace
  * were one argument told twice, now the F steps; the acceptance levels, the ownership ledger and the
@@ -148,6 +150,101 @@ export const softwareDevelopment: ServiceStory = {
     },
     {
       type: 'section',
+      id: 'release-slice',
+      eyebrow: 'How a release is cut',
+      heading: 'A release is a complete slice',
+      lead: 'Cut by release, every layer builds the same path, so each release does something a user can finish.',
+      blocks: [
+        {
+          kind: 'slice',
+          layers: ['Interface', 'Services', 'Integrations', 'Data'],
+          views: {
+            layer: {
+              title: 'Organised by layer',
+              note: 'Each team builds a third of its layer, each on a different path. Nothing a user can do works yet, and nothing can ship.',
+            },
+            slice: {
+              title: 'Organised by release',
+              note: 'The same work, with every layer building the same path. One thing a user can do works end to end, and ships.',
+            },
+          },
+          legend: {
+            built: 'Built',
+            missing: 'Not built yet',
+            path: 'Path',
+            works: 'Works end to end',
+          },
+        },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'delivery-trace',
+      eyebrow: 'What design-led changes',
+      heading: 'Decisions reach the code',
+      lead: 'Every stage cites the one before it, so edge states are implemented, not guessed.',
+      blocks: [
+        {
+          kind: 'steps',
+          items: [
+            {
+              title: 'Settle the behaviour',
+              body: 'Roles, rules and states, decided with their owner.',
+            },
+            {
+              title: 'Write the contract',
+              body: 'The data and API terms each part owes.',
+            },
+            {
+              title: 'Build the slice',
+              body: 'Interface, services and data along one path.',
+            },
+            {
+              title: 'Accept it twice',
+              body: 'Automated and manual tests, behaviour and code.',
+            },
+            {
+              title: 'Ship and observe',
+              body: 'What production shows enters the next decision.',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'evidence',
+      eyebrow: 'Evidence',
+      heading: 'Work that reached code',
+      lead: 'Each case claims only its own record. ConnectX is a coded demonstration, not a deployment.',
+      blocks: [
+        {
+          kind: 'cases',
+          items: [
+            {
+              slug: 'ai-native-building-energy-product-connectx',
+              client: 'ConnectX · Product and software',
+              title: 'AI architecture in a hybrid workspace',
+              body: 'A coded demonstration of AI architecture, scenario modelling and a hybrid workspace.',
+            },
+            {
+              slug: 'legacy-saas-modernisation-information-architecture',
+              client: 'Benchmark Gensuite · Feasibility',
+              title: 'Coded prototypes during modernisation',
+              body: 'Used to test feasibility while the direction could still change.',
+            },
+            {
+              slug: 'redesigning-for-a-shopify-website-ux-design',
+              client: 'GT Tools · Commerce',
+              title: 'Design and build, end to end',
+              body: 'A historical commerce case: bounded design and development.',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'section',
       id: 'specialist-routes',
       eyebrow: 'Where the risk sits',
       heading: 'Specialist software services',
@@ -210,69 +307,6 @@ export const softwareDevelopment: ServiceStory = {
     },
     {
       type: 'section',
-      id: 'delivery-trace',
-      eyebrow: 'What design-led changes',
-      heading: 'Engineering receives the decisions',
-      lead: 'Every stage cites the one before it, so edge states are implemented, not guessed.',
-      blocks: [
-        {
-          kind: 'steps',
-          items: [
-            {
-              title: 'Settle the behaviour',
-              body: 'Roles, rules and states, decided with their owner.',
-            },
-            {
-              title: 'Write the contract',
-              body: 'The data and API terms each part owes.',
-            },
-            {
-              title: 'Build the slice',
-              body: 'Interface, services and data along one path.',
-            },
-            {
-              title: 'Accept it twice',
-              body: 'Automated and manual tests, behaviour and code.',
-            },
-            {
-              title: 'Ship and observe',
-              body: 'What production shows enters the next decision.',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'release-slice',
-      eyebrow: 'How a release is cut',
-      heading: 'A release is a complete slice',
-      lead: 'Organised by layer, every team can finish its part while no user path works.',
-      blocks: [
-        {
-          kind: 'slice',
-          layers: ['Interface', 'Services', 'Integrations', 'AI service', 'Data'],
-          views: {
-            layer: {
-              title: 'Organised by layer',
-              note: 'Each team builds half its layer, each on different paths. Nothing a user can do works yet, and nothing can ship.',
-            },
-            slice: {
-              title: 'Organised by release',
-              note: 'The same work, with every layer building the same paths. Two things a user can do work end to end, and ship.',
-            },
-          },
-          legend: {
-            built: 'Built',
-            missing: 'Not built yet',
-            path: 'Path',
-            works: 'Works end to end',
-          },
-        },
-      ],
-    },
-    {
-      type: 'section',
       id: 'client-view',
       eyebrow: 'Proof',
       heading: 'In a client’s words',
@@ -284,50 +318,14 @@ export const softwareDevelopment: ServiceStory = {
             name: 'Ashok Mohanty',
             company: 'Auxentios',
           },
+          case: {
+            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+            client: 'Auxentios · Industrial CPQ',
+            title: 'Specialist research, carried into an MVP',
+            body: 'Research across specialist roles, carried into a product model and its interface components.',
+          },
         },
       ],
-    },
-    {
-      type: 'section',
-      id: 'evidence',
-      eyebrow: 'Evidence',
-      heading: 'Work that reached code',
-      lead: 'Each case claims only its own record. ConnectX is a coded demonstration, not a deployment.',
-      blocks: [
-        {
-          kind: 'cases',
-          items: [
-            {
-              slug: 'ai-native-building-energy-product-connectx',
-              client: 'ConnectX · Product and software',
-              title: 'AI architecture in a hybrid workspace',
-              body: 'A coded demonstration of AI architecture, scenario modelling and a hybrid workspace.',
-            },
-            {
-              slug: 'legacy-saas-modernisation-information-architecture',
-              client: 'Benchmark Gensuite · Feasibility',
-              title: 'Coded prototypes during modernisation',
-              body: 'Used to test feasibility while the direction could still change.',
-            },
-            {
-              slug: 'redesigning-for-a-shopify-website-ux-design',
-              client: 'GT Tools · Commerce',
-              title: 'Web design and development, end to end',
-              body: 'A historical commerce case: bounded design and development.',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      type: 'statement',
-      id: 'ai-assisted',
-      eyebrow: 'AI-assisted engineering',
-      text: 'Production responsibility does not move to the model.',
-      action: {
-        label: 'AI Product Engineering',
-        href: servicePath('software-development/ai-product-engineering'),
-      },
     },
     {
       type: 'offer',
@@ -387,6 +385,16 @@ export const softwareDevelopment: ServiceStory = {
         },
       ],
     },
+    {
+      type: 'statement',
+      id: 'ai-assisted',
+      eyebrow: 'AI-assisted engineering',
+      text: 'Production responsibility does not move to the model.',
+      action: {
+        label: 'AI Product Engineering',
+        href: servicePath('software-development/ai-product-engineering'),
+      },
+    },
   ],
   close: {
     eyebrow: 'Next step',
@@ -394,8 +402,8 @@ export const softwareDevelopment: ServiceStory = {
     body: 'The slice, its users, the system constraints and the release outcome. A rough brief is enough.',
     points: [
       {
-        label: 'Send the slice that needs to ship',
-        detail: 'Its users, constraints and release outcome.',
+        label: 'Attach what already exists',
+        detail: 'A prototype, a spec or screens, if there are any.',
       },
       {
         label: 'A reply within one business day',
