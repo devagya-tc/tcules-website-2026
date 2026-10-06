@@ -441,3 +441,60 @@
 .steps .body {
   max-inline-size: var(--lcrd-step-body-measure);
 }
+
+/* ── The title-cued row (`cue="title"`, cmp-services fix round 1, 6 Oct 2026) ─────────────────
+   BlockCard's link model on a row: the arrow follows the title's last word, and on hover and focus
+   the title takes the link ink to meet it. The arrow at the row's far end sat 400+px from a 160
+   thumbnail row's title, on its cap line, floating in the row's empty end.
+
+   With nothing painted under the pointer there is no ground for the copy to clear, so the 16 inline
+   inset goes, as it does for a static row and a tile: the marker and the copy stand on the column
+   edge the band's head and the rule share. The rule, the focus ring and the whole-row target stay.
+   Two classes on the frame and three on the states, so these outrank `.frame` and the row's
+   `.root .link:<state>` ground at any source order. */
+.titleCued .frame {
+  padding-inline: 0;
+}
+
+.root.titleCued .link:hover,
+.root.titleCued .link:focus-visible,
+.root.titleCued .link:active {
+  background-color: transparent;
+}
+
+/* The arrow after the title. Inline-block because Icon's <svg> is display:block, which inside a
+   bare inline span would break the title's line; `middle` centres it on the lower-case letters,
+   where an arrow after a word reads as punctuation (BlockCard's .cue, measured there). */
+.titleCue {
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--lcrd-link-ink);
+  transition: color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
+}
+
+.cuedTitle {
+  transition: color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
+}
+
+.root.titleCued .link:hover .cuedTitle,
+.root.titleCued .link:focus-visible .cuedTitle {
+  color: var(--lcrd-link-ink);
+}
+
+.root.titleCued .link:active .cuedTitle,
+.root.titleCued .link:active .titleCue {
+  color: var(--lcrd-link-ink-pressed);
+}
+
+/* ── A row's thumbnail on a phone ─────────────────────────────────────────────────────────────
+   Below md a row's thumbnail is --lcrd-thumbnail-inline-sm, so it stays BESIDE the copy rather than
+   wrapping above it (cmp-services fix round 1). At 160 the 326 phone column left the copy 142, under
+   the core's 192 minimum, so the outer Cluster stacked the image over the title and left a 142px
+   void beside every thumbnail: a three-row router ran ~1540 tall and read as a document. At 96 the
+   copy keeps 206. The layout changes at 768; no distance does. Rows only: a tile's thumbnail always
+   sits above its copy, at the track's width for it. */
+@media (max-width: 767.98px) {
+  .root:not(.tile) .thumbnail {
+    inline-size: var(--lcrd-thumbnail-inline-sm);
+  }
+}

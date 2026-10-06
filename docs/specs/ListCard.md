@@ -145,6 +145,7 @@ element and the `--gap-block` seam beside it.
 | `size`        | `'md' \| 'sm'`                                                                                                             | `'md'` on a row, `'sm'` on a tile | 5 Oct 2026. The type step, passed by the set: `sm` for four rows or more, and every tile. See Amendment · 5 Oct 2026 |
 | `href`        | `string`                                                                                                                   | absent    | A non-blank value makes the whole frame one anchor and causes the cue to render    |
 | `external`    | `boolean`                                                                                                                  | `false`   | The destination leaves tcules.com: new tab, the "leaves the site" cue glyph and the hidden new-tab hint. Ignored without a destination |
+| `cue`         | `'end' \| 'title'`                                                                                                        | `'end'`   | **6 Oct (cmp-services).** `title`: a linked row's arrow follows the title's last word and the title takes the link ink on hover (BlockCard's model); no hover ground, so no 16 inline inset. Ignored on a tile or without a destination. Below md every row's thumbnail is 96 wide (`--lcrd-thumbnail-inline-sm`) and stays beside its copy |
 
 **28 Sep 2026 (2.11).** The thumbnail member carries a whole `MediaImage` record — the shape a page
 receives from `@/content` — and ListCard hands it to `Media` untouched with `fit="fill"`,

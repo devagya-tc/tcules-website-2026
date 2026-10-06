@@ -85,6 +85,10 @@
      2.4:1 at the 381 head track and 2:1 at the 326 phone column, where the aside sits at exactly
      this height; below it a head-track photograph reads as a strip. */
   --csec-aside-min-size: 10rem;
+  /* asideFill below 1024 (cmp-services fix round 1): the head-aside placement's own 3:2 (§ 5.3).
+     Below lg the band is stacked, so there is no body beside the aside for it to fill, and the
+     floor alone made it a 704 × 160 strip at 768 (4.4:1) and 326 × 160 at 390. */
+  --csec-aside-ratio: var(--ratio-cover);
 }
 
 :root,

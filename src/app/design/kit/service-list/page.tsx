@@ -1,6 +1,13 @@
-import type { ReactNode } from 'react';
-
-import { Layout, Media, Section, type IconName } from '@/components';
+import {
+  Cluster,
+  Layout,
+  Media,
+  Section,
+  Texture,
+  TextureShape,
+  type IconName,
+  type MediaRatio,
+} from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -37,18 +44,47 @@ import t from '../../_specimen/typeroles.module.css';
  * none appears twice, and the four audit cards are the studio's own photographs at the one
  * placement their 622px masters allow (4 across, § 5.4). Blue is the foreground accent only:
  * glyphs, title arrows, the thumbnail rows' cues, every link, the index numerals and the one
- * solid ask in the list router's head. Texture: the hero's `hero-plinth` and nothing else — every
- * other band here is cards or ruled rows, and texture never sits behind either (§ 6.2).
+ * solid ask in the list router's head. Texture: one `horizon` (§ 6.3), at the foot of the centred
+ * image router, directly above the change of ground into the tint list router — the one place on
+ * the page where a band meets a different ground. Never behind cards or rows, never in the Slider.
+ * The hero carries none (fix round 1): its stepped plinth under the lead read as a skeleton loader.
  *
- * Band order alternates the head (beside · centred · beside · H-row · beside · centred) so no two
- * neighbours are the same rectangle, which is the squint test (§ 8.5) applied to the specimen.
+ * Band order alternates the head and the ground (beside · centred · beside on tint · H-row · beside
+ * · start, as a rail) so no two neighbours are the same rectangle, which is the squint test (§ 8.5)
+ * applied to the specimen. The two image routers differ by shape as well as head: three whole
+ * cards under a display head, then six on a rail that runs off the page's end edge.
  */
 
 const photo = (id: PhotoId): BlockCardMedia => ({ type: 'image', image: getKitPhoto(id) });
 
-/** The C-icon head photograph, sized to end on the grid's last line (ContentSection asideFill). */
-function Aside({ id }: { id: PhotoId }) {
-  return <Media image={getKitPhoto(id)} fit="fill" sizes={HEAD_TRACK} />;
+/**
+ * The C-icon head photograph. `fill` ends it on the grid's last line (ContentSection asideFill) —
+ * right for six, whose 3 × 2 grid is about as tall as a 3:2 photo in the head track (§ 1.4: 536
+ * against 542). Four cards are a 2 × 2 grid, and the fill floor made that photo a 381 × 160 strip,
+ * so the four take the placement's own 3:2 and the head track runs past the grid, as § 1.4's C-icon-4
+ * arithmetic has it (542 against 432).
+ */
+function Aside({ id, ratio }: { id: PhotoId; ratio?: MediaRatio }) {
+  return ratio ? (
+    <Media image={getKitPhoto(id)} ratio={ratio} sizes={HEAD_TRACK} />
+  ) : (
+    <Media image={getKitPhoto(id)} fit="fill" sizes={HEAD_TRACK} />
+  );
+}
+
+/* A `horizon` (visual-direction § 6.3) at the foot of a paper band directly above a change of
+   ground. In the hard-edged form § 6.3 gives for below 1024 (rect, bottom −80, 120% × 152, blur 24),
+   at every width here: the lg form's blur 200 rose ~250 into the band and laid the grid behind the
+   cards' titles and bodies (crops, fix round 1). This one stands 72 into the 96 padding with a
+   12-deviation edge, so it stops under the cards' air, and reads as the paper giving way to the tint
+   band beneath. Interim numbers at the call site, as every kit family's are until fdn-texture folds
+   the recipes into TEXTURE_RECIPES. */
+function Horizon() {
+  return (
+    <Texture>
+      <TextureShape bottom={-80} width="120%" height={152} blur={24} />
+    </Texture>
+  );
 }
 
 const icon = (
@@ -60,7 +96,13 @@ const icon = (
 ): BlockCardSetItem => ({ id, icon: name, title, body, href });
 
 /* ── 01 · Icon router, six ─────────────────────────────────────────────────────────────────────
-   Icon card ceilings (§ 1.5): title ≤ 5 words on one line, body ≤ 14 on two. */
+   Icon card ceilings (§ 1.5): title ≤ 5 words on one line, body ≤ 14 on two.
+
+   One silhouette family (fix round 1): every glyph is a solid Solar Bold shape drawn straight on
+   the ground — pen and ruler, stacked layers, sparkles, a screen, a database, a shield. Round 1
+   mixed three of those with three filled rounded tiles (code-square, server, refresh-square), so
+   half the grid read as blue chips and half as marks, and the accent landed unevenly. The thin
+   stroke glyphs (code, refresh) are a third weight and are left out for the same reason. */
 const SIX: readonly BlockCardSetItem[] = [
   icon(
     'six-product',
@@ -71,7 +113,7 @@ const SIX: readonly BlockCardSetItem[] = [
   ),
   icon(
     'six-systems',
-    'widget',
+    'layers',
     'Design systems',
     'For teams rebuilding the same button in every product, a little differently.',
     ROUTES.designSystems,
@@ -85,21 +127,21 @@ const SIX: readonly BlockCardSetItem[] = [
   ),
   icon(
     'six-engineering',
-    'code-square',
+    'monitor',
     'Design engineering',
     'For designs that change shape somewhere between the file and the build.',
     ROUTES.designEngineering,
   ),
   icon(
     'six-software',
-    'server',
+    'database',
     'Software development',
     'For the build behind the design, held to the same standard the design set.',
     ROUTES.softwareDevelopment,
   ),
   icon(
     'six-modern',
-    'refresh-square',
+    'shield-check',
     'Product modernisation',
     'For a product old enough that every change feels like a risk to someone.',
     ROUTES.productModernisation,
@@ -133,24 +175,26 @@ const THREE: readonly BlockCardSetItem[] = [
 ];
 
 /* ── 03 · List router ──────────────────────────────────────────────────────────────────────────
-   One-column D row ceilings: title ≤ 5, body ≤ 28 on two lines. The thumbnail is the row's
-   marker, 160 × 107 at 3:2 with the 8 radius and no frame (§ 5.3). */
+   One-column D row ceilings: title ≤ 5, body ≤ 28 on two lines; here ≤ 12, one line at 1440 and
+   three beside the phone thumbnail. The thumbnail is the row's marker, 160 × 107 at 3:2 with the
+   8 radius and no frame (§ 5.3), 96 × 64 below md so it stays beside its title. Every photograph
+   cool or neutral: round 1's violet-lit pencil was the page's one saturated non-blue colour. */
 const ROWS: readonly { title: string; body: string; image: PhotoId; href: string }[] = [
   {
     title: 'Design systems',
-    body: 'When the screens are fine but every team builds them differently, and the product drifts a little with each release.',
-    image: 'pencil-wireframe-violet',
+    body: 'When every team builds the same screens a little differently.',
+    image: 'screen-over-shoulder',
     href: ROUTES.designSystems,
   },
   {
     title: 'Product modernisation',
-    body: 'When the product is old enough that every change is a risk, and the people who knew why have moved on.',
+    body: 'When the product is old enough that every change feels risky.',
     image: 'office-calm-interior',
     href: ROUTES.productModernisation,
   },
   {
     title: 'Software development',
-    body: 'When the design is settled and you need the build behind it held to the same standard.',
+    body: 'When the design is settled and the build must hold to it.',
     image: 'team-laptops-table',
     href: ROUTES.softwareDevelopment,
   },
@@ -198,14 +242,14 @@ const FOUR: readonly BlockCardSetItem[] = [
 const NEXT: readonly BlockCardSetItem[] = [
   icon(
     'nx-systems',
-    'widget',
+    'layers',
     'Design systems',
     'Once the screens ship, one shared set keeps the next ones consistent.',
     ROUTES.designSystems,
   ),
   icon(
     'nx-engineering',
-    'code-square',
+    'monitor',
     'Design engineering',
     'Designers in your codebase, so the build matches what was decided.',
     ROUTES.designEngineering,
@@ -219,7 +263,7 @@ const NEXT: readonly BlockCardSetItem[] = [
   ),
   icon(
     'nx-modern',
-    'refresh-square',
+    'shield-check',
     'Product modernisation',
     'When an older product sits beside the new one and holds it back.',
     ROUTES.productModernisation,
@@ -269,13 +313,43 @@ const SLIDES: readonly { title: string; body: string; image: PhotoId; href: stri
 
 /* ── The showcase chrome ─────────────────────────────────────────────────────────────────────── */
 
+/*
+ * Names are "form, count": a comma, never a middot. Round 1's "Image router · three" bound the
+ * middot to one word with a non-breaking space and wrapped at 1024 as "Image / router · three" or
+ * left the middot dangling at a line end; a comma breaks where a reader expects and none of these
+ * needs to (≤ 20 characters, one line in the 1024 index's 298 track).
+ */
 const VARIATIONS = [
-  { id: 'icon-six', name: 'Icon router\u00a0· six' },
-  { id: 'image-three', name: 'Image router\u00a0· three' },
-  { id: 'list', name: 'List router\u00a0· three rows' },
-  { id: 'image-four', name: 'Image router\u00a0· four' },
-  { id: 'icon-four', name: 'Icon router\u00a0· four' },
-  { id: 'slider', name: 'Image router\u00a0· Slider' },
+  {
+    id: 'icon-six',
+    name: 'Icon router, six',
+    note: 'Six services beside a photograph; each whole card is the link.',
+  },
+  {
+    id: 'image-three',
+    name: 'Image router, three',
+    note: 'Three linked photographs under a centred display head.',
+  },
+  {
+    id: 'list',
+    name: 'List router, three',
+    note: 'Thumbnail rows beside a head that carries the band’s actions.',
+  },
+  {
+    id: 'image-four',
+    name: 'Image router, four',
+    note: 'Four fixed-scope audits, each naming its own next step.',
+  },
+  {
+    id: 'icon-four',
+    name: 'Icon router, four',
+    note: 'What teams add next, closed by a link to all six.',
+  },
+  {
+    id: 'slider',
+    name: 'Image router, Slider',
+    note: 'Six cards on a rail that runs off the page’s edge.',
+  },
 ] as const;
 
 type VariationId = (typeof VARIATIONS)[number]['id'];
@@ -284,29 +358,23 @@ const indexOf = (id: VariationId) =>
   String(VARIATIONS.findIndex((v) => v.id === id) + 1).padStart(2, '0');
 
 /**
- * The titled band in front of each variation: index and name in the head track, what to look for
- * in the body track. Its own tight Section, so the variation under it sits edge to edge with its
- * neighbours exactly as on a route and fold:check measures the band as a page renders it. The
- * `spec` class is the shots harness's crop handle.
+ * The titled band in front of each variation, on one line (fix round 1): the blue index, the name,
+ * and a one-sentence note. Round 1's four-line spec paragraphs made the page read as documentation
+ * between its bands; the rules each variation proves are in the comments beside its data instead.
+ * Its own tight Section, so the variation under it sits edge to edge with its neighbours exactly as
+ * on a route and fold:check measures the band as a page renders it. It takes the ground of the
+ * band it introduces. The `spec` class is the specimen harness's ruled crop handle.
  */
-function Title({ id, children }: { id: VariationId; children: ReactNode }) {
+function Title({ id, surface }: { id: VariationId; surface?: 'tint' }) {
   const variation = VARIATIONS.find((v) => v.id === id)!;
   return (
-    <Section density="tight" id={id}>
-      <Layout
-        className={s.spec}
-        columns={{ lg: [1, 2] }}
-        colGap="section"
-        rowGap="text"
-        align="end"
-      >
-        <Layout rowGap="tight">
-          <p className={s.eyebrow}>{indexOf(id)}</p>
-          {/* An h2 at h3 scale, so the outline never steps h1 → h3 → h2 beside the band's h2. */}
-          <h2 className={t.h3}>{variation.name}</h2>
-        </Layout>
-        <p className={s.specNote}>{children}</p>
-      </Layout>
+    <Section density="tight" id={id} surface={surface}>
+      <Cluster className={s.spec} colGap="block" rowGap="tight" align="baseline">
+        <span className={s.kitIndex}>{indexOf(id)}</span>
+        {/* An h2 at h4 scale, so the outline never steps h1 → h3 → h2 beside the band's h2. */}
+        <h2 className={t.h4}>{variation.name}</h2>
+        <p className={s.specNote}>{variation.note}</p>
+      </Cluster>
     </Section>
   );
 }
@@ -315,6 +383,9 @@ export default function ServiceListKitSpecimen() {
   return (
     <>
       {/* ── Intro ──────────────────────────────────────────────────────────────────────────── */}
+      {/* The photograph hero at § 5.4's 5:4 (572 × 458 at 1470), so the image outweighs the copy as
+          the references' do. No texture: the plinth under the lead was parked in the space the
+          shorter photo left, and read as a skeleton loader. */}
       <PageHero
         arrangement="beside"
         eyebrow="Tcules UI kit"
@@ -322,11 +393,15 @@ export default function ServiceListKitSpecimen() {
         body={[
           'Three ways a page routes a reader to the right service: icons beside a photograph, image cards, or ruled rows with a thumbnail.',
         ]}
-        media={{ type: 'image', image: getKitPhoto('conversation-chalkboard') }}
-        texture
+        actions={[
+          { label: 'See the routers', href: '#icon-six' },
+          { label: 'All services', href: ROUTES.services },
+        ]}
+        media={{ type: 'image', image: getKitPhoto('wall-sketching-portrait'), ratio: '5/4' }}
       />
 
-      {/* The index: every variation, linked to its band — itself a small router. */}
+      {/* The index: every variation, linked to its band — itself a small router, title-cued so its
+          numerals sit on the column edge the hero's copy holds. */}
       <Section density="tight">
         <Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="none">
           {VARIATIONS.map((v, i) => (
@@ -336,18 +411,18 @@ export default function ServiceListKitSpecimen() {
               href={`#${v.id}`}
               marker={{ type: 'number', value: i + 1 }}
               size="sm"
+              cue="title"
             />
           ))}
         </Layout>
       </Section>
 
       {/* ── 01 · C-icon-6 ──────────────────────────────────────────────────────────────────── */}
-      <Title id="icon-six">
-        C-icon-6: a beside head over six linked icon cards, the photograph in the head track
-        ending on the grid&rsquo;s last line. Whole-card links, each title closed by the blue
-        arrow; no CtaRow (§ 1.4 rule 7), and never actions in the head track, so the set never
-        renders without its photo. At 390 the six are one sideways row, the next card peeking.
-      </Title>
+      {/* A beside head over six linked icon cards, the photograph in the head track ending on the
+          grid's last line. Whole-card links, each title closed by the blue arrow; no CtaRow (§ 1.4
+          rule 7), and never actions in the head track, so the set never renders without its photo.
+          At 390 the six are one sideways row, the next card peeking. */}
+      <Title id="icon-six" />
       <ContentSection
         arrangement="beside"
         data-band="C-icon"
@@ -362,11 +437,10 @@ export default function ServiceListKitSpecimen() {
       </ContentSection>
 
       {/* ── 02 · C-image-3, H-compact centred ──────────────────────────────────────────────── */}
-      <Title id="image-three">
-        C-image-3 under a centred H-compact head at the display role: three linked cards at
-        16:9, the copy written as the condition that sends a reader there. On hover the title
-        joins its arrow in blue and the photograph leans in. At 390 the row scrolls.
-      </Title>
+      {/* Three linked cards at 16:9 under a centred display head, the copy written as the condition
+          that sends a reader there; three across from 768 (BlockCardSet), a scroll row at 390. The
+          `horizon` at its foot meets the tint list router below. */}
+      <Title id="image-three" />
       <ContentSection
         align="center"
         headingSize="display"
@@ -375,24 +449,25 @@ export default function ServiceListKitSpecimen() {
         heading="Three ways in"
         headingId="ksl-image-three"
         lead="Pick the problem that sounds like yours. Each page says what we do first and what you get."
+        texture={<Horizon />}
       >
         <BlockCardSet items={THREE} lead="none" />
       </ContentSection>
 
       {/* ── 03 · List router ───────────────────────────────────────────────────────────────── */}
-      <Title id="list">
-        The list router: a beside head carrying the band&rsquo;s actions (one solid ask, one
-        blue link) over three ruled ListCard rows. Each row leads with a 160 × 107 thumbnail at
-        radius 8 and ends on the blue arrow cue; the whole row is the link. Three rows at most,
-        so the head track never needs an aside as well (§ 1.4 rule 6).
-      </Title>
+      {/* A beside head carrying the band's actions (one solid ask, one blue link) over three ruled,
+          title-cued ListCard rows: thumbnail, title and its arrow, the condition under it. Three
+          rows at most, so the head track never needs an aside as well (§ 1.4 rule 6). On tint, the
+          page's one change of ground, so the run of paper bands breaks where the shape does. */}
+      <Title id="list" surface="tint" />
       <ContentSection
         arrangement="beside"
+        surface="tint"
         data-band="D"
         eyebrow="Related services"
-        heading="If product design is not the fit"
+        heading="Not the right fit?"
         headingId="ksl-list"
-        lead="Three neighbouring services, each for a different problem. If none of them is yours either, a short call will find it."
+        lead="Three neighbouring services, each for a different problem. If none is yours, a short call will find it."
         actions={
           <CtaRow
             rule={false}
@@ -414,6 +489,8 @@ export default function ServiceListKitSpecimen() {
               title={row.title}
               body={row.body}
               href={row.href}
+              cue="title"
+              arrangement="stacked"
               marker={{ type: 'thumbnail', image: getKitPhoto(row.image) }}
             />
           ))}
@@ -421,11 +498,10 @@ export default function ServiceListKitSpecimen() {
       </ContentSection>
 
       {/* ── 04 · C-image-4, H-row, per-card CTA ────────────────────────────────────────────── */}
-      <Title id="image-four">
-        C-image-4 under the H-row: four across at 286, h5 over body-sm, lead=&quot;none&quot; so
-        no audit looks recommended. Each card names its destination in a blue link pinned to the
-        card&rsquo;s foot, so the four links share a line. The studio&rsquo;s own photographs.
-      </Title>
+      {/* Four across at 286, h5 over body-sm, lead="none" so no audit looks recommended. Each card
+          names its destination in a blue link pinned to its foot, so the four links share a line.
+          The studio's own photographs. */}
+      <Title id="image-four" />
       <ContentSection
         arrangement="split-head"
         data-band="C-image"
@@ -438,11 +514,10 @@ export default function ServiceListKitSpecimen() {
       </ContentSection>
 
       {/* ── 05 · C-icon-4 + CtaRow ─────────────────────────────────────────────────────────── */}
-      <Title id="icon-four">
-        C-icon-4 on a service page: what teams add next. Four may close on a CtaRow under the
-        grid; the head track still takes only its photograph. At 390, linked and more than
-        three, the set is a sideways row.
-      </Title>
+      {/* On a service page: what teams add next. Four may close on a CtaRow under the grid; the head
+          track still takes only its photograph, at 3:2. At 390, linked and more than three, the set
+          is a sideways row. */}
+      <Title id="icon-four" />
       <ContentSection
         arrangement="beside"
         data-band="C-icon"
@@ -450,8 +525,7 @@ export default function ServiceListKitSpecimen() {
         heading="What teams add next"
         headingId="ksl-icon-four"
         lead="Four services that most often follow product design, in the order clients add them."
-        asideFill
-        aside={<Aside id="hands-sticky-blue-pen" />}
+        aside={<Aside id="hands-sticky-blue-pen" ratio="3/2" />}
         footer={
           <CtaRow
             note="Six services in all, each with its own page."
@@ -463,20 +537,19 @@ export default function ServiceListKitSpecimen() {
       </ContentSection>
 
       {/* ── 06 · Slider ────────────────────────────────────────────────────────────────────── */}
-      <Title id="slider">
-        Five or more image cards never wrap to a 3 × 2 grid (826): they become a Slider showing
-        three, the controls centred under a centred head. Measured at the tallest slide plus its
-        controls. At 390, one card in view and the next peeking.
-      </Title>
+      {/* Five or more image cards never wrap to a 3 × 2 grid (826): they become a Slider showing
+          three, under a start-aligned head this time, and the row BLEEDS past the column's end
+          edge, so the fourth card shows in the margin and the set reads as a rail. The controls
+          are a split row a `stack` under the cards: the progress rail on the column's start edge,
+          the steppers on its end edge. At 390, one card in view and the next peeking. */}
+      <Title id="slider" />
       <ContentSection
-        align="center"
-        headingSize="display"
         data-band="C-image"
         eyebrow="All services"
         heading="Six ways we can help"
         headingId="ksl-slider"
       >
-        <Slider label="Services" align="center">
+        <Slider label="Services" bleed>
           {SLIDES.map((card) => (
             <BlockCard
               key={card.href}

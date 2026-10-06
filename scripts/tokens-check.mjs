@@ -46,6 +46,7 @@ const JS_INJECTED = new Set([
   '--view-xl',
   '--slider-count', // Slider: the slide count, and the scroll progress it writes on scroll
   '--slider-progress',
+  '--slider-bleed', // Slider `bleed`: the measured distance from its end edge to the viewport's
   '--cmark-src',
   '--cmark-ratio',
   '--cmark-ratio-root',

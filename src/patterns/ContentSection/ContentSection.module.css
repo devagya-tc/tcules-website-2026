@@ -174,3 +174,15 @@
   block-size: 100%;
   min-block-size: var(--csec-aside-min-size);
 }
+
+/* Below 1024 the band is stacked and the aside has no body beside it to end on: it takes the head
+   aside's own 3:2 instead of the floor, which letterboxed it to 4.4:1 at 768 (cmp-services fix
+   round 1). `contain: size` stays, so the photograph's intrinsic height still sets nothing; the
+   ratio sizes the box from its width. */
+@media (max-width: 1023.98px) {
+  .asideFill {
+    block-size: auto;
+    min-block-size: 0;
+    aspect-ratio: var(--csec-aside-ratio);
+  }
+}

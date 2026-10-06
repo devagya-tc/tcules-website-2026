@@ -134,7 +134,8 @@ type Columns = ComponentProps<typeof Layout>['columns'];
  * featured. Every shape is one track below md (or a scroll row: see the component).
  *
  *   across 2   two from md. Pairs, and any set in a beside body.
- *   across 3   two from md, three from lg. A set of three, or five and more (rows of three).
+ *   across 3   two from md, three from lg, for five and more (rows of three); a set of exactly
+ *              three is three across from md, so it never leaves an orphan on a second row.
  *   across 4   two from md, four from lg: 2×2 at 768 to 1023, one row from 1024.
  *
  * By count when `across` is absent: 1–2 → 2, 4 → 4, otherwise 3.
@@ -152,6 +153,10 @@ function peerGrid(
      photographs in a band 1140 to 1300 tall — an image wall larger than anything at 1440. Four at
      216 hold the row's shape; the `sm` step is already the four-across one. */
   if (widest === 4) return { columns: { base: 1, md: 2, lg: 4 }, tracks: 2, widest };
+  /* Exactly three: three across from md (cmp-services fix round 1). Two from md put the third card
+     alone on a second row beside an empty cell at 768 to 1023, an orphan in every three-card
+     router. Five and more keep two from md: their rows are full or end on a pair. */
+  if (count === 3) return { columns: { base: 1, md: 3 }, tracks: 3, widest };
   return { columns: { base: 1, md: 2, lg: 3 }, tracks: 3, widest };
 }
 

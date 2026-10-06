@@ -63,6 +63,7 @@ from 768 up. It needs no Slider: below 768 the peek and Tab are the affordances.
 | `children` | `ReactNode` | — | The slides, each one `li`. |
 | `perView` | `1 \| 2 \| 3 \| 4` | `3` | Slides in view at the widest step; the Slider owns the ladder (§ 4). |
 | `align` | `'start' \| 'center'` | `'start'` | Where the controls sit: under a left head, or under a centred one (§ 3.5). |
+| `bleed` | `boolean` | `false` | **6 Oct (cmp-services).** From md the row runs past the column's end edge to the viewport's (measured, written as `--slider-bleed`), so the next slide shows in the margin and the set reads as a rail. The tracks are unchanged; the bleed is end padding the overflow paints into. Row to controls is now `stack` (48), not `block`. |
 
 Deliberately not props: autoplay, loop, a per-slide picker, a step size (always one slide), any gap
 (always `gutter`), `surface` (read from the band), `className`/`style`.

@@ -62,6 +62,22 @@ export type SliderProps = {
   perView?: SliderPerView;
   /** Default `start`. See `SliderAlign`. */
   align?: SliderAlign;
+  /**
+   * From md up, the row runs past the column's inline end to the viewport's edge, so the slide after
+   * the last whole one shows in the band's side margin and the row reads as a rail rather than a
+   * grid of exactly `perView` (cmp-services fix round 1: six image cards at three in view looked
+   * the same as a three-card set beside it, with only the control row saying there were six).
+   * Default `false`.
+   *
+   * The slides keep their tracks to the pixel: the row's content box is still the column, and the
+   * bleed is inline-end padding the overflow paints into. Its width is measured — the distance from
+   * the slider's end edge to the viewport's (`clientWidth`, so a classic scrollbar is excluded and
+   * the page never scrolls sideways) — and written as `--slider-bleed`. Before hydration it is 0, so
+   * the server render is the unbled row and nothing shifts: the peek only appears. Below md the
+   * row already bleeds to both screen edges (Layout's phone scroll row), so this changes nothing
+   * there. The start edge is the column's: slides scroll away under it, as a rail does.
+   */
+  bleed?: boolean;
 };
 
 /** perView → the Layout scroll row's per-breakpoint counts. The table on `SliderPerView`. */
@@ -128,11 +144,18 @@ type Position = { ready: boolean; atStart: boolean; atEnd: boolean };
  * reads data-surface from that Section. A client component because it holds state, a ref and
  * listeners — the only reasons `'use client'` is earned here.
  */
-export function Slider({ label, children, perView = 3, align = 'start' }: SliderProps) {
+export function Slider({
+  label,
+  children,
+  perView = 3,
+  align = 'start',
+  bleed = false,
+}: SliderProps) {
   const slides = Children.toArray(children);
   const count = slides.length;
   const rowId = `${useId()}-slides`;
   const rowRef = useRef<HTMLElement>(null);
+  const rootRef = useRef<HTMLElement>(null);
   const thumbRef = useRef<HTMLSpanElement>(null);
   const [position, setPosition] = useState<Position>({
     ready: false,
@@ -233,6 +256,31 @@ export function Slider({ label, children, perView = 3, align = 'start' }: Slider
     };
   }, [count, label]);
 
+  /* The bleed: the slider's end edge to the viewport's, written on the root. Measured on mount and on
+     every viewport resize — past the 1240 cap the column does not change width, so the row's own
+     ResizeObserver would not fire while the margin grows. */
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!bleed || !root) return;
+    let frame = 0;
+    const write = () => {
+      frame = 0;
+      const box = root.getBoundingClientRect();
+      const rtl = getComputedStyle(root).direction === 'rtl';
+      const end = rtl ? box.left : document.documentElement.clientWidth - box.right;
+      root.style.setProperty('--slider-bleed', `${Math.max(0, Math.floor(end))}px`);
+    };
+    const onResize = () => {
+      if (!frame) frame = requestAnimationFrame(write);
+    };
+    frame = requestAnimationFrame(write);
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [bleed]);
+
   /* One slide per press: the distance between two neighbouring slides' start edges, which is one
      track plus the seam at whatever width this is. Mandatory snapping lands it exactly. No
      `behavior`: the row's own computed scroll-behavior decides, which is smooth only when the
@@ -281,10 +329,14 @@ export function Slider({ label, children, perView = 3, align = 'start' }: Slider
     <section
       aria-roledescription="carousel"
       aria-label={label}
-      className={cx(styles.slider, VIEW_CLASS[perView])}
+      ref={rootRef}
+      className={cx(styles.slider, VIEW_CLASS[perView], bleed && styles.bleed)}
       style={{ '--slider-count': count } as CSSProperties}
     >
-      <Layout rowGap="block">
+      {/* Row to controls is `stack` (48), block to block (cmp-services fix round 1): at `block` (24)
+          the controls sat ~30 under the cards' last line, cramped against the band's 96 and read
+          as part of the last card rather than as the row's own control strip. */}
+      <Layout rowGap="stack">
         <Layout
           as="ul"
           id={rowId}
