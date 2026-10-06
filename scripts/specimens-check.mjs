@@ -58,7 +58,8 @@ for (const href of hrefs) {
 const notARouteSegment = (d) => d.startsWith('_') || d.startsWith('(');
 
 for (const dir of dirs('src/app/design').filter((d) => !notARouteSegment(d))) {
-  if (!hrefs.includes(dir)) {
+  /* A grouping folder (design/kit/<family>) is linked when any specimen under it is. */
+  if (!hrefs.some((href) => href === dir || href.startsWith(`${dir}/`))) {
     problems.push(`src/app/design/${dir}  exists but nothing in SPECIMENS links to it`);
   }
 }

@@ -241,3 +241,6 @@ export type {
   SiteFooterNewsletter,
   SiteFooterSocial,
 } from './SiteFooter';
+
+/* Thread — stages one decision passes through, on one blue line, with a return path (E band). */
+export { Thread, type ThreadProps, type ThreadStage, type ThreadStageHeading } from './Thread';

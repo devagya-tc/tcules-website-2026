@@ -163,7 +163,7 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--bmark-` (components/brand-mark.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--ctarow-` (components/cta-row.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--flow-` (components/process-flow.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--rbadge-` (components/rating-badge.css) · `--sec-` (components/section.css) · `--svc-` (components/service-page.css) · `--sld-` (components/slider.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
+`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--bmark-` (components/brand-mark.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--ctarow-` (components/cta-row.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--flow-` (components/process-flow.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--rbadge-` (components/rating-badge.css) · `--sec-` (components/section.css) · `--svc-` (components/service-page.css) · `--sld-` (components/slider.css) · `--stat-` (components/stat.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css) · `--thread-` (components/thread.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
@@ -198,8 +198,10 @@ against the controls beside it — if you are specifying one, say which of these
 - **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
 - **service-page.css** — `--svc-mark-size` 12px · `--svc-slice-cell` 24px · `--svc-link-underline-offset` 4px · `--svc-hidden-size` 1px · `--svc-rule-width` 1px · `--svc-rule-strong-width` 1px · `--svc-meter-width` 96px · `--svc-meter-height` 24px · `--svc-meter-stroke` 2px · `--svc-authority-slot` 12px
 - **slider.css** — `--sld-progress-length` 240px · `--sld-progress-thickness` 2px · `--sld-progress-radius` 999px · `--sld-ring-width` 2px · `--sld-ring-offset` 2px · `--sld-hidden-size` 1px
+- **stat.css** — `--stat-rule-width` 1px · `--stat-mark-width` 2px · `--stat-mark-length` 32px · `--stat-value-tracking-lg` -0.015em · `--stat-value-tracking-md` -0.01em · `--stat-unit-tracking` 0.08em · `--stat-label-measure` 32ch
 - **table-of-contents.css** — `--toc-title-tracking` 0.12em · `--toc-ordinal-tracking` 0.08em · `--toc-max-inline` 232px · `--toc-min-inline` 160px · `--toc-summary-min-block` 44px · `--toc-ordinal-inline` 24px · `--toc-entry-padding-block` 12px · `--toc-rule-width` 1px · `--toc-current-rule-width` 3px · `--toc-underline-width` 1px · `--toc-underline-width-pressed` 2px · `--toc-underline-offset` 2px · `--toc-entry-radius-focus` 4px · `--toc-ring-width` 2px · `--toc-ring-offset` 2px
 - **tag.css** — `--tag-size-md` 24px · `--tag-radius` 4px · `--tag-edge-width` 1px · `--tag-glyph-size` 16px · `--tag-ring-width` 2px · `--tag-ring-offset` 2px · `--tag-label-trim` 1px · `--tag-glyph-gap` 4px
+- **thread.css** — `--thread-line-width` 1px · `--thread-node-size` 12px · `--thread-node-border` 2px · `--thread-head-size` 8px · `--thread-node-radius` 999px · `--thread-loop-radius` 8px · `--thread-title-tracking-md` 0em · `--thread-title-tracking-sm` 0em
 
 ### The three layout primitives — their real prop APIs
 
@@ -224,7 +226,7 @@ seam to size.
 
 ### What already exists — check these before specifying anything new
 
-- **Primitives** (`src/components/`): `BrandMark` · `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `RatingBadge` · `Section` · `Tag` · `Texture`
-- **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaRow` · `CtaSection` · `DataTable` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `ProcessFlow` · `Proof` · `SiteFooter` · `SiteNav` · `Slider` · `TableOfContents`
+- **Primitives** (`src/components/`): `BrandMark` · `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `RatingBadge` · `Section` · `Stat` · `Tag` · `Texture`
+- **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaRow` · `CtaSection` · `DataTable` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `ProcessFlow` · `Proof` · `SiteFooter` · `SiteNav` · `Slider` · `TableOfContents` · `Thread`
 - **Templates** (`src/templates/`): `CaseStudyIndex` · `ServicePage`
 
