@@ -18,6 +18,7 @@ import {
   ListCard,
   Proof,
   type DataTableProps,
+  type ProofFigure,
 } from '@/patterns';
 import { HEAD_TRACK } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
@@ -43,6 +44,15 @@ const LEAD_LONG =
   'Most modernisation work is scoped as a rebuild of screens, but the decisions that slow a ' +
   'team down live between those screens: who approves a change, which record is authoritative, ' +
   'and what happens when two operators disagree about the same customer at the same time.';
+
+/* The KIT's copy ceilings (visual-direction § 1.5), as distinct from the CMS stress above. The
+   stress copy proves the band does not break; it is past every head's word budget, so a row carrying
+   it is a deliberate fold failure and says so (`FoldExempt`). A row that must FIT pushes copy to these
+   instead: h2 ≤ 6 words in a 381 head track (H-beside-aside), a lead ≤ 18 words (every head form but
+   H-beside-actions). HEADING_LONG is already the H-full ceiling (10 words). */
+const HEADING_CEILING_TRACK = 'Modernisation stalls where ownership is unclear';
+const LEAD_CEILING =
+  'Most delays trace back to a decision nobody owns: which record wins, who approves the change, and when.';
 
 /* No space, no hyphen: the only break opportunity is the one overflow-wrap makes. At 43px in a
    one-third track at 1024 this is roughly twice the track's width. */
@@ -284,6 +294,26 @@ function AsidePhoto({ id }: { id: PhotoId }) {
   return <Media image={photo(id)} ratio="3/2" sizes={HEAD_TRACK} />;
 }
 
+/* The aside's other form (§ 3.3: "D always has an aside: a photograph or one --text-stat-lg
+   figure"). One Proof figure — the kit's stat-lg voice, its checked line said once. § 1.4 budgets it
+   at stat-lg 54, 16, body-sm on 2 lines: 114. The stress figure carries the 12-word label ceiling
+   (§ 1.5) and the widest value shape the corpus uses. */
+const STAT: ProofFigure = {
+  value: '90+',
+  label: 'completed product and design-system engagements',
+  checkedOn: 'checked on 8 August 2026',
+};
+const STAT_LONG: ProofFigure = {
+  value: '1,200+',
+  label: 'operator hours a week returned to claims teams after the workflow rebuild',
+  checkedOn: 'checked on 8 August 2026',
+};
+
+/** A head-track aside: one stat-lg figure (§ 3.3, the D band's other aside). */
+function AsideStat({ figure }: { figure: ProofFigure }) {
+  return <Proof figures={[figure]} />;
+}
+
 function Steps() {
   return (
     <Layout as="ol" rowGap="none">
@@ -299,6 +329,19 @@ function Steps() {
     </Layout>
   );
 }
+
+/**
+ * Marks a band that runs past the 1470 × 830 fold ON PURPOSE (visual-direction § 1.3: "a specimen
+ * block that shows a deliberate failure carries data-fold-exempt"). Every use carries CMS stress copy
+ * past § 1.5's word budget: it proves the band survives the copy, not that the copy is a page shape.
+ * A plain block wrapper — it adds no box, no seam and no ground, so the band inside sits edge to edge
+ * with its neighbours exactly as it would unwrapped.
+ */
+function FoldExempt({ reason, children }: { reason: string; children: ReactNode }) {
+  return <div data-fold-exempt={reason}>{children}</div>;
+}
+
+const OVER_BUDGET = 'CMS stress copy (10-word h2, 45-word lead) past the § 1.5 head budget';
 
 /**
  * A labelling band between groups of specimens. The specimens on this page are BANDS, so they
@@ -461,25 +504,25 @@ export default function ContentSectionSpecimen() {
       <Label title="4 · The longest realistic heading and lead">
         A ten-word H2 of eighty characters and a forty-five-word lead. Stacked, the heading
         breaks at the title measure (--measure-title, 32ch: 816px at 1440) and balances; beside,
-        the one-third track (381) is narrower
-        than that measure, so the track sets the line and the heading runs to more lines — the
-        head column is allowed to be taller than a short body, and section 6 shows what that
-        looks like.
+        the one-third track (381) is narrower than that measure, so the track sets the line and
+        the heading runs to more lines — the head column is allowed to be taller than a short
+        body, and section 6 shows what that looks like.
       </Label>
       {PAIR.map((arrangement) => (
-        <ContentSection
-          key={arrangement}
-          arrangement={arrangement}
-          eyebrow={`Long copy · ${arrangement}`}
-          heading={HEADING_LONG}
-          headingId={`csec-long-${arrangement}`}
-          lead={LEAD_LONG}
-        >
-          <ContentSectionText>
-            <Prose html={BODY_HTML} />
-          </ContentSectionText>
-          {pairBody(arrangement)}
-        </ContentSection>
+        <FoldExempt key={arrangement} reason={OVER_BUDGET}>
+          <ContentSection
+            arrangement={arrangement}
+            eyebrow={`Long copy · ${arrangement}`}
+            heading={HEADING_LONG}
+            headingId={`csec-long-${arrangement}`}
+            lead={LEAD_LONG}
+          >
+            <ContentSectionText>
+              <Prose html={BODY_HTML} />
+            </ContentSectionText>
+            {pairBody(arrangement)}
+          </ContentSection>
+        </FoldExempt>
       ))}
 
       {/* ── 5 ──────────────────────────────────────────────────────────────────────────────── */}
@@ -804,17 +847,19 @@ export default function ContentSectionSpecimen() {
           <Accordion items={FAQ} />
         </ContentSectionText>
       </ContentSection>
-      <ContentSection
-        align="center"
-        eyebrow="Centred · longest copy"
-        heading={HEADING_LONG}
-        headingId="csec-centre-long"
-        lead={LEAD_LONG}
-      >
-        <ContentSectionText>
-          <Prose html={BODY_HTML} />
-        </ContentSectionText>
-      </ContentSection>
+      <FoldExempt reason={OVER_BUDGET}>
+        <ContentSection
+          align="center"
+          eyebrow="Centred · longest copy"
+          heading={HEADING_LONG}
+          headingId="csec-centre-long"
+          lead={LEAD_LONG}
+        >
+          <ContentSectionText>
+            <Prose html={BODY_HTML} />
+          </ContentSectionText>
+        </ContentSection>
+      </FoldExempt>
       <ContentSection
         align="center"
         surface="tint"
@@ -825,7 +870,6 @@ export default function ContentSectionSpecimen() {
         footer={
           <CtaRow
             actions={[SEE_WORK]}
-            tone="primary"
             align="center"
             note="The rule and the note restate their ink per surface."
           />
@@ -838,12 +882,13 @@ export default function ContentSectionSpecimen() {
 
       {/* ── 12 ─────────────────────────────────────────────────────────────────────────────── */}
       <Label title="12 · beside, with an aside or actions in the head track">
-        The head track takes one large object a stack under the head text — a 3:2 photograph (or
-        one stat figure) — or the head&rsquo;s actions, never both (§ 1.4 rule 6; the type
-        refuses the pair). The lead steps to body-lg in a split head track. Below 1024 the aside
-        sits between the head and the body. The body is a reads-down body, icon cards two
-        across, or two pair cards; a footer CtaRow closes the body track. Tint rows are surface
-        proof — on pages, tint is the proof band only (§ 1.7).
+        The head track takes one large object a stack under the head text — a 3:2 photograph or
+        one stat-lg figure (§ 3.3: D always has one of the two; C-icon always the photograph) —
+        or the head&rsquo;s actions, never both (§ 1.4 rule 6; the type refuses the pair). The
+        lead steps to body-lg in a split head track. Below 1024 the aside sits between the head
+        and the body. The body is a reads-down body, icon cards two across, or two pair cards; a
+        footer CtaRow closes the body track. Tint rows are surface proof — on pages, tint is the
+        proof band only (§ 1.7).
       </Label>
       <ContentSection
         arrangement="beside"
@@ -868,6 +913,27 @@ export default function ContentSectionSpecimen() {
       </ContentSection>
       <ContentSection
         arrangement="beside"
+        eyebrow="Aside · D · a stat figure"
+        heading="What the work returns"
+        headingId="csec-aside-stat"
+        lead="Three steps, and the one number that says whether they worked."
+        aside={<AsideStat figure={STAT} />}
+      >
+        <Steps />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        surface="tint"
+        eyebrow="Stat aside · copy and label at the ceiling"
+        heading={HEADING_CEILING_TRACK}
+        headingId="csec-aside-stat-long"
+        lead={LEAD_CEILING}
+        aside={<AsideStat figure={STAT_LONG} />}
+      >
+        <Steps />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
         eyebrow="Actions · C-pair"
         heading="Two pieces of work that argue the same point"
         headingId="csec-beside-actions"
@@ -878,17 +944,19 @@ export default function ContentSectionSpecimen() {
       >
         <PairCards />
       </ContentSection>
-      <ContentSection
-        arrangement="beside"
-        surface="tint"
-        eyebrow="Aside · longest copy"
-        heading={HEADING_LONG}
-        headingId="csec-aside-long"
-        lead={LEAD_LONG}
-        aside={<AsidePhoto id="studio-session-talk" />}
-      >
-        <Steps />
-      </ContentSection>
+      <FoldExempt reason={OVER_BUDGET}>
+        <ContentSection
+          arrangement="beside"
+          surface="tint"
+          eyebrow="Aside · longest copy"
+          heading={HEADING_LONG}
+          headingId="csec-aside-long"
+          lead={LEAD_LONG}
+          aside={<AsidePhoto id="studio-session-talk" />}
+        >
+          <Steps />
+        </ContentSection>
+      </FoldExempt>
 
       {/* ── 13 ─────────────────────────────────────────────────────────────────────────────── */}
       <Label title='13 · arrangement="split-head" (the H-row)'>
@@ -906,11 +974,7 @@ export default function ContentSectionSpecimen() {
         headingId="csec-split-action"
         lead="Product design, design systems and the engineering that ships them, as one team."
         actions={
-          <CtaRow
-            actions={[{ label: 'All services', href: ROUTES.services }]}
-            tone="primary"
-            rule={false}
-          />
+          <CtaRow actions={[{ label: 'All services', href: ROUTES.services }]} rule={false} />
         }
       >
         <Cards />
@@ -931,16 +995,20 @@ export default function ContentSectionSpecimen() {
       >
         <Cards />
       </ContentSection>
-      <ContentSection
-        arrangement="split-head"
-        eyebrow="H-row · longest copy"
-        heading={HEADING_LONG}
-        headingId="csec-split-long"
-        lead={LEAD_LONG}
-        actions={<CtaRow actions={[START, HOW]} emphasis="solid" tone="primary" rule={false} />}
-      >
-        <Cards />
-      </ContentSection>
+      <FoldExempt reason={OVER_BUDGET}>
+        <ContentSection
+          arrangement="split-head"
+          eyebrow="H-row · longest copy"
+          heading={HEADING_LONG}
+          headingId="csec-split-long"
+          lead={LEAD_LONG}
+          actions={
+            <CtaRow actions={[START, HOW]} emphasis="solid" tone="primary" rule={false} />
+          }
+        >
+          <Cards />
+        </ContentSection>
+      </FoldExempt>
       <ContentSection
         arrangement="split-head"
         eyebrow="H-row · title only — degrades to stacked"
@@ -952,16 +1020,19 @@ export default function ContentSectionSpecimen() {
 
       {/* ── 14 ─────────────────────────────────────────────────────────────────────────────── */}
       <Label title='14 · arrangement="media" (the B split)'>
-        A 4:5 photograph in 5 of [5, 7], radius 8, the copy in 7, 96 apart. When the copy ends
-        in an action — a footer, or head actions with nothing after them — the copy column
-        stretches to the photo and pins the action to its bottom edge, so the two share a top
-        and a bottom edge (§ 3.2 rule 1) — but only when blocks sit above the action. Otherwise
-        the copy is centred on the photo (rule 2), including a copy column with no blocks: there
-        is nothing to fill a stretch, and pinning would leave ~400 of empty column between the
-        lead and the action. Those two bands are degrade cases, not page shapes — § 3.4 B always
-        carries tiles. media.side flips the photo to the end. Below 1024 the photo sits above
-        the copy at 4:3. Tint rows are surface proof — on pages, tint is the proof band only
-        (§ 1.7).
+        A 4:5 photograph in 5 of [5, 7], radius 8, the copy in 7, 96 apart. Only one shape pins:
+        blocks, then a footer. That copy column stretches to the photo and pins the footer to
+        its bottom edge, so the two share a top and a bottom edge (§ 3.2 rule 1). Everything
+        else is centred on the photo (rule 2): tiles with no footer, and a copy column with no
+        blocks — a head and a footer, or a head and its actions — because there is nothing to
+        fill a stretch and pinning would leave ~400 of empty column between the lead and the
+        action. Head actions are never pinned; they sit a stack under the lead. The no-blocks
+        bands are degrade cases, not page shapes (§ 3.4 B always carries tiles), and their foot
+        takes rule=&#123;false&#125;: with no body above it, the hairline would underline the
+        lead. The pinned band is shown beside the same band with media.pin=false, for the owner
+        to choose between (spec open question 7). media.side flips the photo to the end. Below
+        1024 the photo sits above the copy at 4:3. Tint rows are surface proof — on pages, tint
+        is the proof band only (§ 1.7).
       </Label>
       <ContentSection
         arrangement="media"
@@ -976,11 +1047,23 @@ export default function ContentSectionSpecimen() {
       <ContentSection
         arrangement="media"
         media={{ image: photo('designer-desk-monitor'), side: 'end' }}
-        eyebrow="Photo end · 2 tiles + CtaRow · pinned"
+        eyebrow="Photo end · 2 tiles + CtaRow · pinned (the default)"
         heading="The team you work with is the team that ships"
         headingId="csec-media-ctarow"
         lead="No hand-off between a pitch team and a delivery team. The people in the room build it."
-        footer={<CtaRow actions={[HOW]} tone="primary" />}
+        footer={<CtaRow actions={[HOW]} />}
+      >
+        <Tiles count={2} />
+      </ContentSection>
+      {/* The owner comparison: identical band, same side, so alignment is the only difference. */}
+      <ContentSection
+        arrangement="media"
+        media={{ image: photo('designer-desk-monitor'), side: 'end', pin: false }}
+        eyebrow="Photo end · 2 tiles + CtaRow · media.pin=false, centred"
+        heading="The team you work with is the team that ships"
+        headingId="csec-media-ctarow-centred"
+        lead="No hand-off between a pitch team and a delivery team. The people in the room build it."
+        footer={<CtaRow actions={[HOW]} />}
       >
         <Tiles count={2} />
       </ContentSection>
@@ -995,6 +1078,7 @@ export default function ContentSectionSpecimen() {
           <CtaRow
             actions={[SEE_WORK]}
             note="Twelve case studies, each with its first sketch."
+            rule={false}
           />
         }
       />
@@ -1011,22 +1095,40 @@ export default function ContentSectionSpecimen() {
         arrangement="media"
         media={{ image: photo('studio-sticky-board-ux') }}
         surface="tint"
-        eyebrow="Longest copy · taller than the photo"
+        eyebrow="Copy at the ceiling · 2 tiles + CtaRow"
         heading={HEADING_LONG}
         headingId="csec-media-long"
-        lead={LEAD_LONG}
+        lead={LEAD_CEILING}
         footer={<CtaRow actions={[SEE_WORK]} />}
       >
-        <Tiles />
+        {/* § 1.4 rule 9: ≤ 4 tiles, or ≤ 2 tiles and a CtaRow, never both in full. The stress is the
+            copy at its § 1.5 ceiling (H-full: 10-word h2, 18-word lead) inside the fuller of the two
+            allowed shapes, not a third shape — so this row must, and does, fit the fold. */}
+        <Tiles count={2} />
       </ContentSection>
+      <FoldExempt reason={`${OVER_BUDGET}: proves a copy column taller than the photo`}>
+        <ContentSection
+          arrangement="media"
+          media={{ image: photo('stylus-tablet-sketch'), side: 'end' }}
+          eyebrow="CMS stress · copy taller than the photo · fold-exempt"
+          heading={HEADING_LONG}
+          headingId="csec-media-overflow"
+          lead={LEAD_LONG}
+          footer={<CtaRow actions={[SEE_WORK]} />}
+        >
+          <Tiles count={2} />
+        </ContentSection>
+      </FoldExempt>
 
       {/* ── 15 ─────────────────────────────────────────────────────────────────────────────── */}
       <Label title="15 · Footer in every arrangement, and footer alone">
         The footer is the body&rsquo;s last row, a stack under the blocks, in every arrangement
         (sections 11 to 14 show it centred, beside, split-head and media). Stacked here, and
-        beside with a footer and no blocks — a degrade case, not a page shape: a footer is not
-        a trailing half on its own (a lone CtaRow level with the eyebrow over an empty
-        two-thirds track), so the band is the stacked band, the footer a stack under the head.
+        beside with a footer and no blocks — a degrade case, not a page shape: a footer is not a
+        trailing half on its own (a lone CtaRow level with the eyebrow over an empty two-thirds
+        track), so the band is the stacked band, the footer a stack under the head. With no
+        blocks the foot passes rule=&#123;false&#125;: its hairline marks where a body ends, and
+        with no body above it, it would sit 48 under the lead as an underline.
       </Label>
       <ContentSection
         eyebrow="Footer · stacked"
@@ -1055,6 +1157,7 @@ export default function ContentSectionSpecimen() {
             emphasis="solid"
             tone="primary"
             note="Every engagement starts with a thirty-minute call."
+            rule={false}
           />
         }
       />

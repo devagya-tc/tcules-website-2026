@@ -244,7 +244,7 @@ an H-row 515. Word ceilings (§ 1.5) are unchanged.
 | CTA point | h6 = 24; 8; detail = 22 (1 line) or 44 (2 lines) | **54 / 76** |
 | CtaRow | 48 seam + one 48 row | **96** |
 | Photo aside, 3:2 at 381 | | **254** |
-| Stat aside | stat-lg 54; 16; body-sm on 2 lines = 44 | **114** |
+| Stat aside | stat-lg 54; 16; body-sm on 2 lines = 44 | **114** (measured 123 as a Proof figure with its "checked on" line; 136 with a 12-word label on 3 lines: `fdn-section-head`, 6 Oct) |
 | Slider controls | 24 + 40 | **64** |
 
 **Fit, per archetype** (§ 3.4 defines the archetypes; every row is checked against the 598 target):
@@ -581,7 +581,13 @@ word, joined to it with a non-breaking space.
    that is a head and an action and nothing else is centred on the image, as in rule 2: stretched,
    it left 350 to 400 of empty column between the lead and the action at 1440 (`fdn-section-head`
    fix round, 6 Oct; ContentSection `media`). B always carries tiles (§ 3.4), so this is the degrade
-   path, not a page shape.
+   path, not a page shape. Head actions are never pinned: they sit a `stack` under the lead, and only
+   blocks followed by a footer stretch the column.
+
+   **Open for the owner (6 Oct, second fix round):** pinned, B with 2 tiles and a CtaRow leaves ~180
+   of empty column between the tiles and the CtaRow's rule at 1440. ContentSection's `media.pin: false`
+   centres that column instead; `/design/content-section` § 14 renders the two side by side, and
+   `cmp-media-split` builds on the owner's choice (ContentSection spec, open question 7).
 2. **When it does not end in an action** (a quote, rows only), the copy is centred on the image
    (`align="center"`).
 3. **An illustration has no box,** so it is always centred on the copy (the hero).
@@ -732,6 +738,15 @@ exactly this wording into the blue comment it adds to `tokens/index.css`.
 
 **Neutral link-style is not blue.** `emphasis="link" tone="neutral"` is ink, so it spends nothing. Every
 second action, every per-card CTA, the "schedule a call" link, and G-case's "Read the case" use it.
+
+**Amended 6 Oct 2026 (`fdn-section-head`, second fix round): a band's link foot is blue by default.**
+CtaRow defaulted every action to neutral, so link feet were ink label and ink arrow; with ink icons in
+the body, a C-icon-4 band read fully black and white. The owner's binding ruling wants more blue in the
+foreground (links, arrows, small marks), so a **link-led CtaRow now defaults to `tone="primary"`**: the
+first action spends **Signal**, counted once per band. A solid-led CtaRow still defaults to neutral,
+because a solid primary is **Accent** and is spent on purpose. The second action stays neutral. A band
+that already spends a different kind of Signal (G's quote rule, E's diagram line) or has spent its two
+passes `tone="neutral"`; the band rule is unchanged.
 
 | Band | Spends | Therefore |
 |---|---|---|

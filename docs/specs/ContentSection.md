@@ -124,6 +124,33 @@ thing that stops those five reading as one repeated shape is an arrangement, not
 > head slots matches one member outright. § 3, § 4, § 14 and § 15 below are amended in place; where the
 > older prose still says "two arrangements", this amendment wins.
 
+> **6 Oct 2026 — `fdn-section-head`, second fix round.**
+> - **A footer under no blocks takes `rule={false}`.** The footer-only `beside` band (degraded to
+>   stacked) and the no-blocks `media` band kept the CtaRow hairline 48 under the lead, with no body
+>   above it to close — CtaRow's own `rule` doc calls that an underline on the lead. The band cannot
+>   reach into the node it is handed (a pattern does not import a pattern or read its classes), so the
+>   `footer` doc tells the caller, and both specimens pass it.
+> - **`media.pin?: boolean`** (default `true`). `false` centres a copy column that would otherwise
+>   pin its footer under blocks (§ 3.2 rule 1 → rule 2's alignment). Added so the owner can compare the
+>   pinned B (2 tiles + CtaRow leaves ~180 of empty column between the tiles and the rule at 1440) with
+>   a centred one before `cmp-media-split` builds on it: open question 7.
+> - **The stat aside is specimened.** § 3.3 lets the `beside` aside be a photograph or one
+>   `--text-stat-lg` figure (D always has one); every aside specimen was a photograph. Two D bands now
+>   carry one `Proof` figure as the aside, one at ordinary copy and one at the § 1.5 ceiling (6-word
+>   h2, 18-word lead, 12-word stat label, a six-character value). Finding, measured at 1440:
+>   Proof's figure tile is narrower than the 381 track, so the 12-word label sets on 3 lines, not
+>   § 1.4's 2, and Proof adds its "checked on" line, which § 1.4's 114 omits: the aside is 123 at
+>   ordinary copy and 136 at the ceiling. The ceiling band is 664 and fits. Recorded for Proof's owner
+>   (`cmp-testimonials`) and for § 1.4's stat-aside row.
+> - **Stress rows say which kind of stress they are.** A row at the § 1.5 ceiling must fit the fold
+>   (media at the B ceiling: 10-word h2, 18-word lead, 2 tiles + CtaRow, 788 at 1440). A row with CMS
+>   stress copy (a 45-word lead, past every head budget) is wrapped in `data-fold-exempt` with the
+>   reason, per visual-direction § 1.3. The old media stress row put 4 tiles and a CtaRow under H-full,
+>   which § 1.4 rule 9 forbids; it now carries 2 tiles.
+> - **Specimen label § 14** no longer says head actions pin: only blocks + footer pins
+>   (`pinFooter = hasBlocks && hasFooter && media.pin !== false`); head actions sit a stack under the
+>   lead and the column is centred.
+
 > **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
 
 ## 1 · Identity
@@ -184,8 +211,8 @@ are arrangement, and arrangement is `Layout`'s.
 | `align` | `ContentSectionAlign` = `'start' \| 'center'` | `'start'` | **6 Oct.** Centred head and centred-as-a-block body (§ 3.5). Stacked only. |
 | `actions` | `ReactNode` | — | **6 Oct.** The head's action row (a `CtaRow rule={false}`), a stack under the lead. Not with `align="center"`, not with `aside`. |
 | `aside` | `ReactNode` | — | **6 Oct.** `beside` only: the head track's photo (3:2) or stat, a stack under the head text. |
-| `media` | `ContentSectionMedia` = `{ image: MediaImage; side?: 'start' \| 'end' }` | — | **6 Oct.** Required by, and only on, `arrangement="media"`. |
-| `footer` | `ReactNode` | — | **6 Oct.** The band's foot (a `CtaRow`), the body's last row at `stack`. |
+| `media` | `ContentSectionMedia` = `{ image: MediaImage; side?: 'start' \| 'end'; pin?: boolean }` | — | **6 Oct.** Required by, and only on, `arrangement="media"`. `pin` (default `true`): `false` centres a blocks + footer copy column instead of pinning the footer (open question 7). |
+| `footer` | `ReactNode` | — | **6 Oct.** The band's foot (a `CtaRow`), the body's last row at `stack`. With no blocks, the caller passes the CtaRow `rule={false}`. |
 | `children` | `ReactNode` | — | The blocks. Rich text goes in wrapped in `ContentSectionText` (below). |
 
 **`ContentSectionText`** (second export, **added 2.17**) — `{ children: ReactNode }`, nothing else.
@@ -383,7 +410,7 @@ the honest sense — sized to its content, not stretched to the body's height pr
 | Empty string for eyebrow / heading / lead | Treated as absent (falsy). No empty element, no seam. |
 | No lead | The eyebrow and heading are the whole head, at the same 24 seam. |
 | No head at all | No head row. Under `beside` the body takes the full column (degrades to `stacked`). |
-| No children / `children` omitted | No body row and no 48 seam under the head. Under `beside` the head takes the full column, and an `aside` is dropped (no head track to sit in). A `footer` alone does not split `beside`: it sits a stack under the head. |
+| No children / `children` omitted | No body row and no 48 seam under the head. Under `beside` the head takes the full column, and an `aside` is dropped (no head track to sit in). A `footer` alone does not split `beside`: it sits a stack under the head, and its CtaRow takes `rule={false}` (nothing above it to close). |
 | Empty children array (`[]`, a CMS section with zero blocks) | Same as omitted — `Children.toArray` is empty. **Changed in 2.13**: previously an empty `Layout` rendered, leaving a phantom 48 seam below the head. |
 | One block / many blocks | One row per block at 48; the component never counts, clamps or paginates. |
 | `beside` with a short body | The head is the taller column; the band ends under the head. Not corrected (specimen §6). |
@@ -419,7 +446,8 @@ animation). Reduced motion: nothing to reduce.
   error (`tsc` fails on `<ContentSection align="center" actions={…} />`).
 - **Don't** hand a `media` band a pre-cropped `<Media>`: `media` takes the record, and the band
   crops it 4:5 / 4:3 (`grep -n "ratio={{ base: '4/3', lg: '4/5' }}" src/patterns/ContentSection/ContentSection.tsx`).
-- **Do** pass `rule={false}` to a footer CtaRow under a ruled ladder (Accordion, ListCard rows).
+- **Do** pass `rule={false}` to a footer CtaRow under a ruled ladder (Accordion, ListCard rows), and
+  to the footer of a band with no blocks (`/design/content-section` § 14, § 15).
 - The module's only `@media` is `.leadBeside`'s (a type role from 1024); it states no distance.
 
 ## 15 · Specimen plan
@@ -444,14 +472,17 @@ route. Labelling bands (tight, paper) separate the groups.
 10. Two adjacent paper bands, beside then stacked.
 11. **6 Oct.** `align="center"`: over a card set, over an accordion with a centred CtaRow (D-faq),
     the longest copy, and on tint (captioned surface proof).
-12. **6 Oct.** `beside` with an aside (photo, C-icon-4 with a footer; photo, D rows), with actions
-    (C-pair), and the longest copy with an aside.
+12. **6 Oct.** `beside` with an aside (photo, C-icon-4 with a footer; photo, D rows; one stat-lg
+    figure, D rows, at ordinary copy and at the § 1.5 ceiling), with actions (C-pair), and CMS stress
+    copy with a photo aside (fold-exempt).
 13. **6 Oct.** `split-head`: with an action, lead only with a footer, the longest copy, and title only
     (degrades to stacked).
-14. **6 Oct.** `media`: photo start + 4 tiles (centred), photo end + 2 tiles + CtaRow (pinned), no
-    blocks + CtaRow (centred, degrade case), head actions and no blocks (centred, degrade case), the
-    longest copy (taller than the photo).
-15. **6 Oct.** Footer under a stacked set; a footer and no blocks under `beside` (degrades to stacked).
+14. **6 Oct.** `media`: photo start + 4 tiles (centred), photo end + 2 tiles + CtaRow pinned beside
+    the identical band with `media.pin: false` (the owner comparison), no blocks + CtaRow (centred,
+    rule off, degrade case), head actions and no blocks (centred, degrade case), copy at the B ceiling
+    with 2 tiles + CtaRow (fits), and CMS stress copy taller than the photo (fold-exempt).
+15. **6 Oct.** Footer under a stacked set; a footer and no blocks under `beside` (degrades to stacked,
+    rule off).
 Section 1 now shows all four arrangements with the body each is for.
 
 No states to force. `beside` cannot be forced inside a narrow frame at a wide window (a frame
@@ -498,6 +529,14 @@ Before 2.17: none — every value in this spec is an existing token. `beside` us
 6. **Brief 07's Note slot and the "rail" arrangement.** Brief 07 asked for a Callout slot and asked
    whether a sticky rail is worth specifying. *Chosen:* no Note slot — a `Callout` is a child in the
    body, which already takes any block; the rail is rejected by O2. *Non-blocking.*
+
+7. **B with tiles and a footer: pinned or centred?** § 3.2 rule 1 pins the footer to the photo's
+   bottom edge so copy and photo share two edges. At 1440 a B with 2 tiles and a CtaRow then carries
+   ~180 of empty column between the tiles and the CtaRow's rule — the emptiest band on the specimen.
+   *Options:* (a) pin (rule 1, two shared edges); (b) centre, the footer a `stack` under the tiles.
+   *Chosen for now:* **(a)**, the documented rule, with `media.pin: false` available and both rendered
+   side by side on `/design/content-section` § 14 for the owner. `cmp-media-split` builds on the
+   answer. *Non-blocking for foundations; the owner's call before `cmp-media-split`.*
 
 No BLOCKING question is open.
 

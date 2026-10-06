@@ -61,6 +61,19 @@ export type ContentSectionMedia = {
   image: MediaImage;
   /** Default `start` — the photo leads. Consecutive media bands on a page alternate it (§ 3.2 rule 4). */
   side?: ContentSectionMediaSide;
+  /**
+   * Whether a copy column that ends in a footer UNDER BLOCKS stretches to the photo and pins the
+   * footer to its bottom edge (§ 3.2 rule 1). Default `true`. `false` centres that copy column on
+   * the photo instead (rule 2's alignment), closing the gap between the last block and the footer to
+   * the band's `stack`.
+   *
+   * Added in the fdn-section-head fix round (6 Oct 2026) so the owner can compare the two at 1440:
+   * B with 2 tiles and a CtaRow, pinned, leaves ~180 of empty column between the tiles and the
+   * footer's rule. It changes nothing where the band would centre anyway (no blocks, or no footer).
+   * The default is open question 7 in docs/specs/ContentSection.md; `cmp-media-split` builds on the
+   * owner's answer.
+   */
+  pin?: boolean;
 };
 
 type ContentSectionBaseProps = {
@@ -120,6 +133,11 @@ type ContentSectionBaseProps = {
    * A footer is not a body on its own: `beside` with a footer and no blocks degrades to `stacked`
    * (the footer a stack under the head), because a lone CtaRow in the two-thirds track sits level
    * with the eyebrow over an empty track, a shape no § 3.4 archetype sanctions.
+   *
+   * WITH NO BLOCKS, PASS THE CtaRow `rule={false}`. Its hairline marks where a body ends and the ask
+   * begins; with no body above it, it sits a `stack` under the lead and reads as an underline on it
+   * (fix round, 6 Oct 2026). The band cannot reach into the node it is handed — a pattern does not
+   * import a pattern, nor read its classes — so the caller states it, as it does under a ruled ladder.
    *
    * A slot and not a list of CtaRow props, because a pattern does not import a pattern (CLAUDE.md §
    * Scope): the caller composes `<CtaRow>` and hands it over, as `Button` takes `icon`.
@@ -388,8 +406,9 @@ export function ContentSection(props: ContentSectionProps) {
            the action (§ 3.4 B: H-full + tiles, or ≤ 2 tiles + a CtaRow). With no blocks there is
            nothing to fill the stretch, and pinning opens a 350–400 hole between the lead and the
            action at 1440; that copy column is centred on the photo instead (rule 2), as is any
-           copy that does not end in an action. */
-        pinFooter={hasBlocks && hasFooter}
+           copy that does not end in an action — and any whose caller passed `media.pin: false`
+           (the owner comparison, open question 7 in the spec). */
+        pinFooter={hasBlocks && hasFooter && media.pin !== false}
       />
     );
   } else if (headSplit) {
@@ -487,7 +506,8 @@ export function ContentSection(props: ContentSectionProps) {
  *                           § 3.7), and it carries no meaning against the copy (an atmosphere photo,
  *                           alt="").
  *   align   stretch|center  the copy column stretches to the photo's height when blocks sit above
- *                           a closing action, and is centred on it otherwise (§ 3.2 rules 1 and 2)
+ *                           a footer (unless `media.pin` is false), and is centred on it otherwise
+ *                           (§ 3.2 rules 1 and 2)
  *
  * The photograph sits in a plain `div` because the row may STRETCH: a stretched `<img>` would take
  * the row's height and lose its 4:5. The div stretches; the image inside keeps its crop at the top

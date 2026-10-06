@@ -24,10 +24,16 @@ export type CtaRowEmphasis = 'link' | 'solid';
 /**
  * The FIRST action's colour axis — Button's `tone`, passed through.
  *
- *   neutral  ink. Spends nothing (§ 4.2: "neutral link-style is not blue"). The default, so a band
- *            never spends blue on its foot without saying so.
- *   primary  blue. As a link it is the band's Signal; as a solid it is the band's Accent. The caller
- *            is spending one of the band's two (§ 4.2 band rule) and should know which.
+ *   primary  blue. As a link it is the band's Signal; as a solid it is the band's Accent (§ 4.2).
+ *            The default for a LINK-led row (amended 6 Oct 2026, fdn-section-head fix round): the
+ *            owner's binding ruling wants more blue in the foreground — links, arrows, small marks —
+ *            so a band's foot points somewhere in blue unless the caller says otherwise. A link row
+ *            spends Signal, the cheap tier, counted once per band however many links it holds.
+ *   neutral  ink. Spends nothing (§ 4.2: "neutral link-style is not blue"). The default for a SOLID-
+ *            led row, because a solid primary spends Accent (≤ 1 per band, the scarcest tier) and the
+ *            caller spends that on purpose. Pass it on a link row only when the band already spends a
+ *            different KIND of Signal — G's quote rule, E's diagram line (§ 4.2: ≤ 1 kind per band) —
+ *            or has already spent its two of Accent, Signal, Field and Texture.
  */
 export type CtaRowTone = 'neutral' | 'primary';
 
@@ -58,7 +64,10 @@ export type CtaRowProps = {
   note?: string;
   /** The first action's loudness. Default `link`. See `CtaRowEmphasis`. */
   emphasis?: CtaRowEmphasis;
-  /** The first action's colour. Default `neutral`, so blue is only ever spent on purpose. */
+  /**
+   * The first action's colour. Default `primary` for a link-led row and `neutral` for a solid-led
+   * one — Signal spent by default, Accent never. See `CtaRowTone`.
+   */
   tone?: CtaRowTone;
   /**
    * The hairline above the row. Default `true`: a section-level CtaRow — a band's `footer` — takes
@@ -67,6 +76,10 @@ export type CtaRowProps = {
    * it to close off; a rule there would read as an underline on the lead. And `false` under a
    * RULED LADDER — an Accordion, a set of ListCard rows, a DataTable — whose last rule already closes
    * the body: a second hairline a `stack` under the first reads as a double rule, not as an edge.
+   * And `false` for a FOOTER IN A BAND WITH NO BLOCKS (a footer-only band, a media split that is a
+   * head and its ask): there is no body for the rule to close, so it sits a `stack` under the lead
+   * and reads as the same underline. The row cannot see what is above it, so the placing caller
+   * states it; ContentSection's `footer` doc says so.
    */
   rule?: boolean;
   /** Default `start`. See `CtaRowAlign`. */
@@ -92,7 +105,9 @@ export type CtaRowProps = {
  *
  * Distances, every one a gap-scale step and none of them responsive:
  *   rule → row        block (24)   head to body inside a block: the rule is the row's head
- *   note ↔ actions    block (24) across, text (16) when they wrap
+ *   note ↔ actions    block (24) across and when they wrap — at 326 the note wraps above the
+ *                                  actions, and 16 there sat the mono label tight under body-sm
+ *                                  (fix round, 6 Oct: the owner rules spacing is never cramped)
  *   action ↔ action   block (24)   PageHero's argument: a bare link label 8 from a filled box reads
  *                                  as part of it, and wrapped targets need clear air between them
  *
@@ -107,7 +122,7 @@ export function CtaRow({
   actions,
   note,
   emphasis = 'link',
-  tone = 'neutral',
+  tone,
   rule = true,
   align = 'start',
 }: CtaRowProps) {
@@ -116,6 +131,8 @@ export function CtaRow({
      actions and turn a start row into a "between" row around nothing. */
   const hasNote = Boolean(note?.trim());
   const linkRow = emphasis === 'link';
+  /* Signal by default, Accent only on request (see CtaRowTone). */
+  const firstTone: CtaRowTone = tone ?? (linkRow ? 'primary' : 'neutral');
 
   const buttons = actions.map((action, index) => {
     const first = index === 0;
@@ -125,7 +142,7 @@ export function CtaRow({
         as="a"
         href={action.href}
         emphasis={first && !linkRow ? 'solid' : 'link'}
-        tone={first ? tone : 'neutral'}
+        tone={first ? firstTone : 'neutral'}
         size="md"
         /* The box is 40 (solid) or the label line (link); the touch floor is 44 either way. */
         extendHitArea
@@ -145,7 +162,7 @@ export function CtaRow({
           label must sit on the solid's label line and on the note's. */}
       <Cluster
         colGap="block"
-        rowGap="text"
+        rowGap="block"
         align="center"
         justify={centred ? 'center' : hasNote ? 'between' : 'start'}
       >
