@@ -144,6 +144,20 @@ type ContentSectionBaseProps = {
    */
   footer?: ReactNode;
   /**
+   * The band's Texture placement (visual-direction § 6): a `<Texture>` composed by the caller,
+   * rendered as the band's first child so it fills the band edge to edge beneath the content. A slot
+   * and not a recipe name, because the recipes are Texture's to own and a pattern takes its sibling
+   * as a node (CtaSection's `texture` is the same slot). On paper only (§ 6.2); the caller places
+   * the shape so its box clears every content box.
+   *
+   * In `media` it is shown from 1024 only. The B band's one placement is `counterweight`, in the
+   * corner opposite the photograph, and it has no phone form (§ 6.3, § 3.7 item 5): below 1024 the
+   * photo sits above the copy and there is no opposite corner left to weigh. Every other
+   * arrangement shows it at every width — `horizon`, the one recipe that runs below 1024, sits on a
+   * stacked band.
+   */
+  texture?: ReactNode;
+  /**
    * The blocks. Each becomes one row of the body stack at `--gap-stack`.
    *
    * Every block takes the full body track — the band cannot tell a paragraph from a card grid by
@@ -307,7 +321,8 @@ const present = (node: ReactNode) => Children.toArray(node).length > 0;
  * Route-blind and data-blind like every pattern — it never learns that Strapi exists.
  */
 export function ContentSection(props: ContentSectionProps) {
-  const { heading, headingId, eyebrow, lead, surface, density, footer, children } = props;
+  const { heading, headingId, eyebrow, lead, surface, density, footer, texture, children } =
+    props;
   const arrangement: ContentSectionArrangement = props.arrangement ?? 'stacked';
   const centred = props.align === 'center';
   const actions = props.actions;
@@ -489,6 +504,12 @@ export function ContentSection(props: ContentSectionProps) {
       aria-labelledby={labelled ? headingId : undefined}
       data-arrangement={arrangement}
     >
+      {/* The wrapper is unpositioned, so the Texture inside still resolves against the Section
+          (its nearest positioned ancestor) and fills the whole band; it exists only to carry the
+          `media` breakpoint. In flow it is an empty block of zero height above the content. */}
+      {present(texture) ? (
+        <div className={arrangement === 'media' ? styles.textureLg : undefined}>{texture}</div>
+      ) : null}
       {arranged}
     </Section>
   );

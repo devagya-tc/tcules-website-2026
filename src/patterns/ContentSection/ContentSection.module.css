@@ -4,10 +4,11 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .heading .lead .leadBeside .centred .bodyCentred .text
+   Classes: .eyebrow .heading .lead .leadBeside .centred .bodyCentred .text .textureLg
 
-   One @media query (.leadBeside, from 1024): the lead's ROLE follows the arrangement, and the
-   beside arrangement only exists from 1024. It swaps a type role, never a distance. */
+   Two @media queries, both from 1024 and neither swapping a distance: .leadBeside (the lead's ROLE
+   follows the arrangement, and the beside arrangement only exists from 1024) and .textureLg (the
+   media split's texture has no phone form). */
 
 .eyebrow {
   font: var(--csec-eyebrow-text);
@@ -75,4 +76,18 @@
    width: in `beside`'s narrower track at 1024 the track is the tighter of the two and wins. */
 .text {
   max-inline-size: var(--csec-body-measure);
+}
+
+/* The `media` arrangement's texture slot, shown from 1024 only (visual-direction § 6.3: the B band's
+   `counterweight` has no form below 1024, because the photo moves above the copy and the corner it
+   weighs against is gone). Visibility, not arrangement and not spacing: the wrapper is an empty,
+   unpositioned block, so showing it moves nothing and the Texture inside still fills the Section. */
+.textureLg {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .textureLg {
+    display: block;
+  }
 }

@@ -213,6 +213,7 @@ are arrangement, and arrangement is `Layout`'s.
 | `aside` | `ReactNode` | — | **6 Oct.** `beside` only: the head track's photo (3:2) or stat, a stack under the head text. |
 | `media` | `ContentSectionMedia` = `{ image: MediaImage; side?: 'start' \| 'end'; pin?: boolean }` | — | **6 Oct.** Required by, and only on, `arrangement="media"`. `pin` (default `true`): `false` centres a blocks + footer copy column instead of pinning the footer (open question 7). |
 | `footer` | `ReactNode` | — | **6 Oct.** The band's foot (a `CtaRow`), the body's last row at `stack`. With no blocks, the caller passes the CtaRow `rule={false}`. |
+| `texture` | `ReactNode` | — | **6 Oct (`cmp-media-split`).** A caller-composed `<Texture>`, rendered as the band's first child so it fills the band beneath the content (CtaSection's slot, same shape). Paper only. In `media` it shows from 1024 only: `counterweight` has no phone form (visual-direction § 6.3). |
 | `children` | `ReactNode` | — | The blocks. Rich text goes in wrapped in `ContentSectionText` (below). |
 
 **`ContentSectionText`** (second export, **added 2.17**) — `{ children: ReactNode }`, nothing else.

@@ -25,7 +25,9 @@ const TIERS = ['components', 'patterns', 'templates'];
 
 const index = readFileSync(INDEX, 'utf8');
 const names = new Set([...index.matchAll(/name:\s*'([^']+)'/g)].map((m) => m[1]));
-const hrefs = [...new Set([...index.matchAll(/href:\s*'\/design\/([^']+)'/g)].map((m) => m[1]))];
+const hrefs = [
+  ...new Set([...index.matchAll(/href:\s*'\/design\/([^']+)'/g)].map((m) => m[1])),
+];
 
 const dirs = (p) =>
   existsSync(p)
@@ -58,7 +60,8 @@ for (const href of hrefs) {
 const notARouteSegment = (d) => d.startsWith('_') || d.startsWith('(');
 
 for (const dir of dirs('src/app/design').filter((d) => !notARouteSegment(d))) {
-  if (!hrefs.includes(dir)) {
+  /* A directory of nested routes (design/kit/<family>) is linked when any href sits under it. */
+  if (!hrefs.some((h) => h === dir || h.startsWith(`${dir}/`))) {
     problems.push(`src/app/design/${dir}  exists but nothing in SPECIMENS links to it`);
   }
 }
