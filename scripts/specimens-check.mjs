@@ -25,7 +25,9 @@ const TIERS = ['components', 'patterns', 'templates'];
 
 const index = readFileSync(INDEX, 'utf8');
 const names = new Set([...index.matchAll(/name:\s*'([^']+)'/g)].map((m) => m[1]));
-const hrefs = [...new Set([...index.matchAll(/href:\s*'\/design\/([^']+)'/g)].map((m) => m[1]))];
+const hrefs = [
+  ...new Set([...index.matchAll(/href:\s*'\/design\/([^']+)'/g)].map((m) => m[1])),
+];
 
 const dirs = (p) =>
   existsSync(p)

@@ -2,11 +2,12 @@
 
    This file owns TYPE AND INK, and nothing else. `Section` paints the band and owns the content
    column; `Layout` and `Cluster` own every seam and every arrangement; `Button` owns every
-   interactive value. Seven parts that carry colour or type, plus one sizing rule for the point's
-   copy column (`.pointContent`), and no fourth thing.
+   interactive value. Nine parts that carry colour or type (one of them, `.rule`, a neutral hairline
+   that opens a ruled point), plus two flex-item sizing rules (`.pointContent`, `.glyph`), and no
+   fourth kind of thing.
 
    Every value it reads is a `var(--cta-*)` declared in tokens/components/cta-section.css, which
-   re-declares the five inks once per surface. So the same markup answers paper, tint, an ink band
+   re-declares the six inks once per surface. So the same markup answers paper, tint, an ink band
    and the blue pivot without knowing which it is standing on.
 
    ── What is NOT here, and why each absence is a decision ────────────────────────
@@ -26,20 +27,21 @@
    optical correction is needed. (The 40px stat numeral it replaced shared a top edge with the label,
    and the spec's §7(c) declined to correct that.)
 
-   No `@media`, no `transition`, no `transform`, no `animation`, no `opacity`. There are no states
-   to interpolate between: nothing here responds to a pointer and nothing opens. The only stateful
+   Two `@media` blocks, both at 1024 (Layout's `lg`): the K photo frame's crop, which follows the arrangement
+   — 4:3 under the copy, 4:5 or 3:2 beside it (§ 3.7 item 4) — and the split close's texture field,
+   which exists only beside the form (below). No `transition`, no `transform`, no
+   `animation`, no `opacity`. There are no states to interpolate between: nothing here responds to
+   a pointer and nothing opens. The only stateful
    things in the band are the `Button`s and whatever the caller passes into the form slot.
 
    No `--cta-*` state token exists at all, which is that assertion in the token layer.
 
    ── Why the size and tracking pairs are NOT in this file ────────────────────────
-   `offer` renders its heading one rung down, at `--text-h2` where the close is at `--text-h1`.
-   That remap lives in the token layer, keyed on `[data-arrangement='offer']`, because a role's size and its tracking companion are one
-   typographic decision and must move together. This file previously remapped the size with an
-   `.offer` class and hard-wired the two tracking values in two separate selectors, which meant
-   re-tuning the size in the token layer left the tracking silently at the old role's value. The
-   `.offer` class is gone with it: the component already emits `data-arrangement` on the band for
-   the spec's own acceptance check, so the discriminator was there to be used.
+   A role's size and its tracking companion are one typographic decision and must move together, so
+   both live in the token layer as `--cta-*` pairs and this file reads them. (Until cmp-cta the
+   `offer` heading stepped down from h1 to h2 under `[data-arrangement='offer']` there. Since fix
+   round 1 each scale is its own class — `.heading`, `.headingClose`, `.headingOpen` — chosen in
+   the TSX, so no rule is scoped by arrangement and nothing here restates a size.)
 
    ── Rule order is not load-bearing ─────────────────────────────────────────────
    One shared wrapping rule, then the part rules with distinct selectors and no state pair decided
@@ -48,7 +50,7 @@
    element, so their order cannot matter. */
 
 /* ── Every text part breaks inside a word ───────────────────────────────────────
-   Six parts, one rule. A 60-character unbroken token in an `h2` is a content fault and should look
+   Seven parts, one rule. A 60-character unbroken token in an `h2` is a content fault and should look
    like one, but it must not take the page's layout with it — the band never produces a horizontal
    scrollbar, at any width, for any content. `anywhere` rather than `break-word` because these
    parts sit in narrow tracks (the ~458px form column, the 3-up points row) where a token can be
@@ -59,10 +61,14 @@
    button rather than being quietly folded. */
 .eyebrow,
 .heading,
+.headingClose,
+.headingOpen,
 .lead,
 .body,
 .label,
-.detail {
+.detail,
+.detailReading,
+.contactValue {
   overflow-wrap: anywhere;
 }
 
@@ -83,9 +89,8 @@
 
 /* ── The heading ───────────────────────────────────────────────────────────────
    An `h2` in all three arrangements — the page's one `h1` belongs to `PageHero`, and this block
-   appears once or twice per route, so it can never be the page's title. `split` and `open` render
-   it at h1 SCALE and `offer` at h2 SCALE, which is a type role rather than a level; the remap is in
-   the token layer.
+   appears once or twice per route, so it can never be the page's title. The offer renders it at h2;
+   the closes step up (`.headingClose`, `.headingOpen`, below); every role is in the token layer.
 
    Balanced, because every title role is (--text-title-wrap, tokens/primitives.css § Type · wrap),
    and it matters most here: this is the loudest line in the band and a widow in it is visible
@@ -100,29 +105,58 @@
   text-wrap: var(--text-title-wrap);
 }
 
+/* The closes' heading (cmp-cta fix round 1): the same part one and two steps up the ladder, so the
+   page's last ask outweighs every mid-page head. Split takes h1 at the title measure; open takes
+   display at the display measure, centred by its column. Separate rules rather than modifiers on
+   `.heading`, so no two rules set the same property on one element. */
+.headingClose {
+  max-inline-size: var(--cta-heading-measure);
+  color: var(--cta-heading-ink);
+  font: var(--cta-close-heading-text);
+  letter-spacing: var(--cta-close-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+.headingOpen {
+  max-inline-size: var(--cta-open-heading-measure);
+  color: var(--cta-heading-ink);
+  font: var(--cta-open-heading-text);
+  letter-spacing: var(--cta-open-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* The open close is a centred column (Quantum's close, references.md): every line in it centres
+   on the column's axis. The column itself is centred by its Layout's `justifyItems`; this sets the
+   lines inside each part. Inherited, so the points' labels and details centre with it. */
+.centred {
+  text-align: center;
+}
+
 /* ── The copy · two roles, one measure ─────────────────────────────────────────
    `body[0]` at `--text-lead` and `body[1]` at `--text-body-lg`, which gives one or two paragraphs
    an internal hierarchy with no prop and no count-driven rule. A third paragraph does not compile:
    this block asks, it does not explain.
 
-   Both share `--cta-body-measure` and resolve to different widths on purpose, because `ch` is
+   Both share `--cta-lede-measure` (44ch, held under the heading's width — the tapered wedge of
+   references.md Meridian item 4) and resolve to different widths on purpose, because `ch` is
    relative to each part's own role. Neither role has a tracking companion, so neither states one. */
 .lead {
-  max-inline-size: var(--cta-body-measure);
+  max-inline-size: var(--cta-lede-measure);
   color: var(--cta-body-ink);
   font: var(--cta-lead-text);
   text-wrap: var(--text-running-wrap);
 }
 
 .body {
-  max-inline-size: var(--cta-body-measure);
+  max-inline-size: var(--cta-lede-measure);
   color: var(--cta-body-ink);
   font: var(--cta-body-text);
   text-wrap: var(--text-running-wrap);
 }
 
 /* ── The points · marker, label, detail ────────────────────────────────────────
-   Three rules, no box, no rule, no bullet glyph. The marker is the list position written as a
+   No box and no bullet character; a hairline only where a point is ruled (`.rule`, below) and a
+   glyph only under `markers="icon"` (`.glyph`). The number marker is the list position written as a
    numeral, and it carries a real contrast floor rather than a decoration exemption: it is
    `aria-hidden` because a screen reader takes position from the `<ol>`, but a sighted reader counts
    the steps with it, so it is meaningful text at 4.5:1.
@@ -135,6 +169,14 @@
   font: var(--cta-marker-text);
   letter-spacing: var(--cta-marker-tracking);
   text-transform: var(--text-mono-case);
+}
+
+/* The icon marker (`markers="icon"`, cmp-cta): the glyph's wrapper takes the marker's blue and
+   holds its size beside the label. Nothing else — Icon owns its box, its `display: block` and its
+   `flex: none`, and the wrapper is a nowrap Cluster's flex item, so no line box forms around it. */
+.glyph {
+  flex: 0 0 auto;
+  color: var(--cta-marker-ink);
 }
 
 /* Sizing one flex item, not arranging siblings: the point's copy column grows from a zero basis
@@ -157,4 +199,95 @@
   color: var(--cta-point-ink);
   font: var(--cta-detail-text);
   text-wrap: var(--text-running-wrap);
+}
+
+/* A ruled point's detail: the same part at the reading role, in the beside offer's body track. */
+.detailReading {
+  max-inline-size: var(--cta-body-measure);
+  color: var(--cta-point-ink);
+  font: var(--cta-detail-reading-text);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* The hairline that opens a ruled point (`rows`, `row`). Neutral on every surface — a blue rule is
+   a mark, never a divider (visual-direction § 4.3). It spans its track. */
+.rule {
+  border-block-start: var(--cta-rule-width) solid var(--cta-rule-ink);
+}
+
+/* ── The K photo frame ─────────────────────────────────────────────────────────
+   The frame owns the crop and Media fills it (`fit="fill"`). Its ratio is a FLOOR: in a stretched
+   row it is the frame's own height when the copy is shorter, and the copy's height when the copy
+   is taller — so the head sits on the photo's top edge and the actions on its foot at every width
+   from 1024, not only at 1440 (§ 3.2 rule 1). Sizing one grid item, not arranging siblings. */
+.photoFrame {
+  aspect-ratio: var(--cta-photo-ratio-stacked);
+  /* Not a clip of anything visible — Media's fill image is exactly 100% of the frame. It switches
+     off the aspect-ratio box's automatic minimum size, without which the image's intrinsic height
+     would push a 4:5 frame past its ratio before the stretch ever applied. */
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .photoPortrait {
+    aspect-ratio: var(--cta-photo-ratio-portrait);
+  }
+
+  .photoLandscape {
+    aspect-ratio: var(--cta-photo-ratio-landscape);
+  }
+}
+
+/* ── The contact strip ─────────────────────────────────────────────────────────
+   The split close's copy foot when it has something plainer than points to say: how to reach the
+   studio, how fast it answers, which hours it keeps. A key in the eyebrow's mono voice over a value
+   in body copy — a key and its value, so the pair sits `inline` apart in the TSX. A value that is a
+   link is a bare `<a>`, inked by the surface's link colour from globals.css (blue at rest). */
+.contactKey {
+  color: var(--cta-eyebrow-ink);
+  font: var(--cta-eyebrow-text);
+  letter-spacing: var(--cta-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.contactValue {
+  color: var(--cta-body-ink);
+  font: var(--cta-body-text);
+}
+
+/* ── The split close's texture field ───────────────────────────────────────────
+   Where the `closing` equaliser rises (final fix round). The well is the copy cell's flexible last
+   row (Layout `pinLast`, no row gap), so it is exactly the air the form leaves under the copy; the
+   field inside it is the box the Texture fills. Sizing and positioning two boxes for a bleed layer,
+   not arranging siblings — the same escape Section documents for its own bleed layers.
+
+     top     a `stack` (48) under the copy's last line: the texture can never sit under text, and
+             one gap step is the clearance the owner's "never behind text it hurts" asks for.
+     bottom  the band's own bottom edge: past the cell by the open band's padding (--gap-section-
+             open, 128 — what Section's `density="open"` resolves to; CtaSection sets that density
+             whenever it renders a texture), so the columns rise FROM the band edge.
+     inline  the copy column, so the form column stays clean (§ 6.3).
+
+   Below 1024 the copy stacks above the form and there is no air beside it: both boxes are
+   `display: contents`, the field is no longer a containing block, and the Texture covers the whole
+   band — where TextureClosing draws § 6.3's `horizon`, full-bleed, inside the bottom padding. */
+.textureWell,
+.textureField {
+  display: contents;
+}
+
+@media (min-width: 1024px) {
+  .textureWell {
+    display: block;
+    position: relative;
+    block-size: 100%;
+  }
+
+  .textureField {
+    display: block;
+    position: absolute;
+    inset-block-start: var(--gap-stack);
+    inset-block-end: calc(-1 * var(--gap-section-open));
+    inset-inline: 0;
+  }
 }

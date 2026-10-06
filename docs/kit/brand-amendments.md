@@ -113,3 +113,13 @@ finds them in one place.
 | Never two `beside` banners within sight of each other on a page (adjacent, or split only by a strip or a short band). Separate them by a band of another arrangement, or make one `below`. | `Banner.tsx` (`BesideProps`); `docs/specs/Banner.md` | `cmp-banner` |
 | **Open proposal:** the Banner lead steps from the lead role to the body role below 768 (`banner.css`). If a second head wants the same phone step, move it into `--text-lead`'s own `-m` ladder and delete the component-layer block. | `tokens/components/banner.css` | `cmp-banner` |
 | Statement `head-half` follows § 6.3 exactly: rect, top −200, end −120, 34% × 296, blur 160, on the band's field. | `Statement.tsx` | `cmp-banner` (fix round 2) |
+
+## Kit amendments (visual-direction, not the brand guide)
+
+Recorded here so the kit doc and the components agree; each is also amended in place in
+`docs/kit/visual-direction.md`.
+
+| § | Kit doc said | The kit now does | Package |
+|---|---|---|---|
+| § 3.4 L | `[5, 7]`: copy + points beside the EnquiryForm | `[10, 7]` from 1280 (copy 673, form 471) and `[1, 1]` from 1024, top-aligned. The full form holds its own 470 measure (`--enq-form-max-inline`), so in a 667 track it left ~197 of dead track at the band's end edge, and at 1024 a 356 track wrapped its two actions. `[5, 7]` stays for the photo + compact-form close (cmp-form). | `cmp-cta` |
+| § 6.3 `closing` | rect, bottom −260, start −120, 44% × 320, blur 200 | A pixel equaliser that rises from the band's edge and fades (`TextureClosing`; the full geometry is in § 6.3's row). The haze had no silhouette and, at the texture's fixed cell alpha, read as a pale tinted strip — close to the banned blue ground. Placed by CtaSection in a field a `stack` clear of the copy; `horizon` below 1024. | `cmp-cta` |

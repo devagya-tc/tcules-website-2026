@@ -242,6 +242,11 @@ const SPECIMENS = [
         name: 'Kit · Client logos',
         note: 'band H as a composition: centred strip, tint, grid beside a head, marks beside a real quote, a sourced figure, CtaRow',
       },
+      {
+        href: '/design/kit/cta',
+        name: 'Kit · CTA',
+        note: 'the K offer (photo, icon, plain and beside) and the L close (form, no points, two actions) as finished bands, the closing texture, and CtaRow inside two ContentSections',
+      },
     ],
   },
 ] as const;

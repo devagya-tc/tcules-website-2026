@@ -506,8 +506,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
               button under them read as the smaller thing; the link takes the same size so the two
               labels set at one type size across the row. lg is 48 and clears the touch floor, so
               neither needs extendHitArea. The link is `primary`: a text link is blue at rest
-              (visual-direction § 4.2, fdn-blue). It has no box, so the submit stays the one ask. */}
-          <Cluster rowGap="tight" colGap="block" align="center">
+              (visual-direction § 4.2, fdn-blue). It has no box, so the submit stays the one ask.
+              Wrapped, the link drops under the submit at `block` (24), as CtaSection's and CtaRow's
+              action rows do (cmp-cta final fix round: at `tight` the two stacked ~12 apart at 390
+              while the K offer beside them stacked ~30 — one stacked-action gap in every variant). */}
+          <Cluster rowGap="block" colGap="block" align="center">
             <Button type="submit" size="lg" busy={submitting}>
               {variant === 'audit'
                 ? 'Request free audit'

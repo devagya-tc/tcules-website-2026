@@ -63,6 +63,15 @@ export const MEDIA_SPLIT =
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 5 / 12), ${FLUID_COLUMN}`;
 
 /**
+ * CtaSection's landscape K offer (cmp-cta): the photograph's track, 7 of [5, 7] from 1024 with the
+ * 96 split seam — MEDIA_SPLIT's mirror. (1240 − 96) × 7 / 12 ≈ 667 at the cap; below 1024 the photo
+ * sits under the copy at the full column.
+ */
+export const MEDIA_SPLIT_WIDE =
+  `(min-width: ${CAP}px) ${Math.round(((CONTAINER - SPLIT_GAP) * 7) / 12)}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 7 / 12), ${FLUID_COLUMN}`;
+
+/**
  * ContentSection `beside`: the head track, 1 of [1, 2] from 1024 with the 96 split seam — where a
  * head-track aside photograph sits (visual-direction § 1.4, 3:2 at 381). (1240 − 96) / 3 ≈ 381 at the
  * cap; (100vw − 64 − 96) / 3 from 1024; below it the aside takes the full column between the head and
@@ -111,3 +120,34 @@ export const PROOF_PORTRAIT = '64px';
  * Media. The fluid term is the full column, so the sheet can over-fetch and never under-fetch.
  */
 export const NAV_CARD = `(min-width: 1024px) 300px, ${FLUID_COLUMN}`;
+
+/**
+ * A placement's `sizes`, re-stated for a COVER CROP (cmp-cta final fix round, 6 Oct 2026).
+ *
+ * The browser picks a srcset candidate by WIDTH alone. Under `fit="fill"` the frame is cropped from
+ * the master, so when the master is wider in ratio than the frame — a 3:2 landscape in a 4:5 portrait
+ * box — the image is drawn at the frame's HEIGHT and its width overflows: a 477 × 596 frame needs a
+ * 894-wide image, not a 477-wide one. Asked for 477, the browser fetched the 652 or 1240 rung and
+ * upscaled it ~1.4–1.7× into the frame, and the K offer's photographs went soft.
+ *
+ * So each entry's width is multiplied by `source / frame` (both width ÷ height) wherever that is
+ * above 1; a master no wider in ratio than its frame is untouched. `frames` gives one ratio per
+ * entry of `sizes`, in order, and the last repeats — the frame can change shape at a breakpoint
+ * (the K frame is 4:5 beside the copy, taller where the copy stretches it, 4:3 under it). Over-asking
+ * by a rung costs bytes; under-asking costs the picture, so a stretched frame states its tallest.
+ */
+export function coverSizes(sizes: string, source: number, frames: readonly number[]): string {
+  return sizes
+    .split(/,\s*/)
+    .map((entry, index) => {
+      const frame = frames[Math.min(index, frames.length - 1)] ?? source;
+      const scale = source / frame;
+      if (!(scale > 1)) return entry;
+      const match = /^(\([^)]*\)\s+)?(.+)$/.exec(entry.trim());
+      const condition = match?.[1] ?? '';
+      const length = match?.[2] ?? entry;
+      const inner = length.startsWith('calc(') ? length.slice(5, -1) : length;
+      return `${condition}calc((${inner}) * ${scale.toFixed(3)})`;
+    })
+    .join(', ');
+}

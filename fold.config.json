@@ -4,5 +4,5 @@
     { "width": 1470, "height": 830, "maxBand": 830 },
     { "width": 390, "height": 844, "maxBand": 1700 }
   ],
-  "routes": ["/design/kit/banner", "/design/banner", "/design/statement", "/design/kit/logos"]
+  "routes": ["/design/kit/banner", "/design/banner", "/design/statement", "/design/kit/logos", "/design/kit/cta", "/design/cta-section"]
 }

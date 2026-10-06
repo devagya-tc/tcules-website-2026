@@ -1,7 +1,15 @@
-import { Fragment } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 import { Cluster, Layout, Prose, Section } from '@/components';
-import { CtaSection, EnquiryForm, Proof, type CtaPoint, type ProofFigure } from '@/patterns';
+import {
+  CtaSection,
+  EnquiryForm,
+  Proof,
+  type CtaIconPoint,
+  type CtaPoint,
+  type ProofFigure,
+} from '@/patterns';
+import { getKitPhoto } from '@/lib/photos';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
 import { Box, specimenStyles as s } from '../_specimen/Specimen';
@@ -11,6 +19,13 @@ const STANDARD_POINTS = [
   { label: 'A written plan', detail: 'You leave with the next decisions in order.' },
   { label: 'A fixed price', detail: 'The scope and the commercial terms arrive together.' },
 ] as const satisfies readonly CtaPoint[];
+
+/* The K offer beside a photograph sets one-line points (§ 3.4 K): the label alone. */
+const K_ICON_POINTS = [
+  { icon: 'layers', label: 'Drift between design and code' },
+  { icon: 'graph-up', label: 'Adoption, product by product' },
+  { icon: 'checklist', label: 'A fix list in payback order' },
+] as const satisfies readonly CtaIconPoint[];
 
 const SIX_POINTS = [
   ...STANDARD_POINTS,
@@ -82,6 +97,16 @@ const PROOF_FIGURES = [
   },
 ] as const satisfies readonly ProofFigure[];
 
+/**
+ * Marks a band that runs past the 1470 × 830 fold ON PURPOSE (visual-direction § 1.3: "a specimen
+ * block that shows a deliberate failure carries data-fold-exempt"). A plain block wrapper — no box,
+ * no seam, no ground — so the band inside sits edge to edge as it would unwrapped. With no reason it
+ * is not exempt, so a mapped ladder can exempt only its over-budget rung.
+ */
+function FoldExempt({ reason, children }: { reason?: string; children: ReactNode }) {
+  return <div data-fold-exempt={reason}>{children}</div>;
+}
+
 function SpecimenNote({ title, note }: { title: string; note: string }) {
   return (
     <Section density="tight">
@@ -141,15 +166,15 @@ export default function CtaSectionSpecimenPage() {
           <Layout rowGap="block">
             <h2>1 · Arrangement matrix</h2>
             <p>
-              One size. Split requires a form, open requires actions, and offer accepts either a
-              form or actions while rejecting proof. The renderings immediately below are the
+              One size. Split requires a form and rejects proof, open requires actions, and offer
+              accepts either a form or actions while rejecting proof. The renderings immediately below are the
               matrix, not three separately styled components.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="gutter">
             <Box>
               <strong>split</strong>
-              <p>form required · proof optional · standard band · vertical points</p>
+              <p>form required · proof forbidden · standard band · vertical points</p>
             </Box>
             <Box>
               <strong>open</strong>
@@ -174,7 +199,6 @@ export default function CtaSectionSpecimenPage() {
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        proof={<ProofFixture kind="figures" />}
         surface="paper"
       />
       <CtaSection
@@ -217,13 +241,15 @@ export default function CtaSectionSpecimenPage() {
         form={<EnquiryForm {...AUDIT_FORM_PROPS} />}
         surface="tint"
       />
-      <CtaSection
-        arrangement="offer"
-        heading="See what your current experience is costing"
-        body={OFFER_BODY}
-        points={STANDARD_POINTS}
-        form={<EnquiryForm {...AUDIT_FORM_PROPS} />}
-      />
+      <FoldExempt reason="the offer with the FULL form: cmp-form's compact-form offer is the page shape">
+        <CtaSection
+          arrangement="offer"
+          heading="See what your current experience is costing"
+          body={OFFER_BODY}
+          points={STANDARD_POINTS}
+          form={<EnquiryForm {...AUDIT_FORM_PROPS} />}
+        />
+      </FoldExempt>
       <CtaSection
         arrangement="offer"
         heading="Get an outside view before you commit"
@@ -282,19 +308,23 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="4 · Points ladder"
-        note="Zero, one, three, and six points in each arrangement, and four and five in offer as well. Zero renders no list; six proves split growth and open's second row without equalRows. Offer is 2-up from md and 3-up from lg: at 4, 5 and 6 every second-row point starts under a first-row label, and each numeral holds its own track beside its label at every width, never wrapping above it."
+        note="Zero, one, three, and six points in each arrangement, and four and five in offer as well. Zero renders no list; six proves split growth and open's second row without equalRows. An offer that asks with actions runs its points as ruled rows in the 763 body track beside its head (cmp-cta); only an offer with a form keeps the 2-up-from-md, 3-up-from-lg strip, where every second-row point starts under a first-row label. Each numeral holds its own place beside its label at every width, never wrapping above it."
       />
       {([0, 1, 3, 6] as const).map((count) => {
         const points = SIX_POINTS.slice(0, count);
         return (
-          <CtaSection
+          <FoldExempt
             key={`split-${count}`}
-            heading={`Split with ${count} point${count === 1 ? '' : 's'}`}
-            body={SPLIT_BODY}
-            points={points}
-            form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-            surface={count % 2 === 0 ? 'paper' : 'tint'}
-          />
+            reason={count > 3 ? 'six points: past the L budget of three (§ 1.5)' : undefined}
+          >
+            <CtaSection
+              heading={`Split with ${count} point${count === 1 ? '' : 's'}`}
+              body={SPLIT_BODY}
+              points={points}
+              form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
+              surface={count % 2 === 0 ? 'paper' : 'tint'}
+            />
+          </FoldExempt>
         );
       })}
       {([0, 1, 3, 6] as const).map((count) => (
@@ -327,7 +357,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="6 · All four surfaces"
-        note="The complete 3 × 4 matrix follows: split, open, and offer on paper, tint, ink, and blue. Tint lifts its eyebrow and numerals because neutral-600 would be 4.39:1; blue inverts the primary Button through Button's own surface map."
+        note="The complete matrix follows: split, open, offer, and the K offer with its photograph and icon markers (the photo flipping side on alternate surfaces), on paper, tint, ink, and blue. Tint lifts its eyebrow and numerals because neutral-600 would be 4.39:1; blue inverts the primary Button through Button's own surface map. The texture slot is not repeated here: Texture is paper only (visual-direction § 6.2), and the closes carry it at /design/kit/cta."
       />
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
         <Fragment key={surface}>
@@ -337,7 +367,6 @@ export default function CtaSectionSpecimenPage() {
             body={SPLIT_BODY}
             points={STANDARD_POINTS}
             form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-            proof={<ProofFixture kind="figures" />}
             surface={surface}
           />
           <CtaSection
@@ -359,6 +388,23 @@ export default function CtaSectionSpecimenPage() {
             actions={[{ label: 'Request free audit', href: ROUTES.audits }]}
             surface={surface}
           />
+          <CtaSection
+            arrangement="offer"
+            markers="icon"
+            eyebrow={`Offer · media · ${surface}`}
+            heading="Know what your design system is costing you"
+            body={OFFER_BODY}
+            points={K_ICON_POINTS}
+            actions={[
+              { label: 'Request free audit', href: ROUTES.audits },
+              { label: 'See how we work', href: ROUTES.howWeWork },
+            ]}
+            media={{
+              image: getKitPhoto('pair-laptop-notebook'),
+              side: surface === 'tint' || surface === 'blue' ? 'start' : 'end',
+            }}
+            surface={surface}
+          />
         </Fragment>
       ))}
 
@@ -374,7 +420,6 @@ export default function CtaSectionSpecimenPage() {
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        proof={<ProofFixture />}
         surface="tint"
       />
       <Section surface="ink" density="tight">
@@ -398,18 +443,8 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="8 · Proof ladder"
-        note="The real Proof renders figures only, quote only, and both: first in split's full-width proof row, then in open's narrower right column."
+        note="The real Proof renders figures only, quote only, and both, in open's right-hand column. Split takes no proof since cmp-cta fix round 1: a close with the full form and a proof row ran 880–1104 at 1470, past the 830 fold with standard copy, so evidence before the form is its own band (a G proof band above the close)."
       />
-      {(['figures', 'quote', 'both'] as const).map((kind) => (
-        <CtaSection
-          key={`split-proof-${kind}`}
-          heading={`Split · ${kind} proof`}
-          body={SPLIT_BODY}
-          points={STANDARD_POINTS}
-          form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-          proof={<ProofFixture kind={kind} />}
-        />
-      ))}
       {(['figures', 'quote', 'both'] as const).map((kind) => (
         <CtaSection
           key={`open-proof-${kind}`}
@@ -453,7 +488,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="9 · Two per page"
-        note="The valid pair: a tight offer mid-scroll, real Prose between, then a standard split close. Their density, heading scale, point arrangement, and proof capability keep them visibly distinct."
+        note="The valid pair: a tight offer mid-scroll, real Prose between, then a standard split close. Their density, arrangement, point shape and proof capability keep them visibly distinct. The offer's heading is h2 and the close's h1 (cmp-cta fix round 1), so scale is one of the differences again."
       />
       <CtaSection
         arrangement="offer"
@@ -481,7 +516,6 @@ export default function CtaSectionSpecimenPage() {
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        proof={<ProofFixture />}
         surface="tint"
       />
 
@@ -555,7 +589,7 @@ export default function CtaSectionSpecimenPage() {
         title="13 · Illegal narrow parents"
         note="These are deliberately invalid placements. At the named 320px floor text breaks without horizontal overflow; at the 256px sub-floor EnquiryForm is the first part to show pressure."
       />
-      <div className={s.narrowMd}>
+      <div className={s.narrowMd} data-fold-exempt="an illegal 320px parent, shown on purpose">
         <CtaSection
           heading="A 320px parent that does not size the band correctly"
           body={SPLIT_BODY}
@@ -563,7 +597,7 @@ export default function CtaSectionSpecimenPage() {
           form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         />
       </div>
-      <div className={s.narrowSm}>
+      <div className={s.narrowSm} data-fold-exempt="an illegal 256px parent, shown on purpose">
         <CtaSection
           heading="A 256px sub-floor parent that exposes the form constraint"
           body={SPLIT_BODY}
@@ -572,6 +606,37 @@ export default function CtaSectionSpecimenPage() {
           surface="tint"
         />
       </div>
+
+      <SpecimenNote
+        title="14 · Falsy slots render nothing"
+        note="proof={false} and proof={null} on open, and form={false} on the offer: each slot is absent, so no column, no 48 seam and no empty div is reserved (spec § 12 row 6). Both opens render the centred close; the offer falls through to its actions shape, which with no actions and no points is the lede alone."
+      />
+      <CtaSection
+        arrangement="open"
+        heading="Open with proof={false}"
+        body={OPEN_BODY}
+        actions={[{ label: 'Start a project', href: ROUTES.contact }]}
+        proof={false}
+      />
+      <CtaSection
+        arrangement="open"
+        heading="Open with proof={null}"
+        body={OPEN_BODY}
+        actions={[{ label: 'Start a project', href: ROUTES.contact }]}
+        proof={null}
+        surface="tint"
+      />
+      <CtaSection
+        arrangement="offer"
+        heading="Offer with form={false}"
+        body={OFFER_BODY}
+        form={false}
+      />
+
+      <SpecimenNote
+        title="15 · The kit's props"
+        note="media (the K offer's 4:5 photograph, either side), markers (number, icon, plain) and texture (the closes' closing placement) are shown as finished bands at /design/kit/cta, with copy at the § 1.5 ceilings."
+      />
 
       <Section>
         <Cluster colGap="text" rowGap="text">

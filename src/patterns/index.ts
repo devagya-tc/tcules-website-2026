@@ -138,7 +138,15 @@ export { TableOfContents } from './TableOfContents';
 export type { TableOfContentsProps, TocItem } from './TableOfContents';
 
 export { CtaSection } from './CtaSection';
-export type { CtaSectionProps, CtaPoint, CtaAction } from './CtaSection';
+export type {
+  CtaSectionProps,
+  CtaPoint,
+  CtaIconPoint,
+  CtaPointMarker,
+  CtaAction,
+  CtaMedia,
+  CtaMediaSide,
+} from './CtaSection';
 
 export { EnquiryForm } from './EnquiryForm';
 export type {
