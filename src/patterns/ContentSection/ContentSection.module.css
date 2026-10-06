@@ -4,7 +4,7 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .heading .headingMd .headingDisplay .asideFill .lead .leadBeside .centred
+   Classes: .eyebrow .mark .heading .headingMd .headingDisplay .asideFill .lead .leadBeside .centred
    .bodyCentred .text .textureLg .eyebrowAccent .photoTrack .photo .photoLeads .photoToCopy
 
    Three @media queries, all from 1024 and none swapping a distance: .leadBeside (the lead's ROLE
@@ -20,6 +20,17 @@
      CMS field keep whatever capitalisation somebody authored. */
   text-transform: var(--text-mono-case);
   color: var(--csec-eyebrow-ink);
+}
+
+/* The eyebrow's mark: one square of the texture's grid, the blue accent at its smallest (§ 4.2) —
+   PageHero's `.mark`, restated here because a pattern never reads another's classes. Sizing and ink
+   only; the Cluster places it. */
+.mark {
+  display: block;
+  flex: none;
+  inline-size: var(--csec-mark-size);
+  block-size: var(--csec-mark-size);
+  background: var(--csec-mark-ink);
 }
 
 .heading {
@@ -173,4 +184,16 @@
   contain: size;
   block-size: 100%;
   min-block-size: var(--csec-aside-min-size);
+}
+
+/* Below 1024 the band is stacked and the aside has no body beside it to end on: it takes the head
+   aside's own 3:2 instead of the floor, which letterboxed it to 4.4:1 at 768 (cmp-services fix
+   round 1). `contain: size` stays, so the photograph's intrinsic height still sets nothing; the
+   ratio sizes the box from its width. */
+@media (max-width: 1023.98px) {
+  .asideFill {
+    block-size: auto;
+    min-block-size: 0;
+    aspect-ratio: var(--csec-aside-ratio);
+  }
 }

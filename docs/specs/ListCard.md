@@ -145,6 +145,7 @@ element and the `--gap-block` seam beside it.
 | `size`        | `'md' \| 'sm'`                                                                                                             | `'md'` on a row, `'sm'` on a tile | 5 Oct 2026. The type step, passed by the set: `sm` for four rows or more, and every tile. See Amendment · 5 Oct 2026 |
 | `href`        | `string`                                                                                                                   | absent    | A non-blank value makes the whole frame one anchor and causes the cue to render    |
 | `external`    | `boolean`                                                                                                                  | `false`   | The destination leaves tcules.com: new tab, the "leaves the site" cue glyph and the hidden new-tab hint. Ignored without a destination |
+| `cue`         | `'end' \| 'title'`                                                                                                        | `'end'`   | **6 Oct (cmp-services).** `title`: a linked row's arrow follows the title's last word and the title takes the link ink on hover (BlockCard's model); no hover ground, so no 16 inline inset. Ignored on a tile or without a destination. On an external row the off-site glyph follows the title in the same way, and the hidden new-tab hint moves inside the title with it. (The phone thumbnail size is a separate, site-wide rule: see § 7.) |
 
 **28 Sep 2026 (2.11).** The thumbnail member carries a whole `MediaImage` record — the shape a page
 receives from `@/content` — and ListCard hands it to `Media` untouched with `fit="fill"`,
@@ -426,6 +427,12 @@ The component does not receive a `surface` prop and never paints the panel groun
   before a 192px content core is squeezed. `Media` in `fit="fill"` covers that box from `--media-fill-position` (inline start, 20% down);
   a B5 cut-out on its contrast panel takes Media's `inset="text"` (`--gap-text`, 16) inside it, leaving
   128 × 75 of part. It kept Media's `--gap-gutter` until 29 Sep 2026 and was left 96 × 43 (§ 17 q8).
+- Thumbnail marker below md: `--lcrd-thumbnail-inline-sm` is 96px, at the same 3:2 (96 × 64), on
+  **every** row with a thumbnail below 768 — cued by the arrow at the end or after the title, linked
+  or not; tiles keep their own geometry (cmp-services, 6 Oct 2026). At 160 the thumbnail wrapped above
+  the copy in the 326 phone column and every row became a photo with a caption under it; at 96 it
+  stays beside its title and the row keeps its marker silhouette. A site-wide change to every phone
+  thumbnail row, and the reason /design/list-card's 390 crops changed shape that day.
 - Hidden hint: `--lcrd-hidden-size` is `--space-1`, the clip technique's own 1px geometry, duplicated
   by value from `--crumb-hidden-size` and SiteFooter's hidden label.
 

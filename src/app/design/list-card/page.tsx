@@ -822,6 +822,74 @@ export default function ListCardSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <Layout rowGap="block">
+            <h2>2e · The cue after the title</h2>
+            <p>
+              <code>cue=&quot;title&quot;</code> (6 Oct 2026, cmp-services): a linked row&rsquo;s
+              arrow follows the title&rsquo;s last word, bound to it by a non-breaking space, and
+              the title takes the link ink on hover — BlockCard&rsquo;s model, for a router of a few
+              rows beside a head. No hover ground, so no 16 inline inset: the row sits flush on the
+              column edge. On an external row the up-right arrow follows the title the same way and
+              the hidden &ldquo;(opens in a new tab)&rdquo; moves inside the title with it, so the
+              accessible name still ends on it. Below 768 every thumbnail row, cued either way, takes
+              the 96 thumbnail and keeps it beside the copy.
+            </p>
+          </Layout>
+          <Specimen title="title-cued · stacked × md · thumbnails · internal and external">
+            <Rows>
+              <ListCard
+                arrangement="stacked"
+                titleAs="h3"
+                title="Design systems"
+                body="When every team builds the same screens a little differently."
+                marker={thumb(getKitPhoto('screen-over-shoulder'))}
+                href={ROUTES.designSystems}
+                cue="title"
+              />
+              <ListCard
+                arrangement="stacked"
+                titleAs="h3"
+                title="A case study, told off-site"
+                body="External: the up-right arrow after the title, and the new-tab hint inside it."
+                marker={thumb(getKitPhoto('desk-flatlay-devices'))}
+                href={EXTERNAL_HREF}
+                external
+                cue="title"
+              />
+            </Rows>
+          </Specimen>
+          <Specimen title="title-cued · split × sm · no marker, then a number · external last">
+            <Rows>
+              <ListCard
+                size="sm"
+                title="Product design"
+                body="A row with no marker: title, arrow, and the body beside it."
+                href={ROUTES.productDesign}
+                cue="title"
+              />
+              <ListCard
+                size="sm"
+                title="Design engineering"
+                body="A number marker holds its own column; the arrow still follows the title."
+                marker={{ type: 'number', value: 2 }}
+                href={ROUTES.designEngineering}
+                cue="title"
+              />
+              <ListCard
+                size="sm"
+                title="The Figma community file"
+                body="External, unmarked: leaves the site, opens a new tab, says so to a reader."
+                href={EXTERNAL_HREF}
+                external
+                cue="title"
+              />
+            </Rows>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
             <h2>3 · Content shapes</h2>
             <p>Real ordered, term-like and linked groups, each using the same row component.</p>
           </Layout>

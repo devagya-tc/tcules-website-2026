@@ -113,7 +113,21 @@ export type ListCardProps = ListCardFormProps & {
    * Ignored on a row with no destination.
    */
   external?: boolean;
+  /**
+   * Where a linked row's arrow sits (cmp-services fix round 1, 6 Oct 2026). Ignored on a tile and
+   * on a row with no destination.
+   *
+   *   end     the default: the arrow at the row's inline end, and the row paints a ground on hover.
+   *   title   BlockCard's link model: the arrow follows the title's last word, and on hover the
+   *           title takes the link ink to meet it. With no ground to clear, the row drops its 16
+   *           inline inset, so its marker and copy sit on the column edge the band's head and the
+   *           rule share. For a router or an index, where a row is a destination, not a line item.
+   *           On a 160 thumbnail row the end arrow sat 400px from its title, on the cap line.
+   */
+  cue?: ListCardCue;
 };
+
+export type ListCardCue = 'end' | 'title';
 
 /** One modifier per step, on the root; the module sets title, body and ordinal offset under it. */
 const SIZE_CLASS: Record<ListCardSize, string | undefined> = {
@@ -216,6 +230,7 @@ export function ListCard({
   size,
   href,
   external = false,
+  cue: cueAt = 'end',
 }: ListCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -232,21 +247,40 @@ export function ListCard({
   const destination = href?.trim() ? href : undefined;
   const isSplit = !isTile && arrangement === 'split';
   const leaves = destination !== undefined && external;
+  const titleCue = destination !== undefined && !isTile && cueAt === 'title';
 
-  const cue = destination ? (
-    <span className={styles.cue}>
-      {/* One glyph per meaning (ch04): `arrow-right` is "go, next", `arrow-right-up` is
+  /* The title-cued row: the arrow after the title's last word, joined by a non-breaking space so it
+     never starts a line alone, and the hint inside it so the accessible name still ends on it. */
+  const titleNode = (className: string | undefined) => (
+    <Title className={cx(className, titleCue && styles.cuedTitle)}>
+      {title}
+      {titleCue ? (
+        <>
+          {'\u00a0'}
+          <span className={styles.titleCue}>
+            <Icon name={leaves ? 'arrow-right-up' : 'arrow-right'} size="lg" />
+            {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}
+          </span>
+        </>
+      ) : null}
+    </Title>
+  );
+
+  const cue =
+    destination && !titleCue ? (
+      <span className={styles.cue}>
+        {/* One glyph per meaning (ch04): `arrow-right` is "go, next", `arrow-right-up` is
           "leaves the site". Both are Solar Bold's plain arrows, the same drawing turned 45°,
           so an off-site row sits in a list of internal ones without a filled square among
           bare arrows (29 Sep 2026, 2.17). The cue is replaced, never doubled — one icon per
           row — and it keeps the cue's slot, size and ink, so an external row differs from an
           internal one by its glyph's angle alone. Trailing either way: both are movement. */}
-      <Icon name={leaves ? 'arrow-right-up' : 'arrow-right'} size="lg" />
-      {/* The glyph is aria-hidden, so the new tab is said in words, at the END of the
+        <Icon name={leaves ? 'arrow-right-up' : 'arrow-right'} size="lg" />
+        {/* The glyph is aria-hidden, so the new tab is said in words, at the END of the
           accessible name so the title is still what a screen reader leads with. */}
-      {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}
-    </span>
-  ) : null;
+        {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}
+      </span>
+    ) : null;
 
   /* The tile: marker, then the title over its body, then — on a linked tile — the cue at the foot,
      pinned there so every cue in a grid row sits on one line however long its body runs.
@@ -302,12 +336,12 @@ export function ListCard({
              past them the leftover stays at the core's inline end instead of prising the title
              and its sentence apart. The module only sizes the two children inside Cluster. */
           <Cluster colGap="block" rowGap="text" align="start" className={styles.content}>
-            <Title className={cx(styles.title, styles.splitTitle)}>{title}</Title>
+            {titleNode(cx(styles.title, styles.splitTitle))}
             {hasBody ? <p className={cx(styles.body, styles.splitBody)}>{body}</p> : null}
           </Cluster>
         ) : (
           <Layout rowGap="text" className={styles.content}>
-            <Title className={styles.title}>{title}</Title>
+            {titleNode(styles.title)}
             {hasBody ? <p className={styles.body}>{body}</p> : null}
           </Layout>
         )}
@@ -317,7 +351,14 @@ export function ListCard({
   );
 
   return (
-    <li className={cx(styles.root, SIZE_CLASS[step], isTile && styles.tile)}>
+    <li
+      className={cx(
+        styles.root,
+        SIZE_CLASS[step],
+        isTile && styles.tile,
+        titleCue && styles.titleCued,
+      )}
+    >
       {destination ? (
         <a
           className={cx(styles.frame, styles.link)}

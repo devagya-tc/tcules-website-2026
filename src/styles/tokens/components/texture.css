@@ -31,6 +31,15 @@
 --tex-counterweight-block-size:160px;
 }
 
+/* The stepped horizon's field height (TextureHorizon, cmp-services fix round 2). Four rows of the
+   recipe's 10px pixels: tall enough to read as a stepped field rather than a hairline of haze, short
+   enough that in a band's 96 of foot padding it starts 56 under the last line of copy — past a
+   `stack` (48), so it never crowds the text it sits beneath. A component size, named for the
+   placement as the counterweight's is.                                                           */
+:root{
+--tex-horizon-block-size:40px;
+}
+
 /* ── Surface: paper ───────────────────────────────────────────────────────────
    The measured value — the Figma render this was taken from is blue on paper.        */
 :root,[data-surface="paper"]{

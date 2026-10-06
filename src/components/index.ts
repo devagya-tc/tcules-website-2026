@@ -95,6 +95,7 @@ export {
   Texture,
   TextureClosing,
   TextureCounterweight,
+  TextureHorizon,
   TextureShape,
   type TextureClosingProps,
   type TextureClosingSide,

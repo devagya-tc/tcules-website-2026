@@ -238,6 +238,26 @@ export default function SliderSpecimen() {
         <Slider label="Case studies">{workCards(8)}</Slider>
       </ContentSection>
 
+      {/* ── 2a ─────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="2a · bleed — the row runs to the viewport's end edge (perView 3, align start)">
+        From 768 the row runs past the column&rsquo;s end edge to the viewport&rsquo;s, so the
+        fourth card shows in the margin and the set reads as a rail rather than a boxed carousel.
+        The tracks are unchanged: the bleed is end padding the overflow paints into, measured from
+        the slider&rsquo;s end edge to the viewport&rsquo;s and re-measured whenever the root
+        element or the slider changes size. At its scroll end the last card stops on the
+        column&rsquo;s edge. Below 768 nothing changes: the phone row already bleeds to both screen
+        edges. Row to controls is a stack (48), as in every Slider.
+      </Label>
+      <ContentSection
+        eyebrow="All services"
+        heading="Six ways we can help"
+        headingId="slider-c-image-bleed"
+      >
+        <Slider label="Services, bled" bleed>
+          {workCards(6)}
+        </Slider>
+      </ContentSection>
+
       {/* ── 3 ──────────────────────────────────────────────────────────────────────────────── */}
       <Label title="3 · G slider on tint (perView 1, align center)">
         § 3.4 G and § 8.3 band 6: one featured testimonial per view — a 1:1 portrait at 477

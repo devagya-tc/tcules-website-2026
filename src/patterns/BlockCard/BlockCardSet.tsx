@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps, CSSProperties } from 'react';
 
 import { Layout } from '@/components';
 
@@ -13,6 +13,7 @@ import {
   type BlockCardTitleElement,
   type BlockCardTracks,
 } from './BlockCard';
+import styles from './BlockCardSet.module.css';
 
 /**
  * One card in a set: a BlockCard record with an `id` for its key, and WITHOUT the presentation
@@ -134,7 +135,8 @@ type Columns = ComponentProps<typeof Layout>['columns'];
  * featured. Every shape is one track below md (or a scroll row: see the component).
  *
  *   across 2   two from md. Pairs, and any set in a beside body.
- *   across 3   two from md, three from lg. A set of three, or five and more (rows of three).
+ *   across 3   two from md, three from lg, for five and more (rows of three); a set of exactly
+ *              three is three across from md, so it never leaves an orphan on a second row.
  *   across 4   two from md, four from lg: 2×2 at 768 to 1023, one row from 1024.
  *
  * By count when `across` is absent: 1–2 → 2, 4 → 4, otherwise 3.
@@ -152,6 +154,10 @@ function peerGrid(
      photographs in a band 1140 to 1300 tall — an image wall larger than anything at 1440. Four at
      216 hold the row's shape; the `sm` step is already the four-across one. */
   if (widest === 4) return { columns: { base: 1, md: 2, lg: 4 }, tracks: 2, widest };
+  /* Exactly three: three across from md (cmp-services fix round 1). Two from md put the third card
+     alone on a second row beside an empty cell at 768 to 1023, an orphan in every three-card
+     router. Five and more keep two from md: their rows are full or end on a pair. */
+  if (count === 3) return { columns: { base: 1, md: 3 }, tracks: 3, widest };
   return { columns: { base: 1, md: 2, lg: 3 }, tracks: 3, widest };
 }
 
@@ -379,13 +385,14 @@ export function BlockCardSet({
   const tabStop = scrolls && !linked;
   if (tabStop && !label) warnUnnamed();
 
-  return (
+  const grid = (
     /* Rows sit a `column` apart, columns a `gutter` (29 Sep). The two seams separate different
        things: across a row the cards are peers read together, and down the grid each row is the
        next set of objects, which must read as separate — the `column` step's own job, turned to
        the block axis. At one shared 32 a borderless tile's copy ran into the image below it;
        `stack` (48) was tried and still read as one field. */
     <Layout
+      className={scrolls ? styles.row : undefined}
       as="ul"
       columns={columns}
       colGap="gutter"
@@ -412,6 +419,24 @@ export function BlockCardSet({
           <BlockCard key={id} {...card} {...shared} tracks={tracks} size={size} ratio={ratio} />
         );
       })}
+    </Layout>
+  );
+
+  if (!scrolls) return grid;
+
+  /* The phone row's progress rail (cmp-services fix round 2; BlockCardSet.module.css): a `stack`
+     under the cards, the Slider's row-to-controls seam, so the two kinds of sideways row read as one
+     family. Hidden from md, where the row is a grid; a hidden item draws no gap. */
+  return (
+    <Layout
+      rowGap="stack"
+      className={styles.scope}
+      style={{ '--blockcardset-count': items.length } as CSSProperties}
+    >
+      {grid}
+      <span className={styles.rail} aria-hidden="true">
+        <span className={styles.thumb} />
+      </span>
     </Layout>
   );
 }

@@ -287,6 +287,11 @@ const SPECIMENS = [
         name: 'Kit · read-down, FAQ and contrast',
         note: 'D read-down (ReadDown: 1 or 2 columns, the photo form or a stat aside, CtaRow, rail on the photo side), D-faq (5 centred, 4 + CtaRow, each followed by an image band), N contrast (4 + 4, with a CtaRow), D on tint',
       },
+      {
+        href: '/design/kit/service-list',
+        name: 'Kit · Service list',
+        note: 'the service router in three forms — icon (C-icon-6 and C-icon-4 + CtaRow, photo aside), image (three centred, four with per-card CTAs, six as a Slider) and list (thumbnail rows beside a head with actions) — every link from routes.ts',
+      },
     ],
   },
 ] as const;

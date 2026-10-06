@@ -12,7 +12,9 @@
      --slider-progress  0 → 1 across the row's scroll range, written by Slider.tsx on scroll
      --slider-thumb     the thumb's share of the rail
 
-   Classes: .slider .view1 .view2 .view3 .view4 .row .rail .thumb .status */
+     --slider-bleed     the slider's end edge to the viewport's, measured by Slider.tsx (`bleed`)
+
+   Classes: .slider .view1 .view2 .view3 .view4 .bleed .row .rail .thumb .status */
 
 /* One in view below 768 at every perView, and always at perView 1. */
 .slider,
@@ -99,4 +101,21 @@
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+}
+
+/* ── bleed · the row runs to the viewport's end edge (md up) ─────────────────────────────────
+   Layout's scroll row is grown by its ring room on every side (padding out, an equal negative margin
+   back). The bled row replaces that pair on its inline END with the measured bleed, the same way:
+   the margin takes the box exactly to the viewport's edge (not a ring past it, which scrolled the
+   page 4px sideways) and the padding gives the same width back, so the CONTENT box — which the
+   tracks divide — is still the column; the end ring room is inside the bleed. The slide after the
+   last whole one overflows into the padding, which a scroll container paints. At its scroll end the last slide
+   stops on the column's end edge, because a grid scroller's end padding is part of its scroll range.
+   From md only: below it Layout's phone row already bleeds to both screen edges. Two classes, so it
+   outranks Layout's single-class scroll rule whatever order the modules load in. */
+@media (min-width: 768px) {
+  .bleed .row {
+    margin-inline-end: calc(-1 * var(--slider-bleed, var(--space-0)));
+    padding-inline-end: var(--slider-bleed, var(--space-0));
+  }
 }

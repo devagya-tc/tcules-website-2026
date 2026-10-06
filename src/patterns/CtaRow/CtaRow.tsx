@@ -17,8 +17,9 @@ export type CtaRowAction = {
  *          action (the kit's one link cue, BlockCard's per-card CTA and ListCard's linked row). The
  *          default, because a band's foot usually points somewhere rather than asks for something.
  *   solid  an ask — the band's one Accent (visual-direction § 4.2: ≤ 1 solid primary per band). The
- *          hero's shape exactly: solid first, a blue link second, and no glyph on either (1 Oct
- *          2026, owner, on CtaSection: "no arrow here" — the label carries the ask).
+ *          hero's shape exactly: solid first with no glyph (1 Oct 2026, owner, on CtaSection: "no
+ *          arrow here" — the label carries the ask), then a blue link with the arrow, as every
+ *          link-style action has it (cmp-services fix round 2).
  */
 export type CtaRowEmphasis = 'link' | 'solid';
 
@@ -147,7 +148,11 @@ export function CtaRow({
         size="md"
         /* The box is 40 (solid) or the label line (link); the touch floor is 44 either way. */
         extendHitArea
-        icon={linkRow ? <Icon name="arrow-right" /> : undefined}
+        /* The arrow belongs to the LINK role, not to the row (cmp-services fix round 2): every
+           link-style action carries it, and only the solid ask goes without — PageHero's and
+           CtaSection's shape ("no arrow here" was the ask). Before, a solid-led row dropped it from
+           its second link too, so "All services" had an arrow in the hero and none in a head. */
+        icon={first && !linkRow ? undefined : <Icon name="arrow-right" />}
       >
         {action.label}
       </Button>
