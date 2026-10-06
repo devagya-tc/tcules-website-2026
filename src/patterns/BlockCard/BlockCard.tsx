@@ -1,3 +1,5 @@
+import type { ComponentProps } from 'react';
+
 import {
   Button,
   Cluster,
@@ -7,9 +9,11 @@ import {
   Layout,
   Media,
   type MediaImage,
+  Texture,
+  TextureShape,
 } from '@/components';
 import { cx } from '@/lib/cx';
-import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
+import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
 
 import styles from './BlockCard.module.css';
 
@@ -43,8 +47,19 @@ export type BlockCardImage = Omit<MediaImage, 'width' | 'height'> & {
  * image, and the service, audit, glossary and capability cards that used to be the icon's home are
  * media-less; ch04 wants one icon per tile in ink, and a 24px glyph heading a card is not what any
  * family is now given. It had no route use (spec § 17 Q14).
+ *
+ * `texture` is the one cover the card draws itself (cmp-feature, 6 Oct 2026): the Tcules pixel grid
+ * (the Texture primitive) through one of three blurred fields, inside the same ruled box, with the
+ * card's `icon` — if it has one — centred on it in blue. It is the stand-in for an ARTEFACT with no
+ * cover yet (a resource, a template, a checklist): a stock photograph of sticky notes said nothing
+ * about the thing, and the texture is the brand's own surface (visual-direction § 6). `recipe`
+ * picks the field; BlockCardSet assigns them in order so three neighbours never repeat. No type is
+ * ever drawn on it.
  */
-export type BlockCardMedia = { type: 'image'; image: BlockCardImage };
+export type BlockCardTextureRecipe = 0 | 1 | 2;
+export type BlockCardMedia =
+  | { type: 'image'; image: BlockCardImage }
+  | { type: 'texture'; recipe?: BlockCardTextureRecipe };
 
 /**
  * The title's element. `h2` exists for one case: a set that IS the page's list, directly under the
@@ -60,8 +75,10 @@ export type BlockCardTitleElement = 'h2' | 'h3' | 'h4';
  *   cover  3:2   one or two cards, and the horizontal arrangement. The default.
  *   wide   16:9  a set of three or more across. At 392 a 3:2 cover is 261 tall and the band runs
  *                past the fold; 16:9 is 221, which is what § 1.4's Card-3 (381) is built on.
+ *   panorama  21:9  the tall lead of a spotlight set (BlockCardSet `lead="beside"`): 802 wide in
+ *                the 2:1 track, where 16:9 would be 451 and put the band past the fold.
  */
-export type BlockCardRatio = 'cover' | 'wide';
+export type BlockCardRatio = 'cover' | 'wide' | 'panorama';
 
 /**
  * How a WHOLE-CARD link says it navigates, at rest. One cue per card, never both.
@@ -71,10 +88,14 @@ export type BlockCardRatio = 'cover' | 'wide';
  *   cta    a link-style action under the copy ("Read more", or `ctaLabel`), blue at rest; the
  *          title stays dark. The per-card CTA of § 1.4 (+64: 24 + a 40 row).
  *
+ *   download  the cta again, with the download glyph and "Download" (or `ctaLabel`): a resource
+ *          that is a file says so before it is opened (M, cmp-feature 6 Oct 2026). Pair it with
+ *          `meta` ("PDF · 12 pages"), which sits beside it on the action row.
+ *
  * Defaults: `arrow` on a card with a cover or an icon, `cta` on a text-only card — the shape every
  * live route already renders. A feature set states it for the whole set (BlockCardSet `cue`).
  */
-export type BlockCardCue = 'arrow' | 'cta';
+export type BlockCardCue = 'arrow' | 'cta' | 'download';
 
 /**
  * Which axis the card arranges on. A PRESENTATION choice, never a CMS field.
@@ -141,6 +162,22 @@ const CUE_SIZE: Record<BlockCardSize, IconSize> = { lg: 'xl', md: 'xl', sm: 'lg'
 const RATIO_CLASS: Record<BlockCardRatio, string | undefined> = {
   cover: undefined,
   wide: styles.wide,
+  panorama: styles.panorama,
+};
+
+/**
+ * The three texture fields, in TextureShape's own terms (percent of the cover, Figma blur). Each
+ * leaves the grid strongest in a different region, so a row of three stand-ins reads as three
+ * covers of one family rather than one cover thrice: a glow off the top end, a bank across the
+ * foot, a field off the start edge.
+ */
+const TEXTURE_RECIPES: Record<
+  BlockCardTextureRecipe,
+  readonly ComponentProps<typeof TextureShape>[]
+> = {
+  0: [{ top: '-25%', right: '-15%', width: '85%', height: '150%', kind: 'ellipse', blur: 70 }],
+  1: [{ bottom: '-35%', width: '140%', height: '85%', kind: 'ellipse', blur: 60 }],
+  2: [{ left: '-20%', width: '75%', height: '170%', kind: 'ellipse', blur: 70 }],
 };
 
 /** An index numeral, two digits: 1 → "01". The mono index voice ListCard's numbered rows use. */
@@ -148,6 +185,9 @@ const indexLabel = (value: number) => String(value).padStart(2, '0');
 
 /** The cta label a linked card uses when the caller names none. */
 const DEFAULT_CTA_LABEL = 'Read more';
+
+/** The `download` cue's label when the caller names none. */
+const DOWNLOAD_LABEL = 'Download';
 
 /**
  * The attributes a record with no intrinsic size is given: the proportions of the box it fills,
@@ -216,6 +256,12 @@ export type BlockCardProps = {
   index?: number;
   /** How a linked card says it navigates. See `BlockCardCue`. Ignored without `href`. */
   cue?: BlockCardCue;
+  /**
+   * One short format line for an artefact — "PDF · 12 pages", "Template · Figma" — in the mono
+   * label voice, after the copy: on the action row beside a `download` or `cta` cue, or on its own
+   * row when the card has none. Facts about the file, never a second description.
+   */
+  meta?: string;
 };
 
 function warn(message: string) {
@@ -230,6 +276,9 @@ function mediaRecord(image: BlockCardImage): MediaImage {
   return { ...image, ...FILL_BOX, sources: undefined, placeholderSize: true };
 }
 
+/** Kinds a cover crop would damage: shown whole, centred, with air inside the ruled box. */
+const CONTAINED_KINDS: ReadonlySet<string> = new Set(['illustration', 'cut-out']);
+
 function ImageMedia({
   image,
   sizes,
@@ -239,6 +288,12 @@ function ImageMedia({
   sizes: string;
   ratio: BlockCardRatio;
 }) {
+  /* An illustration or a cut-out is not cropped (cmp-feature, 6 Oct 2026): the cover crop took the
+     label off the top of the drawing and the run button off the part. `contain` shows the whole
+     object at the largest size that fits, and the box's inset gives it the air a lifted part needs
+     — a cut-out cut at the frame edge reads as a bad capture. A photograph and a capture still
+     cover-crop: a photograph is atmosphere, and a capture is supplied cropped to its region. */
+  const contained = CONTAINED_KINDS.has(image.kind ?? 'capture');
   return (
     /* The card owns the ratio box and Media fills it: `fit="fill"` is a cover crop, anchored where
        Media anchors it, of a box the parent has already sized — which is what this wrapper is. One
@@ -253,9 +308,48 @@ function ImageMedia({
        The inner span is what zooms. It scales inside the box, so the ruled edge never moves and
        the overflow is clipped at it; scaling the <img> itself would reach into Media's element.
        Lazy is Media's default: a card is never the page's LCP. */
-    <span className={cx(styles.imageMedia, RATIO_CLASS[ratio])}>
+    <span className={cx(styles.imageMedia, RATIO_CLASS[ratio], contained && styles.contained)}>
       <span className={styles.imageZoom}>
-        <Media image={mediaRecord(image)} sizes={sizes} fit="fill" edge="placement" />
+        <Media
+          image={mediaRecord(image)}
+          sizes={sizes}
+          fit={contained ? 'contain' : 'fill'}
+          edge="placement"
+        />
+      </span>
+    </span>
+  );
+}
+
+/**
+ * The texture cover: the same ruled box, the pixel grid through one recipe's field, and the card's
+ * glyph centred on it. The box is the Texture's positioned, isolated ancestor (`.textureCover`), so
+ * the field fills exactly the box and sits beneath the glyph. Decoration, like every cover here.
+ */
+function TextureMedia({
+  recipe = 0,
+  ratio,
+  icon,
+}: {
+  recipe?: BlockCardTextureRecipe;
+  ratio: BlockCardRatio;
+  icon?: IconName;
+}) {
+  return (
+    <span className={cx(styles.imageMedia, RATIO_CLASS[ratio])} aria-hidden="true">
+      <span className={styles.imageZoom}>
+        <span className={styles.textureCover}>
+          <Texture>
+            {TEXTURE_RECIPES[recipe].map((shape, i) => (
+              <TextureShape key={i} {...shape} />
+            ))}
+          </Texture>
+          {icon ? (
+            <span className={styles.coverGlyph}>
+              <Icon name={icon} size="xl" />
+            </span>
+          ) : null}
+        </span>
       </span>
     </span>
   );
@@ -291,6 +385,7 @@ export function BlockCard({
   icon,
   index,
   cue,
+  meta,
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -316,12 +411,22 @@ export function BlockCard({
   const horizontal = orientation === 'horizontal';
   const step = size ?? (horizontal ? 'lg' : 'md');
 
+  const coverRatio: BlockCardRatio = horizontal ? 'cover' : ratio;
   const imageNode = hasImage ? (
     <ImageMedia
       image={image}
-      sizes={horizontal || tracks === 2 ? CARD_TWO_TRACKS : CARD_THREE_TRACKS}
-      ratio={horizontal ? 'cover' : ratio}
+      sizes={
+        coverRatio === 'panorama'
+          ? FULL_COLUMN
+          : horizontal || tracks === 2
+            ? CARD_TWO_TRACKS
+            : CARD_THREE_TRACKS
+      }
+      ratio={coverRatio}
     />
+  ) : media?.type === 'texture' ? (
+    /* The card's icon, if any, moves onto the texture: one head object, never two. */
+    <TextureMedia recipe={media.recipe} ratio={coverRatio} icon={icon} />
   ) : null;
 
   /* The icon heads a card with no cover; a cover wins, because a card has one head object. */
@@ -346,7 +451,8 @@ export function BlockCard({
     ? (cue ?? (textOnly ? 'cta' : 'arrow'))
     : undefined;
 
-  const label = ctaLabel?.trim() ? ctaLabel : DEFAULT_CTA_LABEL;
+  const download = cueKind === 'download';
+  const label = ctaLabel?.trim() ? ctaLabel : download ? DOWNLOAD_LABEL : DEFAULT_CTA_LABEL;
   if (ctaLabel !== undefined && ctaLabel.trim().length === 0) {
     warn(`ctaLabel is blank for ${JSON.stringify(title)}; using ${JSON.stringify(label)}.`);
   }
@@ -370,12 +476,26 @@ export function BlockCard({
 
      The tone is primary: a text link is blue at rest, label and arrow (visual-direction § 4, owner
      6 Oct 2026 — blue is the recurring foreground accent; fdn-colour's neutral tone was reversed). */
+  const hasMeta = meta !== undefined && meta.trim().length > 0;
+  const metaNode = hasMeta ? <span className={styles.meta}>{meta}</span> : null;
+  /* The action row: the cta, with the format line a `block` after it on the same row when there is
+     one, so "DOWNLOAD   PDF · 12 PAGES" reads as one statement about the file. */
+  const ctaButton =
+    cueKind === 'cta' || download ? (
+      <Button
+        as="span"
+        emphasis="link"
+        tone="primary"
+        icon={<Icon name={download ? 'download' : 'arrow-right'} />}
+      >
+        {label}
+      </Button>
+    ) : null;
   const cta =
-    cueKind === 'cta' ? (
-      <Cluster>
-        <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
-          {label}
-        </Button>
+    ctaButton || metaNode ? (
+      <Cluster colGap="block" rowGap="tight" align="center">
+        {ctaButton}
+        {metaNode}
       </Cluster>
     ) : null;
 
@@ -501,7 +621,7 @@ export function BlockCard({
         <a
           className={cx(styles.frame, styles.link)}
           href={destination}
-          data-btn-link-group={cta ? true : undefined}
+          data-btn-link-group={ctaButton ? true : undefined}
         >
           {frameContent}
         </a>

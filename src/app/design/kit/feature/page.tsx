@@ -33,9 +33,10 @@ import { specimenStyles as s } from '../../_specimen/Specimen';
 
 const photo = (id: PhotoId): BlockCardMedia => ({ type: 'image', image: getKitPhoto(id) });
 
-/** A head-track aside: a 3:2 photograph at the head track's sizes (§ 1.4, 381 × 254). */
+/** A head-track aside that fills its box: ContentSection `asideFill` sizes the box to end on the
+    body's last line, and the photograph covers it at the head track's sizes (fix round 1). */
 function Aside({ id }: { id: PhotoId }) {
-  return <Media image={getKitPhoto(id)} ratio="3/2" sizes={HEAD_TRACK} />;
+  return <Media image={getKitPhoto(id)} fit="fill" sizes={HEAD_TRACK} />;
 }
 
 const DERIVED = (base: string, ext: string) =>
@@ -49,13 +50,15 @@ const KIND_ILLUSTRATION: BlockCardImage = {
   height: 569,
   kind: 'illustration',
 };
+/* One legible region, not the whole screen (fix round 1): at a 392 card the full 1436 capture set
+   its text at about 7px. The region is the AI panel's benefit chips and their justification, cut at
+   16:9 at its native pixels so nothing is resampled. */
 const KIND_CAPTURE: BlockCardImage = {
-  src: '/design/media/capture-listing.webp',
-  alt: 'Listing editor with four bullet fields beside an AI assistance panel.',
-  width: 1436,
-  height: 883,
+  src: '/design/media/capture-listing-benefits.webp',
+  alt: 'AI-suggested product benefits as chips, one open to show the review text that justifies it.',
+  width: 392,
+  height: 221,
   kind: 'capture',
-  sources: DERIVED('capture-listing', 'jpg'),
 };
 const KIND_CUTOUT: BlockCardImage = {
   src: '/design/media/cutout-flow.png',
@@ -134,7 +137,7 @@ const ENGAGEMENTS: readonly BlockCardSetItem[] = [
     id: 'eng-audit',
     title: 'An audit of the live product',
     body: 'Where the product loses people, ranked by what it costs you.',
-    media: photo('hands-sketches-markers'),
+    media: photo('pencil-wireframe-red'),
     href: ROUTES.uxProductAudit,
     ctaLabel: 'See the audit',
   },
@@ -222,7 +225,7 @@ const AUDITS: readonly BlockCardSetItem[] = [
     id: 'audit-ux',
     title: 'UX and product audit',
     body: 'Where your product loses people, ranked by cost.',
-    media: photo('pencil-wireframe-violet'),
+    media: photo('hand-mouse-detail'),
     href: ROUTES.uxProductAudit,
     ctaLabel: 'See the audit',
   },
@@ -230,7 +233,7 @@ const AUDITS: readonly BlockCardSetItem[] = [
     id: 'audit-system',
     title: 'Design-system audit',
     body: 'Which components drift, and what the drift costs.',
-    media: photo('desk-minimal-white'),
+    media: photo('desk-sketch-flatlay'),
     href: ROUTES.designSystemAudit,
     ctaLabel: 'See the audit',
   },
@@ -238,7 +241,7 @@ const AUDITS: readonly BlockCardSetItem[] = [
     id: 'audit-code',
     title: 'Design-to-code audit',
     body: 'Where the build departs from the design, and why.',
-    media: photo('conversation-chalkboard'),
+    media: photo('pair-laptop-notebook'),
     href: ROUTES.designToCodeAudit,
     ctaLabel: 'See the audit',
   },
@@ -246,7 +249,7 @@ const AUDITS: readonly BlockCardSetItem[] = [
     id: 'audit-ai',
     title: 'AI product readiness',
     body: 'What an AI feature must show before people trust it.',
-    media: photo('pair-desk-through-plants'),
+    media: photo('pair-at-laptop-sticky-wall'),
     href: ROUTES.aiProductUxReadiness,
     ctaLabel: 'See the audit',
   },
@@ -266,12 +269,12 @@ const CASES: readonly { title: string; body: string; image: PhotoId }[] = [
   {
     title: 'A care record nurses can scan',
     body: 'The six things a shift needs, first, on every patient.',
-    image: 'wall-sketching-portrait',
+    image: 'workshop-sticky-sort',
   },
   {
     title: 'Search that knows the catalogue',
     body: 'Forty thousand parts, found by what engineers call them.',
-    image: 'hands-trackpad',
+    image: 'studio-team-holi',
   },
   {
     title: 'Underwriting in one screen, not nine',
@@ -281,7 +284,7 @@ const CASES: readonly { title: string; body: string; image: PhotoId }[] = [
   {
     title: 'A design system across four products',
     body: 'One token layer, four brands, and a release every fortnight.',
-    image: 'moodboard-wall-desk',
+    image: 'wireframe-wall',
   },
 ];
 
@@ -472,7 +475,7 @@ const KINDS: readonly BlockCardSetItem[] = [
     id: 'kind-illustration',
     eyebrow: 'Illustration',
     title: 'The argument, drawn',
-    body: 'Unboxed everywhere else; in a card, cropped and ruled like the rest.',
+    body: 'Unboxed everywhere else; in a card, ruled like the rest and shown whole.',
     media: { type: 'image', image: KIND_ILLUSTRATION },
   },
   {
@@ -491,31 +494,59 @@ const KINDS: readonly BlockCardSetItem[] = [
   },
 ];
 
-/** M: three resources with no covers yet. The set takes a stand-in for each (§ 5.7). */
+/* M: three artefacts with no covers yet. `standIns="texture"` gives each the card's own texture
+   cover with its glyph on it, the three fields in turn; `meta` and the download cue say what the
+   file is before anyone opens it, so the band reads as things to take away, not more articles. */
 const RESOURCES: readonly BlockCardSetItem[] = [
   {
     id: 'res-checklist',
-    title: 'A checklist for an AI feature review',
+    icon: 'checklist',
+    title: 'Reviewing an AI feature before launch',
     body: 'Twelve questions to answer before people are asked to trust it.',
+    meta: 'Checklist · PDF · 4 pages',
     href: ROUTES.tools,
   },
   {
     id: 'res-template',
+    icon: 'notebook',
     title: 'The decision log we use with clients',
     body: 'One page per decision: the question, the owner and the reason.',
+    meta: 'Template · Notion',
     href: ROUTES.tools,
   },
   {
     id: 'res-guide',
+    icon: 'document-text',
     title: 'Running a design crit that decides',
     body: 'How to end a review with fewer open questions than it started.',
+    meta: 'Guide · PDF · 12 pages',
     href: ROUTES.guides,
   },
 ];
-const RESOURCE_STAND_INS: readonly BlockCardImage[] = [
-  getKitPhoto('studio-sticky-board-ux'),
-  getKitPhoto('hands-sticky-blue-pen'),
-  getKitPhoto('workshop-brick-room'),
+
+/* The spotlight: one case study with its cover, and two notes from it beside it. */
+const SPOTLIGHT: readonly BlockCardSetItem[] = [
+  {
+    id: 'sp-lead',
+    title: 'One record for a claims team of four hundred',
+    body: 'Two systems gave two answers about one customer. We settled which ships, and handling time fell by a third.',
+    media: photo('pair-at-laptop-sticky-wall'),
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'sp-rule',
+    eyebrow: 'What we learned',
+    title: 'The rule that decides is the design',
+    body: 'Most of the work was agreeing which system owns each fact. The screens followed in a fortnight.',
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'sp-numbers',
+    eyebrow: 'In numbers',
+    title: 'Eleven screens became four',
+    body: 'One place to look and one place to decide. Support tickets halved within the quarter.',
+    href: ROUTES.caseStudies,
+  },
 ];
 
 const LINKED_4: readonly BlockCardSetItem[] = AUDITS.map((item) => ({
@@ -554,16 +585,17 @@ function Caption({
 }
 
 const VARIATIONS = [
-  'C-image-3 · H-compact centred · whole-card links',
+  'C-image-3 · display H2 · centred · whole-card links',
+  'C-spotlight · 2:1 lead beside a stacked pair',
   'C-image-3 · H-row with a section action',
   'C-image-3 · H-title · per-card CTA',
   'C-image-3 · H-title · CtaRow, one-line titles',
-  'C-image-3 · unlinked, no CTA',
-  'C-image-4 · H-full · lead none',
+  'C-image-3 · unlinked, numbered, no CTA',
+  'C-image-4 · H-row · lead none · numbered',
   'C-image-4 · H-compact · per-card CTA',
   'C-image-6 · Slider showing three',
   'C-text-3 · hairline + index, unlinked',
-  'C-text-3 · per-card CTA',
+  'C-text-3 · H-row · per-card CTA',
   'C-text-3 · whole-card links · on tint',
   'C-text-6 · two-line bodies',
   'C-icon-4 · beside head + photo aside',
@@ -573,7 +605,7 @@ const VARIATIONS = [
   'Mixed set · a stand-in fills the gap',
   'Mixed set · standIns={false} · C-text',
   'Card images · four kinds',
-  'M resources · stand-in covers',
+  'M resources · texture covers · download + format',
   'Phone · a linked set of four scrolls',
 ] as const;
 
@@ -611,12 +643,14 @@ export default function FeatureKitSpecimen() {
       </PageHero>
 
       {/* 01 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={1} name={VARIATIONS[0]} fit="217 + 381 = 598">
-        Whole-card links. Each title ends in the blue arrow at rest; on hover the title joins it
-        and the cover leans in.
+      <Caption n={1} name={VARIATIONS[0]} fit="247 + 381 = 628">
+        ContentSection headingSize=&quot;display&quot;: the band&rsquo;s h2 at the display role, for
+        the band that opens the page&rsquo;s argument. Whole-card links; each title ends in the
+        blue arrow, and on hover the title joins it and the cover leans in.
       </Caption>
       <ContentSection
         align="center"
+        headingSize="display"
         eyebrow="Services"
         heading="Three ways we help"
         headingId="kf-01"
@@ -625,8 +659,22 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={SERVICES} lead="none" />
       </ContentSection>
 
+      {/* 02 · spotlight ───────────────────────────────────────────────────────────────── */}
+      <Caption n={2} name={VARIATIONS[1]} fit="133 + 505 = 638">
+        BlockCardSet lead=&quot;beside&quot;: the first card takes a 2:1 track at 21:9 and the lg
+        step; the rest stack beside it as text notes, sharing its height. Scale and position carry
+        the weight, not a box.
+      </Caption>
+      <ContentSection
+        eyebrow="Selected work"
+        heading="One project, three ways in"
+        headingId="kf-22"
+      >
+        <BlockCardSet items={SPOTLIGHT} lead="beside" />
+      </ContentSection>
+
       {/* 02 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={2} name={VARIATIONS[1]} fit="214 + 381 = 595">
+      <Caption n={3} name={VARIATIONS[2]} fit="214 + 381 = 595">
         The H-row: heading beside the lead, the section&rsquo;s one action under it, the set full
         column beneath.
       </Caption>
@@ -644,7 +692,7 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 03 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={3} name={VARIATIONS[2]} fit="133 + 381 + 64 = 578">
+      <Caption n={4} name={VARIATIONS[3]} fit="133 + 381 + 64 = 578">
         Each card names its own destination in a blue link under the copy; the title stays ink.
       </Caption>
       <ContentSection
@@ -657,7 +705,7 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 04 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={4} name={VARIATIONS[3]} fit="133 + 347 + 96 = 576">
+      <Caption n={5} name={VARIATIONS[4]} fit="133 + 347 + 96 = 576">
         Unlinked cards with one-line titles, and the band&rsquo;s ask in a CtaRow a stack below.
       </Caption>
       <ContentSection
@@ -674,11 +722,11 @@ export default function FeatureKitSpecimen() {
           />
         }
       >
-        <BlockCardSet items={CRAFT} lead="none" />
+        <BlockCardSet items={CRAFT} lead="none" numbered />
       </ContentSection>
 
       {/* 05 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={5} name={VARIATIONS[4]} fit="217 + 381 = 598">
+      <Caption n={6} name={VARIATIONS[5]} fit="217 + 381 = 598">
         No link and no CTA: the set describes, it does not route. Studio photographs, our own.
       </Caption>
       <ContentSection
@@ -688,25 +736,27 @@ export default function FeatureKitSpecimen() {
         headingId="kf-05"
         lead="Three fixed points hold the week together, whatever else the project needs from us."
       >
-        <BlockCardSet items={WEEK} lead="none" />
+        <BlockCardSet items={WEEK} lead="none" numbered />
       </ContentSection>
 
       {/* 06 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={6} name={VARIATIONS[5]} fit="264 + 301 = 565">
+      <Caption n={7} name={VARIATIONS[6]} fit="264 + 301 = 565">
         Four across at 286, h5 over body-sm, 16:9. lead=&quot;none&quot;: no card is featured in a
-        feature band. Unlinked, so it stays stacked on a phone.
+        feature band. On a phone a covered set of three or more is a sideways row; unlinked, the
+        row itself takes the tab stop and the arrow keys move it.
       </Caption>
       <ContentSection
+        arrangement="split-head"
         eyebrow="The studio"
-        heading="A small studio that works in the open with your team"
+        heading="A small studio that works in the open"
         headingId="kf-06"
         lead="Eighteen designers and design engineers in one room, reviewing work daily rather than at milestones."
       >
-        <BlockCardSet items={STUDIO} lead="none" />
+        <BlockCardSet items={STUDIO} lead="none" numbered />
       </ContentSection>
 
       {/* 07 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={7} name={VARIATIONS[6]} fit="217 + 301 + 64 = 582">
+      <Caption n={8} name={VARIATIONS[7]} fit="217 + 301 + 64 = 582">
         Four linked cards with per-card links. On a phone the row scrolls sideways, the next card
         peeking.
       </Caption>
@@ -721,7 +771,7 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 08 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={8} name={VARIATIONS[7]} fit="133 + 381 + 64 = 578">
+      <Caption n={9} name={VARIATIONS[8]} fit="133 + 381 + 64 = 578">
         Five or more image cards never wrap to a second row (826): they become a Slider showing
         three, composed around BlockCards by the page.
       </Caption>
@@ -743,7 +793,7 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 09 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={9} name={VARIATIONS[8]} fit="217 + 217 = 434">
+      <Caption n={10} name={VARIATIONS[9]} fit="217 + 217 = 434">
         A text card takes a hairline at its own top edge, the width of the card, then 24 to a blue
         index. The gutter breaks the rule, so it reads as three objects, not a table.
       </Caption>
@@ -758,10 +808,11 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 10 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={10} name={VARIATIONS[9]} fit="217 + 217 + 64 = 498">
+      <Caption n={11} name={VARIATIONS[10]} fit="217 + 217 + 64 = 498">
         Text cards with an eyebrow and their own named link.
       </Caption>
       <ContentSection
+        arrangement="split-head"
         eyebrow="Further reading"
         heading="Where to read next"
         headingId="kf-10"
@@ -771,7 +822,7 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 11 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={11} name={VARIATIONS[10]} fit="217 + 217 = 434">
+      <Caption n={12} name={VARIATIONS[11]} fit="217 + 217 = 434">
         Surface proof — on pages, tint is the proof band only (§ 1.7). Whole-card links on text
         cards take the arrow cue.
       </Caption>
@@ -787,7 +838,7 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 12 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={12} name={VARIATIONS[11]} fit="133 + 2 × 191 + 64 = 579">
+      <Caption n={13} name={VARIATIONS[12]} fit="133 + 2 × 191 + 64 = 579">
         Six text cards, two rows of three, bodies held to two lines.
       </Caption>
       <ContentSection eyebrow="Method" heading="Six steps, in this order" headingId="kf-12">
@@ -795,7 +846,7 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 13 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={13} name={VARIATIONS[12]} fit="240 + 48 + 254 = 542 · body 336">
+      <Caption n={14} name={VARIATIONS[13]} fit="240 + 48 + 254 = 542 · body 336">
         C-icon always carries a photograph in its head track, and never actions there.
       </Caption>
       <ContentSection
@@ -803,23 +854,24 @@ export default function FeatureKitSpecimen() {
         eyebrow="What you receive"
         heading="Four things you keep"
         headingId="kf-13"
-        lead="Everything we make is yours, documented where your team already works, and maintained after we leave."
+        asideFill
         aside={<Aside id="hand-sketch-wireframe" />}
       >
-        <BlockCardSet items={RECEIVE_4} lead="none" across={2} />
+        <BlockCardSet items={RECEIVE_4} lead="none" across={2} size="md" />
       </ContentSection>
 
       {/* 14 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={14} name={VARIATIONS[13]} fit="head 542 · body 336 + 96 = 432">
+      <Caption n={15} name={VARIATIONS[14]} fit="head 542 · body 336 + 96 = 432">
         C-icon-4 may close on a CtaRow under the grid. The head track still carries only the photo.
       </Caption>
       <ContentSection
         arrangement="beside"
         eyebrow="Discovery"
-        heading="What the first month delivers"
+        heading="The first month"
         headingId="kf-14"
         lead="Four weeks, four artefacts, and a decision about whether to go further, made with you."
-        aside={<Aside id="pencil-wireframe-violet" />}
+        asideFill
+        aside={<Aside id="designer-tablet-monitor" />}
         footer={
           <CtaRow actions={[{ label: 'Plan a discovery month', href: ROUTES.contact }]} />
         }
@@ -828,9 +880,10 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 15 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={15} name={VARIATIONS[14]} fit="head 542 · body 3 × 136 + 2 × 64 = 536">
-        Six linked icon cards route to their pages; no CtaRow (632 would overflow). Icon sets of up
-        to six stay stacked on a phone.
+      <Caption n={16} name={VARIATIONS[15]} fit="head 542 · body 3 × 136 + 2 × 64 = 536">
+        Six linked icon cards route to their pages; no CtaRow (632 would overflow). The photograph
+        ends on the grid&rsquo;s last line (asideFill). On a phone, linked and more than three, the
+        set is a sideways row rather than an 1800px column.
       </Caption>
       <ContentSection
         arrangement="beside"
@@ -838,13 +891,14 @@ export default function FeatureKitSpecimen() {
         heading="Six services, one studio"
         headingId="kf-15"
         lead="Each can stand alone. Most clients start with one and add a second once the first has shipped."
+        asideFill
         aside={<Aside id="studio-whiteboard-crit" />}
       >
         <BlockCardSet items={SERVICES_6} lead="none" across={2} />
       </ContentSection>
 
       {/* 16 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={16} name={VARIATIONS[15]} fit="head 411 · body 429">
+      <Caption n={17} name={VARIATIONS[16]} fit="head 411 · body 429">
         A pair at 3:2 in the two-thirds track; the head track takes the actions instead of an aside.
       </Caption>
       <ContentSection
@@ -869,7 +923,7 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 17 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={17} name={VARIATIONS[16]} fit="217 + 381 = 598">
+      <Caption n={18} name={VARIATIONS[17]} fit="217 + 381 = 598">
         The middle item has no cover. With a stand-in pool, the set takes the first fitting studio
         photograph for it: never a hole, never an empty frame, never a label.
       </Caption>
@@ -884,7 +938,7 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 18 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={18} name={VARIATIONS[17]} fit="217 + 191 = 408">
+      <Caption n={19} name={VARIATIONS[18]} fit="217 + 191 = 408">
         The same three items with standIns=&#123;false&#125;: every card drops its cover and the
         set renders as C-text, hairlines and all.
       </Caption>
@@ -898,7 +952,7 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       {/* 19 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={19} name={VARIATIONS[18]} fit="217 + 331 = 548">
+      <Caption n={20} name={VARIATIONS[19]} fit="217 + 331 = 548">
         Any card may carry any kind. In a card the crop box rules every kind with one hairline and
         an 8 radius; Media draws no edge of its own.
       </Caption>
@@ -907,32 +961,35 @@ export default function FeatureKitSpecimen() {
         eyebrow="Imagery"
         heading="Four kinds of card image"
         headingId="kf-19"
-        lead="A photograph, an illustration, a capture and a cut-out, each cropped to the set's 16:9."
+        lead="A photograph, an illustration, a capture and a cut-out in the set's 16:9 box. The drawing and the part are shown whole."
       >
-        <BlockCardSet items={KINDS} lead="none" />
+        <BlockCardSet items={KINDS} lead="none" numbered />
       </ContentSection>
 
       {/* 20 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={20} name={VARIATIONS[19]} fit="217 + 381 = 598">
-        Resources with no covers yet. The pool covers every item, so each takes a stand-in in the
-        page&rsquo;s tone family (§ 5.7), unlabelled, replaced when the real cover exists.
+      <Caption n={21} name={VARIATIONS[20]} fit="217 + 381 = 598">
+        Resources with no covers yet. standIns=&quot;texture&quot; gives each the card&rsquo;s own
+        texture cover with its glyph, the three fields in turn; the download cue and a format line
+        say what the file is before it is opened.
       </Caption>
       <ContentSection
         align="center"
         eyebrow="Resources"
         heading="Tools we use with clients"
         headingId="kf-20"
-        lead="Free to download and use as they are. Each one came out of a real engagement."
+        lead="Free to use as they are. Each one came out of a real engagement."
       >
-        <BlockCardSet items={RESOURCES} lead="none" standIns={RESOURCE_STAND_INS} />
+        <BlockCardSet items={RESOURCES} lead="none" standIns="texture" cue="download" />
       </ContentSection>
 
       {/* 21 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Caption n={21} name={VARIATIONS[20]} fit="217 + 301 = 518">
+      <Caption n={22} name={VARIATIONS[21]} fit="217 + 301 = 518">
         Below 768 a linked set of more than three is a sideways row, one card in view and the next
-        peeking; Tab moves it. 06 above, unlinked, stays stacked. Here with the arrow cue.
+        peeking; Tab moves it. Short text and icon sets (10, 14) stay stacked. Here with the arrow
+        cue.
       </Caption>
       <ContentSection
+        arrangement="split-head"
         eyebrow="Audits"
         heading="Start with an audit"
         headingId="kf-21"

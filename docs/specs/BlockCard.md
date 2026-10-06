@@ -26,12 +26,12 @@ says otherwise, this block and the dated amendments at the end win.
 | Axis | The rule as built |
 |---|---|
 | **Edge** | No card edge, ground, radius or shadow. The one card-owned line round an image is the **crop box's border hairline** (`--bcrd-media-rule-width` / `-ink`, ch05 amendment 5a); Media draws none inside a card (`edge="placement"`). A **text-only** card takes a hairline at its own top edge instead (`--bcrd-text-rule-*`, neutral on every surface), 24 above its first label. |
-| **Ratio** | **One 3:2 ratio** for the card (`--bcrd-media-ratio` = `--ratio-cover`) in both orientations — **except** a set of three or more across, which crops 16:9 (`--bcrd-media-ratio-wide`, `ratio="wide"`, visual-direction § 1.4 rule 1). The set decides it; the row stays 3:2. |
+| **Ratio** | **One 3:2 ratio** for the card (`--bcrd-media-ratio` = `--ratio-cover`) in both orientations — **except** a set of three or more across, which crops 16:9 (`--bcrd-media-ratio-wide`, `ratio="wide"`, visual-direction § 1.4 rule 1). The set decides it; the row stays 3:2. A spotlight lead (`BlockCardSet lead="beside"`) crops 21:9 (`ratio="panorama"`). An illustration or a cut-out is shown whole inside the box (Media `fit="contain"`, `--bcrd-media-inset`), never cropped. |
 | **Title** | Ink at rest, never underlined (tried 29 Sep, removed). An arrow-cued linked card ends its title in the blue arrow (`--bcrd-cue-ink`); title and arrow take `--bcrd-title-ink-hover` on hover and focus and `--bcrd-title-ink-pressed` on press. A cta-cued card's title never moves. |
 | **Motion** | One movement: the cover leans in to `--bcrd-media-zoom` (1.03) inside its still box on hover, focus and press. Reduced motion removes the zoom outright; the ring and the colour steps remain. |
 | **Colour tokens** | Eleven, declared on every surface: `title-ink`, `title-ink-hover`, `title-ink-pressed`, `cue-ink`, `mark-ink`, `body-ink`, `eyebrow-ink`, `media-rule-ink`, `text-rule-ink`, `ring-color`, `ring-gap-color` (§ 6). The cta's three steps are Button's. |
-| **Cue** | A linked card says it navigates by ONE cue: the arrow (default with a cover or an icon) or a link-style cta (default text-only). `cue` overrides; the set passes it for all. |
-| **Head object** | A cover, or an `icon` (32, blue, the C-icon card), or — text-only — the hairline then an optional blue `index` numeral and/or eyebrow. |
+| **Cue** | A linked card says it navigates by ONE cue: the arrow (default with a cover or an icon), a link-style cta (default text-only), or `download` (the cta with the download glyph, for a file). `cue` overrides; the set passes it for all. An optional `meta` format line sits on the action row. |
+| **Head object** | A cover (an image, or `media.type: 'texture'` — the Tcules texture with the card's icon centred at 48), or an `icon` (32, blue, the C-icon card), or — text-only — the hairline then an optional blue `index` numeral and/or eyebrow. |
 | **Sizes** | `lg` h3 + body-lg (featured row), `md` h4 + body (2–3 across; text cards), `sm` h5 + body-sm (4 across; icon cards). The set decides by **track width**, not count. |
 
 > **Amendment · 5 Oct 2026 · `fdn-spacing` (visual-direction § 1.1 S2, § 1.2, § 7.2).** Where this
@@ -1436,3 +1436,36 @@ for an unfocusable row, but the row then needs a name Layout cannot yet take), o
     display: block as sizing, each with its comment.
 [x] docs/vocabulary.md regenerated in the same change.
 ```
+
+## Amendment · 6 Oct 2026 — `cmp-feature` fix round
+
+Supersedes the phone-scroll rule and the open question in the amendment above.
+
+- **`BlockCardSet lead="beside"`** — the spotlight. From 1024 the first card takes a 2:1 track at 21:9
+  and `lg`; the rest stack beside it as text cards (their covers dropped, never stood in). Built on
+  Layout `lead="tall"` (the first child spans every row; read from the DOM up to six children).
+- **`ratio: 'panorama'`** (21:9, `--bcrd-media-ratio-panorama` = new primitive `--ratio-panorama`) for
+  that lead: at 802 a 16:9 cover is 451 and the band ran past the fold.
+- **Illustration and cut-out covers are not cropped.** Media gains `fit="contain"`; the card pads the
+  ruled box by `--bcrd-media-inset` (`--gap-text`). The cover crop took the label off the drawing and
+  the run button off the part. Photographs and captures still cover-crop.
+- **Texture covers.** `media: { type: 'texture', recipe?: 0 | 1 | 2 }` draws the Texture primitive in
+  the ruled box, the card's icon centred on it at `--bcrd-cover-glyph-size` (`--icon-size-48`, new).
+  `BlockCardSet standIns="texture"` gives every missing cover one, the three recipes in turn: the
+  resources band (M), where a stock photograph said nothing about the file.
+- **`cue: 'download'` and `meta`.** The cta with the download glyph and "Download", and a mono format
+  line ("PDF · 12 pages") beside it on the action row, in the eyebrow's ink.
+- **Phone scroll row, revised.** Below 768: a covered set of three or more scrolls, linked or not; a
+  linked set of four or more scrolls whatever it holds (icon sets included). Otherwise stacked. An
+  unlinked scroll row takes the tab stop itself (Layout `tabIndex={0}`, WCAG 2.1.1). This closes the
+  open question above: the three bands that ran past 1700 at 390 are now rows.
+- **Icon sets** sit a `stack` (48) apart down the grid rather than a `column`: a 32 glyph, an h5 and two
+  lines are smaller objects than a covered tile, and 64 read as four loose items.
+- **Eyebrows stay ink** on every surface (fdn-blue: words are ink, blue is for marks); an unlinked set
+  that needs colour takes `numbered`.
+- **Hover covers the arrow.** `.cue` is named beside `.cued` in the hover and pressed rules: it carries
+  its own rest ink, so on blue a hover that coloured only the title left a white arrow behind.
+
+Outside BlockCard, for its bands: ContentSection gains `headingSize="display"` (the band's h2 at
+`--text-display`) and `asideFill` (the C-icon head-track photograph ends on the body's last line).
+

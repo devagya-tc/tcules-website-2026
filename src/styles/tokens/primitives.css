@@ -591,6 +591,9 @@
   /* A card cover in a set of three or more across (visual-direction § 1.4 rule 1, 6 Oct 2026):
      at 392 a 3:2 cover is 261 tall and a C-image-3 band runs past the 830 fold; 16:9 is 221. */
   --ratio-wide: 16 / 9;
+  /* The tall lead of a spotlight set (BlockCardSet lead="beside", cmp-feature): a 2:1 track beside
+     a stacked pair. At 802 a 16:9 cover is 451 and the band runs past the fold; 21:9 is 344. */
+  --ratio-panorama: 21 / 9;
   --ratio-portrait: 1 / 1;
 }
 
@@ -717,6 +720,9 @@
   /* A glyph that heads a card rather than sitting beside a label (BlockCard's icon card,
      visual-direction § 1.4: icon 32). Not one of Icon's own four roles: the card sizes it. */
   --icon-size-32: 32px;
+  /* The glyph on a texture cover (BlockCard, cmp-feature): one object centred in a 16:9 box about
+     220 tall, where 32 read as a stray mark. */
+  --icon-size-48: 48px;
 }
 
 /* ── Breakpoint ───────────────────────────────────────────────────────────────

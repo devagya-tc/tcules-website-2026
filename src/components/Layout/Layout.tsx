@@ -140,8 +140,15 @@ export type LayoutProps = {
    * With `equalRows`, only the rows after the lead are equalised: the lead's row is explicit and
    * `auto`, the implicit rows below it are `1fr`, and a flexible row never sizes against an item
    * in an auto one. So a tall lead does not stretch every card row to its height.
+   *
+   * `"tall"` is the other featured shape (cmp-feature, 6 Oct 2026): from lg (1024) the first child
+   * takes the FIRST track and spans every row, and the rest stack in the track(s) beside it — a
+   * 2:1 lead beside a stacked pair, `columns={{ lg: [2, 1] }}`. The span is the container's, as
+   * above, and is read from the DOM (`:has`), so it covers up to six children. Below lg it is the
+   * ordinary single-track stack: a span there would only open empty rows. With `equalRows` the
+   * stacked rows share the lead's height equally.
    */
-  lead?: boolean;
+  lead?: boolean | 'tall';
   /**
    * Reverse the VISUAL order of the tracks, per breakpoint — the image/text pair whose image sits
    * right on desktop and first on a phone, or a band that alternates sides down the page. Bare
@@ -439,7 +446,7 @@ export function Layout({
   // the losers emit nothing, so two rules never fight over one grid-column. A scroll row has no
   // explicit grid to place into: `always` drops all three, `until-md` drops lead and the base
   // breakpoint's placements, and keeps md-up ones for the grid it becomes there.
-  const leads = lead && scroll == null;
+  const leads = lead !== false && scroll == null;
   const placeable = ([bp]: [Breakpoint, unknown]) =>
     scroll == null || (scroll === 'until-md' && bp !== 'base');
   const reversed = leads ? [] : perBreakpoint(reverse).filter(placeable);
@@ -465,7 +472,7 @@ export function Layout({
         styles[`justifyitems-${justifyItems}`],
         justify && styles[`justify-${justify}`],
         equalRows && styles['equal-rows'],
-        leads && styles.lead,
+        leads && (lead === 'tall' ? styles['lead-tall'] : styles.lead),
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast && styles['pin-last'],

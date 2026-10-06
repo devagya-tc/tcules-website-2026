@@ -32,7 +32,10 @@
 
    Rule order is load-bearing: the hover/focus rule precedes the pressed rule, and both are
    `.root .link:<state> .cued` — the same specificity — so while the pointer is down over a hovered
-   card source order hands the colour to pressed. Do not merge :active back into the hover list. */
+   card source order hands the colour to pressed. Do not merge :active back into the hover list.
+   The arrow (.cue) is named in both rules beside the title: it carries its own rest ink, so a rule
+   that coloured only the title would leave it behind on hover (on blue, a brandeis-50 title beside
+   a white arrow). */
 
 .root {
   inline-size: 100%;
@@ -74,6 +77,56 @@
 /* Three or more across: 16:9 (visual-direction § 1.4 rule 1). The set chooses it via `ratio`. */
 .wide {
   aspect-ratio: var(--bcrd-media-ratio-wide);
+}
+
+/* The spotlight's tall lead: 21:9 in the 2:1 track (BlockCardSet lead="beside"). */
+.panorama {
+  aspect-ratio: var(--bcrd-media-ratio-panorama);
+}
+
+/* An illustration or a cut-out, shown whole (Media fit="contain"): the box keeps its ratio and its
+   rule, and its padding is the object's air — a lifted part needs room round it to read as lifted,
+   and the cut-out's drop shadow needs somewhere to fall. Padding inside the ruled box, not a margin:
+   the box is the object's frame and owns what is inside it. */
+.contained {
+  padding: var(--bcrd-media-inset);
+}
+
+/* The texture cover's field: the positioned, isolated box the Texture fills (Texture.md: "inside
+   any other box, the box needs position: relative; isolation: isolate"). Sizing and stacking. */
+.textureCover {
+  display: block;
+  position: relative;
+  isolation: isolate;
+  block-size: 100%;
+}
+
+/* The glyph on a texture cover: the card's own icon, larger, in the mark ink (§ 4.2), at the
+   cover's centre. Positioned like the Texture beside it — a decorative layer placed in its box —
+   rather than arranged: there is one item and no flow, so a grid cell would be a layout with
+   nothing to lay out (and Layout starts its content, by design). Percentages only. */
+.coverGlyph {
+  display: block;
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--bcrd-mark-ink);
+}
+
+.coverGlyph > svg {
+  inline-size: var(--bcrd-cover-glyph-size);
+  block-size: var(--bcrd-cover-glyph-size);
+}
+
+/* The artefact's format line ("PDF · 12 pages"): the eyebrow's quiet mono voice and its ink, on
+   the action row. It is a label, so it reads the eyebrow's colour token rather than a second name
+   for the same ink. */
+.meta {
+  color: var(--bcrd-eyebrow-ink);
+  font: var(--bcrd-eyebrow-text);
+  letter-spacing: var(--bcrd-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
 }
 
 /* The text-only card's top edge (§ 3.1): a hairline the width of the card, standing in for the top
@@ -123,7 +176,13 @@
    uppercase in this system (tokens/primitives.css § Type · case), so the rule reads
    --text-mono-case like SiteFooter's .label, SiteNav's .blockLabel and the Button that draws the
    cta below. The caller passes ordinary capitalisation — "Case study", not "CASE STUDY" — because
-   the transform is presentation and the string is content. */
+   the transform is presentation and the string is content.
+
+   It stays INK, not blue, on every surface (argued, cmp-feature fix round 1, 6 Oct 2026). A review
+   asked for blue eyebrows so no band leans on a link for colour; the owner's fdn-blue ruling says
+   the words — headings, eyebrows, card titles at rest, body — stay ink, and blue is for marks.
+   The colour an unlinked set lacked comes from a mark instead: BlockCardSet `numbered` puts a blue
+   index on the eyebrow line of image cards as it does on text cards. */
 .eyebrow {
   color: var(--bcrd-eyebrow-ink);
   font: var(--bcrd-eyebrow-text);
@@ -221,7 +280,9 @@
    title goes blue to meet its arrow. The rule keeps its rest ink and the title does not underline (both
    tried 29 Sep, both too loud). Keyboard gets what the pointer gets, plus the ring. */
 .root .link:hover .cued,
-.root .link:focus-visible .cued {
+.root .link:focus-visible .cued,
+.root .link:hover .cue,
+.root .link:focus-visible .cue {
   color: var(--bcrd-title-ink-hover);
 }
 

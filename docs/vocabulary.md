@@ -147,7 +147,7 @@ placeholder that never wraps.
 - **Motion:** `--duration-instant` 0ms · `--duration-fast` 140ms · `--duration-medium` 240ms · `--duration-slow` 360ms · `--easing-standard` cubic-bezier(0.2, 0, 0, 1)
 - **Elevation:** `--shadow-none` none · `--shadow-crop` 0 0 6px color-mix(in srgb, #1b1b18 8%, transparent)
 - **Z-index:** `--z-base` 0 · `--z-raised` 100 · `--z-sticky` 200 · `--z-dropdown` 300 · `--z-overlay` 400 · `--z-modal` 500 · `--z-toast` 600
-- **Icon:** `--icon-size-14` 14px · `--icon-size-16` 16px · `--icon-size-18` 18px · `--icon-size-24` 24px · `--icon-size-32` 32px
+- **Icon:** `--icon-size-14` 14px · `--icon-size-16` 16px · `--icon-size-18` 18px · `--icon-size-24` 24px · `--icon-size-32` 32px · `--icon-size-48` 48px
 - **Breakpoints:** `--breakpoint-480` 480px · `--breakpoint-768` 768px · `--breakpoint-1024` 1024px · `--breakpoint-1280` 1280px · `--breakpoint-1440` 1440px
 - **Families:** `--font-family-display` 'Newsreader', Georgia, 'Times New Roman', serif · `--font-family-sans` 'Public Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif · `--font-family-mono` 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace
 - **Weights:** `--font-weight-regular` 400 · `--font-weight-medium` 500 · `--font-weight-semibold` 600
@@ -171,12 +171,12 @@ Yours must not collide with any of those, nor with a primitive family above.
 against the controls beside it — if you are specifying one, say which of these it must line up with.
 
 - **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px · `--acc-question-underline-offset` 6px
-- **block-card.css** — `--bcrd-title-tracking-lg` -0.01em · `--bcrd-title-tracking-md` -0.005em · `--bcrd-title-tracking-sm` 0em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-text-rule-width` 1px · `--bcrd-icon-size` 32px · `--bcrd-index-tracking` 0.08em · `--bcrd-media-rule-width` 1px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
+- **block-card.css** — `--bcrd-title-tracking-lg` -0.01em · `--bcrd-title-tracking-md` -0.005em · `--bcrd-title-tracking-sm` 0em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-inset` 16px · `--bcrd-cover-glyph-size` 48px · `--bcrd-text-rule-width` 1px · `--bcrd-icon-size` 32px · `--bcrd-index-tracking` 0.08em · `--bcrd-media-rule-width` 1px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
 - **brand-mark.css** — `--bmark-size` 14px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
 - **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-round` 999px · `--btn-outline-rule-width` 1px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
 - **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 160px
-- **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-measure` 32ch · `--csec-lead-measure` 56ch · `--csec-body-measure` 75ch
+- **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-tracking-display` -0.02em · `--csec-heading-measure-display` 26ch · `--csec-heading-measure` 32ch · `--csec-lead-measure` 56ch · `--csec-body-measure` 75ch · `--csec-aside-min-size` 10rem
 - **cta-row.css** — `--ctarow-rule-width` 1px · `--ctarow-note-measure` 56ch · `--ctarow-centred-measure` 75ch
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.015em · `--cta-point-tracking` 0em · `--cta-marker-tracking` 0.08em · `--cta-heading-measure` 32ch · `--cta-body-measure` 75ch
 - **data-table.css** — `--dtab-rule-width` 1px · `--dtab-fluid-size` 176px · `--dtab-hold-size` 192px · `--dtab-fade-size` 48px
@@ -209,7 +209,7 @@ Layout is done by these three. Always. Anything you specify is arranged by one o
 
   where `SectionSurface` = 'paper' | 'tint' | 'ink' | 'blue' · `SectionDensity` = 'tight' | 'open'
 
-**`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `align?: Place` · `justifyItems?: Place` · `justify?: Distribute` · `scroll?: Scroll` · `ref?: Ref<HTMLElement>` · `tabIndex?: 0 | -1` · `children: ReactNode`
+**`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean | 'tall'` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `align?: Place` · `justifyItems?: Place` · `justify?: Distribute` · `scroll?: Scroll` · `ref?: Ref<HTMLElement>` · `tabIndex?: 0 | -1` · `children: ReactNode`
 
   where `Gap` = 'none' | 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' | 'column' | 'section' | 'section-open' · `Columns` = (number | number[]) | 'fit' | 'tile' | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec } · `MinTrack` = 'xs' | 'sm' | 'md' | 'lg' · `Offset` = 0 | 1 | 2 | 3 · `Place` = 'stretch' | 'start' | 'center' | 'end' · `Distribute` = 'start' | 'center' | 'end' | 'between' · `Scroll` = 'until-md' | 'always'
 

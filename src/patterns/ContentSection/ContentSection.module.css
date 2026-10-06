@@ -4,7 +4,7 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .heading .lead .leadBeside .centred .bodyCentred .text
+   Classes: .eyebrow .heading .headingDisplay .asideFill .lead .leadBeside .centred .bodyCentred .text
 
    One @media query (.leadBeside, from 1024): the lead's ROLE follows the arrangement, and the
    beside arrangement only exists from 1024. It swaps a type role, never a distance. */
@@ -28,6 +28,15 @@
   /* The title measure, so a full-sentence section heading breaks early and reads as a shape
      rather than as a line of running text spanning the whole 1240 column. */
   max-inline-size: var(--csec-heading-measure);
+}
+
+/* headingSize="display": the same h2 at the display role and its measure. After .heading at equal
+   specificity, so it wins by order. Every title role re-declares itself at 1023 and 767, so this
+   needs no breakpoint. */
+.headingDisplay {
+  font: var(--csec-heading-text-display);
+  letter-spacing: var(--csec-heading-tracking-display);
+  max-inline-size: var(--csec-heading-measure-display);
 }
 
 .lead {
@@ -75,4 +84,15 @@
    width: in `beside`'s narrower track at 1024 the track is the tighter of the two and wins. */
 .text {
   max-inline-size: var(--csec-body-measure);
+}
+
+/* asideFill: the aside's box. It fills its grid area (the head group's 1fr row, which the stretched
+   track gives the height the body leaves), so a `fit="fill"` photograph inside it ends on the body's
+   last line. The floor keeps it a photograph when the body is short. `contain: size` takes the
+   photograph's own height out of the track's sizing — without it the image's intrinsic height set
+   the head track and the aside ran past the body again. Sizing only. */
+.asideFill {
+  contain: size;
+  block-size: 100%;
+  min-block-size: var(--csec-aside-min-size);
 }

@@ -88,6 +88,14 @@
   /* Three or more across, 16:9 (§ 1.4 rule 1, 6 Oct 2026). The set chooses it; the card has no
      count. The row (horizontal) stays on the cover ratio. */
   --bcrd-media-ratio-wide: var(--ratio-wide);
+  /* The spotlight's tall lead, 21:9 (BlockCardSet lead="beside", cmp-feature). */
+  --bcrd-media-ratio-panorama: var(--ratio-panorama);
+  /* The air inside the ruled box round an illustration or a cut-out shown whole (fit="contain").
+     Cell padding (16), Media's own small-box inset step: at a 286 card, 24 a side left the part
+     too small to read. */
+  --bcrd-media-inset: var(--gap-text);
+  /* The glyph centred on a texture cover. */
+  --bcrd-cover-glyph-size: var(--icon-size-48);
 
   /* The text-only card's top edge (visual-direction § 3.1, cmp-feature): a hairline the width of
      the card, standing in for the edge a cover gives. Its ink is per surface, below, and neutral

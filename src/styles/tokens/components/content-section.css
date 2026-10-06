@@ -34,6 +34,11 @@
   --csec-eyebrow-tracking: var(--text-eyebrow-tracking);
   --csec-heading-text: var(--text-h2);
   --csec-heading-tracking: var(--text-h2-tracking);
+  /* headingSize="display" (cmp-feature, 6 Oct 2026): the band's h2 at the display role, for the
+     band that opens an argument. Its measure is the display title's, as PageHero's. */
+  --csec-heading-text-display: var(--text-display);
+  --csec-heading-tracking-display: var(--text-display-tracking);
+  --csec-heading-measure-display: var(--measure-display);
 
   /* --csec-lead-text has no tracking companion: --text-lead is a body role and carries no
      optical correction, so a --csec-lead-tracking would name a value that does not exist. */
@@ -47,6 +52,11 @@
   --csec-heading-measure: var(--measure-title);
   --csec-lead-measure: var(--measure-lead);
   --csec-body-measure: var(--measure-body);
+
+  /* asideFill's floor (cmp-feature, 6 Oct 2026): a component size, not a distance. 160 is about
+     2.4:1 at the 381 head track and 2:1 at the 326 phone column, where the aside sits at exactly
+     this height; below it a head-track photograph reads as a strip. */
+  --csec-aside-min-size: 10rem;
 }
 
 :root,

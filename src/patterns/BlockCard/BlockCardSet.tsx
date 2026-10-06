@@ -9,6 +9,7 @@ import {
   type BlockCardProps,
   type BlockCardRatio,
   type BlockCardSize,
+  type BlockCardTextureRecipe,
   type BlockCardTitleElement,
   type BlockCardTracks,
 } from './BlockCard';
@@ -31,10 +32,17 @@ export type BlockCardSetItem = Omit<
  *
  *   auto  from FEATURED_FROM items the first card takes the horizontal row above its peers
  *         (ruling C3, 28 Sep 2026). The case-study index's shape, and the default.
- *   none  never. Every feature band passes it (visual-direction § 1.4 rule 4): a feature set is
- *         peers, and a featured row would make one option look recommended.
+ *   none  never. Every feature band of PEERS passes it (visual-direction § 1.4 rule 4): a
+ *         featured row would make one option look recommended.
+ *   beside  the spotlight (cmp-feature fix round 1, 6 Oct 2026): from 1024 the first card takes a
+ *         2:1 track at 21:9 and the `lg` step, and the rest stack beside it as TEXT cards — hairline,
+ *         index or eyebrow, title, body. For a band that has one thing to show and two to note (an
+ *         insight with its two follow-ups, a case study with two notes from it), where a row of
+ *         equal tiles would read as one rectangle three times. Their covers are dropped, never
+ *         stood in: the companions are notes by design, so the lead is the one image in the band.
+ *         Three items is the shape; up to six works. Below 1024 it is the stack, lead first.
  */
-export type BlockCardSetLead = 'auto' | 'none';
+export type BlockCardSetLead = 'auto' | 'none' | 'beside';
 
 /** How many tracks the set reaches at its widest. See `peerGrid`. */
 export type BlockCardSetAcross = 2 | 3 | 4;
@@ -68,8 +76,13 @@ export type BlockCardSetProps = {
    *
    * Absent behaves as `false`. An all-image set ignores it. Icon cards are not missing a cover —
    * an item with an `icon` and no image is never given a stand-in.
+   *
+   *   texture  every missing cover is the card's own texture cover (BlockCard `media.type`
+   *           'texture'), the three fields in turn, with the item's `icon`, if it has one, on it.
+   *           For artefacts with no cover yet — the resources band (M): the brand's own surface
+   *           rather than a stock photograph that says nothing about the file. Never runs short.
    */
-  standIns?: readonly BlockCardImage[] | false;
+  standIns?: readonly BlockCardImage[] | 'texture' | false;
   /**
    * Number the cards `01`, `02` … above their titles, in blue mono — the text card's index
    * (§ 3.1: hairline, 24, then an index or an eyebrow). Default false.
@@ -115,7 +128,8 @@ function peerGrid(
   return { columns: { base: 1, md: 2, lg: 3 }, tracks: 3, widest };
 }
 
-const hasCover = (item: BlockCardSetItem) => Boolean(item.media?.image.src.trim());
+const hasCover = (item: BlockCardSetItem) =>
+  item.media?.type === 'texture' || Boolean(item.media?.image.src.trim());
 
 /**
  * The peers' type step (§ 7.2), decided by TRACK WIDTH, not by count (cmp-feature, 6 Oct 2026).
@@ -148,10 +162,18 @@ function peerSize(
  */
 function settleMedia(
   items: readonly BlockCardSetItem[],
-  standIns: readonly BlockCardImage[] | false | undefined,
+  standIns: readonly BlockCardImage[] | 'texture' | false | undefined,
 ): readonly BlockCardSetItem[] {
   const covered = items.filter(hasCover).length;
   if (covered === items.length) return items;
+  if (standIns === 'texture') {
+    let n = 0;
+    return items.map((item) =>
+      hasCover(item)
+        ? item
+        : { ...item, media: { type: 'texture', recipe: (n++ % 3) as BlockCardTextureRecipe } },
+    );
+  }
   if (items.every((item) => !hasCover(item) && item.icon !== undefined)) return items;
 
   const missing = items.length - covered;
@@ -182,11 +204,11 @@ function settleMedia(
  * its first child, so a screen reader hears "list, five items" rather than two lists, and the
  * peers' `equalRows` is not stretched to the featured row's height.
  *
- * On a phone a LINKED set of more than three scrolls sideways (§ 3.7 item 2: Layout
- * `scroll="until-md"`, one card per view with the next peeking): every card is then a link, so Tab
- * moves the row. An unlinked set stays stacked, because a scroll row of things nobody can focus
- * fails WCAG 2.1.1 — and so does an icon set of up to six, which is short enough stacked, and a set
- * under a featured lead (the case-study index), which is a page's list rather than a band's row.
+ * On a phone a covered set of three or more, and any linked set of four or more, scrolls sideways
+ * (§ 3.7 item 2: Layout `scroll="until-md"`, one card per view with the next peeking). Linked, Tab
+ * moves the row card by card; unlinked, the row itself is the tab stop and the arrow keys move it,
+ * because a scroll row nobody can reach fails WCAG 2.1.1. Short text and icon sets stay stacked, as
+ * does a set under a featured lead (the case-study index), a page's list rather than a band's row.
  *
  * A set of five or more IMAGE cards in a feature band is a Slider showing three (§ 1.4 rule 3). The
  * Slider is composed by the caller around BlockCards; this set never imports it, because a pattern
@@ -207,7 +229,44 @@ export function BlockCardSet({
 }: BlockCardSetProps) {
   if (given.length === 0) return null;
 
-  const items = settleMedia(given, standIns);
+  /* The spotlight settles its own media: the lead keeps its cover, the companions are notes. */
+  const spotlight = lead === 'beside' && given.length >= 2;
+  const items = spotlight
+    ? given.map((item, i) => (i === 0 ? item : { ...item, media: undefined }))
+    : settleMedia(given, standIns);
+  if (spotlight) {
+    return (
+      /* [2, 1] from lg with the lead spanning every row (Layout lead="tall"); the companions sit a
+         `column` apart down the track, as rows do everywhere in a set, and a `gutter` from the lead.
+         No equalRows: it holds at every width, and on a phone it gave each short note the lead's
+         full height. Content-sized rows share whatever height the lead has over them. Below lg,
+         one track: lead first, then the notes. */
+      <Layout as="ul" columns={{ lg: [2, 1] }} colGap="gutter" rowGap="column" lead="tall">
+        {items.map(({ id, ...card }, index) =>
+          index === 0 ? (
+            <BlockCard
+              key={id}
+              {...card}
+              cue={cue}
+              titleAs={titleAs}
+              index={numbered ? 1 : undefined}
+              size="lg"
+              ratio="panorama"
+            />
+          ) : (
+            <BlockCard
+              key={id}
+              {...card}
+              cue={cue}
+              titleAs={titleAs}
+              index={numbered ? index + 1 : undefined}
+              size="md"
+            />
+          ),
+        )}
+      </Layout>
+    );
+  }
   const featured = lead === 'auto' && items.length >= FEATURED_FROM;
   const peers = featured ? items.slice(1) : items;
   const covered = items.some(hasCover);
@@ -216,12 +275,27 @@ export function BlockCardSet({
   const ratio: BlockCardRatio = widest >= 3 ? 'wide' : 'cover';
   const linked = items.every((item) => Boolean(item.href?.trim()));
   const iconSet = !covered && items.every((item) => item.icon !== undefined);
-  /* § 3.7 item 2: a linked set of more than three scrolls below 768; icon sets of up to six stay
-     stacked (136 each, so six stacked is one phone screen, and a glyph row is not a gallery). */
-  /* Never under a featured lead: Layout ignores `lead` wherever `scroll` is set (a scroll row has no
-     grid to span), and it reads the prop, not the breakpoint — so a scrolling index would lose its
-     featured row at every width. The case-study index is a page-long list, read stacked anyway. */
-  const scrolls = linked && items.length > 3 && !featured && !(iconSet && items.length <= 6);
+  /* The phone row (§ 3.7 item 2, revised in cmp-feature fix round 1, 6 Oct 2026). Stacked at 390,
+     a set of short covered cards read as a loose list — 80 to 90 between cards, and six linked icon
+     cards ran to 1805. So below 768:
+
+       covered, three or more   scrolls, linked or not. One card in view, the next peeking. An
+                                unlinked row holds nothing focusable, so the ROW takes the tab stop
+                                (Layout tabIndex, WCAG 2.1.1) and the arrow keys move it.
+       linked, four or more     scrolls, whatever the cards hold — icon cards included, so six
+                                linked services are one swipeable row, not a 1800px column.
+       otherwise                stacked: three or fewer text or icon cards, or unlinked ones, which
+                                are short enough to read down.
+
+     Never under a featured lead: Layout ignores `lead` wherever `scroll` is set (a scroll row has
+     no grid to span), and it reads the prop, not the breakpoint — so a scrolling index would lose
+     its featured row at every width. The case-study index is a page-long list, read stacked. */
+  const scrolls =
+    !featured && ((covered && items.length >= 3) || (linked && items.length > 3));
+  /* Icon cards are smaller objects than covered or text tiles — a 32 glyph, an h5 and two lines —
+     and at a `column` (64) apart a stacked 2×2 read as four loose items. They sit a `stack` (48)
+     apart down the grid: the block-to-block step, still clearly more than the 16 inside a card. */
+  const rowGap = iconSet ? 'stack' : 'column';
 
   return (
     /* Rows sit a `column` apart, columns a `gutter` (29 Sep). The two seams separate different
@@ -233,10 +307,11 @@ export function BlockCardSet({
       as="ul"
       columns={columns}
       colGap="gutter"
-      rowGap="column"
+      rowGap={rowGap}
       equalRows
       lead={featured}
       scroll={scrolls ? 'until-md' : undefined}
+      tabIndex={scrolls && !linked ? 0 : undefined}
     >
       {items.map(({ id, ...card }, index) => {
         const shared = { index: numbered ? index + 1 : undefined, cue, titleAs };

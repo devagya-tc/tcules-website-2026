@@ -139,6 +139,21 @@
   grid-column: 1 / -1;
 }
 
+/* lead="tall" — from lg, the first child takes the first track and spans every row; the others fill
+   the track(s) beside it, one per row. The row count is the child count less one, read from the DOM
+   like pin-last's, so fragments and conditional children count as what renders. Below lg nothing is
+   placed: the stack is one track, where a span would only add empty rows and their gaps. */
+@media (min-width: 1024px) {
+  .lead-tall > :first-child {
+    grid-column: 1;
+  }
+
+  .lead-tall:has(> :last-child:nth-child(3)) > :first-child { grid-row: 1 / span 2; }
+  .lead-tall:has(> :last-child:nth-child(4)) > :first-child { grid-row: 1 / span 3; }
+  .lead-tall:has(> :last-child:nth-child(5)) > :first-child { grid-row: 1 / span 4; }
+  .lead-tall:has(> :last-child:nth-child(6)) > :first-child { grid-row: 1 / span 5; }
+}
+
 
 /* reverse — the tracks read right to left, visually only (see the prop in Layout.tsx for the a11y
    rule). Child k ends on the k-th line from the END, so child 1 takes the last track, child 2 the
