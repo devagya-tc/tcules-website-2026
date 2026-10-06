@@ -518,7 +518,7 @@ export default function MediaSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>6 · Fit: intrinsic against fill</h2>
+            <h2>6 · Fit: intrinsic, fill and contain</h2>
             <p>
               <code>intrinsic</code> (the default) is 100% of the parent&rsquo;s width with the
               asset&rsquo;s own height — never cropped (ruling H3). <code>fill</code> covers a
@@ -568,6 +568,24 @@ export default function MediaSpecimenPage() {
               <Media image={CUT_OUT} sizes="160px" fit="fill" />
             </div>
           </Specimen>
+          <Halves>
+            <Specimen
+              title="contain, illustration, 3:2"
+              note="fit='contain': the same parent-sized box, but the whole asset shows, centred, at the largest size that fits. For an object a crop would damage — here the drawing's labels. The parent gives it its air (BlockCard's illustration covers)."
+            >
+              <div className={s.ratioCard}>
+                <Media image={ILLUSTRATION} sizes={SIZES_HALF} fit="contain" />
+              </div>
+            </Specimen>
+            <Specimen
+              title="contain, cut-out, 3:2"
+              note="The part keeps its whole edge and its shadow instead of being cut at the box. Compare 'fill, in a 3:2 box' above, which crops the run button off."
+            >
+              <div className={s.ratioCard}>
+                <Media image={{ ...CUT_OUT, shadow: true }} sizes={SIZES_HALF} fit="contain" />
+              </div>
+            </Specimen>
+          </Halves>
         </Layout>
       </Section>
 
@@ -644,8 +662,8 @@ export default function MediaSpecimenPage() {
               <code>getKitPhoto</code>, with their derived 1240 · 652 · 320 rungs. Each tile
               names the crop&rsquo;s resolution against its box at 1470 (§ 5.4: ≥ 1.9×). A
               placement whose crop changes with its arrangement passes{' '}
-              <code>ratio=&#123;&#123; base, lg &#125;&#125;</code> instead: one ratio below 1024,
-              another from it.
+              <code>ratio=&#123;&#123; base, lg &#125;&#125;</code> instead: one ratio below
+              1024, another from it.
             </p>
           </Layout>
           <Quarters>

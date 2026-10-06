@@ -39,4 +39,9 @@
    bottom edge is never cut and the items still sit on the column's edges. */
 --lay-scroll-peek:24px;
 --lay-scroll-ring-room:calc(var(--focus-ring-offset) + var(--focus-ring-width));
+
+/* How far a phone scroll row reaches past the content column on each side, to the viewport edge:
+   the container-gutter step, which is what Section insets its column by below md. A distance, so
+   the gap scale's own name rather than a reading of Section's token (token rule 6). */
+--lay-scroll-bleed:var(--gap-gutter);
 }

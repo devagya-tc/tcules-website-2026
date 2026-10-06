@@ -3,8 +3,8 @@
    Layout owns every block-axis group and the horizontal orientation's two tracks; Button owns the
    cta entirely; Media owns the image's delivery, panel and shadow. This module supplies the ruled
    crop box and its zoom, child sizing, the size step's type roles, and link rendering. It
-   deliberately has no background, margin, hand-written grid or flex arrangement, surface selector
-   or breakpoint.
+   deliberately has no background, margin, hand-written grid or flex arrangement or surface
+   selector, and one breakpoint, which swaps the wide lead's crop ratio and nothing else.
 
    ── What is absent, and why ────────────────────────────────────────────────────
    No card edge. The tile was bounded by a four-sided hairline and is now bounded by the parent
@@ -84,6 +84,31 @@
   aspect-ratio: var(--bcrd-media-ratio-panorama);
 }
 
+/* The wide lead's row (BlockCardSet lead="wide"): 16:9 while the set is the ordinary stack or 2-up,
+   then 2:1 and 1:1 from 1024 in [2, 1, 1], where they are one height. The one breakpoint in this
+   module, and it swaps a ratio, never a distance: the crop follows the arrangement, which changes
+   at 1024 (Media's { base, lg } rule). */
+.double,
+.square {
+  aspect-ratio: var(--bcrd-media-ratio-wide);
+}
+
+@media (min-width: 1024px) {
+  .double {
+    aspect-ratio: var(--bcrd-media-ratio-double);
+  }
+
+  .square {
+    aspect-ratio: var(--bcrd-media-ratio-square);
+  }
+}
+
+/* grow: the copy stack fills the stretched frame, so its first row (the cover, Layout fillFirst)
+   has spare height to take. Sizing only. */
+.grow {
+  block-size: 100%;
+}
+
 /* An illustration or a cut-out, shown whole (Media fit="contain"): the box keeps its ratio and its
    rule, and its padding is the object's air — a lifted part needs room round it to read as lifted,
    and the cut-out's drop shadow needs somewhere to fall. Padding inside the ruled box, not a margin:
@@ -94,23 +119,26 @@
 
 /* The texture cover's field: the positioned, isolated box the Texture fills (Texture.md: "inside
    any other box, the box needs position: relative; isolation: isolate"). Sizing and stacking. */
+/* It is also a size container, so the glyph scales with the cover (--bcrd-cover-glyph-size is in
+   cqi): 80 in a 390 cover, about 57 in the phone's 270, where a fixed 80 crowded the field. */
 .textureCover {
   display: block;
   position: relative;
   isolation: isolate;
   block-size: 100%;
+  container-type: inline-size;
 }
 
-/* The glyph on a texture cover: the card's own icon, larger, in the mark ink (§ 4.2), at the
-   cover's centre. Positioned like the Texture beside it — a decorative layer placed in its box —
-   rather than arranged: there is one item and no flow, so a grid cell would be a layout with
-   nothing to lay out (and Layout starts its content, by design). Percentages only. */
+/* The glyph on a texture cover: the card's own icon, large, in the mark ink (§ 4.2), in the
+   cover's foot-start corner, a `block` in from both edges — where a document's mark sits on its
+   cover, and opposite the field's strongest region. Positioned like the Texture beside it — a
+   decorative layer placed in its box — rather than arranged: there is one item and no flow, so a
+   grid cell would be a layout with nothing to lay out. */
 .coverGlyph {
   display: block;
   position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  transform: translate(-50%, -50%);
+  inset-block-end: var(--bcrd-cover-inset);
+  inset-inline-start: var(--bcrd-cover-inset);
   color: var(--bcrd-mark-ink);
 }
 

@@ -41,8 +41,17 @@ export type BlockCardSetItem = Omit<
  *         equal tiles would read as one rectangle three times. Their covers are dropped, never
  *         stood in: the companions are notes by design, so the lead is the one image in the band.
  *         Three items is the shape; up to six works. Below 1024 it is the stack, lead first.
+ *         From 1024 the lead's cover takes whatever height its companions leave (BlockCard `grow`):
+ *         at 1024 the notes wrap to more lines than the lead and left a dead strip under it.
+ *   wide  the wide lead in a row (cmp-feature fix round 2, 6 Oct 2026): from 1024 three covered
+ *         cards in [2, 1, 1] tracks, the first at 2:1 and the others square, so every cover is
+ *         ONE height — a 2fr track is exactly two 1fr tracks and a gutter wide, and 2:1 of it is
+ *         1:1 of a 1fr track, at every width. Size contrast in one row, where three equal tiles
+ *         read as one rectangle three times. The lead takes `lg`, the squares `sm` (a 294 track).
+ *         Exactly three items with covers; any other count, or a set without covers, renders as
+ *         `none`. Below 1024 it is the ordinary three-card set at 16:9.
  */
-export type BlockCardSetLead = 'auto' | 'none' | 'beside';
+export type BlockCardSetLead = 'auto' | 'none' | 'beside' | 'wide';
 
 /** How many tracks the set reaches at its widest. See `peerGrid`. */
 export type BlockCardSetAcross = 2 | 3 | 4;
@@ -95,6 +104,21 @@ export type BlockCardSetProps = {
    * page's list directly under its h1 (the case-study index), so the outline does not skip h2.
    */
   titleAs?: BlockCardTitleElement;
+  /**
+   * From 1024 the even cards drop by the section step (Layout `stagger`), so a pair reads as
+   * placed rather than tiled — references.md § 3.4's integration cards, text beside a staggered
+   * pair. One row only: a pair or a trio. Ignored with a featured lead (`auto` from four, `beside`,
+   * `wide`). Budget it: the row grows by 96.
+   */
+  stagger?: boolean;
+  /**
+   * The list's accessible name, for the one case the list is itself a tab stop: an unlinked
+   * covered set of three or more, which scrolls sideways on a phone and takes `tabIndex` so a
+   * keyboard can reach it (WCAG 2.1.1). A focusable list with no name is an unlabelled stop, so
+   * that case warns in development without one. Ignored everywhere else — a linked row's stops are
+   * its cards, and a list that is not focusable is named by the band's heading.
+   */
+  label?: string;
 };
 
 /** From how many items the first one is featured (ruling C3, 28 Sep 2026), under `lead="auto"`. */
@@ -111,7 +135,7 @@ type Columns = ComponentProps<typeof Layout>['columns'];
  *
  *   across 2   two from md. Pairs, and any set in a beside body.
  *   across 3   two from md, three from lg. A set of three, or five and more (rows of three).
- *   across 4   two from md, four from xl: 2×2 through 1439, one row at 1440 (spec § 17 Q4).
+ *   across 4   two from md, four from lg: 2×2 at 768 to 1023, one row from 1024.
  *
  * By count when `across` is absent: 1–2 → 2, 4 → 4, otherwise 3.
  *
@@ -124,7 +148,10 @@ function peerGrid(
 ): { columns: Columns; tracks: BlockCardTracks; widest: BlockCardSetAcross } {
   const widest = across ?? (count <= 2 ? 2 : count === 4 ? 4 : 3);
   if (widest === 2) return { columns: { base: 1, md: 2 }, tracks: 2, widest };
-  if (widest === 4) return { columns: { base: 1, md: 2, xl: 4 }, tracks: 2, widest };
+  /* Four across from lg, not xl (cmp-feature fix round 2): at 1024 the 2×2 put 460-wide 16:9
+     photographs in a band 1140 to 1300 tall — an image wall larger than anything at 1440. Four at
+     216 hold the row's shape; the `sm` step is already the four-across one. */
+  if (widest === 4) return { columns: { base: 1, md: 2, lg: 4 }, tracks: 2, widest };
   return { columns: { base: 1, md: 2, lg: 3 }, tracks: 3, widest };
 }
 
@@ -187,8 +214,18 @@ function settleMedia(
   return items.map((item) => {
     if (hasCover(item)) return item;
     const image = pool[next++];
-    return image ? { ...item, media: { type: 'image', image: { ...image, standIn: true } } } : item;
+    return image
+      ? { ...item, media: { type: 'image', image: { ...image, standIn: true } } }
+      : item;
   });
+}
+
+function warnUnnamed() {
+  if (process.env.NODE_ENV !== 'production') {
+    console.warn(
+      'BlockCardSet: an unlinked covered set scrolls on a phone and is a tab stop; pass `label` to name it.',
+    );
+  }
 }
 
 /**
@@ -226,6 +263,8 @@ export function BlockCardSet({
   numbered = false,
   cue,
   titleAs,
+  stagger = false,
+  label,
 }: BlockCardSetProps) {
   if (given.length === 0) return null;
 
@@ -252,6 +291,7 @@ export function BlockCardSet({
               index={numbered ? 1 : undefined}
               size="lg"
               ratio="panorama"
+              grow
             />
           ) : (
             <BlockCard
@@ -267,14 +307,48 @@ export function BlockCardSet({
       </Layout>
     );
   }
+  /* The wide lead: three covered cards in [2, 1, 1] from lg, one cover height across the row. */
+  if (lead === 'wide' && items.length === 3 && items.every(hasCover)) {
+    const linkedRow = items.every((item) => Boolean(item.href?.trim()));
+    if (!linkedRow && !label) warnUnnamed();
+    return (
+      /* Rows of the base and md stacks a `column` apart, as every set; columns a `gutter`. On a
+         phone the three covered cards scroll, as any covered set of three does. */
+      <Layout
+        as="ul"
+        columns={{ base: 1, md: 2, lg: [2, 1, 1] }}
+        colGap="gutter"
+        rowGap="column"
+        equalRows
+        scroll="until-md"
+        tabIndex={linkedRow ? undefined : 0}
+        aria-label={linkedRow ? undefined : label}
+      >
+        {items.map(({ id, ...card }, index) => (
+          <BlockCard
+            key={id}
+            {...card}
+            cue={cue}
+            titleAs={titleAs}
+            index={numbered ? index + 1 : undefined}
+            tracks={index === 0 ? 2 : 3}
+            size={index === 0 ? 'lg' : 'sm'}
+            ratio={index === 0 ? 'double' : 'square'}
+          />
+        ))}
+      </Layout>
+    );
+  }
   const featured = lead === 'auto' && items.length >= FEATURED_FROM;
   const peers = featured ? items.slice(1) : items;
   const covered = items.some(hasCover);
   const { columns, tracks, widest } = peerGrid(peers.length, across);
-  const size = sizeOverride ?? peerSize(peers, widest, covered);
+  const iconSet = !covered && items.every((item) => item.icon !== undefined);
+  /* Icon cards are h5 and body-sm, always (§ 1.4: icon 32; 16; h5; 16; body-sm). `size` is not an
+     option for them: an override set one grid's titles a step above the next one's on one page. */
+  const size = iconSet ? 'sm' : (sizeOverride ?? peerSize(peers, widest, covered));
   const ratio: BlockCardRatio = widest >= 3 ? 'wide' : 'cover';
   const linked = items.every((item) => Boolean(item.href?.trim()));
-  const iconSet = !covered && items.every((item) => item.icon !== undefined);
   /* The phone row (§ 3.7 item 2, revised in cmp-feature fix round 1, 6 Oct 2026). Stacked at 390,
      a set of short covered cards read as a loose list — 80 to 90 between cards, and six linked icon
      cards ran to 1805. So below 768:
@@ -290,12 +364,20 @@ export function BlockCardSet({
      Never under a featured lead: Layout ignores `lead` wherever `scroll` is set (a scroll row has
      no grid to span), and it reads the prop, not the breakpoint — so a scrolling index would lose
      its featured row at every width. The case-study index is a page-long list, read stacked. */
-  const scrolls =
-    !featured && ((covered && items.length >= 3) || (linked && items.length > 3));
+  const scrolls = !featured && ((covered && items.length >= 3) || (linked && items.length > 3));
   /* Icon cards are smaller objects than covered or text tiles — a 32 glyph, an h5 and two lines —
      and at a `column` (64) apart a stacked 2×2 read as four loose items. They sit a `stack` (48)
      apart down the grid: the block-to-block step, still clearly more than the 16 inside a card. */
   const rowGap = iconSet ? 'stack' : 'column';
+  /* Icon rows are pinned to their content: no equalRows (fix round 2). Under a stretched beside
+     body the 1fr rows took the tallest card's height, so a row of three-line bodies left 80 above
+     the next icon and a row of two-line ones 53 — two beats in one grid. Cards in a row still share
+     its height (stretch); the seam down the grid is exactly `stack`. Icon cards carry no pinned
+     cta, which is the only thing equal rows were for. */
+  const equalRows = !iconSet;
+  const staggered = stagger && !featured && peers.length <= widest;
+  const tabStop = scrolls && !linked;
+  if (tabStop && !label) warnUnnamed();
 
   return (
     /* Rows sit a `column` apart, columns a `gutter` (29 Sep). The two seams separate different
@@ -308,10 +390,12 @@ export function BlockCardSet({
       columns={columns}
       colGap="gutter"
       rowGap={rowGap}
-      equalRows
+      equalRows={equalRows}
       lead={featured}
+      stagger={staggered}
       scroll={scrolls ? 'until-md' : undefined}
-      tabIndex={scrolls && !linked ? 0 : undefined}
+      tabIndex={tabStop ? 0 : undefined}
+      aria-label={tabStop ? label : undefined}
     >
       {items.map(({ id, ...card }, index) => {
         const shared = { index: numbered ? index + 1 : undefined, cue, titleAs };

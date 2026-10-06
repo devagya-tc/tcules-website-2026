@@ -90,12 +90,21 @@
   --bcrd-media-ratio-wide: var(--ratio-wide);
   /* The spotlight's tall lead, 21:9 (BlockCardSet lead="beside", cmp-feature). */
   --bcrd-media-ratio-panorama: var(--ratio-panorama);
+  /* The wide lead's row (BlockCardSet lead="wide", fix round 2): 2:1 in the 2fr of [2, 1, 1] and
+     1:1 in each 1fr, which are one height at every width. One reader each, so they stay in this
+     layer (token rule 6) rather than joining the shared ratios. */
+  --bcrd-media-ratio-double: 2 / 1;
+  --bcrd-media-ratio-square: 1 / 1;
   /* The air inside the ruled box round an illustration or a cut-out shown whole (fit="contain").
-     Cell padding (16), Media's own small-box inset step: at a 286 card, 24 a side left the part
-     too small to read. */
-  --bcrd-media-inset: var(--gap-text);
-  /* The glyph centred on a texture cover. */
-  --bcrd-cover-glyph-size: var(--icon-size-48);
+     The tight step (8, fix round 2): at a 286 card 16 a side still left the drawing a thumbnail in
+     a white well. The asset is cut for the placement (a region, not a whole canvas) and the inset
+     only keeps it off the rule. */
+  --bcrd-media-inset: var(--gap-tight);
+  /* The glyph on a texture cover, and its inset from the cover's foot-start corner. A share of the
+     cover's width (the cover is a size container), so it is the cover's one object at every width:
+     80 at the 390 of a 3-up card at 1470, about 57 at the phone's 270. A component size. */
+  --bcrd-cover-glyph-size: 20.5cqi;
+  --bcrd-cover-inset: var(--gap-block);
 
   /* The text-only card's top edge (visual-direction § 3.1, cmp-feature): a hairline the width of
      the card, standing in for the edge a cover gives. Its ink is per surface, below, and neutral

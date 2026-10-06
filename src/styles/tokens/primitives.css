@@ -720,9 +720,6 @@
   /* A glyph that heads a card rather than sitting beside a label (BlockCard's icon card,
      visual-direction § 1.4: icon 32). Not one of Icon's own four roles: the card sizes it. */
   --icon-size-32: 32px;
-  /* The glyph on a texture cover (BlockCard, cmp-feature): one object centred in a 16:9 box about
-     220 tall, where 32 read as a stray mark. */
-  --icon-size-48: 48px;
 }
 
 /* ── Breakpoint ───────────────────────────────────────────────────────────────

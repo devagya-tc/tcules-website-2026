@@ -26,13 +26,14 @@ says otherwise, this block and the dated amendments at the end win.
 | Axis | The rule as built |
 |---|---|
 | **Edge** | No card edge, ground, radius or shadow. The one card-owned line round an image is the **crop box's border hairline** (`--bcrd-media-rule-width` / `-ink`, ch05 amendment 5a); Media draws none inside a card (`edge="placement"`). A **text-only** card takes a hairline at its own top edge instead (`--bcrd-text-rule-*`, neutral on every surface), 24 above its first label. |
-| **Ratio** | **One 3:2 ratio** for the card (`--bcrd-media-ratio` = `--ratio-cover`) in both orientations — **except** a set of three or more across, which crops 16:9 (`--bcrd-media-ratio-wide`, `ratio="wide"`, visual-direction § 1.4 rule 1). The set decides it; the row stays 3:2. A spotlight lead (`BlockCardSet lead="beside"`) crops 21:9 (`ratio="panorama"`). An illustration or a cut-out is shown whole inside the box (Media `fit="contain"`, `--bcrd-media-inset`), never cropped. |
+| **Ratio** | **One 3:2 ratio** for the card (`--bcrd-media-ratio` = `--ratio-cover`) in both orientations — **except** a set of three or more across, which crops 16:9 (`--bcrd-media-ratio-wide`, `ratio="wide"`, visual-direction § 1.4 rule 1). The set decides it; the row stays 3:2. A spotlight lead (`BlockCardSet lead="beside"`) crops 21:9 (`ratio="panorama"`) and grows into spare height (`grow`). The wide lead's row (`lead="wide"`) crops 2:1 and 1:1 from 1024 (`ratio="double"` / `"square"`, 16:9 below), one height across. An illustration or a cut-out is shown whole inside the box (Media `fit="contain"`, `--bcrd-media-inset` = `tight`), and is supplied cut to one region for the card. |
 | **Title** | Ink at rest, never underlined (tried 29 Sep, removed). An arrow-cued linked card ends its title in the blue arrow (`--bcrd-cue-ink`); title and arrow take `--bcrd-title-ink-hover` on hover and focus and `--bcrd-title-ink-pressed` on press. A cta-cued card's title never moves. |
 | **Motion** | One movement: the cover leans in to `--bcrd-media-zoom` (1.03) inside its still box on hover, focus and press. Reduced motion removes the zoom outright; the ring and the colour steps remain. |
 | **Colour tokens** | Eleven, declared on every surface: `title-ink`, `title-ink-hover`, `title-ink-pressed`, `cue-ink`, `mark-ink`, `body-ink`, `eyebrow-ink`, `media-rule-ink`, `text-rule-ink`, `ring-color`, `ring-gap-color` (§ 6). The cta's three steps are Button's. |
 | **Cue** | A linked card says it navigates by ONE cue: the arrow (default with a cover or an icon), a link-style cta (default text-only), or `download` (the cta with the download glyph, for a file). `cue` overrides; the set passes it for all. An optional `meta` format line sits on the action row. |
-| **Head object** | A cover (an image, or `media.type: 'texture'` — the Tcules texture with the card's icon centred at 48), or an `icon` (32, blue, the C-icon card), or — text-only — the hairline then an optional blue `index` numeral and/or eyebrow. |
-| **Sizes** | `lg` h3 + body-lg (featured row), `md` h4 + body (2–3 across; text cards), `sm` h5 + body-sm (4 across; icon cards). The set decides by **track width**, not count. |
+| **Head object** | A cover (an image, or `media.type: 'texture'` — the Tcules texture as hard-edged blocks at full strength, the card's icon about a fifth of the cover's width in its foot-start corner), or an `icon` (32, blue, solid Solar Bold, the C-icon card), or — text-only — the hairline then an optional blue `index` numeral and/or eyebrow. |
+| **Sizes** | `lg` h3 + body-lg (featured row, spotlight and wide leads), `md` h4 + body (2–3 across; text cards), `sm` h5 + body-sm (4 across; the wide lead's squares; icon cards, always). The set decides by **track width**, not count; `size` never reaches an icon set. |
+| **Set shapes** | `lead`: `auto` (featured row from four, the case-study index), `none` (peers), `beside` (spotlight), `wide` ([2, 1, 1]). `stagger` drops the even cards 96 from 1024. Four across from `lg`. Below 768 a covered set of three or more, or a linked set of four or more, is a scroll row bleeding to the screen edge; an unlinked one takes the tab stop and `label`. |
 
 > **Amendment · 5 Oct 2026 · `fdn-spacing` (visual-direction § 1.1 S2, § 1.2, § 7.2).** Where this
 > spec still differs, `docs/kit/visual-direction.md` wins.
@@ -777,83 +778,73 @@ no transition) rather than shortening it. Keyboard focus keeps its ring.
 
 ## 14 · Do's and Don'ts
 
+Rewritten 6 Oct 2026 (cmp-feature fix round 2) to match the **Current contract** block at the top,
+so every check here is a grep or an inspection that holds against the build as it is. The earlier
+list is in git history; where it and the amendments disagreed, the amendments had already won.
+
 **Do**
 
-1. Put every group in `Layout as="ul"` with explicit columns, `colGap="gutter"`,
-   `rowGap="column"` and `equalRows`, and pass the `size` the row's count calls for (§ 7.2);
-   inspect the call-site tree and computed tracks.
-2. Render four cards as two columns from `md` and four only from `xl`; inspect 1023, 1439 and 1440
-   to prove the fourth never becomes a three-column orphan.
-3. Render image media above the title at 3:2 in a vertical card and beside it at 4:3 in a
-   horizontal one; compare the two wrappers' computed `aspect-ratio` and DOM order, and expect a
-   `Media` `<img>` with `loading="lazy"`, a `srcset` and the placement's `sizes` inside each.
-4. Render the cta exactly when a non-blank `href` produces one whole-card anchor AND the card has no
-   cover; count text-only anchors and ctas and expect equal totals, count ctas on covered cards and
-   expect none, and count nested anchors and buttons and expect none.
-   `data-btn-link-group` must appear on exactly the frames that are anchors.
-5. Show a static no-media card as a complete object with no blank action row; inspect its content
-   box beside a linked peer and expect no border on either.
-6. Render identical markup on all four surface bands and inspect all seven resolved `--bcrd-*`
-   colours plus the cta's three `--btn-link-neutral-fg*` steps, including the two nested-surface
-   proofs.
-7. Use `titleAs` to match the page outline while preserving h4 visual type; compare the heading map
-   with the computed type token.
-8. Prove the title's REST ink does not depend on `href`: render the same card linked and static side
-   by side and expect both computed title colours to be `--bcrd-title-ink`. Expect the arrow cue
-   (`arrow-right`, after a non-breaking space) on exactly the covered linked titles, and on no
-   text-only or static one.
-9. Alternate `imageSide` from the call site by index; inspect the rendered tree and expect no
-   index, count or sibling knowledge inside any card.
-10a. Render a set of four through `BlockCardSet` and expect one `ul` of four `li`, the first spanning
-    every track (`grid-column: 1 / -1` from `Layout lead`) and horizontal, the peers vertical.
-10. Point anywhere on a linked card: on a covered card expect the image to scale inside a still
-    box and the title and arrow to take `--bcrd-title-ink-hover` — no underline, no rule change — and
-    on a text-only card the cta's
-    underline to wipe in and its label to step colour; point at a static card and expect nothing to
-    move. This is the group contract working,
-    and it is the one interaction the specimen cannot render statically.
+1. Put every group in `BlockCardSet` (or, for a hand-built row, `Layout as="ul"` with explicit
+   columns, `colGap="gutter"` and `rowGap="column"`), and let the set pass `size`, `ratio`, `tracks`,
+   `index`, `cue` and `titleAs`. Expect `equalRows` on every set except an icon set, whose rows sit on
+   their content a `stack` apart.
+2. Render four peers as two columns from `md` and four from `lg`; inspect 767, 1023 and 1024 and expect
+   no three-column orphan.
+3. Crop every cover to its set's ratio: 3:2 for one or two and the row, 16:9 for three or more across,
+   21:9 for a spotlight lead, 2:1 and 1:1 in the wide lead's row from 1024. Expect a `Media` `<img>`
+   with `loading="lazy"`, a `srcset` where the record has sources, and the placement's `sizes`.
+4. Give a linked card exactly ONE cue: the arrow after the title's last word (default with a cover or
+   an icon), the link-style cta (default text-only), or `download`. Count nested anchors and buttons
+   and expect none; `data-btn-link-group` appears on exactly the anchors that contain a cta.
+5. Show a static card as a complete object with no blank action row.
+6. Render identical markup on all four surface bands and inspect all eleven `--bcrd-*` colour tokens
+   (Current contract) plus the cta's three `--btn-link-primary-fg*` steps, including a nested surface.
+7. Use `titleAs` to match the outline (`h2` only where the set is the page's list under its h1).
+8. Expect the title's REST ink to be `--bcrd-title-ink` linked or not, and the arrow (`.cue`, after a
+   non-breaking space) to be `--bcrd-cue-ink` at rest.
+9. Point at a linked card: expect the cover to scale to `--bcrd-media-zoom` inside a still box, and an
+   arrow-cued title and its arrow to take `--bcrd-title-ink-hover`; press and expect
+   `--bcrd-title-ink-pressed` on both, the zoom held. Under reduced motion expect no transform.
+10. Render a featured set (`lead="auto"`, four or more) and expect one `ul`, the first `li` spanning
+    every track and horizontal. Render the spotlight (`lead="beside"`), the wide lead (`lead="wide"`)
+    and `stagger`, and expect one `ul` each, with the placement written by Layout, never by a card.
+11. Name an unlinked covered set of three or more with `label`: below 768 it scrolls, takes
+    `tabIndex={0}` and carries `aria-label`.
 
 **Don't**
 
-11. Do not add a fill or ground token; search the component layer for `bg`, `ground` and fill
-    declarations and expect none outside image/SVG content.
-12. Do not bring the edge back, in any form: no `border`, no `outline` outside `:focus-visible`, no
-    `box-shadow` beyond the ring, no `--bcrd-edge-*` token, and no hairline drawn as a pseudo-element.
-    Search the module for `border` and expect only `border-radius`. A card that needs a visible
-    boundary is asking for the gutter it was given.
-13. Do not underline the title, give it a link ink at rest, or make any part change on hover or press
-    but the cover's zoom, the covered title-and-arrow's `--bcrd-title-ink-hover` (6 Oct) and the
-    text-only cta; inspect computed styles in every state and expect only those. There is no
-    `--bcrd-link-ink` to reach for any more, and re-adding one is the smell.
-14. Do not restyle the cta from this component: no `.cta` class, no colour, type, case, seam, glyph
-    size or underline of its own, and no `--btn-*` name in this module. Search the module for `cta`
-    and `--btn-` and expect nothing. If the cta looks wrong, that is a conversation about `Button`.
-15. Do not render the cta as anything interactive — no `as="a"`, no `as="button"`, no `href` on it.
-    Tab through a card grid and expect exactly one stop per linked card.
-16. Do not put title text over an image; inspect the DOM and expect image before a separate content
-    block, never an overlay.
-17. Do not import `ListCard`, another pattern, or `@/content`; lint and the tier-boundary grep must
-    remain green. `Button`, `Layout` and `Icon` are Tier 1 and importing them downward is the point
-    of the tier order — the sideways ban is what this rule is about.
-18. Do not add margin, a content inset or hand-written grid/flex arrangement; search the module and
-    expect no child margin, no `padding` on the content block and no display mode used to arrange
-    siblings.
-19. Do not add `surface`, `finish`, `bordered`, `columns`, `equalHeight`, `cue`, `imageRatio`,
-    `children`, `className` or `style` to the public props, and do not widen `size` past
-    `'lg' | 'md' | 'sm'` (5 Oct 2026: `size` is public; a `BlockCardSet` item still cannot carry
-    it); type-checking attempted calls must fail.
-20. Do not clamp titles/bodies/eyebrows or hide cards after eight; the 16-card specimen exposes
-    every row.
-21. Do not place a link, Button or control in body/media; inspect the rendered tab order and expect
-    one focus stop per linked card and none per static card.
-22. Do not put a separator rule between stacked horizontal cards, and do not alternate `imageSide`
-    inside the component; inspect the stack for borders and the card for index awareness.
-23. Do not add a `featured` prop to the card or a featured field to the CMS record; featuring is the
-    set's, by position (C3). Search `BlockCard.tsx` and `src/content/types.ts` for `featured` and
-    expect nothing.
-24. Do not draw an image's edge, crop rule or `object-fit` in this module: search it for `object-fit`
-    and `border` and expect only `border-radius`. `Media` owns the image.
-25. Do not bring back an icon fill, and never a glyph in a disc (ch04).
+12. Do not give the CARD an edge: no border, outline (outside `:focus-visible`), box-shadow beyond the
+    ring, ground, radius or `--bcrd-edge-*` / `--bcrd-radius` / `--bcrd-shadow` token. Search the
+    module for `border` and expect exactly three uses, all argued: `border` on `.imageMedia` (the crop
+    box's hairline, ch05 amendment 5a), `border-radius` on `.imageMedia` (`--bcrd-media-radius`), and
+    `border-block-start` on `.textRule` (the text-only card's top hairline, § 3.1). Anything else is the
+    edge coming back.
+13. Do not underline the title or give it a link ink at rest. What moves, and nothing else: the cover's
+    zoom (hover, focus, press), an arrow-cued title-and-arrow's hover step and its pressed step, and
+    the cta's own Button steps. A cta-cued title never moves.
+14. Do not restyle the cta from this component: no `.cta` class and no `--btn-*` name in the module.
+15. Do not render the cta as anything interactive (`as="span"` only); one tab stop per linked card.
+16. Do not put type on an image; the content block follows the media, never overlays it.
+17. Do not import a pattern or `@/content`. `BlockCardSet` never imports `Slider`: a set of five or
+    more image cards in a feature band is a Slider the PAGE composes around BlockCards.
+18. Do not add margin or hand-written grid or flex arrangement; every arrangement is a Layout prop
+    (`lead`, `stagger`, `fillFirst`, `scroll`). Padding appears once, on `.contained`, the inset of a
+    contained cover inside its own ruled box.
+19. Do not add `surface`, `bordered`, `columns`, `equalHeight`, `children`, `className` or `style` to
+    the public props, and do not widen `size` past `'lg' | 'md' | 'sm'`. `cue`, `ratio`, `index`,
+    `meta`, `icon` and `grow` ARE public (the set passes them); a `BlockCardSetItem` cannot carry the
+    presentation props (`orientation`, `imageSide`, `tracks`, `size`, `ratio`, `index`, `cue`,
+    `titleAs`).
+20. Do not clamp titles, bodies or eyebrows, or hide cards past a count.
+21. Do not let `size` reach an icon set: icon cards are h5 and body-sm (§ 1.4) whatever the set is
+    passed.
+22. Do not mix a line-drawn glyph into an icon-card grid beside solid ones (code, checklist, refresh,
+    cpu); use the solid forms (`code-square`, `clipboard-check`, `refresh-square`, `stars`).
+23. Do not add a `featured` prop to the card or the CMS record; featuring is the set's, by position.
+24. Do not set `object-fit` or select Media's `<img>` here. The module owns the crop BOX (ratio,
+    hairline, radius, inset, zoom span); Media owns the image inside it.
+25. Do not bring back an icon fill, and never put a glyph in a disc (ch04). A texture cover's glyph sits
+    on the texture, not in a container.
 
 ## 15 · Specimen plan — `/design/block-card`
 
@@ -1450,7 +1441,7 @@ Supersedes the phone-scroll rule and the open question in the amendment above.
   ruled box by `--bcrd-media-inset` (`--gap-text`). The cover crop took the label off the drawing and
   the run button off the part. Photographs and captures still cover-crop.
 - **Texture covers.** `media: { type: 'texture', recipe?: 0 | 1 | 2 }` draws the Texture primitive in
-  the ruled box, the card's icon centred on it at `--bcrd-cover-glyph-size` (`--icon-size-48`, new).
+  the ruled box, the card's icon centred on it at `--bcrd-cover-glyph-size` (48 then; 80 in its corner since fix round 2).
   `BlockCardSet standIns="texture"` gives every missing cover one, the three recipes in turn: the
   resources band (M), where a stock photograph said nothing about the file.
 - **`cue: 'download'` and `meta`.** The cta with the download glyph and "Download", and a mono format
@@ -1469,3 +1460,50 @@ Supersedes the phone-scroll rule and the open question in the amendment above.
 Outside BlockCard, for its bands: ContentSection gains `headingSize="display"` (the band's h2 at
 `--text-display`) and `asideFill` (the C-icon head-track photograph ends on the body's last line).
 
+
+## Amendment · 6 Oct 2026 — `cmp-feature` fix round 2
+
+From a three-lens review of `/design/kit/feature`. Each note, its cause, and the fix where the cause
+lives.
+
+- **One rectangle, many times** (13 of 22 bands an equal 3- or 4-up row) — the set had one asymmetric
+  shape. Two more: **`lead="wide"`** ([2, 1, 1] from 1024; the lead at 2:1, the companions 1:1, one
+  cover height because a 2fr track is two 1fr tracks and a gutter; `lg` over `sm`; three covered items
+  exactly, else `none`) and **`stagger`** (Layout `stagger`: the even cards drop 96 from 1024 as a
+  track, not a margin; one row). New ratios `double` and `square` (`--bcrd-media-ratio-double` /
+  `-square`, this layer only — one reader each). The kit page interleaves the three asymmetric shapes
+  between the equal rows.
+- **Spotlight dead strip at 1024** — the lead's cover was a fixed 21:9 under taller notes. `grow` (set
+  by the spotlight) makes the frame stack fill the stretched card and its first row take the spare
+  height (Layout `fillFirst`), never below 21:9.
+- **Icon titles one size** — `size` reached icon sets (`size="md"` on one band). The set now ignores it
+  for icon cards: h5 and body-sm always.
+- **Uneven icon rows under asideFill** — `equalRows` on an icon set gave every row the tallest card's
+  height. Icon sets drop it; rows sit on their content, one `stack` apart.
+- **Mixed icon weights** — four line-drawn Solar Bold glyphs sat beside solid ones. Four solid forms
+  join the set (`code-square`, `refresh-square`, `stars`, `clipboard-check`, Solar Bold verbatim);
+  icon grids use them.
+- **Resource covers read as placeholders** — fields blurred 60 to 70 never reached full strength and a
+  48 glyph floated mid-well. Fields now hold the grid at full strength over half the box (blur 24 to
+  32 at first, then hard-edged blocks: a panel, a band, a step), and the glyph is about a fifth of the
+  cover's width (`--bcrd-cover-glyph-size: 20.5cqi`, the cover a size container; 80 at 390, 57 at
+  the phone's 270; the 48 primitive deleted) in the foot-start corner at `block` (`--bcrd-cover-inset`).
+- **Contained kinds as thumbnails** — a whole hero drawing and a whole workflow canvas in a 286 card.
+  The kit supplies each cut to one region (`illustration-design-systems-card.svg`,
+  `cutout-flow-card.png`), and `--bcrd-media-inset` steps to `tight` (8).
+- **Four-up image walls at 1024** — four across from `lg`, not `xl`.
+- **Unlabelled tab stop** — an unlinked scrolling set took `tabIndex` with no name. `label` passes
+  `aria-label` through Layout (new `aria-label` prop); missing, it warns in development.
+- **Phone row off the gutter and clipped hard** — Layout's phone scroll row now bleeds through the
+  gutter to the screen edge and sizes itself (`justify-self: stretch`), so a centred head's
+  `inline-size: 100%` no longer pins it 4px inside the column.
+- **Barrel** — `BlockCardTextureRecipe` is exported from `@/patterns`.
+
+### Appendix re-run (fix round 2)
+
+§ 14 was rewritten against the build: the `border` grep now expects the three argued uses, `cue`,
+`grow` and `ratio` are listed as public, and the pressed step is in the list of what moves. Gates:
+`npm run verify` green; every band of `/design/kit/feature` at 1470 is 565 to 828 tall; no horizontal
+overflow at 1470, 1440, 1024 or 390; every phone scroll row's first card starts at the 32 column edge
+and its box spans 0 to 390. `/case-studies`' card list is the fold rule's stated exception (an index
+list, `data-fold-exempt` in CaseStudyIndex) and the route is now in `fold.config.json`.

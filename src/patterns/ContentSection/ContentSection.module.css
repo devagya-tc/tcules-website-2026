@@ -69,7 +69,9 @@
    table) still spans the column while a row that caps itself (ContentSectionText around an
    accordion, a centred CtaRow) sits at its cap in the middle. Without it, a centred grid item
    shrinks to its content. Sizing, not arrangement and not spacing: no margin, no display, and the
-   text inside each row keeps its own start alignment (§ 3.5). */
+   text inside each row keeps its own start alignment (§ 3.5). A phone scroll row overrides this
+   for itself (Layout: it always spans its track and bleeds through the gutter), so a centred head
+   never moves a row off the column edge. */
 .bodyCentred > * {
   inline-size: 100%;
 }

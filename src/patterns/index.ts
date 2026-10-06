@@ -170,6 +170,7 @@ export type {
   BlockCardTracks,
   BlockCardRatio,
   BlockCardCue,
+  BlockCardTextureRecipe,
   BlockCardSetProps,
   BlockCardSetItem,
   BlockCardSetLead,

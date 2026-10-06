@@ -201,6 +201,14 @@
 .pin-last:has(> :last-child:nth-child(7)) { grid-template-rows: repeat(6, auto) 1fr; }
 .pin-last:has(> :last-child:nth-child(8)) { grid-template-rows: repeat(7, auto) 1fr; }
 
+/* fillFirst — the mirror of pin-last: the first row takes the spare height of a stretched stack and
+   every later row is content-sized (implicit, `auto`). A 1fr row never shrinks below its item's
+   own minimum, so a cover with an aspect ratio keeps that ratio's height as its floor and only
+   grows. The caller makes the stack fill its parent; with no spare height nothing changes. */
+.fill-first {
+  grid-template-rows: 1fr;
+}
+
 @media (min-width: 768px) {
   .layout { grid-template-columns: var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr))); }
   .reverse-md { grid-auto-flow: dense; }
@@ -242,6 +250,22 @@
   .offset-xl-1 > :first-child { grid-column-start: 2; }
   .offset-xl-2 > :first-child { grid-column-start: 3; }
   .offset-xl-3 > :first-child { grid-column-start: 4; }
+}
+
+/* stagger — from lg, every even child drops by the section step (references § 3.4 item 12). Three
+   explicit rows: the offset, the cards, the offset. Odd children take rows 1–2 and even children
+   rows 2–3, so each starts where its row says, the cards share one height (stretch), and the row
+   grows by exactly one offset. The offset is a track, never a margin on a child. `row-gap` is 0
+   here because the three rows ARE the row: a seam between them would add to the offset. One row
+   only — a staggered second row would overlap the first. After the lg template rule, so it wins. */
+@media (min-width: 1024px) {
+  .stagger {
+    grid-template-rows: var(--gap-section) auto var(--gap-section);
+    row-gap: 0;
+  }
+
+  .stagger > :nth-child(odd) { grid-row: 1 / span 2; }
+  .stagger > :nth-child(even) { grid-row: 2 / span 2; }
 }
 
 /* scroll — the row scrolls sideways instead of wrapping (fdn-scroll, 6 Oct 2026). Written LAST on
@@ -350,6 +374,31 @@
 @media (max-width: 767.98px) and (prefers-reduced-motion: no-preference) {
   .scroll-until-md {
     scroll-behavior: smooth;
+  }
+}
+
+/* The phone row bleeds to the viewport edge (cmp-feature fix round 2, 6 Oct 2026). Inside the
+   content column the next card was cut hard at the 32 gutter, a sliver that read as cropped content
+   rather than a peek. Below md the box reaches through the gutter on both sides (--lay-scroll-bleed,
+   the container-gutter step Section insets its column by), pads itself back by the same amount and
+   snaps to that padding, so the first card still starts on the column edge — level with every
+   stacked band above it — and the next one runs off the screen edge. Inline only: the block axis
+   keeps the ring room above.
+
+   The box also sizes ITSELF on this axis: `justify-self: stretch` and `inline-size: auto`, at
+   double-class specificity. A parent that centres its rows and gives each one `inline-size: 100%`
+   (ContentSection's centred body) fixed the box at the column width, so the negative margins no
+   longer widened it and every card sat 4px inside the gutter. A scroll row always spans its track,
+   whatever its parent's alignment says; the margins then do what they say. This assumes the row
+   spans its Section's column below md, which every arrangement in the system collapses to. */
+@media (max-width: 767.98px) {
+  .layout.scroll-until-md,
+  .layout.scroll-always {
+    justify-self: stretch;
+    inline-size: auto;
+    margin-inline: calc(-1 * var(--lay-scroll-bleed));
+    padding-inline: var(--lay-scroll-bleed);
+    scroll-padding-inline: var(--lay-scroll-bleed);
   }
 }
 

@@ -77,8 +77,13 @@ export type BlockCardTitleElement = 'h2' | 'h3' | 'h4';
  *                past the fold; 16:9 is 221, which is what § 1.4's Card-3 (381) is built on.
  *   panorama  21:9  the tall lead of a spotlight set (BlockCardSet `lead="beside"`): 802 wide in
  *                the 2:1 track, where 16:9 would be 451 and put the band past the fold.
+ *   double  2:1 from 1024, 16:9 below   the wide lead of BlockCardSet `lead="wide"`, in the 2fr of
+ *   square  1:1 from 1024, 16:9 below   [2, 1, 1]; its companions take `square`. 2:1 of a 2fr track
+ *                is 1:1 of a 1fr one, so the row's covers share one height at every width. Below
+ *                1024 the row is the ordinary set, so both are its 16:9. The ratio follows the
+ *                arrangement, and the arrangement changes at 1024 (Media's `{ base, lg }` rule).
  */
-export type BlockCardRatio = 'cover' | 'wide' | 'panorama';
+export type BlockCardRatio = 'cover' | 'wide' | 'panorama' | 'double' | 'square';
 
 /**
  * How a WHOLE-CARD link says it navigates, at rest. One cue per card, never both.
@@ -163,6 +168,8 @@ const RATIO_CLASS: Record<BlockCardRatio, string | undefined> = {
   cover: undefined,
   wide: styles.wide,
   panorama: styles.panorama,
+  double: styles.double,
+  square: styles.square,
 };
 
 /**
@@ -175,9 +182,17 @@ const TEXTURE_RECIPES: Record<
   BlockCardTextureRecipe,
   readonly ComponentProps<typeof TextureShape>[]
 > = {
-  0: [{ top: '-25%', right: '-15%', width: '85%', height: '150%', kind: 'ellipse', blur: 70 }],
-  1: [{ bottom: '-35%', width: '140%', height: '85%', kind: 'ellipse', blur: 60 }],
-  2: [{ left: '-20%', width: '75%', height: '170%', kind: 'ellipse', blur: 70 }],
+  /* Fix round 2 (6 Oct 2026): the fields were blurred 60 to 70 inside a box 220 tall, so the grid
+     never reached full strength anywhere and the cover read as an empty frame — a placeholder. Each
+     field is now a HARD-EDGED block of the grid at full strength: the brand's pixel geometry, a
+     panel, a band and a step, set clear of the foot-start corner the glyph sits in. A blurred edge
+     at this size only ever showed the fade. */
+  0: [{ top: 0, right: 0, width: '58%', height: '100%', kind: 'rect', blur: 0 }],
+  1: [{ top: 0, left: 0, width: '100%', height: '40%', kind: 'rect', blur: 0 }],
+  2: [
+    { top: 0, right: 0, width: '36%', height: '100%', kind: 'rect', blur: 0 },
+    { top: 0, right: '36%', width: '28%', height: '46%', kind: 'rect', blur: 0 },
+  ],
 };
 
 /** An index numeral, two digits: 1 → "01". The mono index voice ListCard's numbered rows use. */
@@ -257,6 +272,13 @@ export type BlockCardProps = {
   /** How a linked card says it navigates. See `BlockCardCue`. Ignored without `href`. */
   cue?: BlockCardCue;
   /**
+   * The cover takes the card's spare height when the card is stretched taller than its own
+   * content, never dropping below its ratio (Layout `fillFirst`). A set's decision, for the one
+   * card stretched to a taller neighbour: the spotlight's lead beside its two notes. Vertical
+   * cards with a cover only; ignored otherwise.
+   */
+  grow?: boolean;
+  /**
    * One short format line for an artefact — "PDF · 12 pages", "Template · Figma" — in the mono
    * label voice, after the copy: on the action row beside a `download` or `cta` cue, or on its own
    * row when the card has none. Facts about the file, never a second description.
@@ -323,7 +345,8 @@ function ImageMedia({
 
 /**
  * The texture cover: the same ruled box, the pixel grid through one recipe's field, and the card's
- * glyph centred on it. The box is the Texture's positioned, isolated ancestor (`.textureCover`), so
+ * glyph set large in its foot-start corner (fix round 2: a 48 glyph centred in a 390 well read as a
+ * placeholder, not a cover). The box is the Texture's positioned, isolated ancestor (`.textureCover`), so
  * the field fills exactly the box and sits beneath the glyph. Decoration, like every cover here.
  */
 function TextureMedia({
@@ -386,6 +409,7 @@ export function BlockCard({
   index,
   cue,
   meta,
+  grow = false,
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -602,8 +626,11 @@ export function BlockCard({
       </Layout>
     );
   } else {
+    /* `grow`: the stack fills the stretched frame and its first row — the cover — takes what is
+       spare, so a lead beside taller notes ends level with them instead of over a dead strip. */
+    const grows = grow && imageNode !== null;
     frameContent = (
-      <Layout rowGap="block">
+      <Layout rowGap="block" fillFirst={grows} className={grows ? styles.grow : undefined}>
         {imageNode}
         {ruleNode}
         {content}

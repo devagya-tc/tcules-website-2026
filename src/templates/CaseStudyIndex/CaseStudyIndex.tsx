@@ -89,21 +89,28 @@ export function CaseStudyIndex({ breadcrumbs, hero, items, closing }: CaseStudyI
       />
 
       {items.length > 0 ? (
-        <Section as="div" surface="paper">
-          {/* The set IS the page's list, straight under the h1 with no band heading between, so
+        /* The fold rule's one exception on this page (visual-direction § 1.3): an INDEX LIST is the
+           page's whole content, grows with the CMS (4038 tall at 1470 with today's entries) and is
+           read by scrolling, so no height could hold it. fold:check reports it with this reason and
+           still measures the hero and the close. The remedy, if the list ever outgrows reading, is
+           pagination, not a shorter card. A plain wrapper: no box, no class, no spacing. */
+        <div data-fold-exempt="Index list: the page's whole content, grows with the CMS and is read by scrolling (visual-direction § 1.3).">
+          <Section as="div" surface="paper">
+            {/* The set IS the page's list, straight under the h1 with no band heading between, so
               its card titles are the page's h2s (axe heading-order: h1 → h3 skipped a level). */}
-          <BlockCardSet
-            titleAs="h2"
-            items={items.map((item) => ({
-              id: item.id,
-              title: item.title,
-              body: item.description,
-              eyebrow: eyebrow(item),
-              media: item.cover ? { type: 'image', image: item.cover } : undefined,
-              href: item.href,
-            }))}
-          />
-        </Section>
+            <BlockCardSet
+              titleAs="h2"
+              items={items.map((item) => ({
+                id: item.id,
+                title: item.title,
+                body: item.description,
+                eyebrow: eyebrow(item),
+                media: item.cover ? { type: 'image', image: item.cover } : undefined,
+                href: item.href,
+              }))}
+            />
+          </Section>
+        </div>
       ) : null}
 
       {/* A close is an ask, so it renders only WITH its action. Without one it was an inline,

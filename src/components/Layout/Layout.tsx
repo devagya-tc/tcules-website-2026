@@ -204,6 +204,29 @@ export type LayoutProps = {
    */
   pinLast?: boolean;
   /**
+   * The FIRST child's row takes a stretched stack's spare height (cmp-feature fix round 2, 6 Oct
+   * 2026) — the mirror of `pinLast`. For a card stretched to a taller neighbour whose cover should
+   * grow into the space rather than leave it empty under the copy: the spotlight's lead at 1024,
+   * where its two companions run taller than it. The template is `1fr` with every later row `auto`,
+   * so the first child never drops below its own content size (an aspect-ratio box keeps its
+   * ratio's height as the floor) and only grows. With no spare height it renders exactly as
+   * without the prop. Single-track only. The stack must itself fill its parent's height (the
+   * caller states that, as a stretched card does) or there is nothing to take.
+   */
+  fillFirst?: boolean;
+  /**
+   * From lg (1024) every EVEN child drops by the `section` step (96), so a row of cards reads as
+   * placed by hand rather than tiled (references.md § 3.4 item 12: "Stagger breaks the grid", kept
+   * as a Layout option, cmp-feature fix round 2). The offset is a TRACK, not a margin: the row is
+   * three explicit rows — the offset, the cards, the offset — and odd children take the first two
+   * while even ones take the last two, so the band grows by exactly the offset and nothing sets
+   * its own outer spacing. `rowGap` is not used inside the staggered row.
+   *
+   * Scope: ONE row — as many children as the template has tracks at lg (a pair, a trio). A second
+   * row would overlap the first. Below lg nothing is placed and `rowGap` applies as usual.
+   */
+  stagger?: boolean;
+  /**
    * Block-axis placement — how items sit vertically in their row (e.g. centre copy against a
    * taller image). Default "stretch".
    */
@@ -258,6 +281,11 @@ export type LayoutProps = {
    * reach fails WCAG 2.1.1. Leave it off everywhere else.
    */
   tabIndex?: 0 | -1;
+  /**
+   * The element's accessible name. For a scroll row that takes `tabIndex` (a focusable list with
+   * no name is announced as an unlabelled stop); the Slider names its own region with `label`.
+   */
+  'aria-label'?: string;
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
@@ -434,9 +462,12 @@ export function Layout({
   reverse,
   offset,
   pinLast = false,
+  fillFirst = false,
+  stagger = false,
   scroll,
   ref,
   tabIndex,
+  'aria-label': ariaLabel,
   className,
   style,
   children,
@@ -462,6 +493,7 @@ export function Layout({
       id={id}
       ref={ref}
       tabIndex={tabIndex}
+      aria-label={ariaLabel}
       style={{ ...vars, ...style }}
       className={cx(
         styles.layout,
@@ -476,6 +508,8 @@ export function Layout({
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast && styles['pin-last'],
+        fillFirst && styles['fill-first'],
+        stagger && scroll !== 'always' && styles.stagger,
         scroll && styles[`scroll-${scroll}`],
         className,
       )}

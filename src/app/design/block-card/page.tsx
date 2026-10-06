@@ -95,6 +95,125 @@ const STAND_INS_TWO: readonly BlockCardImage[] = [
   getKitPhoto('studio-session-talk'),
 ];
 
+/* ── Set shapes (cmp-feature) ────────────────────────────────────────────────────
+   The set's other arrangements, each on its smallest honest input. Kit photographs, once each. */
+const kit = (id: Parameters<typeof getKitPhoto>[0]): BlockCardMedia => ({
+  type: 'image',
+  image: getKitPhoto(id),
+});
+const SHAPE_SPOTLIGHT: readonly BlockCardSetItem[] = [
+  {
+    id: 'sh-lead',
+    title: 'One record for a claims team of four hundred',
+    body: 'Two systems gave two answers about one customer. We settled which ships.',
+    media: kit('pair-at-laptop-sticky-wall'),
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'sh-note-1',
+    eyebrow: 'What we learned',
+    title: 'The rule that decides is the design',
+    body: 'Most of the work was agreeing which system owns each fact.',
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'sh-note-2',
+    eyebrow: 'In numbers',
+    title: 'Eleven screens became four',
+    body: 'Support tickets halved within the quarter.',
+    href: ROUTES.caseStudies,
+  },
+];
+const SHAPE_WIDE: readonly BlockCardSetItem[] = [
+  {
+    id: 'sw-1',
+    title: 'Underwriting in one screen, not nine',
+    body: 'The decision and its evidence side by side, for the first time.',
+    media: kit('conversation-chalkboard'),
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'sw-2',
+    title: 'Search that knows the catalogue',
+    body: 'Forty thousand parts, found by what engineers call them.',
+    media: kit('wall-sketching-portrait'),
+    href: ROUTES.caseStudies,
+  },
+  {
+    id: 'sw-3',
+    title: 'A care record nurses can scan',
+    body: 'The six things a shift needs, first, on every patient.',
+    media: kit('moodboard-wall-desk'),
+    href: ROUTES.caseStudies,
+  },
+];
+const SHAPE_PAIR: readonly BlockCardSetItem[] = [
+  {
+    id: 'sp-1',
+    title: 'A fixed-scope project',
+    body: 'A defined problem, a fixed fee and a date.',
+    media: kit('whiteboard-two-hands'),
+  },
+  {
+    id: 'sp-2',
+    title: 'An embedded team',
+    body: 'Designers and design engineers inside your roadmap.',
+    media: kit('pair-desk-through-plants'),
+  },
+];
+const SHAPE_ICONS: readonly BlockCardSetItem[] = [
+  {
+    id: 'si-1',
+    icon: 'database',
+    title: 'A product model',
+    body: 'The records, their owners and the rules that bind them.',
+  },
+  {
+    id: 'si-2',
+    icon: 'layers',
+    title: 'Flows that hold',
+    body: 'Every path through the work, including the unhappy ones.',
+  },
+  {
+    id: 'si-3',
+    icon: 'widget',
+    title: 'A component set',
+    body: 'Built once in code and documented where the team works.',
+  },
+  {
+    id: 'si-4',
+    icon: 'clipboard-check',
+    title: 'A handover plan',
+    body: 'What your team runs after us, written down and rehearsed.',
+  },
+];
+const SHAPE_RESOURCES: readonly BlockCardSetItem[] = [
+  {
+    id: 'sr-1',
+    icon: 'clipboard-check',
+    title: 'An AI feature review',
+    body: 'Twelve questions before launch.',
+    meta: 'Checklist · PDF',
+    href: ROUTES.tools,
+  },
+  {
+    id: 'sr-2',
+    icon: 'notebook',
+    title: 'A decision log',
+    body: 'One page per decision.',
+    meta: 'Template · Notion',
+    href: ROUTES.tools,
+  },
+  {
+    id: 'sr-3',
+    icon: 'document-text',
+    title: 'A crit that decides',
+    body: 'End a review with fewer questions.',
+    meta: 'Guide · PDF',
+    href: ROUTES.guides,
+  },
+];
+
 /** One item of a list by position, for the specimens that reorder or reuse a set's members. Its
     `id` rides along into a lone card's props, where it is unused. */
 function item(list: readonly BlockCardSetItem[], index: number): BlockCardSetItem {
@@ -597,8 +716,8 @@ export default function BlockCardSpecimenPage() {
             <BlockCardSet items={SERVICES.slice(0, 4)} />
           </Specimen>
           <Specimen
-            title="5 items · featured + 2×2, four across from xl"
-            note="Five service and audit cards. The four peers take the four-card shape: 2×2 through 1439, one row at 1440."
+            title="5 items · featured + 2×2, four across from lg"
+            note="Five service and audit cards. The four peers take the four-card shape: 2×2 from 768 to 1023, one row from 1024 (fix round 2: the 2×2 at 1024 was an image wall 1140 to 1300 tall)."
           >
             <BlockCardSet items={SERVICES} />
           </Specimen>
@@ -639,8 +758,8 @@ export default function BlockCardSpecimenPage() {
             <BlockCardSet items={CASE_STUDIES.slice(0, 4)} />
           </Specimen>
           <Specimen
-            title="5 case studies · featured + 2×2, four across from xl"
-            note={`Four peers in four tracks from xl, so they step to sm (h5 over body-sm): the step follows the track — ${SMALL_FROM} across is 286px at 1470 — not the count (§ 7.2, cmp-feature).`}
+            title="5 case studies · featured + 2×2, four across from lg"
+            note={`Four peers in four tracks from lg, so they step to sm (h5 over body-sm): the step follows the track — ${SMALL_FROM} across is 286px at 1470 — not the count (§ 7.2, cmp-feature).`}
           >
             <BlockCardSet items={CASE_STUDIES} />
           </Specimen>
@@ -649,12 +768,67 @@ export default function BlockCardSpecimenPage() {
 
       <Section>
         <Layout rowGap="stack">
+          <BandHead title="2b · Set shapes: spotlight, wide lead, stagger, icon and texture sets">
+            The arrangements a feature band chooses (visual-direction § 1.4, cmp-feature). Each
+            is one prop on the set; the cards inside are unchanged. The kit page
+            /design/kit/feature composes every one of them in a real band.
+          </BandHead>
+          <Specimen
+            title='lead="beside" · the spotlight'
+            note="From 1024 the lead takes a 2:1 track at 21:9 and lg; the rest stack beside it as text notes, their covers dropped. Where the notes run taller than the lead, its cover grows to meet them (BlockCard grow, Layout fillFirst)."
+          >
+            <BlockCardSet items={SHAPE_SPOTLIGHT} lead="beside" />
+          </Specimen>
+          <Specimen
+            title='lead="wide" · a 2:1 lead and two squares'
+            note="From 1024, [2, 1, 1] with the lead at 2:1 and its companions 1:1: one cover height across the row at every width. lg over sm. Below 1024 the ordinary three-card set at 16:9, and on a phone a scroll row."
+          >
+            <BlockCardSet items={SHAPE_WIDE} lead="wide" />
+          </Specimen>
+          <Specimen
+            title="stagger · a pair, the second dropped a section step"
+            note="From 1024 the even card drops 96 (Layout stagger: a track, not a margin). One row only. Below 1024 the two sit level."
+          >
+            <BlockCardSet items={SHAPE_PAIR} lead="none" stagger />
+          </Specimen>
+          <Specimen
+            title='icon cards · across={2} · size="md" is ignored'
+            note="Icon cards are h5 and body-sm whatever the set is told, and their rows sit on their content (no equalRows), one stack apart."
+          >
+            <BlockCardSet items={SHAPE_ICONS} lead="none" across={2} size="md" />
+          </Specimen>
+          <Specimen
+            title='standIns="texture" · cue="download" · meta'
+            note="Artefacts with no cover take the card's own texture cover, three fields in turn, the glyph large in its foot-start corner."
+          >
+            <BlockCardSet
+              items={SHAPE_RESOURCES}
+              lead="none"
+              standIns="texture"
+              cue="download"
+            />
+          </Specimen>
+          <Specimen
+            title="label · an unlinked covered set of three on a phone"
+            note="Below 768 it scrolls and, holding nothing focusable, the list takes the tab stop, so it is named by `label` (aria-label). Above 768 it is the ordinary grid and the label is not emitted."
+          >
+            <BlockCardSet
+              items={SHAPE_WIDE.map((card) => ({ ...card, href: undefined }))}
+              lead="none"
+              label="Three products"
+            />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
           <BandHead title="3 · Mixed sets">
-            A set is all-image or all-text (visual-direction § 3.1, 6 Oct 2026). Where covers and
-            text-only items meet — an insights index — the set settles it: with a stand-in pool,
-            each missing cover takes the next stand-in (marked, never labelled); without one, or
-            with too few, every card drops its cover and the set renders as text cards. A set
-            never shows a hole or an empty frame.
+            A set is all-image or all-text (visual-direction § 3.1, 6 Oct 2026). Where covers
+            and text-only items meet — an insights index — the set settles it: with a stand-in
+            pool, each missing cover takes the next stand-in (marked, never labelled); without
+            one, or with too few, every card drops its cover and the set renders as text cards.
+            A set never shows a hole or an empty frame.
           </BandHead>
           <Specimen
             title="3 insights · two covers, one without · no pool → C-text"
@@ -670,7 +844,7 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
           <Specimen
             title="4 insights · featured · two missing, a pool of two"
-            note="The first item decides the featured arrangement: media beside copy. The featured lead is the index's shape; feature bands pass lead=&quot;none&quot;."
+            note='The first item decides the featured arrangement: media beside copy. The featured lead is the index&apos;s shape; feature bands pass lead="none".'
           >
             <BlockCardSet items={INSIGHTS} standIns={STAND_INS_TWO} />
           </Specimen>
@@ -1146,8 +1320,8 @@ export default function BlockCardSpecimenPage() {
         <Layout rowGap="stack">
           <BandHead title="14 · Nested surfaces">
             The nearest surface resolves every colour below, the cta&rsquo;s three Button steps
-            included; no outer palette leaks in. The card&rsquo;s own colour set is eleven tokens, every
-            one declared on every surface.
+            included; no outer palette leaks in. The card&rsquo;s own colour set is eleven
+            tokens, every one declared on every surface.
           </BandHead>
           <Section as="div" surface="tint" density="tight">
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="gutter" rowGap="block">

@@ -209,7 +209,8 @@ type WithActionsProps = {
   align?: 'start';
   arrangement?: 'stacked' | 'beside' | 'split-head';
   /**
-   * The head's own action row, a `stack` (48) under the lead (§ 1.2: lead → actions) — in practice
+   * The head's own action row, a `stack` (48) under the lead (§ 1.2: lead → actions; a `block`, 24,
+   * in the H-row's trailing track, where it closes the lead beside the heading) — in practice
    * a `CtaRow` with `rule={false}`. Stacked, under the lead; `beside`, in the head track
    * (H-beside-actions); `split-head`, in the trailing track under the lead (H-row); `media`, under
    * the lead in the copy column. Never on a centred head (§ 3.5), never beside an aside (§ 1.4 rule 6).
@@ -452,15 +453,19 @@ export function ContentSection(props: ContentSectionProps) {
        Measured on the specimen at 1440 (6 Oct 2026); § 1.4's H-row arithmetic changes from 156 to
        14 + 24 + max(94, 128) = 166, still 40 under the C-image-3 target with a 381 set (595).
 
-       Below 1024 the split is one track and every seam is the stacked head's: eyebrow → heading
-       24 (the outer `block`), heading → lead 24 (the split's `rowGap`), lead → actions 48. */
+       Below 1024 the split is one track: eyebrow → heading 24 (the outer `block`), heading → lead
+       24 (the split's `rowGap`), lead → actions 24 (the trailing track's own `block`). */
     arranged = (
       <Layout rowGap="stack">
         <Layout rowGap="block">
           {eyebrowEl}
           <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
             {headingEl}
-            <Layout rowGap="stack">
+            {/* Lead → action at `block` here, not the stacked head's `stack` (cmp-feature fix round
+                2): beside a heading the trailing track is short, and at 48 a one-link action hung
+                ~60 under a two-line lead with air all round it, reading as a third, unanchored
+                object. At 24 the action belongs to the lead it closes. */}
+            <Layout rowGap="block">
               {leadEl}
               {hasActions ? actions : null}
             </Layout>
@@ -492,7 +497,13 @@ export function ContentSection(props: ContentSectionProps) {
         <Layout rowGap="stack" pinLast={asideFill}>
           {headText}
           {hasActions ? actions : null}
-          {hasAside ? asideFill ? <div className={styles.asideFill}>{aside}</div> : aside : null}
+          {hasAside ? (
+            asideFill ? (
+              <div className={styles.asideFill}>{aside}</div>
+            ) : (
+              aside
+            )
+          ) : null}
         </Layout>
       ) : (
         headText
