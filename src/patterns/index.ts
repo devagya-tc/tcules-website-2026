@@ -120,6 +120,11 @@
  * one-line announcement strip at Section's `strip` density; Statement sets one sentence at the h1
  * role in the two-thirds track with a blue mark and, optionally, the head-half texture. Both take
  * their action as a ReactNode slot, because a pattern does not import a pattern.
+ *
+ * Contrast is a PAIR OF OPPOSITES (cmp-readdown, 6 Oct 2026; visual-direction § 3.4 N): what the
+ * work is for beside what it is not, two ruled lists in peer halves whose glyphs carry the polarity.
+ * Promoted from the service page's approved Fit. A block, not a band — it sits in a ContentSection
+ * body — and a pattern because it consumes a content shape and composes Layout, Cluster and Icon.
  */
 export { SiteNav } from './SiteNav';
 export type {

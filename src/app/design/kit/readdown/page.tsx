@@ -307,7 +307,7 @@ const INDEX = [
 
 export default function KitReaddownPage() {
   return (
-    <main>
+    <>
       {/* ── Intro ──────────────────────────────────────────────────────────────────────── */}
       <Section density="open">
         <Layout columns={{ lg: [1, 1] }} colGap="section" rowGap="stack" align="end">
@@ -578,6 +578,6 @@ export default function KitReaddownPage() {
           ]}
         />
       </ContentSection>
-    </main>
+    </>
   );
 }
