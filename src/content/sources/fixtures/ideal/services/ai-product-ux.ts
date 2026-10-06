@@ -15,27 +15,27 @@ import { CLUTCH_RATING } from '../../ratings';
 
 /**
  * /services/ai-product-ux, designed — recomposed from the UI kit on 6 Oct 2026 (visual-direction
- * § 8.2). Copy is the CMS's own, re-cut to the § 1.5 budgets; every edit is logged, old and new, in
- * docs/content-changes.md § 7. The sections say what the page argues; the template decides how each
- * is laid out from the job its blocks do (ServicePage plan.ts), so no field here is a layout.
+ * § 8.2), fix round 1 the same day. Copy is the CMS's own, re-cut to the § 1.5 budgets; every edit is
+ * logged, old and new, in docs/content-changes.md § 7. The sections say what the page argues; the
+ * template decides how each is laid out from the job its blocks do (ServicePage plan.ts), so no field
+ * here is a layout.
  *
  *   hero      the claim
- *   signals   where an AI feature loses people — B, beside a pair testing a screen
+ *   signals   where an AI feature loses people — B, two tiles, so the band carries the counterweight
  *   clients   who we have shipped with — H, with the sourced rating
  *   roles     the role the model plays, least authority to most — E, the authority spectrum
- *   authority inform, suggest, prepare, execute — F, beside the wireframe sketch
- *   statement the claim the page stands on, at scale — J
- *   record    the responsibility record, one per scenario — E, the record sheet
+ *   authority inform, suggest, prepare, execute — E, the thread, with its way back
+ *   record    the responsibility record's eight questions — C-text, an icon grid
  *   offer     the readiness assessment, for the scope not yet known — K
+ *   statement the claim the page stands on, at scale — J
  *   evidence  three AI products under different conditions — M, the real covers
- *   questions evaluation, approval, our own AI use, where to read — D-faq (the old evaluation
- *             band, the responsibilities stat, the scope note and the resources band, folded in)
- *   routes    the four specialisms — the C-icon router
+ *   questions evaluation, approval, our own AI use, where to read — D-faq
+ *   routes    the four specialisms — the list router, beside the studio crit
  *   close     the form — L
  *
  * There is no G proof band: no attributable quote from an AI engagement exists yet, and the one
  * approved quote (Auxentios, CPQ) is not AI work. When one does, a `proof` section between the
- * record and the offer gets the tint band and the `horizon` above it from the plan.
+ * statement and the evidence gets the tint band and the `horizon` above it from the plan.
  */
 export const aiProductUx: ServiceStory = {
   slug: 'ai-product-ux',
@@ -59,17 +59,13 @@ export const aiProductUx: ServiceStory = {
     },
   },
   /* Photographs (visual-direction § 5.5 to § 5.7): a cool-family page. The B, K and aside photos are
-     § 5.6's (SERVICE_PHOTO_SLOTS in src/lib/photos.ts). The stand-in pool is in order of preference,
-     studio first, drawn from the rest of the catalogue; pickStandIn enforces that. The three case
-     cards take their real covers from the listing, so the pool is only the fallback. */
+     § 5.6's (SERVICE_PHOTO_SLOTS in src/lib/photos.ts, swapped in fix round 1 for studio and
+     screen-led frames). The stand-in pool is in order of preference, studio first, drawn from the
+     rest of the catalogue; pickStandIn enforces that. The three case cards take their real covers
+     from the listing, so the pool is only the fallback. */
   photos: {
     family: 'cool',
-    standIns: [
-      'studio-session-talk',
-      'studio-whiteboard-crit',
-      'workshop-brick-room',
-      'hands-trackpad',
-    ],
+    standIns: ['studio-session-talk', 'pair-laptop-notebook'],
   },
   labels: {
     caseCta: 'Read the case',
@@ -81,32 +77,22 @@ export const aiProductUx: ServiceStory = {
       type: 'section',
       id: 'signals',
       eyebrow: 'Where trust breaks',
-      heading: 'Where an AI feature loses people',
-      lead: 'The symptom shows in the interface. The cause is usually the role the model was given.',
+      heading: 'Where AI loses people',
+      lead: 'The symptom is in the interface. The cause is the model’s role.',
       blocks: [
         {
           kind: 'signals',
-          columns: 4,
+          columns: 2,
           items: [
             {
               icon: 'eye',
               title: 'Every answer re-checked',
-              body: 'People cannot see the sources behind an output, or what is missing from them.',
+              body: 'People cannot see the sources behind an output, or how sure the model is, so they redo the work.',
             },
             {
               icon: 'undo-left',
-              title: 'Edits undone by hand',
-              body: 'The model changes what a person owns without showing the difference or keeping the original.',
-            },
-            {
-              icon: 'question-circle',
-              title: 'A confident guess',
-              body: 'Uncertainty is hidden where it should be stated, with a way to dispute it.',
-            },
-            {
-              icon: 'cpu',
-              title: 'An agent nobody stops',
-              body: 'A run of steps has no visible state, no preview and no way to halt it.',
+              title: 'Changes nobody can undo',
+              body: 'The model edits what a person owns, or runs steps with no preview and no way to stop.',
             },
           ],
         },
@@ -142,13 +128,13 @@ export const aiProductUx: ServiceStory = {
         {
           kind: 'spectrum',
           axis: { from: 'Least authority', to: 'Most authority' },
-          meter: { kind: 'authority', label: 'Model authority' },
+          meter: { kind: 'authority', label: 'Authority' },
           columns: { name: 'The model', when: 'Introduces', settles: 'So the product needs' },
           items: [
             {
               name: 'Generates a candidate',
-              when: 'Output a person may not have asked for in that form.',
-              settles: 'Editing, and constraints on source.',
+              when: 'Output a person did not ask for in that form.',
+              settles: 'Editing, and limits on source.',
             },
             {
               name: 'Transforms supplied material',
@@ -157,8 +143,8 @@ export const aiProductUx: ServiceStory = {
             },
             {
               name: 'Retrieves and synthesises',
-              when: 'Claims that rest on evidence the reader cannot see.',
-              settles: 'The sources, and what is missing from them.',
+              when: 'Claims on evidence the reader cannot see.',
+              settles: 'The sources, and what is missing.',
             },
             {
               name: 'Recommends',
@@ -167,7 +153,7 @@ export const aiProductUx: ServiceStory = {
             },
             {
               name: 'Acts with delegated authority',
-              when: 'Consequence in the product, on someone’s behalf.',
+              when: 'Consequence on someone’s behalf.',
               settles: 'Permission, preview, state, stopping and recovery.',
             },
           ],
@@ -183,89 +169,70 @@ export const aiProductUx: ServiceStory = {
       id: 'authority',
       eyebrow: 'Authority by consequence',
       heading: 'Inform, suggest, prepare, execute',
-      lead: 'Decided per action, never once per feature: the consequence, whether it reverses, the evidence and the way back.',
+      lead: 'Set per action, never once per feature, from what the action changes and whether it reverses.',
       blocks: [
         {
-          kind: 'steps',
+          kind: 'thread',
           items: [
-            {
-              title: 'Inform',
-              body: 'The model tells a person something. The person decides everything.',
-            },
-            {
-              title: 'Suggest',
-              body: 'The model proposes. A person chooses, and can see why it was proposed.',
-            },
-            {
-              title: 'Prepare',
-              body: 'The model does the work. A person reviews it before it takes effect.',
-            },
-            {
-              title: 'Execute',
-              body: 'The model acts. The person can see it happen, stop it, and undo it.',
-            },
+            { title: 'Inform', body: 'The model tells a person something. The person decides.' },
+            { title: 'Suggest', body: 'The model proposes. A person chooses, and sees why.' },
+            { title: 'Prepare', body: 'The model does the work. A person reviews it first.' },
+            { title: 'Execute', body: 'The model acts. A person can watch, stop and undo it.' },
           ],
+          loop: 'Every level keeps a way back to a person.',
         },
       ],
     },
     {
-      type: 'statement',
-      id: 'earned-certainty',
-      eyebrow: 'What we hold to',
-      text: 'An interface should never sound more certain than the system has earned.',
-      action: { label: 'See how we work', href: ROUTES.howWeWork },
-    },
-    {
       type: 'section',
       id: 'responsibility-record',
-      eyebrow: 'Written down once',
+      eyebrow: 'The responsibility record',
       heading: 'Eight questions per scenario',
-      lead: 'The responsibility record follows the product into design and engineering.',
+      lead: 'One record for every AI scenario that matters, kept through design and engineering.',
       blocks: [
         {
-          kind: 'record',
-          title: 'Responsibility record',
-          meta: 'One per consequential AI scenario',
+          kind: 'signals',
+          columns: 4,
           items: [
             {
               icon: 'user',
-              field: 'User work',
-              question: 'Which decision or task deserves assistance?',
+              title: 'User work',
+              body: 'Which task deserves assistance?',
             },
             {
               icon: 'cpu',
-              field: 'Model role',
-              question: 'What may the model produce or influence?',
+              title: 'Model role',
+              body: 'What may the model influence?',
             },
             {
               icon: 'document-text',
-              field: 'Evidence',
-              question: 'What data and sources support the output?',
+              title: 'Evidence',
+              body: 'Which sources support the output?',
             },
             {
               icon: 'question-circle',
-              field: 'Uncertainty',
-              question: 'What can be missing, wrong or unstable?',
+              title: 'Uncertainty',
+              body: 'What can be missing, wrong or unstable?',
             },
             {
               icon: 'key',
-              field: 'Authority',
-              question: 'What can happen without human approval?',
+              title: 'Authority',
+              body: 'What happens without human approval?',
             },
             {
               icon: 'checklist',
-              field: 'Evaluation',
-              question: 'What counts as useful and safe performance here?',
+              title: 'Evaluation',
+              body: 'What counts as useful and safe here?',
             },
             {
               icon: 'flag',
-              field: 'Accountability',
-              question: 'Who answers for the result when it is wrong?',
+              title: 'Accountability',
+              body: 'Who answers when the result is wrong?',
             },
             {
-              icon: 'undo-left',
-              field: 'Recovery',
-              question: 'How can a person correct or reverse the result?',
+              icon: 'refresh',
+              title: 'Recovery',
+              body: 'How can a person reverse the result?',
             },
           ],
         },
@@ -278,13 +245,29 @@ export const aiProductUx: ServiceStory = {
       heading: 'Not sure what the model should do yet?',
       body: 'The readiness assessment creates the first evidence, so the route is chosen from the work rather than the technology.',
       points: [
-        { label: 'The user work worth assisting' },
-        { label: 'The product state the model touches' },
-        { label: 'The authority it should receive' },
+        {
+          label: 'The work worth assisting',
+          detail: 'The decision or task where help changes the outcome.',
+        },
+        {
+          label: 'The state it touches',
+          detail: 'The records and screens the model may read or change.',
+        },
+        {
+          label: 'The authority it receives',
+          detail: 'What it may do alone, and what waits for a person.',
+        },
       ],
       actions: [
         { label: 'Request the readiness assessment', href: auditPath('ai-product-ux-readiness') },
       ],
+    },
+    {
+      type: 'statement',
+      id: 'earned-certainty',
+      eyebrow: 'What we hold to',
+      text: 'An interface should never sound more certain than the system has earned.',
+      action: { label: 'See how we work', href: ROUTES.howWeWork },
     },
     {
       type: 'section',
@@ -360,13 +343,12 @@ export const aiProductUx: ServiceStory = {
       id: 'first-decision',
       eyebrow: 'Go narrower',
       heading: 'Choose by what is delegated',
-      lead: 'Useful inputs: the user work, the current product state, and the authority you expect AI to receive.',
+      lead: 'Bring the user work, the current product state and the authority you expect the model to receive.',
       blocks: [
         {
           kind: 'router',
           items: [
             {
-              icon: 'cpu',
               when: 'When the product is delegating a bounded task to a model.',
               route: {
                 label: 'AI Copilots and Agents',
@@ -374,7 +356,6 @@ export const aiProductUx: ServiceStory = {
               },
             },
             {
-              icon: 'users-group-rounded',
               when: 'When review, escalation and correction are central to the work.',
               route: {
                 label: 'Human-in-the-Loop Workflows',
@@ -382,7 +363,6 @@ export const aiProductUx: ServiceStory = {
               },
             },
             {
-              icon: 'shield-check',
               when: 'When failure is consequential and oversight is the open question.',
               route: {
                 label: 'Trust, Control and Recovery',
@@ -390,7 +370,6 @@ export const aiProductUx: ServiceStory = {
               },
             },
             {
-              icon: 'graph-up',
               when: 'When retrieval and ranking decide what a person sees, and why.',
               route: {
                 label: 'AI Search and Recommendation',

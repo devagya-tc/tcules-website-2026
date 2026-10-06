@@ -242,3 +242,30 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 **Not done, for content.** There is no G proof band: no attributable quote from an AI engagement exists, and the one approved quote (Auxentios) is CPQ work. A real quote from ConnectX, BuildTwin or OmnyAI, added as a `proof` section, gives the page its tint band and the `horizon` above it.
 
 **Found in.** `kit/page-ai-product-ux`, 6 Oct 2026.
+
+### 7.1 Fix round 1 (6 Oct 2026)
+
+The review found three ruled text lists in a row (spectrum, steps, record), the signals and the router as one mirrored unit, a stacked double head on the record, weak SaaS-stock photographs and no texture on B. The page now runs hero, B, H, E spectrum, E thread, C-text record, K, J, M, D-faq, D router, L: every band ≤ 830 at 1470 (tallest 805) and ≤ 1700 at 390 (tallest 1628).
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| B signals | heading | Where an AI feature loses people | Where AI loses people (one line at the display role the counterweight gives B) |
+| B signals | lead | The symptom shows in the interface. The cause is usually the role the model was given. | The symptom is in the interface. The cause is the model’s role. |
+| B signals | tiles | four: Every answer re-checked · Edits undone by hand · A confident guess · An agent nobody stops | two, so the band carries the § 6.4 counterweight: Every answer re-checked (eye) — People cannot see the sources behind an output, or how sure the model is, so they redo the work. · Changes nobody can undo (undo-left) — The model edits what a person owns, or runs steps with no preview and no way to stop. The four symptoms remain, merged in pairs, and each is a row of the spectrum below |
+| E model roles | meter label | Model authority | Authority (the header no longer clips at 390) |
+| E model roles | rows | Output a person may not have asked for in that form. / Editing, and constraints on source. · Claims that rest on evidence the reader cannot see. / The sources, and what is missing from them. · Consequence in the product, on someone’s behalf. | Output a person did not ask for in that form. / Editing, and limits on source. · Claims on evidence the reader cannot see. / The sources, and what is missing. · Consequence on someone’s behalf. (shorter cells, shorter rows at 390) |
+| E authority | block | `steps`, four numbered ruled rows beside the wireframe photo (F) | `thread`, a horizontal flow (E, centred): Inform — The model tells a person something. The person decides. · Suggest — The model proposes. A person chooses, and sees why. · Prepare — The model does the work. A person reviews it first. · Execute — The model acts. A person can watch, stop and undo it. Return path: Every level keeps a way back to a person. |
+| E authority | lead | Decided per action, never once per feature: the consequence, whether it reverses, the evidence and the way back. | Set per action, never once per feature, from what the action changes and whether it reverses. |
+| Record | block | `record` (E) with its own title "Responsibility record" and meta "One per consequential AI scenario" under the band head | an eight-tile icon grid (`signals`, four across): the record's name is the band's eyebrow, so there is one head |
+| Record | eyebrow / lead | Written down once / The responsibility record follows the product into design and engineering. | The responsibility record / One record for every AI scenario that matters, kept through design and engineering. |
+| Record | questions | Which decision or task deserves assistance? · What may the model produce or influence? · What data and sources support the output? · What can happen without human approval? · What counts as useful and safe performance here? · Who answers for the result when it is wrong? · How can a person correct or reverse the result? | Which task deserves assistance? · What may the model influence? · Which sources support the output? · What happens without human approval? · What counts as useful and safe here? · Who answers when the result is wrong? · How can a person reverse the result? (one line each at 390; Uncertainty unchanged) |
+| Record | Recovery icon | undo-left | refresh (undo-left is B's "Changes nobody can undo") |
+| Record | position | after the statement | after the thread, before the offer (no two bands without an image are adjacent, § 5.1 rule 1) |
+| K offer | points | The user work worth assisting · The product state the model touches · The authority it should receive (titles only) | The work worth assisting — The decision or task where help changes the outcome. · The state it touches — The records and screens the model may read or change. · The authority it receives — What it may do alone, and what waits for a person. |
+| Router | icons | cpu, users-group-rounded, shield-check, graph-up | none: the list router, so it no longer repeats the signals' icon tiles |
+| Router | lead | Useful inputs: the user work, the current product state, and the authority you expect AI to receive. | Bring the user work, the current product state and the authority you expect the model to receive. |
+| Router | position | before the FAQ | after the FAQ, the last band before the close |
+| — | photos (src/lib/photos.ts § 5.6 row) | B pair-testing-overhead · K conversation-chalkboard · aside 2 pencil-wireframe-red | B workshop-brick-room · K pair-at-laptop-sticky-wall · aside 2 studio-whiteboard-crit (the router's aside) |
+| — | stand-in pool | studio-session-talk, studio-whiteboard-crit, workshop-brick-room, hands-trackpad | studio-session-talk, pair-laptop-notebook (the other two are now slot photos, hands-trackpad is product-design's B) |
+
+**Found in.** `kit/page-ai-product-ux` fix round 1, 6 Oct 2026.

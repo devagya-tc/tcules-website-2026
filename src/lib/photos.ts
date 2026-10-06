@@ -234,12 +234,17 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'desk-flatlay-devices',
     aside2: 'designer-monitor-ui',
   },
+  /* ai-product-ux, fix round 1 (6 Oct 2026): B, K and aside 2 swapped. B was a washed-out overhead
+     desk, K a staged pair under a fake chalkboard dashboard, the aside a small pink-cast pencil crop
+     — SaaS stock beside the strongest hero on the site. B is now a team reviewing screens on a wall
+     (portrait, so the 4:5 crop keeps the room), K a pair working a screen at the studio's sticky
+     wall (landscape 3:2), aside 2 the studio's own whiteboard crit, which the list router takes. */
   'ai-product-ux': {
-    b: 'pair-testing-overhead',
+    b: 'workshop-brick-room',
     i: 'workshop-whiteboard-lounge',
-    k: 'conversation-chalkboard',
+    k: 'pair-at-laptop-sticky-wall',
     aside1: 'hands-sticky-blue-pen',
-    aside2: 'pencil-wireframe-red',
+    aside2: 'studio-whiteboard-crit',
   },
   'product-modernisation': {
     b: 'wall-sketching-portrait',
