@@ -20,6 +20,28 @@ function LabelledInput({
   );
 }
 
+function LabelledTextarea({
+  label,
+  invalid = false,
+  disabled = false,
+}: {
+  label: string;
+  invalid?: boolean;
+  disabled?: boolean;
+}) {
+  return (
+    <Layout as="label" rowGap="tight">
+      <span>{label}</span>
+      <Input
+        as="textarea"
+        invalid={invalid}
+        disabled={disabled}
+        placeholder="A line about what you are building"
+      />
+    </Layout>
+  );
+}
+
 export default function InputSpecimenPage() {
   return (
     <>
@@ -63,20 +85,34 @@ export default function InputSpecimenPage() {
         </Layout>
       </Section>
 
-      {/* Every surface renders every STATE, not just rest. Four of the eleven surface-dependent
-          tokens — --inp-standard-invalid-rule and the three --inp-disabled-* — move per surface, and with
-          invalid and disabled shown on one surface only they were never looked at on ink or blue.
-          The invalid rule in particular steps danger-600 / 600 / 300 / 100 across the four. */}
+      {/* Every surface renders every STATE, not just rest, for BOTH shapes. Four of the eleven
+          surface-dependent tokens — --inp-standard-invalid-rule and the three --inp-disabled-* —
+          move per surface, and with invalid and disabled shown on one surface only they were never
+          looked at on ink or blue. The invalid rule steps danger-600 / 600 / 300 / 600 across the
+          four: on blue it is chosen against the WHITE field it borders, not against the blue
+          ground. The textarea row is here because the textarea is the shape the enquiry forms
+          lean on, and its invalid rule had only ever been seen on paper.
+
+          Three tracks from lg, not md: at 768 a third of the column is 213px, and the row was the
+          one place on the route that scrolled sideways (768–899) while Input carried a 16rem
+          floor. The floor has since moved to the composing patterns; the row still waits for room. */}
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
         <Section key={surface} surface={surface} density="tight">
           <Specimen
             title={`Surface · ${surface}`}
-            note="Identical markup on all four: rest, invalid and disabled. Every one of the 11 surface-dependent tokens renders in this band."
+            note="Identical markup on all four: rest, invalid and disabled, as an input and as a textarea. Every one of the 11 surface-dependent tokens renders in this band."
           >
-            <Layout columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="block">
-              <LabelledInput label="Rest" />
-              <LabelledInput label="Invalid" invalid />
-              <LabelledInput label="Disabled" disabled />
+            <Layout rowGap="stack">
+              <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                <LabelledInput label="Rest" />
+                <LabelledInput label="Invalid" invalid />
+                <LabelledInput label="Disabled" disabled />
+              </Layout>
+              <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                <LabelledTextarea label="Rest · textarea" />
+                <LabelledTextarea label="Invalid · textarea" invalid />
+                <LabelledTextarea label="Disabled · textarea" disabled />
+              </Layout>
             </Layout>
           </Specimen>
         </Section>
@@ -99,7 +135,7 @@ export default function InputSpecimenPage() {
           <Section surface="blue" density="tight">
             <Specimen
               title="Nested surface · blue inside ink"
-              note="SPECIMEN-ONLY ARRANGEMENT — a Section inside a Section insets the content column twice, which is why the two do not align. What it proves is the colour: this field must read as blue's column (invalid at danger-100, the lightest step, because on blue nothing darker clears), not as ink's stranded on a blue ground."
+              note="SPECIMEN-ONLY ARRANGEMENT — a Section inside a Section insets the content column twice, which is why the two do not align. What it proves is the colour: this field must read as blue's column (a white field, a brandeis-200 rule, and invalid at danger-600 — chosen against the white fill it borders, where danger-100 would measure 1.24:1), not as ink's stranded on a blue ground (a neutral-900 field, invalid at danger-300)."
             >
               <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="block">
                 <LabelledInput label="Standard · on blue" />
@@ -114,8 +150,8 @@ export default function InputSpecimenPage() {
         <Layout rowGap="block">
           <h2>Edge cases</h2>
           <Specimen
-            title="Long values and the minimum"
-            note="The input scrolls; the textarea wraps."
+            title="Long values"
+            note="The input scrolls; the textarea wraps. Neither sets a minimum width: the pattern that composes the field owns its floor."
           >
             <Layout rowGap="block">
               <Layout as="label" rowGap="tight">

@@ -21,14 +21,18 @@ function Enquiry({
   outcome = 'success',
   audit = false,
   contact = false,
+  compact = false,
   urlLabel,
 }: {
   outcome?: 'success' | 'error' | 'pending';
   audit?: boolean;
   contact?: boolean;
+  compact?: boolean;
   urlLabel?: EnquiryUrlLabel;
 }) {
   const action = `${ENDPOINTS.enquiryDesign}?outcome=${outcome}`;
+
+  if (compact) return <EnquiryForm variant="compact" action={action} context={CONTEXT} />;
 
   if (contact)
     return <EnquiryForm variant="contact" action={action} scheduleHref={ROUTES.contact} />;
@@ -57,10 +61,12 @@ export default function EnquiryFormSpecimenPage() {
         <Layout rowGap="block">
           <h1>EnquiryForm</h1>
           <p>
-            Shared stacked field sets for enquiries, audits, and contact, with blur-only
-            validation and an asynchronous success replacement. Every specimen rendering sits
-            inside CtaSection.
+            Shared field sets for enquiries, audits, contact, and the compact three-field ask,
+            with blur-only validation and an asynchronous success replacement. The renderings
+            here sit inside CtaSection; the kit&rsquo;s form family shows the form beside a
+            photograph, under a centred and a beside head, and in the offer.
           </p>
+          <Link href={ROUTES.designKitForm}>The form family in the UI kit</Link>
         </Layout>
       </Section>
 
@@ -83,14 +89,23 @@ export default function EnquiryFormSpecimenPage() {
         body={['Five visible contact fields mapped directly to the client-contact mutation.']}
         form={<Enquiry contact />}
       />
+      <CtaSection
+        eyebrow="Variant · compact"
+        heading="Three lines are enough"
+        body={[
+          'Name and email as a pair where the track holds two, the one question, and the submit with the caption beside it. At most 400 tall.',
+        ]}
+        form={<Enquiry compact />}
+      />
       <Section density="tight">
         <Layout rowGap="tight">
           <h2>Submitted context contract</h2>
           <p>
             Enquiry posts <code>origin_route</code>, <code>placement</code>, <code>family</code>
             , <code>service_or_audit</code>, <code>referrer</code>, and <code>campaign</code>.
-            Audit adds <code>intent</code>. Empty referrer and campaign values remain present
-            rather than being dropped.
+            Audit adds <code>intent</code>; compact posts the enquiry context with{' '}
+            <code>name</code> in place of <code>url</code>. Empty referrer and campaign values
+            remain present rather than being dropped.
           </p>
         </Layout>
       </Section>
@@ -123,6 +138,18 @@ export default function EnquiryFormSpecimenPage() {
           heading="Start with the work as it is"
           body={BODY}
           form={<Enquiry />}
+          surface={surface}
+        />
+      ))}
+      {/* The compact set on every surface too: its one line beside the submit is the caption ink
+          at rest, and that ink is one of the values that moves per surface. */}
+      {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
+        <CtaSection
+          key={`compact-${surface}`}
+          eyebrow={`Compact · ${surface}`}
+          heading="Three lines, on this ground"
+          body={BODY}
+          form={<Enquiry compact />}
           surface={surface}
         />
       ))}

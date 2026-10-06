@@ -19,7 +19,7 @@
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
    The pattern owns its band inset, rules, focus rings for footer links, and type composites.
-   Input owns the newsletter control geometry independently.                              */
+   Input owns the newsletter control box; the footer owns the field's usable floor.        */
 :root {
   --foot-rule-width: var(--border-width-hairline);
   --foot-transition-duration: var(--duration-fast);
@@ -33,6 +33,11 @@
  --sec-gap turned out to alias --gap-block. This one exists because it is a PADDING inside the
  band, which no primitive owns. */
   --foot-band-inset: var(--gap-stack);
+
+  /* The newsletter field's usable floor: below it the row wraps the button under the field rather
+     than squeezing the field. It was Input's own minimum until 6 Oct 2026, when the floor moved to
+     the patterns that compose the control (EnquiryForm states its own). rem, so it grows with text. */
+  --foot-field-min-inline: 16rem;
 
   /* The rating badge's geometry and inks moved to rating-badge.css with RatingBadge (1 Oct 2026). */
 

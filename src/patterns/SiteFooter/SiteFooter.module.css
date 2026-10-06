@@ -6,12 +6,13 @@
 
    ── What arranges what ──────────────────────────────────────────────────────────
    Nothing here lays out content. The band is a Section, every stack and every column set is a
-   Layout, every row is a Cluster. What is left is type, colour, hairlines, the two corrections a
-   flex child needs to be allowed to shrink, and the one breakpoint that chooses between the
+   Layout, every row is a Cluster. What is left is type, colour, hairlines, the corrections a flex
+   child needs to shrink (and, on the field, the floor it may not shrink past), and the one breakpoint that chooses between the
    directory's two renderings.
 
    ── The field ───────────────────────────────────────────────────────────────────
-   The wrapper owns only the label relationship and its place in the wrapping row. Input owns the
+   The wrapper owns the label relationship, its place in the wrapping row, and the field's usable
+   minimum (--foot-field-min-inline; Input carries no floor since 6 Oct 2026). Input owns the
    control box; the footer no longer styles a native input privately. */
 
 /* ── Band separators ───────────────────────────────────────────────────────────
@@ -215,10 +216,11 @@
 }
 
 /* The label IS the field's box — the input is nested inside it, so no id wires them together. It
-   grows to fill the row; Input owns the control's usable minimum. */
+   grows to fill the row, and holds the field's usable minimum: the footer owns that floor, not
+   Input (6 Oct 2026), so the button wraps under the field before the field gets too short. */
 .fieldLabel {
   flex: 1 1 auto;
-  min-inline-size: 0;
+  min-inline-size: var(--foot-field-min-inline);
 }
 
 /* Visually hidden, still announced. Not `display: none` and not `visibility: hidden` — both remove

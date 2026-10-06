@@ -19,7 +19,9 @@
      which is why it is not a Layout's job. */
   display: block;
   inline-size: 100%;
-  min-inline-size: var(--inp-min-inline);
+  /* No minimum. A usable floor belongs to the pattern that composes the field (EnquiryForm's
+     --enq-form-min-inline, SiteFooter's --foot-field-min-inline): a floor on the box overflowed
+     every track narrower than it, and a primitive cannot know which tracks those are. */
   block-size: var(--inp-height-md);
   padding-inline: var(--inp-padding-x);
   border: var(--inp-rule-width) solid var(--inp-standard-rule);

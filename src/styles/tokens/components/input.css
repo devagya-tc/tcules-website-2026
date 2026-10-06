@@ -25,12 +25,13 @@
 
 :root {
   /* 40px agrees with the md Button; controls step to the explicit 44px touch size below 768.
-     The 16rem minimum is the last width at which the field remains usable, and 128px gives textarea four body lines plus its optical insets. */
+     128px gives textarea four body lines plus its optical insets. There is no minimum inline size:
+     it moved to the composing patterns (6 Oct 2026), because a 16rem floor on the box overflowed
+     the Input specimen's own 213px tracks at 768–899 and would do the same in any narrow track. */
   --inp-height-md: 40px;
   --inp-height-touch: 44px;
   --inp-padding-x: var(--space-12); /* optical control inset, not layout spacing */
   --inp-textarea-padding-y: var(--space-12); /* optical control inset, not layout spacing */
-  --inp-min-inline: 16rem;
   --inp-textarea-min-block: 128px;
   --inp-radius: var(--radius-8);
   --inp-rule-width: var(--border-width-1);

@@ -25,7 +25,9 @@ const TIERS = ['components', 'patterns', 'templates'];
 
 const index = readFileSync(INDEX, 'utf8');
 const names = new Set([...index.matchAll(/name:\s*'([^']+)'/g)].map((m) => m[1]));
-const hrefs = [...new Set([...index.matchAll(/href:\s*'\/design\/([^']+)'/g)].map((m) => m[1]))];
+const hrefs = [
+  ...new Set([...index.matchAll(/href:\s*'\/design\/([^']+)'/g)].map((m) => m[1])),
+];
 
 const dirs = (p) =>
   existsSync(p)
@@ -57,11 +59,31 @@ for (const href of hrefs) {
    specimens. Neither is a specimen, so neither needs a SPECIMENS entry. */
 const notARouteSegment = (d) => d.startsWith('_') || d.startsWith('(');
 
-for (const dir of dirs('src/app/design').filter((d) => !notARouteSegment(d))) {
-  if (!hrefs.includes(dir)) {
-    problems.push(`src/app/design/${dir}  exists but nothing in SPECIMENS links to it`);
+/* Every route segment under src/app/design, at any depth, that holds a page.tsx must be linked —
+   a family specimen lives one level down (`/design/kit/<family>`), and each one is a specimen in
+   its own right. A directory with no page of its own (`kit/`) is a grouping, and passes only if
+   something beneath it is a linked page. */
+function walk(rel) {
+  let linkedBelow = false;
+  for (const dir of dirs(`src/app/design/${rel}`).filter((d) => !notARouteSegment(d))) {
+    const path = rel ? `${rel}/${dir}` : dir;
+    const hasPage = existsSync(`src/app/design/${path}/page.tsx`);
+    /* Beneath a specimen's own page, nested routes (`service-page/[slug]`) are that specimen's
+       sub-pages, reached from it; only a grouping directory's children are specimens. */
+    if (hasPage) {
+      if (!hrefs.includes(path)) {
+        problems.push(`src/app/design/${path}  exists but nothing in SPECIMENS links to it`);
+      }
+      linkedBelow = true;
+      continue;
+    }
+    const below = walk(path);
+    if (!below) problems.push(`src/app/design/${path}  holds no linked specimen`);
+    linkedBelow ||= below;
   }
+  return linkedBelow;
 }
+walk('');
 
 const folderCount = TIERS.reduce((n, t) => n + dirs(`src/${t}`).length, 0);
 console.log(

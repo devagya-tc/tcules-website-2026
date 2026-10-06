@@ -2,8 +2,9 @@
 
    Layout and Cluster own every sibling seam in the JSX. This module only applies the component's
    inline cap, reserved feedback line, type roles and per-surface inks. The form and its success
-   replacement share the same 256–470px bounds so completion does not change the CTA column's
-   measure. The 19px message reserve is one --text-caption line, held only by a field that validates:
+   replacement share the same bounds (256–470px; compact 256–667px) so completion does not change
+   the column's measure. The bounds are the form's own floor and measure, not a track's: it sits
+   in CtaSection's form column, in a media split's copy column and under a centred head alike. The 19px message reserve is one --text-caption line, held only by a field that validates:
    blur validation may fill it without moving the controls below. No margin, private flex/grid arrangement or surface paint belongs here.
 
    State order is load-bearing: .status establishes the neutral ink, then .statusError replaces
@@ -15,6 +16,15 @@
   inline-size: 100%;
   min-inline-size: var(--enq-form-min-inline);
   max-inline-size: var(--enq-form-max-inline);
+}
+
+/* AFTER `.form, .success` on purpose: same specificity, same property, and the compact measure
+   must win. The compact form takes a wider measure: its name and email sit as a pair, and a pair at the full
+   form's 470 leaves two 223px fields for an address. 667 is the copy track of a [5, 7] split at
+   1470, where the compact form lives beside a photograph (visual-direction § 1.4, L beside a
+   photo). Under a centred head the measure is what centres; in a 763 beside track it stops short. */
+.compact {
+  max-inline-size: var(--enq-compact-max-inline);
 }
 
 /* A SANS role, and the change is the mono rule reaching this component rather than a re-taste.
@@ -84,6 +94,21 @@
   transition: color var(--enq-transition-duration) var(--enq-transition-easing);
 }
 
+/* The compact form's one line beside the submit: the caption at rest, the status once there is
+   one (see the TSX). Caption voice throughout, so a state change swaps the words and the ink, not
+   the type; where the line fits in two caption lines beside the submit the row keeps its 48 (the
+   TSX records the phone exception). `min-inline-size: 0` lets it wrap inside its nowrap row rather
+   than push the row wider than the form. BEFORE .statusError on purpose — the two set the same
+   property and the error must win. */
+.note {
+  min-inline-size: 0;
+  max-inline-size: var(--measure-body);
+  color: var(--enq-caption-ink);
+  font: var(--text-caption);
+  text-wrap: var(--text-running-wrap);
+  transition: color var(--enq-transition-duration) var(--enq-transition-easing);
+}
+
 .statusError {
   color: var(--enq-status-ink-error);
 }
@@ -116,10 +141,11 @@
   text-wrap: var(--text-running-wrap);
 }
 
-/* One selector, because there is one transition. It listed .label and .message as well, which
+/* The two status lines are the only transitions. It listed .label and .message as well, which
    neutralised nothing on either. */
 @media (prefers-reduced-motion: reduce) {
-  .status {
+  .status,
+  .note {
     transition-duration: var(--duration-instant);
   }
 }
