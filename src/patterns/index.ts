@@ -185,7 +185,13 @@ export { Accordion } from './Accordion';
 export type { AccordionProps, AccordionItem, AccordionQuestionElement } from './Accordion';
 
 export { Proof } from './Proof';
-export type { ProofProps, ProofQuote, ProofFigure, ProofPortrait } from './Proof';
+export type {
+  ProofProps,
+  ProofQuote,
+  ProofFigure,
+  ProofFigureSize,
+  ProofPortrait,
+} from './Proof';
 
 export { ContentSection, ContentSectionText } from './ContentSection';
 export type {

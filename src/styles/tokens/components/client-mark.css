@@ -27,7 +27,8 @@
    How the three combine (ClientMark.module.css does the arithmetic):
      width  = √(target-side² × ratio) = target-side × √ratio   — equal AREA, not equal width
      then   capped so height ≤ height-max and width ≤ width-max, the ratio kept
-     then   × (1 + correction), the recorded ±15%, and capped again
+     then   × (1 + correction), the recorded ±15% of THAT size (ch05 §10's order), and the
+            height cap applied again — P2 is absolute; the width cap is not (fix round 2, 6 Oct)
 
    --cmark-target-side   the side of the square whose area every mark in a set matches. The
                          target is stated as a side rather than an area because an area is
@@ -39,17 +40,37 @@
                          lockup stops here, which is why they read slightly lighter than a
                          wordmark: the cap wins over the area, as ch05 orders it.
    --cmark-width-max     at the height cap a 4:1 wordmark is 160 wide; nothing in a set is
-                         allowed to be wider than that. An ultra-wide wordmark (10:1 and
-                         beyond) shrinks in height instead of running the row.            */
+                         wider than that BEFORE its correction. An ultra-wide wordmark (10:1
+                         and beyond) shrinks in height instead of running the row. A recorded
+                         upward correction may take a capped mark to 160 × 1.15 = 184.      */
 :root{
 --cmark-target-side:56px;
 --cmark-height-max:40px;
 --cmark-width-max:160px;
+/* The phone step of all three (see the block below), named once so a specimen can render it
+   beside the desktop sizes at one viewport. -m as the type ladder names its 767 step. */
+--cmark-target-side-m:44px;
+--cmark-height-max-m:32px;
+--cmark-width-max-m:128px;
 /* Forced colours (Windows High Contrast) — surface-independent, because in that mode the
    user's palette replaces every ground. CanvasText is a system colour KEYWORD, not a palette
    value: the one colour correct there by definition, since the user chose it. Read only
    inside @media (forced-colors: active) in ClientMark.module.css.                          */
 --cmark-ink-forced:CanvasText;
+}
+
+/* ── Geometry below 768 (fix round 1, 6 Oct 2026) ─────────────────────────────
+   At the desktop sizes a nine-mark set at 390 is five courses of two near-desktop marks, ~700
+   tall, and the band reads as a list of logos that dwarfs its heading. The marks step down with
+   the column, the way the title roles re-declare at 767: one size decision, three numbers kept
+   in proportion (44 / 56 ≈ 32 / 40 ≈ 128 / 160 ≈ 0.79). A 4:1 wordmark lands at 88 × 22. These
+   are SIZES, not distances: the Cluster's gap stays `stack` at every width.                 */
+@media (max-width: 767px){
+:root{
+--cmark-target-side:var(--cmark-target-side-m);
+--cmark-height-max:var(--cmark-height-max-m);
+--cmark-width-max:var(--cmark-width-max-m);
+}
 }
 
 /* ── The ink steps down from the ground's full ink (29 Sep 2026, owner, tracker 2.17) ─────

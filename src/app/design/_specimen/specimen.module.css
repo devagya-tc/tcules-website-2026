@@ -224,3 +224,12 @@
   aspect-ratio: var(--lcrd-thumbnail-ratio);
 }
 
+
+/* ClientMark at its phone step inside a desktop window — the three -m sizes from client-mark.css
+   swapped in for the active ones, so the specimen can set the 390 sizes beside the desktop sizes
+   at one viewport. Specimen scaffolding: on a page the 767 query in the token file does this. */
+.cmarkPhone {
+  --cmark-target-side: var(--cmark-target-side-m);
+  --cmark-height-max: var(--cmark-height-max-m);
+  --cmark-width-max: var(--cmark-width-max-m);
+}

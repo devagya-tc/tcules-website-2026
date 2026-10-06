@@ -1,13 +1,22 @@
-import { ClientMark, Cluster, Layout, Section, type ClientMarkProps } from '@/components';
+import {
+  ClientMark,
+  Cluster,
+  Layout,
+  Section,
+  type ClientMarkProps,
+  type LayoutProps,
+} from '@/components';
+import { cx } from '@/lib/cx';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
+import * as C from '../_specimen/clients';
 
 /**
  * ClientMark specimen — the client set at one visual weight, on four grounds.
  *
  * What this page has to show:
  *   1. equal AREA, not equal width: a 7:1 wordmark and a 3:1 lockup read as the same weight, and
- *      the ~40px height cap (ruling P2) and 160px width cap hold;
+ *      the ~40px height cap (ruling P2) holds, and the 160px width cap holds before a correction;
  *   2. one colour, the ground's ink, from ONE file per mark on every surface — any mark on ink or
  *      blue that renders light proves the mask is doing it, not the file;
  *   3. the strip is a Cluster of marks, not a component: the Cluster owns the gap;
@@ -29,57 +38,31 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 type Mark = Omit<ClientMarkProps, 'className'> & { shape: string };
 
-const CLIENTS_DIR = '/clients';
 const STRESS_DIR = '/design';
 
-/* width / height are each file's viewBox. A correction is "recorded with the asset" (ch05 §10)
-   — here, the fifth argument; on the site, a field beside the file in the CMS. */
-const client = (
-  name: string,
-  file: string,
-  width: number,
-  height: number,
-  correction?: number,
-): Mark => ({
-  name,
-  src: `${CLIENTS_DIR}/${file}.svg`,
-  width,
-  height,
-  correction,
-  shape: `${(width / height).toFixed(1)}:1${correction ? `, ${correction > 0 ? '+' : '−'}${Math.round(Math.abs(correction) * 100)}%` : ''}`,
-});
+/* The real set and its recorded corrections live in ../_specimen/clients.ts, shared with the kit's H
+   family, so a correction judged on one specimen is the one rendered on the other. Here each record
+   also carries its shape label. */
+const label = (mark: C.ClientRecord): Mark => {
+  const { width, height, correction } = mark;
+  const k = correction
+    ? `, ${correction > 0 ? '+' : '−'}${Math.round(Math.abs(correction) * 100)}%`
+    : '';
+  return { ...mark, shape: `${(width / height).toFixed(1)}:1${k}` };
+};
 
-const DOODLE = client('Doodle', 'doodle', 104, 24);
-const GT_TOOLS = client('GT Tools', 'gttools', 67.384, 19.6);
-const INCLUUDE = client('Incluude', 'incluude', 88.906, 16.851);
-const KNOVOS = client('Knovos', 'knovos', 85.232, 14);
-/* LatitudePay: hairline, widely letter-spaced capitals, so at equal area it reads lighter than
-   every neighbour. +0.05 is judged by eye against Omny and Quoter at 1440 and 390 (tracker 2.17),
-   and it is also the most that takes effect: its fitted width is 152, and the 160 width cap
-   applies again after the correction, so anything above +0.053 renders identically. The rest of
-   the lightness is the file's stroke weight, which a size correction cannot reach. */
-const LATITUDEPAY = client('LatitudePay', 'latitudepay', 133.896, 18.2, 0.05);
-const OMNY = client('Omny', 'omny', 93.982, 24.792);
-const PLEDGE = client('Pledge', 'pledge', 92.032, 19.6);
-const QUOTER = client('Quoter', 'quoter', 93.996, 28.002);
-const SAFEXPAY = client('SafeXpay', 'safexpay', 83.02, 22.398);
+const OMNY = label(C.OMNY);
+const LATITUDEPAY = label(C.LATITUDEPAY);
+const QUOTER = label(C.QUOTER);
+const KNOVOS = label(C.KNOVOS);
+const DOODLE = label(C.DOODLE);
 
-const STRIP: readonly Mark[] = [
-  OMNY,
-  LATITUDEPAY,
-  QUOTER,
-  KNOVOS,
-  SAFEXPAY,
-  DOODLE,
-  PLEDGE,
-  GT_TOOLS,
-  INCLUUDE,
-];
+const STRIP: readonly Mark[] = C.CLIENTS.map(label);
 
-/* The recommended composition's set: a count that fills every row. Eight fills 2 × 4 at base
-   and 4 × 2 from lg; nine would leave one mark alone at base. Incluude is the one held back only
-   because it is last in the strip's order — which mark waits is a content decision. */
-const GRID_SET: readonly Mark[] = STRIP.slice(0, 8);
+/* The grid's set: all nine (visual-direction § 5.9, 6 Oct 2026). Nine fill 3 × 3 at md, sit 5 + 4
+   from lg and leave the last mark alone at base — a start-aligned grid reads that as the end of the
+   list, not a hole. The kit's H band (/design/kit/logos) composes it in every placement. */
+const GRID_SET: readonly Mark[] = STRIP;
 
 /* Fictional stress shapes — see the header. */
 const SQUARE: Mark = {
@@ -128,11 +111,13 @@ const STRESS: readonly Mark[] = [SQUARE, TALL, HEAVY, LIGHT];
 const SIDE = 56;
 const H_MAX = 40;
 const W_MAX = 160;
+/* The correction scales the capped size, and only the height cap applies again (ch05 §10's order,
+   fix round 2) — so a corrected wide mark may pass 160. */
 function computed({ width, height, correction = 0 }: Mark) {
   const r = width / height;
   const k = 1 + Math.max(-0.15, Math.min(0.15, correction));
   const fitted = Math.min(SIDE * Math.sqrt(r), H_MAX * r, W_MAX);
-  const w = Math.min(fitted * k, H_MAX * r, W_MAX);
+  const w = Math.min(fitted * k, H_MAX * r);
   return `${Math.round(w)} × ${Math.round(w / r)}`;
 }
 
@@ -170,13 +155,22 @@ function Strip({ marks }: { marks: readonly Mark[] }) {
  * The recommended composition for a set of known size: one equal cell per mark, each mark at its
  * cell's start edge, so the first column lines up with the heading above it and every column
  * starts on a track line. justifyItems stays at its default (stretch) on purpose: the li fills
- * its track, which is what lets a mark wider than the track (LatitudePay, 160, in a ~139 cell at
- * 390) shrink to it via max-inline-size — a centred li would size to the mark and spill. Two tracks at base, four from lg, so a count of 4, 8 or 12 fills every row. md keeps 2:
- * four tracks in the 704 column are ~140 wide, narrower than the widest marks.
+ * its track, which is what lets a mark wider than the track shrink to it via max-inline-size — a
+ * centred li would size to the mark and spill. {base: 2, md: 3, lg: 5} (§ 5.9): two tracks in the
+ * 326 column are ~139 (the widest phone-size mark is 137), three in the 704 column ~202 and five in
+ * the 1240 column ~209, all wider than the widest mark (175). Between 1024 and ~1130 five tracks
+ * are 154–169, so LatitudePay meets its cell and letterboxes by up to 12% — the one range § 5.9's
+ * lg step costs; ClientMark spec § 17 Q11 puts the xl alternative to the owner.
  */
-function Grid({ marks }: { marks: readonly Mark[] }) {
+function Grid({
+  marks,
+  columns = { base: 2, md: 3, lg: 5 },
+}: {
+  marks: readonly Mark[];
+  columns?: LayoutProps['columns'];
+}) {
   return (
-    <Layout as="ul" columns={{ base: 2, lg: 4 }} colGap="stack" rowGap="stack" align="center">
+    <Layout as="ul" columns={columns} colGap="stack" rowGap="stack" align="center">
       {marks.map((mark) => (
         <li key={mark.name}>
           <ClientMark {...bare(mark)} />
@@ -198,7 +192,8 @@ export default function ClientMarkSpecimenPage() {
               <strong>mask</strong> filled with <code>--cmark-ink</code>, so every mark in a set
               is one colour, the ground&rsquo;s ink, from one file on every surface. Each is
               sized to <strong>equal visual weight</strong>: the same bounding-box area, not the
-              same width, then capped at 40 tall (ruling P2) and 160 wide (ch05 §10).
+              same width, then capped at 40 tall (ruling P2) and 160 wide before its recorded
+              correction (ch05 §10).
             </p>
             <p>
               A logo strip is <strong>not</strong> a component. It is <code>ClientMark</code> ×
@@ -217,15 +212,15 @@ export default function ClientMarkSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="Equal cells — a set that fills its rows"
-            note='The recommended composition when the count is known. Layout as="ul", columns {{ base: 2, lg: 4 }}, colGap and rowGap "stack", align "center", justifyItems left at stretch: one equal cell per mark, each at its cell’s start edge, so the columns line up with the heading. Eight marks fill 4 × 2 here and 2 × 4 at 390; the Cluster above, with nine, leaves 7 + 2 at 1440 and one alone at 390. Pick a count the columns divide — 4, 8 or 12 for {{ base: 2, lg: 4 }}; 6 or 12 for {{ base: 2, md: 3 }}. Still not a component: it is ClientMark × n in a Layout.'
+            title="Equal cells — the grid"
+            note='The grid of § 5.9. Layout as="ul", columns {{ base: 2, md: 3, lg: 5 }}, colGap and rowGap "stack", align "center", justifyItems left at stretch: one equal cell per mark, each at its cell’s start edge, so the columns line up with the heading. Nine marks sit 5 + 4 here, 3 × 3 at md and two to a row at 390. Still not a component: it is ClientMark × n in a Layout. Every H-band placement is composed at /design/kit/logos.'
           >
             <Grid marks={GRID_SET} />
           </Specimen>
 
           <Specimen
             title="The arithmetic, per mark"
-            note="width = 56 × √ratio (equal area, 56² px²), capped so height ≤ 40 and width ≤ 160, then × (1 + correction) and capped again. Every real mark lands inside both caps. The fictional square and stacked lockup reach the height cap first, which is why they are a little lighter than the wordmarks: the cap outranks the area, in ch05's order."
+            note="width = 56 × √ratio (equal area, 56² px²), capped so height ≤ 40 and width ≤ 160, then × (1 + correction) of that capped size, and the height cap again (P2). The width cap is not re-applied, so LatitudePay’s +15% takes effect (175 wide). The fictional square and stacked lockup reach the height cap first, which is why they are a little lighter than the wordmarks: the cap outranks the area, in ch05's order."
           >
             <Layout rowGap="block">
               {[...STRIP, SQUARE, TALL].map((mark) => (
@@ -255,7 +250,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The weight correction, with and without"
-            note="Fictional files (the one real correction, LatitudePay +5%, is too small to read in a pair). Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
+            note="Fictional files, so the pairs read at a glance (the real set runs from LatitudePay +15% to Doodle, GT Tools and Incluude −15%). Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
           >
             <Layout rowGap="block">
               <Cluster colGap="stack" rowGap="stack" align="center">
@@ -302,7 +297,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The width cap"
-            note={`A 12:1 wordmark would be ${Math.round(SIDE * Math.sqrt(12))} wide at the target area. It stops at 160, and its height follows (${computed(ULTRAWIDE)}). Shown beside LatitudePay, the widest real mark at 7.4:1, which stays under the cap at its target area.`}
+            note={`A 12:1 wordmark would be ${Math.round(SIDE * Math.sqrt(12))} wide at the target area. It stops at 160, and its height follows (${computed(ULTRAWIDE)}). Shown beside LatitudePay, the widest real mark at 7.4:1: fitted at 152, then corrected +15% to 175, because the correction scales the capped size and only the height cap applies again.`}
           >
             <Strip marks={[LATITUDEPAY, ULTRAWIDE]} />
           </Specimen>
@@ -338,12 +333,7 @@ export default function ClientMarkSpecimenPage() {
                 <ClientMark {...bare(OMNY)} />
               </li>
               <li className={s.bandOutline}>
-                <ClientMark
-                  src={`${CLIENTS_DIR}/missing.svg`}
-                  name="Hollins"
-                  width={120}
-                  height={40}
-                />
+                <ClientMark src="/clients/missing.svg" name="Hollins" width={120} height={40} />
               </li>
               <li>
                 <ClientMark {...bare(QUOTER)} />
@@ -352,20 +342,34 @@ export default function ClientMarkSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="The 326 column"
-            note="The strip in the phone's content column. It wraps into rows; the Cluster's rowGap is the seam between them, and no mark shrinks to stay on one line — which is how nine marks leave one alone on the last row."
+            title="Desktop and phone sizes, side by side"
+            note="Below 768 the three sizes step down together (target side 56 → 44, height cap 40 → 32, width cap 160 → 128), so a 4:1 wordmark is 88 × 22. The upper row is the desktop size, the lower the phone step, rendered here at one viewport by swapping in the -m tokens."
           >
-            <div className={s.trackMobile}>
+            <Layout rowGap="stack">
+              <Strip marks={STRIP} />
+              <div className={s.cmarkPhone}>
+                <Strip marks={STRIP} />
+              </div>
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="The 326 column, at the phone sizes"
+            note="The strip in the phone's content column, at the -m sizes a 390 window renders. It wraps into rows; the Cluster's rowGap is the seam between them, and no mark shrinks to stay on one line."
+          >
+            <div className={cx(s.trackMobile, s.cmarkPhone)}>
               <Strip marks={STRIP} />
             </div>
           </Specimen>
 
           <Specimen
             title="The 326 column, equal cells"
-            note="The same eight in two tracks, ~139 wide. LatitudePay (160) is the one mark wider than its cell: it shrinks to the cell (max-inline-size: 100%) and letterboxes, never spilling into the gap."
+            note="The § 5.9 grid at base: two tracks, ~139 wide, at the phone sizes. The widest mark, LatitudePay at 137, fits its cell, so equal area holds at 390."
           >
-            <div className={s.trackMobile}>
-              <Grid marks={GRID_SET} />
+            <div className={cx(s.trackMobile, s.cmarkPhone)}>
+              {/* Two tracks at every width: the frame is 326 wide inside a wide window, so the
+                  viewport breakpoints would otherwise give it five. */}
+              <Grid marks={GRID_SET} columns={{ base: 2 }} />
             </div>
           </Specimen>
         </Layout>

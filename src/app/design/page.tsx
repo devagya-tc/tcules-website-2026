@@ -237,6 +237,11 @@ const SPECIMENS = [
         name: 'Kit · process and stats',
         note: 'F process (Steps: 4 / 5 / example / CtaRow), S stats (4 centred, 3 + CtaRow), the D stat aside, Stat sizes, a Thread E band, ProcessFlow for comparison',
       },
+      {
+        href: '/design/kit/logos',
+        name: 'Kit · Client logos',
+        note: 'band H as a composition: centred strip, tint, grid beside a head, marks beside a real quote, a sourced figure, CtaRow',
+      },
     ],
   },
 ] as const;

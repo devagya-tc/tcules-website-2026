@@ -30,7 +30,8 @@ export type ClientMarkProps = {
   /**
    * The weight correction recorded with the asset (ch05 §10), as a fraction of the size:
    * -0.1 draws a heavy mark 10% smaller, 0.12 a hairline mark 12% larger. Clamped to ±0.15, with
-   * a dev warning outside it. The height and width caps still apply after it.
+   * a dev warning outside it. It scales the capped size (ch05 §10); the height cap applies again
+   * after it, the width cap does not, so a corrected wide mark may reach 184.
    */
   correction?: number;
   className?: string;

@@ -392,6 +392,12 @@ export default function ProofSpecimenPage() {
             </Specimen>
           ))}
           <Specimen
+            title='figureSize="xl" · the figure as a band’s hero'
+            note="Figures-only display at --text-stat-xl (96 / 80 / 64). One sourced figure set as the band's one idea, beside its head (the H band, /design/kit/logos). Never beside a quote."
+          >
+            <Proof figures={FIGURES.slice(0, 1)} figureSize="xl" />
+          </Specimen>
+          <Specimen
             title="mixed dates · per-figure lines"
             note="Two dates in one set, so no caption is true of all three: each figure keeps its own."
           >

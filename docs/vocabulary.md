@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 23 roles, consumed as composites
+### Type — 24 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -89,18 +89,19 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-micro` | 11px | 1.2 | mono | semibold | `--text-micro-tracking` | `--text-mono-case` |
 | `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` | `--text-mono-case` |
 | `--text-stat-lg` | 54px | 1 | mono | medium | `--text-stat-lg-tracking` | `--text-mono-case` |
+| `--text-stat-xl` | 96px | 1 | mono | medium | `--text-stat-xl-tracking` | `--text-mono-case` |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**16 roles have a tracking companion. 7 have none** — pairing one with a role in that
+**17 roles have a tracking companion. 7 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
 
 Mono is this system's label voice: chrome, eyebrows, keys, control labels, stats. All
-9 mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
+10 mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
 correction for the side bearings of capitals — so set lower-case, a mono role reads as
 letter-spaced body text rather than as a label. **The case belongs to the role, not to the
-component.** 8 of the 9 take it: `--text-ui-sm`, `--text-ui`, `--text-ui-lg`, `--text-eyebrow`, `--text-index`, `--text-micro`, `--text-stat`, `--text-stat-lg`.
+component.** 9 of the 10 take it: `--text-ui-sm`, `--text-ui`, `--text-ui-lg`, `--text-eyebrow`, `--text-index`, `--text-micro`, `--text-stat`, `--text-stat-lg`, `--text-stat-xl`.
 
 Write it beside the font, exactly as you write tracking, and for the same reason — `font:` carries
 a family, weight, size and ratio, and no transform:
@@ -177,7 +178,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
 - **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-round` 999px · `--btn-outline-rule-width` 1px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
 - **callout.css** — `--call-example-rule-width` 2px
-- **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 160px
+- **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 160px · `--cmark-target-side-m` 44px · `--cmark-height-max-m` 32px · `--cmark-width-max-m` 128px
 - **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-tracking-md` -0.01em · `--csec-heading-measure` 32ch · `--csec-lead-measure` 56ch · `--csec-body-measure` 75ch
 - **cta-row.css** — `--ctarow-rule-width` 1px · `--ctarow-note-measure` 56ch · `--ctarow-centred-measure` 75ch
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.015em · `--cta-point-tracking` 0em · `--cta-marker-tracking` 0.08em · `--cta-heading-measure` 32ch · `--cta-body-measure` 75ch
