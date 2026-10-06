@@ -6,25 +6,23 @@
    the same markup answer a paper band, a tint band, an ink band and a blue pivot without knowing
    which one it is standing on.
 
-   ── Seven rules, and the count is the design ────────────────────────────────────
-   Eighteen parts, seven of which carry a value here: six inks on the six text parts, and the video
-   frame, which is the only box the component draws. The image is a Media and carries its own.
-   Nine more — root, top, split, stack, opening, copy, byline, pair, actions — carry DISTANCE ONLY,
-   and every one of those distances is a Section, Layout or Cluster gap prop in the TSX. The last
-   two carry NOTHING AT ALL, which is the point of them: extras, the caller's block, and trail (kit
-   `fdn-top`, 5 Oct 2026), the Breadcrumbs the caller hands in, which own every value they paint
-   and read this band's ground. A slot that imposed an ink or a step would be a slot the caller
-   had to fight.
+   ── Which parts carry a value here ──────────────────────────────────────────────
+   The text parts carry an ink and a type role each; the marks (the eyebrow's, the tags', the
+   flag's square and the legend's numerals) carry a size and a blue; the video frame is the one box
+   the component draws; the two texture fields carry a position and a size, and nothing else. The
+   structural parts — root, top, split, stack, opening, copy, byline, pair, actions — carry
+   DISTANCE ONLY, and every one of those distances is a Section, Layout or Cluster gap prop in the
+   TSX. Extras and trail carry NOTHING AT ALL: the caller's block and the Breadcrumbs the caller
+   hands in own every value they paint and read this band's ground.
 
-   So eleven of the eighteen emit no class and appear nowhere in this file: a rule for them would
-   be a rule with nothing to say. If you are looking for where the 32 from the trail to the split,
-   the 48, the 24, the 16, the 8 and the 4 — and the 96 between copy and media in `beside` — are
-   set, they are in the JSX, which is where the arrangement belongs.
+   If you are looking for where the 32 from the trail to the split, the 48, the 24, the 16, the 8
+   and the 4 — and the 96 between copy and media in a split — are set, they are in the JSX, which
+   is where the arrangement belongs.
 
-   The media part takes no class of its own and has no wrapper. The image is a Media, whose module
-   owns it; `.video` is the other rendering of the same slot, mutually exclusive by the prop's
-   union, and each sits directly in the split as its second child — so a wrapper element would exist
-   only to hold a class with nothing in it. The aspect-ratio goes on the <iframe> itself.
+   The media part takes no class of its own. The image is a Media, whose module owns it; `.video` is
+   the other rendering of the same slot, mutually exclusive by the prop's union. In a split a
+   photograph or video sits in a classless <div>, so the row's stretch (which the copy track needs
+   for the foot field) reaches that box and never the image. The aspect-ratio goes on the <iframe>.
 
    ── What is NOT here, and why each absence is a decision ────────────────────────
    No display:flex and no display:grid. Every arrangement in this component is a Layout or a
@@ -32,7 +30,9 @@
    Button's, centring a label in its own control box, which is not arrangement. The two
    display:block declaration below de-inlines a replaced element; it arranges nothing.
 
-   No position and therefore no z-index, INCLUDING on the video. The 16/9 box is an aspect-ratio
+   One position, and no z-index: the two texture fields are `position: relative` so the Texture
+   inside each fills that region rather than the band (the field's z-index is Texture's own, and
+   resolves inside the Section's isolation). Nothing else is positioned, INCLUDING the video. The 16/9 box is an aspect-ratio
    on the iframe itself, so the padding-top-percentage-plus-absolute-fill idiom that every embed
    snippet on the internet still carries is not needed here: it predates aspect-ratio, it needs a
    wrapper this component would otherwise not have, and it manufactures a stacking context in a
@@ -47,19 +47,20 @@
    slot. That edge is the strongest vertical line on the page and it must be in the same place on
    all 129 of them. So there is no reach into --space-* here either.
 
-   One pair of @media blocks, and they arrange nothing: they choose which texture recipe shows
-   (hero-foot and hero-field above 1024, horizon below — visual-direction § 6.3). Every arrangement
-   that changes at 1024 — `beside` splitting into two tracks — is Layout's `lg` template, set by a
-   prop; the copy stack is single-track at every width, the Clusters wrap by themselves, and the
-   measures are `ch`-based so they follow the type down with no second value to keep in sync.
-   Nothing moves, so reduced motion has nothing to switch off.
+   Three @media blocks at the foot of the file, and none of them arranges anything: one hides the
+   illustration's legend from 1440 (where the drawing's own labels are legible and the <picture>
+   serves the drawing rather than its numbered cut), one hides the foot field below 1440, and one
+   lets the no-media field take its row's height from 1024 rather than its own 2:1. Every
+   arrangement that changes at a breakpoint — the splits, the phone stacking of the actions — is a
+   Layout or Cluster prop; the measures are `ch`-based so they follow the type down with no second
+   value to keep in sync. Nothing moves, so reduced motion has nothing to switch off.
 
    No transition, transform, animation or opacity. There are no states to interpolate between.
    The entrance animation on a page title is the most-requested hero motion and it is refused: it
    delays the one thing a reader arrived for.
 
    No line-clamp and no text-overflow. The title is never truncated — a 58-character h1 wraps to
-   three lines and balances instead.
+   three lines and balances instead — and since fix round 2 neither is the announcement's sentence.
 
    No rule on the image at all — no object-fit, no max-block-size, no aspect-ratio and no border.
    The image is a Media: the intrinsic ratio IS the decision (H3), and the edge is its kind's.
@@ -79,10 +80,9 @@
 
    No list reset and no dd inset reset. reset.css zeroes dl and dd margins already.
 
-   ── Rule order is not load-bearing here ─────────────────────────────────────────
-   Seven rules, seven distinct selectors, no shared property between any two of them and no state
-   pair to decide by source order. They can be read in any order, which is a consequence of
-   having no states rather than a property of the file. */
+   ── Rule order ───────────────────────────────────────────────────────────────────
+   Not load-bearing anywhere but in the breakpoint switches at the foot, which come after the rules
+   they switch. There are no states to decide by source order. */
 
 /* ── The eyebrow ───────────────────────────────────────────────────────────────
    One of the two mono parts in the component, the byline key below being the other, so both take
@@ -221,9 +221,9 @@
 }
 
 /* ── The media · one slot, two renderings ──────────────────────────────────────
-   Below the copy in `stacked`, beside it from 1024 in `beside` — and neither arrangement is set
-   here. The split is a Layout in the TSX (`columns={{ lg: [1, 1] }}`, `colGap="section"`), which is
-   why this file still has no @media block: the one thing that changes at 1024 is a primitive's.
+   Below the copy in `stacked`, beside it from 1024 in `beside` and `wide` — and no arrangement is
+   set here. Each split is a Layout in the TSX (`columns`, `colGap="section"`): what changes at a
+   breakpoint is a primitive's.
 
    ── The image ────────────────────────────────────────────────────────────────
    Has NO rule here any more, and that is the change. It renders through Media, which owns the
@@ -276,12 +276,12 @@
   inline-size: min(100%, var(--hero-media-size-centred));
 }
 
-/* ── announcement · one line above the hero ─────────────────────────────────────
+/* ── announcement · one line above the hero, two on a phone ───────────────────────
    The flag is the label voice in blue, after a blue pixel (.mark): news, marked by the accent
    rather than by a grey pill. The note is body-sm at the body's ink, a step under the lead. It is
-   the part of the strip that gives way: one line always, ellipsised when the row is short, so the
-   strip never wraps to three rows on a phone. min-inline-size:0 is what lets a flex item shrink
-   below its text's width; the ellipsis needs overflow hidden and nowrap together. */
+   the part of the strip that gives way, by WRAPPING beside the flag: it used to ellipsise to
+   "The AI Product ..." on a phone, which left the strip saying nothing (fix round 2).
+   min-inline-size:0 is what lets the flex item shrink below its text's width so it can wrap. */
 .flag {
   text-transform: var(--text-mono-case);
   color: var(--hero-flag-ink);
@@ -291,15 +291,13 @@
 }
 .note {
   min-inline-size: 0;
-  overflow: hidden;
   color: var(--hero-note-ink);
   font: var(--hero-note-text);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-wrap: var(--text-running-wrap);
 }
 
 /* ── mark · the blue pixel ───────────────────────────────────────────────────────
-   One square of the texture's grid, the marker before each tag and before the announcement's
+   One square of the texture's grid, the marker before the eyebrow, each tag and the announcement's
    flag: the blue accent at its smallest (§ 4.2), and square because the grid is. */
 .mark {
   display: block;
@@ -345,42 +343,54 @@
   color: var(--hero-numeral-accent-glyph-ink);
 }
 
-/* ── breakpoint switches · which rendering shows ───────────────────────────────────
-   Every wrapper below has no box of its own that matters; these rules only switch it.
-     wideCut / phoneCut      the drawing from 768, the phone cut and its legend below it (the
-                             title roles' own 767 step).
-     textureLg / textureBase the photograph's plinth beside the copy from 1024 (Layout's lg, where
-                             the split starts), and under the stacked photograph below it.
-     textureXl / UntilXl     the text hero's end column from 1440 (Layout's xl), where the column is
-                             1240 and the field clears a full 26ch title; the horizon below. */
-@media (max-width: 767.98px) {
-  .wideCut {
-    display: none;
-  }
+/* ── texture fields · a region with an edge, in a track of its own ────────────────
+   Both are `position: relative` boxes the layout sizes, so the Texture inside fills the REGION
+   rather than the band and its shapes are placed against the copy track (foot) or the field track
+   (field), not against the viewport. Round 1's recipes were placed against the band and could only
+   guess where the column was; these share the grid's edges by construction.
+
+   .fieldTexture runs the field one band padding past its box (--gap-section, the 96 Section's
+   default density pads with), so each field sinks into the band's floor rather than stopping 96
+   above it as a floating panel. Two classes, so it outranks Texture's own `height: 100%` whatever
+   order the bundler emits the modules in.
+
+     foot   fills the 1fr row Layout's pinLast leaves under the copy stack (block-size 100%).
+     field  a 2:1 block under the actions below 1024; from 1024 its track's full height, beside the
+            copy, because the split stretches the row. */
+.foot,
+.field {
+  position: relative;
 }
-@media (min-width: 768px) {
-  .phoneCut {
-    display: none;
-  }
+.foot {
+  block-size: 100%;
 }
-@media (max-width: 1023.98px) {
-  .textureLg {
-    display: none;
-  }
+.field {
+  aspect-ratio: var(--hero-field-ratio);
 }
-@media (min-width: 1024px) {
-  .textureBase {
+.foot .fieldTexture,
+.field .fieldTexture {
+  block-size: calc(100% + var(--gap-section));
+}
+
+/* ── breakpoint switches ─────────────────────────────────────────────────────────
+     legend  the numbered cut's legend shows where the <picture> serves the cut: below 1440.
+     foot    the foot field from 1440 only, where a two-line title leaves a region under the copy;
+             below it the copy is as tall as the photograph, and on a phone the field sat in the
+             gutter beside a stacked image.
+     field   its row's height from 1024, where it is a track beside the copy. */
+@media (min-width: 1440px) {
+  .legend {
     display: none;
   }
 }
 @media (max-width: 1439.98px) {
-  .textureXl {
+  .foot {
     display: none;
   }
 }
-@media (min-width: 1440px) {
-  .textureUntilXl {
-    display: none;
+@media (min-width: 1024px) {
+  .field {
+    aspect-ratio: auto;
   }
 }
 

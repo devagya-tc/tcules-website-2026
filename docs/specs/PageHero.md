@@ -780,6 +780,34 @@ Measured at 1470 with the 73 of nav: service 729 · one action 699 · tags 784 �
 announcement 792 · display band 807 (hero 880, exempt) · field 629 · text 590 · category 775 ·
 centred 1346 (exempt). At 390 the h1 sits at 213 and every band is under 1140.
 
+## Amendment · 6 Oct 2026, fix round 2 (kit `cmp-hero`)
+
+| Note | Cause | Fix |
+|---|---|---|
+| Texture an artefact (plinth behind the photo's corner, a tinted strip beside the text) | Soft fields placed against the BAND, guessing where the column was | Two hard-edged regions with a track of their own, a stepped silhouette sinking into the band's floor: `foot` under the copy (photograph, from 1440; `Layout pinLast`, the field fills the 1fr row, 48 under the ask by its own geometry) and `field`, the end third of a `[2, 1]` split from 1024 (no media), a 2:1 block below it (`--hero-field-ratio`) |
+| Six shapes one rectangle | Every photograph took `beside` | `arrangement="wide"`: copy 2 : media 3 from 1440, a 3:2 photograph at 686 × 457 (`HERO_WIDE`). The announcement specimen carries it |
+| Display head misplaced; display over the fold | Top-aligned halves; a 3:1 at 1240 | The Quantum split header: title and lead in 3 of 5, the ask on the lead's last baseline (`Layout align="baseline"`) flush with the column's end from 1024 (`Cluster justify={{ base, lg }}`); a 4:1 panorama (new Media ratio `4/1`). Ends at 781, no exemption |
+| Grey eyebrows | The eyebrow had no mark | The eyebrow carries the 6px blue square (`--hero-mark-*`), as the tags and the flag do |
+| Announcement truncated on a phone | nowrap + ellipsis | The sentence wraps beside the flag; the link drops below |
+| Two action shapes on phones | A wrapping row | `Cluster stackUntil="md"`: below 768 the pair always stacks |
+| Nine ragged tags | A wrapping list | At most six (development warning past six), a 3-column grid from 768, 2 below; keyed by index and tag |
+| Two eager drawings per service page | Two `<Media priority>`, one `display:none` | One `<picture>`: a `<source media="(max-width: 1439.98px)">` serves the numbered cut, so only the shown drawing is fetched |
+| 7px labels and a 4-line title at 1024 | Drawing in a 2/5 track | Drawing heroes are `[2, 1]` from 1024 and `[1, 1]` from 1440, the numbered cut and legend below 1440; photograph heroes `[1, 1]` from 1024 |
+| Authored proper nouns lowercased in a crumb | `trailCase` sentence-cased authored eyebrows | `pageName` keeps an authored eyebrow as written (`authoredCase` only restores a known acronym); `slugCase` is for slugs alone |
+| 860 written twice | Literal in tokens and in `image-sizes.ts` | `CENTRED_MEDIA` in `image-sizes.ts`, cross-referenced from the token |
+
+**Brief deviation, recorded:** the cmp-hero brief says the secondary action is "always neutral
+link-style". It is `emphasis="link" tone="primary"` (blue, with an arrow), because the owner's later
+6 Oct ruling (fdn-blue, visual-direction § 4.1) makes every text link blue at rest. The ruling wins;
+the change is listed in `docs/kit/brand-amendments.md` (ch02, the `tone="primary"` row).
+
+**The two size tokens** `--hero-mark-size` (6) and `--hero-numeral-size` (20) read the space ramp
+as a stated exception: no size primitive holds either value (`--icon-size-*` runs 14 to 24).
+
+Measured at 1470 with the 73 of nav: service 729 · one action 699 · tags 792 · photograph 723 ·
+wide with announcement 792 · display 781 · field 629 · text 590 · category 775 · centred 1346
+(exempt, the owner comparison). No horizontal overflow at 1470, 1024 or 390.
+
 ## Appendix — self-audit
 
 **This audit was written against the 21 Aug 2026 spec and is left as it was signed.** Editing a dated audit in place would make it a claim about a document it never read. The 25 Aug amendment changes eleven of its lines, and the delta is at the end of this appendix rather than spliced through it.

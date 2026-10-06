@@ -27,7 +27,7 @@ import { ROUTES, SECTION_INDEXES } from '@/lib/routes';
  *      Home / Case studies says a category the trail cannot, and an eyebrow holding the word
  *      "services" or "home" is not thereby a repeat (second fix round, 6 Oct 2026). The bare
  *      format, "Case study" or "Audits", still is.
- *   3. A page's own crumb is its NAME, in the trail's case. `pageName` chooses it — from the
+ *   3. A page's own crumb is its NAME. `pageName` chooses it — from the
  *      record's eyebrow where that spells the same name better than the slug does, from the slug
  *      otherwise — and `slugLabel` cases a slug segment. They live
  *      here because "is this eyebrow the page's name?" is the same "says the same thing" question
@@ -264,11 +264,17 @@ export function eyebrowBesideTrail(
 /* ── The page's own crumb ──────────────────────────────────────────────────────────────────── */
 
 /**
- * Words whose spelling is not sentence case, keyed by their lower-case form. Acronyms and the
- * proper nouns the site's slugs and eyebrows carry. A slug has lost the spelling, and an authored
- * Title Case eyebrow ("Figma and Storybook Alignment") cannot tell a proper noun from a word that
- * is capitalised only because it is in a title, so the trail asks this list. A word missing here
- * still renders, in lower case; add it here, once.
+ * Words whose spelling is not sentence case, keyed by their lower-case form: the acronyms and the
+ * proper nouns the site's SLUGS carry. A slug has lost its spelling, so a crumb built from one asks
+ * this list for it ("ai-product-ux" is "AI product UX"). A word missing here renders in lower case
+ * IN A SLUG CRUMB only, where lower case is all the slug ever said; add it here, once.
+ *
+ * An AUTHORED label never loses a capital (6 Oct 2026 audit, "no lowercasing of authored proper
+ * nouns"): `authoredCase` only raises a known spelling ("Ux" to "UX") and keeps every other word as
+ * written, so "Benchmark Gensuite" and "Future Interfaces Lab" stay proper nouns. The cost is that a
+ * Title Case eyebrow used as a crumb stays Title Case beside a slug crumb in sentence case. That is
+ * the honest trade: a list cannot tell a proper noun from a word capitalised for a title, and a
+ * crumb that lowercases a client's name is wrong, while one in Title Case is only inconsistent.
  */
 const SPELLINGS: Readonly<Record<string, string>> = {
   ai: 'AI',
@@ -286,46 +292,50 @@ const SPELLINGS: Readonly<Record<string, string>> = {
 /** Leading punctuation, the word, trailing punctuation: "(UX," is "(", "UX", ",". */
 const WORD_PARTS = /^([^\p{L}\p{N}]*)(.*?)([^\p{L}\p{N}]*)$/u;
 
-/**
- * One word part in the trail's case. A known spelling wins, matched without its punctuation, so
- * "UX," and "ux" are both "UX". Otherwise a part the author wrote with a capital after its first
- * letter ("ConnectX", "QA", "R&D") is kept as written, unless the whole label is shouting, where
- * every part is all capitals and the casing says nothing. Everything else is lower case, with a
- * capital on the label's first letter.
- */
-function trailPart(part: string, first: boolean, shouting: boolean): string {
-  const [, lead = '', core = '', tail = ''] = WORD_PARTS.exec(part) ?? [];
-  const known = SPELLINGS[core.toLowerCase()];
-  if (known) return `${lead}${known}${tail}`;
-  if (!shouting && /\p{Lu}/u.test(core.slice(1))) return part;
-  const lower = core.toLowerCase();
-  const cased = first ? `${lower.charAt(0).toUpperCase()}${lower.slice(1)}` : lower;
-  return `${lead}${cased}${tail}`;
-}
-
-/**
- * A label in the trail's case: sentence case, so a crumb built from a slug and one taken from an
- * authored Title Case eyebrow read as one trail ("AI product UX", "Human-in-the-loop workflows",
- * "Figma and Storybook alignment"). Hyphenated words are cased part by part; the label's own
- * punctuation ("Trust, control and recovery") is kept.
- */
-function trailCase(label: string): string {
-  const shouting = !/\p{Ll}/u.test(label);
-  return label
+/** Each word, and each part of a hyphenated word, through `part`; spacing and punctuation kept. */
+const mapParts = (label: string, part: (core: string, first: boolean) => string) =>
+  label
     .trim()
     .split(/\s+/)
     .map((word, index) =>
       word
         .split('-')
-        .map((part, partIndex) => trailPart(part, index === 0 && partIndex === 0, shouting))
+        .map((piece, pieceIndex) => {
+          const [, lead = '', core = '', tail = ''] = WORD_PARTS.exec(piece) ?? [];
+          return `${lead}${part(core, index === 0 && pieceIndex === 0)}${tail}`;
+        })
         .join('-'),
     )
     .join(' ');
+
+/**
+ * A SLUG's words in the trail's case: sentence case, the known spellings restored. Only ever given
+ * lower-case input (a slug segment), so it has no authored capital to lose.
+ */
+function slugCase(label: string): string {
+  return mapParts(label, (core, first) => {
+    const known = SPELLINGS[core.toLowerCase()];
+    if (known) return known;
+    const lower = core.toLowerCase();
+    return first ? `${lower.charAt(0).toUpperCase()}${lower.slice(1)}` : lower;
+  });
+}
+
+/**
+ * An AUTHORED label as a crumb: exactly as written, except that a known spelling is restored where
+ * the author dropped its capitals ("ux" and "Ux" are "UX"). Never lowers a letter, so a proper
+ * noun the list does not know survives ("Benchmark Gensuite", "ConnectX").
+ */
+function authoredCase(label: string): string {
+  return mapParts(label, (core) => {
+    const known = SPELLINGS[core.toLowerCase()];
+    return known && known.toLowerCase() === core.toLowerCase() && known !== core ? known : core;
+  });
 }
 
 /** A slug segment as a crumb: "ai-product-ux" is "AI product UX". */
 export function slugLabel(segment: string): string {
-  return trailCase(segment.split('-').filter(Boolean).join(' '));
+  return slugCase(segment.split('-').filter(Boolean).join(' '));
 }
 
 /** Words a slug drops without changing the name: "trust-control-recovery" is "Trust, Control and Recovery". */
@@ -358,7 +368,7 @@ function spellsName(text: string, name: string, parent: string | undefined): boo
 
 /** A page's own crumb, and what is left of its eyebrow for the hero. */
 export type PageName = {
-  /** The page's crumb label, in the trail's case. */
+  /** The page's crumb label: a slug's in sentence case, an authored eyebrow's as written. */
   label: string;
   /**
    * The eyebrow to pass on to `eyebrowBesideTrail`: the authored value, or `undefined` when it
@@ -374,8 +384,8 @@ export type PageName = {
  * `name` is the route's fallback, usually `slugLabel` of the last slug segment, which has lost the
  * words and the spelling a slug drops ("Trust control recovery"). The record's eyebrow is asked
  * first, because it is often the same name spelled properly: when it spells the name
- * (`spellsName`, with `parent`'s words allowed), "Trust, Control and Recovery" gives "Trust,
- * control and recovery", in the trail's case. The eyebrow is then CONSUMED, returned as
+ * (`spellsName`, with `parent`'s words allowed), "Trust, Control and Recovery" is the crumb, as
+ * authored: never lowercased, so a proper noun the slug lost survives (`authoredCase`). The eyebrow is then CONSUMED, returned as
  * `undefined`, so `eyebrowBesideTrail` neither shows it under a trail that already says it nor
  * warns about a repeat the route made itself. Otherwise `name` stands and the eyebrow is passed on.
  *
@@ -399,7 +409,7 @@ export function pageName({
 }): PageName {
   const authored = eyebrow?.trim() || undefined;
   if (authored && spellsName(authored, name, parent)) {
-    return { label: trailCase(authored), eyebrow: undefined };
+    return { label: authoredCase(authored), eyebrow: undefined };
   }
   return { label: name, eyebrow: authored };
 }

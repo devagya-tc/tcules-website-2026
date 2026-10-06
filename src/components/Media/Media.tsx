@@ -40,7 +40,7 @@ export type MediaPanel = 'paper' | 'paper-deep' | 'ink';
  *   4/5   B, K and L-photo, the media split         5/4   the photograph hero
  *   3/1   I banner below its head                    3/2   I banner beside, the head-track aside, a pair
  *   16/9  card sets of three or more                 4/3   the horizontal card
- *   1/1   portraits
+ *   1/1   portraits                                 4/1   the title-led hero's panorama (cmp-hero)
  *
  * A placement states one; Media does not choose. Each maps to a `--media-ratio-*` token.
  *
@@ -48,7 +48,7 @@ export type MediaPanel = 'paper' | 'paper-deep' | 'ink';
  * § 5.4's. No card passes them: a card's image is BlockCard's own 3/2 crop box under `fit="fill"`,
  * not a Media `ratio` (drift recorded in src/lib/photos.ts at CARD_RATIO and docs/specs/Media.md).
  */
-export type MediaRatio = '4/5' | '5/4' | '3/1' | '3/2' | '16/9' | '4/3' | '1/1';
+export type MediaRatio = '4/5' | '5/4' | '3/1' | '4/1' | '3/2' | '16/9' | '4/3' | '1/1';
 
 /**
  * A ratio per arrangement: `base` below 1024 and `lg` from 1024 (Layout's `lg`, where every split in
@@ -268,6 +268,7 @@ const RATIO_CLASS: Record<MediaRatio, string | undefined> = {
   '4/5': styles.ratio4x5,
   '5/4': styles.ratio5x4,
   '3/1': styles.ratio3x1,
+  '4/1': styles.ratio4x1,
   '3/2': styles.ratio3x2,
   '16/9': styles.ratio16x9,
   '4/3': styles.ratio4x3,
@@ -279,6 +280,7 @@ const LG_RATIO_CLASS: Record<MediaRatio, string | undefined> = {
   '4/5': styles.lgRatio4x5,
   '5/4': styles.lgRatio5x4,
   '3/1': styles.lgRatio3x1,
+  '4/1': styles.lgRatio4x1,
   '3/2': styles.lgRatio3x2,
   '16/9': styles.lgRatio16x9,
   '4/3': styles.lgRatio4x3,

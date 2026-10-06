@@ -200,9 +200,13 @@
 --hero-media-ratio:16 / 9;
 --hero-media-radius:var(--radius-0);
 --hero-media-rule-width:var(--border-width-hairline);
-  /* Fix round 1 (cmp-hero). The mark is one pixel of the texture's grid at 6, the legend's
-     numeral disc 20 around an 11px micro glyph; component sizes, not distances. The centred
-     media cap is about 8 of 12 columns of the 1240 column. */
+  /* The mark (one pixel of the texture's grid, 6) and the legend's numeral disc (20, around an
+     11px micro glyph) are component SIZES, and they read the space ramp — a STATED EXCEPTION to
+     "the ramp is for optical corrections only" (CLAUDE.md, gap scale rule 1). The system has one
+     size ladder, --icon-size-* (14 to 24), and neither value is on it: a 14 mark is a bullet, not
+     a pixel, and an 18 disc crowds its glyph. The ramp is the only primitive that holds 6 and 20,
+     so these alias it rather than writing a raw length; a --size-* ladder in primitives.css is
+     the clean home if a third component needs one (cmp-hero fix round 2). */
   --hero-mark-size: var(--space-6);
   --hero-numeral-size: var(--space-20);
   --hero-numeral-radius: var(--radius-full);
@@ -212,7 +216,13 @@
   --hero-tag-tracking: var(--text-eyebrow-tracking);
   --hero-flag-text: var(--text-eyebrow);
   --hero-flag-tracking: var(--text-eyebrow-tracking);
+  /* The centred head's media cap, about 8 of 12 columns of the 1240 column. The one raw length in
+     this layer: no primitive holds it. Restated ONCE in TypeScript, as CENTRED_MEDIA in
+     src/lib/image-sizes.ts (which builds the `sizes` from it); change both in one edit. */
   --hero-media-size-centred: 860px;
+  /* The no-media field below 1024, where it is a block under the actions rather than a track:
+     2:1, 358 × 179 at 390 (Quantum's phone strip is 358 × 193). A ratio, not a distance. */
+  --hero-field-ratio: 2 / 1;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────
@@ -226,8 +236,11 @@
    from an article opening are what it is about and who wrote it, and at 20px and 14px they
    need the same weight of ink to arrive together.
 
-   Nothing here is blue. Blue in this system means clickable and appears on nothing that is
-   not — the only blue in the band is inside a Button. */
+   The text inks are not blue; the MARKS are. Since the owner's 6 Oct ruling (fdn-blue,
+   visual-direction § 4.1) blue is the recurring foreground accent, so the eyebrow's square, the
+   tags' squares, the announcement's flag and the legend's numerals take brandeis-500 here, beside
+   the blue link and the solid's fill. Blue is still never a ground: no part of the hero is a blue
+   box, and the title, lead, body, labels and byline stay on the neutral ramp. */
 :root,[data-surface="paper"]{
 --hero-title-ink:var(--color-neutral-900);    /* 14.62:1 */
 --hero-lead-ink:var(--color-neutral-800);     /* 11.81:1 */

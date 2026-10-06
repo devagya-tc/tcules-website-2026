@@ -243,6 +243,24 @@ export default function ClusterSpecimenPage() {
               </Cluster>
             </Cluster>
           </Specimen>
+          <Specimen
+            title="stackUntil · md"
+            note="Below 768 the items stack one per line at rowGap, from the start; from 768 the row wraps as usual. A hero's two actions take it, so their phone shape never depends on label length."
+          >
+            <Cluster colGap="block" rowGap="block" stackUntil="md">
+              <Box>first</Box>
+              <Box>second, a longer label</Box>
+            </Cluster>
+          </Specimen>
+          <Specimen
+            title="justify · { base: start, lg: end }"
+            note="Distribution per breakpoint: at the start below 1024, at the end from it (a split head's ask flush with the column's end edge)."
+          >
+            <Cluster colGap="block" rowGap="block" justify={{ base: 'start', lg: 'end' }}>
+              <Box>one</Box>
+              <Box>two</Box>
+            </Cluster>
+          </Specimen>
         </Layout>
       </Section>
 

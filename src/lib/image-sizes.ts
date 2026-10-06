@@ -21,7 +21,7 @@
  * by its tracks — with the 1304 term stated as a pixel width so a wide window never over-asks.
  *
  * ── Who uses what ─────────────────────────────────────────────────────────────────
- * PageHero reads FULL_COLUMN (stacked) and HERO_BESIDE (beside); Proof reads PROOF_PORTRAIT;
+ * PageHero reads FULL_COLUMN (stacked), HERO_BESIDE, HERO_BESIDE_DRAWING, HERO_WIDE and HERO_CENTRED; Proof reads PROOF_PORTRAIT;
  * ContentSection reads MEDIA_SPLIT (`media`), and a head-track aside is placed at HEAD_TRACK.
  * Figure, BlockCard, ListCard and the SiteNav rail card move onto these as each migrates onto Media (their own PRs); until then
  * they state their own, and the values here are the ones they should converge on.
@@ -45,21 +45,45 @@ const FLUID_COLUMN = `calc(100vw - ${2 * GUTTER}px)`;
 export const FULL_COLUMN = `(min-width: ${CAP}px) ${CONTAINER}px, ${FLUID_COLUMN}`;
 
 /**
- * PageHero `beside`: two equal tracks from 1440 (ruling H2), `colGap="section"` 96 between them,
- * (1240 − 96) / 2 = 572. From 1024 to 1439 the copy takes 3 of 5 and the media 2, so a 67px title is
- * not set in a 432 column (cmp-hero fix round 1): (100vw − 64 − 96) × 2 / 5. Below 1024 the
- * arrangement stacks and the media takes the full column.
+ * PageHero `beside` with a photograph, capture or video: two equal tracks from 1024 (ruling H2),
+ * `colGap="section"` 96 between them, (1240 − 96) / 2 = 572 at the cap; (100vw − 64 − 96) / 2 from
+ * 1024 (cmp-hero fix round 2: the 3 : 2 lg track left the photograph a 346 thumbnail). Below 1024
+ * the arrangement stacks and the media takes the full column.
  */
 export const HERO_BESIDE =
-  `(min-width: 1440px) ${(CONTAINER - SPLIT_GAP) / 2}px, ` +
-  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 2 / 5), ${FLUID_COLUMN}`;
+  `(min-width: ${CAP}px) ${(CONTAINER - SPLIT_GAP) / 2}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) / 2), ${FLUID_COLUMN}`;
 
 /**
- * PageHero `centred`: the media under a centred head, capped at 860 (--hero-media-size-centred,
- * about 8 of 12 columns) so the drawing keeps the split's scale rather than swelling to 1240 (cmp-hero
- * fix round 1). Fluid below 924, the cap plus the two gutters.
+ * PageHero `beside` with an illustration: [1, 1] from 1440 (572), the third of [2, 1] from 1024, so
+ * the 67px title keeps 576 at 1024. A drawing is SVG and takes no srcset today, so this is the
+ * width the slot renders at, stated for the day a raster drawing arrives.
  */
-export const HERO_CENTRED = `(min-width: ${860 + 2 * GUTTER}px) 860px, ${FLUID_COLUMN}`;
+export const HERO_BESIDE_DRAWING =
+  `(min-width: 1440px) ${(CONTAINER - SPLIT_GAP) / 2}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) / 3), ${FLUID_COLUMN}`;
+
+/**
+ * PageHero `wide`: the photograph leads, copy 2 : media 3 from 1440, (1240 − 96) × 3 / 5 ≈ 686;
+ * equal tracks from 1024, as `beside`.
+ */
+export const HERO_WIDE =
+  `(min-width: 1440px) ${Math.round(((CONTAINER - SPLIT_GAP) * 3) / 5)}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) / 2), ${FLUID_COLUMN}`;
+
+/**
+ * The centred hero's media cap, in px — the ONE place this number is written in TypeScript. It
+ * restates --hero-media-size-centred (tokens/components/page-hero.css), which carries a comment
+ * pointing back here; change both in one edit. About 8 of 12 columns of the 1240 column.
+ */
+export const CENTRED_MEDIA = 860;
+
+/**
+ * PageHero `centred`: the media under a centred head, capped at CENTRED_MEDIA so the drawing keeps
+ * the split's scale rather than swelling to 1240 (cmp-hero fix round 1). Fluid below the cap plus
+ * the two gutters.
+ */
+export const HERO_CENTRED = `(min-width: ${CENTRED_MEDIA + 2 * GUTTER}px) ${CENTRED_MEDIA}px, ${FLUID_COLUMN}`;
 
 /**
  * ContentSection `media` (the B media split): the photograph's track, 5 of [5, 7] from 1024 with the

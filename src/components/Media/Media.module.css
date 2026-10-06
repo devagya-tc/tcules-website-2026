@@ -80,6 +80,10 @@
   aspect-ratio: var(--media-ratio-3x1);
 }
 
+.ratio4x1 {
+  aspect-ratio: var(--media-ratio-4x1);
+}
+
 .ratio3x2 {
   aspect-ratio: var(--media-ratio-3x2);
 }
@@ -111,6 +115,10 @@
 
   .lgRatio3x1 {
     aspect-ratio: var(--media-ratio-3x1);
+  }
+
+  .lgRatio4x1 {
+    aspect-ratio: var(--media-ratio-4x1);
   }
 
   .lgRatio3x2 {
