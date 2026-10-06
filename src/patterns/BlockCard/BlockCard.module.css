@@ -15,10 +15,11 @@
    copy relationship moved to the frame Layout's rowGap where a container distance belongs.
    No `position`. Its only job was to be the containing block for the removed hover wipe; the focus
    ring is a box-shadow and needs no positioning.
-   No title state on a text-only card. Its title holds --bcrd-title-ink linked or not, and never
-   underlines on hover (tried on 29 Sep, read as heavy); its cta is the cue. A COVERED linked card's
-   title is the one exception (6 Oct 2026, visual-direction § 3.1): it ends in the arrow cue
-   (.cue), and the title and arrow take --bcrd-title-ink-hover on hover and focus, with the zoom.
+   No title state on a cta-cued card. Its title holds --bcrd-title-ink linked or not, and never
+   underlines on hover (tried on 29 Sep, read as heavy); its cta is the cue. An ARROW-cued card's
+   title (.cued: a cover or icon card, or a text card whose set asks for the arrow; visual-direction
+   § 3.1) ends in the arrow (.cue); title and arrow take --bcrd-title-ink-hover on hover and focus,
+   with the zoom, and --bcrd-title-ink-pressed on press.
    No title measure. The track is the title's measure. The title cap (22ch then) broke 60–87 character case-study
    titles into four ragged lines beside empty space in a 392px tile (29 Sep); balance evens them.
    No image rule. `Media` sizes and crops the <img> (`fit="fill"`); this module gives it the box to
@@ -29,8 +30,9 @@
    colour for it; the frame anchor carries `data-btn-link-group` and Button's own stylesheet reads
    the card's states from there. A `.cta` class here would be a second opinion about a control.
 
-   Rule order is load-bearing: hover/focus precede pressed, so pointer-down wins while the pointer
-   is also hovering. The paired selectors have equal specificity and source order decides them. */
+   Rule order is load-bearing: the hover/focus rule precedes the pressed rule, and both are
+   `.root .link:<state> .cued` — the same specificity — so while the pointer is down over a hovered
+   card source order hands the colour to pressed. Do not merge :active back into the hover list. */
 
 .root {
   inline-size: 100%;
@@ -41,15 +43,15 @@
 /* De-inlines the anchor and sizes it to fill the equal-height track. It arranges NOTHING: the
    frame has exactly one child — a Layout that owns either the media/content stack or the
    horizontal row — so this `display: block` is a sizing declaration in the sense
-   ListCard.module.css:34 uses it. Radius and shadow are held at zero and none: a borderless
-   editorial tile is not a control shell and never lifts off its surface. */
+   ListCard.module.css:34 uses it. It declares no radius and no shadow: a borderless editorial tile
+   is not a control shell and never lifts off its surface, and an absence needs no token (the
+   --bcrd-radius / --bcrd-shadow pair that held 0 and none was deleted, 6 Oct 2026). The focus ring
+   below is a box-shadow on a link state, not a resting one. */
 .frame {
   display: block;
   inline-size: 100%;
   block-size: 100%;
   min-inline-size: 0;
-  border-radius: var(--bcrd-radius);
-  box-shadow: var(--bcrd-shadow);
 }
 
 .content {
@@ -67,6 +69,45 @@
   overflow: hidden;
   border: var(--bcrd-media-rule-width) solid var(--bcrd-media-rule-ink);
   border-radius: var(--bcrd-media-radius);
+}
+
+/* Three or more across: 16:9 (visual-direction § 1.4 rule 1). The set chooses it via `ratio`. */
+.wide {
+  aspect-ratio: var(--bcrd-media-ratio-wide);
+}
+
+/* The text-only card's top edge (§ 3.1): a hairline the width of the card, standing in for the top
+   edge a cover would give. A block-level span with only a top border — a rule, not a box — and a
+   row of the frame Layout, so the 24 beneath it is the Layout's seam and not a margin. Neutral on
+   every surface: a blue rule is a mark, never a divider (§ 4.3). */
+.textRule {
+  display: block;
+  inline-size: 100%;
+  border-block-start: var(--bcrd-text-rule-width) solid var(--bcrd-text-rule-ink);
+}
+
+/* The icon card's head glyph (§ 1.4: icon 32). BlockCard owns the size it hands Icon, as Button
+   does for its own glyph — this rule is more specific than Icon's size class on purpose. Blue at
+   rest: icons carry the foreground accent (§ 4.2). `display: block` on the wrapper de-inlines it;
+   it arranges nothing. */
+.icon {
+  display: block;
+  color: var(--bcrd-mark-ink);
+}
+
+.icon > svg {
+  inline-size: var(--bcrd-icon-size);
+  block-size: var(--bcrd-icon-size);
+}
+
+/* The text card's index numeral: the mono index voice, blue (§ 4.2: index numerals carry the
+   accent). A numeral has no case, but the mono rule states it anyway so every mono rule agrees. */
+.index {
+  color: var(--bcrd-mark-ink);
+  font: var(--bcrd-index-text);
+  letter-spacing: var(--bcrd-index-tracking);
+  text-transform: var(--text-mono-case);
+  white-space: nowrap;
 }
 
 /* What scales. A span between the ruled box and Media, so the box and its edge hold still while
@@ -178,11 +219,18 @@
 
 /* A linked card's hover and keyboard focus: a cover leans in, inside its still, ruled box, and the
    title goes blue to meet its arrow. The rule keeps its rest ink and the title does not underline (both
-   tried 29 Sep, both too loud). Keyboard gets what the pointer gets, plus the ring. Pressed holds it. */
+   tried 29 Sep, both too loud). Keyboard gets what the pointer gets, plus the ring. */
 .root .link:hover .cued,
-.root .link:focus-visible .cued,
-.root .link:active .cued {
+.root .link:focus-visible .cued {
   color: var(--bcrd-title-ink-hover);
+}
+
+/* Pressed is its own step (audit check 9, 6 Oct 2026): title AND arrow deepen one step past hover,
+   so a press registers on the words as well as under the pointer. After the hover rule at equal
+   specificity, so it wins while both match. The zoom holds — geometry does not press. */
+.root .link:active .cued,
+.root .link:active .cue {
+  color: var(--bcrd-title-ink-pressed);
 }
 
 .root .link:hover .imageZoom,

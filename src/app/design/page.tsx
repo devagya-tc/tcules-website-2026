@@ -199,6 +199,16 @@ const SPECIMENS = [
       },
     ],
   },
+  {
+    tier: 'UI kit',
+    items: [
+      {
+        href: '/design/kit/feature',
+        name: 'Kit · Feature',
+        note: 'the feature family (C) and resources (M) — image, text, icon and pair sets on ContentSection, mixed sets and stand-ins, the Slider at six, the phone scroll row',
+      },
+    ],
+  },
 ] as const;
 
 export default function DesignIndexPage() {

@@ -5,10 +5,15 @@
 
    Naming: --bcrd-{part}-{role}-{state}, with a size suffix where the type steps with the set
    (--bcrd-title-text-lg | -md | -sm)
-     parts: title | cue | body | eyebrow | media | ring
-     states: hover, on one token. A covered linked card's title takes --bcrd-title-ink-hover on
-     hover and focus and holds it on press; its arrow cue is blue at rest (--bcrd-cue-ink) and does
-     not move. The cover zoom is geometry, and the text-only cta's steps are Button's.
+     parts: title | cue | mark | body | eyebrow | index | icon | media | text-rule | ring
+     states: hover and pressed. An arrow-cued linked card's title takes --bcrd-title-ink-hover on
+     hover and focus; on press title AND arrow take --bcrd-title-ink-pressed (audit check 9, 6 Oct
+     2026 — hover held through press read as no press at all). The arrow is blue at rest
+     (--bcrd-cue-ink). The cover zoom is geometry, and the cta's steps are Button's.
+
+   Colour tokens, declared on every surface (11): title-ink, title-ink-hover, title-ink-pressed,
+   cue-ink, mark-ink, body-ink, eyebrow-ink, media-rule-ink, text-rule-ink, ring-color and
+   ring-gap-color. The /design/block-card specimen lists them per surface from one constant.
 
    There is no background or ground token: BlockCard never paints a fill and keeps the nearest
    Section visible behind it. Every surface block redeclares every colour token so a nested surface
@@ -18,14 +23,16 @@
    No edge tokens. The tile was a four-sided hairline and is now bounded only by the parent
    Layout's gutter, so --bcrd-edge-ink / -width / -width-pressed were deleted rather than set to
    transparent and zero — a token nothing draws is a token that invites the border back.
+   No radius or shadow tokens (deleted 6 Oct 2026, cmp-feature): --bcrd-radius held 0 and
+   --bcrd-shadow none, and a token that only states an absence invites the value back.
    One title state token, and only for the covered linked card (6 Oct 2026, fdn-media fix round;
    visual-direction § 3.1). A covered card has no cta (29 Sep), so until then its only cue at rest
    was the image. It now carries an arrow glyph after the title's last word, joined by a
    non-breaking space — ListCard's link cue, so the kit has one. The arrow is blue at rest
    (--bcrd-cue-ink; fdn-blue, owner 6 Oct 2026: arrows carry the foreground accent), and the title
    joins it in blue on hover and focus. A text-only card's title still holds --bcrd-title-ink:
-   its cta is the cue and moves instead. No pressed step: the title holds hover on press, so a
-   pressed token would equal the hover one on every surface.
+   its cta is the cue and moves instead. (Superseded 6 Oct 2026: the arrow cue now also serves icon
+   cards and text cards whose set asks for it, and pressed is its own step — see the states above.)
    No cta tokens, and no --bcrd-link-ink either. The cta is the shipped link Button rendered as a
    span, so Button's own layer supplies its type, its case and its three colour steps per surface
    from --btn-link-primary-fg{,-hover,-pressed}: blue at rest (fdn-blue, owner 6 Oct 2026 — a text
@@ -78,6 +85,22 @@
      same in the featured row as in the tile below it. ListCard's thumbnail crops the same asset,
      so all three alias --ratio-cover (primitives.css § Media · ratio). */
   --bcrd-media-ratio: var(--ratio-cover);
+  /* Three or more across, 16:9 (§ 1.4 rule 1, 6 Oct 2026). The set chooses it; the card has no
+     count. The row (horizontal) stays on the cover ratio. */
+  --bcrd-media-ratio-wide: var(--ratio-wide);
+
+  /* The text-only card's top edge (visual-direction § 3.1, cmp-feature): a hairline the width of
+     the card, standing in for the edge a cover gives. Its ink is per surface, below, and neutral
+     on every one. */
+  --bcrd-text-rule-width: var(--border-width-hairline);
+
+  /* The icon card's glyph (§ 1.4: icon 32; 16; h5). A card head, larger than any of Icon's own
+     label-side roles, so the card sizes what it is handed. */
+  --bcrd-icon-size: var(--icon-size-32);
+
+  /* The text card's index numeral: the mono index voice ListCard's numbered rows use. */
+  --bcrd-index-text: var(--text-index);
+  --bcrd-index-tracking: var(--text-index-tracking);
 
   --bcrd-media-rule-width: var(--border-width-hairline);
   /* 1.03 reads as the image leaning in, not as a zoom control: at a 392px tile it moves each edge
@@ -87,7 +110,6 @@
   --bcrd-media-zoom-duration: var(--duration-slow);
   --bcrd-media-zoom-easing: var(--easing-standard);
 
-  --bcrd-radius: var(--radius-0);
   /* The image's crop box takes a radius the frame does not (owner, 29 Sep; ch05 amendment 5b). The
      frame is an editorial tile and stays square; the image inside it is the one object, and 8 —
      the SiteNav card's step above 4, the largest on the ramp short of a pill — softens a 392px
@@ -96,7 +118,6 @@
   /* The covered card's title-and-arrow ink change: the fast step, as ListCard's cue. */
   --bcrd-title-ink-duration: var(--duration-fast);
   --bcrd-title-ink-easing: var(--easing-standard);
-  --bcrd-shadow: var(--shadow-none);
   --bcrd-ring-width: var(--focus-ring-width);
   --bcrd-ring-offset: var(--focus-ring-offset);
 }
@@ -106,8 +127,11 @@
 :root,
 [data-surface='paper'] {
   --bcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
-  --bcrd-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 — covered linked cards only */
+  --bcrd-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 — arrow-cued linked cards only */
+  --bcrd-title-ink-pressed: var(--color-brandeis-700); /* 10.07:1 — title and arrow on press */
   --bcrd-cue-ink: var(--color-brandeis-500); /* 6.17:1 — the arrow carries the accent at rest */
+  --bcrd-mark-ink: var(--color-brandeis-500); /* 6.17:1 — icon and index numeral */
+  --bcrd-text-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
   --bcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — the floor of AA, do not lighten */
   --bcrd-media-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
@@ -120,7 +144,10 @@
 [data-surface='tint'] {
   --bcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --bcrd-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
+  --bcrd-title-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --bcrd-cue-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --bcrd-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --bcrd-text-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
   --bcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
   --bcrd-media-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
@@ -133,7 +160,10 @@
 [data-surface='ink'] {
   --bcrd-title-ink: var(--color-white); /* 17.26:1 */
   --bcrd-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
+  --bcrd-title-ink-pressed: var(--color-brandeis-100); /* 13.61:1 — lifts, the ink direction */
   --bcrd-cue-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --bcrd-mark-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --bcrd-text-rule-ink: var(--color-neutral-700); /* 2.10:1 vs the ground — decoration */
   --bcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --bcrd-media-rule-ink: var(--color-neutral-700); /* 2.10:1 vs the ground — decoration */
@@ -147,7 +177,10 @@
   --bcrd-title-ink: var(--color-white); /* 6.23:1 */
   /* Blue cannot go bluer: the lightest Brandeis step, as Button's neutral link does on blue. */
   --bcrd-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
+  --bcrd-title-ink-pressed: var(--color-brandeis-100); /* 4.91:1 */
   --bcrd-cue-ink: var(--color-white); /* 6.23:1 */
+  --bcrd-mark-ink: var(--color-white); /* 6.23:1 */
+  --bcrd-text-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
   --bcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --bcrd-eyebrow-ink: var(
     --color-brandeis-100

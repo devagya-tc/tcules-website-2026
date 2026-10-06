@@ -36,12 +36,14 @@ type CtaSectionBaseProps = {
    */
   heading: string;
   /**
-   * One or two paragraphs. `body[0]` renders as the lead, `body[1]` as body copy.
+   * One or two paragraphs. `body[0]` renders as the lead, `body[1]` as body copy. Optional
+   * (cmp-feature, 6 Oct 2026): a close that is a heading and its ask needs no lede, and callers
+   * were passing `['']` to satisfy the type.
    *
    * A third paragraph does not compile, and that is the point of the tuple: this block asks, it
    * does not explain. Whatever wants a third paragraph belongs in the page above it.
    */
-  body: readonly [string] | readonly [string, string];
+  body?: readonly [string] | readonly [string, string];
   /** The category label above the heading. Absent renders no element and no seam. */
   eyebrow?: string;
   /**
@@ -131,13 +133,13 @@ function CtaLede({
   headingId: string;
   eyebrow?: string;
   heading: string;
-  body: readonly [string] | readonly [string, string];
+  body?: readonly [string] | readonly [string, string];
 }) {
   /* Blank entries are dropped, so a stray empty string in frontmatter produces no <p> and no seam
      around nothing. Note the consequence the spec leaves unstated: the survivors are re-indexed,
      so an empty body[0] promotes body[1] into the lead role rather than rendering an empty lead
      above a body paragraph. Of the two readings that is the one that still looks deliberate. */
-  const paragraphs = body.filter((paragraph) => paragraph.trim().length > 0);
+  const paragraphs = (body ?? []).filter((paragraph) => paragraph.trim().length > 0);
 
   return (
     <Layout rowGap="block">

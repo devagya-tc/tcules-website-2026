@@ -155,7 +155,9 @@ export type PageHeroProps = {
    */
   title: string;
   /**
-   * The paragraphs, in order. Non-empty by type, because all 129 routes have at least one.
+   * The paragraphs, in order. Optional (cmp-feature, 6 Oct 2026): an index page whose h1 is the
+   * whole opening — the case-study index — has none, and passed `['']` to satisfy the type, a
+   * workaround the filter below made render nothing. Absent and all-blank now mean the same thing.
    *
    * `body[0]` renders as the lead at --text-lead (20) and `body[1…]` as body copy at --text-body
    * (16). That split gives the copy an internal hierarchy which scales from one paragraph to six
@@ -172,7 +174,7 @@ export type PageHeroProps = {
    * six the content belongs in the page body, and that is a review comment on a route rather
    * than a behaviour in a component.
    */
-  body: readonly [string, ...string[]];
+  body?: readonly [string, ...string[]];
   /**
    * A category or format the trail cannot say (`Fintech · Platform rebuild`, `Ep 12 · 48 min`,
    * `Case study · Fintech`). Never a crumb's words: a name the trail says ("Product Design
@@ -394,7 +396,7 @@ export function PageHero({
      would otherwise make the lead an empty <p> and promote paragraph two to body scale, so the
      one route with a stray blank line in its frontmatter would render its opening one step
      quieter than every other route. */
-  const paragraphs = body.filter((paragraph) => paragraph.trim().length > 0);
+  const paragraphs = (body ?? []).filter((paragraph) => paragraph.trim().length > 0);
   const [lead, ...rest] = paragraphs;
 
   const pairs: BylinePair[] = credits.map((credit, index) => ({

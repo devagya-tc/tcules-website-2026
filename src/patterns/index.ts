@@ -168,8 +168,12 @@ export type {
   BlockCardSize,
   BlockCardTitleElement,
   BlockCardTracks,
+  BlockCardRatio,
+  BlockCardCue,
   BlockCardSetProps,
   BlockCardSetItem,
+  BlockCardSetLead,
+  BlockCardSetAcross,
 } from './BlockCard';
 
 export { Accordion } from './Accordion';

@@ -1,4 +1,4 @@
-import { Layout, Section } from '@/components';
+import { Section } from '@/components';
 import {
   BlockCardSet,
   Breadcrumbs,
@@ -50,6 +50,7 @@ export type CaseStudyIndexProps = {
    */
   hero: { name: string; message: string };
   items: readonly CaseStudyIndexItem[];
+  /** The page's close. Rendered only when it carries an `action`: a close without an ask is not one. */
   closing?: CaseStudyIndexClosing;
 };
 
@@ -84,13 +85,15 @@ export function CaseStudyIndex({ breadcrumbs, hero, items, closing }: CaseStudyI
           <Breadcrumbs {...t} />
         ))}
         title={message || hero.name}
-        body={['']}
         surface="paper"
       />
 
       {items.length > 0 ? (
         <Section as="div" surface="paper">
+          {/* The set IS the page's list, straight under the h1 with no band heading between, so
+              its card titles are the page's h2s (axe heading-order: h1 → h3 skipped a level). */}
           <BlockCardSet
+            titleAs="h2"
             items={items.map((item) => ({
               id: item.id,
               title: item.title,
@@ -103,25 +106,18 @@ export function CaseStudyIndex({ breadcrumbs, hero, items, closing }: CaseStudyI
         </Section>
       ) : null}
 
-      {closing ? (
-        closing.action ? (
-          <CtaSection
-            arrangement="open"
-            surface="tint"
-            eyebrow={closing.eyebrow || undefined}
-            heading={closing.heading}
-            body={[closing.body ?? '']}
-            actions={[closing.action]}
-          />
-        ) : (
-          <Section surface="tint" aria-labelledby="case-studies-closing-heading">
-            <Layout rowGap="block">
-              {closing.eyebrow ? <p>{closing.eyebrow}</p> : null}
-              <h2 id="case-studies-closing-heading">{closing.heading}</h2>
-              {closing.body ? <p>{closing.body}</p> : null}
-            </Layout>
-          </Section>
-        )
+      {/* A close is an ask, so it renders only WITH its action. Without one it was an inline,
+          one-off tint band — a heading on a ground and nothing to do — that no other page type
+          has; now it is absent, which is the honest shape of a close with nothing to ask. */}
+      {closing?.action ? (
+        <CtaSection
+          arrangement="open"
+          surface="tint"
+          eyebrow={closing.eyebrow || undefined}
+          heading={closing.heading}
+          body={closing.body?.trim() ? [closing.body] : undefined}
+          actions={[closing.action]}
+        />
       ) : null}
     </>
   );

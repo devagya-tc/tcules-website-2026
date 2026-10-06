@@ -10,6 +10,7 @@ import {
   type BlockCardMedia,
   type BlockCardSetItem,
 } from '@/patterns';
+import { getKitPhoto } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
@@ -86,6 +87,13 @@ const WIDE_CAPTURE: BlockCardImage = {
 };
 
 const cover = (image: BlockCardImage): BlockCardMedia => ({ type: 'image', image });
+
+/** Stand-in pools for the mixed sets (§ 5.7): studio photographs, which show our own work. */
+const STAND_INS: readonly BlockCardImage[] = [getKitPhoto('studio-whiteboard-crit')];
+const STAND_INS_TWO: readonly BlockCardImage[] = [
+  getKitPhoto('studio-whiteboard-crit'),
+  getKitPhoto('studio-session-talk'),
+];
 
 /** One item of a list by position, for the specimens that reorder or reuse a set's members. Its
     `id` rides along into a lone card's props, where it is unused. */
@@ -320,28 +328,65 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
 ] as const;
 
-const NESTED_SURFACE_TOKENS = {
+/* Every --bcrd colour token, as each surface block declares it (tokens/components/block-card.css).
+   One constant, rendered under every surface band and both nested panels, so the specimen lists the
+   whole colour set rather than a hand-picked five. The cta's ramp is Button's and is listed after. */
+const COLOUR_TOKENS = {
+  paper: [
+    ['--bcrd-title-ink', '--color-neutral-900'],
+    ['--bcrd-title-ink-hover', '--color-brandeis-500'],
+    ['--bcrd-title-ink-pressed', '--color-brandeis-700'],
+    ['--bcrd-cue-ink', '--color-brandeis-500'],
+    ['--bcrd-mark-ink', '--color-brandeis-500'],
+    ['--bcrd-body-ink', '--color-neutral-700'],
+    ['--bcrd-eyebrow-ink', '--color-neutral-600'],
+    ['--bcrd-media-rule-ink', '--color-neutral-300'],
+    ['--bcrd-text-rule-ink', '--color-neutral-300'],
+    ['--bcrd-ring-color', '--color-brandeis-500'],
+    ['--bcrd-ring-gap-color', '--color-paper'],
+    ['--btn-link-primary-fg', '--color-brandeis-500'],
+  ],
   tint: [
     ['--bcrd-title-ink', '--color-neutral-900'],
+    ['--bcrd-title-ink-hover', '--color-brandeis-500'],
+    ['--bcrd-title-ink-pressed', '--color-brandeis-700'],
+    ['--bcrd-cue-ink', '--color-brandeis-500'],
+    ['--bcrd-mark-ink', '--color-brandeis-500'],
     ['--bcrd-body-ink', '--color-neutral-700'],
     ['--bcrd-eyebrow-ink', '--color-neutral-700'],
-    ['--bcrd-cue-ink', '--color-brandeis-500'],
-    ['--btn-link-primary-fg', '--color-brandeis-500'],
-    ['--btn-link-primary-fg-hover', '--color-brandeis-600'],
-    ['--btn-link-primary-fg-pressed', '--color-brandeis-700'],
+    ['--bcrd-media-rule-ink', '--color-neutral-400'],
+    ['--bcrd-text-rule-ink', '--color-neutral-400'],
     ['--bcrd-ring-color', '--color-brandeis-500'],
     ['--bcrd-ring-gap-color', '--color-paper-deep'],
+    ['--btn-link-primary-fg', '--color-brandeis-500'],
   ],
   ink: [
     ['--bcrd-title-ink', '--color-white'],
+    ['--bcrd-title-ink-hover', '--color-brandeis-300'],
+    ['--bcrd-title-ink-pressed', '--color-brandeis-100'],
+    ['--bcrd-cue-ink', '--color-brandeis-300'],
+    ['--bcrd-mark-ink', '--color-brandeis-300'],
     ['--bcrd-body-ink', '--color-neutral-300'],
     ['--bcrd-eyebrow-ink', '--color-neutral-400'],
-    ['--bcrd-cue-ink', '--color-brandeis-300'],
-    ['--btn-link-primary-fg', '--color-brandeis-300'],
-    ['--btn-link-primary-fg-hover', '--color-brandeis-200'],
-    ['--btn-link-primary-fg-pressed', '--color-brandeis-100'],
+    ['--bcrd-media-rule-ink', '--color-neutral-700'],
+    ['--bcrd-text-rule-ink', '--color-neutral-700'],
     ['--bcrd-ring-color', '--color-brandeis-300'],
     ['--bcrd-ring-gap-color', '--color-neutral-950'],
+    ['--btn-link-primary-fg', '--color-brandeis-300'],
+  ],
+  blue: [
+    ['--bcrd-title-ink', '--color-white'],
+    ['--bcrd-title-ink-hover', '--color-brandeis-50'],
+    ['--bcrd-title-ink-pressed', '--color-brandeis-100'],
+    ['--bcrd-cue-ink', '--color-white'],
+    ['--bcrd-mark-ink', '--color-white'],
+    ['--bcrd-body-ink', '--color-brandeis-50'],
+    ['--bcrd-eyebrow-ink', '--color-brandeis-100'],
+    ['--bcrd-media-rule-ink', '--color-brandeis-300'],
+    ['--bcrd-text-rule-ink', '--color-brandeis-300'],
+    ['--bcrd-ring-color', '--color-white'],
+    ['--bcrd-ring-gap-color', '--color-brandeis-500'],
+    ['--btn-link-primary-fg', '--color-white'],
   ],
 } as const;
 
@@ -394,6 +439,54 @@ function BandHead({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
+/** The set and the row on a surface: a numbered text set (hairline, blue index, arrow cue) over a
+    horizontal card, with or without its cover. Identical markup on every surface. */
+function SurfaceSetAndRow({ covers }: { covers: boolean }) {
+  return (
+    <Layout rowGap="column">
+      <BlockCardSet
+        lead="none"
+        numbered
+        cue="arrow"
+        items={[
+          {
+            id: 's-one',
+            title: 'A numbered text card',
+            body: 'Hairline, then the blue index, then the title and its arrow.',
+            href: ROUTES.productDesign,
+          },
+          {
+            id: 's-two',
+            title: 'Its linked peer',
+            body: 'Point at it: the title joins the arrow; hold it: both deepen.',
+            href: ROUTES.designSystems,
+          },
+          {
+            id: 's-three',
+            title: 'An unlinked peer',
+            body: 'No arrow and no cta, and the same rule and index.',
+          },
+        ]}
+      />
+      <Rows>
+        <BlockCard
+          orientation="horizontal"
+          eyebrow="Horizontal"
+          title={covers ? 'The row, with its cover' : 'The row, head beside body'}
+          body={
+            covers
+              ? 'Media beside copy at 3:2, the arrow after the title.'
+              : 'No cover on this surface, so the hairline stands in for its top edge.'
+          }
+          media={covers ? cover(COVER_FLOW) : undefined}
+          href={ROUTES.caseStudies}
+          cue="arrow"
+        />
+      </Rows>
+    </Layout>
+  );
+}
+
 /** Identical markup for every surface proof; covers only where a cover may be placed. */
 function SurfaceCards({ covers }: { covers: boolean }) {
   return (
@@ -425,10 +518,10 @@ function SurfaceCards({ covers }: { covers: boolean }) {
   );
 }
 
-function ResolvedTokens({ surface }: { surface: keyof typeof NESTED_SURFACE_TOKENS }) {
+function ResolvedTokens({ surface }: { surface: keyof typeof COLOUR_TOKENS }) {
   return (
     <Layout as="dl" rowGap="tight">
-      {NESTED_SURFACE_TOKENS[surface].map(([token, value]) => (
+      {COLOUR_TOKENS[surface].map(([token, value]) => (
         <Cluster as="div" key={token} colGap="inline" rowGap="inline" align="baseline">
           <dt>
             <code>{token}</code>
@@ -547,7 +640,7 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
           <Specimen
             title="5 case studies · featured + 2×2, four across from xl"
-            note={`Four peers, so they step to sm (h5 over body-sm; from ${SMALL_FROM} peers, § 7.2): at 1440 they are four 286px tracks.`}
+            note={`Four peers in four tracks from xl, so they step to sm (h5 over body-sm): the step follows the track — ${SMALL_FROM} across is 286px at 1470 — not the count (§ 7.2, cmp-feature).`}
           >
             <BlockCardSet items={CASE_STUDIES} />
           </Specimen>
@@ -557,28 +650,35 @@ export default function BlockCardSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <BandHead title="3 · Mixed sets">
-            An insights index is where covers and text-only cards meet, because a resource has a
-            cover or it does not. A card without one starts its copy where its peers&rsquo;
-            images start, so its title sits higher than theirs: the honest reading of
-            &ldquo;this one has no picture&rdquo;, with no placeholder standing in for it.
+            A set is all-image or all-text (visual-direction § 3.1, 6 Oct 2026). Where covers and
+            text-only items meet — an insights index — the set settles it: with a stand-in pool,
+            each missing cover takes the next stand-in (marked, never labelled); without one, or
+            with too few, every card drops its cover and the set renders as text cards. A set
+            never shows a hole or an empty frame.
           </BandHead>
           <Specimen
-            title="3 insights · two covers, one without"
-            note="Article, podcast (no cover), video."
+            title="3 insights · two covers, one without · no pool → C-text"
+            note="Article, podcast (no cover), video. standIns absent behaves as standIns={false}: all three render as text cards, hairline first."
           >
             <BlockCardSet items={INSIGHTS.slice(0, 3)} />
           </Specimen>
           <Specimen
-            title="4 insights · the featured one has a cover"
-            note="The first item decides the featured arrangement: media beside copy here."
+            title="The same three · a stand-in pool of one"
+            note="The podcast takes the studio photograph; the set is all-image, 16:9 at three across."
           >
-            <BlockCardSet items={INSIGHTS} />
+            <BlockCardSet items={INSIGHTS.slice(0, 3)} standIns={STAND_INS} />
           </Specimen>
           <Specimen
-            title="4 insights · the featured one has none"
-            note="Same set, reordered so the podcast leads: the featured card falls to head-beside-body, and the covers sit below it."
+            title="4 insights · featured · two missing, a pool of two"
+            note="The first item decides the featured arrangement: media beside copy. The featured lead is the index's shape; feature bands pass lead=&quot;none&quot;."
           >
-            <BlockCardSet items={[1, 0, 2, 3].map((index) => item(INSIGHTS, index))} />
+            <BlockCardSet items={INSIGHTS} standIns={STAND_INS_TWO} />
+          </Specimen>
+          <Specimen
+            title="4 insights · featured · a pool too short → C-text"
+            note="One stand-in for two gaps is not enough, so the set renders as text: the featured row falls to head-beside-body."
+          >
+            <BlockCardSet items={INSIGHTS} standIns={STAND_INS} />
           </Specimen>
         </Layout>
       </Section>
@@ -1008,10 +1108,13 @@ export default function BlockCardSpecimenPage() {
                 ],
                 [
                   'hover',
-                  'The image scales to --bcrd-media-zoom inside the still box. Text-only: the cta wipes in.',
+                  'The image scales to --bcrd-media-zoom inside the still box, and the title joins its arrow in blue. Text-only: the cta wipes in.',
                 ],
                 ['focus', 'Everything hover does, plus the two-part ring around the card.'],
-                ['pressed', 'Holds hover; the text-only cta steps to its pressed colour.'],
+                [
+                  'pressed',
+                  'Title and arrow deepen to --bcrd-title-ink-pressed, one step past hover; the zoom holds. The cta steps to its own pressed colour.',
+                ],
                 ['reduced motion', 'No zoom at all; keyboard focus keeps its ring.'],
               ].map(([state, note]) => (
                 <Layout key={state} rowGap="inline">
@@ -1033,6 +1136,8 @@ export default function BlockCardSpecimenPage() {
               <p className={s.specNote}>{note}</p>
             </Layout>
             <SurfaceCards covers={surface === 'paper' || surface === 'tint'} />
+            <SurfaceSetAndRow covers={surface === 'paper' || surface === 'tint'} />
+            <ResolvedTokens surface={surface} />
           </Layout>
         </Section>
       ))}
@@ -1041,7 +1146,8 @@ export default function BlockCardSpecimenPage() {
         <Layout rowGap="stack">
           <BandHead title="14 · Nested surfaces">
             The nearest surface resolves every colour below, the cta&rsquo;s three Button steps
-            included; no outer palette leaks in. The card&rsquo;s own set is five tokens.
+            included; no outer palette leaks in. The card&rsquo;s own colour set is eleven tokens, every
+            one declared on every surface.
           </BandHead>
           <Section as="div" surface="tint" density="tight">
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="gutter" rowGap="block">
