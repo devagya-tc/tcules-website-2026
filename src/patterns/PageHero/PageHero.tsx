@@ -908,11 +908,14 @@ export function PageHero({
           {stack}
           <div className={styles.foot}>
             <Texture className={styles.fieldTexture}>
-              {/* Three steps rising toward the photograph: 40 and 72 off the band's floor, then the
-                  last third full height to 48 under the ask. Hard edges (blur 0), so the field is
+              {/* Three steps rising toward the photograph off its foot line: a quarter and
+                  under half of the field, then the last third full height to 48 under the ask.
+                  Proportional rather than 40 / 72 px since the field stopped sinking into the
+                  padding (kit/page-showcase fix round 1): in the ~110 left under a two-line title
+                  a fixed 72 stood taller than the last step. Hard edges (blur 0), so the field is
                   a shape with an edge on the copy track rather than a smudge. */}
-              <TextureShape left={0} bottom={0} width="34%" height={40} />
-              <TextureShape left="34%" bottom={0} width="33%" height={72} />
+              <TextureShape left={0} bottom={0} width="34%" height="25%" />
+              <TextureShape left="34%" bottom={0} width="33%" height="45%" />
               <TextureShape left="67%" top={48} width="33%" height="100%" />
             </Texture>
           </div>

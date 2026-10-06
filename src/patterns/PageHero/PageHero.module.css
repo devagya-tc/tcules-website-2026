@@ -349,9 +349,9 @@
    (field), not against the viewport. Round 1's recipes were placed against the band and could only
    guess where the column was; these share the grid's edges by construction.
 
-   .fieldTexture runs the field one band padding past its box (--gap-section, the 96 Section's
-   default density pads with), so each field sinks into the band's floor rather than stopping 96
-   above it as a floating panel. Two classes, so it outranks Texture's own `height: 100%` whatever
+   The no-media .fieldTexture runs one band padding past its box (--gap-section, the 96 Section's
+   default density pads with), so it sinks into the band's floor; the foot field stops on the
+   photograph's foot line instead (below). Two classes, so it outranks Texture's own `height: 100%` whatever
    order the bundler emits the modules in.
 
      foot   fills the 1fr row Layout's pinLast leaves under the copy stack (block-size 100%).
@@ -367,7 +367,10 @@
 .field {
   aspect-ratio: var(--hero-field-ratio);
 }
-.foot .fieldTexture,
+/* The foot field ends ON the photograph's foot line (kit/page-showcase fix round 1): its box is the
+   row left under the copy, whose floor is the photo's bottom edge, so the field and the photo share
+   one baseline. Sunk into the padding it ended 96 below the photo, touching nothing but the band's
+   invisible paper-on-paper seam, and read as an orphaned bar chart under the copy. */
 .field .fieldTexture {
   block-size: calc(100% + var(--gap-section));
 }

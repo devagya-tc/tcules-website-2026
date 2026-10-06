@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Layout, Media, TextureClosing, TextureHorizon, type IconName } from '@/components';
+import { Media, TextureClosing, TextureHorizon, type IconName } from '@/components';
 import { getIdealServiceStory } from '@/content';
 import {
   Accordion,
@@ -12,10 +12,9 @@ import {
   ContentSectionText,
   CtaRow,
   CtaSection,
-  EnquiryForm,
-  ListCard,
   PageHero,
   Proof,
+  Statement,
   type AccordionItem,
   type BlockCardSetItem,
   type CtaPoint,
@@ -24,7 +23,7 @@ import {
 } from '@/patterns';
 import { HEAD_TRACK } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
-import { ENDPOINTS, ROUTES } from '@/lib/routes';
+import { ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 
 export const metadata: Metadata = {
@@ -37,23 +36,30 @@ export const metadata: Metadata = {
  * (visual-direction § 8.3). Eleven bands, the COOL family (cool + neutral photographs only, no vivid
  * frame), showcase copy written inline (§ 8.4):
  *
- *    1  A      the trail and a no-media hero, the hero-field texture in its empty end column
+ *    1  A      the trail and the title-led hero: title and lead in three fifths, the ask on the
+ *              lead's last line, then a 4:1 panorama of the studio at work across the column. Fix
+ *              round 1: the no-media hero's pale field read as a faded placeholder, and its 2:1
+ *              block at 390 was ~200 of near-empty dots in the first screen
  *    2  C-icon the router: six linked services beside a head and its photograph
- *    3  B      a 4:5 photograph at the end, four tiles on what every service shares
+ *    3  J      one sentence at display scale, the head-half field in its empty top-end corner — in
+ *              place of a second icon grid straight after the router (fix round 1)
  *    4  C      four fixed-scope audits, centred display head, per-card links
- *    5  N      who the work is for, and who it is not for
+ *    5  N      who the work is for: the page's media split, the photograph at the start and the
+ *              two lists beside it (fix round 1: two ruled lists alone read as a document)
  *    6  C-pair two cases beside a head with its action; `horizon` at its foot, above the tint band
- *    7  G      rating-led on tint: the real Clutch score beside the real approved quote. Its eyebrow
- *              starts rather than centres: centred over the [5, 7] score-and-quote split it sat
- *              over neither track (shots, round 1)
- *    8  K      the offer, its quiet photograph at the end
+ *    7  G      rating-led on tint: the real Clutch score beside the real approved quote, the score in
+ *              the stat voice every other figure takes. Its eyebrow starts rather than centres
+ *    8  K      the offer, people at a workshop table at the end
  *    9  D-faq  the questions, centred, before the last image band
  *   10  I      one 3:1 photograph under its H-row
- *   11  L      the close, the closing equaliser under the copy
+ *   11  L      the open close: a centred display ask over the closing equaliser, both sides — the
+ *              index answers "which service?" with a conversation, so its close is two asks, not a
+ *              form (the home and about closes carry the forms)
  *
- * Texture: hero-field (end), horizon above G, closing (start) — three, never adjacent (§ 6.4).
- * Proof is real where it is shown with the real score (§ 5.8): the product-design story's approved
- * quote, read through the content seam, with no portrait.
+ * Texture: head-half on J, horizon above G, closing on L — three, never adjacent (§ 6.4), and none
+ * of them the stepped staircase the home hero carries. Proof is real where it is shown with the real
+ * score (§ 5.8): the product-design story's approved quote, read through the content seam, with no
+ * portrait. Media sides alternate: N start, K end.
  */
 
 const photo = (id: PhotoId) => getKitPhoto(id);
@@ -140,32 +146,6 @@ const SERVICES: readonly BlockCardSetItem[] = [
   ),
 ];
 
-/* ── 3 · B ─────────────────────────────────────────────────────────────────────────────────
-   Four tiles fill the 667 copy column, so the head keeps the h2 role. Tiles ≤ 4 / ≤ 20 words. */
-type Tile = { icon: IconName; title: string; body: string };
-const SHARED: readonly Tile[] = [
-  {
-    icon: 'notebook',
-    title: 'One decision record',
-    body: 'Every service writes to the same record, so research findings reach the code intact.',
-  },
-  {
-    icon: 'users-group-rounded',
-    title: 'The same people',
-    body: 'Whoever runs your first workshop stays on the work until the release ships.',
-  },
-  {
-    icon: 'code-square',
-    title: 'Your stack, your repo',
-    body: 'We design in your files and build in your codebase, reviewed by your engineers.',
-  },
-  {
-    icon: 'lock',
-    title: 'A fixed first phase',
-    body: 'Every service starts with a scoped, priced piece of work you can judge us on.',
-  },
-];
-
 /* ── 4 · C-image-4 ─────────────────────────────────────────────────────────────────────────
    Card-4: titles ≤ 8, bodies ≤ 12; per-card links, so no audit reads as recommended. */
 const AUDITS: readonly BlockCardSetItem[] = [
@@ -204,12 +184,11 @@ const AUDITS: readonly BlockCardSetItem[] = [
 ];
 
 /* ── 5 · N ─────────────────────────────────────────────────────────────────────────────────
-   ≤ 4 items a side, ≤ 14 words each. */
+   Three items a side, ≤ 12 words each, so the two lists sit in the 667 beside the 4:5 photograph. */
 const FOR_YOU = {
   heading: 'Right for you if',
   items: [
-    'You have a product in use, and a decision about it nobody can settle',
-    'Someone on your side can make the consequential calls',
+    'A product in use, and a decision about it nobody can settle',
     'Your engineers want to be in the room, not handed a file',
     'You would rather see it working than read a strategy deck',
   ],
@@ -217,12 +196,15 @@ const FOR_YOU = {
 const NOT_FOR_YOU = {
   heading: 'Not the right fit when',
   items: [
-    'The brief is visual styling only, with product behaviour out of bounds',
-    'Nothing realistic about the product or its users can be shared',
-    'The work needs a regulated specialist opinion we do not give',
+    'The brief is visual styling, with behaviour out of bounds',
+    'Nothing realistic about the product can be shared',
     'What you need most is low-cost production capacity',
   ],
 } as const;
+
+/* The overhead table: laptops, notebooks and hands, cool daylight. Anchored on the table's centre so
+   the 4:5 and the phone's 4:3 both keep the hands. */
+const FIT_PHOTO = { ...photo('team-overhead-laptops'), focus: { x: 0.5, y: 0.55 } };
 
 /* ── 6 · C-pair ────────────────────────────────────────────────────────────────────────────
    Pair cards: titles ≤ 8, bodies ≤ 20. Stand-in covers from the cool family (§ 5.7), unlabelled. */
@@ -230,7 +212,7 @@ const CASES: readonly BlockCardSetItem[] = [
   {
     id: 'si-case-underwriting',
     eyebrow: 'Insurance · Product design',
-    title: 'Underwriting in one screen, not nine',
+    title: 'Underwriting in one screen',
     body: 'The decision and its evidence side by side for the first time, in a tool underwriters asked to keep.',
     media: cover('conversation-chalkboard', true),
     href: ROUTES.caseStudies,
@@ -238,8 +220,8 @@ const CASES: readonly BlockCardSetItem[] = [
   {
     id: 'si-case-catalogue',
     eyebrow: 'Manufacturing · Modernisation',
-    title: 'A parts catalogue engineers can search',
-    body: 'Forty thousand parts, found by the names engineers actually use, rebuilt without a freeze.',
+    title: 'Forty thousand parts, one search',
+    body: 'Found by the names engineers actually use, and rebuilt without a freeze on releases.',
     media: cover('wall-sketching-portrait', true),
     href: ROUTES.caseStudies,
   },
@@ -284,39 +266,30 @@ const FAQ: readonly AccordionItem[] = [
 ];
 
 /* ── 11 · L ────────────────────────────────────────────────────────────────────────────────
-   Point labels ≤ 4 words, details ≤ 18. */
+   The open close: point labels ≤ 4 words, details ≤ 12. */
 const NEXT: readonly CtaPoint[] = [
   {
     label: 'Tell us the problem',
-    detail: 'Not the service. Describe what is stuck, and we will say what kind of work fits.',
+    detail: 'Not the service: what is stuck, and what it costs you.',
   },
   {
     label: 'Meet the lead',
-    detail: 'Thirty minutes with the principal who would run your first phase.',
+    detail: 'Thirty minutes with the principal who would run the work.',
   },
   {
     label: 'Get a fixed proposal',
-    detail: 'Scope, team and price on one page, within a week of the call.',
+    detail: 'Scope, team and price on one page, within a week.',
   },
 ];
 
-const FORM_CONTEXT = {
-  originRoute: '/design/kit/services-index',
-  placement: 'kit-services-index-close',
-  family: 'services',
-  serviceOrAudit: 'kit-services-index',
-  referrer: '',
-  campaign: '',
-} as const;
-
-const TITLE = 'One studio, six ways to move a product forward';
+const TITLE = 'One studio, six ways in';
 
 export default function KitServicesIndexPage() {
   const { quote, rating } = realProof();
 
   return (
     <>
-      {/* 1 · A — no media: the title stands in the clearing the hero-field leaves. */}
+      {/* 1 · A — title-led: the split header, then the studio at work in a 4:1 panorama. */}
       <PageHero
         data-band="A"
         data-fold-hero=""
@@ -331,14 +304,17 @@ export default function KitServicesIndexPage() {
           ),
         )}
         title={TITLE}
-        body={[
-          'Design, systems, engineering and modernisation, run as one practice, so a decision made in research survives into the shipped code.',
-        ]}
+        body={['Design, systems, engineering and modernisation, run as one practice.']}
         actions={[
           { label: 'Book an intro call', href: ROUTES.contact },
           { label: 'Find your service', href: '#si-services' },
         ]}
-        texture
+        arrangement="display"
+        media={{
+          type: 'image',
+          ratio: { base: '3/2', lg: '4/1' },
+          image: { ...photo('office-team-desks'), focus: { x: 0.55, y: 0.4 } },
+        }}
       />
 
       {/* 2 · C-icon-6 — the router, the photograph ending on the grid's last line. */}
@@ -355,29 +331,18 @@ export default function KitServicesIndexPage() {
         <BlockCardSet items={SERVICES} lead="none" across={2} />
       </ContentSection>
 
-      {/* 3 · B — what every service shares, the photograph at the end. */}
-      <ContentSection
-        data-band="B"
-        arrangement="media"
-        media={{ image: photo('pair-testing-overhead'), side: 'end', head: 'title' }}
+      {/* 3 · J — what every service shares, in one sentence; the head-half field. */}
+      <Statement
+        id="si-shared"
         eyebrow="Across every service"
-        heading="One team, whichever door you use"
-        headingId="si-shared"
-        lead="The service names the first problem. The way of working underneath stays the same."
+        size="display"
+        texture="head-half"
+        actions={
+          <CtaRow rule={false} actions={[{ label: 'How we work', href: ROUTES.howWeWork }]} />
+        }
       >
-        <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
-          {SHARED.map((tile) => (
-            <ListCard
-              key={tile.title}
-              form="tile"
-              titleAs="h3"
-              marker={{ type: 'icon', name: tile.icon }}
-              title={tile.title}
-              body={tile.body}
-            />
-          ))}
-        </Layout>
-      </ContentSection>
+        Whichever door you use, the same team ships it.
+      </Statement>
 
       {/* 4 · C-image-4 — the fixed-scope audits, centred, a link on each. */}
       <ContentSection
@@ -392,12 +357,15 @@ export default function KitServicesIndexPage() {
         <BlockCardSet items={AUDITS} lead="none" cue="cta" />
       </ContentSection>
 
-      {/* 5 · N — who the work is for. */}
+      {/* 5 · N — who the work is for, beside the overhead table at the start. */}
       <ContentSection
         data-band="N"
+        arrangement="media"
+        media={{ image: FIT_PHOTO, side: 'start', head: 'title' }}
         eyebrow="Fit"
         heading="Who this work is for"
         headingId="si-fit"
+        lead="We say no often, and early, so the projects we take are ones we can finish well."
       >
         <Contrast yes={FOR_YOU} no={NOT_FOR_YOU} />
       </ContentSection>
@@ -442,7 +410,10 @@ export default function KitServicesIndexPage() {
           { label: 'Plan a sprint', href: ROUTES.contact },
           { label: 'How discovery works', href: ROUTES.howWeWork },
         ]}
-        media={{ image: photo('desk-minimal-white'), side: 'end' }}
+        media={{
+          image: { ...photo('team-table-writing'), focus: { x: 0.42, y: 0.5 } },
+          side: 'end',
+        }}
       />
 
       {/* 9 · D-faq — centred, then the image band, then the close. */}
@@ -461,7 +432,7 @@ export default function KitServicesIndexPage() {
       {/* 10 · I — one 3:1 photograph under its H-row. */}
       <Banner
         eyebrow="Engagements"
-        heading="Most work starts at one desk"
+        heading="Most work starts at one screen"
         headingId="si-desk"
         lead="A principal and your product owner, one afternoon, and the decision that has been waiting longest."
         actions={
@@ -470,26 +441,24 @@ export default function KitServicesIndexPage() {
             actions={[{ label: 'See how we work', href: ROUTES.howWeWork }]}
           />
         }
-        image={photo('pair-desk-through-plants')}
+        image={{ ...photo('pair-laptop-pointing'), focus: { x: 0.45, y: 0.55 } }}
       />
 
-      {/* 11 · L — the close. */}
+      {/* 11 · L — the open close: centred, two asks, the equaliser on both sides. */}
       <CtaSection
         data-band="L"
+        arrangement="open"
         eyebrow="Start a project"
         heading="Not sure which service? Start here"
         body={[
           'Describe what is not working. We will tell you which service fits, or whether you need one at all.',
         ]}
         points={NEXT}
-        form={
-          <EnquiryForm
-            action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
-            context={FORM_CONTEXT}
-            scheduleHref={ROUTES.contact}
-          />
-        }
-        texture={<TextureClosing />}
+        actions={[
+          { label: 'Book an intro call', href: ROUTES.contact },
+          { label: 'Write to the studio', href: 'mailto:hello@tcules.com' },
+        ]}
+        texture={<TextureClosing side="both" />}
       />
     </>
   );

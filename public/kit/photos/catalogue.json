@@ -1588,5 +1588,371 @@
       652,
       320
     ]
+  },
+  {
+    "file": "portrait-woman-sunset-smile.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91",
+    "originalUrl": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91",
+    "subject": "Woman smiling outdoors at golden hour, shoulders up",
+    "mood": "warm, confident, open",
+    "orientation": "square",
+    "width": 1200,
+    "height": 1200,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "testimonial-portrait"
+    ],
+    "notes": "Confident, warm register for a featured quote.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.09,
+      "sat": 0.205
+    },
+    "derived": [
+      652,
+      320
+    ]
+  },
+  {
+    "file": "portrait-woman-black-top.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604",
+    "originalUrl": "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604",
+    "subject": "Woman smiling, black top, plain light-grey ground",
+    "mood": "friendly, assured",
+    "orientation": "square",
+    "width": 1200,
+    "height": 1200,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.38
+    },
+    "bestPlacements": [
+      "testimonial-portrait",
+      "card"
+    ],
+    "notes": "Plain ground: reads as a studio headshot in a team card.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.075,
+      "sat": 0.197
+    },
+    "derived": [
+      652,
+      320
+    ]
+  },
+  {
+    "file": "portrait-man-hat.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6",
+    "originalUrl": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6",
+    "subject": "Young man in a hat, slight smile, plain light ground",
+    "mood": "easy, relaxed",
+    "orientation": "square",
+    "width": 1200,
+    "height": 1200,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "testimonial-portrait",
+      "card"
+    ],
+    "notes": "Plain ground; pairs with the other light-ground headshots.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.069,
+      "sat": 0.13
+    },
+    "derived": [
+      652,
+      320
+    ]
+  },
+  {
+    "file": "portrait-woman-glasses-plaid.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1573496799652-408c2ac9fe98",
+    "originalUrl": "https://images.unsplash.com/photo-1573496799652-408c2ac9fe98",
+    "subject": "Woman in glasses and a plaid shirt smiling in front of a whiteboard",
+    "mood": "warm, open",
+    "orientation": "square",
+    "width": 1200,
+    "height": 1200,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.38
+    },
+    "bestPlacements": [
+      "testimonial-portrait",
+      "card"
+    ],
+    "notes": "Whiteboard ground out of focus; no legible type.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.052,
+      "sat": 0.177
+    },
+    "derived": [
+      652,
+      320
+    ]
+  },
+  {
+    "file": "portrait-man-glasses-stripes.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1566492031773-4f4e44671857",
+    "originalUrl": "https://images.unsplash.com/photo-1566492031773-4f4e44671857",
+    "subject": "Man in round glasses and a striped tee, chin on hand, smiling, light ground",
+    "mood": "warm, thoughtful",
+    "orientation": "square",
+    "width": 1200,
+    "height": 1200,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.4
+    },
+    "bestPlacements": [
+      "testimonial-portrait",
+      "card"
+    ],
+    "notes": "Light ground headshot; pairs with the other plain-ground team portraits.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.057,
+      "sat": 0.123
+    },
+    "derived": [
+      652,
+      320
+    ]
+  },
+  {
+    "file": "team-sticky-wall-bright.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1552664730-d307ca884978",
+    "originalUrl": "https://images.unsplash.com/photo-1552664730-d307ca884978",
+    "subject": "A team at a table while one person adds sticky notes to a bright wall",
+    "mood": "collaborative, bright, mid-project",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "banner",
+      "feature-media"
+    ],
+    "notes": "Wide composition: holds a 3:1 crop across the table and the wall.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.079,
+      "sat": 0.17
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "colleagues-tablet-chat.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1543269865-cbf427effbad",
+    "originalUrl": "https://images.unsplash.com/photo-1543269865-cbf427effbad",
+    "subject": "Four colleagues at a table talking over a tablet and laptop",
+    "mood": "warm, conversational",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.45,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "card",
+      "feature-media"
+    ],
+    "notes": "People at work, faces readable at card size.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.07,
+      "sat": 0.267
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "team-table-laptops-smiling.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
+    "originalUrl": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
+    "subject": "Three people at a wooden table with laptops, laughing mid-conversation",
+    "mood": "warm, relaxed, working",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.55,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "feature-media",
+      "card"
+    ],
+    "notes": "Holds a 4:5 crop on the two people at the right.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.082,
+      "sat": 0.358
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "office-team-desks.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1556761175-b413da4baf72",
+    "originalUrl": "https://images.unsplash.com/photo-1556761175-b413da4baf72",
+    "subject": "An open studio of desks and monitors, a small team talking at the far end",
+    "mood": "daylight, focused, calm",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.55,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "banner",
+      "hero-panorama"
+    ],
+    "notes": "Wide: holds a 4:1 panorama through the desks.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.073,
+      "sat": 0.259
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "team-table-writing.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1517048676732-d65bc937f952",
+    "originalUrl": "https://images.unsplash.com/photo-1517048676732-d65bc937f952",
+    "subject": "A row of people at a long table writing and talking, hands and notebooks in focus",
+    "mood": "focused, workshop",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "feature-media",
+      "card"
+    ],
+    "notes": "Workshop at a table; crop on the hands and notebooks.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.028,
+      "sat": 0.201
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "pair-laptop-pointing.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1531538606174-0f90ff5dce83",
+    "originalUrl": "https://images.unsplash.com/photo-1531538606174-0f90ff5dce83",
+    "subject": "Two people at one laptop, one pointing at the screen",
+    "mood": "focused, collaborative, cool daylight",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.45,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "banner",
+      "card"
+    ],
+    "notes": "Holds a 3:1 crop on the hands and the laptop.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.003,
+      "sat": 0.235
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "team-overhead-laptops.webp",
+    "source": "unsplash",
+    "sourceUrl": "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    "originalUrl": "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    "subject": "Overhead view of a team table: laptops, notebooks and hands at work",
+    "mood": "busy, cool, mid-project",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "feature-media",
+      "card"
+    ],
+    "notes": "Overhead: crops freely in any ratio.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.002,
+      "sat": 0.173
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   }
 ]

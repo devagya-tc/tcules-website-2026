@@ -7,4 +7,5 @@ export {
   type CtaAction,
   type CtaMedia,
   type CtaMediaSide,
+  type CtaContact,
 } from './CtaSection';

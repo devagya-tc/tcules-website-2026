@@ -295,17 +295,17 @@ const SPECIMENS = [
       {
         href: '/design/kit/home',
         name: 'Kit showcase · Home',
-        note: 'the home page composed from the kit, warm family, 12 bands — the strip and the photograph hero, real marks, the H-row and three services, a display statement, the studio board split, the client slider on tint, the method, illustrative stats, a 3:1 banner, questions, latest thinking and the close; texture hero foot / head-half / closing',
+        note: 'the home page composed from the kit, warm family, 12 bands — the strip and the 5:4 photograph hero with its foot field, the real marks and rating, three services under an H-row, a display statement, the wireframe wall at the photograph weight with two tiles, the client slider on tint, four stats centred, the method beside its photograph, one 3:1 studio banner, questions, two pieces of writing and the close with its contact strip; texture hero foot / head-half / closing',
       },
       {
         href: '/design/kit/about',
         name: 'Kit showcase · About',
-        note: 'the studio page composed from the kit, warm family, 10 bands — the Holi photograph hero, a centred statement, four studio scenes, the people with a stat aside, the board with its counterweight, a featured client on tint, numbers, a banner beside, the careers offer and the close',
+        note: 'the studio page composed from the kit, warm family, 10 bands — the Holi photograph leading (wide hero), a centred statement with the corner field, four studio scenes, the board beside two tiles, four people with portraits over the horizon, a featured client on tint, numbers beside their head, a 3:1 banner, the careers offer beside and the close with a photograph and the compact form',
       },
       {
         href: '/design/kit/services-index',
         name: 'Kit showcase · Services index',
-        note: 'the services index composed from the kit, cool family, 11 bands — a no-media hero with the hero field, the six-service router, a split on what every service shares, four audits, fit, two cases over the horizon, the real rating on tint, the sprint offer, questions, a banner and the close',
+        note: 'the services index composed from the kit, cool family, 11 bands — the title-led hero with a 4:1 panorama, the six-service router, a display statement with head-half, four audits, fit beside a photograph, two cases over the horizon, the real rating on tint, the sprint offer, questions, a 3:1 banner and the open close',
       },
     ],
   },

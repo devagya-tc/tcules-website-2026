@@ -152,25 +152,28 @@
   block-size: 100%;
 }
 
-/* The rating-led score: the band's large thing (§ 3.3), at the score role (105 / 84 / 67) in the
-   accent ink — three times the quote beside it. The role is serif (see --font-size-score): in mono
-   the full stop takes a whole cell and "4.8" read as three spaced glyphs. Lining figures, so the
-   numeral stands on the baseline at cap height rather than in old-style descenders. */
+/* The rating-led score: the band's large thing (§ 3.3), in the accent ink. It takes the STAT voice
+   at its largest step (--text-stat-xl, mono 96 / 80 / 64), as every other figure on a page does
+   (kit/page-showcase fix round 1): the serif score role made 4.8 the one display-serif numeral among
+   mono stats, a second numeral voice with no second meaning. Mono, so the case companion. */
 .score {
-  font: var(--text-score);
-  letter-spacing: var(--text-score-tracking);
+  font: var(--text-stat-xl);
+  letter-spacing: var(--text-stat-xl-tracking);
+  text-transform: var(--text-mono-case);
   font-variant-numeric: lining-nums;
   color: var(--proof-value-ink);
 }
 
 /* The score's context, at its side on the numeral's baseline (fix round 2, 6 Oct 2026): the scale
-   in the title serif at h3, in the attribution ink — clearly the numeral's subordinate, never its
-   rival — and what the number is, in the mono label voice under it. Two lines, so the 105 has
+   in the stat voice at its base step (kit/page-showcase fix round 1, with the score), in the
+   attribution ink — clearly the numeral's subordinate, never its
+   rival — and what the number is, in the mono label voice under it. Two lines, so the 96 has
    something beside it at its own baseline and the left track reads as a score rather than as one
    glyph in an empty field. */
 .scoreScale {
-  font: var(--text-h3);
-  letter-spacing: var(--text-h3-tracking);
+  font: var(--text-stat);
+  letter-spacing: var(--text-stat-tracking);
+  text-transform: var(--text-mono-case);
   font-variant-numeric: lining-nums;
   color: var(--proof-attribution-ink);
 }

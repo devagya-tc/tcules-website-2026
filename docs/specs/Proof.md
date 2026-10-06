@@ -798,8 +798,10 @@ value), which the owner's 6 Oct blue ruling (visual-direction § 4) and § 5.3's
   `--proof-value-ink`.
 - **Type.** The quote's size is the arrangement's: `--text-quote-xl` (43 / 34 / 25, new) for the
   centred typographic band; the display role (34) in start display, featured, case and rating; the
-  reading role (28) in compact and group. The rating's numeral takes `--text-score` (105 / 84 / 67,
-  new, serif): mono gave the full stop a whole cell and "4.8" read as three glyphs.
+  reading role (28) in compact and group. The rating's numeral takes `--text-stat-xl` (mono 96 / 80 / 64) and
+  its scale `--text-stat` (kit/page-showcase fix round 1, 7 Oct 2026): the serif `--text-score` made
+  4.8 the one display-serif numeral among the mono stats on every page, a second numeral voice with
+  no second meaning. The full stop's whole mono cell is the accepted cost of one voice.
 - **Slider.** At `perView={1}` the Slider never peeks (Layout `peek={false}`): the next slide's
   start edge was a portrait sliver and a loose quote rule. Fictional cases take a stock cover, never
   a studio photograph.

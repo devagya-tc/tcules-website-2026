@@ -155,6 +155,7 @@ export type {
   CtaAction,
   CtaMedia,
   CtaMediaSide,
+  CtaContact,
 } from './CtaSection';
 
 export { EnquiryForm } from './EnquiryForm';
