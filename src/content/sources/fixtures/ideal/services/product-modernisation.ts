@@ -9,8 +9,8 @@ const ASSESSMENT = auditPath('product-modernisation-assessment');
 
 /**
  * /services/product-modernisation, designed — recomposed from the UI kit on 6 Oct 2026
- * (visual-direction § 8.2, the product-design worked example), fix round 1 the same day. Copy is the
- * CMS's own, re-cut to the § 1.5 budgets; every edit is logged, old and new, in
+ * (visual-direction § 8.2, the product-design worked example), fix rounds 1 and 2 the same day. Copy
+ * is the CMS's own, re-cut to the § 1.5 budgets; every edit is logged, old and new, in
  * docs/content-changes.md ("Product Modernisation recomposed"). The sections say what the page
  * argues; the template decides how each is laid out from the job its blocks do (ServicePage
  * plan.ts). One layout field remains: `signals.columns`, which the content model still requires —
@@ -20,13 +20,15 @@ const ASSESSMENT = auditPath('product-modernisation-assessment');
  *   four-views  sales, support, engineering, customers — B, four tiles beside the wall-sketch photo
  *   clients     who we have shipped with — H
  *   choose      the least disruptive change, five on one scale — E, the spectrum
+ *   continuity  keep what carries the work, let go of habit — J, the page's display sentence; it
+ *               takes the § 6.4 `corner` field, the placement a four-tile B has no room for
  *   work        two cases, one went deeper and one stayed selective — C-pair, the spectrum shown
- *   continuity  keep what carries the work, let go of habit — N, the contrast pair
- *   transition  both products live, designed in between — E, the bridge (horizon above G)
- *   proof       a client's words beside the case they came from — G-case, the tint band
  *   method      five steps from diagnosis to the next release — F
+ *   transition  both products live, designed in between — E, the thread (horizon above G)
+ *   proof       a client's words beside the case they came from — G-case, the tint band
  *   offer       the assessment — K, landscape
- *   routes      three narrower services — the list router (D) beside its photograph
+ *   routes      three narrower services, two neighbouring lines and the worksheet — C-icon, six
+ *               icon cards beside a photograph
  *   close       the form — L
  */
 export const productModernisation: ServiceStory = {
@@ -172,6 +174,12 @@ export const productModernisation: ServiceStory = {
       ],
     },
     {
+      type: 'statement',
+      id: 'continuity',
+      eyebrow: 'What must survive',
+      text: 'Keep what still carries the work. Let go of what only carries habit.',
+    },
+    {
       type: 'section',
       id: 'work',
       eyebrow: 'Modernisation work',
@@ -183,7 +191,7 @@ export const productModernisation: ServiceStory = {
           items: [
             {
               slug: 'legacy-saas-modernisation-information-architecture',
-              client: 'Benchmark Gensuite · went deeper',
+              client: 'Benchmark · went deeper',
               title: 'A visual upgrade exposed the IA',
               body: 'A reused scope selector showed unclear boundaries; the IA changed, continuity held.',
             },
@@ -194,103 +202,6 @@ export const productModernisation: ServiceStory = {
               body: 'Listings gained a clearer reading order; one creation path changed.',
             },
           ],
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'continuity',
-      eyebrow: 'What must survive',
-      heading: 'Continuity belongs in the product plan',
-      lead: 'Some familiarity reflects a sound model; some is effort spent on weak design. The plan tells them apart.',
-      blocks: [
-        {
-          kind: 'fit',
-          yes: {
-            heading: 'Keep what still carries the work',
-            items: [
-              'Essential work, completing during the move and after it',
-              'Records, history and what they mean',
-              'Roles, permissions and approval authority',
-              'Contractual and service commitments',
-            ],
-          },
-          no: {
-            heading: 'Let go of what only carries habit',
-            items: [
-              'Steps that exist only because the old platform required them',
-              'Workarounds built around a defect the change removes',
-              'Labels and groupings the work has outgrown',
-            ],
-          },
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'transition',
-      eyebrow: 'Both products live',
-      heading: 'The transition is designed too',
-      lead: 'Live modernisation creates temporary product work a final mock-up never shows. Tcules designs it before approval.',
-      blocks: [
-        {
-          kind: 'bridge',
-          from: 'Current product',
-          to: 'Target product',
-          label: 'Designed in between',
-          phases: { before: 'Before', during: 'During the move', after: 'After' },
-          states: {
-            from: 'Current product, still running',
-            to: 'Target product, already running',
-          },
-          summary:
-            'Designed in between: during the move, the current product and the target product are both live.',
-          items: [
-            'Old and new navigation together',
-            'Converted and unconverted records',
-            'Compatibility and translation layers',
-            'Feature flags and release groups',
-            'Fallback routes for a failed migration',
-            'Criteria for retiring the temporary state',
-          ],
-        },
-        /* Review mode only (`?slots=1`): the illustration this band is waiting for. Kept as the
-           record of what the image must say, and as the stress story's one `slot` variant. */
-        {
-          kind: 'slot',
-          slot: {
-            kind: 'illustration',
-            ratio: '16/9',
-            message:
-              'During a modernisation the old product and the new one are both live, and the same customer data has to stay correct in both until the move is finished.',
-            shows:
-              'The current product and the new one next to each other, one customer record that exists in both — already moved in the new product, not yet in the old one — and the link between them that keeps the two in step while both are in use.',
-            placement:
-              'In the section on transition states, where the page argues that the in-between period is designed, not endured. If it says that more clearly than the before-and-after diagram above it, it replaces that diagram.',
-          },
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'client-view',
-      eyebrow: 'Proof',
-      heading: 'In a client’s words',
-      blocks: [
-        {
-          kind: 'proof',
-          quote: {
-            text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
-            name: 'Ashok Mohanty',
-            company: 'Auxentios',
-          },
-          case: {
-            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
-            client: 'Auxentios · Industrial CPQ',
-            title: 'A quotation model from eight specialist interviews',
-            body: 'Research across specialist roles, carried into a product model and component-led interface work.',
-          },
-          rating: CLUTCH_RATING,
         },
       ],
     },
@@ -329,6 +240,79 @@ export const productModernisation: ServiceStory = {
       ],
     },
     {
+      type: 'section',
+      id: 'transition',
+      eyebrow: 'Both products live',
+      heading: 'The transition is designed too',
+      lead: 'Live modernisation creates temporary product work a final mock-up never shows. Tcules designs it before approval.',
+      blocks: [
+        {
+          kind: 'thread',
+          items: [
+            {
+              title: 'Current product runs',
+              body: 'Essential work keeps completing while the move is planned.',
+            },
+            {
+              title: 'Both products live',
+              body: 'Old and new navigation, behind flags and release groups.',
+            },
+            {
+              title: 'Records in both',
+              body: 'Converted and unconverted records keep their history and meaning.',
+            },
+            {
+              title: 'Groups move over',
+              body: 'Translation layers keep roles and permissions intact.',
+            },
+            {
+              title: 'The move completes',
+              body: 'Temporary states retire on criteria agreed first.',
+            },
+          ],
+          loop: 'A failed migration has a designed route back to the current product.',
+        },
+        /* Review mode only (`?slots=1`): the illustration this band is waiting for. Kept as the
+           record of what the image must say. */
+        {
+          kind: 'slot',
+          slot: {
+            kind: 'illustration',
+            ratio: '16/9',
+            message:
+              'During a modernisation the old product and the new one are both live, and the same customer data has to stay correct in both until the move is finished.',
+            shows:
+              'The current product and the new one next to each other, one customer record that exists in both — already moved in the new product, not yet in the old one — and the link between them that keeps the two in step while both are in use.',
+            placement:
+              'In the section on transition states, where the page argues that the in-between period is designed, not endured. If it says that more clearly than the stages above it, it replaces them.',
+          },
+        },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'client-view',
+      eyebrow: 'Proof',
+      heading: 'In a client’s words',
+      blocks: [
+        {
+          kind: 'proof',
+          quote: {
+            text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
+            name: 'Ashok Mohanty',
+            company: 'Auxentios',
+          },
+          case: {
+            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+            client: 'Auxentios · Industrial CPQ',
+            title: 'A quotation model from eight specialist interviews',
+            body: 'Research across specialist roles, carried into a product model and component-led interface work.',
+          },
+          rating: CLUTCH_RATING,
+        },
+      ],
+    },
+    {
       type: 'offer',
       id: 'assessment',
       eyebrow: 'Not sure where to start?',
@@ -339,14 +323,15 @@ export const productModernisation: ServiceStory = {
     {
       type: 'section',
       id: 'choose',
-      eyebrow: 'Go narrower',
+      eyebrow: 'Focused services',
       heading: 'When the layer is already clear',
-      lead: 'A narrower service settles a known boundary faster.',
+      lead: 'A focused service settles a known boundary faster.',
       blocks: [
         {
           kind: 'router',
           items: [
             {
+              icon: 'ruler-pen',
               when: 'The cost sits in the experience, and the model underneath still holds.',
               route: {
                 label: 'Product Redesign',
@@ -354,6 +339,7 @@ export const productModernisation: ServiceStory = {
               },
             },
             {
+              icon: 'refresh',
               when: 'Dependencies and accumulated change cost are the binding constraint.',
               route: {
                 label: 'Legacy Software Modernisation',
@@ -361,13 +347,32 @@ export const productModernisation: ServiceStory = {
               },
             },
             {
+              icon: 'layers',
               when: 'The platform move is decided; the behaviour that must survive is not.',
               route: {
                 label: 'Replatforming Product Design',
                 href: servicePath('product-modernisation/replatforming-product-design'),
               },
             },
+            {
+              icon: 'widget',
+              when: 'Every screen rebuilds the same component a little differently.',
+              route: { label: 'Design Systems', href: ROUTES.designSystems },
+            },
+            {
+              icon: 'code',
+              when: 'The change is decided, and it needs building and shipping.',
+              route: { label: 'Software Development', href: ROUTES.softwareDevelopment },
+            },
           ],
+          also: {
+            icon: 'checklist',
+            when: 'You can see the cost, but not yet which layer it sits in.',
+            link: {
+              label: 'The modernisation worksheet',
+              href: toolPath('audit-redesign-modernise-rebuild'),
+            },
+          },
         },
       ],
     },
