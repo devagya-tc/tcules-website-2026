@@ -123,3 +123,22 @@ Recorded here so the kit doc and the components agree; each is also amended in p
 |---|---|---|---|
 | § 3.4 L | `[5, 7]`: copy + points beside the EnquiryForm | `[10, 7]` from 1280 (copy 673, form 471) and `[1, 1]` from 1024, top-aligned. The full form holds its own 470 measure (`--enq-form-max-inline`), so in a 667 track it left ~197 of dead track at the band's end edge, and at 1024 a 356 track wrapped its two actions. `[5, 7]` stays for the photo + compact-form close (cmp-form). | `cmp-cta` |
 | § 6.3 `closing` | rect, bottom −260, start −120, 44% × 320, blur 200 | A pixel equaliser that rises from the band's edge and fades (`TextureClosing`; the full geometry is in § 6.3's row). The haze had no silhouette and, at the texture's fixed cell alpha, read as a pale tinted strip — close to the banned blue ground. Placed by CtaSection in a field a `stack` clear of the copy; `horizon` below 1024. | `cmp-cta` |
+
+## visual-direction § 6.3 · `counterweight` (cmp-media-split, fix round 1, 6 Oct 2026)
+
+| Was | Now | Why |
+|---|---|---|
+| ellipse, bottom −260, side −180, 34% × 340, blur 180; the box rises 80 into the band | `TextureCounterweight` (Texture): ellipse, bottom 20, side −12%, 48% × 56, blur 16 — wholly inside the 96 bottom padding, leaving the band by its side edge | The 180 feather ran under the last tile row (texture behind text) and was cut flat by the band's bottom edge, reading as an artefact. The recipe now lives in Texture, so no route restates its numbers. |
+
+The B media split's head takes the display role when it is ≤ 22 characters (one display line at
+1280+), and its eyebrow takes the accent ink (`--csec-eyebrow-accent-ink`). The fold holds the photo
+at 477 (a [5, 4] split at 4:5 is 987 tall), so the head's scale is the band's dominant element.
+
+## visual-direction § 6.3 · `counterweight`, redrawn (cmp-media-split, final fix round, 6 Oct 2026)
+
+| Was | Now | Why |
+|---|---|---|
+| a blurred ellipse in the band's bottom padding, leaving by the viewport's side; lg only | `media.counterweight`: a 160-tall field in the copy column, pinned on the photo's bottom edge, hard at both sides and the foot, feathered at the top; every width | At the grid's 21% peak a feathered shape with no edge read as moiré, ran past the content column under empty space, and weighed nothing. In flow, its edges are the column's. Bands whose copy fills the photo (four tiles, a ruled list) carry none. |
+
+The B band's photograph may take the wide track (`media.weight="photo"`, 6:5 in 667) when its copy is
+short, and the head's scale is an explicit `media.head`, not a length rule.

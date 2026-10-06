@@ -94,6 +94,7 @@ export { Tag, type TagProps, type TagVariant } from './Tag';
 export {
   Texture,
   TextureClosing,
+  TextureCounterweight,
   TextureShape,
   type TextureClosingProps,
   type TextureClosingSide,

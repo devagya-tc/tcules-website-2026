@@ -215,6 +215,16 @@ const SPECIMENS = [
     ],
   },
   {
+    tier: 'Kit',
+    items: [
+      {
+        href: '/design/kit/media-split',
+        name: 'Kit · Media split',
+        note: 'band B: 4:5 photo beside H-full and tiles, either side, two tiles + a pinned CtaRow, head + CtaRow centred, counterweight texture, studio against stock',
+      },
+    ],
+  },
+  {
     tier: 'Templates',
     items: [
       {

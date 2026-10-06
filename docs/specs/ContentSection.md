@@ -211,8 +211,9 @@ are arrangement, and arrangement is `Layout`'s.
 | `align` | `ContentSectionAlign` = `'start' \| 'center'` | `'start'` | **6 Oct.** Centred head and centred-as-a-block body (§ 3.5). Stacked only. |
 | `actions` | `ReactNode` | — | **6 Oct.** The head's action row (a `CtaRow rule={false}`), a stack under the lead. Not with `align="center"`, not with `aside`. |
 | `aside` | `ReactNode` | — | **6 Oct.** `beside` only: the head track's photo (3:2) or stat, a stack under the head text. |
-| `media` | `ContentSectionMedia` = `{ image: MediaImage; side?: 'start' \| 'end'; pin?: boolean }` | — | **6 Oct.** Required by, and only on, `arrangement="media"`. `pin` (default `true`): `false` centres a blocks + footer copy column instead of pinning the footer (open question 7). |
+| `media` | `ContentSectionMedia` = `{ image: MediaImage; side?: 'start' \| 'end'; pin?: boolean; weight?: 'copy' \| 'photo'; head?: 'display' \| 'title'; counterweight?: boolean }` | — | **6 Oct.** Required by, and only on, `arrangement="media"`. `pin` (default `true`): `false` centres a blocks + footer copy column instead of pinning the footer (open question 7). |
 | `footer` | `ReactNode` | — | **6 Oct.** The band's foot (a `CtaRow`), the body's last row at `stack`. With no blocks, the caller passes the CtaRow `rule={false}`. |
+| `texture` | `ReactNode` | — | **6 Oct (`cmp-media-split`).** A caller-composed `<Texture>`, rendered as the band's first child so it fills the band beneath the content (CtaSection's slot, same shape). Paper only. In `media` it shows from 1024 only: `counterweight` has no phone form (visual-direction § 6.3). |
 | `children` | `ReactNode` | — | The blocks. Rich text goes in wrapped in `ContentSectionText` (below). |
 
 **`ContentSectionText`** (second export, **added 2.17**) — `{ children: ReactNode }`, nothing else.
@@ -570,3 +571,27 @@ LAYOUT, TYPE, SEMANTICS
 [x] No hand-rolled grid, no margins, no Section override. DOM order equals visual order.
 [x] aria-labelledby only when its target renders.
 ```
+
+## Amendment — media arrangement, fix round 1 (cmp-media-split, 6 Oct 2026)
+
+- `texture` is typed paper-only: it is a type error beside `surface` tint, ink or blue.
+- `media`: the photo box is at least 4:5 (4:3 below 1024) and stretches to a taller copy column, with
+  the image filling it, so photo and copy share both edges at every width from 1024.
+- `media` with blocks and a pinned footer pins the blocks AND the footer as one group; the stretch
+  opens under the lead.
+- ~~`media` heads of ≤ 22 characters take `--text-display`~~ (superseded below); the eyebrow takes `--csec-eyebrow-accent-ink`.
+- Placement: `TextureCounterweight` in Texture (docs/kit/brand-amendments.md).
+
+## Amendment — media arrangement, final fix round (cmp-media-split, 6 Oct 2026)
+
+- `media.weight` (default `copy`): `photo` gives the photograph the 7 of [7, 5] at 6:5 (667 × 556 at
+  1470), for short copy — a head and a CtaRow, an accordion, two tiles and a CtaRow. `copy` keeps
+  the 4:5 photo in 5 of [5, 7] for four tiles or a ruled list.
+- The photo box's ratio is a floor and it has a ceiling: a taller copy column stretches it to at
+  most 3:5 (copy-led) or 4:5 (photo-led), read against the track's own width (`cqi`). At 1024 the
+  copy-led photo is 360 × 600, no longer a 1 : 2 strip.
+- `media.head` (default `display`) replaces the 22-character cutoff. fold:check fails a head that
+  runs long.
+- `media.counterweight`: the counterweight is a defined field in the copy column, pinned last on the
+  photo's bottom edge, at every width. Paper only (dropped with a warning elsewhere).
+- `sizes` is `mediaSplitSizes(weight, image)`: the drawn width of the cover crop, not the box's.

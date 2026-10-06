@@ -159,7 +159,11 @@
   overflow-wrap: anywhere;
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
-  text-wrap: var(--text-title-wrap);
+  /* Running wrap, not the title's `balance` (final fix round, 6 Oct 2026). A question shares its row
+     with the mark at the inline end, so a balanced break halves the line and leaves the gap before
+     the mark empty: at 390 "What does the first / month look like?" broke at half the column with
+     ~150 of nothing before the chevron. `pretty` fills the line and only avoids a lone last word. */
+  text-wrap: var(--text-running-wrap);
   color: var(--acc-question-ink);
   transition: color var(--acc-transition-duration) var(--acc-transition-easing);
 }

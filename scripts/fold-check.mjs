@@ -94,6 +94,7 @@ for (const route of routes) {
     const errors = [];
     page.on('pageerror', (error) => errors.push(String(error)));
     await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts.ready);
     await page.evaluate(async () => {
       for (const img of document.images) if (img.loading === 'lazy') img.loading = 'eager';
       await Promise.race([

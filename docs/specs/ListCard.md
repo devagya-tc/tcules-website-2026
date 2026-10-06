@@ -1114,3 +1114,12 @@ Owner: blue is the recurring FOREGROUND accent; the reservation is only for grou
 is deleted and the cue reads `--lcrd-link-ink` at rest again, holding through hover and stepping on
 press (the original model). `--lcrd-marker-ink` and `--lcrd-number-ink` move to the accent: brandeis-500
 on paper and tint, brandeis-300 on ink; blue keeps white and brandeis-200.
+
+## Amendment — final fix round (cmp-media-split, 6 Oct 2026)
+
+- A tile's marker and copy are a wrapping Cluster: from md the copy wraps under the marker at
+  `block` (24), title to body stays `text` (16); below md an icon or number marker sits beside the
+  copy, so a tile on a phone is an icon-and-title row. A thumbnail marker always sits above.
+- A tile's icon is 32 (`--lcrd-marker-icon-size-tile`, new primitive `--icon-size-32`).
+- An unlinked row (`.still`) drops the 16 inline inset: it has no hover ground to clear, so its
+  marker and title hold the column's edge.

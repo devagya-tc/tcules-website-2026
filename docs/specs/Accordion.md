@@ -630,3 +630,8 @@ COMPLETENESS
 [x] Every open question has options, recommendation and a recorded resolution; zero blockers remain.
 [x] Squint test: four shapes, with open answer depth and count density rather than repeated boxes.
 ```
+
+## Amendment — final fix round (cmp-media-split, 6 Oct 2026)
+
+- `.question` wraps with `--text-running-wrap` (pretty), not the title's balance: a balanced break
+  halved a question at 390 and left the space before the chevron empty.

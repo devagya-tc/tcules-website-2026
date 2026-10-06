@@ -97,6 +97,15 @@
   box-shadow: var(--lcrd-shadow);
 }
 
+/* An unlinked row has no ground (final fix round, 6 Oct 2026). The 16 inline inset above exists to
+   clear the hover ground, and only a linked row paints one; on a static row it set every tick and
+   title 16 inside the column, off the left edge the head above it holds (a B band's ruled list,
+   tick at 692 under a head at 673). The tile already drops it for the same reason. Later than
+   .frame at equal specificity, so source order is the mechanism. */
+.still {
+  padding-inline: 0;
+}
+
 /* ── The tile form (1 Oct 2026) ────────────────────────────────────────────────────
    One item in a grid track. Everything below is the row's frame turned for a grid, and nothing
    else: the same rule ink and width, the same type, the same marker and cue.
@@ -125,6 +134,37 @@
 
 .tileInner {
   block-size: 100%;
+}
+
+/* The tile's copy beside or under its marker (see the tile in the TSX). Sizing inside the Cluster,
+   the split's own mechanism: a flex basis decides whether the copy shares the marker's line. Below
+   md it takes the rest of that line; from md, and always under a thumbnail, it takes a whole line
+   and wraps beneath. The layout changes at 768; no distance does. */
+.tileCopy {
+  min-inline-size: 0;
+}
+
+.tileCopyBeside {
+  flex: 1 1 0;
+}
+
+.tileCopyBelow {
+  flex: 1 1 100%;
+}
+
+@media (min-width: 768px) {
+  .tileCopyBeside {
+    flex-basis: 100%;
+  }
+}
+
+/* A tile's icon steps up from the row's 24 to --lcrd-marker-icon-size-tile (32): it stands alone
+   above a head-and-body group, under a section head at h2 or display scale, where 24 read as a blue
+   speck. ListCard sizes the glyph it is handed, as Button does, rather than asking Icon for a size
+   role Icon does not need. Three classes and an element, so it outranks Icon's size class. */
+.tile .marker > svg {
+  width: var(--lcrd-marker-icon-size-tile);
+  height: var(--lcrd-marker-icon-size-tile);
 }
 
 /* Above the title there is no baseline to sit on, so the row's optical offset does not apply.
