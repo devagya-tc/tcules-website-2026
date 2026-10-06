@@ -97,7 +97,7 @@ export function Statement({
            6 Oct 2026, amending § 6.3's "top −200, end −120"). Built as first written, the box sat
            200 above the band's top edge, so the band's own clip drew the grid's hard top line
            across the paper-to-paper seam at 88% strength; and nothing below the 128 of padding is
-           free in the end track, which the sentence fills. Here the box is x −160 to 34% (≤ 380 at
+           free in the end track, which the sentence fills. Here the box is x −160 to 34% (340 at
            1470, the sentence track starts at 592) and y 176 to 336, clear of the eyebrow (128 to
            142) and of the sentence's box; the feather fades to < 10% before either band edge and
            the start edge is the viewport's. From 1024 only. */

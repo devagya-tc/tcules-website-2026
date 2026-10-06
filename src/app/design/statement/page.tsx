@@ -13,12 +13,12 @@ import { specimenStyles as s } from '../_specimen/Specimen';
 
 const SENTENCE =
   'Most product problems are decisions nobody has made yet, showing up on a screen.';
-const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink'];
+const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
 const SURFACE_NOTE: Record<SectionSurface, string> = {
   paper: 'Paper, the page ground.',
   tint: 'Surface proof — on pages, tint is the proof band only (§ 1.7).',
   ink: 'Surface proof — the mark lifts to brandeis-300 on ink.',
-  blue: '',
+  blue: 'Surface proof — self-containment only; no page carries a blue band (§ 4.3).',
 };
 
 function Label({ title, children }: { title: string; children: ReactNode }) {

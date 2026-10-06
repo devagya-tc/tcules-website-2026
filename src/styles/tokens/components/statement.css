@@ -21,8 +21,9 @@
   /* The h1 ROLE on an h2 or a p (§ 3.4: the page's only <h1> is the hero's). */
   --stmt-sentence-text: var(--text-h1);
   --stmt-sentence-tracking: var(--text-h1-tracking);
-  /* ≤ 3 lines at 54 in the 763 track is ~31 characters a line (§ 1.5: ≤ 14 words); the measure is a
-     ceiling so a wider track at 1440+ does not run the sentence to two long lines. */
+  /* A ceiling, not a width. In the 763 track (the column caps at 1240) 32ch at 54 is ~860, so the
+     track wins from 1024; it binds only in the one-column layout from 768 to 1023, where the
+     sentence would otherwise run the whole column in two long lines. */
   --stmt-sentence-measure: var(--measure-title);
 
   /* The mark: a short rule before the eyebrow. A component SIZE, not a distance, so it is not a
