@@ -244,7 +244,7 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 
 **Why.** The 1 Oct review: the page read as a document, with three bands over the fold (1572, 1387, 931). Each section now has its own kit shape, every band fits 1470 × 830 (tallest 788) and 390 (tallest 1499), and detail over budget moved to an accordion or the deep page. **Found in.** `kit/page-design-engineering`, 6 Oct 2026.
 
-### Design Engineering, fix round 1 (7 Oct 2026)
+### Design Engineering, fix round 1 (6 Oct 2026)
 
 **Page / section.** `/design/service-page/design-engineering` (`src/content/sources/fixtures/ideal/services/design-engineering.ts`; the page's photo row in `SERVICE_PHOTO_SLOTS`, `src/lib/photos.ts`).
 
@@ -264,4 +264,36 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 | L close | body | The implementation point where accepted product intent is weakening. | Name the point where accepted intent weakens. (one line at 1470) |
 | — | photos (`SERVICE_PHOTO_SLOTS`) | B `stylus-tablet-sketch` · I `whiteboard-two-hands` · K `sticky-grid-minimal` | B `pair-at-laptop-sticky-wall` · I none (no banner on the page) · K `pair-laptop-notebook` (landscape 3:2) |
 
-**Why.** The fix-round review: the same icon-title-body unit ran in three bands, two of them two bands apart; the matrix read as a spreadsheet and hid its code column at 390; the proof band set two alignment axes; B's photo was mostly out-of-focus sweater and repeated F's sketching motif; K's sticky notes carried legible scripture. **Found in.** `kit/page-design-engineering`, 7 Oct 2026.
+**Why.** The fix-round review: the same icon-title-body unit ran in three bands, two of them two bands apart; the matrix read as a spreadsheet and hid its code column at 390; the proof band set two alignment axes; B's photo was mostly out-of-focus sweater and repeated F's sketching motif; K's sticky notes carried legible scripture. **Found in.** `kit/page-design-engineering`, 6 Oct 2026.
+
+### Design Engineering, fix round 2 (6 Oct 2026)
+
+**Page / section.** `/design/service-page/design-engineering` (`src/content/sources/fixtures/ideal/services/design-engineering.ts`; the page's photo row in `SERVICE_PHOTO_SLOTS`, `src/lib/photos.ts`).
+
+**What's needed.** Approve, rewrite or reject each edit. The page runs 13 bands: A, B, E (record), I, F, E (thread), G, M, K, J, C-icon, D-faq, L. One more than the brief's 12, because the review asked for both a statement band and a full-width image; the deliverables band was removed to pay for one of them (the owner's ruling is not to cap section counts). Tallest band 805 at 1470, 829 at 1024 and 1661 at 390.
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| E evidence | `more` (deep link) | What a coded slice settles → Coded Prototyping | moved to the new I banner's action |
+| I slice | whole band | none | NEW: eyebrow "Coded prototyping", heading "A slice of the product, running", lead "The narrowest code that settles what a screen leaves open, before anyone treats the design as done.", action "What a coded slice settles" → Coded Prototyping |
+| F outputs | step 2 title | Design-system implementation | Design-system code (no lone "implementation" at 390) |
+| E thread | lead | Prototype code may be discarded. What lasts is the clarified decision, and evidence the build meets it. | Six forms, each one checked against the form before it. (the first sentence is now the J statement) |
+| E thread | stage titles | Open question · Coded probe · Contract · Running behaviour · Review finding · Accepted decision | Question · Probe · Contract · Build · Review · Decision (one word each, so no stage wraps at 1024) |
+| G proof | lead | none | From a product we carried from specialist research into component-led interface work. |
+| G proof | case | Auxentios · Industrial CPQ, "A quotation model from eight specialist interviews" | removed from the proof; the case joins the work set below. The quote now takes the display role on its own |
+| M work | eyebrow / heading | Design Engineering work / Code that tested the decision | unchanged |
+| M work | lead | Two products where code tested the product decision rather than illustrating it. Neither is presented as a production release. | Code tested the decision, or components carried it. None is a production release. |
+| M work | Benchmark eyebrow / title / body | Benchmark Gensuite · Coded prototypes / Implementation effort, brought into design review / HTML, CSS and JavaScript prototypes surfaced effort and a drag-and-drop dependency while the design could still change. | Benchmark Gensuite · Prototypes / Effort, brought into design review / Coded prototypes surfaced effort and a drag-and-drop dependency early. |
+| M work | ConnectX body | A coded demonstration linked conversational intent to data, dashboard modules and a digital-twin state. | A coded demo linked conversational intent to data, modules and a digital twin. |
+| M work | third case | none | NEW: Auxentios · Industrial CPQ, "Components from a specialist model", "Eight specialist interviews, carried into one product model and its components." |
+| D leaves | whole band | eyebrow "What you keep", heading "What the engagement leaves behind", lead "A prototype is never passed off as production.", six icon rows (Coded demonstration · Frontend components · Data and state fixtures · Acceptance records · Divergence ledger · Hand-off boundary) | removed; the six deliverables and the lead become one FAQ answer (below) |
+| J what lasts | whole band | none | NEW: eyebrow "What lasts", statement "Prototype code may be thrown away. The decision it settled never is.", action "How a build is accepted" → Implementation QA |
+| C-icon routes | heading | Specialist Design Engineering services | Four specialist services ("services" sat alone on a line at 1024) |
+| C-icon routes | icons | none (the list router) | code, ruler-pen, widget, checklist: icon cards beside the studio crit |
+| D-faq | new question 2 | none | "What does an engagement leave behind?" — Depending on scope: a coded demonstration, with the limits of what it proves stated; production-ready frontend components, matched to the design both ways; realistic data and state fixtures your tests can reuse; acceptance records for responsive, keyboard and screen-reader checks; a divergence ledger of every difference between design and build; and a stated hand-off boundary. A prototype is never passed off as production. |
+| — | `photos` stand-in pool | studio-session-talk · studio-sticky-board-ux · studio-team-holi · hand-mouse-detail · workshop-brick-room | the same without `hand-mouse-detail`, now a § 5.6 slot |
+| — | photos (`SERVICE_PHOTO_SLOTS`) | B `pair-at-laptop-sticky-wall` · no I · K `pair-laptop-notebook` · aside 2 `hands-sketches-markers` | B `hands-sketches-markers` (portrait source, 4:5) · I `pair-at-laptop-sticky-wall` (3:1, the page's one large image) · K `desk-sketch-flatlay` (landscape 3:2, the page's one vivid photo) · aside 2 `hand-mouse-detail`. Aside 1 is still `studio-whiteboard-crit`, now beside the router |
+
+**Owner decision, carried from the first pass.** The G band still quotes Ashok Mohanty (Auxentios), the quote Product Design's proof also carries. The two G bands now differ: Product Design pairs the quote with the case, and this page sets the quote alone. Replace it when a Design Engineering quote is approved.
+
+**Why.** The fix-round-2 review: five bands put the h2 in the same 1/3 rail; there was no statement and no large image, so hero and close had no scale contrast; bands 2 and 8 were the same ruled icon list beside a photo; the proof's case card read as a third work card; band 9's photo was off-subject lifestyle stock in vivid blue; band 8's photo was a 381 × 170 strip; the router left an empty head column; at 390 two runs of three or more bands ended in ruled rows. **Found in.** `kit/page-design-engineering`, 6 Oct 2026.

@@ -4,31 +4,35 @@ import { ANCHORS, anchorHref, auditPath, ROUTES, servicePath } from '@/lib/route
 import { CLUTCH_RATING } from '../../ratings';
 
 const ENQUIRY = anchorHref(ANCHORS.enquiry);
-const AUDIT = { label: 'Start with a Design-to-Code Audit', href: auditPath('design-to-code-audit') };
+const AUDIT = {
+  label: 'Start with a Design-to-Code Audit',
+  href: auditPath('design-to-code-audit'),
+};
 
 /**
  * /services/design-engineering, designed — recomposed from the UI kit on 6 Oct 2026 (visual-direction
  * § 8.2). Copy is the CMS's own, re-cut to the § 1.5 budgets; every edit is logged, old and new, in
- * docs/content-changes.md, "Design Engineering recomposed". The sections say what the page argues;
- * the template decides how each is laid out from the job its blocks do (ServicePage plan.ts), so no
- * field here is a layout.
+ * docs/content-changes.md, "Design Engineering recomposed" and its fix rounds. The sections say what
+ * the page argues; the template decides how each is laid out from the job its blocks do (ServicePage
+ * plan.ts), so no field here is a layout.
  *
  *   hero        the claim
- *   pressures   four pressures code meets that a static screen never does — B, four tiles filling
- *               the copy column beside the pair at one screen (fix round 1: two tiles left a dead
- *               field the counterweight texture was parked in, and it read as a missing image)
- *   evidence    what only running code can settle — E, the Record: the screen's three answers are
- *               the lead, the six code-only questions the sheet (fix round 1: a ten-row tick/cross
- *               matrix read as a spreadsheet, and at 390 its code column scrolled off-screen)
+ *   pressures   four pressures code meets that a static screen never does — B, beside a hand over a
+ *               sketched screen (fix round 2: a portrait source, so the 4:5 crop keeps its subject)
+ *   evidence    what only running code can settle — E, the Record under the H-row
+ *   slice       a slice of the product, running — I, the page's one full-width photograph (fix
+ *               round 2: the page had no large image; the evidence band's deep link moved here)
  *   outputs     four kinds of output, each declared before it is built — F, beside the sketches
  *   thread      one decision kept alive across every form — E, a centred Thread, horizon at its foot
- *   proof       the client's words beside that client's case — G on tint, one start axis
- *   work        two cases where code tested the decision — C-pair
- *   leaves      what the engagement leaves behind — D, icon rows beside the studio crit (fix round
- *               1: as six icon tiles it was the router's shape two bands later)
+ *   proof       the client's words, the quote at the display role — G on tint (fix round 2: the
+ *               case card read as a third case two bands early; it joined the work set)
+ *   work        three cases where code or components carried the decision — M, covers in a row
  *   offer       the Design-to-Code Audit — K, landscape, photo first on a phone
- *   routes      the four specialist services — D, the list router: linked rows, head at the start
- *   questions   delivery, AI-written code and AI products — D-faq
+ *   lasts       what lasts — J, the page's display-scale statement, the corner texture with it; between
+ *               K and the router, so at 390 no three bands running end in rows
+ *   routes      the four specialist services — C-icon, icon cards beside the studio crit
+ *   questions   delivery, what an engagement leaves behind, AI-written code, AI products — D-faq
+ *               (fix round 2: the deliverables were a third ruled list in eight bands)
  *   close       the form — L
  */
 export const designEngineering: ServiceStory = {
@@ -49,7 +53,7 @@ export const designEngineering: ServiceStory = {
       height: 560,
     },
   },
-  /* Photographs (visual-direction § 5.5 to § 5.7): a warm-family page. The B, K and aside photos are
+  /* Photographs (visual-direction § 5.5 to § 5.7): a warm-family page. The B, I, K and aside photos are
      § 5.6's (SERVICE_PHOTO_SLOTS in src/lib/photos.ts). The stand-in pool is in order of preference,
      studio first, drawn from the rest of the catalogue; pickStandIn enforces that. */
   photos: {
@@ -58,7 +62,6 @@ export const designEngineering: ServiceStory = {
       'studio-session-talk',
       'studio-sticky-board-ux',
       'studio-team-holi',
-      'hand-mouse-detail',
       'workshop-brick-room',
     ],
   },
@@ -109,10 +112,6 @@ export const designEngineering: ServiceStory = {
       eyebrow: 'Static or coded',
       heading: 'Code answers what a screen cannot',
       lead: 'A screen settles hierarchy, flow and visual direction. These six questions need something that runs.',
-      more: {
-        label: 'What a coded slice settles',
-        href: servicePath('design-engineering/coded-prototyping'),
-      },
       blocks: [
         {
           kind: 'record',
@@ -154,6 +153,17 @@ export const designEngineering: ServiceStory = {
       ],
     },
     {
+      type: 'banner',
+      id: 'coded-slice',
+      eyebrow: 'Coded prototyping',
+      heading: 'A slice of the product, running',
+      lead: 'The narrowest code that settles what a screen leaves open, before anyone treats the design as done.',
+      action: {
+        label: 'What a coded slice settles',
+        href: servicePath('design-engineering/coded-prototyping'),
+      },
+    },
+    {
       type: 'section',
       id: 'declared-first',
       eyebrow: 'Its job is declared first',
@@ -168,7 +178,7 @@ export const designEngineering: ServiceStory = {
               body: 'Answers one question about how the product behaves. Then it may be thrown away.',
             },
             {
-              title: 'Design-system implementation',
+              title: 'Design-system code',
               body: 'A contract other product teams can build on, with its states and documentation.',
             },
             {
@@ -188,17 +198,17 @@ export const designEngineering: ServiceStory = {
       id: 'one-decision',
       eyebrow: 'One thread',
       heading: 'One decision, kept alive in every form',
-      lead: 'Prototype code may be discarded. What lasts is the clarified decision, and evidence the build meets it.',
+      lead: 'Six forms, each one checked against the form before it.',
       blocks: [
         {
           kind: 'thread',
           items: [
-            { title: 'Open question', body: 'What static review could not settle.' },
-            { title: 'Coded probe', body: 'The narrowest code that answers it.' },
+            { title: 'Question', body: 'What static review could not settle.' },
+            { title: 'Probe', body: 'The narrowest code that answers it.' },
             { title: 'Contract', body: 'The states and API it requires.' },
-            { title: 'Running behaviour', body: 'The decision, inside the product.' },
-            { title: 'Review finding', body: 'Each difference, classified.' },
-            { title: 'Accepted decision', body: 'Kept, with its evidence.' },
+            { title: 'Build', body: 'The decision, inside the product.' },
+            { title: 'Review', body: 'Each difference, classified.' },
+            { title: 'Decision', body: 'Kept, with its evidence.' },
           ],
           loop: 'A finding that contradicts the decision reopens the question, not just the code.',
         },
@@ -209,6 +219,7 @@ export const designEngineering: ServiceStory = {
       id: 'client-view',
       eyebrow: 'Proof',
       heading: 'In a client’s words',
+      lead: 'From a product we carried from specialist research into component-led interface work.',
       blocks: [
         {
           kind: 'proof',
@@ -217,14 +228,9 @@ export const designEngineering: ServiceStory = {
             name: 'Ashok Mohanty',
             company: 'Auxentios',
           },
-          /* The quoted client's own case beside the quote (fix round 1): the typographic quote
-             centred under a start-aligned head was two axes in one band, with large empty tint. */
-          case: {
-            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
-            client: 'Auxentios · Industrial CPQ',
-            title: 'A quotation model from eight specialist interviews',
-            body: 'Research across specialist roles, carried into a product model and component-led interface work.',
-          },
+          /* No case (fix round 2): beside the quote it read as a third card for the work band, a
+             band early. The quote alone takes the display role under the H-row; its case is the
+             work set's third cover. */
           rating: CLUTCH_RATING,
         },
       ],
@@ -234,68 +240,28 @@ export const designEngineering: ServiceStory = {
       id: 'work',
       eyebrow: 'Design Engineering work',
       heading: 'Code that tested the decision',
-      lead: 'Two products where code tested the product decision rather than illustrating it. Neither is presented as a production release.',
+      lead: 'Code tested the decision, or components carried it. None is a production release.',
       blocks: [
         {
           kind: 'cases',
           items: [
             {
               slug: 'legacy-saas-modernisation-information-architecture',
-              client: 'Benchmark Gensuite · Coded prototypes',
-              title: 'Implementation effort, brought into design review',
-              body: 'HTML, CSS and JavaScript prototypes surfaced effort and a drag-and-drop dependency while the design could still change.',
+              client: 'Benchmark Gensuite · Prototypes',
+              title: 'Effort, brought into design review',
+              body: 'Coded prototypes surfaced effort and a drag-and-drop dependency early.',
             },
             {
               slug: 'ai-native-building-energy-product-connectx',
               client: 'ConnectX · Coded demonstration',
               title: 'Intent connected to data, modules and a twin',
-              body: 'A coded demonstration linked conversational intent to data, dashboard modules and a digital-twin state.',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'leaves-behind',
-      eyebrow: 'What you keep',
-      heading: 'What the engagement leaves behind',
-      lead: 'A prototype is never passed off as production.',
-      blocks: [
-        {
-          kind: 'ledger',
-          columns: 2,
-          marker: 'icon',
-          items: [
-            {
-              icon: 'monitor',
-              title: 'Coded demonstration',
-              body: 'A working slice, with the limits of what it proves stated.',
+              body: 'A coded demo linked conversational intent to data, modules and a digital twin.',
             },
             {
-              icon: 'widget',
-              title: 'Frontend components',
-              body: 'Production-ready components, matched to the design both ways.',
-            },
-            {
-              icon: 'database',
-              title: 'Data and state fixtures',
-              body: 'Realistic data and states, reusable in your own tests.',
-            },
-            {
-              icon: 'checklist',
-              title: 'Acceptance records',
-              body: 'Responsive, keyboard and screen-reader checks, against the decision.',
-            },
-            {
-              icon: 'document-text',
-              title: 'Divergence ledger',
-              body: 'Every difference between design and build, classified and decided.',
-            },
-            {
-              icon: 'flag',
-              title: 'Hand-off boundary',
-              body: 'What your teams own next, stated and documented.',
+              slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+              client: 'Auxentios · Industrial CPQ',
+              title: 'Components from a specialist model',
+              body: 'Eight specialist interviews, carried into one product model and its components.',
             },
           ],
         },
@@ -315,15 +281,25 @@ export const designEngineering: ServiceStory = {
       actions: [AUDIT],
     },
     {
+      type: 'statement',
+      id: 'what-lasts',
+      eyebrow: 'What lasts',
+      text: 'Prototype code may be thrown away. The decision it settled never is.',
+      action: {
+        label: 'How a build is accepted',
+        href: servicePath('design-engineering/implementation-qa'),
+      },
+    },
+    {
       type: 'section',
       id: 'first-slice',
       eyebrow: 'Go narrower',
-      heading: 'Specialist Design Engineering services',
+      heading: 'Four specialist services',
       lead: 'Once you know where intent is lost, a narrower service settles it faster.',
       blocks: [
         {
-          /* No icons (fix round 1): the list router, linked rows under a start head. As icon cards
-             it was the third icon-title-body set on the page, two bands after the deliverables. */
+          /* Icons again (fix round 2): with the deliverables in the FAQ there is no other icon set in
+             reach, and as text-only rows the router left its head column empty. */
           kind: 'router',
           items: [
             {
@@ -332,6 +308,7 @@ export const designEngineering: ServiceStory = {
                 label: 'Coded Prototyping',
                 href: servicePath('design-engineering/coded-prototyping'),
               },
+              icon: 'code',
             },
             {
               when: 'When a settled interaction needs a contract the team can build to.',
@@ -339,6 +316,7 @@ export const designEngineering: ServiceStory = {
                 label: 'Design to Code',
                 href: servicePath('design-engineering/design-to-code'),
               },
+              icon: 'ruler-pen',
             },
             {
               when: 'When shared coded foundations keep drifting from the design.',
@@ -346,6 +324,7 @@ export const designEngineering: ServiceStory = {
                 label: 'Frontend Design Systems',
                 href: servicePath('design-engineering/frontend-design-systems'),
               },
+              icon: 'widget',
             },
             {
               when: 'When the running product must be tested against its intended behaviour.',
@@ -353,6 +332,7 @@ export const designEngineering: ServiceStory = {
                 label: 'Implementation QA',
                 href: servicePath('design-engineering/implementation-qa'),
               },
+              icon: 'checklist',
             },
           ],
         },
@@ -371,6 +351,11 @@ export const designEngineering: ServiceStory = {
               question: 'Does the code produced here ship to production?',
               answerHtml:
                 '<p>Only when production delivery and acceptance are in scope. Prototype code may exist solely to answer a question; production components or slices enter your normal architecture, review, testing, security and release path.</p>',
+            },
+            {
+              question: 'What does an engagement leave behind?',
+              answerHtml:
+                '<p>Depending on scope: a coded demonstration, with the limits of what it proves stated; production-ready frontend components, matched to the design both ways; realistic data and state fixtures your tests can reuse; acceptance records for responsive, keyboard and screen-reader checks; a divergence ledger of every difference between design and build; and a stated hand-off boundary. A prototype is never passed off as production.</p>',
             },
             {
               question: 'Can Tcules work inside our team and codebase?',

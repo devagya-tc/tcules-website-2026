@@ -220,17 +220,21 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'studio-session-talk',
     aside2: 'team-laptops-table',
   },
-  /* design-engineering, fix round 1 (7 Oct 2026): B and K swapped. B's stylus-on-tablet frame was
-     40% out-of-focus sweater and repeated F's hands-sketching motif on a page arguing that static
-     screens are not enough; B is now two people at one running screen. K's sticky grid carried
-     legible scripture on the notes and a saturated yellow against the blue accent; K is a pair
-     reviewing a laptop, a landscape master that takes the 3:2 offer. The banner photo is dropped:
-     the page has no I band, and its whiteboard carries legible handwriting. */
+  /* design-engineering, fix round 1 (6 Oct 2026): B and K swapped. B's stylus-on-tablet frame was
+     40% out-of-focus sweater and repeated F's hands-sketching motif; K's sticky grid carried legible
+     scripture and a saturated yellow against the blue accent. Fix round 2 (6 Oct 2026): B is the
+     hand over a sketched screen, a portrait source that holds the 4:5 crop (the 16:9 pair cut a face
+     in half at 1024 and went soft at 1470); the pair at one running screen moves to the page's I
+     banner, 3:1, its one large image; K is the flow sketch beside the keyboard, landscape 3:2, the
+     page's one vivid photo spent deliberately (the lifestyle pair in blue tops had nothing to do
+     with the work and competed with the accent); F's aside is the hand at the running laptop, so the
+     two sketch frames sit eight bands apart. */
   'design-engineering': {
-    b: 'pair-at-laptop-sticky-wall',
-    k: 'pair-laptop-notebook',
+    b: 'hands-sketches-markers',
+    i: 'pair-at-laptop-sticky-wall',
+    k: 'desk-sketch-flatlay',
     aside1: 'studio-whiteboard-crit',
-    aside2: 'hands-sketches-markers',
+    aside2: 'hand-mouse-detail',
   },
   'design-systems': {
     b: 'screen-over-shoulder',
