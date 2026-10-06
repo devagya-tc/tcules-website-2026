@@ -252,10 +252,15 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'hands-sticky-blue-pen',
     aside2: 'studio-whiteboard-crit',
   },
+  /* product-modernisation, fix round 1 (6 Oct 2026): K was `pencil-wireframe-violet`, whose violet
+     cast read as a stock filter beside brandeis blue and peridot, and the page carries no banner.
+     Fix round 2: K was then the empty renovated interior (no people, no work, a dead TV as the focal
+     point) at the page's largest photo size. K is a pair working a decision through at a laptop
+     against a sticky-note wall: people and process, bright, neutral and quiet (§ 5.6 keeps vivid
+     out of a large slot), 3:2 for the landscape offer. */
   'product-modernisation': {
     b: 'wall-sketching-portrait',
-    i: 'office-calm-interior',
-    k: 'pencil-wireframe-violet',
+    k: 'pair-at-laptop-sticky-wall',
     aside1: 'board-review-backs',
     aside2: 'pair-desk-through-plants',
   },
