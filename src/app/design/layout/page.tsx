@@ -226,6 +226,69 @@ export default function LayoutSpecimenPage() {
         </Specimen>
 
         <Specimen
+          title="columns={{ lg: [2, 1] }} lead='tall' colGap='gutter' rowGap='column'"
+          note="From 1024 the first child takes the first track and spans every row; the rest stack beside it, one per row. Below 1024 it is the single-track stack, lead first. BlockCardSet's spotlight (lead='beside') is built on it."
+        >
+          <Layout columns={{ lg: [2, 1] }} colGap="gutter" rowGap="column" lead="tall">
+            <Box tall accent>
+              lead · spans both rows
+            </Box>
+            <Box>beside · row 1</Box>
+            <Box>beside · row 2</Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="columns={2} stagger colGap='gutter'"
+          note="From 1024 every even child drops by the section step (96). The offset is a track, not a margin: three rows (offset, cards, offset), odd children in the first two and even in the last two, so both share one height and the row grows by exactly 96. One row only. Below 1024 the two sit level."
+        >
+          <Layout columns={2} colGap="gutter" stagger>
+            <Box tall>1 · at the top</Box>
+            <Box tall accent>
+              2 · dropped one section step
+            </Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="columns={[1, 1]} — a stretched card whose stack takes fillFirst"
+          note="The mirror of pinLast. The left card is stretched to the right one's height; its stack fills it and the FIRST row (accent) takes the spare height, never dropping below its own size. BlockCard's spotlight lead uses it so its cover grows to the notes beside it."
+        >
+          <Layout columns={[1, 1]} colGap="gutter" rowGap="gutter">
+            <Layout rowGap="block" fillFirst className={s.box}>
+              <Box accent>first row · grows</Box>
+              <p>Short copy under it.</p>
+            </Layout>
+            <Layout rowGap="block" className={s.box}>
+              <strong>The taller neighbour</strong>
+              <p>
+                A longer column, written to run on so that this card sets the row height and the
+                first row in the card beside it has spare height to take. It wraps to several
+                lines at desktop width and more on a phone, where the two stack and nothing
+                grows.
+              </p>
+            </Layout>
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="scroll='until-md' tabIndex={0} aria-label='Studio photographs'"
+          note="A scroll row whose items hold nothing focusable takes the tab stop itself, so it needs a name: aria-label is passed straight through. Below 768 the row also bleeds through the 32 gutter to the viewport edge, with the first item still on the column edge."
+        >
+          <Layout
+            scroll="until-md"
+            columns={{ base: 1, md: 3 }}
+            colGap="gutter"
+            tabIndex={0}
+            aria-label="Studio photographs"
+          >
+            {['1', '2', '3'].map((n) => (
+              <Box key={n}>{n}</Box>
+            ))}
+          </Layout>
+        </Specimen>
+
+        <Specimen
           title="Nesting — rhythm comes from grouping, not from a rhythm knob"
           note="An outer stack at 'stack' (48) holding two inner stacks at 'tight' (8). The tight pairs read as units because of the contrast between the two seams, and no child sets any margin of its own."
         >

@@ -187,8 +187,13 @@ export type {
   BlockCardSize,
   BlockCardTitleElement,
   BlockCardTracks,
+  BlockCardRatio,
+  BlockCardCue,
+  BlockCardTextureRecipe,
   BlockCardSetProps,
   BlockCardSetItem,
+  BlockCardSetLead,
+  BlockCardSetAcross,
 } from './BlockCard';
 
 export { Accordion } from './Accordion';

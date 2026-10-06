@@ -141,9 +141,14 @@ export type ContentSectionMediaHeight = 'ratio' | 'copy';
  * default. `md` sets the same `h2` element at the h3 role (34), for a band whose large thing is not
  * its heading: the S stats band, where a 43 head over 54 mono figures read as a heading over its
  * captions (final fix round, 6 Oct 2026 — the figures must clearly win, § 3.3 "one large thing per
- * band"). The element never changes: the band's place in the outline is not its scale.
+ * band"). `display` sets it at --text-display (≈ 67–70 at 1440) on the display measure, for the one
+ * or two bands on a page that open an argument (cmp-feature fix round 1, 6 Oct 2026): the
+ * references' section titles run at about 70 against the 43 of h2, and a page whose every band is
+ * h2 has no headline rhythm. Budget it: a display title on one line is ~30 taller than h2, so pair
+ * it with a set that has the room (a C-image-3 band at 598 still clears 830). The element never
+ * changes: the band's place in the outline is not its scale.
  */
-export type ContentSectionHeadingSize = 'lg' | 'md';
+export type ContentSectionHeadingSize = 'lg' | 'md' | 'display';
 
 type ContentSectionBaseProps = {
   /**
@@ -267,7 +272,8 @@ type WithActionsProps = {
   align?: 'start';
   arrangement?: 'stacked' | 'beside' | 'split-head';
   /**
-   * The head's own action row, a `stack` (48) under the lead (§ 1.2: lead → actions) — in practice
+   * The head's own action row, a `stack` (48) under the lead (§ 1.2: lead → actions; a `block`, 24,
+   * in the H-row's trailing track, where it closes the lead beside the heading) — in practice
    * a `CtaRow` with `rule={false}`. Stacked, under the lead; `beside`, in the head track
    * (H-beside-actions); `split-head`, in the trailing track under the lead (H-row); `media`, under
    * the lead in the copy column. Never on a centred head (§ 3.5), never beside an aside (§ 1.4 rule 6).
@@ -290,6 +296,17 @@ type WithAsideProps = {
    * past the fold on its own, and HEAD_TRACK's `sizes` would serve it a 381-wide file, upscaled.
    */
   aside: ReactNode;
+  /**
+   * The aside ENDS ON THE BODY'S LAST LINE (cmp-feature fix round 1, 6 Oct 2026). From 1024 the
+   * two tracks stretch to one height, and the aside takes whatever the head track has left under
+   * the head text, so the photograph's foot and the grid's last line sit on one edge — a fixed 3:2
+   * photo under a 240 head ran 160 past a 2×2 icon grid and left a dead quadrant. It never shrinks
+   * below --csec-aside-min-size; where the body is shorter than that, the body ends first. Pass a
+   * photograph that FILLS its box — `<Media fit="fill" sizes={HEAD_TRACK} />` — since the box, not
+   * the asset, now owns the crop. Below 1024 the aside is that minimum height, about 3:2 at 326.
+   * For a photograph only: a stat figure keeps its own height (omit the prop).
+   */
+  asideFill?: boolean;
   actions?: never;
   media?: never;
 };
@@ -442,6 +459,7 @@ export function ContentSection(props: ContentSectionProps) {
      HEAD_TRACK `sizes` it was placed at would serve a 381-wide file, upscaled and soft. */
   const aside = besideSplit ? requestedAside : undefined;
   const hasAside = present(aside);
+  const asideFill = hasAside && 'asideFill' in props && props.asideFill === true;
   const hasHead = hasText || hasActions || hasAside;
 
   /* `split-head` needs a heading for its leading track and a lead or actions for its trailing one.
@@ -477,7 +495,7 @@ export function ContentSection(props: ContentSectionProps) {
       id={headingId}
       className={cx(
         styles.heading,
-        displayHead && styles.headingDisplay,
+        (displayHead || headingSize === 'display') && styles.headingDisplay,
         headingSize === 'md' && styles.headingMd,
         centred && styles.centred,
       )}
@@ -555,15 +573,19 @@ export function ContentSection(props: ContentSectionProps) {
        Measured on the specimen at 1440 (6 Oct 2026); § 1.4's H-row arithmetic changes from 156 to
        14 + 24 + max(94, 128) = 166, still 40 under the C-image-3 target with a 381 set (595).
 
-       Below 1024 the split is one track and every seam is the stacked head's: eyebrow → heading
-       24 (the outer `block`), heading → lead 24 (the split's `rowGap`), lead → actions 48. */
+       Below 1024 the split is one track: eyebrow → heading 24 (the outer `block`), heading → lead
+       24 (the split's `rowGap`), lead → actions 24 (the trailing track's own `block`). */
     arranged = (
       <Layout rowGap="stack">
         <Layout rowGap="block">
           {eyebrowEl}
           <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
             {headingEl}
-            <Layout rowGap="stack">
+            {/* Lead → action at `block` here, not the stacked head's `stack` (cmp-feature fix round
+                2): beside a heading the trailing track is short, and at 48 a one-link action hung
+                ~60 under a two-line lead with air all round it, reading as a third, unanchored
+                object. At 24 the action belongs to the lead it closes. */}
+            <Layout rowGap="block">
               {leadEl}
               {hasActions ? actions : null}
             </Layout>
@@ -590,10 +612,18 @@ export function ContentSection(props: ContentSectionProps) {
        actions and head → aside are both block-to-block seams (§ 1.2). */
     const headGroup =
       hasActions || hasAside ? (
-        <Layout rowGap="stack">
+        /* asideFill: the head group is `auto 1fr` (pinLast) and the aside's box fills the 1fr row,
+           so it ends where the stretched track ends — on the body's last line. */
+        <Layout rowGap="stack" pinLast={asideFill}>
           {headText}
           {hasActions ? actions : null}
-          {hasAside ? aside : null}
+          {hasAside ? (
+            asideFill ? (
+              <div className={styles.asideFill}>{aside}</div>
+            ) : (
+              aside
+            )
+          ) : null}
         </Layout>
       ) : (
         headText
@@ -604,7 +634,7 @@ export function ContentSection(props: ContentSectionProps) {
         rowGap="stack"
         colGap={besideSplit ? 'section' : undefined}
         columns={besideSplit ? { lg: [1, 2] } : undefined}
-        align={besideSplit ? 'start' : undefined}
+        align={besideSplit ? (asideFill ? 'stretch' : 'start') : undefined}
       >
         {hasHead ? headGroup : null}
         {body}

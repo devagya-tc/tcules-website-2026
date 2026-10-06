@@ -240,3 +240,17 @@
 .accent {
   color: var(--sec-accent-ink);
 }
+
+/* Kit showcase pages (/design/kit/*): a variation's number, in the blue index voice every numbered
+   thing on the site takes (visual-direction § 4.2: markers and numerals carry the accent). Mono, so
+   it states the mono case beside its font like every mono rule.
+
+   The colour is the primitive, not Section's --sec-accent-ink: the harness does not depend on a
+   component's token layer (token rule 6). That holds because a kit caption only ever sits on
+   paper — a flush Section between two bands, or the paper PageHero — so it has no surface to follow. */
+.kitIndex {
+  font: var(--text-index);
+  letter-spacing: var(--text-index-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--color-brandeis-500);
+}

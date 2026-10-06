@@ -147,8 +147,12 @@ export type MediaImage = {
  *              --media-fill-position (inline start, 20% down). For the placements that crop
  *              mechanically — BlockCard, ListCard's thumbnail, the nav card — where the pattern
  *              owns the ratio and the asset is authored for it (ch05 B4, §9a).
+ *   contain    fills the same parent-sized box, but the WHOLE asset shows, centred, at the largest
+ *              size that fits (cmp-feature, 6 Oct 2026). For an object a crop would damage — an
+ *              illustration's label, a cut-out's edge — in a placement that owns a ratio of its
+ *              own (BlockCard's illustration and cut-out covers). The parent gives it its air.
  */
-export type MediaFit = 'intrinsic' | 'fill';
+export type MediaFit = 'intrinsic' | 'fill' | 'contain';
 
 /**
  * Who draws the image's edge.
@@ -347,10 +351,11 @@ export function Media({
       image,
     );
   }
-  if (ratio && isPhotograph && fit === 'fill') {
-    warn('`ratio` with `fit="fill"`: the parent already owns the ratio. Ignored', image);
+  const boxed = fit === 'fill' || fit === 'contain';
+  if (ratio && isPhotograph && boxed) {
+    warn(`\`ratio\` with \`fit="${fit}"\`: the parent already owns the ratio. Ignored`, image);
   }
-  const cropRatio = isPhotograph && fit !== 'fill' ? ratio : undefined;
+  const cropRatio = isPhotograph && !boxed ? ratio : undefined;
 
   if (!isCutOut && image.panel) {
     warn(
@@ -386,7 +391,13 @@ export function Media({
     <img
       className={cx(
         styles.image,
-        fit === 'fill' ? styles.fill : cropRatio ? styles.crop : styles.intrinsic,
+        fit === 'fill'
+          ? styles.fill
+          : fit === 'contain'
+            ? styles.contain
+            : cropRatio
+              ? styles.crop
+              : styles.intrinsic,
         ...(cropRatio ? ratioClasses(cropRatio) : []),
         edge === 'kind' && kind === 'capture' && styles.capture,
         edge === 'kind' && isPhotograph && styles.photograph,
@@ -424,7 +435,7 @@ export function Media({
       className={cx(
         styles.panel,
         inset === 'text' && styles.insetText,
-        fit === 'fill' && styles.panelFill,
+        boxed && styles.panelFill,
         PANEL_CLASS[panel],
       )}
     >

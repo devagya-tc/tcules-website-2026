@@ -643,6 +643,12 @@
    be cropping the same face twice. Proof is its first reader. */
 :root {
   --ratio-cover: 3 / 2;
+  /* A card cover in a set of three or more across (visual-direction § 1.4 rule 1, 6 Oct 2026):
+     at 392 a 3:2 cover is 261 tall and a C-image-3 band runs past the 830 fold; 16:9 is 221. */
+  --ratio-wide: 16 / 9;
+  /* The tall lead of a spotlight set (BlockCardSet lead="beside", cmp-feature): a 2:1 track beside
+     a stacked pair. At 802 a 16:9 cover is 451 and the band runs past the fold; 21:9 is 344. */
+  --ratio-panorama: 21 / 9;
   --ratio-portrait: 1 / 1;
 }
 
@@ -766,6 +772,8 @@
   --icon-size-16: 16px;
   --icon-size-18: 18px;
   --icon-size-24: 24px;
+  /* A glyph that heads a card rather than sitting beside a label (BlockCard's icon card,
+     visual-direction § 1.4: icon 32). Not one of Icon's own four roles: the card sizes it. */
   --icon-size-32: 32px;
 }
 

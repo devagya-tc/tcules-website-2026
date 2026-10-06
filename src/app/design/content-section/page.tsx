@@ -1213,6 +1213,46 @@ export default function ContentSectionSpecimen() {
           />
         }
       />
+
+      <Label title='16 · headingSize="display" and asideFill'>
+        headingSize=&quot;display&quot; sets the same h2 at the display role on the display
+        measure: a head that opens an argument, at the ~70 of the references against cards at 22
+        to 28, so the scale gap between head and set is unmistakable. It changes the scale,
+        never the element. Shown centred and start-aligned. asideFill (beside, photo aside only)
+        makes the head-track photograph end on the body&rsquo;s last line: the two tracks
+        stretch to one height and the photo, a fit=&quot;fill&quot; Media, takes what the head
+        text leaves, never below about 3:2. Without it (section 12) the 3:2 photo keeps its own
+        height.
+      </Label>
+      <ContentSection
+        align="center"
+        headingSize="display"
+        eyebrow="Display · centred"
+        heading="Three places products slow down"
+        headingId="csec-display-centred"
+        lead={LEAD}
+      >
+        <Cards />
+      </ContentSection>
+      <ContentSection
+        headingSize="display"
+        eyebrow="Display · stacked"
+        heading="Where the work starts"
+        headingId="csec-display-stacked"
+      >
+        <Cards />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        eyebrow="asideFill · beside"
+        heading="Four things you keep"
+        headingId="csec-aside-fill"
+        lead={LEAD}
+        asideFill
+        aside={<Media image={photo('hand-sketch-wireframe')} fit="fill" sizes={HEAD_TRACK} />}
+      >
+        <IconCards />
+      </ContentSection>
     </>
   );
 }

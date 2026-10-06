@@ -54,9 +54,10 @@
      .leadBeside. Like the lead, no tracking companion. */
   --csec-lead-text-beside: var(--text-body-lg);
 
-  /* The media split's head (cmp-media-split): the display role on the display measure, the copy
-     column's one large element beside the photograph — unless the caller sets `media.head="title"`.
-     Read by .headingDisplay only. */
+  /* The display head: the band's h2 at the display role on the display measure, as PageHero's.
+     Two callers: the media split's head (cmp-media-split), the copy column's one large element
+     beside the photograph unless the caller sets `media.head="title"`; and headingSize="display"
+     (cmp-feature, 6 Oct 2026), for the band that opens an argument. Read by .headingDisplay only. */
   --csec-heading-text-display: var(--text-display);
   --csec-heading-tracking-display: var(--text-display-tracking);
   --csec-heading-measure-display: var(--measure-display);
@@ -79,6 +80,11 @@
   --csec-heading-measure: var(--measure-title);
   --csec-lead-measure: var(--measure-lead);
   --csec-body-measure: var(--measure-body);
+
+  /* asideFill's floor (cmp-feature, 6 Oct 2026): a component size, not a distance. 160 is about
+     2.4:1 at the 381 head track and 2:1 at the 326 phone column, where the aside sits at exactly
+     this height; below it a head-track photograph reads as a strip. */
+  --csec-aside-min-size: 10rem;
 }
 
 :root,

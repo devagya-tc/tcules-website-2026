@@ -140,8 +140,15 @@ export type LayoutProps = {
    * With `equalRows`, only the rows after the lead are equalised: the lead's row is explicit and
    * `auto`, the implicit rows below it are `1fr`, and a flexible row never sizes against an item
    * in an auto one. So a tall lead does not stretch every card row to its height.
+   *
+   * `"tall"` is the other featured shape (cmp-feature, 6 Oct 2026): from lg (1024) the first child
+   * takes the FIRST track and spans every row, and the rest stack in the track(s) beside it — a
+   * 2:1 lead beside a stacked pair, `columns={{ lg: [2, 1] }}`. The span is the container's, as
+   * above, and is read from the DOM (`:has`), so it covers up to six children. Below lg it is the
+   * ordinary single-track stack: a span there would only open empty rows. With `equalRows` the
+   * stacked rows share the lead's height equally.
    */
-  lead?: boolean;
+  lead?: boolean | 'tall';
   /**
    * Reverse the VISUAL order of the tracks, per breakpoint — the image/text pair whose image sits
    * right on desktop and first on a phone, or a band that alternates sides down the page. Bare
@@ -196,6 +203,29 @@ export type LayoutProps = {
    * Single-track only — on a multi-track grid the row count is not the child count.
    */
   pinLast?: boolean;
+  /**
+   * The FIRST child's row takes a stretched stack's spare height (cmp-feature fix round 2, 6 Oct
+   * 2026) — the mirror of `pinLast`. For a card stretched to a taller neighbour whose cover should
+   * grow into the space rather than leave it empty under the copy: the spotlight's lead at 1024,
+   * where its two companions run taller than it. The template is `1fr` with every later row `auto`,
+   * so the first child never drops below its own content size (an aspect-ratio box keeps its
+   * ratio's height as the floor) and only grows. With no spare height it renders exactly as
+   * without the prop. Single-track only. The stack must itself fill its parent's height (the
+   * caller states that, as a stretched card does) or there is nothing to take.
+   */
+  fillFirst?: boolean;
+  /**
+   * From lg (1024) every EVEN child drops by the `section` step (96), so a row of cards reads as
+   * placed by hand rather than tiled (references.md § 3.4 item 12: "Stagger breaks the grid", kept
+   * as a Layout option, cmp-feature fix round 2). The offset is a TRACK, not a margin: the row is
+   * three explicit rows — the offset, the cards, the offset — and odd children take the first two
+   * while even ones take the last two, so the band grows by exactly the offset and nothing sets
+   * its own outer spacing. `rowGap` is not used inside the staggered row.
+   *
+   * Scope: ONE row — as many children as the template has tracks at lg (a pair, a trio). A second
+   * row would overlap the first. Below lg nothing is placed and `rowGap` applies as usual.
+   */
+  stagger?: boolean;
   /**
    * Block-axis placement — how items sit vertically in their row (e.g. centre copy against a
    * taller image). Default "stretch". `baseline` aligns the items' LAST baselines: a split head's
@@ -260,6 +290,11 @@ export type LayoutProps = {
    * reach fails WCAG 2.1.1. Leave it off everywhere else.
    */
   tabIndex?: 0 | -1;
+  /**
+   * The element's accessible name. For a scroll row that takes `tabIndex` (a focusable list with
+   * no name is announced as an unlabelled stop); the Slider names its own region with `label`.
+   */
+  'aria-label'?: string;
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
@@ -436,10 +471,13 @@ export function Layout({
   reverse,
   offset,
   pinLast = false,
+  fillFirst = false,
+  stagger = false,
   scroll,
   peek = true,
   ref,
   tabIndex,
+  'aria-label': ariaLabel,
   className,
   style,
   children,
@@ -449,7 +487,7 @@ export function Layout({
   // the losers emit nothing, so two rules never fight over one grid-column. A scroll row has no
   // explicit grid to place into: `always` drops all three, `until-md` drops lead and the base
   // breakpoint's placements, and keeps md-up ones for the grid it becomes there.
-  const leads = lead && scroll == null;
+  const leads = lead !== false && scroll == null;
   const placeable = ([bp]: [Breakpoint, unknown]) =>
     scroll == null || (scroll === 'until-md' && bp !== 'base');
   const reversed = leads ? [] : perBreakpoint(reverse).filter(placeable);
@@ -465,6 +503,7 @@ export function Layout({
       id={id}
       ref={ref}
       tabIndex={tabIndex}
+      aria-label={ariaLabel}
       style={{ ...vars, ...style }}
       className={cx(
         styles.layout,
@@ -475,10 +514,12 @@ export function Layout({
         styles[`justifyitems-${justifyItems}`],
         justify && styles[`justify-${justify}`],
         equalRows && styles['equal-rows'],
-        leads && styles.lead,
+        leads && (lead === 'tall' ? styles['lead-tall'] : styles.lead),
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast && styles['pin-last'],
+        fillFirst && styles['fill-first'],
+        stagger && scroll !== 'always' && styles.stagger,
         scroll && styles[`scroll-${scroll}`],
         scroll && !peek && styles['no-peek'],
         className,

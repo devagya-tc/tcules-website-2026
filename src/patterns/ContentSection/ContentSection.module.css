@@ -4,8 +4,8 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .heading .lead .leadBeside .centred .bodyCentred .text .textureLg
-   .eyebrowAccent .headingDisplay .headingMd .photoTrack .photo .photoLeads .photoToCopy
+   Classes: .eyebrow .heading .headingMd .headingDisplay .asideFill .lead .leadBeside .centred
+   .bodyCentred .text .textureLg .eyebrowAccent .photoTrack .photo .photoLeads .photoToCopy
 
    Three @media queries, all from 1024 and none swapping a distance: .leadBeside (the lead's ROLE
    follows the arrangement, and the beside arrangement only exists from 1024), .textureLg (the
@@ -70,7 +70,9 @@
    table) still spans the column while a row that caps itself (ContentSectionText around an
    accordion, a centred CtaRow) sits at its cap in the middle. Without it, a centred grid item
    shrinks to its content. Sizing, not arrangement and not spacing: no margin, no display, and the
-   text inside each row keeps its own start alignment (§ 3.5). */
+   text inside each row keeps its own start alignment (§ 3.5). A phone scroll row overrides this
+   for itself (Layout: it always spans its track and bleeds through the gutter), so a centred head
+   never moves a row off the column edge. */
 .bodyCentred > * {
   inline-size: 100%;
 }
@@ -101,10 +103,12 @@
   }
 }
 
-/* The media split's accent eyebrow and display head (fix round 1, cmp-media-split). The eyebrow keeps
-   its mono role and case and takes the surface's accent ink; the heading steps to the display role
-   on the display measure. Both are role swaps, not sizes: the display role re-declares itself at
-   1023 and 767 like every title role, so neither needs a breakpoint here. */
+/* The accent eyebrow and the display head. The eyebrow (fix round 1, cmp-media-split) keeps its mono
+   role and case and takes the surface's accent ink. The heading steps to the display role on the
+   display measure, set by the media split's head and by `headingSize="display"` (cmp-feature); after
+   .heading and .headingMd at equal specificity, so it wins by order. Both are role swaps, not sizes:
+   the display role re-declares itself at 1023 and 767 like every title role, so neither needs a
+   breakpoint here. */
 .eyebrowAccent {
   color: var(--csec-eyebrow-accent-ink);
 }
@@ -158,4 +162,15 @@
   .photoToCopy {
     max-block-size: calc(100cqi * var(--csec-media-ceiling-lg));
   }
+}
+
+/* asideFill: the aside's box. It fills its grid area (the head group's 1fr row, which the stretched
+   track gives the height the body leaves), so a `fit="fill"` photograph inside it ends on the body's
+   last line. The floor keeps it a photograph when the body is short. `contain: size` takes the
+   photograph's own height out of the track's sizing — without it the image's intrinsic height set
+   the head track and the aside ran past the body again. Sizing only. */
+.asideFill {
+  contain: size;
+  block-size: 100%;
+  min-block-size: var(--csec-aside-min-size);
 }

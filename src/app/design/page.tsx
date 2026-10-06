@@ -272,6 +272,11 @@ const SPECIMENS = [
         name: 'Kit · Form',
         note: 'the enquiry form family — the L close beside copy, the compact form beside a 4:5 photo (both sides), standalone under a centred and a beside head, the offer, every variant, error and success',
       },
+      {
+        href: '/design/kit/feature',
+        name: 'Kit · Feature',
+        note: 'the feature family (C) and resources (M) — image, text, icon and pair sets on ContentSection, mixed sets and stand-ins, the Slider at six, the phone scroll row',
+      },
     ],
   },
 ] as const;

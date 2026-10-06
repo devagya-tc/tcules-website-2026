@@ -46,6 +46,10 @@ const NAMES = [
   'flag',
   'cpu',
   'eye',
+  'code-square',
+  'refresh-square',
+  'stars',
+  'clipboard-check',
 ] as const;
 
 /** All thirty-nine glyphs at the default 16. Every one is solid and filled with currentColor. */
