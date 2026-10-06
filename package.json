@@ -24,7 +24,8 @@
     "texture": "node scripts/texture.mjs",
     "photos:tone": "node scripts/photos-tone.mjs",
     "photos:derive": "node scripts/photos-derive.mjs",
-    "photos:check": "node scripts/photos-tone.mjs --check && node scripts/photos-derive.mjs --check"
+    "photos:check": "node scripts/photos-tone.mjs --check && node scripts/photos-derive.mjs --check",
+    "illustrations:phone": "node scripts/illustrations-phone.mjs"
   },
   "engines": {
     "node": ">=20.11.1"

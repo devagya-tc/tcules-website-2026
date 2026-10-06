@@ -2,7 +2,7 @@
  * fold:check — every band fits the fold (visual-direction § 1.3).
  *
  *   npm run fold:check                                   every route in fold.config.json
- *   npm run fold:check -- /design/kit/media-split        only these
+ *   npm run fold:check -- /design/kit/media-split        only these (e.g. /design/kit/hero)
  *   npm run fold:check -- --base=http://localhost:4123   an explicit server, trusted as given
  *
  * A BAND is a Section: the full-width, isolated box Section renders (`isolation: isolate` at the
@@ -13,8 +13,16 @@
  * band carrying, or inside, `data-fold-exempt` is reported and not failed — a long D band, a full
  * route's footer, or the specimen's deliberate failures.
  *
+ * HERO: every `[data-fold-hero]` ends inside the first screen once the nav is above it — its height
+ * plus the viewport's `nav` is at most the viewport's height. A specimen stacks many heroes on one
+ * page, so this is measured per hero rather than by page position. A viewport with no `nav` (390)
+ * measures bands only.
+ *
+ * An exempt measurement is reported with its reason (the attribute's value) and never fails.
+ *
  * Viewports and ceilings come from fold.config.json: at 1470 × 830 every band ≤ 830, at 390 every
- * band ≤ 1700. Exit 1 on any band over its ceiling, on a horizontal overflow, or on a page error.
+ * band ≤ 1700. Exit 1 on any band or hero over its ceiling, on a horizontal overflow, or on a page
+ * error.
  *
  * Server: as `npm run shots` — this checkout's own `next dev` from its lockfile, or a fresh one on a
  * free port, never a well-known port.
@@ -89,7 +97,7 @@ const browser = await chromium.launch();
 let failures = 0;
 
 for (const route of routes) {
-  for (const { width, height, maxBand } of config.viewports) {
+  for (const { width, height, maxBand, nav } of config.viewports) {
     const page = await browser.newPage({ viewport: { width, height } });
     const errors = [];
     page.on('pageerror', (error) => errors.push(String(error)));
@@ -105,7 +113,8 @@ for (const route of routes) {
     const result = await page.evaluate(() => {
       const full = document.documentElement.clientWidth;
       const isBox = (el) =>
-        getComputedStyle(el).isolation === 'isolate' && el.getBoundingClientRect().width >= full - 1;
+        getComputedStyle(el).isolation === 'isolate' &&
+        el.getBoundingClientRect().width >= full - 1;
       const bands = [...document.querySelectorAll('main *')].filter((el) => {
         if (el.hasAttribute('data-band')) return true;
         if (el.closest('header, footer') || !isBox(el)) return false;
@@ -115,27 +124,55 @@ for (const route of routes) {
         }
         return true;
       });
+      const name = (el) =>
+        (
+          el.closest('[data-kit-variation]')?.getAttribute('data-kit-variation') ??
+          el.querySelector('h1, h2')?.textContent ??
+          el.id ??
+          ''
+        )
+          .trim()
+          .slice(0, 48);
+      const exempt = (el) =>
+        el.closest('[data-fold-exempt]')?.getAttribute('data-fold-exempt') ?? null;
+      const measure = (el) => ({
+        height: Math.round(el.getBoundingClientRect().height),
+        name: name(el),
+        exempt: exempt(el),
+      });
       return {
         overflow: document.documentElement.scrollWidth - full,
-        bands: bands.map((el) => ({
-          height: Math.round(el.getBoundingClientRect().height),
-          name: (el.querySelector('h1, h2')?.textContent ?? el.id ?? '').trim().slice(0, 48),
-          exempt: Boolean(el.closest('[data-fold-exempt]')),
-        })),
+        bands: bands.map(measure),
+        heroes: [...document.querySelectorAll('[data-fold-hero]')].map(measure),
       };
     });
 
     const over = result.bands.filter((b) => b.height > maxBand);
-    const failed = over.filter((b) => !b.exempt);
+    /* The hero rule is stated per viewport: a viewport with no `nav` measures bands only. */
+    const heroOver =
+      nav === undefined ? [] : result.heroes.filter((h) => h.height + nav > height);
+    const failed = [...over, ...heroOver].filter((b) => b.exempt === null);
     const tallest = Math.max(0, ...result.bands.map((b) => b.height));
     const ok = failed.length === 0 && result.overflow <= 0 && errors.length === 0;
     if (!ok) failures++;
     console.log(
       `${ok ? 'ok  ' : 'FAIL'} ${route} @ ${width}: ${result.bands.length} bands, tallest ${tallest} (ceiling ${maxBand})` +
+        (nav === undefined
+          ? ''
+          : `, ${result.heroes.length} heroes (hero + nav ${nav} <= ${height})`) +
         (result.overflow > 0 ? `, overflows ${result.overflow}px` : ''),
     );
     for (const band of over) {
-      console.log(`       ${band.exempt ? 'exempt' : 'over  '} ${band.height}  ${band.name}`);
+      console.log(
+        `       ${band.exempt !== null ? 'exempt' : 'over  '} band ${band.height}  ${band.name}` +
+          (band.exempt ? `  (${band.exempt})` : ''),
+      );
+    }
+    for (const hero of heroOver) {
+      console.log(
+        `       ${hero.exempt !== null ? 'exempt' : 'over  '} hero ${hero.height} + nav ${nav}  ${hero.name}` +
+          (hero.exempt ? `  (${hero.exempt})` : ''),
+      );
     }
     for (const error of errors) console.log(`       page error: ${error}`);
     await page.close();
@@ -148,4 +185,4 @@ if (failures > 0) {
   console.error(`fold:check — ${failures} route × viewport combination(s) failed`);
   process.exit(1);
 }
-console.log('fold:check — every band fits its fold; no overflow, no page errors');
+console.log('fold:check — every band and hero fits its fold; no overflow, no page errors');

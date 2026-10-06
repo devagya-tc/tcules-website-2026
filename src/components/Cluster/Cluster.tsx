@@ -35,9 +35,16 @@ export type ClusterProps = {
   /** Cross-axis (vertical) alignment. Default "center". */
   align?: ClusterAlign;
   /** Main-axis (horizontal) distribution. Default "start". */
-  justify?: ClusterJustify;
+  justify?: ClusterJustify | { base?: ClusterJustify; lg?: ClusterJustify };
   /** Keep items on one line (default wraps). */
   nowrap?: boolean;
+  /**
+   * Below 768 the items stack, one per line and `rowGap` apart, from the inline start (or centred,
+   * with `justify="center"`); from 768 up the row wraps as usual. For a group whose phone shape must
+   * not depend on how long its labels are: a hero's two actions stack on every phone rather than
+   * sitting side by side on one page and stacking on the next (cmp-hero, 6 Oct 2026).
+   */
+  stackUntil?: 'md';
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
@@ -60,6 +67,7 @@ export function Cluster({
   align = 'center',
   justify = 'start',
   nowrap = false,
+  stackUntil,
   className,
   style,
   children,
@@ -74,8 +82,14 @@ export function Cluster({
         rowGap && styles[`rowgap-${rowGap}`],
         colGap && styles[`colgap-${colGap}`],
         styles[`align-${align}`],
-        styles[`justify-${justify}`],
+        ...(typeof justify === 'string'
+          ? [styles[`justify-${justify}`]]
+          : [
+              styles[`justify-${justify.base ?? 'start'}`],
+              justify.lg && styles[`lg-justify-${justify.lg}`],
+            ]),
         nowrap && styles.nowrap,
+        stackUntil === 'md' && styles.stackUntilMd,
         className,
       )}
     >

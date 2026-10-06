@@ -198,9 +198,10 @@ export type LayoutProps = {
   pinLast?: boolean;
   /**
    * Block-axis placement — how items sit vertically in their row (e.g. centre copy against a
-   * taller image). Default "stretch".
+   * taller image). Default "stretch". `baseline` aligns the items' LAST baselines: a split head's
+   * ask set on its lead's last line (PageHero `display`, the Quantum split header).
    */
-  align?: Place;
+  align?: Place | 'baseline';
   /**
    * Inline-axis placement of each item WITHIN its own track. Default "stretch" (fill the
    * track); "center" shrinks each item to its content and centres it — how a centred copy

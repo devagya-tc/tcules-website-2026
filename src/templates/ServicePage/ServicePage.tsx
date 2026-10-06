@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 
-import { Cluster, Tag } from '@/components';
 import {
   Breadcrumbs,
   ContentSection,
@@ -74,17 +73,9 @@ export function ServicePage({
             kind: 'illustration',
           },
         }}
-      >
-        {hero.tags && hero.tags.length > 0 ? (
-          <Cluster as="ul" colGap="tight" rowGap="tight">
-            {hero.tags.map((tag) => (
-              <li key={tag}>
-                <Tag>{tag}</Tag>
-              </li>
-            ))}
-          </Cluster>
-        ) : null}
-      </PageHero>
+        /* PageHero's own tag list (cmp-hero fix round 1): unboxed, blue-marked, after the ask. */
+        tags={hero.tags ?? []}
+      />
 
       {sections.map((section) =>
         section.type === 'offer' ? (

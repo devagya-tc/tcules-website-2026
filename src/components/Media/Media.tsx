@@ -40,7 +40,7 @@ export type MediaPanel = 'paper' | 'paper-deep' | 'ink';
  *   4/5   B, K and L-photo, the media split         5/4   the photograph hero
  *   3/1   I banner below its head                    3/2   I banner beside, the head-track aside, a pair
  *   16/9  card sets of three or more                 4/3   the horizontal card
- *   1/1   portraits
+ *   1/1   portraits                                 4/1   the title-led hero's panorama (cmp-hero)
  *
  * A placement states one; Media does not choose. Each maps to a `--media-ratio-*` token.
  *
@@ -48,7 +48,7 @@ export type MediaPanel = 'paper' | 'paper-deep' | 'ink';
  * § 5.4's. No card passes them: a card's image is BlockCard's own 3/2 crop box under `fit="fill"`,
  * not a Media `ratio` (drift recorded in src/lib/photos.ts at CARD_RATIO and docs/specs/Media.md).
  */
-export type MediaRatio = '4/5' | '5/4' | '3/1' | '3/2' | '16/9' | '4/3' | '1/1';
+export type MediaRatio = '4/5' | '5/4' | '3/1' | '4/1' | '3/2' | '16/9' | '4/3' | '1/1';
 
 /**
  * A ratio per arrangement: `base` below 1024 and `lg` from 1024 (Layout's `lg`, where every split in
@@ -235,11 +235,40 @@ export function mediaSrcSet(image: MediaImage): string | undefined {
     .join(', ');
 }
 
+/**
+ * `sizes` for a cover crop. A crop narrower than the asset is filled by HEIGHT, so the rendered
+ * image is wider than its box by the asset's aspect over the crop's, and a `sizes` that states the
+ * box makes the browser pick a rung that is then upscaled: a 3:2 master in the 572 × 458 hero box
+ * renders 687 wide, a 16:9 one 814, and at 2x the 1240 rung was stretched to fill them (cmp-hero,
+ * fix round 1). So every length in the placement's list is multiplied by that factor, the larger of
+ * the two crops for a `{ base, lg }` spec. A crop wider than the asset fills by width: factor 1.
+ */
+const ratioNumber = (ratio: MediaRatio) => {
+  const [w = 1, h = 1] = ratio.split('/').map(Number);
+  return w / h;
+};
+function cropSizes(sizes: string, image: MediaImage, spec: MediaRatioSpec): string {
+  const crops = typeof spec === 'string' ? [spec] : [spec.base, spec.lg];
+  const aspect = image.width / image.height;
+  const factor = Math.max(1, ...crops.map((crop) => aspect / ratioNumber(crop)));
+  if (!Number.isFinite(factor) || factor <= 1.01) return sizes;
+  const k = Math.round(factor * 1000) / 1000;
+  return sizes
+    .split(/,\s*(?![^()]*\))/)
+    .map((entry) => {
+      const match = /^(\([^)]*\)\s+)?(.+)$/.exec(entry.trim());
+      if (!match) return entry;
+      return `${match[1] ?? ''}calc(${match[2]} * ${k})`;
+    })
+    .join(', ');
+}
+
 /** One class per ratio; each reads its `--media-ratio-*` token. */
 const RATIO_CLASS: Record<MediaRatio, string | undefined> = {
   '4/5': styles.ratio4x5,
   '5/4': styles.ratio5x4,
   '3/1': styles.ratio3x1,
+  '4/1': styles.ratio4x1,
   '3/2': styles.ratio3x2,
   '16/9': styles.ratio16x9,
   '4/3': styles.ratio4x3,
@@ -251,6 +280,7 @@ const LG_RATIO_CLASS: Record<MediaRatio, string | undefined> = {
   '4/5': styles.lgRatio4x5,
   '5/4': styles.lgRatio5x4,
   '3/1': styles.lgRatio3x1,
+  '4/1': styles.lgRatio4x1,
   '3/2': styles.lgRatio3x2,
   '16/9': styles.lgRatio16x9,
   '4/3': styles.lgRatio4x3,
@@ -365,7 +395,7 @@ export function Media({
       style={style}
       src={image.src}
       srcSet={srcSet}
-      sizes={srcSet ? sizes : undefined}
+      sizes={srcSet ? (cropRatio ? cropSizes(sizes, image, cropRatio) : sizes) : undefined}
       alt={image.alt}
       width={image.width}
       height={image.height}

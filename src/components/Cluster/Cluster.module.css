@@ -21,6 +21,7 @@
      that sets one axis would otherwise pick up an ancestor's value on the other. */
   --cluster-row-gap: 0;
   --cluster-col-gap: 0;
+  --cluster-stack-align: flex-start;
   row-gap: var(--cluster-row-gap);
   column-gap: var(--cluster-col-gap);
 }
@@ -52,6 +53,25 @@
 
 /* justify = main axis (horizontal distribution). `between` pushes items to the edges. */
 .justify-start   { --cluster-justify: flex-start; }
-.justify-center  { --cluster-justify: center; }
+.justify-center  { --cluster-justify: center; --cluster-stack-align: center; }
 .justify-end     { --cluster-justify: flex-end; }
 .justify-between { --cluster-justify: space-between; }
+
+/* stackUntil="md" — one item per line below 768, at the row seam, from the inline start (centred
+   under justify-center). The column direction is the arrangement's, so it lives here rather than
+   in a caller: a group whose phone shape must not depend on how long its labels are. */
+@media (max-width: 767.98px) {
+  .stackUntilMd {
+    flex-direction: column;
+    align-items: var(--cluster-stack-align);
+  }
+}
+
+/* justify={{ base, lg }} — the main-axis distribution from 1024 (Layout's lg), where a split head
+   sets its ask at the column's end edge and a phone keeps it at the start. */
+@media (min-width: 1024px) {
+  .lg-justify-start   { --cluster-justify: flex-start; }
+  .lg-justify-center  { --cluster-justify: center; }
+  .lg-justify-end     { --cluster-justify: flex-end; }
+  .lg-justify-between { --cluster-justify: space-between; }
+}

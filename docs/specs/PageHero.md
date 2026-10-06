@@ -495,7 +495,7 @@ The only motion inside the band belongs to `Button`: its colours on `--duration-
 
 **One thing inside the band that does move, and it is not ours.** A `media` video is a player in a document on another origin. It moves when a reader presses play, it honours or ignores `prefers-reduced-motion` by YouTube's choice rather than ours, and nothing in this component can reach it. Autoplay is withheld — it is absent from the `allow` list — so nothing moves until a reader asks for it, which is the whole of the control this component has and the reason it takes it.
 
-**Reduced motion.** Nothing of ours to switch off. Under `prefers-reduced-motion: reduce` this component renders identically, and there is no `@media` block in its stylesheet to express that with — the identity is structural, not conditional.
+**Reduced motion.** Nothing of ours to switch off. Under `prefers-reduced-motion: reduce` this component renders identically. Its stylesheet's `@media` blocks (fix round 1: the drawing / phone-cut switch at 768, the texture recipes at 1024 and 1440) choose which rendering shows at a width; none of them animates, so there is nothing for a motion query to express — the identity is structural, not conditional.
 
 ## 14 · Do's and Don'ts
 
@@ -736,6 +736,77 @@ Every line lands between about 19 and 29 characters — a display line's comfort
 **What did not change.** The element, the measures, every ink, every gap, the band density, the arrangement and the media.
 
 ---
+
+## Amendment · 6 Oct 2026 (kit `cmp-hero`, visual-direction § 2.3 to § 2.5)
+
+PageHero is proved as a kit component on `/design/kit/hero`, nine shapes, each measured at 1470 × 830
+and 390 (`fold.config.json`). What the build added:
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `media.ratio` | `MediaRatioSpec` | — | A photograph's crop, passed to Media. The photograph hero takes `'5/4'`, 572 × 458 in the [1, 1] split, anchored at the record's `focus` (`getKitPhoto`). Top-aligned, radius 8, no frame (Media's `photograph` edge). Ignored on any other kind, with Media's warning. |
+| `arrangement` | adds `'centred'` | `'stacked'` | Trail, title, lead and actions centred on the column (Layout `justifyItems`, Cluster `justify`, `text-align` and a balanced lead in the module), then the media below at the full column. The owner comparison (§ 2.3 option, § 10 item 2); it cannot end above 830, so the specimen block carries `data-fold-exempt`. |
+| `tags` | `readonly string[]` | `[]` | Inert Tags in a `ul` Cluster (8 both axes), a stack under the copy, before the actions. Only when the title sets on ≤ 3 lines (§ 2.4): + 80. |
+| `texture` | `boolean` | `false` | The pixel-grid in the recipe the media decides — photograph beside the copy: `hero-foot` (start, lg only); no media: `hero-field` (end, lg) and `horizon` below 1024. Refused with a development warning on an illustration (the band rule: Accent + Field), a video, a stacked image and any ground but paper. A closed set rather than a ReactNode slot, so a call site cannot misplace a recipe; the numbers are § 6.3's and move to `TEXTURE_RECIPES` when `fdn-texture` lands. |
+| `announcement` | `{ label; text; action }` | — | One line above the hero (showcase only): an inert Tag, a body-sm sentence (`--hero-note-*`, new, per surface) and a link-style sm action with a trailing arrow. A `stack` (48) above the trail or the split. The photograph hero with a strip ends at 795. |
+
+Also:
+- The second action carries a trailing `arrow-right`: blue at rest, link-style (visual-direction § 4.2,
+  owner 6 Oct, which supersedes "neutral link-style" in the cmp-hero brief).
+- The band emits `data-arrangement`: `hero-illustration`, `hero-media`, `hero-text`, `hero-stacked` or
+  `hero-centred`, for the fold gate.
+- Measured at 1470 with the 73 of nav: service 742 · one action 752 · tags 807 · photograph 723 ·
+  announcement 795 · no media with trail 629 / 560 · category eyebrow 775. At 390 the h1 sits at 214
+  and every band is under 1140.
+
+## Amendment · 6 Oct 2026, fix round 1 (kit `cmp-hero`)
+
+What the three-lens review changed, cause first:
+
+| Note | Cause | Fix |
+|---|---|---|
+| Texture a faint smudge | Both recipes sat almost wholly off the band | `plinth` (photograph): a field from under the photo's lower half out to the band's end and foot. `field` (no media): a full-height end column that fades in, from 1440; a horizon in the foot padding below. Both clear of every glyph by construction |
+| Centred comparison swollen | Media took the full 1240 | Capped at `--hero-media-size-centred` 860 (`HERO_CENTRED` sizes) |
+| One shape six times | No second opening | `arrangement="display"`: title in 3 of 5, lead and ask in 2 at its foot, media full column below (`ratio` `{ base: '4/3', lg: '3/1' }`). Band 807; its image crosses the fold by design, so the specimen exempts the hero measurement |
+| Grey tag strip | Tag chips between lead and ask | Unboxed mono list after the actions, each after a 6px blue pixel (`--hero-mark-*`, `--hero-tag-*`) |
+| SaaS announcement | Grey pill, wrapping strip | Blue pixel + blue mono flag (`--hero-flag-*`), one line always, the sentence ellipsises |
+| Labels 6px on phones | Text inside an `<img>` at 0.34x | `scripts/illustrations-phone.mjs` writes a phone cut (labels to numbered markers) and `src/lib/illustration-legends.ts`; below 768 the hero shows the cut and a numbered legend. Found by src, so no call site changes |
+| Soft hero photos | `sizes` stated the box, not the cover-cropped image | Media scales `sizes` by the crop factor (`cropSizes`); calmer, sharper frames chosen |
+| 67px title in a 432 track at 1024 | [1, 1] from 1024 | `beside` is 3 : 2 from 1024 and 1 : 1 from 1440 |
+| Trail floats over illustration heroes | Trail above a centred split | Against an illustration the trail joins the copy column: 32 to the title always |
+| No fold gate | Nothing read `fold.config.json` | `npm run fold:check` (`scripts/fold-check.mjs`): bands ≤ `maxBand`, `[data-fold-hero]` + nav ≤ 830, `data-fold-exempt` reported |
+
+Measured at 1470 with the 73 of nav: service 729 · one action 699 · tags 784 · photograph 723 ·
+announcement 792 · display band 807 (hero 880, exempt) · field 629 · text 590 · category 775 ·
+centred 1346 (exempt). At 390 the h1 sits at 213 and every band is under 1140.
+
+## Amendment · 6 Oct 2026, fix round 2 (kit `cmp-hero`)
+
+| Note | Cause | Fix |
+|---|---|---|
+| Texture an artefact (plinth behind the photo's corner, a tinted strip beside the text) | Soft fields placed against the BAND, guessing where the column was | Two hard-edged regions with a track of their own, a stepped silhouette sinking into the band's floor: `foot` under the copy (photograph, from 1440; `Layout pinLast`, the field fills the 1fr row, 48 under the ask by its own geometry) and `field`, the end third of a `[2, 1]` split from 1024 (no media), a 2:1 block below it (`--hero-field-ratio`) |
+| Six shapes one rectangle | Every photograph took `beside` | `arrangement="wide"`: copy 2 : media 3 from 1440, a 3:2 photograph at 686 × 457 (`HERO_WIDE`). The announcement specimen carries it |
+| Display head misplaced; display over the fold | Top-aligned halves; a 3:1 at 1240 | The Quantum split header: title and lead in 3 of 5, the ask on the lead's last baseline (`Layout align="baseline"`) flush with the column's end from 1024 (`Cluster justify={{ base, lg }}`); a 4:1 panorama (new Media ratio `4/1`). Ends at 781, no exemption |
+| Grey eyebrows | The eyebrow had no mark | The eyebrow carries the 6px blue square (`--hero-mark-*`), as the tags and the flag do |
+| Announcement truncated on a phone | nowrap + ellipsis | The sentence wraps beside the flag; the link drops below |
+| Two action shapes on phones | A wrapping row | `Cluster stackUntil="md"`: below 768 the pair always stacks |
+| Nine ragged tags | A wrapping list | At most six (development warning past six), a 3-column grid from 768, 2 below; keyed by index and tag |
+| Two eager drawings per service page | Two `<Media priority>`, one `display:none` | One `<picture>`: a `<source media="(max-width: 1439.98px)">` serves the numbered cut, so only the shown drawing is fetched |
+| 7px labels and a 4-line title at 1024 | Drawing in a 2/5 track | Drawing heroes are `[2, 1]` from 1024 and `[1, 1]` from 1440, the numbered cut and legend below 1440; photograph heroes `[1, 1]` from 1024 |
+| Authored proper nouns lowercased in a crumb | `trailCase` sentence-cased authored eyebrows | `pageName` keeps an authored eyebrow as written (`authoredCase` only restores a known acronym); `slugCase` is for slugs alone |
+| 860 written twice | Literal in tokens and in `image-sizes.ts` | `CENTRED_MEDIA` in `image-sizes.ts`, cross-referenced from the token |
+
+**Brief deviation, recorded:** the cmp-hero brief says the secondary action is "always neutral
+link-style". It is `emphasis="link" tone="primary"` (blue, with an arrow), because the owner's later
+6 Oct ruling (fdn-blue, visual-direction § 4.1) makes every text link blue at rest. The ruling wins;
+the change is listed in `docs/kit/brand-amendments.md` (ch02, the `tone="primary"` row).
+
+**The two size tokens** `--hero-mark-size` (6) and `--hero-numeral-size` (20) read the space ramp
+as a stated exception: no size primitive holds either value (`--icon-size-*` runs 14 to 24).
+
+Measured at 1470 with the 73 of nav: service 729 · one action 699 · tags 792 · photograph 723 ·
+wide with announcement 792 · display 781 · field 629 · text 590 · category 775 · centred 1346
+(exempt, the owner comparison). No horizontal overflow at 1470, 1024 or 390.
 
 ## Appendix — self-audit
 

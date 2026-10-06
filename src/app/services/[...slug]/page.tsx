@@ -306,7 +306,7 @@ function sectionSurfaces(
  * The service's whole trail, every level named, the page's own included, and what is left of the
  * CMS eyebrow for the hero.
  *
- * The leaf is the page's NAME ("Product design", "Trust, control and recovery"), never its
+ * The leaf is the page's NAME ("Product design", "Trust, Control and Recovery"), never its
  * `title`: the title is a headline, which `heroTrail` would drop, ending the trail at the parent
  * (fix round, 6 Oct 2026). `pageName` (`@/lib/trail`) chooses the name, from the eyebrow where it
  * spells the slug's name, from the slug otherwise. The parent passed to it is the named parent
