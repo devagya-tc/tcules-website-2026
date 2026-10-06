@@ -63,6 +63,15 @@ export const MEDIA_SPLIT =
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 5 / 12), ${FLUID_COLUMN}`;
 
 /**
+ * CtaSection's landscape K offer (cmp-cta): the photograph's track, 7 of [5, 7] from 1024 with the
+ * 96 split seam — MEDIA_SPLIT's mirror. (1240 − 96) × 7 / 12 ≈ 667 at the cap; below 1024 the photo
+ * sits under the copy at the full column.
+ */
+export const MEDIA_SPLIT_WIDE =
+  `(min-width: ${CAP}px) ${Math.round(((CONTAINER - SPLIT_GAP) * 7) / 12)}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 7 / 12), ${FLUID_COLUMN}`;
+
+/**
  * ContentSection `beside`: the head track, 1 of [1, 2] from 1024 with the 96 split seam — where a
  * head-track aside photograph sits (visual-direction § 1.4, 3:2 at 381). (1240 − 96) / 3 ≈ 381 at the
  * cap; (100vw − 64 − 96) / 3 from 1024; below it the aside takes the full column between the head and

@@ -1,13 +1,12 @@
 import { Cluster, Layout, Prose, Section, type SectionSurface } from '@/components';
 import {
   CtaSection,
-  EnquiryForm,
   Proof,
   type ProofFigure,
   type ProofPortrait,
   type ProofQuote,
 } from '@/patterns';
-import { caseStudyPath, ENDPOINTS, ROUTES, UNRESOLVED_EXTERNAL } from '@/lib/routes';
+import { caseStudyPath, ROUTES, UNRESOLVED_EXTERNAL } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
@@ -249,19 +248,6 @@ const NESTED_INTERACTIVE_TOKENS = {
     ['--btn-link-neutral-fg-pressed', '--color-brandeis-200'],
   ],
 } as const satisfies Record<'tint' | 'ink', TokenRows>;
-
-const CTA_FORM_PROPS = {
-  action: `${ENDPOINTS.enquiryDesign}?outcome=success`,
-  context: {
-    originRoute: ROUTES.designProof,
-    placement: 'proof-specimen',
-    family: 'design-system',
-    serviceOrAudit: 'proof',
-    referrer: '',
-    campaign: '',
-  },
-  scheduleHref: ROUTES.contact,
-} as const;
 
 function ResolvedTokens({ tokens }: { tokens: TokenRows }) {
   return (
@@ -534,24 +520,9 @@ export default function ProofSpecimenPage() {
           </p>
         </Layout>
       </Section>
-      {PROOF_SHAPES.map((shape) => (
-        <CtaSection
-          key={`split-${shape}`}
-          eyebrow={`Split · ${shape}`}
-          heading="Tell us what you are trying to ship"
-          body={[
-            'Bring the problem as it is. We will help decide what the work needs to become.',
-          ]}
-          points={[
-            { label: 'A written plan' },
-            { label: 'A named team' },
-            { label: 'A delivery window' },
-          ]}
-          form={<EnquiryForm {...CTA_FORM_PROPS} />}
-          proof={<ProofFixture shape={shape} />}
-          surface="tint"
-        />
-      ))}
+      {/* No split rows: CtaSection's split close refuses proof since cmp-cta fix round 1 (a close
+          with the full form and a proof row ran past the 830 fold), so Proof meets the CTA family
+          in the open close only. */}
       {PROOF_SHAPES.map((shape) => (
         <CtaSection
           key={`open-${shape}`}

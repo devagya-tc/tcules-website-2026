@@ -34,16 +34,33 @@ import t from '../../_specimen/typeroles.module.css';
  * bottom padding (§ 6.3). Blue: the solid ask, the point markers and glyphs, every link.
  */
 
-/* ── The `closing` placement (visual-direction § 6.3) ──────────────────────────────────────────
-   rect, bottom −260, start −120, 44% × 320, blur 200: the box rises 60 into the band, inside its 96
-   of bottom padding, under the copy column's foot, and stops at 44% — short of the close's form
-   track, which starts at 667 + 96 of 1240 (~62%). Only the feather reaches content. Composed here and
-   handed to CtaSection's `texture` slot, because the recipe constant is Texture's to own and this
-   family takes the placement as a node (cmp-cta brief: "a texture pass-through"). */
+/* ── The `closing` placement, redrawn (fix round 1) ────────────────────────────────────────────
+   § 6.3's numbers (rect, bottom −260, start −120, 44% × 320, blur 200) drew a ~200 × 200 haze in
+   the corner that read as a rendering smudge: a 200 blur on a box that only enters the band by 60
+   never reaches full strength anywhere on screen. Redrawn as a FIELD the band's bottom edge owns:
+   a near-hard rect filling the bottom padding (96, or the open close's 128) for the width of the
+   copy track, at the grid's full strength, its top edge feathered just enough to read as texture
+   rather than a strip. Its box stops 16 inside the padding's top edge, so only the tail of the
+   24-blur feather (σ 12) meets content, and nothing at all behind the form column (it stops at 58%, the form starts at
+   ~61%). The open close takes it full width, rising behind the centred column's foot.
+
+   PROPOSED RECIPE VALUES, handed to whoever owns Texture: the constant belongs in
+   src/components/Texture/recipes.ts (§ 6.3, "call sites never write a raw number"), which does not
+   exist yet. Until it does, these two are the one place the numbers live, and the six service-page
+   closes must not copy them — they take the recipe when it lands. */
 function ClosingTexture() {
   return (
     <Texture>
-      <TextureShape bottom={-260} left={-120} width="44%" height={320} blur={200} />
+      <TextureShape bottom={-56} left={-40} width="58%" height={136} blur={24} />
+    </Texture>
+  );
+}
+
+function OpenClosingTexture() {
+  return (
+    <Texture>
+      <TextureShape bottom={-64} width="110%" height={176} blur={32} />
+      <TextureShape kind="ellipse" bottom={-200} width="52%" height={300} blur={64} />
     </Texture>
   );
 }
@@ -89,7 +106,7 @@ const HEALTH_POINTS = [
     detail: 'Which teams build on the system, and which work around it.',
   },
   {
-    icon: 'checklist',
+    icon: 'document-text',
     label: 'A sequenced fix list',
     detail: 'Ordered so the first changes pay for the rest.',
   },
@@ -134,6 +151,24 @@ const MODERNISE_POINTS = [
     detail: 'A migration path that keeps operations running every week.',
   },
 ] as const satisfies readonly CtaPoint[];
+
+const WORKSHOP_POINTS = [
+  {
+    icon: 'users-group-rounded',
+    label: 'Everyone in one room',
+    detail: 'Product, design, engineering and the person who signs off.',
+  },
+  {
+    icon: 'flag',
+    label: 'One decision, made',
+    detail: 'The question stalling the roadmap, answered on the day.',
+  },
+  {
+    icon: 'notebook',
+    label: 'A written record',
+    detail: 'What was agreed, by whom, and what happens on Monday.',
+  },
+] as const satisfies readonly CtaIconPoint[];
 
 const CLOSE_POINTS = [
   {
@@ -196,17 +231,18 @@ const PHASES = [
 ] as const;
 
 const VARIATIONS = [
-  { id: 'k-offer', index: '01', name: 'K offer · numbered' },
-  { id: 'k-icons', index: '02', name: 'K offer · icon points' },
-  { id: 'k-plain', index: '03', name: 'K offer · plain points' },
-  { id: 'k-beside', index: '04', name: 'K offer · no photograph' },
-  { id: 'k-flipped', index: '05', name: 'K offer · photo at start' },
-  { id: 'l-close', index: '06', name: 'L close · with the form' },
-  { id: 'l-no-points', index: '07', name: 'L close · no points' },
-  { id: 'l-open', index: '08', name: 'L close · two actions' },
-  { id: 'row-cards', index: '09', name: 'CtaRow · under a card set' },
-  { id: 'row-rows', index: '10', name: 'CtaRow · under ruled rows' },
-  { id: 'tint', index: '11', name: 'Surface proof · tint' },
+  { id: 'k-offer', index: '01', name: 'K offer\u00a0· numbered' },
+  { id: 'k-icons', index: '02', name: 'K offer\u00a0· icon points' },
+  { id: 'k-plain', index: '03', name: 'K offer\u00a0· plain points' },
+  { id: 'k-beside', index: '04', name: 'K offer\u00a0· no photograph' },
+  { id: 'k-flipped', index: '05', name: 'K offer\u00a0· photo first' },
+  { id: 'k-wide', index: '06', name: 'K offer\u00a0· landscape photo' },
+  { id: 'l-close', index: '07', name: 'L close\u00a0· with the form' },
+  { id: 'l-no-points', index: '08', name: 'L close\u00a0· contact strip' },
+  { id: 'l-open', index: '09', name: 'L close\u00a0· centred, two actions' },
+  { id: 'row-cards', index: '10', name: 'CtaRow\u00a0· under a card set' },
+  { id: 'row-rows', index: '11', name: 'CtaRow\u00a0· under ruled rows' },
+  { id: 'tint', index: '12', name: 'Surface proof\u00a0· tint' },
 ] as const;
 
 type VariationId = (typeof VARIATIONS)[number]['id'];
@@ -272,9 +308,10 @@ export default function KitCtaSpecimen() {
 
       {/* ── 01 · K offer, numbered, solid + link ───────────────────────────────────────────── */}
       <Title id="k-offer">
-        [7, 5]: H-full, three one-line numbered points and the actions in the 667 copy column; a
-        quiet 4:5 photograph in the 477 track. The head sits on the photo&rsquo;s top edge and
-        the actions on its foot (§ 3.2 rule 1). Solid first, a blue link second.
+        [7, 5]: H-full, a lede held narrower than its heading, three one-line numbered points and
+        the actions in the 667 copy column; a quiet 4:5 photograph in the 477 track. The head sits
+        on the photo&rsquo;s top edge and the actions on its foot at every width from 1024 (§ 3.2
+        rule 1). Solid first, a blue link second.
       </Title>
       <CtaSection
         arrangement="offer"
@@ -288,7 +325,7 @@ export default function KitCtaSpecimen() {
           { label: 'Request the audit', href: ROUTES.uxProductAudit },
           { label: 'See a sample report', href: ROUTES.audits },
         ]}
-        media={{ image: photo('pair-laptop-notebook') }}
+        media={{ image: photo('stylus-tablet-sketch') }}
       />
 
       {/* ── 02 · K offer, icon points, one action ──────────────────────────────────────────── */}
@@ -371,12 +408,34 @@ export default function KitCtaSpecimen() {
         media={{ image: photo('wireframe-wall'), side: 'start' }}
       />
 
-      {/* ── 06 · L close with the form ─────────────────────────────────────────────────────── */}
+      {/* ── 06 · K offer, landscape photo ──────────────────────────────────────────────────── */}
+      <Title id="k-wide">
+        <code>media.frame=&quot;landscape&quot;</code>: the other rectangle. [5, 7] — the head and
+        its actions in 5, centred on a 3:2 photograph in 7 — and the points as a ruled 3-up strip
+        under both. A page with two offers sets one of each.
+      </Title>
+      <CtaSection
+        arrangement="offer"
+        markers="icon"
+        eyebrow="Alignment workshop"
+        heading="One day to agree what the product is for"
+        body={[
+          'A facilitated session for the people who have to live with the answer, run by the designers who will build it.',
+        ]}
+        points={WORKSHOP_POINTS}
+        actions={[
+          { label: 'Book the workshop', href: ROUTES.contact },
+          { label: 'See the agenda', href: ROUTES.howWeWork },
+        ]}
+        media={{ image: photo('whiteboard-two-hands'), frame: 'landscape' }}
+      />
+
+      {/* ── 07 · L close with the form ─────────────────────────────────────────────────────── */}
       <Title id="l-close">
-        On paper: copy and three points in 667, the full EnquiryForm at its own 470 measure in
-        477, its submit and &ldquo;See available times&rdquo; in one row. The{' '}
-        <code>closing</code> texture rises under the copy&rsquo;s foot into the band&rsquo;s
-        bottom padding; the form column stays clean.
+        On paper, at h1: the page&rsquo;s last ask outweighs every head above it. [10, 7] — copy
+        and three points in 673, the full EnquiryForm filling its 471 to the column edge. The
+        points end on the form&rsquo;s last line; the <code>closing</code> field fills the bottom
+        padding under the copy, and the form column stays clean.
       </Title>
       <CtaSection
         eyebrow="Start a project"
@@ -395,10 +454,11 @@ export default function KitCtaSpecimen() {
         texture={<ClosingTexture />}
       />
 
-      {/* ── 07 · L close without points ────────────────────────────────────────────────────── */}
+      {/* ── 08 · L close, contact strip ─────────────────────────────────────────────────────── */}
       <Title id="l-no-points">
-        No points: the copy column is the lede alone, two paragraphs, and no seam is reserved
-        for the list it does not have. No texture passed, so none renders.
+        No points: the lede, and a contact strip pinned to the form&rsquo;s foot — where to
+        write, how fast we answer, which hours we keep — so the copy column ends where the form
+        does. No texture passed, so none renders.
       </Title>
       <CtaSection
         eyebrow="Hiring a design partner"
@@ -415,13 +475,19 @@ export default function KitCtaSpecimen() {
             urlLabel="Where can we see it?"
           />
         }
+        contact={[
+          { label: 'Write to', value: 'hello@tcules.com', href: 'mailto:hello@tcules.com' },
+          { label: 'Reply', value: 'Within one working day' },
+          { label: 'Hours', value: 'IST, GMT and ET' },
+        ]}
       />
 
-      {/* ── 08 · L close with two actions ──────────────────────────────────────────────────── */}
+      {/* ── 09 · L close, centred, two actions ──────────────────────────────────────────────────── */}
       <Title id="l-open">
-        <code>arrangement=&quot;open&quot;</code>: the close that asks for a click. The lede, a
-        3-up row of numbered points and two actions in one track, the <code>closing</code>{' '}
-        texture under the actions.
+        <code>arrangement=&quot;open&quot;</code>: the close that asks for a click, as a centred
+        column at display scale — the lede, three centred points and two actions on one axis —
+        with the <code>closing</code> field rising from the band&rsquo;s bottom edge behind the
+        column&rsquo;s foot.
       </Title>
       <CtaSection
         arrangement="open"
@@ -435,14 +501,14 @@ export default function KitCtaSpecimen() {
           { label: 'Book a call', href: ROUTES.contact },
           { label: 'See case studies', href: ROUTES.caseStudies },
         ]}
-        texture={<ClosingTexture />}
+        texture={<OpenClosingTexture />}
       />
 
-      {/* ── 09 · CtaRow under a card set ───────────────────────────────────────────────────── */}
+      {/* ── 10 · CtaRow under a card set ───────────────────────────────────────────────────── */}
       <Title id="row-cards">
-        A C-image band: centred H-title, three whole-card links, then a section-level CtaRow
-        under a hairline — a primary link, the band&rsquo;s blue Signal, centred under the
-        centred head.
+        A C-image band: centred H-title, three whole-card links, then a section-level CtaRow — a
+        primary link, the band&rsquo;s blue Signal, centred under the centred head. Rule off: a
+        centred hairline narrower than the card grid matched no edge on the page.
       </Title>
       <ContentSection
         align="center"
@@ -451,6 +517,7 @@ export default function KitCtaSpecimen() {
         footer={
           <CtaRow
             align="center"
+            rule={false}
             note="Each case study names the decision that changed the product."
             actions={[{ label: 'All case studies', href: ROUTES.caseStudies }]}
           />
@@ -470,7 +537,7 @@ export default function KitCtaSpecimen() {
         </Layout>
       </ContentSection>
 
-      {/* ── 10 · CtaRow under ruled rows ───────────────────────────────────────────────────── */}
+      {/* ── 11 · CtaRow under ruled rows ───────────────────────────────────────────────────── */}
       <Title id="row-rows">
         A D band: beside head with a photograph aside, three numbered rows, and a neutral link
         CtaRow — rule off, because the last row&rsquo;s own rule already closes the body.
@@ -502,7 +569,7 @@ export default function KitCtaSpecimen() {
         </Layout>
       </ContentSection>
 
-      {/* ── 11 · Surface proof on tint ─────────────────────────────────────────────────────── */}
+      {/* ── 12 · Surface proof on tint ─────────────────────────────────────────────────────── */}
       <Title id="tint">
         Surface proof — on pages, tint is the proof band only (§ 1.7). The K offer on tint:
         every ink restates itself, the markers stay blue at 5.51:1.

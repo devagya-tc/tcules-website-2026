@@ -27,8 +27,10 @@
    optical correction is needed. (The 40px stat numeral it replaced shared a top edge with the label,
    and the spec's §7(c) declined to correct that.)
 
-   No `@media`, no `transition`, no `transform`, no `animation`, no `opacity`. There are no states
-   to interpolate between: nothing here responds to a pointer and nothing opens. The only stateful
+   One `@media`, at 1024 (Layout's `lg`): the K photo frame's crop, which follows the arrangement
+   — 4:3 under the copy, 4:5 or 3:2 beside it (§ 3.7 item 4). No `transition`, no `transform`, no
+   `animation`, no `opacity`. There are no states to interpolate between: nothing here responds to
+   a pointer and nothing opens. The only stateful
    things in the band are the `Button`s and whatever the caller passes into the form slot.
 
    No `--cta-*` state token exists at all, which is that assertion in the token layer.
@@ -36,8 +38,9 @@
    ── Why the size and tracking pairs are NOT in this file ────────────────────────
    A role's size and its tracking companion are one typographic decision and must move together, so
    both live in the token layer as `--cta-*` pairs and this file reads them. (Until cmp-cta the
-   `offer` heading stepped down from h1 to h2 under `[data-arrangement='offer']` there; every
-   arrangement is h2 now, so the remap is gone and nothing here ever restated a size.)
+   `offer` heading stepped down from h1 to h2 under `[data-arrangement='offer']` there. Since fix
+   round 1 each scale is its own class — `.heading`, `.headingClose`, `.headingOpen` — chosen in
+   the TSX, so no rule is scoped by arrangement and nothing here restates a size.)
 
    ── Rule order is not load-bearing ─────────────────────────────────────────────
    One shared wrapping rule, then the part rules with distinct selectors and no state pair decided
@@ -57,11 +60,14 @@
    button rather than being quietly folded. */
 .eyebrow,
 .heading,
+.headingClose,
+.headingOpen,
 .lead,
 .body,
 .label,
 .detail,
-.detailReading {
+.detailReading,
+.contactValue {
   overflow-wrap: anywhere;
 }
 
@@ -82,8 +88,8 @@
 
 /* ── The heading ───────────────────────────────────────────────────────────────
    An `h2` in all three arrangements — the page's one `h1` belongs to `PageHero`, and this block
-   appears once or twice per route, so it can never be the page's title. Every arrangement renders
-   it at h2 scale since cmp-cta (visual-direction § 7.1); the role is in the token layer.
+   appears once or twice per route, so it can never be the page's title. The offer renders it at h2;
+   the closes step up (`.headingClose`, `.headingOpen`, below); every role is in the token layer.
 
    Balanced, because every title role is (--text-title-wrap, tokens/primitives.css § Type · wrap),
    and it matters most here: this is the loudest line in the band and a widow in it is visible
@@ -98,22 +104,50 @@
   text-wrap: var(--text-title-wrap);
 }
 
+/* The closes' heading (cmp-cta fix round 1): the same part one and two steps up the ladder, so the
+   page's last ask outweighs every mid-page head. Split takes h1 at the title measure; open takes
+   display at the display measure, centred by its column. Separate rules rather than modifiers on
+   `.heading`, so no two rules set the same property on one element. */
+.headingClose {
+  max-inline-size: var(--cta-heading-measure);
+  color: var(--cta-heading-ink);
+  font: var(--cta-close-heading-text);
+  letter-spacing: var(--cta-close-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+.headingOpen {
+  max-inline-size: var(--cta-open-heading-measure);
+  color: var(--cta-heading-ink);
+  font: var(--cta-open-heading-text);
+  letter-spacing: var(--cta-open-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* The open close is a centred column (Quantum's close, references.md): every line in it centres
+   on the column's axis. The column itself is centred by its Layout's `justifyItems`; this sets the
+   lines inside each part. Inherited, so the points' labels and details centre with it. */
+.centred {
+  text-align: center;
+}
+
 /* ── The copy · two roles, one measure ─────────────────────────────────────────
    `body[0]` at `--text-lead` and `body[1]` at `--text-body-lg`, which gives one or two paragraphs
    an internal hierarchy with no prop and no count-driven rule. A third paragraph does not compile:
    this block asks, it does not explain.
 
-   Both share `--cta-body-measure` and resolve to different widths on purpose, because `ch` is
+   Both share `--cta-lede-measure` (44ch, held under the heading's width — the tapered wedge of
+   references.md Meridian item 4) and resolve to different widths on purpose, because `ch` is
    relative to each part's own role. Neither role has a tracking companion, so neither states one. */
 .lead {
-  max-inline-size: var(--cta-body-measure);
+  max-inline-size: var(--cta-lede-measure);
   color: var(--cta-body-ink);
   font: var(--cta-lead-text);
   text-wrap: var(--text-running-wrap);
 }
 
 .body {
-  max-inline-size: var(--cta-body-measure);
+  max-inline-size: var(--cta-lede-measure);
   color: var(--cta-body-ink);
   font: var(--cta-body-text);
   text-wrap: var(--text-running-wrap);
@@ -178,4 +212,44 @@
    a mark, never a divider (visual-direction § 4.3). It spans its track. */
 .rule {
   border-block-start: var(--cta-rule-width) solid var(--cta-rule-ink);
+}
+
+/* ── The K photo frame ─────────────────────────────────────────────────────────
+   The frame owns the crop and Media fills it (`fit="fill"`). Its ratio is a FLOOR: in a stretched
+   row it is the frame's own height when the copy is shorter, and the copy's height when the copy
+   is taller — so the head sits on the photo's top edge and the actions on its foot at every width
+   from 1024, not only at 1440 (§ 3.2 rule 1). Sizing one grid item, not arranging siblings. */
+.photoFrame {
+  aspect-ratio: var(--cta-photo-ratio-stacked);
+  /* Not a clip of anything visible — Media's fill image is exactly 100% of the frame. It switches
+     off the aspect-ratio box's automatic minimum size, without which the image's intrinsic height
+     would push a 4:5 frame past its ratio before the stretch ever applied. */
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .photoPortrait {
+    aspect-ratio: var(--cta-photo-ratio-portrait);
+  }
+
+  .photoLandscape {
+    aspect-ratio: var(--cta-photo-ratio-landscape);
+  }
+}
+
+/* ── The contact strip ─────────────────────────────────────────────────────────
+   The split close's copy foot when it has something plainer than points to say: how to reach the
+   studio, how fast it answers, which hours it keeps. A key in the eyebrow's mono voice over a value
+   in body copy — a key and its value, so the pair sits `inline` apart in the TSX. A value that is a
+   link is a bare `<a>`, inked by the surface's link colour from globals.css (blue at rest). */
+.contactKey {
+  color: var(--cta-eyebrow-ink);
+  font: var(--cta-eyebrow-text);
+  letter-spacing: var(--cta-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.contactValue {
+  color: var(--cta-body-ink);
+  font: var(--cta-body-text);
 }
