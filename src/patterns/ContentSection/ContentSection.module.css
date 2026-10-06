@@ -71,7 +71,7 @@
    this element, never inside it, so it keeps the full track.
 
    `ch` resolves against this element's own font, which is the inherited body composite — the
-   same one Prose sets — so 68ch here is 68ch of the text inside it. The cap is a ceiling, not a
+   same one Prose sets — so 75ch here is 75ch of the text inside it. The cap is a ceiling, not a
    width: in `beside`'s narrower track at 1024 the track is the tighter of the two and wins. */
 .text {
   max-inline-size: var(--csec-body-measure);

@@ -452,3 +452,6 @@ tall before a word of the copy; the 4:3 crop is 244.
   `MEDIA_SPLIT`). `cmp-cta`'s K offer photo is the second.
 - § 14's "Don't find `aspect-ratio` anywhere in `Media.module.css`" was already superseded by the
   `fdn-media` amendment above; the `lg` classes are the same declaration under a query.
+- **Specimen:** `/design/media` § 9 renders the object form beside its control: `{ base: '4/3', lg:
+  '4/5' }` next to the same photo at a bare `4/5`. The pair is 4:5 in the 1440 capture and 4:3 in the
+  390 one; the control stays 4:5 at both (added in the `fdn-section-head` fix round).

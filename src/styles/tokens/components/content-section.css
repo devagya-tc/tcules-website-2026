@@ -21,7 +21,7 @@
    The third measure is the BODY measure, and it is here because Prose has none (owner ruling,
    Prose.module.css: "the caller owns the width"). ContentSection is that caller for every
    service, expertise, audit, tool and glossary band, so it caps the one kind of child that is
-   running text — the rich text a route wraps in ContentSectionText — at 68ch. Every other block
+   running text — the rich text a route wraps in ContentSectionText — at --measure-body (75ch). Every other block
    (card grids, tables, figures, list ladders) keeps the full track. Aliased through --csec-*
    rather than read raw only so the module reads nothing but this prefix, as its two siblings do
    (29 Sep 2026, tracker 2.17).

@@ -642,7 +642,10 @@ export default function MediaSpecimenPage() {
               photograph radius and no frame; a capture keeps radius 0 and its hairline
               (visual-direction § 5.3). The photos come from the kit registry,{' '}
               <code>getKitPhoto</code>, with their derived 1240 · 652 · 320 rungs. Each tile
-              names the crop&rsquo;s resolution against its box at 1470 (§ 5.4: ≥ 1.9×).
+              names the crop&rsquo;s resolution against its box at 1470 (§ 5.4: ≥ 1.9×). A
+              placement whose crop changes with its arrangement passes{' '}
+              <code>ratio=&#123;&#123; base, lg &#125;&#125;</code> instead: one ratio below 1024,
+              another from it.
             </p>
           </Layout>
           <Quarters>
@@ -678,6 +681,30 @@ export default function MediaSpecimenPage() {
                 image={getKitPhoto('pair-laptop-notebook')}
                 sizes={SIZES_HALF}
                 ratio="4/3"
+              />
+            </Specimen>
+          </Halves>
+          <Halves>
+            <Specimen
+              label="below"
+              title="ratio { base: 4:3, lg: 4:5 } · studio-sticky-board-ux"
+              note={`One crop below 1024 and another from it: the B split's, 4:5 beside its copy and 4:3 above it on a phone (§ 3.7 item 4). Two named breakpoints only, because the ratio follows the arrangement and arrangements change at 1024. This tile is 4:5 in the 1440 capture and 4:3 in the 390 one. At 604px the 4:5 crop is ${cropScale('studio-sticky-board-ux', '4/5', 604).toFixed(2)}× the box.`}
+            >
+              <Media
+                image={getKitPhoto('studio-sticky-board-ux')}
+                sizes={SIZES_HALF}
+                ratio={{ base: '4/3', lg: '4/5' }}
+              />
+            </Specimen>
+            <Specimen
+              label="below"
+              title="the same photo, ratio 4:5 at every width"
+              note="The control: a bare MediaRatio is one crop at every width, so this tile stays 4:5 in the 390 capture while the pair beside it cuts to 4:3 (408 tall at 326, against 244)."
+            >
+              <Media
+                image={getKitPhoto('studio-sticky-board-ux')}
+                sizes={SIZES_HALF}
+                ratio="4/5"
               />
             </Specimen>
           </Halves>

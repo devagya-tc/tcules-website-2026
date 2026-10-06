@@ -85,7 +85,7 @@ const STEPS = [
   { title: 'Design the behaviour', body: 'What the interface does, not what it looks like.' },
 ];
 
-/* A four-column table: wide enough that a 68ch cap would visibly crush it, which is the failure the
+/* A four-column table: wide enough that a 75ch cap would visibly crush it, which is the failure the
    body measure must NOT reintroduce. It is a sibling of the text, so it keeps the full track. */
 const cell = (html: string) => `<p>${html}</p>`;
 const TABLE: DataTableProps = {
@@ -326,7 +326,7 @@ function Label({ title, children }: { title: string; children: ReactNode }) {
  * of them and the only way `beside` can be judged against a real 1240 column.
  *
  * The page is ordered so the one comparison that matters comes first — the same content in both
- * arrangements — then the body measure (text capped at 68ch, a table and a card grid still spanning
+ * arrangements — then the body measure (text capped at 75ch, a table and a card grid still spanning
  * the track), and everything after it is coverage: both arrangements on all four surfaces with
  * identical markup, the stress ceilings, a short and a long body beside a head, every absent slot
  * and the two degradations `beside` makes, the densities, nested surfaces, a 390 viewport, and two
@@ -405,13 +405,13 @@ export default function ContentSectionSpecimen() {
       {/* ── 2 ──────────────────────────────────────────────────────────────────────────────── */}
       <Label title="2 · Text at the body measure, every other block at the track">
         Prose has no measure — the caller owns the reading column — and this band is the caller.
-        A rich-text block wrapped in ContentSectionText stops at 68ch, 666px at 1440, which is
-        about 90–95 characters of this face a line (a ch is the width of a zero, wider than the
-        average letter). It caps in both arrangements: stacked against the 1240 column, beside
-        against the two-thirds track. The table and (stacked) the card grid are siblings of the
-        text, not children, so they still run the whole track; beside carries no card set. At
-        1024 the beside track is narrower than 68ch and the track wins — the cap is a ceiling,
-        never a width.
+        A rich-text block wrapped in ContentSectionText stops at --measure-body, 75ch: 734px at
+        1440, which is about 100 characters of this face a line (a ch is the width of a zero,
+        wider than the average letter). It caps in both arrangements: stacked against the 1240
+        column, beside against the 763 two-thirds track. The table and (stacked) the card grid
+        are siblings of the text, not children, so they still run the whole track; beside
+        carries no card set. At 1024 the beside track is 576, narrower than 75ch, and the track
+        wins — the cap is a ceiling, never a width.
       </Label>
       {PAIR.map((arrangement) => (
         <ContentSection
@@ -460,7 +460,8 @@ export default function ContentSectionSpecimen() {
       {/* ── 4 ──────────────────────────────────────────────────────────────────────────────── */}
       <Label title="4 · The longest realistic heading and lead">
         A ten-word H2 of eighty characters and a forty-five-word lead. Stacked, the heading
-        breaks at the title measure (22ch) and balances; beside, the one-third track is narrower
+        breaks at the title measure (--measure-title, 32ch: 816px at 1440) and balances; beside,
+        the one-third track (381) is narrower
         than that measure, so the track sets the line and the heading runs to more lines — the
         head column is allowed to be taller than a short body, and section 6 shows what that
         looks like.
@@ -543,9 +544,12 @@ export default function ContentSectionSpecimen() {
         Each head slot renders no element and no seam when absent — an empty string counts as
         absent. Without an eyebrow the heading is the head&rsquo;s first row; without a lead the
         eyebrow and heading are the whole head; a lead alone is a valid head. Beside needs both
-        halves: with no head the blocks take the full column, and with no blocks the head does —
-        both are the stacked band exactly, because an empty third or an empty two-thirds is a
-        hole. An empty children array counts as no blocks, so no 48 seam hangs under the head.
+        halves, a head and BLOCKS: with no head the blocks take the full column, and with no
+        blocks the head does — both are the stacked band exactly, because an empty third or an
+        empty two-thirds is a hole. A degraded band has no head track, so an aside is dropped
+        rather than set full column (a 3:2 photo at 1240 is ~827 tall and would be upscaled from
+        the 381 file). An empty children array counts as no blocks, so no 48 seam hangs under
+        the head. These are degrade cases, not page shapes.
       </Label>
       <ContentSection
         arrangement="beside"
@@ -602,6 +606,14 @@ export default function ContentSectionSpecimen() {
         heading="A heading with nothing under it takes the full column"
         headingId="csec-absent-children"
         lead="The children prop is omitted. The head renders as the stacked head, measures intact."
+      />
+      <ContentSection
+        arrangement="beside"
+        eyebrow="Aside, no blocks, beside — degrades, aside dropped"
+        heading="A head-track photo with no track to sit in"
+        headingId="csec-absent-aside"
+        lead="An aside is passed and no children: the band is stacked and the photograph is not rendered."
+        aside={<AsidePhoto id="moodboard-wall-desk" />}
       />
       <ContentSection
         arrangement="stacked"
@@ -943,9 +955,13 @@ export default function ContentSectionSpecimen() {
         A 4:5 photograph in 5 of [5, 7], radius 8, the copy in 7, 96 apart. When the copy ends
         in an action — a footer, or head actions with nothing after them — the copy column
         stretches to the photo and pins the action to its bottom edge, so the two share a top
-        and a bottom edge (§ 3.2 rule 1). Otherwise the copy is centred on the photo (rule 2).
-        media.side flips the photo to the end. Below 1024 the photo sits above the copy at 4:3.
-        Tint rows are surface proof — on pages, tint is the proof band only (§ 1.7).
+        and a bottom edge (§ 3.2 rule 1) — but only when blocks sit above the action. Otherwise
+        the copy is centred on the photo (rule 2), including a copy column with no blocks: there
+        is nothing to fill a stretch, and pinning would leave ~400 of empty column between the
+        lead and the action. Those two bands are degrade cases, not page shapes — § 3.4 B always
+        carries tiles. media.side flips the photo to the end. Below 1024 the photo sits above
+        the copy at 4:3. Tint rows are surface proof — on pages, tint is the proof band only
+        (§ 1.7).
       </Label>
       <ContentSection
         arrangement="media"
@@ -971,7 +987,7 @@ export default function ContentSectionSpecimen() {
       <ContentSection
         arrangement="media"
         media={{ image: photo('stylus-tablet-sketch') }}
-        eyebrow="Lead only + CtaRow"
+        eyebrow="No blocks + CtaRow · centred · degrade case"
         heading="Drawn first, then built properly"
         headingId="csec-media-lead"
         lead="Every interface starts as a sketch on paper, because a sketch is cheap to throw away and a coded screen is not."
@@ -985,7 +1001,7 @@ export default function ContentSectionSpecimen() {
       <ContentSection
         arrangement="media"
         media={{ image: photo('whiteboard-two-hands'), side: 'end' }}
-        eyebrow="Head actions, no blocks · pinned"
+        eyebrow="Head actions, no blocks · centred · degrade case"
         heading="Start with the decision in front of you"
         headingId="csec-media-actions"
         lead="A thirty-minute call about the decision you are facing, and a written note of what we would do first."
@@ -1008,8 +1024,9 @@ export default function ContentSectionSpecimen() {
       <Label title="15 · Footer in every arrangement, and footer alone">
         The footer is the body&rsquo;s last row, a stack under the blocks, in every arrangement
         (sections 11 to 14 show it centred, beside, split-head and media). Stacked here, and
-        beside with a footer and no blocks: the footer is then the whole body track, so the band
-        still splits rather than leaving the head alone.
+        beside with a footer and no blocks — a degrade case, not a page shape: a footer is not
+        a trailing half on its own (a lone CtaRow level with the eyebrow over an empty
+        two-thirds track), so the band is the stacked band, the footer a stack under the head.
       </Label>
       <ContentSection
         eyebrow="Footer · stacked"
@@ -1028,7 +1045,7 @@ export default function ContentSectionSpecimen() {
       <ContentSection
         arrangement="beside"
         surface="tint"
-        eyebrow="Footer only · beside"
+        eyebrow="Footer only · beside — degrades to stacked"
         heading="Not sure which of these fits?"
         headingId="csec-footer-only"
         lead="Tell us the decision you are facing and we will say which, in writing."

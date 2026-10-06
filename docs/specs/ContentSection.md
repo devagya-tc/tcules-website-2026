@@ -80,8 +80,14 @@ thing that stops those five reading as one repeated shape is an arrangement, not
 >   aside or actions, never both** (§ 1.4 rule 6): the union pins the other to `never`. Below 1024 the
 >   aside sits between the head and the body (§ 3.7 item 4), which DOM order gives for free.
 > - **`footer: ReactNode`** — the band's foot, in practice one `CtaRow`: the body's last row, a
->   `stack` under the blocks, in every arrangement (pinned to the photo's bottom edge in `media`). A
->   footer with no blocks still counts as a body, so `beside` still splits.
+>   `stack` under the blocks, in every arrangement (pinned to the photo's bottom edge in `media` when
+>   blocks sit above it). **A footer alone is not a trailing half** (fix round): `beside` with a
+>   footer and no blocks degrades to `stacked`, the footer a stack under the head. Split, it put a
+>   lone CtaRow level with the eyebrow over an empty two-thirds track, which no § 3.4 archetype
+>   sanctions.
+> - **A degraded `beside` drops its `aside`** (fix round). The aside belongs to the head track, and a
+>   degraded band has none: set full column at 1240 a 3:2 photo is ~827 tall (past the fold alone),
+>   and the `HEAD_TRACK` sizes it was placed at serve a 381-wide file, upscaled.
 > - **`arrangement="split-head"`** (the H-row, § 1.4). The eyebrow keeps its own row; under it the
 >   heading sits in the leading third and the lead (and actions) in the trailing two-thirds, [1, 2]
 >   from 1024 at `section` (96), **top-aligned**; the body runs the full column beneath at `stack`.
@@ -96,9 +102,11 @@ thing that stops those five reading as one repeated shape is an arrangement, not
 >   the arrangement's: **4:5 from 1024 and 4:3 below it** (§ 3.7 item 4), through Media's new
 >   `{ base, lg }` ratio, at `MEDIA_SPLIT` (`src/lib/image-sizes.ts`). `side: 'end'` is Layout
 >   `reverse={{ lg: true }}` — the photo stays first in the DOM (above the copy on a phone). **When
->   the copy ends in an action** (a footer, or head actions with no blocks after them) the row
->   stretches and `pinLast` pins that action to the photo's bottom edge, so copy and photo share a top
->   and a bottom edge (§ 3.2 rule 1); otherwise the copy is centred on the photo (rule 2). The photo
+>   blocks sit above a footer** the row stretches and `pinLast` pins the footer to the photo's bottom
+>   edge, so copy and photo share a top and a bottom edge (§ 3.2 rule 1); otherwise the copy is
+>   centred on the photo (rule 2). *Fix round:* a copy column with NO blocks (head + footer, or head +
+>   actions) is centred too — pinning it left 350–400 of empty column between the lead and the action
+>   at 1440, and § 3.4 B always carries tiles. Recorded in visual-direction § 3.2. The photo
 >   sits in a plain `div` so a stretched row never stretches the `<img>` out of its ratio.
 > - **The lead under a split `beside` steps to `--text-body-lg`** from 1024 (§ 7.1), via
 >   `--csec-lead-text-beside` and `.leadBeside` — the module's one `@media`, which swaps a role, never
@@ -107,8 +115,9 @@ thing that stops those five reading as one repeated shape is an arrangement, not
 > - **What goes in a `beside` body** is restated from § 1.4 rule 5: rows, an accordion, a record, two
 >   pair cards, or icon cards — never a 3-up card set or a 2 × 2 image grid. The specimen no longer puts
 >   a card set in any beside body.
-> - **Stale measures corrected:** `--measure-title` is 32ch, `--measure-lead` 56ch and
->   `--measure-body` 75ch (they read 22 / 40 / 68 below; the primitives moved and this spec did not).
+> - **Stale measures corrected:** `--measure-title` is 32ch (816px at 1440), `--measure-lead` 56ch and
+>   `--measure-body` 75ch (734px at 1440, about 100 characters a line). § 6, § 10 and § 12 below are
+>   corrected in place; the 2.17 amendment above keeps the 68ch it was written against, as history.
 >
 > The props are now a five-member union discriminated on WHICH SLOTS are filled (plain, centred,
 > withActions, withAside, media), so a template passing a union-typed `'stacked' | 'beside'` with no
@@ -210,7 +219,8 @@ One size. Two arrangements.
 | `beside` | head above body, 48 — **identical to stacked** | head in the leading 1/3, body in the trailing 2/3, 96 between (the split seam, 1 Oct), head top-aligned and static |
 
 `beside` **degrades to `stacked`** whenever one half is absent (§12): no head → the body takes the
-full column; no body → the head takes the full column. An empty track is never drawn.
+full column; no blocks → the head takes the full column (a footer alone is not a body half, and an
+aside is dropped, 6 Oct fix round). An empty track is never drawn.
 
 **`beside` is for a body that reads down** — rows, an accordion, a record sheet — so the head labels
 one long column. It is wrong for a body that reads across, a set of peer cards or tiles (1 Oct 2026,
@@ -276,10 +286,10 @@ exists for). The specimen's section 9 renders exactly that case.
 
 (c) Optical corrections reaching `--space-*`: none.
 
-Measures: `--csec-heading-measure` → `--measure-title` (22ch), `--csec-lead-measure` →
-`--measure-lead` (40ch) and, **added 2.17**, `--csec-body-measure` → `--measure-body` (68ch, 666px),
+Measures: `--csec-heading-measure` → `--measure-title` (32ch, 816px at 1440), `--csec-lead-measure` →
+`--measure-lead` (56ch) and, **added 2.17**, `--csec-body-measure` → `--measure-body` (75ch, 734px),
 read only by `ContentSectionText`. The body measure is a ceiling: `stacked` (1240) and `beside` at
-1440 (784) are both wider, so it caps; `beside` at 1024 (597) is narrower, so the track wins. Under `beside` both measures exceed the head track, so the **track sets the
+1440 (763) are both wider, so it caps; `beside` at 1024 (576) is narrower, so the track wins. Under `beside` both measures exceed the head track, so the **track sets the
 line** and the measures only cap `stacked`. That is intended: the head track is narrower than the
 title measure on purpose, which is what makes the head read as a column.
 
@@ -332,7 +342,7 @@ seam). A card set does not go in it at all: a set reads across, so it takes `sta
 </Section>
 
 // at the call site (2.17):
-<ContentSectionText>                                      // max-inline-size: 68ch
+<ContentSectionText>                                      // max-inline-size: 75ch
   <Prose html={block.html} />
 </ContentSectionText>
 ```
@@ -365,15 +375,15 @@ the honest sense — sized to its content, not stretched to the body's height pr
 
 | Case | Handling |
 |---|---|
-| Longest realistic heading (10 words, 80 characters) | Balances. `stacked`: breaks at 22ch. `beside`: the track sets the line — 5 lines at 1440, 7 at 1024 (§17 Q1). Specimen §4. |
-| Longest lead (45 words) | Pretty-wraps at 40ch (`stacked`) or the track (`beside`). Specimen §4. |
+| Longest realistic heading (10 words, 80 characters) | Balances. `stacked`: breaks at 32ch. `beside`: the track sets the line — 5 lines at 1440, 7 at 1024 (§17 Q1). Specimen §4. |
+| Longest lead (45 words) | Pretty-wraps at 56ch (`stacked`) or the track (`beside`). Specimen §4. |
 | One long unbroken token | `overflow-wrap: break-word` from `reset.css` on `p` and `h2`; every track is `minmax(0, fr)`, so nothing widens the column. Specimen §5; the 390 capture shows no horizontal overflow. |
 | No eyebrow | No element, no 24 seam; the heading is the head's first row. |
 | No heading | No `h2`; the band is a `div`. The eyebrow (if any) and the lead remain. |
 | Empty string for eyebrow / heading / lead | Treated as absent (falsy). No empty element, no seam. |
 | No lead | The eyebrow and heading are the whole head, at the same 24 seam. |
 | No head at all | No head row. Under `beside` the body takes the full column (degrades to `stacked`). |
-| No children / `children` omitted | No body row and no 48 seam under the head. Under `beside` the head takes the full column. |
+| No children / `children` omitted | No body row and no 48 seam under the head. Under `beside` the head takes the full column, and an `aside` is dropped (no head track to sit in). A `footer` alone does not split `beside`: it sits a stack under the head. |
 | Empty children array (`[]`, a CMS section with zero blocks) | Same as omitted — `Children.toArray` is empty. **Changed in 2.13**: previously an empty `Layout` rendered, leaving a phantom 48 seam below the head. |
 | One block / many blocks | One row per block at 48; the component never counts, clamps or paginates. |
 | `beside` with a short body | The head is the taller column; the band ends under the head. Not corrected (specimen §6). |
@@ -419,14 +429,15 @@ route. Labelling bands (tight, paper) separate the groups.
 
 1. The two arrangements, same content (stacked, beside).
 2. **Added 2.17.** The body measure: both arrangements with a long rich-text body in
-   `ContentSectionText` (capped at 68ch) above a `DataTable` and a card grid that still span the track.
+   `ContentSectionText` (capped at 75ch) above a `DataTable` and a card grid that still span the track.
 3. Four surfaces × two arrangements, identical markup (8 bands), the eyebrow naming the cell.
 4. Longest realistic heading (10 words) and lead (45 words), both arrangements.
 5. One unbroken token in heading and lead, both arrangements.
 6. `beside` with a short body and with a long body (prose with an h3, cards, steps).
 7. Absent slots: no eyebrow; no lead; heading only; empty-string eyebrow and heading with a lead
    (unlabelled div); no head under `beside` (full column); no children under `beside` (full column);
-   an empty children array under `stacked` (no phantom seam).
+   an aside and no children under `beside` (stacked, aside dropped); an empty children array under
+   `stacked` (no phantom seam). Labelled as degrade cases, not page shapes.
 8. Density tight and open under `beside`.
 9. Nested surfaces (tint in ink, `beside`; ink in paper, `stacked`), a `Proof` body on blue, and a
    390 viewport frame (`viewportMobile`) with the longest copy.
@@ -437,9 +448,10 @@ route. Labelling bands (tight, paper) separate the groups.
     (C-pair), and the longest copy with an aside.
 13. **6 Oct.** `split-head`: with an action, lead only with a footer, the longest copy, and title only
     (degrades to stacked).
-14. **6 Oct.** `media`: photo start + 4 tiles (centred), photo end + 2 tiles + CtaRow (pinned), lead
-    only + CtaRow, head actions and no blocks (pinned), the longest copy (taller than the photo).
-15. **6 Oct.** Footer under a stacked set; a footer as the whole body of a beside band.
+14. **6 Oct.** `media`: photo start + 4 tiles (centred), photo end + 2 tiles + CtaRow (pinned), no
+    blocks + CtaRow (centred, degrade case), head actions and no blocks (centred, degrade case), the
+    longest copy (taller than the photo).
+15. **6 Oct.** Footer under a stacked set; a footer and no blocks under `beside` (degrades to stacked).
 Section 1 now shows all four arrangements with the body each is for.
 
 No states to force. `beside` cannot be forced inside a narrow frame at a wide window (a frame

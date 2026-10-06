@@ -22,7 +22,8 @@ import styles from './ContentSection.module.css';
  *               apart, the head static (it scrolls with the band; it does not stick, ruling O2). The
  *               head track may carry an `aside` (a 3:2 photograph or one stat figure) OR `actions`,
  *               never both (visual-direction § 1.4 rule 6). Below 1024 it is `stacked`, with the aside
- *               between the head and the body (§ 3.7 item 4).
+ *               between the head and the body (§ 3.7 item 4). It splits only when there are BLOCKS
+ *               for the trailing track; without them it is the stacked band, aside dropped.
  *   split-head  the H-row (§ 1.4): the head itself splits 1 : 2 from 1024 under its eyebrow — the
  *               heading in the leading track, lead and actions in the trailing one, top edges level;
  *               the blocks then run the full column beneath it. The head reads as one horizontal row, which is
@@ -114,7 +115,11 @@ type ContentSectionBaseProps = {
    * The band's foot: in practice one `CtaRow` (a hairline, then a row of actions — § 3.1). It is the
    * body's last row, a `stack` (48) under the blocks (§ 1.2: body → CtaRow), in every arrangement:
    * under the blocks in `stacked` and `split-head`, in the body track under `beside`, and pinned to
-   * the photograph's bottom edge in `media`.
+   * the photograph's bottom edge in `media` when blocks sit above it.
+   *
+   * A footer is not a body on its own: `beside` with a footer and no blocks degrades to `stacked`
+   * (the footer a stack under the head), because a lone CtaRow in the two-thirds track sits level
+   * with the eyebrow over an empty track, a shape no § 3.4 archetype sanctions.
    *
    * A slot and not a list of CtaRow props, because a pattern does not import a pattern (CLAUDE.md §
    * Scope): the caller composes `<CtaRow>` and hands it over, as `Button` takes `icon`.
@@ -194,6 +199,10 @@ type WithAsideProps = {
    * The head track's one large object, a `stack` (48) under the head text: a 3:2 photograph
    * (`<Media ratio="3/2" sizes={HEAD_TRACK} />`, § 1.4 "photo aside, 3:2 at 381") or one stat-lg
    * figure (§ 3.3: D always has one). Below 1024 it sits between the head and the body (§ 3.7).
+   *
+   * Rendered only when the band actually splits (a head AND blocks). A degraded band has no head
+   * track, so the aside is DROPPED rather than set full column: at 1240 a 3:2 photo is ~827 tall,
+   * past the fold on its own, and HEAD_TRACK's `sizes` would serve it a 381-wide file, upscaled.
    */
   aside: ReactNode;
   actions?: never;
@@ -284,21 +293,29 @@ export function ContentSection(props: ContentSectionProps) {
   const arrangement: ContentSectionArrangement = props.arrangement ?? 'stacked';
   const centred = props.align === 'center';
   const actions = props.actions;
-  const aside = props.arrangement === 'beside' ? props.aside : undefined;
   const media = props.arrangement === 'media' ? props.media : undefined;
 
   const hasText = Boolean(eyebrow || heading || lead);
   const hasActions = present(actions);
-  const hasAside = present(aside);
   const hasBlocks = present(children);
   const hasFooter = present(footer);
-  const hasHead = hasText || hasActions || hasAside;
   const hasBody = hasBlocks || hasFooter;
 
-  /* `beside` only splits when there are two halves to split. Either one missing and the band is
-     the stacked band — an empty one-third or two-thirds track is a hole in the page, not a layout.
-     The lead's role follows the SPLIT, not the prop, so a degraded band reads exactly as stacked. */
-  const besideSplit = arrangement === 'beside' && hasHead && hasBody;
+  /* `beside` only splits when there are two halves to split: a head (text, actions or an aside) and
+     BLOCKS. A footer alone is not a trailing half — a lone CtaRow in the two-thirds track sits level
+     with the eyebrow over an empty track. Either half missing and the band is the stacked band: an
+     empty one-third or two-thirds track is a hole in the page, not a layout. The lead's role follows
+     the SPLIT, not the prop, so a degraded band reads exactly as stacked. */
+  const requestedAside = props.arrangement === 'beside' ? props.aside : undefined;
+  const besideSplit =
+    arrangement === 'beside' && (hasText || hasActions || present(requestedAside)) && hasBlocks;
+
+  /* The aside belongs to the head TRACK, so it exists only when the track does. A degraded band
+     drops it: set full column at 1240 a 3:2 photo is ~827 tall (past the fold by itself), and the
+     HEAD_TRACK `sizes` it was placed at would serve a 381-wide file, upscaled and soft. */
+  const aside = besideSplit ? requestedAside : undefined;
+  const hasAside = present(aside);
+  const hasHead = hasText || hasActions || hasAside;
 
   /* `split-head` needs a heading for its leading track and a lead or actions for its trailing one.
      Without either, the head is the stacked head. */
@@ -366,10 +383,13 @@ export function ContentSection(props: ContentSectionProps) {
         actions={hasActions ? actions : null}
         blocks={hasBlocks ? <Layout rowGap="stack">{children}</Layout> : null}
         footer={hasFooter ? footer : null}
-        /* § 3.2 rule 1: a copy column that ENDS in an action — the foot, or the head's actions with
-           nothing after them — stretches to the photograph's height and pins that action to its
-           bottom edge. Otherwise the copy is centred on the photograph (rule 2). */
-        endsInAction={hasFooter || (hasActions && !hasBlocks)}
+        /* § 3.2 rule 1: a copy column that ENDS in an action stretches to the photograph's height
+           and pins that action to its bottom edge — but only when blocks sit between the head and
+           the action (§ 3.4 B: H-full + tiles, or ≤ 2 tiles + a CtaRow). With no blocks there is
+           nothing to fill the stretch, and pinning opens a 350–400 hole between the lead and the
+           action at 1440; that copy column is centred on the photo instead (rule 2), as is any
+           copy that does not end in an action. */
+        pinFooter={hasBlocks && hasFooter}
       />
     );
   } else if (headSplit) {
@@ -466,8 +486,8 @@ export function ContentSection(props: ContentSectionProps) {
  *                           first in the DOM, which is the phone's order (photo above the copy in B,
  *                           § 3.7), and it carries no meaning against the copy (an atmosphere photo,
  *                           alt="").
- *   align   stretch|center  the copy column stretches to the photo's height when it ends in an
- *                           action, and is centred on it when it does not (§ 3.2 rules 1 and 2)
+ *   align   stretch|center  the copy column stretches to the photo's height when blocks sit above
+ *                           a closing action, and is centred on it otherwise (§ 3.2 rules 1 and 2)
  *
  * The photograph sits in a plain `div` because the row may STRETCH: a stretched `<img>` would take
  * the row's height and lose its 4:5. The div stretches; the image inside keeps its crop at the top
@@ -484,14 +504,14 @@ function MediaSplit({
   actions,
   blocks,
   footer,
-  endsInAction,
+  pinFooter,
 }: {
   media: ContentSectionMedia;
   headText: ReactNode;
   actions: ReactNode;
   blocks: ReactNode;
   footer: ReactNode;
-  endsInAction: boolean;
+  pinFooter: boolean;
 }) {
   return (
     <Layout
@@ -499,14 +519,14 @@ function MediaSplit({
       colGap="section"
       rowGap="stack"
       reverse={media.side === 'end' ? { lg: true } : undefined}
-      align={endsInAction ? 'stretch' : 'center'}
+      align={pinFooter ? 'stretch' : 'center'}
     >
       <div>
         {/* 4:5 beside the copy, 4:3 above it (§ 3.7 item 4): a 4:5 at the 326 phone column would be
             408 tall before the first word of the copy. */}
         <Media image={media.image} ratio={{ base: '4/3', lg: '4/5' }} sizes={MEDIA_SPLIT} />
       </div>
-      <Layout rowGap="stack" pinLast={endsInAction}>
+      <Layout rowGap="stack" pinLast={pinFooter}>
         {headText}
         {actions}
         {blocks}

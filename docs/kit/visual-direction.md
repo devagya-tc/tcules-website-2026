@@ -576,6 +576,12 @@ word, joined to it with a non-breaking space.
    - the last element is pinned to the image's bottom edge (`pinLast`).
 
    Two shared edges is what makes a split look finished.
+
+   **Only when blocks sit between the head and the action** (tiles, points, a quote). A copy column
+   that is a head and an action and nothing else is centred on the image, as in rule 2: stretched,
+   it left 350 to 400 of empty column between the lead and the action at 1440 (`fdn-section-head`
+   fix round, 6 Oct; ContentSection `media`). B always carries tiles (§ 3.4), so this is the degrade
+   path, not a page shape.
 2. **When it does not end in an action** (a quote, rows only), the copy is centred on the image
    (`align="center"`).
 3. **An illustration has no box,** so it is always centred on the copy (the hero).
