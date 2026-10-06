@@ -235,3 +235,21 @@ Eyebrows on services/* and expertise/* now stand under "Home / Services" or "Hom
 | — | `photos` stand-in pool | studio-whiteboard-crit, studio-session-talk, workshop-brick-room, hands-trackpad | studio-whiteboard-crit, studio-session-talk, studio-desk-pairing, workshop-brick-room (hands-trackpad is product-design's B photo) |
 
 **Why.** The 1 Oct review found the page read as a document. Two bands ran past the fold, and the page had no proof band, no offer and no logos. Now every section has its own band shape, there is an image every second band, and all twelve bands fit 1470 × 830. **Found in.** `kit/page-product-modernisation`, 6 Oct 2026.
+
+### Product Modernisation fix round 1 (6 Oct 2026)
+
+**What's needed.** Approve, rewrite or reject each edit. The round removes the repeated "rule, icon, serif title, two-line body" tile from three of its four bands, puts imagery into the spectrum-to-proof stretch, and drops the router's duplicate of the offer. Still 12 bands; tallest 791 at 1470, 1440 at 390.
+
+| Band | Field | Old | New |
+|---|---|---|---|
+| B four views | tiles | two: Inside the company — Sales sees an ageing product, support sees recurring exceptions, engineering sees costly dependencies. · Outside it — Customers know the current behaviour, workarounds included. Their learning is what a modernisation must not break. | four, so the eyebrow's "four views" are shown: Sales — Sees an ageing product, and a roadmap slowed by what it carries. · Support — Sees recurring exceptions, handled by hand, release after release. · Engineering — Sees dependencies that make every change expensive. · Customers — Know the current behaviour, workarounds included. That learning must not break. (No counterweight: the template gives it only to two tiles.) |
+| C-pair work | position / lead | band 9, after the method / Three products where the change went as deep as the cost, and stopped there. | band 5, straight after the spectrum it evidences / Two products where the change went exactly as deep as the cost, and stopped there. |
+| C-pair work | cases | three, including Gold Image Printing · Legacy ERP — A legacy ordering flow, rebuilt | two (Benchmark Gensuite, Dealpath); Gold Image Printing is reachable from "All case studies" |
+| C-pair work | Dealpath title | Density kept, one path changed | The density stayed; one path changed (the old title broke "one / path") |
+| N continuity | block | six icon tiles: Operational · Conceptual · Data · Access · Commercial · Learning | a contrast pair, which is the lead's own distinction. Keep what still carries the work — Essential work, completing during the move and after it · Records, history and what they mean · Roles, permissions and approval authority · Contractual and service commitments. Let go of what only carries habit — Steps that exist only because the old platform required them · Workarounds built around a defect the change removes · Labels and groupings the work has outgrown (NEW). Conceptual continuity is the lead; Learning is the method's last step |
+| G proof | case | none | the Auxentios CPQ case the quote came from (G-case), as on product-design. CONTENT ASK unchanged: a modernisation client's own quote |
+| K offer | body / points | The Product Modernisation Assessment decides repair, redesign, replatform or rebuild, capability by capability. / The product, walked through · Each capability’s change, decided · What stays familiar, recorded | The Product Modernisation Assessment walks the product through and decides, capability by capability, what to repair, redesign, replatform or rebuild, and what stays familiar. / none (the three points are the sentence) |
+| K offer | photograph | `pencil-wireframe-violet` | `office-calm-interior` (the violet cast read as a stock filter; slot table in src/lib/photos.ts) |
+| Router | heading / lead | Choose where to start / When the boundary is clear, a narrower service settles it faster. | When the layer is already clear / A narrower service settles a known boundary faster. |
+| Router | routes | four icon cards, the fourth "Product Modernisation Assessment" | three linked rows, no icons (the assessment is band 10's offer, one scroll earlier) |
+

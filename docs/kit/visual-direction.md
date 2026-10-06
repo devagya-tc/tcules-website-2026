@@ -952,7 +952,7 @@ any photo for a better catalogue match, as long as the gate still passes.
 | design-engineering (warm) | `stylus-tablet-sketch` | `whiteboard-two-hands` | `sticky-grid-minimal` | `studio-whiteboard-crit` | `hands-sketches-markers` | aside 1 |
 | design-systems (cool) | `screen-over-shoulder` | `wireframe-wall` | `desk-minimal-white` | `desk-flatlay-devices` (crop out the printed "to") | `designer-monitor-ui` (crop from the right) | `studio-whiteboard-crit` as a stand-in cover |
 | ai-product-ux (cool) | `pair-testing-overhead` | `workshop-whiteboard-lounge` | `conversation-chalkboard` | `hands-sticky-blue-pen` | `pencil-wireframe-red` | `studio-session-talk` as a stand-in cover |
-| product-modernisation (cool) | `wall-sketching-portrait` | `office-calm-interior` | `pencil-wireframe-violet` | `board-review-backs` | `pair-desk-through-plants` | `studio-whiteboard-crit` as a stand-in cover |
+| product-modernisation (cool) | `wall-sketching-portrait` | — (no banner) | `office-calm-interior` (3:2, landscape offer; fix round 1: the violet pencil read as a stock filter) | `board-review-backs` | `pair-desk-through-plants` | `studio-whiteboard-crit` as a stand-in cover |
 
 - **No large slot uses a vivid photo.** Each page may spend its one vivid photo in a card set, for
   example `workshop-sticky-sort` on a discovery card. Keep it away from blue-accented blocks.

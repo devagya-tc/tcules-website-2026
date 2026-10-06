@@ -241,10 +241,12 @@ export const SERVICE_PHOTO_SLOTS = {
     aside1: 'hands-sticky-blue-pen',
     aside2: 'pencil-wireframe-red',
   },
+  /* product-modernisation, fix round 1 (6 Oct 2026): K was `pencil-wireframe-violet`, whose violet
+     cast read as a stock filter beside brandeis blue and peridot. K takes the page's own I photo, the
+     calm renovated interior (neutral, 3:2 for the landscape offer), and the page carries no banner. */
   'product-modernisation': {
     b: 'wall-sketching-portrait',
-    i: 'office-calm-interior',
-    k: 'pencil-wireframe-violet',
+    k: 'office-calm-interior',
     aside1: 'board-review-backs',
     aside2: 'pair-desk-through-plants',
   },

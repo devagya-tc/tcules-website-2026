@@ -9,22 +9,24 @@ const ASSESSMENT = auditPath('product-modernisation-assessment');
 
 /**
  * /services/product-modernisation, designed — recomposed from the UI kit on 6 Oct 2026
- * (visual-direction § 8.2, the product-design worked example). Copy is the CMS's own, re-cut to the
- * § 1.5 budgets; every edit is logged, old and new, in docs/content-changes.md ("Product
- * Modernisation recomposed"). The sections say what the page argues; the template decides how each
- * is laid out from the job its blocks do (ServicePage plan.ts), so no field here is a layout.
+ * (visual-direction § 8.2, the product-design worked example), fix round 1 the same day. Copy is the
+ * CMS's own, re-cut to the § 1.5 budgets; every edit is logged, old and new, in
+ * docs/content-changes.md ("Product Modernisation recomposed"). The sections say what the page
+ * argues; the template decides how each is laid out from the job its blocks do (ServicePage
+ * plan.ts). One layout field remains: `signals.columns`, which the content model still requires —
+ * the template should derive it from the item count, as plan.ts already does for the counterweight.
  *
  *   hero        the claim
- *   four-views  inside the company, and outside it — B, two tiles, so the counterweight runs
- *   clients     who we have shipped with — H, with the sourced rating
+ *   four-views  sales, support, engineering, customers — B, four tiles beside the wall-sketch photo
+ *   clients     who we have shipped with — H
  *   choose      the least disruptive change, five on one scale — E, the spectrum
- *   continuity  what must survive the move — C-text, six cards
+ *   work        two cases, one went deeper and one stayed selective — C-pair, the spectrum shown
+ *   continuity  keep what carries the work, let go of habit — N, the contrast pair
  *   transition  both products live, designed in between — E, the bridge (horizon above G)
- *   proof       a client's words — G, the tint band
+ *   proof       a client's words beside the case they came from — G-case, the tint band
  *   method      five steps from diagnosis to the next release — F
- *   work        three modernisation cases — M
- *   offer       the assessment — K
- *   routes      where to start — the C-icon router
+ *   offer       the assessment — K, landscape
+ *   routes      three narrower services — the list router (D) beside its photograph
  *   close       the form — L
  */
 export const productModernisation: ServiceStory = {
@@ -74,17 +76,27 @@ export const productModernisation: ServiceStory = {
       blocks: [
         {
           kind: 'signals',
-          columns: 2,
+          columns: 4,
           items: [
             {
               icon: 'graph-up',
-              title: 'Inside the company',
-              body: 'Sales sees an ageing product, support sees recurring exceptions, engineering sees costly dependencies.',
+              title: 'Sales',
+              body: 'Sees an ageing product, and a roadmap slowed by what it carries.',
+            },
+            {
+              icon: 'chat-round-dots',
+              title: 'Support',
+              body: 'Sees recurring exceptions, handled by hand, release after release.',
+            },
+            {
+              icon: 'server',
+              title: 'Engineering',
+              body: 'Sees dependencies that make every change expensive.',
             },
             {
               icon: 'users-group-rounded',
-              title: 'Outside it',
-              body: 'Customers know the current behaviour, workarounds included. Their learning is what a modernisation must not break.',
+              title: 'Customers',
+              body: 'Know the current behaviour, workarounds included. That learning must not break.',
             },
           ],
         },
@@ -161,46 +173,56 @@ export const productModernisation: ServiceStory = {
     },
     {
       type: 'section',
+      id: 'work',
+      eyebrow: 'Modernisation work',
+      heading: 'Change at the layer causing the cost',
+      lead: 'Two products where the change went exactly as deep as the cost, and stopped there.',
+      blocks: [
+        {
+          kind: 'cases',
+          items: [
+            {
+              slug: 'legacy-saas-modernisation-information-architecture',
+              client: 'Benchmark Gensuite · went deeper',
+              title: 'A visual upgrade exposed the IA',
+              body: 'A reused scope selector showed unclear boundaries; the IA changed, continuity held.',
+            },
+            {
+              slug: 'enterprise-workflow-redesign-dealpath-real-estate',
+              client: 'Dealpath · stayed selective',
+              title: 'The density stayed; one path changed',
+              body: 'Listings gained a clearer reading order; one creation path changed.',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'section',
       id: 'continuity',
       eyebrow: 'What must survive',
       heading: 'Continuity belongs in the product plan',
       lead: 'Some familiarity reflects a sound model; some is effort spent on weak design. The plan tells them apart.',
       blocks: [
         {
-          kind: 'signals',
-          columns: 3,
-          items: [
-            {
-              icon: 'checklist',
-              title: 'Operational',
-              body: 'Essential work still completes, during the move and after it.',
-            },
-            {
-              icon: 'widget',
-              title: 'Conceptual',
-              body: 'Familiar objects and rules change only with a stated reason.',
-            },
-            {
-              icon: 'database',
-              title: 'Data',
-              body: 'Records, history and their meaning survive the transition.',
-            },
-            {
-              icon: 'lock',
-              title: 'Access',
-              body: 'Roles, permissions and approval authority stay correct.',
-            },
-            {
-              icon: 'document-text',
-              title: 'Commercial',
-              body: 'Contractual and service commitments stay understood.',
-            },
-            {
-              icon: 'refresh',
-              title: 'Learning',
-              body: 'Each release produces evidence for the next decision.',
-            },
-          ],
+          kind: 'fit',
+          yes: {
+            heading: 'Keep what still carries the work',
+            items: [
+              'Essential work, completing during the move and after it',
+              'Records, history and what they mean',
+              'Roles, permissions and approval authority',
+              'Contractual and service commitments',
+            ],
+          },
+          no: {
+            heading: 'Let go of what only carries habit',
+            items: [
+              'Steps that exist only because the old platform required them',
+              'Workarounds built around a defect the change removes',
+              'Labels and groupings the work has outgrown',
+            ],
+          },
         },
       ],
     },
@@ -232,6 +254,8 @@ export const productModernisation: ServiceStory = {
             'Criteria for retiring the temporary state',
           ],
         },
+        /* Review mode only (`?slots=1`): the illustration this band is waiting for. Kept as the
+           record of what the image must say, and as the stress story's one `slot` variant. */
         {
           kind: 'slot',
           slot: {
@@ -259,6 +283,12 @@ export const productModernisation: ServiceStory = {
             text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
             name: 'Ashok Mohanty',
             company: 'Auxentios',
+          },
+          case: {
+            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+            client: 'Auxentios · Industrial CPQ',
+            title: 'A quotation model from eight specialist interviews',
+            body: 'Research across specialist roles, carried into a product model and component-led interface work.',
           },
           rating: CLUTCH_RATING,
         },
@@ -299,62 +329,24 @@ export const productModernisation: ServiceStory = {
       ],
     },
     {
-      type: 'section',
-      id: 'work',
-      eyebrow: 'Modernisation work',
-      heading: 'Change at the layer causing the cost',
-      lead: 'Three products where the change went as deep as the cost, and stopped there.',
-      blocks: [
-        {
-          kind: 'cases',
-          items: [
-            {
-              slug: 'legacy-saas-modernisation-information-architecture',
-              client: 'Benchmark Gensuite · went deeper',
-              title: 'A visual upgrade exposed the IA',
-              body: 'A reused scope selector showed unclear boundaries; the IA changed, continuity held.',
-            },
-            {
-              slug: 'enterprise-workflow-redesign-dealpath-real-estate',
-              client: 'Dealpath · stayed selective',
-              title: 'Density kept, one path changed',
-              body: 'Listings gained a clearer reading order; one creation path changed.',
-            },
-            {
-              slug: 'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
-              client: 'Gold Image Printing · Legacy ERP',
-              title: 'A legacy ordering flow, rebuilt',
-              body: 'An ordering flow rebuilt so print buyers finish what they start.',
-            },
-          ],
-        },
-      ],
-    },
-    {
       type: 'offer',
       id: 'assessment',
       eyebrow: 'Not sure where to start?',
       heading: 'Settle the boundary before delivery starts',
-      body: 'The Product Modernisation Assessment decides repair, redesign, replatform or rebuild, capability by capability.',
-      points: [
-        { label: 'The product, walked through' },
-        { label: 'Each capability’s change, decided' },
-        { label: 'What stays familiar, recorded' },
-      ],
+      body: 'The Product Modernisation Assessment walks the product through and decides, capability by capability, what to repair, redesign, replatform or rebuild, and what stays familiar.',
       actions: [{ label: 'Request the free assessment', href: ASSESSMENT }],
     },
     {
       type: 'section',
       id: 'choose',
       eyebrow: 'Go narrower',
-      heading: 'Choose where to start',
-      lead: 'When the boundary is clear, a narrower service settles it faster.',
+      heading: 'When the layer is already clear',
+      lead: 'A narrower service settles a known boundary faster.',
       blocks: [
         {
           kind: 'router',
           items: [
             {
-              icon: 'ruler-pen',
               when: 'The cost sits in the experience, and the model underneath still holds.',
               route: {
                 label: 'Product Redesign',
@@ -362,7 +354,6 @@ export const productModernisation: ServiceStory = {
               },
             },
             {
-              icon: 'server',
               when: 'Dependencies and accumulated change cost are the binding constraint.',
               route: {
                 label: 'Legacy Software Modernisation',
@@ -370,7 +361,6 @@ export const productModernisation: ServiceStory = {
               },
             },
             {
-              icon: 'layers',
               when: 'The platform move is decided; the behaviour that must survive is not.',
               route: {
                 label: 'Replatforming Product Design',
@@ -378,11 +368,6 @@ export const productModernisation: ServiceStory = {
               },
             },
           ],
-          also: {
-            icon: 'checklist',
-            when: 'The team still disagrees on repair, redesign, replatform or rebuild.',
-            link: { label: 'Product Modernisation Assessment', href: ASSESSMENT },
-          },
         },
       ],
     },
