@@ -24,6 +24,11 @@ const ILLUSTRATION: MediaImage = {
   width: 962,
   height: 714,
   kind: 'illustration',
+  /* The main object, for the phone zoom: the blue model panel and the screen it drives, with
+     PRODUCT MODEL above them; both stay whole at 390. EVIDENCE falls outside the crop, and only
+     the tail of MODEL FIRST's arrow is left at the edge — tried at 0.472 to drop it, which cut
+     the screen in half instead. */
+  focus: { x: 0.515, y: 0.5 },
 };
 
 /**
@@ -76,13 +81,13 @@ export default function KitBannerSpecimen() {
 
       {/* ── I · Banner, below ─────────────────────────────────────────────────────────── */}
       <Caption index="I.1" title="Banner below">
-        The H-row over a 3:1 photograph. The eyebrow labels the whole row; the heading takes the
-        one-third track and the lead and its one blue link the two-thirds track, top edges
-        level. 617 of the 702 a tight band allows. At 390 the photograph crops 3:2.
+        The H-row over a 3:1 photograph. The eyebrow and its blue rule label the whole row; the
+        heading takes the one-third track, and the lead with its blue link a block beneath it is
+        one unit in the two-thirds track, top edges level. At 390 the photograph crops 3:2.
       </Caption>
       <Banner
         eyebrow="How engagements start"
-        heading="A week in the room, first"
+        heading="The work starts in the room"
         headingId="kit-banner-below"
         lead="Before anything is drawn, we sit with the people doing the work and map the decisions they make."
         actions={
@@ -91,12 +96,17 @@ export default function KitBannerSpecimen() {
             rule={false}
           />
         }
-        image={getKitPhoto('workshop-whiteboard-lounge')}
+        image={{
+          ...getKitPhoto('conversation-chalkboard'),
+          /* Anchored high, so the 3:1 crop keeps both faces and the board behind them. */
+          focus: { x: 0.5, y: 0.2 },
+        }}
       />
 
       <Caption index="I.2" title="Banner below, no action">
-        The same row with nothing to click: the lead alone in the trailing track. The photograph
-        carries the band, which is the point of a banner.
+        The same row with nothing to click: the lead alone in the trailing track, the blue rule
+        the band&rsquo;s one accent. The photograph carries the band, which is the point of a
+        banner.
       </Caption>
       <Banner
         eyebrow="The studio"
@@ -125,18 +135,19 @@ export default function KitBannerSpecimen() {
             rule={false}
           />
         }
-        image={getKitPhoto('whiteboard-two-hands')}
+        image={getKitPhoto('stylus-tablet-sketch')}
       />
 
       <Caption index="I.4" title="Banner beside, photo left">
         mediaSide=&quot;start&quot; mirrors the split from 1024; the copy stays first in the
-        reading order. The one solid ask a band may carry, with its blue second action.
+        reading order. The one solid ask a band may carry, with its blue second action. A
+        photograph with no frame needs edges that hold their own tone against the paper.
       </Caption>
       <Banner
         form="beside"
         mediaSide="start"
         eyebrow="Product audits"
-        heading="Two weeks to a clear diagnosis"
+        heading="A clear diagnosis in two weeks"
         headingId="kit-banner-beside-start"
         lead="A senior pair reviews the product, its data and its team, then hands you an ordered list of what to fix first."
         actions={
@@ -149,12 +160,13 @@ export default function KitBannerSpecimen() {
             rule={false}
           />
         }
-        image={getKitPhoto('pair-laptop-notebook')}
+        image={getKitPhoto('whiteboard-pair-laptop')}
       />
 
       <Caption index="I.5" title="Banner beside, illustration">
         An illustration in place of the photograph: whole, unboxed and unrounded, centred on the
-        copy. The illustration is the band&rsquo;s blue mass, so it carries no texture.
+        copy, and the band&rsquo;s blue mass, so it carries no texture. At 390 it zooms into its
+        main object, so its callouts stay legible rather than shrinking to 4px.
       </Caption>
       <Banner
         form="beside"
@@ -174,19 +186,20 @@ export default function KitBannerSpecimen() {
       {/* ── J · Statement ─────────────────────────────────────────────────────────────── */}
       <Caption index="J.1" title="Statement">
         One sentence at the h1 role, rendered as an h2: the page&rsquo;s only h1 is the
-        hero&rsquo;s. Eyebrow and blue mark in the head track, the sentence in 763. 171 of the
-        574 an open band allows; the rest is air, and the air is the design.
+        hero&rsquo;s. Eyebrow and blue mark in the head track, the sentence in 763. Two lines at 1470, three at most at 1024: 114 of the 574 an open
+        band allows. The rest is air, and the air is the design.
       </Caption>
       <Statement eyebrow="What we believe" id="kit-statement">
-        Most product problems are decisions nobody has made yet, showing up on a screen.
+        Most product problems are decisions nobody has made yet.
       </Statement>
 
       <Caption index="J.2" title="Statement, head-half texture">
-        The pixel grid feathers out of the empty end quadrant above the sentence. Its box ends
-        96 into the band, inside the 128 of open air, so it touches no text. From 1024 only.
+        The pixel grid as a soft field in the head track&rsquo;s empty half, under the blue rule
+        and aligned to its start edge. It starts a stack below the eyebrow and fades out inside
+        the 128 of open air, so it touches no text. From 1024 only.
       </Caption>
       <Statement eyebrow="How we work" id="kit-statement-texture" texture="head-half">
-        We design the decision first. The screen is what it looks like afterwards.
+        Decide first. The screen follows from the decision.
       </Statement>
 
       <Caption index="J.3" title="Statement as p">
@@ -194,13 +207,13 @@ export default function KitBannerSpecimen() {
         what the page already argues. A heading navigator lists nothing here.
       </Caption>
       <Statement eyebrow="In short" as="p">
-        A small senior team, working in the open, from the first week to release.
+        A small senior team, working in the open from week one.
       </Statement>
 
       {/* ── The announcement strip ────────────────────────────────────────────────────── */}
       <Caption index="S.1" title="Announcement strip">
-        Section density=&quot;strip&quot;: 24 of air, on tint, one line of body-sm and one blue
-        link. A strip, not a band: showcase pages only.
+        Section density=&quot;strip&quot;: 24 of air, on tint, a blue mono label, one line of
+        body-sm and one blue link. A strip, not a band: showcase pages only.
       </Caption>
       <Banner
         form="strip"

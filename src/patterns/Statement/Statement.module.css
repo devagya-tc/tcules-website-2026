@@ -3,7 +3,7 @@
    Section paints the band and its open air; Layout and Cluster own every seam; Texture owns its
    field. Every value is a --stmt-* token in tokens/components/statement.css.
 
-   Classes: .eyebrow .sentence .mark .texture
+   Classes: .eyebrow .sentence .mark .head .texture
 
    One @media query: the head-half texture runs from 1024 only (§ 6.3: "below 1024: none"). It
    swaps visibility, never a distance. */
@@ -32,12 +32,24 @@
   background: var(--stmt-mark-ink);
 }
 
-.texture {
+/* The head-half field's box (fix round 1). The head cell is the positioning box; the field starts a
+   `stack` under its top, clear of the eyebrow, and runs past the cell's foot through the band's open
+   padding to the band's bottom edge, where Section's ground ends. Placement of a decorative layer,
+   not a seam: nothing is spaced by it. Higher specificity than Texture's own `inset: 0`. */
+.head {
+  position: relative;
+}
+
+.head > .texture {
   display: none;
+  inset: auto;
+  inset-block-start: var(--gap-stack);
+  inset-inline-start: 0;
+  block-size: calc(100% - var(--gap-stack) + var(--gap-section-open));
 }
 
 @media (min-width: 1024px) {
-  .texture {
+  .head > .texture {
     display: block;
   }
 }

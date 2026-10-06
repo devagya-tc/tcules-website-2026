@@ -34,16 +34,18 @@ never `h1` — the page's only h1 is the hero's), `id` (the h2's id and the band
 
 § 6.3 places `head-half` at "rect, top −200, end −120, 34% × 296, blur 160". Built that way, the
 band's own clip cut the grid at its top edge at ~88% strength: a hard line across a paper-to-paper
-seam. Nothing lower is free in the end track, which the sentence's box fills. The built placement is
-in the empty quadrant of the HEAD track, under the eyebrow: ellipse, left −160, top 176, 34% × 160,
-blur 160. Its box (x ≤ 340, y 176 to 336 at 1470) clears the eyebrow and the sentence; the feather
-fades before both band edges and the start edge is the viewport's. Consequence for the kit/home
-signature (§ 6.4): head-half is now a START-side placement, so `cmp-showcase` should pair it with
-an end-side hero-foot or accept start, start, start. Owner check.
+seam. Nothing lower is free in the end track, which the sentence's box fills. The built placement
+(fix round 1) is the HEAD CELL's own field: the cell is positioned, the Texture's box runs from a
+`stack` under the cell's top to the band's bottom edge, and one rect sits centred in it at 80% × 62%,
+blur 40. The core reaches the grid's strength, the feather is spent inside the box, and the nearest
+feather stops ~30 under the eyebrow. (The first build's ellipse, blurred 160 off the viewport edge,
+read as a ~3% smudge.) Consequence for the kit/home signature (§ 6.4): head-half is a START-side
+placement, so `cmp-showcase` should pair it with an end-side hero-foot or accept start, start,
+start. Owner check.
 
 ## Measured (1470 × 830)
 
-428 tall (content 171 + 256 open air, target ≤ 534 content). 390: 409 to 447.
+370 tall with a 2-line sentence (114 + 256 open air); every kit sentence holds ≤ 3 lines at 1024. 390: 409 to 447.
 
 ## Open questions
 

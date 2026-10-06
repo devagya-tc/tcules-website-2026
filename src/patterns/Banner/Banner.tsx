@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import {
   Button,
@@ -60,6 +60,11 @@ type BannerHeadProps = {
    * ratio). `beside` takes a photograph (cropped 3:2) or an illustration, which renders whole,
    * unboxed, centred on the copy (§ 5.3) — and a band with an illustration carries no texture.
    * Never type on the image (§ 5.1 rule 6): the banner has no overlay slot by construction.
+   *
+   * Choose a photograph with DEFINED EDGES. A banner photograph has no frame (§ 5.3), so its paper
+   * edge is the photograph's own: a high-key source whose edge is blown window or white wall
+   * dissolves into the paper and loses its shape and its radius on that side (fix round 1, I.4).
+   * The edge has to hold a tone of its own; reject a source whose edge column is mostly near-white.
    */
   image: MediaImage;
   /** The ground. Default `paper`; tint only as a surface proof on a specimen (§ 8.6). */
@@ -81,7 +86,10 @@ type StripProps = {
   form: 'strip';
   /** The announcement, one sentence of body-sm, ≤ 14 words so it holds one line at 1440. */
   message: string;
-  /** A short mono label before the message ("New", "Event"). Ink, not blue: a label is not a link. */
+  /**
+   * A short mono label before the message ("New", "Event"). Blue, as the family's accent: the label
+   * is the strip's mark, the eyebrow's blue rule in another form (fix round 1). The message stays ink.
+   */
   label?: string;
   /** The one link. Blue at rest, the arrow after it (§ 4.2: every link-style action). */
   link?: BannerLink;
@@ -100,6 +108,21 @@ export type BannerProps = BelowProps | BesideProps | StripProps;
  */
 const BESIDE_SIZES =
   '(min-width: 1304px) 667px, (min-width: 1024px) calc((100vw - 160px) * 7 / 12), calc(100vw - 64px)';
+
+/**
+ * The phone crop's horizontal shift for an illustration, as the one custom property the zoom reads
+ * (Media's --media-focus precedent: a class cannot express a per-asset value). The window is
+ * 1 / zoom of the drawing, centred on `focus.x` and clamped so it never runs past either edge.
+ * Kept in step with --bnr-illustration-zoom-phone (1.8, as 180%) in tokens/components/banner.css.
+ */
+const ILLUSTRATION_ZOOM_PHONE = 1.8;
+function illustrationShift(image: MediaImage): CSSProperties | undefined {
+  const x = image.focus?.x;
+  if (x === undefined) return undefined;
+  const window = 1 / ILLUSTRATION_ZOOM_PHONE;
+  const start = Math.min(Math.max(x - window / 2, 0), 1 - window);
+  return { '--bnr-illustration-shift': `${(-start * 100).toFixed(2)}%` } as CSSProperties;
+}
 
 /**
  * Banner — the I band: one photograph carrying the band, a head that names it, and at most one
@@ -136,10 +159,16 @@ export function Banner(props: BannerProps) {
     );
   }
 
+  /* The eyebrow carries the family's blue mark, the Statement's short rule (cmp-banner fix round 1):
+     a banner with no action has no other blue beside a photograph, and the I and J bands share one
+     accent grammar. The mark is sized, not spaced: the Cluster owns its seam to the label. */
   const eyebrowEl = eyebrow ? (
-    <p className={styles.eyebrow} data-copy="eyebrow">
-      {eyebrow}
-    </p>
+    <Cluster colGap="text" align="center" nowrap>
+      <span aria-hidden="true" className={styles.mark} />
+      <p className={styles.eyebrow} data-copy="eyebrow">
+        {eyebrow}
+      </p>
+    </Cluster>
   ) : null;
   const headingEl = (
     <h2 id={headingId} className={styles.heading} data-copy="h2">
@@ -157,7 +186,12 @@ export function Banner(props: BannerProps) {
   if (form === 'below') {
     /* The H-row (§ 1.4, as amended by fdn-section-head): the eyebrow labels the whole row, so it
        keeps its own row; then heading | lead + action, top-aligned. With no lead and no action the
-       row has no trailing half, and the heading sits alone under its eyebrow. */
+       row has no trailing half, and the heading sits alone under its eyebrow.
+
+       Lead to action is `block` (24) here, not ContentSection's `stack` (48): in the H-row the lead
+       and its link are ONE trailing unit set against the heading, and at 48 the link floated loose in
+       a mostly empty two-thirds track and the row read as a form (fix round 1). In the beside form the
+       copy is a column of its own, and the action keeps the `stack` beat under it. */
     const trailing = leadEl || actions;
     arranged = (
       <Layout rowGap="stack">
@@ -166,7 +200,7 @@ export function Banner(props: BannerProps) {
           {trailing ? (
             <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
               {headingEl}
-              <Layout rowGap="stack">
+              <Layout rowGap="block">
                 {leadEl}
                 {actions}
               </Layout>
@@ -200,15 +234,24 @@ export function Banner(props: BannerProps) {
           </Layout>
           {actions}
         </Layout>
-        {/* A plain wrapper so the image keeps its crop in a row that centres it. An illustration
-            renders whole and unboxed; a photograph crops 3:2 at every width. */}
-        <div>
-          {illustration ? (
-            <Media image={image} sizes={BESIDE_SIZES} />
-          ) : (
+        {/* A plain wrapper so the image keeps its crop in a row that centres it. A photograph crops
+            3:2 at every width. An illustration renders whole and unboxed from 768; on a phone it
+            is ZOOMED into its main object (fix round 1): a 962-wide drawing at the 326 column is
+            0.34×, and its mono callouts came out at 4 to 6px. The phone window is
+            --bnr-illustration-zoom-phone of the column, centred on the record's `focus.x` and
+            clamped to the drawing, so a callout at the far edge falls outside the crop rather
+            than being shrunk past reading. */}
+        {illustration ? (
+          <div className={styles.illustration}>
+            <div className={styles.illustrationZoom} style={illustrationShift(image)}>
+              <Media image={image} sizes={BESIDE_SIZES} />
+            </div>
+          </div>
+        ) : (
+          <div>
             <Media image={image} ratio="3/2" sizes={BESIDE_SIZES} />
-          )}
-        </div>
+          </div>
+        )}
       </Layout>
     );
   }

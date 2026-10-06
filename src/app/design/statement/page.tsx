@@ -13,12 +13,15 @@ import { specimenStyles as s } from '../_specimen/Specimen';
 
 const SENTENCE =
   'Most product problems are decisions nobody has made yet, showing up on a screen.';
-const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
-const SURFACE_NOTE: Record<SectionSurface, string> = {
+/* No blue band (fix round 1): blue is never a ground (owner ruling, § 4.3), and a specimen that
+   paints one is the one place the branch would show it. The blue token block stays declared for
+   self-containment, which tokens:check proves without a render. */
+type ShownSurface = Exclude<SectionSurface, 'blue'>;
+const SURFACES: readonly ShownSurface[] = ['paper', 'tint', 'ink'];
+const SURFACE_NOTE: Record<ShownSurface, string> = {
   paper: 'Paper, the page ground.',
   tint: 'Surface proof — on pages, tint is the proof band only (§ 1.7).',
   ink: 'Surface proof — the mark lifts to brandeis-300 on ink.',
-  blue: 'Surface proof — self-containment only; no page carries a blue band (§ 4.3).',
 };
 
 function Label({ title, children }: { title: string; children: ReactNode }) {
@@ -63,7 +66,7 @@ export default function StatementSpecimen() {
         sits a stack under the sentence, a blue link.
       </Label>
       <Statement eyebrow="How we work" id="stmt-texture" texture="head-half">
-        We design the decision first. The screen is what it looks like afterwards.
+        We design the decision first. The screen follows from it.
       </Statement>
       <Statement
         eyebrow="How we work"
@@ -75,7 +78,7 @@ export default function StatementSpecimen() {
           />
         }
       >
-        We design the decision first. The screen is what it looks like afterwards.
+        We design the decision first. The screen follows from it.
       </Statement>
 
       <Label title="3 · absent eyebrow, and the ceiling">

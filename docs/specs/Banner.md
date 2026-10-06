@@ -32,15 +32,22 @@ Plus the announcement strip, which is the same family's one-line form.
   there is no way to put type on the image (§ 5.1 rule 6).
 - `below` warns in development when handed a non-photograph (only a photograph takes a ratio).
 - An illustration band carries no texture (§ 4.3 band rule); the banner has no texture slot at all.
-- Rhythm is ContentSection's: `block` inside the head, `stack` lead to action and head to image,
-  `section` across a split. The pattern does not import ContentSection (a pattern never imports a
+- Rhythm is ContentSection's: `block` inside the head, `stack` head to image, `section` across a
+  split. Lead to action is `stack` in `beside` and `block` in `below`, where the lead and its link
+  are one trailing unit against the heading (fix round 1).
+- The eyebrow carries a blue mark (the Statement's 32 × 2 rule) and the strip's mono label is blue:
+  one accent grammar across I and J (fix round 1). Below 768 the lead steps to the body role
+  (28 : 16 rather than 28 : 18).
+- `beside` with an illustration zooms to 180% of the column below 768, centred on the record's
+  `focus.x`, so callouts stay legible. A photograph must have defined edges: no frame, so a
+  blown-out edge dissolves into the paper. The pattern does not import ContentSection (a pattern never imports a
   pattern); it repeats the head's twelve lines of Layout.
 - Emits `data-band="I"` (or `strip`) and `data-copy` on eyebrow, h2, lead and the strip message for
   `fold:check`.
 
 ## Measured (1470 × 830)
 
-`below` 752 tall with a 2-line lead (content 624, target ≤ 662). `beside` 573 (photograph 445), 623
+`below` 728 tall with a 2-line lead and a link, 722 without (fix round 1). `beside` 573 (photograph 445), 623
 with the illustration. Strip 70. At 390: 572 to 733, strip 136. No overflow at 390.
 
 ## Deviation recorded

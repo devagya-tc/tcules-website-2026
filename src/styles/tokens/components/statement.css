@@ -27,8 +27,9 @@
   --stmt-sentence-measure: var(--measure-title);
 
   /* The mark: a short rule before the eyebrow. A component SIZE, not a distance, so it is not a
-     gap step; the length is the eyebrow's cap height × ~4 at 12px, chosen to read as a dash. */
-  --stmt-mark-width: 32px; /* literal: the mark's length, component geometry */
+     gap step; the length is the eyebrow's cap height × ~4 at 12px, chosen to read as a dash. Read
+     from the space ramp as a length (fix round 1: it was a raw literal), as --bnr-mark-width is. */
+  --stmt-mark-width: var(--space-32);
   --stmt-mark-height: var(--border-width-2);
 }
 

@@ -4,7 +4,9 @@
    Media owns the photograph's crop, radius and absence of frame. This file states no distance, no
    ground and no size: every value is a --bnr-* token in tokens/components/banner.css.
 
-   Classes: .eyebrow .heading .lead .strip .stripLabel */
+   Classes: .eyebrow .heading .lead .strip .stripLabel .mark .illustration .illustrationZoom
+
+   One @media query: the illustration's phone zoom (below 768). It swaps a scale, never a distance. */
 
 .eyebrow {
   font: var(--bnr-eyebrow-text);
@@ -39,4 +41,28 @@
   letter-spacing: var(--bnr-strip-label-tracking);
   text-transform: var(--text-mono-case);
   color: var(--bnr-strip-label-ink);
+}
+
+/* The blue mark before the eyebrow: the family's foreground accent, the Statement's short rule.
+   Sized, not spaced — the Cluster around it owns the seam to the label. */
+.mark {
+  display: block;
+  inline-size: var(--bnr-mark-width);
+  block-size: var(--bnr-mark-height);
+  background: var(--bnr-mark-ink);
+}
+
+/* The illustration's phone art direction. From 768 the drawing renders whole; below it, the zoom
+   box is --bnr-illustration-zoom-phone of the column and shifted to the main object, and the crop
+   box clips what falls outside. This is a crop of the image's own box, never a distance: it swaps
+   a scale at one width, which is art direction, not a gap step. */
+.illustration {
+  overflow: clip;
+}
+
+@media (max-width: 767px) {
+  .illustrationZoom {
+    inline-size: var(--bnr-illustration-zoom-phone);
+    translate: var(--bnr-illustration-shift) 0;
+  }
 }

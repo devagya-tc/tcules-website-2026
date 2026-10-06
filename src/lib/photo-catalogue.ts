@@ -471,7 +471,7 @@ export const PHOTO_CATALOGUE = {
   },
   'office-calm-interior': {
     src: '/kit/photos/office-calm-interior.webp',
-    width: 2400,
+    width: 2376,
     height: 1602,
     focus: { x: 0.5, y: 0.55 },
     temperature: 'neutral',

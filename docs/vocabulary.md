@@ -171,7 +171,7 @@ Yours must not collide with any of those, nor with a primitive family above.
 against the controls beside it — if you are specifying one, say which of these it must line up with.
 
 - **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px · `--acc-question-underline-offset` 6px
-- **banner.css** — `--bnr-eyebrow-tracking` 0.12em · `--bnr-heading-tracking` -0.015em · `--bnr-heading-measure` 32ch · `--bnr-lead-measure` 56ch · `--bnr-strip-label-tracking` 0.12em
+- **banner.css** — `--bnr-eyebrow-tracking` 0.12em · `--bnr-heading-tracking` -0.015em · `--bnr-heading-measure` 32ch · `--bnr-lead-measure` 56ch · `--bnr-strip-label-tracking` 0.12em · `--bnr-mark-width` 32px · `--bnr-mark-height` 2px · `--bnr-illustration-zoom-phone` 180% · `--bnr-illustration-shift` 0%
 - **block-card.css** — `--bcrd-title-tracking-lg` -0.01em · `--bcrd-title-tracking-md` -0.005em · `--bcrd-title-tracking-sm` 0em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-rule-width` 1px · `--bcrd-radius` 0px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
 - **brand-mark.css** — `--bmark-size` 14px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px

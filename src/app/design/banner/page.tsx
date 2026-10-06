@@ -19,12 +19,15 @@ import { specimenStyles as s } from '../_specimen/Specimen';
 const CTA = (
   <CtaRow actions={[{ label: 'See how we work', href: ROUTES.howWeWork }]} rule={false} />
 );
-const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
-const SURFACE_NOTE: Record<SectionSurface, string> = {
+/* No blue band (fix round 1): blue is never a ground (owner ruling, § 4.3), and a specimen that
+   paints one is the one place the branch would show it. The blue token block stays declared for
+   self-containment, which tokens:check proves without a render. */
+type ShownSurface = Exclude<SectionSurface, 'blue'>;
+const SURFACES: readonly ShownSurface[] = ['paper', 'tint', 'ink'];
+const SURFACE_NOTE: Record<ShownSurface, string> = {
   paper: 'Paper, the page ground.',
   tint: 'Surface proof — on pages, tint is the proof band only (§ 1.7).',
   ink: 'Surface proof — self-containment on ink; no page places a banner here.',
-  blue: 'Surface proof — self-containment only; no page carries a blue band (§ 4.3).',
 };
 
 function Label({ title, children }: { title: string; children: ReactNode }) {
@@ -72,11 +75,11 @@ export default function BannerSpecimen() {
           <Banner
             surface={surface}
             eyebrow="How engagements start"
-            heading="A week in the room, first"
+            heading="The work starts in the room"
             headingId={`bnr-below-${surface}`}
             lead="Before anything is drawn, we sit with the people doing the work and map the decisions they make."
             actions={CTA}
-            image={getKitPhoto('workshop-whiteboard-lounge')}
+            image={{ ...getKitPhoto('conversation-chalkboard'), focus: { x: 0.5, y: 0.2 } }}
           />
         </Layout>
       ))}
@@ -86,7 +89,7 @@ export default function BannerSpecimen() {
         trailing track); a lead with no action.
       </Label>
       <Banner
-        heading="A week in the room, first"
+        heading="The work starts in the room"
         headingId="bnr-below-no-eyebrow"
         lead="Before anything is drawn, we sit with the people doing the work and map the decisions they make."
         actions={CTA}
