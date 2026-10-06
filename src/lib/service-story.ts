@@ -331,7 +331,9 @@ export type ServiceStory = {
    *   standIns  the photos a card with no cover may take, in order of preference — studio first,
    *             because a studio photo shows our own work. The template assigns them in page order,
    *             each at most once, skipping any that is out of family, vivid, or under 1.9× its slot
-   *             (`pickStandIn`). Exclude the page's own § 5.6 picks: no photo appears twice on a page.
+   *             (`pickStandIn`). Drawn from the rest of the catalogue (§ 5.6): never a stock photo
+   *             § 5.6 gives any page's slot, nor this page's own slot photos. Both are enforced
+   *             (`SERVICE_PHOTO_SLOTS`, `RESERVED_STOCK` in src/lib/photos.ts), not just authored.
    */
   photos: { family: PhotoFamily; standIns: readonly PhotoId[] };
   close: {

@@ -389,13 +389,16 @@ now ListCard's thumbnail) draws its own radius on the box, and Media adds none i
 
 **New optional record fields.** `focus`, `tone` (`{ temperature, saturation }`, measured by
 `npm run photos:tone`) and `standIn` (a catalogue photo standing in for a missing cover, § 5.7). None
-renders anything a reader sees.
+renders anything a reader sees. `placeholderSize` (below) says the `width` / `height` are not the
+master's.
 
 **Gate attributes.** A photograph's `<img>` carries `data-src-w` and `data-src-h` (the master's pixels)
 and `data-photo-temp` / `data-photo-sat` (its tone), and a stand-in carries `data-stand-in`. They are
 what `fold:check` (`fdn-gates`) reads to compare the crop with the rendered box (≥ 1.9×, § 5.4) and to
-count a page's photo families and vivid photos (§ 5.5). Photographs only: a BlockCard cover with no
-dimensions is given placeholder ones, and must not report them.
+count a page's photo families and vivid photos (§ 5.5). Photographs only, and the pixels only when they
+are real: a record flagged `placeholderSize: true` emits no `data-src-w` / `-h`. BlockCard sets the flag
+on a cover that arrived without dimensions, which it gives its box's 3 × 2 (fix round, 6 Oct 2026: until
+then the flag did not exist, and such a photograph would have reported a 3px master).
 
 **Where the photos come from.** `src/lib/photos.ts` (`getKitPhoto`, `cropScale`, `qualifies`,
 `pickStandIn`) over the generated `src/lib/photo-catalogue.ts`. The data is never typed by hand:

@@ -1,4 +1,4 @@
-import { Button, Cluster, Icon, Layout, Media, type MediaImage } from '@/components';
+import { Button, Cluster, Icon, type IconSize, Layout, Media, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
 
@@ -13,7 +13,8 @@ import styles from './BlockCard.module.css';
  * attributes on the `<img>`, which the fill rule overrides. Several view models still arrive
  * without them (spec § 17 Q15). A record with no dimensions is given the box's own proportions and
  * loses its `sources`, because a srcset needs the master's true width for its `w` descriptor and
- * a guessed one would make the browser pick the wrong file.
+ * a guessed one would make the browser pick the wrong file. It is also flagged `placeholderSize`,
+ * so Media reports no master pixels for it to the resolution gate.
  */
 export type BlockCardImage = Omit<MediaImage, 'width' | 'height'> & {
   width?: number;
@@ -92,6 +93,13 @@ const SIZE_CLASS: Record<BlockCardSize, string | undefined> = {
   sm: styles.sizeSm,
 };
 
+/**
+ * The arrow cue's glyph size per card step. The Solar arrow is drawn inside its 24-unit box with
+ * air round it, so a box near the title's size gives a glyph about its x-height wide: 24 beside the
+ * 34 and 28 titles, 18 beside the 22.
+ */
+const CUE_SIZE: Record<BlockCardSize, IconSize> = { lg: 'xl', md: 'xl', sm: 'lg' };
+
 /** The cta label a linked card uses when the caller names none. */
 const DEFAULT_CTA_LABEL = 'Read more';
 
@@ -128,9 +136,9 @@ export type BlockCardProps = {
   titleAs?: BlockCardTitleElement;
   /**
    * A non-blank destination turns the entire card into one native link. A linked card WITHOUT a
-   * cover also gets its cta; one with a cover does not (29 Sep): the cover and its hover zoom
-   * already say the tile navigates, and a line repeated under every tile in a grid is noise. A
-   * text-only card has nothing else to say it, so it keeps the line.
+   * cover also gets its cta; one with a cover does not (29 Sep), because a line repeated under
+   * every tile in a grid is noise. A covered linked card instead ends its title in an ink arrow
+   * (6 Oct 2026, visual-direction § 3.1), so it says it navigates at rest as well as on hover.
    */
   href?: string;
   /**
@@ -159,7 +167,7 @@ function mediaRecord(image: BlockCardImage): MediaImage {
   if (image.width && image.height) {
     return { ...image, width: image.width, height: image.height };
   }
-  return { ...image, ...FILL_BOX, sources: undefined };
+  return { ...image, ...FILL_BOX, sources: undefined, placeholderSize: true };
 }
 
 function ImageMedia({ image, sizes }: { image: BlockCardImage; sizes: string }) {
@@ -189,8 +197,9 @@ function ImageMedia({ image, sizes }: { image: BlockCardImage; sizes: string }) 
  *
  * The root is always an <li>. A non-blank href changes the frame element and, on a card with no
  * cover, adds the cta: the linked shape has one native anchor and one focus stop, while the static
- * shape is complete without an empty action row. The title stays dark in both; a covered linked
- * card says it navigates by its hover zoom, and a text-only one by the cta.
+ * shape is complete without an empty action row. A covered linked card says it navigates by the
+ * arrow after its title, which goes blue with the title as the cover zooms; a text-only one by the
+ * cta, under a title that stays dark.
  *
  * Layout owns the block-axis groups, the horizontal orientation's two tracks and the cta's inline
  * row; this module contains no hand-written sibling arrangement. The card knows nothing about its
@@ -278,7 +287,25 @@ export function BlockCard({
     ) : null;
 
   const eyebrowNode = hasEyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null;
-  const titleNode = <Title className={styles.title}>{title}</Title>;
+  /* The covered linked card's rest affordance (visual-direction § 3.1, 6 Oct 2026): an ink arrow
+     after the title's last word, joined by a non-breaking space so it never wraps alone — the same
+     `arrow-right` ListCard's linked rows end in, so the kit has one link cue. It is decoration inside
+     the one anchor: Icon hides it, and the link's name stays the card's words. A text-only card has
+     the cta instead, and never both. */
+  const cued = destination !== undefined && imageNode !== null;
+  const titleNode = (
+    <Title className={cx(styles.title, cued && styles.cued)}>
+      {title}
+      {cued ? (
+        <>
+          {'\u00a0'}
+          <span className={styles.cue}>
+            <Icon name="arrow-right" size={CUE_SIZE[step]} />
+          </span>
+        </>
+      ) : null}
+    </Title>
+  );
   const bodyNode = hasBody ? <p className={styles.body}>{body}</p> : null;
 
   /* The copy: eyebrow, title and body as one group at `text` (16), then the cta a block (24) below

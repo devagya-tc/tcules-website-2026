@@ -777,10 +777,11 @@ export default function BlockCardSpecimenPage() {
 
       <Section surface="tint">
         <Layout rowGap="stack">
-          <BandHead title="8 · The cta">
-            Text-only linked cards only (29 Sep). A card with a cover says it navigates by its
-            hover — the ruled edge darkens, the image leans in, the title underlines — so the
-            first two cards here render no cta. On a text-only card it is the shipped link{' '}
+          <BandHead title="8 · The cta and the arrow cue">
+            The cta is for text-only linked cards only (29 Sep). A card with a cover renders no cta:
+            it ends its title in an ink arrow joined by a non-breaking space, and on hover and focus
+            the title and arrow go blue while the image leans in (6 Oct, visual-direction § 3.1) —
+            so the first card here says it is a link at rest. On a text-only card it is the shipped link{' '}
             <code>Button</code>, rendered <code>as=&quot;span&quot;</code> inside the one frame
             anchor: never in the tab order, no nested link. Tab to a card and count focus stops:
             one.
@@ -788,8 +789,8 @@ export default function BlockCardSpecimenPage() {
           <Cards columns={{ base: 1, lg: 3 }}>
             <BlockCard
               eyebrow="Case study"
-              title="Cover, no cta"
-              body="Linked and covered: hover it — no cta line is rendered."
+              title="Cover, no cta, the arrow instead"
+              body="Linked and covered: the arrow ends the title, and no cta line is rendered."
               media={cover(COVER_FLOW)}
               href={ROUTES.caseStudies}
               tracks={3}

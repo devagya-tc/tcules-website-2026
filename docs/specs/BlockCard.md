@@ -158,7 +158,7 @@ The image member is accepted under question 1(a).
 | `eyebrow`     | `string`                                                                          | absent       | One quiet label above the title; a blank value omits the element and warns        |
 | `media`       | `{ type: 'image'; image: BlockCardImage }`                                        | absent       | The cover image. `BlockCardImage` is `Media`'s `MediaImage` with `width`/`height` optional (section 17 Q15) |
 | `titleAs`     | `'h3' \| 'h4'`                                                                    | `'h3'`       | Heading semantics only; visual type remains fixed                                 |
-| `href`        | `string`                                                                          | absent       | A non-blank destination makes the whole frame one anchor; with no cover it also emits the cta (Rev. 3) |
+| `href`        | `string`                                                                          | absent       | A non-blank destination makes the whole frame one anchor; with no cover it also emits the cta (Rev. 3), and with one it ends the title in the arrow cue (6 Oct) |
 | `ctaLabel`    | `string`                                                                          | `Read more`  | The cta wording on a linked text-only card; ignored on a covered card, which renders no cta (Rev. 3); blank falls back to the default and warns. `Button` uppercases it, so pass ordinary capitalisation |
 | `orientation` | `'vertical' \| 'horizontal'`                                                      | `'vertical'` | Which axis the card arranges on                                                   |
 | `imageSide`   | `'left' \| 'right'`                                                               | `'left'`     | Which track the media takes when horizontal; ignored when vertical or imageless   |
@@ -304,14 +304,15 @@ keyboard get the same treatment.
 
 | State           | Trigger                              | Parts that move |
 | --------------- | ------------------------------------ | --------------- |
-| rest            | Base rendering                       | Nothing. Inks hold; a cover sits in `--bcrd-media-rule-ink`; a text-only linked card's cta at `--btn-link-*-fg` |
-| hover           | Pointer over a linked frame          | With a cover: the image scales to `--bcrd-media-zoom` inside the still, ruled box — nothing else. Without one: the cta's underline wipes in (Button) |
+| rest            | Base rendering                       | Nothing. Inks hold; a cover sits in `--bcrd-media-rule-ink`; a covered linked card's title ends in the ink arrow cue; a text-only linked card's cta at `--btn-link-*-fg` |
+| hover           | Pointer over a linked frame          | With a cover: the image scales to `--bcrd-media-zoom` inside the still, ruled box, and the title and its arrow take `--bcrd-title-ink-hover` (6 Oct). Without one: the cta's underline wipes in (Button) |
 | focus, keyboard | `:focus-visible` on the linked frame | Everything hover does, plus the paired ring (`--bcrd-ring-color`, `--bcrd-ring-gap-color`) |
-| pressed         | Pointer activation on a linked frame | Holds hover; the text-only cta steps to its pressed colour. No card pressed token |
+| pressed         | Pointer activation on a linked frame | Holds hover; the text-only cta steps to its pressed colour. No card pressed token: on a covered card nothing steps past hover, and the cursor's activation is the difference |
 
-The cover's hover is deliberately one quiet movement. A darker rule and a title underline were built
-on 29 Sep and removed the same day at the owner's review as too loud; neither returns without a new
-decision. Hover is still not colour-only: the zoom is a shape change.
+The cover's hover is deliberately quiet: the zoom, plus the title and arrow going blue (visual-direction
+§ 3.1, 6 Oct 2026). A darker rule and a title underline were built on 29 Sep and removed the same day at
+the owner's review as too loud; neither returns without a new decision. Hover is still not colour-only:
+the zoom is a shape change.
 
 Held, disabled, expanded, busy, loading and error are excluded. A navigation tile is neither a
 selectable option nor an unavailable action; nothing opens and nothing asynchronous happens. A
@@ -326,13 +327,15 @@ nevertheless declared again in all four surface blocks. Ratios are measured agai
 | Token                     | paper                                           | tint                                            | ink                                             | blue                                        |
 | ------------------------- | ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- | ------------------------------------------- |
 | `--bcrd-title-ink`        | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
+| `--bcrd-title-ink-hover`  | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--bcrd-body-ink`         | `--color-neutral-700` — 8.14:1                  | `--color-neutral-700` — 7.27:1                  | `--color-neutral-300` — 11.07:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--bcrd-eyebrow-ink`      | `--color-neutral-600` — 4.92:1                  | `--color-neutral-700` — 7.27:1                  | `--color-neutral-400` — 8.05:1                  | `--color-brandeis-100` — 4.91:1              |
 | `--bcrd-media-rule-ink`   | `--color-neutral-300` — n/a, decoration         | `--color-neutral-400` — n/a, decoration         | `--color-neutral-700` — n/a, decoration         | `--color-brandeis-300` — n/a, decoration     |
 | `--bcrd-ring-color`       | `--color-brandeis-500` — 6.17:1 against its gap | `--color-brandeis-500` — 5.51:1 against its gap | `--color-brandeis-300` — 7.32:1 against its gap | `--color-white` — 6.23:1 against its gap    |
 | `--bcrd-ring-gap-color`   | `--color-paper` — paired ring 6.17:1            | `--color-paper-deep` — paired ring 5.51:1       | `--color-neutral-950` — paired ring 7.32:1      | `--color-brandeis-500` — paired ring 6.23:1 |
 
-Six rows. Revision 3 added the media rule, on the house rule ladder `--media-capture-rule-ink` also
+Seven rows. `--bcrd-title-ink-hover` (6 Oct 2026, `fdn-media` fix round) is the covered linked card's
+title and arrow on hover, focus and press, and nothing else reads it. Revision 3 added the media rule, on the house rule ladder `--media-capture-rule-ink` also
 uses, with no hover step; the card declares its own rather than reading Media's (token rule 6). `--bcrd-media-ink` went
 with the icon fill in 2.10 (section 17 Q14). `--bcrd-link-ink`, `-hover` and `-pressed` were **deleted**: the cta is a link
 `Button`, so its three steps per surface come from `--btn-link-neutral-fg{,-hover,-pressed}` in
@@ -766,19 +769,22 @@ no transition) rather than shortening it. Keyboard focus keeps its ring.
    `data-btn-link-group` must appear on exactly the frames that are anchors.
 5. Show a static no-media card as a complete object with no blank action row; inspect its content
    box beside a linked peer and expect no border on either.
-6. Render identical markup on all four surface bands and inspect all five resolved `--bcrd-*`
+6. Render identical markup on all four surface bands and inspect all seven resolved `--bcrd-*`
    colours plus the cta's three `--btn-link-neutral-fg*` steps, including the two nested-surface
    proofs.
 7. Use `titleAs` to match the page outline while preserving h4 visual type; compare the heading map
    with the computed type token.
-8. Prove the title's ink does not depend on `href`: render the same card linked and static side by
-   side and expect both computed title colours to be `--bcrd-title-ink`.
+8. Prove the title's REST ink does not depend on `href`: render the same card linked and static side
+   by side and expect both computed title colours to be `--bcrd-title-ink`. Expect the arrow cue
+   (`arrow-right`, after a non-breaking space) on exactly the covered linked titles, and on no
+   text-only or static one.
 9. Alternate `imageSide` from the call site by index; inspect the rendered tree and expect no
    index, count or sibling knowledge inside any card.
 10a. Render a set of four through `BlockCardSet` and expect one `ul` of four `li`, the first spanning
     every track (`grid-column: 1 / -1` from `Layout lead`) and horizontal, the peers vertical.
-10. Point anywhere on a linked card: on a covered card expect only the image to scale inside a still
-    box — no underline, no rule change — and on a text-only card the cta's
+10. Point anywhere on a linked card: on a covered card expect the image to scale inside a still
+    box and the title and arrow to take `--bcrd-title-ink-hover` — no underline, no rule change — and
+    on a text-only card the cta's
     underline to wipe in and its label to step colour; point at a static card and expect nothing to
     move. This is the group contract working,
     and it is the one interaction the specimen cannot render statically.
@@ -791,9 +797,9 @@ no transition) rather than shortening it. Keyboard focus keeps its ring.
     `box-shadow` beyond the ring, no `--bcrd-edge-*` token, and no hairline drawn as a pseudo-element.
     Search the module for `border` and expect only `border-radius`. A card that needs a visible
     boundary is asking for the gutter it was given.
-13. Do not give the title a link ink or an underline, or make any part change on hover or press but
-    the cover's zoom and the text-only cta; inspect computed styles in every
-    state and expect only those. There is no
+13. Do not underline the title, give it a link ink at rest, or make any part change on hover or press
+    but the cover's zoom, the covered title-and-arrow's `--bcrd-title-ink-hover` (6 Oct) and the
+    text-only cta; inspect computed styles in every state and expect only those. There is no
     `--bcrd-link-ink` to reach for any more, and re-adding one is the smell.
 14. Do not restyle the cta from this component: no `.cta` class, no colour, type, case, seam, glyph
     size or underline of its own, and no `--btn-*` name in this module. Search the module for `cta`
@@ -1288,7 +1294,41 @@ Media's `fill` now anchors at the record's focus when it has one, a stand-in cro
 product-UI cover keeps the 29 Sep top-left anchor. The card's crop box keeps its own hairline and 8px
 radius (ch05 amendment 5a), so a stand-in looks like any other cover.
 
-**Known gap, not this package's.** A covered linked card shows no cta (29 Sep), so a resources card that
-gains a stand-in also loses its named line ("Read the article"), and until § 3.1's arrow cue lands
-(`cmp-feature`) its only rest affordance is the image. On a service page the Resources band is linked
-cards only, so this is visible there.
+**The gap this opened, closed in the fix round below.** A covered linked card shows no cta (29 Sep), so a
+resources card that gained a stand-in also lost its named line ("Read the article"), leaving the image as
+its only rest affordance.
+
+## Amendment · 6 Oct 2026 — `fdn-media` fix round: the arrow cue, whole-set stand-ins, placeholder sizes
+
+**The arrow cue (visual-direction § 3.1), brought forward from `cmp-feature`.** Stand-ins put a cover on
+every service page's Resources cards, and under Revision 3 a covered card drops its cta, so the regression
+was this package's to close. The cause is that a covered linked card had no affordance at rest, and the
+fix is at the card, for every covered linked card on every route:
+- The title ends in an ink `arrow-right` joined to its last word by a non-breaking space, so the glyph
+  never wraps alone. It is ListCard's link cue, so the kit has one. Icon `xl` (24) beside the `lg` and `md`
+  titles, `lg` (18) beside `sm`, which draws a glyph about the title's x-height wide. It sits in an
+  inline-block span (Icon's `<svg>` is `display: block`) at `vertical-align: middle`, centred on the
+  lower-case letters, and is hidden: the link's name is the card's words.
+- On hover, focus and press the title and arrow take `--bcrd-title-ink-hover` — brandeis-500 on paper
+  (6.17:1) and tint (5.51:1), brandeis-300 on ink (7.32:1), brandeis-50 on blue (5.57:1) — while the image
+  leans in. Blue's Free row (§ 4.2), so a linked set still spends nothing in the band rule. No pressed
+  step: the title holds hover on press.
+- A text-only card is unchanged: its cta is the cue and its title holds `--bcrd-title-ink`. A card never
+  has both, and a static card has neither.
+- `cmp-feature` inherits this rather than building it; its remaining BlockCard work is the text-only
+  card's top rule (§ 3.1).
+
+**Stand-ins never take a § 5.6 slot photo.** Pools reused other pages' B, I, K and aside stock picks,
+which § 5.1 rule 4 forbids. `src/lib/photos.ts` now holds § 5.6's table (`SERVICE_PHOTO_SLOTS`) and the
+stock photos in it (`RESERVED_STOCK`); `pickStandIn` refuses those on every page and the template seeds
+each page's used set with its own slot photos, so the rule holds whatever a pool names.
+
+**A set takes stand-ins whole or not at all** (§ 3.1, "a set is all-image or all-text"). When the pool
+cannot cover every coverless card in a set, none of them takes one and every card in it drops its media,
+so the set renders as text cards with their named cta. No set renders that way today, because every case
+card takes its real cover from the listing; the nearest edge is ai-product-ux, where four photographs
+qualify on a cool page and its three Resources cards take three.
+
+**Placeholder sizes are flagged.** A record that arrives without dimensions is given its box's 3 × 2 and
+now `placeholderSize: true`, so Media reports no `data-src-w` / `-h` for it and the resolution gate
+never measures a 3px master.

@@ -23,18 +23,22 @@ export const aiProductUx: ServiceStory = {
       height: 747,
     },
   },
-  /* Photographs (visual-direction § 5.5, § 5.6): a cool-family page. The stand-in pool is in order of
-     preference, studio first, and leaves out this page's own § 5.6 picks so no photo appears twice. */
+  /* Photographs (visual-direction § 5.5 to § 5.7): a cool-family page. The stand-in pool is in order
+     of preference, studio first, and is drawn from the rest of the catalogue (§ 5.6): no stock photo
+     that § 5.6 gives any page's B, I, K or aside slot (RESERVED_STOCK in src/lib/photos.ts), and none
+     of this page's own slot photos. That is enforced, not just authored: the template seeds the page's
+     used set with its slot photos and pickStandIn refuses the reserved ones.
+     Only four photographs qualify on a cool page. The four case cards take their real covers from the
+     case-study listing, so the three Resources cards take three of them. Were the case covers
+     missing, the case set would take all four and the Resources set would render as text cards
+     (standIns.ts, § 3.1): the pool is one photo from that edge. */
   photos: {
     family: 'cool',
     standIns: [
       'studio-session-talk',
-      'pencil-wireframe-violet',
-      'whiteboard-two-hands',
-      'board-review-backs',
+      'studio-whiteboard-crit',
       'workshop-brick-room',
-      'office-calm-interior',
-      'pair-desk-through-plants',
+      'hands-trackpad',
     ],
   },
   sections: [

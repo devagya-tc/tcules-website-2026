@@ -116,6 +116,13 @@ export type MediaImage = {
    * a reviewer can find every one before the real covers replace them.
    */
   standIn?: boolean;
+  /**
+   * True when `width` and `height` are NOT the master's pixels but a well-formed placeholder pair —
+   * BlockCard gives a record that arrived without dimensions its box's own 3 × 2. Media then emits
+   * no `data-src-w` / `data-src-h`, so the resolution gate (§ 5.4) never compares a crop against a
+   * 3px "master". Absent means the numbers are real.
+   */
+  placeholderSize?: boolean;
 };
 
 /**
@@ -299,6 +306,7 @@ export function Media({
   const panel = isCutOut ? image.panel : undefined;
   const shadow = isCutOut && image.shadow === true;
   const srcSet = mediaSrcSet(image);
+  const measured = isPhotograph && image.placeholderSize !== true;
 
   /* The focal point, as the one custom property the crop reads. On the style prop because a class
      cannot express a per-asset value (ClientMark's precedent); absent, the stylesheet's anchor
@@ -334,10 +342,11 @@ export function Media({
       fetchPriority={priority ? 'high' : undefined}
       /* What the gates read off the rendered page (visual-direction § 5.4, § 5.5): the master's
          pixels, to compare the crop against the box the image actually got, and the measured tone.
-         Photographs only — the resolution and tone rules are about photographs, and a record
-         without real dimensions (a BlockCard cover with none) must not report fake ones. */
-      data-src-w={isPhotograph ? image.width : undefined}
-      data-src-h={isPhotograph ? image.height : undefined}
+         Photographs only — the resolution and tone rules are about photographs — and the pixels
+         only when they are real: a record flagged `placeholderSize` (a BlockCard cover that arrived
+         without dimensions) reports none rather than its 3 × 2 box. */
+      data-src-w={measured ? image.width : undefined}
+      data-src-h={measured ? image.height : undefined}
       data-photo-temp={isPhotograph ? image.tone?.temperature : undefined}
       data-photo-sat={isPhotograph ? image.tone?.saturation : undefined}
       data-stand-in={image.standIn ? '' : undefined}

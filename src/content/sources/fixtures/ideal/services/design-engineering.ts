@@ -20,18 +20,20 @@ export const designEngineering: ServiceStory = {
       height: 560,
     },
   },
-  /* Photographs (visual-direction § 5.5, § 5.6): a warm-family page. The stand-in pool is in order of
-     preference, studio first, and leaves out this page's own § 5.6 picks so no photo appears twice. */
+  /* Photographs (visual-direction § 5.5 to § 5.7): a warm-family page. The stand-in pool is in order
+     of preference, studio first, and is drawn from the rest of the catalogue (§ 5.6): no stock photo
+     that § 5.6 gives any page's B, I, K or aside slot (RESERVED_STOCK in src/lib/photos.ts), and none
+     of this page's own slot photos. That is enforced, not just authored: the template seeds the page's
+     used set with its slot photos and pickStandIn refuses the reserved ones. */
   photos: {
     family: 'warm',
     standIns: [
       'studio-session-talk',
+      'studio-sticky-board-ux',
+      'studio-team-holi',
       'hand-mouse-detail',
       'workshop-brick-room',
-      'board-review-backs',
-      'workshop-whiteboard-lounge',
-      'office-calm-interior',
-      'workshop-hands-writing',
+      'hands-trackpad',
     ],
   },
   sections: [

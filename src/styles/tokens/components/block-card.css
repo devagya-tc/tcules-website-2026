@@ -1,12 +1,14 @@
 /* ══ Component layer — BlockCard ═════════════════════════════════════════════════
    Tier 2. One borderless tile with an optional media fill, an optional eyebrow and an optional
-   whole-card link — carrying a read-more cue when it has no cover.
+   whole-card link — carrying a read-more cta when it has no cover, and an arrow after the title
+   when it has one.
 
    Naming: --bcrd-{part}-{role}-{state}, with a size suffix where the type steps with the set
    (--bcrd-title-text-lg | -md | -sm)
      parts: title | body | eyebrow | media | ring
-     states: none. No colour moves on the card; the cover zoom is geometry, and the text-only cta's
-     steps are Button's.
+     states: hover, on one token. A covered linked card's title and its arrow cue take
+     --bcrd-title-ink-hover on hover and focus and hold it on press; nothing else on the card moves
+     colour. The cover zoom is geometry, and the text-only cta's steps are Button's.
 
    There is no background or ground token: BlockCard never paints a fill and keeps the nearest
    Section visible behind it. Every surface block redeclares every colour token so a nested surface
@@ -16,7 +18,13 @@
    No edge tokens. The tile was a four-sided hairline and is now bounded only by the parent
    Layout's gutter, so --bcrd-edge-ink / -width / -width-pressed were deleted rather than set to
    transparent and zero — a token nothing draws is a token that invites the border back.
-   No title state tokens. The title holds --bcrd-title-ink linked or not.
+   One title state token, and only for the covered linked card (6 Oct 2026, fdn-media fix round;
+   visual-direction § 3.1). A covered card has no cta (29 Sep), so until then its only cue at rest
+   was the image. It now carries an ink arrow glyph after the title's last word, joined by a
+   non-breaking space — ListCard's link cue, so the kit has one — and the title and arrow go blue on
+   hover and focus (blue's Free row, § 4.2). A text-only card's title still holds --bcrd-title-ink:
+   its cta is the cue and moves instead. No pressed step: the title holds hover on press, so a
+   pressed token would equal the hover one on every surface.
    No cta tokens, and no --bcrd-link-ink either. The cta is the shipped link Button rendered as a
    span, so Button's own layer supplies its type, its case and its three colour steps per surface
    from --btn-link-neutral-fg{,-hover,-pressed}: ink at rest, blue on the card's hover, focus and
@@ -84,16 +92,20 @@
      the SiteNav card's step above 4, the largest on the ramp short of a pill — softens a 392px
      cover without turning it into a control. The box clips the image and its zoom to it. */
   --bcrd-media-radius: var(--radius-8);
+  /* The covered card's title-and-arrow ink change: the fast step, as ListCard's cue. */
+  --bcrd-title-ink-duration: var(--duration-fast);
+  --bcrd-title-ink-easing: var(--easing-standard);
   --bcrd-shadow: var(--shadow-none);
   --bcrd-ring-width: var(--focus-ring-width);
   --bcrd-ring-offset: var(--focus-ring-offset);
 }
 
-/* Paper: every ink holds whether or not the card is linked. The only colour that moves is the
-   text-only cta's, and Button's layer owns its ramp. */
+/* Paper: every ink but the covered linked title's holds whether or not the card is linked. The
+   text-only cta's ramp is Button's layer's. */
 :root,
 [data-surface='paper'] {
   --bcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --bcrd-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 — covered linked cards only */
   --bcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — the floor of AA, do not lighten */
   --bcrd-media-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
@@ -105,6 +117,7 @@
    the same steps. The eyebrow steps to 700 because 600 would be 4.39:1 here. */
 [data-surface='tint'] {
   --bcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --bcrd-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
   --bcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
   --bcrd-media-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
@@ -116,6 +129,7 @@
    eyebrow to 400. Button lifts the cta on this surface through its own ink block. */
 [data-surface='ink'] {
   --bcrd-title-ink: var(--color-white); /* 17.26:1 */
+  --bcrd-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
   --bcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --bcrd-media-rule-ink: var(--color-neutral-700); /* 2.10:1 vs the ground — decoration */
@@ -127,6 +141,8 @@
    Section's actual Brandeis-500 ground, so the white outer ring is measured against what it frames. */
 [data-surface='blue'] {
   --bcrd-title-ink: var(--color-white); /* 6.23:1 */
+  /* Blue cannot go bluer: the lightest Brandeis step, as Button's neutral link does on blue. */
+  --bcrd-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
   --bcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --bcrd-eyebrow-ink: var(
     --color-brandeis-100

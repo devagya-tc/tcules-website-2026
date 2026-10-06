@@ -6,11 +6,14 @@
  *                            point, tone tags, kind 'photograph', and `alt: ''` unless one is given
  *   cropScale(id, ratio, w)  how many times the placement's box the crop is (the § 5.4 rule)
  *   qualifies(id, placement) cropScale ≥ MIN_CROP_SCALE at the placement's 1470 box
+ *   SERVICE_PHOTO_SLOTS      § 5.6's table: each service page's B, I, K and aside photographs
+ *   RESERVED_STOCK           every stock photo in that table, which no other page may show (§ 5.1)
  *   pickStandIn(...)         the first photo in a page's pool that fits a cover slot (§ 5.7)
  *
  * The data is GENERATED (`photo-catalogue.ts`, by `npm run photos:derive`) from the catalogue JSON,
  * and the tone tags in it are MEASURED (`npm run photos:tone`), never typed by hand. This file holds
- * no per-photo fact of its own.
+ * no per-photo fact of its own. It holds one per-PAGE fact, § 5.6's slot table, because the
+ * uniqueness rule spans pages and no single page's view model can see the others.
  *
  * ── Who uses it ─────────────────────────────────────────────────────────────────
  * The kit showcase pages and the service-page stand-ins. Live routes read CMS images through
@@ -175,17 +178,114 @@ export function qualifies(id: PhotoId, placement: PhotoPlacement): boolean {
   return cropScale(id, ratio, width) >= MIN_CROP_SCALE;
 }
 
+/* ── Slot assignment (§ 5.6) and the uniqueness rule (§ 5.1 rule 4) ─────────────── */
+
+/** The five large photo slots a service page carries outside its card sets. */
+export type ServicePhotoSlots = {
+  b: PhotoId;
+  i: PhotoId;
+  k: PhotoId;
+  aside1: PhotoId;
+  aside2: PhotoId;
+};
+
+/**
+ * visual-direction § 5.6's table, keyed by service slug: the one place the assignment is written.
+ * `cmp-service-pages` reads its B, I, K and aside photographs from here, and may swap one for a
+ * better catalogue match (§ 5.6) by editing this table — which moves the reserved set with it, so a
+ * stand-in can never land on a photo another page has just been given.
+ */
+export const SERVICE_PHOTO_SLOTS = {
+  'product-design': {
+    b: 'studio-sticky-board-ux',
+    i: 'sticky-wall-soft-focus',
+    k: 'pair-laptop-notebook',
+    aside1: 'hand-sketch-wireframe',
+    aside2: 'moodboard-wall-desk',
+  },
+  'software-development': {
+    b: 'designer-desk-monitor',
+    i: 'workshop-hands-writing',
+    k: 'whiteboard-pair-laptop',
+    aside1: 'studio-session-talk',
+    aside2: 'team-laptops-table',
+  },
+  'design-engineering': {
+    b: 'stylus-tablet-sketch',
+    i: 'whiteboard-two-hands',
+    k: 'sticky-grid-minimal',
+    aside1: 'studio-whiteboard-crit',
+    aside2: 'hands-sketches-markers',
+  },
+  'design-systems': {
+    b: 'screen-over-shoulder',
+    i: 'wireframe-wall',
+    k: 'desk-minimal-white',
+    aside1: 'desk-flatlay-devices',
+    aside2: 'designer-monitor-ui',
+  },
+  'ai-product-ux': {
+    b: 'pair-testing-overhead',
+    i: 'workshop-whiteboard-lounge',
+    k: 'conversation-chalkboard',
+    aside1: 'hands-sticky-blue-pen',
+    aside2: 'pencil-wireframe-red',
+  },
+  'product-modernisation': {
+    b: 'wall-sketching-portrait',
+    i: 'office-calm-interior',
+    k: 'pencil-wireframe-violet',
+    aside1: 'board-review-backs',
+    aside2: 'pair-desk-through-plants',
+  },
+} as const satisfies Record<string, ServicePhotoSlots>;
+
+/** The photos a page's own slots take: never also one of its stand-ins (§ 5.1 rule 4). */
+export function slotPhotos(slug: string): ReadonlySet<PhotoId> {
+  const slots: ServicePhotoSlots | undefined = Object.hasOwn(SERVICE_PHOTO_SLOTS, slug)
+    ? SERVICE_PHOTO_SLOTS[slug as keyof typeof SERVICE_PHOTO_SLOTS]
+    : undefined;
+  return new Set(slots ? Object.values(slots) : []);
+}
+
+/**
+ * Every STOCK photograph in a B, I, K or aside slot on any service page. § 5.1 rule 4 gives each of
+ * them to one page only, and § 5.6 draws card images and stand-ins from "the rest of the catalogue",
+ * so none of them is ever a stand-in, on any page. Studio photographs are left out on purpose: they
+ * may recur across sibling pages (§ 5.1 rule 4), and only three resolve outside cards.
+ */
+export const RESERVED_STOCK: ReadonlySet<PhotoId> = new Set(
+  Object.values(SERVICE_PHOTO_SLOTS)
+    .flatMap((slots): PhotoId[] => Object.values(slots))
+    .filter((id) => !isStudio(id)),
+);
+
 /* ── Stand-ins (§ 5.7) ────────────────────────────────────────────────────────── */
 
 /**
- * The first photo in `pool` that is not yet `used` on the page, is in the page's family, is not
- * vivid (§ 5.6: a page spends its one vivid photo deliberately, never by default), and resolves in
- * the cover slot's box. `undefined` when none does: the card then renders without media, which is a
- * text card and never an empty frame.
+ * Why a pool entry can never stand in on a page of this family, or `[]` when it can (resolution
+ * aside, which depends on the slot). The template's development check reads this, so a pool that
+ * names an unusable photo is visible as one rather than silently skipped.
+ */
+export function standInBarriers(id: PhotoId, family: PhotoFamily): string[] {
+  const entry = PHOTO_CATALOGUE[id];
+  return [
+    RESERVED_STOCK.has(id) ? 'reserved for a § 5.6 slot' : '',
+    inFamily(id, family) ? '' : `${entry.temperature} on a ${family} page`,
+    entry.saturation === 'vivid' ? 'vivid' : '',
+  ].filter(Boolean);
+}
+
+/**
+ * The first photo in `pool` that is not yet `used` on the page, is not reserved for another page's
+ * slot (§ 5.1 rule 4), is in the page's family, is not vivid (§ 5.6: a page spends its one vivid
+ * photo deliberately, never by default), and resolves in the cover slot's box. `undefined` when none
+ * does.
  *
- * The pool is authored per page, in order of preference — studio first, because a studio photo shows
- * our own work. The family, the vivid rule and the resolution rule are checked here, so a pool entry
- * that breaks one is skipped rather than rendered.
+ * `used` must start with the page's own slot photos (`slotPhotos`), so the uniqueness rule holds on
+ * the page as well as across pages. The pool is authored per page, in order of preference — studio
+ * first, because a studio photo shows our own work. Every rule is checked here, so a pool entry that
+ * breaks one is skipped rather than rendered: the pool is a preference, not the guarantee.
  */
 export function pickStandIn(
   pool: readonly PhotoId[],
@@ -196,8 +296,7 @@ export function pickStandIn(
   return pool.find(
     (id) =>
       !used.has(id) &&
-      inFamily(id, family) &&
-      PHOTO_CATALOGUE[id].saturation === 'quiet' &&
+      standInBarriers(id, family).length === 0 &&
       cropScale(id, slot.ratio, slot.width) >= MIN_CROP_SCALE,
   );
 }
