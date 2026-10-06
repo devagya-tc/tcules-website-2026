@@ -1,14 +1,32 @@
 import type { ServiceStory } from '@/lib/service-story';
-import {
-  ANCHORS,
-  anchorHref,
-  auditPath,
-  glossaryPath,
-  ROUTES,
-  servicePath,
-} from '@/lib/routes';
+import { ANCHORS, anchorHref, auditPath, ROUTES, servicePath } from '@/lib/routes';
 
-/** /services/design-engineering, designed. Edits: docs/service-pages-design.md § Design Engineering. */
+import { CLUTCH_RATING } from '../../ratings';
+
+const ENQUIRY = anchorHref(ANCHORS.enquiry);
+const AUDIT = { label: 'Start with a Design-to-Code Audit', href: auditPath('design-to-code-audit') };
+
+/**
+ * /services/design-engineering, designed — recomposed from the UI kit on 6 Oct 2026 (visual-direction
+ * § 8.2). Copy is the CMS's own, re-cut to the § 1.5 budgets; every edit is logged, old and new, in
+ * docs/content-changes.md, "Design Engineering recomposed". The sections say what the page argues;
+ * the template decides how each is laid out from the job its blocks do (ServicePage plan.ts), so no
+ * field here is a layout.
+ *
+ *   hero        the claim
+ *   pressures   what code meets that a static screen never does — B, two tiles, so the copy column
+ *               has room for the display head and the counterweight field (§ 6.4 item 1)
+ *   evidence    which questions a static screen answers and which need code — E, the Matrix
+ *   outputs     four kinds of output, each declared before it is built — F, beside the sketches
+ *   thread      one decision kept alive across every form — E, a centred Thread, horizon at its foot
+ *   proof       the client's words — G on tint, typographic, with the sourced rating
+ *   work        two cases where code tested the decision — C-pair
+ *   leaves      what the engagement leaves behind — C-text, six icon tiles under a centred head
+ *   offer       the Design-to-Code Audit — K, beside the sticky grid
+ *   routes      the four specialist services — the C-icon router, beside the studio crit
+ *   questions   delivery, AI-written code and AI products — D-faq
+ *   close       the form — L
+ */
 export const designEngineering: ServiceStory = {
   slug: 'design-engineering',
   name: 'Design Engineering',
@@ -19,19 +37,17 @@ export const designEngineering: ServiceStory = {
   },
   hero: {
     title: 'Keep product intent alive as it becomes software',
-    lead: 'A design decision can be persuasive in a prototype and still weaken on the way into software.',
-    actions: [{ label: 'Start a project', href: anchorHref(ANCHORS.enquiry) }],
+    lead: 'A design decision can be persuasive in a prototype and still weaken on the way into software. We keep it intact in code.',
+    actions: [{ label: 'Start a project', href: ENQUIRY }, AUDIT],
     illustration: {
       src: '/illustrations/services/design-engineering.paper.svg',
       width: 737,
       height: 560,
     },
   },
-  /* Photographs (visual-direction § 5.5 to § 5.7): a warm-family page. The stand-in pool is in order
-     of preference, studio first, and is drawn from the rest of the catalogue (§ 5.6): no stock photo
-     that § 5.6 gives any page's B, I, K or aside slot (RESERVED_STOCK in src/lib/photos.ts), and none
-     of this page's own slot photos. That is enforced, not just authored: the template seeds the page's
-     used set with its slot photos and pickStandIn refuses the reserved ones. */
+  /* Photographs (visual-direction § 5.5 to § 5.7): a warm-family page. The B, K and aside photos are
+     § 5.6's (SERVICE_PHOTO_SLOTS in src/lib/photos.ts). The stand-in pool is in order of preference,
+     studio first, drawn from the rest of the catalogue; pickStandIn enforces that. */
   photos: {
     family: 'warm',
     standIns: [
@@ -40,37 +56,34 @@ export const designEngineering: ServiceStory = {
       'studio-team-holi',
       'hand-mouse-detail',
       'workshop-brick-room',
-      'hands-trackpad',
     ],
+  },
+  labels: {
+    caseCta: 'Read the case',
+    scope: 'Scope',
+    allCases: { label: 'All case studies', href: ROUTES.caseStudies },
   },
   sections: [
     {
       type: 'section',
       id: 'pressures',
-      eyebrow: 'What pushes on a design in code',
-      heading: 'Five pressures a static screen never meets',
-      lead: 'Design Engineering keeps product thinking and frontend reasoning in one responsibility: coded evidence before a roadmap commits, shared frontend systems, and a running product that still behaves as intended.',
+      eyebrow: 'Where intent weakens',
+      heading: 'Where screens run out',
+      lead: 'Product and frontend reasoning, held as one responsibility.',
       blocks: [
         {
           kind: 'signals',
-          columns: 5,
+          columns: 2,
           items: [
             {
               icon: 'database',
-              title: 'Real data',
-              body: 'expands past the layout it was drawn for.',
+              title: 'Real data, real waiting',
+              body: 'Data runs past the layout drawn for it, and latency adds states nobody designed.',
             },
-            { icon: 'lock', title: 'Permissions', body: 'remove actions the design assumed.' },
             {
-              icon: 'clock-circle',
-              title: 'Latency',
-              body: 'creates states between the ones designed.',
-            },
-            { icon: 'smartphone', title: 'Narrow screens', body: 'change the reading order.' },
-            {
-              icon: 'code',
-              title: 'Component APIs',
-              body: 'make some behaviour easier to build than the right one.',
+              icon: 'lock',
+              title: 'Permissions and contracts',
+              body: 'Permissions remove actions the design assumed. APIs make the wrong behaviour easiest.',
             },
           ],
         },
@@ -79,19 +92,24 @@ export const designEngineering: ServiceStory = {
     {
       type: 'section',
       id: 'code-answers',
-      heading: 'Code is sometimes the fastest way to answer a design question',
-      lead: 'Static screens are good evidence for hierarchy, flow and visual direction. They are weak evidence when the decision depends on how the thing behaves.',
+      eyebrow: 'Static or coded',
+      heading: 'Code answers what a screen cannot',
+      lead: 'Static screens are good evidence for hierarchy, flow and direction. Behaviour needs something that runs.',
+      more: {
+        label: 'What a coded slice settles',
+        href: servicePath('design-engineering/coded-prototyping'),
+      },
       blocks: [
         {
           kind: 'matrix',
           keyColumn: 'To decide',
-          columns: ['Static screens', 'A coded slice'],
+          columns: ['A screen', 'Code'],
           labels: { yes: 'Answers it', no: 'Does not' },
           rows: [
             { header: 'Hierarchy', marks: [true, true] },
             { header: 'Flow', marks: [true, true] },
             { header: 'Visual direction', marks: [true, true] },
-            { header: 'Dynamic layout', marks: [false, true] },
+            { header: 'Narrow widths and zoom', marks: [false, true] },
             { header: 'Data density', marks: [false, true] },
             { header: 'Drag and drop', marks: [false, true] },
             { header: 'Model response', marks: [false, true] },
@@ -100,53 +118,33 @@ export const designEngineering: ServiceStory = {
             { header: 'Component constraints', marks: [false, true] },
           ],
         },
-        {
-          kind: 'ledger',
-          heading: 'What a coded slice settles in practice',
-          columns: 1,
-          marker: 'number',
-          items: [
-            {
-              title: 'Does the interaction stay understandable with realistic data?',
-              body: '',
-            },
-            { title: 'Can the component contract express every required state?', body: '' },
-            { title: 'What happens at narrow widths and at 200 per cent zoom?', body: '' },
-            { title: 'Does focus follow the visual and task order?', body: '' },
-            { title: 'Which dependency or API boundary shapes the experience?', body: '' },
-            {
-              title: 'Can the client team inspect and estimate it before it hardens?',
-              body: '',
-            },
-          ],
-        },
       ],
     },
     {
       type: 'section',
       id: 'declared-first',
       eyebrow: 'Its job is declared first',
-      heading: 'Not every line of code is production code',
-      lead: 'Before anything is built, the output’s job and its acceptance criteria are stated — so nobody mistakes a proof for a release.',
+      heading: 'Not all code is production code',
+      lead: 'Every output’s job is stated before it is built, so nobody mistakes a proof for a release.',
       blocks: [
         {
           kind: 'steps',
           items: [
             {
               title: 'Behavioural proof',
-              body: 'Answers one question about how it behaves. Then it may be thrown away.',
+              body: 'Answers one question about how the product behaves. Then it may be thrown away.',
             },
             {
               title: 'Design-system implementation',
-              body: 'A contract other product teams can build on.',
+              body: 'A contract other product teams can build on, with its states and documentation.',
             },
             {
               title: 'Production slice',
-              body: 'Enters the client’s architecture, review, testing and security path.',
+              body: 'Enters your architecture, review, testing and security path like any other code.',
             },
             {
               title: 'Release candidate',
-              body: 'Accepted against the running product, ready to ship.',
+              body: 'Accepted against the running product, and ready to ship.',
             },
           ],
         },
@@ -154,38 +152,56 @@ export const designEngineering: ServiceStory = {
     },
     {
       type: 'section',
-      id: 'three-ways-in',
-      heading: 'Three ways the responsibility enters a product',
+      id: 'one-decision',
+      eyebrow: 'One thread',
+      heading: 'One decision, kept alive in every form',
+      lead: 'Prototype code may be discarded. What lasts is the clarified decision, and evidence the build meets it.',
       blocks: [
         {
-          kind: 'ledger',
-          columns: 3,
-          marker: 'icon',
+          kind: 'thread',
           items: [
-            {
-              icon: 'monitor',
-              title: 'Coded product evidence',
-              body: 'A representative slice that tests behaviour, AI interaction, responsive hierarchy or feasibility — narrow enough to revise, real enough to reveal constraints.',
-            },
-            {
-              icon: 'widget',
-              title: 'Frontend system',
-              body: 'Foundations, tokens, components and patterns with their product semantics intact: APIs, states, responsive behaviour, accessibility, documentation and examples.',
-            },
-            {
-              icon: 'eye',
-              title: 'Implementation quality',
-              body: 'The running product reviewed across content, states, devices, interaction and assistive technology — each difference classified, not filed as a defect by default.',
-            },
+            { title: 'Open question', body: 'What static review could not settle.' },
+            { title: 'Coded probe', body: 'The narrowest code that answers it.' },
+            { title: 'Implementation contract', body: 'The states and API it requires.' },
+            { title: 'Running behaviour', body: 'The decision, inside the product.' },
+            { title: 'Review finding', body: 'Each difference, classified.' },
+            { title: 'Accepted decision', body: 'Kept, with its evidence.' },
           ],
+          loop: 'A finding that contradicts the decision reopens the question, not just the code.',
         },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'client-view',
+      eyebrow: 'Proof',
+      heading: 'In a client’s words',
+      blocks: [
+        {
+          kind: 'proof',
+          quote: {
+            text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
+            name: 'Ashok Mohanty',
+            company: 'Auxentios',
+          },
+          rating: CLUTCH_RATING,
+        },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'work',
+      eyebrow: 'Design Engineering work',
+      heading: 'Code that tested the decision',
+      lead: 'Two products where code tested the product decision rather than illustrating it. Neither is presented as a production release.',
+      blocks: [
         {
           kind: 'cases',
           items: [
             {
               slug: 'legacy-saas-modernisation-information-architecture',
               client: 'Benchmark Gensuite · Coded prototypes',
-              title: 'Implementation effort, brought into the design review',
+              title: 'Implementation effort, brought into design review',
               body: 'HTML, CSS and JavaScript prototypes surfaced effort and a drag-and-drop dependency while the design could still change.',
             },
             {
@@ -195,176 +211,117 @@ export const designEngineering: ServiceStory = {
               body: 'A coded demonstration linked conversational intent to data, dashboard modules and a digital-twin state.',
             },
           ],
-          note: 'Neither case is presented as a production release. Both show code used to test the product decision rather than illustrate it.',
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'one-decision',
-      heading: 'Keep one decision alive across every representation',
-      lead: 'The open product question stays connected from the first coded probe to the accepted decision. Prototype code may be discarded; the durable output is the clarified decision, and the evidence that the implemented behaviour meets it.',
-      blocks: [
-        {
-          kind: 'thread',
-          items: [
-            { title: 'Open question' },
-            { title: 'Coded probe' },
-            { title: 'Implementation contract' },
-            { title: 'Running behaviour' },
-            { title: 'Review finding' },
-            { title: 'Accepted decision' },
-          ],
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'ai',
-      eyebrow: 'Where AI changes the work',
-      heading: 'Generated code enters the same path as written code',
-      lead: 'AI makes plausible output easier to produce outside the product’s actual contracts. Tcules uses it inside the approved client environment, and a practitioner still accepts what ships.',
-      blocks: [
-        {
-          kind: 'flow',
-          stages: [
-            {
-              label: 'AI accelerates',
-              items: [
-                'Code understanding',
-                'Option generation',
-                'Component implementation',
-                'Test preparation',
-                'Documentation',
-              ],
-            },
-            {
-              label: 'A practitioner accepts',
-              items: [
-                'Product behaviour and component choice',
-                'Semantics and accessibility',
-                'Security-relevant boundaries',
-                'Release readiness',
-              ],
-            },
-          ],
-        },
-        {
-          kind: 'note',
-          label: 'For AI products',
-          html: '<p>Design engineering also makes model behaviour tangible. The coded slice exposes latency, streaming, tool calls, incomplete states, evidence, correction and recovery before the interface is treated as settled.</p>',
         },
       ],
     },
     {
       type: 'section',
       id: 'leaves-behind',
+      eyebrow: 'What you keep',
       heading: 'What the engagement leaves behind',
-      lead: 'Depending on scope. Tcules never describes a prototype as production, or a component library as proof that an entire product conforms.',
+      lead: 'A prototype is never passed off as production.',
       blocks: [
         {
-          kind: 'ledger',
+          kind: 'signals',
           columns: 3,
-          marker: 'icon',
           items: [
             {
               icon: 'monitor',
               title: 'Coded demonstration',
-              body: 'With its evidence limits stated.',
+              body: 'A working slice, with the limits of what it proves stated.',
             },
             {
               icon: 'widget',
               title: 'Frontend components',
-              body: 'Production-ready components and patterns.',
-            },
-            {
-              icon: 'layers',
-              title: 'Design–code correspondence',
-              body: 'Tokens and components matched both ways.',
+              body: 'Production-ready components and patterns, matched to the design both ways.',
             },
             {
               icon: 'database',
               title: 'Data and state fixtures',
-              body: 'Realistic, and reusable in tests.',
+              body: 'Realistic data and states, reusable in your own tests.',
             },
             {
               icon: 'checklist',
               title: 'Acceptance records',
-              body: 'Responsive, keyboard and screen reader.',
-            },
-            {
-              icon: 'ruler-pen',
-              title: 'Interaction specifications',
-              body: 'Motion and behaviour, encoded rather than described.',
+              body: 'Responsive, keyboard and screen-reader acceptance, recorded against the decision.',
             },
             {
               icon: 'document-text',
               title: 'Divergence ledger',
-              body: 'Every implementation-QA decision, recorded.',
-            },
-            {
-              icon: 'notebook',
-              title: 'Documentation and examples',
-              body: 'For the client teams who continue.',
+              body: 'Every difference between design and build, classified and decided.',
             },
             {
               icon: 'flag',
               title: 'Hand-off boundary',
-              body: 'What remains client-owned, stated.',
+              body: 'What stays client-owned, stated, with documentation for the teams who continue.',
             },
           ],
         },
       ],
     },
     {
+      type: 'offer',
+      id: 'design-to-code-audit',
+      eyebrow: 'Design-to-Code Audit',
+      heading: 'Not sure where intent is being lost?',
+      body: 'A Design-to-Code Audit traces one surface from the accepted decision to the running product.',
+      points: [
+        { label: 'One surface, decision to build' },
+        { label: 'Every divergence, classified' },
+        { label: 'The first slice to fix' },
+      ],
+      actions: [AUDIT],
+    },
+    {
       type: 'section',
       id: 'first-slice',
-      eyebrow: 'Choose the first useful slice',
-      heading: 'When static review has reached its limit',
-      lead: 'An interaction still disputed, a shared component that keeps drifting, a running surface that no longer matches the decision — any one of them defines a first scope.',
+      eyebrow: 'Go narrower',
+      heading: 'Specialist Design Engineering services',
+      lead: 'Once you know where intent is lost, a narrower service settles it faster.',
       blocks: [
         {
           kind: 'router',
           items: [
             {
-              when: 'A live behaviour or a dependency must be tested.',
+              icon: 'monitor',
+              when: 'When a live behaviour, a dataset or a dependency must be tested in code.',
               route: {
                 label: 'Coded Prototyping',
                 href: servicePath('design-engineering/coded-prototyping'),
               },
             },
             {
-              when: 'A settled interaction needs an implementation contract.',
+              icon: 'code',
+              when: 'When a settled interaction needs a contract the team can build to.',
               route: {
                 label: 'Design to Code',
                 href: servicePath('design-engineering/design-to-code'),
               },
             },
             {
-              when: 'Reusable coded foundations are the need.',
+              icon: 'widget',
+              when: 'When shared coded foundations keep drifting from the design.',
               route: {
                 label: 'Frontend Design Systems',
                 href: servicePath('design-engineering/frontend-design-systems'),
               },
             },
             {
-              when: 'The running product must be tested against its intended behaviour.',
+              icon: 'eye',
+              when: 'When the running product must be tested against its intended behaviour.',
               route: {
                 label: 'Implementation QA',
                 href: servicePath('design-engineering/implementation-qa'),
               },
             },
           ],
-          also: {
-            when: 'Not sure where intent is being lost? Start with a diagnosis.',
-            link: { label: 'Design-to-Code Audit', href: auditPath('design-to-code-audit') },
-          },
         },
       ],
     },
     {
       type: 'section',
       id: 'questions',
+      eyebrow: 'Questions',
       heading: 'Working inside your delivery',
       blocks: [
         {
@@ -373,61 +330,40 @@ export const designEngineering: ServiceStory = {
             {
               question: 'Does the code produced here ship to production?',
               answerHtml:
-                '<p>Only when production delivery and acceptance are in scope. Prototype code may exist solely to answer a question; production components or slices enter your normal architecture, review, testing, security and release path. AI-assisted code follows the same path.</p>',
+                '<p>Only when production delivery and acceptance are in scope. Prototype code may exist solely to answer a question; production components or slices enter your normal architecture, review, testing, security and release path.</p>',
             },
             {
               question: 'Can Tcules work inside our team and codebase?',
               answerHtml:
                 '<p>Yes, when the approved access, stack and collaboration model support it. The first scope may be a bounded coded proof, one component family or a review record. Your teams keep the architecture, security and release responsibilities assigned to them.</p>',
             },
-          ],
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'go-deeper',
-      eyebrow: 'Go deeper',
-      heading: 'What has to survive the move into code',
-      blocks: [
-        {
-          kind: 'resources',
-          items: [
             {
-              type: 'Definition',
-              title: 'Design engineering',
-              body: 'Product reasoning and frontend reasoning, held as one responsibility.',
-              href: glossaryPath('design-engineering'),
-              cta: 'Read the definition',
+              question: 'Does Tcules use AI to write the code?',
+              answerHtml:
+                '<p>Inside your approved environment, for code understanding, option generation, component implementation, test preparation and documentation. A practitioner still accepts product behaviour, semantics and accessibility, security-relevant boundaries and release readiness. Generated code enters the same path as written code.</p>',
             },
             {
-              type: 'Definition',
-              title: 'Design intent',
-              body: 'The decision a design exists to carry, as distinct from how it looks.',
-              href: glossaryPath('design-intent'),
-              cta: 'Read the definition',
+              question: 'What changes when the product itself uses AI?',
+              answerHtml:
+                '<p>The coded slice makes model behaviour tangible. It exposes latency, streaming, tool calls, incomplete states, evidence, correction and recovery before the interface is treated as settled.</p>',
             },
           ],
         },
       ],
     },
   ],
-  labels: {
-    caseCta: 'Read the case',
-    scope: 'Scope',
-    allCases: { label: 'All case studies', href: ROUTES.caseStudies },
-  },
   close: {
-    heading: 'Show us where product intent is getting lost in implementation',
-    body: 'The implementation point where accepted product intent is being lost. A rough brief is enough.',
+    eyebrow: 'Start a project',
+    heading: 'Show us where product intent is getting lost',
+    body: 'The implementation point where accepted product intent is weakening.',
     points: [
       {
         label: 'Send the point where intent is lost',
-        detail: 'One disputed interaction is enough.',
+        detail: 'One disputed interaction is enough. A rough brief is fine.',
       },
       {
-        label: 'A reply within one business day',
-        detail: 'With the first slice it points to.',
+        label: 'A reply within a day',
+        detail: 'One business day, with the first slice it points to.',
       },
     ],
     note: 'Do not include credentials, regulated records or confidential source material.',
