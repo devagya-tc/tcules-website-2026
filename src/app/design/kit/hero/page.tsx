@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Icon, Layout, Section, Tag } from '@/components';
+import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import { getIdealServiceStory } from '@/content';
 import { Breadcrumbs, PageHero, type HeroAction, type PageHeroProps } from '@/patterns';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
@@ -23,11 +23,12 @@ export const metadata: Metadata = {
  * opens. Every hero is a real PageHero fed real or considered copy and catalogue photographs; the
  * strips say what each proves and what it costs at 1470 × 830.
  *
- * Fold: each hero band is measured at 1470 and 390 (fold.config.json lists the route). A hero opens a
+ * Fold: `npm run fold:check` measures every band and every [data-fold-hero] at 1470 and 390
+ * (fold.config.json lists the route); the "Ends at" facts are its numbers, nav included. A hero opens a
  * page, so its budget is band + the 73 of SiteNav. The centred-head comparison cannot meet it and
  * carries data-fold-exempt (§ 10 item 2).
  *
- * Photographs: one temperature family for the whole page (§ 5.5), neutral and quiet throughout.
+ * Photographs: one temperature family for the whole page (§ 5.5): neutral frames and one cool, all quiet, all from 2400 masters.
  */
 
 const photo = (id: PhotoId, alt: string) => getKitPhoto(id, { alt });
@@ -82,8 +83,8 @@ function variations(): Variation[] {
       id: 'service',
       short: 'Illustration · two actions',
       name: 'Illustration beside the copy, two actions',
-      note: 'The locked service hero (ruling H2). The trail sits 32 above the split, the title starts at 222, and the illustration is centred on the copy. One solid ask and one blue link.',
-      facts: ['Ends ≤ 823', 'Accent + Field', 'No texture'],
+      note: 'The locked service hero (ruling H2). The trail joins the copy, 32 above the title, and the pair is centred on the drawing. One solid ask and one blue link. On a phone the drawing’s labels become numbered markers with a legend, so they stay readable.',
+      facts: ['Ends at 729', 'Accent + Field', 'Phone legend'],
       hero: {
         trail: product.trail,
         title: product.hero.title,
@@ -97,8 +98,8 @@ function variations(): Variation[] {
       id: 'single',
       short: 'Illustration · one action',
       name: 'Illustration, one action',
-      note: 'A page with a single ask drops the link and keeps the shape. The solid stands alone under the lead; nothing else changes.',
-      facts: ['Ends ≤ 823', 'Accent + Field'],
+      note: 'A page with a single ask drops the link and keeps the shape. The solid stands alone under the lead, and the trail stays 32 above the title rather than floating at the band’s top.',
+      facts: ['Ends at 699', 'Accent + Field'],
       hero: {
         trail: engineering.trail,
         title: engineering.hero.title,
@@ -111,9 +112,9 @@ function variations(): Variation[] {
     {
       id: 'tags',
       short: 'Illustration · tags',
-      name: 'Illustration with Tags',
-      note: 'Inert marks a stack under the lead. Allowed only when the title sets on three lines or fewer, because the row adds 32 + 48 and must stay inside the illustration’s height.',
-      facts: ['Title ≤ 3 lines', 'Copy + 80', 'Accent + Field'],
+      name: 'Illustration with tags',
+      note: 'The stack, set as an unboxed mono list after the actions, each tag marked by one blue pixel of the texture’s grid. The ask stays where every hero puts it, and the list reads as the hero’s footnote. Keep the title to three lines.',
+      facts: ['Ends at 784', 'Title ≤ 3 lines', 'Accent + Field'],
       hero: {
         trail: software.trail,
         title: software.hero.title,
@@ -126,10 +127,10 @@ function variations(): Variation[] {
     },
     {
       id: 'photograph',
-      short: 'Photograph · texture',
-      name: 'Photograph beside the copy, with the hero-foot texture',
-      note: 'The kit/home opening. A 5:4 photograph at 572 × 458, top-aligned on the eyebrow, radius 8 and no frame. The texture rises from the foot of the copy side, inside the padding, clear of every glyph.',
-      facts: ['Ends at 723', 'Accent + Texture', 'hero-foot · start'],
+      short: 'Photograph · plinth',
+      name: 'Photograph beside the copy, standing on the texture',
+      note: 'The kit/home opening. A 5:4 photograph at 572 × 458, top-aligned on the eyebrow, radius 8. The grid runs from under the photo’s lower half out to the band’s edge and foot, so the photo stands on a field and the copy track stays clean.',
+      facts: ['Ends at 723', 'Accent + Texture', 'plinth'],
       hero: {
         eyebrow: 'Product design and engineering studio',
         title: 'Product design that holds up in production',
@@ -142,8 +143,8 @@ function variations(): Variation[] {
           type: 'image',
           ratio: '5/4',
           image: photo(
-            'pair-at-laptop-sticky-wall',
-            'Two designers at a laptop in front of a wall of sticky notes',
+            'wireframe-wall',
+            'A designer pinning printed wireframes along a studio wall',
           ),
         },
         texture: true,
@@ -153,8 +154,8 @@ function variations(): Variation[] {
       id: 'announcement',
       short: 'Photograph · announcement',
       name: 'Photograph with an announcement above',
-      note: 'One line of news above the hero: a mark, a sentence and a link. It is never a second ask, so the band keeps one solid. Showcase pages only.',
-      facts: ['Ends ≤ 797', 'Accent + Texture', 'Strip + 64'],
+      note: 'One line of news above the hero: a blue pixel, a blue flag, a sentence and a link. It stays one line at every width: on a phone the sentence ellipsises and the flag and the link stay. It is never a second ask, so the band keeps one solid.',
+      facts: ['Ends at 792', 'Accent + Texture', 'One line always'],
       hero: {
         announcement: {
           label: 'New',
@@ -172,8 +173,34 @@ function variations(): Variation[] {
           type: 'image',
           ratio: '5/4',
           image: photo(
-            'workshop-whiteboard-lounge',
-            'A facilitator at a whiteboard of sticky notes, three people listening from a sofa',
+            'whiteboard-pair-laptop',
+            'Two people talking at a whiteboard of sketches, one holding a laptop',
+          ),
+        },
+        texture: true,
+      },
+    },
+    {
+      id: 'display',
+      short: 'Title-led · wide photograph',
+      name: 'Title-led, with a wide photograph below',
+      note: 'The second opening shape. The title takes three fifths, the lead and the ask stand in the other two at its foot, and a 3:1 photograph runs the full column beneath. The image crosses the fold by design, as a banner under a title does; the band itself fits 830.',
+      facts: ['Band 807', 'Accent + Texture', '3:1 · 4:3 on a phone'],
+      exempt:
+        'title-led with a wide photograph below: the image crosses the fold by design; the band fits 830',
+      hero: {
+        title: 'How we work',
+        body: [
+          'What happens in each week of an engagement, who is in the room, and what you hold at the end of it.',
+        ],
+        actions: [{ label: 'Book an intro call', href: ROUTES.contact }],
+        arrangement: 'display',
+        media: {
+          type: 'image',
+          ratio: { base: '4/3', lg: '3/1' },
+          image: photo(
+            'workshop-hands-writing',
+            'A row of hands writing in notebooks along a long wooden table',
           ),
         },
         texture: true,
@@ -182,9 +209,9 @@ function variations(): Variation[] {
     {
       id: 'text-field',
       short: 'Text · field texture',
-      name: 'No media, with the hero-field texture',
-      note: 'The kit/services-index opening. The display title at its 26ch measure, then the lead and the actions, and the field in the empty end half. Below 1024 the field becomes a horizon along the foot.',
-      facts: ['≈ 676 with trail', 'Accent + Texture', 'hero-field · end'],
+      name: 'No media, with the field texture',
+      note: 'The kit/services-index opening. The display title at its 26ch measure, the lead and the actions, and from 1440 a full-height column of grid at the band’s end, clear of the title’s measure. Below 1440 the field is a horizon in the foot padding.',
+      facts: ['Ends at 629', 'Accent + Texture', 'field'],
       hero: {
         trail: heroTrail(
           [
@@ -207,19 +234,19 @@ function variations(): Variation[] {
       short: 'Text only',
       name: 'No media, no texture',
       note: 'The quietest opening: type alone. For a page whose first band carries the image, so the hero does not compete with it.',
-      facts: ['≈ 676 with trail', 'Accent only'],
+      facts: ['Ends at 590', 'Accent only'],
       hero: {
         trail: heroTrail(
           [
             { label: 'Home', href: ROUTES.home },
-            { label: 'How we work', href: ROUTES.howWeWork },
+            { label: 'Expertise', href: ROUTES.expertise },
           ],
-          'From the first call to the handover',
+          'Products we know from the inside',
           (trail) => <Breadcrumbs {...trail} />,
         ),
-        title: 'From the first call to the handover',
+        title: 'Products we know from the inside',
         body: [
-          'What happens in each week of an engagement, who is in the room, and what you hold at the end of it.',
+          'Workflow software, AI and developer tools, data products, marketplaces and fintech: the kinds of product where the model of the work decides the interface.',
         ],
         actions: [{ label: 'Book an intro call', href: ROUTES.contact }],
       },
@@ -229,7 +256,7 @@ function variations(): Variation[] {
       short: 'Category eyebrow',
       name: 'Eyebrow as a category beside the trail',
       note: '“Case study · Fintech” stands 32 under Home / Case studies: a section crumb is repeated only by equalling it, and this says a format and a sector the trail cannot. A bare “Case study”, or “Ledgerline · Fintech” under a Ledgerline crumb, would be dropped.',
-      facts: ['Ends ≤ 830', 'Accent only', 'Two-tier eyebrow rule'],
+      facts: ['Ends at 775', 'Accent only', 'Two-tier eyebrow rule'],
       hero: {
         trail: heroTrail(caseCrumbs, caseTitle, (trail) => <Breadcrumbs {...trail} />),
         eyebrow: 'Case study · Fintech',
@@ -243,8 +270,8 @@ function variations(): Variation[] {
           type: 'image',
           ratio: '5/4',
           image: photo(
-            'board-review-backs',
-            'A team reviewing a wall of sticky notes, seen from behind',
+            'pair-testing-overhead',
+            'Seen from above, two people at a white table testing a flow on a phone beside a laptop',
           ),
         },
       },
@@ -253,7 +280,7 @@ function variations(): Variation[] {
       id: 'centred',
       short: 'Centred comparison',
       name: 'Centred head, media below — the owner comparison',
-      note: 'Product Design’s content in the other shape: the trail, a centred display title, the lead and the actions, then the illustration at the full 1240. It cannot end above the fold, so it is exempt from the rule and shown here beside the locked shape (01). H2 stands unless the owner picks this.',
+      note: 'Product Design’s content in the other shape: the trail, a centred title, the lead and the actions, then the drawing capped at 860, about eight of twelve columns, so it keeps the split’s scale. It cannot end above the fold, so it is exempt and shown beside the locked shape (01). H2 stands unless the owner picks this.',
       facts: ['Fold-exempt', 'Accent + Field', '§ 10 item 2'],
       exempt:
         'owner comparison: centred head + media below cannot end above 830 (visual-direction § 2.3, § 10 item 2)',
@@ -280,10 +307,10 @@ function Label({ index, variation }: { index: number; variation: Variation }) {
         </Layout>
         <Layout rowGap="block">
           <p className={t.body}>{variation.note}</p>
-          <Cluster as="ul" colGap="tight" rowGap="tight">
+          <Cluster as="ul" colGap="block" rowGap="tight">
             {variation.facts.map((fact) => (
-              <li key={fact}>
-                <Tag>{fact}</Tag>
+              <li key={fact} className={t.eyebrow}>
+                {fact}
               </li>
             ))}
           </Cluster>
@@ -301,10 +328,11 @@ export default function HeroKitSpecimen() {
         <Layout columns={{ lg: [1, 1] }} colGap="section" rowGap="stack" align="end">
           <Layout rowGap="block">
             <p className={t.eyebrow}>UI kit · Hero family</p>
-            <h1 className={t.display}>Every page opens the same way, in one of nine shapes</h1>
+            <h1 className={t.display}>Every page opens the same way, in one of ten shapes</h1>
             <p className={t.lead}>
-              One PageHero, three kinds of media and two alignments. Each shape is measured at
-              1470 × 830 and at 390, with the nav above it, and spends at most two blue masses.
+              One PageHero, three kinds of media and four arrangements. Each shape is measured
+              at 1470 × 830 and at 390, with the nav above it, and spends at most two blue
+              masses.
             </p>
           </Layout>
           <Layout as="ol" rowGap="text">
@@ -328,13 +356,10 @@ export default function HeroKitSpecimen() {
       {list.map((variation, index) => (
         <div key={variation.id} data-kit-variation={variation.id}>
           <Label index={index} variation={variation} />
-          {variation.exempt ? (
-            <div data-fold-exempt={variation.exempt}>
-              <PageHero {...variation.hero} />
-            </div>
-          ) : (
+          {/* data-fold-hero: fold:check measures this hero + the nav against 830. */}
+          <div data-fold-hero="" data-fold-exempt={variation.exempt}>
             <PageHero {...variation.hero} />
-          )}
+          </div>
         </div>
       ))}
     </>

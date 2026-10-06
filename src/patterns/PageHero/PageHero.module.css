@@ -268,28 +268,118 @@
   text-align: center;
 }
 
-/* ── announcement · one line above the hero ─────────────────────────────────────
-   Body-sm at the body's ink: a sentence, a step under the lead, so it reads as news above the
-   hero rather than as part of its copy. Running-text wrap, because on a phone it
-   breaks under its mark. */
-.note {
-  color: var(--hero-note-ink);
-  font: var(--hero-note-text);
-  text-wrap: var(--text-running-wrap);
+/* ── centred media · capped under a centred head ────────────────────────────────
+   A size, not an arrangement: the Layout centres the block (justifyItems), this caps its width at
+   --hero-media-size-centred (860, about 8 of 12 columns). At the full 1240 the service drawing was
+   920 tall and its 17-unit labels rendered at 22px, larger than the lead (fix round 1). */
+.centredMedia {
+  inline-size: min(100%, var(--hero-media-size-centred));
 }
 
-/* ── texture · which breakpoint shows which recipe ──────────────────────────────
-   The field is absolutely placed against the band, so its wrapper has no box and these rules only
-   switch it: hero-foot and hero-field above 1024, horizon below (visual-direction § 6.3). The
-   breakpoint is Layout's `lg`, where the split itself starts. */
-@media (max-width: 1023.98px) {
-  .textureWide {
+/* ── announcement · one line above the hero ─────────────────────────────────────
+   The flag is the label voice in blue, after a blue pixel (.mark): news, marked by the accent
+   rather than by a grey pill. The note is body-sm at the body's ink, a step under the lead. It is
+   the part of the strip that gives way: one line always, ellipsised when the row is short, so the
+   strip never wraps to three rows on a phone. min-inline-size:0 is what lets a flex item shrink
+   below its text's width; the ellipsis needs overflow hidden and nowrap together. */
+.flag {
+  text-transform: var(--text-mono-case);
+  color: var(--hero-flag-ink);
+  font: var(--hero-flag-text);
+  letter-spacing: var(--hero-flag-tracking);
+  white-space: nowrap;
+}
+.note {
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--hero-note-ink);
+  font: var(--hero-note-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── mark · the blue pixel ───────────────────────────────────────────────────────
+   One square of the texture's grid, the marker before each tag and before the announcement's
+   flag: the blue accent at its smallest (§ 4.2), and square because the grid is. */
+.mark {
+  display: block;
+  flex: none;
+  inline-size: var(--hero-mark-size);
+  block-size: var(--hero-mark-size);
+  background: var(--hero-mark-ink);
+}
+
+/* ── tag · and a legend label ─────────────────────────────────────────────────────
+   The label voice, unboxed: mono, uppercase in presentation, at the key's ink. */
+.tag {
+  text-transform: var(--text-mono-case);
+  color: var(--hero-tag-ink);
+  font: var(--hero-tag-text);
+  letter-spacing: var(--hero-tag-tracking);
+  white-space: nowrap;
+}
+
+/* ── numeral · the legend's markers, the drawing's discs in HTML ─────────────────────
+   A disc holding one glyph. inline-grid + place-content centres that glyph in its own box; it
+   arranges nothing (the same reason Button centres its label), and the legend row is a Cluster.
+   Blue with a white numeral for a blue label; for the drawing's peridot pill, an outlined disc
+   with an ink numeral and an ink hairline. Peridot stays inside the drawing (§ 4.4): the phone
+   cut's disc is peridot, its legend twin is the pill's outline. */
+.numeral,
+.numeralAccent {
+  display: inline-grid;
+  flex: none;
+  place-content: center;
+  inline-size: var(--hero-numeral-size);
+  block-size: var(--hero-numeral-size);
+  border-radius: var(--hero-numeral-radius);
+  background: var(--hero-numeral-ink);
+  color: var(--hero-numeral-glyph-ink);
+  font: var(--hero-numeral-text);
+  letter-spacing: var(--hero-numeral-tracking);
+  text-transform: var(--text-mono-case);
+}
+.numeralAccent {
+  border: var(--hero-media-rule-width) solid var(--hero-numeral-accent-rule-ink);
+  background: var(--hero-numeral-accent-ink);
+  color: var(--hero-numeral-accent-glyph-ink);
+}
+
+/* ── breakpoint switches · which rendering shows ───────────────────────────────────
+   Every wrapper below has no box of its own that matters; these rules only switch it.
+     wideCut / phoneCut      the drawing from 768, the phone cut and its legend below it (the
+                             title roles' own 767 step).
+     textureLg / textureBase the photograph's plinth beside the copy from 1024 (Layout's lg, where
+                             the split starts), and under the stacked photograph below it.
+     textureXl / UntilXl     the text hero's end column from 1440 (Layout's xl), where the column is
+                             1240 and the field clears a full 26ch title; the horizon below. */
+@media (max-width: 767.98px) {
+  .wideCut {
     display: none;
   }
 }
-
+@media (min-width: 768px) {
+  .phoneCut {
+    display: none;
+  }
+}
+@media (max-width: 1023.98px) {
+  .textureLg {
+    display: none;
+  }
+}
 @media (min-width: 1024px) {
-  .textureNarrow {
+  .textureBase {
+    display: none;
+  }
+}
+@media (max-width: 1439.98px) {
+  .textureXl {
+    display: none;
+  }
+}
+@media (min-width: 1440px) {
+  .textureUntilXl {
     display: none;
   }
 }

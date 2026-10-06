@@ -495,7 +495,7 @@ The only motion inside the band belongs to `Button`: its colours on `--duration-
 
 **One thing inside the band that does move, and it is not ours.** A `media` video is a player in a document on another origin. It moves when a reader presses play, it honours or ignores `prefers-reduced-motion` by YouTube's choice rather than ours, and nothing in this component can reach it. Autoplay is withheld — it is absent from the `allow` list — so nothing moves until a reader asks for it, which is the whole of the control this component has and the reason it takes it.
 
-**Reduced motion.** Nothing of ours to switch off. Under `prefers-reduced-motion: reduce` this component renders identically, and there is no `@media` block in its stylesheet to express that with — the identity is structural, not conditional.
+**Reduced motion.** Nothing of ours to switch off. Under `prefers-reduced-motion: reduce` this component renders identically. Its stylesheet's `@media` blocks (fix round 1: the drawing / phone-cut switch at 768, the texture recipes at 1024 and 1440) choose which rendering shows at a width; none of them animates, so there is nothing for a motion query to express — the identity is structural, not conditional.
 
 ## 14 · Do's and Don'ts
 
@@ -758,6 +758,27 @@ Also:
 - Measured at 1470 with the 73 of nav: service 742 · one action 752 · tags 807 · photograph 723 ·
   announcement 795 · no media with trail 629 / 560 · category eyebrow 775. At 390 the h1 sits at 214
   and every band is under 1140.
+
+## Amendment · 6 Oct 2026, fix round 1 (kit `cmp-hero`)
+
+What the three-lens review changed, cause first:
+
+| Note | Cause | Fix |
+|---|---|---|
+| Texture a faint smudge | Both recipes sat almost wholly off the band | `plinth` (photograph): a field from under the photo's lower half out to the band's end and foot. `field` (no media): a full-height end column that fades in, from 1440; a horizon in the foot padding below. Both clear of every glyph by construction |
+| Centred comparison swollen | Media took the full 1240 | Capped at `--hero-media-size-centred` 860 (`HERO_CENTRED` sizes) |
+| One shape six times | No second opening | `arrangement="display"`: title in 3 of 5, lead and ask in 2 at its foot, media full column below (`ratio` `{ base: '4/3', lg: '3/1' }`). Band 807; its image crosses the fold by design, so the specimen exempts the hero measurement |
+| Grey tag strip | Tag chips between lead and ask | Unboxed mono list after the actions, each after a 6px blue pixel (`--hero-mark-*`, `--hero-tag-*`) |
+| SaaS announcement | Grey pill, wrapping strip | Blue pixel + blue mono flag (`--hero-flag-*`), one line always, the sentence ellipsises |
+| Labels 6px on phones | Text inside an `<img>` at 0.34x | `scripts/illustrations-phone.mjs` writes a phone cut (labels to numbered markers) and `src/lib/illustration-legends.ts`; below 768 the hero shows the cut and a numbered legend. Found by src, so no call site changes |
+| Soft hero photos | `sizes` stated the box, not the cover-cropped image | Media scales `sizes` by the crop factor (`cropSizes`); calmer, sharper frames chosen |
+| 67px title in a 432 track at 1024 | [1, 1] from 1024 | `beside` is 3 : 2 from 1024 and 1 : 1 from 1440 |
+| Trail floats over illustration heroes | Trail above a centred split | Against an illustration the trail joins the copy column: 32 to the title always |
+| No fold gate | Nothing read `fold.config.json` | `npm run fold:check` (`scripts/fold-check.mjs`): bands ≤ `maxBand`, `[data-fold-hero]` + nav ≤ 830, `data-fold-exempt` reported |
+
+Measured at 1470 with the 73 of nav: service 729 · one action 699 · tags 784 · photograph 723 ·
+announcement 792 · display band 807 (hero 880, exempt) · field 629 · text 590 · category 775 ·
+centred 1346 (exempt). At 390 the h1 sits at 213 and every band is under 1140.
 
 ## Appendix — self-audit
 

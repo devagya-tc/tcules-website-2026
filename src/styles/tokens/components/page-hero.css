@@ -200,6 +200,19 @@
 --hero-media-ratio:16 / 9;
 --hero-media-radius:var(--radius-0);
 --hero-media-rule-width:var(--border-width-hairline);
+  /* Fix round 1 (cmp-hero). The mark is one pixel of the texture's grid at 6, the legend's
+     numeral disc 20 around an 11px micro glyph; component sizes, not distances. The centred
+     media cap is about 8 of 12 columns of the 1240 column. */
+  --hero-mark-size: var(--space-6);
+  --hero-numeral-size: var(--space-20);
+  --hero-numeral-radius: var(--radius-full);
+  --hero-numeral-text: var(--text-micro);
+  --hero-numeral-tracking: var(--text-micro-tracking);
+  --hero-tag-text: var(--text-eyebrow);
+  --hero-tag-tracking: var(--text-eyebrow-tracking);
+  --hero-flag-text: var(--text-eyebrow);
+  --hero-flag-tracking: var(--text-eyebrow-tracking);
+  --hero-media-size-centred: 860px;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────
@@ -226,6 +239,14 @@
 --hero-media-rule-ink:var(--color-neutral-300); /* 1.54:1 — decoration, and the surface that
                                                    needs it most: a light UI screenshot on
                                                    near-white has no edge of its own */
+  --hero-mark-ink: var(--color-brandeis-500);
+  --hero-tag-ink: var(--color-neutral-700);
+  --hero-flag-ink: var(--color-brandeis-500);
+  --hero-numeral-ink: var(--color-brandeis-500);
+  --hero-numeral-glyph-ink: var(--color-white);
+  --hero-numeral-accent-ink: transparent; /* an outlined disc: peridot is the drawing's, never HTML's (§ 4.4) */
+  --hero-numeral-accent-glyph-ink: var(--color-neutral-900);
+  --hero-numeral-accent-rule-ink: var(--color-neutral-900);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
@@ -251,6 +272,14 @@
 --hero-media-rule-ink:var(--color-neutral-400); /* 1.90:1 — decoration. It steps with the
                                                    ground and has less to do than on paper:
                                                    tint is already darker than a light shot */
+  --hero-mark-ink: var(--color-brandeis-500);
+  --hero-tag-ink: var(--color-neutral-700);
+  --hero-flag-ink: var(--color-brandeis-500);
+  --hero-numeral-ink: var(--color-brandeis-500);
+  --hero-numeral-glyph-ink: var(--color-white);
+  --hero-numeral-accent-ink: transparent; /* an outlined disc: peridot is the drawing's, never HTML's (§ 4.4) */
+  --hero-numeral-accent-glyph-ink: var(--color-neutral-900);
+  --hero-numeral-accent-rule-ink: var(--color-neutral-900);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
@@ -278,6 +307,14 @@
                                                    would read as a second surface on the
                                                    black one. Almost none is the honest
                                                    amount of rule here */
+  --hero-mark-ink: var(--color-brandeis-300);
+  --hero-tag-ink: var(--color-neutral-300);
+  --hero-flag-ink: var(--color-brandeis-300);
+  --hero-numeral-ink: var(--color-brandeis-300);
+  --hero-numeral-glyph-ink: var(--color-neutral-900);
+  --hero-numeral-accent-ink: transparent; /* an outlined disc: peridot is the drawing's, never HTML's (§ 4.4) */
+  --hero-numeral-accent-glyph-ink: var(--color-white);
+  --hero-numeral-accent-rule-ink: var(--color-white);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -304,4 +341,12 @@
                                                     a saturated ground the distinction wanted
                                                     is a slight one, and stepping toward the
                                                     ground is what makes it slight */
+  --hero-mark-ink: var(--color-white);
+  --hero-tag-ink: var(--color-brandeis-100);
+  --hero-flag-ink: var(--color-white);
+  --hero-numeral-ink: var(--color-white);
+  --hero-numeral-glyph-ink: var(--color-brandeis-500);
+  --hero-numeral-accent-ink: transparent; /* an outlined disc: peridot is the drawing's, never HTML's (§ 4.4) */
+  --hero-numeral-accent-glyph-ink: var(--color-white);
+  --hero-numeral-accent-rule-ink: var(--color-white);
 }

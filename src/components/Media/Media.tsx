@@ -235,6 +235,34 @@ export function mediaSrcSet(image: MediaImage): string | undefined {
     .join(', ');
 }
 
+/**
+ * `sizes` for a cover crop. A crop narrower than the asset is filled by HEIGHT, so the rendered
+ * image is wider than its box by the asset's aspect over the crop's, and a `sizes` that states the
+ * box makes the browser pick a rung that is then upscaled: a 3:2 master in the 572 × 458 hero box
+ * renders 687 wide, a 16:9 one 814, and at 2x the 1240 rung was stretched to fill them (cmp-hero,
+ * fix round 1). So every length in the placement's list is multiplied by that factor, the larger of
+ * the two crops for a `{ base, lg }` spec. A crop wider than the asset fills by width: factor 1.
+ */
+const ratioNumber = (ratio: MediaRatio) => {
+  const [w = 1, h = 1] = ratio.split('/').map(Number);
+  return w / h;
+};
+function cropSizes(sizes: string, image: MediaImage, spec: MediaRatioSpec): string {
+  const crops = typeof spec === 'string' ? [spec] : [spec.base, spec.lg];
+  const aspect = image.width / image.height;
+  const factor = Math.max(1, ...crops.map((crop) => aspect / ratioNumber(crop)));
+  if (!Number.isFinite(factor) || factor <= 1.01) return sizes;
+  const k = Math.round(factor * 1000) / 1000;
+  return sizes
+    .split(/,\s*(?![^()]*\))/)
+    .map((entry) => {
+      const match = /^(\([^)]*\)\s+)?(.+)$/.exec(entry.trim());
+      if (!match) return entry;
+      return `${match[1] ?? ''}calc(${match[2]} * ${k})`;
+    })
+    .join(', ');
+}
+
 /** One class per ratio; each reads its `--media-ratio-*` token. */
 const RATIO_CLASS: Record<MediaRatio, string | undefined> = {
   '4/5': styles.ratio4x5,
@@ -365,7 +393,7 @@ export function Media({
       style={style}
       src={image.src}
       srcSet={srcSet}
-      sizes={srcSet ? sizes : undefined}
+      sizes={srcSet ? (cropRatio ? cropSizes(sizes, image, cropRatio) : sizes) : undefined}
       alt={image.alt}
       width={image.width}
       height={image.height}

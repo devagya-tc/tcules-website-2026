@@ -7,14 +7,14 @@ import {
   Layout,
   Media,
   Section,
-  Tag,
   Texture,
   TextureShape,
   type MediaImage,
   type MediaRatioSpec,
   type SectionSurface,
 } from '@/components';
-import { FULL_COLUMN, HERO_BESIDE } from '@/lib/image-sizes';
+import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
+import { FULL_COLUMN, HERO_BESIDE, HERO_CENTRED } from '@/lib/image-sizes';
 import { repeatsTrail, sameLabel, type HeroTrail } from '@/lib/trail';
 
 import styles from './PageHero.module.css';
@@ -146,20 +146,26 @@ export type { HeroTrail };
  *            96 apart (`section`: a split, not peer halves), the media at its own ratio inside its
  *            track (H3). An illustration is centred on the copy; any other image is top-aligned.
  *            Below 1024 it stacks — copy, then media — and renders exactly as `stacked`.
- *   centred  the trail, title, lead and actions centred on the column, then the media below at the
- *            full 1240. The owner comparison for the service hero (§ 2.3 option, § 10 item 2): it
- *            cannot end above the fold, so it is a specimen until the owner picks it over H2.
+ *   centred  the trail, title, lead and actions centred on the column, then the media below,
+ *            capped at --hero-media-size-centred (860, about 8 of 12 columns) so a drawing keeps the
+ *            split's scale. The owner comparison for the service hero (§ 2.3 option, § 10 item 2):
+ *            it cannot end above the fold, so it is a specimen until the owner picks it over H2.
+ *   display  title-led: the eyebrow and title in 3 of 5 from 1024, the lead and actions in the
+ *            other 2, foot-aligned to the title, then the media at the full column below — a wide
+ *            photograph (`ratio` { base: '4/3', lg: '3/1' }). The page's second opening shape
+ *            (fix round 1). Its image crosses the fold by design, as a banner under a title does.
  *
  * `beside` with no media renders `stacked`: there is nothing to put beside the copy, and a
  * template that sets `beside` for a family must still render the member that has no image. That is
  * the no-visual state, which is the common one, and it is not an error.
  */
-export type HeroArrangement = 'stacked' | 'beside' | 'centred';
+export type HeroArrangement = 'stacked' | 'beside' | 'centred' | 'display';
 
 /**
  * One line above the hero, for a launch or an opening (showcase pages only, visual-direction § 2.5).
- * A mark, a sentence and one link — never a second ask: the link is link-style, the band's one solid
- * stays the hero's. It costs one 32 row and a 48 seam: a photograph hero with a strip measures
+ * A blue pixel and a blue mono `label`, a sentence and one link — never a second ask: the link is
+ * link-style, the band's one solid stays the hero's. Always one line: the sentence ellipsises on a
+ * phone rather than wrapping the strip to three rows. It costs one 32 row and a 48 seam: a photograph hero with a strip measures
  * 795 with the nav, against § 2.5's 797.
  */
 export type HeroAnnouncement = { label: string; text: string; action: HeroAction };
@@ -286,15 +292,18 @@ export type PageHeroProps = {
    */
   arrangement?: HeroArrangement;
   /**
-   * Taxonomy marks under the copy, as inert Tags. Allowed only when the title sets on 3 lines or
-   * fewer: the row adds 32 + 48 and must stay inside the tallest illustration (§ 2.4).
+   * Taxonomy marks after the actions, as an unboxed mono list, each after a 6px blue pixel
+   * (cmp-hero fix round 1: the grey chips were boxes around text and a grey strip above the ask).
+   * Inert; a list, so a reader is told how many. Keep the title to 3 lines when tags are set.
    */
   tags?: readonly string[];
   /**
    * The Tcules pixel-grid texture, in the recipe the hero's media decides — a closed set, so a call
-   * site cannot misplace it (visual-direction § 6.3):
-   *   photograph  `hero-foot`, under the copy at the band's foot, start side; none below 1024.
-   *   no media    `hero-field`, in the empty end half; `horizon` along the foot below 1024.
+   * site cannot misplace it (visual-direction § 6.3, redrawn in fix round 1):
+   *   photograph  `plinth`: a field the photograph stands on, showing in the end margin beside its
+   *               lower half and in the padding under it; clear of the copy track at every width.
+   *   no media    `field`: a full-height column at the band's end from 1440; a horizon in the foot
+   *               padding below 1440.
    * The band rule (§ 4.3): an illustration hero spends its second blue mass on the field, so
    * texture there is refused with a development warning, and so is any ground but paper (§ 6.2).
    */
@@ -472,9 +481,11 @@ export function PageHero({
   const controls: readonly HeroAction[] = actions;
 
   /* The split is real only when there is something to split: `beside` with no media is the
-     single column, and so is `stacked` with or without it. */
+     single column, and so is `stacked` with or without it. `display` splits the HEAD (title |
+     lead and actions) and keeps the media below, so it is title-led with or without media. */
   const split = arrangement === 'beside' && media !== undefined;
   const centredHead = arrangement === 'centred';
+  const display = arrangement === 'display';
 
   /* Against media, the copy's alignment follows what the media IS (visual-direction § 3.2). An
      illustration has no box, so the copy is centred on it and the two read as one pair; a
@@ -483,21 +494,35 @@ export function PageHero({
   const isPhotograph = media?.type === 'image' && media.image.kind === 'photograph';
   const centred = split && isIllustration;
 
-  /* The texture recipe follows the media (visual-direction § 6.3): the foot under a photograph's
-     copy, the field in a text hero's empty end half. Nothing else takes one — an illustration
-     already spends the band's second blue mass (§ 4.3), a video is a box of another origin's
-     pixels, and the grid is drawn for paper only (§ 6.2). */
+  /* The phone cut of a service illustration (scripts/illustrations-phone.mjs): the drawing with its
+     labels as numbered markers, and the labels as a legend under it, below 768. Found by the
+     drawing's own src, so no call site passes it; an image without one renders alone. */
+  const legend =
+    media?.type === 'image' && isIllustration
+      ? ILLUSTRATION_LEGENDS[media.image.src]
+      : undefined;
+
+  /* The texture recipe follows the media (visual-direction § 6.3, redrawn in cmp-hero fix round 1,
+     because the first recipes sat almost wholly off the band and read as a smudge at 1x):
+       plinth  a photograph beside or above the copy: a field the photograph stands on, entering
+               the photo's lower end corner and running out to the band's end edge and foot. The
+               photo covers most of it; what shows is an L of grid in the end margin and under the
+               photo, clear of the copy track by construction.
+       field   no media: a full-height column of grid at the band's end from 1440, clear of the
+               title at its 26ch measure; below 1440, a horizon of real height in the foot padding.
+     Nothing else takes one — an illustration already spends the band's second blue mass (§ 4.3),
+     a video is a box of another origin's pixels, and the grid is drawn for paper only (§ 6.2). */
   const recipe =
     !texture || surface !== 'paper'
       ? undefined
       : media === undefined
         ? 'field'
-        : isPhotograph && split
-          ? 'foot'
+        : isPhotograph && (split || display)
+          ? 'plinth'
           : undefined;
   if (process.env.NODE_ENV !== 'production' && texture && recipe === undefined) {
     console.warn(
-      `PageHero: texture is for a paper hero with a photograph beside the copy, or with no media ` +
+      `PageHero: texture is for a paper hero with a photograph, or with no media ` +
         `(visual-direction § 4.3, § 6.2). Ignored here.`,
     );
   }
@@ -533,295 +558,319 @@ export function PageHero({
     }
   }
 
-  /* ── split · the arrangement ──────────────────────────────────────────────
-      The one Layout that `arrangement` touches. Two children at most — the copy stack and
-      the media — so DOM order is reading order at every width: copy, then media.
+  const justify = centredHead ? 'center' : undefined;
 
-      stacked  single track at every width, 48 between the copy and the media. This is the
-               "below" of ruling H1: media as a full-column block under the copy.
-      beside   from 1024 (`lg`), two EQUAL tracks — text 1 : media 1, ruling H2 — with 96
-               between them, --gap-section: copy beside an image is a split, two regions of
-               different kind, and only peer halves take --gap-column (1 Oct 2026). Below
-               1024 it is the stacked single track exactly, 48 and all.
-
-      The alignment is never stretch: the copy and the media are unequal heights by design (H3 —
-      the media keeps its own ratio), and the default stretch would pull the shorter cell to the
-      row's height. Which of the other two follows the media's kind (visual-direction § 3.2):
-        an illustration  centred on the copy. It has no box, so there is no edge to share, and a
-                         drawing hung from the title's top line reads as dropped into a corner.
-        anything else    top-aligned. A photograph, capture or video has an edge, and the h1 and
-                         that top edge share a line; the difference in height is left as air.
-      In `stacked` both are inert: a single-track row is always its content's height.
-
-      `beside` with no media is not split: there is nothing to stand beside the copy, so the
-      single track renders and the hero is the no-visual hero, which is the common one. */
-  const content = (
-    <Layout
-      rowGap="stack"
-      columns={split ? { lg: [1, 1] } : undefined}
-      colGap={split ? 'section' : undefined}
-      align={centred ? 'center' : 'start'}
-    >
-      {/* ── stack · 48 between blocks ──────────────────────────────────────────
-          Single-track at every width. Every child below is conditional except the opening,
-          and each renders NO ELEMENT when its slot is empty rather than an empty one — a Layout
-          gap exists only between rendered children, so an absent slot costs no seam. No route
-          ever shows 48px of air above nothing. */}
-      <Layout
-        rowGap="stack"
-        justifyItems={centredHead ? 'center' : undefined}
-        className={centredHead ? styles.centred : undefined}
-      >
-        {/* ── opening · 24 between label, title and copy ─────────────────────────
-            One Layout with three children rather than two nested ones, because the
-            eyebrow-to-title seam and the title-to-copy seam are the same step. */}
-        <Layout rowGap="block" justifyItems={centredHead ? 'center' : undefined}>
-          {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-          <h1 className={styles.title}>{title}</h1>
-          {/* copy · 16 between paragraphs. Absent entirely when every entry was blank —
-              never an empty <div> holding 16px of nothing. */}
-          {lead === undefined ? null : (
-            <Layout rowGap="text">
-              <p className={styles.lead}>{lead}</p>
-              {/* The index is the key. These rows are static frontmatter copy in array order —
-                  they never reorder, they are never inserted into, and two paragraphs may be
-                  identical strings, which makes the content itself a worse key than the position. */}
-              {rest.map((paragraph, index) => (
-                <p key={index} className={styles.body}>
-                  {paragraph}
-                </p>
-              ))}
-            </Layout>
-          )}
-        </Layout>
-
-        {/* ── byline · 24 both axes ─────────────────────────────────────────────
-            A <dl> rather than a Cluster of spans, because each <dt> is then announced
-            immediately before its own <dd> — "Written by, Alice Chen and Ben Ndlovu" — instead
-            of a row of unlabelled strings. <div> inside <dl> is valid and is what lets each
-            pair be a Layout, which is the same shape SiteFooter's contact block takes.
-
-            The ratio is what removes the need for decoration: 4px between a key and its value
-            against 24px between one pair and the next is a six-fold difference, so each pair
-            reads as one unit and the row reads as a row — no rule, no dot, no separator. */}
-        {pairs.length > 0 ? (
-          <Cluster as="dl" colGap="block" rowGap="block" align="start">
-            {pairs.map((pair) => (
-              <Layout key={pair.id} rowGap="inline">
-                <dt className={styles.key}>{pair.label}</dt>
-                <dd className={styles.value}>{pair.value}</dd>
-              </Layout>
-            ))}
-          </Cluster>
-        ) : null}
-
-        {/* ── extras ───────────────────────────────────────────────────────────
-            The one part that carries nothing at all — no class, because it has no rule to
-            carry. The <div> exists only to group whatever is passed into ONE row of the stack;
-            without it a fragment of three elements would become three rows at 48px each. */}
-        {children == null ? null : <div>{children}</div>}
-
-        {/* ── tags · inert marks, 8 apart, a stack under the copy ──────────────────
-            A list, because a reader is told how many there are. The chip owns its own box; the
-            row is the Cluster's. 32 tall, so the copy grows by 80 with the seam (§ 2.4). */}
-        {tags.length > 0 ? (
-          <Cluster
-            as="ul"
-            colGap="tight"
-            rowGap="tight"
-            justify={centredHead ? 'center' : undefined}
-          >
-            {tags.map((tag) => (
-              <li key={tag}>
-                <Tag>{tag}</Tag>
-              </li>
-            ))}
-          </Cluster>
-        ) : null}
-
-        {/* ── actions · one solid, one blue link ────────────────────────────────────
-            Anchors, because a hero action always navigates — which is why Space does nothing on
-            them and why that is correct rather than a gap.
-
-            The first is solid/primary, the band's one solid. The second is link-style and
-            primary: blue at rest like every text link (visual-direction § 4.2, fdn-blue), and with
-            no box it reads as an alternative rather than as a second button competing with the
-            first (it was ghost/neutral, then a neutral link). 24 between them, `block`, because a bare label 8 from a filled box
-            reads as part of it; centred on the cross axis, because the link has no box of its
-            own and its label must sit on the button's label line. 24 between wrapped rows too, so a
-            link that wraps under the button keeps its 44px target clear of the button's box.
-
-            size="md" with extendHitArea on both, not size="lg". The solid's box is 40 and the
-            touch floor is 44, so the extension covers the missing 4 without moving the row: lg
-            would make the hero's button 48 while every other control on the site stayed at 40,
-            and the hero would be claiming a loudness the design does not intend. The link has no
-            box: it is its label line, about 16 tall, so for it the extension is the whole of the
-            44 target, centred on the label and reaching 14 above and below it, which is why the
-            rows are 24 apart. An action missing the extension is the one failure this component
-            can ship that a screenshot will not show. */}
-        {controls.length > 0 ? (
-          <Cluster
-            colGap="block"
-            rowGap="block"
-            align="center"
-            justify={centredHead ? 'center' : undefined}
-          >
-            {controls.map((action, index) => (
-              <Button
-                key={action.href}
-                as="a"
-                href={action.href}
-                emphasis={index === 0 ? 'solid' : 'link'}
-                tone="primary"
-                size="md"
-                extendHitArea
-                /* The alternative carries the arrow: a trailing glyph says the click moves you, and
-                   it is one more blue cue in the band (§ 4.2) on the action that has no box. */
-                icon={index === 0 ? undefined : <Icon name="arrow-right" />}
-              >
-                {action.label}
-              </Button>
-            ))}
-          </Cluster>
-        ) : null}
-      </Layout>
-
-      {/* ── media · below the copy, or beside it ─────────────────────────────────
-          One slot, two renderings, mutually exclusive by the union — so there is no wrapper
-          element and no class of PageHero's on the image. Each IS the split's second child.
-
-          The width is the track's in both arrangements: the full content column in `stacked`,
-          half of it less 48 in `beside`. The height is the asset's own (H3) — Media renders
-          intrinsic, uncropped, and a tall asset is tall.
-
-          Nothing here is conditional on `surface`. The image's edge is Media's, by kind, read
-          from the band's data-surface through --media-*; the video's hairline is
-          --hero-media-rule-ink, re-declared once per surface in this component's token layer. */}
-      {media === undefined ? null : media.type === 'image' ? (
-        /* Through Media, which owns the edge (a capture takes the hairline; a cut-out, an
-           illustration and a photograph take none — ch05 §2, §2a, §4a), the srcset and the
-           loading. PageHero owns the two things Media cannot know:
-
-           `sizes` — the arrangement's width, from src/lib/image-sizes.ts. The beside value is
-           only right when the split is real, which is why it follows `split` and not
-           `arrangement`: a `beside` hero with its media stacked is a full-column image.
-
-           `priority` — always. A hero image is the LCP element on every route that has one, so
-           it is eager and fetched ahead of the document's other images. It is the one priority
-           image on a page because there is one hero on a page. */
-        <Media
-          image={media.image}
-          sizes={split ? HERO_BESIDE : FULL_COLUMN}
-          ratio={media.ratio}
-          priority
-        />
-      ) : (
-        /* youtube-nocookie.com rather than youtube.com: it withholds the tracking cookies until
-           a visitor actually presses play, and nothing about the embed needs them before then.
-           The whole URL is built here rather than taken from the caller, so all 129 routes embed
-           the same way — see HeroVideo's doc. There are no query parameters, deliberately: every
-           one YouTube offers changes the player's behaviour, and a default nobody chose is
-           better than one this component chose for 129 pages without being asked.
-
-           loading="lazy" here and NOT on the image, which looks inconsistent and is not. A video
-           frame is never the paint a reader is waiting for — it is an object they have to decide
-           to press — and the embed pulls the player's own scripts from another origin, which is
-           real weight to keep off the critical path of every hero that has one.
-
-           `title` is the frame's accessible name and is required by the type. `allow` is the
-           player's own feature list, minus autoplay: a hero that started playing on load would
-           be the loudest thing on the site and nobody asked for it. */
-        <iframe
-          className={styles.video}
-          src={`https://www.youtube-nocookie.com/embed/${media.id}`}
-          title={media.title}
-          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          loading="lazy"
-          allowFullScreen
-        />
-      )}
-    </Layout>
-  );
-
-  /* ── top · the trail, 32 above the split ────────────────────────────────────────
-     `gutter`: the trail is a 13px apparatus line and the split opens on a 67px title, so the step
-     that separates peers in a row is enough — the scale difference does the rest. The wrapper is a
-     <div> because the crumbs bring their own landmark. Centred, the trail is one item in a
-     centring row rather than a nav stretched to the column, so it sits on the title's axis. */
-  const top =
-    trail === undefined ? (
-      content
-    ) : (
-      <Layout rowGap="gutter">
-        {centredHead ? <Cluster justify="center">{trail.crumbs}</Cluster> : trail.crumbs}
-        {content}
+  /* ── The parts, built once and placed by the arrangement below ─────────────────── */
+  const eyebrowNode = eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null;
+  const titleNode = <h1 className={styles.title}>{title}</h1>;
+  /* copy · 16 between paragraphs. Absent entirely when every entry was blank — never an empty
+     <div> holding 16px of nothing. The index is the key: static frontmatter copy in array order,
+     never reordered, and two paragraphs may be identical strings. */
+  const copyNode =
+    lead === undefined ? null : (
+      <Layout rowGap="text">
+        <p className={styles.lead}>{lead}</p>
+        {rest.map((paragraph, index) => (
+          <p key={index} className={styles.body}>
+            {paragraph}
+          </p>
+        ))}
       </Layout>
     );
 
+  /* ── byline · 24 both axes ─────────────────────────────────────────────
+     A <dl> rather than a Cluster of spans, because each <dt> is then announced immediately before
+     its own <dd>. 4px between a key and its value against 24px between one pair and the next is a
+     six-fold difference, so each pair reads as one unit — no rule, no dot, no separator. */
+  const bylineNode =
+    pairs.length > 0 ? (
+      <Cluster as="dl" colGap="block" rowGap="block" align="start">
+        {pairs.map((pair) => (
+          <Layout key={pair.id} rowGap="inline">
+            <dt className={styles.key}>{pair.label}</dt>
+            <dd className={styles.value}>{pair.value}</dd>
+          </Layout>
+        ))}
+      </Cluster>
+    ) : null;
+
+  /* ── extras · the caller's block. No class: it carries nothing. The <div> groups whatever is
+     passed into ONE row of the stack. */
+  const extrasNode = children == null ? null : <div>{children}</div>;
+
+  /* ── actions · one solid, one blue link ────────────────────────────────────
+     Anchors, because a hero action always navigates. The first is solid/primary, the band's one
+     solid. The second is link-style and primary: blue at rest like every text link (§ 4.2,
+     fdn-blue), with no box, so it reads as an alternative rather than a second button. 24 between
+     them, centred on the cross axis so the link's label sits on the button's label line; 24
+     between wrapped rows too, so a wrapped link keeps its 44px target clear of the button.
+     size="md" with extendHitArea on both: the solid's box is 40 and the extension covers the
+     missing 4; the link is its label line, so for it the extension is the whole 44 target. */
+  const actionsNode =
+    controls.length > 0 ? (
+      <Cluster colGap="block" rowGap="block" align="center" justify={justify}>
+        {controls.map((action, index) => (
+          <Button
+            key={action.href}
+            as="a"
+            href={action.href}
+            emphasis={index === 0 ? 'solid' : 'link'}
+            tone="primary"
+            size="md"
+            extendHitArea
+            /* The alternative carries the arrow: a trailing glyph says the click moves you, and
+               it is one more blue cue in the band (§ 4.2) on the action that has no box. */
+            icon={index === 0 ? undefined : <Icon name="arrow-right" />}
+          >
+            {action.label}
+          </Button>
+        ))}
+      </Cluster>
+    ) : null;
+
+  /* ── tags · an unboxed mono list, each mark a blue pixel ───────────────────
+     Was a row of grey Tag chips between the lead and the actions: a neutral grey strip that pushed
+     the button down 80 and put boxes around text (cmp-hero fix round 1). Now each tag is a mono
+     label after a 6px blue square — the texture's own pixel, so the list carries the blue accent —
+     and the list sits AFTER the actions, as the hero's footnote, so the ask stays where every
+     other hero puts it. A list, because a reader is told how many there are. */
+  const tagsNode =
+    tags.length > 0 ? (
+      <Cluster as="ul" colGap="block" rowGap="tight" justify={justify}>
+        {tags.map((tag) => (
+          <li key={tag}>
+            <Cluster colGap="tight" align="center" nowrap>
+              <span className={styles.mark} aria-hidden="true" />
+              <span className={styles.tag}>{tag}</span>
+            </Cluster>
+          </li>
+        ))}
+      </Cluster>
+    ) : null;
+
+  /* ── media · below the copy, beside it, or under a centred or display head ─────────────────
+     An image renders through Media, which owns the edge (by kind), the srcset and the loading;
+     PageHero owns `sizes` (the arrangement's width, from src/lib/image-sizes.ts) and `priority`
+     (always: a hero image is the LCP element on every route that has one). An illustration with a
+     phone cut renders twice, each wrapper choosing its breakpoint: the drawing from 768, and below
+     it the phone cut and its legend. The legend is aria-hidden for the reason the drawing's alt is
+     empty: the h1 already names what the drawing stands for (ch05 § 9a). */
+  const sizes = centredHead ? HERO_CENTRED : split ? HERO_BESIDE : FULL_COLUMN;
+  const image =
+    media?.type === 'image' ? (
+      <Media image={media.image} sizes={sizes} ratio={media.ratio} priority />
+    ) : null;
+  const mediaNode =
+    media === undefined ? null : media.type === 'image' ? (
+      legend ? (
+        <div>
+          <div className={styles.wideCut}>{image}</div>
+          <div className={styles.phoneCut}>
+            <Layout rowGap="block">
+              <Media image={{ ...media.image, src: legend.src }} sizes={FULL_COLUMN} priority />
+              <Cluster as="ol" colGap="block" rowGap="tight" aria-hidden="true">
+                {legend.items.map((item, index) => (
+                  <li key={item.label}>
+                    <Cluster colGap="tight" align="center" nowrap>
+                      <span
+                        className={
+                          item.tone === 'accent' ? styles.numeralAccent : styles.numeral
+                        }
+                      >
+                        {index + 1}
+                      </span>
+                      <span className={styles.tag}>{item.label}</span>
+                    </Cluster>
+                  </li>
+                ))}
+              </Cluster>
+            </Layout>
+          </div>
+        </div>
+      ) : (
+        image
+      )
+    ) : (
+      /* youtube-nocookie.com: it withholds the tracking cookies until a visitor presses play. The
+         whole URL is built here rather than taken from the caller, so every route embeds the same
+         way (see HeroVideo). No query parameters, deliberately. loading="lazy" here and not on the
+         image: a video frame is an object a reader decides to press, never the paint they wait
+         for. `allow` is the player's own list minus autoplay. */
+      <iframe
+        className={styles.video}
+        src={`https://www.youtube-nocookie.com/embed/${media.id}`}
+        title={media.title}
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        loading="lazy"
+        allowFullScreen
+      />
+    );
+
+  /* The trail. Centred, it is one item in a centring row rather than a nav stretched to the column. */
+  const crumbs =
+    trail === undefined ? null : centredHead ? (
+      <Cluster justify="center">{trail.crumbs}</Cluster>
+    ) : (
+      trail.crumbs
+    );
+
+  /* ── stack · 48 between blocks ──────────────────────────────────────────
+     Every child but the opening is conditional, and each renders NO ELEMENT when its slot is
+     empty, so an absent slot costs no seam. The opening is one Layout of three: the
+     eyebrow-to-title and title-to-copy seams are the same step, 24. */
+  const stack = (
+    <Layout
+      rowGap="stack"
+      justifyItems={justify}
+      className={centredHead ? styles.centred : undefined}
+    >
+      <Layout rowGap="block" justifyItems={justify}>
+        {eyebrowNode}
+        {titleNode}
+        {copyNode}
+      </Layout>
+      {bylineNode}
+      {extrasNode}
+      {actionsNode}
+      {tagsNode}
+    </Layout>
+  );
+
+  /* ── top · the trail 32 above the title, wherever the title stands ───────────────
+     `gutter`: the trail is a 13px apparatus line and the title is 67px, so the step that separates
+     peers in a row is enough. Against an ILLUSTRATION the trail joins the copy column, because the
+     copy is centred on the drawing: above the split it floated 39 to 59 above a title that the
+     centring had moved down (fix round 1, § 1.2's 32). Against a photograph the trail stays above
+     the split, so the photograph's top edge and the eyebrow share a line as § 3.2 asks. */
+  const withTrail = (node: ReactNode) =>
+    crumbs === null ? (
+      node
+    ) : (
+      <Layout rowGap="gutter" justifyItems={justify}>
+        {crumbs}
+        {node}
+      </Layout>
+    );
+
+  let top: ReactNode;
+  if (display) {
+    /* ── display · title-led, the media a full-column band below ─────────────────────────
+       The second opening shape (fix round 1): the title takes 3 of 5 from 1024 and the lead and
+       actions the other 2, foot-aligned to the title's last line, then the media at the full 1240
+       48 below. A head split, so 96 between the tracks like every split. */
+    top = withTrail(
+      <Layout rowGap="stack">
+        <Layout columns={{ lg: [3, 2] }} colGap="section" rowGap="block" align="end">
+          <Layout rowGap="block">
+            {eyebrowNode}
+            {titleNode}
+          </Layout>
+          {/* 24, not the stack's 48: in a 2/5 track the lead and its ask are one unit at the
+              title's foot, and 48 would set the ask adrift from the sentence it answers. */}
+          <Layout rowGap="block">
+            {copyNode}
+            {bylineNode}
+            {extrasNode}
+            {actionsNode}
+            {tagsNode}
+          </Layout>
+        </Layout>
+        {mediaNode}
+      </Layout>,
+    );
+  } else {
+    /* ── split · the arrangement ──────────────────────────────────────────────
+        stacked  single track, 48 between the copy and the media: the "below" of ruling H1.
+        beside   two tracks with 96 between them (--gap-section: a split, not peer halves): text 1 :
+                 media 1 from 1440 (ruling H2), and 3 : 2 from 1024 to 1439, so a 67px title is
+                 never set in a 432 column (fix round 1: five lines with "product." alone).
+        centred  single track, centred, the media capped at --hero-media-size-centred.
+       Never stretch: copy and media are unequal heights by design. An illustration is centred on
+       the copy; anything else is top-aligned. */
+    const copyColumn = centred ? withTrail(stack) : stack;
+    const content = (
+      <Layout
+        rowGap="stack"
+        columns={split ? { lg: [3, 2], xl: [1, 1] } : undefined}
+        colGap={split ? 'section' : undefined}
+        align={centred ? 'center' : 'start'}
+        justifyItems={justify}
+      >
+        {copyColumn}
+        {centredHead && mediaNode !== null ? (
+          <div className={styles.centredMedia}>{mediaNode}</div>
+        ) : (
+          mediaNode
+        )}
+      </Layout>
+    );
+    top = centred ? content : withTrail(content);
+  }
+
   return (
     /* ── The band ────────────────────────────────────────────────────────────────
-       The hero owns its band, at Section's DEFAULT density — 96 of air, one band shape on 129
-       pages, which is what makes a page opening recognisable. There is no `density` prop: a
-       route that wanted 64 would be asking for a quieter hero, which is a content problem.
+       The hero owns its band, at Section's DEFAULT density — 96 of air, one band shape on every
+       page. No className on the Section and no override of it from anywhere: the column, the
+       gutter, the ground and the vertical air are all --sec-*.
 
-       No className on the Section and no override of it from anywhere: the content column, the
-       gutter, the ground and the vertical air are all --sec-*, and the only thing the caller
-       decides about this band is which of the four grounds it paints.
-
-       Deliberately NOT a labelled landmark. SiteNav owns banner, main owns main, SiteFooter owns
-       contentinfo and Breadcrumbs owns its navigation; a fifth landmark at the top of every page
-       is one more region to navigate past rather than to. It stays a <section> rather than a
-       <div> because the hero is a self-contained thematic opening, and because that leaves
-       aria-labelledby on the always-rendered h1 as a one-line change if it is ever wanted. */
+       Deliberately NOT a labelled landmark: SiteNav, main, SiteFooter and Breadcrumbs own the
+       landmarks. A <section> because the hero is a self-contained thematic opening. */
     <Section
       surface={surface}
       data-arrangement={
         centredHead
           ? 'hero-centred'
-          : split
-            ? isIllustration
-              ? 'hero-illustration'
-              : 'hero-media'
-            : media === undefined
-              ? 'hero-text'
-              : 'hero-stacked'
+          : display
+            ? 'hero-display'
+            : split
+              ? isIllustration
+                ? 'hero-illustration'
+                : 'hero-media'
+              : media === undefined
+                ? 'hero-text'
+                : 'hero-stacked'
       }
     >
       {/* ── texture · behind the content, never under a glyph ──────────────────────
-          The field is absolutely placed against the band (Section is positioned and isolated), so
-          these wrappers have no box of their own and only choose the breakpoint. */}
-      {recipe === 'foot' ? (
-        <div className={styles.textureWide}>
-          <Texture>
-            <TextureShape
-              kind="ellipse"
-              bottom={-300}
-              left={-200}
-              width="50%"
-              height={380}
-              blur={180}
-            />
-          </Texture>
-        </div>
+          Absolutely placed against the band (Section is positioned and isolated), so these
+          wrappers have no box of their own and only choose the breakpoint. The numbers are SVG
+          geometry, measured in the comments beside them at 1470 and 390. */}
+      {recipe === 'plinth' ? (
+        <>
+          {/* From 1024: the field starts 150 inside the photograph's start edge (x ≈ 933 of 1470;
+              the copy track ends at 687) and 344 above its foot, and runs 80 past the band's end
+              and foot so the blur never thins it at an edge. Visible: the 115 end margin beside the
+              photo's lower half, and the 96 of padding under it. */}
+          <div className={styles.textureLg}>
+            <Texture>
+              <TextureShape right={-80} bottom={-80} width="42%" height={520} blur={32} />
+            </Texture>
+          </div>
+          {/* Below 1024 the photograph is the band's last child, full column: the field takes its
+              lower end two thirds and the padding under it. */}
+          <div className={styles.textureBase}>
+            <Texture>
+              <TextureShape right={-80} bottom={-80} width="78%" height={330} blur={24} />
+            </Texture>
+          </div>
+        </>
       ) : null}
       {recipe === 'field' ? (
         <>
-          <div className={styles.textureWide}>
+          {/* From 1440: a full-height column at the band's end that fades in from its start edge
+              rather than standing as a panel: 32% of the band past the end, top and foot by 120,
+              its blur ramp centred on x ≈ 1120 at 1470 and reaching full grid by 1210. The title's
+              26ch box ends at 1075 and the lead's 56ch at 731, so no glyph meets the ramp. */}
+          <div className={styles.textureXl}>
             <Texture>
-              <TextureShape
-                kind="ellipse"
-                top={-220}
-                right={-160}
-                width="40%"
-                height={420}
-                blur={200}
-              />
+              <TextureShape right={-120} top={-120} width="32%" height="140%" blur={96} />
             </Texture>
           </div>
-          <div className={styles.textureNarrow}>
+          {/* Below 1440: a horizon in the 96 of foot padding, its top edge 24 below the actions. */}
+          <div className={styles.textureUntilXl}>
             <Texture>
-              <TextureShape bottom={-200} width="110%" height={260} blur={200} />
+              <TextureShape bottom={-80} width="120%" height={152} blur={24} />
             </Texture>
           </div>
         </>
@@ -831,10 +880,16 @@ export function PageHero({
       ) : (
         /* ── announcement · one line of news, a stack above the rest ─────────────────
            48, not the trail's 32: the strip is news ABOUT the site, not part of this page's
-           opening, so it stands apart from the trail and the eyebrow rather than joining them. */
+           opening. A blue pixel and a blue mono label instead of the grey "New" pill, which read
+           as the stock product-site strip (fix round 1). One line at every width: nowrap, and the
+           sentence is the part that gives way, ellipsised on a phone, so the link and the label
+           always show and the h1 never drops a row. */
         <Layout rowGap="stack">
-          <Cluster colGap="block" rowGap="tight" align="center">
-            <Tag>{announcement.label}</Tag>
+          <Cluster colGap="block" align="center" nowrap>
+            <Cluster colGap="tight" align="center" nowrap>
+              <span className={styles.mark} aria-hidden="true" />
+              <span className={styles.flag}>{announcement.label}</span>
+            </Cluster>
             <p className={styles.note}>{announcement.text}</p>
             <Button
               as="a"

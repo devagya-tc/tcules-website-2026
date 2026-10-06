@@ -1029,8 +1029,8 @@ specimen, which renders every recipe in a realistic band.
 
 | Recipe | Where | Shape (lg) | Why its box clears content | Below 1024 |
 |---|---|---|---|---|
-| `hero-field` | a hero with no media, in the empty end half | ellipse, top −220, end −160, 40% × 420, blur 200 | the box spans x ≥ 1042 and y −220 to 200, so it clears the title at its 26ch measure (≈ 985) | `horizon` |
-| `hero-foot` | a hero with a photograph, at the copy side's foot | ellipse, bottom −300, start −200, 50% × 380, blur 180 | the box ends 80 above the band's bottom edge, inside the 96 padding, and clear of the photo track | none |
+| `hero-field` | a hero with no media, a full-height end column from 1440 *(cmp-hero fix round 1: the ellipse sat off the band and read as a smudge)* | rect, top −120, end −120, 32% × 140%, blur 96 | its ramp centres on x ≈ 1120 at 1470 and is full by 1210; the title's 26ch box ends at 1075 | `horizon` in the foot padding, rect bottom −80, 120% × 152, blur 24 |
+| `hero-plinth` (was `hero-foot`) | a hero with a photograph: a field the photo stands on *(fix round 1)* | rect, bottom −80, end −80, 42% × 520, blur 32 | starts 150 inside the photo's start edge (x ≈ 933; the copy track ends at 687), so it shows only in the end margin and the foot padding | rect, bottom −80, end −80, 78% × 330, blur 24, under the stacked photo |
 | `counterweight` | a B band, in the corner opposite the image | ellipse, bottom −260, side −180, 34% × 340, blur 180 | the box rises 80 into the band, inside the 96 padding, under the copy track | none |
 | `horizon` | the bottom edge of a paper band directly above a change of ground; never above ruled rows | rect, bottom −200, 110% × 260, blur 200 | it reaches 60 into the band, inside the 96 | same |
 | `closing` | the L close, under the copy column's foot, running into the ink footer seam; the form column stays clean | rect, bottom −260, start −120, 44% × 320, blur 200 | 60 into the band, inside the 96 | `horizon` |
@@ -1165,7 +1165,7 @@ a photograph.
 
 | # | Band | Head | Image | Texture |
 |---|---|---|---|---|
-| 1 | Announcement strip on tint, then **A, photo hero** [1, 1] | hero | `pair-at-laptop-sticky-wall`, 5:4 | `hero-foot` (start) |
+| 1 | Announcement strip on tint, then **A, photo hero** [1, 1] | hero | `wireframe-wall`, 5:4 (fix round 1: the video still was soft) | `hero-plinth` |
 | 2 | H logo strip: the real marks, headed "Teams we have shipped with" | centred | — | — |
 | 3 | C-image-3, H-row with a section action, "What we do" | left | card images | — |
 | 4 | J statement | left | — | `head-half` (end) |
