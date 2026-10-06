@@ -1,10 +1,19 @@
 import type { ReactNode } from 'react';
 
 import { Cluster, Layout, Section, type MediaImage, type SectionSurface } from '@/components';
-import { ListCard, type ListCardMarker } from '@/patterns';
+import { ListCard, ReadDown, type ListCardMarker, type ReadDownRow } from '@/patterns';
+import { getKitPhoto } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
+
+/* ReadDown rows (specimen § 12): one long body against short ones, so the level rules can be seen. */
+const READ_DOWN: readonly ReadDownRow[] = [
+  { icon: 'layers', title: 'A product model', body: 'The objects, states and rules the product runs on, agreed once by everyone who builds on it.' },
+  { icon: 'document-text', title: 'A decision record', body: 'Every consequential call, with its evidence.' },
+  { icon: 'code', title: 'Coded prototypes', body: 'Working surfaces your team can open and test.' },
+  { icon: 'checklist', title: 'A ranked list of fixes', body: 'Each one costed and sequenced.' },
+];
 
 /* ── Thumbnail records ────────────────────────────────────────────────────────────
    Whole `MediaImage` records, the shape a page receives from `@/content`. The kind is the record's,
@@ -1206,8 +1215,72 @@ export default function ListCardSpecimenPage() {
       </Section>
 
       <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>12 · ReadDown — the D set mode</h2>
+            <p>
+              Ruled rows read top to bottom, one column or two (visual-direction § 3.4 D). Three
+              rows or fewer in one column take md (h4); four or more, or two columns, take sm (h5)
+              and keep the body at body. No inline inset (the rows never link, so no hover ground),
+              and the first row of each column starts on the set&rsquo;s top edge. Two columns are
+              one list in reading order, each grid row as tall as its taller item, so the closing
+              rules run level across the column seam. The kit family page shows it in its bands:
+              /design/kit/readdown.
+            </p>
+          </Layout>
+          <Layout columns={{ lg: [1, 1] }} colGap="column" rowGap="stack" align="start">
+            <Specimen title="columns 1 · three rows · md">
+              <ReadDown rows={READ_DOWN.slice(0, 3)} />
+            </Specimen>
+            <Specimen title="columns 2 · four rows · sm · unequal bodies">
+              <ReadDown rows={READ_DOWN.slice(0, 4)} columns={2} />
+            </Specimen>
+          </Layout>
+          <Specimen title="columns 1 · text only, no glyphs">
+            <ReadDown rows={READ_DOWN.slice(0, 3).map(({ title, body }) => ({ title, body }))} />
+          </Specimen>
+          <Specimen title="photo · three rows · sm — from 1024 the photo takes the trailing two thirds and runs the rows' height, ending on the last rule; below 1024 it sits above them at 3:2">
+            <ReadDown rows={READ_DOWN.slice(0, 3)} photo={getKitPhoto('workshop-brick-room')} />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Specimen title="12 · ReadDown photo + rail — the § 6.3 field hung off the photo's end edge, from 1440: it starts under the photograph and runs into the margin, never under the rows">
+          <ReadDown
+            rows={READ_DOWN.slice(1, 4)}
+            photo={getKitPhoto('hands-sketches-markers')}
+            rail
+          />
+        </Specimen>
+      </Section>
+
+      <Section surface="ink">
+        <Specimen title="12 · ReadDown on ink — the glyph lifts to brandeis-300, the rule to neutral-700">
+          <ReadDown rows={READ_DOWN.slice(0, 4)} columns={2} />
+        </Specimen>
+      </Section>
+
+      <Section surface="blue">
+        <Specimen title="12 · ReadDown on blue — declared for self-containment; the glyph is white, the rule brandeis-300">
+          <ReadDown rows={READ_DOWN.slice(0, 4)} columns={2} />
+        </Specimen>
+      </Section>
+
+      <Section>
+        <Specimen title="12 · ReadDown, two columns, five rows, text only — the odd row stands alone, its rule its own width">
+          <ReadDown
+            rows={[...READ_DOWN, { title: 'A readout', body: 'One hour, the whole team.' }].map(
+              ({ title, body }) => ({ title, body }),
+            )}
+            columns={2}
+          />
+        </Specimen>
+      </Section>
+
+      <Section>
         <Layout rowGap="block">
-          <h2>12 · What this static page cannot force</h2>
+          <h2>13 · What this static page cannot force</h2>
           <p>
             Hold the pointer for pressed and Tab for keyboard focus. The split collapse is no
             longer on the list: it follows the row&rsquo;s own width, so § 1a renders it.

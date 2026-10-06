@@ -61,7 +61,7 @@
 >    route adopts the count rule when it is recomposed from the kit.
 > 6. **Steps, the set mode (`Steps.tsx`), final fix round 6 Oct 2026.** A Steps row is `md` and
 >    `stacked` at every count — the blue index beside an h4 title, the body under it at
->    `--lcrd-step-body-measure` (the lead measure, 56ch) — the editorial process list of
+>    `--lcrd-stacked-body-measure` (the lead measure, 56ch) — the editorial process list of
 >    ref-meridian-04, replacing the h5 split in a 184 title track that read as a three-cell spec table.
 >    The set drops the row's 16 inline inset (it is never linked, so it paints no hover ground), takes
 >    `--gap-block` (24) as its block inset, and starts its first row on the set's top edge.
@@ -1123,3 +1123,44 @@ on paper and tint, brandeis-300 on ink; blue keeps white and brandeis-200.
 - A tile's icon is 32 (`--lcrd-marker-icon-size-tile`, new primitive `--icon-size-32`).
 - An unlinked row (`.still`) drops the 16 inline inset: it has no hover ground to clear, so its
   marker and title hold the column's edge.
+
+## Amendment · 6 Oct 2026 — `cmp-readdown`: ReadDown, the D set mode
+
+`ReadDown.tsx` in ListCard's folder, exported beside `Steps` (a pattern beside it would be a pattern
+importing a pattern). It is the D band's body (visual-direction § 3.4 D): ruled rows of PEERS in a
+`<ul>`, one column or two, each row a blue glyph (or none — a set is all-icon or all-text) beside its
+title with the sentence under it.
+
+- **Size is the set's** (§ 7.2): ≤ 3 rows in one column take `md` (h4); four or more, or two columns,
+  take `sm` (h5), body at body. Rows are always `stacked`, the body capped at `--lcrd-stacked-body-measure`.
+- **Two columns are one list**, laid out `{ md: 2 }` at `column` in reading order. Each frame fills its
+  grid cell (`block-size: 100%`), so the closing rules run level across the seam.
+- **On the content edge:** no inline inset (rows never link, so no hover ground), the 32 block inset kept
+  (§ 1.4's D row, padding 64), and the first row of each column starts on the set's top edge.
+- **`photo`** (fix round 2, superseding round 1's 349 portrait, which read as a third equal column
+  beside a head track left empty under its lead): the photo form gives the photograph the WIDE track.
+  From 1024 the set splits `{ lg: [2, 1] }` at `section` (96) with `reverse`, so the photo (first in the
+  DOM, for the phone's order) takes the trailing two thirds and the rows the leading third; `stretch`,
+  so the photo runs the rows' height and starts and ends with them at every width from 1024. About
+  763 × 449 at 1440. Place it under ContentSection `split-head`, whose head splits [1, 2] at 96 too:
+  heading over rows, lead over photo, one grid. Exactly three rows (warned), `sm` in the 381 track,
+  bodies ≤ 12 words / two lines, so the band is 822 at 1470 (with a CtaRow, 822 at `density="tight"`).
+  Below 1024 the photo sits above the rows at 3:2 (`--lcrd-readdown-photo-height-base`). The caller
+  passes no ContentSection `aside`.
+- **`rail`** (photo form only): the § 6.3 `rail` texture, hung off the photo's END EDGE rather than the
+  band's: the field's box runs from the band's end edge back across the band's inline padding (the
+  same max() Section pads with; cap duplicated on purpose as `--lcrd-readdown-rail-container`) plus
+  `--lcrd-readdown-rail-under` (80, optical) under the photo, and one 220-wide shape, blur 120, fills its
+  start. So the grid always meets the image (round 2: band-anchored, it sat 170 clear of the photo at
+  1920) and never extends past the viewport. Never under text. From 1440 only (`.rail`). Its containing
+  block must be the Section: never wrap a railed set in a positioned box.
+- **Token rename:** `--lcrd-step-body-measure` became `--lcrd-stacked-body-measure` (Steps and
+  ReadDown both read it).
+- **Ceilings warned in development:** > 3 rows in a column, > 6 rows in a set, mixed glyph / no glyph.
+- **A positional exception to § 9 and § 14 Don't 14** (no inset change at a breakpoint): in two
+  columns, from 768 (Layout's md, where the second track begins) the SECOND item is also first in its
+  column, so it drops its top inset with the first. The query follows the arrangement — below 768 the
+  item is the second row of one column and keeps its 32 — and swaps no step for another. Measured at
+  1440 / 768 / 390: both column tops at 0 from 768, the closing rules level across the seam.
+- No row change to ListCard itself; its tokens are unchanged (`--lcrd-stacked-body-measure` renamed for
+  both set modes). The module's "no media query" note now scopes to the row.

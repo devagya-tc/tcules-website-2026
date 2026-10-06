@@ -217,3 +217,13 @@ export function coverSizes(sizes: string, source: number, frames: readonly numbe
     })
     .join(', ');
 }
+
+/**
+ * ReadDown's photograph (the D photo form, cmp-readdown fix round 2): the trailing two-thirds track
+ * of the set's own [1, 2] split at the 96 seam from 1024 — the same grid as ContentSection
+ * `split-head`, which the form sits under. (1240 − 96) × 2 / 3 ≈ 763 at the cap;
+ * (100vw − 64 − 96) × 2 / 3 from 1024; below it the photo sits above the rows at the full column.
+ */
+export const READ_DOWN_PHOTO =
+  `(min-width: ${CAP}px) ${Math.round(((CONTAINER - SPLIT_GAP) * 2) / 3)}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 2 / 3), ${FLUID_COLUMN}`;

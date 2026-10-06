@@ -146,3 +146,13 @@ at 477 (a [5, 4] split at 4:5 is 987 tall), so the head's scale is the band's do
 
 The B band's photograph may take the wide track (`media.weight="photo"`, 6:5 in 667) when its copy is
 short, and the head's scale is an explicit `media.head`, not a length rule.
+
+## Kit layout notes recorded by `cmp-readdown`
+
+| Rule | Where it lives | Package |
+|---|---|---|
+| **D-faq ceilings re-derived from the Accordion as it renders: ≤ 5 questions, ≤ 4 with a CtaRow** (was ≤ 7 / ≤ 5). § 1.4 budgets a closed item at 64; the shipped Accordion row is 77 (24 + h5 28 + 24 + rule), and its first answer is open on arrival (+ ~93). Seven measured 960 at 1470 (seven closed would still be 864), five with a CtaRow 844. Five alone is 805, four with a CtaRow 767. Density stays default (§ 1.3: density is never a squeeze). | `src/app/design/kit/readdown/page.tsx` (captions); § 1.4 D-faq row and § 1.5 to be amended by the integrator | `cmp-readdown` |
+| **D's body is the ReadDown set mode** (ListCard folder): rows on the content edge, ≤ 3 in one column at h4, two columns as one list with level rules at h5. The `rail` texture is the set's `rail` prop, shown from 1440 only. | `src/patterns/ListCard/ReadDown.tsx`; `docs/specs/ListCard.md` | `cmp-readdown` |
+| **D's photo moves from the head track into the body (fix round 1).** "Photo aside, 3:2 at 381" (§ 1.4, § 3.3) weighed about as much as a paragraph and ended 80 to 95 below the last rule. The photo form (`ReadDown photo`): from 1440 the body track splits into the rows and the photo at `column`, and the photo runs the rows' height, so both end on the last rule; 349 × 526 at three rows (2:3), twice the old area. One column, two or three rows at h5 (the 349 track's step). Bands: 718, 782 with a CtaRow. Below 1440 the photo sits above the rows, 16:9 from 1024 and 3:2 below. The stat aside is unchanged. § 1.4's "photo aside" row and § 3.3's D entry to be amended by the integrator. | `src/patterns/ListCard/ReadDown.tsx`, `src/lib/image-sizes.ts` (`READ_DOWN_PHOTO`) | `cmp-readdown` |
+| **§ 6.3 `rail` sits on the photograph's side, photo form only (fix round 1).** At 1440 to 1470 the outer margin is 100 to 115, so the recipe's blur reaches about 120 into the column; beside rows it ran under titles and rules and read as a smudge. On the photo's side the same geometry passes under the photograph, never under text, and the grid reads as coming out from behind the image. The recipe's numbers are unchanged; its placement rule gains "on the side of the band's photograph". | `src/patterns/ListCard/ReadDown.tsx` | `cmp-readdown` |
+| **N's body is the Contrast pattern**, Fit's look moved unchanged (`--svc-*` values restated as `--cntr-*`). | `src/patterns/Contrast/`; `docs/specs/Contrast.md` | `cmp-readdown` |

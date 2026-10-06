@@ -119,9 +119,25 @@
   --lcrd-title-min: 256px;
   --lcrd-body-min: 256px;
 
-  /* A Steps body's measure (ListCard/Steps.tsx, final fix round): the lead measure, so a step's
-     sentence makes two lines at 12–20 words and one at ≤ 10, under its title. */
-  --lcrd-step-body-measure: var(--measure-lead);
+  /* The measure of a body set UNDER its title by a set mode — a Steps body (Steps.tsx, final fix
+     round) and a ReadDown body (ReadDown.tsx, cmp-readdown): the lead measure, so the sentence makes
+     two lines at 12–20 words and one at ≤ 10. Named for the stacked body both modes set, not for
+     Steps, which introduced it (renamed from its Steps-only name, cmp-readdown fix round 1). */
+  --lcrd-stacked-body-measure: var(--measure-lead);
+
+  /* ReadDown's photo form (ReadDown.tsx): the photograph's box height as a multiple of its own width
+     while it sits ABOVE the rows, below 1024 — 3:2. From 1024 the box has no ratio: it stretches to
+     the rows' height in the trailing two-thirds track (about 763 x 450 at 1440, three rows). */
+  --lcrd-readdown-photo-height-base: calc(2 / 3);
+
+  /* The photo form's rail field (ReadDown `rail`), sized from the band's end edge. The column cap is
+     DUPLICATED ON PURPOSE from --sec-container (a component never reads another's tokens, CLAUDE.md
+     tokens rule 6): the field must cross exactly the band's inline padding to start at the photo's
+     end edge, and that padding is a max() over the cap. Change the page frame and change this with
+     it. The under-reach is an OPTICAL placement, not a layout distance (gap rule 1): how far the
+     field starts under the photograph, so its strongest part meets the image's edge. */
+  --lcrd-readdown-rail-container: 1240px;
+  --lcrd-readdown-rail-under: var(--space-80);
 
   /* The accepted native-image contract. 160px was measured as a recognisable landscape sample in
      the 1240px row while still leaving the 192px content core room before Cluster wraps it.

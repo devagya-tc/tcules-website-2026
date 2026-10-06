@@ -16,7 +16,9 @@
      the visually-hidden hint's clip technique, not outer spacing.
    No display:grid or display:flex. Layout and Cluster own both axes; flex values below size their
    children inside those primitives and do not arrange siblings by themselves.
-   No responsive type or distance override, and no media query at all. The split collapses when
+   No responsive type or distance override, and no media query on the row. (The two in this file
+   belong to the ReadDown set mode at its foot: one follows its two-column arrangement, the other
+   gates its rail texture to 1440, the rest size its photo box.) The split collapses when
    the ROW runs out of room for its two minimum tracks — a wrapping Cluster, not a viewport
    boundary — and the type composites step in the shared type layer.
    No container query either. It was the fallback for reading the row's own width, and it is not
@@ -439,5 +441,85 @@
    twenty words make two lines and ten make one — at 1440 and at 1024 alike, since the 547 body of
    the beside track at 1024 is wider than the cap. The rules still run the full track. */
 .steps .body {
-  max-inline-size: var(--lcrd-step-body-measure);
+  max-inline-size: var(--lcrd-stacked-body-measure);
+}
+
+/* ── ReadDown: the D set mode (ReadDown.tsx) ─────────────────────────────────────
+   A read-down row is never linked, so — as in Steps — the 16 inline inset that clears a hover
+   ground goes, and the glyph sits on the edge the band's head and the rows' own rules share. The
+   row keeps its 32 block inset (§ 1.4's D row: padding 64), one step airier than a Steps row's 24,
+   because a D row is a peer read on its own rather than the next beat of a method.
+
+   The first row of each column starts on the set's top edge, so the first title sits on the head's
+   top line: the rules are between rows and after the last, never above the first. */
+.readdown .frame {
+  padding-inline: 0;
+}
+
+.readdown > :first-child .frame {
+  padding-block-start: 0;
+}
+
+/* A row's sentence sits under its title at the lead measure, as a step's does: at 75ch a two-line
+   body in the 763 track was 28 words and half a line of empty rule under each one. */
+.readdown .body {
+  max-inline-size: var(--lcrd-stacked-body-measure);
+}
+
+/* Two columns. Every grid row is as tall as its taller item and each frame fills its cell, so the
+   closing rules run level across the column seam. From 768 (Layout's md, where the two tracks
+   begin) the second item is also first in its column and starts on the top edge with the first;
+   the query follows the ARRANGEMENT, and changes no distance. */
+.readdownTwo .root,
+.readdownTwo .frame {
+  block-size: 100%;
+}
+
+@media (min-width: 768px) {
+  .readdownTwo > :nth-child(2) .frame {
+    padding-block-start: 0;
+  }
+}
+
+/* The photo form (ReadDown `photo`). The outer box is the inline-size container and the grid item
+   Layout stretches; the inner box is what Media fills (a cover crop). Above the rows its height is a
+   multiple of its own width (cqi, 3:2); from 1024, in the trailing track, it takes the stretched
+   row's height and `contain: size` keeps the master's intrinsic height out of the row's sizing, so
+   the ROWS set the band and the photo ends on the last rule. Sizing only: no display, no margin. The
+   query follows the arrangement (Layout's lg); no distance moves. */
+.readdownPhoto {
+  container-type: inline-size;
+}
+
+.readdownPhotoBox {
+  block-size: calc(var(--lcrd-readdown-photo-height-base) * 100cqi);
+}
+
+@media (min-width: 1024px) {
+  .readdownPhotoBox {
+    contain: size;
+    block-size: 100%;
+  }
+}
+
+/* The `rail` texture exists from 1440 only (§ 6.3). Its containing block is the BAND (ReadDown.tsx),
+   so % here is the band's width: the field runs from the band's end edge back across the band's
+   inline padding — the same max() Section pads with — and 80 more, under the photograph's end
+   edge, which from 1024 is the column's end. The field therefore starts under the image at every
+   width and never extends past the viewport. Two classes, so this outranks Texture's own box
+   (inset 0, width 100%) whichever stylesheet loads first. */
+.rail {
+  display: none;
+}
+
+@media (min-width: 1440px) {
+  .readdownPhoto > .rail {
+    display: block;
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    inline-size: calc(
+      max(var(--gap-gutter), (100% - var(--lcrd-readdown-rail-container)) / 2) +
+        var(--lcrd-readdown-rail-under)
+    );
+  }
 }
