@@ -4,7 +4,7 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .heading .headingMd .headingDisplay .asideFill .lead .leadBeside .centred
+   Classes: .eyebrow .mark .heading .headingMd .headingDisplay .asideFill .lead .leadBeside .centred
    .bodyCentred .text .textureLg .eyebrowAccent .photoTrack .photo .photoLeads .photoToCopy
 
    Three @media queries, all from 1024 and none swapping a distance: .leadBeside (the lead's ROLE
@@ -20,6 +20,17 @@
      CMS field keep whatever capitalisation somebody authored. */
   text-transform: var(--text-mono-case);
   color: var(--csec-eyebrow-ink);
+}
+
+/* The eyebrow's mark: one square of the texture's grid, the blue accent at its smallest (§ 4.2) —
+   PageHero's `.mark`, restated here because a pattern never reads another's classes. Sizing and ink
+   only; the Cluster places it. */
+.mark {
+  display: block;
+  flex: none;
+  inline-size: var(--csec-mark-size);
+  block-size: var(--csec-mark-size);
+  background: var(--csec-mark-ink);
 }
 
 .heading {

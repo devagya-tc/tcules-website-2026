@@ -543,21 +543,37 @@ featured one — take:
 | Peers | Columns                     | `tracks` (for `sizes`) |
 | ----- | --------------------------- | ---------------------- |
 | 1–2   | `{ base: 1, md: 2 }`        | 2                      |
-| 3     | `{ base: 1, md: 2, lg: 3 }` | 3                      |
-| 4     | `{ base: 1, md: 2, xl: 4 }` | 2                      |
+| 3     | `{ base: 1, md: 3 }`        | 3                      |
+| 4     | `{ base: 1, md: 2, lg: 4 }` | 2                      |
 | 5+    | `{ base: 1, md: 2, lg: 3 }` | 3                      |
 
-`tracks` is the widest count the shape reaches before `xl`; the four-across row at `xl` reads the
-two-track value and over-fetches, which is the safe direction. From four items the first is
+`tracks` is the widest count the shape reaches before `xl`; the four-across row reads the two-track
+value and over-fetches, which is the safe direction.
+
+Exactly three peers go three across from `md` (cmp-services, 6 Oct 2026): two from `md` put the third
+card alone on a second row beside an empty cell from 768 to 1023, an orphan in every three-card set
+site-wide. The price is a ~213 track at 768, where a two-word title may wrap to two lines and drop
+that card's body below its neighbours'; that is accepted over the orphan. Five and more keep two from
+`md`, because their rows are full or end on a pair. Four have been four across from `lg` since
+cmp-feature fix round 2.
+
+**The phone rail (cmp-services fix round 2).** Wherever the set is a phone scroll row (below 768: a
+covered set of three or more, a linked set of four or more), it carries a progress rail a `stack`
+under the cards: a `--bcrd-rail-length` neutral line with a blue thumb one card's share long, moved
+along the row's inline scroll timeline by CSS alone (`BlockCardSet.module.css`). The peek said there
+was more; the rail says how many and where the reader is, so a six-service router no longer reads as a
+three-card one, and the Slider and the scroll row read as one family. Hidden from `md`. Decorative
+(`aria-hidden`); the cards are a list a screen reader already counts. From four items the first is
 featured and spans the row through `Layout lead`; below `md` it collapses like any horizontal card,
 so a phone sees one column of cards with the featured one first.
 
 A caller that is not a set — a hand-built grid — owns reflow itself:
 
 - Two-card clusters: `columns={{ base: 1, md: 2 }}`.
-- Three-card clusters: `columns={{ base: 1, md: 2, lg: 3 }}`.
-- Four-card clusters: `columns={{ base: 1, md: 2, xl: 4 }}`. They read 2×2 from 768 through 1439
-  and become one deliberate four-card row at the existing `Layout` xl boundary of 1440.
+- Three-card clusters: `columns={{ base: 1, md: 3 }}` — three across from 768, never two and an
+  orphan (cmp-services, 6 Oct 2026).
+- Four-card clusters: `columns={{ base: 1, md: 2, lg: 4 }}`. They read 2×2 from 768 through 1023
+  and one four-card row from 1024 (cmp-feature fix round 2).
 - Five-to-eight-card clusters choose three or four at `xl` from their content grouping; BlockCard
   has no count detection and no orphan rule.
 - Horizontal stacks: `Layout as="ul" rowGap="section"` with no `columns` and no `equalRows`. A

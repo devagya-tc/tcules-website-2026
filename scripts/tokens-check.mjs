@@ -47,6 +47,7 @@ const JS_INJECTED = new Set([
   '--slider-count', // Slider: the slide count, and the scroll progress it writes on scroll
   '--slider-progress',
   '--slider-bleed', // Slider `bleed`: the measured distance from its end edge to the viewport's
+  '--blockcardset-count', // BlockCardSet: the card count, for the phone scroll row's rail thumb
   '--cmark-src',
   '--cmark-ratio',
   '--cmark-ratio-root',

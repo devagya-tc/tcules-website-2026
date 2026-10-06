@@ -3,10 +3,8 @@ import {
   Layout,
   Media,
   Section,
-  Texture,
-  TextureShape,
+  TextureHorizon,
   type IconName,
-  type MediaRatio,
 } from '@/components';
 import {
   BlockCard,
@@ -40,51 +38,33 @@ import t from '../../_specimen/typeroles.module.css';
  * a CONDITION — what sends a reader to that page — because a router is read for "is this me?",
  * and the service name is the link's name, because a link is named by its destination.
  *
- * The page is a cool-family page (§ 5.5 rule 1): every photograph is cool or neutral and quiet,
- * none appears twice, and the four audit cards are the studio's own photographs at the one
- * placement their 622px masters allow (4 across, § 5.4). Blue is the foreground accent only:
- * glyphs, title arrows, the thumbnail rows' cues, every link, the index numerals and the one
- * solid ask in the list router's head. Texture: one `horizon` (§ 6.3), at the foot of the centred
- * image router, directly above the change of ground into the tint list router — the one place on
- * the page where a band meets a different ground. Never behind cards or rows, never in the Slider.
- * The hero carries none (fix round 1): its stepped plinth under the lead read as a skeleton loader.
+ * The page is a cool-family page (§ 5.5 rule 1): every photograph is cool or neutral and quiet, and
+ * none appears twice. Grading is banned (ch05 § 5), so the family is held by SELECTION (fix round 2:
+ * the warm studio snapshots on the audit cards and the warm, royal-blue-shirted aside in 01 were
+ * replaced). Blue is the foreground accent only: every eyebrow's square, glyphs, title arrows, the
+ * thumbnail rows' cues, every link and its arrow, the rails' thumbs, the index numerals and the one
+ * solid ask in the list router's head. Texture: one stepped `horizon` (TextureHorizon, § 6.3), at
+ * the foot of the centred image router, directly above the change of ground into the tint list
+ * router — the one place on the page where a band meets a different ground. It starts 56 under the
+ * cards' last line; never behind cards or rows, never in the Slider. The hero carries none.
  *
  * Band order alternates the head and the ground (beside · centred · beside on tint · H-row · beside
- * · start, as a rail) so no two neighbours are the same rectangle, which is the squint test (§ 8.5)
- * applied to the specimen. The two image routers differ by shape as well as head: three whole
+ * mirrored · start, as a rail) so no two bands are the same rectangle, which is the squint test
+ * (§ 8.5) applied to the specimen. The two image routers differ by shape as well as head: three whole
  * cards under a display head, then six on a rail that runs off the page's end edge.
  */
 
 const photo = (id: PhotoId): BlockCardMedia => ({ type: 'image', image: getKitPhoto(id) });
 
 /**
- * The C-icon head photograph. `fill` ends it on the grid's last line (ContentSection asideFill) —
- * right for six, whose 3 × 2 grid is about as tall as a 3:2 photo in the head track (§ 1.4: 536
- * against 542). Four cards are a 2 × 2 grid, and the fill floor made that photo a 381 × 160 strip,
- * so the four take the placement's own 3:2 and the head track runs past the grid, as § 1.4's C-icon-4
- * arithmetic has it (542 against 432).
+ * The C-icon head photograph, in both icon routers. `asideFill` ends it on the body's last line — for
+ * six, the 3 × 2 grid's; for four, the CtaRow's under the 2 × 2 (fix round 2: at a fixed 3:2 the
+ * four's photo ran ~110 past the row, so the two columns stopped on different lines). Below 1024 it is
+ * a 21:9 banner between the head and the rail (--csec-aside-ratio), so the band keeps a router's
+ * silhouette on a phone and a tablet rather than an image router's.
  */
-function Aside({ id, ratio }: { id: PhotoId; ratio?: MediaRatio }) {
-  return ratio ? (
-    <Media image={getKitPhoto(id)} ratio={ratio} sizes={HEAD_TRACK} />
-  ) : (
-    <Media image={getKitPhoto(id)} fit="fill" sizes={HEAD_TRACK} />
-  );
-}
-
-/* A `horizon` (visual-direction § 6.3) at the foot of a paper band directly above a change of
-   ground. In the hard-edged form § 6.3 gives for below 1024 (rect, bottom −80, 120% × 152, blur 24),
-   at every width here: the lg form's blur 200 rose ~250 into the band and laid the grid behind the
-   cards' titles and bodies (crops, fix round 1). This one stands 72 into the 96 padding with a
-   12-deviation edge, so it stops under the cards' air, and reads as the paper giving way to the tint
-   band beneath. Interim numbers at the call site, as every kit family's are until fdn-texture folds
-   the recipes into TEXTURE_RECIPES. */
-function Horizon() {
-  return (
-    <Texture>
-      <TextureShape bottom={-80} width="120%" height={152} blur={24} />
-    </Texture>
-  );
+function Aside({ id }: { id: PhotoId }) {
+  return <Media image={getKitPhoto(id)} fit="fill" sizes={HEAD_TRACK} />;
 }
 
 const icon = (
@@ -201,13 +181,17 @@ const ROWS: readonly { title: string; body: string; image: PhotoId; href: string
 ];
 
 /* ── 04 · Image router, four, per-card CTA ─────────────────────────────────────────────────────
-   Card-4 ceilings: title ≤ 8, body ≤ 12. The studio's own photographs, at 286 × 161 (2.17×). */
+   Card-4 ceilings: title ≤ 8, body ≤ 12. Fix round 2: the studio's own 622px snapshots read warm and
+   busy under fluorescent light, saturated pink and orange beside the page's cool editorial frames.
+   Four cool or neutral, quiet frames instead, each a close reading of its audit's object: a flow
+   mapped on a whiteboard, a component kit laid out, a screen against its phone build, a review in
+   conversation. */
 const FOUR: readonly BlockCardSetItem[] = [
   {
     id: 'au-ux',
     title: 'UX and product audit',
     body: 'Where the product loses people, ranked by what it costs.',
-    media: photo('studio-whiteboard-crit'),
+    media: photo('whiteboard-two-hands'),
     href: ROUTES.uxProductAudit,
     ctaLabel: 'See the audit',
   },
@@ -215,7 +199,7 @@ const FOUR: readonly BlockCardSetItem[] = [
     id: 'au-system',
     title: 'Design-system audit',
     body: 'Which components drift, and what each drift costs a release.',
-    media: photo('studio-pair-at-monitor'),
+    media: photo('desk-flatlay-devices'),
     href: ROUTES.designSystemAudit,
     ctaLabel: 'See the audit',
   },
@@ -223,7 +207,7 @@ const FOUR: readonly BlockCardSetItem[] = [
     id: 'au-code',
     title: 'Design-to-code audit',
     body: 'Where the build departs from the design, and why.',
-    media: photo('studio-desk-pairing'),
+    media: photo('designer-desk-monitor'),
     href: ROUTES.designToCodeAudit,
     ctaLabel: 'See the audit',
   },
@@ -231,7 +215,7 @@ const FOUR: readonly BlockCardSetItem[] = [
     id: 'au-ai',
     title: 'AI product readiness',
     body: 'What an AI feature must show before people trust it.',
-    media: photo('studio-session-talk'),
+    media: photo('conversation-chalkboard'),
     href: ROUTES.aiProductUxReadiness,
     ctaLabel: 'See the review',
   },
@@ -421,7 +405,8 @@ export default function ServiceListKitSpecimen() {
       {/* A beside head over six linked icon cards, the photograph in the head track ending on the
           grid's last line. Whole-card links, each title closed by the blue arrow; no CtaRow (§ 1.4
           rule 7), and never actions in the head track, so the set never renders without its photo.
-          At 390 the six are one sideways row, the next card peeking. */}
+          At 390 the six are one sideways row, the next card peeking, with a progress rail under it
+          whose thumb is a sixth of its length, so the count reads; the photo is a 21:9 banner. */}
       <Title id="icon-six" />
       <ContentSection
         arrangement="beside"
@@ -431,7 +416,7 @@ export default function ServiceListKitSpecimen() {
         headingId="ksl-icon-six"
         lead="Each has its own page. Most teams start with one, then add a second once it ships."
         asideFill
-        aside={<Aside id="pair-laptop-notebook" />}
+        aside={<Aside id="pair-at-laptop-sticky-wall" />}
       >
         <BlockCardSet items={SIX} lead="none" across={2} />
       </ContentSection>
@@ -449,7 +434,7 @@ export default function ServiceListKitSpecimen() {
         heading="Three ways in"
         headingId="ksl-image-three"
         lead="Pick the problem that sounds like yours. Each page says what we do first and what you get."
-        texture={<Horizon />}
+        texture={<TextureHorizon />}
       >
         <BlockCardSet items={THREE} lead="none" />
       </ContentSection>
@@ -514,9 +499,12 @@ export default function ServiceListKitSpecimen() {
       </ContentSection>
 
       {/* ── 05 · C-icon-4 + CtaRow ─────────────────────────────────────────────────────────── */}
-      {/* On a service page: what teams add next. Four may close on a CtaRow under the grid; the head
-          track still takes only its photograph, at 3:2. At 390, linked and more than three, the set
-          is a sideways row. */}
+      {/* On a service page: what teams add next. MIRRORED (fix round 2, headSide="end"): the 2 × 2
+          and its CtaRow lead in the two-thirds track and the head and its photograph close the row,
+          so this band is not 01's rectangle again with a footer added. The photograph fills to the
+          CtaRow's line, so both tracks stop on one edge. The head stays first in the DOM, so a phone
+          and a screen reader still meet the heading before the cards. At 390, linked and more than
+          three, the set is a sideways row with its progress rail. */}
       <Title id="icon-four" />
       <ContentSection
         arrangement="beside"
@@ -525,7 +513,9 @@ export default function ServiceListKitSpecimen() {
         heading="What teams add next"
         headingId="ksl-icon-four"
         lead="Four services that most often follow product design, in the order clients add them."
-        aside={<Aside id="hands-sticky-blue-pen" ratio="3/2" />}
+        asideFill
+        headSide="end"
+        aside={<Aside id="hands-sticky-blue-pen" />}
         footer={
           <CtaRow
             note="Six services in all, each with its own page."

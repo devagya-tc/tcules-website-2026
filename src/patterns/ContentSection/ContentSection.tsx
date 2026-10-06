@@ -1,6 +1,7 @@
 import { Children, type ReactNode } from 'react';
 
 import {
+  Cluster,
   Layout,
   Media,
   Section,
@@ -307,6 +308,14 @@ type WithAsideProps = {
    * For a photograph only: a stat figure keeps its own height (omit the prop).
    */
   asideFill?: boolean;
+  /**
+   * Which inline end the head track takes from 1024 (cmp-services fix round 2). Default `start`.
+   * `end` mirrors the split — the blocks lead in the 2 and the head and its aside close the row in
+   * the 1 — so two beside-aside bands on one page are not the same rectangle twice (§ 8.5). Visual
+   * only: the head stays first in the DOM, which is the reading order and the phone's (Layout
+   * `reverse`). Below 1024 the band is stacked either way.
+   */
+  headSide?: 'start' | 'end';
   actions?: never;
   media?: never;
 };
@@ -460,6 +469,7 @@ export function ContentSection(props: ContentSectionProps) {
   const aside = besideSplit ? requestedAside : undefined;
   const hasAside = present(aside);
   const asideFill = hasAside && 'asideFill' in props && props.asideFill === true;
+  const headAtEnd = besideSplit && 'headSide' in props && props.headSide === 'end';
   const hasHead = hasText || hasActions || hasAside;
 
   /* `split-head` needs a heading for its leading track and a lead or actions for its trailing one.
@@ -485,10 +495,23 @@ export function ContentSection(props: ContentSectionProps) {
     warn(`media.counterweight is paper-only (§ 6.2); dropped on surface="${surface}".`);
   }
   const counterweight = inMedia && media?.counterweight === true && onPaper;
+  /* The eyebrow carries the blue mark, on every band (cmp-services fix round 2): one square of the
+     texture's grid before the label, PageHero's mark. It is part of the eyebrow ROLE, not a choice a
+     caller makes, so a page's band heads never read black and white while only its hero shows the
+     accent. A Cluster, so the mark-to-label seam is the gap scale's `tight`; `nowrap` because a mark
+     alone at a line end is a stray pixel, and an eyebrow is short. Decorative: aria-hidden. */
   const eyebrowEl = eyebrow ? (
-    <p className={cx(styles.eyebrow, inMedia && styles.eyebrowAccent, centred && styles.centred)}>
-      {eyebrow}
-    </p>
+    <Cluster
+      as="p"
+      colGap="tight"
+      align="center"
+      nowrap
+      justify={centred ? 'center' : 'start'}
+      className={cx(styles.eyebrow, inMedia && styles.eyebrowAccent, centred && styles.centred)}
+    >
+      <span className={styles.mark} aria-hidden="true" />
+      <span>{eyebrow}</span>
+    </Cluster>
   ) : null;
   const headingEl = heading ? (
     <h2
@@ -635,6 +658,7 @@ export function ContentSection(props: ContentSectionProps) {
         colGap={besideSplit ? 'section' : undefined}
         columns={besideSplit ? { lg: [1, 2] } : undefined}
         align={besideSplit ? (asideFill ? 'stretch' : 'start') : undefined}
+        reverse={headAtEnd ? { lg: true } : undefined}
       >
         {hasHead ? headGroup : null}
         {body}

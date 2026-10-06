@@ -1,0 +1,12 @@
+/* TextureHorizon — the stepped field's box: the foot of its positioned ancestor (a Section),
+   full width, --tex-horizon-block-size tall. Positioned so the Texture inside fills IT rather than
+   the band, which puts the field's top edge, and the grid's origin, on a fixed line above the band's
+   bottom edge. Sizing and placement of a decorative layer only; it states no distance, and no
+   z-index — the Texture inside keeps --tex-layer, which resolves within the Section's isolation. */
+.horizon {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: var(--tex-horizon-block-size);
+  pointer-events: none;
+}

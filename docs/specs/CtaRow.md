@@ -83,9 +83,11 @@ One size. `emphasis` × `tone` × `rule` × `align`, plus note present/absent:
 | neutral | spends nothing (pass it explicitly) | the solid default; spends nothing |
 | primary | the link default; Signal (§ 4.2) | Accent (§ 4.2; pass it explicitly) |
 
-Glyph: a link-led row puts `arrow-right` on every action (the kit's one link cue, as BlockCard's
-per-card CTA). A solid-led row has no glyph on either action — PageHero's shape, and the owner's 1 Oct
-"no arrow here" on CtaSection's asks.
+Glyph: every link-style action carries `arrow-right` (the kit's one link cue, as BlockCard's per-card
+CTA); the solid ask never does — the owner's 1 Oct "no arrow here" on CtaSection's asks. So a link-led
+row has the arrow on every action, and a solid-led row on its second only, which is PageHero's and
+CtaSection's shape exactly. *Amended in cmp-services fix round 2:* a solid-led row used to drop the arrow
+from its second link as well, so "All services" read as two different roles on one page.
 
 ## 5 · States
 

@@ -1,0 +1,74 @@
+/* BlockCardSet — the phone scroll row's progress rail (cmp-services fix round 2).
+
+   Every value comes from --bcrd-rail-*, declared in tokens/components/block-card.css. Layout owns
+   the row (scroll mode below md) and the seam between the row and the rail; this file draws the
+   rail and moves its thumb, and states no distance.
+
+   Below 768 a linked set of four or more, and a covered set of three or more, is one sideways row
+   with the next card peeking (§ 3.7 item 2). The peek alone said "there is more" but not how much,
+   so at 390 a six-service router read exactly like a three-card image router. The rail says both:
+   its thumb is one card's share of the rail (one card in view below md) and travels it as the row
+   scrolls, the Slider's rail without its steppers.
+
+   CSS only, through a scroll-driven animation: the row names its inline scroll timeline, the scope
+   lifts the name to the rail beside it, and the thumb's start inset is animated along it. No
+   'use client', no listener, no hydration. Where scroll timelines are unsupported the thumb stays
+   at the start, which still states the count. Decoration for the eye only: aria-hidden in the TSX,
+   since the cards are a list a screen reader already counts.
+
+   Local custom properties take the long `--blockcardset-*` name, so they never read as tokens:
+     --blockcardset-count   the card count, written inline by BlockCardSet.tsx
+     --blockcardset-thumb   the thumb's share of the rail
+
+   Classes: .scope .row .rail .thumb */
+
+.scope {
+  timeline-scope: --blockcardset-rail;
+}
+
+.row {
+  scroll-timeline: --blockcardset-rail inline;
+}
+
+.rail {
+  position: relative;
+  display: block;
+  inline-size: min(var(--bcrd-rail-length), 100%);
+  block-size: var(--bcrd-rail-thickness);
+  border-radius: var(--bcrd-rail-radius);
+  background: var(--bcrd-rail-ink);
+}
+
+.thumb {
+  --blockcardset-thumb: calc(100% / var(--blockcardset-count, 1));
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: var(--blockcardset-thumb);
+  border-radius: var(--bcrd-rail-radius);
+  background: var(--bcrd-rail-thumb-ink);
+}
+
+@supports (animation-timeline: --blockcardset-rail) {
+  .thumb {
+    animation: blockcardset-rail linear both;
+    animation-timeline: --blockcardset-rail;
+  }
+}
+
+@keyframes blockcardset-rail {
+  from {
+    inset-inline-start: 0%;
+  }
+  to {
+    inset-inline-start: calc(100% - var(--blockcardset-thumb));
+  }
+}
+
+/* From md up the row is a grid and there is nothing to travel: no rail, and so no seam either (a
+   grid gap is only drawn between generated items). */
+@media (min-width: 768px) {
+  .rail {
+    display: none;
+  }
+}

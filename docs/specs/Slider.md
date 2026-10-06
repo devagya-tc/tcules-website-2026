@@ -45,7 +45,7 @@ from 768 up. It needs no Slider: below 768 the peek and Tab are the affordances.
 | Part | Element | Required | Notes |
 |---|---|---|---|
 | `root` | `section aria-roledescription="carousel" aria-label={label}` | yes | `.slider` + `.view{n}`; inline `--slider-count`. |
-| `frame` | `div` (a `Layout`, `rowGap="block"`) | yes | Row above, controls below, 24 apart. |
+| `frame` | `div` (a `Layout`, `rowGap="stack"`) | yes | Row above, controls below, 48 apart (`stack`; was `block`, 24, until cmp-services 6 Oct). |
 | `row` | `ul` (a `Layout scroll="always"`, `colGap="gutter"`) | yes | `id` = the controls' `aria-controls`. `tabIndex=0` after hydration only when no slide holds a focusable element. |
 | `slide` | the caller's `li` | yes, ≥ 1 | A `BlockCard` is one; anything else is wrapped in an `li` at the call site. Dev warning otherwise. |
 | `controls` | `div` (a `Cluster`, `nowrap`) | yes | `start`: rail ⟷ the two controls (`justify="between"`). `center`: previous · rail · next. |
@@ -63,7 +63,7 @@ from 768 up. It needs no Slider: below 768 the peek and Tab are the affordances.
 | `children` | `ReactNode` | — | The slides, each one `li`. |
 | `perView` | `1 \| 2 \| 3 \| 4` | `3` | Slides in view at the widest step; the Slider owns the ladder (§ 4). |
 | `align` | `'start' \| 'center'` | `'start'` | Where the controls sit: under a left head, or under a centred one (§ 3.5). |
-| `bleed` | `boolean` | `false` | **6 Oct (cmp-services).** From md the row runs past the column's end edge to the viewport's (measured, written as `--slider-bleed`), so the next slide shows in the margin and the set reads as a rail. The tracks are unchanged; the bleed is end padding the overflow paints into. Row to controls is now `stack` (48), not `block`. |
+| `bleed` | `boolean` | `false` | **6 Oct (cmp-services).** From md the row runs past the column's end edge to the viewport's (measured, written as `--slider-bleed`), so the next slide shows in the margin and the set reads as a rail. The tracks are unchanged; the bleed is end padding the overflow paints into. Row to controls is now `stack` (48), not `block`. The bleed is re-measured by a ResizeObserver on the root element and on the slider (cmp-services fix round 2), not on window `resize`: a classic scrollbar appearing after mount, or a layout shift, left it stale by the scrollbar's width. |
 
 Deliberately not props: autoplay, loop, a per-slide picker, a step size (always one slide), any gap
 (always `gutter`), `surface` (read from the band), `className`/`style`.
@@ -157,7 +157,7 @@ becoming the browser's back gesture. The controls row never wraps (`nowrap`); th
 
 ```tsx
 <section aria-roledescription="carousel" aria-label={label} className={…} style={{ '--slider-count': n }}>
-  <Layout rowGap="block">
+  <Layout rowGap="stack">
     <Layout as="ul" id={rowId} ref={rowRef} scroll="always" columns={LADDER[perView]} colGap="gutter"
             tabIndex={tabStop ? 0 : undefined} className={styles.row}>
       {children /* each an <li> */}

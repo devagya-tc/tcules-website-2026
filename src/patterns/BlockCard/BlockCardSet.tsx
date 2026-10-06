@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps, CSSProperties } from 'react';
 
 import { Layout } from '@/components';
 
@@ -13,6 +13,7 @@ import {
   type BlockCardTitleElement,
   type BlockCardTracks,
 } from './BlockCard';
+import styles from './BlockCardSet.module.css';
 
 /**
  * One card in a set: a BlockCard record with an `id` for its key, and WITHOUT the presentation
@@ -384,13 +385,14 @@ export function BlockCardSet({
   const tabStop = scrolls && !linked;
   if (tabStop && !label) warnUnnamed();
 
-  return (
+  const grid = (
     /* Rows sit a `column` apart, columns a `gutter` (29 Sep). The two seams separate different
        things: across a row the cards are peers read together, and down the grid each row is the
        next set of objects, which must read as separate — the `column` step's own job, turned to
        the block axis. At one shared 32 a borderless tile's copy ran into the image below it;
        `stack` (48) was tried and still read as one field. */
     <Layout
+      className={scrolls ? styles.row : undefined}
       as="ul"
       columns={columns}
       colGap="gutter"
@@ -417,6 +419,24 @@ export function BlockCardSet({
           <BlockCard key={id} {...card} {...shared} tracks={tracks} size={size} ratio={ratio} />
         );
       })}
+    </Layout>
+  );
+
+  if (!scrolls) return grid;
+
+  /* The phone row's progress rail (cmp-services fix round 2; BlockCardSet.module.css): a `stack`
+     under the cards, the Slider's row-to-controls seam, so the two kinds of sideways row read as one
+     family. Hidden from md, where the row is a grid; a hidden item draws no gap. */
+  return (
+    <Layout
+      rowGap="stack"
+      className={styles.scope}
+      style={{ '--blockcardset-count': items.length } as CSSProperties}
+    >
+      {grid}
+      <span className={styles.rail} aria-hidden="true">
+        <span className={styles.thumb} />
+      </span>
     </Layout>
   );
 }

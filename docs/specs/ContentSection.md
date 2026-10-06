@@ -595,3 +595,18 @@ LAYOUT, TYPE, SEMANTICS
 - `media.counterweight`: the counterweight is a defined field in the copy column, pinned last on the
   photo's bottom edge, at every width. Paper only (dropped with a warning elsewhere).
 - `sizes` is `mediaSplitSizes(weight, image)`: the drawn width of the cover crop, not the box's.
+
+## Amendment · 6 Oct 2026 — `cmp-services` fix round 2
+
+- **The eyebrow carries the blue mark, on every band.** One square of the texture's grid
+  (`--csec-mark-size`, 6; `--csec-mark-ink` per surface: brandeis-500 on paper and tint, 300 on ink,
+  white on blue) before the label, a `tight` (8) Cluster seam — PageHero's mark. It is part of the
+  eyebrow role, not a caller's choice, so no band head reads black and white while only the hero shows
+  the accent. Decorative (`aria-hidden`). Centred heads centre the pair.
+- **`headSide: 'start' | 'end'`** on a beside band with an aside. `end` mirrors the split from 1024
+  (Layout `reverse`): the blocks in the 2, the head and its aside closing the row in the 1. Visual
+  only; the head stays first in the DOM. For a page with two beside-aside bands, so they are not the
+  same rectangle twice (§ 8.5).
+- **`asideFill` below 1024 is 21:9** (`--csec-aside-ratio`, was 3:2). At 768 the 3:2 photo was
+  704 × 469 and outweighed the six icon cards under it; at 390 the band read as head, photo, card — the
+  image routers' silhouette. As a 21:9 banner the photograph stays, and the band still reads as a router.

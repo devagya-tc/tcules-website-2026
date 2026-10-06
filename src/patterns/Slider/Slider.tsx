@@ -256,9 +256,15 @@ export function Slider({
     };
   }, [count, label]);
 
-  /* The bleed: the slider's end edge to the viewport's, written on the root. Measured on mount and on
-     every viewport resize — past the 1240 cap the column does not change width, so the row's own
-     ResizeObserver would not fire while the margin grows. */
+  /* The bleed: the slider's end edge to the viewport's, written on the root. Measured on mount and
+     whenever either box changes size. The ROOT element, because past the 1240 cap the column does
+     not change width while the margin grows, so the row's own observer would not fire. The SLIDER,
+     for a layout shift that moves or narrows the column without resizing the window. A window
+     `resize` listener missed both a classic scrollbar appearing after mount (the root's box
+     narrows by its width, the window does not resize) and any shift, and left the bleed stale by
+     a scrollbar's width, a sideways page scroll on Windows (cmp-services fix round 2). Writing the
+     property changes neither box — the bleed is the inner row's margin and padding — so the
+     observer cannot feed itself. */
   useEffect(() => {
     const root = rootRef.current;
     if (!bleed || !root) return;
@@ -274,10 +280,12 @@ export function Slider({
       if (!frame) frame = requestAnimationFrame(write);
     };
     frame = requestAnimationFrame(write);
-    window.addEventListener('resize', onResize, { passive: true });
+    const observer = new ResizeObserver(onResize);
+    observer.observe(document.documentElement);
+    observer.observe(root);
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener('resize', onResize);
+      observer.disconnect();
     };
   }, [bleed]);
 
