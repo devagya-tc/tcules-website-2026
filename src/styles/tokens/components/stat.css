@@ -7,11 +7,13 @@
    Naming: --stat-{part}-{role}
      parts: value | unit | label | rule | mark
 
-   THE NUMERAL IS INK, NEVER BLUE (owner brief for this family, 6 Oct 2026). A figure is the band's
-   large thing; set in blue at 54px it is a blue MASS, not a foreground mark (§ 4.3), and it would
-   read as a link. The accent the stat carries is the MARK: a short blue segment laid over the
-   start of its opening hairline — a small graphic mark (§ 4.2), the same gesture as a tile's opening
-   rule on hover. The hairline itself is neutral (§ 4.3: separators on paper and tint are neutral).
+   THE NUMERAL IS BLUE (page-showcase fix round 2, 7 Oct 2026; docs/kit/brand-amendments.md). The
+   owner's foreground ruling (visual-direction § 4.1) names numerals among blue's marks, and with the
+   figure in ink a row of four stats read as a black-and-white band with one 32px tick of colour,
+   while the rating score beside the same pages was blue: one voice for a number, two colours. The
+   figure is a mono numeral, not a block of type, so blue at 54 is a foreground accent and not a
+   mass; the unit and the label stay in the quiet ink, and the opening hairline keeps its blue mark.
+   Was: ink, never blue (cmp-process-stats, 6 Oct 2026).
 
    What it owns: the opening rule and its mark, the three type roles and their inks. What it does
    not: any distance (gap-scale steps in the module), any ground (the Section's). No state tokens:
@@ -48,7 +50,7 @@
 
 :root,
 [data-surface='paper'] {
-  --stat-value-ink: var(--color-neutral-900); /* 14.62:1 */
+  --stat-value-ink: var(--color-brandeis-500); /* 6.17:1 */
   --stat-unit-ink: var(--color-neutral-700); /* 8.14:1 */
   --stat-label-ink: var(--color-neutral-700); /* 8.14:1 */
   --stat-rule-ink: var(--color-neutral-300); /* decoration */
@@ -56,7 +58,7 @@
 }
 
 [data-surface='tint'] {
-  --stat-value-ink: var(--color-neutral-900); /* 13.06:1 */
+  --stat-value-ink: var(--color-brandeis-500); /* 5.51:1 */
   --stat-unit-ink: var(--color-neutral-700); /* 7.27:1 */
   --stat-label-ink: var(--color-neutral-700); /* 7.27:1 */
   --stat-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
@@ -64,7 +66,7 @@
 }
 
 [data-surface='ink'] {
-  --stat-value-ink: var(--color-white); /* 17.26:1 */
+  --stat-value-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
   --stat-unit-ink: var(--color-neutral-300); /* 11.07:1 */
   --stat-label-ink: var(--color-neutral-300); /* 11.07:1 */
   --stat-rule-ink: var(--color-neutral-700); /* decoration */

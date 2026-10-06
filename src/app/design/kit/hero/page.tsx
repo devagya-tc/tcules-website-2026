@@ -131,7 +131,7 @@ function variations(): Variation[] {
       id: 'photograph',
       short: 'Photograph, foot field',
       name: 'Photograph beside the copy, a field under it',
-      note: 'The kit/home opening. A 5:4 photograph at 572 × 458, top-aligned on the eyebrow, radius 8. Under the copy, a field of the texture steps up toward the photograph and stands on its foot line: its edges are the copy track’s and its floor the photograph’s, so it reads as part of the grid. A two-line title leaves it the room.',
+      note: 'The photograph opening (kit/home takes it without the field since page-showcase fix round 2). A 5:4 photograph at 572 × 458, top-aligned on the eyebrow, radius 8. Under the copy, a field of the texture steps up toward the photograph and stands on its foot line: its edges are the copy track’s and its floor the photograph’s, so it reads as part of the grid. A two-line title leaves it the room.',
       facts: ['Ends at 723', 'Accent + Texture', 'Foot field from 1440'],
       hero: {
         eyebrow: 'Product design and engineering studio',
@@ -202,7 +202,7 @@ function variations(): Variation[] {
       id: 'text-field',
       short: 'Text with the field',
       name: 'No media, the field beside the copy',
-      note: 'The no-media opening. The copy takes two thirds and the texture the last, a field that steps up to the column’s end edge and sinks into the floor, so the title stands in the clearing it leaves (Quantum’s move, made structural). Below 1024 the same steps become a 2:1 block under the actions.',
+      note: 'The kit/services-index opening. The copy takes two thirds and the texture the last, a field that steps up to the column’s end edge and sinks into the floor, so the title stands in the clearing it leaves (Quantum’s move, made structural). Below 1024 it is not drawn: only the horizon runs there (§ 3.7).',
       facts: ['Ends at 629', 'Accent + Texture', 'Field track [2, 1]'],
       hero: {
         trail: heroTrail(

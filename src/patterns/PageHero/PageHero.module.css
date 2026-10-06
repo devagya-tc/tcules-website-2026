@@ -47,10 +47,11 @@
    slot. That edge is the strongest vertical line on the page and it must be in the same place on
    all 129 of them. So there is no reach into --space-* here either.
 
-   Three @media blocks at the foot of the file, and none of them arranges anything: one hides the
+   Four @media blocks at the foot of the file, and none of them arranges anything: one hides the
    illustration's legend from 1440 (where the drawing's own labels are legible and the <picture>
    serves the drawing rather than its numbered cut), one hides the foot field below 1440, and one
-   lets the no-media field take its row's height from 1024 rather than its own 2:1. Every
+   lets the no-media field take its row's height from 1024 rather than its own 2:1, and one hides
+   that field below 1024. Every
    arrangement that changes at a breakpoint — the splits, the phone stacking of the actions — is a
    Layout or Cluster prop; the measures are `ch`-based so they follow the type down with no second
    value to keep in sync. Nothing moves, so reduced motion has nothing to switch off.
@@ -355,8 +356,10 @@
    order the bundler emits the modules in.
 
      foot   fills the 1fr row Layout's pinLast leaves under the copy stack (block-size 100%).
-     field  a 2:1 block under the actions below 1024; from 1024 its track's full height, beside the
-            copy, because the split stretches the row. */
+     field  from 1024 its track's full height, beside the copy, because the split stretches the
+            row; not drawn below 1024 (page-showcase fix round 2: § 3.7 item 5 runs only `horizon`
+            there, and the 2:1 block under the actions was ~200 of near-empty dots in the first
+            screen). The ratio stays as the box's floor should the switch below ever move. */
 .foot,
 .field {
   position: relative;
@@ -394,6 +397,11 @@
 @media (min-width: 1024px) {
   .field {
     aspect-ratio: auto;
+  }
+}
+@media (max-width: 1023.98px) {
+  .field {
+    display: none;
   }
 }
 

@@ -320,7 +320,7 @@ export type PageHeroProps = {
    *               the gutter and sinking into the band's foot padding. Needs the copy to end about
    *               100 above the photograph's foot (a two-line title); hidden below 1440.
    *   no media    `field`: the end third of a [2, 1] split from 1024, stepping up to the column's
-   *               end; a 2:1 block under the actions below 1024.
+   *               end; not drawn below 1024 (§ 3.7 item 5: only `horizon` runs there).
    * The band rule (§ 4.3): an illustration hero spends its second blue mass on the field, so
    * texture there is refused with a development warning, and so is any ground but paper (§ 6.2),
    * and the `wide` and `display` shapes, where the photograph already holds the band.
@@ -545,8 +545,8 @@ export function PageHero({
                photograph and no region is left under it, and on a phone, where it only dirtied the
                end gutter.
        field   no media: the end third of a [2, 1] split from 1024, beside the copy and stepping up
-               to the column's end edge, the copy standing in the clearing it leaves; below 1024 a
-               2:1 block 48 under the actions, the same steps at 358 wide.
+               to the column's end edge, the copy standing in the clearing it leaves; not drawn below
+               1024 (page-showcase fix round 2, § 3.7 item 5).
      Nothing else takes one — an illustration already spends the band's second blue mass (§ 4.3),
      a video is a box of another origin's pixels, the wide and display shapes give the photograph
      the band, and the grid is drawn for paper only (§ 6.2). */

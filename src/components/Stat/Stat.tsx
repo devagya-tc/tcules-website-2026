@@ -59,8 +59,9 @@ function warn(message: string) {
  * start. Built to docs/specs/Stat.md (cmp-process-stats, 6 Oct 2026); promoted from the ServicePage
  * template's local block so the S band, the D aside and the service pages share one stat.
  *
- * THE NUMERAL IS INK. It is the band's large thing (§ 3.3), and a 54px blue figure is a mass rather
- * than an accent; the accent is the short blue mark on the opening rule (tokens/components/stat.css).
+ * THE NUMERAL IS BLUE (page-showcase fix round 2): numerals are among the foreground marks the owner's
+ * blue ruling names (§ 4.1), and an ink figure left a stat row black and white beside a blue score.
+ * The unit and the label stay quiet ink; the short blue mark on the opening rule stays too.
  *
  * THE RULE IS THE STAT'S TOP EDGE, the way a text-only card's hairline stands in for the edge an
  * image would give (§ 3.1). In a row the gutter breaks it, so a set of four reads as four objects

@@ -59,8 +59,9 @@ export const metadata: Metadata = {
  * The page judged against the references, so it opens on a photograph. Twelve bands, every one a
  * kit band fed showcase copy written inline (§ 8.4 — never the content fixtures a live route reads):
  *
- *    1  A   the announcement strip, then the photograph hero (5:4) with its foot field, which
- *           stands on the photograph's foot line
+ *    1  A   the announcement strip, then the photograph hero (5:4). No foot field (fix round 2): at
+ *           the grid's fixed strength it read as a faded placeholder stripe under the actions, so
+ *           the photograph carries the hero alone
  *    2  H   the real client marks (a 6 / 3 / 2 grid, never 5 + 1) and the real Clutch rating, centred
  *    3  C   three services as image cards under the H-row and its section action
  *    4  J   one sentence at display scale, the head-half field in its empty top-end corner
@@ -74,14 +75,15 @@ export const metadata: Metadata = {
  *   10  D   the questions, centred
  *   11  C   two pieces of writing beside a head that carries the way to all of them
  *   12  L   the close: the copy and three ways to reach the studio over the closing equaliser,
- *           the form beside — no numbered list, because the method (7) is the page's one
+ *           the form beside — no numbered list, because the method (8) is the page's one
  *
  * Shapes (fix round 1): the splits (hero, B, G, F, C-pair, L) never run three together — S, I and D
  * break the run with a centred numeral row, a full-column photograph and a centred accordion, and
  * the 12 bands hold four splits where the first build had six. Media sides alternate (B end,
- * G start, F end). Texture signature (§ 6.4): the hero's foot field, head-half
- * on J, closing on L — three placements, never adjacent, and no other showcase page carries the
- * foot. Photographs are one warm family (warm + neutral) with one vivid frame, a portrait in the
+ * G start, F end). Texture signature (§ 6.4): head-half on J and closing on L — two placements,
+ * never adjacent; the hero's foot field is dropped (fix round 2, recorded in brand-amendments.md).
+ * The 3:1 image moment and the split J are this page's own: about's banner is `beside` and its J
+ * centred, and the services index carries a photo pair and no J. Photographs are one warm family (warm + neutral) with one vivid frame, a portrait in the
  * slider (§ 5.5); none appears twice, or on the other two showcase pages. Every photograph is
  * atmosphere, so `alt=""` (photos.ts).
  */
@@ -158,7 +160,7 @@ const SLIDES: readonly ProofQuote[] = [
        read sombre, near tearful, in the wrong register for it). */
     portrait: portrait('portrait-woman-sunset-smile'),
     quoteHtml:
-      '<p>Every screen they cut was one our clinicians never had to learn, and every screen that stayed had been argued for with evidence from the ward.</p>',
+      '<p>Every screen they cut was one our clinicians never had to learn, and every screen that stayed was argued for with evidence from our wards.</p>',
   },
   {
     name: 'Arjun Mehta',
@@ -267,8 +269,8 @@ const THINKING: readonly BlockCardSetItem[] = [
 ];
 
 /* ── 12 · L ────────────────────────────────────────────────────────────────────────────────
-   The contact strip in place of numbered points (fix round 1): the method (7) is the page's one
-   numbered list, and a second, three bands later, made numbering the page's default idiom. */
+   The contact strip in place of numbered points (fix round 1): the method (8) is the page's one
+   numbered list, and a second, four bands later, made numbering the page's default idiom. */
 const CONTACT: readonly CtaContact[] = [
   { label: 'Write', value: 'hello@tcules.com', href: 'mailto:hello@tcules.com' },
   { label: 'Reply', value: 'Within one working day' },
@@ -311,7 +313,6 @@ export default async function KitHomePage() {
         ]}
         arrangement="beside"
         media={{ type: 'image', ratio: '5/4', image: photo('pair-at-laptop-sticky-wall') }}
-        texture
       />
 
       {/* 2 · H — the real marks and the real rating. */}
@@ -380,7 +381,8 @@ export default async function KitHomePage() {
         A good interface is a product decision someone finally made.
       </Statement>
 
-      {/* 5 · B — the wireframe wall at the photograph's weight, at the END; two tiles in the 477. */}
+      {/* 5 · B — the wireframe wall at the photograph's weight, at the END; two tiles in the 477,
+          stacked from 1024 to 1439, where the 477 is ~360 and two up squeezed each to 164. */}
       <ContentSection
         data-band="B"
         arrangement="media"
@@ -390,7 +392,7 @@ export default async function KitHomePage() {
         headingId="home-how"
         lead="Research, rules and interface design share one wall, so nothing is decided twice."
       >
-        <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
+        <Layout as="ul" columns={{ base: 1, md: 2, lg: 1, xl: 2 }} colGap="gutter" rowGap="stack">
           {HOW.map((tile) => (
             <ListCard
               key={tile.title}
@@ -449,7 +451,7 @@ export default async function KitHomePage() {
       {/* 9 · I — the image moment: one 3:1 photograph across the column under its H-row. */}
       <Banner
         eyebrow="The studio"
-        heading="Small rooms, careful decisions"
+        heading="Small rooms, careful calls"
         headingId="home-studio"
         lead="We keep teams small and calendars sparse, so the hard product calls get the attention they need."
         actions={

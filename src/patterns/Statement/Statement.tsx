@@ -67,8 +67,8 @@ export type StatementProps = {
   actions?: ReactNode;
   /**
    * The texture (paper only; ignored with a warning on any other ground). `head-half` is § 6.3's
-   * blurred field, from 1024; `corner` the stepped pixel field in the band's top-end corner, at
-   * every width, clear of the type (TextureCorner).
+   * blurred field, from 1024; `corner` the stepped pixel field in the band's top-end corner, from
+   * 1024, clear of the type (TextureCorner).
    */
   texture?: StatementTexture;
   /** Default `paper`. */
