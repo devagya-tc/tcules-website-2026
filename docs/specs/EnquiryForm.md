@@ -28,6 +28,15 @@
 > 2. **The form is a pattern, not CtaSection's part.** Its bounds are its own floor and measure: `--enq-form-min-inline` 16rem, `--enq-form-max-inline` 470px (full sets), and a new `--enq-compact-max-inline` 667px (the [5, 7] copy track at 1470). It sits in CtaSection's form column, in ContentSection's `media` copy column beside a 4:5 photograph, as a block under a centred head, in a `beside` body track, and in the offer's form slot.
 > 3. **The control's minimum moved out of Input.** `--inp-min-inline` is deleted: a 16rem floor on the box overflowed every track narrower than it (the Input specimen scrolled sideways at 768–899). The floor belongs to the composing pattern: EnquiryForm's `--enq-form-min-inline`, and SiteFooter's new `--foot-field-min-inline` on the newsletter field's label. The § 7(b), § 12 and appendix rows are updated in place.
 > 4. **Specimens:** `/design/enquiry-form` adds `compact` (and compact on all four surfaces); the family showcase is `/design/kit/form`.
+>
+> **Amended 6 Oct 2026 (cmp-form fix round).** Supersedes item 2 above and every row below that disagrees:
+>
+> 5. **One width policy.** Every variant fills its track down to `--enq-form-min-inline`. `--enq-form-max-inline` (470) and `--enq-compact-max-inline` (667) are deleted. `width="measure"` caps any variant at `--enq-form-measure` (667) and is for the centred standalone placement only, where a centred body row is the whole column.
+> 6. **Line fields by default.** `fields="line" | "box"` (default `line`) sets Input's new `appearance="line"`: no fill, no box, one rule under the value that turns blue and doubles on focus; the lined textarea floors at 104 and grows with its text. `box` keeps the filled control.
+> 7. **Blue marks** (`--enq-accent-ink`, per surface): a trailing arrow on every submit, a shield mark leading the caption (a danger triangle in the error ink once the line is an error), the label of the focused field, the success check, and the success steps' numerals.
+> 8. **Grouping.** Fields at `text` inside; the actions a `stack` below them. The caption/status is one live line under the actions on the full sets and beside the submit on compact; on compact it asks for `--enq-note-min-inline` (15rem) beside the submit and otherwise wraps under it.
+> 9. **Success.** Reads mark → thanks at `--text-h4` ("Thanks. We have your enquiry.") → "Here is what happens next." → three numbered steps (blue `--text-index` numerals, `--text-h6` labels, `--text-body-sm` clauses) → the scheduling link where there is one. The success rule and `--enq-success-rule`, and the unused `--enq-status-ink`, are deleted.
+> 10. **Fields are declared once.** Each variant is a list of field specs rendered by one function, so the compact and contact Name and Email (and their blur validators) cannot drift.
 
 Three things were read rather than assumed, and they change the shape of this document:
 

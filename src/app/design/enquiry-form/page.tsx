@@ -22,12 +22,14 @@ function Enquiry({
   audit = false,
   contact = false,
   compact = false,
+  boxed = false,
   urlLabel,
 }: {
   outcome?: 'success' | 'error' | 'pending';
   audit?: boolean;
   contact?: boolean;
   compact?: boolean;
+  boxed?: boolean;
   urlLabel?: EnquiryUrlLabel;
 }) {
   const action = `${ENDPOINTS.enquiryDesign}?outcome=${outcome}`;
@@ -50,6 +52,7 @@ function Enquiry({
       context={CONTEXT}
       urlLabel={urlLabel}
       scheduleHref={ROUTES.contact}
+      fields={boxed ? 'box' : undefined}
     />
   );
 }
@@ -96,6 +99,14 @@ export default function EnquiryFormSpecimenPage() {
           'Name and email as a pair where the track holds two, the one question, and the submit with the caption beside it. At most 400 tall.',
         ]}
         form={<Enquiry compact />}
+      />
+      <CtaSection
+        eyebrow={`Fields · box`}
+        heading="The boxed field, kept as an option"
+        body={[
+          'fields="box" sets Input\'s filled control instead of the default line. Every variant takes it; no placement on the site uses it today.',
+        ]}
+        form={<Enquiry boxed />}
       />
       <Section density="tight">
         <Layout rowGap="tight">

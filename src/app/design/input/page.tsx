@@ -7,15 +7,22 @@ function LabelledInput({
   label,
   invalid = false,
   disabled = false,
+  appearance,
 }: {
   label: string;
   invalid?: boolean;
   disabled?: boolean;
+  appearance?: 'box' | 'line';
 }) {
   return (
     <Layout as="label" rowGap="tight">
       <span>{label}</span>
-      <Input invalid={invalid} disabled={disabled} placeholder="you@company.com" />
+      <Input
+        invalid={invalid}
+        disabled={disabled}
+        appearance={appearance}
+        placeholder="you@company.com"
+      />
     </Layout>
   );
 }
@@ -24,10 +31,12 @@ function LabelledTextarea({
   label,
   invalid = false,
   disabled = false,
+  appearance,
 }: {
   label: string;
   invalid?: boolean;
   disabled?: boolean;
+  appearance?: 'box' | 'line';
 }) {
   return (
     <Layout as="label" rowGap="tight">
@@ -36,6 +45,7 @@ function LabelledTextarea({
         as="textarea"
         invalid={invalid}
         disabled={disabled}
+        appearance={appearance}
         placeholder="A line about what you are building"
       />
     </Layout>
@@ -49,9 +59,10 @@ export default function InputSpecimenPage() {
         <Layout rowGap="block">
           <h1>Input</h1>
           <p>
-            The native control box shared by enquiry forms and the footer — one treatment, on
-            every surface. Labels, flags, messages, and arrangement stay with the pattern that
-            composes it.
+            The native control shared by enquiry forms and the footer, in two appearances on
+            every surface: the filled box, and the unboxed line the enquiry forms use (one rule
+            under the value, blue and doubled on focus). Labels, flags, messages, and arrangement
+            stay with the pattern that composes it.
           </p>
         </Layout>
       </Section>
@@ -81,16 +92,26 @@ export default function InputSpecimenPage() {
                 <LabelledInput label="Disabled" disabled />
               </Layout>
             </Specimen>
+            <Specimen
+              title="Line · input and textarea"
+              note={`appearance="line": no fill and no box, one rule under the value. Focus turns it blue and doubles it without moving anything; the textarea grows with its text instead of carrying a grip.`}
+            >
+              <Layout rowGap="block">
+                <LabelledInput label="Email" appearance="line" />
+                <LabelledTextarea label="What are you working on?" appearance="line" />
+              </Layout>
+            </Specimen>
           </Layout>
         </Layout>
       </Section>
 
-      {/* Every surface renders every STATE, not just rest, for BOTH shapes. Four of the eleven
-          surface-dependent tokens — --inp-standard-invalid-rule and the three --inp-disabled-* —
-          move per surface, and with invalid and disabled shown on one surface only they were never
+      {/* Every surface renders every STATE, not just rest, for BOTH shapes. Ten of the seventeen
+          surface-dependent tokens (--inp-standard-invalid-rule, the three --inp-disabled-* and the
+          six --inp-line-*) move per surface, and with invalid and disabled shown on one surface only they were never
           looked at on ink or blue. The invalid rule steps danger-600 / 600 / 300 / 600 across the
           four: on blue it is chosen against the WHITE field it borders, not against the blue
-          ground. The textarea row is here because the textarea is the shape the enquiry forms
+          ground. The LINE field has no fill, so its invalid rule is chosen against the ground
+          itself: danger-600 / 600 / 300 and danger-100 on blue. The textarea row is here because the textarea is the shape the enquiry forms
           lean on, and its invalid rule had only ever been seen on paper.
 
           Three tracks from lg, not md: at 768 a third of the column is 213px, and the row was the
@@ -100,7 +121,7 @@ export default function InputSpecimenPage() {
         <Section key={surface} surface={surface} density="tight">
           <Specimen
             title={`Surface · ${surface}`}
-            note="Identical markup on all four: rest, invalid and disabled, as an input and as a textarea. Every one of the 11 surface-dependent tokens renders in this band."
+            note="Identical markup on all four: rest, invalid and disabled, as an input and as a textarea, boxed and lined. Every one of the 17 surface-dependent tokens renders in this band."
           >
             <Layout rowGap="stack">
               <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
@@ -113,13 +134,23 @@ export default function InputSpecimenPage() {
                 <LabelledTextarea label="Invalid · textarea" invalid />
                 <LabelledTextarea label="Disabled · textarea" disabled />
               </Layout>
+              <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                <LabelledInput label="Rest · line" appearance="line" />
+                <LabelledInput label="Invalid · line" appearance="line" invalid />
+                <LabelledInput label="Disabled · line" appearance="line" disabled />
+              </Layout>
+              <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                <LabelledTextarea label="Rest · line textarea" appearance="line" />
+                <LabelledTextarea label="Invalid · line textarea" appearance="line" invalid />
+                <LabelledTextarea label="Disabled · line textarea" appearance="line" disabled />
+              </Layout>
             </Layout>
           </Specimen>
         </Section>
       ))}
 
       {/* ── The nested-surface band ───────────────────────────────────────────────
-          The reason all four blocks restate all eleven tokens rather than carrying deltas. A blue
+          The reason all four blocks restate all seventeen tokens rather than carrying deltas. A blue
           Section inside an ink one must render the BLUE column; if any token were missing from the
           blue block it would inherit ink's value and the mismatch would show here as a field that
           does not match its own ground. Input owns more surface-dependent tokens than any other

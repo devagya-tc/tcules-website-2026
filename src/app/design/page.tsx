@@ -44,7 +44,7 @@ const SPECIMENS = [
       {
         href: '/design/input',
         name: 'Input',
-        note: 'native input and textarea, one treatment, rest · invalid · disabled for both shapes on 4 surfaces',
+        note: 'native input and textarea, box and line appearances, rest · invalid · disabled for both shapes and both appearances on 4 surfaces',
       },
       { href: '/design/icon', name: 'Icon', note: 'the glyph set, 4 size roles, currentColor' },
       {

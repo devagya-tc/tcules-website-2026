@@ -26,6 +26,22 @@ export type EnquiryContextBase = {
 type SharedProps = {
   action: string;
   onSubmitted?: () => void;
+  /**
+   * How wide the form sets (cmp-form fix round, 6 Oct 2026). ONE policy for every variant: the form
+   * fills the track it is placed in, down to its own floor, so four variants side by side share a
+   * right edge, and a form stacked under a full-width photograph meets the photograph's edge.
+   *
+   * `measure` caps it at --enq-form-measure (667) for the one placement that has no track of its
+   * own to fill: a standalone form under a CENTRED head, where ContentSection gives every body row
+   * the whole 1240 column and the cap is what centres.
+   */
+  width?: 'track' | 'measure';
+  /**
+   * The field treatment. `line` (default, every variant) is the unboxed underline field —
+   * references.md's Meridian and Executra move, and the one that stops a form on warm paper
+   * reading as a stack of default white boxes. `box` keeps Input's filled control.
+   */
+  fields?: 'line' | 'box';
 };
 
 /* "See available times" lives in the form's own action row, beside the submit, so the two asks
@@ -61,8 +77,9 @@ type ContactVariantProps = SharedProps & {
    submit, at most 400 tall, for the placements where the form is not the band's whole argument: a
    quiet photograph beside a short form (L-photo), the mid-page offer, a standalone ask inside a
    ContentSection. Context travels as on enquiry, so a compact submission is attributable. It is 369
-   tall in the 667 copy track it was sized for; in a track too narrow for the name and email pair
-   (under 400) the pair stacks and the form grows by one field (≈ 465 at 392, 536 at 326).
+   tall in a 667 track and in any track that holds the name and email pair and the caption beside
+   the submit; in a phone column the pair stacks and the caption drops under the submit (544 at
+   326, measured 6 Oct 2026).
 
    NO scheduling link, and the type refuses one. Compact is the short ask by definition; the link is
    the second way to take the step, and a second way is what pushed the full form past 400. The
@@ -150,7 +167,9 @@ function FieldGroup({
   children,
 }: FieldGroupProps) {
   return (
-    <Layout rowGap="tight">
+    /* `.field` so the label can take the accent while its control has focus: the blue lands on the
+       question being answered, beside the blue rule under the value. */
+    <Layout rowGap="tight" className={styles.field}>
       <label className={styles.label} htmlFor={id}>
         {label}
         {optional ? <span className={styles.optional}> (optional)</span> : null}
@@ -181,14 +200,111 @@ function FieldGroup({
 const CAPTION = 'We reply to the address you give us, and use it for nothing else.';
 
 /**
+ * What happens after a send, shown in the success view (cmp-form fix round). The same three steps
+ * the L close promises in its points, so the success state keeps the promise the band made rather
+ * than restating it as one serif line. Blue numerals, as on CtaSection's points: the accent marks
+ * the sequence, the ink carries the words.
+ */
+const NEXT_STEPS = [
+  {
+    label: 'A reply within a working day',
+    detail: 'From the designer who would lead the work.',
+  },
+  {
+    label: 'A thirty-minute call',
+    detail: 'What exists, what is stuck, and what a first fortnight would change.',
+  },
+  {
+    label: 'A written proposal',
+    detail: 'Scope, team and timeline on two pages. No obligation.',
+  },
+] as const;
+
+/** The validating text fields, keyed by the message slot each one fills. */
+type FieldKey = keyof FieldMessages;
+
+/**
+ * One validating field, declared once. Name, email and the free-text question used to be written
+ * out per variant — the compact branch was a near-verbatim copy of contact's Name and Email blocks
+ * and their blur validators — so a change to one could drift from the other. Each variant is now a
+ * LIST of these, and one renderer turns every entry into the same FieldGroup + Input.
+ *
+ * `name` is the posted field name, which differs by variant (contact posts `clientEmail`, the
+ * enquiry sets post `email`); everything a person sees is the spec's.
+ */
+type FieldSpec = {
+  key: FieldKey;
+  label: string;
+  name: string;
+  type?: 'text' | 'email' | 'tel';
+  as?: 'textarea';
+  autoComplete?: string;
+  placeholder?: string;
+  /** The message on an empty blur. */
+  empty: string;
+};
+
+const FIELD = {
+  name: (name: string): FieldSpec => ({
+    key: 'name',
+    label: 'Name',
+    name,
+    autoComplete: 'name',
+    empty: 'Enter your name',
+  }),
+  email: (name: string): FieldSpec => ({
+    key: 'email',
+    label: 'Email',
+    name,
+    type: 'email',
+    autoComplete: 'email',
+    placeholder: 'you@company.com',
+    empty: 'Enter your email',
+  }),
+  company: {
+    key: 'company',
+    label: 'Company',
+    name: 'clientCompany',
+    autoComplete: 'organization',
+    empty: 'Enter your company',
+  } satisfies FieldSpec,
+  phone: {
+    key: 'contact',
+    label: 'Phone',
+    name: 'clientContact',
+    type: 'tel',
+    autoComplete: 'tel',
+    empty: 'Enter your phone number',
+  } satisfies FieldSpec,
+  work: {
+    key: 'work',
+    label: 'What are you working on?',
+    name: 'what_are_you_working_on',
+    as: 'textarea',
+    empty: 'Add a line about it',
+  } satisfies FieldSpec,
+  message: {
+    key: 'comments',
+    label: 'Message',
+    name: 'clientComments',
+    as: 'textarea',
+    empty: 'Add a message',
+  } satisfies FieldSpec,
+};
+
+/**
  * EnquiryForm — the site's shared enquiry behavior for the three-field enquiry/audit set, the
  * five-field contact set and the three-field compact set. Validation is deliberately blur-only;
  * submission keeps uncontrolled values mounted on failure and replaces the form on success.
  *
- * A pattern in its own right, not CtaSection's part: it sizes itself to whatever track it is placed
- * in, between its own floor and its own measure (`--enq-form-*`, `--enq-compact-max-inline`), so it
- * reads the same in CtaSection's form column, in ContentSection's `media` copy column beside a
- * photograph, and as a block under a centred head.
+ * A pattern in its own right, not CtaSection's part: it fills whatever track it is placed in, down
+ * to its own floor (`--enq-form-min-inline`), so it reads the same in CtaSection's form column, in
+ * ContentSection's `media` copy column beside a photograph, and — with `width="measure"` — as a
+ * centred block under a centred head.
+ *
+ * Blue is its recurring foreground accent (visual-direction § 4, owner 6 Oct 2026): the trailing
+ * arrow on the submit, the mark leading the caption, the label of the field being written in, the
+ * rule under that field, the success mark and the numerals of the next steps. No ground is blue.
  */
 export function EnquiryForm(props: EnquiryFormProps) {
   const instanceId = useId();
@@ -200,24 +316,13 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const variant = props.variant ?? 'enquiry';
   const onSubmitted = props.onSubmitted;
   const urlLabel = props.urlLabel ?? (variant === 'audit' ? 'Site to audit' : 'Website');
+  const appearance = props.fields === 'box' ? 'box' : 'line';
   const submitting = lifecycle === 'submitting';
+  const bounds = props.width === 'measure' ? styles.measure : styles.track;
 
-  const ids = {
-    name: `${instanceId}-name`,
-    nameMessage: `${instanceId}-name-msg`,
-    company: `${instanceId}-company`,
-    companyMessage: `${instanceId}-company-msg`,
-    email: `${instanceId}-email`,
-    emailMessage: `${instanceId}-email-msg`,
-    contact: `${instanceId}-contact`,
-    contactMessage: `${instanceId}-contact-msg`,
-    comments: `${instanceId}-comments`,
-    commentsMessage: `${instanceId}-comments-msg`,
-    work: `${instanceId}-work`,
-    workMessage: `${instanceId}-work-msg`,
-    url: `${instanceId}-url`,
-    status: `${instanceId}-status`,
-  };
+  const idFor = (key: string) => `${instanceId}-${key}`;
+  const statusId = idFor('status');
+  const urlId = idFor('url');
 
   useEffect(() => {
     if (lifecycle !== 'success') return;
@@ -255,26 +360,92 @@ export function EnquiryForm(props: EnquiryFormProps) {
     }
   }
 
+  /** One validating field, from its spec. The only place a FieldGroup + Input pair is written. */
+  function renderField(spec: FieldSpec) {
+    const id = idFor(spec.key);
+    const messageId = idFor(`${spec.key}-msg`);
+    const shared = {
+      id,
+      name: spec.name,
+      autoComplete: spec.autoComplete,
+      placeholder: spec.placeholder,
+      required: true,
+      disabled: submitting,
+      appearance,
+      invalid: Boolean(messages[spec.key]),
+      'aria-describedby': messageId,
+    } as const;
+    const validate = (control: HTMLInputElement | HTMLTextAreaElement) =>
+      setMessage(
+        spec.key,
+        control.value.trim() === ''
+          ? spec.empty
+          : control instanceof HTMLInputElement && control.validity.typeMismatch
+            ? 'Enter a valid email'
+            : '',
+      );
+
+    return (
+      <FieldGroup
+        key={spec.key}
+        id={id}
+        label={spec.label}
+        validation={{ id: messageId, message: messages[spec.key] }}
+      >
+        {spec.as === 'textarea' ? (
+          <Input {...shared} as="textarea" onBlur={(event) => validate(event.currentTarget)} />
+        ) : (
+          <Input
+            {...shared}
+            type={spec.type ?? 'text'}
+            onBlur={(event) => validate(event.currentTarget)}
+          />
+        )}
+      </FieldGroup>
+    );
+  }
+
   if (lifecycle === 'success') {
     return (
       <div
-        className={cx(styles.success, variant === 'compact' && styles.compact)}
+        className={cx(styles.success, bounds)}
         role="status"
         aria-live="polite"
         tabIndex={-1}
         ref={successRef}
       >
-        <Layout rowGap="block">
-          <hr className={styles.successRule} />
-          <h3 className={styles.successHeading}>One reply, within a working day.</h3>
-          <Cluster colGap="tight" align="center" nowrap>
-            <Icon name="check-circle" />
-            <p className={styles.successBody}>
-              {variant === 'contact'
-                ? 'Thanks — we have your message.'
-                : 'Thanks — we have your enquiry.'}
-            </p>
-          </Cluster>
+        {/* The moment the form earns, in reading order: the mark, the THANKS at title scale, then
+            what happens next as the same numbered steps the close promised. It used to open on the
+            promise and bury the thanks in one small line under it, with a black check. */}
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <span className={styles.successMark}>
+              <Icon name="check-circle" size="xl" />
+            </span>
+            <Layout rowGap="text">
+              <h3 className={styles.successHeading}>
+                {variant === 'contact'
+                  ? 'Thanks. We have your message.'
+                  : 'Thanks. We have your enquiry.'}
+              </h3>
+              <p className={styles.successBody}>Here is what happens next.</p>
+            </Layout>
+          </Layout>
+          <Layout as="ol" rowGap="block">
+            {NEXT_STEPS.map((step, index) => (
+              <li key={step.label}>
+                <Cluster nowrap colGap="text" align="baseline">
+                  <span aria-hidden="true" className={styles.stepMarker}>
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <Layout rowGap="inline" className={styles.stepContent}>
+                    <span className={styles.stepLabel}>{step.label}</span>
+                    <span className={styles.stepDetail}>{step.detail}</span>
+                  </Layout>
+                </Cluster>
+              </li>
+            ))}
+          </Layout>
           {/* The scheduling link survives the swap. It used to, for free, because CtaSection
               rendered it outside the form; now the form owns it, so the success view carries it
               on — a sent enquiry does not make "talk sooner" any less of an offer. */}
@@ -306,9 +477,47 @@ export function EnquiryForm(props: EnquiryFormProps) {
         ? 'That did not send. Your answers are still here — try again.'
         : '';
 
+  const submitLabel =
+    variant === 'audit' ? 'Request free audit' : variant === 'contact' ? 'Send message' : 'Send enquiry';
+
+  /* The submit carries the trailing arrow on every variant: the click takes the step forward, and
+     the arrow is the band's blue-adjacent mark on the one solid control (the glyph takes the
+     button's own fg). */
+  const submit = (
+    <Button type="submit" size="lg" busy={submitting} icon={<Icon name="arrow-right" />}>
+      {submitLabel}
+    </Button>
+  );
+
+  /* The caption line, led by a blue mark. The mark is the shield at rest — the sentence is a
+     promise about the address — and the danger triangle when the line has become an error. The
+     paragraph is the live region, so the status is announced where the reassurance sat. */
+  const captionLine = (text: string, error: boolean) => (
+    <Cluster nowrap colGap="tight" align="start" className={styles.note}>
+      <span className={cx(styles.noteMark, error && styles.statusError)}>
+        <Icon name={error ? 'danger-triangle' : 'shield-check'} />
+      </span>
+      <p
+        className={cx(styles.noteText, error && styles.statusError)}
+        id={statusId}
+        role="status"
+        aria-live="polite"
+      >
+        {text}
+      </p>
+    </Cluster>
+  );
+
+  const fields: FieldSpec[] =
+    variant === 'contact'
+      ? [FIELD.name('clientName'), FIELD.company, FIELD.email('clientEmail'), FIELD.phone, FIELD.message]
+      : variant === 'compact'
+        ? [FIELD.work]
+        : [FIELD.email('email'), FIELD.work];
+
   return (
     <form
-      className={cx(styles.form, variant === 'compact' && styles.compact)}
+      className={cx(styles.form, bounds)}
       action={props.action}
       method="post"
       noValidate
@@ -322,351 +531,81 @@ export function EnquiryForm(props: EnquiryFormProps) {
       aria-busy={submitting || undefined}
       onSubmit={handleSubmit}
     >
-      <Layout rowGap="block">
+      {/* Two groups, and the seam between them is what groups them (cmp-form fix round): the
+          fields at `text` inside, the actions a `stack` below. Field-to-field and field-to-submit
+          used to measure the same ~52, so the submit read as one more block in a uniform stack. */}
+      <Layout rowGap="stack">
         <Layout rowGap="text">
           {variant === 'compact' ? (
-            <>
-              {/* Name and email as a pair, side by side wherever the form's own width holds two
-                  192px tracks (`fit`, `xs`), and stacked where it does not — the form decides from
-                  its track, not from the viewport, because the same form sits in a 667 copy column
-                  and a 392 card track on one 1440 page. `block` between the two: a pair of fields
-                  is two answers, and at `text` the two labels read as one run. */}
-              <Layout columns="fit" minTrack="xs" colGap="block" rowGap="text">
-                <FieldGroup
-                  id={ids.name}
-                  label="Name"
-                  validation={{ id: ids.nameMessage, message: messages.name }}
-                >
-                  <Input
-                    id={ids.name}
-                    name="name"
-                    autoComplete="name"
-                    required
-                    disabled={submitting}
-                    invalid={Boolean(messages.name)}
-                    aria-describedby={ids.nameMessage}
-                    onBlur={(event) =>
-                      setMessage(
-                        'name',
-                        event.currentTarget.value.trim() === '' ? 'Enter your name' : '',
-                      )
-                    }
-                  />
-                </FieldGroup>
+            /* Name and email as a pair, side by side wherever the form's own width holds two 192px
+               tracks (`fit`, `xs`), and stacked where it does not — the form decides from its
+               track, not from the viewport. `block` between the two: a pair of fields is two
+               answers, and at `text` the two labels read as one run. */
+            <Layout columns="fit" minTrack="xs" colGap="block" rowGap="text">
+              {renderField(FIELD.name('name'))}
+              {renderField(FIELD.email('email'))}
+            </Layout>
+          ) : null}
 
-                <FieldGroup
-                  id={ids.email}
-                  label="Email"
-                  validation={{ id: ids.emailMessage, message: messages.email }}
-                >
-                  <Input
-                    id={ids.email}
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    placeholder="you@company.com"
-                    required
-                    disabled={submitting}
-                    invalid={Boolean(messages.email)}
-                    aria-describedby={ids.emailMessage}
-                    onBlur={(event) =>
-                      setMessage(
-                        'email',
-                        event.currentTarget.value.trim() === ''
-                          ? 'Enter your email'
-                          : event.currentTarget.validity.typeMismatch
-                            ? 'Enter a valid email'
-                            : '',
-                      )
-                    }
-                  />
-                </FieldGroup>
-              </Layout>
+          {fields.map(renderField)}
 
-              <FieldGroup
-                id={ids.work}
-                label="What are you working on?"
-                validation={{ id: ids.workMessage, message: messages.work }}
-              >
-                <Input
-                  as="textarea"
-                  id={ids.work}
-                  name="what_are_you_working_on"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.work)}
-                  aria-describedby={ids.workMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'work',
-                      event.currentTarget.value.trim() === '' ? 'Add a line about it' : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-            </>
-          ) : variant === 'contact' ? (
-            <>
-              <FieldGroup
-                id={ids.name}
-                label="Name"
-                validation={{ id: ids.nameMessage, message: messages.name }}
-              >
-                <Input
-                  id={ids.name}
-                  name="clientName"
-                  autoComplete="name"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.name)}
-                  aria-describedby={ids.nameMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'name',
-                      event.currentTarget.value.trim() === '' ? 'Enter your name' : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.company}
-                label="Company"
-                validation={{ id: ids.companyMessage, message: messages.company }}
-              >
-                <Input
-                  id={ids.company}
-                  name="clientCompany"
-                  autoComplete="organization"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.company)}
-                  aria-describedby={ids.companyMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'company',
-                      event.currentTarget.value.trim() === '' ? 'Enter your company' : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.email}
-                label="Email"
-                validation={{ id: ids.emailMessage, message: messages.email }}
-              >
-                <Input
-                  id={ids.email}
-                  type="email"
-                  name="clientEmail"
-                  autoComplete="email"
-                  placeholder="you@company.com"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.email)}
-                  aria-describedby={ids.emailMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'email',
-                      event.currentTarget.value.trim() === ''
-                        ? 'Enter your email'
-                        : event.currentTarget.validity.typeMismatch
-                          ? 'Enter a valid email'
-                          : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.contact}
-                label="Phone"
-                validation={{ id: ids.contactMessage, message: messages.contact }}
-              >
-                <Input
-                  id={ids.contact}
-                  type="tel"
-                  name="clientContact"
-                  autoComplete="tel"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.contact)}
-                  aria-describedby={ids.contactMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'contact',
-                      event.currentTarget.value.trim() === '' ? 'Enter your phone number' : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.comments}
-                label="Message"
-                validation={{ id: ids.commentsMessage, message: messages.comments }}
-              >
-                <Input
-                  as="textarea"
-                  id={ids.comments}
-                  name="clientComments"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.comments)}
-                  aria-describedby={ids.commentsMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'comments',
-                      event.currentTarget.value.trim() === '' ? 'Add a message' : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-            </>
-          ) : (
-            <>
-              <FieldGroup
-                id={ids.email}
-                label="Email"
-                validation={{ id: ids.emailMessage, message: messages.email }}
-              >
-                <Input
-                  id={ids.email}
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  placeholder="you@company.com"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.email)}
-                  aria-describedby={ids.emailMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'email',
-                      event.currentTarget.value.trim() === ''
-                        ? 'Enter your email'
-                        : event.currentTarget.validity.typeMismatch
-                          ? 'Enter a valid email'
-                          : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.work}
-                label="What are you working on?"
-                validation={{ id: ids.workMessage, message: messages.work }}
-              >
-                <Input
-                  as="textarea"
-                  id={ids.work}
-                  name="what_are_you_working_on"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.work)}
-                  aria-describedby={ids.workMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'work',
-                      event.currentTarget.value.trim() === '' ? 'Add a line about it' : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup id={ids.url} label={urlLabel} optional>
-                <Input
-                  id={ids.url}
-                  type="url"
-                  inputMode="url"
-                  name="url"
-                  autoComplete="url"
-                  disabled={submitting}
-                  onBlur={(event) => {
-                    event.currentTarget.value = normaliseUrl(event.currentTarget.value);
-                  }}
-                />
-              </FieldGroup>
-            </>
-          )}
+          {variant === 'enquiry' || variant === 'audit' ? (
+            <FieldGroup id={urlId} label={urlLabel} optional>
+              <Input
+                id={urlId}
+                type="url"
+                inputMode="url"
+                name="url"
+                autoComplete="url"
+                appearance={appearance}
+                disabled={submitting}
+                onBlur={(event) => {
+                  event.currentTarget.value = normaliseUrl(event.currentTarget.value);
+                }}
+              />
+            </FieldGroup>
+          ) : null}
         </Layout>
 
         {variant === 'compact' ? (
-          /* Compact: the submit and ONE line beside it. That line is the caption at rest and the
-             status once there is one — the same live region, so "Sending…" and "That did not
-             send…" are announced where the reassurance sat, and an idle form spends no row on an
-             empty status line. That row, and the caption's own row, are the 69px the full form
-             spends under its submit and the compact form cannot (§ 1.4, L beside a photo).
+          /* Compact: the submit and ONE line beside it — the caption at rest, the status once there
+             is one, in the same live region, so an idle form spends no row on an empty status line.
 
-             `nowrap`: the line never drops under the submit as a unit; it wraps inside the space
-             beside it. So the row holds its 48 in every state wherever the longer of caption and
-             error fits in two caption lines beside the submit (every track from 392 up, measured
-             6 Oct 2026). On a 326 phone column the caption takes a third line, and the row is
-             that line's height: "Sending…" is shorter, so the row steps up by one caption line
-             (19) while a send is in flight, and back down on an error. Recorded, not hidden. */
-          <Cluster nowrap colGap="block" align="center">
-            <Button type="submit" size="lg" busy={submitting}>
-              Send enquiry
-            </Button>
-            <p
-              className={cx(styles.note, lifecycle === 'error' && styles.statusError)}
-              id={ids.status}
-              role="status"
-              aria-live="polite"
-            >
-              {status || CAPTION}
-            </p>
+             The row WRAPS. The line asks for at least --enq-note-min-inline beside the submit; in
+             a track that cannot give it that (a 326 phone column, a 392 card track) the line drops
+             under the submit at `text` and takes the whole width, rather than wrapping to three
+             ragged lines in 165px beside a 48px button. */
+          <Cluster colGap="block" rowGap="text" align="center">
+            {submit}
+            {captionLine(status || CAPTION, lifecycle === 'error')}
           </Cluster>
         ) : (
-          <>
-            <p
-              className={
-                lifecycle === 'error' ? `${styles.status} ${styles.statusError}` : styles.status
-              }
-              id={ids.status}
-              role="status"
-              aria-live="polite"
-            >
-              {status}
-            </p>
-
-            <Layout rowGap="text">
-              {/* Submit and the scheduling link in ONE row: two ways to take the same next step, so
-                they group. `block` between them, not `tight` — the link is the alternative to the
-                submit, not a part of it — and the row wraps on a narrow column, where the link drops
-                under the submit at `tight`.
-
-                Both lg. The submit is lg because it stands beside 44px phone fields and a 40px
-                button under them read as the smaller thing; the link takes the same size so the two
-                labels set at one type size across the row. lg is 48 and clears the touch floor, so
-                neither needs extendHitArea. The link is `primary`: a text link is blue at rest
-                (visual-direction § 4.2, fdn-blue). It has no box, so the submit stays the one ask. */}
-              <Cluster rowGap="tight" colGap="block" align="center">
-                <Button type="submit" size="lg" busy={submitting}>
-                  {variant === 'audit'
-                    ? 'Request free audit'
-                    : variant === 'contact'
-                      ? 'Send message'
-                      : 'Send enquiry'}
+          <Layout rowGap="text">
+            {/* Submit and the scheduling link in ONE row: two ways to take the same next step, so
+                they group. `block` between them — the link is the alternative to the submit, not a
+                part of it — and the row wraps on a narrow column, where the link drops under the
+                submit at `tight`. Both lg (48, clears the touch floor). The link is `primary`: a
+                text link is blue at rest (visual-direction § 4.2). */}
+            <Cluster rowGap="tight" colGap="block" align="center">
+              {submit}
+              {props.scheduleHref ? (
+                <Button
+                  as="a"
+                  href={props.scheduleHref}
+                  emphasis="link"
+                  tone="primary"
+                  size="lg"
+                  icon={<Icon name="arrow-right" />}
+                >
+                  See available times
                 </Button>
-                {props.scheduleHref ? (
-                  <Button
-                    as="a"
-                    href={props.scheduleHref}
-                    emphasis="link"
-                    tone="primary"
-                    size="lg"
-                    icon={<Icon name="arrow-right" />}
-                  >
-                    See available times
-                  </Button>
-                ) : null}
-              </Cluster>
-              <p className={styles.caption}>{CAPTION}</p>
-            </Layout>
-          </>
+              ) : null}
+            </Cluster>
+            {/* The line under the actions: the caption at rest, the status once there is one, in
+                one live region — the same mechanism as compact's, so the two cannot disagree about
+                where "That did not send" is announced. */}
+            {captionLine(status || CAPTION, lifecycle === 'error')}
+          </Layout>
         )}
       </Layout>
 

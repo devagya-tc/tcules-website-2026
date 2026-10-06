@@ -2,12 +2,13 @@
 
    Layout and Cluster own every sibling seam in the JSX. This module only applies the component's
    inline cap, reserved feedback line, type roles and per-surface inks. The form and its success
-   replacement share the same bounds (256–470px; compact 256–667px) so completion does not change
-   the column's measure. The bounds are the form's own floor and measure, not a track's: it sits
-   in CtaSection's form column, in a media split's copy column and under a centred head alike. The 19px message reserve is one --text-caption line, held only by a field that validates:
+   replacement share the same bounds so completion does not change the column's measure: every
+   variant fills its track down to a 256 floor, and `width="measure"` caps it at 667 for the
+   centred standalone case. It sits in CtaSection's form column, in a media split's copy column and
+   under a centred head alike. The 19px message reserve is one --text-caption line, held only by a field that validates:
    blur validation may fill it without moving the controls below. No margin, private flex/grid arrangement or surface paint belongs here.
 
-   State order is load-bearing: .status establishes the neutral ink, then .statusError replaces
+   State order is load-bearing: .noteText establishes the caption ink, then .statusError replaces
    only that ink. Success is a substitution performed by React, not a hidden sibling, so there is
    no opacity or height transition to coordinate. */
 
@@ -15,16 +16,26 @@
 .success {
   inline-size: 100%;
   min-inline-size: var(--enq-form-min-inline);
-  max-inline-size: var(--enq-form-max-inline);
 }
 
-/* AFTER `.form, .success` on purpose: same specificity, same property, and the compact measure
-   must win. The compact form takes a wider measure: its name and email sit as a pair, and a pair at the full
-   form's 470 leaves two 223px fields for an address. 667 is the copy track of a [5, 7] split at
-   1470, where the compact form lives beside a photograph (visual-direction § 1.4, L beside a
-   photo). Under a centred head the measure is what centres; in a 763 beside track it stops short. */
-.compact {
-  max-inline-size: var(--enq-compact-max-inline);
+/* ONE width policy for every variant (cmp-form fix round): the form fills its track. It used to
+   cap the full set at 470 and compact at 667, so four variants in one grid disagreed about their
+   right edge, and a compact form under a full-width photograph stopped 37–169px short of it. */
+.track {
+  max-inline-size: none;
+}
+
+/* The centred standalone case only: under a centred head every body row is the whole column, and
+   this cap is the block that centres. */
+.measure {
+  max-inline-size: var(--enq-form-measure);
+}
+
+/* The label of the field being written in takes the accent (§ 4.2: blue marks the active state).
+   It is the label, not the field: the field's own rule turns blue too (Input, appearance="line"),
+   and the pair reads as one mark on the one question being answered. */
+.field:focus-within .label {
+  color: var(--enq-accent-ink);
 }
 
 /* A SANS role, and the change is the mono rule reaching this component rather than a re-taste.
@@ -82,25 +93,27 @@
   min-inline-size: 0;
 }
 
-.status {
-  color: var(--enq-status-ink);
-  font: var(--text-body-sm);
-  /* color only. The sentence turns danger when the status becomes an error, which is the one
-     value in this component with two states to travel between. It used to be the hairline ABOVE
-     the sentence that moved, and the hairline is gone (29 Sep 2026, tracker 2.17): it sat directly
-     over the submit row, where the --gap-block seam already separates the fields from the actions,
-     and an idle form drew a rule over an empty line. The error now reads in the sentence itself —
-     "That did not send…" carries the meaning, and the danger ink reinforces it. */
+/* The line under (full) or beside (compact) the submit: the caption at rest, the status once
+   there is one. A nowrap Cluster of the mark and the sentence.
+
+   `flex` is SIZING, not arrangement: the parent Cluster still owns the flow and both seams. The
+   line asks for --enq-note-min-inline before it will sit beside the submit, and grows into what is
+   left; where a track cannot give it that, the parent's wrap drops it under the submit at full
+   width (cmp-form fix round: at 390 it used to wrap to three ragged lines in 165px). */
+.note {
+  flex: 1 1 var(--enq-note-min-inline);
+  min-inline-size: 0;
+}
+
+/* The blue mark leading the line. Its wrapper takes the accent; Icon takes currentColor. */
+.noteMark {
+  color: var(--enq-accent-ink);
   transition: color var(--enq-transition-duration) var(--enq-transition-easing);
 }
 
-/* The compact form's one line beside the submit: the caption at rest, the status once there is
-   one (see the TSX). Caption voice throughout, so a state change swaps the words and the ink, not
-   the type; where the line fits in two caption lines beside the submit the row keeps its 48 (the
-   TSX records the phone exception). `min-inline-size: 0` lets it wrap inside its nowrap row rather
-   than push the row wider than the form. BEFORE .statusError on purpose — the two set the same
-   property and the error must win. */
-.note {
+/* Caption voice throughout, so a state change swaps the words and the ink, not the type. BEFORE
+   .statusError on purpose — the two set the same property and the error must win. */
+.noteText {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);
   color: var(--enq-caption-ink);
@@ -113,39 +126,62 @@
   color: var(--enq-status-ink-error);
 }
 
-.caption {
-  max-inline-size: var(--measure-body);
-  color: var(--enq-caption-ink);
-  font: var(--text-caption);
-}
-
 .success {
   color: var(--enq-success-ink);
 }
 
-.successRule {
-  inline-size: 100%;
-  border: 0;
-  border-block-start: var(--border-width-hairline) solid var(--enq-success-rule);
+/* The success mark: the check at 24 in the accent. It was neutral ink, and the one glyph in the
+   form that says "done" read as black and white. */
+.successMark {
+  color: var(--enq-accent-ink);
 }
 
+/* The thanks at title scale — the success view's one large voice. */
 .successHeading {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
   text-wrap: var(--text-title-wrap);
 }
 
 .successBody {
   max-inline-size: var(--measure-body);
-  font: var(--text-lead);
+  color: var(--enq-hint-ink);
+  font: var(--text-body);
   text-wrap: var(--text-running-wrap);
 }
 
-/* The two status lines are the only transitions. It listed .label and .message as well, which
+/* The next steps: a blue index numeral on the label's baseline (the row Cluster is
+   `align="baseline"`), the step at h6, its clause in the caption's quiet ink. The numeral is
+   aria-hidden — the <ol> carries position — but a sighted reader counts with it, so it holds AA. */
+.stepMarker {
+  color: var(--enq-accent-ink);
+  font: var(--text-index);
+  letter-spacing: var(--text-index-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.stepContent {
+  min-inline-size: 0;
+}
+
+.stepLabel {
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+.stepDetail {
+  max-inline-size: var(--measure-body);
+  color: var(--enq-hint-ink);
+  font: var(--text-body-sm);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* The status line and its mark are the only transitions. It listed .label and .message as well, which
    neutralised nothing on either. */
 @media (prefers-reduced-motion: reduce) {
-  .status,
-  .note {
+  .noteMark,
+  .noteText {
     transition-duration: var(--duration-instant);
   }
 }

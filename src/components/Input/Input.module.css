@@ -94,6 +94,71 @@
   resize: vertical;
 }
 
+/* ── appearance="line" ─────────────────────────────────────────────────────────────
+   The unboxed field. AFTER the base, invalid and disabled rules on purpose: each rule here is
+   (0,2,0) or more and has to win the property it restates. The value sits on the band's own
+   ground, so every ink is chosen against the SURFACE (--inp-line-*), not against a white fill.
+
+   Focus draws no ring box around a field that has no box: the rule under the value turns blue and
+   doubles, drawn as an outside shadow so nothing moves. That is the visible focus indicator, and a
+   2px blue rule clears 3:1 against every ground's rest rule. */
+.control.line {
+  padding-inline: 0;
+  border-width: 0 0 var(--inp-rule-width);
+  border-color: var(--inp-line-rule);
+  border-radius: 0;
+  background: var(--inp-line-bg);
+  color: var(--inp-line-fg);
+}
+
+.control.line::placeholder {
+  color: var(--inp-line-placeholder-fg);
+}
+
+.control.line:not(:disabled, .invalid):hover {
+  border-color: var(--inp-line-rule-hover);
+}
+
+.control.line:not(:disabled, .invalid):focus-visible,
+.control.line:not(:disabled, .invalid):focus {
+  border-color: var(--inp-line-rule-focus);
+  box-shadow: 0 var(--inp-rule-width) 0 0 var(--inp-line-rule-focus);
+}
+
+.control.line.invalid {
+  border-width: 0 0 var(--inp-rule-width);
+  border-color: var(--inp-line-invalid-rule);
+  box-shadow: 0 var(--inp-rule-width) 0 0 var(--inp-line-invalid-rule);
+}
+
+.control.line.invalid:focus-visible {
+  box-shadow: 0 var(--inp-invalid-rule-width) 0 0 var(--inp-line-invalid-rule);
+}
+
+.control.line:disabled {
+  border-color: var(--inp-disabled-rule);
+  background: var(--inp-line-bg);
+  color: var(--inp-disabled-fg);
+}
+
+/* Restated because .control.line::placeholder above is (0,2,1), the same weight as the base
+   disabled placeholder, and later. */
+.control.line:disabled::placeholder {
+  color: var(--inp-disabled-fg);
+}
+
+/* A lined textarea is the same question at a shorter floor: three lines rather than four, because
+   without a box the empty field reads as space, and the rule under it already says where to write.
+   It GROWS with what is typed (`field-sizing: content`, where supported) instead of carrying a
+   resize grip: a grip is a box's corner, and on a field with no box it read as a stray mark. Where
+   field-sizing is unsupported the field scrolls at its floor, as a native textarea does. */
+.textarea.line {
+  min-block-size: var(--inp-line-textarea-min-block);
+  padding-block: var(--inp-textarea-padding-y);
+  resize: none;
+  field-sizing: content;
+}
+
 @media (max-width: 767px) {
   .control:not(.textarea) {
     block-size: var(--inp-height-touch);

@@ -12,6 +12,15 @@ import styles from './Input.module.css';
 type SharedProps = {
   /** Adds the invalid rule and emits aria-invalid without replacing native control semantics. */
   invalid?: boolean;
+  /**
+   * `box` (default) is the filled, ruled control. `line` is the unboxed field (kit cmp-form, 6 Oct
+   * 2026): no fill, no side or top rule, one rule under the value that turns blue and thickens on
+   * focus. references.md lists underline-only fields under the moves to adopt (Meridian, Executra);
+   * it is for a short form that sits in a composition rather than being the band's whole argument,
+   * where a stack of white boxes on warm paper read as a default template. Same height, same type,
+   * same states, so a form can change appearance without changing size.
+   */
+  appearance?: 'box' | 'line';
   className?: string;
 };
 
@@ -34,6 +43,7 @@ export type InputProps = NativeInputProps | NativeTextareaProps;
 export function Input({
   as = 'input',
   invalid = false,
+  appearance = 'box',
   className,
   'aria-invalid': ariaInvalid,
   ...rest
@@ -47,6 +57,7 @@ export function Input({
   const controlClassName = cx(
     styles.control,
     as === 'textarea' && styles.textarea,
+    appearance === 'line' && styles.line,
     invalidState && styles.invalid,
     className,
   );
