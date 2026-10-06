@@ -292,6 +292,21 @@ const SPECIMENS = [
         name: 'Kit · Service list',
         note: 'the service router in three forms — icon (C-icon-6 and C-icon-4 + CtaRow, photo aside), image (three centred, four with per-card CTAs, six as a Slider) and list (thumbnail rows beside a head with actions) — every link from routes.ts',
       },
+      {
+        href: '/design/kit/home',
+        name: 'Kit showcase · Home',
+        note: 'the home page composed from the kit, warm family, 12 bands — the strip and the photograph hero, real marks, the H-row and three services, a display statement, the studio board split, the client slider on tint, the method, illustrative stats, a 3:1 banner, questions, latest thinking and the close; texture hero foot / head-half / closing',
+      },
+      {
+        href: '/design/kit/about',
+        name: 'Kit showcase · About',
+        note: 'the studio page composed from the kit, warm family, 10 bands — the Holi photograph hero, a centred statement, four studio scenes, the people with a stat aside, the board with its counterweight, a featured client on tint, numbers, a banner beside, the careers offer and the close',
+      },
+      {
+        href: '/design/kit/services-index',
+        name: 'Kit showcase · Services index',
+        note: 'the services index composed from the kit, cool family, 11 bands — a no-media hero with the hero field, the six-service router, a split on what every service shares, four audits, fit, two cases over the horizon, the real rating on tint, the sprint offer, questions, a banner and the close',
+      },
     ],
   },
 ] as const;
