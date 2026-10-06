@@ -10,7 +10,33 @@ import {
   ROUTES,
 } from '@/lib/routes';
 
-/** /services/ai-product-ux, designed. Edits: docs/service-pages-design.md § AI Product UX. */
+import { CLIENT_MARKS } from '../../clients';
+import { CLUTCH_RATING } from '../../ratings';
+
+/**
+ * /services/ai-product-ux, designed — recomposed from the UI kit on 6 Oct 2026 (visual-direction
+ * § 8.2). Copy is the CMS's own, re-cut to the § 1.5 budgets; every edit is logged, old and new, in
+ * docs/content-changes.md § 7. The sections say what the page argues; the template decides how each
+ * is laid out from the job its blocks do (ServicePage plan.ts), so no field here is a layout.
+ *
+ *   hero      the claim
+ *   signals   where an AI feature loses people — B, beside a pair testing a screen
+ *   clients   who we have shipped with — H, with the sourced rating
+ *   roles     the role the model plays, least authority to most — E, the authority spectrum
+ *   authority inform, suggest, prepare, execute — F, beside the wireframe sketch
+ *   statement the claim the page stands on, at scale — J
+ *   record    the responsibility record, one per scenario — E, the record sheet
+ *   offer     the readiness assessment, for the scope not yet known — K
+ *   evidence  three AI products under different conditions — M, the real covers
+ *   questions evaluation, approval, our own AI use, where to read — D-faq (the old evaluation
+ *             band, the responsibilities stat, the scope note and the resources band, folded in)
+ *   routes    the four specialisms — the C-icon router
+ *   close     the form — L
+ *
+ * There is no G proof band: no attributable quote from an AI engagement exists yet, and the one
+ * approved quote (Auxentios, CPQ) is not AI work. When one does, a `proof` section between the
+ * record and the offer gets the tint band and the `horizon` above it from the plan.
+ */
 export const aiProductUx: ServiceStory = {
   slug: 'ai-product-ux',
   name: 'AI Product UX',
@@ -32,15 +58,10 @@ export const aiProductUx: ServiceStory = {
       height: 747,
     },
   },
-  /* Photographs (visual-direction § 5.5 to § 5.7): a cool-family page. The stand-in pool is in order
-     of preference, studio first, and is drawn from the rest of the catalogue (§ 5.6): no stock photo
-     that § 5.6 gives any page's B, I, K or aside slot (RESERVED_STOCK in src/lib/photos.ts), and none
-     of this page's own slot photos. That is enforced, not just authored: the template seeds the page's
-     used set with its slot photos and pickStandIn refuses the reserved ones.
-     Only four photographs qualify on a cool page. The four case cards take their real covers from the
-     case-study listing, so the three Resources cards take three of them. Were the case covers
-     missing, the case set would take all four and the Resources set would render as text cards
-     (standIns.ts, § 3.1): the pool is one photo from that edge. */
+  /* Photographs (visual-direction § 5.5 to § 5.7): a cool-family page. The B, K and aside photos are
+     § 5.6's (SERVICE_PHOTO_SLOTS in src/lib/photos.ts). The stand-in pool is in order of preference,
+     studio first, drawn from the rest of the catalogue; pickStandIn enforces that. The three case
+     cards take their real covers from the listing, so the pool is only the fallback. */
   photos: {
     family: 'cool',
     standIns: [
@@ -50,13 +71,73 @@ export const aiProductUx: ServiceStory = {
       'hands-trackpad',
     ],
   },
+  labels: {
+    caseCta: 'Read the case',
+    scope: 'Scope',
+    allCases: { label: 'All case studies', href: ROUTES.caseStudies },
+  },
   sections: [
     {
       type: 'section',
+      id: 'signals',
+      eyebrow: 'Where trust breaks',
+      heading: 'Where an AI feature loses people',
+      lead: 'The symptom shows in the interface. The cause is usually the role the model was given.',
+      blocks: [
+        {
+          kind: 'signals',
+          columns: 4,
+          items: [
+            {
+              icon: 'eye',
+              title: 'Every answer re-checked',
+              body: 'People cannot see the sources behind an output, or what is missing from them.',
+            },
+            {
+              icon: 'undo-left',
+              title: 'Edits undone by hand',
+              body: 'The model changes what a person owns without showing the difference or keeping the original.',
+            },
+            {
+              icon: 'question-circle',
+              title: 'A confident guess',
+              body: 'Uncertainty is hidden where it should be stated, with a way to dispute it.',
+            },
+            {
+              icon: 'cpu',
+              title: 'An agent nobody stops',
+              body: 'A run of steps has no visible state, no preview and no way to halt it.',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'clients',
+      eyebrow: 'Clients',
+      heading: 'Teams we have shipped with',
+      blocks: [
+        {
+          kind: 'logos',
+          marks: [
+            CLIENT_MARKS.omny,
+            CLIENT_MARKS.latitudepay,
+            CLIENT_MARKS.quoter,
+            CLIENT_MARKS.knovos,
+            CLIENT_MARKS.doodle,
+            CLIENT_MARKS.pledge,
+          ],
+          rating: CLUTCH_RATING,
+        },
+      ],
+    },
+    {
+      type: 'section',
       id: 'model-roles',
-      eyebrow: 'Before chat, copilot or agent',
+      eyebrow: 'Before chat or agent',
       heading: 'Define the role the model plays',
-      lead: 'The work combines product strategy, UX, interaction, evaluation and implementation: how people understand, direct, control and recover from model behaviour. It starts with what the model may do.',
+      lead: 'Each role brings something a person must be able to inspect, direct or undo.',
       blocks: [
         {
           kind: 'spectrum',
@@ -85,16 +166,6 @@ export const aiProductUx: ServiceStory = {
               settles: 'The basis, and the alternatives.',
             },
             {
-              name: 'Predicts or detects',
-              when: 'Confidence that can be wrong in both directions.',
-              settles: 'Uncertainty stated, and a way to dispute it.',
-            },
-            {
-              name: 'Orchestrates steps',
-              when: 'A sequence nobody watched step by step.',
-              settles: 'State per step, and a way to stop.',
-            },
-            {
               name: 'Acts with delegated authority',
               when: 'Consequence in the product, on someone’s behalf.',
               settles: 'Permission, preview, state, stopping and recovery.',
@@ -102,13 +173,17 @@ export const aiProductUx: ServiceStory = {
           ],
         },
       ],
+      more: {
+        label: 'Copilots and agents, in depth',
+        href: servicePath('ai-product-ux/ai-copilots-agents'),
+      },
     },
     {
       type: 'section',
       id: 'authority',
-      eyebrow: 'Authority changes with consequence',
+      eyebrow: 'Authority by consequence',
       heading: 'Inform, suggest, prepare, execute',
-      lead: 'Four different product roles. For each: the consequence, whether it can be reversed, the evidence a person can inspect, the human gate and the recovery path — decided per action, not as one label for the whole feature.',
+      lead: 'Decided per action, never once per feature: the consequence, whether it reverses, the evidence and the way back.',
       blocks: [
         {
           kind: 'steps',
@@ -134,10 +209,18 @@ export const aiProductUx: ServiceStory = {
       ],
     },
     {
+      type: 'statement',
+      id: 'earned-certainty',
+      eyebrow: 'What we hold to',
+      text: 'An interface should never sound more certain than the system has earned.',
+      action: { label: 'See how we work', href: ROUTES.howWeWork },
+    },
+    {
       type: 'section',
       id: 'responsibility-record',
-      heading: 'The AI product responsibility record',
-      lead: 'It follows the product into design and engineering, and stops an interface label carrying more certainty than the system has earned.',
+      eyebrow: 'Written down once',
+      heading: 'Eight questions per scenario',
+      lead: 'The responsibility record follows the product into design and engineering.',
       blocks: [
         {
           kind: 'record',
@@ -175,6 +258,11 @@ export const aiProductUx: ServiceStory = {
               question: 'What counts as useful and safe performance here?',
             },
             {
+              icon: 'flag',
+              field: 'Accountability',
+              question: 'Who answers for the result when it is wrong?',
+            },
+            {
               icon: 'undo-left',
               field: 'Recovery',
               question: 'How can a person correct or reverse the result?',
@@ -184,75 +272,35 @@ export const aiProductUx: ServiceStory = {
       ],
     },
     {
-      type: 'section',
-      id: 'evaluation',
-      eyebrow: 'Evaluation before release',
-      heading: 'Evaluate against real decisions, not model accuracy alone',
-      lead: 'The acceptance set starts from representative user decisions and failure conditions.',
-      blocks: [
-        {
-          kind: 'ledger',
-          columns: 2,
-          marker: 'icon',
-          items: [
-            { icon: 'check-circle', title: 'Source coverage', body: '' },
-            { icon: 'check-circle', title: 'Useful output', body: '' },
-            { icon: 'check-circle', title: 'Missing evidence', body: '' },
-            { icon: 'check-circle', title: 'Appropriate human review', body: '' },
-            { icon: 'check-circle', title: 'Action scope', body: '' },
-            { icon: 'check-circle', title: 'Correction and recovery', body: '' },
-          ],
-        },
-        {
-          kind: 'note',
-          label: 'Who approves',
-          html: '<p>Technical and operational checks follow the agreed delivery scope. Tcules makes the evidence reviewable; client owners keep approval of domain, policy and residual risk.</p>',
-        },
+      type: 'offer',
+      id: 'readiness',
+      eyebrow: 'Scope still unclear?',
+      heading: 'Not sure what the model should do yet?',
+      body: 'The readiness assessment creates the first evidence, so the route is chosen from the work rather than the technology.',
+      points: [
+        { label: 'The user work worth assisting' },
+        { label: 'The product state the model touches' },
+        { label: 'The authority it should receive' },
       ],
-    },
-    {
-      type: 'section',
-      id: 'product-responsibility',
-      heading: 'How product responsibility combines',
-      blocks: [
-        {
-          kind: 'stat',
-          value: '12',
-          label: 'AI products',
-          body: 'Tcules has worked on twelve AI products — copilots, AI-native tools, AI-powered products and integrations. These are the responsibilities those engagements combined.',
-          items: [
-            { title: 'Opportunity framing', body: 'The product boundary, before the model.' },
-            { title: 'Research', body: 'With target users and domain experts.' },
-            { title: 'AI interaction and workflow', body: 'Where the model sits in the work.' },
-            {
-              title: 'Source, confidence, explanation',
-              body: 'Patterns a person can inspect.',
-            },
-            { title: 'Human review and control', body: 'The gates, and the recovery path.' },
-            { title: 'Evaluation and acceptance', body: 'Scenarios that decide release.' },
-            {
-              title: 'Coded prototypes and engineering',
-              body: 'Latency, streaming and state, made real.',
-            },
-            { title: 'Integration', body: 'Into existing roles, state and design systems.' },
-          ],
-        },
+      actions: [
+        { label: 'Request the readiness assessment', href: auditPath('ai-product-ux-readiness') },
       ],
     },
     {
       type: 'section',
       id: 'evidence',
       eyebrow: 'Different AI conditions',
-      heading: 'Evidence across different AI products',
+      heading: 'Evidence across AI products',
+      lead: 'Three of the twelve AI products we have worked on, each under a different condition.',
       blocks: [
         {
           kind: 'cases',
           items: [
             {
               slug: 'ai-native-building-energy-product-connectx',
-              client: 'ConnectX · AI-native energy product',
+              client: 'ConnectX · AI-native energy',
               title: 'An intent-led workspace, bounded by eight scenarios',
-              body: 'Demonstrated in code: conversational intent connected to data, dashboard modules and a digital-twin state.',
+              body: 'Intent connected to data, dashboards and a digital-twin state, shown in code.',
             },
             {
               slug: 'ai-quality-control-expert-review-buildtwin',
@@ -261,120 +309,112 @@ export const aiProductUx: ServiceStory = {
               body: 'For an engineer reviewing AI quality-control results.',
             },
             {
-              slug: 'unifying-workflow-creation-through-intelligent-search',
-              client: 'Eden AI · Developer platform',
-              title: 'Workflow creation through search',
-              body: 'For a developer-facing AI platform.',
-            },
-            {
-              slug: 'saas-ux-ui-case-study-ai-for-market-research-automation',
-              client: 'Novus Insights · Research automation',
-              title: 'A survey builder that drafts, so researchers refine',
-              body: 'Public responsibility is bounded by the available source.',
+              slug: 'designing-trust-how-tcules-helped-omnyai-reframe-their-ai-human-relationship',
+              client: 'OmnyAI · Decision support',
+              title: 'Decision control, returned to people',
+              body: 'The AI–human relationship reframed around the people the AI was meant to help.',
             },
           ],
-          note: 'Tcules also uses AI in its own research synthesis, exploration, prototyping, coding and QA. That is a separate claim: generated work is reviewed against the product model, source evidence, implementation constraints and client requirements, and client AI restrictions override delivery defaults.',
+        },
+      ],
+    },
+    {
+      type: 'section',
+      id: 'questions',
+      eyebrow: 'Questions',
+      heading: 'Before the first scenario',
+      blocks: [
+        {
+          kind: 'faq',
+          items: [
+            {
+              question: 'How is an AI feature evaluated before release?',
+              answerHtml:
+                '<p>Against real decisions, not model accuracy alone. The acceptance set starts from representative user decisions and failure conditions, and checks source coverage, useful output, missing evidence, appropriate human review, action scope, and correction and recovery.</p>',
+            },
+            {
+              question: 'Who approves the residual risk?',
+              answerHtml:
+                '<p>Technical and operational checks follow the agreed delivery scope. Tcules makes the evidence reviewable; client owners keep approval of domain, policy and residual risk.</p>',
+            },
+            {
+              question: 'What has the work combined across twelve AI products?',
+              answerHtml:
+                '<p>Across copilots, AI-native tools, AI-powered products and integrations: opportunity framing, research with target users and domain experts, AI interaction and workflow, source, confidence and explanation patterns, human review and control, evaluation and acceptance, coded prototypes and engineering, and integration into existing roles, state and design systems.</p>',
+            },
+            {
+              question: 'Does Tcules use AI in its own work?',
+              answerHtml:
+                '<p>Yes, in research synthesis, exploration, prototyping, coding and QA. That is a separate claim from the client work: generated work is reviewed against the product model, source evidence, implementation constraints and client requirements, and client AI restrictions override delivery defaults.</p>',
+            },
+            {
+              question: 'Where should a team read first?',
+              answerHtml: `<p>Take the free <a href="${toolPath('ai-product-ux-readiness-check')}">AI Product UX Readiness Check</a>, compare the common model roles in <a href="${articlePath('generative-ai-product-patterns-for-saas')}">Generative AI patterns for SaaS</a>, or read the <a href="${glossaryPath('ai-product-ux')}">definition of AI Product UX</a>.</p>`,
+            },
+          ],
         },
       ],
     },
     {
       type: 'section',
       id: 'first-decision',
-      eyebrow: 'Define the first AI decision',
-      heading: 'Choose the route from what the product is delegating',
-      lead: 'Useful inputs are the user work, the current product state, and the authority you expect AI to receive.',
+      eyebrow: 'Go narrower',
+      heading: 'Choose by what is delegated',
+      lead: 'Useful inputs: the user work, the current product state, and the authority you expect AI to receive.',
       blocks: [
         {
           kind: 'router',
           items: [
             {
-              when: 'The product is delegating a bounded task.',
+              icon: 'cpu',
+              when: 'When the product is delegating a bounded task to a model.',
               route: {
                 label: 'AI Copilots and Agents',
                 href: servicePath('ai-product-ux/ai-copilots-agents'),
               },
             },
             {
-              when: 'Review, escalation and correction are central to the work.',
+              icon: 'users-group-rounded',
+              when: 'When review, escalation and correction are central to the work.',
               route: {
                 label: 'Human-in-the-Loop Workflows',
                 href: servicePath('ai-product-ux/human-in-the-loop-workflows'),
               },
             },
             {
-              when: 'Failure is consequential and oversight is the question.',
+              icon: 'shield-check',
+              when: 'When failure is consequential and oversight is the open question.',
               route: {
                 label: 'Trust, Control and Recovery',
                 href: servicePath('ai-product-ux/trust-control-recovery'),
               },
             },
             {
-              when: 'Retrieval and ranking decide what a person sees, and why.',
+              icon: 'graph-up',
+              when: 'When retrieval and ranking decide what a person sees, and why.',
               route: {
                 label: 'AI Search and Recommendation',
                 href: servicePath('ai-product-ux/ai-search-recommendation'),
               },
             },
           ],
-          also: {
-            when: 'The scope is still uncertain, and the first evidence has to be created before the route can be chosen.',
-            link: {
-              label: 'AI Product UX Readiness assessment',
-              href: auditPath('ai-product-ux-readiness'),
-            },
-          },
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'go-deeper',
-      eyebrow: 'Go deeper',
-      heading: 'Before the first scenario',
-      blocks: [
-        {
-          kind: 'resources',
-          items: [
-            {
-              type: 'Self-assessment',
-              title: 'AI Product UX Readiness Check',
-              body: 'A free check of how ready the product is to give AI a role, before anyone is briefed.',
-              href: toolPath('ai-product-ux-readiness-check'),
-              cta: 'Take the check',
-            },
-            {
-              type: 'Article',
-              title: 'Generative AI patterns for SaaS',
-              body: 'The common product roles a model plays, compared before a team settles the interaction.',
-              href: articlePath('generative-ai-product-patterns-for-saas'),
-              cta: 'Read the article',
-            },
-            {
-              type: 'Definition',
-              title: 'AI Product UX',
-              body: 'The relationship between people, models and product state, defined.',
-              href: glossaryPath('ai-product-ux'),
-              cta: 'Read the definition',
-            },
-          ],
         },
       ],
     },
   ],
-  labels: {
-    caseCta: 'Read the case',
-    scope: 'Scope',
-    allCases: { label: 'All case studies', href: ROUTES.caseStudies },
-  },
   close: {
+    eyebrow: 'Start a project',
     heading: 'Share the AI interaction that needs clearer rules',
-    body: 'The interaction, the evidence behind it and the decision rule that needs to become explicit. A rough brief is enough.',
+    body: 'The interaction, the evidence behind it and the decision rule that needs to become explicit.',
     points: [
       {
-        label: 'Send one consequential scenario',
-        detail: 'What the model does, and what it may affect.',
+        label: 'Send one scenario',
+        detail: 'What the model does, and what it may affect. A rough brief is enough.',
       },
-      { label: 'A reply within one business day', detail: 'With what the record needs next.' },
+      {
+        label: 'A reply within a day',
+        detail: 'One business day, with what the record needs next.',
+      },
     ],
     note: 'Do not include credentials, regulated records or confidential source material.',
   },
