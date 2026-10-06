@@ -159,7 +159,8 @@ export type HeroArrangement = 'stacked' | 'beside' | 'centred';
 /**
  * One line above the hero, for a launch or an opening (showcase pages only, visual-direction § 2.5).
  * A mark, a sentence and one link — never a second ask: the link is link-style, the band's one solid
- * stays the hero's. It costs one 32 row and a 48 seam, so a photograph hero with a strip ends at 803 at most (§ 2.5 budgets 797).
+ * stays the hero's. It costs one 32 row and a 48 seam: a photograph hero with a strip measures
+ * 795 with the nav, against § 2.5's 797.
  */
 export type HeroAnnouncement = { label: string; text: string; action: HeroAction };
 
