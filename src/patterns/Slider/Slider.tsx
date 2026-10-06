@@ -11,7 +11,7 @@ import {
   useState,
 } from 'react';
 
-import { Cluster, Icon, Layout } from '@/components';
+import { Button, Cluster, Icon, Layout } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './Slider.module.css';
@@ -249,19 +249,20 @@ export function Slider({ label, children, perView = 3, align = 'start' }: Slider
   const control = (direction: 1 | -1) => {
     const blocked = direction === -1 ? atStart : atEnd;
     return (
-      <button
-        type="button"
-        className={styles.control}
+      <Button
+        emphasis="outline"
+        iconOnly
+        icon={<Icon name={direction === -1 ? 'arrow-left' : 'arrow-right'} />}
+        extendHitArea
         aria-label={direction === -1 ? 'Previous slide' : 'Next slide'}
         aria-controls={rowId}
         /* Native `disabled` only before hydration, when the button genuinely cannot act. After it,
-           an end is `aria-disabled`, which keeps focus where the reader left it. */
-        disabled={!ready || undefined}
+           an end is `aria-disabled`, which keeps focus where the reader left it; Button withholds
+           the click and keeps the ring. */
+        disabled={!ready}
         aria-disabled={ready && blocked ? true : undefined}
-        onClick={blocked ? undefined : () => go(direction)}
-      >
-        <Icon name={direction === -1 ? 'arrow-left' : 'arrow-right'} />
-      </button>
+        onClick={() => go(direction)}
+      />
     );
   };
 

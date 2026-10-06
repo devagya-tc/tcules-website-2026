@@ -344,7 +344,7 @@ export default function SliderSpecimen() {
 
       {/* ── 7 ──────────────────────────────────────────────────────────────────────────────── */}
       <Label title="7 · Four surfaces, identical markup">
-        The controls, the rail and the focus ring re-declare per surface (slider.css). Paper and
+        The controls, the rail and the focus ring re-declare per surface (the controls are Button `outline`, button.css; the rail and ring, slider.css). Paper and
         tint: brandeis-500 glyph on a 300 rule. Ink: the glyph lifts to 200 (blue as ink fails
         on 950). Blue: white, filling white with a blue glyph. Surface proof — on pages, tint is
         the proof band only (§ 1.7), and no band is blue (§ 4.3).

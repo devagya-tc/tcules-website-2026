@@ -5,10 +5,11 @@
    from another component.
 
    Naming: --btn-{emphasis}-{colour}-{part}-{state}
-           emphasis  solid | ghost | link
-           colour    primary (Brandeis) | neutral (ink)
+           emphasis  solid | ghost | link | outline
+           colour    primary (Brandeis) | neutral (ink) — outline is primary only
            part      bg | fg          — a control has a background and a foreground;
                                         a SURFACE has a ground and an ink (section.css)
+                     rule             — outline's hairline border, the one emphasis with an edge
            state     rest (no suffix) | hover | pressed | busy
    Geometry and shared parts drop the emphasis and colour: --btn-height-md,
    --btn-ring-color, --btn-disabled-bg.
@@ -33,6 +34,15 @@
    inside an ink section rendered ghost-neutral at 1.13:1, link-primary at 2.09:1 and
    a focus ring at 2.09:1 against its own gap. The blocks below are therefore
    repetitive on purpose, and the repetition is what makes nesting safe.
+
+   ── Outline (fdn-scroll, 6 Oct 2026) ────────────────────────────────────────────
+   The icon-only stepper — a slider's previous / next. Blue at rest, glyph and rule,
+   because the owner wants blue on arrows and small marks and visual-direction § 4.2
+   counts a slider's navigation Free. Hover fills with the surface's primary (rule and
+   all) and turns the glyph to its label colour; pressed deepens the fill. There is no
+   -fg-pressed: the glyph moves once, onto the fill, and pressed reads -fg-hover.
+   Unavailable, it keeps its circle in --btn-disabled-rule. Was --sld-control-* in the
+   Slider's own layer until a fix round moved it here, so the next stepper inherits it.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
@@ -66,6 +76,8 @@
   --btn-icon-size-md: var(--icon-size-16);
   --btn-icon-size-lg: var(--icon-size-18);
   --btn-radius: var(--radius-8);
+  --btn-radius-round: var(--radius-full); /* outline: the stepper is a circle (references § 10) */
+  --btn-outline-rule-width: var(--border-width-hairline);
   --btn-radius-bare: var(--radius-0); /* link has no box, so it has no corner */
   --btn-radius-bare-focus: var(
     --radius-4
@@ -124,6 +136,12 @@
   --btn-link-neutral-fg-pressed: var(--color-brandeis-600);
   --btn-link-primary-fg-busy: var(--color-brandeis-700);
   --btn-link-neutral-fg-busy: var(--color-brandeis-600);
+  --btn-outline-primary-fg: var(--color-brandeis-500); /* 6.17:1 on paper */
+  --btn-outline-primary-rule: var(--color-brandeis-300); /* decoration; the glyph names it */
+  --btn-outline-primary-bg-hover: var(--color-brandeis-500);
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-700);
+  --btn-outline-primary-fg-hover: var(--color-white); /* 6.23:1 on 500 */
+  --btn-disabled-rule: var(--color-neutral-200);
   --btn-disabled-bg: var(--color-neutral-100);
   --btn-disabled-fg: var(--color-neutral-500);
   --btn-ring-color: var(--color-brandeis-500);
@@ -166,6 +184,12 @@
   --btn-link-neutral-fg-pressed: var(--color-brandeis-600);
   --btn-link-primary-fg-busy: var(--color-brandeis-700);
   --btn-link-neutral-fg-busy: var(--color-brandeis-600);
+  --btn-outline-primary-fg: var(--color-brandeis-500); /* 5.51:1 on paper-deep */
+  --btn-outline-primary-rule: var(--color-brandeis-300);
+  --btn-outline-primary-bg-hover: var(--color-brandeis-500);
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-700);
+  --btn-outline-primary-fg-hover: var(--color-white);
+  --btn-disabled-rule: var(--color-neutral-300); /* 200 vanishes on the deeper ground */
   --btn-disabled-bg: var(--color-neutral-200);
   --btn-disabled-fg: var(--color-neutral-500);
   --btn-ring-color: var(--color-brandeis-500);
@@ -214,6 +238,12 @@
   --btn-link-neutral-fg-pressed: var(--color-brandeis-200);
   --btn-link-primary-fg-busy: var(--color-brandeis-100);
   --btn-link-neutral-fg-busy: var(--color-brandeis-200);
+  --btn-outline-primary-fg: var(--color-brandeis-200); /* 10.48:1; blue as ink fails here */
+  --btn-outline-primary-rule: var(--color-brandeis-400);
+  --btn-outline-primary-bg-hover: var(--color-brandeis-500);
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-600);
+  --btn-outline-primary-fg-hover: var(--color-white);
+  --btn-disabled-rule: var(--color-neutral-800);
   --btn-disabled-bg: var(--color-neutral-800);
   --btn-disabled-fg: var(--color-neutral-600);
   --btn-ring-color: var(--color-brandeis-300);
@@ -261,6 +291,12 @@
   --btn-link-neutral-fg-pressed: var(--color-brandeis-100);
   --btn-link-primary-fg-busy: var(--color-brandeis-100);
   --btn-link-neutral-fg-busy: var(--color-brandeis-100);
+  --btn-outline-primary-fg: var(--color-white); /* 6.23:1 */
+  --btn-outline-primary-rule: var(--color-brandeis-200);
+  --btn-outline-primary-bg-hover: var(--color-paper); /* fills white, the inverted primary */
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-100);
+  --btn-outline-primary-fg-hover: var(--color-brandeis-500); /* 6.17:1 on paper */
+  --btn-disabled-rule: var(--color-brandeis-400);
   --btn-disabled-bg: var(--color-brandeis-600);
   --btn-disabled-fg: var(--color-brandeis-300);
   --btn-ring-color: var(--color-white);

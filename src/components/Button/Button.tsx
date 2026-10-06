@@ -9,11 +9,19 @@ import styles from './Button.module.css';
  *
  *   solid  the one action a view is asking for
  *   ghost  the default secondary — no outline, the fill is the whole affordance
- *   link   reading rather than doing; no box at all, so it can sit in a paragraph
+ *   link     reading rather than doing; no box at all, so it can sit in a paragraph
+ *   outline  a round, hairline-ruled ICON control that steps through something — a slider's
+ *            previous / next (fdn-scroll, 6 Oct 2026). Icon-only and primary-only, by type.
  *
- * None of the three carries an outline. Separation comes from fill and from the space around it.
+ * None of the three LABELLED emphases carries an outline. Separation comes from fill and from the
+ * space around it, and a labelled outline beside a solid would read as a second action of the same
+ * rank. `outline` is not that: it never carries a label, so it never competes with a solid for the
+ * view's one ask, and it exists because a bare ghost glyph at rest is indistinguishable from the
+ * decorative icons in a card (visual-direction § 3.1 lets a slider control keep its box). It is a
+ * Button variant rather than a pattern's own control so the next stepper — a gallery, a pager —
+ * takes the same states, ring, hit area and per-surface colour instead of copying them.
  */
-export type ButtonEmphasis = 'solid' | 'ghost' | 'link';
+export type ButtonEmphasis = 'solid' | 'ghost' | 'link' | 'outline';
 
 /**
  * What the button claims. This is the token layer's colour axis — `primary` and `neutral` select
@@ -61,6 +69,11 @@ type ButtonBase = Omit<
    *
    * `type` and `disabled` are only emitted for a real `button`; an anchor gets `aria-disabled`
    * and leaves the tab order instead, because neither attribute means anything on an `<a>`.
+   *
+   * A caller-held `aria-disabled` is honoured too: the control renders unavailable (no `.live`,
+   * the disabled colours) and its `onClick` is withheld, but it KEEPS focus and its ring. That is
+   * the end-of-row state of a stepper — a Slider's Next at the last slide — where a native
+   * `disabled` would throw a keyboard user who pressed to the end out to the body.
    */
   as?: ElementType;
   /** Destination, when rendering as an anchor. Ignored by a native button. */
@@ -116,6 +129,7 @@ type ButtonAvailability =
    and literal, uppercased by the stylesheet rather than by the copy. */
 type WithLabel = {
   iconOnly?: false;
+  emphasis?: Exclude<ButtonEmphasis, 'outline'>;
   children: ReactNode;
 };
 
@@ -136,7 +150,23 @@ type LeadingIcon = { iconLeft?: ReactNode; icon?: never };
 type IconAlone = {
   iconOnly: true;
   icon: ReactNode;
-  emphasis?: Exclude<ButtonEmphasis, 'link'>;
+  emphasis?: Exclude<ButtonEmphasis, 'link' | 'outline'>;
+  'aria-label': string;
+  children?: never;
+  iconLeft?: never;
+};
+
+/* The outlined stepper. Icon alone by construction — a labelled outline is the "two buttons of the
+   same rank" the three labelled emphases avoid — and primary only: it is navigation through a set,
+   which the owner's 6 Oct ruling puts in blue (arrows, small marks), so a neutral axis would be
+   tokens nobody reads. Never busy: stepping is instant, so there is no request to wait on and no
+   post-activation value to show. */
+type OutlineAlone = {
+  iconOnly: true;
+  icon: ReactNode;
+  emphasis: 'outline';
+  tone?: 'primary';
+  busy?: never;
   'aria-label': string;
   children?: never;
   iconLeft?: never;
@@ -144,7 +174,7 @@ type IconAlone = {
 
 export type ButtonProps = ButtonBase &
   ButtonAvailability &
-  ((WithLabel & (TrailingIcon | LeadingIcon)) | IconAlone);
+  ((WithLabel & (TrailingIcon | LeadingIcon)) | IconAlone | OutlineAlone);
 
 /**
  * Button — the control, built to the Button Spec Sheet.
@@ -174,6 +204,7 @@ export function Button({
   type,
   className,
   children,
+  onClick,
   ...rest
 }: ButtonProps) {
   /* A real <button> takes the attributes; anything else takes the ARIA equivalent, because
@@ -184,11 +215,16 @@ export function Button({
   const nativeState = isNativeButton
     ? { type: type ?? 'button', disabled: disabled || undefined }
     : { 'aria-disabled': disabled || undefined, tabIndex: disabled ? -1 : undefined };
+  /* Unavailable but focused: the caller states `aria-disabled` and keeps the control in the tab
+     order (see `as`). It takes the disabled look and loses its click, and nothing else changes. */
+  const held = rest['aria-disabled'] === true || rest['aria-disabled'] === 'true';
+  const off = disabled || held;
 
   return (
     <Tag
       {...rest}
       {...nativeState}
+      onClick={held ? undefined : onClick}
       aria-busy={busy || undefined}
       className={cx(
         styles.button,
@@ -203,7 +239,8 @@ export function Button({
            here rather than passed: a caller cannot make a disabled button interactive by
            forgetting a prop. It exists as a class rather than a `:not(:disabled)` selector
            because an anchor has no `:disabled` to negate. */
-        disabled ? styles.disabled : busy ? styles.busy : styles.live,
+        off ? styles.disabled : busy ? styles.busy : styles.live,
+        held && styles.held,
         extendHitArea && styles.hit,
         className,
       )}

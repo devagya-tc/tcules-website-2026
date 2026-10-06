@@ -49,7 +49,7 @@ from 768 up. It needs no Slider: below 768 the peek and Tab are the affordances.
 | `row` | `ul` (a `Layout scroll="always"`, `colGap="gutter"`) | yes | `id` = the controls' `aria-controls`. `tabIndex=0` after hydration only when no slide holds a focusable element. |
 | `slide` | the caller's `li` | yes, ≥ 1 | A `BlockCard` is one; anything else is wrapped in an `li` at the call site. Dev warning otherwise. |
 | `controls` | `div` (a `Cluster`, `nowrap`) | yes | `start`: rail ⟷ the two controls (`justify="between"`). `center`: previous · rail · next. |
-| `control` | `button type="button"` × 2 | yes | `.control`; `arrow-left` / `arrow-right` (`Icon`). |
+| `control` | `Button emphasis="outline" iconOnly extendHitArea` × 2 | yes | `arrow-left` / `arrow-right` (`Icon`). Native `disabled` before hydration; `aria-disabled` at an end. |
 | `rail` | `span aria-hidden` › `span.thumb` | yes | Decoration; the thumb is the current marker. |
 | `status` | `p aria-live="polite" aria-atomic="true"` | yes | Visually hidden; written only after a control press. |
 
@@ -100,19 +100,12 @@ Deliberately not props: autoplay, loop, a per-slide picker, a step size (always 
 | nothing to scroll | both controls at an end | thumb fills the rail |
 | row focused (no focusable slides) | — | the row draws the ring round itself |
 
-Hover ≠ pressed on every surface (`--sld-control-bg-hover` ≠ `-pressed`).
+Hover ≠ pressed on every surface (`--btn-outline-primary-bg-hover` ≠ `-pressed`). The controls are Button's `outline` emphasis; their colour tokens live in `button.css`.
 
 ## 6 · Per-surface colour
 
 | Token | paper | tint | ink | blue |
 |---|---|---|---|---|
-| `--sld-control-fg` | `brandeis-500` · 6.17:1 | `brandeis-500` · 5.51:1 | `brandeis-200` · 10.48:1 | `white` · 6.23:1 |
-| `--sld-control-rule` | `brandeis-300` · decoration | `brandeis-300` | `brandeis-400` | `brandeis-200` |
-| `--sld-control-bg-hover` | `brandeis-500` | `brandeis-500` | `brandeis-500` | `paper` |
-| `--sld-control-bg-pressed` | `brandeis-700` | `brandeis-700` | `brandeis-600` | `brandeis-100` |
-| `--sld-control-fg-hover` | `white` · 6.23:1 | `white` | `white` | `brandeis-500` · 6.17:1 |
-| `--sld-control-fg-disabled` | `neutral-400` | `neutral-500` | `neutral-600` | `brandeis-300` |
-| `--sld-control-rule-disabled` | `neutral-200` | `neutral-300` | `neutral-800` | `brandeis-400` |
 | `--sld-progress-rail` | `neutral-200` | `neutral-300` | `neutral-800` | `brandeis-400` |
 | `--sld-progress-thumb` | `brandeis-500` | `brandeis-500` | `brandeis-300` | `white` |
 | `--sld-ring-color` | `brandeis-500` | `brandeis-500` | `brandeis-300` | `white` |
@@ -133,8 +126,7 @@ contrast (WCAG 1.4.3); the rail is decoration.
 | row → controls | `--gap-block` (24) | § 1.4: controls 24 + 40 |
 | rail ↔ controls, control ↔ rail (center) | `--gap-block` (24) | the rail and a control are two objects |
 | control ↔ control (start) | `--gap-text` (16) | one pair, read as one group, never cramped |
-| control | `--sld-control-size` 40, `--radius-full`, hairline rule | the md control height; a circle, the RatingBadge's outline family |
-| hit area | `--sld-hit-min` 44 | extended past the box, never by resizing it |
+| control | hit area | `--sld-hit-min` 44 | extended past the box, never by resizing it |
 | glyph | `--icon-size-18` | |
 | rail | `--sld-progress-length` 240 × `--border-width-2` | shrinks to fit a narrower row (`min()`, flex shrink) |
 | peek (base) | `--lay-scroll-peek` 24 | a sliver of the next slide; a slice of an object, not air |
@@ -249,11 +241,13 @@ head, the default; (3) the G slider on tint, `perView={1}`, portraits; (4) the l
 
 ## 16 · New token requests
 
-`slider.css` (new layer, registered in `tokens/index.css` after `cta-row.css`): `--sld-control-size`,
-`--sld-control-radius`, `--sld-control-rule-width`, `--sld-control-icon-size`, `--sld-hit-min`,
-`--sld-progress-length`, `--sld-progress-thickness`, `--sld-progress-radius`,
-`--sld-transition-duration`, `--sld-transition-easing`, `--sld-ring-width`, `--sld-ring-offset`,
-`--sld-hidden-size` in `:root`; eleven colour tokens on all four surfaces (§ 6).
+`slider.css` (new layer, registered in `tokens/index.css` after `cta-row.css`): `--sld-progress-length`,
+`--sld-progress-thickness`, `--sld-progress-radius`, `--sld-ring-width`, `--sld-ring-offset`,
+`--sld-hidden-size` in `:root`; four colour tokens on all four surfaces (§ 6).
+
+`button.css`: the `outline` emphasis the controls render as — `--btn-radius-round`,
+`--btn-outline-rule-width`, `--btn-outline-primary-{fg,rule,bg-hover,bg-pressed,fg-hover}` and
+`--btn-disabled-rule` on all four surfaces (moved from `--sld-control-*` in a fix round).
 
 `layout.css`: `--lay-scroll-peek`, `--lay-scroll-ring-room`.
 
