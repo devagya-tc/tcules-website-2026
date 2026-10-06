@@ -9,9 +9,9 @@
 | **Status** | approved — the `beside` arrangement implements ruling **O2** (`docs/phase-2-decisions.md`: head beside body is *static, not sticky, head 1 : body 2, from 1024 up*). No BLOCKING question is open (§17). |
 | **Token prefix** | `--csec-*` |
 | **File** | `tokens/components/content-section.css` |
-| **Designer / date** | Claude Code · 28 Sep 2026 (Phase 2 task 2.13) · **amended 29 Sep 2026 (tracker 2.17): the body measure** · **1 Oct 2026: the split seam (96), and `beside` reads down** · **5 Oct 2026 (`fdn-spacing`, S1): one head rhythm at 24** |
+| **Designer / date** | Claude Code · 28 Sep 2026 (Phase 2 task 2.13) · **amended 29 Sep 2026 (tracker 2.17): the body measure** · **1 Oct 2026: the split seam (96), and `beside` reads down** · **5 Oct 2026 (`fdn-spacing`, S1): one head rhythm at 24** · **6 Oct 2026 (`fdn-section-head`): `align`, `aside`, `actions`, `footer`, `split-head`, `media`** |
 | **Implements** | `docs/briefs/07-content-section.md` (the band every long page is made of) · `docs/component-audit.md` §3 ContentSection: *"Extend. Add a head arrangement: head beside body ([1,2] from lg), as well as head above."* · ruling O2 |
-| **Implemented at** | `src/patterns/ContentSection/` · `src/styles/tokens/components/content-section.css` · specimen `src/app/design/content-section/page.tsx` |
+| **Implemented at** | `src/patterns/ContentSection/` · `src/styles/tokens/components/content-section.css` · specimen `src/app/design/content-section/page.tsx` · the foot it is usually handed: `src/patterns/CtaRow/` (`docs/specs/CtaRow.md`) |
 
 This spec is written **after** the component, not before it. `ContentSection` shipped without one
 (brief 07 was never pasted into Claude Design; the component was built directly to fix the flat
@@ -59,6 +59,61 @@ thing that stops those five reading as one repeated shape is an arrangement, not
 > between the eyebrow and the lead comes from scale — a 12px mono label against a 20px lead — not
 > from a second gap. § 1, § 7, § 10, § 12 and the appendix below are amended in place.
 > visual-direction.md wins over this spec where they still differ.
+
+> **Amendment · 6 Oct 2026 · `fdn-section-head` (visual-direction § 1.4, § 3.2, § 3.4, § 3.5, § 3.7,
+> § 7.1, § 11 item 5) — the head axes and two arrangements.** visual-direction.md is the decided
+> direction and wins over this spec; there was no owner step. What was added:
+>
+> - **`align: 'start' | 'center'`** (§ 3.5). Centred: eyebrow, heading and lead centred (each on its
+>   own measure, `text-align: center` inside it, the parts centred by the head Layout's
+>   `justifyItems`); the body centred AS A BLOCK — the body Layout centres each row and `.bodyCentred`
+>   gives every row the column as its width, so a card set still spans 1240 while a capped row
+>   (ContentSectionText around an Accordion, a centred CtaRow) sits in the middle at its cap. Text
+>   inside the blocks stays start-aligned. A centred head is always stacked and never takes `actions`
+>   or `aside` — the union makes each a type error.
+> - **`actions: ReactNode`** — the head's own action row, a `stack` (48) under the lead, in practice a
+>   `CtaRow rule={false}`. Stacked: under the lead. `beside`: in the head track (H-beside-actions).
+>   `split-head`: under the lead in the trailing track (H-row). `media`: under the lead in the copy
+>   column.
+> - **`aside: ReactNode`** — `beside` only: the head track's one large object, a `stack` under the head
+>   text — a 3:2 photograph (`<Media ratio="3/2" sizes={HEAD_TRACK} />`) or one stat figure. **An
+>   aside or actions, never both** (§ 1.4 rule 6): the union pins the other to `never`. Below 1024 the
+>   aside sits between the head and the body (§ 3.7 item 4), which DOM order gives for free.
+> - **`footer: ReactNode`** — the band's foot, in practice one `CtaRow`: the body's last row, a
+>   `stack` under the blocks, in every arrangement (pinned to the photo's bottom edge in `media`). A
+>   footer with no blocks still counts as a body, so `beside` still splits.
+> - **`arrangement="split-head"`** (the H-row, § 1.4). The eyebrow keeps its own row; under it the
+>   heading sits in the leading third and the lead (and actions) in the trailing two-thirds, [1, 2]
+>   from 1024 at `section` (96), **top-aligned**; the body runs the full column beneath at `stack`.
+>   Below 1024 every seam is the stacked head's. With no heading, or with neither lead nor actions, it
+>   degrades to stacked. *Built differently from § 1.4's "eyebrow + h2 in 381":* with the eyebrow
+>   inside the leading track, top alignment floats the 20px lead beside the 12px eyebrow and bottom
+>   alignment drops the heading below the lead's first line (the trailing track, lead + 48 + action,
+>   is the taller one). Measured at 1440; the H-row head is 14 + 24 + max(94, 128) = **166** (was
+>   156), and C-image-3 with an H-row is 595, under the 598 target. Recorded in visual-direction § 1.4.
+> - **`arrangement="media"` + `media: { image, side? }`** (the B split, § 3.2, § 3.4). A photograph in
+>   5 of [5, 7] beside a FLAT copy column (head text, actions, blocks, footer), 96 apart. The crop is
+>   the arrangement's: **4:5 from 1024 and 4:3 below it** (§ 3.7 item 4), through Media's new
+>   `{ base, lg }` ratio, at `MEDIA_SPLIT` (`src/lib/image-sizes.ts`). `side: 'end'` is Layout
+>   `reverse={{ lg: true }}` — the photo stays first in the DOM (above the copy on a phone). **When
+>   the copy ends in an action** (a footer, or head actions with no blocks after them) the row
+>   stretches and `pinLast` pins that action to the photo's bottom edge, so copy and photo share a top
+>   and a bottom edge (§ 3.2 rule 1); otherwise the copy is centred on the photo (rule 2). The photo
+>   sits in a plain `div` so a stretched row never stretches the `<img>` out of its ratio.
+> - **The lead under a split `beside` steps to `--text-body-lg`** from 1024 (§ 7.1), via
+>   `--csec-lead-text-beside` and `.leadBeside` — the module's one `@media`, which swaps a role, never
+>   a distance. A degraded beside band never takes it.
+> - **`data-arrangement`** is emitted on the Section (the requested arrangement), for the gates.
+> - **What goes in a `beside` body** is restated from § 1.4 rule 5: rows, an accordion, a record, two
+>   pair cards, or icon cards — never a 3-up card set or a 2 × 2 image grid. The specimen no longer puts
+>   a card set in any beside body.
+> - **Stale measures corrected:** `--measure-title` is 32ch, `--measure-lead` 56ch and
+>   `--measure-body` 75ch (they read 22 / 40 / 68 below; the primitives moved and this spec did not).
+>
+> The props are now a five-member union discriminated on WHICH SLOTS are filled (plain, centred,
+> withActions, withAside, media), so a template passing a union-typed `'stacked' | 'beside'` with no
+> head slots matches one member outright. § 3, § 4, § 14 and § 15 below are amended in place; where the
+> older prose still says "two arrangements", this amendment wins.
 
 > **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
 
@@ -116,7 +171,12 @@ are arrangement, and arrangement is `Layout`'s.
 | `lead` | `string` | — | One sentence under the heading. |
 | `surface` | `SectionSurface` = `'paper' \| 'tint' \| 'ink' \| 'blue'` | Section's default (paper) | Passed straight to `Section`. This component paints nothing. |
 | `density` | `SectionDensity` = `'tight' \| 'open'` | Section's default | Vertical air, passed to `Section`. |
-| `arrangement` | `ContentSectionArrangement` = `'stacked' \| 'beside'` | `'stacked'` | Where the head sits against the body. **New in 2.13.** |
+| `arrangement` | `ContentSectionArrangement` = `'stacked' \| 'beside' \| 'split-head' \| 'media'` | `'stacked'` | Where the head sits against the body. `beside` new in 2.13; `split-head` and `media` new 6 Oct 2026. |
+| `align` | `ContentSectionAlign` = `'start' \| 'center'` | `'start'` | **6 Oct.** Centred head and centred-as-a-block body (§ 3.5). Stacked only. |
+| `actions` | `ReactNode` | — | **6 Oct.** The head's action row (a `CtaRow rule={false}`), a stack under the lead. Not with `align="center"`, not with `aside`. |
+| `aside` | `ReactNode` | — | **6 Oct.** `beside` only: the head track's photo (3:2) or stat, a stack under the head text. |
+| `media` | `ContentSectionMedia` = `{ image: MediaImage; side?: 'start' \| 'end' }` | — | **6 Oct.** Required by, and only on, `arrangement="media"`. |
+| `footer` | `ReactNode` | — | **6 Oct.** The band's foot (a `CtaRow`), the body's last row at `stack`. |
 | `children` | `ReactNode` | — | The blocks. Rich text goes in wrapped in `ContentSectionText` (below). |
 
 **`ContentSectionText`** (second export, **added 2.17**) — `{ children: ReactNode }`, nothing else.
@@ -166,8 +226,10 @@ Considered and rejected:
 - **`[2, 1]` or `[1, 1]`.** O2 fixes 1 : 2. A half-and-half split makes the head read as a peer of the
   body rather than its label.
 - **`beside` from 768.** At 768 the head track would be ~200px, less than two words of `--text-h2`.
-- **A third, `split`-style arrangement with media beside the copy.** That is `Figure` in the body
-  under `beside`, or a `PageHero`; not a variant of this.
+- ~~**A third, `split`-style arrangement with media beside the copy.** That is `Figure` in the body
+  under `beside`, or a `PageHero`; not a variant of this.~~ **Superseded 6 Oct 2026:** the B media
+  split is a band archetype the kit needs on every page (visual-direction § 3.4), and it is
+  `arrangement="media"` — see the amendment at the top.
 
 ## 5 · States
 
@@ -341,6 +403,14 @@ animation). Reduced motion: nothing to reduce.
 - **Do** render the same DOM order in both arrangements — the head precedes the body in the source.
 - **Don't** draw a one-third track with nothing in it: a `beside` band with no head or no body
   renders no `--tmpl-lg` template (inspect the outer Layout's inline style: `--tmpl-lg: initial`).
+- **Don't** put a card set that reads across (3-up, or a 2 × 2 image grid) in a `beside` body:
+  `/design/content-section` has none (§ 1, § 2, § 4, § 6, § 7 use rows, icon cards or pair cards).
+- **Don't** give a centred head actions, or a beside head both an aside and actions — each is a type
+  error (`tsc` fails on `<ContentSection align="center" actions={…} />`).
+- **Don't** hand a `media` band a pre-cropped `<Media>`: `media` takes the record, and the band
+  crops it 4:5 / 4:3 (`grep -n "ratio={{ base: '4/3', lg: '4/5' }}" src/patterns/ContentSection/ContentSection.tsx`).
+- **Do** pass `rule={false}` to a footer CtaRow under a ruled ladder (Accordion, ListCard rows).
+- The module's only `@media` is `.leadBeside`'s (a type role from 1024); it states no distance.
 
 ## 15 · Specimen plan
 
@@ -361,6 +431,16 @@ route. Labelling bands (tight, paper) separate the groups.
 9. Nested surfaces (tint in ink, `beside`; ink in paper, `stacked`), a `Proof` body on blue, and a
    390 viewport frame (`viewportMobile`) with the longest copy.
 10. Two adjacent paper bands, beside then stacked.
+11. **6 Oct.** `align="center"`: over a card set, over an accordion with a centred CtaRow (D-faq),
+    the longest copy, and on tint (captioned surface proof).
+12. **6 Oct.** `beside` with an aside (photo, C-icon-4 with a footer; photo, D rows), with actions
+    (C-pair), and the longest copy with an aside.
+13. **6 Oct.** `split-head`: with an action, lead only with a footer, the longest copy, and title only
+    (degrades to stacked).
+14. **6 Oct.** `media`: photo start + 4 tiles (centred), photo end + 2 tiles + CtaRow (pinned), lead
+    only + CtaRow, head actions and no blocks (pinned), the longest copy (taller than the photo).
+15. **6 Oct.** Footer under a stacked set; a footer as the whole body of a beside band.
+Section 1 now shows all four arrangements with the body each is for.
 
 No states to force. `beside` cannot be forced inside a narrow frame at a wide window (a frame
 cannot fire a media query), so the 390 capture of the whole page is the proof that `beside`

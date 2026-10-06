@@ -9,6 +9,7 @@ export type {
   MediaPanel,
   MediaProps,
   MediaRatio,
+  MediaRatioSpec,
   MediaSource,
   MediaTone,
 } from './Media';

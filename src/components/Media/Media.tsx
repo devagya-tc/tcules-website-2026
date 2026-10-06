@@ -51,6 +51,19 @@ export type MediaPanel = 'paper' | 'paper-deep' | 'ink';
 export type MediaRatio = '4/5' | '5/4' | '3/1' | '3/2' | '16/9' | '4/3' | '1/1';
 
 /**
+ * A ratio per arrangement: `base` below 1024 and `lg` from 1024 (Layout's `lg`, where every split in
+ * the kit opens). For the placements whose CROP changes with the layout rather than only its width —
+ * the media split and the offer are 4:5 beside their copy and 4:3 above or below it (visual-direction
+ * § 3.7 item 4, `fdn-section-head`, 6 Oct 2026). A 4:5 photograph at a phone's full 326 column would
+ * be 408 tall before a word of the copy; the 4:3 crop is 244.
+ *
+ * Two named breakpoints, both required, and no others: the ratio follows the ARRANGEMENT, and the
+ * arrangements in this system change at 1024 and nowhere else. A bare `MediaRatio` is the same crop
+ * at every width, as before.
+ */
+export type MediaRatioSpec = MediaRatio | { base: MediaRatio; lg: MediaRatio };
+
+/**
  * A focal point, each axis 0 to 1 from the image's top-left: where a crop is anchored. It is an
  * object-position, so the point x% across the image sits x% across the box and the focus always
  * stays inside the crop; it is not centred unless it is at 0.5. A fact about the
@@ -184,8 +197,10 @@ export type MediaProps = {
    * photograph is ever cropped this way — a capture, a cut-out and an illustration render whole
    * (ruling H3), so on any other kind it is ignored with a development warning. Ignored under
    * `fit="fill"` too, where the parent already owns the ratio.
+   *
+   * `{ base, lg }` crops one way below 1024 and another from it — see `MediaRatioSpec`.
    */
-  ratio?: MediaRatio;
+  ratio?: MediaRatioSpec;
   /** Override the record's focal point for this placement only. */
   focus?: MediaFocus;
   /**
@@ -230,6 +245,23 @@ const RATIO_CLASS: Record<MediaRatio, string | undefined> = {
   '4/3': styles.ratio4x3,
   '1/1': styles.ratio1x1,
 };
+
+/** The same ratios from 1024 up — the `lg` half of a `{ base, lg }` spec, in the module's one @media. */
+const LG_RATIO_CLASS: Record<MediaRatio, string | undefined> = {
+  '4/5': styles.lgRatio4x5,
+  '5/4': styles.lgRatio5x4,
+  '3/1': styles.lgRatio3x1,
+  '3/2': styles.lgRatio3x2,
+  '16/9': styles.lgRatio16x9,
+  '4/3': styles.lgRatio4x3,
+  '1/1': styles.lgRatio1x1,
+};
+
+/** The classes a ratio spec emits: the base crop, plus the lg crop where it differs. */
+function ratioClasses(spec: MediaRatioSpec): (string | undefined)[] {
+  if (typeof spec === 'string') return [RATIO_CLASS[spec]];
+  return [RATIO_CLASS[spec.base], spec.lg !== spec.base ? LG_RATIO_CLASS[spec.lg] : undefined];
+}
 
 /** A 0–1 axis as a percentage, clamped: a CMS value of 1.2 must not push the crop off the image. */
 const percent = (value: number) =>
@@ -325,7 +357,7 @@ export function Media({
       className={cx(
         styles.image,
         fit === 'fill' ? styles.fill : cropRatio ? styles.crop : styles.intrinsic,
-        cropRatio && RATIO_CLASS[cropRatio],
+        ...(cropRatio ? ratioClasses(cropRatio) : []),
         edge === 'kind' && kind === 'capture' && styles.capture,
         edge === 'kind' && isPhotograph && styles.photograph,
         shadow && styles.shadow,

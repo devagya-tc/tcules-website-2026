@@ -430,3 +430,25 @@ and `ratio` ignored on the capture), and the gate attributes on a stand-in.
 - **Specimen § 9** sets each label beneath its image, so a title that wraps no longer drops one image
   below its neighbours, and § 9b renders the photographs on tint, ink and blue as well as paper.
 
+
+## Amendment · 6 Oct 2026 — `fdn-section-head`: a ratio per arrangement
+
+**`ratio?: MediaRatioSpec`**, where `MediaRatioSpec = MediaRatio | { base: MediaRatio; lg: MediaRatio }`.
+A bare ratio is unchanged: one crop at every width. The object form crops `base` below 1024 and `lg`
+from 1024 — Layout's `lg`, where every split in the kit opens — for the placements whose crop follows
+the arrangement rather than only its width: the media split and the offer are 4:5 beside their copy and
+4:3 above or below it (visual-direction § 3.7 item 4). A 4:5 photograph at the 326 phone column is 408
+tall before a word of the copy; the 4:3 crop is 244.
+
+- Two named breakpoints, both required, and no others: arrangements change at 1024 and nowhere else.
+- Mechanism: the base class as before (`.ratio4x3`), plus an `lg` class (`.lgRatio4x5`) inside the
+  module's one `@media (min-width: 1024px)`, declared after the base classes at equal specificity so it
+  wins inside the query. Media emits the `lg` class only where the two halves differ. Same tokens
+  (`--media-ratio-*`); no new token.
+- This is the one change to § 3's "no `@media`" note: the crop is a layout fact once it differs by
+  arrangement, and it has nowhere else to live when the box is Media's own.
+- Still photographs only, still ignored under `fit="fill"`.
+- First consumer: ContentSection `arrangement="media"` (`ratio={{ base: '4/3', lg: '4/5' }}`, `sizes`
+  `MEDIA_SPLIT`). `cmp-cta`'s K offer photo is the second.
+- § 14's "Don't find `aspect-ratio` anywhere in `Media.module.css`" was already superseded by the
+  `fdn-media` amendment above; the `lg` classes are the same declaration under a query.

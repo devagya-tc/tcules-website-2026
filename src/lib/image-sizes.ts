@@ -21,7 +21,8 @@
  * by its tracks — with the 1304 term stated as a pixel width so a wide window never over-asks.
  *
  * ── Who uses what ─────────────────────────────────────────────────────────────────
- * PageHero reads FULL_COLUMN (stacked) and HERO_BESIDE (beside); Proof reads PROOF_PORTRAIT.
+ * PageHero reads FULL_COLUMN (stacked) and HERO_BESIDE (beside); Proof reads PROOF_PORTRAIT;
+ * ContentSection reads MEDIA_SPLIT (`media`), and a head-track aside is placed at HEAD_TRACK.
  * Figure, BlockCard, ListCard and the SiteNav rail card move onto these as each migrates onto Media (their own PRs); until then
  * they state their own, and the values here are the ones they should converge on.
  *
@@ -51,6 +52,25 @@ export const FULL_COLUMN = `(min-width: ${CAP}px) ${CONTAINER}px, ${FLUID_COLUMN
 export const HERO_BESIDE =
   `(min-width: ${CAP}px) ${(CONTAINER - SPLIT_GAP) / 2}px, ` +
   `(min-width: 1024px) calc(50vw - ${GUTTER + SPLIT_GAP / 2}px), ${FLUID_COLUMN}`;
+
+/**
+ * ContentSection `media` (the B media split): the photograph's track, 5 of [5, 7] from 1024 with the
+ * 96 split seam between the tracks (fdn-section-head). (1240 − 96) × 5 / 12 ≈ 477 at the cap;
+ * (100vw − 64 − 96) × 5 / 12 from 1024; below it the photo sits above the copy at the full column.
+ */
+export const MEDIA_SPLIT =
+  `(min-width: ${CAP}px) ${Math.round(((CONTAINER - SPLIT_GAP) * 5) / 12)}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 5 / 12), ${FLUID_COLUMN}`;
+
+/**
+ * ContentSection `beside`: the head track, 1 of [1, 2] from 1024 with the 96 split seam — where a
+ * head-track aside photograph sits (visual-direction § 1.4, 3:2 at 381). (1240 − 96) / 3 ≈ 381 at the
+ * cap; (100vw − 64 − 96) / 3 from 1024; below it the aside takes the full column between the head and
+ * the body.
+ */
+export const HEAD_TRACK =
+  `(min-width: ${CAP}px) ${Math.round((CONTAINER - SPLIT_GAP) / 3)}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) / 3), ${FLUID_COLUMN}`;
 
 /**
  * A card in two equal tracks from 768 (`md`), `colGap="gutter"` 32.

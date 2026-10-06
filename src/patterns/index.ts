@@ -56,8 +56,16 @@
  * is the grouping: the head is one group at 24 (eyebrow → heading → lead) so it reads as one
  * object, and the blocks are a separate 48 beat beneath it. One flat Layout cannot say that, which
  * is why this is a component and not three lines at a call site repeated on every route. It has
- * two arrangements of those beats — the head above the blocks, or beside them from 1024 up — and
- * the second is one Layout's props rather than a second component.
+ * four arrangements of those beats — the head above the blocks; beside them from 1024 up, with an
+ * aside or actions in the head track; split across the top as one row (the H-row); or a copy column
+ * beside a photograph (the media split) — and a centred alignment of the first. Every one is
+ * Layout's props rather than a second component.
+ *
+ * CtaRow is a band's FOOT: a hairline and one or two actions, with an optional note — the
+ * section-level ask the kit's families share (visual-direction § 3.1, § 1.4). It owns no band and
+ * no ground, and is placed in ContentSection's `footer` or, with its rule off, its `actions`: a
+ * ReactNode slot, because a pattern does not import a pattern. It is a pattern for the usual two
+ * reasons — a content shape (`{ label, href }`) and a composition of Button, Icon, Cluster and Layout.
  *
  * Figure is the quietest thing in the tier and the first to hold an IMAGE as its subject rather
  * than as a marker: an asset, its caption and an optional quieter note, filling whatever inline
@@ -159,19 +167,26 @@ export { Accordion } from './Accordion';
 export type { AccordionProps, AccordionItem, AccordionQuestionElement } from './Accordion';
 
 export { Proof } from './Proof';
-export type {
-  ProofProps,
-  ProofQuote,
-  ProofFigure,
-  ProofPortrait,
-} from './Proof';
+export type { ProofProps, ProofQuote, ProofFigure, ProofPortrait } from './Proof';
 
 export { ContentSection, ContentSectionText } from './ContentSection';
 export type {
+  ContentSectionAlign,
   ContentSectionArrangement,
+  ContentSectionMedia,
+  ContentSectionMediaSide,
   ContentSectionProps,
   ContentSectionTextProps,
 } from './ContentSection';
+
+export { CtaRow } from './CtaRow';
+export type {
+  CtaRowProps,
+  CtaRowAction,
+  CtaRowAlign,
+  CtaRowEmphasis,
+  CtaRowTone,
+} from './CtaRow';
 
 export { Callout } from './Callout';
 export type { CalloutProps } from './Callout';

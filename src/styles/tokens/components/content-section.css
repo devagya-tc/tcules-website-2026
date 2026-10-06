@@ -39,6 +39,11 @@
      optical correction, so a --csec-lead-tracking would name a value that does not exist. */
   --csec-lead-text: var(--text-lead);
 
+  /* The lead in a split `beside` head track (fdn-section-head, 6 Oct 2026; visual-direction § 7.1):
+     the 381 track takes the 18px body-lg role, not the 20px lead. Read from 1024 only, by
+     .leadBeside. Like the lead, no tracking companion. */
+  --csec-lead-text-beside: var(--text-body-lg);
+
   --csec-heading-measure: var(--measure-title);
   --csec-lead-measure: var(--measure-lead);
   --csec-body-measure: var(--measure-body);

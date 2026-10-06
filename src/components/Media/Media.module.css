@@ -17,8 +17,11 @@
      problem the 326 check catches (ch05 §2, B3), not something to clip here.
    No box-shadow. A cut-out's silhouette is its alpha, and only filter: drop-shadow() follows it;
      a box-shadow would draw a rectangle round the transparent box, which is a frame (ch05 §2a).
-   No @media query and no transition. Nothing here moves or changes with the viewport; the image
-     scales with its track and the browser picks the file from srcset and sizes.
+   One @media query, and no transition. The `lg` half of a `{ base, lg }` ratio (fdn-section-head,
+     6 Oct 2026): the media split crops 4:5 beside its copy from 1024 and 4:3 above it below, because
+     the CROP follows the arrangement and the arrangement changes at Layout's `lg`. Nothing else here
+     changes with the viewport; the image scales with its track and the browser picks the file from
+     srcset and sizes.
    No :hover or :focus. An image is not a control; a link around one is the pattern's.
 
    Rule order is load-bearing in one place: .insetText must follow .panel, since both set padding on
@@ -91,6 +94,40 @@
 
 .ratio1x1 {
   aspect-ratio: var(--media-ratio-1x1);
+}
+
+/* The `lg` crop of a `{ base, lg }` ratio, from 1024 (Layout's `lg`). Rule order is load-bearing:
+   these come after the base classes at equal specificity, so inside the query the lg crop wins and
+   outside it the base crop is the only one that applies. Media.tsx emits an lg class only where the
+   two halves differ. */
+@media (min-width: 1024px) {
+  .lgRatio4x5 {
+    aspect-ratio: var(--media-ratio-4x5);
+  }
+
+  .lgRatio5x4 {
+    aspect-ratio: var(--media-ratio-5x4);
+  }
+
+  .lgRatio3x1 {
+    aspect-ratio: var(--media-ratio-3x1);
+  }
+
+  .lgRatio3x2 {
+    aspect-ratio: var(--media-ratio-3x2);
+  }
+
+  .lgRatio16x9 {
+    aspect-ratio: var(--media-ratio-16x9);
+  }
+
+  .lgRatio4x3 {
+    aspect-ratio: var(--media-ratio-4x3);
+  }
+
+  .lgRatio1x1 {
+    aspect-ratio: var(--media-ratio-1x1);
+  }
 }
 
 /* A photograph's one edge treatment: no frame, the photograph radius (visual-direction § 5.3). A

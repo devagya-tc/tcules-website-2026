@@ -4,7 +4,10 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .heading .lead .text */
+   Classes: .eyebrow .heading .lead .leadBeside .centred .bodyCentred .text
+
+   One @media query (.leadBeside, from 1024): the lead's ROLE follows the arrangement, and the
+   beside arrangement only exists from 1024. It swaps a type role, never a distance. */
 
 .eyebrow {
   font: var(--csec-eyebrow-text);
@@ -32,6 +35,34 @@
   text-wrap: var(--text-running-wrap);
   color: var(--csec-lead-ink);
   max-inline-size: var(--csec-lead-measure);
+}
+
+/* The lead in a split `beside` head track steps from --text-lead to --text-body-lg (visual-direction
+   § 7.1: "Section head (beside) — --text-body-lg, 3 to 4 lines"). The head track is 381 wide at
+   1470, and a 20px lead there sets about five words a line; the 18px role sets about seven and keeps
+   the H-beside-aside head at 240 (§ 1.4). From 1024 only, because below it the band IS the stacked
+   band and takes the stacked lead — the collapse stays identical rather than similar. The TSX emits
+   the class only when the band actually splits, so a degraded beside band never takes it. */
+@media (min-width: 1024px) {
+  .leadBeside {
+    font: var(--csec-lead-text-beside);
+  }
+}
+
+/* A centred head (§ 3.5): each part's TEXT centred inside its own measure. The parts themselves are
+   centred in the column by the head Layout's justifyItems — this rule only sets the lines. */
+.centred {
+  text-align: center;
+}
+
+/* A centred head's body, centred AS A BLOCK. The body Layout centres each row (justifyItems), and
+   this gives every row the column as its width, so a row with no cap of its own (a card set, a
+   table) still spans the column while a row that caps itself (ContentSectionText around an
+   accordion, a centred CtaRow) sits at its cap in the middle. Without it, a centred grid item
+   shrinks to its content. Sizing, not arrangement and not spacing: no margin, no display, and the
+   text inside each row keeps its own start alignment (§ 3.5). */
+.bodyCentred > * {
+  inline-size: 100%;
 }
 
 /* The reading column for running text in the body. Prose has no measure by ruling — the caller

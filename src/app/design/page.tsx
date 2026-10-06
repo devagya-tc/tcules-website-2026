@@ -105,7 +105,12 @@ const SPECIMENS = [
       {
         href: '/design/content-section',
         name: 'ContentSection',
-        note: 'one CMS section as one band — stacked | beside × 4 surfaces, stress copy, absent slots, 390',
+        note: 'one CMS section as one band — stacked | beside | split-head | media, align center, aside, actions, footer, 4 surfaces, stress copy, absent slots, 390',
+      },
+      {
+        href: '/design/cta-row',
+        name: 'CtaRow',
+        note: 'a band’s row of actions — rule, note, link | solid, neutral | primary, centred cap, narrow tracks, 4 surfaces, in a band',
       },
       {
         href: '/design/cta-section',

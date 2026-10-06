@@ -1,0 +1,34 @@
+/* CtaRow — the rule and the note. Type and ink only.
+
+   Every value comes from --ctarow-*, declared in tokens/components/cta-row.css. Layout and Cluster
+   own every seam (gap-scale steps, stated in CtaRow.tsx); Button owns the actions entirely. No
+   margin, no padding, no display, no @media, no state.
+
+   Classes: .rule .note .centred .centredBox */
+
+/* The hairline above a section-level row (visual-direction § 3.1 item 5). An empty element carrying
+   one block-start border rather than an <hr>: it is decoration, not a thematic break a screen reader
+   should announce between a band's body and its ask, and it takes no UA margin to undo. It spans its
+   box — the band's column, the media split's copy column, or the centred cap. */
+.rule {
+  border-block-start: var(--ctarow-rule-width) solid var(--ctarow-rule-ink);
+}
+
+.note {
+  font: var(--ctarow-note-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--ctarow-note-ink);
+  max-inline-size: var(--ctarow-note-measure);
+}
+
+/* A centred row's note, when it wraps, wraps centred. */
+.centred {
+  text-align: center;
+}
+
+/* A centred row caps its whole box — the rule with it — at the body measure. A ceiling, not a
+   width: in a narrower track the track wins. The band (ContentSection's centred body) centres the
+   capped box; nothing here positions it. `ch` resolves against the inherited body composite. */
+.centredBox {
+  max-inline-size: var(--ctarow-centred-measure);
+}

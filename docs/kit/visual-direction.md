@@ -206,6 +206,14 @@ archetypes. The ai-product-ux *evidence* band (1341) and *product-responsibility
 | **H-beside-aside** | in 381: eyebrow, h2 on 2 lines, body-lg lead on 3 lines; then 48 + aside | 14 + 24 + 94 + 24 + 84 = **240** | its own column |
 | **H-beside-actions** | in 381: eyebrow, h2 on 3 lines, body-lg lead on 4 lines, 48, actions | 14 + 24 + 141 + 24 + 112 + 48 + 48 = **411** | its own column |
 
+**Amended 6 Oct 2026 (`fdn-section-head`): the H-row's eyebrow sits above the split.** Built as first
+written (eyebrow + h2 in the 381 track), no alignment of the two tracks reads as one row: top-aligned,
+the lead starts beside the 12px eyebrow; bottom-aligned, the taller trailing track (lead + 48 + action)
+drops the heading below the lead's first line. ContentSection `split-head` therefore puts the eyebrow
+on its own row, then h2 (381) beside lead + 48 + action (763), top-aligned: 14 + 24 + max(94, 128) =
+**166**, + `stack` = 214. C-image-3 with an H-row is 214 + 381 = **595** (target 598); C-image-4 with
+an H-row 515. Word ceilings (§ 1.5) are unchanged.
+
 **Tracks:**
 
 | Split | Tracks |
@@ -521,7 +529,9 @@ not a PageHero is listed too, and gets no special case.
    - between the rows of a read-down list;
    - the top edge of a **text-only card** (below);
    - table rows;
-   - above a section-level CtaRow.
+   - above a section-level CtaRow — **except under a ruled ladder** (an Accordion, ListCard rows, a
+     table), whose last rule already closes the body; there the CtaRow takes `rule={false}`, or two
+     hairlines 48 apart read as a double rule (`fdn-section-head`, 6 Oct 2026).
 
    Never around a card, under a card title, or between cards in a set.
 
