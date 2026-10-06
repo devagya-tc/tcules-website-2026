@@ -8,6 +8,7 @@ import {
 import { TextureClosing } from '@/components';
 import type { ServiceStory } from '@/lib/service-story';
 import { ANCHORS, ROUTES, servicePath } from '@/lib/routes';
+import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { heroTrail } from '@/lib/trail';
 
 import { BandView } from './Bands';
@@ -89,6 +90,10 @@ export function ServicePage({
             alt: '',
             kind: 'illustration',
           },
+          /* The numbered cut and its legend, generated per drawing by
+             scripts/illustrations-phone.mjs. Looked up here, by the drawing's src, because PageHero
+             renders only what it is handed. */
+          cut: ILLUSTRATION_LEGENDS[hero.illustration.src],
         }}
         tags={hero.tags ?? []}
       />

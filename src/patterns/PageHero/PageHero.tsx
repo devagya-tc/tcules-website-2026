@@ -13,7 +13,6 @@ import {
   type MediaRatioSpec,
   type SectionSurface,
 } from '@/components';
-import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import {
   FULL_COLUMN,
   HERO_BESIDE,
@@ -86,7 +85,24 @@ export type HeroImage = {
    * with a development warning: an illustration and a capture render whole (H3).
    */
   ratio?: MediaRatioSpec;
+  /**
+   * An ILLUSTRATION's numbered cut: the same drawing with its labels replaced by numbered markers
+   * (`src`, same viewBox as the drawing), and the labels in marker order (`items`), which PageHero
+   * sets as a legend under the cut. Below 1440 the drawing's track is narrower than 572 and its
+   * labels would set under 9px, so the cut and its legend replace it there. The CALLER supplies it
+   * (the generated `ILLUSTRATION_LEGENDS` in `src/lib/illustration-legends.ts`, keyed by the
+   * drawing's src); PageHero renders only what it is handed and looks nothing up. Absent, or on any
+   * other kind, the image renders alone.
+   */
+  cut?: HeroCut;
 };
+
+/** One label of an illustration's numbered cut. `tone` is its colour in the drawing: `accent` the
+ *  peridot pill, `blue` a blue label. */
+export type HeroCutItem = { label: string; tone: 'accent' | 'blue' };
+
+/** An illustration's numbered cut and its legend — see `HeroImage.cut`. */
+export type HeroCut = { src: string; items: readonly HeroCutItem[] };
 
 /**
  * A YouTube video in the hero, as an id and a title rather than a URL or an embed snippet.
@@ -351,7 +367,10 @@ export type PageHeroProps = {
 const MAX_TAGS = 6;
 
 /* Where an illustration's numbered cut replaces the drawing: below 1440, where its track is
-   narrower than 572 and the drawing's labels would set under 9px. Layout's xl, less a hair. */
+   narrower than 572 and the drawing's labels would set under 9px. Layout's xl, less a hair.
+   KEEP IN STEP with PageHero.module.css § breakpoint switches, which hides `.legend` from 1440:
+   a CSS module cannot read a TSX constant, so the one breakpoint is written twice, here (the
+   <source> Media renders) and there (the legend), and the two must move together. */
 const CUT_QUERY = '(max-width: 1439.98px)';
 
 /* The label a role selects. A fixed map rather than a prop, and it does NOT change with the
@@ -524,14 +543,11 @@ export function PageHero({
   const centred = split && isIllustration;
 
   /* The numbered cut of a service illustration (scripts/illustrations-phone.mjs): the drawing with
-     its labels as numbered markers, and the labels as an HTML legend under it, below 1440. Found by
-     the drawing's own src, so no call site passes it; an image without one renders alone. Below
+     its labels as numbered markers, and the labels as an HTML legend under it, below 1440. Handed
+     in on the image record (`cut`), never looked up here; an image without one renders alone. Below
      1440 the drawing's track is narrower than 572 (a third of the split from 1024, the full column
      on a phone), and its 17-unit mono labels came out at 7px at 1024; the legend sets them at 12. */
-  const legend =
-    media?.type === 'image' && isIllustration
-      ? ILLUSTRATION_LEGENDS[media.image.src]
-      : undefined;
+  const legend = media?.type === 'image' && isIllustration ? media.cut : undefined;
 
   /* The texture recipe follows the media (visual-direction § 6.3, redrawn in cmp-hero fix round 2,
      because round 1's plinth and column were soft fields with no edge: the plinth peeked out from
@@ -734,8 +750,8 @@ export function PageHero({
      PageHero owns `sizes` (the arrangement's width, from src/lib/image-sizes.ts) and `priority`
      (always: a hero image is the LCP element on every route that has one).
 
-     An illustration with a numbered cut is ONE image: a <picture> whose <source> swaps the cut in
-     below 1440, so the browser fetches the one the width shows and only that one is high priority.
+     An illustration with a numbered cut is ONE image: Media's `art` renders a <picture> whose
+     <source> swaps the cut in below 1440, so the browser fetches the one the width shows and only that one is high priority.
      It was two <Media priority> with one hidden by display:none, so every service page fetched both
      drawings eagerly at every width (fix round 2). The legend shows only where the cut does, and is
      aria-hidden for the reason the drawing's alt is empty: the h1 already names what the drawing
@@ -751,16 +767,19 @@ export function PageHero({
         : FULL_COLUMN;
   const image =
     media?.type === 'image' ? (
-      <Media image={media.image} sizes={sizes} ratio={media.ratio} priority />
+      <Media
+        image={media.image}
+        sizes={sizes}
+        ratio={media.ratio}
+        art={legend ? [{ media: CUT_QUERY, src: legend.src }] : undefined}
+        priority
+      />
     ) : null;
   const mediaNode =
     media === undefined ? null : media.type === 'image' ? (
       legend ? (
         <Layout rowGap="block">
-          <picture>
-            <source media={CUT_QUERY} srcSet={legend.src} />
-            {image}
-          </picture>
+          {image}
           {/* aria-hidden on the wrapper: Cluster passes no ARIA through. */}
           <div className={styles.legend} aria-hidden="true">
             <Cluster as="ol" colGap="block" rowGap="tight">

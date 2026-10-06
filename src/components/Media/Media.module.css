@@ -6,8 +6,9 @@
 
    ── What is absent, and why ────────────────────────────────────────────────────
    No margin. The seam around an image is the parent's.
-   No display:grid or display:flex. The two display:block declarations below de-inline an
-     element (the <img>'s baseline gap, the panel <span>); neither arranges anything.
+   No display:grid or display:flex. The three display:block declarations below de-inline an
+     element (the <img>'s baseline gap, the panel <span>, the art-direction <picture>); none
+     arranges anything.
    One aspect-ratio, and only for a photograph cut to a `ratio` (.crop, visual-direction § 5.3,
      6 Oct 2026). In `intrinsic` the ratio is the asset's own, carried by the width and height
      attributes; in `fill` the ratio is the PARENT's box, which is the whole point of `fill` —
@@ -34,6 +35,17 @@
   display: block;
   inline-size: 100%;
   border-radius: var(--media-radius);
+}
+
+/* `art`: the <picture> that holds the <source>s. It renders no box of its own — block so the img
+   inside has no inline line box around it, and, under fill or contain, the parent's full height so
+   the img's 100% still resolves against the parent's box. */
+.picture {
+  display: block;
+}
+
+.pictureFill {
+  block-size: 100%;
 }
 
 /* Height from the asset's own ratio: block-size:auto with the width and height attributes

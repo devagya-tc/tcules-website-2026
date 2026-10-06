@@ -180,6 +180,25 @@ export type MediaEdge = 'kind' | 'placement';
  */
 export type MediaInset = 'gutter' | 'text';
 
+/**
+ * An art-directed alternative to the image: a DIFFERENT file shown where `media` matches, rendered
+ * as a `<source>` in a `<picture>` around the `<img>`. For a recomposed asset rather than a smaller
+ * one — an illustration's numbered cut below the width where its labels stay legible (PageHero).
+ * Resolution switching is the record's `sources`; this is not that.
+ *
+ * `media` is a media query, owned by the placement because only it knows where its track narrows.
+ * `width` and `height` are the alternative's intrinsic size, emitted on the `<source>` so the
+ * browser reserves the right box when the alternative's ratio differs; omit them only when it
+ * shares the image's ratio (the numbered cut shares the drawing's viewBox). The `<img>` stays the
+ * fallback and carries the alt, the loading and the priority for whichever file the width picks.
+ */
+export type MediaArt = {
+  media: string;
+  src: string;
+  width?: number;
+  height?: number;
+};
+
 export type MediaProps = {
   image: MediaImage;
   /**
@@ -212,6 +231,11 @@ export type MediaProps = {
    * at most, and only a hero's. Everything else is lazy and decodes off the main thread.
    */
   priority?: boolean;
+  /**
+   * Art direction: alternative files by media query, first match wins (see `MediaArt`). Absent or
+   * empty, Media renders a bare `<img>`; present, the `<img>` is wrapped in a `<picture>`.
+   */
+  art?: readonly MediaArt[];
 };
 
 /**
@@ -339,6 +363,7 @@ export function Media({
   priority = false,
   ratio,
   focus,
+  art,
 }: MediaProps) {
   const kind: MediaKind = image.kind ?? 'capture';
   const isCutOut = kind === 'cut-out';
@@ -384,7 +409,7 @@ export function Media({
       ? ({ '--media-focus': `${percent(anchor.x)} ${percent(anchor.y)}` } as CSSProperties)
       : undefined;
 
-  const img = (
+  const bare = (
     /* A native image rather than next/image: ruling M1 serves Strapi's own formats as a native
        srcset, with no build-time pipeline, and next/image would add one. */
     /* eslint-disable-next-line @next/next/no-img-element -- the ruled native-srcset contract (M1) */
@@ -425,6 +450,27 @@ export function Media({
       data-stand-in={image.standIn ? '' : undefined}
     />
   );
+
+  /* Art direction: the same <img>, inside a <picture> whose <source>s the browser tries first. The
+     img stays the one element that carries alt, loading and fetchpriority, so only the file the
+     width selects is fetched, and only it is high priority. */
+  const img =
+    art && art.length > 0 ? (
+      <picture className={cx(styles.picture, boxed && styles.pictureFill)}>
+        {art.map((alt) => (
+          <source
+            key={`${alt.media} ${alt.src}`}
+            media={alt.media}
+            srcSet={alt.src}
+            width={alt.width}
+            height={alt.height}
+          />
+        ))}
+        {bare}
+      </picture>
+    ) : (
+      bare
+    );
 
   if (!panel) return img;
 

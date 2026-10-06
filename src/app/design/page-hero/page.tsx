@@ -16,6 +16,7 @@ import {
   type PageHeroProps,
 } from '@/patterns';
 
+import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { ROUTES, glossaryPath, servicePath } from '@/lib/routes';
 import { heroTrail, type Trail } from '@/lib/trail';
 
@@ -748,7 +749,11 @@ export default function PageHeroSpecimenPage() {
           { label: 'Start a project', href: ROUTES.contact },
           { label: 'Start with a UX Product Audit', href: ROUTES.audits },
         ]}
-        media={asHero(SERVICE_ILLUSTRATION)}
+        media={{
+          type: 'image',
+          image: SERVICE_ILLUSTRATION,
+          cut: ILLUSTRATION_LEGENDS[SERVICE_ILLUSTRATION.src],
+        }}
       />
       <Note
         title="9 · The service hero — trail, no eyebrow, one solid and one neutral link, illustration centred"

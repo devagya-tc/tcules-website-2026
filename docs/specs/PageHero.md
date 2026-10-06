@@ -90,7 +90,10 @@ type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer'
 type HeroCredit     = { role: HeroCreditRole; people: readonly [string, ...string[]] }
 type HeroDates      = { published: string; modified?: string }
 type HeroAction     = { label: string; href: string }
-type HeroImage      = { type: 'image'; image: MediaImage }          // the record, nested (28 Sep)
+type HeroImage      = { type: 'image'; image: MediaImage; ratio?: MediaRatioSpec; cut?: HeroCut } // the record, nested (28 Sep); cut 7 Oct
+type HeroCutItem    = { label: string; tone: 'accent' | 'blue' }
+type HeroCut        = { src: string; items: readonly HeroCutItem[] }   // an illustration's numbered cut + legend
+type HeroAnnouncement = { label: string; text: string; action: HeroAction }
 type HeroVideo      = { type: 'youtube'; id: string; title: string }
 type HeroMedia      = HeroImage | HeroVideo
 type HeroArrangement = 'stacked' | 'beside'                        // 28 Sep
@@ -770,7 +773,7 @@ What the three-lens review changed, cause first:
 | One shape six times | No second opening | `arrangement="display"`: title in 3 of 5, lead and ask in 2 at its foot, media full column below (`ratio` `{ base: '4/3', lg: '3/1' }`). Band 807; its image crosses the fold by design, so the specimen exempts the hero measurement |
 | Grey tag strip | Tag chips between lead and ask | Unboxed mono list after the actions, each after a 6px blue pixel (`--hero-mark-*`, `--hero-tag-*`) |
 | SaaS announcement | Grey pill, wrapping strip | Blue pixel + blue mono flag (`--hero-flag-*`), one line always, the sentence ellipsises |
-| Labels 6px on phones | Text inside an `<img>` at 0.34x | `scripts/illustrations-phone.mjs` writes a phone cut (labels to numbered markers) and `src/lib/illustration-legends.ts`; below 768 the hero shows the cut and a numbered legend. Found by src, so no call site changes |
+| Labels 6px on phones | Text inside an `<img>` at 0.34x | `scripts/illustrations-phone.mjs` writes a phone cut (labels to numbered markers) and `src/lib/illustration-legends.ts`; below 768 the hero shows the cut and a numbered legend. Found by src, so no call site changes (superseded 7 Oct 2026: the caller passes it as `HeroImage.cut`; see the amendment at the foot) |
 | Soft hero photos | `sizes` stated the box, not the cover-cropped image | Media scales `sizes` by the crop factor (`cropSizes`); calmer, sharper frames chosen |
 | 67px title in a 432 track at 1024 | [1, 1] from 1024 | `beside` is 3 : 2 from 1024 and 1 : 1 from 1440 |
 | Trail floats over illustration heroes | Trail above a centred split | Against an illustration the trail joins the copy column: 32 to the title always |
@@ -791,7 +794,7 @@ centred 1346 (exempt). At 390 the h1 sits at 213 and every band is under 1140.
 | Announcement truncated on a phone | nowrap + ellipsis | The sentence wraps beside the flag; the link drops below |
 | Two action shapes on phones | A wrapping row | `Cluster stackUntil="md"`: below 768 the pair always stacks |
 | Nine ragged tags | A wrapping list | At most six (development warning past six), a 3-column grid from 768, 2 below; keyed by index and tag |
-| Two eager drawings per service page | Two `<Media priority>`, one `display:none` | One `<picture>`: a `<source media="(max-width: 1439.98px)">` serves the numbered cut, so only the shown drawing is fetched |
+| Two eager drawings per service page | Two `<Media priority>`, one `display:none` | One `<picture>`: a `<source media="(max-width: 1439.98px)">` serves the numbered cut, so only the shown drawing is fetched (rendered by `Media`'s `art` since 7 Oct 2026) |
 | 7px labels and a 4-line title at 1024 | Drawing in a 2/5 track | Drawing heroes are `[2, 1]` from 1024 and `[1, 1]` from 1440, the numbered cut and legend below 1440; photograph heroes `[1, 1]` from 1024 |
 | Authored proper nouns lowercased in a crumb | `trailCase` sentence-cased authored eyebrows | `pageName` keeps an authored eyebrow as written (`authoredCase` only restores a known acronym); `slugCase` is for slugs alone |
 | 860 written twice | Literal in tokens and in `image-sizes.ts` | `CENTRED_MEDIA` in `image-sizes.ts`, cross-referenced from the token |
@@ -998,3 +1001,24 @@ COMPLETENESS
 [~] "the specimen route reads as five shapes" → six. The sixth is the media run, and it is
     the block that gives the component itself the property the squint test asks for.
 ```
+
+## Amendment · 7 Oct 2026 — the cut arrives as a prop; Media renders the `<picture>`
+
+Two tier faults found after the kit run, fixed together:
+
+- **Content seam.** PageHero imported `ILLUSTRATION_LEGENDS` from `@/lib/illustration-legends` and looked
+  up an illustration's numbered cut and legend copy by the image's `src`. A pattern renders only what it is
+  handed, so the lookup moved to the callers: `HeroImage` gains `cut?: HeroCut` (`{ src, items }`, items
+  `{ label, tone: 'accent' | 'blue' }`), structurally the generated `IllustrationLegend`. The ServicePage
+  template, `/design/kit/hero` and `/design/page-hero` § 9 pass `ILLUSTRATION_LEGENDS[image.src]`. A cut on
+  any kind but `illustration` is ignored. Nothing else about the rendering changed.
+- **Art direction.** PageHero wrapped `<Media>` in its own `<picture><source media=…>`. That is the
+  primitive's job: `Media` now takes `art` (docs/specs/Media.md, amendment 7 Oct), and PageHero passes
+  `art={[{ media: CUT_QUERY, src: cut.src }]}`. The rendered markup is the same `<picture>`, now emitted by
+  Media with a `display: block` class.
+- **The one breakpoint, written twice.** `CUT_QUERY` (`(max-width: 1439.98px)`) in `PageHero.tsx` feeds the
+  `<source>`; `PageHero.module.css`'s `@media (min-width: 1440px)` hides `.legend`. A CSS module cannot read a
+  TSX constant, so both carry a KEEP IN STEP comment naming the other.
+- **Barrels.** `HeroAnnouncement`, `HeroCut` and `HeroCutItem` are exported from `src/patterns/PageHero` and
+  `src/patterns`.
+

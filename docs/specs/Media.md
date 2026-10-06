@@ -71,6 +71,7 @@ type MediaImage = {
 type MediaFit = 'intrinsic' | 'fill'
 type MediaEdge = 'kind' | 'placement'
 type MediaInset = 'gutter' | 'text'                          // 29 Sep 2026, 2.17
+type MediaArt = { media: string; src: string; width?: number; height?: number } // 7 Oct 2026
 ```
 
 | Prop | Union | Default | Decides |
@@ -81,6 +82,7 @@ type MediaInset = 'gutter' | 'text'                          // 29 Sep 2026, 2.1
 | `edge` | `'kind' \| 'placement'` | `'kind'` | kind: Media draws the edge the image's kind calls for. placement: the crop box around it rules every kind itself, so Media draws none — amendment · 29 Sep below |
 | `inset` | `'gutter' \| 'text'` | `'gutter'` | the panel inset step, and only that. gutter: `--gap-gutter` (32), every full-column, track and card placement. text: `--gap-text` (16, "cell padding"), for a small box — ListCard's 160 × 107 thumbnail. Ignored when no panel renders (29 Sep 2026, 2.17) |
 | `priority` | `boolean` | `false` | true: `loading="eager"`, `fetchpriority="high"`. false: `loading="lazy"`, `decoding="async"` |
+| `art` | `readonly MediaArt[]` | none | art direction: alternative FILES by media query, first match wins, rendered as `<source>`s in a `<picture>` around the `<img>`. Absent or empty: a bare `<img>` — amendment · 7 Oct below |
 
 **The record, and where its type lives.** `MediaImage` is Media's. The view model's `ImageRecord`
 (`src/content/types.ts`) is the same shape, declared independently — the precedent `FigureImage` set — so a
@@ -455,3 +457,28 @@ tall before a word of the copy; the 4:3 crop is 244.
 - **Specimen:** `/design/media` § 9 renders the object form beside its control: `{ base: '4/3', lg:
   '4/5' }` next to the same photo at a bare `4/5`. The pair is 4:5 in the 1440 capture and 4:3 in the
   390 one; the control stays 4:5 at both (added in the `fdn-section-head` fix round).
+
+## Amendment · 7 Oct 2026 — `art`: art direction in the primitive
+
+PageHero hand-wrapped `<Media>` in a `<picture><source media=…>` to swap an illustration for its numbered
+cut below 1440. Art direction is image delivery, which is Media's, so the `<picture>` moved here.
+
+- **API.** `art?: readonly MediaArt[]`, `MediaArt = { media: string; src: string; width?: number; height?:
+  number }`. Each entry renders `<source media srcset width height>` in order, before the `<img>`; the
+  browser takes the first whose `media` matches. The `<img>` stays the fallback and the one element that
+  carries `alt`, `loading`, `decoding` and `fetchpriority`, so only the file the width selects is fetched and
+  only it is high priority.
+- **Not resolution switching.** The record's `sources` are widths of ONE master (srcset + `sizes`). `art` is
+  a DIFFERENT file — a recomposed asset — so it is a prop the placement chooses, not a record field: only the
+  placement knows where its track gets too narrow. The media query is the placement's for the same reason.
+- **`width` / `height`.** The alternative's intrinsic size, emitted on the `<source>` so the browser reserves
+  its box when its ratio differs. Omit them only when the alternative shares the image's ratio (the numbered
+  cut shares the drawing's viewBox).
+- **CSS.** `.picture { display: block }` de-inlines the wrapper (no line box round the img); under
+  `fit="fill" | "contain"` `.pictureFill` gives it the parent's full height so the img's 100% still
+  resolves. Nothing arranges; no token.
+- **Unchanged.** With a panel, the `<picture>` sits inside the panel span. Ratio crops, focus, edge and the
+  gate attributes are the `<img>`'s as before.
+- **First consumer:** PageHero's illustration cut (docs/specs/PageHero.md, amendment 7 Oct).
+- **Specimen:** `/design/media` renders an art-directed drawing whose `<source>` swaps in below 1440.
+

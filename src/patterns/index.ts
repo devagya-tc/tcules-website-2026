@@ -283,6 +283,9 @@ export type {
   HeroImage,
   HeroVideo,
   HeroTrail,
+  HeroAnnouncement,
+  HeroCut,
+  HeroCutItem,
 } from './PageHero';
 
 export { SiteFooter } from './SiteFooter';

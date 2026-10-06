@@ -380,6 +380,8 @@
 
 /* ── breakpoint switches ─────────────────────────────────────────────────────────
      legend  the numbered cut's legend shows where the <picture> serves the cut: below 1440.
+             KEEP IN STEP with CUT_QUERY in PageHero.tsx, the <source> media query Media renders:
+             a module cannot read the TSX constant, so the breakpoint is written in both.
      foot    the foot field from 1440 only, where a two-line title leaves a region under the copy;
              below it the copy is as tall as the photograph, and on a phone the field sat in the
              gutter beside a stacked image.

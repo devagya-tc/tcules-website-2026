@@ -1,5 +1,6 @@
 export { Media, mediaSrcSet } from './Media';
 export type {
+  MediaArt,
   MediaEdge,
   MediaFit,
   MediaFocus,

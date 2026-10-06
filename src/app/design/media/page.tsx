@@ -32,6 +32,16 @@ const CAPTURE: MediaImage = {
   sources: DERIVED('capture-listing', 'jpg'),
 };
 
+/* `art`: a service illustration and its numbered cut (scripts/illustrations-phone.mjs), one viewBox. */
+const ART_DRAWING: MediaImage = {
+  src: '/illustrations/services/product-design.paper.svg',
+  alt: '',
+  width: 962,
+  height: 714,
+  kind: 'illustration',
+};
+const ART_CUT = '/illustrations/services/product-design.paper.phone.svg';
+
 const CUT_OUT: MediaImage = {
   src: '/design/media/cutout-flow.png',
   alt: 'Workflow node: an input connected to an AI feature card with a provider field, a file field and an output.',
@@ -777,6 +787,26 @@ export default function MediaSpecimenPage() {
               <Media image={CAPTURE} sizes={SIZES_QUARTER} ratio="4/5" />
             </Specimen>
           </Quarters>
+          <Halves>
+            <Specimen
+              label="below"
+              title="art · a numbered cut below 1440"
+              note="art={[{ media: '(max-width: 1439.98px)', src: …phone.svg }]}: a <picture> whose <source> swaps in a different FILE where the query matches, the <img> the fallback that carries alt, loading and priority. The drawing at 1440 and up, its numbered cut below (this tile shows the cut in the 390 capture). Not resolution switching — that is the record's sources."
+            >
+              <Media
+                image={ART_DRAWING}
+                sizes={SIZES_HALF}
+                art={[{ media: '(max-width: 1439.98px)', src: ART_CUT }]}
+              />
+            </Specimen>
+            <Specimen
+              label="below"
+              title="the same drawing, no art"
+              note="The control: a bare <img>, the drawing with its own labels at every width."
+            >
+              <Media image={ART_DRAWING} sizes={SIZES_HALF} />
+            </Specimen>
+          </Halves>
           <Specimen
             label="below"
             title="what the gates read"

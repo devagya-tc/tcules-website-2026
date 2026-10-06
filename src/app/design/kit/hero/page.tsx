@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Cluster, Layout, Section } from '@/components';
 import { getIdealServiceStory } from '@/content';
 import { Breadcrumbs, ListCard, PageHero, type HeroAction, type PageHeroProps } from '@/patterns';
+import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { ROUTES, auditPath, caseStudyPath, servicePath } from '@/lib/routes';
 import { heroTrail, slugLabel, type TrailItem } from '@/lib/trail';
@@ -50,6 +51,7 @@ function serviceHero(slug: string) {
     media: {
       type: 'image' as const,
       image: { ...hero.illustration, alt: '', kind: 'illustration' as const },
+      cut: ILLUSTRATION_LEGENDS[hero.illustration.src],
     },
   };
 }

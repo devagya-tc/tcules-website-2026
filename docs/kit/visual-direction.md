@@ -949,7 +949,7 @@ any photo for a better catalogue match, as long as the gate still passes.
 |---|---|---|---|---|---|---|
 | product-design (warm) | `hands-trackpad` (fix round 2: the sticky wall was the page's one off-key, saturated frame) | — (no banner; fix round 1, 7 Oct) | `designer-tablet-monitor` (3:2, landscape offer) | `studio-whiteboard-crit` | `hand-sketch-wireframe` | B, aside 1 |
 | software-development (warm) | `designer-desk-monitor` | `workshop-hands-writing` | `whiteboard-pair-laptop` | `studio-session-talk` | `team-laptops-table` | aside 1 |
-| design-engineering (warm) | `stylus-tablet-sketch` | `whiteboard-two-hands` | `sticky-grid-minimal` | `studio-whiteboard-crit` | `hands-sketches-markers` | aside 1 |
+| design-engineering (warm) | `hands-sketches-markers` (fix round 2, 6 Oct: a portrait source that holds 4:5) | `pair-at-laptop-sticky-wall` | `desk-sketch-flatlay` (3:2, landscape offer) | `studio-whiteboard-crit` | `hand-mouse-detail` | aside 1 |
 | design-systems (cool) | `swatch-book-pages` (fix round 2, 6 Oct: the system's own artefacts, not screens) | — (no banner) | `swatch-ring-white` (3:2, landscape offer) | `white-bricks-pile` (the four-route router's media split) | — (no F or D band) | `studio-whiteboard-crit` as a stand-in cover |
 | ai-product-ux (cool) | `pair-testing-overhead` | `workshop-whiteboard-lounge` (no banner on the page yet) | `pair-laptop-notebook` (3:2, landscape offer; fix round 2, replacing the staged chalkboard pair) | `hands-sticky-blue-pen` (not shown: the stat band takes the slot and shows its figure) | `studio-whiteboard-crit` (the numbered record's aside; fix round 2, replacing the pink-cast pencil crop) | aside 2 |
 | product-modernisation (cool) | `wall-sketching-portrait` | — (no banner) | `pair-at-laptop-sticky-wall` (3:2, landscape offer; fix round 1: the violet pencil read as a stock filter; fix round 2: the empty `office-calm-interior` showed no people and no work) | `board-review-backs` | `pair-desk-through-plants` | `studio-whiteboard-crit` as a stand-in cover |
@@ -959,7 +959,13 @@ any photo for a better catalogue match, as long as the gate still passes.
 - **Card images and stand-in covers** come from the rest of the catalogue in the page's family, at the
   resolution § 5.4 allows.
 - **The close (L) carries no photograph** on service pages. The close is copy, form and texture.
-- `pair-at-laptop-sticky-wall` is kept for the kit/home hero.
+- `pair-at-laptop-sticky-wall` is NOT reserved for the home hero any more (corrected 7 Oct 2026 against
+  `SERVICE_PHOTO_SLOTS` in `src/lib/photos.ts` and the kit routes). It is product-modernisation's K offer
+  photo and design-engineering's I banner, and the kit's home hero (`design/kit/home`) and the
+  photograph hero variant (`design/kit/hero`) also use it, as do the testimonials, service-list, media-split,
+  CTA, feature and block-card specimens. It is a stock photograph (`photo-catalogue.ts`), so its use on
+  two service pages' B/I/K slots breaks rule 4 of § 5.1 (a stock photograph appears on one service page
+  only). Open: one of the two slots needs another catalogue pick. The table rows above follow `photos.ts`, which is the source of truth.
 
 ### 5.7 Case-study and resource covers: stand-ins are permitted
 
