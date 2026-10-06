@@ -277,6 +277,11 @@ const SPECIMENS = [
         name: 'Kit · Feature',
         note: 'the feature family (C) and resources (M) — image, text, icon and pair sets on ContentSection, mixed sets and stand-ins, the Slider at six, the phone scroll row',
       },
+      {
+        href: '/design/kit/service-list',
+        name: 'Kit · Service list',
+        note: 'the service router in three forms — icon (C-icon-6 and C-icon-4 + CtaRow, photo aside), image (three centred, four with per-card CTAs, six as a Slider) and list (thumbnail rows beside a head with actions) — every link from routes.ts',
+      },
     ],
   },
 ] as const;
