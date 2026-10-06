@@ -40,8 +40,9 @@
                          lockup stops here, which is why they read slightly lighter than a
                          wordmark: the cap wins over the area, as ch05 orders it.
    --cmark-width-max     at the height cap a 4:1 wordmark is 160 wide; nothing in a set is
-                         allowed to be wider than that. An ultra-wide wordmark (10:1 and
-                         beyond) shrinks in height instead of running the row.            */
+                         wider than that BEFORE its correction. An ultra-wide wordmark (10:1
+                         and beyond) shrinks in height instead of running the row. A recorded
+                         upward correction may take a capped mark to 160 × 1.15 = 184.      */
 :root{
 --cmark-target-side:56px;
 --cmark-height-max:40px;

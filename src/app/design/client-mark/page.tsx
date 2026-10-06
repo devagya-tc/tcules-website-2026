@@ -16,7 +16,7 @@ import * as C from '../_specimen/clients';
  *
  * What this page has to show:
  *   1. equal AREA, not equal width: a 7:1 wordmark and a 3:1 lockup read as the same weight, and
- *      the ~40px height cap (ruling P2) and 160px width cap hold;
+ *      the ~40px height cap (ruling P2) holds, and the 160px width cap holds before a correction;
  *   2. one colour, the ground's ink, from ONE file per mark on every surface — any mark on ink or
  *      blue that renders light proves the mask is doing it, not the file;
  *   3. the strip is a Cluster of marks, not a component: the Cluster owns the gap;
@@ -155,11 +155,12 @@ function Strip({ marks }: { marks: readonly Mark[] }) {
  * The recommended composition for a set of known size: one equal cell per mark, each mark at its
  * cell's start edge, so the first column lines up with the heading above it and every column
  * starts on a track line. justifyItems stays at its default (stretch) on purpose: the li fills
- * its track, which is what lets a mark wider than the track (LatitudePay, 160, in a ~139 cell at
- * 390) shrink to it via max-inline-size — a centred li would size to the mark and spill.
- * {base: 2, md: 3, lg: 5} (§ 5.9): three tracks in the 704 column are ~202 wide and five in the
- * 1240 column ~209, both wider than the widest mark. Inside a narrower track (the 763 body beside
- * a head) the caller holds it at three; see the kit specimen.
+ * its track, which is what lets a mark wider than the track shrink to it via max-inline-size — a
+ * centred li would size to the mark and spill. {base: 2, md: 3, lg: 5} (§ 5.9): two tracks in the
+ * 326 column are ~139 (the widest phone-size mark is 137), three in the 704 column ~202 and five in
+ * the 1240 column ~209, all wider than the widest mark (175). Between 1024 and ~1130 five tracks
+ * are 154–169, so LatitudePay meets its cell and letterboxes by up to 12% — the one range § 5.9's
+ * lg step costs; ClientMark spec § 17 Q11 puts the xl alternative to the owner.
  */
 function Grid({
   marks,
@@ -191,7 +192,8 @@ export default function ClientMarkSpecimenPage() {
               <strong>mask</strong> filled with <code>--cmark-ink</code>, so every mark in a set
               is one colour, the ground&rsquo;s ink, from one file on every surface. Each is
               sized to <strong>equal visual weight</strong>: the same bounding-box area, not the
-              same width, then capped at 40 tall (ruling P2) and 160 wide (ch05 §10).
+              same width, then capped at 40 tall (ruling P2) and 160 wide before its recorded
+              correction (ch05 §10).
             </p>
             <p>
               A logo strip is <strong>not</strong> a component. It is <code>ClientMark</code> ×
