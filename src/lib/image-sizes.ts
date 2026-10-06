@@ -113,13 +113,11 @@ export const PROOF_PORTRAIT = '64px';
 export const NAV_CARD = `(min-width: 1024px) 300px, ${FLUID_COLUMN}`;
 
 /**
- * ReadDown's photograph (the D photo form, cmp-readdown fix round 1): the body track of
- * ContentSection `beside`, split again from 1440 into the rows and the photo, 64 (`column`) apart.
- * ((1240 − 96) × 2 / 3 − 64) / 2 ≈ 349 from 1440; below 1440 the photo runs the whole body track
- * above the rows — 763 at the cap, (100vw − 64 − 96) × 2 / 3 from 1024 — and the column below that.
+ * ReadDown's photograph (the D photo form, cmp-readdown fix round 2): the trailing two-thirds track
+ * of the set's own [1, 2] split at the 96 seam from 1024 — the same grid as ContentSection
+ * `split-head`, which the form sits under. (1240 − 96) × 2 / 3 ≈ 763 at the cap;
+ * (100vw − 64 − 96) × 2 / 3 from 1024; below it the photo sits above the rows at the full column.
  */
-const BODY_TRACK = Math.round(((CONTAINER - SPLIT_GAP) * 2) / 3);
 export const READ_DOWN_PHOTO =
-  `(min-width: 1440px) ${Math.round((BODY_TRACK - 64) / 2)}px, ` +
-  `(min-width: ${CAP}px) ${BODY_TRACK}px, ` +
+  `(min-width: ${CAP}px) ${Math.round(((CONTAINER - SPLIT_GAP) * 2) / 3)}px, ` +
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 2 / 3), ${FLUID_COLUMN}`;

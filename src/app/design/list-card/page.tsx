@@ -1239,14 +1239,14 @@ export default function ListCardSpecimenPage() {
           <Specimen title="columns 1 · text only, no glyphs">
             <ReadDown rows={READ_DOWN.slice(0, 3).map(({ title, body }) => ({ title, body }))} />
           </Specimen>
-          <Specimen title="photo · three rows · sm — from 1440 the photo runs the rows' height in the end track and ends on the last rule; below 1440 it sits above them, 16:9 from 1024, 3:2 below">
+          <Specimen title="photo · three rows · sm — from 1024 the photo takes the trailing two thirds and runs the rows' height, ending on the last rule; below 1024 it sits above them at 3:2">
             <ReadDown rows={READ_DOWN.slice(0, 3)} photo={getKitPhoto('workshop-brick-room')} />
           </Specimen>
         </Layout>
       </Section>
 
       <Section>
-        <Specimen title="12 · ReadDown photo + rail — the § 6.3 field on the photo's side, from 1440; its feather passes under the photograph, never under the rows">
+        <Specimen title="12 · ReadDown photo + rail — the § 6.3 field hung off the photo's end edge, from 1440: it starts under the photograph and runs into the margin, never under the rows">
           <ReadDown
             rows={READ_DOWN.slice(1, 4)}
             photo={getKitPhoto('hands-sketches-markers')}

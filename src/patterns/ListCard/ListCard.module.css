@@ -443,10 +443,10 @@
 
 /* The photo form (ReadDown `photo`). The outer box is the inline-size container and the grid item
    Layout stretches; the inner box is what Media fills (a cover crop). Above the rows its height is a
-   multiple of its own width (cqi); from 1440, in the end track, it takes the stretched row's height
-   and `contain: size` keeps the master's intrinsic height (a 2:3 master is 523 tall at 349) out of
-   the row's sizing, so the ROWS set the band and the photo ends on the last rule. Sizing only: no
-   display, no margin. The queries follow the arrangement (Layout's lg and xl); no distance moves. */
+   multiple of its own width (cqi, 3:2); from 1024, in the trailing track, it takes the stretched
+   row's height and `contain: size` keeps the master's intrinsic height out of the row's sizing, so
+   the ROWS set the band and the photo ends on the last rule. Sizing only: no display, no margin. The
+   query follows the arrangement (Layout's lg); no distance moves. */
 .readdownPhoto {
   container-type: inline-size;
 }
@@ -457,25 +457,29 @@
 
 @media (min-width: 1024px) {
   .readdownPhotoBox {
-    block-size: calc(var(--lcrd-readdown-photo-height-lg) * 100cqi);
-  }
-}
-
-@media (min-width: 1440px) {
-  .readdownPhotoBox {
     contain: size;
     block-size: 100%;
   }
 }
 
-/* The `rail` texture exists from 1440 only (§ 6.3), where the photo it sits behind stands in the
-   end track; below it the photo sits above the rows and the field would stand under them. */
+/* The `rail` texture exists from 1440 only (§ 6.3). Its containing block is the BAND (ReadDown.tsx),
+   so % here is the band's width: the field runs from the band's end edge back across the band's
+   inline padding — the same max() Section pads with — and 80 more, under the photograph's end
+   edge, which from 1024 is the column's end. The field therefore starts under the image at every
+   width and never extends past the viewport. Two classes, so this outranks Texture's own box
+   (inset 0, width 100%) whichever stylesheet loads first. */
 .rail {
   display: none;
 }
 
 @media (min-width: 1440px) {
-  .rail {
+  .readdownPhoto > .rail {
     display: block;
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    inline-size: calc(
+      max(var(--gap-gutter), (100% - var(--lcrd-readdown-rail-container)) / 2) +
+        var(--lcrd-readdown-rail-under)
+    );
   }
 }

@@ -67,24 +67,25 @@ function Caption({
 }
 
 /* ── D rows ──────────────────────────────────────────────────────────────────────────────────
-   The photo form and two columns both set rows in the 349 track (sm, h5): ≤ 5-word titles, bodies
+   The photo form sets rows in the 381 track (sm, h5): ≤ 4-word titles, bodies ≤ 12 words, two
+   lines, so three rows and the head fit the fold. Two columns set them in the 349 halves: bodies
    ≤ 19 words, three lines at most (§ 1.5). The tint proof's one column (md, h4) runs at the lead
    measure, ≤ 20 words. */
 const KEEP: readonly ReadDownRow[] = [
   {
     icon: 'layers',
     title: 'A product model',
-    body: 'The objects, states and rules your product runs on, drawn once and agreed by everyone who builds on it.',
+    body: 'The objects, states and rules your product runs on, agreed once.',
   },
   {
     icon: 'document-text',
     title: 'A decision record',
-    body: 'Every consequential call, with the evidence behind it, so the reasoning survives the people who made it.',
+    body: 'Each call and its evidence, so the reasoning outlives the room.',
   },
   {
     icon: 'code',
     title: 'Coded prototypes',
-    body: 'Working surfaces your team can open, test with users and hand straight to engineering.',
+    body: 'Working surfaces to test with users and hand to engineering.',
   },
 ];
 
@@ -92,17 +93,17 @@ const AUDIT: readonly ReadDownRow[] = [
   {
     icon: 'eye',
     title: 'The product as used',
-    body: 'We work through the real flows with real accounts, where the friction actually shows up.',
+    body: 'The real flows with real accounts, where the friction shows.',
   },
   {
     icon: 'database',
     title: 'The model underneath',
-    body: 'Where the screens and the data disagree about what a thing is, and who owns it.',
+    body: 'Where the screens and the data disagree about what a thing is.',
   },
   {
     icon: 'checklist',
     title: 'A ranked list of fixes',
-    body: 'Each one costed and sequenced, so the first sprint after the audit is already planned.',
+    body: 'Costed and sequenced, so the next sprint is already planned.',
   },
 ];
 
@@ -166,17 +167,17 @@ const SYSTEM: readonly ReadDownRow[] = [
   {
     icon: 'widget',
     title: 'Components',
-    body: 'Built once in code and in design, each with a named owner and a version.',
+    body: 'Built once in code and design, each with an owner and a version.',
   },
   {
     icon: 'ruler-pen',
     title: 'Tokens',
-    body: 'Every colour, size and distance a named decision, so a rebrand is an edit, not a project.',
+    body: 'Every colour and distance named, so a rebrand is an edit.',
   },
   {
     icon: 'monitor',
     title: 'A living reference',
-    body: 'One site where design, code and guidance agree, and say when not to reach for a part.',
+    body: 'One site where design, code and guidance agree on every part.',
   },
 ];
 
@@ -314,32 +315,36 @@ export default function KitReaddownPage() {
 
       {/* ── D · one column, photo aside ───────────────────────────────────────────────── */}
       <Caption id="d-photo" index="D.1" title="One column, photo, three rows">
-        The photograph is the band&rsquo;s large thing, so it stands in the body beside the
-        rows rather than under the lead: a 2:3 portrait the rows&rsquo; own height, ending on
-        the last rule. The head keeps its track; the first title and the photo&rsquo;s top
-        both start on the eyebrow&rsquo;s line. Each glyph is blue.
+        The photograph is the band&rsquo;s large thing, so it takes the wide track: the head
+        splits into the heading and the lead, and the body splits on the same line, the rows
+        under the heading and the photo under the lead, the rows&rsquo; own height. Both start on
+        the first title&rsquo;s line and end on the last rule, from 1024 up. Each glyph is blue.
       </Caption>
       <ContentSection
-        arrangement="beside"
+        arrangement="split-head"
         eyebrow="What you receive"
         heading="What your team keeps"
         headingId="kit-d-photo"
         lead="Everything we make is built to outlast the engagement, and to be read by people who were not in the room."
       >
-        <ReadDown rows={KEEP} photo={photo('moodboard-wall-desk')} />
+        <ReadDown rows={KEEP} photo={photo('whiteboard-pair-laptop')} />
       </ContentSection>
 
       {/* ── D · one column + CtaRow ───────────────────────────────────────────────────── */}
       <Caption id="d-cta" index="D.2" title="One column, three rows and a CtaRow">
         The photo form closed by a blue link a stack under the rows and the photograph, which
-        still end level. The CtaRow&rsquo;s rule is off: the ladder&rsquo;s last hairline already
-        closes the body (§ 3.1).
+        still end level on the last rule. The CtaRow&rsquo;s rule is off: the ladder&rsquo;s last
+        hairline already closes the body (§ 3.1). The foot is paid for with tight air, so the band
+        stays inside one viewport.
       </Caption>
       <ContentSection
-        arrangement="beside"
+        arrangement="split-head"
         eyebrow="Product audit"
         heading="What two weeks of audit covers"
         headingId="kit-d-cta"
+        /* The foot costs 88 (stack + CtaRow); at standard air the band is 886. Tight air (64) pays
+           for it and lands at 822, under the fold, rather than cutting a row or the photo. */
+        density="tight"
         lead="A fixed scope, a fixed fee, and a readout your whole team can act on the following Monday."
         footer={
           <CtaRow
@@ -351,7 +356,7 @@ export default function KitReaddownPage() {
           />
         }
       >
-        <ReadDown rows={AUDIT} photo={photo('designer-monitor-ui')} />
+        <ReadDown rows={AUDIT} photo={photo('pair-laptop-notebook')} />
       </ContentSection>
 
       {/* ── D · two columns, stat aside ───────────────────────────────────────────────── */}
@@ -409,19 +414,19 @@ export default function KitReaddownPage() {
 
       {/* ── D · rail texture ──────────────────────────────────────────────────────────── */}
       <Caption id="d-rail" index="D.5" title="The photo form with the rail texture">
-        § 6.3 `rail`, on the photograph&rsquo;s side: one field of the Tcules grid from 140 past
-        the band&rsquo;s edge, 220 wide, blur 120. Its feather passes under the photograph, never
-        under a word, so the grid reads as coming out from behind the image into the margin. From
-        1440 only, where the photo stands in the end track; at 390 the band renders without it.
+        § 6.3 `rail`, hung off the photograph&rsquo;s end edge: one field of the Tcules grid that
+        starts under the image and runs into the margin, 220 wide, blur 120. It never passes
+        under a word, and it meets the photo at every width, so the grid reads as coming out from
+        behind the image. From 1440 only; at 390 the band renders without it.
       </Caption>
       <ContentSection
-        arrangement="beside"
+        arrangement="split-head"
         eyebrow="Design systems"
         heading="What a system hands over"
         headingId="kit-d-rail"
         lead="Three parts, each one owned, versioned and written down, so the system outlives the project that built it."
       >
-        <ReadDown rows={SYSTEM} photo={photo('sticky-grid-minimal')} rail />
+        <ReadDown rows={SYSTEM} photo={photo('wireframe-wall')} rail />
       </ContentSection>
 
       {/* ── D-faq · seven ─────────────────────────────────────────────────────────────── */}

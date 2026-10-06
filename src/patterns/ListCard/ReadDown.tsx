@@ -35,31 +35,35 @@ type ReadDownBase = {
 };
 
 /**
- * THE PHOTO FORM (fix round 1, 6 Oct 2026). A 3:2 photograph at 381 under the lead was the
- * size of a paragraph and ended 80 to 95 below the last rule, so the band finished ragged and the
- * image read as an attachment. In this form the photograph is the band's large thing and it lives
- * in the BODY: from 1440 the body track splits again into the rows and the photo, 64 (`column`)
- * apart, and the photo runs the rows' full height — about 349 × 526 with three rows, a 2:3
- * portrait, twice the area of the old aside — so the photo and the rows end on the same line, the
- * last rule. The caller passes no `aside`: the photo is it.
+ * THE PHOTO FORM (fix round 2, 6 Oct 2026). The photograph is the band's large thing, so it takes
+ * the WIDE track: from 1024 the set splits [1, 2] at 96 (`section`) — the rows in the leading third,
+ * the photo in the trailing two thirds — and the photo runs the rows' full height, so the two start
+ * on the first title's line and end on the last rule at every width from 1024. About 763 × 450 at
+ * 1440 with three rows: half the band, the mass the references give an image (Meridian's
+ * deliverables split), where round 1's 349 portrait read as a third equal column.
  *
- * One column only, two or three rows: the rows take the 349 track of the two-column set, so they
- * take that set's step (`sm`) and its arithmetic (§ 1.4, D row 186; three rows 526, a band of 718,
- * 814 with a CtaRow). Below 1440 the photo sits above the rows across the body track — 16:9 from
- * 1024, 3:2 below — first in DOM order, the phone's order (§ 3.7 item 4: aside between head and
- * body). The photograph is atmosphere (alt=""), so its visual move to the end carries no meaning.
+ * PLACE IT UNDER ContentSection `split-head`. That head splits [1, 2] at 96 from 1024 too, so the
+ * two halves are one grid: the heading over the rows, the lead over the photograph, and no empty
+ * head track under a short lead (round 1's 290 hole). Under `stacked` it reads the same with the
+ * head above both. Never under `beside`: the set would split again inside the two-thirds track.
+ *
+ * Exactly three rows, `sm` (h5) in the 381 track. Fewer and the photo becomes a letterbox (two rows
+ * stretch a 763 photo to ~290, 2.6 : 1), more and the band passes the fold. Below 1024 the photo sits
+ * above the rows at 3:2 across the column, first in DOM order, the phone's order (§ 3.7 item 4:
+ * aside between head and body). The photograph is atmosphere (alt=""), so its visual move to the
+ * trailing track carries no meaning. The caller passes no `aside`: the photo is it.
  */
 type ReadDownWithPhoto = ReadDownBase & {
   columns?: 1;
   photo: MediaImage;
   /**
-   * The `rail` texture (§ 6.3), on the PHOTO's side: one field from 140 past the band's end edge,
-   * 220 wide, 15% to 85% of its height, blur 120. Only with the photo, because the photo is what
-   * makes the recipe honest: in the 100 to 115 margin of a 1440 to 1470 window the feather reaches
-   * about 120 into the column, and on this side it passes UNDER the photograph, never under a word.
-   * The field reads as the grid emerging from behind the image into the margin. From 1440 only,
-   * where the photo stands in the end track. Paper only (§ 6.2); it spends one of the band's two
-   * blue masses (§ 4.3).
+   * The `rail` texture (§ 6.3), anchored to the PHOTOGRAPH'S END EDGE, never to the band: the field
+   * starts 80 under the photo and runs to the viewport edge, one shape 220 wide with blur 120, so
+   * the grid always reads as coming out from behind the image — at 1440 it fills the 100 margin, at
+   * 1920 it fades out inside the 340 one, never a stray strip at the screen edge (round 2: anchored to
+   * the band, it sat 170 clear of the photo at 1920). It never passes under a word: under the photo
+   * and in the margin only. From 1440, where the margin is wide enough to hold it. Paper only (§ 6.2);
+   * it spends one of the band's two blue masses (§ 4.3).
    */
   rail?: boolean;
 };
@@ -113,11 +117,11 @@ export function ReadDown({ rows, columns = 1, titleAs = 'h3', photo, rail }: Rea
     warn('some rows carry a glyph and some do not; a set is all-icon or all-text.');
   }
 
-  if (photo && (rows.length < 2 || rows.length > 3)) {
-    warn(`the photo form takes two or three rows; received ${rows.length}.`);
+  if (photo && rows.length !== 3) {
+    warn(`the photo form takes three rows; received ${rows.length}.`);
   }
 
-  /* The photo form's rows sit in the 349 track, the two-column set's, and take its step. */
+  /* The photo form's rows sit in the 381 track, narrower than a two-column half, and take its step. */
   const size = rows.length >= 4 || columns === 2 || photo ? 'sm' : 'md';
 
   const list = (
@@ -144,37 +148,39 @@ export function ReadDown({ rows, columns = 1, titleAs = 'h3', photo, rail }: Rea
 
   if (!photo) return list;
 
-  /* The photo form. Photo first in the DOM (above the rows below 1440), reversed to the end track
-     from 1440. Layout owns both tracks and the 64 seam; the rows' Layout and the photo's box are its
-     two children. `stretch`, so the photo's box takes the rows' height: the outer box is the
-     inline-size container, the inner one reads it (cqi) below 1440 and fills the row from it.
+  /* The photo form. Photo first in the DOM (above the rows below 1024), reversed into the trailing
+     two-thirds track from 1024. Layout owns both tracks and the 96 seam; `stretch`, so the photo's
+     box takes the rows' height (the outer box is the inline-size container the base ratio reads).
 
-     The rail's svg is a child of the band's body stack, out of flow: Texture fills its nearest
-     positioned ancestor, and nothing between here and the Section is positioned, so the field
-     covers the band. Place a railed set as the LAST block of a plain body stack, as ContentSection's
-     beside body is. The geometry is § 6.3's `rail`, exactly; raw numbers because TextureShape takes
-     them as props (as Statement's head-half field does). */
+     The rail's svg sits in the photo's box but is NOT contained by it: nothing between it and the
+     Section is positioned, so the band is its containing block, and its CSS sizes it from the band's
+     end edge back to 80 under the photo (the margin is a max() over the band's width, which only a
+     child of the band can resolve). That is what keeps it inside the viewport — a field hung off the
+     photo box would overflow the page sideways at 1440. So place a railed set straight in a band,
+     as ContentSection's body is, never in a positioned wrapper. The shape fills that field's start;
+     its vertical place is the photo's in a three-row band (35% to 85% of it). Raw numbers because
+     TextureShape takes them as props (as Statement's head-half field does). */
   return (
-    <>
-      {rail ? (
-        <Texture className={styles.rail}>
-          <TextureShape right={-140} top="15%" width={220} height="70%" blur={120} />
-        </Texture>
-      ) : null}
-      <Layout
-        columns={{ xl: [1, 1] }}
-        colGap="column"
-        rowGap="stack"
-        reverse={{ xl: true }}
-        align="stretch"
-      >
-        <div className={styles.readdownPhoto}>
-          <div className={styles.readdownPhotoBox}>
-            <Media image={photo} fit="fill" sizes={READ_DOWN_PHOTO} />
-          </div>
+    <Layout
+      /* [2, 1] in DOM order: the ratio travels with its child under `reverse`, so the photo (first)
+         keeps the 2fr track and lands in it at the trailing end. */
+      columns={{ lg: [2, 1] }}
+      colGap="section"
+      rowGap="stack"
+      reverse={{ lg: true }}
+      align="stretch"
+    >
+      <div className={styles.readdownPhoto}>
+        {rail ? (
+          <Texture className={styles.rail}>
+            <TextureShape left={0} top="35%" width={220} height="50%" blur={120} />
+          </Texture>
+        ) : null}
+        <div className={styles.readdownPhotoBox}>
+          <Media image={photo} fit="fill" sizes={READ_DOWN_PHOTO} />
         </div>
-        {list}
-      </Layout>
-    </>
+      </div>
+      {list}
+    </Layout>
   );
 }

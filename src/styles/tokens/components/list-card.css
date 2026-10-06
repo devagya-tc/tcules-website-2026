@@ -126,11 +126,18 @@
   --lcrd-stacked-body-measure: var(--measure-lead);
 
   /* ReadDown's photo form (ReadDown.tsx): the photograph's box height as a multiple of its own width
-     while it sits ABOVE the rows — 3:2 below 1024, 16:9 from 1024 to 1439, where the body track is
-     576 to 763 wide and a 3:2 would be a 509-tall photo before the first row. From 1440 the box has
-     no ratio: it stretches to the rows' height in the end track (2:3 at three rows). */
+     while it sits ABOVE the rows, below 1024 — 3:2. From 1024 the box has no ratio: it stretches to
+     the rows' height in the trailing two-thirds track (about 763 x 450 at 1440, three rows). */
   --lcrd-readdown-photo-height-base: calc(2 / 3);
-  --lcrd-readdown-photo-height-lg: calc(9 / 16);
+
+  /* The photo form's rail field (ReadDown `rail`), sized from the band's end edge. The column cap is
+     DUPLICATED ON PURPOSE from --sec-container (a component never reads another's tokens, CLAUDE.md
+     tokens rule 6): the field must cross exactly the band's inline padding to start at the photo's
+     end edge, and that padding is a max() over the cap. Change the page frame and change this with
+     it. The under-reach is an OPTICAL placement, not a layout distance (gap rule 1): how far the
+     field starts under the photograph, so its strongest part meets the image's edge. */
+  --lcrd-readdown-rail-container: 1240px;
+  --lcrd-readdown-rail-under: var(--space-80);
 
   /* The accepted native-image contract. 160px was measured as a recognisable landscape sample in
      the 1240px row while still leaving the 192px content core room before Cluster wraps it.

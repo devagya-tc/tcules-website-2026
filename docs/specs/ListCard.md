@@ -1128,16 +1128,23 @@ title with the sentence under it.
   grid cell (`block-size: 100%`), so the closing rules run level across the seam.
 - **On the content edge:** no inline inset (rows never link, so no hover ground), the 32 block inset kept
   (§ 1.4's D row, padding 64), and the first row of each column starts on the set's top edge.
-- **`photo`** (fix round 1): the photo form. The photograph moves out of the head track (a 3:2 at 381
-  ended 80–95 below the last rule and weighed a paragraph) into the BODY: from 1440 the body track
-  splits `{ xl: [1, 1] }` at `column`, the rows start, the photo end (`reverse`, photo first in the DOM
-  for the phone's order), `stretch`, so the photo runs the rows' height and ends on the last rule —
-  349 × 526 at three rows, a 2:3 portrait. One column, two or three rows, `sm` (the 349 track is the
-  two-column set's). Below 1440 the photo sits above the rows: 16:9 from 1024, 3:2 below
-  (`--lcrd-readdown-photo-height-lg` / `-base`). The caller passes no ContentSection `aside`.
-- **`rail`** (photo form only): the § 6.3 `rail` texture (rect, right −140, top 15 %, 220 × 70 %, blur
-  120), on the photo's side, so the feather that reaches past the 100–115 margin of a 1440–1470 window
-  passes under the photograph and never under text. Shown from 1440 only (`.rail`).
+- **`photo`** (fix round 2, superseding round 1's 349 portrait, which read as a third equal column
+  beside a head track left empty under its lead): the photo form gives the photograph the WIDE track.
+  From 1024 the set splits `{ lg: [2, 1] }` at `section` (96) with `reverse`, so the photo (first in the
+  DOM, for the phone's order) takes the trailing two thirds and the rows the leading third; `stretch`,
+  so the photo runs the rows' height and starts and ends with them at every width from 1024. About
+  763 × 449 at 1440. Place it under ContentSection `split-head`, whose head splits [1, 2] at 96 too:
+  heading over rows, lead over photo, one grid. Exactly three rows (warned), `sm` in the 381 track,
+  bodies ≤ 12 words / two lines, so the band is 822 at 1470 (with a CtaRow, 822 at `density="tight"`).
+  Below 1024 the photo sits above the rows at 3:2 (`--lcrd-readdown-photo-height-base`). The caller
+  passes no ContentSection `aside`.
+- **`rail`** (photo form only): the § 6.3 `rail` texture, hung off the photo's END EDGE rather than the
+  band's: the field's box runs from the band's end edge back across the band's inline padding (the
+  same max() Section pads with; cap duplicated on purpose as `--lcrd-readdown-rail-container`) plus
+  `--lcrd-readdown-rail-under` (80, optical) under the photo, and one 220-wide shape, blur 120, fills its
+  start. So the grid always meets the image (round 2: band-anchored, it sat 170 clear of the photo at
+  1920) and never extends past the viewport. Never under text. From 1440 only (`.rail`). Its containing
+  block must be the Section: never wrap a railed set in a positioned box.
 - **Token rename:** `--lcrd-step-body-measure` became `--lcrd-stacked-body-measure` (Steps and
   ReadDown both read it).
 - **Ceilings warned in development:** > 3 rows in a column, > 6 rows in a set, mixed glyph / no glyph.
