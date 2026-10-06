@@ -7,15 +7,47 @@ function LabelledInput({
   label,
   invalid = false,
   disabled = false,
+  appearance,
 }: {
   label: string;
   invalid?: boolean;
   disabled?: boolean;
+  appearance?: 'box' | 'line';
 }) {
   return (
     <Layout as="label" rowGap="tight">
       <span>{label}</span>
-      <Input invalid={invalid} disabled={disabled} placeholder="you@company.com" />
+      <Input
+        invalid={invalid}
+        disabled={disabled}
+        appearance={appearance}
+        placeholder="you@company.com"
+      />
+    </Layout>
+  );
+}
+
+function LabelledTextarea({
+  label,
+  invalid = false,
+  disabled = false,
+  appearance,
+}: {
+  label: string;
+  invalid?: boolean;
+  disabled?: boolean;
+  appearance?: 'box' | 'line';
+}) {
+  return (
+    <Layout as="label" rowGap="tight">
+      <span>{label}</span>
+      <Input
+        as="textarea"
+        invalid={invalid}
+        disabled={disabled}
+        appearance={appearance}
+        placeholder="A line about what you are building"
+      />
     </Layout>
   );
 }
@@ -27,9 +59,10 @@ export default function InputSpecimenPage() {
         <Layout rowGap="block">
           <h1>Input</h1>
           <p>
-            The native control box shared by enquiry forms and the footer — one treatment, on
-            every surface. Labels, flags, messages, and arrangement stay with the pattern that
-            composes it.
+            The native control shared by enquiry forms and the footer, in two appearances on
+            every surface: the filled box, and the unboxed line the enquiry forms use (one rule
+            under the value, blue and doubled on focus). Labels, flags, messages, and
+            arrangement stay with the pattern that composes it.
           </p>
         </Layout>
       </Section>
@@ -37,7 +70,10 @@ export default function InputSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <h2>Native shapes and states</h2>
-          <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
+          {/* Four across from lg (cmp-form final round): two by two, the band was 948 at 1470 and
+              ran past the fold. Each track is 286 at 1440 and 216 at 1024, and the control has no
+              minimum width, so all four fit. */}
+          <Layout columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
             <Specimen
               title="Standard · input"
               note="Point, tab, type, and disable from markup."
@@ -59,31 +95,83 @@ export default function InputSpecimenPage() {
                 <LabelledInput label="Disabled" disabled />
               </Layout>
             </Specimen>
+            <Specimen
+              title="Line · input and textarea"
+              note={`appearance="line": no fill, no box, the value on its one rule. Focus turns it blue and doubles it; the two-line textarea grows with its text and needs its placeholder to read as a field.`}
+            >
+              <Layout rowGap="block">
+                <LabelledInput label="Email" appearance="line" />
+                <LabelledTextarea label="What are you working on?" appearance="line" />
+                {/* EnquiryForm disables every field while it submits and keeps `invalid` from the
+                    blur messages, so this pair is a real state: it must read disabled, with no
+                    danger rule left under it. */}
+                <LabelledInput
+                  label="Invalid and disabled"
+                  appearance="line"
+                  invalid
+                  disabled
+                />
+              </Layout>
+            </Specimen>
           </Layout>
         </Layout>
       </Section>
 
-      {/* Every surface renders every STATE, not just rest. Four of the eleven surface-dependent
-          tokens — --inp-standard-invalid-rule and the three --inp-disabled-* — move per surface, and with
-          invalid and disabled shown on one surface only they were never looked at on ink or blue.
-          The invalid rule in particular steps danger-600 / 600 / 300 / 100 across the four. */}
+      {/* Every surface renders every STATE, not just rest, for BOTH shapes. Twelve of the nineteen
+          surface-dependent tokens (--inp-standard-invalid-rule, the three --inp-disabled-* and the
+          eight --inp-line-*) move per surface, and with invalid and disabled shown on one surface only they were never
+          looked at on ink or blue. The invalid rule steps danger-600 / 600 / 300 / 600 across the
+          four: on blue it is chosen against the WHITE field it borders, not against the blue
+          ground. The LINE field has no fill, so its invalid rule is chosen against the ground
+          itself: danger-600 / 600 / 300 and danger-300 on blue (danger-100 read as the rest rule drawn heavier). The textarea row is here because the textarea is the shape the enquiry forms
+          lean on, and its invalid rule had only ever been seen on paper.
+
+          Three tracks from lg, not md: at 768 a third of the column is 213px, and the row was the
+          one place on the route that scrolled sideways (768–899) while Input carried a 16rem
+          floor. The floor has since moved to the composing patterns; the row still waits for room. */}
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
-        <Section key={surface} surface={surface} density="tight">
-          <Specimen
-            title={`Surface · ${surface}`}
-            note="Identical markup on all four: rest, invalid and disabled. Every one of the 11 surface-dependent tokens renders in this band."
-          >
-            <Layout columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="block">
-              <LabelledInput label="Rest" />
-              <LabelledInput label="Invalid" invalid />
-              <LabelledInput label="Disabled" disabled />
-            </Layout>
-          </Specimen>
-        </Section>
+        <div
+          key={surface}
+          data-fold-exempt="surface proof: twelve states on one ground, which at 390 stack one per row"
+        >
+          <Section surface={surface} density="tight">
+            <Specimen
+              title={`Surface · ${surface}`}
+              note="Identical markup on all four: rest, invalid and disabled, as an input and as a textarea, boxed and lined. Every surface-dependent token renders in this band. On blue the line invalid rule is danger-300, a change of hue rather than a heavier pale rule, and the line disabled field reads its own brandeis-300 / 400 tokens."
+            >
+              <Layout rowGap="stack">
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <LabelledInput label="Rest" />
+                  <LabelledInput label="Invalid" invalid />
+                  <LabelledInput label="Disabled" disabled />
+                </Layout>
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <LabelledTextarea label="Rest · textarea" />
+                  <LabelledTextarea label="Invalid · textarea" invalid />
+                  <LabelledTextarea label="Disabled · textarea" disabled />
+                </Layout>
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <LabelledInput label="Rest · line" appearance="line" />
+                  <LabelledInput label="Invalid · line" appearance="line" invalid />
+                  <LabelledInput label="Disabled · line" appearance="line" disabled />
+                </Layout>
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <LabelledTextarea label="Rest · line textarea" appearance="line" />
+                  <LabelledTextarea label="Invalid · line textarea" appearance="line" invalid />
+                  <LabelledTextarea
+                    label="Disabled · line textarea"
+                    appearance="line"
+                    disabled
+                  />
+                </Layout>
+              </Layout>
+            </Specimen>
+          </Section>
+        </div>
       ))}
 
       {/* ── The nested-surface band ───────────────────────────────────────────────
-          The reason all four blocks restate all eleven tokens rather than carrying deltas. A blue
+          The reason all four blocks restate all nineteen tokens rather than carrying deltas. A blue
           Section inside an ink one must render the BLUE column; if any token were missing from the
           blue block it would inherit ink's value and the mismatch would show here as a field that
           does not match its own ground. Input owns more surface-dependent tokens than any other
@@ -99,7 +187,7 @@ export default function InputSpecimenPage() {
           <Section surface="blue" density="tight">
             <Specimen
               title="Nested surface · blue inside ink"
-              note="SPECIMEN-ONLY ARRANGEMENT — a Section inside a Section insets the content column twice, which is why the two do not align. What it proves is the colour: this field must read as blue's column (invalid at danger-100, the lightest step, because on blue nothing darker clears), not as ink's stranded on a blue ground."
+              note="SPECIMEN-ONLY ARRANGEMENT — a Section inside a Section insets the content column twice, which is why the two do not align. What it proves is the colour: this field must read as blue's column (a white field, a brandeis-200 rule, and invalid at danger-600 — chosen against the white fill it borders, where danger-100 would measure 1.24:1), not as ink's stranded on a blue ground (a neutral-900 field, invalid at danger-300)."
             >
               <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="block">
                 <LabelledInput label="Standard · on blue" />
@@ -114,8 +202,8 @@ export default function InputSpecimenPage() {
         <Layout rowGap="block">
           <h2>Edge cases</h2>
           <Specimen
-            title="Long values and the minimum"
-            note="The input scrolls; the textarea wraps."
+            title="Long values"
+            note="The input scrolls; the textarea wraps. Neither sets a minimum width: the pattern that composes the field owns its floor."
           >
             <Layout rowGap="block">
               <Layout as="label" rowGap="tight">

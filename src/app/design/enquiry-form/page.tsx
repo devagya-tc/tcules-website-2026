@@ -4,6 +4,7 @@ import { Button, Cluster, Layout, Section } from '@/components';
 import { CtaSection, EnquiryForm, type EnquiryUrlLabel } from '@/patterns';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
+import { Rehearse } from '../_specimen/Rehearse';
 import { specimenStyles as s } from '../_specimen/Specimen';
 
 const CONTEXT = {
@@ -17,18 +18,39 @@ const CONTEXT = {
 
 const BODY = ['Tell us what you are trying to ship and who it is for.'] as const;
 
+/* The caller's next steps: the success view numbers what it is handed. */
+const STEPS = [
+  { label: 'A reply within a working day', detail: 'From the person who would lead the work.' },
+  {
+    label: 'A thirty-minute call',
+    detail: 'What exists, and what a first fortnight would change.',
+  },
+] as const;
+
+const SENT = {
+  name: 'Maya Fernandes',
+  email: 'maya@northwind.studio',
+  what_are_you_working_on: 'A billing redesign for a B2B payments product.',
+};
+
 function Enquiry({
   outcome = 'success',
   audit = false,
   contact = false,
+  compact = false,
+  boxed = false,
   urlLabel,
 }: {
   outcome?: 'success' | 'error' | 'pending';
   audit?: boolean;
   contact?: boolean;
+  compact?: boolean;
+  boxed?: boolean;
   urlLabel?: EnquiryUrlLabel;
 }) {
   const action = `${ENDPOINTS.enquiryDesign}?outcome=${outcome}`;
+
+  if (compact) return <EnquiryForm variant="compact" action={action} context={CONTEXT} />;
 
   if (contact)
     return <EnquiryForm variant="contact" action={action} scheduleHref={ROUTES.contact} />;
@@ -46,6 +68,7 @@ function Enquiry({
       context={CONTEXT}
       urlLabel={urlLabel}
       scheduleHref={ROUTES.contact}
+      fields={boxed ? 'box' : undefined}
     />
   );
 }
@@ -57,10 +80,12 @@ export default function EnquiryFormSpecimenPage() {
         <Layout rowGap="block">
           <h1>EnquiryForm</h1>
           <p>
-            Shared stacked field sets for enquiries, audits, and contact, with blur-only
-            validation and an asynchronous success replacement. Every specimen rendering sits
-            inside CtaSection.
+            Shared field sets for enquiries, audits, contact, and the compact three-field ask,
+            with blur-only validation and an asynchronous success replacement. The renderings
+            here sit inside CtaSection; the kit&rsquo;s form family shows the form beside a
+            photograph, under a centred and a beside head, and in the offer.
           </p>
+          <Link href={ROUTES.designKitForm}>The form family in the UI kit</Link>
         </Layout>
       </Section>
 
@@ -83,14 +108,31 @@ export default function EnquiryFormSpecimenPage() {
         body={['Five visible contact fields mapped directly to the client-contact mutation.']}
         form={<Enquiry contact />}
       />
+      <CtaSection
+        eyebrow="Variant · compact"
+        heading="Three lines are enough"
+        body={[
+          'Name and email as a pair where the track holds two, the one question, and the submit with the caption beside it. At most 400 tall.',
+        ]}
+        form={<Enquiry compact />}
+      />
+      <CtaSection
+        eyebrow={`Fields · box`}
+        heading="The boxed field, kept as an option"
+        body={[
+          'fields="box" sets Input\'s filled control instead of the default line. Every variant takes it; no placement on the site uses it today.',
+        ]}
+        form={<Enquiry boxed />}
+      />
       <Section density="tight">
         <Layout rowGap="tight">
           <h2>Submitted context contract</h2>
           <p>
             Enquiry posts <code>origin_route</code>, <code>placement</code>, <code>family</code>
             , <code>service_or_audit</code>, <code>referrer</code>, and <code>campaign</code>.
-            Audit adds <code>intent</code>. Empty referrer and campaign values remain present
-            rather than being dropped.
+            Audit adds <code>intent</code>; compact posts the enquiry context with{' '}
+            <code>name</code> in place of <code>url</code>. Empty referrer and campaign values
+            remain present rather than being dropped.
           </p>
         </Layout>
       </Section>
@@ -123,6 +165,48 @@ export default function EnquiryFormSpecimenPage() {
           heading="Start with the work as it is"
           body={BODY}
           form={<Enquiry />}
+          surface={surface}
+        />
+      ))}
+      {/* The compact set on every surface too, numbered and with the full-width submit, so the
+          accent numerals (--enq-accent-ink) and the caption ink under a full submit are seen on
+          every ground. */}
+      {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
+        <CtaSection
+          key={`compact-${surface}`}
+          eyebrow={`Compact · ${surface}`}
+          heading="Three lines, on this ground"
+          body={BODY}
+          form={
+            <EnquiryForm
+              variant="compact"
+              numbered
+              submit="full"
+              action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+              context={CONTEXT}
+            />
+          }
+          surface={surface}
+        />
+      ))}
+      {/* The success view on every surface: the check, the thanks, and the caller's numbered
+          steps (.stepMarker in the accent, .stepDetail in the hint ink). */}
+      {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
+        <CtaSection
+          key={`sent-${surface}`}
+          eyebrow={`Sent · ${surface}`}
+          heading="The thanks, on this ground"
+          body={BODY}
+          form={
+            <Rehearse submit fill={SENT}>
+              <EnquiryForm
+                variant="compact"
+                action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+                context={CONTEXT}
+                nextSteps={STEPS}
+              />
+            </Rehearse>
+          }
           surface={surface}
         />
       ))}
@@ -166,7 +250,10 @@ export default function EnquiryFormSpecimenPage() {
           />
         }
       />
-      <div className={s.trackSm}>
+      <div
+        className={s.trackSm}
+        data-fold-exempt="stress specimen: an illegal 256px parent squeezes the band to expose the form's floor"
+      >
         <CtaSection
           eyebrow="Edge · illegal parent"
           heading="A 256px parent that does not size the band"

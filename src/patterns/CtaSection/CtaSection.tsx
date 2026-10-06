@@ -868,9 +868,11 @@ export function CtaSection(props: CtaSectionProps) {
      union's first member has `arrangement?: 'split'`, so an omitted arrangement lands here.
 
      [10, 7] at `section` from 1280: the copy, its points and its contact strip in 10 (673 at 1470),
-     the full EnquiryForm in 7 (471). The 7 is sized TO THE FORM: the full form holds its own 470
-     measure (`--enq-form-max-inline`: one-field rows read as stretched any wider), so in [7, 5]'s
-     477 its fields stopped 7 short of the column's end edge (fix round 1). § 3.4 L draws the close
+     the full EnquiryForm in 7 (471). The 7 is sized TO THE FORM: a one-field row of the full set
+     (email, the question, the link) reads as stretched any wider than ~470. EnquiryForm has no
+     measure of its own since the cmp-form fix round (6 Oct 2026: one width policy, every variant
+     fills its track; the old 470 `--enq-form-max-inline` is deleted), so the form meets the band's
+     end edge by filling this track, not by a cap. § 3.4 L draws the close
      as [5, 7] with the form in 667 — that is the COMPACT form, and cmp-form's L-photo; the full-form
      close's [10, 7] is recorded as an amendment to § 3.4 L (docs/kit/brand-amendments.md).
      [1, 1] from 1024 to 1279 (final fix round): at 1024 the 7 is 356, too narrow for the form's

@@ -233,3 +233,10 @@
   --cmark-height-max: var(--cmark-height-max-m);
   --cmark-width-max: var(--cmark-width-max-m);
 }
+
+/* An index numeral or mark in the band's blue (visual-direction § 4.2: numerals are blue at rest).
+   Pair with a typeroles class for the type; this sets the ink only, from the section's own accent
+   so it lifts on ink like every other blue mark. */
+.accent {
+  color: var(--sec-accent-ink);
+}

@@ -44,7 +44,7 @@ const SPECIMENS = [
       {
         href: '/design/input',
         name: 'Input',
-        note: 'native input and textarea, 2 emphases, semantic states, 4 surfaces',
+        note: 'native input and textarea, box and line appearances, rest · invalid · disabled for both shapes and both appearances on 4 surfaces',
       },
       { href: '/design/icon', name: 'Icon', note: 'the glyph set, 4 size roles, currentColor' },
       {
@@ -145,7 +145,7 @@ const SPECIMENS = [
       {
         href: '/design/enquiry-form',
         name: 'EnquiryForm',
-        note: 'enquiry, audit, and contact field sets — async lifecycle, 4 surfaces',
+        note: 'enquiry, audit, contact and compact field sets — async lifecycle, 4 surfaces',
       },
       {
         href: '/design/process-flow',
@@ -266,6 +266,11 @@ const SPECIMENS = [
         href: '/design/kit/testimonials',
         name: 'Testimonials (G)',
         note: 'typographic, G-case, featured portrait, groups of 2 and 3, slider, rating-led — each with and without a CtaRow, on tint, at 1470 and 390',
+      },
+      {
+        href: '/design/kit/form',
+        name: 'Kit · Form',
+        note: 'the enquiry form family — the L close beside copy, the compact form beside a 4:5 photo (both sides), standalone under a centred and a beside head, the offer, every variant, error and success',
       },
     ],
   },
