@@ -842,9 +842,16 @@ The typography specimen's `<mark>` example is deleted.
 
 The site had too many arrows in buttons and its pairs were inconsistent. The rules:
 
-1. **Solid primary is the converting action. No arrow, ever.** The label carries the ask.
+1. **Solid primary is the group's main next step. No arrow, ever.** The label carries the ask.
+   Revised by the owner the same day: the primary does not have to convert. Choose it in this order:
+   (a) if the group holds a converting action (start a project, book a call, send, contact), that is
+   the solid; (b) otherwise the solid is the step the page most wants next — on About, How we work or
+   an index, where nothing converts, a hero with two actions still leads with a solid so the pair is
+   balanced; (c) a band foot that only points onward, with one destination, is a single link, not a
+   lone solid. One solid per band.
 2. **A primary's partner is a ghost button**, not a link button. The ghost takes the trailing arrow when
-   it navigates.
+   it navigates. A ghost has no outline at rest and so looks like a link button until hovered; that is
+   intended (owner, 7 Oct 2026) — the interaction tells them apart.
 3. **Link buttons belong inside cards and inline contexts** (a card's cta, a list of links, a line of
    text), and carry the arrow. They are never the secondary beside a primary.
 4. **Never two buttons of the same emphasis side by side.** A group is at most one solid + one ghost. A

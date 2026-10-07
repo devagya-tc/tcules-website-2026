@@ -283,7 +283,7 @@ export type PageHeroProps = {
   dates?: HeroDates;
   /**
    * Nought, one or two. Position decides emphasis: the first renders solid/primary with no arrow
-   * (the converting action), the second a primary GHOST with the trailing arrow — its partner, blue
+   * (the main next step: the conversion when there is one, visual-direction § 4.5), the second a primary GHOST with the trailing arrow — its partner, blue
    * at rest (owner, 7 Oct 2026: a primary's partner is a ghost, never a link button; a link button
    * belongs in cards and inline contexts).
    *

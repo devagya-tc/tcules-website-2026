@@ -19,9 +19,9 @@ export type CtaRowAction = {
  *          row is an ask and takes `solid`. The default, because a band's foot usually points
  *          somewhere rather than asks for something.
  *   solid  an ask — the band's one Accent (visual-direction § 4.2: ≤ 1 solid primary per band). The
- *          converting action is solid and NEVER carries an arrow (the label carries the ask). Its
- *          optional partner is a GHOST — never a link — with the trailing arrow, because it
- *          navigates. That is PageHero's and CtaSection's shape exactly.
+ *          main next step (the conversion when there is one; visual-direction § 4.5) is solid
+ *          and NEVER carries an arrow (the label carries the ask). Its optional partner is a
+ *          GHOST — never a link — with the trailing arrow, because it navigates. That is PageHero's and CtaSection's shape exactly.
  *
  * Arrows are therefore the row's decision, not the caller's: link → arrow, solid → none, ghost
  * partner → arrow. There is no per-action emphasis and no icon prop.
@@ -93,7 +93,7 @@ type CtaRowLink = {
 };
 
 /**
- * An ask: the solid converting action (no arrow), and at most one ghost partner (trailing arrow).
+ * An ask: the solid main next step (no arrow), and at most one ghost partner (trailing arrow).
  * Position decides emphasis — the first is the solid, the second the ghost — so a page cannot pair a
  * solid with a link button or put two solids together.
  */

@@ -25,9 +25,11 @@
 
 > **Owner amendment, 7 Oct 2026 — pairing and arrows.** The site had too many arrows in buttons and
 > its pairs were inconsistent. Five rules, binding on every call site; the full text is § 14a.
-> 1. **Solid primary is the converting action. No arrow, ever.**
+> 1. **Solid primary is the group's main next step. No arrow, ever.** It need not convert (owner,
+>    revised 7 Oct): a converting action takes it when present; otherwise the step the page most wants
+>    next, so a non-converting page's hero pair stays balanced. Order of choice: `visual-direction.md` § 4.5.
 > 2. **A primary's partner is a ghost**, not a link button. The ghost carries the trailing arrow when it
->    navigates.
+>    navigates. No outline at rest, so it looks like a link until hovered — intended (owner, 7 Oct).
 > 3. **Link buttons (`emphasis="link"`) belong inside cards and inline contexts**, and carry the arrow.
 >    They are never the secondary beside a primary.
 > 4. **Never two buttons of the same emphasis side by side.** A group is at most one solid + one ghost.
@@ -857,7 +859,7 @@ Each of these is decidable from a diff or from a rendered page.
 
 | Emphasis | Where it goes | Arrow (`arrow-right`, trailing) |
 |---|---|---|
-| `solid` | the converting action — one per view | **never** |
+| `solid` | the main next step (the conversion when there is one) — one per band | **never** |
 | `ghost` | the solid's partner, or a lone secondary action | yes when it navigates (an anchor to somewhere); no when it acts in place (submit, copy, clear) |
 | `link` | inside a card, a list of links, a line of text | yes |
 
