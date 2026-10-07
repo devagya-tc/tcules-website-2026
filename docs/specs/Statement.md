@@ -25,8 +25,7 @@ never `h1` — the page's only h1 is the hero's), `id` (the h2's id and the band
 
 - The element marks the outline; the role sets the scale. `as="p"` keeps a restating sentence out of
   a heading navigator.
-- The words stay ink. The blue is the mark (`--stmt-mark-ink`: brandeis-500, 300 on ink), a small
-  graphic mark (§ 4.2), so the band never reads black and white even with no texture or link.
+- The words stay ink. The eyebrow carries no mark (owner, 7 Oct 2026; the blue square is withdrawn).
 - Texture is paper only (development warning elsewhere) and from 1024 only.
 - Emits `data-band="J"` and `data-copy="statement"`.
 

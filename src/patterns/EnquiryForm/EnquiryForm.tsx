@@ -37,9 +37,9 @@ type SharedProps = {
    */
   width?: 'track' | 'measure';
   /**
-   * The field treatment. `line` (default, every variant) is the unboxed underline field —
-   * references.md's Meridian and Executra move, and the one that stops a form on warm paper
-   * reading as a stack of default white boxes. `box` keeps Input's filled control.
+   * The field treatment. `box` (default, every variant; owner, 7 Oct 2026) is Input's filled
+   * control, which separates each field more clearly than a rule. `line` is the unboxed
+   * underline field — references.md's Meridian and Executra move.
    */
   fields?: 'line' | 'box';
   /**
@@ -355,7 +355,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const variant = props.variant ?? 'enquiry';
   const onSubmitted = props.onSubmitted;
   const urlLabel = props.urlLabel ?? (variant === 'audit' ? 'Site to audit' : 'Website');
-  const appearance = props.fields === 'box' ? 'box' : 'line';
+  const appearance = props.fields === 'line' ? 'line' : 'box';
   const submitting = lifecycle === 'submitting';
   const bounds = props.width === 'measure' ? styles.measure : styles.track;
 

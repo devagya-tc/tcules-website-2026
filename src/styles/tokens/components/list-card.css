@@ -3,6 +3,7 @@
 
    Naming: --lcrd-{part}-{role}-{state}, with a size suffix where the type steps with the set
    (--lcrd-title-text-md | -sm)
+     variants: neutral (the number's quiet tone only)
      parts: title | body | marker | number | ground | link | rule | ring | thumbnail | content
      (title and body also carry the split's -min geometry)
      states: rest (no suffix) | hover | pressed
@@ -13,6 +14,10 @@
    The number has its own ink, separate from --lcrd-marker-ink, and the split is the point: an
    ordinal is chrome and an icon marker names the subject, so they do not want the same weight. One
    token would have forced a choice between a shouting ordinal and a receding subject glyph.
+
+   The number has two tones (owner, 7 Oct 2026): `accent` (--lcrd-number-ink, the default) and
+   `neutral` (--lcrd-neutral-number-ink) for a set where blue numerals would compete with the
+   band's other accent. The tone is chosen per marker by the caller, not by the surface.
 
    It sits ONE STEP QUIETER than the quiet-label ramp used by --crumb-link-ink, --foot-label-ink
    and --bcrd-eyebrow-ink, because a 20px numeral carries further than a 12px label and has to give
@@ -222,6 +227,7 @@
   --lcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --lcrd-marker-ink: var(--color-brandeis-500); /* 6.17:1 — the accent mark (fdn-blue) */
   --lcrd-number-ink: var(--color-brandeis-500); /* 6.17:1 — numerals carry the accent */
+  --lcrd-neutral-number-ink: var(--color-neutral-600); /* 4.92:1 */
   --lcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
   --lcrd-rule-ink: var(--color-neutral-300); /* decoration */
@@ -239,6 +245,7 @@
   --lcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --lcrd-marker-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-number-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --lcrd-neutral-number-ink: var(--color-neutral-600); /* 4.39:1 */
   --lcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --lcrd-rule-ink: var(--color-neutral-400); /* decoration */
@@ -257,6 +264,7 @@
   --lcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --lcrd-marker-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
   --lcrd-number-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --lcrd-neutral-number-ink: var(--color-neutral-500); /* 5.41:1 */
   --lcrd-link-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 15.44:1 */
   --lcrd-rule-ink: var(--color-neutral-700); /* decoration */
@@ -273,6 +281,7 @@
   --lcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-marker-ink: var(--color-white); /* 6.23:1 */
   --lcrd-number-ink: var(--color-brandeis-200); /* 3.78:1 — quieter than 100's, clear of 3:1 */
+  --lcrd-neutral-number-ink: var(--color-brandeis-200); /* 3.78:1 — no grey reads on blue; equals accent */
   --lcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-rule-ink: var(--color-brandeis-300); /* decoration */

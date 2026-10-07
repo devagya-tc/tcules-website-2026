@@ -235,6 +235,12 @@
   white-space: nowrap;
 }
 
+/* The neutral tone: the numeral steps out of the accent into the surface's quiet grey. After
+   .number, equal specificity, so source order is again the mechanism. */
+.numberNeutral {
+  color: var(--lcrd-neutral-number-ink);
+}
+
 /* The icon fill needs no rule of its own, and that absence is the assertion: Icon owns its box, its
    `display: block` and its `flex: none`, so the wrapper contributes only .marker's ink and sizing.
    A `line-height: 0` stood here and could never have applied — the wrapper is a Cluster flex item,

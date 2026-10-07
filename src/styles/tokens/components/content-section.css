@@ -96,13 +96,6 @@
      140 strip (2.3:1) that showed a slice of the scene, while B's and K's photos took 4:3 a band
      away. The phone takes 4:3 too; 768 to 1023 keeps the panorama for the reason above. */
   --csec-aside-ratio-phone: var(--csec-photo-ratio);
-
-  /* The eyebrow's mark (cmp-services fix round 2): one square of the texture's grid before the
-     label, PageHero's mark, so every band head carries the blue accent at its smallest rather than
-     only the hero's (§ 4.2). A component size, and the same 6 as --hero-mark-size: duplicated on
-     purpose, since a component never reads another's tokens. Off the gap scale because it is a
-     glyph's size, not a distance. */
-  --csec-mark-size: var(--space-6);
 }
 
 :root,
@@ -110,26 +103,22 @@
   --csec-heading-ink: var(--color-neutral-900); /* 14.62:1 */
   --csec-lead-ink: var(--color-neutral-700); /* 8.15:1 */
   --csec-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
-  --csec-mark-ink: var(--color-brandeis-500); /* decoration — the eyebrow's blue square */
 }
 
 [data-surface='tint'] {
   --csec-heading-ink: var(--color-neutral-900); /* 13.05:1 */
   --csec-lead-ink: var(--color-neutral-700); /* 7.27:1 */
   --csec-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
-  --csec-mark-ink: var(--color-brandeis-500); /* decoration */
 }
 
 [data-surface='ink'] {
   --csec-heading-ink: var(--color-white); /* 17.26:1 */
   --csec-lead-ink: var(--color-neutral-300); /* 11.07:1 */
   --csec-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
-  --csec-mark-ink: var(--color-brandeis-300); /* decoration — 500 sinks into neutral-950 */
 }
 
 [data-surface='blue'] {
   --csec-heading-ink: var(--color-white); /* 6.23:1 */
   --csec-lead-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --csec-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
-  --csec-mark-ink: var(--color-white); /* decoration — on blue the accent is the ground */
 }

@@ -60,7 +60,7 @@ export default function InputSpecimenPage() {
           <h1>Input</h1>
           <p>
             The native control shared by enquiry forms and the footer, in two appearances on
-            every surface: the filled box, and the unboxed line the enquiry forms use (one rule
+            every surface: the filled box the enquiry forms use, and the unboxed line (one rule
             under the value, blue and doubled on focus). Labels, flags, messages, and
             arrangement stay with the pattern that composes it.
           </p>

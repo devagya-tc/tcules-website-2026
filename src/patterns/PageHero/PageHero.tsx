@@ -640,7 +640,6 @@ export function PageHero({
       nowrap
       className={styles.eyebrow}
     >
-      <span className={styles.mark} aria-hidden="true" />
       <span>{eyebrow}</span>
     </Cluster>
   ) : null;

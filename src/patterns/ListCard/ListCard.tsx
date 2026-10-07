@@ -28,9 +28,13 @@ import styles from './ListCard.module.css';
  * pattern cannot tell a case study from a glossary term, so the route decides whether to pass one.
  */
 export type ListCardMarker =
-  | { type: 'number'; value: number }
+  /** `tone` (owner, 7 Oct 2026): `accent` (default) sets the numeral blue; `neutral` sets it in a
+      quiet grey, for a set whose band already carries its accent elsewhere. */
+  | { type: 'number'; value: number; tone?: ListCardNumberTone }
   | { type: 'icon'; name: IconName }
   | { type: 'thumbnail'; image: MediaImage };
+
+export type ListCardNumberTone = 'accent' | 'neutral';
 
 export type ListCardArrangement = 'split' | 'stacked';
 
@@ -150,7 +154,12 @@ function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }
     return (
       <span
         aria-hidden="true"
-        className={cx(styles.marker, styles.number, form === 'tile' && styles.numberAbove)}
+        className={cx(
+          styles.marker,
+          styles.number,
+          marker.tone === 'neutral' && styles.numberNeutral,
+          form === 'tile' && styles.numberAbove,
+        )}
       >
         {value}
       </span>

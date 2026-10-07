@@ -334,7 +334,6 @@ function CtaLede({
           justify={centred ? 'center' : 'start'}
           className={styles.eyebrow}
         >
-          <span className={styles.mark} aria-hidden="true" />
           <span>{eyebrow}</span>
         </Cluster>
       ) : null}

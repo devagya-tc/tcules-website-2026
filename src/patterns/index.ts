@@ -180,6 +180,7 @@ export type {
   ListCardMarker,
   ListCardArrangement,
   ListCardForm,
+  ListCardNumberTone,
   ListCardSize,
   ListCardTitleElement,
   Step,

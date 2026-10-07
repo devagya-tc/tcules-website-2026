@@ -1,15 +1,14 @@
 /* ══ Component layer — Statement ═════════════════════════════════════════════════
    Tier 2. The J statement (visual-direction § 3.4): one sentence at the h1 ROLE, set in the
-   two-thirds track, with its eyebrow and a short blue mark in the head track. Built by cmp-banner,
+   two-thirds track, with its eyebrow in the head track. Built by cmp-banner,
    6 Oct 2026, to docs/specs/Statement.md.
 
    Naming: --stmt-{part}-{role}
-     parts  eyebrow · sentence · mark
+     parts  eyebrow · sentence
      roles  text · tracking · measure · ink · width · height
 
-   It is an EXCEPTION band (§ 3.3): no image, so its one large thing is the type. The mark is the
-   band's foreground accent (§ 4.2 "small graphic marks"), so a statement never reads black and
-   white even without its texture; the sentence itself stays ink (§ 4.3: the words stay ink).
+   It is an EXCEPTION band (§ 3.3): no image, so its one large thing is the type. The sentence stays
+   ink (§ 4.3: the words stay ink). Eyebrows carry no mark (owner, 7 Oct 2026).
 
    Every surface block declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
@@ -32,13 +31,6 @@
   --stmt-sentence-tracking-display: var(--text-display-tracking);
   --stmt-sentence-measure-display: var(--measure-display);
 
-  /* The mark: the blue square before the eyebrow — the one eyebrow mark every band in the kit
-     carries (page-product-design fix round 1, 7 Oct 2026). It was a 32 × 2 rule here while
-     ContentSection, PageHero and the closes set a 6 square, and on one page the two read as drift.
-     One square of the texture's grid; a glyph's SIZE, not a distance, duplicated by value from
-     --csec-mark-size (token rule 6). */
-  --stmt-mark-width: var(--space-6);
-  --stmt-mark-height: var(--space-6);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -46,26 +38,22 @@
 [data-surface='paper'] {
   --stmt-sentence-ink: var(--color-neutral-900); /* 14.62:1 */
   --stmt-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
-  --stmt-mark-ink: var(--color-brandeis-500); /* 6.17:1, a mark ≥ 3:1 */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
   --stmt-sentence-ink: var(--color-neutral-900); /* 13.05:1 */
   --stmt-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 */
-  --stmt-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
 [data-surface='ink'] {
   --stmt-sentence-ink: var(--color-white); /* 17.26:1 */
   --stmt-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
-  --stmt-mark-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
 }
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
 [data-surface='blue'] {
   --stmt-sentence-ink: var(--color-white); /* 6.23:1 */
   --stmt-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --stmt-mark-ink: var(--color-white); /* blue cannot accent itself */
 }

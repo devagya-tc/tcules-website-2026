@@ -533,7 +533,6 @@ export function ContentSection(props: ContentSectionProps) {
         centredLg && styles.centredLg,
       )}
     >
-      <span className={styles.mark} aria-hidden="true" />
       <span>{eyebrow}</span>
     </Cluster>
   ) : null;

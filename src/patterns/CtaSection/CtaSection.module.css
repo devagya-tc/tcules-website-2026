@@ -87,17 +87,6 @@
   text-transform: var(--text-mono-case);
 }
 
-/* The eyebrow's mark: one square of the texture's grid before the label, the blue accent at its
-   smallest — ContentSection's `.mark`, restated because a pattern never reads another's classes.
-   Sizing and ink only; the eyebrow's Cluster places it. */
-.mark {
-  display: block;
-  flex: none;
-  inline-size: var(--cta-mark-size);
-  block-size: var(--cta-mark-size);
-  background: var(--cta-mark-ink);
-}
-
 /* ── The heading ───────────────────────────────────────────────────────────────
    An `h2` in all three arrangements — the page's one `h1` belongs to `PageHero`, and this block
    appears once or twice per route, so it can never be the page's title. The offer renders it at h2;

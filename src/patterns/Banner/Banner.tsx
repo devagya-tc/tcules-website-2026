@@ -172,16 +172,10 @@ export function Banner(props: BannerProps) {
     );
   }
 
-  /* The eyebrow carries the kit's blue square, every band eyebrow's mark (cmp-banner fix round 1; a square since page-product-design fix round 1):
-     a banner with no action has no other blue beside a photograph, and the I and J bands share one
-     accent grammar. The mark is sized, not spaced: the Cluster owns its seam to the label. */
   const eyebrowEl = eyebrow ? (
-    <Cluster colGap="tight" align="center" nowrap>
-      <span aria-hidden="true" className={styles.mark} />
-      <p className={styles.eyebrow} data-copy="eyebrow">
-        {eyebrow}
-      </p>
-    </Cluster>
+    <p className={styles.eyebrow} data-copy="eyebrow">
+      {eyebrow}
+    </p>
   ) : null;
   const headingEl = (
     <h2 id={headingId} className={styles.heading} data-copy="h2">

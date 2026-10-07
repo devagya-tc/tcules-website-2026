@@ -598,11 +598,10 @@ LAYOUT, TYPE, SEMANTICS
 
 ## Amendment · 6 Oct 2026 — `cmp-services` fix round 2
 
-- **The eyebrow carries the blue mark, on every band.** One square of the texture's grid
-  (`--csec-mark-size`, 6; `--csec-mark-ink` per surface: brandeis-500 on paper and tint, 300 on ink,
-  white on blue) before the label, a `tight` (8) Cluster seam — PageHero's mark. It is part of the
-  eyebrow role, not a caller's choice, so no band head reads black and white while only the hero shows
-  the accent. Decorative (`aria-hidden`). Centred heads centre the pair.
+- ~~**The eyebrow carries the blue mark, on every band.**~~ Withdrawn 7 Oct 2026 (owner): no eyebrow
+  carries a mark — ContentSection, PageHero, CtaSection, Statement and Banner alike. The mark's tokens
+  are deleted. PageHero keeps its square on the tag list and the announcement flag, which are bullets,
+  not eyebrows.
 - **`headSide: 'start' | 'end'`** on a beside band with an aside. `end` mirrors the split from 1024
   (Layout `reverse`): the blocks in the 2, the head and its aside closing the row in the 1. Visual
   only; the head stays first in the DOM. For a page with two beside-aside bands, so they are not the

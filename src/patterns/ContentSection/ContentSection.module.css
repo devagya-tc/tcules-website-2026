@@ -23,17 +23,6 @@
   color: var(--csec-eyebrow-ink);
 }
 
-/* The eyebrow's mark: one square of the texture's grid, the blue accent at its smallest (§ 4.2) —
-   PageHero's `.mark`, restated here because a pattern never reads another's classes. Sizing and ink
-   only; the Cluster places it. */
-.mark {
-  display: block;
-  flex: none;
-  inline-size: var(--csec-mark-size);
-  block-size: var(--csec-mark-size);
-  background: var(--csec-mark-ink);
-}
-
 .heading {
   font: var(--csec-heading-text);
   letter-spacing: var(--csec-heading-tracking);

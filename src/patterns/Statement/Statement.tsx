@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 
 import {
-  Cluster,
   Layout,
   Section,
   Texture,
@@ -78,17 +77,16 @@ export type StatementProps = {
 /**
  * Statement — the J band: one sentence, large, and almost nothing else.
  *
- * [1, 2] from 1024 at the split seam (96): the eyebrow and its blue mark in the head track, the
+ * [1, 2] from 1024 at the split seam (96): the eyebrow in the head track, the
  * sentence in the two-thirds track (763 at 1470), top edges level. `open` density (128) — the
  * references give a statement ~1.6× the standard air, and that maps to `--gap-section-open`, never to
  * an invented 208 (references § Meridian). Below 1024 one column: eyebrow, then the sentence a
  * `block` (24) beneath, the head rhythm.
  *
- * The blue mark is the band's foreground accent: a statement has no image, no icon and often no
- * link, and without the mark the band reads black and white (§ 4.1). The sentence stays ink.
+ * The sentence stays ink. Eyebrows carry no mark (owner, 7 Oct 2026).
  *
- * It contributes type, ink and the mark only. Section paints the band and its air, Layout and
- * Cluster own every seam, Texture owns the field.
+ * It contributes type and ink only. Section paints the band and its air, Layout owns
+ * every seam, Texture owns the field.
  */
 export function Statement({
   children,
@@ -155,12 +153,9 @@ export function Statement({
         <Layout rowGap="stack" justifyItems="center">
           <Layout rowGap="block" justifyItems="center">
             {eyebrow ? (
-              <Cluster colGap="tight" align="center" nowrap>
-                <span aria-hidden="true" className={styles.mark} />
-                <p className={styles.eyebrow} data-copy="eyebrow">
-                  {eyebrow}
-                </p>
-              </Cluster>
+              <p className={styles.eyebrow} data-copy="eyebrow">
+                {eyebrow}
+              </p>
             ) : null}
             {sentence}
           </Layout>
@@ -168,16 +163,10 @@ export function Statement({
         </Layout>
       ) : (
         <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
-          {/* The mark belongs to the eyebrow: it is the label's lead-in. With no eyebrow there is
-            nothing for it to lead into, and a mark alone at the sentence's cap height read as
-            a stray dash (fix round 2) — so the head track stays empty and the air holds it. */}
           {eyebrow ? (
-            <Cluster colGap="tight" align="center" nowrap>
-              <span aria-hidden="true" className={styles.mark} />
-              <p className={styles.eyebrow} data-copy="eyebrow">
-                {eyebrow}
-              </p>
-            </Cluster>
+            <p className={styles.eyebrow} data-copy="eyebrow">
+              {eyebrow}
+            </p>
           ) : (
             <div className={styles.headEmpty} />
           )}

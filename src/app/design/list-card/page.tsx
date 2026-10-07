@@ -269,6 +269,12 @@ function SurfaceRows() {
         marker={{ type: 'number', value: 1 }}
       />
       <ListCard
+        arrangement="stacked"
+        title="The same numeral in its neutral tone"
+        body="marker tone neutral: the ordinal steps out of the accent into the surface's quiet grey."
+        marker={{ type: 'number', value: 2, tone: 'neutral' }}
+      />
+      <ListCard
         title="Design systems"
         body="The linked row proves the dark title, icon marker, cue link ink and focus ring."
         marker={{ type: 'icon', name: 'check-circle' }}

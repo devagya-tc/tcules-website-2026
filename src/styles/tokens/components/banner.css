@@ -4,10 +4,10 @@
    docs/specs/Banner.md.
 
    Naming: --bnr-{part}-{role}
-     parts  eyebrow · heading · lead · strip · strip-label · mark · illustration
+     parts  eyebrow · heading · lead · strip · strip-label · illustration
      roles  text (a type composite) · tracking · measure · ink · width · height · zoom · shift
 
-   Type, ink, the mark and the illustration's phone zoom. Section paints the band (density `tight` for the banner, `strip` for the
+   Type, ink and the illustration's phone zoom. Section paints the band (density `tight` for the banner, `strip` for the
    strip), Layout owns every seam, Media owns the photograph's crop and its 8 radius (§ 5.3:
    photographs carry no frame). This layer has no distance and no state: nothing in a banner
    responds to a pointer except the action, and the action is a Button that owns its own states.
@@ -36,13 +36,6 @@
   --bnr-strip-label-text: var(--text-eyebrow);
   --bnr-strip-label-tracking: var(--text-eyebrow-tracking);
 
-  /* The mark: the blue square before the eyebrow — the one eyebrow mark every band in the kit
-     carries (page-product-design fix round 1, 7 Oct 2026). It was a 32 × 2 rule here while
-     ContentSection, PageHero and the closes set a 6 square, and on one page the two read as drift.
-     One square of the texture's grid; a glyph's SIZE, not a distance, duplicated by value from
-     --csec-mark-size (token rule 6). */
-  --bnr-mark-width: var(--space-6);
-  --bnr-mark-height: var(--space-6);
 
   /* The illustration's phone art direction (below 768): the drawing at 180% of the column, so a
      962-wide drawing's 18px callouts land near 11px rather than 6. --bnr-illustration-shift is set
@@ -74,7 +67,6 @@
   --bnr-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
   --bnr-strip-ink: var(--color-neutral-800);
   --bnr-strip-label-ink: var(--color-brandeis-500); /* 6.17:1 */
-  --bnr-mark-ink: var(--color-brandeis-500); /* 6.17:1, a mark ≥ 3:1 */
 }
 
 /* ── Surface: tint ── the strip's home ground (§ 1.7) ─────────────────────────── */
@@ -84,7 +76,6 @@
   --bnr-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails at 4.39:1 */
   --bnr-strip-ink: var(--color-neutral-800);
   --bnr-strip-label-ink: var(--color-brandeis-500); /* 5.51:1 */
-  --bnr-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
@@ -94,7 +85,6 @@
   --bnr-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --bnr-strip-ink: var(--color-neutral-200);
   --bnr-strip-label-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
-  --bnr-mark-ink: var(--color-brandeis-300); /* 7.32:1 */
 }
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band (§ 4.3) ── */
@@ -104,5 +94,4 @@
   --bnr-eyebrow-ink: var(--color-brandeis-100);
   --bnr-strip-ink: var(--color-white);
   --bnr-strip-label-ink: var(--color-white); /* blue cannot accent itself */
-  --bnr-mark-ink: var(--color-white);
 }
