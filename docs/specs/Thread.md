@@ -76,4 +76,11 @@ The service page passes `center` when its E band centres its head over a thread 
 - One element at every width; on the arc the "Back to" lead-in is clipped for sight only, so a screen
   reader still hears where the path goes.
 - `loop` is at most eight words (a development warning past eight on an arc thread).
+- **Below 1024 (revised the same day, owner):** the vertical thread draws the return path as a LANE down
+  the start edge — out of the last node, up a lane a `block` (24) from the nodes, and back into the
+  first node with the connectors' arrowhead. Each stage draws its own stretch of the lane (first,
+  middle, last), so no piece needs the list's height. An annotation marker (`--thread-marker-size`, the
+  kit's blue square with a ring of the ground) sits on the lane at the middle stage, and the same square
+  leads the sentence under the thread; the "Back to" lead-in is clipped for sight there too. The
+  closing line with the drawn up-arrow is now only the two-row case from 1024.
 

@@ -174,20 +174,18 @@
 
    The sentence is the arc's LABEL (owner, 7 Oct 2026): set on the arc's top run, centred between
    its legs, on a patch of the band's own ground that cuts the line. It used to sit under the stages
-   beside a generic undo glyph, ~160 from the arc it described, and below 1024 — where no arc is
-   drawn — it pointed at nothing.
+   beside a generic undo glyph, ~160 from the arc it described, and below 1024 it pointed at nothing.
 
-   Where no arc is drawn (below 1024, and a two-row thread at any width) the sentence closes the
-   thread instead, in the copy column under the last stage, led by "Back to {first stage}:" and a
-   return arrow DRAWN in the node column in the thread's own line — the same stroke and head as
-   every connector, so it reads as part of the diagram rather than as an icon beside a note.
+   Below 1024 the path is a LANE down the start edge with an annotation marker, and the sentence
+   is the marker's note (see § The return lane). From 1024 on a two-row thread no path can be
+   drawn, so the sentence closes the thread, led by "Back to {first stage}:" and a return arrow
+   drawn in the node column in the thread's own stroke and head.
 
    The arc's far leg is the last track's node: every track is (100% − (n − 1) × gutter) / n, and
    the last one starts exactly one track from the end, so the leg sits a track minus a node-half in
    from the column's end. */
 .loop {
   position: relative;
-  padding-inline-start: calc(var(--thread-node-size) + var(--gap-text));
   font: var(--thread-loop-text);
   text-wrap: var(--text-running-wrap);
   color: var(--thread-loop-ink);
@@ -197,28 +195,136 @@
   color: var(--thread-title-ink);
 }
 
-/* The return arrow: a stem one line tall in the node column, and the connectors' head turned to
-   point up — back towards where the thread began. */
 .loop::before,
 .loop::after {
   content: '';
   position: absolute;
 }
 
-.loop::before {
-  inset-block: var(--gap-inline);
-  inset-inline-start: calc(var(--thread-node-half) - var(--thread-line-width) / 2);
-  border-inline-start: var(--thread-line-width) solid var(--thread-line-ink);
+/* ── Below 1024: the return lane ─────────────────────────────────────────────────
+   The thread is a vertical list here, so the return path is drawn down the START edge (owner,
+   7 Oct 2026): from the last node it turns out to a lane a `block` (24) from the nodes, runs up,
+   and turns back into the first node with the connectors' arrowhead. The ol gives the lane its
+   room; each stage draws its own stretch (first: corner and head; middle: straight; last: the
+   corner out of the last node), reaching a `stack` down into the seam exactly as the forward line
+   does, so the pieces meet without any of them knowing the list's height. An annotation marker —
+   the kit's blue square, the bullet voice — sits on the lane at its middle stage, and the same
+   square leads the sentence under the thread: marker and note read as one reference. */
+@media (max-width: 1023px) {
+  .laned {
+    padding-inline-start: var(--gap-block);
+  }
+
+  .lane {
+    position: absolute;
+    inset-block: 0 calc(-1 * var(--gap-stack));
+    inset-inline-start: calc(-1 * var(--gap-block));
+    inline-size: calc(var(--gap-block) - var(--gap-tight));
+    border-inline-start: var(--thread-line-width) solid var(--thread-line-ink);
+    /* 1lh of the title's font is where the node centres; see .node. */
+    font: var(--thread-title-text-md);
+  }
+
+  .laneFirst {
+    inset-block-start: calc(1lh / 2 - var(--thread-line-width) / 2);
+    border-block-start: var(--thread-line-width) solid var(--thread-line-ink);
+    border-start-start-radius: var(--thread-loop-radius);
+  }
+
+  /* The head into the first node: the forward head's square, pointing along the arm. */
+  .laneFirst::after {
+    content: '';
+    position: absolute;
+    inset-block-start: calc(
+      -1 * var(--thread-head-size) / 2 - var(--thread-line-width) / 2
+    );
+    inset-inline-end: 0;
+    inline-size: var(--thread-head-size);
+    block-size: var(--thread-head-size);
+    border-block-start: var(--thread-line-width) solid var(--thread-line-ink);
+    border-inline-end: var(--thread-line-width) solid var(--thread-line-ink);
+    transform: rotate(45deg);
+  }
+
+  .laneLast {
+    inset-block-end: auto;
+    block-size: calc(1lh / 2 + var(--thread-line-width) / 2);
+    border-block-end: var(--thread-line-width) solid var(--thread-line-ink);
+    border-end-start-radius: var(--thread-loop-radius);
+  }
+
+  .laneMark::before {
+    content: '';
+    position: absolute;
+    inset-block-start: calc(50% - var(--thread-marker-size) / 2);
+    inset-inline-start: calc(
+      -1 * var(--thread-marker-size) / 2 - var(--thread-line-width) / 2
+    );
+    inline-size: var(--thread-marker-size);
+    block-size: var(--thread-marker-size);
+    background: var(--thread-line-ink);
+    /* A ring of the band's ground, so the marker reads as a mark set ON the lane, not a kink. */
+    outline: var(--thread-line-width) solid var(--thread-node-fill);
+  }
+
+  /* The note, in the copy column under the last stage, led by the lane's marker. */
+  .loop {
+    padding-inline-start: calc(var(--gap-block) + var(--thread-node-size) + var(--gap-text));
+  }
+
+  .loop::before {
+    inset-block-start: calc(1lh / 2 - var(--thread-marker-size) / 2);
+    inset-inline-start: calc(
+      var(--gap-block) + var(--thread-node-size) + var(--gap-text) - var(--thread-marker-size) -
+        var(--gap-tight)
+    );
+    inline-size: var(--thread-marker-size);
+    block-size: var(--thread-marker-size);
+    background: var(--thread-line-ink);
+  }
+
+  .loop::after {
+    content: none;
+  }
+
+  .loopTarget {
+    position: absolute;
+    inline-size: var(--thread-hidden-size);
+    block-size: var(--thread-hidden-size);
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
-.loop::after {
-  inset-block-start: var(--gap-inline);
-  inset-inline-start: calc(var(--thread-node-half) - var(--thread-head-size) / 2);
-  inline-size: var(--thread-head-size);
-  block-size: var(--thread-head-size);
-  border-block-start: var(--thread-line-width) solid var(--thread-line-ink);
-  border-inline-end: var(--thread-line-width) solid var(--thread-line-ink);
-  transform: rotate(-45deg);
+/* ── From 1024 with no arc (two rows): the closing line ──────────────────────────
+   No path can be drawn, so the sentence closes the thread under the last stage, led by
+   "Back to {first stage}:" and a return arrow drawn in the node column — a stem one line tall and
+   the connectors' head turned to point up. */
+@media (min-width: 1024px) {
+  .lane {
+    display: none;
+  }
+
+  .loop {
+    padding-inline-start: calc(var(--thread-node-size) + var(--gap-text));
+  }
+
+  .loop::before {
+    inset-block: var(--gap-inline);
+    inset-inline-start: calc(var(--thread-node-half) - var(--thread-line-width) / 2);
+    border-inline-start: var(--thread-line-width) solid var(--thread-line-ink);
+  }
+
+  .loop::after {
+    inset-block-start: var(--gap-inline);
+    inset-inline-start: calc(var(--thread-node-half) - var(--thread-head-size) / 2);
+    inline-size: var(--thread-head-size);
+    block-size: var(--thread-head-size);
+    border-block-start: var(--thread-line-width) solid var(--thread-line-ink);
+    border-inline-end: var(--thread-line-width) solid var(--thread-line-ink);
+    transform: rotate(-45deg);
+  }
 }
 
 @media (min-width: 1024px) {

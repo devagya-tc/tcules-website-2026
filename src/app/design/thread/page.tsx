@@ -83,7 +83,7 @@ export default function ThreadSpecimenPage() {
           </Specimen>
           <Specimen
             title="four stages, with bodies, and a return path"
-            note="Up to four across, h5 titles. From 1024 the return path is an arc over the row: it rises from the last node, where the thread lands, and comes down into the first. The sentence sits on the column line after the last stage, led by a drawn return arrow and ‘Back to the first stage:’."
+            note="Up to four across, h5 titles. From 1024 the return path is an arc over the row: it rises from the last node, where the thread lands, and comes down into the first. The sentence is the arc’s label, on its top run. Below 1024 the path is a lane down the start edge, back into the first node, with a blue marker on it; the sentence sits under the thread, led by the same marker."
           >
             <Thread
               stages={FOUR}

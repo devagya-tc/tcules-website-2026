@@ -35,6 +35,9 @@
      the arc's top run, stays inside the band. Derived from the label's own type, not a distance. */
   /* The clipped "Back to" lead-in on the arc: the visually-hidden technique's one-pixel box, a
      fixed size by definition, not a distance. */
+  /* The return lane's annotation marker below 1024: the kit's bullet square, on the lane and
+     again before the sentence it points to. A mark's size, not a distance. */
+  --thread-marker-size: var(--space-10);
   --thread-hidden-size: var(--space-1);
   --thread-arc-label-half: calc(var(--font-size-body-sm) * var(--line-height-body-sm) / 2);
 

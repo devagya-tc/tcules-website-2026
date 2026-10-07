@@ -100,10 +100,23 @@ export function Thread({ stages, loop, stageHeading = 'h3', align = 'start' }: T
   const arc = Boolean(returnPath) && valid.length <= across;
   /* The label rides the arc on one line; past eight words it wraps over the line it labels. */
   if (arc && returnPath && returnPath.split(/\s+/).length > 8)
-    warn(`loop is ${returnPath.split(/\s+/).length} words; the arc's label is designed for eight.`);
+    warn(
+      `loop is ${returnPath.split(/\s+/).length} words; the arc's label is designed for eight.`,
+    );
+
+  /* Below 1024 the return path is drawn as a lane down the start edge (owner, 7 Oct 2026). Each
+     stage draws its own stretch of it — first, middle, last — so no piece needs to know the
+     list's height. The annotation marker sits on the lane near its middle stage, and the same
+     marker leads the sentence under the thread. */
+  const lane = Boolean(returnPath);
+  const lastIndex = valid.length - 1;
+  const markIndex = Math.max(1, Math.floor(lastIndex / 2));
 
   return (
-    <Layout rowGap="stack" className={cx(styles.root, arc && styles.rootArc, arc && ROW_CLASS[across])}>
+    <Layout
+      rowGap="stack"
+      className={cx(styles.root, arc && styles.rootArc, arc && ROW_CLASS[across])}
+    >
       <Layout
         as="ol"
         columns={{ lg: across }}
@@ -113,12 +126,24 @@ export function Thread({ stages, loop, stageHeading = 'h3', align = 'start' }: T
           ROW_CLASS[across],
           across >= 5 && styles.dense,
           arc && styles.arc,
+          lane && styles.laned,
           align === 'center' && styles.centred,
         )}
       >
         {valid.map((stage, index) => (
           <li key={`${index}-${stage.title}`} className={styles.stage}>
             <span className={styles.node} aria-hidden="true" />
+            {lane ? (
+              <span
+                aria-hidden="true"
+                className={cx(
+                  styles.lane,
+                  index === 0 && styles.laneFirst,
+                  index === lastIndex && styles.laneLast,
+                  index === markIndex && styles.laneMark,
+                )}
+              />
+            ) : null}
             <Layout rowGap="tight">
               <Heading className={styles.title}>{stage.title}</Heading>
               {stage.body ? <p className={styles.body}>{stage.body}</p> : null}
@@ -127,9 +152,11 @@ export function Thread({ stages, loop, stageHeading = 'h3', align = 'start' }: T
         ))}
       </Layout>
       {returnPath ? (
-        /* One element at every width, so the sentence is read once. On the arc it is the arc's
-           label and the "Back to" lead-in is for a screen reader only (the arc shows where it
-           goes); everywhere else the lead-in is visible and a drawn arrow sits in the node column. */
+        /* One element at every width, so the sentence is read once. Below 1024 it is the lane's
+           annotation, led by the lane's marker; from 1024 on a one-row thread it is the arc's
+           label. In both the "Back to" lead-in is for a screen reader only — the drawing shows
+           where the path goes. A two-row thread from 1024 draws no path, so there the lead-in is
+           visible and a drawn return arrow sits in the node column. */
         <p
           className={cx(
             styles.loop,
