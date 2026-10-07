@@ -53,12 +53,6 @@ export type ProofFigure = {
   value: string;
   /** What the value counts. */
   label: string;
-  /**
-   * Visible integrity line, including "checked on". Required on every figure. When every figure in
-   * the group carries the same string it renders ONCE, as the group's caption; mixed dates render
-   * under their own figures.
-   */
-  checkedOn: string;
   /** Optional source destination. External destinations are named by the caller's route layer. */
   sourceHref?: string;
 };
@@ -257,7 +251,7 @@ function normaliseFigures(figures: readonly ProofFigure[] | undefined): ProofFig
   if (!figures) return [];
 
   return figures.flatMap((figure, index) => {
-    const blankFields = (['value', 'label', 'checkedOn'] as const).filter(
+    const blankFields = (['value', 'label'] as const).filter(
       (field) => !isFilled(figure[field]),
     );
 
@@ -515,24 +509,11 @@ function scaleOf(rating: ProofRating): string {
   return isFilled(rating.scale) ? rating.scale.trim() : '5';
 }
 
-/**
- * The one date every figure shares, or undefined when there is one figure or the dates differ.
- * Compared trimmed, so a trailing space in the CMS does not split a group that reads as one date.
- */
-function sharedCheckedOn(figures: readonly ProofFigure[]): string | undefined {
-  const [head, ...rest] = figures;
-  if (!head || rest.length === 0) return undefined;
-  const first = head.checkedOn.trim();
-  return figures.every((figure) => figure.checkedOn.trim() === first) ? first : undefined;
-}
-
-function FigureList({
+function Figures({
   figures,
-  showDates,
   size,
 }: {
   figures: readonly ProofFigure[];
-  showDates: boolean;
   size: ProofFigureSize;
 }) {
   return (
@@ -555,26 +536,22 @@ function FigureList({
               <span className={styles.label}>{figure.label}</span>
             </Layout>
             {/* Rendered only when it holds something: an empty grid item would still take the
-                text seam above it. */}
-            {showDates || figure.sourceHref ? (
-              <Layout rowGap="tight" className={styles.metadata}>
-                {showDates ? <span className={styles.checked}>{figure.checkedOn}</span> : null}
-                {figure.sourceHref ? (
-                  <Button
-                    as="a"
-                    href={figure.sourceHref}
-                    emphasis="link"
-                    tone="primary"
-                    size="sm"
-                    extendHitArea
-                    aria-label={`View source for ${figure.label}`}
-                    className={styles.source}
-                    icon={<Icon name="arrow-right" />}
-                  >
-                    View source
-                  </Button>
-                ) : null}
-              </Layout>
+                text seam above it. No "checked on" date (owner, 7 Oct 2026): it was visual noise
+                that added no credibility; a figure is backed by its attribution and its source. */}
+            {figure.sourceHref ? (
+              <Button
+                as="a"
+                href={figure.sourceHref}
+                emphasis="link"
+                tone="primary"
+                size="sm"
+                extendHitArea
+                aria-label={`View source for ${figure.label}`}
+                className={styles.source}
+                icon={<Icon name="arrow-right" />}
+              >
+                View source
+              </Button>
             ) : null}
           </Layout>
         </li>
@@ -584,33 +561,7 @@ function FigureList({
 }
 
 /**
- * The figure set. When every figure was checked on the same date, the date is said once: the list
- * and the date become one `figure` whose `figcaption` is that date. The caption is the group's
- * accessible name, so a screen reader announces "figure, checked on 8 August 2026" before the list
- * and the date covers every item in it programmatically, with no idref and no repeated string.
- * Mixed dates keep the per-figure line, inside each `li` beside the value it qualifies.
- */
-function Figures({
-  figures,
-  size,
-}: {
-  figures: readonly ProofFigure[];
-  size: ProofFigureSize;
-}) {
-  const shared = sharedCheckedOn(figures);
-
-  if (!shared) return <FigureList figures={figures} showDates size={size} />;
-
-  return (
-    <Layout as="figure" rowGap="gutter" className={styles.figureGroup}>
-      <FigureList figures={figures} showDates={false} size={size} />
-      <figcaption className={styles.checked}>{shared}</figcaption>
-    </Layout>
-  );
-}
-
-/**
- * Proof — attributed client evidence, checked figures, or both, built to docs/specs/Proof.md.
+ * Proof — attributed client evidence, figures, or both, built to docs/specs/Proof.md.
  *
  * The content seam decides whether a markdown blockquote is an attributed Proof or an unattributed
  * Callout; this pattern never sniffs HTML for a name. A quote follows the site blockquote (ch10
@@ -619,7 +570,7 @@ function Figures({
  *
  *   display   the typographic band: the quote at --text-quote-lg, or centred (`align`) at
  *             --text-quote-xl, with
- *             an optional score; or checked figures; or the quote in a 2:1 lead track beside them.
+ *             an optional score; or figures; or the quote in a 2:1 lead track beside them.
  *   compact   one quote at --text-quote embedded in a reading flow; figures are a compile error.
  *   featured  a 1:1 portrait at 477 beside the display quote, [5, 7] at section, an optional footer.
  *   case      the work (a BlockCard, passed in) in 381 beside the display quote in 763 — G-case.

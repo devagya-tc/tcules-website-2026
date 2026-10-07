@@ -178,7 +178,6 @@ export default async function KitLogosPage() {
         {
           value: rating.score,
           label: `Overall rating on ${rating.platform}`,
-          checkedOn: 'Checked 26 August 2026',
           sourceHref: rating.href,
         },
       ]

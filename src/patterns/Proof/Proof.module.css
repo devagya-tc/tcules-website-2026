@@ -1,4 +1,4 @@
-/* Proof — attributed quotation, checked figures, or both, built to docs/specs/Proof.md.
+/* Proof — attributed quotation, figures, or both, built to docs/specs/Proof.md.
 
    Layout and Cluster own every relationship: the quote/figures pair, the figure tiles, the portrait
    beside the attribution and each nested vertical rhythm. This module owns only the evidence
@@ -215,7 +215,6 @@
   color: var(--proof-attribution-ink);
 }
 
-.figureGroup,
 .figures {
   inline-size: 100%;
   min-inline-size: 0;
@@ -223,10 +222,6 @@
 
 .figure,
 .valueLabel,
-.metadata {
-  min-inline-size: 0;
-}
-
 /* Mono, so it takes the mono case, and the transform is a no-op on "4.9" or "120" — it earns its
    line on the value that carries a letter. "12k" sets as "12K", in the same voice as the label
    under it, rather than as the one lower-case glyph in a band of capitals. Figures exist only in
@@ -255,13 +250,6 @@
   letter-spacing: var(--text-micro-tracking);
   text-transform: var(--text-mono-case);
   color: var(--proof-label-ink);
-}
-
-.checked {
-  min-inline-size: 0;
-  overflow-wrap: anywhere;
-  font: var(--text-caption);
-  color: var(--proof-checked-ink);
 }
 
 .source {

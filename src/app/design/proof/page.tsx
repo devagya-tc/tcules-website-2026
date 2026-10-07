@@ -137,31 +137,20 @@ const FIGURES = [
   {
     value: '90+',
     label: 'completed projects',
-    checkedOn: 'checked on 8 August 2026',
   },
   {
     value: '19',
     label: 'countries with Tcules clients',
-    checkedOn: 'checked on 8 August 2026',
   },
   {
     value: '12',
     label: '12 AI engagements',
-    checkedOn: 'checked on 8 August 2026',
   },
   {
     value: '4.8/5',
     label: '4.8/5 Clutch rating',
-    checkedOn: 'checked on 8 August 2026',
     sourceHref: UNRESOLVED_EXTERNAL,
   },
-] as const satisfies readonly ProofFigure[];
-
-/* Two dates in one set: the per-figure line comes back, because no single caption is true of all. */
-const MIXED_DATE_FIGURES = [
-  FIGURES[0],
-  { ...FIGURES[1], checkedOn: 'checked on 2 September 2026' },
-  FIGURES[3],
 ] as const satisfies readonly ProofFigure[];
 
 const EIGHT_FIGURES = [
@@ -183,7 +172,7 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
   {
     surface: 'ink',
-    note: 'Quote and value lift to white; neutral-400 supports attribution, label and checked date.',
+    note: 'Quote and value lift to white; neutral-400 supports attribution and label.',
   },
   {
     surface: 'blue',
@@ -200,7 +189,6 @@ const PROOF_SURFACE_TOKENS = {
     ['--proof-attribution-ink', '--color-neutral-600'],
     ['--proof-value-ink', '--color-neutral-950'],
     ['--proof-label-ink', '--color-neutral-700'],
-    ['--proof-checked-ink', '--color-neutral-600'],
     ['--proof-quote-rule', '--color-brandeis-500'],
   ],
   tint: [
@@ -209,7 +197,6 @@ const PROOF_SURFACE_TOKENS = {
     ['--proof-attribution-ink', '--color-neutral-700'],
     ['--proof-value-ink', '--color-neutral-950'],
     ['--proof-label-ink', '--color-neutral-800'],
-    ['--proof-checked-ink', '--color-neutral-700'],
     ['--proof-quote-rule', '--color-brandeis-500'],
   ],
   ink: [
@@ -218,7 +205,6 @@ const PROOF_SURFACE_TOKENS = {
     ['--proof-attribution-ink', '--color-neutral-400'],
     ['--proof-value-ink', '--color-white'],
     ['--proof-label-ink', '--color-neutral-400'],
-    ['--proof-checked-ink', '--color-neutral-400'],
     ['--proof-quote-rule', '--color-brandeis-300'],
   ],
   blue: [
@@ -227,7 +213,6 @@ const PROOF_SURFACE_TOKENS = {
     ['--proof-attribution-ink', '--color-brandeis-100'],
     ['--proof-value-ink', '--color-white'],
     ['--proof-label-ink', '--color-brandeis-100'],
-    ['--proof-checked-ink', '--color-brandeis-100'],
     ['--proof-quote-rule', '--color-white'],
   ],
 } as const satisfies Record<SectionSurface, TokenRows>;
@@ -390,10 +375,10 @@ export default function ProofSpecimenPage() {
         <Layout rowGap="block">
           <h1>Proof</h1>
           <p>
-            One evidence pattern with three display shapes: an attributed quotation, checked
-            figures, or both. Compact is the embedded quote-only arrangement; featured, case,
-            group and rating-led are the G bands (§ 19). Proof owns no ground; the nearest
-            surface supplies it.
+            One evidence pattern with three display shapes: an attributed quotation, figures, or
+            both. Compact is the embedded quote-only arrangement; featured, case, group and
+            rating-led are the G bands (§ 19). Proof owns no ground; the nearest surface
+            supplies it.
           </p>
         </Layout>
       </Section>
@@ -478,8 +463,8 @@ export default function ProofSpecimenPage() {
             <h2>4 · Figure count ladder</h2>
             <p>
               Values keep one role, --text-stat-lg (54 / 43 / 40), while tile tracks prevent a
-              partial final row from stretching. A date every figure shares is said once, as the
-              set&apos;s caption; one figure keeps its own line, and mixed dates keep one each.
+              partial final row from stretching. No figure carries a &ldquo;checked on&rdquo;
+              date (owner, 7 Oct 2026).
             </p>
           </Layout>
           {([1, 2, 3, 4] as const).map((count) => (
@@ -492,12 +477,6 @@ export default function ProofSpecimenPage() {
             note="Figures-only display at --text-stat-xl (96 / 80 / 64). One sourced figure set as the band's one idea, beside its head (the H band, /design/kit/logos). Never beside a quote."
           >
             <Proof figures={FIGURES.slice(0, 1)} figureSize="xl" />
-          </Specimen>
-          <Specimen
-            title="mixed dates · per-figure lines"
-            note="Two dates in one set, so no caption is true of all three: each figure keeps its own."
-          >
-            <Proof figures={MIXED_DATE_FIGURES} />
           </Specimen>
           <Specimen
             title="8 figures · 2× expected"
@@ -676,8 +655,6 @@ export default function ProofSpecimenPage() {
                   value: '123456789012345678901234567890',
                   label:
                     'A deliberately long audited figure label that remains complete inside its tile',
-                  checkedOn:
-                    'checked on a deliberately verbose evidence review date that remains visible',
                 },
               ]}
             />
@@ -696,7 +673,7 @@ export default function ProofSpecimenPage() {
               </Box>
             </Specimen>
           ))}
-          {(['value', 'label', 'checkedOn'] as const).map((field) => (
+          {(['value', 'label'] as const).map((field) => (
             <Specimen key={field} title={`blank figure ${field} · valid neighbour remains`}>
               <Proof figures={[{ ...FIGURES[0], [field]: ' ' }, FIGURES[1]]} />
             </Specimen>

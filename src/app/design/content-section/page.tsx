@@ -303,12 +303,10 @@ function AsidePhoto({ id }: { id: PhotoId }) {
 const STAT: ProofFigure = {
   value: '90+',
   label: 'completed product and design-system engagements',
-  checkedOn: 'checked on 8 August 2026',
 };
 const STAT_LONG: ProofFigure = {
   value: '1,200+',
   label: 'operator hours a week returned to claims teams after the workflow rebuild',
-  checkedOn: 'checked on 8 August 2026',
 };
 
 /** A head-track aside: one stat-lg figure (§ 3.3, the D band's other aside). */

@@ -83,17 +83,14 @@ const PROOF_FIGURES = [
   {
     value: '90+',
     label: 'completed projects',
-    checkedOn: 'checked on 8 August 2026',
   },
   {
     value: '4.8/5',
     label: '4.8/5 Clutch rating',
-    checkedOn: 'checked on 8 August 2026',
   },
   {
     value: '19',
     label: 'countries with Tcules clients',
-    checkedOn: 'checked on 8 August 2026',
   },
 ] as const satisfies readonly ProofFigure[];
 

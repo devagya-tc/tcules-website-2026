@@ -13,6 +13,12 @@
 | **Implemented at**  | `src/patterns/Proof/` · `src/styles/tokens/components/proof.css` · specimen `src/app/design/proof/page.tsx` |
 | **Amended**         | **28 Sep 2026** (tracker 2.12; rulings P1, P2; audit §3 Proof, §4) — an optional 1:1 `portrait` through `Media`, an optional `clientMark` through `ClientMark`, `role` optional, and the quote brought onto ch10 B2.07's site blockquote: italic, a 6px rule beside the quote only, the attribution beneath with the name on the quote's first letter, and a white rule on blue. Every section below is amended in place; the changes are collected in **Amendment · 28 Sep 2026** before the self-audit. **29 Sep 2026** (tracker 2.17, owner-approved) — a display scale (`--text-quote-lg`, `--text-stat-lg`), the shared checked date said once, the quote beside stacked figures at 2:1 from lg, and the specimen's client marks rendering at last. Collected in **Amendment · 29 Sep 2026**. **30 Sep 2026** (owner) — **the client mark is removed**: `clientMark`, `ProofClientMark` and the ClientMark render are gone. The company is named in the role line, and a logo under the person's name competed with the portrait beside it. Every `clientMark` reference below is superseded. A broader Proof overhaul is planned. **1 Oct 2026** (owner) — **the display quote leaves heading scale**: `--text-quote-lg` 43 → 34 (h3 scale, 34 / 28 / 22), the figure loses its body-font measure cap, display sets at `--measure-lead`, an optional `quote.source` link joins the attribution row, and the quote/figures split takes `--gap-section`. Collected in **Amendment · 1 Oct 2026**. **6 Oct 2026** (cmp-testimonials) — six arrangements, `align`, `rating`, the featured portrait radius and the centred mark (fix round 2: featured `reverse`, G-case tracks sharing a foot, the score's scale beside it); collected in **Amendment · 6 Oct 2026**. |
 
+> **Owner amendment, 7 Oct 2026 — no "checked on" date.** The per-figure date and the shared-date
+> caption are removed: they were visual noise that added no credibility. `ProofFigure` is `value`,
+> `label` and an optional `sourceHref`; the figure group (`figure`/`figcaption`) and the
+> checked-date ink are deleted. Every mention of a checked date, a shared caption or the date
+> group below is superseded by this note.
+
 The owner accepted the shared component identity in section 17 question 1. The public API, folder,
 token prefix and specimen route therefore use `Proof` rather than separate Testimonial and Stat
 names.
@@ -72,8 +78,6 @@ variant.
 | value-label | for every figure | nested `Layout` | Keeps the audited value and what it counts as one visual unit. |
 | value | for every figure | text `span` | Verbatim audited value such as “90+” or “4.8/5”; never inferred, rounded or coloured as a link. |
 | label | for every figure | text `span` | Verbatim sentence-case source label, uppercased at render by `--text-mono-case` — mono is always uppercase, and the string keeps its authored casing. |
-| checked | for every figure (authored) | text `span` in the `li`, or the group's `figcaption` | Required per-item checked date, authored as a complete phrase such as “checked on 8 August 2026”. When two or more figures carry the same string it renders once, as the figure-group caption; otherwise under each figure. *Amended 29 Sep 2026 (tracker 2.17).* |
-| figure-group | when ≥ 2 figures share one checked date | `Layout as="figure"` | Wraps the `ul` and a `figcaption` holding the shared date, so the one date is the whole set's caption. Absent otherwise — no wrapper for mixed dates or a single figure. *Amended 29 Sep 2026 (tracker 2.17).* |
 | source | optional per figure | existing `Button as="a"` | Fixed visible label “View source”; Button owns every link state and the extended touch target. |
 
 There is no eyebrow, heading, body-copy, avatar (a circle-masked portrait), rating mark, review-theme
@@ -99,7 +103,6 @@ export type ProofQuote = {
 export type ProofFigure = {
   value: string;
   label: string;
-  checkedOn: string;
   sourceHref?: string;
 };
 
@@ -130,7 +133,6 @@ export type ProofProps = ProofCompactProps | ProofDisplayProps;
 | `clientMark` | `ProofClientMark \| undefined` | none | The client's SVG mark, ClientMark's asset fields without `name`. Blank src or a non-positive dimension → omitted with a warning, so no empty row is left. |
 | `value` | `string` | none | Verbatim audited figure value. |
 | `label` | `string` | none | What the figure counts. |
-| `checkedOn` | `string` | none | Required per-figure integrity line, including “checked on”. |
 | `sourceHref` | `string` | none | Optional source destination. Call sites use the named Clutch destination from the routes module once its exact URL is supplied. |
 
 The API deliberately has no `size`, `tone`, `surface`, `color`, `ground`, `padding`, `gap`, `radius`,
@@ -203,7 +205,6 @@ the exact Section ground; the quote rule is decoration.
 | `--proof-attribution-ink` | `--color-neutral-600` — 4.92:1 | `--color-neutral-700` — 7.27:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
 | `--proof-value-ink` | `--color-brandeis-500` — 6.17:1 | `--color-brandeis-500` — 5.51:1 | `--color-brandeis-300` — 7.32:1 | `--color-white` — 6.23:1 |
 | `--proof-label-ink` | `--color-neutral-700` — 8.14:1 | `--color-neutral-800` — 10.54:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
-| `--proof-checked-ink` | `--color-neutral-600` — 4.92:1 | `--color-neutral-700` — 7.27:1 | `--color-neutral-400` — 8.05:1 | `--color-brandeis-100` — 4.91:1 |
 | `--proof-quote-rule` | `--color-brandeis-500` — n/a, decoration | `--color-brandeis-500` — n/a, decoration | `--color-brandeis-300` — n/a, decoration | `--color-white` — n/a, decoration (*was `--color-peridot-400` until 28 Sep 2026*) |
 
 **Paper.** The quotation softens to neutral-800 so long display copy does not compete with the
@@ -319,7 +320,6 @@ from Layout's existing component geometry.
 | role-company | `--text-body-sm` | none — this role has no tracking companion | the attribution text column, `--measure-body` cap on the row |
 | value | `--text-stat-lg` — 54 / 1, 43 at ≤1023, 40 at ≤767; mono, so `--text-mono-case`. *Amended 29 Sep 2026 (tracker 2.17).* Was `--text-stat` | `--text-stat-lg-tracking` | intrinsic inside one figure tile |
 | label | `--text-micro` | `--text-micro-tracking` | one figure tile |
-| checked | `--text-caption` | none — this role has no tracking companion | one figure tile, or the figure-group caption |
 | source | owned by `Button size="sm" emphasis="link"` | owned by `Button` | intrinsic visible label |
 
 Quote, attribution and checked-date copy stay in authored sentence case: “The team helped us make a

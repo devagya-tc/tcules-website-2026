@@ -177,7 +177,6 @@ const PHASES = [
 const PHASE_STAT: ProofFigure = {
   value: '0',
   label: 'handoffs between the people who research, design and build',
-  checkedOn: 'checked on 6 October 2026',
 };
 
 const VARIATIONS = [

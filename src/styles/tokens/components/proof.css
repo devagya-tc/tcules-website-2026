@@ -1,9 +1,9 @@
 /* ══ Component layer — Proof ════════════════════════════════════════════════════
    Tier 2. Attributed client quotations — typographic, compact, featured with a portrait, beside a
-   case, in a group, led by a score — a set of checked figures, or a quote beside them.
+   case, in a group, led by a score — a set of figures, or a quote beside them.
 
    Naming: --proof-{part}-{role}
-     parts: quote | name | attribution | portrait | mark | value | label | checked
+     parts: quote | name | attribution | portrait | mark | value | label
 
    Proof paints no ground and owns no interactive state. Prose owns links inside quote HTML and
    Button owns the optional figure-source link; and Media owns the portrait's delivery and edge. Every surface block below redeclares all seven
@@ -60,7 +60,6 @@
   --proof-attribution-ink: var(--color-neutral-600); /* 4.92:1 */
   --proof-value-ink: var(--color-brandeis-500); /* 6.17:1 — the stat numeral carries the accent */
   --proof-label-ink: var(--color-neutral-700); /* 8.14:1 */
-  --proof-checked-ink: var(--color-neutral-600); /* 4.92:1 */
   --proof-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
 }
 
@@ -71,7 +70,6 @@
   --proof-attribution-ink: var(--color-neutral-700); /* 7.27:1 */
   --proof-value-ink: var(--color-brandeis-500); /* 5.51:1 */
   --proof-label-ink: var(--color-neutral-800); /* 10.54:1 */
-  --proof-checked-ink: var(--color-neutral-700); /* 7.27:1 */
   --proof-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
 }
 
@@ -83,7 +81,6 @@
   --proof-attribution-ink: var(--color-neutral-400); /* 8.05:1 */
   --proof-value-ink: var(--color-brandeis-300); /* 7.32:1 */
   --proof-label-ink: var(--color-neutral-400); /* 8.05:1 */
-  --proof-checked-ink: var(--color-neutral-400); /* 8.05:1 */
   --proof-quote-rule: var(--color-brandeis-300); /* decoration — ch10 B2.07 */
 }
 
@@ -97,6 +94,5 @@
   --proof-attribution-ink: var(--color-brandeis-100); /* 4.91:1 */
   --proof-value-ink: var(--color-white); /* 6.23:1 */
   --proof-label-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --proof-checked-ink: var(--color-brandeis-100); /* 4.91:1 */
   --proof-quote-rule: var(--color-white); /* decoration — ch10 B2.07 */
 }
