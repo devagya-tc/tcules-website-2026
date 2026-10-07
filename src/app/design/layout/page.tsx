@@ -32,6 +32,16 @@ export default function LayoutSpecimenPage() {
         </Specimen>
 
         <Specimen
+          title="columns={{ lg: [1, 'auto'] }} colGap='column' rowGap='block'"
+          note="An 'auto' weight is a content-sized track: as wide as its child, while the 1fr track takes the rest. For a control group pinned to the end of a row (ContentSection actionsAt='end'); never for text, which would grow the track to its full length. Single track below 1024."
+        >
+          <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="block">
+            <Box tall>1fr</Box>
+            <Box accent>auto · sized to me</Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
           title="columns={3} colGap='block' rowGap='block'"
           note="Three equal tracks from md up. minmax(0, 1fr) means a long unbroken word cannot widen its track."
         >

@@ -289,6 +289,25 @@ type WithActionsProps = {
    * heading (the retired H-row, owner 7 Oct 2026).
    */
   actions: ReactNode;
+  /**
+   * Where the head's actions sit (owner, 7 Oct 2026). `below` (default) is the row a `stack` under
+   * the lead. `end` sets them at the inline end of the heading's row from 1024, their top on the
+   * heading's top (the eyebrow stays above, on its own line, so it is the TITLE the actions align
+   * with), in a content-sized track a `column` (64) from the heading and lead. Below 1024 they fall
+   * back under the lead. Stacked only: under `beside` the head track is too narrow for a row.
+   */
+  actionsAt?: 'below';
+  aside?: never;
+  media?: never;
+};
+
+type WithActionsEndProps = {
+  align?: 'start';
+  arrangement?: 'stacked';
+  /** See `WithActionsProps.actions`. */
+  actions: ReactNode;
+  /** See `WithActionsProps.actionsAt`. */
+  actionsAt: 'end';
   aside?: never;
   media?: never;
 };
@@ -374,7 +393,14 @@ type GroundProps =
 
 export type ContentSectionProps = ContentSectionBaseProps &
   GroundProps &
-  (PlainProps | CentredProps | WithActionsProps | WithAsideProps | MediaSplitProps);
+  (
+    | PlainProps
+    | CentredProps
+    | WithActionsProps
+    | WithActionsEndProps
+    | WithAsideProps
+    | MediaSplitProps
+  );
 
 export type ContentSectionTextProps = {
   /** The running text — in practice one `Prose`. */
@@ -495,6 +521,13 @@ export function ContentSection(props: ContentSectionProps) {
   const asideFill = hasAside && 'asideFill' in props && props.asideFill === true;
   const headAtEnd = besideSplit && 'headSide' in props && props.headSide === 'end';
   const hasHead = hasText || hasActions || hasAside;
+  /* Actions at the heading row's end: stacked only, and only with a heading to align to. */
+  const actionsAtEnd =
+    hasActions &&
+    Boolean(heading) &&
+    arrangement === 'stacked' &&
+    'actionsAt' in props &&
+    props.actionsAt === 'end';
 
   /* A `section` element is only honest when the band has a name. Unheaded, it is a `div` —
      an unnamed <section> is a region a screen reader announces and cannot identify. */
@@ -515,11 +548,8 @@ export function ContentSection(props: ContentSectionProps) {
     warn(`media.counterweight is paper-only (§ 6.2); dropped on surface="${surface}".`);
   }
   const counterweight = inMedia && media?.counterweight === true && onPaper;
-  /* The eyebrow carries the blue mark, on every band (cmp-services fix round 2): one square of the
-     texture's grid before the label, PageHero's mark. It is part of the eyebrow ROLE, not a choice a
-     caller makes, so a page's band heads never read black and white while only its hero shows the
-     accent. A Cluster, so the mark-to-label seam is the gap scale's `tight`; `nowrap` because a mark
-     alone at a line end is a stray pixel, and an eyebrow is short. Decorative: aria-hidden. */
+  /* The eyebrow carries no mark (owner, 7 Oct 2026). A Cluster still, because its `justify` is the
+     one placement prop here that takes a value per breakpoint (`center-lg`). */
   const eyebrowEl = eyebrow ? (
     <Cluster
       as="p"
@@ -635,8 +665,23 @@ export function ContentSection(props: ContentSectionProps) {
 
        The head group is the head text, then the actions or the aside a `stack` beneath it — lead →
        actions and head → aside are both block-to-block seams (§ 1.2). */
-    const headGroup =
-      hasActions || hasAside ? (
+    const headGroup = actionsAtEnd ? (
+      /* Actions at the end (owner, 7 Oct 2026): the eyebrow on its own line, then the heading and
+         lead in the fractional track and the actions in a content-sized one from 1024, both
+         starting on the heading's top. `column` (64) between them: two kinds of thing that must
+         read as separate. Below 1024 one track, the actions a `stack` (48) under the lead — the
+         `below` placement exactly. */
+      <Layout rowGap="block">
+        {eyebrowEl}
+        <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="stack" align="start">
+          <Layout rowGap="block">
+            {headingEl}
+            {leadEl}
+          </Layout>
+          {actions}
+        </Layout>
+      </Layout>
+    ) : hasActions || hasAside ? (
         /* asideFill: the head group is `auto 1fr` (pinLast) and the aside's box fills the 1fr row,
            so it ends where the stretched track ends — on the body's last line. */
         <Layout rowGap="stack" pinLast={asideFill}>

@@ -1,5 +1,9 @@
 # DataTable
 
+
+> **Owner, 7 Oct 2026:** on a phone a table scrolls sideways and never restacks into key/value
+> blocks — rows are easier to read across. A partly clipped second column at 390 is accepted.
+
 ## 0 · Front matter
 
 |                     |                                                                                                                                                                                                                                                                                                          |

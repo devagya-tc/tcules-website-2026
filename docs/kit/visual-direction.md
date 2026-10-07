@@ -92,7 +92,7 @@ so these numbers are for writers and planners, and the gate is the authority.
 
 ## Owner rulings · 7 Oct 2026 (design review)
 
-These four override anything below that disagrees; the inline amendments point here.
+These override anything below that disagrees; the inline amendments point here.
 
 1. **Tables are boxed.** Tabular content — a key column and data columns that a reader compares
    across rows — renders as the boxed DataTable: outer border, head fill, body ground, a hairline
@@ -118,6 +118,14 @@ These four override anything below that disagrees; the inline amendments point h
    (`block`), start-aligned on a generous measure (`align="start"`, the default) or centred
    (`align="center"`). The `[1, 2]` form, eyebrow alone in the head track ~480 from its sentence,
    left the band with no anchor.
+5. **A head's actions may sit at the end of the heading's row** (ContentSection `actionsAt="end"`).
+   The text stays one column on the left; the actions take a content-sized track at the row's end
+   from 1024, their top on the heading's top (the eyebrow keeps its own line above both), 64
+   (`column`) from the text. Below 1024 they fall back a `stack` under the lead. This is not the
+   retired split: the text is still read top to bottom in one column, and the actions are a control
+   group pinned to the title, not a second column of copy. Stacked heads only.
+6. **Tables scroll sideways on a phone; they never restack** into key/value blocks. A table is read
+   across its rows, and that reading survives a horizontal scroll better than it survives blocks.
 
 ---
 

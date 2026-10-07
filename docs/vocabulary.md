@@ -220,7 +220,7 @@ Layout is done by these three. Always. Anything you specify is arranged by one o
 
 **`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean | 'tall'` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `fillFirst?: boolean` · `stagger?: boolean` · `align?: Place | 'baseline'` · `justifyItems?: Place` · `justify?: Distribute` · `scroll?: Scroll` · `peek?: boolean` · `ref?: Ref<HTMLElement>` · `tabIndex?: 0 | -1` · `'aria-label'?: string` · `children: ReactNode`
 
-  where `Gap` = 'none' | 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' | 'column' | 'section' | 'section-open' · `Columns` = (number | number[]) | 'fit' | 'tile' | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec } · `MinTrack` = 'xs' | 'sm' | 'md' | 'lg' · `Offset` = 0 | 1 | 2 | 3 · `Place` = 'stretch' | 'start' | 'center' | 'end' · `Distribute` = 'start' | 'center' | 'end' | 'between' · `Scroll` = 'until-md' | 'always'
+  where `Gap` = 'none' | 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' | 'column' | 'section' | 'section-open' · `Columns` = (number | (number | 'auto')[]) | 'fit' | 'tile' | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec } · `MinTrack` = 'xs' | 'sm' | 'md' | 'lg' · `Offset` = 0 | 1 | 2 | 3 · `Place` = 'stretch' | 'start' | 'center' | 'end' · `Distribute` = 'start' | 'center' | 'end' | 'between' · `Scroll` = 'until-md' | 'always'
 
 **`Cluster`** — `as?: ElementType` · `rowGap?: ClusterGap` · `colGap?: ClusterGap` · `align?: ClusterAlign` · `justify?: ClusterJustify | { base?: ClusterJustify` · `nowrap?: boolean` · `stackUntil?: 'md'` · `children: ReactNode`
 

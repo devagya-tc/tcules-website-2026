@@ -48,8 +48,14 @@ type MinTrack = 'xs' | 'sm' | 'md' | 'lg';
 /**
  * A column shape: a count of equal tracks (`3`) or fractional weights (`[2, 1]`, `[1, 1, 2]`).
  * Children fill the tracks in order; each owns its own sizing.
+ *
+ * A weight may be `'auto'` (owner, 7 Oct 2026): a CONTENT-SIZED track, as wide as its child and no
+ * wider, while the fractional tracks share what is left. For a row whose one side is a control
+ * group that must not stretch or wrap early — a section head's actions set at the end of the
+ * heading's row (`[1, 'auto']`). Never for content that reads: an auto track holding text grows to
+ * the text's full length.
  */
-type ColumnSpec = number | number[];
+type ColumnSpec = number | (number | 'auto')[];
 
 /**
  * How the tracks are arranged. Two models, deliberately both available:
@@ -305,7 +311,7 @@ export type LayoutProps = {
 function track(spec: ColumnSpec): string {
   return typeof spec === 'number'
     ? `repeat(${spec}, minmax(0, 1fr))`
-    : spec.map((weight) => `minmax(0, ${weight}fr)`).join(' ');
+    : spec.map((weight) => (weight === 'auto' ? 'auto' : `minmax(0, ${weight}fr)`)).join(' ');
 }
 
 /**

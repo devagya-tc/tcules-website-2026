@@ -1018,6 +1018,52 @@ export default function ContentSectionSpecimen() {
         </ContentSection>
       </FoldExempt>
 
+      {/* ── 13b · actions at the end of the heading's row ─────────────────────────────── */}
+      <Label title="13b · Actions at the end of the heading's row">
+        actionsAt=&quot;end&quot; (owner, 7 Oct 2026): the text stays in one column on the left and
+        the actions sit at the row&rsquo;s end from 1024, their top on the heading&rsquo;s top — the
+        eyebrow keeps its own line above both. A content-sized track, 64 from the text. Below
+        1024 the actions fall back a stack under the lead. Stacked heads only; the link-row form
+        and the solid pair, then the longest heading and lead against it.
+      </Label>
+      <ContentSection
+        eyebrow="Actions at the end · link"
+        heading="What we do"
+        headingId="csec-actions-end-link"
+        lead="Product design, design systems and the engineering that ships them, as one team."
+        actionsAt="end"
+        actions={<CtaRow actions={[SEE_WORK]} rule={false} />}
+      >
+        <PairCards />
+      </ContentSection>
+      <ContentSection
+        surface="tint"
+        eyebrow="Actions at the end · solid pair"
+        heading="Two pieces of work that argue the same point"
+        headingId="csec-actions-end-pair"
+        lead="A rebuilt workflow and a design system, both settled at the model before a screen was drawn."
+        actionsAt="end"
+        actions={
+          <CtaRow actions={[START, SEE_WORK]} emphasis="solid" tone="primary" rule={false} />
+        }
+      >
+        <PairCards />
+      </ContentSection>
+      <FoldExempt reason={OVER_BUDGET}>
+        <ContentSection
+          eyebrow="Actions at the end · longest copy"
+          heading={HEADING_LONG}
+          headingId="csec-actions-end-long"
+          lead={LEAD_LONG}
+          actionsAt="end"
+          actions={
+            <CtaRow actions={[START, SEE_WORK]} emphasis="solid" tone="primary" rule={false} />
+          }
+        >
+          <PairCards />
+        </ContentSection>
+      </FoldExempt>
+
       {/* ── 14 ─────────────────────────────────────────────────────────────────────────────── */}
       <Label title='14 · arrangement="media" (the B split)'>
         A 4:5 photograph in 5 of [5, 7], radius 8, the copy in 7, 96 apart. Only one shape pins:

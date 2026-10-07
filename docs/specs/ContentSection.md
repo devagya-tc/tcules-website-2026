@@ -653,3 +653,14 @@ another name, so the arrangement is deleted from the union: `'stacked' | 'beside
 a band that took the H-row is ~90 taller. Measured at 1440 on the six service pages after the change:
 the tallest bands are 819 (E with a five-row table, M with three covers) and 823 (I with its photo),
 all under the 830 fold.
+
+## Amendment · 7 Oct 2026 — `actionsAt="end"` (owner)
+
+- A stacked head with `actions` may set them at the inline end of the heading's row: `actionsAt="end"`
+  (default `below`). From 1024 the head is the eyebrow on its own line, then a row of two tracks —
+  heading and lead in `1fr`, the actions in a content-sized track (Layout's new `'auto'` weight) —
+  `column` (64) apart, aligned to the heading's top. Below 1024 the actions fall back a `stack` under
+  the lead, exactly as `below`.
+- Typed: `actionsAt: 'end'` is a separate union member that only allows `arrangement="stacked"`.
+  It needs a heading to align to; without one the actions render `below`.
+- Specimen: `/design/content-section` § 13b — link row, solid pair on tint, longest copy.
