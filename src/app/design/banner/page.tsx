@@ -109,6 +109,21 @@ export default function BannerSpecimen() {
         image={getKitPhoto('sticky-wall-soft-focus')}
       />
 
+      <Label title="2b · below, the action at the end of the heading's row">
+        actionsAt=&quot;end&quot; (owner, 7 Oct 2026): the eyebrow on its own line, the heading and
+        lead on the left, the action at the row&rsquo;s end with its top on the heading&rsquo;s top,
+        from 1024. Below 1024 it falls back under the lead. The service page&rsquo;s I banner.
+      </Label>
+      <Banner
+        eyebrow="Coded prototyping"
+        heading="The work starts in the room"
+        headingId="bnr-below-actions-end"
+        lead="Before anything is drawn, we sit with the people doing the work and map the decisions they make."
+        actionsAt="end"
+        actions={CTA}
+        image={getKitPhoto('team-laptops-table')}
+      />
+
       <Label title="3 · beside, both sides, three surfaces">
         mediaSide end (default) and start. The copy is first in the DOM either way; reverse
         mirrors from 1024 only.

@@ -379,6 +379,7 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
         heading={banner.heading}
         headingId={banner.id}
         lead={banner.lead}
+        actionsAt="end"
         actions={action}
         data-band="I"
       />
@@ -390,6 +391,9 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
       heading={banner.heading}
       headingId={banner.id}
       lead={banner.lead}
+      /* The banner's one link is the way deeper, so it sits at the heading row's end (owner,
+         7 Oct 2026); the head and the photograph keep the band's full column. */
+      actionsAt="end"
       actions={action}
       image={getKitPhoto(band.photo)}
     />

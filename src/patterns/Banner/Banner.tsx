@@ -83,6 +83,13 @@ type BannerHeadProps = {
 type BelowProps = BannerHeadProps & {
   form?: 'below';
   mediaSide?: never;
+  /**
+   * Where the head's action sits (owner, 7 Oct 2026) — ContentSection's `actionsAt`, the same
+   * decision. `below` (default) a `stack` under the lead; `end` at the inline end of the heading's
+   * row from 1024, its top on the heading's top, in a content-sized track a `column` (64) from the
+   * text, the eyebrow on its own line above both. Below 1024 it falls back under the lead.
+   */
+  actionsAt?: 'below' | 'end';
 };
 
 /**
@@ -193,7 +200,29 @@ export function Banner(props: BannerProps) {
 
   let arranged: ReactNode;
 
-  if (form === 'below') {
+  const actionsAtEnd =
+    form === 'below' && Boolean(actions) && 'actionsAt' in props && props.actionsAt === 'end';
+
+  if (form === 'below' && actionsAtEnd) {
+    /* Actions at the end (owner, 7 Oct 2026): the eyebrow on its own line, then heading and lead
+       in the 1fr track and the action in a content-sized one from 1024, both on the heading's
+       top, `column` (64) apart. Below 1024 one track, the action a `stack` under the lead. */
+    arranged = (
+      <Layout rowGap="stack">
+        <Layout rowGap="block">
+          {eyebrowEl}
+          <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="stack" align="start">
+            <Layout rowGap="block">
+              {headingEl}
+              {leadEl}
+            </Layout>
+            {actions}
+          </Layout>
+        </Layout>
+        <Media image={image} ratio={{ base: '3/2', lg: '3/1' }} sizes={FULL_COLUMN} />
+      </Layout>
+    );
+  } else if (form === 'below') {
     /* The head is one column, the ContentSection stacked head (owner, 7 Oct 2026): eyebrow →
        heading → lead at `block`, the action a `stack` under the lead (§ 1.2), the photograph a
        `stack` under the head. It was the H-row — heading | lead + action — and with no image beside

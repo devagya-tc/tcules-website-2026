@@ -65,3 +65,12 @@ with the illustration. Strip 70. At 390: 572 to 733, strip 136. No overflow at 3
 ## Open questions
 
 None blocking.
+
+## Amendment · 7 Oct 2026 — `actionsAt="end"` (owner)
+
+`below` takes `actionsAt: 'below' | 'end'` (default `below`), the same decision as ContentSection's.
+`end` sets the action at the inline end of the heading's row from 1024 — eyebrow on its own line,
+heading and lead in `1fr`, the action in a content-sized track `column` (64) away, top on the
+heading's top — and under the lead below 1024. The service page's I banner uses it: its one link is
+the way deeper, so the head and the photograph keep the full column. Specimen: `/design/banner` § 2b.
+
