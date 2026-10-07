@@ -55,21 +55,7 @@ export type DataTableRow = {
   cellsHtml: readonly (string | DataTableNodeCell)[];
 };
 
-/**
- * How the table is drawn (page-product-design fix round 2, 6 Oct 2026).
- *
- *   boxed  default. The boxed frame: outer border, head fill, body ground, a hairline between every
- *          row and every column.
- *   ruled  no box: the table sits on the band's own ground, the head row closes on a strong rule
- *          and the rows on hairlines, no column dividers and no outer border. For a table that IS a
- *          band's diagram — a spectrum, a check matrix — where the owner's ruling "no boxes around
- *          text content" holds and the columns are few enough to read by alignment alone.
- */
-export type DataTableFrame = 'boxed' | 'ruled';
-
 export type DataTableProps = {
-  /** Default `boxed`. See `DataTableFrame`. */
-  frame?: DataTableFrame;
   /** The table's name. Rendered as `<caption>`, so it is also the table's accessible name. */
   caption?: string;
   /** A plain-text lead-in, rendered as a paragraph immediately before the table. */
@@ -105,6 +91,10 @@ function warn(message: string) {
  * trusted rich text — which a primitive may not import.
  *
  * ── One reading order, a boxed frame ───────────────────────────────────────────────────────
+ * TABLES ARE BOXED (owner, 7 Oct 2026). The frame is the table's, not a variant: tabular content
+ * always renders in it. A `frame="ruled"` variant (no box, a strong head rule, hairline rows) lived
+ * here from 6 Oct to 7 Oct 2026 and was withdrawn — the ruled tables read dense and compact, rows
+ * running together with nothing to hold them, and a table without its frame stops reading as one.
  * It is a table at every width. The frame — outer border, head fill, body ground, and a hairline
  * between every row and every column — is what makes it readable as a structure, so a narrow track does not
  * restructure it: when its columns' floors add up to more than the track, the frame scrolls
@@ -127,14 +117,7 @@ function warn(message: string) {
  * columns (padded with empty cells, or truncated — a cell with no column head cannot be read in
  * the stacked order). Zero rows renders nothing.
  */
-export function DataTable({
-  caption,
-  summary,
-  keyColumn,
-  columns,
-  rows,
-  frame = 'boxed',
-}: DataTableProps) {
+export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTableProps) {
   const captionId = useId();
 
   if (rows.length === 0) {
@@ -175,7 +158,7 @@ export function DataTable({
         ) : null}
         {/* The shell holds the frame and draws the scroll fades over its clipped edges. It does not
             scroll itself, which is what keeps the fades pinned while the table moves beneath them. */}
-        <div className={cx(styles.shell, frame === 'ruled' && styles.ruled)}>
+        <div className={styles.shell}>
           <div
             className={styles.frame}
             role="region"
@@ -235,6 +218,7 @@ export function DataTable({
                             key={index}
                             className={cx(
                               styles.cell,
+                              typeof cell !== 'string' && styles.nodeCell,
                               BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
                             )}
                           >

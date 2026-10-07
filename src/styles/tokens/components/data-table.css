@@ -43,8 +43,6 @@
 
 :root {
   --dtab-rule-width: var(--border-width-hairline);
-  /* `frame="ruled"`: the head row's closing rule (page-product-design fix round 2). */
-  --dtab-rule-strong-width: var(--border-width-1);
   /* The two column floors. Every cell floors at the fluid size, so a narrow track scrolls the frame
      rather than crushing a column; a `hold` column floors higher, so a greedy prose neighbour
      cannot take its width at a wide track either. Both include the cell's --gap-block inset each
@@ -77,10 +75,6 @@
   --dtab-empty-ink: var(--color-neutral-500); /* 3.19:1 — a mark for "nothing here", non-text */
   --dtab-ring-ink: var(--color-brandeis-500); /* 6.17:1 on paper */
   /* Prose on the white body: ink 14.75, muted 4.97, link 6.23. */
-  /* `frame="ruled"`: the head's strong rule, and the band's own ground the fades fade to (the
-     section ground, restated by value — token rule 6). */
-  --dtab-rule-strong-ink: var(--color-neutral-400); /* decoration */
-  --dtab-band-ground: var(--color-paper);
 }
 
 /* Tint: the body is paper on the deeper band — the reference this table was drawn from. The
@@ -95,10 +89,6 @@
   --dtab-empty-ink: var(--color-neutral-500); /* 3.16:1 on the body, non-text */
   --dtab-ring-ink: var(--color-brandeis-500); /* 5.51:1 on paper-deep */
   /* Prose on the paper body: ink 14.62, muted 8.14, link 6.17. */
-  /* `frame="ruled"`: the head's strong rule, and the band's own ground the fades fade to (the
-     section ground, restated by value — token rule 6). */
-  --dtab-rule-strong-ink: var(--color-neutral-500); /* decoration */
-  --dtab-band-ground: var(--color-paper-deep);
 }
 
 /* Ink: the frame steps UP the ramp — body neutral-900, head neutral-800 — so the box reads as a
@@ -114,10 +104,6 @@
   --dtab-empty-ink: var(--color-neutral-500); /* 4.62:1 on the body */
   --dtab-ring-ink: var(--color-brandeis-300); /* 7.32:1 on neutral-950 */
   /* Prose on the neutral-900 body: ink 12.37, muted 6.88, link 6.26. */
-  /* `frame="ruled"`: the head's strong rule, and the band's own ground the fades fade to (the
-     section ground, restated by value — token rule 6). */
-  --dtab-rule-strong-ink: var(--color-neutral-600); /* decoration */
-  --dtab-band-ground: var(--color-neutral-950);
 }
 
 /* Blue: the frame steps DOWN the ramp — body brandeis-700, head brandeis-600 — because a lighter
@@ -133,8 +119,4 @@
   --dtab-empty-ink: var(--color-brandeis-300); /* 4.31:1 on the body */
   --dtab-ring-ink: var(--color-white); /* 6.23:1 on brandeis-500 */
   /* Prose on the brandeis-700 body: ink and link 10.16, muted 8.01. */
-  /* `frame="ruled"`: the head's strong rule, and the band's own ground the fades fade to (the
-     section ground, restated by value — token rule 6). */
-  --dtab-rule-strong-ink: var(--color-brandeis-300); /* decoration */
-  --dtab-band-ground: var(--color-brandeis-500);
 }

@@ -32,16 +32,20 @@ export type StatementElement = 'h2' | 'p';
 export type StatementTexture = 'head-half' | 'corner';
 
 /**
- * Where the sentence sits (page-product-design fix round 2, 6 Oct 2026).
+ * Where the sentence sits. One column in both: the eyebrow directly above the sentence, a `block`
+ * (24) apart, the action a `stack` (48) under it.
  *
- *   split   default. [1, 2] from 1024: the eyebrow in the head track, the sentence in the 763.
- *   center  one column at every width, eyebrow, sentence and action centred on the band's axis
- *           across the full measure — Meridian's overview line. For a page whose neighbouring bands
- *           already start their content on the 1/3 line: a split J between two beside bands read as
- *           one long split. Pair it with `texture="corner"`, the corner being the only ground a
- *           centred sentence leaves clear.
+ *   start   default. On the band's start edge, the sentence on its own generous measure (the title
+ *           measure at h1, the display measure at display), the band's end left open as air.
+ *   center  eyebrow, sentence and action centred on the band's axis across the full measure —
+ *           Meridian's overview line. For a page whose neighbouring bands already start their
+ *           content on the start edge. Pair it with `texture="corner"`, the corner being the only
+ *           ground a centred sentence leaves clear.
+ *
+ * There is no split form (owner, 7 Oct 2026). `split` set the eyebrow alone in a one-third track,
+ * ~480 from its sentence, and the band had no anchor: a label belongs to the thing it labels.
  */
-export type StatementAlign = 'split' | 'center';
+export type StatementAlign = 'start' | 'center';
 
 /**
  * The sentence's scale. `h1` (default) the h1 role; `display` the display role, the hero's — for
@@ -50,13 +54,13 @@ export type StatementAlign = 'split' | 'center';
 export type StatementSize = 'h1' | 'display';
 
 export type StatementProps = {
-  /** Default `split`. See `StatementAlign`. */
+  /** Default `start`. See `StatementAlign`. */
   align?: StatementAlign;
   /** Default `h1`. See `StatementSize`. */
   size?: StatementSize;
-  /** The sentence, ≤ 14 words so it holds ≤ 3 lines at the h1 role in the 763 track (§ 1.5). */
+  /** The sentence, ≤ 14 words so it holds ≤ 3 lines at the h1 role on its measure (§ 1.5). */
   children: string;
-  /** The label in the head track. Never repeats the band before it (§ 7.3). */
+  /** The label directly above the sentence. Never repeats the band before it (§ 7.3). */
   eyebrow?: string;
   /** The sentence's element. Default `h2`. */
   as?: StatementElement;
@@ -77,11 +81,11 @@ export type StatementProps = {
 /**
  * Statement — the J band: one sentence, large, and almost nothing else.
  *
- * [1, 2] from 1024 at the split seam (96): the eyebrow in the head track, the
- * sentence in the two-thirds track (763 at 1470), top edges level. `open` density (128) — the
- * references give a statement ~1.6× the standard air, and that maps to `--gap-section-open`, never to
- * an invented 208 (references § Meridian). Below 1024 one column: eyebrow, then the sentence a
- * `block` (24) beneath, the head rhythm.
+ * One column at every width: the eyebrow, then the sentence a `block` (24) beneath — the head
+ * rhythm, so the label sits on the thing it labels — and the action a `stack` (48) under that.
+ * Start-aligned (default) or centred (`align`). `open` density (128) — the references give a
+ * statement ~1.6× the standard air, and that maps to `--gap-section-open`, never to an invented 208
+ * (references § Meridian).
  *
  * The sentence stays ink. Eyebrows carry no mark (owner, 7 Oct 2026).
  *
@@ -97,7 +101,7 @@ export function Statement({
   texture,
   surface = 'paper',
   size = 'h1',
-  align = 'split',
+  align = 'start',
 }: StatementProps) {
   const heading = Tag === 'h2';
   const labelled = heading && Boolean(id);
@@ -147,39 +151,20 @@ export function Statement({
         </Texture>
       ) : null}
       {cornered ? <TextureCorner /> : null}
-      {centred ? (
-        /* Centred: one column, every part on the band's axis. The eyebrow-to-sentence seam is the
-           head rhythm's `block`, the sentence-to-action seam the band's `stack`, as in the split. */
-        <Layout rowGap="stack" justifyItems="center">
-          <Layout rowGap="block" justifyItems="center">
-            {eyebrow ? (
-              <p className={styles.eyebrow} data-copy="eyebrow">
-                {eyebrow}
-              </p>
-            ) : null}
-            {sentence}
-          </Layout>
-          {actions ?? null}
-        </Layout>
-      ) : (
-        <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
+      {/* One column either way. The eyebrow-to-sentence seam is the head rhythm's `block`, the
+          sentence-to-action seam the band's `stack`. Centred, Layout centres each part on the
+          band's axis; start-aligned, every part keeps the start edge. */}
+      <Layout rowGap="stack" justifyItems={centred ? 'center' : undefined}>
+        <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
           {eyebrow ? (
             <p className={styles.eyebrow} data-copy="eyebrow">
               {eyebrow}
             </p>
-          ) : (
-            <div className={styles.headEmpty} />
-          )}
-          {actions ? (
-            <Layout rowGap="stack">
-              {sentence}
-              {actions}
-            </Layout>
-          ) : (
-            sentence
-          )}
+          ) : null}
+          {sentence}
         </Layout>
-      )}
+        {actions ?? null}
+      </Layout>
     </Section>
   );
 }

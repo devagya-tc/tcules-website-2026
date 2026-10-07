@@ -521,7 +521,7 @@ layout limit — rows are one ruled line each and nothing in the frame depends o
 first comparison matrix (Design Engineering: ten things to decide, each answered by static screens or
 a coded slice) is a legitimate ten-row table. Above twelve the warning still fires.
 
-## Amendment · 6 Oct 2026 — `page-product-design` fix round 2: `frame="ruled"`
+## Amendment · 6 Oct 2026 — `page-product-design` fix round 2: `frame="ruled"` (withdrawn 7 Oct 2026)
 
 `frame?: 'boxed' | 'ruled'`, default `boxed` (everything above). `ruled` draws no box: no outer
 border, no head fill, no body ground, no column dividers. The head row closes on the strong rule
@@ -530,3 +530,28 @@ the band's text edge, and the scroll fades fade to the band's own ground (`--dta
 restated per surface by value). For a table that IS a band's diagram — the service page's spectrum
 and check matrix — where the owner's ruling "no boxes around text content" holds and the columns
 are few enough to read by alignment. Specimen: `/design/data-table` § 2.
+
+## Amendment · 7 Oct 2026 — owner design review: tables are boxed
+
+**The rule: tables are boxed.** Tabular content renders as this table in its boxed frame — outer
+border, head fill, body ground, a hairline between every row and every column. The box is the
+table's, not a variant. Recorded in `docs/kit/visual-direction.md`, "Owner rulings · 7 Oct 2026",
+rule 1.
+
+- **`frame` is removed**, with `DataTableFrame`, the `.ruled` overrides and the three tokens only it
+  read (`--dtab-rule-strong-width`, `--dtab-rule-strong-ink`, `--dtab-band-ground`, the last two per
+  surface). The ruled tables (the service page's spectrum and matrix) read dense and compact: rows ran
+  together with nothing to hold them, and without its frame a table stops reading as one. The
+  6 Oct "no boxes around text content" ruling still governs cards and diagrams; a table is not text
+  content in a box.
+- **The service page's three tables are boxed**: Spectrum, Matrix and Record. Record — a record's
+  fields and the question each holds, which had been a ruled sheet — is now a two-column DataTable
+  under a set heading; six fields or more set as two boxed halves side by side from 1024 (as the
+  Matrix halves already did), each half its own table with its own head row, so the band keeps the
+  fold (775 and 759 at 1440).
+- **A composed `{ node }` cell is top-aligned** (`.nodeCell`). Every other cell sits on the row's
+  shared baseline; a node has no text, so its baseline is its bottom edge, and the 24 disruption
+  trace pushed every text cell in its row down 7px (rows 65 instead of 58, which ran the
+  modernisation spectrum band to 849, past the fold). Top-aligned, a 24 mark sits in the 26 first
+  line box and the text keeps its baseline.
+- Specimen: `/design/data-table` loses the ruled row; its intro states the rule.

@@ -434,7 +434,8 @@ export default function DataTableSpecimenPage() {
             behaviour is presentation. It is drawn as a box — outer border, head fill, body
             ground, and a hairline between every row and every column — and when its track is
             too narrow for its columns the box scrolls sideways; it never restacks. The page
-            itself never scrolls horizontally.
+            itself never scrolls horizontally. Tables are boxed, always (owner, 7 Oct 2026): the
+            box is the table&rsquo;s, not a variant, so there is no ruled frame.
           </p>
         </Layout>
       </Section>
@@ -482,12 +483,6 @@ export default function DataTableSpecimenPage() {
             note="No zebra: rows are separated by the hairline only, inside the frame."
           >
             <DataTable {...EIGHT_ROWS} />
-          </Specimen>
-          <Specimen
-            title='frame="ruled" · no box'
-            note="For a table that is a band's diagram (the service page's spectrum and matrix): no outer border, no head fill, no column dividers. The head closes on the strong rule, the rows on hairlines, and the key starts on the band's text edge."
-          >
-            <DataTable {...THREE_COLUMNS} frame="ruled" />
           </Specimen>
           <Specimen
             title="Long row headers"

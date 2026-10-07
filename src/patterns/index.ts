@@ -262,7 +262,6 @@ export type { CalloutProps, CalloutTone } from './Callout';
 export { DataTable } from './DataTable';
 export type {
   DataTableProps,
-  DataTableFrame,
   DataTableKeyColumn,
   DataTableColumn,
   DataTableRow,

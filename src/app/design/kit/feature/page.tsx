@@ -722,17 +722,17 @@ function Caption({
 const VARIATIONS = [
   'C-image-3 · display · centred · whole-card links',
   'C-spotlight · 2:1 lead beside a stacked pair',
-  'C-image-3 · H-row with a section action',
+  'C-image-3 · with a section action',
   'C-wide · a 2:1 lead and two squares, one height',
   'C-image-3 · display H-compact · per-card CTA',
   'C-image-3 · display H-title · CtaRow, one-line titles',
   'C-image-3 · unlinked, numbered, no CTA',
-  'C-image-4 · H-row · lead none · numbered',
+  'C-image-4 · lead none · numbered',
   'C-image-4 · display H-compact · per-card CTA',
   'C-image-6 · Slider showing three',
   'C-pair · staggered, text beside',
   'C-text-3 · hairline + index, unlinked',
-  'C-text-3 · H-row · per-card CTA',
+  'C-text-3 · per-card CTA',
   'C-text-3 · whole-card links · on tint',
   'C-text-6 · two-line bodies',
   'C-icon-4 · beside head + photo aside',
@@ -760,7 +760,7 @@ const kf = (n: number) => `kf-${String(n).padStart(2, '0')}`;
  * order below puts between the equal rows, so no two neighbouring bands are the same rectangle.
  *
  * Heads: centred H-compact and H-title heads take headingSize="display" (fix round 2), so the
- * head-to-card scale gap is the references' ~70 over 22–28; H-row and beside heads keep h2, where
+ * head-to-card scale gap is the references' ~70 over 22–28; stacked and beside heads keep h2, where
  * the head shares its row with a lead or a body.
  */
 export default function FeatureKitSpecimen() {
@@ -824,16 +824,19 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={SPOTLIGHT} lead="beside" />
       </ContentSection>
 
-      <Caption n={3} name={VARIATIONS[2]} fit="190 + 381 = 571">
-        The H-row: heading beside the lead, the section&rsquo;s one action a block under it, the
-        set full column beneath.
+      <Caption
+        n={3}
+        name={VARIATIONS[2]}
+        fit="226 + 48 + 357 = 631 (measured, 1-line lead)"
+      >
+        A stacked head: eyebrow, heading, lead and the section&rsquo;s one action in one column
+        (the H-row, heading beside the lead, is retired), the set full column beneath.
       </Caption>
       <ContentSection
-        arrangement="split-head"
         eyebrow="Recent work"
         heading="Work that held up in use"
         headingId={kf(3)}
-        lead="Three products we designed and built with their teams, measured after launch rather than at handover."
+        lead="Three products, measured after launch, not at handover."
         actions={
           <CtaRow
             rule={false}
@@ -916,7 +919,6 @@ export default function FeatureKitSpecimen() {
         lead=&quot;none&quot;: no card is featured in a feature band.
       </Caption>
       <ContentSection
-        arrangement="split-head"
         eyebrow="The studio"
         heading="A small studio that works in the open"
         headingId={kf(8)}
@@ -1000,7 +1002,6 @@ export default function FeatureKitSpecimen() {
         Text cards with an eyebrow and their own named link.
       </Caption>
       <ContentSection
-        arrangement="split-head"
         eyebrow="Further reading"
         heading="Where to read next"
         headingId={kf(13)}
@@ -1181,7 +1182,6 @@ export default function FeatureKitSpecimen() {
         these are text cards. Short unlinked text and icon sets (12, 16) stay stacked.
       </Caption>
       <ContentSection
-        arrangement="split-head"
         eyebrow="Audits"
         heading="Start with an audit"
         headingId={kf(24)}

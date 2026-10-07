@@ -212,8 +212,8 @@ export const aiProductUx: ServiceStory = {
       blocks: [
         {
           kind: 'record',
-          meta: 'One per AI scenario',
           title: 'Responsibility record',
+          columns: { field: 'Field', question: 'The question it answers' },
           items: [
             { field: 'User work', question: 'Which task deserves assistance?', icon: 'user' },
             { field: 'Model role', question: 'What may the model influence?', icon: 'cpu' },

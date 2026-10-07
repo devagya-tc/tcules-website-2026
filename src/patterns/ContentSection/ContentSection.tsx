@@ -19,6 +19,14 @@ import styles from './ContentSection.module.css';
  * Where the head group sits against the blocks. Four arrangements of the same beats; the layout
  * moves at 1024 and nowhere else, and below 1024 every one of them is a single column in DOM order.
  *
+ * NO TEXT-ONLY HEAD SPLITS (owner, 7 Oct 2026). A head is never split left/right on its own: the
+ * `split-head` arrangement (the H-row — heading in one track, lead and action in the other) was
+ * retired, because with no image beside it the reading order was unclear and the action floated in
+ * a mostly empty track. A text-only head is eyebrow → heading → lead → action in ONE column, over
+ * its body. Side by side survives only where one side is media: `media` (the photograph beside the
+ * copy) and `beside` with an aside (the head track's photograph), plus `beside` over a body that
+ * reads down, where the split is head | body rather than heading | lead.
+ *
  *   stacked     the head above the blocks, at every width. The default.
  *   beside      from 1024, the head in a leading track (5 : 7, then 1 : 2 from 1440) and the blocks in the trailing one, 96
  *               apart, the head static (it scrolls with the band; it does not stick, ruling O2). The
@@ -26,10 +34,6 @@ import styles from './ContentSection.module.css';
  *               never both (visual-direction § 1.4 rule 6). Below 1024 it is `stacked`, with the aside
  *               between the head and the body (§ 3.7 item 4). It splits only when there are BLOCKS
  *               for the trailing track; without them it is the stacked band, aside dropped.
- *   split-head  the H-row (§ 1.4): the head itself splits 1 : 2 from 1024 under its eyebrow — the
- *               heading in the leading track, lead and actions in the trailing one, top edges level;
- *               the blocks then run the full column beneath it. The head reads as one horizontal row, which is
- *               what a full-column body (a 3-up image set, a 3:1 banner) wants above it.
  *   media       the B media split (§ 3.4): a 4:5 photograph in 5 of [5, 7] beside a copy column
  *               holding the head, the blocks and the footer, 96 apart. `media.side` puts the photo at
  *               the start or the end. Below 1024 the photo sits ABOVE the copy, at 4:3.
@@ -37,7 +41,7 @@ import styles from './ContentSection.module.css';
  * A PRESENTATION choice, and therefore never a CMS field (docs/strapi-changes.md §1): it changes
  * how a section looks, not what it says. The template that places the band chooses it.
  */
-export type ContentSectionArrangement = 'stacked' | 'beside' | 'split-head' | 'media';
+export type ContentSectionArrangement = 'stacked' | 'beside' | 'media';
 
 /**
  * How the head aligns (§ 3.5). `center` sets eyebrow, heading and lead centred, each on its own
@@ -205,7 +209,7 @@ type ContentSectionBaseProps = {
   /**
    * The band's foot: in practice one `CtaRow` (a hairline, then a row of actions — § 3.1). It is the
    * body's last row, a `stack` (48) under the blocks (§ 1.2: body → CtaRow), in every arrangement:
-   * under the blocks in `stacked` and `split-head`, in the body track under `beside`, and pinned to
+   * under the blocks in `stacked`, in the body track under `beside`, and pinned to
    * the photograph's bottom edge in `media` when blocks sit above it.
    *
    * A footer is not a body on its own: `beside` with a footer and no blocks degrades to `stacked`
@@ -230,7 +234,7 @@ type ContentSectionBaseProps = {
    *
    * What goes in a `beside` body: a body that reads DOWN (rows, an accordion, a record), or two pair
    * cards, or icon cards (§ 1.4 rule 5). Never a 3-up card set or a 2 × 2 image grid — a set that
-   * reads across goes `stacked`, `split-head` or centred (1 Oct 2026, owner, on "Go deeper").
+   * reads across goes `stacked` or centred (1 Oct 2026, owner, on "Go deeper").
    *
    * "No blocks" is decided with `Children.toArray`, which drops `null`, `undefined` and booleans —
    * so an empty array (a CMS section with zero blocks, mapped) renders no body row and no 48 seam
@@ -245,10 +249,10 @@ type ContentSectionBaseProps = {
    caller that passes a union-typed arrangement (a template's `'stacked' | 'beside'` from its story)
    with no head slots matches one member outright instead of asking the compiler to split it.
 
-     plain        no head slot: stacked, beside or split-head, start-aligned.
+     plain        no head slot: stacked or beside, start-aligned.
      centred      § 3.5 — a centred head is always stacked, never beside, and never carries actions
                   in its column (nor an aside, which only a beside head track has).
-     withActions  stacked, beside or split-head, with the head's own actions. Never an aside beside
+     withActions  stacked or beside, with the head's own actions. Never an aside beside
                   them: § 1.4 rule 6 — the head track takes an aside OR actions, never both (411 +
                   254 overflows the 638 a band has).
      withAside    beside only — an aside belongs to a head TRACK, and only `beside` has one.
@@ -260,7 +264,7 @@ type ContentSectionBaseProps = {
 
 type PlainProps = {
   align?: 'start';
-  arrangement?: 'stacked' | 'beside' | 'split-head';
+  arrangement?: 'stacked' | 'beside';
   actions?: never;
   aside?: never;
   media?: never;
@@ -276,13 +280,13 @@ type CentredProps = {
 
 type WithActionsProps = {
   align?: 'start';
-  arrangement?: 'stacked' | 'beside' | 'split-head';
+  arrangement?: 'stacked' | 'beside';
   /**
-   * The head's own action row, a `stack` (48) under the lead (§ 1.2: lead → actions; a `block`, 24,
-   * in the H-row's trailing track, where it closes the lead beside the heading) — in practice
-   * a `CtaRow` with `rule={false}`. Stacked, under the lead; `beside`, in the head track
-   * (H-beside-actions); `split-head`, in the trailing track under the lead (H-row); `media`, under
-   * the lead in the copy column. Never on a centred head (§ 3.5), never beside an aside (§ 1.4 rule 6).
+   * The head's own action row, a `stack` (48) under the lead (§ 1.2: lead → actions) — in practice
+   * a `CtaRow` with `rule={false}`. Stacked, under the lead in the one head column; `beside`, in the
+   * head track (H-beside-actions); `media`, under the lead in the copy column. Never on a centred
+   * head (§ 3.5), never beside an aside (§ 1.4 rule 6), and never in a track of its own beside the
+   * heading (the retired H-row, owner 7 Oct 2026).
    */
   actions: ReactNode;
   aside?: never;
@@ -404,7 +408,7 @@ export function ContentSectionText({ children }: ContentSectionTextProps) {
 }
 
 /**
- * The head track against the body, in `beside` and `split-head`: 1 : 2 from 1440 (O2), and 5 : 7
+ * The head track against the body, in `beside`: 1 : 2 from 1440 (O2), and 5 : 7
  * from 1024 to 1439 (page-product-design fix round 2, 6 Oct 2026). At 1024 a third of the column is
  * 288, and a 43 h2 broke there into one- and two-word lines ("Relevant / Product / Design work",
  * "From the / real work / to the build") across four bands. 5 of 12 is 360, which holds the same
@@ -447,9 +451,10 @@ const present = (node: ReactNode) => Children.toArray(node).length > 0;
  * component's rendering is a function of its props: nothing in it responds to a pointer and
  * nothing opens.
  *
- * FOUR ARRANGEMENTS × TWO ALIGNMENTS, which is what lets a page change shape at every seam (§ 1.7)
- * without a new band component: stacked, beside (with an aside or actions in the head track),
- * split-head (the H-row) and media (the B split), each start-aligned, and stacked also centred.
+ * THREE ARRANGEMENTS × TWO ALIGNMENTS, which is what lets a page change shape at every seam (§ 1.7)
+ * without a new band component: stacked, beside (with an aside or actions in the head track) and
+ * media (the B split), each start-aligned, and stacked also centred. (`split-head`, the H-row, was
+ * retired 7 Oct 2026: a text-only head is never split left/right.)
  * Every one is Layout's props; there is no local grid.
  *
  * Route-blind and data-blind like every pattern — it never learns that Strapi exists.
@@ -490,11 +495,6 @@ export function ContentSection(props: ContentSectionProps) {
   const asideFill = hasAside && 'asideFill' in props && props.asideFill === true;
   const headAtEnd = besideSplit && 'headSide' in props && props.headSide === 'end';
   const hasHead = hasText || hasActions || hasAside;
-
-  /* `split-head` needs a heading for its leading track and a lead or actions for its trailing one.
-     Without either, the head is the stacked head. */
-  const headSplit =
-    arrangement === 'split-head' && Boolean(heading) && (Boolean(lead) || hasActions);
 
   /* A `section` element is only honest when the band has a name. Unheaded, it is a `div` —
      an unnamed <section> is a region a screen reader announces and cannot identify. */
@@ -617,40 +617,6 @@ export function ContentSection(props: ContentSectionProps) {
         pinFooter={hasBlocks && hasFooter && media.pin !== false}
         counterweight={counterweight}
       />
-    );
-  } else if (headSplit) {
-    /* split-head (the H-row). The eyebrow keeps its own row above the split — it labels the whole
-       row, not the title's column — and then the heading and the lead (with the actions under it)
-       sit side by side: HEAD_TRACKS from 1024 at the split seam (96), TOP-aligned, so the heading's line
-       box and the lead's start on one edge and the row reads as one horizontal unit.
-
-       Why not the eyebrow inside the leading track: whichever way that pair is aligned, the two
-       tracks disagree. Top-aligned, the 20px lead starts level with the 12px eyebrow and floats
-       beside a label; bottom-aligned, the trailing track (lead + 48 + action, ≈ 128) is the taller
-       one, so the heading drops below the lead's first line and the eyebrow lands mid-paragraph.
-       Measured on the specimen at 1440 (6 Oct 2026); § 1.4's H-row arithmetic changes from 156 to
-       14 + 24 + max(94, 128) = 166, still 40 under the C-image-3 target with a 381 set (595).
-
-       Below 1024 the split is one track: eyebrow → heading 24 (the outer `block`), heading → lead
-       24 (the split's `rowGap`), lead → actions 24 (the trailing track's own `block`). */
-    arranged = (
-      <Layout rowGap="stack">
-        <Layout rowGap="block">
-          {eyebrowEl}
-          <Layout columns={HEAD_TRACKS} colGap="section" rowGap="block" align="start">
-            {headingEl}
-            {/* Lead → action at `block` here, not the stacked head's `stack` (cmp-feature fix round
-                2): beside a heading the trailing track is short, and at 48 a one-link action hung
-                ~60 under a two-line lead with air all round it, reading as a third, unanchored
-                object. At 24 the action belongs to the lead it closes. */}
-            <Layout rowGap="block">
-              {leadEl}
-              {hasActions ? actions : null}
-            </Layout>
-          </Layout>
-        </Layout>
-        {body}
-      </Layout>
     );
   } else {
     /* stacked, beside, and every degraded case. One outer Layout; `beside` touches it only through

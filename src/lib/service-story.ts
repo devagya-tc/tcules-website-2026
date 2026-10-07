@@ -203,11 +203,14 @@ export type StoryBlock =
       columns: readonly string[];
       rows: readonly { header: string; cells: readonly string[] }[];
     }
-  /** A record with named fields — a spec sheet, not a table of options. */
+  /** A record with named fields — a spec sheet, not a table of options. Drawn as a boxed table
+      (tables are boxed, owner 7 Oct 2026): `title` names it, `columns` heads its two columns. */
   | {
       kind: 'record';
       title: string;
-      meta: string;
+      /** The two column heads: over the field names, and over the questions each field holds. */
+      columns: { field: string; question: string };
+      /** `icon` is the field's glyph for the deep page; the band's boxed table does not draw it. */
       items: readonly { field: string; question: string; icon: StoryGlyph }[];
     }
   /** Work moving through stages, each with its items; optionally what another party keeps

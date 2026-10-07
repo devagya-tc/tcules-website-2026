@@ -33,20 +33,20 @@ export const metadata: Metadata = {
  *           column, a 4:1 panorama from 1024 (fix round 2: the `wide` split was the home hero's
  *           copy-beside-photo rectangle again, with a different crop)
  *    2  J   why the studio exists, one centred sentence at display scale, the corner field (1024+)
- *    3  C   four studio scenes, our own photographs, under the H-row, numbered through the week
+ *    3  C   four studio scenes, our own photographs, under a stacked head, numbered through the week
  *    4  B   the studio board at 4:5 beside a title head, two tiles and the way to the method
  *    5  D   the people you would work with: four square headshots under a centred head (fix round
  *           2: 16:9 strips cut heads at the hat and chin, and repeated the week's card row), the
  *           `horizon` at the foot above the tint band
  *    6  G   the proof band on tint: one featured client with a stock portrait, mirrored
- *    7  S   the studio in four blue numerals in one row under its H-row — not a head beside a grid
+ *    7  S   the studio in four blue numerals in one row under its stacked head — not a head beside a grid
  *    8  I   THE IMAGE MOMENT, beside: the whiteboard at 3:2 in the 7, the copy centred on it in 5
  *    9  K   careers, a centred moment: the head, three offers in a row, the asks centred under them
  *   10  L   the close: the compact form beside the studio's own crit photograph, at the END
  *
  * Shapes (fix round 2): the lower half alternates split (G), row (S), split (I), centred (K),
  * split (L) — never two block-left-block-right bands back to back. The image moment here is the
- * `beside` banner, where home's is the 3:1 under its H-row and the services index's a photo pair,
+ * `beside` banner, where home's is the 3:1 under its stacked head and the services index's a photo pair,
  * so the three pages do not share one stamped banner. Texture signature: corner on J, horizon on D
  * — two placements, neither the home page's head-half nor the closing equaliser. Media sides
  * alternate: B start, G end, I start, L end. One vivid photograph, the offsite scene in the C set
@@ -159,7 +159,7 @@ const FEATURED: ProofQuote = {
 
 /* ── 7 · S ─────────────────────────────────────────────────────────────────────────────────
    Illustrative numerals (§ 8.4), labels ≤ 12 words; no client mark in the band. One row of four
-   under the H-row (fix round 2: a head beside a 2 × 2 grid was one more block-left-block-right
+   under a stacked head (fix round 2: a head beside a 2 × 2 grid was one more block-left-block-right
    band), the numerals blue like every figure in the kit. */
 const STATS = [
   {
@@ -274,7 +274,6 @@ export default function KitAboutPage() {
       {/* 3 · C-image-4 — a week in the studio, our own photographs. */}
       <ContentSection
         data-band="C-image"
-        arrangement="split-head"
         eyebrow="Inside the studio"
         heading="How a week runs here"
         headingId="about-week"
@@ -350,10 +349,9 @@ export default function KitAboutPage() {
         />
       </Section>
 
-      {/* 7 · S — the studio in four blue numerals, one row under its H-row. */}
+      {/* 7 · S — the studio in four blue numerals, one row under its stacked head. */}
       <ContentSection
         data-band="S"
-        arrangement="split-head"
         eyebrow="The studio in numbers"
         heading="Four numbers, one room"
         headingId="about-numbers"

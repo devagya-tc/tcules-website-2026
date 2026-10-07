@@ -110,17 +110,17 @@ const SPECIMENS = [
       {
         href: '/design/content-section',
         name: 'ContentSection',
-        note: 'one CMS section as one band — stacked | beside | split-head | media, align center, aside, actions, footer, 4 surfaces, stress copy, absent slots, 390',
+        note: 'one CMS section as one band — stacked | beside | media (split-head retired), align center, aside, actions, footer, 4 surfaces, stress copy, absent slots, 390',
       },
       {
         href: '/design/banner',
         name: 'Banner',
-        note: 'the I band and the announcement strip — below (H-row over 3:1) | beside (3:2 or illustration, both sides) | strip, absent slots, stress, 3 surfaces',
+        note: 'the I band and the announcement strip — below (stacked head over 3:1) | beside (3:2 or illustration, both sides) | strip, absent slots, stress, 3 surfaces',
       },
       {
         href: '/design/statement',
         name: 'Statement',
-        note: 'the J band — one sentence at the h1 role as h2 | p, blue mark, head-half texture, action, 3 surfaces',
+        note: 'the J band — one sentence at the h1 or display role as h2 | p, eyebrow directly above it, start | center (split retired), head-half and corner texture, action, 3 surfaces',
       },
       {
         href: '/design/kit/banner',
@@ -200,7 +200,7 @@ const SPECIMENS = [
       {
         href: '/design/data-table',
         name: 'DataTable',
-        note: 'the comparison table — 1 to 5 data columns, column behaviour, marks, the stacked order at 326 and 392, 4 surfaces',
+        note: 'the comparison table, always boxed — 1 to 5 data columns, column behaviour, marks, the stacked order at 326 and 392, 4 surfaces',
       },
       {
         href: '/design/page-hero',
@@ -295,7 +295,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/home',
         name: 'Kit showcase · Home',
-        note: 'the home page composed from the kit, warm family, 12 bands — the strip and the 5:4 photograph hero with its foot field, the real marks and rating, three services under an H-row, a display statement, the wireframe wall at the photograph weight with two tiles, the client slider on tint, four stats centred, the method beside its photograph, one 3:1 studio banner, questions, two pieces of writing and the close with its contact strip; texture hero foot / head-half / closing',
+        note: 'the home page composed from the kit, warm family, 12 bands — the strip and the 5:4 photograph hero with its foot field, the real marks and rating, three services under a stacked head, a display statement, the wireframe wall at the photograph weight with two tiles, the client slider on tint, four stats centred, the method beside its photograph, one 3:1 studio banner, questions, two pieces of writing and the close with its contact strip; texture hero foot / head-half / closing',
       },
       {
         href: '/design/kit/about',

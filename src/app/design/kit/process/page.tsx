@@ -352,7 +352,6 @@ export default function KitProcessPage() {
         note="Stages that each hold several things, with what the client keeps throughout as a lane. It is the existing, approved ProcessFlow, unchanged — shown here so the three forms can be told apart: Steps are a method, a Thread is a chain of artefacts, a flow is stages with contents."
       />
       <ContentSection
-        arrangement="split-head"
         eyebrow="How a release moves"
         heading="Three stages, one owner"
         headingId="kit-flow"

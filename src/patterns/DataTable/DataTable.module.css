@@ -220,6 +220,14 @@
   min-inline-size: 0;
 }
 
+/* A composed `{ node }` cell (a meter, a glyph) has no text, so its baseline is the mark's bottom
+   edge: on the shared baseline it pushed every text cell in its row down by the mark's height less
+   a line's descent (7px a row under the 24 disruption trace, 7 Oct 2026). Top-aligned instead, the
+   mark sits on the row's first line box — a 24 mark in a 26 line — and the text keeps its baseline. */
+.nodeCell {
+  vertical-align: top;
+}
+
 /* An empty cell's mark. aria-hidden in the markup; the cell is announced blank on its own. */
 .empty {
   font: var(--text-body);
@@ -246,42 +254,6 @@
   overflow-wrap: normal;
   text-align: end;
   font-variant-numeric: tabular-nums;
-}
-
-/* ── The ruled frame (`frame="ruled"`) ──────────────────────────────────────────────────────────
-   No box: no outer border, no grounds, no column dividers. The head row closes on the strong rule,
-   the rows on the hairline, and the fades fade to the BAND's ground, since there is no body ground
-   for them to fade to. Overrides only; every rule above still sets the cell insets and behaviours. */
-.ruled .frame {
-  border: 0;
-  background: none;
-}
-
-.ruled .colHead {
-  background: none;
-  border-block-end: var(--dtab-rule-strong-width) solid var(--dtab-rule-strong-ink);
-}
-
-.ruled .colHead,
-.ruled .key,
-.ruled .cell {
-  border-inline-end: 0;
-}
-
-/* The first column starts on the band's text edge: the cell inset stays between columns only. */
-.ruled .colHead:first-child,
-.ruled .key {
-  padding-inline-start: 0;
-}
-
-@supports (animation-timeline: scroll()) {
-  .ruled::before {
-    background: linear-gradient(to right, var(--dtab-band-ground), transparent);
-  }
-
-  .ruled::after {
-    background: linear-gradient(to left, var(--dtab-band-ground), transparent);
-  }
 }
 
 /* ── Print ──────────────────────────────────────────────────────────────────────────────────────

@@ -17,10 +17,12 @@ import styles from './Banner.module.css';
 /**
  * The three forms of the banner family (visual-direction § 3.4, I and the strip).
  *
- *   below   the H-row over a 3:1 photograph at the full column (1240 × 413 at 1470). Eyebrow on its
- *           own row, then the h2 in the 1 track and the lead and action in the 2 track of [1, 2],
- *           top edges level; then the photograph a `stack` beneath. Below 1024 one column, and the
- *           photograph crops 3:2 — a 3:1 at the 326 phone column is a 109px sliver.
+ *   below   a stacked head over a 3:1 photograph at the full column (1240 × 413 at 1470): eyebrow →
+ *           heading → lead in one column at `block`, the action a `stack` under the lead, then the
+ *           photograph a `stack` beneath. One column at every width (owner, 7 Oct 2026: the H-row,
+ *           heading in a 1 track and lead + action in a 2 track, is retired — a text-only head is
+ *           never split left/right). Below 1024 the photograph crops 3:2 — a 3:1 at the 326 phone
+ *           column is a 109px sliver.
  *   beside  a 3:2 photograph in 7 of [5, 7] (667) beside the copy in 5 (477), centred on it: the
  *           copy is a head and an action and nothing else, so it is centred, never stretched
  *           (§ 3.2 rule 1, its exception). `mediaSide` puts the photograph at either end. Below
@@ -192,31 +194,18 @@ export function Banner(props: BannerProps) {
   let arranged: ReactNode;
 
   if (form === 'below') {
-    /* The H-row (§ 1.4, as amended by fdn-section-head): the eyebrow labels the whole row, so it
-       keeps its own row; then heading | lead + action, top-aligned. With no lead and no action the
-       row has no trailing half, and the heading sits alone under its eyebrow.
-
-       Lead to action is `block` (24) here, not ContentSection's `stack` (48): in the H-row the lead
-       and its link are ONE trailing unit set against the heading, and at 48 the link floated loose in
-       a mostly empty two-thirds track and the row read as a form (fix round 1). In the beside form the
-       copy is a column of its own, and the action keeps the `stack` beat under it. */
-    const trailing = leadEl || actions;
+    /* The head is one column, the ContentSection stacked head (owner, 7 Oct 2026): eyebrow →
+       heading → lead at `block`, the action a `stack` under the lead (§ 1.2), the photograph a
+       `stack` under the head. It was the H-row — heading | lead + action — and with no image beside
+       the text the reading order was unclear and the action floated in a mostly empty track. */
     arranged = (
       <Layout rowGap="stack">
         <Layout rowGap="block">
           {eyebrowEl}
-          {trailing ? (
-            <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
-              {headingEl}
-              <Layout rowGap="block">
-                {leadEl}
-                {actions}
-              </Layout>
-            </Layout>
-          ) : (
-            headingEl
-          )}
+          {headingEl}
+          {leadEl}
         </Layout>
+        {actions}
         <Media image={image} ratio={{ base: '3/2', lg: '3/1' }} sizes={FULL_COLUMN} />
       </Layout>
     );

@@ -44,7 +44,7 @@ import t from '../../_specimen/typeroles.module.css';
  *   03  H-beside-actions (no lead), a 3 × 3 grid in the body track;
  *   04  H-title, then Quantum-06's panel: marks beside the quote, the figure on its attribution line;
  *   05  split head with the sourced figure as its hero, the § 5.9 grid under it;
- *   06  the H-row with its action, the strip justified across the full measure.
+ *   06  a stacked head with its action, the strip justified across the full measure.
  *
  * Honesty rules (§ 5.8): the marks are the nine real files in public/clients, one ink per set,
  * equal area, with the weight corrections recorded in ../../_specimen/clients.ts. A real mark sits
@@ -73,7 +73,7 @@ const BESIDE_QUOTE: readonly ClientRecord[] = [
   INCLUUDE,
 ];
 
-/** Under the H-row, justified across the full measure. */
+/** Under a stacked head, justified across the full measure. */
 const UNDER_ROW: readonly ClientRecord[] = [
   LATITUDEPAY,
   DOODLE,
@@ -338,7 +338,6 @@ export default async function KitLogosPage() {
             The Clutch rating as the band&rsquo;s hero, at stat-xl, over the § 5.9 grid.
           </Label>
           <ContentSection
-            arrangement="split-head"
             eyebrow="On the record"
             heading="Rated by the teams we serve"
             headingId="logos-figures"
@@ -351,10 +350,9 @@ export default async function KitLogosPage() {
 
       {/* ── 06 ──────────────────────────────────────────────────────────────────────────── */}
       <Label title="06 · Strip with a CtaRow">
-        The action on the head&rsquo;s row; the strip justified across the full measure.
+        The action closes the stacked head; the strip justified across the full measure.
       </Label>
       <ContentSection
-        arrangement="split-head"
         eyebrow="Clients"
         heading="Recent work"
         headingId="logos-cta"

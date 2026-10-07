@@ -43,7 +43,7 @@ export const metadata: Metadata = {
  *    3  C      four fixed-scope audits, centred display head, per-card links
  *    4  B      what every service shares: the media split, the designer at the wall at the END
  *              and four tiles — in place of the J statement, which repeated home's (§ 8.3: B)
- *    5  N      who the work is for: the H-row, then the two lists across the full column, the
+ *    5  N      who the work is for: a stacked head, then the two lists across the full column, the
  *              needs two up (Contrast `yes`). Fix round 2: in the media split's 667 the lists
  *              were 256 at 1024, every item three lines, and the band 852 tall
  *    6  C-pair two cases with their products on screen; `horizon` at its foot, above the tint band
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
  *    8  K      the offer, the team at the whiteboard at the end
  *    9  D-faq  the questions, centred
  *   10  I      THE IMAGE MOMENT as a photo pair: a 16:9 and a 3:2 side by side, bottoms level,
- *              under a start-set head — home's is one 3:1 under its H-row and about's a beside
+ *              under a start-set head — home's is one 3:1 under its stacked head and about's a beside
  *              banner, so no showcase page repeats another's
  *   11  L      the open close: a centred display ask over the closing equaliser, both sides — the
  *              index answers "which service?" with a conversation, so its close is two asks, not a
@@ -410,10 +410,9 @@ export default function KitServicesIndexPage() {
         </Layout>
       </ContentSection>
 
-      {/* 5 · N — who the work is for: the H-row, then the two lists across the full column. */}
+      {/* 5 · N — who the work is for: a stacked head, then the two lists across the full column. */}
       <ContentSection
         data-band="N"
-        arrangement="split-head"
         eyebrow="Fit"
         heading="Who this work is for"
         headingId="si-fit"

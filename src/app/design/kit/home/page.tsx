@@ -63,7 +63,7 @@ export const metadata: Metadata = {
  *           the grid's fixed strength it read as a faded placeholder stripe under the actions, so
  *           the photograph carries the hero alone
  *    2  H   the real client marks (a 6 / 3 / 2 grid, never 5 + 1) and the real Clutch rating, centred
- *    3  C   three services as image cards under the H-row and its section action
+ *    3  C   three services as image cards under a stacked head and its section action
  *    4  J   one sentence at display scale, the head-half field in its empty top-end corner
  *    5  B   the wireframe wall at the photograph's weight (6:5 in the 7), END, two tiles beside it,
  *           the head at the title role so it holds two lines in the 477
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
  *    7  S   the studio in four numerals, centred, at the large stat role — a display-scale moment
  *           between two splits, with no mark in it (§ 5.8)
  *    8  F   the method, read down, its photograph at the END, cut to the steps' height
- *    9  I   THE IMAGE MOMENT: one 3:1 photograph across the column under its H-row
+ *    9  I   THE IMAGE MOMENT: one 3:1 photograph across the column under its stacked head
  *   10  D   the questions, centred
  *   11  C   two pieces of writing beside a head that carries the way to all of them
  *   12  L   the close: the copy and three ways to reach the studio over the closing equaliser,
@@ -350,10 +350,9 @@ export default async function KitHomePage() {
         </Layout>
       </ContentSection>
 
-      {/* 3 · C-image-3 — the H-row with the section action, three linked services. */}
+      {/* 3 · C-image-3 — a stacked head with the section action, three linked services. */}
       <ContentSection
         data-band="C-image"
-        arrangement="split-head"
         eyebrow="What we do"
         heading="Three ways in, one team"
         headingId="home-services"
@@ -448,7 +447,7 @@ export default async function KitHomePage() {
         <Steps steps={STEPS} />
       </ContentSection>
 
-      {/* 9 · I — the image moment: one 3:1 photograph across the column under its H-row. */}
+      {/* 9 · I — the image moment: one 3:1 photograph across the column under its stacked head. */}
       <Banner
         eyebrow="The studio"
         heading="Small rooms, careful calls"

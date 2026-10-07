@@ -64,3 +64,23 @@ None blocking.
   read as a pale gradient smudge, its feather reached the sentence's first line, and below 1024 it
   was not drawn. Paper only, like every texture.
 - Specimen: `/design/statement` § 4 (display) and § 5 (centre + corner, and centre at h1).
+
+## Amendment · 7 Oct 2026 — owner design review: no split form
+
+- **`align?: 'start' | 'center'`**, default **`start`**. The `split` form is removed: it set the eyebrow
+  alone in the `[1, 2]` head track, ~480 from its sentence, and the band had no anchor — a label
+  belongs on the thing it labels. Recorded in `docs/kit/visual-direction.md`, "Owner rulings · 7 Oct
+  2026", rule 4.
+- **Both forms are one column**: the eyebrow directly above the sentence at `block` (24), the action a
+  `stack` (48) under it. `start` keeps every part on the start edge, the sentence on its own measure
+  (`--stmt-sentence-measure`, the title measure, or `--stmt-sentence-measure-display`), so the
+  band's end is open air — which is also where the `head-half` and `corner` textures sit. `center`
+  centres every part on the band's axis, as before.
+- Both are kept: the service page centres its J unless a neighbour is centred (plan § 3.5), and
+  starts it otherwise; kit/home's J is `start`, kit/about's `center`.
+- The empty head cell (`.headEmpty`) is gone with the track it held. No token changed; the token
+  file's header and measure comment now describe the one-column band.
+- Measured (1440): a 2-line display sentence with its link is 498 tall in either form (open air 256
+  + 14 + 24 + 140 + 48 + 16); the centred h1 three-line form 434.
+- Specimen: `/design/statement` § 4 adds the start form at display with the corner field and a link
+  (the service page's shape), beside § 5's centred pair; every other row is the start form.

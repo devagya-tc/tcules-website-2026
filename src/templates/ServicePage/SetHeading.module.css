@@ -1,0 +1,9 @@
+/* ServicePage · a set's heading. The h3 role, one step above any item title a set here carries
+   (SetHeading.tsx). Ink from --svc-*; type as a composite. No margin: the Layout over the set owns
+   the seam. */
+.heading {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--svc-ink);
+}

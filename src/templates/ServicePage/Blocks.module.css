@@ -2,8 +2,8 @@
 
    Every colour is --svc-*, re-declared per surface in tokens/components/service-page.css. Type is
    consumed as composites. Layout and Cluster own every arrangement and every seam; this module
-   owns ink and type roles for the little the kit units do not already carry: a ledger set's h3, a
-   bare stat sentence and the review-mode slot. No margins. The Fit list (glyph rows, `.rowText`)
+   owns ink and type roles for the little the kit units do not already carry: a bare stat sentence
+   and the review-mode slot (a set's heading is SetHeading's). No margins. The Fit list (glyph rows, `.rowText`)
    left with the swap to Contrast (6 Oct 2026), which settles the audit's flex-sizing question: the
    template no longer sizes a row at all. */
 
@@ -13,13 +13,6 @@
   letter-spacing: var(--text-eyebrow-tracking);
   text-transform: var(--text-mono-case);
   color: var(--svc-ink-label);
-}
-
-/* ── Ledger ───────────────────────────────────────────────────────────────────── */
-.setHeading {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
-  color: var(--svc-ink);
 }
 
 /* ── Stat ───────────────────────────────────────────────────────────────────────
