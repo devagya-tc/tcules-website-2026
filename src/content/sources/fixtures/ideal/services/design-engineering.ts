@@ -211,7 +211,7 @@ export const designEngineering: ServiceStory = {
             { title: 'Review', body: 'Each difference, classified.' },
             { title: 'Decision', body: 'Kept, with its evidence.' },
           ],
-          loop: 'A finding that contradicts the decision reopens the question, not just the code.',
+          loop: 'A contradicting finding reopens the question itself.',
         },
       ],
     },

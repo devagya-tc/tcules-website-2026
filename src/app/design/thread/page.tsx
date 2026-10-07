@@ -83,11 +83,11 @@ export default function ThreadSpecimenPage() {
           </Specimen>
           <Specimen
             title="four stages, with bodies, and a return path"
-            note="Up to four across, h5 titles. From 1024 the return path is an arc over the row: it rises from the last node, where the thread lands, and comes down into the first. The sentence sits on the column line under the stages, a return glyph at its start, at every width."
+            note="Up to four across, h5 titles. From 1024 the return path is an arc over the row: it rises from the last node, where the thread lands, and comes down into the first. The sentence sits on the column line after the last stage, led by a drawn return arrow and ‘Back to the first stage:’."
           >
             <Thread
               stages={FOUR}
-              loop="What production shows returns to the next product decision."
+              loop="What production shows returns to the next decision."
             />
           </Specimen>
           <Specimen
@@ -96,13 +96,13 @@ export default function ThreadSpecimenPage() {
           >
             <Thread
               stages={SIX.slice(0, 5)}
-              loop="A mistaken change has a safe way back to the last accepted plan."
+              loop="A mistaken change returns to the accepted plan."
               align="center"
             />
           </Specimen>
           <Specimen
             title="nine stages, titles only · two balanced rows"
-            note="Seven to twelve stages break into two rows (9 → 5 + 4). A row's last stage carries no connector — the row break is the turn — and no arc is drawn: no path from row two's end to row one's start avoids the copy, so the return is the sentence and its glyph."
+            note="Seven to twelve stages break into two rows (9 → 5 + 4). A row's last stage carries no connector — the row break is the turn — and no arc is drawn: no path from row two's end to row one's start avoids the copy, so the return is the closing line: a drawn return arrow and ‘Back to the first stage:’."
           >
             <Thread
               stages={NINE}

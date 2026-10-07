@@ -31,6 +31,12 @@
   /* How high the return arc rises over the nodes: a mark's own height, the room the arc needs to
      read as a loop rather than an underline of the band head above it. */
   --thread-arc-rise: var(--space-40);
+  /* Half the loop label's line: the room the root keeps above the arc so the label, centred ON
+     the arc's top run, stays inside the band. Derived from the label's own type, not a distance. */
+  /* The clipped "Back to" lead-in on the arc: the visually-hidden technique's one-pixel box, a
+     fixed size by definition, not a distance. */
+  --thread-hidden-size: var(--space-1);
+  --thread-arc-label-half: calc(var(--font-size-body-sm) * var(--line-height-body-sm) / 2);
 
   /* The stage title steps with the count across, as card titles do (§ 7.2): h5 up to four a row,
      h6 at five or six, where a track is 180 to 220 wide. */

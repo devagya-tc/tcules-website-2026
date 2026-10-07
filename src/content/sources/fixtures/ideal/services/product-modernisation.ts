@@ -270,7 +270,7 @@ export const productModernisation: ServiceStory = {
               body: 'Temporary states retire on criteria agreed first.',
             },
           ],
-          loop: 'A failed migration has a designed route back to the current product.',
+          loop: 'A failed migration routes back to today’s product.',
         },
         /* Review mode only (`?slots=1`): the illustration this band is waiting for. Kept as the
            record of what the image must say. */

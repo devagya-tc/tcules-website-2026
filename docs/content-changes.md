@@ -636,3 +636,24 @@ The record's title stays, as the heading over the table. The field icons stay in
 deep page; the table does not draw them. Strapi: a record block needs the two column-head strings.
 
 **Found in.** `fix/sections`, 7 Oct 2026.
+
+## Thread loops fit the arc's label (7 Oct 2026, owner design review)
+
+**Page / section.** The Thread diagram's return sentence (`loop`) on `/services/design-engineering`,
+`/design-systems`, `/product-design` and `/product-modernisation`.
+
+**What's needed.** The loop is now the LABEL on the return arc, so it is at most eight words:
+- Design Engineering: "A finding that contradicts the decision reopens the question, not just the code."
+  → **"A contradicting finding reopens the question itself."**
+- Design Systems: "Change one alone and products drift: designers detach, and code accepts what design
+  forbids." → **"Change one alone and the products drift."**
+- Product Design: "A mistaken change has a safe way back to the last accepted plan." → **"A mistaken
+  change returns to the accepted plan."**
+- Product Modernisation: "A failed migration has a designed route back to the current product." →
+  **"A failed migration routes back to today’s product."**
+- AI Product UX: unchanged ("Every level keeps a way back to a person.", eight words).
+
+Where no arc is drawn (phones, two-row threads) the sentence closes the thread, led by "Back to
+{first stage}:". Strapi: cap the loop field at eight words.
+
+**Found in.** Owner review, 7 Oct 2026.

@@ -208,7 +208,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **statement.css** — `--stmt-eyebrow-tracking` 0.12em · `--stmt-sentence-tracking` -0.018em · `--stmt-sentence-measure` 32ch · `--stmt-sentence-tracking-display` -0.02em · `--stmt-sentence-measure-display` 26ch
 - **table-of-contents.css** — `--toc-title-tracking` 0.12em · `--toc-ordinal-tracking` 0.08em · `--toc-max-inline` 232px · `--toc-min-inline` 160px · `--toc-summary-min-block` 44px · `--toc-ordinal-inline` 24px · `--toc-entry-padding-block` 12px · `--toc-rule-width` 1px · `--toc-current-rule-width` 3px · `--toc-underline-width` 1px · `--toc-underline-width-pressed` 2px · `--toc-underline-offset` 2px · `--toc-entry-radius-focus` 4px · `--toc-ring-width` 2px · `--toc-ring-offset` 2px
 - **tag.css** — `--tag-size-md` 24px · `--tag-radius` 4px · `--tag-edge-width` 1px · `--tag-glyph-size` 16px · `--tag-ring-width` 2px · `--tag-ring-offset` 2px · `--tag-label-trim` 1px · `--tag-glyph-gap` 4px
-- **thread.css** — `--thread-line-width` 2px · `--thread-node-size` 16px · `--thread-node-border` 2px · `--thread-head-size` 10px · `--thread-node-radius` 999px · `--thread-loop-radius` 8px · `--thread-arc-rise` 40px · `--thread-title-tracking-md` 0em · `--thread-title-tracking-sm` 0em
+- **thread.css** — `--thread-line-width` 2px · `--thread-node-size` 16px · `--thread-node-border` 2px · `--thread-head-size` 10px · `--thread-node-radius` 999px · `--thread-loop-radius` 8px · `--thread-arc-rise` 40px · `--thread-hidden-size` 1px · `--thread-title-tracking-md` 0em · `--thread-title-tracking-sm` 0em
 
 ### The three layout primitives — their real prop APIs
 

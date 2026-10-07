@@ -222,7 +222,7 @@ export const designSystems: ServiceStory = {
             { title: 'Docs and tests', body: 'Usage, keyboard and content cases written down.' },
             { title: 'Release', body: 'Every product knows the version and the change.' },
           ],
-          loop: 'Change one alone and products drift: designers detach, and code accepts what design forbids.',
+          loop: 'Change one alone and the products drift.',
         },
       ],
     },

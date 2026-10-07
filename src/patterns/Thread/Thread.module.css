@@ -167,26 +167,58 @@
 }
 
 /* ── The return path ─────────────────────────────────────────────────────────────
-   The sentence sits under the stages on the column line, a return glyph at its start, at every
-   width. From 1024, on a ONE-row thread, the path itself is drawn as an arc OVER the nodes: it
-   rises from the last node — where the thread lands — runs back above the stages and comes down
-   into the first node, an arrowhead on it. Above the row there is nothing to cross, so the loop
-   can start and end ON the two nodes it joins; drawn beneath, it had to start under copy and stop
-   short of node one, and read as a detached bracket (panel note, 6 Oct 2026).
+   From 1024, on a ONE-row thread, the path is drawn as an arc OVER the nodes: it rises from the
+   last node — where the thread lands — runs back above the stages and comes down into the first
+   node, an arrowhead on it. Above the row there is nothing to cross, so the loop can start and end
+   ON the two nodes it joins (panel note, 6 Oct 2026).
+
+   The sentence is the arc's LABEL (owner, 7 Oct 2026): set on the arc's top run, centred between
+   its legs, on a patch of the band's own ground that cuts the line. It used to sit under the stages
+   beside a generic undo glyph, ~160 from the arc it described, and below 1024 — where no arc is
+   drawn — it pointed at nothing.
+
+   Where no arc is drawn (below 1024, and a two-row thread at any width) the sentence closes the
+   thread instead, in the copy column under the last stage, led by "Back to {first stage}:" and a
+   return arrow DRAWN in the node column in the thread's own line — the same stroke and head as
+   every connector, so it reads as part of the diagram rather than as an icon beside a note.
 
    The arc's far leg is the last track's node: every track is (100% − (n − 1) × gutter) / n, and
    the last one starts exactly one track from the end, so the leg sits a track minus a node-half in
-   from the column's end. Two-row threads draw no arc — no path from row two's end to row one's
-   start avoids the copy — and keep the sentence and its glyph alone. */
-.loopGlyph {
-  display: block;
-  color: var(--thread-line-ink);
-}
-
-.loopText {
+   from the column's end. */
+.loop {
+  position: relative;
+  padding-inline-start: calc(var(--thread-node-size) + var(--gap-text));
   font: var(--thread-loop-text);
   text-wrap: var(--text-running-wrap);
   color: var(--thread-loop-ink);
+}
+
+.loopTarget {
+  color: var(--thread-title-ink);
+}
+
+/* The return arrow: a stem one line tall in the node column, and the connectors' head turned to
+   point up — back towards where the thread began. */
+.loop::before,
+.loop::after {
+  content: '';
+  position: absolute;
+}
+
+.loop::before {
+  inset-block: var(--gap-inline);
+  inset-inline-start: calc(var(--thread-node-half) - var(--thread-line-width) / 2);
+  border-inline-start: var(--thread-line-width) solid var(--thread-line-ink);
+}
+
+.loop::after {
+  inset-block-start: var(--gap-inline);
+  inset-inline-start: calc(var(--thread-node-half) - var(--thread-head-size) / 2);
+  inline-size: var(--thread-head-size);
+  block-size: var(--thread-head-size);
+  border-block-start: var(--thread-line-width) solid var(--thread-line-ink);
+  border-inline-end: var(--thread-line-width) solid var(--thread-line-ink);
+  transform: rotate(-45deg);
 }
 
 @media (min-width: 1024px) {
@@ -229,6 +261,58 @@
     border-block-end: var(--thread-line-width) solid var(--thread-line-ink);
     border-inline-end: var(--thread-line-width) solid var(--thread-line-ink);
     transform: rotate(45deg);
+  }
+}
+
+/* ── The label on the arc (from 1024, one-row threads) ───────────────────────────
+   The root reserves half the label's line above the arc so the label straddles the arc's top run
+   inside the band; the label is placed on the root's own box at the arc's insets, a mark on the
+   component's edge like the arc itself. The "Back to" lead-in is clipped, not removed: the arc
+   shows where the path goes, and a screen reader still hears it. */
+@media (min-width: 1024px) {
+  .rootArc {
+    position: relative;
+    padding-block-start: var(--thread-arc-label-half);
+  }
+
+  .loopOnArc {
+    position: absolute;
+    inset-block-start: var(--thread-arc-label-half);
+    inset-inline-start: calc(var(--thread-node-half) - var(--thread-line-width) / 2);
+    inset-inline-end: calc(
+      (100% - (var(--thread-n) - 1) * var(--gap-gutter)) / var(--thread-n) -
+        var(--thread-node-half) - var(--thread-line-width) / 2
+    );
+    padding-inline-start: 0;
+    text-align: center;
+    transform: translateY(-50%);
+  }
+
+  .loopCentred.loopOnArc {
+    inset-inline: calc(
+      (100% - (var(--thread-n) - 1) * var(--gap-gutter)) / var(--thread-n) / 2 -
+        var(--thread-line-width) / 2
+    );
+  }
+
+  .loopOnArc::before,
+  .loopOnArc::after {
+    content: none;
+  }
+
+  .loopOnArc .loopLabel {
+    padding-inline: var(--gap-tight);
+    background: var(--thread-node-fill);
+    box-decoration-break: clone;
+  }
+
+  .loopOnArc .loopTarget {
+    position: absolute;
+    inline-size: var(--thread-hidden-size);
+    block-size: var(--thread-hidden-size);
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 

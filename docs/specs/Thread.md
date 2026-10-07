@@ -63,3 +63,17 @@ band's bottom padding (§ 4.3: E with horizon).
 
 The service page passes `center` when its E band centres its head over a thread (ContentSection
 `center-lg`). § 5's "H-compact (left)" stays the default band.
+
+## Amendment · 7 Oct 2026 — the loop labels the arc (owner)
+
+- On a one-row thread from 1024 the `loop` sentence is the arc's LABEL: centred on the arc's top run
+  between its legs, on a patch of the band's ground (`--thread-node-fill`) that cuts the line. The root
+  keeps half the label's line above the arc (`--thread-arc-label-half`).
+- Where no arc is drawn (below 1024; a two-row thread) the sentence closes the thread under the last
+  stage, in the copy column, led by **"Back to {first stage}:"** and a return arrow drawn in the node
+  column in the thread's own stroke and head. The generic `undo-left` glyph is gone: it matched nothing
+  in the drawing.
+- One element at every width; on the arc the "Back to" lead-in is clipped for sight only, so a screen
+  reader still hears where the path goes.
+- `loop` is at most eight words (a development warning past eight on an arc thread).
+

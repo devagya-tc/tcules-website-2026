@@ -1,4 +1,4 @@
-import { Cluster, Icon, Layout } from '@/components';
+import { Layout } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './Thread.module.css';
@@ -16,10 +16,13 @@ export type ThreadProps = {
   /** Two to twelve stages, in order. Fewer than two renders nothing: a thread needs somewhere to go. */
   stages: readonly ThreadStage[];
   /**
-   * The return path, in one sentence: what the last stage feeds back into the first ("Production
-   * observation returns to the next product decision."), set under the stages beside a return
-   * glyph. From 1024, on a one-row thread, the path is also drawn: an arc over the nodes from the
-   * last node back down into the first. Absent draws no path.
+   * The return path, in one sentence of at most eight words: what the last stage feeds back into
+   * the first ("A contradicting finding reopens the question."). From 1024, on a one-row thread, the
+   * path is drawn as an arc over the nodes from the last node back down into the first, and the
+   * sentence is the arc's LABEL, set on its top run (owner, 7 Oct 2026). Where no arc can be drawn
+   * — below 1024, or a thread of two rows — it closes the thread instead, under the last stage,
+   * led by a drawn return arrow and "Back to {first stage}:", so it always names where it goes.
+   * Absent draws no path.
    */
   loop?: string;
   /** The stage titles' element. Default `h3`; `h4` when the thread sits under an h3. */
@@ -95,9 +98,12 @@ export function Thread({ stages, loop, stageHeading = 'h3', align = 'start' }: T
   const returnPath = loop?.trim();
   /* The arc is drawn on a one-row thread only; see Thread.module.css § The return path. */
   const arc = Boolean(returnPath) && valid.length <= across;
+  /* The label rides the arc on one line; past eight words it wraps over the line it labels. */
+  if (arc && returnPath && returnPath.split(/\s+/).length > 8)
+    warn(`loop is ${returnPath.split(/\s+/).length} words; the arc's label is designed for eight.`);
 
   return (
-    <Layout rowGap="stack" className={styles.root}>
+    <Layout rowGap="stack" className={cx(styles.root, arc && styles.rootArc, arc && ROW_CLASS[across])}>
       <Layout
         as="ol"
         columns={{ lg: across }}
@@ -121,17 +127,21 @@ export function Thread({ stages, loop, stageHeading = 'h3', align = 'start' }: T
         ))}
       </Layout>
       {returnPath ? (
-        <Cluster
-          nowrap
-          colGap="tight"
-          align="start"
-          justify={align === 'center' ? { base: 'start', lg: 'center' } : 'start'}
+        /* One element at every width, so the sentence is read once. On the arc it is the arc's
+           label and the "Back to" lead-in is for a screen reader only (the arc shows where it
+           goes); everywhere else the lead-in is visible and a drawn arrow sits in the node column. */
+        <p
+          className={cx(
+            styles.loop,
+            arc && styles.loopOnArc,
+            align === 'center' && styles.loopCentred,
+          )}
         >
-          <span className={styles.loopGlyph} aria-hidden="true">
-            <Icon name="undo-left" size="md" />
+          <span className={styles.loopLabel}>
+            <span className={styles.loopTarget}>Back to {valid[0]?.title}: </span>
+            {returnPath}
           </span>
-          <p className={styles.loopText}>{returnPath}</p>
-        </Cluster>
+        </p>
       ) : null}
     </Layout>
   );

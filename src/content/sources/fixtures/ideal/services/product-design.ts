@@ -176,7 +176,7 @@ export const productDesign: ServiceStory = {
             { title: 'Owner responds', body: 'The person who must agree is named.' },
             { title: 'Change accepted', body: 'The reason stays with the job afterwards.' },
           ],
-          loop: 'A mistaken change has a safe way back to the last accepted plan.',
+          loop: 'A mistaken change returns to the accepted plan.',
         },
       ],
     },
