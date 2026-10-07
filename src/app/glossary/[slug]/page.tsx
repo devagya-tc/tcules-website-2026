@@ -20,6 +20,7 @@ import {
 } from '@/content';
 import { glossaryPath, ROUTES } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
+import { leadConverts } from '@/lib/conversion';
 import {
   Accordion,
   BlockCard,
@@ -93,7 +94,7 @@ function renderColumn(column: GlossaryContentColumn) {
               as="a"
               href={link.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
               icon={<Icon name="arrow-right" />}
@@ -165,7 +166,7 @@ function renderGlossaryBlock(block: GlossaryBlock) {
                 as="a"
                 href={block.source.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
                 icon={<Icon name="arrow-right" />}
@@ -321,6 +322,7 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
         title={glossary.title}
         eyebrow={eyebrowBesideTrail(glossary.hero.eyebrow, crumbs)}
         body={[glossary.hero.description]}
+        converts={leadConverts(heroActions)}
         actions={heroActions}
         surface="paper"
       >
@@ -377,6 +379,7 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
           body={glossary.cta.body}
           eyebrow={glossary.cta.eyebrow}
           points={glossary.cta.points}
+          converts={leadConverts(glossary.cta.actions)}
           actions={glossary.cta.actions}
         />
       ) : null}

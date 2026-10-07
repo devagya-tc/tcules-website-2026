@@ -370,6 +370,7 @@ export default function ServiceListKitSpecimen() {
         body={[
           'Three ways a page routes a reader to the right service: icons beside a photograph, image cards, or ruled rows with a thumbnail.',
         ]}
+        converts={false}
         actions={[
           { label: 'See the routers', href: '#icon-six' },
           { label: 'All services', href: ROUTES.services },
@@ -450,7 +451,7 @@ export default function ServiceListKitSpecimen() {
           <CtaRow
             rule={false}
             emphasis="solid"
-            tone="primary"
+            converts
             actions={[
               { label: 'Book a call', href: ROUTES.contact },
               { label: 'All services', href: ROUTES.services },

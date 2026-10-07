@@ -5,6 +5,7 @@ export type {
   HeroCreditRole,
   HeroDates,
   HeroAction,
+  HeroActions,
   HeroArrangement,
   HeroMedia,
   HeroImage,

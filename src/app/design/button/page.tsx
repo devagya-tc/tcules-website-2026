@@ -16,17 +16,22 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
  */
 
 const COMBOS = [
-  { emphasis: 'solid', tone: 'primary', name: 'Solid · blue', sub: 'The primary ask' },
-  { emphasis: 'solid', tone: 'neutral', name: 'Solid · ink', sub: 'Utility on paper' },
-  { emphasis: 'ghost', tone: 'primary', name: 'Ghost · blue', sub: "The solid's partner" },
-  { emphasis: 'ghost', tone: 'neutral', name: 'Ghost · ink', sub: 'Default secondary' },
+  { emphasis: 'solid', tone: 'primary', name: 'Solid · blue', sub: 'The action converts' },
+  {
+    emphasis: 'solid',
+    tone: 'neutral',
+    name: 'Solid · ink',
+    sub: 'A lead action that does not convert',
+  },
+  { emphasis: 'ghost', tone: 'primary', name: 'Ghost · blue', sub: 'Every ghost in content' },
+  { emphasis: 'ghost', tone: 'neutral', name: 'Ghost · ink', sub: 'Site chrome only' },
   {
     emphasis: 'link',
     tone: 'primary',
     name: 'Link · blue',
-    sub: 'In a card or a line of text',
+    sub: 'Every link in content',
   },
-  { emphasis: 'link', tone: 'neutral', name: 'Link · ink', sub: 'In a card, spending no blue' },
+  { emphasis: 'link', tone: 'neutral', name: 'Link · ink', sub: 'Site chrome only' },
 ] as const;
 
 const SURFACES = [
@@ -65,6 +70,48 @@ function SurfaceMatrix() {
             </Button>
           </Layout>
         ))}
+      </Layout>
+      <Layout rowGap="tight">
+        <p className={s.specTitle}>
+          The colour rule (owner, 7 Oct 2026): a solid is blue when the action converts and ink
+          when it does not; its ghost partner is blue either way
+        </p>
+        <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+          <Layout rowGap="tight" justifyItems="start">
+            <p className={s.specTitle}>Converts · blue solid + blue ghost</p>
+            <Cluster colGap="block" rowGap="block" align="center">
+              <Button as="a" href="#start" emphasis="solid" tone="primary">
+                Start a project
+              </Button>
+              <Button
+                as="a"
+                href="#how"
+                emphasis="ghost"
+                tone="primary"
+                icon={<Icon name="arrow-right" />}
+              >
+                How we work
+              </Button>
+            </Cluster>
+          </Layout>
+          <Layout rowGap="tight" justifyItems="start">
+            <p className={s.specTitle}>Does not convert · ink solid + blue ghost</p>
+            <Cluster colGap="block" rowGap="block" align="center">
+              <Button as="a" href="#roles" emphasis="solid" tone="neutral">
+                See open roles
+              </Button>
+              <Button
+                as="a"
+                href="#hire"
+                emphasis="ghost"
+                tone="primary"
+                icon={<Icon name="arrow-right" />}
+              >
+                How we hire
+              </Button>
+            </Cluster>
+          </Layout>
+        </Layout>
       </Layout>
       <Layout rowGap="tight">
         <p className={s.specTitle}>Held · active — busy — and disabled, on this ground</p>

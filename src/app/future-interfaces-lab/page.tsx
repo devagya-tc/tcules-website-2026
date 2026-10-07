@@ -97,6 +97,9 @@ export default async function FutureInterfacesLabPage() {
         )}
         title={page.hero.heading}
         body={page.hero.body}
+        /* Every action in the Lab family is an application to the Lab — "Join the Lab", "Apply for
+           fellowship", "Apply to labs" — and applying converts (owner, 7 Oct 2026). */
+        converts
         actions={firstTwoActions(page.hero.actions)}
         surface="paper"
       />
@@ -264,6 +267,9 @@ export default async function FutureInterfacesLabPage() {
             eyebrow={page.misc.eyebrow || undefined}
             heading={page.misc.heading}
             body={page.misc.body}
+            /* Every action in the Lab family is an application to the Lab — "Join the Lab", "Apply for
+               fellowship", "Apply to labs" — and applying converts (owner, 7 Oct 2026). */
+            converts
             actions={[
               {
                 label: page.misc.action.label,

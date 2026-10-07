@@ -828,7 +828,7 @@ added blue where the accent belongs. The record is in `docs/kit/brand-amendments
 | **Active and current states** | the nav and TOC current marker, the current breadcrumb, the slider thumb, focus rings, link hover and pressed, input focus, the whole-card hover | `--crumb-current-ink`, `--sld-progress-thumb`, rings |
 | **Slider controls** | previous / next, glyph and hairline rule | Button `emphasis="outline"`, `--btn-outline-primary-*` |
 | **Stat accents** | a Proof stat's numeral | `--proof-value-ink`: 500 → 300 |
-| **The ask** | the solid primary button | `--btn-solid-primary-bg` |
+| **The ask** | the solid button of a CONVERTING action — start a project, book a call, request an audit, send, contact, apply, subscribe — wherever it appears (§ 4.5). A lead action that does not convert is the ink solid, not blue | `--btn-solid-primary-bg` |
 
 **Contrast, on every surface:** text links ≥ 4.5:1; icons and marks ≥ 3:1. brandeis-500 is 6.17:1 on
 paper and 5.51:1 on tint. On ink it is 2.77:1, so the accent lifts to **brandeis-300 (7.32:1)**, or 200
@@ -889,30 +889,57 @@ The typography specimen's `<mark>` example is deleted.
 
 ---
 
-### 4.5 Actions: pairing and arrows (owner, 7 Oct 2026, binding)
+### 4.5 Actions: colour, pairing and arrows (owner, 7 Oct 2026, binding)
 
-The site had too many arrows in buttons and its pairs were inconsistent. The rules:
+The site had too many arrows in buttons, its pairs were inconsistent, and a solid's colour depended on
+where it sat. The rules:
 
-1. **Solid primary is the group's main next step. No arrow, ever.** The label carries the ask.
-   Revised by the owner the same day: the primary does not have to convert. Choose it in this order:
-   (a) if the group holds a converting action (start a project, book a call, send, contact), that is
-   the solid; (b) otherwise the solid is the step the page most wants next — on About, How we work or
-   an index, where nothing converts, a hero with two actions still leads with a solid so the pair is
-   balanced; (c) a band foot that only points onward, with one destination, is a single link, not a
-   lone solid. One solid per band.
-2. **A primary's partner is a ghost button**, not a link button. The ghost takes the trailing arrow when
+**Colour comes from the KIND of action — never from count or placement.**
+
+| Action | Treatment | Examples |
+|---|---|---|
+| **Converts** — the reader starts something with the studio | **blue solid** (Button `tone="primary"`) | Start a project · Book a call / intro call · Request an audit · Send an enquiry · Contact · Apply (for a role, to the Lab) · Subscribe |
+| **A band's lead action that does not convert** | **ink solid** (Button `tone="neutral"`) | See open roles (on About) · Meet the team · Explore services · See the work |
+| **Any ghost or link** | **blue**, always, whatever sits beside it | How we hire → · Download · Read the case study → · How we work → |
+
+- The same ask repeated in the hero, a mid-page offer and the closing CTA is blue every time.
+- The ink solid exists because a page with nothing to convert still needs a solid for balance (rule 1
+  below): the solid is "the group's main next step", not only a conversion.
+- An ink solid with a blue ghost partner is the intended pair.
+- **Judge the action itself, not the page.** "See open roles" on About is ink; "Apply" on a careers page
+  is blue.
+- Neutral ghost and link buttons remain in Button for site chrome only (SiteNav, SiteFooter, filter
+  controls). Content never uses them.
+
+**Encoded, not chosen.** A caller states what the action IS and the pattern derives the colour:
+`converts: boolean` — required, with no default — on CtaRow's solid row, and on PageHero and
+CtaSection whenever they take actions. CtaRow's link row and every ghost partner take no colour at all.
+EnquiryForm's submit always converts and is always blue. Where an action arrives from the CMS and the
+route cannot see its label, `convertsByHref` (`src/lib/conversion.ts`) classifies it by destination
+(the contact route or an `#enquiry` form converts; everything else navigates), until the CMS states the
+fact itself (`docs/strapi-changes.md` § 17).
+
+**Pairing and arrows:**
+
+1. **The solid is the group's main next step. No arrow, ever.** The label carries the ask. Choose it in
+   this order: (a) if the group holds a converting action, that is the solid — and it is blue; (b)
+   otherwise the solid is the step the page most wants next — on About, How we work or an index, where
+   nothing converts, a hero with two actions still leads with a solid so the pair is balanced — and it
+   is ink; (c) a band foot that only points onward, with one destination, is a single link, not a lone
+   solid. One solid per band.
+2. **A solid's partner is a ghost button**, not a link button. The ghost takes the trailing arrow when
    it navigates. A ghost has no outline at rest and so looks like a link button until hovered; that is
    intended (owner, 7 Oct 2026) — the interaction tells them apart.
 3. **Link buttons belong inside cards and inline contexts** (a card's cta, a list of links, a line of
-   text), and carry the arrow. They are never the secondary beside a primary.
+   text), and carry the arrow. They are never the secondary beside a solid.
 4. **Never two buttons of the same emphasis side by side.** A group is at most one solid + one ghost. A
    stack of links, one per line, is a list rather than a group.
 5. **Everywhere.** Banner actions, Statement's action, CtaSection, ContentSection actions and footers,
    PageHero, CtaRow, EnquiryForm, and every page and specimen composition.
 
 Encoded, not just written: CtaRow's types allow one link, or a solid with at most one ghost partner;
-PageHero and CtaSection decide by position (solid, then ghost); every arrow in those rows is the
-pattern's decision. The table and the list of what is deliberately not covered are in
+PageHero and CtaSection decide by position (solid, then ghost); every arrow and every colour in those
+rows is the pattern's decision. The table and the list of what is deliberately not covered are in
 `docs/specs/Button.md` § 14a.
 
 ## 5 · Image-to-text balance

@@ -1,5 +1,12 @@
 # CtaSection
 
+> **Owner amendment, 7 Oct 2026 — colour follows the kind of action** (visual-direction § 4.5,
+> `docs/specs/Button.md` § 14a). The `open` and `offer`-with-actions arrangements REQUIRE `converts:
+> boolean` (no default); the form arrangements refuse it (`converts?: never` — the submit always
+> converts and is always blue). The first action's solid is blue when it converts and ink when it does
+> not; the ghost partner is blue either way. A close almost always converts, but it is stated, not
+> assumed. CMS-fed routes pass `leadConverts(actions)` from `@/lib/conversion`.
+
 > **Amended 6 Oct 2026, final fix round (`cmp-cta`) — supersedes the notes below wherever they
 > differ; §§ 7, 8, 9 and 12 are amended in place.**
 >

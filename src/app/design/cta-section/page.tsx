@@ -207,6 +207,7 @@ export default function CtaSectionSpecimenPage() {
         heading="Choose the next useful move"
         body={OPEN_BODY}
         points={STANDARD_POINTS}
+        converts
         actions={[
           { label: 'Discuss the relevant project', href: ROUTES.contact },
           { label: 'See how we work', href: ROUTES.howWeWork },
@@ -220,6 +221,7 @@ export default function CtaSectionSpecimenPage() {
         heading="Find the friction before it becomes a rebuild"
         body={OFFER_BODY}
         points={STANDARD_POINTS}
+        converts
         actions={[{ label: 'Request free audit', href: ROUTES.audits }]}
         surface="ink"
       />
@@ -255,6 +257,7 @@ export default function CtaSectionSpecimenPage() {
         heading="Get an outside view before you commit"
         body={OFFER_BODY}
         points={STANDARD_POINTS}
+        converts
         actions={[{ label: 'Request free audit', href: ROUTES.audits }]}
         surface="blue"
       />
@@ -263,6 +266,7 @@ export default function CtaSectionSpecimenPage() {
         heading="Make the next decision with evidence"
         body={OPEN_BODY}
         points={STANDARD_POINTS}
+        converts
         actions={[
           { label: 'Start a project', href: ROUTES.contact },
           { label: 'Request free audit', href: ROUTES.audits },
@@ -290,6 +294,7 @@ export default function CtaSectionSpecimenPage() {
         arrangement="open"
         heading="Choose the next useful move"
         body={OPEN_BODY}
+        converts
         actions={[
           { label: 'Start a project', href: ROUTES.contact },
           { label: 'Request free audit', href: ROUTES.audits },
@@ -299,6 +304,7 @@ export default function CtaSectionSpecimenPage() {
         arrangement="open"
         heading="Choose the next useful move"
         body={OPEN_BODY}
+        converts
         actions={[
           { label: 'Discuss the relevant project', href: ROUTES.contact },
           { label: 'Apply the decision', href: ROUTES.howWeWork },
@@ -334,6 +340,7 @@ export default function CtaSectionSpecimenPage() {
           heading={`Open with ${count} point${count === 1 ? '' : 's'}`}
           body={OPEN_BODY}
           points={SIX_POINTS.slice(0, count)}
+          converts
           actions={[{ label: 'Start a project', href: ROUTES.contact }]}
           surface={count % 2 === 0 ? 'tint' : 'paper'}
         />
@@ -345,6 +352,7 @@ export default function CtaSectionSpecimenPage() {
           heading={`Offer with ${count} point${count === 1 ? '' : 's'}`}
           body={OFFER_BODY}
           points={SIX_POINTS.slice(0, count)}
+          converts
           actions={[{ label: 'Request free audit', href: ROUTES.audits }]}
           surface={count % 2 === 0 ? 'ink' : 'blue'}
         />
@@ -375,6 +383,7 @@ export default function CtaSectionSpecimenPage() {
             heading="Choose the next useful move"
             body={OPEN_BODY}
             points={STANDARD_POINTS}
+            converts
             actions={[{ label: 'Start a project', href: ROUTES.contact }]}
             proof={<ProofFixture kind="quote" />}
             surface={surface}
@@ -385,6 +394,7 @@ export default function CtaSectionSpecimenPage() {
             heading="Find the friction before it becomes a rebuild"
             body={OFFER_BODY}
             points={STANDARD_POINTS}
+            converts
             actions={[{ label: 'Request free audit', href: ROUTES.audits }]}
             surface={surface}
           />
@@ -395,6 +405,7 @@ export default function CtaSectionSpecimenPage() {
             heading="Know what your design system is costing you"
             body={OFFER_BODY}
             points={K_ICON_POINTS}
+            converts
             actions={[
               { label: 'Request free audit', href: ROUTES.audits },
               { label: 'See how we work', href: ROUTES.howWeWork },
@@ -433,6 +444,7 @@ export default function CtaSectionSpecimenPage() {
         heading="A dark close inside a light page sequence"
         body={OPEN_BODY}
         points={STANDARD_POINTS}
+        converts
         actions={[{ label: 'Start a project', href: ROUTES.contact }]}
         proof={<ProofFixture />}
         surface="ink"
@@ -452,6 +464,7 @@ export default function CtaSectionSpecimenPage() {
           heading={`Open · ${kind} proof`}
           body={OPEN_BODY}
           points={STANDARD_POINTS}
+          converts
           actions={[{ label: 'Start a project', href: ROUTES.contact }]}
           proof={<ProofFixture kind={kind} />}
           surface="tint"
@@ -468,6 +481,7 @@ export default function CtaSectionSpecimenPage() {
         heading="Make the next decision with evidence"
         body={OPEN_BODY}
         points={STANDARD_POINTS}
+        converts
         actions={[
           { label: 'Start a project', href: ROUTES.contact },
           { label: 'See how we work', href: ROUTES.howWeWork },
@@ -480,6 +494,7 @@ export default function CtaSectionSpecimenPage() {
         heading="Make the next decision with evidence"
         body={OPEN_BODY}
         points={STANDARD_POINTS}
+        converts
         actions={[
           { label: 'Start a project', href: ROUTES.contact },
           { label: 'See how we work', href: ROUTES.howWeWork },
@@ -495,6 +510,7 @@ export default function CtaSectionSpecimenPage() {
         heading="Find the expensive friction first"
         body={OFFER_BODY}
         points={STANDARD_POINTS}
+        converts
         actions={[{ label: 'Audit my website', href: ROUTES.audits }]}
         surface="blue"
       />
@@ -552,6 +568,7 @@ export default function CtaSectionSpecimenPage() {
           { label: 'A normal point', detail: 'The neighbouring track remains intact.' },
           { label: 'A final point' },
         ]}
+        converts
         actions={[
           { label: 'Discuss the relevant project', href: ROUTES.contact },
           { label: 'Apply the decision', href: ROUTES.howWeWork },
@@ -567,6 +584,7 @@ export default function CtaSectionSpecimenPage() {
           { label: '   ', detail: 'This entire point is filtered before render.' },
           { label: 'The surviving point', detail: 'It becomes 01 after filtering.' },
         ]}
+        converts
         actions={[{ label: 'Start a project', href: ROUTES.contact }]}
         surface="tint"
       />
@@ -580,6 +598,7 @@ export default function CtaSectionSpecimenPage() {
         heading="See the work, then decide"
         body={OPEN_BODY}
         points={STANDARD_POINTS}
+        converts
         actions={[{ label: 'Start a project', href: ROUTES.contact }]}
         proof={<ProofFixture kind="quote" interactive />}
         surface="ink"
@@ -615,6 +634,7 @@ export default function CtaSectionSpecimenPage() {
         arrangement="open"
         heading="Open with proof={false}"
         body={OPEN_BODY}
+        converts
         actions={[{ label: 'Start a project', href: ROUTES.contact }]}
         proof={false}
       />
@@ -622,6 +642,7 @@ export default function CtaSectionSpecimenPage() {
         arrangement="open"
         heading="Open with proof={null}"
         body={OPEN_BODY}
+        converts
         actions={[{ label: 'Start a project', href: ROUTES.contact }]}
         proof={null}
         surface="tint"

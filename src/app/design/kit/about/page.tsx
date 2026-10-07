@@ -252,6 +252,7 @@ export default function KitAboutPage() {
         body={[
           'Researchers, designers and engineers in one room, from decision to code.',
         ]}
+        converts
         actions={[
           { label: 'Work with us', href: ROUTES.contact },
           { label: 'Meet the team', href: ROUTES.team },
@@ -393,7 +394,7 @@ export default function KitAboutPage() {
           <CtaRow
             align="center"
             emphasis="solid"
-            tone="primary"
+            converts={false}
             actions={[
               { label: 'See open roles', href: ROUTES.careers },
               { label: 'How we hire', href: ROUTES.team },

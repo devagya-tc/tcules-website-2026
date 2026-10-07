@@ -949,7 +949,7 @@ export default function ContentSectionSpecimen() {
         headingId="csec-beside-actions"
         lead="A rebuilt workflow and a design system, both settled at the model before a screen was drawn."
         actions={
-          <CtaRow actions={[START, SEE_WORK]} emphasis="solid" tone="primary" rule={false} />
+          <CtaRow actions={[START, SEE_WORK]} emphasis="solid" converts rule={false} />
         }
       >
         <PairCards />
@@ -1011,7 +1011,7 @@ export default function ContentSectionSpecimen() {
           headingId="csec-split-long"
           lead={LEAD_LONG}
           actions={
-            <CtaRow actions={[START, HOW]} emphasis="solid" tone="primary" rule={false} />
+            <CtaRow actions={[START, HOW]} emphasis="solid" converts rule={false} />
           }
         >
           <Cards />
@@ -1094,7 +1094,7 @@ export default function ContentSectionSpecimen() {
         heading="Start with the decision in front of you"
         headingId="csec-media-actions"
         lead="A thirty-minute call about the decision you are facing, and a written note of what we would do first."
-        actions={<CtaRow actions={[START, HOW]} emphasis="solid" tone="primary" rule={false} />}
+        actions={<CtaRow actions={[START, HOW]} emphasis="solid" converts rule={false} />}
       />
       <ContentSection
         arrangement="media"
@@ -1201,7 +1201,7 @@ export default function ContentSectionSpecimen() {
           <CtaRow
             actions={[START]}
             emphasis="solid"
-            tone="primary"
+            converts
             note="Every engagement starts with a thirty-minute call."
             rule={false}
           />

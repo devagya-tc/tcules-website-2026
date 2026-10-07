@@ -4,5 +4,4 @@ export type {
   CtaRowAction,
   CtaRowAlign,
   CtaRowEmphasis,
-  CtaRowTone,
 } from './CtaRow';

@@ -149,6 +149,9 @@ export default async function FutureInterfacesLabJoinPage() {
         eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
         title={page.hero.heading}
         body={page.hero.body}
+        /* Every action in the Lab family is an application to the Lab — "Join the Lab", "Apply for
+           fellowship", "Apply to labs" — and applying converts (owner, 7 Oct 2026). */
+        converts
         actions={firstTwoActions(page.hero.actions)}
         surface="paper"
       />

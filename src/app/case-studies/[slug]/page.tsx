@@ -6,6 +6,7 @@ import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components
 import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
+import { leadConverts } from '@/lib/conversion';
 import {
   BlockCard,
   Breadcrumbs,
@@ -127,7 +128,7 @@ function renderCaseStudyBlock(block: CaseStudyBlock) {
               as="a"
               href={block.action.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
               icon={<Icon name="arrow-right" />}
@@ -332,6 +333,7 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
           surface="tint"
           heading={caseStudy.cta.heading}
           body={caseStudy.cta.body}
+          converts={leadConverts(caseStudy.cta.actions)}
           actions={caseStudy.cta.actions}
         />
       ) : null}

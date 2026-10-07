@@ -57,11 +57,11 @@ type BannerHeadProps = {
    * one blue link (or one solid, with at most a ghost partner — owner, 7 Oct 2026) is the caller's
    * composition and a pattern never imports a pattern.
    *
-   * A solid ask is the BLUE solid primary — `<CtaRow emphasis="solid" tone="primary" … />` — the
-   * same treatment as the hero's first action (fix round 2). CtaRow's solid default is the neutral
-   * (ink) solid, and on a page that put an ink "Book an audit" a scroll above a blue "Start a
-   * project" the two asks read as two systems. One band, one ask, one colour for it: blue (§ 4.2,
-   * "the ask: the solid primary button").
+   * A solid ask is `<CtaRow emphasis="solid" converts … />`: the caller states what the action IS
+   * and CtaRow derives the colour — blue when it converts ("Book an audit"), the same treatment as
+   * the hero's first action, and ink when it is a lead action that does not (owner, 7 Oct 2026,
+   * visual-direction § 4.5). Colour follows the kind of action, never the band, so the same ask can
+   * never read as two systems a scroll apart.
    */
   actions?: ReactNode;
   /**

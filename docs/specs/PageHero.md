@@ -36,6 +36,14 @@ Verified against the loaded Tcules library (`window.Tcules`, 10 components) and 
 
 Every section below is amended in place for this block — 1, 2, 3, 7, 9, 10, 12 row 9, 14 checks 4 and 7, 15 item 9 and the build-decisions log; the 29 Sep amendment carries a note.
 
+> **Owner amendment, 7 Oct 2026 — colour follows the kind of action** (visual-direction § 4.5,
+> `docs/specs/Button.md` § 14a). Passing `actions` now REQUIRES `converts: boolean` (no default; the
+> type is `{ actions?: never; converts?: never } | { actions: HeroActions; converts: boolean }`). The
+> first action's solid is blue when it converts (start a project, book a call, request an audit,
+> contact, apply, subscribe) and ink when it does not ("Meet the team", "See the work"); the ghost
+> partner is blue either way. CMS-fed routes pass `leadConverts(actions)` from `@/lib/conversion`,
+> which classifies by destination until the CMS carries the fact (`docs/strapi-changes.md` § 17).
+
 > **Owner amendment, 7 Oct 2026 — pairing and arrows** (`docs/specs/Button.md` § 14a). The second
 > action is now `ghost` / `primary` with the trailing `arrow-right`; the first stays `solid` / `primary`
 > and never carries an arrow. A link button is never the partner beside a solid. Rows below that

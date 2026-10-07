@@ -5,6 +5,7 @@ import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import { getAboutPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
+import { convertsByHref } from '@/lib/conversion';
 import { BlockCard, Breadcrumbs, ListCard, PageHero } from '@/patterns';
 
 const ABOUT_SLUG = ROUTES.about.slice(1);
@@ -324,7 +325,9 @@ export default async function AboutPage() {
                     as="a"
                     href={page.closing.action.href}
                     emphasis="solid"
-                    tone="primary"
+                    /* A CMS action: blue when it converts, ink when it does not (owner, 7 Oct
+                       2026 — colour follows the kind of action). */
+                    tone={convertsByHref(page.closing.action.href) ? 'primary' : 'neutral'}
                     size="lg"
                   >
                     {page.closing.action.label}
@@ -374,7 +377,7 @@ export default async function AboutPage() {
                               as="a"
                               href={card.action.href}
                               emphasis="link"
-                              tone="neutral"
+                              tone="primary"
                               size="md"
                               icon={<Icon name="arrow-right" />}
                               extendHitArea

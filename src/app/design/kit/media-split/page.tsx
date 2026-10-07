@@ -434,7 +434,7 @@ export default function MediaSplitKitSpecimen() {
             <CtaRow
               actions={[PLAN_DISCOVERY, SEE_PLAN]}
               emphasis="solid"
-              tone="primary"
+              converts
               note="Most of our engagements start here."
             />
           }
@@ -501,7 +501,7 @@ export default function MediaSplitKitSpecimen() {
             <CtaRow
               actions={[TALK_ENGINEERING, SEE_WORK]}
               emphasis="solid"
-              tone="primary"
+              converts
               rule={false}
             />
           }

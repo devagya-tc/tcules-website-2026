@@ -108,7 +108,7 @@ function renderEventBlock(block: EventBlock, eventTitle: string) {
                 as="a"
                 href={block.mediaUrl}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
                 icon={<Icon name="arrow-right" />}
@@ -130,7 +130,7 @@ function renderEventBlock(block: EventBlock, eventTitle: string) {
                 as="a"
                 href={block.action.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
                 icon={<Icon name="arrow-right" />}

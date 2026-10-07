@@ -20,6 +20,7 @@ import {
 } from '@/content';
 import { auditPath, ROUTES } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
+import { leadConverts } from '@/lib/conversion';
 import {
   Accordion,
   BlockCard,
@@ -92,7 +93,7 @@ function renderColumn(column: AuditContentColumn) {
               as="a"
               href={link.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
               icon={<Icon name="arrow-right" />}
@@ -158,7 +159,7 @@ function renderAuditBlock(block: AuditBlock) {
                 as="a"
                 href={block.source.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
                 icon={<Icon name="arrow-right" />}
@@ -305,6 +306,7 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
         title={audit.title}
         eyebrow={eyebrowBesideTrail(audit.hero.eyebrow, crumbs)}
         body={[audit.hero.description]}
+        converts={leadConverts(heroActions)}
         actions={heroActions}
         surface="paper"
       >
@@ -361,6 +363,7 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
           body={audit.cta.body}
           eyebrow={audit.cta.eyebrow}
           points={audit.cta.points}
+          converts={leadConverts(audit.cta.actions)}
           actions={audit.cta.actions}
         />
       ) : null}

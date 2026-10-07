@@ -272,6 +272,7 @@ export default function KitCtaSpecimen() {
           'A senior designer reviews one critical journey and returns a ranked list of what to change first.',
         ]}
         points={AUDIT_POINTS}
+        converts
         actions={[
           { label: 'Request the audit', href: ROUTES.uxProductAudit },
           { label: 'See a sample report', href: ROUTES.audits },
@@ -294,6 +295,7 @@ export default function KitCtaSpecimen() {
           'We audit tokens, components and adoption across your products, then show where drift slows delivery.',
         ]}
         points={HEALTH_POINTS}
+        converts
         actions={[{ label: 'Book a health check', href: ROUTES.designSystemAudit }]}
         media={{ image: photo('pencil-wireframe-red') }}
       />
@@ -312,6 +314,7 @@ export default function KitCtaSpecimen() {
           'A fixed-scope sprint for when the brief is still an argument. You leave with evidence, not opinions.',
         ]}
         points={SPRINT_POINTS}
+        converts
         actions={[
           { label: 'Plan a sprint', href: ROUTES.contact },
           { label: 'How discovery works', href: ROUTES.howWeWork },
@@ -333,6 +336,7 @@ export default function KitCtaSpecimen() {
           'An expert review against WCAG 2.2 AA, with every issue mapped to the component that causes it and the change that closes it.',
         ]}
         points={REVIEW_POINTS}
+        converts
         actions={[
           { label: 'Request a review', href: ROUTES.audits },
           { label: 'What we test', href: ROUTES.howWeWork },
@@ -352,6 +356,7 @@ export default function KitCtaSpecimen() {
           'Start with a two-week assessment of one legacy journey and the decisions buried inside it.',
         ]}
         points={MODERNISE_POINTS}
+        converts
         actions={[
           { label: 'Start an assessment', href: ROUTES.productModernisationAssessment },
           { label: 'Read a case study', href: ROUTES.caseStudies },
@@ -374,6 +379,7 @@ export default function KitCtaSpecimen() {
           'A facilitated session for the people who have to live with the answer, run by the designers who will build it.',
         ]}
         points={WORKSHOP_POINTS}
+        converts
         actions={[
           { label: 'Book the workshop', href: ROUTES.contact },
           { label: 'See the agenda', href: ROUTES.howWeWork },
@@ -451,6 +457,7 @@ export default function KitCtaSpecimen() {
           'Read three engagements like yours, or book a call and we will sketch a first phase with you.',
         ]}
         points={OPEN_POINTS}
+        converts
         actions={[
           { label: 'Book a call', href: ROUTES.contact },
           { label: 'See case studies', href: ROUTES.caseStudies },
@@ -505,13 +512,9 @@ export default function KitCtaSpecimen() {
         lead="The people who interview your users are the people who ship your interface."
         aside={<Proof figures={[PHASE_STAT]} />}
         footer={
-          /* Neutral, and argued (final fix round asked for one second-action treatment): this is
-             not a second action beside a solid — it is the band's only link, and the band already
-             spends its Signal on the rows' blue numerals and the figure, so CtaRow's own rule
-             (CtaRowTone: neutral "when the band already spends a different KIND of Signal") keeps
-             it ink. It follows the family's ARROW rule: a link carries its trailing arrow. */
+          /* A link row: blue, always (owner, 7 Oct 2026 — colour follows the kind of action, and
+             a link is never ink in content). It carries its trailing arrow. */
           <CtaRow
-            tone="neutral"
             rule={false}
             note="Each phase ends in something your team can run without us."
             actions={[{ label: 'How we work', href: ROUTES.howWeWork }]}
@@ -549,6 +552,7 @@ export default function KitCtaSpecimen() {
           { label: 'Drift, ranked by who sees it' },
           { label: 'A handoff fix that holds' },
         ]}
+        converts
         actions={[
           { label: 'Request the audit', href: ROUTES.designToCodeAudit },
           { label: 'What it covers', href: ROUTES.audits },

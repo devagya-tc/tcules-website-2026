@@ -139,7 +139,7 @@ export default function IconSpecimenPage() {
                   as="a"
                   href="https://example.com"
                   emphasis="link"
-                  tone="neutral"
+                  tone="primary"
                   icon={<Icon name="square-arrow-right-up" />}
                 >
                   Read the paper
@@ -242,7 +242,7 @@ export default function IconSpecimenPage() {
               <Button
                 size="sm"
                 emphasis="ghost"
-                tone="neutral"
+                tone="primary"
                 icon={<Icon name="arrow-right" />}
               >
                 sm · 14
@@ -250,7 +250,7 @@ export default function IconSpecimenPage() {
               <Button
                 size="md"
                 emphasis="ghost"
-                tone="neutral"
+                tone="primary"
                 icon={<Icon name="arrow-right" />}
               >
                 md · 16
@@ -258,7 +258,7 @@ export default function IconSpecimenPage() {
               <Button
                 size="lg"
                 emphasis="ghost"
-                tone="neutral"
+                tone="primary"
                 icon={<Icon name="arrow-right" />}
               >
                 lg · 18
@@ -266,7 +266,7 @@ export default function IconSpecimenPage() {
               <Button
                 size="sm"
                 emphasis="ghost"
-                tone="neutral"
+                tone="primary"
                 icon={<Icon name="arrow-right" size="xl" />}
               >
                 sm, icon asked for xl
@@ -322,7 +322,7 @@ export default function IconSpecimenPage() {
               <Button emphasis="ghost" tone="primary" icon={<Icon name="arrow-right" />}>
                 See the work
               </Button>
-              <Button emphasis="ghost" tone="neutral" iconLeft={<Icon name="download" />}>
+              <Button emphasis="ghost" tone="primary" iconLeft={<Icon name="download" />}>
                 Download
               </Button>
               <Button
@@ -336,7 +336,7 @@ export default function IconSpecimenPage() {
                 as="a"
                 href="https://example.com"
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 icon={<Icon name="square-arrow-right-up" />}
               >
                 Read the paper

@@ -5,6 +5,7 @@ import { Cluster, Layout, Section } from '@/components';
 import { getMatterDesignSystemPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
+import { leadConverts } from '@/lib/conversion';
 import {
   BlockCard,
   Breadcrumbs,
@@ -102,6 +103,7 @@ export default async function MatterDesignSystemPage() {
         title={heroTitle}
         eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
         body={[page.hero.description]}
+        converts={leadConverts(heroActions)}
         actions={heroActions}
         media={heroMedia}
         surface="paper"
@@ -188,6 +190,7 @@ export default async function MatterDesignSystemPage() {
             surface="blue"
             heading={page.stripOne.heading}
             body={[page.stripOne.description]}
+            converts={leadConverts([page.stripOne.action])}
             actions={[{ label: page.stripOne.action.label, href: page.stripOne.action.href }]}
           />
         ) : (
@@ -309,6 +312,7 @@ export default async function MatterDesignSystemPage() {
             surface="ink"
             heading={page.stripTwo.heading}
             body={[page.stripTwo.description]}
+            converts={leadConverts([page.stripTwo.action])}
             actions={[{ label: page.stripTwo.action.label, href: page.stripTwo.action.href }]}
             proof={
               page.stripTwo.backgroundImage ? (

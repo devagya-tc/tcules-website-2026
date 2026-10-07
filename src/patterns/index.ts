@@ -250,7 +250,6 @@ export type {
   CtaRowAction,
   CtaRowAlign,
   CtaRowEmphasis,
-  CtaRowTone,
 } from './CtaRow';
 
 export { Slider } from './Slider';
@@ -280,6 +279,7 @@ export type {
   HeroCreditRole,
   HeroDates,
   HeroAction,
+  HeroActions,
   HeroArrangement,
   HeroMedia,
   HeroImage,
