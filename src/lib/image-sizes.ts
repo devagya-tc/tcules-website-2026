@@ -222,8 +222,8 @@ export function coverSizes(sizes: string, source: number, frames: readonly numbe
 
 /**
  * ReadDown's photograph (the D photo form, cmp-readdown fix round 2): the trailing two-thirds track
- * of the set's own [1, 2] split at the 96 seam from 1024 — the same grid as ContentSection
- * `split-head`, which the form sits under. (1240 − 96) × 2 / 3 ≈ 763 at the cap;
+ * of the set's own [1, 2] split at the 96 seam from 1024, under a stacked ContentSection head.
+ * (1240 − 96) × 2 / 3 ≈ 763 at the cap;
  * (100vw − 64 − 96) × 2 / 3 from 1024; below it the photo sits above the rows at the full column.
  */
 export const READ_DOWN_PHOTO =

@@ -46,11 +46,10 @@ import type {
  *   § 3.5  J centres its sentence across the full measure unless a neighbour is centred (fix round
  *          2): a split J between two beside bands put four bands' content on one 1/3 line.
  *   § 7.1  the head form follows the body: a thread's E band centres its head from 1024 (start below,
- *          over the vertical thread); every other diagram takes the H-row, the head split beside its
- *          lead, because a diagram is the band's large thing and a stacked head spent 100 of its fold.
- *          M (a set of covers) and a G with a lead take the H-row too (fix round 2): the card row
- *          gets the whole measure under a title-left, intro-right head, a different shape from the
- *          centred H and D-faq heads, and both bands keep ~70 of headroom under the fold.
+ *          over the vertical thread); every other diagram, and M (a set of covers), takes a stacked
+ *          start head whose `more` link closes it under the lead (`moreInHead`) rather than a ruled
+ *          foot under the body. The H-row (heading beside its lead) is retired (owner, 7 Oct 2026):
+ *          a text-only head is never split left/right.
  *
  * Pure: the same story always gets the same plan. Every decision a renderer needs is on the band,
  * so Bands.tsx only places what it is told.
@@ -71,7 +70,7 @@ export type Archetype =
   | 'I' // the banner
   | 'J' // the statement: one sentence at the display role
   | 'K' // the mid-page offer
-  | 'M' // a full-width row of linked covers under the H-row
+  | 'M' // a full-width row of linked covers under a stacked head
   | 'N'; // the contrast pair
 
 type BandBase = {
@@ -94,8 +93,10 @@ export type SectionBand = BandBase & {
   photoWeight: boolean;
   /** C-icon only: four routes take the media split, the photo beside the 2 × 2 (§ 3.4). */
   split: boolean;
-  /** E only: the head is the H-row (heading beside its lead) rather than stacked over the diagram. */
-  headRow: boolean;
+  /** E (a diagram) and M (covers): the `more` link closes the stacked head, under the lead, rather
+      than opening a ruled foot under the full-column body. (It was `headRow`, the H-row, retired
+      7 Oct 2026: a text-only head is never split left/right.) */
+  moreInHead: boolean;
 };
 
 export type OfferBand = BandBase & {
@@ -124,9 +125,8 @@ const QUIET: ReadonlySet<StoryBlock['kind']> = new Set(['note', 'slot']);
 const RULED: ReadonlySet<Archetype> = new Set(['D', 'D-faq', 'F', 'N']);
 
 /** Bands that are always centred, and bands that centre unless their neighbour already does. */
-/* M is not among them (fix round 2): a set of covers is a full-width image-card row under the
-   H-row — title left, intro right — so its frames take the whole measure and the band is a
-   different shape from the centred H and D-faq heads (and ~70 shorter than a stacked head). */
+/* M is not among them (fix round 2): a set of covers is a full-width image-card row under a start
+   head, a different shape from the centred H and D-faq heads. */
 const ALWAYS_CENTRED: ReadonlySet<Archetype> = new Set(['H', 'D-faq']);
 const MAY_CENTRE: ReadonlySet<Archetype> = new Set(['E', 'N', 'C-text']);
 
@@ -251,11 +251,10 @@ export function planBands(story: ServiceStory): Band[] {
     }
     /* § 3.5: a G with no case beside its quote is the typographic band — the quote centred
        (Proof `align="center"`, "the typographic G band under a centred head") — so its head centres
-       with it, unless a lead splits the head into the H-row. A start head over a centred quote was
-       two alignments in one band (page-design-systems fix round 2). */
+       with it, lead or not (the H-row that took a lead is retired, 7 Oct 2026). A start head over a
+       centred quote was two alignments in one band (page-design-systems fix round 2). */
     const proof = job(entry);
-    const typographic =
-      archetype === 'G' && proof?.kind === 'proof' && !proof.case && !entry.lead;
+    const typographic = archetype === 'G' && proof?.kind === 'proof' && !proof.case;
     return {
       kind: 'section',
       section: entry,
@@ -266,7 +265,7 @@ export function planBands(story: ServiceStory): Band[] {
       headSide: 'start',
       photoWeight,
       split,
-      headRow: false,
+      moreInHead: false,
     };
   });
 
@@ -288,13 +287,13 @@ export function planBands(story: ServiceStory): Band[] {
     if (band.kind === 'section') {
       /* § 3.5: a band that may centre does so only where neither neighbour is centred. An E band
          centres only over a thread, whose rail centres with it; any other diagram is a full-column
-         object under the H-row (§ 3.4 E: "H-compact … left"). */
+         object under a stacked start head (§ 3.4 E). */
       const thread = job(band.section)?.kind === 'thread';
       if (MAY_CENTRE.has(band.archetype) && (band.archetype !== 'E' || thread)) {
         band.centred = !before?.centred && !(after && ALWAYS_CENTRED.has(after.archetype));
       }
-      if (band.archetype === 'E' && !band.centred && !thread) band.headRow = true;
-      if (band.archetype === 'M') band.headRow = true;
+      if (band.archetype === 'E' && !band.centred && !thread) band.moreInHead = true;
+      if (band.archetype === 'M') band.moreInHead = true;
       /* § 3.2: beside-with-aside bands alternate the head's side down the page. */
       if (ASIDE.has(band.archetype) && band.photo) {
         band.headSide = asideCount % 2 === 0 ? 'start' : 'end';

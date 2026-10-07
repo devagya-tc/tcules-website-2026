@@ -83,9 +83,10 @@ export default function KitBannerSpecimen() {
 
       {/* ── I · Banner, below ─────────────────────────────────────────────────────────── */}
       <Caption index="I.1" title="Banner below">
-        The H-row over a 3:1 photograph. The eyebrow and its blue rule label the whole row; the
-        heading takes the one-third track, and the lead with its blue link a block beneath it is
-        one unit in the two-thirds track, top edges level. At 390 the photograph crops 3:2.
+        A stacked head over a 3:1 photograph: eyebrow, heading and lead in one column, the blue
+        link a stack under the lead, the photograph a stack beneath. (The H-row — heading in a
+        one-third track, lead and link in the two-thirds — is retired: a text-only head is never
+        split left/right, owner 7 Oct 2026.) At 390 the photograph crops 3:2.
       </Caption>
       <Banner
         eyebrow="How engagements start"
@@ -194,8 +195,9 @@ export default function KitBannerSpecimen() {
       {/* ── J · Statement ─────────────────────────────────────────────────────────────── */}
       <Caption index="J.1" title="Statement">
         One sentence at the h1 role, rendered as an h2: the page&rsquo;s only h1 is the
-        hero&rsquo;s. Eyebrow and blue mark in the head track, the sentence in 763: two lines at
-        1470, three at most at 1024. The rest is air, and the air is the design.
+        hero&rsquo;s. The eyebrow directly above the sentence, a block apart, on the start edge;
+        the sentence on its title measure, two lines at 1470, three at most at 1024. The rest is
+        air, and the air is the design.
       </Caption>
       <Statement eyebrow="What we believe" id="kit-statement">
         Most product problems are decisions nobody has made yet.

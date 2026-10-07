@@ -618,3 +618,21 @@ The review found no proof moment at scale, the same icon-tile shape three times 
 | Photos | B / router / K | screen-over-shoulder / designer-monitor-ui / wireframe-wall | swatch-book-pages (a colour library, page by page) / white-bricks-pile (unpainted components) / swatch-ring-white (a whole scale laid out): three new Unsplash photographs, catalogued, measured neutral and quiet. The case covers are the page's only screens |
 
 **Why.** Fix round 2 review: B's counterweight read as a skeleton loader, the router and case images were postage stamps, three device shots read as generic stock, the proof was split by K and the FAQ, and the evidence band disclaimed itself. **Found in.** `kit/page-design-systems`, fix round 2.
+
+## Records become boxed tables (7 Oct 2026, owner design review)
+
+**Page / section.** `/services/design-engineering` · *Code answers what a screen cannot* (the record
+"What a screen leaves open"), and `/services/ai-product-ux` · *Eight questions per scenario* (the
+"Responsibility record").
+
+**What's needed.** Each record loses its mono label (`meta`) and gains two column heads (`columns`),
+because it now renders as a boxed table (tables are boxed, owner 7 Oct 2026):
+- Design Engineering: was meta "Needs running code"; now columns **"Left open"** over the fields and
+  **"What only running code settles"** over the questions.
+- AI Product UX: was meta "One per AI scenario"; now columns **"Field"** and **"The question it
+  answers"**. "One per AI scenario" is already said by the band's lead.
+
+The record's title stays, as the heading over the table. The field icons stay in the content for the
+deep page; the table does not draw them. Strapi: a record block needs the two column-head strings.
+
+**Found in.** `fix/sections`, 7 Oct 2026.

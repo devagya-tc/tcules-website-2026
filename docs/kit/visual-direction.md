@@ -90,6 +90,37 @@ so these numbers are for writers and planners, and the gate is the authority.
 
 ---
 
+## Owner rulings · 7 Oct 2026 (design review)
+
+These four override anything below that disagrees; the inline amendments point here.
+
+1. **Tables are boxed.** Tabular content — a key column and data columns that a reader compares
+   across rows — renders as the boxed DataTable: outer border, head fill, body ground, a hairline
+   between every row and column. The box is the table's, not a variant: DataTable's `frame="ruled"`
+   (6 Oct) is withdrawn, because ruled tables read dense and compact. The service page's Spectrum,
+   Matrix and Record are boxed DataTables; a record of six or more fields sets as two boxed halves
+   side by side from 1024, so the band keeps its fold. The "no boxes around text content" ruling
+   still holds for cards and diagrams — a table is not text content in a box, it is a table. Where a
+   ruled list is genuinely the right form (ListCard rows, ReadDown, Steps), it stays ruled, and any
+   loosening is a gap-scale step, never a local distance.
+2. **No text-only left/right splits.** A head with no image beside it is ONE column: eyebrow →
+   heading → lead (24 each), then its action a `stack` under the lead. ContentSection's `split-head`
+   (the H-row) is removed, and Banner `below` stacks its head over the photograph. Side by side
+   survives only where one side is media: ContentSection `media`, `beside` with a photograph or stat
+   aside (and `beside` over a read-down body, where the split is head | body), Banner `beside`, K, L.
+   Every H-row arithmetic below is superseded by H-compact or H-full plus the action:
+   + 48 + 40 (a link) to the head.
+3. **A set's heading outranks its items.** A heading over a set of titled items is always at least
+   one type step above the largest item title. On the service page that is `SetHeading` (the h3
+   role), the one way the template heads a set: a ledger, a slice's acceptance levels, a record.
+   The ledger's h5 heading over h4 rows was the failure.
+4. **The statement has no split.** Statement is one column: the eyebrow directly above the sentence
+   (`block`), start-aligned on a generous measure (`align="start"`, the default) or centred
+   (`align="center"`). The `[1, 2]` form, eyebrow alone in the head track ~480 from its sentence,
+   left the band with no anchor.
+
+---
+
 ## 0 · The diagnosis, in numbers
 
 The review said the pages read as "text, text, text". There are four causes, and copy volume is one of
@@ -202,9 +233,12 @@ archetypes. The ai-product-ux *evidence* band (1341) and *product-responsibility
 | **H-title** | eyebrow, h2 on 1 line | 14 + 24 + 47 = **85** | 133 |
 | **H-compact** | eyebrow, h2 on 1 line, lead on 2 lines | 85 + 24 + 60 = **169** | 217 |
 | **H-full** | eyebrow, h2 on 2 lines, lead on 2 lines | 14 + 24 + 94 + 24 + 60 = **216** | 264 |
-| **H-row** | [1, 2] at `section`: eyebrow + h2 (2 lines) in 381, then lead (2 lines) + 48 + action in 763 | max(132, 156) = **156** | 204 |
+| ~~**H-row**~~ | **Retired 7 Oct 2026 (7 Oct ruling 2).** Was [1, 2] at `section`: eyebrow + h2 (2 lines) in 381, then lead (2 lines) + 48 + action in 763 | max(132, 156) = **156** | 204 |
+| **H-compact + action** | the stacked head that replaces it: H-compact, then 48 + a link (40) | 169 + 88 = **257** | 305 |
 | **H-beside-aside** | in 381: eyebrow, h2 on 2 lines, body-lg lead on 3 lines; then 48 + aside | 14 + 24 + 94 + 24 + 84 = **240** | its own column |
 | **H-beside-actions** | in 381: eyebrow, h2 on 3 lines, body-lg lead on 4 lines, 48, actions | 14 + 24 + 141 + 24 + 112 + 48 + 48 = **411** | its own column |
+
+**Superseded 7 Oct 2026 (7 Oct ruling 2): the H-row is retired; the two amendments below are history.**
 
 **Amended 6 Oct 2026 (`fdn-section-head`): the H-row's eyebrow sits above the split.** Built as first
 written (eyebrow + h2 in the 381 track), no alignment of the two tracks reads as one row: top-aligned,
@@ -287,9 +321,9 @@ on purpose: the banner's is a head over one photograph, ContentSection's a head 
 | **H** grid beside a head | head 240; grid 2 × 48 + 48 = 144 | **240** | ✓ |
 | **H** marks beside a real quote | H-title 133 + max(quote on 4 lines 152 + 24 + 50 = 226, 3 × 48 + 2 × 48 = 240) | **373** | ✓ |
 | **S** stats | H-compact 217 + one row of stats (114) = **331**; + CtaRow = 427 | | ✓ |
-| **I** banner, below (`tight`) | H-row 204 + photo 3:1 at 1240 = 413 | **617** | ✓ ≤ 662 |
+| **I** banner, below (`tight`) | stacked head with its link (7 Oct 2026, 7 Oct ruling 2) ~257 + 48 + photo 3:1 at 1240 = 413 | **~695** (measured 695 at 1440, band 823 with 64 + 64) | ✓ ≤ 702 |
 | **I** banner, beside (`tight`) | photo 3:2 in 667 = **445**. Copy in 477: 14 + 24 + h2 on 3 lines 141 + 24 + lead on 3 lines 90 + 48 + 48 = 389 | 445 | ✓ |
-| **J** statement (`open`) | [1, 2]: eyebrow in 381, h1 on 3 lines in 763 | **171** | ✓ ≤ 534 |
+| **J** statement (`open`) | one column (7 Oct 2026, 7 Oct ruling 4): eyebrow 14 + 24 + h1 on 3 lines 171 | **209** | ✓ ≤ 534 |
 | **K** offer | [7, 5]: copy in 667: H-full 264 + 3 one-line points (3 × 54 + 2 × 24 = 210) + 48 + 48 = 570. Photo 4:5 in 477 = **596** | 596 | ✓ |
 | **K** without a photo | [1, 2]: head track H-beside-actions 411; points in 763: 3 × 76 + 48 = 276 | **411** | ✓ |
 | **L** close | [5, 7]: copy in 477: 14 + 24 + h2 on 2 lines 94 + 24 + lead on 3 lines 90 + 48 + 3 two-line points (3 × 76 + 48 = 276) = 570. Form in 667 ≤ 560 | **570** | ✓ |
@@ -571,7 +605,7 @@ word, joined to it with a non-breaking space.
 | Split | Columns at lg | Gap | Use |
 |---|---|---|---|
 | Hero | [1, 1] | `section` | copy, then illustration or photograph |
-| Head beside body | [1, 2] | `section` | read-down bodies, icon grids, pair cards, the H-row |
+| Head beside body | [1, 2] | `section` | read-down bodies, icon grids, pair cards (the H-row, a text-only head split, is retired: 7 Oct ruling 2) |
 | Media split | [5, 7] or [7, 5] | `section` | a photograph beside copy, a form beside a photo, a featured testimonial, the offer, the close |
 | Peer halves | [1, 1] | `column` | the N contrast pair, two lists |
 
@@ -646,18 +680,18 @@ Every band on a kit page is one of these. Rules for the sequence:
 |---|---|---|---|---|---|
 | A | Hero | trail + [1, 1] split, or stacked (no media) | the hero | illustration / photo | `fdn-top`, `cmp-hero` |
 | B | Media split | [5, 7] / [7, 5]: H-full + ≤ 4 tiles, or ≤ 2 tiles + a CtaRow, beside a 4:5 photo | left | photograph | `cmp-media-split` |
-| C | Feature | **image:** 3 or 4 cards across, or a Slider at 5+. **text:** 3 or 6 text cards. **icon:** beside head + photo aside + 4 or 6 icon cards. **pair:** beside head + actions + 2 image cards | centred (image, text), left (H-row), beside (icon, pair) | card images, or the head photo | `cmp-feature` |
+| C | Feature | **image:** 3 or 4 cards across, or a Slider at 5+. **text:** 3 or 6 text cards. **icon:** beside head + photo aside + 4 or 6 icon cards. **pair:** beside head + actions + 2 image cards | centred (image, text), left (stacked head; the H-row is retired, the 7 Oct rulings), beside (icon, pair) | card images, or the head photo | `cmp-feature` |
 | D | Read-down | beside head with an aside + ruled rows (1 or 2 columns) | beside | aside photo or stat | `cmp-readdown` |
 | D-faq | FAQ | centred head over a centred accordion at `--measure-body` | centred | exception | `cmp-readdown` |
 | E | Diagram | H-compact + a full-column diagram ≤ 380 tall | left | the diagram | `cmp-service-pages` (diagrams stay template-local) |
 | F | Process | beside head + photo aside + ≤ 5 numbered read-down rows (the approved Steps) | beside | head photo | `cmp-process-stats` |
 | G | Proof | typographic; **G-case** (case card + compact quote, the work first); featured with portrait; group of 2 to 3; slider; rating-led | centred (typographic, group, rating), left (case, featured) | quote-lg, portrait or case card | `cmp-testimonials` |
 | H | Logos | a centred strip; a grid beside a head; marks beside a real quote | centred | exception | `cmp-logos` |
-| I | Banner | H-row over a 3:1 photo, or a 3:2 photo beside copy; `tight` | left | photograph | `cmp-banner` |
-| J | Statement | [1, 2]: eyebrow in the head track, h1-role sentence in the body track; `open` | left | exception | `cmp-banner` |
+| I | Banner | stacked head over a 3:1 photo (7 Oct 2026), or a 3:2 photo beside copy; `tight` | left | photograph | `cmp-banner` |
+| J | Statement | one column: eyebrow directly above the h1- or display-role sentence, start or centred (7 Oct 2026; the [1, 2] split is retired); `open` | left or centred | exception | `cmp-banner` |
 | K | Offer | [7, 5]: head + 3 points + actions, beside a 4:5 photo; or beside head + points (no photo) | left | photograph | `cmp-cta` |
 | L | Close | [10, 7] from 1280 ([1, 1] from 1024): copy + points beside the full EnquiryForm on paper, top-aligned, the `closing` equaliser under the copy (amended 6 Oct 2026, cmp-cta: the full form holds its own 470, so the 7 is sized to it); or [5, 7], a photo beside a compact form | left | exception (or the photo) | `cmp-cta`, `cmp-form` |
-| M | Resources | head + 3 cover cards, whole-card links | centred (on a service page: the H-row, title left and intro right, over a full-width card row; page-product-design fix round 2) | covers | `cmp-feature` |
+| M | Resources | head + 3 cover cards, whole-card links | centred (on a service page: a stacked start head over a full-width card row — the H-row it took in page-product-design fix round 2 is retired, the 7 Oct rulings) | covers | `cmp-feature` |
 | N | Contrast (Fit) | H-title + two lists in peer halves, check and close glyphs | left | exception | `cmp-readdown` |
 | S | Stats | H-compact + one row of 3 or 4 stats | centred | numerals | `cmp-process-stats` |
 | — | Announcement strip | `Section density="strip"` on tint: body-sm + one blue link; showcase only | — | — | `cmp-banner` |

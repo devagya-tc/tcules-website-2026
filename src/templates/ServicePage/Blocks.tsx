@@ -37,6 +37,7 @@ import type {
 } from '@/lib/service-story';
 
 import { Bridge, Matrix, Parts, Record, Slice, Spectrum } from './Diagrams';
+import { SetHeading } from './SetHeading';
 import { paragraph } from './text';
 import styles from './Blocks.module.css';
 
@@ -137,7 +138,8 @@ export function StepsBlock({ block }: { block: Of<'steps'> }) {
    four (§ 1.4 rule 8). A read-down set never exceeds six, so a longer ledger is a grid of tiles
    (the set reads across, two or three up), and a story that hits it should be cut to the six that
    matter. A numbered ledger keeps ListCard's numbered rows. A ledger with a heading names its set
-   with an h3 over it. A tile set's rows sit a `stack` apart, block to block (fix round 2: they were
+   with SetHeading over it — the h3 role, always a step above the item titles (owner, 7 Oct 2026:
+   the h5 heading sat under h4 rows), the items `h4` beneath it. A tile set's rows sit a `stack` apart, block to block (fix round 2: they were
    `column`, 64, which on a phone put a column gutter between every stacked tile and ran the stress
    stat band to 1699 of 1700). A tile opens on its own rule, so 48 still reads as the next object. */
 const READ_DOWN_MAX = 6;
@@ -177,6 +179,7 @@ export function Ledger({ block }: { block: Of<'ledger'> }) {
   ) : (
     <ReadDown
       columns={block.items.length > 3 ? 2 : 1}
+      titleAs={block.heading ? 'h4' : 'h3'}
       rows={block.items.map((item) => ({
         title: item.title,
         body: item.body || undefined,
@@ -187,7 +190,7 @@ export function Ledger({ block }: { block: Of<'ledger'> }) {
   if (!block.heading) return rows;
   return (
     <Layout rowGap="block">
-      <h3 className={styles.setHeading}>{block.heading}</h3>
+      <SetHeading>{block.heading}</SetHeading>
       {rows}
     </Layout>
   );

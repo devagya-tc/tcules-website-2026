@@ -1,16 +1,16 @@
 /* ServicePage · diagrams.
 
    The six template-local E diagrams (visual-direction § 3.4 E): a scale (Spectrum), a check matrix
-   (Matrix), a sheet (Record), an orbit (Parts), a slice (Slice) and a bridge (Bridge). Each
+   (Matrix), a record (Record), an orbit (Parts), a slice (Slice) and a bridge (Bridge). Each
    is one service page's argument rather than a reusable unit, so it stays in the template; Thread
    was promoted to a pattern (cmp-process-stats) and its rules left this file on 6 Oct 2026. Colour
    from --svc-*, type from the composites, arrangement from Layout and Cluster. Positioned
    pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
 
-   No diagram boxes its text (owner ruling, fix round 2): the sheet is drawn with rules only, the
-   orbit is a drawing with nothing inside it, and the two tables (Spectrum, Matrix) take DataTable's
-   `ruled` frame. The only grounds are data marks — a live bar, a built cell, a filled slot — never
-   a panel behind copy.
+   No diagram boxes its text (owner ruling, fix round 2) — but TABLES ARE BOXED (owner, 7 Oct
+   2026): the three tables (Spectrum, Matrix, Record) take DataTable's frame, which is the table's
+   own. Outside a table the only grounds are data marks — a live bar, a built cell, a filled slot —
+   never a panel behind copy.
 
    Every mark here says something (30 Sep 2026 review): the orbit says the operating model is the
    loop that keeps the four parts current; the paired grids say a release is one path built through
@@ -51,48 +51,6 @@
 .markNo {
   display: block;
   color: var(--svc-ink-quiet);
-}
-
-/* ── Record: a sheet drawn with rules ────────────────────────────────────────────
-   No ground and no outer border (page-product-design fix round 2, owner ruling: no boxes around text
-   content). The sheet is said by its rules alone: the head closes on the strong rule, every field
-   closes on a hairline, and the last hairline closes the sheet. Paired from 1024, the two columns
-   sit a `column` apart (Diagrams.tsx), so no seam rule is needed between them. */
-.sheet {
-  color: var(--svc-ink);
-}
-
-.sheetHead {
-  padding-block-end: var(--gap-block);
-  border-block-end: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
-}
-
-.sheetTitle {
-  font: var(--text-h4);
-  letter-spacing: var(--text-h4-tracking);
-  color: var(--svc-ink);
-}
-
-.sheetRow {
-  padding-block: var(--gap-text);
-  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
-}
-
-.sheetField {
-  font: var(--text-ui);
-  letter-spacing: var(--text-ui-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--svc-ink-label);
-}
-
-/* The question is the record's content; the field name is its key. So the question takes a heading
-   role (h5, 22) and the key stays the quiet mono label above it — it was h6, 18, barely above body
-   and quieter than the mono over it (1 Oct 2026). */
-.sheetQuestion {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
-  text-wrap: var(--text-running-wrap);
-  color: var(--svc-ink);
 }
 
 /* ── Parts: four parts in one orbit ──────────────────────────────────────────────────
@@ -251,12 +209,6 @@
 .sliceResult {
   padding-block-start: var(--gap-tight);
   border-block-start: var(--svc-rule-width) solid var(--svc-rule-strong);
-}
-
-.levelsLabel {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
-  color: var(--svc-ink);
 }
 
 /* ── Bridge: three states ────────────────────────────────────────────────────────

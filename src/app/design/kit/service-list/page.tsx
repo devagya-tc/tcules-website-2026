@@ -48,7 +48,7 @@ import t from '../../_specimen/typeroles.module.css';
  * router — the one place on the page where a band meets a different ground. It starts 56 under the
  * cards' last line; never behind cards or rows, never in the Slider. The hero carries none.
  *
- * Band order alternates the head and the ground (beside · centred · beside on tint · H-row · beside
+ * Band order alternates the head and the ground (beside · centred · beside on tint · stacked · beside
  * mirrored · start, as a rail) so no two bands are the same rectangle, which is the squint test
  * (§ 8.5) applied to the specimen. The two image routers differ by shape as well as head: three whole
  * cards under a display head, then six on a rail that runs off the page's end edge.
@@ -482,13 +482,12 @@ export default function ServiceListKitSpecimen() {
         </Layout>
       </ContentSection>
 
-      {/* ── 04 · C-image-4, H-row, per-card CTA ────────────────────────────────────────────── */}
+      {/* ── 04 · C-image-4, stacked head, per-card CTA ───────────────────────────────────── */}
       {/* Four across at 286, h5 over body-sm, lead="none" so no audit looks recommended. Each card
           names its destination in a blue link pinned to its foot, so the four links share a line.
           The studio's own photographs. */}
       <Title id="image-four" />
       <ContentSection
-        arrangement="split-head"
         data-band="C-image"
         eyebrow="Fixed-scope audits"
         heading="Start smaller, with an audit"

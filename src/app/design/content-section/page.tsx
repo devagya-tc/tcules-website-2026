@@ -134,8 +134,8 @@ const TABLE: DataTableProps = {
 
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
 
-/* The two arrangements the comparison rows show side by side. Not every arrangement: `split-head`
-   and `media` have sections of their own (11 to 14), because what goes in their bodies differs. */
+/* The two arrangements the comparison rows show side by side. `media` has a section of its own
+   (14), because what goes in its body differs. */
 const PAIR = ['stacked', 'beside'] as const;
 type Pair = (typeof PAIR)[number];
 
@@ -401,25 +401,24 @@ export default function ContentSectionSpecimen() {
             One CMS section as one band: an optional eyebrow, heading and lead, the head&rsquo;s
             own actions or aside, then the blocks and a foot. The gap ladder is the reason it
             exists — 24 eyebrow to heading to lead, 48 lead to actions, head to aside, head to
-            body, block to block and body to footer, 96 across every split. Four arrangements:{' '}
+            body, block to block and body to footer, 96 across every split. Three arrangements:{' '}
             <code>stacked</code> (the default), <code>beside</code> (1 : 2 from 1024, the head
-            static, an aside or actions in its track), <code>split-head</code> (the H-row: title
-            1, lead and actions 2, the body full column beneath) and <code>media</code> (a 4:5
-            photograph in 5 of [5, 7] beside the copy, 4:3 above it below 1024). One alignment
-            axis: <code>align=&quot;center&quot;</code> centres a stacked head and its body as a
-            block. Below 1024 every arrangement is one column in DOM order.
+            static, an aside or actions in its track) and <code>media</code> (a 4:5 photograph
+            in 5 of [5, 7] beside the copy, 4:3 above it below 1024). A text-only head is never
+            split left/right: <code>split-head</code> (the H-row) was retired on 7 Oct 2026. One
+            alignment axis: <code>align=&quot;center&quot;</code> centres a stacked head and its
+            body as a block. Below 1024 every arrangement is one column in DOM order.
           </p>
         </Layout>
       </Section>
 
       {/* ── 1 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Label title="1 · The four arrangements, same head">
-        One head, four arrangements, each with the body it is for. Stacked puts the head over a
+      <Label title="1 · The three arrangements, same head">
+        One head, three arrangements, each with the body it is for. Stacked puts the head over a
         card set. Beside puts it in the leading third, static, over rows — a set that reads
-        across never goes beside (§ 1.4 rule 5). Split-head turns the head into one row under
-        its eyebrow, heading left and lead and actions right, with the set full column beneath
-        (the H-row). Media sets the copy beside a 4:5 photograph, centred on it because the copy
-        does not end in an action. Resize below 1024 and all four are one column.
+        across never goes beside (§ 1.4 rule 5). Media sets the copy beside a 4:5 photograph,
+        centred on it because the copy does not end in an action. Resize below 1024 and all
+        three are one column.
       </Label>
       {PAIR.map((arrangement) => (
         <ContentSection
@@ -436,16 +435,6 @@ export default function ContentSectionSpecimen() {
           {pairBody(arrangement)}
         </ContentSection>
       ))}
-      <ContentSection
-        arrangement="split-head"
-        eyebrow='arrangement="split-head"'
-        heading="Where products slow down"
-        headingId="csec-compare-split-head"
-        lead={LEAD}
-        actions={<CtaRow actions={[SEE_WORK]} rule={false} />}
-      >
-        <Cards />
-      </ContentSection>
       <ContentSection
         arrangement="media"
         media={{ head: 'title', image: photo('studio-sticky-board-ux') }}
@@ -980,17 +969,17 @@ export default function ContentSectionSpecimen() {
       </FoldExempt>
 
       {/* ── 13 ─────────────────────────────────────────────────────────────────────────────── */}
-      <Label title='13 · arrangement="split-head" (the H-row)'>
-        The head becomes one row from 1024 under its eyebrow: the heading in the leading third,
-        lead and actions in the trailing two-thirds, 96 apart, top edges level. The body runs
-        the full column under it, which is what a three-up set wants. Below 1024 it is the
-        stacked head exactly (eyebrow → heading → lead 24, lead → actions 48). With only a title
-        there is nothing for the trailing track, and the head is stacked. Tint rows are surface
-        proof — on pages, tint is the proof band only (§ 1.7).
+      <Label title="13 · A text-only head is one column (split-head retired)">
+        The H-row — heading in the leading third, lead and actions in the trailing two-thirds —
+        was retired on 7 Oct 2026 (owner): with no image beside it the reading order was unclear
+        and the action floated in a mostly empty track. A head with no media is eyebrow →
+        heading → lead 24, lead → actions 48, in one column over a full-column body; side by
+        side survives only where one side is media (14, and the aside in 8 to 12). These are the
+        bands that took the H-row, as they read now. Tint rows are surface proof — on pages,
+        tint is the proof band only (§ 1.7).
       </Label>
       <ContentSection
-        arrangement="split-head"
-        eyebrow="H-row · with an action"
+        eyebrow="Stacked · with an action"
         heading="What we do"
         headingId="csec-split-action"
         lead="Product design, design systems and the engineering that ships them, as one team."
@@ -1001,9 +990,8 @@ export default function ContentSectionSpecimen() {
         <Cards />
       </ContentSection>
       <ContentSection
-        arrangement="split-head"
         surface="tint"
-        eyebrow="H-row · lead only, and a footer"
+        eyebrow="Stacked · lead only, and a footer"
         heading="Three places products slow down"
         headingId="csec-split-lead"
         lead={LEAD}
@@ -1018,8 +1006,7 @@ export default function ContentSectionSpecimen() {
       </ContentSection>
       <FoldExempt reason={OVER_BUDGET}>
         <ContentSection
-          arrangement="split-head"
-          eyebrow="H-row · longest copy"
+          eyebrow="Stacked · longest copy"
           heading={HEADING_LONG}
           headingId="csec-split-long"
           lead={LEAD_LONG}
@@ -1030,14 +1017,6 @@ export default function ContentSectionSpecimen() {
           <Cards />
         </ContentSection>
       </FoldExempt>
-      <ContentSection
-        arrangement="split-head"
-        eyebrow="H-row · title only — degrades to stacked"
-        heading="Nothing for the trailing track"
-        headingId="csec-split-degrade"
-      >
-        <Cards />
-      </ContentSection>
 
       {/* ── 14 ─────────────────────────────────────────────────────────────────────────────── */}
       <Label title='14 · arrangement="media" (the B split)'>
@@ -1190,8 +1169,8 @@ export default function ContentSectionSpecimen() {
       {/* ── 15 ─────────────────────────────────────────────────────────────────────────────── */}
       <Label title="15 · Footer in every arrangement, and footer alone">
         The footer is the body&rsquo;s last row, a stack under the blocks, in every arrangement
-        (sections 11 to 14 show it centred, beside, split-head and media). Stacked here, and
-        beside with a footer and no blocks — a degrade case, not a page shape: a footer is not a
+        (sections 11 to 14 show it centred, beside, stacked and media). Stacked here, and beside
+        with a footer and no blocks — a degrade case, not a page shape: a footer is not a
         trailing half on its own (a lone CtaRow level with the eyebrow over an empty two-thirds
         track), so the band is the stacked band, the footer a stack under the head. With no
         blocks the foot passes rule=&#123;false&#125;: its hairline marks where a body ends, and

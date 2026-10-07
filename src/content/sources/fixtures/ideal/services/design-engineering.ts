@@ -19,7 +19,8 @@ const AUDIT = {
  *   hero        the claim
  *   pressures   four pressures code meets that a static screen never does — B, beside a hand over a
  *               sketched screen (fix round 2: a portrait source, so the 4:5 crop keeps its subject)
- *   evidence    what only running code can settle — E, the Record under the H-row
+ *   evidence    what only running code can settle — E, the Record as a boxed table under a stacked
+ *               head (7 Oct 2026, owner: tables are boxed; the H-row is retired)
  *   slice       a slice of the product, running — I, the page's one full-width photograph (fix
  *               round 2: the page had no large image; the evidence band's deep link moved here)
  *   outputs     four kinds of output, each declared before it is built — F, beside the sketches
@@ -115,8 +116,8 @@ export const designEngineering: ServiceStory = {
       blocks: [
         {
           kind: 'record',
-          meta: 'Needs running code',
           title: 'What a screen leaves open',
+          columns: { field: 'Left open', question: 'What only running code settles' },
           items: [
             {
               field: 'Narrow widths and zoom',

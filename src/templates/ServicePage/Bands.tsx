@@ -230,54 +230,38 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
       );
     }
 
-    /* G — the proof band, the page's one tint band (§ 1.7). */
-    case 'G':
-      /* With a lead, the H-row (fix round 2): the head beside its lead, so the case and the quote
-         — the band's large things — keep the ~70 a stacked head spent. Stacked, the stress proof
-         band ran to 823 of 830, no headroom for a fixture a line longer. */
-      if (section.lead) {
-        return (
-          <ContentSection
-            {...head}
-            footer={undefined}
-            surface="tint"
-            arrangement="split-head"
-            actions={
-              section.more ? <CtaRow rule={false} actions={[section.more]} /> : undefined
-            }
-          >
-            {section.blocks.map((block, index) => (
-              <Fragment key={index}>
-                <StoryBlockView block={block} labels={ctx.labels} slots={ctx.slots} />
-              </Fragment>
-            ))}
-          </ContentSection>
-        );
-      }
-      {
-        const proofBlocks = section.blocks.map((block, index) => (
-          <Fragment key={index}>
-            <StoryBlockView block={block} labels={ctx.labels} slots={ctx.slots} />
-          </Fragment>
-        ));
-        /* Centred where the plan centred it: the typographic quote under its head (plan § 3.5). */
-        return band.centred ? (
-          <ContentSection {...head} surface="tint" align="center">
-            {proofBlocks}
-          </ContentSection>
-        ) : (
-          <ContentSection {...head} surface="tint">
-            {proofBlocks}
-          </ContentSection>
-        );
-      }
+    /* G — the proof band, the page's one tint band (§ 1.7). A typographic quote centres its head
+       with it (plan § 3.5), the `more` link its foot; a G with a case keeps the start edge, the link
+       closing the head under the lead. Never the H-row: a text-only head is one column (owner,
+       7 Oct 2026). */
+    case 'G': {
+      const proofBlocks = section.blocks.map((block, index) => (
+        <Fragment key={index}>
+          <StoryBlockView block={block} labels={ctx.labels} slots={ctx.slots} />
+        </Fragment>
+      ));
+      return band.centred ? (
+        <ContentSection {...head} surface="tint" align="center">
+          {proofBlocks}
+        </ContentSection>
+      ) : (
+        <ContentSection
+          {...head}
+          footer={undefined}
+          surface="tint"
+          actions={section.more ? <CtaRow rule={false} actions={[section.more]} /> : undefined}
+        >
+          {proofBlocks}
+        </ContentSection>
+      );
+    }
 
     default:
       break;
   }
 
   /* Everything else is a stacked band — centred or start-aligned as planned — with every block in
-     order: E (a diagram), H (marks), M (covers, under the H-row), N (the contrast pair), D-faq,
+     order: E (a diagram), H (marks), M (covers), N (the contrast pair), D-faq,
      C-text. A centred
      thread centres its stages on their tracks, so the rail sits on the head's axis. */
   const blocks = section.blocks.map((block, index) => (
@@ -300,16 +284,15 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
       </ContentSection>
     );
   }
-  /* A diagram under the H-row (plan `headRow`): the heading beside its lead, so the diagram — the
-     band's large thing — keeps the height a stacked head would have spent (§ 3.4 E). */
-  if (band.headRow) {
-    /* Its `more` link closes the lead in the H-row's trailing track rather than opening a foot under
-       the diagram: beside the heading it costs ~20, under the diagram a rule and a row (~100). */
+  /* A full-column body (a diagram, a set of covers) under a stacked head (plan `moreInHead`): the
+     `more` link closes the head, a `stack` under the lead, rather than opening a ruled foot under
+     the body — under the diagram a rule and a row cost ~100 of the band's fold. The head is one
+     column: eyebrow → heading → lead → action (owner, 7 Oct 2026, retiring the H-row). */
+  if (band.moreInHead) {
     return (
       <ContentSection
         {...head}
         footer={undefined}
-        arrangement="split-head"
         texture={texture}
         actions={section.more ? <CtaRow rule={false} actions={[section.more]} /> : undefined}
       >
@@ -365,14 +348,14 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
     const { statement } = band;
     /* J — one sentence at the display role, the page's display-scale moment, with the link that
        says where the claim is shown in full (§ 3.4 J). Centred across the full measure where the
-       plan centred it, so it breaks the 1/3 line the beside bands share; the `corner` field when the
-       plan spent the texture here. */
+       plan centred it, else on the start edge with its eyebrow directly above it; the `corner`
+       field when the plan spent the texture here. */
     return (
       <Statement
         id={statement.id}
         eyebrow={statement.eyebrow}
         size="display"
-        align={band.centred ? 'center' : 'split'}
+        align={band.centred ? 'center' : 'start'}
         texture={band.corner ? 'corner' : undefined}
         actions={
           statement.action ? <CtaRow rule={false} actions={[statement.action]} /> : undefined
@@ -383,8 +366,8 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
     );
   }
 
-  /* I — the banner: an H-row over the page's 3:1 photograph (§ 3.4 I). Without a photograph there
-     is no banner to show, so the band is the head and its link. */
+  /* I — the banner: a stacked head over the page's 3:1 photograph (§ 3.4 I). Without a photograph
+     there is no banner to show, so the band is the head and its link, in one column. */
   const { banner } = band;
   const action = <CtaRow rule={false} actions={[banner.action]} />;
   if (!band.photo) {
@@ -394,7 +377,6 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
         heading={banner.heading}
         headingId={banner.id}
         lead={banner.lead}
-        arrangement="split-head"
         actions={action}
         data-band="I"
       />

@@ -42,10 +42,10 @@ type ReadDownBase = {
  * 1440 with three rows: half the band, the mass the references give an image (Meridian's
  * deliverables split), where round 1's 349 portrait read as a third equal column.
  *
- * PLACE IT UNDER ContentSection `split-head`. That head splits [1, 2] at 96 from 1024 too, so the
- * two halves are one grid: the heading over the rows, the lead over the photograph, and no empty
- * head track under a short lead (round 1's 290 hole). Under `stacked` it reads the same with the
- * head above both. Never under `beside`: the set would split again inside the two-thirds track.
+ * PLACE IT UNDER A STACKED ContentSection head, which sits above both halves (`split-head`, the
+ * H-row that put the heading over the rows and the lead over the photo, was retired on 7 Oct 2026:
+ * a text-only head is never split left/right). Never under `beside`: the set would split again
+ * inside the two-thirds track.
  *
  * Exactly three rows, `sm` (h5) in the 381 track. Fewer and the photo becomes a letterbox (two rows
  * stretch a 763 photo to ~290, 2.6 : 1), more and the band passes the fold. Below 1024 the photo sits

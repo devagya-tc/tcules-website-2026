@@ -33,6 +33,17 @@ import t from '../../_specimen/typeroles.module.css';
 
 const photo = (id: PhotoId) => getKitPhoto(id);
 
+/* The ReadDown photo form was sized under the H-row (heading over the rows, lead over the photo).
+   With the H-row retired (owner, 7 Oct 2026: a text-only head is never split left/right) its head
+   stacks above both halves and the band measures ~860 at 1470 (it fits a 1440 x 900 screen, not the
+   830 fold). Re-sizing the form is ReadDown's own change; until then the three photo bands say so. */
+const STACKED_HEAD =
+  'ReadDown photo form under a stacked head (H-row retired 7 Oct 2026): ~860 at 1470, re-size pending';
+
+function FoldExempt({ reason, children }: { reason: string; children: ReactNode }) {
+  return <div data-fold-exempt={reason}>{children}</div>;
+}
+
 /**
  * A caption band: the variation's index and name in the head track, what to look for in the body
  * track, a hairline above. Tight, so the band beneath keeps its own air. Scaffolding.
@@ -315,49 +326,51 @@ export default function KitReaddownPage() {
 
       {/* ── D · one column, photo aside ───────────────────────────────────────────────── */}
       <Caption id="d-photo" index="D.1" title="One column, photo, three rows">
-        The photograph is the band&rsquo;s large thing, so it takes the wide track: the head
-        splits into the heading and the lead, and the body splits on the same line, the rows
-        under the heading and the photo under the lead, the rows&rsquo; own height. Both start on
+        The photograph is the band&rsquo;s large thing, so it takes the wide track: the head is
+        stacked over the body (a text-only head never splits, owner 7 Oct 2026), and the body
+        splits, the rows beside the photo, the photo the rows&rsquo; own height. Both start on
         the first title&rsquo;s line and end on the last rule, from 1024 up. Each glyph is blue.
       </Caption>
-      <ContentSection
-        arrangement="split-head"
-        eyebrow="What you receive"
-        heading="What your team keeps"
-        headingId="kit-d-photo"
-        lead="Everything we make is built to outlast the engagement, and to be read by people who were not in the room."
-      >
-        <ReadDown rows={KEEP} photo={photo('whiteboard-pair-laptop')} />
-      </ContentSection>
+      <FoldExempt reason={STACKED_HEAD}>
+        <ContentSection
+          eyebrow="What you receive"
+          heading="What your team keeps"
+          headingId="kit-d-photo"
+          lead="Everything we make is built to outlast the engagement, and to be read by people who were not in the room."
+        >
+          <ReadDown rows={KEEP} photo={photo('whiteboard-pair-laptop')} />
+        </ContentSection>
+      </FoldExempt>
 
       {/* ── D · one column + CtaRow ───────────────────────────────────────────────────── */}
       <Caption id="d-cta" index="D.2" title="One column, three rows and a CtaRow">
         The photo form closed by a blue link a stack under the rows and the photograph, which
-        still end level on the last rule. The CtaRow&rsquo;s rule is off: the ladder&rsquo;s last
-        hairline already closes the body (§ 3.1). The foot is paid for with tight air, so the band
-        stays inside one viewport.
+        still end level on the last rule. The CtaRow&rsquo;s rule is off: the ladder&rsquo;s
+        last hairline already closes the body (§ 3.1). The foot is paid for with tight air, so
+        the band stays inside one viewport.
       </Caption>
-      <ContentSection
-        arrangement="split-head"
-        eyebrow="Product audit"
-        heading="What two weeks of audit covers"
-        headingId="kit-d-cta"
-        /* The foot costs 88 (stack + CtaRow); at standard air the band is 886. Tight air (64) pays
-           for it and lands at 822, under the fold, rather than cutting a row or the photo. */
-        density="tight"
-        lead="A fixed scope, a fixed fee, and a readout your whole team can act on the following Monday."
-        footer={
-          <CtaRow
-            rule={false}
-            actions={[
-              { label: 'See a sample readout', href: ROUTES.uxProductAudit },
-              { label: 'All audits', href: ROUTES.audits },
-            ]}
-          />
-        }
-      >
-        <ReadDown rows={AUDIT} photo={photo('pair-laptop-notebook')} />
-      </ContentSection>
+      <FoldExempt reason={STACKED_HEAD}>
+        <ContentSection
+          eyebrow="Product audit"
+          heading="What two weeks of audit covers"
+          headingId="kit-d-cta"
+          /* The foot costs 88 (stack + CtaRow); at standard air the band is 886. Tight air (64) pays
+             for it and lands at 822, under the fold, rather than cutting a row or the photo. */
+          density="tight"
+          lead="A fixed scope, a fixed fee, and a readout your whole team can act on the following Monday."
+          footer={
+            <CtaRow
+              rule={false}
+              actions={[
+                { label: 'See a sample readout', href: ROUTES.uxProductAudit },
+                { label: 'All audits', href: ROUTES.audits },
+              ]}
+            />
+          }
+        >
+          <ReadDown rows={AUDIT} photo={photo('pair-laptop-notebook')} />
+        </ContentSection>
+      </FoldExempt>
 
       {/* ── D · two columns, stat aside ───────────────────────────────────────────────── */}
       <Caption id="d-stat" index="D.3" title="Two columns, stat aside, six rows">
@@ -414,20 +427,21 @@ export default function KitReaddownPage() {
 
       {/* ── D · rail texture ──────────────────────────────────────────────────────────── */}
       <Caption id="d-rail" index="D.5" title="The photo form with the rail texture">
-        § 6.3 `rail`, hung off the photograph&rsquo;s end edge: one field of the Tcules grid that
-        starts under the image and runs into the margin, 220 wide, blur 120. It never passes
-        under a word, and it meets the photo at every width, so the grid reads as coming out from
-        behind the image. From 1440 only; at 390 the band renders without it.
+        § 6.3 `rail`, hung off the photograph&rsquo;s end edge: one field of the Tcules grid
+        that starts under the image and runs into the margin, 220 wide, blur 120. It never
+        passes under a word, and it meets the photo at every width, so the grid reads as coming
+        out from behind the image. From 1440 only; at 390 the band renders without it.
       </Caption>
-      <ContentSection
-        arrangement="split-head"
-        eyebrow="Design systems"
-        heading="What a system hands over"
-        headingId="kit-d-rail"
-        lead="Three parts, each one owned, versioned and written down, so the system outlives the project that built it."
-      >
-        <ReadDown rows={SYSTEM} photo={photo('wireframe-wall')} rail />
-      </ContentSection>
+      <FoldExempt reason={STACKED_HEAD}>
+        <ContentSection
+          eyebrow="Design systems"
+          heading="What a system hands over"
+          headingId="kit-d-rail"
+          lead="Three parts, each one owned, versioned and written down, so the system outlives the project that built it."
+        >
+          <ReadDown rows={SYSTEM} photo={photo('wireframe-wall')} rail />
+        </ContentSection>
+      </FoldExempt>
 
       {/* ── D-faq · seven ─────────────────────────────────────────────────────────────── */}
       <Caption id="faq-long" index="D-faq.1" title="Five questions, centred">

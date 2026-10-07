@@ -8,8 +8,8 @@ import { specimenStyles as s } from '../_specimen/Specimen';
 
 /**
  * Statement — the proving ground. Coverage beside the family page (/design/kit/banner): both
- * elements, both textures, an action, absent eyebrow, the 3-line ceiling, the display size, the
- * centred alignment, and three surfaces.
+ * elements, both textures, an action, absent eyebrow, the 3-line ceiling, the display size, both
+ * alignments (start and centre — the split form was retired 7 Oct 2026), and three surfaces.
  */
 
 const SENTENCE =
@@ -22,7 +22,7 @@ const SURFACES: readonly ShownSurface[] = ['paper', 'tint', 'ink'];
 const SURFACE_NOTE: Record<ShownSurface, string> = {
   paper: 'Paper, the page ground.',
   tint: 'Surface proof — on pages, tint is the proof band only (§ 1.7).',
-  ink: 'Surface proof — the mark lifts to brandeis-300 on ink.',
+  ink: 'Surface proof — the eyebrow lifts to neutral-400 on ink.',
 };
 
 function Label({ title, children }: { title: string; children: ReactNode }) {
@@ -44,12 +44,13 @@ export default function StatementSpecimen() {
           <h1>Statement</h1>
           <p className={s.specNote}>
             The J band: one sentence at the h1 role on an <code>h2</code> (default) or a{' '}
-            <code>p</code>, never an h1. [1, 2] from 1024: eyebrow and a short blue mark in the
-            head track, the sentence in the two-thirds track. Open density (128). Optional
-            head-half texture (paper, from 1024) and one optional action. ≤ 14 words, ≤ 3 lines.
-            Two variations for a page&rsquo;s display-scale moment:{' '}
-            <code>size=&quot;display&quot;</code> and <code>align=&quot;center&quot;</code> with
-            the <code>corner</code> texture.
+            <code>p</code>, never an h1. One column at every width: the eyebrow directly above the
+            sentence (a block, 24), start-aligned by default or centred with{' '}
+            <code>align=&quot;center&quot;</code>. The split form — eyebrow alone in a one-third
+            track — is retired (owner, 7 Oct 2026): the label belongs on the thing it labels. Open
+            density (128). Optional texture (paper, from 1024) and one optional action. ≤ 14
+            words, ≤ 3 lines. For a page&rsquo;s display-scale moment,{' '}
+            <code>size=&quot;display&quot;</code>, with the <code>corner</code> texture.
           </p>
         </Layout>
       </Section>
@@ -86,8 +87,8 @@ export default function StatementSpecimen() {
       </Statement>
 
       <Label title="3 · absent eyebrow, and the ceiling">
-        Without an eyebrow the head track is empty: the mark leads its label and goes with it.
-        Then 14 words, the § 1.5 ceiling, on 3 lines.
+        Without an eyebrow the sentence opens the band on its own; nothing holds its place. Then
+        14 words, the § 1.5 ceiling, on 3 lines.
       </Label>
       <Statement id="stmt-no-eyebrow">
         Good products are mostly decisions, made early, kept.
@@ -97,16 +98,31 @@ export default function StatementSpecimen() {
       </Statement>
 
       <Label title='4 · size="display"'>
-        The sentence at the display role, the hero&rsquo;s, in the split: for the one J a page
-        spends as its display-scale moment. Measure --stmt-sentence-measure-display.
+        The sentence at the display role, the hero&rsquo;s, on the start edge: for the one J a
+        page spends as its display-scale moment. Measure --stmt-sentence-measure-display. Then
+        the service page&rsquo;s start form: display, the corner field and the link.
       </Label>
       <Statement eyebrow="How we work" id="stmt-display" size="display">
         One accountable team, from the first question to the shipped build.
       </Statement>
+      <Statement
+        eyebrow="AI-assisted engineering"
+        id="stmt-display-start"
+        size="display"
+        texture="corner"
+        actions={
+          <CtaRow
+            actions={[{ label: 'See how we work', href: ROUTES.howWeWork }]}
+            rule={false}
+          />
+        }
+      >
+        Production responsibility does not move to the model.
+      </Statement>
 
       <Label title='5 · align="center", texture="corner"'>
-        One column on the band&rsquo;s axis at every width — the service page&rsquo;s J, between
-        beside bands that already start on the 1/3 line. The corner field sits in the top-end
+        One column on the band&rsquo;s axis at every width — the service page&rsquo;s J where
+        neither neighbour is centred. The corner field sits in the top-end
         corner from 1024, clear of the eyebrow; below 1024 the corner is not drawn. Then the same without an action.
       </Label>
       <Statement

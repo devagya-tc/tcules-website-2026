@@ -1,7 +1,7 @@
 /* ══ Component layer — Statement ═════════════════════════════════════════════════
-   Tier 2. The J statement (visual-direction § 3.4): one sentence at the h1 ROLE, set in the
-   two-thirds track, with its eyebrow in the head track. Built by cmp-banner,
-   6 Oct 2026, to docs/specs/Statement.md.
+   Tier 2. The J statement (visual-direction § 3.4): one sentence at the h1 ROLE, its eyebrow
+   directly above it in one column, start-aligned or centred (the [1, 2] split form was retired,
+   owner, 7 Oct 2026). Built by cmp-banner, 6 Oct 2026, to docs/specs/Statement.md.
 
    Naming: --stmt-{part}-{role}
      parts  eyebrow · sentence
@@ -20,9 +20,8 @@
   /* The h1 ROLE on an h2 or a p (§ 3.4: the page's only <h1> is the hero's). */
   --stmt-sentence-text: var(--text-h1);
   --stmt-sentence-tracking: var(--text-h1-tracking);
-  /* A ceiling, not a width. In the 763 track (the column caps at 1240) 32ch at 54 is ~860, so the
-     track wins from 1024; it binds only in the one-column layout from 768 to 1023, where the
-     sentence would otherwise run the whole column in two long lines. */
+  /* A ceiling, not a width: 32ch at 54 is ~860, so a start-aligned sentence breaks as a shape and
+     leaves the band's end open as air, rather than running the 1240 column in two long lines. */
   --stmt-sentence-measure: var(--measure-title);
   /* `size="display"` (page-product-design fix round 1, 7 Oct 2026): the display role, the hero's,
      on the display measure — for the page whose argument needs one sentence at the scale of its

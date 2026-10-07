@@ -52,13 +52,13 @@ export default function BannerSpecimen() {
         <Layout rowGap="block">
           <h1>Banner</h1>
           <p className={s.specNote}>
-            The I band and the announcement strip. Three forms: <code>below</code> (the H-row
-            over a 3:1 photograph, 3:2 below 1024), <code>beside</code> (a 3:2 photograph or an
-            illustration in 7 of [5, 7], the copy centred on it in 5) and <code>strip</code>{' '}
-            (one line of body-sm and one blue link at Section&rsquo;s <code>strip</code>{' '}
-            density). The banner is always <code>tight</code>. No frame on a photograph, radius
-            8, and no slot that could put type on the image. The family page is
-            /design/kit/banner.
+            The I band and the announcement strip. Three forms: <code>below</code> (a stacked
+            head over a 3:1 photograph, 3:2 below 1024), <code>beside</code> (a 3:2 photograph
+            or an illustration in 7 of [5, 7], the copy centred on it in 5) and{' '}
+            <code>strip</code> (one line of body-sm and one blue link at Section&rsquo;s{' '}
+            <code>strip</code> density). The banner is always <code>tight</code>. No frame on a
+            photograph, radius 8, and no slot that could put type on the image. The family page
+            is /design/kit/banner.
           </p>
         </Layout>
       </Section>

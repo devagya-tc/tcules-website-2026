@@ -1149,8 +1149,8 @@ title with the sentence under it.
   From 1024 the set splits `{ lg: [2, 1] }` at `section` (96) with `reverse`, so the photo (first in the
   DOM, for the phone's order) takes the trailing two thirds and the rows the leading third; `stretch`,
   so the photo runs the rows' height and starts and ends with them at every width from 1024. About
-  763 × 449 at 1440. Place it under ContentSection `split-head`, whose head splits [1, 2] at 96 too:
-  heading over rows, lead over photo, one grid. Exactly three rows (warned), `sm` in the 381 track,
+  763 × 449 at 1440. Place it under a stacked ContentSection head (`split-head`, whose head split [1, 2] over
+  the same grid, was retired 7 Oct 2026). Exactly three rows (warned), `sm` in the 381 track,
   bodies ≤ 12 words / two lines, so the band is 822 at 1470 (with a CtaRow, 822 at `density="tight"`).
   Below 1024 the photo sits above the rows at 3:2 (`--lcrd-readdown-photo-height-base`). The caller
   passes no ContentSection `aside`.

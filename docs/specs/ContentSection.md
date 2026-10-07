@@ -9,7 +9,7 @@
 | **Status** | approved — the `beside` arrangement implements ruling **O2** (`docs/phase-2-decisions.md`: head beside body is *static, not sticky, head 1 : body 2, from 1024 up*). No BLOCKING question is open (§17). |
 | **Token prefix** | `--csec-*` |
 | **File** | `tokens/components/content-section.css` |
-| **Designer / date** | Claude Code · 28 Sep 2026 (Phase 2 task 2.13) · **amended 29 Sep 2026 (tracker 2.17): the body measure** · **1 Oct 2026: the split seam (96), and `beside` reads down** · **5 Oct 2026 (`fdn-spacing`, S1): one head rhythm at 24** · **6 Oct 2026 (`fdn-section-head`): `align`, `aside`, `actions`, `footer`, `split-head`, `media`** |
+| **Designer / date** | Claude Code · 28 Sep 2026 (Phase 2 task 2.13) · **amended 29 Sep 2026 (tracker 2.17): the body measure** · **1 Oct 2026: the split seam (96), and `beside` reads down** · **5 Oct 2026 (`fdn-spacing`, S1): one head rhythm at 24** · **6 Oct 2026 (`fdn-section-head`): `align`, `aside`, `actions`, `footer`, `split-head`, `media`** · **7 Oct 2026 (owner): `split-head` removed** |
 | **Implements** | `docs/briefs/07-content-section.md` (the band every long page is made of) · `docs/component-audit.md` §3 ContentSection: *"Extend. Add a head arrangement: head beside body ([1,2] from lg), as well as head above."* · ruling O2 |
 | **Implemented at** | `src/patterns/ContentSection/` · `src/styles/tokens/components/content-section.css` · specimen `src/app/design/content-section/page.tsx` · the foot it is usually handed: `src/patterns/CtaRow/` (`docs/specs/CtaRow.md`) |
 
@@ -88,7 +88,7 @@ thing that stops those five reading as one repeated shape is an arrangement, not
 > - **A degraded `beside` drops its `aside`** (fix round). The aside belongs to the head track, and a
 >   degraded band has none: set full column at 1240 a 3:2 photo is ~827 tall (past the fold alone),
 >   and the `HEAD_TRACK` sizes it was placed at serve a 381-wide file, upscaled.
-> - **`arrangement="split-head"`** (the H-row, § 1.4). The eyebrow keeps its own row; under it the
+> - **`arrangement="split-head"`** (the H-row, § 1.4) — *removed 7 Oct 2026, see the last amendment.* The eyebrow keeps its own row; under it the
 >   heading sits in the leading third and the lead (and actions) in the trailing two-thirds, [1, 2]
 >   from 1024 at `section` (96), **top-aligned**; the body runs the full column beneath at `stack`.
 >   Below 1024 every seam is the stacked head's. With no heading, or with neither lead nor actions, it
@@ -207,7 +207,7 @@ are arrangement, and arrangement is `Layout`'s.
 | `lead` | `string` | — | One sentence under the heading. |
 | `surface` | `SectionSurface` = `'paper' \| 'tint' \| 'ink' \| 'blue'` | Section's default (paper) | Passed straight to `Section`. This component paints nothing. |
 | `density` | `SectionDensity` = `'tight' \| 'open'` | Section's default | Vertical air, passed to `Section`. |
-| `arrangement` | `ContentSectionArrangement` = `'stacked' \| 'beside' \| 'split-head' \| 'media'` | `'stacked'` | Where the head sits against the body. `beside` new in 2.13; `split-head` and `media` new 6 Oct 2026. |
+| `arrangement` | `ContentSectionArrangement` = `'stacked' \| 'beside' \| 'media'` | `'stacked'` | Where the head sits against the body. `beside` new in 2.13; `media` new 6 Oct 2026. (`split-head`, new 6 Oct, removed 7 Oct 2026 — see the last amendment.) |
 | `align` | `ContentSectionAlign` = `'start' \| 'center'` | `'start'` | **6 Oct.** Centred head and centred-as-a-block body (§ 3.5). Stacked only. |
 | `actions` | `ReactNode` | — | **6 Oct.** The head's action row (a `CtaRow rule={false}`), a stack under the lead. Not with `align="center"`, not with `aside`. |
 | `aside` | `ReactNode` | — | **6 Oct.** `beside` only: the head track's photo (3:2) or stat, a stack under the head text. |
@@ -476,15 +476,15 @@ route. Labelling bands (tight, paper) separate the groups.
 12. **6 Oct.** `beside` with an aside (photo, C-icon-4 with a footer; photo, D rows; one stat-lg
     figure, D rows, at ordinary copy and at the § 1.5 ceiling), with actions (C-pair), and CMS stress
     copy with a photo aside (fold-exempt).
-13. **6 Oct.** `split-head`: with an action, lead only with a footer, the longest copy, and title only
-    (degrades to stacked).
+13. **7 Oct.** The bands that took `split-head`, as they read stacked now: with an action, lead only
+    with a footer, and the longest copy (`split-head` removed — see the last amendment).
 14. **6 Oct.** `media`: photo start + 4 tiles (centred), photo end + 2 tiles + CtaRow pinned beside
     the identical band with `media.pin: false` (the owner comparison), no blocks + CtaRow (centred,
     rule off, degrade case), head actions and no blocks (centred, degrade case), copy at the B ceiling
     with 2 tiles + CtaRow (fits), and CMS stress copy taller than the photo (fold-exempt).
 15. **6 Oct.** Footer under a stacked set; a footer and no blocks under `beside` (degrades to stacked,
     rule off).
-Section 1 now shows all four arrangements with the body each is for.
+Section 1 now shows all three arrangements with the body each is for.
 
 No states to force. `beside` cannot be forced inside a narrow frame at a wide window (a frame
 cannot fire a media query), so the 390 capture of the whole page is the proof that `beside`
@@ -622,3 +622,34 @@ LAYOUT, TYPE, SEMANTICS
   work"). 5 of 12 is 360, which holds the same heads to two lines. The arrangement changes at a
   breakpoint; no distance does. Every 1440+ measurement above is unchanged.
 - `--csec-eyebrow-accent-ink` is gone (see the struck line in the media amendment).
+
+## Amendment · 7 Oct 2026 — owner design review: `split-head` removed
+
+**The rule.** A head with no image beside it is never split left/right. It is ONE column: eyebrow →
+heading → lead at `block` (24), the head's action a `stack` (48) under the lead, then the body.
+Side by side survives only where one side is media — `media` (the photograph beside the copy) and
+`beside` with an aside — and in `beside` over a read-down body, where the split is head | body rather
+than heading | lead. Recorded in `docs/kit/visual-direction.md`, "Owner rulings · 7 Oct 2026", rule 2.
+
+**Why.** `split-head` (the H-row) put the heading in the leading third and the lead and action in the
+trailing two-thirds. With no image, the reading order was unclear (heading, then across, then down)
+and the one-link action floated in a mostly empty two-thirds track.
+
+**Removed, not made media-only.** A media-only split-head would be `media` or `beside` + aside under
+another name, so the arrangement is deleted from the union: `'stacked' | 'beside' | 'media'`. Passing
+`arrangement="split-head"` is now a type error, so no caller can reintroduce it.
+
+**Call sites migrated** (all to `stacked`, the action kept as the head's `actions` under the lead):
+- `ServicePage` (`Bands.tsx`): the E diagram and M covers bands (plan `headRow` → `moreInHead`: the
+  `more` link closes the stacked head rather than opening a ruled foot), the G proof band with a lead
+  (a typographic quote now centres its head with it, the link its foot; a G with a case keeps the
+  start edge and the head's link), and the I band without a photograph.
+- `Banner` `below`: the head stacks over the 3:1 photograph (its own H-row, same ruling).
+- Kit pages: home (C-image-3), about (C-image-4, S), feature (variations 3, 8, 13, 24), logos (05,
+  06), process (the flow), readdown (D.1, D.2, D.5), service-list (04), services-index (N).
+- Specimen § 13 rewritten: the same three bands, stacked.
+
+**Height.** The stacked head with a link is H-compact 169 + 48 + 40 = 257 against the H-row's 166, so
+a band that took the H-row is ~90 taller. Measured at 1440 on the six service pages after the change:
+the tallest bands are 819 (E with a five-row table, M with three covers) and 823 (I with its photo),
+all under the 830 fold.

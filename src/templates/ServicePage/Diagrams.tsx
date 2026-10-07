@@ -3,6 +3,7 @@ import { DataTable, ListCard } from '@/patterns';
 import type { StoryBlock } from '@/lib/service-story';
 
 import styles from './Diagrams.module.css';
+import { SetHeading } from './SetHeading';
 import { paragraph } from './text';
 
 type Of<K extends StoryBlock['kind']> = Extract<StoryBlock, { kind: K }>;
@@ -122,9 +123,8 @@ export function Spectrum({ block }: { block: Of<'spectrum'> }) {
   const last = items.length - 1;
   return (
     <DataTable
-      /* Ruled, not boxed (fix round 2): the spectrum is the band's diagram, and a boxed table with a
-         grey head row was a box around text content (owner ruling). */
-      frame="ruled"
+      /* Boxed: tables are boxed (owner, 7 Oct 2026). The ruled frame it took in fix round 2 read
+         dense and compact, rows running together with nothing to hold them. */
       /* The order, said once, when no meter shows it row by row: the story's own sentence. It was
          assembled here from the axis labels, lower-cased — which rewrote authored strings (an
          acronym or a name in an axis label came out wrong) and put template copy on the page. */
@@ -188,7 +188,6 @@ export function Matrix({ block }: { block: Of<'matrix'> }) {
 function MatrixTable({ block, rows }: { block: Of<'matrix'>; rows: Of<'matrix'>['rows'] }) {
   return (
     <DataTable
-      frame="ruled"
       keyColumn={{ heading: block.keyColumn }}
       columns={block.columns.map((heading) => ({ heading, behaviour: 'nowrap' as const }))}
       rows={rows.map((row) => ({
@@ -215,50 +214,42 @@ function MatrixTable({ block, rows }: { block: Of<'matrix'>; rows: Of<'matrix'>[
 }
 
 /* ── Record ───────────────────────────────────────────────────────────────────
-   A record with fields, drawn as the document it is: a head naming the record, and one row per
-   field — the field keyed in mono with its glyph ABOVE the question it holds, in serif. Stacked,
-   not side by side: a key and its question are one item, not two columns.
-   Drawn with rules only (fix round 2, 6 Oct 2026, owner ruling: no boxes around text content): the
-   head closes on the strong rule and every field on a hairline. It used to paint a ground inside a
-   full border, the one sheet in the template, and that box was a box around questions. */
-const RECORD_PAIRED_FROM = 4;
-/* Eight fields — four paired rows — is the most a record holds in its band with slack. */
+   A record with named fields — what it is for, then one row per field and the question it holds —
+   as a BOXED TABLE (owner, 7 Oct 2026: tables are boxed). It was a ruled sheet, the field keyed in
+   mono over its question, two columns of hairline rows; it read dense and compact, and what is a
+   key and its value across six or eight rows is a table. SetHeading names it (the h3 role, above
+   the table's h6 keys); the table's two columns are the story's `columns`.
+
+   Six fields or more set as two halves side by side from 1024, a `column` apart, each a table of
+   its own with its own head row (as the Matrix halves are): six rows in one table ran the stacked
+   evidence band past the fold, and three rows a half keep it a band. The order reads down the first
+   half, then the second. Below 1024 the halves stack, a `stack` apart. */
+const RECORD_SPLIT_FROM = 6;
+/* Eight fields — four rows a half — is the most a record holds in its band with slack. */
 const RECORD_MAX = 8;
 
 export function Record({ block }: { block: Of<'record'> }) {
   const items = capped(block.items, RECORD_MAX, 'record');
-  const paired = items.length >= RECORD_PAIRED_FROM;
+  const table = (rows: typeof items) => (
+    <DataTable
+      keyColumn={{ heading: block.columns.field }}
+      columns={[{ heading: block.columns.question }]}
+      rows={rows.map((item) => ({ header: item.field, cellsHtml: [paragraph(item.question)] }))}
+    />
+  );
+  const half = Math.ceil(items.length / 2);
   return (
-    <figure className={styles.sheet}>
-      {/* Stacked: what the record is for, then its name — a label over the thing it labels. It was
-          title left, mono meta right, the left/right pairing the owner rejected (1 Oct 2026). */}
-      <Layout as="figcaption" rowGap="tight" className={styles.sheetHead}>
-        <span className={styles.key}>{block.meta}</span>
-        <span className={styles.sheetTitle}>{block.title}</span>
-      </Layout>
-      {/* Four or more fields pair up from 1024, so the sheet is half as tall (fix round 1), the two
-          columns a `column` apart — two halves of one sheet that must read as separate lists. */}
-      <Layout
-        as="dl"
-        rowGap="none"
-        colGap={paired ? 'column' : undefined}
-        columns={paired ? { lg: 2 } : undefined}
-      >
-        {items.map((item) => (
-          <Layout key={item.field} rowGap="tight" className={styles.sheetRow}>
-            <dt className={styles.sheetField}>
-              <Cluster nowrap colGap="tight" align="center">
-                <span className={styles.icon} aria-hidden="true">
-                  <Icon name={item.icon} size="lg" />
-                </span>
-                <span>{item.field}</span>
-              </Cluster>
-            </dt>
-            <dd className={styles.sheetQuestion}>{item.question}</dd>
-          </Layout>
-        ))}
-      </Layout>
-    </figure>
+    <Layout rowGap="block">
+      <SetHeading>{block.title}</SetHeading>
+      {items.length >= RECORD_SPLIT_FROM ? (
+        <Layout columns={{ lg: 2 }} colGap="column" rowGap="stack" align="start">
+          {table(items.slice(0, half))}
+          {table(items.slice(half))}
+        </Layout>
+      ) : (
+        table(items)
+      )}
+    </Layout>
   );
 }
 
@@ -526,7 +517,7 @@ export function Slice({ block }: { block: Of<'slice'> }) {
       {block.levels && block.levels.length > 0 ? (
         <Layout rowGap="block">
           {block.levelsLabel ? (
-            <h3 className={styles.levelsLabel}>{block.levelsLabel}</h3>
+            <SetHeading>{block.levelsLabel}</SetHeading>
           ) : null}
           {/* Rows, the glyph beside the copy, side by side from md (fix round 1, 7 Oct 2026): as tiles
               with the glyph above, the three levels took ~250 of a band the two grids already fill,
