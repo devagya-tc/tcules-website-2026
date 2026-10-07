@@ -202,7 +202,15 @@ export function Ledger({ block }: { block: Of<'ledger'> }) {
    you there as its body — boxed (owner, 7 Oct 2026), so four to six destinations read as separate
    objects rather than one field of text. Without, the list router: linked ListCard rows. The
    non-service route (an audit) is the last item, for the reader who cannot name the condition. */
-export function Router({ block }: { block: Of<'router'> }) {
+export function Router({
+  block,
+  across = 2,
+}: {
+  block: Of<'router'>;
+  /** 2 in a body track (beside or split); 3 when the router's head stacks over it (image pass,
+      7 Oct 2026: a C-icon with no photograph), so six routes are two rows of three. */
+  across?: 2 | 3;
+}) {
   const all = [
     ...block.items.map((item) => ({ when: item.when, link: item.route, icon: item.icon })),
     ...(block.also ? [block.also] : []),
@@ -217,7 +225,7 @@ export function Router({ block }: { block: Of<'router'> }) {
     }));
     /* Stacked on a phone (`scroll="never"`): a router shows every route at once, never one and a
        fifth of six behind a gesture (fix round 1). */
-    return <BlockCardSet items={items} lead="none" across={2} scroll="never" frame="box" />;
+    return <BlockCardSet items={items} lead="none" across={across} scroll="never" frame="box" />;
   }
   const size = setSize(all.length, 'row');
   return (

@@ -27,7 +27,8 @@ import type {
  *   § 3.5  centred heads never sit in adjacent bands: a band that may go either way yields.
  *   § 3.2  consecutive beside-with-aside bands mirror (`headSide`), so two are never one rectangle.
  *   § 5.6  the page's photographs come from its slot table (SERVICE_PHOTO_SLOTS): B, I and K by role,
- *          the two head-track asides in page order, the router preferring `aside1`. K's frame follows
+ *          the head-track asides in page order, the router preferring `aside1`, D taking `aside2`;
+ *          F takes none and a page may name none (image pass, 7 Oct 2026). K's frame follows
  *          its photograph: landscape 3:2 where the master resolves at 667, else the portrait 4:5.
  *   § 6.4  the texture signature: `horizon` on the band directly above the tint proof band unless it
  *          ends in ruled rows, `closing` on L, and the third placement on the J statement — the
@@ -64,7 +65,7 @@ export type Archetype =
   | 'D' // read-down rows beside a head with an aside
   | 'D-faq' // a centred accordion
   | 'E' // a full-column diagram under a head
-  | 'F' // numbered steps beside a head with a photo aside
+  | 'F' // numbered steps beside a head (no photograph since the 7 Oct 2026 image pass)
   | 'G' // the proof band, on tint
   | 'H' // client marks
   | 'I' // the banner
@@ -246,9 +247,12 @@ export function planBands(story: ServiceStory): Band[] {
       photo = takeAside(0);
       const router = job(entry);
       split = router?.kind === 'router' && router.items.length + (router.also ? 1 : 0) === 4;
-    } else if (archetype === 'F' || archetype === 'D') {
+    } else if (archetype === 'D') {
       photo = takeAside(1);
     }
+    /* F takes no photograph (image pass, 7 Oct 2026): numbered steps are the band's shape, and a
+       stock photo beside them neither shows the method nor fits it. The head sits beside the steps
+       (a head | read-down split, which the 7 Oct ruling 2 keeps). */
     /* § 3.5: a G with no case beside its quote is the typographic band — the quote centred
        (Proof `align="center"`, "the typographic G band under a centred head") — so its head centres
        with it, lead or not (the H-row that took a lead is retired, 7 Oct 2026). A start head over a

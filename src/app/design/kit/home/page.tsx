@@ -433,17 +433,15 @@ export default async function KitHomePage() {
         </Layout>
       </ContentSection>
 
-      {/* 8 · F — the method, read down; the head and its photograph close the row at the END. */}
+      {/* 8 · F — the method, read down beside its head. No photograph (image pass, 7 Oct 2026): the
+          steps are the band's shape, and a stock room beside them showed nothing they do not say. */}
       <ContentSection
         data-band="F"
         arrangement="beside"
-        headSide="end"
         eyebrow="An engagement"
         heading="From first call to shipped build"
         headingId="home-method"
         lead="Each stage ends in something your team can read, question and push back on before the next begins."
-        asideFill
-        aside={<Media image={photo('workshop-brick-room')} fit="fill" sizes={HEAD_TRACK} />}
       >
         <Steps steps={STEPS} />
       </ContentSection>
