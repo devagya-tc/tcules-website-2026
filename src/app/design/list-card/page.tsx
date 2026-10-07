@@ -9,10 +9,26 @@ import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 /* ReadDown rows (specimen § 12): one long body against short ones, so the level rules can be seen. */
 const READ_DOWN: readonly ReadDownRow[] = [
-  { icon: 'layers', title: 'A product model', body: 'The objects, states and rules the product runs on, agreed once by everyone who builds on it.' },
-  { icon: 'document-text', title: 'A decision record', body: 'Every consequential call, with its evidence.' },
-  { icon: 'code', title: 'Coded prototypes', body: 'Working surfaces your team can open and test.' },
-  { icon: 'checklist', title: 'A ranked list of fixes', body: 'Each one costed and sequenced.' },
+  {
+    icon: 'layers',
+    title: 'A product model',
+    body: 'The objects, states and rules the product runs on, agreed once by everyone who builds on it.',
+  },
+  {
+    icon: 'document-text',
+    title: 'A decision record',
+    body: 'Every consequential call, with its evidence.',
+  },
+  {
+    icon: 'code',
+    title: 'Coded prototypes',
+    body: 'Working surfaces your team can open and test.',
+  },
+  {
+    icon: 'checklist',
+    title: 'A ranked list of fixes',
+    body: 'Each one costed and sequenced.',
+  },
 ];
 
 /* ── Thumbnail records ────────────────────────────────────────────────────────────
@@ -148,21 +164,49 @@ const LINKED = [
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
-    note: 'Neutral-900 title, marker and cue at rest, neutral-700 body; the cue takes brandeis-500 on hover and focus and 700 on press, and hover is also a neutral-100 ground.',
+    note: 'Neutral-900 title, blue marker and numeral at rest, neutral-700 body; a linked title takes brandeis-500 on hover and focus and 700 on press. A boxed tile: neutral-300 edge, paper-deep ground on hover, neutral-100 on press.',
   },
   {
     surface: 'tint',
-    note: 'The text and cue ramps still pass unchanged — the cue neutral-900 at rest, brandeis on hover; the decorative rule steps to neutral-400.',
+    note: 'The text and link ramps still pass unchanged; the rule and the box edge step to neutral-400, and a boxed tile hovers to neutral-100.',
   },
   {
     surface: 'ink',
-    note: 'Title, marker and the resting cue lift to white, body to neutral-300, and the cue goes 300 on hover, 50 on press.',
+    note: 'Title lifts to white, body to neutral-300, accent to brandeis-300 (a linked title 300 on hover, 50 on press). The box edge is neutral-700 and hovers to a neutral-900 ground.',
   },
   {
     surface: 'blue',
-    note: 'Only the light end clears AA: the cue white at rest, 100 on hover, 50 on press, with a white focus ring against its blue gap.',
+    note: 'Only the light end clears AA: a linked title 100 on hover, 50 on press, with a white focus ring against its blue gap. The box edge is brandeis-300 and hovers to a brandeis-600 ground.',
   },
 ] as const;
+
+/* The boxed tiles (frame="box", owner 7 Oct 2026): an icon router of linked destinations, the shape
+   the box exists for. Rendered on all four surfaces with identical markup. */
+const BOXED = [
+  {
+    title: 'Product redesign',
+    body: 'The cost sits in the experience, and the model underneath still holds.',
+    href: ROUTES.productDesign,
+    marker: { type: 'icon', name: 'ruler-pen' },
+  },
+  {
+    title: 'Design systems',
+    body: 'Every screen rebuilds the same component a little differently.',
+    href: ROUTES.designSystems,
+    marker: { type: 'icon', name: 'widget' },
+  },
+  {
+    title: 'Software development',
+    body: 'The change is decided, and it needs building and shipping.',
+    href: ROUTES.softwareDevelopment,
+    marker: { type: 'icon', name: 'code' },
+  },
+] as const satisfies readonly {
+  title: string;
+  body: string;
+  href: string;
+  marker: ListCardMarker;
+}[];
 
 const TILES_ICON = [
   {
@@ -213,8 +257,8 @@ const NESTED_SURFACE_TOKENS = {
     ['--lcrd-link-ink', '--color-brandeis-500'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-700'],
     ['--lcrd-rule-ink', '--color-neutral-400'],
-    ['--lcrd-ground-hover', '--color-neutral-200'],
-    ['--lcrd-ground-pressed', '--color-neutral-300'],
+    ['--lcrd-ground-hover', '--color-neutral-100'],
+    ['--lcrd-ground-pressed', '--color-neutral-200'],
     ['--lcrd-ring-color', '--color-brandeis-500'],
     ['--lcrd-ring-gap-color', '--color-paper-deep'],
   ],
@@ -276,18 +320,37 @@ function SurfaceRows() {
       />
       <ListCard
         title="Design systems"
-        body="The linked row proves the dark title, icon marker, cue link ink and focus ring."
+        body="The linked row: no arrow. Hover or Tab — the title takes the link ink, and the ring runs round the row."
         marker={{ type: 'icon', name: 'check-circle' }}
         href={ROUTES.designSystems}
       />
       <ListCard
         title="A case study, told off-site"
-        body="A cut-out thumbnail and the leaves-the-site cue: no edge on the part, and the up-right arrow in the cue's own ink."
+        body="A cut-out thumbnail, and the one glyph a linked row keeps: the small up-right arrow that says it leaves the site."
         marker={thumb(CUT_OUT)}
         href={EXTERNAL_HREF}
         external
       />
     </Rows>
+  );
+}
+
+/** The boxed tiles, identical on every surface: three linked, then one static with an action-free body. */
+function SurfaceBoxes() {
+  return (
+    <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="gutter">
+      {BOXED.map((tile) => (
+        <ListCard key={tile.title} form="tile" frame="box" titleAs="h3" {...tile} />
+      ))}
+      <ListCard
+        form="tile"
+        frame="box"
+        titleAs="h3"
+        title="Unlinked box"
+        body="No destination: the edge and inset, no ground and no pointer state."
+        marker={{ type: 'icon', name: 'document-text' }}
+      />
+    </Layout>
   );
 }
 
@@ -428,10 +491,10 @@ export default function ListCardSpecimenPage() {
               &ldquo;Interactio/n&rdquo;). The title&rsquo;s wrap is now <code>break-word</code>
               , so its words stay whole at every track below. On a wide row the title stops at{' '}
               <code>--measure-title</code> and the body at <code>--measure-body</code>, so the
-              leftover collects before the cue instead of opening a channel between a title and
-              its sentence. The frames below stand in for the content column at 1440, 1023, 768
-              and 390, and for grid tracks inside them; none can fire a media query, which is
-              now the point — the row does not need one.
+              leftover collects at the row&rsquo;s end instead of opening a channel between a title
+              and its sentence. The frames below stand in for the content column at 1440, 1023,
+              768 and 390, and for grid tracks inside them; none can fire a media query, which
+              is now the point — the row does not need one.
             </p>
           </Layout>
           {(
@@ -457,7 +520,7 @@ export default function ListCardSpecimenPage() {
                   />
                   <ListCard
                     title="A case study, told off-site"
-                    body="A thumbnail row, linked away: the split has what is left after the 160 marker and the cue."
+                    body="A thumbnail row, linked away: the split has what is left after the 160 marker."
                     marker={thumb(CUT_OUT)}
                     href={EXTERNAL_HREF}
                     external
@@ -501,9 +564,10 @@ export default function ListCardSpecimenPage() {
               <code>form=&quot;tile&quot;</code> is the item in a grid track. The rule opens the
               item instead of closing it, because tiles in a grid row only line up at the top;
               the marker stands above the title; the copy sits flush with the track, so the grid
-              aligns with the heading over it; title and body always stack. A linked tile has no
-              hover ground: its opening rule takes the link ink, and the cue sits at the foot,
-              pinned so every cue in the row shares a line. A tile defaults to{' '}
+              aligns with the heading over it; title and body always stack. A linked tile
+              carries no arrow (owner, 7 Oct 2026): on hover its opening rule and its title take
+              the link ink. An optional action (<code>ctaLabel</code>) is pinned to the foot, so
+              every action in a row shares a line. A tile defaults to{' '}
               <code>size=&quot;sm&quot;</code> (h5 over body-sm, § 7.2), so every tile below is
               at the small step without being told; the third cell passes <code>md</code> to
               show the override. Rows of tiles are <code>column</code> (64) apart, the row seam
@@ -561,13 +625,98 @@ export default function ListCardSpecimenPage() {
             </Layout>
           </Specimen>
           <Specimen
-            title="linked tiles · three tracks, unequal bodies"
-            note="Cues pinned to the foot"
+            title="linked tiles · three tracks, unequal bodies · no arrow"
+            note="The whole tile is the link. Hover: the opening rule and the title take the link ink."
           >
             <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
               {LINKED.slice(0, 3).map((row) => (
                 <ListCard key={row.title} form="tile" {...row} />
               ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="linked tiles · ctaLabel · the action pinned to the foot"
+            note="Opt-in, for an item whose action is not obvious from its title. The link Button is a span inside the one anchor: one focus stop. The title holds still; the action moves."
+          >
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
+              <ListCard
+                form="tile"
+                titleAs="h3"
+                title="The modernisation worksheet"
+                body="You can see the cost, but not yet which layer it sits in."
+                marker={{ type: 'icon', name: 'checklist' }}
+                href={ROUTES.contact}
+                ctaLabel="Open the worksheet"
+              />
+              <ListCard
+                form="tile"
+                titleAs="h3"
+                title="Research record template"
+                body="One page per interview, with the evidence each claim rests on, ready for synthesis."
+                marker={{ type: 'icon', name: 'document-text' }}
+                href={EXTERNAL_HREF}
+                external
+                ctaLabel="Get the Figma file"
+              />
+              <ListCard
+                form="tile"
+                titleAs="h3"
+                title="Accessibility audit"
+                body="A ranked list of fixes."
+                marker={{ type: 'icon', name: 'check-circle' }}
+                href={ROUTES.contact}
+                ctaLabel="Book an audit"
+              />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title='boxed tiles · frame="box" · an icon router of six, two across'
+            note="Owner, 7 Oct 2026. A hairline at the 8 radius, 24 inside on every side, and a ground under the pointer when linked. Boxed tiles sit a gutter apart both ways: the box is the separation. The shape it is for: four to six destinations beside a head."
+          >
+            <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack">
+              <Box tall />
+              <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+                {[...BOXED, ...LINKED.slice(0, 3)].map((tile) => (
+                  <ListCard key={tile.title} form="tile" frame="box" titleAs="h3" {...tile} />
+                ))}
+              </Layout>
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="boxed tiles · numbers, a thumbnail, title only, and an action"
+            note="Every marker in the box. A thumbnail sits above its copy as in the open tile."
+          >
+            <Layout as="ol" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="gutter">
+              <ListCard
+                form="tile"
+                frame="box"
+                title="Read the real work"
+                body="What triggers the change, who decides, who is affected."
+                marker={{ type: 'number', value: 1 }}
+              />
+              <ListCard
+                form="tile"
+                frame="box"
+                title="A case study"
+                body="A thumbnail in the box."
+                marker={thumb(getKitPhoto('screen-over-shoulder'))}
+                href={ROUTES.caseStudies}
+              />
+              <ListCard
+                form="tile"
+                frame="box"
+                title="Title only"
+                marker={{ type: 'number', value: 3 }}
+              />
+              <ListCard
+                form="tile"
+                frame="box"
+                title="Product modernisation assessment"
+                body="Capability by capability: repair, redesign, replatform or rebuild."
+                marker={{ type: 'number', value: 4 }}
+                href={ROUTES.contact}
+                ctaLabel="Request the assessment"
+              />
             </Layout>
           </Specimen>
           <Specimen
@@ -786,39 +935,38 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>2d · External rows</h2>
             <p>
-              <code>external</code> swaps the cue for the &ldquo;leaves the site&rdquo; arrow,{' '}
-              <code>arrow-right-up</code> — Solar Bold&rsquo;s plain arrow of the same family as{' '}
-              <code>arrow-right</code>, so an off-site row differs from its neighbours by the
-              arrow&rsquo;s angle, not by a filled square among bare arrows (29 Sep 2026, 2.17).
-              One glyph per meaning, replacing the arrow rather than joining it. It opens a new
-              tab, and appends a visually hidden &ldquo;(opens in a new tab)&rdquo; to the
-              row&rsquo;s accessible name. Same slot, size (18) and ink as the arrow. It is the
-              first route-visible Solar glyph, so the site footer&rsquo;s legal line now carries
-              the CC BY 4.0 credit.
+              <code>external</code> opens a new tab, appends a visually hidden &ldquo;(opens in
+              a new tab)&rdquo; to the row&rsquo;s accessible name, and sets a small (16){' '}
+              <code>arrow-right-up</code> after the title&rsquo;s last word, in the link ink. It
+              is the one glyph a linked row still carries after the arrow cue was removed
+              (owner, 7 Oct 2026), because it says something the hover cannot: that the page
+              will leave the site, before the click (WCAG G201). An internal row carries none.
+              With an action (<code>ctaLabel</code>) the action&rsquo;s own glyph turns up-right
+              instead and the title carries none.
             </p>
           </Layout>
           <Rows>
             <ListCard
               title="Internal destination"
-              body="arrow-right: go, next. Same tab."
+              body="No glyph. Same tab. The title takes the link ink on hover."
               href={ROUTES.caseStudies}
             />
             <ListCard
               title="External destination"
-              body="arrow-right-up: leaves the site. New tab, said in words to a screen reader."
+              body="The small up-right glyph after the title: leaves the site. New tab, said in words to a screen reader."
               href={EXTERNAL_HREF}
               external
             />
             <ListCard
               title="External with a thumbnail"
-              body="The cue and the marker are independent; the row is still one link and one focus stop."
+              body="The glyph and the marker are independent; the row is still one link and one focus stop."
               marker={thumb(ILLUSTRATION)}
               href={EXTERNAL_HREF}
               external
             />
             <ListCard
               title="An external flag with no href"
-              body="No destination, so no anchor, no cue and no hint."
+              body="No destination, so no anchor, no glyph and no hint."
               external
             />
           </Rows>
@@ -828,19 +976,20 @@ export default function ListCardSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>2e · The cue after the title</h2>
+            <h2>2e · Linked rows: no arrow, and an action where one is needed</h2>
             <p>
-              <code>cue=&quot;title&quot;</code> (6 Oct 2026, cmp-services): a linked row&rsquo;s
-              arrow follows the title&rsquo;s last word, bound to it by a non-breaking space, and
-              the title takes the link ink on hover — BlockCard&rsquo;s model, for a router of a few
-              rows beside a head. No hover ground, so no 16 inline inset: the row sits flush on the
-              column edge. On an external row the up-right arrow follows the title the same way and
-              the hidden &ldquo;(opens in a new tab)&rdquo; moves inside the title with it, so the
-              accessible name still ends on it. Below 768 every thumbnail row, cued either way, takes
-              the 96 thumbnail and keeps it beside the copy.
+              Owner, 7 Oct 2026: almost every card carried a blue arrow next to its title, and
+              it read as bulky. The whole row is the link, so a linked row carries no glyph at
+              rest; on hover and focus its title takes the link ink, and the ring runs round the
+              row. The row&rsquo;s hover ground and the 16 inline inset that cleared it went
+              with the arrow, so every row sits flush on the column edge the head and the rules
+              share. Where the action is not obvious from the title, the caller opts into a
+              visible one: <code>ctaLabel</code> sets the link Button, with its arrow, under the
+              copy — and the title holds still while the action moves. Below 768 a thumbnail row
+              takes the 96 thumbnail and keeps it beside the copy.
             </p>
           </Layout>
-          <Specimen title="title-cued · stacked × md · thumbnails · internal and external">
+          <Specimen title="linked · stacked × md · thumbnails · internal and external">
             <Rows>
               <ListCard
                 arrangement="stacked"
@@ -849,36 +998,32 @@ export default function ListCardSpecimenPage() {
                 body="When every team builds the same screens a little differently."
                 marker={thumb(getKitPhoto('screen-over-shoulder'))}
                 href={ROUTES.designSystems}
-                cue="title"
               />
               <ListCard
                 arrangement="stacked"
                 titleAs="h3"
                 title="A case study, told off-site"
-                body="External: the up-right arrow after the title, and the new-tab hint inside it."
+                body="External: the small up-right glyph after the title, and the new-tab hint at the end of the name."
                 marker={thumb(getKitPhoto('desk-flatlay-devices'))}
                 href={EXTERNAL_HREF}
                 external
-                cue="title"
               />
             </Rows>
           </Specimen>
-          <Specimen title="title-cued · split × sm · no marker, then a number · external last">
+          <Specimen title="linked · split × sm · no marker, then a number · external last">
             <Rows>
               <ListCard
                 size="sm"
                 title="Product design"
-                body="A row with no marker: title, arrow, and the body beside it."
+                body="A row with no marker: the title, and the body beside it."
                 href={ROUTES.productDesign}
-                cue="title"
               />
               <ListCard
                 size="sm"
                 title="Design engineering"
-                body="A number marker holds its own column; the arrow still follows the title."
+                body="A number marker holds its own column."
                 marker={{ type: 'number', value: 2 }}
                 href={ROUTES.designEngineering}
-                cue="title"
               />
               <ListCard
                 size="sm"
@@ -886,7 +1031,31 @@ export default function ListCardSpecimenPage() {
                 body="External, unmarked: leaves the site, opens a new tab, says so to a reader."
                 href={EXTERNAL_HREF}
                 external
-                cue="title"
+              />
+            </Rows>
+          </Specimen>
+          <Specimen
+            title="ctaLabel · split × md and stacked × md · internal and external"
+            note="The action sits a block (24) under the copy, at its inline start. One anchor, one focus stop: the Button is a span and takes the row's hover, focus and press."
+          >
+            <Rows>
+              <ListCard
+                titleAs="h3"
+                title="Product modernisation assessment"
+                body="A free walk-through that decides, capability by capability, what to repair, redesign, replatform or rebuild."
+                marker={{ type: 'icon', name: 'checklist' }}
+                href={ROUTES.contact}
+                ctaLabel="Request the assessment"
+              />
+              <ListCard
+                arrangement="stacked"
+                titleAs="h3"
+                title="Research record template"
+                body="One page per interview. The action's glyph turns up-right because the file leaves the site."
+                marker={thumb(getKitPhoto('desk-flatlay-devices'))}
+                href={EXTERNAL_HREF}
+                external
+                ctaLabel="Get the Figma file"
               />
             </Rows>
           </Specimen>
@@ -939,16 +1108,12 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>4 · States</h2>
             <p>
-              The static row has rest only. Point at, hold and Tab to the linked row: a{' '}
-              <strong>ground</strong> appears under the whole row on hover and the{' '}
-              <strong>ink arrow turns blue</strong> — then press deepens the ground and steps
-              the cue again. The ground is <code>Button</code>&rsquo;s ghost steps; the arrow is
-              ink at rest like every card arrow, and blue only while the row is the target (the
-              whole-card hover cue, blue&rsquo;s free row, 6 Oct 2026). The target is up to
-              1240px wide and about 82px tall, so the signal has to cover it, and it paints only
-              under a pointer — a list of these is still a list of ruled rows, not a stack of
-              tiles. Focus adds the surface-aware two-part ring on top, so keyboard focus is
-              never carried by colour alone.
+              The static row has rest only. Point at, hold and Tab to the linked row: its{' '}
+              <strong>title turns blue</strong> on hover and focus and deepens on press (owner,
+              7 Oct 2026 — the arrow cue and the row&rsquo;s hover ground were removed). Focus
+              adds the surface-aware two-part ring round the whole row, so keyboard focus is
+              never carried by colour alone. A boxed tile adds a ground under the pointer (§
+              1b).
             </p>
           </Layout>
           <Rows ordered>
@@ -961,7 +1126,7 @@ export default function ListCardSpecimenPage() {
             <ListCard
               arrangement="stacked"
               title="Linked · point, hold and Tab"
-              body="One native anchor owns the title, summary and arrow cue."
+              body="One native anchor owns the marker, title and summary."
               marker={{ type: 'icon', name: 'copy' }}
               href={ROUTES.designEngineering}
             />
@@ -970,16 +1135,16 @@ export default function ListCardSpecimenPage() {
             {[
               [
                 'rest',
-                'Dark h4 title, blue numeral and marker, quiet base hairline, the arrow cue blue (--lcrd-link-ink).',
+                'Dark h4 title, blue numeral and marker, quiet base hairline. No arrow.',
               ],
               [
                 'hover',
-                'The frame paints --lcrd-ground-hover across the whole row; the cue holds its blue.',
+                'The title takes --lcrd-link-ink. A boxed tile also paints --lcrd-ground-hover.',
               ],
               ['focus', 'Exactly the hover rendering plus the two-part keyboard ring.'],
               [
                 'pressed',
-                'The ground steps to --lcrd-ground-pressed AND the cue to its pressed ink.',
+                'The title steps to --lcrd-link-ink-pressed; a boxed tile to --lcrd-ground-pressed.',
               ],
             ].map(([state, note]) => (
               <div key={state}>
@@ -1000,6 +1165,7 @@ export default function ListCardSpecimenPage() {
               <p className={s.specNote}>{note}</p>
             </Layout>
             <SurfaceRows />
+            <SurfaceBoxes />
           </Layout>
         </Section>
       ))}
@@ -1098,18 +1264,18 @@ export default function ListCardSpecimenPage() {
 
           <Specimen
             title="7 · Empty required-ish text"
-            note="The blank title returns null; blank body keeps the title; blank href stays static without a cue."
+            note="The blank title returns null; blank body keeps the title; blank href stays static, with no anchor."
           >
             <Rows>
               <ListCard title="   " body="This row must not render." />
               <ListCard title="Body omitted" body="   " />
-              <ListCard title="Blank href is inert" body="No anchor and no cue." href="   " />
+              <ListCard title="Blank href is inert" body="No anchor and no hover." href="   " />
             </Rows>
           </Specimen>
 
           <Specimen
             title="8 · 767 track · 9 · unsized parent · 10 · logical placement"
-            note="Use block/inline edges only. The cue stays at inline end; a larger thumbnail wraps before the xs content core collapses. The second harness is a wrapping Cluster with no track width: each ListCard must still take one complete line."
+            note="Use block/inline edges only. A larger thumbnail wraps before the xs content core collapses. The second harness is a wrapping Cluster with no track width: each ListCard must still take one complete line."
           >
             <Layout rowGap="block">
               <div className={s.trackSm}>
@@ -1199,13 +1365,13 @@ export default function ListCardSpecimenPage() {
                 <ListCard
                   arrangement="stacked"
                   title="The same thumbnail, unlinked"
-                  body="No cue, so the core gets the cue's width back."
+                  body="Linked or not, the core takes the same width: no cue."
                   marker={thumb(ILLUSTRATION)}
                 />
                 <ListCard
                   arrangement="stacked"
                   title="A cut-out part, off-site"
-                  body="The leaves-the-site cue at the phone's width: the up-right arrow keeps the arrow's slot."
+                  body="The leaves-the-site glyph at the phone's width, after the title's last word."
                   marker={thumb(CUT_OUT)}
                   href={EXTERNAL_HREF}
                   external
@@ -1294,12 +1460,12 @@ export default function ListCardSpecimenPage() {
             <h2>12 · ReadDown — the D set mode</h2>
             <p>
               Ruled rows read top to bottom, one column or two (visual-direction § 3.4 D). Three
-              rows or fewer in one column take md (h4); four or more, or two columns, take sm (h5)
-              and keep the body at body. No inline inset (the rows never link, so no hover ground),
-              and the first row of each column starts on the set&rsquo;s top edge. Two columns are
-              one list in reading order, each grid row as tall as its taller item, so the closing
-              rules run level across the column seam. The kit family page shows it in its bands:
-              /design/kit/readdown.
+              rows or fewer in one column take md (h4); four or more, or two columns, take sm
+              (h5) and keep the body at body. No inline inset (the rows never link, so no hover
+              ground), and the first row of each column starts on the set&rsquo;s top edge. Two
+              columns are one list in reading order, each grid row as tall as its taller item,
+              so the closing rules run level across the column seam. The kit family page shows
+              it in its bands: /design/kit/readdown.
             </p>
           </Layout>
           <Layout columns={{ lg: [1, 1] }} colGap="column" rowGap="stack" align="start">
@@ -1311,7 +1477,9 @@ export default function ListCardSpecimenPage() {
             </Specimen>
           </Layout>
           <Specimen title="columns 1 · text only, no glyphs">
-            <ReadDown rows={READ_DOWN.slice(0, 3).map(({ title, body }) => ({ title, body }))} />
+            <ReadDown
+              rows={READ_DOWN.slice(0, 3).map(({ title, body }) => ({ title, body }))}
+            />
           </Specimen>
           <Specimen title="photo · three rows · sm — from 1024 the photo takes the trailing two thirds and runs the rows' height, ending on the last rule; below 1024 it sits above them at 3:2">
             <ReadDown rows={READ_DOWN.slice(0, 3)} photo={getKitPhoto('workshop-brick-room')} />

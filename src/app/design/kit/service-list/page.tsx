@@ -23,7 +23,7 @@ import t from '../../_specimen/typeroles.module.css';
  * "Which one is mine?" answered three ways (visual-direction § 3.3, § 3.4): an ICON router (C-icon,
  * a beside head with a photograph in its head track and whole-card links), an IMAGE router
  * (C-image-3 / -4 linked, or a Slider from five), and a LIST router (a beside head with its
- * actions over ruled ListCard rows, each with a 160 thumbnail and the arrow cue). A composition:
+ * actions over ruled ListCard rows, each with a 160 thumbnail). A composition:
  * no unit is added. ServicePage's `Router` block is swapped for one of these by cmp-service-pages;
  * this route proves the shapes, and the template is not touched here.
  *
@@ -34,8 +34,8 @@ import t from '../../_specimen/typeroles.module.css';
  * The page is a cool-family page (§ 5.5 rule 1): every photograph is cool or neutral and quiet, and
  * none appears twice. Grading is banned (ch05 § 5), so the family is held by SELECTION (fix round 2:
  * the warm studio snapshots on the audit cards and the warm, royal-blue-shirted aside in 01 were
- * replaced). Blue is the foreground accent only: every eyebrow's square, glyphs, title arrows, the
- * thumbnail rows' cues, every link and its arrow, the rails' thumbs, the index numerals and the one
+ * replaced). Blue is the foreground accent only: every eyebrow's square, glyphs, a linked title on
+ * hover, every link and its arrow, the rails' thumbs, the index numerals and the one
  * solid ask in the list router's head. Texture: one stepped `horizon` (TextureHorizon, § 6.3), at
  * the foot of the centred image router, directly above the change of ground into the tint list
  * router — the one place on the page where a band meets a different ground. It starts 56 under the
@@ -377,8 +377,9 @@ export default function ServiceListKitSpecimen() {
         media={{ type: 'image', image: getKitPhoto('wall-sketching-portrait'), ratio: '5/4' }}
       />
 
-      {/* The index: every variation, linked to its band — itself a small router, title-cued so its
-          numerals sit on the column edge the hero's copy holds. */}
+      {/* The index: every variation, linked to its band — itself a small router, its numerals on
+          the column edge the hero's copy holds. Neutral numerals: they index the page, they are not
+          the band's information (ListCard spec, number tone). */}
       <Section density="tight">
         <Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="none">
           {VARIATIONS.map((v, i) => (
@@ -386,9 +387,8 @@ export default function ServiceListKitSpecimen() {
               key={v.id}
               title={v.name}
               href={`#${v.id}`}
-              marker={{ type: 'number', value: i + 1 }}
+              marker={{ type: 'number', value: i + 1, tone: 'neutral' }}
               size="sm"
-              cue="title"
             />
           ))}
         </Layout>
@@ -396,7 +396,7 @@ export default function ServiceListKitSpecimen() {
 
       {/* ── 01 · C-icon-6 ──────────────────────────────────────────────────────────────────── */}
       {/* A beside head over six linked icon cards, the photograph in the head track ending on the
-          grid's last line. Whole-card links, each title closed by the blue arrow; no CtaRow (§ 1.4
+          grid's last line. Whole-card links in boxes (owner, 7 Oct 2026); no CtaRow (§ 1.4
           rule 7), and never actions in the head track, so the set never renders without its photo.
           At 390 the six are one sideways row, the next card peeking, with a progress rail under it
           whose thumb is a sixth of its length, so the count reads; the photo is a 21:9 banner. */}
@@ -411,7 +411,7 @@ export default function ServiceListKitSpecimen() {
         asideFill
         aside={<Aside id="pair-at-laptop-sticky-wall" />}
       >
-        <BlockCardSet items={SIX} lead="none" across={2} />
+        <BlockCardSet items={SIX} lead="none" across={2} frame="box" />
       </ContentSection>
 
       {/* ── 02 · C-image-3, H-compact centred ──────────────────────────────────────────────── */}
@@ -434,7 +434,7 @@ export default function ServiceListKitSpecimen() {
 
       {/* ── 03 · List router ───────────────────────────────────────────────────────────────── */}
       {/* A beside head carrying the band's actions (one solid ask, its ghost partner) over three ruled,
-          title-cued ListCard rows: thumbnail, title and its arrow, the condition under it. Three
+          linked ListCard rows: thumbnail, title, the condition under it. Three
           rows at most, so the head track never needs an aside as well (§ 1.4 rule 6). On tint, the
           page's one change of ground, so the run of paper bands breaks where the shape does. */}
       <Title id="list" surface="tint" />
@@ -467,7 +467,6 @@ export default function ServiceListKitSpecimen() {
               title={row.title}
               body={row.body}
               href={row.href}
-              cue="title"
               arrangement="stacked"
               marker={{ type: 'thumbnail', image: getKitPhoto(row.image) }}
             />
@@ -516,7 +515,7 @@ export default function ServiceListKitSpecimen() {
           />
         }
       >
-        <BlockCardSet items={NEXT} lead="none" across={2} />
+        <BlockCardSet items={NEXT} lead="none" across={2} frame="box" />
       </ContentSection>
 
       {/* ── 06 · Slider ────────────────────────────────────────────────────────────────────── */}

@@ -1011,7 +1011,7 @@ export default function FeatureKitSpecimen() {
 
       <Caption n={14} name={VARIATIONS[13]} fit="display head · 217">
         Surface proof — on pages, tint is the proof band only (§ 1.7). Whole-card links on text
-        cards take the arrow cue.
+        cards take the title cue: no glyph, the title goes blue on hover.
       </Caption>
       <ContentSection
         align="center"
@@ -1022,7 +1022,7 @@ export default function FeatureKitSpecimen() {
         headingId={kf(14)}
         lead="Products where a wrong screen costs real money, real time or real trust."
       >
-        <BlockCardSet items={WHERE} lead="none" cue="arrow" />
+        <BlockCardSet items={WHERE} lead="none" cue="title" />
       </ContentSection>
 
       <Caption n={15} name={VARIATIONS[14]} fit="display head · 2 × 191 + 64">
@@ -1073,9 +1073,9 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       <Caption n={18} name={VARIATIONS[17]} fit="head 542 · body 3 × 136 + 2 × 48 = 504">
-        Six linked icon cards route to their pages; no CtaRow. Rows sit on their content, one
-        beat apart. Solid glyphs only. On a phone, linked and more than three, the set is a
-        sideways row.
+        Six linked icon cards route to their pages; no CtaRow. Boxed (owner, 7 Oct 2026): a
+        hairline at the 8 radius and a ground on hover, a gutter apart. Solid glyphs only. On a
+        phone, linked and more than three, the set is a sideways row.
       </Caption>
       <ContentSection
         arrangement="beside"
@@ -1086,7 +1086,7 @@ export default function FeatureKitSpecimen() {
         asideFill
         aside={<Aside id="desk-minimal-white" />}
       >
-        <BlockCardSet items={SERVICES_6} lead="none" across={2} />
+        <BlockCardSet items={SERVICES_6} lead="none" across={2} frame="box" />
       </ContentSection>
 
       <Caption n={19} name={VARIATIONS[18]} fit="head 411 · body 429">
@@ -1187,7 +1187,7 @@ export default function FeatureKitSpecimen() {
         headingId={kf(24)}
         lead="A fixed scope, a fixed fee, and findings ranked by what they cost you to leave alone."
       >
-        <BlockCardSet items={LINKED_4} lead="none" cue="arrow" />
+        <BlockCardSet items={LINKED_4} lead="none" cue="title" />
       </ContentSection>
     </>
   );

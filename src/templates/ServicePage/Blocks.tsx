@@ -196,7 +196,8 @@ export function Ledger({ block }: { block: Of<'ledger'> }) {
 /* ── Router ───────────────────────────────────────────────────────────────────
    "Which one is mine?" With a glyph on every route, the C-icon router (cmp-services): linked icon
    cards two across in the body track, the service as the card's name and the condition that sends
-   you there as its body. Without, the list router: linked ListCard rows with the arrow cue. The
+   you there as its body — boxed (owner, 7 Oct 2026), so four to six destinations read as separate
+   objects rather than one field of text. Without, the list router: linked ListCard rows. The
    non-service route (an audit) is the last item, for the reader who cannot name the condition. */
 export function Router({ block }: { block: Of<'router'> }) {
   const all = [
@@ -213,7 +214,7 @@ export function Router({ block }: { block: Of<'router'> }) {
     }));
     /* Stacked on a phone (`scroll="never"`): a router shows every route at once, never one and a
        fifth of six behind a gesture (fix round 1). */
-    return <BlockCardSet items={items} lead="none" across={2} scroll="never" />;
+    return <BlockCardSet items={items} lead="none" across={2} scroll="never" frame="box" />;
   }
   const size = setSize(all.length, 'row');
   return (

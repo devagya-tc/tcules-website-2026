@@ -14,23 +14,24 @@
 | **Revised**         | Case-study revision / 29 Sep 2026 — one hairline round every image kind (the crop box's, ch05 amendment 5a; `Media edge="placement"`); a subtle hover zoom as the only hover cue; the cta only on text-only linked cards; no title measure cap; `BlockCardSet` rows a `stack` apart; `/case-studies` onto the `CaseStudyIndex` template. See § Revision 3 |
 | **Revised**         | `fdn-spacing` / 5 Oct 2026 — the copy group at `text` (S2); the `size` prop (`lg \| md \| sm`) and `BlockCardSet` passing it by count (visual-direction § 7.2); the set's row seam recorded as `column`. See **Amendment · 5 Oct 2026** below |
 | **Revised**         | `cmp-feature` / 6 Oct 2026 — 16:9 for sets of three or more; the text-only top hairline; icon and index cards; `cue` (arrow or cta); a pressed step; the `--bcrd-radius` / `--bcrd-shadow` absences deleted; `BlockCardSet` `lead`, `across`, `size`, `standIns`, `numbered`, `cue`, `titleAs`, the step by track width, mixed-set settling and the phone scroll row. See **Amendment · 6 Oct 2026 — `cmp-feature`** |
+| **Revised**         | **Owner review / 7 Oct 2026** — the arrow after the title removed (`cue="arrow"` → `cue="title"`, `--bcrd-cue-ink` deleted); the optional boxed card (`frame="box"`, `BlockCardSet frame`, `--bcrd-box-*`), applied to every icon router. See **Amendment · 7 Oct 2026** at the foot. |
 | **Implements**      | `docs/briefs/12-block-card.md`                                                                                         |
 | **Implemented at**  | `src/patterns/BlockCard/` (`BlockCard.tsx`, `BlockCardSet.tsx`) · `src/styles/tokens/components/block-card.css` · specimen `src/app/design/block-card/page.tsx` |
 | **Rulings**         | `docs/phase-2-decisions.md` C1, C2, C3 (28 Sep 2026); Media M1–M4 and PageHero A3 by reference                          |
 
-## Current contract · 6 Oct 2026 (Revision 3 + kit amendments)
+## Current contract · 7 Oct 2026 (Revision 3 + kit amendments + owner review)
 
 Read this first. Sections 1 to 17 are kept as the record of how the card got here; where one of them
 says otherwise, this block and the dated amendments at the end win.
 
 | Axis | The rule as built |
 |---|---|
-| **Edge** | No card edge, ground, radius or shadow. The one card-owned line round an image is the **crop box's border hairline** (`--bcrd-media-rule-width` / `-ink`, ch05 amendment 5a); Media draws none inside a card (`edge="placement"`). A **text-only** card takes a hairline at its own top edge instead (`--bcrd-text-rule-*`, neutral on every surface), 24 above its first label. |
+| **Edge** | By default no card edge, ground, radius or shadow. **`frame="box"`** (owner, 7 Oct 2026; set by `BlockCardSet frame`) draws a `--bcrd-box-rule-*` hairline at `--bcrd-box-radius` (8), `--gap-block` inside, a `--bcrd-box-ground-hover` / `-pressed` ground on a linked card, and drops a text card's top hairline; boxed rows sit a `gutter` apart. The one card-owned line round an image is the **crop box's border hairline** (`--bcrd-media-rule-width` / `-ink`, ch05 amendment 5a); Media draws none inside a card (`edge="placement"`). A **text-only** card takes a hairline at its own top edge instead (`--bcrd-text-rule-*`, neutral on every surface), 24 above its first label. |
 | **Ratio** | **One 3:2 ratio** for the card (`--bcrd-media-ratio` = `--ratio-cover`) in both orientations — **except** a set of three or more across, which crops 16:9 (`--bcrd-media-ratio-wide`, `ratio="wide"`, visual-direction § 1.4 rule 1). The set decides it; the row stays 3:2. A spotlight lead (`BlockCardSet lead="beside"`) crops 21:9 (`ratio="panorama"`) and grows into spare height (`grow`). The wide lead's row (`lead="wide"`) crops 2:1 and 1:1 from 1024 (`ratio="double"` / `"square"`, 16:9 below), one height across. An illustration or a cut-out is shown whole inside the box (Media `fit="contain"`, `--bcrd-media-inset` = `tight`), and is supplied cut to one region for the card. |
-| **Title** | Ink at rest, never underlined (tried 29 Sep, removed). An arrow-cued linked card ends its title in the blue arrow (`--bcrd-cue-ink`); title and arrow take `--bcrd-title-ink-hover` on hover and focus and `--bcrd-title-ink-pressed` on press. A cta-cued card's title never moves. |
+| **Title** | Ink at rest, never underlined (tried 29 Sep, removed). No arrow after it (owner, 7 Oct 2026). A title-cued linked card's title takes `--bcrd-title-ink-hover` on hover and focus and `--bcrd-title-ink-pressed` on press. A cta-cued card's title never moves. |
 | **Motion** | One movement: the cover leans in to `--bcrd-media-zoom` (1.03) inside its still box on hover, focus and press. Reduced motion removes the zoom outright; the ring and the colour steps remain. |
-| **Colour tokens** | Eleven, declared on every surface: `title-ink`, `title-ink-hover`, `title-ink-pressed`, `cue-ink`, `mark-ink`, `body-ink`, `eyebrow-ink`, `media-rule-ink`, `text-rule-ink`, `ring-color`, `ring-gap-color` (§ 6). The cta's three steps are Button's. |
-| **Cue** | A linked card says it navigates by ONE cue: the arrow (default with a cover or an icon), a link-style cta (default text-only), or `download` (the cta with the download glyph, for a file). `cue` overrides; the set passes it for all. An optional `meta` format line sits on the action row. |
+| **Colour tokens** | Thirteen, declared on every surface: `title-ink`, `title-ink-hover`, `title-ink-pressed`, `mark-ink`, `body-ink`, `eyebrow-ink`, `media-rule-ink`, `text-rule-ink`, `box-rule-ink`, `box-ground-hover`, `box-ground-pressed`, `ring-color`, `ring-gap-color` (§ 6 and the 7 Oct amendment; `cue-ink` deleted). The cta's three steps are Button's. |
+| **Cue** | A linked card says it navigates by ONE cue: its title (`title`, default with a cover or an icon — no glyph, the title goes blue on hover), a link-style cta with its arrow (default text-only, and for any card whose action is not obvious from its title), or `download` (the cta with the download glyph, for a file). `cue` overrides; the set passes it for all. An optional `meta` format line sits on the action row. |
 | **Head object** | A cover (an image, or `media.type: 'texture'` — the Tcules texture as hard-edged blocks at full strength, the card's icon about a fifth of the cover's width in its foot-start corner), or an `icon` (32, blue, solid Solar Bold, the C-icon card), or — text-only — the hairline then an optional blue `index` numeral and/or eyebrow. |
 | **Sizes** | `lg` h3 + body-lg (featured row, spotlight and wide leads), `md` h4 + body (2–3 across; text cards), `sm` h5 + body-sm (4 across; the wide lead's squares; icon cards, always). The set decides by **track width**, not count; `size` never reaches an icon set. |
 | **Set shapes** | `lead`: `auto` (featured row from four, the case-study index), `none` (peers), `beside` (spotlight), `wide` ([2, 1, 1]). `stagger` drops the even cards 96 from 1024. Four across from `lg`. Below 768 a covered set of three or more, or a linked set of four or more, is a scroll row bleeding to the screen edge; an unlinked one takes the tab stop and `label`. |
@@ -1535,3 +1536,47 @@ list, `data-fold-exempt` in CaseStudyIndex) and the route is now in `fold.config
   row (`[1, 7]`), rather than on a 48 row of its own above it. A six-card router stacked at 390 ran
   past the 1700 phone ceiling with the glyph above; beside the title it holds. From 768 the glyph
   sits above the title as specified.
+
+## Amendment · 7 Oct 2026 — owner review: no title arrow; the boxed card
+
+Owner decisions of 7 Oct 2026. Where anything above differs, this section wins.
+
+### 1 · No arrow after the title
+
+The blue arrow after a covered, icon or arrow-cued text card's title (`fdn-media` fix round, 6 Oct)
+stood on nearly every card in the kit and read as bulky; the whole card is already the link. So:
+
+- **`BlockCardCue` is `'title' | 'cta' | 'download'`.** `arrow` is renamed `title` and renders no glyph:
+  the title is the cue. On hover and focus it takes `--bcrd-title-ink-hover` (a cover leans in, as
+  before), on press `--bcrd-title-ink-pressed`. The default is unchanged in shape: `title` on a card
+  with a cover or an icon, `cta` on a text-only card.
+- **`--bcrd-cue-ink` is deleted** from all four surfaces, with the `.cue` rule and `CUE_SIZE`.
+- **Where a card needs a visible action, it takes the cta** (`cue="cta"`, `ctaLabel`): the link `Button`
+  with its arrow — the link button is the arrow-carrying control — at the card's foot. Opt-in, for cards
+  whose action is not obvious from the title; a card whose title names its destination needs none.
+  Call sites changed: `kit/feature` (two sets, `cue="arrow"` → `cue="title"`) and the specimen.
+
+### 2 · The boxed card: `frame="box"`
+
+A partial reversal of "a card is never a box" (visual-direction § 3.1, amended the same day).
+
+- `BlockCard frame?: 'none' | 'box'`, default `none`; `BlockCardSet frame` sets it for every card (it is
+  a set's decision, and `BlockCardSetItem` omits it).
+- **Box:** a `--bcrd-box-rule-width` hairline in `--bcrd-box-rule-ink`, `--bcrd-box-radius` (8, the
+  photograph radius), `--gap-block` (24) inside on every side. A text-only card drops its top hairline
+  (the box's top edge is that edge). A cover sits inside the inset.
+- **Linked:** a `--bcrd-box-ground-hover` ground under the pointer and `--bcrd-box-ground-pressed` on
+  press; the edge holds its ink; the title moves as on any title-cued card; the focus ring follows the
+  radius.
+- **In a set,** boxed rows sit a `gutter` (32) apart, the same as the column seam: the box is the
+  separation, so the `stack` / `column` row seam an open set needs would leave the boxes floating.
+- **Tokens, every surface** (paper / tint / ink / blue): `--bcrd-box-rule-ink` neutral-300 / neutral-400 /
+  neutral-700 / brandeis-300 (decoration); `--bcrd-box-ground-hover` paper-deep / neutral-100 /
+  neutral-900 / brandeis-600; `--bcrd-box-ground-pressed` neutral-100 / neutral-200 / neutral-800 /
+  brandeis-700.
+- **Where it is applied:** every icon router — ServicePage `Router` (`src/templates/ServicePage/Blocks.tsx`,
+  so every service page's C-icon band, including product-modernisation's "When the layer is already
+  clear"), and the kit's icon routers of four to six linked services: `kit/service-list` (C-icon-6 and
+  C-icon-4), `kit/services-index` (C-icon-6) and `kit/feature` (variation 18, six services). Unlinked
+  icon sets ("Four things you keep") stay open: they are not destinations.
+

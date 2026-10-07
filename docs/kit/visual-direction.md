@@ -559,13 +559,30 @@ not a PageHero is listed too, and gets no special case.
 **Boxes stay where they are the thing:** form fields, Tag chips, the RatingBadge, slider controls, the
 Callout, the code chip, and the ch05 contrast panel behind a cut-out.
 
-**A card is never a box:** no border, no ground, no radius on the card, and no shadow.
+**A card is not a box by default:** no border, no ground, no radius on the card, and no shadow.
 
-**Whole-card links carry a visible affordance at rest:** a blue arrow glyph set after the title's last
-word, joined to it with a non-breaking space.
-- It is the same cue ListCard's linked rows already use, so the kit has one link cue.
-- On hover and focus, the title joins the arrow in blue (§ 4.2) and the image zooms (approved 29 Sep).
-- This adds one glyph to BlockCard Revision 3, the smallest change that answers "clear affordance".
+**Amendment (owner, 7 Oct 2026) — the boxed variant.** A set whose items must read as separate objects
+at a glance — an icon router of four to six destinations — may draw every card in a box:
+`BlockCardSet frame="box"` (BlockCard `frame="box"`) and ListCard `form="tile" frame="box"`.
+- A hairline round the card at the 8 radius (the photograph radius), 24 (`block`) inside on every side.
+- A linked box paints a quiet ground under the pointer (paper → paper-deep, tint → neutral-100, ink →
+  neutral-900, blue → brandeis-600); nothing paints at rest. The edge never changes.
+- Boxed cards in a set sit a `gutter` (32) apart both ways: the box is the separation.
+- It is a set's decision, never one card's, and the default stays unboxed. Applied to every icon router
+  (ServicePage `Router`, the kit's C-icon routers). Not for unlinked icon sets, image sets or text sets.
+- This partially reverses the "no box on any card" rule of § 3.1 and § 8.5; the rest of § 3 stands.
+
+**Whole-card links carry no arrow (owner, 7 Oct 2026, superseding the 6 Oct arrow cue).** The blue
+arrow after the title's last word stood on nearly every card and read as bulky; the whole card is the
+link.
+- On hover and focus the **title** takes the accent ink (§ 4.2), the image zooms (approved 29 Sep), and
+  the keyboard ring runs round the card. ListCard's linked rows and tiles answer the same way: no end
+  arrow, no row hover ground.
+- **Where a card needs a visible action,** it gets a link button at its foot — Button `emphasis="link"`
+  with its arrow, the arrow-carrying control: BlockCard `cue="cta"` / `ctaLabel`, ListCard `ctaLabel`.
+  Opt-in, only where the action is not obvious from the title.
+- An external ListCard keeps a small (16) up-right glyph after its title and the hidden "(opens in a new
+  tab)": it says "leaves the site", which the hover cannot.
 
 ### 3.2 Asymmetry, and how copy aligns against an image
 
@@ -772,7 +789,7 @@ added blue where the accent belongs. The record is in `docs/kit/brand-amendments
 | **Text links**, blue at rest | inline and Prose links; every link-style action — the per-card cta, a Proof's source link, a CtaRow link row — and the ghost partner beside a solid (hero, close, CtaRow ask, "See available times"; § 4.5) | `--btn-link-primary-fg`, `--btn-ghost-primary-fg`, `--prose-link-ink`: brandeis-500 → 300 (200 on a control) |
 | **Icons** | content icons: ListCard markers, the service page's sheet, frame and loop glyphs, a check in a needs-list or a comparison, the RatingBadge star | `--lcrd-marker-ink`, `--svc-mark`, `--rbadge-star-fg`: 500 → 300 |
 | **Markers and numerals** | list and step markers, index numerals, a CtaSection's points, an `<ol>` numeral in Prose | `--lcrd-number-ink`, `--flow-number-ink`, `--cta-marker-ink`, `--prose-marker-ink`: 500 → 300 |
-| **Arrows and cues** | ListCard's cue, BlockCard's title arrow, ProcessFlow and Thread connectors, an accordion chevron | `--lcrd-link-ink`, `--bcrd-cue-ink`, `--flow-arrow-ink`, `--svc-mark`, `--acc-mark-ink`: 500 → 300 |
+| **Arrows and cues** | ProcessFlow and Thread connectors, an accordion chevron, ListCard's external glyph (card title arrows removed, owner 7 Oct 2026) | `--lcrd-link-ink`, `--flow-arrow-ink`, `--svc-mark`, `--acc-mark-ink`: 500 → 300 |
 | **Small graphic marks** | a Proof's quote rule, a diagram's blue line, the tile's opening rule on hover | `--proof-quote-rule`, … |
 | **Active and current states** | the nav and TOC current marker, the current breadcrumb, the slider thumb, focus rings, link hover and pressed, input focus, the whole-card hover | `--crumb-current-ink`, `--sld-progress-thumb`, rings |
 | **Slider controls** | previous / next, glyph and hairline rule | Button `emphasis="outline"`, `--btn-outline-primary-*` |
@@ -1307,7 +1324,8 @@ The slider portraits must sit in the warm family: `portrait-man-blue-office` (wa
       rows shape.
 - [ ] The band rule (§ 4.3) holds; no ground is blue; the page does not read black and white (§ 4.2). The peridot gate (§ 4.4) passes.
 - [ ] Image cadence (§ 5.1) holds. There are no empty media frames.
-- [ ] No box on any card. No margin on any child. No hand-rolled grid or flex.
+- [ ] No box on any card, except a set boxed on purpose (`frame="box"`, § 3.1 amendment, 7 Oct 2026).
+      No margin on any child. No hand-rolled grid or flex.
 - [ ] `npm run verify`, `npm run build && npm run aria:check`, and `/audit-component` on each new or
       changed unit all pass.
 
