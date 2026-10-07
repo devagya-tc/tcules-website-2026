@@ -136,8 +136,11 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
           {body}
         </ContentSection>
       ) : (
-        <ContentSection {...head} arrangement="beside" texture={texture}>
-          {body}
+        /* No photograph (image pass, 7 Oct 2026): the head stacks over the icons, because a text
+           head beside a card grid is the retired text-only split (owner ruling 2, 7 Oct). */
+        <ContentSection {...head} texture={texture}>
+          <Router block={job} across={3} />
+          {others}
         </ContentSection>
       );
     }
@@ -161,7 +164,9 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
       );
     }
 
-    /* F — Steps beside a head with its photograph (§ 3.4 F, the approved method). At the default
+    /* F — Steps beside a head (§ 3.4 F, the approved method). The plan gives F no photograph since
+       the image pass (7 Oct 2026): the steps are the band's shape, and the head | steps split is a
+       read-down body beside its head, which ruling 2 keeps. At the default
        density: § 1.3 gives `tight` to I and `open` to J only, and density is never a way to make a
        band fit (fix round 1 — it had been `tight`, which also broke the 192 seam either side). */
     case 'F': {

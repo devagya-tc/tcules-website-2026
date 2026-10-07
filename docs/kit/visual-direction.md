@@ -127,6 +127,16 @@ These override anything below that disagrees; the inline amendments point here.
 6. **Tables scroll sideways on a phone; they never restack** into key/value blocks. A table is read
    across its rows, and that reading survives a horizontal scroll better than it survives blocks.
 
+**Image pass, 7 Oct 2026** (owner: "sometimes you need one, sometimes you don't"). A photograph earns
+its band only when it shows what the words cannot (the studio, people at the work, an artefact), is
+the one large thing in a text-only stretch, or is a hero, banner, offer, case cover or portrait.
+Generic stock beside a structure that is already the content (steps, a typed list, an icon set)
+does not. So **F takes no photograph** (head beside the steps), and a six-route **C-icon names no
+photo where a neighbour band already carries an image**, unless it is the page's only studio photo or
+dropping it leaves three image-less bands in a row (product-design keeps its router crit for both
+reasons); without one it stacks its head over the icons, three across. Rhythm floor instead of the old minimums: roughly every second or third band still carries
+an image. This amends § 3.3's F and C-icon binding rules and § 5.1 rule 3's "≥ 4 photographs".
+
 ---
 
 ## 0 · The diagnosis, in numbers
@@ -685,11 +695,11 @@ and are capped per page:
 | **L** close | the form (its texture is air, not an object) | 1, always last |
 
 Binding rules:
-- **C-icon always carries a photograph in its head track.** A section CTA on an icon set is a CtaRow under
+- **C-icon always carries a photograph in its head track** (amended by the 7 Oct image pass: not where a neighbour band already carries an image; then the head stacks). A section CTA on an icon set is a CtaRow under
   the grid (C-icon-4 only) or per-card links. Actions never go in an icon set's head track, so no icon
   set renders without its photo.
 - **D always has an aside:** a photograph or one `--text-stat-lg` figure.
-- **F always has a photograph aside.** The worked-example Callout goes above the rows in the body track
+- **F always has a photograph aside** (withdrawn by the 7 Oct image pass: F takes none). The worked-example Callout goes above the rows in the body track
   (§ 3.6).
 - **Two large things is a failure.** A photo beside numerals, or a photo beside a statement title, has
   two.
@@ -1086,12 +1096,12 @@ any photo for a better catalogue match, as long as the gate still passes.
 
 | Page (family) | B 4:5 | I 3:1 | K 4:5 | Aside 1 (C-icon) | Aside 2 (F or D) | Studio |
 |---|---|---|---|---|---|---|
-| product-design (warm) | `hands-trackpad` (fix round 2: the sticky wall was the page's one off-key, saturated frame) | — (no banner; fix round 1, 7 Oct) | `designer-tablet-monitor` (3:2, landscape offer) | `studio-whiteboard-crit` | `hand-sketch-wireframe` | B, aside 1 |
-| software-development (warm) | `designer-desk-monitor` | `workshop-hands-writing` | `whiteboard-pair-laptop` | `studio-session-talk` | `team-laptops-table` | aside 1 |
-| design-engineering (warm) | `hands-sketches-markers` (fix round 2, 6 Oct: a portrait source that holds 4:5) | `pair-at-laptop-sticky-wall` | `desk-sketch-flatlay` (3:2, landscape offer) | `studio-whiteboard-crit` | `hand-mouse-detail` | aside 1 |
+| product-design (warm) | `hands-trackpad` (fix round 2: the sticky wall was the page's one off-key, saturated frame) | — (no banner; fix round 1, 7 Oct) | `designer-tablet-monitor` (3:2, landscape offer) | `studio-whiteboard-crit` | — (image pass, 7 Oct: F takes none) | aside 1 |
+| software-development (warm) | `designer-desk-monitor` | `workshop-hands-writing` | `whiteboard-pair-laptop` | — (image pass, 7 Oct: router between image bands) | — (image pass, 7 Oct: F takes none) | — |
+| design-engineering (warm) | `hands-sketches-markers` (fix round 2, 6 Oct: a portrait source that holds 4:5) | `pair-at-laptop-sticky-wall` | `desk-sketch-flatlay` (3:2, landscape offer) | `studio-whiteboard-crit` | — (image pass, 7 Oct: F takes none) | aside 1 |
 | design-systems (cool) | `swatch-book-pages` (fix round 2, 6 Oct: the system's own artefacts, not screens) | — (no banner) | `swatch-ring-white` (3:2, landscape offer) | `white-bricks-pile` (the four-route router's media split) | — (no F or D band) | `studio-whiteboard-crit` as a stand-in cover |
 | ai-product-ux (cool) | `pair-testing-overhead` | `workshop-whiteboard-lounge` (no banner on the page yet) | `pair-laptop-notebook` (3:2, landscape offer; fix round 2, replacing the staged chalkboard pair) | `hands-sticky-blue-pen` (not shown: the stat band takes the slot and shows its figure) | `studio-whiteboard-crit` (the numbered record's aside; fix round 2, replacing the pink-cast pencil crop) | aside 2 |
-| product-modernisation (cool) | `wall-sketching-portrait` | — (no banner) | `pair-at-laptop-sticky-wall` (3:2, landscape offer; fix round 1: the violet pencil read as a stock filter; fix round 2: the empty `office-calm-interior` showed no people and no work) | `board-review-backs` | `pair-desk-through-plants` | `studio-whiteboard-crit` as a stand-in cover |
+| product-modernisation (cool) | `wall-sketching-portrait` | — (no banner) | `pair-at-laptop-sticky-wall` (3:2, landscape offer; fix round 1: the violet pencil read as a stock filter; fix round 2: the empty `office-calm-interior` showed no people and no work) | — (image pass, 7 Oct: router under K's photo) | — (image pass, 7 Oct: F takes none) | `studio-whiteboard-crit` as a stand-in cover |
 
 - **No large slot uses a vivid photo.** Each page may spend its one vivid photo in a card set, for
   example `workshop-sticky-sort` on a discovery card. Keep it away from blue-accented blocks.

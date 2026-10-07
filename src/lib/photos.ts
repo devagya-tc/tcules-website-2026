@@ -189,8 +189,11 @@ export type ServicePhotoSlots = {
       banner was one link under a soft photo, and its job moved to the J statement's link). */
   i?: PhotoId;
   k: PhotoId;
-  aside1: PhotoId;
-  aside2: PhotoId;
+  /** Optional, both (image pass, 7 Oct 2026): a head-track photograph is named only where the band
+      needs one. F (steps) never takes one (plan.ts), and a page whose six-route icon router sits
+      between image bands names no router photo, so the router stacks its head over the icons. */
+  aside1?: PhotoId;
+  aside2?: PhotoId;
 };
 
 /**
@@ -211,7 +214,7 @@ export const SERVICE_PHOTO_SLOTS = {
     b: 'hands-trackpad',
     k: 'designer-tablet-monitor',
     aside1: 'studio-whiteboard-crit',
-    aside2: 'hand-sketch-wireframe',
+    /* Image pass (7 Oct 2026): no aside 2. F's wireframe sketch was decoration beside the steps. */
   },
   /* software-development, fix round 2 (6 Oct 2026): both asides swapped. The router's was a dim,
      low-contrast talk in a warm room and F's a desaturated overhead table of coders, the two
@@ -221,8 +224,8 @@ export const SERVICE_PHOTO_SLOTS = {
     b: 'designer-desk-monitor',
     i: 'workshop-hands-writing',
     k: 'whiteboard-pair-laptop',
-    aside1: 'whiteboard-two-hands',
-    aside2: 'stylus-tablet-sketch',
+    /* Image pass (7 Oct 2026): no asides. F's tablet sketch was stock beside numbered steps, and the
+       router's whiteboard sat between the case covers (M) and the case card (G), both image bands. */
   },
   /* design-engineering, fix round 1 (6 Oct 2026): B and K swapped. B's stylus-on-tablet frame was
      40% out-of-focus sweater and repeated F's hands-sketching motif; K's sticky grid carried legible
@@ -238,7 +241,8 @@ export const SERVICE_PHOTO_SLOTS = {
     i: 'pair-at-laptop-sticky-wall',
     k: 'desk-sketch-flatlay',
     aside1: 'studio-whiteboard-crit',
-    aside2: 'hand-mouse-detail',
+    /* Image pass (7 Oct 2026): no aside 2. F's hand on a mouse explained nothing about four kinds of
+       code (the owner's example); the typed list is the band. */
   },
   /* design-systems, fix round 2 (6 Oct 2026): three screen-on-a-device shots (a soft monitor
      showing another brand's guide file, a designer's monitor, the case's laptop) read as generic
@@ -277,8 +281,8 @@ export const SERVICE_PHOTO_SLOTS = {
   'product-modernisation': {
     b: 'wall-sketching-portrait',
     k: 'pair-at-laptop-sticky-wall',
-    aside1: 'board-review-backs',
-    aside2: 'pair-desk-through-plants',
+    /* Image pass (7 Oct 2026): no asides. F's pair through plants was decoration beside the steps,
+       and the router's board review sat directly under K's photograph. */
   },
 } as const satisfies Record<string, ServicePhotoSlots>;
 

@@ -353,23 +353,18 @@ export default function KitServicesIndexPage() {
         texture
       />
 
-      {/* 2 · C-icon-6 — the router, its square photograph at the head track's full width. */}
+      {/* 2 · C-icon-6 — the router: a stacked head over three across. No photograph (image pass,
+          7 Oct 2026): a generic office beside six icon cards was decoration, and the icons already
+          give every item a shape. A text head beside the cards would be the retired text-only
+          split (owner ruling 2, 7 Oct), so the head stacks. */}
       <ContentSection
         data-band="C-icon"
-        arrangement="beside"
         eyebrow="The services"
         heading="Start from the problem"
         headingId="si-services"
         lead="Six doors, and one team behind every one."
-        aside={
-          <Media
-            image={{ ...photo('office-team-desks'), focus: { x: 0.62, y: 0.5 } }}
-            ratio="1/1"
-            sizes={HEAD_TRACK}
-          />
-        }
       >
-        <BlockCardSet items={SERVICES} lead="none" across={2} frame="box" />
+        <BlockCardSet items={SERVICES} lead="none" across={3} frame="box" />
       </ContentSection>
 
       {/* 3 · C-image-4 — the fixed-scope audits, centred, a link on each. */}
