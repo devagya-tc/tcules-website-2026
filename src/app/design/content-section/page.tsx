@@ -948,9 +948,7 @@ export default function ContentSectionSpecimen() {
         heading="Two pieces of work that argue the same point"
         headingId="csec-beside-actions"
         lead="A rebuilt workflow and a design system, both settled at the model before a screen was drawn."
-        actions={
-          <CtaRow actions={[START, SEE_WORK]} emphasis="solid" converts rule={false} />
-        }
+        actions={<CtaRow actions={[START, SEE_WORK]} emphasis="solid" converts rule={false} />}
       >
         <PairCards />
       </ContentSection>
@@ -1010,9 +1008,7 @@ export default function ContentSectionSpecimen() {
           heading={HEADING_LONG}
           headingId="csec-split-long"
           lead={LEAD_LONG}
-          actions={
-            <CtaRow actions={[START, HOW]} emphasis="solid" converts rule={false} />
-          }
+          actions={<CtaRow actions={[START, HOW]} emphasis="solid" converts rule={false} />}
         >
           <Cards />
         </ContentSection>
@@ -1020,11 +1016,11 @@ export default function ContentSectionSpecimen() {
 
       {/* ── 13b · actions at the end of the heading's row ─────────────────────────────── */}
       <Label title="13b · Actions at the end of the heading's row">
-        actionsAt=&quot;end&quot; (owner, 7 Oct 2026): the text stays in one column on the left and
-        the actions sit at the row&rsquo;s end from 1024, their top on the heading&rsquo;s top — the
-        eyebrow keeps its own line above both. A content-sized track, 64 from the text. Below
-        1024 the actions fall back a stack under the lead. Stacked heads only; the link-row form
-        and the solid pair, then the longest heading and lead against it.
+        actionsAt=&quot;end&quot; (owner, 7 Oct 2026): the text stays in one column on the left
+        and the actions sit at the row&rsquo;s end from 1024, their top on the heading&rsquo;s
+        top — the eyebrow keeps its own line above both. A content-sized track, 64 from the
+        text. Below 1024 the actions fall back a stack under the lead. Stacked heads only; the
+        link-row form and the solid pair, then the longest heading and lead against it.
       </Label>
       <ContentSection
         eyebrow="Actions at the end · link"
@@ -1043,9 +1039,7 @@ export default function ContentSectionSpecimen() {
         headingId="csec-actions-end-pair"
         lead="A rebuilt workflow and a design system, both settled at the model before a screen was drawn."
         actionsAt="end"
-        actions={
-          <CtaRow actions={[START, SEE_WORK]} emphasis="solid" tone="primary" rule={false} />
-        }
+        actions={<CtaRow actions={[START, SEE_WORK]} emphasis="solid" converts rule={false} />}
       >
         <PairCards />
       </ContentSection>
@@ -1057,7 +1051,7 @@ export default function ContentSectionSpecimen() {
           lead={LEAD_LONG}
           actionsAt="end"
           actions={
-            <CtaRow actions={[START, SEE_WORK]} emphasis="solid" tone="primary" rule={false} />
+            <CtaRow actions={[START, SEE_WORK]} emphasis="solid" converts rule={false} />
           }
         >
           <PairCards />
