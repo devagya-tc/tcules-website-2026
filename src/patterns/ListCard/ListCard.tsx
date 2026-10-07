@@ -1,4 +1,12 @@
-import { Cluster, Icon, Layout, Media, type IconName, type MediaImage } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  Layout,
+  Media,
+  type IconName,
+  type MediaImage,
+} from '@/components';
 import { cx } from '@/lib/cx';
 import { LIST_CARD_THUMBNAIL } from '@/lib/image-sizes';
 
@@ -77,8 +85,22 @@ export type ListCardSize = 'md' | 'sm';
 export type ListCardTitleElement = 'span' | 'h3' | 'h4';
 
 /**
+ * The tile's finish (owner, 7 Oct 2026 — a partial reversal of "a card is never a box").
+ *
+ *   none  the default: the groundless tile, opened by its rule.
+ *   box   a hairline round all four sides at the 8 radius, the copy a `block` (24) inside it, and —
+ *         on a linked tile — a ground under the pointer. For a set whose items must read as
+ *         separate objects at a glance: an icon router of four to six destinations, where open
+ *         tiles in a grid read as one field of text.
+ *
+ * A tile only. A row sits in a ruled ladder whose rules ARE its separation; a box round each row
+ * would be a stack of panels with a second rule between them.
+ */
+export type ListCardFrame = 'none' | 'box';
+
+/**
  * A closed content record. There is no `children`, `className` or DOM-attribute spread: allowing
- * any of them would reopen nested controls, call-site geometry and a second source for the cue.
+ * any of them would reopen nested controls, call-site geometry and a second source for the action.
  */
 type ListCardFormProps =
   | {
@@ -86,12 +108,16 @@ type ListCardFormProps =
       form?: 'row';
       /** Title/body geometry only. Defaults to the corpus's highest-volume split arrangement. */
       arrangement?: ListCardArrangement;
+      /** A row is never boxed. See `ListCardFrame`. */
+      frame?: never;
     }
   | {
       /** An item in a grid track. See `ListCardForm`. */
       form: 'tile';
       /** A tile always stacks: a split needs a row's width, and a grid track never has it. */
       arrangement?: never;
+      /** The tile's finish. Defaults to `none`. See `ListCardFrame`. */
+      frame?: ListCardFrame;
     };
 
 export type ListCardProps = ListCardFormProps & {
@@ -109,29 +135,28 @@ export type ListCardProps = ListCardFormProps & {
   titleAs?: ListCardTitleElement;
   /** The type step, passed by the set. Defaults to `sm` on a tile and `md` on a row. */
   size?: ListCardSize;
-  /** A non-blank destination turns the entire row into one native link and adds its cue. */
+  /**
+   * A non-blank destination turns the entire item into one native link (owner, 7 Oct 2026: no arrow
+   * after the title). The item carries no glyph at rest; on hover and focus its title takes the
+   * accent ink, and a keyboard focus ring runs round the whole item.
+   */
   href?: string;
   /**
-   * The destination leaves tcules.com. Opens in a new tab, swaps the cue for the "leaves the
-   * site" arrow (`arrow-right-up`) and appends a visually hidden "(opens in a new tab)" to the row's accessible name.
-   * Ignored on a row with no destination.
+   * The destination leaves tcules.com. Opens in a new tab, appends a visually hidden "(opens in a
+   * new tab)" to the item's accessible name, and sets a small up-right glyph after the title — the
+   * one glyph a linked item may still carry, so a sighted reader is told the same thing (WCAG
+   * G201) before the click rather than after it. Ignored on an item with no destination.
    */
   external?: boolean;
   /**
-   * Where a linked row's arrow sits (cmp-services fix round 1, 6 Oct 2026). Ignored on a tile and
-   * on a row with no destination.
-   *
-   *   end     the default: the arrow at the row's inline end, and the row paints a ground on hover.
-   *   title   BlockCard's link model: the arrow follows the title's last word, and on hover the
-   *           title takes the link ink to meet it. With no ground to clear, the row drops its 16
-   *           inline inset, so its marker and copy sit on the column edge the band's head and the
-   *           rule share. For a router or an index, where a row is a destination, not a line item.
-   *           On a 160 thumbnail row the end arrow sat 400px from its title, on the cap line.
+   * A visible action at the item's foot: the link Button, with its arrow, carrying this label
+   * (owner, 7 Oct 2026). Opt-in, for an item whose action is NOT obvious from its title — "Download
+   * the template", "Book a slot". Most linked items need none: the title names the destination.
+   * Rendered as a span inside the item's one anchor, so it adds no second focus stop. Ignored
+   * without a destination. Pass ordinary capitalisation; Button sets the case.
    */
-  cue?: ListCardCue;
+  ctaLabel?: string;
 };
-
-export type ListCardCue = 'end' | 'title';
 
 /** One modifier per step, on the root; the module sets title, body and ordinal offset under it. */
 const SIZE_CLASS: Record<ListCardSize, string | undefined> = {
@@ -218,16 +243,18 @@ function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }
  * one boolean driving both — so a numbered set is a real <ol> and an unordered one a <ul>. A
  * wrapper pattern that owned the list would be a pattern importing a pattern, or a second Layout.
  *
- * A non-blank href
- * changes only the frame element and the cue: one <a> wraps the row, giving it one focus stop and
- * one accessible name, while the static shape is an inert <div> with no pointer states.
+ * A non-blank href changes only the frame element and the title's hover ink: one <a> wraps the
+ * item, giving it one focus stop and one accessible name, while the static shape is an inert <div>
+ * with no pointer states. There is no arrow cue (owner, 7 Oct 2026): the whole item is the link, and
+ * a blue arrow after nearly every title read as bulky. Where the action is not obvious from the
+ * title the caller opts into a visible one at the foot (`ctaLabel`).
  *
  * Every arrangement is a primitive. The outer Cluster puts marker beside the content core and may
- * wrap the larger thumbnail above it. The inner nowrap Cluster keeps the cue at the core's inline
- * end. The title/body split is a third, wrapping Cluster whose break point is the two children's
- * minimum tracks — the row's own width decides, never the viewport's (29 Sep 2026, 2.17). A stacked
- * row is a single-track Layout. The module contains no grid or flex arrangement; its flex
- * declarations only size children inside those primitives.
+ * wrap the larger thumbnail above it. The title/body split is a second, wrapping Cluster whose
+ * break point is the two children's minimum tracks — the row's own width decides, never the
+ * viewport's (29 Sep 2026, 2.17). A stacked row, and a row's copy over its action, are single-track
+ * Layouts. The module contains no grid or flex arrangement; its flex declarations only size
+ * children inside those primitives.
  */
 export function ListCard({
   title,
@@ -235,11 +262,12 @@ export function ListCard({
   marker,
   form = 'row',
   arrangement = 'split',
+  frame = 'none',
   titleAs: Title = 'span',
   size,
   href,
   external = false,
-  cue: cueAt = 'end',
+  ctaLabel,
 }: ListCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -251,48 +279,59 @@ export function ListCard({
     warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
   }
   const isTile = form === 'tile';
+  const boxed = isTile && frame === 'box';
   const step: ListCardSize = size ?? (isTile ? 'sm' : 'md');
 
   const destination = href?.trim() ? href : undefined;
   const isSplit = !isTile && arrangement === 'split';
   const leaves = destination !== undefined && external;
-  const titleCue = destination !== undefined && !isTile && cueAt === 'title';
 
-  /* The title-cued row: the arrow after the title's last word, joined by a non-breaking space so it
-     never starts a line alone, and the hint inside it so the accessible name still ends on it. */
+  if (ctaLabel !== undefined && ctaLabel.trim().length === 0) {
+    warn(`ctaLabel is blank for ${JSON.stringify(title)}; omitting the action.`);
+  }
+  /* The opt-in action: the shipped link Button, as BlockCard's cta draws it. `as="span"` keeps the
+     single-anchor contract — the item already navigates, so a nested <a> would be invalid markup
+     and a second stop for one destination — and the frame's `data-btn-link-group` hands it the
+     item's hover, focus and press. The Cluster keeps it at the copy's inline start rather than
+     letting a blockified inline-flex take the whole track. */
+  const action =
+    destination && ctaLabel?.trim() ? (
+      <Cluster>
+        <Button
+          as="span"
+          emphasis="link"
+          tone="primary"
+          icon={<Icon name={leaves ? 'arrow-right-up' : 'arrow-right'} />}
+        >
+          {ctaLabel}
+        </Button>
+      </Cluster>
+    ) : null;
+
+  /* An external item says so to the eye as well as to a screen reader: a small up-right glyph after
+     the title's last word, joined by a non-breaking space so it never starts a line alone. Not the
+     removed arrow cue — it does not say "this is a link" (the hover does that), it says "this
+     leaves the site", which a sighted reader cannot otherwise know before the new tab opens. With
+     an action, the action's own glyph says it instead, so the title carries none. */
+  const leavesGlyph =
+    leaves && !action ? (
+      <>
+        {'\u00a0'}
+        <span className={styles.leaves}>
+          <Icon name="arrow-right-up" size="md" />
+        </span>
+      </>
+    ) : null;
+
   const titleNode = (className: string | undefined) => (
-    <Title className={cx(className, titleCue && styles.cuedTitle)}>
+    <Title className={className}>
       {title}
-      {titleCue ? (
-        <>
-          {'\u00a0'}
-          <span className={styles.titleCue}>
-            <Icon name={leaves ? 'arrow-right-up' : 'arrow-right'} size="lg" />
-            {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}
-          </span>
-        </>
-      ) : null}
+      {leavesGlyph}
     </Title>
   );
 
-  const cue =
-    destination && !titleCue ? (
-      <span className={styles.cue}>
-        {/* One glyph per meaning (ch04): `arrow-right` is "go, next", `arrow-right-up` is
-          "leaves the site". Both are Solar Bold's plain arrows, the same drawing turned 45°,
-          so an off-site row sits in a list of internal ones without a filled square among
-          bare arrows (29 Sep 2026, 2.17). The cue is replaced, never doubled — one icon per
-          row — and it keeps the cue's slot, size and ink, so an external row differs from an
-          internal one by its glyph's angle alone. Trailing either way: both are movement. */}
-        <Icon name={leaves ? 'arrow-right-up' : 'arrow-right'} size="lg" />
-        {/* The glyph is aria-hidden, so the new tab is said in words, at the END of the
-          accessible name so the title is still what a screen reader leads with. */}
-        {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}
-      </span>
-    ) : null;
-
-  /* The tile: marker, then the title over its body, then — on a linked tile — the cue at the foot,
-     pinned there so every cue in a grid row sits on one line however long its body runs.
+  /* The tile: marker, then the title over its body, then — when there is one — the action at the
+     foot, pinned there so every action in a grid row sits on one line however long its body runs.
 
      The marker and the copy are a wrapping Cluster (final fix round, cmp-media-split, 6 Oct 2026),
      which is what lets the tile change shape at 768 without a second layout. From md the copy takes
@@ -304,15 +343,15 @@ export function ListCard({
      Title to body stays `text`, not `tight` (8), in every form (visual-direction § 1.1, S3): it puts
      ListCard and BlockCard on one card rhythm, and at 8 a two-line title and its sentence read as
      one paragraph in two faces. A thumbnail marker always sits above: beside a phone-width copy
-     column, a 160 image leaves it ~140. */
+     column, a 160 image leaves it ~140. The action sits a `block` under the copy, as BlockCard's. */
   const tileCopy = (
     <Layout rowGap="text" className={styles.content}>
-      <Title className={styles.title}>{title}</Title>
+      {titleNode(styles.title)}
       {hasBody ? <p className={styles.body}>{body}</p> : null}
     </Layout>
   );
   const tile = (
-    <Layout rowGap="text" pinLast={destination !== undefined} className={styles.tileInner}>
+    <Layout rowGap="block" pinLast={action !== null} className={styles.tileInner}>
       {marker ? (
         <Cluster colGap="block" rowGap="block" align="start">
           <Marker marker={marker} form={form} />
@@ -328,36 +367,46 @@ export function ListCard({
       ) : (
         tileCopy
       )}
-      {cue}
+      {action}
+    </Layout>
+  );
+
+  /* The split reads the row's OWN width, not the viewport's. A wrapping Cluster puts title and body
+     side by side only while both of their minimum tracks fit on one line, and wraps the body under
+     the title the moment they do not — so a row in a 390px grid track stacks even on a 1440 screen,
+     and the title is never squeezed into a track narrower than its words. The two maxima
+     (--measure-title, --measure-body) are the cap: past them the leftover stays at the core's inline
+     end instead of prising the title and its sentence apart. The module only sizes the two children
+     inside Cluster. */
+  const rowCopy = isSplit ? (
+    <Cluster colGap="block" rowGap="text" align="start" className={styles.content}>
+      {titleNode(cx(styles.title, styles.splitTitle))}
+      {hasBody ? <p className={cx(styles.body, styles.splitBody)}>{body}</p> : null}
+    </Cluster>
+  ) : (
+    <Layout rowGap="text" className={styles.content}>
+      {titleNode(styles.title)}
+      {hasBody ? <p className={styles.body}>{body}</p> : null}
     </Layout>
   );
 
   const row = (
     <Cluster colGap="block" rowGap="block" align="start">
       {marker ? <Marker marker={marker} form={form} /> : null}
-      <Cluster colGap="block" align="start" nowrap className={styles.core}>
-        {isSplit ? (
-          /* The split reads the row's OWN width, not the viewport's. A wrapping Cluster puts title
-             and body side by side only while both of their minimum tracks fit on one line, and
-             wraps the body under the title the moment they do not — so a row in a 390px grid
-             track stacks even on a 1440 screen, and the title is never squeezed into a track
-             narrower than its words. The two maxima (--measure-title, --measure-body) are the cap:
-             past them the leftover stays at the core's inline end instead of prising the title
-             and its sentence apart. The module only sizes the two children inside Cluster. */
-          <Cluster colGap="block" rowGap="text" align="start" className={styles.content}>
-            {titleNode(cx(styles.title, styles.splitTitle))}
-            {hasBody ? <p className={cx(styles.body, styles.splitBody)}>{body}</p> : null}
-          </Cluster>
-        ) : (
-          <Layout rowGap="text" className={styles.content}>
-            {titleNode(styles.title)}
-            {hasBody ? <p className={styles.body}>{body}</p> : null}
+      <div className={styles.core}>
+        {action ? (
+          <Layout rowGap="block">
+            {rowCopy}
+            {action}
           </Layout>
+        ) : (
+          rowCopy
         )}
-        {cue}
-      </Cluster>
+      </div>
     </Cluster>
   );
+
+  const inner = isTile ? tile : row;
 
   return (
     <li
@@ -365,20 +414,27 @@ export function ListCard({
         styles.root,
         SIZE_CLASS[step],
         isTile && styles.tile,
-        titleCue && styles.titleCued,
+        boxed && styles.boxed,
+        action !== null && styles.withAction,
       )}
     >
       {destination ? (
+        /* `data-btn-link-group` is Button's published contract: this anchor's states are the
+           states of the link Button inside it. Emitted only when there is one. */
         <a
           className={cx(styles.frame, styles.link)}
           href={destination}
           target={leaves ? '_blank' : undefined}
           rel={leaves ? 'noreferrer' : undefined}
+          data-btn-link-group={action ? true : undefined}
         >
-          {isTile ? tile : row}
+          {inner}
+          {/* The glyph is aria-hidden, so the new tab is said in words, at the END of the
+              accessible name so the title is still what a screen reader leads with. */}
+          {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}
         </a>
       ) : (
-        <div className={cx(styles.frame, styles.still)}>{isTile ? tile : row}</div>
+        <div className={styles.frame}>{inner}</div>
       )}
     </li>
   );

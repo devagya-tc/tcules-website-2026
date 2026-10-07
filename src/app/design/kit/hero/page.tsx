@@ -334,7 +334,7 @@ export default function HeroKitSpecimen() {
                 key={variation.id}
                 form="tile"
                 size="sm"
-                marker={{ type: 'number', value: index + 1 }}
+                marker={{ type: 'number', value: index + 1, tone: 'neutral' }}
                 title={variation.short}
                 body={variation.facts[0]}
                 href={`#${variation.id}`}

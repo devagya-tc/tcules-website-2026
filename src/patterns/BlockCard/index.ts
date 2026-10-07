@@ -10,6 +10,7 @@ export type {
   BlockCardTracks,
   BlockCardRatio,
   BlockCardCue,
+  BlockCardFrame,
   BlockCardTextureRecipe,
 } from './BlockCard';
 export { BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCardSet';

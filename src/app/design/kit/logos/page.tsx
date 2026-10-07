@@ -226,13 +226,13 @@ export default async function KitLogosPage() {
             <Layout as="ol" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
               <ListCard
                 form="tile"
-                marker={{ type: 'number', value: 1 }}
+                marker={{ type: 'number', value: 1, tone: 'neutral' }}
                 title="One ink, equal area"
                 body="Each mark drawn in the ground's ink from the client's own file, sized by area, not width."
               />
               <ListCard
                 form="tile"
-                marker={{ type: 'number', value: 2 }}
+                marker={{ type: 'number', value: 2, tone: 'neutral' }}
                 title="Real marks, real words"
                 body="Beside an approved quote or a sourced figure only, never an illustrative one."
               />

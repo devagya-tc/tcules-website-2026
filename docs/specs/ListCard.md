@@ -11,8 +11,15 @@
 | **Designer / date** | Codex / 21 Aug 2026                                                                                                    |
 | **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug. **Phase 2 task 2.11 / 28 Sep 2026** — the thumbnail moves onto `Media` (`fit="fill"`, `LIST_CARD_THUMBNAIL`, lazy); the marker union discriminates on `type`; `external` takes ch04's `square-arrow-right-up` and a visually hidden new-tab hint; the ordered set is confirmed as a real `ol`; contact cards lose their icon thumbnails (C1). Rulings: `docs/phase-2-decisions.md` C1, M1–M4. **Tracker 2.17 / 29 Sep 2026** — the split reads the row's own width (a wrapping `Cluster` on `--lcrd-title-min` / `--lcrd-body-min`, not Layout's md viewport boundary), so titles no longer break mid-word; the title wraps `break-word`, not `anywhere`; wide rows are capped at `--measure-title` + seam + `--measure-body`; the off-site cue is the plain `arrow-right-up`; the thumbnail passes Media `inset="text"`. See § 7, § 9, § 10 and § 17 q7, q8. **1 Oct 2026 (owner)** — a second **form**, `tile`, for an item in a grid track, and `body` optional. Collected in **Amendment · 1 Oct 2026**. |
 | **Revised**         | `fdn-spacing` / 5 Oct 2026 — title → body at `text` in every form (S3); the `size` prop (`md \| sm`), passed by the composing route (visual-direction § 7.2). See **Amendment · 5 Oct 2026**. 6 Oct 2026 — at `sm` only a tile's body steps to body-sm; a row's body stays at body (item 2), and grids of tiles take a `column` row seam (item 4) |
+| **Revised**         | **Owner review / 7 Oct 2026** — no arrow cue on linked items (the `cue` prop is deleted; the title takes the link ink on hover and focus); an opt-in action at the foot (`ctaLabel`); the boxed tile (`frame="box"`); the number tone rule. See **Amendment · 7 Oct 2026** at the foot; where this spec still differs, that amendment wins. |
 | **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
 | **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
+
+> **Amendment · 7 Oct 2026 · owner review (supersedes every mention of the arrow cue below).** No
+> arrow after a linked item's title and no arrow at a row's end: the whole item is the link, and its
+> title is the hover and focus signal. Visible actions are opt-in (`ctaLabel`). Tiles may be boxed
+> (`frame="box"`). Number markers are blue when the numbered points ARE the section's information and
+> neutral when they are auxiliary. Full text: **Amendment · 7 Oct 2026** at the foot.
 
 > **Amendment · 5 Oct 2026 · `fdn-spacing` (visual-direction § 1.1 S3, § 7.2).** Where this spec
 > still differs, `docs/kit/visual-direction.md` wins.
@@ -101,9 +108,11 @@ parent list.
 | `content` |              yes | The group containing `title` and `body` — a wrapping `Cluster` when `split`, a one-track `Layout` when `stacked` | `split` or `stacked` arrangement; no colour of its own            |
 | `title`   |              yes | A `span`, `h3` or `h4`, selected by `titleAs`                                    | `--lcrd-title-ink`, linked or not                                 |
 | `body`    |   yes in the API | One paragraph; whitespace-only content emits no element                          | `--lcrd-body-ink` and `--measure-body`                            |
-| `cue`     | linked rows only | `Icon name="arrow-right" size="lg"`, or `arrow-right-up` when `external` (2.17; was `square-arrow-right-up`), hidden from assistive technology; an external row adds a visually hidden "(opens in a new tab)" | The row's only link ink, and the row's only state                 |
+| `cue`     | **deleted 7 Oct 2026** | — The arrow cue is gone. An external item keeps a small (16) `arrow-right-up` after the title and a visually hidden "(opens in a new tab)" at the end of its name | The title carries the link ink on hover, focus and press                 |
+| `action`  | opt-in, linked only | `ctaLabel`: the link `Button` (`as="span"`, `emphasis="link"`, `tone="primary"`, `arrow-right` or `arrow-right-up`) a `block` under the copy, pinned to a tile's foot | Button's own tokens; the frame carries `data-btn-link-group` |
 | `rule`    |              yes | The root's block-end hairline                                                    | `--lcrd-rule-ink`; one width and one colour in every state         |
-| `ground`  | linked rows only | No element of its own — the frame's own background, painted only under a pointer  | `--lcrd-ground-hover`, `--lcrd-ground-pressed`                    |
+| `ground`  | boxed linked tiles only (7 Oct 2026) | No element of its own — the frame's own background, painted only under a pointer  | `--lcrd-ground-hover`, `--lcrd-ground-pressed`                    |
+| `box`     | `frame="box"` tiles only | The frame's four-sided hairline at `--lcrd-box-radius` (8), `--gap-block` inside | `--lcrd-rule-ink`, `--lcrd-box-rule-width`                    |
 
 The title's ink does not depend on `href`, matching the same change in `BlockCard`: a linked row is
 recognisable by its arrow, not by a blue heading, so `--lcrd-link-ink` is worn by the cue alone.
@@ -213,10 +222,13 @@ Static rows have only rest. They do not respond to a pointer and do not enter th
 
 | State           | Trigger                              | Parts that move                                                                              |
 | --------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
-| rest            | Base rendering                       | Nothing moves. Title and body hold their own inks; marker, numeral and cue carry the blue accent (fdn-blue, 6 Oct 2026) |
-| hover           | Pointer over a linked frame          | Row: the frame paints `--lcrd-ground-hover`. Tile (1 Oct 2026): no ground; the opening rule takes `--lcrd-link-ink`. The cue holds `--lcrd-link-ink` |
+| rest            | Base rendering                       | Nothing moves. Title and body hold their own inks; marker and numeral carry the blue accent (fdn-blue, 6 Oct 2026). No arrow (7 Oct 2026) |
+| hover           | Pointer over a linked frame          | The title takes `--lcrd-link-ink` (not with an action: the action moves instead). Open tile: the opening rule takes `--lcrd-link-ink`. Boxed tile: the frame paints `--lcrd-ground-hover`. Rows paint no ground (7 Oct 2026) |
 | focus, keyboard | `:focus-visible` on a linked frame   | Exactly the hover rendering plus the two-part ring from `--lcrd-ring-color` and `--lcrd-ring-gap-color` |
-| pressed         | Pointer activation on a linked frame | The ground steps to `--lcrd-ground-pressed` and the cue to `--lcrd-link-ink-pressed`           |
+| pressed         | Pointer activation on a linked frame | The title steps to `--lcrd-link-ink-pressed`; a boxed tile's ground to `--lcrd-ground-pressed`           |
+
+The paragraphs below record the 26 Aug row ground and the ghost model it took. Both were removed on 7
+Oct 2026 with the arrow cue; they stand as history.
 
 **Hover moves one thing and press moves two**, which is `Button`'s ghost model rather than an
 invention here. Ghost moves its background under the pointer and its foreground only on the click;
@@ -266,8 +278,8 @@ ground: `--color-paper`, `--color-paper-deep`, `--color-neutral-950` and
 | `--lcrd-link-ink`         | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-brandeis-100` — 4.91:1             |
 | `--lcrd-link-ink-pressed` | `--color-brandeis-700` — 10.07:1                | `--color-brandeis-700` — 8.99:1                 | `--color-brandeis-50` — 15.44:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--lcrd-rule-ink`         | `--color-neutral-300` — n/a, decoration         | `--color-neutral-400` — n/a, decoration         | `--color-neutral-700` — n/a, decoration         | `--color-brandeis-300` — n/a, decoration    |
-| `--lcrd-ground-hover`     | `--color-neutral-100` — a ground, not an ink     | `--color-neutral-200` — a ground, not an ink     | `--color-neutral-900` — a ground, not an ink     | `--color-brandeis-600` — a ground, not an ink |
-| `--lcrd-ground-pressed`   | `--color-neutral-200` — a ground, not an ink     | `--color-neutral-300` — a ground, not an ink     | `--color-neutral-800` — a ground, not an ink     | `--color-brandeis-700` — a ground, not an ink |
+| `--lcrd-ground-hover`     | `--color-paper-deep` — a ground, not an ink (7 Oct)     | `--color-neutral-100` — a ground, not an ink (7 Oct)     | `--color-neutral-900` — a ground, not an ink     | `--color-brandeis-600` — a ground, not an ink |
+| `--lcrd-ground-pressed`   | `--color-neutral-100` — a ground, not an ink (7 Oct)     | `--color-neutral-200` — a ground, not an ink (7 Oct)     | `--color-neutral-800` — a ground, not an ink     | `--color-brandeis-700` — a ground, not an ink |
 | `--lcrd-ring-color`       | `--color-brandeis-500` — 6.17:1 against its gap | `--color-brandeis-500` — 5.51:1 against its gap | `--color-brandeis-300` — 7.32:1 against its gap | `--color-white` — 6.23:1 against its gap    |
 | `--lcrd-ring-gap-color`   | `--color-paper` — paired ring 6.17:1            | `--color-paper-deep` — paired ring 5.51:1       | `--color-neutral-950` — paired ring 7.32:1      | `--color-brandeis-500` — paired ring 6.23:1 |
 
@@ -1171,3 +1183,87 @@ title with the sentence under it.
   1440 / 768 / 390: both column tops at 0 from 768, the closing rules level across the seam.
 - No row change to ListCard itself; its tokens are unchanged (`--lcrd-stacked-body-measure` renamed for
   both set modes). The module's "no media query" note now scopes to the row.
+
+## Amendment · 7 Oct 2026 — owner review: no title arrow, the action slot, the boxed tile, number tone
+
+Owner decisions of 7 Oct 2026. Where anything above differs, this section wins.
+
+### 1 · No arrow cue
+
+Nearly every clickable card in the kit showed a blue arrow — after a `cue="title"` row's title, at a
+`cue="end"` row's inline end, at a linked tile's foot — and it read as bulky. The whole item is already
+the link. So:
+
+- **The `cue` prop and `ListCardCue` are deleted.** A linked item carries no glyph at rest.
+- **The title is the affordance.** On hover and keyboard focus it takes `--lcrd-link-ink`; on press
+  `--lcrd-link-ink-pressed`. The two-part focus ring still runs round the whole item, so focus is never
+  colour alone. An open tile's opening rule still takes the link ink on hover too.
+- **The end-of-row arrow went as well.** Judged on the crops: a wide row with a title that turns blue
+  under the pointer, plus a cursor and a ring, is still plainly a link, and the owner's complaint was
+  the arrow's prevalence, not one position of it. Keeping it on rows alone would have kept two link
+  models in one kit.
+- **No row hover ground.** It answered a 1240 target whose only other signal was an 18px arrow at its
+  far end. With the title moving it answered nothing, and its 16 inline inset went with it: every row
+  now stands on the column edge the band's head and the rules share (as static, Steps, ReadDown and
+  title-cued rows already did). `--lcrd-ground-*` now serve the boxed tile only, at new values.
+- **External links still say so.** `external` keeps the visually hidden "(opens in a new tab)" at the
+  end of the accessible name, and sets a small (16, Icon `md`) `arrow-right-up` after the title's last
+  word in the link ink, joined by a non-breaking space. Justified: it does not say "this is a link" (the
+  hover does that), it says "this leaves the site" — which a sighted reader cannot otherwise know before
+  the new tab opens (WCAG technique G201 asks that the warning reach everyone). External items are rare,
+  so it does not bring the bulk back. With an action, the action's own glyph turns up-right instead and
+  the title carries none.
+
+### 2 · An opt-in action at the foot: `ctaLabel`
+
+`ctaLabel?: string`. With a destination, the item renders the link `Button` — `emphasis="link"`,
+`tone="primary"`, `as="span"`, `arrow-right` (or `arrow-right-up` when external) — a `block` (24) under
+the copy: inside a row's content core, and pinned to a tile's foot (`Layout pinLast`) so every action
+in a grid row sits on one line. The frame anchor carries `data-btn-link-group`, Button's published
+contract, so the span takes the item's hover, focus and press. One anchor, one focus stop, no nested
+interactive element. With an action the title holds still and the action moves (BlockCard's cta model:
+one cue per item). Blank labels warn and render no action. **Use it only where the action is not obvious
+from the title** — "Book an audit", "Get the Figma file". A title that names its destination needs none.
+
+### 3 · The boxed tile: `frame="box"`
+
+A partial reversal of the kit's "cards have no boxes" ruling (visual-direction § 3.1, amended the same
+day). `frame?: 'none' | 'box'`, on `form="tile"` only (typed: a row's `frame` is `never`); default
+`none`.
+
+- A `--lcrd-box-rule-width` hairline round all four sides in `--lcrd-rule-ink` (the same hairline as the
+  open tile's opening rule, so no new ink), `--lcrd-box-radius` (8, the photograph radius), and
+  `--gap-block` (24) inside on every side. The opening rule becomes the box's top edge.
+- Linked: `--lcrd-ground-hover` under the pointer, `--lcrd-ground-pressed` on press; the edge holds its
+  ink. The title moves as on any linked item. The focus ring follows the radius.
+- Ground values per surface: paper `paper-deep` / `neutral-100`; tint `neutral-100` / `neutral-200`; ink
+  `neutral-900` / `neutral-800`; blue `brandeis-600` / `brandeis-700`.
+- Use it for a set whose items must read as separate objects at a glance — an icon router of four to six
+  destinations. Boxed tiles sit a `gutter` (32) apart both ways: the box is the separation.
+- Rows are never boxed: their rules are their separation, and a box round each row is a stack of panels.
+
+### 4 · Number tone: accent or neutral
+
+`marker: { type: 'number', value, tone?: 'accent' | 'neutral' }`, `accent` by default.
+
+**The rule (owner):** blue (`accent`) when the numbered points **are the main information of the
+section** — a method's steps, a checklist that is the band's body, the phases a CTA band sells.
+**`neutral` when the numbers are auxiliary** — an index of the page's own sections, a pair of numbered
+notes under a hero's heading, any set where the numeral only counts and the band's information is
+elsewhere.
+
+Audit, 7 Oct 2026 — set to `neutral`:
+
+| Call site | Why auxiliary |
+|---|---|
+| `src/app/design/kit/cta/page.tsx` — the variation index | indexes the page's bands; the bands are the information |
+| `src/app/design/kit/service-list/page.tsx` — the variation index | the same |
+| `src/app/design/kit/hero/page.tsx` — the variation index tiles | the same |
+| `src/app/design/kit/logos/page.tsx` — two numbered notes under the h1 | supporting points to the intro's heading and lede |
+
+Left at `accent` (the numbered points are the content): `Steps` (every method); the ServicePage ledger's
+numbered rows; the CMS `labelled-list` with `displayStyle: 'numbered'` on services, expertise, audits,
+glossary, tools and how-we-work (the author numbered the list because its order is the point); the About
+checklist; the Future Interfaces Lab join steps; the kit CTA band's phases; the ContentSection and CtaRow
+specimens' steps.
+

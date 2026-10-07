@@ -5,7 +5,6 @@ import {
   Cluster,
   Icon,
   type IconName,
-  type IconSize,
   Layout,
   Media,
   type MediaImage,
@@ -90,21 +89,40 @@ export type BlockCardTitleElement = 'h2' | 'h3' | 'h4';
 export type BlockCardRatio = 'cover' | 'wide' | 'panorama' | 'double' | 'square' | 'headshot';
 
 /**
- * How a WHOLE-CARD link says it navigates, at rest. One cue per card, never both.
+ * How a WHOLE-CARD link says it navigates. One cue per card, never both.
  *
- *   arrow  a blue arrow after the title's last word, joined by a non-breaking space — ListCard's
- *          linked-row cue, so the kit has one. The title joins it in blue on hover and focus.
- *   cta    a link-style action under the copy ("Read more", or `ctaLabel`), blue at rest; the
- *          title stays dark. The per-card CTA of § 1.4 (+64: 24 + a 40 row).
+ *   title  the title itself (owner, 7 Oct 2026): no glyph at rest, and on hover and focus the
+ *          title takes the accent ink (and a cover leans in). It replaced `arrow`, a blue arrow
+ *          after the title's last word: on nearly every card in the kit it read as bulky, and the
+ *          whole card is already the link. ListCard's linked items answer the same way.
+ *   cta    a link-style action under the copy ("Read more", or `ctaLabel`), blue at rest, with its
+ *          arrow; the title stays dark. The per-card CTA of § 1.4 (+64: 24 + a 40 row). For a card
+ *          whose action is NOT obvious from its title; a card whose title names its destination
+ *          needs none.
  *
  *   download  the cta again, with the download glyph and "Download" (or `ctaLabel`): a resource
  *          that is a file says so before it is opened (M, cmp-feature 6 Oct 2026). Pair it with
  *          `meta` ("PDF · 12 pages"), which sits beside it on the action row.
  *
- * Defaults: `arrow` on a card with a cover or an icon, `cta` on a text-only card — the shape every
+ * Defaults: `title` on a card with a cover or an icon, `cta` on a text-only card — the shape every
  * live route already renders. A feature set states it for the whole set (BlockCardSet `cue`).
  */
-export type BlockCardCue = 'arrow' | 'cta' | 'download';
+export type BlockCardCue = 'title' | 'cta' | 'download';
+
+/**
+ * The card's finish (owner, 7 Oct 2026 — a partial reversal of "a card is never a box",
+ * visual-direction § 3.1).
+ *
+ *   none  the default: the borderless card, bounded by its set's gutter and its cover's edge.
+ *   box   a hairline round the card at the 8 radius, its content a `block` (24) inside, and — on a
+ *         linked card — a ground under the pointer. For a set whose cards must read as separate
+ *         objects at a glance: an icon router of four to six destinations, where open icon cards
+ *         two across read as one field of text. A text-only card drops its top hairline inside a
+ *         box, whose own top edge already draws it.
+ *
+ * A set's decision, like the type step: BlockCardSet `frame` states it for every card.
+ */
+export type BlockCardFrame = 'none' | 'box';
 
 /**
  * Which axis the card arranges on. A PRESENTATION choice, never a CMS field.
@@ -159,13 +177,6 @@ const SIZE_CLASS: Record<BlockCardSize, string | undefined> = {
   md: styles.sizeMd,
   sm: styles.sizeSm,
 };
-
-/**
- * The arrow cue's glyph size per card step. The Solar arrow is drawn inside its 24-unit box with
- * air round it, so a box near the title's size gives a glyph about its x-height wide: 24 beside the
- * 34 and 28 titles, 18 beside the 22.
- */
-const CUE_SIZE: Record<BlockCardSize, IconSize> = { lg: 'xl', md: 'xl', sm: 'lg' };
 
 /** One modifier per crop, on the image box; the module reads the ratio token under it. */
 const RATIO_CLASS: Record<BlockCardRatio, string | undefined> = {
@@ -241,15 +252,16 @@ export type BlockCardProps = {
   /** Heading semantics without a visual type change. Defaults to h3. */
   titleAs?: BlockCardTitleElement;
   /**
-   * A non-blank destination turns the entire card into one native link, which says it navigates at
-   * rest by ONE cue (`cue`): the blue arrow after the title, or a link-style cta under the copy.
-   * By default a card with a cover or an icon takes the arrow and a text-only card the cta.
+   * A non-blank destination turns the entire card into one native link, which says it navigates by
+   * ONE cue (`cue`): its title, which takes the accent on hover and focus, or a link-style cta under
+   * the copy. By default a card with a cover or an icon is title-cued and a text-only card takes the
+   * cta.
    */
   href?: string;
   /**
    * The cta wording when the card's cue is `cta`. Defaults to "Read more", which is
    * content-type-agnostic; pass a specific line where the page can name its destination. Ignored
-   * without `href` and under the arrow cue. `Button` uppercases it, so pass ordinary capitalisation.
+   * without `href` and under the title cue. `Button` uppercases it, so pass ordinary capitalisation.
    */
   ctaLabel?: string;
   /** Arrangement axis. Defaults to the grid tile. */
@@ -276,6 +288,8 @@ export type BlockCardProps = {
   index?: number;
   /** How a linked card says it navigates. See `BlockCardCue`. Ignored without `href`. */
   cue?: BlockCardCue;
+  /** The card's finish. Defaults to `none`. See `BlockCardFrame`. */
+  frame?: BlockCardFrame;
   /**
    * The cover takes the card's spare height when the card is stretched taller than its own
    * content, never dropping below its ratio (Layout `fillFirst`). A set's decision, for the one
@@ -388,9 +402,9 @@ function TextureMedia({
  *
  * The root is always an <li>. A non-blank href changes the frame element and, on a card with no
  * cover, adds the cta: the linked shape has one native anchor and one focus stop, while the static
- * shape is complete without an empty action row. A covered linked card says it navigates by the
- * arrow after its title, which goes blue with the title as the cover zooms; a text-only one by the
- * cta, under a title that stays dark.
+ * shape is complete without an empty action row. A covered linked card says it navigates by its
+ * title, which goes blue as the cover zooms; a text-only one by the cta, under a title that stays
+ * dark.
  *
  * Layout owns the block-axis groups, the horizontal orientation's two tracks and the cta's inline
  * row; this module contains no hand-written sibling arrangement. The card knows nothing about its
@@ -413,6 +427,7 @@ export function BlockCard({
   icon,
   index,
   cue,
+  frame = 'none',
   meta,
   grow = false,
 }: BlockCardProps) {
@@ -470,14 +485,18 @@ export function BlockCard({
      the card (visual-direction § 3.1, 6 Oct 2026). It stands in for the top edge an image would
      give; the set's 32 gutter breaks it between cards, so a row reads as three objects and not as
      a table. It is a row of the frame's Layout, so the 24 under it is that Layout's `block` seam —
-     the image-to-copy distance, which is exactly the relationship it replaces. Decoration: hidden. */
+     the image-to-copy distance, which is exactly the relationship it replaces. Decoration: hidden.
+     A boxed card draws none: the box's own top edge is that edge, and a second hairline 24 under
+     it would be a double rule. */
   const textOnly = !imageNode && !iconNode;
-  const ruleNode = textOnly ? <span className={styles.textRule} aria-hidden="true" /> : null;
+  const boxed = frame === 'box';
+  const ruleNode =
+    textOnly && !boxed ? <span className={styles.textRule} aria-hidden="true" /> : null;
 
   /* Which cue a linked card carries. The caller's, or the shape's default: a covered or icon card
-     ends its title in the arrow, a text-only card carries the cta (every live route's shape). */
+     is title-cued, a text-only card carries the cta (every live route's shape). */
   const cueKind: BlockCardCue | undefined = destination
-    ? (cue ?? (textOnly ? 'cta' : 'arrow'))
+    ? (cue ?? (textOnly ? 'cta' : 'title'))
     : undefined;
 
   const download = cueKind === 'download';
@@ -542,26 +561,12 @@ export function BlockCard({
     ) : (
       (indexNode ?? eyebrowText)
     );
-  /* The covered linked card's rest affordance (visual-direction § 3.1, 6 Oct 2026): a blue arrow
-     after the title's last word, joined by a non-breaking space so it never wraps alone — the same
-     `arrow-right` ListCard's linked rows end in, so the kit has one link cue. It is decoration inside
-     the one anchor: Icon hides it, and the link's name stays the card's words. A text-only card has
-     the cta instead, and never both. An icon card, or a text card whose set asks for it
-     (`cue="arrow"`), takes the arrow too: it is the cue for every whole-card link with no cta. */
-  const cued = cueKind === 'arrow';
-  const titleNode = (
-    <Title className={cx(styles.title, cued && styles.cued)}>
-      {title}
-      {cued ? (
-        <>
-          {'\u00a0'}
-          <span className={styles.cue}>
-            <Icon name="arrow-right" size={CUE_SIZE[step]} />
-          </span>
-        </>
-      ) : null}
-    </Title>
-  );
+  /* A title-cued card's title is its affordance (owner, 7 Oct 2026): no glyph after it — the blue
+     arrow that stood here on nearly every card read as bulky — and on hover and focus it takes the
+     accent ink while a cover leans in. The whole card is the one anchor, so the title needs no
+     mark at rest to be the link; a card whose action is not obvious from its title takes the cta. */
+  const cued = cueKind === 'title';
+  const titleNode = <Title className={cx(styles.title, cued && styles.cued)}>{title}</Title>;
   const bodyNode = hasBody ? <p className={styles.body}>{body}</p> : null;
 
   /* The copy: eyebrow, title and body as one group at `text` (16), then the cta a block (24) below
@@ -650,17 +655,37 @@ export function BlockCard({
     /* `grow`: the stack fills the stretched frame and its first row — the cover — takes what is
        spare, so a lead beside taller notes ends level with them instead of over a dead strip. */
     const grows = grow && imageNode !== null;
-    frameContent = (
-      <Layout rowGap="block" fillFirst={grows} className={grows ? styles.grow : undefined}>
-        {imageNode}
-        {ruleNode}
-        {content}
-      </Layout>
-    );
+    if (cta && !grows) {
+      /* An action row sits on the card's FOOT (§ 3.1 item 4, "pinLast for the CTA"; owner, 7 Oct
+         2026: "a link button at its foot"). The stack is flattened so the cta is its own last row,
+         and `pinLast` gives that row the spare height of a card stretched to its row's tallest, so
+         every action in a row sits on one line — which a box's visible foot makes plain when it
+         does not. The seams are the ones the nested stack had: `block` from the cover or rule to
+         the copy, and from the copy to the cta. */
+      frameContent = (
+        <Layout rowGap="block" pinLast className={styles.grow}>
+          {imageNode}
+          {ruleNode}
+          <Layout rowGap="text" className={styles.content}>
+            {head}
+            {bodyNode}
+          </Layout>
+          {cta}
+        </Layout>
+      );
+    } else {
+      frameContent = (
+        <Layout rowGap="block" fillFirst={grows} className={grows ? styles.grow : undefined}>
+          {imageNode}
+          {ruleNode}
+          {content}
+        </Layout>
+      );
+    }
   }
 
   return (
-    <li className={cx(styles.root, SIZE_CLASS[step])}>
+    <li className={cx(styles.root, SIZE_CLASS[step], boxed && styles.boxed)}>
       {destination ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it
            declares that this anchor's hover, focus-visible and pressed states are the states of

@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-import { Cluster, Layout, Section, type SectionSurface } from '@/components';
+import { Cluster, Layout, Section, type IconName, type SectionSurface } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -455,12 +455,14 @@ const COLOUR_TOKENS = {
     ['--bcrd-title-ink', '--color-neutral-900'],
     ['--bcrd-title-ink-hover', '--color-brandeis-500'],
     ['--bcrd-title-ink-pressed', '--color-brandeis-700'],
-    ['--bcrd-cue-ink', '--color-brandeis-500'],
     ['--bcrd-mark-ink', '--color-brandeis-500'],
     ['--bcrd-body-ink', '--color-neutral-700'],
     ['--bcrd-eyebrow-ink', '--color-neutral-600'],
     ['--bcrd-media-rule-ink', '--color-neutral-300'],
     ['--bcrd-text-rule-ink', '--color-neutral-300'],
+    ['--bcrd-box-rule-ink', '--color-neutral-300'],
+    ['--bcrd-box-ground-hover', '--color-paper-deep'],
+    ['--bcrd-box-ground-pressed', '--color-neutral-100'],
     ['--bcrd-ring-color', '--color-brandeis-500'],
     ['--bcrd-ring-gap-color', '--color-paper'],
     ['--btn-link-primary-fg', '--color-brandeis-500'],
@@ -469,12 +471,14 @@ const COLOUR_TOKENS = {
     ['--bcrd-title-ink', '--color-neutral-900'],
     ['--bcrd-title-ink-hover', '--color-brandeis-500'],
     ['--bcrd-title-ink-pressed', '--color-brandeis-700'],
-    ['--bcrd-cue-ink', '--color-brandeis-500'],
     ['--bcrd-mark-ink', '--color-brandeis-500'],
     ['--bcrd-body-ink', '--color-neutral-700'],
     ['--bcrd-eyebrow-ink', '--color-neutral-700'],
     ['--bcrd-media-rule-ink', '--color-neutral-400'],
     ['--bcrd-text-rule-ink', '--color-neutral-400'],
+    ['--bcrd-box-rule-ink', '--color-neutral-400'],
+    ['--bcrd-box-ground-hover', '--color-neutral-100'],
+    ['--bcrd-box-ground-pressed', '--color-neutral-200'],
     ['--bcrd-ring-color', '--color-brandeis-500'],
     ['--bcrd-ring-gap-color', '--color-paper-deep'],
     ['--btn-link-primary-fg', '--color-brandeis-500'],
@@ -483,12 +487,14 @@ const COLOUR_TOKENS = {
     ['--bcrd-title-ink', '--color-white'],
     ['--bcrd-title-ink-hover', '--color-brandeis-300'],
     ['--bcrd-title-ink-pressed', '--color-brandeis-100'],
-    ['--bcrd-cue-ink', '--color-brandeis-300'],
     ['--bcrd-mark-ink', '--color-brandeis-300'],
     ['--bcrd-body-ink', '--color-neutral-300'],
     ['--bcrd-eyebrow-ink', '--color-neutral-400'],
     ['--bcrd-media-rule-ink', '--color-neutral-700'],
     ['--bcrd-text-rule-ink', '--color-neutral-700'],
+    ['--bcrd-box-rule-ink', '--color-neutral-700'],
+    ['--bcrd-box-ground-hover', '--color-neutral-900'],
+    ['--bcrd-box-ground-pressed', '--color-neutral-800'],
     ['--bcrd-ring-color', '--color-brandeis-300'],
     ['--bcrd-ring-gap-color', '--color-neutral-950'],
     ['--btn-link-primary-fg', '--color-brandeis-300'],
@@ -497,12 +503,14 @@ const COLOUR_TOKENS = {
     ['--bcrd-title-ink', '--color-white'],
     ['--bcrd-title-ink-hover', '--color-brandeis-50'],
     ['--bcrd-title-ink-pressed', '--color-brandeis-100'],
-    ['--bcrd-cue-ink', '--color-white'],
     ['--bcrd-mark-ink', '--color-white'],
     ['--bcrd-body-ink', '--color-brandeis-50'],
     ['--bcrd-eyebrow-ink', '--color-brandeis-100'],
     ['--bcrd-media-rule-ink', '--color-brandeis-300'],
     ['--bcrd-text-rule-ink', '--color-brandeis-300'],
+    ['--bcrd-box-rule-ink', '--color-brandeis-300'],
+    ['--bcrd-box-ground-hover', '--color-brandeis-600'],
+    ['--bcrd-box-ground-pressed', '--color-brandeis-700'],
     ['--bcrd-ring-color', '--color-white'],
     ['--bcrd-ring-gap-color', '--color-brandeis-500'],
     ['--btn-link-primary-fg', '--color-white'],
@@ -558,32 +566,33 @@ function BandHead({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/** The set and the row on a surface: a numbered text set (hairline, blue index, arrow cue) over a
-    horizontal card, with or without its cover. Identical markup on every surface. */
+/** The set and the row on a surface: a numbered text set (hairline, blue index, title cue) over a
+    horizontal card, with or without its cover, then a boxed icon router. Identical markup on every
+    surface. */
 function SurfaceSetAndRow({ covers }: { covers: boolean }) {
   return (
     <Layout rowGap="column">
       <BlockCardSet
         lead="none"
         numbered
-        cue="arrow"
+        cue="title"
         items={[
           {
             id: 's-one',
             title: 'A numbered text card',
-            body: 'Hairline, then the blue index, then the title and its arrow.',
+            body: 'Hairline, then the blue index, then the title. No arrow: the title is the cue.',
             href: ROUTES.productDesign,
           },
           {
             id: 's-two',
             title: 'Its linked peer',
-            body: 'Point at it: the title joins the arrow; hold it: both deepen.',
+            body: 'Point at it: the title goes blue; hold it: it deepens.',
             href: ROUTES.designSystems,
           },
           {
             id: 's-three',
             title: 'An unlinked peer',
-            body: 'No arrow and no cta, and the same rule and index.',
+            body: 'No hover and no cta, and the same rule and index.',
           },
         ]}
       />
@@ -594,15 +603,58 @@ function SurfaceSetAndRow({ covers }: { covers: boolean }) {
           title={covers ? 'The row, with its cover' : 'The row, head beside body'}
           body={
             covers
-              ? 'Media beside copy at 3:2, the arrow after the title.'
+              ? 'Media beside copy at 3:2, the title the cue.'
               : 'No cover on this surface, so the hairline stands in for its top edge.'
           }
           media={covers ? cover(COVER_FLOW) : undefined}
           href={ROUTES.caseStudies}
-          cue="arrow"
+          cue="title"
         />
       </Rows>
+      <BoxedRouter />
     </Layout>
+  );
+}
+
+/** The boxed icon router (frame="box", owner 7 Oct 2026): four linked icon cards and one static,
+    two across. Identical markup on every surface. */
+function BoxedRouter() {
+  return (
+    <BlockCardSet
+      lead="none"
+      across={2}
+      scroll="never"
+      frame="box"
+      items={[
+        {
+          id: 'b-one',
+          icon: 'ruler-pen',
+          title: 'Product redesign',
+          body: 'The cost sits in the experience, and the model underneath still holds.',
+          href: ROUTES.productDesign,
+        },
+        {
+          id: 'b-two',
+          icon: 'refresh',
+          title: 'Legacy software modernisation',
+          body: 'Dependencies and accumulated change cost are the binding constraint.',
+          href: ROUTES.productModernisation,
+        },
+        {
+          id: 'b-three',
+          icon: 'widget',
+          title: 'Design systems',
+          body: 'Every screen rebuilds the same component a little differently.',
+          href: ROUTES.designSystems,
+        },
+        {
+          id: 'b-four',
+          icon: 'code',
+          title: 'An unlinked box',
+          body: 'No destination: the edge and the inset, no ground and no pointer state.',
+        },
+      ]}
+    />
   );
 }
 
@@ -792,10 +844,30 @@ export default function BlockCardSpecimenPage() {
             <Layout as="ul" columns={{ base: 2, lg: 4 }} colGap="gutter" rowGap="stack">
               {(
                 [
-                  ['portrait-woman-black-top', 'Principal designer', 'Meera Joshi', 'Leads the product model.'],
-                  ['portrait-man-hat', 'Design engineer', 'Tom Becker', 'Builds the component library.'],
-                  ['portrait-woman-glasses-plaid', 'Research lead', 'Lena Park', 'Runs the interviews.'],
-                  ['portrait-man-glasses-stripes', 'Design systems lead', 'Marco Reyes', 'Owns the tokens.'],
+                  [
+                    'portrait-woman-black-top',
+                    'Principal designer',
+                    'Meera Joshi',
+                    'Leads the product model.',
+                  ],
+                  [
+                    'portrait-man-hat',
+                    'Design engineer',
+                    'Tom Becker',
+                    'Builds the component library.',
+                  ],
+                  [
+                    'portrait-woman-glasses-plaid',
+                    'Research lead',
+                    'Lena Park',
+                    'Runs the interviews.',
+                  ],
+                  [
+                    'portrait-man-glasses-stripes',
+                    'Design systems lead',
+                    'Marco Reyes',
+                    'Owns the tokens.',
+                  ],
                 ] as const
               ).map(([id, role, name, body]) => (
                 <BlockCard
@@ -1078,20 +1150,21 @@ export default function BlockCardSpecimenPage() {
 
       <Section surface="tint">
         <Layout rowGap="stack">
-          <BandHead title="8 · The cta and the arrow cue">
-            The cta is for text-only linked cards only (29 Sep). A card with a cover renders no
-            cta: it ends its title in a blue arrow joined by a non-breaking space, and on hover
-            and focus the title goes blue to meet it while the image leans in (6 Oct,
-            visual-direction § 3.1) — so the first card here says it is a link at rest. On a
-            text-only card it is the shipped link <code>Button</code>, rendered{' '}
-            <code>as=&quot;span&quot;</code> inside the one frame anchor: never in the tab
-            order, no nested link. Tab to a card and count focus stops: one.
+          <BandHead title="8 · The cta and the title cue">
+            The cta is for text-only linked cards by default (29 Sep), and for any card whose
+            action is not obvious from its title (<code>cue=&quot;cta&quot;</code>). A card with
+            a cover renders no cta and no arrow (owner, 7 Oct 2026 — the blue arrow after nearly
+            every title read as bulky): the whole card is the link, and on hover and focus the
+            title goes blue while the image leans in. The cta is the shipped link{' '}
+            <code>Button</code>, with its arrow, rendered <code>as=&quot;span&quot;</code>{' '}
+            inside the one frame anchor: never in the tab order, no nested link. Tab to a card
+            and count focus stops: one.
           </BandHead>
           <Cards columns={{ base: 1, lg: 3 }}>
             <BlockCard
               eyebrow="Case study"
-              title="Cover, no cta, the arrow instead"
-              body="Linked and covered: the arrow ends the title, and no cta line is rendered."
+              title="Cover, no cta, no arrow"
+              body="Linked and covered: hover and the title goes blue as the image leans in."
               media={cover(COVER_FLOW)}
               href={ROUTES.caseStudies}
               tracks={3}
@@ -1127,13 +1200,147 @@ export default function BlockCardSpecimenPage() {
                 <Cards columns={{ base: 1 }}>
                   <BlockCard
                     title="Long label at 192px"
-                    body="The arrow stays with the last word."
+                    body="The cta's arrow stays with its last word."
                     href={ROUTES.caseStudies}
                     ctaLabel="Read the whole engagement write-up"
                   />
                 </Cards>
               </div>
             </Layout>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <BandHead title='8b · The boxed card · frame="box"'>
+            Owner, 7 Oct 2026, a partial reversal of &ldquo;a card is never a box&rdquo; (§
+            3.1): for a set whose cards must read as separate objects at a glance — an icon
+            router of four to six destinations — the set draws every card in a hairline at the 8
+            radius, its content a block (24) inside. A linked box paints a ground under the
+            pointer and its title goes blue. Boxed rows sit a gutter apart, not a stack: the box
+            is the separation. A text-only card drops its top hairline inside a box. Default
+            stays unboxed, and it is the set&rsquo;s decision, never one card&rsquo;s.
+          </BandHead>
+          <Specimen
+            title="icon router · six, two across, beside a head · the service-page Router"
+            note="BlockCardSet lead=none across=2 scroll=never frame=box. Five services and an audit."
+          >
+            <Layout columns={{ base: 1, lg: [7, 5] }} colGap="section" rowGap="stack">
+              <BlockCardSet
+                lead="none"
+                across={2}
+                scroll="never"
+                frame="box"
+                items={[
+                  [
+                    'ruler-pen',
+                    'Product Redesign',
+                    'The cost sits in the experience, and the model underneath still holds.',
+                    ROUTES.productDesign,
+                  ],
+                  [
+                    'refresh',
+                    'Legacy Software Modernisation',
+                    'Dependencies and accumulated change cost are the binding constraint.',
+                    ROUTES.productModernisation,
+                  ],
+                  [
+                    'layers',
+                    'Replatforming Product Design',
+                    'The platform move is decided; the behaviour that must survive is not.',
+                    ROUTES.productModernisation,
+                  ],
+                  [
+                    'widget',
+                    'Design Systems',
+                    'Every screen rebuilds the same component a little differently.',
+                    ROUTES.designSystems,
+                  ],
+                  [
+                    'code',
+                    'Software Development',
+                    'The change is decided, and it needs building and shipping.',
+                    ROUTES.softwareDevelopment,
+                  ],
+                  [
+                    'checklist',
+                    'The modernisation worksheet',
+                    'You can see the cost, but not yet which layer it sits in.',
+                    ROUTES.contact,
+                  ],
+                ].map(([icon, title, body, href]) => ({
+                  id: title as string,
+                  icon: icon as IconName,
+                  title: title as string,
+                  body: body as string,
+                  href: href as string,
+                }))}
+              />
+              <Box tall />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="text, cover and cta cards, boxed · three across"
+            note="A text-only box has no top hairline (the box draws it). A cover sits inside the inset. A cta card's title holds still and the cta moves."
+          >
+            <BlockCardSet
+              lead="none"
+              frame="box"
+              cue="title"
+              items={[
+                {
+                  id: 'bx-text',
+                  eyebrow: 'Service',
+                  title: 'A text-only card in a box',
+                  body: 'The index or eyebrow, the title and the body, 24 inside the edge.',
+                  href: ROUTES.productDesign,
+                },
+                {
+                  id: 'bx-static',
+                  eyebrow: 'Note',
+                  title: 'Unlinked, boxed',
+                  body: 'The same edge and inset; no ground, no pointer state.',
+                },
+                {
+                  id: 'bx-third',
+                  eyebrow: 'Service',
+                  title: 'A third text card',
+                  body: 'Rows of boxes sit a gutter apart.',
+                  href: ROUTES.designSystems,
+                },
+              ]}
+            />
+          </Specimen>
+          <Specimen title="cta-cued boxes · the action at the foot, pinned level">
+            <BlockCardSet
+              lead="none"
+              frame="box"
+              cue="cta"
+              items={[
+                {
+                  id: 'bc-one',
+                  title: 'Accessibility audit',
+                  body: 'A ranked list of fixes, each costed and sequenced.',
+                  href: ROUTES.contact,
+                  ctaLabel: 'Book an audit',
+                },
+                {
+                  id: 'bc-two',
+                  title: 'Design-to-code audit',
+                  body: 'Where the build drifts from the design, and what it costs you to leave it.',
+                  href: ROUTES.contact,
+                  ctaLabel: 'Book an audit',
+                },
+                {
+                  id: 'bc-three',
+                  title: 'The modernisation worksheet',
+                  body: 'You can see the cost, but not yet which layer it sits in.',
+                  href: ROUTES.contact,
+                  ctaLabel: 'Open the worksheet',
+                },
+              ]}
+            />
           </Specimen>
         </Layout>
       </Section>
@@ -1307,12 +1514,12 @@ export default function BlockCardSpecimenPage() {
                 ],
                 [
                   'hover',
-                  'The image scales to --bcrd-media-zoom inside the still box, and the title joins its arrow in blue. Text-only: the cta wipes in.',
+                  'The image scales to --bcrd-media-zoom inside the still box, and the title goes blue. Text-only: the cta wipes in. Boxed: the --bcrd-box-ground-hover ground.',
                 ],
                 ['focus', 'Everything hover does, plus the two-part ring around the card.'],
                 [
                   'pressed',
-                  'Title and arrow deepen to --bcrd-title-ink-pressed, one step past hover; the zoom holds. The cta steps to its own pressed colour.',
+                  'The title deepens to --bcrd-title-ink-pressed, one step past hover; the zoom holds. The cta steps to its own pressed colour; a boxed ground to --bcrd-box-ground-pressed.',
                 ],
                 ['reduced motion', 'No zoom at all; keyboard focus keeps its ring.'],
               ].map(([state, note]) => (

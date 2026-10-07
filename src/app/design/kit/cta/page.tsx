@@ -249,7 +249,7 @@ export default function KitCtaSpecimen() {
               key={v.id}
               title={v.name}
               href={`#${v.id}`}
-              marker={{ type: 'number', value: i + 1 }}
+              marker={{ type: 'number', value: i + 1, tone: 'neutral' }}
               size="sm"
             />
           ))}

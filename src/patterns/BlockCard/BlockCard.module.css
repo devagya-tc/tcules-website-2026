@@ -7,19 +7,20 @@
    selector, and one breakpoint, which swaps the wide lead's crop ratio and nothing else.
 
    ── What is absent, and why ────────────────────────────────────────────────────
-   No card edge. The tile was bounded by a four-sided hairline and is now bounded by the parent
-   Layout's gutter alone. The one border here is the IMAGE's crop box (.imageMedia), never the card's.
-   No content inset. The inset existed to hold copy off that edge; with the edge gone it would set
+   No card edge by default. The tile was bounded by a four-sided hairline and is bounded by the
+   parent Layout's gutter alone — unless its set asks for a box (`frame="box"`, owner 7 Oct 2026,
+   .boxed at the foot of this file), which brings back the edge, an inset and a hover ground.
+   No content inset on an open card. The inset existed to hold copy off that edge; with the edge gone it would set
    text 24px in from a boundary that no longer exists, putting neighbouring cards' images 32px
    apart while their titles sat 80px apart. Copy is flush to the media instead, and the image-to-
    copy relationship moved to the frame Layout's rowGap where a container distance belongs.
    No `position`. Its only job was to be the containing block for the removed hover wipe; the focus
    ring is a box-shadow and needs no positioning.
    No title state on a cta-cued card. Its title holds --bcrd-title-ink linked or not, and never
-   underlines on hover (tried on 29 Sep, read as heavy); its cta is the cue. An ARROW-cued card's
-   title (.cued: a cover or icon card, or a text card whose set asks for the arrow; visual-direction
-   § 3.1) ends in the arrow (.cue); title and arrow take --bcrd-title-ink-hover on hover and focus,
-   with the zoom, and --bcrd-title-ink-pressed on press.
+   underlines on hover (tried on 29 Sep, read as heavy); its cta is the cue. A TITLE-cued card's
+   title (.cued: a cover or icon card, or a text card whose set asks for it) takes
+   --bcrd-title-ink-hover on hover and focus, with the zoom, and --bcrd-title-ink-pressed on press.
+   No arrow after the title (owner, 7 Oct 2026): it stood on nearly every card and read as bulky.
    No title measure. The track is the title's measure. The title cap (22ch then) broke 60–87 character case-study
    titles into four ragged lines beside empty space in a 392px tile (29 Sep); balance evens them.
    No image rule. `Media` sizes and crops the <img> (`fit="fill"`); this module gives it the box to
@@ -32,10 +33,7 @@
 
    Rule order is load-bearing: the hover/focus rule precedes the pressed rule, and both are
    `.root .link:<state> .cued` — the same specificity — so while the pointer is down over a hovered
-   card source order hands the colour to pressed. Do not merge :active back into the hover list.
-   The arrow (.cue) is named in both rules beside the title: it carries its own rest ink, so a rule
-   that coloured only the title would leave it behind on hover (on blue, a brandeis-50 title beside
-   a white arrow). */
+   card source order hands the colour to pressed. Do not merge :active back into the hover list. */
 
 .root {
   inline-size: 100%;
@@ -108,8 +106,9 @@
   }
 }
 
-/* grow: the copy stack fills the stretched frame, so its first row (the cover, Layout fillFirst)
-   has spare height to take. Sizing only. */
+/* The card's stack fills the stretched frame, so a row has spare height to take: the first (the
+   cover, Layout fillFirst, under `grow`) or the last (the cta, Layout pinLast, so every action in a
+   set's row sits on one line). Sizing only. */
 .grow {
   block-size: 100%;
 }
@@ -229,21 +228,9 @@
   text-wrap: var(--text-title-wrap);
 }
 
-/* A covered linked card's title: the one that ends in the arrow and moves colour (§ 3.1). */
+/* A title-cued linked card's title: the one that moves colour (§ 3.1). */
 .cued {
   transition: color var(--bcrd-title-ink-duration) var(--bcrd-title-ink-easing);
-}
-
-/* The arrow after the title's last word. The non-breaking space before it is in the markup, so the
-   glyph never starts a line on its own. Inline-block because Icon's <svg> is display:block, which
-   inside a bare inline span would break the title's line. `middle` centres the glyph's box on the
-   lower-case letters, where an arrow after a word reads as punctuation; on the baseline it sat
-   below them and read as a subscript (crops, 6 Oct). It is blue at rest — arrows carry the
-   foreground accent (fdn-blue, 6 Oct) — and the title joins it on hover. */
-.cue {
-  display: inline-block;
-  vertical-align: middle;
-  color: var(--bcrd-cue-ink);
 }
 
 .body {
@@ -286,11 +273,12 @@
 /* Higher specificity than the global anchor rule. The anchor carries NO link colour of its own —
    every part below it states its own ink, and the cta gets its three steps from Button — so
    `inherit` here keeps globals.css's bare-anchor blue from reaching anything the design wants
-   dark. It also has no `transition`: nothing on this element changes colour; the covered title's
-   own does (.cued). */
+   dark. Its one transition is the boxed card's ground (.boxed below); the title's colour fades on
+   .cued. */
 .root .link {
   color: inherit;
   text-decoration: none;
+  transition: background-color var(--bcrd-title-ink-duration) var(--bcrd-title-ink-easing);
 }
 
 .root .link:hover,
@@ -310,20 +298,17 @@
 }
 
 /* A linked card's hover and keyboard focus: a cover leans in, inside its still, ruled box, and the
-   title goes blue to meet its arrow. The rule keeps its rest ink and the title does not underline (both
-   tried 29 Sep, both too loud). Keyboard gets what the pointer gets, plus the ring. */
+   title goes blue. The rule keeps its rest ink and the title does not underline (both tried 29 Sep,
+   both too loud). Keyboard gets what the pointer gets, plus the ring. */
 .root .link:hover .cued,
-.root .link:focus-visible .cued,
-.root .link:hover .cue,
-.root .link:focus-visible .cue {
+.root .link:focus-visible .cued {
   color: var(--bcrd-title-ink-hover);
 }
 
-/* Pressed is its own step (audit check 9, 6 Oct 2026): title AND arrow deepen one step past hover,
-   so a press registers on the words as well as under the pointer. After the hover rule at equal
+/* Pressed is its own step (audit check 9, 6 Oct 2026): the title deepens one step past hover, so a
+   press registers on the words as well as under the pointer. After the hover rule at equal
    specificity, so it wins while both match. The zoom holds — geometry does not press. */
-.root .link:active .cued,
-.root .link:active .cue {
+.root .link:active .cued {
   color: var(--bcrd-title-ink-pressed);
 }
 
@@ -346,4 +331,30 @@
   .root .link:active .imageZoom {
     transform: none;
   }
+}
+
+/* ── The boxed card (`frame="box"`, owner 7 Oct 2026) ──────────────────────────────────────────
+   A partial reversal of "a card is never a box" (visual-direction § 3.1), for a set whose cards
+   must read as separate objects at a glance — an icon router of four to six destinations, where
+   open icon cards two across read as one field of text. A hairline round the card at the 8 radius,
+   its content a `block` (24) inside on every side: head to body inside a block, the box being the
+   block. The frame is the card's single box, so the padding is an inner inset, not outer spacing.
+
+   Linked, the box paints a ground under the pointer and holds its edge ink: with 24 of inset there
+   is somewhere for a ground to sit, and it is the one signal that covers the whole target. The
+   focus ring is the frame's box-shadow, so it follows the radius. Two classes and an element state,
+   so these outrank `.root .link` and its states. */
+.boxed .frame {
+  padding: var(--gap-block);
+  border: var(--bcrd-box-rule-width) solid var(--bcrd-box-rule-ink);
+  border-radius: var(--bcrd-box-radius);
+}
+
+.root.boxed .link:hover,
+.root.boxed .link:focus-visible {
+  background-color: var(--bcrd-box-ground-hover);
+}
+
+.root.boxed .link:active {
+  background-color: var(--bcrd-box-ground-pressed);
 }

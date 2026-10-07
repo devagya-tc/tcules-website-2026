@@ -368,7 +368,7 @@ export default function KitServicesIndexPage() {
           />
         }
       >
-        <BlockCardSet items={SERVICES} lead="none" across={2} />
+        <BlockCardSet items={SERVICES} lead="none" across={2} frame="box" />
       </ContentSection>
 
       {/* 3 · C-image-4 — the fixed-scope audits, centred, a link on each. */}
