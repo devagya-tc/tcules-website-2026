@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Button, Layout, Media, Section, Texture, TextureShape } from '@/components';
+import { Button, Icon, Layout, Media, Section, Texture, TextureShape } from '@/components';
 import { getIdealServiceStory } from '@/content';
 import { MEDIA_SPLIT } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
@@ -389,7 +389,14 @@ export default function TestimonialsKitPage() {
             <Layout as="ol" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="text">
               {ORDER.map((v, i) => (
                 <li key={v.id}>
-                  <Button as="a" href={`#${v.id}`} emphasis="link" tone="primary" size="sm">
+                  <Button
+                    as="a"
+                    href={`#${v.id}`}
+                    emphasis="link"
+                    tone="primary"
+                    size="sm"
+                    icon={<Icon name="arrow-right" />}
+                  >
                     {`${String(i + 1).padStart(2, '0')}  ${v.title}`}
                   </Button>
                 </li>

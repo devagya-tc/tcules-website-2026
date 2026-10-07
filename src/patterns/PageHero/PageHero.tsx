@@ -282,12 +282,12 @@ export type PageHeroProps = {
   /** The date pairs, after the credits. Absent renders nothing. */
   dates?: HeroDates;
   /**
-   * Nought, one or two. Position decides emphasis: the first renders solid/primary, the second
-   * a primary link-style action — blue at rest, as every text link is (visual-direction § 4.2,
-   * owner 6 Oct 2026).
+   * Nought, one or two. Position decides emphasis: the first renders solid/primary with no arrow
+   * (the converting action), the second a primary GHOST with the trailing arrow — its partner, blue
+   * at rest (owner, 7 Oct 2026: a primary's partner is a ghost, never a link button; a link button
+   * belongs in cards and inline contexts).
    *
-   * The second was ghost/neutral until 5 Oct 2026 and a neutral link until fdn-blue. A link has no
-   * box, so the pair still reads as one action and one alternative rather than as two buttons.
+   * History: ghost/neutral until 5 Oct 2026, then a primary link (fdn-blue) until the 7 Oct ruling.
    *
    * Those are the three counts the corpus has, as a type — a third entry has no member of the
    * union to match, so it is a compile error rather than a review comment. The second emphasis is
@@ -694,19 +694,17 @@ export function PageHero({
      passed into ONE row of the stack. */
   const extrasNode = children == null ? null : <div>{children}</div>;
 
-  /* ── actions · one solid, one blue link ────────────────────────────────────
+  /* ── actions · one solid, one ghost partner ────────────────────────────────
      Anchors, because a hero action always navigates. The first is solid/primary, the band's one
-     solid. The second is link-style and PRIMARY — blue at rest with an arrow, not the neutral link
-     the cmp-hero brief named: the owner's 6 Oct ruling (fdn-blue, visual-direction § 4.1) makes
-     blue the recurring foreground accent and every text link blue at rest, and the ruling is the
-     later one. Recorded in docs/kit/brand-amendments.md (ch02, the tone="primary" row) and in
-     docs/specs/PageHero.md. It has no box, so it still reads as an alternative, not a second button.
-     From 768 the pair sits on one line, centred on the cross axis so the link's label sits on the
-     button's label line. Below 768 it ALWAYS stacks, the link 24 under the button (`stackUntil`):
-     the phone shape no longer depends on how long the labels are, which put one hero's pair side
-     by side and the next one's stacked (fix round 2). size="md" with extendHitArea on both: the
-     solid's box is 40 and the extension covers the missing 4; the link is its label line, so for
-     it the extension is the whole 44 target, and 24 keeps that target clear of the button. */
+     solid, and carries NO arrow — the label carries the ask. The second is a primary GHOST with
+     the trailing arrow: the owner's 7 Oct 2026 pairing rule (a primary's partner is a ghost, never a
+     link button; the ghost takes the arrow because it navigates). Its label and arrow stay blue at
+     rest, the foreground accent (visual-direction § 4.2), and it has no fill at rest, so it reads
+     as the alternative rather than a second ask. Recorded in docs/specs/Button.md § 14a.
+     From 768 the pair sits on one line, centred on the cross axis. Below 768 it ALWAYS stacks, the
+     ghost 24 under the solid (`stackUntil`): the phone shape no longer depends on how long the
+     labels are (fix round 2). size="md" with extendHitArea on both: each box is 40 and the
+     extension covers the missing 4. */
   const actionsNode =
     controls.length > 0 ? (
       <Cluster
@@ -721,7 +719,7 @@ export function PageHero({
             key={action.href}
             as="a"
             href={action.href}
-            emphasis={index === 0 ? 'solid' : 'link'}
+            emphasis={index === 0 ? 'solid' : 'ghost'}
             tone="primary"
             size="md"
             extendHitArea

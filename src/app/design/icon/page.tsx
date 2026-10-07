@@ -38,7 +38,10 @@ const MEANINGS = [
   { name: 'download', meaning: 'Download a file — leading' },
   { name: 'copy', meaning: 'Copy to clipboard — leading' },
   { name: 'hamburger-menu', meaning: 'Menu — content only; the nav uses chrome-menu' },
-  { name: 'chrome-menu', meaning: 'CHROME · the site nav’s menu toggle — the universal three bars' },
+  {
+    name: 'chrome-menu',
+    meaning: 'CHROME · the site nav’s menu toggle — the universal three bars',
+  },
   { name: 'chrome-close', meaning: 'CHROME · the site nav’s close — the universal cross' },
   { name: 'info-circle', meaning: 'Information — leading, beside the words of a notice' },
   { name: 'danger-triangle', meaning: 'Warning — leading, beside the words of a notice' },
@@ -316,7 +319,9 @@ export default function IconSpecimenPage() {
               ))}
             </Layout>
             <Cluster colGap="block" rowGap="text" align="center">
-              <Button icon={<Icon name="arrow-right" />}>Start a project</Button>
+              <Button emphasis="ghost" tone="primary" icon={<Icon name="arrow-right" />}>
+                See the work
+              </Button>
               <Button emphasis="ghost" tone="neutral" iconLeft={<Icon name="download" />}>
                 Download
               </Button>

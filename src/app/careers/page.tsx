@@ -202,7 +202,6 @@ export default async function CareersPage() {
                     as="a"
                     href={page.fourthSection.action.href}
                     size="lg"
-                    icon={<Icon name="arrow-right" />}
                     {...externalAnchorProps(page.fourthSection.action)}
                   >
                     {page.fourthSection.action.label}

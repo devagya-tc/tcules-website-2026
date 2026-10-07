@@ -454,8 +454,9 @@ Instead it changes everything that made the first viewport read as a document:
 2. **The title is rewritten to ≤ 48 characters.** That is 3 balanced lines at 572, where today's titles
    run 3 to 5 lines (51 to 64 characters). It is a sentence, not a slogan.
 3. **The lead is cut to ≤ 26 words** (3 lines). `hero.body` moves to the first band's lead.
-4. **One solid action and one blue link-style action.** The hero's blue masses are the solid and the
-   illustration (§ 4.3); the link is the foreground accent (§ 4.2).
+4. **One solid action and its blue ghost partner.** The hero's blue masses are the solid and the
+   illustration (§ 4.3); the ghost's label and arrow are the foreground accent (§ 4.2). *(Amended
+   7 Oct 2026, owner: the partner was a link-style action; § 4.5.)*
 5. **The illustration stays 572 wide and is centred on the copy.** It is unboxed at its own ratio (the
    six run 1.13 to 1.35 : 1, so 424 to 505 tall). No texture sits behind it and no type sits on it.
 6. **The next band is the B photograph.** The hero ends 7 to 88px above the fold, and on every service
@@ -768,7 +769,7 @@ added blue where the accent belongs. The record is in `docs/kit/brand-amendments
 
 | Role | Where | Tokens (paper and tint → ink) |
 |---|---|---|
-| **Text links**, blue at rest | inline and Prose links; every link-style action, including a second action beside a solid, the per-card cta, "See available times", a Proof's source link, every CtaRow link | `--btn-link-primary-fg`, `--prose-link-ink`: brandeis-500 → 300 |
+| **Text links**, blue at rest | inline and Prose links; every link-style action — the per-card cta, a Proof's source link, a CtaRow link row — and the ghost partner beside a solid (hero, close, CtaRow ask, "See available times"; § 4.5) | `--btn-link-primary-fg`, `--btn-ghost-primary-fg`, `--prose-link-ink`: brandeis-500 → 300 (200 on a control) |
 | **Icons** | content icons: ListCard markers, the service page's sheet, frame and loop glyphs, a check in a needs-list or a comparison, the RatingBadge star | `--lcrd-marker-ink`, `--svc-mark`, `--rbadge-star-fg`: 500 → 300 |
 | **Markers and numerals** | list and step markers, index numerals, a CtaSection's points, an `<ol>` numeral in Prose | `--lcrd-number-ink`, `--flow-number-ink`, `--cta-marker-ink`, `--prose-marker-ink`: 500 → 300 |
 | **Arrows and cues** | ListCard's cue, BlockCard's title arrow, ProcessFlow and Thread connectors, an accordion chevron | `--lcrd-link-ink`, `--bcrd-cue-ink`, `--flow-arrow-ink`, `--svc-mark`, `--acc-mark-ink`: 500 → 300 |
@@ -836,6 +837,25 @@ Peridot has exactly two uses on the website:
 The typography specimen's `<mark>` example is deleted.
 
 ---
+
+### 4.5 Actions: pairing and arrows (owner, 7 Oct 2026, binding)
+
+The site had too many arrows in buttons and its pairs were inconsistent. The rules:
+
+1. **Solid primary is the converting action. No arrow, ever.** The label carries the ask.
+2. **A primary's partner is a ghost button**, not a link button. The ghost takes the trailing arrow when
+   it navigates.
+3. **Link buttons belong inside cards and inline contexts** (a card's cta, a list of links, a line of
+   text), and carry the arrow. They are never the secondary beside a primary.
+4. **Never two buttons of the same emphasis side by side.** A group is at most one solid + one ghost. A
+   stack of links, one per line, is a list rather than a group.
+5. **Everywhere.** Banner actions, Statement's action, CtaSection, ContentSection actions and footers,
+   PageHero, CtaRow, EnquiryForm, and every page and specimen composition.
+
+Encoded, not just written: CtaRow's types allow one link, or a solid with at most one ghost partner;
+PageHero and CtaSection decide by position (solid, then ghost); every arrow in those rows is the
+pattern's decision. The table and the list of what is deliberately not covered are in
+`docs/specs/Button.md` § 14a.
 
 ## 5 · Image-to-text balance
 

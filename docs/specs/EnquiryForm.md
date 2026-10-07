@@ -55,6 +55,12 @@ Three things were read rather than assumed, and they change the shape of this do
 
 ---
 
+> **Owner amendment, 7 Oct 2026 — pairing and arrows** (`docs/specs/Button.md` § 14a). The submit is
+> the converting action: solid, and it no longer carries `arrow-right` on any variant. "See available
+> times" is its partner, so it is `ghost` / `primary` with the trailing arrow (it navigates) — in the
+> action row and on the success view alike — not `link`. Question 5's answer is superseded on that
+> point; the rest of its argument (a secondary navigation choice, not a second ask) still holds.
+
 ## 1. Identity
 
 **What it is.** The site's shared enquiry behavior: the enquiry/audit set has three visible controls and six or seven hidden context fields; the contact set has five visible client-contact controls and no hidden context fields. All three have one submit, one status line, and a success panel that replaces the form.

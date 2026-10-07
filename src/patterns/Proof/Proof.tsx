@@ -569,6 +569,7 @@ function FigureList({
                     extendHitArea
                     aria-label={`View source for ${figure.label}`}
                     className={styles.source}
+                    icon={<Icon name="arrow-right" />}
                   >
                     View source
                   </Button>

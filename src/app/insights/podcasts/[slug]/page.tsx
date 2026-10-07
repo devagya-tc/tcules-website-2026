@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
+import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
 import { getPodcastPage, type PodcastBlock, type PodcastImage } from '@/content';
 import { articlePath, podcastPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
@@ -111,6 +111,7 @@ function renderPodcastBlock(block: PodcastBlock, podcastTitle: string) {
                 tone="neutral"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 Watch the podcast
               </Button>
@@ -132,6 +133,7 @@ function renderPodcastBlock(block: PodcastBlock, podcastTitle: string) {
                 tone="neutral"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.action.label}
               </Button>

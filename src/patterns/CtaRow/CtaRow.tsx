@@ -10,27 +10,33 @@ export type CtaRowAction = {
 };
 
 /**
- * How loud the FIRST action is. Every later action is a link: in the first's tone on a link row, in
- * the primary tone (blue at rest) after a solid — a text link is blue at rest (fdn-blue, 6 Oct 2026).
+ * What the row is. The pairing rules are the owner's (7 Oct 2026) and the TYPES carry them, so a page
+ * cannot get one wrong:
  *
- *   link   a navigation row — "See the work", "All services". Link-style, a trailing arrow on every
- *          action (the kit's one link cue, BlockCard's per-card CTA and ListCard's linked row). The
- *          default, because a band's foot usually points somewhere rather than asks for something.
+ *   link   a navigation row — "See the work", "All services". ONE link-style action with the trailing
+ *          arrow (the kit's link cue). One, because two links side by side are two actions of the
+ *          same emphasis, which a group never is: a second destination is a second band's, or the
+ *          row is an ask and takes `solid`. The default, because a band's foot usually points
+ *          somewhere rather than asks for something.
  *   solid  an ask — the band's one Accent (visual-direction § 4.2: ≤ 1 solid primary per band). The
- *          hero's shape exactly: solid first with no glyph (1 Oct 2026, owner, on CtaSection: "no
- *          arrow here" — the label carries the ask), then a blue link with the arrow, as every
- *          link-style action has it (cmp-services fix round 2).
+ *          converting action is solid and NEVER carries an arrow (the label carries the ask). Its
+ *          optional partner is a GHOST — never a link — with the trailing arrow, because it
+ *          navigates. That is PageHero's and CtaSection's shape exactly.
+ *
+ * Arrows are therefore the row's decision, not the caller's: link → arrow, solid → none, ghost
+ * partner → arrow. There is no per-action emphasis and no icon prop.
  */
 export type CtaRowEmphasis = 'link' | 'solid';
 
 /**
- * The FIRST action's colour axis — Button's `tone`, passed through.
+ * The FIRST action's colour axis — Button's `tone`, passed through. A solid row's ghost partner is
+ * always primary and takes no tone.
  *
  *   primary  blue. As a link it is the band's Signal; as a solid it is the band's Accent (§ 4.2).
  *            The default for a LINK-led row (amended 6 Oct 2026, fdn-section-head fix round): the
  *            owner's binding ruling wants more blue in the foreground — links, arrows, small marks —
  *            so a band's foot points somewhere in blue unless the caller says otherwise. A link row
- *            spends Signal, the cheap tier, counted once per band however many links it holds.
+ *            spends Signal, the cheap tier.
  *   neutral  ink. Spends nothing (§ 4.2: "neutral link-style is not blue"). The default for a SOLID-
  *            led row, because a solid primary spends Accent (≤ 1 per band, the scarcest tier) and the
  *            caller spends that on purpose. Pass it on a link row only when the band already spends a
@@ -50,27 +56,13 @@ export type CtaRowTone = 'neutral' | 'primary';
  */
 export type CtaRowAlign = 'start' | 'center';
 
-export type CtaRowProps = {
-  /**
-   * One or two actions. A third does not compile: a band's foot is one way on and at most one
-   * alternative, and three links in a row is a nav strip.
-   *
-   * Position decides emphasis, as in CtaSection and PageHero — there is no per-action emphasis.
-   */
-  actions: readonly [CtaRowAction] | readonly [CtaRowAction, CtaRowAction];
+type CtaRowCommon = {
   /**
    * One sentence before the actions — what the action is FOR ("Every engagement starts with a
    * thirty-minute call."). Body-sm, the row's small voice. Absent renders no element; a
    * whitespace-only string is treated as absent.
    */
   note?: string;
-  /** The first action's loudness. Default `link`. See `CtaRowEmphasis`. */
-  emphasis?: CtaRowEmphasis;
-  /**
-   * The first action's colour. Default `primary` for a link-led row and `neutral` for a solid-led
-   * one — Signal spent by default, Accent never. See `CtaRowTone`.
-   */
-  tone?: CtaRowTone;
   /**
    * The hairline above the row. Default `true`: a section-level CtaRow — a band's `footer` — takes
    * one (§ 3.1 item 5), because it marks where the body ends and the ask begins. `false` for a row
@@ -89,6 +81,36 @@ export type CtaRowProps = {
 };
 
 /**
+ * A navigation row: one link with the arrow. A second action does not compile (two links side by
+ * side — owner, 7 Oct 2026).
+ */
+type CtaRowLink = {
+  /** Default `link`. See `CtaRowEmphasis`. */
+  emphasis?: 'link';
+  actions: readonly [CtaRowAction];
+  /** The link's colour. Default `primary` — Signal, a blue foot. See `CtaRowTone`. */
+  tone?: CtaRowTone;
+};
+
+/**
+ * An ask: the solid converting action (no arrow), and at most one ghost partner (trailing arrow).
+ * Position decides emphasis — the first is the solid, the second the ghost — so a page cannot pair a
+ * solid with a link button or put two solids together.
+ */
+type CtaRowSolid = {
+  emphasis: 'solid';
+  actions: readonly [CtaRowAction] | readonly [CtaRowAction, CtaRowAction];
+  /**
+   * The SOLID's colour. Default `neutral`: a primary solid spends Accent, and the caller spends that
+   * on purpose. The ghost partner is always `primary` — its blue label and arrow are the foreground
+   * accent (§ 4.2), and a ghost has no fill at rest to compete with the solid.
+   */
+  tone?: CtaRowTone;
+};
+
+export type CtaRowProps = CtaRowCommon & (CtaRowLink | CtaRowSolid);
+
+/**
  * CtaRow — a band's row of actions, built to docs/specs/CtaRow.md (fdn-section-head, 6 Oct 2026).
  *
  * The section-level CTA the kit needs in four families (visual-direction § 1.4): under a card set,
@@ -98,7 +120,8 @@ export type CtaRowProps = {
  *
  *   ┌───────────────────────────────────────────── rule (hairline, neutral) ─┐
  *   │                              block (24)                                │
- *   │ note (body-sm, ≤ 56ch)           between           Action →   Action → │
+ *   │ note (body-sm, ≤ 56ch)         between       [ ASK ]  [ PARTNER → ]   │
+ *   │                              or, a link row:                  LINK → │
  *   └────────────────────────────────────────────────────────────────────────┘
  *
  * § 1.4 budgets it at "48 seam + one 48 row": the band supplies the 48 above it (its `footer` is a
@@ -110,8 +133,8 @@ export type CtaRowProps = {
  *   note ↔ actions    block (24) across and when they wrap — at 326 the note wraps above the
  *                                  actions, and 16 there sat the mono label tight under body-sm
  *                                  (fix round, 6 Oct: the owner rules spacing is never cramped)
- *   action ↔ action   block (24)   PageHero's argument: a bare link label 8 from a filled box reads
- *                                  as part of it, and wrapped targets need clear air between them
+ *   action ↔ action   block (24)   solid ↔ ghost partner: PageHero's argument — two boxes need clear
+ *                                  air between them, wrapped or across
  *
  * It contributes the rule and the note only. `Button` owns every interactive value and state,
  * `Cluster` and `Layout` every seam, the band its ground. No `'use client'`, no state, no ref.
@@ -120,39 +143,34 @@ export type CtaRowProps = {
  * composes Button, Icon, Cluster and Layout. It is placed by a band — ContentSection's `footer` or
  * `actions`, or a template's own row — and never imports one.
  */
-export function CtaRow({
-  actions,
-  note,
-  emphasis = 'link',
-  tone,
-  rule = true,
-  align = 'start',
-}: CtaRowProps) {
+export function CtaRow(props: CtaRowProps) {
+  const { actions, note, rule = true, align = 'start' } = props;
   const centred = align === 'center';
   /* Whitespace-only is absent, so a bad record cannot put an empty paragraph in front of the
      actions and turn a start row into a "between" row around nothing. */
   const hasNote = Boolean(note?.trim());
-  const linkRow = emphasis === 'link';
+  const ask = props.emphasis === 'solid';
   /* Signal by default, Accent only on request (see CtaRowTone). */
-  const firstTone: CtaRowTone = tone ?? (linkRow ? 'primary' : 'neutral');
+  const firstTone: CtaRowTone = props.tone ?? (ask ? 'neutral' : 'primary');
 
+  /* The owner's pairing (7 Oct 2026), decided here and nowhere else:
+       link row     one link, `firstTone`, trailing arrow — the link cue.
+       solid row    the solid ask, `firstTone`, NO arrow — the label carries the ask; then at most
+                    one ghost partner, primary, trailing arrow — it navigates.
+     Every action is an anchor, so a ghost here always navigates and always takes the arrow. */
   const buttons = actions.map((action, index) => {
-    const first = index === 0;
+    const solid = ask && index === 0;
     return (
       <Button
         key={`${index}-${action.href}-${action.label}`}
         as="a"
         href={action.href}
-        emphasis={first && !linkRow ? 'solid' : 'link'}
-        tone={first || linkRow ? firstTone : 'primary'}
+        emphasis={solid ? 'solid' : ask ? 'ghost' : 'link'}
+        tone={index === 0 ? firstTone : 'primary'}
         size="md"
-        /* The box is 40 (solid) or the label line (link); the touch floor is 44 either way. */
+        /* The box is 40 (solid, ghost) or the label line (link); the touch floor is 44 either way. */
         extendHitArea
-        /* The arrow belongs to the LINK role, not to the row (cmp-services fix round 2): every
-           link-style action carries it, and only the solid ask goes without — PageHero's and
-           CtaSection's shape ("no arrow here" was the ask). Before, a solid-led row dropped it from
-           its second link too, so "All services" had an arrow in the hero and none in a head. */
-        icon={first && !linkRow ? undefined : <Icon name="arrow-right" />}
+        icon={solid ? undefined : <Icon name="arrow-right" />}
       >
         {action.label}
       </Button>

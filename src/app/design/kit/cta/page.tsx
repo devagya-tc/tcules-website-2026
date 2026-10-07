@@ -256,12 +256,13 @@ export default function KitCtaSpecimen() {
         </Layout>
       </Section>
 
-      {/* ── 01 · K offer, numbered, solid + link ───────────────────────────────────────────── */}
+      {/* ── 01 · K offer, numbered, solid + ghost──────────────────────────────────────────── */}
       <Title id="k-offer">
-        [7, 5]: H-full, a lede held narrower than its heading, three one-line numbered points and
-        the actions in the 667 copy column; a quiet 4:5 photograph in the 477 track. The head sits
-        on the photo&rsquo;s top edge and the actions on its foot (§ 3.2 rule 1). Solid first, then
-        the family&rsquo;s one second action: a blue link with its arrow.
+        [7, 5]: H-full, a lede held narrower than its heading, three one-line numbered points
+        and the actions in the 667 copy column; a quiet 4:5 photograph in the 477 track. The
+        head sits on the photo&rsquo;s top edge and the actions on its foot (§ 3.2 rule 1).
+        Solid first, no arrow, then its partner: a blue ghost with the arrow (owner, 7 Oct
+        2026).
       </Title>
       <CtaSection
         arrangement="offer"
@@ -299,8 +300,8 @@ export default function KitCtaSpecimen() {
 
       {/* ── 03 · K offer, plain points ─────────────────────────────────────────────────────── */}
       <Title id="k-plain">
-        Plain points: the serif label carries each one on its own, for short claims a numeral or a
-        glyph would over-dress. Three lines, so the head and the photograph carry the band.
+        Plain points: the serif label carries each one on its own, for short claims a numeral or
+        a glyph would over-dress. Three lines, so the head and the photograph carry the band.
       </Title>
       <CtaSection
         arrangement="offer"
@@ -360,9 +361,9 @@ export default function KitCtaSpecimen() {
 
       {/* ── 06 · K offer, landscape photo ──────────────────────────────────────────────────── */}
       <Title id="k-wide">
-        <code>media.frame=&quot;landscape&quot;</code>: the other rectangle. [5, 7] — the head and
-        its actions in 5, centred on a 3:2 photograph in 7 — and the points as a ruled 3-up strip
-        under both. A page with two offers sets one of each.
+        <code>media.frame=&quot;landscape&quot;</code>: the other rectangle. [5, 7] — the head
+        and its actions in 5, centred on a 3:2 photograph in 7 — and the points as a ruled 3-up
+        strip under both. A page with two offers sets one of each.
       </Title>
       <CtaSection
         arrangement="offer"
@@ -384,9 +385,9 @@ export default function KitCtaSpecimen() {
       <Title id="l-close">
         On paper, at h1: the page&rsquo;s last ask outweighs every head above it. [10, 7] — copy
         and three two-line points in 673, read down from the form&rsquo;s first label; the full
-        EnquiryForm fills its 471 to the column edge. The <code>closing</code> equaliser rises from
-        the band&rsquo;s edge into the air under the copy, a gap step clear of it, and the form
-        column stays clean. Below 1024 it becomes the full-bleed <code>horizon</code>.
+        EnquiryForm fills its 471 to the column edge. The <code>closing</code> equaliser rises
+        from the band&rsquo;s edge into the air under the copy, a gap step clear of it, and the
+        form column stays clean. Below 1024 it becomes the full-bleed <code>horizon</code>.
       </Title>
       <CtaSection
         eyebrow="Start a project"
@@ -408,9 +409,9 @@ export default function KitCtaSpecimen() {
       {/* ── 08 · L close, contact strip ─────────────────────────────────────────────────────── */}
       <Title id="l-no-points">
         No points: the lede and a contact strip a <code>stack</code> under it — where to write,
-        how fast we answer, which hours we keep. The strip follows the copy rather than pinning to
-        the form&rsquo;s foot (it ends in a key and a value, not an action), and the deeper air
-        under it is where the equaliser stands tallest.
+        how fast we answer, which hours we keep. The strip follows the copy rather than pinning
+        to the form&rsquo;s foot (it ends in a key and a value, not an action), and the deeper
+        air under it is where the equaliser stands tallest.
       </Title>
       <CtaSection
         eyebrow="Hiring a design partner"
@@ -437,10 +438,10 @@ export default function KitCtaSpecimen() {
 
       {/* ── 09 · L close, centred, two actions ──────────────────────────────────────────────────── */}
       <Title id="l-open">
-        <code>arrangement=&quot;open&quot;</code>: the close that asks for a click, as one centred
-        object at display scale — the lede, three points held to the middle 8 of 12, and two
-        actions on one axis — with the <code>closing</code> equaliser rising at both flanks, clear
-        of the column.
+        <code>arrangement=&quot;open&quot;</code>: the close that asks for a click, as one
+        centred object at display scale — the lede, three points held to the middle 8 of 12, and
+        two actions on one axis — with the <code>closing</code> equaliser rising at both flanks,
+        clear of the column.
       </Title>
       <CtaSection
         arrangement="open"
@@ -493,8 +494,9 @@ export default function KitCtaSpecimen() {
       {/* ── 11 · CtaRow under ruled rows ───────────────────────────────────────────────────── */}
       <Title id="row-rows">
         A D band: beside head with a stat aside, three numbered rows, and a neutral link CtaRow
-        with its note — rule off, because the last row&rsquo;s own rule closes the body. The aside
-        ends above the body&rsquo;s foot, so the band closes on the CtaRow&rsquo;s one line.
+        with its note — rule off, because the last row&rsquo;s own rule closes the body. The
+        aside ends above the body&rsquo;s foot, so the band closes on the CtaRow&rsquo;s one
+        line.
       </Title>
       <ContentSection
         arrangement="beside"

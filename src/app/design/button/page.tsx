@@ -18,10 +18,15 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 const COMBOS = [
   { emphasis: 'solid', tone: 'primary', name: 'Solid · blue', sub: 'The primary ask' },
   { emphasis: 'solid', tone: 'neutral', name: 'Solid · ink', sub: 'Utility on paper' },
-  { emphasis: 'ghost', tone: 'primary', name: 'Ghost · blue', sub: 'Secondary, same offer' },
+  { emphasis: 'ghost', tone: 'primary', name: 'Ghost · blue', sub: "The solid's partner" },
   { emphasis: 'ghost', tone: 'neutral', name: 'Ghost · ink', sub: 'Default secondary' },
-  { emphasis: 'link', tone: 'primary', name: 'Link · blue', sub: 'In the text column' },
-  { emphasis: 'link', tone: 'neutral', name: 'Link · ink', sub: 'Navigation' },
+  {
+    emphasis: 'link',
+    tone: 'primary',
+    name: 'Link · blue',
+    sub: 'In a card or a line of text',
+  },
+  { emphasis: 'link', tone: 'neutral', name: 'Link · ink', sub: 'In a card, spending no blue' },
 ] as const;
 
 const SURFACES = [
@@ -51,7 +56,11 @@ function SurfaceMatrix() {
         {COMBOS.map((c) => (
           <Layout key={c.emphasis + c.tone} rowGap="tight" justifyItems="start">
             <p className={s.specTitle}>{c.name}</p>
-            <Button emphasis={c.emphasis} tone={c.tone}>
+            <Button
+              emphasis={c.emphasis}
+              tone={c.tone}
+              icon={c.emphasis === 'link' ? <Icon name="arrow-right" /> : undefined}
+            >
               {c.emphasis === 'link' ? 'Read case study' : 'See the work'}
             </Button>
           </Layout>
@@ -208,7 +217,9 @@ export default function ButtonSpecimenPage() {
                   Trailing for movement, leading to name the kind of action. Never both.
                 </p>
                 <Cluster colGap="text" rowGap="text">
-                  <Button icon={<Icon name="arrow-right" />}>Read case study</Button>
+                  <Button emphasis="ghost" tone="primary" icon={<Icon name="arrow-right" />}>
+                    See the work
+                  </Button>
                   <Button emphasis="ghost" tone="neutral" iconLeft={<Icon name="download" />}>
                     Download
                   </Button>
@@ -266,7 +277,7 @@ export default function ButtonSpecimenPage() {
                   <Button
                     size={size}
                     emphasis="ghost"
-                    tone="neutral"
+                    tone="primary"
                     icon={<Icon name="arrow-right" />}
                   >
                     See the work
@@ -279,10 +290,12 @@ export default function ButtonSpecimenPage() {
                     icon={<Icon name="copy" />}
                     aria-label="Copy"
                   />
-                  <Button size={size} tone="neutral">
-                    Send
-                  </Button>
-                  <Button size={size} emphasis="link" tone="primary">
+                  <Button
+                    size={size}
+                    emphasis="link"
+                    tone="primary"
+                    icon={<Icon name="arrow-right" />}
+                  >
                     Read case study
                   </Button>
                 </Cluster>
@@ -292,7 +305,7 @@ export default function ButtonSpecimenPage() {
 
           <Specimen
             title="Groups, and the one-solid rule"
-            note="A row of buttons is a Cluster, which owns the gap — never a margin on the button. One solid per view: a second solid of any colour means the page has not decided which action it wants, and the reader will not decide for it."
+            note="A row of buttons is a Cluster, which owns the gap — never a margin on the button. One solid per view: a second solid of any colour means the page has not decided which action it wants, and the reader will not decide for it. The pair is the hero's shape — a solid with no arrow, its ghost partner with one (owner, 7 Oct 2026)."
           >
             <Layout rowGap="block">
               <Cluster colGap="text" rowGap="text">
@@ -329,17 +342,76 @@ export default function ButtonSpecimenPage() {
           </Specimen>
 
           <Specimen
+            title="Pairings — which emphasis goes with which (owner, 7 Oct 2026)"
+            note="Solid is the converting action and never carries an arrow. Its partner is a ghost, which takes the trailing arrow when it navigates. A link button lives in a card or a line of text and carries the arrow; it is never the partner beside a solid. Two of the same emphasis never sit side by side, so a group is at most one solid and one ghost."
+          >
+            <Layout columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="block">
+              <Layout rowGap="tight" justifyItems="start">
+                <p className={s.specTitle}>The ask, and its partner</p>
+                <p className={s.specNote}>
+                  Solid, no arrow · ghost, arrow. Heroes, closes, CtaRow.
+                </p>
+                <Cluster colGap="block" rowGap="block" align="center">
+                  <Button as="a" href="#pairing-demo">
+                    Start a project
+                  </Button>
+                  <Button
+                    as="a"
+                    href="#pairing-demo"
+                    emphasis="ghost"
+                    tone="primary"
+                    icon={<Icon name="arrow-right" />}
+                  >
+                    See the work
+                  </Button>
+                </Cluster>
+              </Layout>
+              <Layout rowGap="tight" justifyItems="start">
+                <p className={s.specTitle}>The ask alone</p>
+                <p className={s.specNote}>A solid needs no partner, and never an arrow.</p>
+                <Button as="a" href="#pairing-demo">
+                  Book a call
+                </Button>
+              </Layout>
+              <Layout rowGap="tight" justifyItems="start">
+                <p className={s.specTitle}>A link, in a card or a line</p>
+                <p className={s.specNote}>
+                  One per place, with the arrow. Never beside a solid.
+                </p>
+                <Button
+                  as="a"
+                  href="#pairing-demo"
+                  emphasis="link"
+                  tone="primary"
+                  icon={<Icon name="arrow-right" />}
+                >
+                  Read case study
+                </Button>
+              </Layout>
+            </Layout>
+          </Specimen>
+
+          <Specimen
             title="Anchors — a button that navigates"
             note="as='a' with an href, or as={Link} for an internal route. Link emphasis is almost always an anchor; solid and ghost are almost always buttons. type and disabled are only emitted for a real button — an anchor takes aria-disabled and leaves the tab order instead."
           >
-            <Cluster colGap="text" rowGap="text">
-              <Button as="a" href="#anchor-demo" emphasis="link" tone="primary">
+            <Cluster colGap="block" rowGap="text" align="center">
+              <Button
+                as="a"
+                href="#anchor-demo"
+                emphasis="link"
+                tone="primary"
+                icon={<Icon name="arrow-right" />}
+              >
                 Read case study
               </Button>
-              <Button as="a" href="#anchor-demo" emphasis="link" tone="neutral">
-                Approach
-              </Button>
-              <Button as="a" href="#anchor-demo" emphasis="ghost" tone="neutral">
+              <Button
+                as="a"
+                href="#anchor-demo"
+                emphasis="ghost"
+                tone="neutral"
+                icon={<Icon name="arrow-right" />}
+              >
                 All work
               </Button>
               <Button as="a" href="#anchor-demo" disabled>
@@ -359,7 +431,9 @@ export default function ButtonSpecimenPage() {
                 hover affordance at all — and since focus is the hover treatment plus the ring,
                 a link with no fill would degrade to ring-only.
               </p>
-              <Cluster colGap="block" rowGap="text">
+              {/* Stacked, not side by side: two links in a row are two actions of the same
+                  emphasis, which a group never is (owner, 7 Oct 2026). */}
+              <Layout rowGap="text" justifyItems="start">
                 <Button
                   as="a"
                   href="#link-demo"
@@ -368,10 +442,16 @@ export default function ButtonSpecimenPage() {
                 >
                   Read case study
                 </Button>
-                <Button as="a" href="#link-demo" emphasis="link" tone="neutral">
+                <Button
+                  as="a"
+                  href="#link-demo"
+                  emphasis="link"
+                  tone="neutral"
+                  icon={<Icon name="arrow-right" />}
+                >
                   Approach
                 </Button>
-              </Cluster>
+              </Layout>
             </Layout>
           </Specimen>
 

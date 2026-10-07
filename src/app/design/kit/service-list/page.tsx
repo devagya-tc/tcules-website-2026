@@ -1,11 +1,4 @@
-import {
-  Cluster,
-  Layout,
-  Media,
-  Section,
-  TextureHorizon,
-  type IconName,
-} from '@/components';
+import { Cluster, Layout, Media, Section, TextureHorizon, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -440,7 +433,7 @@ export default function ServiceListKitSpecimen() {
       </ContentSection>
 
       {/* ── 03 · List router ───────────────────────────────────────────────────────────────── */}
-      {/* A beside head carrying the band's actions (one solid ask, one blue link) over three ruled,
+      {/* A beside head carrying the band's actions (one solid ask, its ghost partner) over three ruled,
           title-cued ListCard rows: thumbnail, title and its arrow, the condition under it. Three
           rows at most, so the head track never needs an aside as well (§ 1.4 rule 6). On tint, the
           page's one change of ground, so the run of paper bands breaks where the shape does. */}

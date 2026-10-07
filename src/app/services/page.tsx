@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
+import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
 import { getServicesMasterPage, type ServicesMasterAction } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
@@ -171,6 +171,7 @@ export default async function ServicesPage() {
                               tone="primary"
                               size="md"
                               extendHitArea
+                              icon={<Icon name="arrow-right" />}
                             >
                               {card.action.label}
                             </Button>
@@ -200,6 +201,7 @@ export default async function ServicesPage() {
                     tone="primary"
                     size="md"
                     extendHitArea
+                    icon={<Icon name="arrow-right" />}
                   >
                     {section.action.label}
                   </Button>

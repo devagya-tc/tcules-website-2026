@@ -2,7 +2,16 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag, type LayoutProps } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  Layout,
+  Prose,
+  Section,
+  Tag,
+  type LayoutProps,
+} from '@/components';
 import {
   getGlossaryPage,
   type GlossaryAction,
@@ -76,7 +85,8 @@ function renderColumn(column: GlossaryContentColumn) {
       ) : null}
 
       {column.links.length > 0 ? (
-        <Cluster colGap="tight" rowGap="tight">
+        /* A column's links STACK (owner, 7 Oct 2026): link buttons never sit side by side. */
+        <Layout rowGap="text" justifyItems="start">
           {column.links.map((link) => (
             <Button
               key={`${column.id}-${link.href}-${link.label}`}
@@ -86,11 +96,12 @@ function renderColumn(column: GlossaryContentColumn) {
               tone="neutral"
               size="md"
               extendHitArea
+              icon={<Icon name="arrow-right" />}
             >
               {link.label}
             </Button>
           ))}
-        </Cluster>
+        </Layout>
       ) : null}
     </Layout>
   );
@@ -157,6 +168,7 @@ function renderGlossaryBlock(block: GlossaryBlock) {
                 tone="neutral"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.source.label}
               </Button>

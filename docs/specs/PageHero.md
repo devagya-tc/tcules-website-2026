@@ -36,6 +36,12 @@ Verified against the loaded Tcules library (`window.Tcules`, 10 components) and 
 
 Every section below is amended in place for this block — 1, 2, 3, 7, 9, 10, 12 row 9, 14 checks 4 and 7, 15 item 9 and the build-decisions log; the 29 Sep amendment carries a note.
 
+> **Owner amendment, 7 Oct 2026 — pairing and arrows** (`docs/specs/Button.md` § 14a). The second
+> action is now `ghost` / `primary` with the trailing `arrow-right`; the first stays `solid` / `primary`
+> and never carries an arrow. A link button is never the partner beside a solid. Rows below that
+> describe the second action as a link (its label line, its 44 hit area as the whole target) are
+> superseded: the partner is a 40 box like the solid, with `extendHitArea` covering the missing 4.
+
 ## 1 · Identity
 
 The opening block of a page: an optional ancestor trail (*5 Oct 2026*), one `h1`, an optional eyebrow above it, one to six paragraphs of lead copy, an optional byline of credits and dates, an optional caller-supplied block, nought to two actions, and — last in the band — an optional image or YouTube embed. It paints its own band. It is the first thing inside `<main>` on all 129 routes and there is never a second one.

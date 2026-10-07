@@ -1204,7 +1204,7 @@ export default function ContentSectionSpecimen() {
         lead={LEAD}
         footer={
           <CtaRow
-            actions={[SEE_WORK, HOW]}
+            actions={[SEE_WORK]}
             note="Each one is a case study you can read in five minutes."
           />
         }

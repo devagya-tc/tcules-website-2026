@@ -360,9 +360,9 @@ export default function MediaSplitKitSpecimen() {
             <h1 className={t.display}>The photograph and the argument</h1>
             <p className={t.lead}>
               One ContentSection, one photograph and a short body: tiles, a ruled list, an
-              accordion or a single ask. Long copy takes the wide column; short copy hands it to the
-              photograph. Blue marks where to look. Every band is shot at 390 too, where the photo
-              moves above the copy at 4:3.
+              accordion or a single ask. Long copy takes the wide column; short copy hands it to
+              the photograph. Blue marks where to look. Every band is shot at 390 too, where the
+              photo moves above the copy at 4:3.
             </p>
           </Layout>
           <Layout as="ol" rowGap="text">
@@ -433,6 +433,8 @@ export default function MediaSplitKitSpecimen() {
           footer={
             <CtaRow
               actions={[PLAN_DISCOVERY, SEE_PLAN]}
+              emphasis="solid"
+              tone="primary"
               note="Most of our engagements start here."
             />
           }
@@ -444,7 +446,11 @@ export default function MediaSplitKitSpecimen() {
       <Variant variation={V.lead}>
         <ContentSection
           arrangement="media"
-          media={{ image: photo('hand-sketch-wireframe'), weight: 'photo', counterweight: true }}
+          media={{
+            image: photo('hand-sketch-wireframe'),
+            weight: 'photo',
+            counterweight: true,
+          }}
           eyebrow="Sketch first"
           heading="Paper before pixels"
           headingId="b-lead"
@@ -491,7 +497,14 @@ export default function MediaSplitKitSpecimen() {
           heading="Designed to ship"
           headingId="b-mirror"
           lead="Engineers sit in the design reviews from the first week, so what we draw is what ships."
-          actions={<CtaRow actions={[TALK_ENGINEERING, SEE_WORK]} rule={false} />}
+          actions={
+            <CtaRow
+              actions={[TALK_ENGINEERING, SEE_WORK]}
+              emphasis="solid"
+              tone="primary"
+              rule={false}
+            />
+          }
         />
       </Variant>
     </>

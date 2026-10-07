@@ -45,8 +45,8 @@ export type ServicePageProps = {
  * The page makes four decisions for every service line, once:
  *
  *   1. It opens on the line's illustration beside the copy (ruling H2, § 2.3): the trail inside the
- *      hero, no hero eyebrow (the last crumb already names the service), one solid action and one
- *      blue link. The hero spends the solid and the illustration, so it carries no texture.
+ *      hero, no hero eyebrow (the last crumb already names the service), one solid action and its
+ *      ghost partner. The hero spends the solid and the illustration, so it carries no texture.
  *   2. It decides every band's ARRANGEMENT from the job the band's blocks do (plan.ts), never from
  *      the story — a story says what a section argues, and the template says how it is laid out.
  *      Each job is one kit archetype (§ 3.4), and the plan applies the page rules no band can see

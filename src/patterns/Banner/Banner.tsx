@@ -52,7 +52,8 @@ type BannerHeadProps = {
   lead?: string;
   /**
    * The head's action, a `stack` under the lead — in practice a `CtaRow` with `rule={false}`, so the
-   * blue link (or one solid) is the caller's composition and a pattern never imports a pattern.
+   * one blue link (or one solid, with at most a ghost partner — owner, 7 Oct 2026) is the caller's
+   * composition and a pattern never imports a pattern.
    *
    * A solid ask is the BLUE solid primary — `<CtaRow emphasis="solid" tone="primary" … />` — the
    * same treatment as the hero's first action (fix round 2). CtaRow's solid default is the neutral

@@ -554,22 +554,19 @@ function CtaPoints({
  * available times" together, inside EnquiryForm — so this renders only when there is no form.
  *
  * POSITION decides emphasis, and it is the hero's shape exactly (PageHero, CtaRow `solid`): the
- * first is `solid`/`primary`, the band's one ask; the second is a LINK in the primary tone, blue at
- * rest (visual-direction § 4.2: "every link-style action, including a second action beside a solid").
- * It was a `ghost` until cmp-cta (6 Oct 2026): a ghost is a second box beside the first, and two
- * boxes in one row read as two asks of equal standing. A link is plainly the alternative. There is
- * no `emphasis` on `CtaAction` for that reason.
+ * first is `solid`/`primary`, the band's one ask; the second is its partner, a GHOST in the primary
+ * tone (owner, 7 Oct 2026: a primary's partner is a ghost, never a link button — link buttons belong
+ * in cards and inline contexts). It was a ghost until cmp-cta (6 Oct), a link from then until the
+ * 7 Oct ruling. There is no `emphasis` on `CtaAction`: position decides.
  *
- * THE ARROW RULE (final fix round): the solid takes no glyph — 1 Oct 2026, owner, on the offer's
- * "Start a project": "no arrow here"; the ask's label carries it, as in the hero and the nav — and
- * the second action, a link, takes the trailing `arrow-right`, the kit's one link cue. That is the
- * same rule EnquiryForm's "See available times →" and CtaRow's link rows follow, so every second
- * action in the family is one treatment: link-style, blue at rest, arrow. It had no arrow here while
- * the form's link beside it had one.
+ * THE ARROW RULE (owner, 7 Oct 2026): the solid takes no glyph, ever — the ask's label carries it
+ * (1 Oct: "no arrow here"). The ghost partner navigates, so it takes the trailing `arrow-right`.
+ * EnquiryForm's submit and "See available times →" and CtaRow's solid rows follow the same rule, so
+ * every pair in the family is one treatment.
  *
  * Every control is `size="md"` with `extendHitArea`: the box is 40 and the touch floor is 44, so
  * the target is legal without the row growing. `block` (24) between them, as CtaRow and PageHero
- * set it: a bare link label 8 from a filled box reads as part of it.
+ * set it: two boxes need clear air between them.
  */
 function CtaActions({
   actions,
@@ -586,7 +583,7 @@ function CtaActions({
           key={`${index}-${action.href}-${action.label}`}
           as="a"
           href={action.href}
-          emphasis={index === 0 ? 'solid' : 'link'}
+          emphasis={index === 0 ? 'solid' : 'ghost'}
           tone="primary"
           size="md"
           extendHitArea
