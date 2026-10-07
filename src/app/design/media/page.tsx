@@ -137,6 +137,7 @@ const PLACEMENT_FOR: Record<MediaRatio, string> = {
   '5/4': 'the photograph hero',
   '3/1': 'I banner below its head',
   '4/1': 'the title-led hero panorama (PageHero display; /design/kit/hero)',
+  '2/1': 'the title-led hero wide shape, its default (PageHero display)',
   '3/2':
     'banner beside, the head-track aside, and every card box (BlockCard and ListCard crop at 3:2)',
   '16/9':

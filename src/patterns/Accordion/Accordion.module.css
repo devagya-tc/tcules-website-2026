@@ -42,10 +42,9 @@
    polyfilled. The mark still does not rotate: both chevrons are in the DOM and `[open]` picks.
 
    ── Rule order is load-bearing ──────────────────────────────────────────────────
-   `.trigger:hover`/`:focus-visible`/`.item[open]`, then `:active`. All of the state selectors
-   resolve the question to the SAME raised ink, so they cannot fight over colour — what source
-   order decides is the underline: `:active` comes last so a pressed row keeps it while also
-   hovered. The `:focus-visible` ring block is separate from `:focus`, which only kills the UA
+   `.trigger:hover`/`:focus-visible`/`.item[open]` all resolve the question to the SAME raised ink,
+   so they cannot fight over colour. Pressed adds nothing of its own: no underline (owner, 7 Oct
+   2026 — it read as a stray rule under the question). The `:focus-visible` ring block is separate from `:focus`, which only kills the UA
    outline; splitting them is what stops a mouse click drawing a ring. */
 
 .root {
@@ -214,16 +213,6 @@
 .trigger:focus-visible .mark,
 .item[open] .mark {
   color: var(--acc-mark-ink-hover);
-}
-
-/* Pressed holds the raised ink and adds a hairline underline, so it differs from hover by more
-   than colour — which is the job the deleted --acc-trigger-bg-pressed used to do. Last, so a row
-   that is pressed AND hovered keeps it. */
-.trigger:active .question {
-  text-decoration: underline;
-  text-decoration-color: var(--acc-mark-ink);
-  text-decoration-thickness: var(--acc-rule-width);
-  text-underline-offset: var(--acc-question-underline-offset);
 }
 
 /* Accordion says NOTHING about the answer's type or its colour, and this class is the whole of

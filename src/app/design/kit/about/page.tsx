@@ -257,7 +257,7 @@ export default function KitAboutPage() {
           { label: 'Meet the team', href: ROUTES.team },
         ]}
         arrangement="display"
-        media={{ type: 'image', ratio: { base: '3/2', lg: '4/1' }, image: HOLI }}
+        media={{ type: 'image', image: HOLI }}
       />
 
       {/* 2 · J — why the studio exists, centred at display scale, the corner field. */}

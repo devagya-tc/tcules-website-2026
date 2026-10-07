@@ -43,10 +43,9 @@ type SharedProps = {
    */
   fields?: 'line' | 'box';
   /**
-   * Number the fields (cmp-form final round): a blue mono numeral leads each label — 01 Name,
-   * 02 Email, 03 What are you working on? The form's own structural mark, for the placements where
-   * nothing else in the band carries the accent (a standalone ask with no photograph, no texture
-   * and no points), so the band does not read black and white plus one blue button. The numerals
+   * Number the fields (cmp-form final round): a mono numeral leads each label — 01 Name,
+   * 02 Email, 03 What are you working on? Neutral, not blue (owner, 7 Oct 2026): numbers are blue
+   * only where they ARE the information, and here they are auxiliary to the labels. The numerals
    * are aria-hidden: the label is the field's name, and the count is visual order, not content.
    */
   numbered?: boolean;

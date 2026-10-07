@@ -31,6 +31,7 @@
   --enq-success-ink: var(--color-neutral-900);
   --enq-caption-ink: var(--color-neutral-600);
   --enq-accent-ink: var(--color-brandeis-500); /* 6.17:1: marks, active label, numerals */
+  --enq-index-ink: var(--color-neutral-600); /* 4.92:1 — field and step numerals: auxiliary, so neutral (owner, 7 Oct 2026) */
 }
 
 [data-surface='tint'] {
@@ -43,6 +44,7 @@
   --enq-success-ink: var(--color-neutral-900);
   --enq-caption-ink: var(--color-neutral-700);
   --enq-accent-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --enq-index-ink: var(--color-neutral-700); /* 7.27:1 */
 }
 
 [data-surface='ink'] {
@@ -55,6 +57,7 @@
   --enq-success-ink: var(--color-neutral-50);
   --enq-caption-ink: var(--color-neutral-400);
   --enq-accent-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --enq-index-ink: var(--color-neutral-400); /* 8.05:1 */
 }
 
 [data-surface='blue'] {
@@ -66,4 +69,5 @@
   --enq-success-ink: var(--color-white);
   --enq-caption-ink: var(--color-brandeis-100);
   --enq-accent-ink: var(--color-white);
+  --enq-index-ink: var(--color-brandeis-100); /* 4.91:1 */
 }

@@ -173,7 +173,7 @@ Yours must not collide with any of those, nor with a primitive family above.
 **Their geometry, so you can size against it rather than guessing.** A new control is measured
 against the controls beside it — if you are specifying one, say which of these it must line up with.
 
-- **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px · `--acc-question-underline-offset` 6px
+- **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px
 - **banner.css** — `--bnr-eyebrow-tracking` 0.12em · `--bnr-heading-tracking` -0.015em · `--bnr-heading-measure` 32ch · `--bnr-lead-measure` 56ch · `--bnr-strip-label-tracking` 0.12em · `--bnr-illustration-zoom-phone` 180% · `--bnr-illustration-shift` 0%
 - **block-card.css** — `--bcrd-title-tracking-lg` -0.01em · `--bcrd-title-tracking-md` -0.005em · `--bcrd-title-tracking-sm` 0em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-inset` 8px · `--bcrd-cover-inset` 24px · `--bcrd-text-rule-width` 1px · `--bcrd-icon-size` 32px · `--bcrd-index-tracking` 0.08em · `--bcrd-media-rule-width` 1px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px · `--bcrd-rail-length` 10rem · `--bcrd-rail-thickness` 2px · `--bcrd-rail-radius` 999px
 - **brand-mark.css** — `--bmark-size` 14px
@@ -201,7 +201,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **proof.css** — `--proof-quote-rule-width` 2px · `--proof-portrait-size` 64px · `--proof-portrait-radius-compact` 4px · `--proof-portrait-radius` 8px · `--proof-mark-inline-size` 48px · `--proof-radius` 0px
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px
 - **rating-badge.css** — `--rbadge-padding-inline` 14px · `--rbadge-radius` 999px · `--rbadge-rule-width` 1px · `--rbadge-tracking` 0.08em · `--rbadge-ring-width` 2px · `--rbadge-ring-offset` 2px · `--rbadge-hidden-size` 1px
-- **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-padding-y-strip` 24px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
+- **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-padding-y-strip` 24px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px · `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px
 - **service-page.css** — `--svc-mark-size` 12px · `--svc-slice-cell` 24px · `--svc-hidden-size` 1px · `--svc-rule-width` 1px · `--svc-rule-strong-width` 1px · `--svc-meter-width` 96px · `--svc-meter-height` 24px · `--svc-meter-stroke` 2px · `--svc-authority-slot` 12px · `--svc-orbit-stroke` 2px
 - **slider.css** — `--sld-progress-length` 240px · `--sld-progress-thickness` 2px · `--sld-progress-radius` 999px · `--sld-ring-width` 2px · `--sld-ring-offset` 2px · `--sld-hidden-size` 1px
 - **stat.css** — `--stat-rule-width` 1px · `--stat-mark-width` 2px · `--stat-mark-length` 32px · `--stat-value-tracking-lg` -0.015em · `--stat-value-tracking-md` -0.01em · `--stat-unit-tracking` 0.08em · `--stat-label-measure` 32ch

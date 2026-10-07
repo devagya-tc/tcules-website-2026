@@ -722,6 +722,27 @@ wall of text again.
 
 ---
 
+### 3.8 Labels: a bulleted list or a Tag (owner, 7 Oct 2026)
+
+The kit has two label shapes, and the choice follows what the label is attached to.
+
+| Shape | What it is | Use it when | Never |
+|---|---|---|---|
+| **Bulleted label** (PageHero's tag list: blue square, mono label, no box) | facets that describe the page or band you are ON | a run of 3–6 attributes of the subject itself: what a service covers, a hero's facts | on a card; interactive; a single label alone |
+| **`Tag` `mark`** (badge: quiet ground, no edge) | files ONE object in a set under a taxonomy | a card's, article's or case study's category, one or two per item, attached to the item | as a list describing the page; clickable |
+| **`Tag` `filter`** (chip: edge, no ground) | a query the reader can apply | an index page's filter row | as decoration or a category label |
+
+The test, in order: can the reader act on it → `filter`. Does it label one item among several →
+`mark`. Does it describe the thing the reader is on → bulleted. The blue square survives only on
+the bulleted label: it is a bullet, not an eyebrow mark (eyebrows carry no mark, owner 7 Oct 2026).
+
+### 3.9 Numerals: accent or neutral (owner, 7 Oct 2026)
+
+A numeral is blue when the numbered points ARE the band's information — a process, a numbered
+ledger, a set whose order is the argument. It is neutral when the numbers are auxiliary to
+something else: a form's field numbers (`--enq-index-ink`), an offer's points beside the ask
+(`--cta-number-ink`), a ListCard set with `tone: 'neutral'` whose band carries its accent elsewhere.
+
 ## 4 · Blue: the recurring foreground accent
 
 ### 4.1 The rule (owner, 6 Oct 2026, binding)

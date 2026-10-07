@@ -165,7 +165,7 @@
    list's own track caps the row. `detail` takes the body measure because it is a clause. That
    asymmetry is the reason the two are separate parts sharing one ink. */
 .marker {
-  color: var(--cta-marker-ink);
+  color: var(--cta-number-ink);
   font: var(--cta-marker-text);
   letter-spacing: var(--cta-marker-tracking);
   text-transform: var(--text-mono-case);

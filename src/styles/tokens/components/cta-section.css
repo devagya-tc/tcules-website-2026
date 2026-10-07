@@ -94,6 +94,7 @@
   --cta-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
   /* 6.17:1 — the points' numerals and glyphs carry the accent */
   --cta-marker-ink: var(--color-brandeis-500);
+  --cta-number-ink: var(--color-neutral-600); /* 4.92:1 — point numerals: auxiliary to the ask, so neutral (owner, 7 Oct 2026); glyphs keep --cta-marker-ink */
   --cta-rule-ink: var(--color-neutral-300); /* decoration */
 }
 
@@ -103,6 +104,7 @@
   --cta-point-ink: var(--color-neutral-900); /* 13.05:1 */
   --cta-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
   --cta-marker-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --cta-number-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
 }
 
@@ -112,6 +114,7 @@
   --cta-point-ink: var(--color-white); /* 17.26:1 */
   --cta-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --cta-marker-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --cta-number-ink: var(--color-neutral-400); /* 8.05:1 */
   --cta-rule-ink: var(--color-neutral-700); /* decoration */
 }
 
@@ -121,5 +124,6 @@
   --cta-point-ink: var(--color-white); /* 6.23:1 */
   --cta-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --cta-marker-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --cta-number-ink: var(--color-brandeis-100); /* 4.91:1 */
   --cta-rule-ink: var(--color-brandeis-300); /* decoration */
 }

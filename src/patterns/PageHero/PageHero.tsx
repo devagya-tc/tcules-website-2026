@@ -75,6 +75,14 @@ export type HeroAction = { label: string; href: string };
  * `alt` describes what the image SHOWS and must not restate the title or the lead. An illustration
  * cover or banner takes `alt=""` (ch05 § 9a): the h1 already names what it stands for.
  */
+export type HeroImageShape = 'panorama' | 'wide' | 'tall';
+
+const HERO_SHAPE_RATIO: Record<HeroImageShape, MediaRatioSpec> = {
+  panorama: { base: '3/2', lg: '4/1' },
+  wide: { base: '3/2', lg: '2/1' },
+  tall: { base: '3/2', lg: '16/9' },
+};
+
 export type HeroImage = {
   type: 'image';
   image: MediaImage;
@@ -85,6 +93,13 @@ export type HeroImage = {
    * with a development warning: an illustration and a capture render whole (H3).
    */
   ratio?: MediaRatioSpec;
+  /**
+   * The `display` arrangement's photograph shape (owner, 7 Oct 2026), from 1024; below it every
+   * shape is 3:2. `panorama` 4:1 (a strip: landscapes and interiors, never a group of people),
+   * `wide` 2:1 (the default), `tall` 16:9. Named rather than a free ratio so a hero picks a shape
+   * the kit has judged, not the asset's accidental one. An explicit `ratio` wins over it.
+   */
+  shape?: HeroImageShape;
   /**
    * An ILLUSTRATION's numbered cut: the same drawing with its labels replaced by numbered markers
    * (`src`, same viewBox as the drawing), and the labels in marker order (`items`), which PageHero
@@ -177,7 +192,7 @@ export type { HeroTrail };
  *            idea, so a home hero and a studio hero are not the same rectangle at a squint.
  *   display  title-led: the eyebrow, title and lead in 3 of 5 from 1024 and the ask in the other 2
  *            on the lead's last baseline (the Quantum split header), then the media at the full
- *            column below — a panorama (`ratio` { base: '3/2', lg: '4/1' }), so it ends at 781.
+ *            column below, in a named `shape` (panorama 4:1, wide 2:1 by default, tall 16:9).
  *
  * `beside` with no media renders `stacked`: there is nothing to put beside the copy, and a
  * template that sets `beside` for a family must still render the member that has no image. That is
@@ -769,7 +784,12 @@ export function PageHero({
       <Media
         image={media.image}
         sizes={sizes}
-        ratio={media.ratio}
+        ratio={
+          media.ratio ??
+          (display && media.image.kind === 'photograph'
+            ? HERO_SHAPE_RATIO[media.shape ?? 'wide']
+            : undefined)
+        }
         art={legend ? [{ media: CUT_QUERY, src: legend.src }] : undefined}
         priority
       />

@@ -63,7 +63,7 @@
    the label's baseline (its Cluster is `align="baseline"`), in the accent. It does not take the
    label's focus colour — it is the form's mark, not the active state's. */
 .fieldIndex {
-  color: var(--enq-accent-ink);
+  color: var(--enq-index-ink);
   font: var(--text-ui-sm);
   letter-spacing: var(--text-ui-sm-tracking);
   text-transform: var(--text-mono-case);
@@ -167,7 +167,7 @@
    `align="baseline"`), the step at h6, its clause in the caption's quiet ink. The numeral is
    aria-hidden — the <ol> carries position — but a sighted reader counts with it, so it holds AA. */
 .stepMarker {
-  color: var(--enq-accent-ink);
+  color: var(--enq-index-ink);
   font: var(--text-index);
   letter-spacing: var(--text-index-tracking);
   text-transform: var(--text-mono-case);

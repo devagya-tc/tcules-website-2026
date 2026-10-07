@@ -36,7 +36,7 @@ export type CtaIconPoint = CtaPoint & {
 /**
  * What stands in front of each point (cmp-cta, 6 Oct 2026).
  *
- *   number  the list position as a two-digit mono numeral, in blue — and the list is an `<ol>`,
+ *   number  the list position as a two-digit mono numeral, in the quiet neutral (owner, 7 Oct 2026: the numbers are auxiliary to the ask) — and the list is an `<ol>`,
  *           because the order is the meaning ("what happens next"). The default.
  *   icon    a Solar Bold glyph at `xl` (24), in the same blue (visual-direction § 4.2: icons and
  *           markers are the foreground accent). The list is a `<ul>`: an icon names a kind of thing,

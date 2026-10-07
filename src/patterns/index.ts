@@ -282,6 +282,7 @@ export type {
   HeroArrangement,
   HeroMedia,
   HeroImage,
+  HeroImageShape,
   HeroVideo,
   HeroTrail,
   HeroAnnouncement,

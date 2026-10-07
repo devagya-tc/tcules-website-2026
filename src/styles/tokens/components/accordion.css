@@ -22,9 +22,8 @@
    moves on at least one surface, which is why there is no --btn-solid-*-fg-pressed either. The
    redesign brief listed --acc-question-ink-pressed and --acc-question-ink-expanded separately and
    gave both the same four values as -hover; declaring them would have been three names for one
-   decision, which is the --sec-gap mistake. Pressed is still distinguishable from hover — it adds
-   a hairline underline (see .trigger:active in the module), which is what the deleted
-   --acc-trigger-bg-pressed used to do.
+   decision, which is the --sec-gap mistake. Pressed is not distinguished from hover: the hairline
+   underline it used to add was removed (owner, 7 Oct 2026).
 
    There is no layer token. The spec asked for one resolving to --z-base, but --z-base is 0 and
    nothing in this component stacks — a token whose only reader is one component and whose only
@@ -37,10 +36,6 @@
   --acc-shadow: var(--shadow-none);
   --acc-ring-width: var(--focus-ring-width);
   --acc-ring-offset: var(--focus-ring-offset);
-  /* Optical, not a layout distance: the offset that clears Public Sans' descenders under the h5
-     question at 22px, so the pressed underline reads as a rule rather than as a strikethrough
-     through the tail of a `g`. Same reach and same reason as --prose-link-underline-offset. */
-  --acc-question-underline-offset: var(--space-6);
   --acc-transition-duration: var(--duration-fast);
   --acc-transition-easing: var(--easing-standard);
   /* The answer's open and close (1 Oct 2026). Medium, not fast: the answer travels its own height,

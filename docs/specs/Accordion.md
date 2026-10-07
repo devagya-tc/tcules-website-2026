@@ -230,11 +230,8 @@ outer ink value may leak through an omitted declaration.
 
 ### (c) Optical corrections
 
-One. `--acc-question-underline-offset` resolves to `--space-6`: the offset that clears Public Sans'
-descenders under the 22px question, so the pressed underline reads as a rule rather than as a
-strikethrough through the tail of a `g`. It is a correction at a size, not a layout distance, which
-is what earns the reach to the space ramp — the same reach and the same reason as
-`--prose-link-underline-offset`. Its thickness reuses `--acc-rule-width`.
+None (owner, 7 Oct 2026). The pressed underline and its offset token were removed: the press no
+longer draws a rule under the question.
 
 Trigger and answer insets remain layout relationships named by the gap scale, and the mark uses an
 existing icon size.
@@ -502,7 +499,8 @@ true after the redesign: every new value is an existing ramp step.
 The layer as built, for the record:
 
 - **New.** `--acc-question-ink`, `--acc-question-ink-hover`, `--acc-mark-ink`, `--acc-mark-ink-hover`
-  (four surfaces each), and the geometry token `--acc-question-underline-offset`.
+  (four surfaces each), and a geometry token for the pressed underline's offset (removed with the
+  underline, 7 Oct 2026).
 - **Changed.** `--acc-rule-ink` lightens one step on every surface: neutral-200 paper, neutral-300
   tint, neutral-800 ink, brandeis-400 blue.
 - **Dropped.** `--acc-trigger-fg` (split into a question ink and a mark ink, which no longer move
@@ -589,8 +587,7 @@ NAMES
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS declarations, selectors or media blocks.
 [x] h5 uses its required tracking companion; Prose owns the answer composite.
 [x] Every layout distance is a gap-scale role.
-[x] Space-ramp reaches: 1 — --acc-question-underline-offset: --space-6, an optical correction under
-    the 22px question, commented as one in accordion.css. Section 7(c) states it.
+[x] Space-ramp reaches: none (the pressed-underline offset was removed 7 Oct 2026).
 [x] Literal pixels appear only as existing breakpoint, touch, track and Section-cap measurements
     used to explain verification; no literal becomes an implementation value.
 

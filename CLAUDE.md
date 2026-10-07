@@ -113,7 +113,10 @@ Nine steps, named for what they separate:
    split the difference.
 4. **A step is chosen by what it separates, never by how it looks at one width.** The scale does
    not shift responsively — the *layout* changes at a breakpoint, the distance does not. Do not
-   add a media query that swaps one step for another.
+   add a media query that swaps one step for another. One exception (owner, 7 Oct 2026): `Section`'s
+   own vertical padding steps down one beat below 768 (96 → 64, 64 → 48, 128 → 96), in
+   `tokens/components/section.css` and nowhere else. It is the band's air against the screen, not a
+   distance between two things.
 
 `Layout` and `Cluster` take these names directly as `rowGap` / `colGap` values. Cluster caps at
 `stack`: controls and chips stop at `block`, a strip of client marks is set at `stack`, and a

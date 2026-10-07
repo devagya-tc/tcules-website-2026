@@ -181,7 +181,7 @@ function variations(): Variation[] {
       id: 'display',
       short: 'Title-led panorama',
       name: 'Title-led, with a panorama below',
-      note: 'The split header: the title and lead in three fifths, the ask on the lead’s last line and flush with the column’s end, then a 4:1 photograph across the full column. The calmest frame in the catalogue, an empty studio, so the panorama is light and air rather than a second subject.',
+      note: 'The split header: the title and lead in three fifths, the ask on the lead’s last line and flush with the column’s end, then a 4:1 photograph across the full column (shape panorama). The calmest frame in the catalogue, an empty studio, so the panorama is light and air rather than a second subject.',
       facts: ['Ends at 781', 'Accent only', '4:1 · 3:2 on a phone'],
       hero: {
         title: 'How we work',
@@ -195,8 +195,43 @@ function variations(): Variation[] {
         arrangement: 'display',
         media: {
           type: 'image',
-          ratio: { base: '3/2', lg: '4/1' },
+          shape: 'panorama',
           image: photo('office-calm-interior', ''),
+        },
+      },
+    },
+    {
+      id: 'display-wide',
+      short: 'Title-led wide',
+      name: 'Title-led, with a wide photograph below',
+      note: 'The display arrangement’s default shape, 2:1 from 1024. A photograph of people needs the height a 4:1 strip cuts away, so it runs past the fold by design; the panorama is kept for interiors and landscapes.',
+      facts: ['shape wide (default)', '2:1 · 3:2 on a phone'],
+      hero: {
+        title: 'Small on purpose',
+        body: ['Researchers, designers and engineers in one room, from decision to code.'],
+        actions: [START],
+        arrangement: 'display',
+        media: {
+          type: 'image',
+          image: { ...photo('studio-team-holi', ''), focus: { x: 0.5, y: 0.42 } },
+        },
+      },
+    },
+    {
+      id: 'display-tall',
+      short: 'Title-led tall',
+      name: 'Title-led, with a tall photograph below',
+      note: 'shape tall, 16:9 from 1024: the most image of the three, for a hero whose photograph is the argument.',
+      facts: ['shape tall', '16:9 · 3:2 on a phone'],
+      hero: {
+        title: 'Built where the work happens',
+        body: ['Every engagement runs out of one studio, with the team that will ship it.'],
+        actions: [START],
+        arrangement: 'display',
+        media: {
+          type: 'image',
+          shape: 'tall',
+          image: photo('wireframe-wall', ''),
         },
       },
     },
