@@ -344,7 +344,7 @@ function variations(): Variation[] {
 /** The tint strip that names a variation. Specimen chrome: it labels the band below it. */
 function Label({ index, variation }: { index: number; variation: Variation }) {
   return (
-    <Section surface="tint" density="tight" id={variation.id}>
+    <Section surface="tint" id={variation.id}>
       <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
         <Layout rowGap="tight">
           <p className={t.index}>{String(index + 1).padStart(2, '0')}</p>

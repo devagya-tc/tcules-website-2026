@@ -32,7 +32,7 @@ const SURFACE_NOTE: Record<ShownSurface, string> = {
 
 function Label({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <Section density="tight">
+    <Section>
       <Layout rowGap="block" className={s.spec}>
         <h2>{title}</h2>
         <p className={s.specNote}>{children}</p>
@@ -69,7 +69,7 @@ export default function BannerSpecimen() {
       </Label>
       {SURFACES.map((surface) => (
         <Layout key={surface} rowGap="none">
-          <Section density="tight" surface={surface}>
+          <Section surface={surface}>
             <p className={s.specTitle}>{SURFACE_NOTE[surface]}</p>
           </Section>
           <Banner
@@ -130,7 +130,7 @@ export default function BannerSpecimen() {
       </Label>
       {SURFACES.map((surface, i) => (
         <Layout key={surface} rowGap="none">
-          <Section density="tight" surface={surface}>
+          <Section surface={surface}>
             <p className={s.specTitle}>
               {SURFACE_NOTE[surface]} mediaSide=&quot;{i % 2 ? 'start' : 'end'}&quot;
             </p>
@@ -191,11 +191,11 @@ export default function BannerSpecimen() {
         message="Our field guide to modernising a live product, without stopping it, is out."
         link={{ label: 'Read the guide', href: ROUTES.guides }}
       />
-      <Section density="tight">
+      <Section>
         <p className={s.specTitle}>Message only</p>
       </Section>
       <Banner form="strip" message="The studio is closed for Diwali from 1 to 5 November." />
-      <Section density="tight">
+      <Section>
         <p className={s.specTitle}>Surface proofs: paper, then ink</p>
       </Section>
       <Banner

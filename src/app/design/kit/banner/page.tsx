@@ -47,7 +47,7 @@ function Caption({
   children: ReactNode;
 }) {
   return (
-    <Section density="tight">
+    <Section>
       <Layout
         columns={{ lg: [1, 2] }}
         colGap="section"

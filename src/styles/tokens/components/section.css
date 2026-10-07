@@ -34,9 +34,14 @@
    its own layer reading --text-h2 and --measure-body, rather than a --sec-text-title
    alias only Section itself could use.                                          */
 :root{
+/* ONE vertical air for every band at a given width (owner, 7 Oct 2026): 96 here, 64 below 768
+   (the media blocks after this one). No band is tightened or loosened — there is no tight or open
+   density — so the seams down a page are one rhythm. The page's FIRST band takes less above its
+   content below 1024 (--sec-padding-y-first): under the nav, a full 96 or 64 read as a void before
+   the hero. Each value is a gap-scale step; this is the band's padding, a component size that
+   answers to the viewport, not the gap scale shifting (CLAUDE.md, gap-scale rule 3). */
 --sec-padding-y:var(--gap-section);
---sec-padding-y-tight:var(--gap-column);
---sec-padding-y-open:var(--gap-section-open);
+--sec-padding-y-first:var(--gap-section);
 /* The announcement strip (visual-direction § 3.4, cmp-banner, 6 Oct 2026): a slim band of one line,
    not an argument, so its air is the head-to-body step rather than a section beat. A fourth density
    rather than flush plus inner padding, so no element inside a strip writes a padding-block that
@@ -50,23 +55,26 @@
 --sec-rail:180px;        /* literal: the left column a running head or margin note sits
                             in. Column geometry, like --lay-track-*. */
 
-/* Phone (≤767, owner 7 Oct 2026): a section's OWN top and bottom air steps down one beat. 96 is a
-   quarter of a 390-wide screen and read as a void, worst at the top of a page. This is the band's
-   padding, a component size that answers to the viewport — not the gap scale shifting: every gap
-   INSIDE a section stays put, and each value is still a gap-scale step (normal 96 → 64, tight
-   64 → 48, open 128 → 96). The strip is already a block beat and does not move. */
-@media (max-width: 767px){
-:root{
---sec-padding-y:var(--gap-column);
---sec-padding-y-tight:var(--gap-stack);
---sec-padding-y-open:var(--gap-section);
-}
-}
-
 /* No highlight pair. --sec-highlight / --sec-highlight-ink (peridot-500 under neutral-900) were
    deleted on 6 Oct 2026: nothing read them, and the website does not highlight text
    (visual-direction § 4.4). Selection is globals.css's one ::selection rule. */
 }
+
+/* Tablet: the first band's top steps to 48. Every other band keeps 96. */
+@media (max-width: 1023px){
+:root{
+--sec-padding-y-first:var(--gap-stack);
+}
+}
+
+/* Phone: every band 64; the first band's top 32. */
+@media (max-width: 767px){
+:root{
+--sec-padding-y:var(--gap-column);
+--sec-padding-y-first:var(--gap-gutter);
+}
+}
+
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────
    The eyebrow is deliberately neutral, not blue: blue means clickable, and a

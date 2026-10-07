@@ -49,14 +49,17 @@
   padding-block: var(--sec-padding-y);
 }
 
-/* Vertical air — the three variants the token layer declares, all gap-scale steps. There is no
-   arbitrary value: a band is standard (96), tight (64), open (128), a strip (24), or flush (0). */
-.tight {
-  padding-block: var(--sec-padding-y-tight);
-}
+/* Vertical air: ONE value per width for every band (owner, 7 Oct 2026) — --sec-padding-y, 96
+   from 768 and 64 below. Besides it only the strip (24) and flush (0); there is no tight or open
+   band. */
 
-.open {
-  padding-block: var(--sec-padding-y-open);
+/* The page's first band: less air above its content below 1024 (48 tablet, 32 phone), so the
+   hero does not open on a void under the nav. Only the TOP: its foot keeps the page's one seam.
+   `main >` because the first band of the page is the first child of the layout's main — or the
+   band straight after a leading announcement strip, which sits above the hero. */
+main > .section:first-child:not(.flush, .strip),
+main > .strip:first-child + .section:not(.flush, .strip) {
+  padding-block-start: var(--sec-padding-y-first);
 }
 
 /* The announcement strip: one line of copy on its own ground (cmp-banner, 6 Oct 2026). */

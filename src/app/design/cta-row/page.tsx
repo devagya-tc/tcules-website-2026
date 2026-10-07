@@ -232,7 +232,7 @@ export default function CtaRowSpecimen() {
       ))}
 
       {/* ── 4 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <h2>4 · Where it lives</h2>
           <p className={s.specNote}>

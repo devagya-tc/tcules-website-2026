@@ -100,7 +100,7 @@ export default function StatSpecimenPage() {
       </Section>
 
       {SURFACES.map((surface) => (
-        <Section key={surface} surface={surface} density="tight">
+        <Section key={surface} surface={surface}>
           <Layout rowGap="block">
             <p className={s.specTitle}>surface · {surface}</p>
             <Layout as="ul" columns={{ md: 2, lg: 4 }} colGap="gutter" rowGap="column">

@@ -286,7 +286,6 @@ export function Banner(props: BannerProps) {
     <Section
       as={labelled ? 'section' : 'div'}
       surface={surface}
-      density="tight"
       aria-labelledby={labelled ? headingId : undefined}
       data-arrangement={form}
       data-band="I"

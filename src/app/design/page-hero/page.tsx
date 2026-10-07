@@ -337,7 +337,7 @@ function Note({
   surface?: SectionSurface;
 }) {
   return (
-    <Section surface={surface} density="tight">
+    <Section surface={surface}>
       <Layout rowGap="tight">
         <p className={s.specTitle}>{title}</p>
         <p className={s.specNote}>{note}</p>
@@ -567,7 +567,7 @@ export default function PageHeroSpecimenPage() {
       </Section>
 
       {/* ── 1 · The matrix ─────────────────────────────────────────────────────── */}
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>1 · The matrix — 1 variant × 1 size</p>
           <p className={s.specNote}>
@@ -657,7 +657,7 @@ export default function PageHeroSpecimenPage() {
 
       {/* ── 6 · States: none to force ──────────────────────────────────────────── */}
       <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={TWO_ACTIONS} converts={false} />
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>6 · States — and why there is no state column here</p>
           <p className={s.specNote}>
@@ -709,11 +709,11 @@ export default function PageHeroSpecimenPage() {
           so a tint hero standing between two ink bands is the real composition rather than an
           approximation of it, and the only thing that decides which column it reads is the
           data-surface its own Section writes. */}
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <p className={s.specNote}>An ink band above.</p>
       </Section>
       <PageHero surface="tint" title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <p className={s.specNote}>An ink band below.</p>
       </Section>
       <Note
@@ -721,11 +721,11 @@ export default function PageHeroSpecimenPage() {
         note="This hero reads the TINT column, not ink's: lead at neutral-800 on paper-deep (10.54:1), eyebrow and keys at neutral-700 (7.27:1), title at neutral-900 (13.06:1). Had the tint block carried only its deltas from paper it would have inherited ink's values for whatever it omitted and stranded neutral-100 on this light ground at 1.13:1 — which is a measured failure elsewhere in this system, not a hypothetical one. The repetition in the token layer is the fix."
       />
 
-      <Section density="tight">
+      <Section>
         <p className={s.specNote}>A paper band above.</p>
       </Section>
       <PageHero surface="ink" title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
-      <Section density="tight">
+      <Section>
         <p className={s.specNote}>A paper band below.</p>
       </Section>
       <Note
@@ -904,7 +904,7 @@ export default function PageHeroSpecimenPage() {
 
       {/* ── 13 · The hit floor ──────────────────────────────────────────────────── */}
       <PageHero title={TITLE} body={paragraphs(1)} actions={TWO_ACTIONS} converts={false} />
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>
             13 · The 44px touch floor, which a screenshot will not show
@@ -928,7 +928,7 @@ export default function PageHeroSpecimenPage() {
       </Section>
 
       {/* ── 14 · Illegal placements, rendered ───────────────────────────────────── */}
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>
             14 · Illegal placements — a band in a narrow track, at 320 and at 256
@@ -1058,7 +1058,7 @@ export default function PageHeroSpecimenPage() {
           ch05 B3: every image is approved at the phone's column. A band's column is its own
           gutter's doing, so the harness frames the VIEWPORT (390) and lets the hero produce the
           326 itself, instead of clamping the band to 326 and insetting it a second time. */}
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>15 · 326 · mobile column</p>
           <p className={s.specNote}>
@@ -1228,7 +1228,7 @@ export default function PageHeroSpecimenPage() {
           1024 `beside` IS `stacked`, so these bands render `stacked`, which is what a phone gets
           from either arrangement. The real 390 capture of this page shows every band above in
           that state. */}
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>21 · 326 · every media kind at the mobile column</p>
           <p className={s.specNote}>
@@ -1251,7 +1251,7 @@ export default function PageHeroSpecimenPage() {
       ))}
 
       {/* ── 22 · What this page cannot show ─────────────────────────────────────── */}
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>22 · What a static page cannot show</p>
           <p className={s.specNote}>

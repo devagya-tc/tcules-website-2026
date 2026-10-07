@@ -201,9 +201,8 @@ type ContentSectionBaseProps = {
    */
   lead?: string;
   /**
-   * Vertical air, passed through to `Section`. A band holding one paragraph and a band holding a
-   * five-card grid do not want the same air, and that is a property of what is IN the band —
-   * which only the caller knows.
+   * Passed through to `Section`: `strip` only. Every other band takes the one section padding
+   * (owner, 7 Oct 2026).
    */
   density?: SectionDensity;
   /**

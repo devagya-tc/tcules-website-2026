@@ -134,7 +134,7 @@ export default function InputSpecimenPage() {
           key={surface}
           data-fold-exempt="surface proof: twelve states on one ground, which at 390 stack one per row"
         >
-          <Section surface={surface} density="tight">
+          <Section surface={surface}>
             <Specimen
               title={`Surface · ${surface}`}
               note="Identical markup on all four: rest, invalid and disabled, as an input and as a textarea, boxed and lined. Every surface-dependent token renders in this band. On blue the line invalid rule is danger-300, a change of hue rather than a heavier pale rule, and the line disabled field reads its own brandeis-300 / 400 tokens."
@@ -184,7 +184,7 @@ export default function InputSpecimenPage() {
           >
             <LabelledInput label="Standard · on ink" />
           </Specimen>
-          <Section surface="blue" density="tight">
+          <Section surface="blue">
             <Specimen
               title="Nested surface · blue inside ink"
               note="SPECIMEN-ONLY ARRANGEMENT — a Section inside a Section insets the content column twice, which is why the two do not align. What it proves is the colour: this field must read as blue's column (a white field, a brandeis-200 rule, and invalid at danger-600 — chosen against the white fill it borders, where danger-100 would measure 1.24:1), not as ink's stranded on a blue ground (a neutral-900 field, invalid at danger-300)."

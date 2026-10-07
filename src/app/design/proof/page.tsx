@@ -562,7 +562,7 @@ export default function ProofSpecimenPage() {
               independently resolve their complete palettes from the same nearest scope.
             </p>
           </Layout>
-          <Section surface="tint" density="tight">
+          <Section surface="tint">
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="column" rowGap="stack">
               <Proof quote={LINK_QUOTE} figures={[FIGURES[0], FIGURES[3]]} />
               <ResolvedTokens tokens={NESTED_INTERACTIVE_TOKENS.tint} />
@@ -571,7 +571,7 @@ export default function ProofSpecimenPage() {
         </Layout>
       </Section>
       <Section>
-        <Section surface="ink" density="tight">
+        <Section surface="ink">
           <Layout columns={{ base: 1, lg: [2, 1] }} colGap="column" rowGap="stack">
             <Proof quote={LINK_QUOTE} figures={[FIGURES[0], FIGURES[3]]} />
             <ResolvedTokens tokens={NESTED_INTERACTIVE_TOKENS.ink} />

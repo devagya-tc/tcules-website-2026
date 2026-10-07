@@ -378,7 +378,7 @@ export default function ClientMarkSpecimenPage() {
       {/* Same markup on every ground, under a section heading, because the ink is judged against
           the heading: one step quieter than --sec-ink on each (client-mark.css, tracker 2.17). */}
       {SURFACES.map((surface) => (
-        <Section key={surface} surface={surface} density="tight">
+        <Section key={surface} surface={surface}>
           <Specimen
             title={`surface="${surface}"`}
             note={`Same markup, no colour prop, same files. The ink is --cmark-ink for this ground: ${INK[surface]}. The heading is the section's full ink; the marks sit a step under it.`}
@@ -391,12 +391,12 @@ export default function ClientMarkSpecimenPage() {
         </Section>
       ))}
 
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <Specimen
           title="Nested: a tint band inside an ink band"
           note="The tint block in client-mark.css restates --cmark-ink, so marks inside a tint band nested in ink paint neutral-600, not ink's neutral-300."
         >
-          <Section surface="tint" density="tight">
+          <Section surface="tint">
             <Strip marks={STRIP} />
           </Section>
         </Specimen>

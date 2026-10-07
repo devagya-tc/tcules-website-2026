@@ -125,7 +125,7 @@ export default function ThreadSpecimenPage() {
       </Section>
 
       {SURFACES.map((surface) => (
-        <Section key={surface} surface={surface} density="tight">
+        <Section key={surface} surface={surface}>
           <Layout rowGap="block">
             <p className={s.specTitle}>surface · {surface}</p>
             <Thread stages={FOUR} loop="What production shows returns to the next decision." />

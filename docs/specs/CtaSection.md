@@ -326,7 +326,7 @@ table is corrected to match the type rather than the type to the table.
 | `actions` | the scheduling link only, under the form | 1–2, under the points | **1 or 2**, under the points |
 | `form` | required, right column | forbidden | optional, under the copy |
 | `proof` | optional, full-width row | optional, right column; absent → no column | forbidden |
-| band | `--sec-padding-y` 96px | `--sec-padding-y` 96px | `--sec-padding-y-tight` 64px |
+| band | `--sec-padding-y` 96px | `--sec-padding-y` 96px | `--sec-padding-y` 96px |
 
 No row differs in **slot set**. Every difference is a position, a type role or a density — which is the hard constraint that eleven arrangements must not be eleven builds, satisfied by making them one build with three positions for four slots.
 
@@ -417,9 +417,9 @@ Every ratio is text against **the ground it actually sits on**, which here is al
 | `label` → `detail` | `--gap-tight` (was `--gap-inline` until 5 Oct, S5) | the inner `Layout`'s `rowGap` — a label over its description is a tight pair, not a key and its value |
 | action → action, both axes | `--gap-block` (24; `--gap-tight` until cmp-cta) | `actions`' `colGap` and `rowGap` — the same step when they stack, in every arrangement and in EnquiryForm's own row (final fix round) |
 | copy → texture field, `split` with `texture` | `--gap-stack` (48) | `.textureField`'s block-start inset: the clearance between the copy's last line and the equaliser |
-| the band's vertical air, `split` | `--sec-padding-y` (96px); `--sec-padding-y-open` (128) with a texture | `Section`'s density, chosen by whether a texture is passed |
-| the band's vertical air, `open` | `--sec-padding-y` (96px) with proof; `--sec-padding-y-open` (128) centred | `Section`'s density |
-| the band's vertical air, `offer` | `--sec-padding-y-tight` (64px) | `Section density="tight"` |
+| the band's vertical air, `split` | `--sec-padding-y` (96px; one value per width, owner 7 Oct 2026) | `Section`'s density, chosen by whether a texture is passed |
+| the band's vertical air, `open` | `--sec-padding-y` (96px) | `Section`'s density |
+| the band's vertical air, `offer` | `--sec-padding-y` (96px) | `Section` (no density; owner 7 Oct 2026) |
 | `root` → whatever precedes or follows it | none | **the page**, by ordering its bands. `CtaSection` sets no outer spacing |
 
 The non-uniform rhythm comes entirely from nesting rather than from a knob: 8 inside a point (label to detail, S5), 16 beside a numeral and between paragraphs, 24 inside the lede and between `split`'s steps, 32 between the cards of a step row, 48 between blocks, 96 between the halves (the split seam, 1 Oct 2026; it was 4 inside a point, 8 beside a numeral and 64 between the halves). Tighten by grouping, loosen by separating — which is why `stack`, `frame`, `column`, `lede` and `copy` all exist as parts even though none renders anything visible. They are the five levels the rhythm needs.

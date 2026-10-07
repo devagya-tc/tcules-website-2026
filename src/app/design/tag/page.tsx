@@ -294,7 +294,7 @@ export default function TagSpecimenPage() {
             nothing inherits half of one. These marks and chips must be identical to the tint
             band above, not to the ink band around them.
           </p>
-          <Section as="div" surface="tint" density="tight">
+          <Section as="div" surface="tint">
             <Matrix />
           </Section>
         </Layout>

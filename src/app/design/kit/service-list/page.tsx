@@ -345,7 +345,7 @@ const indexOf = (id: VariationId) =>
 function Title({ id, surface }: { id: VariationId; surface?: 'tint' }) {
   const variation = VARIATIONS.find((v) => v.id === id)!;
   return (
-    <Section density="tight" id={id} surface={surface}>
+    <Section id={id} surface={surface}>
       <Cluster className={s.spec} colGap="block" rowGap="tight" align="baseline">
         <span className={s.kitIndex}>{indexOf(id)}</span>
         {/* An h2 at h4 scale, so the outline never steps h1 → h3 → h2 beside the band's h2. */}
@@ -381,7 +381,7 @@ export default function ServiceListKitSpecimen() {
       {/* The index: every variation, linked to its band — itself a small router, its numerals on
           the column edge the hero's copy holds. Neutral numerals: they index the page, they are not
           the band's information (ListCard spec, number tone). */}
-      <Section density="tight">
+      <Section>
         <Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="none">
           {VARIATIONS.map((v, i) => (
             <ListCard

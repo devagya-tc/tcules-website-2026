@@ -737,7 +737,7 @@ export default function TypographySpecimenPage() {
           The full flow, given the widest band on the page. Everything a CMS body field can
           contain, in one continuous piece, because that is the only way the vertical rhythm
           between two DIFFERENT kinds of block can be judged. */}
-      <Section density="open">
+      <Section>
         <Layout rowGap="stack">
           <Layout rowGap="block">
             <p className={t.eyebrow}>Rich text</p>
@@ -1092,7 +1092,7 @@ export default function TypographySpecimenPage() {
               tint block, this is where it would show — as white ink on a light ground.
             </p>
           </Layout>
-          <Section surface="tint" density="tight">
+          <Section surface="tint">
             <SurfaceFlow />
           </Section>
         </Layout>

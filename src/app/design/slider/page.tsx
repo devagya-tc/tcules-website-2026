@@ -168,7 +168,7 @@ const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
  */
 function Label({ title, children }: { title: string; children: string }) {
   return (
-    <Section density="tight">
+    <Section>
       <Layout rowGap="tight" className={s.spec}>
         <p className={s.specTitle}>{title}</p>
         <p className={s.specNote}>{children}</p>
@@ -371,7 +371,7 @@ export default function SliderSpecimen() {
         the proof band only (§ 1.7), and no band is blue (§ 4.3).
       </Label>
       {SURFACES.map((surface) => (
-        <Section key={surface} surface={surface} density="tight">
+        <Section key={surface} surface={surface}>
           <Specimen
             title={`surface="${surface}"`}
             note="Hover a control for the fill, press for the deeper step; Tab for the ring."

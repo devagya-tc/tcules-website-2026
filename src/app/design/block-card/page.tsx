@@ -1555,7 +1555,7 @@ export default function BlockCardSpecimenPage() {
             included; no outer palette leaks in. The card&rsquo;s own colour set is eleven
             tokens, every one declared on every surface.
           </BandHead>
-          <Section as="div" surface="tint" density="tight">
+          <Section as="div" surface="tint">
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="gutter" rowGap="block">
               <SurfaceCards covers />
               <ResolvedTokens surface="tint" />
@@ -1566,7 +1566,7 @@ export default function BlockCardSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <p>The ink panel below is nested back inside paper and must invert in full.</p>
-          <Section as="div" surface="ink" density="tight">
+          <Section as="div" surface="ink">
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="gutter" rowGap="block">
               <SurfaceCards covers={false} />
               <ResolvedTokens surface="ink" />
@@ -1713,7 +1713,7 @@ export default function BlockCardSpecimenPage() {
             title="Nested surface · zero-gap adjacent cards"
             note="With no edge to meet, two cards at zero gap run together — which is exactly why the gutter is required. This is a stress harness, not a composition."
           >
-            <Section as="div" surface="ink" density="tight">
+            <Section as="div" surface="ink">
               <Cards columns={2} gap={false}>
                 <BlockCard title="First object" body="Nothing marks where it ends." />
                 <BlockCard title="Second object" body="Nothing marks where it begins." />

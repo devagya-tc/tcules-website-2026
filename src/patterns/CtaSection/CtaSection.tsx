@@ -773,7 +773,6 @@ export function CtaSection(props: CtaSectionProps) {
         surface={props.surface}
         id={props.id}
         data-band={props['data-band']}
-        density="open"
         aria-labelledby={headingId}
         data-arrangement="open"
       >
@@ -825,7 +824,6 @@ export function CtaSection(props: CtaSectionProps) {
           surface={props.surface}
           id={props.id}
           data-band={props['data-band']}
-          density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
         >
@@ -884,7 +882,6 @@ export function CtaSection(props: CtaSectionProps) {
           surface={props.surface}
           id={props.id}
           data-band={props['data-band']}
-          density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
         >
@@ -919,7 +916,6 @@ export function CtaSection(props: CtaSectionProps) {
           surface={props.surface}
           id={props.id}
           data-band={props['data-band']}
-          density="tight"
           aria-labelledby={headingId}
           data-arrangement="offer"
         >
@@ -947,7 +943,6 @@ export function CtaSection(props: CtaSectionProps) {
         surface={props.surface}
         id={props.id}
         data-band={props['data-band']}
-        density="tight"
         aria-labelledby={headingId}
         data-arrangement="offer"
       >
@@ -991,7 +986,6 @@ export function CtaSection(props: CtaSectionProps) {
       surface={props.surface}
       id={props.id}
       data-band={props['data-band']}
-      density={hasTexture ? 'open' : undefined}
       aria-labelledby={headingId}
       data-arrangement="split"
     >

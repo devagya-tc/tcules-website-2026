@@ -43,23 +43,6 @@ const SEAMS: readonly SeamBand[] = [
     surface: 'tint',
   },
   {
-    label: 'Seam · standard → tight — 96 + 64',
-    note: 'Each band brings its own padding: the preceding standard band’s 96, then this tight band’s 64.',
-    surface: 'tint',
-    density: 'tight',
-  },
-  {
-    label: 'Seam · tight → open — 64 + 128',
-    note: 'The tight band’s 64 below it, then this open band’s 128 above its own content.',
-    surface: 'tint',
-    density: 'open',
-  },
-  {
-    label: 'Seam · open → standard — 128 + 96',
-    note: 'Both paddings, as everywhere.',
-    surface: 'tint',
-  },
-  {
     label: 'Seam · tint → ink — full air again',
     note: 'The surface changes back; both sides keep their air.',
     surface: 'ink',
@@ -93,7 +76,7 @@ export default function SectionSpecimenPage() {
 
           <Specimen
             title="Vertical air — --sec-padding-y, 96 flat"
-            note="One value at every width, and a gap-scale step: --gap-section. The token layer declares tight (64, --gap-column), open (128, --gap-section-open) and strip (24, --gap-block) beside it, reachable via the density prop, and flush zeroes it. There is no arbitrary value: a band is one of those five. Two adjacent bands keep both paddings, on any surface; see the seam sequence below."
+            note="One value per width (owner, 7 Oct 2026): 96 (--gap-section) from 768, 64 (--gap-column) below. The page's first band takes less above its content below 1024 — 48 on a tablet, 32 on a phone — so the hero does not open on a void under the nav. Besides it only strip (24, the announcement strip) and flush (0). There is no tight or open band. Two adjacent bands keep both paddings, on any surface; see the seam sequence below."
           >
             <div className={s.ruler}>content sits inside the vertical air</div>
           </Specimen>
@@ -182,20 +165,6 @@ export default function SectionSpecimenPage() {
           </Layout>
         </Section>
       ))}
-
-      <Section density="tight" className={s.bandOutline}>
-        <Layout rowGap="text">
-          <p className={s.specTitle}>density=&quot;tight&quot; — 64 against the standard 96</p>
-          <Box>tight band</Box>
-        </Layout>
-      </Section>
-
-      <Section density="open" className={s.bandOutline}>
-        <Layout rowGap="text">
-          <p className={s.specTitle}>density=&quot;open&quot; — 128</p>
-          <Box>open band</Box>
-        </Layout>
-      </Section>
 
       <Section density="strip" surface="tint" className={s.bandOutline}>
         <Layout rowGap="text">

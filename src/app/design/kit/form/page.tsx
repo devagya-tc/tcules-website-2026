@@ -120,7 +120,7 @@ function ClosingTexture() {
 function Plate({ id, note }: { id: VariationId; note: string }) {
   const title = VARIATIONS.find((v) => v.id === id)?.title ?? id;
   return (
-    <Section id={id} density="tight">
+    <Section id={id}>
       <Layout
         className={s.spec}
         columns={{ lg: [1, 2] }}
@@ -142,7 +142,7 @@ export default function KitFormPage() {
   return (
     <>
       {/* ── Intro ───────────────────────────────────────────────────────────────────── */}
-      <Section density="open">
+      <Section>
         {/* The grid field fills the empty end of the band, clear of the title's 7 track, and
             feathers off the top edge; it never reaches a form (every form on this page is in a
             band of its own). */}
@@ -417,7 +417,7 @@ export default function KitFormPage() {
         note="Driven through the real controls on load: the first form blurred, empty and malformed; the second filled and sent to an endpoint that fails (the page's one console 500 is that send, on purpose); the third sent. On tint, as the surface proof: on pages, tint is the proof band only (§ 1.7)."
       />
       <div data-fold-exempt="specimen comparison: three states side by side, which at 390 stack past the phone limit">
-        <Section surface="tint" density="tight">
+        <Section surface="tint">
           <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="column">
             <Specimen
               title="Invalid · blurred, empty and malformed"
@@ -460,7 +460,7 @@ export default function KitFormPage() {
         </Section>
       </div>
 
-      <Section density="tight">
+      <Section>
         <Button as={Link} href={ROUTES.design} emphasis="link" tone="primary">
           Back to the proving ground
         </Button>

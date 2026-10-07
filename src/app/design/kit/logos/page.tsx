@@ -262,7 +262,6 @@ export default async function KitLogosPage() {
       </Label>
       <ContentSection
         surface="tint"
-        density="tight"
         eyebrow="Product teams we have shipped with"
       >
         <Strip marks={TINT} justify="between" />

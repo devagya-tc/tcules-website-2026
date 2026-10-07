@@ -352,7 +352,6 @@ export default async function AboutPage() {
                       as="li"
                       key={card.id}
                       surface={card.surface}
-                      density="tight"
                       aria-labelledby={headingId}
                     >
                       <Layout rowGap="block">

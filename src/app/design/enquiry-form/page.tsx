@@ -124,7 +124,7 @@ export default function EnquiryFormSpecimenPage() {
         ]}
         form={<Enquiry lined />}
       />
-      <Section density="tight">
+      <Section>
         <Layout rowGap="tight">
           <h2>Submitted context contract</h2>
           <p>
@@ -211,7 +211,7 @@ export default function EnquiryFormSpecimenPage() {
         />
       ))}
 
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <Layout rowGap="block">
           <h2>Nested surface boundary</h2>
           <p>The blue form below must resolve its own tokens, not inherit this ink band.</p>
@@ -223,7 +223,7 @@ export default function EnquiryFormSpecimenPage() {
         form={<Enquiry />}
         surface="blue"
       />
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <p>Ink resumes after the blue form.</p>
       </Section>
 
@@ -272,7 +272,7 @@ export default function EnquiryFormSpecimenPage() {
         />
       </Cluster>
 
-      <Section density="tight">
+      <Section>
         <p>
           The adjacent pair is deliberately erroneous: a production route must render one
           enquiry form. It proves that separate <code>useId</code> namespaces do not collide

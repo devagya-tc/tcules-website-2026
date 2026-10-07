@@ -107,7 +107,7 @@ export default function KitProcessPage() {
   return (
     <>
       {/* ── Intro ──────────────────────────────────────────────────────────────────────── */}
-      <Section density="open">
+      <Section>
         <Layout columns={{ lg: [1, 1] }} colGap="section" rowGap="stack" align="end">
           <Layout rowGap="block">
             <p className={t.eyebrow}>UI kit · family F and S</p>
@@ -141,7 +141,6 @@ export default function KitProcessPage() {
       />
       <ContentSection
         arrangement="beside"
-        density="tight"
         eyebrow="How an engagement runs"
         heading="Four stages, each one reviewed"
         headingId="kit-f-four"
@@ -159,7 +158,6 @@ export default function KitProcessPage() {
       />
       <ContentSection
         arrangement="media"
-        density="tight"
         media={{ image: photo('hands-sketches-markers'), side: 'end', height: 'copy' }}
         eyebrow="How an audit reads a product"
         heading="Follow one record, not every screen"
@@ -181,7 +179,6 @@ export default function KitProcessPage() {
       />
       <ContentSection
         arrangement="beside"
-        density="tight"
         eyebrow="Design sprint"
         heading="Five days, one tested answer"
         headingId="kit-f-five"
@@ -199,7 +196,6 @@ export default function KitProcessPage() {
       />
       <ContentSection
         arrangement="media"
-        density="tight"
         media={{ image: photo('pair-laptop-notebook'), height: 'copy' }}
         eyebrow="Working together"
         heading="A fixed first month, then you decide"
@@ -217,7 +213,6 @@ export default function KitProcessPage() {
       />
       <ContentSection
         align="center"
-        density="open"
         headingSize="md"
         eyebrow="In numbers"
         heading="A year of work, counted"
@@ -242,7 +237,6 @@ export default function KitProcessPage() {
       />
       <ContentSection
         align="center"
-        density="open"
         headingSize="md"
         eyebrow="After the redesign"
         heading="What changed in one quarter"

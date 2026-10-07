@@ -552,7 +552,7 @@ export default function ButtonSpecimenPage() {
               the ring.
             </p>
           </Layout>
-          <Section as="div" surface="tint" density="tight">
+          <Section as="div" surface="tint">
             <SurfaceMatrix />
           </Section>
         </Layout>

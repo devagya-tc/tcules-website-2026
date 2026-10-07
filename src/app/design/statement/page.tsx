@@ -27,7 +27,7 @@ const SURFACE_NOTE: Record<ShownSurface, string> = {
 
 function Label({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <Section density="tight">
+    <Section>
       <Layout rowGap="block" className={s.spec}>
         <h2>{title}</h2>
         <p className={s.specNote}>{children}</p>
@@ -149,7 +149,7 @@ export default function StatementSpecimen() {
       </Label>
       {SURFACES.map((surface) => (
         <Layout key={surface} rowGap="none">
-          <Section density="tight" surface={surface}>
+          <Section surface={surface}>
             <p className={s.specTitle}>{SURFACE_NOTE[surface]}</p>
           </Section>
           <Statement surface={surface} eyebrow="What we believe" id={`stmt-${surface}`}>

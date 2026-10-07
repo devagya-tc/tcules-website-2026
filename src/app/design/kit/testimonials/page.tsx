@@ -272,7 +272,7 @@ const ORDER = Object.values(VARIATIONS);
 function Label({ variation }: { variation: Variation }) {
   const n = String(ORDER.indexOf(variation) + 1).padStart(2, '0');
   return (
-    <Section density="tight" id={variation.id}>
+    <Section id={variation.id}>
       <Layout rowGap="tight" className={s.spec}>
         <p className={s.specTitle}>
           G · {n} — {variation.title}

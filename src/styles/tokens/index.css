@@ -43,7 +43,7 @@
      (--btn-solid-primary-bg, --btn-ghost-neutral-fg). Never -fg on a surface, never
      -ink on a control.
    · Two vocabularies for steps, and which one to use is decided by what is stepping.
-     A DISTANCE takes a gap-scale role name — --gap-block, --sec-padding-y-tight. A
+     A DISTANCE takes a gap-scale role name — --gap-block, --sec-padding-y-first. A
      COMPONENT SIZE takes a t-shirt name — --btn-height-md, --lay-track-sm. Distances
      are shared across the system so they are named for the relationship; a size
      belongs to one component, so a neutral ordinal is honest.

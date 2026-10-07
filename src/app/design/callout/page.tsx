@@ -211,7 +211,7 @@ export default function CalloutSpecimenPage() {
               result.
             </p>
           </Layout>
-          <Section as="div" surface="tint" density="tight">
+          <Section as="div" surface="tint">
             <Layout rowGap="block">
               <Callout html={INLINE_RICH_TEXT} />
               <ResolvedTokens
@@ -229,7 +229,7 @@ export default function CalloutSpecimenPage() {
 
       <Section>
         <Layout rowGap="stack">
-          <Section as="div" surface="ink" density="tight">
+          <Section as="div" surface="ink">
             <Layout rowGap="block">
               <Callout html={TWO_SENTENCES} />
               <ResolvedTokens

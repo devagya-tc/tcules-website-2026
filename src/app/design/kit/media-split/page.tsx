@@ -326,7 +326,7 @@ const number = (variation: Variation) => String(ORDER.indexOf(variation) + 1).pa
 function Variant({ variation, children }: { variation: Variation; children: ReactNode }) {
   return (
     <div data-shot="">
-      <Section surface="tint" density="tight" id={variation.id}>
+      <Section surface="tint" id={variation.id}>
         <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block" align="start">
           <Layout rowGap="tight">
             <p className={t.index}>{`${number(variation)} · ${variation.short}`}</p>
@@ -353,7 +353,7 @@ export default function MediaSplitKitSpecimen() {
   return (
     <>
       {/* ── Intro ───────────────────────────────────────────────────────────────────────── */}
-      <Section density="open">
+      <Section>
         <Layout columns={{ lg: [1, 1] }} colGap="section" rowGap="stack" align="end">
           <Layout rowGap="block">
             <p className={t.eyebrow}>UI kit · Band B</p>

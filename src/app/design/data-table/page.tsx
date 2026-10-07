@@ -650,7 +650,7 @@ export default function DataTableSpecimenPage() {
               leaks into its grounds, heads, keys, caption or rules.
             </p>
           </Layout>
-          <Section as="div" surface="tint" density="tight">
+          <Section as="div" surface="tint">
             <DataTable {...MARKS} />
           </Section>
         </Layout>
@@ -660,10 +660,10 @@ export default function DataTableSpecimenPage() {
           <p>
             An ink panel nested back inside paper, and a blue one, must each invert in full.
           </p>
-          <Section as="div" surface="ink" density="tight">
+          <Section as="div" surface="ink">
             <DataTable {...NUMERIC} />
           </Section>
-          <Section as="div" surface="blue" density="tight">
+          <Section as="div" surface="blue">
             <DataTable {...EMPTY_CELLS} />
           </Section>
         </Layout>

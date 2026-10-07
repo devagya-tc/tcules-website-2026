@@ -297,7 +297,7 @@ export default function IconSpecimenPage() {
       {/* currentColor on all four grounds — the claim the token layer makes by having no surface
           blocks, so it is the claim this page has to actually show. */}
       {SURFACES.map((surface) => (
-        <Section key={surface} surface={surface} density="tight">
+        <Section key={surface} surface={surface}>
           <Layout rowGap="block">
             <Layout rowGap="tight">
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>

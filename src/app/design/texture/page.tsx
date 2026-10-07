@@ -86,7 +86,7 @@ export default function TextureSpecimenPage() {
         </Specimen>
       </Section>
 
-      <Section density="open">
+      <Section>
         <Texture>
           <TextureShape width={471} height="80%" />
         </Texture>
@@ -101,7 +101,7 @@ export default function TextureSpecimenPage() {
         </Specimen>
       </Section>
 
-      <Section density="open">
+      <Section>
         <Texture>
           <TextureShape width={471} height="80%" blur={100} />
         </Texture>
@@ -116,7 +116,7 @@ export default function TextureSpecimenPage() {
         </Specimen>
       </Section>
 
-      <Section density="open">
+      <Section>
         <Edges />
         <Layout rowGap="stack">
           <Layout rowGap="block">
@@ -136,7 +136,7 @@ export default function TextureSpecimenPage() {
         </Specimen>
       </Section>
 
-      <Section density="open">
+      <Section>
         <Texture>
           <TextureShape
             kind="ellipse"
@@ -162,7 +162,7 @@ export default function TextureSpecimenPage() {
         </Copy>
       </Section>
 
-      <Section surface="tint" density="open">
+      <Section surface="tint">
         <Edges />
         <Copy title="Surface · tint">
           Neutral-400, not blue, and quieter than paper on purpose — a strength-matched 700 read
@@ -173,7 +173,7 @@ export default function TextureSpecimenPage() {
       <Section surface="tint" flush>
         <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
           {TINT_CANDIDATES.map((c) => (
-            <Section key={c.label} as="div" surface="tint" density="open">
+            <Section key={c.label} as="div" surface="tint">
               <Texture className={c.className}>
                 <TextureShape bottom={-40} width="80%" height={160} blur={120} />
               </Texture>

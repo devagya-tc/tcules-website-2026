@@ -106,7 +106,7 @@ function FoldExempt({ reason, children }: { reason?: string; children: ReactNode
 
 function SpecimenNote({ title, note }: { title: string; note: string }) {
   return (
-    <Section density="tight">
+    <Section>
       <Layout rowGap="tight" className={s.spec}>
         <p className={s.specTitle}>{title}</p>
         <p className={s.specNote}>{note}</p>
@@ -420,7 +420,7 @@ export default function CtaSectionSpecimenPage() {
         title="7 · Surface boundaries"
         note="A tint CTA between ink bands, then an ink CTA between paper bands. Each CTA's own data-surface scope resolves all five CTA inks plus the real EnquiryForm and Proof inside it."
       />
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <p>Ink band before the tint CTA.</p>
       </Section>
       <CtaSection
@@ -430,10 +430,10 @@ export default function CtaSectionSpecimenPage() {
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         surface="tint"
       />
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <p>Ink band after the tint CTA.</p>
       </Section>
-      <Section density="tight">
+      <Section>
         <p>Paper band before the ink CTA.</p>
       </Section>
       <CtaSection
@@ -446,7 +446,7 @@ export default function CtaSectionSpecimenPage() {
         proof={<ProofFixture />}
         surface="ink"
       />
-      <Section density="tight">
+      <Section>
         <p>Paper band after the ink CTA.</p>
       </Section>
 

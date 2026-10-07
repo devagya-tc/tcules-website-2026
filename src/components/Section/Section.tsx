@@ -23,7 +23,7 @@ export type SectionSurface = 'paper' | 'tint' | 'ink' | 'blue';
  *               cmp-banner (6 Oct 2026) so a strip needs neither `flush` plus an inner padding
  *               (the padding-block collision) nor a padding through `className` (rule 5)
  */
-export type SectionDensity = 'tight' | 'open' | 'strip';
+export type SectionDensity = 'strip';
 
 export type SectionProps = {
   /** Element to render. Defaults to a semantic <section>; use "div"/"header"/"footer" as needed. */
@@ -37,7 +37,11 @@ export type SectionProps = {
    * inheriting dark roles.
    */
   surface?: SectionSurface;
-  /** Vertical air — `tight` (64), `open` (128) or `strip` (24) against the standard 96. */
+  /**
+   * `strip` (24): the one-line announcement band. There is no other density (owner, 7 Oct 2026):
+   * every band takes the same vertical air at a given width — 96 from 768, 64 below — so no band
+   * is tightened or loosened to fit a fold. Fit the content instead.
+   */
   density?: SectionDensity;
   /**
    * Drop the vertical air to zero, for a composition that supplies its own — a full-bleed

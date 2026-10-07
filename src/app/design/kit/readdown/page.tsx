@@ -60,7 +60,7 @@ function Caption({
   children: ReactNode;
 }) {
   return (
-    <Section density="tight" id={id}>
+    <Section id={id}>
       <Layout
         columns={{ lg: [1, 2] }}
         colGap="section"
@@ -303,7 +303,7 @@ export default function KitReaddownPage() {
   return (
     <>
       {/* ── Intro ──────────────────────────────────────────────────────────────────────── */}
-      <Section density="open">
+      <Section>
         <Layout columns={{ lg: [1, 1] }} colGap="section" rowGap="stack" align="end">
           <Layout rowGap="block">
             <p className={t.eyebrow}>UI kit · family D and N</p>
@@ -356,7 +356,6 @@ export default function KitReaddownPage() {
           headingId="kit-d-cta"
           /* The foot costs 88 (stack + CtaRow); at standard air the band is 886. Tight air (64) pays
              for it and lands at 822, under the fold, rather than cutting a row or the photo. */
-          density="tight"
           lead="A fixed scope, a fixed fee, and a readout your whole team can act on the following Monday."
           footer={
             <CtaRow

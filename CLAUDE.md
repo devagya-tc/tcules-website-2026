@@ -42,8 +42,9 @@ a primitive. Same rule one tier up — a pattern does not import a pattern.
 `Section`, `Layout` and `Cluster` express every arrangement in the site between them:
 
 - **`Section`** — the full-width band. Paints the ground and owns the content column (1240 cap,
-  32 gutter) and the vertical air (96, or `density="tight"` 64 / `density="open"` 128, or `flush`
-  0). Every one of those values comes from `--sec-*`; the component contributes none of its own.
+  32 gutter) and the vertical air: ONE value per width — 96, and 64 below 768 — with the page's
+  first band taking 48 (tablet) / 32 (phone) above its content; `density="strip"` (24) and `flush`
+  (0) are the only exceptions (owner, 7 Oct 2026). Every one of those values comes from `--sec-*`; the component contributes none of its own.
   `surface="paper | tint | ink | blue"` sets the ground for everything inside it.
 - **`Layout`** — the columnar axis. Tracks (`3`, `[2,1]`, per-breakpoint, `fit`, `tile`) plus
   `rowGap` / `colGap`, both taking gap-scale step names. A vertical stack is the single-track case.
@@ -114,8 +115,8 @@ Nine steps, named for what they separate:
 4. **A step is chosen by what it separates, never by how it looks at one width.** The scale does
    not shift responsively — the *layout* changes at a breakpoint, the distance does not. Do not
    add a media query that swaps one step for another. One exception (owner, 7 Oct 2026): `Section`'s
-   own vertical padding steps down one beat below 768 (96 → 64, 64 → 48, 128 → 96), in
-   `tokens/components/section.css` and nowhere else. It is the band's air against the screen, not a
+   own vertical padding is one value per width — 96, 64 below 768 — and the page's first band
+   takes 48 / 32 above its content below 1024, in `tokens/components/section.css` and nowhere else. It is the band's air against the screen, not a
    distance between two things.
 
 `Layout` and `Cluster` take these names directly as `rowGap` / `colGap` values. Cluster caps at
@@ -144,7 +145,7 @@ wrapping row has no use for a column or section beat.
    (`--sec-ground`, `--sec-link-ink`). A *control* has a **bg** and an **fg**
    (`--btn-ghost-neutral-fg`). Never `-fg` on a surface, never `-ink` on a control.
 5. **Two vocabularies for steps.** A *distance* takes a gap-scale role name (`--gap-block`,
-   `--sec-padding-y-tight`). A *component size* takes a t-shirt name (`--btn-height-md`,
+   `--sec-padding-y-first`). A *component size* takes a t-shirt name (`--btn-height-md`,
    `--lay-track-sm`). Distances are shared system-wide so they name the relationship; a size
    belongs to one component, so an ordinal is honest.
 6. **A component never reads another component's tokens.** Shared values are primitives or usage

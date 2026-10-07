@@ -206,7 +206,7 @@ type VariationId = (typeof VARIATIONS)[number]['id'];
 function Title({ id, children }: { id: VariationId; children: ReactNode }) {
   const variation = VARIATIONS.find((v) => v.id === id)!;
   return (
-    <Section density="tight" id={id}>
+    <Section id={id}>
       <Layout
         className={s.spec}
         columns={{ lg: [1, 2] }}
@@ -241,7 +241,7 @@ export default function KitCtaSpecimen() {
       />
 
       {/* The index: every variation, linked to its band. A tight band of its own, three across. */}
-      <Section density="tight">
+      <Section>
         <Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="none">
           {VARIATIONS.map((v, i) => (
             <ListCard

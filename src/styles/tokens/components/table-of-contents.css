@@ -150,7 +150,7 @@
      than through Nav's token, because a component may not read another component's tokens —
      so if the bar height moves off this step, this must be re-checked. That is exactly the
      idiom Breadcrumbs.module.css used for its band's air until 5 Oct 2026: it read
-     --gap-column, the step --sec-padding-y-tight resolves to, and said in a comment that
+     --gap-column, the 64 step, and said in a comment that
      Section being re-tuned meant re-checking there. Reading Nav's token instead would make this component follow
      Nav silently, which is the failure; writing a bare 72px would put a literal in a layer
      that has a step for it, which is the other one.

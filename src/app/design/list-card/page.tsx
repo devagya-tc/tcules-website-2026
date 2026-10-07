@@ -1179,7 +1179,7 @@ export default function ListCardSpecimenPage() {
               ink value may leak through an omitted declaration.
             </p>
           </Layout>
-          <Section as="div" surface="tint" density="tight">
+          <Section as="div" surface="tint">
             <Layout columns={{ base: 1, md: [2, 1] }} colGap="gutter" rowGap="block">
               <SurfaceRows />
               <ResolvedTokens surface="tint" />
@@ -1190,7 +1190,7 @@ export default function ListCardSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <p>The ink panel below is nested back inside paper and must invert in full.</p>
-          <Section as="div" surface="ink" density="tight">
+          <Section as="div" surface="ink">
             <Layout columns={{ base: 1, md: [2, 1] }} colGap="gutter" rowGap="block">
               <SurfaceRows />
               <ResolvedTokens surface="ink" />
@@ -1302,7 +1302,7 @@ export default function ListCardSpecimenPage() {
           </Specimen>
 
           <Specimen title="11 · Nested surface · 12 · adjacent rows">
-            <Section as="div" surface="ink" density="tight">
+            <Section as="div" surface="ink">
               <Rows>
                 <ListCard title="First adjacent row" body="One rule at the shared seam." />
                 <ListCard title="Second adjacent row" body="One final rule at block end." />

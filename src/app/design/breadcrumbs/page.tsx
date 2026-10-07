@@ -320,7 +320,7 @@ export default function BreadcrumbsSpecimenPage() {
           token. */}
       <Section surface="ink">
         <Layout rowGap="block">
-          <Section surface="tint" density="tight">
+          <Section surface="tint">
             <Breadcrumbs items={trail(4)} />
           </Section>
           <Layout rowGap="tight">
@@ -349,7 +349,7 @@ export default function BreadcrumbsSpecimenPage() {
           'The real composition: the trail in PageHero’s trail slot, inside the hero’s band, built by heroTrail.',
         ]}
       />
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>In situ · under a stand-in for the sticky nav</p>
           <p className={s.specNote}>

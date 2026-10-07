@@ -288,7 +288,7 @@ export default async function FutureInterfacesLabJoinPage() {
               align="start"
             >
               {page.sixthSection.leftCard ? (
-                <Section as="div" surface="paper" density="tight">
+                <Section as="div" surface="paper">
                   <Layout rowGap="block">
                     <h3>{page.sixthSection.leftCard.heading}</h3>
                     <p>{page.sixthSection.leftCard.description}</p>

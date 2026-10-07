@@ -132,7 +132,6 @@ export function Statement({
     <Section
       as={labelled ? 'section' : 'div'}
       surface={surface}
-      density="open"
       aria-labelledby={labelled ? id : undefined}
       data-band="J"
     >

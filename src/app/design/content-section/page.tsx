@@ -352,7 +352,7 @@ const OVER_BUDGET = 'CMS stress copy (10-word h2, 45-word lead) past the § 1.5 
  */
 function Label({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <Section density="tight">
+    <Section>
       <Layout rowGap="block">
         <h2>{title}</h2>
         <p className={s.specNote}>{children}</p>
@@ -677,7 +677,6 @@ export default function ContentSectionSpecimen() {
         heading="One block, tight"
         headingId="csec-density-tight"
         lead="A band holding a paragraph does not want the air a five-card grid wants."
-        density="tight"
       >
         <ContentSectionText>
           <Prose html={BODY_HTML} />
@@ -689,7 +688,6 @@ export default function ContentSectionSpecimen() {
         heading="One block, open"
         headingId="csec-density-open"
         lead="The other direction, for a band that carries the page's turn."
-        density="open"
       >
         <ContentSectionText>
           <Prose html={BODY_HTML} />
@@ -711,7 +709,7 @@ export default function ContentSectionSpecimen() {
             title="tint nested in ink · beside"
             note="The case that once rendered at 1.13:1. Heading neutral-900, lead neutral-700, eyebrow neutral-700: tint's own block, nothing from ink."
           >
-            <Section as="div" surface="ink" density="tight">
+            <Section as="div" surface="ink">
               <ContentSection
                 surface="tint"
                 arrangement="beside"
