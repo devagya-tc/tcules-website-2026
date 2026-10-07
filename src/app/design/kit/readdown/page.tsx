@@ -317,8 +317,9 @@ export default function KitReaddownPage() {
       <Caption id="d-photo" index="D.1" title="One column, photo, three rows">
         The photograph is the band&rsquo;s large thing, so it takes the wide track: the head
         splits into the heading and the lead, and the body splits on the same line, the rows
-        under the heading and the photo under the lead, the rows&rsquo; own height. Both start on
-        the first title&rsquo;s line and end on the last rule, from 1024 up. Each glyph is blue.
+        under the heading and the photo under the lead, the rows&rsquo; own height. Both start
+        on the first title&rsquo;s line and end on the last rule, from 1024 up. Each glyph is
+        blue.
       </Caption>
       <ContentSection
         arrangement="split-head"
@@ -333,9 +334,9 @@ export default function KitReaddownPage() {
       {/* ── D · one column + CtaRow ───────────────────────────────────────────────────── */}
       <Caption id="d-cta" index="D.2" title="One column, three rows and a CtaRow">
         The photo form closed by a blue link a stack under the rows and the photograph, which
-        still end level on the last rule. The CtaRow&rsquo;s rule is off: the ladder&rsquo;s last
-        hairline already closes the body (§ 3.1). The foot is paid for with tight air, so the band
-        stays inside one viewport.
+        still end level on the last rule. The CtaRow&rsquo;s rule is off: the ladder&rsquo;s
+        last hairline already closes the body (§ 3.1). The foot is paid for with tight air, so
+        the band stays inside one viewport.
       </Caption>
       <ContentSection
         arrangement="split-head"
@@ -349,10 +350,7 @@ export default function KitReaddownPage() {
         footer={
           <CtaRow
             rule={false}
-            actions={[
-              { label: 'See a sample readout', href: ROUTES.uxProductAudit },
-              { label: 'All audits', href: ROUTES.audits },
-            ]}
+            actions={[{ label: 'See a sample readout', href: ROUTES.uxProductAudit }]}
           />
         }
       >
@@ -414,10 +412,10 @@ export default function KitReaddownPage() {
 
       {/* ── D · rail texture ──────────────────────────────────────────────────────────── */}
       <Caption id="d-rail" index="D.5" title="The photo form with the rail texture">
-        § 6.3 `rail`, hung off the photograph&rsquo;s end edge: one field of the Tcules grid that
-        starts under the image and runs into the margin, 220 wide, blur 120. It never passes
-        under a word, and it meets the photo at every width, so the grid reads as coming out from
-        behind the image. From 1440 only; at 390 the band renders without it.
+        § 6.3 `rail`, hung off the photograph&rsquo;s end edge: one field of the Tcules grid
+        that starts under the image and runs into the margin, 220 wide, blur 120. It never
+        passes under a word, and it meets the photo at every width, so the grid reads as coming
+        out from behind the image. From 1440 only; at 390 the band renders without it.
       </Caption>
       <ContentSection
         arrangement="split-head"

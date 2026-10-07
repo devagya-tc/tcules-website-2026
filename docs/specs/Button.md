@@ -23,6 +23,21 @@
 > shipped CSS and **[c]** where they were computed for this spec from the ramp hexes in
 > `primitives.css` using the WCAG 2.x relative-luminance formula.
 
+> **Owner amendment, 7 Oct 2026 — pairing and arrows.** The site had too many arrows in buttons and
+> its pairs were inconsistent. Five rules, binding on every call site; the full text is § 14a.
+> 1. **Solid primary is the converting action. No arrow, ever.**
+> 2. **A primary's partner is a ghost**, not a link button. The ghost carries the trailing arrow when it
+>    navigates.
+> 3. **Link buttons (`emphasis="link"`) belong inside cards and inline contexts**, and carry the arrow.
+>    They are never the secondary beside a primary.
+> 4. **Never two buttons of the same emphasis side by side.** A group is at most one solid + one ghost.
+> 5. The same rules hold in every pattern that renders actions — PageHero, CtaSection, CtaRow, Banner,
+>    Statement, ContentSection, EnquiryForm — and in every page and specimen composition.
+>
+> Button itself does not enforce them: it is a primitive, takes `icon` as a `ReactNode` and cannot know
+> which glyph it was handed or what sits beside it. The patterns that own action rows enforce them by
+> position and by type (§ 14a).
+
 ---
 
 ## 1 · Identity
@@ -60,7 +75,9 @@ inside a control that sizes its own icons.
 
 **How many appear on a page.** Solid: **one per view**, of either tone. A second solid means the
 page has not decided which action it wants, and the reader will not decide for it. Ghost and link:
-unbounded — a segmented filter set is four ghosts, a card deck is a link per card.
+unbounded across a page — a card deck is a link per card — but never two of one emphasis side by side
+in one action group (owner, 7 Oct 2026; § 14a). A segmented filter set of ghosts is a control set, not
+an action group, and is not covered by that rule.
 
 ---
 
@@ -806,8 +823,9 @@ Each of these is decidable from a diff or from a rendered page.
 5. Use `as={Link}` with a path from `@/lib/routes` for anything that navigates internally.
 6. Give an icon-only button an `aria-label` that says what it does, not what it looks like:
    "Close", not "X".
-7. Put `emphasis="link"` where a reader is reading — inside a paragraph, under a case title — and
-   `solid` / `ghost` where a reader is acting.
+7. Put `emphasis="link"` where a reader is reading — inside a card, inside a paragraph, under a case
+   title — and `solid` / `ghost` where a reader is acting. *(Amended 7 Oct 2026: a link is never the
+   partner beside a solid; that is a ghost. § 14a.)*
 8. Add a new colour by adding it to **all four** surface blocks in `button.css`.
 
 **Don't**
@@ -834,6 +852,37 @@ Each of these is decidable from a diff or from a rendered page.
 12. Don't put a `<button>`, `<a>`, `<input>` or any other focusable element inside a label or a
     glyph slot. A control inside a control is invalid HTML, a second tab stop and a contested
     accessible name; two controls are two Buttons in a `Cluster` (§12 row 13).
+
+### 14a · Pairing and arrows (owner amendment, 7 Oct 2026)
+
+| Emphasis | Where it goes | Arrow (`arrow-right`, trailing) |
+|---|---|---|
+| `solid` | the converting action — one per view | **never** |
+| `ghost` | the solid's partner, or a lone secondary action | yes when it navigates (an anchor to somewhere); no when it acts in place (submit, copy, clear) |
+| `link` | inside a card, a list of links, a line of text | yes |
+
+Groups:
+- **A group is at most one `solid` + one `ghost`.** Never a solid beside a link button, and never two of
+  the same emphasis side by side — two solids, two ghosts, two links. A column of links stacked one per
+  line (a `Layout`, not a `Cluster`) is a list, not a side-by-side group.
+- A lone link-style action at a band's foot is legal (CtaRow's link row). A second destination is a
+  second band's, or the row is an ask and takes the solid + ghost shape.
+
+Where it is enforced (types and position, so a page cannot get it wrong):
+
+| Pattern | API | Result |
+|---|---|---|
+| `CtaRow` | `emphasis?: 'link'` with `actions: [one]`, or `emphasis: 'solid'` with `actions: [ask] \| [ask, partner]` | link → one link with arrow; solid → solid (no arrow) + ghost primary with arrow |
+| `PageHero` | `actions: [] \| [a] \| [a, b]`, position decides | solid/primary no arrow · ghost/primary with arrow |
+| `CtaSection` | same | same |
+| `EnquiryForm` | owned markup | submit solid, no arrow · "See available times" ghost/primary with arrow |
+| `Banner`, `Statement`, `ContentSection` | an `actions` / `footer` slot | composed with a `CtaRow`, so CtaRow's types apply |
+
+Not covered (deliberately): SiteNav's chrome (the menu sheet's foot is already solid + ghost); a
+segmented filter set; a download link (its glyph, if any, names the kind of action, so it carries no
+arrow); `BlockCard`'s and `ListCard`'s own per-card cues, which those components own.
+
+The specimen's *Pairings* block (`/design/button`) renders the three sanctioned shapes.
 
 ---
 

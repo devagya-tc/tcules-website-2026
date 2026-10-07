@@ -882,6 +882,8 @@ export default function FeatureKitSpecimen() {
         headingId={kf(6)}
         footer={
           <CtaRow
+            emphasis="solid"
+            tone="primary"
             note="Every engagement starts with a thirty-minute call."
             actions={[
               { label: 'Book a call', href: ROUTES.contact },

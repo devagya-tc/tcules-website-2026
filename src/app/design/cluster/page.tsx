@@ -63,10 +63,16 @@ const META = [
 function ButtonGroup() {
   return (
     <Cluster colGap="tight" rowGap="tight">
-      <Button as="a" href={ROUTES.contact} icon={<Icon name="arrow-right" />}>
+      <Button as="a" href={ROUTES.contact}>
         Start a project
       </Button>
-      <Button as="a" href={ROUTES.caseStudies} emphasis="ghost">
+      <Button
+        as="a"
+        href={ROUTES.caseStudies}
+        emphasis="ghost"
+        tone="primary"
+        icon={<Icon name="arrow-right" />}
+      >
         See the work
       </Button>
     </Cluster>

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import {
   Button,
   Cluster,
+  Icon,
   Layout,
   Prose,
   Section,
@@ -92,7 +93,8 @@ function renderColumn(column: ServiceContentColumn) {
       ) : null}
 
       {column.links.length > 0 ? (
-        <Cluster colGap="tight" rowGap="tight">
+        /* A column's links STACK (owner, 7 Oct 2026): link buttons never sit side by side. */
+        <Layout rowGap="text" justifyItems="start">
           {column.links.map((link) => (
             <Button
               key={`${column.id}-${link.href}-${link.label}`}
@@ -102,11 +104,12 @@ function renderColumn(column: ServiceContentColumn) {
               tone="neutral"
               size="md"
               extendHitArea
+              icon={<Icon name="arrow-right" />}
             >
               {link.label}
             </Button>
           ))}
-        </Cluster>
+        </Layout>
       ) : null}
     </Layout>
   );
@@ -167,6 +170,7 @@ function renderServiceBlock(block: ServiceBlock) {
                 tone="neutral"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.source.label}
               </Button>

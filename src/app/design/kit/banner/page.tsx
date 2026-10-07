@@ -147,8 +147,8 @@ export default function KitBannerSpecimen() {
       <Caption index="I.4" title="Banner beside, photo left">
         mediaSide=&quot;start&quot; mirrors the split from 1024; the copy stays first in the
         reading order. The one solid ask a band may carry is the blue solid primary, the
-        hero&rsquo;s, with a blue link beside it. On a page, never two beside banners within
-        sight of each other: here they are a specimen set.
+        hero&rsquo;s, with its ghost partner beside it. On a page, never two beside banners
+        within sight of each other: here they are a specimen set.
       </Caption>
       <Banner
         form="beside"
@@ -219,8 +219,8 @@ export default function KitBannerSpecimen() {
       </Statement>
 
       <Caption index="J.4" title="Statement at display scale, with its link">
-        size=&quot;display&quot;: the hero&rsquo;s display role on the display measure, for the one
-        band that restates a page&rsquo;s argument at the scale of its opening (the service
+        size=&quot;display&quot;: the hero&rsquo;s display role on the display measure, for the
+        one band that restates a page&rsquo;s argument at the scale of its opening (the service
         pages&rsquo; J). One link a stack under the sentence.
       </Caption>
       <Statement
@@ -229,7 +229,10 @@ export default function KitBannerSpecimen() {
         size="display"
         texture="head-half"
         actions={
-          <CtaRow rule={false} actions={[{ label: 'See how we work', href: ROUTES.howWeWork }]} />
+          <CtaRow
+            rule={false}
+            actions={[{ label: 'See how we work', href: ROUTES.howWeWork }]}
+          />
         }
       >
         One accountable team, from the first question to the shipped build.

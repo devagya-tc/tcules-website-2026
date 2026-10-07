@@ -568,7 +568,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
               <Button
                 as="a"
                 href={props.scheduleHref}
-                emphasis="link"
+                emphasis="ghost"
                 tone="primary"
                 size="lg"
                 icon={<Icon name="arrow-right" />}
@@ -598,11 +598,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
         ? 'Send message'
         : 'Send enquiry';
 
-  /* The submit carries the trailing arrow on every variant: the click takes the step forward, and
-     the arrow is the band's blue-adjacent mark on the one solid control (the glyph takes the
-     button's own fg). */
+  /* The submit is the converting action, so it carries NO arrow on any variant (owner, 7 Oct 2026:
+     a solid primary never takes one — the label carries the ask). Its partner, "See available
+     times", is a ghost with the trailing arrow, because it navigates. */
   const submitButton = (
-    <Button type="submit" size="lg" busy={submitting} icon={<Icon name="arrow-right" />}>
+    <Button type="submit" size="lg" busy={submitting}>
       {submitLabel}
     </Button>
   );
@@ -611,7 +611,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
     <Button
       as="a"
       href={props.scheduleHref}
-      emphasis="link"
+      emphasis="ghost"
       tone="primary"
       size="lg"
       icon={<Icon name="arrow-right" />}

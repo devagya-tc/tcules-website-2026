@@ -13,6 +13,21 @@
 | **Implements** | visual-direction § 1.2 (body → CtaRow, `stack`), § 1.4 ("CtaRow — 48 seam + one 48 row"), § 3.1 item 5 (a hairline above a section-level CtaRow), § 4.2 (Signal and Accent budgets), § 11 item 5 |
 | **Implemented at** | `src/patterns/CtaRow/` · `src/styles/tokens/components/cta-row.css` · specimen `src/app/design/cta-row/page.tsx` (also used across `src/app/design/content-section/page.tsx`) |
 
+> **Owner amendment, 7 Oct 2026 — pairing and arrows** (`docs/specs/Button.md` § 14a). Supersedes the
+> glyph and second-action rules below wherever they differ.
+> - **Two shapes, by type.** `emphasis?: 'link'` takes exactly ONE action: a link with the trailing
+>   arrow. `emphasis: 'solid'` takes one or two: the solid ask, which **never** carries an arrow, and at
+>   most one partner, which is a **ghost** (`tone="primary"`) with the trailing arrow — never a link.
+>   `CtaRowProps` is `CtaRowCommon & (CtaRowLink | CtaRowSolid)`, so a two-action link row, a solid
+>   partnered by a link, or two of one emphasis does not compile.
+> - **The row owns every arrow.** There is no icon prop and no per-action emphasis; callers pass labels
+>   and hrefs. Every action is an anchor, so the ghost partner always navigates and always takes the
+>   arrow.
+> - **`tone` sets the first action only.** The ghost partner is always `primary`.
+> - Call sites with two link actions became either one link (a navigation foot: content-section § Footer
+>   stacked, kit/readdown D) or an ask (solid primary + ghost: kit/feature 6, kit/media-split ask and
+>   mirror).
+
 > **Amended 6 Oct 2026 (`fdn-section-head`, second fix round).**
 > - **A link-led row defaults to `tone="primary"`.** It was `neutral`, so every link foot rendered an
 >   ink label and an ink arrow, and with ink icons in the body a C-icon-4 band read fully black and
@@ -63,15 +78,15 @@ Frequency: zero or one per band; most kit bands carry none.
 
 | Prop | Type | Default | Decides |
 |---|---|---|---|
-| `actions` | `readonly [CtaRowAction] \| readonly [CtaRowAction, CtaRowAction]` | — | One or two `{ label, href }`. A third does not compile. Paths from `@/lib/routes`. |
+| `actions` | link row: `readonly [CtaRowAction]`; solid row: `readonly [CtaRowAction] \| readonly [CtaRowAction, CtaRowAction]` | — | `{ label, href }`. One on a link row, one or two on a solid row (*7 Oct 2026*). A third never compiles. Paths from `@/lib/routes`. |
 | `note` | `string` | — | One sentence before the actions, body-sm. Whitespace-only = absent. |
-| `emphasis` | `'link' \| 'solid'` | `'link'` | The FIRST action: a link with the arrow cue, or a solid button (the band's Accent, no glyph). |
-| `tone` | `'neutral' \| 'primary'` | `'primary'` for `link`, `'neutral'` for `solid` | The FIRST action's Button tone. Primary link = Signal (spent by default); primary solid = Accent (spent only on request). |
+| `emphasis` | `'link' \| 'solid'` | `'link'` | The row's shape (the union's discriminant): one link with the arrow cue, or a solid ask (no glyph) with an optional ghost partner (arrow). |
+| `tone` | `'neutral' \| 'primary'` | `'primary'` for `link`, `'neutral'` for `solid` | The FIRST action's Button tone. Primary link = Signal (spent by default); primary solid = Accent (spent only on request). The ghost partner is always primary. |
 | `rule` | `boolean` | `true` | The hairline above. `false` in a head's actions, under a ruled ladder (Accordion, ListCard rows, DataTable) whose last rule already closes the body, and as the footer of a band with no blocks (nothing to close). |
 | `align` | `'start' \| 'center'` | `'start'` | `center`: note and actions centred, the whole box capped at `--ctarow-centred-measure` (→ `--measure-body`). |
 
-The second action is always `emphasis="link" tone="neutral"` — position decides emphasis, as in
-`CtaSection` and `PageHero`. Deliberately not props: per-action emphasis, icons, size (always `md` +
+The second action (solid rows only) is always `emphasis="ghost" tone="primary"` with the trailing
+arrow (*7 Oct 2026*; a link until then) — position decides emphasis, as in `CtaSection` and `PageHero`. Deliberately not props: per-action emphasis, icons, size (always `md` +
 `extendHitArea`), any gap, `className`/`style`.
 
 ## 4 · Variants × sizes
@@ -83,10 +98,9 @@ One size. `emphasis` × `tone` × `rule` × `align`, plus note present/absent:
 | neutral | spends nothing (pass it explicitly) | the solid default; spends nothing |
 | primary | the link default; Signal (§ 4.2) | Accent (§ 4.2; pass it explicitly) |
 
-Glyph: every link-style action carries `arrow-right` (the kit's one link cue, as BlockCard's per-card
-CTA); the solid ask never does — the owner's 1 Oct "no arrow here" on CtaSection's asks. So a link-led
-row has the arrow on every action, and a solid-led row on its second only, which is PageHero's and
-CtaSection's shape exactly. *Amended in cmp-services fix round 2:* a solid-led row used to drop the arrow
+Glyph (*7 Oct 2026*): the link carries `arrow-right` (the kit's link cue); the solid ask never does
+(the owner's 1 Oct "no arrow here", made a rule on 7 Oct); the ghost partner does, because it
+navigates. PageHero's and CtaSection's shape exactly. *Amended in cmp-services fix round 2:* a solid-led row used to drop the arrow
 from its second link as well, so "All services" read as two different roles on one page.
 
 ## 5 · States
@@ -197,8 +211,8 @@ None of its own. Button's colour transition is Button's.
 ## 15 · Specimen plan
 
 `/design/cta-row`: (1) the variant ladder at the full column — link primary (the default), link neutral,
-two actions, with a note, solid primary + link, solid neutral (the solid default), `rule={false}`,
-`align="center"`; (2) stress
+link with a note, solid primary + ghost partner, solid neutral (the solid default), `rule={false}`,
+`align="center"` (*7 Oct 2026*: the two-link rows are gone, because they no longer compile); (2) stress
 — the four-word label ceiling with a long note, a whitespace-only note, the 381 head track, the 326
 column with a note and centred; (3) four surfaces, identical markup, captioned as surface proof; (4) in
 live ContentSection bands: beside footer, centred footer under an accordion, stacked head actions.
@@ -214,7 +228,8 @@ live ContentSection bands: beside footer, centred footer under an accordion, sta
 
 1. **Default `rule`.** *Chosen:* `true`, because the section-level foot is the primary use (§ 3.1).
    Head actions and rows under a ruled ladder pass `false`. *Non-blocking.*
-2. **Arrow on link actions.** *Chosen:* on every action of a link-led row, none in a solid-led row.
+2. **Arrow on link actions.** *Decided by the owner, 7 Oct 2026:* link → arrow, solid → never, ghost
+   partner → arrow. *Previously chosen:* on every action of a link-led row, none in a solid-led row.
    *Alternative:* no glyph anywhere, as CtaSection. A foot that points somewhere reads better with the
    kit's one link cue. *Non-blocking; shown to the owner in the PR.*
 

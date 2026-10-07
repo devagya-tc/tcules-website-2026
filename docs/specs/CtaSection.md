@@ -169,6 +169,12 @@ orphan the numeral, and two mono digits are a constant width, so labels still st
 
 > **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
 
+> **Owner amendment, 7 Oct 2026 — pairing and arrows** (`docs/specs/Button.md` § 14a). The second
+> action is now `ghost` / `primary` with the trailing `arrow-right`; the first stays `solid` / `primary`
+> and never carries an arrow. A link button is never the partner beside a solid. Rows below that
+> describe the second action as a link (its label line, its 44 hit area as the whole target) are
+> superseded: the partner is a 40 box like the solid, with `extendHitArea` covering the missing 4.
+
 ## 1 · Identity
 
 The block that closes a commercial page: an optional eyebrow, one `h2`, one or two paragraphs, a short ordered list of what happens next, nought to two actions, an optional enquiry form and an optional proof block. It paints no ground of its own — it hands a `surface` to `Section` and `Section` paints the band. It appears **once or twice per route**: 76 routes, 113 instances, because 37 routes carry a mid-page free-audit offer as well as the closing block.

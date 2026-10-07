@@ -3,7 +3,13 @@ import { notFound } from 'next/navigation';
 
 import { Cluster, Layout, Section } from '@/components';
 import { getIdealServiceStory } from '@/content';
-import { Breadcrumbs, ListCard, PageHero, type HeroAction, type PageHeroProps } from '@/patterns';
+import {
+  Breadcrumbs,
+  ListCard,
+  PageHero,
+  type HeroAction,
+  type PageHeroProps,
+} from '@/patterns';
 import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { ROUTES, auditPath, caseStudyPath, servicePath } from '@/lib/routes';
@@ -86,7 +92,7 @@ function variations(): Variation[] {
       id: 'service',
       short: 'Illustration, two actions',
       name: 'Illustration beside the copy, two actions',
-      note: 'The locked service hero (ruling H2). The trail joins the copy, 32 above the title, and the pair is centred on the drawing. One solid ask and one blue link. Below 1440 the drawing’s labels become numbered markers with a legend, so they stay readable at every width.',
+      note: 'The locked service hero (ruling H2). The trail joins the copy, 32 above the title, and the pair is centred on the drawing. One solid ask and its ghost partner. Below 1440 the drawing’s labels become numbered markers with a legend, so they stay readable at every width.',
       facts: ['Ends at 729', 'Accent + Field', 'Numbered legend below 1440'],
       hero: {
         trail: product.trail,
@@ -323,8 +329,9 @@ export default function HeroKitSpecimen() {
               <h1 className={t.display}>One hero, ten openings</h1>
             </Layout>
             <p className={t.lead}>
-              One PageHero, three kinds of media and five arrangements. Each shape is measured at
-              1470 × 830 and at 390 with the nav above it, and spends at most two blue masses.
+              One PageHero, three kinds of media and five arrangements. Each shape is measured
+              at 1470 × 830 and at 390 with the nav above it, and spends at most two blue
+              masses.
             </p>
           </Layout>
           <Layout as="ol" columns={{ base: 2, lg: 5 }} colGap="gutter" rowGap="gutter">

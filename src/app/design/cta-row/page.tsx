@@ -69,14 +69,16 @@ export default function CtaRowSpecimen() {
           <h1>CtaRow</h1>
           <p className={s.specNote}>
             A band&rsquo;s row of actions: a hairline, 24, then an optional one-line note and
-            one or two actions. The first action is a link (the default, every action with the
-            arrow cue) or a solid (the band&rsquo;s one Accent, no glyph); the second is always
-            a neutral link. A link-led row defaults to tone=&quot;primary&quot; — the
-            band&rsquo;s Signal, so its foot points somewhere in blue (amended 6 Oct: the owner
-            wants more blue on links and arrows); a solid-led row defaults to neutral, because a
-            solid primary spends Accent and the caller spends that on purpose. Placed by a band
-            — ContentSection&rsquo;s <code>footer</code>, or with{' '}
-            <code>rule=&#123;false&#125;</code> its <code>actions</code>.
+            the actions. Two shapes, and the types allow no others (owner, 7 Oct 2026): a{' '}
+            <strong>link row</strong> — ONE link with the arrow cue (the default) — or an{' '}
+            <strong>ask</strong> — a solid with no arrow, ever, and at most one ghost partner
+            with the trailing arrow. A solid is never partnered by a link, and two actions of
+            the same emphasis never sit side by side. The row decides every arrow; the caller
+            passes labels and hrefs. A link row defaults to tone=&quot;primary&quot; (Signal, a
+            blue foot); a solid defaults to neutral, because a solid primary spends Accent and
+            the caller spends that on purpose. Placed by a band — ContentSection&rsquo;s{' '}
+            <code>footer</code>, or with <code>rule=&#123;false&#125;</code> its{' '}
+            <code>actions</code>.
           </p>
         </Layout>
       </Section>
@@ -94,7 +96,7 @@ export default function CtaRowSpecimen() {
           </Layout>
           <Specimen
             title="link · primary · one action (the default)"
-            note="The band's Signal (§ 4.2), label and arrow blue at rest — one kind per band, counted once however many links."
+            note="The band's Signal (§ 4.2), label and arrow blue at rest. One link only: a second destination is a second band's, or the row is an ask."
           >
             <CtaRow actions={[SEE_WORK]} />
           </Specimen>
@@ -105,20 +107,14 @@ export default function CtaRowSpecimen() {
             <CtaRow actions={[SEE_WORK]} tone="neutral" />
           </Specimen>
           <Specimen
-            title="link · two actions"
-            note="The second is always neutral, whatever the first."
-          >
-            <CtaRow actions={[ALL_SERVICES, HOW]} />
-          </Specimen>
-          <Specimen
             title="link · with a note"
-            note="Note body-sm at the start, capped at 56ch; actions at the end."
+            note="Note body-sm at the start, capped at 56ch; the action at the end."
           >
-            <CtaRow actions={[SEE_WORK, ALL_SERVICES]} note={NOTE} />
+            <CtaRow actions={[SEE_WORK]} note={NOTE} />
           </Specimen>
           <Specimen
-            title="solid · primary + neutral link"
-            note="The band's one Accent. No glyph on either — the hero's shape exactly."
+            title="solid primary + ghost partner"
+            note="The band's one Accent. The solid converts and carries no arrow; the ghost partner navigates, so it takes the trailing arrow — the hero's shape exactly."
           >
             <CtaRow actions={[START, HOW]} emphasis="solid" tone="primary" note={NOTE} />
           </Specimen>
@@ -138,7 +134,13 @@ export default function CtaRowSpecimen() {
             title='align="center"'
             note="Note and actions centred, the whole box — rule included — capped at the body measure. Here the specimen does not centre the box; a centred band does (section 4)."
           >
-            <CtaRow actions={[SEE_WORK, ALL_SERVICES]} note={NOTE} align="center" />
+            <CtaRow
+              actions={[START, HOW]}
+              emphasis="solid"
+              tone="primary"
+              note={NOTE}
+              align="center"
+            />
           </Specimen>
         </Layout>
       </Section>
@@ -157,14 +159,19 @@ export default function CtaRowSpecimen() {
             </p>
           </Layout>
           <Specimen title="a four-word label (the ceiling) and a long note, full column">
-            <CtaRow actions={[LABEL_LONG, ALL_SERVICES]} note={NOTE_LONG} />
+            <CtaRow
+              actions={[START, LABEL_LONG]}
+              emphasis="solid"
+              tone="primary"
+              note={NOTE_LONG}
+            />
           </Specimen>
           <Specimen title="whitespace-only note" note="Identical to the row with no note.">
             <CtaRow actions={[SEE_WORK]} note="   " />
           </Specimen>
           <Specimen
             title="the 381 head track — a beside head's actions"
-            note="Solid and link wrap onto two lines at 24."
+            note="Solid and ghost wrap onto two lines at 24."
           >
             <div className={s.trackSm}>
               <CtaRow
@@ -177,7 +184,7 @@ export default function CtaRowSpecimen() {
           </Specimen>
           <Specimen title="the 326 phone column, with a note">
             <div className={s.trackMobile}>
-              <CtaRow actions={[SEE_WORK, ALL_SERVICES]} note={NOTE} />
+              <CtaRow actions={[ALL_SERVICES]} note={NOTE} />
             </div>
           </Specimen>
           <Specimen title="the 326 phone column, centred">
@@ -207,9 +214,9 @@ export default function CtaRowSpecimen() {
               </p>
             </Layout>
             <Specimen title={`${surface} · link, primary, with a note`}>
-              <CtaRow actions={[SEE_WORK, ALL_SERVICES]} note={NOTE} />
+              <CtaRow actions={[SEE_WORK]} note={NOTE} />
             </Specimen>
-            <Specimen title={`${surface} · solid primary + neutral link`}>
+            <Specimen title={`${surface} · solid primary + ghost partner`}>
               <CtaRow actions={[START, HOW]} emphasis="solid" tone="primary" />
             </Specimen>
           </Layout>

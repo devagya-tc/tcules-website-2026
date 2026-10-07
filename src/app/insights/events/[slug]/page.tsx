@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
+import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
 import { getEventPage, type EventBlock, type EventImage } from '@/content';
 import { articlePath, eventPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
@@ -111,6 +111,7 @@ function renderEventBlock(block: EventBlock, eventTitle: string) {
                 tone="neutral"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 View event media
               </Button>
@@ -132,6 +133,7 @@ function renderEventBlock(block: EventBlock, eventTitle: string) {
                 tone="neutral"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.action.label}
               </Button>

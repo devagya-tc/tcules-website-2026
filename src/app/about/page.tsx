@@ -326,7 +326,6 @@ export default async function AboutPage() {
                     emphasis="solid"
                     tone="primary"
                     size="lg"
-                    icon={<Icon name="arrow-right" />}
                   >
                     {page.closing.action.label}
                   </Button>

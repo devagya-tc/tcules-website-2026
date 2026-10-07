@@ -373,13 +373,13 @@ const LADDER: readonly { key: string; title: string; note: string; props: HeroSl
   {
     key: 'one-action',
     title: '+ one action — 59 routes have at least one',
-    note: 'One action renders one solid/primary Button and no link. The second emphasis is a consequence of a second array entry, not a slot waiting to be filled.',
+    note: 'One action renders one solid/primary Button, no arrow, and no partner. The second emphasis is a consequence of a second array entry, not a slot waiting to be filled.',
     props: { actions: ONE_ACTION },
   },
   {
     key: 'two-actions',
     title: '+ two actions',
-    note: 'Position decides emphasis: first solid/primary, second a neutral link — ink, so it spends no blue (visual-direction § 4.2). Both are size="md" with extendHitArea, both anchors. Four actions is a compile error, not a runtime cap.',
+    note: 'Position decides emphasis: first solid/primary with no arrow, second its ghost partner with the trailing arrow (owner, 7 Oct 2026). Both are size="md" with extendHitArea, both anchors. Four actions is a compile error, not a runtime cap.',
     props: { actions: TWO_ACTIONS },
   },
   {
@@ -756,8 +756,8 @@ export default function PageHeroSpecimenPage() {
         }}
       />
       <Note
-        title="9 · The service hero — trail, no eyebrow, one solid and one neutral link, illustration centred"
-        note="The locked [1, 1] shape (ruling H2) as the six service pages render it (visual-direction § 2.3–2.4). No eyebrow: the last crumb is the service's name. A title of at most 48 characters on three lines, a lead of at most 26 words, the solid action as the band's one Accent and the illustration as its Field, so the second action is a neutral link. The illustration is centred on the copy because it has no box to share an edge with. At 1470 × 830 the h1 starts at 222 and the band ends at or above 823."
+        title="9 · The service hero — trail, no eyebrow, one solid and its ghost partner, illustration centred"
+        note="The locked [1, 1] shape (ruling H2) as the six service pages render it (visual-direction § 2.3–2.4). No eyebrow: the last crumb is the service's name. A title of at most 48 characters on three lines, a lead of at most 26 words, the solid action as the band's one Accent and the illustration as its Field; the second action is the solid's ghost partner, with the arrow. The illustration is centred on the copy because it has no box to share an edge with. At 1470 × 830 the h1 starts at 222 and the band ends at or above 823."
       />
 
       <PageHero
@@ -877,23 +877,13 @@ export default function PageHeroSpecimenPage() {
             size="md"
             extendHitArea
           >
-            Extras control one
-          </Button>
-          <Button
-            as="a"
-            href={ROUTES.services}
-            emphasis="ghost"
-            tone="neutral"
-            size="md"
-            extendHitArea
-          >
-            Extras control two
+            An extras control
           </Button>
         </Cluster>
       </PageHero>
       <Note
         title="12 · Interactive content in extras — tab order"
-        note="Tab from the top: extras control one, extras control two, then the first action, then the second. DOM order, which is visual order, and the component adds no tabindex, no focus trap and no roving index. Anything focusable in extras reaches the 44px floor by its own means — these two are Buttons with extendHitArea, which already do. The other slots CANNOT hold interactive content, and that is a compile-time guarantee rather than a rule: title, eyebrow and every entry in body are typed string, so no control, no link and no second heading can be passed into them."
+        note="Tab from the top: the extras control, then the first action, then the second. (One extras control, not two: two ghosts side by side is a pairing the owner ruled out on 7 Oct 2026.) DOM order, which is visual order, and the component adds no tabindex, no focus trap and no roving index. Anything focusable in extras reaches the 44px floor by its own means — this one is a Button with extendHitArea, which already do. The other slots CANNOT hold interactive content, and that is a compile-time guarantee rather than a rule: title, eyebrow and every entry in body are typed string, so no control, no link and no second heading can be passed into them."
       />
 
       {/* ── 13 · The hit floor ──────────────────────────────────────────────────── */}
@@ -910,12 +900,12 @@ export default function PageHeroSpecimenPage() {
             covers the missing 4 without moving the row — and the row not moving is the point:
             stepping to <code>size=&quot;lg&quot;</code> would make the hero&apos;s button 48
             while every other control on the site stayed at 40, and the hero would be claiming a
-            loudness the design does not intend. The neutral link has no box: it is its label
-            line, about 16 tall, so for it the extension IS the 44 target, centred on the label.
-            The dashed box below is 44 tall, for comparison against the actions above. An action
+            loudness the design does not intend. The ghost partner has the same 40 box (it was a
+            link until 7 Oct 2026, whose label line made the extension the whole target). The
+            dashed box below is 44 tall, for comparison against the actions above. An action
             missing the extension is the one failure this component can ship that a screenshot
-            will not show, so assert the 44 in the rendered DOM: the solid&apos;s box is 40, the
-            link&apos;s is its line, and both hit areas are 44.
+            will not show, so assert the 44 in the rendered DOM: both boxes are 40, and both hit
+            areas are 44.
           </p>
           <div className={s.hitFloor} />
         </Layout>
