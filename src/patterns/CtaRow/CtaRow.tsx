@@ -18,9 +18,8 @@ export type CtaRowAction = {
  *          same emphasis, which a group never is: a second destination is a second band's, or the
  *          row is an ask and takes `solid`. The default, because a band's foot usually points
  *          somewhere rather than asks for something.
- *   solid  an ask — the band's one Accent (visual-direction § 4.2: ≤ 1 solid primary per band). The
- *          main next step (the conversion when there is one; visual-direction § 4.5) is solid
- *          and NEVER carries an arrow (the label carries the ask). Its optional partner is a
+ *   solid  the band's main next step (visual-direction § 4.5) — blue when it converts, ink when it
+ *          does not (see `converts`). The solid NEVER carries an arrow (the label carries the ask). Its optional partner is a
  *          GHOST — never a link — with the trailing arrow, because it navigates. That is PageHero's and CtaSection's shape exactly.
  *
  * Arrows are therefore the row's decision, not the caller's: link → arrow, solid → none, ghost
@@ -29,22 +28,21 @@ export type CtaRowAction = {
 export type CtaRowEmphasis = 'link' | 'solid';
 
 /**
- * The FIRST action's colour axis — Button's `tone`, passed through. A solid row's ghost partner is
- * always primary and takes no tone.
+ * Colour is not the caller's to choose (owner, 7 Oct 2026; visual-direction § 4.5). It follows the
+ * KIND of action, and the row derives it:
  *
- *   primary  blue. As a link it is the band's Signal; as a solid it is the band's Accent (§ 4.2).
- *            The default for a LINK-led row (amended 6 Oct 2026, fdn-section-head fix round): the
- *            owner's binding ruling wants more blue in the foreground — links, arrows, small marks —
- *            so a band's foot points somewhere in blue unless the caller says otherwise. A link row
- *            spends Signal, the cheap tier.
- *   neutral  ink. Spends nothing (§ 4.2: "neutral link-style is not blue"). The default for a SOLID-
- *            led row, because a solid primary spends Accent (≤ 1 per band, the scarcest tier) and the
- *            caller spends that on purpose. Pass it on a link row only when the band already spends a
- *            different KIND of Signal — G's quote rule, E's diagram line (§ 4.2: ≤ 1 kind per band) —
- *            or has already spent its two of Accent, Signal, Field and Texture.
+ *   link row       the link is blue — Button `tone="primary"`, always. A link spends Signal, and a
+ *                  link and its arrow are the foreground blue the owner's ruling asks for.
+ *   solid row      the solid is BLUE when it converts (`converts: true` — the reader starts something
+ *                  with the studio: start a project, book a call, request an audit, contact, apply,
+ *                  subscribe) and INK when it does not (`converts: false` — "See the work", "Meet the
+ *                  team", "See open roles": a band's lead action that is a next step, not an ask).
+ *   ghost partner  blue, always, whatever the solid beside it is. Ink solid + blue ghost is the
+ *                  intended non-converting pair.
+ *
+ * `converts` is REQUIRED on a solid row and has no default: a silent default would pick a plausible
+ * colour for an action nobody classified, which is the same mistake as a silent gap.
  */
-export type CtaRowTone = 'neutral' | 'primary';
-
 /**
  * Where the row sits in its box.
  *
@@ -88,8 +86,8 @@ type CtaRowLink = {
   /** Default `link`. See `CtaRowEmphasis`. */
   emphasis?: 'link';
   actions: readonly [CtaRowAction];
-  /** The link's colour. Default `primary` — Signal, a blue foot. See `CtaRowTone`. */
-  tone?: CtaRowTone;
+  /** A link row has no solid to classify: its link is always blue (owner, 7 Oct 2026). */
+  converts?: never;
 };
 
 /**
@@ -101,11 +99,12 @@ type CtaRowSolid = {
   emphasis: 'solid';
   actions: readonly [CtaRowAction] | readonly [CtaRowAction, CtaRowAction];
   /**
-   * The SOLID's colour. Default `neutral`: a primary solid spends Accent, and the caller spends that
-   * on purpose. The ghost partner is always `primary` — its blue label and arrow are the foreground
-   * accent (§ 4.2), and a ghost has no fill at rest to compete with the solid.
+   * Does the solid action CONVERT — does the reader start something with the studio by taking it?
+   * `true` renders it blue (Button `tone="primary"`), `false` ink (`tone="neutral"`). Required, no
+   * default: judge the action itself, not the page or the band — "Apply" converts, "See open roles"
+   * does not (owner, 7 Oct 2026; visual-direction § 4.5). The ghost partner is blue either way.
    */
-  tone?: CtaRowTone;
+  converts: boolean;
 };
 
 export type CtaRowProps = CtaRowCommon & (CtaRowLink | CtaRowSolid);
@@ -150,12 +149,13 @@ export function CtaRow(props: CtaRowProps) {
      actions and turn a start row into a "between" row around nothing. */
   const hasNote = Boolean(note?.trim());
   const ask = props.emphasis === 'solid';
-  /* Signal by default, Accent only on request (see CtaRowTone). */
-  const firstTone: CtaRowTone = props.tone ?? (ask ? 'neutral' : 'primary');
+  /* The solid's colour is the action's kind (see `converts`); every other action is blue. */
+  const solidTone = props.emphasis === 'solid' && !props.converts ? 'neutral' : 'primary';
 
   /* The owner's pairing (7 Oct 2026), decided here and nowhere else:
-       link row     one link, `firstTone`, trailing arrow — the link cue.
-       solid row    the solid ask, `firstTone`, NO arrow — the label carries the ask; then at most
+       link row     one link, blue, trailing arrow — the link cue.
+       solid row    the solid, blue if it converts and ink if not, NO arrow — the label carries
+                    the ask; then at most
                     one ghost partner, primary, trailing arrow — it navigates.
      Every action is an anchor, so a ghost here always navigates and always takes the arrow. */
   const buttons = actions.map((action, index) => {
@@ -166,7 +166,7 @@ export function CtaRow(props: CtaRowProps) {
         as="a"
         href={action.href}
         emphasis={solid ? 'solid' : ask ? 'ghost' : 'link'}
-        tone={index === 0 ? firstTone : 'primary'}
+        tone={solid ? solidTone : 'primary'}
         size="md"
         /* The box is 40 (solid, ghost) or the label line (link); the touch floor is 44 either way. */
         extendHitArea

@@ -13,6 +13,7 @@ import {
   type HeroCredit,
   type HeroDates,
   type HeroMedia,
+  type HeroActions,
   type PageHeroProps,
 } from '@/patterns';
 
@@ -266,9 +267,16 @@ const CU_SUPPORT_MAX =
 const CASE_STUDY = `${ROUTES.caseStudies}/connectx`;
 
 const ONE_ACTION = [{ label: 'Read the case study', href: CASE_STUDY }] as const;
+/* Neither specimen lead converts — reading a case study starts nothing with the studio — so these
+   heroes pass `converts={false}` and their solid is ink (owner, 7 Oct 2026). CONVERTING_ACTIONS is
+   the same pair with the converting action first. */
 const TWO_ACTIONS = [
   { label: 'Read the case study', href: CASE_STUDY },
   { label: 'Talk to the team', href: ROUTES.contact },
+] as const;
+const CONVERTING_ACTIONS = [
+  { label: 'Talk to the team', href: ROUTES.contact },
+  { label: 'Read the case study', href: CASE_STUDY },
 ] as const;
 
 const TRAIL = [
@@ -354,7 +362,8 @@ const SLOT_TABLE = [
    reasons: the literals below are then checked against the real prop types at the point they are
    written, and a spread of this shape after `title` and `body` cannot widen either of them to
    undefined the way a Partial<PageHeroProps> would. */
-type HeroSlots = Pick<PageHeroProps, 'eyebrow' | 'credits' | 'dates' | 'actions'>;
+type HeroSlots = Pick<PageHeroProps, 'eyebrow' | 'credits' | 'dates'> &
+  ({ actions?: never; converts?: never } | { actions: HeroActions; converts: boolean });
 
 /* Block 2 — the slot-presence ladder, each rung labelled with its corpus count. */
 const LADDER: readonly { key: string; title: string; note: string; props: HeroSlots }[] = [
@@ -373,20 +382,26 @@ const LADDER: readonly { key: string; title: string; note: string; props: HeroSl
   {
     key: 'one-action',
     title: '+ one action — 59 routes have at least one',
-    note: 'One action renders one solid/primary Button, no arrow, and no partner. The second emphasis is a consequence of a second array entry, not a slot waiting to be filled.',
-    props: { actions: ONE_ACTION },
+    note: 'One action renders one solid Button — ink here, because reading a case study does not convert — no arrow, and no partner. The second emphasis is a consequence of a second array entry, not a slot waiting to be filled.',
+    props: { actions: ONE_ACTION, converts: false },
   },
   {
     key: 'two-actions',
     title: '+ two actions',
-    note: 'Position decides emphasis: first solid/primary with no arrow, second its ghost partner with the trailing arrow (owner, 7 Oct 2026). Both are size="md" with extendHitArea, both anchors. Four actions is a compile error, not a runtime cap.',
-    props: { actions: TWO_ACTIONS },
+    note: 'Position decides emphasis: first solid with no arrow (ink here: the lead does not convert), second its ghost partner with the trailing arrow (owner, 7 Oct 2026). Both are size="md" with extendHitArea, both anchors. Four actions is a compile error, not a runtime cap.',
+    props: { actions: TWO_ACTIONS, converts: false },
+  },
+  {
+    key: 'two-actions-converts',
+    title: '+ two actions, the first converts',
+    note: 'The same pair with a converting lead. Colour follows the KIND of action (owner, 7 Oct 2026): “Talk to the team” starts something with the studio, so `converts` makes the solid blue; “Read the case study” above does not, so the solid there is ink. The ghost partner is blue either way.',
+    props: { actions: CONVERTING_ACTIONS, converts: true },
   },
   {
     key: 'audit',
     title: '+ eyebrow and two actions — the audit hero, 6 routes',
     note: 'Two independent slots filled at once, which is the whole of §4: this is not a third arrangement, it is the two optional slots that differentiate the corpus both being present.',
-    props: { eyebrow: EYEBROW, actions: TWO_ACTIONS },
+    props: { eyebrow: EYEBROW, actions: TWO_ACTIONS, converts: false },
   },
   {
     key: 'article',
@@ -641,7 +656,7 @@ export default function PageHeroSpecimenPage() {
       ))}
 
       {/* ── 6 · States: none to force ──────────────────────────────────────────── */}
-      <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={TWO_ACTIONS} />
+      <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={TWO_ACTIONS} converts={false} />
       <Section density="tight">
         <Layout rowGap="block">
           <p className={s.specTitle}>6 · States — and why there is no state column here</p>
@@ -679,7 +694,7 @@ export default function PageHeroSpecimenPage() {
             eyebrow={EYEBROW}
             credits={[{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }]}
             dates={{ published: '2026-03-03', modified: '2026-06-12' }}
-            actions={TWO_ACTIONS}
+            actions={TWO_ACTIONS} converts={false}
           />
           <Note
             surface={entry.surface}
@@ -745,6 +760,7 @@ export default function PageHeroSpecimenPage() {
         body={[
           'Tcules takes responsibility for the product beneath the screens: who does what, the records and rules behind it, how it behaves, and what to learn first.',
         ]}
+        converts
         actions={[
           { label: 'Start a project', href: ROUTES.contact },
           { label: 'Start with a UX Product Audit', href: ROUTES.audits },
@@ -836,7 +852,7 @@ export default function PageHeroSpecimenPage() {
         eyebrow={EYEBROW}
         credits={[{ role: 'author', people: ['Alice Chen'] }]}
         dates={{ published: '2026-03-03', modified: '2026-06-12' }}
-        actions={TWO_ACTIONS}
+        actions={TWO_ACTIONS} converts={false}
       >
         <Layout columns={3} colGap="gutter" rowGap="block">
           <Layout rowGap="inline">
@@ -867,13 +883,13 @@ export default function PageHeroSpecimenPage() {
       />
 
       {/* ── 12 · Interactive content in extras ──────────────────────────────────── */}
-      <PageHero title={TITLE} body={paragraphs(1)} actions={TWO_ACTIONS}>
+      <PageHero title={TITLE} body={paragraphs(1)} actions={TWO_ACTIONS} converts={false}>
         <Cluster colGap="tight" rowGap="tight">
           <Button
             as="a"
             href={ROUTES.caseStudies}
             emphasis="ghost"
-            tone="neutral"
+            tone="primary"
             size="md"
             extendHitArea
           >
@@ -887,7 +903,7 @@ export default function PageHeroSpecimenPage() {
       />
 
       {/* ── 13 · The hit floor ──────────────────────────────────────────────────── */}
-      <PageHero title={TITLE} body={paragraphs(1)} actions={TWO_ACTIONS} />
+      <PageHero title={TITLE} body={paragraphs(1)} actions={TWO_ACTIONS} converts={false} />
       <Section density="tight">
         <Layout rowGap="block">
           <p className={s.specTitle}>
@@ -930,7 +946,7 @@ export default function PageHeroSpecimenPage() {
               title={TITLE}
               body={paragraphs(2)}
               eyebrow={EYEBROW}
-              actions={ONE_ACTION}
+              actions={ONE_ACTION} converts={false}
             />
           </div>
           <p className={s.specNote}>
@@ -944,7 +960,7 @@ export default function PageHeroSpecimenPage() {
               title={TITLE}
               body={paragraphs(2)}
               eyebrow={EYEBROW}
-              actions={ONE_ACTION}
+              actions={ONE_ACTION} converts={false}
             />
           </div>
           <p className={s.specNote}>
@@ -969,7 +985,7 @@ export default function PageHeroSpecimenPage() {
         eyebrow={EYEBROW}
         credits={[{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }]}
         dates={{ published: '2026-03-03', modified: '2026-06-12' }}
-        actions={TWO_ACTIONS}
+        actions={TWO_ACTIONS} converts={false}
         media={MEDIA_WIDE}
       />
       <Note
@@ -1025,7 +1041,7 @@ export default function PageHeroSpecimenPage() {
             as="a"
             href={ROUTES.caseStudies}
             emphasis="ghost"
-            tone="neutral"
+            tone="primary"
             size="md"
             extendHitArea
           >
@@ -1079,7 +1095,7 @@ export default function PageHeroSpecimenPage() {
         title={CU_TITLE_MAX}
         body={[CU_SUPPORT_MAX]}
         eyebrow="Design systems"
-        actions={TWO_ACTIONS}
+        actions={TWO_ACTIONS} converts={false}
       />
       <Note
         title="16 · No visual · CU04 ceiling — a 10-word H1, 35-word support, eyebrow and two actions"
@@ -1098,7 +1114,7 @@ export default function PageHeroSpecimenPage() {
               title={TITLE}
               body={[CU_SUPPORT_MAX]}
               eyebrow={EYEBROW}
-              actions={ONE_ACTION}
+              actions={ONE_ACTION} converts={false}
               media={entry.media}
             />
             <Note
@@ -1121,7 +1137,7 @@ export default function PageHeroSpecimenPage() {
         title={CU_TITLE_MAX}
         body={[CU_SUPPORT_MAX]}
         eyebrow="Design systems"
-        actions={TWO_ACTIONS}
+        actions={TWO_ACTIONS} converts={false}
         media={asHero(ILLUSTRATION)}
       />
       <Note
@@ -1135,7 +1151,7 @@ export default function PageHeroSpecimenPage() {
         eyebrow={EYEBROW}
         credits={[{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }]}
         dates={{ published: '2026-03-03', modified: '2026-06-12' }}
-        actions={TWO_ACTIONS}
+        actions={TWO_ACTIONS} converts={false}
         media={asHero(CUT_OUT)}
       />
       <Note
@@ -1173,7 +1189,7 @@ export default function PageHeroSpecimenPage() {
             arrangement="beside"
             title={TITLE}
             body={[CU_SUPPORT_MAX]}
-            actions={ONE_ACTION}
+            actions={ONE_ACTION} converts={false}
             media={asHero(image)}
           />
           <Note title={`19 · beside · a ${shape} asset`} note={note} />
@@ -1195,7 +1211,7 @@ export default function PageHeroSpecimenPage() {
             eyebrow={EYEBROW}
             credits={[{ role: 'author', people: ['Alice Chen'] }]}
             dates={{ published: '2026-03-03' }}
-            actions={TWO_ACTIONS}
+            actions={TWO_ACTIONS} converts={false}
             media={asHero(CAPTURE)}
           />
           <Note
@@ -1228,7 +1244,7 @@ export default function PageHeroSpecimenPage() {
           <PageHero
             title={CU_TITLE_MAX}
             body={[CU_SUPPORT_MAX]}
-            actions={ONE_ACTION}
+            actions={ONE_ACTION} converts={false}
             media={entry.media}
           />
         </div>

@@ -13,6 +13,18 @@
 | **Implements** | visual-direction § 1.2 (body → CtaRow, `stack`), § 1.4 ("CtaRow — 48 seam + one 48 row"), § 3.1 item 5 (a hairline above a section-level CtaRow), § 4.2 (Signal and Accent budgets), § 11 item 5 |
 | **Implemented at** | `src/patterns/CtaRow/` · `src/styles/tokens/components/cta-row.css` · specimen `src/app/design/cta-row/page.tsx` (also used across `src/app/design/content-section/page.tsx`) |
 
+> **Owner amendment, 7 Oct 2026 — colour follows the kind of action** (visual-direction § 4.5,
+> `docs/specs/Button.md` § 14a). Supersedes every `tone` rule below, including the 6 Oct defaults.
+> - **`tone` is gone.** Callers state what the action IS, not its colour. The solid row takes a
+>   **required** `converts: boolean` — no default, because an unstated axis must not silently pick a
+>   plausible colour. `true` (start a project, book a call, request an audit, contact, apply,
+>   subscribe) renders the solid blue; `false` (a band's lead action that starts nothing with the
+>   studio: "See open roles", "Meet the team", "See the work") renders it ink.
+> - **The link row takes no colour prop** (`converts?: never`): a link is blue, always.
+> - **The ghost partner is blue, always**, beside a blue solid or an ink one. Ink solid + blue ghost is
+>   the intended non-converting pair.
+> - `CtaRowTone` is deleted from the exports.
+
 > **Owner amendment, 7 Oct 2026 — pairing and arrows** (`docs/specs/Button.md` § 14a). Supersedes the
 > glyph and second-action rules below wherever they differ.
 > - **Two shapes, by type.** `emphasis?: 'link'` takes exactly ONE action: a link with the trailing
@@ -23,7 +35,7 @@
 > - **The row owns every arrow.** There is no icon prop and no per-action emphasis; callers pass labels
 >   and hrefs. Every action is an anchor, so the ghost partner always navigates and always takes the
 >   arrow.
-> - **`tone` sets the first action only.** The ghost partner is always `primary`.
+> - ~~`tone` sets the first action only.~~ Replaced by `converts` the same day (amendment above). The ghost partner is always `primary`.
 > - Call sites with two link actions became either one link (a navigation foot: content-section § Footer
 >   stacked, kit/readdown D) or an ask (solid primary + ghost: kit/feature 6, kit/media-split ask and
 >   mirror).
@@ -81,7 +93,7 @@ Frequency: zero or one per band; most kit bands carry none.
 | `actions` | link row: `readonly [CtaRowAction]`; solid row: `readonly [CtaRowAction] \| readonly [CtaRowAction, CtaRowAction]` | — | `{ label, href }`. One on a link row, one or two on a solid row (*7 Oct 2026*). A third never compiles. Paths from `@/lib/routes`. |
 | `note` | `string` | — | One sentence before the actions, body-sm. Whitespace-only = absent. |
 | `emphasis` | `'link' \| 'solid'` | `'link'` | The row's shape (the union's discriminant): one link with the arrow cue, or a solid ask (no glyph) with an optional ghost partner (arrow). |
-| `tone` | `'neutral' \| 'primary'` | `'primary'` for `link`, `'neutral'` for `solid` | The FIRST action's Button tone. Primary link = Signal (spent by default); primary solid = Accent (spent only on request). The ghost partner is always primary. |
+| `converts` | solid row: `boolean` (**required**); link row: `never` | — (no default) | Does the solid action convert? `true` → blue solid (Button `tone="primary"`), `false` → ink solid (`tone="neutral"`). The link and the ghost partner are always blue and take no prop (*7 Oct 2026*). |
 | `rule` | `boolean` | `true` | The hairline above. `false` in a head's actions, under a ruled ladder (Accordion, ListCard rows, DataTable) whose last rule already closes the body, and as the footer of a band with no blocks (nothing to close). |
 | `align` | `'start' \| 'center'` | `'start'` | `center`: note and actions centred, the whole box capped at `--ctarow-centred-measure` (→ `--measure-body`). |
 
@@ -95,8 +107,10 @@ One size. `emphasis` × `tone` × `rule` × `align`, plus note present/absent:
 
 | | link | solid |
 |---|---|---|
-| neutral | spends nothing (pass it explicitly) | the solid default; spends nothing |
-| primary | the link default; Signal (§ 4.2) | Accent (§ 4.2; pass it explicitly) |
+| colour | blue, always (no prop) | `converts` → blue; `converts={false}` → ink. Required |
+| partner | — | ghost, blue, always |
+
+*(7 Oct 2026. Until then a `tone` prop defaulted the link to primary and the solid to neutral.)*
 
 Glyph (*7 Oct 2026*): the link carries `arrow-right` (the kit's link cue); the solid ask never does
 (the owner's 1 Oct "no arrow here", made a rule on 7 Oct); the ghost partner does, because it
@@ -185,7 +199,7 @@ No hand-rolled grid or flex, no margin, no padding. The placing band owns the se
 | A label over the ceiling | Overflows at 390 (Button never wraps). A copy fault; rewrite it. |
 | Under a ruled ladder | `rule={false}`, or two hairlines sit 48 apart and read as a double rule. |
 | Footer of a band with no blocks | `rule={false}`: no body to close, so the rule would underline the lead (ContentSection § 15, the footer-only and no-blocks media bands). |
-| A band already spending another kind of Signal | `tone="neutral"` on a link row (G's quote rule, E's diagram line: § 4.2, ≤ 1 kind per band). |
+| A lead action that does not convert | `emphasis="solid" converts={false}`: an ink solid, its ghost partner still blue (*7 Oct 2026*). A link row has no ink option. |
 | In a centred band | `align="center"`; ContentSection's centred body centres the capped box. |
 | In a 381 head track | Solid and link wrap to two lines at 24. |
 | Nested surface | Every ink restated per surface (§ 6). |
@@ -200,21 +214,22 @@ None of its own. Button's colour transition is Button's.
   into another pattern: `grep -rn "CtaRow" src/patterns --include=*.tsx | grep import` shows only
   `src/patterns/CtaRow/` and the barrel.
 - **Don't** hand-roll layout: `perl -0pe 's{/\*.*?\*/}{}gs' src/patterns/CtaRow/CtaRow.module.css | grep -nE 'display|grid|flex|margin|padding'` returns nothing.
-- **Do** let a link foot be blue: with no `tone`, a link-led row's first action is `tone="primary"`
-  (Signal) and a solid-led row's is `neutral` (inspect `/design/cta-row` § 1, rows 1 and 6). **Don't**
-  leave it primary in a band that already spends another kind of Signal or has spent its two — pass
-  `tone="neutral"` there.
+- **Do** state what the solid action is: `converts` for an action that starts something with the
+  studio, `converts={false}` for a lead action that does not (inspect `/design/cta-row` § 1 and § 3).
+  **Don't** choose a colour by the band's budget or the solid's position: the same ask is blue in every
+  band (*7 Oct 2026*).
 - **Don't** put a rule on the footer of a band with no blocks (`/design/content-section` § 14 and § 15).
 - **Don't** double a rule under an Accordion or ListCard rows (`/design/content-section` § 11, D-faq).
 - **Don't** pass a label over four words.
 
 ## 15 · Specimen plan
 
-`/design/cta-row`: (1) the variant ladder at the full column — link primary (the default), link neutral,
-link with a note, solid primary + ghost partner, solid neutral (the solid default), `rule={false}`,
+`/design/cta-row`: (1) the variant ladder at the full column — link (always blue), link with a note,
+solid that converts (blue) + ghost partner, solid that does not convert (ink) + blue ghost, a lone
+non-converting solid, `rule={false}`,
 `align="center"` (*7 Oct 2026*: the two-link rows are gone, because they no longer compile); (2) stress
 — the four-word label ceiling with a long note, a whitespace-only note, the 381 head track, the 326
-column with a note and centred; (3) four surfaces, identical markup, captioned as surface proof; (4) in
+column with a note and centred; (3) four surfaces, identical markup, captioned as surface proof — each with the link row, the converting pair and the non-converting pair; (4) in
 live ContentSection bands: beside footer, centred footer under an accordion, stacked head actions.
 `/design/content-section` uses it in every arrangement (§ 1, § 11 to § 15).
 
@@ -233,11 +248,10 @@ live ContentSection bands: beside footer, centred footer under an accordion, sta
    *Alternative:* no glyph anywhere, as CtaSection. A foot that points somewhere reads better with the
    kit's one link cue. *Non-blocking; shown to the owner in the PR.*
 
-3. **Default `tone`.** *Chosen (6 Oct, second fix round):* `primary` for a link-led row, `neutral` for
-   a solid-led one. *Was:* `neutral` for both ("don't spend blue by default"), reversed because it ran
-   against the owner's binding ruling for more blue on links and arrows. *Alternative:* `primary` for
-   both; rejected because a solid primary is Accent (≤ 1 per band) and should be spent on purpose.
-   *Non-blocking.*
+3. **Default `tone`.** *Superseded by the owner, 7 Oct 2026:* there is no `tone` and no default. The
+   solid row requires `converts` (blue when the action converts, ink when it does not); links and ghost
+   partners are always blue. *History:* 6 Oct chose `primary` for a link-led row and `neutral` for a
+   solid-led one. *Resolved.*
 
 No BLOCKING question is open.
 

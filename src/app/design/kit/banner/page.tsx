@@ -161,7 +161,7 @@ export default function KitBannerSpecimen() {
         actions={
           <CtaRow
             emphasis="solid"
-            tone="primary"
+            converts
             actions={[
               { label: 'Book an audit', href: ROUTES.audits },
               { label: 'See a sample report', href: ROUTES.uxProductAudit },
@@ -269,6 +269,7 @@ export default function KitBannerSpecimen() {
           body={[
             'A small senior studio for the product decisions that slow teams down: what to build, how it should behave, and how it reaches code.',
           ]}
+          converts
           actions={[
             { label: 'Start a project', href: ROUTES.contact },
             { label: 'See our work', href: ROUTES.caseStudies },

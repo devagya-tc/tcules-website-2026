@@ -5,6 +5,7 @@ import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components
 import { getServicesMasterPage, type ServicesMasterAction } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
+import { leadConverts } from '@/lib/conversion';
 import { BlockCard, Breadcrumbs, CtaSection, PageHero, type HeroAction } from '@/patterns';
 
 const SERVICES_SLUG = ROUTES.services.slice(1);
@@ -86,6 +87,7 @@ export default async function ServicesPage() {
         )}
         title={page.hero.heading}
         body={page.hero.body}
+        converts={leadConverts(heroActions)}
         actions={heroActions}
         surface="paper"
       >
@@ -220,6 +222,7 @@ export default async function ServicesPage() {
             heading={page.closingCta.heading}
             body={page.closingCta.body}
             points={page.closingCta.points}
+            converts={leadConverts(page.closingCta.actions)}
             actions={
               firstTwoActions(page.closingCta.actions) as Exclude<PageActions, readonly []>
             }

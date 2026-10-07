@@ -22,6 +22,7 @@ import {
 } from '@/content';
 import { ROUTES, servicePath } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail, pageName, slugLabel } from '@/lib/trail';
+import { leadConverts } from '@/lib/conversion';
 import {
   Accordion,
   BlockCard,
@@ -101,7 +102,7 @@ function renderColumn(column: ServiceContentColumn) {
               as="a"
               href={link.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
               icon={<Icon name="arrow-right" />}
@@ -167,7 +168,7 @@ function renderServiceBlock(block: ServiceBlock) {
                 as="a"
                 href={block.source.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
                 icon={<Icon name="arrow-right" />}
@@ -247,7 +248,7 @@ function renderServiceBlock(block: ServiceBlock) {
                 as="a"
                 href={block.download.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
               >
@@ -417,6 +418,7 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
         title={title}
         eyebrow={eyebrowBesideTrail(eyebrow, crumbs)}
         body={[service.hero.description]}
+        converts={leadConverts(heroActions)}
         actions={heroActions}
         surface="paper"
       >
@@ -486,6 +488,7 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
             heading={service.capabilitiesCta.heading}
             body={service.capabilitiesCta.body}
             points={service.capabilitiesCta.points}
+            converts={leadConverts(service.capabilitiesCta.actions)}
             actions={service.capabilitiesCta.actions}
           />
         ) : (
@@ -495,6 +498,7 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
             heading={service.capabilitiesCta.heading}
             body={service.capabilitiesCta.body}
             points={service.capabilitiesCta.points}
+            converts={leadConverts(service.capabilitiesCta.actions)}
             actions={service.capabilitiesCta.actions}
           />
         )

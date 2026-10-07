@@ -209,7 +209,7 @@ export type HeroArrangement = 'stacked' | 'beside' | 'wide' | 'centred' | 'displ
  */
 export type HeroAnnouncement = { label: string; text: string; action: HeroAction };
 
-export type PageHeroProps = {
+type PageHeroBaseProps = {
   /** The band's archetype for `fold:check` (§ 1.3) — `A` — passed to Section's `data-band`. */
   'data-band'?: string;
   /** Marks this hero for `fold:check`'s hero rule (it + the nav end inside the first screen). */
@@ -281,20 +281,6 @@ export type PageHeroProps = {
   credits?: readonly HeroCredit[];
   /** The date pairs, after the credits. Absent renders nothing. */
   dates?: HeroDates;
-  /**
-   * Nought, one or two. Position decides emphasis: the first renders solid/primary with no arrow
-   * (the main next step: the conversion when there is one, visual-direction § 4.5), the second a primary GHOST with the trailing arrow — its partner, blue
-   * at rest (owner, 7 Oct 2026: a primary's partner is a ghost, never a link button; a link button
-   * belongs in cards and inline contexts).
-   *
-   * History: ghost/neutral until 5 Oct 2026, then a primary link (fdn-blue) until the 7 Oct ruling.
-   *
-   * Those are the three counts the corpus has, as a type — a third entry has no member of the
-   * union to match, so it is a compile error rather than a review comment. The second emphasis is
-   * a consequence of a second entry, not a slot waiting to be filled, which is why there is no
-   * `emphasis` on HeroAction.
-   */
-  actions?: readonly [] | readonly [HeroAction] | readonly [HeroAction, HeroAction];
   /**
    * The ground this band paints, and therefore the trail's too. Defaults to `paper`.
    *
@@ -377,6 +363,42 @@ export type PageHeroProps = {
    */
   children?: ReactNode;
 };
+
+/**
+ * Nought, one or two actions. Position decides emphasis: the first renders SOLID with no arrow (the
+ * main next step, visual-direction § 4.5), the second a primary GHOST with the trailing arrow — its
+ * partner, blue at rest (owner, 7 Oct 2026: a primary's partner is a ghost, never a link button; a
+ * link button belongs in cards and inline contexts).
+ *
+ * Those are the three counts the corpus has, as a type — a third entry has no member of the union to
+ * match, so it is a compile error rather than a review comment. The second emphasis is a consequence
+ * of a second entry, not a slot waiting to be filled, which is why there is no `emphasis` on
+ * HeroAction.
+ *
+ * History: ghost/neutral until 5 Oct 2026, then a primary link (fdn-blue) until the 7 Oct ruling.
+ */
+export type HeroActions = readonly [] | readonly [HeroAction] | readonly [HeroAction, HeroAction];
+
+/**
+ * `actions` and `converts` travel together: passing actions REQUIRES saying what the first one is.
+ * There is no default — an unstated axis must not silently pick a plausible colour.
+ */
+type PageHeroActionProps =
+  | { actions?: never; converts?: never }
+  | {
+      /** See `HeroActions`. */
+      actions: HeroActions;
+      /**
+       * Does the FIRST (solid) action convert — does the reader start something with the studio by
+       * taking it (start a project, book a call, request an audit, contact, apply, subscribe)?
+       * `true` renders the solid blue, `false` ink ("See the work", "Meet the team", "Explore
+       * services"). Judge the action itself, not the page. The ghost partner is blue either way
+       * (owner, 7 Oct 2026; visual-direction § 4.5). Required whenever `actions` is passed.
+       */
+      converts: boolean;
+    };
+
+export type PageHeroProps = PageHeroBaseProps & PageHeroActionProps;
 
 /** Six tags at most: two balanced rows of three beside the media (fix round 2). */
 const MAX_TAGS = 6;
@@ -493,6 +515,7 @@ export function PageHero({
   credits = [],
   dates,
   actions = [],
+  converts = false,
   media,
   arrangement = 'stacked',
   surface = 'paper',
@@ -695,8 +718,9 @@ export function PageHero({
   const extrasNode = children == null ? null : <div>{children}</div>;
 
   /* ── actions · one solid, one ghost partner ────────────────────────────────
-     Anchors, because a hero action always navigates. The first is solid/primary, the band's one
-     solid, and carries NO arrow — the label carries the ask. The second is a primary GHOST with
+     Anchors, because a hero action always navigates. The first is the band's one solid — blue
+     when it converts, ink when it does not (`converts`, owner 7 Oct 2026, visual-direction § 4.5)
+     — and carries NO arrow: the label carries the ask. The second is a primary GHOST with
      the trailing arrow: the owner's 7 Oct 2026 pairing rule (a primary's partner is a ghost, never a
      link button; the ghost takes the arrow because it navigates). Its label and arrow stay blue at
      rest, the foreground accent (visual-direction § 4.2), and it has no fill at rest, so it reads
@@ -720,7 +744,7 @@ export function PageHero({
             as="a"
             href={action.href}
             emphasis={index === 0 ? 'solid' : 'ghost'}
-            tone="primary"
+            tone={index === 0 && !converts ? 'neutral' : 'primary'}
             size="md"
             extendHitArea
             icon={index === 0 ? undefined : <Icon name="arrow-right" />}

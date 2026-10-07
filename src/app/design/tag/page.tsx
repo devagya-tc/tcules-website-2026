@@ -259,6 +259,7 @@ export default function TagSpecimenPage() {
           'The hero is real: eyebrow, h1, lede, two actions, and the tag row in its children slot — which is exactly where ten route modules put it today.',
           'Eight marks, spanning the measured range from three characters to thirty-two, including both 31-character navigation labels the site ships.',
         ]}
+        converts={false}
         actions={[
           { label: 'Read the case study', href: ROUTES.caseStudies },
           { label: 'Talk to us', href: ROUTES.contact },

@@ -20,6 +20,7 @@ import {
 } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail, pageName } from '@/lib/trail';
+import { leadConverts } from '@/lib/conversion';
 import {
   Accordion,
   BlockCard,
@@ -94,7 +95,7 @@ function renderColumn(column: HowWeWorkContentColumn) {
               as="a"
               href={link.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
               icon={<Icon name="arrow-right" />}
@@ -160,7 +161,7 @@ function renderHowWeWorkBlock(block: HowWeWorkBlock) {
                 as="a"
                 href={block.source.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
                 icon={<Icon name="arrow-right" />}
@@ -305,6 +306,7 @@ export default async function HowWeWorkPage() {
         title={page.title}
         eyebrow={eyebrowBesideTrail(name.eyebrow, crumbs)}
         body={[page.hero.description]}
+        converts={leadConverts(heroActions)}
         actions={heroActions}
         surface="paper"
       >
@@ -361,6 +363,7 @@ export default async function HowWeWorkPage() {
           body={page.cta.body}
           eyebrow={page.cta.eyebrow}
           points={page.cta.points}
+          converts={leadConverts(page.cta.actions)}
           actions={page.cta.actions}
         />
       ) : null}

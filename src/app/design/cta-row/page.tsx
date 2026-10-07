@@ -12,6 +12,10 @@ const SEE_WORK = { label: 'See the work', href: ROUTES.caseStudies };
 const ALL_SERVICES = { label: 'All services', href: ROUTES.services };
 const START = { label: 'Start a project', href: ROUTES.contact };
 const HOW = { label: 'How we work', href: ROUTES.howWeWork };
+/* The non-converting pair (owner, 7 Oct 2026): a band's lead action that starts nothing with the
+   studio is an ink solid, and its ghost partner is blue. */
+const OPEN_ROLES = { label: 'See open roles', href: ROUTES.careers };
+const HOW_WE_HIRE = { label: 'How we hire', href: ROUTES.howWeWork };
 
 const NOTE = 'Every engagement starts with a thirty-minute call.';
 const NOTE_LONG =
@@ -74,9 +78,10 @@ export default function CtaRowSpecimen() {
             <strong>ask</strong> — a solid with no arrow, ever, and at most one ghost partner
             with the trailing arrow. A solid is never partnered by a link, and two actions of
             the same emphasis never sit side by side. The row decides every arrow; the caller
-            passes labels and hrefs. A link row defaults to tone=&quot;primary&quot; (Signal, a
-            blue foot); a solid defaults to neutral, because a solid primary spends Accent and
-            the caller spends that on purpose. Placed by a band — ContentSection&rsquo;s{' '}
+            passes labels and hrefs. Colour follows the KIND of action, never the count or the
+            placement (owner, 7 Oct 2026): a solid row states <code>converts</code> — blue when
+            the reader starts something with the studio, ink when the action is a next step that
+            does not convert — and links and ghost partners are blue, always. Placed by a band — ContentSection&rsquo;s{' '}
             <code>footer</code>, or with <code>rule=&#123;false&#125;</code> its{' '}
             <code>actions</code>.
           </p>
@@ -101,34 +106,34 @@ export default function CtaRowSpecimen() {
             <CtaRow actions={[SEE_WORK]} />
           </Specimen>
           <Specimen
-            title='link · tone="neutral"'
-            note="Spends nothing: ink, blue only on hover and focus (Free). For a band that already spends another kind of Signal — G's quote rule, E's diagram line — or has spent its two."
-          >
-            <CtaRow actions={[SEE_WORK]} tone="neutral" />
-          </Specimen>
-          <Specimen
             title="link · with a note"
             note="Note body-sm at the start, capped at 56ch; the action at the end."
           >
             <CtaRow actions={[SEE_WORK]} note={NOTE} />
           </Specimen>
           <Specimen
-            title="solid primary + ghost partner"
-            note="The band's one Accent. The solid converts and carries no arrow; the ghost partner navigates, so it takes the trailing arrow — the hero's shape exactly."
+            title="solid · converts — blue solid + blue ghost"
+            note="“Start a project” converts, so the solid is blue (converts). It carries no arrow; the ghost partner navigates, so it takes the trailing arrow — the hero's shape exactly."
           >
-            <CtaRow actions={[START, HOW]} emphasis="solid" tone="primary" note={NOTE} />
+            <CtaRow actions={[START, HOW]} emphasis="solid" converts note={NOTE} />
           </Specimen>
           <Specimen
-            title="solid · neutral (the solid default)"
-            note="A solid that spends nothing — for a band that has already spent its two. A solid-led row is neutral unless the caller spends its Accent."
+            title="solid · does not convert — ink solid + blue ghost"
+            note="“See open roles” is the band's lead action but starts nothing with the studio, so the solid is ink (converts={false}). The ghost partner stays blue: ink solid + blue ghost is the intended pair."
           >
-            <CtaRow actions={[START]} emphasis="solid" />
+            <CtaRow actions={[OPEN_ROLES, HOW_WE_HIRE]} emphasis="solid" converts={false} />
+          </Specimen>
+          <Specimen
+            title="solid · does not convert, alone"
+            note="A lone non-converting solid: ink, no arrow."
+          >
+            <CtaRow actions={[SEE_WORK]} emphasis="solid" converts={false} />
           </Specimen>
           <Specimen
             title="rule={false} — a head’s actions"
             note="No hairline: in a head the row sits a stack under the lead, with no body above it to close off."
           >
-            <CtaRow actions={[START, HOW]} emphasis="solid" tone="primary" rule={false} />
+            <CtaRow actions={[START, HOW]} emphasis="solid" converts rule={false} />
           </Specimen>
           <Specimen
             title='align="center"'
@@ -137,7 +142,7 @@ export default function CtaRowSpecimen() {
             <CtaRow
               actions={[START, HOW]}
               emphasis="solid"
-              tone="primary"
+              converts
               note={NOTE}
               align="center"
             />
@@ -162,7 +167,7 @@ export default function CtaRowSpecimen() {
             <CtaRow
               actions={[START, LABEL_LONG]}
               emphasis="solid"
-              tone="primary"
+              converts
               note={NOTE_LONG}
             />
           </Specimen>
@@ -177,7 +182,7 @@ export default function CtaRowSpecimen() {
               <CtaRow
                 actions={[START, LABEL_LONG]}
                 emphasis="solid"
-                tone="primary"
+                converts
                 rule={false}
               />
             </div>
@@ -192,7 +197,7 @@ export default function CtaRowSpecimen() {
               <CtaRow
                 actions={[START, HOW]}
                 emphasis="solid"
-                tone="primary"
+                converts
                 note={NOTE}
                 align="center"
               />
@@ -216,8 +221,11 @@ export default function CtaRowSpecimen() {
             <Specimen title={`${surface} · link, primary, with a note`}>
               <CtaRow actions={[SEE_WORK]} note={NOTE} />
             </Specimen>
-            <Specimen title={`${surface} · solid primary + ghost partner`}>
-              <CtaRow actions={[START, HOW]} emphasis="solid" tone="primary" />
+            <Specimen title={`${surface} · converts — blue solid + blue ghost`}>
+              <CtaRow actions={[START, HOW]} emphasis="solid" converts />
+            </Specimen>
+            <Specimen title={`${surface} · does not convert — ink solid + blue ghost`}>
+              <CtaRow actions={[OPEN_ROLES, HOW_WE_HIRE]} emphasis="solid" converts={false} />
             </Specimen>
           </Layout>
         </Section>
@@ -286,7 +294,7 @@ export default function CtaRowSpecimen() {
         heading="Start with the decision in front of you"
         headingId="ctarow-in-actions"
         lead="A head's own actions: a CtaRow with the rule off, a stack under the lead."
-        actions={<CtaRow actions={[START, HOW]} emphasis="solid" tone="primary" rule={false} />}
+        actions={<CtaRow actions={[START, HOW]} emphasis="solid" converts rule={false} />}
       />
     </>
   );

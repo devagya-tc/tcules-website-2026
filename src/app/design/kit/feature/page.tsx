@@ -886,7 +886,7 @@ export default function FeatureKitSpecimen() {
         footer={
           <CtaRow
             emphasis="solid"
-            tone="primary"
+            converts
             note="Every engagement starts with a thirty-minute call."
             actions={[
               { label: 'Book a call', href: ROUTES.contact },
@@ -1104,7 +1104,7 @@ export default function FeatureKitSpecimen() {
           <CtaRow
             rule={false}
             emphasis="solid"
-            tone="primary"
+            converts
             actions={[
               { label: 'Start a project', href: ROUTES.contact },
               { label: 'All case studies', href: ROUTES.caseStudies },

@@ -177,7 +177,7 @@ function renderToolBlock(block: ToolBlock) {
                 as="a"
                 href={block.download.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
               >

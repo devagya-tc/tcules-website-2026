@@ -20,6 +20,7 @@ import {
 } from '@/content';
 import { expertisePath, ROUTES } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
+import { leadConverts } from '@/lib/conversion';
 import {
   Accordion,
   BlockCard,
@@ -92,7 +93,7 @@ function renderColumn(column: ExpertiseContentColumn) {
               as="a"
               href={link.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
               icon={<Icon name="arrow-right" />}
@@ -165,7 +166,7 @@ function renderExpertiseBlock(block: ExpertiseBlock) {
                 as="a"
                 href={block.source.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
                 icon={<Icon name="arrow-right" />}
@@ -239,7 +240,7 @@ function renderExpertiseBlock(block: ExpertiseBlock) {
                     as="a"
                     href={link.href}
                     emphasis="link"
-                    tone="neutral"
+                    tone="primary"
                     size="md"
                     extendHitArea
                     icon={<Icon name="arrow-right" />}
@@ -263,7 +264,7 @@ function renderExpertiseBlock(block: ExpertiseBlock) {
                 as="a"
                 href={block.download.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
               >
@@ -349,6 +350,7 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
         title={title}
         eyebrow={eyebrowBesideTrail(expertise.hero.eyebrow, crumbs)}
         body={[expertise.hero.description]}
+        converts={leadConverts(heroActions)}
         actions={heroActions}
         surface="paper"
       >
@@ -405,6 +407,7 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
             heading={expertise.capabilitiesCta.heading}
             body={expertise.capabilitiesCta.body}
             points={expertise.capabilitiesCta.points}
+            converts={leadConverts(expertise.capabilitiesCta.actions)}
             actions={expertise.capabilitiesCta.actions}
           />
         ) : (
@@ -414,6 +417,7 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
             heading={expertise.capabilitiesCta.heading}
             body={expertise.capabilitiesCta.body}
             points={expertise.capabilitiesCta.points}
+            converts={leadConverts(expertise.capabilitiesCta.actions)}
             actions={expertise.capabilitiesCta.actions}
           />
         )

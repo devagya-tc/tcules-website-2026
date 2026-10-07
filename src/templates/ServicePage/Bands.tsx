@@ -4,6 +4,7 @@ import { TextureHorizon } from '@/components';
 import { Banner, ContentSection, CtaRow, CtaSection, Statement, Thread } from '@/patterns';
 import { getKitPhoto } from '@/lib/photos';
 import type { StoryBlock } from '@/lib/service-story';
+import { leadConverts } from '@/lib/conversion';
 
 import {
   AsidePhoto,
@@ -329,6 +330,7 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
            the accent repetition. One glyph for every point, so no story has to choose icons. */
         markers="icon"
         points={offer.points?.map((point) => ({ ...point, icon: 'check-circle' as const }))}
+        converts={leadConverts(offer.actions)}
         actions={offer.actions}
         media={
           band.photo

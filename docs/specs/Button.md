@@ -23,6 +23,16 @@
 > shipped CSS and **[c]** where they were computed for this spec from the ramp hexes in
 > `primitives.css` using the WCAG 2.x relative-luminance formula.
 
+> **Owner amendment, 7 Oct 2026 — colour follows the kind of action** (approved after the pairing
+> amendment below; § 14a, `docs/kit/visual-direction.md` § 4.5). A solid is **blue** (`tone="primary"`)
+> when the action converts — the reader starts something with the studio: start a project, book a
+> call, request an audit, send, contact, apply, subscribe — and **ink** (`tone="neutral"`) when it is a
+> band's lead action that does not ("See open roles", "Meet the team", "See the work"). Ghost and link
+> buttons in content are **always blue**, whatever sits beside them; neutral ghost and link stay in
+> the primitive for site chrome only. Never decided by count or placement: the same ask is blue in the
+> hero, the offer and the close. Button keeps its `tone` axis unchanged; the patterns that own action
+> rows take a required `converts: boolean` and derive the tone (§ 14a).
+
 > **Owner amendment, 7 Oct 2026 — pairing and arrows.** The site had too many arrows in buttons and
 > its pairs were inconsistent. Five rules, binding on every call site; the full text is § 14a.
 > 1. **Solid primary is the group's main next step. No arrow, ever.** It need not convert (owner,
@@ -189,8 +199,8 @@ variants.
 
 |             | solid                                                                                                                                                                        | ghost                                                                                                             | link                                                                                          |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| **primary** | The one action a view is asking for. Brandeis blue: on the web, blue means clickable, and nothing else on the page may borrow the colour.                                    | Secondary, same offer. No outline — the fill is the whole affordance, and it appears the moment the pointer does. | Reading rather than doing. No box at all, so it can sit in a paragraph or under a case title. |
-| **neutral** | Ink. Claims nothing and gets the work done — and is the most legible button in the system. Where blue would make a utility sound like an offer: send, copy, download, close. | The default secondary.                                                                                            | Navigation.                                                                                   |
+| **primary** | The action CONVERTS — the reader starts something with the studio (*7 Oct 2026*, § 14a). Brandeis blue, the same in the hero, the offer and the close.                          | Every ghost in content — a solid's partner, whatever the solid's colour. No outline — the fill is the whole affordance, and it appears the moment the pointer does. | Every link in content. No box at all, so it can sit in a paragraph or under a case title. |
+| **neutral** | Ink. A band's lead action that does NOT convert — "See open roles", "Meet the team", "See the work" — so a non-converting page still has a solid (*7 Oct 2026*). | Site chrome only (SiteNav, filter controls). Never in content since 7 Oct 2026.                                    | Site chrome only. Never in content since 7 Oct 2026.                                         |
 
 | Size | Height                 | Label composite                         | Icon                                    | Where it lands                                                                     |
 | ---- | ---------------------- | --------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------- |
@@ -855,13 +865,18 @@ Each of these is decidable from a diff or from a rendered page.
     glyph slot. A control inside a control is invalid HTML, a second tab stop and a contested
     accessible name; two controls are two Buttons in a `Cluster` (§12 row 13).
 
-### 14a · Pairing and arrows (owner amendment, 7 Oct 2026)
+### 14a · Colour, pairing and arrows (owner amendments, 7 Oct 2026)
 
-| Emphasis | Where it goes | Arrow (`arrow-right`, trailing) |
-|---|---|---|
-| `solid` | the main next step (the conversion when there is one) — one per band | **never** |
-| `ghost` | the solid's partner, or a lone secondary action | yes when it navigates (an anchor to somewhere); no when it acts in place (submit, copy, clear) |
-| `link` | inside a card, a list of links, a line of text | yes |
+| Emphasis | Where it goes | Tone | Arrow (`arrow-right`, trailing) |
+|---|---|---|---|
+| `solid` | the group's main next step — one per band | **`primary` (blue) when the action converts; `neutral` (ink) when it does not.** Decided by the kind of action, never by count or placement | **never** |
+| `ghost` | the solid's partner, or a lone secondary action | **`primary`, always** in content — beside a blue solid or an ink one | yes when it navigates (an anchor to somewhere); no when it acts in place (submit, copy, clear) |
+| `link` | inside a card, a list of links, a line of text | **`primary`, always** in content | yes |
+
+**Converts** = the reader starts something with the studio: start a project, book a call or intro call,
+request an audit, send an enquiry, contact, apply (for a role, to the Lab), subscribe. Judge the action
+itself, not the page: "See open roles" on About is ink, "Apply" on a careers page is blue. Neutral
+ghost and link remain in the primitive for site chrome (SiteNav, SiteFooter, filter controls).
 
 Groups:
 - **A group is at most one `solid` + one `ghost`.** Never a solid beside a link button, and never two of
@@ -874,10 +889,10 @@ Where it is enforced (types and position, so a page cannot get it wrong):
 
 | Pattern | API | Result |
 |---|---|---|
-| `CtaRow` | `emphasis?: 'link'` with `actions: [one]`, or `emphasis: 'solid'` with `actions: [ask] \| [ask, partner]` | link → one link with arrow; solid → solid (no arrow) + ghost primary with arrow |
-| `PageHero` | `actions: [] \| [a] \| [a, b]`, position decides | solid/primary no arrow · ghost/primary with arrow |
-| `CtaSection` | same | same |
-| `EnquiryForm` | owned markup | submit solid, no arrow · "See available times" ghost/primary with arrow |
+| `CtaRow` | `emphasis?: 'link'` with `actions: [one]` and no colour prop, or `emphasis: 'solid'` with `actions: [ask] \| [ask, partner]` and a REQUIRED `converts: boolean` | link → one blue link with arrow; solid → solid (blue if `converts`, ink if not; no arrow) + blue ghost with arrow |
+| `PageHero` | `actions: [] \| [a] \| [a, b]`, position decides; `converts: boolean` required whenever `actions` is passed | solid (blue if `converts`, ink if not) no arrow · ghost/primary with arrow |
+| `CtaSection` | same: `converts` required on the arrangements that take actions, refused (`never`) on the form arrangements | same |
+| `EnquiryForm` | owned markup | submit solid **primary, always** (sending converts), no arrow · "See available times" ghost/primary with arrow |
 | `Banner`, `Statement`, `ContentSection` | an `actions` / `footer` slot | composed with a `CtaRow`, so CtaRow's types apply |
 
 Not covered (deliberately): SiteNav's chrome (the menu sheet's foot is already solid + ghost); a
@@ -900,7 +915,7 @@ only — it defines no component beyond two local presentation helpers (`COMBOS`
 | #    | Block                                             | What it renders                                                                                                                                                                                                                                                                                                  |
 | ---- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0    | Intro                                             | `h1`, then the two claims the component is built on: that the same markup is correct on all four grounds, and that the box is 8 / 4 / 4 and none of the three scales.                                                                                                                                            |
-| 1    | **The six combinations**                          | A 3-track `Layout`, one cell per emphasis × tone, each with its name and its one-line job ("The primary ask", "Default secondary", "Navigation"). The two link cells carry a trailing `arrow-right`.                                                                                                             |
+| 1    | **The six combinations**                          | A 3-track `Layout`, one cell per emphasis × tone, each with its name and its one-line job ("The action converts", "A lead action that does not convert", "Site chrome only"; *7 Oct 2026*). The two link cells carry a trailing `arrow-right`. Each surface band also renders the colour rule's two pairs: converting (blue solid + blue ghost) and non-converting (ink solid + blue ghost).                                                                                                             |
 | 2    | **States — four of seven are printable**          | A `[2,1,1,1,1]` `Layout`: a header row, then the six combinations down the first column and **rest / active / busy / disabled** across.                                                                                                                                                                          |
 | 3    | **Variants — label, label and icon, icon alone**  | Three columns. Label-only; label with a trailing `arrow-right` and a leading `download`; and four icon-only buttons — `close-circle`, `copy`, `arrow-right`, `download` — each with its `aria-label`, in both ghost and solid.                                                                                   |
 | 4    | **Size — 32 / 40 / 48**                           | One `Cluster` per size, each holding a ruler caption and five buttons: solid primary, ghost with a trailing icon, icon-only, solid neutral, link. Reading down the three rows is how you check that only the height, the label and the icon step.                                                                |

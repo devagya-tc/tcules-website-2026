@@ -201,6 +201,10 @@ export default async function CareersPage() {
                   <Button
                     as="a"
                     href={page.fourthSection.action.href}
+                    /* An application ("Begin engagement", to the Lab's application form): applying
+                       converts, so the solid is blue (owner, 7 Oct 2026). Stated, not defaulted. */
+                    emphasis="solid"
+                    tone="primary"
                     size="lg"
                     {...externalAnchorProps(page.fourthSection.action)}
                   >
@@ -236,7 +240,7 @@ export default async function CareersPage() {
                           as="a"
                           href={card.action.href}
                           emphasis="link"
-                          tone="neutral"
+                          tone="primary"
                           icon={<Icon name="arrow-right" />}
                           extendHitArea
                           {...externalAnchorProps(card.action)}
@@ -266,7 +270,7 @@ export default async function CareersPage() {
                       as="a"
                       href={page.fourthSection.bottomAction.href}
                       emphasis="ghost"
-                      tone="neutral"
+                      tone="primary"
                       icon={<Icon name="arrow-right" />}
                       {...externalAnchorProps(page.fourthSection.bottomAction)}
                     >

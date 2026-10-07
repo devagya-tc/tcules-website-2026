@@ -127,7 +127,7 @@ export default async function ContactPage() {
                           as="a"
                           href={social.href}
                           emphasis="link"
-                          tone="neutral"
+                          tone="primary"
                           icon={<Icon name="arrow-right" />}
                           extendHitArea
                           {...externalAnchorProps(social)}

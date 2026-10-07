@@ -646,6 +646,7 @@ export default function ProofSpecimenPage() {
           eyebrow={`Open · ${shape}`}
           heading="Make the next decision with evidence"
           body={['Start with the outcome you need and the proof you already have.']}
+          converts
           actions={[{ label: 'Start a project', href: ROUTES.contact }]}
           proof={<ProofFixture shape={shape} />}
           surface="ink"

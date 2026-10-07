@@ -14,6 +14,7 @@ import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { ROUTES, auditPath, caseStudyPath, servicePath } from '@/lib/routes';
 import { heroTrail, slugLabel, type TrailItem } from '@/lib/trail';
+import { leadConverts } from '@/lib/conversion';
 
 import t from '../../_specimen/typeroles.module.css';
 
@@ -99,6 +100,7 @@ function variations(): Variation[] {
         title: product.hero.title,
         body: [product.hero.lead],
         actions: product.hero.actions,
+        converts: leadConverts(product.hero.actions),
         arrangement: 'beside',
         media: product.media,
       },
@@ -114,6 +116,7 @@ function variations(): Variation[] {
         title: engineering.hero.title,
         body: [engineering.hero.lead],
         actions: engineering.hero.actions,
+        converts: leadConverts(engineering.hero.actions),
         arrangement: 'beside',
         media: engineering.media,
       },
@@ -129,6 +132,7 @@ function variations(): Variation[] {
         title: software.hero.title,
         body: [software.hero.lead],
         actions: software.hero.actions,
+        converts: leadConverts(software.hero.actions),
         arrangement: 'beside',
         media: software.media,
         /* The fixture carries nine; the hero sets six (PageHero warns past six). */
@@ -147,6 +151,7 @@ function variations(): Variation[] {
         body: [
           'We design and build B2B, workflow and AI products, from the first model of the work to the code that ships it.',
         ],
+        converts: true,
         actions: [START, { label: 'See the work', href: ROUTES.caseStudies }],
         arrangement: 'beside',
         media: {
@@ -174,6 +179,7 @@ function variations(): Variation[] {
         body: [
           'Researchers, designers and engineers in one room, accountable for the decision and for the software it becomes.',
         ],
+        converts: true,
         actions: [START, { label: 'How we work', href: ROUTES.howWeWork }],
         arrangement: 'wide',
         media: {
@@ -194,6 +200,7 @@ function variations(): Variation[] {
         body: [
           'What happens in each week of an engagement, who is in the room, and what you hold at the end of it.',
         ],
+        converts: true,
         actions: [
           { label: 'Book an intro call', href: ROUTES.contact },
           { label: 'Read a sample plan', href: '#display' },
@@ -215,6 +222,7 @@ function variations(): Variation[] {
       hero: {
         title: 'Small on purpose',
         body: ['Researchers, designers and engineers in one room, from decision to code.'],
+        converts: true,
         actions: [START],
         arrangement: 'display',
         media: {
@@ -232,6 +240,7 @@ function variations(): Variation[] {
       hero: {
         title: 'Built where the work happens',
         body: ['Every engagement runs out of one studio, with the team that will ship it.'],
+        converts: true,
         actions: [START],
         arrangement: 'display',
         media: {
@@ -260,6 +269,7 @@ function variations(): Variation[] {
         body: [
           'Design, systems, engineering and modernisation, run as one practice so a decision made in research survives into the code.',
         ],
+        converts: true,
         actions: [START, { label: 'Compare the services', href: '#compare' }],
         texture: true,
       },
@@ -283,6 +293,7 @@ function variations(): Variation[] {
         body: [
           'Workflow software, AI and developer tools, data products, marketplaces and fintech: the kinds of product where the model of the work decides the interface.',
         ],
+        converts: true,
         actions: [{ label: 'Book an intro call', href: ROUTES.contact }],
       },
     },
@@ -299,6 +310,7 @@ function variations(): Variation[] {
         body: [
           'A reconciliation console for a payments team of forty, designed with the analysts who close the books each month.',
         ],
+        converts: true,
         actions: [START, { label: 'All case studies', href: ROUTES.caseStudies }],
         arrangement: 'beside',
         media: {
@@ -321,6 +333,7 @@ function variations(): Variation[] {
         title: product.hero.title,
         body: [product.hero.lead],
         actions: product.hero.actions,
+        converts: leadConverts(product.hero.actions),
         arrangement: 'centred',
         media: product.media,
       },
