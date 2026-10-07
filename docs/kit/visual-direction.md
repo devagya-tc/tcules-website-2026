@@ -704,6 +704,11 @@ These were approved, so the kit keeps them as they are:
 The fold rule is for the MacBook Air, but 390 has its own rules, because a 2300px phone band is the
 wall of text again.
 
+**Gaps do not shrink when a row stacks (owner, 7 Oct 2026).** A set whose items sit a `column`
+(64) apart keeps 64 when it stacks on a phone: Proof's quote group and BlockCardSet's spotlight
+were reviewed at 390 and the separation reads clearly. Only Section's own padding steps down
+below 768 (CLAUDE.md, gap-scale rule 3).
+
 1. **Every band is ≤ 1700 at 390** (two 844 viewports). `fold:check` measures 390 too.
 2. **A linked card set of more than 3 items scrolls sideways below 768** (Layout `scroll="until-md"`,
    § 11 `fdn-scroll`): one card per view, with the next card peeking.
