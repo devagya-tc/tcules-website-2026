@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Section, TextureClosing } from '@/components';
+import { Layout, Section } from '@/components';
 import {
   BlockCard,
   ContentSection,
@@ -408,7 +408,6 @@ export default function KitCtaSpecimen() {
             scheduleHref={ROUTES.contact}
           />
         }
-        texture={<TextureClosing />}
       />
 
       {/* ── 08 · L close, contact strip ─────────────────────────────────────────────────────── */}
@@ -438,7 +437,6 @@ export default function KitCtaSpecimen() {
           { label: 'Reply', value: 'Within one working day' },
           { label: 'Hours', value: 'IST, GMT and ET' },
         ]}
-        texture={<TextureClosing />}
       />
 
       {/* ── 09 · L close, centred, two actions ──────────────────────────────────────────────────── */}
@@ -461,7 +459,6 @@ export default function KitCtaSpecimen() {
           { label: 'Book a call', href: ROUTES.contact },
           { label: 'See case studies', href: ROUTES.caseStudies },
         ]}
-        texture={<TextureClosing side="both" />}
       />
 
       {/* ── 10 · CtaRow under a card set ───────────────────────────────────────────────────── */}

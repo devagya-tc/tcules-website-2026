@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Layout, Media, TextureClosing, TextureHorizon, type IconName } from '@/components';
+import { Layout, Media, TextureHorizon, type IconName } from '@/components';
 import { getIdealServiceStory } from '@/content';
 import {
   Accordion,
@@ -20,7 +20,7 @@ import {
   type ProofQuote,
   type ProofRating,
 } from '@/patterns';
-import { HEAD_TRACK, MEDIA_SPLIT, MEDIA_SPLIT_WIDE } from '@/lib/image-sizes';
+import { MEDIA_SPLIT, MEDIA_SPLIT_WIDE } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
@@ -506,7 +506,6 @@ export default function KitServicesIndexPage() {
           { label: 'Book an intro call', href: ROUTES.contact },
           { label: 'Write to the studio', href: 'mailto:hello@tcules.com' },
         ]}
-        texture={<TextureClosing side="both" />}
       />
     </>
   );

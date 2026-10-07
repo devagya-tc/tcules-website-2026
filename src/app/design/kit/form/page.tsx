@@ -104,15 +104,6 @@ const COMPACT_STEPS = [
   },
 ] as const;
 
-/** The L close's texture, § 6.3 `closing`: under the copy column's foot, the form column clean. */
-function ClosingTexture() {
-  return (
-    <Texture>
-      <TextureShape bottom={-260} left={-120} width="44%" height={320} blur={200} />
-    </Texture>
-  );
-}
-
 /**
  * A variation's title band: the index numeral in blue over its name (an h2 at h3 scale; the band
  * below brings its own h2, so the outline never steps h1 → h3), and what to look for beside it.
@@ -200,7 +191,6 @@ export default function KitFormPage() {
             nextSteps={ENQUIRY_STEPS}
           />
         }
-        texture={<ClosingTexture />}
       />
 
       {/* ── 02 · L beside a studio photo ────────────────────────────────────────────── */}
@@ -215,6 +205,7 @@ export default function KitFormPage() {
           grade is banned (ch05 § 5), so this is the whole of what the placement can do; the
           remaining loudness is an owner call, flagged in the note above. */}
       <ContentSection
+        surface="tint"
         arrangement="media"
         media={{
           image: { ...getKitPhoto('studio-sticky-board-ux'), focus: { x: 0.3, y: 0.9 } },
@@ -238,6 +229,7 @@ export default function KitFormPage() {
         note={`The photo at the end (hand-sketch-wireframe, quiet stock at 2.7× for 4:5), and a different form: submit="full", the button across the track with the caption under it, as Executra ends its form. Consecutive media bands alternate side; the form changes shape so the pair is not one composition mirrored.`}
       />
       <ContentSection
+        surface="tint"
         arrangement="media"
         media={{ image: getKitPhoto('hand-sketch-wireframe'), side: 'end' }}
         eyebrow="A short note is enough"

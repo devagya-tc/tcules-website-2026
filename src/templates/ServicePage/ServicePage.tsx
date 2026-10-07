@@ -5,7 +5,6 @@ import {
   PageHero,
   type BreadcrumbItem,
 } from '@/patterns';
-import { TextureClosing } from '@/components';
 import type { ServiceStory } from '@/lib/service-story';
 import { ANCHORS, ROUTES, servicePath } from '@/lib/routes';
 import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
@@ -111,7 +110,6 @@ export function ServicePage({
         heading={close.heading}
         body={[close.body, close.note]}
         points={close.points}
-        texture={<TextureClosing />}
         form={
           <EnquiryForm
             action={formAction}

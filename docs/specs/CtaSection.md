@@ -943,3 +943,15 @@ Supersedes the K and close notes in § 0's amendment block where they differ:
   beside the method's steps rather than deliberately quiet.
 - The service page sets the offer's points as a check row (`markers="icon"`, `check-circle`): the
   01/02 numeral is the page's sequence device and a third run of it made the accent repetition.
+
+## Amendment · 7 Oct 2026 — the close is tinted, without texture (owner)
+
+- The closes (`split`, `open`) default to `surface="tint"`; `offer` keeps paper. Pass `surface` to
+  override. The page then steps paper → tint → the ink footer, so the last band reads as a closer.
+- The `texture` slot is withdrawn from CtaSection (types, the `.textureField` placement and the open
+  arrangements' texture), and every `<TextureClosing />` call site is removed. The `closing` recipe stays
+  in Texture for the post-review texture rework. With the slot gone, the "present, it sets
+  `density=\"open\"`" rule goes too (there is no open density any more).
+- A close composed from ContentSection (`arrangement="media"` with a form — kit About, kit form 02/03)
+  sets `surface="tint"` at its call site, the same rule.
+

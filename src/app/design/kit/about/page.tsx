@@ -419,6 +419,7 @@ export default function KitAboutPage() {
       {/* 10 · L — the close: the compact form beside the studio's own crit, at the end. */}
       <ContentSection
         data-band="L"
+        surface="tint"
         arrangement="media"
         media={{ image: CLOSE_PHOTO, side: 'end', head: 'title' }}
         eyebrow="Work with the studio"

@@ -5,11 +5,9 @@ import {
   ClientMark,
   Icon,
   Layout,
-  Media,
   RatingBadge,
   Section,
   Stat,
-  TextureClosing,
   type IconName,
 } from '@/components';
 import { getNavigation } from '@/content';
@@ -34,7 +32,6 @@ import {
   type ProofQuote,
   type Step,
 } from '@/patterns';
-import { HEAD_TRACK } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
@@ -502,7 +499,6 @@ export default async function KitHomePage() {
             scheduleHref={ROUTES.contact}
           />
         }
-        texture={<TextureClosing />}
       />
     </>
   );

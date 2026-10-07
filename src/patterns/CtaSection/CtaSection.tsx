@@ -128,7 +128,9 @@ type CtaSectionBaseProps = {
    * A prop here rather than an inherited attribute, and it is the same conclusion `SiteNav` and
    * `PageHero` reached: this component IS the band, so it has no ancestor to read `data-surface`
    * from. Passing it through is not the same as owning the ground — the stylesheet paints nothing.
-   * The close sits on paper (§ 3.4 L); tint is a specimen's surface proof only.
+   * The CLOSES (`split`, `open`) default to tint (owner, 7 Oct 2026): the page's last band reads
+   * as a closer, stepping paper → tint → the ink footer. The mid-page `offer` defaults to paper — a
+   * tinted offer would spend the signal that says "this is the end". Pass `surface` to override.
    */
   surface?: SectionSurface;
   /**
@@ -181,9 +183,7 @@ type CtaPointsProps =
 
      media    the K offer's photograph — on the offer with ACTIONS only. A photo beside a compact
               form is cmp-form's L-photo variation, composed there; and a close carries no photograph
-              on the service pages (§ 5.6: the close is copy, form and texture).
-     texture  the closes only (split, open). The K offer's photo fills its band, so it carries no
-              texture (§ 4.3's band table: K spends its solid; L spends its solid and `closing`).
+              on the service pages (§ 5.6: the close is copy and form, on tint — owner, 7 Oct 2026).
 
    One more constraint rides on the form/actions pairing: a form allows only the empty `actions`
    tuple, because the form's own submit is the primary ask and a second primary beside it is two
@@ -217,16 +217,6 @@ type CtaSplitProps = {
    * between the lede and the strip at 1470 — the dead column § 3.2 warns about.
    */
   contact?: readonly CtaContact[];
-  /**
-   * The close's texture — `<TextureClosing />`, the `closing` recipe (§ 6.3). A node, so the recipe
-   * and its numbers stay Texture's; the PLACEMENT is this band's. From 1024 it fills a field that
-   * starts a `stack` (48) under the copy's last line and runs to the band's bottom edge, the width
-   * of the copy column — so it can never sit under text, and the form column stays clean. Below
-   * 1024 the field dissolves and the texture covers the band, where the recipe draws `horizon`.
-   * Present, it sets the band at `density="open"` (128): the close is the page's last beat, and the
-   * deeper foot is the ground the equaliser rises from.
-   */
-  texture?: ReactNode;
 };
 
 type CtaOpenProps = {
@@ -243,8 +233,6 @@ type CtaOpenProps = {
   proof?: ReactNode;
   media?: never;
   contact?: never;
-  /** As on `split`. */
-  texture?: ReactNode;
 };
 
 type CtaOfferWithFormProps = {
@@ -255,7 +243,6 @@ type CtaOfferWithFormProps = {
   proof?: never;
   media?: never;
   contact?: never;
-  texture?: never;
 };
 
 type CtaOfferWithActionsProps = {
@@ -272,7 +259,6 @@ type CtaOfferWithActionsProps = {
    */
   media?: CtaMedia;
   contact?: never;
-  texture?: never;
 };
 
 export type CtaSectionProps = CtaSectionBaseProps &
@@ -705,6 +691,9 @@ const LANDSCAPE_FRAMES = [3 / 2, 3 / 2, 4 / 3] as const;
  * A server component in effect: `useId` is the only hook, there is no state, no effect, no ref and
  * no DOM handler.
  */
+/** The closes' ground (owner, 7 Oct 2026): see `surface`. */
+const CLOSE_SURFACE: SectionSurface = 'tint';
+
 export function CtaSection(props: CtaSectionProps) {
   /* The heading owns the region's name. `useId` rather than a caller-supplied id, because two
      instances on one route would otherwise have to be told apart by hand — and the id is only ever
@@ -736,13 +725,12 @@ export function CtaSection(props: CtaSectionProps) {
     if (hasProof) {
       return (
         <Section
-          surface={props.surface}
+          surface={props.surface ?? CLOSE_SURFACE}
           id={props.id}
           data-band={props['data-band']}
           aria-labelledby={headingId}
           data-arrangement="open"
         >
-          {present(props.texture) ? props.texture : null}
           <Layout
             columns={{ base: 1, lg: [3, 2] }}
             colGap="section"
@@ -770,13 +758,12 @@ export function CtaSection(props: CtaSectionProps) {
        row and buttons, which read as a document with an empty right half. */
     return (
       <Section
-        surface={props.surface}
+        surface={props.surface ?? CLOSE_SURFACE}
         id={props.id}
         data-band={props['data-band']}
         aria-labelledby={headingId}
         data-arrangement="open"
       >
-        {present(props.texture) ? props.texture : null}
         <div className={styles.centred}>
           <Layout rowGap="stack">
             {lede({ scale: 'open', centred: true })}
@@ -978,21 +965,16 @@ export function CtaSection(props: CtaSectionProps) {
      No proof row: see `CtaSplitProps.proof`. */
   const contact = props.contact ?? [];
   const hasContact = contact.some((cell) => cell.label.trim() && cell.value.trim());
-  const hasTexture = present(props.texture);
   const hasForm = isValidElement(props.form);
 
   return (
     <Section
-      surface={props.surface}
+      surface={props.surface ?? CLOSE_SURFACE}
       id={props.id}
       data-band={props['data-band']}
       aria-labelledby={headingId}
       data-arrangement="split"
     >
-      {/* The `closing` field: the band's foot, edge to edge, a direct child of the Section so it is
-          placed against the band (`.textureField`). It sits in the open padding a `stack` under
-          the lowest line of either column, so it never runs under text. */}
-      {hasTexture ? <div className={styles.textureField}>{props.texture}</div> : null}
       <Layout
         columns={hasForm ? { base: 1, lg: [1, 1], xl: [10, 7] } : undefined}
         colGap={hasForm ? 'section' : undefined}

@@ -448,8 +448,12 @@ service fixture in `docs/content-changes.md`, with the old and new text.
 - **The seam is 96 + 96 = 192** between any two bands. Section keeps both paddings, as it has since
   30 Sep.
 - **There is no blue band** (§ 4). The footer is ink.
-- **Paper carries the page.** One band per page goes to **tint**: the proof band (G), placed mid-page.
-  The slim announcement strip (§ 3.4) may also sit on tint. It is a strip, not a band.
+- **Paper carries the page.** Tint marks two things: the proof band (G), placed mid-page, and **the
+  close** (L — the page's last band; owner, 7 Oct 2026), so the page steps paper → tint → the ink
+  footer and the end reads as an ending. More than one tint band on a page is fine when they are
+  well apart; never two adjacent. The mid-page offer (K) stays paper: a tinted offer would spend the
+  ending's signal. The close carries no texture for now (textures are to be reworked after the
+  7 Oct review). The slim announcement strip (§ 3.4) may also sit on tint. It is a strip, not a band.
 
 **Paper runs of 4 or 5 bands need something that marks where one band ends.** Every page uses all three
 of these devices:

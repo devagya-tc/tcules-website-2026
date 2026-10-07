@@ -255,29 +255,3 @@
   font: var(--cta-body-text);
 }
 
-/* ── The split close's texture field ───────────────────────────────────────────
-   Where the `closing` equaliser rises (final fix round). The field is the box the Texture fills:
-   sizing and positioning one box for a bleed layer, not arranging siblings — the same escape Section
-   documents for its own bleed layers.
-
-   THE FIELD IS THE BAND'S FOOT, edge to edge (page-product-design fix round 1, 7 Oct 2026). It
-   was the copy column's width under the copy's last line, and on a close whose copy ran as long
-   as its form that left an ~80-tall fragment which stopped mid-column under the points: it read as
-   truncated, not as a signature, and at 390 the blurred horizon under the form was all but gone.
-   Now it is the open band's bottom padding, the full width of the band, at every width:
-
-     bottom  the band's own bottom edge, so the columns rise FROM it.
-     height  the open padding (--gap-section-open, 128 — what `density="open"` resolves to, and
-             CtaSection sets that density whenever it renders a texture) less a `stack` (48): it
-             stops a stack under the lowest line of either column, so it never sits under text.
-     inline  the band, edge to edge — under the form column too, which it clears by that stack.
-
-   The field is a direct child of the Section, which is the band's positioned box (Section.module.css:
-   the containing block for bleed layers), so nothing here restates the column or the gutter. */
-.textureField {
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0;
-  block-size: calc(var(--gap-section-open) - var(--gap-stack));
-  pointer-events: none;
-}
