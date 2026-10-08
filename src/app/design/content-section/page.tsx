@@ -944,7 +944,7 @@ export default function ContentSectionSpecimen() {
         heading="Two pieces of work that argue the same point"
         headingId="csec-beside-actions"
         lead="A rebuilt workflow and a design system, both settled at the model before a screen was drawn."
-        actions={<CtaRow actions={[START, SEE_WORK]} emphasis="solid" converts rule={false} />}
+        actions={<CtaRow actions={[SEE_WORK]} rule={false} />}
       >
         <PairCards />
       </ContentSection>
@@ -1004,7 +1004,7 @@ export default function ContentSectionSpecimen() {
           heading={HEADING_LONG}
           headingId="csec-split-long"
           lead={LEAD_LONG}
-          actions={<CtaRow actions={[START, HOW]} emphasis="solid" converts rule={false} />}
+          actions={<CtaRow actions={[START]} rule={false} />}
         >
           <Cards />
         </ContentSection>
@@ -1016,7 +1016,9 @@ export default function ContentSectionSpecimen() {
         and the actions sit at the row&rsquo;s end from 1024, their top on the heading&rsquo;s
         top — the eyebrow keeps its own line above both. A content-sized track, 64 from the
         text. Below 1024 the actions fall back a stack under the lead. Stacked heads only; the
-        link-row form and the solid pair, then the longest heading and lead against it.
+        link row on paper and on tint, then the longest heading and lead against it. An in-band
+        action is always a link (r7-buttons, 8 Oct 2026): the solid pair is the hero&rsquo;s and
+        the close&rsquo;s.
       </Label>
       <ContentSection
         eyebrow="Actions at the end · link"
@@ -1030,12 +1032,12 @@ export default function ContentSectionSpecimen() {
       </ContentSection>
       <ContentSection
         surface="tint"
-        eyebrow="Actions at the end · solid pair"
+        eyebrow="Actions at the end · on tint"
         heading="Two pieces of work that argue the same point"
         headingId="csec-actions-end-pair"
         lead="A rebuilt workflow and a design system, both settled at the model before a screen was drawn."
         actionsAt="end"
-        actions={<CtaRow actions={[START, SEE_WORK]} emphasis="solid" converts rule={false} />}
+        actions={<CtaRow actions={[HOW]} rule={false} />}
       >
         <PairCards />
       </ContentSection>
@@ -1046,9 +1048,7 @@ export default function ContentSectionSpecimen() {
           headingId="csec-actions-end-long"
           lead={LEAD_LONG}
           actionsAt="end"
-          actions={
-            <CtaRow actions={[START, SEE_WORK]} emphasis="solid" converts rule={false} />
-          }
+          actions={<CtaRow actions={[START]} rule={false} />}
         >
           <PairCards />
         </ContentSection>
@@ -1130,7 +1130,7 @@ export default function ContentSectionSpecimen() {
         heading="Start with the decision in front of you"
         headingId="csec-media-actions"
         lead="A thirty-minute call about the decision you are facing, and a written note of what we would do first."
-        actions={<CtaRow actions={[START, HOW]} emphasis="solid" converts rule={false} />}
+        actions={<CtaRow actions={[START]} rule={false} />}
       />
       <ContentSection
         arrangement="media"
@@ -1236,8 +1236,6 @@ export default function ContentSectionSpecimen() {
         footer={
           <CtaRow
             actions={[START]}
-            emphasis="solid"
-            converts
             note="Every engagement starts with a thirty-minute call."
             rule={false}
           />

@@ -6,7 +6,10 @@
 
    Naming: --btn-{emphasis}-{colour}-{part}-{state}
            emphasis  solid | ghost | link | outline
-           colour    primary (Brandeis) | neutral (ink) — outline is primary only
+           colour    primary (Brandeis) | neutral (ink) — solid and outline are primary
+                     only. The ink solid (--btn-solid-neutral-*) was retired on 8 Oct 2026
+                     (r7-buttons): the solid is the page's one main action, always blue, and
+                     neutral survives on ghost and link for site chrome alone.
            part      bg | fg          — a control has a background and a foreground;
                                         a SURFACE has a ground and an ink (section.css)
                      rule             — outline's hairline border, the one emphasis with an edge
@@ -118,11 +121,6 @@
   --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
   --btn-solid-primary-bg-busy: var(--color-brandeis-700);
   --btn-solid-primary-fg: var(--color-white);
-  --btn-solid-neutral-bg: var(--color-neutral-950);
-  --btn-solid-neutral-bg-hover: var(--color-neutral-800);
-  --btn-solid-neutral-bg-pressed: var(--color-neutral-700);
-  --btn-solid-neutral-bg-busy: var(--color-neutral-700);
-  --btn-solid-neutral-fg: var(--color-paper);
   --btn-ghost-primary-fg: var(--color-brandeis-500);
   --btn-ghost-primary-fg-pressed: var(--color-brandeis-600);
   --btn-ghost-primary-bg-hover: var(--color-brandeis-50);
@@ -166,11 +164,6 @@
   --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
   --btn-solid-primary-bg-busy: var(--color-brandeis-700);
   --btn-solid-primary-fg: var(--color-white);
-  --btn-solid-neutral-bg: var(--color-neutral-950);
-  --btn-solid-neutral-bg-hover: var(--color-neutral-800);
-  --btn-solid-neutral-bg-pressed: var(--color-neutral-700);
-  --btn-solid-neutral-bg-busy: var(--color-neutral-700);
-  --btn-solid-neutral-fg: var(--color-paper);
   --btn-ghost-primary-fg: var(--color-brandeis-500);
   --btn-ghost-primary-fg-pressed: var(--color-brandeis-600);
   --btn-ghost-primary-bg-hover: var(--color-brandeis-100);
@@ -209,8 +202,8 @@
    restated rather than inherited, because inheriting it means an ink panel nested in a
    blue section would pick up blue's INVERTED primary.
 
-   The neutrals reverse. Two values are contrast floors rather than preferences — blue
-   as ink and blue as a 2px ring both reach only 2.77:1 on neutral-950, so a blue label
+   The neutrals reverse (ghost and link; there is no neutral solid). Two values are
+   contrast floors rather than preferences — blue as ink and blue as a 2px ring both reach only 2.77:1 on neutral-950, so a blue label
    lifts to 200 (10.48:1) and the ring to 300 (7.32:1). A ghost carries neutral fills in
    both steps, 900 then 800, and never a blue tint: at the pale end of the blue ramp
    there is no tint left to see. link-neutral runs white → 300 → 200.            */
@@ -220,11 +213,6 @@
   --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
   --btn-solid-primary-bg-busy: var(--color-brandeis-700);
   --btn-solid-primary-fg: var(--color-white);
-  --btn-solid-neutral-bg: var(--color-paper);
-  --btn-solid-neutral-bg-hover: var(--color-neutral-200);
-  --btn-solid-neutral-bg-pressed: var(--color-neutral-300);
-  --btn-solid-neutral-bg-busy: var(--color-neutral-300);
-  --btn-solid-neutral-fg: var(--color-neutral-950);
   --btn-ghost-primary-fg: var(--color-brandeis-200);
   --btn-ghost-primary-fg-pressed: var(--color-brandeis-200);
   --btn-ghost-primary-bg-hover: var(--color-neutral-900);
@@ -259,7 +247,8 @@
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
    The one surface where the primary cannot be blue. Solid primary inverts to paper
-   with an ink label; ghost fills with the ramp below the ground, 600 then 700.
+   with an ink label — still the primary, inverted, not an ink solid; ghost fills with the
+   ramp below the ground, 600 then 700.
    Primary and neutral collapse for ghost and link — both read white — and that is
    correct: on a blue field there is one voice.
 
@@ -273,11 +262,6 @@
   --btn-solid-primary-bg-pressed: var(--color-neutral-300);
   --btn-solid-primary-bg-busy: var(--color-neutral-300);
   --btn-solid-primary-fg: var(--color-neutral-950);
-  --btn-solid-neutral-bg: var(--color-neutral-950);
-  --btn-solid-neutral-bg-hover: var(--color-neutral-900);
-  --btn-solid-neutral-bg-pressed: var(--color-neutral-800);
-  --btn-solid-neutral-bg-busy: var(--color-neutral-800);
-  --btn-solid-neutral-fg: var(--color-paper);
   --btn-ghost-primary-fg: var(--color-white);
   --btn-ghost-primary-fg-pressed: var(--color-white);
   --btn-ghost-primary-bg-hover: var(--color-brandeis-600);

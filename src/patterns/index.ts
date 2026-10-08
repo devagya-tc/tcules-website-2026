@@ -65,8 +65,8 @@
  * beside a photograph (the media split) — and a centred alignment of the first. Every one is
  * Layout's props rather than a second component.
  *
- * CtaRow is a band's FOOT: a hairline and one or two actions, with an optional note — the
- * section-level ask the kit's families share (visual-direction § 3.1, § 1.4). It owns no band and
+ * CtaRow is a band's FOOT: a hairline and one link action, with an optional note — the
+ * section-level action the kit's families share (visual-direction § 3.1, § 1.4). It owns no band and
  * no ground, and is placed in ContentSection's `footer` or, with its rule off, its `actions`: a
  * ReactNode slot, because a pattern does not import a pattern. It is a pattern for the usual two
  * reasons — a content shape (`{ label, href }`) and a composition of Button, Icon, Cluster and Layout.
@@ -249,7 +249,6 @@ export type {
   CtaRowProps,
   CtaRowAction,
   CtaRowAlign,
-  CtaRowEmphasis,
 } from './CtaRow';
 
 export { Slider } from './Slider';

@@ -9,7 +9,6 @@ import {
   type HeroAction,
 } from '@/patterns';
 import { heroTrail } from '@/lib/trail';
-import { leadConverts } from '@/lib/conversion';
 
 /**
  * One case study as the index shows it. The template's own shape, not the view model's: a template
@@ -124,7 +123,6 @@ export function CaseStudyIndex({ breadcrumbs, hero, items, closing }: CaseStudyI
           eyebrow={closing.eyebrow || undefined}
           heading={closing.heading}
           body={closing.body?.trim() ? [closing.body] : undefined}
-          converts={leadConverts([closing.action])}
           actions={[closing.action]}
         />
       ) : null}

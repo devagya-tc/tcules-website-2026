@@ -345,7 +345,6 @@ export default function KitServicesIndexPage() {
         body={[
           'Design, systems, engineering and modernisation, run as one practice by the same senior team.',
         ]}
-        converts
         actions={[
           { label: 'Book an intro call', href: ROUTES.contact },
           { label: 'Find your service', href: '#si-services' },
@@ -453,11 +452,7 @@ export default function KitServicesIndexPage() {
           'For when the brief is still an argument. You leave with evidence, a direction and a price for it.',
         ]}
         points={SPRINT_POINTS}
-        converts
-        actions={[
-          { label: 'Plan a sprint', href: ROUTES.contact },
-          { label: 'How discovery works', href: ROUTES.howWeWork },
-        ]}
+        actions={[{ label: 'Plan a sprint', href: ROUTES.contact }]}
         media={{
           image: { ...photo('workshop-whiteboard-lounge'), focus: { x: 0.56, y: 0.5 } },
           side: 'end',
@@ -501,7 +496,6 @@ export default function KitServicesIndexPage() {
           'Describe what is not working. We will tell you which service fits, or whether you need one at all.',
         ]}
         points={NEXT}
-        converts
         actions={[
           { label: 'Book an intro call', href: ROUTES.contact },
           { label: 'Write to the studio', href: 'mailto:hello@tcules.com' },

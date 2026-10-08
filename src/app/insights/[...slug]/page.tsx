@@ -6,7 +6,6 @@ import { Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getBlogPage, type BlogBlock, type BlogImage } from '@/content';
 import { blogPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
-import { leadConverts } from '@/lib/conversion';
 import {
   BlockCard,
   Breadcrumbs,
@@ -387,7 +386,6 @@ export default async function BlogPage({ params }: BlogPageProps) {
           surface="tint"
           heading={blog.cta.heading}
           body={blog.cta.body}
-          converts={leadConverts(blog.cta.actions)}
           actions={blog.cta.actions}
         />
       ) : null}

@@ -20,7 +20,6 @@ import {
 } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail, pageName } from '@/lib/trail';
-import { leadConverts } from '@/lib/conversion';
 import {
   Accordion,
   BlockCard,
@@ -306,7 +305,6 @@ export default async function HowWeWorkPage() {
         title={page.title}
         eyebrow={eyebrowBesideTrail(name.eyebrow, crumbs)}
         body={[page.hero.description]}
-        converts={leadConverts(heroActions)}
         actions={heroActions}
         surface="paper"
       >
@@ -363,7 +361,6 @@ export default async function HowWeWorkPage() {
           body={page.cta.body}
           eyebrow={page.cta.eyebrow}
           points={page.cta.points}
-          converts={leadConverts(page.cta.actions)}
           actions={page.cta.actions}
         />
       ) : null}

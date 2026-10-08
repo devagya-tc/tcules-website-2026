@@ -41,7 +41,7 @@ export const metadata: Metadata = {
  *    6  G   the proof band on tint: one featured client with a stock portrait, mirrored
  *    7  S   the studio in four blue numerals in one row under its stacked head — not a head beside a grid
  *    8  I   THE IMAGE MOMENT, beside: the whiteboard at 3:2 in the 7, the copy centred on it in 5
- *    9  K   careers, a centred moment: the head, three offers in a row, the asks centred under them
+ *    9  K   careers, a centred moment: the head, three offers in a row, one link centred under them
  *   10  L   the close: the compact form beside the studio's own crit photograph, at the END
  *
  * Shapes (fix round 2): the lower half alternates split (G), row (S), split (I), centred (K),
@@ -185,7 +185,7 @@ const STATS = [
 ] as const;
 
 /* ── 9 · K careers, centred ────────────────────────────────────────────────────────────────
-   Three offers as icon tiles (≤ 5 / ≤ 12 words) in one row under a centred head, the two asks
+   Three offers as icon tiles (≤ 5 / ≤ 12 words) in one row under a centred head, the one link
    centred under them (fix round 2: the beside offer and the photo-beside-form close were two splits
    back to back). What the offer contains, not a sequence, so icons rather than numerals. */
 const ROLE_POINTS = [
@@ -252,7 +252,6 @@ export default function KitAboutPage() {
         body={[
           'Researchers, designers and engineers in one room, from decision to code.',
         ]}
-        converts
         actions={[
           { label: 'Work with us', href: ROUTES.contact },
           { label: 'Meet the team', href: ROUTES.team },
@@ -382,7 +381,7 @@ export default function KitAboutPage() {
         image={photo('whiteboard-two-hands')}
       />
 
-      {/* 9 · K — careers, a centred moment: three offers in a row, the asks centred under them. */}
+      {/* 9 · K — careers, a centred moment: three offers in a row, the one link centred under them. */}
       <ContentSection
         data-band="K"
         align="center"
@@ -391,15 +390,7 @@ export default function KitAboutPage() {
         headingId="about-careers"
         lead="We hire a few senior people a year, and every one of them works on real products from the first week."
         footer={
-          <CtaRow
-            align="center"
-            emphasis="solid"
-            converts={false}
-            actions={[
-              { label: 'See open roles', href: ROUTES.careers },
-              { label: 'How we hire', href: ROUTES.team },
-            ]}
-          />
+          <CtaRow align="center" actions={[{ label: 'See open roles', href: ROUTES.careers }]} />
         }
       >
         <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="stack">

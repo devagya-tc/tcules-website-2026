@@ -185,22 +185,10 @@
   background: var(--btn-solid-primary-bg-pressed);
 }
 
-.solid.neutral {
-  background: var(--btn-solid-neutral-bg);
-  color: var(--btn-solid-neutral-fg);
-}
+/* There is no `.solid.neutral`: the solid is the page's one main action and it is always blue
+   (r7-buttons, 8 Oct 2026). Button.tsx types a solid primary-only, so the class is never emitted.
 
-.solid.neutral.live:hover,
-.solid.neutral.live:focus-visible {
-  background: var(--btn-solid-neutral-bg-hover);
-}
-
-.solid.neutral.live:active,
-.solid.neutral.live.active {
-  background: var(--btn-solid-neutral-bg-pressed);
-}
-
-/* A solid button's label never moves — not on hover, not on press, on any surface — which is why
+   A solid button's label never moves — not on hover, not on press, on any surface — which is why
    the token layer declares no --btn-solid-*-fg-pressed for these rules to read. The absence is
    the assertion. */
 
@@ -331,10 +319,6 @@
 
 .solid.primary.busy {
   background: var(--btn-solid-primary-bg-busy);
-}
-
-.solid.neutral.busy {
-  background: var(--btn-solid-neutral-bg-busy);
 }
 
 .ghost.primary.busy {

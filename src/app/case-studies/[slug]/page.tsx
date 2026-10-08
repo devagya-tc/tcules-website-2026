@@ -6,7 +6,6 @@ import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components
 import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
-import { leadConverts } from '@/lib/conversion';
 import {
   BlockCard,
   Breadcrumbs,
@@ -333,7 +332,6 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
           surface="tint"
           heading={caseStudy.cta.heading}
           body={caseStudy.cta.body}
-          converts={leadConverts(caseStudy.cta.actions)}
           actions={caseStudy.cta.actions}
         />
       ) : null}

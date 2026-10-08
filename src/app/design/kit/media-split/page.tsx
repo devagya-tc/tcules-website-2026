@@ -231,7 +231,6 @@ const QUESTIONS = [
 ];
 
 const PLAN_DISCOVERY = { label: 'Plan a discovery', href: ROUTES.contact };
-const SEE_PLAN = { label: 'See a sample plan', href: ROUTES.caseStudies };
 const SEE_WORK = { label: 'See the work', href: ROUTES.caseStudies };
 const TALK_ENGINEERING = { label: 'Talk to an engineer', href: ROUTES.contact };
 
@@ -431,12 +430,7 @@ export default function MediaSplitKitSpecimen() {
           headingId="b-ask"
           lead="A fixed engagement that ends in a ranked plan, with the evidence for every item on it."
           footer={
-            <CtaRow
-              actions={[PLAN_DISCOVERY, SEE_PLAN]}
-              emphasis="solid"
-              converts
-              note="Most of our engagements start here."
-            />
+            <CtaRow actions={[PLAN_DISCOVERY]} note="Most of our engagements start here." />
           }
         >
           <Tiles tiles={DISCOVERY_TILES} columns={{ base: 1, md: 2, lg: 1, xl: 2 }} />
@@ -497,14 +491,7 @@ export default function MediaSplitKitSpecimen() {
           heading="Designed to ship"
           headingId="b-mirror"
           lead="Engineers sit in the design reviews from the first week, so what we draw is what ships."
-          actions={
-            <CtaRow
-              actions={[TALK_ENGINEERING, SEE_WORK]}
-              emphasis="solid"
-              converts
-              rule={false}
-            />
-          }
+          actions={<CtaRow actions={[TALK_ENGINEERING]} rule={false} />}
         />
       </Variant>
     </>

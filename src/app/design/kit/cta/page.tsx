@@ -34,7 +34,7 @@ import t from '../../_specimen/typeroles.module.css';
  * filled a third of the crop), every one `quiet` (§ 5.5 rule 3), all from the neutral family so the
  * page never mixes warm and cool (§ 5.5 rule 1). Portrait masters where the frame is 4:5, so the
  * crop is drawn from pixels rather than upscaled. Texture: the `closing` recipe (TextureClosing,
- * § 6.3 as amended) on the three closes — no number is written here. Blue: the solid ask, the point
+ * § 6.3 as amended) on the three closes — no number is written here. Blue: the closes' solid ask, the offers' links, the point
  * markers and glyphs, every link and its arrow.
  */
 
@@ -255,13 +255,13 @@ export default function KitCtaSpecimen() {
         </Layout>
       </Section>
 
-      {/* ── 01 · K offer, numbered, solid + ghost──────────────────────────────────────────── */}
+      {/* ── 01 · K offer, numbered, its one link ─────────────────────────────────────────── */}
       <Title id="k-offer">
         [7, 5]: H-full, a lede held narrower than its heading, three one-line numbered points
         and the actions in the 667 copy column; a quiet 4:5 photograph in the 477 track. The
-        head sits on the photo&rsquo;s top edge and the actions on its foot (§ 3.2 rule 1).
-        Solid first, no arrow, then its partner: a blue ghost with the arrow (owner, 7 Oct
-        2026).
+        head sits on the photo&rsquo;s top edge. The offer is mid-page, so its action is the
+        blue link button with the arrow, never a solid: the page&rsquo;s one solid is the
+        hero&rsquo;s and the close&rsquo;s (r7-buttons, owner 7 Oct as corrected 8 Oct).
       </Title>
       <CtaSection
         arrangement="offer"
@@ -271,11 +271,7 @@ export default function KitCtaSpecimen() {
           'A senior designer reviews one critical journey and returns a ranked list of what to change first.',
         ]}
         points={AUDIT_POINTS}
-        converts
-        actions={[
-          { label: 'Request the audit', href: ROUTES.uxProductAudit },
-          { label: 'See a sample report', href: ROUTES.audits },
-        ]}
+        actions={[{ label: 'Request the audit', href: ROUTES.uxProductAudit }]}
         media={{ image: photo('designer-monitor-ui') }}
       />
 
@@ -283,7 +279,7 @@ export default function KitCtaSpecimen() {
       <Title id="k-icons">
         The same band with Solar Bold glyphs in place of numerals, in the marker&rsquo;s blue —
         the points are what the offer contains, not a sequence, so the list is a <code>ul</code>
-        . One solid action.
+        . One link action.
       </Title>
       <CtaSection
         arrangement="offer"
@@ -294,7 +290,6 @@ export default function KitCtaSpecimen() {
           'We audit tokens, components and adoption across your products, then show where drift slows delivery.',
         ]}
         points={HEALTH_POINTS}
-        converts
         actions={[{ label: 'Book a health check', href: ROUTES.designSystemAudit }]}
         media={{ image: photo('pencil-wireframe-red') }}
       />
@@ -313,11 +308,7 @@ export default function KitCtaSpecimen() {
           'A fixed-scope sprint for when the brief is still an argument. You leave with evidence, not opinions.',
         ]}
         points={SPRINT_POINTS}
-        converts
-        actions={[
-          { label: 'Plan a sprint', href: ROUTES.contact },
-          { label: 'How discovery works', href: ROUTES.howWeWork },
-        ]}
+        actions={[{ label: 'Plan a sprint', href: ROUTES.contact }]}
         media={{ image: photo('pair-at-laptop-sticky-wall') }}
       />
 
@@ -335,11 +326,7 @@ export default function KitCtaSpecimen() {
           'An expert review against WCAG 2.2 AA, with every issue mapped to the component that causes it and the change that closes it.',
         ]}
         points={REVIEW_POINTS}
-        converts
-        actions={[
-          { label: 'Request a review', href: ROUTES.audits },
-          { label: 'What we test', href: ROUTES.howWeWork },
-        ]}
+        actions={[{ label: 'Request a review', href: ROUTES.audits }]}
       />
 
       {/* ── 05 · K offer, photo at start ───────────────────────────────────────────────────── */}
@@ -355,10 +342,8 @@ export default function KitCtaSpecimen() {
           'Start with a two-week assessment of one legacy journey and the decisions buried inside it.',
         ]}
         points={MODERNISE_POINTS}
-        converts
         actions={[
           { label: 'Start an assessment', href: ROUTES.productModernisationAssessment },
-          { label: 'Read a case study', href: ROUTES.caseStudies },
         ]}
         media={{ image: photo('wireframe-wall'), side: 'start' }}
       />
@@ -378,11 +363,7 @@ export default function KitCtaSpecimen() {
           'A facilitated session for the people who have to live with the answer, run by the designers who will build it.',
         ]}
         points={WORKSHOP_POINTS}
-        converts
-        actions={[
-          { label: 'Book the workshop', href: ROUTES.contact },
-          { label: 'See the agenda', href: ROUTES.howWeWork },
-        ]}
+        actions={[{ label: 'Book the workshop', href: ROUTES.contact }]}
         media={{ image: photo('whiteboard-two-hands'), frame: 'landscape' }}
       />
 
@@ -454,7 +435,6 @@ export default function KitCtaSpecimen() {
           'Read three engagements like yours, or book a call and we will sketch a first phase with you.',
         ]}
         points={OPEN_POINTS}
-        converts
         actions={[
           { label: 'Book a call', href: ROUTES.contact },
           { label: 'See case studies', href: ROUTES.caseStudies },
@@ -548,11 +528,7 @@ export default function KitCtaSpecimen() {
           { label: 'Drift, ranked by who sees it' },
           { label: 'A handoff fix that holds' },
         ]}
-        converts
-        actions={[
-          { label: 'Request the audit', href: ROUTES.designToCodeAudit },
-          { label: 'What it covers', href: ROUTES.audits },
-        ]}
+        actions={[{ label: 'Request the audit', href: ROUTES.designToCodeAudit }]}
         media={{ image: photo('hands-trackpad') }}
       />
     </>

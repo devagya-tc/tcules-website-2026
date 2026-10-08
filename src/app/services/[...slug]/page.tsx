@@ -22,7 +22,6 @@ import {
 } from '@/content';
 import { ROUTES, servicePath } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail, pageName, slugLabel } from '@/lib/trail';
-import { leadConverts } from '@/lib/conversion';
 import {
   Accordion,
   BlockCard,
@@ -418,7 +417,6 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
         title={title}
         eyebrow={eyebrowBesideTrail(eyebrow, crumbs)}
         body={[service.hero.description]}
-        converts={leadConverts(heroActions)}
         actions={heroActions}
         surface="paper"
       >
@@ -488,8 +486,9 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
             heading={service.capabilitiesCta.heading}
             body={service.capabilitiesCta.body}
             points={service.capabilitiesCta.points}
-            converts={leadConverts(service.capabilitiesCta.actions)}
-            actions={service.capabilitiesCta.actions}
+            /* Mid-page, so ONE link (r7-buttons): the offer takes the first action and a second
+               is dropped until the model carries one (docs/strapi-changes.md § 17). */
+            actions={[service.capabilitiesCta.actions[0]]}
           />
         ) : (
           <CtaSection
@@ -498,7 +497,6 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
             heading={service.capabilitiesCta.heading}
             body={service.capabilitiesCta.body}
             points={service.capabilitiesCta.points}
-            converts={leadConverts(service.capabilitiesCta.actions)}
             actions={service.capabilitiesCta.actions}
           />
         )

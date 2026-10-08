@@ -35,8 +35,8 @@ import t from '../../_specimen/typeroles.module.css';
  * none appears twice. Grading is banned (ch05 § 5), so the family is held by SELECTION (fix round 2:
  * the warm studio snapshots on the audit cards and the warm, royal-blue-shirted aside in 01 were
  * replaced). Blue is the foreground accent only: every eyebrow's square, glyphs, a linked title on
- * hover, every link and its arrow, the rails' thumbs, the index numerals and the one
- * solid ask in the list router's head. Texture: one stepped `horizon` (TextureHorizon, § 6.3), at
+ * hover, every link and its arrow, the rails' thumbs and the index numerals (the list router's
+ * head action is a link since r7-buttons, 8 Oct 2026). Texture: one stepped `horizon` (TextureHorizon, § 6.3), at
  * the foot of the centred image router, directly above the change of ground into the tint list
  * router — the one place on the page where a band meets a different ground. It starts 56 under the
  * cards' last line; never behind cards or rows, never in the Slider. The hero carries none.
@@ -370,7 +370,6 @@ export default function ServiceListKitSpecimen() {
         body={[
           'Three ways a page routes a reader to the right service: icons beside a photograph, image cards, or ruled rows with a thumbnail.',
         ]}
-        converts={false}
         actions={[
           { label: 'See the routers', href: '#icon-six' },
           { label: 'All services', href: ROUTES.services },
@@ -434,7 +433,7 @@ export default function ServiceListKitSpecimen() {
       </ContentSection>
 
       {/* ── 03 · List router ───────────────────────────────────────────────────────────────── */}
-      {/* A beside head carrying the band's actions (one solid ask, its ghost partner) over three ruled,
+      {/* A beside head carrying the band's actions (one link — in-band, r7-buttons) over three ruled,
           linked ListCard rows: thumbnail, title, the condition under it. Three
           rows at most, so the head track never needs an aside as well (§ 1.4 rule 6). On tint, the
           page's one change of ground, so the run of paper bands breaks where the shape does. */}
@@ -448,15 +447,7 @@ export default function ServiceListKitSpecimen() {
         headingId="ksl-list"
         lead="Three neighbouring services, each for a different problem. If none is yours, a short call will find it."
         actions={
-          <CtaRow
-            rule={false}
-            emphasis="solid"
-            converts
-            actions={[
-              { label: 'Book a call', href: ROUTES.contact },
-              { label: 'All services', href: ROUTES.services },
-            ]}
-          />
+          <CtaRow rule={false} actions={[{ label: 'Book a call', href: ROUTES.contact }]} />
         }
       >
         <Layout as="ul" rowGap="none">

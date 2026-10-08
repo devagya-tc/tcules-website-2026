@@ -10,7 +10,6 @@ import {
 } from '@/content';
 import { blogPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
-import { leadConverts } from '@/lib/conversion';
 import { BlockCard, Breadcrumbs, CtaSection, PageHero } from '@/patterns';
 
 const INSIGHTS_SLUG = ROUTES.insights.slice(1);
@@ -186,7 +185,6 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
             surface="blue"
             heading={page.lab.heading}
             body={[page.lab.description]}
-            converts={leadConverts([page.lab.action])}
             actions={[page.lab.action]}
           />
         ) : (

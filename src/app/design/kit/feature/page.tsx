@@ -885,13 +885,8 @@ export default function FeatureKitSpecimen() {
         headingId={kf(6)}
         footer={
           <CtaRow
-            emphasis="solid"
-            converts
             note="Every engagement starts with a thirty-minute call."
-            actions={[
-              { label: 'Book a call', href: ROUTES.contact },
-              { label: 'How we work', href: ROUTES.howWeWork },
-            ]}
+            actions={[{ label: 'Book a call', href: ROUTES.contact }]}
           />
         }
       >
@@ -1101,15 +1096,7 @@ export default function FeatureKitSpecimen() {
         headingId={kf(19)}
         lead="Both started as a redesign brief. Both ended with a different product model, and a team that owns it."
         actions={
-          <CtaRow
-            rule={false}
-            emphasis="solid"
-            converts
-            actions={[
-              { label: 'Start a project', href: ROUTES.contact },
-              { label: 'All case studies', href: ROUTES.caseStudies },
-            ]}
-          />
+          <CtaRow rule={false} actions={[{ label: 'All case studies', href: ROUTES.caseStudies }]} />
         }
       >
         <BlockCardSet items={PAIR} lead="none" />

@@ -254,3 +254,11 @@
   text-transform: var(--text-mono-case);
   color: var(--color-brandeis-500);
 }
+
+/* A row that holds one control at the lg button's height, so a row of cells whose controls differ in
+   kind — a solid, a ghost, a bare link — keeps every cell's next line on one baseline (the Button
+   showcase's three kinds). Reads Button's own height token with the honesty .hitFloor takes: this IS
+   a stand-in for an lg button's box. A Cluster carries it, so the centring is the primitive's. */
+.controlRow {
+  min-block-size: var(--btn-height-lg);
+}

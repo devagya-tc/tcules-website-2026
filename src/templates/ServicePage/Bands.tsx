@@ -4,7 +4,6 @@ import { TextureHorizon } from '@/components';
 import { Banner, ContentSection, CtaRow, CtaSection, Statement, Thread } from '@/patterns';
 import { getKitPhoto } from '@/lib/photos';
 import type { StoryBlock } from '@/lib/service-story';
-import { leadConverts } from '@/lib/conversion';
 
 import {
   AsidePhoto,
@@ -335,8 +334,10 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
            the accent repetition. One glyph for every point, so no story has to choose icons. */
         markers="icon"
         points={offer.points?.map((point) => ({ ...point, icon: 'check-circle' as const }))}
-        converts={leadConverts(offer.actions)}
-        actions={offer.actions}
+        /* Mid-page, so the offer's action is ONE link (r7-buttons, 8 Oct 2026). The story still
+           allows two (software-development carries "See how we work" second); r7-pages narrows
+           StoryOffer to one and drops it there. Until then the first renders. */
+        actions={[offer.actions[0]]}
         media={
           band.photo
             ? {

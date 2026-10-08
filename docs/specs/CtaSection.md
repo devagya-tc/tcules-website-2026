@@ -1,6 +1,14 @@
 # CtaSection
 
-> **Owner amendment, 7 Oct 2026 — colour follows the kind of action** (visual-direction § 4.5,
+> **Owner amendment, 8 Oct 2026 — r7-buttons** (`docs/kit/review-7-oct.md`, visual-direction § 4.5,
+> `docs/specs/Button.md` § 14a). Supersedes the colour amendment below. `converts` is removed from
+> every arrangement and `@/lib/conversion` is deleted: there is no ink solid. The CLOSES (`open`,
+> `split`) carry the page's main action — `open` renders the blue solid, then at most its blue ghost
+> partner; `split`'s EnquiryForm submits with the blue solid. The mid-page **`offer` takes ONE action**
+> (`actions: readonly [CtaAction]`) and renders it as the blue link button with the arrow, because an
+> in-band action is a link ("Start with a UX Product Audit" inside a band is a link, not a button).
+
+> **Superseded 8 Oct.** ~~Owner amendment, 7 Oct 2026 — colour follows the kind of action~~ (visual-direction § 4.5,
 > `docs/specs/Button.md` § 14a). The `open` and `offer`-with-actions arrangements REQUIRE `converts:
 > boolean` (no default); the form arrangements refuse it (`converts?: never` — the submit always
 > converts and is always blue). The first action's solid is blue when it converts and ink when it does

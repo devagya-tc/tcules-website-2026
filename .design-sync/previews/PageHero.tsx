@@ -132,7 +132,7 @@ export function WithEyebrow() {
 }
 
 /** Nought, one or two actions — a third does not compile. POSITION decides emphasis: the first is
-    solid/primary, the second a neutral link, so there is no emphasis prop on an action. Both are
+    the blue solid, the second its blue ghost partner, so there is no emphasis prop on an action. Both are
     size="md" with the hit area extended to the 44px touch floor rather than the box stepped to 48,
     which is what keeps the hero's controls the same height as every other control on the site. */
 export function WithActions() {

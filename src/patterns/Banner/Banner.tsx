@@ -54,14 +54,11 @@ type BannerHeadProps = {
   lead?: string;
   /**
    * The head's action, a `stack` under the lead — in practice a `CtaRow` with `rule={false}`, so the
-   * one blue link (or one solid, with at most a ghost partner — owner, 7 Oct 2026) is the caller's
-   * composition and a pattern never imports a pattern.
+   * one blue link is the caller's composition and a pattern never imports a pattern.
    *
-   * A solid ask is `<CtaRow emphasis="solid" converts … />`: the caller states what the action IS
-   * and CtaRow derives the colour — blue when it converts ("Book an audit"), the same treatment as
-   * the hero's first action, and ink when it is a lead action that does not (owner, 7 Oct 2026,
-   * visual-direction § 4.5). Colour follows the kind of action, never the band, so the same ask can
-   * never read as two systems a scroll apart.
+   * ONE link, never a solid (r7-buttons, 8 Oct 2026): a banner is in-band, and the page's one main
+   * action — the blue solid and its ghost — belongs to the hero and the close. Until then a solid
+   * CtaRow that took `converts` was allowed here.
    */
   actions?: ReactNode;
   /**

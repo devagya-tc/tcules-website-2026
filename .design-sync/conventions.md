@@ -98,7 +98,8 @@ Two more rules that decide whether a composition is right:
 
 ### Components
 
-`Button` — `emphasis="solid|ghost|link"` × `tone="primary|neutral"`, `size="sm|md|lg"`, plus
+`Button` — `emphasis="solid|ghost|link"`; `tone="primary|neutral"` on ghost and link only (neutral is
+site chrome; the solid is always blue, the page's one main action — 8 Oct 2026), `size="sm|md|lg"`, plus
 `icon` / `iconLeft` (one side only), `iconOnly` (requires `aria-label`), `active`, `disabled`.
 A button that navigates is an anchor: `as="a" href="…"`. It never sets its own outer spacing —
 put it in a `Cluster`.
@@ -154,7 +155,7 @@ slots: `trail` (the Breadcrumbs, above everything), `eyebrow` (a category or for
 the title — never the page's own name or a named crumb's words, and never a section crumb on its
 own: "Case study · Fintech" under Home / Case studies, not "Case study"), `credits` (role groups — `author`, `host`,
 `guest`, `reviewer` — each with its own `people`), `dates` (`published`, optional `modified`), and
-`actions` (nought, one or two `{ label, href }`; the first renders solid, the second a neutral link).
+`actions` (nought, one or two `{ label, href }`; the first renders the blue solid, the second its blue ghost partner).
 `children` is a free slot between the byline and the actions. And `surface`, because this one
 brings its own band too.
 
