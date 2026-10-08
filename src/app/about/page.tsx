@@ -5,7 +5,6 @@ import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import { getAboutPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
-import { convertsByHref } from '@/lib/conversion';
 import { BlockCard, Breadcrumbs, ListCard, PageHero } from '@/patterns';
 
 const ABOUT_SLUG = ROUTES.about.slice(1);
@@ -324,10 +323,9 @@ export default async function AboutPage() {
                   <Button
                     as="a"
                     href={page.closing.action.href}
+                    /* The page's closing ask: the blue solid, whatever the action is (r7-buttons,
+                       8 Oct 2026 — the ink solid is retired). */
                     emphasis="solid"
-                    /* A CMS action: blue when it converts, ink when it does not (owner, 7 Oct
-                       2026 — colour follows the kind of action). */
-                    tone={convertsByHref(page.closing.action.href) ? 'primary' : 'neutral'}
                     size="lg"
                   >
                     {page.closing.action.label}

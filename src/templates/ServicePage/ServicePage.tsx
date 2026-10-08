@@ -9,7 +9,6 @@ import type { ServiceStory } from '@/lib/service-story';
 import { ANCHORS, ROUTES, servicePath } from '@/lib/routes';
 import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { heroTrail } from '@/lib/trail';
-import { leadConverts } from '@/lib/conversion';
 
 import { BandView } from './Bands';
 import { planBands, type Band } from './plan';
@@ -79,7 +78,6 @@ export function ServicePage({
         ))}
         title={hero.title}
         body={[hero.lead]}
-        converts={leadConverts(hero.actions)}
         actions={hero.actions}
         arrangement="beside"
         media={{

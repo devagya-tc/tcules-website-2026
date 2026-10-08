@@ -5,11 +5,16 @@ import { cx } from '@/lib/cx';
 import styles from './Button.module.css';
 
 /**
- * How loud the button is.
+ * How loud the button is. Three labelled kinds, one per job (owner, 7 Oct 2026 as corrected 8 Oct —
+ * docs/kit/review-7-oct.md r7-buttons):
  *
- *   solid  the one action a view is asking for
- *   ghost  the default secondary — no outline, the fill is the whole affordance
- *   link     reading rather than doing; no box at all, so it can sit in a paragraph
+ *   solid    the page's ONE main action — the hero's and/or the bottom close's ask (PageHero,
+ *            CtaSection's closes, EnquiryForm's submit). Always blue: there is no ink solid.
+ *   ghost    the solid's partner, beside it and nowhere else in content — blue, no outline, the fill
+ *            is the whole affordance. (Site chrome — the nav's menu triggers, a filter set — also
+ *            uses the neutral ghost; that is a control, not an action in content.)
+ *   link     every other action, which navigates: a band's "Start with an audit", a card's foot, a
+ *            line of text. No box at all, so it can sit in a paragraph.
  *   outline  a round, hairline-ruled ICON control that steps through something — a slider's
  *            previous / next (fdn-scroll, 6 Oct 2026). Icon-only and primary-only, by type.
  *
@@ -24,18 +29,19 @@ import styles from './Button.module.css';
 export type ButtonEmphasis = 'solid' | 'ghost' | 'link' | 'outline';
 
 /**
- * What the button claims. This is the token layer's colour axis — `primary` and `neutral` select
- * `--btn-{emphasis}-primary-*` and `--btn-{emphasis}-neutral-*` respectively.
+ * The token layer's colour axis — `primary` and `neutral` select `--btn-{emphasis}-primary-*` and
+ * `--btn-{emphasis}-neutral-*` respectively. It applies to the QUIET emphases only: a solid is blue
+ * by type (`PrimaryTone` / `NeutralTone` below), because the solid is the page's one main action and that action is
+ * the offer (r7-buttons, 8 Oct 2026, which retired the ink solid and its `--btn-solid-neutral-*`).
  *
  * It is named `tone` rather than `color` for one reason: `color` is a real (if deprecated) HTML
  * attribute, so a prop of that name collides with React's own typing for every element this can
  * render as, and the resulting error points at the DOM rather than at the design system.
  *
- *   primary  Brandeis blue — this is the offer. On the web, blue means clickable, and nothing
- *            else on the page may borrow the colour.
- *   neutral  ink — claims nothing and gets the work done. Not a downgrade: neutral solid is the
- *            most legible button in the system at 17:1. It is where blue would make a utility
- *            sound like an offer — send, copy, download, close.
+ *   primary  Brandeis blue — the default, and every ghost and link in CONTENT. On the web, blue
+ *            means clickable: blue is the recurring foreground accent.
+ *   neutral  ink — site CHROME only: the nav's menu triggers and its quiet links, a segmented
+ *            filter set. It claims nothing, so it never stands for an action in a band.
  */
 export type ButtonTone = 'primary' | 'neutral';
 
@@ -78,10 +84,6 @@ type ButtonBase = Omit<
   as?: ElementType;
   /** Destination, when rendering as an anchor. Ignored by a native button. */
   href?: string;
-  /** Loudness. Defaults to `solid`. */
-  emphasis?: ButtonEmphasis;
-  /** The token layer's colour axis. Defaults to `primary`. */
-  tone?: ButtonTone;
   /** Height, label size and icon size together. Defaults to `md` (40). */
   size?: ButtonSize;
   /**
@@ -125,13 +127,30 @@ type ButtonAvailability =
     }
   | { busy?: false; disabled?: boolean };
 
+/* Emphasis and tone, as one decision. `emphasis` defaults to `solid`, and `neutral` is open to the
+   quiet emphases only: the ink solid is retired (r7-buttons), so `<Button tone="neutral">` — a solid
+   by default — is a type error rather than a review comment. Split by TONE rather than by emphasis
+   so a caller that computes its emphasis (`index === 0 ? 'solid' : 'ghost'`) still type-checks
+   against the primary member without TypeScript having to discriminate a union. */
+type PrimaryTone<E extends ButtonEmphasis> = {
+  /** Loudness. Defaults to `solid`. See `ButtonEmphasis`. */
+  emphasis?: E;
+  /** The token layer's colour axis. Defaults to `primary`, the only tone a solid takes. */
+  tone?: 'primary';
+};
+type NeutralTone<E extends ButtonEmphasis> = {
+  /** Loudness. A neutral control is never a solid. See `ButtonEmphasis`. */
+  emphasis: E;
+  /** Site chrome only. See `ButtonTone`. */
+  tone: 'neutral';
+};
+
 /* A labelled button. The label is the whole button in the common case: two to four words, terse
    and literal, uppercased by the stylesheet rather than by the copy. */
 type WithLabel = {
   iconOnly?: false;
-  emphasis?: Exclude<ButtonEmphasis, 'outline'>;
   children: ReactNode;
-};
+} & (PrimaryTone<'solid' | 'ghost' | 'link'> | NeutralTone<'ghost' | 'link'>);
 
 /* One icon, one side — never both. A trailing glyph means the click changes where you are; a
    leading glyph names the KIND of action. Together they read as two claims about one action, and
@@ -150,11 +169,10 @@ type LeadingIcon = { iconLeft?: ReactNode; icon?: never };
 type IconAlone = {
   iconOnly: true;
   icon: ReactNode;
-  emphasis?: Exclude<ButtonEmphasis, 'link' | 'outline'>;
   'aria-label': string;
   children?: never;
   iconLeft?: never;
-};
+} & (PrimaryTone<'solid' | 'ghost'> | NeutralTone<'ghost'>);
 
 /* The outlined stepper. Icon alone by construction — a labelled outline is the "two buttons of the
    same rank" the three labelled emphases avoid — and primary only: it is navigation through a set,
@@ -179,8 +197,8 @@ export type ButtonProps = ButtonBase &
 /**
  * Button — the control, built to the Button Spec Sheet.
  *
- * Six combinations (three emphases × two tones), three sizes, three variants (label, label and
- * icon, icon alone) and seven states. It contributes no colour and no distance: every value comes
+ * Five combinations (the blue solid; ghost and link in two tones, the neutral pair for site chrome
+ * only), three sizes, three variants (label, label and icon, icon alone) and seven states. It contributes no colour and no distance: every value comes
  * from `--btn-*` in tokens/components/button.css, which re-declares the whole set once per
  * surface. So the same markup is correct on paper, on a tint panel, in the ink footer and on the
  * blue pivot — including a tint panel nested inside an ink section — without being told where it

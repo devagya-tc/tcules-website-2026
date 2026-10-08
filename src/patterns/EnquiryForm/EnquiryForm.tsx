@@ -600,9 +600,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
   /* The submit is the converting action, so it carries NO arrow on any variant (owner, 7 Oct 2026:
      a solid primary never takes one — the label carries the ask). Its partner, "See available
      times", is a ghost with the trailing arrow, because it navigates.
-     Colour (owner, 7 Oct 2026, visual-direction § 4.5): sending an enquiry ALWAYS converts, so the
-     submit is always the blue solid and takes no prop; stated here rather than left to Button's
-     defaults so the decision is visible. */
+     The submit is the blue solid: the form sits in the close, which carries the page's one main
+     action (r7-buttons, 8 Oct 2026 — there is no ink solid). */
   const submitButton = (
     <Button type="submit" emphasis="solid" tone="primary" size="lg" busy={submitting}>
       {submitLabel}

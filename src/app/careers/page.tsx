@@ -201,10 +201,9 @@ export default async function CareersPage() {
                   <Button
                     as="a"
                     href={page.fourthSection.action.href}
-                    /* An application ("Begin engagement", to the Lab's application form): applying
-                       converts, so the solid is blue (owner, 7 Oct 2026). Stated, not defaulted. */
+                    /* The page's closing ask ("Begin engagement", to the Lab's application form):
+                       the blue solid (r7-buttons, 8 Oct 2026). */
                     emphasis="solid"
-                    tone="primary"
                     size="lg"
                     {...externalAnchorProps(page.fourthSection.action)}
                   >

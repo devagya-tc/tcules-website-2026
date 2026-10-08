@@ -9,7 +9,7 @@ rework come later, once the owner delivers the copy.
 
 ## Packages
 
-- [ ] **r7-buttons — no neutral/ink solid buttons.** Three kinds remain: a **blue solid** for the
+- [x] **r7-buttons — no neutral/ink solid buttons.** (kit/r7-buttons) Three kinds remain: a **blue solid** for the
       one main action on a page (hero and/or the bottom CTA), a **blue ghost** that pairs with it, and a
       **link button** for every other (navigational) action. "Start with a UX product audit" inside a
       band is a link, not a button. This reverses `fix/tone` ("converts blue, else ink"): remove the

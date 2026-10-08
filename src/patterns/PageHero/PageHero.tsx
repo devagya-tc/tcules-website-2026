@@ -365,38 +365,27 @@ type PageHeroBaseProps = {
 };
 
 /**
- * Nought, one or two actions. Position decides emphasis: the first renders SOLID with no arrow (the
- * main next step, visual-direction § 4.5), the second a primary GHOST with the trailing arrow — its
- * partner, blue at rest (owner, 7 Oct 2026: a primary's partner is a ghost, never a link button; a
- * link button belongs in cards and inline contexts).
+ * Nought, one or two actions. Position decides emphasis: the first renders the blue SOLID with no
+ * arrow — the page's one main action (r7-buttons, owner 7 Oct 2026 as corrected 8 Oct: the hero
+ * and/or the bottom close carry it, and it is always blue) — the second a blue GHOST with the
+ * trailing arrow, its partner (a solid's partner is a ghost, never a link button; a link button is
+ * every other, navigational action). There is no `converts`: colour no longer follows the kind of
+ * action, so there is nothing to classify.
  *
  * Those are the three counts the corpus has, as a type — a third entry has no member of the union to
  * match, so it is a compile error rather than a review comment. The second emphasis is a consequence
  * of a second entry, not a slot waiting to be filled, which is why there is no `emphasis` on
  * HeroAction.
  *
- * History: ghost/neutral until 5 Oct 2026, then a primary link (fdn-blue) until the 7 Oct ruling.
+ * History: ghost/neutral until 5 Oct 2026, then a primary link (fdn-blue) until the 7 Oct ruling;
+ * an ink solid for a non-converting lead (fix/tone) until r7-buttons retired it on 8 Oct.
  */
 export type HeroActions = readonly [] | readonly [HeroAction] | readonly [HeroAction, HeroAction];
 
-/**
- * `actions` and `converts` travel together: passing actions REQUIRES saying what the first one is.
- * There is no default — an unstated axis must not silently pick a plausible colour.
- */
-type PageHeroActionProps =
-  | { actions?: never; converts?: never }
-  | {
-      /** See `HeroActions`. */
-      actions: HeroActions;
-      /**
-       * Does the FIRST (solid) action convert — does the reader start something with the studio by
-       * taking it (start a project, book a call, request an audit, contact, apply, subscribe)?
-       * `true` renders the solid blue, `false` ink ("See the work", "Meet the team", "Explore
-       * services"). Judge the action itself, not the page. The ghost partner is blue either way
-       * (owner, 7 Oct 2026; visual-direction § 4.5). Required whenever `actions` is passed.
-       */
-      converts: boolean;
-    };
+type PageHeroActionProps = {
+  /** See `HeroActions`. Absent or empty renders no row and no seam. */
+  actions?: HeroActions;
+};
 
 export type PageHeroProps = PageHeroBaseProps & PageHeroActionProps;
 
@@ -515,7 +504,6 @@ export function PageHero({
   credits = [],
   dates,
   actions = [],
-  converts = false,
   media,
   arrangement = 'stacked',
   surface = 'paper',
@@ -718,9 +706,9 @@ export function PageHero({
   const extrasNode = children == null ? null : <div>{children}</div>;
 
   /* ── actions · one solid, one ghost partner ────────────────────────────────
-     Anchors, because a hero action always navigates. The first is the band's one solid — blue
-     when it converts, ink when it does not (`converts`, owner 7 Oct 2026, visual-direction § 4.5)
-     — and carries NO arrow: the label carries the ask. The second is a primary GHOST with
+     Anchors, because a hero action always navigates. The first is the page's one main action, the
+     blue solid (r7-buttons, 8 Oct 2026: there is no ink solid) — and carries NO arrow: the label
+     carries the ask. The second is a primary GHOST with
      the trailing arrow: the owner's 7 Oct 2026 pairing rule (a primary's partner is a ghost, never a
      link button; the ghost takes the arrow because it navigates). Its label and arrow stay blue at
      rest, the foreground accent (visual-direction § 4.2), and it has no fill at rest, so it reads
@@ -744,7 +732,6 @@ export function PageHero({
             as="a"
             href={action.href}
             emphasis={index === 0 ? 'solid' : 'ghost'}
-            tone={index === 0 && !converts ? 'neutral' : 'primary'}
             size="md"
             extendHitArea
             icon={index === 0 ? undefined : <Icon name="arrow-right" />}

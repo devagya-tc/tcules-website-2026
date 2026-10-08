@@ -147,8 +147,8 @@ export default function KitBannerSpecimen() {
 
       <Caption index="I.4" title="Banner beside, photo left">
         mediaSide=&quot;start&quot; mirrors the split from 1024; the copy stays first in the
-        reading order. The one solid ask a band may carry is the blue solid primary, the
-        hero&rsquo;s, with its ghost partner beside it. On a page, never two beside banners
+        reading order. Its action is one blue link: a banner is in-band, and the solid is the
+        hero&rsquo;s and the close&rsquo;s (r7-buttons, 8 Oct 2026). On a page, never two beside banners
         within sight of each other: here they are a specimen set.
       </Caption>
       <Banner
@@ -159,15 +159,7 @@ export default function KitBannerSpecimen() {
         headingId="kit-banner-beside-start"
         lead="A senior pair reviews the product, its data and its team, then hands you an ordered list of what to fix first."
         actions={
-          <CtaRow
-            emphasis="solid"
-            converts
-            actions={[
-              { label: 'Book an audit', href: ROUTES.audits },
-              { label: 'See a sample report', href: ROUTES.uxProductAudit },
-            ]}
-            rule={false}
-          />
+          <CtaRow actions={[{ label: 'Book an audit', href: ROUTES.audits }]} rule={false} />
         }
         image={getKitPhoto('whiteboard-pair-laptop')}
       />
@@ -269,7 +261,6 @@ export default function KitBannerSpecimen() {
           body={[
             'A small senior studio for the product decisions that slow teams down: what to build, how it should behave, and how it reaches code.',
           ]}
-          converts
           actions={[
             { label: 'Start a project', href: ROUTES.contact },
             { label: 'See our work', href: ROUTES.caseStudies },

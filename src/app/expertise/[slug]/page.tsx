@@ -20,7 +20,6 @@ import {
 } from '@/content';
 import { expertisePath, ROUTES } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
-import { leadConverts } from '@/lib/conversion';
 import {
   Accordion,
   BlockCard,
@@ -350,7 +349,6 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
         title={title}
         eyebrow={eyebrowBesideTrail(expertise.hero.eyebrow, crumbs)}
         body={[expertise.hero.description]}
-        converts={leadConverts(heroActions)}
         actions={heroActions}
         surface="paper"
       >
@@ -407,8 +405,9 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
             heading={expertise.capabilitiesCta.heading}
             body={expertise.capabilitiesCta.body}
             points={expertise.capabilitiesCta.points}
-            converts={leadConverts(expertise.capabilitiesCta.actions)}
-            actions={expertise.capabilitiesCta.actions}
+            /* Mid-page, so ONE link (r7-buttons): the offer takes the first action and a second
+               is dropped until the model carries one (docs/strapi-changes.md § 17). */
+            actions={[expertise.capabilitiesCta.actions[0]]}
           />
         ) : (
           <CtaSection
@@ -417,7 +416,6 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
             heading={expertise.capabilitiesCta.heading}
             body={expertise.capabilitiesCta.body}
             points={expertise.capabilitiesCta.points}
-            converts={leadConverts(expertise.capabilitiesCta.actions)}
             actions={expertise.capabilitiesCta.actions}
           />
         )

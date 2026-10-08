@@ -13,7 +13,15 @@
 | **Implements** | visual-direction § 1.2 (body → CtaRow, `stack`), § 1.4 ("CtaRow — 48 seam + one 48 row"), § 3.1 item 5 (a hairline above a section-level CtaRow), § 4.2 (Signal and Accent budgets), § 11 item 5 |
 | **Implemented at** | `src/patterns/CtaRow/` · `src/styles/tokens/components/cta-row.css` · specimen `src/app/design/cta-row/page.tsx` (also used across `src/app/design/content-section/page.tsx`) |
 
-> **Owner amendment, 7 Oct 2026 — colour follows the kind of action** (visual-direction § 4.5,
+> **Owner amendment, 8 Oct 2026 — CtaRow is ONE link** (r7-buttons; `docs/kit/review-7-oct.md`,
+> visual-direction § 4.5, `docs/specs/Button.md` § 14a). Supersedes every amendment below. A CtaRow is
+> always in-band, and an in-band action is a link: the blue solid and its ghost partner are the page's
+> one main action and belong to the hero (PageHero) and the close (CtaSection), never to a band's foot.
+> So the row has one shape — `actions: readonly [CtaRowAction]`, rendered as the blue link button with
+> the trailing arrow — and **`emphasis` and `converts` are removed**. The solid row, the ink solid and
+> the ghost partner described below no longer exist; read them as history.
+
+> **Superseded 8 Oct.** ~~Owner amendment, 7 Oct 2026 — colour follows the kind of action~~ (visual-direction § 4.5,
 > `docs/specs/Button.md` § 14a). Supersedes every `tone` rule below, including the 6 Oct defaults.
 > - **`tone` is gone.** Callers state what the action IS, not its colour. The solid row takes a
 >   **required** `converts: boolean` — no default, because an unstated axis must not silently pick a
@@ -90,27 +98,21 @@ Frequency: zero or one per band; most kit bands carry none.
 
 | Prop | Type | Default | Decides |
 |---|---|---|---|
-| `actions` | link row: `readonly [CtaRowAction]`; solid row: `readonly [CtaRowAction] \| readonly [CtaRowAction, CtaRowAction]` | — | `{ label, href }`. One on a link row, one or two on a solid row (*7 Oct 2026*). A third never compiles. Paths from `@/lib/routes`. |
+| `actions` | `readonly [CtaRowAction]` | — | `{ label, href }`, exactly one (*8 Oct 2026*). A second never compiles. Paths from `@/lib/routes`. |
 | `note` | `string` | — | One sentence before the actions, body-sm. Whitespace-only = absent. |
-| `emphasis` | `'link' \| 'solid'` | `'link'` | The row's shape (the union's discriminant): one link with the arrow cue, or a solid ask (no glyph) with an optional ghost partner (arrow). |
-| `converts` | solid row: `boolean` (**required**); link row: `never` | — (no default) | Does the solid action convert? `true` → blue solid (Button `tone="primary"`), `false` → ink solid (`tone="neutral"`). The link and the ghost partner are always blue and take no prop (*7 Oct 2026*). |
 | `rule` | `boolean` | `true` | The hairline above. `false` in a head's actions, under a ruled ladder (Accordion, ListCard rows, DataTable) whose last rule already closes the body, and as the footer of a band with no blocks (nothing to close). |
 | `align` | `'start' \| 'center'` | `'start'` | `center`: note and actions centred, the whole box capped at `--ctarow-centred-measure` (→ `--measure-body`). |
 
-The second action (solid rows only) is always `emphasis="ghost" tone="primary"` with the trailing
-arrow (*7 Oct 2026*; a link until then) — position decides emphasis, as in `CtaSection` and `PageHero`. Deliberately not props: per-action emphasis, icons, size (always `md` +
+The action is always Button `emphasis="link"` (blue) with the trailing `arrow-right`. Deliberately not
+props: emphasis (removed 8 Oct 2026 with the solid row), colour, icons, size (always `md` +
 `extendHitArea`), any gap, `className`/`style`.
 
 ## 4 · Variants × sizes
 
-One size. `emphasis` × `tone` × `rule` × `align`, plus note present/absent:
+One size, one shape: `rule` × `align`, plus note present/absent. The link is blue, always.
 
-| | link | solid |
-|---|---|---|
-| colour | blue, always (no prop) | `converts` → blue; `converts={false}` → ink. Required |
-| partner | — | ghost, blue, always |
-
-*(7 Oct 2026. Until then a `tone` prop defaulted the link to primary and the solid to neutral.)*
+*(8 Oct 2026. From 7 Oct to 8 Oct a solid row took `converts` — blue or ink — with a blue ghost partner;
+before that a `tone` prop defaulted the link to primary and the solid to neutral.)*
 
 Glyph (*7 Oct 2026*): the link carries `arrow-right` (the kit's link cue); the solid ask never does
 (the owner's 1 Oct "no arrow here", made a rule on 7 Oct); the ghost partner does, because it
@@ -199,9 +201,9 @@ No hand-rolled grid or flex, no margin, no padding. The placing band owns the se
 | A label over the ceiling | Overflows at 390 (Button never wraps). A copy fault; rewrite it. |
 | Under a ruled ladder | `rule={false}`, or two hairlines sit 48 apart and read as a double rule. |
 | Footer of a band with no blocks | `rule={false}`: no body to close, so the rule would underline the lead (ContentSection § 15, the footer-only and no-blocks media bands). |
-| A lead action that does not convert | `emphasis="solid" converts={false}`: an ink solid, its ghost partner still blue (*7 Oct 2026*). A link row has no ink option. |
+| An ask in a band ("Start a project", "Start with a UX Product Audit") | Still one link (*8 Oct 2026*): the solid is the hero's and the close's. |
 | In a centred band | `align="center"`; ContentSection's centred body centres the capped box. |
-| In a 381 head track | Solid and link wrap to two lines at 24. |
+| In a 381 head track | The four-word ceiling fits with its arrow. |
 | Nested surface | Every ink restated per surface (§ 6). |
 
 ## 13 · Motion
@@ -214,22 +216,20 @@ None of its own. Button's colour transition is Button's.
   into another pattern: `grep -rn "CtaRow" src/patterns --include=*.tsx | grep import` shows only
   `src/patterns/CtaRow/` and the barrel.
 - **Don't** hand-roll layout: `perl -0pe 's{/\*.*?\*/}{}gs' src/patterns/CtaRow/CtaRow.module.css | grep -nE 'display|grid|flex|margin|padding'` returns nothing.
-- **Do** state what the solid action is: `converts` for an action that starts something with the
-  studio, `converts={false}` for a lead action that does not (inspect `/design/cta-row` § 1 and § 3).
-  **Don't** choose a colour by the band's budget or the solid's position: the same ask is blue in every
-  band (*7 Oct 2026*).
+- **Don't** reach for a solid in a band (*8 Oct 2026*): the row has no solid, and a hand-built Cluster of
+  Buttons at a band's foot to get one is the same mistake by another route. The page's ask is the
+  hero's and the close's.
 - **Don't** put a rule on the footer of a band with no blocks (`/design/content-section` § 14 and § 15).
 - **Don't** double a rule under an Accordion or ListCard rows (`/design/content-section` § 11, D-faq).
 - **Don't** pass a label over four words.
 
 ## 15 · Specimen plan
 
-`/design/cta-row`: (1) the variant ladder at the full column — link (always blue), link with a note,
-solid that converts (blue) + ghost partner, solid that does not convert (ink) + blue ghost, a lone
-non-converting solid, `rule={false}`,
-`align="center"` (*7 Oct 2026*: the two-link rows are gone, because they no longer compile); (2) stress
-— the four-word label ceiling with a long note, a whitespace-only note, the 381 head track, the 326
-column with a note and centred; (3) four surfaces, identical markup, captioned as surface proof — each with the link row, the converting pair and the non-converting pair; (4) in
+`/design/cta-row` (*rewritten 8 Oct 2026*): (1) the variant ladder at the full column — a link, a link
+with a note, an in-band ask as a link, `rule={false}`, `align="center"`; (2) stress — the four-word
+label ceiling with a long note, a whitespace-only note, the 381 head track, the 326 column with a note
+and centred; (3) four surfaces, identical markup, captioned as surface proof — a link with a note and a
+link with the rule off; (4) in
 live ContentSection bands: beside footer, centred footer under an accordion, stacked head actions.
 `/design/content-section` uses it in every arrangement (§ 1, § 11 to § 15).
 

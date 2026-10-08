@@ -36,7 +36,12 @@ Verified against the loaded Tcules library (`window.Tcules`, 10 components) and 
 
 Every section below is amended in place for this block — 1, 2, 3, 7, 9, 10, 12 row 9, 14 checks 4 and 7, 15 item 9 and the build-decisions log; the 29 Sep amendment carries a note.
 
-> **Owner amendment, 7 Oct 2026 — colour follows the kind of action** (visual-direction § 4.5,
+> **Owner amendment, 8 Oct 2026 — r7-buttons** (`docs/kit/review-7-oct.md`, visual-direction § 4.5).
+> Supersedes the colour amendment below. `converts` is removed (`actions?: HeroActions`): the hero
+> carries the page's one main action, so its first action is always the blue solid and its second the
+> blue ghost partner. There is no ink solid.
+
+> **Superseded 8 Oct.** ~~Owner amendment, 7 Oct 2026 — colour follows the kind of action~~ (visual-direction § 4.5,
 > `docs/specs/Button.md` § 14a). Passing `actions` now REQUIRES `converts: boolean` (no default; the
 > type is `{ actions?: never; converts?: never } | { actions: HeroActions; converts: boolean }`). The
 > first action's solid is blue when it converts (start a project, book a call, request an audit,

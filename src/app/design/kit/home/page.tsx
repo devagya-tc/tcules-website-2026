@@ -304,7 +304,6 @@ export default async function KitHomePage() {
         body={[
           'A senior team that settles what your product should do, designs how it behaves, and builds it in your codebase.',
         ]}
-        converts
         actions={[
           { label: 'Start a project', href: ROUTES.contact },
           { label: 'See the work', href: ROUTES.caseStudies },

@@ -39,7 +39,7 @@ const SPECIMENS = [
       {
         href: '/design/button',
         name: 'Button',
-        note: '3 emphases × 2 tones, 3 sizes, 3 variants, 4 surfaces',
+        note: 'a showcase — blue solid (the page’s one main action) + blue ghost partner + link, in a page; sizes, states, icons, the outline stepper, chrome-only neutral, 4 surfaces',
       },
       {
         href: '/design/input',
@@ -130,7 +130,7 @@ const SPECIMENS = [
       {
         href: '/design/cta-row',
         name: 'CtaRow',
-        note: 'a band’s row of actions — rule, note, link | solid, neutral | primary, centred cap, narrow tracks, 4 surfaces, in a band',
+        note: 'a band’s one link action — rule, note, centred cap, narrow tracks, 4 surfaces, in a band',
       },
       {
         href: '/design/slider',

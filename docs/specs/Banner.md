@@ -38,9 +38,9 @@ Plus the announcement strip, which is the same family's one-line form.
 - The eyebrow carries a blue mark (the kit's 6px eyebrow square, the one every eyebrow carries — it was the Statement's 32 × 2 rule until `cmp-services` fix round 2) and the strip's mono label is blue:
   one accent grammar across I and J (fix round 1). Below 768 the lead steps to the body role
   (28 : 16 rather than 28 : 18).
-- A solid ask is `CtaRow emphasis="solid"` with a required `converts`: blue when the action converts
-  (the hero's treatment; one ask, one colour for it everywhere), ink when it is a lead action that does
-  not (owner, 7 Oct 2026, visual-direction § 4.5). Its ghost partner is blue either way.
+- The banner's action is a `CtaRow` — ONE blue link with the arrow (r7-buttons, 8 Oct 2026). A banner
+  is in-band, and an in-band action is a link: the solid is the hero's and the close's. (From 7 Oct to
+  8 Oct a solid CtaRow with `converts` was allowed here; CtaRow no longer has a solid.)
 - Never two `beside` banners within sight of each other on a page (adjacent, or split only by a strip
   or a short band): mirrored or not, they are one rectangle repeated. Separate them with a band of
   another arrangement, or make one `below`. The family specimen shows three in a row as a set only.

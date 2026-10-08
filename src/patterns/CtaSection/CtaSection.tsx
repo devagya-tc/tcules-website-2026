@@ -200,8 +200,6 @@ type CtaSplitProps = {
    */
   form: ReactElement;
   actions?: readonly [];
-  /** A form's submit always converts and is always blue; there is no solid action to classify. */
-  converts?: never;
   /**
    * Refused since cmp-cta fix round 1. A close with the FULL form and a proof row ran 880–1104 at
    * 1470 with standard copy — past the 830 fold at every proof kind — so the evidence for the ask is
@@ -222,14 +220,11 @@ type CtaSplitProps = {
 type CtaOpenProps = {
   arrangement: 'open';
   form?: never;
-  actions: readonly [CtaAction] | readonly [CtaAction, CtaAction];
   /**
-   * Does the FIRST (solid) action convert — does the reader start something with the studio by
-   * taking it (start a project, book a call, request an audit, contact, apply, subscribe)? `true`
-   * renders the solid blue, `false` ink. Required, no default: judge the action itself, not the page
-   * or the band (owner, 7 Oct 2026; visual-direction § 4.5). The ghost partner is blue either way.
+   * The close's ask: the blue solid, then at most its blue ghost partner. A close is where the page
+   * makes its one main action (r7-buttons, 8 Oct 2026), so this is a solid by position.
    */
-  converts: boolean;
+  actions: readonly [CtaAction] | readonly [CtaAction, CtaAction];
   proof?: ReactNode;
   media?: never;
   contact?: never;
@@ -239,7 +234,6 @@ type CtaOfferWithFormProps = {
   arrangement: 'offer';
   form: ReactNode;
   actions?: readonly [];
-  converts?: never;
   proof?: never;
   media?: never;
   contact?: never;
@@ -248,9 +242,14 @@ type CtaOfferWithFormProps = {
 type CtaOfferWithActionsProps = {
   arrangement: 'offer';
   form?: never;
-  actions: readonly [CtaAction] | readonly [CtaAction, CtaAction];
-  /** As on `open`. */
-  converts: boolean;
+  /**
+   * ONE action, rendered as the blue LINK button with its arrow — never a solid (r7-buttons, owner
+   * 7 Oct 2026 as corrected 8 Oct). The offer interrupts the page mid-scroll; the page's one main
+   * action belongs to the hero and the close, so "Start with a UX Product Audit" inside a band is a
+   * link, not a button. One, because two links side by side are two actions of one emphasis (the
+   * CtaRow rule); a second destination is a second band's.
+   */
+  actions: readonly [CtaAction];
   proof?: never;
   /**
    * The K offer's photograph. With it, the band is [7, 5] — copy in 7 (667 at 1470), the 4:5 photo
@@ -551,49 +550,48 @@ function CtaPoints({
  * The control row for the actions-only shapes. A form brings its own row — submit and "See
  * available times" together, inside EnquiryForm — so this renders only when there is no form.
  *
- * POSITION decides emphasis, and it is the hero's shape exactly (PageHero, CtaRow `solid`): the
- * first is `solid`, the band's one ask — blue when it converts, ink when it does not (`converts`,
- * owner 7 Oct 2026, visual-direction § 4.5); the second is its partner, a GHOST in the primary
- * tone (owner, 7 Oct 2026: a primary's partner is a ghost, never a link button — link buttons belong
- * in cards and inline contexts). It was a ghost until cmp-cta (6 Oct), a link from then until the
- * 7 Oct ruling. There is no `emphasis` on `CtaAction`: position decides.
+ * Two kinds, by where the band sits (r7-buttons, owner 7 Oct 2026 as corrected 8 Oct):
  *
- * THE ARROW RULE (owner, 7 Oct 2026): the solid takes no glyph, ever — the ask's label carries it
- * (1 Oct: "no arrow here"). The ghost partner navigates, so it takes the trailing `arrow-right`.
- * EnquiryForm's submit and "See available times →" and CtaRow's solid rows follow the same rule, so
- * every pair in the family is one treatment.
+ *   ask   the CLOSE (`open`). The page's one main action: the first is the blue `solid`, no arrow
+ *         — the label carries the ask; the second its partner, a blue GHOST with the trailing
+ *         arrow, because it navigates. The hero's shape exactly (PageHero). There is no ink solid
+ *         and no `converts`: colour no longer follows the kind of action.
+ *   link  the mid-page OFFER (K). One blue link button with the trailing arrow — every action that
+ *         is not the page's main one is a link, and the offer is in-band.
  *
- * Every control is `size="md"` with `extendHitArea`: the box is 40 and the touch floor is 44, so
- * the target is legal without the row growing. `block` (24) between them, as CtaRow and PageHero
- * set it: two boxes need clear air between them.
+ * Every control is `size="md"` with `extendHitArea`: the box is 40 (or the link's label line) and
+ * the touch floor is 44, so the target is legal without the row growing. `block` (24) between the
+ * solid and its ghost, as CtaRow and PageHero set it: two boxes need clear air between them.
  */
 function CtaActions({
   actions,
-  converts,
+  kind,
   justify,
 }: {
   actions: readonly CtaAction[];
-  /** The solid's kind: blue when it converts, ink when it does not. See `CtaOpenProps.converts`. */
-  converts: boolean;
+  /** `ask` on a close, `link` on the offer. See above. */
+  kind: 'ask' | 'link';
   /** `center` in the open close's centred column; otherwise the row starts at the copy's edge. */
   justify?: 'center';
 }) {
   return (
     <Cluster colGap="block" rowGap="block" align="center" justify={justify}>
-      {actions.map((action, index) => (
-        <Button
-          key={`${index}-${action.href}-${action.label}`}
-          as="a"
-          href={action.href}
-          emphasis={index === 0 ? 'solid' : 'ghost'}
-          tone={index === 0 && !converts ? 'neutral' : 'primary'}
-          size="md"
-          extendHitArea
-          icon={index === 0 ? undefined : <Icon name="arrow-right" />}
-        >
-          {action.label}
-        </Button>
-      ))}
+      {actions.map((action, index) => {
+        const solid = kind === 'ask' && index === 0;
+        return (
+          <Button
+            key={`${index}-${action.href}-${action.label}`}
+            as="a"
+            href={action.href}
+            emphasis={solid ? 'solid' : kind === 'ask' ? 'ghost' : 'link'}
+            size="md"
+            extendHitArea
+            icon={solid ? undefined : <Icon name="arrow-right" />}
+          >
+            {action.label}
+          </Button>
+        );
+      })}
     </Cluster>
   );
 }
@@ -740,7 +738,7 @@ export function CtaSection(props: CtaSectionProps) {
             <Layout rowGap="stack">
               {lede({ scale: 'close' })}
               <CtaPoints shape="row" markers={markers} points={points} />
-              <CtaActions actions={props.actions} converts={props.converts} />
+              <CtaActions actions={props.actions} kind="ask" />
             </Layout>
             <div>{props.proof}</div>
           </Layout>
@@ -776,7 +774,7 @@ export function CtaSection(props: CtaSectionProps) {
                 <CtaPoints shape="centred" markers={markers} points={points} />
               </Layout>
             ) : null}
-            <CtaActions actions={props.actions} converts={props.converts} justify="center" />
+            <CtaActions actions={props.actions} kind="ask" justify="center" />
           </Layout>
         </div>
       </Section>
@@ -786,7 +784,6 @@ export function CtaSection(props: CtaSectionProps) {
   if (props.arrangement === 'offer') {
     const hasForm = 'form' in props && present(props.form);
     const actions = 'actions' in props && props.actions ? props.actions : [];
-    const converts = props.converts === true;
     const media = 'media' in props ? props.media : undefined;
 
     /* ── K with a landscape photograph (cmp-cta fix round 1) ─────────────────────────────────
@@ -827,7 +824,7 @@ export function CtaSection(props: CtaSectionProps) {
               {photoFirst ? landscapePhoto : null}
               <Layout rowGap="stack">
                 {lede()}
-                {actions.length > 0 ? <CtaActions actions={actions} converts={converts} /> : null}
+                {actions.length > 0 ? <CtaActions actions={actions} kind="link" /> : null}
               </Layout>
               {photoFirst ? null : landscapePhoto}
             </Layout>
@@ -883,7 +880,7 @@ export function CtaSection(props: CtaSectionProps) {
             <Layout rowGap="stack">
               {lede()}
               <CtaPoints shape="line" markers={markers} points={points} />
-              {actions.length > 0 ? <CtaActions actions={actions} converts={converts} /> : null}
+              {actions.length > 0 ? <CtaActions actions={actions} kind="link" /> : null}
             </Layout>
             {photoFirst ? null : portraitPhoto}
           </Layout>
@@ -914,7 +911,7 @@ export function CtaSection(props: CtaSectionProps) {
           >
             <Layout rowGap="stack">
               {lede({ leadRole: hasPoints ? 'body' : 'lead' })}
-              {actions.length > 0 ? <CtaActions actions={actions} converts={converts} /> : null}
+              {actions.length > 0 ? <CtaActions actions={actions} kind="link" /> : null}
             </Layout>
             <CtaPoints shape="rows" markers={markers} points={points} />
           </Layout>

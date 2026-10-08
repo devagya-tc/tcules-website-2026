@@ -223,7 +223,18 @@ header (§10). A block that names its job removes the guess. Ordering, too, beco
 
 **Found in.** Kit `fdn-top` review round, 5 Oct 2026. Content side: `docs/content-changes.md` § 5.
 
-## 17. Actions say whether they convert
+## 17. Actions say whether they convert — withdrawn 8 Oct 2026
+
+**Withdrawn** (r7-buttons, owner 7 Oct 2026 as corrected 8 Oct, `docs/kit/review-7-oct.md`). The ink
+solid is retired: a solid is always blue, and which kind an action renders as is decided by WHERE it
+sits — the hero's and the close's actions are the blue solid and its blue ghost partner; every in-band
+action (the capabilities offer, the Lab and Matter strips, a section's foot) is a link button. Nothing
+on the view model has to say whether an action converts, so no field is needed and
+`src/lib/conversion.ts` is deleted. One consequence for the model: an in-band offer renders ONE link,
+so the capabilities offer's `actions` should be a single action rather than one-or-two; until the model
+says so, the legacy service and expertise routes render the first and drop the second.
+
+The original recommendation, kept for the record:
 
 **What.** A required `converts` boolean (or a `kind` enum: `converts` · `navigates`) on every CTA
 link component — hero actions, the closing CTA's actions, the capabilities offer's actions, the Lab and
