@@ -16,7 +16,7 @@ rework come later, once the owner delivers the copy.
       ink solid tone and migrate every call site.
 - [ ] **r7-logos — boxed logo grid.** Reference: Enorm, Dribbble
       (https://dribbble.com/shots/26454188-Enorm-Technology-Client-Logos-Partner-Trust-Section-UI). Each
-      logo sits in its own boxed cell with equal weight, so the box reads as the logo even though our marks
+      logo sits in its own boxed cell with equal weight (**owner, 8 Oct: work with the 9 logos we have** in public/clients), so the box reads as the logo even though our marks
       differ in kind: wordmark, badge (GT Tools), symbol between words (Doodle). Boxes are allowed here
       because a logo cell is not a card; record this as the named exception to "no boxes". The section
       heading is demoted to eyebrow-size context text (the reviewer said the title was "a hero instrument",
@@ -54,10 +54,15 @@ rework come later, once the owner delivers the copy.
       day".
 - [ ] **r7-howwework — "How we work" as its own component.** This is the USP: the engagement model. One
       accountable team from the first question to ship; part-time assignment with the idle cost absorbed
-      by Tcules; the team stretches so the client never suffers. Design it properly; do not reuse a generic
+      by Tcules; the team stretches so the client never suffers. **Owner, 8 Oct:** work with the copy we
+      have, and look on https://tcules.com (WebFetch its how-we-work, about and engagement pages) for
+      more relevant copy. Do not invent claims. Design it properly; do not reuse a generic
       list. It must not create hard separation twice (a hairline AND an icon per row was criticised).
 - [ ] **r7-facts — facts & figures.** About four facts in one section: aggregate rating, years, projects,
       team. No testimonial in it. Compose from Stat and RatingBadge before building anything new.
+      **Owner, 8 Oct:** the placeholder figures are fine as they are. This is **crucial for Friday's
+      review**: it must be at least as beautiful as the best of the other kit components, never a plain
+      row of numbers. Judge it side by side with the logo grid and the featured testimonials.
 - [ ] **r7-rules — codify:**
       - Never two text-heavy sections back to back; follow a text-heavy band with a visual one. Make this
         a check in the ServicePage plan.
