@@ -389,6 +389,10 @@ beside a square 4:5 photo (§ 5.3). Captures stay at radius 0 with the hairline;
 illustrations are unchanged. A placement that rules its own crop box (`edge="placement"`: BlockCard,
 now ListCard's thumbnail) draws its own radius on the box, and Media adds none inside it.
 
+**The tone layer** (owner, 7 Oct 2026; visual-direction § 5.5a). Every `kind: 'photograph'`, at every
+`edge`, takes `filter: var(--media-photo-grade)`. The token ships `none`, so the layer renders nothing
+until the owner rules on the treatment; the ruling then lands in that one token. No prop opts out.
+
 **New optional record fields.** `focus`, `tone` (`{ temperature, saturation }`, measured by
 `npm run photos:tone`) and `standIn` (a catalogue photo standing in for a missing cover, § 5.7). None
 renders anything a reader sees. `placeholderSize` (below) says the `width` / `height` are not the

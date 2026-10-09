@@ -175,6 +175,14 @@
   border-radius: var(--media-photo-radius);
 }
 
+/* The tone layer every photograph carries (review 7 Oct 2026, visual-direction § 5.5a). One hook,
+   one value for the whole site: the treatment is the owner's to choose, so the token ships `none`
+   and this rule renders nothing. Setting --media-photo-grade in media.css grades every photograph
+   at once; no placement, kind or prop can opt out, which is what makes the layer consistent. */
+.grade {
+  filter: var(--media-photo-grade);
+}
+
 /* A capture's one edge cue: the placement's hairline in the surface's rule ink (ch05 §2). */
 .capture {
   border: var(--media-capture-rule-width) solid var(--media-capture-rule-ink);

@@ -198,3 +198,11 @@ short, and the head's scale is an explicit `media.head`, not a length rule.
 | BlockCard ratio | covers only (3:2, 16:9, 21:9, 2:1, square from 1024) | `headshot`: 1:1 at every width, for people | Square portraits set 16:9 cut heads at the hat and chin at every width. |
 | § 8.3 showcase heroes and image moments | about: photo hero 5:4; services: no-media; I banner per page unspecified | home: photo beside (5:4); about: title-led `display` with the Holi panorama (4:1); services: no-media with `hero-field`. Image moment: home the 3:1 under its H-row, about the `beside` banner, services a [7, 5] photo pair. J only on home (split) and about (centred) | Seen as one kit, the same split-head-over-3:1 band and the same split statement on every page read as stamped templates. |
 | CtaSection contact strip | 1 to 3 cells side by side from md | beside the form, one column from 1024 to 1279 | At 1024 three cells were ~130 each and the address broke as "hello@tcules.c / om". |
+
+## Rules codified by `r7-rules` (owner review, 7 Oct 2026)
+
+| Where | It said | The kit now does | Why |
+|---|---|---|---|
+| visual-direction § 1.7 | three devices mark a seam (alignment, imagery cadence, arrangement) | plus: **never two text-heavy bands back to back**, with "text-heavy" defined; `planBands` warns in development (`textHeavyPairs`) | Two read-only bands in a row read as one long text stretch, whatever their arrangement. |
+| ch05 / visual-direction § 5.5 | "Grading, duotone and tint are banned, so selection is the only lever" | **§ 5.5a:** IRL photographs carry one tone layer. Hook only: `--media-photo-grade: none` (media.css), read by every photograph Media renders. Treatment TBD by the owner. | A consistent finish across studio and stock photographs; the hook lets the ruling land in one token. |
+| visual-direction § 5.8 | — | **Proof is a set, not a ranking:** logos, case studies, testimonials, the platform rating; no order, number or "top" label ranks them. | The owner's framing of proof. |

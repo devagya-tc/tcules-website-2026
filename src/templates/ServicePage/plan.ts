@@ -51,6 +51,9 @@ import type {
  *          start head whose `more` link closes it under the lead (`moreInHead`) rather than a ruled
  *          foot under the body. The H-row (heading beside its lead) is retired (owner, 7 Oct 2026):
  *          a text-only head is never split left/right.
+ *   § 1.7  never two text-heavy bands back to back (owner, 7 Oct 2026): a dev warning, not a
+ *          rearrangement, because the fix is the story's order and the plan never reorders it.
+ *          `textHeavy` below is the definition.
  *
  * Pure: the same story always gets the same plan. Every decision a renderer needs is on the band,
  * so Bands.tsx only places what it is told.
@@ -339,5 +342,46 @@ export function planBands(story: ServiceStory): Band[] {
     }
   });
 
+  if (process.env.NODE_ENV !== 'production') warnTextHeavyPairs(story.slug, bands);
   return bands;
+}
+
+/** Bands whose job is drawn rather than written: a diagram, client marks, a set of covers, an icon
+    set, a case pair (cards with covers). Visual whatever photograph they carry. */
+const DRAWN: ReadonlySet<Archetype> = new Set(['E', 'H', 'M', 'C-icon', 'C-pair']);
+
+/**
+ * TEXT-HEAVY (visual-direction § 1.7, owner 7 Oct 2026): a band a reader can only read. It carries no
+ * photograph and its body is words — a statement (J), an accordion (D-faq), a contrast pair (N),
+ * steps (F), tiles (C-text), and a ledger, stat or list router (D), a quote with no case (G), an
+ * offer (K) or banner (I) when no photograph landed. A band is VISUAL when it carries a photograph
+ * or its job is drawn (`DRAWN`). Read from the plan, not the story, so a slot table that loses a
+ * photograph turns its band text-heavy and the check sees it.
+ */
+export function textHeavy(band: Band): boolean {
+  if (DRAWN.has(band.archetype)) return false;
+  if ('photo' in band && band.photo) return false;
+  if (band.kind === 'section' && band.archetype === 'G') {
+    const proof = job(band.section);
+    return !(proof?.kind === 'proof' && proof.case);
+  }
+  return true;
+}
+
+/** The index of every band that follows a text-heavy band and is text-heavy itself. */
+export function textHeavyPairs(bands: readonly Band[]): number[] {
+  return bands.flatMap((band, index) => {
+    const before = bands[index - 1];
+    return before && textHeavy(before) && textHeavy(band) ? [index] : [];
+  });
+}
+
+function warnTextHeavyPairs(slug: string, bands: readonly Band[]): void {
+  for (const index of textHeavyPairs(bands)) {
+    console.warn(
+      `[ServicePage ${slug}] bands ${index} and ${index + 1} (${bands[index - 1]?.archetype}, ` +
+        `${bands[index]?.archetype}) are both text-heavy. Follow a text-heavy band with a visual ` +
+        'one (visual-direction § 1.7): reorder the story or give one a photograph.',
+    );
+  }
 }

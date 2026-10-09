@@ -89,6 +89,14 @@
      than read from BlockCard's layer: a component never reads another component's tokens. */
   --media-photo-radius: var(--radius-8);
 
+  /* The photograph tone layer (review 7 Oct 2026, visual-direction § 5.5a): a `filter` value that
+     every photograph Media renders takes, so the site's IRL photographs share one grade. The
+     treatment is TBD, so the hook ships `none` — a no-op, not an invented filter. When the owner
+     rules on it, the value lands here and nowhere else. Geometry-like, so :root only: a grade
+     belongs to the photograph, not the ground it sits on (a photograph reads no surface token,
+     § 5.3), and declaring it four times would assert a variation the rule forbids. */
+  --media-photo-grade: none;
+
   /* Where a `ratio` crop is anchored when the record names no focal point: the middle. A photograph's
      subject is wherever the photographer put it, and the catalogue records it (`focalPoint`); a
      record without one gets the neutral answer, not the UI anchor --media-fill-position gives a
