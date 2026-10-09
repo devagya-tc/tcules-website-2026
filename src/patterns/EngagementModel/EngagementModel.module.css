@@ -1,0 +1,133 @@
+/* EngagementModel — type, ink and the drawing.
+
+   Section paints the band; Layout owns every seam. Every value is an --eng-* token in
+   tokens/components/engagement-model.css.
+
+   Classes: .eyebrow .heading .lead .title .body .key .axis .axisEnd
+            .drawing .swatch .grid .hatch .stretch .level .rule .drop .line
+            .nodeOpen .nodeHalo .nodeShut
+
+   The drawing's strokes are non-scaling, so the line keeps one weight from 1440 down to 390 and
+   the chart reads as drawn rather than as an image scaled. */
+
+.eyebrow {
+  font: var(--eng-eyebrow-text);
+  letter-spacing: var(--eng-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--eng-eyebrow-ink);
+}
+
+.heading {
+  font: var(--eng-heading-text);
+  letter-spacing: var(--eng-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--eng-heading-ink);
+  max-inline-size: var(--eng-heading-measure);
+}
+
+.lead {
+  font: var(--eng-lead-text);
+  color: var(--eng-lead-ink);
+  max-inline-size: var(--eng-lead-measure);
+}
+
+.title,
+.key {
+  font: var(--eng-title-text);
+  letter-spacing: var(--eng-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--eng-title-ink);
+}
+
+.body {
+  font: var(--eng-body-text);
+  color: var(--eng-body-ink);
+  max-inline-size: var(--eng-body-measure);
+}
+
+.axis {
+  font: var(--eng-axis-text);
+  letter-spacing: var(--eng-axis-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--eng-axis-ink);
+}
+
+.axisEnd {
+  text-align: end;
+}
+
+/* ── The drawing ─────────────────────────────────────────────────────────────── */
+
+.drawing {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  overflow: visible;
+}
+
+.swatch {
+  display: block;
+  inline-size: var(--eng-swatch-width);
+  block-size: var(--eng-swatch-height);
+  overflow: visible;
+}
+
+.grid {
+  fill: var(--eng-grid-ink);
+}
+
+.hatch {
+  stroke: var(--eng-idle-ink);
+  stroke-width: var(--eng-idle-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.stretch {
+  fill: var(--eng-stretch-fill);
+}
+
+.level {
+  stroke: var(--eng-level-ink);
+  stroke-width: var(--eng-level-width);
+  stroke-dasharray: var(--eng-level-dash);
+  vector-effect: non-scaling-stroke;
+}
+
+.rule {
+  stroke: var(--eng-rule-ink);
+  stroke-width: var(--eng-rule-width);
+  vector-effect: non-scaling-stroke;
+}
+
+/* The two ends dropped to the axis: the line's start and finish, measured against time. */
+.drop {
+  stroke: var(--eng-rule-ink);
+  stroke-width: var(--eng-rule-width);
+  stroke-dasharray: var(--eng-drop-dash);
+  vector-effect: non-scaling-stroke;
+}
+
+.line {
+  fill: none;
+  stroke: var(--eng-line-ink);
+  stroke-width: var(--eng-line-width);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The first question: an open node. The shipped build: a closed one in a halo of the field. */
+.nodeOpen {
+  fill: var(--eng-node-fill);
+  stroke: var(--eng-line-ink);
+  stroke-width: var(--eng-node-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.nodeHalo {
+  fill: var(--eng-stretch-fill);
+}
+
+.nodeShut {
+  fill: var(--eng-line-ink);
+}
