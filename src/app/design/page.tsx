@@ -313,6 +313,11 @@ const SPECIMENS = [
         note: 'the studio page composed from the kit, warm family, 10 bands — the Holi photograph leading (wide hero), a centred statement with the corner field, four studio scenes, the board beside two tiles, four people with portraits over the horizon, a featured client on tint, numbers beside their head, a 3:1 banner, the careers offer beside and the close with a photograph and the compact form',
       },
       {
+        href: '/design/kit/services',
+        name: 'Kit · Services',
+        note: 'r7-cards — sections of clickable cards: eyebrow, heading and body, then three, four or six cards; icon cards with the glyph at the title em, numbered text cards on tint, cta-cued audits and six text cards under a centred head; no decorative image, no boxes',
+      },
+      {
         href: '/design/kit/services-index',
         name: 'Kit showcase · Services index',
         note: 'the services index composed from the kit, cool family, 11 bands — the title-led hero with a 4:1 panorama, the six-service router, a statement with head-half, four audits, fit beside a photograph, two cases over the horizon, the real rating on tint, the sprint offer, questions, a 3:1 banner and the open close',

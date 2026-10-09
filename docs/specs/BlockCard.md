@@ -1580,3 +1580,13 @@ A partial reversal of "a card is never a box" (visual-direction § 3.1, amended 
   C-icon-4), `kit/services-index` (C-icon-6) and `kit/feature` (variation 18, six services). Unlinked
   icon sets ("Four things you keep") stay open: they are not destinations.
 
+
+## Amendment · r7-cards, 9 Oct 2026
+
+Owner, 7 Oct review: the boxed card variant goes, and each icon is sized to the card title beside it,
+from a token. `frame="box"`, `BlockCardFrame` and BlockCardSet `frame` are deleted with every
+`--bcrd-box-*` token. The icon card's glyph sits on the title's first line, `tight` before it, and
+`--bcrd-icon-size` is `1em` of the title role for the card's size step (22 sm, 28 md, 34 lg at 1440). An
+icon card is opened by the same top hairline as a text card. No decorative image shares a section with
+clickable cards; `/design/kit/services` shows the arrangement (eyebrow, heading, body, then 3/4/6 cards).
+Where earlier sections describe the box or the 32 icon above the title, this amendment wins.

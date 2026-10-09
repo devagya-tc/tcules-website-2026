@@ -1069,8 +1069,8 @@ export default function FeatureKitSpecimen() {
       </ContentSection>
 
       <Caption n={18} name={VARIATIONS[17]} fit="head 542 · body 3 × 136 + 2 × 48 = 504">
-        Six linked icon cards route to their pages; no CtaRow. Boxed (owner, 7 Oct 2026): a
-        hairline at the 8 radius and a ground on hover, a gutter apart. Solid glyphs only. On a
+        Six linked icon cards route to their pages; no CtaRow. Open, each opened by its hairline
+        (the box went, owner 7 Oct 2026), the glyph the em of the h5 beside it. Solid glyphs only. On a
         phone, linked and more than three, the set is a sideways row.
       </Caption>
       <ContentSection
@@ -1082,7 +1082,7 @@ export default function FeatureKitSpecimen() {
         asideFill
         aside={<Aside id="desk-minimal-white" />}
       >
-        <BlockCardSet items={SERVICES_6} lead="none" across={2} frame="box" />
+        <BlockCardSet items={SERVICES_6} lead="none" across={2} />
       </ContentSection>
 
       <Caption n={19} name={VARIATIONS[18]} fit="head 411 · body 429">

@@ -111,8 +111,6 @@ parent list.
 | `cue`     | **deleted 7 Oct 2026** | — The arrow cue is gone. An external item keeps a small (16) `arrow-right-up` after the title and a visually hidden "(opens in a new tab)" at the end of its name | The title carries the link ink on hover, focus and press                 |
 | `action`  | opt-in, linked only | `ctaLabel`: the link `Button` (`as="span"`, `emphasis="link"`, `tone="primary"`, `arrow-right` or `arrow-right-up`) a `block` under the copy, pinned to a tile's foot | Button's own tokens; the frame carries `data-btn-link-group` |
 | `rule`    |              yes | The root's block-end hairline                                                    | `--lcrd-rule-ink`; one width and one colour in every state         |
-| `ground`  | boxed linked tiles only (7 Oct 2026) | No element of its own — the frame's own background, painted only under a pointer  | `--lcrd-ground-hover`, `--lcrd-ground-pressed`                    |
-| `box`     | `frame="box"` tiles only | The frame's four-sided hairline at `--lcrd-box-radius` (8), `--gap-block` inside | `--lcrd-rule-ink`, `--lcrd-box-rule-width`                    |
 
 The title's ink does not depend on `href`, matching the same change in `BlockCard`: a linked row is
 recognisable by its arrow, not by a blue heading, so `--lcrd-link-ink` is worn by the cue alone.
@@ -278,8 +276,6 @@ ground: `--color-paper`, `--color-paper-deep`, `--color-neutral-950` and
 | `--lcrd-link-ink`         | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-brandeis-100` — 4.91:1             |
 | `--lcrd-link-ink-pressed` | `--color-brandeis-700` — 10.07:1                | `--color-brandeis-700` — 8.99:1                 | `--color-brandeis-50` — 15.44:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--lcrd-rule-ink`         | `--color-neutral-300` — n/a, decoration         | `--color-neutral-400` — n/a, decoration         | `--color-neutral-700` — n/a, decoration         | `--color-brandeis-300` — n/a, decoration    |
-| `--lcrd-ground-hover`     | `--color-paper-deep` — a ground, not an ink (7 Oct)     | `--color-neutral-100` — a ground, not an ink (7 Oct)     | `--color-neutral-900` — a ground, not an ink     | `--color-brandeis-600` — a ground, not an ink |
-| `--lcrd-ground-pressed`   | `--color-neutral-100` — a ground, not an ink (7 Oct)     | `--color-neutral-200` — a ground, not an ink (7 Oct)     | `--color-neutral-800` — a ground, not an ink     | `--color-brandeis-700` — a ground, not an ink |
 | `--lcrd-ring-color`       | `--color-brandeis-500` — 6.17:1 against its gap | `--color-brandeis-500` — 5.51:1 against its gap | `--color-brandeis-300` — 7.32:1 against its gap | `--color-white` — 6.23:1 against its gap    |
 | `--lcrd-ring-gap-color`   | `--color-paper` — paired ring 6.17:1            | `--color-paper-deep` — paired ring 5.51:1       | `--color-neutral-950` — paired ring 7.32:1      | `--color-brandeis-500` — paired ring 6.23:1 |
 
@@ -1267,3 +1263,12 @@ glossary, tools and how-we-work (the author numbered the list because its order 
 checklist; the Future Interfaces Lab join steps; the kit CTA band's phases; the ContentSection and CtaRow
 specimens' steps.
 
+
+## Amendment · r7-cards, 9 Oct 2026
+
+Owner, 7 Oct review: "remove the box borders: the boxed card variant goes", and "size each icon to the
+card title beside it, from a token". `frame="box"` and `ListCardFrame` are deleted with
+`--lcrd-box-rule-width`, `--lcrd-box-radius`, `--lcrd-ground-hover` and `--lcrd-ground-pressed`; nothing
+paints a ground. A tile's icon now sits on the title's first line at every width, `tight` from it, and
+`--lcrd-marker-icon-size-tile` is `1em` of the title role for the size step (22 beside h5, 28 beside h4).
+Where earlier sections describe the box, the ground or the 32 tile icon, this amendment wins.

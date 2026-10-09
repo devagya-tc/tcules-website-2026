@@ -5,7 +5,6 @@ import { Layout } from '@/components';
 import {
   BlockCard,
   type BlockCardCue,
-  type BlockCardFrame,
   type BlockCardImage,
   type BlockCardProps,
   type BlockCardRatio,
@@ -32,7 +31,6 @@ export type BlockCardSetItem = Omit<
   | 'index'
   | 'cue'
   | 'titleAs'
-  | 'frame'
 > & {
   id: string;
 };
@@ -109,14 +107,6 @@ export type BlockCardSetProps = {
   numbered?: boolean;
   /** How every linked card says it navigates. Absent, each card's own default. See `BlockCardCue`. */
   cue?: BlockCardCue;
-  /**
-   * Every card's finish (owner, 7 Oct 2026). `box` draws each card in a hairline box at the 8
-   * radius; see `BlockCardFrame`. A set's decision, never one card's: a set with one boxed card
-   * and five open ones reads as a recommendation. Boxed rows sit a `gutter` apart, not a `stack` or
-   * a `column`: the box is the separation, so the seam down the grid matches the seam across it.
-   * Default `none`.
-   */
-  frame?: BlockCardFrame;
   /**
    * The cards' heading element. Default h3, under a band's h2. `h2` only where the set IS the
    * page's list directly under its h1 (the case-study index), so the outline does not skip h2.
@@ -293,7 +283,6 @@ export function BlockCardSet({
   standIns,
   numbered = false,
   cue,
-  frame,
   titleAs,
   stagger = false,
   label,
@@ -320,7 +309,6 @@ export function BlockCardSet({
               key={id}
               {...card}
               cue={cue}
-              frame={frame}
               titleAs={titleAs}
               index={numbered ? 1 : undefined}
               size="lg"
@@ -332,7 +320,6 @@ export function BlockCardSet({
               key={id}
               {...card}
               cue={cue}
-              frame={frame}
               titleAs={titleAs}
               index={numbered ? index + 1 : undefined}
               size="md"
@@ -364,7 +351,6 @@ export function BlockCardSet({
             key={id}
             {...card}
             cue={cue}
-            frame={frame}
             titleAs={titleAs}
             index={numbered ? index + 1 : undefined}
             tracks={index === 0 ? 2 : 3}
@@ -380,7 +366,7 @@ export function BlockCardSet({
   const covered = items.some(hasCover);
   const { columns, tracks, widest } = peerGrid(peers.length, across);
   const iconSet = !covered && items.every((item) => item.icon !== undefined);
-  /* Icon cards are h5 and body-sm, always (§ 1.4: icon 32; 16; h5; 16; body-sm). `size` is not an
+  /* Icon cards are h5 and body-sm, always (§ 1.4; the glyph is the h5's em beside it, 7 Oct 2026). `size` is not an
      option for them: an override set one grid's titles a step above the next one's on one page. */
   const size = iconSet ? 'sm' : (sizeOverride ?? peerSize(peers, widest, covered));
   const ratio: BlockCardRatio = widest >= 3 ? 'wide' : 'cover';
@@ -404,10 +390,11 @@ export function BlockCardSet({
     scroll === 'auto' &&
     !featured &&
     ((covered && items.length >= 3) || (linked && items.length > 3));
-  /* Icon cards are smaller objects than covered or text tiles — a 32 glyph, an h5 and two lines —
-     and at a `column` (64) apart a stacked 2×2 read as four loose items. They sit a `stack` (48)
-     apart down the grid: the block-to-block step, still clearly more than the 16 inside a card. */
-  const rowGap = frame === 'box' ? 'gutter' : iconSet ? 'stack' : 'column';
+  /* Icon cards are smaller objects than covered or text tiles — a rule, an h5 led by its glyph and
+     two lines — and at a `column` (64) apart a stacked 2×2 read as four loose items. They sit a
+     `stack` (48) apart down the grid: the block-to-block step, still clearly more than the 16
+     inside a card, and each row opens on its own hairlines. */
+  const rowGap = iconSet ? 'stack' : 'column';
   /* Icon rows are pinned to their content: no equalRows (fix round 2). Under a stretched beside
      body the 1fr rows took the tallest card's height, so a row of three-line bodies left 80 above
      the next icon and a row of two-line ones 53 — two beats in one grid. Cards in a row still share
@@ -438,7 +425,7 @@ export function BlockCardSet({
       aria-label={tabStop ? label : undefined}
     >
       {items.map(({ id, ...card }, index) => {
-        const shared = { index: numbered ? index + 1 : undefined, cue, frame, titleAs };
+        const shared = { index: numbered ? index + 1 : undefined, cue, titleAs };
         return featured && index === 0 ? (
           <BlockCard
             key={id}
