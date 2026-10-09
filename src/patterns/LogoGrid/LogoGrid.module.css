@@ -1,0 +1,85 @@
+/* LogoGrid — the hairline cells and the context line. Layout owns the columns and Cluster the
+   centring; nothing here arranges anything. Every value is a token.
+
+   How the hairlines are drawn. Each cell rules its own block-start and inline-start edge, so two
+   neighbours never double a line, whatever the column count. `open` then clips the grid's first
+   hairline-width at the top and the start, which removes exactly the outer top and start edges
+   (no cell rules its end or bottom edge, so those are absent already): rules only BETWEEN cells,
+   with no row or column to special-case. `closed`, the default since the 9 Oct review, instead
+   adds the end and bottom edges to the grid itself, so every cell is a whole box. Neither needs a margin, a
+   negative offset or a gap: the grid's gaps are 0 because no axis is stated (Layout rule 3), and
+   that seam is the point — the cells share their edges. */
+
+.cell {
+  min-block-size: var(--lgrid-cell-height);
+
+  /* A guard, not a layout distance between things: the mark never touches a hairline in the
+     narrowest cell (~179 at 390, two across, where LatitudePay is 158). The one step serves every
+     width; the scale does not shift responsively. */
+  padding-inline: var(--gap-tight);
+  border-block-start: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
+  border-inline-start: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
+}
+
+/* The closing cell: when the last row holds one mark it spans the row, so the grid is a whole
+   rectangle (nine on a phone is 4 × 2 + 1). Placement of this unit's own cell inside the Layout it
+   renders, at the breakpoint where it applies — LogoGrid.tsx decides which, from the count.
+   Layout's breakpoints: md 768, lg 1024, xl 1440. */
+@media (max-width: 767.98px) {
+  .fillBase {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .fillMd {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439.98px) {
+  .fillLg {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1440px) {
+  .fillXl {
+    grid-column: 1 / -1;
+  }
+}
+
+.open {
+  clip-path: inset(var(--lgrid-rule-width) 0 0 var(--lgrid-rule-width));
+}
+
+/* Inline-start is the right edge in a right-to-left page. */
+.open:dir(rtl) {
+  clip-path: inset(var(--lgrid-rule-width) var(--lgrid-rule-width) 0 0);
+}
+
+.closed {
+  border-block-end: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
+  border-inline-end: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
+}
+
+/* The demoted heading: the eyebrow role, so mono and uppercase in presentation only. */
+.context {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--lgrid-context-ink);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* The beside head's short heading: the h4 role on the h2 element (9 Oct review), so the grid
+   stays the band's large thing. Its ink is the surface's, inherited as every heading's is. */
+.heading {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+.centred {
+  text-align: center;
+}

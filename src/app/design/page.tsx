@@ -65,7 +65,7 @@ const SPECIMENS = [
       {
         href: '/design/client-mark',
         name: 'ClientMark',
-        note: "a client's logo in a set — mask in the ground's ink, equal area, capped 40 × 160, ±15% correction, 4 surfaces",
+        note: "a client's logo in a set — mask in the ground's ink, equal area of ink by measured density, capped 40 tall, 240 wide guard, ±15% correction, 4 surfaces",
       },
       {
         href: '/design/brand-mark',
@@ -270,7 +270,12 @@ const SPECIMENS = [
       {
         href: '/design/kit/logos',
         name: 'Kit · Client logos',
-        note: 'band H as a composition: centred strip, tint, grid beside a head, marks beside a real quote, a sourced figure, CtaRow',
+        note: 'band H, the boxed grid (r7): context line, led by the rating badge, beside a short h4 heading, 12 cells, open edges, surfaces',
+      },
+      {
+        href: '/design/kit/logos',
+        name: 'LogoGrid',
+        note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone',
       },
       {
         href: '/design/kit/facts',

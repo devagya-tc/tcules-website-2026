@@ -1,0 +1,60 @@
+/* ══ Component layer — LogoGrid ══════════════════════════════════════════════════
+   Tier 2. The boxed client-logo grid (r7-logos, 7 Oct review, owner 8 Oct): every mark in a
+   cell of its own, equal weight, the cells divided by hairlines as the Enorm reference sets
+   them. A logo cell is not a card, so these hairlines are the NAMED EXCEPTION to "a card is
+   never a box" (visual-direction § 3.1): the box is what makes nine marks of different kinds —
+   wordmark, badge, symbol between words — read as one set of equals.
+
+   Naming: --lgrid-{part}-{role}
+     parts: cell | rule | context
+
+   The cell's inner padding and the gaps around the grid are distances, so the pattern reads the
+   gap scale directly; the eyebrow role is read directly too. Neither is aliased here. */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   --lgrid-cell-height   a component SIZE: the row height every cell shares. 128 holds the
+                         40-tall mark cap with 44 of air above and below, the proportion of the
+                         reference's 107 cells to its ~30 marks. Three rows are 384, so a
+                         three-by-three grid, its context line and a section's padding stay well
+                         inside the 830 fold at 1470.
+   --lgrid-cell-height-m the phone step, as the type ladder names its 767 step: 88 holds the
+                         phone mark's 32 cap with 28 of air, so nine marks two across (five
+                         rows) are 440 and twelve (six rows) 528.                            */
+:root {
+  --lgrid-cell-height: 128px;
+  --lgrid-cell-height-m: 88px;
+  --lgrid-rule-width: var(--border-width-hairline);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --lgrid-cell-height: var(--lgrid-cell-height-m);
+  }
+}
+
+/* ── Surfaces ─────────────────────────────────────────────────────────────────
+   The rule is decoration (the cell's edge, not a boundary anyone must find), so it has no
+   contrast floor; it is the hairline step the data table uses on each ground, which is the one
+   other ruled grid in the system. The context line is surface text and clears 4.5:1, the
+   eyebrow's inks. Blue is declared because every surface is (rule 2), though blue is never a
+   ground for this band. */
+:root,
+[data-surface='paper'] {
+  --lgrid-rule-ink: var(--color-neutral-200); /* decoration */
+  --lgrid-context-ink: var(--color-neutral-600); /* 4.92:1 */
+}
+
+[data-surface='tint'] {
+  --lgrid-rule-ink: var(--color-neutral-200); /* decoration */
+  --lgrid-context-ink: var(--color-neutral-700); /* 7.27:1 */
+}
+
+[data-surface='ink'] {
+  --lgrid-rule-ink: var(--color-neutral-700); /* decoration */
+  --lgrid-context-ink: var(--color-neutral-400); /* 8.05:1 */
+}
+
+[data-surface='blue'] {
+  --lgrid-rule-ink: var(--color-brandeis-400); /* decoration */
+  --lgrid-context-ink: var(--color-brandeis-100); /* 4.91:1 */
+}

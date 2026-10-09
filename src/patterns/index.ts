@@ -334,3 +334,12 @@ export {
   type VideoTestimonialSource,
   type VideoTestimonialCaptions,
 } from './VideoTestimonial';
+
+/* LogoGrid — client marks in equal hairline cells, with an optional badge and context line (H band). */
+export {
+  LogoGrid,
+  logoGridColumns,
+  type LogoGridProps,
+  type LogoGridMark,
+  type LogoGridTrack,
+} from './LogoGrid';

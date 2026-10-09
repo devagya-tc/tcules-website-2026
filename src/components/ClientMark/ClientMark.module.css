@@ -7,12 +7,13 @@
    from the page that embeds it, and a CSS filter that forces it dark or white is a recolour
    by approximation, not a named ink.
 
-   Four custom properties arrive from ClientMark.tsx on the style prop, because they are
+   Five custom properties arrive from ClientMark.tsx on the style prop, because they are
    per-asset data and there is no finite set of classes to enumerate:
      --cmark-src          url("…") of the client's SVG
      --cmark-ratio        intrinsic width / height
      --cmark-ratio-root   √ratio, computed in TSX (see the TSX for why not CSS sqrt())
      --cmark-correction   1 + the recorded weight correction, already clamped to ±0.15
+     --cmark-optical      √(reference density / the mark's density): 1 with no density recorded
    They are listed in JS_INJECTED in scripts/tokens-check.mjs. Every other value here is a
    token; this file states no distance and no colour.
 
@@ -20,11 +21,14 @@
    radius, no transition, no animation, and no crop — the mask is `contain`, so a mark whose
    stated ratio is slightly off letterboxes inside its box rather than losing an edge. */
 .mark {
-  /* Equal AREA first: a mark of ratio r whose area is side² is side·√r wide. Then the two
+  /* Equal AREA first — of INK, not of box (r7-logos fix round, 9 Oct 2026): the side is scaled
+     by --cmark-optical, so a mark that inks half the reference density gets twice the box area
+     and lays the same ink as its neighbours. A mark of ratio r whose area is side² is side·√r
+     wide. Then the two
      caps, each keeping the ratio: at the height cap the width is height-max·r. The order of
      the terms is irrelevant to min(); the order of the STEPS is ch05's (area, then caps). */
   --cmark-width-fitted: min(
-    calc(var(--cmark-target-side) * var(--cmark-ratio-root)),
+    calc(var(--cmark-target-side) * var(--cmark-optical) * var(--cmark-ratio-root)),
     calc(var(--cmark-height-max) * var(--cmark-ratio)),
     var(--cmark-width-max)
   );
@@ -33,8 +37,9 @@
      tall) is absolute. The width cap does not (fix round 2, 6 Oct 2026): it is the set's design
      limit, and re-applying it neutralised the one correction the set needs most — LatitudePay's
      hairline, letter-spaced wordmark is fitted at 152 of 160, so +15% became +5% and the mark read
-     visibly lighter than every neighbour. A wide mark may now reach 160 × 1.15 = 184, and only when
-     its file records a correction; at 0 the width cap holds exactly as before. */
+     visibly lighter than every neighbour. Since the density step the width cap is a GUARD for the
+     ultra-wide (240, a 6:1 wordmark at the height cap), not the normaliser: no real mark reaches
+     it, and LatitudePay's weight now comes from its measured density rather than a correction. */
   --cmark-width: min(
     calc(var(--cmark-width-fitted) * var(--cmark-correction)),
     calc(var(--cmark-height-max) * var(--cmark-ratio))
@@ -48,8 +53,8 @@
   justify-self: start;
   inline-size: var(--cmark-width);
   /* Never wider than the box it is placed in. In a Cluster that is the mark's own li, so this
-     does nothing; in equal grid cells narrower than the mark (a corrected 175-wide mark in a
-     five-track cell at 1024, ~154) the mark would otherwise spill out of its track. The block-size below
+     does nothing; in an equal grid cell narrower than the mark (LatitudePay at 201 in a narrow
+     track) the mark would otherwise spill out of its cell. The block-size below
      does not follow, deliberately: the mask is `contain`, so the artwork shrinks to the width
      and letterboxes vertically in a box a few px taller — the designed failure mode, never a
      crop or a stretch. */
