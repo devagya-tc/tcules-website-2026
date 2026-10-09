@@ -27,7 +27,7 @@ import type {
  *   § 3.5  centred heads never sit in adjacent bands: a band that may go either way yields.
  *   § 3.2  consecutive beside-with-aside bands mirror (`headSide`), so two are never one rectangle.
  *   § 5.6  the page's photographs come from its slot table (SERVICE_PHOTO_SLOTS): B, I and K by role,
- *          the head-track asides in page order, the router preferring `aside1`, D taking `aside2`;
+ *          the head-track asides in page order, D (never a router) taking `aside2`;
  *          F takes none and a page may name none (image pass, 7 Oct 2026). K's frame follows
  *          its photograph: landscape 3:2 where the master resolves at 667, else the portrait 4:5.
  *   § 6.4  the texture signature: `horizon` on the band directly above the tint proof band unless it
@@ -39,11 +39,9 @@ import type {
  *   § 3.2  a B with two tiles gives the photograph the large track (`photoWeight`, 667 at 6:5 beside
  *          the copy's 477): two tiles leave a 667 copy column half empty, and the photograph is what
  *          the band can spend the width on. Four tiles fill the 667, so the photo keeps the 477.
- *   § 3.4  a C-icon router of FOUR routes is B's geometry (`split`): the photograph 4:5 beside a
- *          2 × 2 of icon cards in the 667, ending on the cards' last line, and image-led on a phone.
- *          The head-track aside cut it to a 381 × 160 strip under the head, and at 390 the band was
- *          one more head-and-rows run. Six routes need the 763 for three rows of two, so they keep
- *          the beside head with its aside.
+ *   § 3.4  a section of clickable cards — the C-icon router, the list router, the C-pair cases —
+ *          stacks its head over the cards at full width and carries no photograph (owner, 9 Oct
+ *          2026): the cards read as the heading's continuation, never as a grid beside a head.
  *   § 3.5  J centres its sentence across the full measure unless a neighbour is centred (fix round
  *          2): a split J between two beside bands put four bands' content on one 1/3 line.
  *   § 7.1  the head form follows the body: a thread's E band centres its head from 1024 (start below,
@@ -63,8 +61,8 @@ import type {
 export type Archetype =
   | 'B' // media split: a photograph beside the head and tiles
   | 'C-text' // tiles under a head: signals with no photograph to stand beside
-  | 'C-icon' // the icon router: beside head + photo aside, linked icon cards
-  | 'C-pair' // two cases beside a head and its action
+  | 'C-icon' // the icon router: stacked head over linked icon cards, no photograph
+  | 'C-pair' // a stacked head and its action over two cases
   | 'D' // read-down rows beside a head with an aside
   | 'D-faq' // a centred accordion
   | 'E' // a full-column diagram under a head
@@ -95,8 +93,6 @@ export type SectionBand = BandBase & {
   headSide: 'start' | 'end';
   /** B only: the photograph takes the large track, because the copy is two tiles (§ 3.2). */
   photoWeight: boolean;
-  /** C-icon only: four routes take the media split, the photo beside the 2 × 2 (§ 3.4). */
-  split: boolean;
   /** E (a diagram) and M (covers): the `more` link closes the stacked head, under the lead, rather
       than opening a ruled foot under the full-column body. (It was `headRow`, the H-row, retired
       7 Oct 2026: a text-only head is never split left/right.) */
@@ -138,7 +134,7 @@ const MAY_CENTRE: ReadonlySet<Archetype> = new Set(['E', 'N', 'C-text']);
 const TEXTURE_BUDGET = 3;
 
 /** Bands with a head-track aside. */
-const ASIDE: ReadonlySet<Archetype> = new Set(['C-icon', 'D', 'F']);
+const ASIDE: ReadonlySet<Archetype> = new Set(['D', 'F']);
 
 function job(section: StorySection): StoryBlock | undefined {
   return section.blocks.find((block) => !QUIET.has(block.kind));
@@ -240,19 +236,17 @@ export function planBands(story: ServiceStory): Band[] {
     const archetype = archetypeOf(entry, Boolean(slots) && !bUsed);
     let photo: PhotoId | undefined;
     let photoWeight = false;
-    let split = false;
     if (archetype === 'B') {
       bUsed = true;
       photo = slots?.b;
       const signals = job(entry);
       photoWeight = signals?.kind === 'signals' && signals.items.length <= 2;
-    } else if (archetype === 'C-icon') {
-      photo = takeAside(0);
-      const router = job(entry);
-      split = router?.kind === 'router' && router.items.length + (router.also ? 1 : 0) === 4;
-    } else if (archetype === 'D') {
+    } else if (archetype === 'D' && job(entry)?.kind !== 'router') {
       photo = takeAside(1);
     }
+    /* A router takes no photograph, icon (C-icon) or list (D): a section of clickable cards has no
+       decorative image, and its head stacks over the cards (owner, 9 Oct 2026). The photo budget
+       goes to the bands whose items are read, not clicked. */
     /* F takes no photograph (image pass, 7 Oct 2026): numbered steps are the band's shape, and a
        stock photo beside them neither shows the method nor fits it. The head sits beside the steps
        (a head | read-down split, which the 7 Oct ruling 2 keeps). */
@@ -271,7 +265,6 @@ export function planBands(story: ServiceStory): Band[] {
       photo,
       headSide: 'start',
       photoWeight,
-      split,
       moreInHead: false,
     };
   });

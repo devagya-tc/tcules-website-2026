@@ -198,19 +198,13 @@ export function Ledger({ block }: { block: Of<'ledger'> }) {
 
 /* ── Router ───────────────────────────────────────────────────────────────────
    "Which one is mine?" With a glyph on every route, the C-icon router (cmp-services): linked icon
-   cards two across in the body track, the service as the card's name and the condition that sends
-   you there as its body — boxed (owner, 7 Oct 2026), so four to six destinations read as separate
-   objects rather than one field of text. Without, the list router: linked ListCard rows. The
-   non-service route (an audit) is the last item, for the reader who cannot name the condition. */
-export function Router({
-  block,
-  across = 2,
-}: {
-  block: Of<'router'>;
-  /** 2 in a body track (beside or split); 3 when the router's head stacks over it (image pass,
-      7 Oct 2026: a C-icon with no photograph), so six routes are two rows of three. */
-  across?: 2 | 3;
-}) {
+   cards under the band's stacked head (owner, 9 Oct 2026: a section of clickable cards never sets
+   its head beside them), the service as the card's name and the condition that sends you there as
+   its body — boxed (owner, 7 Oct 2026; borderless since 9 Oct), so four to six destinations read
+   as separate targets. The count picks the tracks (BlockCardSet): four across, or six as two rows
+   of three. Without glyphs, the list router: linked ListCard rows. The non-service route (an
+   audit) is the last item, for the reader who cannot name the condition. */
+export function Router({ block }: { block: Of<'router'> }) {
   const all = [
     ...block.items.map((item) => ({ when: item.when, link: item.route, icon: item.icon })),
     ...(block.also ? [block.also] : []),
@@ -225,7 +219,7 @@ export function Router({
     }));
     /* Stacked on a phone (`scroll="never"`): a router shows every route at once, never one and a
        fifth of six behind a gesture (fix round 1). */
-    return <BlockCardSet items={items} lead="none" across={across} scroll="never" frame="box" />;
+    return <BlockCardSet items={items} lead="none" scroll="never" frame="box" />;
   }
   const size = setSize(all.length, 'row');
   return (

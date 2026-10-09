@@ -1,4 +1,4 @@
-import { Cluster, Layout, Media, Section, TextureHorizon, type IconName } from '@/components';
+import { Cluster, Layout, Section, TextureHorizon, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -10,7 +10,6 @@ import {
   type BlockCardMedia,
   type BlockCardSetItem,
 } from '@/patterns';
-import { HEAD_TRACK } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 
@@ -21,9 +20,10 @@ import t from '../../_specimen/typeroles.module.css';
  * /design/kit/service-list — the service router family of the Tcules UI kit (cmp-services).
  *
  * "Which one is mine?" answered three ways (visual-direction § 3.3, § 3.4): an ICON router (C-icon,
- * a beside head with a photograph in its head track and whole-card links), an IMAGE router
- * (C-image-3 / -4 linked, or a Slider from five), and a LIST router (a beside head with its
- * actions over ruled ListCard rows, each with a 160 thumbnail). A composition:
+ * a stacked head over borderless boxed whole-card links), an IMAGE router (C-image-3 / -4 linked,
+ * or a Slider from five), and a LIST router (a stacked head with its actions over three ListCard
+ * tiles, each with a 160 thumbnail). Every router stacks its head over its clickable cards and
+ * carries no decorative photograph (owner, 9 Oct 2026). A composition:
  * no unit is added. ServicePage's `Router` block is swapped for one of these by cmp-service-pages;
  * this route proves the shapes, and the template is not touched here.
  *
@@ -41,24 +41,13 @@ import t from '../../_specimen/typeroles.module.css';
  * router — the one place on the page where a band meets a different ground. It starts 56 under the
  * cards' last line; never behind cards or rows, never in the Slider. The hero carries none.
  *
- * Band order alternates the head and the ground (beside · centred · beside on tint · stacked · beside
- * mirrored · start, as a rail) so no two bands are the same rectangle, which is the squint test
+ * Band order alternates the head, the ground and the card shape (icon boxes · centred covers · rows
+ * on tint · four covers · a row of four icon boxes · a rail) so no two bands are the same rectangle, which is the squint test
  * (§ 8.5) applied to the specimen. The two image routers differ by shape as well as head: three whole
  * cards under a display head, then six on a rail that runs off the page's end edge.
  */
 
 const photo = (id: PhotoId): BlockCardMedia => ({ type: 'image', image: getKitPhoto(id) });
-
-/**
- * The C-icon head photograph, in both icon routers. `asideFill` ends it on the body's last line — for
- * six, the 3 × 2 grid's; for four, the CtaRow's under the 2 × 2 (fix round 2: at a fixed 3:2 the
- * four's photo ran ~110 past the row, so the two columns stopped on different lines). Below 1024 it is
- * a 21:9 banner between the head and the rail (--csec-aside-ratio), so the band keeps a router's
- * silhouette on a phone and a tablet rather than an image router's.
- */
-function Aside({ id }: { id: PhotoId }) {
-  return <Media image={getKitPhoto(id)} fit="fill" sizes={HEAD_TRACK} />;
-}
 
 const icon = (
   id: string,
@@ -395,23 +384,19 @@ export default function ServiceListKitSpecimen() {
       </Section>
 
       {/* ── 01 · C-icon-6 ──────────────────────────────────────────────────────────────────── */}
-      {/* A beside head over six linked icon cards, the photograph in the head track ending on the
-          grid's last line. Whole-card links in boxes (owner, 7 Oct 2026); no CtaRow (§ 1.4
-          rule 7), and never actions in the head track, so the set never renders without its photo.
-          At 390 the six are one sideways row, the next card peeking, with a progress rail under it
+      {/* A stacked head over six linked icon cards, two rows of three, and no photograph: a
+          section of clickable cards reads as its heading's continuation (owner, 9 Oct 2026).
+          Whole-card links in borderless boxes; no CtaRow (§ 1.4 rule 7). At 390 the six are one sideways row, the next card peeking, with a progress rail under it
           whose thumb is a sixth of its length, so the count reads; the photo is a 21:9 banner. */}
       <Title id="icon-six" />
       <ContentSection
-        arrangement="beside"
         data-band="C-icon"
         eyebrow="Services"
         heading="Find the service that fits"
         headingId="ksl-icon-six"
         lead="Each has its own page. Most teams start with one, then add a second once it ships."
-        asideFill
-        aside={<Aside id="pair-at-laptop-sticky-wall" />}
       >
-        <BlockCardSet items={SIX} lead="none" across={2} frame="box" />
+        <BlockCardSet items={SIX} lead="none" across={3} frame="box" />
       </ContentSection>
 
       {/* ── 02 · C-image-3, H-compact centred ──────────────────────────────────────────────── */}
@@ -433,13 +418,13 @@ export default function ServiceListKitSpecimen() {
       </ContentSection>
 
       {/* ── 03 · List router ───────────────────────────────────────────────────────────────── */}
-      {/* A beside head carrying the band's actions (one link — in-band, r7-buttons) over three ruled,
-          linked ListCard rows: thumbnail, title, the condition under it. Three
-          rows at most, so the head track never needs an aside as well (§ 1.4 rule 6). On tint, the
+      {/* A stacked head carrying the band's actions (one link — in-band, r7-buttons) over three
+          linked ListCard tiles across the column: thumbnail, title, the condition under it.
+          Clickable, so the head sits above them at full width (owner, 9 Oct 2026); tiles rather
+          than rows, because three 171 rows under a full head ran the band to 989. On tint, the
           page's one change of ground, so the run of paper bands breaks where the shape does. */}
       <Title id="list" surface="tint" />
       <ContentSection
-        arrangement="beside"
         surface="tint"
         data-band="D"
         eyebrow="Related services"
@@ -450,16 +435,16 @@ export default function ServiceListKitSpecimen() {
           <CtaRow rule={false} actions={[{ label: 'Book a call', href: ROUTES.contact }]} />
         }
       >
-        <Layout as="ul" rowGap="none">
+        <Layout as="ul" columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="stack">
           {ROWS.map((row) => (
             <ListCard
               key={row.href}
+              form="tile"
               size="md"
               titleAs="h3"
               title={row.title}
               body={row.body}
               href={row.href}
-              arrangement="stacked"
               marker={{ type: 'thumbnail', image: getKitPhoto(row.image) }}
             />
           ))}
@@ -482,23 +467,17 @@ export default function ServiceListKitSpecimen() {
       </ContentSection>
 
       {/* ── 05 · C-icon-4 + CtaRow ─────────────────────────────────────────────────────────── */}
-      {/* On a service page: what teams add next. MIRRORED (fix round 2, headSide="end"): the 2 × 2
-          and its CtaRow lead in the two-thirds track and the head and its photograph close the row,
-          so this band is not 01's rectangle again with a footer added. The photograph fills to the
-          CtaRow's line, so both tracks stop on one edge. The head stays first in the DOM, so a phone
-          and a screen reader still meet the heading before the cards. At 390, linked and more than
-          three, the set is a sideways row with its progress rail. */}
+      {/* On a service page: what teams add next. A stacked head over four linked icon cards in one
+          row of four, and its CtaRow under them; no photograph, because the cards are clickable
+          (owner, 9 Oct 2026). At 390, linked and more than three, the set is a sideways row with
+          its progress rail. */}
       <Title id="icon-four" />
       <ContentSection
-        arrangement="beside"
         data-band="C-icon"
         eyebrow="Pairs well with"
         heading="What teams add next"
         headingId="ksl-icon-four"
         lead="Four services that most often follow product design, in the order clients add them."
-        asideFill
-        headSide="end"
-        aside={<Aside id="hands-sticky-blue-pen" />}
         footer={
           <CtaRow
             note="Six services in all, each with its own page."
@@ -506,7 +485,7 @@ export default function ServiceListKitSpecimen() {
           />
         }
       >
-        <BlockCardSet items={NEXT} lead="none" across={2} frame="box" />
+        <BlockCardSet items={NEXT} lead="none" frame="box" />
       </ContentSection>
 
       {/* ── 06 · Slider ────────────────────────────────────────────────────────────────────── */}

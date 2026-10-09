@@ -140,6 +140,27 @@ dropping it leaves three image-less bands in a row (product-design keeps its rou
 reasons); without one it stacks its head over the icons, three across. Rhythm floor instead of the old minimums: roughly every second or third band still carries
 an image. This amends § 3.3's F and C-icon binding rules and § 5.1 rule 3's "≥ 4 photographs".
 
+## Owner rulings · 9 Oct 2026 (card sections)
+
+These override anything below that disagrees, including the 7 Oct image pass where it gave C-icon a
+photograph.
+
+1. **An icon card stacks.** Glyph on its own row, then the title, then the body — in every card
+   (BlockCard, ListCard tile, every frame, the hairline tile included) and at every width. Never the
+   glyph inline beside the title: that reads as a bulleted heading. The glyph keeps its size (the title
+   role's em) and sits a `text` (16) above the title.
+2. **The box has no edge.** `frame="box"` keeps its 24 inset and its hover ground at the 8 radius —
+   the inset exists for the ground — and loses its border on every side and surface. A linked box
+   answers the pointer with the ground and the title's accent, and the keyboard with the ring.
+3. **A section of clickable cards puts its head above them.** Eyebrow, heading and lead run the full
+   column, and the cards follow under them as the heading's continuation. Never a head track beside a
+   card grid: that reads as two things side by side.
+4. **No decorative image in a section of clickable cards.** The cards are the band's shape. A
+   photograph may sit beside a list of items a reader does NOT click (B: a hairline problem list),
+   with the items continuing under the heading in the same column.
+
+So C-icon, the list router and C-pair stack their heads and take no photograph; B is unchanged.
+
 ---
 
 ## 0 · The diagnosis, in numbers
@@ -628,13 +649,14 @@ Callout, the code chip, and the ch05 contrast panel behind a cut-out.
 
 **A card is not a box by default:** no border, no ground, no radius on the card, and no shadow.
 
-**Amendment (owner, 7 Oct 2026) — the boxed variant.** A set whose items must read as separate objects
-at a glance — an icon router of four to six destinations — may draw every card in a box:
+**Amendment (owner, 7 Oct 2026; edge removed 9 Oct) — the boxed variant.** A set whose items must read
+as separate targets — an icon router of four to six destinations — may box every card:
 `BlockCardSet frame="box"` (BlockCard `frame="box"`) and ListCard `form="tile" frame="box"`.
-- A hairline round the card at the 8 radius (the photograph radius), 24 (`block`) inside on every side.
-- A linked box paints a quiet ground under the pointer (paper → paper-deep, tint → neutral-100, ink →
-  neutral-900, blue → brandeis-600); nothing paints at rest. The edge never changes.
-- Boxed cards in a set sit a `gutter` (32) apart both ways: the box is the separation.
+- No edge on any side (9 Oct). 24 (`block`) inside on every side, which is where the hover ground sits.
+- A linked box paints a quiet ground at the 8 radius under the pointer (paper → paper-deep, tint →
+  neutral-100, ink → neutral-900, blue → brandeis-600); nothing paints at rest.
+- Boxed cards in a set sit a `gutter` (32) apart both ways.
+- The set runs under its head at full width, never beside a head or a photograph (9 Oct rulings 3–4).
 - It is a set's decision, never one card's, and the default stays unboxed. Applied to every icon router
   (ServicePage `Router`, the kit's C-icon routers). Not for unlinked icon sets, image sets or text sets.
 - This partially reverses the "no box on any card" rule of § 3.1 and § 8.5; the rest of § 3 stands.
@@ -720,9 +742,9 @@ and are capped per page:
 | **L** close | the form (its texture is air, not an object) | 1, always last |
 
 Binding rules:
-- **C-icon always carries a photograph in its head track** (amended by the 7 Oct image pass: not where a neighbour band already carries an image; then the head stacks). A section CTA on an icon set is a CtaRow under
-  the grid (C-icon-4 only) or per-card links. Actions never go in an icon set's head track, so no icon
-  set renders without its photo.
+- **C-icon stacks its head over the cards and carries no photograph** (owner, 9 Oct 2026, superseding
+  "always carries a photograph in its head track"). A section CTA on an icon set is a CtaRow under the
+  grid (C-icon-4 only) or per-card links.
 - **D always has an aside:** a photograph or one `--text-stat-lg` figure.
 - **F always has a photograph aside** (withdrawn by the 7 Oct image pass: F takes none). The worked-example Callout goes above the rows in the body track
   (§ 3.6).

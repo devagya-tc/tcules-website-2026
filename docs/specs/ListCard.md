@@ -1272,3 +1272,16 @@ card title beside it, from a token". `frame="box"` and `ListCardFrame` are delet
 paints a ground. A tile's icon now sits on the title's first line at every width, `tight` from it, and
 `--lcrd-marker-icon-size-tile` is `1em` of the title role for the size step (22 beside h5, 28 beside h4).
 Where earlier sections describe the box, the ground or the 32 tile icon, this amendment wins.
+
+## Amendment · owner rulings, 9 Oct 2026 (supersedes r7-cards where they differ)
+
+1. **An icon tile stacks at every width.** Glyph on its own row, then the title, then the body —
+   never the glyph inline beside the title (the phone's icon-and-title row is retired). The glyph and
+   the copy are a `Layout` at `--gap-text` (16), the head group's own seam. `--lcrd-marker-icon-size-tile`
+   is unchanged (`1em` of the title role: 22 over h5, 28 over h4), and the glyph's box is its own size.
+   Number and thumbnail markers keep their Cluster. The open tile's opening hairline is unchanged.
+2. **`frame="box"` stays, without its edge.** No border on any side (`--lcrd-box-rule-width` is
+   deleted); the `--gap-block` inset, the 8 radius on the hover ground, `--lcrd-ground-hover` /
+   `-pressed`, the title's link ink on hover and the focus ring all stay.
+3. **Clickable tiles and rows sit under their head**, full width, never beside a heading or with a
+   decorative image. Non-clickable icon tiles beside a photograph (the B band) stay.

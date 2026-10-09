@@ -95,65 +95,29 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
       );
     }
 
-    /* C-icon — the router: linked icon cards (cmp-services). Four routes are a media split (plan
-       `split`): the photograph 4:5 in the 477 running the copy column's height, the head and the
-       2 × 2 of cards in the 667, on the side opposite the page's last photo-led band; on a phone the
-       photo leads at 4:3. Six take the beside head with its photograph in the head track. */
+    /* C-icon — the router: linked icon cards (cmp-services). The head stacks over the cards at full
+       width and the band carries no photograph (owner, 9 Oct 2026): a section of clickable cards
+       reads as the heading's continuation, never a card grid beside a head or an image. The count
+       picks the tracks: four routes are one row of four, six are two rows of three. */
     case 'C-icon': {
       if (job?.kind !== 'router') break;
-      const body = (
-        <>
-          <Router block={job} />
-          {others}
-        </>
-      );
-      if (photo && band.split) {
-        return (
-          <ContentSection
-            {...head}
-            arrangement="media"
-            media={{
-              image: getKitPhoto(photo),
-              side: band.headSide === 'start' ? 'end' : 'start',
-              height: 'copy',
-              head: 'title',
-            }}
-          >
-            {body}
-          </ContentSection>
-        );
-      }
-      return photo ? (
-        <ContentSection
-          {...head}
-          arrangement="beside"
-          asideFill
-          aside={<AsidePhoto id={photo} />}
-          headSide={band.headSide}
-          texture={texture}
-        >
-          {body}
-        </ContentSection>
-      ) : (
-        /* No photograph (image pass, 7 Oct 2026): the head stacks over the icons, because a text
-           head beside a card grid is the retired text-only split (owner ruling 2, 7 Oct). */
+      return (
         <ContentSection {...head} texture={texture}>
-          <Router block={job} across={3} />
+          <Router block={job} />
           {others}
         </ContentSection>
       );
     }
 
-    /* C-pair — two cases beside a head that carries the way to every case (§ 1.4 C-pair:
-       H-beside-actions + 2 pair cards). The cases' scope note is a Callout under the cards, never a
-       paragraph in the head track: there it floated a `stack` under the lead in small type and read
-       as an orphaned footnote (fix round 1, 7 Oct 2026). */
+    /* C-pair — two cases under a head that carries the way to every case (§ 1.4 C-pair). Stacked:
+       the cases are clickable cards, so the head sits above them at full width with its action
+       under the lead, never in a track beside them (owner, 9 Oct 2026). The cases' scope note is a
+       Callout under the cards (fix round 1, 7 Oct 2026). */
     case 'C-pair': {
       if (job?.kind !== 'cases') break;
       return (
         <ContentSection
           {...head}
-          arrangement="beside"
           texture={texture}
           actions={<CtaRow rule={false} actions={[ctx.labels.allCases]} />}
         >
@@ -207,6 +171,16 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
         ) : (
           <StoryBlockView block={job} labels={ctx.labels} slots={ctx.slots} />
         );
+      /* A list router is clickable rows: its head stacks over them at full width, with no image
+         (owner, 9 Oct 2026). Only read-down rows (a ledger, stats) keep the beside head. */
+      if (job.kind === 'router') {
+        return (
+          <ContentSection {...head}>
+            {body}
+            {others}
+          </ContentSection>
+        );
+      }
       const aside: ReactNode =
         job.kind === 'stat' ? (
           <StatAside block={job} />

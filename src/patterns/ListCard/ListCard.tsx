@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import {
   Button,
   Cluster,
@@ -333,44 +335,52 @@ export function ListCard({
   /* The tile: marker, then the title over its body, then — when there is one — the action at the
      foot, pinned there so every action in a grid row sits on one line however long its body runs.
 
-     The marker and the copy are a wrapping Cluster (final fix round, cmp-media-split, 6 Oct 2026),
-     which is what lets the tile change shape at 768 without a second layout. From md the copy takes
-     a whole line, so it wraps UNDER the marker at the Cluster's `block` (24) — further than title to
-     body (`text`, 16), so the tile reads as a mark over a head-and-body group rather than three
-     equally loose rows. Below md the copy takes the rest of the marker's line, so a tile on a phone
-     is an icon-and-title row: four tiles stacked at 390 were ~1500 of rule, icon, title, body.
+     An icon tile STACKS at every width (owner, 9 Oct 2026): the glyph on its own row, then the
+     title, then the body — never the glyph inline beside the title, which read as a bulleted
+     heading. Icon to title is `text` (16), the step the head group already uses between its rows:
+     the glyph is a row of the head, sized from the title's role, not a label it decorates. The
+     phone cost the inline form saved (~1500 for four stacked tiles) is accepted with the ruling.
+
+     A number or thumbnail marker and the copy are a wrapping Cluster (final fix round, cmp-media-
+     split, 6 Oct 2026). From md the copy takes a whole line, so it wraps UNDER the marker at the
+     Cluster's `block` (24); below md a number's copy takes the rest of its line. A thumbnail
+     always sits above: beside a phone-width copy column, a 160 image leaves it ~140.
 
      Title to body stays `text`, not `tight` (8), in every form (visual-direction § 1.1, S3): it puts
-     ListCard and BlockCard on one card rhythm, and at 8 a two-line title and its sentence read as
-     one paragraph in two faces. A thumbnail marker always sits above: beside a phone-width copy
-     column, a 160 image leaves it ~140. The action sits a `block` under the copy, as BlockCard's. */
+     ListCard and BlockCard on one card rhythm. The action sits a `block` under the copy, as
+     BlockCard's. */
   const tileCopy = (
     <Layout rowGap="text" className={styles.content}>
       {titleNode(styles.title)}
       {hasBody ? <p className={styles.body}>{body}</p> : null}
     </Layout>
   );
+  let tileHead: ReactNode = tileCopy;
+  if (marker && marker.type === 'icon') {
+    tileHead = (
+      <Layout rowGap="text">
+        <Marker marker={marker} form={form} />
+        {tileCopy}
+      </Layout>
+    );
+  } else if (marker) {
+    tileHead = (
+      <Cluster colGap="block" rowGap="block" align="start">
+        <Marker marker={marker} form={form} />
+        <div
+          className={cx(
+            styles.tileCopy,
+            marker.type === 'thumbnail' ? styles.tileCopyBelow : styles.tileCopyBeside,
+          )}
+        >
+          {tileCopy}
+        </div>
+      </Cluster>
+    );
+  }
   const tile = (
     <Layout rowGap="block" pinLast={action !== null} className={styles.tileInner}>
-      {marker ? (
-        <Cluster colGap={marker.type === 'icon' ? 'tight' : 'block'} rowGap="block" align="start">
-          <Marker marker={marker} form={form} />
-          <div
-            className={cx(
-              styles.tileCopy,
-              marker.type === 'thumbnail'
-                ? styles.tileCopyBelow
-                : marker.type === 'icon'
-                  ? styles.tileCopyInline
-                  : styles.tileCopyBeside,
-            )}
-          >
-            {tileCopy}
-          </div>
-        </Cluster>
-      ) : (
-        tileCopy
-      )}
+      {tileHead}
       {action}
     </Layout>
   );

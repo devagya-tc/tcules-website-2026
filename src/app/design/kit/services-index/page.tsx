@@ -38,15 +38,15 @@ export const metadata: Metadata = {
  *    1  A      the trail and the no-media hero, the `hero-field` stepping up to the column's end
  *              from 1024 (§ 8.3); below 1024 it is not drawn (§ 3.7 item 5). Fix round 2: the
  *              title-led panorama moved to the about page, so no two showcase heroes share a shape
- *    2  C-icon the router: six linked services beside a head and its 1:1 photograph at the head
- *              track's full width (fix round 2: a 380 × 214 fill under the lead was a postage stamp)
+ *    2  C-icon the router: six linked services under a stacked head, no photograph (owner, 9 Oct
+ *              2026: a section of clickable cards stacks its head and carries no image)
  *    3  C      four fixed-scope audits, centred display head, per-card links
  *    4  B      what every service shares: the media split, the designer at the wall at the END
  *              and four tiles — in place of the J statement, which repeated home's (§ 8.3: B)
  *    5  N      who the work is for: a stacked head, then the two lists across the full column, the
  *              needs two up (Contrast `yes`). Fix round 2: in the media split's 667 the lists
  *              were 256 at 1024, every item three lines, and the band 852 tall
- *    6  C-pair two cases with their products on screen; `horizon` at its foot, above the tint band
+ *    6  C-pair two cases with their products on screen under a stacked head; `horizon` at its foot
  *    7  G      rating-led on tint: the real Clutch score beside the real approved quote. Its
  *              eyebrow starts rather than centres
  *    8  K      the offer, the team at the whiteboard at the end
@@ -416,10 +416,10 @@ export default function KitServicesIndexPage() {
         <Contrast emphasis="yes" yes={FOR_YOU} no={NOT_FOR_YOU} />
       </ContentSection>
 
-      {/* 6 · C-pair — two cases; horizon at the foot, above the tint band. */}
+      {/* 6 · C-pair — two cases under a stacked head (owner, 9 Oct 2026: clickable cards never sit
+          beside their head); horizon at the foot, above the tint band. */}
       <ContentSection
         data-band="C-pair"
-        arrangement="beside"
         eyebrow="Selected work"
         heading="Two services, two products, in use"
         headingId="si-work"

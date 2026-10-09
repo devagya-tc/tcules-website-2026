@@ -49,8 +49,8 @@
      no body/marker state tokens those parts never move;
      no disabled/active tokens   links are either destinations or absent;
      no cue tokens at all         the arrow cue was removed (7 Oct 2026);
-     no box ink                   a boxed tile's edge reads --lcrd-rule-ink: it is the same hairline
-                                 as the open tile's opening rule, drawn on four sides;
+     no box ink or width          a boxed tile has no edge (owner, 9 Oct 2026); its hover ground
+                                 is the only paint it carries;
      no rule state at all         the rule is one width AND one colour in every state. A darkening
                                  rule was tried on 25 Aug as the full-width hover signal and
                                  replaced the next day by the fill, which is the better answer to
@@ -186,10 +186,10 @@
      ground: paper to paper-deep, paper-deep to neutral-100, and the dark grounds one step lighter
      (ink) and darker (blue), pressed one step further. Nothing paints at rest. */
   --lcrd-rule-width: var(--border-width-hairline);
-  /* The boxed tile (`frame="box"`, owner 7 Oct 2026): a hairline round all four sides at the
-     photograph radius every image box takes, so a boxed tile and the thumbnails and covers on one
-     page share one corner. Its inset is --gap-block, read directly: head to body inside a block. */
-  --lcrd-box-rule-width: var(--border-width-hairline);
+  /* The boxed tile (`frame="box"`, owner 7 Oct 2026): no edge since 9 Oct 2026, so the radius is
+     the hover ground's corner — the photograph radius every image box takes, so a boxed tile and
+     the thumbnails and covers on one page share one corner. Its inset is --gap-block, read
+     directly: head to body inside a block. */
   --lcrd-box-radius: var(--radius-8);
   --lcrd-radius: var(--radius-0);
   --lcrd-shadow: var(--shadow-none);

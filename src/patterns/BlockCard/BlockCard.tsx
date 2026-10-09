@@ -114,11 +114,10 @@ export type BlockCardCue = 'title' | 'cta' | 'download';
  * visual-direction § 3.1).
  *
  *   none  the default: the borderless card, bounded by its set's gutter and its cover's edge.
- *   box   a hairline round the card at the 8 radius, its content a `block` (24) inside, and — on a
- *         linked card — a ground under the pointer. For a set whose cards must read as separate
- *         objects at a glance: an icon router of four to six destinations, where open icon cards
- *         two across read as one field of text. A text-only card drops its top hairline inside a
- *         box, whose own top edge already draws it.
+ *   box   no edge (owner, 9 Oct 2026): its content a `block` (24) inside, and — on a linked card —
+ *         a ground at the 8 radius under the pointer, which is what the inset is for. For a set
+ *         whose cards must read as separate targets: an icon router of four to six destinations.
+ *         A text-only card draws no top hairline inside a box.
  *
  * A set's decision, like the type step: BlockCardSet `frame` states it for every card.
  */
@@ -279,9 +278,9 @@ export type BlockCardProps = {
   /** The cover's crop. Defaults to `cover` (3:2). Ignored when horizontal, which is always 3:2. */
   ratio?: BlockCardRatio;
   /**
-   * A Solar Bold glyph on the title's first line of a card with NO cover — the icon card of C-icon.
-   * Sized to the title beside it, from --bcrd-icon-size (owner, 7 Oct 2026: the 32 glyph heading
-   * the card was far too big). Blue, because icons carry the foreground accent (§ 4.2). Ignored
+   * A Solar Bold glyph on its own row above the title of a card with NO cover — the icon card of
+   * C-icon (owner, 9 Oct 2026: stacked, never inline). Sized from the title's role, from
+   * --bcrd-icon-size (owner, 7 Oct 2026: the 32 glyph heading the card was far too big). Blue, because icons carry the foreground accent (§ 4.2). Ignored
    * when the card has a cover: a card has one object at its head, never two.
    */
   icon?: IconName;
@@ -579,23 +578,16 @@ export function BlockCard({
      it. 16 is one step under the section head's 24, so a card reads as a smaller unit of the same
      system (visual-direction § 1.1, S2). It was `tight` (8): three rows at one step have no
      hierarchy, and a 12px label 8px over a 28px serif read as cramped. */
-  /* An icon card sets its glyph on the title's FIRST LINE, before it, at every width (owner, 7 Oct
-     2026: size each icon to the card title beside it). The glyph's box is the title's line box
-     (.icon), so `start` alignment is first-line centring without measuring anything; the auto
-     track is the glyph's own width and `tight` is the icon-to-label step. An eyebrow or index, if
-     any, labels the pair from above. */
-  const titleRow = iconNode ? (
-    <Layout columns={{ base: ['auto', 1] }} colGap="tight" align="start">
-      {iconNode}
-      {titleNode}
-    </Layout>
-  ) : (
-    titleNode
-  );
+  /* An icon card STACKS (owner, 9 Oct 2026): the glyph on its own row, then the title, then the
+     body — never the glyph inline beside the title. The glyph is the card's head object, so it
+     leads the head, above any eyebrow or index. Icon to its copy is `text` (16): the step the head
+     group already uses between its rows, because the glyph is a row of the head sized from the
+     title's role, not a label it decorates (`tight` would weld it to the title as a bullet). */
   const head = (
     <>
+      {iconNode}
       {eyebrowNode}
-      {titleRow}
+      {titleNode}
     </>
   );
   const content = (

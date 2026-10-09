@@ -12,8 +12,8 @@
      through press read as no press at all). A boxed linked card's ground takes
      --bcrd-box-ground-hover / -pressed. The cover zoom is geometry, and the cta's steps are Button's.
 
-   Colour tokens, declared on every surface (13): title-ink, title-ink-hover, title-ink-pressed,
-   mark-ink, body-ink, eyebrow-ink, media-rule-ink, text-rule-ink, box-rule-ink, box-ground-hover,
+   Colour tokens, declared on every surface (12): title-ink, title-ink-hover, title-ink-pressed,
+   mark-ink, body-ink, eyebrow-ink, media-rule-ink, text-rule-ink, box-ground-hover,
    box-ground-pressed, ring-color and ring-gap-color. The /design/block-card specimen lists them per
    surface from one constant. --bcrd-cue-ink was deleted with the arrow (7 Oct 2026).
 
@@ -140,10 +140,9 @@
   --bcrd-ring-width: var(--focus-ring-width);
   --bcrd-ring-offset: var(--focus-ring-offset);
 
-  /* The boxed card (`frame="box"`, owner 7 Oct 2026): a hairline at the photograph radius, so a
-     boxed card and the covers on its page share one corner. Its inset is --gap-block, read
-     directly. Inks per surface, below. */
-  --bcrd-box-rule-width: var(--border-width-hairline);
+  /* The boxed card (`frame="box"`, owner 7 Oct 2026): no edge since 9 Oct 2026, so the radius is
+     the hover ground's corner — the photograph radius, so a boxed card and the covers on its page
+     share one corner. Its inset is --gap-block, read directly. Grounds per surface, below. */
   --bcrd-box-radius: var(--radius-8);
 
   /* The phone scroll row's progress rail (BlockCardSet, cmp-services fix round 2): a neutral line
@@ -168,7 +167,6 @@
   --bcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — the floor of AA, do not lighten */
   --bcrd-media-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
-  --bcrd-box-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration, the box's edge */
   --bcrd-box-ground-hover: var(--color-paper-deep); /* a boxed linked card only */
   --bcrd-box-ground-pressed: var(--color-neutral-100);
   --bcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
@@ -188,7 +186,6 @@
   --bcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
   --bcrd-media-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
-  --bcrd-box-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
   --bcrd-box-ground-hover: var(--color-neutral-100);
   --bcrd-box-ground-pressed: var(--color-neutral-200);
   --bcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
@@ -208,7 +205,6 @@
   --bcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --bcrd-media-rule-ink: var(--color-neutral-700); /* 2.10:1 vs the ground — decoration */
-  --bcrd-box-rule-ink: var(--color-neutral-700); /* 2.10:1 — decoration */
   --bcrd-box-ground-hover: var(--color-neutral-900);
   --bcrd-box-ground-pressed: var(--color-neutral-800);
   --bcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
@@ -231,7 +227,6 @@
     --color-brandeis-100
   ); /* 4.91:1 — the tightest cell here, do not lighten */
   --bcrd-media-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
-  --bcrd-box-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
   --bcrd-box-ground-hover: var(--color-brandeis-600);
   --bcrd-box-ground-pressed: var(--color-brandeis-700);
   --bcrd-ring-color: var(--color-white); /* 6.23:1 against gap */

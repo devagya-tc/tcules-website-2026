@@ -491,10 +491,10 @@ export default function ListCardSpecimenPage() {
               &ldquo;Interactio/n&rdquo;). The title&rsquo;s wrap is now <code>break-word</code>
               , so its words stay whole at every track below. On a wide row the title stops at{' '}
               <code>--measure-title</code> and the body at <code>--measure-body</code>, so the
-              leftover collects at the row&rsquo;s end instead of opening a channel between a title
-              and its sentence. The frames below stand in for the content column at 1440, 1023,
-              768 and 390, and for grid tracks inside them; none can fire a media query, which
-              is now the point — the row does not need one.
+              leftover collects at the row&rsquo;s end instead of opening a channel between a
+              title and its sentence. The frames below stand in for the content column at 1440,
+              1023, 768 and 390, and for grid tracks inside them; none can fire a media query,
+              which is now the point — the row does not need one.
             </p>
           </Layout>
           {(
@@ -670,16 +670,13 @@ export default function ListCardSpecimenPage() {
             </Layout>
           </Specimen>
           <Specimen
-            title='boxed tiles · frame="box" · an icon router of six, two across'
-            note="Owner, 7 Oct 2026. A hairline at the 8 radius, 24 inside on every side, and a ground under the pointer when linked. Boxed tiles sit a gutter apart both ways: the box is the separation. The shape it is for: four to six destinations beside a head."
+            title='boxed tiles · frame="box" · an icon router of six, three across'
+            note="Owner, 7 Oct 2026; edge removed 9 Oct 2026. No edge on any side; 24 inside on every side, which is where the ground under the pointer sits when linked, at the 8 radius. Boxed tiles sit a gutter apart both ways. Clickable, so the set runs the full column under its head — never beside a head or a photograph."
           >
-            <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack">
-              <Box tall />
-              <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
-                {[...BOXED, ...LINKED.slice(0, 3)].map((tile) => (
-                  <ListCard key={tile.title} form="tile" frame="box" titleAs="h3" {...tile} />
-                ))}
-              </Layout>
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+              {[...BOXED, ...LINKED.slice(0, 3)].map((tile) => (
+                <ListCard key={tile.title} form="tile" frame="box" titleAs="h3" {...tile} />
+              ))}
             </Layout>
           </Specimen>
           <Specimen

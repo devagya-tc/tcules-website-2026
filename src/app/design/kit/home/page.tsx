@@ -472,10 +472,10 @@ export default async function KitHomePage() {
         </ContentSectionText>
       </ContentSection>
 
-      {/* 11 · C-pair — two pieces of writing beside the way to all of them. */}
+      {/* 11 · C-pair — two pieces of writing under a stacked head and the way to all of them
+          (owner, 9 Oct 2026: clickable cards never sit beside their head). */}
       <ContentSection
         data-band="C-pair"
-        arrangement="beside"
         eyebrow="Latest thinking"
         heading="Notes from recent projects"
         headingId="home-thinking"
@@ -484,7 +484,7 @@ export default async function KitHomePage() {
           <CtaRow rule={false} actions={[{ label: 'All insights', href: ROUTES.insights }]} />
         }
       >
-        <BlockCardSet items={THINKING} lead="none" stagger />
+        <BlockCardSet items={THINKING} lead="none" />
       </ContentSection>
 
       {/* 12 · L — the close. */}

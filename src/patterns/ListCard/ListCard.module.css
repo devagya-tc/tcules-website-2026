@@ -100,10 +100,11 @@
   block-size: 100%;
 }
 
-/* The tile's copy beside or under its marker (see the tile in the TSX). Sizing inside the Cluster,
-   the split's own mechanism: a flex basis decides whether the copy shares the marker's line. Below
-   md it takes the rest of that line; from md, and always under a thumbnail, it takes a whole line
-   and wraps beneath. The layout changes at 768; no distance does. */
+/* A number or thumbnail tile's copy beside or under its marker (see the tile in the TSX). Sizing
+   inside the Cluster, the split's own mechanism: a flex basis decides whether the copy shares the
+   marker's line. Below md a number's copy takes the rest of that line; from md, and always under a
+   thumbnail, it takes a whole line and wraps beneath. The layout changes at 768; no distance does.
+   An icon tile is not in this Cluster: it stacks at every width (owner, 9 Oct 2026). */
 .tileCopy {
   min-inline-size: 0;
 }
@@ -122,20 +123,15 @@
   }
 }
 
-/* A tile's icon is sized to the title beside it (owner, 7 Oct 2026: the 32 that stood alone above
-   the title was far too big). It sits on the title's first line at every width, `tight` from it
-   (the icon-to-label step), and the marker is set in the title's own role for the size step, so
-   its box is the title's line box (1lh) and the glyph its em (--lcrd-marker-icon-size-tile): 22
-   beside an h5, 28 beside an h4, stepping with the roles at 1023 and 767. The half-leading is the
-   block padding, which centres it on that line — an inset, not an arrangement. ListCard sizes the
-   glyph it is handed, as Button does; three classes and an element outrank Icon's size class. */
-.tileCopyInline {
-  flex: 1 1 0;
-}
-
+/* A tile's icon is sized from the title under it (owner, 7 Oct 2026: the 32 that stood alone above
+   the title was far too big) and stands on its own row above it (owner, 9 Oct 2026). The marker is
+   set in the title's own role for the size step, so the glyph is the title's em
+   (--lcrd-marker-icon-size-tile): 22 over an h5, 28 over an h4, stepping with the roles at 1023
+   and 767. The box is the glyph's own size — no line box round it, since there is no line to
+   centre on — so the 16 to the title is the Layout's seam alone. ListCard sizes the glyph it is
+   handed, as Button does; three classes and an element outrank Icon's size class. */
 .tile .markerIcon {
-  block-size: 1lh;
-  padding-block: calc((1lh - var(--lcrd-marker-icon-size-tile)) / 2);
+  block-size: var(--lcrd-marker-icon-size-tile);
 }
 
 .sizeMd.tile .markerIcon {
@@ -503,33 +499,30 @@
   }
 }
 
-/* ── The boxed tile (`frame="box"`, owner 7 Oct 2026) ─────────────────────────────────────────
-   A partial reversal of "a card is never a box", for a set whose items must read as separate
-   objects at a glance — an icon router of four to six destinations. A hairline round all four
-   sides at the 8 radius, the copy a `block` (24) inside it on every side: head to body inside a
-   block, the box being the block. The open tile's opening rule becomes the box's top edge, so it
-   is not drawn twice.
+/* ── The boxed tile (`frame="box"`, owner 7 Oct 2026; edge removed 9 Oct 2026) ─────────────────
+   For a set whose items must read as separate objects under the pointer — an icon router of four
+   to six destinations. It has NO edge on any side (owner, 9 Oct 2026: the hairline box read as a
+   panel grid); what it keeps is the inset, a `block` (24) on every side, because the inset is what
+   gives the hover ground somewhere to sit. The open tile's opening rule is not drawn either.
 
-   Linked, the box paints a ground under the pointer (--lcrd-ground-hover / -pressed): with 24 of
-   inset there is somewhere for one to sit, which the open tile never had. The edge holds its ink
-   in every state; the open tile's blue opening rule is the open tile's signal, not this one's.
-   The focus ring is the frame's box-shadow, so it follows the radius. Three classes on the frame
-   and four on its states, so these outrank the open tile's rules at any source order. */
+   Linked, the box paints a ground under the pointer (--lcrd-ground-hover / -pressed) at the 8
+   radius, and the title takes the link ink, so a borderless target still answers the pointer
+   across its whole area. The focus ring is the frame's box-shadow, so it follows the radius. Three
+   classes on the frame and four on its states, so these outrank the open tile's rules at any
+   source order. `border: none` is stated because the open tile's rule is on the same frame. */
 .root.tile.boxed .frame {
   padding: var(--gap-block);
-  border: var(--lcrd-box-rule-width) solid var(--lcrd-rule-ink);
+  border: none;
   border-radius: var(--lcrd-box-radius);
 }
 
 .root.tile.boxed .link:hover,
 .root.tile.boxed .link:focus-visible {
   background-color: var(--lcrd-ground-hover);
-  border-color: var(--lcrd-rule-ink);
 }
 
 .root.tile.boxed .link:active {
   background-color: var(--lcrd-ground-pressed);
-  border-color: var(--lcrd-rule-ink);
 }
 
 /* ── A row's thumbnail on a phone ─────────────────────────────────────────────────────────────

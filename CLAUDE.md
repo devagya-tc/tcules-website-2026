@@ -360,6 +360,12 @@ Clean does not mean plain, and "not busy" is not an argument for "not designed".
   tinted background band.
 - Vary the arrangement between blocks rather than the ground behind them.
 - A secondary column that is only text is a missed opportunity; give every item a shape.
+- **Clickable cards sit under their head.** A section of linked cards puts its eyebrow, heading and
+  lead above them at full width, so the cards read as the heading's continuation — never a head track
+  beside the grid. And it carries no decorative image: the cards are the band's shape. A photograph
+  may sit beside items nobody clicks, with those items continuing under the heading in its column.
+- **An icon heads its card.** Glyph, then title, then body, each on its own row — never the glyph
+  inline beside the title. A boxed card has no edge; its inset exists for the hover ground.
 - **Never two text-heavy bands back to back.** A band with no photograph and a body of words is
   followed by a visual one (a photograph, a diagram, marks, covers, an icon set). The ServicePage
   plan warns in development (`textHeavyPairs`, visual-direction § 1.7).

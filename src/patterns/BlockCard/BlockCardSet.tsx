@@ -110,10 +110,11 @@ export type BlockCardSetProps = {
   /** How every linked card says it navigates. Absent, each card's own default. See `BlockCardCue`. */
   cue?: BlockCardCue;
   /**
-   * Every card's finish (owner, 7 Oct 2026). `box` draws each card in a hairline box at the 8
-   * radius; see `BlockCardFrame`. A set's decision, never one card's: a set with one boxed card
+   * Every card's finish (owner, 7 Oct 2026). `box` insets each card's copy by a `block` and paints
+   * a ground under the pointer, with no edge (owner, 9 Oct 2026); see `BlockCardFrame`. A set's decision, never one card's: a set with one boxed card
    * and five open ones reads as a recommendation. Boxed rows sit a `gutter` apart, not a `stack` or
-   * a `column`: the box is the separation, so the seam down the grid matches the seam across it.
+   * a `column`: each card's own 24 inset is the separation, so the seam down the grid matches the
+   * seam across it.
    * Default `none`.
    */
   frame?: BlockCardFrame;
@@ -380,11 +381,17 @@ export function BlockCardSet({
   const covered = items.some(hasCover);
   const { columns, tracks, widest } = peerGrid(peers.length, across);
   const iconSet = !covered && items.every((item) => item.icon !== undefined);
-  /* Icon cards are h5 and body-sm, always (§ 1.4; the glyph is the h5's em beside it, 7 Oct 2026). `size` is not an
+  /* Icon cards are h5 and body-sm, always (§ 1.4; the glyph is the h5's em, on its own row above it, 9 Oct 2026). `size` is not an
      option for them: an override set one grid's titles a step above the next one's on one page. */
   const size = iconSet ? 'sm' : (sizeOverride ?? peerSize(peers, widest, covered));
-  const ratio: BlockCardRatio = widest >= 3 ? 'wide' : 'cover';
   const linked = items.every((item) => Boolean(item.href?.trim()));
+  /* A linked pair runs the full column (owner, 9 Oct 2026: clickable cards sit under their head,
+     never in a track beside it), so each card is ~604 wide at the cap and a 3:2 cover alone is 403
+     tall — the C-pair band ran ~1030 against the 830 fold. It takes the spotlight lead's 21:9
+     instead, the crop this set already gives a wide, short cover. An unlinked pair can still sit in
+     a beside body (763 → 365 per card), where 3:2 stays right. */
+  const ratio: BlockCardRatio =
+    widest >= 3 ? 'wide' : linked && covered && widest === 2 ? 'panorama' : 'cover';
   /* The phone row (§ 3.7 item 2, revised in cmp-feature fix round 1, 6 Oct 2026). Stacked at 390,
      a set of short covered cards read as a loose list — 80 to 90 between cards, and six linked icon
      cards ran to 1805. So below 768:

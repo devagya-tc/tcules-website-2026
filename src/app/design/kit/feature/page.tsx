@@ -730,15 +730,15 @@ const VARIATIONS = [
   'C-image-4 · lead none · numbered',
   'C-image-4 · display H-compact · per-card CTA',
   'C-image-6 · Slider showing three',
-  'C-pair · staggered, text beside',
+  'C-pair · staggered, under its head',
   'C-text-3 · hairline + index, unlinked',
   'C-text-3 · per-card CTA',
   'C-text-3 · whole-card links · on tint',
   'C-text-6 · two-line bodies',
   'C-icon-4 · beside head + photo aside',
   'C-icon-4 · CtaRow under the grid',
-  'C-icon-6 · photo aside · whole-card links',
-  'C-pair · beside head with actions',
+  'C-icon-6 · stacked head · whole-card links',
+  'C-pair · stacked head with actions',
   'Mixed set · a stand-in fills the gap',
   'Mixed set · standIns={false} · C-text',
   'Card images · four kinds',
@@ -824,11 +824,7 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={SPOTLIGHT} lead="beside" />
       </ContentSection>
 
-      <Caption
-        n={3}
-        name={VARIATIONS[2]}
-        fit="226 + 48 + 357 = 631 (measured, 1-line lead)"
-      >
+      <Caption n={3} name={VARIATIONS[2]} fit="226 + 48 + 357 = 631 (measured, 1-line lead)">
         A stacked head: eyebrow, heading, lead and the section&rsquo;s one action in one column
         (the H-row, heading beside the lead, is retired), the set full column beneath.
       </Caption>
@@ -963,13 +959,12 @@ export default function FeatureKitSpecimen() {
         </Slider>
       </ContentSection>
 
-      <Caption n={11} name={VARIATIONS[10]} fit="head 240 · body 96 + 493 = 589">
+      <Caption n={11} name={VARIATIONS[10]} fit="stacked head · pair 96 + 493">
         BlockCardSet stagger: from 1024 the second card drops a section step (Layout stagger, a
-        track rather than a margin), so the pair reads as placed by hand beside its head, not
-        tiled.
+        track rather than a margin), so the pair reads as placed by hand, not tiled. Linked
+        cards, so the head sits above them at full width (owner, 9 Oct 2026).
       </Caption>
       <ContentSection
-        arrangement="beside"
         eyebrow="Ways to work"
         heading="Two ways to work with us"
         headingId={kf(11)}
@@ -1068,35 +1063,35 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={RECEIVE_4B} lead="none" across={2} />
       </ContentSection>
 
-      <Caption n={18} name={VARIATIONS[17]} fit="head 542 · body 3 × 136 + 2 × 48 = 504">
-        Six linked icon cards route to their pages; no CtaRow. Boxed (owner, 7 Oct 2026): a
-        hairline at the 8 radius and a ground on hover, a gutter apart. Solid glyphs only. On a
-        phone, linked and more than three, the set is a sideways row.
+      <Caption n={18} name={VARIATIONS[17]} fit="stacked head · body 2 rows of 3">
+        Six linked icon cards route to their pages; no CtaRow. Clickable cards, so the head sits
+        above them at full width and the band carries no photograph (owner, 9 Oct 2026). Boxed:
+        no edge, a 24 inset and a ground on hover. Solid glyphs only. On a phone, linked and
+        more than three, the set is a sideways row.
       </Caption>
       <ContentSection
-        arrangement="beside"
         eyebrow="Services"
         heading="Six services, one studio"
         headingId={kf(18)}
         lead="Each can stand alone. Most clients start with one and add a second once the first has shipped."
-        asideFill
-        aside={<Aside id="desk-minimal-white" />}
       >
-        <BlockCardSet items={SERVICES_6} lead="none" across={2} frame="box" />
+        <BlockCardSet items={SERVICES_6} lead="none" across={3} frame="box" />
       </ContentSection>
 
-      <Caption n={19} name={VARIATIONS[18]} fit="head 411 · body 429">
-        A pair at 3:2 in the two-thirds track; the head track takes the actions instead of an
-        aside.
+      <Caption n={19} name={VARIATIONS[18]} fit="stacked head with actions · pair">
+        A pair of linked cases under a stacked head, its action under the lead (owner, 9 Oct
+        2026: clickable cards never sit beside their head).
       </Caption>
       <ContentSection
-        arrangement="beside"
         eyebrow="Selected work"
         heading="Two projects that changed how a team works"
         headingId={kf(19)}
         lead="Both started as a redesign brief. Both ended with a different product model, and a team that owns it."
         actions={
-          <CtaRow rule={false} actions={[{ label: 'All case studies', href: ROUTES.caseStudies }]} />
+          <CtaRow
+            rule={false}
+            actions={[{ label: 'All case studies', href: ROUTES.caseStudies }]}
+          />
         }
       >
         <BlockCardSet items={PAIR} lead="none" />

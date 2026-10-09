@@ -1595,3 +1595,22 @@ from a token. `frame="box"`, `BlockCardFrame` and BlockCardSet `frame` are delet
 icon card is opened by the same top hairline as a text card. No decorative image shares a section with
 clickable cards; `/design/kit/services` shows the arrangement (eyebrow, heading, body, then 3/4/6 cards).
 Where earlier sections describe the box or the 32 icon above the title, this amendment wins.
+
+## Amendment · owner rulings, 9 Oct 2026 (supersedes r7-cards where they differ)
+
+1. **The icon card stacks.** Glyph on its own row, then the title, then the body — never the glyph
+   inline beside the title, in any frame or at any width. The glyph leads the head, above any eyebrow
+   or index; icon to its copy is `--gap-text` (16), the head group's own seam, because the glyph is a
+   row of the head and not a label (`tight` would weld it to the title as a bullet). Its size is
+   unchanged: `--bcrd-icon-size` is `1em` of the title role for the size step (22 sm, 28 md, 34 lg at
+   1440), and the glyph's box is the glyph's own size, with no line box round it.
+2. **`frame="box"` stays, without its edge.** No border on any side, on any surface:
+   `--bcrd-box-rule-width` and `--bcrd-box-rule-ink` are deleted. It keeps its `--gap-block` inset,
+   because the inset is what gives the hover ground somewhere to sit, and keeps
+   `--bcrd-box-radius` (8) as that ground's corner, `--bcrd-box-ground-hover` / `-pressed`, the
+   title's accent on hover and the box-shadow focus ring round the inset.
+3. **A set of clickable cards sits under its head**, full width — never in a track beside a heading,
+   and never in a band with a decorative image (CLAUDE.md § Design quality; visual-direction § 1.4).
+   ServicePage's C-icon router, list router and C-pair now stack their heads and take no photograph;
+   so do `kit/service-list` 01 / 03 / 05, `kit/feature` 11 / 18 / 19, `kit/home` 11 and
+   `kit/services-index` 6. An image may still sit beside non-clickable items (the B band).

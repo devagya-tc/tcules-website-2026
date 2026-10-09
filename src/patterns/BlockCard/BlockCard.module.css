@@ -9,7 +9,7 @@
    ── What is absent, and why ────────────────────────────────────────────────────
    No card edge by default. The tile was bounded by a four-sided hairline and is bounded by the
    parent Layout's gutter alone — unless its set asks for a box (`frame="box"`, owner 7 Oct 2026,
-   .boxed at the foot of this file), which brings back the edge, an inset and a hover ground.
+   .boxed at the foot of this file), which brings an inset and a hover ground — no edge since 9 Oct.
    No content inset on an open card. The inset existed to hold copy off that edge; with the edge gone it would set
    text 24px in from a boundary that no longer exists, putting neighbouring cards' images 32px
    apart while their titles sat 80px apart. Copy is flush to the media instead, and the image-to-
@@ -171,17 +171,16 @@
   border-block-start: var(--bcrd-text-rule-width) solid var(--bcrd-text-rule-ink);
 }
 
-/* The icon card's glyph, sized to the title beside it (owner, 7 Oct 2026). The wrapper is set in
-   the title's own role for the card's size step (below), so its box is exactly the title's first
-   line box (1lh) and the glyph is the title's em (--bcrd-icon-size): 22 beside an h5, 28 beside an
-   h4, and both follow the roles' 1023 / 767 steps with no breakpoint here. The block padding is
-   the half-leading, which centres the glyph on that line inside the wrapper — an inset, not an
-   arrangement. More specific than Icon's size class on purpose: BlockCard owns the size it hands
-   Icon, as Button does. Blue at rest: icons carry the foreground accent (§ 4.2). */
+/* The icon card's glyph, sized from the title (owner, 7 Oct 2026) and standing on its own row
+   above it (owner, 9 Oct 2026: never inline beside the title). The wrapper is set in the title's
+   own role for the card's size step (below), so the glyph is the title's em (--bcrd-icon-size): 22
+   over an h5, 28 over an h4, and both follow the roles' 1023 / 767 steps with no breakpoint here.
+   The box is the glyph's own size, no line box round it, so the seam to the title is the head
+   Layout's alone. More specific than Icon's size class on purpose: BlockCard owns the size it
+   hands Icon, as Button does. Blue at rest: icons carry the foreground accent (§ 4.2). */
 .icon {
   display: block;
-  block-size: 1lh;
-  padding-block: calc((1lh - var(--bcrd-icon-size)) / 2);
+  block-size: var(--bcrd-icon-size);
   color: var(--bcrd-mark-ink);
 }
 
@@ -342,20 +341,19 @@
   }
 }
 
-/* ── The boxed card (`frame="box"`, owner 7 Oct 2026) ──────────────────────────────────────────
-   A partial reversal of "a card is never a box" (visual-direction § 3.1), for a set whose cards
-   must read as separate objects at a glance — an icon router of four to six destinations, where
-   open icon cards two across read as one field of text. A hairline round the card at the 8 radius,
-   its content a `block` (24) inside on every side: head to body inside a block, the box being the
-   block. The frame is the card's single box, so the padding is an inner inset, not outer spacing.
+/* ── The boxed card (`frame="box"`, owner 7 Oct 2026; edge removed 9 Oct 2026) ─────────────────
+   For a set whose cards must read as separate targets under the pointer — an icon router of four
+   to six destinations. It has NO edge on any side (owner, 9 Oct 2026: the hairline box read as a
+   panel grid). What it keeps is the inset, a `block` (24) inside on every side, because the inset
+   is what gives the hover ground somewhere to sit; the frame is the card's single box, so the
+   padding is an inner inset, not outer spacing. A text-only boxed card draws no top hairline.
 
-   Linked, the box paints a ground under the pointer and holds its edge ink: with 24 of inset there
-   is somewhere for a ground to sit, and it is the one signal that covers the whole target. The
-   focus ring is the frame's box-shadow, so it follows the radius. Two classes and an element state,
-   so these outrank `.root .link` and its states. */
+   Linked, the box paints a ground under the pointer at the 8 radius and its title (always cued on
+   a boxed card with an icon) takes the accent, so a borderless target answers across its whole
+   area. The focus ring is the frame's box-shadow, so it follows the radius. Two classes and an
+   element state, so these outrank `.root .link` and its states. */
 .boxed .frame {
   padding: var(--gap-block);
-  border: var(--bcrd-box-rule-width) solid var(--bcrd-box-rule-ink);
   border-radius: var(--bcrd-box-radius);
 }
 
