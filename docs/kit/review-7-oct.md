@@ -25,7 +25,7 @@ rework come later, once the owner delivers the copy.
 - [x] **r7-hero — rating badge in the eyebrow** (kit/r7-hero), and a smaller lead. Reference for the badge as
       eyebrow: https://doodle.com/en/. The lead was too large; visitor-facing pages get the smaller lead.
       SEO-only pages may compromise, but the component default is the smaller size.
-- [ ] **r7-testimonials.**
+- [x] **r7-testimonials.** (kit/r7-testimonials)
       - G·02 ("Typographic, with a CtaRow") is the favourite. It must be available both as-is and inside
         the auto-advancing Slider; the slider version is a new variant.
       - The featured large-image variants are "all good options"; keep them.

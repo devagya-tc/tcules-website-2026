@@ -221,8 +221,12 @@ const FILL_BOX = { width: 3, height: 2 } as const;
 export type BlockCardProps = {
   /** Required card heading. Whitespace-only values render nothing and warn in development. */
   title: string;
-  /** One supporting paragraph. Whitespace-only values omit the paragraph and warn. */
-  body: string;
+  /**
+   * One supporting paragraph. Whitespace-only values omit the paragraph and warn. Optional: a card
+   * whose description is said by something beside it — the case card in Proof's G-case, where the
+   * quote is the description (owner, 7 Oct 2026) — leaves it off, and no warning is raised.
+   */
+  body?: string;
   /**
    * One optional quiet label above the title — a client, a category, a content type, a kicker.
    * A plain string rather than a structured record: what belongs here varies by page, so the
@@ -419,8 +423,8 @@ export function BlockCard({
     return null;
   }
 
-  const hasBody = body.trim().length > 0;
-  if (!hasBody) warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
+  const hasBody = body !== undefined && body.trim().length > 0;
+  if (body !== undefined && !hasBody) warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
 
   const hasEyebrow = eyebrow !== undefined && eyebrow.trim().length > 0;
   if (eyebrow !== undefined && !hasEyebrow) {

@@ -5,7 +5,6 @@ import {
   CtaRow,
   CtaSection,
   Proof,
-  type ProofRating,
   type ProofFigure,
   type ProofPortrait,
   type ProofQuote,
@@ -146,9 +145,10 @@ const FIGURES = [
     value: '12',
     label: '12 AI engagements',
   },
+  /* Not a rating (7 Oct 2026): this set sits beside quotes on this page, and a score never does. */
   {
-    value: '4.8/5',
-    label: '4.8/5 Clutch rating',
+    value: '140+',
+    label: 'products shipped since 2012',
     sourceHref: UNRESOLVED_EXTERNAL,
   },
 ] as const satisfies readonly ProofFigure[];
@@ -258,8 +258,9 @@ function ResolvedTokens({ tokens }: { tokens: TokenRows }) {
 const PROOF_SHAPES = ['quote', 'figures', 'combined'] as const;
 
 /* ── The G arrangements (cmp-testimonials, 6 Oct 2026) ─────────────────────────────────
-   Fictional people, stock portraits, and a fictional platform for the score: a specimen never sets
-   a stock face or an invented quote beside the real Clutch mark or rating (§ 5.8). */
+   Fictional people. Stock portraits only where the arrangement is built on a photograph (featured)
+   or where the opt-in compact portrait is the thing shown; everywhere else the quote carries a tag
+   in the image's place (7 Oct 2026: no headshots). No score beside any quote (7 Oct 2026). */
 const kitPortrait = (id: PhotoId): ProofPortrait => {
   const { src, width, height, sources } = getKitPhoto(id);
   return { src, width, height, sources };
@@ -293,26 +294,35 @@ const G_QUOTES = [
   },
 ] as const satisfies readonly ProofQuote[];
 
-const G_RATING: ProofRating = {
-  score: '4.9',
-  platform: 'Example Reviews',
-  href: UNRESOLVED_EXTERNAL,
-};
+/** The same three voices with no face, each with the tag that takes the image's place. */
+const G_TAGS = ['User research', 'Delivery', 'Design system'] as const;
+const G_VOICES = G_QUOTES.map((quote, index): ProofQuote => ({
+  ...quote,
+  portrait: undefined,
+  tag: G_TAGS[index],
+}));
 
 function GSurface({ surface }: { surface: SectionSurface }) {
   const [ines, tobias, daniel] = G_QUOTES;
-  const inesText: ProofQuote = { ...ines, portrait: undefined };
+  const [inesVoice, tobiasVoice, danielVoice] = G_VOICES as [
+    ProofQuote,
+    ProofQuote,
+    ProofQuote,
+  ];
   return (
     <Section surface={surface}>
       <Layout rowGap="column">
-        <Specimen title={`${surface} · display, centred, with a score`}>
-          <Proof quote={inesText} align="center" rating={G_RATING} />
+        <Specimen title={`${surface} · display, centred`}>
+          <Proof quote={{ ...inesVoice, tag: undefined }} align="center" />
         </Specimen>
-        <Specimen title={`${surface} · display, start-aligned, with a score`}>
-          <Proof quote={{ ...tobias, portrait: undefined }} rating={G_RATING} />
+        <Specimen title={`${surface} · display, start, a tag in the image's place`}>
+          <Proof quote={tobiasVoice} />
         </Specimen>
-        <Specimen title={`${surface} · compact, with a portrait and a score`}>
-          <Proof arrangement="compact" quote={ines} rating={G_RATING} />
+        <Specimen title={`${surface} · compact, with the opt-in portrait`}>
+          <Proof arrangement="compact" quote={ines} />
+        </Specimen>
+        <Specimen title={`${surface} · compact, a tag in the image's place`}>
+          <Proof arrangement="compact" quote={inesVoice} />
         </Specimen>
         <Specimen title={`${surface} · featured, with a footer`}>
           <Proof
@@ -329,7 +339,10 @@ function GSurface({ surface }: { surface: SectionSurface }) {
         <Specimen title={`${surface} · featured, reversed`}>
           <Proof arrangement="featured" reverse quote={tobias} />
         </Specimen>
-        <Specimen title={`${surface} · case, with a score`}>
+        <Specimen title={`${surface} · featured with no image: start edge, tag`}>
+          <Proof arrangement="featured" quote={danielVoice} />
+        </Specimen>
+        <Specimen title={`${surface} · case, the card without a description`}>
           <Proof
             arrangement="case"
             work={
@@ -337,7 +350,6 @@ function GSurface({ surface }: { surface: SectionSurface }) {
                 <BlockCard
                   eyebrow="Halden Freight · Logistics"
                   title="Dispatch screens rebuilt around the driver’s day"
-                  body="Field research with twelve dispatchers, carried into a routing model."
                   href={ROUTES.caseStudies}
                   media={{
                     type: 'image',
@@ -348,14 +360,13 @@ function GSurface({ surface }: { surface: SectionSurface }) {
               </Layout>
             }
             quote={{ ...tobias, portrait: undefined }}
-            rating={G_RATING}
           />
         </Specimen>
-        <Specimen title={`${surface} · group of three`}>
-          <Proof arrangement="group" quotes={G_QUOTES} />
+        <Specimen title={`${surface} · group of three, tags in the image's place`}>
+          <Proof arrangement="group" quotes={[inesVoice, tobiasVoice, danielVoice]} />
         </Specimen>
-        <Specimen title={`${surface} · rating-led`}>
-          <Proof arrangement="rating" rating={G_RATING} quote={inesText} />
+        <Specimen title={`${surface} · group of three, opt-in portraits`}>
+          <Proof arrangement="group" quotes={G_QUOTES} />
         </Specimen>
       </Layout>
     </Section>
@@ -376,9 +387,10 @@ export default function ProofSpecimenPage() {
           <h1>Proof</h1>
           <p>
             One evidence pattern with three display shapes: an attributed quotation, figures, or
-            both. Compact is the embedded quote-only arrangement; featured, case, group and
-            rating-led are the G bands (§ 19). Proof owns no ground; the nearest surface
-            supplies it.
+            both. Compact is the embedded quote-only arrangement; featured, case and group are
+            the G bands (§ 19). Proof owns no ground; the nearest surface supplies it. Since the
+            7 Oct review a score never sits beside a quote, and a quote without a photograph
+            leads with a tag on the start edge.
           </p>
         </Layout>
       </Section>
@@ -388,9 +400,10 @@ export default function ProofSpecimenPage() {
           <Layout rowGap="block">
             <h2>1 · Identity</h2>
             <p>
-              This combined block is why Testimonial and Stat ship as one pattern. The rating is
-              an ordinary checked figure, not a third component. From lg the quote leads in the
-              wide track of a 2:1 and the figures stack beside it; below lg, one column.
+              This combined block is why Testimonial and Stat ship as one pattern. A figure
+              beside a quote is the work’s own number, never a rating (7 Oct 2026). From lg the
+              quote leads in the wide track of a 2:1 and the figures stack beside it; below lg,
+              one column.
             </p>
           </Layout>
           <Proof quote={THREE_SENTENCE_QUOTE} figures={FIGURES} />
@@ -903,10 +916,10 @@ export default function ProofSpecimenPage() {
         <Layout rowGap="block">
           <h2>19 · The G arrangements on four surfaces</h2>
           <p>
-            Featured, case, group, rating-led and the centred display, identical markup on
-            paper, tint, ink and blue: every Proof token is redeclared per surface, so the quote
-            rule, the centred mark, the score and the badge resolve on each. The bands
-            themselves, at 1470 and 390, are proven on{' '}
+            Featured, case, group and the display, identical markup on paper, tint, ink and
+            blue: every Proof token is redeclared per surface, so the quote rule, the centred
+            mark and the tag in the image’s place resolve on each. The bands themselves, at 1470
+            and 390, are proven on{' '}
             <a href={ROUTES.designKitTestimonials}>the testimonials kit</a>.
           </p>
         </Layout>

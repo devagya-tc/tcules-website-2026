@@ -26,6 +26,21 @@ names.
 
 > **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
 
+### Amendment — 7 Oct 2026 (r7-testimonials)
+
+- **No rating beside a quote.** `rating` on `display`, `compact` and `case` is `@deprecated`, ignored and
+  warned about in development; the `rating` arrangement (rating-led) is retired and renders the quote
+  alone. The rating lives with the client list, beside the CTA or enquiry, and in facts & figures.
+  `ProofRating` stays exported, deprecated, until r7-pages removes the ServicePage call sites.
+- **No headshots by default.** `portrait` is opt-in; the featured arrangements are where a photograph
+  belongs. New `ProofQuote.tag`: when no photograph is shown, the tag (a `Tag` mark) leads the figure a
+  `block` above the quote, and the attribution sits on the start edge rather than indented onto the
+  quote's first letter. Beside a photograph shown elsewhere (featured) the indent stays. Featured with
+  no portrait renders this start-aligned display.
+- **G-case has three parts:** the case card is passed with no `body` (BlockCard's `body` is now
+  optional) and the quote carries no score.
+- The typographic band also runs inside `Slider` with `autoplay` (see Slider.md's amendment).
+
 ## 1 · Identity
 
 `Proof` is one evidence block: an attributed client quotation, a set of checked figures, or the two

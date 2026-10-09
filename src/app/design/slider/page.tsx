@@ -162,6 +162,39 @@ function storySlides() {
 
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
 
+/** Typographic slides for autoplay: the centred quote alone, no face (7 Oct 2026), one length. */
+const VOICES: readonly ProofQuote[] = [
+  {
+    quoteHtml:
+      '<p>They argued every screen with evidence, so the ones that stayed were the ones our people actually needed.</p>',
+    name: 'Mira Castellan',
+    role: 'Head of Product',
+    company: 'Dunmere',
+  },
+  {
+    quoteHtml:
+      '<p>Decisions arrived in writing every Friday. Engineering never opened a file and found a surprise waiting inside it.</p>',
+    name: 'Tomasz Ellery',
+    role: 'Engineering Lead',
+    company: 'Aldermoor',
+  },
+  {
+    quoteHtml:
+      '<p>We shipped less than we had planned, and every part of it was in daily use within a week of launch.</p>',
+    name: 'Priya Anand-Whitcombe',
+    role: 'Director of Operations',
+    company: 'Brightwell',
+  },
+];
+
+function voiceSlides() {
+  return VOICES.map((quote) => (
+    <li key={quote.name}>
+      <Proof quote={quote} align="center" />
+    </li>
+  ));
+}
+
 /**
  * A band-level note: a `spec` block holding only its title and note, which the shots harness crops
  * from this band through the live band that follows it (CtaSection's SpecimenNote, same shape).
@@ -241,12 +274,12 @@ export default function SliderSpecimen() {
       {/* ── 2a ─────────────────────────────────────────────────────────────────────────────── */}
       <Label title="2a · bleed — the row runs to the viewport's end edge (perView 3, align start)">
         From 768 the row runs past the column&rsquo;s end edge to the viewport&rsquo;s, so the
-        fourth card shows in the margin and the set reads as a rail rather than a boxed carousel.
-        The tracks are unchanged: the bleed is end padding the overflow paints into, measured from
-        the slider&rsquo;s end edge to the viewport&rsquo;s and re-measured whenever the root
-        element or the slider changes size. At its scroll end the last card stops on the
-        column&rsquo;s edge. Below 768 nothing changes: the phone row already bleeds to both screen
-        edges. Row to controls is a stack (48), as in every Slider.
+        fourth card shows in the margin and the set reads as a rail rather than a boxed
+        carousel. The tracks are unchanged: the bleed is end padding the overflow paints into,
+        measured from the slider&rsquo;s end edge to the viewport&rsquo;s and re-measured
+        whenever the root element or the slider changes size. At its scroll end the last card
+        stops on the column&rsquo;s edge. Below 768 nothing changes: the phone row already
+        bleeds to both screen edges. Row to controls is a stack (48), as in every Slider.
       </Label>
       <ContentSection
         eyebrow="All services"
@@ -363,7 +396,56 @@ export default function SliderSpecimen() {
       </Section>
 
       {/* ── 7 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Label title="7 · Four surfaces, identical markup">
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>7 · Autoplay</h2>
+            <p className={s.specNote}>
+              One per view only (7 Oct 2026). The rail becomes a stepper — a numbered step per
+              slide, the current line filling over the eight-second hold — and a rotation
+              control leads it. Rest the pointer on a quote, or Tab into the slides, and the
+              turn holds with the line frozen; leave and it resumes from there. The control row
+              does not hold it, so Play under the pointer plays. With reduced motion it waits on
+              Play. It wraps from the last slide to the first, and it never speaks: the status
+              line follows a press.
+            </p>
+          </Layout>
+          <Specimen
+            title="autoplay · align center · typographic quotes"
+            note="The G·02 slider: nothing focusable in a slide, so the row takes the tab stop and focus on it holds the turn."
+          >
+            <Slider label="Client quotes" perView={1} align="center" autoplay>
+              {voiceSlides()}
+            </Slider>
+          </Specimen>
+          <Specimen
+            title="autoplay · align start · featured stories"
+            note="The stepper and rotation control on the start edge, the steppers at the end."
+          >
+            <Slider label="Client stories, turning" perView={1} autoplay>
+              {storySlides()}
+            </Slider>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Label title="7 · The stepper on ink and blue">
+        The step numerals and fill re-declare per surface in slider.css: the current numeral at
+        full ink, the rest at the attribution ink, the fill the rail’s thumb. Surface proof only
+        — on pages G sits on tint or paper.
+      </Label>
+      {(['ink', 'blue'] as const).map((surface) => (
+        <Section key={`auto-${surface}`} surface={surface}>
+          <Specimen title={`autoplay · surface="${surface}"`}>
+            <Slider label={`Client quotes on ${surface}`} perView={1} align="center" autoplay>
+              {voiceSlides()}
+            </Slider>
+          </Specimen>
+        </Section>
+      ))}
+
+      {/* ── 8 ──────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="8 · Four surfaces, identical markup">
         The controls, the rail and the focus ring re-declare per surface (the controls are
         Button outline in button.css; the rail and ring in slider.css). Paper and tint:
         brandeis-500 glyph on a 300 rule. Ink: the glyph lifts to 200 (blue as ink fails on

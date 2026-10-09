@@ -71,6 +71,11 @@ says otherwise, this block and the dated amendments at the end win.
 >    § 10's set sample and § 14 Do 1 were brought into line on 6 Oct; § 17 Q19 is kept as the record
 >    of the 32 it started at.
 
+### Amendment — 7 Oct 2026 (r7-testimonials)
+
+`body` is optional. A card whose description is said by something beside it — the case card in Proof's
+G-case, where the quote is the description — leaves it off with no warning; a blank string still warns.
+
 ## 1 · Identity
 
 `BlockCard` is one borderless card in a semantic grid: a required title and body, an optional

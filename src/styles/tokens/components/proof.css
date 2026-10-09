@@ -1,6 +1,6 @@
 /* ══ Component layer — Proof ════════════════════════════════════════════════════
    Tier 2. Attributed client quotations — typographic, compact, featured with a portrait, beside a
-   case, in a group, led by a score — a set of figures, or a quote beside them.
+   case, in a group — a set of figures, or a quote beside them. Never a score beside a quote (7 Oct 2026).
 
    Naming: --proof-{part}-{role}
      parts: quote | name | attribution | portrait | mark | value | label
@@ -49,7 +49,7 @@
   --proof-layer: var(--z-base);
 }
 
-/* Paper: long quote copy is quiet neutral; the value (a figure's numeral, the rating-led score)
+/* Paper: long quote copy is quiet neutral; the value (a figure’s numeral)
    carries the blue accent — the colour, not the darkest ink (owner, 6 Oct: blue is the recurring
    foreground accent). The name is one step above the quote so the attribution reads as a second
    voice, not a fainter echo. */

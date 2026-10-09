@@ -6,7 +6,7 @@
 |---|---|
 | **Component** | `Slider` (and the `scroll` mode of `Layout` it drives) |
 | **Tier** | 2 pattern (`src/patterns/Slider/`); the scroll mode is tier 1 (`src/components/Layout/`) |
-| **Status** | implemented — `fdn-scroll`, 6 Oct 2026. No spec → owner step for kit foundations: `docs/kit/visual-direction.md` is the decided direction, and it wins where this spec and it differ. |
+| **Status** | implemented — `fdn-scroll`, 6 Oct 2026. Amended 7 Oct 2026 (r7-testimonials): `autoplay`. No spec → owner step for kit foundations: `docs/kit/visual-direction.md` is the decided direction, and it wins where this spec and it differ. |
 | **Token prefix** | `--sld-*` (Slider); `--lay-scroll-*` (Layout's scroll row) |
 | **File** | `tokens/components/slider.css`; `tokens/components/layout.css` |
 | **Designer / date** | Claude Code · 6 Oct 2026 |
@@ -15,6 +15,28 @@
 
 There is no `docs/specs/Layout.md`: Layout's docblock and prop docs are its spec, and they carry the
 scroll mode. This file states the scroll mode too, because the Slider is its reason for existing.
+
+### Amendment — 7 Oct 2026 (r7-testimonials): `autoplay`
+
+The owner asked for the typographic testimonial "inside the auto-advancing Slider". `autoplay` (default
+`false`) and `interval` (default 8000 ms) are new props, one per view only — any other `perView` ignores
+`autoplay` with a development warning. With it:
+
+- the rail is replaced by a **stepper**: one step per slide, a mono numeral (`--text-index`, from md) over
+  a line at `--sld-step-length`, in a `--sld-step-target`-tall button named "Slide n of N" with
+  `aria-current` on the current one. The current line fills over the hold (`--slider-step-progress`,
+  written each frame by the clock, as the thumb's `--slider-progress` is). Below md the numerals drop and
+  the lines alone are the stepper. Step ink is `--sld-step-fg` / `--sld-step-fg-current`, per surface;
+  the line and fill reuse `--sld-progress-rail` / `--sld-progress-thumb`;
+- a **rotation control** (Button outline lg, `chrome-pause` / `chrome-play`, named "Pause slides" /
+  "Play slides") leads the stepper (WCAG 2.2.2);
+- the turn **holds** while a mouse rests on the slides or focus is inside them, and resumes from where it
+  froze; the control row does not hold it, so Play under the pointer plays;
+- it **never starts** before hydration or for a reader who prefers reduced motion — Play starts it;
+- it wraps from the last slide to the first, and it is silent: the status line still speaks only after
+  a reader's press.
+
+Controls keep their 48 circle in a crowded row (`flex: none`); the steps give way.
 
 ## 1 · Identity
 
