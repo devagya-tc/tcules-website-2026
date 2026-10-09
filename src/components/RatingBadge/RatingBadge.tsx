@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+import { cx } from '@/lib/cx';
+
 import styles from './RatingBadge.module.css';
 
 export type RatingBadgeProps = {
@@ -36,6 +38,14 @@ export type RatingBadgeProps = {
    * shows "/ 5" to the eye (rating-led, fix round 2). Ignored while `showScore` is on.
    */
   scale?: string;
+  /**
+   * The pill's edge. `pill` (default) is the outline pill. `plain` drops the outline and the inline
+   * padding, so the claim reads as a line of mono type in the label voice — the badge as a hero's
+   * eyebrow (r7-hero, owner 7 Oct 2026, after doodle.com), where a 12px label sits over a 67px title
+   * and a second outline above the solid ask would read as a control. The block padding stays, so
+   * the link keeps a target taller than 24 (WCAG 2.5.8). Placement is still the parent's.
+   */
+  frame?: 'pill' | 'plain';
 };
 
 /**
@@ -59,9 +69,15 @@ export function RatingBadge({
   mark,
   showScore = true,
   scale,
+  frame = 'pill',
 }: RatingBadgeProps) {
   return (
-    <a className={styles.badge} href={href} target="_blank" rel="noreferrer noopener">
+    <a
+      className={cx(styles.badge, frame === 'plain' && styles.plain)}
+      href={href}
+      target="_blank"
+      rel="noreferrer noopener"
+    >
       {/* Decorative: "4.8 on Clutch" is the whole claim. A glyph from the set, not a ★ character:
           the mono face has no ★, so every browser fell back to a different font and the star's
           centre landed somewhere different on each (1 Oct 2026). An SVG centres exactly. */}

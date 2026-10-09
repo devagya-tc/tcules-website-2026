@@ -85,3 +85,12 @@ prevents. A checked-on date is not shown, matching the footer; if the owner want
 the badge (Proof `arrangement="rating"`): the pill reads "★ Rated on [mark] Clutch", and the score
 follows the platform in visually hidden text, so the accessible name is "Rated on Clutch, 4.8 (opens
 in a new tab)" — the visible label first (WCAG 2.5.3), the score still in the claim.
+
+## Amendment · 9 Oct 2026 (r7-hero)
+
+`frame?: 'pill' | 'plain'` (default `'pill'`). `plain` drops the outline (border width 0, so no colour
+is stated) and the inline padding, and keeps the block padding so the target stays taller than 24
+(WCAG 2.5.8). It exists for PageHero's `rating`, the score set in the eyebrow's place (owner, 7 Oct
+2026, after doodle.com): beside a photograph the plain line reads in the label voice, and a second
+outline above the solid ask would read as a control. Hover and focus are unchanged; with no border,
+only the ink moves. Placement remains the parent's.

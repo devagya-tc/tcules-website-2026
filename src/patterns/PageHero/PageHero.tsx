@@ -1,18 +1,22 @@
 import type { ReactNode } from 'react';
 
 import {
+  BrandMark,
   Button,
   Cluster,
   Icon,
   Layout,
   Media,
+  RatingBadge,
   Section,
   Texture,
   TextureShape,
   type MediaImage,
+  type BrandMarkName,
   type MediaRatioSpec,
   type SectionSurface,
 } from '@/components';
+import { cx } from '@/lib/cx';
 import {
   FULL_COLUMN,
   HERO_BESIDE,
@@ -209,6 +213,49 @@ export type HeroArrangement = 'stacked' | 'beside' | 'wide' | 'centred' | 'displ
  */
 export type HeroAnnouncement = { label: string; text: string; action: HeroAction };
 
+/**
+ * A third-party score, set in the eyebrow's place (r7-hero, owner 7 Oct 2026, after doodle.com): the
+ * one line above the title that can never repeat a crumb, because it is a claim with a source rather
+ * than a name. Rendered as a RatingBadge — the one score component — so the hero and the footer
+ * cannot disagree about how a rating reads.
+ *
+ *   frame  `pill` (default) — the outline pill; the quiet object over a long title or a drawing.
+ *          `plain` — no outline, a line of mono type in the eyebrow's own voice with the blue star;
+ *          the doodle.com shape, for a photograph hero, where a second outline above the solid ask
+ *          would read as a control.
+ *   mark   the platform's mark, by name. PageHero composes the BrandMark, so a template passes data.
+ *   showScore, scale  as RatingBadge's; there is no large numeral beside it here, so the default
+ *          prints the score.
+ *
+ * One platform, not a strip: the corpus has one rating source, and two pills over a title is a
+ * logo strip in the wrong band (ratings beside the client list are r7-facts' job).
+ */
+export type HeroRating = {
+  score: string;
+  platform: string;
+  href: string;
+  mark?: BrandMarkName;
+  scale?: string;
+  frame?: 'pill' | 'plain';
+};
+
+/**
+ * The lead's size, `md` (default) or `lg`. r7-hero, owner 7 Oct 2026: the 20px lead was too large;
+ * visitor-facing pages take `md`, --text-body-lg at 18, two px above the paragraphs under it. `lg`
+ * (--text-lead, 20, and 18 on a phone) is an OPT-IN for a page written for search, whose lead has to
+ * carry more of the query in its first line; it is never the default and a template chooses it for a
+ * family, in code. A component size, so a t-shirt name (token rule 5).
+ */
+export type HeroLeadSize = 'md' | 'lg';
+
+/**
+ * The line above the title holds ONE thing: a category (`eyebrow`) or a score (`rating`). Typed as a
+ * union so both cannot be passed — a score beside a category is two labels competing for 12px, and
+ * the score is the one that can never echo the trail.
+ */
+type HeroEyebrowProps =
+  { eyebrow?: string; rating?: never } | { rating?: HeroRating; eyebrow?: never };
+
 type PageHeroBaseProps = {
   /** The band's archetype for `fold:check` (§ 1.3) — `A` — passed to Section's `data-band`. */
   'data-band'?: string;
@@ -265,6 +312,10 @@ type PageHeroBaseProps = {
    * under a 12px label reads as a caption stuck to the title and 24 reads as a label above one.
    */
   eyebrow?: string;
+  /** A score in the eyebrow's place. See `HeroRating`. */
+  rating?: HeroRating;
+  /** The lead's size; `md` by default. See `HeroLeadSize`. */
+  leadSize?: HeroLeadSize;
   /**
    * The ancestor trail, built by `heroTrail(items, title, (t) => <Breadcrumbs {...t} />)`. Sits 32
    * above the split.
@@ -380,14 +431,17 @@ type PageHeroBaseProps = {
  * History: ghost/neutral until 5 Oct 2026, then a primary link (fdn-blue) until the 7 Oct ruling;
  * an ink solid for a non-converting lead (fix/tone) until r7-buttons retired it on 8 Oct.
  */
-export type HeroActions = readonly [] | readonly [HeroAction] | readonly [HeroAction, HeroAction];
+export type HeroActions =
+  readonly [] | readonly [HeroAction] | readonly [HeroAction, HeroAction];
 
 type PageHeroActionProps = {
   /** See `HeroActions`. Absent or empty renders no row and no seam. */
   actions?: HeroActions;
 };
 
-export type PageHeroProps = PageHeroBaseProps & PageHeroActionProps;
+export type PageHeroProps = Omit<PageHeroBaseProps, 'eyebrow' | 'rating'> &
+  HeroEyebrowProps &
+  PageHeroActionProps;
 
 /** Six tags at most: two balanced rows of three beside the media (fix round 2). */
 const MAX_TAGS = 6;
@@ -500,6 +554,8 @@ export function PageHero({
   title,
   body,
   eyebrow,
+  rating,
+  leadSize = 'md',
   trail,
   credits = [],
   dates,
@@ -657,7 +713,26 @@ export function PageHero({
      heroes reading black and white apart from the ask. The square is aria-hidden: it marks, it
      does not say. nowrap, so the square never wraps away from a long label: the label's own span
      shrinks and wraps instead. */
-  const eyebrowNode = eyebrow ? (
+  /* The score in the eyebrow's place: a RatingBadge in a plain <div>, because a Layout track would
+     stretch the badge's inline-flex box to the column and a pill would run the full width. The div
+     carries no class: it only stops the stretch. Under a centred head the Layout's justify-items
+     centres the div, and the badge sits in it at its own width. */
+  const ratingNode = rating ? (
+    <div>
+      <RatingBadge
+        score={rating.score}
+        platform={rating.platform}
+        href={rating.href}
+        scale={rating.scale}
+        frame={rating.frame}
+        icon={<Icon name="star" size="sm" />}
+        mark={rating.mark ? <BrandMark name={rating.mark} /> : undefined}
+      />
+    </div>
+  ) : null;
+  const eyebrowNode = rating ? (
+    ratingNode
+  ) : eyebrow ? (
     <Cluster
       as="p"
       colGap="tight"
@@ -676,7 +751,7 @@ export function PageHero({
   const copyNode =
     lead === undefined ? null : (
       <Layout rowGap="text">
-        <p className={styles.lead}>{lead}</p>
+        <p className={cx(styles.lead, leadSize === 'lg' && styles.leadLg)}>{lead}</p>
         {rest.map((paragraph, index) => (
           <p key={index} className={styles.body}>
             {paragraph}

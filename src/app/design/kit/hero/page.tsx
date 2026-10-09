@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Cluster, Layout, Section } from '@/components';
-import { getIdealServiceStory } from '@/content';
+import { BrandMark, Cluster, Icon, Layout, RatingBadge, Section } from '@/components';
+import { getIdealServiceStory, getNavigation } from '@/content';
 import {
   Breadcrumbs,
   ListCard,
   PageHero,
   type HeroAction,
+  type HeroRating,
   type PageHeroProps,
 } from '@/patterns';
 import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
@@ -72,10 +73,25 @@ type Variation = {
   note: string;
   facts: readonly string[];
   exempt?: string;
+  /** `rating`: the 7 Oct family, the score in the eyebrow's place (r7-hero). Indexed as its own group. */
+  group?: 'rating';
   hero: PageHeroProps;
 };
 
-function variations(): Variation[] {
+/** The one rating source, read through the content seam as the footer reads it — never restated. */
+async function clutchRating(): Promise<HeroRating> {
+  const { footer } = await getNavigation();
+  const rating = footer.brand.rating;
+  if (!rating) notFound();
+  return {
+    score: rating.score,
+    platform: rating.platform,
+    href: rating.href,
+    mark: rating.mark,
+  };
+}
+
+function variations(rating: HeroRating): Variation[] {
   const product = serviceHero('product-design');
   const engineering = serviceHero('design-engineering');
   const software = serviceHero('software-development');
@@ -93,7 +109,7 @@ function variations(): Variation[] {
       short: 'Illustration, two actions',
       name: 'Illustration beside the copy, two actions',
       note: 'The locked service hero (ruling H2). The trail joins the copy, 32 above the title, and the pair is centred on the drawing. One solid ask and its ghost partner. Below 1440 the drawing’s labels become numbered markers with a legend, so they stay readable at every width.',
-      facts: ['Ends at 729', 'Accent + Field', 'Numbered legend below 1440'],
+      facts: ['Ends at 723', 'Accent + Field', 'Numbered legend below 1440'],
       hero: {
         trail: product.trail,
         title: product.hero.title,
@@ -123,7 +139,7 @@ function variations(): Variation[] {
       short: 'Illustration with tags',
       name: 'Illustration with tags',
       note: 'Six tags as an unboxed grid after the actions: two balanced rows of three, three rows of two on a phone, each marked by one blue pixel of the texture’s grid. The hero sets six at most; the rest of the stack belongs in the page. Keep the title to three lines.',
-      facts: ['Ends at 792', 'Six at most', 'Accent + Field'],
+      facts: ['Ends at 787', 'Six at most', 'Accent + Field'],
       hero: {
         trail: software.trail,
         title: software.hero.title,
@@ -188,7 +204,7 @@ function variations(): Variation[] {
       short: 'Title-led panorama',
       name: 'Title-led, with a panorama below',
       note: 'The split header: the title and lead in three fifths, the ask on the lead’s last line and flush with the column’s end, then a 4:1 photograph across the full column (shape panorama). The calmest frame in the catalogue, an empty studio, so the panorama is light and air rather than a second subject.',
-      facts: ['Ends at 781', 'Accent only', '4:1 · 3:2 on a phone'],
+      facts: ['Ends at 777', 'Accent only', '4:1 · 3:2 on a phone'],
       hero: {
         title: 'How we work',
         body: [
@@ -246,7 +262,7 @@ function variations(): Variation[] {
       short: 'Text with the field',
       name: 'No media, the field beside the copy',
       note: 'The kit/services-index opening. The copy takes two thirds and the texture the last, a field that steps up to the column’s end edge and sinks into the floor, so the title stands in the clearing it leaves (Quantum’s move, made structural). Below 1024 it is not drawn: only the horizon runs there (§ 3.7).',
-      facts: ['Ends at 629', 'Accent + Texture', 'Field track [2, 1]'],
+      facts: ['Ends at 625', 'Accent + Texture', 'Field track [2, 1]'],
       hero: {
         trail: heroTrail(
           [
@@ -269,7 +285,7 @@ function variations(): Variation[] {
       short: 'Text only',
       name: 'No media, no texture',
       note: 'The quietest opening: type alone. For a page whose first band carries the image, so the hero does not compete with it.',
-      facts: ['Ends at 590', 'Accent only'],
+      facts: ['Ends at 583', 'Accent only'],
       hero: {
         trail: heroTrail(
           [
@@ -325,7 +341,217 @@ function variations(): Variation[] {
         media: product.media,
       },
     },
+    {
+      id: 'rating-photo',
+      group: 'rating',
+      short: 'Photograph, plain score',
+      name: 'Photograph beside the copy, the score as the eyebrow',
+      note: 'The doodle.com shape, made ours. The eyebrow line is the Clutch score in the plain frame: the blue star, the score and the mark in the label voice, no outline, so the only edged objects in the band are the photograph and the solid ask. A home opening has no trail, and the score says what a category eyebrow cannot: someone else’s verdict.',
+      facts: ['Ends at 723', 'Plain frame', 'Home opening'],
+      hero: {
+        rating: { ...rating, frame: 'plain' },
+        title: 'Product teams that ship what they design',
+        body: [
+          'Research, design and engineering in one accountable team, for B2B, workflow and AI products.',
+        ],
+        actions: [START, { label: 'See the work', href: ROUTES.caseStudies }],
+        arrangement: 'beside',
+        media: {
+          type: 'image',
+          ratio: '5/4',
+          image: photo('studio-pair-at-monitor', ''),
+        },
+      },
+    },
+    {
+      id: 'rating-service',
+      group: 'rating',
+      short: 'Illustration, pill score',
+      name: 'The service hero, the score above the title',
+      note: 'The locked shape (01) with the eyebrow line filled again, by the one thing that cannot echo the trail. The pill, because beside a drawing the plain line had nothing to hold it and read as a stray caption; the outline gives it an object’s edge at 34px. Home / Services above it, the score under them, the title 24 under that.',
+      facts: ['Ends at 779', 'Pill frame', 'Never a crumb'],
+      hero: {
+        trail: product.trail,
+        rating,
+        title: product.hero.title,
+        body: [product.hero.lead],
+        actions: product.hero.actions,
+        arrangement: 'beside',
+        media: product.media,
+      },
+    },
+    {
+      id: 'rating-field',
+      group: 'rating',
+      short: 'Text, field, pill score',
+      name: 'No media, the field beside the copy, the score as the eyebrow',
+      note: 'The services index with a score where an eyebrow would have said “Services” a second time. The pill sits on the copy’s start edge; the field steps up in the end third as before, so the band keeps its two shapes.',
+      facts: ['Ends at 681', 'Pill frame', 'Field track [2, 1]'],
+      hero: {
+        trail: heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Services', href: ROUTES.services },
+          ],
+          'Six ways into one accountable product team',
+          (trail) => <Breadcrumbs {...trail} />,
+        ),
+        rating,
+        title: 'Six ways into one accountable product team',
+        body: [
+          'Design, systems, engineering and modernisation, run as one practice so a decision made in research survives into the code.',
+        ],
+        actions: [START, { label: 'Compare the services', href: '#compare' }],
+        texture: true,
+      },
+    },
+    {
+      id: 'rating-centred',
+      group: 'rating',
+      short: 'Centred, pill score',
+      name: 'Centred head, no media, the score on the axis',
+      note: 'A campaign or landing opening: everything on the centre line, the pill first. Centred, an outline earns its place — the plain line floated off the axis because its star and its mark are different widths — and the pill is the only object above a display title.',
+      facts: ['Ends at 628', 'Pill frame', 'Centred, no media'],
+      hero: {
+        rating,
+        title: 'Design and engineering, accountable as one team',
+        body: [
+          'From the first model of the work to the code that ships it, with the same people in the room.',
+        ],
+        actions: [START, { label: 'How we work', href: ROUTES.howWeWork }],
+        arrangement: 'centred',
+      },
+    },
+    {
+      id: 'lead-lg',
+      group: 'rating',
+      short: 'Larger lead, opt-in',
+      name: 'The larger lead, opted into by a page written for search',
+      note: 'Compare with 10: the same page, the same words, with leadSize="lg". Every hero above takes the default lead, 18 over 16 paragraphs. A template opts a family into 20 when its lead has to carry the query in its first line, as an expertise or glossary page does; on a phone the two sizes meet at 18.',
+      facts: ['Ends at 590', 'leadSize="lg"', 'Opt-in, never the default'],
+      hero: {
+        trail: heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Expertise', href: ROUTES.expertise },
+          ],
+          'Products we know from the inside',
+          (trail) => <Breadcrumbs {...trail} />,
+        ),
+        title: 'Products we know from the inside',
+        body: [
+          'Workflow software, AI and developer tools, data products, marketplaces and fintech: the kinds of product where the model of the work decides the interface.',
+        ],
+        leadSize: 'lg',
+        actions: [{ label: 'Book an intro call', href: ROUTES.contact }],
+      },
+    },
   ];
+}
+
+/**
+ * The index of a run of variations: numbered tiles that jump to their strips. Six across from 1024,
+ * so the twelve openings are two balanced rows and the band stays inside the fold.
+ */
+function Index({ items, list }: { items: readonly Variation[]; list: readonly Variation[] }) {
+  return (
+    <Layout as="ol" columns={{ base: 2, lg: 6 }} colGap="gutter" rowGap="gutter">
+      {/* ListCard renders its own <li>. Numbered across the page, as the strips are. */}
+      {items.map((variation) => (
+        <ListCard
+          key={variation.id}
+          form="tile"
+          size="sm"
+          marker={{ type: 'number', value: list.indexOf(variation) + 1, tone: 'neutral' }}
+          title={variation.short}
+          body={variation.facts[0]}
+          href={`#${variation.id}`}
+        />
+      ))}
+    </Layout>
+  );
+}
+
+/**
+ * Part two's opening (r7-hero, 7 Oct review): what changed, and its own index. Specimen chrome.
+ */
+function RatingChapter({
+  items,
+  list,
+}: {
+  items: readonly Variation[];
+  list: readonly Variation[];
+}) {
+  return (
+    <Section id="rating">
+      <Layout rowGap="stack">
+        <Layout rowGap="block">
+          <p className={t.eyebrow}>Part two · 7 Oct review</p>
+          <h2 className={t.h1}>A score above the title, a quieter lead</h2>
+          <p className={t.lead}>
+            One line above the title: a category or a score, and a score can never repeat a
+            crumb.
+          </p>
+        </Layout>
+        <Index items={items} list={list} />
+      </Layout>
+    </Section>
+  );
+}
+
+/**
+ * The two changes at actual size, each beside its pair: the score's two frames, the lead's two
+ * sizes. Specimen chrome, so it renders RatingBadge and the type roles directly.
+ */
+function RatingSheet({ rating }: { rating: HeroRating }) {
+  const badge = (frame: 'pill' | 'plain') => (
+    <div>
+      <RatingBadge
+        score={rating.score}
+        platform={rating.platform}
+        href={rating.href}
+        frame={frame}
+        icon={<Icon name="star" size="sm" />}
+        mark={rating.mark ? <BrandMark name={rating.mark} /> : undefined}
+      />
+    </div>
+  );
+  const sample =
+    'Research, design and engineering in one accountable team, for B2B, workflow and AI products.';
+  return (
+    <Section>
+      <Layout columns={{ md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
+        <Layout rowGap="block">
+          <p className={t.eyebrow}>Frame · pill · default</p>
+          {badge('pill')}
+          <p className={t.body}>
+            An object’s edge: over a drawing, on a centred axis, wherever a line of 12px type
+            would read as a stray caption.
+          </p>
+        </Layout>
+        <Layout rowGap="block">
+          <p className={t.eyebrow}>Frame · plain</p>
+          {badge('plain')}
+          <p className={t.body}>
+            The label voice, the blue star its only colour. Beside a photograph, already the
+            band’s edged object with the solid ask.
+          </p>
+        </Layout>
+        <Layout rowGap="block">
+          <p className={t.eyebrow}>Lead · md · default</p>
+          <p className={t.bodyLg}>{sample}</p>
+          <p className={t.body}>
+            Every hero. Two px over the paragraphs, and the shorter line.
+          </p>
+        </Layout>
+        <Layout rowGap="block">
+          <p className={t.eyebrow}>Lead · lg · opt-in</p>
+          <p className={t.lead}>{sample}</p>
+          <p className={t.body}>A page written for search, per family. Meets md on a phone.</p>
+        </Layout>
+      </Layout>
+    </Section>
+  );
 }
 
 /** The tint strip that names a variation. Specimen chrome: it labels the band below it. */
@@ -352,8 +578,11 @@ function Label({ index, variation }: { index: number; variation: Variation }) {
   );
 }
 
-export default function HeroKitSpecimen() {
-  const list = variations();
+export default async function HeroKitSpecimen() {
+  const rating = await clutchRating();
+  const list = variations(rating);
+  const openings = list.filter((v) => v.group === undefined);
+  const scored = list.filter((v) => v.group === 'rating');
   return (
     <>
       <Section>
@@ -361,7 +590,7 @@ export default function HeroKitSpecimen() {
           <Layout columns={{ lg: [3, 2] }} colGap="section" rowGap="block" align="baseline">
             <Layout rowGap="block">
               <p className={t.eyebrow}>UI kit · Hero family</p>
-              <h1 className={t.display}>One hero, ten openings</h1>
+              <h1 className={t.display}>One hero, {list.length} openings</h1>
             </Layout>
             <p className={t.lead}>
               One PageHero, three kinds of media and five arrangements. Each shape is measured
@@ -369,25 +598,18 @@ export default function HeroKitSpecimen() {
               masses.
             </p>
           </Layout>
-          <Layout as="ol" columns={{ base: 2, lg: 5 }} colGap="gutter" rowGap="gutter">
-            {/* ListCard renders its own <li>. */}
-            {list.map((variation, index) => (
-              <ListCard
-                key={variation.id}
-                form="tile"
-                size="sm"
-                marker={{ type: 'number', value: index + 1, tone: 'neutral' }}
-                title={variation.short}
-                body={variation.facts[0]}
-                href={`#${variation.id}`}
-              />
-            ))}
-          </Layout>
+          <Index items={openings} list={list} />
         </Layout>
       </Section>
 
       {list.map((variation, index) => (
         <div key={variation.id} data-kit-variation={variation.id}>
+          {variation.id === scored[0]?.id ? (
+            <>
+              <RatingChapter items={scored} list={list} />
+              <RatingSheet rating={rating} />
+            </>
+          ) : null}
           <Label index={index} variation={variation} />
           {/* data-fold-hero: fold:check measures this hero + the nav against 830. */}
           <div data-fold-hero="" data-fold-exempt={variation.exempt}>

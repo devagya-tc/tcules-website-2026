@@ -37,7 +37,7 @@ export default function RatingBadgeSpecimen() {
             {index === 0 ? <h2>1 · Four surfaces · identical markup</h2> : null}
             <Specimen
               title={surface}
-              note="with the Clutch mark, without a mark, and showScore={false} (the score set large beside it; the name still carries it)"
+              note="with the Clutch mark, without a mark, showScore={false} (the score set large beside it; the name still carries it), and frame plain (no outline: the hero eyebrow, r7-hero)"
             >
               <Cluster colGap="block" rowGap="block">
                 <RatingBadge
@@ -55,6 +55,14 @@ export default function RatingBadgeSpecimen() {
                   icon={<Icon name="star" size="sm" />}
                   mark={<BrandMark name="clutch" />}
                   showScore={false}
+                />
+                <RatingBadge
+                  score={SCORE}
+                  platform="Clutch"
+                  href={EXTERNAL.clutch}
+                  icon={<Icon name="star" size="sm" />}
+                  mark={<BrandMark name="clutch" />}
+                  frame="plain"
                 />
               </Cluster>
             </Specimen>

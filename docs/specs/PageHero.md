@@ -1041,3 +1041,20 @@ Two tier faults found after the kit run, fixed together:
 - **Barrels.** `HeroAnnouncement`, `HeroCut` and `HeroCutItem` are exported from `src/patterns/PageHero` and
   `src/patterns`.
 
+
+## Amendment · 9 Oct 2026 — r7-hero: the score in the eyebrow's place, and a quieter lead
+
+Owner, 7 Oct 2026 review (`docs/kit/review-7-oct.md`, r7-hero; reference doodle.com).
+
+- **`rating?: HeroRating`** — `{ score, platform, href, mark?, scale?, frame? }`, rendered as a
+  `RatingBadge` with the star and the `BrandMark` composed here, in the eyebrow's row, 24 over the
+  title. `eyebrow` and `rating` are one union (`HeroEyebrowProps`): the line above the title holds one
+  thing, so passing both does not compile. A score is a claim with a source, never a name, so it can
+  never repeat a crumb and the `repeatsTrail` warning has nothing to compare.
+- **`frame`**: `pill` (default) beside a drawing, on a centred axis or over a long title; `plain`
+  (RatingBadge `frame="plain"`, no outline) beside a photograph, the doodle.com shape. Proven at
+  `/design/kit/hero` 13 to 16 and `/design/page-hero` block 22.
+- **`leadSize?: 'md' | 'lg'`**, default `md`. `md` reads `--hero-lead-text` (now `--text-body-lg`);
+  `lg` reads `--hero-lead-text-lg` (`--text-lead`, the old default) and is an opt-in for a page
+  written for search, chosen per family in code. On a phone both are 18. Every hero in the kit got
+  4 to 7px shorter; the kit's "Ends at" facts were re-measured. Block 23 and `/design/kit/hero` 17.
