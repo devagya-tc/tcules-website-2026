@@ -39,7 +39,7 @@
 }
 
 /* The display role (34 / 28 / 22) is the quote that shares its band with one large object: the 667
-   beside a portrait (featured), the 7 beside the score (rating-led), the 763 beside a case card
+   beside a portrait (featured), the 763 beside a case card
    (G-case), or a start-aligned typographic column. At the lead measure in its own font that is about
    860px — inside the 800–960 that reference proof bands set a quote across. Wrapped `pretty`, not
    balanced: it is three to six lines of speech, and ch10 wraps quotes pretty ("the lines stay full
@@ -69,7 +69,7 @@
   text-wrap: var(--text-running-wrap);
 }
 
-/* Centred (typographic and rating-led G, under a centred head — § 3.5). There is no inline-start
+/* Centred (typographic G, under a centred head — § 3.5). There is no inline-start
    edge to run the rule down, so the rule leaves the quote's side for the mark above it, and the
    inset that cleared it goes too. Balanced, not pretty, here and only here: centred lines of
    unequal length read ragged on BOTH edges, and balance is what keeps a centred block one shape. */
@@ -152,35 +152,6 @@
   block-size: 100%;
 }
 
-/* The rating-led score: the band's large thing (§ 3.3), at the score role (105 / 84 / 67) in the
-   accent ink — three times the quote beside it. The role is serif (see --font-size-score): in mono
-   the full stop takes a whole cell and "4.8" read as three spaced glyphs. Lining figures, so the
-   numeral stands on the baseline at cap height rather than in old-style descenders. */
-.score {
-  font: var(--text-score);
-  letter-spacing: var(--text-score-tracking);
-  font-variant-numeric: lining-nums;
-  color: var(--proof-value-ink);
-}
-
-/* The score's context, at its side on the numeral's baseline (fix round 2, 6 Oct 2026): the scale
-   in the title serif at h3, in the attribution ink — clearly the numeral's subordinate, never its
-   rival — and what the number is, in the mono label voice under it. Two lines, so the 105 has
-   something beside it at its own baseline and the left track reads as a score rather than as one
-   glyph in an empty field. */
-.scoreScale {
-  font: var(--text-h3);
-  letter-spacing: var(--text-h3-tracking);
-  font-variant-numeric: lining-nums;
-  color: var(--proof-attribution-ink);
-}
-
-.scoreLabel {
-  font: var(--text-micro);
-  letter-spacing: var(--text-micro-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--proof-label-ink);
-}
 
 /* The speaker group sizes to its content and never shrinks below it; the source link takes what
    is left or wraps beneath. */

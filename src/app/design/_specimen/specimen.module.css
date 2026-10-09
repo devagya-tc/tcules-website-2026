@@ -262,3 +262,10 @@
 .controlRow {
   min-block-size: var(--btn-height-lg);
 }
+
+/* A kit page's short titled note (testimonials' rulings strip): an h2 for the outline, set at the
+   h5 role because it names one point in a row of four, not a band. */
+.kitRuleTitle {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+}

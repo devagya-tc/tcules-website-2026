@@ -1,32 +1,34 @@
 import type { ReactNode } from 'react';
 
-import { Button, Icon, Layout, Media, Section, Texture, TextureShape } from '@/components';
+import {
+  Button,
+  Cluster,
+  Layout,
+  Media,
+  Section,
+  Tag,
+  Texture,
+  TextureShape,
+} from '@/components';
 import { getIdealServiceStory } from '@/content';
 import { MEDIA_SPLIT } from '@/lib/image-sizes';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
-import {
-  BlockCard,
-  ContentSection,
-  CtaRow,
-  Proof,
-  Slider,
-  type ProofQuote,
-  type ProofRating,
-} from '@/patterns';
+import { BlockCard, ContentSection, CtaRow, Proof, Slider, type ProofQuote } from '@/patterns';
 
 import { specimenStyles as s } from '../../_specimen/Specimen';
 
 /* ── Content ─────────────────────────────────────────────────────────────────────────
    Two kinds, never mixed (visual-direction § 5.8):
 
-   REAL — the one approved client quote and the real Clutch score, read from the content seam
-   (the product-design story), so a re-read rating or an edited quote reaches this page too. No
-   portrait: a stock face beside a real name is a fabricated likeness.
+   REAL — the one approved client quote, read from the content seam (the product-design story), so
+   an edited quote reaches this page too. No portrait: a stock face beside a real name is a
+   fabricated likeness. No score either, now on any quote (owner, 7 Oct 2026): "never put a rating
+   beside a client quote".
 
-   FICTIONAL — invented people at invented companies, with stock portraits from the kit registry.
-   They never sit beside a real mark or the real score, and they link to the work index rather than
-   to a real case they did not commission. */
+   FICTIONAL — invented people at invented companies. Only the featured arrangements show a face
+   (stock portraits from the kit registry; 7 Oct: no headshots elsewhere). They never sit beside a
+   real mark, and they link to the work index rather than to a real case they did not commission. */
 
 function realProof() {
   const story = getIdealServiceStory('product-design');
@@ -39,33 +41,11 @@ function realProof() {
 
 const REAL = realProof();
 
-/* The page's sourced score: the proof block's own, or — since product-design's fix round 1 moved
-   the one Clutch pill to its logo band, a band above the proof — the logo band's. One source, so
-   the score here is always the score the page shows. */
-function realRating() {
-  if (REAL?.rating) return REAL.rating;
-  const story = getIdealServiceStory('product-design');
-  for (const section of story?.sections ?? []) {
-    if (!('blocks' in section)) continue;
-    for (const block of section.blocks)
-      if (block.kind === 'logos' && block.rating) return block.rating;
-  }
-  return undefined;
-}
-const RATING = realRating();
-
 const REAL_QUOTE: ProofQuote | undefined = REAL && {
   quoteHtml: `<p>${REAL.quote.text}</p>`,
   name: REAL.quote.name,
   role: REAL.quote.role,
   company: REAL.quote.company,
-};
-
-const REAL_RATING: ProofRating | undefined = RATING && {
-  score: RATING.score,
-  platform: RATING.platform,
-  href: RATING.href,
-  mark: RATING.mark,
 };
 
 const REAL_CASE = REAL?.case;
@@ -150,22 +130,33 @@ const SLIDES: readonly ProofQuote[] = [
   },
 ];
 
+/** A speaker without the face: everywhere but the featured arrangements (7 Oct: no headshots). */
+const voice = ({ name, role, company }: { name: string; role: string; company: string }) => ({
+  name,
+  role,
+  company,
+});
+
 /* Group quotes: ≤ 25 words each (§ 1.5), and written to one length — the blue rule runs the
    height of its quote, and it is the most saturated mark on the band, so peers of unequal length
-   set a stagger along the row's top edge (fix round 2). Measured: the same line count at 1470, 1280 and 1024, where the three sit across. */
+   set a stagger along the row's top edge (fix round 2). No faces (7 Oct): each leads with the tag
+   that names the engagement, in the place the portrait took, and the names sit on the start edge. */
 const GROUP: readonly [ProofQuote, ProofQuote, ProofQuote] = [
   {
-    ...DANIEL,
+    ...voice(DANIEL),
+    tag: 'Design system',
     quoteHtml:
       '<p>Engineers stopped rebuilding tables, and releases stopped waiting on design files.</p>',
   },
   {
-    ...TOBIAS,
+    ...voice(TOBIAS),
+    tag: 'Delivery',
     quoteHtml:
       '<p>Decisions every week, written down. Nobody on our side chased a status update.</p>',
   },
   {
-    ...INES,
+    ...voice(INES),
+    tag: 'User research',
     quoteHtml:
       '<p>Their research changed the brief, not only the screens. We built less, and better.</p>',
   },
@@ -173,110 +164,163 @@ const GROUP: readonly [ProofQuote, ProofQuote, ProofQuote] = [
 
 /* Typographic, fictional: ≤ 35 words (§ 1.5). No portrait — the typographic band never shows one. */
 const TOBIAS_TYPOGRAPHIC: ProofQuote = {
+  ...voice(TOBIAS),
   quoteHtml:
     '<p>We came for a redesign and left with a way of making decisions. The interface is better, and the meetings about the interface are shorter. We had not expected the second part at all.</p>',
-  name: 'Tobias Reyes',
-  role: 'VP Engineering',
-  company: 'Quillstack',
 };
 
-/* G-case, fictional: ≤ 45 words (§ 1.5). */
-const MAREN_CASE: ProofQuote = {
+/* The typographic slider: three voices written to one length (≈ 25 words, three lines at 43 in the
+   lead measure at 1470), so the band does not change height as it turns, and the centred quote
+   sits at one place on the page from slide to slide. */
+const TYPOGRAPHIC_SLIDES: readonly ProofQuote[] = [
+  TOBIAS_TYPOGRAPHIC,
+  {
+    ...voice(ARJUN),
+    quoteHtml:
+      '<p>Every screen they cut was one our clinicians never had to learn, and every screen that stayed had been argued for, with evidence on the table.</p>',
+  },
+  {
+    ...voice(INES),
+    quoteHtml:
+      '<p>They left us a system our own team could extend. Six months on we still ship from it every week, and nobody has asked how it works.</p>',
+  },
+  {
+    ...voice(DANIEL),
+    quoteHtml:
+      '<p>The design review stopped being a meeting about taste. Each decision arrived with the research behind it, so we argued about evidence instead of opinions.</p>',
+  },
+];
+
+/* Featured without a photograph: the content on the start edge, the tag in the image's place. */
+const ARJUN_NO_IMAGE: ProofQuote = {
+  ...voice(ARJUN),
+  tag: 'Clinical product',
   quoteHtml:
-    '<p>The first month was listening: ride-alongs, call recordings, the spreadsheets nobody admits to keeping. What came out of it looks simple, and it is simple because the hard part was done first.</p>',
-  name: 'Maren Holt',
-  role: 'Head of Product',
-  company: 'Halden Freight',
+    '<p>What we valued most was the restraint. Every screen they cut was one our clinicians never had to learn, and every one that stayed had been argued for.</p>',
 };
 
 /* ── Bands ──────────────────────────────────────────────────────────────────────────── */
 
-type Variation = { id: string; title: string; note: string };
+type Family = 'Typographic' | 'The work first' | 'Featured' | 'Group' | 'Surface';
+
+type Variation = {
+  id: string;
+  family: Family;
+  title: string;
+  note: string;
+  /** What the 7 Oct review changed here, if anything — shown as a Tag on the label and the index. */
+  change?: 'New' | 'Changed';
+};
 
 const VARIATIONS = {
-  typographic: {
-    id: 'typographic',
-    title: 'Typographic, centred, with the rating',
-    note: 'A real quote with no portrait at the centred role (43), the quote rule turned on its side above it, the Clutch badge a block under the attribution. § 1.4 budget 421.',
-  },
   typographicCta: {
     id: 'typographic-cta',
+    family: 'Typographic',
     title: 'Typographic, with a CtaRow',
-    note: 'The same shape with the band’s way on — “Read the case” — centred under a hairline at the body measure. § 1.4 budget 517.',
+    note: 'The favourite (7 Oct), kept as it is: the quote at the centred role (43) under the rule turned on its side, the attribution, and the band’s way on — “Read the case” — centred under a hairline at the body measure. § 1.4 budget 517.',
+  },
+  typographicSlider: {
+    id: 'typographic-slider',
+    family: 'Typographic',
+    title: 'Typographic slider, with a CtaRow',
+    change: 'New',
+    note: 'The same band, turning on its own: one quote every eight seconds, the stepper’s current line filling over the hold. Resting the pointer on the quote, or focusing it, holds the turn and freezes the line; the rotation control leads the row; with reduced motion it waits for Play. Four voices written to one length, so the band never changes height.',
+  },
+  typographic: {
+    id: 'typographic',
+    family: 'Typographic',
+    title: 'Typographic, the real quote',
+    change: 'Changed',
+    note: 'The approved client quote with no portrait and, now, no score: a rating never sits beside a client quote (7 Oct). It goes with the client list, beside the CTA or enquiry, and in facts & figures.',
   },
   case: {
     id: 'case',
+    family: 'The work first',
     title: 'G-case: the work first, then the words',
-    note: 'The owner-approved composition (1 Oct): the case card in the 381 track, the quote at the display role in the 763. The two tracks share a top and a bottom line — the quote starts level with the cover, and the attribution and score are pinned to the card’s foot. Real quote, real score, stand-in cover. § 1.4 G-case 564.',
-  },
-  caseBare: {
-    id: 'case-without-rating',
-    title: 'G-case without the rating',
-    note: 'With no score, the attribution alone is pinned to the card’s foot. Fictional speaker, so a stock cover rather than a studio photograph.',
+    change: 'Changed',
+    note: 'Three parts, where the first version had five competing (7 Oct): the case card keeps its cover, client, title and link and loses its description — the quote beside it is the description — and the quote loses the score. Real quote, stand-in cover, the quote centred on the card.',
   },
   featured: {
     id: 'featured',
+    family: 'Featured',
     title: 'Featured, with a 1:1 portrait',
-    note: '[5, 7] at section: the portrait at 477, radius 8, no frame; the quote at the display role, centred on it because the column ends in no action (§ 3.2 rule 2). Fictional speaker, stock portrait. § 1.4 budget 477.',
+    note: '[5, 7] at section: the portrait at 477, radius 8, no frame; the quote at the display role, centred on it. The large image is the band’s one idea — kept (7 Oct: “all good options”). Fictional speaker, stock portrait. § 1.4 budget 477.',
   },
   featuredCta: {
     id: 'featured-cta',
+    family: 'Featured',
     title: 'Featured, with a CtaRow',
     note: 'With an ask: the link a block under the attribution, on the name’s indent, and the whole stack still centred on the portrait — the ask travels with the testimonial.',
   },
   featuredReverse: {
     id: 'featured-reverse',
+    family: 'Featured',
     title: 'Featured, mirrored',
     note: '`reverse`: the portrait at the end from 1024, the quote in the 7 at the start. Visual only — on a phone the person still comes first. Two pages using G-featured take opposite sides.',
   },
+  featuredSlider: {
+    id: 'slider',
+    family: 'Featured',
+    title: 'Slider of featured slides',
+    note: 'One per view, no peek, moved only by the reader: the rail on the start edge, 48 outline steppers on the end. Arrow keys are not hijacked; Tab reaches the controls. § 1.4 G-slider 549.',
+  },
+  featuredNoImage: {
+    id: 'featured-no-image',
+    family: 'Featured',
+    title: 'Featured without an image',
+    change: 'New',
+    note: 'When a quote has no photograph the content shifts to the start and a tag takes the image’s place (7 Oct): the tag, the quote rule and the name share one edge, and the quote holds the display role.',
+  },
   group3: {
     id: 'group-of-3',
+    family: 'Group',
     title: 'Group of three',
-    note: 'Three compact quotes as peers, 32 apart, written to one length so the three blue rules end together. Each 64 portrait (radius 4) sits beside its name, the two lines centred on the face, and the attributions share one baseline. § 1.4 budget 485.',
+    change: 'Changed',
+    note: 'Three compact quotes as peers, 32 apart, written to one length so the three blue rules end together. No faces: each leads with the tag that names the engagement, and the names share one baseline on the start edge.',
   },
   group2: {
     id: 'group-of-2',
+    family: 'Group',
     title: 'Group of two',
+    change: 'Changed',
     note: 'The same item, two across.',
   },
   group3Cta: {
     id: 'group-of-3-cta',
+    family: 'Group',
     title: 'Group of three, with a CtaRow',
+    change: 'Changed',
     note: '§ 1.4 budget 581.',
-  },
-  slider: {
-    id: 'slider',
-    title: 'Slider of featured slides',
-    note: 'The testimonial use of Slider: one per view, no peek, no autoplay, opening on a speaker no other band shows. The rail on the start edge, 48 outline steppers on the end. Arrow keys are not hijacked; Tab reaches the controls and Previous / Next move one slide. § 1.4 G-slider 549.',
-  },
-  rating: {
-    id: 'rating-led',
-    title: 'Rating-led',
-    note: 'The score is the band’s large thing: the numeral at the score role (105, serif) with its scale and what it measures at its side, over the pill that carries it in its link name; [5, 7] with the quote. Real score, real quote. § 1.4 budget 347.',
-  },
-  ratingCta: {
-    id: 'rating-led-cta',
-    title: 'Rating-led, with a CtaRow',
-    note: '§ 1.4 budget 443.',
   },
   paper: {
     id: 'surface-proof',
+    family: 'Surface',
     title: 'Surface proof on paper',
-    note: 'Surface proof — on pages G sits on tint (§ 1.7). Rating-led on paper, because it carries the most surface-dependent ink — score, scale, rule, quote, name and the badge’s own layer — to show every token resolves on a second ground.',
+    note: 'On pages G sits on tint (§ 1.7). The typographic slider on paper — the stepper’s numerals, line and fill, the rotation control, the rule and the attribution all resolve on a second ground.',
   },
 } satisfies Record<string, Variation>;
 
-const ORDER = Object.values(VARIATIONS);
+const ORDER: readonly Variation[] = Object.values(VARIATIONS);
+const FAMILIES: readonly Family[] = [
+  'Typographic',
+  'The work first',
+  'Featured',
+  'Group',
+  'Surface',
+];
 
-/** The titled band above each variation: its number, its name and what to look for. */
+const number = (variation: Variation) => String(ORDER.indexOf(variation) + 1).padStart(2, '0');
+
+/** The titled band above each variation: its number, its name, what changed and what to look for. */
 function Label({ variation }: { variation: Variation }) {
-  const n = String(ORDER.indexOf(variation) + 1).padStart(2, '0');
   return (
     <Section id={variation.id}>
       <Layout rowGap="tight" className={s.spec}>
-        <p className={s.specTitle}>
-          G · {n} — {variation.title}
-        </p>
+        <Cluster colGap="text" rowGap="tight" align="center">
+          <span className={s.kitIndex}>G · {number(variation)}</span>
+          <span className={s.specTitle}>{variation.title}</span>
+          {variation.change ? <Tag>{variation.change}</Tag> : null}
+        </Cluster>
         <p className={s.specNote}>{variation.note}</p>
       </Layout>
     </Section>
@@ -292,45 +336,20 @@ function Band({ variation, children }: { variation: Variation; children: ReactNo
   );
 }
 
-/** One linked case card, in the one-item list a BlockCard needs. */
-function CaseCard({
-  eyebrow,
-  title,
-  body,
-  href,
-  cover,
-}: {
-  eyebrow: string;
-  title: string;
-  body: string;
-  href: string;
-  cover: PhotoId;
-}) {
-  return (
-    <Layout as="ul" rowGap="none">
-      <BlockCard
-        eyebrow={eyebrow}
-        title={title}
-        body={body}
-        href={href}
-        ctaLabel="Read the case"
-        media={{ type: 'image', image: getKitPhoto(cover, { standIn: true }) }}
-        tracks={3}
-      />
-    </Layout>
-  );
-}
-
+/** One linked case card with no description (7 Oct), in the one-item list a BlockCard needs. */
 function RealCaseCard() {
   if (!REAL_CASE) return null;
   return (
-    <CaseCard
-      eyebrow={REAL_CASE.client}
-      title={REAL_CASE.title}
-      body={REAL_CASE.body}
-      href={REAL_CASE_HREF}
-      cover="studio-session-talk"
-    />
+    <Layout as="ul" rowGap="none">
+      <BlockCard
+        eyebrow={REAL_CASE.client}
+        title={REAL_CASE.title}
+        href={REAL_CASE_HREF}
+        ctaLabel="Read the case"
+        media={{ type: 'image', image: getKitPhoto('studio-session-talk', { standIn: true }) }}
+        tracks={3}
+      />
+    </Layout>
   );
 }
 
@@ -342,15 +361,62 @@ function featuredSlides() {
   ));
 }
 
+/** The typographic slider band: G·02's shape, its quote in an auto-advancing one-up Slider. */
+function TypographicSlider({ surface }: { surface: 'tint' | 'paper' }) {
+  return (
+    <ContentSection
+      surface={surface}
+      align="center"
+      eyebrow="In our clients’ words"
+      data-band="G-typographic-slider"
+      footer={
+        <CtaRow
+          align="center"
+          actions={[{ label: 'See the work', href: ROUTES.caseStudies }]}
+        />
+      }
+    >
+      <Slider label="Client quotes" perView={1} align="center" autoplay>
+        {TYPOGRAPHIC_SLIDES.map((quote) => (
+          <li key={quote.name}>
+            <Proof quote={quote} align="center" />
+          </li>
+        ))}
+      </Slider>
+    </ContentSection>
+  );
+}
+
+/** The four standing rules from the 7 Oct review; each variation's label says which it shows. */
+const RULES: readonly { title: string; body: string }[] = [
+  {
+    title: 'No score beside a quote',
+    body: 'A client’s words stand alone. The rating goes with the client list, the CTA and the figures.',
+  },
+  {
+    title: 'No headshots by default',
+    body: 'Without a photograph the quote moves to the start edge and a tag takes the image’s place.',
+  },
+  {
+    title: 'Three parts in G-case',
+    body: 'Cover, title and link; then the words and who said them. No description, no badge.',
+  },
+  {
+    title: 'Moves, and stops for you',
+    body: 'The typographic slider turns on its own, holds under the pointer and focus, and waits under reduced motion.',
+  },
+];
+
 /**
- * Testimonials — the G family of the UI kit (visual-direction § 1.4, § 3.4 G, § 3.6, § 5.8).
+ * Testimonials — the G family of the UI kit (visual-direction § 1.4, § 3.4 G, § 3.6, § 5.8), as
+ * revised by the 7 Oct 2026 review.
  *
  * Every variation is a live band on tint, the ground G takes on a page (§ 1.7), each under a
- * titled paper band that says what it is and what to look for. The last variation is the one
- * surface proof on paper (§ 8.6).
+ * titled paper band that says what it is, what changed and what to look for. The last variation is
+ * the one surface proof on paper (§ 8.6).
  */
 export default function TestimonialsKitPage() {
-  if (!REAL_QUOTE || !REAL_RATING) {
+  if (!REAL_QUOTE) {
     throw new Error('Testimonials kit: the product-design story lost its proof block.');
   }
 
@@ -377,29 +443,36 @@ export default function TestimonialsKitPage() {
         >
           <Layout rowGap="stack">
             <Layout rowGap="block">
-              <p className={s.eyebrow}>UI kit · Family G</p>
+              <p className={s.eyebrow}>UI kit · Family G · 7 Oct review</p>
               <h1>Testimonials</h1>
               <p className={s.specNote}>
-                What clients said, set so it reads as evidence. The work first where there is a
-                case; the speaker’s face where we may show one; the score only where it is real.
-                Six arrangements of one Proof pattern, featured either way round, each a band on
-                tint that fits one screen at 1470.
+                What clients said, set so it reads as evidence: the words first, then who said
+                them. The work beside them where there is a case; a face only where the image is
+                the band’s one idea; never a score. Thirteen bands from one Proof pattern and
+                one Slider, each on tint and inside one screen at 1470.
               </p>
             </Layout>
-            <Layout as="ol" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="text">
-              {ORDER.map((v, i) => (
-                <li key={v.id}>
-                  <Button
-                    as="a"
-                    href={`#${v.id}`}
-                    emphasis="link"
-                    tone="primary"
-                    size="sm"
-                    icon={<Icon name="arrow-right" />}
-                  >
-                    {`${String(i + 1).padStart(2, '0')}  ${v.title}`}
-                  </Button>
-                </li>
+            {/* The index, by family: each family a column of its numbered variations. */}
+            <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="block">
+              {FAMILIES.map((family) => (
+                <Layout key={family} rowGap="tight">
+                  <p className={s.specTitle}>{family}</p>
+                  <Layout as="ol" rowGap="none">
+                    {ORDER.filter((v) => v.family === family).map((v) => (
+                      <li key={v.id}>
+                        <Button
+                          as="a"
+                          href={`#${v.id}`}
+                          emphasis="link"
+                          tone="primary"
+                          size="sm"
+                        >
+                          {`${number(v)}  ${v.title}`}
+                        </Button>
+                      </li>
+                    ))}
+                  </Layout>
+                </Layout>
               ))}
             </Layout>
           </Layout>
@@ -407,18 +480,24 @@ export default function TestimonialsKitPage() {
         </Layout>
       </Section>
 
-      {/* ── 01 Typographic ────────────────────────────────────────────────────────── */}
-      <Band variation={VARIATIONS.typographic}>
-        <ContentSection
-          surface="tint"
-          align="center"
-          eyebrow="In a client’s words"
-          data-band="G-typographic"
-        >
-          <Proof quote={REAL_QUOTE} align="center" rating={REAL_RATING} />
-        </ContentSection>
-      </Band>
+      {/* ── The rulings, each linked to the band that shows it ─────────────────────── */}
+      <Section>
+        <Layout as="ol" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
+          {RULES.map((rule, index) => (
+            <li key={rule.title}>
+              <Layout rowGap="text" className={s.spec}>
+                <span className={s.kitIndex}>{String(index + 1).padStart(2, '0')}</span>
+                <Layout rowGap="tight">
+                  <h2 className={s.kitRuleTitle}>{rule.title}</h2>
+                  <p className={s.specNote}>{rule.body}</p>
+                </Layout>
+              </Layout>
+            </li>
+          ))}
+        </Layout>
+      </Section>
 
+      {/* ── Typographic ───────────────────────────────────────────────────────────── */}
       <Band variation={VARIATIONS.typographicCta}>
         <ContentSection
           surface="tint"
@@ -436,7 +515,22 @@ export default function TestimonialsKitPage() {
         </ContentSection>
       </Band>
 
-      {/* ── 03 G-case ─────────────────────────────────────────────────────────────── */}
+      <Band variation={VARIATIONS.typographicSlider}>
+        <TypographicSlider surface="tint" />
+      </Band>
+
+      <Band variation={VARIATIONS.typographic}>
+        <ContentSection
+          surface="tint"
+          align="center"
+          eyebrow="In a client’s words"
+          data-band="G-typographic"
+        >
+          <Proof quote={REAL_QUOTE} align="center" />
+        </ContentSection>
+      </Band>
+
+      {/* ── G-case ────────────────────────────────────────────────────────────────── */}
       <Band variation={VARIATIONS.case}>
         <ContentSection
           surface="tint"
@@ -444,39 +538,11 @@ export default function TestimonialsKitPage() {
           headingId="kit-g-case"
           data-band="G-case"
         >
-          <Proof
-            arrangement="case"
-            work={<RealCaseCard />}
-            quote={REAL_QUOTE}
-            rating={REAL_RATING}
-          />
+          <Proof arrangement="case" work={<RealCaseCard />} quote={REAL_QUOTE} />
         </ContentSection>
       </Band>
 
-      <Band variation={VARIATIONS.caseBare}>
-        <ContentSection
-          surface="tint"
-          heading="The work, then the words"
-          headingId="kit-g-case-bare"
-          data-band="G-case"
-        >
-          <Proof
-            arrangement="case"
-            work={
-              <CaseCard
-                eyebrow="Halden Freight · Logistics"
-                title="Dispatch screens rebuilt around the driver’s day"
-                body="Field research with twelve dispatchers, carried into a routing model and a component library."
-                href={ROUTES.caseStudies}
-                cover="pair-at-laptop-sticky-wall"
-              />
-            }
-            quote={MAREN_CASE}
-          />
-        </ContentSection>
-      </Band>
-
-      {/* ── 05 Featured ───────────────────────────────────────────────────────────── */}
+      {/* ── Featured ──────────────────────────────────────────────────────────────── */}
       <Band variation={VARIATIONS.featured}>
         <Section surface="tint" data-band="G-featured">
           <Proof arrangement="featured" quote={DANIEL_FEATURED} />
@@ -504,7 +570,23 @@ export default function TestimonialsKitPage() {
         </Section>
       </Band>
 
-      {/* ── 08 Groups ─────────────────────────────────────────────────────────────── */}
+      {/* No head: a one-up slide is its own large object, and the rail and steppers say what the
+          band is. The § 1.4 row is portrait + block + controls, 549. */}
+      <Band variation={VARIATIONS.featuredSlider}>
+        <Section surface="tint" data-band="G-slider">
+          <Slider label="Client stories" perView={1}>
+            {featuredSlides()}
+          </Slider>
+        </Section>
+      </Band>
+
+      <Band variation={VARIATIONS.featuredNoImage}>
+        <Section surface="tint" data-band="G-featured">
+          <Proof arrangement="featured" quote={ARJUN_NO_IMAGE} />
+        </Section>
+      </Band>
+
+      {/* ── Groups ────────────────────────────────────────────────────────────────── */}
       <Band variation={VARIATIONS.group3}>
         <ContentSection
           surface="tint"
@@ -550,46 +632,9 @@ export default function TestimonialsKitPage() {
         </ContentSection>
       </Band>
 
-      {/* ── 11 Slider ─────────────────────────────────────────────────────────────── */}
-      {/* No head: a one-up slide is its own large object, and the rail and steppers say what the
-          band is. The § 1.4 row is portrait + block + controls, 549 (fix round 2: with an eyebrow
-          a stack above, the band ran 603 against the 598 target). */}
-      <Band variation={VARIATIONS.slider}>
-        <Section surface="tint" data-band="G-slider">
-          <Slider label="Client stories" perView={1}>
-            {featuredSlides()}
-          </Slider>
-        </Section>
-      </Band>
-
-      {/* ── 12 Rating-led ─────────────────────────────────────────────────────────── */}
-      <Band variation={VARIATIONS.rating}>
-        <ContentSection surface="tint" eyebrow="Independent reviews" data-band="G-rating">
-          <Proof arrangement="rating" rating={REAL_RATING} quote={REAL_QUOTE} />
-        </ContentSection>
-      </Band>
-
-      <Band variation={VARIATIONS.ratingCta}>
-        <ContentSection
-          surface="tint"
-          eyebrow="Independent reviews"
-          data-band="G-rating"
-          footer={<CtaRow actions={[{ label: 'Read the case', href: REAL_CASE_HREF }]} />}
-        >
-          <Proof arrangement="rating" rating={REAL_RATING} quote={REAL_QUOTE} />
-        </ContentSection>
-      </Band>
-
-      {/* ── 14 Surface proof ──────────────────────────────────────────────────────── */}
+      {/* ── Surface proof ─────────────────────────────────────────────────────────── */}
       <Band variation={VARIATIONS.paper}>
-        <ContentSection
-          surface="paper"
-          eyebrow="Independent reviews"
-          data-band="G-rating"
-          footer={<CtaRow actions={[{ label: 'Read the case', href: REAL_CASE_HREF }]} />}
-        >
-          <Proof arrangement="rating" rating={REAL_RATING} quote={REAL_QUOTE} />
-        </ContentSection>
+        <TypographicSlider surface="paper" />
       </Band>
     </>
   );

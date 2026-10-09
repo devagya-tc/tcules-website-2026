@@ -9,6 +9,7 @@ import {
   useId,
   useRef,
   useState,
+  useSyncExternalStore,
 } from 'react';
 
 import { Button, Cluster, Icon, Layout } from '@/components';
@@ -78,7 +79,44 @@ export type SliderProps = {
    * there. The start edge is the column's: slides scroll away under it, as a rail does.
    */
   bleed?: boolean;
+  /**
+   * Advance on its own, one slide every `interval`, wrapping from the last to the first (owner, 7 Oct
+   * 2026: the typographic testimonial "inside the auto-advancing Slider"). One per view only: at
+   * two or more in view an advance moves things the reader is part-way through, so with any other
+   * `perView` it is ignored with a development warning. Default `false`.
+   *
+   * With it the rail becomes a STEPPER — one numbered step per slide, the current one filling over
+   * the interval — and a rotation control (pause / play) leads the control row (WCAG 2.2.2; APG
+   * carousel). The rotation:
+   *   - pauses while a mouse rests on the slides or focus is inside them, and resumes from where it
+   *     was when both leave — the step's fill freezes, so the pause is visible. The control row
+   *     does not hold it, so Play under the pointer that pressed it plays;
+   *   - does not start for a reader who prefers reduced motion: the rotation control offers Play,
+   *     and only their press starts it;
+   *   - never starts before hydration, so a server render and a no-script page are the manual row;
+   *   - is silent: the status line speaks after a reader's own press, never after an advance.
+   */
+  autoplay?: boolean;
+  /** Milliseconds a slide holds before the next, with `autoplay`. Default 8000 — a 35-word quote read twice. */
+  interval?: number;
 };
+
+/** A slide's hold with `autoplay` (see `interval`). */
+const INTERVAL = 8000;
+
+/** Longest frame the autoplay clock will count: a backgrounded tab resumes, it does not skip. */
+const MAX_FRAME = 100;
+
+/* Reduced motion as an external store: read during render, so the default rotation state needs no
+   effect. The server snapshot says "reduce", so nothing rotates before hydration. */
+const REDUCE = '(prefers-reduced-motion: reduce)';
+const subscribeMotion = (onChange: () => void) => {
+  const query = window.matchMedia(REDUCE);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
+};
+const prefersReduced = () => window.matchMedia(REDUCE).matches;
+const serverPrefersReduced = () => true;
 
 /** perView → the Layout scroll row's per-breakpoint counts. The table on `SliderPerView`. */
 const LADDER: Record<SliderPerView, { base: number; md: number; lg: number; xl: number }> = {
@@ -103,7 +141,7 @@ const FOCUSABLE =
 /** Sub-pixel slack for "at the start" / "at the end": scrollLeft is fractional on zoomed pages. */
 const EDGE = 2;
 
-type Position = { ready: boolean; atStart: boolean; atEnd: boolean };
+type Position = { ready: boolean; atStart: boolean; atEnd: boolean; active: number };
 
 /**
  * Slider — a row of slides you scroll sideways, with previous / next controls and a progress rail
@@ -134,7 +172,9 @@ type Position = { ready: boolean; atStart: boolean; atEnd: boolean };
  *     keyboard user who pressed Next to the end would be thrown out of the carousel;
  *   - after a control press, a visually hidden `aria-live="polite"` line says which slides are in
  *     view ("Slides 4 to 6 of 8"). It speaks only after a press, never on load or while swiping;
- *   - no autoplay, so no rotation control is needed and nothing moves that the reader did not move;
+ *   - no autoplay unless asked for (`autoplay`, one per view): then a rotation control leads the
+ *     controls, the rotation holds under the pointer and focus on the slides, and never starts for a
+ *     reader who prefers reduced motion;
  *   - reduced motion: the row jumps instead of gliding (Layout's `scroll-behavior` is smooth only
  *     under `no-preference`, and the press uses the row's computed behaviour), and the controls'
  *     fill change is instant.
@@ -150,6 +190,8 @@ export function Slider({
   perView = 3,
   align = 'start',
   bleed = false,
+  autoplay = false,
+  interval = INTERVAL,
 }: SliderProps) {
   const slides = Children.toArray(children);
   const count = slides.length;
@@ -161,7 +203,20 @@ export function Slider({
     ready: false,
     atStart: true,
     atEnd: false,
+    active: 0,
   });
+  /* The rotation. `choice` is the reader's own press on the rotation control, and wins; until they
+     press it, the default is to rotate unless they prefer reduced motion. `held` is the pointer or
+     focus resting inside — a pause that lifts by itself. */
+  const rotates = autoplay && perView === 1 && count > 1;
+  const reduced = useSyncExternalStore(subscribeMotion, prefersReduced, serverPrefersReduced);
+  const [choice, setChoice] = useState<'play' | 'pause' | null>(null);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const playing = rotates && (choice ? choice === 'play' : !reduced);
+  const held = hovered || focused;
+  /* Time the current slide has been shown while running, in ms; reset whenever the slide changes. */
+  const elapsed = useRef(0);
   const [tabStop, setTabStop] = useState(false);
   const [status, setStatus] = useState('');
   /* Set by a control press, cleared once the row settles and the status line is written — so the
@@ -196,10 +251,14 @@ export function Slider({
       thumbRef.current?.style.setProperty('--slider-progress', String(progress));
       const atStart = x <= EDGE;
       const atEnd = x >= max - EDGE;
+      /* The slide whose start edge is nearest the row's — the stepper's current step. */
+      const [a, b] = Array.from(row.children) as HTMLElement[];
+      const step = a && b ? Math.abs(b.offsetLeft - a.offsetLeft) : 0;
+      const active = step > 0 ? Math.min(count - 1, Math.round(x / step)) : 0;
       setPosition((p) =>
-        p.ready && p.atStart === atStart && p.atEnd === atEnd
+        p.ready && p.atStart === atStart && p.atEnd === atEnd && p.active === active
           ? p
-          : { ready: true, atStart, atEnd },
+          : { ready: true, atStart, atEnd, active },
       );
     };
 
@@ -303,7 +362,97 @@ export function Slider({
     row.scrollBy({ left: direction * step * rtl });
   }, []);
 
-  const { ready, atStart, atEnd } = position;
+  /* A step pressed: straight to that slide. Its start edge, less the first slide's, is the scroll
+     position that shows it — exact at every width, and snapping agrees. */
+  const goTo = useCallback((index: number) => {
+    const row = rowRef.current;
+    const target = row?.children[index] as HTMLElement | undefined;
+    const first = row?.children[0] as HTMLElement | undefined;
+    if (!row || !target || !first) return;
+    const rtl = getComputedStyle(row).direction === 'rtl' ? -1 : 1;
+    announce.current = true;
+    row.scrollTo({ left: Math.abs(target.offsetLeft - first.offsetLeft) * rtl });
+  }, []);
+
+  /* The rotation's own advance: one slide on, or from the last back to the first. Silent — it sets
+     no announcement, because nothing the reader did caused it. */
+  const advance = useCallback(() => {
+    const row = rowRef.current;
+    if (!row) return;
+    const max = row.scrollWidth - row.clientWidth;
+    if (Math.abs(row.scrollLeft) >= max - EDGE) {
+      row.scrollTo({ left: 0 });
+      return;
+    }
+    const [a, b] = Array.from(row.children) as HTMLElement[];
+    const step = a && b ? Math.abs(b.offsetLeft - a.offsetLeft) : row.clientWidth;
+    const rtl = getComputedStyle(row).direction === 'rtl' ? -1 : 1;
+    row.scrollBy({ left: step * rtl });
+  }, []);
+
+  if (autoplay && perView !== 1 && process.env.NODE_ENV !== 'production') {
+    console.warn(
+      `Slider "${label}": autoplay is one per view only; ignoring it at perView ${perView}.`,
+    );
+  }
+
+  const { ready, atStart, atEnd, active } = position;
+
+  /* The hold: a mouse resting on the SLIDES, or focus inside them — the thing being read. Not the
+     control row: a press on Play would otherwise hold the rotation it had just started, under the
+     very pointer and focus that pressed it. Touch is left out, because a tap's pointerenter has no
+     matching leave. */
+  useEffect(() => {
+    const row = rowRef.current;
+    if (!row || !rotates) return;
+    const enter = (event: PointerEvent) => {
+      if (event.pointerType === 'mouse') setHovered(true);
+    };
+    const leave = () => setHovered(false);
+    const focusIn = () => setFocused(true);
+    const focusOut = (event: FocusEvent) => {
+      if (!row.contains(event.relatedTarget as Node | null)) setFocused(false);
+    };
+    row.addEventListener('pointerenter', enter);
+    row.addEventListener('pointerleave', leave);
+    row.addEventListener('focusin', focusIn);
+    row.addEventListener('focusout', focusOut);
+    return () => {
+      row.removeEventListener('pointerenter', enter);
+      row.removeEventListener('pointerleave', leave);
+      row.removeEventListener('focusin', focusIn);
+      row.removeEventListener('focusout', focusOut);
+    };
+  }, [rotates]);
+
+  /* A new slide starts its hold from nothing, whoever moved it there. */
+  useEffect(() => {
+    elapsed.current = 0;
+    rootRef.current?.style.setProperty('--slider-step-progress', '0');
+  }, [active]);
+
+  /* The clock: frames, not a timer, so a hold is exact across a pause and the step's fill is the
+     clock itself rather than an animation that has to be kept in step with one. It runs only while
+     rotating, hydrated, and not held; a pause stops the frames and keeps `elapsed`, so the fill
+     resumes where it froze. The fill is written straight to the root, as the rail's thumb is. */
+  useEffect(() => {
+    if (!playing || !ready || held) return;
+    let frame = 0;
+    let last = performance.now();
+    const tick = (now: number) => {
+      elapsed.current += Math.min(MAX_FRAME, Math.max(0, now - last));
+      last = now;
+      const progress = Math.min(1, elapsed.current / interval);
+      rootRef.current?.style.setProperty('--slider-step-progress', String(progress));
+      if (progress >= 1) {
+        elapsed.current = 0;
+        advance();
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [playing, ready, held, interval, advance]);
   const control = (direction: 1 | -1) => {
     const blocked = direction === -1 ? atStart : atEnd;
     return (
@@ -323,6 +472,7 @@ export function Slider({
         disabled={!ready}
         aria-disabled={ready && blocked ? true : undefined}
         onClick={() => go(direction)}
+        className={styles.control}
       />
     );
   };
@@ -333,12 +483,74 @@ export function Slider({
     </span>
   );
 
+  /* The rotation control: what pressing it will do, as its name and its glyph. Disabled until
+     hydration like the steppers. */
+  const rotation = (
+    <Button
+      emphasis="outline"
+      size="lg"
+      iconOnly
+      icon={<Icon name={playing ? 'chrome-pause' : 'chrome-play'} />}
+      extendHitArea
+      aria-label={playing ? 'Pause slides' : 'Play slides'}
+      aria-controls={rowId}
+      disabled={!ready}
+      onClick={() => setChoice(playing ? 'pause' : 'play')}
+      className={styles.control}
+    />
+  );
+
+  /* The stepper: one numbered step per slide, the current one's line filling over its hold. The
+     numerals are the eye's way to the slide count; each step's name is the slide's place in the
+     set. A list, so a screen reader hears how many there are. */
+  const steps = (
+    <Cluster as="ol" colGap="tight" nowrap className={styles.steps}>
+      {slides.map((_, index) => (
+        <li key={index}>
+          <button
+            type="button"
+            className={styles.step}
+            aria-label={`Slide ${index + 1} of ${count}`}
+            aria-current={index === active ? 'true' : undefined}
+            aria-controls={rowId}
+            disabled={!ready}
+            onClick={() => goTo(index)}
+          >
+            <Layout as="span" rowGap="tight">
+              <span className={styles.stepNumber} aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span className={styles.stepLine} aria-hidden="true">
+                <span className={styles.stepFill} />
+              </span>
+            </Layout>
+          </button>
+        </li>
+      ))}
+    </Cluster>
+  );
+
+  /* With rotation the stepper takes the rail's place, the rotation control at its head. */
+  const progressMark = rotates ? (
+    <Cluster colGap="block" align="center" nowrap className={styles.progress}>
+      {rotation}
+      {steps}
+    </Cluster>
+  ) : (
+    rail
+  );
+
   return (
     <section
       aria-roledescription="carousel"
       aria-label={label}
       ref={rootRef}
-      className={cx(styles.slider, VIEW_CLASS[perView], bleed && styles.bleed)}
+      className={cx(
+        styles.slider,
+        VIEW_CLASS[perView],
+        bleed && styles.bleed,
+        playing && styles.playing,
+      )}
       style={{ '--slider-count': count } as CSSProperties}
     >
       {/* Row to controls is `stack` (48), block to block (cmp-services fix round 1): at `block` (24)
@@ -361,12 +573,12 @@ export function Slider({
         {align === 'center' ? (
           <Cluster colGap="block" align="center" justify="center" nowrap>
             {control(-1)}
-            {rail}
+            {progressMark}
             {control(1)}
           </Cluster>
         ) : (
           <Cluster colGap="block" align="center" justify="between" nowrap>
-            {rail}
+            {progressMark}
             <Cluster colGap="text" align="center" nowrap>
               {control(-1)}
               {control(1)}

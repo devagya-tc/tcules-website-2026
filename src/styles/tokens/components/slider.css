@@ -5,7 +5,8 @@
    docs/specs/Slider.md.
 
    Naming: --sld-{part}-{state}
-     parts: progress (the rail and its thumb) | ring (the row's own) | hidden
+     parts: progress (the rail and its thumb, and each step's line and fill) | step (the
+            autoplay stepper's numbered steps) | ring (the row's and the steps') | hidden
 
    What it owns: the rail and the row's focus ring. What it does not: the two controls (Button
    `emphasis="outline"` — the round, hairline-ruled, blue-at-rest stepper, tokens in button.css),
@@ -31,6 +32,13 @@
   --sld-progress-thickness: var(--border-width-2);
   --sld-progress-radius: var(--radius-full);
 
+  /* The autoplay stepper (7 Oct 2026). A step is a numeral over a line; its length is a component
+     size — long enough that the fill's travel over a hold reads as time passing, short enough that
+     a set of six stays beside its controls at 390. The target is the WCAG 2.5.8 floor raised to
+     the 44 the site's controls hold to: the numeral and line are 26 tall, the button is not. */
+  --sld-step-length: 56px;
+  --sld-step-target: 44px;
+
   --sld-ring-width: var(--focus-ring-width);
   --sld-ring-offset: var(--focus-ring-offset);
 
@@ -44,6 +52,8 @@
   --sld-progress-thumb: var(--color-brandeis-500);
   --sld-ring-color: var(--color-brandeis-500);
   --sld-ring-gap-color: var(--color-paper);
+  --sld-step-fg: var(--color-neutral-600); /* 4.92:1 */
+  --sld-step-fg-current: var(--color-neutral-900);
 }
 
 [data-surface='tint'] {
@@ -51,6 +61,8 @@
   --sld-progress-thumb: var(--color-brandeis-500);
   --sld-ring-color: var(--color-brandeis-500);
   --sld-ring-gap-color: var(--color-paper-deep);
+  --sld-step-fg: var(--color-neutral-700); /* 7.27:1 */
+  --sld-step-fg-current: var(--color-neutral-900);
 }
 
 /* Blue as ink fails on neutral-950 (2.77:1), so the thumb and ring lift to 300. */
@@ -59,6 +71,8 @@
   --sld-progress-thumb: var(--color-brandeis-300);
   --sld-ring-color: var(--color-brandeis-300);
   --sld-ring-gap-color: var(--color-neutral-950);
+  --sld-step-fg: var(--color-neutral-400); /* 8.05:1 */
+  --sld-step-fg-current: var(--color-white);
 }
 
 /* The one surface where the accent cannot be blue: the thumb and ring go white. */
@@ -67,4 +81,6 @@
   --sld-progress-thumb: var(--color-white);
   --sld-ring-color: var(--color-white);
   --sld-ring-gap-color: var(--color-brandeis-500);
+  --sld-step-fg: var(--color-brandeis-100); /* 4.91:1 */
+  --sld-step-fg-current: var(--color-white);
 }

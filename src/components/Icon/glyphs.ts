@@ -28,7 +28,7 @@
  * site's own navigation are read by CONVENTION, not by style, so they take the universally recognised
  * marks — three plain bars, a plain cross — rather than Solar's bars-in-a-rounded-square and
  * cross-in-a-circle, which kept the family consistent and lost the intent ("i noticed you replaced
- * the hamburger icon with a filled icon from solar … the intent is lost"). The two chrome glyphs are
+ * the hamburger icon with a filled icon from solar … the intent is lost"). The chrome glyphs are
  * the house drawings the site shipped before the Solar move, restored under a `chrome-` prefix so a
  * call site cannot reach for one by accident in the content area.
  *
@@ -140,6 +140,17 @@ export const glyphs = {
   ],
   'chrome-close': [
     'M17.9 3.9 20.1 6.1 14.19 12 20.1 17.9 17.9 20.1 12 14.19 6.1 20.1 3.9 17.9 9.81 12 3.9 6.1 6.1 3.9 12 9.81Z',
+  ],
+  /* The rotation control of an auto-advancing Slider (7 Oct 2026). Chrome, like menu and close: a
+     media player's pause and play are read by convention, two bars and a triangle, so they take the
+     plain house drawing in the chrome-menu idiom (1.5-unit rounded ends) rather than Solar's
+     marks-in-a-circle. */
+  'chrome-pause': [
+    'M7.5 4h1A1.5 1.5 0 0 1 10 5.5v13A1.5 1.5 0 0 1 8.5 20h-1A1.5 1.5 0 0 1 6 18.5v-13A1.5 1.5 0 0 1 7.5 4Z',
+    'M15.5 4h1A1.5 1.5 0 0 1 18 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-13A1.5 1.5 0 0 1 15.5 4Z',
+  ],
+  'chrome-play': [
+    'M7 5.27v13.46a1.5 1.5 0 0 0 2.3 1.27l10.77-6.73a1.5 1.5 0 0 0 0-2.54L9.3 4A1.5 1.5 0 0 0 7 5.27Z',
   ],
   'hamburger-menu': [
     'M3.46447 20.5355C4.92893 22 7.28595 22 12 22C16.714 22 19.0711 22 20.5355 20.5355C22 19.0711 22 16.714 22 12C22 7.28595 22 4.92893 20.5355 3.46447C19.0711 2 16.714 2 12 2C7.28595 2 4.92893 2 3.46447 3.46447C2 4.92893 2 7.28595 2 12C2 16.714 2 19.0711 3.46447 20.5355ZM18.75 16C18.75 16.4142 18.4142 16.75 18 16.75H6C5.58579 16.75 5.25 16.4142 5.25 16C5.25 15.5858 5.58579 15.25 6 15.25H18C18.4142 15.25 18.75 15.5858 18.75 16ZM18 12.75C18.4142 12.75 18.75 12.4142 18.75 12C18.75 11.5858 18.4142 11.25 18 11.25H6C5.58579 11.25 5.25 11.5858 5.25 12C5.25 12.4142 5.58579 12.75 6 12.75H18ZM18.75 8C18.75 8.41421 18.4142 8.75 18 8.75H6C5.58579 8.75 5.25 8.41421 5.25 8C5.25 7.58579 5.58579 7.25 6 7.25H18C18.4142 7.25 18.75 7.58579 18.75 8Z',
