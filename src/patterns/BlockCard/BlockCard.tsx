@@ -81,12 +81,16 @@ export type BlockCardTitleElement = 'h2' | 'h3' | 'h4';
  *                is 1:1 of a 1fr one, so the row's covers share one height at every width. Below
  *                1024 the row is the ordinary set, so both are its 16:9. The ratio follows the
  *                arrangement, and the arrangement changes at 1024 (Media's `{ base, lg }` rule).
+ *   pair  16:5 from 1024, 16:9 below   a LINKED pair of covered cards under a stacked head, each
+ *                ~604 wide (BlockCardSet). 21:9 was 259 tall and the C-pair band ran 888 against the
+ *                830 fold (9 Oct 2026); 16:5 is 189, 12 under it. Below 1024 the pair is 16:9,
+ *                the set's own crop.
  *   headshot  1:1 at EVERY width   a person's face (page-showcase fix round 2, 7 Oct 2026). A
  *                square portrait set 16:9 cut heads at the hat and the chin at every width; the
  *                headshot keeps the source's own square, so the face is never the crop's casualty.
  *                Composed by the caller in its own Layout; BlockCardSet's count rule never picks it.
  */
-export type BlockCardRatio = 'cover' | 'wide' | 'panorama' | 'double' | 'square' | 'headshot';
+export type BlockCardRatio = 'cover' | 'wide' | 'panorama' | 'double' | 'square' | 'headshot' | 'pair';
 
 /**
  * How a WHOLE-CARD link says it navigates. One cue per card, never both.
@@ -185,6 +189,7 @@ const RATIO_CLASS: Record<BlockCardRatio, string | undefined> = {
   double: styles.double,
   square: styles.square,
   headshot: styles.headshot,
+  pair: styles.pair,
 };
 
 /**

@@ -21,6 +21,17 @@
   min-inline-size: 0;
 }
 
+/* wide: the poster is a cinematic crop of the frame across the whole column, so the band clears the
+   830 fold. The film is still 16:9, so the box opens to the player's ratio on play — the reader
+   asked for it, and only content below the film moves. */
+.wide .screen {
+  aspect-ratio: var(--vt-poster-ratio-wide);
+}
+
+.wide .playing {
+  aspect-ratio: var(--vt-poster-ratio);
+}
+
 .video {
   position: absolute;
   inset: 0;
@@ -171,6 +182,15 @@
 .meta,
 .attribution {
   padding-inline-start: calc(var(--vt-quote-rule-width) + var(--gap-block));
+}
+
+/* wide, from 1024: the label and the speaker stand in their own track beside the quote, as the
+   film's credit, so they no longer hang on the quote's text edge. */
+@media (min-width: 1024px) {
+  .wide .meta,
+  .wide .attribution {
+    padding-inline-start: 0;
+  }
 }
 
 .meta {

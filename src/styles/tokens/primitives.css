@@ -649,6 +649,9 @@
   /* The tall lead of a spotlight set (BlockCardSet lead="beside", cmp-feature): a 2:1 track beside
      a stacked pair. At 802 a 16:9 cover is 451 and the band runs past the fold; 21:9 is 344. */
   --ratio-panorama: 21 / 9;
+  /* The wide video poster (VideoTestimonial wide, 9 Oct 2026): a film across the 1240 column. At
+     16:9 it is 697 tall and the band runs past the 830 fold; at 3:1, a scope-style crop, 413. */
+  --ratio-cinema: 3 / 1;
   --ratio-portrait: 1 / 1;
 }
 

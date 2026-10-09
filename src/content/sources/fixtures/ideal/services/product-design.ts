@@ -12,19 +12,18 @@ const ENQUIRY = anchorHref(ANCHORS.enquiry);
  * docs/content-changes.md § 6. The sections say what the page argues; the template decides how each
  * is laid out from the job its blocks do (ServicePage plan.ts), so no field here is a layout.
  *
- *   hero      the claim
+ *   hero      the claim, the sourced Clutch rating in the eyebrow's place
  *   signals   what the screen may be telling you — B, beside a screen in use
- *   clients   who we have shipped with — H, with the sourced rating
- *   method    five steps, each leaving an artefact — F, beside the wireframe sketch
+ *   method    five steps, each leaving an artefact — F
  *   example   the worked example as the chain one decision moves through — E, a Thread
- *   proof     the work, then the client's words — G-case, the tint band
- *   work      two more cases — C-pair
- *   statement how the work runs, said once at scale — J (fix round 1: the I banner's job, which
- *             spent a 660-tall band and a soft photograph on one link)
- *   offer     examine the slice first — K, beside a screen-work photograph
- *   routes    the specialist services — the C-icon router
- *   fit       who is involved — N
- *   close     the form — L
+ *   statement how the work runs, said once — J
+ *   clients   who we have shipped with — H, the boxed LogoGrid under its context line
+ *   proof     the clients' words — G·02, typographic quotes in the auto-advancing Slider, on tint
+ *   routes    the specialist services — the C-icon router, its head above the cards
+ *   close     the compact form — L
+ *
+ * Recomposed 9 Oct 2026 as the showcase of the 7 Oct review's components: the case pair (C-pair),
+ * the G-case band, the offer (K) and the contrast pair (N) left the page (docs/content-changes.md).
  */
 export const productDesign: ServiceStory = {
   slug: 'product-design',
@@ -37,6 +36,7 @@ export const productDesign: ServiceStory = {
   hero: {
     title: 'Finished screens can hide an unresolved product.',
     lead: 'Tcules takes responsibility for the product beneath the screens: who does what, the records and rules behind it, how it behaves, and what to learn first.',
+    rating: CLUTCH_RATING,
     actions: [
       { label: 'Start a project', href: ENQUIRY },
       { label: 'Start with a UX Product Audit', href: auditPath('ux-product-audit') },
@@ -102,26 +102,6 @@ export const productDesign: ServiceStory = {
     },
     {
       type: 'section',
-      id: 'clients',
-      eyebrow: 'Clients',
-      heading: 'Teams we have shipped with',
-      blocks: [
-        {
-          kind: 'logos',
-          marks: [
-            CLIENT_MARKS.omny,
-            CLIENT_MARKS.latitudepay,
-            CLIENT_MARKS.quoter,
-            CLIENT_MARKS.knovos,
-            CLIENT_MARKS.doodle,
-            CLIENT_MARKS.pledge,
-          ],
-          rating: CLUTCH_RATING,
-        },
-      ],
-    },
-    {
-      type: 'section',
       id: 'method',
       eyebrow: 'What Product Design owns',
       heading: 'From the real work to the build',
@@ -181,10 +161,40 @@ export const productDesign: ServiceStory = {
       ],
     },
     {
+      type: 'statement',
+      id: 'how-we-work',
+      eyebrow: 'How we work',
+      text: 'One accountable team, from the first question to the shipped build.',
+      action: { label: 'See how we work', href: ROUTES.howWeWork },
+    },
+    {
+      type: 'section',
+      id: 'clients',
+      eyebrow: 'Clients',
+      heading: 'Product teams we have designed and shipped with',
+      blocks: [
+        {
+          kind: 'logos',
+          marks: [
+            CLIENT_MARKS.omny,
+            CLIENT_MARKS.latitudepay,
+            CLIENT_MARKS.quoter,
+            CLIENT_MARKS.knovos,
+            CLIENT_MARKS.doodle,
+            CLIENT_MARKS.pledge,
+            CLIENT_MARKS.safexpay,
+            CLIENT_MARKS.gttools,
+            CLIENT_MARKS.incluude,
+          ],
+        },
+      ],
+    },
+    {
       type: 'section',
       id: 'client-view',
       eyebrow: 'Proof',
-      heading: 'In a client’s words',
+      heading: 'In our clients’ words',
+      more: { label: 'See the work', href: ROUTES.caseStudies },
       blocks: [
         {
           kind: 'proof',
@@ -193,60 +203,25 @@ export const productDesign: ServiceStory = {
             name: 'Ashok Mohanty',
             company: 'Auxentios',
           },
-          case: {
-            slug: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
-            client: 'Auxentios · Industrial CPQ',
-            title: 'A quotation model from eight specialist interviews',
-            body: 'Research across specialist roles, carried into a product model and component-led interface work.',
-          },
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'work',
-      eyebrow: 'Connected product decisions',
-      heading: 'Relevant Product Design work',
-      lead: 'Two more products where the model was settled before the screens were drawn. Each case claims only what its own record shows.',
-      blocks: [
-        {
-          kind: 'cases',
-          items: [
+          /* Stand-in voices for the slider, FICTIONAL (the kit testimonial specimen's speakers), cut
+             to the sourced quote's length so the band holds one height as it turns. Logged in
+             docs/content-changes.md; to be replaced by sourced quotes before any route uses them. */
+          voices: [
             {
-              slug: 'doodle-case-study-automating-enterprise-meeting-scheduling',
-              client: 'Doodle · Enterprise scheduling',
-              title: 'Priority and bookability, modelled first',
-              body: 'Meeting type, priority, tentative availability and bookability confidence, connected in one scheduling model.',
+              text: 'Every screen they cut was one our team never had to learn, and every screen that stayed had been argued for.',
+              name: 'Arjun Mehta',
+              role: 'Director of Clinical Product',
+              company: 'Corvel Health',
             },
             {
-              slug: 'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
-              client: 'Scissors · Staffing software',
-              title: 'Candidates, pools, jobs and organisations as objects',
-              body: 'Research and heuristic review behind an object-oriented redesign of the whole product.',
+              text: 'The design review stopped being a meeting about taste. Each decision arrived with the research behind it.',
+              name: 'Daniel Okafor',
+              role: 'Chief Product Officer',
+              company: 'Brightwater Labs',
             },
           ],
         },
       ],
-    },
-    {
-      type: 'statement',
-      id: 'how-we-work',
-      eyebrow: 'How we work',
-      text: 'One accountable team, from the first question to the shipped build.',
-      action: { label: 'See how we work', href: ROUTES.howWeWork },
-    },
-    {
-      type: 'offer',
-      id: 'examine-the-slice',
-      eyebrow: 'Recognise the workflow?',
-      heading: 'A workflow that keeps raising questions?',
-      body: 'Examine that slice of rules, roles and recovery before the team commits to more screens.',
-      points: [
-        { label: 'The workflow, walked through with its people' },
-        { label: 'The rules, roles and way back beneath it' },
-        { label: 'What to design first, and what can wait' },
-      ],
-      actions: [{ label: 'Start with a UX Product Audit', href: auditPath('ux-product-audit') }],
     },
     {
       type: 'section',
@@ -300,35 +275,6 @@ export const productDesign: ServiceStory = {
             icon: 'eye',
             when: 'When you can see the problem but not yet where it sits.',
             link: { label: 'UX Product Audit', href: auditPath('ux-product-audit') },
-          },
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'who-is-involved',
-      eyebrow: 'Who is involved',
-      heading: 'Real access, people who decide',
-      blocks: [
-        {
-          kind: 'fit',
-          yes: {
-            heading: 'What the work needs from you',
-            items: [
-              'Realistic access to the product',
-              'Relevant research or operating material',
-              'Time with people who understand the system',
-              'An owner who can settle consequential choices and technical constraints',
-            ],
-          },
-          no: {
-            heading: 'Not the right service when',
-            items: [
-              'The brief allows visual styling only, and forbids discussing behaviour',
-              'The team needs a regulated specialist opinion Tcules does not provide',
-              'No realistic product, user, data or build context can be shared',
-              'The purchase is mainly low-cost production capacity',
-            ],
           },
         },
       ],

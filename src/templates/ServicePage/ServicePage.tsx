@@ -44,16 +44,17 @@ export type ServicePageProps = {
  * The page makes four decisions for every service line, once:
  *
  *   1. It opens on the line's illustration beside the copy (ruling H2, § 2.3): the trail inside the
- *      hero, no hero eyebrow (the last crumb already names the service), one solid action and its
- *      ghost partner. The hero spends the solid and the illustration, so it carries no texture.
+ *      hero, the sourced rating in the eyebrow's place (never a text eyebrow: the last crumb already
+ *      names the service), one solid action and its ghost partner. The hero spends the solid and
+ *      the illustration, so it carries no texture.
  *   2. It decides every band's ARRANGEMENT from the job the band's blocks do (plan.ts), never from
  *      the story — a story says what a section argues, and the template says how it is laid out.
  *      Each job is one kit archetype (§ 3.4), and the plan applies the page rules no band can see
  *      alone: centred heads never adjacent, beside bands mirrored, the § 5.6 photographs assigned,
  *      the § 6.4 texture signature placed.
  *   3. Paper carries the page. Tint is the proof band alone (§ 1.7); no ground is blue (§ 4).
- *   4. It closes on the ask as a form on paper, the `closing` texture under the copy (§ 3.4 L). The
- *      close is the enquiry anchor (ANCHORS.enquiry), so every "Start a project" lands on it.
+ *   4. It closes on the ask as the compact form (r7-form: name, email, one question) on paper,
+ *      the `closing` texture under the copy (§ 3.4 L). The close is the enquiry anchor (ANCHORS.enquiry), so every "Start a project" lands on it.
  */
 export function ServicePage({
   story,
@@ -66,6 +67,10 @@ export function ServicePage({
   const resolved = withStandIns(story);
   const { hero, close } = resolved;
   const bands = planBands(resolved);
+  /* The sourced rating leads the hero, in the eyebrow's place (r7-hero, owner 7 Oct 2026), where a
+     story names one. It is not lent from the client strip: the badge adds a row over the title,
+     and a hero written without it can lose the fold (software-development's ran 843 against 830). */
+  const { rating } = hero;
 
   return (
     <>
@@ -76,6 +81,7 @@ export function ServicePage({
         trail={heroTrail(breadcrumbs, hero.title, (t) => (
           <Breadcrumbs {...t} />
         ))}
+        rating={rating}
         title={hero.title}
         body={[hero.lead]}
         actions={hero.actions}
@@ -110,8 +116,8 @@ export function ServicePage({
         points={close.points}
         form={
           <EnquiryForm
+            variant="compact"
             action={formAction}
-            scheduleHref={ROUTES.contact}
             nextSteps={close.points}
             context={{
               originRoute: servicePath(story.slug),

@@ -38,8 +38,10 @@ import styles from './VideoTestimonial.module.css';
  *   Both are single-film layouts; neither is a group.
  *   featured   a large poster with the quote beside it from 1024 — [3, 2], 64 between — and the
  *              quote under it below. The band's one object.
- *   wide       the poster across the full column, the quote under it. For a band where the film
- *              itself is the argument and wants the whole width.
+ *   wide       the poster across the full column in a cinematic crop, the caption under it as one
+ *              row from 1024 (the quote, the speaker at its foot). For a band where the film itself
+ *              is the argument and wants the whole width — and still fits the 830 fold at 1470.
+ *              The crop is the POSTER's: pressing play opens the box to the film's own 16:9.
  *   Both take the display quote role and the large play disc from 1024.
  *
  * Owns no band and no ground; the caller places it in a Section, and the surface reaches it through
@@ -204,18 +206,45 @@ export function VideoTestimonial({
     </div>
   );
 
+  const label_ = <p className={styles.meta}>{meta.join(' · ')}</p>;
+  const pulled = (
+    <blockquote id={quoteId} className={styles.quote}>
+      <p>{quote}</p>
+    </blockquote>
+  );
+  const speaker = (
+    <p className={styles.attribution}>
+      <span className={styles.name}>{name}</span>
+      {attribution ? <span className={styles.role}>{attribution}</span> : null}
+    </p>
+  );
+
+  /* wide sets the caption as one row from 1024 — the quote with its label, the speaker in the
+     narrow track at the quote's foot — so the band spends its height on the film, not on a stack. */
   const caption = (
-    <Layout as="figcaption" rowGap="stack" className={styles.caption}>
-      <Layout rowGap="block">
-        <p className={styles.meta}>{meta.join(' · ')}</p>
-        <blockquote id={quoteId} className={styles.quote}>
-          <p>{quote}</p>
-        </blockquote>
-      </Layout>
-      <p className={styles.attribution}>
-        <span className={styles.name}>{name}</span>
-        {attribution ? <span className={styles.role}>{attribution}</span> : null}
-      </p>
+    <Layout
+      as="figcaption"
+      columns={featured ? undefined : { base: 1, lg: [3, 1] }}
+      colGap="column"
+      rowGap="stack"
+      className={styles.caption}
+    >
+      {featured ? (
+        <Layout rowGap="block">
+          {label_}
+          {pulled}
+        </Layout>
+      ) : (
+        pulled
+      )}
+      {featured ? (
+        speaker
+      ) : (
+        <Layout rowGap="block">
+          {label_}
+          {speaker}
+        </Layout>
+      )}
     </Layout>
   );
 
@@ -224,9 +253,9 @@ export function VideoTestimonial({
       as="figure"
       columns={featured ? { base: 1, lg: [3, 2] } : undefined}
       colGap="column"
-      rowGap="stack"
+      rowGap={featured ? 'stack' : 'block'}
       align={featured ? 'center' : undefined}
-      className={styles.root}
+      className={cx(styles.root, !featured && styles.wide)}
     >
       {screen}
       {caption}

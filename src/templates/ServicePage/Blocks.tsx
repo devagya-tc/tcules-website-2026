@@ -1,11 +1,6 @@
 import {
-  BrandMark,
-  ClientMark,
-  Cluster,
-  Icon,
   Layout,
   Media,
-  RatingBadge,
   Stat,
 } from '@/components';
 import {
@@ -17,9 +12,11 @@ import {
   ContentSectionText,
   DataTable,
   ListCard,
+  LogoGrid,
   ProcessFlow,
   Proof,
   ReadDown,
+  Slider,
   Steps,
   Thread,
   type BlockCardSetItem,
@@ -32,7 +29,6 @@ import type {
   ServiceStory,
   StoryBlock,
   StoryCover,
-  StoryRating,
   StorySlot,
 } from '@/lib/service-story';
 
@@ -44,8 +40,8 @@ import styles from './Blocks.module.css';
 /**
  * The service page's blocks, as kit units (cmp-service-pages, 6 Oct 2026). Each StoryBlock is a
  * JOB, and each job renders as the kit unit that does it — Steps (F), ReadDown (D), the icon router
- * (C-icon), BlockCardSet (C-pair, M), Proof `case` (G-case), Contrast (N), Thread (E), a ClientMark
- * strip (H), Stat (the D aside) — so this file draws no tile, row or card of its own. What stays
+ * (C-icon), BlockCardSet (C-pair, M), Proof and its Slider (G), Contrast (N), Thread (E), the
+ * LogoGrid (H), Stat (the D aside) — so this file draws no tile, row or card of its own. What stays
  * template-local is the six diagrams in Diagrams.tsx (Spectrum, Matrix, Record, Parts, Slice,
  * Bridge): each is one service page's argument, not a reusable unit (visual-direction § 3.4 E).
  *
@@ -73,19 +69,6 @@ export function AsidePhoto({ id }: { id: PhotoId }) {
 /** A card's cover as BlockCard's media slot: never an empty frame (§ 5.7). */
 function coverMedia(cover: StoryCover | undefined) {
   return cover ? { type: 'image' as const, image: cover } : undefined;
-}
-
-/** The sourced rating as its pill: the score, the platform's mark and the star. */
-function RatingPill({ rating }: { rating: StoryRating }) {
-  return (
-    <RatingBadge
-      score={rating.score}
-      platform={rating.platform}
-      href={rating.href}
-      icon={<Icon name="star" size="sm" />}
-      mark={<BrandMark name={rating.mark} />}
-    />
-  );
 }
 
 /* ── Signals ──────────────────────────────────────────────────────────────────
@@ -278,36 +261,49 @@ export function Cases({
 }
 
 /* ── Proof (G) ────────────────────────────────────────────────────────────────
-   With a case: G-case, the WORK first, then what the client said (§ 3.6, owner 1 Oct) — Proof's
-   `case` arrangement, the case card in the 381 track and the quote in the 763, the score pinned
-   under the attribution. Without one: the typographic quote, centred, with its score. No portrait:
-   a stock face beside a real name is a fabricated likeness (§ 5.8). */
+   Never a rating beside a client quote (owner, 7 Oct 2026): the score leads the hero instead.
+   Without a case: the typographic quote, centred (kit G·02). With further voices it turns them in
+   an auto-advancing one-up Slider (r7-testimonials' slider variant), each slide the same centred
+   Proof. With a case: G-case, the WORK first, then what the client said (§ 3.6, owner 1 Oct) — the
+   case card carries its client, title and link and NO description (owner, 7 Oct 2026: the card and
+   the quote were five-plus competing elements). No portrait: a stock face beside a real name is a
+   fabricated likeness (§ 5.8). */
+type StoryQuote = Of<'proof'>['quote'];
+
+function proofQuote(quote: StoryQuote) {
+  return {
+    quoteHtml: paragraph(quote.text),
+    name: quote.name,
+    role: quote.role,
+    company: quote.company,
+  };
+}
+
 export function ProofBlock({ block, labels }: { block: Of<'proof'>; labels: Labels }) {
-  const quote = {
-    quoteHtml: paragraph(block.quote.text),
-    name: block.quote.name,
-    role: block.quote.role,
-    company: block.quote.company,
-  };
-  const rating = block.rating && {
-    score: block.rating.score,
-    platform: block.rating.platform,
-    href: block.rating.href,
-    mark: block.rating.mark,
-  };
+  const quote = proofQuote(block.quote);
   const caseCard = block.case;
-  if (!caseCard) return <Proof quote={quote} align="center" rating={rating} />;
+  if (!caseCard) {
+    const voices = [block.quote, ...(block.voices ?? [])];
+    if (voices.length < 2) return <Proof quote={quote} align="center" />;
+    return (
+      <Slider label="Client quotes" slideName="testimonial" perView={1} align="center" autoplay>
+        {voices.map((voice) => (
+          <li key={voice.name}>
+            <Proof quote={proofQuote(voice)} align="center" />
+          </li>
+        ))}
+      </Slider>
+    );
+  }
   return (
     <Proof
       arrangement="case"
       quote={quote}
-      rating={rating}
       work={
         <Layout as="ul" rowGap="none">
           <BlockCard
             eyebrow={caseCard.client}
             title={caseCard.title}
-            body={caseCard.body}
             href={caseCard.href}
             ctaLabel={labels.caseCta}
             media={coverMedia(caseCard.cover)}
@@ -320,40 +316,20 @@ export function ProofBlock({ block, labels }: { block: Of<'proof'>; labels: Labe
 }
 
 /* ── Logos (H) ────────────────────────────────────────────────────────────────
-   The client marks as a centred set (§ 5.9), the sourced rating a `stack` under it, so a real mark
-   sits beside a real figure (§ 5.8). Equal tracks rather than a wrapping Cluster (fix round 1, 7 Oct
-   2026): wrapping, six marks broke 5 + 1 at 1024 and left one mark alone on a second row. The
-   tracks keep the rows whole at every width — two at a phone, three from md, the whole set on one
-   row from xl (two balanced rows past six) — and each mark centres in its track at its own area. */
-function logoColumns(count: number) {
-  const row = count <= 6 ? count : Math.ceil(count / 2);
-  return { base: 2, md: count % 2 === 0 && count % 3 !== 0 ? Math.min(count, 4) : 3, xl: row };
-}
-
-export function Logos({ block }: { block: Of<'logos'> }) {
-  return (
-    <Layout rowGap="stack">
-      <Layout
-        as="ul"
-        columns={logoColumns(block.marks.length)}
-        colGap="stack"
-        rowGap="stack"
-        align="center"
-        justifyItems="center"
-      >
-        {block.marks.map((mark) => (
-          <li key={mark.name}>
-            <ClientMark {...mark} />
-          </li>
-        ))}
-      </Layout>
-      {block.rating ? (
-        <Cluster justify="center">
-          <RatingPill rating={block.rating} />
-        </Cluster>
-      ) : null}
-    </Layout>
-  );
+   The client marks as the boxed LogoGrid (r7-logos): each mark in its own closed cell, equal weight.
+   The band's head is the grid's own context line (Bands.tsx); here, a set after another block, it
+   is the grid alone. Never the score beside the marks: proof types are not combined in one section
+   (owner, 9 Oct 2026), so the story's rating leads the hero instead (ServicePage). */
+export function Logos({
+  block,
+  context,
+  headingId,
+}: {
+  block: Of<'logos'>;
+  context?: string;
+  headingId?: string;
+}) {
+  return <LogoGrid marks={block.marks} context={context} headingId={headingId} />;
 }
 
 /* ── Stat (D) ─────────────────────────────────────────────────────────────────

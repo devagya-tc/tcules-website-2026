@@ -31,7 +31,8 @@ import type {
  *          F takes none and a page may name none (image pass, 7 Oct 2026). K's frame follows
  *          its photograph: landscape 3:2 where the master resolves at 667, else the portrait 4:5.
  *   § 6.4  the texture signature: `horizon` on the band directly above the tint proof band unless it
- *          ends in ruled rows, `closing` on L, and the third placement on the J statement — the
+ *          ends in ruled rows or is the boxed logo grid (a texture behind a wall of cells is noise),
+ *          `closing` on L, and the third placement on the J statement — the
  *          stepped `corner` field in the band's top-end corner (fix round 2; it was `head-half`, which
  *          read as a pale smudge and ran behind the sentence's first line). B carries no texture
  *          (page-design-systems fix round 2, 6 Oct 2026): its `counterweight` floated under two tiles
@@ -127,7 +128,9 @@ const RULED: ReadonlySet<Archetype> = new Set(['D', 'D-faq', 'F', 'N']);
 /** Bands that are always centred, and bands that centre unless their neighbour already does. */
 /* M is not among them (fix round 2): a set of covers is a full-width image-card row under a start
    head, a different shape from the centred H and D-faq heads. */
-const ALWAYS_CENTRED: ReadonlySet<Archetype> = new Set(['H', 'D-faq']);
+/* H left on 9 Oct 2026: the boxed LogoGrid sets its context line on the start edge over a full-column
+   grid (r7-logos), and a centred line over a boxed wall read as a second hero. */
+const ALWAYS_CENTRED: ReadonlySet<Archetype> = new Set(['D-faq']);
 const MAY_CENTRE: ReadonlySet<Archetype> = new Set(['E', 'N', 'C-text']);
 
 /** Texture placements per page at 8 or more bands (§ 6.4). */
@@ -307,7 +310,8 @@ export function planBands(story: ServiceStory): Band[] {
       band.kind === 'section' &&
       !RULED.has(band.archetype) &&
       band.archetype !== 'B' &&
-      band.archetype !== 'G'
+      band.archetype !== 'G' &&
+      band.archetype !== 'H'
     ) {
       band.horizon = true;
     }

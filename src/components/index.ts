@@ -100,6 +100,8 @@ export {
   TextureShape,
   type TextureClosingProps,
   type TextureClosingSide,
+  type TextureCornerAt,
+  type TextureCornerProps,
   type TextureLength,
   type TextureProps,
   type TextureShapeProps,

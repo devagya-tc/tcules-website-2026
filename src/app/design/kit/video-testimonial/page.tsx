@@ -43,8 +43,8 @@ const VARIATIONS = {
   },
   wide: {
     id: 'wide',
-    title: 'Wide, the quote below',
-    note: 'The second single-film layout: the poster across the whole column, the pulled line under it at the display quote role, held to the lead measure. For a band where the film itself is the argument. Still one film, and the only testimonial in the band — never beside text quotes, never two at once (owner rule, 9 Oct).',
+    title: 'Wide, a cinematic poster',
+    note: 'The second single-film layout: the poster across the whole column in a 3:1 cinematic crop, and under it one row from 1024 — the pulled line at the display quote role in the wide track, the label and the speaker as the film’s credit in the narrow one. Pressing play opens the box to the film’s own 16:9. The crop is what lets a full-width film clear the 830 fold at 1470. For a band where the film itself is the argument. Still one film, and the only testimonial in the band — never beside text quotes, never two at once (owner rule, 9 Oct).',
   },
   ink: {
     id: 'ink',
@@ -116,7 +116,7 @@ export default function VideoTestimonialKitPage() {
                 A client interview, set so the reader chooses to watch it: the poster, one play
                 control, the line worth hearing pulled out beside it, and who said it. Two
                 single-film layouts of one VideoTestimonial pattern — featured, quote beside, and
-                wide, quote below. One film per band, and it is the band’s only testimonial.
+                wide, a cinematic poster with the quote below. One film per band, and it is the band’s only testimonial.
               </p>
             </Layout>
             <Layout as="ol" rowGap="text">

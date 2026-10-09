@@ -62,7 +62,12 @@ exporter, so the page and the assets can't drift apart.
 - **Stacking.** The field sits under the band's content. `Section` isolates itself so that works;
   inside any other box, the box needs `position: relative; isolation: isolate`.
 
-Specimen: `/design/texture`. It shows each step of the workflow, the measured frame rebuilt, every
+**Placements.** Pages never place shapes themselves; they pick a named placement, documented with
+when / never on `/design/texture`: Statement `texture="head-half"` (end-edge corner fade),
+`"end-fade"` (end-edge horizontal fade), `"corner"` (single corner cluster), `"corner-pair"`
+(balanced two-corner clusters), and `TextureHorizon` (the seam strip into a tint band).
+
+Specimen: `/design/texture`. After the placements it shows each step of the workflow, the measured frame rebuilt, every
 anchor, all four surfaces, and the candidate inks for the dark grounds.
 
 **Open:** tint, ink and blue are provisional: neutral-400 on paper-deep (deliberately quieter than

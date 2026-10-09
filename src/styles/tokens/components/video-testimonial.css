@@ -15,6 +15,9 @@
    Geometry
    --vt-poster-ratio        16:9, the ratio the interviews are shot in, so the poster and the film
                             occupy the same box and pressing play moves nothing on the page.
+   --vt-poster-ratio-wide   the wide arrangement's poster: a cinematic crop of the 16:9 frame,
+                            so a poster across the 1240 column clears the 830 fold at 1470.
+                            The player keeps --vt-poster-ratio when it opens.
    --vt-poster-radius       the photograph radius, 8, on the poster's own box (Media is told the
                             placement owns the edge).
    --vt-play-size-lg/-md    the disc. A component SIZE, so t-shirt names and literals. 88 on the
@@ -29,6 +32,7 @@
    --vt-quote-rule-width    the site blockquote's rule (ch10 B2.07), as Proof draws it.            */
 :root {
   --vt-poster-ratio: var(--ratio-wide);
+  --vt-poster-ratio-wide: var(--ratio-cinema);
   --vt-poster-radius: var(--radius-8);
   --vt-play-size-lg: 88px;
   --vt-play-size-md: 64px;

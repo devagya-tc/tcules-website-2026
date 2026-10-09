@@ -117,6 +117,34 @@ export default function StatementSpecimen() {
         We design the decision first. The screen follows from it.
       </Statement>
 
+      <Caption index="J · 3b" title="The end-edge horizontal fade">
+        <code>texture=&quot;end-fade&quot;</code>: the same field run the band&rsquo;s full
+        height down its end edge, fading right to left rather than in from the corner.
+        Start-aligned only, from 1024.
+      </Caption>
+      <Statement
+        eyebrow="What we believe"
+        id="stmt-end-fade"
+        texture="end-fade"
+        actions={<CtaRow actions={HOW_WE_WORK} rule={false} />}
+      >
+        A good interface is a product decision someone finally made.
+      </Statement>
+
+      <Caption index="J · 2b" title="Centred, with the balanced corner pair">
+        <code>texture=&quot;corner-pair&quot;</code>: the top-end corner field plus a lighter,
+        related cluster in the bottom-start corner, so a centred band reads balanced. From 1024.
+      </Caption>
+      <Statement
+        eyebrow="How we work"
+        id="stmt-corner-pair"
+        align="center"
+        texture="corner-pair"
+        actions={<CtaRow actions={HOW_WE_WORK} rule={false} />}
+      >
+        One accountable team, from the first question to the shipped build.
+      </Statement>
+
       <Caption index="J · 4" title="The graphic slot">
         <code>graphic</code>: a square a block (24) above the eyebrow, sized by{' '}
         <code>--stmt-graphic-size</code> (64) — a mark beside the type, never an image competing

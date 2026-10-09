@@ -657,3 +657,28 @@ Where no arc is drawn (phones, two-row threads) the sentence closes the thread, 
 {first stage}:". Strapi: cap the loop field at eight words.
 
 **Found in.** Owner review, 7 Oct 2026.
+
+## Product Design recomposed as the 7 Oct review showcase (9 Oct 2026)
+
+`/design/service-page/product-design` (fixture `ideal/services/product-design.ts`). Band order:
+hero · B signals · F method · E worked example · J statement · H clients · G quotes · C-icon routes ·
+L close.
+
+- **Removed sections.** `work` (the C-pair: Doodle and Scissors cases), `examine-the-slice` (the K
+  offer), `who-is-involved` (the N contrast pair) and the case beside the Auxentios quote (G-case,
+  rejected 7 Oct). Their copy is unchanged in git history; nothing was rewritten.
+- **Order.** `clients` moved from second to fifth, after the statement, so the proof (marks, then
+  quotes) sits together before the routes; `method` and `worked-example` now follow the signals
+  directly.
+- **Hero.** The Clutch rating (4.8, sourced, `ratings.ts`) moved from beside the client marks into
+  the hero's eyebrow. Proof types are not combined in one section.
+- **Clients.** Heading "Teams we have shipped with" → **"Product teams we have designed and shipped
+  with"**, rendered as the LogoGrid's eyebrow-size context line. Marks: six → all nine (SafeXpay, GT
+  Tools and Incluude added, owner 8 Oct: work with the nine we have).
+- **Proof.** Heading "In a client’s words" → **"In our clients’ words"** (rendered as the band's
+  context line); action **"See the work"** → case studies added. Two **fictional stand-in** quotes
+  join Ashok Mohanty's for the slider (Arjun Mehta, Corvel Health; Daniel Okafor, Brightwater Labs —
+  the kit testimonial specimen's speakers, cut to ~20 words). **Replace with sourced quotes before
+  any route uses this fixture.**
+- **Close.** The form is now the compact EnquiryForm on every service page (name, email, one
+  question; no scheduling link).

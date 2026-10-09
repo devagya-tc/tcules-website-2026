@@ -295,7 +295,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/video-testimonial',
         name: 'VideoTestimonial',
-        note: 'a client interview on film: featured (16:9 poster in [3, 2], display quote beside) under a head on paper and alone on tint, and wide (poster across the column, quote below); one film per band and the band’s only testimonial; poster, play disc, captions track slot, no autoplay, focus hand-off, reduced motion',
+        note: 'a client interview on film: featured (16:9 poster in [3, 2], display quote beside) under a head on paper and alone on tint, and wide (3:1 poster across the column, opening to 16:9 on play; quote and credit in one row below); one film per band and the band’s only testimonial; poster, play disc, captions track slot, no autoplay, focus hand-off, reduced motion',
       },
       {
         href: '/design/kit/form',
@@ -325,7 +325,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/about',
         name: 'Kit showcase · About',
-        note: 'the studio page composed from the kit, warm family, 10 bands — the Holi photograph leading (wide hero), a centred statement with the corner field, four studio scenes, the board beside two tiles, four people with portraits over the horizon, a featured client on tint, numbers beside their head, a 3:1 banner, the careers offer beside and the close with a photograph and the compact form',
+        note: 'the studio page from the reviewed components, each once, 7 bands alternating stacked / split / centred — the Holi panorama hero (one solid, its ghost), a week of hairline tiles beside the studio board, the statement with its graphic slot, the engagement model compact, one wide video testimonial on tint, the rating on its own, and the open close',
       },
       {
         href: '/design/kit/services',

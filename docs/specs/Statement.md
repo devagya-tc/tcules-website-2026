@@ -100,3 +100,10 @@ very special text". Recorded in `docs/kit/review-7-oct.md`, r7-statement.
   supplies the shape. Centred with the column under `align="center"`.
 - Specimen: `/design/statement` rebuilt as a showcase, J · 1 – J · 7 (voice, plain h2 / p, centred +
   corner, head-half, graphic start / centred, no eyebrow + ceiling, tint and ink).
+
+## Amendment · 9 Oct 2026 — owner texture review: `end-fade` and `corner-pair`
+- **`texture?: 'head-half' | 'end-fade' | 'corner' | 'corner-pair'`**. `end-fade` is the end-edge
+  horizontal fade — the field full-height along the end edge, fading toward the start; start-aligned
+  only, from 1024. `corner-pair` is `corner` plus `TextureCorner at="bottom-start"`, a lighter related
+  cluster in the opposite corner so a centred band reads balanced; centred only, from 1024.
+- Specimen: `/design/statement` J · 3b and J · 2b; documented with when / never on `/design/texture`.

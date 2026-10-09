@@ -172,8 +172,19 @@ export type StoryBlock =
         company: string;
         portrait?: { src: string; width: number; height: number };
       };
+      /**
+       * Further quotes, each with its own speaker. With them the typographic band turns the quotes
+       * in an auto-advancing one-up Slider (kit G·02 slider, r7-testimonials). Ignored beside a case.
+       */
+      voices?: readonly {
+        text: string;
+        name: string;
+        role?: string;
+        company: string;
+      }[];
       case?: StoryCase;
-      /** A third-party rating shown with the quote — the client's words, and the market's score. */
+      /** @deprecated Not rendered: no rating beside a client quote (owner, 7 Oct 2026). The score
+          goes in the hero's eyebrow (`hero.rating`). */
       rating?: StoryRating;
     }
   /** Options on one scale — least to most disruptive — each with its condition and its question. */
@@ -275,6 +286,8 @@ export type StoryBlock =
   | {
       kind: 'logos';
       marks: readonly StoryMark[];
+      /** @deprecated Not rendered in the H band: proof types are never combined in one section
+          (owner, 9 Oct 2026). Set `hero.rating` instead. */
       rating?: StoryRating;
     }
   /** One figure, stated in words beside it. */
@@ -395,6 +408,8 @@ export type ServiceStory = {
     /** A service-line illustration: `public/illustrations/services/<name>.paper.svg`. */
     illustration: { src: string; width: number; height: number };
     tags?: readonly string[];
+    /** The sourced rating, in the eyebrow's place (r7-hero, the doodle.com move). */
+    rating?: StoryRating;
   };
   sections: readonly (StorySection | StoryOffer | StoryBanner | StoryStatement)[];
   /**

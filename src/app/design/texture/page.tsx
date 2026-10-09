@@ -1,29 +1,26 @@
-import { Layout, Section, Texture, TextureShape } from '@/components';
+import { Layout, Section, Texture, TextureHorizon, TextureShape } from '@/components';
+import { ROUTES } from '@/lib/routes';
+import { CtaRow, Statement } from '@/patterns';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 /**
- * Texture specimen — the pixel grid, shown through shapes.
+ * Texture specimen — the approved placements first, documented; then the mechanism they are built
+ * from (the pixel grid shown through shapes), kept as technical specimens.
  *
- * PARKED (owner, 29 Sep 2026, tracker 2.17) until a real placement exists. This page is kept to
- * the rules rather than grown: nothing here makes Texture stronger or more visible.
- *
- * The Figma workflow, one step at a time: a shape, then the same shape blurred, then the frame the
- * texture was measured from, rebuilt. Steps 1 and 2 are MECHANISM bands and carry no content,
- * because a hard shape inside the content column is outside the rules (spec §1, limit 6). Every
- * band that does carry content keeps every shape's full-strength box in the band's air — the 128
- * above and below an open band — so no shape sits under a heading or body at any width.
+ * Owner review, 9 Oct 2026: the end-edge corner fade (Statement `head-half`), the seam strip
+ * (TextureHorizon) and the single corner cluster (Statement `corner`) are approved as drawn; two
+ * variations were added — the end-edge horizontal fade (`end-fade`) and the balanced two-corner
+ * clusters (`corner-pair`).
  *
  * ── Why each caption band is `flush` ─────────────────────────────────────────────
  * Two adjacent bands on the same ground merge their seam: the second drops its TOP padding
  * (Section.module.css, tracker 2.17). A textured paper band after a paper caption band therefore
- * started at y = 0, and every top-anchored shape landed behind its heading — the breach this page
- * was showing at 390. A flush band is excluded from that merge (it has no bottom padding to be the
- * seam), so the textured band after it keeps its full 128 of top air, which is what the top shapes
- * are measured against.
+ * started at y = 0, and every top-anchored shape landed behind its heading. A flush band is
+ * excluded from that merge (it has no bottom padding to be the seam), so the textured band after it
+ * keeps its full top air, which is what the top shapes are measured against.
  *
- * Only paper and tint appear. Ink and blue are banned by limit 3, so their bands and their ink
- * candidates are gone rather than printed as options.
+ * Only paper and tint appear. Ink and blue are banned by limit 3.
  */
 
 const TINT_CANDIDATES = [
@@ -51,30 +48,158 @@ function Edges({ className }: { className?: string }) {
   );
 }
 
+const HOW_WE_WORK = [{ label: 'See how we work', href: ROUTES.howWeWork }] as const;
+
+/** One approved placement: what it is called, the prop that draws it, when to reach for it, and the
+    one way it is misused. Printed as the caption band above the live band. */
+function Pattern({
+  title,
+  use,
+  when,
+  never,
+}: {
+  title: string;
+  use: string;
+  when: string;
+  never: string;
+}) {
+  return (
+    <Section flush>
+      <Specimen title={`${title} · ${use}`} note={`When: ${when} Never: ${never}`}>
+        <p className={s.specNote}>The band below.</p>
+      </Specimen>
+    </Section>
+  );
+}
+
+const RULES = [
+  'Texture is rhythm, never decoration for its own sake. It marks where a band begins, ends or turns — it does not fill a band that looks empty.',
+  'One texture signature per band. A band carries one placement, or a corner pair; never a fade and a strip together.',
+  'Where it may sit: a band’s air and edges — its top or bottom padding, its end edge beside a start-aligned sentence, a corner a centred sentence leaves clear. Never behind a glyph at full strength; only a feather may reach the type.',
+  'Paper only for placements. Tint carries the quieter neutral grid when it sits under a seam; ink and blue never take texture (limit 3). Peridot never.',
+  'Not on a band with an illustration hero, a photograph or a media column competing for the same corner — the illustration is that band’s mark.',
+  'Contrast: the grid peaks at 21% of --tex-ink, so text over a feather keeps its full contrast. If a placement would sit under type at full strength, move the placement, not the strength.',
+  'Decorative only: aria-hidden, no pointer events, drawn from the generated pixel-grid (npm run texture) — never a raster or a hand-drawn pattern.',
+  'Desktop-led: the corner, fade and pair placements exist from 1024; below it only the seam strip runs.',
+] as const;
+
 export default function TextureSpecimenPage() {
   return (
     <>
       <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h1>Texture</h1>
+            <p>
+              The pixel grid as a mark of rhythm. It tells the eye where a band arrives, where
+              it hands over to the next, and which corner of a quiet band is the open one. It is
+              never there to make an empty band look busy: a band that needs texture to hold
+              together is a band whose composition is not finished.
+            </p>
+            <p>
+              Five placements are approved. Each is a named option, so no page writes a number:
+              pick one by what the band is doing, and give each band at most one.
+            </p>
+          </Layout>
+          <Layout rowGap="text">
+            <h2>Rules</h2>
+            <ul>
+              {RULES.map((rule) => (
+                <li key={rule}>{rule}</li>
+              ))}
+            </ul>
+          </Layout>
+        </Layout>
+      </Section>
+
+      <Pattern
+        title="1 · End-edge corner fade"
+        use='Statement texture="head-half"'
+        when="a start-aligned statement whose sentence leaves the band's top-end open; the field arrives from past the corner, as atmosphere entering the band."
+        never="with a centred sentence, or on a band that already has a seam strip."
+      />
+      <Statement
+        eyebrow="What we believe"
+        id="tex-head-half"
+        texture="head-half"
+        actions={<CtaRow actions={HOW_WE_WORK} rule={false} />}
+      >
+        A good interface is a product decision someone finally made.
+      </Statement>
+
+      <Pattern
+        title="2 · End-edge horizontal fade"
+        use='Statement texture="end-fade"'
+        when="a start-aligned statement that should feel anchored along its whole end edge rather than lit from one corner — a full-height field fading right to left."
+        never="with a centred sentence (it reaches into the feather), or below 1024 (not drawn)."
+      />
+      <Statement
+        eyebrow="What we believe"
+        id="tex-end-fade"
+        texture="end-fade"
+        actions={<CtaRow actions={HOW_WE_WORK} rule={false} />}
+      >
+        A good interface is a product decision someone finally made.
+      </Statement>
+
+      <Pattern
+        title="3 · Seam strip"
+        use="TextureHorizon, the last child of a paper Section"
+        when="a paper band hands over to a tint band: the paper breaks up into the change of ground beneath it. The only placement that runs below 1024."
+        never="above a paper band (there is no change of ground to mark), or under a band whose last line sits closer than a stack to the foot."
+      />
+      <Section>
         <Layout rowGap="block">
-          <h1>Texture</h1>
+          <h2>Forty thousand parts, one search</h2>
           <p>
-            The pixel grid as a decorative field. It fills the band edge to edge, sits between
-            the band&rsquo;s ground and its content, and shows only through the shapes placed in
-            it. Blur a shape and the grid fades with it. The grid itself is never blurred.
-          </p>
-          <p>
-            Shapes are placed like absolutely positioned boxes: <code>top</code> /{' '}
-            <code>bottom</code>, <code>left</code> / <code>right</code>, and a size, each in px
-            or % of the band. An axis with neither side given is centred. <code>blur</code>{' '}
-            takes Figma&rsquo;s number. The grid&rsquo;s geometry comes from{' '}
-            <code>src/styles/textures/pixel-grid.json</code>, the same spec{' '}
-            <code>npm run texture</code> exports from.
-          </p>
-          <p>
-            <strong>Parked</strong> (owner, 29 Sep 2026) until a real placement exists. Paper
-            and tint only — ink and blue are banned by limit 3.
+            Found by the names engineers actually use, and rebuilt without a freeze on releases.
           </p>
         </Layout>
+        <TextureHorizon />
+      </Section>
+      <Section surface="tint">
+        <p>The next band, on tint.</p>
+      </Section>
+
+      <Pattern
+        title="4 · Single corner cluster"
+        use='Statement texture="corner"'
+        when="a centred statement; the top-end corner is the only ground a centred sentence leaves clear, and one stepped cluster marks it."
+        never="on a start-aligned band (use a fade), or anywhere it would sit behind the eyebrow."
+      />
+      <Statement
+        eyebrow="How we work"
+        id="tex-corner"
+        align="center"
+        texture="corner"
+        actions={<CtaRow actions={HOW_WE_WORK} rule={false} />}
+      >
+        One accountable team, from the first question to the shipped build.
+      </Statement>
+
+      <Pattern
+        title="5 · Balanced two-corner clusters"
+        use='Statement texture="corner-pair"'
+        when="a centred statement that stands alone between two bands and needs weight at both ends of its diagonal; the bottom-start cluster is lighter and related, not a mirror."
+        never="the bottom-start cluster alone, or a pair on a band whose action sits on its start edge."
+      />
+      <Statement
+        eyebrow="How we work"
+        id="tex-corner-pair"
+        align="center"
+        texture="corner-pair"
+        actions={<CtaRow actions={HOW_WE_WORK} rule={false} />}
+      >
+        One accountable team, from the first question to the shipped build.
+      </Statement>
+
+      <Section flush>
+        <Specimen
+          title="Mechanism · how the grid is drawn"
+          note="Below: the Texture primitive the placements are built from. The pixel grid fills the band edge to edge, sits between the band's ground and its content, and shows only through the shapes placed in it; blur a shape and the grid fades with it. Shapes are placed like absolutely positioned boxes, blur takes Figma's number, and the grid's geometry is src/styles/textures/pixel-grid.json, the same spec npm run texture exports from. These are technical specimens, not placements."
+        >
+          <p className={s.specNote}>The bands below.</p>
+        </Specimen>
       </Section>
 
       <Section flush>

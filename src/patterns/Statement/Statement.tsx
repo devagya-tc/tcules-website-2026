@@ -28,8 +28,18 @@ export type StatementElement = 'h2' | 'p';
  * The texture recipe a statement may carry (§ 6.3). `head-half` is a field in the band's empty top-end
  * corner, bleeding off its top and end edges, from 1024 only, and spends the band's one blue mass
  * (§ 4.3: J with head-half — the sentence stays ink). Paper only.
+ *
+ *   head-half    the end-edge CORNER fade: one feathered field arriving from past the top-end corner.
+ *                Start-aligned sentences.
+ *   end-fade     the end-edge HORIZONTAL fade (owner, 9 Oct 2026): the field runs the band's full
+ *                height along its end edge and fades toward the start, so the gradient is right to
+ *                left rather than corner-in. Start-aligned sentences only — a centred sentence
+ *                reaches into its feather.
+ *   corner       the stepped pixel field in the top-end corner. Centred sentences.
+ *   corner-pair  `corner` plus a lighter, related cluster in the bottom-start corner (owner, 9 Oct
+ *                2026), so a centred band reads balanced. Centred sentences.
  */
-export type StatementTexture = 'head-half' | 'corner';
+export type StatementTexture = 'head-half' | 'end-fade' | 'corner' | 'corner-pair';
 
 /**
  * Where the sentence sits. One column in both: the eyebrow directly above the sentence, a `block`
@@ -69,8 +79,9 @@ export type StatementProps = {
   actions?: ReactNode;
   /**
    * The texture (paper only; ignored with a warning on any other ground). `head-half` is § 6.3's
-   * blurred field, from 1024; `corner` the stepped pixel field in the band's top-end corner, from
-   * 1024, clear of the type (TextureCorner).
+   * blurred field, from 1024; `end-fade` the same field run full-height down the end edge;
+   * `corner` the stepped pixel field in the band's top-end corner, from 1024, clear of the type
+   * (TextureCorner); `corner-pair` that plus its bottom-start partner. See `StatementTexture`.
    */
   texture?: StatementTexture;
   /** Default `paper`. */
@@ -111,7 +122,9 @@ export function Statement({
   const labelled = heading && Boolean(id);
   const onPaper = surface === 'paper';
   const textured = texture === 'head-half' && onPaper;
-  const cornered = texture === 'corner' && onPaper;
+  const faded = texture === 'end-fade' && onPaper;
+  const cornered = (texture === 'corner' || texture === 'corner-pair') && onPaper;
+  const paired = texture === 'corner-pair' && onPaper;
   const centred = align === 'center';
 
   if (process.env.NODE_ENV !== 'production' && texture && surface !== 'paper') {
@@ -149,7 +162,18 @@ export function Statement({
           <TextureShape top={-200} right={-120} width="34%" height={296} blur={160} />
         </Texture>
       ) : null}
+      {faded ? (
+        /* end-fade: head-half's rect, its horizontal geometry unchanged (end −120, 30% wide, blur
+           160), but run from −50% to 150% of the band's height, so the blur's vertical falloff lands
+           outside the band and is clipped: the grid is at full strength from top edge to bottom
+           edge along the end, and fades only toward the start. 30% rather than 34% so the feather
+           stops short of a start-aligned sentence on its title measure at 1024. From 1024 only. */
+        <Texture className={styles.texture}>
+          <TextureShape top="-50%" right={-120} width="30%" height="200%" blur={160} />
+        </Texture>
+      ) : null}
       {cornered ? <TextureCorner /> : null}
+      {paired ? <TextureCorner at="bottom-start" /> : null}
       {/* One column either way. The eyebrow-to-sentence seam is the head rhythm's `block`, the
           sentence-to-action seam the band's `stack`. Centred, Layout centres each part on the
           band's axis; start-aligned, every part keeps the start edge. */}

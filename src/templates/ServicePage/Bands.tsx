@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { TextureHorizon } from '@/components';
+import { Section, TextureHorizon } from '@/components';
 import { Banner, ContentSection, CtaRow, CtaSection, Statement, Thread } from '@/patterns';
 import { getKitPhoto } from '@/lib/photos';
 import type { StoryBlock } from '@/lib/service-story';
@@ -9,6 +9,7 @@ import {
   AsidePhoto,
   Cases,
   Ledger,
+  Logos,
   Router,
   Signals,
   StatAside,
@@ -219,8 +220,19 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
           <StoryBlockView block={block} labels={ctx.labels} slots={ctx.slots} />
         </Fragment>
       ));
+      /* The typographic band (kit G·02, the 7 Oct favourite): the quote — or the Slider of quotes —
+         is the band's one large thing, so the section's heading is demoted to the eyebrow-size line
+         over it (no h2 competing with a 43px quote) and its CtaRow closes the band, centred. */
       return band.centred ? (
-        <ContentSection {...head} surface="tint" align="center">
+        <ContentSection
+          surface="tint"
+          align="center"
+          data-band={archetype}
+          eyebrow={section.heading ?? section.eyebrow}
+          footer={
+            section.more ? <CtaRow align="center" actions={[section.more]} /> : undefined
+          }
+        >
           {proofBlocks}
         </ContentSection>
       ) : (
@@ -235,12 +247,25 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
       );
     }
 
+    /* H — the client marks as the boxed LogoGrid (r7-logos). The section's heading is demoted to the
+       grid's eyebrow-size context line (the 7 Oct review: a full title here was "a hero
+       instrument"), start-aligned over the full-column grid, which is the band's shape. No score
+       beside the marks (proof types are never combined in one section): it leads the hero. */
+    case 'H': {
+      if (job?.kind !== 'logos') break;
+      return (
+        <Section aria-labelledby={section.id} data-band="H">
+          <Logos block={job} context={section.heading} headingId={section.id} />
+        </Section>
+      );
+    }
+
     default:
       break;
   }
 
   /* Everything else is a stacked band — centred or start-aligned as planned — with every block in
-     order: E (a diagram), H (marks), M (covers), N (the contrast pair), D-faq,
+     order: E (a diagram), M (covers), N (the contrast pair), D-faq,
      C-text. A centred
      thread centres its stages on their tracks, so the rail sits on the head's axis. */
   const blocks = section.blocks.map((block, index) => (
