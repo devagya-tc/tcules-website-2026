@@ -153,10 +153,10 @@ function variations(rating: HeroRating): Variation[] {
     },
     {
       id: 'photograph',
-      short: 'Photograph, foot field',
-      name: 'Photograph beside the copy, a field under it',
-      note: 'The photograph opening (kit/home takes it without the field since page-showcase fix round 2). A 5:4 photograph at 572 × 458, top-aligned on the eyebrow, radius 8. Under the copy, a field of the texture steps up toward the photograph and stands on its foot line: its edges are the copy track’s and its floor the photograph’s, so it reads as part of the grid. A two-line title leaves it the room.',
-      facts: ['Ends at 723', 'Accent + Texture', 'Foot field from 1440'],
+      short: 'Photograph',
+      name: 'Photograph beside the copy',
+      note: 'The photograph opening, as kit/home takes it. A 5:4 photograph at 572 × 458, top-aligned on the eyebrow, radius 8. No texture: a hero with an image carries none (owner, 9 Oct 2026; the stepped foot field under the copy was retired).',
+      facts: ['Ends at 723', 'Accent + Image'],
       hero: {
         eyebrow: 'Product design and engineering studio',
         title: 'Built to hold up in production',
@@ -170,7 +170,6 @@ function variations(rating: HeroRating): Variation[] {
           ratio: '5/4',
           image: photo('wireframe-wall', ''),
         },
-        texture: true,
       },
     },
     {
@@ -259,10 +258,10 @@ function variations(rating: HeroRating): Variation[] {
     },
     {
       id: 'text-field',
-      short: 'Text with the field',
-      name: 'No media, the field beside the copy',
-      note: 'The kit/services-index opening. The copy takes two thirds and the texture the last, a field that steps up to the column’s end edge and sinks into the floor, so the title stands in the clearing it leaves (Quantum’s move, made structural). Below 1024 it is not drawn: only the horizon runs there (§ 3.7).',
-      facts: ['Ends at 625', 'Accent + Texture', 'Field track [2, 1]'],
+      short: 'Text with the end-fade',
+      name: 'No media, the end-fade',
+      note: 'The kit/services-index opening. The copy holds the column; the texture is Statement’s end-fade, full strength along the end edge and fading toward the copy. Below 1024 it is not drawn. (The stepped field it replaced was retired, 9 Oct 2026.)',
+      facts: ['Ends at 625', 'Accent + Texture', 'End-fade from 1024'],
       hero: {
         trail: heroTrail(
           [
@@ -383,10 +382,10 @@ function variations(rating: HeroRating): Variation[] {
     {
       id: 'rating-field',
       group: 'rating',
-      short: 'Text, field, pill score',
-      name: 'No media, the field beside the copy, the score as the eyebrow',
-      note: 'The services index with a score where an eyebrow would have said “Services” a second time. The pill sits on the copy’s start edge; the field steps up in the end third as before, so the band keeps its two shapes.',
-      facts: ['Ends at 681', 'Pill frame', 'Field track [2, 1]'],
+      short: 'Text, end-fade, pill score',
+      name: 'No media, the end-fade, the score as the eyebrow',
+      note: 'The services index with a score where an eyebrow would have said “Services” a second time. The pill sits on the copy’s start edge; the end-fade runs down the end edge as on the plain no-media hero.',
+      facts: ['Ends at 681', 'Pill frame', 'End-fade from 1024'],
       hero: {
         trail: heroTrail(
           [

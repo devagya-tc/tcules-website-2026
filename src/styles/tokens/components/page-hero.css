@@ -228,9 +228,6 @@
      this layer: no primitive holds it. Restated ONCE in TypeScript, as CENTRED_MEDIA in
      src/lib/image-sizes.ts (which builds the `sizes` from it); change both in one edit. */
   --hero-media-size-centred: 860px;
-  /* The no-media field below 1024, where it is a block under the actions rather than a track:
-     2:1, 358 × 179 at 390 (Quantum's phone strip is 358 × 193). A ratio, not a distance. */
-  --hero-field-ratio: 2 / 1;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────

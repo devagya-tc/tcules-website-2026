@@ -320,7 +320,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/home',
         name: 'Kit showcase · Home',
-        note: 'the home page composed from the kit, warm family, 12 bands — the strip and the 5:4 photograph hero with its foot field, the real marks and rating, three services under a stacked head, a two-tone statement, the wireframe wall at the photograph weight with two tiles, the client slider on tint, four stats centred, the method beside its photograph, one 3:1 studio banner, questions, two pieces of writing and the close with its contact strip; texture hero foot / head-half / closing',
+        note: 'the home page composed from the kit, warm family, 12 bands — the strip and the 5:4 photograph hero, the real marks and rating, three services under a stacked head, a two-tone statement, the wireframe wall at the photograph weight with two tiles, the client slider on tint, four stats centred, the method beside its photograph, one 3:1 studio banner, questions, two pieces of writing and the close with its contact strip; texture head-half / closing',
       },
       {
         href: '/design/kit/about',

@@ -381,17 +381,13 @@ type PageHeroBaseProps = {
    */
   tags?: readonly string[];
   /**
-   * The Tcules pixel-grid texture, in the recipe the hero's media decides — a closed set, so a call
-   * site cannot misplace it (visual-direction § 6.3, redrawn in fix round 2 as hard-edged regions
-   * with a track of their own):
-   *   photograph  `foot`: from 1440, a stepped field under the COPY, below the actions, rising to
-   *               the gutter and sinking into the band's foot padding. Needs the copy to end about
-   *               100 above the photograph's foot (a two-line title); hidden below 1440.
-   *   no media    `field`: the end third of a [2, 1] split from 1024, stepping up to the column's
-   *               end; not drawn below 1024 (§ 3.7 item 5: only `horizon` runs there).
-   * The band rule (§ 4.3): an illustration hero spends its second blue mass on the field, so
-   * texture there is refused with a development warning, and so is any ground but paper (§ 6.2),
-   * and the `wide` and `display` shapes, where the photograph already holds the band.
+   * The Tcules pixel-grid texture, for a paper hero with NO media only: the end-fade, the field
+   * Statement's `end-fade` draws (end −120, 30% wide, blur 160, the band's full height), so it runs
+   * hard along the end edge and fades toward the copy. From 1024; not drawn below.
+   * A hero with a photograph, an illustration or a video carries no texture (owner, 9 Oct 2026:
+   * the stepped `foot` and `field` recipes were retired; a hard-edged block reads as an object
+   * competing with the copy, not as rhythm). Refused with a development warning there, and on any
+   * ground but paper (§ 6.2).
    */
   texture?: boolean;
   /** A one-line announcement above the hero (showcase pages only). See `HeroAnnouncement`. */
@@ -631,35 +627,15 @@ export function PageHero({
      on a phone), and its 17-unit mono labels came out at 7px at 1024; the legend sets them at 12. */
   const legend = media?.type === 'image' && isIllustration ? media.cut : undefined;
 
-  /* The texture recipe follows the media (visual-direction § 6.3, redrawn in cmp-hero fix round 2,
-     because round 1's plinth and column were soft fields with no edge: the plinth peeked out from
-     behind the photograph's corner like a drop shadow, and the column was a tinted strip with no
-     relation to the copy). Both are now STRUCTURAL regions with hard edges, in a track of their
-     own, cut as a stepped silhouette that rises to the band's end and sinks into its foot padding:
-       foot    a photograph beside the copy, from 1440: a field under the COPY, in the copy track
-               below the actions, its tallest step against the gutter and 48 under the ask, its
-               start edge the copy's own start edge and its floor the band's (Quantum's field
-               framing the type, references.md). Hidden below 1440, where the copy is as tall as the
-               photograph and no region is left under it, and on a phone, where it only dirtied the
-               end gutter.
-       field   no media: the end third of a [2, 1] split from 1024, beside the copy and stepping up
-               to the column's end edge, the copy standing in the clearing it leaves; not drawn below
-               1024 (page-showcase fix round 2, § 3.7 item 5).
-     Nothing else takes one — an illustration already spends the band's second blue mass (§ 4.3),
-     a video is a box of another origin's pixels, the wide and display shapes give the photograph
-     the band, and the grid is drawn for paper only (§ 6.2). */
-  const recipe =
-    !texture || surface !== 'paper'
-      ? undefined
-      : media === undefined
-        ? 'field'
-        : isPhotograph && split && !wide
-          ? 'foot'
-          : undefined;
-  if (process.env.NODE_ENV !== 'production' && texture && recipe === undefined) {
+  /* The texture: the end-fade, on a paper hero with no media, and nothing else (owner, 9 Oct
+     2026). The stepped `foot` (under the copy beside a photograph) and `field` (the end third of a
+     no-media band) were retired: a hard-edged block reads as an object competing with the copy, not
+     as rhythm. A hero with media already has its image; the grid is drawn for paper only (§ 6.2). */
+  const faded = texture && surface === 'paper' && media === undefined;
+  if (process.env.NODE_ENV !== 'production' && texture && !faded) {
     console.warn(
-      `PageHero: texture is for a paper hero with a photograph beside the copy, or with no media ` +
-        `(visual-direction § 4.3, § 6.2). Ignored here.`,
+      `PageHero: texture is for a paper hero with no media (the end-fade); a hero with an image ` +
+        `carries none (§ 6.2). Ignored here.`,
     );
   }
 
@@ -1009,57 +985,16 @@ export function PageHero({
                  idea, so the home and studio heroes are not one rectangle at a squint (fix round 2).
         centred  single track, centred, the media capped at --hero-media-size-centred.
        Copy and media are unequal heights by design. An illustration is centred on the copy;
-       anything else is top-aligned in its own box, and the COPY track stretches to the row so the
-       foot field can take the height left under the actions. */
+       anything else is top-aligned in its own box. */
     const columns = !split
-      ? recipe === 'field'
-        ? { lg: [2, 1] }
-        : undefined
+      ? undefined
       : wide
         ? { lg: [1, 1], xl: [2, 3] }
         : isIllustration
           ? { lg: [2, 1], xl: [1, 1] }
           : { lg: [1, 1] };
 
-    /* foot · pinned to the copy track's foot, filling the 1fr row pinLast leaves under the stack.
-       No row gap: the 48 between the ask and the field's tallest step is the field's own geometry
-       (top 48), so a field hidden below 1440 leaves no empty seam behind. */
-    const copyTrack =
-      recipe === 'foot' ? (
-        <Layout pinLast>
-          {stack}
-          <div className={styles.foot}>
-            <Texture className={styles.fieldTexture}>
-              {/* Three steps rising toward the photograph off its foot line: a quarter and
-                  under half of the field, then the last third full height to 48 under the ask.
-                  Proportional rather than 40 / 72 px since the field stopped sinking into the
-                  padding (kit/page-showcase fix round 1): in the ~110 left under a two-line title
-                  a fixed 72 stood taller than the last step. Hard edges (blur 0), so the field is
-                  a shape with an edge on the copy track rather than a smudge. */}
-              <TextureShape left={0} bottom={0} width="34%" height="25%" />
-              <TextureShape left="34%" bottom={0} width="33%" height="45%" />
-              <TextureShape left="67%" top={48} width="33%" height="100%" />
-            </Texture>
-          </div>
-        </Layout>
-      ) : (
-        stack
-      );
-
-    const field =
-      recipe === 'field' ? (
-        <div className={styles.field}>
-          <Texture className={styles.fieldTexture}>
-            {/* Three steps rising to the column's end edge, the last full height from the title's
-                top: a clearing at the track's start for the copy beside it to stand in. Hard edges;
-                the field sinks into the band's foot padding (fieldTexture), so it rises from the
-                floor rather than floating as a panel. */}
-            <TextureShape left={0} top="56%" width="34%" height="100%" />
-            <TextureShape left="34%" top="28%" width="33%" height="100%" />
-            <TextureShape left="67%" top={0} width="33%" height="100%" />
-          </Texture>
-        </div>
-      ) : null;
+    const copyTrack = stack;
 
     const mediaTrack =
       mediaNode === null ? null : centredHead ? (
@@ -1082,7 +1017,6 @@ export function PageHero({
       >
         {copyColumn}
         {mediaTrack}
-        {field}
       </Layout>
     );
     top = centred ? content : withTrail(content);
@@ -1116,6 +1050,14 @@ export function PageHero({
                 : 'hero-stacked'
       }
     >
+      {faded ? (
+        /* end-fade: Statement's recipe, a direct child of Section so the field is the band's
+           padding box. Run from −50% to 150% of the band's height, so the blur's vertical falloff
+           is clipped and the grid holds full strength along the end edge. From 1024 only. */
+        <Texture className={styles.fade}>
+          <TextureShape top="-50%" right={-120} width="30%" height="200%" blur={160} />
+        </Texture>
+      ) : null}
       {announcement === undefined ? (
         top
       ) : (

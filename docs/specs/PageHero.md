@@ -1058,3 +1058,14 @@ Owner, 7 Oct 2026 review (`docs/kit/review-7-oct.md`, r7-hero; reference doodle.
   `lg` reads `--hero-lead-text-lg` (`--text-lead`, the old default) and is an opt-in for a page
   written for search, chosen per family in code. On a phone both are 18. Every hero in the kit got
   4 to 7px shorter; the kit's "Ends at" facts were re-measured. Block 23 and `/design/kit/hero` 17.
+
+### Amendment · 9 Oct 2026 — the stepped texture recipes retired
+
+Owner review: both hero textures were "bad use of texture". The stepped `foot` (under the copy beside
+a photograph) and `field` (the end third of a no-media band, `[2, 1]`) are removed with their CSS
+and `--hero-field-ratio`. A hard-edged block reads as an object competing with the copy, not as
+rhythm. `texture` now means one thing: a paper hero with **no media** draws Statement's `end-fade`
+field (end −120, 30% wide, blur 160, full band height) from 1024. A hero with a photograph, an
+illustration or a video carries no texture; `texture` there is ignored with a development warning.
+The texture row in the props table above and the fix-round rows that describe `foot` / `field` are
+superseded by this amendment. `/design/texture` shows the stepped block under "Never".

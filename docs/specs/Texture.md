@@ -75,6 +75,9 @@ side of ch05:
    anywhere text could be at some width) takes `blur` of 100 or more. A hard or lightly feathered
    edge inside the column reads as a shape, not as texture, and at 390 the column is the whole band.
    Only a shape wholly outside the column — in a gutter, or off the field — may be harder.
+7. **Never a stepped, hard-edged block** (owner, 9 Oct 2026). The PageHero `foot` and `field`
+   staircases were retired: a hard-edged block reads as an object competing with the copy, not as
+   rhythm. Shown under "Never" on `/design/texture`.
 
 **How "under" is judged.** A shape's box is the rectangle or ellipse before blur, where the grid is
 at full strength. It must not intersect the box of a heading, a body paragraph or an image. The

@@ -195,6 +195,27 @@ export default function TextureSpecimenPage() {
 
       <Section flush>
         <Specimen
+          title="Never · a stepped block"
+          note="Retired 9 Oct 2026 (the PageHero foot and field recipes). A hard-edged block reads as an object competing with the copy, not as rhythm. A hero with an image takes no texture; a hero with none takes the end-fade."
+        >
+          <p className={s.specNote}>The band below shows what not to do.</p>
+        </Specimen>
+      </Section>
+
+      <Section>
+        <Texture>
+          <TextureShape right={0} top="20%" width="12%" height="100%" />
+          <TextureShape right="12%" top="45%" width="12%" height="100%" />
+          <TextureShape right="24%" top="70%" width="12%" height="100%" />
+        </Texture>
+        <Copy title="Never · the stepped staircase">
+          The hard-edged staircase the hero once carried beside or under its copy. It reads as an
+          object competing with the copy, not as rhythm.
+        </Copy>
+      </Section>
+
+      <Section flush>
+        <Specimen
           title="Mechanism · how the grid is drawn"
           note="Below: the Texture primitive the placements are built from. The pixel grid fills the band edge to edge, sits between the band's ground and its content, and shows only through the shapes placed in it; blur a shape and the grid fades with it. Shapes are placed like absolutely positioned boxes, blur takes Figma's number, and the grid's geometry is src/styles/textures/pixel-grid.json, the same spec npm run texture exports from. These are technical specimens, not placements."
         >

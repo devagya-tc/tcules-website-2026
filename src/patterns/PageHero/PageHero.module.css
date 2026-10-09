@@ -9,7 +9,7 @@
    ── Which parts carry a value here ──────────────────────────────────────────────
    The text parts carry an ink and a type role each; the marks (the eyebrow's, the tags', the
    flag's square and the legend's numerals) carry a size and a blue; the video frame is the one box
-   the component draws; the two texture fields carry a position and a size, and nothing else. The
+   the component draws; the texture carries a visibility switch, and nothing else. The
    structural parts — root, top, split, stack, opening, copy, byline, pair, actions — carry
    DISTANCE ONLY, and every one of those distances is a Section, Layout or Cluster gap prop in the
    TSX. Extras and trail carry NOTHING AT ALL: the caller's block and the Breadcrumbs the caller
@@ -21,8 +21,8 @@
 
    The media part takes no class of its own. The image is a Media, whose module owns it; `.video` is
    the other rendering of the same slot, mutually exclusive by the prop's union. In a split a
-   photograph or video sits in a classless <div>, so the row's stretch (which the copy track needs
-   for the foot field) reaches that box and never the image. The aspect-ratio goes on the <iframe>.
+   photograph or video sits in a classless <div>, so the row's stretch reaches that box and never
+   the image. The aspect-ratio goes on the <iframe>.
 
    ── What is NOT here, and why each absence is a decision ────────────────────────
    No display:flex and no display:grid. Every arrangement in this component is a Layout or a
@@ -30,9 +30,9 @@
    Button's, centring a label in its own control box, which is not arrangement. The two
    display:block declaration below de-inlines a replaced element; it arranges nothing.
 
-   One position, and no z-index: the two texture fields are `position: relative` so the Texture
-   inside each fills that region rather than the band (the field's z-index is Texture's own, and
-   resolves inside the Section's isolation). Nothing else is positioned, INCLUDING the video. The 16/9 box is an aspect-ratio
+   No position and no z-index: the end-fade Texture is a direct child of the Section and fills the
+   band (its z-index is Texture's own, and resolves inside the Section's isolation). Nothing here is
+   positioned, INCLUDING the video. The 16/9 box is an aspect-ratio
    on the iframe itself, so the padding-top-percentage-plus-absolute-fill idiom that every embed
    snippet on the internet still carries is not needed here: it predates aspect-ratio, it needs a
    wrapper this component would otherwise not have, and it manufactures a stacking context in a
@@ -47,11 +47,9 @@
    slot. That edge is the strongest vertical line on the page and it must be in the same place on
    all 129 of them. So there is no reach into --space-* here either.
 
-   Four @media blocks at the foot of the file, and none of them arranges anything: one hides the
+   Two @media blocks at the foot of the file, and neither arranges anything: one hides the
    illustration's legend from 1440 (where the drawing's own labels are legible and the <picture>
-   serves the drawing rather than its numbered cut), one hides the foot field below 1440, and one
-   lets the no-media field take its row's height from 1024 rather than its own 2:1, and one hides
-   that field below 1024. Every
+   serves the drawing rather than its numbered cut), and one shows the end-fade from 1024. Every
    arrangement that changes at a breakpoint — the splits, the phone stacking of the actions — is a
    Layout or Cluster prop; the measures are `ch`-based so they follow the type down with no second
    value to keep in sync. Nothing moves, so reduced motion has nothing to switch off.
@@ -349,66 +347,26 @@
   color: var(--hero-numeral-accent-glyph-ink);
 }
 
-/* ── texture fields · a region with an edge, in a track of its own ────────────────
-   Both are `position: relative` boxes the layout sizes, so the Texture inside fills the REGION
-   rather than the band and its shapes are placed against the copy track (foot) or the field track
-   (field), not against the viewport. Round 1's recipes were placed against the band and could only
-   guess where the column was; these share the grid's edges by construction.
-
-   The no-media .fieldTexture runs one band padding past its box (--gap-section, the 96 Section's
-   default density pads with), so it sinks into the band's floor; the foot field stops on the
-   photograph's foot line instead (below). Two classes, so it outranks Texture's own `height: 100%` whatever
-   order the bundler emits the modules in.
-
-     foot   fills the 1fr row Layout's pinLast leaves under the copy stack (block-size 100%).
-     field  from 1024 its track's full height, beside the copy, because the split stretches the
-            row; not drawn below 1024 (page-showcase fix round 2: § 3.7 item 5 runs only `horizon`
-            there, and the 2:1 block under the actions was ~200 of near-empty dots in the first
-            screen). The ratio stays as the box's floor should the switch below ever move. */
-.foot,
-.field {
-  position: relative;
-}
-.foot {
-  block-size: 100%;
-}
-.field {
-  aspect-ratio: var(--hero-field-ratio);
-}
-/* The foot field ends ON the photograph's foot line (kit/page-showcase fix round 1): its box is the
-   row left under the copy, whose floor is the photo's bottom edge, so the field and the photo share
-   one baseline. Sunk into the padding it ended 96 below the photo, touching nothing but the band's
-   invisible paper-on-paper seam, and read as an orphaned bar chart under the copy. */
-.field .fieldTexture {
-  block-size: calc(100% + var(--gap-section));
+/* ── texture · the end-fade, a paper hero with no media only ─────────────────────
+   Statement's end-fade recipe, a direct child of the Section. The stepped foot and field regions
+   were retired (owner, 9 Oct 2026). Hidden below 1024, where it would sit behind the copy. */
+.fade {
+  display: none;
 }
 
 /* ── breakpoint switches ─────────────────────────────────────────────────────────
      legend  the numbered cut's legend shows where the <picture> serves the cut: below 1440.
              KEEP IN STEP with CUT_QUERY in PageHero.tsx, the <source> media query Media renders:
              a module cannot read the TSX constant, so the breakpoint is written in both.
-     foot    the foot field from 1440 only, where a two-line title leaves a region under the copy;
-             below it the copy is as tall as the photograph, and on a phone the field sat in the
-             gutter beside a stacked image.
-     field   its row's height from 1024, where it is a track beside the copy. */
+     fade    the end-fade from 1024 only. */
 @media (min-width: 1440px) {
   .legend {
     display: none;
   }
 }
-@media (max-width: 1439.98px) {
-  .foot {
-    display: none;
-  }
-}
 @media (min-width: 1024px) {
-  .field {
-    aspect-ratio: auto;
-  }
-}
-@media (max-width: 1023.98px) {
-  .field {
-    display: none;
+  .fade {
+    display: block;
   }
 }
 

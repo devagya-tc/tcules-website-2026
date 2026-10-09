@@ -35,8 +35,8 @@ export const metadata: Metadata = {
  * (visual-direction § 8.3). Eleven bands, the COOL family (cool + neutral photographs only, no vivid
  * frame), showcase copy written inline (§ 8.4):
  *
- *    1  A      the trail and the no-media hero, the `hero-field` stepping up to the column's end
- *              from 1024 (§ 8.3); below 1024 it is not drawn (§ 3.7 item 5). Fix round 2: the
+ *    1  A      the trail and the no-media hero, with the end-fade texture from 1024 (the stepped
+ *              `hero-field` was retired, 9 Oct 2026); below 1024 it is not drawn (§ 3.7 item 5). Fix round 2: the
  *              title-led panorama moved to the about page, so no two showcase heroes share a shape
  *    2  C-icon the router: six linked services under a stacked head, no photograph (owner, 9 Oct
  *              2026: a section of clickable cards stacks its head and carries no image)
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
  *              index answers "which service?" with a conversation, so its close is two asks, not a
  *              form (the home and about closes carry the forms)
  *
- * Texture: hero-field on A, horizon above G, closing on L — three, never adjacent (§ 6.4). Proof is
+ * Texture: end-fade on A, horizon above G, closing on L — three, never adjacent (§ 6.4). Proof is
  * real where it is shown with the real score (§ 5.8): the product-design story's approved quote,
  * read through the content seam, with no portrait. Media sides alternate: C-icon start, B end,
  * K end, the pair centred. Every photograph is people at work or the product on a screen, sharp
@@ -327,7 +327,7 @@ export default function KitServicesIndexPage() {
 
   return (
     <>
-      {/* 1 · A — no media, the hero-field stepping up to the column's end from 1024. */}
+      {/* 1 · A — no media, the end-fade down the band's end edge from 1024. */}
       <PageHero
         data-band="A"
         data-fold-hero=""
