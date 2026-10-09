@@ -110,21 +110,6 @@ export type BlockCardRatio = 'cover' | 'wide' | 'panorama' | 'double' | 'square'
 export type BlockCardCue = 'title' | 'cta' | 'download';
 
 /**
- * The card's finish (owner, 7 Oct 2026 — a partial reversal of "a card is never a box",
- * visual-direction § 3.1).
- *
- *   none  the default: the borderless card, bounded by its set's gutter and its cover's edge.
- *   box   a hairline round the card at the 8 radius, its content a `block` (24) inside, and — on a
- *         linked card — a ground under the pointer. For a set whose cards must read as separate
- *         objects at a glance: an icon router of four to six destinations, where open icon cards
- *         two across read as one field of text. A text-only card drops its top hairline inside a
- *         box, whose own top edge already draws it.
- *
- * A set's decision, like the type step: BlockCardSet `frame` states it for every card.
- */
-export type BlockCardFrame = 'none' | 'box';
-
-/**
  * Which axis the card arranges on. A PRESENTATION choice, never a CMS field.
  *
  *   vertical    the grid tile: media above copy, filling one track of a multi-column Layout.
@@ -275,9 +260,10 @@ export type BlockCardProps = {
   /** The cover's crop. Defaults to `cover` (3:2). Ignored when horizontal, which is always 3:2. */
   ratio?: BlockCardRatio;
   /**
-   * A Solar Bold glyph heading a card with NO cover — the icon card of C-icon (visual-direction
-   * § 1.4: icon 32; 16; h5; 16; body-sm). Blue, because icons carry the foreground accent (§ 4.2).
-   * Ignored when the card has a cover: a card has one object at its head, never two.
+   * A Solar Bold glyph on the title's first line of a card with NO cover — the icon card of C-icon.
+   * Sized to the title beside it, from --bcrd-icon-size (owner, 7 Oct 2026: the 32 glyph heading
+   * the card was far too big). Blue, because icons carry the foreground accent (§ 4.2). Ignored
+   * when the card has a cover: a card has one object at its head, never two.
    */
   icon?: IconName;
   /**
@@ -288,8 +274,6 @@ export type BlockCardProps = {
   index?: number;
   /** How a linked card says it navigates. See `BlockCardCue`. Ignored without `href`. */
   cue?: BlockCardCue;
-  /** The card's finish. Defaults to `none`. See `BlockCardFrame`. */
-  frame?: BlockCardFrame;
   /**
    * The cover takes the card's spare height when the card is stretched taller than its own
    * content, never dropping below its ratio (Layout `fillFirst`). A set's decision, for the one
@@ -427,7 +411,6 @@ export function BlockCard({
   icon,
   index,
   cue,
-  frame = 'none',
   meta,
   grow = false,
 }: BlockCardProps) {
@@ -477,21 +460,19 @@ export function BlockCard({
   const iconNode =
     icon !== undefined && !imageNode ? (
       <span className={styles.icon}>
-        <Icon name={icon} size="xl" />
+        <Icon name={icon} />
       </span>
     ) : null;
 
-  /* A text-only card — no cover and no icon — takes a hairline at its own top edge, the width of
-     the card (visual-direction § 3.1, 6 Oct 2026). It stands in for the top edge an image would
-     give; the set's 32 gutter breaks it between cards, so a row reads as three objects and not as
-     a table. It is a row of the frame's Layout, so the 24 under it is that Layout's `block` seam —
-     the image-to-copy distance, which is exactly the relationship it replaces. Decoration: hidden.
-     A boxed card draws none: the box's own top edge is that edge, and a second hairline 24 under
-     it would be a double rule. */
+  /* A card with no cover — a text card or an icon card — takes a hairline at its own top edge, the
+     width of the card (visual-direction § 3.1, 6 Oct 2026). It stands in for the top edge an image
+     would give; the set's 32 gutter breaks it between cards, so a row reads as three objects and
+     not as a table. It is a row of the frame's Layout, so the 24 under it is that Layout's `block`
+     seam — the image-to-copy distance, which is exactly the relationship it replaces. The icon card
+     took it when the box went (owner, 7 Oct 2026: "the boxed card variant goes"): the rule is what
+     separates six open icon cards, as it already does ListCard's icon tile. Decoration: hidden. */
   const textOnly = !imageNode && !iconNode;
-  const boxed = frame === 'box';
-  const ruleNode =
-    textOnly && !boxed ? <span className={styles.textRule} aria-hidden="true" /> : null;
+  const ruleNode = !imageNode ? <span className={styles.textRule} aria-hidden="true" /> : null;
 
   /* Which cue a linked card carries. The caller's, or the shape's default: a covered or icon card
      is title-cued, a text-only card carries the cta (every live route's shape). */
@@ -573,24 +554,25 @@ export function BlockCard({
      it. 16 is one step under the section head's 24, so a card reads as a smaller unit of the same
      system (visual-direction § 1.1, S2). It was `tight` (8): three rows at one step have no
      hierarchy, and a 12px label 8px over a 28px serif read as cramped. */
-  /* An icon card on a phone sets its glyph BEFORE the title, on the title's row (page-product-design
-     fix round 1, 7 Oct 2026): stacked, six icon cards at 390 ran the router band to 1757, past the
-     1700 phone ceiling, and each glyph took a 48 row of its own above a one-line title. [1, 7] at
-     the 326 column is a 41 track for the 32 glyph, `tight` to the title, centred on its first line;
-     from md the pair is one track again and the glyph heads the card, `text` above the title. */
-  const head =
-    iconNode && !eyebrowNode ? (
-      <Layout columns={{ base: [1, 7], md: 1 }} colGap="tight" rowGap="text" align="center">
-        {iconNode}
-        {titleNode}
-      </Layout>
-    ) : (
-      <>
-        {iconNode}
-        {eyebrowNode}
-        {titleNode}
-      </>
-    );
+  /* An icon card sets its glyph on the title's FIRST LINE, before it, at every width (owner, 7 Oct
+     2026: size each icon to the card title beside it). The glyph's box is the title's line box
+     (.icon), so `start` alignment is first-line centring without measuring anything; the auto
+     track is the glyph's own width and `tight` is the icon-to-label step. An eyebrow or index, if
+     any, labels the pair from above. */
+  const titleRow = iconNode ? (
+    <Layout columns={{ base: ['auto', 1] }} colGap="tight" align="start">
+      {iconNode}
+      {titleNode}
+    </Layout>
+  ) : (
+    titleNode
+  );
+  const head = (
+    <>
+      {eyebrowNode}
+      {titleRow}
+    </>
+  );
   const content = (
     <Layout rowGap="block" className={styles.content}>
       <Layout rowGap="text">
@@ -640,9 +622,7 @@ export function BlockCard({
         {ruleNode}
         <Layout columns={[1, 1]} colGap="column" rowGap="text" align="start">
           <Layout rowGap="text" className={styles.content}>
-            {iconNode}
-            {eyebrowNode}
-            {titleNode}
+            {head}
           </Layout>
           <Layout rowGap="block" className={styles.content}>
             {bodyNode}
@@ -659,8 +639,7 @@ export function BlockCard({
       /* An action row sits on the card's FOOT (§ 3.1 item 4, "pinLast for the CTA"; owner, 7 Oct
          2026: "a link button at its foot"). The stack is flattened so the cta is its own last row,
          and `pinLast` gives that row the spare height of a card stretched to its row's tallest, so
-         every action in a row sits on one line — which a box's visible foot makes plain when it
-         does not. The seams are the ones the nested stack had: `block` from the cover or rule to
+         every action in a row sits on one line. The seams are the ones the nested stack had: `block` from the cover or rule to
          the copy, and from the copy to the cta. */
       frameContent = (
         <Layout rowGap="block" pinLast className={styles.grow}>
@@ -685,7 +664,7 @@ export function BlockCard({
   }
 
   return (
-    <li className={cx(styles.root, SIZE_CLASS[step], boxed && styles.boxed)}>
+    <li className={cx(styles.root, SIZE_CLASS[step])}>
       {destination ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it
            declares that this anchor's hover, focus-visible and pressed states are the states of

@@ -41,7 +41,7 @@ rework come later, once the owner delivers the copy.
 - [ ] **r7-statement — retire the display size.** "Way too big", "not a title-level thing but a very
       special text". The smaller variant reads better. Trying the secondary brand shapes is the owner's
       job (Figma); leave a graphic slot ready if it fits cleanly.
-- [ ] **r7-cards — clickable-card sections.**
+- [x] **r7-cards — clickable-card sections.** (kit/r7-cards)
       - The boxed 6-card grid with an image beside it was too busy. The arrangement is eyebrow, heading,
         body, then the cards.
       - **Rule:** no decorative image in a section that has clickable cards.

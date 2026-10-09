@@ -4,7 +4,6 @@ export type {
   ListCardMarker,
   ListCardArrangement,
   ListCardForm,
-  ListCardFrame,
   ListCardNumberTone,
   ListCardSize,
   ListCardTitleElement,
