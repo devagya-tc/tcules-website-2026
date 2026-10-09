@@ -14,7 +14,7 @@ rework come later, once the owner delivers the copy.
       **link button** for every other (navigational) action. "Start with a UX product audit" inside a
       band is a link, not a button. This reverses `fix/tone` ("converts blue, else ink"): remove the
       ink solid tone and migrate every call site.
-- [ ] **r7-logos — boxed logo grid.** Reference: Enorm, Dribbble
+- [x] **r7-logos — boxed logo grid.** (kit/r7-logos) Reference: Enorm, Dribbble
       (https://dribbble.com/shots/26454188-Enorm-Technology-Client-Logos-Partner-Trust-Section-UI). Each
       logo sits in its own boxed cell with equal weight (**owner, 8 Oct: work with the 9 logos we have** in public/clients), so the box reads as the logo even though our marks
       differ in kind: wordmark, badge (GT Tools), symbol between words (Doodle). Boxes are allowed here

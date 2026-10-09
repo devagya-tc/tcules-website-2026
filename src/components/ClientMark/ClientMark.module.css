@@ -78,6 +78,15 @@
   print-color-adjust: exact;
 }
 
+/* size="sm": the grid's step. It swaps the three geometry inputs for their -sm tokens on this
+   element only; every formula above reads the swapped values, so area, caps and correction keep
+   ch05's order unchanged. The -sm tokens equal the base ones from 768 up (client-mark.css). */
+.sm {
+  --cmark-target-side: var(--cmark-target-side-sm);
+  --cmark-height-max: var(--cmark-height-max-sm);
+  --cmark-width-max: var(--cmark-width-max-sm);
+}
+
 /* Forced colours (Windows High Contrast). The UA replaces every background-color with the
    system Canvas colour, which is the ground — so an unadjusted mark would vanish into it with
    its name still announced and nothing on screen. Opting out of the adjustment and painting

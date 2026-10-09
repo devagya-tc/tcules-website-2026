@@ -313,3 +313,12 @@ export type {
 
 /* Thread — stages one decision passes through, on one blue line, with a return path (E band). */
 export { Thread, type ThreadProps, type ThreadStage, type ThreadStageHeading } from './Thread';
+
+/* LogoGrid — client marks in equal hairline cells, with an optional badge and context line (H band). */
+export {
+  LogoGrid,
+  logoGridColumns,
+  type LogoGridProps,
+  type LogoGridMark,
+  type LogoGridTrack,
+} from './LogoGrid';

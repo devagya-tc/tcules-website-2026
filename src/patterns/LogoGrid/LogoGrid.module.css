@@ -1,0 +1,49 @@
+/* LogoGrid — the hairline cells and the context line. Layout owns the columns and Cluster the
+   centring; nothing here arranges anything. Every value is a token.
+
+   How the hairlines are drawn. Each cell rules its own block-start and inline-start edge, so two
+   neighbours never double a line, whatever the column count. `open` then clips the grid's first
+   hairline-width at the top and the start, which removes exactly the outer top and start edges
+   (no cell rules its end or bottom edge, so those are absent already): rules only BETWEEN cells,
+   the reference's treatment, with no row or column to special-case. `closed` instead adds the end
+   and bottom edges to the grid itself, so every cell is a whole box. Neither needs a margin, a
+   negative offset or a gap: the grid's gaps are 0 because no axis is stated (Layout rule 3), and
+   that seam is the point — the cells share their edges. */
+
+.cell {
+  min-block-size: var(--lgrid-cell-height);
+
+  /* A guard, not a layout distance between things: the mark never touches a hairline in the
+     narrowest cell (~119 at 390 three across). The one step serves every width; the scale does
+     not shift responsively. */
+  padding-inline: var(--gap-tight);
+  border-block-start: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
+  border-inline-start: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
+}
+
+.open {
+  clip-path: inset(var(--lgrid-rule-width) 0 0 var(--lgrid-rule-width));
+}
+
+/* Inline-start is the right edge in a right-to-left page. */
+.open:dir(rtl) {
+  clip-path: inset(var(--lgrid-rule-width) var(--lgrid-rule-width) 0 0);
+}
+
+.closed {
+  border-block-end: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
+  border-inline-end: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
+}
+
+/* The demoted heading: the eyebrow role, so mono and uppercase in presentation only. */
+.context {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--lgrid-context-ink);
+  text-wrap: var(--text-title-wrap);
+}
+
+.centred {
+  text-align: center;
+}

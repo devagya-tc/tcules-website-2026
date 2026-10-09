@@ -260,7 +260,12 @@ const SPECIMENS = [
       {
         href: '/design/kit/logos',
         name: 'Kit · Client logos',
-        note: 'band H as a composition: centred strip, tint, grid beside a head, marks beside a real quote, a sourced figure, CtaRow',
+        note: 'band H, the boxed grid (r7): context line, led by the rating badge, beside a short heading, 12 cells closed',
+      },
+      {
+        href: '/design/kit/logos',
+        name: 'LogoGrid',
+        note: 'client marks in equal hairline cells; columns from the count so rows are full at 8, 9 and 12; open or closed edge',
       },
       {
         href: '/design/kit/cta',

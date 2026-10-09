@@ -303,6 +303,23 @@ export default function ClientMarkSpecimenPage() {
           </Specimen>
 
           <Specimen
+            title="Two sizes — md and sm"
+            note="size=&quot;sm&quot; is the logo grid's mark (r7-logos). From 768 it IS md, so the two rows match at 1440; below 768 sm steps to 36 / 26 / 90 against md's 44 / 32 / 128, which lets LogoGrid set nine marks three across a 390 column at equal weight. One size per set, always."
+          >
+            <Layout rowGap="stack">
+              {(['md', 'sm'] as const).map((size) => (
+                <Cluster key={size} as="ul" colGap="stack" rowGap="stack" align="center">
+                  {STRIP.map((mark) => (
+                    <li key={mark.name}>
+                      <ClientMark {...bare(mark)} size={size} />
+                    </li>
+                  ))}
+                </Cluster>
+              ))}
+            </Layout>
+          </Specimen>
+
+          <Specimen
             title="A lone mark"
             note="One mark, still in the ground's ink and still at the set's size. ch05 §10 lets a mark shown alone beside its own case study be the client's full-colour version — that is the client's file in a Figure, not this component."
           >

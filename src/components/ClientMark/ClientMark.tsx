@@ -34,6 +34,13 @@ export type ClientMarkProps = {
    * after it, the width cap does not, so a corrected wide mark may reach 184.
    */
   correction?: number;
+  /**
+   * The size step. `md` (default) is the strip's mark. `sm` is the mark for a dense logo grid: the
+   * same size from 768 up, one step smaller below it, so nine marks fit three across a phone's
+   * column at equal weight instead of the widest letterboxing (r7-logos, 9 Oct 2026). Every mark
+   * in one set takes the same size, or the set stops being equal-weight.
+   */
+  size?: 'md' | 'sm';
   className?: string;
 };
 
@@ -74,6 +81,7 @@ export function ClientMark({
   width,
   height,
   correction = 0,
+  size = 'md',
   className,
 }: ClientMarkProps) {
   if (!src) {
@@ -121,6 +129,11 @@ export function ClientMark({
     /* role="img" + aria-label: the element has no content, so the label is its entire accessible
        text, and the role makes a screen reader announce it as an image ("Northwind, image")
        rather than skip an empty span. */
-    <span role="img" aria-label={name} className={cx(styles.mark, className)} style={vars} />
+    <span
+      role="img"
+      aria-label={name}
+      className={cx(styles.mark, size === 'sm' && styles.sm, className)}
+      style={vars}
+    />
   );
 }
