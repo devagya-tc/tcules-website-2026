@@ -36,7 +36,7 @@ export type StatementTexture = 'head-half' | 'corner';
  * (24) apart, the action a `stack` (48) under it.
  *
  *   start   default. On the band's start edge, the sentence on its own generous measure (the title
- *           measure at h1, the display measure at display), the band's end left open as air.
+ *           measure), the band's end left open as air.
  *   center  eyebrow, sentence and action centred on the band's axis across the full measure —
  *           Meridian's overview line. For a page whose neighbouring bands already start their
  *           content on the start edge. Pair it with `texture="corner"`, the corner being the only
@@ -47,19 +47,27 @@ export type StatementTexture = 'head-half' | 'corner';
  */
 export type StatementAlign = 'start' | 'center';
 
-/**
- * The sentence's scale. `h1` (default) the h1 role; `display` the display role, the hero's — for
- * the one band on a page that restates its argument at the scale of its opening.
- */
-export type StatementSize = 'h1' | 'display';
-
 export type StatementProps = {
   /** Default `start`. See `StatementAlign`. */
   align?: StatementAlign;
-  /** Default `h1`. See `StatementSize`. */
-  size?: StatementSize;
   /** The sentence, ≤ 14 words so it holds ≤ 3 lines at the h1 role on its measure (§ 1.5). */
   children: string;
+  /**
+   * The words the sentence turns on — a phrase of `children`, verbatim, usually its close. Given,
+   * the sentence goes two-tone: the rest steps back to a quiet ink and the phrase holds full ink,
+   * set italic. That voice is what makes a statement read as a said thing rather than as the
+   * title of a section (owner, 7 Oct 2026: "not a title-level thing but a very special text").
+   * Both tones are ink; blue never sets words (§ 4.3). A phrase not found in the sentence is
+   * ignored with a warning.
+   */
+  emphasis?: string;
+  /**
+   * An optional graphic above the eyebrow: a secondary brand shape, one per band, decorative.
+   * Statement sizes the slot (--stmt-graphic-size, square) and the caller supplies the shape, so
+   * the shape is chosen where the page is composed (owner, 7 Oct 2026: trying the shapes is
+   * Figma work). Render it aria-hidden; it says nothing the sentence does not.
+   */
+  graphic?: ReactNode;
   /** The label directly above the sentence. Never repeats the band before it (§ 7.3). */
   eyebrow?: string;
   /** The sentence's element. Default `h2`. */
@@ -87,6 +95,11 @@ export type StatementProps = {
  * statement ~1.6× the standard air, and that maps to `--gap-section-open`, never to an invented 208
  * (references § Meridian).
  *
+ * One size, the h1 role: the display size was retired (owner, 7 Oct 2026: "way too big"). What
+ * sets the sentence apart from a section title is its voice, not its scale — regular weight, and
+ * with `emphasis` two tones of ink and an italic turn. An optional `graphic` sits a `block` above
+ * the eyebrow.
+ *
  * The sentence stays ink. Eyebrows carry no mark (owner, 7 Oct 2026).
  *
  * It contributes type and ink only. Section paints the band and its air, Layout owns
@@ -100,8 +113,9 @@ export function Statement({
   actions,
   texture,
   surface = 'paper',
-  size = 'h1',
   align = 'start',
+  emphasis,
+  graphic,
 }: StatementProps) {
   const heading = Tag === 'h2';
   const labelled = heading && Boolean(id);
@@ -114,17 +128,27 @@ export function Statement({
     console.warn(`Statement: texture sits on paper only (§ 6.2); ignored on "${surface}".`);
   }
 
+  const at = emphasis ? children.indexOf(emphasis) : -1;
+  if (process.env.NODE_ENV !== 'production' && emphasis && at < 0) {
+    console.warn(`Statement: emphasis "${emphasis}" is not a phrase of the sentence; ignored.`);
+  }
+  const toned = emphasis !== undefined && emphasis !== '' && at >= 0;
+
   const sentence = (
     <Tag
       id={heading ? id : undefined}
-      className={cx(
-        styles.sentence,
-        size === 'display' && styles.sentenceDisplay,
-        centred && styles.centred,
-      )}
+      className={cx(styles.sentence, toned && styles.toned, centred && styles.centred)}
       data-copy="statement"
     >
-      {children}
+      {toned ? (
+        <>
+          {children.slice(0, at)}
+          <em className={styles.emphasis}>{emphasis}</em>
+          {children.slice(at + emphasis.length)}
+        </>
+      ) : (
+        children
+      )}
     </Tag>
   );
 
@@ -155,6 +179,11 @@ export function Statement({
           band's axis; start-aligned, every part keeps the start edge. */}
       <Layout rowGap="stack" justifyItems={centred ? 'center' : undefined}>
         <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
+          {graphic ? (
+            <div className={styles.graphic} aria-hidden="true">
+              {graphic}
+            </div>
+          ) : null}
           {eyebrow ? (
             <p className={styles.eyebrow} data-copy="eyebrow">
               {eyebrow}

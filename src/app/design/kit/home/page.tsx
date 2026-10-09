@@ -364,11 +364,12 @@ export default async function KitHomePage() {
         <BlockCardSet items={SERVICES} lead="none" />
       </ContentSection>
 
-      {/* 4 · J — one sentence at display scale; the head-half field in the empty top-end corner. */}
+      {/* 4 · J — one sentence, two tones and an italic turn; the head-half field in the empty
+          top-end corner. */}
       <Statement
         id="home-belief"
         eyebrow="What we believe"
-        size="display"
+        emphasis="someone finally made."
         texture="head-half"
         actions={
           <CtaRow rule={false} actions={[{ label: 'How we work', href: ROUTES.howWeWork }]} />

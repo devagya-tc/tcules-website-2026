@@ -260,11 +260,11 @@ export default function KitAboutPage() {
         media={{ type: 'image', image: HOLI }}
       />
 
-      {/* 2 · J — why the studio exists, centred at display scale, the corner field. */}
+      {/* 2 · J — why the studio exists, centred, its turn in italic, the corner field. */}
       <Statement
         id="about-why"
         eyebrow="Why we started"
-        size="display"
+        emphasis="so we removed the handover."
         align="center"
         texture="corner"
       >

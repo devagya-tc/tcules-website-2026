@@ -3,7 +3,7 @@
    Section paints the band and its open air; Layout and Cluster own every seam; Texture owns its
    field. Every value is a --stmt-* token in tokens/components/statement.css.
 
-   Classes: .eyebrow .sentence .sentenceDisplay .centred .texture
+   Classes: .graphic .eyebrow .sentence .toned .emphasis .centred .texture
 
    One @media query: the head-half texture exists from 1024 only (§ 6.3: "below 1024: none"). It
    swaps visibility, never a distance. */
@@ -23,12 +23,28 @@
   max-inline-size: var(--stmt-sentence-measure);
 }
 
-/* `size="display"`: the sentence at the display role. A role swap, never a distance; the role
-   re-declares itself at 1023 and 767 like every title role. */
-.sentenceDisplay {
-  font: var(--stmt-sentence-text-display);
-  letter-spacing: var(--stmt-sentence-tracking-display);
-  max-inline-size: var(--stmt-sentence-measure-display);
+/* `emphasis` given: the sentence steps back to the quiet ink and the phrase it turns on holds full
+   ink, italic. Two tones of ink and a change of voice, never a change of size, so the role's
+   ladder still governs every width. */
+.toned {
+  color: var(--stmt-sentence-ink-quiet);
+}
+
+.emphasis {
+  font-style: var(--stmt-emphasis-style);
+  color: var(--stmt-emphasis-ink);
+}
+
+/* The graphic slot: a square the caller's shape fills. Statement owns the size; the shape owns
+   its drawing. A size, not a distance — the seam under it is Layout's `block`. */
+.graphic {
+  inline-size: var(--stmt-graphic-size);
+  block-size: var(--stmt-graphic-size);
+}
+
+.graphic > * {
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 /* `align="center"`: the sentence's lines centre on its measure. The Layout around it centres the

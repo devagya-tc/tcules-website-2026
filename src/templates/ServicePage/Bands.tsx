@@ -354,7 +354,7 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
 
   if (band.kind === 'statement') {
     const { statement } = band;
-    /* J — one sentence at the display role, the page's display-scale moment, with the link that
+    /* J — one sentence at the h1 role (the display size is retired), with the link that
        says where the claim is shown in full (§ 3.4 J). Centred across the full measure where the
        plan centred it, else on the start edge with its eyebrow directly above it; the `corner`
        field when the plan spent the texture here. */
@@ -362,7 +362,6 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
       <Statement
         id={statement.id}
         eyebrow={statement.eyebrow}
-        size="display"
         align={band.centred ? 'center' : 'start'}
         texture={band.corner ? 'corner' : undefined}
         actions={
