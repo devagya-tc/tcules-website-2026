@@ -225,7 +225,7 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
          over it (no h2 competing with a 43px quote) and its CtaRow closes the band, centred. */
       return band.centred ? (
         <ContentSection
-          surface="tint"
+          surface={band.surface}
           align="center"
           data-band={archetype}
           eyebrow={section.heading ?? section.eyebrow}
@@ -239,7 +239,7 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
         <ContentSection
           {...head}
           footer={undefined}
-          surface="tint"
+          surface={band.surface}
           actions={section.more ? <CtaRow rule={false} actions={[section.more]} /> : undefined}
         >
           {proofBlocks}
@@ -323,6 +323,7 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
     return (
       <CtaSection
         arrangement="offer"
+        surface={band.surface}
         data-band="K"
         eyebrow={offer.eyebrow}
         heading={offer.heading}
@@ -365,7 +366,9 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
         /* A centred sentence takes the corner with its bottom-start partner, so the band reads
            balanced (owner, 9 Oct 2026, on product-design's "How we work"); a start one keeps the
            single corner. */
-        texture={band.corner ? (band.centred ? 'corner-pair' : 'corner') : undefined}
+        texture={
+          band.fade ? 'end-fade' : band.corner ? (band.centred ? 'corner-pair' : 'corner') : undefined
+        }
         actions={
           statement.action ? <CtaRow rule={false} actions={[statement.action]} /> : undefined
         }

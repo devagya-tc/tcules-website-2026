@@ -11,7 +11,7 @@ import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { heroTrail } from '@/lib/trail';
 
 import { BandView } from './Bands';
-import { planBands, type Band } from './plan';
+import { closeSurface, planBands, type Band } from './plan';
 import { withStandIns } from './standIns';
 
 /** A band's React key: the id of the story entry it renders. */
@@ -110,6 +110,7 @@ export function ServicePage({
       <CtaSection
         id={ANCHORS.enquiry}
         data-band="L"
+        surface={closeSurface(bands)}
         eyebrow={close.eyebrow}
         heading={close.heading}
         body={[close.body, close.note]}

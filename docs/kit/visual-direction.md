@@ -168,6 +168,9 @@ So C-icon, the list router and C-pair stack their heads and take no photograph; 
    18 / 1.55 at 767), which carries the old lead's ladder.
 6. **No close repeats the reply time.** The compact form already says "We reply within a business
    day", so the close copy is one short lead, at most one short note and at most one next step.
+7. **Two tinted bands are never adjacent**, the close L included. On a service page the plan
+   enforces it as it assigns surfaces (`plan.ts`): the proof band G keeps tint and its neighbour
+   drops to paper, so a page ending on G gets a paper close.
 
 ---
 

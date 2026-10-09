@@ -50,6 +50,9 @@ import type {
  *          start head whose `more` link closes it under the lead (`moreInHead`) rather than a ruled
  *          foot under the body. The H-row (heading beside its lead) is retired (owner, 7 Oct 2026):
  *          a text-only head is never split left/right.
+ *   § 1.7  two tint bands are never adjacent (owner, 9 Oct 2026), the close L included: where two
+ *          would meet, the proof band G keeps tint and its neighbour drops to paper; between two Gs
+ *          the later one drops. `closeSurface` gives L its ground from the plan.
  *   § 1.7  never two text-heavy bands back to back (owner, 7 Oct 2026): a dev warning, not a
  *          rearrangement, because the fix is the story's order and the plan never reorders it.
  *          `textHeavy` below is the definition.
@@ -83,7 +86,11 @@ type BandBase = {
   centred: boolean;
   /** `horizon` at the band's foot (§ 6.4 item 2). */
   horizon: boolean;
+  /** The ground: tint for the proof band G, paper otherwise, and never tint beside tint (§ 1.7). */
+  surface: BandSurface;
 };
+
+export type BandSurface = 'paper' | 'tint';
 
 export type SectionBand = BandBase & {
   kind: 'section';
@@ -116,6 +123,8 @@ export type StatementBand = BandBase & {
   statement: StoryStatement;
   /** The `corner` field, when the page's texture budget has the placement to spend here. */
   corner: boolean;
+  /** The story's `end-fade` (owner, 9 Oct 2026): start-aligned, the field fading right to left. */
+  fade: boolean;
 };
 export type Band = SectionBand | OfferBand | BannerBand | StatementBand;
 
@@ -211,6 +220,7 @@ export function planBands(story: ServiceStory): Band[] {
         archetype: 'K',
         centred: false,
         horizon: false,
+        surface: 'paper',
         photo,
         frame: photo && qualifies(photo, 'offerWide') ? 'landscape' : 'portrait',
         photoFirst: false,
@@ -223,7 +233,9 @@ export function planBands(story: ServiceStory): Band[] {
         archetype: 'J',
         centred: false,
         horizon: false,
+        surface: 'paper',
         corner: false,
+        fade: entry.texture === 'end-fade',
       };
     }
     if (entry.type === 'banner') {
@@ -233,6 +245,7 @@ export function planBands(story: ServiceStory): Band[] {
         archetype: 'I',
         centred: false,
         horizon: false,
+        surface: 'paper',
         photo: slots?.i,
       };
     }
@@ -265,11 +278,20 @@ export function planBands(story: ServiceStory): Band[] {
       archetype,
       centred: ALWAYS_CENTRED.has(archetype) || typographic,
       horizon: false,
+      surface: archetype === 'G' ? 'tint' : 'paper',
       photo,
       headSide: 'start',
       photoWeight,
       moreInHead: false,
     };
+  });
+
+  /* § 1.7: never tint beside tint. G keeps its ground and a neighbour yields; of two Gs, the later. */
+  bands.forEach((band, index) => {
+    const before = bands[index - 1];
+    if (band.surface !== 'tint' || before?.surface !== 'tint') return;
+    if (band.archetype === 'G' && before.archetype !== 'G') before.surface = 'paper';
+    else band.surface = 'paper';
   });
 
   /* Pass 2: the page-level rules. */
@@ -285,7 +307,8 @@ export function planBands(story: ServiceStory): Band[] {
       band.photoFirst = asideBand(before) || asideBand(after);
     }
     if (band.kind === 'statement') {
-      band.centred = !before?.centred && !(after && ALWAYS_CENTRED.has(after.archetype));
+      band.centred =
+        !band.fade && !before?.centred && !(after && ALWAYS_CENTRED.has(after.archetype));
     }
     if (band.kind === 'section') {
       /* § 3.5: a band that may centre does so only where neither neighbour is centred. An E band
@@ -323,11 +346,11 @@ export function planBands(story: ServiceStory): Band[] {
   const textured = (band: Band | undefined): boolean => {
     if (!band) return false;
     if (band.horizon) return true;
-    return band.kind === 'statement' && band.corner;
+    return band.kind === 'statement' && (band.corner || band.fade);
   };
   const spent = () => 1 + bands.filter(textured).length;
   bands.forEach((band, index) => {
-    if (band.kind !== 'statement') return;
+    if (band.kind !== 'statement' || band.fade) return;
     const last = index === bands.length - 1;
     if (
       spent() < TEXTURE_BUDGET &&
@@ -341,6 +364,11 @@ export function planBands(story: ServiceStory): Band[] {
 
   if (process.env.NODE_ENV !== 'production') warnTextHeavyPairs(story.slug, bands);
   return bands;
+}
+
+/** The close L's ground: tint, the closer's step (CtaSection), unless the last band is tint (§ 1.7). */
+export function closeSurface(bands: readonly Band[]): BandSurface {
+  return bands.at(-1)?.surface === 'tint' ? 'paper' : 'tint';
 }
 
 /** Bands whose job is drawn rather than written: a diagram, client marks, a set of covers, an icon

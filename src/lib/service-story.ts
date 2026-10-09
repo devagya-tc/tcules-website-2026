@@ -360,7 +360,9 @@ export type StoryBanner = {
  * all the same size … there is no oversized statement"). ≤ 14 words, so it holds three lines at the
  * h1 role in the 763 track. An optional link under it says where the claim is shown in full — the
  * old I banner's job ("How an engagement runs"), which needed a band of its own for one link.
- * The texture and the element are the template's; the story names only the words.
+ * The element is the template's, and so is the texture unless the story names `texture`: an owner's
+ * call for one page (9 Oct 2026, product-design's "How we work"), which the plan honours over its
+ * own centring and corner rules.
  */
 export type StoryStatement = {
   type: 'statement';
@@ -368,6 +370,8 @@ export type StoryStatement = {
   eyebrow?: string;
   text: string;
   action?: StoryLink;
+  /** `end-fade`: the sentence sits on the start edge with the right-to-left field behind it. */
+  texture?: 'end-fade';
 };
 
 /**

@@ -135,6 +135,40 @@ export const productDesign: ServiceStory = {
     },
     {
       type: 'section',
+      id: 'client-view',
+      eyebrow: 'Proof',
+      heading: 'In our clients’ words',
+      more: { label: 'See the work', href: ROUTES.caseStudies },
+      blocks: [
+        {
+          kind: 'proof',
+          quote: {
+            text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
+            name: 'Ashok Mohanty',
+            company: 'Auxentios',
+          },
+          /* Stand-in voices for the slider, FICTIONAL (the kit testimonial specimen's speakers), cut
+             to the sourced quote's length so the band holds one height as it turns. Logged in
+             docs/content-changes.md; to be replaced by sourced quotes before any route uses them. */
+          voices: [
+            {
+              text: 'Every screen they cut was one our team never had to learn, and every screen that stayed had been argued for.',
+              name: 'Arjun Mehta',
+              role: 'Director of Clinical Product',
+              company: 'Corvel Health',
+            },
+            {
+              text: 'The design review stopped being a meeting about taste. Each decision arrived with the research behind it.',
+              name: 'Daniel Okafor',
+              role: 'Chief Product Officer',
+              company: 'Brightwater Labs',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'section',
       id: 'specialist-services',
       eyebrow: 'Go narrower',
       heading: 'Specialist Product Design services',
@@ -195,6 +229,8 @@ export const productDesign: ServiceStory = {
       eyebrow: 'How we work',
       text: 'One accountable team, from the first question to the shipped build.',
       action: { label: 'See how we work', href: ROUTES.howWeWork },
+      /* Owner, 9 Oct 2026: start-aligned, with the right-to-left fade. */
+      texture: 'end-fade',
     },
     {
       type: 'section',
@@ -214,40 +250,6 @@ export const productDesign: ServiceStory = {
             CLIENT_MARKS.safexpay,
             CLIENT_MARKS.gttools,
             CLIENT_MARKS.incluude,
-          ],
-        },
-      ],
-    },
-    {
-      type: 'section',
-      id: 'client-view',
-      eyebrow: 'Proof',
-      heading: 'In our clients’ words',
-      more: { label: 'See the work', href: ROUTES.caseStudies },
-      blocks: [
-        {
-          kind: 'proof',
-          quote: {
-            text: 'The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.',
-            name: 'Ashok Mohanty',
-            company: 'Auxentios',
-          },
-          /* Stand-in voices for the slider, FICTIONAL (the kit testimonial specimen's speakers), cut
-             to the sourced quote's length so the band holds one height as it turns. Logged in
-             docs/content-changes.md; to be replaced by sourced quotes before any route uses them. */
-          voices: [
-            {
-              text: 'Every screen they cut was one our team never had to learn, and every screen that stayed had been argued for.',
-              name: 'Arjun Mehta',
-              role: 'Director of Clinical Product',
-              company: 'Corvel Health',
-            },
-            {
-              text: 'The design review stopped being a meeting about taste. Each decision arrived with the research behind it.',
-              name: 'Daniel Okafor',
-              role: 'Chief Product Officer',
-              company: 'Brightwater Labs',
-            },
           ],
         },
       ],

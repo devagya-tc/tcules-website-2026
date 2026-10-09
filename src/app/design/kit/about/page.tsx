@@ -242,6 +242,9 @@ export default async function KitAboutPage() {
       {/* 7 · close — the page's main action, once more, and its ghost partner. */}
       <CtaSection
         data-band="close"
+        /* Two tint bands are never adjacent (owner, 9 Oct 2026): without the rating band the close
+           would meet the tint film band, so it drops to paper. */
+        surface={rating ? undefined : 'paper'}
         arrangement="open"
         eyebrow="Work with the studio"
         heading="Bring us the decision you are stuck on"
