@@ -35,10 +35,10 @@ rework come later, once the owner delivers the copy.
         do too" problem). Ratings go with the client list, beside the CTA or enquiry, and in facts & figures.
       - No headshots. When a quote has no image, the content shifts to the start and a tag takes the
         image's place.
-- [ ] **r7-video — video testimonial.** Allowed and wanted (two ~5-minute client interviews exist). Design it
+- [x] **r7-video — video testimonial.** Allowed and wanted (two ~5-minute client interviews exist). Design it
       beautifully: poster image with play affordance, quote pull and attribution, keyboard and reduced
       motion, no autoplay with sound.
-- [ ] **r7-statement — retire the display size.** "Way too big", "not a title-level thing but a very
+- [x] **r7-statement — retire the display size.** "Way too big", "not a title-level thing but a very
       special text". The smaller variant reads better. Trying the secondary brand shapes is the owner's
       job (Figma); leave a graphic slot ready if it fits cleanly.
 - [x] **r7-cards — clickable-card sections.** (kit/r7-cards)
@@ -49,10 +49,10 @@ rework come later, once the owner delivers the copy.
         not eyeballed); they were far too big.
       - Remove the box borders: the boxed card variant goes.
       - The top-hairline variant stays as it is. Type stays as it is.
-- [ ] **r7-form — compact EnquiryForm.** No visible labels: the placeholder or help text acts as the
+- [x] **r7-form — compact EnquiryForm.** No visible labels: the placeholder or help text acts as the
       label, and each field keeps an accessible, visually hidden label. Keep "We reply within a business
       day".
-- [ ] **r7-howwework — "How we work" as its own component.** This is the USP: the engagement model. One
+- [x] **r7-howwework — "How we work" as its own component.** This is the USP: the engagement model. One
       accountable team from the first question to ship; part-time assignment with the idle cost absorbed
       by Tcules; the team stretches so the client never suffers. **Owner, 8 Oct:** work with the copy we
       have, and look on https://tcules.com (WebFetch its how-we-work, about and engagement pages) for
@@ -63,7 +63,7 @@ rework come later, once the owner delivers the copy.
       **Owner, 8 Oct:** the placeholder figures are fine as they are. This is **crucial for Friday's
       review**: it must be at least as beautiful as the best of the other kit components, never a plain
       row of numbers. Judge it side by side with the logo grid and the featured testimonials.
-- [ ] **r7-rules — codify:**
+- [x] **r7-rules — codify:**
       - Never two text-heavy sections back to back; follow a text-heavy band with a visual one. Make this
         a check in the ServicePage plan.
       - IRL photographs carry a consistent tone layer. The treatment is still TBD, so add the rule and a
