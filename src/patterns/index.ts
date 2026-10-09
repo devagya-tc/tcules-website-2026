@@ -313,3 +313,13 @@ export type {
 
 /* Thread — stages one decision passes through, on one blue line, with a return path (E band). */
 export { Thread, type ThreadProps, type ThreadStage, type ThreadStageHeading } from './Thread';
+
+/* VideoTestimonial — a client interview on film: poster, play control, pulled quote (r7-video). */
+export {
+  VideoTestimonial,
+  type VideoTestimonialProps,
+  type VideoTestimonialVariant,
+  type VideoTestimonialFilm,
+  type VideoTestimonialSource,
+  type VideoTestimonialCaptions,
+} from './VideoTestimonial';

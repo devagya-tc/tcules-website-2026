@@ -132,6 +132,7 @@
 @import 'components/banner.css';
 @import 'components/statement.css';
 @import 'components/contrast.css';
+@import 'components/video-testimonial.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */

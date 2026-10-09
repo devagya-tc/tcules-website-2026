@@ -17,6 +17,7 @@ const NAMES = [
   'hamburger-menu',
   'chrome-menu',
   'chrome-close',
+  'play',
   'star',
   'close-circle',
   'square-arrow-right-up',
