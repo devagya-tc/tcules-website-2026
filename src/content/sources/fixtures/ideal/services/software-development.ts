@@ -399,17 +399,13 @@ export const softwareDevelopment: ServiceStory = {
   close: {
     eyebrow: 'Next step',
     heading: 'Start with the slice that needs to ship',
-    body: 'The slice, its users, the system constraints and the release outcome. A rough brief is enough.',
+    body: 'The slice, its users and the release outcome.',
     points: [
       {
         label: 'Attach what already exists',
-        detail: 'A prototype, a spec or screens, if there are any.',
-      },
-      {
-        label: 'A reply within one business day',
-        detail: 'With the responsibility it points to.',
+        detail: 'A prototype, a spec or screens.',
       },
     ],
-    note: 'Do not include credentials, regulated records or confidential source material.',
+    note: 'Do not send credentials or confidential material.',
   },
 };

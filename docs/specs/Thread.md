@@ -7,6 +7,7 @@
 | **Component** | `Thread` |
 | **Tier** | 2 pattern (`src/patterns/Thread/`) |
 | **Status** | implemented — `cmp-process-stats`, 6 Oct 2026. Built to the family brief and `docs/kit/visual-direction.md` (§ 3.4 E, § 4.2 connectors), which win where this spec differs. |
+| **Owner note, 9 Oct 2026** | The owner found the worked-example arrangement (a Thread as an E band's whole body, product-design's "Moving one job moves others") too dense. Not to be used on pages until redesigned. |
 | **Token prefix** | `--thread-*` |
 | **File** | `tokens/components/thread.css` |
 | **Designer / date** | Claude Code · 6 Oct 2026 |

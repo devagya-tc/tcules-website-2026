@@ -362,7 +362,10 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
         id={statement.id}
         eyebrow={statement.eyebrow}
         align={band.centred ? 'center' : 'start'}
-        texture={band.corner ? 'corner' : undefined}
+        /* A centred sentence takes the corner with its bottom-start partner, so the band reads
+           balanced (owner, 9 Oct 2026, on product-design's "How we work"); a start one keeps the
+           single corner. */
+        texture={band.corner ? (band.centred ? 'corner-pair' : 'corner') : undefined}
         actions={
           statement.action ? <CtaRow rule={false} actions={[statement.action]} /> : undefined
         }

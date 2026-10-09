@@ -413,17 +413,13 @@ export const aiProductUx: ServiceStory = {
   close: {
     eyebrow: 'Start a project',
     heading: 'Share the AI interaction that needs clearer rules',
-    body: 'The interaction, the evidence behind it and the decision rule that needs to become explicit.',
+    body: 'The interaction, and the decision rule it needs made explicit.',
     points: [
       {
         label: 'Send one scenario',
-        detail: 'What the model does, and what it may affect. A rough brief is enough.',
-      },
-      {
-        label: 'A reply within a day',
-        detail: 'One business day, with what the record needs next.',
+        detail: 'A rough brief is enough.',
       },
     ],
-    note: 'Do not include credentials, regulated records or confidential source material.',
+    note: 'Do not send credentials or confidential material.',
   },
 };

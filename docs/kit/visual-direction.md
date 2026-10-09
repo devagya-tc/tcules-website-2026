@@ -161,6 +161,14 @@ photograph.
 
 So C-icon, the list router and C-pair stack their heads and take no photograph; B is unchanged.
 
+5. **Section copy steps down one size.** The section lead (`--text-lead`) is 18 (was 20; line height
+   1.55, was 1.5) and section body (`--text-body-lg`) is 16 (was 18; 1.6, was 1.55), so body-lg now
+   equals body by decision. Neither re-declares at 1023 or 767. The hero keeps 18 / 20: its default
+   lead re-points to `--text-lead`, and `leadSize="lg"` to the new `--text-lead-lg` (20 / 1.5,
+   18 / 1.55 at 767), which carries the old lead's ladder.
+6. **No close repeats the reply time.** The compact form already says "We reply within a business
+   day", so the close copy is one short lead, at most one short note and at most one next step.
+
 ---
 
 ## 0 · The diagnosis, in numbers

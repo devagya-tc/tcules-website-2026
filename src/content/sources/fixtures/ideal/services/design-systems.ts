@@ -323,17 +323,13 @@ export const designSystems: ServiceStory = {
   close: {
     eyebrow: 'Start a project',
     heading: 'Start with the part teams work around',
-    body: 'The decision, component family or adoption path teams keep working around.',
+    body: 'The decision or component family teams keep working around.',
     points: [
       {
         label: 'Send the decision',
-        detail: 'The one teams keep remaking. One component family is enough.',
-      },
-      {
-        label: 'A reply within a day',
-        detail: 'One business day, with the first scope it points to.',
+        detail: 'One component family is enough.',
       },
     ],
-    note: 'Do not include credentials, regulated records or confidential source material.',
+    note: 'Do not send credentials or confidential material.',
   },
 };

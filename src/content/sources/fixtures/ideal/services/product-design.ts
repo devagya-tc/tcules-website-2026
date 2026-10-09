@@ -2,7 +2,6 @@ import type { ServiceStory } from '@/lib/service-story';
 import { ANCHORS, anchorHref, auditPath, ROUTES, servicePath } from '@/lib/routes';
 
 import { CLIENT_MARKS } from '../../clients';
-import { CLUTCH_RATING } from '../../ratings';
 
 const ENQUIRY = anchorHref(ANCHORS.enquiry);
 
@@ -12,18 +11,19 @@ const ENQUIRY = anchorHref(ANCHORS.enquiry);
  * docs/content-changes.md § 6. The sections say what the page argues; the template decides how each
  * is laid out from the job its blocks do (ServicePage plan.ts), so no field here is a layout.
  *
- *   hero      the claim, the sourced Clutch rating in the eyebrow's place
+ *   hero      the claim, no eyebrow (owner, 9 Oct 2026: no Clutch badge on this page)
  *   signals   what the screen may be telling you — B, beside a screen in use
  *   method    five steps, each leaving an artefact — F
- *   example   the worked example as the chain one decision moves through — E, a Thread
- *   statement how the work runs, said once — J
+ *   routes    the specialist services — the C-icon router, its head above the cards; moved up
+ *             from the foot on 9 Oct so the statement does not follow the steps (§ 1.7)
+ *   statement how the work runs, said once — J, centred, corner-pair
  *   clients   who we have shipped with — H, the boxed LogoGrid under its context line
  *   proof     the clients' words — G·02, typographic quotes in the auto-advancing Slider, on tint
- *   routes    the specialist services — the C-icon router, its head above the cards
  *   close     the compact form — L
  *
  * Recomposed 9 Oct 2026 as the showcase of the 7 Oct review's components: the case pair (C-pair),
  * the G-case band, the offer (K) and the contrast pair (N) left the page (docs/content-changes.md).
+ * 9 Oct (owner): the worked-example Thread (E) left too — too dense.
  */
 export const productDesign: ServiceStory = {
   slug: 'product-design',
@@ -36,7 +36,6 @@ export const productDesign: ServiceStory = {
   hero: {
     title: 'Finished screens can hide an unresolved product.',
     lead: 'Tcules takes responsibility for the product beneath the screens: who does what, the records and rules behind it, how it behaves, and what to learn first.',
-    rating: CLUTCH_RATING,
     actions: [
       { label: 'Start a project', href: ENQUIRY },
       { label: 'Start with a UX Product Audit', href: auditPath('ux-product-audit') },
@@ -136,27 +135,57 @@ export const productDesign: ServiceStory = {
     },
     {
       type: 'section',
-      id: 'worked-example',
-      eyebrow: 'Worked example · fictional',
-      heading: 'Moving one job moves others',
-      lead: 'A job is rescheduled after a required input falls through. The product must show what moves with it.',
+      id: 'specialist-services',
+      eyebrow: 'Go narrower',
+      heading: 'Specialist Product Design services',
+      lead: 'When the problem is located, a narrower service settles it faster.',
       blocks: [
         {
-          kind: 'thread',
+          kind: 'router',
           items: [
-            { title: 'Input unavailable', body: 'The job cannot go ahead as planned.' },
             {
-              title: 'New date proposed',
-              body: 'Proposed, not accepted: the commitment stands.',
+              icon: 'users-group-rounded',
+              when: 'When people, context or one risky assumption could change the direction.',
+              route: { label: 'UX Research', href: servicePath('product-design/ux-research') },
             },
             {
-              title: 'Dependent work shown',
-              body: 'Three jobs that would move, before anyone confirms.',
+              icon: 'layers',
+              when: 'When records, roles, state and navigation no longer agree with the work.',
+              route: {
+                label: 'IA & Workflow Design',
+                href: servicePath('product-design/information-architecture-workflow-design'),
+              },
             },
-            { title: 'Owner responds', body: 'The person who must agree is named.' },
-            { title: 'Change accepted', body: 'The reason stays with the job afterwards.' },
+            {
+              icon: 'ruler-pen',
+              when: 'When the rule is understood, but its states and responsive form are not.',
+              route: {
+                label: 'Interaction & UI Design',
+                href: servicePath('product-design/interaction-ui-design'),
+              },
+            },
+            {
+              icon: 'graph-up',
+              when: 'When someone must compare, interpret and act, with clear definitions and sources.',
+              route: {
+                label: 'Data Visualisation',
+                href: servicePath('product-design/data-visualisation'),
+              },
+            },
+            {
+              icon: 'monitor',
+              when: 'When the next commitment needs evidence a static screen cannot give.',
+              route: {
+                label: 'Prototyping & Testing',
+                href: servicePath('product-design/prototyping-usability-testing'),
+              },
+            },
           ],
-          loop: 'A mistaken change returns to the accepted plan.',
+          also: {
+            icon: 'eye',
+            when: 'When you can see the problem but not yet where it sits.',
+            link: { label: 'UX Product Audit', href: auditPath('ux-product-audit') },
+          },
         },
       ],
     },
@@ -223,77 +252,17 @@ export const productDesign: ServiceStory = {
         },
       ],
     },
-    {
-      type: 'section',
-      id: 'specialist-services',
-      eyebrow: 'Go narrower',
-      heading: 'Specialist Product Design services',
-      lead: 'When the problem is located, a narrower service settles it faster.',
-      blocks: [
-        {
-          kind: 'router',
-          items: [
-            {
-              icon: 'users-group-rounded',
-              when: 'When people, context or one risky assumption could change the direction.',
-              route: { label: 'UX Research', href: servicePath('product-design/ux-research') },
-            },
-            {
-              icon: 'layers',
-              when: 'When records, roles, state and navigation no longer agree with the work.',
-              route: {
-                label: 'IA & Workflow Design',
-                href: servicePath('product-design/information-architecture-workflow-design'),
-              },
-            },
-            {
-              icon: 'ruler-pen',
-              when: 'When the rule is understood, but its states and responsive form are not.',
-              route: {
-                label: 'Interaction & UI Design',
-                href: servicePath('product-design/interaction-ui-design'),
-              },
-            },
-            {
-              icon: 'graph-up',
-              when: 'When someone must compare, interpret and act, with clear definitions and sources.',
-              route: {
-                label: 'Data Visualisation',
-                href: servicePath('product-design/data-visualisation'),
-              },
-            },
-            {
-              icon: 'monitor',
-              when: 'When the next commitment needs evidence a static screen cannot give.',
-              route: {
-                label: 'Prototyping & Testing',
-                href: servicePath('product-design/prototyping-usability-testing'),
-              },
-            },
-          ],
-          also: {
-            icon: 'eye',
-            when: 'When you can see the problem but not yet where it sits.',
-            link: { label: 'UX Product Audit', href: auditPath('ux-product-audit') },
-          },
-        },
-      ],
-    },
   ],
   close: {
     eyebrow: 'Start a project',
     heading: 'Share the product decision that needs settling',
-    body: 'The decision, the roles it affects and the evidence you already have.',
+    body: 'The decision, and the evidence you already have.',
     points: [
       {
         label: 'Send the decision',
-        detail: 'And what you already know about it. A rough brief is enough.',
-      },
-      {
-        label: 'A reply within a day',
-        detail: 'One business day, with the questions we need answered first.',
+        detail: 'A rough brief is enough.',
       },
     ],
-    note: 'Do not include credentials, regulated records or confidential source material.',
+    note: 'Do not send credentials or confidential material.',
   },
 };

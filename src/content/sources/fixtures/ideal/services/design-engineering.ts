@@ -385,13 +385,9 @@ export const designEngineering: ServiceStory = {
     points: [
       {
         label: 'Send the point where intent is lost',
-        detail: 'One disputed interaction is enough. A rough brief is fine.',
-      },
-      {
-        label: 'A reply within a day',
-        detail: 'One business day, with the first slice it points to.',
+        detail: 'One disputed interaction is enough.',
       },
     ],
-    note: 'Do not include credentials, regulated records or confidential source material.',
+    note: 'Do not send credentials or confidential material.',
   },
 };

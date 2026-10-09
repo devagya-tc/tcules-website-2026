@@ -380,17 +380,13 @@ export const productModernisation: ServiceStory = {
   close: {
     eyebrow: 'Start a project',
     heading: 'Start with the capability that cannot stay as it is',
-    body: 'The capability, what depends on it, and the change that can no longer wait.',
+    body: 'The capability, and the change that can no longer wait.',
     points: [
       {
         label: 'Send one capability',
-        detail: 'And what depends on it. A rough brief is enough.',
-      },
-      {
-        label: 'A reply within a day',
-        detail: 'One business day. Incomplete evidence becomes uncertainty to test.',
+        detail: 'A rough brief is enough.',
       },
     ],
-    note: 'Do not include credentials, regulated records or confidential source material.',
+    note: 'Do not send credentials or confidential material.',
   },
 };

@@ -682,3 +682,42 @@ L close.
   any route uses this fixture.**
 - **Close.** The form is now the compact EnquiryForm on every service page (name, email, one
   question; no scheduling link).
+
+## Service closes trimmed; Product Design loses the worked example (9 Oct 2026, owner)
+
+The compact form carries "We reply within a business day", so no close repeats the reply time. Each
+close is now one short lead, one note and one next step. Every service shares the note:
+"Do not include credentials, regulated records or confidential source material." →
+"Do not send credentials or confidential material."
+
+| Service | Field | Old | New |
+|---|---|---|---|
+| ai-product-ux | body | The interaction, the evidence behind it and the decision rule that needs to become explicit. | The interaction, and the decision rule it needs made explicit. |
+| ai-product-ux | point 1 detail | What the model does, and what it may affect. A rough brief is enough. | A rough brief is enough. |
+| ai-product-ux | point 2 | A reply within a day: One business day, with what the record needs next. | removed |
+| design-engineering | point 1 detail | One disputed interaction is enough. A rough brief is fine. | One disputed interaction is enough. |
+| design-engineering | point 2 | A reply within a day: One business day, with the first slice it points to. | removed |
+| design-systems | body | The decision, component family or adoption path teams keep working around. | The decision or component family teams keep working around. |
+| design-systems | point 1 detail | The one teams keep remaking. One component family is enough. | One component family is enough. |
+| design-systems | point 2 | A reply within a day: One business day, with the first scope it points to. | removed |
+| product-design | body | The decision, the roles it affects and the evidence you already have. | The decision, and the evidence you already have. |
+| product-design | point 1 detail | And what you already know about it. A rough brief is enough. | A rough brief is enough. |
+| product-design | point 2 | A reply within a day: One business day, with the questions we need answered first. | removed |
+| product-modernisation | body | The capability, what depends on it, and the change that can no longer wait. | The capability, and the change that can no longer wait. |
+| product-modernisation | point 1 detail | And what depends on it. A rough brief is enough. | A rough brief is enough. |
+| product-modernisation | point 2 | A reply within a day: One business day. Incomplete evidence becomes uncertainty to test. | removed |
+| software-development | body | The slice, its users, the system constraints and the release outcome. A rough brief is enough. | The slice, its users and the release outcome. |
+| software-development | point 1 detail | A prototype, a spec or screens, if there are any. | A prototype, a spec or screens. |
+| software-development | point 2 | A reply within one business day: With the responsibility it points to. | removed |
+
+**Product Design** (`ideal/services/product-design.ts`):
+
+- **Removed** the `worked-example` section (E, Thread, "Moving one job moves others"): too dense
+  (owner). Copy is in git history.
+- **Removed** `hero.rating` (the Clutch badge): not the pattern for this page. The hero has no
+  eyebrow.
+- **Order.** `specialist-services` (C-icon) moved from the foot to after `method`, because removing
+  the Thread left F steps directly above the J statement, two text-heavy bands (§ 1.7). New order:
+  hero · B · F · C-icon · J · H · G · L.
+- **Statement.** "How we work" is centred with `texture="corner-pair"`. The template now gives any
+  centred statement that wins the corner its bottom-start partner (`Bands.tsx`).

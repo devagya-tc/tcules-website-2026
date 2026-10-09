@@ -120,12 +120,14 @@
 --hero-title-text:var(--text-display);
 --hero-title-tracking:var(--text-display-tracking);
 /* The lead, two sizes (r7-hero, owner 7 Oct 2026: the 20px lead was too large). The default is
-   --text-body-lg, 18, two px over the 16 paragraphs below it, which is enough for the lead to read as
+   --text-lead, 18, two px over the 16 paragraphs below it, which is enough for the lead to read as
    the lead because it is also the shorter line (--hero-lead-measure). `-lg` is the opt-in for a
-   page written for search (`leadSize="lg"`): --text-lead, 20, falling to 18 on a phone through the
-   role's own re-declaration, so at 390 the two sizes meet. */
---hero-lead-text:var(--text-body-lg);
---hero-lead-text-lg:var(--text-lead);
+   page written for search (`leadSize="lg"`): --text-lead-lg, 20, falling to 18 on a phone through
+   the role's own re-declaration, so at 390 the two sizes meet. The 9 Oct ruling that moved section
+   copy down a step (lead 20 → 18, body-lg 18 → 16) left the hero at 18 / 20 by re-pointing these
+   two, not by changing them. */
+--hero-lead-text:var(--text-lead);
+--hero-lead-text-lg:var(--text-lead-lg);
 /* 16, and the same role the page's Prose body takes. It was --text-body-lg at 18,
    chosen so hero copy stayed a step above body scale; the copy now MEETS body scale
    instead, and the hierarchy inside the hero is carried by the lead alone — 20 against
