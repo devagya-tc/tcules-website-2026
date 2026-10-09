@@ -97,7 +97,8 @@ export type SliderProps = {
    *     and only their press starts it;
    *   - never starts before hydration, so a server render and a no-script page are the manual row;
    *   - is silent: the status line speaks after a reader's own press, never after an advance;
-   *   - stops for good when a reader presses a bar: choosing a slide is taking over (APG).
+   *   - rests when a reader presses a bar, and resumes RESUME (6s) later from the slide they chose
+   *     (owner, 9 Oct 2026). A bar under KEYBOARD focus holds it for as long as focus stays.
    */
   autoplay?: boolean;
   /** What one slide is, for each bar's name: "Show {slideName} 2 of 4". Default `'slide'`. */
@@ -111,6 +112,9 @@ const INTERVAL = 8000;
 
 /** Longest frame the autoplay clock will count: a backgrounded tab resumes, it does not skip. */
 const MAX_FRAME = 100;
+
+/** How long a press on a bar holds the rotation before it resumes (owner, 9 Oct 2026). */
+const RESUME = 6000;
 
 /* Reduced motion as an external store: read during render, so the default rotation state needs no
    effect. The server snapshot says "reduce", so nothing rotates before hydration. */
@@ -220,7 +224,15 @@ export function Slider({
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const playing = rotates && (choice ? choice === 'play' : !reduced);
-  const held = hovered || focused;
+  /* A press on a bar rests the rotation for RESUME, then it carries on from the chosen slide. Each
+     press restarts the rest. */
+  const [rest, setRest] = useState(0);
+  useEffect(() => {
+    if (!rest) return;
+    const timer = window.setTimeout(() => setRest(0), RESUME);
+    return () => window.clearTimeout(timer);
+  }, [rest]);
+  const held = hovered || focused || rest > 0;
   /* Time the current slide has been shown while running, in ms; reset whenever the slide changes. */
   const elapsed = useRef(0);
   const [tabStop, setTabStop] = useState(false);
@@ -510,8 +522,10 @@ export function Slider({
      the slide's place in the set; a list, so a screen reader hears how many there are.
 
      WCAG 2.2.2 (Pause, Stop, Hide) without a rotation button, for the centred row: pressing any bar
-     STOPS the rotation for good — the reader chose a slide, so the slider stops choosing for them
-     (APG carousel) — and a bar under focus, like the slides under a mouse or focus, HOLDS it. So
+     RESTS the rotation for RESUME and then it carries on from that slide (owner, 9 Oct 2026); a bar
+     under keyboard focus, like the slides under a mouse or focus, HOLDS it for as long as it stays.
+     A mouse press also focuses the bar in some browsers, so only :focus-visible counts as a hold
+     here — otherwise a clicked bar would hold the rotation until the reader clicked elsewhere. So
      every reader who can reach the content has a way to stop it, at the control they would use
      anyway, and nothing rotates at all under prefers-reduced-motion. A 48 pause circle in the
      middle of a centred quote would be the loudest thing in the band, for a job the bars already do. */
@@ -526,10 +540,12 @@ export function Slider({
             aria-current={index === active ? 'true' : undefined}
             aria-controls={rowId}
             disabled={!ready}
-            onFocus={() => setFocused(true)}
+            onFocus={(event) => {
+              if (event.currentTarget.matches(':focus-visible')) setFocused(true);
+            }}
             onBlur={() => setFocused(false)}
             onClick={() => {
-              if (rotates) setChoice('pause');
+              if (rotates) setRest((n) => n + 1);
               goTo(index);
             }}
           >
