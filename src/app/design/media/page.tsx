@@ -103,6 +103,9 @@ const SIZES_QUARTER =
 /* columns {base:1, md:2}, colGap gutter (32). */
 const SIZES_HALF =
   '(min-width: 1304px) 604px, (min-width: 768px) calc(50vw - 48px), calc(100vw - 64px)';
+/* Section 11: a half of the [1, 2] layout's wide track (784 at the 1240 cap, less one gutter). */
+const SIZES_TONE =
+  '(min-width: 1304px) 376px, (min-width: 1024px) calc((100vw - 128px) / 3 - 16px), (min-width: 768px) calc(50vw - 48px), calc(100vw - 64px)';
 /* The harness's 326 mobile column. */
 const SIZES_MOBILE = '326px';
 
@@ -158,6 +161,16 @@ const SURFACE_ROW: readonly { ratio: MediaRatio; id: PhotoId; box: number }[] = 
   { ratio: '4/5', id: 'studio-sticky-board-ux', box: 477 },
   { ratio: '3/2', id: 'studio-session-talk', box: 381 },
   { ratio: '1/1', id: 'portrait-woman-grey', box: 477 },
+];
+
+/* Section 11's set: one photograph from each measured tone (§ 5.5), studio and stock, so the band
+   shows the spread one grade will have to carry. Deliberately mixed: this is the set the layer
+   exists for, not a page (a page is one family). */
+const TONE_SET: readonly { id: PhotoId; tone: string }[] = [
+  { id: 'sticky-notes-wall-dense', tone: 'warm · vivid' },
+  { id: 'studio-team-holi', tone: 'warm · quiet' },
+  { id: 'studio-session-talk', tone: 'neutral · quiet' },
+  { id: 'pair-testing-overhead', tone: 'cool · quiet' },
 ];
 
 /** The capture hairline each 9b band shows, from media.css's surface blocks. */
@@ -868,6 +881,31 @@ export default function MediaSpecimenPage() {
           </Layout>
         </Section>
       ))}
+
+      <Section>
+        <Layout columns={{ base: 1, lg: [1, 2] }} colGap="column" rowGap="stack" align="start">
+          <Layout rowGap="block">
+            <h2>11 · The tone layer</h2>
+            <p>
+              Every photograph carries one grade, so studio and stock read as one shoot. The
+              treatment is the owner&rsquo;s to choose, so Media ships the hook, not a filter:{' '}
+              <code>filter: var(--media-photo-grade)</code>, and the token is <code>none</code>.
+            </p>
+            <p className={s.specNote}>
+              Renders nothing today. A ruling lands in that one token and grades these four, and
+              every photograph on the site, at once. Captures, cut-outs and illustrations never
+              take it.
+            </p>
+          </Layout>
+          <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+            {TONE_SET.map(({ id, tone }) => (
+              <Specimen key={id} label="below" title={tone} note={id}>
+                <Media image={getKitPhoto(id)} sizes={SIZES_TONE} ratio="16/9" />
+              </Specimen>
+            ))}
+          </Layout>
+        </Layout>
+      </Section>
 
       <Section surface="ink">
         <Layout rowGap="block">

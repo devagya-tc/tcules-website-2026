@@ -126,6 +126,9 @@ These override anything below that disagrees; the inline amendments point here.
    group pinned to the title, not a second column of copy. Stacked heads only.
 6. **Tables scroll sideways on a phone; they never restack** into key/value blocks. A table is read
    across its rows, and that reading survives a horizontal scroll better than it survives blocks.
+7. **Never two text-heavy bands back to back** (§ 1.7): follow a text-heavy band with a visual one.
+8. **IRL photographs carry one consistent tone layer** (§ 5.5a). The treatment is TBD; the hook ships.
+9. **Proof is a set, not a ranking** (§ 5.8): logos, case studies, testimonials and the platform rating.
 
 **Image pass, 7 Oct 2026** (owner: "sometimes you need one, sometimes you don't"). A photograph earns
 its band only when it shows what the words cannot (the studio, people at the work, an artefact), is
@@ -460,6 +463,14 @@ of these devices:
 1. **Head alignment alternates** (§ 3.5). No two adjacent bands share both a head form and an alignment.
 2. **Imagery cadence** (§ 5.1).
 3. **The arrangement changes at every seam** (§ 3.4).
+
+**Never two text-heavy bands back to back** (owner, 7 Oct 2026). A text-heavy band is one a reader can
+only read: no photograph, and a body made of words — J, D-faq, N, F, C-text, and D, G, K or I when no
+photograph or case card landed in it. A band is **visual** when it carries a photograph or its job is
+drawn: E (a diagram), H (marks), M (covers), C-icon (an icon set), C-pair and G-case (cards with
+covers). After a text-heavy band comes a visual one. `planBands` checks the rule on the finished plan
+(`textHeavy`, `textHeavyPairs` in `ServicePage/plan.ts`) and warns in development; it never reorders,
+because the fix is the story's order or a photograph, and both are decisions.
 
 ---
 
@@ -1048,7 +1059,7 @@ fetches the 2× candidate.
 
 ### 5.5 Tone: one temperature family per page, at most one vivid photo
 
-Grading, duotone and tint are banned, so **selection is the only lever.** Meridian and Executra get their
+Grading, duotone and tint are banned (amended 7 Oct: one site-wide tone layer, § 5.5a), so **selection is the first lever.** Meridian and Executra get their
 finish from a photo set shot in one light. The rule makes our selection decidable.
 
 **Every catalogue entry is tagged by measurement**, not by eye. `npm run photos:tone` (`fdn-media`)
@@ -1076,6 +1087,16 @@ rules.
 | **warm** | sticky-notes-wall-dense (vivid), studio-offsite-talk (vivid), sticky-grid-minimal, hand-mouse-detail, workshop-sticky-sort (vivid), sticky-notes-mass (vivid), studio-workshop-presenting, studio-sticky-board-ux, sticky-wall-soft-focus, studio-team-holi, moodboard-wall-desk, portrait-man-blue-office |
 | **cool** | conversation-chalkboard, screen-over-shoulder, hands-sticky-blue-pen, desk-flatlay-devices, desk-minimal-white, pair-testing-overhead, wall-sketching-portrait, pair-desk-through-plants, pencil-wireframe-violet, portrait-man-glasses, portrait-woman-laughing, and the three studio headshots (unused) |
 | **neutral** | everything else, with `desk-sketch-flatlay` and `portrait-man-green` measuring vivid |
+
+### 5.5a The tone layer (owner, 7 Oct 2026; amends § 5.5's "grading is banned")
+
+IRL photographs carry one consistent tone layer, so a page's photographs read as one shoot. The
+treatment is **TBD**, so what ships is the hook, not a filter: every `kind: 'photograph'` Media renders
+takes `filter: var(--media-photo-grade)` (studio and stock alike, every placement and edge), and the
+token is `none` in `tokens/components/media.css`. It renders nothing. When the owner rules, the value
+lands in that one token and grades every photograph at once; no prop or placement can opt out, which
+is what makes it consistent. Selection by measured tone (§ 5.5) still applies underneath: a grade
+unifies a set, it does not rescue a mixed one. Captures, cut-outs and illustrations never take it.
 
 ### 5.6 Photo assignment for the six service pages
 
@@ -1126,6 +1147,11 @@ family. Studio photographs make the best stand-ins, because they show our own wo
   the H logo band are separate bands, and the stats are illustrative. `cmp-logos`' stats-over-strip
   variant uses only sourced figures (the ratings fixture), or it is not built.
 - Stock photographs need no credit or label (owner, 5 Oct: internal review).
+- **Proof is a set, not a ranking** (owner, 7 Oct 2026). The four proof items are client logos, case
+  studies, testimonials and the platform rating (Clutch). A page draws whichever it has, in the order
+  its argument needs; none is numbered, labelled "top" or "best", or scaled up as the headline proof
+  over the others, and none is required before another. Weight within a band still follows § 3.3
+  (one large thing); that is composition, not rank.
 
 ### 5.9 Client logos
 

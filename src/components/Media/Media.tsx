@@ -438,6 +438,10 @@ export function Media({
         ...(cropRatio ? ratioClasses(cropRatio) : []),
         edge === 'kind' && kind === 'capture' && styles.capture,
         edge === 'kind' && isPhotograph && styles.photograph,
+        /* The tone layer (review 7 Oct 2026): every photograph, whatever its edge, so one grade
+           reaches the whole page. Not keyed to `edge` — a placement that draws its own box still
+           shows the same photograph. Renders nothing until --media-photo-grade is set. */
+        isPhotograph && styles.grade,
         shadow && styles.shadow,
       )}
       style={style}

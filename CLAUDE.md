@@ -360,6 +360,13 @@ Clean does not mean plain, and "not busy" is not an argument for "not designed".
   tinted background band.
 - Vary the arrangement between blocks rather than the ground behind them.
 - A secondary column that is only text is a missed opportunity; give every item a shape.
+- **Never two text-heavy bands back to back.** A band with no photograph and a body of words is
+  followed by a visual one (a photograph, a diagram, marks, covers, an icon set). The ServicePage
+  plan warns in development (`textHeavyPairs`, visual-direction § 1.7).
+- **IRL photographs share one tone layer.** It is `--media-photo-grade`, read by every photograph
+  Media renders; it ships `none` until the owner picks the treatment. Never grade one image locally.
+- **Proof is a set, not a ranking.** Logos, case studies, testimonials and the platform rating are
+  drawn on as the argument needs; none is numbered, ordered by strength, or billed as "top".
 - **Before shipping a composition:** if you squint, does it read as more than one idea? If every
   block is the same rectangle at the same size, it is not finished.
 
