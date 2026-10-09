@@ -15,8 +15,9 @@ import * as C from '../_specimen/clients';
  * ClientMark specimen — the client set at one visual weight, on four grounds.
  *
  * What this page has to show:
- *   1. equal AREA, not equal width: a 7:1 wordmark and a 3:1 lockup read as the same weight, and
- *      the ~40px height cap (ruling P2) holds, and the 160px width cap holds before a correction;
+ *   1. equal AREA OF INK, not equal width or equal box: a 7:1 hairline wordmark and a 3:1 bold
+ *      lockup read as the same weight because each is sized by its measured density, and the
+ *      ~40px height cap (ruling P2) holds, and the 240px width guard holds before a correction;
  *   2. one colour, the ground's ink, from ONE file per mark on every surface — any mark on ink or
  *      blue that renders light proves the mask is doing it, not the file;
  *   3. the strip is a Cluster of marks, not a component: the Cluster owns the gap;
@@ -40,15 +41,16 @@ type Mark = Omit<ClientMarkProps, 'className'> & { shape: string };
 
 const STRESS_DIR = '/design';
 
-/* The real set and its recorded corrections live in ../_specimen/clients.ts, shared with the kit's H
-   family, so a correction judged on one specimen is the one rendered on the other. Here each record
-   also carries its shape label. */
+/* The real set and its measured densities live in ../_specimen/clients.ts, shared with the kit's H
+   family, so a size judged on one specimen is the one rendered on the other. Here each record also
+   carries its shape label: ratio, then ink density. */
 const label = (mark: C.ClientRecord): Mark => {
-  const { width, height, correction } = mark;
+  const { width, height, correction, density } = mark;
   const k = correction
     ? `, ${correction > 0 ? '+' : '−'}${Math.round(Math.abs(correction) * 100)}%`
     : '';
-  return { ...mark, shape: `${(width / height).toFixed(1)}:1${k}` };
+  const d = density ? `, ink ${density.toFixed(2)}` : '';
+  return { ...mark, shape: `${(width / height).toFixed(1)}:1${d}${k}` };
 };
 
 const OMNY = label(C.OMNY);
@@ -95,30 +97,41 @@ const LIGHT: Mark = {
   correction: 0.12,
   shape: 'fictional · hairline strokes, 3:1, +12%',
 };
+/* The 12:1 file, recorded as the sparse wordmark it is, so the guard has something to stop:
+   at 0.16 it would be 56 × 1.32 × √12 = 257 wide. */
 const ULTRAWIDE: Mark = {
   name: 'Gallowmere Holdings',
   src: `${STRESS_DIR}/client-mark-ultrawide.svg`,
   width: 360,
   height: 30,
-  shape: 'fictional · ultra-wide wordmark, 12:1',
+  density: 0.16,
+  shape: 'fictional · ultra-wide wordmark, 12:1, ink 0.16',
 };
 
 const STRESS: readonly Mark[] = [SQUARE, TALL, HEAVY, LIGHT];
 
 /* The component's arithmetic, restated so each mark can carry its computed size as a label. The
-   three numbers mirror --cmark-target-side / -height-max / -width-max in client-mark.css; if the
-   tokens change, these labels go stale and the rendering does not — the rendering is the truth. */
+   three numbers mirror --cmark-target-side / -height-max / -width-max in client-mark.css, and REF
+   ClientMark's REFERENCE_DENSITY; if either changes, these labels go stale and the rendering does
+   not — the rendering is the truth. */
 const SIDE = 56;
 const H_MAX = 40;
-const W_MAX = 160;
-/* The correction scales the capped size, and only the height cap applies again (ch05 §10's order,
-   fix round 2) — so a corrected wide mark may pass 160. */
-function computed({ width, height, correction = 0 }: Mark) {
+const W_MAX = 240;
+const REF = 0.28;
+/* Equal ink: the side scales by √(REF / density). The correction scales the capped size, and only
+   the height cap applies again (ch05 §10's order, fix round 2). */
+function computed({ width, height, correction = 0, density = REF }: Mark) {
   const r = width / height;
   const k = 1 + Math.max(-0.15, Math.min(0.15, correction));
-  const fitted = Math.min(SIDE * Math.sqrt(r), H_MAX * r, W_MAX);
+  const optical = Math.sqrt(REF / Math.max(0.1, Math.min(0.6, density)));
+  const fitted = Math.min(SIDE * optical * Math.sqrt(r), H_MAX * r, W_MAX);
   const w = Math.min(fitted * k, H_MAX * r);
   return `${Math.round(w)} × ${Math.round(w / r)}`;
+}
+
+/** The same record without its density: sized by its box alone, as before 9 Oct 2026. */
+function boxOnly(mark: Mark): Mark {
+  return { ...mark, density: undefined, name: `${mark.name} (box only)` };
 }
 
 /** A mark's props without its specimen label. */
@@ -157,10 +170,10 @@ function Strip({ marks }: { marks: readonly Mark[] }) {
  * starts on a track line. justifyItems stays at its default (stretch) on purpose: the li fills
  * its track, which is what lets a mark wider than the track shrink to it via max-inline-size — a
  * centred li would size to the mark and spill. {base: 2, md: 3, lg: 5} (§ 5.9): two tracks in the
- * 326 column are ~139 (the widest phone-size mark is 137), three in the 704 column ~202 and five in
- * the 1240 column ~209, all wider than the widest mark (175). Between 1024 and ~1130 five tracks
- * are 154–169, so LatitudePay meets its cell and letterboxes by up to 12% — the one range § 5.9's
- * lg step costs; ClientMark spec § 17 Q11 puts the xl alternative to the owner.
+ * 326 column are ~139, three in the 704 column ~202 and five in the 1240 column ~209. LatitudePay,
+ * drawn by its density at 201 (158 on a phone), is the one mark that meets its cell: at 390 and
+ * between 1024 and ~1130 it letterboxes to the track — the cost of a gapped grid. The boxed grid
+ * (LogoGrid, /design/kit/logos) sets its columns so it does not.
  */
 function Grid({
   marks,
@@ -191,9 +204,9 @@ export default function ClientMarkSpecimenPage() {
               One client&rsquo;s logo in a set. The client&rsquo;s SVG is drawn as a{' '}
               <strong>mask</strong> filled with <code>--cmark-ink</code>, so every mark in a set
               is one colour, the ground&rsquo;s ink, from one file on every surface. Each is
-              sized to <strong>equal visual weight</strong>: the same bounding-box area, not the
-              same width, then capped at 40 tall (ruling P2) and 160 wide before its recorded
-              correction (ch05 §10).
+              sized to <strong>equal visual weight</strong>: the same area of ink, not the same
+              width or the same box — its box scaled by its measured density — then capped at 40
+              tall (ruling P2), with a 240 guard for the ultra-wide (ch05 §10).
             </p>
             <p>
               A logo strip is <strong>not</strong> a component. It is <code>ClientMark</code> ×
@@ -220,7 +233,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The arithmetic, per mark"
-            note="width = 56 × √ratio (equal area, 56² px²), capped so height ≤ 40 and width ≤ 160, then × (1 + correction) of that capped size, and the height cap again (P2). The width cap is not re-applied, so LatitudePay’s +15% takes effect (175 wide). The fictional square and stacked lockup reach the height cap first, which is why they are a little lighter than the wordmarks: the cap outranks the area, in ch05's order."
+            note="width = 56 × √(0.28 ÷ density) × √ratio (equal INK, 56² × 0.28 px² of it), capped so height ≤ 40 and width ≤ 240, then × (1 + correction) of that capped size, and the height cap again (P2). LatitudePay, the sparsest at 0.16, is drawn 201 wide; Doodle, the densest at 0.40, 97. The fictional square and stacked lockup carry no density, so they size as at 0.28, and reach the height cap first: the cap outranks the area, in ch05's order."
           >
             <Layout rowGap="block">
               {[...STRIP, SQUARE, TALL].map((mark) => (
@@ -232,12 +245,23 @@ export default function ClientMarkSpecimenPage() {
                     width={mark.width}
                     height={mark.height}
                     correction={mark.correction}
+                    density={mark.density}
                   />
                   <span className={s.specNote}>
                     {mark.name} · {mark.shape}
                   </span>
                 </Cluster>
               ))}
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="Equal ink, against equal box"
+            note="The four marks the 9 Oct review named. Above, each without its density: sized by its box alone, as before, and LatitudePay’s tracked hairline capitals and Quoter’s name inside its pill read about half the mass of Knovos and Doodle. Below, with it: the same files at the same area of ink. Quoter is measured with its pill left out — a frame is a container, not mass."
+          >
+            <Layout rowGap="stack">
+              <Strip marks={[LATITUDEPAY, QUOTER, KNOVOS, DOODLE].map(boxOnly)} />
+              <Strip marks={[LATITUDEPAY, QUOTER, KNOVOS, DOODLE]} />
             </Layout>
           </Specimen>
 
@@ -250,7 +274,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="The weight correction, with and without"
-            note="Fictional files, so the pairs read at a glance (the real set runs from LatitudePay +15% to Doodle, GT Tools and Incluude −15%). Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
+            note="Fictional files, so the pairs read at a glance (the real set carries none since its densities were measured: the correction is for what a measurement cannot see). Same files, correction 0 on the left of each pair and the recorded value on the right. A heavy mark comes down, a hairline mark comes up. The last pair passes 0.4: it is clamped to +0.15 and warned in development."
           >
             <Layout rowGap="block">
               <Cluster colGap="stack" rowGap="stack" align="center">
@@ -296,27 +320,10 @@ export default function ClientMarkSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="The width cap"
-            note={`A 12:1 wordmark would be ${Math.round(SIDE * Math.sqrt(12))} wide at the target area. It stops at 160, and its height follows (${computed(ULTRAWIDE)}). Shown beside LatitudePay, the widest real mark at 7.4:1: fitted at 152, then corrected +15% to 175, because the correction scales the capped size and only the height cap applies again.`}
+            title="The width guard"
+            note={`A sparse 12:1 wordmark would be ${Math.round(SIDE * Math.sqrt(REF / 0.16) * Math.sqrt(12))} wide at the target ink. It stops at 240, and its height follows (${computed(ULTRAWIDE)}). Shown beside LatitudePay, the widest real mark at 7.4:1 and ${computed(LATITUDEPAY)}: the guard stops the ultra-wide, and no real mark reaches it.`}
           >
             <Strip marks={[LATITUDEPAY, ULTRAWIDE]} />
-          </Specimen>
-
-          <Specimen
-            title="Two sizes — md and sm"
-            note="size=&quot;sm&quot; is the logo grid's mark (r7-logos). From 768 it IS md, so the two rows match at 1440; below 768 sm steps to 36 / 26 / 90 against md's 44 / 32 / 128, which lets LogoGrid set nine marks three across a 390 column at equal weight. One size per set, always."
-          >
-            <Layout rowGap="stack">
-              {(['md', 'sm'] as const).map((size) => (
-                <Cluster key={size} as="ul" colGap="stack" rowGap="stack" align="center">
-                  {STRIP.map((mark) => (
-                    <li key={mark.name}>
-                      <ClientMark {...bare(mark)} size={size} />
-                    </li>
-                  ))}
-                </Cluster>
-              ))}
-            </Layout>
           </Specimen>
 
           <Specimen

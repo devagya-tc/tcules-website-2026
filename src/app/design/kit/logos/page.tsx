@@ -9,7 +9,7 @@ import {
 } from '@/components';
 import { getNavigation } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { ContentSection, CtaRow, ListCard, LogoGrid, logoGridColumns } from '@/patterns';
+import { CtaRow, ListCard, LogoGrid, logoGridColumns } from '@/patterns';
 
 import { Specimen, specimenStyles as s } from '../../_specimen/Specimen';
 import {
@@ -30,21 +30,23 @@ import t from '../../_specimen/typeroles.module.css';
 /**
  * Kit · H · Client logos — the boxed logo grid (r7-logos; 7 Oct review, owner 8 Oct 2026).
  *
- * The H band is now one unit, LogoGrid: every mark in a hairline cell of its own, equal weight, the
- * Enorm reference's treatment. The cell is the named exception to "no boxes" — a logo cell is not
+ * The H band is now one unit, LogoGrid: every mark in a boxed hairline cell of its own, the outer
+ * edge drawn (closed, the default since the 9 Oct review), at equal weight — equal area of INK, by
+ * each mark's measured density — the Enorm reference's treatment. The cell is the named exception to "no boxes" — a logo cell is not
  * a card. The band's heading is demoted to an eyebrow-size context line, and it may lead with the
  * sourced rating badge. No marquee. Each band is ≤ 830 at 1470 (`npm run fold:check`).
  *
  * The three variants differ in what leads, so the page never repeats one rectangle:
  *   01  the context line alone, start-aligned, nine marks three by three across the column;
  *   02  the RatingBadge leading a centred context line, eight marks in one flat four-by-two wall;
- *   03  a short heading beside the grid, nine marks three by three in the body track.
- * Then the counts: 12 cells (6 × 2 at 1440), with the closed edge, so 8, 9 and 12 are all on the page;
- * and the token proof on tint, ink and blue (never this band's ground on a page — blue is the
- * foreground accent — but every surface block in logo-grid.css has to render somewhere).
+ *   03  a short h4-scale heading beside the grid, centred on it, nine marks three by three.
+ * Then the counts: 12 cells (6 × 2 at 1440), so 8, 9 and 12 are all on the page; the open edge, the
+ * alternative; and the token proof on tint, ink and blue (never this band's ground on a page — blue
+ * is the foreground accent — but every surface block in logo-grid.css has to render somewhere).
+ * On a phone every count is two across; nine closes on one cell spanning the row.
  *
- * Honesty (§ 5.8): the marks are the nine real files in public/clients, one ink, equal area, the
- * corrections recorded in ../../_specimen/clients.ts. The badge is the one sourced figure the seam
+ * Honesty (§ 5.8): the marks are the nine real files in public/clients, one ink, equal ink area, the
+ * densities measured and recorded in ../../_specimen/clients.ts. The badge is the one sourced figure the seam
  * holds, the Clutch rating (fixtures/ratings.ts, via getNavigation). The twelve-cell grid repeats
  * three marks to reach twelve, and says so: a stress count, not a client list.
  */
@@ -127,14 +129,14 @@ export default async function KitLogosPage() {
             <ListCard
               form="tile"
               marker={{ type: 'number', value: 1, tone: 'neutral' }}
-              title="A cell is not a card"
-              body="Hairlines between equal cells: the one named exception to no boxes."
+              title="Each mark in its own box"
+              body="Equal hairline cells, the outer edge drawn: a logo cell is not a card."
             />
             <ListCard
               form="tile"
               marker={{ type: 'number', value: 2, tone: 'neutral' }}
-              title="Rows are always full"
-              body="The count sets the columns: 8 is 4 × 2, 9 is 3 × 3, 12 is 6 × 2."
+              title="Equal ink, every row full"
+              body="Each mark sized by its measured density. The count sets the columns: 8 is 4 × 2, 9 is 3 × 3, 12 is 6 × 2."
             />
           </Layout>
         </Layout>
@@ -142,13 +144,13 @@ export default async function KitLogosPage() {
 
       {/* ── 01 ──────────────────────────────────────────────────────────────────────────── */}
       <Label title="01 · Context line">
-        {`The heading demoted to one eyebrow-size line over the open grid. Nine: ${shape(9)}.`}
+        {`The heading demoted to one eyebrow-size line over the boxed grid. Nine: ${shape(9)}.`}
       </Label>
       <Section aria-labelledby="logos-context">
         <LogoGrid
           marks={CLIENTS}
           context="Product teams we have designed and shipped with"
-          contextId="logos-context"
+          headingId="logos-context"
         />
       </Section>
 
@@ -163,7 +165,7 @@ export default async function KitLogosPage() {
               marks={EIGHT}
               badge={badge}
               context="Rated by the product teams we work with"
-              contextId="logos-rated"
+              headingId="logos-rated"
               align="center"
             />
           </Section>
@@ -172,38 +174,51 @@ export default async function KitLogosPage() {
 
       {/* ── 03 ──────────────────────────────────────────────────────────────────────────── */}
       <Label title="03 · Beside a short heading">
-        {`A short head and its action beside the grid in the body track. Nine: ${shape(9, 'body')}.`}
+        {`A short h4 head and its action, centred on the grid beside it. Nine: ${shape(9, 'body')}.`}
       </Label>
-      <ContentSection
-        arrangement="beside"
-        eyebrow="Clients"
-        heading="Nine teams, one way of working"
-        headingId="logos-beside"
-        actions={
-          <CtaRow
-            actions={[{ label: 'See the work', href: ROUTES.caseStudies }]}
-            rule={false}
-          />
-        }
-      >
-        <LogoGrid marks={CLIENTS} track="body" />
-      </ContentSection>
+      <Section aria-labelledby="logos-beside">
+        <LogoGrid
+          marks={CLIENTS}
+          arrangement="beside"
+          context="Clients"
+          heading="Nine teams, one way of working"
+          headingId="logos-beside"
+          action={
+            <CtaRow
+              actions={[{ label: 'See the work', href: ROUTES.caseStudies }]}
+              rule={false}
+            />
+          }
+        />
+      </Section>
 
       {/* ── 04 ──────────────────────────────────────────────────────────────────────────── */}
-      <Label title="04 · Twelve cells, closed edge">
-        {`Stress count: three marks repeated to reach twelve, every cell a whole box. ${shape(12)}.`}
+      <Label title="04 · Twelve cells">
+        {`Stress count: three marks repeated to reach twelve, still a whole rectangle. ${shape(12)}.`}
       </Label>
       <Section aria-labelledby="logos-twelve">
         <LogoGrid
           marks={TWELVE}
-          context="Twelve cells, the outer edge drawn"
-          contextId="logos-twelve"
-          edges="closed"
+          context="Twelve cells, every row full"
+          headingId="logos-twelve"
         />
       </Section>
 
       {/* ── 05 ──────────────────────────────────────────────────────────────────────────── */}
-      <Label title="05 · The other surfaces">
+      <Label title="05 · Open edges, the alternative">
+        {`edges="open": rules only between cells, no frame round the set, so it sits in the paper. Eight: ${shape(8)}.`}
+      </Label>
+      <Section aria-labelledby="logos-open">
+        <LogoGrid
+          marks={EIGHT}
+          context="The same wall, its outer edge left open"
+          headingId="logos-open"
+          edges="open"
+        />
+      </Section>
+
+      {/* ── 06 ──────────────────────────────────────────────────────────────────────────── */}
+      <Label title="06 · The other surfaces">
         Token proof, not placements: the rule and context inks on tint, ink and blue. Blue and
         ink are never this band&rsquo;s ground on a page.
       </Label>
@@ -212,9 +227,8 @@ export default async function KitLogosPage() {
           <LogoGrid
             marks={EIGHT}
             context={`surface="${surface}"`}
-            contextId={`logos-${surface}`}
+            headingId={`logos-${surface}`}
             contextAs="p"
-            edges={surface === 'tint' ? 'open' : 'closed'}
           />
         </Section>
       ))}

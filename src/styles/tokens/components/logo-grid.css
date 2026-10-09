@@ -17,8 +17,9 @@
                          reference's 107 cells to its ~30 marks. Three rows are 384, so a
                          three-by-three grid, its context line and a section's padding stay well
                          inside the 830 fold at 1470.
-   --lgrid-cell-height-m the phone step, as the type ladder names its 767 step: 88 for the
-                         ClientMark's sm mark (26 tall), so twelve marks in four rows are 352.  */
+   --lgrid-cell-height-m the phone step, as the type ladder names its 767 step: 88 holds the
+                         phone mark's 32 cap with 28 of air, so nine marks two across (five
+                         rows) are 440 and twelve (six rows) 528.                            */
 :root {
   --lgrid-cell-height: 128px;
   --lgrid-cell-height-m: 88px;

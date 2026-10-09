@@ -69,6 +69,7 @@ through the mask; there is no `<img>` and no inline `<svg>`.
 | `width`      | `number` | required | intrinsic width (viewBox units). Only `width / height` is used                                             |
 | `height`     | `number` | required | intrinsic height                                                                                           |
 | `correction` | `number` | `0`      | the weight correction recorded with the asset, as a fraction of size. Clamped to ±0.15, dev-warned outside |
+| `density`    | `number` | 0.28     | the file's measured ink coverage, 0–1 (`node scripts/client-mark-density.mjs`; an enclosing frame left out). The box's area scales by 0.28 ÷ density, so every mark lays the same area of INK (r7-logos fix round, 9 Oct 2026). Clamped to 0.1–0.6, dev-warned outside |
 | `className`  | `string` | —        | position only (never colour, size, spacing)                                                                |
 
 **Deliberately not a prop:** `surface` (read from the ancestor `data-surface`), colour / ink
@@ -165,8 +166,8 @@ container's — the Cluster's or the Layout's, `colGap` / `rowGap` = `stack` (48
 
 **Never wider than its box.** `max-inline-size: 100%` (2.17). In a Cluster the box is the mark's
 own `li`, so it does nothing; in an equal grid cell narrower than the mark (a corrected 175-wide
-mark in a five-track cell between 1024 and ~1130, 154–169 wide) it stops the mark spilling out of
-its track. The `block-size` does not follow, on purpose: the
+mark — LatitudePay at 201 by its density — in a gapped five-track cell between 1024 and ~1130) it
+stops the mark spilling out of its track. LogoGrid sets its columns so no boxed cell is narrower. The `block-size` does not follow, on purpose: the
 mask is `contain`, so the artwork shrinks to the width and letterboxes in a box a few px taller —
 the designed failure mode, never a crop or a stretch.
 
@@ -176,10 +177,10 @@ the designed failure mode, never a crop or a stretch.
 | --------------------- | ----- | ------------------------------------------------------------------------------------------------------ |
 | `--cmark-target-side` | 56px  | the side of the target square (area 3136 px²). A 4:1 wordmark → 112 × 28, 3:1 → 97 × 32; under the cap |
 | `--cmark-height-max`  | 40px  | ruling P2, "~40px tall"                                                                                |
-| `--cmark-width-max`   | 160px | a 4:1 wordmark at the height cap. A 12:1 wordmark stops at 160 × 13. The limit BEFORE a correction; a +15% mark may reach 184 |
+| `--cmark-width-max`   | 240px | a GUARD for the ultra-wide (a 6:1 wordmark at the height cap), not the normaliser — 160 until 9 Oct 2026, when it was the thing sizing LatitudePay; its density does that now (201), and no real mark reaches 240 |
 | `--cmark-target-side-m` | 44px | the phone step (below 768), 56 × 0.79. A 4:1 wordmark → 88 × 22 |
 | `--cmark-height-max-m`  | 32px | the phone step of P2's cap, 40 × 0.8 |
-| `--cmark-width-max-m`   | 128px | the phone step, 160 × 0.8. The widest real mark at 390 is LatitudePay, 119 × 1.15 = 137, inside a 139 two-track cell |
+| `--cmark-width-max-m`   | 188px | the phone step, 240 × 0.79. The widest real mark at 390 is LatitudePay at 158, inside LogoGrid's ~179 two-across cell |
 
 The target is a side, not an area, because a custom property cannot carry px².
 
@@ -191,8 +192,9 @@ shadow". The mask is `contain` and `no-repeat`, so the mark is never cropped (§
 **The arithmetic lives in CSS; √r does not.** `sqrt()` needs Chrome 120 / Firefox 118 / Safari
 15.4, and Next 16 supports Chrome/Edge 111+. In 111–119 the width would be invalid and every mark
 would collapse to zero. So TSX computes `r` and `√r` once on the server and passes them, with the
-URL and `1 + correction`, as four unitless custom properties on `style` (`--cmark-src`,
-`--cmark-ratio`, `--cmark-ratio-root`, `--cmark-correction`), registered in `JS_INJECTED`. Every
+URL, `1 + correction` and `√(0.28 / density)`, as five custom properties on `style` (`--cmark-src`,
+`--cmark-ratio`, `--cmark-ratio-root`, `--cmark-correction`, `--cmark-optical`), registered in
+`JS_INJECTED`. Every
 length is computed in the module from tokens.
 
 ---
@@ -339,7 +341,9 @@ None. ch05 §10: never animated. No transition, no hover colour change, no marqu
 - **Do** put a set of known size in equal cells — a `Layout` (`as="ul"`, each in an `li`) with a
   count the columns divide; use a `Cluster` when the count is not yours to choose (§10).
 - **Do** pass the viewBox width and height as `width` / `height`.
-- **Do** record a correction beside the asset, and only for unusually heavy or light strokes.
+- **Do** record the measured density beside the asset; leave an enclosing frame (a pill, a box)
+  out of the measurement with `--frame=<path ids>`.
+- **Do** record a correction only for what the density cannot see — never to restate it.
 - **Don't** set `margin`, `padding`, `background`, `border`, `box-shadow`, `border-radius` or
   `animation` on a `.mark` from any stylesheet: `grep -rn "ClientMark" src --include=*.tsx` call
   sites carry no `className` other than a position.

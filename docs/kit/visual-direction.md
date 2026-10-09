@@ -631,9 +631,12 @@ at a glance — an icon router of four to six destinations — may draw every ca
 **Named exception (owner, 7 Oct review, 8 Oct ruling) — the logo cell.** A client mark in the H band sits
 in a hairline cell of its own (`LogoGrid`, the Enorm reference), so marks of different kinds read as
 equals. A logo cell is not a card, so this is an exception to the rule above rather than a third card
-form: rules between cells only (`edges="open"`, the default) or every cell a whole box
-(`edges="closed"`); no ground, radius or shadow; the column count follows the mark count so every row
-is full. The section heading is demoted to an eyebrow-size context line, which a RatingBadge may lead.
+form: every cell a whole box, the outer edge drawn (`edges="closed"`, the default since the 9 Oct
+review), or rules between cells only (`edges="open"`, the alternative); no ground, radius or shadow;
+the column count follows the mark count so every row is full, two across on a phone with a lone last
+mark spanning the row. Each mark is sized to equal area of ink by its measured density. The section
+heading is demoted to an eyebrow-size context line, which a RatingBadge may lead; beside the grid, a
+short heading at the h4 role, centred on it.
 
 **Whole-card links carry no arrow (owner, 7 Oct 2026, superseding the 6 Oct arrow cue).** The blue
 arrow after the title's last word stood on nearly every card and read as bulky; the whole card is the

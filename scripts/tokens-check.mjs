@@ -24,7 +24,7 @@ const CONSUMER_GLOBS = ['src/**/*.module.css', 'src/app/globals.css', 'src/style
  *   there is no finite set of classes to enumerate. Each is pinned to `initial` when unused so
  *   the var() fallback chain resolves to a single track rather than inheriting an ancestor's.
  *
- * --cmark-{src,ratio,ratio-root,correction}  written by src/components/ClientMark/ClientMark.tsx.
+ * --cmark-{src,ratio,ratio-root,correction,optical}  written by src/components/ClientMark/ClientMark.tsx.
  *   Per-asset data: the client's SVG URL and its intrinsic ratio are continuous values from the
  *   CMS, so they cannot be classes. √ratio is computed there rather than with CSS sqrt(), which
  *   is below Next 16's Chrome 111 floor.
@@ -52,6 +52,7 @@ const JS_INJECTED = new Set([
   '--cmark-ratio',
   '--cmark-ratio-root',
   '--cmark-correction',
+  '--cmark-optical',
   '--media-focus',
 ]);
 
