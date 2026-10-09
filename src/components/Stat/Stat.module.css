@@ -44,6 +44,11 @@
   text-transform: var(--text-mono-case);
 }
 
+.sizeXl .value {
+  font: var(--stat-value-text-xl);
+  letter-spacing: var(--stat-value-tracking-xl);
+}
+
 .sizeMd .value {
   font: var(--stat-value-text-md);
   letter-spacing: var(--stat-value-tracking-md);
@@ -58,11 +63,102 @@
   color: var(--stat-unit-ink);
 }
 
+/* ── The tally: the figure drawn as its count (kit r7-facts, 9 Oct 2026) ──────────
+   A field of marks between the rule and the figure, one per unit. At lg and md the field has one
+   fixed height and its marks sit on its floor, so a row of stats whose fields differ in shape — a
+   square of 64, a run of 11 ticks, a low block of 18 — still sets its figures on one line, and the
+   fields read as a skyline over them. At xl the field is the glyph row's own height: one figure, no
+   row to align with. Marks per row come from the markup as --stat-tally-columns, a count the data
+   decides; every other value is --stat-tally-*. A glyph row floors with the rest, so a rating's
+   stars at lg or md keep its figure on the row's line. */
+.tally {
+  /* Declared here so the read resolves; the markup's inline value (the data's count) wins. */
+  --stat-tally-columns: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--stat-tally-columns), max-content);
+  gap: var(--stat-tally-gap);
+  align-content: end;
+  block-size: var(--stat-tally-height);
+}
+
+.tallyBar {
+  column-gap: var(--stat-tally-bar-gap);
+}
+
+.sizeXl .tally {
+  block-size: auto;
+}
+
+/* Below 768 a set of stats is one column: there is no row whose figures the shared floor could
+   align, and a low field (18 as 6 × 3) would only open a gap above itself. The field takes its own
+   height, so every stat on a phone reads rule, marks, figure with the same seams. A bar keeps its
+   full stroke height; only the floor goes. */
+@media (max-width: 767.98px) {
+  .tally {
+    block-size: auto;
+  }
+}
+
+.mark {
+  /* The partial mark's share, set inline on that one mark; 0% everywhere else. */
+  --stat-tally-share: 0%;
+  position: relative;
+  display: block;
+  line-height: 0;
+}
+
+.filled {
+  color: var(--stat-tally-ink);
+}
+
+.empty {
+  color: var(--stat-tally-empty-ink);
+}
+
+.dot,
+.bar {
+  display: block;
+  background: currentColor;
+}
+
+.dot {
+  inline-size: var(--stat-tally-mark);
+  block-size: var(--stat-tally-mark);
+}
+
+.bar {
+  inline-size: var(--stat-tally-bar-width);
+  block-size: var(--stat-tally-height);
+}
+
+.mark svg {
+  inline-size: var(--stat-tally-glyph);
+  block-size: var(--stat-tally-glyph);
+}
+
+/* The partial mark's fill: the same shape laid exactly over the empty one and clipped to its share
+   from the start edge, so 4.8 of 5 shows a star four-fifths blue rather than a rounded-up fifth. */
+.share {
+  position: absolute;
+  inset: 0;
+  color: var(--stat-tally-ink);
+  clip-path: inset(0 calc(100% - var(--stat-tally-share)) 0 0);
+}
+
+.share:dir(rtl) {
+  clip-path: inset(0 0 0 calc(100% - var(--stat-tally-share)));
+}
+
 .label {
   max-inline-size: var(--stat-label-measure);
   font: var(--stat-label-text);
   text-wrap: var(--text-running-wrap);
   color: var(--stat-label-ink);
+}
+
+/* The source sits at the stat's start (or its centre, below), at its own width: a pill, not a row. */
+.source {
+  justify-self: start;
 }
 
 /* ── One form at every width (final fix round, 6 Oct 2026) ──────────────────────
@@ -83,6 +179,14 @@
 
 .centred .figure {
   justify-content: center;
+}
+
+.centred .tally {
+  justify-content: center;
+}
+
+.centred .source {
+  justify-self: center;
 }
 
 .centred::before {

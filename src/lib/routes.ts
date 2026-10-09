@@ -108,6 +108,7 @@ export const ROUTES = {
   designKitForm: '/design/kit/form',
   designProof: '/design/proof',
   designKitTestimonials: '/design/kit/testimonials',
+  designKitFacts: '/design/kit/facts',
   designCallout: '/design/callout',
   designKitProcess: '/design/kit/process',
   designSteps: '/design/steps',
