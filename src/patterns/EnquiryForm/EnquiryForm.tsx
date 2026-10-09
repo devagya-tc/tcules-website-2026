@@ -43,13 +43,6 @@ type SharedProps = {
    */
   fields?: 'line' | 'box';
   /**
-   * Number the fields (cmp-form final round): a mono numeral leads each label — 01 Name,
-   * 02 Email, 03 What are you working on? Neutral, not blue (owner, 7 Oct 2026): numbers are blue
-   * only where they ARE the information, and here they are auxiliary to the labels. The numerals
-   * are aria-hidden: the label is the field's name, and the count is visual order, not content.
-   */
-  numbered?: boolean;
-  /**
    * How the submit sets. `inline` (default) is the button at its own width, the caption (compact)
    * or the scheduling link (full) beside it. `full` sets the button across the form's whole track
    * with the line under it — the reference move (Executra) for a form that ends a column, and the
@@ -120,7 +113,9 @@ type CompactVariantProps = SharedProps & {
 export type EnquiryFormProps =
   EnquiryVariantProps | AuditVariantProps | ContactVariantProps | CompactVariantProps;
 
-type Lifecycle = 'idle' | 'submitting' | 'error' | 'success';
+/* `invalid`: a send was attempted with a required answer missing or malformed, and the form held
+   it back (r7-form). Nothing was posted. */
+type Lifecycle = 'idle' | 'invalid' | 'submitting' | 'error' | 'success';
 type FieldMessages = {
   email: string;
   work: string;
@@ -153,37 +148,34 @@ function normaliseUrl(value: string): string {
 }
 
 /**
- * One field's frame: label, control, and only the rows the field can actually use (1 Oct 2026).
+ * One field's frame: a hidden label, an optional hint, the control and its message (r7-form, owner
+ * 7 Oct 2026).
  *
- * The frame used to be the same for every field: a label, an optional mono flag beside it, and a
- * message row ALWAYS reserved under the control. So a field that could never fail still held an
- * empty error line, and "Optional" was a separate shouted chip. Now each field declares its
- * contract and the anatomy follows from it:
+ * NO VISIBLE LABEL. The placeholder is the field's visible cue — "Name", "Email", "What are you
+ * working on?" — and the <label> stays, visually hidden, so the field keeps its accessible name and
+ * the name does not vanish for a screen reader once something is typed. A field that needs more
+ * than its noun says it in a visible hint above the control. The compact form is the point: a row
+ * of labels over a row of boxes doubled the form's height for words the boxes already said.
  *
- *   label     the NOUN for the value — Email, Name, Company, Phone, Website. A longer label only
- *             where the noun is ambiguous or the field asks for free text ("What are you working
- *             on?" tells a person what to write; "Message" would not). Never "Your …", never
- *             "… Address", never Title Case.
- *   optional  said inside the label, in the label's own voice and a quieter ink: "Website
- *             (optional)". Only the minority is marked — on these forms, the optional field.
- *   hint      a row under the label, only when the field has something to explain.
- *   validates the field can fail, so it reserves one caption line under the control and blur
- *             errors land without moving anything below. A field that cannot fail has no row.
+ *   label     the NOUN for the value — Email, Name, Company, Phone, Website — or the question
+ *             where the field asks for free text. Never "Your …", never Title Case. The same words
+ *             are the placeholder, so what is announced is what is seen.
+ *   optional  said inside the cue, in the cue's own voice: "Website (optional)".
+ *   hint      a visible row above the control, only when the field has something to explain.
+ *   validates the field can fail. Its message row is ALWAYS mounted and is a polite live region,
+ *             so a blur error is announced as it appears; it is empty and takes no height until
+ *             there is a message, which keeps the form compact. The control points at it with
+ *             aria-describedby, so a return visit to the field reads the error with its name.
  *
  * Errors say what to do, in a few words, no period, no blame: "Enter your email", "Enter a valid
- * email". Prefer normalising over rejecting (see normaliseUrl): every rule the form can apply
- * itself is an error a person never sees.
+ * email". Prefer normalising over rejecting (see normaliseUrl).
  */
 type FieldGroupProps = {
   id: string;
   label: string;
-  /** The blue numeral leading the label, when the form is `numbered`. */
-  index?: string;
-  /** The field treatment, which sets the label-to-control step (see below). */
-  appearance: 'line' | 'box';
   optional?: boolean;
   hint?: { id: string; text: string };
-  /** Present when the field validates: the id of its reserved message row, and the message. */
+  /** Present when the field validates: the id of its message row, and the message. */
   validation?: { id: string; message: string };
   children: ReactNode;
 };
@@ -191,68 +183,53 @@ type FieldGroupProps = {
 function FieldGroup({
   id,
   label,
-  index,
-  appearance,
   optional = false,
   hint,
   validation,
   children,
 }: FieldGroupProps) {
-  const text = (
-    <>
-      {label}
-      {optional ? <span className={styles.optional}> (optional)</span> : null}
-    </>
-  );
+  const message = validation?.message ?? '';
   return (
-    /* `.field` so the label can take the accent while its control has focus: the blue lands on the
-       question being answered, beside the blue rule under the value.
-
-       Two steps, nested (cmp-form final round). The label, its hint and the control are ONE group
-       at `inline` on a line field — the label sits on the value and the value on its rule, so the
-       three read as one answer — and the message row is a `tight` below the rule. On a box field
-       the label keeps `tight` over the box: a box is its own edge and needs no pulling in. With the
-       label at `tight` over a centred value, an empty line field's label sat as far from its own
-       rule as from the rule above it. */
-    <Layout rowGap="tight" className={styles.field}>
-      <Layout rowGap={appearance === 'line' ? 'inline' : 'tight'}>
-        <label className={styles.label} htmlFor={id}>
-          {index ? (
-            <Cluster as="span" nowrap colGap="tight" align="baseline">
-              <span aria-hidden="true" className={styles.fieldIndex}>
-                {index}
-              </span>
-              <span>{text}</span>
-            </Cluster>
-          ) : (
-            text
-          )}
-        </label>
-        {hint ? (
-          <p className={styles.hint} id={hint.id}>
-            {hint.text}
-          </p>
-        ) : null}
-        {children}
-      </Layout>
+    /* The control and its message group at `tight`, but ONLY while there is a message: an empty
+       message row is mounted (it is the live region) and must cost nothing, so with no message the
+       group states no row gap and the empty row is zero tall. */
+    <Layout rowGap={message ? 'tight' : undefined}>
+      <label className={styles.hidden} htmlFor={id}>
+        {label}
+        {optional ? ' (optional)' : null}
+      </label>
+      {hint ? (
+        <p className={styles.hint} id={hint.id}>
+          {hint.text}
+        </p>
+      ) : null}
+      {children}
       {validation ? (
-        <Cluster
-          className={styles.message}
-          id={validation.id}
-          colGap="tight"
-          align="center"
-          nowrap
-        >
-          {validation.message ? <Icon name="close-circle" /> : null}
-          <span>{validation.message}</span>
-        </Cluster>
+        <div className={styles.message} id={validation.id} aria-live="polite">
+          {message ? (
+            <Cluster colGap="tight" align="center" nowrap>
+              <Icon name="close-circle" />
+              <span>{message}</span>
+            </Cluster>
+          ) : null}
+        </div>
       ) : null}
     </Layout>
   );
 }
 
-/** The reassurance line under (or, compact, beside) the submit. One sentence, said once. */
-const CAPTION = 'We reply to the address you give us, and use it for nothing else.';
+/** A field's message for its current value: empty, malformed, or none. Blur and submit share it. */
+function messageFor(spec: FieldSpec, control: HTMLInputElement | HTMLTextAreaElement): string {
+  if (control.value.trim() === '') return spec.empty;
+  if (control instanceof HTMLInputElement && control.validity.typeMismatch) {
+    return 'Enter a valid email';
+  }
+  return '';
+}
+
+/** The reassurance line beside (or under) the submit. One sentence, said once, and kept at the
+    submit by ruling (owner, 7 Oct 2026): the promise belongs where the decision to send is made. */
+const CAPTION = 'We reply within a business day.';
 
 /** The validating text fields, keyed by the message slot each one fills. */
 type FieldKey = keyof FieldMessages;
@@ -273,9 +250,6 @@ type FieldSpec = {
   type?: 'text' | 'email' | 'tel';
   as?: 'textarea';
   autoComplete?: string;
-  /** The hint inside an empty field. Every textarea carries one: a lined textarea with no hint
-      reads as empty space rather than as a field (cmp-form final round). */
-  placeholder?: string;
   /** The message on an empty blur. */
   empty: string;
 };
@@ -294,7 +268,6 @@ const FIELD = {
     name,
     type: 'email',
     autoComplete: 'email',
-    placeholder: 'you@company.com',
     empty: 'Enter your email',
   }),
   company: {
@@ -317,15 +290,13 @@ const FIELD = {
     label: 'What are you working on?',
     name: 'what_are_you_working_on',
     as: 'textarea',
-    placeholder: 'A line or two: the product, and what is stuck',
     empty: 'Add a line about it',
   } satisfies FieldSpec,
   message: {
     key: 'comments',
-    label: 'Message',
+    label: 'What would you like to talk about?',
     name: 'clientComments',
     as: 'textarea',
-    placeholder: 'What would you like to talk about?',
     empty: 'Add a message',
   } satisfies FieldSpec,
 };
@@ -356,6 +327,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const urlLabel = props.urlLabel ?? (variant === 'audit' ? 'Site to audit' : 'Website');
   const appearance = props.fields === 'line' ? 'line' : 'box';
   const submitting = lifecycle === 'submitting';
+  const invalidCount = Object.values(messages).filter(Boolean).length;
   const bounds = props.width === 'measure' ? styles.measure : styles.track;
 
   const idFor = (key: string) => `${instanceId}-${key}`;
@@ -383,6 +355,26 @@ export function EnquiryForm(props: EnquiryFormProps) {
     const submitter = (event.nativeEvent as SubmitEvent).submitter;
     const fallbackSubmitter =
       event.currentTarget.querySelector<HTMLButtonElement>('button[type="submit"]');
+    /* Validate before sending (r7-form): every required field gets its message at once, the
+       line beside the submit says how many need a look, and focus moves to the first of them so a
+       keyboard or screen-reader user lands on the problem with its name and its message. */
+    const form = event.currentTarget;
+    const next: FieldMessages = { ...EMPTY_MESSAGES };
+    let firstInvalid: HTMLElement | null = null;
+    for (const spec of rows.flatMap((row) => (row === 'url' ? [] : row))) {
+      const control = form.elements.namedItem(spec.name);
+      if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement))
+        continue;
+      next[spec.key] = messageFor(spec, control);
+      if (next[spec.key] && !firstInvalid) firstInvalid = control;
+    }
+    if (firstInvalid) {
+      setMessages(next);
+      setLifecycle('invalid');
+      firstInvalid.focus();
+      return;
+    }
+
     (submitter instanceof HTMLElement ? submitter : fallbackSubmitter)?.focus();
 
     setLifecycle('submitting');
@@ -416,13 +408,6 @@ export function EnquiryForm(props: EnquiryFormProps) {
         ? [[FIELD.name('name'), FIELD.email('email')], [FIELD.work]]
         : [[FIELD.email('email')], [FIELD.work], 'url'];
 
-  /* The numeral each field takes when the form is `numbered`, counted in reading order. */
-  const indexFor = (() => {
-    const order = rows.flatMap((row) => (row === 'url' ? ['url'] : row.map((f) => f.key)));
-    return (key: string) =>
-      props.numbered ? String(order.indexOf(key) + 1).padStart(2, '0') : undefined;
-  })();
-
   /** One validating field, from its spec. The only place a FieldGroup + Input pair is written. */
   function renderField(spec: FieldSpec) {
     const id = idFor(spec.key);
@@ -431,7 +416,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
       id,
       name: spec.name,
       autoComplete: spec.autoComplete,
-      placeholder: spec.placeholder,
+      /* The visible cue (r7-form): the label's own words, since the label is hidden. */
+      placeholder: spec.label,
       required: true,
       disabled: submitting,
       appearance,
@@ -439,22 +425,13 @@ export function EnquiryForm(props: EnquiryFormProps) {
       'aria-describedby': messageId,
     } as const;
     const validate = (control: HTMLInputElement | HTMLTextAreaElement) =>
-      setMessage(
-        spec.key,
-        control.value.trim() === ''
-          ? spec.empty
-          : control instanceof HTMLInputElement && control.validity.typeMismatch
-            ? 'Enter a valid email'
-            : '',
-      );
+      setMessage(spec.key, messageFor(spec, control));
 
     return (
       <FieldGroup
         key={spec.key}
         id={id}
         label={spec.label}
-        index={indexFor(spec.key)}
-        appearance={appearance}
         validation={{ id: messageId, message: messages[spec.key] }}
       >
         {spec.as === 'textarea' ? (
@@ -473,22 +450,14 @@ export function EnquiryForm(props: EnquiryFormProps) {
   function renderRow(row: Row) {
     if (row === 'url') {
       return (
-        <FieldGroup
-          key="url"
-          id={urlId}
-          label={urlLabel}
-          index={indexFor('url')}
-          appearance={appearance}
-          optional
-        >
+        <FieldGroup key="url" id={urlId} label={urlLabel} optional>
           <Input
             id={urlId}
             type="url"
             inputMode="url"
             name="url"
             autoComplete="url"
-            /* A scheme-less example, because the field accepts one (normaliseUrl). */
-            placeholder="yourproduct.com"
+            placeholder={`${urlLabel} (optional)`}
             appearance={appearance}
             disabled={submitting}
             onBlur={(event) => {
@@ -501,10 +470,10 @@ export function EnquiryForm(props: EnquiryFormProps) {
     const [first, second] = row;
     if (!first) return null;
     if (!second) return renderField(first);
-    /* `block` between the two: a pair of fields is two answers, and closer the two labels read as
-       one run. The stacked pair keeps the form's own row step. */
+    /* `text` both ways: the pair's seam is the form's own field step, so name beside email and
+       name over email (stacked in a narrow track) are the same distance apart as every other row. */
     return (
-      <Layout key={first.key} columns="fit" minTrack="xs" colGap="block" rowGap="block">
+      <Layout key={first.key} columns="fit" minTrack="xs" colGap="text" rowGap="text">
         {row.map(renderField)}
       </Layout>
     );
@@ -588,7 +557,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
         : 'Sending your enquiry.'
       : lifecycle === 'error'
         ? 'That did not send. Your answers are still here — try again.'
-        : '';
+        : lifecycle === 'invalid' && invalidCount > 0
+          ? invalidCount === 1
+            ? 'One answer needs a look before this can send'
+            : `${invalidCount} answers need a look before this can send`
+          : '';
 
   const submitLabel =
     variant === 'audit'
@@ -621,14 +594,14 @@ export function EnquiryForm(props: EnquiryFormProps) {
     </Button>
   ) : null;
 
-  /* The caption line, led by a blue mark. The mark is the shield at rest — the sentence is a
-     promise about the address — and the danger triangle when the line has become an error. The
+  /* The caption line, led by a blue mark. The mark is the clock at rest — the sentence is a
+     promise about time — and the danger triangle when the line has become an error. The
      paragraph is the live region, so the status is announced where the reassurance sat. */
-  const error = lifecycle === 'error';
+  const error = lifecycle === 'error' || (lifecycle === 'invalid' && invalidCount > 0);
   const captionLine = (
     <Cluster nowrap colGap="tight" align="start" className={styles.note}>
       <span className={cx(styles.noteMark, error && styles.statusError)}>
-        <Icon name={error ? 'danger-triangle' : 'shield-check'} />
+        <Icon name={error ? 'danger-triangle' : 'clock-circle'} />
       </span>
       <p
         className={cx(styles.noteText, error && styles.statusError)}
@@ -694,13 +667,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
       aria-busy={submitting || undefined}
       onSubmit={handleSubmit}
     >
-      {/* ONE row step for every row, the actions included (cmp-form final round). Each field row
-          ends in its reserved message line, so field → field and field → submit both measure the
-          message reserve plus `block` (~51). The actions used to sit a `stack` below the fields,
-          ~76 from the last rule against ~53 between fields, and read as a separate block rather
-          than as the end of the form. */}
+      {/* Compact by nesting (r7-form): the fields are one group at `text` — with no labels and no
+          reserved message lines, field to field is the 16 between two controls — and the actions
+          sit a `block` below that group, so the submit reads as the end of the form and not as one
+          more field. A message, when there is one, opens its own `tight` under its field. */}
       <Layout rowGap="block">
-        {rows.map(renderRow)}
+        <Layout rowGap="text">{rows.map(renderRow)}</Layout>
         {actions}
       </Layout>
 

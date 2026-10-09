@@ -45,27 +45,22 @@
   --inp-ring-offset: var(--focus-ring-offset);
   /* appearance="line": no fill on any surface.
 
-     The line control is SHORTER than the box (32, not 40) and its value sits on its rule
-     (cmp-form final round, 6 Oct 2026). At 40 with the value centred, an empty line field put its
-     label 59px above its own rule and 53 below the rule above it, so the label read as belonging
-     to either, and a form of them read as a ruled notepad. Executra (ref-executra-11) sets the
-     value on the rule. 32 holds one --text-body line (24) and the rule inset under it; the label
-     sits a `--gap-inline` over the value (EnquiryForm), so label → own rule is ~36 and own rule →
-     next label is the row's step plus the reserved message line, ~51.
+     The line control is UNLABELLED to the eye (r7-form, owner 7 Oct 2026): the placeholder is the
+     visible cue and the label is visually hidden. So it no longer leans on a label above it for
+     its hit area or its anchoring, and it is the touch floor tall on its own at every width: 44,
+     the value set low, on its rule (Executra, ref-executra-11), 14 over the value and 6 under it.
+     It was 32 with the value tucked under a visible label 4 above; with the label gone a 32 field
+     was a target under the floor and a row of them read as a ruled notepad.
 
-     The 44px touch floor is met by the label + control together: every line field is labelled with
-     `for`, so the label is part of the hit area, and label (21) + gap (4) + control (32) is 57.
-
-     The textarea floor is two lines (64, from 104): at three lines an empty lined textarea was
-     ~100px of nothing over a hairline, and at a squint it read as a spacing bug. It still grows
-     with what is typed (field-sizing: content). */
+     The textarea floor is two lines plus the same insets (68): its first line sits where a
+     single-line field's value sits, so a row of lined fields shares one baseline rhythm. It still
+     grows with what is typed (field-sizing: content). */
   --inp-line-bg: transparent;
-  --inp-line-height-md: 32px;
+  --inp-line-height-md: var(--inp-height-touch);
   --inp-line-inset-bottom: var(--space-6); /* optical: the value's descenders clear the rule */
-  --inp-line-inset-top: var(
-    --space-4
-  ); /* optical: the textarea's first line clears the label */
-  --inp-line-textarea-min-block: 64px;
+  /* optical: the inset that sets one --text-body line on its rule in a 44 field (44 - 24 - 6) */
+  --inp-line-inset-top: var(--space-14);
+  --inp-line-textarea-min-block: 68px; /* two body lines (48) + the 14 and 6 insets */
 }
 
 :root,

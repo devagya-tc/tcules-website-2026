@@ -13,6 +13,15 @@
 | **Implemented at**  | `src/patterns/EnquiryForm/EnquiryForm.tsx` · `src/patterns/EnquiryForm/EnquiryForm.module.css` · `src/styles/tokens/components/enquiry-form.css` · primitive dependency `src/components/Input/` · specimen `src/app/design/enquiry-form/page.tsx` |
 | **Rendered from**   | `guidelines/docs/vocabulary.md` (read in full; every token name below is verbatim from it, or is a request in §16)                                                                                                                                |
 
+> **Amended 8 Oct 2026 (r7-form, owner ruling of 7 Oct; `docs/kit/review-7-oct.md`).** Applied in the build; where anything below disagrees, this wins:
+>
+> 1. **No visible labels.** Each field's placeholder is its visible cue and carries the label's own words ("Name", "Email", "What are you working on?", "Website (optional)"); the `<label for>` stays, visually hidden (`--enq-hidden-size`), so the accessible name survives typing. `--enq-label-ink` and the label's focus accent are deleted. A field that needs more than its noun takes a visible hint above the control.
+> 2. **Compact rhythm.** No message line is reserved (`--enq-message-reserve` deleted): the fields are one group at `text` (pairs `text` both ways), the actions a `block` below it. A field's message row is always mounted as a polite live region, empty and zero-tall at rest, and opens a `tight` under its field when it has something to say.
+> 3. **Errors on send.** Submit validates every required field first: each gets its message, the line beside the submit turns to "N answers need a look before this can send", focus moves to the first invalid field, and nothing is posted.
+> 4. **The caption is "We reply within a business day."**, beside (or under) the submit.
+> 5. **`numbered` is retired**: its numerals led labels that no longer render.
+> 6. **Input's line field is 44 tall** with the value on its rule (`--inp-line-height-md` = `--inp-height-touch`, `--inp-line-inset-top` 14); unlabelled, it meets the touch floor alone. The lined textarea floors at 68.
+
 > **Amended 29 Sep 2026 (tracker 2.17).** Four changes, approved by the owner, applied in place below:
 >
 > 1. **"See available times" moved into this component.** It sits in the action row beside the submit — one `Cluster colGap="block"`, wrapping on a narrow column — as `Button emphasis="link" tone="primary" size="lg"` (primary since fdn-blue, 6 Oct 2026: a text link is blue at rest) with a trailing `arrow-right` glyph. `scheduleHref` is now a prop: **required** on `enquiry` and `audit` (the 56-instance constraint moved here from `CtaSection`, which no longer takes `scheduleHref`), optional on `contact`. The Success view carries the same link on, so there is still exactly one per band.
@@ -119,7 +128,7 @@ Caller inputs are the field set (§3 `variant`, `urlLabel`), `context` for enqui
 | `scheduleHref` | `string` | required on enquiry and audit, optional on contact, refused on compact | The "See available times" link beside the submit and in the success view (29 Sep 2026) |
 | `width` | `"track" \| "measure"` | `"track"` | Every variant fills its track; `measure` caps it at `--enq-form-measure` (667) for a form under a centred head (6 Oct 2026) |
 | `fields` | `"line" \| "box"` | `"line"` | Input's appearance for every field (6 Oct 2026) |
-| `numbered` | `boolean` | `false` | A blue `--text-ui-sm` numeral leads each label, aria-hidden (6 Oct 2026, final round) |
+| ~~`numbered`~~ | — | — | Retired 8 Oct 2026 (r7-form): it numbered labels that no longer render |
 | `submit` | `"inline" \| "full"` | `"inline"` | `full` sets the submit across the track with the line under it (6 Oct 2026, final round) |
 | `nextSteps` | `readonly EnquiryNextStep[]` (`{ label: string; detail?: string }`) | none | The success view's numbered steps, the caller's copy; on a close, CtaSection's `points` passed straight through (6 Oct 2026, final round) |
 

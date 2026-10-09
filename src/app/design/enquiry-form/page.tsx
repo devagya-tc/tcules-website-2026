@@ -80,8 +80,9 @@ export default function EnquiryFormSpecimenPage() {
         <Layout rowGap="block">
           <h1>EnquiryForm</h1>
           <p>
-            Shared field sets for enquiries, audits, contact, and the compact three-field ask,
-            with blur-only validation and an asynchronous success replacement. The renderings
+            Shared field sets for enquiries, audits, contact, and the compact three-field ask.
+            No visible labels: each placeholder is its field&rsquo;s cue and the label stays,
+            visually hidden. Errors land on blur and on send, and are announced. The renderings
             here sit inside CtaSection; the kit&rsquo;s form family shows the form beside a
             photograph, under a centred and a beside head, and in the offer.
           </p>
@@ -112,7 +113,7 @@ export default function EnquiryFormSpecimenPage() {
         eyebrow="Variant · compact"
         heading="Three lines are enough"
         body={[
-          'Name and email as a pair where the track holds two, the one question, and the submit with the caption beside it. At most 400 tall.',
+          'Name and email as a pair where the track holds two, the one question, and the submit with "We reply within a business day." beside it.',
         ]}
         form={<Enquiry compact />}
       />
@@ -120,7 +121,7 @@ export default function EnquiryFormSpecimenPage() {
         eyebrow={`Fields · line`}
         heading="The line field, kept as an option"
         body={[
-          'fields="line" sets Input\'s unboxed underline field instead of the default box. Every variant takes it; no placement on the site uses it today.',
+          'fields="line" sets Input\'s unboxed underline field, 44 tall with the value on its rule, instead of the default box. Every variant takes it; no placement on the site uses it today.',
         ]}
         form={<Enquiry lined />}
       />
@@ -140,9 +141,25 @@ export default function EnquiryFormSpecimenPage() {
       <CtaSection
         heading="Reach each state through the real controls"
         body={[
-          'Blur an empty or malformed field for Invalid. Submit the three forms below for pending Success, Error, and delayed Submitting. Point at a field, hold the submit, and Tab through the form for the native hover, pressed, and focus states.',
+          'Blur an empty or malformed field, or send with one empty, for Invalid. Submit the three forms below for pending Success, Error, and delayed Submitting. Point at a field, hold the submit, and Tab through the form for the native hover, pressed, and focus states.',
         ]}
         form={<Enquiry outcome="pending" />}
+      />
+      <CtaSection
+        eyebrow="State · invalid on send"
+        heading="Send with an answer missing"
+        body={[
+          'Nothing posts. Each empty or malformed field gets its message, the line beside the submit says how many need a look, and focus moves to the first.',
+        ]}
+        form={
+          <Rehearse submit fill={{ email: 'maya@' }}>
+            <EnquiryForm
+              variant="compact"
+              action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+              context={CONTEXT}
+            />
+          </Rehearse>
+        }
       />
       <CtaSection
         eyebrow="State · error"
@@ -168,9 +185,8 @@ export default function EnquiryFormSpecimenPage() {
           surface={surface}
         />
       ))}
-      {/* The compact set on every surface too, numbered and with the full-width submit, so the
-          accent numerals (--enq-accent-ink) and the caption ink under a full submit are seen on
-          every ground. */}
+      {/* The compact set on every surface too, lined and with the full-width submit, so the line
+          field's inks and the caption under a full submit are seen on every ground. */}
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
         <CtaSection
           key={`compact-${surface}`}
@@ -180,7 +196,7 @@ export default function EnquiryFormSpecimenPage() {
           form={
             <EnquiryForm
               variant="compact"
-              numbered
+              fields="line"
               submit="full"
               action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
               context={CONTEXT}

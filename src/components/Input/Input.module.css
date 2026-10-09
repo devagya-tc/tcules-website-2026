@@ -100,16 +100,16 @@
    (0,2,0) or more and has to win the property it restates. The value sits on the band's own
    ground, so every ink is chosen against the SURFACE (--inp-line-*), not against a white fill.
 
-   The value sits ON its rule (cmp-form final round): 32 tall rather than the box's 40, no top
-   inset, and a 6px optical inset under the value. With the value centred in 40, an empty field's
-   label sat as far from its own rule as from the rule above it. See input.css § line.
+   The value sits ON its rule: the touch-floor height (44) with the inset over the value and a 6px
+   optical inset under it (r7-form, 8 Oct 2026). The field carries no visible label, so its
+   placeholder is the cue and the field alone is the hit area. See input.css § line.
 
    Focus draws no ring box around a field that has no box: the rule under the value turns blue and
    doubles, drawn as an outside shadow so nothing moves. That is the visible focus indicator, and a
    2px blue rule clears 3:1 against every ground's rest rule. */
 .control.line {
   block-size: var(--inp-line-height-md);
-  padding-block: 0 var(--inp-line-inset-bottom);
+  padding-block: var(--inp-line-inset-top) var(--inp-line-inset-bottom);
   padding-inline: 0;
   border-width: 0 0 var(--inp-rule-width);
   border-color: var(--inp-line-rule);
@@ -172,8 +172,8 @@
   color: var(--inp-line-disabled-fg);
 }
 
-/* A lined textarea: two lines rather than the box's four, a 4px inset over the first line so it
-   clears the label, and the same 6px under the last. It GROWS with what is typed
+/* A lined textarea: two lines rather than the box's four, its first line inset as a single-line
+   field's value is, and the same 6px under the last. It GROWS with what is typed
    (`field-sizing: content`, where supported) instead of carrying a resize grip: a grip is a box's
    corner, and on a field with no box it read as a stray mark. Where field-sizing is unsupported the
    field scrolls at its floor, as a native textarea does. Its affordance when empty is the
@@ -189,12 +189,6 @@
 @media (max-width: 767px) {
   .control:not(.textarea) {
     block-size: var(--inp-height-touch);
-  }
-
-  /* The line control keeps its 32 at the phone breakpoint: its touch target is the label and the
-     control together (57), and a 44 line would float the value off its rule again. */
-  .control.line:not(.textarea) {
-    block-size: var(--inp-line-height-md);
   }
 }
 

@@ -97,11 +97,16 @@ export default function InputSpecimenPage() {
             </Specimen>
             <Specimen
               title="Line · input and textarea"
-              note={`appearance="line": no fill, no box, the value on its one rule. Focus turns it blue and doubles it; the two-line textarea grows with its text and needs its placeholder to read as a field.`}
+              note={`appearance="line": 44 tall, the value on its one rule. As EnquiryForm sets it, the placeholder is the cue and the label hidden. Focus turns the rule blue.`}
             >
-              <Layout rowGap="block">
-                <LabelledInput label="Email" appearance="line" />
-                <LabelledTextarea label="What are you working on?" appearance="line" />
+              <Layout rowGap="text">
+                <Input appearance="line" aria-label="Email" placeholder="Email" type="email" />
+                <Input
+                  as="textarea"
+                  appearance="line"
+                  aria-label="What are you working on?"
+                  placeholder="What are you working on?"
+                />
                 {/* EnquiryForm disables every field while it submits and keeps `invalid` from the
                     blur messages, so this pair is a real state: it must read disabled, with no
                     danger rule left under it. */}
@@ -177,7 +182,8 @@ export default function InputSpecimenPage() {
           does not match its own ground. Input owns more surface-dependent tokens than any other
           primitive, and until now it was the only one with no band to prove it. */}
       <Section surface="ink">
-        <Layout rowGap="stack">
+        {/* Side by side from lg: stacked, the band was 839 at 1470 and ran past the fold. */}
+        <Layout columns={{ base: 1, lg: [1, 2] }} colGap="gutter" rowGap="stack" align="start">
           <Specimen
             title="Nested surface · ink outer"
             note="The reference: an ink field on the ink ground it belongs to."

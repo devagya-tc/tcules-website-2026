@@ -1,12 +1,13 @@
 /* EnquiryForm owns the form's copy and feedback, not its control boxes or outer band.
 
    Layout and Cluster own every sibling seam in the JSX. This module only applies the component's
-   inline cap, reserved feedback line, type roles and per-surface inks. The form and its success
+   inline cap, hidden labels, type roles and per-surface inks. The form and its success
    replacement share the same bounds so completion does not change the column's measure: every
    variant fills its track down to a 256 floor, and `width="measure"` caps it at 667 for the
    centred standalone case. It sits in CtaSection's form column, in a media split's copy column and
-   under a centred head alike. The 19px message reserve is one --text-caption line, held only by a field that validates:
-   blur validation may fill it without moving the controls below. No margin, private flex/grid arrangement or surface paint belongs here.
+   under a centred head alike. No message line is reserved (r7-form): a field's message row is
+   mounted empty and opens under the field when there is something to say, so the form stays
+   compact at rest. No margin, private flex/grid arrangement or surface paint belongs here.
 
    State order is load-bearing: .noteText establishes the caption ink, then .statusError replaces
    only that ink. Success is a substitution performed by React, not a hidden sibling, so there is
@@ -31,45 +32,23 @@
   max-inline-size: var(--enq-form-measure);
 }
 
-/* The label of the field being written in takes the accent (§ 4.2: blue marks the active state).
-   It is the label, not the field: the field's own rule turns blue too (Input, appearance="line"),
-   and the pair reads as one mark on the one question being answered. */
-.field:focus-within .label {
-  color: var(--enq-accent-ink);
+/* The field's label, visually hidden and still announced (r7-form, owner 7 Oct 2026): the
+   placeholder is the visible cue, the label the accessible name. Not display:none or
+   visibility:hidden, which remove it from the accessibility tree. The negative margin is not outer
+   spacing: it pulls the 1px clip box out of the flow so the field group does not grow by it. */
+.hidden {
+  position: absolute;
+  inline-size: var(--enq-hidden-size);
+  block-size: var(--enq-hidden-size);
+  margin: calc(-1 * var(--enq-hidden-size));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
-/* A SANS role, and the change is the mono rule reaching this component rather than a re-taste.
-   Mono is always uppercase now (see tokens/primitives.css § Type · case), and these labels are
-   questions — "What are you working on?" — so upper-casing them would make the site's most
-   conversational moment read as a row of shouted field names. The spec argued for sentence case
-   here on exactly that ground; under the rule, a label that must stay sentence case is not a mono
-   label. --text-body-sm at 14/1.5 keeps it: one step up in size from the 13px it left, no tracking
-   companion to restate, and a different voice from the --text-caption message below it, which is
-   the one distinction the two lines have to keep. */
-.label {
-  color: var(--enq-label-ink);
-  font: var(--text-body-sm);
-}
-
-/* "(optional)" is said INSIDE the label, in the label's own voice and a quieter ink (1 Oct 2026).
-   It used to be a separate mono chip beside the label — a third voice in a two-line field, shouting
-   in capitals about the least important fact on it. Same role as the label, so it needs no font of
-   its own; only the ink steps down. */
-.optional {
-  color: var(--enq-hint-ink);
-}
-
-/* The blue numeral leading a label on a `numbered` form: the mono index voice at ui-sm (12), on
-   the label's baseline (its Cluster is `align="baseline"`), in the accent. It does not take the
-   label's focus colour — it is the form's mark, not the active state's. */
-.fieldIndex {
-  color: var(--enq-index-ink);
-  font: var(--text-ui-sm);
-  letter-spacing: var(--text-ui-sm-tracking);
-  text-transform: var(--text-mono-case);
-}
-
-/* A hint, when a field has one: under the label, in the caption voice the error also uses, in the
+/* A hint, when a field has one: over the control, in the caption voice the error also uses, in the
    quiet ink rather than the error's. Absent on every field that has nothing to explain. */
 .hint {
   color: var(--enq-hint-ink);
@@ -77,15 +56,14 @@
   text-wrap: var(--text-running-wrap);
 }
 
-/* No colour transition on the label or here, and that is a correction rather than an omission.
-   --enq-label-ink and --enq-message-invalid-ink are one constant per surface — there is no second
+/* No colour transition here, and that is a correction rather than an omission.
+   --enq-message-invalid-ink is one constant per surface — there is no second
    value in the token layer and no state class that would select one — so a `transition: color` on
-   either could never fire. §5 of the spec says as much ("the label, value and ground hold"); §13's
+   it could never fire. §5 of the spec says as much ("the label, value and ground hold"); §13's
    motion table said otherwise, and the build had followed the table. The only colour that moves in
    this component is the status rule below. */
 .message {
   min-inline-size: 0;
-  min-block-size: var(--enq-message-reserve);
   color: var(--enq-message-invalid-ink);
   font: var(--text-caption);
 }
@@ -94,8 +72,7 @@
    component's own documented 256px floor, "That does not look like an email address." at
    --text-caption leaves about 232px once the 16px glyph and its 8px gap are taken — so `nowrap`
    plus an ellipsis discarded characters from a required error message, and the specimen's own
-   256px band rendered it clipped. --enq-message-reserve already holds the one-line height, so
-   wrapping costs no layout shift; it only grows downward when it has to.
+   256px band rendered it clipped. Wrapping only grows the row downward.
 
    `min-inline-size: 0` stays: it is what lets the span shrink inside its Cluster instead of
    forcing the row wider than the form. */
@@ -190,7 +167,7 @@
   text-wrap: var(--text-running-wrap);
 }
 
-/* The status line and its mark are the only transitions. It listed .label and .message as well, which
+/* The status line and its mark are the only transitions. It listed the label and .message as well, which
    neutralised nothing on either. */
 @media (prefers-reduced-motion: reduce) {
   .noteMark,
