@@ -1,0 +1,112 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   VIDEO TESTIMONIAL — component tokens
+   Tier 2. A client interview on film: a poster with a play control, the line pulled from it, and
+   who said it. Two variants, featured (large poster, quote beside) and in-row (smaller, above the
+   quote, beside two text quotes).
+
+   Naming: --vt-{part}-{role}
+     parts: poster | play | player | quote | name | attribution | meta | ring
+
+   The poster is a photograph and takes the photograph radius (visual-direction § 5.3). The play
+   control is the ONE blue mass in the unit: a solid control, the foreground accent on a photograph,
+   never a ground under copy. No type is set on the poster (owner ruling): the running time and the
+   captions note sit in the text beside or under it.
+
+   Geometry
+   --vt-poster-ratio        16:9, the ratio the interviews are shot in, so the poster and the film
+                            occupy the same box and pressing play moves nothing on the page.
+   --vt-poster-radius       the photograph radius, 8, on the poster's own box (Media is told the
+                            placement owns the edge).
+   --vt-play-size-lg/-md    the disc. A component SIZE, so t-shirt names and literals. 88 on the
+                            featured poster (about a ninth of its 705 width — reads as the object's
+                            control, not a badge); 64 in-row (a sixth of 392). Both clear the 44
+                            target floor by a wide margin.
+   --vt-play-glyph-lg/-md   the triangle inside it, at roughly 0.36 of the disc.
+   --vt-play-glyph-nudge    an OPTICAL correction, from the space ramp: a play triangle's mass sits
+                            left of its box centre, so it is moved right by 2 to look centred.
+   --vt-poster-scale-hover  the poster's slow push-in on hover — the one motion here, dropped
+                            entirely under reduced motion.
+   --vt-quote-rule-width    the site blockquote's rule (ch10 B2.07), as Proof draws it.            */
+:root {
+  --vt-poster-ratio: var(--ratio-wide);
+  --vt-poster-radius: var(--radius-8);
+  --vt-play-size-lg: 88px;
+  --vt-play-size-md: 64px;
+  --vt-play-glyph-lg: 32px;
+  --vt-play-glyph-md: 24px;
+  --vt-play-glyph-nudge: var(--space-2); /* optical: the triangle's mass sits left of centre */
+  --vt-play-radius: var(--radius-full);
+  --vt-poster-scale-hover: 1.03;
+  --vt-play-scale-hover: 1.06;
+  --vt-duration: var(--duration-slow);
+  --vt-duration-play: var(--duration-medium);
+  --vt-easing: var(--easing-standard);
+  --vt-ring-width: var(--focus-ring-width);
+  --vt-ring-offset: var(--focus-ring-offset);
+  --vt-quote-rule-width: var(--border-width-rule-quote);
+  --vt-layer-poster: var(--z-base);
+  --vt-layer-control: var(--z-raised);
+}
+
+/* Paper. The play disc is the blue solid control; hover goes one step darker and pressed one
+   further, as the solid button's do (rest → hover → pressed: 500 → 600 → 700). The player ground is only ever seen if a film is not 16:9 — the letterbox — and
+   is the darkest neutral, never blue. */
+:root,
+[data-surface='paper'] {
+  --vt-quote-ink: var(--color-neutral-800); /* 11.81:1 */
+  --vt-name-ink: var(--color-neutral-900); /* 14.62:1 */
+  --vt-attribution-ink: var(--color-neutral-600); /* 4.92:1 */
+  --vt-meta-ink: var(--color-brandeis-500); /* 6.17:1 — the label carries the accent */
+  --vt-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
+  --vt-play-bg: var(--color-brandeis-500);
+  --vt-play-bg-hover: var(--color-brandeis-600);
+  --vt-play-bg-pressed: var(--color-brandeis-700);
+  --vt-play-fg: var(--color-white);
+  --vt-player-ground: var(--color-neutral-950);
+  --vt-ring-color: var(--color-brandeis-500);
+}
+
+[data-surface='tint'] {
+  --vt-quote-ink: var(--color-neutral-800); /* 10.54:1 */
+  --vt-name-ink: var(--color-neutral-900); /* 13.06:1 */
+  --vt-attribution-ink: var(--color-neutral-700); /* 7.27:1 */
+  --vt-meta-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --vt-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
+  --vt-play-bg: var(--color-brandeis-500);
+  --vt-play-bg-hover: var(--color-brandeis-600);
+  --vt-play-bg-pressed: var(--color-brandeis-700);
+  --vt-play-fg: var(--color-white);
+  --vt-player-ground: var(--color-neutral-950);
+  --vt-ring-color: var(--color-brandeis-500);
+}
+
+/* Ink: the label and the rule lift to brandeis-300, as Proof's do; the disc stays the blue solid. */
+[data-surface='ink'] {
+  --vt-quote-ink: var(--color-white); /* 17.26:1 */
+  --vt-name-ink: var(--color-white); /* 17.26:1 */
+  --vt-attribution-ink: var(--color-neutral-400); /* 8.05:1 */
+  --vt-meta-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --vt-quote-rule: var(--color-brandeis-300); /* decoration — ch10 B2.07 */
+  --vt-play-bg: var(--color-brandeis-500);
+  --vt-play-bg-hover: var(--color-brandeis-600);
+  --vt-play-bg-pressed: var(--color-brandeis-700);
+  --vt-play-fg: var(--color-white);
+  --vt-player-ground: var(--color-neutral-950);
+  --vt-ring-color: var(--color-brandeis-300);
+}
+
+/* Blue: the disc inverts to paper with a blue glyph, as the solid button does on blue — a blue
+   disc on a blue band would vanish at the poster's edge. */
+[data-surface='blue'] {
+  --vt-quote-ink: var(--color-white); /* 6.23:1 */
+  --vt-name-ink: var(--color-white); /* 6.23:1 */
+  --vt-attribution-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --vt-meta-ink: var(--color-white); /* 6.23:1 */
+  --vt-quote-rule: var(--color-white); /* decoration — ch10 B2.07 */
+  --vt-play-bg: var(--color-paper);
+  --vt-play-bg-hover: var(--color-neutral-200);
+  --vt-play-bg-pressed: var(--color-neutral-300);
+  --vt-play-fg: var(--color-brandeis-500);
+  --vt-player-ground: var(--color-neutral-950);
+  --vt-ring-color: var(--color-white);
+}

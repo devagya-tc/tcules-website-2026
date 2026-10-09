@@ -283,6 +283,11 @@ const SPECIMENS = [
         note: 'typographic, G-case, featured portrait, groups of 2 and 3, slider, rating-led — each with and without a CtaRow, on tint, at 1470 and 390',
       },
       {
+        href: '/design/kit/video-testimonial',
+        name: 'VideoTestimonial',
+        note: 'a client interview on film: featured (16:9 poster in [3, 2], display quote beside) under a head on paper and alone on tint, and in-row beside two Proof compact quotes; poster, play disc, captions track slot, no autoplay, focus hand-off, reduced motion',
+      },
+      {
         href: '/design/kit/form',
         name: 'Kit · Form',
         note: 'the enquiry form family — the L close beside copy, the compact form beside a 4:5 photo (both sides), standalone under a centred and a beside head, the offer, every variant, error and success',

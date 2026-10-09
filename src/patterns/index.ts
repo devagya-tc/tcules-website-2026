@@ -323,3 +323,12 @@ export type {
   EngagementPoint,
   EngagementAction,
 } from './EngagementModel';
+/* VideoTestimonial — a client interview on film: poster, play control, pulled quote (r7-video). */
+export {
+  VideoTestimonial,
+  type VideoTestimonialProps,
+  type VideoTestimonialVariant,
+  type VideoTestimonialFilm,
+  type VideoTestimonialSource,
+  type VideoTestimonialCaptions,
+} from './VideoTestimonial';
