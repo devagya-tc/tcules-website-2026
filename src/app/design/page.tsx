@@ -158,6 +158,11 @@ const SPECIMENS = [
         note: 'stages one decision passes through on one blue line — 2 to 12 stages, the return arc, vertical below 1024, 3 surfaces',
       },
       {
+        href: '/design/kit/how-we-work',
+        name: 'EngagementModel',
+        note: 'the "How we work" USP band — one chart over time keyed by three points; full and compact, paper and tint, stress copy',
+      },
+      {
         href: '/design/steps',
         name: 'Steps',
         note: "ListCard's set mode, the approved F body — 2 to 5 numbered rows, one title size, one title track, two body budgets",
@@ -256,6 +261,11 @@ const SPECIMENS = [
         href: '/design/kit/process',
         name: 'Kit · process and stats',
         note: 'F process (Steps: 4 / 5 / example / CtaRow), S stats (4 centred, 3 + CtaRow), the D stat aside, Stat sizes, a Thread E band, ProcessFlow for comparison',
+      },
+      {
+        href: '/design/kit/how-we-work',
+        name: 'Kit · How we work',
+        note: 'EngagementModel, the USP band: the engagement model drawn as one chart keyed by three points — full (paper, tint with an action, stress copy) and compact for service pages (paper, tint)',
       },
       {
         href: '/design/kit/logos',

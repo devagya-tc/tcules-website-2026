@@ -312,3 +312,16 @@ export type {
 
 /* Thread — stages one decision passes through, on one blue line, with a return path (E band). */
 export { Thread, type ThreadProps, type ThreadStage, type ThreadStageHeading } from './Thread';
+
+/**
+ * EngagementModel is the "How we work" USP band (r7-howwework, 9 Oct 2026): the engagement model
+ * drawn as one chart over time, its three points keyed to the drawing's three marks. `full` for
+ * its own page, `compact` for a service page.
+ */
+export { EngagementModel } from './EngagementModel';
+export type {
+  EngagementModelProps,
+  EngagementModelArrangement,
+  EngagementPoint,
+  EngagementAction,
+} from './EngagementModel';
