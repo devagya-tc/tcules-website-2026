@@ -5,8 +5,8 @@
    neighbours never double a line, whatever the column count. `open` then clips the grid's first
    hairline-width at the top and the start, which removes exactly the outer top and start edges
    (no cell rules its end or bottom edge, so those are absent already): rules only BETWEEN cells,
-   with no row or column to special-case. `closed`, the default since the 9 Oct review, instead
-   adds the end and bottom edges to the grid itself, so every cell is a whole box. Neither needs a margin, a
+   with no row or column to special-case. `closed`, the default since the 9 Oct review, wraps that
+   open grid in a frame that draws the whole outer edge with a radius, so every cell is a whole box. Neither needs a margin, a
    negative offset or a gap: the grid's gaps are 0 because no axis is stated (Layout rule 3), and
    that seam is the point — the cells share their edges. */
 
@@ -58,9 +58,12 @@
   clip-path: inset(var(--lgrid-rule-width) var(--lgrid-rule-width) 0 0);
 }
 
+/* The frame round a closed grid: the whole outer edge, rounded to match the photographs (owner,
+   9 Oct 2026), the open grid inside it clipped to the curve. */
 .closed {
-  border-block-end: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
-  border-inline-end: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
+  border: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
+  border-radius: var(--lgrid-radius);
+  overflow: hidden;
 }
 
 /* The demoted heading: the eyebrow role, so mono and uppercase in presentation only. */

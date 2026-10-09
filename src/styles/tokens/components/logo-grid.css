@@ -6,7 +6,7 @@
    wordmark, badge, symbol between words — read as one set of equals.
 
    Naming: --lgrid-{part}-{role}
-     parts: cell | rule | context
+     parts: cell | rule | context | radius
 
    The cell's inner padding and the gaps around the grid are distances, so the pattern reads the
    gap scale directly; the eyebrow role is read directly too. Neither is aliased here. */
@@ -24,6 +24,9 @@
   --lgrid-cell-height: 128px;
   --lgrid-cell-height-m: 88px;
   --lgrid-rule-width: var(--border-width-hairline);
+  /* The closed frame's corners: the photograph radius, so the grid matches the images round it
+     (owner, 9 Oct 2026). Only the frame's outer corners; the cells inside stay square. */
+  --lgrid-radius: var(--radius-8);
 }
 
 @media (max-width: 767px) {

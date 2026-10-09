@@ -175,12 +175,8 @@ export function LogoGrid({
   const fills = lastFills(marks.length, columns);
   const Context = heading ? 'p' : (contextAs ?? 'h2');
 
-  const grid = (
-    <Layout
-      as="ul"
-      columns={columns}
-      className={edges === 'open' ? styles.open : styles.closed}
-    >
+  const cells = (
+    <Layout as="ul" columns={columns} className={styles.open}>
       {marks.map((mark, i) => (
         <Cluster
           as="li"
@@ -197,6 +193,9 @@ export function LogoGrid({
       ))}
     </Layout>
   );
+  /* `closed` frames the open grid: the frame draws the outer edge whole, with the photograph's
+     radius (owner, 9 Oct 2026), and clips the cells to it. The inner rules stay the open grid's. */
+  const grid = edges === 'open' ? cells : <div className={styles.closed}>{cells}</div>;
 
   if (!hasHead) return className ? <div className={className}>{grid}</div> : grid;
 
