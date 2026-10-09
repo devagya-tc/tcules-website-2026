@@ -4,8 +4,8 @@
    owner, 7 Oct 2026). Built by cmp-banner, 6 Oct 2026, to docs/specs/Statement.md.
 
    Naming: --stmt-{part}-{role}
-     parts  eyebrow · sentence
-     roles  text · tracking · measure · ink · width · height
+     parts  eyebrow · sentence · emphasis · graphic
+     roles  text · tracking · measure · ink · ink-quiet · style · size
 
    It is an EXCEPTION band (§ 3.3): no image, so its one large thing is the type. The sentence stays
    ink (§ 4.3: the words stay ink). Eyebrows carry no mark (owner, 7 Oct 2026).
@@ -23,36 +23,47 @@
   /* A ceiling, not a width: 32ch at 54 is ~860, so a start-aligned sentence breaks as a shape and
      leaves the band's end open as air, rather than running the 1240 column in two long lines. */
   --stmt-sentence-measure: var(--measure-title);
-  /* `size="display"` (page-product-design fix round 1, 7 Oct 2026): the display role, the hero's,
-     on the display measure — for the page whose argument needs one sentence at the scale of its
-     opening (the references' overview lines run ~70, against the 54 of h1). */
-  --stmt-sentence-text-display: var(--text-display);
-  --stmt-sentence-tracking-display: var(--text-display-tracking);
-  --stmt-sentence-measure-display: var(--measure-display);
-
+  /* The display size is retired (owner, 7 Oct 2026: "way too big", "not a title-level thing but
+     a very special text"). The h1 role is the one scale; the voice below sets the sentence apart. */
+  /* `emphasis`: the phrase the sentence turns on, set in the role's own italic (Newsreader 400
+     italic is loaded with the face). */
+  --stmt-emphasis-style: italic;
+  /* The graphic slot, square — a component size, not a distance. 64 is about one line of the
+     sentence, so a shape reads as a mark beside the type, not as an image competing with it
+     (§ 3.3: an exception band's one large thing is the type). */
+  --stmt-graphic-size: var(--space-64);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
   --stmt-sentence-ink: var(--color-neutral-900); /* 14.62:1 */
+  --stmt-sentence-ink-quiet: var(--color-neutral-600); /* 4.92:1 */
+  --stmt-emphasis-ink: var(--color-neutral-900); /* 14.62:1 */
   --stmt-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
   --stmt-sentence-ink: var(--color-neutral-900); /* 13.05:1 */
+  /* 4.39:1 — AA for large text, which the h1 role is at every width (34 at its smallest) */
+  --stmt-sentence-ink-quiet: var(--color-neutral-600);
+  --stmt-emphasis-ink: var(--color-neutral-900); /* 13.05:1 */
   --stmt-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 */
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
 [data-surface='ink'] {
   --stmt-sentence-ink: var(--color-white); /* 17.26:1 */
+  --stmt-sentence-ink-quiet: var(--color-neutral-500); /* 5.41:1 */
+  --stmt-emphasis-ink: var(--color-white); /* 17.26:1 */
   --stmt-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
 }
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
 [data-surface='blue'] {
   --stmt-sentence-ink: var(--color-white); /* 6.23:1 */
+  --stmt-sentence-ink-quiet: var(--color-brandeis-100); /* 4.91:1 */
+  --stmt-emphasis-ink: var(--color-white); /* 6.23:1 */
   --stmt-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 */
 }

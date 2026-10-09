@@ -120,7 +120,7 @@ const SPECIMENS = [
       {
         href: '/design/statement',
         name: 'Statement',
-        note: 'the J band — one sentence at the h1 or display role as h2 | p, eyebrow directly above it, start | center (split retired), head-half and corner texture, action, 3 surfaces',
+        note: 'the J band — one sentence at the h1 role as h2 | p (display retired), plain or two-tone with an italic turn (emphasis), graphic slot, eyebrow directly above it, start | center, head-half and corner texture, action, 3 surfaces',
       },
       {
         href: '/design/kit/banner',
@@ -295,7 +295,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/home',
         name: 'Kit showcase · Home',
-        note: 'the home page composed from the kit, warm family, 12 bands — the strip and the 5:4 photograph hero with its foot field, the real marks and rating, three services under a stacked head, a display statement, the wireframe wall at the photograph weight with two tiles, the client slider on tint, four stats centred, the method beside its photograph, one 3:1 studio banner, questions, two pieces of writing and the close with its contact strip; texture hero foot / head-half / closing',
+        note: 'the home page composed from the kit, warm family, 12 bands — the strip and the 5:4 photograph hero with its foot field, the real marks and rating, three services under a stacked head, a two-tone statement, the wireframe wall at the photograph weight with two tiles, the client slider on tint, four stats centred, the method beside its photograph, one 3:1 studio banner, questions, two pieces of writing and the close with its contact strip; texture hero foot / head-half / closing',
       },
       {
         href: '/design/kit/about',
@@ -305,7 +305,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/services-index',
         name: 'Kit showcase · Services index',
-        note: 'the services index composed from the kit, cool family, 11 bands — the title-led hero with a 4:1 panorama, the six-service router, a display statement with head-half, four audits, fit beside a photograph, two cases over the horizon, the real rating on tint, the sprint offer, questions, a 3:1 banner and the open close',
+        note: 'the services index composed from the kit, cool family, 11 bands — the title-led hero with a 4:1 panorama, the six-service router, a statement with head-half, four audits, fit beside a photograph, two cases over the horizon, the real rating on tint, the sprint offer, questions, a 3:1 banner and the open close',
       },
     ],
   },

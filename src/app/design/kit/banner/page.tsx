@@ -212,15 +212,15 @@ export default function KitBannerSpecimen() {
         A small senior team, working in the open from week one.
       </Statement>
 
-      <Caption index="J.4" title="Statement at display scale, with its link">
-        size=&quot;display&quot;: the hero&rsquo;s display role on the display measure, for the
-        one band that restates a page&rsquo;s argument at the scale of its opening (the service
-        pages&rsquo; J). One link a stack under the sentence.
+      <Caption index="J.4" title="Statement with its turn, and its link">
+        emphasis: the sentence steps back to a quiet ink and the phrase it turns on holds full
+        ink, italic (the display size is retired, owner 7 Oct 2026). One link a stack under the
+        sentence.
       </Caption>
       <Statement
         eyebrow="How we work"
         id="kit-statement-display"
-        size="display"
+        emphasis="to the shipped build."
         texture="head-half"
         actions={
           <CtaRow
