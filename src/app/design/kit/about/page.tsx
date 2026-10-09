@@ -249,9 +249,7 @@ export default function KitAboutPage() {
           ),
         )}
         title={TITLE}
-        body={[
-          'Researchers, designers and engineers in one room, from decision to code.',
-        ]}
+        body={['Researchers, designers and engineers in one room, from decision to code.']}
         actions={[
           { label: 'Work with us', href: ROUTES.contact },
           { label: 'Meet the team', href: ROUTES.team },
@@ -260,14 +258,8 @@ export default function KitAboutPage() {
         media={{ type: 'image', image: HOLI }}
       />
 
-      {/* 2 · J — why the studio exists, centred, its turn in italic, the corner field. */}
-      <Statement
-        id="about-why"
-        eyebrow="Why we started"
-        emphasis="so we removed the handover."
-        align="center"
-        texture="corner"
-      >
+      {/* 2 · J — why the studio exists, centred, the corner field. */}
+      <Statement id="about-why" eyebrow="Why we started" align="center" texture="corner">
         Good products kept dying in the handover, so we removed the handover.
       </Statement>
 
@@ -390,7 +382,10 @@ export default function KitAboutPage() {
         headingId="about-careers"
         lead="We hire a few senior people a year, and every one of them works on real products from the first week."
         footer={
-          <CtaRow align="center" actions={[{ label: 'See open roles', href: ROUTES.careers }]} />
+          <CtaRow
+            align="center"
+            actions={[{ label: 'See open roles', href: ROUTES.careers }]}
+          />
         }
       >
         <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="stack">

@@ -7,11 +7,10 @@
    selector, and one breakpoint, which swaps the wide lead's crop ratio and nothing else.
 
    ── What is absent, and why ────────────────────────────────────────────────────
-   No card edge. The tile was bounded by a four-sided hairline and is bounded by the parent
-   Layout's gutter alone. The boxed card (`frame="box"`, 7 Oct 2026) was removed the same week by
-   the owner: "remove the box borders: the boxed card variant goes". A coverless card is opened by
-   its top hairline instead.
-   No content inset. The inset existed to hold copy off that edge; with the edge gone it would set
+   No card edge by default. The tile was bounded by a four-sided hairline and is bounded by the
+   parent Layout's gutter alone — unless its set asks for a box (`frame="box"`, owner 7 Oct 2026,
+   .boxed at the foot of this file), which brings back the edge, an inset and a hover ground.
+   No content inset on an open card. The inset existed to hold copy off that edge; with the edge gone it would set
    text 24px in from a boundary that no longer exists, putting neighbouring cards' images 32px
    apart while their titles sat 80px apart. Copy is flush to the media instead, and the image-to-
    copy relationship moved to the frame Layout's rowGap where a container distance belongs.
@@ -341,4 +340,30 @@
   .root .link:active .imageZoom {
     transform: none;
   }
+}
+
+/* ── The boxed card (`frame="box"`, owner 7 Oct 2026) ──────────────────────────────────────────
+   A partial reversal of "a card is never a box" (visual-direction § 3.1), for a set whose cards
+   must read as separate objects at a glance — an icon router of four to six destinations, where
+   open icon cards two across read as one field of text. A hairline round the card at the 8 radius,
+   its content a `block` (24) inside on every side: head to body inside a block, the box being the
+   block. The frame is the card's single box, so the padding is an inner inset, not outer spacing.
+
+   Linked, the box paints a ground under the pointer and holds its edge ink: with 24 of inset there
+   is somewhere for a ground to sit, and it is the one signal that covers the whole target. The
+   focus ring is the frame's box-shadow, so it follows the radius. Two classes and an element state,
+   so these outrank `.root .link` and its states. */
+.boxed .frame {
+  padding: var(--gap-block);
+  border: var(--bcrd-box-rule-width) solid var(--bcrd-box-rule-ink);
+  border-radius: var(--bcrd-box-radius);
+}
+
+.root.boxed .link:hover,
+.root.boxed .link:focus-visible {
+  background-color: var(--bcrd-box-ground-hover);
+}
+
+.root.boxed .link:active {
+  background-color: var(--bcrd-box-ground-pressed);
 }

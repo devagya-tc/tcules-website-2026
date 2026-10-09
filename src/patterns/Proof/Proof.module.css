@@ -93,6 +93,14 @@
   background: var(--proof-quote-rule);
 }
 
+/* Not inside a carousel (owner, 9 Oct 2026): there the slider's indicator is already a row of short
+   blue-led bars under the quote, and a second short blue line above it read as a third bar. Keyed
+   to the carousel's ARIA role, the one thing every Slider renders, so Proof imports nothing and
+   every slider instance gets it, not one specimen. Gone, not hidden: the figure's gap closes. */
+:where([aria-roledescription='carousel']) .mark {
+  display: none;
+}
+
 /* Prose remains the trusted-HTML seam and keeps its flow/link behavior. The two-class selector is
    intentionally stronger than Prose's root class so the arrangement can own this field's quote
    composite without copying Prose's link, emphasis or paragraph rules. */

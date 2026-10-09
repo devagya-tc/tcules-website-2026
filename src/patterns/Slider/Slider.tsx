@@ -40,7 +40,7 @@ export type SliderPerView = 1 | 2 | 3 | 4;
  *   start   the progress rail at the start, the two controls at the end — under a left-weighted
  *           head, so the row's ends line up with the column's.
  *   center  the controls either side of a centred rail — under a centred head (§ 3.5: a G
- *           slider, a centred C-image head).
+ *           slider, a centred C-image head). With `autoplay` the centred row is the bars alone.
  */
 export type SliderAlign = 'start' | 'center';
 
@@ -85,18 +85,23 @@ export type SliderProps = {
    * two or more in view an advance moves things the reader is part-way through, so with any other
    * `perView` it is ignored with a development warning. Default `false`.
    *
-   * With it the rail becomes a STEPPER — one numbered step per slide, the current one filling over
-   * the interval — and a rotation control (pause / play) leads the control row (WCAG 2.2.2; APG
-   * carousel). The rotation:
+   * With it the rail becomes a STEPPER — one plain bar per slide, the current one filling over the
+   * interval (owner, 9 Oct 2026: bars only, no numerals). Under `align="start"` a rotation control
+   * (pause / play) leads the control row (WCAG 2.2.2; APG carousel). Under `align="center"` the bars
+   * ARE the control row — no previous / next, no rotation button — so the chrome is one quiet strip
+   * under a centred quote rather than three controls stacked on one axis. The rotation:
    *   - pauses while a mouse rests on the slides or focus is inside them, and resumes from where it
    *     was when both leave — the step's fill freezes, so the pause is visible. The control row
    *     does not hold it, so Play under the pointer that pressed it plays;
    *   - does not start for a reader who prefers reduced motion: the rotation control offers Play,
    *     and only their press starts it;
    *   - never starts before hydration, so a server render and a no-script page are the manual row;
-   *   - is silent: the status line speaks after a reader's own press, never after an advance.
+   *   - is silent: the status line speaks after a reader's own press, never after an advance;
+   *   - stops for good when a reader presses a bar: choosing a slide is taking over (APG).
    */
   autoplay?: boolean;
+  /** What one slide is, for each bar's name: "Show {slideName} 2 of 4". Default `'slide'`. */
+  slideName?: string;
   /** Milliseconds a slide holds before the next, with `autoplay`. Default 8000 — a 35-word quote read twice. */
   interval?: number;
 };
@@ -189,6 +194,7 @@ export function Slider({
   children,
   perView = 3,
   align = 'start',
+  slideName = 'slide',
   bleed = false,
   autoplay = false,
   interval = INTERVAL,
@@ -500,9 +506,15 @@ export function Slider({
     />
   );
 
-  /* The stepper: one numbered step per slide, the current one's line filling over its hold. The
-     numerals are the eye's way to the slide count; each step's name is the slide's place in the
-     set. A list, so a screen reader hears how many there are. */
+  /* The stepper: one plain bar per slide, the current one filling over its hold. Each bar's name is
+     the slide's place in the set; a list, so a screen reader hears how many there are.
+
+     WCAG 2.2.2 (Pause, Stop, Hide) without a rotation button, for the centred row: pressing any bar
+     STOPS the rotation for good — the reader chose a slide, so the slider stops choosing for them
+     (APG carousel) — and a bar under focus, like the slides under a mouse or focus, HOLDS it. So
+     every reader who can reach the content has a way to stop it, at the control they would use
+     anyway, and nothing rotates at all under prefers-reduced-motion. A 48 pause circle in the
+     middle of a centred quote would be the loudest thing in the band, for a job the bars already do. */
   const steps = (
     <Cluster as="ol" colGap="tight" nowrap className={styles.steps}>
       {slides.map((_, index) => (
@@ -510,32 +522,36 @@ export function Slider({
           <button
             type="button"
             className={styles.step}
-            aria-label={`Slide ${index + 1} of ${count}`}
+            aria-label={`Show ${slideName} ${index + 1} of ${count}`}
             aria-current={index === active ? 'true' : undefined}
             aria-controls={rowId}
             disabled={!ready}
-            onClick={() => goTo(index)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            onClick={() => {
+              if (rotates) setChoice('pause');
+              goTo(index);
+            }}
           >
-            <Layout as="span" rowGap="tight">
-              <span className={styles.stepNumber} aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <span className={styles.stepLine} aria-hidden="true">
-                <span className={styles.stepFill} />
-              </span>
-            </Layout>
+            <span className={styles.stepLine} aria-hidden="true">
+              <span className={styles.stepFill} />
+            </span>
           </button>
         </li>
       ))}
     </Cluster>
   );
 
-  /* With rotation the stepper takes the rail's place, the rotation control at its head. */
+  /* With rotation the stepper takes the rail's place; under `start` the rotation control at its head. */
   const progressMark = rotates ? (
-    <Cluster colGap="block" align="center" nowrap className={styles.progress}>
-      {rotation}
-      {steps}
-    </Cluster>
+    align === 'center' ? (
+      steps
+    ) : (
+      <Cluster colGap="block" align="center" nowrap className={styles.progress}>
+        {rotation}
+        {steps}
+      </Cluster>
+    )
   ) : (
     rail
   );
@@ -570,7 +586,9 @@ export function Slider({
         >
           {slides}
         </Layout>
-        {align === 'center' ? (
+        {align === 'center' && rotates ? (
+          <Cluster justify="center">{progressMark}</Cluster>
+        ) : align === 'center' ? (
           <Cluster colGap="block" align="center" justify="center" nowrap>
             {control(-1)}
             {progressMark}

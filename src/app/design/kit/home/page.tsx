@@ -364,12 +364,11 @@ export default async function KitHomePage() {
         <BlockCardSet items={SERVICES} lead="none" />
       </ContentSection>
 
-      {/* 4 · J — one sentence, two tones and an italic turn; the head-half field in the empty
+      {/* 4 · J — one sentence in one ink; the head-half field in the empty
           top-end corner. */}
       <Statement
         id="home-belief"
         eyebrow="What we believe"
-        emphasis="someone finally made."
         texture="head-half"
         actions={
           <CtaRow rule={false} actions={[{ label: 'How we work', href: ROUTES.howWeWork }]} />
@@ -389,7 +388,12 @@ export default async function KitHomePage() {
         headingId="home-how"
         lead="Research, rules and interface design share one wall, so nothing is decided twice."
       >
-        <Layout as="ul" columns={{ base: 1, md: 2, lg: 1, xl: 2 }} colGap="gutter" rowGap="stack">
+        <Layout
+          as="ul"
+          columns={{ base: 1, md: 2, lg: 1, xl: 2 }}
+          colGap="gutter"
+          rowGap="stack"
+        >
           {HOW.map((tile) => (
             <ListCard
               key={tile.title}

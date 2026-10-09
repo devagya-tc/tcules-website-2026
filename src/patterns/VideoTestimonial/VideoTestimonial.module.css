@@ -104,28 +104,26 @@
   translate: var(--vt-play-glyph-nudge) 0;
 }
 
-/* The disc is sized to the POSTER, and the featured poster is only large beside its caption: below
-   1024 it is the full phone column (about 326 × 183), where an 88 disc would cover half its height.
-   So featured takes the md disc there and the lg disc from 1024, where the [3, 2] split opens. */
-.playLg,
-.playMd {
+/* The disc is sized to the POSTER: below 1024 the poster is the full phone column (about 326 × 183),
+   where an 88 disc would cover half its height. So it takes the md disc there and the lg disc from
+   1024, where both layouts give the poster its large width. */
+.play {
   inline-size: var(--vt-play-size-md);
   block-size: var(--vt-play-size-md);
 }
 
-.playLg svg,
-.playMd svg {
+.play svg {
   inline-size: var(--vt-play-glyph-md);
   block-size: var(--vt-play-glyph-md);
 }
 
 @media (min-width: 1024px) {
-  .playLg {
+  .play {
     inline-size: var(--vt-play-size-lg);
     block-size: var(--vt-play-size-lg);
   }
 
-  .playLg svg {
+  .play svg {
     inline-size: var(--vt-play-glyph-lg);
     block-size: var(--vt-play-glyph-lg);
   }
@@ -190,17 +188,9 @@
   color: var(--vt-quote-ink);
   overflow-wrap: anywhere;
   text-wrap: var(--text-running-wrap);
-}
-
-/* Featured: the display quote role, the band's one voice beside its one object. In-row: the
-   reading role, the size the text quotes beside it are set at, so the row reads as peers. */
-.featured .quote {
+  /* The display quote role in both layouts: the film is the band's only voice, never a row's peer. */
   font: var(--text-quote-lg);
   letter-spacing: var(--text-quote-lg-tracking);
-}
-
-.inRow .quote {
-  font: var(--text-quote);
 }
 
 .name {

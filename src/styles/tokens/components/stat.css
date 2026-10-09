@@ -5,7 +5,7 @@
    6 Oct 2026). Promoted from the ServicePage template's local `Stat`.
 
    Naming: --stat-{part}-{role}
-     parts: value | unit | label | rule | mark | tally
+     parts: value | unit | label | rule | mark
 
    THE NUMERAL IS BLUE (page-showcase fix round 2, 7 Oct 2026; docs/kit/brand-amendments.md). The
    owner's foreground ruling (visual-direction § 4.1) names numerals among blue's marks, and with the
@@ -50,21 +50,6 @@
   /* Two lines at the 286 track of a 4-up row; the cap stops a stat in a wide track (the 381 head
      track, a 3-up row at 392) running its label into one long line that reads as a caption. */
   --stat-label-measure: var(--measure-title);
-
-  /* The tally (kit r7-facts, 9 Oct 2026): the figure drawn as its count. Each value is the
-     tally's own geometry — a mark's size, the seam inside a field of marks — not a distance
-     between two things, which is why it reads the ramp (CLAUDE.md § gap scale, rule 1). An 8
-     square on a 4 seam keeps a field of 64 countable at a glance and 92 square; the field is the
-     height of eight rows, so the largest square field ends level with a run of full-height ticks. */
-  --stat-tally-mark: var(--space-8);
-  --stat-tally-gap: var(--space-4);
-  --stat-tally-height: calc(var(--stat-tally-mark) * 8 + var(--stat-tally-gap) * 7);
-  /* A tick is a stroke, not a square: half a mark wide on a full mark's seam, so a run of years
-     reads as a calendar's ticks rather than as a bar chart. */
-  --stat-tally-bar-width: var(--space-4);
-  --stat-tally-bar-gap: var(--space-8);
-  /* A glyph mark (the rating's stars) at the icon set's native size. */
-  --stat-tally-glyph: var(--space-24);
 }
 
 :root,
@@ -74,8 +59,6 @@
   --stat-label-ink: var(--color-neutral-700); /* 8.14:1 */
   --stat-rule-ink: var(--color-neutral-300); /* decoration */
   --stat-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the accent mark */
-  --stat-tally-ink: var(--color-brandeis-500); /* 6.17:1 — a filled mark */
-  --stat-tally-empty-ink: var(--color-neutral-300); /* decoration — the unfilled share */
 }
 
 [data-surface='tint'] {
@@ -84,8 +67,6 @@
   --stat-label-ink: var(--color-neutral-700); /* 7.27:1 */
   --stat-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
   --stat-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
-  --stat-tally-ink: var(--color-brandeis-500); /* 5.51:1 */
-  --stat-tally-empty-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
 }
 
 [data-surface='ink'] {
@@ -94,8 +75,6 @@
   --stat-label-ink: var(--color-neutral-300); /* 11.07:1 */
   --stat-rule-ink: var(--color-neutral-700); /* decoration */
   --stat-mark-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
-  --stat-tally-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
-  --stat-tally-empty-ink: var(--color-neutral-700); /* decoration */
 }
 
 [data-surface='blue'] {
@@ -104,6 +83,4 @@
   --stat-label-ink: var(--color-brandeis-50); /* 5.57:1 */
   --stat-rule-ink: var(--color-brandeis-300); /* decoration */
   --stat-mark-ink: var(--color-white); /* 6.23:1 */
-  --stat-tally-ink: var(--color-white); /* 6.23:1 */
-  --stat-tally-empty-ink: var(--color-brandeis-300); /* decoration */
 }

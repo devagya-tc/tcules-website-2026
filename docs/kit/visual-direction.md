@@ -1162,6 +1162,9 @@ family. Studio photographs make the best stand-ins, because they show our own wo
   its argument needs; none is numbered, labelled "top" or "best", or scaled up as the headline proof
   over the others, and none is required before another. Weight within a band still follows § 3.3
   (one large thing); that is composition, not rank.
+- **Never combine proof types in one section** (owner, 9 Oct 2026). Client logos, testimonials, the
+  aggregate rating and the studio's record (years, projects, team) are each their own kind of proof
+  and each gets its own band; a facts band need not show every figure every time.
 
 ### 5.9 Client logos
 

@@ -12,8 +12,8 @@ import { specimenStyles as s } from '../../_specimen/Specimen';
  * The owner's arrangement from the 7 Oct review: an eyebrow, a heading and a body, then the cards.
  * Three, four and six, as icon cards and as text cards, every one a whole-card link. Two rules
  * from the same review hold on every band: no decorative image in a section that has clickable
- * cards, and no box round a card. A coverless card is opened by its top hairline, and an icon card's
- * glyph is the em of the title beside it (--bcrd-icon-size). Each band is live on the 1240 column
+ * cards. Icon cards are boxed (`frame="box"`, the router finish), text cards are opened by their
+ * top hairline, and an icon card's glyph is the em of the title beside it (--bcrd-icon-size). Each band is live on the 1240 column
  * and fits a 1470 × 830 screen; `fold:check` measures them by their `data-band`.
  */
 
@@ -179,7 +179,15 @@ const SIX_TEXT: readonly BlockCardSetItem[] = [
  * A caption band: the variation's index and name in the head track, what to look for in the body
  * track. Tight, so the live band beneath keeps its own air.
  */
-function Caption({ index, title, children }: { index: string; title: string; children: ReactNode }) {
+function Caption({
+  index,
+  title,
+  children,
+}: {
+  index: string;
+  title: string;
+  children: ReactNode;
+}) {
   return (
     <Section>
       <Layout
@@ -208,18 +216,18 @@ export default function KitServicesSpecimen() {
           <p className={s.specNote}>
             The arrangement the 7 Oct review settled: an eyebrow, a heading and a body, then the
             cards. Three, four and six, as icon cards and as text cards, every card one link. No
-            decorative image shares a band with clickable cards, and no card is boxed: a card
-            without a cover is opened by its hairline, and an icon is the em of the title beside
-            it, so it can never outgrow the words it labels.
+            decorative image shares a band with clickable cards. Icon cards are boxed (the
+            router finish), a text card is opened by its hairline, and an icon is the em of the
+            title beside it, so it can never outgrow the words it labels.
           </p>
         </Layout>
       </Section>
 
       {/* ── S.1 · three icon cards ──────────────────────────────────────────────────────── */}
       <Caption index="S.1" title="Three icon cards">
-        The smallest router: three doors at 392 each. Every glyph sits on its title&rsquo;s first
-        line at the h5&rsquo;s em (22 at 1440, 20 at 390), the hairline above each card is the
-        only edge, and the whole card is the target: point at one and its title turns blue.
+        The smallest router: three doors at 392 each. Every glyph sits on its title&rsquo;s
+        first line at the h5&rsquo;s em (22 at 1440, 20 at 390), each card is boxed, and the
+        whole card is the target: point at one and its box takes a ground.
       </Caption>
       <ContentSection
         data-band="C-icon"
@@ -228,14 +236,14 @@ export default function KitServicesSpecimen() {
         headingId="ks-three-icon"
         lead="Three practices, one senior team behind each, and a page for every one of them."
       >
-        <BlockCardSet items={THREE_ICON} lead="none" across={3} />
+        <BlockCardSet items={THREE_ICON} lead="none" across={3} frame="box" />
       </ContentSection>
 
       {/* ── S.2 · four icon cards, centred head ─────────────────────────────────────────── */}
       <Caption index="S.2" title="Four icon cards, the head centred">
         Four across at 286, the head centred over them so the row reads as one answer to one
-        question. On a phone four linked cards become a sideways row with a progress rail, so the
-        band never runs to a column of rules.
+        question. On a phone four linked cards become a sideways row with a progress rail, so
+        the band never runs to a column of boxes.
       </Caption>
       <ContentSection
         data-band="C-icon"
@@ -245,13 +253,13 @@ export default function KitServicesSpecimen() {
         headingId="ks-four-icon"
         lead="The work that happens to a product people already depend on, every day."
       >
-        <BlockCardSet items={FOUR_ICON} lead="none" across={4} />
+        <BlockCardSet items={FOUR_ICON} lead="none" across={4} frame="box" />
       </ContentSection>
 
       {/* ── S.3 · six icon cards ────────────────────────────────────────────────────────── */}
       <Caption index="S.3" title="Six icon cards, three across">
-        The full services router, two rows of three a stack (48) apart, each row opening on its
-        own hairlines. No photograph beside it: the six glyphs already give every item a shape,
+        The full services router, two rows of three in boxes, a gutter (32) apart down the grid
+        as across it. No photograph beside it: the six glyphs already give every item a shape,
         and an image here was the busy version the review retired.
       </Caption>
       <ContentSection
@@ -261,7 +269,7 @@ export default function KitServicesSpecimen() {
         headingId="ks-six-icon"
         lead="Six doors into one practice. Pick the one that sounds most like this week."
       >
-        <BlockCardSet items={SIX_ICON} lead="none" across={3} />
+        <BlockCardSet items={SIX_ICON} lead="none" across={3} frame="box" />
       </ContentSection>
 
       {/* ── S.4 · three numbered text cards on tint ─────────────────────────────────────── */}
@@ -299,8 +307,8 @@ export default function KitServicesSpecimen() {
 
       {/* ── S.6 · six text cards, centred head ──────────────────────────────────────────── */}
       <Caption index="S.6" title="Six text cards, the head centred">
-        Six destinations with no glyph to tell them apart, so the eyebrow groups them in pairs and
-        the title is the cue. Rows sit a column (64) apart: a borderless text card needs the
+        Six destinations with no glyph to tell them apart, so the eyebrow groups them in pairs
+        and the title is the cue. Rows sit a column (64) apart: a borderless text card needs the
         larger seam to read as the next object rather than the next paragraph.
       </Caption>
       <ContentSection

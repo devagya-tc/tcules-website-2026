@@ -110,6 +110,21 @@ export type BlockCardRatio = 'cover' | 'wide' | 'panorama' | 'double' | 'square'
 export type BlockCardCue = 'title' | 'cta' | 'download';
 
 /**
+ * The card's finish (owner, 7 Oct 2026 — a partial reversal of "a card is never a box",
+ * visual-direction § 3.1).
+ *
+ *   none  the default: the borderless card, bounded by its set's gutter and its cover's edge.
+ *   box   a hairline round the card at the 8 radius, its content a `block` (24) inside, and — on a
+ *         linked card — a ground under the pointer. For a set whose cards must read as separate
+ *         objects at a glance: an icon router of four to six destinations, where open icon cards
+ *         two across read as one field of text. A text-only card drops its top hairline inside a
+ *         box, whose own top edge already draws it.
+ *
+ * A set's decision, like the type step: BlockCardSet `frame` states it for every card.
+ */
+export type BlockCardFrame = 'none' | 'box';
+
+/**
  * Which axis the card arranges on. A PRESENTATION choice, never a CMS field.
  *
  *   vertical    the grid tile: media above copy, filling one track of a multi-column Layout.
@@ -278,6 +293,8 @@ export type BlockCardProps = {
   index?: number;
   /** How a linked card says it navigates. See `BlockCardCue`. Ignored without `href`. */
   cue?: BlockCardCue;
+  /** The card's finish. Defaults to `none`. See `BlockCardFrame`. */
+  frame?: BlockCardFrame;
   /**
    * The cover takes the card's spare height when the card is stretched taller than its own
    * content, never dropping below its ratio (Layout `fillFirst`). A set's decision, for the one
@@ -415,6 +432,7 @@ export function BlockCard({
   icon,
   index,
   cue,
+  frame = 'none',
   meta,
   grow = false,
 }: BlockCardProps) {
@@ -424,7 +442,8 @@ export function BlockCard({
   }
 
   const hasBody = body !== undefined && body.trim().length > 0;
-  if (body !== undefined && !hasBody) warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
+  if (body !== undefined && !hasBody)
+    warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
 
   const hasEyebrow = eyebrow !== undefined && eyebrow.trim().length > 0;
   if (eyebrow !== undefined && !hasEyebrow) {
@@ -468,15 +487,17 @@ export function BlockCard({
       </span>
     ) : null;
 
-  /* A card with no cover — a text card or an icon card — takes a hairline at its own top edge, the
-     width of the card (visual-direction § 3.1, 6 Oct 2026). It stands in for the top edge an image
-     would give; the set's 32 gutter breaks it between cards, so a row reads as three objects and
-     not as a table. It is a row of the frame's Layout, so the 24 under it is that Layout's `block`
-     seam — the image-to-copy distance, which is exactly the relationship it replaces. The icon card
-     took it when the box went (owner, 7 Oct 2026: "the boxed card variant goes"): the rule is what
-     separates six open icon cards, as it already does ListCard's icon tile. Decoration: hidden. */
+  /* A text-only card — no cover and no icon — takes a hairline at its own top edge, the width of
+     the card (visual-direction § 3.1, 6 Oct 2026). It stands in for the top edge an image would
+     give; the set's 32 gutter breaks it between cards, so a row reads as three objects and not as
+     a table. It is a row of the frame's Layout, so the 24 under it is that Layout's `block` seam —
+     the image-to-copy distance, which is exactly the relationship it replaces. Decoration: hidden.
+     A boxed card draws none: the box's own top edge is that edge, and a second hairline 24 under
+     it would be a double rule. */
   const textOnly = !imageNode && !iconNode;
-  const ruleNode = !imageNode ? <span className={styles.textRule} aria-hidden="true" /> : null;
+  const boxed = frame === 'box';
+  const ruleNode =
+    textOnly && !boxed ? <span className={styles.textRule} aria-hidden="true" /> : null;
 
   /* Which cue a linked card carries. The caller's, or the shape's default: a covered or icon card
      is title-cued, a text-only card carries the cta (every live route's shape). */
@@ -643,7 +664,8 @@ export function BlockCard({
       /* An action row sits on the card's FOOT (§ 3.1 item 4, "pinLast for the CTA"; owner, 7 Oct
          2026: "a link button at its foot"). The stack is flattened so the cta is its own last row,
          and `pinLast` gives that row the spare height of a card stretched to its row's tallest, so
-         every action in a row sits on one line. The seams are the ones the nested stack had: `block` from the cover or rule to
+         every action in a row sits on one line — which a box's visible foot makes plain when it
+         does not. The seams are the ones the nested stack had: `block` from the cover or rule to
          the copy, and from the copy to the cta. */
       frameContent = (
         <Layout rowGap="block" pinLast className={styles.grow}>
@@ -668,7 +690,7 @@ export function BlockCard({
   }
 
   return (
-    <li className={cx(styles.root, SIZE_CLASS[step])}>
+    <li className={cx(styles.root, SIZE_CLASS[step], boxed && styles.boxed)}>
       {destination ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it
            declares that this anchor's hover, focus-visible and pressed states are the states of

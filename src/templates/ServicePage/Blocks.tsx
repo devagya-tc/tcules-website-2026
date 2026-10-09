@@ -225,7 +225,7 @@ export function Router({
     }));
     /* Stacked on a phone (`scroll="never"`): a router shows every route at once, never one and a
        fifth of six behind a gesture (fix round 1). */
-    return <BlockCardSet items={items} lead="none" across={across} scroll="never" />;
+    return <BlockCardSet items={items} lead="none" across={across} scroll="never" frame="box" />;
   }
   const size = setSize(all.length, 'row');
   return (

@@ -28,18 +28,25 @@ import styles from './VideoTestimonial.module.css';
  *   A <figure>: the film is the figure, and its caption is the pulled line (a <blockquote>) and
  *   the speaker. The play control is a <button> whose name says what it plays and for how long.
  *
+ * ── One film, alone (owner rule, 9 Oct) ──────────────────────────────────────────
+ *   This renders exactly ONE video, and it is the ONLY testimonial in its section. Never two films
+ *   in a band, and never a film beside text quotes: the video demands attention and has to fight
+ *   for it, so it is never set as one item of a row or a group. A band that needs several voices
+ *   uses Proof; a band with a film in it has the film and nothing else that speaks.
+ *
  * ── Variants ─────────────────────────────────────────────────────────────────────
+ *   Both are single-film layouts; neither is a group.
  *   featured   a large poster with the quote beside it from 1024 — [3, 2], 64 between — and the
- *              quote under it below. The band's one object; takes the display quote role.
- *   in-row     a smaller poster with the quote under it, made to sit as one item of a row beside
- *              text quotes. Takes the reading quote role, the size its text-quote peers set.
+ *              quote under it below. The band's one object.
+ *   wide       the poster across the full column, the quote under it. For a band where the film
+ *              itself is the argument and wants the whole width.
+ *   Both take the display quote role and the large play disc from 1024.
  *
  * Owns no band and no ground; the caller places it in a Section, and the surface reaches it through
- * data-surface. Imports components only — a pattern does not import a pattern, so the two text
- * quotes an in-row film sits beside are the caller's (Proof, compact).
+ * data-surface. Imports components only.
  */
 
-export type VideoTestimonialVariant = 'featured' | 'in-row';
+export type VideoTestimonialVariant = 'featured' | 'wide';
 
 /** One encoding of the film. Listed best first; the browser plays the first type it supports. */
 export type VideoTestimonialSource = {
@@ -91,11 +98,12 @@ export type VideoTestimonialProps = {
 };
 
 /* The poster widths at 1470, from Section's 1240 column (src/lib/image-sizes.ts arithmetic):
-   featured is the 3 of [3, 2] with a 64 seam, (1240 - 64) * 3/5 ≈ 706; in-row is one of three
-   tracks at 32, ≈ 392. Below 1024 each is the full column, the viewport less two 32 gutters. */
+   featured is the 3 of [3, 2] with a 64 seam, (1240 - 64) * 3/5 ≈ 706; wide is the whole column,
+   1240 once the viewport clears 1240 + two 32 gutters. Below that each is the full column, the
+   viewport less two 32 gutters. */
 const SIZES: Record<VideoTestimonialVariant, string> = {
   featured: '(min-width: 1024px) 706px, calc(100vw - 64px)',
-  'in-row': '(min-width: 1024px) 392px, calc(100vw - 64px)',
+  wide: '(min-width: 1304px) 1240px, calc(100vw - 64px)',
 };
 
 /** "4:52" → "4 minutes 52 seconds", so the control's name is not read as a clock time. */
@@ -188,7 +196,7 @@ export function VideoTestimonial({
               />
             </span>
           </span>
-          <span className={cx(styles.play, featured ? styles.playLg : styles.playMd)} aria-hidden>
+          <span className={styles.play} aria-hidden>
             <Icon name="play" />
           </span>
         </button>
@@ -197,7 +205,7 @@ export function VideoTestimonial({
   );
 
   const caption = (
-    <Layout as="figcaption" rowGap={featured ? 'stack' : 'block'} className={styles.caption}>
+    <Layout as="figcaption" rowGap="stack" className={styles.caption}>
       <Layout rowGap="block">
         <p className={styles.meta}>{meta.join(' · ')}</p>
         <blockquote id={quoteId} className={styles.quote}>
@@ -216,9 +224,9 @@ export function VideoTestimonial({
       as="figure"
       columns={featured ? { base: 1, lg: [3, 2] } : undefined}
       colGap="column"
-      rowGap={featured ? 'stack' : 'block'}
+      rowGap="stack"
       align={featured ? 'center' : undefined}
-      className={cx(styles.root, featured ? styles.featured : styles.inRow)}
+      className={styles.root}
     >
       {screen}
       {caption}

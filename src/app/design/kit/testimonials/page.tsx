@@ -224,7 +224,7 @@ const VARIATIONS = {
     family: 'Typographic',
     title: 'Typographic slider, with a CtaRow',
     change: 'New',
-    note: 'The same band, turning on its own: one quote every eight seconds, the stepper’s current line filling over the hold. Resting the pointer on the quote, or focusing it, holds the turn and freezes the line; the rotation control leads the row; with reduced motion it waits for Play. Four voices written to one length, so the band never changes height.',
+    note: 'The same band, turning on its own: one quote every eight seconds, a row of plain bars, the current one filling over the hold (9 Oct: no numerals, no arrows, no pause circle, no rule above the quote). The bars are the controls: pressing one shows that quote and stops the turn for good; resting the pointer on the quote, or focusing a bar or the quote, holds it; with reduced motion it never turns. Four voices written to one length, so the band never changes height.',
   },
   typographic: {
     id: 'typographic',
@@ -296,7 +296,7 @@ const VARIATIONS = {
     id: 'surface-proof',
     family: 'Surface',
     title: 'Surface proof on paper',
-    note: 'On pages G sits on tint (§ 1.7). The typographic slider on paper — the stepper’s numerals, line and fill, the rotation control, the rule and the attribution all resolve on a second ground.',
+    note: 'On pages G sits on tint (§ 1.7). The typographic slider on paper — the bars and their fill, the focus ring and the attribution all resolve on a second ground.',
   },
 } satisfies Record<string, Variation>;
 
@@ -376,7 +376,7 @@ function TypographicSlider({ surface }: { surface: 'tint' | 'paper' }) {
         />
       }
     >
-      <Slider label="Client quotes" perView={1} align="center" autoplay>
+      <Slider label="Client quotes" slideName="testimonial" perView={1} align="center" autoplay>
         {TYPOGRAPHIC_SLIDES.map((quote) => (
           <li key={quote.name}>
             <Proof quote={quote} align="center" />

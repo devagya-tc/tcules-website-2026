@@ -3,15 +3,16 @@
    Every colour, type role, component size and state value comes from --lcrd-*, declared in
    tokens/components/list-card.css and re-declared once per surface there. Two usage tokens are read
    unaliased and the spec names them that way: --measure-title / --measure-body on the copy, and
-   --gap-gutter as the row's block inset. Both are shared
+   --gap-gutter as the row's block inset and --gap-block as a boxed tile's inset. Both are shared
    answers rather than this component's own. Layout and Cluster own every arrangement and every
    seam. This module provides only the item's own edge, inner inset, child sizing, crop and
    interactive rendering.
 
    ── What is absent, and why ────────────────────────────────────────────────────
-   No background, at rest or under the pointer: "a ListCard never owns its ground". The boxed tile
-   that painted one (`frame="box"`) was removed by the owner on 7 Oct 2026, with its box.
-   No surrounding edge. A row's one border is its block-end rule; a tile's, its block-start rule.
+   No background AT REST, which is the whole of what "a ListCard never owns its ground" ever meant.
+   Only a boxed, linked tile paints, and only under the pointer: an affordance, not a finish.
+   No surrounding edge, except on a boxed tile (`frame="box"`, owner 7 Oct 2026). A row's one
+   border is its block-end rule; an open tile's, its block-start rule.
    No margin. The parent Layout owns the list axis and uses rowGap="none". The one margin below is
      the visually-hidden hint's clip technique, not outer spacing.
    No display:grid or display:flex. Layout and Cluster own both axes; flex values below size their
@@ -62,6 +63,9 @@
      rule share — what a static row, a Steps row and a tile already did. */
   padding-block: var(--gap-gutter);
   padding-inline: 0;
+  /* Stated so a boxed tile's hover ground has an explicit endpoint to transition from, the same
+     reason Button.module.css declares it on `.button`. Nothing paints at rest. */
+  background: transparent;
   border-block-end: var(--lcrd-rule-width) solid var(--lcrd-rule-ink);
   border-radius: var(--lcrd-radius);
   box-shadow: var(--lcrd-shadow);
@@ -159,7 +163,8 @@
    highlighted paragraph rather than a target. Beside its title's ink, its signal is the edge it
    already has: the opening rule takes the link ink, across the whole tile, at the top where the eye
    enters it. It reads --lcrd-link-ink rather than a rule state token, because the rule has no state
-   of its own — it borrows the link colour while the tile is the active target. */
+   of its own — it borrows the link colour while the tile is the active target. A boxed tile
+   (below) paints a ground instead, because its inset gives one somewhere to sit. */
 .root.tile .link:hover,
 .root.tile .link:focus-visible {
   background-color: transparent;
@@ -496,6 +501,35 @@
         var(--lcrd-readdown-rail-under)
     );
   }
+}
+
+/* ── The boxed tile (`frame="box"`, owner 7 Oct 2026) ─────────────────────────────────────────
+   A partial reversal of "a card is never a box", for a set whose items must read as separate
+   objects at a glance — an icon router of four to six destinations. A hairline round all four
+   sides at the 8 radius, the copy a `block` (24) inside it on every side: head to body inside a
+   block, the box being the block. The open tile's opening rule becomes the box's top edge, so it
+   is not drawn twice.
+
+   Linked, the box paints a ground under the pointer (--lcrd-ground-hover / -pressed): with 24 of
+   inset there is somewhere for one to sit, which the open tile never had. The edge holds its ink
+   in every state; the open tile's blue opening rule is the open tile's signal, not this one's.
+   The focus ring is the frame's box-shadow, so it follows the radius. Three classes on the frame
+   and four on its states, so these outrank the open tile's rules at any source order. */
+.root.tile.boxed .frame {
+  padding: var(--gap-block);
+  border: var(--lcrd-box-rule-width) solid var(--lcrd-rule-ink);
+  border-radius: var(--lcrd-box-radius);
+}
+
+.root.tile.boxed .link:hover,
+.root.tile.boxed .link:focus-visible {
+  background-color: var(--lcrd-ground-hover);
+  border-color: var(--lcrd-rule-ink);
+}
+
+.root.tile.boxed .link:active {
+  background-color: var(--lcrd-ground-pressed);
+  border-color: var(--lcrd-rule-ink);
 }
 
 /* ── A row's thumbnail on a phone ─────────────────────────────────────────────────────────────

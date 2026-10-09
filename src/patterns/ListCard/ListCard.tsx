@@ -85,6 +85,20 @@ export type ListCardSize = 'md' | 'sm';
 export type ListCardTitleElement = 'span' | 'h3' | 'h4';
 
 /**
+ * The tile's finish (owner, 7 Oct 2026 — a partial reversal of "a card is never a box").
+ *
+ *   none  the default: the groundless tile, opened by its rule.
+ *   box   a hairline round all four sides at the 8 radius, the copy a `block` (24) inside it, and —
+ *         on a linked tile — a ground under the pointer. For a set whose items must read as
+ *         separate objects at a glance: an icon router of four to six destinations, where open
+ *         tiles in a grid read as one field of text.
+ *
+ * A tile only. A row sits in a ruled ladder whose rules ARE its separation; a box round each row
+ * would be a stack of panels with a second rule between them.
+ */
+export type ListCardFrame = 'none' | 'box';
+
+/**
  * A closed content record. There is no `children`, `className` or DOM-attribute spread: allowing
  * any of them would reopen nested controls, call-site geometry and a second source for the action.
  */
@@ -94,12 +108,16 @@ type ListCardFormProps =
       form?: 'row';
       /** Title/body geometry only. Defaults to the corpus's highest-volume split arrangement. */
       arrangement?: ListCardArrangement;
+      /** A row is never boxed. See `ListCardFrame`. */
+      frame?: never;
     }
   | {
       /** An item in a grid track. See `ListCardForm`. */
       form: 'tile';
       /** A tile always stacks: a split needs a row's width, and a grid track never has it. */
       arrangement?: never;
+      /** The tile's finish. Defaults to `none`. See `ListCardFrame`. */
+      frame?: ListCardFrame;
     };
 
 export type ListCardProps = ListCardFormProps & {
@@ -244,6 +262,7 @@ export function ListCard({
   marker,
   form = 'row',
   arrangement = 'split',
+  frame = 'none',
   titleAs: Title = 'span',
   size,
   href,
@@ -260,6 +279,7 @@ export function ListCard({
     warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
   }
   const isTile = form === 'tile';
+  const boxed = isTile && frame === 'box';
   const step: ListCardSize = size ?? (isTile ? 'sm' : 'md');
 
   const destination = href?.trim() ? href : undefined;
@@ -398,6 +418,7 @@ export function ListCard({
         styles.root,
         SIZE_CLASS[step],
         isTile && styles.tile,
+        boxed && styles.boxed,
         action !== null && styles.withAction,
       )}
     >

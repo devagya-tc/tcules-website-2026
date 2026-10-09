@@ -53,15 +53,6 @@ export type StatementProps = {
   /** The sentence, ≤ 14 words so it holds ≤ 3 lines at the h1 role on its measure (§ 1.5). */
   children: string;
   /**
-   * The words the sentence turns on — a phrase of `children`, verbatim, usually its close. Given,
-   * the sentence goes two-tone: the rest steps back to a quiet ink and the phrase holds full ink,
-   * set italic. That voice is what makes a statement read as a said thing rather than as the
-   * title of a section (owner, 7 Oct 2026: "not a title-level thing but a very special text").
-   * Both tones are ink; blue never sets words (§ 4.3). A phrase not found in the sentence is
-   * ignored with a warning.
-   */
-  emphasis?: string;
-  /**
    * An optional graphic above the eyebrow: a secondary brand shape, one per band, decorative.
    * Statement sizes the slot (--stmt-graphic-size, square) and the caller supplies the shape, so
    * the shape is chosen where the page is composed (owner, 7 Oct 2026: trying the shapes is
@@ -96,8 +87,8 @@ export type StatementProps = {
  * (references § Meridian).
  *
  * One size, the h1 role: the display size was retired (owner, 7 Oct 2026: "way too big"). What
- * sets the sentence apart from a section title is its voice, not its scale — regular weight, and
- * with `emphasis` two tones of ink and an italic turn. An optional `graphic` sits a `block` above
+ * sets the sentence apart from a section title is its voice, not its scale — regular weight, one
+ * uniform ink (the two-tone italic turn was retired, owner, 9 Oct 2026). An optional `graphic` sits a `block` above
  * the eyebrow.
  *
  * The sentence stays ink. Eyebrows carry no mark (owner, 7 Oct 2026).
@@ -114,7 +105,6 @@ export function Statement({
   texture,
   surface = 'paper',
   align = 'start',
-  emphasis,
   graphic,
 }: StatementProps) {
   const heading = Tag === 'h2';
@@ -128,27 +118,13 @@ export function Statement({
     console.warn(`Statement: texture sits on paper only (§ 6.2); ignored on "${surface}".`);
   }
 
-  const at = emphasis ? children.indexOf(emphasis) : -1;
-  if (process.env.NODE_ENV !== 'production' && emphasis && at < 0) {
-    console.warn(`Statement: emphasis "${emphasis}" is not a phrase of the sentence; ignored.`);
-  }
-  const toned = emphasis !== undefined && emphasis !== '' && at >= 0;
-
   const sentence = (
     <Tag
       id={heading ? id : undefined}
-      className={cx(styles.sentence, toned && styles.toned, centred && styles.centred)}
+      className={cx(styles.sentence, centred && styles.centred)}
       data-copy="statement"
     >
-      {toned ? (
-        <>
-          {children.slice(0, at)}
-          <em className={styles.emphasis}>{emphasis}</em>
-          {children.slice(at + emphasis.length)}
-        </>
-      ) : (
-        children
-      )}
+      {children}
     </Tag>
   );
 

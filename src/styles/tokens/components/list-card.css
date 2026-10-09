@@ -1,11 +1,11 @@
 /* ══ Component layer — ListCard ══════════════════════════════════════════════════
    Tier 2. One ruled list row or grid tile, with one marker slot, an optional whole-item link, an
-   optional action at its foot. Never boxed: the boxed tile (`frame="box"`) was removed by the owner on 7 Oct 2026.
+   optional action at its foot, and — tile only — an optional box (`frame="box"`, owner 7 Oct 2026).
 
    Naming: --lcrd-{part}-{role}-{state}, with a size suffix where the type steps with the set
    (--lcrd-title-text-md | -sm)
      variants: neutral (the number's quiet tone only)
-     parts: title | body | marker | number | link | rule | ring | thumbnail | content
+     parts: title | body | marker | number | ground | link | rule | box | ring | thumbnail | content
      (title and body also carry the split's -min geometry)
      states: rest (no suffix) | hover | pressed
 
@@ -35,14 +35,22 @@
    glyph's ink on an external item, and the open tile's opening rule on hover.
 
    State-token absences are assertions:
-     no ground tokens            nothing paints a ground, at rest or under the pointer. The row's
-                                 hover ground went with the arrow cue, and the boxed tile's with
-                                 the box (both 7 Oct 2026): the title answers the pointer;
+     ONE pair of ground tokens    --lcrd-ground-hover / -pressed. Nothing paints a ground AT REST.
+                                 Since 7 Oct 2026 only a BOXED linked tile paints one under the
+                                 pointer; the row's hover ground went with the arrow cue.
+                                 GROUND, not bg: rule 4 gives a surface a ground and an ink, a
+                                 control a bg and an fg, and every other colour this component owns
+                                 is an -ink. Button says --btn-ghost-*-bg because a Button IS a
+                                 control. "fill" was neither register and was the wrong word. See
+                                 the note below the geometry block for why a hover ground is a state
+                                 rather than a finish, and does not make this a BlockCard;
      no title state tokens       the linked title's states ARE the link tokens; a second pair
                                  holding the same values would be two names for one colour;
      no body/marker state tokens those parts never move;
      no disabled/active tokens   links are either destinations or absent;
      no cue tokens at all         the arrow cue was removed (7 Oct 2026);
+     no box ink                   a boxed tile's edge reads --lcrd-rule-ink: it is the same hairline
+                                 as the open tile's opening rule, drawn on four sides;
      no rule state at all         the rule is one width AND one colour in every state. A darkening
                                  rule was tried on 25 Aug as the full-width hover signal and
                                  replaced the next day by the fill, which is the better answer to
@@ -170,7 +178,19 @@
      ramp because 1px is not a distance the gap scale has any business naming. */
   --lcrd-hidden-size: var(--space-1);
 
+  /* ── The hover ground ─────────────────────────────────────────────────────────
+     Painted by a boxed linked tile only (7 Oct 2026). The row's whole-row ground, Button's
+     ghost-neutral steps, went with the arrow cue: the title answers the pointer now. A box keeps
+     one because its 24 inset gives a ground somewhere to sit, and on a box the ground is the one
+     signal that covers the whole target. The steps are one quiet move off each surface's own
+     ground: paper to paper-deep, paper-deep to neutral-100, and the dark grounds one step lighter
+     (ink) and darker (blue), pressed one step further. Nothing paints at rest. */
   --lcrd-rule-width: var(--border-width-hairline);
+  /* The boxed tile (`frame="box"`, owner 7 Oct 2026): a hairline round all four sides at the
+     photograph radius every image box takes, so a boxed tile and the thumbnails and covers on one
+     page share one corner. Its inset is --gap-block, read directly: head to body inside a block. */
+  --lcrd-box-rule-width: var(--border-width-hairline);
+  --lcrd-box-radius: var(--radius-8);
   --lcrd-radius: var(--radius-0);
   --lcrd-shadow: var(--shadow-none);
   --lcrd-ring-width: var(--focus-ring-width);
@@ -200,7 +220,7 @@
    Title and body use their own inks at rest whether or not the item is linked. The marker and the
    index numeral carry the blue accent at rest (visual-direction § 4, owner 6 Oct 2026: blue is the
    recurring foreground accent); a linked title takes brandeis-500 on hover and 700 on press. The
-   neutral-300 hairline is decoration at one width in every state. */
+   neutral-300 hairline is decoration at one width in every state, and is a boxed tile's edge. */
 :root,
 [data-surface='paper'] {
   --lcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
@@ -211,6 +231,8 @@
   --lcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
   --lcrd-rule-ink: var(--color-neutral-300); /* decoration */
+  --lcrd-ground-hover: var(--color-paper-deep); /* a boxed linked tile only */
+  --lcrd-ground-pressed: var(--color-neutral-100);
   --lcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --lcrd-ring-gap-color: var(--color-paper);
 }
@@ -227,6 +249,8 @@
   --lcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --lcrd-rule-ink: var(--color-neutral-400); /* decoration */
+  --lcrd-ground-hover: var(--color-neutral-100);
+  --lcrd-ground-pressed: var(--color-neutral-200);
   --lcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --lcrd-ring-gap-color: var(--color-paper-deep);
 }
@@ -245,13 +269,15 @@
   --lcrd-link-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 15.44:1 */
   --lcrd-rule-ink: var(--color-neutral-700); /* decoration */
+  --lcrd-ground-hover: var(--color-neutral-900);
+  --lcrd-ground-pressed: var(--color-neutral-800);
   --lcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --lcrd-ring-gap-color: var(--color-neutral-950);
 }
 
 /* ── Surface: blue ──────────────────────────────────────────────────────────────
    The light end is the only end that clears AA: a linked title 100 → 50 hover → pressed; title and
-   marker white at rest, body 50. */
+   marker white at rest, body 50. A boxed tile's ground steps 600 → 700. */
 [data-surface='blue'] {
   --lcrd-title-ink: var(--color-white); /* 6.23:1 */
   --lcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
@@ -261,6 +287,8 @@
   --lcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-rule-ink: var(--color-brandeis-300); /* decoration */
+  --lcrd-ground-hover: var(--color-brandeis-600);
+  --lcrd-ground-pressed: var(--color-brandeis-700);
   --lcrd-ring-color: var(--color-white); /* 6.23:1 against gap */
   --lcrd-ring-gap-color: var(--color-brandeis-500);
 }

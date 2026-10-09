@@ -2,13 +2,7 @@ import type { ReactNode } from 'react';
 
 import { Button, Icon, Layout, Section } from '@/components';
 import { getKitPhoto } from '@/lib/photos';
-import {
-  ContentSection,
-  Proof,
-  VideoTestimonial,
-  type ProofQuote,
-  type VideoTestimonialFilm,
-} from '@/patterns';
+import { ContentSection, VideoTestimonial, type VideoTestimonialFilm } from '@/patterns';
 
 import { specimenStyles as s } from '../../_specimen/Specimen';
 
@@ -32,23 +26,6 @@ const TABLET: VideoTestimonialFilm = {
   duration: '5:08',
 };
 
-const PEERS: readonly [ProofQuote, ProofQuote] = [
-  {
-    quoteHtml:
-      '<p>Every decision came with the reason attached, so our board could follow the work without a deck.</p>',
-    name: 'Mira Castell',
-    role: 'COO',
-    company: 'Harbourline',
-  },
-  {
-    quoteHtml:
-      '<p>They told us which of our ideas to drop, and they were right about all three of them.</p>',
-    name: 'Tobias Wren',
-    role: 'Founder',
-    company: 'Quillmark',
-  },
-];
-
 /* ── Showcase scaffolding ─────────────────────────────────────────────────────────── */
 
 type Variation = { id: string; title: string; note: string };
@@ -64,10 +41,10 @@ const VARIATIONS = {
     title: 'Featured, alone on tint',
     note: 'No head: the film is the band. The same unit on tint — every colour comes from the surface, so nothing is re-specified. Different poster, different speaker.',
   },
-  inRow: {
-    id: 'in-row',
-    title: 'In-row, beside two text quotes',
-    note: 'Three peers at 32, bottom-aligned so the three speakers share a line. The film takes one track with the poster above its quote at the reading role (28) — the size its two Proof compact neighbours are set at — so the row reads as three voices, one of them on camera.',
+  wide: {
+    id: 'wide',
+    title: 'Wide, the quote below',
+    note: 'The second single-film layout: the poster across the whole column, the pulled line under it at the display quote role, held to the lead measure. For a band where the film itself is the argument. Still one film, and the only testimonial in the band — never beside text quotes, never two at once (owner rule, 9 Oct).',
   },
   ink: {
     id: 'ink',
@@ -79,7 +56,7 @@ const VARIATIONS = {
 const ORDER: Variation[] = [
   VARIATIONS.featured,
   VARIATIONS.featuredBare,
-  VARIATIONS.inRow,
+  VARIATIONS.wide,
   VARIATIONS.ink,
 ];
 
@@ -138,8 +115,8 @@ export default function VideoTestimonialKitPage() {
               <p className={s.specNote}>
                 A client interview, set so the reader chooses to watch it: the poster, one play
                 control, the line worth hearing pulled out beside it, and who said it. Two
-                variants of one VideoTestimonial pattern — featured, the band’s one object, and
-                in-row, one voice among text quotes.
+                single-film layouts of one VideoTestimonial pattern — featured, quote beside, and
+                wide, quote below. One film per band, and it is the band’s only testimonial.
               </p>
             </Layout>
             <Layout as="ol" rowGap="text">
@@ -205,30 +182,22 @@ export default function VideoTestimonialKitPage() {
         </Section>
       </Band>
 
-      {/* ── 03 In-row ─────────────────────────────────────────────────────────────── */}
-      <Band variation={VARIATIONS.inRow}>
+      {/* ── 03 Wide ───────────────────────────────────────────────────────────────── */}
+      <Band variation={VARIATIONS.wide}>
         <ContentSection
-          surface="tint"
-          heading="In our clients’ words"
-          headingId="kit-video-in-row"
-          data-band="G-video-in-row"
+          heading="Three weeks from eleven steps to four"
+          headingId="kit-video-wide"
+          data-band="G-video-wide"
         >
-          {/* Bottom-aligned: the three attributions share one line and the three quotes sit on
-              one band, so the film's poster rises above a row of peers rather than pushing its
-              own quote below theirs. */}
-          <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="stack" align="end">
-            <VideoTestimonial
-              variant="in-row"
-              poster={getKitPhoto('conversation-chalkboard')}
-              film={CHALKBOARD}
-              quote="Three weeks in, the booking flow had gone from eleven steps to four."
-              name="Asha Raman"
-              role="Head of Product"
-              company="Northwind Travel"
-            />
-            <Proof arrangement="compact" quote={PEERS[0]} />
-            <Proof arrangement="compact" quote={PEERS[1]} />
-          </Layout>
+          <VideoTestimonial
+            variant="wide"
+            poster={getKitPhoto('conversation-chalkboard')}
+            film={CHALKBOARD}
+            quote="Three weeks in, the booking flow had gone from eleven steps to four — and the planners were the ones asking for the next release."
+            name="Asha Raman"
+            role="Head of Product"
+            company="Northwind Travel"
+          />
         </ContentSection>
       </Band>
 

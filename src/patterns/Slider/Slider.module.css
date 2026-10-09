@@ -18,7 +18,7 @@
                         not started to fill is empty rather than unresolved
 
    Classes: .slider .view1 .view2 .view3 .view4 .bleed .row .rail .thumb .status .playing .control .progress
-            .steps .step .stepNumber .stepLine .stepFill */
+            .steps .step .stepLine .stepFill */
 
 /* One in view below 768 at every perView, and always at perView 1. */
 .slider,
@@ -129,20 +129,19 @@
 }
 
 /* ── The autoplay stepper (7 Oct 2026) ───────────────────────────────────────────
-   One step per slide: a mono numeral over a line, the rail's line and its thumb at a step's length.
-   The current step's numeral takes the full ink, and its line fills — wholly at rest, and over the
+   One step per slide: a plain bar, the rail's line and its thumb at a step's length (9 Oct 2026:
+   the numerals went — bars only). The current step's line fills — wholly at rest, and over the
    hold while rotating, from --slider-step-progress, which the clock writes on the root each frame
    (the thumb's technique). A pause stops the writes, so the fill freezes where it was: the hold is
    visible. Under reduced motion nothing rotates unless the reader presses Play; the fill is then
-   the clock they asked for. The arrangement — steps in a row, numeral over line — is Cluster's and
-   Layout's; this module sizes the parts and paints them. */
+   the clock they asked for. The arrangement — steps in a row — is Cluster's; this module sizes the parts and paints them. */
 /* A control keeps its 48 circle in a crowded row: the steps give way, never the buttons. */
 .control {
   flex: none;
 }
 
 /* The stepper's group (rotation control + steps) and the steps list may shrink inside the nowrap
-   control row, and each step with them, down to its numeral: at 390 a centred row of two steppers,
+   control row, and each step with them, down to its bar: at 390 a centred row of two steppers,
    the rotation control and four 56 steps is wider than the 326 column. Sizing, not arrangement —
    the Clusters still own the row and its gaps. A shrunk step keeps the WCAG 2.5.8 spacing
    exception: its 44 height, and the `tight` seam beside it, clear a 24 circle. */
@@ -158,7 +157,7 @@
 }
 
 /* A definite inline size, not a flex-basis: a flex container's intrinsic width is built from its
-   items' sizes, and a basis alone would size the list to its numerals. */
+   items' sizes, and a basis alone would size the list to nothing. */
 .steps > li {
   flex: 0 1 auto;
   inline-size: var(--sld-step-length);
@@ -166,7 +165,7 @@
 }
 
 /* A native button reset to the step's own box: the 44 target in block size, the step's length in
-   inline size. A button centres its content in its block size, so the numeral and line sit in the
+   inline size. A button centres its content in its block size, so the line sits in the
    middle of the target with no padding. */
 .step {
   display: block;
@@ -176,14 +175,8 @@
   border: 0;
   border-radius: var(--sld-progress-radius);
   background: none;
-  color: var(--sld-step-fg);
   text-align: start;
   cursor: pointer;
-}
-
-.step:hover,
-.step[aria-current='true'] {
-  color: var(--sld-step-fg-current);
 }
 
 .step:disabled {
@@ -195,25 +188,6 @@
   box-shadow:
     0 0 0 var(--sld-ring-offset) var(--sld-ring-gap-color),
     0 0 0 calc(var(--sld-ring-offset) + var(--sld-ring-width)) var(--sld-ring-color);
-}
-
-/* The numerals from md. On a phone the control row is two steppers, the rotation control and the
-   steps in a 326 column, and four steps come to ~22 each — narrower than "01" in the index role, so
-   the numerals ran together. There the steps are their lines alone, the story-bar form, and still
-   the stepper: current, filling, and one 44-tall target each. A layout change at a breakpoint, not
-   a distance swapped for another. */
-.stepNumber {
-  display: none;
-  font: var(--text-index);
-  letter-spacing: var(--text-index-tracking);
-  text-transform: var(--text-mono-case);
-  font-variant-numeric: tabular-nums;
-}
-
-@media (min-width: 768px) {
-  .stepNumber {
-    display: inline;
-  }
 }
 
 .stepLine {

@@ -93,12 +93,8 @@ very special text". Recorded in `docs/kit/review-7-oct.md`, r7-statement.
 - **`size` is removed**, with `--stmt-sentence-text-display`, `-tracking-display` and
   `-measure-display`. The h1 role on `--stmt-sentence-measure` is the one scale. Callers migrated:
   ServicePage's J band, kit/home, kit/about, kit/banner.
-- **`emphasis?: string`** — a phrase of `children`, verbatim. Given, the sentence goes two-tone: the
-  rest at `--stmt-sentence-ink-quiet` (neutral-600 on paper 4.92:1 and tint 4.39:1, AA at the role's
-  large size; neutral-500 on ink 5.41:1; brandeis-100 on blue), the phrase at `--stmt-emphasis-ink`
-  (full ink) in `--stmt-emphasis-style` (italic, Newsreader 400 italic, already loaded). Voice, never
-  scale, is what separates a statement from a section title. Both tones are ink: blue never sets
-  words (§ 4.3). A phrase not found is ignored with a dev warning. Without it, one tone of full ink.
+- ~~`emphasis`~~ — retired (owner, 9 Oct 2026: the italic two-tone turn "is good as an idea but not
+  as a visual; it reads AI-generated"). The sentence is one uniform ink at the h1 role.
 - **`graphic?: ReactNode`** — the slot for the secondary brand shapes (owner's Figma work). A square
   of `--stmt-graphic-size` (64) a `block` above the eyebrow, aria-hidden; Statement sizes it, the page
   supplies the shape. Centred with the column under `align="center"`.

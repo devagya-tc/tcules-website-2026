@@ -3,7 +3,7 @@
    Section paints the band and its open air; Layout and Cluster own every seam; Texture owns its
    field. Every value is a --stmt-* token in tokens/components/statement.css.
 
-   Classes: .graphic .eyebrow .sentence .toned .emphasis .centred .texture
+   Classes: .graphic .eyebrow .sentence .centred .texture
 
    One @media query: the head-half texture exists from 1024 only (§ 6.3: "below 1024: none"). It
    swaps visibility, never a distance. */
@@ -21,18 +21,6 @@
   text-wrap: var(--text-title-wrap);
   color: var(--stmt-sentence-ink);
   max-inline-size: var(--stmt-sentence-measure);
-}
-
-/* `emphasis` given: the sentence steps back to the quiet ink and the phrase it turns on holds full
-   ink, italic. Two tones of ink and a change of voice, never a change of size, so the role's
-   ladder still governs every width. */
-.toned {
-  color: var(--stmt-sentence-ink-quiet);
-}
-
-.emphasis {
-  font-style: var(--stmt-emphasis-style);
-  color: var(--stmt-emphasis-ink);
 }
 
 /* The graphic slot: a square the caller's shape fills. Statement owns the size; the shape owns

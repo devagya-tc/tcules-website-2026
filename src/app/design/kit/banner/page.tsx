@@ -148,8 +148,8 @@ export default function KitBannerSpecimen() {
       <Caption index="I.4" title="Banner beside, photo left">
         mediaSide=&quot;start&quot; mirrors the split from 1024; the copy stays first in the
         reading order. Its action is one blue link: a banner is in-band, and the solid is the
-        hero&rsquo;s and the close&rsquo;s (r7-buttons, 8 Oct 2026). On a page, never two beside banners
-        within sight of each other: here they are a specimen set.
+        hero&rsquo;s and the close&rsquo;s (r7-buttons, 8 Oct 2026). On a page, never two beside
+        banners within sight of each other: here they are a specimen set.
       </Caption>
       <Banner
         form="beside"
@@ -212,15 +212,13 @@ export default function KitBannerSpecimen() {
         A small senior team, working in the open from week one.
       </Statement>
 
-      <Caption index="J.4" title="Statement with its turn, and its link">
-        emphasis: the sentence steps back to a quiet ink and the phrase it turns on holds full
-        ink, italic (the display size is retired, owner 7 Oct 2026). One link a stack under the
-        sentence.
+      <Caption index="J.4" title="Statement with its link">
+        One uniform ink at the h1 role (the italic turn is retired, owner 9 Oct 2026). One link
+        a stack under the sentence.
       </Caption>
       <Statement
         eyebrow="How we work"
         id="kit-statement-display"
-        emphasis="to the shipped build."
         texture="head-half"
         actions={
           <CtaRow

@@ -363,7 +363,7 @@ export default function KitServicesIndexPage() {
         headingId="si-services"
         lead="Six doors, and one team behind every one."
       >
-        <BlockCardSet items={SERVICES} lead="none" across={3} />
+        <BlockCardSet items={SERVICES} lead="none" across={3} frame="box" />
       </ContentSection>
 
       {/* 3 · C-image-4 — the fixed-scope audits, centred, a link on each. */}

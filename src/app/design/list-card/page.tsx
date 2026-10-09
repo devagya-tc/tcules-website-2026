@@ -164,25 +164,25 @@ const LINKED = [
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
-    note: 'Neutral-900 title, blue marker and numeral at rest, neutral-700 body; a linked title takes brandeis-500 on hover and focus and 700 on press.',
+    note: 'Neutral-900 title, blue marker and numeral at rest, neutral-700 body; a linked title takes brandeis-500 on hover and focus and 700 on press. A boxed tile: neutral-300 edge, paper-deep ground on hover, neutral-100 on press.',
   },
   {
     surface: 'tint',
-    note: 'The text and link ramps still pass unchanged; the rule steps to neutral-400.',
+    note: 'The text and link ramps still pass unchanged; the rule and the box edge step to neutral-400, and a boxed tile hovers to neutral-100.',
   },
   {
     surface: 'ink',
-    note: 'Title lifts to white, body to neutral-300, accent to brandeis-300 (a linked title 300 on hover, 50 on press).',
+    note: 'Title lifts to white, body to neutral-300, accent to brandeis-300 (a linked title 300 on hover, 50 on press). The box edge is neutral-700 and hovers to a neutral-900 ground.',
   },
   {
     surface: 'blue',
-    note: 'Only the light end clears AA: a linked title 100 on hover, 50 on press, with a white focus ring against its blue gap.',
+    note: 'Only the light end clears AA: a linked title 100 on hover, 50 on press, with a white focus ring against its blue gap. The box edge is brandeis-300 and hovers to a brandeis-600 ground.',
   },
 ] as const;
 
-/* Icon tiles: an icon router of linked destinations, open and ruled (the box went, owner 7 Oct
-   2026). Rendered on all four surfaces with identical markup. */
-const ICON_TILES = [
+/* The boxed tiles (frame="box", owner 7 Oct 2026): an icon router of linked destinations, the shape
+   the box exists for. Rendered on all four surfaces with identical markup. */
+const BOXED = [
   {
     title: 'Product redesign',
     body: 'The cost sits in the experience, and the model underneath still holds.',
@@ -257,6 +257,8 @@ const NESTED_SURFACE_TOKENS = {
     ['--lcrd-link-ink', '--color-brandeis-500'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-700'],
     ['--lcrd-rule-ink', '--color-neutral-400'],
+    ['--lcrd-ground-hover', '--color-neutral-100'],
+    ['--lcrd-ground-pressed', '--color-neutral-200'],
     ['--lcrd-ring-color', '--color-brandeis-500'],
     ['--lcrd-ring-gap-color', '--color-paper-deep'],
   ],
@@ -268,6 +270,8 @@ const NESTED_SURFACE_TOKENS = {
     ['--lcrd-link-ink', '--color-brandeis-300'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-50'],
     ['--lcrd-rule-ink', '--color-neutral-700'],
+    ['--lcrd-ground-hover', '--color-neutral-900'],
+    ['--lcrd-ground-pressed', '--color-neutral-800'],
     ['--lcrd-ring-color', '--color-brandeis-300'],
     ['--lcrd-ring-gap-color', '--color-neutral-950'],
   ],
@@ -331,18 +335,19 @@ function SurfaceRows() {
   );
 }
 
-/** The icon tiles, identical on every surface: three linked, then one static with an action-free body. */
-function SurfaceIconTiles() {
+/** The boxed tiles, identical on every surface: three linked, then one static with an action-free body. */
+function SurfaceBoxes() {
   return (
-    <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="column">
-      {ICON_TILES.map((tile) => (
-        <ListCard key={tile.title} form="tile" titleAs="h3" {...tile} />
+    <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="gutter">
+      {BOXED.map((tile) => (
+        <ListCard key={tile.title} form="tile" frame="box" titleAs="h3" {...tile} />
       ))}
       <ListCard
         form="tile"
+        frame="box"
         titleAs="h3"
-        title="Unlinked tile"
-        body="No destination: the rule and the marker, and no pointer state."
+        title="Unlinked box"
+        body="No destination: the edge and inset, no ground and no pointer state."
         marker={{ type: 'icon', name: 'document-text' }}
       />
     </Layout>
@@ -661,6 +666,56 @@ export default function ListCardSpecimenPage() {
                 marker={{ type: 'icon', name: 'check-circle' }}
                 href={ROUTES.contact}
                 ctaLabel="Book an audit"
+              />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title='boxed tiles · frame="box" · an icon router of six, two across'
+            note="Owner, 7 Oct 2026. A hairline at the 8 radius, 24 inside on every side, and a ground under the pointer when linked. Boxed tiles sit a gutter apart both ways: the box is the separation. The shape it is for: four to six destinations beside a head."
+          >
+            <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack">
+              <Box tall />
+              <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+                {[...BOXED, ...LINKED.slice(0, 3)].map((tile) => (
+                  <ListCard key={tile.title} form="tile" frame="box" titleAs="h3" {...tile} />
+                ))}
+              </Layout>
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="boxed tiles · numbers, a thumbnail, title only, and an action"
+            note="Every marker in the box. A thumbnail sits above its copy as in the open tile."
+          >
+            <Layout as="ol" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="gutter">
+              <ListCard
+                form="tile"
+                frame="box"
+                title="Read the real work"
+                body="What triggers the change, who decides, who is affected."
+                marker={{ type: 'number', value: 1 }}
+              />
+              <ListCard
+                form="tile"
+                frame="box"
+                title="A case study"
+                body="A thumbnail in the box."
+                marker={thumb(getKitPhoto('screen-over-shoulder'))}
+                href={ROUTES.caseStudies}
+              />
+              <ListCard
+                form="tile"
+                frame="box"
+                title="Title only"
+                marker={{ type: 'number', value: 3 }}
+              />
+              <ListCard
+                form="tile"
+                frame="box"
+                title="Product modernisation assessment"
+                body="Capability by capability: repair, redesign, replatform or rebuild."
+                marker={{ type: 'number', value: 4 }}
+                href={ROUTES.contact}
+                ctaLabel="Request the assessment"
               />
             </Layout>
           </Specimen>
@@ -1057,7 +1112,8 @@ export default function ListCardSpecimenPage() {
               <strong>title turns blue</strong> on hover and focus and deepens on press (owner,
               7 Oct 2026 — the arrow cue and the row&rsquo;s hover ground were removed). Focus
               adds the surface-aware two-part ring round the whole row, so keyboard focus is
-              never carried by colour alone.
+              never carried by colour alone. A boxed tile adds a ground under the pointer (§
+              1b).
             </p>
           </Layout>
           <Rows ordered>
@@ -1083,12 +1139,12 @@ export default function ListCardSpecimenPage() {
               ],
               [
                 'hover',
-                'The title takes --lcrd-link-ink.',
+                'The title takes --lcrd-link-ink. A boxed tile also paints --lcrd-ground-hover.',
               ],
               ['focus', 'Exactly the hover rendering plus the two-part keyboard ring.'],
               [
                 'pressed',
-                'The title steps to --lcrd-link-ink-pressed.',
+                'The title steps to --lcrd-link-ink-pressed; a boxed tile to --lcrd-ground-pressed.',
               ],
             ].map(([state, note]) => (
               <div key={state}>
@@ -1109,7 +1165,7 @@ export default function ListCardSpecimenPage() {
               <p className={s.specNote}>{note}</p>
             </Layout>
             <SurfaceRows />
-            <SurfaceIconTiles />
+            <SurfaceBoxes />
           </Layout>
         </Section>
       ))}

@@ -114,4 +114,4 @@ export { RatingBadge, type RatingBadgeProps } from './RatingBadge';
 
 /* Stat is one figure, its unit and what it counts — the S band's numerals and the D band's stat
    aside (cmp-process-stats, 6 Oct 2026). */
-export { Stat, type StatAlign, type StatElement, type StatProps, type StatSize, type StatTally, type StatTallyForm } from './Stat';
+export { Stat, type StatAlign, type StatElement, type StatProps, type StatSize } from './Stat';

@@ -396,7 +396,7 @@ export default function ServiceListKitSpecimen() {
 
       {/* ── 01 · C-icon-6 ──────────────────────────────────────────────────────────────────── */}
       {/* A beside head over six linked icon cards, the photograph in the head track ending on the
-          grid's last line. Whole-card links, open and ruled (the box went, owner 7 Oct 2026); no CtaRow (§ 1.4
+          grid's last line. Whole-card links in boxes (owner, 7 Oct 2026); no CtaRow (§ 1.4
           rule 7), and never actions in the head track, so the set never renders without its photo.
           At 390 the six are one sideways row, the next card peeking, with a progress rail under it
           whose thumb is a sixth of its length, so the count reads; the photo is a 21:9 banner. */}
@@ -411,7 +411,7 @@ export default function ServiceListKitSpecimen() {
         asideFill
         aside={<Aside id="pair-at-laptop-sticky-wall" />}
       >
-        <BlockCardSet items={SIX} lead="none" across={2} />
+        <BlockCardSet items={SIX} lead="none" across={2} frame="box" />
       </ContentSection>
 
       {/* ── 02 · C-image-3, H-compact centred ──────────────────────────────────────────────── */}
@@ -506,7 +506,7 @@ export default function ServiceListKitSpecimen() {
           />
         }
       >
-        <BlockCardSet items={NEXT} lead="none" across={2} />
+        <BlockCardSet items={NEXT} lead="none" across={2} frame="box" />
       </ContentSection>
 
       {/* ── 06 · Slider ────────────────────────────────────────────────────────────────────── */}

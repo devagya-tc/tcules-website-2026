@@ -120,7 +120,7 @@ const SPECIMENS = [
       {
         href: '/design/statement',
         name: 'Statement',
-        note: 'the J band — one sentence at the h1 role as h2 | p (display retired), plain or two-tone with an italic turn (emphasis), graphic slot, eyebrow directly above it, start | center, head-half and corner texture, action, 3 surfaces',
+        note: 'the J band — one sentence at the h1 role as h2 | p (display retired), one uniform ink, graphic slot, eyebrow directly above it, start | center, head-half and corner texture, action, 3 surfaces',
       },
       {
         href: '/design/kit/banner',
@@ -280,7 +280,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/facts',
         name: 'Kit · Facts and figures',
-        note: 'rating, years, projects and team, each figure drawn as its count: the scoreboard (the rating at score size beside three tallied stats, paper and tint) and the client-list band (rating beside the logo grid, the studio facts as its foot)',
+        note: 'never combine proof types: the rating on its own (score size, badge as source) and the studio record on its own (three figures on tint, two beside the head), plain stats',
       },
       {
         href: '/design/kit/cta',
@@ -295,7 +295,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/video-testimonial',
         name: 'VideoTestimonial',
-        note: 'a client interview on film: featured (16:9 poster in [3, 2], display quote beside) under a head on paper and alone on tint, and in-row beside two Proof compact quotes; poster, play disc, captions track slot, no autoplay, focus hand-off, reduced motion',
+        note: 'a client interview on film: featured (16:9 poster in [3, 2], display quote beside) under a head on paper and alone on tint, and wide (poster across the column, quote below); one film per band and the band’s only testimonial; poster, play disc, captions track slot, no autoplay, focus hand-off, reduced motion',
       },
       {
         href: '/design/kit/form',
