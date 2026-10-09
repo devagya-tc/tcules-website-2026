@@ -27,16 +27,18 @@ type Breakpoint = 'base' | 'md' | 'lg' | 'xl';
  * buys it back. Two across, a ~179 cell holds every mark at its full phone size, and a count with
  * one left over closes on a cell that spans the row (`lastFills`), so nine is still a whole
  * rectangle: four rows of two and one of one.
+ *
+ * Never more than four across at any width (owner, 9 Oct 2026).
  */
 const RANGE: Record<LogoGridTrack, Record<Breakpoint, [max: number, min: number]>> = {
-  full: { base: [2, 2], md: [4, 3], lg: [5, 3], xl: [6, 3] },
+  full: { base: [2, 2], md: [4, 3], lg: [4, 3], xl: [4, 3] },
   body: { base: [2, 2], md: [4, 3], lg: [3, 2], xl: [3, 2] },
 };
 
 /**
  * The column count for `count` cells: the most across, within the range, that divides the count,
- * so every row is full and the grid is a whole rectangle — 8 is 4 × 2, 9 is 3 × 3, 12 is 6 × 2 at
- * 1440 (4 × 3 at 1024). A count with no divisor in range (7, 11, 13) takes the count that leaves
+ * so every row is full and the grid is a whole rectangle — 8 is 4 × 2, 9 is 3 × 3, 12 is 4 × 3.
+ * A count with no divisor in range (7, 11, 13) takes the count that leaves
  * the fewest empty places in the last row, the wider on a tie. Fewer cells than the floor sit in
  * one row.
  */

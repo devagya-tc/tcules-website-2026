@@ -40,7 +40,7 @@ import t from '../../_specimen/typeroles.module.css';
  *   01  the context line alone, start-aligned, nine marks three by three across the column;
  *   02  the RatingBadge leading a centred context line, eight marks in one flat four-by-two wall;
  *   03  a short h4-scale heading beside the grid, centred on it, nine marks three by three.
- * Then the counts: 12 cells (6 × 2 at 1440), so 8, 9 and 12 are all on the page; the open edge, the
+ * Then the counts: 12 cells (4 × 3; never more than four across), so 8, 9 and 12 are all on the page; the open edge, the
  * alternative; and the token proof on tint, ink and blue (never this band's ground on a page — blue
  * is the foreground accent — but every surface block in logo-grid.css has to render somewhere).
  * On a phone every count is two across; nine closes on one cell spanning the row.
@@ -136,7 +136,7 @@ export default async function KitLogosPage() {
               form="tile"
               marker={{ type: 'number', value: 2, tone: 'neutral' }}
               title="Equal ink, every row full"
-              body="Each mark sized by its measured density. The count sets the columns: 8 is 4 × 2, 9 is 3 × 3, 12 is 6 × 2."
+              body="Each mark sized by its measured density. The count sets the columns: 8 is 4 × 2, 9 is 3 × 3, 12 is 4 × 3. Never more than four across."
             />
           </Layout>
         </Layout>
