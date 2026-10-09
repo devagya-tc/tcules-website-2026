@@ -42,9 +42,10 @@ const VARIATIONS = [
   { id: 'centred', title: 'Compact under a centred head' },
   { id: 'beside', title: 'Compact beside its head' },
   { id: 'offer', title: 'The offer, with the compact form' },
+  { id: 'inverted', title: 'Inverted, on ink' },
   { id: 'full-sets', title: 'Enquiry and audit' },
   { id: 'contact', title: 'Contact, and what it becomes' },
-  { id: 'states', title: 'Error and success' },
+  { id: 'states', title: 'Invalid, error and success' },
 ] as const;
 
 type VariationId = (typeof VARIATIONS)[number]['id'];
@@ -153,9 +154,10 @@ export default function KitFormPage() {
               <p className={s.eyebrow}>UI kit · Forms</p>
               <h1>Every ask, in the shape its page needs</h1>
               <p>
-                One form, four field sets. The close sits beside the promise it makes. A short
-                form sits beside a quiet photograph. A compact form drops into any band and
-                brings no layout of its own: it fills the track it is given.
+                One form, four field sets, and no labels over the boxes: each field says what it
+                wants in its own placeholder, so a short ask stays short. The close sits beside
+                the promise it makes; a compact form drops into any band and fills the track it
+                is given. Errors still land under their field, and are read aloud.
               </p>
             </Layout>
             <Layout as="ol" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="tight">
@@ -248,7 +250,7 @@ export default function KitFormPage() {
       {/* ── 04 · Compact standalone, centred head ───────────────────────────────────── */}
       <Plate
         id="centred"
-        note={`ContentSection, align center (H-compact): the head centred on its measures, the compact form beneath it as a block at its 667 measure (width="measure"), its fields numbered (numbered): the blue numerals are the band's structural mark where it has no photograph, texture or points. The fields stay start-aligned.`}
+        note={`ContentSection, align center (H-compact): the head centred on its measures, the compact form beneath it as a block at its 667 measure (width="measure"), in the unboxed line fields (fields="line"): 44 tall, the cue on its rule, blue and doubled on focus. The quiet option where a band has no photograph, texture or points to set boxes against. The fields stay start-aligned.`}
       />
       <ContentSection
         align="center"
@@ -260,7 +262,7 @@ export default function KitFormPage() {
         <EnquiryForm
           variant="compact"
           width="measure"
-          numbered
+          fields="line"
           action={action()}
           context={context('kit-centred')}
           nextSteps={COMPACT_STEPS}
@@ -270,7 +272,7 @@ export default function KitFormPage() {
       {/* ── 05 · Compact standalone, beside head ────────────────────────────────────── */}
       <Plate
         id="beside"
-        note="ContentSection beside: the head, its lead and two blue ways to reach the studio under it in 381, as Executra pins its contact items, so the head column is a shape and not three lines over a dead quadrant; the compact form, numbered, filling the 763 body track to the band's edge."
+        note="ContentSection beside: the head, its lead and two blue ways to reach the studio under it in 381, as Executra pins its contact items, so the head column is a shape and not three lines over a dead quadrant; the compact form filling the 763 body track to the band's edge, its caption beside the submit."
       />
       <ContentSection
         arrangement="beside"
@@ -303,7 +305,6 @@ export default function KitFormPage() {
       >
         <EnquiryForm
           variant="compact"
-          numbered
           action={action()}
           context={context('kit-beside')}
           nextSteps={COMPACT_STEPS}
@@ -346,7 +347,29 @@ export default function KitFormPage() {
         }
       />
 
-      {/* ── 07 · Enquiry and audit ──────────────────────────────────────────────────── */}
+      {/* ── 07 · Inverted ───────────────────────────────────────────────────────────── */}
+      <Plate
+        id="inverted"
+        note={`The same compact form on ink, beside its head (ContentSection beside, surface="ink"): nothing passed but the ground. The boxes, the cues, the blue submit and the caption all resolve from the surface, so the inverted form is not a variant to maintain. For the one band on a page that is ink by design.`}
+      />
+      <ContentSection
+        surface="ink"
+        arrangement="beside"
+        eyebrow="Before you go"
+        heading="Three lines, and we take it from there"
+        headingId="inverted-heading"
+        lead="The product, what is stuck, and how to reach you. A designer reads it, not a queue."
+      >
+        <EnquiryForm
+          variant="compact"
+          submit="full"
+          action={action()}
+          context={context('kit-inverted')}
+          nextSteps={COMPACT_STEPS}
+        />
+      </ContentSection>
+
+      {/* ── 08 · Enquiry and audit ──────────────────────────────────────────────────── */}
       <Plate
         id="full-sets"
         note="The two full field sets side by side, each filling its track: email, the question and an optional link, with See available times beside the submit. One width policy for every variant, so the right edges agree."
@@ -372,7 +395,7 @@ export default function KitFormPage() {
         </Layout>
       </Section>
 
-      {/* ── 08 · Contact, and its success ───────────────────────────────────────────── */}
+      {/* ── 09 · Contact, and its success ───────────────────────────────────────────── */}
       <Plate
         id="contact"
         note="The five-field contact set, its fields paired (name with company, email with phone) so it fits a band, beside the same form sent: the thanks and the caller's two steps. A plain message promises less than an enquiry, so it says less."
@@ -403,19 +426,19 @@ export default function KitFormPage() {
         </Layout>
       </Section>
 
-      {/* ── 09 · Error and success ──────────────────────────────────────────────────── */}
+      {/* ── 10 · Error and success ──────────────────────────────────────────────────── */}
       <Plate
         id="states"
-        note="Driven through the real controls on load: the first form blurred, empty and malformed; the second filled and sent to an endpoint that fails (the page's one console 500 is that send, on purpose); the third sent. On tint, as the surface proof: on pages, tint is the proof band only (§ 1.7)."
+        note="Driven through the real controls on load: the first form sent with the name and question empty and the email malformed, so nothing posts, every message lands under its field and focus moves to the first; the second filled and sent to an endpoint that fails (the page's one console 500 is that send, on purpose); the third sent. On tint, as the surface proof: on pages, tint is the proof band only (§ 1.7)."
       />
       <div data-fold-exempt="specimen comparison: three states side by side, which at 390 stack past the phone limit">
         <Section surface="tint">
           <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="column">
             <Specimen
-              title="Invalid · blurred, empty and malformed"
-              note="Name and question empty, email malformed; each message lands in its reserved line."
+              title="Invalid · sent incomplete"
+              note="Nothing posts. Each message opens under its field; the line beside the submit counts them."
             >
-              <Rehearse blur fill={{ email: 'maya@' }}>
+              <Rehearse submit fill={{ email: 'maya@' }}>
                 <EnquiryForm
                   variant="compact"
                   action={action()}

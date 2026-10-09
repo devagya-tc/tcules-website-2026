@@ -8,14 +8,12 @@
      it lives here, in the composing pattern, since Input stopped carrying one (6 Oct 2026: a
      control-box minimum overflowed every track narrower than it, the Input specimen's 213px
      tracks first). Every variant fills its track; the one measure (667, the copy track of a
-     [5, 7] split at 1470) is opted into by the centred standalone placement. One 19px caption line is reserved so blur validation does not move later
-     controls. */
+     [5, 7] split at 1470) is opted into by the centred standalone placement. */
   --enq-form-min-inline: 16rem;
   --enq-form-measure: 667px; /* width="measure": the copy track of a [5, 7] split at 1470 */
   --enq-note-min-inline: 15rem; /* the caption beside the submit, or under it */
-  /* One --text-caption line, derived rather than restated (13 × 1.45 ≈ 19): if the caption role
-     changes, the reserve follows it. */
-  --enq-message-reserve: calc(var(--font-size-caption) * var(--line-height-caption));
+  /* The visually-hidden label's clip box (r7-form: the placeholder is the visible cue). */
+  --enq-hidden-size: 1px;
   --enq-transition-duration: var(--duration-fast);
   --enq-transition-easing: var(--easing-standard);
 }
@@ -24,20 +22,18 @@
 [data-surface='paper'] {
   /* Neutral-600 is the text floor for hint/caption at 4.92:1 on paper. Danger-600 carries invalid
      copy at 6.48:1; the success check takes the accent. */
-  --enq-label-ink: var(--color-neutral-700);
   --enq-hint-ink: var(--color-neutral-600);
   --enq-message-invalid-ink: var(--color-danger-600);
   --enq-status-ink-error: var(--color-danger-600); /* 6.48:1 on paper */
   --enq-success-ink: var(--color-neutral-900);
   --enq-caption-ink: var(--color-neutral-600);
   --enq-accent-ink: var(--color-brandeis-500); /* 6.17:1: marks, active label, numerals */
-  --enq-index-ink: var(--color-neutral-600); /* 4.92:1 — field and step numerals: auxiliary, so neutral (owner, 7 Oct 2026) */
+  --enq-index-ink: var(--color-neutral-600); /* 4.92:1 — step numerals: auxiliary, so neutral (owner, 7 Oct 2026) */
 }
 
 [data-surface='tint'] {
   /* Deep paper raises the ground: hint and caption step to neutral-700 because neutral-600 would
      fail at 4.39:1. Danger-600 remains 5.78:1 for invalid and error copy. */
-  --enq-label-ink: var(--color-neutral-700);
   --enq-hint-ink: var(--color-neutral-700);
   --enq-message-invalid-ink: var(--color-danger-600);
   --enq-status-ink-error: var(--color-danger-600); /* 5.78:1 on deep paper */
@@ -50,7 +46,6 @@
 [data-surface='ink'] {
   /* Text polarity inverts without borrowing Input tokens. Neutral-400 keeps hint/caption above the
      text floor, while danger-300 carries error copy at 8.65:1 on neutral-950. */
-  --enq-label-ink: var(--color-neutral-200);
   --enq-hint-ink: var(--color-neutral-400);
   --enq-message-invalid-ink: var(--color-danger-300);
   --enq-status-ink-error: var(--color-danger-300); /* 8.65:1 on neutral-950 */
@@ -62,7 +57,6 @@
 
 [data-surface='blue'] {
   /* Brand-100 is the quiet text floor at 4.91:1. Danger-100 reaches 5.03:1; the accent turns white. */
-  --enq-label-ink: var(--color-brandeis-50);
   --enq-hint-ink: var(--color-brandeis-100);
   --enq-message-invalid-ink: var(--color-danger-100);
   --enq-status-ink-error: var(--color-danger-100); /* 5.03:1 on brandeis-500 */
