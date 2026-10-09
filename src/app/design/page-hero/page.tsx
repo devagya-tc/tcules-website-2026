@@ -14,10 +14,13 @@ import {
   type HeroDates,
   type HeroMedia,
   type HeroActions,
+  type HeroRating,
   type PageHeroProps,
 } from '@/patterns';
 
+import { getNavigation } from '@/content';
 import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
+import { getKitPhoto } from '@/lib/photos';
 import { ROUTES, glossaryPath, servicePath } from '@/lib/routes';
 import { heroTrail, type Trail } from '@/lib/trail';
 
@@ -317,6 +320,73 @@ const SERVICE_TRAIL = [
   { label: 'Product Design', href: servicePath('product-design') },
 ] as const;
 
+/* Block 22: the score in the eyebrow's place, each frame where it belongs and once where it does not
+   (the plain frame on the centred axis), so the reason for the default is visible. */
+const RATING_CASES: readonly {
+  key: string;
+  title: string;
+  frame: 'pill' | 'plain';
+  note: string;
+  props: Pick<PageHeroProps, 'arrangement' | 'media' | 'trail' | 'surface'>;
+}[] = [
+  {
+    key: 'stacked-pill',
+    title: 'stacked',
+    frame: 'pill',
+    note: 'The default frame on the default arrangement. The pill takes the eyebrow row, 24 over the title; the wrapper stops the Layout track stretching it to the column.',
+    props: {},
+  },
+  {
+    key: 'stacked-plain',
+    title: 'stacked',
+    frame: 'plain',
+    note: 'No outline and no inline padding, so the star starts on the column edge like any eyebrow. The block padding stays, so the link target is still taller than 24.',
+    props: {},
+  },
+  {
+    key: 'beside-plain',
+    title: 'beside a photograph',
+    frame: 'plain',
+    note: 'The doodle.com placement: the photograph and the solid are the band’s edged objects, and the score is one more line of label type, top-aligned with the photograph.',
+    props: {
+      arrangement: 'beside',
+      media: {
+        type: 'image',
+        ratio: '5/4',
+        image: getKitPhoto('studio-pair-at-monitor', { alt: '' }),
+      },
+    },
+  },
+  {
+    key: 'trail-pill',
+    title: 'under a trail',
+    frame: 'pill',
+    note: 'Under Home / Case studies / ConnectX. The score is the one eyebrow that cannot repeat a crumb, so no warning can fire: it is a claim with a source, not a name.',
+    props: { trail: heroTrail(TRAIL, CU_TITLE_MIN, crumbs) },
+  },
+  {
+    key: 'centred-pill',
+    title: 'centred',
+    frame: 'pill',
+    note: 'Centred, the pill is an object on the axis, centred by the Layout’s justify-items.',
+    props: { arrangement: 'centred' },
+  },
+  {
+    key: 'centred-plain',
+    title: 'centred',
+    frame: 'plain',
+    note: 'Legal, and shown so the default is argued: without an edge the star and the mark are different widths, and the line reads off the axis by a few px. Prefer the pill here.',
+    props: { arrangement: 'centred' },
+  },
+  {
+    key: 'ink-pill',
+    title: 'on ink',
+    frame: 'pill',
+    note: 'RatingBadge reads its ground from the hero’s data-surface: the star lifts to brandeis-300 and the rule to neutral-800, with no prop.',
+    props: { surface: 'ink' },
+  },
+];
+
 /**
  * The note for the band above it, in its own band on the same ground. Below rather than above,
  * because a hero gives 96 in both directions: putting the note underneath makes the seam you read
@@ -357,8 +427,9 @@ const SLOT_TABLE = [
    reasons: the literals below are then checked against the real prop types at the point they are
    written, and a spread of this shape after `title` and `body` cannot widen either of them to
    undefined the way a Partial<PageHeroProps> would. */
-type HeroSlots = Pick<PageHeroProps, 'eyebrow' | 'credits' | 'dates'> &
-  { actions?: HeroActions };
+type HeroSlots = Pick<PageHeroProps, 'eyebrow' | 'credits' | 'dates'> & {
+  actions?: HeroActions;
+};
 
 /* Block 2 — the slot-presence ladder, each rung labelled with its corpus count. */
 const LADDER: readonly { key: string; title: string; note: string; props: HeroSlots }[] = [
@@ -526,7 +597,15 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
 ];
 
-export default function PageHeroSpecimenPage() {
+export default async function PageHeroSpecimenPage() {
+  const { footer } = await getNavigation();
+  const source = footer.brand.rating;
+  const rating: HeroRating | undefined = source && {
+    score: source.score,
+    platform: source.platform,
+    href: source.href,
+    mark: source.mark,
+  };
   return (
     <>
       <Section>
@@ -609,10 +688,10 @@ export default function PageHeroSpecimenPage() {
             title={`3 · ${count} paragraph${count === 1 ? '' : 's'}`}
             note={
               count === 1
-                ? '34 routes. One paragraph renders as a single --text-lead <p> and copy shows no seam at all.'
+                ? '34 routes. One paragraph renders as a single lead <p> (--text-body-lg, 18, by default; block 23) and copy shows no seam at all.'
                 : count === 12
                   ? '2× the corpus maximum, and there is no route like it. No cap, no truncation, no warning: the lead role still applies to the first paragraph only, so this renders as a lead and eleven body paragraphs and looks exactly like what it is — a page whose opening should have been a section. That is a review comment on a route, not a behaviour here.'
-                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-lead (20) and everything under it at --text-body (16); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: the lead takes --measure-lead (40ch, about 490px at 20) and the paragraphs --measure-body (68ch, 666px at 16), so the lead is a short, large block and the body a long, small one — two shapes rather than one ragged column. Before 28 Sep both took 68ch and the lead ran 832px.`
+                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-body-lg (18, the default since r7-hero; leadSize="lg" opts into --text-lead, 20, block 23) and everything under it at --text-body (16); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: the lead takes --measure-lead (a ch measure, so it follows the lead’s size) and the paragraphs --measure-body (68ch, 666px at 16), so the lead is a short, large block and the body a long, small one — two shapes rather than one ragged column. Before 28 Sep both took 68ch and the lead ran 832px.`
             }
           />
         </div>
@@ -1238,10 +1317,47 @@ export default function PageHeroSpecimenPage() {
         </div>
       ))}
 
-      {/* ── 22 · What this page cannot show ─────────────────────────────────────── */}
+      {/* ── 22 · The score in the eyebrow's place ─────────────────────────────────
+           r7-hero, owner 7 Oct 2026. `rating` and `eyebrow` are one union: the line holds one
+           thing. Two frames × the three arrangements a score fits, then the trail and a ground. */}
+      {rating
+        ? RATING_CASES.map((entry) => (
+            <div key={entry.key}>
+              <PageHero
+                {...entry.props}
+                rating={{ ...rating, frame: entry.frame }}
+                title={CU_TITLE_MIN}
+                body={[CU_SUPPORT_MIN]}
+                actions={TWO_ACTIONS}
+              />
+              <Note
+                title={`22 · rating · ${entry.frame} · ${entry.title}`}
+                note={entry.note}
+                surface={entry.props.surface}
+              />
+            </div>
+          ))
+        : null}
+
+      {/* ── 23 · The lead, two sizes ─────────────────────────────────────────────── */}
+      {(['md', 'lg'] as const).map((size) => (
+        <div key={size}>
+          <PageHero title={TITLE} body={paragraphs(3)} leadSize={size} />
+          <Note
+            title={`23 · leadSize="${size}"${size === 'md' ? ' (default)' : ' (opt-in)'}`}
+            note={
+              size === 'md'
+                ? 'The default since 7 Oct 2026 (owner: the lead was too large). --text-body-lg, 18, over --text-body paragraphs at 16: the lead is still the larger, shorter line, so it reads as the lead without shouting over the title.'
+                : 'The opt-in, for a page written for search whose lead must carry the query: --text-lead, 20, re-declared to 18 at 767 by the role itself, so on a phone it meets md. A template chooses it per family, in code; it is never content.'
+            }
+          />
+        </div>
+      ))}
+
+      {/* ── 24 · What this page cannot show ─────────────────────────────────────── */}
       <Section>
         <Layout rowGap="block">
-          <p className={s.specTitle}>22 · What a static page cannot show</p>
+          <p className={s.specTitle}>24 · What a static page cannot show</p>
           <p className={s.specNote}>
             <strong>The 1024, 767 and 375 columns.</strong> Narrow the window. At 1023 every{' '}
             <code>beside</code> band stacks — copy, then media — through Layout&apos;s{' '}

@@ -15,4 +15,6 @@ export type {
   HeroAnnouncement,
   HeroCut,
   HeroCutItem,
+  HeroRating,
+  HeroLeadSize,
 } from './PageHero';

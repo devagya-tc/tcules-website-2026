@@ -22,6 +22,14 @@
     border-color var(--rbadge-transition-duration) var(--rbadge-transition-easing);
 }
 
+/* `frame="plain"`: no outline and no inline padding, so the star starts on the column's edge like
+   any eyebrow. The width goes to zero rather than the colour to transparent, so no colour is stated
+   here and the hover's border-color below has nothing to paint. */
+.plain {
+  padding-inline: 0;
+  border-width: 0;
+}
+
 /* No pressed step, deliberately (tokens rule 3: a state token exists only if its value moves on at
    least one surface). The pill is a link that leaves the site in a new tab: the press IS the
    navigation, so there is no held state to show, and a pressed fg would equal the hover fg on all

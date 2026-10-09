@@ -22,7 +22,7 @@ rework come later, once the owner delivers the copy.
       heading is demoted to eyebrow-size context text (the reviewer said the title was "a hero instrument",
       with the IA reversed and the logos not leading). It may lead with the rating badge. No marquee. The
       whole section is at most one MacBook Air viewport tall (830 at 1470).
-- [ ] **r7-hero — rating badge in the eyebrow**, and a smaller lead. Reference for the badge as
+- [x] **r7-hero — rating badge in the eyebrow** (kit/r7-hero), and a smaller lead. Reference for the badge as
       eyebrow: https://doodle.com/en/. The lead was too large; visitor-facing pages get the smaller lead.
       SEO-only pages may compromise, but the component default is the smaller size.
 - [ ] **r7-testimonials.**
