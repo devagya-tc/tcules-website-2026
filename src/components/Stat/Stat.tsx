@@ -1,3 +1,5 @@
+import type { CSSProperties, ReactNode } from 'react';
+
 import { cx } from '@/lib/cx';
 
 import styles from './Stat.module.css';
@@ -7,8 +9,11 @@ import styles from './Stat.module.css';
  *
  *   lg  --text-stat-lg (54). The band's large thing: the S row, the D head-track aside (§ 3.3).
  *   md  --text-stat (40). A stat that sits beside other content rather than carrying the band.
+ *   xl  --text-score (105, serif). ONE figure that is the band's hero — the rating in a facts band
+ *       (kit r7-facts, 9 Oct 2026), the role the rating-led testimonial gave the score. Never for a
+ *       set of figures: a set is lg, whose tabular mono aligns a column.
  */
-export type StatSize = 'lg' | 'md';
+export type StatSize = 'xl' | 'lg' | 'md';
 
 /**
  * Where the stat's parts sit in its track, at every width. `center` for a row under a centred head
@@ -16,6 +21,42 @@ export type StatSize = 'lg' | 'md';
  * than a centred head over start-set numerals — at 390 too, where the set is one column.
  */
 export type StatAlign = 'start' | 'center';
+
+/**
+ * How a tally's marks are drawn when no `glyph` is given (a component's own shapes, so a word each).
+ *
+ *   dot  a square the size of one mark — the brand's bulleted-label square, laid out as a field.
+ *        Counts of things: products, people.
+ *   bar  a tall stroke the full height of the field — a tick on a calendar. Counts of time: years.
+ */
+export type StatTallyForm = 'dot' | 'bar';
+
+/**
+ * The figure drawn as its count (kit r7-facts, 9 Oct 2026: "never a plain row of numbers"). Every
+ * mark is one unit of what the figure counts, so the shape is the number rather than an ornament
+ * beside it: 64 products are 64 squares, 11 years are 11 ticks, 4.8 out of 5 is five stars with the
+ * last one four-fifths full. Decorative to assistive technology — the value is the claim, the tally
+ * only shows its size.
+ */
+export type StatTally = {
+  /**
+   * How many marks to draw: the count itself, or the top of a scale (5 for a rating). A whole
+   * number, 1–120; a field larger than that stops being countable and reads as a texture.
+   */
+  marks: number;
+  /** How many of them are filled. May be fractional (4.8 of 5). Default: every mark. */
+  filled?: number;
+  /** Marks per row. Default: every mark on one row. 64 as 8 × 8 is a square; 18 as 6 × 3 a block. */
+  columns?: number;
+  /** Default `dot`. Ignored when `glyph` is given. See `StatTallyForm`. */
+  form?: StatTallyForm;
+  /**
+   * One glyph drawn for every mark, composed by the caller — in practice `<Icon name="star" />`
+   * for a rating. Taken as a node because a primitive does not import a sibling (RatingBadge takes
+   * its star the same way); the stat sizes whatever it is handed.
+   */
+  glyph?: ReactNode;
+};
 
 /** `li` when the stat is one of a set (`<Layout as="ul">`); `div` when it stands alone. */
 export type StatElement = 'div' | 'li';
@@ -37,6 +78,18 @@ export type StatProps = {
    * number without its meaning is decoration.
    */
   label: string;
+  /**
+   * The figure drawn as its count, set between the opening rule and the figure. See `StatTally`.
+   * At lg and md, from 768, every tally sits on the floor of one fixed-height field, so in a row the figures
+   * under fields of different shapes still share one line.
+   */
+  tally?: StatTally;
+  /**
+   * Where the figure can be checked, composed by the caller — in practice a `RatingBadge` with
+   * `showScore={false}` under a rating, so the score is printed once, large, and the pill carries
+   * the source. Set after the label. A claim with a source has to be reachable (RatingBadge).
+   */
+  source?: ReactNode;
   /** Default `lg`. See `StatSize`. */
   size?: StatSize;
   /** Default `div`. See `StatElement`. */
@@ -46,12 +99,66 @@ export type StatProps = {
 };
 
 const SIZE_CLASS: Record<StatSize, string | undefined> = {
+  xl: styles.sizeXl,
   lg: styles.sizeLg,
   md: styles.sizeMd,
 };
 
 function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`Stat: ${message}`);
+}
+
+/** The most marks a tally draws (see `StatTally.marks`). */
+const TALLY_MAX = 120;
+
+/**
+ * The tally field: one mark per unit. A full mark draws its shape once in the fill ink, an empty
+ * mark once in the quiet ink, and the one partial mark draws both, the fill laid over the empty
+ * shape and clipped to its share. Its arrangement is a grid inside the unit, as the figure line is.
+ */
+function Tally({ marks, filled, columns, form = 'dot', glyph }: StatTally) {
+  const count = Math.min(Math.max(Math.round(marks), 0), TALLY_MAX);
+  if (count !== marks) warn(`tally \`marks\` must be a whole number from 1 to ${TALLY_MAX}; drew ${count}.`);
+  if (count === 0) return null;
+  const full = Math.min(Math.max(filled ?? count, 0), count);
+  const perRow = Math.min(Math.max(Math.round(columns ?? count), 1), count);
+  const shape = glyph ?? <span className={form === 'bar' ? styles.bar : styles.dot} />;
+
+  return (
+    <span
+      className={cx(styles.tally, !glyph && form === 'bar' && styles.tallyBar)}
+      style={{ '--stat-tally-columns': perRow } as CSSProperties}
+      aria-hidden="true"
+    >
+      {Array.from({ length: count }, (_, i) => {
+        const share = Math.min(Math.max(full - i, 0), 1);
+        if (share === 1) {
+          return (
+            <span key={i} className={cx(styles.mark, styles.filled)}>
+              {shape}
+            </span>
+          );
+        }
+        if (share === 0) {
+          return (
+            <span key={i} className={cx(styles.mark, styles.empty)}>
+              {shape}
+            </span>
+          );
+        }
+        return (
+          <span
+            key={i}
+            className={cx(styles.mark, styles.empty)}
+            style={{ '--stat-tally-share': `${share * 100}%` } as CSSProperties}
+          >
+            {shape}
+            <span className={styles.share}>{shape}</span>
+          </span>
+        );
+      })}
+    </span>
+  );
 }
 
 /**
@@ -78,6 +185,8 @@ export function Stat({
   value,
   unit,
   label,
+  tally,
+  source,
   size = 'lg',
   as: Tag = 'div',
   align = 'start',
@@ -93,11 +202,13 @@ export function Stat({
 
   return (
     <Tag className={cx(styles.stat, SIZE_CLASS[size], align === 'center' && styles.centred)}>
+      {tally ? <Tally {...tally} /> : null}
       <p className={styles.figure}>
         <span className={styles.value}>{figure}</span>
         {word ? <span className={styles.unit}>{word}</span> : null}
       </p>
       {meaning ? <p className={styles.label}>{meaning}</p> : null}
+      {source ? <div className={styles.source}>{source}</div> : null}
     </Tag>
   );
 }

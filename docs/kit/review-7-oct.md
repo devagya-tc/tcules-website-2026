@@ -58,7 +58,7 @@ rework come later, once the owner delivers the copy.
       have, and look on https://tcules.com (WebFetch its how-we-work, about and engagement pages) for
       more relevant copy. Do not invent claims. Design it properly; do not reuse a generic
       list. It must not create hard separation twice (a hairline AND an icon per row was criticised).
-- [ ] **r7-facts — facts & figures.** About four facts in one section: aggregate rating, years, projects,
+- [x] **r7-facts — facts & figures.** (kit/r7-facts) About four facts in one section: aggregate rating, years, projects,
       team. No testimonial in it. Compose from Stat and RatingBadge before building anything new.
       **Owner, 8 Oct:** the placeholder figures are fine as they are. This is **crucial for Friday's
       review**: it must be at least as beautiful as the best of the other kit components, never a plain
