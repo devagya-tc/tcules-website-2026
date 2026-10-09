@@ -12,7 +12,7 @@ import {
   type SectionSurface,
 } from '@/components';
 import { cx } from '@/lib/cx';
-import { coverSizes, MEDIA_SPLIT, MEDIA_SPLIT_WIDE } from '@/lib/image-sizes';
+import { coverSizes, MEDIA_SPLIT } from '@/lib/image-sizes';
 
 import styles from './CtaSection.module.css';
 
@@ -67,16 +67,6 @@ export type CtaMedia = {
   image: MediaImage;
   /** Default `end` — the copy leads, the photo closes the row. `start` flips it (§ 3.2 rule 4). */
   side?: CtaMediaSide;
-  /**
-   * The photograph's shape, and with it the band's (cmp-cta fix round 1: four K offers that were
-   * all one rectangle gave a page with two offers nothing to vary).
-   *
-   *   portrait   default. [7, 5]: the copy, its points and its actions in 7, a 4:5 photo in 5.
-   *   landscape  [5, 7]: the head and its actions in 5, a 3:2 photo in 7 — the photograph is the
-   *              band's large thing — and the points as a ruled 3-up strip under both, the width of
-   *              the column. For an offer whose photo carries it (a workshop, a product on a screen).
-   */
-  frame?: 'portrait' | 'landscape';
   /**
    * Below 1024, where the photo sits against the copy (page-product-design fix round 2). Default
    * `after`: the copy, then the photo (§ 3.7 item 4). `before` sets the photo first, for an offer a
@@ -644,12 +634,11 @@ function CtaContactStrip({
 /** A master's ratio, width ÷ height, for `coverSizes`. */
 const ratioOf = (image: MediaImage) => image.width / image.height;
 
-/* The K frame's ratio per `sizes` entry (MEDIA_SPLIT and MEDIA_SPLIT_WIDE: cap, from 1024, below),
+/* The K frame's ratio per `sizes` entry (MEDIA_SPLIT: cap, from 1024, below),
    restating --cta-photo-ratio-* (TypeScript cannot read a custom property). The portrait frame is a
    FLOOR, and from 1024 to 1303 the copy column can stretch it to ~0.62, so that entry states the
    tallest it gets: an over-ask by one rung, never an under-ask. */
 const PORTRAIT_FRAMES = [4 / 5, 0.62, 4 / 3] as const;
-const LANDSCAPE_FRAMES = [3 / 2, 3 / 2, 4 / 3] as const;
 
 /**
  * CtaSection — the page's ask, built to docs/specs/CtaSection.md and visual-direction § 3.4 K / L.
@@ -670,9 +659,9 @@ const LANDSCAPE_FRAMES = [3 / 2, 3 / 2, 4 / 3] as const;
  *   offer   K, which INTERRUPTS a page mid-scroll. Sets `density="tight"` itself. Three shapes:
  *             with `media`   [7, 5]: H-full, ≤ 3 one-line points (`line`) and the actions in 7, a quiet 4:5
  *                            photograph in 5 (`media.side` flips it). The copy column is centred on
- *                            the photo, the actions a `stack` under the points (fix round 1). With
- *                            `media.frame="landscape"`, [5, 7]: the lede and actions beside a 3:2
- *                            photo in 7, the points a ruled 3-up strip under both.
+ *                            the photo, the actions a `stack` under the points (fix round 1). The only
+ *                            offer-with-photo shape: a landscape [5, 7] with the points as a strip
+ *                            under both was removed (owner, 9 Oct 2026) — points stay with the copy.
  *             without        [1, 2]: head and actions in the 381 head track (H-beside-actions), the
  *                            points in the 763 body track.
  *             with a form    stacked: the lede, the form, then the points as a strip.
@@ -786,53 +775,7 @@ export function CtaSection(props: CtaSectionProps) {
     const actions = 'actions' in props && props.actions ? props.actions : [];
     const media = 'media' in props ? props.media : undefined;
 
-    /* ── K with a landscape photograph (cmp-cta fix round 1) ─────────────────────────────────
-       [5, 7]: the lede and the actions in 5, a 3:2 photo in 7 — the photograph is the band's large
-       thing — and the points under both as a ruled 3-up strip the width of the column. A genuinely
-       different rectangle from the portrait offer, so a page with two offers can vary them. The
-       copy column centres on the photo (§ 3.2 rule 2: a head and its actions and nothing between
-       them centre rather than stretch). `reverse` for `side="start"` as in the portrait shape. */
     const photoFirst = media?.phone === 'before';
-    if (media && !hasForm && media.frame === 'landscape') {
-      const landscapePhoto = (
-        <div className={cx(styles.photoFrame, styles.photoLandscape)}>
-          <Media
-            image={media.image}
-            fit="fill"
-            sizes={coverSizes(MEDIA_SPLIT_WIDE, ratioOf(media.image), LANDSCAPE_FRAMES)}
-          />
-        </div>
-      );
-      return (
-        <Section
-          surface={props.surface}
-          id={props.id}
-          data-band={props['data-band']}
-          aria-labelledby={headingId}
-          data-arrangement="offer"
-        >
-          <Layout rowGap="stack">
-            {/* `phone="before"` writes the photo first and mirrors the row from 1024, so the
-                photo keeps its 7 and its `side` (Layout reverse carries the weights with it). */}
-            <Layout
-              columns={photoFirst ? { lg: [7, 5] } : { lg: [5, 7] }}
-              colGap="section"
-              rowGap="stack"
-              reverse={(media.side === 'start') !== photoFirst ? { lg: true } : undefined}
-              align="center"
-            >
-              {photoFirst ? landscapePhoto : null}
-              <Layout rowGap="stack">
-                {lede()}
-                {actions.length > 0 ? <CtaActions actions={actions} kind="link" /> : null}
-              </Layout>
-              {photoFirst ? null : landscapePhoto}
-            </Layout>
-            <CtaPoints shape="row" markers={markers} points={points} />
-          </Layout>
-        </Section>
-      );
-    }
 
     /* ── K with a portrait photograph ────────────────────────────────────────────────────────
        [7, 5] at `section` (96): the copy column in 7, the photo in 5 — the same 477 track as the B

@@ -232,10 +232,6 @@
   .photoPortrait {
     aspect-ratio: var(--cta-photo-ratio-portrait);
   }
-
-  .photoLandscape {
-    aspect-ratio: var(--cta-photo-ratio-landscape);
-  }
 }
 
 /* ── The contact strip ─────────────────────────────────────────────────────────

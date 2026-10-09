@@ -171,6 +171,10 @@ So C-icon, the list router and C-pair stack their heads and take no photograph; 
 7. **Two tinted bands are never adjacent**, the close L included. On a service page the plan
    enforces it as it assigns surfaces (`plan.ts`): the proof band G keeps tint and its neighbour
    drops to paper, so a page ending on G gets a paper close.
+8. **A set of points never sits as a separate strip under a split; points stay with the copy they
+   belong to.** (9 Oct 2026.) CtaSection's landscape offer (`media.frame="landscape"`, [5, 7] with
+   the points as a ruled 3-up strip under copy and photo) is removed; every K offer with a photo is
+   the portrait [7, 5], its points in the copy column.
 
 ---
 

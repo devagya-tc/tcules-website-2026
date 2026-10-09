@@ -92,24 +92,6 @@ const MODERNISE_POINTS = [
   { label: 'A rebuild that never stops operations' },
 ] as const satisfies readonly CtaPoint[];
 
-const WORKSHOP_POINTS = [
-  {
-    icon: 'users-group-rounded',
-    label: 'Everyone in one room',
-    detail: 'Product, design, engineering and the person who signs off.',
-  },
-  {
-    icon: 'flag',
-    label: 'One decision, made',
-    detail: 'The question stalling the roadmap, answered on the day.',
-  },
-  {
-    icon: 'notebook',
-    label: 'A written record',
-    detail: 'What was agreed, by whom, and what happens on Monday.',
-  },
-] as const satisfies readonly CtaIconPoint[];
-
 const CLOSE_POINTS = [
   {
     label: 'A thirty-minute call',
@@ -185,13 +167,12 @@ const VARIATIONS = [
   { id: 'k-plain', index: '03', name: 'K offer\u00a0· plain points' },
   { id: 'k-beside', index: '04', name: 'K offer\u00a0· no photograph' },
   { id: 'k-flipped', index: '05', name: 'K offer\u00a0· photo first' },
-  { id: 'k-wide', index: '06', name: 'K offer\u00a0· landscape photo' },
-  { id: 'l-close', index: '07', name: 'L close\u00a0· with the form' },
-  { id: 'l-no-points', index: '08', name: 'L close\u00a0· contact strip' },
-  { id: 'l-open', index: '09', name: 'L close\u00a0· centred, two actions' },
-  { id: 'row-cards', index: '10', name: 'CtaRow\u00a0· under a card set' },
-  { id: 'row-rows', index: '11', name: 'CtaRow\u00a0· under ruled rows' },
-  { id: 'tint', index: '12', name: 'Surface proof\u00a0· tint' },
+  { id: 'l-close', index: '06', name: 'L close\u00a0· with the form' },
+  { id: 'l-no-points', index: '07', name: 'L close\u00a0· contact strip' },
+  { id: 'l-open', index: '08', name: 'L close\u00a0· centred, two actions' },
+  { id: 'row-cards', index: '09', name: 'CtaRow\u00a0· under a card set' },
+  { id: 'row-rows', index: '10', name: 'CtaRow\u00a0· under ruled rows' },
+  { id: 'tint', index: '11', name: 'Surface proof\u00a0· tint' },
 ] as const;
 
 type VariationId = (typeof VARIATIONS)[number]['id'];
@@ -348,26 +329,7 @@ export default function KitCtaSpecimen() {
         media={{ image: photo('wireframe-wall'), side: 'start' }}
       />
 
-      {/* ── 06 · K offer, landscape photo ──────────────────────────────────────────────────── */}
-      <Title id="k-wide">
-        <code>media.frame=&quot;landscape&quot;</code>: the other rectangle. [5, 7] — the head
-        and its actions in 5, centred on a 3:2 photograph in 7 — and the points as a ruled 3-up
-        strip under both. A page with two offers sets one of each.
-      </Title>
-      <CtaSection
-        arrangement="offer"
-        markers="icon"
-        eyebrow="Alignment workshop"
-        heading="One day to agree what the product is for"
-        body={[
-          'A facilitated session for the people who have to live with the answer, run by the designers who will build it.',
-        ]}
-        points={WORKSHOP_POINTS}
-        actions={[{ label: 'Book the workshop', href: ROUTES.contact }]}
-        media={{ image: photo('whiteboard-two-hands'), frame: 'landscape' }}
-      />
-
-      {/* ── 07 · L close with the form ─────────────────────────────────────────────────────── */}
+      {/* ── 06 · L close with the form ─────────────────────────────────────────────────────── */}
       <Title id="l-close">
         On paper, at h1: the page&rsquo;s last ask outweighs every head above it. [10, 7] — copy
         and three two-line points in 673, read down from the form&rsquo;s first label; the full
@@ -391,7 +353,7 @@ export default function KitCtaSpecimen() {
         }
       />
 
-      {/* ── 08 · L close, contact strip ─────────────────────────────────────────────────────── */}
+      {/* ── 07 · L close, contact strip ─────────────────────────────────────────────────────── */}
       <Title id="l-no-points">
         No points: the lede and a contact strip a <code>stack</code> under it — where to write,
         how fast we answer, which hours we keep. The strip follows the copy rather than pinning
@@ -420,7 +382,7 @@ export default function KitCtaSpecimen() {
         ]}
       />
 
-      {/* ── 09 · L close, centred, two actions ──────────────────────────────────────────────────── */}
+      {/* ── 08 · L close, centred, two actions ──────────────────────────────────────────────────── */}
       <Title id="l-open">
         <code>arrangement=&quot;open&quot;</code>: the close that asks for a click, as one
         centred object at display scale — the lede, three points held to the middle 8 of 12, and
@@ -441,7 +403,7 @@ export default function KitCtaSpecimen() {
         ]}
       />
 
-      {/* ── 10 · CtaRow under a card set ───────────────────────────────────────────────────── */}
+      {/* ── 09 · CtaRow under a card set ───────────────────────────────────────────────────── */}
       <Title id="row-cards">
         A C-image band: centred H-title, three whole-card links, then a section-level CtaRow — a
         primary link, the band&rsquo;s blue Signal, centred under the centred head. Rule off: a
@@ -474,7 +436,7 @@ export default function KitCtaSpecimen() {
         </Layout>
       </ContentSection>
 
-      {/* ── 11 · CtaRow under ruled rows ───────────────────────────────────────────────────── */}
+      {/* ── 10 · CtaRow under ruled rows ───────────────────────────────────────────────────── */}
       <Title id="row-rows">
         A D band: beside head with a stat aside, three numbered rows, and a neutral link CtaRow
         with its note — rule off, because the last row&rsquo;s own rule closes the body. The
@@ -510,7 +472,7 @@ export default function KitCtaSpecimen() {
         </Layout>
       </ContentSection>
 
-      {/* ── 12 · Surface proof on tint ─────────────────────────────────────────────────────── */}
+      {/* ── 11 · Surface proof on tint ─────────────────────────────────────────────────────── */}
       <Title id="tint">
         Surface proof — on pages, tint is the proof band only (§ 1.7). The K offer on tint:
         every ink restates itself, the markers stay blue at 5.51:1.

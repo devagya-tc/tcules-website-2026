@@ -75,11 +75,10 @@
      so a copy column taller than the photo stretches the frame instead of leaving the photo ~105
      short of the actions at 1024–1279 (§ 3.2: head on the photo's top edge, actions on its foot).
      The ratio is the frame's FLOOR, not a fixed crop: where the copy is shorter, the frame is
-     exactly this ratio. Portrait 4:5 beside the copy in the 477 track, landscape 3:2 in the 673
-     track, and 4:3 stacked under the copy below 1024 (§ 3.7 item 4). Duplicated from Media's
+     exactly this ratio. Portrait 4:5 beside the copy in the 477 track
+     and 4:3 stacked under the copy below 1024 (§ 3.7 item 4). Duplicated from Media's
      ratio set on purpose (token rule 6: a component never reads another component's tokens). */
   --cta-photo-ratio-portrait: 4 / 5;
-  --cta-photo-ratio-landscape: 3 / 2;
   --cta-photo-ratio-stacked: 4 / 3;
 }
 

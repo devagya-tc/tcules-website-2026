@@ -154,8 +154,6 @@ export const PHOTO_PLACEMENTS = {
   bannerBeside: { ratio: '3/2', width: 667 },
   /** The head-track aside. */
   aside: { ratio: '3/2', width: 381 },
-  /** K's landscape frame: a 3:2 photo in 7 of [5, 7] (CtaSection `media.frame="landscape"`). */
-  offerWide: { ratio: '3/2', width: 667 },
   /** A card in a set of three across. */
   card3: { ratio: CARD_RATIO, width: 392 },
   /** A card in a set of four across. */

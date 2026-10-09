@@ -1,5 +1,4 @@
 import {
-  qualifies,
   SERVICE_PHOTO_SLOTS,
   type PhotoId,
   type ServicePhotoSlots,
@@ -28,8 +27,8 @@ import type {
  *   § 3.2  consecutive beside-with-aside bands mirror (`headSide`), so two are never one rectangle.
  *   § 5.6  the page's photographs come from its slot table (SERVICE_PHOTO_SLOTS): B, I and K by role,
  *          the head-track asides in page order, D (never a router) taking `aside2`;
- *          F takes none and a page may name none (image pass, 7 Oct 2026). K's frame follows
- *          its photograph: landscape 3:2 where the master resolves at 667, else the portrait 4:5.
+ *          F takes none and a page may name none (image pass, 7 Oct 2026). K is always the
+ *          portrait 4:5 offer, its points in the copy column (owner, 9 Oct 2026).
  *   § 6.4  the texture signature: `horizon` on the band directly above the tint proof band unless it
  *          ends in ruled rows or is the boxed logo grid (a texture behind a wall of cells is noise),
  *          `closing` on L, and the third placement on the J statement — the
@@ -111,8 +110,6 @@ export type OfferBand = BandBase & {
   kind: 'offer';
   offer: StoryOffer;
   photo?: PhotoId;
-  /** The photograph's frame: landscape where the master resolves at the 667 track (§ 5.4). */
-  frame: 'portrait' | 'landscape';
   /** Below 1024, the photo above the copy: set where a neighbour is a head → photo → body band,
       which at 390 would otherwise repeat K's shape (fix round 2). */
   photoFirst: boolean;
@@ -222,7 +219,6 @@ export function planBands(story: ServiceStory): Band[] {
         horizon: false,
         surface: 'paper',
         photo,
-        frame: photo && qualifies(photo, 'offerWide') ? 'landscape' : 'portrait',
         photoFirst: false,
       };
     }

@@ -449,7 +449,6 @@ and is kept for its arithmetic; where the two differ, this one holds.
 | `open` centred | one track; points in the middle 4 of `[1, 4, 1]` at `gutter` | points track **784**, each point 240 | heading at `--measure-display`, lede at 44ch |
 | `open` with proof | `[3, 2]` | 686 · 458 | unchanged |
 | `offer` + portrait photo | `[7, 5]` | copy **667** · photo **477** (4:5, a floor) | 4:3 under the copy below 1024 |
-| `offer` + landscape photo | `[5, 7]` | copy 477 · photo **667** (3:2) | points a ruled 3-up strip under both |
 | `offer`, no photo | `[5, 7]` from 1024, `[1, 2]` from 1440 | head **381** · body **763** | H-beside-actions |
 | lede (`lead`, `body`) | `--cta-lede-measure` 44ch | ≈ 480 at lead, ≈ 430 at body-lg | held narrower than the heading |
 
@@ -963,3 +962,9 @@ Supersedes the K and close notes in § 0's amendment block where they differ:
 - A close composed from ContentSection (`arrangement="media"` with a form — kit About, kit form 02/03)
   sets `surface="tint"` at its call site, the same rule.
 
+## Amendment · 9 Oct 2026 — the landscape offer is removed (owner)
+
+- 9 Oct 2026: `media.frame` and its `landscape` shape are removed, with `--cta-photo-ratio-landscape`
+  and `.photoLandscape`. A set of points never sits as a separate strip under a split; points stay
+  with the copy they belong to. The portrait `[7, 5]` is the only offer-with-photo shape. Earlier
+  mentions of the landscape offer above are superseded.

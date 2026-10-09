@@ -316,10 +316,9 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
 
   if (band.kind === 'offer') {
     const { offer } = band;
-    /* K — the mid-page offer on paper, its quiet photograph at the end (§ 3.4 K, § 5.6). The frame
-       follows the photograph (plan `frame`): a landscape master takes the [5, 7] offer, the photo
-       the band's large thing and the points a strip under both — a different rectangle from B's
-       portrait split, which a page that opens on B needs (fix round 1, 7 Oct 2026). */
+    /* K — the mid-page offer on paper, its quiet photograph at the end (§ 3.4 K, § 5.6). Always the
+       portrait [7, 5], the points in the copy column: the landscape [5, 7] with its points as a strip
+       under both was removed (owner, 9 Oct 2026). */
     return (
       <CtaSection
         arrangement="offer"
@@ -343,7 +342,6 @@ export function BandView({ band, labels, slots }: { band: Band } & Context) {
             ? {
                 image: getKitPhoto(band.photo),
                 side: 'end',
-                frame: band.frame,
                 phone: band.photoFirst ? 'before' : 'after',
               }
             : undefined

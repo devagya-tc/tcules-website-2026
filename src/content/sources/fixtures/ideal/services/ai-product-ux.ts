@@ -30,7 +30,7 @@ import { CLUTCH_RATING } from '../../ratings';
  *   roles     the role the model plays, least authority to most — E, the authority spectrum
  *   authority inform, suggest, prepare, execute — E, the thread, with its way back
  *   record    the responsibility record, 01 to 08 — D, numbered rows beside the studio crit
- *   offer     the readiness assessment, for the scope not yet known — K, copy beside a landscape photo
+ *   offer     the readiness assessment, for the scope not yet known — K, copy beside a portrait photo
  *   statement the claim the page stands on, at scale — J, with the texture's corner field
  *   scale     twelve AI products, and what the work combined — D, the figure as the aside
  *   evidence  three of the twelve, under different conditions — M, the real covers
