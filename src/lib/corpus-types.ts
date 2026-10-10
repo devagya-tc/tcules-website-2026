@@ -58,7 +58,10 @@ export type CorpusComposition = {
   mediaBindings: CorpusMediaBinding[];
   /** Client names for the logo strip (`client_recognition.clients` / `logo_client_ids`). */
   logoClients: string[];
-  /** Testimonial ids the page cites (`testimonial_ids`). */
+  /**
+   * Testimonial ids the page cites, in the order its quotes appear: `page_composition.testimonial_ids`,
+   * or `page_composition.commercial_system.testimonial_ids` where a page files them there (About).
+   */
   testimonialIds: string[];
   /** A case study's hero metadata (`page_composition.case_meta`), as authored. */
   caseMeta: Record<string, unknown> | null;
@@ -97,7 +100,10 @@ export type CorpusFormField = { label: InlineRun[]; labelText: string; optional:
  *   table      `header` then `rows`, every cell a run list. The first row is markdown's header even
  *              where the content is key/value (an "At a glance" table) — the page decides how to show it
  *   quote      `paragraphs` and `attribution`; `pendingSignoff` is true when `<!-- awaiting client
- *              sign-off -->` precedes it (render as written)
+ *              sign-off -->` precedes it (render as written). `testimonialId` is the frontmatter's
+ *              testimonial id for this quote (`testimonial_ids`, matched in document order by the
+ *              loader when the page cites exactly one id per quote), or null when it cannot be
+ *              matched. It keys per-review data such as a rating; it is never shown
  *   item       a `###` / `####` subhead with its following blocks (`level` 3 or 4; a `####` nests
  *              inside its `###`)
  *   links      a line made only of links (and `·` separators): a CTA when one, a link row when several
@@ -114,6 +120,7 @@ export type CorpusBlock =
       paragraphs: InlineRun[][];
       attribution: InlineRun[] | null;
       pendingSignoff: boolean;
+      testimonialId: string | null;
     }
   | {
       type: 'item';
@@ -180,3 +187,12 @@ export type CorpusCaseRef = {
   title: string;
   cover: CorpusMediaBinding | null;
 };
+
+/**
+ * A star rating for one testimonial, keyed by testimonial id at the content seam
+ * (`getTestimonialRatings`). `value` is out of 5, in half steps. `placeholder` is true for a rating
+ * nobody has sourced yet (home round 2, 10 Oct 2026: the owner asked for 4–5 placeholders until the
+ * real per-review ratings arrive); a page renders it the same way, and the flag exists so a check or
+ * a launch list can find every one that must be replaced.
+ */
+export type TestimonialRating = { value: number; placeholder: boolean };

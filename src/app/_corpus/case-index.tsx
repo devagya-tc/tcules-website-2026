@@ -1,16 +1,22 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getCaseRefs, getCorpusPage } from '@/content';
+import { getCaseRefs, getCorpusPage, getTestimonialRatings } from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
-import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
+import type {
+  CorpusBand,
+  CorpusBlock,
+  CorpusCaseRef,
+  CorpusPage,
+  TestimonialRating,
+} from '@/lib/corpus-types';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import {
   CaseStudyIndex,
   corpusEnquiryForm,
   coverFor,
-  proofQuote,
+  testimonialItem,
   type CaseStudyIndexItem,
   type CaseStudyIndexSection,
 } from '@/templates';
@@ -79,7 +85,12 @@ function itemOf(
     description: '',
     bodyHtml: fields.bodyHtml,
     ctaLabel: fields.ctaLabel,
-    cover: coverFor(page, fields.name, fields.href ? refs[fields.href] : undefined, fields.band),
+    cover: coverFor(
+      page,
+      fields.name,
+      fields.href ? refs[fields.href] : undefined,
+      fields.band,
+    ),
   };
 }
 
@@ -158,6 +169,7 @@ function sectionOf(
   page: CorpusPage,
   refs: Readonly<Record<string, CorpusCaseRef>>,
   band: CorpusBand,
+  ratings: Readonly<Record<string, TestimonialRating>>,
 ): CaseStudyIndexSection {
   const items: CaseStudyIndexItem[] = [];
   let quote: CaseStudyIndexSection['quote'];
@@ -167,7 +179,7 @@ function sectionOf(
     else if (block.type === 'paragraph') {
       const item = boldLedItem(page, refs, block, band.id);
       if (item) items.push(item);
-    } else if (block.type === 'quote') quote = proofQuote(block);
+    } else if (block.type === 'quote') quote = testimonialItem(block, ratings);
   }
   return { id: band.id, heading: band.headingText, items, quote };
 }
@@ -175,7 +187,10 @@ function sectionOf(
 export async function CaseIndexRoute() {
   const page = await getCorpusPage(CASE_INDEX_ROUTE);
   if (!page) notFound();
-  const refs = await getCaseRefs(caseRoutesIn(page));
+  const [refs, ratings] = await Promise.all([
+    getCaseRefs(caseRoutesIn(page)),
+    getTestimonialRatings(page.composition.testimonialIds),
+  ]);
 
   const anchor = page.conversion?.anchor ?? 'enquiry';
   const closeBand = page.bands.find((band) => band.id === anchor);
@@ -195,7 +210,7 @@ export async function CaseIndexRoute() {
       }}
       sections={page.bands
         .filter((band) => band.id !== anchor)
-        .map((band) => sectionOf(page, refs, band))}
+        .map((band) => sectionOf(page, refs, band, ratings))}
       closing={
         closeBand
           ? {

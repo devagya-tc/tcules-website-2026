@@ -1,0 +1,118 @@
+/* Testimonial — the rated card, a wall of them, and one beside its case. Every colour is --tsm-*.
+
+   Layout and Cluster own every relationship: the card's stack, the attribution row, the wall's
+   columns and the pair. This module owns the card's ground, its inset and the parts' type and ink.
+   The inset is padding inside the card's own box and the attribution's rule is its own top edge:
+   neither spaces the card from anything. No margin, no breakpoint, no state. */
+
+.item,
+.wall,
+.beside {
+  min-inline-size: 0;
+}
+
+.card {
+  min-inline-size: 0;
+}
+
+/* The panel: a `gutter` inset (the card is a container; the gap scale names its padding for that),
+   the quiet ground and the 8 radius, and no edge (9 Oct box ruling). */
+.box {
+  padding: var(--gap-gutter);
+  background: var(--tsm-ground);
+  border-radius: var(--tsm-radius);
+}
+
+/* A peer in a row: the list item is stretched to the row (a stretched grid item has a definite
+   height, so 100% resolves), the card fills it, and pinLast drops the attribution to the foot so a
+   row of peers shares one baseline for the speakers. Sizing, not spacing. */
+.fill {
+  min-inline-size: 0;
+}
+
+.fillCard {
+  block-size: 100%;
+}
+
+/* The client's words: the reading quote at its narrow measure (22), italic in the composite — the
+   brand's speech voice — wrapped pretty so the last line alone shortens. */
+.quote {
+  min-inline-size: 0;
+  /* A measure in the quote's own type: no effect inside a card's track, and a cap when an unboxed
+     quote is handed a full column (a supporting quote under a row of claims). */
+  max-inline-size: var(--measure-body);
+  font: var(--text-quote-sm);
+  color: var(--tsm-quote-ink);
+  text-wrap: var(--text-running-wrap);
+  overflow-wrap: anywhere;
+}
+
+.sm .quote {
+  color: var(--tsm-quote-ink-quiet);
+}
+
+/* Prose stays the trusted-HTML seam; the two-class selector outranks its root so the quote's own
+   composite and ink win. */
+.quote .quoteProse {
+  font: inherit;
+  color: inherit;
+}
+
+/* The speaker's row opens on a hairline inside a panel, a `block` of air under it: the person is the
+   card's foot. Padding and the part's own edge, so no seam outside the row changes. */
+.attribution {
+  min-inline-size: 0;
+}
+
+.attributionRuled {
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--tsm-rule-width) solid var(--tsm-rule);
+}
+
+/* The monogram: the speaker's initials in a hairline square, the mono label voice, blue as an index
+   numeral is. It centres its two letters inside its own box (inline-flex on one text node arranges
+   nothing). Square, never a circle. */
+.monogram {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--tsm-monogram-size);
+  block-size: var(--tsm-monogram-size);
+  border: var(--tsm-rule-width) solid var(--tsm-monogram-rule);
+  border-radius: var(--tsm-monogram-radius);
+  font: var(--text-ui);
+  letter-spacing: var(--text-ui-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--tsm-monogram-ink);
+}
+
+.who {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.name {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+  color: var(--tsm-name-ink);
+}
+
+.role {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  font: var(--text-body-sm);
+  text-wrap: var(--text-running-wrap);
+  color: var(--tsm-role-ink);
+}
+
+/* Unboxed (a supporting quote on the surface itself): the -quiet inks, set for the surface. */
+.card:not(.box) .name {
+  color: var(--tsm-name-ink-quiet);
+}
+
+.card:not(.box) .role {
+  color: var(--tsm-role-ink-quiet);
+}

@@ -71,15 +71,6 @@
 
 /* ── Home ──────────────────────────────────────────────────────────────────────────── */
 
-/* The rating sentence under the logo wall: the authored line in the body voice, quiet, centred under
-   the grid it closes. */
-.ratingLine {
-  font: var(--text-body);
-  color: var(--cpg-ink-muted);
-  text-align: center;
-  text-wrap: var(--text-title-wrap);
-}
-
 /* A reason banner (home's "Why teams choose Tcules"): each opens on a hairline across the full row, so
    four banners read as four moments down the band rather than one block of copy. The inset under the
    rule is the banner's own, the Stat's opening move (a rule, then a `stack` of air). */
@@ -97,12 +88,20 @@
   color: var(--cpg-mark);
 }
 
-/* The reason's title: an h3 element at the h3 role — a banner is the band's large unit, so its title
-   takes the step under the band's display head (a set's heading outranks its items, 7 Oct ruling 3). */
+/* The reason's title: an h3 element at the h2 role (home round 2, 10 Oct 2026). The claim is the
+   row's one primary, so it takes the step under the band's display head (67) and well over the
+   supporting quote beside it (22): round 1 set it at 34, the size of the quote opposite, and the two
+   fought. The element stays h3 — the scale is the role's, not the element's. */
 .reasonTitle {
-  font: var(--text-h3);
-  letter-spacing: var(--text-h3-tracking);
+  font: var(--text-h2);
+  letter-spacing: var(--text-h2-tracking);
   text-wrap: var(--text-title-wrap);
+}
+
+/* The supporting side of a reason row: a track that holds the quote or the picture and nothing
+   else. min-inline-size lets a long quote wrap inside the 5 rather than widen it. */
+.reasonSupport {
+  min-inline-size: 0;
 }
 
 /* The reason's sentences: the section lead's voice, so the banner's copy side holds its weight against

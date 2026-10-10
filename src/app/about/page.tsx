@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getCaseRefs, getCorpusPage } from '@/content';
+import { getCaseRefs, getCorpusPage, getTestimonialRatings } from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
@@ -20,6 +20,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function About() {
   const page = await getCorpusPage(ROUTES.about);
   if (!page) notFound();
-  const caseRefs = await getCaseRefs(caseRoutesIn(page));
-  return <AboutPage page={page} caseRefs={caseRefs} />;
+  const [caseRefs, ratings] = await Promise.all([
+    getCaseRefs(caseRoutesIn(page)),
+    getTestimonialRatings(page.composition.testimonialIds),
+  ]);
+  return <AboutPage page={page} caseRefs={caseRefs} ratings={ratings} />;
 }

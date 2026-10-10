@@ -493,3 +493,43 @@ proposals below are where that design asks something of the copy.
 - **Why:** one statement of the number reads as confidence; two read as insistence. Both render
   meanwhile, because the sentence is authored copy and the badge is the approved composition.
 
+
+## Home round 2 (owner review, 10 Oct 2026)
+
+### P36 · every page with testimonials · star ratings · the ratings are placeholders and must be replaced before launch
+
+- **Page and band:** every testimonial now renders as a rated card (`/` selected work, why-tcules,
+  client-voices; `/services/product-design` outcomes and complex-products;
+  `/audits/design-to-code-audit` proof; `/expertise/healthtech` proof; `/case-studies` designed and
+  built; `/about` testimonials).
+- **Problem:** the owner asked for "ratings from 4 to 5 for each testimonial for now". The 14 values
+  in `src/content/sources/fixtures/testimonial-ratings.ts` were chosen to fill that brief, in half
+  steps; none was read off a review. A star rating beside a named client's words is a claim about
+  what that client said. Invented ratings attributed to named clients cannot ship.
+- **Proposal:** before launch, replace each placeholder with that review's own published rating
+  (each of the 13 Clutch reviews carries one; Upwork and other sources carry theirs), keyed by the
+  testimonial id the frontmatter already lists. A quote whose source has no rating ships with no
+  stars: the card renders none when the id has no rating. Add `rating` (and its source) to the
+  testimonial record in the content model (docs/strapi-changes.md § 18).
+- **Why:** the stars are evidence, and evidence has a source. Every placeholder carries
+  `placeholder: true`, so a launch check can list what is left.
+
+### P37 · `/` · client-recognition · the review count left with the sentence
+
+- **Page and band:** the line under the logo wall ("4.8 out of 5 on Clutch across 13 independent
+  client reviews. Read the reviews") is removed at the owner's request; the Clutch badge leading the
+  wall carries the score and links to the profile.
+- **Problem:** "13 independent client reviews" no longer appears on the page.
+- **Proposal:** either accept the loss (the badge's link shows the count), or let the badge carry it
+  ("★ 4.8 on Clutch · 13 reviews"), driven by the frontmatter's `external_review.review_count`.
+  Supersedes P35.
+- **Why:** one statement of the score, as P35 asked; the count is the one fact the cut removed.
+
+### P38 · `/` · hero record · "Based in Ahmedabad, India" is no longer shown as a figure
+
+- **Page and band:** the record under the hero shows three figures (2017 · 90+ · 19) at the owner's
+  request; the fourth fact is a place, not a measure.
+- **Problem:** the authored record line still lists four facts.
+- **Proposal:** drop "Based in Ahmedabad, India" from the hero's record line in the source, or move it
+  to the hero lede or the FAQ answer about working outside India, which already names India.
+- **Why:** the source should say what the page shows. P33's figure forms stand for the other three.

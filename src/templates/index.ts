@@ -30,6 +30,7 @@ export {
   planOffer,
   proofQuote,
   slugOf,
+  testimonialItem,
 } from './CorpusPage';
 export type {
   AboutPageProps,
@@ -41,4 +42,5 @@ export type {
   OfferKind,
   OfferPart,
   OfferUnit,
+  RatingsById,
 } from './CorpusPage';

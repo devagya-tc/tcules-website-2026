@@ -1,0 +1,43 @@
+/* ══ Component layer — StarRating ═══════════════════════════════════════════════════
+   Tier 1. One review's score as five stars (home round 2, 10 Oct 2026: the rated testimonial card).
+
+   Naming: --star-{part}-{state}. A star is a graphic mark with a fill, so its colours take the
+   control register's -fg (as --rbadge-star-fg does), never -ink. No state tokens: nothing in a
+   StarRating responds to a pointer.
+
+   The FILLED star carries the blue accent (index.css § Blue: icons and marks are blue):
+   brandeis-500 on paper and tint, 300 on ink, white on blue — RatingBadge's star, so a rating reads
+   in one colour wherever it appears. The EMPTY star is a quiet neutral, a step darker on tint, whose
+   testimonial cards are paper: it must read as "not earned", not vanish. The value itself is the
+   component's accessible name, so the empty star's contrast is a legibility floor rather than the
+   only carrier of the score.
+
+   Every surface restates every colour, so a rating nested in another surface never inherits the
+   wrong value (index.css, rule 2). */
+
+:root {
+  /* Component sizes on the icon ramp: sm under a supporting quote, md on a testimonial card. */
+  --star-size-sm: var(--icon-size-14);
+  --star-size-md: var(--icon-size-18);
+}
+
+:root,
+[data-surface='paper'] {
+  --star-fill-fg: var(--color-brandeis-500);
+  --star-empty-fg: var(--color-neutral-300);
+}
+
+[data-surface='tint'] {
+  --star-fill-fg: var(--color-brandeis-500);
+  --star-empty-fg: var(--color-neutral-400);
+}
+
+[data-surface='ink'] {
+  --star-fill-fg: var(--color-brandeis-300);
+  --star-empty-fg: var(--color-neutral-700);
+}
+
+[data-surface='blue'] {
+  --star-fill-fg: var(--color-white);
+  --star-empty-fg: var(--color-brandeis-400);
+}

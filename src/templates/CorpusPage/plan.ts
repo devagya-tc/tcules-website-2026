@@ -15,13 +15,15 @@ import { boldLead, linkLead, plain } from './text';
  *      cannot tell apart are told by the band id, which is the content team's own vocabulary
  *      (`complex-products` and `proof` are both "labelled claims ending in a quote", but one names
  *      products and the other names cases).
- *   2. SPLIT. One band may become two units (page-mapping § 0 rule 3): a case set and the quote it
- *      ends on; a head and its closing sentence; the first principles and the rest. A split's second
+ *   2. SPLIT. One band may become two units (page-mapping § 0 rule 3): a head and its closing
+ *      sentence; the first principles and the rest. A case set and the quote it ends on are NOT split
+ *      (home round 2, 10 Oct 2026): the quote sits beside its own case inside the band, and a story's
+ *      quote beside its story. A split's second
  *      part keeps the reading order, so no word moves.
  *   3. RHYTHM. Media sides alternate (the first is at the start); a third media split in a row
- *      becomes a read-down with the photograph aside; a quote band is tint, the close is tint unless
- *      the band above is, and two tints never touch; the paper band above a tint quote carries the
- *      horizon texture.
+ *      becomes a read-down with the photograph aside; the close is tint unless the band above is, and
+ *      two tints never touch. (The tint quote bands, and the horizon texture that announced them,
+ *      went with the split quotes in home round 2.)
  *
  * Units are emitted in document order, with the one sanctioned exception every corpus template
  * shares (`formBeforeFaq`, order.ts): the enquiry form sits immediately before the FAQ.
@@ -41,7 +43,6 @@ export type OfferKind =
   | 'personas'
   | 'principles'
   | 'caseStories'
-  | 'storyQuotes'
   | 'faq'
   | 'enquiry'
   | 'generic';
@@ -62,8 +63,6 @@ export type OfferUnit = {
   side?: 'start' | 'end';
   /** `reasons` is a media split (`B`) unless a third in a row would follow, then a read-down (`D`). */
   variant?: 'B' | 'D';
-  /** The horizon texture at this paper band's foot, above a tint quote band. */
-  horizon: boolean;
   /** Visual (a photograph, artefact, drawing, boxed table, icon set) or text-heavy: page-mapping § 3. */
   visual: boolean;
 };
@@ -204,12 +203,7 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
   'caseStories',
 ]);
 
-/** A quote that closes a labelled set; the band splits so the quote gets its own typographic band. */
-function endsInQuote(band: CorpusBand): boolean {
-  return band.blocks.filter((b) => b.type !== 'comment').at(-1)?.type === 'quote';
-}
-
-type Draft = Omit<OfferUnit, 'surface' | 'side' | 'horizon' | 'variant'> & {
+type Draft = Omit<OfferUnit, 'surface' | 'side' | 'variant'> & {
   variant?: OfferUnit['variant'];
 };
 
@@ -235,12 +229,11 @@ function drafts(page: CorpusPage): Draft[] {
     const kind = kindOf(band);
     switch (kind) {
       case 'cases':
-        /* M6: a set of cases and the quote it ends on are two proofs of different kinds. The set is
-           the cards; the quote is the typographic band after it. */
-        if (endsInQuote(band)) {
-          unit(band, 'cases', 'a');
-          unit(band, 'cases', 'b', { visual: false });
-        } else unit(band, 'cases', 'whole');
+        /* M6: a set of cases and the quote it ends on stay ONE band (home round 2, 10 Oct 2026). The
+           quote's case is featured with the quote beside it, and the other cases follow as the list
+           (OfferBands CaseSet). Round 1 sent the quote to a tint band of its own after the set, where
+           it no longer sat with the case it was about. */
+        unit(band, 'cases', 'whole');
         break;
       case 'personas':
         unit(band, 'personas', 'a');
@@ -258,16 +251,8 @@ function drafts(page: CorpusPage): Draft[] {
             id: index === 0 ? band.id : `${band.id}-${index + 1}`,
           }),
         );
-        /* What the clients said leaves the stories (owner, 10 Oct 2026: a quote is never stuffed into
-           a case): every quote the items authored follows the last story as its own typographic
-           band, each still naming its client. */
-        if (
-          items.some(
-            (item) => item.type === 'item' && item.blocks.some((b) => b.type === 'quote'),
-          )
-        ) {
-          unit(band, 'storyQuotes', 'b', { id: `${band.id}-quotes`, visual: false });
-        }
+        /* A story's quote is set BESIDE its story, in the story's own band (OfferBands caseStories),
+           never after the last story as a band of its own (home round 2, 10 Oct 2026). */
         break;
       }
       default:
@@ -290,11 +275,9 @@ export function planOffer(page: CorpusPage): OfferUnit[] {
   let bRun = 0;
 
   for (const draft of raw) {
-    const isQuoteBand =
-      (draft.kind === 'cases' && draft.part === 'b') || draft.kind === 'storyQuotes';
     const prevTint = planned.at(-1)?.surface === 'tint';
     const surface: OfferUnit['surface'] =
-      isQuoteBand || (draft.kind === 'enquiry' && !prevTint) ? 'tint' : 'paper';
+      draft.kind === 'enquiry' && !prevTint ? 'tint' : 'paper';
 
     const carriesMedia =
       MEDIA_KINDS.has(draft.kind) && !(draft.kind === 'principles' && draft.part === 'b');
@@ -309,20 +292,10 @@ export function planOffer(page: CorpusPage): OfferUnit[] {
       unitSide = side;
       side = side === 'start' ? 'end' : 'start';
     }
-    /* A story's quote band is an interlude between the stories and what follows, not a break in
-       their run: split, split, quote, split still reads as three splits in a row. */
-    if (draft.kind !== 'storyQuotes') bRun = isB ? bRun + 1 : 0;
+    bRun = isB ? bRun + 1 : 0;
 
-    planned.push({ ...draft, surface, side: unitSide, variant, horizon: false });
+    planned.push({ ...draft, surface, side: unitSide, variant });
   }
-
-  /* The horizon sits at the foot of the paper band directly above a tint quote band. */
-  planned.forEach((unit, index) => {
-    const next = planned[index + 1];
-    if (next?.surface === 'tint' && next.kind === 'cases' && unit.kind === 'cases') {
-      unit.horizon = true;
-    }
-  });
 
   /* Rhythm: never two text-heavy bands adjacent (page-mapping § 3). A warning, not a refusal: the
      page renders as written and the fault is visible on it. */

@@ -113,6 +113,7 @@
 @import 'components/block-card.css';
 @import 'components/accordion.css';
 @import 'components/proof.css';
+@import 'components/testimonial.css';
 @import 'components/callout.css';
 @import 'components/figure.css';
 @import 'components/table-of-contents.css';
@@ -125,6 +126,7 @@
 @import 'components/data-table.css';
 @import 'components/brand-mark.css';
 @import 'components/rating-badge.css';
+@import 'components/star-rating.css';
 @import 'components/process-flow.css';
 @import 'components/stat.css';
 @import 'components/thread.css';

@@ -1,7 +1,8 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, TextureHorizon } from '@/components';
+import { Layout } from '@/components';
 import {
+  BlockCard,
   BlockCardSet,
   Callout,
   ContentSection,
@@ -9,9 +10,10 @@ import {
   CtaRow,
   DataTable,
   ListCard,
-  Proof,
   ReadDown,
   Statement,
+  TestimonialBeside,
+  TestimonialCard,
   Thread,
   type BlockCardSetItem,
 } from '@/patterns';
@@ -34,11 +36,11 @@ import {
   FaqItems,
   GenericBlocks,
   ListTiles,
-  QuoteCompact,
   TableLegend,
   bodyOf,
   head,
-  proofQuote,
+  testimonialItem,
+  type RatingsById,
 } from './blocks';
 import { bindingNamed, coverFor, hasSlot, slotImage, slugOf, type SlotImage } from './images';
 import styles from './CorpusPage.module.css';
@@ -69,6 +71,11 @@ export type OfferContext = {
   caseRefs: Readonly<Record<string, CorpusCaseRef>>;
   /** Studio photographs the corpus binds on other pages, by binding id, for the slots that reuse them. */
   shared: Readonly<Record<string, CorpusMediaBinding>>;
+  /**
+   * Star ratings for the page's testimonials, by testimonial id, as the route read them (PLACEHOLDERS
+   * today: fixtures/testimonial-ratings.ts). A quote with none shows no stars.
+   */
+  ratings?: RatingsById;
 };
 
 type Lead = { title: string; body: readonly InlineRun[] };
@@ -130,7 +137,6 @@ function liftTrailingLink(runs: readonly InlineRun[]) {
 export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
   const { page } = ctx;
   const { band } = unit;
-  const texture = unit.horizon ? <TextureHorizon /> : undefined;
 
   switch (unit.kind) {
     case 'faq':
@@ -146,7 +152,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return <EnquiryBand page={page} band={band} surface={unit.surface} />;
 
     /* M12 — labelled claims of equal weight: text cards under a centred head, the quote that ends
-       the band a stack under them (M6, the short form). */
+       the band a stack under them as the SUPPORTING testimonial (TestimonialCard `sm`, unboxed): the
+       claims lead, the client's words back them (home round 2, 10 Oct 2026). Round 1 set it as a 28
+       quote behind a blue rule, larger than the claims it was supporting. */
     case 'outcomes': {
       const quote = quoteOf(band);
       return (
@@ -162,7 +170,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
               ...bodyOf(row.body),
             }))}
           />
-          {quote ? <QuoteCompact block={quote} /> : null}
+          {quote ? (
+            <TestimonialCard
+              item={testimonialItem(quote, ctx.ratings)}
+              size="sm"
+              frame="none"
+            />
+          ) : null}
         </ContentSection>
       );
     }
@@ -213,14 +227,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     }
 
-    /* M8 — cited cases as covers. */
+    /* M8 — cited cases as covers; the case a quote is about featured with the quote beside it. */
     case 'cases':
-      return unit.part === 'b' ? (
-        <ContentSection id={unit.id} surface="tint" align="center" data-band="G">
-          {quoteOf(band) ? <Proof quote={proofQuote(quoteOf(band)!)} align="center" /> : null}
-        </ContentSection>
-      ) : (
-        <ContentSection {...head(band)} data-band="M" texture={texture}>
+      return (
+        <ContentSection {...head(band)} data-band="M">
           <CaseSet ctx={ctx} band={band} />
         </ContentSection>
       );
@@ -424,32 +434,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     }
 
-    /* What the clients in the stories said, after the stories: the G typographic band on tint, the
-       cases' own quote band. One quote centred; two or three as peers. */
-    case 'storyQuotes': {
-      const quotes = band.blocks.flatMap((b) =>
-        b.type === 'item'
-          ? b.blocks.flatMap((inner) => (inner.type === 'quote' ? [proofQuote(inner)] : []))
-          : [],
-      );
-      const [first, second, third] = quotes;
-      if (!first) return null;
-      return (
-        <ContentSection id={unit.id} surface="tint" align="center" data-band="G">
-          {second ? (
-            <Proof
-              arrangement="group"
-              quotes={third ? [first, second, third] : [first, second]}
-            />
-          ) : (
-            <Proof quote={first} align="center" />
-          )}
-        </ContentSection>
-      );
-    }
-
-    /* Two cases told in turn: the work, each beside its artefact. What the clients said follows the
-       stories as its own band (`storyQuotes`), never inside a story. */
+    /* Two cases told in turn: the work, each beside its artefact. A story its client spoke about is
+       set as a case card with the client's rated quote BESIDE it (TestimonialBeside), so the quote
+       sits with its own story and never inside it (home round 2, 10 Oct 2026; round 1 had moved
+       every story quote to a tint band after the last story, away from the story it was about). */
     case 'caseStories': {
       const items = band.blocks.filter(
         (b): b is Extract<CorpusBlock, { type: 'item' }> => b.type === 'item',
@@ -472,6 +460,32 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
       const first = unit.part === 'a';
       const headProps = first ? head(band) : { id: unit.id };
+      const quote = item.blocks.find(
+        (b): b is Extract<CorpusBlock, { type: 'quote' }> => b.type === 'quote',
+      );
+      if (quote) {
+        const paragraphs = item.blocks.flatMap((b) =>
+          b.type === 'paragraph' ? [inlineToHtml(b.runs)] : [],
+        );
+        return (
+          <ContentSection {...headProps} data-band="M">
+            <TestimonialBeside
+              work={
+                <ul>
+                  <BlockCard
+                    title={item.headingText}
+                    bodyHtml={paragraphs}
+                    size="lg"
+                    ratio="cover"
+                    {...(image ? { media: { type: 'image' as const, image } } : {})}
+                  />
+                </ul>
+              }
+              item={testimonialItem(quote, ctx.ratings)}
+            />
+          </ContentSection>
+        );
+      }
       return image ? (
         <ContentSection
           {...headProps}
@@ -630,11 +644,26 @@ function caseGroups(band: CorpusBand): CaseGroup[] {
   return groups;
 }
 
+/** The case group a quote is about: the one whose name its company carries ("Auxentios" in
+ *  "Auxentios Technology"), else the last, after which the content authors a case set's quote. */
+function quotedGroup(groups: readonly CaseGroup[], company: string): number {
+  const name = (title: string) => title.replace(/[.:]$/, '').trim().toLowerCase();
+  const wanted = company.toLowerCase();
+  const found = groups.findIndex(
+    (group) => wanted.includes(name(group.title)) || name(group.title).includes(wanted),
+  );
+  return found >= 0 ? found : groups.length - 1;
+}
+
 /**
  * M8 — case cards: each case with its cover, its name as authored and the words after it. Linked only
  * where a link is authored (the trailing "Read the case" becomes the card's cta, so no card holds a
- * link in its body). An unlinked covered set of three or more scrolls sideways on a phone and is a tab
- * stop, so it is named by the band's heading.
+ * link in its body).
+ *
+ * A set that ends on a client's quote is FEATURED, THEN LISTED (home round 2, 10 Oct 2026): the case
+ * the quote is about leads as a large card with the rated quote in its own card beside it
+ * (TestimonialBeside), and the other cases follow as the set, two or three across. Round 1 sent the
+ * quote to a tint band after the set, where it read as a testimonial about nothing in particular.
  */
 function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
   const groups = caseGroups(band);
@@ -655,15 +684,47 @@ function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
       ...(href ? { href, ctaLabel: plain(group.link?.children ?? []) } : {}),
     };
   });
-  const linked = items.every((item) => item.href);
+  const quote = quoteOf(band);
+  const testimonial = quote ? testimonialItem(quote, ctx.ratings) : undefined;
+  const featuredAt = testimonial ? quotedGroup(groups, testimonial.company) : -1;
+  const featured = featuredAt >= 0 ? items[featuredAt] : undefined;
+  const rest = items.filter((_, index) => index !== featuredAt);
+  const linked = rest.every((item) => item.href);
+  const set =
+    rest.length > 0 ? (
+      <BlockCardSet
+        lead="none"
+        across={rest.length === 4 ? 4 : undefined}
+        scroll="never"
+        cue={linked ? 'cta' : undefined}
+        label={linked ? undefined : band.headingText}
+        items={rest}
+      />
+    ) : null;
+  if (!featured || !testimonial) return set;
+  const card = featured;
   return (
-    <BlockCardSet
-      lead="none"
-      across={items.length === 4 ? 4 : undefined}
-      scroll="never"
-      cue={linked ? 'cta' : undefined}
-      label={linked ? undefined : band.headingText}
-      items={items}
-    />
+    <Layout rowGap="section">
+      <TestimonialBeside
+        work={
+          <ul>
+            <BlockCard
+              title={card.title}
+              {...('bodyHtml' in card && card.bodyHtml
+                ? { bodyHtml: card.bodyHtml }
+                : { body: card.body })}
+              media={card.media}
+              href={card.href}
+              ctaLabel={card.ctaLabel}
+              size="lg"
+              ratio="double"
+              cue={card.href ? 'cta' : undefined}
+            />
+          </ul>
+        }
+        item={testimonial}
+      />
+      {set}
+    </Layout>
   );
 }

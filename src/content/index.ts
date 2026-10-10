@@ -38,6 +38,7 @@ export {
   getToolPage,
   getCorpusPage,
   listCorpusPages,
+  getTestimonialRatings,
 } from './source';
 export { getCaseRefs, getCorpusBindings } from './corpus-refs';
 export type {

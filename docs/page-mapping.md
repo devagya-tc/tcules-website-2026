@@ -943,3 +943,95 @@ narrow measure it exists for.
 | About's split record ended ~100 apart (one-line facts left, four-line ones right) | `split` broke at the row count | `split` breaks where the halves' estimated heights are closest; one continuous table below 1024 as before | `DataTable` |
 
 17.4 items 3 is done. Item 4 (the index's story band keeps its quote under the case) is still the owner's call.
+
+## 18 · Home round 2 (owner review, 10 Oct 2026)
+
+**The review.** Feedback, not instructions: remove the "based in India" figure and the line under the
+logo wall; "What do you need next?" was about the images rather than the services; selected work was
+boring (four rows in sequence, quotes either embedded or orphaned); "Why teams choose Tcules" had
+everything fighting for attention; the testimonial grid needed a real component with a star rating
+(placeholder ratings 4–5 for now). The owner's four testimonial references are in `docs/kit/refs/`.
+Patterns derived for every page are in memory `home-review-patterns-oct-2026`: claim leads and proof
+supports; gateways serve a quick decision; a case and its quote sit adjacent, never embedded;
+featured, then listed; cut redundant proof; every testimonial group is a rated card.
+
+### 18.1 Home, point by point: feedback → cause → fix
+
+| # | Feedback | Cause | Fix |
+|---|---|---|---|
+| a | Remove "India / Based in Ahmedabad" from the stat bar | Round 1 turned every fact in the record line into a figure, and a place is not a measure | `RECORD_FORMS` maps the fact to `null` (deliberately not shown); three figures, 3 across from 768, stacked below. The FAQ and the footer still name India. P38 asks the source to match. |
+| b | Remove the line under the logo wall | The authored sentence restated the badge's score, and its link went where the badge goes | The sentence and "Read the reviews" are gone; the Clutch `RatingBadge` leads the wall and IS the link to the profile (it always opens in a new tab). The review count leaves with the sentence (P37, supersedes P35). `.ratingLine` deleted. |
+| c | "What do you need next?" focuses on images, not services; illustrations are the wrong imagery | Each situation was led by a 3:2 service drawing two up (2,276 tall); the drawing was the largest thing on every card | Six **text cards**, two up, each opening on a hairline: the situation as an h3-scale title (the reason to explore), its paragraph, and the service named on its one action. No imagery: an icon per card would repeat the "What we do" glyphs for the same services two bands later. 2,276 → 1,072 at 1440. |
+| d | Selected work is boring; quote close to the case but not embedded; 2 featured rows then a 2-col list | Four identical image-start rows, then the two quotes as a pair detached from their cases | **Featured, then listed.** Doodle and Eden AI (the cases with quotes) each take a featured row: the case card (2:1 artefact, h3 title, paragraph, link) in the 7, the client's **rated quote card** in the 5 beside it (`TestimonialBeside`), the second row mirrored. Dealpath and Benchmark Gensuite follow as a lighter pair, two across, one type step down, at the 16:5 crop. |
+| e | "Why teams choose Tcules": the claim is the highlight, the testimonial supports it | Each reason (h3, 34) faced a display quote at the same 34 behind a blue rule, sides alternating | Every row reads start to end: index, the claim at the **h2 role** and its sentences at lead size in the 7; the client's words as the **supporting** testimonial in the 5 (`TestimonialCard size="sm" frame="none"`: the 22 quote in the quiet ink, 14 stars, no panel, no rule, no monogram). Sides never alternate. Reason 3's support is the Wandering Raven placeholder. 1,886 → 1,595. |
+| f | A better testimonial component with a star rating; 4–5 placeholder ratings | Quotes were Proof `compact` in column stacks: no rating, no panel, a column of italics | New `StarRating` primitive and `Testimonial` pattern (§ 18.2). "What clients say" is a `TestimonialWall`: three column stacks of rated cards (paper on tint), quotes in authored order, split where the columns end most even. Ratings live in the content seam (§ 18.3). |
+
+**Squint, top to bottom:** split hero · three blue figures on tint · centred boxed logo wall · six
+title-led cards, type only · two featured cases with a quote card beside each, then a lighter pair ·
+six small icon boxes · four claim rows with a quiet quote · a wall of rated cards on tint · photo-start
+banner · eight sector cards · the form on tint · the questions. Tints: record, voices, form, none
+adjacent. Blue solid: the hero only.
+
+**Fold (measured, `npm run fold:check -- /`, 1470 × 830):** situations 1,072 (was 2,276), selected work
+1,946 (was 1,944 after the round 1 critic; two featured rows and a pair, with a quote card each, in the
+same height), why-tcules 1,595 (was 1,886), client voices 1,120 (was 890: six cards with ratings and
+attributions), expertise 834, FAQ 844. Page 13,777 → 12,407 at 1440. The 5 Oct one-viewport rule is
+still the owner's call for selected work and why-tcules (§ 17.4 item 1).
+
+### 18.2 New components
+
+| Piece | Tier | What it is | Token layer | Specimen |
+|---|---|---|---|---|
+| `StarRating` | 1 · mark | One review's score as five stars: filled, half (the filled glyph clipped at half from the inline start) or empty. Takes the star glyph as a node (`<Icon name="star" />`); the value is its accessible name ("Rated 4.5 out of 5"); rounds to halves and clamps 0–5 with a warning. Never an aggregate score: that is `RatingBadge`. | `star-rating.css` (`--star-fill-fg`, `--star-empty-fg` per surface; `--star-size-sm/md`) | `/design/star-rating` |
+| `Testimonial` | 2 · pattern | `TestimonialCard` (stars → quote at `--text-quote-sm` → hairline → initials monogram + name/role; `md` box or `sm` unboxed), `TestimonialWall` (a row of peers up to the column count, else contiguous column stacks balanced by length; optional `stagger`), `TestimonialBeside` (the work slot in the 7, the card in the 5, `reverse`). Ratings arrive as props. | `testimonial.css` (`--tsm-*`, ground and inks per surface, the quiet inks for the unboxed card) | `/design/testimonial` |
+
+The card is the one card with a ground at rest besides the boxed logo grid: every owner reference
+panels each review, and the 9 Oct box ruling (padding, no edge) is followed. No photographs: an
+initials monogram in a hairline square stands in. The 7 Oct "never a rating beside a client quote"
+ruling was about the aggregate platform score; a per-review rating belongs to its quote (owner,
+10 Oct 2026), and the aggregate still lives only with the logo wall.
+
+### 18.3 Ratings: data, placeholders, and the seam
+
+- Corpus quotes now carry `testimonialId`: the loader matches the frontmatter's `testimonial_ids`
+  (or `page_composition.commercial_system.testimonial_ids`, About) to the quotes in document order,
+  only when the counts agree; otherwise ids stay null and the quotes render without stars.
+- `src/content/sources/fixtures/testimonial-ratings.ts` holds 14 **PLACEHOLDER** ratings (4–5, half
+  steps), each `placeholder: true`, with a comment saying they are not real data.
+  `getTestimonialRatings(ids)` (`@/content`) is the only reader. Routes read them and pass `ratings`
+  to the templates; `testimonialItem(block, ratings)` (blocks.tsx) builds each card's item. No
+  pattern or template holds a value.
+- Launch blocker: P36 (replace with each review's own rating, or show none). Strapi: § 18 in
+  docs/strapi-changes.md (`rating` + `ratingSource` on the testimonial record).
+
+### 18.4 Cross-page sweep: page/band → change (fixed at the shared piece)
+
+| Page / band | Pattern | Change | Where it lives |
+|---|---|---|---|
+| `/about` testimonials | 5 | Three Proof peers → a row of three rated cards on tint | `QuoteGroupBand` → `TestimonialWall` (blocks.tsx) |
+| `/about` work-you-can-inspect | 3 | Four covers in one identical row → featured then listed: Doodle leads at full width, three under it (the case index's "Four to start with" shape) | `AboutPage` (`BlockCardSet lead="auto"`) |
+| `/services/product-design` complex-products | 3, 5 | Four covers, then the Auxentios quote on its own tint band → Auxentios featured with its rated quote beside it, then Doodle, Scissors and Eden AI three across. The tint quote band is gone | `CaseSet` + `quotedGroup` (OfferBands), `plan.ts` (no `cases` split) |
+| `/services/product-design` outcomes | 1 | The VideoPlasty quote at 28 behind a blue rule, louder than the four claims → the supporting unboxed testimonial under them | OfferBands `outcomes` |
+| `/audits/design-to-code-audit` proof | 3, 5 | Three covers, then the Eden AI quote on a tint band → Eden AI featured with its quote beside it, then Benchmark Gensuite and GT Tools two across | `CaseSet` (OfferBands) |
+| `/expertise/healthtech` proof | 3, 5 | CuramCare story, Vovisto story, then the CuramCare quote on a tint band → the CuramCare story as a case card with its rated quote beside it; Vovisto stays a media split. `storyQuotes` is gone | OfferBands `caseStories`, `plan.ts` |
+| `/case-studies` designed-and-built | 3, 5 | The Wandering Raven quote under the case in the same column → the case as a card with the rated quote beside it | `CaseStudyIndex` one-case + quote branch; route passes ratings |
+| `/case-studies` four-to-start-with | 3 | Already featured then listed (lead + three); no change | — |
+| `/services/product-design` starting-points, specialist-capabilities | 2 | Already title-led (quoted symptoms beside a photograph; icon cards whose glyph is title-sized); no change | — |
+| `/tools/…`, `/insights/…`, `/glossary/…`, `/case-studies/benchmark-…` | — | No testimonials, gateways or case sets; shot at 1440 and 390, unchanged | — |
+
+Side effects: the offer plan no longer emits tint quote bands, so the horizon texture that announced
+them is gone (`OfferUnit.horizon` removed); tint now marks only the close on offer pages. The
+Proof pattern keeps its arrangements for the kit; on the corpus pages it now renders only a quote that reaches the generic fallback (`GenericBlocks`), which none of the ten pages does.
+
+### 18.5 For the owner
+
+1. **Placeholder ratings.** 14 invented ratings are on the pages as you asked. They cannot launch
+   (P36). Who sources the real per-review ratings, and do quotes with no published rating ship
+   without stars?
+2. **The review count.** "13 independent client reviews" left with the line (P37). Should the badge
+   carry it?
+3. **Fold.** Selected work (1,946) and why-tcules (1,595) still run past one viewport at 1470.
+4. **Situations without imagery.** The gateway is type only. If you want a mark per situation, it
+   would need its own small set (not the service glyphs, which "What we do" uses two bands later).
+5. **Rated cards everywhere.** Every testimonial now carries stars, including the supporting quotes
+   in why-tcules and outcomes. Say if supporting quotes should drop them.

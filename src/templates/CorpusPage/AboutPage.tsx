@@ -25,6 +25,7 @@ import {
   faqItems,
   head,
   headingIdOf,
+  type RatingsById,
 } from './blocks';
 import { coverFor, slotImage } from './images';
 import styles from './CorpusPage.module.css';
@@ -34,6 +35,8 @@ export type AboutPageProps = {
   page: CorpusPage;
   /** The cases the page cites, as each case's own page describes them (title, cover). */
   caseRefs?: Readonly<Record<string, CorpusCaseRef>>;
+  /** Star ratings for the page's testimonials, by id (PLACEHOLDERS today; see the content seam). */
+  ratings?: RatingsById;
 };
 
 type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
@@ -79,7 +82,7 @@ const NEW_TAB = { target: '_blank', rel: 'noopener' } as const;
  * careers banner. The hero holds the title and its first paragraph; the rest of the opening splits into
  * `studio`, so the first viewport is not a wall of text.
  */
-export function AboutPage({ page, caseRefs = {} }: AboutPageProps) {
+export function AboutPage({ page, caseRefs = {}, ratings }: AboutPageProps) {
   const [lede1, ...opening] = page.hero.lede;
   return (
     <>
@@ -93,7 +96,7 @@ export function AboutPage({ page, caseRefs = {} }: AboutPageProps) {
       <HowWeWork page={page} />
       <Leadership page={page} />
       <WorkYouCanInspect page={page} caseRefs={caseRefs} />
-      <QuoteGroupBand band={band(page, 'testimonials')} />
+      <QuoteGroupBand band={band(page, 'testimonials')} ratings={ratings} />
       <CompanyRecord page={page} />
       <Faq page={page} />
       <Constant page={page} />
@@ -346,8 +349,11 @@ function Blocks({ blocks }: { blocks: readonly CorpusBlock[] }) {
 /* ── 8a · 8b · the work you can inspect ──────────────────────────────────────── */
 
 /**
- * Four cases, each named for what it proves, as linked covers; then the Lab paragraph and the link to
- * every case beside the working wall. The band's bound photograph may not sit beside clickable cards
+ * Four cases, each named for what it proves, as linked covers, FEATURED THEN LISTED (home round 2,
+ * 10 Oct 2026: four identical items in a row is the shape the owner called boring): the first leads
+ * at full width beside its copy and the other three sit under it (BlockCardSet `auto`, ruling C3),
+ * the arrangement the case-study index's "Four to start with" already uses. Then the Lab paragraph
+ * and the link to every case beside the working wall. The band's bound photograph may not sit beside clickable cards
  * (9 Oct), so the band splits: the cards first, then the wall.
  */
 function WorkYouCanInspect({
@@ -380,7 +386,7 @@ function WorkYouCanInspect({
   return (
     <>
       <ContentSection {...head(b)} data-band="M">
-        <BlockCardSet items={cards} lead="none" across={4} cue="title" scroll="never" />
+        <BlockCardSet items={cards} lead="auto" cue="title" scroll="never" />
       </ContentSection>
       <ContentSection
         id={`${b.id}-2`}

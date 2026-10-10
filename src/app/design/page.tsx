@@ -78,6 +78,11 @@ const SPECIMENS = [
         note: 'a third-party score and its source as one outline pill, mark passed in, 4 surfaces',
       },
       {
+        href: '/design/star-rating',
+        name: 'StarRating',
+        note: 'one review score as five stars — filled, half, empty — glyph passed in, md and sm, 4 surfaces',
+      },
+      {
         href: '/design/stat',
         name: 'Stat',
         note: 'one figure, its unit and what it counts — lg and md, start or centred, beside its label below 768, ink numeral, blue mark on the opening rule, 3 surfaces',
@@ -191,6 +196,11 @@ const SPECIMENS = [
         href: '/design/proof',
         name: 'Proof',
         note: 'the evidence block — display (start | center), compact, featured portrait, case, group, rating-led, checked figures, 4 surfaces',
+      },
+      {
+        href: '/design/testimonial',
+        name: 'Testimonial',
+        note: 'the rated testimonial card (md box, sm unboxed), the wall (row of peers, column stacks, staggered), beside its case, 4 surfaces',
       },
       {
         href: '/design/callout',

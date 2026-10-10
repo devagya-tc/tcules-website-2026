@@ -1,7 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getCaseRefs, getCorpusBindings, getCorpusPage } from '@/content';
+import {
+  getCaseRefs,
+  getCorpusBindings,
+  getCorpusPage,
+  getTestimonialRatings,
+} from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { OfferPage } from '@/templates';
@@ -44,9 +49,10 @@ export async function offerMetadata(route: string): Promise<Metadata | null> {
 export async function OfferRoute({ route }: { route: string }) {
   const page = await getCorpusPage(route);
   if (!page) notFound();
-  const [caseRefs, shared] = await Promise.all([
+  const [caseRefs, shared, ratings] = await Promise.all([
     getCaseRefs(caseRoutesIn(page)),
     getCorpusBindings(SHARED_BINDINGS),
+    getTestimonialRatings(page.composition.testimonialIds),
   ]);
-  return <OfferPage page={page} caseRefs={caseRefs} shared={shared} />;
+  return <OfferPage page={page} caseRefs={caseRefs} shared={shared} ratings={ratings} />;
 }

@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import yaml from 'js-yaml';
 
 import type {
+  CorpusBand,
+  CorpusBlock,
   CorpusBreadcrumb,
   CorpusComposition,
   CorpusConversion,
@@ -66,7 +68,9 @@ function composition(raw: unknown): CorpusComposition {
     visualPlan: str(c.visual_plan),
     mediaBindings: Array.isArray(c.media_bindings) ? c.media_bindings.map(mediaBinding) : [],
     logoClients,
-    testimonialIds: strs(c.testimonial_ids),
+    testimonialIds: strs(c.testimonial_ids).length
+      ? strs(c.testimonial_ids)
+      : strs(dict(c.commercial_system).testimonial_ids),
     caseMeta: Object.keys(caseMeta).length ? caseMeta : null,
     raw: c,
   };
@@ -101,6 +105,30 @@ function conversion(raw: unknown): CorpusConversion | null {
   };
 }
 
+type QuoteBlock = Extract<CorpusBlock, { type: 'quote' }>;
+
+/** Every quote of the hero and the bands, in document order (items' quotes where they sit). */
+function quotesIn(blocks: readonly CorpusBlock[]): QuoteBlock[] {
+  return blocks.flatMap((block) =>
+    block.type === 'quote' ? [block] : block.type === 'item' ? quotesIn(block.blocks) : [],
+  );
+}
+
+/**
+ * Give each quote its testimonial id. The frontmatter lists the ids a page cites in the order its
+ * quotes are written (checked on the ten pass-1 pages, 10 Oct 2026), and nothing in the body names
+ * them, so the match is positional and only made when the counts agree. A page whose counts differ
+ * keeps null ids, and its quotes render without per-review data rather than with another
+ * client's.
+ */
+function assignTestimonialIds(bands: readonly CorpusBand[], ids: readonly string[]) {
+  const quotes = quotesIn(bands.flatMap((band) => band.blocks));
+  if (quotes.length === 0 || quotes.length !== ids.length) return;
+  quotes.forEach((quote, index) => {
+    quote.testimonialId = ids[index] ?? null;
+  });
+}
+
 /** Parse one corpus file's text into a page. Throws with the file name on a malformed file. */
 export function parseCorpusFile(file: string, text: string): CorpusPage {
   try {
@@ -113,6 +141,8 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
     const render = dict(data.render);
     const release = dict(data.release);
     const { hero, bands } = parseBody(body);
+    const comp = composition(data.page_composition);
+    assignTestimonialIds(bands, comp.testimonialIds);
     return {
       route,
       slug: str(data.slug) ?? route.split('/').filter(Boolean).pop() ?? 'home',
@@ -133,7 +163,7 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
       ),
       conversion: conversion(data.conversion),
       bandOrder: strs(render.band_order),
-      composition: composition(data.page_composition),
+      composition: comp,
       release: {
         contentState: str(release.content_state),
         siteReleaseState: str(release.site_release_state),

@@ -23,14 +23,15 @@ export type OfferPageProps = Omit<OfferContext, 'page'> & {
  *   1. The hero opens on a drawing beside the copy: the service line's own illustration where a
  *      page keeps one on purpose, else the register's labelled placeholder (illustration 5:4).
  *      The eyebrow, title, lede and asks are verbatim; the first ask is the page's one blue solid.
- *   2. Paper carries the page. Tint marks the quote bands (a lone quote set at the typographic
- *      scale) and the close, and two tints never touch.
+ *   2. Paper carries the page. Tint marks the close, and two tints never touch. A client's quote
+ *      sits beside the case it is about, inside that case's band (home round 2), not on a tint band
+ *      of its own.
  *   3. Photographs alternate sides down the page; a media split is never a third in a row.
  *   4. It closes on the enquiry form, split, the page's one ask made once more.
  */
-export function OfferPage({ page, caseRefs, shared }: OfferPageProps) {
+export function OfferPage({ page, caseRefs, shared, ratings }: OfferPageProps) {
   const units = planOffer(page);
-  const ctx: OfferContext = { page, caseRefs, shared };
+  const ctx: OfferContext = { page, caseRefs, shared, ratings };
 
   const drawing = page.route.startsWith('/services/')
     ? serviceIllustration(page.slug)

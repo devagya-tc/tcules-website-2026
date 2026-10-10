@@ -246,11 +246,7 @@ export type {
 } from './ContentSection';
 
 export { CtaRow } from './CtaRow';
-export type {
-  CtaRowProps,
-  CtaRowAction,
-  CtaRowAlign,
-} from './CtaRow';
+export type { CtaRowProps, CtaRowAction, CtaRowAlign } from './CtaRow';
 
 export { Slider } from './Slider';
 export type { SliderProps, SliderPerView, SliderAlign } from './Slider';
@@ -348,3 +344,18 @@ export {
   type LogoGridMarkName,
   type LogoGridTrack,
 } from './LogoGrid';
+
+/* Testimonial — the rated testimonial card: stars, the client's words, the speaker; a wall of them;
+   and one beside the case it is about (home round 2, 10 Oct 2026). Every testimonial GROUP uses it. */
+export {
+  TestimonialBeside,
+  TestimonialCard,
+  TestimonialWall,
+  initialsOf,
+  type TestimonialBesideProps,
+  type TestimonialCardProps,
+  type TestimonialFrame,
+  type TestimonialItem,
+  type TestimonialSize,
+  type TestimonialWallProps,
+} from './Testimonial';

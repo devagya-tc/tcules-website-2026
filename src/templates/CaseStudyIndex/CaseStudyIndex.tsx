@@ -2,17 +2,18 @@ import type { ReactElement } from 'react';
 
 import { Layout, Section } from '@/components';
 import {
+  BlockCard,
   BlockCardSet,
   Breadcrumbs,
   ContentSection,
   CtaSection,
   ListCard,
   PageHero,
-  Proof,
+  TestimonialBeside,
   type BlockCardImage,
   type BreadcrumbItem,
   type HeroAction,
-  type ProofQuote,
+  type TestimonialItem,
 } from '@/patterns';
 import { heroTrail } from '@/lib/trail';
 
@@ -47,8 +48,9 @@ export type CaseStudyIndexItem = {
  *
  *   first, four or more   the featured set: the first case leads at full width, the rest under it
  *                         (BlockCardSet `auto`, ruling C3), each with a cta
- *   one                   a story: the cover beside the case's title line and body, then its client's
- *                         words (`quote`) after the work
+ *   one                   a story: the cover beside the case's title line and body; with its client's
+ *                         words (`quote`), the case as a card and the rated quote in its own card
+ *                         BESIDE it (TestimonialBeside), never under it in the same column
  *   five or more          thumbnail rows in two columns, a denser catalogue shape than the covers
  *   two to four           equal covers, linked whole cards
  *
@@ -59,8 +61,11 @@ export type CaseStudyIndexSection = {
   id: string;
   heading: string;
   items: readonly CaseStudyIndexItem[];
-  /** The client's words, after the work. Shown only on a one-case story. */
-  quote?: ProofQuote;
+  /**
+   * The client's words, with the rating the page passed for them. Shown only on a one-case story,
+   * beside the case (home round 2, 10 Oct 2026: a quote sits next to its case, never inside it).
+   */
+  quote?: TestimonialItem;
 };
 
 export type CaseStudyIndexClosing = {
@@ -247,22 +252,48 @@ function SectionView({ section, first }: { section: CaseStudyIndexSection; first
 
   if (items.length === 0) return null;
 
-  /* One case: a story. The cover beside the work, then what its client said. */
+  /* One case with its client's words: the case as a card (cover, title, body, link) in the 7, and
+     the rated quote in its own card in the 5, beside it (TestimonialBeside). The quote used to sit
+     under the case in the same column, which read as part of the case (owner, home round 2, 10 Oct
+     2026: "close to the case study but not embedded in it"). */
+  if (items.length === 1 && section.quote) {
+    const [item] = items as [CaseStudyIndexItem];
+    return (
+      <ContentSection {...common} data-band="M">
+        <TestimonialBeside
+          work={
+            <ul>
+              <BlockCard
+                title={item.title}
+                {...bodyOf(item)}
+                {...coverOf(item)}
+                href={item.href}
+                ctaLabel={item.ctaLabel}
+                cue={item.ctaLabel ? 'cta' : 'title'}
+                size="lg"
+                ratio="double"
+              />
+            </ul>
+          }
+          item={section.quote}
+        />
+      </ContentSection>
+    );
+  }
+
+  /* One case: a story. The cover beside the work. */
   if (items.length === 1) {
     const [item] = items as [CaseStudyIndexItem];
     const story = (
-      <Layout rowGap="stack">
-        <Layout as="ul" rowGap="none">
-          <ListCard
-            arrangement="stacked"
-            size="md"
-            titleAs="h3"
-            title={item.title}
-            href={item.href}
-            {...bodyOf(item)}
-          />
-        </Layout>
-        {section.quote ? <Proof arrangement="compact" quote={section.quote} /> : null}
+      <Layout as="ul" rowGap="none">
+        <ListCard
+          arrangement="stacked"
+          size="md"
+          titleAs="h3"
+          title={item.title}
+          href={item.href}
+          {...bodyOf(item)}
+        />
       </Layout>
     );
     const cover = item.cover;

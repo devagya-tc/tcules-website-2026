@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getCorpusPage } from '@/content';
+import { getCorpusPage, getTestimonialRatings } from '@/content';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
 import { HomePage } from '@/templates';
@@ -18,5 +18,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   const page = await getCorpusPage(ROUTES.home);
   if (!page) notFound();
-  return <HomePage page={page} />;
+  const ratings = await getTestimonialRatings(page.composition.testimonialIds);
+  return <HomePage page={page} ratings={ratings} />;
 }

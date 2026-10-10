@@ -253,3 +253,18 @@ calling the helper.
 
 **Found in.** Button colour rule, 7 Oct 2026 (`fix/tone`).
 
+
+## 18. Testimonials carry a per-review rating and its source
+
+**What.** A testimonial record gains `rating` (decimal, 0–5 in halves, optional) and
+`ratingSource` (enum: clutch, upwork, google, direct; optional), beside the quote, the speaker and
+the client. Mapped onto the view model's `TestimonialRating` (`src/lib/corpus-types.ts`) and keyed by
+the testimonial id the pages already cite.
+
+**Why.** The rated testimonial card (home round 2, 10 Oct 2026) shows the stars the client gave.
+Today the values are PLACEHOLDERS in `src/content/sources/fixtures/testimonial-ratings.ts`, by owner
+request, and each must be replaced with the review's own rating before launch
+(docs/content-proposals.md P36). A rating with no source is not evidence, so the source travels with
+it. A record with no rating renders no stars.
+
+**Found in.** Home round 2, 10 Oct 2026 (`feat/pages-pass-1`).

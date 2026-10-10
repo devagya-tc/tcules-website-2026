@@ -1,6 +1,7 @@
 import { fixtureSource } from './sources/fixtures';
 import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
+import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
 import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
 import { blogSource } from './sources/strapi/blog';
@@ -45,6 +46,7 @@ import type {
   TermsOfUseContentSource,
   ToolContentSource,
 } from './types';
+import type { TestimonialRating } from './corpus-types.ts';
 
 /**
  * THE SEAM.
@@ -135,6 +137,22 @@ export const getTermsOfUsePage =
 export const getToolPage = toolsSource.getToolPage.bind(toolsSource);
 export const getCorpusPage = corpusPagesSource.getCorpusPage.bind(corpusPagesSource);
 export const listCorpusPages = corpusPagesSource.listCorpusPages.bind(corpusPagesSource);
+
+/**
+ * Star ratings for the testimonials a page cites, keyed by testimonial id. PLACEHOLDER values today
+ * (fixtures/testimonial-ratings.ts, owner 10 Oct 2026); each carries `placeholder: true` until a real
+ * per-review rating replaces it. An id with no rating is absent, so its quote renders without stars.
+ */
+export async function getTestimonialRatings(
+  ids: readonly string[],
+): Promise<Record<string, TestimonialRating>> {
+  const found: Record<string, TestimonialRating> = {};
+  for (const id of ids) {
+    const rating = TESTIMONIAL_RATINGS[id];
+    if (rating) found[id] = rating;
+  }
+  return found;
+}
 
 export type {
   Page,

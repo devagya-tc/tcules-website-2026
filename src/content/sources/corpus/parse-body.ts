@@ -197,6 +197,7 @@ function quoteBlock(lines: string[], pendingSignoff: boolean): CorpusBlock {
     paragraphs: paras.map((g) => parseInline(g.join('\n').trimEnd())),
     attribution,
     pendingSignoff,
+    testimonialId: null,
   };
 }
 
