@@ -906,6 +906,15 @@ export default function ProofSpecimenPage() {
             <Proof arrangement="compact" quote={ALDERMOOR_QUOTE} />
             <Proof arrangement="compact" quote={BRIGHTWELL_QUOTE} />
           </Layout>
+          <Specimen title="compact · narrow track (under 30rem) beside a wide one — the narrow-measure step">
+            {/* Pages pass 1 critic (10 Oct 2026): the compact quote measures its own track. In the
+                one-third track it sets at --text-quote-sm (22, the phone step); in the two-thirds
+                track beside it, at --text-quote (28). Same component, same prop, two measures. */}
+            <Layout columns={{ lg: [1, 2] }} colGap="gutter" rowGap="stack">
+              <Proof arrangement="compact" quote={ALDERMOOR_QUOTE} />
+              <Proof arrangement="compact" quote={ALDERMOOR_QUOTE} />
+            </Layout>
+          </Specimen>
           <Specimen title="stat group · Proof display, figures only">
             <Proof figures={FIGURES} />
           </Specimen>

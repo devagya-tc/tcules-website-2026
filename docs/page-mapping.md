@@ -710,3 +710,27 @@ accepts a name (G1); `EnquiryForm` takes `urlLabel="Product or company URL"`, an
 `bodyHtml` (G3a); `DataTable` takes `labelledBy` (G4b); `ContentSection` takes `id`; `PageHero`'s tag grid
 is 2 × 2 at four tags; `Icon` gains `cart`, `wallet` and `heart-pulse`.
 
+
+## 12 · Critic pass, batch B1 (10 Oct 2026)
+
+Shot at 1440 and 390 and read band by band. Copy fidelity was re-checked against the raw markdown
+(not the corpus parser): every sentence of the four sources renders verbatim and every `##` band is in
+document order. The one fragment not on the page at rest is each form's "After sending" line, which is
+the success view's body and appears after a submit. Each note below names its cause and where the fix
+lives.
+
+| # | Where | Seen | Cause | Fix | Lives in |
+|---|---|---|---|---|---|
+| C1.1 | `/` · `why-tcules` | two reasons side by side, each quote at 28 in a ~306 track: four words a line, the Eduard Stinga quote ran seven lines, and the quotes outweighed the photograph | the compact quote's size ignored the measure it is set in | Proof's compact figure is its own size container; under a 30rem track it takes the new `--text-quote-sm` (22 / 1.4, `--text-quote`'s own phone step, no breakpoint step). The two quotes drop to four and three lines and the band reads as photo + two reasons. The group arrangement (approved, three peers at ~390) is untouched | `Proof.module.css`, `tokens/primitives.css`; specimen `/design/proof` § 18 |
+| C1.2 | `/expertise/healthtech` · `approach` / `approach-2` | the split's last three principles set as BlockCardSet text cards a type step above the first two ListCard tiles; at 390 the bodies were 16 against 14 | the split's two halves were drawn with two different components | `approach-2` renders the same `ListCard` tiles as `approach`, three across (`tiles(rows, 3)`) | `OfferBands.tsx` |
+| C1.3 | `/expertise/healthtech` · `hard-parts-2` | the statement split carried no anchor (§ 3: a split's second part is `<id>-2`) | `Statement` applied `id` to its h2 only, and a `p` statement has none | with `as="p"`, `Statement`'s `id` goes on the band; the template passes `hard-parts-2` | `Statement.tsx`, `OfferBands.tsx` |
+
+Looked at and kept, with the reason:
+
+- **`/expertise/healthtech` · `why-tcules`** sets its head at the end (`headSide="end"`). The photo
+  alternates with Vovisto's start-side photo directly above (§ 3, media sides). The arrangement is the
+  kit's approved mirror; the head stays first in the DOM and on a phone.
+- **`approach` → `approach-2`** keeps a full section seam between the two halves. Unsplit, the band runs
+  past the fold (P10). With one tile type the second half reads as the set's continuation.
+- **Placeholders** in small slots (an aside of 3:2 at 381, a 16:9 cover) print their label small.
+  They are stand-ins for the register's assets and do not ship.

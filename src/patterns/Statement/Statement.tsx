@@ -73,7 +73,11 @@ export type StatementProps = {
   eyebrow?: string;
   /** The sentence's element. Default `h2`. */
   as?: StatementElement;
-  /** The h2's id — the band's accessible name and its anchor. Ignored when `as="p"`. */
+  /**
+   * The band's anchor. With `as="h2"` it is the h2's id (the band's accessible name and its anchor);
+   * with `as="p"` there is no heading to carry it, so it goes on the band itself — a corpus split's
+   * second part (`<band>-2`, page-mapping § 3) is still a place a URL can land.
+   */
   id?: string;
   /** One action under the sentence, a `stack` beneath — in practice a CtaRow, `rule={false}`. */
   actions?: ReactNode;
@@ -146,6 +150,7 @@ export function Statement({
       as={labelled ? 'section' : 'div'}
       surface={surface}
       aria-labelledby={labelled ? id : undefined}
+      id={heading ? undefined : id}
       data-band="J"
     >
       {textured ? (

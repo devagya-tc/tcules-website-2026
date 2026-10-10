@@ -109,7 +109,7 @@ function ctaRow(links: readonly CorpusLink[], rule = true): ReactNode {
   ) : undefined;
 }
 
-const tiles = (rows: readonly Lead[], columns: 1 | 2 = 2) => (
+const tiles = (rows: readonly Lead[], columns: 1 | 2 | 3 = 2) => (
   <Layout as="ul" columns={{ base: 1, md: columns }} colGap="gutter" rowGap="stack">
     {rows.map((row) => (
       <ListCard
@@ -385,7 +385,12 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         return (
           <Fragment>
             {closing.map((runs, index) => (
-              <Statement key={index} as="p" align="center">
+              <Statement
+                key={index}
+                as="p"
+                align="center"
+                id={index === 0 ? unit.id : `${unit.id}-${index + 1}`}
+              >
                 {plain(runs)}
               </Statement>
             ))}
@@ -405,14 +410,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       if (unit.part === 'b') {
         return (
           <ContentSection id={unit.id} data-band="C-text">
-            <BlockCardSet
-              lead="none"
-              across={3}
-              scroll="never"
-              items={rows
-                .slice(2)
-                .map((row) => ({ id: row.title, title: row.title, ...bodyOf(row.body) }))}
-            />
+            {/* The same tiles as part a, three across: one set of five principles split across two
+                bands reads as one set only when the last three are the first two's object, at the
+                first two's type (pages pass 1 critic: a BlockCardSet here set the three a step
+                apart from the two). */}
+            {tiles(rows.slice(2), 3)}
           </ContentSection>
         );
       }

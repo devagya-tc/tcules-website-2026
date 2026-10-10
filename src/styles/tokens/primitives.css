@@ -426,6 +426,15 @@
   --text-quote-xl: italic var(--font-weight-regular)
     var(--font-size-quote-xl)/var(--line-height-quote-xl) var(--font-family-display);
   --text-quote-xl-tracking: var(--letter-spacing-title-tight);
+  /* The reading quote at a narrow measure: --text-quote's own phone step (22 / 1.4), as a role that
+     holds at every width. Proof's compact quote takes it when its own track is under 30rem — a tile
+     beside another tile, where 28 set four words a line (pages pass 1 critic, 10 Oct 2026). NO
+     BREAKPOINT STEP, deliberately, as h6 has none: it already IS the phone size, so a phone column
+     and a desktop tile, being the same measure, set the same quote. Chosen by measure, never by how
+     important the quote is. Italic in the composite like every quote role; no tracking companion,
+     as the 28 reading quote has none. */
+  --text-quote-sm: italic var(--font-weight-regular)
+    var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-display);
   --text-lead-lg: var(--font-weight-regular) var(--font-size-lead-lg)/var(--line-height-lead-lg)
     var(--font-family-sans);
   --text-lead: var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead)

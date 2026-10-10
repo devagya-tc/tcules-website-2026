@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 27 roles, consumed as composites
+### Type — 28 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -77,6 +77,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-quote` | 28px | 1.35 | display | regular | **none** | verbatim |
 | `--text-quote-lg` | 34px | 1.3 | display | regular | `--text-quote-lg-tracking` | verbatim |
 | `--text-quote-xl` | 43px | 1.25 | display | regular | `--text-quote-xl-tracking` | verbatim |
+| `--text-quote-sm` | 22px | 1.4 | display | regular | **none** | verbatim |
 | `--text-lead-lg` | 20px | 1.5 | sans | regular | **none** | verbatim |
 | `--text-lead` | 18px | 1.55 | sans | regular | **none** | verbatim |
 | `--text-body-lg` | 16px | 1.6 | sans | regular | **none** | verbatim |
@@ -95,8 +96,8 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-score` | 105px | 1 | display | regular | `--text-score-tracking` | verbatim |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**19 roles have a tracking companion. 8 have none** — pairing one with a role in that
-second group names a token that does not exist: `--text-quote`, `--text-lead-lg`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
+**19 roles have a tracking companion. 9 have none** — pairing one with a role in that
+second group names a token that does not exist: `--text-quote`, `--text-quote-sm`, `--text-lead-lg`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
 
