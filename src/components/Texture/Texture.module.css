@@ -16,3 +16,11 @@
   color: var(--tex-ink);
   fill: currentColor;
 }
+
+/* TextureCounterweight's field: an in-flow block whose width is its column and whose height is
+   --tex-counterweight-block-size. Positioned, so the Texture inside fills IT rather than the band.
+   Sizing only; it states no distance. */
+.counterweight {
+  position: relative;
+  block-size: var(--tex-counterweight-block-size);
+}

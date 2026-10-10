@@ -22,9 +22,8 @@
    moves on at least one surface, which is why there is no --btn-solid-*-fg-pressed either. The
    redesign brief listed --acc-question-ink-pressed and --acc-question-ink-expanded separately and
    gave both the same four values as -hover; declaring them would have been three names for one
-   decision, which is the --sec-gap mistake. Pressed is still distinguishable from hover — it adds
-   a hairline underline (see .trigger:active in the module), which is what the deleted
-   --acc-trigger-bg-pressed used to do.
+   decision, which is the --sec-gap mistake. Pressed is not distinguished from hover: the hairline
+   underline it used to add was removed (owner, 7 Oct 2026).
 
    There is no layer token. The spec asked for one resolving to --z-base, but --z-base is 0 and
    nothing in this component stacks — a token whose only reader is one component and whose only
@@ -37,12 +36,12 @@
   --acc-shadow: var(--shadow-none);
   --acc-ring-width: var(--focus-ring-width);
   --acc-ring-offset: var(--focus-ring-offset);
-  /* Optical, not a layout distance: the offset that clears Public Sans' descenders under the h5
-     question at 22px, so the pressed underline reads as a rule rather than as a strikethrough
-     through the tail of a `g`. Same reach and same reason as --prose-link-underline-offset. */
-  --acc-question-underline-offset: var(--space-6);
   --acc-transition-duration: var(--duration-fast);
   --acc-transition-easing: var(--easing-standard);
+  /* The answer's open and close (1 Oct 2026). Medium, not fast: the answer travels its own height,
+     often 150–300px, and at 140ms that distance reads as a snap — the jump this replaces. Slow
+     (360) made a seven-item FAQ feel heavy to scan. */
+  --acc-reveal-duration: var(--duration-medium);
 }
 
 /* Paper: the question rests one step below full ink and rises to it. The mark rests quieter still
@@ -53,8 +52,8 @@
 [data-surface='paper'] {
   --acc-question-ink: var(--color-neutral-800); /* 11.81:1 */
   --acc-question-ink-hover: var(--color-neutral-950); /* 17.10:1 */
-  --acc-mark-ink: var(--color-neutral-500); /* decoration; 3.16:1 clears the 3:1 non-text floor */
-  --acc-mark-ink-hover: var(--color-neutral-950); /* 17.10:1 */
+  --acc-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the chevron carries the accent */
+  --acc-mark-ink-hover: var(--color-brandeis-700); /* 10.07:1 */
   --acc-rule-ink: var(--color-neutral-200); /* decoration; 1.33:1 */
   --acc-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --acc-ring-gap-color: var(--color-paper);
@@ -65,8 +64,8 @@
 [data-surface='tint'] {
   --acc-question-ink: var(--color-neutral-800); /* 10.54:1 */
   --acc-question-ink-hover: var(--color-neutral-950); /* 15.27:1 */
-  --acc-mark-ink: var(--color-neutral-600); /* decoration; 4.39:1 */
-  --acc-mark-ink-hover: var(--color-neutral-950); /* 15.27:1 */
+  --acc-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --acc-mark-ink-hover: var(--color-brandeis-700); /* 8.99:1 */
   --acc-rule-ink: var(--color-neutral-300); /* decoration; 1.38:1 */
   --acc-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --acc-ring-gap-color: var(--color-paper-deep);
@@ -77,8 +76,8 @@
 [data-surface='ink'] {
   --acc-question-ink: var(--color-neutral-300); /* 11.07:1 */
   --acc-question-ink-hover: var(--color-white); /* 17.26:1 */
-  --acc-mark-ink: var(--color-neutral-500); /* decoration; 5.41:1 */
-  --acc-mark-ink-hover: var(--color-white); /* 17.26:1 */
+  --acc-mark-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --acc-mark-ink-hover: var(--color-brandeis-100); /* 13.61:1 */
   --acc-rule-ink: var(--color-neutral-800); /* decoration; 1.45:1 */
   --acc-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --acc-ring-gap-color: var(--color-neutral-950);

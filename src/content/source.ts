@@ -1,5 +1,6 @@
 import { fixtureSource } from './sources/fixtures';
 import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
+import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
 import { aboutSource } from './sources/strapi/about';
 import { blogSource } from './sources/strapi/blog';
 import { careersSource } from './sources/strapi/careers';
@@ -92,6 +93,15 @@ export const getCaseStudyPage = caseStudiesSource.getCaseStudyPage.bind(caseStud
 export async function getIdealCaseStudyListingPage(slug: string) {
   const page = await getCaseStudyListingPage(slug);
   return page ? withIdealCaseStudyCopy(page) : null;
+}
+/**
+ * The six service lines as DESIGNED — hand-authored stories typed against `@/lib/service-story`,
+ * not a reading of Strapi (sources/fixtures/ideal/services). For the ServicePage specimen only,
+ * never a live route: the live /services/* pages still read Strapi through serviceSource.
+ */
+export const idealServiceSlugs = Object.keys(IDEAL_SERVICE_STORIES);
+export function getIdealServiceStory(slug: string) {
+  return IDEAL_SERVICE_STORIES[slug] ?? null;
 }
 export const getContactPage = contactPagesSource.getContactPage.bind(contactPagesSource);
 export const createClientContact =

@@ -2,7 +2,16 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag, type LayoutProps } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  Layout,
+  Prose,
+  Section,
+  Tag,
+  type LayoutProps,
+} from '@/components';
 import {
   getAuditPage,
   type AuditAction,
@@ -10,10 +19,12 @@ import {
   type AuditContentColumn,
 } from '@/content';
 import { auditPath, ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -73,21 +84,23 @@ function renderColumn(column: AuditContentColumn) {
       ) : null}
 
       {column.links.length > 0 ? (
-        <Cluster colGap="tight" rowGap="tight">
+        /* A column's links STACK (owner, 7 Oct 2026): link buttons never sit side by side. */
+        <Layout rowGap="text" justifyItems="start">
           {column.links.map((link) => (
             <Button
               key={`${column.id}-${link.href}-${link.label}`}
               as="a"
               href={link.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
+              icon={<Icon name="arrow-right" />}
             >
               {link.label}
             </Button>
           ))}
-        </Cluster>
+        </Layout>
       ) : null}
     </Layout>
   );
@@ -109,7 +122,7 @@ function renderAuditBlock(block: AuditBlock) {
           as="ul"
           columns={cardColumns(block.columns)}
           colGap="gutter"
-          rowGap="gutter"
+          rowGap="column"
           equalRows
         >
           {block.cards.map((card) => (
@@ -125,7 +138,7 @@ function renderAuditBlock(block: AuditBlock) {
 
     case 'comparison-cards':
       return (
-        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="gutter" equalRows>
+        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="column" equalRows>
           {block.cards.map((card) => (
             <BlockCard key={`${block.id}-${card.title}`} title={card.title} body={card.body} />
           ))}
@@ -145,9 +158,10 @@ function renderAuditBlock(block: AuditBlock) {
                 as="a"
                 href={block.source.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.source.label}
               </Button>
@@ -269,6 +283,12 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
 
   const heroActions = firstTwoHeroActions(audit.hero.actions);
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: 'Audits', href: ROUTES.audits },
+    { label: audit.title, href: auditPath(audit.slug) },
+  ];
+
   return (
     <>
       {audit.seo?.structuredData ? (
@@ -278,18 +298,12 @@ export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>)
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Audits', href: ROUTES.audits },
-          { label: audit.title, href: auditPath(audit.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(crumbs, audit.title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={audit.title}
-        eyebrow={audit.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(audit.hero.eyebrow, crumbs)}
         body={[audit.hero.description]}
         actions={heroActions}
         surface="paper"

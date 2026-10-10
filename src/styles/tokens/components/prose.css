@@ -2,10 +2,12 @@
    Tier 3. Rich text: the flow a CMS body field arrives as, and the only place in the
    system where the markup is not ours to choose. Everything a body field can contain
    — headings, paragraphs, both list kinds, a definition list, a blockquote, a figure,
-   a table, a rule, and the six inline marks — is styled here and nowhere else.
+   a table, a rule, and the inline marks — is styled here and nowhere else. <mark> is the
+   exception by omission: the website does not highlight text (visual-direction § 4.4, 6 Oct
+   2026), so it has no token here and renders as the text around it (reset.css).
 
    Naming: --prose-{part}-{modifier}
-           part      ink | link | marker | quote | rule | code | pre | mark | table
+           part      ink | link | marker | quote | rule | code | pre | table
            modifier  the role within that part, then the state
 
    ── What this file declares, and what it deliberately does not ──────────────────
@@ -79,7 +81,7 @@
 --prose-ink:var(--color-neutral-900);              /* 14.62:1 */
 --prose-ink-heading:var(--color-neutral-950);      /* 16.35:1 */
 --prose-ink-muted:var(--color-neutral-600);        /*  4.92:1 — the floor of AA, do not lighten */
---prose-marker-ink:var(--color-neutral-600);       /* an <ol> numeral is content, so it holds AA */
+--prose-marker-ink:var(--color-brandeis-500);       /*  6.17:1 — an <ol> numeral and a bullet carry the accent */
 --prose-link-ink:var(--color-brandeis-500);        /*  6.17:1 */
 --prose-link-ink-hover:var(--color-brandeis-600);
 --prose-link-rule:var(--color-brandeis-300);       /* the underline sits under the ink, not level with it */
@@ -88,7 +90,6 @@
 --prose-rule:var(--color-neutral-200);
 --prose-code-bg:var(--color-neutral-100);--prose-code-fg:var(--color-neutral-900);
 --prose-pre-bg:var(--color-neutral-950);--prose-pre-fg:var(--color-neutral-100);
---prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
 --prose-table-body-ground:var(--color-white);      /* Prose on white: ink 14.75, muted 4.97, link 6.23 */
 --prose-table-head-ground:var(--color-neutral-50);
 --prose-table-head-ink:var(--color-neutral-700);   /*  7.54:1 on the head fill */
@@ -104,7 +105,7 @@
 --prose-ink:var(--color-neutral-900);              /* 13.06:1 */
 --prose-ink-heading:var(--color-neutral-950);      /* 14.61:1 */
 --prose-ink-muted:var(--color-neutral-700);        /*  7.27:1 — stepped; 600 would be 4.39:1 */
---prose-marker-ink:var(--color-neutral-700);
+--prose-marker-ink:var(--color-brandeis-500);       /*  5.51:1 */
 --prose-link-ink:var(--color-brandeis-500);        /*  5.51:1 */
 --prose-link-ink-hover:var(--color-brandeis-600);
 --prose-link-rule:var(--color-brandeis-300);
@@ -113,7 +114,6 @@
 --prose-rule:var(--color-neutral-300);
 --prose-code-bg:var(--color-neutral-200);--prose-code-fg:var(--color-neutral-900);
 --prose-pre-bg:var(--color-neutral-950);--prose-pre-fg:var(--color-neutral-100);
---prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
 --prose-table-body-ground:var(--color-paper);      /* the frame is paper on the deeper band; muted 8.14 */
 --prose-table-head-ground:var(--color-neutral-50);
 --prose-table-head-ink:var(--color-neutral-700);   /*  7.54:1 on the head fill */
@@ -136,7 +136,7 @@
 --prose-ink:var(--color-neutral-100);              /* 13.63:1 — softer than white, which haloes */
 --prose-ink-heading:var(--color-white);            /* 15.85:1 */
 --prose-ink-muted:var(--color-neutral-400);        /*  8.02:1 */
---prose-marker-ink:var(--color-neutral-500);       /*  5.36:1 */
+--prose-marker-ink:var(--color-brandeis-300);       /*  7.32:1 */
 --prose-link-ink:var(--color-brandeis-300);        /*  7.32:1 — 500 would be 2.11:1 */
 --prose-link-ink-hover:var(--color-brandeis-200);
 --prose-link-rule:var(--color-brandeis-400);
@@ -145,7 +145,6 @@
 --prose-rule:var(--color-neutral-800);
 --prose-code-bg:var(--color-neutral-800);--prose-code-fg:var(--color-neutral-100);  /* 8.63:1 */
 --prose-pre-bg:var(--color-neutral-900);--prose-pre-fg:var(--color-neutral-100);
---prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
 --prose-table-body-ground:var(--color-neutral-900);  /* raised panel; ink 12.37, muted 6.88, link 6.26 */
 --prose-table-head-ground:var(--color-neutral-800);
 --prose-table-head-ink:var(--color-neutral-300);   /*  7.64:1 on the head fill */
@@ -158,9 +157,11 @@
    --prose-link-rule steps to 200 here rather than staying quiet — it is carrying the
    whole signal.
 
-   The quote rule is the one peridot in this file. Brandeis against Brandeis is
-   invisible, and peridot is the system's highlight: it is doing exactly its job,
-   marking one passage, and it fills nothing that could be mistaken for an action.
+   The quote rule is white, matching --proof-quote-rule on this surface. Brandeis
+   against Brandeis is invisible, and it was peridot-400 until 6 Oct 2026; peridot
+   has two uses on the website, ::selection and an illustration's carried item
+   (visual-direction § 4.4), so a rule is not one of them. tokens:check now fails
+   any component layer that reads the peridot ramp.
 
    The code chip drops to 600 — a darker blue rather than a neutral — because a grey
    chip on a saturated ground reads as a rendering fault. The pre panel still goes to
@@ -174,11 +175,10 @@
 --prose-link-ink-hover:var(--color-brandeis-100);
 --prose-link-rule:var(--color-brandeis-200);
 --prose-quote-ink:var(--color-white);
---prose-quote-rule:var(--color-peridot-400);       /* highlight, never an action */
+--prose-quote-rule:var(--color-white);             /* as --proof-quote-rule here; was peridot-400 */
 --prose-rule:var(--color-brandeis-400);
 --prose-code-bg:var(--color-brandeis-600);--prose-code-fg:var(--color-white);       /* 8.53:1 */
 --prose-pre-bg:var(--color-neutral-950);--prose-pre-fg:var(--color-neutral-100);
---prose-mark-bg:var(--color-peridot-300);--prose-mark-ink:var(--color-neutral-950);
 --prose-table-body-ground:var(--color-brandeis-700); /* one rung down; ink and link 10.16, muted 8.01 */
 --prose-table-head-ground:var(--color-brandeis-600);
 --prose-table-head-ink:var(--color-brandeis-100);  /*  5.99:1 on the head fill */

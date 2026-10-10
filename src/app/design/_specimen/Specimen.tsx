@@ -12,19 +12,30 @@ import styles from './specimen.module.css';
 export function Specimen({
   title,
   note,
+  label = 'above',
   children,
 }: {
   title: string;
   note?: string;
+  /**
+   * Where the title and note sit. `below` for a ROW of specimens whose renderings must share a top
+   * edge: above, a title that wraps to two lines pushes its rendering lower than its neighbours',
+   * and the row stops comparing like with like.
+   */
+  label?: 'above' | 'below';
   children: ReactNode;
 }) {
+  const caption = (
+    <Layout rowGap="tight">
+      <p className={styles.specTitle}>{title}</p>
+      {note ? <p className={styles.specNote}>{note}</p> : null}
+    </Layout>
+  );
   return (
     <Layout as="section" rowGap="block" className={styles.spec}>
-      <Layout rowGap="tight">
-        <p className={styles.specTitle}>{title}</p>
-        {note ? <p className={styles.specNote}>{note}</p> : null}
-      </Layout>
+      {label === 'above' ? caption : null}
       {children}
+      {label === 'below' ? caption : null}
     </Layout>
   );
 }

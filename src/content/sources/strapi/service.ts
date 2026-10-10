@@ -429,11 +429,7 @@ function mapSections(
       const lifted = liftLead(block.richTextBody);
       if (lifted) {
         current.lead = lifted.lead;
-        const remainder = mapBlock(
-          { ...block, richTextBody: lifted.rest },
-          index,
-          graphqlUrl,
-        );
+        const remainder = mapBlock({ ...block, richTextBody: lifted.rest }, index, graphqlUrl);
         if (remainder) current.blocks.push(remainder);
         return;
       }

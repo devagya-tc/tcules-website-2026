@@ -1,9 +1,9 @@
 import { Button, Cluster, Icon, Layout } from 'tcules-website-2026';
 
 /**
- * Three emphases × two tones — the primary variant axis, and the one that most changes
- * appearance. Copy follows the component's own rule: primary is the offer, neutral is the
- * utility that gets the work done.
+ * The three kinds (owner, 8 Oct 2026): the blue solid is the page's one main action, the blue
+ * ghost its partner, the link every other action. Neutral ghost and link are site chrome only —
+ * there is no neutral (ink) solid.
  */
 export function Emphasis() {
   return (
@@ -20,9 +20,6 @@ export function Emphasis() {
         </Button>
       </Cluster>
       <Cluster colGap="tight" rowGap="tight">
-        <Button emphasis="solid" tone="neutral">
-          Send message
-        </Button>
         <Button emphasis="ghost" tone="neutral">
           Copy link
         </Button>

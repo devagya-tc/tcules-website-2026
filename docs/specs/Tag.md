@@ -49,6 +49,11 @@ The site's small label mark: one word to a short phrase, in a box of its own, si
 
 **How many appear on a page.** Inert: one row, three to eight marks, on ten route modules covering most of the 129-page corpus — `services/[...slug]` (32), `insights/[...slug]` plus `insights/events/[slug]` and `insights/podcasts/[slug]` (21), `glossary/[slug]` (18), `case-studies/[slug]` (14), `expertise/[slug]` (12), `audits/[slug]` (6), `services/page.tsx` and `how-we-work/page.tsx`. Every row is optional per record and an empty one renders nothing, so those are ceilings, not a census. Interactive: one page, `src/app/insights/page.tsx`, three rows, roughly eleven chips — three to five real options per group **and no `"All"`**, which is not a filter and is dropped (Q12). **The two never appear in the same band, and on `/insights` they appear on the same page** — that page is the specimen that decides whether this works.
 
+> **Owner amendment, 7 Oct 2026 — Tag or a bulleted label.** A `Tag` labels ONE item in a set (`mark`)
+> or applies a query (`filter`). Facets that describe the page the reader is on are not Tags: they are
+> PageHero's bulleted tag list. The full rule and its decision test are in
+> `docs/kit/visual-direction.md` § 3.8.
+
 ## 2 · Anatomy
 
 | Part | Element | Required | Content slot | Carries |

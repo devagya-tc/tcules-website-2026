@@ -1,0 +1,59 @@
+/* Banner — type and ink only.
+
+   Section paints the band and its air (`tight`, or `strip`); Layout and Cluster own every seam;
+   Media owns the photograph's crop, radius and absence of frame. This file states no distance, no
+   ground and no size: every value is a --bnr-* token in tokens/components/banner.css.
+
+   Classes: .eyebrow .heading .lead .strip .stripLabel .mark .illustration .illustrationZoom
+
+   One @media query: the illustration's phone zoom (below 768). It swaps a scale, never a distance. */
+
+.eyebrow {
+  font: var(--bnr-eyebrow-text);
+  letter-spacing: var(--bnr-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--bnr-eyebrow-ink);
+}
+
+.heading {
+  font: var(--bnr-heading-text);
+  letter-spacing: var(--bnr-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--bnr-heading-ink);
+  max-inline-size: var(--bnr-heading-measure);
+}
+
+.lead {
+  font: var(--bnr-lead-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--bnr-lead-ink);
+  max-inline-size: var(--bnr-lead-measure);
+}
+
+.strip {
+  font: var(--bnr-strip-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--bnr-strip-ink);
+}
+
+.stripLabel {
+  font: var(--bnr-strip-label-text);
+  letter-spacing: var(--bnr-strip-label-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--bnr-strip-label-ink);
+}
+
+/* The illustration's phone art direction. From 768 the drawing renders whole; below it, the zoom
+   box is --bnr-illustration-zoom-phone of the column and shifted to the main object, and the crop
+   box clips what falls outside. This is a crop of the image's own box, never a distance: it swaps
+   a scale at one width, which is art direction, not a gap step. */
+.illustration {
+  overflow: clip;
+}
+
+@media (max-width: 767px) {
+  .illustrationZoom {
+    inline-size: var(--bnr-illustration-zoom-phone);
+    translate: var(--bnr-illustration-shift) 0;
+  }
+}

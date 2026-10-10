@@ -181,3 +181,35 @@ export function TextureShape({
     </>
   );
 }
+
+/**
+ * TextureCounterweight — the `counterweight` placement (visual-direction § 6.3), owned here so every
+ * band that spends it reads one recipe rather than restating its numbers. The B media split's one
+ * blue mass, in its copy column, opposite the photograph.
+ *
+ * A DEFINED FIELD, not a haze (final fix round, 6 Oct 2026). The first two drawings were blurred
+ * ellipses in the band's bottom padding, bled off the viewport's side: at the grid's 21% peak a
+ * feathered shape with no edge read as a moiré or a compression smear, ran past the content column
+ * under empty space, and counterweighed nothing. This one is QuantumLab's pixel strip in Tcules'
+ * grid — an in-flow block in the copy column, so its edges ARE the column's: hard at the inline
+ * start, the inline end and the foot, where it sits on the photo's bottom edge, and feathered only
+ * at the top, where it rises out of the copy's air. (Hard on all four sides was tried: a flat
+ * rectangle of a grid this quiet read as an empty image slot.)
+ *
+ *   rect, left −25%, width 150%, top 35%, height 100%, blur 48
+ *
+ * The rect runs past the field on three sides, so the blur's falloff on those sides is outside the
+ * field and clipped: the grid is at full strength to each edge. Its top edge is 35% down with a 24
+ * deviation, so the field rises from clear to full strength over its upper half.
+ * The field's height is --tex-counterweight-block-size; its width is the column it is placed in.
+ * Its rule is still that it never sits behind a glyph: it is a block of its own, after the copy.
+ */
+export function TextureCounterweight() {
+  return (
+    <div className={styles.counterweight}>
+      <Texture>
+        <TextureShape left="-25%" width="150%" top="35%" height="100%" blur={48} />
+      </Texture>
+    </div>
+  );
+}

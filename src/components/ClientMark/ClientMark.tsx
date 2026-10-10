@@ -7,6 +7,16 @@ import styles from './ClientMark.module.css';
 /** ch05 §10: "corrected by up to ±15% of that size". */
 const CORRECTION_LIMIT = 0.15;
 
+/**
+ * The ink coverage a mark is sized FOR (r7-logos fix round, 9 Oct 2026): a mark whose artwork inks
+ * this fraction of its viewBox is drawn at exactly --cmark-target-side's area, so a set without
+ * densities renders as it always has. 0.28 is the set's light-middle (Omny 0.28, Knovos 0.33). A
+ * denser mark comes down and a sparser one goes up, until every mark lays the same AREA OF INK.
+ */
+const REFERENCE_DENSITY = 0.28;
+/** Outside this a density is a measuring error, not a mark: a hairline monogram is ~0.1. */
+const DENSITY_RANGE = [0.1, 0.6] as const;
+
 export type ClientMarkProps = {
   /**
    * The client's own SVG, as a URL — the file the client supplies or publishes (ch05 §10), never
@@ -30,9 +40,25 @@ export type ClientMarkProps = {
   /**
    * The weight correction recorded with the asset (ch05 §10), as a fraction of the size:
    * -0.1 draws a heavy mark 10% smaller, 0.12 a hairline mark 12% larger. Clamped to ±0.15, with
-   * a dev warning outside it. The height and width caps still apply after it.
+   * a dev warning outside it. It scales the capped size (ch05 §10); the height cap applies again
+   * after it, the width cap does not, so a corrected wide mark may reach 184.
    */
   correction?: number;
+  /**
+   * The mark's OPTICAL density: the fraction of its viewBox the artwork inks, 0–1, measured from
+   * the file (`node scripts/client-mark-density.mjs`) and recorded with the asset beside its
+   * viewBox. It turns "equal area" from equal BOXES into equal INK: the box's area is scaled by
+   * REFERENCE_DENSITY / density, so a thin, tracked wordmark (LatitudePay, 0.16) is drawn larger
+   * and a bold, packed one (Doodle, 0.40) smaller, by measurement rather than by eye. A one-off
+   * shared cap cannot do this: it sizes every mark by its box, and a box says nothing about how
+   * much of it is ink (owner, 9 Oct 2026: LatitudePay and Quoter read half the mass of Knovos).
+   *
+   * An enclosing FRAME is not mass and is left out of the measurement: Quoter's pill is a container
+   * the eye reads past to the name inside it, so its density is the name's (0.22), not the pill's
+   * and the name's together (0.37). Absent, the mark is sized as if at REFERENCE_DENSITY — exactly
+   * the box-area sizing it had before densities. Clamped to 0.1–0.6, warned outside it.
+   */
+  density?: number;
   className?: string;
 };
 
@@ -43,7 +69,7 @@ function warn(message: string) {
 /** CSS string for url(). JSON's escaping of `"` and `\` is valid CSS string escaping. */
 const cssUrl = (src: string) => `url(${JSON.stringify(src)})`;
 
-/** Four decimals is well under a device pixel at the 160px width cap. */
+/** Four decimals is well under a device pixel at the 240px width cap. */
 const round = (n: number) => Math.round(n * 10000) / 10000;
 
 /**
@@ -51,7 +77,8 @@ const round = (n: number) => Math.round(n * 10000) / 10000;
  *
  * A MARK, like Logo, and not an Icon or a Figure. It draws the client's SVG as a mask filled with
  * --cmark-ink, so every mark in a set is one colour — the ground's ink — with one file for all
- * four surfaces. It sizes each mark to equal visual weight: the same bounding-box AREA, not the
+ * four surfaces. It sizes each mark to equal visual weight: the same AREA OF INK (its box's area
+ * scaled by its recorded density), not the
  * same width, then capped in height and width (ch05 §10, ruling P2).
  *
  * The strip is not a component. It is `ClientMark` × n in a `Cluster`, which owns the gap —
@@ -73,6 +100,7 @@ export function ClientMark({
   width,
   height,
   correction = 0,
+  density,
   className,
 }: ClientMarkProps) {
   if (!src) {
@@ -99,13 +127,21 @@ export function ClientMark({
     k = Math.max(-CORRECTION_LIMIT, Math.min(CORRECTION_LIMIT, k));
   }
 
+  let d = density ?? REFERENCE_DENSITY;
+  if (!Number.isFinite(d) || d < DENSITY_RANGE[0] || d > DENSITY_RANGE[1]) {
+    warn(`"${name}" density ${density} is outside ${DENSITY_RANGE.join('–')}; clamped.`);
+    d = Number.isFinite(d)
+      ? Math.max(DENSITY_RANGE[0], Math.min(DENSITY_RANGE[1], d))
+      : REFERENCE_DENSITY;
+  }
+
   const ratio = width / height;
 
   /* Per-asset values on the style prop, because a class cannot express them: the URL is the
-     asset, and the ratio is continuous. These four custom properties are the whole of it — every
+     asset, and the ratio is continuous. These five custom properties are the whole of it — every
      length is computed in ClientMark.module.css from tokens.
 
-     √ratio is computed HERE rather than with CSS sqrt(), deliberately. sqrt() needs Chrome 120 /
+     √ratio and √(reference / density) are computed HERE rather than with CSS sqrt(), deliberately. sqrt() needs Chrome 120 /
      Firefox 118 / Safari 15.4, and Next 16's supported floor is Chrome and Edge 111 — in 111–119
      the declaration is invalid, the width computes to nothing, and every mark in the strip
      collapses to zero with no error. A number computed once on the server costs nothing. */
@@ -114,6 +150,8 @@ export function ClientMark({
     '--cmark-ratio': round(ratio),
     '--cmark-ratio-root': round(Math.sqrt(ratio)),
     '--cmark-correction': round(1 + k),
+    /* Equal INK: the area scales by REFERENCE_DENSITY / density, so the side by its root. */
+    '--cmark-optical': round(Math.sqrt(REFERENCE_DENSITY / d)),
   } as CSSProperties;
 
   return (

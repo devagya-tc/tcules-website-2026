@@ -23,6 +23,32 @@
 --tex-layer:-1;
 }
 
+/* The counterweight's field height (TextureCounterweight, final fix round 6 Oct 2026). A component
+   size, not a distance, and the only placement with one, so it is named for the placement rather
+   than given a t-shirt step: tall enough to read as a mass beside a 556–596 photograph, short
+   enough that a head, a lead and a CtaRow above it still fit the fold.                          */
+:root{
+--tex-counterweight-block-size:160px;
+}
+
+/* The stepped horizon's field height (TextureHorizon, cmp-services fix round 2). Four rows of the
+   recipe's 10px pixels: tall enough to read as a stepped field rather than a hairline of haze, short
+   enough that in a band's 96 of foot padding it starts 56 under the last line of copy — past a
+   `stack` (48), so it never crowds the text it sits beneath. A component size, named for the
+   placement as the counterweight's is.                                                           */
+:root{
+--tex-horizon-block-size:40px;
+}
+
+/* The corner field's box (TextureCorner, page-product-design fix round 2). 28 × 8 of the recipe's
+   10px pixels at most: 80 tall, so in a band's 128 of open top air it ends 48 above the eyebrow —
+   past a `stack` — and never half the band's width, so on a phone it keeps to the end corner, clear
+   of a centred eyebrow. Component sizes, named for the placement as the horizon's is.          */
+:root{
+--tex-corner-inline-size:min(280px, 40%);
+--tex-corner-block-size:80px;
+}
+
 /* ── Surface: paper ───────────────────────────────────────────────────────────
    The measured value — the Figma render this was taken from is blue on paper.        */
 :root,[data-surface="paper"]{

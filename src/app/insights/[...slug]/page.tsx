@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Cluster, Layout, Prose, Section, Tag } from '@/components';
 import { getBlogPage, type BlogBlock, type BlogImage } from '@/content';
 import { blogPath, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
@@ -300,11 +301,11 @@ export default async function BlogPage({ params }: BlogPageProps) {
         />
       ) : null}
 
-      <Breadcrumbs surface="paper" items={blogBreadcrumbs(blog.slug, blog.title)} />
-
       <PageHero
+        trail={heroTrail(blogBreadcrumbs(blog.slug, blog.title), blog.title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={blog.title}
-        eyebrow="Insight"
         body={[blog.description || `Read ${blog.title}.`]}
         credits={credits}
         dates={
@@ -358,7 +359,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
               as="ul"
               columns={{ base: 1, md: 2, lg: 3 }}
               colGap="gutter"
-              rowGap="gutter"
+              rowGap="column"
               equalRows
             >
               {blog.resources.map((resource) => (
@@ -369,11 +370,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                     .filter(Boolean)
                     .join(' — ')}
                   eyebrow={resource.categories.join(' · ') || 'Insight'}
-                  media={
-                    resource.image
-                      ? { type: 'image', image: resource.image }
-                      : undefined
-                  }
+                  media={resource.image ? { type: 'image', image: resource.image } : undefined}
                   href={blogPath(resource.slug)}
                   ctaLabel="Read insight"
                 />

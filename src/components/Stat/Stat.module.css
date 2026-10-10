@@ -1,0 +1,104 @@
+/* Stat — a figure, its unit, and its label, opening on a hairline with a blue mark.
+
+   Every colour and size is --stat-*, declared in tokens/components/stat.css and re-declared per
+   surface there. The stat lays out its own parts (figure line, label) with grid and inline-flex:
+   the inside of one unit, not an arrangement of siblings — RatingBadge's reading. No margin. */
+
+.stat {
+  position: relative;
+  display: grid;
+  row-gap: var(--gap-text);
+  align-content: start;
+  min-inline-size: 0;
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--stat-rule-width) solid var(--stat-rule-ink);
+}
+
+/* The accent: a short blue segment laid over the start of the hairline, centred on it. A mark on
+   the rule's own edge, drawn by a positioned pseudo-element — it places no sibling. */
+.stat::before {
+  content: '';
+  position: absolute;
+  inset-block-start: calc((var(--stat-mark-width) + var(--stat-rule-width)) / -2);
+  inset-inline-start: 0;
+  inline-size: var(--stat-mark-length);
+  block-size: var(--stat-mark-width);
+  background: var(--stat-mark-ink);
+}
+
+.figure {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--gap-tight);
+}
+
+.value {
+  font-variant-numeric: tabular-nums;
+  color: var(--stat-value-ink);
+}
+
+.sizeLg .value {
+  font: var(--stat-value-text-lg);
+  letter-spacing: var(--stat-value-tracking-lg);
+  text-transform: var(--text-mono-case);
+}
+
+.sizeXl .value {
+  font: var(--stat-value-text-xl);
+  letter-spacing: var(--stat-value-tracking-xl);
+}
+
+.sizeMd .value {
+  font: var(--stat-value-text-md);
+  letter-spacing: var(--stat-value-tracking-md);
+  text-transform: var(--text-mono-case);
+}
+
+.unit {
+  white-space: nowrap;
+  font: var(--stat-unit-text);
+  letter-spacing: var(--stat-unit-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--stat-unit-ink);
+}
+
+.label {
+  max-inline-size: var(--stat-label-measure);
+  font: var(--stat-label-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--stat-label-ink);
+}
+
+/* The source sits at the stat's start (or its centre, below), at its own width: a pill, not a row. */
+.source {
+  justify-self: start;
+}
+
+/* ── One form at every width (final fix round, 6 Oct 2026) ──────────────────────
+   Below 768 the stat used to set its figure BESIDE its label, the unit wrapping under the value in
+   some cells and not others ("38 / PRODUCTS" stacked, "1 RECORD" inline), the label a ragged
+   column whose top landed mid-figure, and a set of them start-aligned under a centred head: one band
+   on two axes. Now the stat is the same object at every width — figure line, then label — and
+   `align` holds at every width, so an S band stays on its one centred axis at 390. The unit keeps
+   the figure's line (nowrap on the unit, below); a one-column phone track is 326, and the longest
+   figure line in the kit ("6–8 WEEKS", "12 AI PRODUCTS") is under 260 at the -m stat-lg size.
+
+   align="center": under a centred head the stat centres in its track — figure, label and the mark
+   on the rule. The rule still runs the track's full width, so a row of them keeps its four objects. */
+.centred {
+  justify-items: center;
+  text-align: center;
+}
+
+.centred .figure {
+  justify-content: center;
+}
+
+.centred .source {
+  justify-self: center;
+}
+
+.centred::before {
+  inset-inline-start: calc(50% - var(--stat-mark-length) / 2);
+}

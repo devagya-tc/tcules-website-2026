@@ -6,8 +6,10 @@ import {
   mediaSrcSet,
   Section,
   type MediaImage,
+  type MediaRatio,
   type SectionSurface,
 } from '@/components';
+import { cropScale, getKitPhoto, type PhotoId } from '@/lib/photos';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
@@ -29,6 +31,16 @@ const CAPTURE: MediaImage = {
   kind: 'capture',
   sources: DERIVED('capture-listing', 'jpg'),
 };
+
+/* `art`: a service illustration and its numbered cut (scripts/illustrations-phone.mjs), one viewBox. */
+const ART_DRAWING: MediaImage = {
+  src: '/illustrations/services/product-design.paper.svg',
+  alt: '',
+  width: 962,
+  height: 714,
+  kind: 'illustration',
+};
+const ART_CUT = '/illustrations/services/product-design.paper.phone.svg';
 
 const CUT_OUT: MediaImage = {
   src: '/design/media/cutout-flow.png',
@@ -91,6 +103,9 @@ const SIZES_QUARTER =
 /* columns {base:1, md:2}, colGap gutter (32). */
 const SIZES_HALF =
   '(min-width: 1304px) 604px, (min-width: 768px) calc(50vw - 48px), calc(100vw - 64px)';
+/* Section 11: a half of the [1, 2] layout's wide track (784 at the 1240 cap, less one gutter). */
+const SIZES_TONE =
+  '(min-width: 1304px) 376px, (min-width: 1024px) calc((100vw - 128px) / 3 - 16px), (min-width: 768px) calc(50vw - 48px), calc(100vw - 64px)';
 /* The harness's 326 mobile column. */
 const SIZES_MOBILE = '326px';
 
@@ -113,9 +128,57 @@ const KINDS: readonly { label: string; image: MediaImage; note: string }[] = [
   {
     label: 'photograph',
     image: PHOTOGRAPH,
-    note: 'No edge, radius 0, never masked (§3, §6).',
+    note: 'No edge, the photograph radius 8 (--media-photo-radius, visual-direction § 5.3), never masked (§3).',
   },
 ];
+
+/* ── Section 9's photographs ──────────────────────────────────────────────────────
+   One registry photo per ratio, each at a placement § 5.4 admits it to; `box` is the placement's
+   inline size at 1470, the number the resolution note divides by. */
+const PLACEMENT_FOR: Record<MediaRatio, string> = {
+  '4/5': 'B, K and L-photo: the media split',
+  '5/4': 'the photograph hero',
+  '3/1': 'I banner below its head',
+  '4/1': 'the title-led hero panorama (PageHero display; /design/kit/hero)',
+  '2/1': 'the title-led hero wide shape, its default (PageHero display)',
+  '3/2':
+    'banner beside, the head-track aside, and every card box (BlockCard and ListCard crop at 3:2)',
+  '16/9':
+    '§ 5.4 names it for card sets of three or more; no card renders it (cards crop at 3:2)',
+  '4/3': '§ 5.4 names it for the horizontal card; no card renders it (cards crop at 3:2)',
+  '1/1': 'portraits',
+};
+
+const RATIO_ROW: readonly { ratio: MediaRatio; id: PhotoId; box: number }[] = [
+  { ratio: '4/5', id: 'studio-sticky-board-ux', box: 477 },
+  { ratio: '5/4', id: 'whiteboard-two-hands', box: 572 },
+  { ratio: '3/2', id: 'studio-session-talk', box: 381 },
+  { ratio: '1/1', id: 'portrait-woman-grey', box: 477 },
+];
+
+/* Section 9b's row: the same three crops on tint, ink and blue, each at a placement § 5.4 admits. */
+const SURFACE_ROW: readonly { ratio: MediaRatio; id: PhotoId; box: number }[] = [
+  { ratio: '4/5', id: 'studio-sticky-board-ux', box: 477 },
+  { ratio: '3/2', id: 'studio-session-talk', box: 381 },
+  { ratio: '1/1', id: 'portrait-woman-grey', box: 477 },
+];
+
+/* Section 11's set: one photograph from each measured tone (§ 5.5), studio and stock, so the band
+   shows the spread one grade will have to carry. Deliberately mixed: this is the set the layer
+   exists for, not a page (a page is one family). */
+const TONE_SET: readonly { id: PhotoId; tone: string }[] = [
+  { id: 'sticky-notes-wall-dense', tone: 'warm · vivid' },
+  { id: 'studio-team-holi', tone: 'warm · quiet' },
+  { id: 'studio-session-talk', tone: 'neutral · quiet' },
+  { id: 'pair-testing-overhead', tone: 'cool · quiet' },
+];
+
+/** The capture hairline each 9b band shows, from media.css's surface blocks. */
+const SURFACE_RULE: Record<'tint' | 'ink' | 'blue', string> = {
+  tint: 'neutral-400 on tint',
+  ink: 'neutral-700 on ink',
+  blue: 'brandeis-300 on blue',
+};
 
 const SURFACE_NOTES: Record<SectionSurface, string> = {
   paper:
@@ -322,14 +385,14 @@ export default function MediaSpecimenPage() {
             <h2>3c · The panel inset: gutter and text</h2>
             <p>
               <code>inset</code> is the one geometry a placement chooses, and only between two
-              gap-scale steps. <code>gutter</code> (<code>--gap-gutter</code>, 32) is the default
-              and every full-column, track and card placement keeps it. <code>text</code> (
-              <code>--gap-text</code>, 16, &ldquo;cell padding&rdquo;) is for a small box, where 32
-              on each side leaves no part to recognise — ListCard&rsquo;s 160 × 107 thumbnail kept
-              96 × 43 of part at <code>gutter</code> and keeps 128 × 75 at <code>text</code>. Only
-              a cut-out takes a panel, so it is the only kind with an inset; each panel ground is
-              shown at both steps, in <code>intrinsic</code> and in <code>fill</code> (29 Sep 2026,
-              tracker 2.17).
+              gap-scale steps. <code>gutter</code> (<code>--gap-gutter</code>, 32) is the
+              default and every full-column, track and card placement keeps it.{' '}
+              <code>text</code> (<code>--gap-text</code>, 16, &ldquo;cell padding&rdquo;) is for
+              a small box, where 32 on each side leaves no part to recognise — ListCard&rsquo;s
+              160 × 107 thumbnail kept 96 × 43 of part at <code>gutter</code> and keeps 128 × 75
+              at <code>text</code>. Only a cut-out takes a panel, so it is the only kind with an
+              inset; each panel ground is shown at both steps, in <code>intrinsic</code> and in{' '}
+              <code>fill</code> (29 Sep 2026, tracker 2.17).
             </p>
           </Layout>
           <Quarters>
@@ -338,7 +401,11 @@ export default function MediaSpecimenPage() {
                 <Specimen
                   key={`${panel}-${inset}`}
                   title={`panel: ${panel} · inset: ${inset}`}
-                  note={inset === 'gutter' ? 'The default: 32 of panel round the part.' : '16 of panel round the part.'}
+                  note={
+                    inset === 'gutter'
+                      ? 'The default: 32 of panel round the part.'
+                      : '16 of panel round the part.'
+                  }
                 >
                   <Media image={{ ...PANEL_PART, panel }} sizes={SIZES_QUARTER} inset={inset} />
                 </Specimen>
@@ -476,7 +543,7 @@ export default function MediaSpecimenPage() {
       <Section surface="tint">
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>6 · Fit: intrinsic against fill</h2>
+            <h2>6 · Fit: intrinsic, fill and contain</h2>
             <p>
               <code>intrinsic</code> (the default) is 100% of the parent&rsquo;s width with the
               asset&rsquo;s own height — never cropped (ruling H3). <code>fill</code> covers a
@@ -526,6 +593,24 @@ export default function MediaSpecimenPage() {
               <Media image={CUT_OUT} sizes="160px" fit="fill" />
             </div>
           </Specimen>
+          <Halves>
+            <Specimen
+              title="contain, illustration, 3:2"
+              note="fit='contain': the same parent-sized box, but the whole asset shows, centred, at the largest size that fits. For an object a crop would damage — here the drawing's labels. The parent gives it its air (BlockCard's illustration covers)."
+            >
+              <div className={s.ratioCard}>
+                <Media image={ILLUSTRATION} sizes={SIZES_HALF} fit="contain" />
+              </div>
+            </Specimen>
+            <Specimen
+              title="contain, cut-out, 3:2"
+              note="The part keeps its whole edge and its shadow instead of being cut at the box. Compare 'fill, in a 3:2 box' above, which crops the run button off."
+            >
+              <div className={s.ratioCard}>
+                <Media image={{ ...CUT_OUT, shadow: true }} sizes={SIZES_HALF} fit="contain" />
+              </div>
+            </Specimen>
+          </Halves>
         </Layout>
       </Section>
 
@@ -572,8 +657,8 @@ export default function MediaSpecimenPage() {
             <p>
               Every kind in the mobile column — 326, a 390 viewport less Section&rsquo;s two
               gutters, the width ch05 B3 approves every image at. The harness&rsquo;s{' '}
-              <code>trackMobile</code> frame puts that column on the 1440 capture beside the wide
-              bands; the 390 capture of this page renders every band above in the real one.
+              <code>trackMobile</code> frame puts that column on the 1440 capture beside the
+              wide bands; the 390 capture of this page renders every band above in the real one.
             </p>
           </Layout>
           <Layout columns="fit" minTrack="lg" colGap="gutter" rowGap="stack" align="start">
@@ -588,9 +673,243 @@ export default function MediaSpecimenPage() {
         </Layout>
       </Section>
 
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>9 · Photographs: ratio, focus and the photograph radius</h2>
+            <p>
+              A photograph whose box is Media&rsquo;s own &mdash; B, K, the banner, the aside,
+              the hero photograph &mdash; is cut to one of seven ratios with <code>ratio</code>,
+              and the cover crop is anchored at the record&rsquo;s focal point (
+              <code>focus</code>, from the catalogue). Every photograph carries the 8px
+              photograph radius and no frame; a capture keeps radius 0 and its hairline
+              (visual-direction § 5.3). The photos come from the kit registry,{' '}
+              <code>getKitPhoto</code>, with their derived 1240 · 652 · 320 rungs. Each tile
+              names the crop&rsquo;s resolution against its box at 1470 (§ 5.4: ≥ 1.9×). A
+              placement whose crop changes with its arrangement passes{' '}
+              <code>ratio=&#123;&#123; base, lg &#125;&#125;</code> instead: one ratio below
+              1024, another from it.
+            </p>
+          </Layout>
+          <Quarters>
+            {RATIO_ROW.map(({ ratio, id, box }) => (
+              <Specimen
+                label="below"
+                key={ratio}
+                title={`ratio ${ratio.replace('/', ':')} · ${id}`}
+                note={`${PLACEMENT_FOR[ratio]}. At ${box}px the crop is ${cropScale(id, ratio, box).toFixed(2)}× the box.`}
+              >
+                <Media image={getKitPhoto(id)} sizes={SIZES_QUARTER} ratio={ratio} />
+              </Specimen>
+            ))}
+          </Quarters>
+          <Halves>
+            <Specimen
+              label="below"
+              title="ratio 16:9 · workshop-hands-writing"
+              note={`${PLACEMENT_FOR['16/9']}. At 392px the crop is ${cropScale('workshop-hands-writing', '16/9', 392).toFixed(2)}× the box.`}
+            >
+              <Media
+                image={getKitPhoto('workshop-hands-writing')}
+                sizes={SIZES_HALF}
+                ratio="16/9"
+              />
+            </Specimen>
+            <Specimen
+              label="below"
+              title="ratio 4:3 · pair-laptop-notebook"
+              note={`${PLACEMENT_FOR['4/3']}. At 604px the crop is ${cropScale('pair-laptop-notebook', '4/3', 604).toFixed(2)}× the box.`}
+            >
+              <Media
+                image={getKitPhoto('pair-laptop-notebook')}
+                sizes={SIZES_HALF}
+                ratio="4/3"
+              />
+            </Specimen>
+          </Halves>
+          <Halves>
+            <Specimen
+              label="below"
+              title="ratio { base: 4:3, lg: 4:5 } · studio-sticky-board-ux"
+              note={`One crop below 1024 and another from it: the B split's, 4:5 beside its copy and 4:3 above it on a phone (§ 3.7 item 4). Two named breakpoints only, because the ratio follows the arrangement and arrangements change at 1024. This tile is 4:5 in the 1440 capture and 4:3 in the 390 one. At 604px the 4:5 crop is ${cropScale('studio-sticky-board-ux', '4/5', 604).toFixed(2)}× the box.`}
+            >
+              <Media
+                image={getKitPhoto('studio-sticky-board-ux')}
+                sizes={SIZES_HALF}
+                ratio={{ base: '4/3', lg: '4/5' }}
+              />
+            </Specimen>
+            <Specimen
+              label="below"
+              title="the same photo, ratio 4:5 at every width"
+              note="The control: a bare MediaRatio is one crop at every width, so this tile stays 4:5 in the 390 capture while the pair beside it cuts to 4:3 (408 tall at 326, against 244)."
+            >
+              <Media
+                image={getKitPhoto('studio-sticky-board-ux')}
+                sizes={SIZES_HALF}
+                ratio="4/5"
+              />
+            </Specimen>
+          </Halves>
+          <Specimen
+            label="below"
+            title="ratio 3:1 · sticky-wall-soft-focus"
+            note={`${PLACEMENT_FOR['3/1']}. At 1240px the crop is ${cropScale('sticky-wall-soft-focus', '3/1', 1240).toFixed(2)}× the box.`}
+          >
+            <Media
+              image={getKitPhoto('sticky-wall-soft-focus')}
+              sizes={SIZES_FULL}
+              ratio="3/1"
+            />
+          </Specimen>
+          <Quarters>
+            <Specimen
+              label="below"
+              title="focus from the record"
+              note="pair-desk-through-plants, 4:5, anchored at its catalogue focal point (0.6, 0.45): the pair at the desk."
+            >
+              <Media
+                image={getKitPhoto('pair-desk-through-plants')}
+                sizes={SIZES_QUARTER}
+                ratio="4/5"
+              />
+            </Specimen>
+            <Specimen
+              label="below"
+              title="focus on the prop — crop from the right"
+              note="The same record, the placement's override { x: 1, y: 0.5 }: the crop moves off the leaves on the left (§ 5.6's 'crop from the right')."
+            >
+              <Media
+                image={getKitPhoto('pair-desk-through-plants')}
+                sizes={SIZES_QUARTER}
+                ratio="4/5"
+                focus={{ x: 1, y: 0.5 }}
+              />
+            </Specimen>
+            <Specimen
+              label="below"
+              title="photograph, intrinsic"
+              note="No ratio: the whole frame at its own 3:2, still radius 8 and no frame."
+            >
+              <Media image={getKitPhoto('hands-sticky-blue-pen')} sizes={SIZES_QUARTER} />
+            </Specimen>
+            <Specimen
+              label="below"
+              title="capture beside it: radius 0, hairline"
+              note="ratio is passed and IGNORED (a development warning): a capture renders whole (H3)."
+            >
+              <Media image={CAPTURE} sizes={SIZES_QUARTER} ratio="4/5" />
+            </Specimen>
+          </Quarters>
+          <Halves>
+            <Specimen
+              label="below"
+              title="art · a numbered cut below 1440"
+              note="art={[{ media: '(max-width: 1439.98px)', src: …phone.svg }]}: a <picture> whose <source> swaps in a different FILE where the query matches, the <img> the fallback that carries alt, loading and priority. The drawing at 1440 and up, its numbered cut below (this tile shows the cut in the 390 capture). Not resolution switching — that is the record's sources."
+            >
+              <Media
+                image={ART_DRAWING}
+                sizes={SIZES_HALF}
+                art={[{ media: '(max-width: 1439.98px)', src: ART_CUT }]}
+              />
+            </Specimen>
+            <Specimen
+              label="below"
+              title="the same drawing, no art"
+              note="The control: a bare <img>, the drawing with its own labels at every width."
+            >
+              <Media image={ART_DRAWING} sizes={SIZES_HALF} />
+            </Specimen>
+          </Halves>
+          <Specimen
+            label="below"
+            title="what the gates read"
+            note="Every photograph emits its master's pixels and its measured tone on the <img>, for fold:check's resolution and tone rules. A stand-in cover also carries data-stand-in. None of it is visible."
+          >
+            <Layout rowGap="text">
+              <div className={s.trackMd}>
+                <Media
+                  image={getKitPhoto('studio-whiteboard-crit', { standIn: true })}
+                  sizes="384px"
+                  ratio="3/2"
+                />
+              </div>
+              <p className={s.specNote}>
+                <code>
+                  data-src-w=&quot;898&quot; data-src-h=&quot;610&quot;
+                  data-photo-temp=&quot;neutral&quot; data-photo-sat=&quot;quiet&quot;
+                  data-stand-in
+                </code>
+              </p>
+              <SrcSet image={getKitPhoto('studio-whiteboard-crit')} />
+            </Layout>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      {(['tint', 'ink', 'blue'] as const).map((surface) => (
+        <Section key={surface} surface={surface}>
+          <Layout rowGap="stack">
+            <Layout rowGap="block">
+              <h2>9b · Photographs on {surface}</h2>
+              <p>
+                A photograph reads no surface token: no frame, the same 8px radius and the same
+                crop on every ground. The capture beside them is the control &mdash; its
+                hairline is the one edge here that steps with the surface (
+                {SURFACE_RULE[surface]}).
+              </p>
+            </Layout>
+            <Quarters>
+              {SURFACE_ROW.map(({ ratio, id, box }) => (
+                <Specimen
+                  key={ratio}
+                  label="below"
+                  title={`ratio ${ratio.replace('/', ':')} · ${id}`}
+                  note={`${PLACEMENT_FOR[ratio]}. ${cropScale(id, ratio, box).toFixed(2)}× at ${box}px.`}
+                >
+                  <Media image={getKitPhoto(id)} sizes={SIZES_QUARTER} ratio={ratio} />
+                </Specimen>
+              ))}
+              <Specimen
+                label="below"
+                title="capture: radius 0, hairline"
+                note="The surface's rule ink, and ratio ignored (H3)."
+              >
+                <Media image={CAPTURE} sizes={SIZES_QUARTER} ratio="4/5" />
+              </Specimen>
+            </Quarters>
+          </Layout>
+        </Section>
+      ))}
+
+      <Section>
+        <Layout columns={{ base: 1, lg: [1, 2] }} colGap="column" rowGap="stack" align="start">
+          <Layout rowGap="block">
+            <h2>11 · The tone layer</h2>
+            <p>
+              Every photograph carries one grade, so studio and stock read as one shoot. The
+              treatment is the owner&rsquo;s to choose, so Media ships the hook, not a filter:{' '}
+              <code>filter: var(--media-photo-grade)</code>, and the token is <code>none</code>.
+            </p>
+            <p className={s.specNote}>
+              Renders nothing today. A ruling lands in that one token and grades these four, and
+              every photograph on the site, at once. Captures, cut-outs and illustrations never
+              take it.
+            </p>
+          </Layout>
+          <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+            {TONE_SET.map(({ id, tone }) => (
+              <Specimen key={id} label="below" title={tone} note={id}>
+                <Media image={getKitPhoto(id)} sizes={SIZES_TONE} ratio="16/9" />
+              </Specimen>
+            ))}
+          </Layout>
+        </Layout>
+      </Section>
+
       <Section surface="ink">
         <Layout rowGap="block">
-          <h2>9 · Nested surface</h2>
+          <h2>10 · Nested surface</h2>
           <p>
             An ink band, then a tint band holding a capture, then ink again. The capture&rsquo;s
             hairline must resolve tint&rsquo;s neutral-400, not ink&rsquo;s 700 — which is what

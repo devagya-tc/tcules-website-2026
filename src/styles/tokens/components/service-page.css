@@ -1,0 +1,115 @@
+/* ══ Component layer — ServicePage (template) ══════════════════════════════════
+   Tier 3. What the template still draws itself once the kit units carry the rest (cmp-service-
+   pages, 6 Oct 2026): the six E diagrams (Spectrum's meters, Matrix, Record, Parts, Slice, Bridge),
+   a ledger set's heading, a bare stat sentence and the review-mode slot. Steps, rows, tiles, the
+   router, the contrast pair, Thread and Stat are kit units with layers of their own.
+
+   Naming: --svc-{part}-{role}
+     parts: ink | rule | mark | bar | slot | slice | meter | authority | hidden
+
+   One layer for the template rather than one per diagram: the diagrams live and die together as
+   the service page's vocabulary, and every one draws from the same surface roles. If one graduates
+   into a pattern, its tokens move with it. The --svc-link-* tokens were deleted on 6 Oct 2026: the
+   router that read them is the kit's (BlockCard, ListCard) and nothing here draws a link.
+
+   Every surface restates every token (CLAUDE.md § Tokens rule 2).
+
+   --svc-mark is the blue accent the diagrams' small marks carry — a check in a matrix or a slice
+   verdict, a record's field glyph, the parts orbit's loop and nodes, the spectrum's two meters (fix round
+   2) (visual-direction § 4, owner 6 Oct 2026:
+   blue is the recurring foreground accent, never a ground). A cross stays neutral
+   (--svc-ink-quiet): it only says "not this one" — but it is still a graphic mark that carries the
+   answer beside its label, so it holds 3:1 against every ground (WCAG 1.4.11). It was neutral-400
+   on paper at 2.12:1 (ServicePage audit, 6 Oct 2026); each surface states its ratio below. */
+
+/* ── Geometry · identical on every surface ───────────────────────────────────── */
+:root {
+  /* The slice legend's swatch: a cell drawn at legend size, a component size. */
+  --svc-mark-size: var(--space-12);
+  /* One cell of the slice grids: a component size. */
+  --svc-slice-cell: var(--space-24);
+  /* Review-mode portrait slot: a 1:1 box at the size a portrait brief can be read in, 320. */
+  --svc-slot-size-portrait: calc(var(--space-160) * 2);
+  /* A visually-hidden label's clip box. */
+  --svc-hidden-size: 1px;
+  --svc-rule-width: var(--border-width-hairline);
+  --svc-rule-strong-width: var(--border-width-1);
+  /* The disruption trace: its box, a component size rather than a distance, and its line. */
+  --svc-meter-width: var(--space-96);
+  --svc-meter-height: var(--space-24);
+  --svc-meter-stroke: var(--border-width-2);
+  /* The authority meter: one slot of the decision, a component size. */
+  --svc-authority-slot: var(--space-12);
+  /* The parts orbit (page-design-systems fix round 1). Its size is a component size (t-shirt
+     name, one step today): 288, stated as three of the 96 ramp step because the drawing is laid
+     out on that unit — its inner orbit and loop are 2/3 and 14/15 of it. Its loop line. Its
+     leader's dash reaches the ramp as an OPTICAL correction: a 4-on-4 dash at the 1 px rule reads
+     as a dotted line rather than a broken rule, which is what tells a leader from a spoke. */
+  --svc-orbit-size-lg: calc(var(--space-96) * 3);
+  --svc-orbit-stroke: var(--border-width-2);
+  --svc-orbit-dash: var(--space-4) var(--space-4);
+}
+
+/* ── Surfaces ──────────────────────────────────────────────────────────────────
+   Six roles from ch02's surface model — ink, muted, label, rule, rule-strong, accent (--svc-mark)
+   — plus the quiet ink a cross takes (--svc-ink-quiet), the slot's dashed edge and the bridge's
+   bars (--svc-bar-*: a live product's solid ground and its label, and the dashed edge of a product
+   half-present, in the accent). The slice's built cell is --svc-ink; it has no token of its own.
+   --svc-sheet-ground was deleted in fix round 2 (6 Oct 2026): the record and the parts orbit are
+   drawn with rules only, so nothing in the template paints a ground behind text. */
+:root,
+[data-surface='paper'] {
+  --svc-ink: var(--color-neutral-900); /* 14.62:1 */
+  --svc-ink-muted: var(--color-neutral-600); /* 4.92:1 */
+  --svc-ink-label: var(--color-neutral-700); /* 8.14:1 */
+  --svc-rule: var(--color-neutral-200);
+  --svc-rule-strong: var(--color-neutral-400);
+  --svc-mark: var(--color-brandeis-500); /* 6.17:1 */
+  --svc-slot-edge: var(--color-neutral-400);
+  --svc-bar-live-ground: var(--color-neutral-900);
+  --svc-bar-live-ink: var(--color-paper);
+  --svc-bar-edge: var(--color-brandeis-500); /* decoration — the accent, a line */
+  --svc-ink-quiet: var(--color-neutral-500); /* 3.16:1 — a cross, a graphic mark: ≥ 3:1 (WCAG 1.4.11) */
+}
+
+[data-surface='tint'] {
+  --svc-ink: var(--color-neutral-900);
+  --svc-ink-muted: var(--color-neutral-700); /* 7.27:1 */
+  --svc-ink-label: var(--color-neutral-800); /* 10.54:1 */
+  --svc-rule: var(--color-neutral-300);
+  --svc-rule-strong: var(--color-neutral-500);
+  --svc-mark: var(--color-brandeis-500); /* 5.51:1 */
+  --svc-slot-edge: var(--color-neutral-500);
+  --svc-bar-live-ground: var(--color-neutral-900);
+  --svc-bar-live-ink: var(--color-paper);
+  --svc-bar-edge: var(--color-brandeis-500); /* decoration — the accent, a line */
+  --svc-ink-quiet: var(--color-neutral-600); /* 4.39:1 — 500 is 2.82:1 on tint */
+}
+
+[data-surface='ink'] {
+  --svc-ink: var(--color-white);
+  --svc-ink-muted: var(--color-neutral-400); /* 8.05:1 */
+  --svc-ink-label: var(--color-neutral-300); /* 11.07:1 */
+  --svc-rule: var(--color-neutral-800);
+  --svc-rule-strong: var(--color-neutral-700);
+  --svc-mark: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
+  --svc-slot-edge: var(--color-neutral-600);
+  --svc-bar-live-ground: var(--color-white);
+  --svc-bar-live-ink: var(--color-neutral-950);
+  --svc-bar-edge: var(--color-brandeis-300); /* decoration — 500 sinks into ink */
+  --svc-ink-quiet: var(--color-neutral-600); /* 3.48:1 */
+}
+
+[data-surface='blue'] {
+  --svc-ink: var(--color-white);
+  --svc-ink-muted: var(--color-brandeis-100); /* 4.91:1 */
+  --svc-ink-label: var(--color-brandeis-50); /* 5.57:1 */
+  --svc-rule: var(--color-brandeis-400);
+  --svc-rule-strong: var(--color-brandeis-300);
+  --svc-mark: var(--color-white); /* 6.23:1 */
+  --svc-slot-edge: var(--color-brandeis-300);
+  --svc-bar-live-ground: var(--color-white);
+  --svc-bar-live-ink: var(--color-brandeis-500);
+  --svc-bar-edge: var(--color-brandeis-100);
+  --svc-ink-quiet: var(--color-brandeis-200); /* 3.78:1 — 300 is 2.64:1 here */
+}

@@ -4,6 +4,7 @@ export type {
   DataTableKeyColumn,
   DataTableColumn,
   DataTableRow,
+  DataTableNodeCell,
   DataTableKeyBehaviour,
   DataTableColumnBehaviour,
 } from './DataTable';

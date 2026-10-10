@@ -1,14 +1,15 @@
 import { Cluster, Layout, Prose, Section, type SectionSurface } from '@/components';
+import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import {
+  BlockCard,
+  CtaRow,
   CtaSection,
-  EnquiryForm,
   Proof,
-  type ProofClientMark,
   type ProofFigure,
   type ProofPortrait,
   type ProofQuote,
 } from '@/patterns';
-import { ENDPOINTS, ROUTES, UNRESOLVED_EXTERNAL } from '@/lib/routes';
+import { caseStudyPath, ROUTES, UNRESOLVED_EXTERNAL } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
@@ -64,24 +65,6 @@ const PORTRAIT_OFF_SQUARE = {
   height: 401,
 } as const satisfies ProofPortrait;
 
-const MARK_DUNMERE = {
-  src: '/design/client-mark-mid.svg',
-  width: 120,
-  height: 40,
-} as const satisfies ProofClientMark;
-
-const MARK_ALDERMOOR = {
-  src: '/design/client-mark-wide.svg',
-  width: 240,
-  height: 40,
-} as const satisfies ProofClientMark;
-
-const MARK_BRIGHTWELL = {
-  src: '/design/client-mark-square.svg',
-  width: 64,
-  height: 64,
-} as const satisfies ProofClientMark;
-
 const DUNMERE_QUOTE = {
   quoteHtml:
     '<p>They showed us which half of the roadmap was habit, and we cut it in a week.</p>',
@@ -102,7 +85,6 @@ const ALDERMOOR_QUOTE = {
   role: 'Engineering Lead',
   company: 'Aldermoor',
   portrait: PORTRAIT,
-  clientMark: MARK_ALDERMOOR,
 } as const satisfies ProofQuote;
 
 const BRIGHTWELL_QUOTE = {
@@ -111,7 +93,16 @@ const BRIGHTWELL_QUOTE = {
   name: 'Priya Anand-Whitcombe',
   company: 'Brightwell',
   portrait: PORTRAIT,
-  clientMark: MARK_BRIGHTWELL,
+} as const satisfies ProofQuote;
+
+/* The quote that stands alone, with the case it came from as a link in its attribution row. */
+const SOURCED_QUOTE = {
+  quoteHtml:
+    '<p>The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.</p>',
+  name: 'Ashok Mohanty',
+  company: 'Auxentios',
+  portrait: PORTRAIT,
+  source: { label: 'Read the Auxentios case study', href: caseStudyPath('auxentios') },
 } as const satisfies ProofQuote;
 
 const LONG_ATTRIBUTION_QUOTE = {
@@ -120,24 +111,19 @@ const LONG_ATTRIBUTION_QUOTE = {
   role: 'Vice President, Customer Operations and Service Design, Europe, Middle East and Africa',
   company: 'Dunmere',
   portrait: PORTRAIT,
-  clientMark: MARK_DUNMERE,
 } as const satisfies ProofQuote;
 
-/** The four corners of the portrait × mark matrix, on one fictional quote. */
+/** With and without the portrait, on one fictional quote. (The client-mark half of this matrix
+    was removed with the mark, 30 Sep 2026.) */
 const MEDIA_MATRIX = [
   { title: 'text only', quote: DUNMERE_QUOTE },
   { title: 'portrait', quote: { ...DUNMERE_QUOTE, portrait: PORTRAIT } },
-  { title: 'client mark', quote: { ...DUNMERE_QUOTE, clientMark: MARK_DUNMERE } },
-  {
-    title: 'portrait + client mark',
-    quote: { ...DUNMERE_QUOTE, portrait: PORTRAIT, clientMark: MARK_DUNMERE },
-  },
 ] as const satisfies readonly { title: string; quote: ProofQuote }[];
 
-const FULL_QUOTE = MEDIA_MATRIX[3].quote;
+const FULL_QUOTE = MEDIA_MATRIX[1].quote;
 
 const PHONE_ROWS = [
-  { title: 'compact · portrait + mark', quote: FULL_QUOTE, arrangement: 'compact' },
+  { title: 'compact · portrait', quote: FULL_QUOTE, arrangement: 'compact' },
   {
     title: 'compact · long attribution',
     quote: LONG_ATTRIBUTION_QUOTE,
@@ -150,31 +136,21 @@ const FIGURES = [
   {
     value: '90+',
     label: 'completed projects',
-    checkedOn: 'checked on 8 August 2026',
   },
   {
     value: '19',
     label: 'countries with Tcules clients',
-    checkedOn: 'checked on 8 August 2026',
   },
   {
     value: '12',
     label: '12 AI engagements',
-    checkedOn: 'checked on 8 August 2026',
   },
+  /* Not a rating (7 Oct 2026): this set sits beside quotes on this page, and a score never does. */
   {
-    value: '4.8/5',
-    label: '4.8/5 Clutch rating',
-    checkedOn: 'checked on 8 August 2026',
+    value: '140+',
+    label: 'products shipped since 2012',
     sourceHref: UNRESOLVED_EXTERNAL,
   },
-] as const satisfies readonly ProofFigure[];
-
-/* Two dates in one set: the per-figure line comes back, because no single caption is true of all. */
-const MIXED_DATE_FIGURES = [
-  FIGURES[0],
-  { ...FIGURES[1], checkedOn: 'checked on 2 September 2026' },
-  FIGURES[3],
 ] as const satisfies readonly ProofFigure[];
 
 const EIGHT_FIGURES = [
@@ -196,11 +172,11 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
   {
     surface: 'ink',
-    note: 'Quote and value lift to white; neutral-400 supports attribution, label and checked date.',
+    note: 'Quote and value lift to white; neutral-400 supports attribution and label.',
   },
   {
     surface: 'blue',
-    note: 'White leads, Brandeis-100 supports, and the quote rule is white (ch10 B2.07) — no longer peridot, which ch02 v1.0 keeps for a marked phrase.',
+    note: 'White leads, Brandeis-100 supports, and the quote rule is white (ch10 B2.07) — no longer peridot, which on the website is ::selection and an illustration’s carried item only.',
   },
 ] as const;
 
@@ -213,7 +189,6 @@ const PROOF_SURFACE_TOKENS = {
     ['--proof-attribution-ink', '--color-neutral-600'],
     ['--proof-value-ink', '--color-neutral-950'],
     ['--proof-label-ink', '--color-neutral-700'],
-    ['--proof-checked-ink', '--color-neutral-600'],
     ['--proof-quote-rule', '--color-brandeis-500'],
   ],
   tint: [
@@ -222,7 +197,6 @@ const PROOF_SURFACE_TOKENS = {
     ['--proof-attribution-ink', '--color-neutral-700'],
     ['--proof-value-ink', '--color-neutral-950'],
     ['--proof-label-ink', '--color-neutral-800'],
-    ['--proof-checked-ink', '--color-neutral-700'],
     ['--proof-quote-rule', '--color-brandeis-500'],
   ],
   ink: [
@@ -231,7 +205,6 @@ const PROOF_SURFACE_TOKENS = {
     ['--proof-attribution-ink', '--color-neutral-400'],
     ['--proof-value-ink', '--color-white'],
     ['--proof-label-ink', '--color-neutral-400'],
-    ['--proof-checked-ink', '--color-neutral-400'],
     ['--proof-quote-rule', '--color-brandeis-300'],
   ],
   blue: [
@@ -240,7 +213,6 @@ const PROOF_SURFACE_TOKENS = {
     ['--proof-attribution-ink', '--color-brandeis-100'],
     ['--proof-value-ink', '--color-white'],
     ['--proof-label-ink', '--color-brandeis-100'],
-    ['--proof-checked-ink', '--color-brandeis-100'],
     ['--proof-quote-rule', '--color-white'],
   ],
 } as const satisfies Record<SectionSurface, TokenRows>;
@@ -266,19 +238,6 @@ const NESTED_INTERACTIVE_TOKENS = {
   ],
 } as const satisfies Record<'tint' | 'ink', TokenRows>;
 
-const CTA_FORM_PROPS = {
-  action: `${ENDPOINTS.enquiryDesign}?outcome=success`,
-  context: {
-    originRoute: ROUTES.designProof,
-    placement: 'proof-specimen',
-    family: 'design-system',
-    serviceOrAudit: 'proof',
-    referrer: '',
-    campaign: '',
-  },
-  scheduleHref: ROUTES.contact,
-} as const;
-
 function ResolvedTokens({ tokens }: { tokens: TokenRows }) {
   return (
     <Layout as="dl" rowGap="tight">
@@ -298,6 +257,122 @@ function ResolvedTokens({ tokens }: { tokens: TokenRows }) {
 
 const PROOF_SHAPES = ['quote', 'figures', 'combined'] as const;
 
+/* ── The G arrangements (cmp-testimonials, 6 Oct 2026) ─────────────────────────────────
+   Fictional people. Stock portraits only where the arrangement is built on a photograph (featured)
+   or where the opt-in compact portrait is the thing shown; everywhere else the quote carries a tag
+   in the image's place (7 Oct 2026: no headshots). No score beside any quote (7 Oct 2026). */
+const kitPortrait = (id: PhotoId): ProofPortrait => {
+  const { src, width, height, sources } = getKitPhoto(id);
+  return { src, width, height, sources };
+};
+
+const G_QUOTES = [
+  {
+    quoteHtml:
+      '<p>The research changed the brief, not just the screens. We built less, and it was the right less.</p>',
+    name: 'Ines Duarte',
+    role: 'Design Director',
+    company: 'Lumen Ledger',
+    portrait: kitPortrait('portrait-woman-laughing'),
+  },
+  {
+    quoteHtml:
+      '<p>Clear decisions every week, written down. Nobody on our side had to chase a status update once.</p>',
+    name: 'Tobias Reyes',
+    role: 'VP Engineering',
+    company: 'Quillstack',
+    portrait: kitPortrait('portrait-man-glasses'),
+  },
+  {
+    quoteHtml:
+      '<p>They designed with our constraints in the room, so engineering never opened a file and found a surprise.</p>',
+    name: 'Daniel Okafor',
+    role: 'Chief Product Officer',
+    company: 'Brightwater Labs',
+    /* Light ground, engaged: the grey low-key portrait read sombre under praise (fix round 2). */
+    portrait: kitPortrait('portrait-man-blue-office'),
+  },
+] as const satisfies readonly ProofQuote[];
+
+/** The same three voices with no face, each with the tag that takes the image's place. */
+const G_TAGS = ['User research', 'Delivery', 'Design system'] as const;
+const G_VOICES = G_QUOTES.map((quote, index): ProofQuote => ({
+  ...quote,
+  portrait: undefined,
+  tag: G_TAGS[index],
+}));
+
+function GSurface({ surface }: { surface: SectionSurface }) {
+  const [ines, tobias, daniel] = G_QUOTES;
+  const [inesVoice, tobiasVoice, danielVoice] = G_VOICES as [
+    ProofQuote,
+    ProofQuote,
+    ProofQuote,
+  ];
+  return (
+    <Section surface={surface}>
+      <Layout rowGap="column">
+        <Specimen title={`${surface} · display, centred`}>
+          <Proof quote={{ ...inesVoice, tag: undefined }} align="center" />
+        </Specimen>
+        <Specimen title={`${surface} · display, start, a tag in the image's place`}>
+          <Proof quote={tobiasVoice} />
+        </Specimen>
+        <Specimen title={`${surface} · compact, with the opt-in portrait`}>
+          <Proof arrangement="compact" quote={ines} />
+        </Specimen>
+        <Specimen title={`${surface} · compact, a tag in the image's place`}>
+          <Proof arrangement="compact" quote={inesVoice} />
+        </Specimen>
+        <Specimen title={`${surface} · featured, with a footer`}>
+          <Proof
+            arrangement="featured"
+            quote={daniel}
+            footer={
+              <CtaRow
+                rule={false}
+                actions={[{ label: 'Read the case', href: ROUTES.caseStudies }]}
+              />
+            }
+          />
+        </Specimen>
+        <Specimen title={`${surface} · featured, reversed`}>
+          <Proof arrangement="featured" reverse quote={tobias} />
+        </Specimen>
+        <Specimen title={`${surface} · featured with no image: start edge, tag`}>
+          <Proof arrangement="featured" quote={danielVoice} />
+        </Specimen>
+        <Specimen title={`${surface} · case, the card without a description`}>
+          <Proof
+            arrangement="case"
+            work={
+              <Layout as="ul" rowGap="none">
+                <BlockCard
+                  eyebrow="Halden Freight · Logistics"
+                  title="Dispatch screens rebuilt around the driver’s day"
+                  href={ROUTES.caseStudies}
+                  media={{
+                    type: 'image',
+                    image: getKitPhoto('designer-tablet-monitor', { standIn: true }),
+                  }}
+                  tracks={3}
+                />
+              </Layout>
+            }
+            quote={{ ...tobias, portrait: undefined }}
+          />
+        </Specimen>
+        <Specimen title={`${surface} · group of three, tags in the image's place`}>
+          <Proof arrangement="group" quotes={[inesVoice, tobiasVoice, danielVoice]} />
+        </Specimen>
+        <Specimen title={`${surface} · group of three, opt-in portraits`}>
+          <Proof arrangement="group" quotes={G_QUOTES} />
+        </Specimen>
+      </Layout>
+    </Section>
+  );
+}
+
 function ProofFixture({ shape }: { shape: (typeof PROOF_SHAPES)[number] }) {
   if (shape === 'quote') return <Proof quote={ONE_SENTENCE_QUOTE} />;
   if (shape === 'figures') return <Proof figures={FIGURES.slice(0, 2)} />;
@@ -311,9 +386,11 @@ export default function ProofSpecimenPage() {
         <Layout rowGap="block">
           <h1>Proof</h1>
           <p>
-            One evidence pattern with three display shapes: an attributed quotation, checked
-            figures, or both. Compact is the embedded quote-only arrangement. Proof owns no
-            ground; the nearest surface supplies it.
+            One evidence pattern with three display shapes: an attributed quotation, figures, or
+            both. Compact is the embedded quote-only arrangement; featured, case and group are
+            the G bands (§ 19). Proof owns no ground; the nearest surface supplies it. Since the
+            7 Oct review a score never sits beside a quote, and a quote without a photograph
+            leads with a tag on the start edge.
           </p>
         </Layout>
       </Section>
@@ -323,9 +400,10 @@ export default function ProofSpecimenPage() {
           <Layout rowGap="block">
             <h2>1 · Identity</h2>
             <p>
-              This combined block is why Testimonial and Stat ship as one pattern. The rating is
-              an ordinary checked figure, not a third component. From lg the quote leads in the
-              wide track of a 2:1 and the figures stack beside it; below lg, one column.
+              This combined block is why Testimonial and Stat ship as one pattern. A figure
+              beside a quote is the work’s own number, never a rating (7 Oct 2026). From lg the
+              quote leads in the wide track of a 2:1 and the figures stack beside it; below lg,
+              one column.
             </p>
           </Layout>
           <Proof quote={THREE_SENTENCE_QUOTE} figures={FIGURES} />
@@ -363,11 +441,20 @@ export default function ProofSpecimenPage() {
           <Layout rowGap="block">
             <h2>3 · Quote length ladder</h2>
             <p>
-              Display is the display quote role, --text-quote-lg (43 / 34 / 25, italic in the
-              composite), from one sentence through six. Compact keeps the reading-flow quote
-              composite (28 / 22); neither path sniffs length or clamps content.
+              Display is the large quote role, --text-quote-lg (34 / 28 / 22, italic in the
+              composite), at the lead measure, from one sentence through six. Compact keeps the
+              reading-flow quote composite (28 / 22); neither path sniffs length or clamps
+              content. Size follows the quote&apos;s length and width, never its importance: a
+              quote with the column to itself is display, a quote beside anything else is
+              compact (1 Oct 2026).
             </p>
           </Layout>
+          <Specimen
+            title="display · with source"
+            note="The case it came from, as a link beside the speaker. Wraps beneath at 390."
+          >
+            <Proof quote={SOURCED_QUOTE} />
+          </Specimen>
           <Specimen title="display · one sentence" note="Resolved role: --text-quote-lg">
             <Proof quote={ONE_SENTENCE_QUOTE} />
           </Specimen>
@@ -389,8 +476,8 @@ export default function ProofSpecimenPage() {
             <h2>4 · Figure count ladder</h2>
             <p>
               Values keep one role, --text-stat-lg (54 / 43 / 40), while tile tracks prevent a
-              partial final row from stretching. A date every figure shares is said once, as the
-              set&apos;s caption; one figure keeps its own line, and mixed dates keep one each.
+              partial final row from stretching. No figure carries a &ldquo;checked on&rdquo;
+              date (owner, 7 Oct 2026).
             </p>
           </Layout>
           {([1, 2, 3, 4] as const).map((count) => (
@@ -399,10 +486,10 @@ export default function ProofSpecimenPage() {
             </Specimen>
           ))}
           <Specimen
-            title="mixed dates · per-figure lines"
-            note="Two dates in one set, so no caption is true of all three: each figure keeps its own."
+            title='figureSize="xl" · the figure as a band’s hero'
+            note="Figures-only display at --text-stat-xl (96 / 80 / 64). One sourced figure set as the band's one idea, beside its head (the H band, /design/kit/logos). Never beside a quote."
           >
-            <Proof figures={MIXED_DATE_FIGURES} />
+            <Proof figures={FIGURES.slice(0, 1)} figureSize="xl" />
           </Specimen>
           <Specimen
             title="8 figures · 2× expected"
@@ -488,7 +575,7 @@ export default function ProofSpecimenPage() {
               independently resolve their complete palettes from the same nearest scope.
             </p>
           </Layout>
-          <Section surface="tint" density="tight">
+          <Section surface="tint">
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="column" rowGap="stack">
               <Proof quote={LINK_QUOTE} figures={[FIGURES[0], FIGURES[3]]} />
               <ResolvedTokens tokens={NESTED_INTERACTIVE_TOKENS.tint} />
@@ -497,7 +584,7 @@ export default function ProofSpecimenPage() {
         </Layout>
       </Section>
       <Section>
-        <Section surface="ink" density="tight">
+        <Section surface="ink">
           <Layout columns={{ base: 1, lg: [2, 1] }} colGap="column" rowGap="stack">
             <Proof quote={LINK_QUOTE} figures={[FIGURES[0], FIGURES[3]]} />
             <ResolvedTokens tokens={NESTED_INTERACTIVE_TOKENS.ink} />
@@ -541,24 +628,9 @@ export default function ProofSpecimenPage() {
           </p>
         </Layout>
       </Section>
-      {PROOF_SHAPES.map((shape) => (
-        <CtaSection
-          key={`split-${shape}`}
-          eyebrow={`Split · ${shape}`}
-          heading="Tell us what you are trying to ship"
-          body={[
-            'Bring the problem as it is. We will help decide what the work needs to become.',
-          ]}
-          points={[
-            { label: 'A written plan' },
-            { label: 'A named team' },
-            { label: 'A delivery window' },
-          ]}
-          form={<EnquiryForm {...CTA_FORM_PROPS} />}
-          proof={<ProofFixture shape={shape} />}
-          surface="tint"
-        />
-      ))}
+      {/* No split rows: CtaSection's split close refuses proof since cmp-cta fix round 1 (a close
+          with the full form and a proof row ran past the 830 fold), so Proof meets the CTA family
+          in the open close only. */}
       {PROOF_SHAPES.map((shape) => (
         <CtaSection
           key={`open-${shape}`}
@@ -595,8 +667,6 @@ export default function ProofSpecimenPage() {
                   value: '123456789012345678901234567890',
                   label:
                     'A deliberately long audited figure label that remains complete inside its tile',
-                  checkedOn:
-                    'checked on a deliberately verbose evidence review date that remains visible',
                 },
               ]}
             />
@@ -615,7 +685,7 @@ export default function ProofSpecimenPage() {
               </Box>
             </Specimen>
           ))}
-          {(['value', 'label', 'checkedOn'] as const).map((field) => (
+          {(['value', 'label'] as const).map((field) => (
             <Specimen key={field} title={`blank figure ${field} · valid neighbour remains`}>
               <Proof figures={[{ ...FIGURES[0], [field]: ' ' }, FIGURES[1]]} />
             </Specimen>
@@ -708,15 +778,14 @@ export default function ProofSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>15 · Portrait × client mark</h2>
+            <h2>15 · Portrait</h2>
             <p>
               The site blockquote (ch10 B2.07): italic serif behind the 6px rule, attribution
-              beneath. A portrait is small, 1:1 and radius 0, flush on the left margin under the
-              rule, with the name a bind to its right (ruling P1). Without one, the name is
-              indented onto the quote&apos;s first letter and no gap is left. The client mark
-              sits under the attribution text, one per quote, in the ground&apos;s ink
-              (ClientMark, 40px cap), and is hidden from assistive technology because the
-              company is text one line above it.
+              beneath. A portrait is small, 1:1 and radius 4 (on its own box: Media is told the
+              placement rules the edge), flush on the left margin under the rule, with the name
+              a bind to its right (ruling P1). Without one, the name is indented onto the
+              quote&apos;s first letter and no gap is left. There is no client mark: it was
+              removed on 30 Sep 2026, because the company is already named in the role line.
             </p>
           </Layout>
           <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
@@ -748,10 +817,10 @@ export default function ProofSpecimenPage() {
             </p>
           </Layout>
           <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
-            <Specimen title="long name + long role · portrait + mark">
+            <Specimen title="long name + long role · portrait">
               <Proof arrangement="compact" quote={LONG_ATTRIBUTION_QUOTE} />
             </Specimen>
-            <Specimen title="missing role · portrait + mark">
+            <Specimen title="missing role · portrait">
               <Proof arrangement="compact" quote={BRIGHTWELL_QUOTE} />
             </Specimen>
             <Specimen title="blank role string · text only">
@@ -760,16 +829,15 @@ export default function ProofSpecimenPage() {
             <Specimen title="missing role · display">
               <Proof quote={BRIGHTWELL_QUOTE} />
             </Specimen>
-            <Specimen title="one line · portrait + mark">
+            <Specimen title="one line · portrait">
               <Proof arrangement="compact" quote={FULL_QUOTE} />
             </Specimen>
-            <Specimen title="six sentences · portrait + mark">
+            <Specimen title="six sentences · portrait">
               <Proof
                 arrangement="compact"
                 quote={{
                   ...DUNMERE_SIX_SENTENCES,
                   portrait: PORTRAIT,
-                  clientMark: MARK_DUNMERE,
                 }}
               />
             </Specimen>
@@ -791,15 +859,6 @@ export default function ProofSpecimenPage() {
               <Proof
                 arrangement="compact"
                 quote={{ ...DUNMERE_QUOTE, portrait: { ...PORTRAIT, src: ' ' } }}
-              />
-            </Specimen>
-            <Specimen
-              title="mark with no dimensions"
-              note="Omitted with a warning, so the attribution has no empty row beneath it."
-            >
-              <Proof
-                arrangement="compact"
-                quote={{ ...DUNMERE_QUOTE, clientMark: { ...MARK_DUNMERE, width: 0 } }}
               />
             </Specimen>
           </Layout>
@@ -835,7 +894,8 @@ export default function ProofSpecimenPage() {
             <h2>18 · Testimonial group and stat group are compositions</h2>
             <p>
               Audit §4: a testimonial group is Proof compact × n in a Layout, and a stat group
-              is Proof display with figures only. Neither is a variant or a new unit. Here three
+              is Proof display with figures only. (Superseded for the testimonial group on 6
+              Oct: the G band is <code>arrangement=&quot;group&quot;</code>, § 19.) Here three
               compact quotes share a <code>fit</code> Layout with a gutter between them; the
               marks are one colour, the ground&apos;s ink, because together they are a set (ch05
               §10).
@@ -852,10 +912,26 @@ export default function ProofSpecimenPage() {
         </Layout>
       </Section>
 
+      <Section>
+        <Layout rowGap="block">
+          <h2>19 · The G arrangements on four surfaces</h2>
+          <p>
+            Featured, case, group and the display, identical markup on paper, tint, ink and
+            blue: every Proof token is redeclared per surface, so the quote rule, the centred
+            mark and the tag in the image’s place resolve on each. The bands themselves, at 1470
+            and 390, are proven on{' '}
+            <a href={ROUTES.designKitTestimonials}>the testimonials kit</a>.
+          </p>
+        </Layout>
+      </Section>
+      {SURFACES.map(({ surface }) => (
+        <GSurface key={`g-${surface}`} surface={surface} />
+      ))}
+
       <Section surface="tint">
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>19 · Manual checks</h2>
+            <h2>20 · Manual checks</h2>
             <p>
               Resize through 1023 and 767, point and hold both link types, Tab and Shift+Tab
               through the semantic specimen, and enable reduced motion. Proof changes no type

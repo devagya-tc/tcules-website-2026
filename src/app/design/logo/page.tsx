@@ -89,7 +89,7 @@ export default function LogoSpecimenPage() {
           and tint, at marketing scale. On ink and blue --logo-bar is the wordmark's own ink, so an
           accent there would render identically; it is not shown, so nobody reads it as an option. */}
       {SURFACES.map((surface) => (
-        <Section key={surface} surface={surface} density="tight">
+        <Section key={surface} surface={surface}>
           <Layout rowGap="block">
             <Layout rowGap="tight">
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>

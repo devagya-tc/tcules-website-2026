@@ -105,11 +105,61 @@ export const ROUTES = {
   design: '/design',
   designCtaSection: '/design/cta-section',
   designEnquiryForm: '/design/enquiry-form',
+  designKitForm: '/design/kit/form',
   designProof: '/design/proof',
+  designKitTestimonials: '/design/kit/testimonials',
+  designKitFacts: '/design/kit/facts',
   designCallout: '/design/callout',
+  designKitProcess: '/design/kit/process',
+  designSteps: '/design/steps',
+  designKitHome: '/design/kit/home',
+  designKitAbout: '/design/kit/about',
+  designKitServicesIndex: '/design/kit/services-index',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
+
+/**
+ * The site's section indexes: the pages that exist to list a family ("Services", "Case studies",
+ * "Insights"), as against a top-level page that NAMES something ("How we work", "Future Interfaces
+ * Lab", "Matter Design System").
+ *
+ * Named once, here, because the difference decides what a hero eyebrow may say. `@/lib/trail`
+ * treats Home and these crumbs as the site's structure, which an eyebrow repeats only by equalling
+ * ("Case study · Fintech" stands under Home / Case studies, a bare "Case study" does not); every
+ * other crumb is a name, which an eyebrow repeats by saying it. It used to be inferred from href
+ * depth, which counted every top-level page as structure. A new family's index joins this list in
+ * the same edit that names its route.
+ */
+export const SECTION_INDEXES: readonly string[] = [
+  ROUTES.services,
+  ROUTES.audits,
+  ROUTES.caseStudies,
+  ROUTES.expertise,
+  ROUTES.insights,
+  ROUTES.tools,
+  ROUTES.glossary,
+];
+
+/**
+ * In-page anchors, named once. A page's enquiry form is the target of every "Start a project" on
+ * it, so the id the close band carries and the fragment every action links to are one string —
+ * the ServicePage close used to wrap itself in `<div id="enquiry">` while six fixtures wrote
+ * `'#enquiry'` by hand (ServicePage audit, 6 Oct 2026).
+ */
+export const ANCHORS = {
+  enquiry: 'enquiry',
+} as const;
+
+/** The fragment href for an in-page anchor: `#enquiry`. */
+export function anchorHref(id: (typeof ANCHORS)[keyof typeof ANCHORS]): `#${string}` {
+  return `#${id}`;
+}
+
+/** The designed service page in the proving ground: `/design/service-page/<slug>`. */
+export function designServicePagePath(slug: string): string {
+  return `${ROUTES.design}/service-page/${encodeURIComponent(slug)}`;
+}
 
 /** Build one canonical audit-detail path without duplicating the route family at call sites. */
 export function auditPath(slug: string): string {

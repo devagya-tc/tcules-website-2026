@@ -224,3 +224,48 @@
   aspect-ratio: var(--lcrd-thumbnail-ratio);
 }
 
+
+/* ClientMark at its phone step inside a desktop window — the three -m sizes from client-mark.css
+   swapped in for the active ones, so the specimen can set the 390 sizes beside the desktop sizes
+   at one viewport. Specimen scaffolding: on a page the 767 query in the token file does this. */
+.cmarkPhone {
+  --cmark-target-side: var(--cmark-target-side-m);
+  --cmark-height-max: var(--cmark-height-max-m);
+  --cmark-width-max: var(--cmark-width-max-m);
+}
+
+/* An index numeral or mark in the band's blue (visual-direction § 4.2: numerals are blue at rest).
+   Pair with a typeroles class for the type; this sets the ink only, from the section's own accent
+   so it lifts on ink like every other blue mark. */
+.accent {
+  color: var(--sec-accent-ink);
+}
+
+/* Kit showcase pages (/design/kit/*): a variation's number, in the blue index voice every numbered
+   thing on the site takes (visual-direction § 4.2: markers and numerals carry the accent). Mono, so
+   it states the mono case beside its font like every mono rule.
+
+   The colour is the primitive, not Section's --sec-accent-ink: the harness does not depend on a
+   component's token layer (token rule 6). That holds because a kit caption only ever sits on
+   paper — a flush Section between two bands, or the paper PageHero — so it has no surface to follow. */
+.kitIndex {
+  font: var(--text-index);
+  letter-spacing: var(--text-index-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--color-brandeis-500);
+}
+
+/* A row that holds one control at the lg button's height, so a row of cells whose controls differ in
+   kind — a solid, a ghost, a bare link — keeps every cell's next line on one baseline (the Button
+   showcase's three kinds). Reads Button's own height token with the honesty .hitFloor takes: this IS
+   a stand-in for an lg button's box. A Cluster carries it, so the centring is the primitive's. */
+.controlRow {
+  min-block-size: var(--btn-height-lg);
+}
+
+/* A kit page's short titled note (testimonials' rulings strip): an h2 for the outline, set at the
+   h5 role because it names one point in a row of four, not a band. */
+.kitRuleTitle {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+}

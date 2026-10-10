@@ -1,5 +1,150 @@
 # CtaSection
 
+> **Owner amendment, 8 Oct 2026 — r7-buttons** (`docs/kit/review-7-oct.md`, visual-direction § 4.5,
+> `docs/specs/Button.md` § 14a). Supersedes the colour amendment below. `converts` is removed from
+> every arrangement and `@/lib/conversion` is deleted: there is no ink solid. The CLOSES (`open`,
+> `split`) carry the page's main action — `open` renders the blue solid, then at most its blue ghost
+> partner; `split`'s EnquiryForm submits with the blue solid. The mid-page **`offer` takes ONE action**
+> (`actions: readonly [CtaAction]`) and renders it as the blue link button with the arrow, because an
+> in-band action is a link ("Start with a UX Product Audit" inside a band is a link, not a button).
+
+> **Superseded 8 Oct.** ~~Owner amendment, 7 Oct 2026 — colour follows the kind of action~~ (visual-direction § 4.5,
+> `docs/specs/Button.md` § 14a). The `open` and `offer`-with-actions arrangements REQUIRE `converts:
+> boolean` (no default); the form arrangements refuse it (`converts?: never` — the submit always
+> converts and is always blue). The first action's solid is blue when it converts and ink when it does
+> not; the ghost partner is blue either way. A close almost always converts, but it is stated, not
+> assumed. CMS-fed routes pass `leadConverts(actions)` from `@/lib/conversion`.
+
+> **Amended 6 Oct 2026, final fix round (`cmp-cta`) — supersedes the notes below wherever they
+> differ; §§ 7, 8, 9 and 12 are amended in place.**
+>
+> - **⚑ The split close is top-aligned.** The copy reads down from the form's first label and the
+>   air falls at the column's foot (pinned, the points left ~110 of bare paper under the lede and
+>   the contact strip ~250). `contact` follows the copy at `stack`, no longer pinned.
+> - **⚑ `split` is `[1, 1]` from 1024 and `[10, 7]` from 1280.** At 1024 the 7-track was 356 and
+>   the form's two actions wrapped; halves give it 432. The `[10, 7]` close is recorded as an
+>   amendment to visual-direction § 3.4 L (docs/kit/brand-amendments.md, "Kit amendments").
+> - **Texture placement.** `texture` (split, open) takes `<TextureClosing />`, the `closing` recipe
+>   (src/components/Texture/TextureClosing.tsx; § 6.3 amended): a pixel equaliser that rises from
+>   the band's edge and fades. On split it fills a field a `stack` under the copy's last line, the
+>   copy column's width, to the band's bottom edge (`.textureWell` / `.textureField`), and the band
+>   goes to `density="open"`; on the centred open it is band-wide, its two flanks clear of the
+>   column (`side="both"`). Below 1024 the field dissolves and the recipe draws `horizon`.
+> - **K points are one line** (new shape `line`, the offer beside a photograph): marker and label,
+>   no detail (a detail passed there is not rendered, and warns in development). The beside offer's
+>   ruled rows and the landscape offer's strip keep their details; two-line points belong to L.
+> - **The open close's points** take the middle 4 of `[1, 4, 1]` (~784 at 1470), not the full 1240.
+> - **The second action** is `link` / `primary` with the trailing `arrow-right` — the kit's one
+>   link cue, as EnquiryForm's "See available times" and CtaRow's link rows. The solid keeps no glyph
+>   (owner, 1 Oct: "no arrow here" was the ask). Actions stack at `block` (24) everywhere,
+>   EnquiryForm's row included.
+> - **`form` on split is a `ReactElement`** (not `ReactNode`) and is tested with `isValidElement`,
+>   so `form={null}` neither compiles nor reserves the 7-track.
+> - **K photo `sizes`** go through `coverSizes` (src/lib/image-sizes.ts): the width the browser
+>   chooses by is scaled by master ratio ÷ frame ratio, so a 3:2 master in the 4:5 frame is fetched
+>   tall enough for the crop rather than upscaled ~1.4–1.7×.
+>
+> **Amended 6 Oct 2026, fix round 1 (`cmp-cta`) — the close gets its scale back; supersedes the
+> note below wherever they differ.** Every change here reaches every existing call site, and two
+> of them reverse an approved decision, so they go to the owner as deliberate changes (marked ⚑).
+>
+> - **⚑ Heading scale by arrangement.** `split` `--text-h1` (`--cta-close-heading-*`), centred
+>   `open` `--text-display` at `--measure-display` (`--cta-open-heading-*`), `offer` `--text-h2`
+>   (`--cta-heading-*`). At h2 the page's last ask weighed what a mid-page head did; the references
+>   set it at ~72 (Meridian) or as a centred display column (Quantum). Restores 29 Sep's h1 close
+>   (tracker 2.17) for split and goes one step further for open. Three classes, `.heading`,
+>   `.headingClose`, `.headingOpen`, picked in the TSX — no arrangement selector in the CSS.
+> - **⚑ `split` is `[10, 7]`** (was `[7, 5]`, and `[3, 2]` before that): copy **673**, form **471**,
+>   sized to the full form's own 470 so its fields meet the column's end edge (they stopped 7 short
+>   in 477). Stretched, with the copy's last part `pinLast`-ed: the heading sits on the form's first
+>   label and the points end on its last line (§ 3.2 rule 1).
+> - **⚑ `split` refuses `proof`** (`proof?: never`). Split + any proof ran 880–1104 at 1470 with
+>   standard copy, past the 830 fold, so the evidence goes in its own band above the close. `open`
+>   keeps `proof`, and with it keeps the left-aligned `[3, 2]` shape (h1 heading, ruled 3-up row).
+> - **⚑ `open` without proof is a centred close**: eyebrow, display heading, lede, the points as a
+>   centred 3-up row (new shape `centred`: marker above, no rule), actions centred — at
+>   `density="open"` (128), so the texture rises in its own bottom padding, not behind the actions.
+> - **New props.** `media.frame?: 'portrait' | 'landscape'` — landscape is `[5, 7]`: lede and
+>   actions centred on a 3:2 photo in 7 (`MEDIA_SPLIT_WIDE`), the points a ruled 3-up strip under
+>   both. `contact?: readonly CtaContact[]` on split (`{ label; value; href? }`, a `dl`, 1–3 cells,
+>   pinned to the copy's foot) for a close whose copy is short.
+> - **The K photo fills a frame** (`.photoFrame`, `Media fit="fill"`) whose ratio is a floor
+>   (`--cta-photo-ratio-portrait` 4/5, `-landscape` 3/2, `-stacked` 4/3 below 1024). A taller copy
+>   column stretches it, so the edge alignment holds from 1024, not only at 1440. This is the
+>   stylesheet's one `@media` (§ 9 and § 14's "zero media queries" are amended by it).
+> - **§ 7(b) / § 8 measures.** The lede (`lead`, `body`) takes `--cta-lede-measure: 44ch` (~480 at
+>   lead), not `--measure-body`: the copy is held narrower than its heading (references.md, Meridian
+>   item 4). `eyebrow` and `detail` keep `--measure-body`; the heading keeps `--measure-title`
+>   (display: `--measure-display`). The beside offer is `[5, 7]` from 1024 and `[1, 2]` from 1440, so
+>   the h2 stays within three lines at 1024.
+> - **§ 8, the offer selector.** There is none. The heading's role is chosen by class; no rule in
+>   `CtaSection.module.css` or `cta-section.css` is scoped by `[data-arrangement]`.
+> - **Texture.** The slot is unchanged (a node, rendered first in the band). The kit's `closing`
+>   placement is redrawn as a field filling the bottom padding (see `src/app/design/kit/cta`); the
+>   numbers belong in Texture's `recipes.ts` (§ 6.3), which Texture's owner has yet to create.
+
+> **Amended 6 Oct 2026 (`cmp-cta`, visual-direction § 3.4 K / L, § 1.4, § 7.1) — the kit's offer and
+> close.** This note supersedes the body below wherever they differ; the lines it names are amended
+> in place.
+>
+> - **New props.** `media?: { image: MediaImage; side?: 'start' | 'end' }` (`CtaMedia`) on the
+>   offer-with-actions member only — `never` on split, open and the offer with a form. `markers?:
+>   'number' | 'icon' | 'plain'` (`CtaPointMarker`), paired with the points in one union so
+>   `markers="icon"` requires `CtaIconPoint` (`{ label; detail?; icon: IconName }`). `texture?:
+>   ReactNode` on split and open (the closes take the `closing` placement, § 6.3), `never` on the
+>   offer (§ 4.3: K spends its solid, and its photo fills the band).
+> - **The offer, by shape.** With `media`: `[7, 5]` at `section`, copy (H-full, ≤ 3 one-line points,
+>   actions) in 667, the photo 4:5 in 477 (4:3 below 1024, after the copy), `sizes` =
+>   `MEDIA_SPLIT`; the copy column stretches to the photo and `pinLast` pins the actions to its foot
+>   when points sit between (§ 3.2 rule 1), and is centred on it otherwise; `side="start"` is
+>   `reverse={{ lg: true }}`. Without media, asking with actions: `[1, 2]`, the lede (lead at
+>   body-lg) and actions in 381, the points as ruled rows in 763 (§ 1.4 "K without a photo"). With a
+>   form: unchanged, stacked, the points as a 2- and 3-up strip.
+> - **§ 7(b) measures.** `split` is `[7, 5]` (was `[3, 2]`): content **667**, form **477**. § 3.4 L
+>   draws the close as `[5, 7]` with the form in 667; the full set's one-field rows read as stretched
+>   at 667, so the close keeps the form in 5. EnquiryForm no longer carries a measure (cmp-form, 6 Oct
+>   2026: `--enq-form-max-inline` 470 is deleted and every variant fills its track), so in 477 the
+>   form meets the band's end edge by filling the track. The
+>   offer's copy column is 667 beside media, 381 | 763 beside nothing. `open` is unchanged.
+> - **§ 8 type.** Every heading is `--text-h2` (§ 7.1: "Close: `--text-h2`"); the
+>   `[data-arrangement='offer']` remap is deleted, so § 8's "offer selector" no longer exists and the
+>   heading's size and tracking are one `:root` pair. Point labels stay `--text-h5` (approved 30 Sep;
+>   at § 7.1's h6 the 18px label sat under the 20px numeral). A ruled point's detail is
+>   `--cta-detail-reading-text: var(--text-body)` (§ 7.2: a row's body steps with the track).
+>   New tokens: `--cta-detail-reading-text`, `--cta-rule-width`, and `--cta-rule-ink` on all four
+>   surfaces (neutral 300 / 400 / 700, brandeis-300 on blue) — six inks per surface, not five.
+> - **Points, four shapes.** `stack` (beside a photo or a form), `rows` (ruled, the beside offer's
+>   body), `row` (open's 3-up, each point opened by a hairline the width of its track, the text-card
+>   top edge of § 3.1) and `grid` (the offer with a form). An `<ol>` only under `markers="number"`;
+>   icon and plain points are an offer's contents, a `<ul>`. Glyphs are `xl` (24), `--cta-marker-ink`.
+> - **Actions.** The second action is `link` / `primary`, blue at rest (§ 4.2; it was `ghost`), with
+>   `block` (24) between the two, PageHero's shape.
+> - **§ 12 row 6 holds for falsy slots.** `proof` (split, open) and `form` (offer) are tested with
+>   `present()` — `null`, `undefined`, a boolean and `''` are absent — not `!== undefined`, so
+>   `proof={false}` no longer reserves a column, a 48 seam and an empty div.
+> - **`scheduleHref`, scope of the 29 Sep amendment.** It removed the prop from CtaSection only.
+>   EnquiryForm's `enquiry` and `audit` variants require it, and that is the whole of the
+>   constraint; the cmp-cta changes do not touch it.
+
+> **Amended 5 Oct 2026 (`fdn-spacing`, visual-direction § 1.1 S5) — label → detail is `--gap-tight`.**
+> A point's label over its detail line moves from `--gap-inline` (4) to `--gap-tight` (8). `inline` is
+> a key and its value; a step name over the sentence describing it is a tight pair. The point → point
+> seam in `split` stays `--gap-block` (24, amended 29 Sep), so the bind-and-separate ratio in § 7 is
+> now 8:24 — three-fold, still enough to bind a pair and separate a row. The lede (`block` for
+> eyebrow → heading → copy) does not change: it is the rhythm `ContentSection` now adopts (S1).
+> § 7's table, its ratio paragraph and § 10's composition are amended in place; visual-direction.md
+> wins where this document still differs.
+>
+> **Audit pass, same day.** `/audit-component CtaSection` found older drift the S5 edit had walked
+> past, now amended in place: § 2's point row and § 10's compositions (a nowrap baseline `Cluster`
+> since 30 Sep, not a two-track `Layout`), § 7's halves seam and the tracks measured from it
+> (`--gap-section` 96 since 1 Oct: content 686, form/proof 458, not 706/470), § 8's marker role
+> (`--text-index`) and the `offer` heading's key (`[data-arrangement='offer']`), and § 10's `open`
+> primary action (no glyph since 1 Oct). The point's label-and-detail wrapper is a `<div>`, not a
+> `<span>`: it holds a `Layout`, and a div inside a span is invalid HTML. Later sections that quote
+> 706 or 470 as an aside (§ 4's rejected variants, § 12, § 15, § 17) predate 1 Oct and read ~20 and
+> ~13px wide; no conclusion drawn from them changes.
+
 > **Amended 29 Sep 2026 (tracker 2.17) — `scheduleHref` removed.** "See available times" moved into
 > `EnquiryForm`'s own action row, beside its submit (see `docs/specs/EnquiryForm.md`, amendment at
 > the top). `CtaSection` no longer takes `scheduleHref` or renders the link; the `form` members of
@@ -15,7 +160,7 @@
 |---|---|
 | **Component** | `CtaSection` |
 | **Tier** | 2 pattern (`src/patterns/CtaSection/`) |
-| **Status** | implemented |
+| **Status** | implemented (amended 6 Oct 2026, cmp-cta) |
 | **Token prefix** | `--cta-*` (collides with none of `--btn-` `--crumb-` `--foot-` `--icn-` `--lay-` `--logo-` `--nav-` `--prose-` `--sec-`) |
 | **Designer / date** | Design · 21 Aug 2026 |
 | **Implements** | COMPONENT NAME: CtaSection — the block that closes a commercial page. 76 routes, 113 instances |
@@ -25,11 +170,25 @@ Composed and checked against the loaded Tcules library (`window.Tcules`, 10 real
 
 **Amended 29 Sep 2026 (tracker 2.17):** three changes, all recorded in place below. (1) In `split` and `offer` a point is a two-track `Layout` row — marker track, label track — never a wrapping `Cluster`, and `offer`'s list is a `Layout` grid (`{ base: 1, md: 2, lg: 3 }`), not a wrapping row: the `Cluster` let a numeral wrap onto its own line above its label at 390 and let a second row of six points disagree with the first about where labels start. (2) Points have a shape: `label` at `--text-h5` (serif title voice), `marker` at `--text-stat` (mono numeral). `split`'s point-to-point seam steps from `--gap-text` to `--gap-block` with them. (3) The close's heading is set at `--text-h1` in `split` and `open`, paired with `PageHero` moving to display scale so the ladder holds, and `offer`'s steps from `--text-h3` to `--text-h2` — still one rung below the close, and no longer smaller than its own 40px numerals. The element is an `h2` throughout.
 
+**Amended 30 Sep 2026 (owner):** the marker drops from `--text-stat` (40) to `--text-index` (20) —
+the numerals out-shouted the close's heading and its form. With a 20px marker the two-track row is
+replaced by a non-wrapping `Cluster` (`nowrap`, `colGap="text"`, `align="baseline"`): it cannot
+orphan the numeral, and two mono digits are a constant width, so labels still start on one line.
+
 **Two findings, before the form starts.**
 
 **One.** The eleven arrangements are **three**, and the three are not three densities of one shape — they are one slot set with three different jobs on the page. `split` closes a page that asks for an enquiry (56 routes). `open` closes a page that asks for a click (20 routes). `offer` interrupts a page mid-scroll with the free audit (37 routes). Everything else on the resolution sheet is one of those three with a slot filled or empty, and section 4 lays the eight rejections out against their page counts.
 
 **Two.** `Stat` and `Testimonial` should not both be built. The proof slot holds one thing — a **`Proof`** pattern with a `figures` slot and a `quote` slot, either of which may be empty — because `/how-we-work` and `/clients` already put the 4.8/5 rating, the review themes and a client quote in one block, and two components cannot render one block. Section 1 specifies the three together, as the brief requires, and section 3 says why `CtaSection` still takes it as a `ReactNode` rather than as a typed union: a pattern may not import a pattern, so a typed union would name a component this one is forbidden to render.
+
+
+> **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
+
+> **Owner amendment, 7 Oct 2026 — pairing and arrows** (`docs/specs/Button.md` § 14a). The second
+> action is now `ghost` / `primary` with the trailing `arrow-right`; the first stays `solid` / `primary`
+> and never carries an arrow. A link button is never the partner beside a solid. Rows below that
+> describe the second action as a link (its label line, its 44 hit area as the whole target) are
+> superseded: the partner is a 40 box like the solid, with `extendHitArea` covering the missing 4.
 
 ## 1 · Identity
 
@@ -80,7 +239,7 @@ Section 17 Q3 carries that recommendation as a question addressed to briefs 15 a
 | `lead` | `<p>` — the first paragraph | yes | `body[0]`, verbatim | `--cta-body-ink`, `--cta-lead-text`, `--measure-body` |
 | `body` | `<p>` — the second paragraph | no | `body[1]`, verbatim | `--cta-body-ink`, `--cta-body-text`, `--measure-body` |
 | `points` | `<ol>`, a `Layout` — single-track in `split`, `columns={{base:1,md:3}}` in `open`, `columns={{base:1,md:2,lg:3}}` in `offer` (amended 29 Sep 2026; was a `Cluster`) | no | none | both seams between points |
-| `point` | `<li>`, a two-track `Layout` in `split` (`{base:[1,4], md:[1,8]}`) and `offer` (`{base:[1,4]}`), a single-track `Layout` in `open` (amended 29 Sep 2026; was a `Cluster`) | one per entry | none | the seam between `marker`, `label` and `detail` |
+| `point` | `<li>`, a nowrap `Cluster` with `colGap="text"` and `align="baseline"` in `split` and `offer` (amended 30 Sep 2026; it was a two-track `Layout`, `{base:[1,4], md:[1,8]}`), a single-track `Layout` in `open`; the label and detail sit in one `<div>` that grows from a zero basis beside the marker | one per entry | none | the seam between `marker`, `label` and `detail` |
 | `marker` | `<span aria-hidden>` — the position numeral | one per `point` | none — the component writes it from the index | `--cta-marker-ink`, `--cta-marker-text`, `--cta-marker-tracking` |
 | `label` | `<span>` | one per `point` | `points[n].label`, verbatim | `--cta-point-ink`, `--cta-point-text`, `--cta-point-tracking` |
 | `detail` | `<span>` | no | `points[n].detail`, verbatim | `--cta-point-ink`, `--cta-detail-text`, `--measure-body` |
@@ -98,9 +257,9 @@ Five parts carry colour (`eyebrow`, `heading`, `lead` and `body` together on one
 type CtaPoint  = { label: string; detail?: string }
 type CtaAction = { label: string; href: string }
 
-type CtaFormSlot =
-  | { form: ReactNode; scheduleHref: string; actions?: readonly [] }
-  | { form?: never;    scheduleHref?: never; actions: readonly [CtaAction] | readonly [CtaAction, CtaAction] }
+type CtaFormSlot =   // amended 29 Sep: no scheduleHref — EnquiryForm owns "See available times"
+  | { form: ReactNode; actions?: readonly [] }
+  | { form?: never;    actions: readonly [CtaAction] | readonly [CtaAction, CtaAction] }
 ```
 
 | Prop | Exact literal union | Default | What it decides |
@@ -110,11 +269,15 @@ type CtaFormSlot =
 | `body` | `readonly [string] \| readonly [string, string]` | none — required | One or two paragraphs. `body[0]` renders as `lead`, `body[1]` as `body`. A third paragraph does not compile — this block asks, it does not explain |
 | `eyebrow` | `string \| undefined` | `undefined` | Whether the `eyebrow` part exists. Absent renders no element and no seam |
 | `points` | `readonly CtaPoint[]` | `[]` | What happens next, in order. Empty renders no `<ol>` at all. Order is meaning, which is why it is an ordered list and why `marker` is an index rather than a glyph |
-| `actions` | see `CtaFormSlot` | `[]` | Nought, one or two controls. Position decides emphasis: the first is `solid` / `primary` with `arrow-right`, the second is `ghost` / `neutral` with no glyph |
+| `actions` | see `CtaFormSlot` | `[]` | Nought, one or two controls. Position decides emphasis: the first is `solid` / `primary`, the second `link` / `primary` (amended 6 Oct 2026, cmp-cta; was `ghost` / `neutral`). Neither carries a glyph (1 Oct 2026, owner: the first used to take `arrow-right` by position, so the same action looked different here than in the hero and the nav) |
 | `form` | `ReactNode` (in `CtaFormSlot`) | `undefined` | Whether the block asks in place or asks by link. Present in 56 of 113 instances |
-| `scheduleHref` | `string` (required when `form` is present) | none | Where "See available times" goes. Required by the type whenever a form is rendered, which is the mechanism for the hard constraint that all 56 form instances carry it |
-| `proof` | `ReactNode` | `undefined` | The `Proof` block. Full-width row beneath `frame` in `split`; the right-hand column in `open`; a compile error in `offer` |
+| `proof` | `ReactNode` | `undefined` | The `Proof` block. The right-hand column in `open`; a compile error in `offer` and, since fix round 1, in `split` |
+| `media` | `CtaMedia` (`{ image; side?; frame? }`) | `undefined` | The K offer's photograph — offer with actions only |
+| `markers` | `'number' \| 'icon' \| 'plain'` | `'number'` | The points' marker; `icon` requires a glyph on every point |
+| `contact` | `readonly CtaContact[]` | `undefined` | `split` only: the contact strip at the copy's foot |
+| `texture` | `ReactNode` | `undefined` | `split` and `open` only: a `<Texture>`, the band's first child |
 | `surface` | `'paper' \| 'tint' \| 'ink' \| 'blue'` | `'paper'` | Which ground `Section` paints under this band. Passed straight through and read nowhere else in the component |
+| `id` | `string` | — | The band's id, passed to `Section`: the in-page anchor a page's actions link to (the close's `ANCHORS.enquiry`, `src/lib/routes.ts`). On the band itself, never a wrapper `div` (ServicePage audit, 6 Oct 2026). Distinct from the generated heading id that names the region |
 
 **`surface` is a pass-through prop, and that is not the same thing as owning the ground.** The rule says `surface` is never a prop, and it is right for everything that stands inside a band: a `Button` three levels down reads `data-surface` and is correct without being told. This component **is** the band. It has no ancestor that declares a surface, so there is nothing to inherit and the value must arrive as a prop — the same conclusion `Breadcrumbs` and `PageHero` reached, so this is a precedent followed rather than one set. What the hard constraint forbids is the component painting anything: `CtaSection.module.css` contains no `background`, no `color` on the root, no `padding-inline`, no `max-width` and no `--cta-*-bg-*` token, so the ground is `--sec-ground` and nothing else. Section 14 item 8 names the grep. Section 17 Q5 records the stricter reading of the constraint and why it is not the one taken.
 
@@ -126,7 +289,7 @@ type CtaFormSlot =
 | `formKind` — `'project' \| 'audit'` | The label set that switches with the form kind belongs to the form (brief 09), which is the thing whose labels they are. `CtaSection` renders a `ReactNode` and cannot inspect it; a `formKind` here would be a second copy of the same fact, and the day the two disagreed the page would render an audit form under project-enquiry framing. The section's own copy switches because the frontmatter passes different strings |
 | `density`, `padding`, `compact` | `arrangement="offer"` sets `Section density="tight"` internally and the other two take the default. Three shapes, three densities, decided once — a route that wanted 64px of air under a closing block is asking for the mid-page shape |
 | `columns`, `ratio`, `reverse`, `formSide` | The content-left / form-right default is a decision, not a setting. A route that wanted the form on the left would put the form on the left on one page out of 56, and the constraint is that the drift is visible on whichever page the visitor sees second |
-| `headingLevel`, `as`, `titleAs` | The heading is an `h2` in all three arrangements. `split` and `open` render it at `--text-h1` scale and `offer` at `--text-h2` (amended 29 Sep 2026; were `--text-h2` and `--text-h3`), which is a type role and not a level — section 17 Q4 raises that as the open question the tier rules require, because there is no `Heading` component to ask |
+| `headingLevel`, `as`, `titleAs` | The heading is an `h2` in all three arrangements, rendered at `--text-h1` in `split`, `--text-display` in the centred `open` and `--text-h2` in `offer` (fix round 1, 6 Oct 2026), which is a type role and not a level — section 17 Q4 raises that as the open question the tier rules require, because there is no `Heading` component to ask |
 | `variant="withForm" \| "withoutForm"` | The hard constraint, as a type. The presence of the form slot is the difference; naming it a variant is the first step to two components |
 | `showProof`, `proofPosition` | Proof's presence is its content's presence, and its position is a consequence of the arrangement. A position prop would let one route put proof in the column while 112 put it in the row |
 | `lazy`, `loadForm`, `onSubmit` | Loading is not in the state model and nothing here is asynchronous. The scheduling secondary is an anchor to `scheduleHref`; the booking widget lives on that route and therefore cannot load with this block. That is what "lazy" means here, and it needs no mechanism |
@@ -134,7 +297,7 @@ type CtaFormSlot =
 
 **Compile errors, not review comments**
 
-1. **A form with no scheduling link.** `CtaFormSlot`'s first member requires `scheduleHref`. The hard constraint is that all 56 form instances carry "See available times"; this is that constraint as a type rather than as a review.
+1. ~~**A form with no scheduling link.**~~ Moved 29 Sep 2026: EnquiryForm's `enquiry` and `audit` variants require `scheduleHref`, which is where the 56-instance constraint now lives.
 2. **A form with its own `actions`.** The same member allows only the empty tuple. The form's submit is the primary ask; a second primary beside it is two asks in one block.
 3. **No form and no actions.** The second member requires at least one action. A closing block that asks for nothing is a block with no reason to exist.
 4. **Three or more actions.** The union has a 1- and a 2-tuple and no third member.
@@ -165,13 +328,13 @@ table is corrected to match the type rather than the type to the table.
 | | `split` (56) | `open` (20) | `offer` (37) |
 |---|---|---|---|
 | `eyebrow` | optional | optional | optional |
-| `heading` | `--text-h1`, always | `--text-h1`, always | `--text-h2`, always |
+| `heading` | `--text-h2`, always (was `--text-h1` until 6 Oct) | `--text-h2`, always (was `--text-h1`) | `--text-h2`, always |
 | `lead` + `body` | 1–2 | 1–2 | 1–2 |
 | `points` | vertical list, content column | 3-up row — ~214px tracks beside proof, 392px without it | 1-up, 2-up from md, 3-up from lg — 392px tracks at 1440 |
 | `actions` | the scheduling link only, under the form | 1–2, under the points | **1 or 2**, under the points |
 | `form` | required, right column | forbidden | optional, under the copy |
 | `proof` | optional, full-width row | optional, right column; absent → no column | forbidden |
-| band | `--sec-padding-y` 96px | `--sec-padding-y` 96px | `--sec-padding-y-tight` 64px |
+| band | `--sec-padding-y` 96px | `--sec-padding-y` 96px | `--sec-padding-y` 96px |
 
 No row differs in **slot set**. Every difference is a position, a type role or a density — which is the hard constraint that eleven arrangements must not be eleven builds, satisfied by making them one build with three positions for four slots.
 
@@ -251,33 +414,49 @@ Every ratio is text against **the ground it actually sits on**, which here is al
 | `eyebrow` → `heading` → `copy` | `--gap-block` | `lede`'s `rowGap` — head to body inside a block, the most used step |
 | paragraph → paragraph | `--gap-text` | `copy`'s `rowGap` |
 | `lede` → `points` → `actions` | `--gap-stack` | `column`'s `rowGap` — block to block inside a section |
-| content column → form column (`split`), content column → proof column (`open`) | `--gap-column` | `frame`'s `colGap` — the step for two halves that must read as separate. Not stated in `open` without proof: one track has no column seam |
+| content column → form column (`split`), content column → proof column (`open`) | `--gap-section` (96; `--gap-column` until 1 Oct) | `frame`'s `colGap` — the step for two halves that must read as separate. Not stated in `open` without proof: one track has no column seam |
 | the columns when `frame` wraps at 1023 | `--gap-stack` | `frame`'s `rowGap` |
 | `frame` → full-width `proof` row (`split`) | `--gap-stack` | `stack`'s `rowGap` |
 | point → point, vertical list (`split`) | `--gap-block` | `points`' `rowGap`. Amended 29 Sep 2026 from `--gap-text`: at 16 a 40px numeral sat nearer the next step's numeral than its own detail |
 | point → point, 3-up row (`open`) | `--gap-gutter` both axes | `points`' `colGap` and `rowGap` — the step between cards in a set, which is what a 3-up row of steps is |
 | point → point, grid (`offer`) | `--gap-gutter` both axes | `points`' `Layout` `colGap` and `rowGap` — the same step as `open`'s, cards in a set. Amended 29 Sep 2026 from a `Cluster` at `--gap-block` |
-| `marker` → `label` (`split`, `offer`) | `--gap-tight`, plus the marker track's slack | `point`'s `Layout` `colGap` — icon-to-label distance, and a numeral is an icon made of type. The marker's track is an fr share (`[1,4]`, or `[1,8]` in `split` from md) sized to land at 64–106px at every width, wide enough for a two-digit `--text-stat` numeral (≈48px at 40, ≈38px at 32). A track cannot wrap, so the numeral cannot orphan, and every point in one list takes the same share of the same track width, so every label starts on one line — including a second row of `offer` points under the first |
+| `marker` → `label` (`split`, `offer`) | `--gap-tight`, plus the marker track's slack | Superseded 30 Sep 2026: now `--gap-text` in a nowrap `Cluster`, no marker track. Was: `point`'s `Layout` `colGap` — the marker's track was an fr share (`[1,4]`, or `[1,8]` in `split` from md) sized to land at 64–106px at every width, wide enough for a two-digit `--text-stat` numeral (≈48px at 40, ≈38px at 32). A track cannot wrap, so the numeral cannot orphan, and every point in one list takes the same share of the same track width, so every label starts on one line — including a second row of `offer` points under the first |
 | `marker` → `label` (`open`, stacked) | `--gap-tight` | `point`'s `Layout` `rowGap` |
-| `label` → `detail` | `--gap-inline` | the inner `Layout`'s `rowGap` — a key and its value, which is what a step and its explanation are |
-| action → action, both axes | `--gap-tight` | `actions`' `colGap` and `rowGap` |
-| the band's vertical air, `split` and `open` | `--sec-padding-y` (96px) | `Section` at its default density. Not this component's to set |
-| the band's vertical air, `offer` | `--sec-padding-y-tight` (64px) | `Section density="tight"` |
+| `label` → `detail` | `--gap-tight` (was `--gap-inline` until 5 Oct, S5) | the inner `Layout`'s `rowGap` — a label over its description is a tight pair, not a key and its value |
+| action → action, both axes | `--gap-block` (24; `--gap-tight` until cmp-cta) | `actions`' `colGap` and `rowGap` — the same step when they stack, in every arrangement and in EnquiryForm's own row (final fix round) |
+| copy → texture field, `split` with `texture` | `--gap-stack` (48) | `.textureField`'s block-start inset: the clearance between the copy's last line and the equaliser |
+| the band's vertical air, `split` | `--sec-padding-y` (96px; one value per width, owner 7 Oct 2026) | `Section`'s density, chosen by whether a texture is passed |
+| the band's vertical air, `open` | `--sec-padding-y` (96px) | `Section`'s density |
+| the band's vertical air, `offer` | `--sec-padding-y` (96px) | `Section` (no density; owner 7 Oct 2026) |
 | `root` → whatever precedes or follows it | none | **the page**, by ordering its bands. `CtaSection` sets no outer spacing |
 
-Seven of the nine steps, and the non-uniform rhythm comes entirely from nesting rather than from a knob: 4 inside a point, 8 beside a numeral, 16 between paragraphs and between list rows, 24 inside the lede, 32 between the cards of a step row, 48 between blocks, 64 between the halves. Tighten by grouping, loosen by separating — which is why `stack`, `frame`, `column`, `lede` and `copy` all exist as parts even though none renders anything visible. They are the five levels the rhythm needs.
+The non-uniform rhythm comes entirely from nesting rather than from a knob: 8 inside a point (label to detail, S5), 16 beside a numeral and between paragraphs, 24 inside the lede and between `split`'s steps, 32 between the cards of a step row, 48 between blocks, 96 between the halves (the split seam, 1 Oct 2026; it was 4 inside a point, 8 beside a numeral and 64 between the halves). Tighten by grouping, loosen by separating — which is why `stack`, `frame`, `column`, `lede` and `copy` all exist as parts even though none renders anything visible. They are the five levels the rhythm needs.
 
-**`--gap-column` between the halves, not `--gap-gutter`.** 32px between a paragraph of copy and a form field reads as one dense two-column block, and the reader's eye runs the wrong way across it — from the end of a sentence into a field label. 64px is the step the vocabulary names for two halves that must read as separate, and separate is exactly what these are: one asks, the other answers. It also costs the form 21px of track and gains the copy nothing, which is the trade being made deliberately.
+**`--gap-section` between the halves, not `--gap-gutter` (amended 1 Oct 2026; it was `--gap-column`).** 32px between a paragraph of copy and a form field reads as one dense two-column block, and the reader's eye runs the wrong way across it — from the end of a sentence into a field label. The copy and the form are two regions of different kind side by side — one asks, the other answers — which is a *split*, and a split takes 96 (CLAUDE.md § gap scale). 64 is for peer halves only. It costs the form about 13px of track against the 64 it replaced, which is the trade being made deliberately.
 
-**The points in `split` are the brief's open question, answered by the ratio rather than by a shape.** In a 706px column, a numeral 8px from its label with 4px to a detail line under it and 16px to the next step reads as a numbered sequence with no rule, no dot and no bullet character. The 4:16 ratio does the same work `SiteFooter` gets from its meta-key tracking: a four-fold difference is enough to bind a pair and separate a row. That is why the narrow column does not need the 3-up row's 32px, and why the answer is one `rowGap` value rather than a second arrangement.
+**The points in `split` are the brief's open question, answered by the ratio rather than by a shape.** In a 706px column, a numeral 16px beside its label (`--gap-text`, a nowrap `Cluster` since 30 Sep), with 8px to a detail line under it (`--gap-tight`, S5, 5 Oct 2026) and 24px to the next step (`--gap-block`, 29 Sep), reads as a numbered sequence with no rule, no dot and no bullet character. The 8:24 ratio does the same work `SiteFooter` gets from its meta-key tracking: a three-fold difference is enough to bind a pair and separate a row. (It was 4:16 — four-fold — before both seams moved; the ratio narrowed and the argument did not change.) That is why the narrow column does not need the 3-up row's 32px, and why the answer is one `rowGap` value rather than a second arrangement.
 
 **(b) Component sizes — t-shirt named, each measured against something real**
 
+**As built, 6 Oct 2026 (final fix round).** These are the tracks the measures below now sit in, at
+1470 (the column is 1240 from 1304). The table after this one is the 1 Oct record against `[3, 2]`
+and is kept for its arithmetic; where the two differ, this one holds.
+
+| Arrangement | Tracks | At 1470 | Notes |
+|---|---|---|---|
+| `split` from 1280 | `[10, 7]` at `section` 96 | copy **673** · form **471** | the 7 is sized to the full form's own 470 (`--enq-form-max-inline`) |
+| `split` 1024–1279 | `[1, 1]` | 432 · 432 at 1024 | the form's submit and its link fit one row |
+| `open` centred | one track; points in the middle 4 of `[1, 4, 1]` at `gutter` | points track **784**, each point 240 | heading at `--measure-display`, lede at 44ch |
+| `open` with proof | `[3, 2]` | 686 · 458 | unchanged |
+| `offer` + portrait photo | `[7, 5]` | copy **667** · photo **477** (4:5, a floor) | 4:3 under the copy below 1024 |
+| `offer`, no photo | `[5, 7]` from 1024, `[1, 2]` from 1440 | head **381** · body **763** | H-beside-actions |
+| lede (`lead`, `body`) | `--cta-lede-measure` 44ch | ≈ 480 at lead, ≈ 430 at body-lg | held narrower than the heading |
+
 | Name | Value | Measured against |
 |---|---|---|
-| `content` track, `split` and `open` with proof | **706px** | `--sec-container` 1240px less `--gap-column` 64px, at `columns={[3,2]}`: 1176 × 3/5 = 705.6. Every measure in this component was measured against this track, not against the 1240 column |
-| `form` track, `split`; `proof` track, `open` | **470px** | the same arithmetic, 1176 × 2/5 = 470.4. It is 214px wider than `--foot-field-min-inline` 256px, so a two-field row inside the form still fits — which is the reason the ratio is 3:2 and not 2:1 |
-| `point` track, `open` | **392px** without proof · **~214px** with it | without proof the frame is one track, so the 3-up row divides the whole 1240 content column less two `--gap-gutter` 32px: (1240 − 64) / 3 = 392, the brief's own figure. With proof it divides the 706 track: (706 − 64) / 3 ≈ 214. Below 1024 both are the same full-column 3-up shape, ≈298px at 1023, until it drops at 767 |
+| `content` track, `split` and `open` with proof | **686px** (706 before 1 Oct) | `--sec-container` 1240px less `--gap-section` 96px, at `columns={[3,2]}`: 1144 × 3/5 = 686.4. Every measure in this component was measured against this track (then 706, with `--gap-column`), not against the 1240 column |
+| `form` track, `split`; `proof` track, `open` | **458px** (470 before 1 Oct) | the same arithmetic, 1144 × 2/5 = 457.6. It is 202px wider than `--foot-field-min-inline` 256px, so a two-field row inside the form still fits — which is the reason the ratio is 3:2 and not 2:1 |
+| `point` track, `open` | **392px** without proof · **~214px** with it | without proof the frame is one track, so the 3-up row divides the whole 1240 content column less two `--gap-gutter` 32px: (1240 − 64) / 3 = 392, the brief's own figure. With proof it divides the 686 track: (686 − 64) / 3 ≈ 207 (≈214 in the 706 track before 1 Oct). Below 1024 both are the same full-column 3-up shape, ≈298px at 1023, until it drops at 767 |
 | `heading` measure | `--measure-title`, 22ch ≈ **473px** at `--text-h2` | the 706px content track. The heading takes 67% of its track and wraps to two or three lines, which is the shape a closing ask should have — a one-line heading in a 706px track reads as a section label |
 | `copy` measure | `--measure-body`, 68ch ≈ **748px** at `--text-lead` | the same 706px track, which it exceeds and therefore goes inert. Stated because a reviewer will find it: the measure is there for `offer`, whose copy runs the full 1240px column and needs the cap |
 | `detail` measure | `--measure-body`, 68ch ≈ **535px** at `--text-body-sm` | the 392px (or ~214px) `open` point track, which it exceeds and goes inert, and the 1240px `offer` row, where it is the only thing stopping a detail line running the full band |
@@ -286,13 +465,13 @@ Seven of the nine steps, and the non-uniform rhythm comes entirely from nesting 
 
 Eight values, of which three are declared and five are computed consequences stated so a reviewer can check them.
 
-**Which track this component was measured against:** the **706px** content track of `columns={[3,2]}` inside `--sec-container` 1240px with `--gap-column` 64px between the halves. Not the 1240px column, and not the three-up point track except where 7(b) names it for `open`'s points.
+**Which track this component was measured against:** the **706px** content track of `columns={[3,2]}` inside `--sec-container` 1240px with `--gap-column` 64px between the halves — **686px** since the 1 Oct split seam (96). The measures are `ch` caps, so none of them moved; only the track they sit in narrowed by 20px. Not the 1240px column, and not the three-up point track except where 7(b) names it for `open`'s points.
 
 **`open` without proof is one track, and it needs no new measure.** The frame reserves a second track only when `proof` is passed — the same idiom as `Proof`'s `columns={both ? 'fit' : undefined}` — because a 3:2 frame with an empty right-hand track left the 470px proof track (534 with its gap) as dead ground at 1440 on ten of the eleven `open` routes (tracker 2.4). The one-track frame does not let the ask run to 1240: the heading keeps `--measure-title` (≈473px), and `body` (≈673px) and `detail` (≈535px) keep `--measure-body` at the widths they had. The one running part that grows is the `lead`: 68ch at `--text-lead` is ≈748px, which the 706 track used to clamp, and it now renders at its own measure. That is accepted rather than corrected — 748 is the body measure doing its job, not a new width, and inventing a narrower lead measure for one arrangement would be a second answer to one question. Only the points row takes the full column, as three 392px tracks, which is the same full-column 3-up shape `open` has always had between 768 and 1023. So the band reads as a capped statement over a wide sequence of steps, and the empty column is gone rather than filled.
 
 **(c) Optical corrections reaching the space ramp — none, and why**
 
-**Amended 29 Sep 2026:** the marker is now `--text-stat` (40px, line-height 1) beside a `--text-h5` label (22px), and the row is a `Layout` with `align="start"` — the two share a top edge, not a baseline, and the numeral's cap top sits within a few pixels of the label's. The correction below stays declined for the same reason, and its sizes are historical. There is a real correction available and this spec declines it. Geist Mono's numerals at `--text-micro` sit a fraction above the baseline of Public Sans at `--text-body`, so in `split` and `offer` a numeral and its label do not quite share a baseline; `align="baseline"` on the `point` `Cluster` fixes the alignment but not the optical rise, and pulling the marker down by `--space-1` would. It is declined because the numeral is 11px against a 16px label and the rise is under a pixel at the sizes that ship — a correction that small is a value someone will later read as a layout distance in disguise, which is the failure mode the justification-sentence rule exists to catch. It is also the wrong axis: if the numerals ever look wrong it will be in `open`, where they sit *above* their labels and the correction would not apply at all.
+**Amended 30 Sep 2026:** the marker is `--text-index` (≈20px) and the row is a nowrap `Cluster` with `align="baseline"`, so the numeral sits on the label's first baseline and the paragraph below is history. **Amended 29 Sep 2026:** the marker is now `--text-stat` (40px, line-height 1) beside a `--text-h5` label (22px), and the row is a `Layout` with `align="start"` — the two share a top edge, not a baseline, and the numeral's cap top sits within a few pixels of the label's. The correction below stays declined for the same reason, and its sizes are historical. There is a real correction available and this spec declines it. Geist Mono's numerals at `--text-micro` sit a fraction above the baseline of Public Sans at `--text-body`, so in `split` and `offer` a numeral and its label do not quite share a baseline; `align="baseline"` on the `point` `Cluster` fixes the alignment but not the optical rise, and pulling the marker down by `--space-1` would. It is declined because the numeral is 11px against a 16px label and the rise is under a pixel at the sizes that ship — a correction that small is a value someone will later read as a layout distance in disguise, which is the failure mode the justification-sentence rule exists to catch. It is also the wrong axis: if the numerals ever look wrong it will be in `open`, where they sit *above* their labels and the correction would not apply at all.
 
 So the component reaches into `--space-*` nowhere, and it carries **no margin on any node**, which keeps layout rule 2 intact with zero exceptions. `Prose`'s documented margin exception applies only inside a `Prose`, which this component renders only if the caller puts one in a slot.
 
@@ -309,22 +488,23 @@ So the component reaches into `--space-*` nowhere, and it carries **no margin on
 | Part | Role | Tracking companion |
 |---|---|---|
 | `eyebrow` | `--cta-eyebrow-text: var(--text-eyebrow)` | `--text-eyebrow-tracking` |
-| `heading`, `split` and `open` | `--cta-heading-text: var(--text-h1)` | `--text-h1-tracking` |
+| `heading`, `split` and `open` with proof (fix round 1) | `--cta-close-heading-text: var(--text-h1)` | `--text-h1-tracking` |
+| `heading`, centred `open` (fix round 1) | `--cta-open-heading-text: var(--text-display)`, measure `--measure-display` | `--text-display-tracking` |
 | `heading`, `offer` | `--cta-heading-text: var(--text-h2)` | `--text-h2-tracking` |
 | `lead` | `--cta-lead-text: var(--text-lead)` | none — this role has no tracking companion |
 | `body` | `--cta-body-text: var(--text-body-lg)` | none — this role has no tracking companion |
 | `label` | `--cta-point-text: var(--text-h5)` | `--cta-point-tracking: var(--text-h5-tracking)`; `text-wrap: var(--text-title-wrap)` |
 | `detail` | `--cta-detail-text: var(--text-body-sm)` | none — this role has no tracking companion |
-| `marker` | `--cta-marker-text: var(--text-stat)` | `--text-stat-tracking`; `text-transform: var(--text-mono-case)` |
+| `marker` | `--cta-marker-text: var(--text-index)` (30 Sep 2026; was `--text-stat`) | `--text-index-tracking`; `text-transform: var(--text-mono-case)` |
 | `actions` | — | `Button` owns it, through `--btn-text-tracking` |
 
-`--cta-heading-text` is one token re-declared under the `offer` arrangement's own class, which is the component layer doing what it is for: one name, one meaning — "the size this block's heading is" — with a different answer in one arrangement. It is not a second token and it is not a media query.
+**There is no offer selector (6 Oct 2026).** Each heading scale is its own class picked in the TSX — `.heading` (`offer`, h2, `--cta-heading-*`), `.headingClose` (`split` and `open` with proof, h1, `--cta-close-heading-*`), `.headingOpen` (centred `open`, display, `--cta-open-heading-*`) — so no rule in `CtaSection.module.css` or `cta-section.css` is scoped by `[data-arrangement]`, and each role and its tracking are one `:root` pair. (Until 6 Oct `--cta-heading-text` was re-declared under `[data-arrangement='offer']`; fix round 1 briefly made every arrangement h2, then gave the closes their own pairs.)
 
 **Three families in one band, and that is the design.** The heading and the point labels are display serif, the copy and the point details are sans, the eyebrow and the numerals are mono (amended 29 Sep 2026: the labels were sans). A CTA built from one family has to earn its structure from rules and boxes, which section 2 refused; a CTA with three families gets it from the type. Squint at `split` and it reads as four things — a big serif ask, a grey paragraph, a numbered sequence in two sizes, and a form — not as one rectangle.
 
 **Why the lead and the body are different roles.** `body[0]` at `--text-lead` (20px) and `body[1]` at `--text-body-lg` (18px) gives the copy an internal hierarchy without a prop and without a count-driven rule the caller cannot see. The 18px matters as much as the 20px: the page's `Prose` runs at `--text-body` (16px), so this block's paragraphs stay above body scale and continue to read as an ask rather than as one more section of the article. ~~The points sit *at* 16px deliberately.~~ **Amended 29 Sep 2026:** the points no longer sit at body scale. At 16px sans with an 11px numeral they read as a paragraph with digits in front, and the list is the one part of the band that can give each step a shape; the label is now a `--text-h5` title and the numeral a `--text-stat` mark, and only the `detail` stays at `--text-body-sm`, one clear rung under a 22px step name.
 
-**Measure.** `heading` takes `--measure-title`. `lead`, `body`, `eyebrow` and `detail` take `--measure-body`. `label` takes none: a point label is a phrase of three to six words and the list's track caps it. Section 7(b) records which of those measures are inert in which arrangement, which is a consequence worth having written down rather than a fault.
+**Measure.** `heading` takes `--measure-title` (`--measure-display` in the centred open). `lead` and `body` take `--cta-lede-measure` (44ch, fix round 1: the copy held narrower than its heading); `eyebrow` and `detail` take `--measure-body`. `label` takes none: a point label is a phrase of three to six words and the list's track caps it. Section 7(b) records which of those measures are inert in which arrangement, which is a consequence worth having written down rather than a fault.
 
 **Case — settled by the token layer. Amended 25 Aug 2026:** mono is always uppercase system-wide (`tokens/primitives.css` § Type · case), so the `eyebrow` and the `marker` — this component's two mono parts — both read `text-transform: var(--text-mono-case)`, and there are two `text-transform` declarations rather than one. The `eyebrow` renders **uppercase**. `--text-eyebrow` is mono semibold with tracking on it, and tracking that wide exists for capitals: set lower-case, a tracked mono label reads as letter-spaced body text rather than as a label — which is why the case belongs to the role and not to this block. The `marker` is a numeral and has nothing for the transform to do; it states it anyway, so the omission never has to be read as a decision. Everything else — heading, copy, points, actions — is **verbatim**, and the transform is applied in CSS rather than in the data, so the frontmatter keeps its authored casing and reversing this is one declaration.
 
@@ -340,11 +520,11 @@ Numerals render two-digit and zero-padded (`01`, `02`, `03`) rather than `1.` �
 
 ## 9 · Responsive
 
-**At 1023 — `frame` collapses and nothing else changes.** `columns={{base: 1, lg: [3, 2]}}` (only when `open` has proof, and always in `split`), so below 1024 the two halves become one track: in `split` the form drops beneath the content column, in `open` proof drops beneath it. The seam between them becomes `frame`'s `rowGap`, `--gap-stack`, which was declared for exactly this and is not a substituted value. DOM order is unchanged, so reading order is unchanged. `open` without proof has no frame change to make: it is one track at every width. `open`'s points stay 3-up here — the 959px column at 1023 less two 32px gutters gives ≈298px tracks — and drop at 767.
+**At 1023 — `frame` collapses and nothing else changes.** `columns={{base: 1, lg: [3, 2]}}` when `open` has proof, and `{{ base: 1, lg: [1, 1], xl: [10, 7] }}` in `split` (final fix round, 6 Oct 2026; it was `[7, 5]`, and `[3, 2]` before that), so below 1024 the two halves become one track: in `split` the form drops beneath the content column, in `open` proof drops beneath it. The seam between them becomes `frame`'s `rowGap`, `--gap-stack`, which was declared for exactly this and is not a substituted value. DOM order is unchanged, so reading order is unchanged. `open` without proof has no frame change to make: it is one track at every width. `open`'s points stay 3-up here — the 959px column at 1023 less two 32px gutters gives ≈298px tracks — and drop at 767.
 
 **At 767 — `open`'s points collapse to one track.** `columns={{base: 1, md: 3}}` on `points`, so below 768 the 3-up row becomes a vertical list at the same `--gap-gutter` **[assumed: `md` is the 768 breakpoint]**. `offer`'s points step 3 → 2 at 1023 and 2 → 1 at 767 (`columns={{base:1, md:2, lg:3}}`, amended 29 Sep 2026; they were a `Cluster` that wrapped on its own, which is what let a numeral orphan). `actions` wraps on its own at `--gap-tight`. Nothing reorders and no type role changes.
 
-**What must not change:** the part order, the three arrangements, the twelve gap assignments in 7(a), the two measures, the eight type roles, and the 3:2 ratio above 1024 wherever a second column has content. `CtaSection.module.css` contains **zero media queries** — the two breakpoint changes above are `Layout`'s `columns` object, which is the primitive's mechanism and not a rule in this component's stylesheet. Section 14 names the grep.
+**What must not change:** the part order, the three arrangements, the twelve gap assignments in 7(a), the two measures, the eight type roles, and the ratio above 1024 wherever a second column has content (3:2 in `open` with proof, 1:1 then 10:7 in `split`, 7:5 in the K offer with a portrait photo and 5:7 with a landscape one, 5:7 then 1:2 in the beside offer — cmp-cta, 6 Oct 2026). ~~`CtaSection.module.css` contains **zero media queries**~~ — amended 6 Oct 2026: it carries two `@media (min-width: 1024px)` blocks, the K photo frame's crop and the split close's texture field, both of which follow an arrangement change at that breakpoint; neither swaps a gap step or a type role. The breakpoint changes above are otherwise `Layout`'s `columns` object.
 
 **The gap scale does not shift responsively.** `--gap-inline`, `--gap-tight`, `--gap-text`, `--gap-block`, `--gap-gutter`, `--gap-stack` and `--gap-column` are the same distances at 1440 and at 375. No media query in this component may swap a gap step, and none may change a type role — the title roles re-declare themselves at 1023 and 767 in the type layer already **[assumed]**, and this component must not touch them.
 
@@ -355,15 +535,14 @@ Numerals render two-digit and zero-padded (`01`, `02`, `03`) rather than `1.` �
 ```jsx
 // arrangement="split" — the enquiry close. 56 instances.
 <Section surface={surface}>                                    {/* root — band, column, 96 of air */}
-  <Layout rowGap="stack">                                      {/* stack — 48: frame to proof row */}
+  {texture}                                                    {/* the band's first child, or absent */}
+    <Layout columns={{ base: 1, lg: [10, 7] }} colGap="section" rowGap="stack" align="stretch">
+      {/* frame — 96 between the halves (split seam, 1 Oct), 48 when it wraps at 1023; [10, 7] since fix round 1 */}
 
-    <Layout columns={{ base: 1, lg: [3, 2] }} colGap="column" rowGap="stack" align="start">
-      {/* frame — 64 between the halves, 48 when it wraps at 1023 */}
-
-      <Layout rowGap="stack">                                  {/* column — 48: block to block */}
+      <Layout rowGap="stack" pinLast>                          {/* column — 48; the last part pinned to the form's foot */}
         <Layout rowGap="block">                                {/* lede — 24: label, heading, copy */}
           <p>{eyebrow}</p>                                     {/* eyebrow — no element when absent */}
-          <h2 id={headingId}>{heading}</h2>                    {/* heading — --text-h1 scale */}
+          <h2 id={headingId}>{heading}</h2>                    {/* heading — --text-h1 (--cta-close-heading-text) */}
           <Layout rowGap="text">                               {/* copy — 16: paragraph to paragraph */}
             <p>{body[0]}</p>                                   {/* lead — --text-lead */}
             <p>{body[1]}</p>                                   {/* body — --text-body-lg, ×0-1 */}
@@ -371,45 +550,38 @@ Numerals render two-digit and zero-padded (`01`, `02`, `03`) rather than `1.` �
         </Layout>
 
         <Layout as="ol" rowGap="block">                         {/* points — 24 between steps */}
-          <Layout as="li" columns={{ base: [1, 4], md: [1, 8] }} colGap="tight" align="start">
-                                                                {/* point — marker track, label track */}
+          <Cluster as="li" nowrap colGap="text" align="baseline">
+                                                                {/* point — marker beside label, 30 Sep */}
             <span aria-hidden="true">01</span>                  {/* marker */}
-            <Layout rowGap="inline">                            {/* 4: label to detail */}
-              <span>{points[0].label}</span>
-              <span>{points[0].detail}</span>
-            </Layout>
-          </Layout>
+            <div>                                               {/* grows from 0 beside the marker */}
+              <Layout rowGap="tight">                           {/* 8: label to detail (S5) */}
+                <span>{points[0].label}</span>
+                <span>{points[0].detail}</span>
+              </Layout>
+            </div>
+          </Cluster>
         </Layout>
       </Layout>
 
-      <Layout rowGap="stack">                                   {/* the form half */}
-        <div>{form}</div>                                       {/* form — brief 09, passed in */}
-        <Cluster colGap="tight" rowGap="tight">                 {/* actions — 8 both axes */}
-          <Button as="a" href={scheduleHref} emphasis="link" tone="neutral" size="md" extendHitArea>
-            See available times
-          </Button>
-        </Cluster>
-      </Layout>
+      <div>{form}</div>                                         {/* form — EnquiryForm, with its own submit and "See available times" */}
     </Layout>
-
-    <div>{proof}</div>                                          {/* proof — full-width row, or absent */}
-  </Layout>
-</Section>
+</Section>                                                      {/* no proof row: refused since fix round 1 */}
 
 // arrangement="open" — the action close. 20 instances. Same slot set; three positions move.
-//   frame: with proof   — columns={{ base: 1, lg: [3, 2] }} colGap="column" rowGap="stack"; proof takes the right half
-//          without proof — no columns, no colGap, no rowGap: one track, the ask alone
+//   frame: with proof   — columns={{ base: 1, lg: [3, 2] }} colGap="section" rowGap="stack"; proof takes the right half
+//          without proof — the centred close (fix round 1): density="open", justifyItems="center",
+//                          display heading, points shape "centred", actions justify="center"
 //   points: Layout as="ol" columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="gutter"
 //           point: Layout rowGap="tight" — marker ABOVE label
 //   actions: in the content column, under the points —
-//           Button emphasis="solid" tone="primary" icon={<Icon name="arrow-right" />} then
+//           Button emphasis="solid" tone="primary" (no glyph since 1 Oct, § 16) then
 //           Button emphasis="ghost" tone="neutral"
 //   stack: one child, so its 48 seam does not render
 
 // arrangement="offer" — the mid-page audit interrupt. 37 instances. One column, tight band.
 //   Section density="tight"; heading at --text-h2; proof is a compile error
 //   points: Layout as="ol" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter"
-//           point: Layout columns={{ base: [1, 4] }} colGap="tight" align="start" — marker BESIDE label
+//           point: Cluster nowrap colGap="text" align="baseline" — marker BESIDE label, as split
 //   form optional, under the copy; actions under the points
 ```
 
@@ -462,13 +634,13 @@ Three things that string is meant to prove: the region arrives with the heading 
 | **3 · Zero items** | `points={[]}` renders no `<ol>` and no `--gap-stack` seam, because a `Layout` gap exists only between rendered children — 20 of the 113 instances are expected to be pointless in exactly this way. `actions` empty is legal only when `form` is present (section 3), and then the scheduling link is still rendered, so the `Cluster` is never empty. `body` empty and `points[n].label` empty do not compile |
 | **4 · One item** | One point renders one `<li>` and no seam; in `open` it renders one track of a three-track grid and sits left, not centred, because a lone centred step reads as a caption. One action renders one `solid` / `primary` `Button` and no `ghost` — the second emphasis is a consequence of a second entry, not a slot waiting to be filled. One paragraph renders `lead` only |
 | **5 · Many items (2× expected)** | Three points is the expected count; six is 2×. No cap, no truncation, no warning. In `split` the vertical list grows and the content column gets taller than the form, which is correct — `align="start"` means the form does not stretch and the band grows. In `open` six points render as two rows of three at `--gap-gutter` on both axes, which is what `columns={3}` does and is the reason `equalRows` is not set: a step with a two-line detail should not pad the two beside it. In `offer` six points render as two rows of three at `--gap-gutter`, and four or five as a full first row with the rest starting under its first label — amended 29 Sep 2026; the `Cluster` this replaced wrapped by content width, so row two did not align with row one. Six is where a reviewer should ask whether the block is still an ask (section 17 Q6) |
-| **6 · Missing image or missing optional slot** | There is no image slot: this component holds no image, requests none, and section 17 Q7 says why a logo row inside `proof` is `Proof`'s question and not this one. For the five optional slots the rule is one sentence and it is the most important one in this section: **an absent slot renders no element and no seam.** `eyebrow` absent → `lede` has two children and the heading sits at the top of the band with only the band's padding above it. `points` absent → no `<ol>`. `form` absent → no form column, and `frame` renders one track (which is `open`). `proof` absent → no full-width row in `split`, and `stack`'s 48 seam does not render; in `open` no right-hand column — `frame` is one track, not a 3:2 frame with an empty half. `body[1]` absent → `copy` has one child and shows no seam. No instance ever renders a 48px gap above nothing |
+| **6 · Missing image or missing optional slot** | **One image slot, on one member** (6 Oct 2026): `media` on the offer with actions — the K photograph. Absent, the band is the beside offer (`[5, 7]` / `[1, 2]`: head and actions beside the points), not a `[7, 5]` with an empty photo track. Split, open and the offer with a form refuse it (`media?: never`), and a logo row inside `proof` is still `Proof`'s question (section 17 Q7). For the optional slots the rule is one sentence and it is the most important one in this section: **an absent slot renders no element and no seam.** `eyebrow` absent → `lede` has two children and the heading sits at the top of the band with only the band's padding above it. `points` absent → no list (and on the centred open no `[1, 4, 1]` wrapper). `form` on split is a required `ReactElement`, tested with `isValidElement`, so `form={null}` does not compile and reserves no track; on the offer `form` is tested with `present()`. `proof` → `split` refuses it (`proof?: never`, fix round 1: split + proof ran past the fold), so split has no proof row at all; in `open`, `proof` absent (or `null`, `false`, `''` — `present()`) → no right-hand column, and the band is the centred close rather than a 3:2 frame with an empty half. `texture` absent → no field and the band keeps its default density. `contact` absent or all-blank → no `dl`. `body[1]` absent → `copy` has one child and shows no seam. No instance ever renders a 48px gap above nothing |
 | **7 · Empty required-ish text** | `heading=""` renders the `<h2>` anyway, empty — and `aria-labelledby` then names an empty element, which exposes the region as unnamed. That is worse-looking than a placeholder and it is deliberate: **no fallback copy, ever**, because a fallback is how a content fault ships to 76 routes. An empty string in `body` or in a `label` is filtered before render, producing no element and no seam around nothing |
 | **8 · The narrow track at 767** | The band stays full width; the content column becomes the viewport less `--sec-gutter` each side. `frame` is already single-track (it collapsed at 1023). `open`'s points collapse to one track at `--gap-gutter`. `offer`'s points collapse to one track at `--gap-gutter`, each numeral still in its own track beside its label; the `actions` `Cluster` wraps on its own. Both `--measure-*` values exceed the column and go inert, which is correct and needs no rule. The heading wraps to more lines and `--text-h2` re-declares itself in the type layer **[assumed]**, not here. Nothing reorders |
 | **9 · A parent that does not size it** | This is a band and may only be a direct child of the page or its template. It must not be placed inside a `Section` (the content column would inset twice), inside a `Layout` track (a band is not a row), or inside a `Cluster` (a wrapping row does not size a band, and the block would shrink to its longest word). For the case where it happens anyway, the named minimum is **320px, `--lay-track-md`** — the width at which the longest single word in a corpus heading still fits without overflow at the 767 type scale. Below 320 it renders and breaks inside words rather than overflowing, and the real `EnquiryForm`, whose `--enq-form-min-inline` is 256px, is the part that shows the fault first |
 | **10 · Logical properties rather than left/right** | Every distance in the component is a `Layout` or `Cluster` gap, which are logical by construction, or a measure, which is `max-inline-size`. There is no `margin`, no `padding`, no `left`/`right` and no positioned part anywhere in the stylesheet, so there is no physical-direction property to get wrong. "Content-left / form-right" is `columns={[3, 2]}` in source order and mirrors correctly under RTL with no work, which is the cleanest available answer to this row |
 | **11 · This component's surface nested inside a different one** | Addressed in section 6. The band is the `[data-surface]` scope and all five tokens are declared in all four blocks, so a `tint` CTA between two `ink` bands renders the tint column at 11.81:1 rather than a light ink stranded on a light ground at 1.13:1. Inside the band, the form and `proof` read `--sec-*` from this band's surface. Neither slot may contain a `Section` — the column would inset twice — nor a `Breadcrumbs`, nor a `PageHero`, nor another `CtaSection` |
-| **12 · Two of this component adjacent** | **The normal case, on 37 routes** — and the constraint is that they must not look identical, so it is enforced by shape rather than by review: the mid-page instance is `offer` (tight band, `--text-h2`-scale heading, a 2- and 3-up grid of points, no proof) and the closing instance is `split` or `open` (96px band, `--text-h1`-scale heading, two columns, proof available — scales amended 29 Sep 2026). Two instances of the **same** arrangement on one route is the bug; the component cannot detect a sibling — no `:has()`, no upward selector — so section 14 item 15 names the frontmatter grep that catches it. An `offer` and a standard close placed directly adjacent produce 160px of facing band air (64 + 96); two adjacent standard closes produce 192px (96 + 96). Both are invalid because the real mid-page placement always leaves page content between the two `h2`s |
+| **12 · Two of this component adjacent** | **The normal case, on 37 routes** — and the constraint is that they must not look identical, so it is enforced by shape rather than by review: the mid-page instance is `offer` (tight band, a photograph or a beside head, no proof) and the closing instance is `split` or `open` (a 96 or 128 band, a form or a centred 3-up row of points, the `closing` equaliser — and the scale differs again: the offer's heading is h2, the split close's h1 and the centred open's display, fix round 1, 6 Oct 2026; proof on `open` only). Two instances of the **same** arrangement on one route is the bug; the component cannot detect a sibling — no `:has()`, no upward selector — so section 14 item 15 names the frontmatter grep that catches it. An `offer` and a standard close placed directly adjacent produce 160px of facing band air (64 + 96); two adjacent standard closes produce 192px (96 + 96). Both are invalid because the real mid-page placement always leaves page content between the two `h2`s |
 | **13 · Interactive content inside a slot** | `form` and `proof` may both hold interactive content, and the first one always does. It enters the tab order in DOM order and the component adds no `tabindex`, no focus trap and no roving index. Anything focusable there reaches the 44px floor by its own means. The other slots **cannot** hold interactive content, and that is a compile-time guarantee rather than a rule: `heading`, `eyebrow`, every entry in `body`, and both fields of every `CtaPoint` are typed `string`, so no element — no control, no link, no second heading — can be passed into them. `CtaAction` is `{ label: string; href: string }` for the same reason: a `ReactNode` label is how an icon, a `<br>` and eventually a nested button get into a control |
 
 ## 13 · Motion
@@ -491,8 +663,8 @@ The only motion in the band belongs to the controls: `Button`'s colours on `--du
 4. Every route with a mid-page instance renders `offer` for it and `split` or `open` for the closing one — diff the frontmatter against the rendered `data-arrangement` attribute on all 37.
 5. An absent slot renders no element — with `points` undefined, the rendered DOM contains no `<ol>`, and the computed distance between `lede` and `actions` equals `--gap-stack` exactly once, not twice.
 6. Every action is `Button size="md"` with `extendHitArea` — each action's computed box height is 40px and its rendered hit area is 44px. Assert both; an action missing the extension is the one failure this component can ship that a screenshot will not show.
-7. `points` renders as an `<ol>` with an `<li>` per entry and an `aria-hidden` numeral in each — assert in the rendered DOM. A `<ul>` or a `<div>` role-listed is a diff comment.
-8. The component's stylesheet contains no `background` and no `padding-inline`; there is no `.offer` class at all — the heading's step down is `[data-arrangement='offer']` in `cta-section.css`, re-declaring `--cta-heading-text` and `--cta-heading-tracking` together; all seven `color` declarations belong to text parts; and the five `max-inline-size` declarations belong only to `eyebrow`, `heading`, `lead`, `body` and `detail`, using the two approved `--measure-*` roles. Strip comments, grep each declaration and inspect its selector. This is "must not own its ground", as a check.
+7. `points` renders as an `<ol>` with an `<li>` per entry and an `aria-hidden` numeral in each when the markers are numbers (the default); under `markers="icon"` or `"plain"` it is a `<ul>`, because those points are contents rather than a sequence (6 Oct 2026). Assert in the rendered DOM. A `<div>` role-listed is a diff comment.
+8. The component's stylesheet contains no `background` and no `padding-inline`; there is no `.offer` class and no arrangement remap at all (6 Oct 2026: every heading is h2); the nine `color` declarations belong to text parts and to the icon marker's wrapper (`.glyph`); and the six `max-inline-size` declarations belong only to `eyebrow`, `heading`, `lead`, `body`, `detail` and `detailReading`, using the two approved `--measure-*` roles. Strip comments, grep each declaration and inspect its selector. This is "must not own its ground", as a check.
 
 **Don't**
 
@@ -520,7 +692,7 @@ The block list for `/design/cta-section`, in order.
 6. **All four surfaces as sibling bands with identical markup** — the same `split` instance rendered four times, `paper` · `tint` · `ink` · `blue`, with section 6's per-surface paragraph printed beside each band. The 4.39:1 failure that moved the eyebrow and the numerals on tint is annotated on the tint band, because that is the one cell a future reviewer will want to lighten. The blue band carries the note that its primary action cannot be blue.
 7. **The nested-surface band** — a `tint` CTA between two `ink` bands, and an `ink` CTA between two `paper` bands, each with its five resolved values listed, plus a form and a `Proof` inside each so the two slots' inheritance is a rendering rather than a claim.
 8. **The proof ladder** — `Proof` with figures only (the `Stat` case), quote only (the `Testimonial` case), and both (the `/how-we-work` case), each shown in `split`'s full-width row and in `open`'s 470px column. Six bands, and they are the argument for section 1's collapse of two briefed components into one. Then **`open` with and without proof**, the same close twice, so the one-track frame is seen against the 3:2 one at 1440 and 390.
-9. **The two-per-page band** — a full page fragment: an `offer` mid-scroll, two paragraphs of `Prose` between, then a `split` close, on the surfaces they would really take. Annotated with what makes them not look identical: 64 against 96 of band air, `--text-h2` against `--text-h1` (amended 29 Sep 2026), a grid of points against a vertical list, no proof against proof.
+9. **The two-per-page band** — a full page fragment: an `offer` mid-scroll, two paragraphs of `Prose` between, then a `split` close, on the surfaces they would really take. Annotated with what makes them not look identical: 64 against 96 of band air, `--text-h2` against `--text-h1` (restored in fix round 1, 6 Oct 2026), a photograph against a form, and the close's texture field.
 10. **The wrong version of the same band** — two `split` instances on one page, labelled "this is the bug section 12 row 12 names", with the 192px of facing band air and the two `h2`s measured.
 11. **Every edge case from section 12**, each labelled with its row number: the 28-character and 60-character labels; a bare URL in `body[1]`; `heading=""` with its unnamed region annotated; an empty string in a point label; the 1023, 767 and 375 columns; the 320px floor and a 256px sub-floor.
 12. **Interactive content in `proof`** — a `Proof` whose quote carries a link, with the tab order annotated: copy, actions, proof.
@@ -539,7 +711,7 @@ Four values were checked against the ramps and found, and the near-misses are wo
 - **A step between `--gap-gutter` 32 and `--gap-stack` 48** for the seam between the two halves when `frame` wraps. Declined: `--gap-stack` is the block-to-block step and a wrapped half is a block, so 48 is the relationship and not a compromise. A new step here would be splitting the difference, which is forbidden.
 - **A dedicated measure role for the point labels.** Declined: `label` needs no measure at all, because its track caps it in all three arrangements.
 - **A `--cta-rule` hairline above the proof row.** Declined on the design bar, and the 48px seam does the work. Its absence is why `--border-width-0` is a decision in 7 rather than an omission.
-- **A glyph for the point markers** — a numbered-circle or a `check`. Declined: `check` is in the glyph set but means "included", not "third", and the points are a sequence. Two-digit mono numerals carry the order and need no glyph, so this component requests none. The one glyph it does render is `arrow-right`, which is in the set of 17.
+- **A glyph for the point markers** — a numbered-circle or a `check`. Declined: `check` is in the glyph set but means "included", not "third", and the points are a sequence. Two-digit mono numerals carry the order and need no glyph, so this component requests none. It rendered `arrow-right` on the primary action until 1 Oct 2026; it now renders no glyph.
 
 ## 17 · Open questions
 
@@ -759,3 +931,40 @@ COMPLETENESS
     and the three arrangements put those four in three different places. The specimen route
     reads as five shapes, not one rectangle repeated.
 ```
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix rounds 1 and 2
+
+Supersedes the K and close notes in § 0's amendment block where they differ:
+
+- **The landscape offer is centred, not stretched.** The copy column (lede then actions, a `stack`
+  apart) centres on the 3:2 photo (`align="center"`); nothing is pinned. Stretched, with the actions
+  pinned to the photo's foot, the K CTA hung in a dead hole under a short lede (fix round 1).
+- **The close's texture is a horizon across the band**, not pinned under the copy: `TextureClosing`
+  spans the full width in the band's bottom air (fix round 1).
+- **`media.phone?: 'after' | 'before'`** (fix round 2). Below 1024 where the photo sits against the
+  copy. `after` (default) is § 3.7 item 4. `before` sets the photo first, for an offer placed beside
+  a head → photo → body band, where at 390 the two read as one repeated rectangle. The photo is
+  decorative (`alt=""`), so DOM order carries no meaning; from 1024 `side` alone decides.
+- **Point ink is the step-title ink** (fix round 2). `--cta-point-ink` is neutral-900 on paper and
+  tint, white on ink and blue: at neutral-700 the offer's and the close's lists read greyed out
+  beside the method's steps rather than deliberately quiet.
+- The service page sets the offer's points as a check row (`markers="icon"`, `check-circle`): the
+  01/02 numeral is the page's sequence device and a third run of it made the accent repetition.
+
+## Amendment · 7 Oct 2026 — the close is tinted, without texture (owner)
+
+- The closes (`split`, `open`) default to `surface="tint"`; `offer` keeps paper. Pass `surface` to
+  override. The page then steps paper → tint → the ink footer, so the last band reads as a closer.
+- The `texture` slot is withdrawn from CtaSection (types, the `.textureField` placement and the open
+  arrangements' texture), and every `<TextureClosing />` call site is removed. The `closing` recipe stays
+  in Texture for the post-review texture rework. With the slot gone, the "present, it sets
+  `density=\"open\"`" rule goes too (there is no open density any more).
+- A close composed from ContentSection (`arrangement="media"` with a form — kit About, kit form 02/03)
+  sets `surface="tint"` at its call site, the same rule.
+
+## Amendment · 9 Oct 2026 — the landscape offer is removed (owner)
+
+- 9 Oct 2026: `media.frame` and its `landscape` shape are removed, with `--cta-photo-ratio-landscape`
+  and `.photoLandscape`. A set of points never sits as a separate strip under a split; points stay
+  with the copy they belong to. The portrait `[7, 5]` is the only offer-with-photo shape. Earlier
+  mentions of the landscape offer above are superseded.

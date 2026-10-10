@@ -5,8 +5,18 @@ export type {
   BlockCardImage,
   BlockCardImageSide,
   BlockCardOrientation,
+  BlockCardSize,
   BlockCardTitleElement,
   BlockCardTracks,
+  BlockCardRatio,
+  BlockCardCue,
+  BlockCardFrame,
+  BlockCardTextureRecipe,
 } from './BlockCard';
-export { BlockCardSet, FEATURED_FROM } from './BlockCardSet';
-export type { BlockCardSetProps, BlockCardSetItem } from './BlockCardSet';
+export { BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCardSet';
+export type {
+  BlockCardSetProps,
+  BlockCardSetItem,
+  BlockCardSetLead,
+  BlockCardSetAcross,
+} from './BlockCardSet';

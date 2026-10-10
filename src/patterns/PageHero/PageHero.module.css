@@ -6,22 +6,23 @@
    the same markup answer a paper band, a tint band, an ink band and a blue pivot without knowing
    which one it is standing on.
 
-   ── Seven rules, and the count is the design ────────────────────────────────────
-   Sixteen parts, seven of which carry a value here: six inks on the six text parts, and the video
-   frame, which is the only box the component draws. The image is a Media and carries its own.
-   Eight more — root, split, stack, opening, copy, byline, pair, actions — carry DISTANCE ONLY, and
-   every one of those distances is a Section, Layout or Cluster gap prop in the TSX. The
-   sixteenth, extras, carries NOTHING AT ALL, which is the point of it: a slot that imposed an
-   ink or a step would be a slot the caller had to fight.
+   ── Which parts carry a value here ──────────────────────────────────────────────
+   The text parts carry an ink and a type role each; the marks (the eyebrow's, the tags', the
+   flag's square and the legend's numerals) carry a size and a blue; the video frame is the one box
+   the component draws; the texture carries a visibility switch, and nothing else. The
+   structural parts — root, top, split, stack, opening, copy, byline, pair, actions — carry
+   DISTANCE ONLY, and every one of those distances is a Section, Layout or Cluster gap prop in the
+   TSX. Extras and trail carry NOTHING AT ALL: the caller's block and the Breadcrumbs the caller
+   hands in own every value they paint and read this band's ground.
 
-   So eight of the sixteen emit no class and appear nowhere in this file: a rule for them would
-   be a rule with nothing to say. If you are looking for where the 48, the 24, the 16, the 8 and
-   the 4 — and the 64 between copy and media in `beside` — are set, they are in the JSX, which is where the arrangement belongs.
+   If you are looking for where the 32 from the trail to the split, the 48, the 24, the 16, the 8
+   and the 4 — and the 96 between copy and media in a split — are set, they are in the JSX, which
+   is where the arrangement belongs.
 
-   The media part takes no class of its own and has no wrapper. The image is a Media, whose module
-   owns it; `.video` is the other rendering of the same slot, mutually exclusive by the prop's
-   union, and each sits directly in the split as its second child — so a wrapper element would exist
-   only to hold a class with nothing in it. The aspect-ratio goes on the <iframe> itself.
+   The media part takes no class of its own. The image is a Media, whose module owns it; `.video` is
+   the other rendering of the same slot, mutually exclusive by the prop's union. In a split a
+   photograph or video sits in a classless <div>, so the row's stretch reaches that box and never
+   the image. The aspect-ratio goes on the <iframe>.
 
    ── What is NOT here, and why each absence is a decision ────────────────────────
    No display:flex and no display:grid. Every arrangement in this component is a Layout or a
@@ -29,7 +30,9 @@
    Button's, centring a label in its own control box, which is not arrangement. The two
    display:block declaration below de-inlines a replaced element; it arranges nothing.
 
-   No position and therefore no z-index, INCLUDING on the video. The 16/9 box is an aspect-ratio
+   No position and no z-index: the end-fade Texture is a direct child of the Section and fills the
+   band (its z-index is Texture's own, and resolves inside the Section's isolation). Nothing here is
+   positioned, INCLUDING the video. The 16/9 box is an aspect-ratio
    on the iframe itself, so the padding-top-percentage-plus-absolute-fill idiom that every embed
    snippet on the internet still carries is not needed here: it predates aspect-ratio, it needs a
    wrapper this component would otherwise not have, and it manufactures a stacking context in a
@@ -44,20 +47,19 @@
    slot. That edge is the strongest vertical line on the page and it must be in the same place on
    all 129 of them. So there is no reach into --space-* here either.
 
-   No @media block of ANY kind, including prefers-reduced-motion. Nothing in THIS FILE changes at
-   1023 or at 767. The one thing in the component that does — `beside` splitting into two tracks
-   at 1024 — is Layout's `lg` template, set by a prop; the copy stack is single-track at every
-   width, both Clusters wrap by themselves, and both measures are `ch`-based so they follow the type down on their own with no
-   second value to keep in sync. And nothing moves, so reduced motion has nothing to switch off —
-   the identity is structural rather than conditional, which is why asserting it with an empty
-   media query would be worse than saying it here.
+   Two @media blocks at the foot of the file, and neither arranges anything: one hides the
+   illustration's legend from 1440 (where the drawing's own labels are legible and the <picture>
+   serves the drawing rather than its numbered cut), and one shows the end-fade from 1024. Every
+   arrangement that changes at a breakpoint — the splits, the phone stacking of the actions — is a
+   Layout or Cluster prop; the measures are `ch`-based so they follow the type down with no second
+   value to keep in sync. Nothing moves, so reduced motion has nothing to switch off.
 
    No transition, transform, animation or opacity. There are no states to interpolate between.
    The entrance animation on a page title is the most-requested hero motion and it is refused: it
    delays the one thing a reader arrived for.
 
    No line-clamp and no text-overflow. The title is never truncated — a 58-character h1 wraps to
-   three lines and balances instead.
+   three lines and balances instead — and since fix round 2 neither is the announcement's sentence.
 
    No rule on the image at all — no object-fit, no max-block-size, no aspect-ratio and no border.
    The image is a Media: the intrinsic ratio IS the decision (H3), and the edge is its kind's.
@@ -77,10 +79,9 @@
 
    No list reset and no dd inset reset. reset.css zeroes dl and dd margins already.
 
-   ── Rule order is not load-bearing here ─────────────────────────────────────────
-   Seven rules, seven distinct selectors, no shared property between any two of them and no state
-   pair to decide by source order. They can be read in any order, which is a consequence of
-   having no states rather than a property of the file. */
+   ── Rule order ───────────────────────────────────────────────────────────────────
+   Not load-bearing anywhere but in the breakpoint switches at the foot, which come after the rules
+   they switch. There are no states to decide by source order. */
 
 /* ── The eyebrow ───────────────────────────────────────────────────────────────
    One of the two mono parts in the component, the byline key below being the other, so both take
@@ -90,7 +91,7 @@
    text rather than as a label. That is the reason the case belongs to the role rather than to
    this component, and the token is now where it is stated.
 
-   It is also what keeps this label distinguishable from the Breadcrumbs trail 96px above it —
+   It is also what keeps this label distinguishable from the Breadcrumbs trail 32px above it —
    that is sans, verbatim, untracked and 13px, this is mono, uppercase, tracked and 12px, so the
    two differ in four ways and the air between them is the fourth defence rather than the only
    one. The transform is applied here rather than in the data, so the frontmatter keeps its
@@ -171,6 +172,11 @@
   text-wrap: var(--text-running-wrap);
 }
 
+/* `leadSize="lg"`, the opt-in: the font alone moves. The measure is `ch`, so it follows the size. */
+.leadLg {
+  font: var(--hero-lead-text-lg);
+}
+
 .body {
   max-inline-size: var(--hero-body-measure);
   color: var(--hero-body-ink);
@@ -219,9 +225,9 @@
 }
 
 /* ── The media · one slot, two renderings ──────────────────────────────────────
-   Below the copy in `stacked`, beside it from 1024 in `beside` — and neither arrangement is set
-   here. The split is a Layout in the TSX (`columns={{ lg: [1, 1] }}`, `colGap="column"`), which is
-   why this file still has no @media block: the one thing that changes at 1024 is a primitive's.
+   Below the copy in `stacked`, beside it from 1024 in `beside` and `wide` — and no arrangement is
+   set here. Each split is a Layout in the TSX (`columns`, `colGap="section"`): what changes at a
+   breakpoint is a primitive's.
 
    ── The image ────────────────────────────────────────────────────────────────
    Has NO rule here any more, and that is the change. It renders through Media, which owns the
@@ -256,4 +262,115 @@
   overflow: hidden;
   border: var(--hero-media-rule-width) solid var(--hero-media-rule-ink);
   border-radius: var(--hero-media-radius);
+}
+
+/* ── centred · the owner comparison (arrangement="centred") ─────────────────────
+   The copy stack centres its blocks with Layout's justifyItems; this centres the LINES inside each
+   one, which no primitive does because it is type, not arrangement. Inherited by the eyebrow, the
+   title and the lead, so none of them needs a rule of its own. */
+.centred {
+  text-align: center;
+}
+
+/* ── centred media · capped under a centred head ────────────────────────────────
+   A size, not an arrangement: the Layout centres the block (justifyItems), this caps its width at
+   --hero-media-size-centred (860, about 8 of 12 columns). At the full 1240 the service drawing was
+   920 tall and its 17-unit labels rendered at 22px, larger than the lead (fix round 1). */
+.centredMedia {
+  inline-size: min(100%, var(--hero-media-size-centred));
+}
+
+/* ── announcement · one line above the hero, two on a phone ───────────────────────
+   The flag is the label voice in blue, after a blue pixel (.mark): news, marked by the accent
+   rather than by a grey pill. The note is body-sm at the body's ink, a step under the lead. It is
+   the part of the strip that gives way, by WRAPPING beside the flag: it used to ellipsise to
+   "The AI Product ..." on a phone, which left the strip saying nothing (fix round 2).
+   min-inline-size:0 is what lets the flex item shrink below its text's width so it can wrap. */
+.flag {
+  text-transform: var(--text-mono-case);
+  color: var(--hero-flag-ink);
+  font: var(--hero-flag-text);
+  letter-spacing: var(--hero-flag-tracking);
+  white-space: nowrap;
+}
+.note {
+  min-inline-size: 0;
+  color: var(--hero-note-ink);
+  font: var(--hero-note-text);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* ── mark · the blue pixel ───────────────────────────────────────────────────────
+   One square of the texture's grid, the marker before the eyebrow, each tag and the announcement's
+   flag: the blue accent at its smallest (§ 4.2), and square because the grid is. */
+.mark {
+  display: block;
+  flex: none;
+  inline-size: var(--hero-mark-size);
+  block-size: var(--hero-mark-size);
+  background: var(--hero-mark-ink);
+}
+
+/* ── tag · and a legend label ─────────────────────────────────────────────────────
+   The label voice, unboxed: mono, uppercase in presentation, at the key's ink. */
+.tag {
+  text-transform: var(--text-mono-case);
+  color: var(--hero-tag-ink);
+  font: var(--hero-tag-text);
+  letter-spacing: var(--hero-tag-tracking);
+  white-space: nowrap;
+}
+
+/* ── numeral · the legend's markers, the drawing's discs in HTML ─────────────────────
+   A disc holding one glyph. inline-grid + place-content centres that glyph in its own box; it
+   arranges nothing (the same reason Button centres its label), and the legend row is a Cluster.
+   Blue with a white numeral for a blue label; for the drawing's peridot pill, an outlined disc
+   with an ink numeral and an ink hairline. Peridot stays inside the drawing (§ 4.4): the phone
+   cut's disc is peridot, its legend twin is the pill's outline. */
+.numeral,
+.numeralAccent {
+  display: inline-grid;
+  flex: none;
+  place-content: center;
+  inline-size: var(--hero-numeral-size);
+  block-size: var(--hero-numeral-size);
+  border-radius: var(--hero-numeral-radius);
+  background: var(--hero-numeral-ink);
+  color: var(--hero-numeral-glyph-ink);
+  font: var(--hero-numeral-text);
+  letter-spacing: var(--hero-numeral-tracking);
+  text-transform: var(--text-mono-case);
+}
+.numeralAccent {
+  border: var(--hero-media-rule-width) solid var(--hero-numeral-accent-rule-ink);
+  background: var(--hero-numeral-accent-ink);
+  color: var(--hero-numeral-accent-glyph-ink);
+}
+
+/* ── texture · the end-fade, a paper hero with no media only ─────────────────────
+   Statement's end-fade recipe, a direct child of the Section. The stepped foot and field regions
+   were retired (owner, 9 Oct 2026). Hidden below 1024, where it would sit behind the copy. */
+.fade {
+  display: none;
+}
+
+/* ── breakpoint switches ─────────────────────────────────────────────────────────
+     legend  the numbered cut's legend shows where the <picture> serves the cut: below 1440.
+             KEEP IN STEP with CUT_QUERY in PageHero.tsx, the <source> media query Media renders:
+             a module cannot read the TSX constant, so the breakpoint is written in both.
+     fade    the end-fade from 1024 only. */
+@media (min-width: 1440px) {
+  .legend {
+    display: none;
+  }
+}
+@media (min-width: 1024px) {
+  .fade {
+    display: block;
+  }
+}
+
+/* Centred, a ragged lead shows a widow on the axis; balanced, its lines step evenly about it. */
+.centred .lead {
+  text-wrap: var(--text-title-wrap);
 }

@@ -2,7 +2,16 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag, type LayoutProps } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  Layout,
+  Prose,
+  Section,
+  Tag,
+  type LayoutProps,
+} from '@/components';
 import {
   getExpertisePage,
   type ExpertiseAction,
@@ -10,10 +19,12 @@ import {
   type ExpertiseContentColumn,
 } from '@/content';
 import { expertisePath, ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -73,21 +84,23 @@ function renderColumn(column: ExpertiseContentColumn) {
       ) : null}
 
       {column.links.length > 0 ? (
-        <Cluster colGap="tight" rowGap="tight">
+        /* A column's links STACK (owner, 7 Oct 2026): link buttons never sit side by side. */
+        <Layout rowGap="text" justifyItems="start">
           {column.links.map((link) => (
             <Button
               key={`${column.id}-${link.href}-${link.label}`}
               as="a"
               href={link.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
+              icon={<Icon name="arrow-right" />}
             >
               {link.label}
             </Button>
           ))}
-        </Cluster>
+        </Layout>
       ) : null}
     </Layout>
   );
@@ -109,7 +122,7 @@ function renderExpertiseBlock(block: ExpertiseBlock) {
           as="ul"
           columns={cardColumns(block.columns)}
           colGap="gutter"
-          rowGap="gutter"
+          rowGap="column"
           equalRows
         >
           {block.cards.map((card) => (
@@ -127,7 +140,7 @@ function renderExpertiseBlock(block: ExpertiseBlock) {
 
     case 'comparison-cards':
       return (
-        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="gutter" equalRows>
+        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="column" equalRows>
           {block.cards.map((card) => (
             <BlockCard
               key={`${block.id}-${card.title}`}
@@ -152,9 +165,10 @@ function renderExpertiseBlock(block: ExpertiseBlock) {
                 as="a"
                 href={block.source.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.source.label}
               </Button>
@@ -225,9 +239,10 @@ function renderExpertiseBlock(block: ExpertiseBlock) {
                     as="a"
                     href={link.href}
                     emphasis="link"
-                    tone="neutral"
+                    tone="primary"
                     size="md"
                     extendHitArea
+                    icon={<Icon name="arrow-right" />}
                   >
                     {link.title}
                   </Button>
@@ -248,7 +263,7 @@ function renderExpertiseBlock(block: ExpertiseBlock) {
                 as="a"
                 href={block.download.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
               >
@@ -312,6 +327,12 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
   const title = expertise.title || expertise.hero.highlightedText || '';
   const heroActions = firstTwoHeroActions(expertise.hero.actions);
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: 'Expertise', href: ROUTES.expertise },
+    { label: title, href: expertisePath(expertise.slug) },
+  ];
+
   return (
     <>
       {expertise.seo?.structuredData ? (
@@ -321,18 +342,12 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Expertise', href: ROUTES.expertise },
-          { label: title, href: expertisePath(expertise.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(crumbs, title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={title}
-        eyebrow={expertise.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(expertise.hero.eyebrow, crumbs)}
         body={[expertise.hero.description]}
         actions={heroActions}
         surface="paper"
@@ -390,7 +405,9 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
             heading={expertise.capabilitiesCta.heading}
             body={expertise.capabilitiesCta.body}
             points={expertise.capabilitiesCta.points}
-            actions={expertise.capabilitiesCta.actions}
+            /* Mid-page, so ONE link (r7-buttons): the offer takes the first action and a second
+               is dropped until the model carries one (docs/strapi-changes.md § 17). */
+            actions={[expertise.capabilitiesCta.actions[0]]}
           />
         ) : (
           <CtaSection

@@ -1,8 +1,9 @@
 /* ══ Component layer — input ═════════════════════════════════════════════════════
-   Tier 3. A native input or textarea control, with ONE treatment.
+   Tier 3. A native input or textarea control: ONE emphasis, two appearances (box and line).
 
-   Naming: --inp-standard-{part}-{state} for the treatment, --inp-disabled-* for the disabled
-   state. There were two emphases — standard, and a `quiet` one kept for SiteFooter's newsletter
+   Naming: --inp-standard-{part}-{state} for the boxed treatment, --inp-disabled-* for its disabled
+   state, and --inp-line-{part}-{state} for appearance="line" (no fill, so every line ink is chosen
+   against the surface, its disabled pair included). There were two emphases — standard, and a `quiet` one kept for SiteFooter's newsletter
    row — and on paper and ink they rendered nearly identically: the same fill, the same rule, a
    placeholder a step apart. An emphasis nobody can see is worse than none, so quiet was merged
    into standard and its tokens deleted from every block (29 Sep 2026, tracker 2.17). `standard`
@@ -25,12 +26,13 @@
 
 :root {
   /* 40px agrees with the md Button; controls step to the explicit 44px touch size below 768.
-     The 16rem minimum is the last width at which the field remains usable, and 128px gives textarea four body lines plus its optical insets. */
+     128px gives textarea four body lines plus its optical insets. There is no minimum inline size:
+     it moved to the composing patterns (6 Oct 2026), because a 16rem floor on the box overflowed
+     the Input specimen's own 213px tracks at 768–899 and would do the same in any narrow track. */
   --inp-height-md: 40px;
   --inp-height-touch: 44px;
   --inp-padding-x: var(--space-12); /* optical control inset, not layout spacing */
   --inp-textarea-padding-y: var(--space-12); /* optical control inset, not layout spacing */
-  --inp-min-inline: 16rem;
   --inp-textarea-min-block: 128px;
   --inp-radius: var(--radius-8);
   --inp-rule-width: var(--border-width-1);
@@ -41,6 +43,24 @@
   --inp-transition-easing: var(--easing-standard);
   --inp-ring-width: var(--focus-ring-width);
   --inp-ring-offset: var(--focus-ring-offset);
+  /* appearance="line": no fill on any surface.
+
+     The line control is UNLABELLED to the eye (r7-form, owner 7 Oct 2026): the placeholder is the
+     visible cue and the label is visually hidden. So it no longer leans on a label above it for
+     its hit area or its anchoring, and it is the touch floor tall on its own at every width: 44,
+     the value set low, on its rule (Executra, ref-executra-11), 14 over the value and 6 under it.
+     It was 32 with the value tucked under a visible label 4 above; with the label gone a 32 field
+     was a target under the floor and a row of them read as a ruled notepad.
+
+     The textarea floor is two lines plus the same insets (68): its first line sits where a
+     single-line field's value sits, so a row of lined fields shares one baseline rhythm. It still
+     grows with what is typed (field-sizing: content). */
+  --inp-line-bg: transparent;
+  --inp-line-height-md: var(--inp-height-touch);
+  --inp-line-inset-bottom: var(--space-6); /* optical: the value's descenders clear the rule */
+  /* optical: the inset that sets one --text-body line on its rule in a 44 field (44 - 24 - 6) */
+  --inp-line-inset-top: var(--space-14);
+  --inp-line-textarea-min-block: 68px; /* two body lines (48) + the 14 and 6 insets */
 }
 
 :root,
@@ -58,6 +78,16 @@
   --inp-disabled-fg: var(--color-neutral-500); /* 2.67:1 — exempt, see header */
   --inp-disabled-rule: var(--color-neutral-200);
   --inp-standard-invalid-rule: var(--color-danger-600); /* 6.54:1 on the white fill */
+  /* line: on paper itself. Rest rule neutral-400 (the field's only edge has to read as one); focus
+     brandeis-500, 6.17:1; invalid danger-600, 6.48:1 on paper. */
+  --inp-line-fg: var(--color-neutral-900);
+  --inp-line-placeholder-fg: var(--color-neutral-600);
+  --inp-line-rule: var(--color-neutral-400);
+  --inp-line-rule-hover: var(--color-neutral-600);
+  --inp-line-rule-focus: var(--color-brandeis-500);
+  --inp-line-invalid-rule: var(--color-danger-600);
+  --inp-line-disabled-fg: var(--color-neutral-500); /* 3.16:1 on paper — exempt, see header */
+  --inp-line-disabled-rule: var(--color-neutral-200);
 }
 
 [data-surface='tint'] {
@@ -74,6 +104,17 @@
   --inp-disabled-fg: var(--color-neutral-500); /* 2.37:1 — exempt, see header */
   --inp-disabled-rule: var(--color-neutral-300);
   --inp-standard-invalid-rule: var(--color-danger-600); /* 6.54:1 on the paper fill */
+  /* line: on deep paper. Placeholder steps to neutral-700, since 600 is 4.39:1 on this ground. */
+  --inp-line-fg: var(--color-neutral-900);
+  --inp-line-placeholder-fg: var(--color-neutral-700);
+  --inp-line-rule: var(--color-neutral-500);
+  --inp-line-rule-hover: var(--color-neutral-700);
+  --inp-line-rule-focus: var(--color-brandeis-500);
+  --inp-line-invalid-rule: var(--color-danger-600);
+  --inp-line-disabled-fg: var(
+    --color-neutral-500
+  ); /* 2.82:1 on deep paper — exempt, see header */
+  --inp-line-disabled-rule: var(--color-neutral-300);
 }
 
 [data-surface='ink'] {
@@ -90,6 +131,17 @@
   --inp-disabled-fg: var(--color-neutral-600); /* 3.48:1 — exempt, see header */
   --inp-disabled-rule: var(--color-neutral-800);
   --inp-standard-invalid-rule: var(--color-danger-300); /* 7.39:1 on the neutral-900 fill */
+  /* line: on neutral-950. Blue lifts to 300 as everywhere on ink; invalid danger-300. */
+  --inp-line-fg: var(--color-neutral-50);
+  --inp-line-placeholder-fg: var(--color-neutral-400);
+  --inp-line-rule: var(--color-neutral-600);
+  --inp-line-rule-hover: var(--color-neutral-400);
+  --inp-line-rule-focus: var(--color-brandeis-300);
+  --inp-line-invalid-rule: var(--color-danger-300);
+  --inp-line-disabled-fg: var(
+    --color-neutral-600
+  ); /* 3.48:1 on neutral-950 — exempt, see header */
+  --inp-line-disabled-rule: var(--color-neutral-800);
 }
 
 [data-surface='blue'] {
@@ -106,4 +158,20 @@
   --inp-disabled-fg: var(--color-neutral-500); /* 2.67:1 — exempt, see header */
   --inp-disabled-rule: var(--color-neutral-300);
   --inp-standard-invalid-rule: var(--color-danger-600); /* 6.54:1 on the white fill */
+  /* line: directly on brandeis-500, so the value is white and the focus rule is white.
+
+     Invalid is danger-300, not danger-100 (cmp-form final round): danger-100 is a near-white pink,
+     and beside the brandeis-200 rest rule the invalid line read as the same rule drawn heavier, with
+     no change of colour. Danger-300 is a visible change of hue and 3.12:1 on the ground. Disabled
+     takes its own line tokens on every surface for the same reason: --inp-disabled-fg is chosen
+     against the WHITE box fill (neutral-500), and with no fill under it the disabled placeholder
+     rendered a muddy olive on blue. Brandeis-300 / 400 read as unavailable on blue's own terms. */
+  --inp-line-fg: var(--color-white);
+  --inp-line-placeholder-fg: var(--color-brandeis-100);
+  --inp-line-rule: var(--color-brandeis-200);
+  --inp-line-rule-hover: var(--color-brandeis-50);
+  --inp-line-rule-focus: var(--color-white);
+  --inp-line-invalid-rule: var(--color-danger-300); /* 3.12:1 on brandeis-500 */
+  --inp-line-disabled-fg: var(--color-brandeis-300); /* 2.64:1 — exempt, see header */
+  --inp-line-disabled-rule: var(--color-brandeis-400);
 }

@@ -6,7 +6,7 @@
 |---|---|
 | **Component** | `PageHero` |
 | **Tier** | 2 pattern (`src/patterns/PageHero/`) |
-| **Status** | implemented · amended 28 Sep 2026 (tracker 2.9) — shown to the owner, not merged until approved (★, ruling W1) · amended 29 Sep 2026 (tracker 2.17) — the title at `--text-display` |
+| **Status** | implemented · **amended 5 Oct 2026 (kit `fdn-top`)** — `trail` slot, eyebrow-repeat warning, media-kind alignment, neutral link second action · amended 28 Sep 2026 (tracker 2.9) — shown to the owner, not merged until approved (★, ruling W1) · amended 29 Sep 2026 (tracker 2.17) — the title at `--text-display` |
 | **Token prefix** | `--hero-*` (collides with none of `--btn-` `--crumb-` `--foot-` `--icn-` `--lay-` `--logo-` `--nav-` `--prose-` `--sec-`) |
 | **Designer / date** | Design · 21 Aug 2026 |
 | **Amended** | 25 Aug 2026 — three changes, all requested and all global: a `media` slot last in the band (image or YouTube embed), the `body` paragraphs from `--text-body-lg` (18) to `--text-body` (16), and the byline `key` from verbatim to uppercase. Every section below is amended in place; the changes are collected in **Amendment · 25 Aug 2026** near the end, next to the build-decisions log. **28 Sep 2026** (tracker 2.9, rulings H1–H3, M1–M4) — an `arrangement` prop (`stacked` · `beside`), image media through the `Media` primitive with the record nested, `sizes` from `src/lib/image-sizes.ts`, and the lead onto `--measure-lead`. Collected in **Amendment · 28 Sep 2026** |
@@ -19,15 +19,51 @@ Verified against the loaded Tcules library (`window.Tcules`, 10 components) and 
 
 **The headline finding, before the form starts.** The brief describes three arrangements — text-left, article hero, case-study hero. There are not three. There is **one arrangement with two independent optional slots**, and the case-study hero is not one of them: 13 of its 14 pages are bare title and body, which is byte-for-byte the text-left hero, and the 14th fills the `eyebrow` slot that 31 other pages already fill. So section 4 is a 1 × 1 matrix, and the brief's lean — one arrangement with a slot that switches — is right but does not go far enough. The author line and the client eyebrow are not two settings of one slot. They are two slots, they are independent, and a podcast episode with a client eyebrow and a host-and-guests byline renders both, in order, with no new code and no new prop.
 
+
+> **1 Oct 2026 — split gap.** Two regions of different kind side by side are a *split* and take `--gap-section` (96), not `--gap-column` (64), which is now for peer halves only (CLAUDE.md § gap scale, rule 2). Owner, 1 Oct: "64px is fine but 96px … gives it just a bit more breathing space."
+
+**Amended 5 Oct 2026 (kit `fdn-top`, visual-direction § 2.2–2.4) — read this first.**
+
+1. **New prop `trail?: HeroTrail`**, `{ crumbs: ReactNode; labels: readonly string[]; structural?: number }` (`structural` added 6 Oct, item 2), declared in `src/lib/trail.ts` and re-exported from PageHero. `crumbs` is the rendered `<Breadcrumbs …/>`; `labels` are its labels, which PageHero cannot read out of a node. Neither is written by hand: the route or template calls `heroTrail(items, title, (t) => <Breadcrumbs {...t} />)`, which builds both from one array. No pattern imports another: PageHero places the node it is handed. Structure: `<Section><Layout rowGap="gutter">{trail.crumbs}{split}</Layout></Section>` (the `top` part) — 96 of the band's padding above the trail, 32 between the 13px trail and the split. Absent renders the split alone, exactly as before. *(Visual-direction § 2.2 specified `{ crumbs; current: string }`. Changed in the fix round of 5 Oct: `current` restated the last crumb at all 25 call sites, and a trail that ends at its parent has no current crumb to state — see item 7.)*
+2. **In development PageHero warns** when `eyebrow` repeats any crumb in `trail.labels`, and when the last crumb repeats `title`. Each asks the question the routes' own fix asks, from `src/lib/trail.ts`: the eyebrow warning asks `repeatsTrail`, which `eyebrowBesideTrail` uses; the title warning asks `sameLabel`, which `heroTrail` uses. Both normalise the same way: zero-width characters, punctuation, case and plurals ("-ies" to "-y", then a trailing "s") are ignored, so the Matter record's U+200D and "Audit" under "Audits" are both caught. *Fix round, 6 Oct 2026:* the eyebrow question is a **whole-word phrase match**, not equality. An eyebrow repeats a crumb when it says the crumb's words in order as whole words, so "Product Design specialist" under "Product design" is a repeat; "Designer" under "Design" is not. *Second fix round, 6 Oct:* the phrase match is asked only of crumbs that name something. The site's structure, the root and a top-level section index ("Home", "Services", "Case studies", named once in `SECTION_INDEXES` in `src/lib/routes.ts` and carried to PageHero as `trail.structural`; *third fix round:* until then told apart by the href's depth, which also counted named top-level pages such as "Future Interfaces Lab" as structure), is repeated only by an eyebrow that equals it, so "Case study · Fintech" under Home / Case studies is valid and a bare "Case study" is not. Without that the rule silently dropped any eyebrow holding the word "services" or "home". Equality stays the title question, because an h1 is a sentence that routinely uses a crumb's words without repeating it. Review found the exact-match version letting "PRODUCT DESIGN SPECIALIST" stand 32px under "Product design" on five live routes; the eyebrow table in Breadcrumbs.md's 5 Oct amendment lists the ten eyebrows the wider rule drops. The band still renders, so the fault shows on the page too. `eyebrow?` stays, for what the trail cannot say (`Fintech · Platform rebuild`, `Ep 12 · 48 min`, and visual-direction § 2.2's `Case study · Fintech` and `Podcast · Ep 12`).
+3. **`surface` no longer has a partner.** It was "must match the Breadcrumbs above"; the trail is now inside this band and reads its ground.
+4. **Alignment against media follows the kind** (§ 3.2): `beside` with an illustration is `align="center"` — the copy centred on the drawing, which has no box to share an edge with; every other image, and the video, stays top-aligned. `beside` keeps `{ lg: [1, 1] }` and `colGap="section"` (96); the comment that said 64 is fixed.
+5. **The second action is `emphasis="link" tone="neutral"`**, not ghost/neutral. A neutral link is ink and spends no blue (§ 4.2), so a hero spends one Accent (the solid button) plus, beside media, one Field. The actions row is a `Cluster colGap="block" rowGap="block" align="center"`: 24 so a bare label does not read as part of the filled box beside it, and 24 between wrapped rows so a link that wraps under the button keeps its 44px target clear of the button's box.
+6. **Service-page budget (§ 2.4), measured at 1470 × 830 on all six:** split top 222 (was 296); h1 at 224 to 269 because the copy is centred on the illustration; titles 3 lines (43 to 48 characters); leads 2 or 3 lines (14 to 26 words); illustration 425 to 505 tall; hero bottom 742 to 823 (was 859 to 1014). At 390: trail 161, h1 214. Shots: `scratchpad/kit/fdn/fdn-top/{before,after,after-r2}`. *Re-measured 6 Oct 2026 on `a6f2259`, after `fdn-spacing` and `fdn-colour`:* unchanged to the pixel. Split top 222 on all six. Hero bottom 742.4 (product-design), 752.2 (design-engineering), 795.1 (design-systems), 803.8 (ai-product-ux), 806.8 (software-development) and 822.7 (product-modernisation), so every one is ≤ 823. Illustrations run 424.6 to 504.8 tall. No eyebrow on any of them. At 390 the trail is at 161 and the h1 at 213.8 on all six. Shots and `budget.json`: `scratchpad/kit/fdn/fdn-top/after-r3`.
+7. **The last crumb names the page only when the h1 does not** (fix round, 5 Oct). On most trail pages the last crumb was the page's full title, so 32px above the h1 the headline read twice, and on a phone the long crumb wrapped (tracker 2.17's defect, moved inside the hero). `heroTrail` therefore drops the last item when it repeats the title, and the trail ends at the PARENT, rendered by `Breadcrumbs endsWith="parent"` as a link with nothing `aria-current` — the h1 directly below is the current page. A trail left as a lone "Home" is not rendered. Where the page has a name shorter than its h1 the route passes that name as the leaf (`story.name`, or a nav label: "Insights", "Case studies"), and it stays. Crawl of 162 pages: 128 carry a trail, always inside the hero, never twice; no last crumb repeats its h1; no eyebrow equals a crumb (exact match; widened to a phrase match in the 6 Oct fix round, item 2, and re-crawled clean over 165 pages); every trail is one line at 390.
+
+8. **The live `/services/*` route and the ServicePage template open a service page the same way** (6 Oct; rewritten in the second fix round). The template carries no eyebrow (visual-direction § 2.3) because `story.name` is its last crumb, so "Home / Services / Product design" names the page. The live route used to build its leaf from the CMS `title`, a headline, which `heroTrail` dropped, so its trail ended at the parent and the CMS eyebrow was the only name in the hero; where that eyebrow said a crumb it went too, and /services/product-design and the three design-systems L2 pages lost their name altogether. The route now builds the leaf as the page's name, from the slug ("Product design") or from the CMS eyebrow where that is the same name spelled out ("Trust, control and recovery"; "Design-system governance and adoption", matched once the parent crumb's words are set aside). All 27 service trails end at the page. *Third fix round, 6 Oct:* the naming is `pageName` and `slugLabel` in `src/lib/trail.ts`, not route code, beside the comparisons it shares a normalisation with. It keeps proper nouns and acronyms (`SPELLINGS`, matched without punctuation, so "UX," is "UX,"; and any authored internal capital, "ConnectX") while sentence-casing the rest, so the Figma page reads "Figma and Storybook alignment" under an h1 that says "Storybook". An eyebrow used as the leaf is consumed (`pageName(…).eyebrow` is `undefined`), so the route no longer warns about a repeat it made itself; `eyebrowBesideTrail` warns once per distinct eyebrow and crumb per server process. A crawl of 165 pages now logs six distinct drops, each a CMS value the trail genuinely repeats, where it logged 37 standing ones. The title's opening was tried as a name source and dropped: it read the headline's first words 32px above the headline. The record's short `name` (`docs/strapi-changes.md` § 16) replaces the slug reading when it exists.
+
+Every section below is amended in place for this block — 1, 2, 3, 7, 9, 10, 12 row 9, 14 checks 4 and 7, 15 item 9 and the build-decisions log; the 29 Sep amendment carries a note.
+
+> **Owner amendment, 8 Oct 2026 — r7-buttons** (`docs/kit/review-7-oct.md`, visual-direction § 4.5).
+> Supersedes the colour amendment below. `converts` is removed (`actions?: HeroActions`): the hero
+> carries the page's one main action, so its first action is always the blue solid and its second the
+> blue ghost partner. There is no ink solid.
+
+> **Superseded 8 Oct.** ~~Owner amendment, 7 Oct 2026 — colour follows the kind of action~~ (visual-direction § 4.5,
+> `docs/specs/Button.md` § 14a). Passing `actions` now REQUIRES `converts: boolean` (no default; the
+> type is `{ actions?: never; converts?: never } | { actions: HeroActions; converts: boolean }`). The
+> first action's solid is blue when it converts (start a project, book a call, request an audit,
+> contact, apply, subscribe) and ink when it does not ("Meet the team", "See the work"); the ghost
+> partner is blue either way. CMS-fed routes pass `leadConverts(actions)` from `@/lib/conversion`,
+> which classifies by destination until the CMS carries the fact (`docs/strapi-changes.md` § 17).
+
+> **Owner amendment, 7 Oct 2026 — pairing and arrows** (`docs/specs/Button.md` § 14a). The second
+> action is now `ghost` / `primary` with the trailing `arrow-right`; the first stays `solid` / `primary`
+> and never carries an arrow. A link button is never the partner beside a solid. Rows below that
+> describe the second action as a link (its label line, its 44 hit area as the whole target) are
+> superseded: the partner is a 40 box like the solid, with `extendHitArea` covering the missing 4.
+
 ## 1 · Identity
 
-The opening block of a page: one `h1`, an optional eyebrow above it, one to six paragraphs of lead copy, an optional byline of credits and dates, an optional caller-supplied block, nought to two actions, and — last in the band — an optional image or YouTube embed. It paints its own band. It is the first thing inside `<main>` on all 129 routes and there is never a second one.
+The opening block of a page: an optional ancestor trail (*5 Oct 2026*), one `h1`, an optional eyebrow above it, one to six paragraphs of lead copy, an optional byline of credits and dates, an optional caller-supplied block, nought to two actions, and — last in the band — an optional image or YouTube embed. It paints its own band. It is the first thing inside `<main>` on all 129 routes and there is never a second one.
 
 **Tier 2 pattern, and the tier is forced twice over.** It takes content shaped like a CMS record — `title`, `eyebrow`, `body`, `credits`, `dates` straight off frontmatter — which the tier rule says makes it a pattern at the least. And it composes `Section`, `Layout`, `Cluster` and `Button`, all four of them primitives; a primitive may not import a primitive, so a hero that arranges itself with `Layout` cannot be one, and hand-rolling flex instead is forbidden. Both roads end at `src/patterns/`.
 
 **What it is NOT**
 
-1. **Not the page's navigation context.** `Breadcrumbs` does that, in its own band directly above, on 128 of 129 routes. It is a pattern, so `PageHero` may not import it, and it does not need to: the two are siblings in the page template and the only thing they share is a `surface` value.
+1. **Not the page's navigation context.** `Breadcrumbs` does that. Since 5 Oct 2026 it sits *inside* this band, in the `trail` slot, 32 above the split; until then it had a band of its own directly above. It is a pattern, so `PageHero` may not import it, and it does not need to: the route or template renders it and hands the node in, and the trail reads this band's ground.
 2. **Not the page's body copy.** `Prose` does that, in the `Section`s below, at `--text-body`. The hero's one to six paragraphs are the abstract, not the article — which is why they are `string`s rather than a rich-text field, and why a link belongs in the body and not here.
 3. **Not a section header.** A bare `<h2>` inside a `Layout` does that, many times per page. A hero happens once and carries the `h1`; a section header happens often and never does. A component that could do both would be a component that could put a second `h1` on the page, which the hard constraint forbids.
 
@@ -40,7 +76,9 @@ The opening block of a page: one `h1`, an optional eyebrow above it, one to six 
 | Part | Element | Required | Content slot | Carries |
 |---|---|---|---|---|
 | `root` | `<section>`, rendered by `Section surface={surface}` | yes | none | the band — ground, content column and vertical air, all from `--sec-*`. No `--hero-*` value of its own |
-| `split` | `<div>`, `Layout rowGap="stack" align="start"`, and in `beside` with media `columns={{ lg: [1, 1] }} colGap="column"` | yes | none | the seam between the copy `stack` and `media` — 48 stacked; 64 across from 1024 in `beside` (added 28 Sep 2026) |
+| `top` | `<div>`, `Layout rowGap="gutter"` — rendered only with a `trail` (*5 Oct 2026*) | no | none | the seam between `trail` and `split`, 32 |
+| `trail` | whatever the caller renders — `<Breadcrumbs …/>`, its own `<nav>` landmark | no — 128 of 162 crawled pages | `trail.crumbs` | nothing of its own. Breadcrumbs owns every value it paints, read from this band's `data-surface` |
+| `split` | `<div>`, `Layout rowGap="stack"`, and in `beside` with media `columns={{ lg: [1, 1] }} colGap="section"`, `align="center"` against an illustration and `align="start"` against anything else | yes | none | the seam between the copy `stack` and `media` — 48 stacked; 96 across from 1024 in `beside` (added 28 Sep 2026; 64 until 1 Oct) |
 | `stack` | `<div>`, `Layout rowGap="stack"` | yes | none | the seam between `opening`, `byline`, `extras` and `actions` |
 | `opening` | `<div>`, `Layout rowGap="block"` | yes | none | the seams between `eyebrow`, `title` and `copy` — one step, three children |
 | `eyebrow` | `<p>` | no — 32 of 129 | `eyebrow`, uppercased | `--hero-eyebrow-ink`, `--text-eyebrow` and its tracking, `--measure-body` |
@@ -53,10 +91,10 @@ The opening block of a page: one `h1`, an optional eyebrow above it, one to six 
 | `key` | `<dt>` | one per `pair` | none — the label is the component's, mapped from `role`, uppercased | `--hero-key-ink`, `--text-micro` and its tracking |
 | `value` | `<dd>` | one per `pair` | the joined people, or a `<time>` | `--hero-value-ink`, `--text-body-sm` |
 | `extras` | `<div>` | no — 1 of 129 | `children` | nothing of its own — the caller's content reads `--sec-*` from the band it is standing in |
-| `actions` | `<div>`, `Cluster colGap="tight" rowGap="tight"` | no — 59 of 129 | `actions`, as `Button`s | both seams. No colour: `Button` owns every value it paints, via `--btn-*` |
+| `actions` | `<div>`, `Cluster colGap="block" rowGap="block" align="center"` (*5 Oct 2026*; `tight` until then) | no — 59 of 129 | `actions`, as `Button`s: the first solid/primary, the second link/neutral | both seams. No colour: `Button` owns every value it paints, via `--btn-*` |
 | `media` | `Media` (an `<img>`, or a panel `<span>` around one) **or** `<iframe>` — no wrapper | no — 6 routes can fill it | `media`, as a discriminated union on `type` | image: nothing of its own — `Media` owns the edge by `kind`, the srcset and the loading; PageHero passes `sizes` and `priority`. video: `--hero-media-rule-ink`, `--hero-media-rule-width`, `--hero-media-radius`, `--hero-media-ratio`. The full content column in `stacked`, the whole of its track in `beside`, uncapped by any measure |
 
-Six parts carry colour (`eyebrow`, `title`, `lead`, `body`, `key`, `value`) and they are the six rows of section 6; the `media` part adds a seventh surface-dependent value, its hairline, which section 6 carries as its own row. Seven parts carry distance only (`root`, `stack`, `opening`, `copy`, `byline`, `pair`, `actions`) and they are the seven component rows of 7(a). One part carries nothing at all (`extras`), and that is the point of it: a slot that imposed a colour or a distance on the caller's block would be a slot the caller had to fight.
+Eighteen parts. Six carry colour (`eyebrow`, `title`, `lead`, `body`, `key`, `value`) and they are the six rows of section 6; the `media` part adds a seventh surface-dependent value, its hairline, which section 6 carries as its own row. Nine parts carry distance only (`root`, `top`, `split`, `stack`, `opening`, `copy`, `byline`, `pair`, `actions`) and they are the component rows of 7(a). Two parts carry nothing at all (`extras` and `trail`), and that is the point of them: a slot that imposed a colour or a distance on the caller's block would be a slot the caller had to fight.
 
 **`media` has no wrapper element and no class of its own on the image.** The two renderings are mutually exclusive by the union, and each one *is* the second child of `split`, so a wrapper would exist only to hold a class with nothing in it. The 16/9 box goes on the `<iframe>` itself as an `aspect-ratio`, which is what makes that possible — the padding-top-percentage-plus-absolute-fill idiom every embed snippet still ships predates `aspect-ratio`, needs the wrapper this component would otherwise not have, and manufactures a stacking context in a band with nothing to stack.
 
@@ -71,7 +109,10 @@ type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer'
 type HeroCredit     = { role: HeroCreditRole; people: readonly [string, ...string[]] }
 type HeroDates      = { published: string; modified?: string }
 type HeroAction     = { label: string; href: string }
-type HeroImage      = { type: 'image'; image: MediaImage }          // the record, nested (28 Sep)
+type HeroImage      = { type: 'image'; image: MediaImage; ratio?: MediaRatioSpec; cut?: HeroCut } // the record, nested (28 Sep); cut 7 Oct
+type HeroCutItem    = { label: string; tone: 'accent' | 'blue' }
+type HeroCut        = { src: string; items: readonly HeroCutItem[] }   // an illustration's numbered cut + legend
+type HeroAnnouncement = { label: string; text: string; action: HeroAction }
 type HeroVideo      = { type: 'youtube'; id: string; title: string }
 type HeroMedia      = HeroImage | HeroVideo
 type HeroArrangement = 'stacked' | 'beside'                        // 28 Sep
@@ -81,16 +122,17 @@ type HeroArrangement = 'stacked' | 'beside'                        // 28 Sep
 |---|---|---|---|
 | `title` | `string` | none — required | The page's one `h1`, rendered verbatim. A `string` and not a `ReactNode`, which is what makes a second heading impossible to smuggle in |
 | `body` | `readonly [string, ...string[]]` | none — required | The paragraphs, in order. `body[0]` renders as `lead` at `--text-lead`; `body[1…]` render as `body` at `--text-body`. Non-empty by type, because all 129 routes have at least one |
-| `eyebrow` | `string \| undefined` | `undefined` | Whether the `eyebrow` part exists. Absent renders no element and no seam — it is a slot, not a variant |
+| `eyebrow` | `string \| undefined` | `undefined` | Whether the `eyebrow` part exists. Absent renders no element and no seam — it is a slot, not a variant. Never a crumb's words: PageHero warns in development when it repeats one (*5 Oct 2026*) |
+| `trail` | `HeroTrail \| undefined` — `{ crumbs: ReactNode; labels: readonly string[]; structural?: number }` (*5 Oct 2026*; `structural`, the count of leading section crumbs, 6 Oct) | `undefined` | Whether the `top` and `trail` parts exist. Built by `heroTrail(items, title, render)` from `src/lib/trail.ts`, which ends the trail at the parent when its last item repeats the title and returns `undefined` when only "Home" is left. Absent renders the split alone |
 | `credits` | `readonly HeroCredit[]` | `[]` | The credit pairs, in array order, before the dates. Empty renders no `<dl>` at all |
 | `dates` | `HeroDates \| undefined` | `undefined` | The date pairs. `published` always renders when `dates` is given; `modified` renders only when it is present **and** differs from `published` |
-| `actions` | `readonly [] \| readonly [HeroAction] \| readonly [HeroAction, HeroAction]` | `[]` | Nought, one or two controls — the three counts the corpus has, as a type. Position decides emphasis: the first is `solid` / `primary`, the second is `ghost` / `neutral` |
+| `actions` | `readonly [] \| readonly [HeroAction] \| readonly [HeroAction, HeroAction]` | `[]` | Nought, one or two controls — the three counts the corpus has, as a type. Position decides emphasis: the first is `solid` / `primary`, the second is `link` / `neutral` (*5 Oct 2026*; `ghost` / `neutral` until then) |
 | `surface` | `'paper' \| 'tint' \| 'ink' \| 'blue'` | `'paper'` | The ground this component's own band paints. A prop here rather than an inherited attribute, for the reason below |
 | `children` | `ReactNode` | `undefined` | The `extras` row — `/contact`'s `h3` stat block. Renders after the byline and before the actions |
 | `media` | `HeroMedia \| undefined` | `undefined` | An image or a YouTube embed: below the copy in `stacked`, beside it from 1024 in `beside`. A discriminated union on `type`, so `image` and `video` set together does not compile. The image is the `MediaImage` record **nested** under `image`, never spread, because the record has its own `kind` (Media §17 Q7). Absent renders no element and no seam |
-| `arrangement` | `'stacked' \| 'beside'` | `'stacked'` | Where the media stands. **Set by the page template per family, in code — never a CMS field** (ruling H1). `stacked`: copy, then the media as a full-column block (this is H1's "below"). `beside`: from 1024, copy and media in two equal tracks, 64 apart, top-aligned (H2); below 1024 identical to `stacked`. With no media both render the one column |
+| `arrangement` | `'stacked' \| 'beside'` | `'stacked'` | Where the media stands. **Set by the page template per family, in code — never a CMS field** (ruling H1). `stacked`: copy, then the media as a full-column block (this is H1's "below"). `beside`: from 1024, copy and media in two equal tracks, 96 apart (64 until 1 Oct), the copy centred on an illustration and top-aligned against any other media (*5 Oct 2026*, visual-direction § 3.2; top-aligned for all until then); below 1024 identical to `stacked`. With no media both render the one column |
 
-**`surface` is a prop, and it is the one place this spec departs from the global rule.** The rule says `surface` is never a prop, and it is right everywhere it applies: a component that stands inside a band reads `data-surface` from that band and is correct without being told. `PageHero` **is** the band. It has no ancestor that declares a surface, so there is nothing to inherit and the value has to arrive as a prop. `Breadcrumbs` reached the same conclusion for the same reason and shipped with the same prop, so this is a precedent being followed rather than one being set. The composition rule that comes with it: the page template holds one surface constant and passes it to `Breadcrumbs` and `PageHero` both, because a mismatched pair renders as a two-tone split across the seam and neither component can check for it. At launch every route takes the default and no route passes the prop at all.
+**`surface` is a prop, and it is the one place this spec departs from the global rule.** The rule says `surface` is never a prop, and it is right everywhere it applies: a component that stands inside a band reads `data-surface` from that band and is correct without being told. `PageHero` **is** the band. It has no ancestor that declares a surface, so there is nothing to inherit and the value has to arrive as a prop. `Breadcrumbs` reached the same conclusion while it owned a band, and dropped the prop on 5 Oct 2026 when it moved inside this one: it now reads this band's `data-surface` like a Button, so the old composition rule — one surface constant passed to both, or the seam goes two-tone — no longer exists to be broken. At launch every route takes the default and no route passes the prop at all.
 
 **Deliberately NOT props**
 
@@ -107,7 +149,7 @@ type HeroArrangement = 'stacked' | 'beside'                        // 28 Sep
 | a media `caption` or `alt` on the video | A hero image's `alt` is required and is on `HeroImage`; a *caption* is `Figure`'s job and a hero is not a figure — the copy above it is the caption. The video's `title` is the frame's accessible name, which is a different thing from a caption and is likewise required |
 | `icon` on a `HeroAction` | Nought of the 59 actioned heroes needs a glyph. An optional prop nobody uses is an invitation; when a download action arrives it is a one-line amendment to `HeroAction` |
 | `showByline`, `hideDates`, `dateFormat`, `authorLabel` | The byline's presence is its content's presence. The labels and the date format are decisions this spec makes once (section 8, section 11) — a hero whose date read differently on one route is a bug |
-| `breadcrumb`, `items` | `Breadcrumbs` is a pattern and so is this; a pattern may not import a pattern. They are siblings, and the template composes them |
+| `breadcrumb`, `items` | `Breadcrumbs` is a pattern and so is this; a pattern may not import a pattern. The route renders it and hands the node to `trail` (*5 Oct 2026*; until then they were sibling bands) |
 | `className`, `style`, `id` | The props interface is closed. The only reason to reach in would be outer spacing on the band, and the page owns that by ordering its bands |
 
 **Compile errors, not review comments**
@@ -217,18 +259,19 @@ Every text ratio is measured against **the ground it actually sits on**, which h
 
 | Where | Role | Owner |
 |---|---|---|
+| `trail` → `split` | `--gap-gutter` (32) | `top`'s `rowGap` (*5 Oct 2026*). The trail is a 13px apparatus line and the split opens on a 67px title, so the step that separates peers is enough; the scale difference does the rest |
 | `eyebrow` → `title` → `copy` | `--gap-block` | `opening`'s `rowGap` — head to body inside a block, the most used step |
 | paragraph → paragraph inside `copy` | `--gap-text` | `copy`'s `rowGap` |
 | `opening` → `byline` → `extras` → `actions` | `--gap-stack` | `stack`'s `rowGap` — block to block inside a section |
 | copy `stack` → `media`, stacked (and `beside` below 1024) | `--gap-stack` | `split`'s `rowGap` — the media is one more block |
-| copy `stack` ↔ `media`, `beside` from 1024 | `--gap-column` (64) | `split`'s `colGap` — two halves that must read as separate, which is what this step is for. The copy does not run into the image, and the image does not read as a figure in the copy's column |
+| copy `stack` ↔ `media`, `beside` from 1024 | `--gap-section` (96; 64 until 1 Oct) | `split`'s `colGap` — two halves that must read as separate, which is what this step is for. The copy does not run into the image, and the image does not read as a figure in the copy's column |
 | `key` → `value` inside a `pair` | `--gap-inline` | `pair`'s `rowGap` — a key and its value, which is what this step is for |
 | `pair` → `pair`, both axes | `--gap-block` | `byline`'s `colGap` and `rowGap` |
-| action → action, both axes | `--gap-tight` | `actions`' `colGap` and `rowGap` |
-| the band's own vertical air | `--sec-padding-y` (96px) | `Section`, at its default density. Not this component's to set |
+| action → action, both axes | `--gap-block` (*5 Oct 2026*; `--gap-tight` until then) | `actions`' `colGap` and `rowGap`. 24 so a bare link label does not read as part of the filled box beside it, and 24 between wrapped rows so the link's 44 target clears the button's box |
+| the band's own vertical air | `--sec-padding-y` (96px) | `Section`, at its default density. Not this component's to set. With a trail, the top 96 is the air above the trail |
 | `root` → whatever precedes or follows it | none | **the page**, by ordering its bands. `PageHero` sets no outer spacing |
 
-Five of the nine steps, and the non-uniform rhythm comes entirely from nesting rather than from a knob: 24 inside the opening, 16 between paragraphs, 48 between blocks. Tighten by grouping, loosen by separating — which is why `stack`, `opening` and `copy` all exist as parts even though none of them renders anything visible. They are the three levels the rhythm needs.
+Six of the nine steps, and the non-uniform rhythm comes entirely from nesting rather than from a knob: 24 inside the opening, 16 between paragraphs, 48 between blocks. Tighten by grouping, loosen by separating — which is why `stack`, `opening` and `copy` all exist as parts even though none of them renders anything visible. They are the three levels the rhythm needs.
 
 **The eyebrow sits at `--gap-block`, not `--gap-tight`, and that is a deliberate reversal.** 8px under a 12px label reads as a caption stuck to the title — a subtitle in the wrong place. 24px reads as a label *above* a title, which is what an eyebrow is: it names the category the page belongs to, not the page. It also means `opening` is one `Layout` with three children rather than two nested ones, because the eyebrow-to-title seam and the title-to-copy seam are now the same step. One fewer part, one fewer level, identical pixels.
 
@@ -242,9 +285,9 @@ The byline's two steps are the one place the ratio does real work: 4px between a
 | `lead` measure | `--hero-lead-measure` → `--measure-lead` | 40ch — **measured 489px** at `--text-lead` (28 Sep 2026; it was `--measure-body`, 832px, until then) | CU04's 35-word ceiling: at 832px that is three long lines reading as the first paragraph of the body; at 489 it is a compact statement under an 878px balanced title, and the two read as two shapes at squint with the band's right half open. The same measure ContentSection's lead takes |
 | `body` measure | `--measure-body` | 68ch — **measured 666px** at `--text-body` | The same 1240px column. The measure does not narrow at six paragraphs — a hero that tightened its measure as its copy grew would turn its longest pages into ribbons |
 | `eyebrow` measure | `--measure-body` | 68ch — **measured 490px** at `--text-eyebrow` (this row said ≈548px) | The longest eyebrow in the corpus, `CONNECTX · AI-NATIVE BUILDING ENERGY PRODUCT` at 44 characters, which measures about 380px uppercased and sits on one line. The measure is there to cap the one that does not |
-| action height | `--btn-height-md` | 40px | The site's default control height. It is 4px short of `--btn-hit-min` 44px, which is why every action sets `extendHitArea` — see section 9 |
+| action height | `--btn-height-md` | solid: 40px. link: no box — its label line, **measured 15.6px** (*5 Oct 2026*) | The site's default control height. It is 4px short of `--btn-hit-min` 44px, and the link's line is 28.4 short, which is why both actions set `extendHitArea`: both hit areas are 44 — see section 9 |
 | minimum inline size | — | 320px, `--lay-track-md` | The longest single word in a corpus `h1` — "Modernisation", 13 characters. **29 Sep 2026, at `--text-display`:** it measures **261px** at the 767 re-declaration (43px), so it fits a 320px track and the 326px column at a 390 viewport, but not the 256px column at a **320 viewport**, where it now breaks inside the word (no overflow — the reset's break-word holds, and no horizontal scrollbar). At `--text-h1` (34px) it fit at 320 too. Logged as an open question rather than changed (A10) |
-| `media` inline size | — | `stacked`: the full content column, 1240. `beside` from 1024: one of two equal tracks, (1240 − 64) / 2 = **588** at the cap | Nothing. It is the only part of the hero that is **not** capped at a measure. Height always follows the asset's own ratio (H3): a 1:1 illustration beside the copy is 588 tall, a 16:9 banner below it 698 |
+| `media` inline size | — | `stacked`: the full content column, 1240. `beside` from 1024: one of two equal tracks, (1240 − 96) / 2 = **572** at the cap | Nothing. It is the only part of the hero that is **not** capped at a measure. Height always follows the asset's own ratio (H3): a 1:1 illustration beside the copy is 588 tall, a 16:9 banner below it 698 |
 | `media` video ratio | `--hero-media-ratio` | 16 / 9 | YouTube's own ratio, and it boxes the **frame only**. Anything else letterboxes inside the player rather than cropping it, which is a black band drawn by another origin inside our band. It is not applied to images: those render at their intrinsic ratio, uncropped |
 | two-adjacent dead air | — | 192px, 2 × `--sec-padding-y` | The visual tell of the bug in section 12 row 12: two 96px band paddings meeting between two display titles |
 
@@ -308,9 +351,9 @@ Example copy, exactly as it would be authored — the eyebrow and the key in sen
 
 **At 1023 — nothing in this component changes.** No DOM change, no reordering, no gap change, no type change. `--text-display` re-declares itself at 1023 (67 → 54) and 767 (→ 43) in the type layer, and `PageHero` must not touch it; because both measures are `ch`-based they follow the type down on their own, with no media query and no second value to keep in sync.
 
-**At 1024 — `beside` splits (28 Sep 2026).** A `beside` hero with media goes from one track to two equal ones at Layout's `lg` breakpoint (1024), with `--gap-column` between them, top-aligned. That is the only responsive change in the component, and it is Layout's template, set by a prop — `PageHero.module.css` still contains no `@media`. Below 1024 a `beside` hero is a `stacked` hero exactly: copy, then media, 48 apart. `sizes` follows: `HERO_BESIDE` states 588 at the cap, `50vw − 64` from 1024, and the full column below.
+**At 1024 — `beside` splits (28 Sep 2026).** A `beside` hero with media goes from one track to two equal ones at Layout's `lg` breakpoint (1024), with `--gap-section` between them (`--gap-column` until 1 Oct), centred on an illustration and top-aligned against any other media (5 Oct 2026). That is the only responsive change in the component, and it is Layout's template, set by a prop — `PageHero.module.css` still contains no `@media`. Below 1024 a `beside` hero is a `stacked` hero exactly: copy, then media, 48 apart. `sizes` follows: `HERO_BESIDE` states 588 at the cap, `50vw − 64` from 1024, and the full column below.
 
-**At 767 — nothing in this component changes either.** The `stack` is single-track at every width, so there is nothing to collapse. The `byline` `Cluster` wraps to one pair per line by itself, at `--gap-block`. The `actions` `Cluster` wraps by itself, at `--gap-tight`, and each `Button` keeps its 40px box and 44px hit area — the wrapped-row pitch is 40 + 8 = 48px, so two rows' targets clear each other rather than overlapping. The measures exceed the content column below about 800px and go inert, which is the correct behaviour and needs no rule.
+**At 767 — nothing in this component changes either.** The `stack` is single-track at every width, so there is nothing to collapse. The `byline` `Cluster` wraps to one pair per line by itself, at `--gap-block`. The `actions` `Cluster` wraps by itself, at `--gap-block` (5 Oct 2026), and each action keeps its box (40 for the solid, the label line for the link) and its 44px hit area — a link wrapped under the button sits 24 below the button's box, and its 44 target, centred on a 15.6 line, reaches 14.2 above the label, so the two targets clear each other rather than overlapping. The measures exceed the content column below about 800px and go inert, which is the correct behaviour and needs no rule.
 
 **`media` needs no query either, and it is the one part that might look as though it does.** Both renderings are `inline-size: 100%` of the content column, so they follow the column down at every width with no breakpoint of their own. The image's block-size follows from its intrinsic ratio and the video's from `aspect-ratio`, which means neither can letterbox and neither can overflow. A `media` that swapped ratio at 767 would be swapping a value the gap scale's own rule forbids swapping — the *layout* changes at a breakpoint, the distance does not — and there is no layout change here to hang it on.
 
@@ -318,25 +361,31 @@ Example copy, exactly as it would be authored — the eyebrow and the key in sen
 
 **The gap scale does not shift responsively.** `--gap-tight`, `--gap-text`, `--gap-block`, `--gap-stack` and `--gap-inline` are the distances at 1440 and at 375 alike. No media query in this component may swap a gap step or a type role.
 
-**Touch targets — 44px, reached by extending the hit area past the box, not by stepping the size up.** Every action is `Button size="md"`, whose box is `--btn-height-md` 40px — 4px short of `--btn-hit-min` 44px — so every action also sets `extendHitArea`, which is `Button`'s own mechanism for reaching the floor without changing the box. That is the choice between the two legal means, and the reason it is the right one here is that the alternative would have made the hero's controls 48px while every other control on the site stayed at 40: the row would move, and the hero would be claiming a loudness the design does not intend. The extension is a transparent overlay on the control's own block axis, so the `--gap-tight` seam between two actions is unaffected and the `actions` row does not grow. **Measured at build:** every action's box is 40px and its `::after` hit area is 44px, on all 25 actions the specimen renders; the wrapped-row pitch is 40 + 8 = 48px, so two rows' targets clear each other rather than overlapping.
+**Touch targets — 44px, reached by extending the hit area past the box, not by stepping the size up.** Every action is `Button size="md"`, whose box is `--btn-height-md` 40px — 4px short of `--btn-hit-min` 44px — so every action also sets `extendHitArea`, which is `Button`'s own mechanism for reaching the floor without changing the box. That is the choice between the two legal means, and the reason it is the right one here is that the alternative would have made the hero's controls 48px while every other control on the site stayed at 40: the row would move, and the hero would be claiming a loudness the design does not intend. The extension is a transparent overlay on the control's own block axis, so the `--gap-tight` seam between two actions is unaffected and the `actions` row does not grow. **Measured at build:** every action's box is 40px and its `::after` hit area is 44px, on all 25 actions the specimen renders; the wrapped-row pitch is 40 + 8 = 48px, so two rows' targets clear each other rather than overlapping. **Re-measured 5 Oct 2026**, after the second action became `emphasis="link"`: the solid's box is still 40 with a 44 hit area; the link has no box, its label line is 15.6 tall and its hit area is 44, centred on the line. The extension is the whole of the link's target rather than a 4px top-up, which is the reason the row's gap rose to 24.
 
 **One contradiction to know about.** `Button.tsx`'s own doc comment lists `lg 48` as the size for "heroes, closing calls, and every button on a phone". This spec overrides that for this component, with the argument above, and the override is deliberate rather than an oversight — but Button's comment now names a case the site's only hero does not take. Whether other heroes still want `lg` is a design decision for Button's owner, not something this build changed. The component renders no other interactive element; anything the caller puts in `extras` reaches the floor by its own means.
 
 ## 10 · Composition
 
 ```jsx
-// The page template composes the two bands as siblings. Breadcrumbs is a pattern and
-// PageHero is a pattern, so neither may import the other. Both take `surface`, because
-// both paint their own band — one constant, passed twice, or the seam goes two-tone.
+// 5 Oct 2026: the route renders the trail and hands it to PageHero. Breadcrumbs is a pattern
+// and PageHero is a pattern, so neither imports the other. heroTrail (src/lib/trail.ts) builds
+// the node and its labels from one array, and ends the trail at the parent when the last item
+// repeats the title. Only PageHero takes `surface`: the trail reads the hero's ground.
 <main>
-  <Breadcrumbs items={frontmatter.navigation.breadcrumb} surface={surface} />
-  <PageHero surface={surface} title={…} body={…} eyebrow={…} credits={…} dates={…}
-            actions={…} media={…} />
+  <PageHero surface={surface} title={title} body={…} eyebrow={…} credits={…} dates={…}
+            actions={…} media={…}
+            trail={heroTrail(items, title, (t) => <Breadcrumbs {...t} />)} />
   {/* the page's body Sections follow */}
 </main>
 
 // Inside PageHero
 <Section surface={surface}>                                {/* root — band, column, 96 of air */}
+  <Layout rowGap="gutter">                                 {/* top — 32, only with a trail */}
+  {trail.crumbs}                                           {/* trail — the caller's <nav> */}
+  <Layout rowGap="stack" columns={split ? { lg: [1, 1] } : undefined}
+          colGap={split ? 'section' : undefined}
+          align={illustration ? 'center' : 'start'}>       {/* split — 48 stacked, 96 beside */}
   <Layout rowGap="stack">                                  {/* stack — 48: block to block */}
 
     <Layout rowGap="block">                                {/* opening — 24: label, title, copy */}
@@ -361,28 +410,30 @@ Example copy, exactly as it would be authored — the eyebrow and the key in sen
 
     <div>{children}</div>                                  {/* extras — no element when absent */}
 
-    <Cluster colGap="tight" rowGap="tight">                {/* actions — 8 both axes */}
+    <Cluster colGap="block" rowGap="block" align="center"> {/* actions — 24 both axes */}
       <Button as="a" href={actions[0].href} emphasis="solid" tone="primary" size="md" extendHitArea>
         {actions[0].label}
       </Button>
-      <Button as="a" href={actions[1].href} emphasis="ghost" tone="neutral" size="md" extendHitArea>
+      <Button as="a" href={actions[1].href} emphasis="link" tone="neutral" size="md" extendHitArea>
         {actions[1].label}
       </Button>
     </Cluster>
 
-    {/* media — LAST, and one element with no wrapper. Whichever the union selects. */}
-    <img src={media.src} alt={media.alt} width={media.width} height={media.height}
-         decoding="async" fetchPriority="high" />
-    {/* …or… */}
-    <iframe src={`https://www.youtube-nocookie.com/embed/${media.id}`} title={media.title}
-            allow="…" referrerPolicy="strict-origin-when-cross-origin" loading="lazy"
-            allowFullScreen />
+  </Layout>{/* stack */}
 
-  </Layout>
+  {/* media — the split's second child, one element with no wrapper. Whichever the union selects. */}
+  <Media image={media.image} sizes={split ? HERO_BESIDE : FULL_COLUMN} priority />
+  {/* …or… */}
+  <iframe src={`https://www.youtube-nocookie.com/embed/${media.id}`} title={media.title}
+          allow="…" referrerPolicy="strict-origin-when-cross-origin" loading="lazy"
+          allowFullScreen />
+
+  </Layout>{/* split */}
+  </Layout>{/* top — without a trail the split is the Section's only child */}
 </Section>
 ```
 
-**28 Sep 2026: the image is a `Media`.** `<Media image={media.image} sizes={split ? HERO_BESIDE : FULL_COLUMN} priority />` replaces the native `<img>` in the tree above, and the tree gains the `split` Layout around the copy `stack` and the media: `<Layout rowGap="stack" columns={split ? { lg: [1, 1] } : undefined} colGap={split ? 'column' : undefined} align="start">`. `split` is `arrangement === 'beside' && media !== undefined`.
+**28 Sep 2026: the image is a `Media`.** `<Media image={media.image} sizes={split ? HERO_BESIDE : FULL_COLUMN} priority />` replaced the native `<img>` the tree used to show, and the tree gained the `split` Layout around the copy `stack` and the media: `<Layout rowGap="stack" columns={split ? { lg: [1, 1] } : undefined} colGap={split ? 'column' : undefined} align="start">`. `split` is `arrangement === 'beside' && media !== undefined`. (*1 Oct 2026:* `colGap` is `section`. *5 Oct 2026:* `align` is `center` against an illustration; the tree above is current.)
 
 **The image is not lazy and the video is, which looks inconsistent and is not.** A hero image is the LCP element on the routes that have one, so deferring it defers the largest paint on the page — `fetchPriority="high"` goes further and asks for it ahead of the other images in the document, which on a page opening is true by construction. `Figure`'s thumbnail *is* lazy, and its own comment named the single case that would mis-serve — "an above-the-fold hero image", which "cannot exist yet: `PageHero` has no image slot". This is that slot, and this is the joint amendment that comment asked for. The video, by contrast, is never the paint a reader is waiting for: it is an object they have to decide to press, and the embed pulls the player's own scripts from another origin, which is real weight to keep off the critical path.
 
@@ -445,12 +496,12 @@ Three things that sentence is meant to prove: the eyebrow arrives as plain text 
 | **1 · Longest realistic string** | The longest `h1` in the corpus is a Service L3 name of about 58 characters. It wraps inside `--measure-title` to three lines at `--text-display` (measured 29 Sep 2026: three lines, 600px of ink at 1440), and the lines **balance** rather than leaving one word alone on the last — the title is the strongest shape in the band and a widow in it is visible from across a room. Never truncated, never clamped, no ellipsis: no `line-clamp` and no `text-overflow` anywhere in this component |
 | **2 · One long unbroken token (a URL)** | Every text part breaks inside a word rather than overflow — `eyebrow`, `title`, `lead`, `body`, `key` and `value` alike. The band never produces a horizontal scrollbar, at any width, for any content. The title is included deliberately: a 60-character unbroken token in an `h1` is a content fault and should look like one, but it must not take the page's layout with it |
 | **3 · Zero items** | `body` empty is a **compile error** (section 3), and so is a `credits` group with no people. The runtime cases that remain: `credits` empty renders no `<dl>`; `actions` empty renders no `Cluster`; and in both cases the `--gap-stack` seam disappears with the row, because a `Layout` gap exists only between rendered children. If an empty `body` reaches the renderer anyway, `copy` renders no element at all — never an empty `<div>` holding 16px of nothing |
-| **4 · One item** | One paragraph (34 pages) renders as a single `--text-lead` `<p>` and `copy` shows no seam. One credit group renders one `pair` and `byline` shows no seam. One action renders one `solid` / `primary` `Button` and no `ghost` — the second emphasis is a consequence of a second entry, not a slot waiting to be filled |
+| **4 · One item** | One paragraph (34 pages) renders as a single `--text-lead` `<p>` and `copy` shows no seam. One credit group renders one `pair` and `byline` shows no seam. One action renders one `solid` / `primary` `Button` and no link (*5 Oct 2026*; it was `ghost`) — the second emphasis is a consequence of a second entry, not a slot waiting to be filled |
 | **5 · Many items (2× expected)** | Six paragraphs is the corpus maximum; twelve is 2×. No cap, no truncation, no warning — the stack grows and the `lead` role still applies to the first only, so a twelve-paragraph hero renders as a lead and eleven body paragraphs and looks exactly like what it is, a page whose opening should have been a section. That is a review comment, not a runtime behaviour (section 17 Q8). Four actions is a compile error |
 | **6 · Missing image or missing optional slot** | **Amended 25 Aug 2026 — there is now an image slot, and it answers this row the same way every other optional slot does.** `media` absent renders no element, no ratio reserved and no placeholder box: 129 of 129 routes are in that state today, and a hero that left room for an image it does not have would be a hero with a hole in it. For all five optional slots the rule is one sentence and it is the most important one in this section: **an absent slot renders no element and no seam.** `eyebrow` absent on 97 pages → `opening` has one child and the title sits at the top of the band with only `--sec-padding-y` above it. `credits` and `dates` absent on 114 → no `<dl>`, not an empty one. `children` absent on 128 → no `extras` div. `actions` absent on 70 → no `Cluster`. `media` absent on all 129 → no `<img>` and no `<iframe>`. No route ever renders a 48px gap above nothing. A *broken* image src is a different case and is not handled: the browser's own broken-image box renders at the reserved width and height, which is the honest failure and is findable in an audit |
 | **7 · Empty required-ish text** | `title=""` renders the `<h1>` anyway, empty. A page with no `h1` is worse than a page with a visibly empty one, and the empty element is what makes the fault findable in an audit. **No placeholder copy, ever** — no "Untitled", no em dash, no fallback string, because a fallback is how a content fault ships. An empty string inside `body` is filtered before render, so it produces no `<p>` and no seam around nothing. **The build had to fix the ORDER this happens in, which the spec did not state:** blanks are dropped BEFORE the lead and body roles are assigned. Filtering afterwards would let a blank first entry render an empty `<p>` at `--text-lead` and promote paragraph two to `--text-body`, so one route with a stray blank line in its frontmatter would open one step quieter than every other route |
 | **8 · The narrow track at 767** | The band stays full-width; the content column becomes the viewport less `--sec-gutter` on each side. Both measures exceed the column below about 800px and go inert. The title wraps to more lines and `--text-display` re-declares itself in the type layer (43px at 767), not here. `byline` wraps to one pair per line at `--gap-block`; `actions` wraps at `--gap-tight`, each `Button` keeping its 40px box and its 44px hit area (this row said 48px before the build, which contradicted 7(b) and 9; the box is `--btn-height-md` and the floor is reached by `extendHitArea`, not by stepping the size). Nothing reorders and no media query fires in this component |
-| **9 · A parent that does not size it** | `PageHero` is a band and may only be a direct child of the page or its template, exactly as `Breadcrumbs` may. `media` inherits this: both renderings are `inline-size: 100%`, which resolves against the band's content column and would resolve against nothing useful in a shrink-to-fit parent — one more consequence of a placement that should not exist. It must not be placed inside a `Section` (the content column would inset twice), inside a `Layout` track (a band is not a row), or inside a `Cluster` (a wrapping row does not size a band, and the hero would shrink to its longest word). For the case where it happens anyway, the named minimum is **320px, `--lay-track-md`** — the width at which the longest single word in a corpus `h1` still fits without overflow. Below 320 it renders and breaks inside words rather than overflowing |
+| **9 · A parent that does not size it** | `PageHero` is a band and may only be a direct child of the page or its template (`Breadcrumbs` was too, until it moved inside this band on 5 Oct 2026). `media` inherits this: both renderings are `inline-size: 100%`, which resolves against the band's content column and would resolve against nothing useful in a shrink-to-fit parent — one more consequence of a placement that should not exist. It must not be placed inside a `Section` (the content column would inset twice), inside a `Layout` track (a band is not a row), or inside a `Cluster` (a wrapping row does not size a band, and the hero would shrink to its longest word). For the case where it happens anyway, the named minimum is **320px, `--lay-track-md`** — the width at which the longest single word in a corpus `h1` still fits without overflow. Below 320 it renders and breaks inside words rather than overflowing |
 | **10 · Logical properties rather than left/right** | Every distance in the component is a `Layout` or `Cluster` gap, which are logical by construction, or a measure, which is `max-inline-size`. `media` is `inline-size` / `block-size`, likewise logical. There is no `margin`, no `padding` and no positioned part anywhere in `PageHero.module.css`, so there is no physical-direction property to get wrong — which is the cleanest possible answer to this row and is a consequence of 7(c) declining the one optical correction on offer |
 | **11 · This component's surface nested inside a different one** | Addressed in section 6. The band is the `[data-surface]` scope and all seven surface-dependent tokens are declared in all four blocks, so a `tint` hero between two `ink` bands renders the tint column at 11.81:1 rather than a light ink stranded on a light ground at 1.13:1. Inside the band, `extras` content reads `--sec-*` from the hero's own surface. `extras` **must not contain a `Section`** — the column would inset twice — nor a `Breadcrumbs`, nor another `PageHero` |
 | **12 · Two of this component adjacent** | Forbidden: two heroes are two `h1`s, and one page has one `h1`. The component cannot detect a sibling — no `:has()`, no upward selector — so this is a lint rule and a review, not a runtime guard. The visual tell, for the specimen band that shows it: two `--sec-padding-y` paddings meet and leave **192px** of dead air between two display titles, which is unmistakable once it has been seen once |
@@ -466,7 +517,7 @@ The only motion inside the band belongs to `Button`: its colours on `--duration-
 
 **One thing inside the band that does move, and it is not ours.** A `media` video is a player in a document on another origin. It moves when a reader presses play, it honours or ignores `prefers-reduced-motion` by YouTube's choice rather than ours, and nothing in this component can reach it. Autoplay is withheld — it is absent from the `allow` list — so nothing moves until a reader asks for it, which is the whole of the control this component has and the reason it takes it.
 
-**Reduced motion.** Nothing of ours to switch off. Under `prefers-reduced-motion: reduce` this component renders identically, and there is no `@media` block in its stylesheet to express that with — the identity is structural, not conditional.
+**Reduced motion.** Nothing of ours to switch off. Under `prefers-reduced-motion: reduce` this component renders identically. Its stylesheet's `@media` blocks (fix round 1: the drawing / phone-cut switch at 768, the texture recipes at 1024 and 1440) choose which rendering shows at a width; none of them animates, so there is nothing for a motion query to express — the identity is structural, not conditional.
 
 ## 14 · Do's and Don'ts
 
@@ -475,10 +526,10 @@ The only motion inside the band belongs to `Button`: its colours on `--duration-
 1. Every route renders exactly one `<h1>` — grep the built HTML per route for `<h1` and expect a count of 1.
 2. An absent slot renders no element — with `eyebrow` undefined, the rendered DOM contains no `eyebrow` node, and the computed distance above the `<h1>` equals `--sec-padding-y` alone, not `--sec-padding-y` plus 8.
 3. `body[0]` computes `font-size: 20px` and `body[1]` computes `16px`, on every route that has two or more paragraphs. **Amended 25 Aug 2026** — this check read `18px` before that date, and a route asserting the old number is asserting the old spec.
-4. Every action is `Button size="md"` with `extendHitArea` — each action's computed box height is 40px and its rendered hit area is 44px. Assert both in the rendered DOM; an action missing the extension is the one failure this component can ship that a screenshot will not show.
+4. Every action is `Button size="md"` with `extendHitArea`, and every action's rendered hit area is 44px. The solid action's computed box is 40px; the link action has no box and computes its label line, 15.6px (*5 Oct 2026*; this check read "every box is 40" while the second action was ghost). Assert the 44 on both in the rendered DOM; an action missing the extension is the one failure this component can ship that a screenshot will not show.
 5. The byline is a `<dl>` in which every `<dt>` has exactly one `<dd>` — assert it in the rendered DOM for the 15 long-read routes.
 6. Every date `<dd>` contains a `<time>` with an ISO `datetime` attribute. **Assert it through the DOM, not with a case-sensitive grep:** React serialises the JSX `dateTime` prop as `dateTime="…"` in the HTML, and because HTML attribute names are ASCII case-insensitive the browser reads it as `datetime` — `getAttribute('datetime')` returns the ISO string on all 14 in the specimen. A `grep 'datetime='` over built HTML finds nothing and means nothing; `grep -i` or a DOM query is the check.
-7. The hero's `surface` equals the `Breadcrumbs` `surface` immediately above it, on all 128 routes that have both — a single template constant, so the diff shows any route that passes two.
+7. The trail is inside the hero and never twice: on every route, every `nav[aria-label="Breadcrumb"]` is a descendant of the hero's `<section>` and there is at most one. The trail's last crumb never repeats the h1, compared with `sameLabel`, and the eyebrow never repeats a crumb, compared with `repeatsTrail` (a whole-word phrase match against a named crumb, equality against a structural one, 6 Oct 2026; both in `src/lib/trail.ts`). Every call site builds the trail with `heroTrail` — grep `trail={{` in `src/app` and `src/templates` and expect none. *(Retired 5 Oct 2026: "the hero's `surface` equals the `Breadcrumbs` `surface` above it". Breadcrumbs has no `surface` and no band, so a mismatch cannot be written.)*
 8. Every `HeroImage`'s `image.alt` is a deliberate value: a description of what it shows, or `""` for an illustration banner (ch05 §9a). Every `HeroVideo` a `title` that is not "YouTube video player". Both are required by the type, so this is a review of the *values*, which no type can check.
 9. Every `media` image asset is supplied as a 2560 master with Strapi's derived widths (M2), and at least 1240 wide in any case. There is no cap at the intrinsic width, so a narrower asset upscales and looks soft; the fix belongs to the asset.
 9b. `PageHero.tsx` passes `sizes` from `@/lib/image-sizes` only — grep for a literal `sizes=` string in the file and expect none — and always passes `priority` on the image.
@@ -523,7 +574,7 @@ The block list for `/design/page-hero`, in order.
 
    **The band must carry all six coloured parts, not the audit hero's four.** This block first specified eyebrow + three paragraphs + two actions, and built that way it left `--hero-key-ink` and `--hero-value-ink` — 2 of the 6 tokens and 6 of the 24 cells in section 6 — rendered on paper and nowhere else, because blocks 4 and 5 are paper-only by design. The tint cell this plan calls out for annotation moves the eyebrow *and the credit keys*, so half of the most-argued decision in the token layer could not be looked at. The band therefore renders eyebrow, title, three paragraphs, a two-author byline with both dates, and two actions: every ink, on every ground, in one arrangement.
 8. **The nested-surface band** — a `tint` hero between two `ink` bands, and an `ink` hero between two `paper` bands, each with its six resolved values listed, so the tint-in-ink case is a rendering rather than a claim.
-9. **The `Breadcrumbs` seam** — the trail above the hero on all four surfaces, matched; then one band with the two deliberately mismatched (`paper` trail over `ink` hero), labelled as the bug neither component can detect. Beside it, the 96px separation that answers the eyebrow-versus-trail question, with both labels visible.
+9. **The trail inside the hero** (*rewritten 5 Oct 2026*; it was "the Breadcrumbs seam", matched and deliberately mismatched, which can no longer be written). Four bands, paper · tint · ink · blue, each with the trail in the slot and a category eyebrow the trail cannot say; the service hero as the six pages render it (trail ending in the service's name, no eyebrow, one solid and one neutral link, illustration centred); a page whose h1 is its name, with the trail ending at the parent; and, deliberately wrong, an eyebrow that repeats the last crumb, which logs the development warning.
 10. **Every edge case from section 12**, each labelled with its row number: the 58-character title with its balanced lines; a bare URL in paragraph 3; `title=""`; an empty string inside `body`; the 767 and 375 columns; the 320px floor; the 256px sub-floor.
 11. **Two adjacent** — two heroes in sequence, with the 192px of dead air measured and annotated, and the band marked "this is a bug; the specimen shows what the bug looks like".
 12. **Interactive content in `extras`** — a `Cluster` of two `Button`s inside the slot, with the tab order annotated: extras first, then the actions.
@@ -644,7 +695,7 @@ Three that are implementation and have no section to contradict:
 
 1. **The tuple union is widened once, to iterate it.** `actions` is `readonly [] | readonly [HeroAction] | readonly [HeroAction, HeroAction]`, which is what makes a third action a compile error — and `.map` is not callable on a union of tuple types, so the component assigns it to one `readonly HeroAction[]` before rendering. It weakens nothing: the narrowing has already done its work by the time a value reaches the component.
 2. **Paragraphs are keyed by index.** They are static frontmatter copy in array order — never reordered, never inserted into — and two paragraphs may be identical strings, which makes the content a worse key than the position.
-3. **No development warning anywhere.** `Breadcrumbs` warns on a frontmatter record it cannot render; this component has no such case. `title=""` renders the empty `<h1>` §12 row 7 asks for and says nothing, because the empty element IS the signal and a console line nobody reads is not a second one.
+3. **No development warning anywhere.** `Breadcrumbs` warns on a frontmatter record it cannot render; this component has no such case. `title=""` renders the empty `<h1>` §12 row 7 asks for and says nothing, because the empty element IS the signal and a console line nobody reads is not a second one. **Superseded 5 Oct 2026 (kit `fdn-top`):** PageHero now has two development warnings, both about the trail — an eyebrow that repeats a crumb, and a last crumb that repeats the title. Both are faults no screenshot labels as faults (the band renders correctly, it just says something twice), which is the case a warning is for. `title=""` still warns about nothing.
 
 Four more are recorded in the section each one belongs to rather than only here: the corrected measure arithmetic in **7(b)**, the date labels and the UTC formatter in **11**, the blank-paragraph filter order in **12 row 7**, and the declaration-scoped greps in **14**.
 
@@ -700,13 +751,84 @@ Every line lands between about 19 and 29 characters — a display line's comfort
 
 **3 · The lead/body step.** 20 over 16 under a 67px title: the title-to-lead ratio goes from 2.7 to 3.35 and the lead still reads as the second voice, set at 40ch (489px) against an 878px title — two distinct shapes at squint, with the 24 between them unchanged. **Unchanged; not clearly broken.**
 
-**4 · Checked:** every arrangement × media kind × surface in the specimen at 1440, 1024, 1023, 768, 767, 390 and 320 — no title overflows its box and no page scrolls sideways (`scripts/shots.mjs`: 0 problems). `beside` stays top-aligned (H3); centring the media was not approved.
+**4 · Checked:** every arrangement × media kind × surface in the specimen at 1440, 1024, 1023, 768, 767, 390 and 320 — no title overflows its box and no page scrolls sideways (`scripts/shots.mjs`: 0 problems). `beside` stays top-aligned (H3); centring the media was not approved. *(Superseded 5 Oct 2026, kit `fdn-top`: visual-direction § 3.2 centres the copy on an ILLUSTRATION, which has no box to share an edge with; every other media kind stays top-aligned, so H3's reason still holds for them.)*
 
 **A10 · "Modernisation" at a 320 viewport. — non-blocking, owner's call.** At 43px the word is 261px and the column at a 320 viewport is 256, so it breaks inside the word there (no overflow). It fits at 390. Options: accept it (320 is below the 390 the site is checked at), or a smaller `--font-size-display-m` step, which is a type-layer change for every display user and not part of this ruling.
 
 **What did not change.** The element, the measures, every ink, every gap, the band density, the arrangement and the media.
 
 ---
+
+## Amendment · 6 Oct 2026 (kit `cmp-hero`, visual-direction § 2.3 to § 2.5)
+
+PageHero is proved as a kit component on `/design/kit/hero`, nine shapes, each measured at 1470 × 830
+and 390 (`fold.config.json`). What the build added:
+
+| Prop | Type | Default | What it does |
+|---|---|---|---|
+| `media.ratio` | `MediaRatioSpec` | — | A photograph's crop, passed to Media. The photograph hero takes `'5/4'`, 572 × 458 in the [1, 1] split, anchored at the record's `focus` (`getKitPhoto`). Top-aligned, radius 8, no frame (Media's `photograph` edge). Ignored on any other kind, with Media's warning. |
+| `arrangement` | adds `'centred'` | `'stacked'` | Trail, title, lead and actions centred on the column (Layout `justifyItems`, Cluster `justify`, `text-align` and a balanced lead in the module), then the media below at the full column. The owner comparison (§ 2.3 option, § 10 item 2); it cannot end above 830, so the specimen block carries `data-fold-exempt`. |
+| `tags` | `readonly string[]` | `[]` | Inert Tags in a `ul` Cluster (8 both axes), a stack under the copy, before the actions. Only when the title sets on ≤ 3 lines (§ 2.4): + 80. |
+| `texture` | `boolean` | `false` | The pixel-grid in the recipe the media decides — photograph beside the copy: `hero-foot` (start, lg only); no media: `hero-field` (end, lg) and `horizon` below 1024. Refused with a development warning on an illustration (the band rule: Accent + Field), a video, a stacked image and any ground but paper. A closed set rather than a ReactNode slot, so a call site cannot misplace a recipe; the numbers are § 6.3's and move to `TEXTURE_RECIPES` when `fdn-texture` lands. |
+| `announcement` | `{ label; text; action }` | — | One line above the hero (showcase only): an inert Tag, a body-sm sentence (`--hero-note-*`, new, per surface) and a link-style sm action with a trailing arrow. A `stack` (48) above the trail or the split. The photograph hero with a strip ends at 795. |
+
+Also:
+- The second action carries a trailing `arrow-right`: blue at rest, link-style (visual-direction § 4.2,
+  owner 6 Oct, which supersedes "neutral link-style" in the cmp-hero brief).
+- The band emits `data-arrangement`: `hero-illustration`, `hero-media`, `hero-text`, `hero-stacked` or
+  `hero-centred`, for the fold gate.
+- Measured at 1470 with the 73 of nav: service 742 · one action 752 · tags 807 · photograph 723 ·
+  announcement 795 · no media with trail 629 / 560 · category eyebrow 775. At 390 the h1 sits at 214
+  and every band is under 1140.
+
+## Amendment · 6 Oct 2026, fix round 1 (kit `cmp-hero`)
+
+What the three-lens review changed, cause first:
+
+| Note | Cause | Fix |
+|---|---|---|
+| Texture a faint smudge | Both recipes sat almost wholly off the band | `plinth` (photograph): a field from under the photo's lower half out to the band's end and foot. `field` (no media): a full-height end column that fades in, from 1440; a horizon in the foot padding below. Both clear of every glyph by construction |
+| Centred comparison swollen | Media took the full 1240 | Capped at `--hero-media-size-centred` 860 (`HERO_CENTRED` sizes) |
+| One shape six times | No second opening | `arrangement="display"`: title in 3 of 5, lead and ask in 2 at its foot, media full column below (`ratio` `{ base: '4/3', lg: '3/1' }`). Band 807; its image crosses the fold by design, so the specimen exempts the hero measurement |
+| Grey tag strip | Tag chips between lead and ask | Unboxed mono list after the actions, each after a 6px blue pixel (`--hero-mark-*`, `--hero-tag-*`) |
+| SaaS announcement | Grey pill, wrapping strip | Blue pixel + blue mono flag (`--hero-flag-*`), one line always, the sentence ellipsises |
+| Labels 6px on phones | Text inside an `<img>` at 0.34x | `scripts/illustrations-phone.mjs` writes a phone cut (labels to numbered markers) and `src/lib/illustration-legends.ts`; below 768 the hero shows the cut and a numbered legend. Found by src, so no call site changes (superseded 7 Oct 2026: the caller passes it as `HeroImage.cut`; see the amendment at the foot) |
+| Soft hero photos | `sizes` stated the box, not the cover-cropped image | Media scales `sizes` by the crop factor (`cropSizes`); calmer, sharper frames chosen |
+| 67px title in a 432 track at 1024 | [1, 1] from 1024 | `beside` is 3 : 2 from 1024 and 1 : 1 from 1440 |
+| Trail floats over illustration heroes | Trail above a centred split | Against an illustration the trail joins the copy column: 32 to the title always |
+| No fold gate | Nothing read `fold.config.json` | `npm run fold:check` (`scripts/fold-check.mjs`): bands ≤ `maxBand`, `[data-fold-hero]` + nav ≤ 830, `data-fold-exempt` reported |
+
+Measured at 1470 with the 73 of nav: service 729 · one action 699 · tags 784 · photograph 723 ·
+announcement 792 · display band 807 (hero 880, exempt) · field 629 · text 590 · category 775 ·
+centred 1346 (exempt). At 390 the h1 sits at 213 and every band is under 1140.
+
+## Amendment · 6 Oct 2026, fix round 2 (kit `cmp-hero`)
+
+| Note | Cause | Fix |
+|---|---|---|
+| Texture an artefact (plinth behind the photo's corner, a tinted strip beside the text) | Soft fields placed against the BAND, guessing where the column was | Two hard-edged regions with a track of their own, a stepped silhouette sinking into the band's floor: `foot` under the copy (photograph, from 1440; `Layout pinLast`, the field fills the 1fr row, 48 under the ask by its own geometry) and `field`, the end third of a `[2, 1]` split from 1024 (no media), a 2:1 block below it (`--hero-field-ratio`) |
+| Six shapes one rectangle | Every photograph took `beside` | `arrangement="wide"`: copy 2 : media 3 from 1440, a 3:2 photograph at 686 × 457 (`HERO_WIDE`). The announcement specimen carries it |
+| Display head misplaced; display over the fold | Top-aligned halves; a 3:1 at 1240 | The Quantum split header: title and lead in 3 of 5, the ask on the lead's last baseline (`Layout align="baseline"`) flush with the column's end from 1024 (`Cluster justify={{ base, lg }}`); a 4:1 panorama (new Media ratio `4/1`). Ends at 781, no exemption |
+| Grey eyebrows | The eyebrow had no mark | The eyebrow carries the 6px blue square (`--hero-mark-*`), as the tags and the flag do |
+| Announcement truncated on a phone | nowrap + ellipsis | The sentence wraps beside the flag; the link drops below |
+| Two action shapes on phones | A wrapping row | `Cluster stackUntil="md"`: below 768 the pair always stacks |
+| Nine ragged tags | A wrapping list | At most six (development warning past six), a 3-column grid from 768, 2 below; keyed by index and tag |
+| Two eager drawings per service page | Two `<Media priority>`, one `display:none` | One `<picture>`: a `<source media="(max-width: 1439.98px)">` serves the numbered cut, so only the shown drawing is fetched (rendered by `Media`'s `art` since 7 Oct 2026) |
+| 7px labels and a 4-line title at 1024 | Drawing in a 2/5 track | Drawing heroes are `[2, 1]` from 1024 and `[1, 1]` from 1440, the numbered cut and legend below 1440; photograph heroes `[1, 1]` from 1024 |
+| Authored proper nouns lowercased in a crumb | `trailCase` sentence-cased authored eyebrows | `pageName` keeps an authored eyebrow as written (`authoredCase` only restores a known acronym); `slugCase` is for slugs alone |
+| 860 written twice | Literal in tokens and in `image-sizes.ts` | `CENTRED_MEDIA` in `image-sizes.ts`, cross-referenced from the token |
+
+**Brief deviation, recorded:** the cmp-hero brief says the secondary action is "always neutral
+link-style". It is `emphasis="link" tone="primary"` (blue, with an arrow), because the owner's later
+6 Oct ruling (fdn-blue, visual-direction § 4.1) makes every text link blue at rest. The ruling wins;
+the change is listed in `docs/kit/brand-amendments.md` (ch02, the `tone="primary"` row).
+
+**The two size tokens** `--hero-mark-size` (6) and `--hero-numeral-size` (20) read the space ramp
+as a stated exception: no size primitive holds either value (`--icon-size-*` runs 14 to 24).
+
+Measured at 1470 with the 73 of nav: service 729 · one action 699 · tags 792 · photograph 723 ·
+wide with announcement 792 · display 781 · field 629 · text 590 · category 775 · centred 1346
+(exempt, the owner comparison). No horizontal overflow at 1470, 1024 or 390.
 
 ## Appendix — self-audit
 
@@ -898,3 +1020,52 @@ COMPLETENESS
 [~] "the specimen route reads as five shapes" → six. The sixth is the media run, and it is
     the block that gives the component itself the property the squint test asks for.
 ```
+
+## Amendment · 7 Oct 2026 — the cut arrives as a prop; Media renders the `<picture>`
+
+Two tier faults found after the kit run, fixed together:
+
+- **Content seam.** PageHero imported `ILLUSTRATION_LEGENDS` from `@/lib/illustration-legends` and looked
+  up an illustration's numbered cut and legend copy by the image's `src`. A pattern renders only what it is
+  handed, so the lookup moved to the callers: `HeroImage` gains `cut?: HeroCut` (`{ src, items }`, items
+  `{ label, tone: 'accent' | 'blue' }`), structurally the generated `IllustrationLegend`. The ServicePage
+  template, `/design/kit/hero` and `/design/page-hero` § 9 pass `ILLUSTRATION_LEGENDS[image.src]`. A cut on
+  any kind but `illustration` is ignored. Nothing else about the rendering changed.
+- **Art direction.** PageHero wrapped `<Media>` in its own `<picture><source media=…>`. That is the
+  primitive's job: `Media` now takes `art` (docs/specs/Media.md, amendment 7 Oct), and PageHero passes
+  `art={[{ media: CUT_QUERY, src: cut.src }]}`. The rendered markup is the same `<picture>`, now emitted by
+  Media with a `display: block` class.
+- **The one breakpoint, written twice.** `CUT_QUERY` (`(max-width: 1439.98px)`) in `PageHero.tsx` feeds the
+  `<source>`; `PageHero.module.css`'s `@media (min-width: 1440px)` hides `.legend`. A CSS module cannot read a
+  TSX constant, so both carry a KEEP IN STEP comment naming the other.
+- **Barrels.** `HeroAnnouncement`, `HeroCut` and `HeroCutItem` are exported from `src/patterns/PageHero` and
+  `src/patterns`.
+
+
+## Amendment · 9 Oct 2026 — r7-hero: the score in the eyebrow's place, and a quieter lead
+
+Owner, 7 Oct 2026 review (`docs/kit/review-7-oct.md`, r7-hero; reference doodle.com).
+
+- **`rating?: HeroRating`** — `{ score, platform, href, mark?, scale?, frame? }`, rendered as a
+  `RatingBadge` with the star and the `BrandMark` composed here, in the eyebrow's row, 24 over the
+  title. `eyebrow` and `rating` are one union (`HeroEyebrowProps`): the line above the title holds one
+  thing, so passing both does not compile. A score is a claim with a source, never a name, so it can
+  never repeat a crumb and the `repeatsTrail` warning has nothing to compare.
+- **`frame`**: `pill` (default) beside a drawing, on a centred axis or over a long title; `plain`
+  (RatingBadge `frame="plain"`, no outline) beside a photograph, the doodle.com shape. Proven at
+  `/design/kit/hero` 13 to 16 and `/design/page-hero` block 22.
+- **`leadSize?: 'md' | 'lg'`**, default `md`. `md` reads `--hero-lead-text` (now `--text-body-lg`);
+  `lg` reads `--hero-lead-text-lg` (`--text-lead`, the old default) and is an opt-in for a page
+  written for search, chosen per family in code. On a phone both are 18. Every hero in the kit got
+  4 to 7px shorter; the kit's "Ends at" facts were re-measured. Block 23 and `/design/kit/hero` 17.
+
+### Amendment · 9 Oct 2026 — the stepped texture recipes retired
+
+Owner review: both hero textures were "bad use of texture". The stepped `foot` (under the copy beside
+a photograph) and `field` (the end third of a no-media band, `[2, 1]`) are removed with their CSS
+and `--hero-field-ratio`. A hard-edged block reads as an object competing with the copy, not as
+rhythm. `texture` now means one thing: a paper hero with **no media** draws Statement's `end-fade`
+field (end −120, 30% wide, blur 160, full band height) from 1024. A hero with a photograph, an
+illustration or a video carries no texture; `texture` there is ignored with a development warning.
+The texture row in the props table above and the fix-round rows that describe `foot` / `field` are
+superseded by this amendment. `/design/texture` shows the stepped block under "Never".

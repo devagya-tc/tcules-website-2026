@@ -1,0 +1,229 @@
+/* VideoTestimonial — a client interview on film, built to the 7 Oct review (r7-video).
+
+   Layout owns every relationship: the poster beside or above the caption, the label-to-quote and
+   quote-to-speaker seams. This module owns the screen's box and its two layers (the poster over
+   the player), the play disc, and the caption's type, rule, indent and ink. It paints no ground.
+   The one `display: grid` here centres ONE glyph inside its disc — a control's interior, not an
+   arrangement of siblings. */
+
+.root {
+  min-inline-size: 0;
+}
+
+/* ── The screen ────────────────────────────────────────────────────────────────
+   One 16:9 box holding two layers in the same place: the player underneath, the poster over it.
+   Pressing play removes the poster and reveals the player where the poster was, so nothing on the
+   page moves. The box carries no overflow clip, so the focus ring drawn around it is not cut. */
+.screen {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: var(--vt-poster-ratio);
+  min-inline-size: 0;
+}
+
+/* wide: the poster is a cinematic crop of the frame across the whole column, so the band clears the
+   830 fold. The film is still 16:9, so the box opens to the player's ratio on play — the reader
+   asked for it, and only content below the film moves. */
+.wide .screen {
+  aspect-ratio: var(--vt-poster-ratio-wide);
+}
+
+.wide .playing {
+  aspect-ratio: var(--vt-poster-ratio);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+  border-radius: var(--vt-poster-radius);
+  background: var(--vt-player-ground);
+  visibility: hidden;
+}
+
+.playing .video {
+  visibility: visible;
+}
+
+.video:focus-visible {
+  outline: var(--vt-ring-width) solid var(--vt-ring-color);
+  outline-offset: var(--vt-ring-offset);
+}
+
+/* The poster is the control: the whole photograph is the target, not only the disc. */
+.poster {
+  position: absolute;
+  inset: 0;
+  z-index: var(--vt-layer-poster);
+  inline-size: 100%;
+  block-size: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--vt-poster-radius);
+  background: none;
+  cursor: pointer;
+}
+
+.poster:focus-visible {
+  outline: var(--vt-ring-width) solid var(--vt-ring-color);
+  outline-offset: var(--vt-ring-offset);
+}
+
+/* The crop: the photograph radius on the poster's own box (Media is told the placement owns the
+   edge), and the clip the hover push-in needs. */
+.frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--vt-poster-radius);
+}
+
+.zoom {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  transition: transform var(--vt-duration) var(--vt-easing);
+}
+
+.poster:hover .zoom,
+.poster:focus-visible .zoom {
+  transform: scale(var(--vt-poster-scale-hover));
+}
+
+/* ── The play disc ─────────────────────────────────────────────────────────────
+   Centred on the photograph, the one blue mass in the unit. It is the poster's affordance, not a
+   second control: aria-hidden, inside the one button. */
+.play {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  z-index: var(--vt-layer-control);
+  display: grid;
+  place-items: center;
+  border-radius: var(--vt-play-radius);
+  background: var(--vt-play-bg);
+  color: var(--vt-play-fg);
+  translate: -50% -50%;
+  transition:
+    background-color var(--vt-duration-play) var(--vt-easing),
+    scale var(--vt-duration-play) var(--vt-easing);
+}
+
+.play svg {
+  translate: var(--vt-play-glyph-nudge) 0;
+}
+
+/* The disc is sized to the POSTER: below 1024 the poster is the full phone column (about 326 × 183),
+   where an 88 disc would cover half its height. So it takes the md disc there and the lg disc from
+   1024, where both layouts give the poster its large width. */
+.play {
+  inline-size: var(--vt-play-size-md);
+  block-size: var(--vt-play-size-md);
+}
+
+.play svg {
+  inline-size: var(--vt-play-glyph-md);
+  block-size: var(--vt-play-glyph-md);
+}
+
+@media (min-width: 1024px) {
+  .play {
+    inline-size: var(--vt-play-size-lg);
+    block-size: var(--vt-play-size-lg);
+  }
+
+  .play svg {
+    inline-size: var(--vt-play-glyph-lg);
+    block-size: var(--vt-play-glyph-lg);
+  }
+}
+
+.poster:hover .play,
+.poster:focus-visible .play {
+  background: var(--vt-play-bg-hover);
+  scale: var(--vt-play-scale-hover);
+}
+
+/* Pressed: one step past hover, on the disc only — the pointer is down on the whole poster, but
+   the disc is the part that answers. */
+.poster:active .play {
+  background: var(--vt-play-bg-pressed);
+}
+
+/* Reduced motion: the push-in and the swell are decoration, so they are dropped rather than made
+   instant. The disc still darkens: that is the hover state, not motion. */
+@media (prefers-reduced-motion: reduce) {
+  .zoom,
+  .play {
+    transition-duration: var(--duration-instant);
+  }
+
+  .poster:hover .zoom,
+  .poster:focus-visible .zoom {
+    transform: none;
+  }
+
+  .poster:hover .play,
+  .poster:focus-visible .play {
+    scale: none;
+  }
+}
+
+/* ── The caption ───────────────────────────────────────────────────────────────
+   The label, the pulled line and the speaker. The rule runs beside the quote only (ch10 B2.07);
+   the label and the speaker hang on the quote's text edge, so the rule is the one thing outside
+   the column and reads as the mark of speech. */
+.caption {
+  min-inline-size: 0;
+}
+
+.meta,
+.attribution {
+  padding-inline-start: calc(var(--vt-quote-rule-width) + var(--gap-block));
+}
+
+/* wide, from 1024: the label and the speaker stand in their own track beside the quote, as the
+   film's credit, so they no longer hang on the quote's text edge. */
+@media (min-width: 1024px) {
+  .wide .meta,
+  .wide .attribution {
+    padding-inline-start: 0;
+  }
+}
+
+.meta {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--vt-meta-ink);
+}
+
+.quote {
+  min-inline-size: 0;
+  max-inline-size: var(--measure-lead);
+  border-inline-start: var(--vt-quote-rule-width) solid var(--vt-quote-rule);
+  padding-inline-start: var(--gap-block);
+  color: var(--vt-quote-ink);
+  overflow-wrap: anywhere;
+  text-wrap: var(--text-running-wrap);
+  /* The display quote role in both layouts: the film is the band's only voice, never a row's peer. */
+  font: var(--text-quote-lg);
+  letter-spacing: var(--text-quote-lg-tracking);
+}
+
+.name {
+  display: block;
+  overflow-wrap: anywhere;
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+  color: var(--vt-name-ink);
+}
+
+.role {
+  display: block;
+  overflow-wrap: anywhere;
+  font: var(--text-body-sm);
+  color: var(--vt-attribution-ink);
+}

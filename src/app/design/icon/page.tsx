@@ -37,7 +37,12 @@ const MEANINGS = [
   { name: 'check-circle', meaning: 'Done, included' },
   { name: 'download', meaning: 'Download a file — leading' },
   { name: 'copy', meaning: 'Copy to clipboard — leading' },
-  { name: 'hamburger-menu', meaning: 'Menu' },
+  { name: 'hamburger-menu', meaning: 'Menu — content only; the nav uses chrome-menu' },
+  {
+    name: 'chrome-menu',
+    meaning: 'CHROME · the site nav’s menu toggle — the universal three bars',
+  },
+  { name: 'chrome-close', meaning: 'CHROME · the site nav’s close — the universal cross' },
   { name: 'info-circle', meaning: 'Information — leading, beside the words of a notice' },
   { name: 'danger-triangle', meaning: 'Warning — leading, beside the words of a notice' },
 ] as const;
@@ -134,7 +139,7 @@ export default function IconSpecimenPage() {
                   as="a"
                   href="https://example.com"
                   emphasis="link"
-                  tone="neutral"
+                  tone="primary"
                   icon={<Icon name="square-arrow-right-up" />}
                 >
                   Read the paper
@@ -237,7 +242,7 @@ export default function IconSpecimenPage() {
               <Button
                 size="sm"
                 emphasis="ghost"
-                tone="neutral"
+                tone="primary"
                 icon={<Icon name="arrow-right" />}
               >
                 sm · 14
@@ -245,7 +250,7 @@ export default function IconSpecimenPage() {
               <Button
                 size="md"
                 emphasis="ghost"
-                tone="neutral"
+                tone="primary"
                 icon={<Icon name="arrow-right" />}
               >
                 md · 16
@@ -253,7 +258,7 @@ export default function IconSpecimenPage() {
               <Button
                 size="lg"
                 emphasis="ghost"
-                tone="neutral"
+                tone="primary"
                 icon={<Icon name="arrow-right" />}
               >
                 lg · 18
@@ -261,7 +266,7 @@ export default function IconSpecimenPage() {
               <Button
                 size="sm"
                 emphasis="ghost"
-                tone="neutral"
+                tone="primary"
                 icon={<Icon name="arrow-right" size="xl" />}
               >
                 sm, icon asked for xl
@@ -292,7 +297,7 @@ export default function IconSpecimenPage() {
       {/* currentColor on all four grounds — the claim the token layer makes by having no surface
           blocks, so it is the claim this page has to actually show. */}
       {SURFACES.map((surface) => (
-        <Section key={surface} surface={surface} density="tight">
+        <Section key={surface} surface={surface}>
           <Layout rowGap="block">
             <Layout rowGap="tight">
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>
@@ -314,8 +319,10 @@ export default function IconSpecimenPage() {
               ))}
             </Layout>
             <Cluster colGap="block" rowGap="text" align="center">
-              <Button icon={<Icon name="arrow-right" />}>Start a project</Button>
-              <Button emphasis="ghost" tone="neutral" iconLeft={<Icon name="download" />}>
+              <Button emphasis="ghost" tone="primary" icon={<Icon name="arrow-right" />}>
+                See the work
+              </Button>
+              <Button emphasis="ghost" tone="primary" iconLeft={<Icon name="download" />}>
                 Download
               </Button>
               <Button
@@ -329,7 +336,7 @@ export default function IconSpecimenPage() {
                 as="a"
                 href="https://example.com"
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 icon={<Icon name="square-arrow-right-up" />}
               >
                 Read the paper

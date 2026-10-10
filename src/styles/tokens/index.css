@@ -43,7 +43,7 @@
      (--btn-solid-primary-bg, --btn-ghost-neutral-fg). Never -fg on a surface, never
      -ink on a control.
    · Two vocabularies for steps, and which one to use is decided by what is stepping.
-     A DISTANCE takes a gap-scale role name — --gap-block, --sec-padding-y-tight. A
+     A DISTANCE takes a gap-scale role name — --gap-block, --sec-padding-y-first. A
      COMPONENT SIZE takes a t-shirt name — --btn-height-md, --lay-track-sm. Distances
      are shared across the system so they are named for the relationship; a size
      belongs to one component, so a neutral ordinal is honest.
@@ -58,6 +58,22 @@
      never resolve to the same value.
    · A genuinely one-off value — a logotype, a diagram label — stays inline with a
      comment. It does not get a name that suggests it is reusable.
+
+   ── Blue, and peridot ───────────────────────────────────────────────────────────
+   Blue is the recurring FOREGROUND accent (visual-direction § 4, owner 6 Oct 2026):
+   text links at rest, icons, list and step markers and numerals, arrows and cues,
+   small graphic marks, active and current states, slider controls, stat accents.
+   Coherently, not sparsely: a role that is blue is blue on every page. Paper and
+   tint read brandeis-500; ink lifts to 300 (500 is 2.77:1 there); blue goes white.
+   Text links ≥ 4.5:1, icons and marks ≥ 3:1, on every surface. The WORDS stay ink
+   — headings, eyebrows, card titles at rest, body, Tag chips — and so do neutral
+   separators and a cross beside a check.
+   Blue is NEVER a ground: no band, card fill or panel. The band rule counts blue
+   MASSES only — at most one solid primary, and at most two of solid primary,
+   illustration and Texture per band; the foreground accent is never counted.
+   Peridot is ::selection (globals.css) and an illustration's carried item, nothing
+   else. tokens:check fails any component layer or *.module.css that reads
+   --color-peridot-*; the ramp's declarations in primitives.css stay.
 
    ── Adding a component layer ───────────────────────────────────────────────────
    Copy the shape of tokens/components/button.css: geometry in :root, then one block
@@ -101,10 +117,25 @@
 @import 'components/figure.css';
 @import 'components/table-of-contents.css';
 @import 'components/content-section.css';
+@import 'components/cta-row.css';
+@import 'components/slider.css';
 @import 'components/tag.css';
 @import 'components/texture.css';
 @import 'components/client-mark.css';
 @import 'components/data-table.css';
+@import 'components/brand-mark.css';
+@import 'components/rating-badge.css';
+@import 'components/process-flow.css';
+@import 'components/stat.css';
+@import 'components/thread.css';
+@import 'components/service-page.css';
+@import 'components/banner.css';
+@import 'components/statement.css';
+@import 'components/engagement-model.css';
+@import 'components/contrast.css';
+@import 'components/video-testimonial.css';
+
+@import 'components/logo-grid.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */

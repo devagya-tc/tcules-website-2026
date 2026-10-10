@@ -13,7 +13,7 @@ app  →  templates  →  patterns  →  components  →  lib / styles
 |---|---|---|
 | — | `src/app/**` | routes. Composition only; read content, pass props |
 | 3 | `src/templates/**` | whole page-type layouts (article shape, service-page shape) |
-| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter`, `Breadcrumbs`, `PageHero`, `CtaSection`, `EnquiryForm`, `ListCard`, `BlockCard`, `Accordion`, `Proof` and `Figure` today; `ContentSection` next |
+| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter`, `Breadcrumbs`, `TableOfContents`, `PageHero`, `ContentSection`, `CtaSection`, `CtaRow`, `EnquiryForm`, `ProcessFlow`, `ListCard`, `BlockCard`, `Accordion`, `Proof`, `Callout`, `DataTable`, `Figure` and the kit's `Slider` today; `Statement`, `Banner`, `Contrast` and `Thread` as they land |
 | 1 | `src/components/**` | primitives, controls and marks — `Section`, `Layout`, `Cluster`, `Button`, `Icon`, `Logo`, `Prose` |
 | — | `src/content/**` | the CMS seam. Imported by pages and nothing else |
 | — | `src/lib/**`, `src/styles/**` | leaves. Import nothing above them |
@@ -42,11 +42,14 @@ a primitive. Same rule one tier up — a pattern does not import a pattern.
 `Section`, `Layout` and `Cluster` express every arrangement in the site between them:
 
 - **`Section`** — the full-width band. Paints the ground and owns the content column (1240 cap,
-  32 gutter) and the vertical air (96, or `density="tight"` 64 / `density="open"` 128, or `flush`
-  0). Every one of those values comes from `--sec-*`; the component contributes none of its own.
+  32 gutter) and the vertical air: ONE value per width — 96, and 64 below 768 — with the page's
+  first band taking 48 (tablet) / 32 (phone) above its content; `density="strip"` (24) and `flush`
+  (0) are the only exceptions (owner, 7 Oct 2026). Every one of those values comes from `--sec-*`; the component contributes none of its own.
   `surface="paper | tint | ink | blue"` sets the ground for everything inside it.
 - **`Layout`** — the columnar axis. Tracks (`3`, `[2,1]`, per-breakpoint, `fit`, `tile`) plus
   `rowGap` / `colGap`, both taking gap-scale step names. A vertical stack is the single-track case.
+  `scroll="until-md" | "always"` turns the tracks into one sideways scroll-snap row, `columns` then
+  naming how many items are in view; the `Slider` pattern drives `always`.
 - **`Cluster`** — the inline axis. Wrapping rows: chips, button groups, metadata, logo strips.
   Same scale, capped at `stack`.
 
@@ -93,19 +96,28 @@ Nine steps, named for what they separate:
 | `--gap-block` | 24 | head to body inside a block — the most used step |
 | `--gap-gutter` | 32 | container gutter, and the gap between cards in a set |
 | `--gap-stack` | 48 | block to block inside a section |
-| `--gap-column` | 64 | column gutter where two halves must read as separate |
-| `--gap-section` | 96 | section padding, tight |
+| `--gap-column` | 64 | column gutter between two **peer** halves that must read as separate, **and the row seam of a borderless card set (29 Sep 2026)** |
+| `--gap-section` | 96 | section padding, tight — and a **split**: two regions of different kind side by side |
 | `--gap-section-open` | 128 | section padding, open |
 
 1. **Layout distance never comes from `--space-*`.** The space ramp exists so the gap scale can be
    built from it. A component may reach the ramp for an **optical correction** — a label's
    side-bearing margin, a ring offset — and must say so in a comment on the token, as
    `button.css` does.
-2. **A distance that is not one of these nine is a mistake or a new step.** Decide which. Do not
+2. **Peer or split — decide which before reaching for a column gap.** Two halves of the same kind
+   (two lists, the sides of one contrast) are peers and take `column` (64). Two regions of different
+   kind side by side — copy beside a form, copy beside an image, a head beside its body, a quote
+   beside its case — are a split: two sections sharing a row, so they take `section` (96). The
+   patterns that own a split (`PageHero` beside, `ContentSection` beside, `CtaSection`, `Proof`)
+   already set it; a template composing its own split states it the same way.
+3. **A distance that is not one of these nine is a mistake or a new step.** Decide which. Do not
    split the difference.
-3. **A step is chosen by what it separates, never by how it looks at one width.** The scale does
+4. **A step is chosen by what it separates, never by how it looks at one width.** The scale does
    not shift responsively — the *layout* changes at a breakpoint, the distance does not. Do not
-   add a media query that swaps one step for another.
+   add a media query that swaps one step for another. One exception (owner, 7 Oct 2026): `Section`'s
+   own vertical padding is one value per width — 96, 64 below 768 — and the page's first band
+   takes 48 / 32 above its content below 1024, in `tokens/components/section.css` and nowhere else. It is the band's air against the screen, not a
+   distance between two things.
 
 `Layout` and `Cluster` take these names directly as `rowGap` / `colGap` values. Cluster caps at
 `stack`: controls and chips stop at `block`, a strip of client marks is set at `stack`, and a
@@ -133,7 +145,7 @@ wrapping row has no use for a column or section beat.
    (`--sec-ground`, `--sec-link-ink`). A *control* has a **bg** and an **fg**
    (`--btn-ghost-neutral-fg`). Never `-fg` on a surface, never `-ink` on a control.
 5. **Two vocabularies for steps.** A *distance* takes a gap-scale role name (`--gap-block`,
-   `--sec-padding-y-tight`). A *component size* takes a t-shirt name (`--btn-height-md`,
+   `--sec-padding-y-first`). A *component size* takes a t-shirt name (`--btn-height-md`,
    `--lay-track-sm`). Distances are shared system-wide so they name the relationship; a size
    belongs to one component, so an ordinal is honest.
 6. **A component never reads another component's tokens.** Shared values are primitives or usage
@@ -315,8 +327,10 @@ get a spec. That step was manual, and Claude Design cannot see this repo.)
 the chain. `docs/briefs/` is the record of what was asked for under the old workflow; `docs/briefs/README.md`
 indexes it.
 
-**`npm run verify`** chains six checks: `lint`, `typecheck`, `tokens:check`, `classes:check`,
-`specimens:check` and `design:check`. Two more gates run separately:
+**`npm run verify`** chains seven checks: `lint`, `typecheck`, `tokens:check`, `classes:check`,
+`specimens:check`, `design:check` and `photos:check` (the kit photo catalogue's measured tone tags,
+derived widths and generated registry are current; `npm run photos:tone && npm run photos:derive`
+refreshes them). Two more gates run separately:
 - `npm run build && npm run aria:check` proves every ARIA idref in the rendered output resolves and that
   no id is duplicated. It needs a build.
 - `npm run shots` catches horizontal overflow and page errors. It needs a server.
@@ -346,6 +360,20 @@ Clean does not mean plain, and "not busy" is not an argument for "not designed".
   tinted background band.
 - Vary the arrangement between blocks rather than the ground behind them.
 - A secondary column that is only text is a missed opportunity; give every item a shape.
+- **Clickable cards sit under their head.** A section of linked cards puts its eyebrow, heading and
+  lead above them at full width, so the cards read as the heading's continuation — never a head track
+  beside the grid. And it carries no decorative image: the cards are the band's shape. A photograph
+  may sit beside items nobody clicks, with those items continuing under the heading in its column.
+- **Two tinted bands are never adjacent**, the close included: where two would meet, one drops to paper.
+- **An icon heads its card.** Glyph, then title, then body, each on its own row — never the glyph
+  inline beside the title. A boxed card has no edge; its inset exists for the hover ground.
+- **Never two text-heavy bands back to back.** A band with no photograph and a body of words is
+  followed by a visual one (a photograph, a diagram, marks, covers, an icon set). The ServicePage
+  plan warns in development (`textHeavyPairs`, visual-direction § 1.7).
+- **IRL photographs share one tone layer.** It is `--media-photo-grade`, read by every photograph
+  Media renders; it ships `none` until the owner picks the treatment. Never grade one image locally.
+- **Proof is a set, not a ranking.** Logos, case studies, testimonials and the platform rating are
+  drawn on as the argument needs; none is numbered, ordered by strength, or billed as "top".
 - **Before shipping a composition:** if you squint, does it read as more than one idea? If every
   block is the same rectangle at the same size, it is not finished.
 

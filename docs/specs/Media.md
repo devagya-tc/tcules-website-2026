@@ -71,6 +71,7 @@ type MediaImage = {
 type MediaFit = 'intrinsic' | 'fill'
 type MediaEdge = 'kind' | 'placement'
 type MediaInset = 'gutter' | 'text'                          // 29 Sep 2026, 2.17
+type MediaArt = { media: string; src: string; width?: number; height?: number } // 7 Oct 2026
 ```
 
 | Prop | Union | Default | Decides |
@@ -81,6 +82,7 @@ type MediaInset = 'gutter' | 'text'                          // 29 Sep 2026, 2.1
 | `edge` | `'kind' \| 'placement'` | `'kind'` | kind: Media draws the edge the image's kind calls for. placement: the crop box around it rules every kind itself, so Media draws none — amendment · 29 Sep below |
 | `inset` | `'gutter' \| 'text'` | `'gutter'` | the panel inset step, and only that. gutter: `--gap-gutter` (32), every full-column, track and card placement. text: `--gap-text` (16, "cell padding"), for a small box — ListCard's 160 × 107 thumbnail. Ignored when no panel renders (29 Sep 2026, 2.17) |
 | `priority` | `boolean` | `false` | true: `loading="eager"`, `fetchpriority="high"`. false: `loading="lazy"`, `decoding="async"` |
+| `art` | `readonly MediaArt[]` | none | art direction: alternative FILES by media query, first match wins, rendered as `<source>`s in a `<picture>` around the `<img>`. Absent or empty: a bare `<img>` — amendment · 7 Oct below |
 
 **The record, and where its type lives.** `MediaImage` is Media's. The view model's `ImageRecord`
 (`src/content/types.ts`) is the same shape, declared independently — the precedent `FigureImage` set — so a
@@ -358,3 +360,129 @@ crop keeps the part that orients a reader. One anchor for every cropping placeme
 and the amendments' inset arithmetic assume a *central* 4:3 safe area; a cover authored to that rule can now
 lose its right-hand side in a 3:2 or 4:3 crop. The supply rule should move to match — the safe area sits at
 the top-left — or covers keep their concept left of centre.
+
+## Amendment · 6 Oct 2026 — `fdn-media`: `ratio`, `focus`, the photograph radius, the gate attributes
+
+Built to `docs/kit/visual-direction.md` § 5.3 to § 5.7, which wins where it conflicts with this spec.
+
+**`ratio?: MediaRatio`** — `'4/5' | '5/4' | '3/1' | '3/2' | '16/9' | '4/3' | '1/1'`, the closed set of § 5.4's
+placements, each read from a `--media-ratio-*` token. A photograph whose box is Media's own (B, K and
+L-photo at 4:5, the hero photograph at 5:4, the I banner at 3:1 or 3:2, the head-track aside at 3:2) is
+cut to the ratio in its own box: full inline size, block size from the ratio, `object-fit: cover`.
+- **Photographs only.** A capture, a cut-out and an illustration still render whole (ruling H3); on them
+  `ratio` is ignored with a development warning. This is the one change to § 3's "no aspect-ratio":
+  the ratio has nowhere else to live when the box is Media's.
+- **Ignored under `fit="fill"`**, with a warning: the parent already owns that ratio.
+
+**`focus`** — `{ x, y }`, each 0 to 1 from the top-left, on the record (`MediaImage.focus`, the
+catalogue's `focalPoint`) and optionally on the prop, which wins for one placement ("crop from the
+right", § 5.6). It is an `object-position`, so the point x% across the image sits x% across the box and
+the focus is always inside the crop. Written as one custom property on the element's style
+(`--media-focus`, ClientMark's per-asset idiom) over a stylesheet default: the centre
+(`--media-crop-position`) for a ratio crop, `--media-fill-position` (0 20%) for a fill. So a card's
+stand-in photograph crops on its subject, and a product-UI cover keeps the 29 Sep top-left anchor.
+
+**The photograph radius.** `kind: 'photograph'` with `edge="kind"` takes `--media-photo-radius:
+var(--radius-8)` and no frame. This revises § 7's "radius 0 on every image" for photographs only: the
+29 Sep 8px on card images is extended to every photograph, so a page never shows rounded card photos
+beside a square 4:5 photo (§ 5.3). Captures stay at radius 0 with the hairline; cut-outs and
+illustrations are unchanged. A placement that rules its own crop box (`edge="placement"`: BlockCard,
+now ListCard's thumbnail) draws its own radius on the box, and Media adds none inside it.
+
+**The tone layer** (owner, 7 Oct 2026; visual-direction § 5.5a). Every `kind: 'photograph'`, at every
+`edge`, takes `filter: var(--media-photo-grade)`. The token ships `none`, so the layer renders nothing
+until the owner rules on the treatment; the ruling then lands in that one token. No prop opts out.
+
+**New optional record fields.** `focus`, `tone` (`{ temperature, saturation }`, measured by
+`npm run photos:tone`) and `standIn` (a catalogue photo standing in for a missing cover, § 5.7). None
+renders anything a reader sees. `placeholderSize` (below) says the `width` / `height` are not the
+master's.
+
+**Gate attributes.** A photograph's `<img>` carries `data-src-w` and `data-src-h` (the master's pixels)
+and `data-photo-temp` / `data-photo-sat` (its tone), and a stand-in carries `data-stand-in`. They are
+what `fold:check` (`fdn-gates`) reads to compare the crop with the rendered box (≥ 1.9×, § 5.4) and to
+count a page's photo families and vivid photos (§ 5.5). Photographs only, and the pixels only when they
+are real: a record flagged `placeholderSize: true` emits no `data-src-w` / `-h`. BlockCard sets the flag
+on a cover that arrived without dimensions, which it gives its box's 3 × 2 (fix round, 6 Oct 2026: until
+then the flag did not exist, and such a photograph would have reported a 3px master).
+
+**Where the photos come from.** `src/lib/photos.ts` (`getKitPhoto`, `cropScale`, `qualifies`,
+`pickStandIn`) over the generated `src/lib/photo-catalogue.ts`. The data is never typed by hand:
+`npm run photos:tone` measures the tags into `public/kit/photos/catalogue.json`, and
+`npm run photos:derive` writes the 1240 · 652 · 320 rungs (`public/kit/photos/derived/`) and the
+registry. `npm run photos:check`, in `verify`, fails when either is stale.
+
+**Specimen:** `/design/media` § 9 — one photo per ratio with its crop scale at 1470, the record's focus
+against a prop override, a photograph intrinsic beside a capture (radius 8 against 0 and the hairline,
+and `ratio` ignored on the capture), and the gate attributes on a stand-in.
+
+### Fix round · 6 Oct 2026
+
+- **The card ratio has one answer: 3:2.** § 5.4's table gives card sets of three or more 16:9 and the
+  horizontal card 4:3, but no card renders either: BlockCard's crop box is `--bcrd-media-ratio` →
+  `--ratio-cover` (3/2) in both orientations, and ListCard's thumbnail is the same. `src/lib/photos.ts`
+  now exports `CARD_RATIO = '3/2'`, every card placement in `PHOTO_PLACEMENTS` (`card3`, `card4`,
+  `cardPair`, `cardHorizontal`, `thumbnail`) measures against it, and the stand-in picker reads the same
+  constant, so `qualifies(id, 'card3')` measures the box a card actually draws. **§ 5.4 drift:** its 16:9
+  and 4:3 card rows describe a BlockCard that does not exist; adopting them would be a BlockCard change
+  (a ratio per set size), which `CARD_RATIO` would then follow. `16/9` and `4/3` stay in `MediaRatio`
+  because the set is § 5.4's, but no shipped placement passes them.
+- **A 64 portrait is a placement-ruled box.** Proof's compact portrait now passes `edge="placement"`
+  and draws `--proof-portrait-radius-compact` (`--radius-4`, § 5.3) on its own clipping box. At the
+  default `edge="kind"` it picked up the photograph radius, 8, which § 5.3 does not give it.
+- **`--media-focus` is registered** in `scripts/tokens-check.mjs`'s `JS_INJECTED`, beside ClientMark's
+  per-asset properties, so the check no longer relies on `.fill` and `.crop` happening to declare a
+  local default.
+- **Specimen § 9** sets each label beneath its image, so a title that wraps no longer drops one image
+  below its neighbours, and § 9b renders the photographs on tint, ink and blue as well as paper.
+
+
+## Amendment · 6 Oct 2026 — `fdn-section-head`: a ratio per arrangement
+
+**`ratio?: MediaRatioSpec`**, where `MediaRatioSpec = MediaRatio | { base: MediaRatio; lg: MediaRatio }`.
+A bare ratio is unchanged: one crop at every width. The object form crops `base` below 1024 and `lg`
+from 1024 — Layout's `lg`, where every split in the kit opens — for the placements whose crop follows
+the arrangement rather than only its width: the media split and the offer are 4:5 beside their copy and
+4:3 above or below it (visual-direction § 3.7 item 4). A 4:5 photograph at the 326 phone column is 408
+tall before a word of the copy; the 4:3 crop is 244.
+
+- Two named breakpoints, both required, and no others: arrangements change at 1024 and nowhere else.
+- Mechanism: the base class as before (`.ratio4x3`), plus an `lg` class (`.lgRatio4x5`) inside the
+  module's one `@media (min-width: 1024px)`, declared after the base classes at equal specificity so it
+  wins inside the query. Media emits the `lg` class only where the two halves differ. Same tokens
+  (`--media-ratio-*`); no new token.
+- This is the one change to § 3's "no `@media`" note: the crop is a layout fact once it differs by
+  arrangement, and it has nowhere else to live when the box is Media's own.
+- Still photographs only, still ignored under `fit="fill"`.
+- First consumer: ContentSection `arrangement="media"` (`ratio={{ base: '4/3', lg: '4/5' }}`, `sizes`
+  `MEDIA_SPLIT`). `cmp-cta`'s K offer photo is the second.
+- § 14's "Don't find `aspect-ratio` anywhere in `Media.module.css`" was already superseded by the
+  `fdn-media` amendment above; the `lg` classes are the same declaration under a query.
+- **Specimen:** `/design/media` § 9 renders the object form beside its control: `{ base: '4/3', lg:
+  '4/5' }` next to the same photo at a bare `4/5`. The pair is 4:5 in the 1440 capture and 4:3 in the
+  390 one; the control stays 4:5 at both (added in the `fdn-section-head` fix round).
+
+## Amendment · 7 Oct 2026 — `art`: art direction in the primitive
+
+PageHero hand-wrapped `<Media>` in a `<picture><source media=…>` to swap an illustration for its numbered
+cut below 1440. Art direction is image delivery, which is Media's, so the `<picture>` moved here.
+
+- **API.** `art?: readonly MediaArt[]`, `MediaArt = { media: string; src: string; width?: number; height?:
+  number }`. Each entry renders `<source media srcset width height>` in order, before the `<img>`; the
+  browser takes the first whose `media` matches. The `<img>` stays the fallback and the one element that
+  carries `alt`, `loading`, `decoding` and `fetchpriority`, so only the file the width selects is fetched and
+  only it is high priority.
+- **Not resolution switching.** The record's `sources` are widths of ONE master (srcset + `sizes`). `art` is
+  a DIFFERENT file — a recomposed asset — so it is a prop the placement chooses, not a record field: only the
+  placement knows where its track gets too narrow. The media query is the placement's for the same reason.
+- **`width` / `height`.** The alternative's intrinsic size, emitted on the `<source>` so the browser reserves
+  its box when its ratio differs. Omit them only when the alternative shares the image's ratio (the numbered
+  cut shares the drawing's viewBox).
+- **CSS.** `.picture { display: block }` de-inlines the wrapper (no line box round the img); under
+  `fit="fill" | "contain"` `.pictureFill` gives it the parent's full height so the img's 100% still
+  resolves. Nothing arranges; no token.
+- **Unchanged.** With a panel, the `<picture>` sits inside the panel span. Ratio crops, focus, edge and the
+  gate attributes are the `<img>`'s as before.
+- **First consumer:** PageHero's illustration cut (docs/specs/PageHero.md, amendment 7 Oct).
+- **Specimen:** `/design/media` renders an art-directed drawing whose `<source>` swaps in below 1440.
+

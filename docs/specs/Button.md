@@ -12,7 +12,7 @@
 | **Implements**         | No brief. `Button.tsx` and `tokens/components/button.css` both cite "the Button Spec Sheet", which resolved to nothing until this file existed — this is that sheet, and the citation is what it implements.                                    |
 | **Implemented at**     | `src/components/Button/Button.tsx` · `src/components/Button/Button.module.css` · `src/styles/tokens/components/button.css` · specimen `src/app/design/button/page.tsx`                                                                          |
 | **Spec reconstructed** | 2026-08-19, from the shipped implementation                                                                                                                                                                                                     |
-| **Revised**            | 2026-08-25 — adds the `data-btn-link-group` contract in section 5, so a link Button can serve as the label of an enclosing whole-card or whole-row anchor.                                                                                      |
+| **Revised**            | 2026-08-25 — adds the `data-btn-link-group` contract in section 5, so a link Button can serve as the label of an enclosing whole-card or whole-row anchor. 2026-10-08 — r7-buttons: the ink solid is retired (§ 0 amendment, § 14a).          |
 
 > **What this document is.** Both `Button.tsx` and `tokens/components/button.css` open by saying
 > they were "built to the Button Spec Sheet". This is that sheet, reconstructed after the fact so
@@ -23,11 +23,55 @@
 > shipped CSS and **[c]** where they were computed for this spec from the ramp hexes in
 > `primitives.css` using the WCAG 2.x relative-luminance formula.
 
+> **Owner amendment, 8 Oct 2026 — three kinds, one job each** (r7-buttons; `docs/kit/review-7-oct.md`,
+> the 7 Oct review as corrected by the owner on 8 Oct). **This supersedes the colour amendment below.**
+> 1. **Blue solid** — the page's ONE main action: the hero's and/or the bottom close's ask (PageHero,
+>    CtaSection's `open` and `split` closes, EnquiryForm's submit). Always blue. **There is no ink
+>    solid**: `ButtonTone` keeps `neutral` for ghost and link only, and the type makes
+>    `<Button tone="neutral">` (a solid by default) a compile error. `--btn-solid-neutral-*` is deleted
+>    from every surface block, with its `.solid.neutral` rules.
+> 2. **Blue ghost** — the solid's partner, beside it and nowhere else in content.
+> 3. **Link button** — every other action, which navigates. In-band actions are links: "Start with a
+>    UX Product Audit" inside a band is a link, not a button. CtaRow is therefore link-only (one action),
+>    and CtaSection's mid-page `offer` takes one action and renders it as a link.
+>
+> Kind follows WHERE the action sits, not what it does, so `converts` is gone from PageHero, CtaSection
+> and CtaRow, and `src/lib/conversion.ts` is deleted. Neutral ghost and link remain for site chrome
+> (SiteNav, a filter set, a utility glyph) and never stand for an action in a band.
+
+> **Superseded 8 Oct 2026 by the amendment above.** ~~Owner amendment, 7 Oct 2026 — colour follows the kind of action~~ (approved after the pairing
+> amendment below; § 14a, `docs/kit/visual-direction.md` § 4.5). A solid is **blue** (`tone="primary"`)
+> when the action converts — the reader starts something with the studio: start a project, book a
+> call, request an audit, send, contact, apply, subscribe — and **ink** (`tone="neutral"`) when it is a
+> band's lead action that does not ("See open roles", "Meet the team", "See the work"). Ghost and link
+> buttons in content are **always blue**, whatever sits beside them; neutral ghost and link stay in
+> the primitive for site chrome only. Never decided by count or placement: the same ask is blue in the
+> hero, the offer and the close. Button keeps its `tone` axis unchanged; the patterns that own action
+> rows take a required `converts: boolean` and derive the tone (§ 14a).
+
+> **Owner amendment, 7 Oct 2026 — pairing and arrows.** The site had too many arrows in buttons and
+> its pairs were inconsistent. Five rules, binding on every call site; the full text is § 14a.
+> 1. **Solid primary is the group's main next step. No arrow, ever.** It need not convert (owner,
+>    revised 7 Oct): a converting action takes it when present; otherwise the step the page most wants
+>    next, so a non-converting page's hero pair stays balanced. Order of choice: `visual-direction.md` § 4.5.
+> 2. **A primary's partner is a ghost**, not a link button. The ghost carries the trailing arrow when it
+>    navigates. No outline at rest, so it looks like a link until hovered — intended (owner, 7 Oct).
+> 3. **Link buttons (`emphasis="link"`) belong inside cards and inline contexts**, and carry the arrow.
+>    They are never the secondary beside a primary.
+> 4. **Never two buttons of the same emphasis side by side.** A group is at most one solid + one ghost.
+> 5. The same rules hold in every pattern that renders actions — PageHero, CtaSection, CtaRow, Banner,
+>    Statement, ContentSection, EnquiryForm — and in every page and specimen composition.
+>
+> Button itself does not enforce them: it is a primitive, takes `icon` as a `ReactNode` and cannot know
+> which glyph it was handed or what sits beside it. The patterns that own action rows enforce them by
+> position and by type (§ 14a).
+
 ---
 
 ## 1 · Identity
 
-**What it is.** The one interactive control in the system. Three emphases against two tones, three
+**What it is.** The one interactive control in the system. Three labelled emphases (the solid blue
+only; ghost and link in two tones, neutral for site chrome), three
 sizes, three content variants and seven states — and it contributes no colour and no distance of its
 own. Every value comes from `--btn-*`, which the token layer re-declares once per surface, so one
 piece of markup is correct on paper, on a tint panel, in the ink footer and on the blue pivot
@@ -58,9 +102,12 @@ overrides the glyph's size from `--btn-icon-size-*`, because the spec's rule is 
 with the _button_, and `Icon`'s own JSDoc records that its `size` prop is deliberately ignored
 inside a control that sizes its own icons.
 
-**How many appear on a page.** Solid: **one per view**, of either tone. A second solid means the
+**How many appear on a page.** Solid: **one main action per page** — the hero's and/or the close's,
+always blue (8 Oct 2026). A second solid means the
 page has not decided which action it wants, and the reader will not decide for it. Ghost and link:
-unbounded — a segmented filter set is four ghosts, a card deck is a link per card.
+unbounded across a page — a card deck is a link per card — but never two of one emphasis side by side
+in one action group (owner, 7 Oct 2026; § 14a). A segmented filter set of ghosts is a control set, not
+an action group, and is not covered by that rule.
 
 ---
 
@@ -103,7 +150,7 @@ label sits on true centre rather than half a pixel left of it.
 | `as`            | `ElementType`                                                          | `'button'`             | The rendered element. `'a'` for an external link, `Link` for an internal route. Also decides which disabled mechanism is emitted (§11).                                                                                     |
 | `href`          | `string`                                                               | —                      | Destination when rendering as an anchor. Ignored by a native button.                                                                                                                                                        |
 | `emphasis`      | `'solid' \| 'ghost' \| 'link'`                                         | `'solid'`              | How loud. Selects the `--btn-{emphasis}-*` colour block and, for `link`, drops the box entirely.                                                                                                                            |
-| `tone`          | `'primary' \| 'neutral'`                                               | `'primary'`            | What it claims. Selects the `-primary-` or `-neutral-` colour axis.                                                                                                                                                         |
+| `tone`          | `'primary' \| 'neutral'`                                               | `'primary'`            | Selects the `-primary-` or `-neutral-` colour axis. `neutral` only with `emphasis="ghost"` or `"link"` (site chrome); a solid is `primary` by type (8 Oct 2026).                                                            |
 | `size`          | `'sm' \| 'md' \| 'lg'`                                                 | `'md'`                 | Height, label composite and icon size — together, and nothing else (§4).                                                                                                                                                    |
 | `icon`          | `ReactNode`                                                            | —                      | Trailing glyph. Mutually exclusive with `iconLeft` at the type level.                                                                                                                                                       |
 | `iconLeft`      | `ReactNode`                                                            | —                      | Leading glyph. Mutually exclusive with `icon` at the type level.                                                                                                                                                            |
@@ -135,6 +182,16 @@ label sits on true centre rather than half a pixel left of it.
 - **`outline` / `bordered`.** None of the three emphases carries an outline, on purpose. A ghost is
   always shown beside a solid, and two boxes of equal edge weight — one filled, one outlined — read
   as two buttons of the same rank before the label is parsed.
+  *Amended 6 Oct 2026.* One exception exists since `fdn-scroll`: `emphasis="outline"`, typed
+  icon-only and primary-only, the slider's previous / next stepper. It is never a labelled button,
+  so it never stands beside a solid as a second rank. Round (`--btn-radius-round`), a hairline rule
+  (`--btn-outline-rule-width`, `--btn-outline-primary-rule`), the glyph in `--btn-outline-primary-fg`,
+  filling with `--btn-outline-primary-bg-hover` on hover and focus and `-bg-pressed` on press.
+  Its glyph is one step above a labelled button's at each size — `--btn-outline-icon-size-sm` 16,
+  `-md` 18, `-lg` 24 (cmp-testimonials fix round 2: the arrow is the whole control) — and the
+  Slider uses `lg`, a 48 circle. Unavailable, it keeps its circle in `--btn-disabled-rule`:
+  neutral-300 on paper, neutral-400 on tint (300 all but vanished on paper-deep), neutral-800 on
+  ink, brandeis-400 on blue. Rendered in every surface band of `/design/button`.
 - **`margin` / `gap` / any spacing prop.** `Cluster` owns the gap.
 
 **Prop combinations that are a compile error, not a review comment.** `ButtonProps` is
@@ -155,13 +212,13 @@ were verified against the shipped types:
 
 ## 4 · Variants × sizes
 
-Three emphases × two tones = **six combinations**, each available in three sizes and three content
-variants.
+**Five combinations** — the blue solid, and ghost and link in two tones — each available in three
+sizes and three content variants. (Six until 8 Oct 2026, when the ink solid was retired.)
 
 |             | solid                                                                                                                                                                        | ghost                                                                                                             | link                                                                                          |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| **primary** | The one action a view is asking for. Brandeis blue: on the web, blue means clickable, and nothing else on the page may borrow the colour.                                    | Secondary, same offer. No outline — the fill is the whole affordance, and it appears the moment the pointer does. | Reading rather than doing. No box at all, so it can sit in a paragraph or under a case title. |
-| **neutral** | Ink. Claims nothing and gets the work done — and is the most legible button in the system. Where blue would make a utility sound like an offer: send, copy, download, close. | The default secondary.                                                                                            | Navigation.                                                                                   |
+| **primary** | The page's ONE main action — the hero's and/or the close's (*8 Oct 2026*, § 14a). Brandeis blue, the same in the hero and the close.                                              | Every ghost in content — a solid's partner, whatever the solid's colour. No outline — the fill is the whole affordance, and it appears the moment the pointer does. | Every link in content. No box at all, so it can sit in a paragraph or under a case title. |
+| **neutral** | **None.** Retired 8 Oct 2026 (r7-buttons): there is no ink solid, by type and in the token layer. | Site chrome only (SiteNav, filter controls). Never in content since 7 Oct 2026.                                    | Site chrome only. Never in content since 7 Oct 2026.                                         |
 
 | Size | Height                 | Label composite                         | Icon                                    | Where it lands                                                                     |
 | ---- | ---------------------- | --------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------- |
@@ -283,8 +340,8 @@ a case to support.
 
 | Absent                                                               | Because                                                                                                                                             |
 | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--btn-solid-primary-fg-hover` / `-fg-pressed`, and the neutral pair | A solid button's label never changes — not on hover, not on press, on any of the four surfaces. The absence is the assertion.                       |
-| `--btn-solid-primary-fg-busy`, and the neutral equivalent            | A solid button's label also holds through request progress; only its field takes the busy token.                                                    |
+| `--btn-solid-primary-fg-hover` / `-fg-pressed`                       | A solid button's label never changes — not on hover, not on press, on any of the four surfaces. The absence is the assertion.                       |
+| `--btn-solid-primary-fg-busy`                                        | A solid button's label also holds through request progress; only its field takes the busy token.                                                    |
 | `--btn-ghost-*-fg-hover`                                             | A ghost's hover step _is_ the fill appearing. Its label holds still until the press.                                                                |
 | `--btn-ghost-*-bg` / `--btn-link-*-bg` (rest)                        | Neither has a fill at rest. Ghost's box "is still there; it appears the moment the pointer does." Link has no box at all.                           |
 | `--btn-link-*-bg-hover` / `-bg-pressed`                              | Link's hover step is a label colour, not a field.                                                                                                   |
@@ -328,11 +385,6 @@ decimals, with one rounding note in §17.
 | `--btn-solid-primary-bg-pressed` | `--color-brandeis-700` · label 10.16:1 **[c]**                                                     | `--color-brandeis-700` · label 10.16:1 **[c]**                            | `--color-brandeis-700` · label 10.16:1 **[c]**                    | `--color-neutral-300` · label 11.07:1 **[c]**                      |
 | `--btn-solid-primary-bg-busy`    | `--color-brandeis-700` · label 10.16:1 **[c]**                                                     | `--color-brandeis-700` · label 10.16:1 **[c]**                            | `--color-brandeis-700` · label 10.16:1 **[c]**                    | `--color-neutral-300` · label 11.07:1 **[c]**                      |
 | `--btn-solid-primary-fg`         | `--color-white` · 6.23:1 on rest bg **[q]**                                                        | `--color-white` · 6.23:1 on rest bg **[q]**                               | `--color-white` · 6.23:1 on rest bg **[q]**                       | `--color-neutral-950` · 17.10:1 on rest bg **[c]**                 |
-| `--btn-solid-neutral-bg`         | `--color-neutral-950` · label 17.10:1 **[c]** (`Button.tsx` says "17:1")                           | `--color-neutral-950` · label 17.10:1 **[c]**                             | `--color-paper` · label 17.10:1 **[c]**                           | `--color-neutral-950` · label 17.10:1 **[c]**                      |
-| `--btn-solid-neutral-bg-hover`   | `--color-neutral-800` · label 11.81:1 **[c]**                                                      | `--color-neutral-800` · label 11.81:1 **[c]**                             | `--color-neutral-200` · label 12.83:1 **[c]**                     | `--color-neutral-900` · label 14.62:1 **[c]**                      |
-| `--btn-solid-neutral-bg-pressed` | `--color-neutral-700` · label 8.14:1 **[c]**                                                       | `--color-neutral-700` · label 8.14:1 **[c]**                              | `--color-neutral-300` · label 11.07:1 **[c]**                     | `--color-neutral-800` · label 11.81:1 **[c]**                      |
-| `--btn-solid-neutral-bg-busy`    | `--color-neutral-700` · label 8.14:1 **[c]**                                                       | `--color-neutral-700` · label 8.14:1 **[c]**                              | `--color-neutral-300` · label 11.07:1 **[c]**                     | `--color-neutral-800` · label 11.81:1 **[c]**                      |
-| `--btn-solid-neutral-fg`         | `--color-paper` · 17.10:1 on rest bg **[c]**                                                       | `--color-paper` · 17.10:1 on rest bg **[c]**                              | `--color-neutral-950` · 17.10:1 on rest bg **[c]**                | `--color-paper` · 17.10:1 on rest bg **[c]**                       |
 | `--btn-ghost-primary-fg`         | `--color-brandeis-500` · 6.17:1 on ground **[c]**                                                  | `--color-brandeis-500` · 5.51:1 on ground **[c]**                         | `--color-brandeis-200` · 10.48:1 on ground **[q]**                | `--color-white` · 6.23:1 on ground **[q]**                         |
 | `--btn-ghost-primary-fg-pressed` | `--color-brandeis-600` · 5.99:1 on pressed fill **[c]**                                            | `--color-brandeis-600` · 4.61:1 on pressed fill **[c]**                   | `--color-brandeis-200` · 7.23:1 on pressed fill **[c]**           | `--color-white` · 10.16:1 on pressed fill **[c]**                  |
 | `--btn-ghost-primary-bg-hover`   | `--color-brandeis-50` · label 5.57:1 **[q]**                                                       | `--color-brandeis-100` · label 4.91:1 **[q]**                             | `--color-neutral-900` · label 8.95:1 **[c]**                      | `--color-brandeis-600` · label 7.59:1 **[c]**                      |
@@ -385,8 +437,8 @@ anywhere in the component. It clears AA and there is no room to step again.
 **ink** — **blue does not move**: solid primary keeps `--color-brandeis-500` with a white label and
 runs 600 / 700 exactly as on paper, so the primary action is recognisably the same object here. It
 is restated rather than inherited, because inheriting it would mean an ink panel nested inside a
-blue section picked up blue's _inverted_ primary. **The neutrals reverse** — solid neutral becomes
-paper with an ink label, ghost and link neutral become white. Two values are contrast floors rather
+blue section picked up blue's _inverted_ primary. **The neutrals reverse** — ghost and link neutral become
+white (there is no neutral solid since 8 Oct 2026). Two values are contrast floors rather
 than preferences: blue as ink and blue as a 2px ring both reach only **2.77:1 [q]** on
 `--color-neutral-950`, so a blue label lifts to `--color-brandeis-200` (**10.48:1 [q]**) and the
 ring to `--color-brandeis-300` (**7.32:1 [q]**). A ghost carries **neutral** fills in both steps,
@@ -565,7 +617,7 @@ The rest of the composition contract:
 - **Never set colour, background, padding, height or radius via `className`.** All six live in the
   token layer, per surface, and a hand-set value is exactly the drift the layer exists to prevent.
 - **Columnar arrangement is `Layout`'s.** A button in a card sits in the card's `Layout` track.
-- **One solid per view**, of either tone.
+- **One solid per page** — the main action, always blue.
 - **Icons arrive as elements**, and must be _direct_ children of the box: `.button > svg` is what
   sizes them, so a wrapper `<div>` around an `<Icon>` would not be sized.
 
@@ -796,8 +848,9 @@ Each of these is decidable from a diff or from a rendered page.
 5. Use `as={Link}` with a path from `@/lib/routes` for anything that navigates internally.
 6. Give an icon-only button an `aria-label` that says what it does, not what it looks like:
    "Close", not "X".
-7. Put `emphasis="link"` where a reader is reading — inside a paragraph, under a case title — and
-   `solid` / `ghost` where a reader is acting.
+7. Put `emphasis="link"` where a reader is reading — inside a card, inside a paragraph, under a case
+   title — and `solid` / `ghost` where a reader is acting. *(Amended 7 Oct 2026: a link is never the
+   partner beside a solid; that is a ghost. § 14a.)*
 8. Add a new colour by adding it to **all four** surface blocks in `button.css`.
 
 **Don't**
@@ -809,7 +862,8 @@ Each of these is decidable from a diff or from a rendered page.
 4. Don't pass both `icon` and `iconLeft`. (It will not compile; it is listed here so the rule is
    findable.)
 5. Don't add a media query to `Button.module.css` for anything but motion preference.
-6. Don't add an `outline` or a `border` to any emphasis.
+6. Don't add an `outline` or a `border` to any labelled emphasis. *(Amended 6 Oct 2026: the icon-only
+   `outline` stepper is the one bordered control; see § 3.)*
 7. Don't use `active` on a call to action — it is the _held_ state of a stateful control.
 8. Don't express disabled as an `opacity`.
 9. Don't add a `-focus` or an `-active` token; focus reads `-hover`, active reads `-pressed`.
@@ -824,40 +878,65 @@ Each of these is decidable from a diff or from a rendered page.
     glyph slot. A control inside a control is invalid HTML, a second tab stop and a contested
     accessible name; two controls are two Buttons in a `Cluster` (§12 row 13).
 
----
+### 14a · Kinds, pairing and arrows (owner amendments, 7 Oct 2026, as corrected 8 Oct)
+
+| Kind | Where it goes | Tone | Arrow (`arrow-right`, trailing) |
+|---|---|---|---|
+| blue `solid` | the page's ONE main action — the hero's and/or the bottom close's ask | **`primary`, always** — there is no ink solid (8 Oct 2026) | **never**: the label carries the ask |
+| blue `ghost` | the solid's partner, beside it, and nowhere else in content | **`primary`, always** in content | yes when it navigates; no when it acts in place (submit, copy, clear) |
+| `link` | every other action: a band's foot (CtaRow), a mid-page offer, a card's foot, a line of text | **`primary`, always** in content | yes |
+
+Kind follows **where the action sits**, not what it does: the same "Start a project" is the solid in the
+hero and a link at a band's foot. Nothing classifies an action as converting any more. Neutral ghost
+and link remain in the primitive for site chrome (SiteNav, SiteFooter, a filter set, a utility glyph).
+
+Groups:
+- **A group is at most one `solid` + one `ghost`**, and it occurs only in the hero and the close. Never
+  a solid beside a link button, and never two of the same emphasis side by side. A column of links
+  stacked one per line (a `Layout`, not a `Cluster`) is a list, not a side-by-side group.
+- An in-band action is ONE link. A second destination is a second band's.
+
+Where it is enforced (types and position, so a page cannot get it wrong):
+
+| Pattern | API | Result |
+|---|---|---|
+| `CtaRow` | `actions: [one]`; no `emphasis`, no colour prop | one blue link with the arrow |
+| `PageHero` | `actions: [] \| [a] \| [a, b]`, position decides | blue solid, no arrow · blue ghost with arrow |
+| `CtaSection` `open` | `actions: [a] \| [a, b]`, position decides | blue solid, no arrow · blue ghost with arrow |
+| `CtaSection` `offer` | `actions: [one]` (or a form) | one blue link with the arrow |
+| `EnquiryForm` | owned markup | submit blue solid, no arrow · "See available times" blue ghost with arrow |
+| `Banner`, `Statement`, `ContentSection` | an `actions` / `footer` slot | composed with a `CtaRow`, so CtaRow's types apply |
+
+Not covered (deliberately): SiteNav's chrome (its bar CTA and the menu sheet's foot); a segmented filter
+set; a download link (its glyph names the kind of action, so it carries no arrow); `BlockCard`'s and
+`ListCard`'s own per-card cues, which those components own.
 
 ## 15 · Specimen plan
 
-Route `/design/button`, registered by hand in the `SPECIMENS` list on `/design` under
-**Primitives** as _"3 emphases × 2 tones, 3 sizes, 3 variants, 4 surfaces"_. It is a `page.tsx`
-only — it defines no component beyond two local presentation helpers (`COMBOS`, `SURFACES` and a
-`SurfaceMatrix` that renders one ground's full set).
+Route `/design/button`, registered by hand in the `SPECIMENS` list on `/design` under **Primitives**.
+Since r7-buttons (8 Oct 2026) it is a kit SHOWCASE rather than a matrix: an intro hero, an index, then
+each variation under a titled head. It is a `page.tsx` only — local presentation helpers (`Head`,
+`Title`, `Band`, `Cell`, `Stage`, `Rung`, `SurfaceRow`) and no component.
 
-**The shipped page, block by block:**
-
-| #    | Block                                             | What it renders                                                                                                                                                                                                                                                                                                  |
-| ---- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0    | Intro                                             | `h1`, then the two claims the component is built on: that the same markup is correct on all four grounds, and that the box is 8 / 4 / 4 and none of the three scales.                                                                                                                                            |
-| 1    | **The six combinations**                          | A 3-track `Layout`, one cell per emphasis × tone, each with its name and its one-line job ("The primary ask", "Default secondary", "Navigation"). The two link cells carry a trailing `arrow-right`.                                                                                                             |
-| 2    | **States — four of seven are printable**          | A `[2,1,1,1,1]` `Layout`: a header row, then the six combinations down the first column and **rest / active / busy / disabled** across.                                                                                                                                                                          |
-| 3    | **Variants — label, label and icon, icon alone**  | Three columns. Label-only; label with a trailing `arrow-right` and a leading `download`; and four icon-only buttons — `close-circle`, `copy`, `arrow-right`, `download` — each with its `aria-label`, in both ghost and solid.                                                                                   |
-| 4    | **Size — 32 / 40 / 48**                           | One `Cluster` per size, each holding a ruler caption and five buttons: solid primary, ghost with a trailing icon, icon-only, solid neutral, link. Reading down the three rows is how you check that only the height, the label and the icon step.                                                                |
-| 5    | **Groups, and the one-solid rule**                | An `lg` solid-plus-ghost pair (the hero shape), then a four-item `sm` segmented set with `active` on the first — the thing `active` exists for — and a note that pressing an item previews the state it is about to hold.                                                                                        |
-| 6    | **Anchors — a button that navigates**             | Four `as="a"` buttons including a disabled one, so `aria-disabled` and the `tabIndex` removal can be inspected.                                                                                                                                                                                                  |
-| 7    | **The link in a text column**                     | Two link anchors in a text block, with the paper `link-neutral` hover argument (ink → blue 500 → blue 600) written out beside them.                                                                                                                                                                              |
-| 8    | **extendHitArea — 44px without changing the box** | An extended and a non-extended `sm` ghost side by side, plus a ruler caption: _both boxes 32 high — the first answers the pointer 6px above and below it._                                                                                                                                                       |
-| 9–12 | **The four surfaces**                             | Four sibling `Section`s — paper, tint, ink, blue — each rendering the same `SurfaceMatrix` (the six combinations, plus held-`active`, busy and disabled controls) from identical markup, under a note naming what moved on that ground and why.                                                                  |
-| 13   | **The nesting case**                              | Its own band: an ink `Section` containing `<Section as="div" surface="tint" density="tight">` with the full matrix inside it, and the three failure ratios the repetition fixed (1.13:1, 2.09:1, 2.09:1) written out. The buttons in the panel should be indistinguishable from the ones on the tint band above. |
+| #  | Variation | What it renders |
+|----|-----------|-----------------|
+| —  | Intro | A `beside` PageHero — itself the first proof: the blue solid and its blue ghost, beside a photograph. Then the index, twelve ListCards linking to the bands. |
+| 01 | Three kinds, one job each | Three columns on a hairline: name, job, the control at lg (held at the lg box height so the rows align), then *Where* and *Never*. |
+| 02 | In a band · links | A real ContentSection: three image BlockCards with their link cues, and a CtaRow — one link with its note. |
+| 03 | A mid-page offer · a link | A real CtaSection `offer` with "Start with a UX Product Audit" as its one link. |
+| 04 | The close · solid + ghost | A real CtaSection `open` close on tint. |
+| 05 | Blue solid | Size ladder, "the label is the ask", busy and disabled. |
+| 06 | Blue ghost | The pair at three sizes, rest then pressed (`active`), busy and disabled. |
+| 07 | Link button | Size ladder, a link inside a line of text, held / busy / disabled. |
+| 08 | Label, arrow, glyph, icon alone | The four content variants. |
+| 09 | Outline stepper | The three sizes (previous unavailable), beside a live Slider of four case cards. |
+| 10 | Site chrome · neutral | A segmented filter (`active`), nav links, utility glyphs — the only neutral controls. |
+| 11 | Four surfaces, and nesting | The pair, the link and the unavailable states on paper, tint, ink and blue, then a tint panel inside ink. |
+| 12 | The 44px touch floor | `extendHitArea` on 32 and 40 boxes beside the dashed 44 floor. |
 
 **Its honesty about what a static page cannot show.** Hover, pressed and tab focus have no props —
-they are the stylesheet's business, driven by `:hover`, `:active` and `:focus-visible` — so the
-page cannot print them in a column, and it says so rather than quietly showing seven state labels
-with invented controls. The block is titled _"States — four of seven are printable"_, its note
-names the three that are missing and instructs the reader to point at each button, hold it down,
-and tab to it, adding that the exercise has to be repeated **on each of the four surfaces below**. The same
-instruction is repeated where it matters: the blue band asks the reader to tab to a button to see
-a white ring with a blue gap, the tint band asks them to hover a ghost here and on paper to see the
-one-step-down fill, and the nesting band asks them to tab through the panel to check the ring.
+they are the stylesheet's business — so the page does not print them; each anatomy head says where to
+point, hold and tab, and the surfaces head asks the reader to tab through each ground.
 
 ---
 

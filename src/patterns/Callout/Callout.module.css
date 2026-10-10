@@ -17,7 +17,7 @@
 
 /* The optional key (tracker 2.17). A mono label, so the case is the role's and not the string's:
    `text-transform` sits beside `font:` and the authored "Scope" stays "Scope" in the DOM and the
-   accessibility tree. No tracking-free fallback and no margin — the Cluster owns the 8px seam. */
+   accessibility tree. No tracking-free fallback and no margin — the Layout owns the 8px seam. */
 .label {
   min-inline-size: 0;
   overflow-wrap: anywhere;
@@ -27,11 +27,22 @@
   color: var(--call-label-ink);
 }
 
-/* Only when keyed, the content is a flex item in the Cluster, and this is item sizing rather than
-   arrangement: the Cluster still owns direction, wrap, alignment and both gaps. Without a grow
-   factor a flex item is sized to its max-content, so a sentence of any length would always wrap
-   below the key and the key would never lead it. The basis is the narrowest the sentence may run
-   beside the key; below it, the line wraps and the sentence takes the full row under the key. */
-.root .keyed {
-  flex: 1 1 var(--call-content-min-xs);
+/* ── tone="example" ──────────────────────────────────────────────────────────────
+   The worked example that leads a set. A blue rule down the start edge is its mark — one edge, not
+   a box — and the copy sits a block (24) inside it. The sentence steps to body-lg in the surface's
+   full ink, and the key takes the accent, so the example reads as the scene the steps walk through
+   rather than a footnote above them. Inner inset, not outer spacing: the parent Layout keeps every
+   seam. */
+.example {
+  padding-inline-start: var(--gap-block);
+  border-inline-start: var(--call-example-rule-width) solid var(--call-example-rule-ink);
+}
+
+.example .content {
+  font: var(--text-body-lg);
+  color: var(--call-example-content-ink);
+}
+
+.example .label {
+  color: var(--call-example-label-ink);
 }

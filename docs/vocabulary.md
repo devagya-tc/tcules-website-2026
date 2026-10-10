@@ -50,8 +50,8 @@ hex in the spec — write the token name.
 | `--gap-block` | 24px | head to body inside a block — the most used step |
 | `--gap-gutter` | 32px | container gutter, and the gap between cards in a set |
 | `--gap-stack` | 48px | block to block inside a section |
-| `--gap-column` | 64px | column gutter where two halves must read as separate |
-| `--gap-section` | 96px | section padding, tight |
+| `--gap-column` | 64px | column gutter between two peer halves that must read as separate, and the row seam of a borderless card set |
+| `--gap-section` | 96px | section padding, tight; and a split — two regions of different kind side by side |
 | `--gap-section-open` | 128px | section padding, open |
 
 ### The space ramp — NOT for layout
@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 23 roles, consumed as composites
+### Type — 27 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -75,9 +75,11 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-h5` | 22px | 1.28 | display | medium | `--text-h5-tracking` | verbatim |
 | `--text-h6` | 18px | 1.35 | display | medium | `--text-h6-tracking` | verbatim |
 | `--text-quote` | 28px | 1.35 | display | regular | **none** | verbatim |
-| `--text-quote-lg` | 43px | 1.2 | display | regular | `--text-quote-lg-tracking` | verbatim |
-| `--text-lead` | 20px | 1.5 | sans | regular | **none** | verbatim |
-| `--text-body-lg` | 18px | 1.55 | sans | regular | **none** | verbatim |
+| `--text-quote-lg` | 34px | 1.3 | display | regular | `--text-quote-lg-tracking` | verbatim |
+| `--text-quote-xl` | 43px | 1.25 | display | regular | `--text-quote-xl-tracking` | verbatim |
+| `--text-lead-lg` | 20px | 1.5 | sans | regular | **none** | verbatim |
+| `--text-lead` | 18px | 1.55 | sans | regular | **none** | verbatim |
+| `--text-body-lg` | 16px | 1.6 | sans | regular | **none** | verbatim |
 | `--text-body` | 16px | 1.6 | sans | regular | **none** | verbatim |
 | `--text-body-sm` | 14px | 1.55 | sans | regular | **none** | verbatim |
 | `--text-caption` | 13px | 1.45 | sans | regular | **none** | verbatim |
@@ -89,18 +91,20 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-micro` | 11px | 1.2 | mono | semibold | `--text-micro-tracking` | `--text-mono-case` |
 | `--text-stat` | 40px | 1 | mono | medium | `--text-stat-tracking` | `--text-mono-case` |
 | `--text-stat-lg` | 54px | 1 | mono | medium | `--text-stat-lg-tracking` | `--text-mono-case` |
+| `--text-stat-xl` | 96px | 1 | mono | medium | `--text-stat-xl-tracking` | `--text-mono-case` |
+| `--text-score` | 105px | 1 | display | regular | `--text-score-tracking` | verbatim |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**16 roles have a tracking companion. 7 have none** — pairing one with a role in that
-second group names a token that does not exist: `--text-quote`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
+**19 roles have a tracking companion. 8 have none** — pairing one with a role in that
+second group names a token that does not exist: `--text-quote`, `--text-lead-lg`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
 
 Mono is this system's label voice: chrome, eyebrows, keys, control labels, stats. All
-9 mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
+10 mono roles are cut for capitals — their tracking is opened 0.08–0.12em, which is a
 correction for the side bearings of capitals — so set lower-case, a mono role reads as
 letter-spaced body text rather than as a label. **The case belongs to the role, not to the
-component.** 8 of the 9 take it: `--text-ui-sm`, `--text-ui`, `--text-ui-lg`, `--text-eyebrow`, `--text-index`, `--text-micro`, `--text-stat`, `--text-stat-lg`.
+component.** 9 of the 10 take it: `--text-ui-sm`, `--text-ui`, `--text-ui-lg`, `--text-eyebrow`, `--text-index`, `--text-micro`, `--text-stat`, `--text-stat-lg`, `--text-stat-xl`.
 
 Write it beside the font, exactly as you write tracking, and for the same reason — `font:` carries
 a family, weight, size and ratio, and no transform:
@@ -142,19 +146,19 @@ placeholder that never wraps.
 
 - **Measure (line length):** `--measure-display` 26ch · `--measure-title` 32ch · `--measure-lead` 56ch · `--measure-body` 75ch
 - **Radius:** `--radius-0` 0px · `--radius-4` 4px · `--radius-8` 8px · `--radius-full` 999px
-- **Border width:** `--border-width-0` 0px · `--border-width-1` 1px · `--border-width-2` 2px · `--border-width-3` 3px · `--border-width-hairline` 1px · `--border-width-hairline-deck` 2px · `--border-width-hairline-social` 3px · `--border-width-hairline-print` 0.75pt · `--border-width-6` 6px · `--border-width-rule-quote` 6px
+- **Border width:** `--border-width-0` 0px · `--border-width-1` 1px · `--border-width-2` 2px · `--border-width-3` 3px · `--border-width-hairline` 1px · `--border-width-hairline-deck` 2px · `--border-width-hairline-social` 3px · `--border-width-hairline-print` 0.75pt · `--border-width-rule-quote` 2px
 - **Focus ring:** `--focus-ring-width` 2px · `--focus-ring-offset` 2px
 - **Motion:** `--duration-instant` 0ms · `--duration-fast` 140ms · `--duration-medium` 240ms · `--duration-slow` 360ms · `--easing-standard` cubic-bezier(0.2, 0, 0, 1)
 - **Elevation:** `--shadow-none` none · `--shadow-crop` 0 0 6px color-mix(in srgb, #1b1b18 8%, transparent)
 - **Z-index:** `--z-base` 0 · `--z-raised` 100 · `--z-sticky` 200 · `--z-dropdown` 300 · `--z-overlay` 400 · `--z-modal` 500 · `--z-toast` 600
-- **Icon:** `--icon-size-14` 14px · `--icon-size-16` 16px · `--icon-size-18` 18px · `--icon-size-24` 24px
+- **Icon:** `--icon-size-14` 14px · `--icon-size-16` 16px · `--icon-size-18` 18px · `--icon-size-24` 24px · `--icon-size-32` 32px
 - **Breakpoints:** `--breakpoint-480` 480px · `--breakpoint-768` 768px · `--breakpoint-1024` 1024px · `--breakpoint-1280` 1280px · `--breakpoint-1440` 1440px
 - **Families:** `--font-family-display` 'Newsreader', Georgia, 'Times New Roman', serif · `--font-family-sans` 'Public Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif · `--font-family-mono` 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace
 - **Weights:** `--font-weight-regular` 400 · `--font-weight-medium` 500 · `--font-weight-semibold` 600
 
-### The glyph set — exactly these 15
+### The glyph set — exactly these 49
 
-`alt-arrow-down` · `alt-arrow-right` · `alt-arrow-up` · `arrow-left` · `arrow-right` · `arrow-right-up` · `check-circle` · `close-circle` · `copy` · `danger-triangle` · `document-text` · `download` · `hamburger-menu` · `info-circle` · `square-arrow-right-up`
+`alt-arrow-down` · `alt-arrow-right` · `alt-arrow-up` · `arrow-left` · `arrow-right` · `arrow-right-up` · `chat-round-dots` · `check-circle` · `checklist` · `chrome-close` · `chrome-menu` · `chrome-pause` · `chrome-play` · `clipboard-check` · `clock-circle` · `close-circle` · `code` · `code-square` · `copy` · `cpu` · `danger-triangle` · `database` · `document-text` · `download` · `eye` · `flag` · `graph-up` · `hamburger-menu` · `info-circle` · `key` · `layers` · `lock` · `monitor` · `notebook` · `play` · `question-circle` · `refresh` · `refresh-square` · `ruler-pen` · `server` · `shield-check` · `smartphone` · `square-arrow-right-up` · `star` · `stars` · `undo-left` · `user` · `users-group-rounded` · `widget`
 
 Glyphs are **solid shapes** on a 24 box, filled in `currentColor` with counters cut through the
 mass (`fill-rule: evenodd`) so they show whatever is behind them. **No stroke** — there is no
@@ -163,52 +167,66 @@ that list is a **NEW GLYPH REQUEST**, and it describes a FILLED drawing.
 
 ### Component token prefixes already taken
 
-`--acc-` (components/accordion.css) · `--bcrd-` (components/block-card.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--sec-` (components/section.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css)
+`--acc-` (components/accordion.css) · `--bnr-` (components/banner.css) · `--bcrd-` (components/block-card.css) · `--bmark-` (components/brand-mark.css) · `--crumb-` (components/breadcrumbs.css) · `--btn-` (components/button.css) · `--call-` (components/callout.css) · `--cmark-` (components/client-mark.css) · `--csec-` (components/content-section.css) · `--cntr-` (components/contrast.css) · `--ctarow-` (components/cta-row.css) · `--cta-` (components/cta-section.css) · `--dtab-` (components/data-table.css) · `--eng-` (components/engagement-model.css) · `--enq-` (components/enquiry-form.css) · `--fig-` (components/figure.css) · `--foot-` (components/footer.css) · `--icn-` (components/icon.css) · `--inp-` (components/input.css) · `--lay-` (components/layout.css) · `--lcrd-` (components/list-card.css) · `--lgrid-` (components/logo-grid.css) · `--logo-` (components/logo.css) · `--media-` (components/media.css) · `--nav-` (components/nav.css) · `--hero-` (components/page-hero.css) · `--flow-` (components/process-flow.css) · `--proof-` (components/proof.css) · `--prose-` (components/prose.css) · `--rbadge-` (components/rating-badge.css) · `--sec-` (components/section.css) · `--svc-` (components/service-page.css) · `--sld-` (components/slider.css) · `--stat-` (components/stat.css) · `--stmt-` (components/statement.css) · `--toc-` (components/table-of-contents.css) · `--tag-` (components/tag.css) · `--tex-` (components/texture.css) · `--thread-` (components/thread.css) · `--vt-` (components/video-testimonial.css)
 
 Yours must not collide with any of those, nor with a primitive family above.
 
 **Their geometry, so you can size against it rather than guessing.** A new control is measured
 against the controls beside it — if you are specifying one, say which of these it must line up with.
 
-- **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px · `--acc-question-underline-offset` 6px
-- **block-card.css** — `--bcrd-title-tracking` -0.005em · `--bcrd-title-tracking-horizontal` -0.01em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-rule-width` 1px · `--bcrd-radius` 0px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px
+- **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px
+- **banner.css** — `--bnr-eyebrow-tracking` 0.12em · `--bnr-heading-tracking` -0.015em · `--bnr-heading-measure` 32ch · `--bnr-lead-measure` 56ch · `--bnr-strip-label-tracking` 0.12em · `--bnr-illustration-zoom-phone` 180% · `--bnr-illustration-shift` 0%
+- **block-card.css** — `--bcrd-title-tracking-lg` -0.01em · `--bcrd-title-tracking-md` -0.005em · `--bcrd-title-tracking-sm` 0em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-inset` 8px · `--bcrd-cover-inset` 24px · `--bcrd-text-rule-width` 1px · `--bcrd-icon-size` 1em · `--bcrd-index-tracking` 0.08em · `--bcrd-media-rule-width` 1px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px · `--bcrd-box-radius` 8px · `--bcrd-rail-length` 10rem · `--bcrd-rail-thickness` 2px · `--bcrd-rail-radius` 999px
+- **brand-mark.css** — `--bmark-size` 14px
 - **breadcrumbs.css** — `--crumb-hit-min` 44px · `--crumb-link-rule-width` 1px · `--crumb-link-rule-width-pressed` 2px · `--crumb-link-rule-offset` 2px · `--crumb-link-radius-focus` 4px · `--crumb-ring-width` 2px · `--crumb-ring-offset` 2px · `--crumb-hidden-size` 1px
-- **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-radius` 8px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
-- **callout.css** — `--call-content-min-xs` 192px
-- **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 160px
-- **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-measure` 32ch · `--csec-lead-measure` 56ch · `--csec-body-measure` 75ch
-- **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.015em · `--cta-point-tracking` 0em · `--cta-marker-tracking` -0.01em · `--cta-heading-measure` 32ch · `--cta-body-measure` 75ch
+- **button.css** — `--btn-padding-x` 8px · `--btn-label-margin` 4px · `--btn-gap` 4px · `--btn-gap-bare` 8px · `--btn-height-sm` 32px · `--btn-height-md` 40px · `--btn-height-lg` 48px · `--btn-hit-min` 44px · `--btn-text-tracking` 0.08em · `--btn-icon-size-sm` 14px · `--btn-icon-size-md` 16px · `--btn-icon-size-lg` 18px · `--btn-outline-icon-size-sm` 16px · `--btn-outline-icon-size-md` 18px · `--btn-outline-icon-size-lg` 24px · `--btn-radius` 8px · `--btn-radius-round` 999px · `--btn-outline-rule-width` 1px · `--btn-radius-bare` 0px · `--btn-radius-bare-focus` 4px · `--btn-link-rule-width` 1px · `--btn-link-rule-offset` 2px · `--btn-ring-width` 2px · `--btn-ring-offset` 2px
+- **callout.css** — `--call-example-rule-width` 2px
+- **client-mark.css** — `--cmark-target-side` 56px · `--cmark-height-max` 40px · `--cmark-width-max` 240px · `--cmark-target-side-m` 44px · `--cmark-height-max-m` 32px · `--cmark-width-max-m` 188px
+- **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-tracking-md` -0.01em · `--csec-heading-tracking-display` -0.02em · `--csec-heading-measure-display` 26ch · `--csec-heading-measure` 32ch · `--csec-lead-measure` 56ch · `--csec-body-measure` 75ch · `--csec-aside-min-size` 10rem
+- **contrast.css** — `--cntr-heading-tracking` -0.005em · `--cntr-item-tracking-primary` 0em · `--cntr-rule-width` 1px · `--cntr-rule-strong-width` 1px
+- **cta-row.css** — `--ctarow-rule-width` 1px · `--ctarow-note-measure` 56ch · `--ctarow-centred-measure` 75ch
+- **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.015em · `--cta-close-heading-tracking` -0.018em · `--cta-open-heading-tracking` -0.02em · `--cta-point-tracking` 0em · `--cta-rule-width` 1px · `--cta-marker-tracking` 0.08em · `--cta-heading-measure` 32ch · `--cta-open-heading-measure` 26ch · `--cta-body-measure` 75ch · `--cta-lede-measure` 44ch
 - **data-table.css** — `--dtab-rule-width` 1px · `--dtab-fluid-size` 176px · `--dtab-hold-size` 192px · `--dtab-fade-size` 48px
-- **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-max-inline` 470px · `--enq-message-reserve` 19px
+- **engagement-model.css** — `--eng-eyebrow-tracking` 0.12em · `--eng-heading-tracking` -0.015em · `--eng-heading-measure` 32ch · `--eng-lead-measure` 56ch · `--eng-title-tracking` -0.005em · `--eng-body-measure` 56ch · `--eng-axis-tracking` 0.1em · `--eng-line-width` 3px · `--eng-level-width` 1px · `--eng-rule-width` 1px · `--eng-idle-width` 1px · `--eng-node-width` 2px · `--eng-swatch-width` 48px · `--eng-swatch-height` 24px
+- **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-measure` 667px · `--enq-note-min-inline` 15rem · `--enq-hidden-size` 1px
 - **figure.css** — `--fig-min-xs` 192px
-- **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-badge-padding-inline` 14px · `--foot-badge-radius` 999px · `--foot-watermark-size` 160px · `--foot-tagline-measure` 56ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 75ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em
+- **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-field-min-inline` 16rem · `--foot-watermark-size` 160px · `--foot-tagline-measure` 56ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 75ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em
 - **icon.css** — `--icn-size-sm` 14px · `--icn-size-md` 16px · `--icn-size-lg` 18px · `--icn-size-xl` 24px
-- **input.css** — `--inp-height-md` 40px · `--inp-height-touch` 44px · `--inp-padding-x` 12px · `--inp-textarea-padding-y` 12px · `--inp-min-inline` 16rem · `--inp-textarea-min-block` 128px · `--inp-radius` 8px · `--inp-rule-width` 1px · `--inp-invalid-rule-width` 2px · `--inp-ring-width` 2px · `--inp-ring-offset` 2px
-- **layout.css** — `--lay-track-xs` 192px · `--lay-track-sm` 256px · `--lay-track-md` 320px · `--lay-track-lg` 384px
-- **list-card.css** — `--lcrd-title-tracking` -0.005em · `--lcrd-marker-tracking` 0.08em · `--lcrd-number-baseline-offset` 4px · `--lcrd-content-min-xs` 192px · `--lcrd-title-min` 256px · `--lcrd-body-min` 256px · `--lcrd-thumbnail-inline-md` 160px · `--lcrd-hidden-size` 1px · `--lcrd-rule-width` 1px · `--lcrd-radius` 0px · `--lcrd-ring-width` 2px · `--lcrd-ring-offset` 2px
+- **input.css** — `--inp-height-md` 40px · `--inp-height-touch` 44px · `--inp-padding-x` 12px · `--inp-textarea-padding-y` 12px · `--inp-textarea-min-block` 128px · `--inp-radius` 8px · `--inp-rule-width` 1px · `--inp-invalid-rule-width` 2px · `--inp-ring-width` 2px · `--inp-ring-offset` 2px · `--inp-line-height-md` 44px · `--inp-line-inset-bottom` 6px · `--inp-line-inset-top` 14px · `--inp-line-textarea-min-block` 68px
+- **layout.css** — `--lay-track-xs` 192px · `--lay-track-sm` 256px · `--lay-track-md` 320px · `--lay-track-lg` 384px · `--lay-scroll-peek` 24px · `--lay-scroll-bleed` 32px
+- **list-card.css** — `--lcrd-title-tracking-md` -0.005em · `--lcrd-title-tracking-sm` 0em · `--lcrd-marker-tracking` 0.08em · `--lcrd-number-baseline-offset-md` 4px · `--lcrd-number-baseline-offset-sm` 0px · `--lcrd-content-min-xs` 192px · `--lcrd-title-min` 256px · `--lcrd-body-min` 256px · `--lcrd-stacked-body-measure` 56ch · `--lcrd-readdown-rail-container` 1240px · `--lcrd-readdown-rail-under` 80px · `--lcrd-thumbnail-inline-md` 160px · `--lcrd-thumbnail-inline-sm` 96px · `--lcrd-marker-icon-size-tile` 1em · `--lcrd-thumbnail-radius` 8px · `--lcrd-hidden-size` 1px · `--lcrd-rule-width` 1px · `--lcrd-box-radius` 8px · `--lcrd-radius` 0px · `--lcrd-ring-width` 2px · `--lcrd-ring-offset` 2px
+- **logo-grid.css** — `--lgrid-cell-height` 128px · `--lgrid-cell-height-m` 88px · `--lgrid-rule-width` 1px · `--lgrid-radius` 8px
 - **logo.css** — `--logo-height-sm` 20px · `--logo-height-md` 24px · `--logo-height-lg` 40px
-- **media.css** — `--media-radius` 0px · `--media-capture-rule-width` 1px · `--media-panel-inset` 32px
+- **media.css** — `--media-radius` 0px · `--media-capture-rule-width` 1px · `--media-panel-inset` 32px · `--media-photo-radius` 8px
 - **nav.css** — `--nav-bar-height` 72px · `--nav-bar-height-compact` 64px · `--nav-rule-width` 1px · `--nav-ring-width` 2px · `--nav-ring-offset` 2px · `--nav-item-height` 40px · `--nav-item-padding-x` 16px · `--nav-item-gap` 4px · `--nav-item-radius` 8px · `--nav-item-text-tracking` 0.08em · `--nav-item-icon-size` 14px · `--nav-plate-width-lg` 1056px · `--nav-plate-width-md` 780px · `--nav-plate-width-sm` 560px · `--nav-plate-radius` 8px · `--nav-plate-inset` 16px · `--nav-row-padding-block` 8px · `--nav-row-padding-inline` 16px · `--nav-row-radius` 8px · `--nav-row-arrow-size` 14px · `--nav-row-arrow-travel` 4px · `--nav-rail-title-tracking` 0em · `--nav-card-radius` 8px · `--nav-card-padding` 16px · `--nav-card-image-radius` 4px · `--nav-card-arrow-size` 16px · `--nav-label-tracking` 0.12em · `--nav-sheet-reserve` 88px · `--nav-sheet-radius` 8px · `--nav-sheet-padding-inline` 20px · `--nav-sheet-row-padding-block` 12px · `--nav-sheet-foot-padding-block` 12px · `--nav-sheet-link-padding-block` 12px · `--nav-sheet-chevron-size` 16px · `--nav-grab-width` 36px · `--nav-grab-height` 4px · `--nav-sheet-dismiss-distance` 56px · `--nav-sheet-dismiss-flick-distance` 24px · `--nav-drag-slop` 8px · `--nav-row-lift` 6px
-- **page-hero.css** — `--hero-eyebrow-tracking` 0.12em · `--hero-title-tracking` -0.02em · `--hero-key-tracking` 0.1em · `--hero-title-measure` 26ch · `--hero-lead-measure` 56ch · `--hero-body-measure` 75ch · `--hero-media-radius` 0px · `--hero-media-rule-width` 1px
-- **proof.css** — `--proof-quote-rule-width` 6px · `--proof-portrait-size` 64px · `--proof-radius` 0px
+- **page-hero.css** — `--hero-eyebrow-tracking` 0.12em · `--hero-title-tracking` -0.02em · `--hero-key-tracking` 0.1em · `--hero-title-measure` 26ch · `--hero-lead-measure` 56ch · `--hero-body-measure` 75ch · `--hero-media-radius` 0px · `--hero-media-rule-width` 1px · `--hero-mark-size` 6px · `--hero-numeral-size` 20px · `--hero-numeral-radius` 999px · `--hero-numeral-tracking` 0.1em · `--hero-tag-tracking` 0.12em · `--hero-flag-tracking` 0.12em · `--hero-media-size-centred` 860px
+- **process-flow.css** — `--flow-rule-width` 1px · `--flow-item-rule-width` 1px · `--flow-span-width` 1px · `--flow-span-tick` 12px
+- **proof.css** — `--proof-quote-rule-width` 2px · `--proof-portrait-size` 64px · `--proof-portrait-radius-compact` 4px · `--proof-portrait-radius` 8px · `--proof-mark-inline-size` 48px · `--proof-radius` 0px
 - **prose.css** — `--prose-marker-inset` 24px · `--prose-link-underline-offset` 2px · `--prose-code-padding-x` 6px · `--prose-code-padding-y` 2px · `--prose-code-radius` 4px · `--prose-pre-radius` 0px · `--prose-quote-rule-width` 2px · `--prose-rule-width` 1px · `--prose-table-rule-width` 1px
-- **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-tight` 64px · `--sec-padding-y-open` 128px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
+- **rating-badge.css** — `--rbadge-padding-inline` 14px · `--rbadge-radius` 999px · `--rbadge-rule-width` 1px · `--rbadge-tracking` 0.08em · `--rbadge-ring-width` 2px · `--rbadge-ring-offset` 2px · `--rbadge-hidden-size` 1px
+- **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-first` 96px · `--sec-padding-y-strip` 24px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
+- **service-page.css** — `--svc-mark-size` 12px · `--svc-slice-cell` 24px · `--svc-hidden-size` 1px · `--svc-rule-width` 1px · `--svc-rule-strong-width` 1px · `--svc-meter-width` 96px · `--svc-meter-height` 24px · `--svc-meter-stroke` 2px · `--svc-authority-slot` 12px · `--svc-orbit-stroke` 2px
+- **slider.css** — `--sld-progress-length` 240px · `--sld-progress-thickness` 2px · `--sld-progress-radius` 999px · `--sld-step-length` 56px · `--sld-step-target` 44px · `--sld-ring-width` 2px · `--sld-ring-offset` 2px · `--sld-hidden-size` 1px
+- **stat.css** — `--stat-rule-width` 1px · `--stat-mark-width` 2px · `--stat-mark-length` 32px · `--stat-value-tracking-lg` -0.015em · `--stat-value-tracking-xl` -0.02em · `--stat-value-tracking-md` -0.01em · `--stat-unit-tracking` 0.08em · `--stat-label-measure` 32ch
+- **statement.css** — `--stmt-eyebrow-tracking` 0.12em · `--stmt-sentence-tracking` -0.018em · `--stmt-sentence-measure` 32ch · `--stmt-graphic-size` 64px
 - **table-of-contents.css** — `--toc-title-tracking` 0.12em · `--toc-ordinal-tracking` 0.08em · `--toc-max-inline` 232px · `--toc-min-inline` 160px · `--toc-summary-min-block` 44px · `--toc-ordinal-inline` 24px · `--toc-entry-padding-block` 12px · `--toc-rule-width` 1px · `--toc-current-rule-width` 3px · `--toc-underline-width` 1px · `--toc-underline-width-pressed` 2px · `--toc-underline-offset` 2px · `--toc-entry-radius-focus` 4px · `--toc-ring-width` 2px · `--toc-ring-offset` 2px
 - **tag.css** — `--tag-size-md` 24px · `--tag-radius` 4px · `--tag-edge-width` 1px · `--tag-glyph-size` 16px · `--tag-ring-width` 2px · `--tag-ring-offset` 2px · `--tag-label-trim` 1px · `--tag-glyph-gap` 4px
+- **thread.css** — `--thread-line-width` 2px · `--thread-node-size` 16px · `--thread-node-border` 2px · `--thread-head-size` 10px · `--thread-node-radius` 999px · `--thread-loop-radius` 8px · `--thread-arc-rise` 40px · `--thread-marker-size` 10px · `--thread-hidden-size` 1px · `--thread-title-tracking-md` 0em · `--thread-title-tracking-sm` 0em
+- **video-testimonial.css** — `--vt-poster-radius` 8px · `--vt-play-size-lg` 88px · `--vt-play-size-md` 64px · `--vt-play-glyph-lg` 32px · `--vt-play-glyph-md` 24px · `--vt-play-glyph-nudge` 2px · `--vt-play-radius` 999px · `--vt-ring-width` 2px · `--vt-ring-offset` 2px · `--vt-quote-rule-width` 2px
 
 ### The three layout primitives — their real prop APIs
 
 Layout is done by these three. Always. Anything you specify is arranged by one of them.
 
-**`Section`** — `as?: ElementType` · `surface?: SectionSurface` · `density?: SectionDensity` · `flush?: boolean` · `children: ReactNode` · `'aria-labelledby'?: string` · `'data-arrangement'?: string`
+**`Section`** — `as?: ElementType` · `surface?: SectionSurface` · `density?: SectionDensity` · `flush?: boolean` · `children: ReactNode` · `'aria-labelledby'?: string` · `'aria-label'?: string` · `'data-band'?: string` · `'data-fold-hero'?: ''` · `'data-arrangement'?: string`
 
-  where `SectionSurface` = 'paper' | 'tint' | 'ink' | 'blue' · `SectionDensity` = 'tight' | 'open'
+  where `SectionSurface` = 'paper' | 'tint' | 'ink' | 'blue' · `SectionDensity` = 'strip'
 
-**`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `align?: Place` · `justifyItems?: Place` · `justify?: Distribute` · `children: ReactNode`
+**`Layout`** — `as?: ElementType` · `rowGap?: Gap` · `colGap?: Gap` · `columns?: Columns` · `minTrack?: MinTrack` · `equalRows?: boolean` · `lead?: boolean | 'tall'` · `reverse?: Responsive<boolean>` · `offset?: Responsive<Offset>` · `pinLast?: boolean` · `fillFirst?: boolean` · `stagger?: boolean` · `align?: Place | 'baseline'` · `justifyItems?: Place` · `justify?: Distribute` · `scroll?: Scroll` · `peek?: boolean` · `ref?: Ref<HTMLElement>` · `tabIndex?: 0 | -1` · `'aria-label'?: string` · `children: ReactNode`
 
-  where `Gap` = 'none' | 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' | 'column' | 'section' | 'section-open' · `Columns` = (number | number[]) | 'fit' | 'tile' | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec } · `MinTrack` = 'xs' | 'sm' | 'md' | 'lg' · `Offset` = 0 | 1 | 2 | 3 · `Place` = 'stretch' | 'start' | 'center' | 'end' · `Distribute` = 'start' | 'center' | 'end' | 'between'
+  where `Gap` = 'none' | 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' | 'column' | 'section' | 'section-open' · `Columns` = (number | (number | 'auto')[]) | 'fit' | 'tile' | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec } · `MinTrack` = 'xs' | 'sm' | 'md' | 'lg' · `Offset` = 0 | 1 | 2 | 3 · `Place` = 'stretch' | 'start' | 'center' | 'end' · `Distribute` = 'start' | 'center' | 'end' | 'between' · `Scroll` = 'until-md' | 'always'
 
-**`Cluster`** — `as?: ElementType` · `rowGap?: ClusterGap` · `colGap?: ClusterGap` · `align?: ClusterAlign` · `justify?: ClusterJustify` · `nowrap?: boolean` · `children: ReactNode`
+**`Cluster`** — `as?: ElementType` · `rowGap?: ClusterGap` · `colGap?: ClusterGap` · `align?: ClusterAlign` · `justify?: ClusterJustify | { base?: ClusterJustify` · `nowrap?: boolean` · `stackUntil?: 'md'` · `children: ReactNode`
 
   where `ClusterGap` = 'inline' | 'tight' | 'text' | 'block' | 'gutter' | 'stack' · `ClusterAlign` = 'start' | 'center' | 'end' | 'baseline' | 'stretch' · `ClusterJustify` = 'start' | 'center' | 'end' | 'between'
 
@@ -219,7 +237,7 @@ seam to size.
 
 ### What already exists — check these before specifying anything new
 
-- **Primitives** (`src/components/`): `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `Section` · `Tag` · `Texture`
-- **Patterns** (`src/patterns/`): `Accordion` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `CtaSection` · `DataTable` · `EnquiryForm` · `Figure` · `ListCard` · `PageHero` · `Proof` · `SiteFooter` · `SiteNav` · `TableOfContents`
-- **Templates** (`src/templates/`): `CaseStudyIndex`
+- **Primitives** (`src/components/`): `BrandMark` · `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `RatingBadge` · `Section` · `Stat` · `Tag` · `Texture`
+- **Patterns** (`src/patterns/`): `Accordion` · `Banner` · `BlockCard` · `Breadcrumbs` · `Callout` · `ContentSection` · `Contrast` · `CtaRow` · `CtaSection` · `DataTable` · `EngagementModel` · `EnquiryForm` · `Figure` · `ListCard` · `LogoGrid` · `PageHero` · `ProcessFlow` · `Proof` · `SiteFooter` · `SiteNav` · `Slider` · `Statement` · `TableOfContents` · `Thread` · `VideoTestimonial`
+- **Templates** (`src/templates/`): `CaseStudyIndex` · `ServicePage`
 

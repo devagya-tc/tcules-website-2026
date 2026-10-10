@@ -17,6 +17,8 @@ export {
   getCareerPage,
   getCaseStudyListingPage,
   getIdealCaseStudyListingPage,
+  getIdealServiceStory,
+  idealServiceSlugs,
   getCaseStudyPage,
   getContactPage,
   createClientContact,

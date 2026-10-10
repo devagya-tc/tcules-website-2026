@@ -92,7 +92,7 @@ export default async function SiteFooterSpecimenPage() {
           placeholder ink on each ground. */}
       {SURFACES.map((surface) => (
         <div key={surface}>
-          <Section surface={surface} density="tight" flush>
+          <Section surface={surface} flush>
             <Layout rowGap="tight" className={s.spec}>
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>
               <p className={s.specNote}>

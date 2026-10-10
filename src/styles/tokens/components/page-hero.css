@@ -32,7 +32,7 @@
    token would have been a name for a page family styled identically to the default.
 
    The two ARRANGEMENTS (stacked, beside — 28 Sep 2026) add no token either. Where the media
-   stands is a Layout template and its 64 is --gap-column, a prop in the TSX; the image's
+   stands is a Layout template and its 96 is --gap-section, a prop in the TSX; the image's
    edge is Media's (--media-*). Nothing about an arrangement is a value this file decides.
 
    ── The state model: there isn't one ────────────────────────────────────────────
@@ -119,7 +119,15 @@
    a home-page hero that nothing built, and every hero is the page's one title. */
 --hero-title-text:var(--text-display);
 --hero-title-tracking:var(--text-display-tracking);
+/* The lead, two sizes (r7-hero, owner 7 Oct 2026: the 20px lead was too large). The default is
+   --text-lead, 18, two px over the 16 paragraphs below it, which is enough for the lead to read as
+   the lead because it is also the shorter line (--hero-lead-measure). `-lg` is the opt-in for a
+   page written for search (`leadSize="lg"`): --text-lead-lg, 20, falling to 18 on a phone through
+   the role's own re-declaration, so at 390 the two sizes meet. The 9 Oct ruling that moved section
+   copy down a step (lead 20 → 18, body-lg 18 → 16) left the hero at 18 / 20 by re-pointing these
+   two, not by changing them. */
 --hero-lead-text:var(--text-lead);
+--hero-lead-text-lg:var(--text-lead-lg);
 /* 16, and the same role the page's Prose body takes. It was --text-body-lg at 18,
    chosen so hero copy stayed a step above body scale; the copy now MEETS body scale
    instead, and the hierarchy inside the hero is carried by the lead alone — 20 against
@@ -195,9 +203,31 @@
    colour of the ground and has no edge of its own. The values are re-derived here rather
    than read from --fig-*, because a component never reads another component's tokens —
    the day Figure or Media re-tunes its rule, a hero video must not move with it. */
+/* The announcement line above a showcase hero: a sentence at body-sm. */
+--hero-note-text:var(--text-body-sm);
 --hero-media-ratio:16 / 9;
 --hero-media-radius:var(--radius-0);
 --hero-media-rule-width:var(--border-width-hairline);
+  /* The mark (one pixel of the texture's grid, 6) and the legend's numeral disc (20, around an
+     11px micro glyph) are component SIZES, and they read the space ramp — a STATED EXCEPTION to
+     "the ramp is for optical corrections only" (CLAUDE.md, gap scale rule 1). The system has one
+     size ladder, --icon-size-* (14 to 24), and neither value is on it: a 14 mark is a bullet, not
+     a pixel, and an 18 disc crowds its glyph. The ramp is the only primitive that holds 6 and 20,
+     so these alias it rather than writing a raw length; a --size-* ladder in primitives.css is
+     the clean home if a third component needs one (cmp-hero fix round 2). */
+  --hero-mark-size: var(--space-6);
+  --hero-numeral-size: var(--space-20);
+  --hero-numeral-radius: var(--radius-full);
+  --hero-numeral-text: var(--text-micro);
+  --hero-numeral-tracking: var(--text-micro-tracking);
+  --hero-tag-text: var(--text-eyebrow);
+  --hero-tag-tracking: var(--text-eyebrow-tracking);
+  --hero-flag-text: var(--text-eyebrow);
+  --hero-flag-tracking: var(--text-eyebrow-tracking);
+  /* The centred head's media cap, about 8 of 12 columns of the 1240 column. The one raw length in
+     this layer: no primitive holds it. Restated ONCE in TypeScript, as CENTRED_MEDIA in
+     src/lib/image-sizes.ts (which builds the `sizes` from it); change both in one edit. */
+  --hero-media-size-centred: 860px;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────
@@ -211,8 +241,11 @@
    from an article opening are what it is about and who wrote it, and at 20px and 14px they
    need the same weight of ink to arrive together.
 
-   Nothing here is blue. Blue in this system means clickable and appears on nothing that is
-   not — the only blue in the band is inside a Button. */
+   The text inks are not blue; the MARKS are. Since the owner's 6 Oct ruling (fdn-blue,
+   visual-direction § 4.1) blue is the recurring foreground accent, so the eyebrow's square, the
+   tags' squares, the announcement's flag and the legend's numerals take brandeis-500 here, beside
+   the blue link and the solid's fill. Blue is still never a ground: no part of the hero is a blue
+   box, and the title, lead, body, labels and byline stay on the neutral ramp. */
 :root,[data-surface="paper"]{
 --hero-title-ink:var(--color-neutral-900);    /* 14.62:1 */
 --hero-lead-ink:var(--color-neutral-800);     /* 11.81:1 */
@@ -220,9 +253,18 @@
 --hero-value-ink:var(--color-neutral-800);    /* 11.81:1 */
 --hero-eyebrow-ink:var(--color-neutral-600);  /*  4.92:1 — the floor of AA, do not lighten */
 --hero-key-ink:var(--color-neutral-600);      /*  4.92:1 — the floor of AA, do not lighten */
+--hero-note-ink:var(--color-neutral-700);     /* 8.14:1 — the body's step: news, not the lead */
 --hero-media-rule-ink:var(--color-neutral-300); /* 1.54:1 — decoration, and the surface that
                                                    needs it most: a light UI screenshot on
                                                    near-white has no edge of its own */
+  --hero-mark-ink: var(--color-brandeis-500);
+  --hero-tag-ink: var(--color-neutral-700);
+  --hero-flag-ink: var(--color-brandeis-500);
+  --hero-numeral-ink: var(--color-brandeis-500);
+  --hero-numeral-glyph-ink: var(--color-white);
+  --hero-numeral-accent-ink: transparent; /* an outlined disc: peridot is the drawing's, never HTML's (§ 4.4) */
+  --hero-numeral-accent-glyph-ink: var(--color-neutral-900);
+  --hero-numeral-accent-rule-ink: var(--color-neutral-900);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
@@ -244,9 +286,18 @@
 --hero-value-ink:var(--color-neutral-800);    /* 10.54:1 */
 --hero-eyebrow-ink:var(--color-neutral-700);  /*  7.27:1 — stepped; 600 would be 4.39:1 */
 --hero-key-ink:var(--color-neutral-700);      /*  7.27:1 — stepped; 600 would be 4.39:1 */
+--hero-note-ink:var(--color-neutral-700);     /* 7.27:1 — the body's step: news, not the lead */
 --hero-media-rule-ink:var(--color-neutral-400); /* 1.90:1 — decoration. It steps with the
                                                    ground and has less to do than on paper:
                                                    tint is already darker than a light shot */
+  --hero-mark-ink: var(--color-brandeis-500);
+  --hero-tag-ink: var(--color-neutral-700);
+  --hero-flag-ink: var(--color-brandeis-500);
+  --hero-numeral-ink: var(--color-brandeis-500);
+  --hero-numeral-glyph-ink: var(--color-white);
+  --hero-numeral-accent-ink: transparent; /* an outlined disc: peridot is the drawing's, never HTML's (§ 4.4) */
+  --hero-numeral-accent-glyph-ink: var(--color-neutral-900);
+  --hero-numeral-accent-rule-ink: var(--color-neutral-900);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
@@ -266,6 +317,7 @@
 --hero-value-ink:var(--color-neutral-100);    /* 14.47:1 */
 --hero-eyebrow-ink:var(--color-neutral-400);  /*  8.05:1 */
 --hero-key-ink:var(--color-neutral-400);      /*  8.05:1 */
+--hero-note-ink:var(--color-neutral-300);     /* 11.07:1 — the body's step: news, not the lead */
 --hero-media-rule-ink:var(--color-neutral-700); /* 2.10:1 — decoration, and it DROPS rather
                                                    than lifting with the inks: a shot on
                                                    near-black has all the edge it needs from
@@ -273,6 +325,14 @@
                                                    would read as a second surface on the
                                                    black one. Almost none is the honest
                                                    amount of rule here */
+  --hero-mark-ink: var(--color-brandeis-300);
+  --hero-tag-ink: var(--color-neutral-300);
+  --hero-flag-ink: var(--color-brandeis-300);
+  --hero-numeral-ink: var(--color-brandeis-300);
+  --hero-numeral-glyph-ink: var(--color-neutral-900);
+  --hero-numeral-accent-ink: transparent; /* an outlined disc: peridot is the drawing's, never HTML's (§ 4.4) */
+  --hero-numeral-accent-glyph-ink: var(--color-white);
+  --hero-numeral-accent-rule-ink: var(--color-white);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -292,10 +352,19 @@
 --hero-value-ink:var(--color-brandeis-50);    /*  5.57:1 */
 --hero-eyebrow-ink:var(--color-brandeis-100); /*  4.91:1 — the tightest cell here, do not lighten */
 --hero-key-ink:var(--color-brandeis-100);     /*  4.91:1 — the tightest cell here, do not lighten */
+--hero-note-ink:var(--color-brandeis-100);     /* 4.91:1 — the body's step: news, not the lead */
 --hero-media-rule-ink:var(--color-brandeis-300); /* 2.64:1 — decoration, and DARKER than
                                                     every text ink on this ground. The light
                                                     end of the ramp is spent on the type; on
                                                     a saturated ground the distinction wanted
                                                     is a slight one, and stepping toward the
                                                     ground is what makes it slight */
+  --hero-mark-ink: var(--color-white);
+  --hero-tag-ink: var(--color-brandeis-100);
+  --hero-flag-ink: var(--color-white);
+  --hero-numeral-ink: var(--color-white);
+  --hero-numeral-glyph-ink: var(--color-brandeis-500);
+  --hero-numeral-accent-ink: transparent; /* an outlined disc: peridot is the drawing's, never HTML's (§ 4.4) */
+  --hero-numeral-accent-glyph-ink: var(--color-white);
+  --hero-numeral-accent-rule-ink: var(--color-white);
 }

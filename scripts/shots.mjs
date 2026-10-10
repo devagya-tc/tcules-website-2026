@@ -34,7 +34,14 @@
  * edit here. The underscore-prefixed harness (`_specimen`) is not a route and is skipped.
  */
 import { spawn } from 'node:child_process';
-import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { createServer } from 'node:net';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
@@ -47,10 +54,26 @@ const baseArg = args.find((a) => a.startsWith('--base='));
 const only = args.filter((a) => !a.startsWith('--'));
 
 const designDir = 'src/app/design';
-const all = readdirSync(designDir).filter(
-  (d) => !d.startsWith('_') && statSync(join(designDir, d)).isDirectory(),
+/* Every specimen route under design/, nested ones included (`kit/cta`). A folder is a route only if
+   it holds a page.tsx: the top-level-only listing captured `/design/kit` (a 404, no page) and never
+   reached the eleven kit specimens under it, so a full run reported 0 problems for pages it had not
+   opened. `_`-prefixed (the harness) and `[dynamic]` segments are not specimen routes. */
+function specimenRoutes(dir, prefix = '') {
+  return readdirSync(dir)
+    .filter(
+      (d) => !d.startsWith('_') && !d.startsWith('[') && statSync(join(dir, d)).isDirectory(),
+    )
+    .flatMap((d) => {
+      const name = prefix + d;
+      const own = existsSync(join(dir, d, 'page.tsx')) ? [name] : [];
+      return [...own, ...specimenRoutes(join(dir, d), `${name}/`)];
+    });
+}
+const all = specimenRoutes(designDir);
+/* A nested specimen (`kit/cta`) is named by its path under design/ and must have a page. */
+const unknown = only.filter(
+  (n) => !all.includes(n) && !existsSync(join(designDir, n, 'page.tsx')),
 );
-const unknown = only.filter((n) => !all.includes(n));
 if (unknown.length > 0) {
   console.error(`No specimen route for: ${unknown.join(', ')}`);
   process.exit(1);
@@ -104,6 +127,31 @@ async function startServer() {
   throw new Error('next dev did not answer within 120s');
 }
 
+/**
+ * Load every image on the page before it is captured.
+ *
+ * A full-page screenshot never scrolls, so a `loading="lazy"` image below the first viewport is never
+ * requested: it was captured as its empty box. Every BlockCard cover is lazy, so every case card on a
+ * service page came out as a hairline frame with nothing in it, and the frames were read as an
+ * empty-frame bug in the component (visual-direction § 5.7). The page was fine; the capture was not.
+ * Each lazy image is switched to eager and awaited until decoded, capped so one stalled CDN request
+ * cannot hang the run.
+ */
+async function loadEveryImage(page) {
+  await page.evaluate(async () => {
+    const images = [...document.images];
+    for (const img of images) if (img.loading === 'lazy') img.loading = 'eager';
+    /* decode() settles once the file has loaded AND decoded — rejecting for a broken one, which is
+       left broken so it shows as broken. `complete` alone was not enough: an image switched from
+       lazy could report complete before its pixels were painted, and was captured blank. */
+    const settle = (img) => img.decode().catch(() => undefined);
+    await Promise.race([
+      Promise.all(images.map(settle)),
+      new Promise((resolve) => setTimeout(resolve, 15000)),
+    ]);
+  });
+}
+
 let server = null;
 let base = baseArg ? baseArg.slice('--base='.length) : ownDevServer();
 if (baseArg && !(await answers(`${base}/design`))) {
@@ -131,10 +179,16 @@ try {
       page.on('pageerror', (e) => errors.push(e.message));
       await page.goto(base + path, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts.ready);
+      await loadEveryImage(page);
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
       );
-      const file = `${name}-${width}.png`;
+      const slug = name.replaceAll('/', '-');
+      const file = `${slug}-${width}.png`;
+      // Next's dev indicator is a fixed badge in a shadow root (`nextjs-portal`): in a full-page
+      // capture it sat over the page's first band, and the owner's crops showed it as page content.
+      // Hidden before every capture, full-page and crop alike.
+      await page.addStyleTag({ content: 'nextjs-portal { visibility: hidden !important; }' });
       await page.screenshot({ path: join(OUT, file), fullPage: true });
       const crops = [];
       if (only.length > 0) {
@@ -145,10 +199,23 @@ try {
             if ([...el.classList].some((c) => /^specimen-module__\w+__spec$/.test(c)))
               el.setAttribute('data-shot', '');
           });
+          // A sticky or fixed element OUTSIDE every block (the SiteNav) is painted over whatever a
+          // block crop scrolls under it, so the crop showed the nav across the thing under test.
+          // Hidden, not unstuck: `visibility` keeps its box, so nothing below it moves.
+          document.querySelectorAll('body *').forEach((el) => {
+            const { position } = getComputedStyle(el);
+            if ((position === 'sticky' || position === 'fixed') && !el.closest('[data-shot]'))
+              el.style.visibility = 'hidden';
+          });
+          // Next's dev indicator draws its fixed badge inside a shadow root, which the walk above
+          // cannot see into, so its host is hidden by name.
+          document
+            .querySelectorAll('nextjs-portal')
+            .forEach((el) => (el.style.visibility = 'hidden'));
         });
         const blocks = page.locator('[data-shot]');
         const count = await blocks.count();
-        const dir = `${name}-${width}`;
+        const dir = `${slug}-${width}`;
         mkdirSync(join(OUT, dir), { recursive: true });
         for (let i = 0; i < count; i++) {
           const block = blocks.nth(i);
@@ -159,7 +226,31 @@ try {
             .replace(/^-|-$/g, '')
             .slice(0, 60);
           const crop = `${dir}/${String(i + 1).padStart(2, '0')}-${slug || 'untitled'}.png`;
-          await block.screenshot({ path: join(OUT, crop) });
+          // A block that holds only its title and note is a band-level specimen note: what it
+          // describes follows it as full-width Sections (CtaSection's ladders), so a crop of the
+          // block alone was the note and nothing else. Crop from the note's band to the next
+          // block's band instead, full width, out of a full-page capture.
+          const clip = await block.evaluate((el) => {
+            if ([...el.children].some((c) => c.tagName !== 'P')) return null;
+            const band = (n) => n.closest('[data-surface]') ?? n;
+            const all = [...document.querySelectorAll('[data-shot]')];
+            const next = all[all.indexOf(el) + 1];
+            const top = band(el).getBoundingClientRect().top + window.scrollY;
+            const end = next
+              ? band(next).getBoundingClientRect().top + window.scrollY
+              : document.documentElement.scrollHeight;
+            return {
+              x: 0,
+              y: top,
+              width: document.documentElement.clientWidth,
+              height: end - top,
+            };
+          });
+          if (clip && clip.height > 0) {
+            await page.screenshot({ path: join(OUT, crop), fullPage: true, clip });
+          } else {
+            await block.screenshot({ path: join(OUT, crop) });
+          }
           crops.push({ title, file: crop });
         }
       }

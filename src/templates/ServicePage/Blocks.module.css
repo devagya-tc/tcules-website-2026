@@ -1,0 +1,63 @@
+/* ServicePage · blocks.
+
+   Every colour is --svc-*, re-declared per surface in tokens/components/service-page.css. Type is
+   consumed as composites. Layout and Cluster own every arrangement and every seam; this module
+   owns ink and type roles for the little the kit units do not already carry: a bare stat sentence
+   and the review-mode slot (a set's heading is SetHeading's). No margins. The Fit list (glyph rows, `.rowText`)
+   left with the swap to Contrast (6 Oct 2026), which settles the audit's flex-sizing question: the
+   template no longer sizes a row at all. */
+
+/* ── Shared roles ─────────────────────────────────────────────────────────────── */
+.key {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--svc-ink-label);
+}
+
+/* ── Stat ───────────────────────────────────────────────────────────────────────
+   The sentence under a stat that has no rows to count. */
+.statBody {
+  font: var(--text-lead);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink);
+  max-inline-size: var(--measure-lead);
+}
+
+/* ── Slot (review mode only) ──────────────────────────────────────────────────── */
+.slot {
+  border: var(--border-width-1) dashed var(--svc-slot-edge);
+  padding: var(--gap-gutter);
+  color: var(--svc-ink);
+}
+
+.slot[data-ratio='16/9'] {
+  aspect-ratio: 16 / 9;
+}
+
+.slot[data-ratio='4/3'] {
+  aspect-ratio: 4 / 3;
+}
+
+.slot[data-ratio='3/2'] {
+  aspect-ratio: 3 / 2;
+}
+
+.slot[data-ratio='1/1'] {
+  aspect-ratio: 1 / 1;
+  max-inline-size: var(--svc-slot-size-portrait);
+}
+
+.slotMessage {
+  font: var(--text-lead);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink);
+  max-inline-size: var(--measure-lead);
+}
+
+.slotBrief {
+  font: var(--text-body);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink-muted);
+  max-inline-size: var(--measure-body);
+}

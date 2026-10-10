@@ -1,5 +1,9 @@
 # DataTable
 
+
+> **Owner, 7 Oct 2026:** on a phone a table scrolls sideways and never restacks into key/value
+> blocks — rows are easier to read across. A partly clipped second column at 390 is accepted.
+
 ## 0 · Front matter
 
 |                     |                                                                                                                                                                                                                                                                                                          |
@@ -72,7 +76,7 @@ HTML. Nothing else is a slot; there is no action slot (§ 12, "interactive conte
 | `summary`   | `string`                                                                                 | —                   | A plain-text lead-in paragraph before the table. Omitted → none.                                               |
 | `keyColumn` | `{ heading: string; behaviour?: 'fluid' \| 'nowrap' \| 'hold' }`                         | behaviour `'hold'`  | The first column's head and how the row headers behave.                                                        |
 | `columns`   | `readonly { heading: string; behaviour?: 'fluid' \| 'nowrap' \| 'hold' \| 'numeric' }[]` | behaviour `'fluid'` | The data columns, in order. The COUNT is data, never a variant.                                                |
-| `rows`      | `readonly { header: string; cellsHtml: readonly string[] }[]`                            | —                   | Each row: a plain-text header and one trusted rich-text string per data column.                                |
+| `rows`      | `readonly { header: string; cellsHtml: readonly (string \| { node: ReactNode })[] }[]` | —                   | Each row: a plain-text header and, per data column, a trusted rich-text string or (1 Oct 2026) a composed mark `{ node }`. |
 
 **Column behaviour** (presentation, set by the caller):
 
@@ -498,3 +502,60 @@ LAYOUT
 [x] No display grid/flex, no margins, no Section override. Grounds only through --dtab-*-ground.
 [x] No horizontal page overflow at 390 (npm run shots: 0 problems); the frame scrolls instead.
 ```
+
+## Amendment · 1 Oct 2026 — a cell may be a composed mark
+
+**Why.** The service pages drew two tables as hand-made rows (Modernisation's interventions, Design
+Systems' representations) because one column needed a mark DataTable could not hold — a disruption
+meter, a chip. Drawn as rows they lost table semantics, and on a phone they collapsed into the same
+stacked blocks as the cards above them, so comparison data and peer items looked alike. Owner: *"the
+disruption table should be a table?"*
+
+**The rule this settles:** content a reader compares ACROSS rows — every row the same attributes — is a
+table and stays one at every width (DataTable scrolls sideways on a phone, behind its edge fades). Peers,
+each a name and a line, are cards or rows and stack.
+
+**The change.** A `cellsHtml` entry may be `{ node: ReactNode }` (`DataTableNodeCell`) instead of a
+trusted HTML string: a mark the caller composes, placed in the cell as given. The node owns its own text
+alternative (the disruption meter carries a visually hidden "Disruption: 3 of 6"). Strings keep their
+contract unchanged. Give a mark column `behaviour: 'nowrap'`.
+
+**Row range, 1 Oct 2026.** Three to twelve, up from eight. The cap was a content estimate, not a
+layout limit — rows are one ruled line each and nothing in the frame depends on the count — and the
+first comparison matrix (Design Engineering: ten things to decide, each answered by static screens or
+a coded slice) is a legitimate ten-row table. Above twelve the warning still fires.
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix round 2: `frame="ruled"` (withdrawn 7 Oct 2026)
+
+`frame?: 'boxed' | 'ruled'`, default `boxed` (everything above). `ruled` draws no box: no outer
+border, no head fill, no body ground, no column dividers. The head row closes on the strong rule
+(`--dtab-rule-strong-width`, `--dtab-rule-strong-ink`), the rows on the hairline, the key starts on
+the band's text edge, and the scroll fades fade to the band's own ground (`--dtab-band-ground`,
+restated per surface by value). For a table that IS a band's diagram — the service page's spectrum
+and check matrix — where the owner's ruling "no boxes around text content" holds and the columns
+are few enough to read by alignment. Specimen: `/design/data-table` § 2.
+
+## Amendment · 7 Oct 2026 — owner design review: tables are boxed
+
+**The rule: tables are boxed.** Tabular content renders as this table in its boxed frame — outer
+border, head fill, body ground, a hairline between every row and every column. The box is the
+table's, not a variant. Recorded in `docs/kit/visual-direction.md`, "Owner rulings · 7 Oct 2026",
+rule 1.
+
+- **`frame` is removed**, with `DataTableFrame`, the `.ruled` overrides and the three tokens only it
+  read (`--dtab-rule-strong-width`, `--dtab-rule-strong-ink`, `--dtab-band-ground`, the last two per
+  surface). The ruled tables (the service page's spectrum and matrix) read dense and compact: rows ran
+  together with nothing to hold them, and without its frame a table stops reading as one. The
+  6 Oct "no boxes around text content" ruling still governs cards and diagrams; a table is not text
+  content in a box.
+- **The service page's three tables are boxed**: Spectrum, Matrix and Record. Record — a record's
+  fields and the question each holds, which had been a ruled sheet — is now a two-column DataTable
+  under a set heading; six fields or more set as two boxed halves side by side from 1024 (as the
+  Matrix halves already did), each half its own table with its own head row, so the band keeps the
+  fold (775 and 759 at 1440).
+- **A composed `{ node }` cell is top-aligned** (`.nodeCell`). Every other cell sits on the row's
+  shared baseline; a node has no text, so its baseline is its bottom edge, and the 24 disruption
+  trace pushed every text cell in its row down 7px (rows 65 instead of 58, which ran the
+  modernisation spectrum band to 849, past the fold). Top-aligned, a 24 mark sits in the 26 first
+  line box and the text keeps its baseline.
+- Specimen: `/design/data-table` loses the ruled row; its intro states the rule.

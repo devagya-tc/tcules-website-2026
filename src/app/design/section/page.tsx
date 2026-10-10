@@ -18,18 +18,18 @@ type SeamBand = {
 };
 
 /**
- * The seam sequence (29 Sep 2026, tracker 2.17). Order matters — every note describes the seam
+ * The seam sequence (2.17; the single seam reverted 30 Sep 2026). Order matters — every note describes the seam
  * between this band and the one before it, so the list is the proof and cannot be sorted.
  */
 const SEAMS: readonly SeamBand[] = [
   {
     label: 'Seam · after a flush band — full air',
-    note: 'The band above is flush: it has no bottom padding to serve as the seam, and it is flush because it hands the air to the next band (Breadcrumbs does exactly this). So this band keeps its top 96.',
+    note: 'The band above is flush: it has no bottom padding to serve as the seam, and it is flush because it hands the air to the next band. So this band keeps its top 96.',
     surface: 'paper',
   },
   {
-    label: 'Seam · paper + paper — one seam, 96',
-    note: 'Follows a paper band, so its top padding drops and the seam is the preceding band’s bottom 96 — not 96 + 96 = 192 of identical ground.',
+    label: 'Seam · paper + paper — both paddings, 96 + 96',
+    note: 'Follows a paper band and keeps its own top padding: the seam is 192. On one ground the air is what separates two arguments (reverted from the single seam, 30 Sep 2026).',
     surface: 'paper',
   },
   {
@@ -38,25 +38,8 @@ const SEAMS: readonly SeamBand[] = [
     surface: 'tint',
   },
   {
-    label: 'Seam · tint + tint — one seam, 96',
-    note: 'The same rule on every surface: a tint band after a tint band drops its top.',
-    surface: 'tint',
-  },
-  {
-    label: 'Seam · standard → tight — 96, the preceding band governs',
-    note: 'This band is tight, but the seam above it is the preceding band’s bottom, 96. Its own tightness shows below it.',
-    surface: 'tint',
-    density: 'tight',
-  },
-  {
-    label: 'Seam · tight → open — 64',
-    note: 'The preceding band is tight, so the seam is its 64. This open band’s 128 governs its own bottom.',
-    surface: 'tint',
-    density: 'open',
-  },
-  {
-    label: 'Seam · open → standard — 128',
-    note: 'The open band above sets the seam at 128.',
+    label: 'Seam · tint + tint — both paddings, 96 + 96',
+    note: 'The same on every surface: nothing merges.',
     surface: 'tint',
   },
   {
@@ -84,16 +67,16 @@ export default function SectionSpecimenPage() {
             </p>
             <p>
               One declaration does three jobs:{' '}
-              <code>padding-inline: max(--sec-gutter, (100% - --sec-container) / 2)</code>. Below
-              the cap the gutter wins; past it the centring term does. Both values, and the
-              vertical air, come from the --sec-* token layer — this component states no distance
-              of its own.
+              <code>padding-inline: max(--sec-gutter, (100% - --sec-container) / 2)</code>.
+              Below the cap the gutter wins; past it the centring term does. Both values, and
+              the vertical air, come from the --sec-* token layer — this component states no
+              distance of its own.
             </p>
           </Layout>
 
           <Specimen
             title="Vertical air — --sec-padding-y, 96 flat"
-            note="One value at every width, and a gap-scale step: --gap-section. The token layer declares tight (64, --gap-column) and open (128, --gap-section-open) beside it, reachable via the density prop, and flush zeroes it. There is no arbitrary value: a band is one of those four. Two adjacent bands on the same surface share ONE seam — the following band drops its top padding; see the seam sequence below."
+            note="One value per width (owner, 7 Oct 2026): 96 (--gap-section) from 768, 64 (--gap-column) below. The page's first band takes less above its content below 1024 — 48 on a tablet, 32 on a phone — so the hero does not open on a void under the nav. Besides it only strip (24, the announcement strip) and flush (0). There is no tight or open band. Two adjacent bands keep both paddings, on any surface; see the seam sequence below."
           >
             <div className={s.ruler}>content sits inside the vertical air</div>
           </Specimen>
@@ -111,11 +94,10 @@ export default function SectionSpecimenPage() {
         <Layout rowGap="text">
           <p className={s.specTitle}>Two stacked Sections — the band boundary</p>
           <p className={s.specNote}>
-            The dashed outline is chrome, not a border the primitive draws. Bands are separated by
-            ground and whitespace, never by a rule — the surface specimens below show the tone
-            doing that work. This band follows the paper band above and precedes another, so both
-            of its seams are ONE band&apos;s air, not two: a band that follows a band of its own
-            surface drops its top padding.
+            The dashed outline is chrome, not a border the primitive draws. Bands are separated
+            by ground and whitespace, never by a rule — the surface specimens below show the
+            tone doing that work. This band follows the paper band above and precedes another,
+            and each seam is BOTH bands&apos; air: 96 + 96 on one ground.
           </p>
           <Box>band A</Box>
         </Layout>
@@ -132,8 +114,8 @@ export default function SectionSpecimenPage() {
         <Layout rowGap="text">
           <p className={s.specTitle}>flush — vertical rhythm zeroed</p>
           <p className={s.specNote}>
-            For a composition that supplies its own vertical space; a full-bleed immersive hero is
-            the case that needs it. Overrides density. The gutter and the content cap are
+            For a composition that supplies its own vertical space; a full-bleed immersive hero
+            is the case that needs it. Overrides density. The gutter and the content cap are
             unaffected.
           </p>
           <Box>flush band</Box>
@@ -169,9 +151,9 @@ export default function SectionSpecimenPage() {
             <Layout rowGap="tight">
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>
               <p className={s.specNote}>
-                {SURFACE_NOTES[surface]} Every --sec-* role is remapped in the token layer, so the
-                heading, the muted note, the hairlines and the accent below all adapt without this
-                page saying anything about colour.
+                {SURFACE_NOTES[surface]} Every --sec-* role is remapped in the token layer, so
+                the heading, the muted note, the hairlines and the accent below all adapt
+                without this page saying anything about colour.
               </p>
             </Layout>
             <h3>A heading on {surface}</h3>
@@ -184,17 +166,17 @@ export default function SectionSpecimenPage() {
         </Section>
       ))}
 
-      <Section density="tight" className={s.bandOutline}>
+      <Section density="strip" surface="tint" className={s.bandOutline}>
         <Layout rowGap="text">
-          <p className={s.specTitle}>density=&quot;tight&quot; — 64 against the standard 96</p>
-          <Box>tight band</Box>
+          <p className={s.specTitle}>density=&quot;strip&quot; — 24, the announcement strip</p>
+          <Box>strip band (one line; Banner form=&quot;strip&quot; is its only caller)</Box>
         </Layout>
       </Section>
 
-      <Section density="open" className={s.bandOutline}>
+      <Section density="strip" flush className={s.bandOutline}>
         <Layout rowGap="text">
-          <p className={s.specTitle}>density=&quot;open&quot; — 128</p>
-          <Box>open band</Box>
+          <p className={s.specTitle}>density=&quot;strip&quot; flush — flush wins, 0</p>
+          <Box>flush overrides every density, strip included</Box>
         </Layout>
       </Section>
 
@@ -202,8 +184,8 @@ export default function SectionSpecimenPage() {
         <Layout rowGap="text">
           <p className={s.specTitle}>as=&quot;div&quot; — the element is a prop</p>
           <p className={s.specNote}>
-            Defaults to a semantic &lt;section&gt;. Use div / header / footer where the semantics
-            call for it.
+            Defaults to a semantic &lt;section&gt;. Use div / header / footer where the
+            semantics call for it.
           </p>
           <Box>rendered as a div</Box>
         </Layout>

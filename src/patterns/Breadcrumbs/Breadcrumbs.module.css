@@ -6,11 +6,11 @@
    is what lets the same markup answer a paper band, a tint panel, an ink band and a blue pivot
    without knowing which one it is standing on.
 
-   ── The band ────────────────────────────────────────────────────────────────────
-   This component owns its band, so there is exactly one way a trail can sit on a page. That is
-   the same shape SiteNav and SiteFooter already take, and it is why `surface` is a prop here: a
-   control reads data-surface from an ancestor because it sits in somebody else's band, and a
-   pattern that owns one has no ancestor to ask.
+   ── No band ──────────────────────────────────────────────────────────────────────
+   Since 5 Oct 2026 (kit fdn-top) this component renders no Section and owns no air. It sits in
+   PageHero's `trail` slot, inside the hero's band, and reads its ground from that band's
+   data-surface exactly as a Button does — so this file holds no padding, and nothing here can
+   disagree with the hero about which surface it is on.
 
    ── What is NOT here, and why ───────────────────────────────────────────────────
    No display:flex and no display:grid. Every arrangement in this component is a Cluster — the
@@ -40,36 +40,6 @@
    against --sec-link-ink-hover's 600 on paper), so a lost tie is a real colour drift that renders
    perfectly and looks almost right. The descendant selector takes it to (0,2,1) and settles it
    here instead. It needs no extra markup: .trail is on the <ol> that every link sits inside. */
-
-/* ── The band's air · 64 above, the ring's reach below ───────────────────────
-   On the <nav>, INSIDE the flush Section, and that placement is the whole point of this block.
-
-   The obvious way to write this is on the Section itself — `flush` plus a className adding the
-   top. It is what an earlier draft did, with a comment claiming that adding a longhand to a flush
-   band is safe because it conflicts with nothing. That was wrong: Section's `.flush` is
-   `padding-block: 0`, a SHORTHAND, so it sets padding-block-start too, and a longhand on another
-   single class is the same (0,1,0). The winner is stylesheet order — the identical failure the
-   draft rejected `density="tight"` plus a zeroed end for. It happened to render correctly because
-   importing Section puts its module first, which is not a thing to rest on.
-
-   Putting the air on the nav removes the contest instead of winning it on specificity. The Section
-   is genuinely flush, nothing in this file touches a Section at all, and the two values cannot be
-   reordered out of existence. It also means this component no longer claims the licence SiteNav
-   takes to style its own band from outside — it does not need it.
-
-   ABOVE: 64, because a sticky SiteNav sits immediately above this band on every route and stacks
-   over it, and the hit extension reaches 23.15px up. BELOW: the focus ring's reach and nothing
-   more — the air between the trail and the hero belongs to the HERO band, and contributing a
-   seam's worth here would make the two paddings add.
-
-   --gap-column is read directly rather than renamed: a --crumb-band-padding token would be a
-   second name for one distance, which is why --sec-gap was deleted. It is also the step
-   --sec-padding-y-tight resolves to, quoted by VALUE because a component may not read another
-   component's tokens — so if Section's tight density is re-tuned, this must be re-checked. */
-.root {
-  padding-block-start: var(--gap-column);
-  padding-block-end: var(--crumb-ring-clearance);
-}
 
 /* ── The trail ─────────────────────────────────────────────────────────────────
    One type role for the whole component, set once here and INHERITED by the links, the dividers,
@@ -106,9 +76,8 @@
   position: relative;
   display: inline-block;
   /* The rule's clearance, held INSIDE the label's box rather than as a negative offset below it.
-     That is the difference between a rule that renders and one that does not: the band gives
-     nothing downward, so anything positioned below this box is outside the band and is painted
-     over by the next one. Inside the box it cannot be clipped by anything.
+     Inside the box the rule cannot be clipped by anything, whatever sits beneath the trail: today the
+     32 to the hero's split, and when the trail was its own band, the next band's paint.
      It also removes a defect the spec had documented and accepted: the wrapped line pitch becomes
      20.85 + 24 = 44.85px, which is more than the 44px target, so two wrapped lines' targets no
      longer overlap at all. The 1.15px overlap is gone rather than reasoned about. */
@@ -178,10 +147,10 @@
   position: absolute;
   inset-inline: 0;
   /* Anchored to the BOTTOM of the label's box and grown upward, not centred on it. Centring would
-     put (44 - 20.85) / 2 = 11.575px of the target below the box — outside the band, where the next
-     band paints over it, so the target would be silently cut to about 36px on the one component
-     whose targets are already the tightest on the site. Growing upward puts the whole 44 inside
-     the band, because the band has 64 of air above.
+     put (44 - 20.85) / 2 = 11.575px of the target below the box, into the 32 between the trail and
+     the hero's split, where it would sit over the eyebrow or the title's cap height. Growing upward
+     puts the whole extension into the hero's 96 of top padding: it reaches 23.15px up and leaves
+     about 73 clear of the sticky nav.
      It is also correct on a wrapped row: the target reaches 44 - 20.85 = 23.15px above the box,
      and the previous line's box bottom is --gap-block (24) above it, so consecutive lines clear
      each other by 0.85px instead of overlapping. */

@@ -230,11 +230,8 @@ outer ink value may leak through an omitted declaration.
 
 ### (c) Optical corrections
 
-One. `--acc-question-underline-offset` resolves to `--space-6`: the offset that clears Public Sans'
-descenders under the 22px question, so the pressed underline reads as a rule rather than as a
-strikethrough through the tail of a `g`. It is a correction at a size, not a layout distance, which
-is what earns the reach to the space ramp — the same reach and the same reason as
-`--prose-link-underline-offset`. Its thickness reuses `--acc-rule-width`.
+None (owner, 7 Oct 2026). The pressed underline and its offset token were removed: the press no
+longer draws a rule under the question.
 
 Trigger and answer insets remain layout relationships named by the gap scale, and the mark uses an
 existing icon size.
@@ -386,16 +383,31 @@ expanded, button”, followed by the answer in normal reading order.
 
 ## 13 · Motion
 
-Question ink and mark ink transition with `--acc-transition-duration: --duration-fast` and
-`--acc-transition-easing: --easing-standard`. Those are the only two transitions in the component:
-the trigger background they used to describe no longer exists, and the item border no longer changes
-colour, so neither is animated. The disclosure opens and closes at native layout speed with no
-height interpolation. The chevron swap is immediate.
+**Amended 1 Oct 2026 (owner: "add subtle motion to the opening and closing … so it doesn't feel so
+jumpy", global).** The answer now opens and closes with motion, on the native element:
 
-There is no transform, translation, rotation, scale, rule wipe, fade, opacity change, height
-animation, max-height animation, answer slide or mark movement. Reduced motion resolves the two
-colour transitions to `--duration-instant`; content visibility and native keyboard behavior are
-unchanged.
+- `.item { interpolate-size: allow-keywords }` lets `block-size` transition to `auto`, scoped to the
+  component rather than set on `:root`.
+- `.item::details-content` (the UA box around everything after the summary) goes from `block-size: 0;
+  opacity: 0; overflow: clip` to `block-size: auto; opacity: 1` under `[open]`, over
+  `--acc-reveal-duration` (`--duration-medium`, 240ms) with `--acc-transition-easing`.
+  `content-visibility` is transitioned `allow-discrete`, so a closing answer stays painted until its
+  height has gone.
+- The open state's tighter inset under the question (`padding-block-end` 24 → 16) eases on the same
+  duration, so it does not arrive as a second, smaller jump.
+
+Why 240: the answer travels its own height, often 150–300px; at 140 that reads as a snap, and 360 made
+a seven-item FAQ heavy to scan.
+
+**Progressive, not polyfilled.** Where `::details-content` or `interpolate-size` is unsupported, the
+answer appears at once, as it did before. No JavaScript, no height measurement, no max-height guess,
+so the native behaviour this component exists to keep (find-in-page, keyboard, independent items) is
+untouched. This supersedes the earlier "no height interpolation" ruling, which was right while the
+only way to animate `<details>` was to fake it.
+
+Unchanged: question and mark ink transition on `--acc-transition-duration` (`--duration-fast`); the
+chevron swap is immediate; no transform, rotation, slide or rule wipe. Reduced motion resolves every
+transition, the answer's included, to `--duration-instant`.
 
 ## 14 · Do's and Don'ts
 
@@ -487,7 +499,8 @@ true after the redesign: every new value is an existing ramp step.
 The layer as built, for the record:
 
 - **New.** `--acc-question-ink`, `--acc-question-ink-hover`, `--acc-mark-ink`, `--acc-mark-ink-hover`
-  (four surfaces each), and the geometry token `--acc-question-underline-offset`.
+  (four surfaces each), and a geometry token for the pressed underline's offset (removed with the
+  underline, 7 Oct 2026).
 - **Changed.** `--acc-rule-ink` lightens one step on every surface: neutral-200 paper, neutral-300
   tint, neutral-800 ink, brandeis-400 blue.
 - **Dropped.** `--acc-trigger-fg` (split into a question ink and a mark ink, which no longer move
@@ -574,8 +587,7 @@ NAMES
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS declarations, selectors or media blocks.
 [x] h5 uses its required tracking companion; Prose owns the answer composite.
 [x] Every layout distance is a gap-scale role.
-[x] Space-ramp reaches: 1 — --acc-question-underline-offset: --space-6, an optical correction under
-    the 22px question, commented as one in accordion.css. Section 7(c) states it.
+[x] Space-ramp reaches: none (the pressed-underline offset was removed 7 Oct 2026).
 [x] Literal pixels appear only as existing breakpoint, touch, track and Section-cap measurements
     used to explain verification; no literal becomes an implementation value.
 
@@ -615,3 +627,8 @@ COMPLETENESS
 [x] Every open question has options, recommendation and a recorded resolution; zero blockers remain.
 [x] Squint test: four shapes, with open answer depth and count density rather than repeated boxes.
 ```
+
+## Amendment — final fix round (cmp-media-split, 6 Oct 2026)
+
+- `.question` wraps with `--text-running-wrap` (pretty), not the title's balance: a balanced break
+  halved a question at 390 and left the space before the chevron empty.

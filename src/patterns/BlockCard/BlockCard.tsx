@@ -1,6 +1,18 @@
-import { Button, Cluster, Icon, Layout, Media, type MediaImage } from '@/components';
+import type { ComponentProps } from 'react';
+
+import {
+  Button,
+  Cluster,
+  Icon,
+  type IconName,
+  Layout,
+  Media,
+  type MediaImage,
+  Texture,
+  TextureShape,
+} from '@/components';
 import { cx } from '@/lib/cx';
-import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
+import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
 
 import styles from './BlockCard.module.css';
 
@@ -13,7 +25,8 @@ import styles from './BlockCard.module.css';
  * attributes on the `<img>`, which the fill rule overrides. Several view models still arrive
  * without them (spec § 17 Q15). A record with no dimensions is given the box's own proportions and
  * loses its `sources`, because a srcset needs the master's true width for its `w` descriptor and
- * a guessed one would make the browser pick the wrong file.
+ * a guessed one would make the browser pick the wrong file. It is also flagged `placeholderSize`,
+ * so Media reports no master pixels for it to the resolution gate.
  */
 export type BlockCardImage = Omit<MediaImage, 'width' | 'height'> & {
   width?: number;
@@ -33,10 +46,86 @@ export type BlockCardImage = Omit<MediaImage, 'width' | 'height'> & {
  * image, and the service, audit, glossary and capability cards that used to be the icon's home are
  * media-less; ch04 wants one icon per tile in ink, and a 24px glyph heading a card is not what any
  * family is now given. It had no route use (spec § 17 Q14).
+ *
+ * `texture` is the one cover the card draws itself (cmp-feature, 6 Oct 2026): the Tcules pixel grid
+ * (the Texture primitive) through one of three blurred fields, inside the same ruled box, with the
+ * card's `icon` — if it has one — centred on it in blue. It is the stand-in for an ARTEFACT with no
+ * cover yet (a resource, a template, a checklist): a stock photograph of sticky notes said nothing
+ * about the thing, and the texture is the brand's own surface (visual-direction § 6). `recipe`
+ * picks the field; BlockCardSet assigns them in order so three neighbours never repeat. No type is
+ * ever drawn on it.
  */
-export type BlockCardMedia = { type: 'image'; image: BlockCardImage };
+export type BlockCardTextureRecipe = 0 | 1 | 2;
+export type BlockCardMedia =
+  | { type: 'image'; image: BlockCardImage }
+  | { type: 'texture'; recipe?: BlockCardTextureRecipe };
 
-export type BlockCardTitleElement = 'h3' | 'h4';
+/**
+ * The title's element. `h2` exists for one case: a set that IS the page's list, directly under the
+ * page's h1 with no band heading between them (the case-study index, `/case-studies`). There the
+ * cards are the page's sections, and an h3 under an h1 skips a level (axe heading-order).
+ */
+export type BlockCardTitleElement = 'h2' | 'h3' | 'h4';
+
+/**
+ * The crop a cover takes (visual-direction § 1.4 rule 1, 6 Oct 2026). A presentation choice the SET
+ * makes, because it depends on the count:
+ *
+ *   cover  3:2   one or two cards, and the horizontal arrangement. The default.
+ *   wide   16:9  a set of three or more across. At 392 a 3:2 cover is 261 tall and the band runs
+ *                past the fold; 16:9 is 221, which is what § 1.4's Card-3 (381) is built on.
+ *   panorama  21:9  the tall lead of a spotlight set (BlockCardSet `lead="beside"`): 802 wide in
+ *                the 2:1 track, where 16:9 would be 451 and put the band past the fold.
+ *   double  2:1 from 1024, 16:9 below   the wide lead of BlockCardSet `lead="wide"`, in the 2fr of
+ *   square  1:1 from 1024, 16:9 below   [2, 1, 1]; its companions take `square`. 2:1 of a 2fr track
+ *                is 1:1 of a 1fr one, so the row's covers share one height at every width. Below
+ *                1024 the row is the ordinary set, so both are its 16:9. The ratio follows the
+ *                arrangement, and the arrangement changes at 1024 (Media's `{ base, lg }` rule).
+ *   pair  16:5 from 1024, 16:9 below   a LINKED pair of covered cards under a stacked head, each
+ *                ~604 wide (BlockCardSet). 21:9 was 259 tall and the C-pair band ran 888 against the
+ *                830 fold (9 Oct 2026); 16:5 is 189, 12 under it. Below 1024 the pair is 16:9,
+ *                the set's own crop.
+ *   headshot  1:1 at EVERY width   a person's face (page-showcase fix round 2, 7 Oct 2026). A
+ *                square portrait set 16:9 cut heads at the hat and the chin at every width; the
+ *                headshot keeps the source's own square, so the face is never the crop's casualty.
+ *                Composed by the caller in its own Layout; BlockCardSet's count rule never picks it.
+ */
+export type BlockCardRatio = 'cover' | 'wide' | 'panorama' | 'double' | 'square' | 'headshot' | 'pair';
+
+/**
+ * How a WHOLE-CARD link says it navigates. One cue per card, never both.
+ *
+ *   title  the title itself (owner, 7 Oct 2026): no glyph at rest, and on hover and focus the
+ *          title takes the accent ink (and a cover leans in). It replaced `arrow`, a blue arrow
+ *          after the title's last word: on nearly every card in the kit it read as bulky, and the
+ *          whole card is already the link. ListCard's linked items answer the same way.
+ *   cta    a link-style action under the copy ("Read more", or `ctaLabel`), blue at rest, with its
+ *          arrow; the title stays dark. The per-card CTA of § 1.4 (+64: 24 + a 40 row). For a card
+ *          whose action is NOT obvious from its title; a card whose title names its destination
+ *          needs none.
+ *
+ *   download  the cta again, with the download glyph and "Download" (or `ctaLabel`): a resource
+ *          that is a file says so before it is opened (M, cmp-feature 6 Oct 2026). Pair it with
+ *          `meta` ("PDF · 12 pages"), which sits beside it on the action row.
+ *
+ * Defaults: `title` on a card with a cover or an icon, `cta` on a text-only card — the shape every
+ * live route already renders. A feature set states it for the whole set (BlockCardSet `cue`).
+ */
+export type BlockCardCue = 'title' | 'cta' | 'download';
+
+/**
+ * The card's finish (owner, 7 Oct 2026 — a partial reversal of "a card is never a box",
+ * visual-direction § 3.1).
+ *
+ *   none  the default: the borderless card, bounded by its set's gutter and its cover's edge.
+ *   box   no edge (owner, 9 Oct 2026): its content a `block` (24) inside, and — on a linked card —
+ *         a ground at the 8 radius under the pointer, which is what the inset is for. For a set
+ *         whose cards must read as separate targets: an icon router of four to six destinations.
+ *         A text-only card draws no top hairline inside a box.
+ *
+ * A set's decision, like the type step: BlockCardSet `frame` states it for every card.
+ */
+export type BlockCardFrame = 'none' | 'box';
 
 /**
  * Which axis the card arranges on. A PRESENTATION choice, never a CMS field.
@@ -45,9 +134,9 @@ export type BlockCardTitleElement = 'h3' | 'h4';
  *   horizontal  the row: two equal tracks from md, 64 apart. With an image, media beside copy at
  *               3:2, the tile's own crop. Without one, the copy splits instead — eyebrow and title in the first track,
  *               body and cta in the second — so a text-only row is a head beside its body rather
- *               than a single column with an empty half. Either way the title steps up to the h3
- *               role, because a row spanning the column carries more weight than a tile. This is
- *               the featured arrangement `BlockCardSet` gives its first item (ruling C3).
+ *               than a single column with an empty half. Either way it defaults to the `lg` size,
+ *               because a row spanning the column carries more weight than a tile. This is the
+ *               featured arrangement `BlockCardSet` gives its first item (ruling C3).
  */
 export type BlockCardOrientation = 'vertical' | 'horizontal';
 
@@ -72,8 +161,68 @@ export type BlockCardImageSide = 'left' | 'right';
  */
 export type BlockCardTracks = 2 | 3;
 
+/**
+ * The card's type step: title and body roles together (visual-direction § 7.2, 5 Oct 2026). A
+ * COMPONENT SIZE, so a t-shirt name. The card does not know its count, so the set passes it.
+ *
+ *   lg  h3 title, body-lg   the one featured, horizontal card
+ *   md  h4 title, body      two to three cards; text cards
+ *   sm  h5 title, body-sm   four to six cards across
+ *
+ * Defaults by orientation — `lg` when horizontal, `md` when vertical — so a caller that states
+ * neither gets the arrangement's own weight. The set, not the card, decides `sm`.
+ */
+export type BlockCardSize = 'lg' | 'md' | 'sm';
+
+/** One modifier per step, on the root; the module sets title and body roles under it. */
+const SIZE_CLASS: Record<BlockCardSize, string | undefined> = {
+  lg: styles.sizeLg,
+  md: styles.sizeMd,
+  sm: styles.sizeSm,
+};
+
+/** One modifier per crop, on the image box; the module reads the ratio token under it. */
+const RATIO_CLASS: Record<BlockCardRatio, string | undefined> = {
+  cover: undefined,
+  wide: styles.wide,
+  panorama: styles.panorama,
+  double: styles.double,
+  square: styles.square,
+  headshot: styles.headshot,
+  pair: styles.pair,
+};
+
+/**
+ * The three texture fields, in TextureShape's own terms (percent of the cover, Figma blur). Each
+ * leaves the grid strongest in a different region, so a row of three stand-ins reads as three
+ * covers of one family rather than one cover thrice: a glow off the top end, a bank across the
+ * foot, a field off the start edge.
+ */
+const TEXTURE_RECIPES: Record<
+  BlockCardTextureRecipe,
+  readonly ComponentProps<typeof TextureShape>[]
+> = {
+  /* Fix round 2 (6 Oct 2026): the fields were blurred 60 to 70 inside a box 220 tall, so the grid
+     never reached full strength anywhere and the cover read as an empty frame — a placeholder. Each
+     field is now a HARD-EDGED block of the grid at full strength: the brand's pixel geometry, a
+     panel, a band and a step, set clear of the foot-start corner the glyph sits in. A blurred edge
+     at this size only ever showed the fade. */
+  0: [{ top: 0, right: 0, width: '58%', height: '100%', kind: 'rect', blur: 0 }],
+  1: [{ top: 0, left: 0, width: '100%', height: '40%', kind: 'rect', blur: 0 }],
+  2: [
+    { top: 0, right: 0, width: '36%', height: '100%', kind: 'rect', blur: 0 },
+    { top: 0, right: '36%', width: '28%', height: '46%', kind: 'rect', blur: 0 },
+  ],
+};
+
+/** An index numeral, two digits: 1 → "01". The mono index voice ListCard's numbered rows use. */
+const indexLabel = (value: number) => String(value).padStart(2, '0');
+
 /** The cta label a linked card uses when the caller names none. */
 const DEFAULT_CTA_LABEL = 'Read more';
+
+/** The `download` cue's label when the caller names none. */
+const DOWNLOAD_LABEL = 'Download';
 
 /**
  * The attributes a record with no intrinsic size is given: the proportions of the box it fills,
@@ -91,8 +240,12 @@ const FILL_BOX = { width: 3, height: 2 } as const;
 export type BlockCardProps = {
   /** Required card heading. Whitespace-only values render nothing and warn in development. */
   title: string;
-  /** One supporting paragraph. Whitespace-only values omit the paragraph and warn. */
-  body: string;
+  /**
+   * One supporting paragraph. Whitespace-only values omit the paragraph and warn. Optional: a card
+   * whose description is said by something beside it — the case card in Proof's G-case, where the
+   * quote is the description (owner, 7 Oct 2026) — leaves it off, and no warning is raised.
+   */
+  body?: string;
   /**
    * One optional quiet label above the title — a client, a category, a content type, a kicker.
    * A plain string rather than a structured record: what belongs here varies by page, so the
@@ -107,17 +260,16 @@ export type BlockCardProps = {
   /** Heading semantics without a visual type change. Defaults to h3. */
   titleAs?: BlockCardTitleElement;
   /**
-   * A non-blank destination turns the entire card into one native link. A linked card WITHOUT a
-   * cover also gets its cta; one with a cover does not (29 Sep): the cover and its hover zoom
-   * already say the tile navigates, and a line repeated under every tile in a grid is noise. A
-   * text-only card has nothing else to say it, so it keeps the line.
+   * A non-blank destination turns the entire card into one native link, which says it navigates by
+   * ONE cue (`cue`): its title, which takes the accent on hover and focus, or a link-style cta under
+   * the copy. By default a card with a cover or an icon is title-cued and a text-only card takes the
+   * cta.
    */
   href?: string;
   /**
-   * The cta wording on a linked text-only card. Defaults to "Read more", which is
+   * The cta wording when the card's cue is `cta`. Defaults to "Read more", which is
    * content-type-agnostic; pass a specific line where the page can name its destination. Ignored
-   * without `href`, and ignored on a card with a cover, because neither renders a cta. `Button`
-   * uppercases it, so pass ordinary capitalisation.
+   * without `href` and under the title cue. `Button` uppercases it, so pass ordinary capitalisation.
    */
   ctaLabel?: string;
   /** Arrangement axis. Defaults to the grid tile. */
@@ -126,6 +278,40 @@ export type BlockCardProps = {
   imageSide?: BlockCardImageSide;
   /** The widest track count of the card's set, for the image's `sizes`. Defaults to 2. */
   tracks?: BlockCardTracks;
+  /** The type step. Defaults to `lg` when horizontal and `md` when vertical. */
+  size?: BlockCardSize;
+  /** The cover's crop. Defaults to `cover` (3:2). Ignored when horizontal, which is always 3:2. */
+  ratio?: BlockCardRatio;
+  /**
+   * A Solar Bold glyph on its own row above the title of a card with NO cover — the icon card of
+   * C-icon (owner, 9 Oct 2026: stacked, never inline). Sized from the title's role, from
+   * --bcrd-icon-size (owner, 7 Oct 2026: the 32 glyph heading the card was far too big). Blue, because icons carry the foreground accent (§ 4.2). Ignored
+   * when the card has a cover: a card has one object at its head, never two.
+   */
+  icon?: IconName;
+  /**
+   * An index numeral above the title, set as `01`, `02` … in mono, blue (§ 4.2: index numerals
+   * carry the accent). The text card's head (§ 3.1: hairline, 24, then an index or an eyebrow).
+   * Usually passed by BlockCardSet `numbered`, which knows each card's position.
+   */
+  index?: number;
+  /** How a linked card says it navigates. See `BlockCardCue`. Ignored without `href`. */
+  cue?: BlockCardCue;
+  /** The card's finish. Defaults to `none`. See `BlockCardFrame`. */
+  frame?: BlockCardFrame;
+  /**
+   * The cover takes the card's spare height when the card is stretched taller than its own
+   * content, never dropping below its ratio (Layout `fillFirst`). A set's decision, for the one
+   * card stretched to a taller neighbour: the spotlight's lead beside its two notes. Vertical
+   * cards with a cover only; ignored otherwise.
+   */
+  grow?: boolean;
+  /**
+   * One short format line for an artefact — "PDF · 12 pages", "Template · Figma" — in the mono
+   * label voice, after the copy: on the action row beside a `download` or `cta` cue, or on its own
+   * row when the card has none. Facts about the file, never a second description.
+   */
+  meta?: string;
 };
 
 function warn(message: string) {
@@ -137,14 +323,32 @@ function mediaRecord(image: BlockCardImage): MediaImage {
   if (image.width && image.height) {
     return { ...image, width: image.width, height: image.height };
   }
-  return { ...image, ...FILL_BOX, sources: undefined };
+  return { ...image, ...FILL_BOX, sources: undefined, placeholderSize: true };
 }
 
-function ImageMedia({ image, sizes }: { image: BlockCardImage; sizes: string }) {
+/** Kinds a cover crop would damage: shown whole, centred, with air inside the ruled box. */
+const CONTAINED_KINDS: ReadonlySet<string> = new Set(['illustration', 'cut-out']);
+
+function ImageMedia({
+  image,
+  sizes,
+  ratio,
+}: {
+  image: BlockCardImage;
+  sizes: string;
+  ratio: BlockCardRatio;
+}) {
+  /* An illustration or a cut-out is not cropped (cmp-feature, 6 Oct 2026): the cover crop took the
+     label off the top of the drawing and the run button off the part. `contain` shows the whole
+     object at the largest size that fits, and the box's inset gives it the air a lifted part needs
+     — a cut-out cut at the frame edge reads as a bad capture. A photograph and a capture still
+     cover-crop: a photograph is atmosphere, and a capture is supplied cropped to its region. */
+  const contained = CONTAINED_KINDS.has(image.kind ?? 'capture');
   return (
     /* The card owns the ratio box and Media fills it: `fit="fill"` is a cover crop, anchored where
        Media anchors it, of a box the parent has already sized — which is what this wrapper is. One
-       ratio in both orientations (3:2, 29 Sep), so a cover crops alike in the row and the tile.
+       ratio per card, set by its set: 3:2 for one or two and in the row, 16:9 for three or more
+       across (§ 1.4 rule 1, 6 Oct 2026).
 
        The box also owns the EDGE, for every kind (29 Sep, ch05 amendment 5a). A card crops every
        asset mechanically to its own ratio, so the boundary is a cut the card made, not the
@@ -154,9 +358,49 @@ function ImageMedia({ image, sizes }: { image: BlockCardImage; sizes: string }) 
        The inner span is what zooms. It scales inside the box, so the ruled edge never moves and
        the overflow is clipped at it; scaling the <img> itself would reach into Media's element.
        Lazy is Media's default: a card is never the page's LCP. */
-    <span className={styles.imageMedia}>
+    <span className={cx(styles.imageMedia, RATIO_CLASS[ratio], contained && styles.contained)}>
       <span className={styles.imageZoom}>
-        <Media image={mediaRecord(image)} sizes={sizes} fit="fill" edge="placement" />
+        <Media
+          image={mediaRecord(image)}
+          sizes={sizes}
+          fit={contained ? 'contain' : 'fill'}
+          edge="placement"
+        />
+      </span>
+    </span>
+  );
+}
+
+/**
+ * The texture cover: the same ruled box, the pixel grid through one recipe's field, and the card's
+ * glyph set large in its foot-start corner (fix round 2: a 48 glyph centred in a 390 well read as a
+ * placeholder, not a cover). The box is the Texture's positioned, isolated ancestor (`.textureCover`), so
+ * the field fills exactly the box and sits beneath the glyph. Decoration, like every cover here.
+ */
+function TextureMedia({
+  recipe = 0,
+  ratio,
+  icon,
+}: {
+  recipe?: BlockCardTextureRecipe;
+  ratio: BlockCardRatio;
+  icon?: IconName;
+}) {
+  return (
+    <span className={cx(styles.imageMedia, RATIO_CLASS[ratio])} aria-hidden="true">
+      <span className={styles.imageZoom}>
+        <span className={styles.textureCover}>
+          <Texture>
+            {TEXTURE_RECIPES[recipe].map((shape, i) => (
+              <TextureShape key={i} {...shape} />
+            ))}
+          </Texture>
+          {icon ? (
+            <span className={styles.coverGlyph}>
+              <Icon name={icon} size="xl" />
+            </span>
+          ) : null}
+        </span>
       </span>
     </span>
   );
@@ -167,8 +411,9 @@ function ImageMedia({ image, sizes }: { image: BlockCardImage; sizes: string }) 
  *
  * The root is always an <li>. A non-blank href changes the frame element and, on a card with no
  * cover, adds the cta: the linked shape has one native anchor and one focus stop, while the static
- * shape is complete without an empty action row. The title stays dark in both; a covered linked
- * card says it navigates by its hover zoom, and a text-only one by the cta.
+ * shape is complete without an empty action row. A covered linked card says it navigates by its
+ * title, which goes blue as the cover zooms; a text-only one by the cta, under a title that stays
+ * dark.
  *
  * Layout owns the block-axis groups, the horizontal orientation's two tracks and the cta's inline
  * row; this module contains no hand-written sibling arrangement. The card knows nothing about its
@@ -186,14 +431,23 @@ export function BlockCard({
   orientation = 'vertical',
   imageSide = 'left',
   tracks = 2,
+  size,
+  ratio = 'cover',
+  icon,
+  index,
+  cue,
+  frame = 'none',
+  meta,
+  grow = false,
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
     return null;
   }
 
-  const hasBody = body.trim().length > 0;
-  if (!hasBody) warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
+  const hasBody = body !== undefined && body.trim().length > 0;
+  if (body !== undefined && !hasBody)
+    warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
 
   const hasEyebrow = eyebrow !== undefined && eyebrow.trim().length > 0;
   if (eyebrow !== undefined && !hasEyebrow) {
@@ -209,15 +463,54 @@ export function BlockCard({
   }
 
   const horizontal = orientation === 'horizontal';
+  const step = size ?? (horizontal ? 'lg' : 'md');
 
+  const coverRatio: BlockCardRatio = horizontal ? 'cover' : ratio;
   const imageNode = hasImage ? (
     <ImageMedia
       image={image}
-      sizes={horizontal || tracks === 2 ? CARD_TWO_TRACKS : CARD_THREE_TRACKS}
+      sizes={
+        coverRatio === 'panorama'
+          ? FULL_COLUMN
+          : horizontal || tracks === 2
+            ? CARD_TWO_TRACKS
+            : CARD_THREE_TRACKS
+      }
+      ratio={coverRatio}
     />
+  ) : media?.type === 'texture' ? (
+    /* The card's icon, if any, moves onto the texture: one head object, never two. */
+    <TextureMedia recipe={media.recipe} ratio={coverRatio} icon={icon} />
   ) : null;
 
-  const label = ctaLabel?.trim() ? ctaLabel : DEFAULT_CTA_LABEL;
+  /* The icon heads a card with no cover; a cover wins, because a card has one head object. */
+  const iconNode =
+    icon !== undefined && !imageNode ? (
+      <span className={styles.icon}>
+        <Icon name={icon} />
+      </span>
+    ) : null;
+
+  /* A text-only card — no cover and no icon — takes a hairline at its own top edge, the width of
+     the card (visual-direction § 3.1, 6 Oct 2026). It stands in for the top edge an image would
+     give; the set's 32 gutter breaks it between cards, so a row reads as three objects and not as
+     a table. It is a row of the frame's Layout, so the 24 under it is that Layout's `block` seam —
+     the image-to-copy distance, which is exactly the relationship it replaces. Decoration: hidden.
+     A boxed card draws none: the box's own top edge is that edge, and a second hairline 24 under
+     it would be a double rule. */
+  const textOnly = !imageNode && !iconNode;
+  const boxed = frame === 'box';
+  const ruleNode =
+    textOnly && !boxed ? <span className={styles.textRule} aria-hidden="true" /> : null;
+
+  /* Which cue a linked card carries. The caller's, or the shape's default: a covered or icon card
+     is title-cued, a text-only card carries the cta (every live route's shape). */
+  const cueKind: BlockCardCue | undefined = destination
+    ? (cue ?? (textOnly ? 'cta' : 'title'))
+    : undefined;
+
+  const download = cueKind === 'download';
+  const label = ctaLabel?.trim() ? ctaLabel : download ? DOWNLOAD_LABEL : DEFAULT_CTA_LABEL;
   if (ctaLabel !== undefined && ctaLabel.trim().length === 0) {
     warn(`ctaLabel is blank for ${JSON.stringify(title)}; using ${JSON.stringify(label)}.`);
   }
@@ -237,28 +530,75 @@ export function BlockCard({
 
      The Cluster is what keeps the cta at the copy's inline start. A grid item is blockified, so the
      Button's `inline-flex` would become `flex` and take the whole track, centring its label; a
-     Cluster starts its items. No gap is stated because there is one child. */
+     Cluster starts its items. No gap is stated because there is one child.
+
+     The tone is primary: a text link is blue at rest, label and arrow (visual-direction § 4, owner
+     6 Oct 2026 — blue is the recurring foreground accent; fdn-colour's neutral tone was reversed). */
+  const hasMeta = meta !== undefined && meta.trim().length > 0;
+  const metaNode = hasMeta ? <span className={styles.meta}>{meta}</span> : null;
+  /* The action row: the cta, with the format line a `block` after it on the same row when there is
+     one, so "DOWNLOAD   PDF · 12 PAGES" reads as one statement about the file. */
+  const ctaButton =
+    cueKind === 'cta' || download ? (
+      <Button
+        as="span"
+        emphasis="link"
+        tone="primary"
+        icon={<Icon name={download ? 'download' : 'arrow-right'} />}
+      >
+        {label}
+      </Button>
+    ) : null;
   const cta =
-    destination && !imageNode ? (
-      <Cluster>
-        <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
-          {label}
-        </Button>
+    ctaButton || metaNode ? (
+      <Cluster colGap="block" rowGap="tight" align="center">
+        {ctaButton}
+        {metaNode}
       </Cluster>
     ) : null;
 
-  const eyebrowNode = hasEyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null;
-  const titleNode = (
-    <Title className={cx(styles.title, horizontal && styles.titleHorizontal)}>{title}</Title>
-  );
+  const hasIndex = index !== undefined && Number.isFinite(index);
+  const indexNode = hasIndex ? <span className={styles.index}>{indexLabel(index)}</span> : null;
+  const eyebrowText = hasEyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null;
+  /* The label line: an index, an eyebrow, or both on one line a `block` apart — a numeral and a
+     category are two labels, and the 24 keeps them from reading as one string. */
+  const eyebrowNode =
+    indexNode && eyebrowText ? (
+      <Cluster colGap="block" rowGap="tight" align="baseline">
+        {indexNode}
+        {eyebrowText}
+      </Cluster>
+    ) : (
+      (indexNode ?? eyebrowText)
+    );
+  /* A title-cued card's title is its affordance (owner, 7 Oct 2026): no glyph after it — the blue
+     arrow that stood here on nearly every card read as bulky — and on hover and focus it takes the
+     accent ink while a cover leans in. The whole card is the one anchor, so the title needs no
+     mark at rest to be the link; a card whose action is not obvious from its title takes the cta. */
+  const cued = cueKind === 'title';
+  const titleNode = <Title className={cx(styles.title, cued && styles.cued)}>{title}</Title>;
   const bodyNode = hasBody ? <p className={styles.body}>{body}</p> : null;
 
-  /* The copy: eyebrow, title and body as one tight group, then the cta a block below it. */
+  /* The copy: eyebrow, title and body as one group at `text` (16), then the cta a block (24) below
+     it. 16 is one step under the section head's 24, so a card reads as a smaller unit of the same
+     system (visual-direction § 1.1, S2). It was `tight` (8): three rows at one step have no
+     hierarchy, and a 12px label 8px over a 28px serif read as cramped. */
+  /* An icon card STACKS (owner, 9 Oct 2026): the glyph on its own row, then the title, then the
+     body — never the glyph inline beside the title. The glyph is the card's head object, so it
+     leads the head, above any eyebrow or index. Icon to its copy is `text` (16): the step the head
+     group already uses between its rows, because the glyph is a row of the head sized from the
+     title's role, not a label it decorates (`tight` would weld it to the title as a bullet). */
+  const head = (
+    <>
+      {iconNode}
+      {eyebrowNode}
+      {titleNode}
+    </>
+  );
   const content = (
     <Layout rowGap="block" className={styles.content}>
-      <Layout rowGap="tight">
-        {eyebrowNode}
-        {titleNode}
+      <Layout rowGap="text">
+        {head}
         {bodyNode}
       </Layout>
       {cta}
@@ -300,28 +640,54 @@ export function BlockCard({
     );
   } else if (horizontal) {
     frameContent = (
-      <Layout columns={[1, 1]} colGap="column" rowGap="tight" align="start">
-        <Layout rowGap="tight" className={styles.content}>
-          {eyebrowNode}
-          {titleNode}
-        </Layout>
-        <Layout rowGap="block" className={styles.content}>
-          {bodyNode}
-          {cta}
+      <Layout rowGap="block">
+        {ruleNode}
+        <Layout columns={[1, 1]} colGap="column" rowGap="text" align="start">
+          <Layout rowGap="text" className={styles.content}>
+            {head}
+          </Layout>
+          <Layout rowGap="block" className={styles.content}>
+            {bodyNode}
+            {cta}
+          </Layout>
         </Layout>
       </Layout>
     );
   } else {
-    frameContent = (
-      <Layout rowGap="block">
-        {imageNode}
-        {content}
-      </Layout>
-    );
+    /* `grow`: the stack fills the stretched frame and its first row — the cover — takes what is
+       spare, so a lead beside taller notes ends level with them instead of over a dead strip. */
+    const grows = grow && imageNode !== null;
+    if (cta && !grows) {
+      /* An action row sits on the card's FOOT (§ 3.1 item 4, "pinLast for the CTA"; owner, 7 Oct
+         2026: "a link button at its foot"). The stack is flattened so the cta is its own last row,
+         and `pinLast` gives that row the spare height of a card stretched to its row's tallest, so
+         every action in a row sits on one line — which a box's visible foot makes plain when it
+         does not. The seams are the ones the nested stack had: `block` from the cover or rule to
+         the copy, and from the copy to the cta. */
+      frameContent = (
+        <Layout rowGap="block" pinLast className={styles.grow}>
+          {imageNode}
+          {ruleNode}
+          <Layout rowGap="text" className={styles.content}>
+            {head}
+            {bodyNode}
+          </Layout>
+          {cta}
+        </Layout>
+      );
+    } else {
+      frameContent = (
+        <Layout rowGap="block" fillFirst={grows} className={grows ? styles.grow : undefined}>
+          {imageNode}
+          {ruleNode}
+          {content}
+        </Layout>
+      );
+    }
   }
 
   return (
-    <li className={styles.root}>
+    <li className={cx(styles.root, SIZE_CLASS[step], boxed && styles.boxed)}>
       {destination ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it
            declares that this anchor's hover, focus-visible and pressed states are the states of
@@ -330,7 +696,7 @@ export function BlockCard({
         <a
           className={cx(styles.frame, styles.link)}
           href={destination}
-          data-btn-link-group={cta ? true : undefined}
+          data-btn-link-group={ctaButton ? true : undefined}
         >
           {frameContent}
         </a>

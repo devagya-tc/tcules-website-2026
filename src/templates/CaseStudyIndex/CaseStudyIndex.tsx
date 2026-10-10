@@ -1,4 +1,4 @@
-import { Layout, Section } from '@/components';
+import { Section } from '@/components';
 import {
   BlockCardSet,
   Breadcrumbs,
@@ -8,6 +8,7 @@ import {
   type BreadcrumbItem,
   type HeroAction,
 } from '@/patterns';
+import { heroTrail } from '@/lib/trail';
 
 /**
  * One case study as the index shows it. The template's own shape, not the view model's: a template
@@ -39,12 +40,17 @@ export type CaseStudyIndexProps = {
   /**
    * The opening, by ROLE rather than by element (29 Sep). `name` is what the page is called
    * ("Selected case studies") and `message` is what it argues — the line a visitor should leave
-   * with. The template sets the message as the h1 and the name as the eyebrow above it, and takes
-   * no action: this page's job is to get a case study read, and a hero button ahead of the cards
-   * competes with that. A blank message falls back to the name as the h1 with no eyebrow.
+   * with. The template sets the message as the h1, and takes no action: this page's job is to get a
+   * case study read, and a hero button ahead of the cards competes with that. A blank message falls
+   * back to the name as the h1.
+   *
+   * The name is no longer an eyebrow (kit `fdn-top`, 5 Oct 2026). The trail names the page (the
+   * route passes its nav label, "Case studies", as the last crumb) and now sits inside the hero 32
+   * above the title, so an eyebrow saying the name again repeated the line directly over it.
    */
   hero: { name: string; message: string };
   items: readonly CaseStudyIndexItem[];
+  /** The page's close. Rendered only when it carries an `action`: a close without an ask is not one. */
   closing?: CaseStudyIndexClosing;
 };
 
@@ -61,7 +67,7 @@ function eyebrow(item: CaseStudyIndexItem): string | undefined {
 }
 
 /**
- * CaseStudyIndex — the case-study index page type: breadcrumbs, the opening, the set of case-study
+ * CaseStudyIndex — the case-study index page type: the opening with its trail, the set of case-study
  * cards (featured first, from BlockCardSet), and an optional close.
  *
  * It exists so that the live route and its specimen render one composition. The route passes what
@@ -74,49 +80,51 @@ export function CaseStudyIndex({ breadcrumbs, hero, items, closing }: CaseStudyI
 
   return (
     <>
-      <Breadcrumbs surface="paper" items={breadcrumbs} />
-
       <PageHero
-        eyebrow={message ? hero.name : undefined}
+        trail={heroTrail(breadcrumbs, message || hero.name, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={message || hero.name}
-        body={['']}
         surface="paper"
       />
 
       {items.length > 0 ? (
-        <Section as="div" surface="paper">
-          <BlockCardSet
-            items={items.map((item) => ({
-              id: item.id,
-              title: item.title,
-              body: item.description,
-              eyebrow: eyebrow(item),
-              media: item.cover ? { type: 'image', image: item.cover } : undefined,
-              href: item.href,
-            }))}
-          />
-        </Section>
+        /* The fold rule's one exception on this page (visual-direction § 1.3): an INDEX LIST is the
+           page's whole content, grows with the CMS (4038 tall at 1470 with today's entries) and is
+           read by scrolling, so no height could hold it. fold:check reports it with this reason and
+           still measures the hero and the close. The remedy, if the list ever outgrows reading, is
+           pagination, not a shorter card. A plain wrapper: no box, no class, no spacing. */
+        <div data-fold-exempt="Index list: the page's whole content, grows with the CMS and is read by scrolling (visual-direction § 1.3).">
+          <Section as="div" surface="paper">
+            {/* The set IS the page's list, straight under the h1 with no band heading between, so
+              its card titles are the page's h2s (axe heading-order: h1 → h3 skipped a level). */}
+            <BlockCardSet
+              titleAs="h2"
+              items={items.map((item) => ({
+                id: item.id,
+                title: item.title,
+                body: item.description,
+                eyebrow: eyebrow(item),
+                media: item.cover ? { type: 'image', image: item.cover } : undefined,
+                href: item.href,
+              }))}
+            />
+          </Section>
+        </div>
       ) : null}
 
-      {closing ? (
-        closing.action ? (
-          <CtaSection
-            arrangement="open"
-            surface="tint"
-            eyebrow={closing.eyebrow || undefined}
-            heading={closing.heading}
-            body={[closing.body ?? '']}
-            actions={[closing.action]}
-          />
-        ) : (
-          <Section surface="tint" aria-labelledby="case-studies-closing-heading">
-            <Layout rowGap="block">
-              {closing.eyebrow ? <p>{closing.eyebrow}</p> : null}
-              <h2 id="case-studies-closing-heading">{closing.heading}</h2>
-              {closing.body ? <p>{closing.body}</p> : null}
-            </Layout>
-          </Section>
-        )
+      {/* A close is an ask, so it renders only WITH its action. Without one it was an inline,
+          one-off tint band — a heading on a ground and nothing to do — that no other page type
+          has; now it is absent, which is the honest shape of a close with nothing to ask. */}
+      {closing?.action ? (
+        <CtaSection
+          arrangement="open"
+          surface="tint"
+          eyebrow={closing.eyebrow || undefined}
+          heading={closing.heading}
+          body={closing.body?.trim() ? [closing.body] : undefined}
+          actions={[closing.action]}
+        />
       ) : null}
     </>
   );

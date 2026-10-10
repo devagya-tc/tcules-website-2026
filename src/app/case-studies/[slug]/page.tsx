@@ -2,9 +2,10 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
+import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
 import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
@@ -126,9 +127,10 @@ function renderCaseStudyBlock(block: CaseStudyBlock) {
               as="a"
               href={block.action.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
+              icon={<Icon name="arrow-right" />}
             >
               {block.action.label}
             </Button>
@@ -232,18 +234,19 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Case studies', href: ROUTES.caseStudies },
-          { label: caseStudy.title, href: caseStudyPath(caseStudy.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Case studies', href: ROUTES.caseStudies },
+            { label: caseStudy.title, href: caseStudyPath(caseStudy.slug) },
+          ],
+          caseStudy.title,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
         title={caseStudy.title}
-        eyebrow="Case study"
         body={[caseStudy.description]}
         dates={
           published
@@ -288,7 +291,7 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
               as="ul"
               columns={caseStudy.statements.length > 1 ? { base: 1, md: 2 } : { base: 1 }}
               colGap="gutter"
-              rowGap="gutter"
+              rowGap="column"
               equalRows
             >
               {caseStudy.statements.map((statement) => (

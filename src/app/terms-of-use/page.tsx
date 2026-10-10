@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Layout, Prose, Section } from '@/components';
 import { getTermsOfUsePage } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { Breadcrumbs, PageHero, TableOfContents, type TocItem } from '@/patterns';
 
 const TERMS_OF_USE_SLUG = ROUTES.terms.slice(1);
@@ -98,15 +99,17 @@ export default async function TermsOfUsePage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: termsOfUse.title, href: ROUTES.terms },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: termsOfUse.title, href: ROUTES.terms },
+          ],
+          termsOfUse.title,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
         title={termsOfUse.title}
         body={[termsOfUse.description]}
         dates={

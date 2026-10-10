@@ -14,13 +14,18 @@
     "classes:check": "node scripts/classes-check.mjs",
     "aria:check": "node scripts/aria-check.mjs",
     "shots": "node scripts/shots.mjs",
+    "fold:check": "node scripts/fold-check.mjs",
     "design:brief": "node scripts/design-brief.mjs",
     "design:check": "node scripts/design-brief.mjs --check",
     "vocabulary": "node scripts/design-brief.mjs --vocabulary > docs/vocabulary.md",
     "guide:dist": "node scripts/guide-dist.mjs",
-    "verify": "npm run lint && npm run typecheck && npm run tokens:check && npm run classes:check && npm run specimens:check && npm run design:check",
+    "verify": "npm run lint && npm run typecheck && npm run tokens:check && npm run classes:check && npm run specimens:check && npm run design:check && npm run photos:check",
     "format": "prettier --write .",
-    "texture": "node scripts/texture.mjs"
+    "texture": "node scripts/texture.mjs",
+    "photos:tone": "node scripts/photos-tone.mjs",
+    "photos:derive": "node scripts/photos-derive.mjs",
+    "photos:check": "node scripts/photos-tone.mjs --check && node scripts/photos-derive.mjs --check",
+    "illustrations:phone": "node scripts/illustrations-phone.mjs"
   },
   "engines": {
     "node": ">=20.11.1"
@@ -39,6 +44,7 @@
     "eslint-config-prettier": "^10.1.8",
     "playwright": "^1.63.0",
     "prettier": "^3.9.6",
+    "sharp": "^0.35.5",
     "typescript": "^6.0.3"
   }
 }

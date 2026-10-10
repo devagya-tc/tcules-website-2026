@@ -1,0 +1,118 @@
+/* ══ Component layer — EngagementModel ════════════════════════════════════════════
+   Tier 2. The "How we work" USP band (r7-howwework, 9 Oct 2026; review-7-oct.md): the engagement
+   model told as one drawn chart. One unbroken line is the one accountable team from the first
+   question to the shipped build; the dashed level is the part-time assignment; the hatch below it
+   is idle time Tcules absorbs; the field above it is the team stretching to meet the work.
+
+   Naming: --eng-{part}-{role}
+     parts  eyebrow · heading · lead · title · body · axis · line · node · level · stretch ·
+            idle · grid · rule · swatch
+     roles  text · tracking · measure · ink · fill · width · height
+
+   The points are told apart by the SHAPE of their key (a line, a hatch, a field), never by a
+   hairline and an icon both (owner, 7 Oct: one separation, not two). No state tokens: nothing in
+   the band responds to a pointer. Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry and type · identical on every surface ──────────────────────────── */
+:root {
+  --eng-eyebrow-text: var(--text-eyebrow);
+  --eng-eyebrow-tracking: var(--text-eyebrow-tracking);
+  --eng-heading-text: var(--text-h2);
+  --eng-heading-tracking: var(--text-h2-tracking);
+  --eng-heading-measure: var(--measure-title);
+  --eng-lead-text: var(--text-lead);
+  --eng-lead-measure: var(--measure-lead);
+  --eng-title-text: var(--text-h4);
+  --eng-title-tracking: var(--text-h4-tracking);
+  --eng-body-text: var(--text-body);
+  --eng-body-measure: var(--measure-lead);
+  /* The axis ends' labels: the mono micro voice, a key on a chart rather than a sentence. */
+  --eng-axis-text: var(--text-micro);
+  --eng-axis-tracking: var(--text-micro-tracking);
+
+  /* Stroke widths stay true at every scale (the drawing sets vector-effect: non-scaling-stroke). */
+  --eng-line-width: var(--border-width-3); /* the team: the drawing's one heavy stroke */
+  --eng-level-width: var(--border-width-1); /* the assignment level, dashed */
+  --eng-rule-width: var(--border-width-hairline); /* the time axis and its week ticks */
+  --eng-idle-width: var(--border-width-1); /* the hatch strokes */
+  --eng-node-width: var(--border-width-2); /* the open start node's ring */
+  /* Dash patterns, in the drawing's own units (unitless: SVG user space, not a layout distance).
+     The level reads as a dashed line; the two drops to the axis as a finer dotted measure. */
+  --eng-level-dash: 4 4;
+  --eng-drop-dash: 2 3;
+
+  /* The key beside each point: a component SIZE (a drawing's frame), not a distance, so it may
+     take the space ramp. 2:1, near the proportion of the chart it keys. */
+  --eng-swatch-width: var(--space-48);
+  --eng-swatch-height: var(--space-24);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --eng-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
+  --eng-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --eng-lead-ink: var(--color-neutral-700); /* 8.14:1 */
+  --eng-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --eng-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --eng-axis-ink: var(--color-neutral-600); /* 4.92:1 */
+  --eng-line-ink: var(--color-brandeis-500); /* the accent, as foreground: 6.17:1 */
+  --eng-node-fill: var(--color-paper); /* the open node takes the band's ground */
+  --eng-level-ink: var(--color-neutral-500);
+  --eng-stretch-fill: var(--color-brandeis-100); /* decoration: the field the line rises into */
+  --eng-idle-ink: var(--color-neutral-500); /* decoration: the hatch */
+  --eng-grid-ink: var(--color-neutral-200); /* decoration: the plotting dots */
+  --eng-rule-ink: var(--color-neutral-300); /* decoration: the axis */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --eng-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 */
+  --eng-heading-ink: var(--color-neutral-900); /* 13.05:1 */
+  --eng-lead-ink: var(--color-neutral-800); /* 10.54:1 */
+  --eng-title-ink: var(--color-neutral-900); /* 13.05:1 */
+  --eng-body-ink: var(--color-neutral-800); /* 10.54:1 */
+  --eng-axis-ink: var(--color-neutral-700); /* 7.27:1 */
+  --eng-line-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --eng-node-fill: var(--color-paper-deep);
+  --eng-level-ink: var(--color-neutral-600);
+  --eng-stretch-fill: var(--color-brandeis-100);
+  --eng-idle-ink: var(--color-neutral-600);
+  --eng-grid-ink: var(--color-neutral-300);
+  --eng-rule-ink: var(--color-neutral-400);
+}
+
+/* ── Surface: ink ── declared for self-containment; ink is reserved site-wide ─── */
+[data-surface='ink'] {
+  --eng-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+  --eng-heading-ink: var(--color-white); /* 17.26:1 */
+  --eng-lead-ink: var(--color-neutral-200);
+  --eng-title-ink: var(--color-white);
+  --eng-body-ink: var(--color-neutral-200);
+  --eng-axis-ink: var(--color-neutral-400);
+  --eng-line-ink: var(--color-brandeis-300); /* 7.32:1 — blue lifts on ink */
+  --eng-node-fill: var(--color-neutral-950);
+  --eng-level-ink: var(--color-neutral-400);
+  --eng-stretch-fill: var(--color-brandeis-800);
+  --eng-idle-ink: var(--color-neutral-600);
+  --eng-grid-ink: var(--color-neutral-800);
+  --eng-rule-ink: var(--color-neutral-700);
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
+[data-surface='blue'] {
+  --eng-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --eng-heading-ink: var(--color-white); /* 6.23:1 */
+  --eng-lead-ink: var(--color-white);
+  --eng-title-ink: var(--color-white);
+  --eng-body-ink: var(--color-white);
+  --eng-axis-ink: var(--color-brandeis-100);
+  --eng-line-ink: var(--color-white);
+  --eng-node-fill: var(--color-brandeis-500);
+  --eng-level-ink: var(--color-brandeis-100);
+  --eng-stretch-fill: var(--color-brandeis-400);
+  --eng-idle-ink: var(--color-brandeis-200);
+  --eng-grid-ink: var(--color-brandeis-400);
+  --eng-rule-ink: var(--color-brandeis-300);
+}

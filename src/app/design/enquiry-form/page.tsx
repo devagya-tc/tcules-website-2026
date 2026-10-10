@@ -1,9 +1,10 @@
 import Link from 'next/link';
 
 import { Button, Cluster, Layout, Section } from '@/components';
-import { CtaSection, EnquiryForm } from '@/patterns';
+import { CtaSection, EnquiryForm, type EnquiryUrlLabel } from '@/patterns';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
+import { Rehearse } from '../_specimen/Rehearse';
 import { specimenStyles as s } from '../_specimen/Specimen';
 
 const CONTEXT = {
@@ -17,18 +18,39 @@ const CONTEXT = {
 
 const BODY = ['Tell us what you are trying to ship and who it is for.'] as const;
 
+/* The caller's next steps: the success view numbers what it is handed. */
+const STEPS = [
+  { label: 'A reply within a working day', detail: 'From the person who would lead the work.' },
+  {
+    label: 'A thirty-minute call',
+    detail: 'What exists, and what a first fortnight would change.',
+  },
+] as const;
+
+const SENT = {
+  name: 'Maya Fernandes',
+  email: 'maya@northwind.studio',
+  what_are_you_working_on: 'A billing redesign for a B2B payments product.',
+};
+
 function Enquiry({
   outcome = 'success',
   audit = false,
   contact = false,
+  compact = false,
+  lined = false,
   urlLabel,
 }: {
   outcome?: 'success' | 'error' | 'pending';
   audit?: boolean;
   contact?: boolean;
-  urlLabel?: 'Site or product URL' | 'Link to the work' | 'Where can we see it?';
+  compact?: boolean;
+  lined?: boolean;
+  urlLabel?: EnquiryUrlLabel;
 }) {
   const action = `${ENDPOINTS.enquiryDesign}?outcome=${outcome}`;
+
+  if (compact) return <EnquiryForm variant="compact" action={action} context={CONTEXT} />;
 
   if (contact)
     return <EnquiryForm variant="contact" action={action} scheduleHref={ROUTES.contact} />;
@@ -46,6 +68,7 @@ function Enquiry({
       context={CONTEXT}
       urlLabel={urlLabel}
       scheduleHref={ROUTES.contact}
+      fields={lined ? 'line' : undefined}
     />
   );
 }
@@ -57,10 +80,13 @@ export default function EnquiryFormSpecimenPage() {
         <Layout rowGap="block">
           <h1>EnquiryForm</h1>
           <p>
-            Shared stacked field sets for enquiries, audits, and contact, with blur-only
-            validation and an asynchronous success replacement. Every specimen rendering sits
-            inside CtaSection.
+            Shared field sets for enquiries, audits, contact, and the compact three-field ask.
+            No visible labels: each placeholder is its field&rsquo;s cue and the label stays,
+            visually hidden. Errors land on blur and on send, and are announced. The renderings
+            here sit inside CtaSection; the kit&rsquo;s form family shows the form beside a
+            photograph, under a centred and a beside head, and in the offer.
           </p>
+          <Link href={ROUTES.designKitForm}>The form family in the UI kit</Link>
         </Layout>
       </Section>
 
@@ -83,14 +109,31 @@ export default function EnquiryFormSpecimenPage() {
         body={['Five visible contact fields mapped directly to the client-contact mutation.']}
         form={<Enquiry contact />}
       />
-      <Section density="tight">
+      <CtaSection
+        eyebrow="Variant · compact"
+        heading="Three lines are enough"
+        body={[
+          'Name and email as a pair where the track holds two, the one question, and the submit with "We reply within a business day." beside it.',
+        ]}
+        form={<Enquiry compact />}
+      />
+      <CtaSection
+        eyebrow={`Fields · line`}
+        heading="The line field, kept as an option"
+        body={[
+          'fields="line" sets Input\'s unboxed underline field, 44 tall with the value on its rule, instead of the default box. Every variant takes it; no placement on the site uses it today.',
+        ]}
+        form={<Enquiry lined />}
+      />
+      <Section>
         <Layout rowGap="tight">
           <h2>Submitted context contract</h2>
           <p>
             Enquiry posts <code>origin_route</code>, <code>placement</code>, <code>family</code>
             , <code>service_or_audit</code>, <code>referrer</code>, and <code>campaign</code>.
-            Audit adds <code>intent</code>. Empty referrer and campaign values remain present
-            rather than being dropped.
+            Audit adds <code>intent</code>; compact posts the enquiry context with{' '}
+            <code>name</code> in place of <code>url</code>. Empty referrer and campaign values
+            remain present rather than being dropped.
           </p>
         </Layout>
       </Section>
@@ -98,9 +141,25 @@ export default function EnquiryFormSpecimenPage() {
       <CtaSection
         heading="Reach each state through the real controls"
         body={[
-          'Blur an empty or malformed field for Invalid. Submit the three forms below for pending Success, Error, and delayed Submitting. Point at a field, hold the submit, and Tab through the form for the native hover, pressed, and focus states.',
+          'Blur an empty or malformed field, or send with one empty, for Invalid. Submit the three forms below for pending Success, Error, and delayed Submitting. Point at a field, hold the submit, and Tab through the form for the native hover, pressed, and focus states.',
         ]}
         form={<Enquiry outcome="pending" />}
+      />
+      <CtaSection
+        eyebrow="State · invalid on send"
+        heading="Send with an answer missing"
+        body={[
+          'Nothing posts. Each empty or malformed field gets its message, the line beside the submit says how many need a look, and focus moves to the first.',
+        ]}
+        form={
+          <Rehearse submit fill={{ email: 'maya@' }}>
+            <EnquiryForm
+              variant="compact"
+              action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+              context={CONTEXT}
+            />
+          </Rehearse>
+        }
       />
       <CtaSection
         eyebrow="State · error"
@@ -126,8 +185,49 @@ export default function EnquiryFormSpecimenPage() {
           surface={surface}
         />
       ))}
+      {/* The compact set on every surface too, lined and with the full-width submit, so the line
+          field's inks and the caption under a full submit are seen on every ground. */}
+      {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
+        <CtaSection
+          key={`compact-${surface}`}
+          eyebrow={`Compact · ${surface}`}
+          heading="Three lines, on this ground"
+          body={BODY}
+          form={
+            <EnquiryForm
+              variant="compact"
+              fields="line"
+              submit="full"
+              action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+              context={CONTEXT}
+            />
+          }
+          surface={surface}
+        />
+      ))}
+      {/* The success view on every surface: the check, the thanks, and the caller's numbered
+          steps (.stepMarker in the accent, .stepDetail in the hint ink). */}
+      {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
+        <CtaSection
+          key={`sent-${surface}`}
+          eyebrow={`Sent · ${surface}`}
+          heading="The thanks, on this ground"
+          body={BODY}
+          form={
+            <Rehearse submit fill={SENT}>
+              <EnquiryForm
+                variant="compact"
+                action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+                context={CONTEXT}
+                nextSteps={STEPS}
+              />
+            </Rehearse>
+          }
+          surface={surface}
+        />
+      ))}
 
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <Layout rowGap="block">
           <h2>Nested surface boundary</h2>
           <p>The blue form below must resolve its own tokens, not inherit this ink band.</p>
@@ -139,7 +239,7 @@ export default function EnquiryFormSpecimenPage() {
         form={<Enquiry />}
         surface="blue"
       />
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <p>Ink resumes after the blue form.</p>
       </Section>
 
@@ -166,7 +266,10 @@ export default function EnquiryFormSpecimenPage() {
           />
         }
       />
-      <div className={s.trackSm}>
+      <div
+        className={s.trackSm}
+        data-fold-exempt="stress specimen: an illegal 256px parent squeezes the band to expose the form's floor"
+      >
         <CtaSection
           eyebrow="Edge · illegal parent"
           heading="A 256px parent that does not size the band"
@@ -185,7 +288,7 @@ export default function EnquiryFormSpecimenPage() {
         />
       </Cluster>
 
-      <Section density="tight">
+      <Section>
         <p>
           The adjacent pair is deliberately erroneous: a production route must render one
           enquiry form. It proves that separate <code>useId</code> namespaces do not collide

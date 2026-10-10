@@ -1,0 +1,30 @@
+/* TextureCorner — the stepped corner field's box: the top-end corner of its positioned ancestor (a
+   Section), --tex-corner-inline-size × --tex-corner-block-size. Positioned so the Texture inside
+   fills IT rather than the band. Sizing and placement of a decorative layer only; it states no
+   distance, and no z-index — the Texture inside keeps --tex-layer, which resolves within the
+   Section's isolation. */
+.corner {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  inline-size: var(--tex-corner-inline-size);
+  block-size: var(--tex-corner-block-size);
+  pointer-events: none;
+}
+
+/* The bottom-start partner of a balanced pair: the opposite corner, the same box. */
+.bottomStart {
+  inset-block-start: auto;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+}
+
+/* From 1024 only (page-showcase fix round 2, 7 Oct 2026): visual-direction § 3.7 item 5 and § 6.3
+   run only `horizon` below 1024. At 1024 the box was a 280 × 80 fragment and at 390 a 156 × 80 one,
+   stranded in the gap between the band above and the eyebrow — read as a stray blob, not a corner. */
+@media (max-width: 1023.98px) {
+  .corner {
+    display: none;
+  }
+}

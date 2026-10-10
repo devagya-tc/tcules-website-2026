@@ -2,9 +2,10 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
+import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
 import { getPodcastPage, type PodcastBlock, type PodcastImage } from '@/content';
 import { articlePath, podcastPath, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
@@ -107,9 +108,10 @@ function renderPodcastBlock(block: PodcastBlock, podcastTitle: string) {
                 as="a"
                 href={block.mediaUrl}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 Watch the podcast
               </Button>
@@ -128,9 +130,10 @@ function renderPodcastBlock(block: PodcastBlock, podcastTitle: string) {
                 as="a"
                 href={block.action.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.action.label}
               </Button>
@@ -255,19 +258,20 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Insights', href: ROUTES.insights },
-          { label: 'Podcasts', href: ROUTES.podcasts },
-          { label: podcast.title, href: podcastPath(podcast.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Insights', href: ROUTES.insights },
+            { label: 'Podcasts', href: ROUTES.podcasts },
+            { label: podcast.title, href: podcastPath(podcast.slug) },
+          ],
+          podcast.title,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
         title={podcast.title}
-        eyebrow="Podcast"
         body={[podcast.description || `Listen to ${podcast.title}.`]}
         dates={published ? { published } : undefined}
         media={heroMedia}
@@ -316,7 +320,7 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
               as="ul"
               columns={{ base: 1, md: 2, lg: 3 }}
               colGap="gutter"
-              rowGap="gutter"
+              rowGap="column"
               equalRows
             >
               {podcast.resources.map((resource) => (
@@ -325,11 +329,7 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
                   title={resource.title}
                   body={displayDate(resource.publishedAt)}
                   eyebrow="Article"
-                  media={
-                    resource.image
-                      ? { type: 'image', image: resource.image }
-                      : undefined
-                  }
+                  media={resource.image ? { type: 'image', image: resource.image } : undefined}
                   href={articlePath(resource.slug)}
                   ctaLabel="Read article"
                 />

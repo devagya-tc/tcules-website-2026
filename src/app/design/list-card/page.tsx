@@ -1,10 +1,35 @@
 import type { ReactNode } from 'react';
 
 import { Cluster, Layout, Section, type MediaImage, type SectionSurface } from '@/components';
-import { ListCard, type ListCardMarker } from '@/patterns';
+import { ListCard, ReadDown, type ListCardMarker, type ReadDownRow } from '@/patterns';
+import { getKitPhoto } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
+
+/* ReadDown rows (specimen § 12): one long body against short ones, so the level rules can be seen. */
+const READ_DOWN: readonly ReadDownRow[] = [
+  {
+    icon: 'layers',
+    title: 'A product model',
+    body: 'The objects, states and rules the product runs on, agreed once by everyone who builds on it.',
+  },
+  {
+    icon: 'document-text',
+    title: 'A decision record',
+    body: 'Every consequential call, with its evidence.',
+  },
+  {
+    icon: 'code',
+    title: 'Coded prototypes',
+    body: 'Working surfaces your team can open and test.',
+  },
+  {
+    icon: 'checklist',
+    title: 'A ranked list of fixes',
+    body: 'Each one costed and sequenced.',
+  },
+];
 
 /* ── Thumbnail records ────────────────────────────────────────────────────────────
    Whole `MediaImage` records, the shape a page receives from `@/content`. The kind is the record's,
@@ -139,19 +164,87 @@ const LINKED = [
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
-    note: 'Neutral-900 title and marker, neutral-700 body, and a 500 → 600 → 700 ramp on the cue alone.',
+    note: 'Neutral-900 title, blue marker and numeral at rest, neutral-700 body; a linked title takes brandeis-500 on hover and focus and 700 on press. A boxed tile: neutral-300 edge, paper-deep ground on hover, neutral-100 on press.',
   },
   {
     surface: 'tint',
-    note: 'The text and cue ramps still pass unchanged; the decorative rule steps to neutral-400.',
+    note: 'The text and link ramps still pass unchanged; the rule and the box edge step to neutral-400, and a boxed tile hovers to neutral-100.',
   },
   {
     surface: 'ink',
-    note: 'Title and marker lift to white, body to neutral-300, and the cue ramp lifts to 300 → 100 → 50.',
+    note: 'Title lifts to white, body to neutral-300, accent to brandeis-300 (a linked title 300 on hover, 50 on press). The box edge is neutral-700 and hovers to a neutral-900 ground.',
   },
   {
     surface: 'blue',
-    note: 'Only the light end clears AA: cue 100 → white → 50, with a white focus ring against its blue gap.',
+    note: 'Only the light end clears AA: a linked title 100 on hover, 50 on press, with a white focus ring against its blue gap. The box edge is brandeis-300 and hovers to a brandeis-600 ground.',
+  },
+] as const;
+
+/* The boxed tiles (frame="box", owner 7 Oct 2026): an icon router of linked destinations, the shape
+   the box exists for. Rendered on all four surfaces with identical markup. */
+const BOXED = [
+  {
+    title: 'Product redesign',
+    body: 'The cost sits in the experience, and the model underneath still holds.',
+    href: ROUTES.productDesign,
+    marker: { type: 'icon', name: 'ruler-pen' },
+  },
+  {
+    title: 'Design systems',
+    body: 'Every screen rebuilds the same component a little differently.',
+    href: ROUTES.designSystems,
+    marker: { type: 'icon', name: 'widget' },
+  },
+  {
+    title: 'Software development',
+    body: 'The change is decided, and it needs building and shipping.',
+    href: ROUTES.softwareDevelopment,
+    marker: { type: 'icon', name: 'code' },
+  },
+] as const satisfies readonly {
+  title: string;
+  body: string;
+  href: string;
+  marker: ListCardMarker;
+}[];
+
+const TILES_ICON = [
+  {
+    title: 'Sales',
+    body: 'Sees an ageing product.',
+    marker: { type: 'icon', name: 'graph-up' },
+  },
+  {
+    title: 'Support',
+    body: 'Sees recurring exceptions.',
+    marker: { type: 'icon', name: 'chat-round-dots' },
+  },
+  {
+    title: 'Engineering',
+    body: 'Sees dependencies that make every change expensive.',
+    marker: { type: 'icon', name: 'code' },
+  },
+  {
+    title: 'A polished AI interaction',
+    body: 'May be hiding what the model used, what it changed, and who is accountable when it is wrong.',
+    marker: { type: 'icon', name: 'users-group-rounded' },
+  },
+] as const satisfies readonly { title: string; body: string; marker: ListCardMarker }[];
+
+const TILES_STEPS = [
+  {
+    title: 'Read the real work',
+    body: 'What triggers the change, who decides, who is affected.',
+  },
+  { title: 'Settle the product model', body: 'The job, dependency, owner and committed date.' },
+  { title: 'Design the behaviour', body: 'Preview affected work before confirming.' },
+  {
+    title: 'Test the risky scenario',
+    body: 'Conflicting jobs, limited permissions, partial updates.',
+  },
+  {
+    title: 'Keep the rule in the build',
+    body: 'States, responses and history use the same rule.',
   },
 ] as const;
 
@@ -159,22 +252,26 @@ const NESTED_SURFACE_TOKENS = {
   tint: [
     ['--lcrd-title-ink', '--color-neutral-900'],
     ['--lcrd-body-ink', '--color-neutral-700'],
-    ['--lcrd-marker-ink', '--color-neutral-900'],
+    ['--lcrd-marker-ink', '--color-brandeis-500'],
+    ['--lcrd-number-ink', '--color-brandeis-500'],
     ['--lcrd-link-ink', '--color-brandeis-500'],
-    ['--lcrd-link-ink-hover', '--color-brandeis-600'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-700'],
     ['--lcrd-rule-ink', '--color-neutral-400'],
+    ['--lcrd-ground-hover', '--color-neutral-100'],
+    ['--lcrd-ground-pressed', '--color-neutral-200'],
     ['--lcrd-ring-color', '--color-brandeis-500'],
     ['--lcrd-ring-gap-color', '--color-paper-deep'],
   ],
   ink: [
     ['--lcrd-title-ink', '--color-white'],
     ['--lcrd-body-ink', '--color-neutral-300'],
-    ['--lcrd-marker-ink', '--color-white'],
+    ['--lcrd-marker-ink', '--color-brandeis-300'],
+    ['--lcrd-number-ink', '--color-brandeis-300'],
     ['--lcrd-link-ink', '--color-brandeis-300'],
-    ['--lcrd-link-ink-hover', '--color-brandeis-100'],
     ['--lcrd-link-ink-pressed', '--color-brandeis-50'],
     ['--lcrd-rule-ink', '--color-neutral-700'],
+    ['--lcrd-ground-hover', '--color-neutral-900'],
+    ['--lcrd-ground-pressed', '--color-neutral-800'],
     ['--lcrd-ring-color', '--color-brandeis-300'],
     ['--lcrd-ring-gap-color', '--color-neutral-950'],
   ],
@@ -216,19 +313,44 @@ function SurfaceRows() {
         marker={{ type: 'number', value: 1 }}
       />
       <ListCard
+        arrangement="stacked"
+        title="The same numeral in its neutral tone"
+        body="marker tone neutral: the ordinal steps out of the accent into the surface's quiet grey."
+        marker={{ type: 'number', value: 2, tone: 'neutral' }}
+      />
+      <ListCard
         title="Design systems"
-        body="The linked row proves the dark title, icon marker, cue link ink and focus ring."
+        body="The linked row: no arrow. Hover or Tab — the title takes the link ink, and the ring runs round the row."
         marker={{ type: 'icon', name: 'check-circle' }}
         href={ROUTES.designSystems}
       />
       <ListCard
         title="A case study, told off-site"
-        body="A cut-out thumbnail and the leaves-the-site cue: no edge on the part, and the up-right arrow in the cue's own ink."
+        body="A cut-out thumbnail, and the one glyph a linked row keeps: the small up-right arrow that says it leaves the site."
         marker={thumb(CUT_OUT)}
         href={EXTERNAL_HREF}
         external
       />
     </Rows>
+  );
+}
+
+/** The boxed tiles, identical on every surface: three linked, then one static with an action-free body. */
+function SurfaceBoxes() {
+  return (
+    <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="gutter">
+      {BOXED.map((tile) => (
+        <ListCard key={tile.title} form="tile" frame="box" titleAs="h3" {...tile} />
+      ))}
+      <ListCard
+        form="tile"
+        frame="box"
+        titleAs="h3"
+        title="Unlinked box"
+        body="No destination: the edge and inset, no ground and no pointer state."
+        marker={{ type: 'icon', name: 'document-text' }}
+      />
+    </Layout>
   );
 }
 
@@ -273,8 +395,14 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>1 · Arrangement × size</h2>
             <p>
-              Two arrangements, one md row size. The copy is identical so the title/body
-              relationship is the only visible difference.
+              Two arrangements and two type steps (visual-direction § 7.2, 5 Oct).{' '}
+              <code>md</code> (h4 over body) is a row&rsquo;s default; <code>sm</code> (h5) is
+              what any set of four rows or more passes, and it is a tile&rsquo;s default (§ 1b).
+              The title steps in every form; the body steps in a tile only, so a row at{' '}
+              <code>sm</code> keeps body, since its body is a reading line at up to the body
+              measure (6 Oct). A row cannot see its siblings, so the composing route passes the
+              step. The copy is identical so the title/body relationship is the only visible
+              difference; title to body is <code>text</code> (16) in every cell.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
@@ -296,7 +424,56 @@ export default function ListCardSpecimenPage() {
                 <ListCard arrangement="stacked" title={TERMS[1].title} body={TERMS[1].body} />
               </Rows>
             </Specimen>
+            <Specimen
+              title="split × sm"
+              note="The small step in the same cell. The split's minimum tracks are unchanged, so it stacks here too."
+            >
+              <Rows>
+                <ListCard size="sm" title={TERMS[0].title} body={TERMS[0].body} />
+                <ListCard size="sm" title={TERMS[1].title} body={TERMS[1].body} />
+              </Rows>
+            </Specimen>
+            <Specimen
+              title="stacked × sm"
+              note="h5 over body: a long set's titles stop competing with the band's h2, and the body keeps its reading size."
+            >
+              <Rows>
+                <ListCard
+                  size="sm"
+                  arrangement="stacked"
+                  title={TERMS[0].title}
+                  body={TERMS[0].body}
+                />
+                <ListCard
+                  size="sm"
+                  arrangement="stacked"
+                  title={TERMS[1].title}
+                  body={TERMS[1].body}
+                />
+              </Rows>
+            </Specimen>
           </Layout>
+          <Specimen
+            title="Numbered rows · md and sm · the ordinal's baseline"
+            note="The ordinal's optical offset is a function of the title's size, so it steps too: 4 against h4, 0 against h5. The numeral's baseline sits on the title's first baseline in both."
+          >
+            <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
+              {(['md', 'sm'] as const).map((size) => (
+                <Rows key={size} ordered>
+                  {TILES_STEPS.slice(0, 4).map((step, index) => (
+                    <ListCard
+                      key={step.title}
+                      size={size}
+                      arrangement="stacked"
+                      title={step.title}
+                      body={step.body}
+                      marker={{ type: 'number', value: index + 1 }}
+                    />
+                  ))}
+                </Rows>
+              ))}
+            </Layout>
+          </Specimen>
         </Layout>
       </Section>
 
@@ -305,18 +482,19 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>1a · The split reads its own width</h2>
             <p>
-              The split is a wrapping <code>Cluster</code>: title and body share a line only while{' '}
-              <code>--lcrd-title-min</code> + the block seam + <code>--lcrd-body-min</code> (256 +
-              24 + 256) fits the row&rsquo;s own content width, and the body wraps under the title
-              the moment it does not. It used to switch on at the md <em>viewport</em>, so a row in
-              a 392px grid track was split into a ~150px title track and the h4 broke mid-word
-              (&ldquo;Produ/ct&rdquo;, &ldquo;Interactio/n&rdquo;). The title&rsquo;s wrap is now{' '}
-              <code>break-word</code>, so its words stay whole at every track below. On a wide row
-              the title stops at <code>--measure-title</code> and the body at{' '}
-              <code>--measure-body</code>, so the leftover collects before the cue instead of
-              opening a channel between a title and its sentence. The frames below stand in for
-              the content column at 1440, 1023, 768 and 390, and for grid tracks inside them; none
-              can fire a media query, which is now the point — the row does not need one.
+              The split is a wrapping <code>Cluster</code>: title and body share a line only
+              while <code>--lcrd-title-min</code> + the block seam +{' '}
+              <code>--lcrd-body-min</code> (256 + 24 + 256) fits the row&rsquo;s own content
+              width, and the body wraps under the title the moment it does not. It used to
+              switch on at the md <em>viewport</em>, so a row in a 392px grid track was split
+              into a ~150px title track and the h4 broke mid-word (&ldquo;Produ/ct&rdquo;,
+              &ldquo;Interactio/n&rdquo;). The title&rsquo;s wrap is now <code>break-word</code>
+              , so its words stay whole at every track below. On a wide row the title stops at{' '}
+              <code>--measure-title</code> and the body at <code>--measure-body</code>, so the
+              leftover collects at the row&rsquo;s end instead of opening a channel between a
+              title and its sentence. The frames below stand in for the content column at 1440,
+              1023, 768 and 390, and for grid tracks inside them; none can fire a media query,
+              which is now the point — the row does not need one.
             </p>
           </Layout>
           {(
@@ -342,7 +520,7 @@ export default function ListCardSpecimenPage() {
                   />
                   <ListCard
                     title="A case study, told off-site"
-                    body="A thumbnail row, linked away: the split has what is left after the 160 marker and the cue."
+                    body="A thumbnail row, linked away: the split has what is left after the 160 marker."
                     marker={thumb(CUT_OUT)}
                     href={EXTERNAL_HREF}
                     external
@@ -373,6 +551,198 @@ export default function ListCardSpecimenPage() {
                   ))}
                 </Layout>
               </div>
+            </Layout>
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>1b · Tile form</h2>
+            <p>
+              <code>form=&quot;tile&quot;</code> is the item in a grid track. The rule opens the
+              item instead of closing it, because tiles in a grid row only line up at the top;
+              the marker stands above the title; the copy sits flush with the track, so the grid
+              aligns with the heading over it; title and body always stack. A linked tile
+              carries no arrow (owner, 7 Oct 2026): on hover its opening rule and its title take
+              the link ink. An optional action (<code>ctaLabel</code>) is pinned to the foot, so
+              every action in a row shares a line. A tile defaults to{' '}
+              <code>size=&quot;sm&quot;</code> (h5 over body-sm, § 7.2), so every tile below is
+              at the small step without being told; the third cell passes <code>md</code> to
+              show the override. Rows of tiles are <code>column</code> (64) apart, the row seam
+              of every borderless card set (§ 1.2, 6 Oct); the two-track cell shows it at every
+              width.
+            </p>
+          </Layout>
+          <Specimen
+            title="icon tiles · four tracks · sm by default"
+            note="Signals: a thing a reader can see, then what it may mean. No size passed: a tile is sm."
+          >
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="column">
+              {TILES_ICON.map((tile) => (
+                <ListCard key={tile.title} form="tile" titleAs="h3" {...tile} />
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="icon tiles · two tracks, two rows · the row seam"
+            note="Rows of tiles are column (64) apart, the seam of every borderless card set; columns stay gutter (32). The B shape: the box stands in for the photo, the tiles sit two across in the 667 copy track."
+          >
+            <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack">
+              <Box tall />
+              <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="column">
+                {TILES_ICON.map((tile) => (
+                  <ListCard key={tile.title} form="tile" titleAs="h3" {...tile} />
+                ))}
+              </Layout>
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="number tiles · five tracks, ordered"
+            note="A method: the <ol> carries the order"
+          >
+            <Layout as="ol" columns={{ base: 1, md: 2, lg: 5 }} colGap="gutter" rowGap="column">
+              {TILES_STEPS.map((tile, index) => (
+                <ListCard
+                  key={tile.title}
+                  form="tile"
+                  titleAs="h3"
+                  marker={{ type: 'number', value: index + 1 }}
+                  {...tile}
+                />
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="icon tiles · four tracks · md, passed explicitly"
+            note="The override, for comparison only. § 7.2 gives every tile sm, so h5 sits two rungs under the band's h2; at md the tiles' h4 competes with it. No page passes this."
+          >
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="column">
+              {TILES_ICON.map((tile) => (
+                <ListCard key={tile.title} form="tile" size="md" titleAs="h3" {...tile} />
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="linked tiles · three tracks, unequal bodies · no arrow"
+            note="The whole tile is the link. Hover: the opening rule and the title take the link ink."
+          >
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
+              {LINKED.slice(0, 3).map((row) => (
+                <ListCard key={row.title} form="tile" {...row} />
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="linked tiles · ctaLabel · the action pinned to the foot"
+            note="Opt-in, for an item whose action is not obvious from its title. The link Button is a span inside the one anchor: one focus stop. The title holds still; the action moves."
+          >
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="column">
+              <ListCard
+                form="tile"
+                titleAs="h3"
+                title="The modernisation worksheet"
+                body="You can see the cost, but not yet which layer it sits in."
+                marker={{ type: 'icon', name: 'checklist' }}
+                href={ROUTES.contact}
+                ctaLabel="Open the worksheet"
+              />
+              <ListCard
+                form="tile"
+                titleAs="h3"
+                title="Research record template"
+                body="One page per interview, with the evidence each claim rests on, ready for synthesis."
+                marker={{ type: 'icon', name: 'document-text' }}
+                href={EXTERNAL_HREF}
+                external
+                ctaLabel="Get the Figma file"
+              />
+              <ListCard
+                form="tile"
+                titleAs="h3"
+                title="Accessibility audit"
+                body="A ranked list of fixes."
+                marker={{ type: 'icon', name: 'check-circle' }}
+                href={ROUTES.contact}
+                ctaLabel="Book an audit"
+              />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title='boxed tiles · frame="box" · an icon router of six, three across'
+            note="Owner, 7 Oct 2026; edge removed 9 Oct 2026. No edge on any side; 24 inside on every side, which is where the ground under the pointer sits when linked, at the 8 radius. Boxed tiles sit a gutter apart both ways. Clickable, so the set runs the full column under its head — never beside a head or a photograph."
+          >
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+              {[...BOXED, ...LINKED.slice(0, 3)].map((tile) => (
+                <ListCard key={tile.title} form="tile" frame="box" titleAs="h3" {...tile} />
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="boxed tiles · numbers, a thumbnail, title only, and an action"
+            note="Every marker in the box. A thumbnail sits above its copy as in the open tile."
+          >
+            <Layout as="ol" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="gutter">
+              <ListCard
+                form="tile"
+                frame="box"
+                title="Read the real work"
+                body="What triggers the change, who decides, who is affected."
+                marker={{ type: 'number', value: 1 }}
+              />
+              <ListCard
+                form="tile"
+                frame="box"
+                title="A case study"
+                body="A thumbnail in the box."
+                marker={thumb(getKitPhoto('screen-over-shoulder'))}
+                href={ROUTES.caseStudies}
+              />
+              <ListCard
+                form="tile"
+                frame="box"
+                title="Title only"
+                marker={{ type: 'number', value: 3 }}
+              />
+              <ListCard
+                form="tile"
+                frame="box"
+                title="Product modernisation assessment"
+                body="Capability by capability: repair, redesign, replatform or rebuild."
+                marker={{ type: 'number', value: 4 }}
+                href={ROUTES.contact}
+                ctaLabel="Request the assessment"
+              />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="title only · rows and tiles"
+            note="body is optional: no paragraph, no seam"
+          >
+            <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
+              <Layout as="ul" rowGap="none">
+                <ListCard
+                  title="Realistic access to the product"
+                  marker={{ type: 'icon', name: 'check-circle' }}
+                />
+                <ListCard
+                  title="Time with people who understand the system"
+                  marker={{ type: 'icon', name: 'check-circle' }}
+                />
+              </Layout>
+              <Layout as="ul" columns={2} colGap="gutter" rowGap="column">
+                <ListCard
+                  form="tile"
+                  title="Product model"
+                  marker={{ type: 'icon', name: 'widget' }}
+                />
+                <ListCard
+                  form="tile"
+                  title="Research record"
+                  marker={{ type: 'icon', name: 'document-text' }}
+                />
+              </Layout>
             </Layout>
           </Specimen>
         </Layout>
@@ -467,12 +837,12 @@ export default function ListCardSpecimenPage() {
               A B5 cut-out on its contrast panel took Media&rsquo;s <code>--gap-gutter</code>{' '}
               inset at every size, so in a 160 × 107 box the part got 96 × 43 — not one
               recognisable shape. <strong>Shipped 29 Sep 2026 (2.17):</strong> Media gained{' '}
-              <code>inset</code>, and the thumbnail passes <code>inset=&quot;text&quot;</code>{' '}
-              (<code>--gap-text</code>, 16, &ldquo;cell padding&rdquo;), which leaves 128 × 75. The
-              value stays Media&rsquo;s; ListCard names the step because only the placement knows
-              its box is small. The <code>gutter</code> rendering at 160 is on /design/media § 3c
-              for comparison. The supply rule still stands beside it: a part whose own edge holds
-              needs no panel at all.
+              <code>inset</code>, and the thumbnail passes <code>inset=&quot;text&quot;</code> (
+              <code>--gap-text</code>, 16, &ldquo;cell padding&rdquo;), which leaves 128 × 75.
+              The value stays Media&rsquo;s; ListCard names the step because only the placement
+              knows its box is small. The <code>gutter</code> rendering at 160 is on
+              /design/media § 3c for comparison. The supply rule still stands beside it: a part
+              whose own edge holds needs no panel at all.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
@@ -562,41 +932,130 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>2d · External rows</h2>
             <p>
-              <code>external</code> swaps the cue for the &ldquo;leaves the site&rdquo; arrow,{' '}
-              <code>arrow-right-up</code> — Solar Bold&rsquo;s plain arrow of the same family as{' '}
-              <code>arrow-right</code>, so an off-site row differs from its neighbours by the
-              arrow&rsquo;s angle, not by a filled square among bare arrows (29 Sep 2026, 2.17).
-              One glyph per meaning, replacing the arrow rather than joining it. It opens a new tab, and appends a visually hidden
-              &ldquo;(opens in a new tab)&rdquo; to the row&rsquo;s accessible name. Same slot,
-              size (18) and ink as the arrow. It is the first route-visible Solar glyph, so the
-              site footer&rsquo;s legal line now carries the CC BY 4.0 credit.
+              <code>external</code> opens a new tab, appends a visually hidden &ldquo;(opens in
+              a new tab)&rdquo; to the row&rsquo;s accessible name, and sets a small (16){' '}
+              <code>arrow-right-up</code> after the title&rsquo;s last word, in the link ink. It
+              is the one glyph a linked row still carries after the arrow cue was removed
+              (owner, 7 Oct 2026), because it says something the hover cannot: that the page
+              will leave the site, before the click (WCAG G201). An internal row carries none.
+              With an action (<code>ctaLabel</code>) the action&rsquo;s own glyph turns up-right
+              instead and the title carries none.
             </p>
           </Layout>
           <Rows>
             <ListCard
               title="Internal destination"
-              body="arrow-right: go, next. Same tab."
+              body="No glyph. Same tab. The title takes the link ink on hover."
               href={ROUTES.caseStudies}
             />
             <ListCard
               title="External destination"
-              body="arrow-right-up: leaves the site. New tab, said in words to a screen reader."
+              body="The small up-right glyph after the title: leaves the site. New tab, said in words to a screen reader."
               href={EXTERNAL_HREF}
               external
             />
             <ListCard
               title="External with a thumbnail"
-              body="The cue and the marker are independent; the row is still one link and one focus stop."
+              body="The glyph and the marker are independent; the row is still one link and one focus stop."
               marker={thumb(ILLUSTRATION)}
               href={EXTERNAL_HREF}
               external
             />
             <ListCard
               title="An external flag with no href"
-              body="No destination, so no anchor, no cue and no hint."
+              body="No destination, so no anchor, no glyph and no hint."
               external
             />
           </Rows>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>2e · Linked rows: no arrow, and an action where one is needed</h2>
+            <p>
+              Owner, 7 Oct 2026: almost every card carried a blue arrow next to its title, and
+              it read as bulky. The whole row is the link, so a linked row carries no glyph at
+              rest; on hover and focus its title takes the link ink, and the ring runs round the
+              row. The row&rsquo;s hover ground and the 16 inline inset that cleared it went
+              with the arrow, so every row sits flush on the column edge the head and the rules
+              share. Where the action is not obvious from the title, the caller opts into a
+              visible one: <code>ctaLabel</code> sets the link Button, with its arrow, under the
+              copy — and the title holds still while the action moves. Below 768 a thumbnail row
+              takes the 96 thumbnail and keeps it beside the copy.
+            </p>
+          </Layout>
+          <Specimen title="linked · stacked × md · thumbnails · internal and external">
+            <Rows>
+              <ListCard
+                arrangement="stacked"
+                titleAs="h3"
+                title="Design systems"
+                body="When every team builds the same screens a little differently."
+                marker={thumb(getKitPhoto('screen-over-shoulder'))}
+                href={ROUTES.designSystems}
+              />
+              <ListCard
+                arrangement="stacked"
+                titleAs="h3"
+                title="A case study, told off-site"
+                body="External: the small up-right glyph after the title, and the new-tab hint at the end of the name."
+                marker={thumb(getKitPhoto('desk-flatlay-devices'))}
+                href={EXTERNAL_HREF}
+                external
+              />
+            </Rows>
+          </Specimen>
+          <Specimen title="linked · split × sm · no marker, then a number · external last">
+            <Rows>
+              <ListCard
+                size="sm"
+                title="Product design"
+                body="A row with no marker: the title, and the body beside it."
+                href={ROUTES.productDesign}
+              />
+              <ListCard
+                size="sm"
+                title="Design engineering"
+                body="A number marker holds its own column."
+                marker={{ type: 'number', value: 2 }}
+                href={ROUTES.designEngineering}
+              />
+              <ListCard
+                size="sm"
+                title="The Figma community file"
+                body="External, unmarked: leaves the site, opens a new tab, says so to a reader."
+                href={EXTERNAL_HREF}
+                external
+              />
+            </Rows>
+          </Specimen>
+          <Specimen
+            title="ctaLabel · split × md and stacked × md · internal and external"
+            note="The action sits a block (24) under the copy, at its inline start. One anchor, one focus stop: the Button is a span and takes the row's hover, focus and press."
+          >
+            <Rows>
+              <ListCard
+                titleAs="h3"
+                title="Product modernisation assessment"
+                body="A free walk-through that decides, capability by capability, what to repair, redesign, replatform or rebuild."
+                marker={{ type: 'icon', name: 'checklist' }}
+                href={ROUTES.contact}
+                ctaLabel="Request the assessment"
+              />
+              <ListCard
+                arrangement="stacked"
+                titleAs="h3"
+                title="Research record template"
+                body="One page per interview. The action's glyph turns up-right because the file leaves the site."
+                marker={thumb(getKitPhoto('desk-flatlay-devices'))}
+                href={EXTERNAL_HREF}
+                external
+                ctaLabel="Get the Figma file"
+              />
+            </Rows>
+          </Specimen>
         </Layout>
       </Section>
 
@@ -646,16 +1105,12 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>4 · States</h2>
             <p>
-              The static row has rest only. Point at, hold and Tab to the linked row: a{' '}
-              <strong>ground</strong> appears under the whole row on hover and the{' '}
-              <strong>cue holds still</strong> — then press deepens the ground and steps the cue
-              together. That is <code>Button</code>&rsquo;s ghost model, values and state
-              machine both: a ghost button moves its background under the pointer and its label
-              only on the click. Hover moves one thing, press moves two. The target is up to
-              1240px wide and about 82px tall, so the signal has to cover it, and it paints only
-              under a pointer — a list of these is still a list of ruled rows, not a stack of
-              tiles. Focus adds the surface-aware two-part ring on top, so keyboard focus is
-              never carried by colour alone.
+              The static row has rest only. Point at, hold and Tab to the linked row: its{' '}
+              <strong>title turns blue</strong> on hover and focus and deepens on press (owner,
+              7 Oct 2026 — the arrow cue and the row&rsquo;s hover ground were removed). Focus
+              adds the surface-aware two-part ring round the whole row, so keyboard focus is
+              never carried by colour alone. A boxed tile adds a ground under the pointer (§
+              1b).
             </p>
           </Layout>
           <Rows ordered>
@@ -668,7 +1123,7 @@ export default function ListCardSpecimenPage() {
             <ListCard
               arrangement="stacked"
               title="Linked · point, hold and Tab"
-              body="One native anchor owns the title, summary and arrow cue."
+              body="One native anchor owns the marker, title and summary."
               marker={{ type: 'icon', name: 'copy' }}
               href={ROUTES.designEngineering}
             />
@@ -677,16 +1132,16 @@ export default function ListCardSpecimenPage() {
             {[
               [
                 'rest',
-                'Dark h4 title, quiet numeral, quiet base hairline, cue at --lcrd-link-ink.',
+                'Dark h4 title, blue numeral and marker, quiet base hairline. No arrow.',
               ],
               [
                 'hover',
-                'The frame paints --lcrd-ground-hover across the whole row. The cue holds.',
+                'The title takes --lcrd-link-ink. A boxed tile also paints --lcrd-ground-hover.',
               ],
               ['focus', 'Exactly the hover rendering plus the two-part keyboard ring.'],
               [
                 'pressed',
-                'The ground steps to --lcrd-ground-pressed AND the cue to its pressed ink.',
+                'The title steps to --lcrd-link-ink-pressed; a boxed tile to --lcrd-ground-pressed.',
               ],
             ].map(([state, note]) => (
               <div key={state}>
@@ -707,6 +1162,7 @@ export default function ListCardSpecimenPage() {
               <p className={s.specNote}>{note}</p>
             </Layout>
             <SurfaceRows />
+            <SurfaceBoxes />
           </Layout>
         </Section>
       ))}
@@ -716,11 +1172,11 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>6 · Nested surfaces</h2>
             <p>
-              The tint panel below resolves all nine ListCard colour tokens from itself; no ink
-              value may leak through an omitted declaration.
+              The tint panel below resolves all eleven ListCard colour tokens from itself; no
+              ink value may leak through an omitted declaration.
             </p>
           </Layout>
-          <Section as="div" surface="tint" density="tight">
+          <Section as="div" surface="tint">
             <Layout columns={{ base: 1, md: [2, 1] }} colGap="gutter" rowGap="block">
               <SurfaceRows />
               <ResolvedTokens surface="tint" />
@@ -731,7 +1187,7 @@ export default function ListCardSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <p>The ink panel below is nested back inside paper and must invert in full.</p>
-          <Section as="div" surface="ink" density="tight">
+          <Section as="div" surface="ink">
             <Layout columns={{ base: 1, md: [2, 1] }} colGap="gutter" rowGap="block">
               <SurfaceRows />
               <ResolvedTokens surface="ink" />
@@ -746,8 +1202,8 @@ export default function ListCardSpecimenPage() {
             <h2>7 · Twelve-row sample-finding block</h2>
             <p>
               One full-width ordered list with zero row gap. Narrow the window: title/body
-              stacks when the row runs out of room, two-digit markers hold the left rhythm quietly and the rules keep one list
-              intact.
+              stacks when the row runs out of room, two-digit markers hold the left rhythm
+              quietly and the rules keep one list intact.
             </p>
           </Layout>
           <SampleList />
@@ -805,18 +1261,18 @@ export default function ListCardSpecimenPage() {
 
           <Specimen
             title="7 · Empty required-ish text"
-            note="The blank title returns null; blank body keeps the title; blank href stays static without a cue."
+            note="The blank title returns null; blank body keeps the title; blank href stays static, with no anchor."
           >
             <Rows>
               <ListCard title="   " body="This row must not render." />
               <ListCard title="Body omitted" body="   " />
-              <ListCard title="Blank href is inert" body="No anchor and no cue." href="   " />
+              <ListCard title="Blank href is inert" body="No anchor and no hover." href="   " />
             </Rows>
           </Specimen>
 
           <Specimen
             title="8 · 767 track · 9 · unsized parent · 10 · logical placement"
-            note="Use block/inline edges only. The cue stays at inline end; a larger thumbnail wraps before the xs content core collapses. The second harness is a wrapping Cluster with no track width: each ListCard must still take one complete line."
+            note="Use block/inline edges only. A larger thumbnail wraps before the xs content core collapses. The second harness is a wrapping Cluster with no track width: each ListCard must still take one complete line."
           >
             <Layout rowGap="block">
               <div className={s.trackSm}>
@@ -843,7 +1299,7 @@ export default function ListCardSpecimenPage() {
           </Specimen>
 
           <Specimen title="11 · Nested surface · 12 · adjacent rows">
-            <Section as="div" surface="ink" density="tight">
+            <Section as="div" surface="ink">
               <Rows>
                 <ListCard title="First adjacent row" body="One rule at the shared seam." />
                 <ListCard title="Second adjacent row" body="One final rule at block end." />
@@ -906,13 +1362,13 @@ export default function ListCardSpecimenPage() {
                 <ListCard
                   arrangement="stacked"
                   title="The same thumbnail, unlinked"
-                  body="No cue, so the core gets the cue's width back."
+                  body="Linked or not, the core takes the same width: no cue."
                   marker={thumb(ILLUSTRATION)}
                 />
                 <ListCard
                   arrangement="stacked"
                   title="A cut-out part, off-site"
-                  body="The leaves-the-site cue at the phone's width: the up-right arrow keeps the arrow's slot."
+                  body="The leaves-the-site glyph at the phone's width, after the title's last word."
                   marker={thumb(CUT_OUT)}
                   href={EXTERNAL_HREF}
                   external
@@ -996,13 +1452,80 @@ export default function ListCardSpecimenPage() {
       </Section>
 
       <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>12 · ReadDown — the D set mode</h2>
+            <p>
+              Ruled rows read top to bottom, one column or two (visual-direction § 3.4 D). Three
+              rows or fewer in one column take md (h4); four or more, or two columns, take sm
+              (h5) and keep the body at body. No inline inset (the rows never link, so no hover
+              ground), and the first row of each column starts on the set&rsquo;s top edge. Two
+              columns are one list in reading order, each grid row as tall as its taller item,
+              so the closing rules run level across the column seam. The kit family page shows
+              it in its bands: /design/kit/readdown.
+            </p>
+          </Layout>
+          <Layout columns={{ lg: [1, 1] }} colGap="column" rowGap="stack" align="start">
+            <Specimen title="columns 1 · three rows · md">
+              <ReadDown rows={READ_DOWN.slice(0, 3)} />
+            </Specimen>
+            <Specimen title="columns 2 · four rows · sm · unequal bodies">
+              <ReadDown rows={READ_DOWN.slice(0, 4)} columns={2} />
+            </Specimen>
+          </Layout>
+          <Specimen title="columns 1 · text only, no glyphs">
+            <ReadDown
+              rows={READ_DOWN.slice(0, 3).map(({ title, body }) => ({ title, body }))}
+            />
+          </Specimen>
+          <Specimen title="photo · three rows · sm — from 1024 the photo takes the trailing two thirds and runs the rows' height, ending on the last rule; below 1024 it sits above them at 3:2">
+            <ReadDown rows={READ_DOWN.slice(0, 3)} photo={getKitPhoto('workshop-brick-room')} />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Specimen title="12 · ReadDown photo + rail — the § 6.3 field hung off the photo's end edge, from 1440: it starts under the photograph and runs into the margin, never under the rows">
+          <ReadDown
+            rows={READ_DOWN.slice(1, 4)}
+            photo={getKitPhoto('hands-sketches-markers')}
+            rail
+          />
+        </Specimen>
+      </Section>
+
+      <Section surface="ink">
+        <Specimen title="12 · ReadDown on ink — the glyph lifts to brandeis-300, the rule to neutral-700">
+          <ReadDown rows={READ_DOWN.slice(0, 4)} columns={2} />
+        </Specimen>
+      </Section>
+
+      <Section surface="blue">
+        <Specimen title="12 · ReadDown on blue — declared for self-containment; the glyph is white, the rule brandeis-300">
+          <ReadDown rows={READ_DOWN.slice(0, 4)} columns={2} />
+        </Specimen>
+      </Section>
+
+      <Section>
+        <Specimen title="12 · ReadDown, two columns, five rows, text only — the odd row stands alone, its rule its own width">
+          <ReadDown
+            rows={[...READ_DOWN, { title: 'A readout', body: 'One hour, the whole team.' }].map(
+              ({ title, body }) => ({ title, body }),
+            )}
+            columns={2}
+          />
+        </Specimen>
+      </Section>
+
+      <Section>
         <Layout rowGap="block">
-          <h2>12 · What this static page cannot force</h2>
+          <h2>13 · What this static page cannot force</h2>
           <p>
             Hold the pointer for pressed and Tab for keyboard focus. The split collapse is no
-            longer on the list: it follows the row&rsquo;s own width, so § 1a renders it. Reduced motion is no longer on the list: the rule wipe was
-            the row&rsquo;s only transform and it is gone, so there is nothing left for the
-            preference to shorten. None has a prop; the absence is part of the contract.
+            longer on the list: it follows the row&rsquo;s own width, so § 1a renders it.
+            Reduced motion is no longer on the list: the rule wipe was the row&rsquo;s only
+            transform and it is gone, so there is nothing left for the preference to shorten.
+            None has a prop; the absence is part of the contract.
           </p>
         </Layout>
       </Section>

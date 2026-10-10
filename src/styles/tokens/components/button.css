@@ -5,10 +5,14 @@
    from another component.
 
    Naming: --btn-{emphasis}-{colour}-{part}-{state}
-           emphasis  solid | ghost | link
-           colour    primary (Brandeis) | neutral (ink)
+           emphasis  solid | ghost | link | outline
+           colour    primary (Brandeis) | neutral (ink) — solid and outline are primary
+                     only. The ink solid (--btn-solid-neutral-*) was retired on 8 Oct 2026
+                     (r7-buttons): the solid is the page's one main action, always blue, and
+                     neutral survives on ghost and link for site chrome alone.
            part      bg | fg          — a control has a background and a foreground;
                                         a SURFACE has a ground and an ink (section.css)
+                     rule             — outline's hairline border, the one emphasis with an edge
            state     rest (no suffix) | hover | pressed | busy
    Geometry and shared parts drop the emphasis and colour: --btn-height-md,
    --btn-ring-color, --btn-disabled-bg.
@@ -33,6 +37,15 @@
    inside an ink section rendered ghost-neutral at 1.13:1, link-primary at 2.09:1 and
    a focus ring at 2.09:1 against its own gap. The blocks below are therefore
    repetitive on purpose, and the repetition is what makes nesting safe.
+
+   ── Outline (fdn-scroll, 6 Oct 2026) ────────────────────────────────────────────
+   The icon-only stepper — a slider's previous / next. Blue at rest, glyph and rule,
+   because the owner wants blue on arrows and small marks and visual-direction § 4.2
+   counts a slider's navigation Free. Hover fills with the surface's primary (rule and
+   all) and turns the glyph to its label colour; pressed deepens the fill. There is no
+   -fg-pressed: the glyph moves once, onto the fill, and pressed reads -fg-hover.
+   Unavailable, it keeps its circle in --btn-disabled-rule. Was --sld-control-* in the
+   Slider's own layer until a fix round moved it here, so the next stepper inherits it.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
@@ -65,7 +78,16 @@
   --btn-icon-size-sm: var(--icon-size-14);
   --btn-icon-size-md: var(--icon-size-16);
   --btn-icon-size-lg: var(--icon-size-18);
+  /* The stepper's glyph, one step up from a labelled button's at each size (fix round 2,
+     cmp-testimonials, 6 Oct 2026). An icon-only control has no label to carry it, so its glyph IS
+     the control: at 18 in a 48 circle the arrow read as an afterthought beside a 477 portrait,
+     where the reference steppers set the arrow at half the circle. */
+  --btn-outline-icon-size-sm: var(--icon-size-16);
+  --btn-outline-icon-size-md: var(--icon-size-18);
+  --btn-outline-icon-size-lg: var(--icon-size-24);
   --btn-radius: var(--radius-8);
+  --btn-radius-round: var(--radius-full); /* outline: the stepper is a circle (references § 10) */
+  --btn-outline-rule-width: var(--border-width-hairline);
   --btn-radius-bare: var(--radius-0); /* link has no box, so it has no corner */
   --btn-radius-bare-focus: var(
     --radius-4
@@ -99,11 +121,6 @@
   --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
   --btn-solid-primary-bg-busy: var(--color-brandeis-700);
   --btn-solid-primary-fg: var(--color-white);
-  --btn-solid-neutral-bg: var(--color-neutral-950);
-  --btn-solid-neutral-bg-hover: var(--color-neutral-800);
-  --btn-solid-neutral-bg-pressed: var(--color-neutral-700);
-  --btn-solid-neutral-bg-busy: var(--color-neutral-700);
-  --btn-solid-neutral-fg: var(--color-paper);
   --btn-ghost-primary-fg: var(--color-brandeis-500);
   --btn-ghost-primary-fg-pressed: var(--color-brandeis-600);
   --btn-ghost-primary-bg-hover: var(--color-brandeis-50);
@@ -124,6 +141,12 @@
   --btn-link-neutral-fg-pressed: var(--color-brandeis-600);
   --btn-link-primary-fg-busy: var(--color-brandeis-700);
   --btn-link-neutral-fg-busy: var(--color-brandeis-600);
+  --btn-outline-primary-fg: var(--color-brandeis-500); /* 6.17:1 on paper */
+  --btn-outline-primary-rule: var(--color-brandeis-300); /* decoration; the glyph names it */
+  --btn-outline-primary-bg-hover: var(--color-brandeis-500);
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-700);
+  --btn-outline-primary-fg-hover: var(--color-white); /* 6.23:1 on 500 */
+  --btn-disabled-rule: var(--color-neutral-300); /* the stepper's circle, off — still a circle */
   --btn-disabled-bg: var(--color-neutral-100);
   --btn-disabled-fg: var(--color-neutral-500);
   --btn-ring-color: var(--color-brandeis-500);
@@ -141,11 +164,6 @@
   --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
   --btn-solid-primary-bg-busy: var(--color-brandeis-700);
   --btn-solid-primary-fg: var(--color-white);
-  --btn-solid-neutral-bg: var(--color-neutral-950);
-  --btn-solid-neutral-bg-hover: var(--color-neutral-800);
-  --btn-solid-neutral-bg-pressed: var(--color-neutral-700);
-  --btn-solid-neutral-bg-busy: var(--color-neutral-700);
-  --btn-solid-neutral-fg: var(--color-paper);
   --btn-ghost-primary-fg: var(--color-brandeis-500);
   --btn-ghost-primary-fg-pressed: var(--color-brandeis-600);
   --btn-ghost-primary-bg-hover: var(--color-brandeis-100);
@@ -166,6 +184,12 @@
   --btn-link-neutral-fg-pressed: var(--color-brandeis-600);
   --btn-link-primary-fg-busy: var(--color-brandeis-700);
   --btn-link-neutral-fg-busy: var(--color-brandeis-600);
+  --btn-outline-primary-fg: var(--color-brandeis-500); /* 5.51:1 on paper-deep */
+  --btn-outline-primary-rule: var(--color-brandeis-300);
+  --btn-outline-primary-bg-hover: var(--color-brandeis-500);
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-700);
+  --btn-outline-primary-fg-hover: var(--color-white);
+  --btn-disabled-rule: var(--color-neutral-400); /* 300 all but vanished on paper-deep (fix round 2) */
   --btn-disabled-bg: var(--color-neutral-200);
   --btn-disabled-fg: var(--color-neutral-500);
   --btn-ring-color: var(--color-brandeis-500);
@@ -178,8 +202,8 @@
    restated rather than inherited, because inheriting it means an ink panel nested in a
    blue section would pick up blue's INVERTED primary.
 
-   The neutrals reverse. Two values are contrast floors rather than preferences — blue
-   as ink and blue as a 2px ring both reach only 2.77:1 on neutral-950, so a blue label
+   The neutrals reverse (ghost and link; there is no neutral solid). Two values are
+   contrast floors rather than preferences — blue as ink and blue as a 2px ring both reach only 2.77:1 on neutral-950, so a blue label
    lifts to 200 (10.48:1) and the ring to 300 (7.32:1). A ghost carries neutral fills in
    both steps, 900 then 800, and never a blue tint: at the pale end of the blue ramp
    there is no tint left to see. link-neutral runs white → 300 → 200.            */
@@ -189,11 +213,6 @@
   --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
   --btn-solid-primary-bg-busy: var(--color-brandeis-700);
   --btn-solid-primary-fg: var(--color-white);
-  --btn-solid-neutral-bg: var(--color-paper);
-  --btn-solid-neutral-bg-hover: var(--color-neutral-200);
-  --btn-solid-neutral-bg-pressed: var(--color-neutral-300);
-  --btn-solid-neutral-bg-busy: var(--color-neutral-300);
-  --btn-solid-neutral-fg: var(--color-neutral-950);
   --btn-ghost-primary-fg: var(--color-brandeis-200);
   --btn-ghost-primary-fg-pressed: var(--color-brandeis-200);
   --btn-ghost-primary-bg-hover: var(--color-neutral-900);
@@ -214,6 +233,12 @@
   --btn-link-neutral-fg-pressed: var(--color-brandeis-200);
   --btn-link-primary-fg-busy: var(--color-brandeis-100);
   --btn-link-neutral-fg-busy: var(--color-brandeis-200);
+  --btn-outline-primary-fg: var(--color-brandeis-200); /* 10.48:1; blue as ink fails here */
+  --btn-outline-primary-rule: var(--color-brandeis-400);
+  --btn-outline-primary-bg-hover: var(--color-brandeis-500);
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-600);
+  --btn-outline-primary-fg-hover: var(--color-white);
+  --btn-disabled-rule: var(--color-neutral-800);
   --btn-disabled-bg: var(--color-neutral-800);
   --btn-disabled-fg: var(--color-neutral-600);
   --btn-ring-color: var(--color-brandeis-300);
@@ -222,7 +247,8 @@
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
    The one surface where the primary cannot be blue. Solid primary inverts to paper
-   with an ink label; ghost fills with the ramp below the ground, 600 then 700.
+   with an ink label — still the primary, inverted, not an ink solid; ghost fills with the
+   ramp below the ground, 600 then 700.
    Primary and neutral collapse for ghost and link — both read white — and that is
    correct: on a blue field there is one voice.
 
@@ -236,11 +262,6 @@
   --btn-solid-primary-bg-pressed: var(--color-neutral-300);
   --btn-solid-primary-bg-busy: var(--color-neutral-300);
   --btn-solid-primary-fg: var(--color-neutral-950);
-  --btn-solid-neutral-bg: var(--color-neutral-950);
-  --btn-solid-neutral-bg-hover: var(--color-neutral-900);
-  --btn-solid-neutral-bg-pressed: var(--color-neutral-800);
-  --btn-solid-neutral-bg-busy: var(--color-neutral-800);
-  --btn-solid-neutral-fg: var(--color-paper);
   --btn-ghost-primary-fg: var(--color-white);
   --btn-ghost-primary-fg-pressed: var(--color-white);
   --btn-ghost-primary-bg-hover: var(--color-brandeis-600);
@@ -261,6 +282,12 @@
   --btn-link-neutral-fg-pressed: var(--color-brandeis-100);
   --btn-link-primary-fg-busy: var(--color-brandeis-100);
   --btn-link-neutral-fg-busy: var(--color-brandeis-100);
+  --btn-outline-primary-fg: var(--color-white); /* 6.23:1 */
+  --btn-outline-primary-rule: var(--color-brandeis-200);
+  --btn-outline-primary-bg-hover: var(--color-paper); /* fills white, the inverted primary */
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-100);
+  --btn-outline-primary-fg-hover: var(--color-brandeis-500); /* 6.17:1 on paper */
+  --btn-disabled-rule: var(--color-brandeis-400);
   --btn-disabled-bg: var(--color-brandeis-600);
   --btn-disabled-fg: var(--color-brandeis-300);
   --btn-ring-color: var(--color-white);

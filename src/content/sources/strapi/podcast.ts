@@ -346,7 +346,14 @@ function mapPodcast(
      key order, which is the kind of correctness nobody sees in review. */
   const outline: PageOutlineEntry[] = [];
   const blocks = sections.flatMap((block, index) => {
-    const mapped = mapBlock(block, index, title, graphqlUrl, outline, index === heroVideoBlockIndex);
+    const mapped = mapBlock(
+      block,
+      index,
+      title,
+      graphqlUrl,
+      outline,
+      index === heroVideoBlockIndex,
+    );
     return mapped ? [mapped] : [];
   });
 

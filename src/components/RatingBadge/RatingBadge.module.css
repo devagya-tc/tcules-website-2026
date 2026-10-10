@@ -1,0 +1,101 @@
+/* RatingBadge — a score and its source as one outline pill. Every value is --rbadge-*.
+
+   The pill lays out its own four inline parts (star, score, mark, name) with inline-flex: they are
+   the inside of one control, not an arrangement of siblings, the same reading Button gives its
+   label and glyph. No margin. */
+
+.badge {
+  display: inline-flex;
+  gap: var(--gap-tight);
+  align-items: center;
+  padding-block: var(--gap-tight);
+  padding-inline: var(--rbadge-padding-inline);
+  color: var(--rbadge-fg);
+  font: var(--rbadge-text);
+  letter-spacing: var(--rbadge-tracking);
+  text-transform: var(--text-mono-case);
+  text-decoration: none;
+  border: var(--rbadge-rule-width) solid var(--rbadge-rule);
+  border-radius: var(--rbadge-radius);
+  transition:
+    color var(--rbadge-transition-duration) var(--rbadge-transition-easing),
+    border-color var(--rbadge-transition-duration) var(--rbadge-transition-easing);
+}
+
+/* `frame="plain"`: no outline and no inline padding, so the star starts on the column's edge like
+   any eyebrow. The width goes to zero rather than the colour to transparent, so no colour is stated
+   here and the hover's border-color below has nothing to paint. */
+.plain {
+  padding-inline: 0;
+  border-width: 0;
+}
+
+/* No pressed step, deliberately (tokens rule 3: a state token exists only if its value moves on at
+   least one surface). The pill is a link that leaves the site in a new tab: the press IS the
+   navigation, so there is no held state to show, and a pressed fg would equal the hover fg on all
+   four surfaces. Hover and focus carry the one change from rest — fg and rule together. */
+.badge:hover,
+.badge:focus-visible {
+  color: var(--rbadge-fg-hover);
+  border-color: var(--rbadge-fg-hover);
+}
+
+.badge:focus {
+  outline: none;
+}
+
+.badge:focus-visible {
+  box-shadow:
+    0 0 0 var(--rbadge-ring-offset) var(--rbadge-ring-gap-color),
+    0 0 0 calc(var(--rbadge-ring-offset) + var(--rbadge-ring-width)) var(--rbadge-ring-color);
+}
+
+/* The star's box. The glyph is an Icon the caller passes; this wrapper gives it the star's ink and
+   takes the inline box's line height out of play, so `align-items: center` centres the glyph
+   itself, the same way the mark beside the platform name is centred. */
+.star {
+  display: block;
+  line-height: 0;
+  color: var(--rbadge-star-fg);
+}
+
+/* The text's box, trimmed to the capitals (1 Oct 2026, owner: the star sat low). `align-items:
+   center` centres each item's BOX; a text box is the line box, and in this mono face that carries
+   descender space under capitals that have no descenders, so its centre sits below the middle of
+   the caps and the icons, centred on it, sat low and hung under the baseline. Trimmed to cap height
+   over the alphabetic baseline, the box IS the capitals, and centring is exact whatever metrics the
+   face resolves to — ch04: an icon centres on the text beside it, not on the line box. Where
+   `text-box` is unsupported the line box remains, and the icons sit as they did before. */
+.text {
+  display: block;
+  text-box: trim-both cap alphabetic;
+}
+
+/* Tighter than the badge's own gap, so the mark and the name read as one lockup. */
+.lockup {
+  display: inline-flex;
+  gap: var(--gap-inline);
+  align-items: center;
+}
+
+.mark {
+  display: block;
+  line-height: 0;
+}
+
+/* Visually hidden, still announced. The negative margin pulls the 1px clip box out of the flow. */
+.hint {
+  position: absolute;
+  inline-size: var(--rbadge-hidden-size);
+  block-size: var(--rbadge-hidden-size);
+  margin: calc(-1 * var(--rbadge-hidden-size));
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge {
+    transition-duration: var(--duration-instant);
+  }
+}

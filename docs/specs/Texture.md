@@ -75,6 +75,9 @@ side of ch05:
    anywhere text could be at some width) takes `blur` of 100 or more. A hard or lightly feathered
    edge inside the column reads as a shape, not as texture, and at 390 the column is the whole band.
    Only a shape wholly outside the column — in a gutter, or off the field — may be harder.
+7. **Never a stepped, hard-edged block** (owner, 9 Oct 2026). The PageHero `foot` and `field`
+   staircases were retired: a hard-edged block reads as an object competing with the copy, not as
+   rhythm. Shown under "Never" on `/design/texture`.
 
 **How "under" is judged.** A shape's box is the rectangle or ellipse before blur, where the grid is
 at full strength. It must not intersect the box of a heading, a body paragraph or an image. The
@@ -386,3 +389,29 @@ would not encode anything known to be wrong.
 | New tokens requested        | 0                                                                                                                                |
 | Placement limits recorded   | 6 — 5 from audit §3, 1 from the owner (2.17)                                                                                     |
 | BLOCKING questions          | 0                                                                                                                                |
+
+## Amendment · 6 Oct 2026 — `page-product-design` fix round 2: TextureCorner
+
+A named recipe beside TextureHorizon and TextureClosing: a stepped pixel field (10px pixels, two grid
+pitches, no blur) in a band's top-end corner, `--tex-corner-inline-size` (`min(280px, 40%)`) ×
+`--tex-corner-block-size` (80), dense where the top and end edges meet and dithering out on both axes
+(a seeded field, the same every render). For a band whose type is centred and leaves the corner as
+the only clear ground — the Statement's `texture="corner"`. In an `open` band it ends 48 above the
+eyebrow, so it is drawn at every width. Paper only. Specimen: `/design/statement` § 5.
+
+## Amendment · 9 Oct 2026 — owner texture review: two variations, and the documented patterns
+
+Approved as drawn: the end-edge corner fade (Statement `head-half`), the seam strip
+(`TextureHorizon`) and the single corner cluster (`TextureCorner`, Statement `corner`). Added:
+
+- **`TextureCorner at?: 'top-end' | 'bottom-start'`** (default `top-end`). `bottom-start` is the
+  partner of a balanced pair: the same box (`--tex-corner-*`), pixel and falloff law, but its own
+  seed and a steeper falloff along the edge, so it reads as a related, lighter cluster rather than
+  the top-end field flipped. Never used alone. No new tokens.
+- **End-edge horizontal fade** — head-half's rect run from −50% to 150% of the band's height (end
+  −120, 30% wide, blur 160), so the field is full strength top to bottom along the end edge and
+  fades only toward the start. Drawn by Statement `texture="end-fade"`; from 1024.
+
+`/design/texture` is now the documented page: purpose, rules (rhythm not decoration; one signature
+per band; air and edges only; paper only, peridot never; not with an illustration hero; contrast),
+the five placements live with when / never, then the mechanism specimens.

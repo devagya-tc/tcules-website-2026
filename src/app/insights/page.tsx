@@ -9,6 +9,7 @@ import {
   type InsightResourceKind,
 } from '@/content';
 import { blogPath, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { BlockCard, Breadcrumbs, CtaSection, PageHero } from '@/patterns';
 
 const INSIGHTS_SLUG = ROUTES.insights.slice(1);
@@ -132,15 +133,21 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
 
   return (
     <>
-      <Breadcrumbs
+      <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Insights', href: ROUTES.insights },
+          ],
+          page.hero.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
+        title={page.hero.heading}
+        body={[page.hero.description]}
         surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: page.hero.heading, href: ROUTES.insights },
-        ]}
       />
-
-      <PageHero title={page.hero.heading} body={[page.hero.description]} surface="paper" />
 
       {page.formatCards.length > 0 ? (
         <Section as="div" surface="tint">
@@ -148,7 +155,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
             as="ul"
             columns={{ base: 1, md: 2, lg: 4 }}
             colGap="gutter"
-            rowGap="gutter"
+            rowGap="column"
             equalRows
           >
             {page.formatCards.map((card) => (
@@ -253,7 +260,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
               as="ul"
               columns={{ base: 1, md: 2, lg: 3 }}
               colGap="gutter"
-              rowGap="gutter"
+              rowGap="column"
               equalRows
             >
               {visibleResources.map((resource) => {
@@ -267,9 +274,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
                     body={resource.description}
                     eyebrow={eyebrow}
                     media={
-                      resource.image
-                        ? { type: 'image', image: resource.image }
-                        : undefined
+                      resource.image ? { type: 'image', image: resource.image } : undefined
                     }
                     href={blogPath(resource.slug)}
                     ctaLabel={resourceCta(resource.kind)}
@@ -290,7 +295,7 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
                     as="a"
                     href={filterHref(new Map())}
                     emphasis="ghost"
-                    tone="neutral"
+                    tone="primary"
                     icon={<Icon name="arrow-right" />}
                   >
                     Clear filters

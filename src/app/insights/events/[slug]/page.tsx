@@ -2,9 +2,10 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
+import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
 import { getEventPage, type EventBlock, type EventImage } from '@/content';
 import { articlePath, eventPath, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
@@ -107,9 +108,10 @@ function renderEventBlock(block: EventBlock, eventTitle: string) {
                 as="a"
                 href={block.mediaUrl}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 View event media
               </Button>
@@ -128,9 +130,10 @@ function renderEventBlock(block: EventBlock, eventTitle: string) {
                 as="a"
                 href={block.action.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.action.label}
               </Button>
@@ -256,19 +259,20 @@ export default async function EventPage({ params }: EventPageProps) {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Insights', href: ROUTES.insights },
-          { label: 'Events', href: ROUTES.events },
-          { label: event.title, href: eventPath(event.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Insights', href: ROUTES.insights },
+            { label: 'Events', href: ROUTES.events },
+            { label: event.title, href: eventPath(event.slug) },
+          ],
+          event.title,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
         title={event.title}
-        eyebrow="Event"
         body={[event.description || `Explore ${event.title}.`]}
         dates={published ? { published } : undefined}
         media={heroMedia}
@@ -350,7 +354,7 @@ export default async function EventPage({ params }: EventPageProps) {
               as="ul"
               columns={{ base: 1, md: 2, lg: 3 }}
               colGap="gutter"
-              rowGap="gutter"
+              rowGap="column"
               equalRows
             >
               {event.resources.map((resource) => (
@@ -359,11 +363,7 @@ export default async function EventPage({ params }: EventPageProps) {
                   title={resource.title}
                   body={displayDate(resource.publishedAt)}
                   eyebrow="Article"
-                  media={
-                    resource.image
-                      ? { type: 'image', image: resource.image }
-                      : undefined
-                  }
+                  media={resource.image ? { type: 'image', image: resource.image } : undefined}
                   href={articlePath(resource.slug)}
                   ctaLabel="Read article"
                 />

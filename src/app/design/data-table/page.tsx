@@ -1,4 +1,4 @@
-import { Layout, Section, type SectionSurface } from '@/components';
+import { Icon, Layout, Section, type SectionSurface } from '@/components';
 import { auditPath, ROUTES, servicePath } from '@/lib/routes';
 import { DataTable, type DataTableProps, type DataTableRow } from '@/patterns';
 
@@ -391,6 +391,37 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
 ];
 
+/* A composed-mark column (1 Oct 2026): a cell may be `{ node }` — here a glyph with its own words —
+   placed as given while the other cells keep the trusted-HTML contract. Rendered on every surface
+   below, so the mark takes each surface's ink. */
+function Mark({ yes }: { yes: boolean }) {
+  return (
+    <span>
+      <Icon name={yes ? 'check-circle' : 'close-circle'} label={yes ? 'Yes' : 'No'} />
+    </span>
+  );
+}
+
+const NODE_TABLE: DataTableProps = {
+  caption: 'A composed mark in a column',
+  keyColumn: { heading: 'Representation' },
+  columns: [{ heading: 'Governed', behaviour: 'nowrap' }, { heading: 'What must stay true' }],
+  rows: [
+    {
+      header: 'Semantic definition',
+      cellsHtml: [{ node: <Mark yes /> }, '<p>Some work is complete; some remains.</p>'],
+    },
+    {
+      header: 'Figma component',
+      cellsHtml: [{ node: <Mark yes={false} /> }, '<p>Properties cover label and detail.</p>'],
+    },
+    {
+      header: 'Runtime component',
+      cellsHtml: [{ node: <Mark yes /> }, '<p>API exposes the same meaning.</p>'],
+    },
+  ],
+};
+
 export default function DataTableSpecimenPage() {
   return (
     <>
@@ -403,7 +434,8 @@ export default function DataTableSpecimenPage() {
             behaviour is presentation. It is drawn as a box — outer border, head fill, body
             ground, and a hairline between every row and every column — and when its track is
             too narrow for its columns the box scrolls sideways; it never restacks. The page
-            itself never scrolls horizontally.
+            itself never scrolls horizontally. Tables are boxed, always (owner, 7 Oct 2026): the
+            box is the table&rsquo;s, not a variant, so there is no ruled frame.
           </p>
         </Layout>
       </Section>
@@ -603,7 +635,7 @@ export default function DataTableSpecimenPage() {
             </Layout>
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="gutter" rowGap="stack">
               <DataTable {...SURFACE_TABLE} />
-              <DataTable {...SURFACE_TABLE} />
+              <DataTable {...NODE_TABLE} />
             </Layout>
           </Layout>
         </Section>
@@ -618,7 +650,7 @@ export default function DataTableSpecimenPage() {
               leaks into its grounds, heads, keys, caption or rules.
             </p>
           </Layout>
-          <Section as="div" surface="tint" density="tight">
+          <Section as="div" surface="tint">
             <DataTable {...MARKS} />
           </Section>
         </Layout>
@@ -628,10 +660,10 @@ export default function DataTableSpecimenPage() {
           <p>
             An ink panel nested back inside paper, and a blue one, must each invert in full.
           </p>
-          <Section as="div" surface="ink" density="tight">
+          <Section as="div" surface="ink">
             <DataTable {...NUMERIC} />
           </Section>
-          <Section as="div" surface="blue" density="tight">
+          <Section as="div" surface="blue">
             <DataTable {...EMPTY_CELLS} />
           </Section>
         </Layout>

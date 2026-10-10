@@ -118,7 +118,8 @@
 
    The mark sits on --color-paper-deep — the system's own tint, so the ground is warm
    rather than grey, and at 1.12:1 it is a change of paper rather than a drawn box.
-   --prose-mark-bg is the precedent for a small non-control mark carrying its own ground.
+   --prose-mark-bg was the precedent for a small non-control mark carrying its own ground (that
+   token was deleted 6 Oct 2026 with the website's text highlight; the reasoning stands).
 
    The chip is the inverse and paints nothing at rest. Its hairline is neutral-600: 400
    measures 2.13:1 here, 500 cleared the 3:1 outline floor at 3.16:1 but read as a hint

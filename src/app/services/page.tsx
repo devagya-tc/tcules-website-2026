@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag } from '@/components';
+import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
 import { getServicesMasterPage, type ServicesMasterAction } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { BlockCard, Breadcrumbs, CtaSection, PageHero, type HeroAction } from '@/patterns';
 
 const SERVICES_SLUG = ROUTES.services.slice(1);
@@ -72,15 +73,17 @@ export default async function ServicesPage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Services', href: ROUTES.services },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Services', href: ROUTES.services },
+          ],
+          page.hero.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
         title={page.hero.heading}
         body={page.hero.body}
         actions={heroActions}
@@ -137,7 +140,7 @@ export default async function ServicesPage() {
                   as="ul"
                   columns={{ base: 1, md: 2, lg: section.cards.length >= 3 ? 3 : 2 }}
                   colGap="gutter"
-                  rowGap="gutter"
+                  rowGap="column"
                   equalRows
                 >
                   {section.cards.map((card) =>
@@ -168,6 +171,7 @@ export default async function ServicesPage() {
                               tone="primary"
                               size="md"
                               extendHitArea
+                              icon={<Icon name="arrow-right" />}
                             >
                               {card.action.label}
                             </Button>
@@ -179,11 +183,7 @@ export default async function ServicesPage() {
                         key={card.id}
                         title={card.title}
                         body={card.description}
-                        media={
-                          card.icon
-                            ? { type: 'image', image: card.icon }
-                            : undefined
-                        }
+                        media={card.icon ? { type: 'image', image: card.icon } : undefined}
                         href={card.action?.href}
                         ctaLabel={card.action?.label}
                       />
@@ -201,6 +201,7 @@ export default async function ServicesPage() {
                     tone="primary"
                     size="md"
                     extendHitArea
+                    icon={<Icon name="arrow-right" />}
                   >
                     {section.action.label}
                   </Button>

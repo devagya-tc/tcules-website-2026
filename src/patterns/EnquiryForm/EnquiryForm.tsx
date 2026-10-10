@@ -4,13 +4,15 @@ import type { FormEvent, ReactNode } from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 
 import { Button, Cluster, Icon, Input, Layout } from '@/components';
+import { cx } from '@/lib/cx';
 
 import styles from './EnquiryForm.module.css';
 
-export type EnquiryUrlLabel =
-  'Site or product URL' | 'Link to the work' | 'Where can we see it?';
+/* The plain noun first; the two longer labels stay for the placements whose page asks a different
+   question of the link. See § Field labels on FieldGroup. */
+export type EnquiryUrlLabel = 'Website' | 'Link to the work' | 'Where can we see it?';
 
-export type AuditUrlLabel = 'URL of the site to audit';
+export type AuditUrlLabel = 'Site to audit';
 
 export type EnquiryContextBase = {
   originRoute: string;
@@ -24,7 +26,42 @@ export type EnquiryContextBase = {
 type SharedProps = {
   action: string;
   onSubmitted?: () => void;
+  /**
+   * How wide the form sets (cmp-form fix round, 6 Oct 2026). ONE policy for every variant: the form
+   * fills the track it is placed in, down to its own floor, so four variants side by side share a
+   * right edge, and a form stacked under a full-width photograph meets the photograph's edge.
+   *
+   * `measure` caps it at --enq-form-measure (667) for the one placement that has no track of its
+   * own to fill: a standalone form under a CENTRED head, where ContentSection gives every body row
+   * the whole 1240 column and the cap is what centres.
+   */
+  width?: 'track' | 'measure';
+  /**
+   * The field treatment. `box` (default, every variant; owner, 7 Oct 2026) is Input's filled
+   * control, which separates each field more clearly than a rule. `line` is the unboxed
+   * underline field — references.md's Meridian and Executra move.
+   */
+  fields?: 'line' | 'box';
+  /**
+   * How the submit sets. `inline` (default) is the button at its own width, the caption (compact)
+   * or the scheduling link (full) beside it. `full` sets the button across the form's whole track
+   * with the line under it — the reference move (Executra) for a form that ends a column, and the
+   * variation that stops every compact form on a page being the same rectangle.
+   */
+  submit?: 'inline' | 'full';
+  /**
+   * What happens after a send, shown in the success view as numbered steps. The CALLER's copy,
+   * never the pattern's: on a close it is the same list the band's points promise (pass
+   * CtaSection's `points` straight through), so the success view keeps the band's promise and
+   * cannot drift from it. Absent, the success view is the thanks and one line. Structurally
+   * CtaSection's CtaPoint — a pattern does not import a pattern, so the shape is restated, not the
+   * type.
+   */
+  nextSteps?: readonly EnquiryNextStep[];
 };
+
+/** One step in the success view's "what happens next". */
+export type EnquiryNextStep = { label: string; detail?: string };
 
 /* "See available times" lives in the form's own action row, beside the submit, so the two asks
    read as one group rather than as a form with a stray link under it. Amended 29 Sep 2026
@@ -55,13 +92,33 @@ type ContactVariantProps = SharedProps & {
   scheduleHref?: string;
 };
 
-export type EnquiryFormProps = EnquiryVariantProps | AuditVariantProps | ContactVariantProps;
+/* The compact form (kit cmp-form, 6 Oct 2026): name, email, the one free-text question and the
+   submit, at most 400 tall, for the placements where the form is not the band's whole argument: a
+   quiet photograph beside a short form (L-photo), the mid-page offer, a standalone ask inside a
+   ContentSection. Context travels as on enquiry, so a compact submission is attributable. It is 369
+   tall in a 667 track and in any track that holds the name and email pair and the caption beside
+   the submit; in a phone column the pair stacks and the caption drops under the submit (544 at
+   326, measured 6 Oct 2026).
 
-type Lifecycle = 'idle' | 'submitting' | 'error' | 'success';
+   NO scheduling link, and the type refuses one. Compact is the short ask by definition; the link is
+   the second way to take the step, and a second way is what pushed the full form past 400. The
+   placements that want both use `enquiry`. */
+type CompactVariantProps = SharedProps & {
+  variant: 'compact';
+  urlLabel?: never;
+  context: EnquiryContextBase & { intent?: never };
+  scheduleHref?: never;
+};
+
+export type EnquiryFormProps =
+  EnquiryVariantProps | AuditVariantProps | ContactVariantProps | CompactVariantProps;
+
+/* `invalid`: a send was attempted with a required answer missing or malformed, and the form held
+   it back (r7-form). Nothing was posted. */
+type Lifecycle = 'idle' | 'invalid' | 'submitting' | 'error' | 'success';
 type FieldMessages = {
   email: string;
   work: string;
-  url: string;
   name: string;
   company: string;
   contact: string;
@@ -71,72 +128,192 @@ type FieldMessages = {
 const EMPTY_MESSAGES: FieldMessages = {
   email: '',
   work: '',
-  url: '',
   name: '',
   company: '',
   contact: '',
   comments: '',
 };
 
-function validHttpsUrl(value: string): boolean {
-  if (value === '') return true;
-  if (!value.startsWith('https://')) return false;
-
-  try {
-    return new URL(value).protocol === 'https:';
-  } catch {
-    return false;
-  }
+/**
+ * A URL as people type it — "acme.com", "www.acme.com/app" — made into the full address the form
+ * sends. The field used to REJECT anything not starting with https://, which made a person learn a
+ * rule the form could apply itself, and is the only reason the optional URL field carried an error
+ * row (1 Oct 2026). Normalise, don't reject: a scheme-less value gets https:// in front; anything
+ * that already has a scheme is left as typed. Blank stays blank.
+ */
+function normaliseUrl(value: string): string {
+  const trimmed = value.trim();
+  if (trimmed === '' || /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
 }
 
+/**
+ * One field's frame: a hidden label, an optional hint, the control and its message (r7-form, owner
+ * 7 Oct 2026).
+ *
+ * NO VISIBLE LABEL. The placeholder is the field's visible cue — "Name", "Email", "What are you
+ * working on?" — and the <label> stays, visually hidden, so the field keeps its accessible name and
+ * the name does not vanish for a screen reader once something is typed. A field that needs more
+ * than its noun says it in a visible hint above the control. The compact form is the point: a row
+ * of labels over a row of boxes doubled the form's height for words the boxes already said.
+ *
+ *   label     the NOUN for the value — Email, Name, Company, Phone, Website — or the question
+ *             where the field asks for free text. Never "Your …", never Title Case. The same words
+ *             are the placeholder, so what is announced is what is seen.
+ *   optional  said inside the cue, in the cue's own voice: "Website (optional)".
+ *   hint      a visible row above the control, only when the field has something to explain.
+ *   validates the field can fail. Its message row is ALWAYS mounted and is a polite live region,
+ *             so a blur error is announced as it appears; it is empty and takes no height until
+ *             there is a message, which keeps the form compact. The control points at it with
+ *             aria-describedby, so a return visit to the field reads the error with its name.
+ *
+ * Errors say what to do, in a few words, no period, no blame: "Enter your email", "Enter a valid
+ * email". Prefer normalising over rejecting (see normaliseUrl).
+ */
 type FieldGroupProps = {
   id: string;
-  messageId: string;
   label: string;
-  flagId?: string;
-  flag?: string;
-  message: string;
+  optional?: boolean;
+  hint?: { id: string; text: string };
+  /** Present when the field validates: the id of its message row, and the message. */
+  validation?: { id: string; message: string };
   children: ReactNode;
 };
 
 function FieldGroup({
   id,
-  messageId,
   label,
-  flagId,
-  flag,
-  message,
+  optional = false,
+  hint,
+  validation,
   children,
 }: FieldGroupProps) {
+  const message = validation?.message ?? '';
   return (
-    <Layout rowGap="tight">
-      {flag ? (
-        <Cluster colGap="tight" align="baseline" nowrap>
-          <label className={styles.label} htmlFor={id}>
-            {label}
-          </label>
-          <span className={styles.flag} id={flagId}>
-            {flag}
-          </span>
-        </Cluster>
-      ) : (
-        <label className={styles.label} htmlFor={id}>
-          {label}
-        </label>
-      )}
+    /* The control and its message group at `tight`, but ONLY while there is a message: an empty
+       message row is mounted (it is the live region) and must cost nothing, so with no message the
+       group states no row gap and the empty row is zero tall. */
+    <Layout rowGap={message ? 'tight' : undefined}>
+      <label className={styles.hidden} htmlFor={id}>
+        {label}
+        {optional ? ' (optional)' : null}
+      </label>
+      {hint ? (
+        <p className={styles.hint} id={hint.id}>
+          {hint.text}
+        </p>
+      ) : null}
       {children}
-      <Cluster className={styles.message} id={messageId} colGap="tight" align="center" nowrap>
-        {message ? <Icon name="close-circle" /> : null}
-        <span>{message}</span>
-      </Cluster>
+      {validation ? (
+        <div className={styles.message} id={validation.id} aria-live="polite">
+          {message ? (
+            <Cluster colGap="tight" align="center" nowrap>
+              <Icon name="close-circle" />
+              <span>{message}</span>
+            </Cluster>
+          ) : null}
+        </div>
+      ) : null}
     </Layout>
   );
 }
 
+/** A field's message for its current value: empty, malformed, or none. Blur and submit share it. */
+function messageFor(spec: FieldSpec, control: HTMLInputElement | HTMLTextAreaElement): string {
+  if (control.value.trim() === '') return spec.empty;
+  if (control instanceof HTMLInputElement && control.validity.typeMismatch) {
+    return 'Enter a valid email';
+  }
+  return '';
+}
+
+/** The reassurance line beside (or under) the submit. One sentence, said once, and kept at the
+    submit by ruling (owner, 7 Oct 2026): the promise belongs where the decision to send is made. */
+const CAPTION = 'We reply within a business day.';
+
+/** The validating text fields, keyed by the message slot each one fills. */
+type FieldKey = keyof FieldMessages;
+
 /**
- * EnquiryForm — the site's shared enquiry behavior for the three-field enquiry/audit set and
- * five-field contact set. Validation is deliberately blur-only; submission keeps uncontrolled
- * values mounted on failure and replaces the form on success.
+ * One validating field, declared once. Name, email and the free-text question used to be written
+ * out per variant — the compact branch was a near-verbatim copy of contact's Name and Email blocks
+ * and their blur validators — so a change to one could drift from the other. Each variant is now a
+ * LIST of these, and one renderer turns every entry into the same FieldGroup + Input.
+ *
+ * `name` is the posted field name, which differs by variant (contact posts `clientEmail`, the
+ * enquiry sets post `email`); everything a person sees is the spec's.
+ */
+type FieldSpec = {
+  key: FieldKey;
+  label: string;
+  name: string;
+  type?: 'text' | 'email' | 'tel';
+  as?: 'textarea';
+  autoComplete?: string;
+  /** The message on an empty blur. */
+  empty: string;
+};
+
+const FIELD = {
+  name: (name: string): FieldSpec => ({
+    key: 'name',
+    label: 'Name',
+    name,
+    autoComplete: 'name',
+    empty: 'Enter your name',
+  }),
+  email: (name: string): FieldSpec => ({
+    key: 'email',
+    label: 'Email',
+    name,
+    type: 'email',
+    autoComplete: 'email',
+    empty: 'Enter your email',
+  }),
+  company: {
+    key: 'company',
+    label: 'Company',
+    name: 'clientCompany',
+    autoComplete: 'organization',
+    empty: 'Enter your company',
+  } satisfies FieldSpec,
+  phone: {
+    key: 'contact',
+    label: 'Phone',
+    name: 'clientContact',
+    type: 'tel',
+    autoComplete: 'tel',
+    empty: 'Enter your phone number',
+  } satisfies FieldSpec,
+  work: {
+    key: 'work',
+    label: 'What are you working on?',
+    name: 'what_are_you_working_on',
+    as: 'textarea',
+    empty: 'Add a line about it',
+  } satisfies FieldSpec,
+  message: {
+    key: 'comments',
+    label: 'What would you like to talk about?',
+    name: 'clientComments',
+    as: 'textarea',
+    empty: 'Add a message',
+  } satisfies FieldSpec,
+};
+
+/**
+ * EnquiryForm — the site's shared enquiry behavior for the three-field enquiry/audit set, the
+ * five-field contact set and the three-field compact set. Validation is deliberately blur-only;
+ * submission keeps uncontrolled values mounted on failure and replaces the form on success.
+ *
+ * A pattern in its own right, not CtaSection's part: it fills whatever track it is placed in, down
+ * to its own floor (`--enq-form-min-inline`), so it reads the same in CtaSection's form column, in
+ * ContentSection's `media` copy column beside a photograph, and — with `width="measure"` — as a
+ * centred block under a centred head.
+ *
+ * Blue is its recurring foreground accent (visual-direction § 4, owner 6 Oct 2026): the trailing
+ * arrow on the submit, the mark leading the caption, the label of the field being written in, the
+ * rule under that field, the success mark and the numerals of the next steps. No ground is blue.
  */
 export function EnquiryForm(props: EnquiryFormProps) {
   const instanceId = useId();
@@ -147,29 +324,15 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
   const variant = props.variant ?? 'enquiry';
   const onSubmitted = props.onSubmitted;
-  const urlLabel =
-    props.urlLabel ??
-    (variant === 'audit' ? 'URL of the site to audit' : 'Site or product URL');
+  const urlLabel = props.urlLabel ?? (variant === 'audit' ? 'Site to audit' : 'Website');
+  const appearance = props.fields === 'line' ? 'line' : 'box';
   const submitting = lifecycle === 'submitting';
+  const invalidCount = Object.values(messages).filter(Boolean).length;
+  const bounds = props.width === 'measure' ? styles.measure : styles.track;
 
-  const ids = {
-    name: `${instanceId}-name`,
-    nameMessage: `${instanceId}-name-msg`,
-    company: `${instanceId}-company`,
-    companyMessage: `${instanceId}-company-msg`,
-    email: `${instanceId}-email`,
-    emailMessage: `${instanceId}-email-msg`,
-    contact: `${instanceId}-contact`,
-    contactMessage: `${instanceId}-contact-msg`,
-    comments: `${instanceId}-comments`,
-    commentsMessage: `${instanceId}-comments-msg`,
-    work: `${instanceId}-work`,
-    workMessage: `${instanceId}-work-msg`,
-    url: `${instanceId}-url`,
-    urlFlag: `${instanceId}-url-flag`,
-    urlMessage: `${instanceId}-url-msg`,
-    status: `${instanceId}-status`,
-  };
+  const idFor = (key: string) => `${instanceId}-${key}`;
+  const statusId = idFor('status');
+  const urlId = idFor('url');
 
   useEffect(() => {
     if (lifecycle !== 'success') return;
@@ -192,6 +355,26 @@ export function EnquiryForm(props: EnquiryFormProps) {
     const submitter = (event.nativeEvent as SubmitEvent).submitter;
     const fallbackSubmitter =
       event.currentTarget.querySelector<HTMLButtonElement>('button[type="submit"]');
+    /* Validate before sending (r7-form): every required field gets its message at once, the
+       line beside the submit says how many need a look, and focus moves to the first of them so a
+       keyboard or screen-reader user lands on the problem with its name and its message. */
+    const form = event.currentTarget;
+    const next: FieldMessages = { ...EMPTY_MESSAGES };
+    let firstInvalid: HTMLElement | null = null;
+    for (const spec of rows.flatMap((row) => (row === 'url' ? [] : row))) {
+      const control = form.elements.namedItem(spec.name);
+      if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement))
+        continue;
+      next[spec.key] = messageFor(spec, control);
+      if (next[spec.key] && !firstInvalid) firstInvalid = control;
+    }
+    if (firstInvalid) {
+      setMessages(next);
+      setLifecycle('invalid');
+      firstInvalid.focus();
+      return;
+    }
+
     (submitter instanceof HTMLElement ? submitter : fallbackSubmitter)?.focus();
 
     setLifecycle('submitting');
@@ -207,26 +390,144 @@ export function EnquiryForm(props: EnquiryFormProps) {
     }
   }
 
+  /* The rows, in order. A row is one field or a PAIR side by side: compact pairs name and email,
+     contact pairs name with company and email with phone (cmp-form final round — stacked one per
+     row, the five-field set was 1021 tall and ran past the fold). A pair sits side by side wherever
+     the form's own width holds two 192px tracks (`fit`, `xs`) and stacks where it does not, so the
+     form decides from its track, not from the viewport. The optional link field is a row of its
+     own at the end of the enquiry and audit sets. */
+  type Row = readonly FieldSpec[] | 'url';
+  const rows: Row[] =
+    variant === 'contact'
+      ? [
+          [FIELD.name('clientName'), FIELD.company],
+          [FIELD.email('clientEmail'), FIELD.phone],
+          [FIELD.message],
+        ]
+      : variant === 'compact'
+        ? [[FIELD.name('name'), FIELD.email('email')], [FIELD.work]]
+        : [[FIELD.email('email')], [FIELD.work], 'url'];
+
+  /** One validating field, from its spec. The only place a FieldGroup + Input pair is written. */
+  function renderField(spec: FieldSpec) {
+    const id = idFor(spec.key);
+    const messageId = idFor(`${spec.key}-msg`);
+    const shared = {
+      id,
+      name: spec.name,
+      autoComplete: spec.autoComplete,
+      /* The visible cue (r7-form): the label's own words, since the label is hidden. */
+      placeholder: spec.label,
+      required: true,
+      disabled: submitting,
+      appearance,
+      invalid: Boolean(messages[spec.key]),
+      'aria-describedby': messageId,
+    } as const;
+    const validate = (control: HTMLInputElement | HTMLTextAreaElement) =>
+      setMessage(spec.key, messageFor(spec, control));
+
+    return (
+      <FieldGroup
+        key={spec.key}
+        id={id}
+        label={spec.label}
+        validation={{ id: messageId, message: messages[spec.key] }}
+      >
+        {spec.as === 'textarea' ? (
+          <Input {...shared} as="textarea" onBlur={(event) => validate(event.currentTarget)} />
+        ) : (
+          <Input
+            {...shared}
+            type={spec.type ?? 'text'}
+            onBlur={(event) => validate(event.currentTarget)}
+          />
+        )}
+      </FieldGroup>
+    );
+  }
+
+  function renderRow(row: Row) {
+    if (row === 'url') {
+      return (
+        <FieldGroup key="url" id={urlId} label={urlLabel} optional>
+          <Input
+            id={urlId}
+            type="url"
+            inputMode="url"
+            name="url"
+            autoComplete="url"
+            placeholder={`${urlLabel} (optional)`}
+            appearance={appearance}
+            disabled={submitting}
+            onBlur={(event) => {
+              event.currentTarget.value = normaliseUrl(event.currentTarget.value);
+            }}
+          />
+        </FieldGroup>
+      );
+    }
+    const [first, second] = row;
+    if (!first) return null;
+    if (!second) return renderField(first);
+    /* `text` both ways: the pair's seam is the form's own field step, so name beside email and
+       name over email (stacked in a narrow track) are the same distance apart as every other row. */
+    return (
+      <Layout key={first.key} columns="fit" minTrack="xs" colGap="text" rowGap="text">
+        {row.map(renderField)}
+      </Layout>
+    );
+  }
+
   if (lifecycle === 'success') {
+    const steps = props.nextSteps ?? [];
     return (
       <div
-        className={styles.success}
+        className={cx(styles.success, bounds)}
         role="status"
         aria-live="polite"
         tabIndex={-1}
         ref={successRef}
       >
-        <Layout rowGap="block">
-          <hr className={styles.successRule} />
-          <h3 className={styles.successHeading}>One reply, within a working day.</h3>
-          <Cluster colGap="tight" align="center" nowrap>
-            <Icon name="check-circle" />
-            <p className={styles.successBody}>
-              {variant === 'contact'
-                ? 'Thanks — we have your message.'
-                : 'Thanks — we have your enquiry.'}
-            </p>
-          </Cluster>
+        {/* The moment the form earns, in reading order: the mark, the THANKS at title scale, then
+            what happens next — the caller's steps, numbered in blue, when it passes them. */}
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <span className={styles.successMark}>
+              <Icon name="check-circle" size="xl" />
+            </span>
+            <Layout rowGap="text">
+              <h3 className={styles.successHeading}>
+                {variant === 'contact'
+                  ? 'Thanks. We have your message.'
+                  : 'Thanks. We have your enquiry.'}
+              </h3>
+              <p className={styles.successBody}>
+                {steps.length > 0
+                  ? 'Here is what happens next.'
+                  : 'We will reply to the address you gave us.'}
+              </p>
+            </Layout>
+          </Layout>
+          {steps.length > 0 ? (
+            <Layout as="ol" rowGap="block">
+              {steps.map((step, index) => (
+                <li key={step.label}>
+                  <Cluster nowrap colGap="text" align="baseline">
+                    <span aria-hidden="true" className={styles.stepMarker}>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <Layout rowGap="inline" className={styles.stepContent}>
+                      <span className={styles.stepLabel}>{step.label}</span>
+                      {step.detail ? (
+                        <span className={styles.stepDetail}>{step.detail}</span>
+                      ) : null}
+                    </Layout>
+                  </Cluster>
+                </li>
+              ))}
+            </Layout>
+          ) : null}
           {/* The scheduling link survives the swap. It used to, for free, because CtaSection
               rendered it outside the form; now the form owns it, so the success view carries it
               on — a sent enquiry does not make "talk sooner" any less of an offer. */}
@@ -235,8 +536,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
               <Button
                 as="a"
                 href={props.scheduleHref}
-                emphasis="link"
-                tone="neutral"
+                emphasis="ghost"
+                tone="primary"
                 size="lg"
                 icon={<Icon name="arrow-right" />}
               >
@@ -256,11 +557,103 @@ export function EnquiryForm(props: EnquiryFormProps) {
         : 'Sending your enquiry.'
       : lifecycle === 'error'
         ? 'That did not send. Your answers are still here — try again.'
-        : '';
+        : lifecycle === 'invalid' && invalidCount > 0
+          ? invalidCount === 1
+            ? 'One answer needs a look before this can send'
+            : `${invalidCount} answers need a look before this can send`
+          : '';
+
+  const submitLabel =
+    variant === 'audit'
+      ? 'Request free audit'
+      : variant === 'contact'
+        ? 'Send message'
+        : 'Send enquiry';
+
+  /* The submit is the converting action, so it carries NO arrow on any variant (owner, 7 Oct 2026:
+     a solid primary never takes one — the label carries the ask). Its partner, "See available
+     times", is a ghost with the trailing arrow, because it navigates.
+     The submit is the blue solid: the form sits in the close, which carries the page's one main
+     action (r7-buttons, 8 Oct 2026 — there is no ink solid). */
+  const submitButton = (
+    <Button type="submit" emphasis="solid" tone="primary" size="lg" busy={submitting}>
+      {submitLabel}
+    </Button>
+  );
+
+  const scheduleLink = props.scheduleHref ? (
+    <Button
+      as="a"
+      href={props.scheduleHref}
+      emphasis="ghost"
+      tone="primary"
+      size="lg"
+      icon={<Icon name="arrow-right" />}
+    >
+      See available times
+    </Button>
+  ) : null;
+
+  /* The caption line, led by a blue mark. The mark is the clock at rest — the sentence is a
+     promise about time — and the danger triangle when the line has become an error. The
+     paragraph is the live region, so the status is announced where the reassurance sat. */
+  const error = lifecycle === 'error' || (lifecycle === 'invalid' && invalidCount > 0);
+  const captionLine = (
+    <Cluster nowrap colGap="tight" align="start" className={styles.note}>
+      <span className={cx(styles.noteMark, error && styles.statusError)}>
+        <Icon name={error ? 'danger-triangle' : 'clock-circle'} />
+      </span>
+      <p
+        className={cx(styles.noteText, error && styles.statusError)}
+        id={statusId}
+        role="status"
+        aria-live="polite"
+      >
+        {status || CAPTION}
+      </p>
+    </Cluster>
+  );
+
+  /* The action row's three shapes.
+
+       full     the submit across the track (a one-track Layout stretches it), the scheduling link
+                under it, then the line — every row at `text`.
+       compact  the submit and ONE line beside it: the caption at rest, the status once there is
+                one, in the same live region. The row WRAPS: the line asks for at least
+                --enq-note-min-inline beside the submit, and in a track that cannot give it that (a
+                phone column, a 392 card track) it drops under the submit at `text` and takes the
+                whole width, rather than wrapping to three ragged lines beside a 48px button.
+       enquiry  the submit and the scheduling link in ONE row — two ways to take the same next
+                step, so they group, at `block`; wrapped on a narrow column the link drops under
+                the submit at `block` too, as CtaSection's and CtaRow's action rows do (cmp-cta
+                final fix round: at `tight` the two stacked ~12 apart at 390 while the K offer
+                beside them stacked ~30 — one stacked-action gap in every variant). The line under
+                them at `text`. Both lg (48, clears the touch floor). */
+  const actions =
+    props.submit === 'full' ? (
+      <Layout rowGap="text">
+        {submitButton}
+        {scheduleLink}
+        {captionLine}
+      </Layout>
+    ) : variant === 'compact' ? (
+      <Cluster colGap="block" rowGap="text" align="center">
+        {submitButton}
+        {captionLine}
+      </Cluster>
+    ) : (
+      <Layout rowGap="text">
+        <Cluster rowGap="block" colGap="block" align="center">
+          {submitButton}
+          {scheduleLink}
+        </Cluster>
+        {captionLine}
+      </Layout>
+    );
 
   return (
     <form
-      className={styles.form}
+      className={cx(styles.form, bounds)}
       action={props.action}
       method="post"
       noValidate
@@ -274,267 +667,13 @@ export function EnquiryForm(props: EnquiryFormProps) {
       aria-busy={submitting || undefined}
       onSubmit={handleSubmit}
     >
+      {/* Compact by nesting (r7-form): the fields are one group at `text` — with no labels and no
+          reserved message lines, field to field is the 16 between two controls — and the actions
+          sit a `block` below that group, so the submit reads as the end of the form and not as one
+          more field. A message, when there is one, opens its own `tight` under its field. */}
       <Layout rowGap="block">
-        <Layout rowGap="text">
-          {variant === 'contact' ? (
-            <>
-              <FieldGroup
-                id={ids.name}
-                messageId={ids.nameMessage}
-                label="Your Name"
-                message={messages.name}
-              >
-                <Input
-                  id={ids.name}
-                  name="clientName"
-                  autoComplete="name"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.name)}
-                  aria-describedby={ids.nameMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'name',
-                      event.currentTarget.value.trim() === '' ? 'Enter your name.' : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.company}
-                messageId={ids.companyMessage}
-                label="Company Name"
-                message={messages.company}
-              >
-                <Input
-                  id={ids.company}
-                  name="clientCompany"
-                  autoComplete="organization"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.company)}
-                  aria-describedby={ids.companyMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'company',
-                      event.currentTarget.value.trim() === '' ? 'Enter your company name.' : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.email}
-                messageId={ids.emailMessage}
-                label="Email Address"
-                message={messages.email}
-              >
-                <Input
-                  id={ids.email}
-                  type="email"
-                  name="clientEmail"
-                  autoComplete="email"
-                  placeholder="you@company.com"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.email)}
-                  aria-describedby={ids.emailMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'email',
-                      event.currentTarget.value.trim() === '' ||
-                        event.currentTarget.validity.typeMismatch
-                        ? 'That does not look like an email address.'
-                        : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.contact}
-                messageId={ids.contactMessage}
-                label="Contact Number"
-                message={messages.contact}
-              >
-                <Input
-                  id={ids.contact}
-                  type="tel"
-                  name="clientContact"
-                  autoComplete="tel"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.contact)}
-                  aria-describedby={ids.contactMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'contact',
-                      event.currentTarget.value.trim() === ''
-                        ? 'Enter your contact number.'
-                        : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.comments}
-                messageId={ids.commentsMessage}
-                label="Let’s talk about your product"
-                message={messages.comments}
-              >
-                <Input
-                  as="textarea"
-                  id={ids.comments}
-                  name="clientComments"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.comments)}
-                  aria-describedby={ids.commentsMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'comments',
-                      event.currentTarget.value.trim() === ''
-                        ? 'Tell us about your product.'
-                        : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-            </>
-          ) : (
-            <>
-              <FieldGroup
-                id={ids.email}
-                messageId={ids.emailMessage}
-                label="Email address"
-                message={messages.email}
-              >
-                <Input
-                  id={ids.email}
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  placeholder="you@company.com"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.email)}
-                  aria-describedby={ids.emailMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'email',
-                      event.currentTarget.value.trim() === '' ||
-                        event.currentTarget.validity.typeMismatch
-                        ? 'That does not look like an email address.'
-                        : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.work}
-                messageId={ids.workMessage}
-                label="What are you working on?"
-                message={messages.work}
-              >
-                <Input
-                  as="textarea"
-                  id={ids.work}
-                  name="what_are_you_working_on"
-                  required
-                  disabled={submitting}
-                  invalid={Boolean(messages.work)}
-                  aria-describedby={ids.workMessage}
-                  onBlur={(event) =>
-                    setMessage(
-                      'work',
-                      event.currentTarget.value.trim() === ''
-                        ? 'Tell us what you are working on.'
-                        : '',
-                    )
-                  }
-                />
-              </FieldGroup>
-
-              <FieldGroup
-                id={ids.url}
-                messageId={ids.urlMessage}
-                label={urlLabel}
-                flag="Optional"
-                flagId={ids.urlFlag}
-                message={messages.url}
-              >
-                <Input
-                  id={ids.url}
-                  type="url"
-                  inputMode="url"
-                  name="url"
-                  disabled={submitting}
-                  invalid={Boolean(messages.url)}
-                  aria-describedby={`${ids.urlFlag} ${ids.urlMessage}`}
-                  onBlur={(event) =>
-                    setMessage(
-                      'url',
-                      validHttpsUrl(event.currentTarget.value.trim())
-                        ? ''
-                        : 'Use a full address beginning with https://.',
-                    )
-                  }
-                />
-              </FieldGroup>
-            </>
-          )}
-        </Layout>
-
-        <p
-          className={
-            lifecycle === 'error' ? `${styles.status} ${styles.statusError}` : styles.status
-          }
-          id={ids.status}
-          role="status"
-          aria-live="polite"
-        >
-          {status}
-        </p>
-
-        <Layout rowGap="text">
-          {/* Submit and the scheduling link in ONE row: two ways to take the same next step, so
-              they group. `block` between them, not `tight` — the link is the alternative to the
-              submit, not a part of it — and the row wraps on a narrow column, where the link drops
-              under the submit at `tight`.
-
-              Both lg. The submit is lg because it stands beside 44px phone fields and a 40px
-              button under them read as the smaller thing; the link takes the same size so the two
-              labels set at one type size across the row. lg is 48 and clears the touch floor, so
-              neither needs extendHitArea. The link keeps `neutral`: the submit is the one primary
-              ask, and blue on both would make it two. */}
-          <Cluster rowGap="tight" colGap="block" align="center">
-            <Button type="submit" size="lg" busy={submitting}>
-              {variant === 'audit'
-                ? 'Request free audit'
-                : variant === 'contact'
-                  ? 'Send message'
-                  : 'Send enquiry'}
-            </Button>
-            {props.scheduleHref ? (
-              <Button
-                as="a"
-                href={props.scheduleHref}
-                emphasis="link"
-                tone="neutral"
-                size="lg"
-                icon={<Icon name="arrow-right" />}
-              >
-                See available times
-              </Button>
-            ) : null}
-          </Cluster>
-          <p className={styles.caption}>
-            We reply to the address you give us, and use it for nothing else.
-          </p>
-        </Layout>
+        <Layout rowGap="text">{rows.map(renderRow)}</Layout>
+        {actions}
       </Layout>
 
       {props.variant === 'contact' ? null : (

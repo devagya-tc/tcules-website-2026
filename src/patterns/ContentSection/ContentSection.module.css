@@ -4,7 +4,14 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .heading .lead .text */
+   Classes: .eyebrow .mark .heading .headingMd .headingDisplay .asideFill .lead .leadBeside .centred
+   .centredLg .itemsCentredLg .bodyCentred .bodyCentredLg .text .textureLg .photoTrack .photo
+   .photoLeads .photoToCopy
+
+   The @media queries swap a role, a crop or an alignment, never a distance: .leadBeside (the
+   lead's ROLE follows the arrangement, and the beside arrangement only exists from 1024),
+   .textureLg (the media split's texture has no phone form), .photo (4:3 above the copy, 4:5 beside
+   it), the `center-lg` classes (centred from 1024 only) and .asideFill (its phone crop). */
 
 .eyebrow {
   font: var(--csec-eyebrow-text);
@@ -27,11 +34,78 @@
   max-inline-size: var(--csec-heading-measure);
 }
 
+/* `headingSize="md"`: the same h2 at the h3 role, for a band whose large thing is not its heading
+   (the S stats band). A type role swap, never a distance. */
+.headingMd {
+  font: var(--csec-heading-text-md);
+  letter-spacing: var(--csec-heading-tracking-md);
+}
+
 .lead {
   font: var(--csec-lead-text);
   text-wrap: var(--text-running-wrap);
   color: var(--csec-lead-ink);
   max-inline-size: var(--csec-lead-measure);
+}
+
+/* The lead in a split `beside` head track steps from --text-lead to --text-body-lg (visual-direction
+   § 7.1: "Section head (beside) — --text-body-lg, 3 to 4 lines"). The head track is 381 wide at
+   1470, and a 20px lead there sets about five words a line; the 18px role sets about seven and keeps
+   the H-beside-aside head at 240 (§ 1.4). From 1024 only, because below it the band IS the stacked
+   band and takes the stacked lead — the collapse stays identical rather than similar. The TSX emits
+   the class only when the band actually splits, so a degraded beside band never takes it. */
+@media (min-width: 1024px) {
+  .leadBeside {
+    font: var(--csec-lead-text-beside);
+  }
+}
+
+/* A centred head (§ 3.5): each part's TEXT centred inside its own measure. The parts themselves are
+   centred in the column by the head Layout's justifyItems — this rule only sets the lines. */
+.centred {
+  text-align: center;
+}
+
+/* Centred, a ragged lead leaves a one- or two-word last line on the axis ("after ours.", "on it.");
+   balanced, its lines step evenly about it — PageHero's centred lead, the same reading
+   (page-showcase fix round 1). */
+.lead.centred {
+  text-wrap: var(--text-title-wrap);
+}
+
+/* `align="center-lg"`: the same centring, from 1024 only. Below it the band is start-aligned like
+   the body it sits over (a thread down the start edge, stacked lists). `justify-self` on the head's
+   and the body's rows is the head Layout's `justifyItems="center"` restated at one breakpoint —
+   placement inside the container's own grid, never a distance. */
+@media (min-width: 1024px) {
+  .centredLg {
+    text-align: center;
+  }
+
+  .lead.centredLg {
+    text-wrap: var(--text-title-wrap);
+  }
+
+  .itemsCentredLg > *,
+  .bodyCentredLg > * {
+    justify-self: center;
+  }
+
+  .bodyCentredLg > * {
+    inline-size: 100%;
+  }
+}
+
+/* A centred head's body, centred AS A BLOCK. The body Layout centres each row (justifyItems), and
+   this gives every row the column as its width, so a row with no cap of its own (a card set, a
+   table) still spans the column while a row that caps itself (ContentSectionText around an
+   accordion, a centred CtaRow) sits at its cap in the middle. Without it, a centred grid item
+   shrinks to its content. Sizing, not arrangement and not spacing: no margin, no display, and the
+   text inside each row keeps its own start alignment (§ 3.5). A phone scroll row overrides this
+   for itself (Layout: it always spans its track and bleeds through the gutter), so a centred head
+   never moves a row off the column edge. */
+.bodyCentred > * {
+  inline-size: 100%;
 }
 
 /* The reading column for running text in the body. Prose has no measure by ruling — the caller
@@ -40,8 +114,109 @@
    this element, never inside it, so it keeps the full track.
 
    `ch` resolves against this element's own font, which is the inherited body composite — the
-   same one Prose sets — so 68ch here is 68ch of the text inside it. The cap is a ceiling, not a
+   same one Prose sets — so 75ch here is 75ch of the text inside it. The cap is a ceiling, not a
    width: in `beside`'s narrower track at 1024 the track is the tighter of the two and wins. */
 .text {
   max-inline-size: var(--csec-body-measure);
+}
+
+/* The `media` arrangement's texture slot, shown from 1024 only (visual-direction § 6.3: the B band's
+   `counterweight` has no form below 1024, because the photo moves above the copy and the corner it
+   weighs against is gone). Visibility, not arrangement and not spacing: the wrapper is an empty,
+   unpositioned block, so showing it moves nothing and the Texture inside still fills the Section. */
+.textureLg {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .textureLg {
+    display: block;
+  }
+}
+
+/* The display head. The heading steps to the display role on the display measure, set by the media
+   split's head and by `headingSize="display"` (cmp-feature); after .heading and .headingMd at equal
+   specificity, so it wins by order. A role swap, not a size: the display role re-declares itself at
+   1023 and 767 like every title role, so it needs no breakpoint here. (The media split's accent
+   eyebrow went in page-product-design fix round 1: the blue is the mark on every band.) */
+.headingDisplay {
+  font: var(--csec-heading-text-display);
+  letter-spacing: var(--csec-heading-tracking-display);
+  max-inline-size: var(--csec-heading-measure-display);
+}
+
+/* The media split's photograph: a track and a box (see MediaSplit in the TSX).
+
+   .photoTrack is the grid item. It stretches to the row (`align-self`, argued in MediaSplit: the
+   photo fills the row while the copy is centred in it, two placements one `align` cannot state) and
+   it is an inline-size container, so the box inside can be capped against its own width.
+
+   .photo is the box. Its ratio is the FLOOR — `aspect-ratio` sets its height, and its contribution
+   to the row, whenever the copy is shorter. A taller copy column stretches the track and the box
+   follows it (`block-size: 100%`) up to a CEILING, `max-block-size` in the track's own width, so a
+   narrow photo track at 1024 never becomes a 1 : 2 strip. The image fills the box (Media
+   `fit="fill"`). Sizing, not arrangement: nothing here places anything or states a distance. Ratio
+   and ceiling follow the ARRANGEMENT, which changes at 1024 — 4:3 above the copy, then 4:5 in the
+   copy-led 5 or 6:5 in the photo-led 7 (.photoLeads) beside it. */
+.photoTrack {
+  align-self: stretch;
+  container-type: inline-size;
+}
+
+/* Both sizes are stated: with only a block size, `aspect-ratio` derives the box's WIDTH from the
+   stretched height and the photo overflows its track (500 in a 477 track at 1440). With both, the
+   ratio applies only while the height is still auto — the row's sizing pass, where it is the floor. */
+.photo {
+  inline-size: 100%;
+  block-size: 100%;
+  aspect-ratio: var(--csec-photo-ratio);
+}
+
+@media (min-width: 1024px) {
+  .photo {
+    aspect-ratio: var(--csec-photo-ratio-beside);
+    max-block-size: calc(100cqi * var(--csec-photo-stretch-max-beside));
+  }
+
+  .photoLeads {
+    aspect-ratio: var(--csec-photo-ratio-lead);
+    max-block-size: calc(100cqi * var(--csec-photo-stretch-max-lead));
+  }
+
+  /* `media.height: 'copy'` (cmp-process-stats): the copy-led photo runs the copy column's height
+     and stops at 2:3 — past it the photo keeps the eyebrow's line with air beneath. */
+  .photoToCopy {
+    max-block-size: calc(100cqi * var(--csec-media-ceiling-lg));
+  }
+}
+
+/* asideFill: the aside's box. It fills its grid area (the head group's 1fr row, which the stretched
+   track gives the height the body leaves), so a `fit="fill"` photograph inside it ends on the body's
+   last line. The floor keeps it a photograph when the body is short. `contain: size` takes the
+   photograph's own height out of the track's sizing — without it the image's intrinsic height set
+   the head track and the aside ran past the body again. Sizing only. */
+.asideFill {
+  contain: size;
+  block-size: 100%;
+  min-block-size: var(--csec-aside-min-size);
+}
+
+/* Below 1024 the band is stacked and the aside has no body beside it to end on: it takes a ratio of
+   its own instead of the floor, which letterboxed it to 4.4:1 at 768 (cmp-services fix round 1).
+   `contain: size` stays, so the photograph's intrinsic height still sets nothing; the ratio sizes
+   the box from its width. From 768 to 1023 the panorama (a 704 × 469 3:2 outweighed the six cards
+   under it); below 768 the phone's 4:3, B's and K's (page-product-design fix round 1: at 326 the
+   panorama was a 326 × 140 strip that showed a slice of the scene). An art-direction swap. */
+@media (max-width: 1023.98px) {
+  .asideFill {
+    block-size: auto;
+    min-block-size: 0;
+    aspect-ratio: var(--csec-aside-ratio);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .asideFill {
+    aspect-ratio: var(--csec-aside-ratio-phone);
+  }
 }

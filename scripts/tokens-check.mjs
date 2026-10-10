@@ -24,20 +24,36 @@ const CONSUMER_GLOBS = ['src/**/*.module.css', 'src/app/globals.css', 'src/style
  *   there is no finite set of classes to enumerate. Each is pinned to `initial` when unused so
  *   the var() fallback chain resolves to a single track rather than inheriting an ancestor's.
  *
- * --cmark-{src,ratio,ratio-root,correction}  written by src/components/ClientMark/ClientMark.tsx.
+ * --cmark-{src,ratio,ratio-root,correction,optical}  written by src/components/ClientMark/ClientMark.tsx.
  *   Per-asset data: the client's SVG URL and its intrinsic ratio are continuous values from the
  *   CMS, so they cannot be classes. √ratio is computed there rather than with CSS sqrt(), which
  *   is below Next 16's Chrome 111 floor.
+ *
+ * --media-focus  written by src/components/Media/Media.tsx from the record's focal point (or the
+ *   placement's `focus` override). Per-asset and continuous — any point 0 to 1 on two axes — so it
+ *   cannot be a class. Media.module.css also declares a local default on .fill and .crop (the
+ *   stylesheet's anchor where the record names none), but the inline write is the source, and it is
+ *   listed here so the check does not depend on that default happening to exist.
  */
 const JS_INJECTED = new Set([
   '--tmpl-base',
   '--tmpl-md',
   '--tmpl-lg',
   '--tmpl-xl',
+  '--view-base', // Layout scroll mode's per-view counts (viewVars in Layout.tsx)
+  '--view-md',
+  '--view-lg',
+  '--view-xl',
+  '--slider-count', // Slider: the slide count, and the scroll progress it writes on scroll
+  '--slider-progress',
+  '--slider-bleed', // Slider `bleed`: the measured distance from its end edge to the viewport's
+  '--blockcardset-count', // BlockCardSet: the card count, for the phone scroll row's rail thumb
   '--cmark-src',
   '--cmark-ratio',
   '--cmark-ratio-root',
   '--cmark-correction',
+  '--cmark-optical',
+  '--media-focus',
 ]);
 
 const read = (f) => readFileSync(f, 'utf8');
@@ -47,7 +63,8 @@ const strip = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
    line: a 20-line header comment shifts every finding below it by 20. */
 const stripKeepLines = (css) =>
   css.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
-const definedIn = (css) => new Set([...strip(css).matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]));
+const definedIn = (css) =>
+  new Set([...strip(css).matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]));
 const usedIn = (css) => [...strip(css).matchAll(/var\(\s*(--[\w-]+)/g)].map((m) => m[1]);
 const lineOf = (css, needle) => css.slice(0, css.indexOf(needle)).split('\n').length;
 
@@ -93,12 +110,16 @@ for (const file of consumers) {
 
   for (const v of new Set(usedIn(css))) {
     if (!tokens.has(v) && !local.has(v) && !JS_INJECTED.has(v)) {
-      problems.push(`${file}:${lineOf(css, v)}  reads ${v}, which no token defines and this file does not declare`);
+      problems.push(
+        `${file}:${lineOf(css, v)}  reads ${v}, which no token defines and this file does not declare`,
+      );
     }
   }
 
   for (const hex of new Set(strip(css).match(/#[0-9a-fA-F]{3,8}\b/g) ?? [])) {
-    problems.push(`${file}:${lineOf(css, hex)}  writes the literal colour ${hex} — colour belongs to the token layer`);
+    problems.push(
+      `${file}:${lineOf(css, hex)}  writes the literal colour ${hex} — colour belongs to the token layer`,
+    );
   }
 
   /**
@@ -215,6 +236,57 @@ for (const file of tokenFiles.filter((f) => f.includes('/components/'))) {
   }
 }
 
+/**
+ * THE PERIDOT GATE (visual-direction § 4.4, 6 Oct 2026).
+ *
+ * On the website peridot has exactly two uses: `::selection` in globals.css, and the carried item
+ * inside an illustration. Everything else it used to paint — a `<mark>` ground, a quote rule on
+ * blue, an unused --sec-highlight pair — read as a highlighter, and the website does not highlight
+ * text. So nothing outside primitives.css may READ the ramp:
+ *   · every token file except primitives.css (whose declarations of the ramp stay), so a component
+ *     layer cannot alias it — `--x-mark: var(--color-peridot-300)` is consumption;
+ *   · every consumer stylesheet (*.module.css, globals.css, reset.css);
+ *   · every .ts/.tsx under src/, so an inline style cannot route around the CSS check.
+ * The one exemption is a declaration inside a rule whose selector is `::selection`, in globals.css.
+ * Comments are stripped first: a comment that names peridot is not consumption. Illustration SVGs
+ * are files in public/ and are not scanned, which is the exemption § 4.4 asks for.
+ */
+const PERIDOT = /var\(\s*--color-peridot-/;
+const peridotFiles = [
+  ...tokenFiles.filter((f) => !f.endsWith('/primitives.css')),
+  ...consumers,
+  ...globSync('src/**/*.{ts,tsx}'),
+].sort();
+for (const file of peridotFiles) {
+  const isCss = file.endsWith('.css');
+  /* Strip comments, keeping line numbers. TS/TSX also loses `//` line comments — a crude strip,
+     whose only failure is missing a peridot var() written after a `//` inside a string. */
+  let code = stripKeepLines(read(file));
+  if (!isCss) code = code.replace(/(^|[^:'"`])\/\/[^\n]*/g, (m, pre) => pre);
+  if (!PERIDOT.test(code)) continue;
+  if (isCss) {
+    for (const m of code.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      if (!PERIDOT.test(m[2])) continue;
+      const selector = m[1].trim().replace(/\s+/g, ' ');
+      if (file === 'src/app/globals.css' && selector === '::selection') continue;
+      const line = code.slice(0, m.index + m[0].search(PERIDOT)).split('\n').length;
+      problems.push(
+        `${file}:${line}  reads the peridot ramp in \`${selector}\` — peridot on the website is ` +
+          `::selection (globals.css) and an illustration's carried item only (visual-direction § 4.4)`,
+      );
+    }
+  } else {
+    code.split('\n').forEach((l, i) => {
+      if (PERIDOT.test(l)) {
+        problems.push(
+          `${file}:${i + 1}  reads the peridot ramp from script — peridot on the website is ` +
+            `::selection (globals.css) and an illustration's carried item only (visual-direction § 4.4)`,
+        );
+      }
+    });
+  }
+}
+
 console.log(
   `tokens:check — ${tokens.size} tokens defined across ${tokenFiles.length} files, ` +
     `${consumers.length} consumer stylesheets checked`,
@@ -227,5 +299,5 @@ if (problems.length) {
 }
 
 console.log(
-  'all custom properties resolve; every component layer is registered; no literal colours or raw distances outside the token layer',
+  'all custom properties resolve; every component layer is registered; no literal colours or raw distances outside the token layer; peridot read only by ::selection',
 );

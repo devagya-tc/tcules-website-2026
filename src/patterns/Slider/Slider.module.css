@@ -1,0 +1,216 @@
+/* Slider — the progress rail, the row's own focus ring and the status line.
+
+   Every value comes from --sld-*, declared in tokens/components/slider.css. Layout owns the row
+   (scroll mode: tracks, seam, snapping, smooth-or-not), Cluster and Layout every seam around the
+   controls (Button `emphasis="outline"`), the band its ground. No margin anywhere: the status line's negative margin below is
+   the visually-hidden clip technique, not outer spacing.
+
+   Local custom properties take the long `--slider-*` name, as Layout's do (`--layout-*` beside
+   the `--lay-*` tokens), so a reader never mistakes one for a token:
+     --slider-view      slides in view at this width (the perView ladder, restated for the rail)
+     --slider-count     the slide count, written inline by Slider.tsx
+     --slider-progress  0 → 1 across the row's scroll range, written by Slider.tsx on scroll
+     --slider-thumb     the thumb's share of the rail
+
+     --slider-bleed     the slider's end edge to the viewport's, measured by Slider.tsx (`bleed`)
+     --slider-step-progress  0 → 1 across the current slide's hold with `autoplay`, written on the
+                        root by Slider.tsx's clock each frame; declared 0 here, so a step that has
+                        not started to fill is empty rather than unresolved
+
+   Classes: .slider .view1 .view2 .view3 .view4 .bleed .row .rail .thumb .status .playing .control .progress
+            .steps .step .stepLine .stepFill */
+
+/* One in view below 768 at every perView, and always at perView 1. */
+.slider,
+.view1 {
+  --slider-view: 1;
+}
+
+.slider {
+  --slider-step-progress: 0;
+}
+
+/* The perView ladder (SliderPerView in Slider.tsx), restated for the rail so its thumb is the
+   right length before hydration and without a measurement. The row's own counts come from the
+   same table through Layout's `columns`; these two must change together. */
+@media (min-width: 768px) {
+  .view2,
+  .view3,
+  .view4 {
+    --slider-view: 2;
+  }
+}
+@media (min-width: 1024px) {
+  .view3,
+  .view4 {
+    --slider-view: 3;
+  }
+}
+@media (min-width: 1440px) {
+  .view4 {
+    --slider-view: 4;
+  }
+}
+
+/* The row takes a tab stop only when no slide holds anything focusable (Slider.tsx), and then it
+   needs a ring of its own. Drawn as a box-shadow like every ring in the system; the row's own
+   ring room (Layout scroll mode: 4 of padding round the slides) keeps the slides clear of it. */
+.row:focus {
+  outline: none;
+}
+
+.row:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--sld-ring-offset) var(--sld-ring-gap-color),
+    0 0 0 calc(var(--sld-ring-offset) + var(--sld-ring-width)) var(--sld-ring-color);
+}
+
+/* ── The rail ─────────────────────────────────────────────────────────────────
+   A neutral line with a blue thumb — the pager's current marker (Free, § 4.2). The thumb is as
+   long as the share of the slides in view and travels the rail as the row scrolls:
+
+     thumb = rail × min(1, view / count)       start = progress × (rail − thumb)
+
+   A fixed length (--sld-progress-length) that shrinks when the row is narrower: `min()` against
+   the controls row, and a flex item may shrink below its stated size, so at 390 a centred rail
+   between the two controls fits the 326 column. Decoration for the eye only — the status line is
+   what a screen reader gets. */
+.rail {
+  position: relative;
+  display: block;
+  inline-size: min(var(--sld-progress-length), 100%);
+  block-size: var(--sld-progress-thickness);
+  border-radius: var(--sld-progress-radius);
+  background: var(--sld-progress-rail);
+}
+
+.thumb {
+  --slider-thumb: calc(100% * min(1, var(--slider-view) / var(--slider-count, 1)));
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--slider-progress, 0) * (100% - var(--slider-thumb)));
+  inline-size: var(--slider-thumb);
+  border-radius: var(--sld-progress-radius);
+  background: var(--sld-progress-thumb);
+}
+
+/* ── The status line ──────────────────────────────────────────────────────────
+   Visually hidden, still announced (not display:none, which removes it from the accessibility
+   tree). Absolutely positioned, so it is out of the row's flow; the negative margin pulls the 1px
+   clip box out of the flow too, so the slider's box does not grow by a pixel nobody can see. */
+.status {
+  position: absolute;
+  inline-size: var(--sld-hidden-size);
+  block-size: var(--sld-hidden-size);
+  margin: calc(-1 * var(--sld-hidden-size));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── bleed · the row runs to the viewport's end edge (md up) ─────────────────────────────────
+   Layout's scroll row is grown by its ring room on every side (padding out, an equal negative margin
+   back). The bled row replaces that pair on its inline END with the measured bleed, the same way:
+   the margin takes the box exactly to the viewport's edge (not a ring past it, which scrolled the
+   page 4px sideways) and the padding gives the same width back, so the CONTENT box — which the
+   tracks divide — is still the column; the end ring room is inside the bleed. The slide after the
+   last whole one overflows into the padding, which a scroll container paints. At its scroll end the last slide
+   stops on the column's end edge, because a grid scroller's end padding is part of its scroll range.
+   From md only: below it Layout's phone row already bleeds to both screen edges. Two classes, so it
+   outranks Layout's single-class scroll rule whatever order the modules load in. */
+@media (min-width: 768px) {
+  .bleed .row {
+    margin-inline-end: calc(-1 * var(--slider-bleed, var(--space-0)));
+    padding-inline-end: var(--slider-bleed, var(--space-0));
+  }
+}
+
+/* ── The autoplay stepper (7 Oct 2026) ───────────────────────────────────────────
+   One step per slide: a plain bar, the rail's line and its thumb at a step's length (9 Oct 2026:
+   the numerals went — bars only). The current step's line fills — wholly at rest, and over the
+   hold while rotating, from --slider-step-progress, which the clock writes on the root each frame
+   (the thumb's technique). A pause stops the writes, so the fill freezes where it was: the hold is
+   visible. Under reduced motion nothing rotates unless the reader presses Play; the fill is then
+   the clock they asked for. The arrangement — steps in a row — is Cluster's; this module sizes the parts and paints them. */
+/* A control keeps its 48 circle in a crowded row: the steps give way, never the buttons. */
+.control {
+  flex: none;
+}
+
+/* The stepper's group (rotation control + steps) and the steps list may shrink inside the nowrap
+   control row, and each step with them, down to its bar: at 390 a centred row of two steppers,
+   the rotation control and four 56 steps is wider than the 326 column. Sizing, not arrangement —
+   the Clusters still own the row and its gaps. A shrunk step keeps the WCAG 2.5.8 spacing
+   exception: its 44 height, and the `tight` seam beside it, clear a 24 circle. */
+.progress,
+.steps {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+}
+
+.steps {
+  list-style: none;
+  padding: 0;
+}
+
+/* A definite inline size, not a flex-basis: a flex container's intrinsic width is built from its
+   items' sizes, and a basis alone would size the list to nothing. */
+.steps > li {
+  flex: 0 1 auto;
+  inline-size: var(--sld-step-length);
+  min-inline-size: 0;
+}
+
+/* A native button reset to the step's own box: the 44 target in block size, the step's length in
+   inline size. A button centres its content in its block size, so the line sits in the
+   middle of the target with no padding. */
+.step {
+  display: block;
+  inline-size: 100%;
+  min-block-size: var(--sld-step-target);
+  padding: 0;
+  border: 0;
+  border-radius: var(--sld-progress-radius);
+  background: none;
+  text-align: start;
+  cursor: pointer;
+}
+
+.step:disabled {
+  cursor: default;
+}
+
+.step:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--sld-ring-offset) var(--sld-ring-gap-color),
+    0 0 0 calc(var(--sld-ring-offset) + var(--sld-ring-width)) var(--sld-ring-color);
+}
+
+.stepLine {
+  position: relative;
+  display: block;
+  block-size: var(--sld-progress-thickness);
+  border-radius: var(--sld-progress-radius);
+  background: var(--sld-progress-rail);
+  overflow: hidden;
+}
+
+.stepFill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 0;
+  background: var(--sld-progress-thumb);
+}
+
+.step[aria-current='true'] .stepFill {
+  inline-size: 100%;
+}
+
+.playing .step[aria-current='true'] .stepFill {
+  inline-size: calc(var(--slider-step-progress) * 100%);
+}

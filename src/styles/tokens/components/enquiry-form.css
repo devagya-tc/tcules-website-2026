@@ -4,65 +4,64 @@
    button.css; this layer never reaches into either component's tokens. */
 
 :root {
-  /* The minimum duplicates Input's usable floor intentionally: patterns never read another
-     component's tokens. The maximum is CtaSection's 470px split track. One 19px caption line is
-     reserved so blur validation does not move later controls. */
+  /* The form's own floor and measure. The floor is the last width at which a field is usable, and
+     it lives here, in the composing pattern, since Input stopped carrying one (6 Oct 2026: a
+     control-box minimum overflowed every track narrower than it, the Input specimen's 213px
+     tracks first). Every variant fills its track; the one measure (667, the copy track of a
+     [5, 7] split at 1470) is opted into by the centred standalone placement. */
   --enq-form-min-inline: 16rem;
-  --enq-form-max-inline: 470px;
-  --enq-message-reserve: 19px;
+  --enq-form-measure: 667px; /* width="measure": the copy track of a [5, 7] split at 1470 */
+  --enq-note-min-inline: 15rem; /* the caption beside the submit, or under it */
+  /* The visually-hidden label's clip box (r7-form: the placeholder is the visible cue). */
+  --enq-hidden-size: 1px;
   --enq-transition-duration: var(--duration-fast);
   --enq-transition-easing: var(--easing-standard);
 }
 
 :root,
 [data-surface='paper'] {
-  /* Neutral-600 is the text floor for flag/caption at 4.92:1 on paper. Danger-600 carries invalid
-     copy at 6.48:1; the success rule is decorative while the check glyph and sentence carry meaning. */
-  --enq-label-ink: var(--color-neutral-700);
-  --enq-flag-ink: var(--color-neutral-600);
+  /* Neutral-600 is the text floor for hint/caption at 4.92:1 on paper. Danger-600 carries invalid
+     copy at 6.48:1; the success check takes the accent. */
+  --enq-hint-ink: var(--color-neutral-600);
   --enq-message-invalid-ink: var(--color-danger-600);
-  --enq-status-ink: var(--color-neutral-900);
   --enq-status-ink-error: var(--color-danger-600); /* 6.48:1 on paper */
   --enq-success-ink: var(--color-neutral-900);
-  --enq-success-rule: var(--color-success-500);
   --enq-caption-ink: var(--color-neutral-600);
+  --enq-accent-ink: var(--color-brandeis-500); /* 6.17:1: marks, active label, numerals */
+  --enq-index-ink: var(--color-neutral-600); /* 4.92:1 — step numerals: auxiliary, so neutral (owner, 7 Oct 2026) */
 }
 
 [data-surface='tint'] {
-  /* Deep paper raises the ground: flag and caption step to neutral-700 because neutral-600 would
+  /* Deep paper raises the ground: hint and caption step to neutral-700 because neutral-600 would
      fail at 4.39:1. Danger-600 remains 5.78:1 for invalid and error copy. */
-  --enq-label-ink: var(--color-neutral-700);
-  --enq-flag-ink: var(--color-neutral-700);
+  --enq-hint-ink: var(--color-neutral-700);
   --enq-message-invalid-ink: var(--color-danger-600);
-  --enq-status-ink: var(--color-neutral-900);
   --enq-status-ink-error: var(--color-danger-600); /* 5.78:1 on deep paper */
   --enq-success-ink: var(--color-neutral-900);
-  --enq-success-rule: var(--color-success-500);
   --enq-caption-ink: var(--color-neutral-700);
+  --enq-accent-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --enq-index-ink: var(--color-neutral-700); /* 7.27:1 */
 }
 
 [data-surface='ink'] {
-  /* Text polarity inverts without borrowing Input tokens. Neutral-400 keeps flag/caption above the
+  /* Text polarity inverts without borrowing Input tokens. Neutral-400 keeps hint/caption above the
      text floor, while danger-300 carries error copy at 8.65:1 on neutral-950. */
-  --enq-label-ink: var(--color-neutral-200);
-  --enq-flag-ink: var(--color-neutral-400);
+  --enq-hint-ink: var(--color-neutral-400);
   --enq-message-invalid-ink: var(--color-danger-300);
-  --enq-status-ink: var(--color-neutral-100);
   --enq-status-ink-error: var(--color-danger-300); /* 8.65:1 on neutral-950 */
   --enq-success-ink: var(--color-neutral-50);
-  --enq-success-rule: var(--color-success-500);
   --enq-caption-ink: var(--color-neutral-400);
+  --enq-accent-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --enq-index-ink: var(--color-neutral-400); /* 8.05:1 */
 }
 
 [data-surface='blue'] {
-  /* Brand-100 is the quiet text floor at 4.91:1. Danger-100 reaches 5.03:1; the success rule turns
-     white because semantic success-500 would be only 2.05:1 on this ground. */
-  --enq-label-ink: var(--color-brandeis-50);
-  --enq-flag-ink: var(--color-brandeis-100);
+  /* Brand-100 is the quiet text floor at 4.91:1. Danger-100 reaches 5.03:1; the accent turns white. */
+  --enq-hint-ink: var(--color-brandeis-100);
   --enq-message-invalid-ink: var(--color-danger-100);
-  --enq-status-ink: var(--color-white);
   --enq-status-ink-error: var(--color-danger-100); /* 5.03:1 on brandeis-500 */
   --enq-success-ink: var(--color-white);
-  --enq-success-rule: var(--color-white);
   --enq-caption-ink: var(--color-brandeis-100);
+  --enq-accent-ink: var(--color-white);
+  --enq-index-ink: var(--color-brandeis-100); /* 4.91:1 */
 }

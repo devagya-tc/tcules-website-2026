@@ -1,4 +1,4 @@
-import type { CSSProperties, ElementType, ReactNode } from 'react';
+import type { CSSProperties, ElementType, ReactNode, Ref } from 'react';
 
 import { cx } from '@/lib/cx';
 
@@ -48,8 +48,14 @@ type MinTrack = 'xs' | 'sm' | 'md' | 'lg';
 /**
  * A column shape: a count of equal tracks (`3`) or fractional weights (`[2, 1]`, `[1, 1, 2]`).
  * Children fill the tracks in order; each owns its own sizing.
+ *
+ * A weight may be `'auto'` (owner, 7 Oct 2026): a CONTENT-SIZED track, as wide as its child and no
+ * wider, while the fractional tracks share what is left. For a row whose one side is a control
+ * group that must not stretch or wrap early — a section head's actions set at the end of the
+ * heading's row (`[1, 'auto']`). Never for content that reads: an auto track holding text grows to
+ * the text's full length.
  */
-type ColumnSpec = number | number[];
+type ColumnSpec = number | (number | 'auto')[];
 
 /**
  * How the tracks are arranged. Two models, deliberately both available:
@@ -85,6 +91,21 @@ type Columns =
   | 'fit'
   | 'tile'
   | { base?: ColumnSpec; md?: ColumnSpec; lg?: ColumnSpec; xl?: ColumnSpec };
+
+/**
+ * Where the row SCROLLS sideways instead of stacking or wrapping (fdn-scroll, 6 Oct 2026;
+ * visual-direction § 3.7 item 2 and the Slider, § 1.4 rule 3).
+ *
+ *   until-md  below 768 only. One item per view with the next one peeking, so a linked card set of
+ *             more than three reads as a row you swipe rather than a 2300px column; from md up the
+ *             `columns` apply exactly as they would without the prop. Only where every item is
+ *             focusable (§ 3.7): Tab is how a keyboard moves the row, so a set of unlinked cards
+ *             stays stacked.
+ *   always    every width. The Slider's mode — use it through `Slider`, which adds the controls that
+ *             say there is more from md up (below md the peek says it). On its own it is a row with
+ *             no visible affordance on a desktop without a trackpad.
+ */
+type Scroll = 'until-md' | 'always';
 
 export type LayoutProps = {
   /** Element to render (default "div"; use "ul"/"ol"/"section" etc. as needed). */
@@ -125,8 +146,15 @@ export type LayoutProps = {
    * With `equalRows`, only the rows after the lead are equalised: the lead's row is explicit and
    * `auto`, the implicit rows below it are `1fr`, and a flexible row never sizes against an item
    * in an auto one. So a tall lead does not stretch every card row to its height.
+   *
+   * `"tall"` is the other featured shape (cmp-feature, 6 Oct 2026): from lg (1024) the first child
+   * takes the FIRST track and spans every row, and the rest stack in the track(s) beside it — a
+   * 2:1 lead beside a stacked pair, `columns={{ lg: [2, 1] }}`. The span is the container's, as
+   * above, and is read from the DOM (`:has`), so it covers up to six children. Below lg it is the
+   * ordinary single-track stack: a span there would only open empty rows. With `equalRows` the
+   * stacked rows share the lead's height equally.
    */
-  lead?: boolean;
+  lead?: boolean | 'tall';
   /**
    * Reverse the VISUAL order of the tracks, per breakpoint — the image/text pair whose image sits
    * right on desktop and first on a phone, or a band that alternates sides down the page. Bare
@@ -182,10 +210,34 @@ export type LayoutProps = {
    */
   pinLast?: boolean;
   /**
-   * Block-axis placement — how items sit vertically in their row (e.g. centre copy against a
-   * taller image). Default "stretch".
+   * The FIRST child's row takes a stretched stack's spare height (cmp-feature fix round 2, 6 Oct
+   * 2026) — the mirror of `pinLast`. For a card stretched to a taller neighbour whose cover should
+   * grow into the space rather than leave it empty under the copy: the spotlight's lead at 1024,
+   * where its two companions run taller than it. The template is `1fr` with every later row `auto`,
+   * so the first child never drops below its own content size (an aspect-ratio box keeps its
+   * ratio's height as the floor) and only grows. With no spare height it renders exactly as
+   * without the prop. Single-track only. The stack must itself fill its parent's height (the
+   * caller states that, as a stretched card does) or there is nothing to take.
    */
-  align?: Place;
+  fillFirst?: boolean;
+  /**
+   * From lg (1024) every EVEN child drops by the `section` step (96), so a row of cards reads as
+   * placed by hand rather than tiled (references.md § 3.4 item 12: "Stagger breaks the grid", kept
+   * as a Layout option, cmp-feature fix round 2). The offset is a TRACK, not a margin: the row is
+   * three explicit rows — the offset, the cards, the offset — and odd children take the first two
+   * while even ones take the last two, so the band grows by exactly the offset and nothing sets
+   * its own outer spacing. `rowGap` is not used inside the staggered row.
+   *
+   * Scope: ONE row — as many children as the template has tracks at lg (a pair, a trio). A second
+   * row would overlap the first. Below lg nothing is placed and `rowGap` applies as usual.
+   */
+  stagger?: boolean;
+  /**
+   * Block-axis placement — how items sit vertically in their row (e.g. centre copy against a
+   * taller image). Default "stretch". `baseline` aligns the items' LAST baselines: a split head's
+   * ask set on its lead's last line (PageHero `display`, the Quantum split header).
+   */
+  align?: Place | 'baseline';
   /**
    * Inline-axis placement of each item WITHIN its own track. Default "stretch" (fill the
    * track); "center" shrinks each item to its content and centres it — how a centred copy
@@ -203,6 +255,52 @@ export type LayoutProps = {
    * property of fr tracks, not an oversight.
    */
   justify?: Distribute;
+  /**
+   * Scroll the row sideways instead of wrapping it — see `Scroll`. In scroll mode `columns` states
+   * how many items are IN VIEW at each breakpoint, so it takes counts, not ratios: `3` is one in
+   * view at base and three from md up, the bare-value convention; `{ base: 1, md: 2, lg: 3 }`
+   * names each step. Below md the row always shows its base count plus a peek of the next item
+   * (`--lay-scroll-peek`); from md up it shows exactly the count, so a Slider's three cards are
+   * the 392 of a 3-up grid and the band's arithmetic is unchanged.
+   *
+   * Every item is a snap point (`scroll-snap-align: start`, written by the container like `lead`'s
+   * span). `colGap` is the seam between items and is stated or 0, as everywhere; `rowGap` has one
+   * row to act on and does nothing while the row scrolls. Smooth scrolling only under
+   * `prefers-reduced-motion: no-preference`. The scrollbar is hidden: the peek, focusable items and
+   * the Slider's controls are the affordances.
+   *
+   * The scroll box is grown by `--lay-scroll-ring-room` on every side (padding, cancelled by an
+   * equal negative margin), because a scroll container clips whatever paints outside it and an
+   * item's focus ring is drawn 4px outside the item. The items stay on the column's edges; that
+   * is the one optical correction the mode makes. `lead`, `reverse` and `offset`
+   * place children in an explicit grid the scrolling row does not have, so they are ignored
+   * wherever the row scrolls.
+   */
+  scroll?: Scroll;
+  /**
+   * Whether a scroll row shows `--lay-scroll-peek` of the next item below md. Default `true`. The
+   * Slider turns it off at one per view (cmp-testimonials, 6 Oct 2026): a one-up slide is a
+   * composite — a portrait over a quote — so its peeking start edge is a sliver of photograph and a
+   * loose quote rule, not a card's edge, and the Slider's controls already say there is more.
+   * Ignored without `scroll`.
+   */
+  peek?: boolean;
+  /**
+   * The rendered element, for a caller that drives a scroll row (the Slider reads its scroll
+   * position and scrolls it). A plain prop, as React 19 passes refs.
+   */
+  ref?: Ref<HTMLElement>;
+  /**
+   * Only for a scroll row whose items hold nothing focusable — testimonial slides, text cards —
+   * which a keyboard can then reach and scroll with the arrow keys. A scroll container no key can
+   * reach fails WCAG 2.1.1. Leave it off everywhere else.
+   */
+  tabIndex?: 0 | -1;
+  /**
+   * The element's accessible name. For a scroll row that takes `tabIndex` (a focusable list with
+   * no name is announced as an unlabelled stop); the Slider names its own region with `label`.
+   */
+  'aria-label'?: string;
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
@@ -213,7 +311,7 @@ export type LayoutProps = {
 function track(spec: ColumnSpec): string {
   return typeof spec === 'number'
     ? `repeat(${spec}, minmax(0, 1fr))`
-    : spec.map((weight) => `minmax(0, ${weight}fr)`).join(' ');
+    : spec.map((weight) => (weight === 'auto' ? 'auto' : `minmax(0, ${weight}fr)`)).join(' ');
 }
 
 /**
@@ -258,7 +356,10 @@ function reversedVars(
   return vars as CSSProperties;
 }
 
-function columnsToVars(columns?: Columns, reversed: [Breakpoint, boolean][] = []): CSSProperties {
+function columnsToVars(
+  columns?: Columns,
+  reversed: [Breakpoint, boolean][] = [],
+): CSSProperties {
   // Always emit all four breakpoint vars. The --tmpl-* custom properties INHERIT, so a nested
   // Layout that sets no columns would otherwise pick up an ancestor's template (e.g. a vertical
   // stack inside a 2-col hero turning into 2 columns). Pinning the unused breakpoints to
@@ -307,6 +408,36 @@ function columnsToVars(columns?: Columns, reversed: [Breakpoint, boolean][] = []
   return vars as CSSProperties;
 }
 
+/** A per-view count from a column shape: a ratio's length, as a safe reading of a misuse. */
+const viewCount = (spec: ColumnSpec) => (typeof spec === 'number' ? spec : spec.length);
+
+/**
+ * Scroll mode's per-view counts, one custom property per breakpoint. All four are always written,
+ * `initial` where unstated, for the reason `columnsToVars` gives: the properties inherit, and a
+ * nested scroll row must never pick up an ancestor's count. `until-md` scrolls at base only, so it
+ * needs only the base count; its md-up tracks come from the ordinary `--tmpl-*` templates.
+ */
+function viewVars(columns: Columns | undefined, scroll: Scroll): CSSProperties {
+  const vars: Record<string, string> = {
+    '--view-base': 'initial',
+    '--view-md': 'initial',
+    '--view-lg': 'initial',
+    '--view-xl': 'initial',
+  };
+  if (columns == null || columns === 'fit' || columns === 'tile') return vars as CSSProperties;
+  if (typeof columns === 'number' || Array.isArray(columns)) {
+    if (scroll === 'always') vars['--view-md'] = String(viewCount(columns));
+    return vars as CSSProperties;
+  }
+  for (const bp of ['base', 'md', 'lg', 'xl'] as const) {
+    const spec = columns[bp];
+    if (spec != null && (scroll === 'always' || bp === 'base')) {
+      vars[`--view-${bp}`] = String(viewCount(spec));
+    }
+  }
+  return vars as CSSProperties;
+}
+
 /**
  * Layout — the columnar layout primitive. Fills the content column Section gives it, owns the
  * two seams between its children, and arranges them into tracks: equal counts, fr ratios, or
@@ -325,6 +456,11 @@ function columnsToVars(columns?: Columns, reversed: [Breakpoint, boolean][] = []
  * and `pinLast` pins a stretched stack's last child to its foot. All default off, and off they
  * emit no class and no custom property, so every existing Layout renders byte-for-byte as before.
  * `lead`, `reverse` and `offset` all place the first child and are exclusive, in that precedence.
+ *
+ * The fourth arrangement is a SCROLL ROW (`scroll`, fdn-scroll, 6 Oct 2026): the same children in
+ * one sideways-scrolling, snapping row, `columns` naming how many are in view. It is how a linked
+ * card set of more than three stays one row on a phone (§ 3.7) and what the Slider pattern drives.
+ * Off, it emits no class and no custom property, so every existing Layout renders as before.
  * There is no docs/specs/Layout.md — this docblock and the prop docs above are the spec.
  */
 export function Layout({
@@ -341,19 +477,40 @@ export function Layout({
   reverse,
   offset,
   pinLast = false,
+  fillFirst = false,
+  stagger = false,
+  scroll,
+  peek = true,
+  ref,
+  tabIndex,
+  'aria-label': ariaLabel,
   className,
   style,
   children,
   id,
 }: LayoutProps) {
   // lead, reverse and offset all place the first child; precedence is lead > reverse > offset and
-  // the losers emit nothing, so two rules never fight over one grid-column.
-  const reversed = lead ? [] : perBreakpoint(reverse);
-  const offsets = lead || reverse != null ? [] : perBreakpoint(offset);
+  // the losers emit nothing, so two rules never fight over one grid-column. A scroll row has no
+  // explicit grid to place into: `always` drops all three, `until-md` drops lead and the base
+  // breakpoint's placements, and keeps md-up ones for the grid it becomes there.
+  const leads = lead !== false && scroll == null;
+  const placeable = ([bp]: [Breakpoint, unknown]) =>
+    scroll == null || (scroll === 'until-md' && bp !== 'base');
+  const reversed = leads ? [] : perBreakpoint(reverse).filter(placeable);
+  const offsets = leads || reverse != null ? [] : perBreakpoint(offset).filter(placeable);
+  const vars =
+    scroll === 'always'
+      ? { ...columnsToVars(undefined), ...viewVars(columns, scroll) }
+      : scroll === 'until-md'
+        ? { ...columnsToVars(columns, reversed), ...viewVars(columns, scroll) }
+        : columnsToVars(columns, reversed);
   return (
     <Tag
       id={id}
-      style={{ ...columnsToVars(columns, reversed), ...style }}
+      ref={ref}
+      tabIndex={tabIndex}
+      aria-label={ariaLabel}
+      style={{ ...vars, ...style }}
       className={cx(
         styles.layout,
         rowGap && styles[`rowgap-${rowGap}`],
@@ -363,10 +520,14 @@ export function Layout({
         styles[`justifyitems-${justifyItems}`],
         justify && styles[`justify-${justify}`],
         equalRows && styles['equal-rows'],
-        lead && styles.lead,
+        leads && (lead === 'tall' ? styles['lead-tall'] : styles.lead),
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast && styles['pin-last'],
+        fillFirst && styles['fill-first'],
+        stagger && scroll !== 'always' && styles.stagger,
+        scroll && styles[`scroll-${scroll}`],
+        scroll && !peek && styles['no-peek'],
         className,
       )}
     >

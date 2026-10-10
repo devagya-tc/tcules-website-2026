@@ -193,3 +193,63 @@ the h1 and the label becomes the eyebrow. A button in the hero asks the visitor 
 have read a case study, which is this page's one job. The close (the `misc` CTA) still carries the ask.
 
 **Found in.** `CaseStudyIndex` template, 29 Sep 2026 (`docs/specs/BlockCard.md` § Revision 3).
+
+## 15. Service sections say what job each block does
+
+**What.** Replace the service page's generic block union (`rich-text`, `card-grid`, `table`, `quote`,
+`labelled-list`, `two-column`, `link-group`) with components named for the job the block does. The set
+is `src/lib/service-story.ts`: `signals`, `steps`, `ledger`, `router`, `cases`, `proof`, `fit`,
+`spectrum`, `representations`, `record`, `contrast`, `parts`, `slice`, `bridge`, `thread`, `nudge`,
+`faq`, `note`, `resources` (revised 30 Sep: `statement` and `links` dropped, `resources` added). Each maps to one Strapi component
+whose fields are the type's fields. Two field-level asks come with it:
+- `cases` reference case-study records by relation, not by typed slug, so a renamed slug cannot break
+  the link.
+- `resources` reference their target records (article, glossary term, tool) by relation, so the
+  type label and path come from the record rather than being typed.
+
+**Why.** The translation layer has to *guess* what a block is for. It guesses wrong in five recurring
+ways (`docs/service-pages-design.md` §1): an unattributed quote used as a pull-line, an eyebrow as the
+first line of rich text, a CTA as a paragraph, a closing paragraph inside a card, and a duplicated row
+header (§10). A block that names its job removes the guess. Ordering, too, becomes content: a
+`spectrum` is ordered by its authors on purpose.
+
+**Found in.** Service pages designed from content, 29 Sep 2026 (`/design/service-page`).
+
+## 16. Records carry a short `name` beside their headline
+
+**What.** A `name` field (short text, required, about 40 characters max) on the service, expertise and case-study content types: what the page is *called* ("Product Design", "HealthTech", "ConnectX"), as distinct from its `title`, which is the line the page argues. For case studies this is the `client` field (§ 13); it need not be a second field. Once it exists, each source maps it onto the view model (`ServicePage`, `ExpertisePage`, `CaseStudyPage`) and the route passes it as the trail's last crumb.
+
+**Why.** The trail sits 32px above the h1 (kit `fdn-top`), and its last crumb names the page only when the h1 does not. Today these records have only a title, so their trails stop at the parent ("Home / Services") rather than repeating the headline. With a name the trail can say where you are *and* what the page is called, as the six designed service pages already do from `story.name`. The hero eyebrow on services and expertise ("Product Design services", "Product Design specialist") is doing this job today without being meant for it. *6 Oct 2026, second fix round:* the live service route no longer waits on this field for the trail to name the page. It builds the leaf from the slug ("Product design"), or from the CMS eyebrow where that is the same name spelled out ("Trust, control and recovery"; and, with the parent crumb's words set aside, "Design-system governance and adoption"), so every service trail ends at the page. The slug reading is a stand-in, and it shows on the three pages whose eyebrow is not their name: "Information architecture workflow design", "Interaction UI design" and "Prototyping usability testing" are the words of a URL, not of a name. (Their h1s open with the right spelling, and taking it was tried and dropped: a crumb that is the headline's first five words reads the headline twice.) When this field exists the route maps it as the leaf and both stand-ins go, along with the eyebrow on these types. Expertise and case studies still end at the parent until then.
+
+**Found in.** Kit `fdn-top` review round, 5 Oct 2026. Content side: `docs/content-changes.md` § 5.
+
+## 17. Actions say whether they convert — withdrawn 8 Oct 2026
+
+**Withdrawn** (r7-buttons, owner 7 Oct 2026 as corrected 8 Oct, `docs/kit/review-7-oct.md`). The ink
+solid is retired: a solid is always blue, and which kind an action renders as is decided by WHERE it
+sits — the hero's and the close's actions are the blue solid and its blue ghost partner; every in-band
+action (the capabilities offer, the Lab and Matter strips, a section's foot) is a link button. Nothing
+on the view model has to say whether an action converts, so no field is needed and
+`src/lib/conversion.ts` is deleted. One consequence for the model: an in-band offer renders ONE link,
+so the capabilities offer's `actions` should be a single action rather than one-or-two; until the model
+says so, the legacy service and expertise routes render the first and drop the second.
+
+The original recommendation, kept for the record:
+
+**What.** A required `converts` boolean (or a `kind` enum: `converts` · `navigates`) on every CTA
+link component — hero actions, the closing CTA's actions, the capabilities offer's actions, the Lab and
+Matter strips, the about and careers closing actions. "Converts" means the reader starts something with
+the studio by taking it: start a project, book a call, request an audit, contact, apply, subscribe.
+
+**Why.** The owner's colour rule (7 Oct 2026, `docs/kit/visual-direction.md` § 4.5) makes a solid
+button blue when its action converts and ink when it does not, and the kind varies by record — the
+Product Design hero leads with "See how Product Design works" where its siblings lead with "Start a
+project"; one expertise hero leads with an in-page anchor. Today the routes infer it from the
+destination (`src/lib/conversion.ts`: the contact route or an `#enquiry` form converts), which misses a
+conversion that goes elsewhere (an external application form) and reads a mislabelled link ("Explore how
+we work" to `/contact`) as an ask. It changes what the action IS, not how it looks, so it passes entry
+1's test. Once mapped, each source sets it on the view model and the routes pass it through instead of
+calling the helper.
+
+**Found in.** Button colour rule, 7 Oct 2026 (`fix/tone`).
+

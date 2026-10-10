@@ -11,12 +11,14 @@
  * Breadcrumbs is the third kind here: not chrome like the nav and the footer, and not a block a
  * page is built out of, but a STATEMENT OF POSITION — an ordered list of the pages above this one.
  * It is a pattern for two independent reasons: it consumes a content shape (`{ label, href }` from
- * frontmatter), and it arranges itself with Cluster, which a primitive may not import.
+ * frontmatter), and it arranges itself with Cluster, which a primitive may not import. It owns no
+ * band (since 5 Oct 2026): it is placed in PageHero's `trail` slot and reads the hero's ground.
  *
  * PageHero is the first of the fourth kind — an OPENING: the one block every page begins with,
- * carrying its single h1. Like Breadcrumbs it owns its band and takes `surface` as a prop, and for
- * the same reason (a pattern that paints a band has no ancestor to read data-surface from); unlike
- * it, it is a block a page is built out of rather than apparatus around one.
+ * carrying its single h1 and, in its `trail` slot, the Breadcrumbs. Like SiteNav and SiteFooter it
+ * owns its band and takes `surface` as a prop, and for the same reason (a pattern that paints a
+ * band has no ancestor to read data-surface from); unlike them, it is a block a page is built out
+ * of rather than apparatus around one.
  *
  * CtaSection is its bookend — a CLOSE, the page's ask made once, carrying an h2 and never an h1.
  * It is the third pattern here to take `surface` as a prop, for the same reason as the other two,
@@ -27,19 +29,27 @@
  * EnquiryForm is a BEHAVIOURAL FORM: route-blind in what it renders, but responsible for the
  * blur-validation and asynchronous lifecycle shared by every page that collects an enquiry.
  *
+ * ProcessFlow is a DIAGRAM OF ORDER: stages the work passes through, each with its items, and an
+ * optional lane for what another party holds throughout. A pattern because it takes a content
+ * shape and composes Layout, Cluster and Icon; not steps (ListCard rows) and not peers (tiles).
+ *
  * ListCard is the fifth kind, and the only one here that is not a block: it is a ROW, and the
- * smallest thing in this tier. It owns no band, takes no `surface`, paints no ground, and renders a
+ * smallest thing in this tier. It owns no band, takes no `surface`, paints no ground at rest, and renders a
  * bare <li> — the list element belongs to the caller, as a Layout with rowGap="none", because the
  * row finishes itself with its own block-end rule and a gap would break the ladder. It is a pattern
  * for the usual two reasons (it consumes a content shape, and it arranges with Cluster and Layout).
+ * Its two SET MODES live in its folder: `Steps` (a method, an <ol> of numbered rows) and `ReadDown`
+ * (the D body, a <ul> of peer rows in one column or two) own the list element because they own the
+ * count — the type step and the ceilings — while each row inside them is still the bare <li>.
  * BlockCard is its sibling OBJECT: a borderless tile that fills a parent-owned grid track, with no
  * edge and no ground; its title scale, cover media and position make the object. BlockCardSet is its
  * set, the one place that knows the count and so the one place the featured first card is decided.
  * Accordion is a DISCLOSURE SET: one continuous rule ladder of native details/summary pairs. It
  * owns a CMS-shaped question/answer array and composes Layout, Cluster, Icon and Prose while
  * leaving surface and surrounding page rhythm to its caller.
- * Proof is EVIDENCE: an attributed quotation, checked figures, or both. It composes Layout,
- * Prose and Button while leaving the ground and its position in a page argument to the caller.
+ * Proof is EVIDENCE: an attributed quotation in six arrangements, checked figures, or both. It
+ * composes Layout, Cluster, Prose, Button, Media, Icon, BrandMark and RatingBadge, takes the work
+ * and the footer as slots, and leaves the ground and its position in a page argument to the caller.
  * Callout is a SCOPE NOTE: a quiet, unattributed boundary on the claim immediately before it. It
  * composes Prose inside a semantic note while leaving the ground and the claim-to-note seam to
  * its caller. It is not a quotation, alert, card or second rich-text variant.
@@ -47,11 +57,28 @@
  * ContentSection is a BAND, and the only pattern here whose reason for existing is a distance:
  * one CMS section — eyebrow, heading, lead, then a run of blocks the caller supplies as children.
  * It takes `surface` like the other band-owning patterns and paints nothing itself. What it owns
- * is the grouping: the head group nests at 8 and 24 so it reads as one object, and the blocks are
- * a separate 48 beat beneath it. A flat Layout cannot say that, which is why this is a component
- * and not three lines at a call site repeated on every long-form route. It has two arrangements of
- * those beats — the head above the blocks, or beside them from 1024 up — and the second is one
+ * is the grouping: the head is one group at 24 (eyebrow → heading → lead) so it reads as one
+ * object, and the blocks are a separate 48 beat beneath it. One flat Layout cannot say that, which
+ * is why this is a component and not three lines at a call site repeated on every route. It has
+ * four arrangements of those beats — the head above the blocks; beside them from 1024 up, with an
+ * aside or actions in the head track; split across the top as one row (the H-row); or a copy column
+ * beside a photograph (the media split) — and a centred alignment of the first. Every one is
  * Layout's props rather than a second component.
+ *
+ * CtaRow is a band's FOOT: a hairline and one link action, with an optional note — the
+ * section-level action the kit's families share (visual-direction § 3.1, § 1.4). It owns no band and
+ * no ground, and is placed in ContentSection's `footer` or, with its rule off, its `actions`: a
+ * ReactNode slot, because a pattern does not import a pattern. It is a pattern for the usual two
+ * reasons — a content shape (`{ label, href }`) and a composition of Button, Icon, Cluster and Layout.
+ *
+ * Slider is a ROW YOU MOVE: slides in a sideways-scrolling, snapping row (Layout `scroll="always"`),
+ * with previous / next controls and a progress rail (fdn-scroll, 6 Oct 2026; visual-direction
+ * § 1.4 — an image set of five or more is a Slider showing three). It owns no band and no ground,
+ * sits in a band's body and reads data-surface from it. Its slides are the caller's `<li>`s — a
+ * BlockCard, or a testimonial wrapped in one — so it takes children rather than records, and it
+ * is a pattern because it composes Layout, Cluster and Icon. It is a client component, like SiteNav,
+ * TableOfContents and EnquiryForm, for a ref, listeners and the controls' state; the scrolling itself is CSS, so the row
+ * swipes and snaps before it hydrates.
  *
  * Figure is the quietest thing in the tier and the first to hold an IMAGE as its subject rather
  * than as a marker: an asset, its caption and an optional quieter note, filling whatever inline
@@ -87,6 +114,18 @@
  * `<table>` with scoped header cells that no card can express honestly. It owns no band and no
  * ground, composes Layout and Prose, and changes reading order — row by row, each value under its
  * column head — when the track it is given is narrower than the md content column.
+ *
+ * Banner and Statement are two BANDS of the kit (cmp-banner, 6 Oct 2026; visual-direction § 3.4 I
+ * and J). Each owns its band and ground, and composes Section and Layout. Banner gives one
+ * photograph (or an illustration) the band's whole weight under or beside a head, or renders the
+ * one-line announcement strip at Section's `strip` density; Statement sets one sentence at the h1
+ * role in the two-thirds track with a blue mark and, optionally, the head-half texture. Both take
+ * their action as a ReactNode slot, because a pattern does not import a pattern.
+ *
+ * Contrast is a PAIR OF OPPOSITES (cmp-readdown, 6 Oct 2026; visual-direction § 3.4 N): what the
+ * work is for beside what it is not, two ruled lists in peer halves whose glyphs carry the polarity.
+ * Promoted from the service page's approved Fit. A block, not a band — it sits in a ContentSection
+ * body — and a pattern because it consumes a content shape and composes Layout, Cluster and Icon.
  */
 export { SiteNav } from './SiteNav';
 export type {
@@ -108,35 +147,76 @@ export { TableOfContents } from './TableOfContents';
 export type { TableOfContentsProps, TocItem } from './TableOfContents';
 
 export { CtaSection } from './CtaSection';
-export type { CtaSectionProps, CtaPoint, CtaAction } from './CtaSection';
+export type {
+  CtaSectionProps,
+  CtaPoint,
+  CtaIconPoint,
+  CtaPointMarker,
+  CtaAction,
+  CtaMedia,
+  CtaMediaSide,
+  CtaContact,
+} from './CtaSection';
 
 export { EnquiryForm } from './EnquiryForm';
 export type {
   AuditUrlLabel,
   EnquiryContextBase,
   EnquiryFormProps,
+  EnquiryNextStep,
   EnquiryUrlLabel,
 } from './EnquiryForm';
 
-export { ListCard } from './ListCard';
+export { ProcessFlow } from './ProcessFlow';
+export type {
+  ProcessFlowProps,
+  ProcessFlowStage,
+  ProcessFlowLane,
+  ProcessFlowStageHeading,
+} from './ProcessFlow';
+export { ListCard, ReadDown, Steps } from './ListCard';
 export type {
   ListCardProps,
   ListCardMarker,
   ListCardArrangement,
+  ListCardForm,
+  ListCardFrame,
+  ListCardNumberTone,
+  ListCardSize,
   ListCardTitleElement,
+  Step,
+  StepsProps,
+  ReadDownRow,
+  ReadDownProps,
+  ReadDownColumns,
 } from './ListCard';
 
-export { BlockCard, BlockCardSet, FEATURED_FROM } from './BlockCard';
+export { Contrast } from './Contrast';
+export type {
+  ContrastProps,
+  ContrastList,
+  ContrastHeadingElement,
+  ContrastEmphasis,
+} from './Contrast';
+
+export { BlockCard, BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCard';
 export type {
   BlockCardProps,
   BlockCardMedia,
   BlockCardImage,
   BlockCardImageSide,
   BlockCardOrientation,
+  BlockCardSize,
   BlockCardTitleElement,
   BlockCardTracks,
+  BlockCardRatio,
+  BlockCardCue,
+  BlockCardFrame,
+  BlockCardTextureRecipe,
   BlockCardSetProps,
   BlockCardSetItem,
+  BlockCardSetLead,
+  BlockCardSetAcross,
 } from './BlockCard';
 
 export { Accordion } from './Accordion';
@@ -147,19 +227,35 @@ export type {
   ProofProps,
   ProofQuote,
   ProofFigure,
+  ProofFigureSize,
   ProofPortrait,
-  ProofClientMark,
+  ProofRating,
+  ProofAlign,
 } from './Proof';
 
 export { ContentSection, ContentSectionText } from './ContentSection';
 export type {
+  ContentSectionAlign,
   ContentSectionArrangement,
+  ContentSectionMedia,
+  ContentSectionMediaSide,
+  ContentSectionMediaHeight,
   ContentSectionProps,
   ContentSectionTextProps,
 } from './ContentSection';
 
+export { CtaRow } from './CtaRow';
+export type {
+  CtaRowProps,
+  CtaRowAction,
+  CtaRowAlign,
+} from './CtaRow';
+
+export { Slider } from './Slider';
+export type { SliderProps, SliderPerView, SliderAlign } from './Slider';
+
 export { Callout } from './Callout';
-export type { CalloutProps } from './Callout';
+export type { CalloutProps, CalloutTone } from './Callout';
 
 export { DataTable } from './DataTable';
 export type {
@@ -167,6 +263,7 @@ export type {
   DataTableKeyColumn,
   DataTableColumn,
   DataTableRow,
+  DataTableNodeCell,
   DataTableKeyBehaviour,
   DataTableColumnBehaviour,
 } from './DataTable';
@@ -181,10 +278,18 @@ export type {
   HeroCreditRole,
   HeroDates,
   HeroAction,
+  HeroActions,
   HeroArrangement,
   HeroMedia,
   HeroImage,
+  HeroImageShape,
   HeroVideo,
+  HeroTrail,
+  HeroAnnouncement,
+  HeroCut,
+  HeroCutItem,
+  HeroRating,
+  HeroLeadSize,
 } from './PageHero';
 
 export { SiteFooter } from './SiteFooter';
@@ -197,3 +302,46 @@ export type {
   SiteFooterNewsletter,
   SiteFooterSocial,
 } from './SiteFooter';
+export { Banner } from './Banner';
+export type { BannerProps, BannerForm, BannerMediaSide, BannerLink } from './Banner';
+export { Statement } from './Statement';
+export type {
+  StatementProps,
+  StatementElement,
+  StatementAlign,
+  StatementTexture,
+} from './Statement';
+
+/* Thread — stages one decision passes through, on one blue line, with a return path (E band). */
+export { Thread, type ThreadProps, type ThreadStage, type ThreadStageHeading } from './Thread';
+
+/**
+ * EngagementModel is the "How we work" USP band (r7-howwework, 9 Oct 2026): the engagement model
+ * drawn as one chart over time, its three points keyed to the drawing's three marks. `full` for
+ * its own page, `compact` for a service page.
+ */
+export { EngagementModel } from './EngagementModel';
+export type {
+  EngagementModelProps,
+  EngagementModelArrangement,
+  EngagementPoint,
+  EngagementAction,
+} from './EngagementModel';
+/* VideoTestimonial — a client interview on film: poster, play control, pulled quote (r7-video). */
+export {
+  VideoTestimonial,
+  type VideoTestimonialProps,
+  type VideoTestimonialVariant,
+  type VideoTestimonialFilm,
+  type VideoTestimonialSource,
+  type VideoTestimonialCaptions,
+} from './VideoTestimonial';
+
+/* LogoGrid — client marks in equal hairline cells, with an optional badge and context line (H band). */
+export {
+  LogoGrid,
+  logoGridColumns,
+  type LogoGridProps,
+  type LogoGridMark,
+  type LogoGridTrack,
+} from './LogoGrid';

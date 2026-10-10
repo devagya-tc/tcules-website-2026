@@ -32,6 +32,16 @@ export default function LayoutSpecimenPage() {
         </Specimen>
 
         <Specimen
+          title="columns={{ lg: [1, 'auto'] }} colGap='column' rowGap='block'"
+          note="An 'auto' weight is a content-sized track: as wide as its child, while the 1fr track takes the rest. For a control group pinned to the end of a row (ContentSection actionsAt='end'); never for text, which would grow the track to its full length. Single track below 1024."
+        >
+          <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="block">
+            <Box tall>1fr</Box>
+            <Box accent>auto · sized to me</Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
           title="columns={3} colGap='block' rowGap='block'"
           note="Three equal tracks from md up. minmax(0, 1fr) means a long unbroken word cannot widen its track."
         >
@@ -156,7 +166,12 @@ export default function LayoutSpecimenPage() {
           title="columns={{ base: 2 }} reverse={{ base: true, lg: false }}"
           note="The explicit off. Two tracks at every width, reversed at 390 and restored from 1024 — so at 1440 the accent box is back on the left."
         >
-          <Layout columns={{ base: 2 }} colGap="block" rowGap="block" reverse={{ base: true, lg: false }}>
+          <Layout
+            columns={{ base: 2 }}
+            colGap="block"
+            rowGap="block"
+            reverse={{ base: true, lg: false }}
+          >
             <Box accent>1</Box>
             <Box>2</Box>
           </Layout>
@@ -221,6 +236,69 @@ export default function LayoutSpecimenPage() {
         </Specimen>
 
         <Specimen
+          title="columns={{ lg: [2, 1] }} lead='tall' colGap='gutter' rowGap='column'"
+          note="From 1024 the first child takes the first track and spans every row; the rest stack beside it, one per row. Below 1024 it is the single-track stack, lead first. BlockCardSet's spotlight (lead='beside') is built on it."
+        >
+          <Layout columns={{ lg: [2, 1] }} colGap="gutter" rowGap="column" lead="tall">
+            <Box tall accent>
+              lead · spans both rows
+            </Box>
+            <Box>beside · row 1</Box>
+            <Box>beside · row 2</Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="columns={2} stagger colGap='gutter'"
+          note="From 1024 every even child drops by the section step (96). The offset is a track, not a margin: three rows (offset, cards, offset), odd children in the first two and even in the last two, so both share one height and the row grows by exactly 96. One row only. Below 1024 the two sit level."
+        >
+          <Layout columns={2} colGap="gutter" stagger>
+            <Box tall>1 · at the top</Box>
+            <Box tall accent>
+              2 · dropped one section step
+            </Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="columns={[1, 1]} — a stretched card whose stack takes fillFirst"
+          note="The mirror of pinLast. The left card is stretched to the right one's height; its stack fills it and the FIRST row (accent) takes the spare height, never dropping below its own size. BlockCard's spotlight lead uses it so its cover grows to the notes beside it."
+        >
+          <Layout columns={[1, 1]} colGap="gutter" rowGap="gutter">
+            <Layout rowGap="block" fillFirst className={s.box}>
+              <Box accent>first row · grows</Box>
+              <p>Short copy under it.</p>
+            </Layout>
+            <Layout rowGap="block" className={s.box}>
+              <strong>The taller neighbour</strong>
+              <p>
+                A longer column, written to run on so that this card sets the row height and the
+                first row in the card beside it has spare height to take. It wraps to several
+                lines at desktop width and more on a phone, where the two stack and nothing
+                grows.
+              </p>
+            </Layout>
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="scroll='until-md' tabIndex={0} aria-label='Studio photographs'"
+          note="A scroll row whose items hold nothing focusable takes the tab stop itself, so it needs a name: aria-label is passed straight through. Below 768 the row also bleeds through the 32 gutter to the viewport edge, with the first item still on the column edge."
+        >
+          <Layout
+            scroll="until-md"
+            columns={{ base: 1, md: 3 }}
+            colGap="gutter"
+            tabIndex={0}
+            aria-label="Studio photographs"
+          >
+            {['1', '2', '3'].map((n) => (
+              <Box key={n}>{n}</Box>
+            ))}
+          </Layout>
+        </Specimen>
+
+        <Specimen
           title="Nesting — rhythm comes from grouping, not from a rhythm knob"
           note="An outer stack at 'stack' (48) holding two inner stacks at 'tight' (8). The tight pairs read as units because of the contrast between the two seams, and no child sets any margin of its own."
         >
@@ -258,6 +336,57 @@ export default function LayoutSpecimenPage() {
                 <div className={s.ruler}>rowGap=&quot;{rung}&quot;</div>
                 <div className={s.ruler} />
               </Layout>
+            ))}
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="scroll='until-md' columns={4} colGap='gutter'"
+          note="Four equal tracks from 768 up, exactly as without the prop. Below 768 the same children are one sideways row: one item in view and a 24 peek of the next (--lay-scroll-peek), each item a snap point, the scrollbar hidden. visual-direction § 3.7: a linked card set of more than three, where every item is focusable so Tab moves the row. Resize below 768, or read the 390 shot."
+        >
+          <Layout scroll="until-md" columns={4} colGap="gutter" rowGap="column">
+            <Box tall>1</Box>
+            <Box tall>2</Box>
+            <Box tall>3</Box>
+            <Box tall accent>
+              4
+            </Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="scroll='always' columns={{ base: 1, md: 2, lg: 3 }} colGap='gutter'"
+          note="Scrolls at every width; columns names how many are IN VIEW per step, counts not ratios. Three in view from 1024 are a 3-up grid's tracks to the pixel, so the band arithmetic holds; below 768 the peek appears. The row grows its box by --lay-scroll-ring-room (4) on every side, padding cancelled by a negative margin, so its clip cannot cut a focus ring and the items still sit on the column edges. The Slider pattern drives this mode and adds the controls; on its own it has no affordance on a desktop without a trackpad."
+        >
+          <Layout scroll="always" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter">
+            {['1', '2', '3', '4', '5', '6'].map((n) => (
+              <Box key={n} tall accent={n === '4'}>
+                {n}
+              </Box>
+            ))}
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="scroll='always' columns={1} peek={false} colGap='gutter'"
+          note="The peek switched off: exactly one item in view at every width, 390 included, and the next one wholly off the row's end. For a one-up row whose items are composites — the Slider's one-per-view testimonial, a portrait over a quote — where a 24 sliver of the neighbour reads as a stray photograph edge rather than as more to come. The controls carry that message instead. Default true; ignored without scroll. Compare the 390 shot with the row above."
+        >
+          <Layout scroll="always" columns={1} peek={false} colGap="gutter">
+            {['1', '2', '3'].map((n) => (
+              <Box key={n} tall accent={n === '2'}>
+                {n}
+              </Box>
+            ))}
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="scroll='always' with no colGap → items touch"
+          note="The seam is stated or it is 0, in a scroll row as everywhere. A row of edge-to-edge items is wrong on sight, which is the point."
+        >
+          <Layout scroll="always" columns={3}>
+            {['1', '2', '3', '4'].map((n) => (
+              <Box key={n}>{n}</Box>
             ))}
           </Layout>
         </Specimen>

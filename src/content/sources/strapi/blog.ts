@@ -481,7 +481,14 @@ function mapBlog(
   const outline: PageOutlineEntry[] = [];
   const blocks = sections.flatMap((block, index) => {
     if (index === publishedContentBlockIndex) return [];
-    const mapped = mapBlock(block, index, title, graphqlUrl, index === heroVideoBlockIndex, outline);
+    const mapped = mapBlock(
+      block,
+      index,
+      title,
+      graphqlUrl,
+      index === heroVideoBlockIndex,
+      outline,
+    );
     return mapped ? [mapped] : [];
   });
 

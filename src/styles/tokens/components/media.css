@@ -4,10 +4,11 @@
    edge-by-kind rules (ch05 §2, §2a, §4a, amendments B2–B5). Built to docs/specs/Media.md.
 
    Naming: --media-{kind or part}-{part}-{role}
-     kinds  capture | cutout            (illustration and photograph own no token: they take
-                                         no edge, no panel and no shadow, so there is nothing
-                                         to declare for them — the absence is the rule)
-     parts  rule | shadow | panel | radius
+     kinds  capture | cutout | photo    (illustration owns no token: it takes no edge, no
+                                         panel, no shadow and no radius, so there is nothing to
+                                         declare for it — the absence is the rule. A photograph
+                                         owns one, its radius)
+     parts  rule | shadow | panel | radius | ratio | crop | photo
      roles  ink (a rule's colour) · ground (a panel's fill) · width · inset
 
    ── Two kinds of colour live here, and only one of them is per surface ───────────
@@ -40,7 +41,8 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   Radius 0 on every image, in every medium (ch05 §6). The one exception the chapter
+   Radius 0 on every image but a photograph, in every medium (ch05 §6; the photograph's 8 is
+   --media-photo-radius below, visual-direction § 5.3). The one exception the chapter
    names — the SiteNav rail card's --radius-4 — belongs to that card, which is a control
    rather than an image placement, so it is the card's token to set on its own box and
    not a variant of this one.
@@ -78,6 +80,47 @@
      ListCard thumbnail, the SiteNav card), so one cover crops alike wherever it appears. A 1:1
      portrait in a 1:1 box (Proof) does not crop, so it is unaffected. */
   --media-fill-position: 0 20%;
+
+  /* The photograph radius (visual-direction § 5.3, fdn-media, 6 Oct 2026). The 29 Sep 8px on card
+     images (--bcrd-media-radius) extended to every photograph Media boxes itself — B, K, the
+     banner, the aside, the hero photograph — so a page never sets a rounded card photo beside a
+     square split photo. Photographs only: a capture keeps --media-radius's 0 and its hairline, a
+     cut-out has no box, and an illustration is never boxed (ch05 § 4a). Duplicated by value rather
+     than read from BlockCard's layer: a component never reads another component's tokens. */
+  --media-photo-radius: var(--radius-8);
+
+  /* The photograph tone layer (review 7 Oct 2026, visual-direction § 5.5a): a `filter` value that
+     every photograph Media renders takes, so the site's IRL photographs share one grade. The
+     treatment is TBD, so the hook ships `none` — a no-op, not an invented filter. When the owner
+     rules on it, the value lands here and nowhere else. Geometry-like, so :root only: a grade
+     belongs to the photograph, not the ground it sits on (a photograph reads no surface token,
+     § 5.3), and declaring it four times would assert a variation the rule forbids. */
+  --media-photo-grade: none;
+
+  /* Where a `ratio` crop is anchored when the record names no focal point: the middle. A photograph's
+     subject is wherever the photographer put it, and the catalogue records it (`focalPoint`); a
+     record without one gets the neutral answer, not the UI anchor --media-fill-position gives a
+     cover. */
+  --media-crop-position: 50% 50%;
+
+  /* The ratios a photograph may be cut to, inline over block — the closed set of § 5.4's
+     placements, one token each so the ratio a placement names is a decision in one file. Named by
+     the ratio itself, because the ratio IS the meaning: a 4:5 is the media split, a 3:1 the banner,
+     and two names for one ratio would be the --sec-gap mistake. --ratio-cover and --ratio-portrait
+     (primitives) stay the shared CARD crops; these are Media's own boxes. */
+  --media-ratio-4x5: 4 / 5;
+  --media-ratio-5x4: 5 / 4;
+  --media-ratio-3x1: 3 / 1;
+  /* The title-led hero's panorama under its head (cmp-hero fix round 2): 1240 × 310, so the hero
+     ends at 787 with the nav where a 3:1 put it at 953. */
+  --media-ratio-4x1: 4 / 1;
+  /* The title-led hero's WIDE shape, its default (owner, 7 Oct 2026): the panorama cut a group
+     photograph to a strip. 1240 × 620; the photograph runs past the fold by design. */
+  --media-ratio-2x1: 2 / 1;
+  --media-ratio-3x2: 3 / 2;
+  --media-ratio-16x9: 16 / 9;
+  --media-ratio-4x3: 4 / 3;
+  --media-ratio-1x1: 1 / 1;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────

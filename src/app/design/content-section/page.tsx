@@ -1,16 +1,30 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Prose, Section, type SectionSurface } from '@/components';
 import {
+  Layout,
+  Media,
+  Prose,
+  Section,
+  Texture,
+  TextureShape,
+  type IconName,
+  type SectionSurface,
+} from '@/components';
+import {
+  Accordion,
   BlockCard,
   ContentSection,
   ContentSectionText,
+  CtaRow,
   DataTable,
   ListCard,
   Proof,
-  type ContentSectionArrangement,
   type DataTableProps,
+  type ProofFigure,
 } from '@/patterns';
+import { HEAD_TRACK } from '@/lib/image-sizes';
+import { getKitPhoto, type PhotoId } from '@/lib/photos';
+import { ROUTES } from '@/lib/routes';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
@@ -32,6 +46,15 @@ const LEAD_LONG =
   'Most modernisation work is scoped as a rebuild of screens, but the decisions that slow a ' +
   'team down live between those screens: who approves a change, which record is authoritative, ' +
   'and what happens when two operators disagree about the same customer at the same time.';
+
+/* The KIT's copy ceilings (visual-direction § 1.5), as distinct from the CMS stress above. The
+   stress copy proves the band does not break; it is past every head's word budget, so a row carrying
+   it is a deliberate fold failure and says so (`FoldExempt`). A row that must FIT pushes copy to these
+   instead: h2 ≤ 6 words in a 381 head track (H-beside-aside), a lead ≤ 18 words (every head form but
+   H-beside-actions). HEADING_LONG is already the H-full ceiling (10 words). */
+const HEADING_CEILING_TRACK = 'Modernisation stalls where ownership is unclear';
+const LEAD_CEILING =
+  'Most delays trace back to a decision nobody owns: which record wins, who approves the change, and when.';
 
 /* No space, no hyphen: the only break opportunity is the one overflow-wrap makes. At 43px in a
    one-third track at 1024 this is roughly twice the track's width. */
@@ -74,7 +97,7 @@ const STEPS = [
   { title: 'Design the behaviour', body: 'What the interface does, not what it looks like.' },
 ];
 
-/* A four-column table: wide enough that a 68ch cap would visibly crush it, which is the failure the
+/* A four-column table: wide enough that a 75ch cap would visibly crush it, which is the failure the
    body measure must NOT reintroduce. It is a sibling of the text, so it keeps the full track. */
 const cell = (html: string) => `<p>${html}</p>`;
 const TABLE: DataTableProps = {
@@ -110,7 +133,96 @@ const TABLE: DataTableProps = {
 };
 
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
-const ARRANGEMENTS: readonly ContentSectionArrangement[] = ['stacked', 'beside'];
+
+/* The two arrangements the comparison rows show side by side. `media` has a section of its own
+   (14), because what goes in its body differs. */
+const PAIR = ['stacked', 'beside'] as const;
+type Pair = (typeof PAIR)[number];
+
+/* The body each of the pair takes in a comparison row. A card set reads ACROSS, so it never goes in
+   a beside body (1 Oct 2026, owner; visual-direction § 1.4 rule 5): beside takes rows. */
+const pairBody = (arrangement: Pair) => (arrangement === 'beside' ? <Steps /> : <Cards />);
+
+/* Photographs for the aside, media and pair rows (src/lib/photos.ts). Atmosphere photos: alt="". */
+const photo = (id: PhotoId) => getKitPhoto(id);
+
+const ICON_CARDS: readonly { title: string; body: string; icon: IconName }[] = [
+  {
+    title: 'A product model',
+    body: 'The records, their owners and the rules that bind them.',
+    icon: 'database',
+  },
+  {
+    title: 'Flows that hold',
+    body: 'Every path through the work, including the unhappy ones.',
+    icon: 'layers',
+  },
+  {
+    title: 'A component set',
+    body: 'Built once in code, documented where the team works.',
+    icon: 'widget',
+  },
+  {
+    title: 'A handover plan',
+    body: 'What your team runs after us, written down and rehearsed.',
+    icon: 'checklist',
+  },
+];
+
+const TILES = [
+  {
+    title: 'Workshops, not decks',
+    body: 'Decisions get made in the room with the people who own them.',
+  },
+  {
+    title: 'One shared board',
+    body: 'Every open question lives in one place the whole team can see.',
+  },
+  {
+    title: 'Weekly working reviews',
+    body: 'Real screens against real tasks, every week, from week one.',
+  },
+  {
+    title: 'A written trail',
+    body: 'Each decision recorded with the reason, so it is not reopened.',
+  },
+];
+
+const PAIR_CARDS = [
+  {
+    title: 'Rebuilding a claims workflow around one record',
+    body: 'Two teams, one customer, and the rule that settled which answer ships.',
+    image: 'pair-laptop-notebook' as PhotoId,
+  },
+  {
+    title: 'A design system the engineers asked for',
+    body: 'Tokens and components the product team adopted without being told to.',
+    image: 'whiteboard-pair-laptop' as PhotoId,
+  },
+];
+
+const FAQ = [
+  {
+    question: 'Do you work with an in-house design team?',
+    answerHtml: '<p>Most of the time, yes. We join the team rather than replace it.</p>',
+  },
+  {
+    question: 'How long is a typical engagement?',
+    answerHtml: '<p>Eight to sixteen weeks for a product, longer for a system.</p>',
+  },
+  {
+    question: 'Can we start with an audit?',
+    answerHtml: '<p>Yes. Every audit ends in a written plan you can run without us.</p>',
+  },
+  {
+    question: 'Who owns what we make together?',
+    answerHtml: '<p>You do, from the first commit. Nothing is held back as a licence.</p>',
+  },
+];
+
+const SEE_WORK = { label: 'See the work', href: ROUTES.caseStudies };
+const HOW = { label: 'How we work', href: ROUTES.howWeWork };
+const START = { label: 'Start a project', href: ROUTES.contact };
 
 /* ── Blocks ──────────────────────────────────────────────────────────────────────────────────
    Real patterns, composed exactly as a route composes them. Each owns its own set; the band only
@@ -118,12 +230,88 @@ const ARRANGEMENTS: readonly ContentSectionArrangement[] = ['stacked', 'beside']
 
 function Cards() {
   return (
-    <Layout as="ul" columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="gutter" equalRows>
+    <Layout as="ul" columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="column" equalRows>
       {CARDS.map((card) => (
         <BlockCard key={card.title} title={card.title} body={card.body} />
       ))}
     </Layout>
   );
+}
+
+/** Four icon cards, two across — the beside body C-icon takes (§ 1.4 rule 5). Icons are ink (§ 4.3). */
+function IconCards() {
+  return (
+    <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="column">
+      {ICON_CARDS.map((card) => (
+        <ListCard
+          key={card.title}
+          form="tile"
+          titleAs="h3"
+          title={card.title}
+          body={card.body}
+          marker={{ type: 'icon', name: card.icon }}
+        />
+      ))}
+    </Layout>
+  );
+}
+
+/** B tiles: up to four, two across at gutter, rows at column (§ 1.2) — or two with a CtaRow. */
+function Tiles({ count = 4 }: { count?: 2 | 4 }) {
+  return (
+    <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="column">
+      {TILES.slice(0, count).map((tile) => (
+        <ListCard
+          key={tile.title}
+          form="tile"
+          titleAs="h3"
+          title={tile.title}
+          body={tile.body}
+        />
+      ))}
+    </Layout>
+  );
+}
+
+/** Two pair cards with photographs — the beside body C-pair takes (§ 1.4 rule 5). */
+function PairCards() {
+  return (
+    <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="column">
+      {PAIR_CARDS.map((card) => (
+        <BlockCard
+          key={card.title}
+          title={card.title}
+          body={card.body}
+          href={ROUTES.caseStudies}
+          tracks={2}
+          media={{ type: 'image', image: photo(card.image) }}
+        />
+      ))}
+    </Layout>
+  );
+}
+
+/** A head-track aside: a 3:2 photograph at the head track's sizes (§ 1.4, 381 × 254). */
+function AsidePhoto({ id }: { id: PhotoId }) {
+  return <Media image={photo(id)} ratio="3/2" sizes={HEAD_TRACK} />;
+}
+
+/* The aside's other form (§ 3.3: "D always has an aside: a photograph or one --text-stat-lg
+   figure"). One Proof figure — the kit's stat-lg voice, its checked line said once. § 1.4 budgets it
+   at stat-lg 54, 16, body-sm on 2 lines: 114. The stress figure carries the 12-word label ceiling
+   (§ 1.5) and the widest value shape the corpus uses. */
+const STAT: ProofFigure = {
+  value: '90+',
+  label: 'completed product and design-system engagements',
+};
+const STAT_LONG: ProofFigure = {
+  value: '1,200+',
+  label: 'operator hours a week returned to claims teams after the workflow rebuild',
+};
+
+/** A head-track aside: one stat-lg figure (§ 3.3, the D band's other aside). */
+function AsideStat({ figure }: { figure: ProofFigure }) {
+  return <Proof figures={[figure]} />;
 }
 
 function Steps() {
@@ -143,6 +331,19 @@ function Steps() {
 }
 
 /**
+ * Marks a band that runs past the 1470 × 830 fold ON PURPOSE (visual-direction § 1.3: "a specimen
+ * block that shows a deliberate failure carries data-fold-exempt"). Every use carries CMS stress copy
+ * past § 1.5's word budget: it proves the band survives the copy, not that the copy is a page shape.
+ * A plain block wrapper — it adds no box, no seam and no ground, so the band inside sits edge to edge
+ * with its neighbours exactly as it would unwrapped.
+ */
+function FoldExempt({ reason, children }: { reason: string; children: ReactNode }) {
+  return <div data-fold-exempt={reason}>{children}</div>;
+}
+
+const OVER_BUDGET = 'CMS stress copy (10-word h2, 45-word lead) past the § 1.5 head budget';
+
+/**
  * A labelling band between groups of specimens. The specimens on this page are BANDS, so they
  * cannot sit inside a Specimen block without being nested inside another Section's column — which
  * would move their content column and make every measurement on the page wrong. The label is a
@@ -151,7 +352,7 @@ function Steps() {
  */
 function Label({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <Section density="tight">
+    <Section>
       <Layout rowGap="block">
         <h2>{title}</h2>
         <p className={s.specNote}>{children}</p>
@@ -168,7 +369,7 @@ function Label({ title, children }: { title: string; children: ReactNode }) {
  * of them and the only way `beside` can be judged against a real 1240 column.
  *
  * The page is ordered so the one comparison that matters comes first — the same content in both
- * arrangements — then the body measure (text capped at 68ch, a table and a card grid still spanning
+ * arrangements — then the body measure (text capped at 75ch, a table and a card grid still spanning
  * the track), and everything after it is coverage: both arrangements on all four surfaces with
  * identical markup, the stress ceilings, a short and a long body beside a head, every absent slot
  * and the two degradations `beside` makes, the densities, nested surfaces, a 390 viewport, and two
@@ -178,6 +379,16 @@ function Label({ title, children }: { title: string; children: ReactNode }) {
  * wide window. The 390 capture of this page is the proof that every `beside` band collapses to
  * `stacked`; section 9's frame shows the stacked band at 390 for comparison inside a wide window.
  */
+/** 14b's band-level texture: a soft glow in one bottom corner, inside the padding. */
+function CornerTexture({ side }: { side: 'start' | 'end' }) {
+  const across = side === 'end' ? { right: '-12%' as const } : { left: '-12%' as const };
+  return (
+    <Texture>
+      <TextureShape kind="ellipse" bottom={20} {...across} width="48%" height={56} blur={16} />
+    </Texture>
+  );
+}
+
 export default function ContentSectionSpecimen() {
   return (
     <>
@@ -185,26 +396,29 @@ export default function ContentSectionSpecimen() {
         <Layout rowGap="block">
           <h1>ContentSection</h1>
           <p className={s.specNote}>
-            One CMS section as one band: an optional eyebrow, heading and lead, then the blocks
-            the caller hands it. The gap ladder is the reason it exists — 8 eyebrow to heading,
-            24 heading to lead, 48 head group to the blocks and between the blocks. The{' '}
-            <code>arrangement</code> prop places that head group above the blocks (
-            <code>stacked</code>, the default) or, from 1024 up, in a one-third leading track
-            beside them (<code>beside</code>, ruling O2: static, 1 : 2, 64 between the halves).
-            Below 1024 the two are identical.
+            One CMS section as one band: an optional eyebrow, heading and lead, the head&rsquo;s
+            own actions or aside, then the blocks and a foot. The gap ladder is the reason it
+            exists — 24 eyebrow to heading to lead, 48 lead to actions, head to aside, head to
+            body, block to block and body to footer, 96 across every split. Three arrangements:{' '}
+            <code>stacked</code> (the default), <code>beside</code> (1 : 2 from 1024, the head
+            static, an aside or actions in its track) and <code>media</code> (a 4:5 photograph
+            in 5 of [5, 7] beside the copy, 4:3 above it below 1024). A text-only head is never
+            split left/right: <code>split-head</code> (the H-row) was retired on 7 Oct 2026. One
+            alignment axis: <code>align=&quot;center&quot;</code> centres a stacked head and its
+            body as a block. Below 1024 every arrangement is one column in DOM order.
           </p>
         </Layout>
       </Section>
 
       {/* ── 1 ──────────────────────────────────────────────────────────────────────────────── */}
-      <Label title="1 · The two arrangements, same content">
-        Identical props but one. Stacked puts the head group above the body; beside puts it in
-        the leading third, top-aligned, and does not stick. Compare the silhouettes: stacked is
-        a heading over a paragraph over three cards, the shape a long page repeats; beside is
-        two columns of different weight. Resize below 1024 and the second band becomes the
-        first.
+      <Label title="1 · The three arrangements, same head">
+        One head, three arrangements, each with the body it is for. Stacked puts the head over a
+        card set. Beside puts it in the leading third, static, over rows — a set that reads
+        across never goes beside (§ 1.4 rule 5). Media sets the copy beside a 4:5 photograph,
+        centred on it because the copy does not end in an action. Resize below 1024 and all
+        three are one column.
       </Label>
-      {ARRANGEMENTS.map((arrangement) => (
+      {PAIR.map((arrangement) => (
         <ContentSection
           key={arrangement}
           arrangement={arrangement}
@@ -216,21 +430,32 @@ export default function ContentSectionSpecimen() {
           <ContentSectionText>
             <Prose html={BODY_HTML} />
           </ContentSectionText>
-          <Cards />
+          {pairBody(arrangement)}
         </ContentSection>
       ))}
+      <ContentSection
+        arrangement="media"
+        media={{ head: 'title', image: photo('studio-sticky-board-ux') }}
+        eyebrow='arrangement="media"'
+        heading="How a week with us actually runs"
+        headingId="csec-compare-media"
+        lead={LEAD}
+      >
+        <Tiles />
+      </ContentSection>
 
       {/* ── 2 ──────────────────────────────────────────────────────────────────────────────── */}
       <Label title="2 · Text at the body measure, every other block at the track">
         Prose has no measure — the caller owns the reading column — and this band is the caller.
-        A rich-text block wrapped in ContentSectionText stops at 68ch, 666px at 1440, which is
-        about 90–95 characters of this face a line (a ch is the width of a zero, wider than the
-        average letter). It caps in both arrangements: stacked against the 1240 column, beside
-        against the 784 two-thirds track. The table and the card grid are siblings of the text,
-        not children, so they still run the whole track. At 1024 the beside track is narrower
-        than 68ch and the track wins — the cap is a ceiling, never a width.
+        A rich-text block wrapped in ContentSectionText stops at --measure-body, 75ch: 734px at
+        1440, which is about 100 characters of this face a line (a ch is the width of a zero,
+        wider than the average letter). It caps in both arrangements: stacked against the 1240
+        column, beside against the 763 two-thirds track. The table and (stacked) the card grid
+        are siblings of the text, not children, so they still run the whole track; beside
+        carries no card set. At 1024 the beside track is 576, narrower than 75ch, and the track
+        wins — the cap is a ceiling, never a width.
       </Label>
-      {ARRANGEMENTS.map((arrangement) => (
+      {PAIR.map((arrangement) => (
         <ContentSection
           key={arrangement}
           arrangement={arrangement}
@@ -243,7 +468,7 @@ export default function ContentSectionSpecimen() {
             <Prose html={BODY_LONG_HTML} />
           </ContentSectionText>
           <DataTable {...TABLE} />
-          <Cards />
+          {arrangement === 'stacked' ? <Cards /> : null}
         </ContentSection>
       ))}
 
@@ -256,7 +481,7 @@ export default function ContentSectionSpecimen() {
         because this is a matrix; on a route the two are never adjacent.
       </Label>
       {SURFACES.flatMap((surface) =>
-        ARRANGEMENTS.map((arrangement) => (
+        PAIR.map((arrangement) => (
           <ContentSection
             key={`${surface}-${arrangement}`}
             surface={surface}
@@ -277,25 +502,26 @@ export default function ContentSectionSpecimen() {
       {/* ── 4 ──────────────────────────────────────────────────────────────────────────────── */}
       <Label title="4 · The longest realistic heading and lead">
         A ten-word H2 of eighty characters and a forty-five-word lead. Stacked, the heading
-        breaks at the title measure (22ch) and balances; beside, the one-third track is narrower
-        than that measure, so the track sets the line and the heading runs to more lines — the
-        head column is allowed to be taller than a short body, and section 6 shows what that
-        looks like.
+        breaks at the title measure (--measure-title, 32ch: 816px at 1440) and balances; beside,
+        the one-third track (381) is narrower than that measure, so the track sets the line and
+        the heading runs to more lines — the head column is allowed to be taller than a short
+        body, and section 6 shows what that looks like.
       </Label>
-      {ARRANGEMENTS.map((arrangement) => (
-        <ContentSection
-          key={arrangement}
-          arrangement={arrangement}
-          eyebrow={`Long copy · ${arrangement}`}
-          heading={HEADING_LONG}
-          headingId={`csec-long-${arrangement}`}
-          lead={LEAD_LONG}
-        >
-          <ContentSectionText>
-            <Prose html={BODY_HTML} />
-          </ContentSectionText>
-          <Cards />
-        </ContentSection>
+      {PAIR.map((arrangement) => (
+        <FoldExempt key={arrangement} reason={OVER_BUDGET}>
+          <ContentSection
+            arrangement={arrangement}
+            eyebrow={`Long copy · ${arrangement}`}
+            heading={HEADING_LONG}
+            headingId={`csec-long-${arrangement}`}
+            lead={LEAD_LONG}
+          >
+            <ContentSectionText>
+              <Prose html={BODY_HTML} />
+            </ContentSectionText>
+            {pairBody(arrangement)}
+          </ContentSection>
+        </FoldExempt>
       ))}
 
       {/* ── 5 ──────────────────────────────────────────────────────────────────────────────── */}
@@ -304,7 +530,7 @@ export default function ContentSectionSpecimen() {
         can widen its column, and the base element rule breaks the word rather than the page.
         The 390 capture of this page is the check that nothing scrolls sideways.
       </Label>
-      {ARRANGEMENTS.map((arrangement) => (
+      {PAIR.map((arrangement) => (
         <ContentSection
           key={arrangement}
           surface="tint"
@@ -326,6 +552,8 @@ export default function ContentSectionSpecimen() {
         column and the band ends under the head; with a long body the head sits at the top of a
         column that is mostly air. Neither is corrected — a sticking head is ruling O2&rsquo;s
         rejected option, and stretching the head would put the lead at the band&rsquo;s foot.
+        The long body mixes prose, icon cards two across and rows — what a beside body may hold
+        (§ 1.4 rule 5); never a three-up set.
       </Label>
       <ContentSection
         arrangement="beside"
@@ -349,7 +577,7 @@ export default function ContentSectionSpecimen() {
         <ContentSectionText>
           <Prose html={BODY_LONG_HTML} />
         </ContentSectionText>
-        <Cards />
+        <IconCards />
         <Steps />
       </ContentSection>
 
@@ -358,9 +586,12 @@ export default function ContentSectionSpecimen() {
         Each head slot renders no element and no seam when absent — an empty string counts as
         absent. Without an eyebrow the heading is the head&rsquo;s first row; without a lead the
         eyebrow and heading are the whole head; a lead alone is a valid head. Beside needs both
-        halves: with no head the blocks take the full column, and with no blocks the head does —
-        both are the stacked band exactly, because an empty third or an empty two-thirds is a
-        hole. An empty children array counts as no blocks, so no 48 seam hangs under the head.
+        halves, a head and BLOCKS: with no head the blocks take the full column, and with no
+        blocks the head does — both are the stacked band exactly, because an empty third or an
+        empty two-thirds is a hole. A degraded band has no head track, so an aside is dropped
+        rather than set full column (a 3:2 photo at 1240 is ~827 tall and would be upscaled from
+        the 381 file). An empty children array counts as no blocks, so no 48 seam hangs under
+        the head. These are degrade cases, not page shapes.
       </Label>
       <ContentSection
         arrangement="beside"
@@ -408,7 +639,7 @@ export default function ContentSectionSpecimen() {
             }
           />
         </ContentSectionText>
-        <Cards />
+        <Steps />
       </ContentSection>
       <ContentSection
         surface="tint"
@@ -417,6 +648,14 @@ export default function ContentSectionSpecimen() {
         heading="A heading with nothing under it takes the full column"
         headingId="csec-absent-children"
         lead="The children prop is omitted. The head renders as the stacked head, measures intact."
+      />
+      <ContentSection
+        arrangement="beside"
+        eyebrow="Aside, no blocks, beside — degrades, aside dropped"
+        heading="A head-track photo with no track to sit in"
+        headingId="csec-absent-aside"
+        lead="An aside is passed and no children: the band is stacked and the photograph is not rendered."
+        aside={<AsidePhoto id="moodboard-wall-desk" />}
       />
       <ContentSection
         arrangement="stacked"
@@ -431,14 +670,13 @@ export default function ContentSectionSpecimen() {
       {/* ── 8 ──────────────────────────────────────────────────────────────────────────────── */}
       <Label title="8 · Density">
         Vertical air passes straight through to Section. It is independent of arrangement: a
-        tight band beside and an open band beside keep the same 64 between their halves.
+        tight band beside and an open band beside keep the same 96 between their halves.
       </Label>
       <ContentSection
         arrangement="beside"
         heading="One block, tight"
         headingId="csec-density-tight"
         lead="A band holding a paragraph does not want the air a five-card grid wants."
-        density="tight"
       >
         <ContentSectionText>
           <Prose html={BODY_HTML} />
@@ -450,7 +688,6 @@ export default function ContentSectionSpecimen() {
         heading="One block, open"
         headingId="csec-density-open"
         lead="The other direction, for a band that carries the page's turn."
-        density="open"
       >
         <ContentSectionText>
           <Prose html={BODY_HTML} />
@@ -472,7 +709,7 @@ export default function ContentSectionSpecimen() {
             title="tint nested in ink · beside"
             note="The case that once rendered at 1.13:1. Heading neutral-900, lead neutral-700, eyebrow neutral-700: tint's own block, nothing from ink."
           >
-            <Section as="div" surface="ink" density="tight">
+            <Section as="div" surface="ink">
               <ContentSection
                 surface="tint"
                 arrangement="beside"
@@ -568,6 +805,481 @@ export default function ContentSectionSpecimen() {
         lead={LEAD}
       >
         <Cards />
+      </ContentSection>
+
+      {/* ── 11 ─────────────────────────────────────────────────────────────────────────────── */}
+      <Label title='11 · align="center"'>
+        Eyebrow, heading and lead centred, each on its own measure (title 32ch, lead 56ch), and
+        the body centred as a block beneath. Under a ruled ladder (the accordion) the foot
+        passes rule=&#123;false&#125;: the ladder&rsquo;s last rule already closes the body, and
+        a second hairline 48 under it reads as a double rule. Otherwise: a card set still spans
+        the column, a capped block (the accordion in ContentSectionText, a centred CtaRow) sits
+        in the middle at its cap, and text inside every block stays start-aligned. Always
+        stacked; actions never sit in a centred head (the type refuses them) — a centred
+        band&rsquo;s ask is its footer.
+      </Label>
+      <ContentSection
+        align="center"
+        eyebrow="Centred · a set"
+        heading="Three places products slow down"
+        headingId="csec-centre-set"
+        lead="Each looks like an interface problem, and none of them starts on a screen."
+      >
+        <Cards />
+      </ContentSection>
+      <ContentSection
+        align="center"
+        eyebrow="Centred · D-faq"
+        heading="Questions we are asked first"
+        headingId="csec-centre-faq"
+        footer={
+          <CtaRow
+            actions={[{ label: 'Ask us directly', href: ROUTES.contact }]}
+            align="center"
+            rule={false}
+          />
+        }
+      >
+        <ContentSectionText>
+          <Accordion items={FAQ} />
+        </ContentSectionText>
+      </ContentSection>
+      <ContentSection
+        align="center-lg"
+        eyebrow="Centred from 1024 · center-lg"
+        heading="Centred over the row, start-aligned over the stack"
+        headingId="csec-centre-lg"
+        lead="From 1024 the head centres; below it the head starts on the column edge, like the stacked body under it."
+      >
+        <Cards />
+      </ContentSection>
+      <FoldExempt reason={OVER_BUDGET}>
+        <ContentSection
+          align="center"
+          eyebrow="Centred · longest copy"
+          heading={HEADING_LONG}
+          headingId="csec-centre-long"
+          lead={LEAD_LONG}
+        >
+          <ContentSectionText>
+            <Prose html={BODY_HTML} />
+          </ContentSectionText>
+        </ContentSection>
+      </FoldExempt>
+      <ContentSection
+        align="center"
+        surface="tint"
+        eyebrow="Centred · tint"
+        heading="Surface proof"
+        headingId="csec-centre-tint"
+        lead="Surface proof — on pages, tint is the proof band only (§ 1.7)."
+        footer={
+          <CtaRow
+            actions={[SEE_WORK]}
+            align="center"
+            note="The rule and the note restate their ink per surface."
+          />
+        }
+      >
+        <ContentSectionText>
+          <Prose html={BODY_HTML} />
+        </ContentSectionText>
+      </ContentSection>
+
+      {/* ── 12 ─────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="12 · beside, with an aside or actions in the head track">
+        The head track takes one large object a stack under the head text — a 3:2 photograph or
+        one stat-lg figure (§ 3.3: D always has one of the two; C-icon always the photograph) —
+        or the head&rsquo;s actions, never both (§ 1.4 rule 6; the type refuses the pair). The
+        lead steps to body-lg in a split head track. Below 1024 the aside sits between the head
+        and the body. The body is a reads-down body, icon cards two across, or two pair cards; a
+        footer CtaRow closes the body track. Tint rows are surface proof — on pages, tint is the
+        proof band only (§ 1.7).
+      </Label>
+      <ContentSection
+        arrangement="beside"
+        eyebrow="Aside · C-icon-4"
+        heading="What you receive"
+        headingId="csec-aside-icons"
+        lead="Four things your team keeps, each one built to be run without us."
+        aside={<AsidePhoto id="hand-sketch-wireframe" />}
+        footer={<CtaRow actions={[HOW]} />}
+      >
+        <IconCards />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        eyebrow="Aside · D"
+        heading="How the work is sequenced"
+        headingId="csec-aside-rows"
+        lead="Three steps, in the order they happen, each with what it hands over."
+        aside={<AsidePhoto id="moodboard-wall-desk" />}
+      >
+        <Steps />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        eyebrow="Aside · D · a stat figure"
+        heading="What the work returns"
+        headingId="csec-aside-stat"
+        lead="Three steps, and the one number that says whether they worked."
+        aside={<AsideStat figure={STAT} />}
+      >
+        <Steps />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        surface="tint"
+        eyebrow="Stat aside · copy and label at the ceiling"
+        heading={HEADING_CEILING_TRACK}
+        headingId="csec-aside-stat-long"
+        lead={LEAD_CEILING}
+        aside={<AsideStat figure={STAT_LONG} />}
+      >
+        <Steps />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        eyebrow="Actions · C-pair"
+        heading="Two pieces of work that argue the same point"
+        headingId="csec-beside-actions"
+        lead="A rebuilt workflow and a design system, both settled at the model before a screen was drawn."
+        actions={<CtaRow actions={[SEE_WORK]} rule={false} />}
+      >
+        <PairCards />
+      </ContentSection>
+      <FoldExempt reason={OVER_BUDGET}>
+        <ContentSection
+          arrangement="beside"
+          surface="tint"
+          eyebrow="Aside · longest copy"
+          heading={HEADING_LONG}
+          headingId="csec-aside-long"
+          lead={LEAD_LONG}
+          aside={<AsidePhoto id="studio-session-talk" />}
+        >
+          <Steps />
+        </ContentSection>
+      </FoldExempt>
+
+      {/* ── 13 ─────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="13 · A text-only head is one column (split-head retired)">
+        The H-row — heading in the leading third, lead and actions in the trailing two-thirds —
+        was retired on 7 Oct 2026 (owner): with no image beside it the reading order was unclear
+        and the action floated in a mostly empty track. A head with no media is eyebrow →
+        heading → lead 24, lead → actions 48, in one column over a full-column body; side by
+        side survives only where one side is media (14, and the aside in 8 to 12). These are the
+        bands that took the H-row, as they read now. Tint rows are surface proof — on pages,
+        tint is the proof band only (§ 1.7).
+      </Label>
+      <ContentSection
+        eyebrow="Stacked · with an action"
+        heading="What we do"
+        headingId="csec-split-action"
+        lead="Product design, design systems and the engineering that ships them, as one team."
+        actions={
+          <CtaRow actions={[{ label: 'All services', href: ROUTES.services }]} rule={false} />
+        }
+      >
+        <Cards />
+      </ContentSection>
+      <ContentSection
+        surface="tint"
+        eyebrow="Stacked · lead only, and a footer"
+        heading="Three places products slow down"
+        headingId="csec-split-lead"
+        lead={LEAD}
+        footer={
+          <CtaRow
+            actions={[SEE_WORK]}
+            note="Each one is a case study you can read in five minutes."
+          />
+        }
+      >
+        <Cards />
+      </ContentSection>
+      <FoldExempt reason={OVER_BUDGET}>
+        <ContentSection
+          eyebrow="Stacked · longest copy"
+          heading={HEADING_LONG}
+          headingId="csec-split-long"
+          lead={LEAD_LONG}
+          actions={<CtaRow actions={[START]} rule={false} />}
+        >
+          <Cards />
+        </ContentSection>
+      </FoldExempt>
+
+      {/* ── 13b · actions at the end of the heading's row ─────────────────────────────── */}
+      <Label title="13b · Actions at the end of the heading's row">
+        actionsAt=&quot;end&quot; (owner, 7 Oct 2026): the text stays in one column on the left
+        and the actions sit at the row&rsquo;s end from 1024, their top on the heading&rsquo;s
+        top — the eyebrow keeps its own line above both. A content-sized track, 64 from the
+        text. Below 1024 the actions fall back a stack under the lead. Stacked heads only; the
+        link row on paper and on tint, then the longest heading and lead against it. An in-band
+        action is always a link (r7-buttons, 8 Oct 2026): the solid pair is the hero&rsquo;s and
+        the close&rsquo;s.
+      </Label>
+      <ContentSection
+        eyebrow="Actions at the end · link"
+        heading="What we do"
+        headingId="csec-actions-end-link"
+        lead="Product design, design systems and the engineering that ships them, as one team."
+        actionsAt="end"
+        actions={<CtaRow actions={[SEE_WORK]} rule={false} />}
+      >
+        <PairCards />
+      </ContentSection>
+      <ContentSection
+        surface="tint"
+        eyebrow="Actions at the end · on tint"
+        heading="Two pieces of work that argue the same point"
+        headingId="csec-actions-end-pair"
+        lead="A rebuilt workflow and a design system, both settled at the model before a screen was drawn."
+        actionsAt="end"
+        actions={<CtaRow actions={[HOW]} rule={false} />}
+      >
+        <PairCards />
+      </ContentSection>
+      <FoldExempt reason={OVER_BUDGET}>
+        <ContentSection
+          eyebrow="Actions at the end · longest copy"
+          heading={HEADING_LONG}
+          headingId="csec-actions-end-long"
+          lead={LEAD_LONG}
+          actionsAt="end"
+          actions={<CtaRow actions={[START]} rule={false} />}
+        >
+          <PairCards />
+        </ContentSection>
+      </FoldExempt>
+
+      {/* ── 14 ─────────────────────────────────────────────────────────────────────────────── */}
+      <Label title='14 · arrangement="media" (the B split)'>
+        A 4:5 photograph in 5 of [5, 7], radius 8, the copy in 7, 96 apart. Only one shape pins:
+        blocks, then a footer. That copy column stretches to the photo and pins the footer to
+        its bottom edge, so the two share a top and a bottom edge (§ 3.2 rule 1). Everything
+        else is centred on the photo (rule 2): tiles with no footer, and a copy column with no
+        blocks — a head and a footer, or a head and its actions — because there is nothing to
+        fill a stretch and pinning would leave ~400 of empty column between the lead and the
+        action. Head actions are never pinned; they sit a stack under the lead. The no-blocks
+        bands are degrade cases, not page shapes (§ 3.4 B always carries tiles), and their foot
+        takes rule=&#123;false&#125;: with no body above it, the hairline would underline the
+        lead. The pinned band is shown beside the same band with media.pin=false, for the owner
+        to choose between (spec open question 7). media.side flips the photo to the end. Below
+        1024 the photo sits above the copy at 4:3. Tint rows are surface proof — on pages, tint
+        is the proof band only (§ 1.7).
+      </Label>
+      <ContentSection
+        arrangement="media"
+        media={{ head: 'title', image: photo('studio-sticky-board-ux') }}
+        eyebrow="Photo start · 4 tiles · centred"
+        heading="How a week with us actually runs"
+        headingId="csec-media-tiles"
+        lead="Working sessions, one shared board and a written trail, from the first week."
+      >
+        <Tiles />
+      </ContentSection>
+      <ContentSection
+        arrangement="media"
+        media={{ head: 'title', image: photo('designer-desk-monitor'), side: 'end' }}
+        eyebrow="Photo end · 2 tiles + CtaRow · pinned (the default)"
+        heading="The team you work with is the team that ships"
+        headingId="csec-media-ctarow"
+        lead="No hand-off between a pitch team and a delivery team. The people in the room build it."
+        footer={<CtaRow actions={[HOW]} />}
+      >
+        <Tiles count={2} />
+      </ContentSection>
+      {/* The owner comparison: identical band, same side, so alignment is the only difference. */}
+      <ContentSection
+        arrangement="media"
+        media={{
+          head: 'title',
+          image: photo('designer-desk-monitor'),
+          side: 'end',
+          pin: false,
+        }}
+        eyebrow="Photo end · 2 tiles + CtaRow · media.pin=false, centred"
+        heading="The team you work with is the team that ships"
+        headingId="csec-media-ctarow-centred"
+        lead="No hand-off between a pitch team and a delivery team. The people in the room build it."
+        footer={<CtaRow actions={[HOW]} />}
+      >
+        <Tiles count={2} />
+      </ContentSection>
+      <ContentSection
+        arrangement="media"
+        media={{ head: 'title', image: photo('stylus-tablet-sketch') }}
+        eyebrow="No blocks + CtaRow · centred · degrade case"
+        heading="Drawn first, then built properly"
+        headingId="csec-media-lead"
+        lead="Every interface starts as a sketch on paper, because a sketch is cheap to throw away and a coded screen is not."
+        footer={
+          <CtaRow
+            actions={[SEE_WORK]}
+            note="Twelve case studies, each with its first sketch."
+            rule={false}
+          />
+        }
+      />
+      <ContentSection
+        arrangement="media"
+        media={{ head: 'title', image: photo('whiteboard-two-hands'), side: 'end' }}
+        eyebrow="Head actions, no blocks · centred · degrade case"
+        heading="Start with the decision in front of you"
+        headingId="csec-media-actions"
+        lead="A thirty-minute call about the decision you are facing, and a written note of what we would do first."
+        actions={<CtaRow actions={[START]} rule={false} />}
+      />
+      <ContentSection
+        arrangement="media"
+        media={{ head: 'title', image: photo('studio-sticky-board-ux') }}
+        surface="tint"
+        eyebrow="Copy at the ceiling · 2 tiles + CtaRow"
+        heading={HEADING_LONG}
+        headingId="csec-media-long"
+        lead={LEAD_CEILING}
+        footer={<CtaRow actions={[SEE_WORK]} />}
+      >
+        {/* § 1.4 rule 9: ≤ 4 tiles, or ≤ 2 tiles and a CtaRow, never both in full. The stress is the
+            copy at its § 1.5 ceiling (H-full: 10-word h2, 18-word lead) inside the fuller of the two
+            allowed shapes, not a third shape — so this row must, and does, fit the fold. */}
+        <Tiles count={2} />
+      </ContentSection>
+      <FoldExempt reason={`${OVER_BUDGET}: proves a copy column taller than the photo`}>
+        <ContentSection
+          arrangement="media"
+          media={{ head: 'title', image: photo('stylus-tablet-sketch'), side: 'end' }}
+          eyebrow="CMS stress · copy taller than the photo · fold-exempt"
+          heading={HEADING_LONG}
+          headingId="csec-media-overflow"
+          lead={LEAD_LONG}
+          footer={<CtaRow actions={[SEE_WORK]} />}
+        >
+          <Tiles count={2} />
+        </ContentSection>
+      </FoldExempt>
+
+      {/* ── 14b · the texture slot outside `media` ───────────────────────────────────────── */}
+      <Label title="14b · texture, in every arrangement">
+        The texture slot takes one of Texture&rsquo;s named placements and renders it as the
+        band&rsquo;s first child, beneath the content. In media it shows from 1024 only (the
+        counterweight has no phone form); in stacked, beside and a centred head it shows at
+        every width, which these three bands prove at 390. Paper only, by type: beside any other
+        surface the prop does not compile. Shown with a corner glow composed in place, in the
+        bottom padding and leaving by the side. The media split&rsquo;s own counterweight is not
+        this slot: it is media.counterweight, a field in the copy column
+        (/design/kit/media-split).
+      </Label>
+      <ContentSection
+        eyebrow="Stacked · texture"
+        heading="Three places products slow down"
+        headingId="csec-texture-stacked"
+        lead={LEAD}
+        texture={<CornerTexture side="end" />}
+      >
+        <Cards />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        eyebrow="Beside · texture"
+        heading="What changes in the first month"
+        headingId="csec-texture-beside"
+        lead={LEAD}
+        texture={<CornerTexture side="start" />}
+      >
+        <Tiles count={2} />
+      </ContentSection>
+      <ContentSection
+        align="center"
+        eyebrow="Centred · texture"
+        heading="One team from the first workshop"
+        headingId="csec-texture-centred"
+        lead={LEAD}
+        texture={<CornerTexture side="end" />}
+      >
+        <Cards />
+      </ContentSection>
+
+      {/* ── 15 ─────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="15 · Footer in every arrangement, and footer alone">
+        The footer is the body&rsquo;s last row, a stack under the blocks, in every arrangement
+        (sections 11 to 14 show it centred, beside, stacked and media). Stacked here, and beside
+        with a footer and no blocks — a degrade case, not a page shape: a footer is not a
+        trailing half on its own (a lone CtaRow level with the eyebrow over an empty two-thirds
+        track), so the band is the stacked band, the footer a stack under the head. With no
+        blocks the foot passes rule=&#123;false&#125;: its hairline marks where a body ends, and
+        with no body above it, it would sit 48 under the lead as an underline.
+      </Label>
+      <ContentSection
+        eyebrow="Footer · stacked"
+        heading="Three places products slow down"
+        headingId="csec-footer-stacked"
+        lead={LEAD}
+        footer={
+          <CtaRow
+            actions={[SEE_WORK]}
+            note="Each one is a case study you can read in five minutes."
+          />
+        }
+      >
+        <Cards />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        surface="tint"
+        eyebrow="Footer only · beside — degrades to stacked"
+        heading="Not sure which of these fits?"
+        headingId="csec-footer-only"
+        lead="Tell us the decision you are facing and we will say which, in writing."
+        footer={
+          <CtaRow
+            actions={[START]}
+            note="Every engagement starts with a thirty-minute call."
+            rule={false}
+          />
+        }
+      />
+
+      <Label title='16 · headingSize="display" and asideFill'>
+        headingSize=&quot;display&quot; sets the same h2 at the display role on the display
+        measure: a head that opens an argument, at the ~70 of the references against cards at 22
+        to 28, so the scale gap between head and set is unmistakable. It changes the scale,
+        never the element. Shown centred and start-aligned. asideFill (beside, photo aside only)
+        makes the head-track photograph end on the body&rsquo;s last line: the two tracks
+        stretch to one height and the photo, a fit=&quot;fill&quot; Media, takes what the head
+        text leaves, never below about 3:2. Without it (section 12) the 3:2 photo keeps its own
+        height.
+      </Label>
+      <ContentSection
+        align="center"
+        headingSize="display"
+        eyebrow="Display · centred"
+        heading="Three places products slow down"
+        headingId="csec-display-centred"
+        lead={LEAD}
+      >
+        <Cards />
+      </ContentSection>
+      <ContentSection
+        headingSize="display"
+        eyebrow="Display · stacked"
+        heading="Where the work starts"
+        headingId="csec-display-stacked"
+      >
+        <Cards />
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        eyebrow="asideFill · beside"
+        heading="Four things you keep"
+        headingId="csec-aside-fill"
+        lead={LEAD}
+        asideFill
+        aside={<Media image={photo('hand-sketch-wireframe')} fit="fill" sizes={HEAD_TRACK} />}
+      >
+        <IconCards />
       </ContentSection>
     </>
   );

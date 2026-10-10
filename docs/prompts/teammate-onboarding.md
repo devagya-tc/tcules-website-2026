@@ -151,7 +151,7 @@ may need attention. Do not delete package-lock.json.
 
 Then, from the repo root, run this once and paste the real output:
      npm run verify
-It chains six checks — lint, typecheck, tokens:check, classes:check, specimens:check, design:check.
+It chains seven checks — lint, typecheck, tokens:check, classes:check, specimens:check, design:check, photos:check.
 All six pass on a clean clone of main. If any fails: DO NOT FIX IT. Show me the failure verbatim, say in one
 sentence what it looks like, and note whether it looks pre-existing or environmental. A red check on
 a fresh clone is information I need, not a task for you.

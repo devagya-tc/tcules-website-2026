@@ -5,9 +5,11 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Layout, Prose, type LayoutProps } from '@/components';
 import { getToolPage, type ToolBlock, type ToolContentColumn } from '@/content';
 import { ROUTES, toolPath } from '@/lib/routes';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -73,7 +75,7 @@ function renderToolBlock(block: ToolBlock) {
           as="ul"
           columns={cardColumns(block.columns)}
           colGap="gutter"
-          rowGap="gutter"
+          rowGap="column"
           equalRows
         >
           {block.cards.map((card) => (
@@ -89,7 +91,7 @@ function renderToolBlock(block: ToolBlock) {
 
     case 'comparison-cards':
       return (
-        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="gutter" equalRows>
+        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="column" equalRows>
           {block.cards.map((card) => (
             <BlockCard
               key={`${block.id}-${card.title}`}
@@ -175,7 +177,7 @@ function renderToolBlock(block: ToolBlock) {
                 as="a"
                 href={block.download.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
               >
@@ -238,6 +240,12 @@ export default async function ToolPage({ params }: PageProps<'/tools/[slug]'>) {
 
   const title = tool.title || tool.hero.highlightedText || '';
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: 'Tools', href: ROUTES.tools },
+    { label: title, href: toolPath(tool.slug) },
+  ];
+
   return (
     <>
       {tool.seo?.structuredData ? (
@@ -247,18 +255,12 @@ export default async function ToolPage({ params }: PageProps<'/tools/[slug]'>) {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Tools', href: ROUTES.tools },
-          { label: title, href: toolPath(tool.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(crumbs, title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={title}
-        eyebrow={tool.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(tool.hero.eyebrow, crumbs)}
         body={[tool.hero.description]}
         dates={tool.publishedAt ? { published: tool.publishedAt } : undefined}
         surface="paper"

@@ -3,29 +3,36 @@
    Every colour, type role, component size and state value comes from --lcrd-*, declared in
    tokens/components/list-card.css and re-declared once per surface there. Two usage tokens are read
    unaliased and the spec names them that way: --measure-title / --measure-body on the copy, and
-   --gap-gutter and --gap-text as the row's block and inline insets. Both are shared answers rather than this component's own. Layout and Cluster own
-   every arrangement and every seam. This module provides only the row's own edge, inner inset,
-   child sizing, crop and interactive rendering.
+   --gap-gutter as the row's block inset and --gap-block as a boxed tile's inset. Both are shared
+   answers rather than this component's own. Layout and Cluster own every arrangement and every
+   seam. This module provides only the item's own edge, inner inset, child sizing, crop and
+   interactive rendering.
 
    ── What is absent, and why ────────────────────────────────────────────────────
    No background AT REST, which is the whole of what "a ListCard never owns its ground" ever meant.
-   A ground under the pointer is an affordance; a ground at rest would be a finish, and a filled
-   object at rest is still BlockCard's job. Nothing here paints until :hover.
-   No surrounding edge. The one border is the row's block-end rule.
+   Only a boxed, linked tile paints, and only under the pointer: an affordance, not a finish.
+   No surrounding edge, except on a boxed tile (`frame="box"`, owner 7 Oct 2026). A row's one
+   border is its block-end rule; an open tile's, its block-start rule.
    No margin. The parent Layout owns the list axis and uses rowGap="none". The one margin below is
      the visually-hidden hint's clip technique, not outer spacing.
    No display:grid or display:flex. Layout and Cluster own both axes; flex values below size their
    children inside those primitives and do not arrange siblings by themselves.
-   No responsive type or distance override, and no media query at all. The split collapses when
+   No responsive type or distance override, and no media query on the row. (The two in this file
+   belong to the ReadDown set mode at its foot: one follows its two-column arrangement, the other
+   gates its rail texture to 1440, the rest size its photo box.) The split collapses when
    the ROW runs out of room for its two minimum tracks — a wrapping Cluster, not a viewport
    boundary — and the type composites step in the shared type layer.
    No container query either. It was the fallback for reading the row's own width, and it is not
    needed: flex-wrap already answers "do both tracks fit on this line", and it answers it inside a
    primitive rather than in a local arrangement.
    No rule wipe. Hover used to animate a hairline across the row's block-end and double it on press.
-   The row's own rule stays — it was always decoration, never the interactive element — but the
-   trailing cue is now the only part that moves, and it moves in colour alone.
-   No title state rule. The title holds --lcrd-title-ink linked or not; nothing sets it to inherit.
+   No arrow cue (owner, 7 Oct 2026). A blue arrow after nearly every linked title read as bulky,
+   and the whole item is already the link: a linked item's TITLE is its hover and focus signal,
+   taking --lcrd-link-ink, with the focus ring round the whole item. An item with an action at its
+   foot (`ctaLabel`) leaves its title still and lets the action move, as BlockCard's cta card does.
+   No row hover ground. It existed to cover a 1240 target whose only other signal was an 18px
+   arrow at its far end; with the title moving there is nothing for it to answer, and the 16 inline
+   inset that held copy off it went with it, so every row now stands on the column edge.
    No motion. Nothing transforms, so there is no prefers-reduced-motion block left to write.
 
    Rule order is load-bearing: hover/focus precede pressed, so pointer-down wins while the pointer
@@ -47,73 +54,141 @@
 .frame {
   display: block;
   min-inline-size: 0;
-  /* The two axes take DIFFERENT steps, because they cost different things. Vertical space is free —
-     the page scrolls — so the block axis can be generous. Inline space is scarce: every pixel is a
-     pixel of copy width, and on a phone it is a pixel out of 311.
-
-     Block: --gap-gutter, "container gutter". 32 puts adjacent rows' content 64px apart and gives a
+  /* Block: --gap-gutter, "container gutter". 32 puts adjacent rows' content 64px apart and gives a
      title-only row about 98px of height. --gap-block (24) sat here briefly and was the wrong ROLE —
      "head to body inside a block" is a distance between two pieces of content, not a container's own
-     inset — which is the mistake the scale warns about: a step is chosen by what it separates, never
-     by how it looks at one width. The three container-inset roles are --gap-tight "chip padding",
-     --gap-text "cell padding", --gap-gutter "container gutter". */
+     inset — which is the mistake the scale warns about: a step is chosen by what it separates.
+     Inline: none (7 Oct 2026). The 16 that stood here cleared a row's hover ground, and the ground
+     went with the arrow cue, so the marker and copy stand on the column edge the band's head and the
+     rule share — what a static row, a Steps row and a tile already did. */
   padding-block: var(--gap-gutter);
-  /* Inline: --gap-text, "cell padding" — the smallest container-inset role that does the job, because
-     on this axis the job is small and the cost is not. It exists because of the hover ground: without
-     it the copy sits flush against the edge of a band that paints under it, which is the one thing
-     ghost gets right by having --btn-padding-x. 16px clears that edge visibly; ghost itself uses 8.
-
-     --gap-gutter was tried here for one revision and is too expensive on the axis that pays. At 32 a
-     375px phone spends 128px of its width on padding — 64 in the Section gutters and 64 here, 34% of
-     the screen — and the xs stress track falls to 128px of copy, roughly eight characters of an h4
-     title per line. At 16 those become 279px and 160px. The rejected argument for 32 was that
-     --sec-gutter is also 32, so the copy would sit the same distance inside the row as the band sits
-     inside the viewport; a row's ground is not a viewport, and two things sharing a number is not a
-     reason.
-
-     The spec used to say "no inline frame inset, Section already aligns the row to the content
-     column" — true, and an argument that it was unnecessary rather than that it was wrong. A ground
-     made it necessary.
-
-     Safe at every width, and that is a property of the box model rather than of this value:
-     `box-sizing: border-box` is global, so padding is taken OUT of the row's inline size and can
-     never widen it. Combined with min-inline-size:0 here and on .content, the row cannot overflow
-     a 375px phone, a 192px stress track, a two-column 64px-gap layout or an unsized wrapping
-     Cluster — the copy wraps instead. It also does not shift responsively, per the gap scale's own
-     rule; one value holds everywhere.
-
-     The consequence to know: the copy now sits 16px inside the Section content column, so it no
-     longer aligns with a section heading directly above it, while the rule and the hover ground
-     still span the full column. That is the reference's own relationship — a full-width rule with
-     inset content — and it reads as the rows belonging under the heading. The alternative was
-     bleeding the ground outside the column with a negative inset, which breaks in exactly the
-     containers listed above. */
-  padding-inline: var(--gap-text);
-  /* Stated so the hover ground has an explicit endpoint to transition from, the same reason
-     Button.module.css declares it on `.button`. The row paints nothing at rest. */
+  padding-inline: 0;
+  /* Stated so a boxed tile's hover ground has an explicit endpoint to transition from, the same
+     reason Button.module.css declares it on `.button`. Nothing paints at rest. */
   background: transparent;
   border-block-end: var(--lcrd-rule-width) solid var(--lcrd-rule-ink);
   border-radius: var(--lcrd-radius);
   box-shadow: var(--lcrd-shadow);
 }
 
-/* The content/cue core is a Cluster child. Its basis is the named xs component minimum; flex-grow
-   takes the rest of the row, and min(100%, xs) is what lets it shrink in a parent narrower than
-   the minimum without horizontal overflow. This is sizing inside Cluster, not a second layout. */
+/* ── The tile form (1 Oct 2026) ────────────────────────────────────────────────────
+   One item in a grid track. Everything below is the row's frame turned for a grid, and nothing
+   else: the same rule ink and width, the same type, the same marker.
+
+   The rule OPENS the item. Tiles in a grid row have unequal heights, so their bottoms never line up
+   and only their tops do; a block-start rule is the edge that aligns across the row. The rule-to-
+   content distance is --gap-block, "head to body inside a block": the rule heads the item.
+
+   No inline inset and no block-end inset: an open tile's copy sits flush with the track, so a grid
+   of tiles aligns with the section heading over it. The space after a tile is the grid's rowGap.
+
+   The frame fills the li, and the li fills the grid's stretched cell, so a linked tile's whole cell
+   is the target and a pinned action can sit at the cell's foot. */
+.tile .frame {
+  block-size: 100%;
+  padding-block: var(--gap-block) 0;
+  padding-inline: 0;
+  border-block-end: none;
+  border-block-start: var(--lcrd-rule-width) solid var(--lcrd-rule-ink);
+}
+
+.tile {
+  block-size: 100%;
+}
+
+.tileInner {
+  block-size: 100%;
+}
+
+/* A number or thumbnail tile's copy beside or under its marker (see the tile in the TSX). Sizing
+   inside the Cluster, the split's own mechanism: a flex basis decides whether the copy shares the
+   marker's line. Below md a number's copy takes the rest of that line; from md, and always under a
+   thumbnail, it takes a whole line and wraps beneath. The layout changes at 768; no distance does.
+   An icon tile is not in this Cluster: it stacks at every width (owner, 9 Oct 2026). */
+.tileCopy {
+  min-inline-size: 0;
+}
+
+.tileCopyBeside {
+  flex: 1 1 0;
+}
+
+.tileCopyBelow {
+  flex: 1 1 100%;
+}
+
+@media (min-width: 768px) {
+  .tileCopyBeside {
+    flex-basis: 100%;
+  }
+}
+
+/* A tile's icon is sized from the title under it (owner, 7 Oct 2026: the 32 that stood alone above
+   the title was far too big) and stands on its own row above it (owner, 9 Oct 2026). The marker is
+   set in the title's own role for the size step, so the glyph is the title's em
+   (--lcrd-marker-icon-size-tile): 22 over an h5, 28 over an h4, stepping with the roles at 1023
+   and 767. The box is the glyph's own size — no line box round it, since there is no line to
+   centre on — so the 16 to the title is the Layout's seam alone. ListCard sizes the glyph it is
+   handed, as Button does; three classes and an element outrank Icon's size class. */
+.tile .markerIcon {
+  block-size: var(--lcrd-marker-icon-size-tile);
+}
+
+.sizeMd.tile .markerIcon {
+  font: var(--lcrd-title-text-md);
+}
+
+.sizeSm.tile .markerIcon {
+  font: var(--lcrd-title-text-sm);
+}
+
+.tile .marker > svg {
+  display: block;
+  width: var(--lcrd-marker-icon-size-tile);
+  height: var(--lcrd-marker-icon-size-tile);
+}
+
+/* Above the title there is no baseline to sit on, so the row's optical offset does not apply.
+   Three classes, so it outranks both `.number` and the size step's `.sizeSm .number` (later in this
+   file) without depending on source order. */
+.root .number.numberAbove {
+  padding-block-start: 0;
+}
+
+/* An open linked tile has NO hover ground: a ground flush with copy that has no inset reads as a
+   highlighted paragraph rather than a target. Beside its title's ink, its signal is the edge it
+   already has: the opening rule takes the link ink, across the whole tile, at the top where the eye
+   enters it. It reads --lcrd-link-ink rather than a rule state token, because the rule has no state
+   of its own — it borrows the link colour while the tile is the active target. A boxed tile
+   (below) paints a ground instead, because its inset gives one somewhere to sit. */
+.root.tile .link:hover,
+.root.tile .link:focus-visible {
+  background-color: transparent;
+  border-block-start-color: var(--lcrd-link-ink);
+}
+
+.root.tile .link:active {
+  background-color: transparent;
+  border-block-start-color: var(--lcrd-link-ink-pressed);
+}
+
+/* The content core is a Cluster child: the copy, and an action under it when there is one. Its
+   basis is the named xs component minimum; flex-grow takes the rest of the row, and min(100%, xs)
+   is what lets it shrink in a parent narrower than the minimum without horizontal overflow. This is
+   sizing inside Cluster, not a second layout. */
 .core {
   flex: 1 1 var(--lcrd-content-min-xs);
   min-inline-size: min(100%, var(--lcrd-content-min-xs));
 }
 
 /* The title/body container — the split's Cluster or the stacked Layout — receives all remaining
-   core width while the cue keeps its own box. */
+   core width. */
 .content {
   flex: 1 1 auto;
   min-inline-size: 0;
 }
 
-.marker,
-.cue {
+.marker {
   flex: 0 0 auto;
 }
 
@@ -131,12 +206,18 @@
   /* Later than .marker in this file and at equal specificity, which is what lets the ordinal take
      its own quiet ink while an icon marker keeps .marker's. Source order is the mechanism, so do
      not reorder these two rules. */
-  padding-block-start: var(--lcrd-number-baseline-offset);
+  padding-block-start: var(--lcrd-number-baseline-offset-md);
   color: var(--lcrd-number-ink);
   font: var(--lcrd-marker-text);
   letter-spacing: var(--lcrd-marker-tracking);
   text-transform: var(--text-mono-case);
   white-space: nowrap;
+}
+
+/* The neutral tone: the numeral steps out of the accent into the surface's quiet grey. After
+   .number, equal specificity, so source order is again the mechanism. */
+.numberNeutral {
+  color: var(--lcrd-neutral-number-ink);
 }
 
 /* The icon fill needs no rule of its own, and that absence is the assertion: Icon owns its box, its
@@ -147,12 +228,15 @@
 /* The thumbnail's BOX, and nothing inside it. ListCard owns the placement — 160 inline, the shared
    3:2 cover crop — and Media fills it (`fit="fill"`) with its own crop, srcset and edge by kind.
    overflow:hidden is what makes the cover crop a crop: Media's fill image is 100% of this box, and
-   a cut-out's drop-shadow is clipped to it rather than bleeding into the copy's seam. */
+   a cut-out's drop-shadow is clipped to it rather than bleeding into the copy's seam. It is also
+   what applies the radius to whatever fills the box — photograph, capture or a cut-out's panel —
+   since Media is passed `edge="placement"` and draws no edge of its own (visual-direction § 5.3). */
 .thumbnail {
   display: block;
   inline-size: var(--lcrd-thumbnail-inline-md);
   aspect-ratio: var(--lcrd-thumbnail-ratio);
   overflow: hidden;
+  border-radius: var(--lcrd-thumbnail-radius);
 }
 
 /* The title breaks only BETWEEN words. `anywhere` stood here and was the mid-word bug ("Produ/ct",
@@ -166,17 +250,43 @@
   max-inline-size: var(--measure-title);
   overflow-wrap: break-word;
   color: var(--lcrd-title-ink);
-  font: var(--lcrd-title-text);
-  letter-spacing: var(--lcrd-title-tracking);
   text-wrap: var(--text-title-wrap);
+  transition: color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
 }
 
 .body {
   max-inline-size: var(--measure-body);
+  font: var(--lcrd-body-text-md);
   overflow-wrap: anywhere;
   color: var(--lcrd-body-ink);
-  font: var(--lcrd-body-text);
   text-wrap: var(--text-running-wrap);
+}
+
+/* The size step, set on the root by the `size` prop (visual-direction § 7.2). One modifier on the
+   root, because the step is one decision about the item. Exactly one of the two is always present.
+
+   The title steps in every form. The body steps in a TILE only: a tile's body runs in a 286 to 392
+   track, where body-sm is the right size, but a row's body runs at up to --measure-body beside or
+   under its title, and body-sm at that measure read as fine print under an h2 band (6 Oct 2026,
+   fdn-spacing review; § 1.4's F step row and one-column D row are h5 over body). So `.body` above
+   carries the md role and only `.sizeSm.tile` restates it. The ordinal's baseline correction is a
+   function of the title's size, so the small step restates it; `.number` above carries the md value. */
+.sizeMd .title {
+  font: var(--lcrd-title-text-md);
+  letter-spacing: var(--lcrd-title-tracking-md);
+}
+
+.sizeSm .title {
+  font: var(--lcrd-title-text-sm);
+  letter-spacing: var(--lcrd-title-tracking-sm);
+}
+
+.sizeSm.tile .body {
+  font: var(--lcrd-body-text-sm);
+}
+
+.sizeSm .number {
+  padding-block-start: var(--lcrd-number-baseline-offset-sm);
 }
 
 /* ── The split: sizing inside the Cluster, not a second layout ───────────────────
@@ -192,7 +302,7 @@
    The GROWTH keeps the 2:3 weighting the split always had, until the MAXIMA stop it: the title at
    --measure-title, the body at --measure-body (.title / .body above). That is the width cap — the
    split can never be wider than the title track plus the seam plus the body's measure — so on a wide
-   row the leftover collects at the core's inline end, before the cue, instead of opening a 500px
+   row the leftover collects at the core's inline end, instead of opening a 500px
    channel between a title and the sentence it heads.
 
    min-inline-size:0 on both, so a child alone on its line after the wrap can shrink to the row
@@ -207,54 +317,46 @@
   min-inline-size: 0;
 }
 
-/* The row's only link-coloured part. It holds this ink through hover and steps once on press, which
-   is ghost's model: a Button's background moves under the pointer and its foreground waits for the
-   click. A ground arriving across 1240px and a glyph changing shade are one event, so they are not
-   signalled twice. */
-.cue {
-  color: var(--lcrd-link-ink);
-  transition: color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
-}
-
 /* Higher specificity than globals.css's bare anchor rules. The anchor carries NO link colour of its
-   own — title, body, marker and cue each state their own ink — so `inherit` keeps the bare-anchor
-   blue from reaching the title the redesign wants dark.
-
-   The transition is on background-color, because the ground below is the affordance. `background`
-   would work and is avoided on purpose: the shorthand animates every background property, and one
-   named longhand says what actually moves. */
+   own — title, body, marker and action each state their own ink — so `inherit` keeps the bare-anchor
+   blue from reaching the title at rest. */
 .root .link {
   color: inherit;
   text-decoration: none;
-  transition: background-color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
+  transition:
+    background-color var(--lcrd-transition-duration) var(--lcrd-transition-easing),
+    border-color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
 }
 
-/* The hover affordance, and the reason it is a ground: the target is the whole row — up to 1240px wide
-   and about 82px tall — so the signal has to cover the whole row too. An 18px arrow at the far inline
-   end changing one step of blue is not feedback anybody notices at that size, and a darkening rule,
-   which is what stood here for a day, signals along one edge of the box rather than across it.
-
-   It takes Button's ghost-neutral steps per surface AND ghost's state model: the ground moves under
-   the pointer, the cue waits for the press. It is a STATE, not a finish — nothing paints at rest, so
-   a list of these is still a list of ruled rows rather than a stack of tiles.
-
-   The ground spans the frame's whole box, padding included, so it runs the full Section content
-   column while the copy sits --gap-text inside it. That inset is what stops the copy touching the
-   edge of a band painted under it; see padding-inline above for why it is padding rather than a
-   negative-inset bleed. */
 .root .link:hover,
 .root .link:focus-visible {
-  background-color: var(--lcrd-ground-hover);
   text-decoration: none;
 }
 
-.root .link:active {
-  background-color: var(--lcrd-ground-pressed);
+/* The linked item's affordance (owner, 7 Oct 2026): its title takes the accent on hover and
+   keyboard focus, and steps once more on press (the fade is on `.title`). It replaced the blue
+   arrow after the title — the word that names the destination is the part that answers the
+   pointer. An item with an action (`.withAction`) leaves its title still: the link Button moves
+   instead, through Button's `data-btn-link-group` contract, and one item moving two things says the
+   same thing twice. Hover/focus before pressed at equal specificity, so source order hands the
+   press its step. */
+.root:not(.withAction) .link:hover .title,
+.root:not(.withAction) .link:focus-visible .title {
+  color: var(--lcrd-link-ink);
 }
 
-/* Press alone. There is deliberately no `:hover .cue` rule above this one — see .cue. */
-.root .link:active .cue {
+.root:not(.withAction) .link:active .title {
   color: var(--lcrd-link-ink-pressed);
+}
+
+/* An external item's up-right glyph after the title: "leaves the site", not "is a link" (see the
+   TSX). Inline-block because Icon's <svg> is display:block, which inside a bare inline span would
+   break the title's line; `middle` centres it on the lower-case letters. Small (16) and in the link
+   ink, so it reads as a note on the title rather than a cue beside it. */
+.leaves {
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--lcrd-link-ink);
 }
 
 /* One keyboard-only ring around the entire row. The gap colour is the surface beneath it, so a
@@ -273,7 +375,7 @@
 /* Visually hidden, still announced: an external row's "(opens in a new tab)". Not display:none and
    not visibility:hidden — both remove it from the accessibility tree, which is the opposite of the
    point. The negative margin is not outer spacing: it pulls the 1px clip box out of the flow so the
-   cue's box does not grow by a pixel nobody can see. */
+   anchor's box does not grow by a pixel nobody can see. */
 .hint {
   position: absolute;
   inline-size: var(--lcrd-hidden-size);
@@ -284,4 +386,154 @@
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+}
+
+/* ── Steps: the set mode (Steps.tsx) ─────────────────────────────────────────────
+   No inline inset: the numeral sits on the content edge the band's head and the rules share (final
+   fix round, 6 Oct 2026 — at 16 the numerals stood at 689 against a head at 673). Every row now has
+   none (7 Oct 2026); it is restated here so the set mode states its whole frame.
+
+   Block: --gap-block (24) rather than the row's --gap-gutter (32). The tile's reading, not the
+   list row's: in a method the rule HEADS the next step, so rule-to-content is "head to body inside
+   a block" — the reference process list's own 24 row padding. It is also what holds F inside its
+   arithmetic with h4 titles (§ 1.4: four two-line rows 4 × 150 − 24 = 576, five one-line rows 596).
+
+   The first row starts on the set's top edge: the ladder's rules sit between steps and after the
+   last, so the 24 above the first title would be air with no rule to head. Inner inset only; the
+   set's Layout still owns every seam between rows (rowGap none). */
+.steps .frame {
+  padding-block: var(--gap-block);
+  padding-inline: 0;
+}
+
+.steps > :first-child .frame {
+  padding-block-start: 0;
+}
+
+/* A step's body is a sentence about one action, read under its title, so it takes the LEAD measure
+   (56ch, ~520) rather than the row's 75ch: at 75ch a two-line budget meant 30 words a step and the
+   ladder became a wall, and a ten-word body left two thirds of a 700 line empty. At 56ch twelve to
+   twenty words make two lines and ten make one — at 1440 and at 1024 alike, since the 547 body of
+   the beside track at 1024 is wider than the cap. The rules still run the full track. */
+.steps .body {
+  max-inline-size: var(--lcrd-stacked-body-measure);
+}
+
+/* ── ReadDown: the D set mode (ReadDown.tsx) ─────────────────────────────────────
+   No inline inset, as in Steps (and every row since 7 Oct 2026): the glyph sits on the edge the
+   band's head and the rows' own rules share. The
+   row keeps its 32 block inset (§ 1.4's D row: padding 64), one step airier than a Steps row's 24,
+   because a D row is a peer read on its own rather than the next beat of a method.
+
+   The first row of each column starts on the set's top edge, so the first title sits on the head's
+   top line: the rules are between rows and after the last, never above the first. */
+.readdown .frame {
+  padding-inline: 0;
+}
+
+.readdown > :first-child .frame {
+  padding-block-start: 0;
+}
+
+/* A row's sentence sits under its title at the lead measure, as a step's does: at 75ch a two-line
+   body in the 763 track was 28 words and half a line of empty rule under each one. */
+.readdown .body {
+  max-inline-size: var(--lcrd-stacked-body-measure);
+}
+
+/* Two columns. Every grid row is as tall as its taller item and each frame fills its cell, so the
+   closing rules run level across the column seam. From 768 (Layout's md, where the two tracks
+   begin) the second item is also first in its column and starts on the top edge with the first;
+   the query follows the ARRANGEMENT, and changes no distance. */
+.readdownTwo .root,
+.readdownTwo .frame {
+  block-size: 100%;
+}
+
+@media (min-width: 768px) {
+  .readdownTwo > :nth-child(2) .frame {
+    padding-block-start: 0;
+  }
+}
+
+/* The photo form (ReadDown `photo`). The outer box is the inline-size container and the grid item
+   Layout stretches; the inner box is what Media fills (a cover crop). Above the rows its height is a
+   multiple of its own width (cqi, 3:2); from 1024, in the trailing track, it takes the stretched
+   row's height and `contain: size` keeps the master's intrinsic height out of the row's sizing, so
+   the ROWS set the band and the photo ends on the last rule. Sizing only: no display, no margin. The
+   query follows the arrangement (Layout's lg); no distance moves. */
+.readdownPhoto {
+  container-type: inline-size;
+}
+
+.readdownPhotoBox {
+  block-size: calc(var(--lcrd-readdown-photo-height-base) * 100cqi);
+}
+
+@media (min-width: 1024px) {
+  .readdownPhotoBox {
+    contain: size;
+    block-size: 100%;
+  }
+}
+
+/* The `rail` texture exists from 1440 only (§ 6.3). Its containing block is the BAND (ReadDown.tsx),
+   so % here is the band's width: the field runs from the band's end edge back across the band's
+   inline padding — the same max() Section pads with — and 80 more, under the photograph's end
+   edge, which from 1024 is the column's end. The field therefore starts under the image at every
+   width and never extends past the viewport. Two classes, so this outranks Texture's own box
+   (inset 0, width 100%) whichever stylesheet loads first. */
+.rail {
+  display: none;
+}
+
+@media (min-width: 1440px) {
+  .readdownPhoto > .rail {
+    display: block;
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    inline-size: calc(
+      max(var(--gap-gutter), (100% - var(--lcrd-readdown-rail-container)) / 2) +
+        var(--lcrd-readdown-rail-under)
+    );
+  }
+}
+
+/* ── The boxed tile (`frame="box"`, owner 7 Oct 2026; edge removed 9 Oct 2026) ─────────────────
+   For a set whose items must read as separate objects under the pointer — an icon router of four
+   to six destinations. It has NO edge on any side (owner, 9 Oct 2026: the hairline box read as a
+   panel grid); what it keeps is the inset, a `block` (24) on every side, because the inset is what
+   gives the hover ground somewhere to sit. The open tile's opening rule is not drawn either.
+
+   Linked, the box paints a ground under the pointer (--lcrd-ground-hover / -pressed) at the 8
+   radius, and the title takes the link ink, so a borderless target still answers the pointer
+   across its whole area. The focus ring is the frame's box-shadow, so it follows the radius. Three
+   classes on the frame and four on its states, so these outrank the open tile's rules at any
+   source order. `border: none` is stated because the open tile's rule is on the same frame. */
+.root.tile.boxed .frame {
+  padding: var(--gap-block);
+  border: none;
+  border-radius: var(--lcrd-box-radius);
+}
+
+.root.tile.boxed .link:hover,
+.root.tile.boxed .link:focus-visible {
+  background-color: var(--lcrd-ground-hover);
+}
+
+.root.tile.boxed .link:active {
+  background-color: var(--lcrd-ground-pressed);
+}
+
+/* ── A row's thumbnail on a phone ─────────────────────────────────────────────────────────────
+   Below md a row's thumbnail is --lcrd-thumbnail-inline-sm, so it stays BESIDE the copy rather than
+   wrapping above it (cmp-services fix round 1). At 160 the 326 phone column left the copy 142, under
+   the core's 192 minimum, so the outer Cluster stacked the image over the title and left a 142px
+   void beside every thumbnail: a three-row router ran ~1540 tall and read as a document. At 96 the
+   copy keeps 206. The layout changes at 768; no distance does. Rows only: a tile's thumbnail always
+   sits above its copy, at the track's width for it. */
+@media (max-width: 767.98px) {
+  .root:not(.tile) .thumbnail {
+    inline-size: var(--lcrd-thumbnail-inline-sm);
+  }
 }

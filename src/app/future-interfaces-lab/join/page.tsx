@@ -8,10 +8,12 @@ import {
   type FutureInterfacesLabJoinCard,
 } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   ListCard,
   PageHero,
   type HeroAction,
@@ -38,7 +40,7 @@ function cardGrid(cards: readonly FutureInterfacesLabJoinCard[]) {
       as="ul"
       columns={{ base: 1, md: 2, lg: cards.length >= 3 ? 3 : 2 }}
       colGap="gutter"
-      rowGap="gutter"
+      rowGap="column"
       equalRows
     >
       {cards.map((card) => {
@@ -132,19 +134,19 @@ export default async function FutureInterfacesLabJoinPage() {
 
   if (!page) notFound();
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: 'Future Interfaces Lab', href: ROUTES.futureInterfacesLab },
+    { label: page.hero.heading, href: ROUTES.futureInterfacesLabJoin },
+  ];
+
   return (
     <>
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Future Interfaces Lab', href: ROUTES.futureInterfacesLab },
-          { label: page.hero.heading, href: ROUTES.futureInterfacesLabJoin },
-        ]}
-      />
-
       <PageHero
-        eyebrow={page.hero.eyebrow}
+        trail={heroTrail(crumbs, page.hero.heading, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
+        eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
         title={page.hero.heading}
         body={page.hero.body}
         actions={firstTwoActions(page.hero.actions)}
@@ -283,7 +285,7 @@ export default async function FutureInterfacesLabJoinPage() {
               align="start"
             >
               {page.sixthSection.leftCard ? (
-                <Section as="div" surface="paper" density="tight">
+                <Section as="div" surface="paper">
                   <Layout rowGap="block">
                     <h3>{page.sixthSection.leftCard.heading}</h3>
                     <p>{page.sixthSection.leftCard.description}</p>

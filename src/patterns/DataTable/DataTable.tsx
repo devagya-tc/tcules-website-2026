@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId, type ReactNode } from 'react';
 
 import { Layout, Prose } from '@/components';
 import { cx } from '@/lib/cx';
@@ -36,14 +36,23 @@ export type DataTableColumn = {
   behaviour?: DataTableColumnBehaviour;
 };
 
+/**
+ * A cell that is not text: a mark the caller composes — a meter, a glyph — passed as a node, the way
+ * a primitive takes a sibling (CLAUDE.md § Sideways has an idiom). Added 1 Oct 2026 so a table that
+ * needs one encoded column can stay a table instead of being redrawn as rows. The node owns its own
+ * text alternative; the table only places it.
+ */
+export type DataTableNodeCell = { node: ReactNode };
+
 export type DataTableRow = {
   /** Plain-text row header — `<th scope="row">`. */
   header: string;
   /**
-   * One TRUSTED, seam-sanitised rich-text string per data column, in column order — the same
-   * contract as `Prose`'s `html`. An empty string is an empty cell.
+   * One cell per data column, in column order. A string is TRUSTED, seam-sanitised rich text — the
+   * same contract as `Prose`'s `html` — and an empty string is an empty cell. A `{ node }` is a
+   * composed mark (see DataTableNodeCell).
    */
-  cellsHtml: readonly string[];
+  cellsHtml: readonly (string | DataTableNodeCell)[];
 };
 
 export type DataTableProps = {
@@ -54,7 +63,7 @@ export type DataTableProps = {
   keyColumn: DataTableKeyColumn;
   /** The data columns. One to five is the designed range; the count is data, never a variant. */
   columns: readonly DataTableColumn[];
-  /** Three to eight is the designed range. Never sorted, filtered or paginated. */
+  /** Three to twelve is the designed range (eight until 1 Oct 2026). Never sorted, filtered or paginated. */
   rows: readonly DataTableRow[];
 };
 
@@ -82,6 +91,10 @@ function warn(message: string) {
  * trusted rich text — which a primitive may not import.
  *
  * ── One reading order, a boxed frame ───────────────────────────────────────────────────────
+ * TABLES ARE BOXED (owner, 7 Oct 2026). The frame is the table's, not a variant: tabular content
+ * always renders in it. A `frame="ruled"` variant (no box, a strong head rule, hairline rows) lived
+ * here from 6 Oct to 7 Oct 2026 and was withdrawn — the ruled tables read dense and compact, rows
+ * running together with nothing to hold them, and a table without its frame stops reading as one.
  * It is a table at every width. The frame — outer border, head fill, body ground, and a hairline
  * between every row and every column — is what makes it readable as a structure, so a narrow track does not
  * restructure it: when its columns' floors add up to more than the track, the frame scrolls
@@ -120,8 +133,8 @@ export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTa
     warn(`received ${columns.length} data columns; the designed maximum is five.`);
   }
 
-  if (rows.length < 3 || rows.length > 8) {
-    warn(`received ${rows.length} rows; the designed range is three to eight.`);
+  if (rows.length < 3 || rows.length > 12) {
+    warn(`received ${rows.length} rows; the designed range is three to twelve.`);
   }
 
   const keyBehaviour = keyColumn.behaviour ?? 'hold';
@@ -198,16 +211,20 @@ export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTa
                         <span className={styles.keyText}>{row.header}</span>
                       </th>
                       {columns.map((column, index) => {
-                        const html = row.cellsHtml[index] ?? '';
+                        const cell = row.cellsHtml[index] ?? '';
+                        const html = typeof cell === 'string' ? cell : '';
                         return (
                           <td
                             key={index}
                             className={cx(
                               styles.cell,
+                              typeof cell !== 'string' && styles.nodeCell,
                               BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
                             )}
                           >
-                            {html.trim() ? (
+                            {typeof cell !== 'string' ? (
+                              cell.node
+                            ) : html.trim() ? (
                               <Prose html={html} className={styles.value} />
                             ) : (
                               // An empty cell is still a cell: the screen reader announces it blank on

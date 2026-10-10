@@ -2,7 +2,16 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag, type LayoutProps } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  Layout,
+  Prose,
+  Section,
+  Tag,
+  type LayoutProps,
+} from '@/components';
 import {
   getGlossaryPage,
   type GlossaryAction,
@@ -10,10 +19,12 @@ import {
   type GlossaryContentColumn,
 } from '@/content';
 import { glossaryPath, ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -74,21 +85,23 @@ function renderColumn(column: GlossaryContentColumn) {
       ) : null}
 
       {column.links.length > 0 ? (
-        <Cluster colGap="tight" rowGap="tight">
+        /* A column's links STACK (owner, 7 Oct 2026): link buttons never sit side by side. */
+        <Layout rowGap="text" justifyItems="start">
           {column.links.map((link) => (
             <Button
               key={`${column.id}-${link.href}-${link.label}`}
               as="a"
               href={link.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
+              icon={<Icon name="arrow-right" />}
             >
               {link.label}
             </Button>
           ))}
-        </Cluster>
+        </Layout>
       ) : null}
     </Layout>
   );
@@ -110,7 +123,7 @@ function renderGlossaryBlock(block: GlossaryBlock) {
           as="ul"
           columns={cardColumns(block.columns)}
           colGap="gutter"
-          rowGap="gutter"
+          rowGap="column"
           equalRows
         >
           {block.cards.map((card) => (
@@ -127,7 +140,7 @@ function renderGlossaryBlock(block: GlossaryBlock) {
 
     case 'comparison-cards':
       return (
-        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="gutter" equalRows>
+        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="column" equalRows>
           {block.cards.map((card) => (
             <BlockCard
               key={`${block.id}-${card.title}`}
@@ -152,9 +165,10 @@ function renderGlossaryBlock(block: GlossaryBlock) {
                 as="a"
                 href={block.source.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.source.label}
               </Button>
@@ -285,6 +299,12 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
 
   const heroActions = firstTwoHeroActions(glossary.hero.actions);
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: 'Glossary', href: ROUTES.glossary },
+    { label: glossary.title, href: glossaryPath(glossary.slug) },
+  ];
+
   return (
     <>
       {glossary.seo?.structuredData ? (
@@ -294,18 +314,12 @@ export default async function GlossaryPage({ params }: GlossaryPageProps) {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Glossary', href: ROUTES.glossary },
-          { label: glossary.title, href: glossaryPath(glossary.slug) },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(crumbs, glossary.title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={glossary.title}
-        eyebrow={glossary.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(glossary.hero.eyebrow, crumbs)}
         body={[glossary.hero.description]}
         actions={heroActions}
         surface="paper"

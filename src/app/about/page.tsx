@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import { getAboutPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { BlockCard, Breadcrumbs, ListCard, PageHero } from '@/patterns';
 
 const ABOUT_SLUG = ROUTES.about.slice(1);
@@ -78,15 +79,17 @@ export default async function AboutPage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: breadcrumbLabel, href: ROUTES.about },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: breadcrumbLabel, href: ROUTES.about },
+          ],
+          page.hero.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
         title={page.hero.heading}
         body={[page.hero.description]}
         media={
@@ -256,7 +259,7 @@ export default async function AboutPage() {
                 as="ul"
                 columns={{ base: 1, md: 2, lg: 3 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.voices.cards.map((card) => (
@@ -265,11 +268,7 @@ export default async function AboutPage() {
                     title={card.title}
                     body={card.body}
                     eyebrow={card.eyebrow}
-                    media={
-                      card.image
-                        ? { type: 'image', image: card.image }
-                        : undefined
-                    }
+                    media={card.image ? { type: 'image', image: card.image } : undefined}
                   />
                 ))}
               </Layout>
@@ -324,10 +323,10 @@ export default async function AboutPage() {
                   <Button
                     as="a"
                     href={page.closing.action.href}
+                    /* The page's closing ask: the blue solid, whatever the action is (r7-buttons,
+                       8 Oct 2026 — the ink solid is retired). */
                     emphasis="solid"
-                    tone="primary"
                     size="lg"
-                    icon={<Icon name="arrow-right" />}
                   >
                     {page.closing.action.label}
                   </Button>
@@ -351,7 +350,6 @@ export default async function AboutPage() {
                       as="li"
                       key={card.id}
                       surface={card.surface}
-                      density="tight"
                       aria-labelledby={headingId}
                     >
                       <Layout rowGap="block">
@@ -376,7 +374,7 @@ export default async function AboutPage() {
                               as="a"
                               href={card.action.href}
                               emphasis="link"
-                              tone="neutral"
+                              tone="primary"
                               size="md"
                               icon={<Icon name="arrow-right" />}
                               extendHitArea

@@ -1,0 +1,58 @@
+/* ══ Component layer — Statement ═════════════════════════════════════════════════
+   Tier 2. The J statement (visual-direction § 3.4): one sentence at the h1 ROLE, its eyebrow
+   directly above it in one column, start-aligned or centred (the [1, 2] split form was retired,
+   owner, 7 Oct 2026). Built by cmp-banner, 6 Oct 2026, to docs/specs/Statement.md.
+
+   Naming: --stmt-{part}-{role}
+     parts  eyebrow · sentence · graphic
+     roles  text · tracking · measure · ink · size
+
+   It is an EXCEPTION band (§ 3.3): no image, so its one large thing is the type. The sentence stays
+   ink (§ 4.3: the words stay ink). Eyebrows carry no mark (owner, 7 Oct 2026).
+
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry and type · identical on every surface ──────────────────────────── */
+:root {
+  --stmt-eyebrow-text: var(--text-eyebrow);
+  --stmt-eyebrow-tracking: var(--text-eyebrow-tracking);
+  /* The h1 ROLE on an h2 or a p (§ 3.4: the page's only <h1> is the hero's). */
+  --stmt-sentence-text: var(--text-h1);
+  --stmt-sentence-tracking: var(--text-h1-tracking);
+  /* A ceiling, not a width: 32ch at 54 is ~860, so a start-aligned sentence breaks as a shape and
+     leaves the band's end open as air, rather than running the 1240 column in two long lines. */
+  --stmt-sentence-measure: var(--measure-title);
+  /* The display size is retired (owner, 7 Oct 2026: "way too big", "not a title-level thing but
+     a very special text"). The h1 role is the one scale, in one uniform ink: the two-tone italic
+     turn was retired (owner, 9 Oct 2026: "reads AI-generated"). */
+  /* The graphic slot, square — a component size, not a distance. 64 is about one line of the
+     sentence, so a shape reads as a mark beside the type, not as an image competing with it
+     (§ 3.3: an exception band's one large thing is the type). */
+  --stmt-graphic-size: var(--space-64);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --stmt-sentence-ink: var(--color-neutral-900); /* 14.62:1 */
+  --stmt-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --stmt-sentence-ink: var(--color-neutral-900); /* 13.05:1 */
+  --stmt-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --stmt-sentence-ink: var(--color-white); /* 17.26:1 */
+  --stmt-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
+[data-surface='blue'] {
+  --stmt-sentence-ink: var(--color-white); /* 6.23:1 */
+  --stmt-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 */
+}

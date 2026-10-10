@@ -3,6 +3,8 @@ export type {
   ProofProps,
   ProofQuote,
   ProofFigure,
+  ProofFigureSize,
   ProofPortrait,
-  ProofClientMark,
+  ProofRating,
+  ProofAlign,
 } from './Proof';

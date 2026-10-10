@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Layout, Prose, Section } from '@/components';
 import { getPrivacyPolicyPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { Breadcrumbs, PageHero, TableOfContents, type TocItem } from '@/patterns';
 
 const PRIVACY_POLICY_SLUG = ROUTES.privacy.slice(1);
@@ -98,15 +99,17 @@ export default async function PrivacyPolicyPage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: privacyPolicy.title, href: ROUTES.privacy },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: privacyPolicy.title, href: ROUTES.privacy },
+          ],
+          privacyPolicy.title,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
         title={privacyPolicy.title}
         body={[privacyPolicy.description]}
         dates={

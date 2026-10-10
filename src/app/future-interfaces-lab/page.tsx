@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Layout, Prose, Section } from '@/components';
 import { getFutureInterfacesLabPage, type FutureInterfacesLabAction } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -81,15 +82,19 @@ export default async function FutureInterfacesLabPage() {
 
   return (
     <>
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: page.hero.heading, href: ROUTES.futureInterfacesLab },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            /* The CMS heading is this page's NAME (decorated), not a message, so it is the leaf,
+               and heroTrail drops it as a repeat of the h1: a lone Home renders no trail. */
+            { label: page.hero.heading, href: ROUTES.futureInterfacesLab },
+          ],
+          page.hero.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
         title={page.hero.heading}
         body={page.hero.body}
         actions={firstTwoActions(page.hero.actions)}
@@ -113,7 +118,7 @@ export default async function FutureInterfacesLabPage() {
                   as="ul"
                   columns={{ base: 1, md: 2, lg: section.cards.length >= 3 ? 3 : 2 }}
                   colGap="gutter"
-                  rowGap="gutter"
+                  rowGap="column"
                   equalRows
                 >
                   {section.cards.map((card) => {
@@ -136,11 +141,7 @@ export default async function FutureInterfacesLabPage() {
                           key={card.id}
                           title={card.title}
                           body={card.body}
-                          media={
-                            media
-                              ? { type: 'image', image: media }
-                              : undefined
-                          }
+                          media={media ? { type: 'image', image: media } : undefined}
                           href={card.action?.href}
                           ctaLabel={card.action?.label}
                         />
@@ -182,7 +183,7 @@ export default async function FutureInterfacesLabPage() {
                         {card.pointsHtml ? <Prose html={card.pointsHtml} /> : null}
 
                         {card.tiles.length > 0 ? (
-                          <Layout as="ul" columns="fit" colGap="gutter" rowGap="gutter">
+                          <Layout as="ul" columns="fit" colGap="gutter" rowGap="column">
                             {card.tiles.map((tile) => (
                               <BlockCard
                                 key={tile.id}
@@ -240,17 +241,13 @@ export default async function FutureInterfacesLabPage() {
 
       {page.interfaceLabs && page.interfaceLabs.cards.length > 0 ? (
         <Section as="div" id={page.interfaceLabs.id} surface="tint">
-          <Layout as="ul" columns="fit" colGap="gutter" rowGap="gutter" equalRows>
+          <Layout as="ul" columns="fit" colGap="gutter" rowGap="column" equalRows>
             {page.interfaceLabs.cards.map((card) => (
               <BlockCard
                 key={card.id}
                 title={card.title}
                 body={card.action?.description || ''}
-                media={
-                  card.icon
-                    ? { type: 'image', image: card.icon }
-                    : undefined
-                }
+                media={card.icon ? { type: 'image', image: card.icon } : undefined}
                 href={card.action?.href}
                 ctaLabel={card.action?.label}
               />
@@ -275,7 +272,10 @@ export default async function FutureInterfacesLabPage() {
             ]}
           />
         ) : (
-          <Section surface="tint" aria-labelledby={`future-interfaces-lab-misc-${page.misc.id}`}>
+          <Section
+            surface="tint"
+            aria-labelledby={`future-interfaces-lab-misc-${page.misc.id}`}
+          >
             <Layout rowGap="block">
               {page.misc.eyebrow ? <p>{page.misc.eyebrow}</p> : null}
               <h2 id={`future-interfaces-lab-misc-${page.misc.id}`}>{page.misc.heading}</h2>

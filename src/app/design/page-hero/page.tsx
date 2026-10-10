@@ -13,10 +13,16 @@ import {
   type HeroCredit,
   type HeroDates,
   type HeroMedia,
+  type HeroActions,
+  type HeroRating,
   type PageHeroProps,
 } from '@/patterns';
 
-import { ROUTES } from '@/lib/routes';
+import { getNavigation } from '@/content';
+import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
+import { getKitPhoto } from '@/lib/photos';
+import { ROUTES, glossaryPath, servicePath } from '@/lib/routes';
+import { heroTrail, type Trail } from '@/lib/trail';
 
 import { specimenStyles as s } from '../_specimen/Specimen';
 
@@ -264,6 +270,8 @@ const CU_SUPPORT_MAX =
 const CASE_STUDY = `${ROUTES.caseStudies}/connectx`;
 
 const ONE_ACTION = [{ label: 'Read the case study', href: CASE_STUDY }] as const;
+/* The hero's first action is the page's one main action, the blue solid; the second is its blue
+   ghost partner (r7-buttons, 8 Oct 2026 — there is no ink solid, whatever the action is). */
 const TWO_ACTIONS = [
   { label: 'Read the case study', href: CASE_STUDY },
   { label: 'Talk to the team', href: ROUTES.contact },
@@ -274,6 +282,110 @@ const TRAIL = [
   { label: 'Case studies', href: ROUTES.caseStudies },
   { label: 'ConnectX', href: CASE_STUDY },
 ] as const;
+
+/* The eyebrow a hero under TRAIL may carry: a category and a format, neither of which the trail
+   says. EYEBROW cannot stand there — it opens with 'ConnectX', the trail's last crumb, and the
+   deliberately wrong block below uses it for exactly that reason. */
+const TRAIL_EYEBROW = 'Climate tech · Platform rebuild';
+
+/* Two eyebrows against TRAIL's section crumb, 'Case studies'. The first holds its word and adds
+   what the trail cannot say, so it stands; the second is the crumb alone, so it is a repeat. */
+const STRUCTURE_EYEBROW = 'Case study · Fintech';
+const BARE_STRUCTURE_EYEBROW = 'Case study';
+
+/* A page whose only name IS its h1 — a glossary term. Its whole trail ends in that name, and
+   heroTrail drops the leaf because the title says it, so the trail ends at the parent. */
+const TERM = 'Design intent';
+const TERM_TRAIL = [
+  { label: 'Home', href: ROUTES.home },
+  { label: 'Glossary', href: ROUTES.glossary },
+  { label: TERM, href: glossaryPath('design-intent') },
+] as const;
+
+/* The one render every hero below hands to heroTrail. */
+const crumbs = (trail: Trail) => <Breadcrumbs {...trail} />;
+
+/* A real service-line illustration, so block 9's service hero is the shape the six pages render. */
+const SERVICE_ILLUSTRATION: MediaImage = {
+  src: '/illustrations/services/product-design.paper.svg',
+  alt: '',
+  width: 962,
+  height: 714,
+  kind: 'illustration',
+};
+
+const SERVICE_TRAIL = [
+  { label: 'Home', href: ROUTES.home },
+  { label: 'Services', href: ROUTES.services },
+  { label: 'Product Design', href: servicePath('product-design') },
+] as const;
+
+/* Block 22: the score in the eyebrow's place, each frame where it belongs and once where it does not
+   (the plain frame on the centred axis), so the reason for the default is visible. */
+const RATING_CASES: readonly {
+  key: string;
+  title: string;
+  frame: 'pill' | 'plain';
+  note: string;
+  props: Pick<PageHeroProps, 'arrangement' | 'media' | 'trail' | 'surface'>;
+}[] = [
+  {
+    key: 'stacked-pill',
+    title: 'stacked',
+    frame: 'pill',
+    note: 'The default frame on the default arrangement. The pill takes the eyebrow row, 24 over the title; the wrapper stops the Layout track stretching it to the column.',
+    props: {},
+  },
+  {
+    key: 'stacked-plain',
+    title: 'stacked',
+    frame: 'plain',
+    note: 'No outline and no inline padding, so the star starts on the column edge like any eyebrow. The block padding stays, so the link target is still taller than 24.',
+    props: {},
+  },
+  {
+    key: 'beside-plain',
+    title: 'beside a photograph',
+    frame: 'plain',
+    note: 'The doodle.com placement: the photograph and the solid are the band’s edged objects, and the score is one more line of label type, top-aligned with the photograph.',
+    props: {
+      arrangement: 'beside',
+      media: {
+        type: 'image',
+        ratio: '5/4',
+        image: getKitPhoto('studio-pair-at-monitor', { alt: '' }),
+      },
+    },
+  },
+  {
+    key: 'trail-pill',
+    title: 'under a trail',
+    frame: 'pill',
+    note: 'Under Home / Case studies / ConnectX. The score is the one eyebrow that cannot repeat a crumb, so no warning can fire: it is a claim with a source, not a name.',
+    props: { trail: heroTrail(TRAIL, CU_TITLE_MIN, crumbs) },
+  },
+  {
+    key: 'centred-pill',
+    title: 'centred',
+    frame: 'pill',
+    note: 'Centred, the pill is an object on the axis, centred by the Layout’s justify-items.',
+    props: { arrangement: 'centred' },
+  },
+  {
+    key: 'centred-plain',
+    title: 'centred',
+    frame: 'plain',
+    note: 'Legal, and shown so the default is argued: without an edge the star and the mark are different widths, and the line reads off the axis by a few px. Prefer the pill here.',
+    props: { arrangement: 'centred' },
+  },
+  {
+    key: 'ink-pill',
+    title: 'on ink',
+    frame: 'pill',
+    note: 'RatingBadge reads its ground from the hero’s data-surface: the star lifts to brandeis-300 and the rule to neutral-800, with no prop.',
+    props: { surface: 'ink' },
+  },
+];
 
 /**
  * The note for the band above it, in its own band on the same ground. Below rather than above,
@@ -290,7 +402,7 @@ function Note({
   surface?: SectionSurface;
 }) {
   return (
-    <Section surface={surface} density="tight">
+    <Section surface={surface}>
       <Layout rowGap="tight">
         <p className={s.specTitle}>{title}</p>
         <p className={s.specNote}>{note}</p>
@@ -315,7 +427,9 @@ const SLOT_TABLE = [
    reasons: the literals below are then checked against the real prop types at the point they are
    written, and a spread of this shape after `title` and `body` cannot widen either of them to
    undefined the way a Partial<PageHeroProps> would. */
-type HeroSlots = Pick<PageHeroProps, 'eyebrow' | 'credits' | 'dates' | 'actions'>;
+type HeroSlots = Pick<PageHeroProps, 'eyebrow' | 'credits' | 'dates'> & {
+  actions?: HeroActions;
+};
 
 /* Block 2 — the slot-presence ladder, each rung labelled with its corpus count. */
 const LADDER: readonly { key: string; title: string; note: string; props: HeroSlots }[] = [
@@ -334,13 +448,13 @@ const LADDER: readonly { key: string; title: string; note: string; props: HeroSl
   {
     key: 'one-action',
     title: '+ one action — 59 routes have at least one',
-    note: 'One action renders one solid/primary Button and no ghost. The second emphasis is a consequence of a second array entry, not a slot waiting to be filled.',
+    note: 'One action renders the blue solid Button — the page\u2019s one main action — no arrow, and no partner. The second emphasis is a consequence of a second array entry, not a slot waiting to be filled.',
     props: { actions: ONE_ACTION },
   },
   {
     key: 'two-actions',
     title: '+ two actions',
-    note: 'Position decides emphasis: first solid/primary, second ghost/neutral. Both are size="md" with extendHitArea, both anchors. Four actions is a compile error, not a runtime cap.',
+    note: 'Position decides emphasis: first the blue solid with no arrow, second its blue ghost partner with the trailing arrow (owner, 7 Oct 2026; the ink solid retired 8 Oct). Both are size="md" with extendHitArea, both anchors. Four actions is a compile error, not a runtime cap.',
     props: { actions: TWO_ACTIONS },
   },
   {
@@ -475,7 +589,7 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
   {
     surface: 'ink',
-    note: 'The direction inverts and the ramp gets more room. Title to white (17.26:1), lead and byline values to neutral-100 (14.47:1), body to neutral-300 (11.07:1), mono labels to neutral-400 (8.05:1) — the same step Breadcrumbs lifts its links to on this ground, so a trail and an eyebrow standing 96 apart are the same grey rather than two greys. Every cell here is at least 8:1, which matters on the surface where a serif title is most at risk of looking thin.',
+    note: 'The direction inverts and the ramp gets more room. Title to white (17.26:1), lead and byline values to neutral-100 (14.47:1), body to neutral-300 (11.07:1), mono labels to neutral-400 (8.05:1) — the same step Breadcrumbs lifts its links to on this ground, so a trail and an eyebrow standing 32 apart are the same grey rather than two greys. Every cell here is at least 8:1, which matters on the surface where a serif title is most at risk of looking thin.',
   },
   {
     surface: 'blue',
@@ -483,18 +597,26 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   },
 ];
 
-export default function PageHeroSpecimenPage() {
+export default async function PageHeroSpecimenPage() {
+  const { footer } = await getNavigation();
+  const source = footer.brand.rating;
+  const rating: HeroRating | undefined = source && {
+    score: source.score,
+    platform: source.platform,
+    href: source.href,
+    mark: source.mark,
+  };
   return (
     <>
       <Section>
         <Layout rowGap="block">
           <h2 className={s.titleScale}>PageHero</h2>
           <p>
-            The opening block of a page: one <code>h1</code>, an optional eyebrow above it, one
-            to six paragraphs of lead copy, an optional byline of credits and dates, an optional
-            caller block, nought to two actions and — last — an optional image or YouTube embed.
-            It paints its own band and it is the first thing inside <code>main</code> on all 129
-            routes.
+            The opening block of a page: an optional ancestor trail, one <code>h1</code>, an
+            optional eyebrow above it, one to six paragraphs of lead copy, an optional byline of
+            credits and dates, an optional caller block, nought to two actions and — last — an
+            optional image or YouTube embed. It paints its own band and it is the first thing
+            inside <code>main</code> on all 129 routes.
           </p>
           <p>
             <strong>This route renders many h1 elements on purpose.</strong> Every band below is
@@ -513,7 +635,7 @@ export default function PageHeroSpecimenPage() {
       </Section>
 
       {/* ── 1 · The matrix ─────────────────────────────────────────────────────── */}
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>1 · The matrix — 1 variant × 1 size</p>
           <p className={s.specNote}>
@@ -566,10 +688,10 @@ export default function PageHeroSpecimenPage() {
             title={`3 · ${count} paragraph${count === 1 ? '' : 's'}`}
             note={
               count === 1
-                ? '34 routes. One paragraph renders as a single --text-lead <p> and copy shows no seam at all.'
+                ? '34 routes. One paragraph renders as a single lead <p> (--text-body-lg, 18, by default; block 23) and copy shows no seam at all.'
                 : count === 12
                   ? '2× the corpus maximum, and there is no route like it. No cap, no truncation, no warning: the lead role still applies to the first paragraph only, so this renders as a lead and eleven body paragraphs and looks exactly like what it is — a page whose opening should have been a section. That is a review comment on a route, not a behaviour here.'
-                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-lead (20) and everything under it at --text-body (16); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: the lead takes --measure-lead (40ch, about 490px at 20) and the paragraphs --measure-body (68ch, 666px at 16), so the lead is a short, large block and the body a long, small one — two shapes rather than one ragged column. Before 28 Sep both took 68ch and the lead ran 832px.`
+                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-body-lg (18, the default since r7-hero; leadSize="lg" opts into --text-lead, 20, block 23) and everything under it at --text-body (16); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: the lead takes --measure-lead (a ch measure, so it follows the lead’s size) and the paragraphs --measure-body (68ch, 666px at 16), so the lead is a short, large block and the body a long, small one — two shapes rather than one ragged column. Before 28 Sep both took 68ch and the lead ran 832px.`
             }
           />
         </div>
@@ -603,7 +725,7 @@ export default function PageHeroSpecimenPage() {
 
       {/* ── 6 · States: none to force ──────────────────────────────────────────── */}
       <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={TWO_ACTIONS} />
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>6 · States — and why there is no state column here</p>
           <p className={s.specNote}>
@@ -655,11 +777,11 @@ export default function PageHeroSpecimenPage() {
           so a tint hero standing between two ink bands is the real composition rather than an
           approximation of it, and the only thing that decides which column it reads is the
           data-surface its own Section writes. */}
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <p className={s.specNote}>An ink band above.</p>
       </Section>
       <PageHero surface="tint" title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
-      <Section surface="ink" density="tight">
+      <Section surface="ink">
         <p className={s.specNote}>An ink band below.</p>
       </Section>
       <Note
@@ -667,11 +789,11 @@ export default function PageHeroSpecimenPage() {
         note="This hero reads the TINT column, not ink's: lead at neutral-800 on paper-deep (10.54:1), eyebrow and keys at neutral-700 (7.27:1), title at neutral-900 (13.06:1). Had the tint block carried only its deltas from paper it would have inherited ink's values for whatever it omitted and stranded neutral-100 on this light ground at 1.13:1 — which is a measured failure elsewhere in this system, not a hypothetical one. The repetition in the token layer is the fix."
       />
 
-      <Section density="tight">
+      <Section>
         <p className={s.specNote}>A paper band above.</p>
       </Section>
       <PageHero surface="ink" title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
-      <Section density="tight">
+      <Section>
         <p className={s.specNote}>A paper band below.</p>
       </Section>
       <Note
@@ -679,24 +801,91 @@ export default function PageHeroSpecimenPage() {
         note="The same test in the other direction: white title (17.26:1), neutral-100 lead (14.47:1), neutral-400 eyebrow (8.05:1). The seam above and below is two 96px paddings meeting, which is what every band-to-band seam on a real route looks like."
       />
 
-      {/* ── 9 · The Breadcrumbs seam ────────────────────────────────────────────── */}
+      {/* ── 9 · The trail inside the hero ──────────────────────────────────────── */}
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
-        <div key={surface}>
-          <Breadcrumbs items={TRAIL} surface={surface} />
-          <PageHero surface={surface} title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
-        </div>
+        <PageHero
+          key={surface}
+          surface={surface}
+          trail={heroTrail(TRAIL, TITLE, crumbs)}
+          title={TITLE}
+          body={paragraphs(2)}
+          eyebrow={TRAIL_EYEBROW}
+        />
       ))}
       <Note
-        title="9 · The Breadcrumbs seam — matched on all four surfaces, above"
-        note="The real composition: the trail band, then the hero band, nothing between them but the two paddings that face each other. The trail gives only its focus ring's 4px downward, so the 96 above the eyebrow is the HERO band's — which is the half that should own it. Look at the trail and the eyebrow together: sans over mono, verbatim over uppercase, untracked over tracked, 13px over 12px. Four differences, and the 96 between them is the fourth defence rather than the only one."
+        title="9 · The trail inside the hero — paper, tint, ink and blue, above"
+        note="Breadcrumbs in the trail slot: 96 of the hero's own padding above it, 32 (gutter) from the trail to the eyebrow. One band, so the trail reads the hero's ground and a two-tone seam can no longer be written — the four bands above pass nothing to the crumbs but the items. The eyebrow here is a category and a format the trail cannot say, which is the only kind an eyebrow under a trail may carry."
       />
 
-      <Breadcrumbs items={TRAIL} surface="paper" />
-      <PageHero surface="ink" title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} />
+      <PageHero
+        arrangement="beside"
+        trail={heroTrail(
+          SERVICE_TRAIL,
+          'Finished screens can hide an unresolved product.',
+          crumbs,
+        )}
+        title="Finished screens can hide an unresolved product."
+        body={[
+          'Tcules takes responsibility for the product beneath the screens: who does what, the records and rules behind it, how it behaves, and what to learn first.',
+        ]}
+        actions={[
+          { label: 'Start a project', href: ROUTES.contact },
+          { label: 'Start with a UX Product Audit', href: ROUTES.audits },
+        ]}
+        media={{
+          type: 'image',
+          image: SERVICE_ILLUSTRATION,
+          cut: ILLUSTRATION_LEGENDS[SERVICE_ILLUSTRATION.src],
+        }}
+      />
       <Note
-        surface="ink"
-        title="9 · Deliberately MISMATCHED — a paper trail over an ink hero"
-        note="THIS IS THE BUG, rendered. Neither component can detect it: each paints its own band and neither can see its sibling. The fix is one template constant passed to both, which is why the spec's §14 check reads 'the hero's surface equals the Breadcrumbs surface immediately above it' and is a diff over the template rather than a runtime guard."
+        title="9 · The service hero — trail, no eyebrow, one solid and its ghost partner, illustration centred"
+        note="The locked [1, 1] shape (ruling H2) as the six service pages render it (visual-direction § 2.3–2.4). No eyebrow: the last crumb is the service's name. A title of at most 48 characters on three lines, a lead of at most 26 words, the solid action as the band's one Accent and the illustration as its Field; the second action is the solid's ghost partner, with the arrow. The illustration is centred on the copy because it has no box to share an edge with. At 1470 × 830 the h1 starts at 222 and the band ends at or above 823."
+      />
+
+      <PageHero
+        trail={heroTrail(TERM_TRAIL, TERM, crumbs)}
+        title={TERM}
+        body={[
+          'The decision a design records about how the product should behave, as distinct from how one screen of it looks.',
+        ]}
+      />
+      <Note
+        title="9 · A page whose h1 is its name — the trail ends at the parent"
+        note="The page's whole trail is Home / Glossary / Design intent, and its h1 is 'Design intent'. A current crumb would say the headline 32px above it, and a headline-length one wraps on a phone, so heroTrail drops the leaf when it repeats the title and Breadcrumbs renders endsWith='parent': every crumb is a link and none is aria-current, because the h1 is the current page. The same rule ends an article, an audit, a tool, a case study and a legal page at its parent; a top-level page whose h1 is its name is left a lone 'Home' and gets no trail at all."
+      />
+
+      <PageHero
+        trail={heroTrail(TRAIL, TITLE, crumbs)}
+        title={TITLE}
+        body={paragraphs(1)}
+        eyebrow={EYEBROW}
+      />
+      <Note
+        title="9 · Deliberately WRONG — an eyebrow that repeats the last crumb"
+        note="The eyebrow opens with 'ConnectX' 32px under a trail that ends in 'ConnectX', so the crumb reads twice even though the two strings are not equal. In development PageHero logs a warning naming the eyebrow, and the band still renders, so the fault is visible on the page as well as in the console. The comparison is repeatsTrail from @/lib/trail, the same one the routes' eyebrowBesideTrail uses: an eyebrow repeats a crumb that names something when it says the crumb's words as a whole-word phrase, and repeats the site's structure (Home, a section index such as Case studies) only when it equals it, with zero-width characters, punctuation, case and plurals ignored throughout. So 'Product Design specialist' under 'Product design' and a bare 'Case study' under 'Case studies' are caught, while 'Case study · Fintech' under 'Case studies' and 'Designer' under 'Design' are not. The fix is to drop the eyebrow, or to replace it with a category or format the trail cannot say, like block 9's 'Climate tech · Platform rebuild'."
+      />
+
+      <PageHero
+        trail={heroTrail(TRAIL, TITLE, crumbs)}
+        title={TITLE}
+        body={paragraphs(1)}
+        eyebrow={STRUCTURE_EYEBROW}
+      />
+      <Note
+        title="9 · An eyebrow that holds a section crumb's word and stands — 'Case study · Fintech' under Home / Case studies"
+        note="'Case studies' is the site's structure, a section index named once in SECTION_INDEXES (@/lib/routes), so an eyebrow repeats it only by equalling it. 'Case study · Fintech' says the format and the category, which the trail cannot, so it stands with no warning. The same rule lets 'Product audit' stand under Home / Audits. Against a crumb that NAMES something, 'ConnectX' here, or a top-level page such as 'Future Interfaces Lab', the eyebrow is a repeat as soon as it says the name, which is the next block's ConnectX case."
+      />
+
+      <PageHero
+        trail={heroTrail(TRAIL, TITLE, crumbs)}
+        title={TITLE}
+        body={paragraphs(1)}
+        eyebrow={BARE_STRUCTURE_EYEBROW}
+      />
+      <Note
+        title="9 · Deliberately WRONG — a bare 'Case study' under Home / Case studies"
+        note="The eyebrow equals the section crumb once plurals are folded ('Case study' and 'Case studies' normalise alike), so it is the crumb read twice, 32px apart. In development PageHero logs a warning naming it, and the band still renders so the fault shows on the page. On a live route eyebrowBesideTrail drops it before PageHero sees it, and reports the drop once per server process. The fix is to add what the trail cannot say, as the block above does."
       />
 
       {/* ── 10 · Every edge case from §12 ───────────────────────────────────────── */}
@@ -767,54 +956,46 @@ export default function PageHeroSpecimenPage() {
             as="a"
             href={ROUTES.caseStudies}
             emphasis="ghost"
-            tone="neutral"
+            tone="primary"
             size="md"
             extendHitArea
           >
-            Extras control one
-          </Button>
-          <Button
-            as="a"
-            href={ROUTES.services}
-            emphasis="ghost"
-            tone="neutral"
-            size="md"
-            extendHitArea
-          >
-            Extras control two
+            An extras control
           </Button>
         </Cluster>
       </PageHero>
       <Note
         title="12 · Interactive content in extras — tab order"
-        note="Tab from the top: extras control one, extras control two, then the first action, then the second. DOM order, which is visual order, and the component adds no tabindex, no focus trap and no roving index. Anything focusable in extras reaches the 44px floor by its own means — these two are Buttons with extendHitArea, which already do. The other slots CANNOT hold interactive content, and that is a compile-time guarantee rather than a rule: title, eyebrow and every entry in body are typed string, so no control, no link and no second heading can be passed into them."
+        note="Tab from the top: the extras control, then the first action, then the second. (One extras control, not two: two ghosts side by side is a pairing the owner ruled out on 7 Oct 2026.) DOM order, which is visual order, and the component adds no tabindex, no focus trap and no roving index. Anything focusable in extras reaches the 44px floor by its own means — this one is a Button with extendHitArea, which already do. The other slots CANNOT hold interactive content, and that is a compile-time guarantee rather than a rule: title, eyebrow and every entry in body are typed string, so no control, no link and no second heading can be passed into them."
       />
 
       {/* ── 13 · The hit floor ──────────────────────────────────────────────────── */}
       <PageHero title={TITLE} body={paragraphs(1)} actions={TWO_ACTIONS} />
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>
             13 · The 44px touch floor, which a screenshot will not show
           </p>
           <p className={s.specNote}>
-            Every action is <code>Button size=&quot;md&quot;</code> with{' '}
-            <code>extendHitArea</code>. The box is <code>--btn-height-md</code> 40 and the floor
-            is <code>--btn-hit-min</code> 44, so the extension covers the missing 4 without
-            moving the row — and the row not moving is the point: stepping to{' '}
-            <code>size=&quot;lg&quot;</code> would make the hero&apos;s controls 48 while every
-            other control on the site stayed at 40, and the hero would be claiming a loudness
-            the design does not intend. The dashed box below is 44 tall, for comparison against
-            the actions above. An action missing the extension is the one failure this component
-            can ship that a screenshot will not show, so assert both numbers in the rendered
-            DOM.
+            Both actions are <code>Button size=&quot;md&quot;</code> with{' '}
+            <code>extendHitArea</code>, and the floor is <code>--btn-hit-min</code> 44 for both.
+            The solid&apos;s box is <code>--btn-height-md</code> 40, so for it the extension
+            covers the missing 4 without moving the row — and the row not moving is the point:
+            stepping to <code>size=&quot;lg&quot;</code> would make the hero&apos;s button 48
+            while every other control on the site stayed at 40, and the hero would be claiming a
+            loudness the design does not intend. The ghost partner has the same 40 box (it was a
+            link until 7 Oct 2026, whose label line made the extension the whole target). The
+            dashed box below is 44 tall, for comparison against the actions above. An action
+            missing the extension is the one failure this component can ship that a screenshot
+            will not show, so assert the 44 in the rendered DOM: both boxes are 40, and both hit
+            areas are 44.
           </p>
           <div className={s.hitFloor} />
         </Layout>
       </Section>
 
       {/* ── 14 · Illegal placements, rendered ───────────────────────────────────── */}
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>
             14 · Illegal placements — a band in a narrow track, at 320 and at 256
@@ -927,7 +1108,7 @@ export default function PageHeroSpecimenPage() {
             as="a"
             href={ROUTES.caseStudies}
             emphasis="ghost"
-            tone="neutral"
+            tone="primary"
             size="md"
             extendHitArea
           >
@@ -944,7 +1125,7 @@ export default function PageHeroSpecimenPage() {
           ch05 B3: every image is approved at the phone's column. A band's column is its own
           gutter's doing, so the harness frames the VIEWPORT (390) and lets the hero produce the
           326 itself, instead of clamping the band to 326 and insetting it a second time. */}
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>15 · 326 · mobile column</p>
           <p className={s.specNote}>
@@ -1007,7 +1188,7 @@ export default function PageHeroSpecimenPage() {
               title={`17 · arrangement="${arrangement}" · ${entry.label}`}
               note={
                 arrangement === 'beside' && entry.media
-                  ? `From 1024: copy and media in two equal tracks, 64 apart (--gap-column), top-aligned, the media at its own ratio inside a 588 track (sizes: HERO_BESIDE). ${entry.note}`
+                  ? `From 1024: copy and media in two equal tracks, 96 apart (--gap-section), the media at its own ratio inside a 572 track (sizes: HERO_BESIDE). An illustration is centred on the copy; every other kind is top-aligned. ${entry.note}`
                   : arrangement === 'stacked' && entry.media
                     ? `The media below the copy as a full-column block, 48 under the actions (sizes: FULL_COLUMN). This is ruling H1's "below". ${entry.note}`
                     : entry.note
@@ -1114,7 +1295,7 @@ export default function PageHeroSpecimenPage() {
           1024 `beside` IS `stacked`, so these bands render `stacked`, which is what a phone gets
           from either arrangement. The real 390 capture of this page shows every band above in
           that state. */}
-      <Section density="tight">
+      <Section>
         <Layout rowGap="block">
           <p className={s.specTitle}>21 · 326 · every media kind at the mobile column</p>
           <p className={s.specNote}>
@@ -1136,10 +1317,47 @@ export default function PageHeroSpecimenPage() {
         </div>
       ))}
 
-      {/* ── 22 · What this page cannot show ─────────────────────────────────────── */}
-      <Section density="tight">
+      {/* ── 22 · The score in the eyebrow's place ─────────────────────────────────
+           r7-hero, owner 7 Oct 2026. `rating` and `eyebrow` are one union: the line holds one
+           thing. Two frames × the three arrangements a score fits, then the trail and a ground. */}
+      {rating
+        ? RATING_CASES.map((entry) => (
+            <div key={entry.key}>
+              <PageHero
+                {...entry.props}
+                rating={{ ...rating, frame: entry.frame }}
+                title={CU_TITLE_MIN}
+                body={[CU_SUPPORT_MIN]}
+                actions={TWO_ACTIONS}
+              />
+              <Note
+                title={`22 · rating · ${entry.frame} · ${entry.title}`}
+                note={entry.note}
+                surface={entry.props.surface}
+              />
+            </div>
+          ))
+        : null}
+
+      {/* ── 23 · The lead, two sizes ─────────────────────────────────────────────── */}
+      {(['md', 'lg'] as const).map((size) => (
+        <div key={size}>
+          <PageHero title={TITLE} body={paragraphs(3)} leadSize={size} />
+          <Note
+            title={`23 · leadSize="${size}"${size === 'md' ? ' (default)' : ' (opt-in)'}`}
+            note={
+              size === 'md'
+                ? 'The default since 7 Oct 2026 (owner: the lead was too large). --text-body-lg, 18, over --text-body paragraphs at 16: the lead is still the larger, shorter line, so it reads as the lead without shouting over the title.'
+                : 'The opt-in, for a page written for search whose lead must carry the query: --text-lead, 20, re-declared to 18 at 767 by the role itself, so on a phone it meets md. A template chooses it per family, in code; it is never content.'
+            }
+          />
+        </div>
+      ))}
+
+      {/* ── 24 · What this page cannot show ─────────────────────────────────────── */}
+      <Section>
         <Layout rowGap="block">
-          <p className={s.specTitle}>22 · What a static page cannot show</p>
+          <p className={s.specTitle}>24 · What a static page cannot show</p>
           <p className={s.specNote}>
             <strong>The 1024, 767 and 375 columns.</strong> Narrow the window. At 1023 every{' '}
             <code>beside</code> band stacks — copy, then media — through Layout&apos;s{' '}
@@ -1148,8 +1366,8 @@ export default function PageHeroSpecimenPage() {
             of its own — and that is the assertion rather than an omission: the stack is
             single-track at every width, both Clusters wrap by themselves, and both measures are{' '}
             <code>ch</code>-based so they follow the type down with no second value to keep in
-            sync. <code>--text-display</code> re-declares itself at 1023 (54) and 767 (43) in the type layer,
-            which is where that decision belongs.
+            sync. <code>--text-display</code> re-declares itself at 1023 (54) and 767 (43) in
+            the type layer, which is where that decision belongs.
           </p>
           <p className={s.specNote}>
             <strong>The Buttons&apos; three stateless states.</strong> Hover, pressed and{' '}

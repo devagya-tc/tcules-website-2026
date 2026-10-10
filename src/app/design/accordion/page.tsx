@@ -268,7 +268,7 @@ export default function AccordionSpecimenPage() {
               enclosing ink value leaks into its questions, marks, rules or focus pair.
             </p>
           </Layout>
-          <Section as="div" surface="tint" density="tight">
+          <Section as="div" surface="tint">
             <Layout columns={{ base: 1, md: [2, 1] }} colGap="gutter" rowGap="block">
               <Accordion items={SURFACE_ITEMS} />
               <ResolvedTokens surface="tint" />
@@ -279,7 +279,7 @@ export default function AccordionSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <p>The ink panel below is nested back inside paper and must invert in full.</p>
-          <Section as="div" surface="ink" density="tight">
+          <Section as="div" surface="ink">
             <Layout columns={{ base: 1, md: [2, 1] }} colGap="gutter" rowGap="block">
               <Accordion items={SURFACE_ITEMS} />
               <ResolvedTokens surface="ink" />

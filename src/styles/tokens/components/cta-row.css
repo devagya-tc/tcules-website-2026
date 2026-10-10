@@ -1,0 +1,60 @@
+/* ══ Component layer — CtaRow ═══════════════════════════════════════════════════
+   Tier 2. A band's row of actions: a hairline, then an optional one-line note and one or two
+   actions (visual-direction § 3.1, § 1.4 "CtaRow — 48 seam + one 48 row"; fdn-section-head,
+   6 Oct 2026). Built to docs/specs/CtaRow.md.
+
+   Naming: --ctarow-{part}-{role}
+     parts: rule | note | measure
+
+   What it owns: the rule (one width, one ink per surface), the note's role and ink, and the cap a
+   CENTRED row takes. What it does not: the actions' colour, size and states (Button's — a CtaRow
+   only picks emphasis and tone, by position and prop), any distance (Layout and Cluster, from the
+   gap scale), and any ground (the Section's). No state tokens: nothing here responds to a pointer;
+   the buttons inside it do, from their own layer.
+
+   The rule is DECORATION. It marks where a band's body ends and its ask begins (§ 3.1 item 5, "a
+   hairline rule, only where it is earned: … above a section-level CtaRow"), and it is not the only
+   cue — the actions are their own affordance — so it carries no 3:1 floor, the same argument
+   --lcrd-rule-ink and --fig-rule-ink make. It is neutral on every surface: a blue rule at rest is
+   a § 4.3 failure (hairline rules on paper and tint are neutral).
+
+   Every surface restates every ink, so a CtaRow inside a band nested in a different surface cannot
+   inherit the wrong value from an outer ancestor. */
+
+:root {
+  --ctarow-rule-width: var(--border-width-hairline);
+
+  /* The note is the small voice beside the ask — one sentence, body-sm, never a second lead. It
+     caps at the lead measure so a long note in a "between" row cannot push the actions onto a
+     line of their own at 1440. */
+  --ctarow-note-text: var(--text-body-sm);
+  --ctarow-note-measure: var(--measure-lead);
+
+  /* A CENTRED row (align="center") caps its whole box — rule included — at the body measure, so
+     under a centred head it reads as the foot of the centred block above it (an accordion at the
+     body measure, D-faq) rather than as a 1240 rule under a 666 column. */
+  --ctarow-centred-measure: var(--measure-body);
+}
+
+:root,
+[data-surface='paper'] {
+  --ctarow-rule-ink: var(--color-neutral-300); /* decoration */
+  --ctarow-note-ink: var(--color-neutral-700); /* 8.15:1 */
+}
+
+[data-surface='tint'] {
+  --ctarow-rule-ink: var(
+    --color-neutral-400
+  ); /* decoration; 300 vanishes on the deeper ground */
+  --ctarow-note-ink: var(--color-neutral-700); /* 7.27:1 */
+}
+
+[data-surface='ink'] {
+  --ctarow-rule-ink: var(--color-neutral-700); /* decoration */
+  --ctarow-note-ink: var(--color-neutral-300); /* 11.07:1 */
+}
+
+[data-surface='blue'] {
+  --ctarow-rule-ink: var(--color-brandeis-300); /* decoration */
+  --ctarow-note-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+}

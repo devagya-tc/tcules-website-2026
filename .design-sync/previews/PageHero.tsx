@@ -1,4 +1,4 @@
-import { Button, Cluster, Layout, PageHero } from 'tcules-website-2026';
+import { Breadcrumbs, Button, Cluster, Layout, PageHero } from 'tcules-website-2026';
 import type { HeroCredit } from 'tcules-website-2026';
 
 /* NOTE: these preview files are type-STRIPPED, not type-checked (see .design-sync/NOTES.md), so an
@@ -78,17 +78,17 @@ const VIDEO = {
 } as const;
 
 /**
- * The opening block of a page: one h1, an optional eyebrow above it, one to six paragraphs of lead
- * copy, an optional byline of credits and dates, an optional caller block and nought to two
- * actions. It is the first thing inside <main> on every route and there is never a second one —
- * two heroes are two h1s.
+ * The opening block of a page: an optional ancestor trail, one h1, an optional eyebrow above it, one
+ * to six paragraphs of lead copy, an optional byline of credits and dates, an optional caller block
+ * and nought to two actions. It is the first thing inside <main> on every route and there is never
+ * a second one — two heroes are two h1s.
  *
  * It brings its own band: a Section at default density, so 96 of air above the title and 96 below
  * the last block. That means it can only be a direct child of a page or its template — never
  * inside another Section (the content column would inset twice), never inside a Layout track (a
  * band is not a row) and never inside a Cluster (which would shrink it to its longest word).
- * `surface` must match the Breadcrumbs band immediately above it, or the seam reads as a two-tone
- * split.
+ * The trail goes INSIDE it, in the `trail` slot, and takes the hero's ground — there is no
+ * second band to keep in step.
  *
  * ONE variant and ONE size. The three arrangements a hero looks like it should have — plain,
  * article, case study — are one arrangement: nothing differs in how it is ARRANGED, only in which
@@ -103,6 +103,27 @@ export function Default() {
   return <PageHero title={TITLE} body={[LEAD, SECOND, THIRD]} />;
 }
 
+/** The trail, inside the hero: Breadcrumbs in the `trail` slot, 32 above the title. `labels` are
+    the rendered crumbs' labels (the site derives both from one array with `heroTrail`); in
+    development PageHero warns when the eyebrow says one of them as a phrase, or the title equals
+    the last. So the eyebrow is a category and format the trail cannot say: "Case study" under
+    Home / Case studies would be the crumb read twice. */
+export function WithTrail() {
+  const items = [
+    { label: 'Home', href: '/' },
+    { label: 'Case studies', href: '/case-studies' },
+    { label: 'ConnectX', href: '/case-studies/connectx' },
+  ];
+  return (
+    <PageHero
+      trail={{ crumbs: <Breadcrumbs items={items} />, labels: items.map((item) => item.label) }}
+      title={TITLE}
+      body={[LEAD]}
+      eyebrow="Energy · Platform rebuild"
+    />
+  );
+}
+
 /** The eyebrow names the CATEGORY the page belongs to, not the page. Uppercased by the stylesheet,
     so the content keeps its authored casing. Absent on most routes: an absent slot renders no
     element and no seam, never an empty one. */
@@ -111,7 +132,7 @@ export function WithEyebrow() {
 }
 
 /** Nought, one or two actions — a third does not compile. POSITION decides emphasis: the first is
-    solid/primary, the second ghost/neutral, so there is no emphasis prop on an action. Both are
+    the blue solid, the second its blue ghost partner, so there is no emphasis prop on an action. Both are
     size="md" with the hit area extended to the 44px touch floor rather than the box stepped to 48,
     which is what keeps the hero's controls the same height as every other control on the site. */
 export function WithActions() {
@@ -267,7 +288,6 @@ export function InteractiveExtras() {
     </PageHero>
   );
 }
-
 
 /** An image under the hero, LAST in the band — below the actions, not beside the copy. It renders
     at its own intrinsic ratio, uncropped, at the full width of the content column, so a portrait

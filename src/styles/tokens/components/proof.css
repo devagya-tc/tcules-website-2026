@@ -1,16 +1,16 @@
 /* ══ Component layer — Proof ════════════════════════════════════════════════════
-   Tier 2. One attributed client quotation, a set of checked figures, or both.
+   Tier 2. Attributed client quotations — typographic, compact, featured with a portrait, beside a
+   case, in a group — a set of figures, or a quote beside them. Never a score beside a quote (7 Oct 2026).
 
    Naming: --proof-{part}-{role}
-     parts: quote | name | attribution | portrait | value | label | checked
+     parts: quote | name | attribution | portrait | mark | value | label
 
    Proof paints no ground and owns no interactive state. Prose owns links inside quote HTML and
-   Button owns the optional figure-source link; Media owns the portrait's delivery and edge, and
-   ClientMark owns the client mark's ink and size. Every surface block below redeclares all seven
+   Button owns the optional figure-source link; and Media owns the portrait's delivery and edge. Every surface block below redeclares all seven
    Proof colours so a nested surface cannot inherit evidence ink or the quote rule from its parent. */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   --proof-quote-rule-width   the site blockquote's 6px rule (ch10 B2.07), through the shared
+   --proof-quote-rule-width   the site blockquote's rule (ch10 B2.07, 2 since fix round 1), through the shared
                               --border-width-rule-quote primitive.
    --proof-portrait-size      a component SIZE, not a distance, so a literal with an explicit name
                               (the --cmark-height-max shape). Ruling P1: "small, 1:1, beside the name
@@ -19,37 +19,57 @@
                               than the attribution it sits beside — and stays under a fifth of a 326
                               column, so the name keeps a readable measure beside it on a phone.
                               RESTATED in src/lib/image-sizes.ts as PROOF_PORTRAIT: change both.
-   --proof-portrait-ratio     portraits are 1:1 everywhere (ch05 §3, §12 11).                      */
+   --proof-portrait-ratio     portraits are 1:1 everywhere (ch05 §3, §12 11).
+   --proof-portrait-radius-compact
+                              the 64 portrait's corner, 4 (visual-direction § 5.3, fdn-media fix
+                              round, 6 Oct 2026). Smaller than the photograph radius's 8 because 8
+                              on a 64 box is an eighth of its side and starts to read as a squircle,
+                              the masking ch05 §6 bans. Drawn on Proof's own box, which Media is
+                              told it rules (edge="placement"): the 8 Media gives a photograph it
+                              boxes itself would otherwise land here.
+   --proof-portrait-radius    the FEATURED portrait's corner, 8 — the photograph radius every other
+                              photograph box on the site takes (§ 5.3), on the 477 square beside a
+                              featured quote and on its full-column square below 1024. No frame:
+                              a portrait is a photograph, and photographs carry none (cmp-testimonials).
+   --proof-mark-inline-size   the quote rule turned on its side: a CENTRED quote has no inline-start
+                              edge to run a rule down, so the same blue rule sits above it, this
+                              long. A component SIZE, a literal with an explicit name. 48 is about
+                              one capital of the 43 centred quote (--text-quote-xl) — long enough to read as the
+                              rule and not as a dash, short enough not to read as a divider (§ 4.3:
+                              a blue rule is a mark, never a divider).                             */
 :root {
   --proof-quote-rule-width: var(--border-width-rule-quote);
   --proof-portrait-size: 64px;
   --proof-portrait-ratio: var(--ratio-portrait);
+  --proof-portrait-radius-compact: var(--radius-4);
+  --proof-portrait-radius: var(--radius-8);
+  --proof-mark-inline-size: 48px;
   --proof-radius: var(--radius-0);
   --proof-shadow: var(--shadow-none);
   --proof-layer: var(--z-base);
 }
 
-/* Paper: long quote copy is quiet neutral; the audited value carries the strongest ink. The name is
-   one step above the quote so the attribution reads as a second voice, not a fainter echo. */
+/* Paper: long quote copy is quiet neutral; the value (a figure’s numeral)
+   carries the blue accent — the colour, not the darkest ink (owner, 6 Oct: blue is the recurring
+   foreground accent). The name is one step above the quote so the attribution reads as a second
+   voice, not a fainter echo. */
 :root,
 [data-surface='paper'] {
   --proof-quote-ink: var(--color-neutral-800); /* 11.81:1 */
   --proof-name-ink: var(--color-neutral-900); /* 14.62:1 */
   --proof-attribution-ink: var(--color-neutral-600); /* 4.92:1 */
-  --proof-value-ink: var(--color-neutral-950); /* 17.10:1 */
+  --proof-value-ink: var(--color-brandeis-500); /* 6.17:1 — the stat numeral carries the accent */
   --proof-label-ink: var(--color-neutral-700); /* 8.14:1 */
-  --proof-checked-ink: var(--color-neutral-600); /* 4.92:1 */
   --proof-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
 }
 
-/* Tint: supporting copy deepens against paper-deep while the audited value stays neutral-950. */
+/* Tint: supporting copy deepens against paper-deep; the value keeps brandeis-500 (5.51:1). */
 [data-surface='tint'] {
   --proof-quote-ink: var(--color-neutral-800); /* 10.54:1 */
   --proof-name-ink: var(--color-neutral-900); /* 13.06:1 */
   --proof-attribution-ink: var(--color-neutral-700); /* 7.27:1 */
-  --proof-value-ink: var(--color-neutral-950); /* 15.27:1 */
+  --proof-value-ink: var(--color-brandeis-500); /* 5.51:1 */
   --proof-label-ink: var(--color-neutral-800); /* 10.54:1 */
-  --proof-checked-ink: var(--color-neutral-700); /* 7.27:1 */
   --proof-quote-rule: var(--color-brandeis-500); /* decoration — ch10 B2.07 */
 }
 
@@ -59,9 +79,8 @@
   --proof-quote-ink: var(--color-white); /* 17.26:1 */
   --proof-name-ink: var(--color-white); /* 17.26:1 */
   --proof-attribution-ink: var(--color-neutral-400); /* 8.05:1 */
-  --proof-value-ink: var(--color-white); /* 17.26:1 */
+  --proof-value-ink: var(--color-brandeis-300); /* 7.32:1 */
   --proof-label-ink: var(--color-neutral-400); /* 8.05:1 */
-  --proof-checked-ink: var(--color-neutral-400); /* 8.05:1 */
   --proof-quote-rule: var(--color-brandeis-300); /* decoration — ch10 B2.07 */
 }
 
@@ -75,6 +94,5 @@
   --proof-attribution-ink: var(--color-brandeis-100); /* 4.91:1 */
   --proof-value-ink: var(--color-white); /* 6.23:1 */
   --proof-label-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --proof-checked-ink: var(--color-brandeis-100); /* 4.91:1 */
   --proof-quote-rule: var(--color-white); /* decoration — ch10 B2.07 */
 }

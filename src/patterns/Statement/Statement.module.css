@@ -1,0 +1,55 @@
+/* Statement — type, ink and the mark.
+
+   Section paints the band and its open air; Layout and Cluster own every seam; Texture owns its
+   field. Every value is a --stmt-* token in tokens/components/statement.css.
+
+   Classes: .graphic .eyebrow .sentence .centred .texture
+
+   One @media query: the head-half texture exists from 1024 only (§ 6.3: "below 1024: none"). It
+   swaps visibility, never a distance. */
+
+.eyebrow {
+  font: var(--stmt-eyebrow-text);
+  letter-spacing: var(--stmt-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--stmt-eyebrow-ink);
+}
+
+.sentence {
+  font: var(--stmt-sentence-text);
+  letter-spacing: var(--stmt-sentence-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--stmt-sentence-ink);
+  max-inline-size: var(--stmt-sentence-measure);
+}
+
+/* The graphic slot: a square the caller's shape fills. Statement owns the size; the shape owns
+   its drawing. A size, not a distance — the seam under it is Layout's `block`. */
+.graphic {
+  inline-size: var(--stmt-graphic-size);
+  block-size: var(--stmt-graphic-size);
+}
+
+.graphic > * {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* `align="center"`: the sentence's lines centre on its measure. The Layout around it centres the
+   box itself; this centres the text inside it. */
+.centred {
+  text-align: center;
+}
+
+/* The head-half field (§ 6.3) sits on the band's own field — Texture fills Section's padding box —
+   so nothing here places it. It only switches on at 1024, where the sentence's measure leaves the
+   band's top-end corner empty for it. */
+.texture {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .texture {
+    display: block;
+  }
+}

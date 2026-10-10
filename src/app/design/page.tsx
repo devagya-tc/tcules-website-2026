@@ -33,24 +33,24 @@ const SPECIMENS = [
       {
         href: '/design/layout',
         name: 'Layout',
-        note: 'columnar axis — tracks, the two seams and a leading item',
+        note: 'columnar axis — tracks, the two seams, a leading item, and the scroll row (until-md | always)',
       },
       { href: '/design/cluster', name: 'Cluster', note: 'inline axis — wrapping rows' },
       {
         href: '/design/button',
         name: 'Button',
-        note: '3 emphases × 2 tones, 3 sizes, 3 variants, 4 surfaces',
+        note: 'a showcase — blue solid (the page’s one main action) + blue ghost partner + link, in a page; sizes, states, icons, the outline stepper, chrome-only neutral, 4 surfaces',
       },
       {
         href: '/design/input',
         name: 'Input',
-        note: 'native input and textarea, 2 emphases, semantic states, 4 surfaces',
+        note: 'native input and textarea, box and line appearances, rest · invalid · disabled for both shapes and both appearances on 4 surfaces',
       },
       { href: '/design/icon', name: 'Icon', note: 'the glyph set, 4 size roles, currentColor' },
       {
         href: '/design/media',
         name: 'Media',
-        note: 'the image asset — 4 kinds × 4 surfaces, cut-out shadow and panels, srcset, intrinsic vs fill, stress shapes',
+        note: 'the image asset — 4 kinds × 4 surfaces, cut-out shadow and panels, srcset, intrinsic vs fill, photograph ratio · focus · radius, stress shapes',
       },
       {
         href: '/design/tag',
@@ -65,7 +65,22 @@ const SPECIMENS = [
       {
         href: '/design/client-mark',
         name: 'ClientMark',
-        note: "a client's logo in a set — mask in the ground's ink, equal area, capped 40 × 160, ±15% correction, 4 surfaces",
+        note: "a client's logo in a set — mask in the ground's ink, equal area of ink by measured density, capped 40 tall, 240 wide guard, ±15% correction, 4 surfaces",
+      },
+      {
+        href: '/design/brand-mark',
+        name: 'BrandMark',
+        note: 'third-party marks (LinkedIn, YouTube, Clutch) at their own proportions, monochrome, 4 surfaces',
+      },
+      {
+        href: '/design/rating-badge',
+        name: 'RatingBadge',
+        note: 'a third-party score and its source as one outline pill, mark passed in, 4 surfaces',
+      },
+      {
+        href: '/design/stat',
+        name: 'Stat',
+        note: 'one figure, its unit and what it counts — lg and md, start or centred, beside its label below 768, ink numeral, blue mark on the opening rule, 3 surfaces',
       },
       {
         href: '/design/texture',
@@ -95,7 +110,32 @@ const SPECIMENS = [
       {
         href: '/design/content-section',
         name: 'ContentSection',
-        note: 'one CMS section as one band — stacked | beside × 4 surfaces, stress copy, absent slots, 390',
+        note: 'one CMS section as one band — stacked | beside | media (split-head retired), align center, aside, actions, footer, 4 surfaces, stress copy, absent slots, 390',
+      },
+      {
+        href: '/design/banner',
+        name: 'Banner',
+        note: 'the I band and the announcement strip — below (stacked head over 3:1) | beside (3:2 or illustration, both sides) | strip, absent slots, stress, 3 surfaces',
+      },
+      {
+        href: '/design/statement',
+        name: 'Statement',
+        note: 'the J band — one sentence at the h1 role as h2 | p (display retired), one uniform ink, graphic slot, eyebrow directly above it, start | center, head-half and corner texture, action, 3 surfaces',
+      },
+      {
+        href: '/design/kit/banner',
+        name: 'Kit · cmp-banner',
+        note: 'the family page — every Banner, Statement and strip variation as a page would place it',
+      },
+      {
+        href: '/design/cta-row',
+        name: 'CtaRow',
+        note: 'a band’s one link action — rule, note, centred cap, narrow tracks, 4 surfaces, in a band',
+      },
+      {
+        href: '/design/slider',
+        name: 'Slider',
+        note: 'a row you move — Layout scroll, perView 1 | 2 | 3 | 4, align start | center, C-image-5+ and G bands, unfocusable slides, edge counts, 4 surfaces',
       },
       {
         href: '/design/cta-section',
@@ -105,17 +145,42 @@ const SPECIMENS = [
       {
         href: '/design/enquiry-form',
         name: 'EnquiryForm',
-        note: 'enquiry, audit, and contact field sets — async lifecycle, 4 surfaces',
+        note: 'enquiry, audit, contact and compact field sets — async lifecycle, 4 surfaces',
+      },
+      {
+        href: '/design/process-flow',
+        name: 'ProcessFlow',
+        note: 'stages in order with their items, arrows between, an optional lane held throughout — 4 surfaces',
+      },
+      {
+        href: '/design/thread',
+        name: 'Thread',
+        note: 'stages one decision passes through on one blue line — 2 to 12 stages, the return arc, vertical below 1024, 3 surfaces',
+      },
+      {
+        href: '/design/kit/how-we-work',
+        name: 'EngagementModel',
+        note: 'the "How we work" USP band — one chart over time keyed by three points; full and compact, paper and tint, stress copy',
+      },
+      {
+        href: '/design/steps',
+        name: 'Steps',
+        note: "ListCard's set mode, the approved F body — 2 to 5 numbered rows, one title size, one title track, two body budgets",
       },
       {
         href: '/design/list-card',
         name: 'ListCard',
-        note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces',
+        note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces, the ReadDown set (1 or 2 columns, the photo form, the rail)',
       },
       {
         href: '/design/block-card',
         name: 'BlockCard',
         note: 'the borderless card — cover media via Media, text-only sets, the featured set, 4 surfaces',
+      },
+      {
+        href: '/design/contrast',
+        name: 'Contrast',
+        note: 'the N band body — two opposite lists in peer halves, check blue and cross quiet ink, unequal sides, stress, with a CtaRow, 4 surfaces',
       },
       {
         href: '/design/accordion',
@@ -125,7 +190,7 @@ const SPECIMENS = [
       {
         href: '/design/proof',
         name: 'Proof',
-        note: 'the evidence block — attributed quotes, checked figures, combined layouts, 4 surfaces',
+        note: 'the evidence block — display (start | center), compact, featured portrait, case, group, rating-led, checked figures, 4 surfaces',
       },
       {
         href: '/design/callout',
@@ -140,12 +205,17 @@ const SPECIMENS = [
       {
         href: '/design/data-table',
         name: 'DataTable',
-        note: 'the comparison table — 1 to 5 data columns, column behaviour, marks, the stacked order at 326 and 392, 4 surfaces',
+        note: 'the comparison table, always boxed — 1 to 5 data columns, column behaviour, marks, the stacked order at 326 and 392, 4 surfaces',
       },
       {
         href: '/design/page-hero',
         name: 'PageHero',
         note: 'the page opening — stacked · beside × every media kind, CU04 budgets, slot and paragraph ladders, 4 surfaces, 326',
+      },
+      {
+        href: '/design/kit/hero',
+        name: 'Kit · Hero family',
+        note: 'the nine hero shapes — illustration, photograph 5:4, no media, centred comparison — with texture, tags and an announcement, measured at 1470 × 830',
       },
       {
         href: '/design/site-nav',
@@ -160,12 +230,112 @@ const SPECIMENS = [
     ],
   },
   {
+    tier: 'Kit',
+    items: [
+      {
+        href: '/design/kit/media-split',
+        name: 'Kit · Media split',
+        note: 'band B: 4:5 photo beside H-full and tiles, either side, two tiles + a pinned CtaRow, head + CtaRow centred, counterweight texture, studio against stock',
+      },
+    ],
+  },
+  {
     tier: 'Templates',
     items: [
       {
         href: '/design/case-study-index',
         name: 'CaseStudyIndex',
         note: 'the case-study index page type, with the live entries and their ideal copy',
+      },
+      {
+        href: '/design/service-page',
+        name: 'ServicePage',
+        note: 'the six service lines, designed from their own content rather than the CMS translation; ?slots=1 shows the images each is designed to carry',
+      },
+    ],
+  },
+  {
+    tier: 'Kit families',
+    items: [
+      {
+        href: '/design/kit/process',
+        name: 'Kit · process and stats',
+        note: 'F process (Steps: 4 / 5 / example / CtaRow), S stats (4 centred, 3 + CtaRow), the D stat aside, Stat sizes, a Thread E band, ProcessFlow for comparison',
+      },
+      {
+        href: '/design/kit/how-we-work',
+        name: 'Kit · How we work',
+        note: 'EngagementModel, the USP band: the engagement model drawn as one chart keyed by three points — full (paper, tint with an action, stress copy) and compact for service pages (paper, tint)',
+      },
+      {
+        href: '/design/kit/logos',
+        name: 'Kit · Client logos',
+        note: 'band H, the boxed grid (r7): context line, led by the rating badge, beside a short h4 heading, 12 cells, open edges, surfaces',
+      },
+      {
+        href: '/design/kit/logos',
+        name: 'LogoGrid',
+        note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone',
+      },
+      {
+        href: '/design/kit/facts',
+        name: 'Kit · Facts and figures',
+        note: 'never combine proof types: the rating on its own (score size, badge as source) and the studio record on its own (three figures on tint, two beside the head), plain stats',
+      },
+      {
+        href: '/design/kit/cta',
+        name: 'Kit · CTA',
+        note: 'the K offer (photo, icon, plain and beside) and the L close (form, no points, two actions) as finished bands, the closing texture, and CtaRow inside two ContentSections',
+      },
+      {
+        href: '/design/kit/testimonials',
+        name: 'Testimonials (G)',
+        note: 'typographic, G-case, featured portrait, groups of 2 and 3, slider, rating-led — each with and without a CtaRow, on tint, at 1470 and 390',
+      },
+      {
+        href: '/design/kit/video-testimonial',
+        name: 'VideoTestimonial',
+        note: 'a client interview on film: featured (16:9 poster in [3, 2], display quote beside) under a head on paper and alone on tint, and wide (3:1 poster across the column, opening to 16:9 on play; quote and credit in one row below); one film per band and the band’s only testimonial; poster, play disc, captions track slot, no autoplay, focus hand-off, reduced motion',
+      },
+      {
+        href: '/design/kit/form',
+        name: 'Kit · Form',
+        note: 'the enquiry form family — the L close beside copy, the compact form beside a 4:5 photo (both sides), standalone under a centred and a beside head, the offer, every variant, error and success',
+      },
+      {
+        href: '/design/kit/feature',
+        name: 'Kit · Feature',
+        note: 'the feature family (C) and resources (M) — image, text, icon and pair sets on ContentSection, mixed sets and stand-ins, the Slider at six, the phone scroll row',
+      },
+      {
+        href: '/design/kit/readdown',
+        name: 'Kit · read-down, FAQ and contrast',
+        note: 'D read-down (ReadDown: 1 or 2 columns, the photo form or a stat aside, CtaRow, rail on the photo side), D-faq (5 centred, 4 + CtaRow, each followed by an image band), N contrast (4 + 4, with a CtaRow), D on tint',
+      },
+      {
+        href: '/design/kit/service-list',
+        name: 'Kit · Service list',
+        note: 'the service router in three forms — icon (C-icon-6 and C-icon-4 + CtaRow, photo aside), image (three centred, four with per-card CTAs, six as a Slider) and list (thumbnail rows beside a head with actions) — every link from routes.ts',
+      },
+      {
+        href: '/design/kit/home',
+        name: 'Kit showcase · Home',
+        note: 'the home page composed from the kit, warm family, 12 bands — the strip and the 5:4 photograph hero, the real marks and rating, three services under a stacked head, a two-tone statement, the wireframe wall at the photograph weight with two tiles, the client slider on tint, four stats centred, the method beside its photograph, one 3:1 studio banner, questions, two pieces of writing and the close with its contact strip; texture head-half / closing',
+      },
+      {
+        href: '/design/kit/about',
+        name: 'Kit showcase · About',
+        note: 'the studio page from the reviewed components, each once, 7 bands alternating stacked / split / centred — the Holi panorama hero (one solid, its ghost), a week of hairline tiles beside the studio board, the statement with its graphic slot, the engagement model compact, one wide video testimonial on tint, the rating on its own, and the open close',
+      },
+      {
+        href: '/design/kit/services',
+        name: 'Kit · Services',
+        note: 'r7-cards — sections of clickable cards: eyebrow, heading and body, then three, four or six cards; icon cards with the glyph at the title em, numbered text cards on tint, cta-cued audits and six text cards under a centred head; no decorative image, no boxes',
+      },
+      {
+        href: '/design/kit/services-index',
+        name: 'Kit showcase · Services index',
+        note: 'the services index composed from the kit, cool family, 11 bands — the title-led hero with a 4:1 panorama, the six-service router, a statement with head-half, four audits, fit beside a photograph, two cases over the horizon, the real rating on tint, the sprint offer, questions, a 3:1 banner and the open close',
       },
     ],
   },

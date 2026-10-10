@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import { getContactPage, type ContactAction } from '@/content';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { Breadcrumbs, EnquiryForm, ListCard, PageHero } from '@/patterns';
 
 const CONTACT_SLUG = ROUTES.contact.slice(1);
@@ -63,15 +64,21 @@ export default async function ContactPage() {
         />
       ) : null}
 
-      <Breadcrumbs
+      <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Contact', href: ROUTES.contact },
+          ],
+          page.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
+        title={page.heading}
+        body={[page.description]}
         surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Contact', href: ROUTES.contact },
-        ]}
-      />
-
-      <PageHero title={page.heading} body={[page.description]} surface="paper">
+      >
         <EnquiryForm variant="contact" action={ENDPOINTS.contact} />
       </PageHero>
 
@@ -120,7 +127,7 @@ export default async function ContactPage() {
                           as="a"
                           href={social.href}
                           emphasis="link"
-                          tone="neutral"
+                          tone="primary"
                           icon={<Icon name="arrow-right" />}
                           extendHitArea
                           {...externalAnchorProps(social)}

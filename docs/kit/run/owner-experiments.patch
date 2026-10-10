@@ -1,0 +1,163 @@
+diff --git a/src/app/design/kit/form/page.tsx b/src/app/design/kit/form/page.tsx
+index f29cdee..706406b 100644
+--- a/src/app/design/kit/form/page.tsx
++++ b/src/app/design/kit/form/page.tsx
+@@ -193,7 +193,7 @@ export default function KitFormPage() {
+         ]}
+         points={ENQUIRY_STEPS}
+         form={
+-          <EnquiryForm
++          <EnquiryForm fields= 'box'
+             action={action()}
+             context={context('kit-close')}
+             scheduleHref={ROUTES.contact}
+@@ -224,7 +224,7 @@ export default function KitFormPage() {
+         headingId="studio-heading"
+         lead="The flow nobody wants to own, the screen support hears about most. Three lines are enough to start."
+       >
+-        <EnquiryForm
++        <EnquiryForm fields= 'box'
+           variant="compact"
+           action={action()}
+           context={context('kit-l-studio')}
+@@ -244,7 +244,7 @@ export default function KitFormPage() {
+         heading="Start with three lines"
+         headingId="stock-heading"
+       >
+-        <EnquiryForm
++        <EnquiryForm fields= 'box'
+           variant="compact"
+           submit="full"
+           action={action()}
+@@ -265,7 +265,7 @@ export default function KitFormPage() {
+         headingId="centred-heading"
+         lead="Describe where the product is today. We answer with what we would look at first, and whether we are the right team."
+       >
+-        <EnquiryForm
++        <EnquiryForm fields= 'box'
+           variant="compact"
+           width="measure"
+           numbered
+@@ -309,7 +309,7 @@ export default function KitFormPage() {
+           </Layout>
+         }
+       >
+-        <EnquiryForm
++        <EnquiryForm fields= 'box'
+           variant="compact"
+           numbered
+           action={action()}
+@@ -321,7 +321,7 @@ export default function KitFormPage() {
+       {/* ── 06 · Offer with the compact form ────────────────────────────────────────── */}
+       <Plate
+         id="offer"
+-        note={`CtaSection arrangement="offer" with form={<EnquiryForm variant="compact" />}, exactly: the mid-page ask, tight. The lede, then the compact form filling the column (name and email a pair at 608, the question across the band), then the three points as a strip. The page's one wide form: every other placement sets it in a track.`}
++        note={`CtaSection arrangement="offer" with form={<EnquiryForm fields= 'box' variant="compact" />}, exactly: the mid-page ask, tight. The lede, then the compact form filling the column (name and email a pair at 608, the question across the band), then the three points as a strip. The page's one wide form: every other placement sets it in a track.`}
+       />
+       <CtaSection
+         arrangement="offer"
+@@ -345,7 +345,7 @@ export default function KitFormPage() {
+           },
+         ]}
+         form={
+-          <EnquiryForm
++          <EnquiryForm fields= 'box'
+             variant="compact"
+             action={action()}
+             context={context('kit-offer')}
+@@ -362,7 +362,7 @@ export default function KitFormPage() {
+       <Section>
+         <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="column">
+           <Specimen title="enquiry" note="Send enquiry, with See available times beside it.">
+-            <EnquiryForm
++            <EnquiryForm fields= 'box'
+               action={action()}
+               context={context('kit-variants')}
+               scheduleHref={ROUTES.contact}
+@@ -370,7 +370,7 @@ export default function KitFormPage() {
+             />
+           </Specimen>
+           <Specimen title="audit" note="The audit wording, and the intent field it posts.">
+-            <EnquiryForm
++            <EnquiryForm fields= 'box'
+               variant="audit"
+               action={action()}
+               context={{ ...context('kit-variants'), intent: 'free-audit' }}
+@@ -391,7 +391,7 @@ export default function KitFormPage() {
+             title="contact"
+             note="Five fields in three rows; the contact page is the conversation."
+           >
+-            <EnquiryForm
++            <EnquiryForm fields= 'box'
+               variant="contact"
+               action={action()}
+               scheduleHref={ROUTES.contact}
+@@ -400,7 +400,7 @@ export default function KitFormPage() {
+           </Specimen>
+           <Specimen title="contact · sent" note="The thanks, then what happens next.">
+             <Rehearse submit fill={FILLED_CONTACT}>
+-              <EnquiryForm
++              <EnquiryForm fields= 'box'
+                 variant="contact"
+                 action={action()}
+                 scheduleHref={ROUTES.contact}
+@@ -424,7 +424,7 @@ export default function KitFormPage() {
+               note="Name and question empty, email malformed; each message lands in its reserved line."
+             >
+               <Rehearse blur fill={{ email: 'maya@' }}>
+-                <EnquiryForm
++                <EnquiryForm fields= 'box'
+                   variant="compact"
+                   action={action()}
+                   context={context('kit-states')}
+@@ -436,7 +436,7 @@ export default function KitFormPage() {
+               note="The answers stay; the line under the submit turns."
+             >
+               <Rehearse submit fill={FILLED}>
+-                <EnquiryForm
++                <EnquiryForm fields= 'box'
+                   variant="compact"
+                   action={action('error')}
+                   context={context('kit-states')}
+@@ -448,7 +448,7 @@ export default function KitFormPage() {
+               note="The form gives way to the thanks, then the one step the compact ask promises."
+             >
+               <Rehearse submit fill={FILLED}>
+-                <EnquiryForm
++                <EnquiryForm fields= 'box'
+                   variant="compact"
+                   action={action()}
+                   context={context('kit-states')}
+diff --git a/src/patterns/ContentSection/ContentSection.tsx b/src/patterns/ContentSection/ContentSection.tsx
+index 67874b7..9ff4fc7 100644
+--- a/src/patterns/ContentSection/ContentSection.tsx
++++ b/src/patterns/ContentSection/ContentSection.tsx
+@@ -533,7 +533,7 @@ export function ContentSection(props: ContentSectionProps) {
+         centredLg && styles.centredLg,
+       )}
+     >
+-      <span className={styles.mark} aria-hidden="true" />
++      {/* <span className={styles.mark} aria-hidden="true" /> */}
+       <span>{eyebrow}</span>
+     </Cluster>
+   ) : null;
+diff --git a/src/styles/tokens/components/list-card.css b/src/styles/tokens/components/list-card.css
+index c12ab46..21cd22c 100644
+--- a/src/styles/tokens/components/list-card.css
++++ b/src/styles/tokens/components/list-card.css
+@@ -222,6 +222,7 @@
+   --lcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
+   --lcrd-marker-ink: var(--color-brandeis-500); /* 6.17:1 — the accent mark (fdn-blue) */
+   --lcrd-number-ink: var(--color-brandeis-500); /* 6.17:1 — numerals carry the accent */
++/* --lcrd-number-ink: var(--color-neutral-600); */
+   --lcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
+   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
+   --lcrd-rule-ink: var(--color-neutral-300); /* decoration */
+@@ -239,6 +240,7 @@
+   --lcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
+   --lcrd-marker-ink: var(--color-brandeis-500); /* 5.51:1 */
+   --lcrd-number-ink: var(--color-brandeis-500); /* 5.51:1 */
++  /* --lcrd-number-ink: var(--color-neutral-600); */
+   --lcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
+   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
+   --lcrd-rule-ink: var(--color-neutral-400); /* decoration */

@@ -9,7 +9,8 @@
    breakpoint single-line controls step from 40 to the 44px touch floor. Textareas already exceed
    the floor through their 128px minimum and remain natively resizable.
 
-   One treatment. A second, `quiet`, was kept for SiteFooter's newsletter row and rendered nearly
+   One emphasis, two appearances: `box` (the filled control) and `line` (the unboxed field, below).
+   A second EMPHASIS, `quiet`, was kept for SiteFooter's newsletter row and rendered nearly
    identically to this one on paper and ink; it was merged in and deleted on 29 Sep 2026 (tracker
    2.17). The --inp-standard-* token names keep `standard` as the name of the treatment. */
 
@@ -19,7 +20,9 @@
      which is why it is not a Layout's job. */
   display: block;
   inline-size: 100%;
-  min-inline-size: var(--inp-min-inline);
+  /* No minimum. A usable floor belongs to the pattern that composes the field (EnquiryForm's
+     --enq-form-min-inline, SiteFooter's --foot-field-min-inline): a floor on the box overflowed
+     every track narrower than it, and a primitive cannot know which tracks those are. */
   block-size: var(--inp-height-md);
   padding-inline: var(--inp-padding-x);
   border: var(--inp-rule-width) solid var(--inp-standard-rule);
@@ -90,6 +93,97 @@
   min-block-size: var(--inp-textarea-min-block);
   padding-block: var(--inp-textarea-padding-y);
   resize: vertical;
+}
+
+/* ── appearance="line" ─────────────────────────────────────────────────────────────
+   The unboxed field. AFTER the base, invalid and disabled rules on purpose: each rule here is
+   (0,2,0) or more and has to win the property it restates. The value sits on the band's own
+   ground, so every ink is chosen against the SURFACE (--inp-line-*), not against a white fill.
+
+   The value sits ON its rule: the touch-floor height (44) with the inset over the value and a 6px
+   optical inset under it (r7-form, 8 Oct 2026). The field carries no visible label, so its
+   placeholder is the cue and the field alone is the hit area. See input.css § line.
+
+   Focus draws no ring box around a field that has no box: the rule under the value turns blue and
+   doubles, drawn as an outside shadow so nothing moves. That is the visible focus indicator, and a
+   2px blue rule clears 3:1 against every ground's rest rule. */
+.control.line {
+  block-size: var(--inp-line-height-md);
+  padding-block: var(--inp-line-inset-top) var(--inp-line-inset-bottom);
+  padding-inline: 0;
+  border-width: 0 0 var(--inp-rule-width);
+  border-color: var(--inp-line-rule);
+  border-radius: 0;
+  background: var(--inp-line-bg);
+  color: var(--inp-line-fg);
+}
+
+.control.line::placeholder {
+  color: var(--inp-line-placeholder-fg);
+}
+
+.control.line:not(:disabled, .invalid):hover {
+  border-color: var(--inp-line-rule-hover);
+}
+
+.control.line:not(:disabled, .invalid):focus-visible,
+.control.line:not(:disabled, .invalid):focus {
+  border-color: var(--inp-line-rule-focus);
+  box-shadow: 0 var(--inp-rule-width) 0 0 var(--inp-line-rule-focus);
+}
+
+/* Invalid at rest: the rule in the danger ink, doubled. */
+.control.line.invalid {
+  border-width: 0 0 var(--inp-rule-width);
+  border-color: var(--inp-line-invalid-rule);
+  box-shadow: 0 var(--inp-rule-width) 0 0 var(--inp-line-invalid-rule);
+}
+
+/* Invalid AND keyboard-focused: the doubled danger rule stays, and the focus ring arrives UNDER it
+   as a second rule — the ground's own gap, then the ring colour — the box's ring offset and width,
+   drawn as the line's one edge. It used to thicken the danger rule from 2px to 3px in the same
+   colour, so an invalid field's focus indicator was a 1px change (cmp-form final round). The
+   shadows stack top first: the danger band, the gap painted under it, the ring under both. */
+.control.line.invalid:focus-visible {
+  box-shadow:
+    0 var(--inp-rule-width) 0 0 var(--inp-line-invalid-rule),
+    0 calc(var(--inp-rule-width) + var(--inp-ring-offset)) 0 0
+      var(--inp-standard-ring-gap-color),
+    0 calc(var(--inp-rule-width) + var(--inp-ring-offset) + var(--inp-ring-width)) 0 0
+      var(--inp-line-rule-focus);
+}
+
+/* Disabled reads its own line tokens: the box's --inp-disabled-fg is chosen against a WHITE fill,
+   and with no fill under it the disabled placeholder went muddy on blue. */
+.control.line:disabled {
+  /* Clears the doubled rule .control.line.invalid draws: EnquiryForm disables every field while
+     it submits and keeps `invalid` from the blur messages, so invalid + disabled is a real state,
+     and unavailable must read as unavailable (see the rule-order note above). */
+  box-shadow: var(--inp-shadow);
+  border-width: 0 0 var(--inp-rule-width);
+  border-color: var(--inp-line-disabled-rule);
+  background: var(--inp-line-bg);
+  color: var(--inp-line-disabled-fg);
+}
+
+/* Restated because .control.line::placeholder above is (0,2,1), the same weight as the base
+   disabled placeholder, and later. */
+.control.line:disabled::placeholder {
+  color: var(--inp-line-disabled-fg);
+}
+
+/* A lined textarea: two lines rather than the box's four, its first line inset as a single-line
+   field's value is, and the same 6px under the last. It GROWS with what is typed
+   (`field-sizing: content`, where supported) instead of carrying a resize grip: a grip is a box's
+   corner, and on a field with no box it read as a stray mark. Where field-sizing is unsupported the
+   field scrolls at its floor, as a native textarea does. Its affordance when empty is the
+   placeholder the composing pattern passes — a lined textarea with no hint reads as space. */
+.textarea.line {
+  block-size: auto;
+  min-block-size: var(--inp-line-textarea-min-block);
+  padding-block: var(--inp-line-inset-top) var(--inp-line-inset-bottom);
+  resize: none;
+  field-sizing: content;
 }
 
 @media (max-width: 767px) {

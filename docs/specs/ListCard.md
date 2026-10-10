@@ -9,9 +9,71 @@
 | **Status**          | implemented                                                                                                            |
 | **Token prefix**    | `--lcrd-*`                                                                                                             |
 | **Designer / date** | Codex / 21 Aug 2026                                                                                                    |
-| **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug. **Phase 2 task 2.11 / 28 Sep 2026** — the thumbnail moves onto `Media` (`fit="fill"`, `LIST_CARD_THUMBNAIL`, lazy); the marker union discriminates on `type`; `external` takes ch04's `square-arrow-right-up` and a visually hidden new-tab hint; the ordered set is confirmed as a real `ol`; contact cards lose their icon thumbnails (C1). Rulings: `docs/phase-2-decisions.md` C1, M1–M4. **Tracker 2.17 / 29 Sep 2026** — the split reads the row's own width (a wrapping `Cluster` on `--lcrd-title-min` / `--lcrd-body-min`, not Layout's md viewport boundary), so titles no longer break mid-word; the title wraps `break-word`, not `anywhere`; wide rows are capped at `--measure-title` + seam + `--measure-body`; the off-site cue is the plain `arrow-right-up`; the thumbnail passes Media `inset="text"`. See § 7, § 9, § 10 and § 17 q7, q8 |
+| **Revised**         | Cards 1a redesign / 25 Aug 2026 — always-dark title, the cue alone carries the link colour, hover wipe removed, and the number marker de-emphasised — 40px down to the new 20px `--text-index` role, its own quiet ink one step below the label ramp, and a baseline correction. Presence and interaction pass, same day — title to h4, the row's inner inset off the dense-table step, and a per-surface hover fill on the ghost-button model. The rule's one-day stint as the hover signal was replaced by the fill on 26 Aug. **Phase 2 task 2.11 / 28 Sep 2026** — the thumbnail moves onto `Media` (`fit="fill"`, `LIST_CARD_THUMBNAIL`, lazy); the marker union discriminates on `type`; `external` takes ch04's `square-arrow-right-up` and a visually hidden new-tab hint; the ordered set is confirmed as a real `ol`; contact cards lose their icon thumbnails (C1). Rulings: `docs/phase-2-decisions.md` C1, M1–M4. **Tracker 2.17 / 29 Sep 2026** — the split reads the row's own width (a wrapping `Cluster` on `--lcrd-title-min` / `--lcrd-body-min`, not Layout's md viewport boundary), so titles no longer break mid-word; the title wraps `break-word`, not `anywhere`; wide rows are capped at `--measure-title` + seam + `--measure-body`; the off-site cue is the plain `arrow-right-up`; the thumbnail passes Media `inset="text"`. See § 7, § 9, § 10 and § 17 q7, q8. **1 Oct 2026 (owner)** — a second **form**, `tile`, for an item in a grid track, and `body` optional. Collected in **Amendment · 1 Oct 2026**. |
+| **Revised**         | `fdn-spacing` / 5 Oct 2026 — title → body at `text` in every form (S3); the `size` prop (`md \| sm`), passed by the composing route (visual-direction § 7.2). See **Amendment · 5 Oct 2026**. 6 Oct 2026 — at `sm` only a tile's body steps to body-sm; a row's body stays at body (item 2), and grids of tiles take a `column` row seam (item 4) |
+| **Revised**         | **Owner review / 7 Oct 2026** — no arrow cue on linked items (the `cue` prop is deleted; the title takes the link ink on hover and focus); an opt-in action at the foot (`ctaLabel`); the boxed tile (`frame="box"`); the number tone rule. See **Amendment · 7 Oct 2026** at the foot; where this spec still differs, that amendment wins. |
 | **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
 | **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
+
+> **Amendment · 7 Oct 2026 · owner review (supersedes every mention of the arrow cue below).** No
+> arrow after a linked item's title and no arrow at a row's end: the whole item is the link, and its
+> title is the hover and focus signal. Visible actions are opt-in (`ctaLabel`). Tiles may be boxed
+> (`frame="box"`). Number markers are blue when the numbered points ARE the section's information and
+> neutral when they are auxiliary. Full text: **Amendment · 7 Oct 2026** at the foot.
+
+> **Amendment · 5 Oct 2026 · `fdn-spacing` (visual-direction § 1.1 S3, § 7.2).** Where this spec
+> still differs, `docs/kit/visual-direction.md` wins.
+>
+> 1. **S3 — title → body is `text` (16), not `tight` (8)**, in the stacked row, the wrapped split
+>    (the Cluster's `rowGap`) and the tile. Ink gap after: ~25 → ~33. It puts ListCard and BlockCard
+>    on one card rhythm (BlockCard's S2).
+> 2. **A `size` prop: `'md' | 'sm'`** — the title and body roles together, a component size and so a
+>    t-shirt name. A row cannot see its siblings, so the composing route passes it. **The default
+>    follows the form:** `md` for `form="row"`, `sm` for `form="tile"`, so the rule that every tile
+>    takes `sm` holds without a call site remembering it. A row set of four or more still passes
+>    `sm`, because only the route can count.
+>
+>    | Size | Title | Body | Ordinal offset | Set |
+>    |---|---|---|---|---|
+>    | `md` | `--text-h4` | `--text-body` | `--space-4` | up to three rows |
+>    | `sm` | `--text-h5` | `--text-body-sm` on a tile; `--text-body` on a row | `--space-0` | any set of four rows or more, and tiles |
+>
+>    **6 Oct 2026 — the body steps in a tile only.** As shipped on 5 Oct, `sm` set body-sm on a row
+>    too, and on product-design at 1440 the five numbered steps and the "What you receive" rows read
+>    as fine print beside an h2 band: a row's body runs at up to `--measure-body`, beside or under its
+>    title, and that is a reading line, not a tile's caption. Visual-direction § 1.4 already assumed
+>    it (the F step row and the one-column D row are h5 over **body**), so § 7.2 is reconciled to
+>    § 1.4: the title steps with the count in every form; the body steps with the track, so only a
+>    tile's does. The module sets the md body role on `.body` and restates it only under
+>    `.sizeSm.tile`. No token changes: `--lcrd-body-text-sm` is now read by tiles alone.
+>
+>    There is no `lg`: § 7.2's large step is the one featured, horizontal card, which is BlockCard's
+>    arrangement, and a ListCard is never featured. Tokens `--lcrd-title-text-{md,sm}`,
+>    `--lcrd-title-tracking-{md,sm}`, `--lcrd-body-text-{md,sm}` and
+>    `--lcrd-number-baseline-offset-{md,sm}` replace the unsuffixed four. The ordinal's correction is a
+>    function of the title's size (§ 7c), so it steps with it; both values were measured in the browser
+>    (numeral baseline minus title baseline: 0.00px at md with 4, and 0 needed at sm, where 2 sat 2px low). The module sets the roles under one root modifier per step (`.sizeMd` / `.sizeSm`),
+>    and `.numberAbove` takes a third class so a tile's ordinal still drops the offset at `sm`.
+> 3. **The service-page template passes it:** tiles (Signals, Ledger grids, the Parts and Slice
+>    diagram tiles) take `sm`; Steps, Router, the Stat rows and a one-column Ledger take `sm` from four
+>    rows, else `md`.
+> 4. **Grids of tiles take `rowGap="column"` (64), 6 Oct 2026** — the row seam of every borderless
+>    card set (CLAUDE.md's `--gap-column` row; visual-direction § 1.2). Signals, Ledger grids, the
+>    Parts and Slice diagram tiles and every tile grid in the specimen moved from `stack` (48). A tile
+>    has no box, so at 48 its last line ran into the opening rule of the tile below. A column of
+>    ruled rows is not covered: its rule and padding are its seam, and it stays at `none`.
+> 5. **Follow-up, not in this package:** routes outside the six service pages that render a ListCard
+>    set of four rows or more (`services/[...slug]`, `expertise/[slug]`, `audits/[slug]`,
+>    `tools/[slug]`, `how-we-work`, `glossary`) do not pass `size` yet, so they stay at `md`. Each
+>    route adopts the count rule when it is recomposed from the kit.
+> 6. **Steps, the set mode (`Steps.tsx`), final fix round 6 Oct 2026.** A Steps row is `md` and
+>    `stacked` at every count — the blue index beside an h4 title, the body under it at
+>    `--lcrd-stacked-body-measure` (the lead measure, 56ch) — the editorial process list of
+>    ref-meridian-04, replacing the h5 split in a 184 title track that read as a three-cell spec table.
+>    The set drops the row's 16 inline inset (it is never linked, so it paints no hover ground), takes
+>    `--gap-block` (24) as its block inset, and starts its first row on the set's top edge.
+>    `--lcrd-step-title-track` is deleted. `--lcrd-number-baseline-offset-md` now steps at the h4
+>    role's breakpoints (4 / 1 / 0, measured: at 4 the numeral sat 3px low at 1023 and 5px at 767).
 
 ## 1 · Identity
 
@@ -46,9 +108,9 @@ parent list.
 | `content` |              yes | The group containing `title` and `body` — a wrapping `Cluster` when `split`, a one-track `Layout` when `stacked` | `split` or `stacked` arrangement; no colour of its own            |
 | `title`   |              yes | A `span`, `h3` or `h4`, selected by `titleAs`                                    | `--lcrd-title-ink`, linked or not                                 |
 | `body`    |   yes in the API | One paragraph; whitespace-only content emits no element                          | `--lcrd-body-ink` and `--measure-body`                            |
-| `cue`     | linked rows only | `Icon name="arrow-right" size="lg"`, or `arrow-right-up` when `external` (2.17; was `square-arrow-right-up`), hidden from assistive technology; an external row adds a visually hidden "(opens in a new tab)" | The row's only link ink, and the row's only state                 |
+| `cue`     | **deleted 7 Oct 2026** | — The arrow cue is gone. An external item keeps a small (16) `arrow-right-up` after the title and a visually hidden "(opens in a new tab)" at the end of its name | The title carries the link ink on hover, focus and press                 |
+| `action`  | opt-in, linked only | `ctaLabel`: the link `Button` (`as="span"`, `emphasis="link"`, `tone="primary"`, `arrow-right` or `arrow-right-up`) a `block` under the copy, pinned to a tile's foot | Button's own tokens; the frame carries `data-btn-link-group` |
 | `rule`    |              yes | The root's block-end hairline                                                    | `--lcrd-rule-ink`; one width and one colour in every state         |
-| `ground`  | linked rows only | No element of its own — the frame's own background, painted only under a pointer  | `--lcrd-ground-hover`, `--lcrd-ground-pressed`                    |
 
 The title's ink does not depend on `href`, matching the same change in `BlockCard`: a linked row is
 recognisable by its arrow, not by a blue heading, so `--lcrd-link-ink` is worn by the cue alone.
@@ -82,12 +144,15 @@ element and the `--gap-block` seam beside it.
 | Prop          | Exact type / literal union                                                                                                 | Default   | What it decides                                                                    |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------- |
 | `title`       | `string`                                                                                                                   | required  | The row's primary label                                                            |
-| `body`        | `string`                                                                                                                   | required  | The one explanatory paragraph                                                      |
+| `body`        | `string`                                                                                                                   | absent    | The one explanatory paragraph. Optional since 1 Oct 2026: absent renders no paragraph and no seam; present but blank warns |
 | `marker`      | `{ type: 'number'; value: number } \| { type: 'icon'; name: IconName } \| { type: 'thumbnail'; image: MediaImage }` | absent    | Which one fill occupies the marker slot; `IconName` is Icon's glyph union, `MediaImage` is Media's record |
+| `form`        | `'row' \| 'tile'` | `'row'` | 1 Oct 2026. `row`: a row of a one-column list, rule at block-end, marker beside. `tile`: an item in a grid track, rule at block-start, marker above, always stacked, flush — `arrangement` is `never` with it. See Amendment · 1 Oct 2026 |
 | `arrangement` | `'split' \| 'stacked'`                                                                                                     | `'split'` | Whether title and body are two tracks from `md`, or one stack at every width       |
 | `titleAs`     | `'span' \| 'h3' \| 'h4'`                                                                                                   | `'span'`  | Heading semantics only; visual type does not change                                |
+| `size`        | `'md' \| 'sm'`                                                                                                             | `'md'` on a row, `'sm'` on a tile | 5 Oct 2026. The type step, passed by the set: `sm` for four rows or more, and every tile. See Amendment · 5 Oct 2026 |
 | `href`        | `string`                                                                                                                   | absent    | A non-blank value makes the whole frame one anchor and causes the cue to render    |
 | `external`    | `boolean`                                                                                                                  | `false`   | The destination leaves tcules.com: new tab, the "leaves the site" cue glyph and the hidden new-tab hint. Ignored without a destination |
+| `cue`         | `'end' \| 'title'`                                                                                                        | `'end'`   | **6 Oct (cmp-services).** `title`: a linked row's arrow follows the title's last word and the title takes the link ink on hover (BlockCard's model); no hover ground, so no 16 inline inset. Ignored on a tile or without a destination. On an external row the off-site glyph follows the title in the same way, and the hidden new-tab hint moves inside the title with it. (The phone thumbnail size is a separate, site-wide rule: see § 7.) |
 
 **28 Sep 2026 (2.11).** The thumbnail member carries a whole `MediaImage` record — the shape a page
 receives from `@/content` — and ListCard hands it to `Media` untouched with `fit="fill"`,
@@ -112,8 +177,10 @@ Deliberately not props:
 - `finish`, `filled`, `selected` and `active`: only ruled ships; no selected content need exists.
 - `cue`, `cueIcon` and `cueLabel`: `href` is the single source of truth, and `arrow-right` is one
   system decision.
-- `size`, density, padding, gap, radius, height and width: one row size and one rhythm prevent a
-  12-row list becoming twelve individually tuned objects.
+- density, padding, gap, radius, height and width: one rhythm prevents a 12-row list becoming
+  twelve individually tuned objects. `size` is the exception, and a narrow one (5 Oct 2026): it
+  steps the title and body roles only, `md | sm`, and is set once per set by the route, so a list
+  still has one size, never twelve.
 - `className`, `style` and arbitrary DOM attributes: they would reopen colour, distance and box
   geometry from the call site.
 - `children`: the closed strings prevent a second heading, nested action or rich-text flow from
@@ -128,18 +195,18 @@ Compile errors, not review comments:
 2. A thumbnail marker without a complete `MediaImage` (`src`, `alt`, `width`, `height`), an icon
    marker without `name`, or a number marker without `value` cannot compile.
 3. A third arrangement, title element or arbitrary glyph name cannot compile.
-4. A missing `title` or `body` cannot compile.
+4. A missing `title` cannot compile. (`body` is optional since 1 Oct 2026.) `form="tile"` with any `arrangement` cannot compile.
 5. There is no cue prop, so a static row with a cue and a linked row without one are both
    unrepresentable.
 
 ## 4 · Variants × sizes
 
-| Arrangement | `md` — the only size                                                                            | Intended use                                                                                     |
+| Arrangement | At either size (`md` or `sm`, 5 Oct 2026)                                                       | Intended use                                                                                     |
 | ----------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `split`     | Title takes two fractional tracks and body three from `md`; they collapse to one track below it | The 21 title-left / body-right sections; default because it is the highest-volume arrangement    |
+| `split`     | Title and body share a line while both minimum tracks fit the row's own width, and stack when not (2.17; no breakpoint) | The 21 title-left / body-right sections; default because it is the highest-volume arrangement    |
 | `stacked`   | Title above body at every width                                                                 | The 11 title-plus-body sections and sequences whose lead-in must remain attached to its sentence |
 
-There is no `sm` or `lg` row size and therefore no `size` prop. Marker fill, link presence and
+**Amended 5 Oct 2026:** there is a `size` prop, `md | sm`, and no `lg` (Amendment · 5 Oct 2026). Marker fill, link presence and
 heading semantics do not create variants: they change content or semantics, not the row's design
 role. The title/body role, row inset, rule, cue and icon sizes do not step between arrangements.
 
@@ -153,10 +220,13 @@ Static rows have only rest. They do not respond to a pointer and do not enter th
 
 | State           | Trigger                              | Parts that move                                                                              |
 | --------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
-| rest            | Base rendering                       | Nothing moves. Title, body and marker hold their own inks; the cue holds `--lcrd-link-ink`   |
-| hover           | Pointer over a linked frame          | The frame paints `--lcrd-ground-hover`. Nothing else moves — the cue holds its rest ink        |
+| rest            | Base rendering                       | Nothing moves. Title and body hold their own inks; marker and numeral carry the blue accent (fdn-blue, 6 Oct 2026). No arrow (7 Oct 2026) |
+| hover           | Pointer over a linked frame          | The title takes `--lcrd-link-ink` (not with an action: the action moves instead). Open tile: the opening rule takes `--lcrd-link-ink`. Boxed tile: the frame paints `--lcrd-ground-hover`. Rows paint no ground (7 Oct 2026) |
 | focus, keyboard | `:focus-visible` on a linked frame   | Exactly the hover rendering plus the two-part ring from `--lcrd-ring-color` and `--lcrd-ring-gap-color` |
-| pressed         | Pointer activation on a linked frame | The ground steps to `--lcrd-ground-pressed` and the cue to `--lcrd-link-ink-pressed`           |
+| pressed         | Pointer activation on a linked frame | The title steps to `--lcrd-link-ink-pressed`; a boxed tile's ground to `--lcrd-ground-pressed`           |
+
+The paragraphs below record the 26 Aug row ground and the ghost model it took. Both were removed on 7
+Oct 2026 with the arrow cue; they stand as history.
 
 **Hover moves one thing and press moves two**, which is `Button`'s ghost model rather than an
 invention here. Ghost moves its background under the pointer and its foreground only on the click;
@@ -201,19 +271,18 @@ ground: `--color-paper`, `--color-paper-deep`, `--color-neutral-950` and
 | ------------------------- | ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- | ------------------------------------------- |
 | `--lcrd-title-ink`        | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
 | `--lcrd-body-ink`         | `--color-neutral-700` — 8.14:1                  | `--color-neutral-700` — 7.27:1                  | `--color-neutral-300` — 11.07:1                 | `--color-brandeis-50` — 5.57:1              |
-| `--lcrd-marker-ink`       | `--color-neutral-900` — 14.62:1                 | `--color-neutral-900` — 13.06:1                 | `--color-white` — 17.26:1                       | `--color-white` — 6.23:1                    |
-| `--lcrd-number-ink`       | `--color-neutral-500` — 3.16:1                  | `--color-neutral-600` — 4.39:1                  | `--color-neutral-500` — 5.41:1                  | `--color-brandeis-200` — 3.78:1             |
+| `--lcrd-marker-ink`       | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-white` — 6.23:1                    |
+| `--lcrd-number-ink`       | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-brandeis-200` — 3.78:1             |
 | `--lcrd-link-ink`         | `--color-brandeis-500` — 6.17:1                 | `--color-brandeis-500` — 5.51:1                 | `--color-brandeis-300` — 7.32:1                 | `--color-brandeis-100` — 4.91:1             |
 | `--lcrd-link-ink-pressed` | `--color-brandeis-700` — 10.07:1                | `--color-brandeis-700` — 8.99:1                 | `--color-brandeis-50` — 15.44:1                 | `--color-brandeis-50` — 5.57:1              |
 | `--lcrd-rule-ink`         | `--color-neutral-300` — n/a, decoration         | `--color-neutral-400` — n/a, decoration         | `--color-neutral-700` — n/a, decoration         | `--color-brandeis-300` — n/a, decoration    |
-| `--lcrd-ground-hover`     | `--color-neutral-100` — a ground, not an ink     | `--color-neutral-200` — a ground, not an ink     | `--color-neutral-900` — a ground, not an ink     | `--color-brandeis-600` — a ground, not an ink |
-| `--lcrd-ground-pressed`   | `--color-neutral-200` — a ground, not an ink     | `--color-neutral-300` — a ground, not an ink     | `--color-neutral-800` — a ground, not an ink     | `--color-brandeis-700` — a ground, not an ink |
 | `--lcrd-ring-color`       | `--color-brandeis-500` — 6.17:1 against its gap | `--color-brandeis-500` — 5.51:1 against its gap | `--color-brandeis-300` — 7.32:1 against its gap | `--color-white` — 6.23:1 against its gap    |
 | `--lcrd-ring-gap-color`   | `--color-paper` — paired ring 6.17:1            | `--color-paper-deep` — paired ring 5.51:1       | `--color-neutral-950` — paired ring 7.32:1      | `--color-brandeis-500` — paired ring 6.23:1 |
 
 **Paper.** The title sits at neutral-900 whether or not the row navigates, while the body drops to
-neutral-700 so a row reads title first without sacrificing AA. The cue starts at brandeis-500 and
-advances through 600 and 700, and it is the only part of the row that does. The neutral-300 rule is
+neutral-700 so a row reads title first without sacrificing AA. The cue is neutral-900 at rest, takes
+brandeis-500 on hover and focus and 700 on press (6 Oct 2026, below); hover is also carried by the
+row's neutral-100 ground (§ 5, 26 Aug). The cue is the only ink in the row that moves. The neutral-300 rule is
 deliberately quieter than text and stays at that one value in every state.
 
 **The number is not the marker, for colour.** `--lcrd-marker-ink` keeps the title's ink for the icon
@@ -227,25 +296,26 @@ to give more back, and colour — not size — is where this component gives it.
 surfaces that means stepping toward white; on ink and blue it means stepping **toward the ground**,
 which is the opposite direction in hex and the same direction in emphasis.
 
-Every cell clears 3:1 and none clears 4.5:1, and that is the deliberate part rather than an
-oversight. The numeral is `aria-hidden` and the parent `<ol>` carries the order, so it is a visible
+At rest every cell clears 3:1 (3.16 to 5.41:1; only ink's clears 4.5), and on paper's hover and
+pressed grounds the numeral falls to 2.68 and 2.37:1, an accepted cost. That is the deliberate part
+rather than an oversight. The numeral is `aria-hidden` and the parent `<ol>` carries the order, so it is a visible
 mark duplicating semantics the markup already states — the same argument `--fig-rule-ink` makes at
 1.90:1. The moment it becomes the only source of the order, it has to come back up to 4.5:1.
 
 **Tint.** Title, body and marker can keep their paper steps: each still clears its floor on
-paper-deep. The cue ramp is also restated unchanged because brandeis-500, 600 and 700 all clear AA
-here. The rule moves to neutral-400 so it remains present against the deeper ground without
+paper-deep. The cue is also restated unchanged because brandeis-500 and 700 both clear AA here. The rule moves to neutral-400 so it remains present against the deeper ground without
 competing with the copy.
 
-**Ink.** Title and marker lift to white and body to neutral-300. The cue ramp lifts to brandeis-300
-at rest, 100 on hover and 50 on press because brandeis-500 reaches only 2.77:1 on this ground. The
+**Ink.** Title and marker lift to white and body to neutral-300. The cue lifts to brandeis-300
+at rest, holding through hover, and 50 on press, because brandeis-500 reaches only 2.77:1 on this
+ground. The
 rule drops to neutral-700 so twelve adjacent separators do not turn into a ladder louder than the
 content.
 
-**Blue.** The available light ramp is narrow: the cue starts at brandeis-100, reaches white on hover
-and returns to brandeis-50 on press; all three clear 4.5:1. The title and marker are white, body is
-brandeis-50, and the decorative rule is brandeis-300. With the pressed rule width gone, these three
-light steps are the whole of the state model on this surface, which is why none may be lightened and
+**Blue.** The available light ramp is narrow: the cue is brandeis-100 at rest and through hover, and
+brandeis-50 on press; both clear 4.5:1, and hover is the brandeis-600 ground. The title and marker are white, body is
+brandeis-50, and the decorative rule is brandeis-300. With the pressed rule width gone, the two cue steps and the
+two ground steps are the whole of the state model on this surface, which is why none may be lightened and
 why the white focus ring against its brandeis-500 gap matters most here.
 
 **The ground re-measures every ink above it.** The table's ratios are against the surface. On hover
@@ -305,12 +375,13 @@ The component does not receive a `surface` prop and never paints the panel groun
   two things sharing a number is not a reason.
 - Marker to the content/cue core: `Cluster colGap="block"`; when the outer cluster wraps, its
   wrapped line seam is `rowGap="block"`.
-- Stacked title to body: `Layout rowGap="tight"`.
-- Split title to body: **`Cluster colGap="block"`, `rowGap="tight"`** (29 Sep 2026, 2.17). Was `Layout
+- Stacked title to body: `Layout rowGap="text"` (`tight` until 5 Oct, S3).
+- Split title to body: **`Cluster colGap="block"`, `rowGap="text"`** (29 Sep 2026, 2.17; the wrapped
+  seam `tight` until 5 Oct, S3). Was `Layout
   colGap="column"` (64). The split is now a wrapping `Cluster`, and its seam is chosen by what it
   separates: a title and the sentence it heads are head and body of one block, which is `--gap-block`'s
   role, not "two halves that must read as separate", which is `--gap-column`'s — the opposite of what
-  a coupled row wants. When the body wraps under the title the line seam is `tight`, the same step the
+  a coupled row wants. When the body wraps under the title the line seam is `text`, the same step the
   stacked arrangement uses, so a split row that has wrapped is indistinguishable from a stacked one.
 - Content to cue: `Cluster colGap="block"`.
 - Frame inline inset: `--gap-block`, uniform with the block inset. This section previously read "no
@@ -336,10 +407,10 @@ The component does not receive a `surface` prop and never paints the panel groun
 
 ### (b) Component sizes
 
-- `md` row: the only size; it has no fixed height and fills the available inline size. A title-only
-  linked row measures about 98px high: one h4 line at 33.6px plus two `--gap-gutter` insets, so the
-  whole-row target clears 44px with room to spare and needs no hit extension. It was ~56px at the h5
-  title and the `--gap-text` inset.
+- A row, at either size, has no fixed height and fills the available inline size. A title-only
+  linked `md` row measures about 98px high: one h4 line at 33.6px plus two `--gap-gutter` insets; an
+  `sm` row about 92px (one h5 line at 28.2px plus the same insets). Both clear 44px with room to
+  spare and need no hit extension. It was ~56px at the h5 title and the old `--gap-text` inset.
 - `xs` content core minimum: `--lcrd-content-min-xs` is 192px, measured against Layout's existing
   `xs` track. It keeps a number or 24px icon beside readable copy and causes the larger thumbnail to
   wrap above the core before the copy collapses. Since the inline inset arrived, a 192px *track* hands the row 160px of content, which is below that
@@ -361,16 +432,23 @@ The component does not receive a `surface` prop and never paints the panel groun
 - Cue: `Icon size="lg"`, resolving to `--icon-size-18`.
 - Thumbnail marker: `--lcrd-thumbnail-inline-md` is 160px and `--lcrd-thumbnail-ratio` is 3:2,
   measured as a recognisable landscape sample at the full 1240px row while still wrapping cleanly
-  before a 192px content core is squeezed. `Media` in `fit="fill"` covers that box from its centre;
+  before a 192px content core is squeezed. `Media` in `fit="fill"` covers that box from `--media-fill-position` (inline start, 20% down);
   a B5 cut-out on its contrast panel takes Media's `inset="text"` (`--gap-text`, 16) inside it, leaving
   128 × 75 of part. It kept Media's `--gap-gutter` until 29 Sep 2026 and was left 96 × 43 (§ 17 q8).
+- Thumbnail marker below md: `--lcrd-thumbnail-inline-sm` is 96px, at the same 3:2 (96 × 64), on
+  **every** row with a thumbnail below 768 — cued by the arrow at the end or after the title, linked
+  or not; tiles keep their own geometry (cmp-services, 6 Oct 2026). At 160 the thumbnail wrapped above
+  the copy in the 326 phone column and every row became a photo with a caption under it; at 96 it
+  stays beside its title and the row keeps its marker silhouette. A site-wide change to every phone
+  thumbnail row, and the reason /design/list-card's 390 crops changed shape that day.
 - Hidden hint: `--lcrd-hidden-size` is `--space-1`, the clip technique's own 1px geometry, duplicated
   by value from `--crumb-hidden-size` and SiteFooter's hidden label.
 
 ### (c) Optical corrections
 
-**One, and it is the number's baseline.** `--lcrd-number-baseline-offset` is `--space-4`, applied as
-`padding-block-start` on the number fill alone. Every other inset and seam is a gap-scale
+**One, and it is the number's baseline.** `--lcrd-number-baseline-offset-md` is `--space-4` and
+`-sm` is `--space-0` (5 Oct 2026: the correction is a function of the title's size, so it steps with
+`size`), applied as `padding-block-start` on the number fill alone. Every other inset and seam is a gap-scale
 relationship, every icon is sized by `Icon`, and the rule and focus ring use their own system
 geometry.
 
@@ -386,9 +464,10 @@ is what actually sits the numeral on the title's baseline when looked at. **An o
 measured, not derived** — a value computed from nominal metrics and never checked against a render is
 not an optical correction, it is a guess with arithmetic attached.
 
-The value is a function of **both** type roles, which is the thing to remember about it: 8px against
-a 13px number, 2px against an h5 title, 6px now. Change either role and recompute it in the same
-edit.
+The value is a function of **both** type roles, which is the thing to remember about it. It was 8px
+against the old 13px number; against the 20px number it is now **4 at `md` (h4) and 0 at `sm` (h5)**,
+both measured in the browser on 5 Oct 2026 (at `sm`, 2 put the numeral 2px low). Change the number's
+role or either title role and re-measure both values in the same edit.
 
 `align="baseline"` on that `Cluster` is the typographically correct relationship and cannot be used:
 the same marker slot holds a 160px thumbnail whose baseline is its bottom edge, so baseline-aligning
@@ -404,14 +483,14 @@ at `--z-base`.
 
 | Part                     | Type role        | Tracking                                   | Measure                              |
 | ------------------------ | ---------------- | ------------------------------------------ | ------------------------------------ |
-| `title`                  | `--text-h4`      | `--text-h4-tracking`                       | `--measure-title`                    |
-| `body`                   | `--text-body`    | none — this role has no tracking companion | `--measure-body`                     |
+| `title`, `md` / `sm`     | `--text-h4` / `--text-h5` | `--text-h4-tracking` / `--text-h5-tracking` | `--measure-title`           |
+| `body`, `md` / `sm`      | `--text-body` / `--text-body-sm` on a tile, `--text-body` on a row (6 Oct 2026) | none — these roles have no tracking companion | `--measure-body`     |
 | Number fill in `marker`  | `--text-index`   | `--text-index-tracking`                    | none — one expected two-digit marker |
 | Icon and thumbnail fills | none             | none                                       | none                                 |
 | `cue`                    | none — an `Icon` | none                                       | none                                 |
 
-The component aliases the first three roles through `--lcrd-title-text`,
-`--lcrd-title-tracking`, `--lcrd-body-text`, `--lcrd-marker-text` and
+The component aliases the first three roles through `--lcrd-title-text-{md,sm}`,
+`--lcrd-title-tracking-{md,sm}`, `--lcrd-body-text-{md,sm}`, `--lcrd-marker-text` and
 `--lcrd-marker-tracking`. `titleAs` changes element semantics, never the visual role.
 
 All copy renders verbatim in sentence case: the title and body are sans, so the mono rule does not
@@ -429,7 +508,9 @@ almost twice the size of the content it indexes, and the loudest element in ever
 inversion rather than a matter of taste. The role was the mistake, not the size: `--text-stat` is for
 a number that IS the content, the way a metric is in `Proof`, and a position in a list is a label.
 
-There is deliberately no middle step. The mono ramp runs 11, 12, 13, 14 and then jumps to 40, so a
+*Historical (superseded 25 Aug 2026 by `--text-index`, the 20px mono role added for exactly this
+gap; the two paragraphs below record the reasoning that led to it).* There was deliberately no
+middle step. The mono ramp ran 11, 12, 13, 14 and then jumped to 40, so a
 mono numeral is either a metric or a label with nothing in between to retreat to. Inventing a 24px
 mono step to split the difference is what the token rules forbid: a size that is not on the ramp is
 a mistake or a new step, and this is neither.
@@ -493,12 +574,12 @@ or duplicate action. `Prose` is not used: one plain paragraph is not a CMS rich-
         <Cluster colGap="block" align="start" nowrap>
           {split ? (
             /* wraps when --lcrd-title-min + block + --lcrd-body-min no longer fits the row */
-            <Cluster colGap="block" rowGap="tight" align="start">
+            <Cluster colGap="block" rowGap="text" align="start">
               {title /* flex: 2 1 --lcrd-title-min, max --measure-title */}
               {body /* flex: 3 1 --lcrd-body-min, max --measure-body */}
             </Cluster>
           ) : (
-            <Layout rowGap="tight">
+            <Layout rowGap="text">
               {title}
               {body}
             </Layout>
@@ -597,14 +678,15 @@ subject icon or arrow a second time.
 | Narrow track at 767                       | `split` is stacked; number/icon remain beside the core when they fit, and thumbnail may wrap above it. Measures and token-aware breaking prevent overflow.                                                                                                                                                           |
 | Parent that does not size it              | The root fills one available line in a wrapping parent. The content core's named minimum is `xs` (192px), which forces the marker to wrap before copy becomes unreadable. The root has no hard minimum beyond the parent's available inline size, so a sub-192px parent wraps text instead of causing page overflow. |
 | Logical properties rather than left/right | Marker is at inline start, cue at inline end, inset is block-axis and the rule is at block end. The current site is LTR; an RTL site must swap the directional cue to the existing `arrow-left` glyph at the composition boundary.                                                                                   |
-| Surface nested inside a different one     | The nearest `data-surface` block redeclares all nine colour tokens. A tint row inside ink uses the tint column in full.                                                                                                                                                                                              |
+| Surface nested inside a different one     | The nearest `data-surface` block redeclares all eleven colour tokens. A tint row inside ink uses the tint column in full.                                                                                                                                                                                              |
 | Two components adjacent                   | Two rows in the same zero-gap parent produce one rule at their shared seam and one rule at the end of the second row; there is no top edge to double the seam.                                                                                                                                                       |
 | Interactive content inside a slot         | Rejected. `title` and `body` are strings, icon/number fills are inert, and thumbnail media must not contain a link, button or control. The row anchor is the only possible focus target.                                                                                                                             |
 
 ## 13 · Motion
 
-The cue's ink transitions with `--duration-fast` and `--easing-standard`, aliased as
-`--lcrd-transition-duration` and `--lcrd-transition-easing`. That is the whole of it.
+The cue's ink and the linked row's ground (`background-color`, since 26 Aug) transition with
+`--duration-fast` and `--easing-standard`, aliased as `--lcrd-transition-duration` and
+`--lcrd-transition-easing`. That is the whole of it.
 
 The interactive overlay rule — the `Button`/`Breadcrumbs` wipe precedent along the row's own inline
 axis — is gone, and with it the pressed width step. Nothing in the component transforms, translates,
@@ -629,29 +711,33 @@ query in the same change.
    inspect the target overlay.
 5. Render identical ListCard markup on all four surface bands and inspect resolved `--lcrd-*`
    values rather than passing a surface prop.
-6. Use `titleAs` to match the page outline while preserving h4 visual type; compare the heading map
-   with the computed type token.
+6. Use `titleAs` to match the page outline while preserving the visual type `size` sets (h4 at
+   `md`, h5 at `sm`); compare the heading map with the computed type token.
 7. Prove the title's ink does not depend on `href`: render the same row linked and static side by
    side and expect both computed title colours to be `--lcrd-title-ink`.
 
 **Don't**
 
-8. Do not add a background, surrounding edge or filled finish; inspect the module and expect no
-   background token and no finish prop.
-9. Do not give the title the link ink, or make any part but the cue change on hover or press;
-   inspect computed styles in every state and expect only the cue to move.
+8. Do not add a rest background, surrounding edge or filled finish; inspect the module and expect
+   no background at rest, no finish prop, and only the two state grounds (`--lcrd-ground-hover`,
+   `--lcrd-ground-pressed`, § 5) on a linked row.
+9. Do not give the title the link ink, or make any part but the row's ground, the cue and, on a
+   tile, the opening rule change on hover or press; inspect computed styles in every state. A row's ground and a
+   tile's rule are the two state carriers, and nothing else moves (amended 1 Oct 2026).
 10. Do not restore the rule wipe or a pressed rule width, and do not confuse either with the row's
     own block-end rule, which stays; search the module for `::after` and `scaleX` and expect none.
 11. Do not put a Button inside a linked row or interactive content in thumbnail media; tab order
     must contain one focus stop per linked row.
-12. Do not add margin to any ListCard node; search the module for margin and expect zero
-    declarations.
+12. Do not add margin to any ListCard node; search the module for margin and expect exactly one
+    declaration, the visually hidden `.hint`'s clip-technique margin (2.11, argued in its comment),
+    and no layout margin.
 13. Do not add hand-written grid or flex arrangement; search the module for those display modes and
     expect zero. `Layout` and `Cluster` must own every arrangement.
 14. Do not change a gap or type role in a component breakpoint; compare the responsive rules with
     sections 8 and 9.
 15. Do not clamp titles/bodies or hide rows after 12; the 24-row specimen must expose all content.
-16. Do not add `surface`, `size`, `finish`, `cue`, `className` or `style` to the public props; type
+16. Do not add `surface`, `finish`, `cue`, `className` or `style` to the public props, and do not
+    widen `size` past `'md' | 'sm'` (5 Oct 2026: `size` is public, and there is no `lg`); type
     checking an attempted call must fail.
 17. Do not introduce a second marker slot or branch into marker-specific row components; inspect
     the public export and expect one `ListCard` and one `marker` prop.
@@ -660,8 +746,10 @@ query in the same change.
 
 The exact block list, in order:
 
-1. **Arrangement × size matrix.** Two cells: `split × md` and `stacked × md`, with identical term
-   and definition copy. A note states there is no size prop.
+1. **Arrangement × size matrix.** Four cells: `split × md`, `stacked × md`, `split × sm` and
+   `stacked × sm`, with identical term and definition copy, then numbered rows at `md` and `sm`
+   side by side to prove the ordinal's baseline offset at each step (5 Oct 2026). The note states
+   that the composing route passes the step, that `md` is a row's default and `sm` a tile's.
 2. **Marker fill ladder.** Four rows in one list: number, icon, thumbnail and omitted marker. Label
    them as fills of one slot, not variants.
 3. **Content-shape set.** A 5-row numbered sequence, a 5-row term list and a 3-row linked set. Use
@@ -676,7 +764,7 @@ The exact block list, in order:
    exercise the dark title, cue ink and ring together. Print the matching section 6 surface paragraph
    beside each band.
 6. **Nested surface.** A tint panel inside an ink band and an ink panel inside a paper band, with the
-   nine resolved colour tokens listed beside each rendering.
+   eleven resolved colour tokens listed beside each rendering.
 7. **Twelve-row sample-finding block.** Numbered `01`–`12`, full width, zero row gap. Inspect at
    desktop and at 767 to prove it remains one list rather than twelve tiles.
 8. **Every section 12 edge case.** Thirteen labelled rows/blocks: long title/body; unbroken URL;
@@ -907,14 +995,16 @@ NAMES
     must be regenerated and pushed — section 16 says so.
 [x] Named glyphs are existing: arrow-right, arrow-left, square-arrow-right-up (2.11), arrow-right-up (2.17), and the IconName union.
 [x] Section, Layout and Cluster props/values are existing unions: as, rowGap, colGap, columns,
-    align, nowrap; none, tight, block, column, start; base, md; ol, ul, li.
+    align, nowrap; none, text, block, column, start; base, md; ol, ul, li (`tight` became `text` 5 Oct, S3).
 [x] Zero hex codes, rgb(), hsl(), Tailwind names, CSS rule blocks or media-query blocks.
-[x] Tracking companions are used only with h4 and index, both of which have one. The marker moved
+[x] Tracking companions are used only with h4, h5 (`sm`, 5 Oct 2026) and index, each of which has one. The marker moved
     off stat on 25 Aug 2026; size and tracking moved together, and --text-index borrows ui's 0.08em
     rather than declaring a third correction.
 [x] Every layout distance is a gap-scale role.
-[x] Space-ramp reaches: 1 — --lcrd-number-baseline-offset (--space-2), argued in section 7(c) as a
-    baseline correction rather than a distance, and commented as optical on its own token.
+[x] Space-ramp reaches: 3 — --lcrd-number-baseline-offset-md (--space-4) and -sm (--space-0),
+    argued in section 7(c) as a baseline correction rather than a distance and commented as optical
+    on their tokens; and --lcrd-hidden-size (--space-1), the visually hidden clip box's own geometry
+    (section 7(b)). Recounted 6 Oct 2026; it said 1 (--space-2) since before the size step.
 [x] One new USAGE role was added for this component's sake: --text-index, 20px mono. Section 8 and
     docs/vocabulary.md carry it, /design/typography renders it, and the justification is a genuine
     hole in the ramp (mono ran 11, 12, 13, 14, then 40) rather than this component's convenience.
@@ -963,7 +1053,7 @@ COMPLETENESS
 [x] All thirteen required content edge cases are answered.
 [x] The unsized-parent row names the 192px core minimum and explains why the root has no hard floor.
 [x] Do's and Don'ts name a rendered-tree, type-check, search or computed-style decision.
-[x] Specimen plan covers 2 arrangements × 1 size, all four surfaces, manual states, nested surfaces,
+[x] Specimen plan covers 2 arrangements × 2 sizes (5 Oct 2026), all four surfaces, manual states, nested surfaces,
     every edge case, adjacent rows and narrow tracks.
 [x] Section 16 asks for nothing, explains why component tokens do not constitute a request, and
     records the one removal and the vocabulary push it requires.
@@ -971,3 +1061,227 @@ COMPLETENESS
 [x] Squint test: five shapes, with scale and position supplied by marker fills and arrangements rather
     than bounded rectangles.
 ```
+
+## Amendment · 1 Oct 2026 — the tile form, and an optional body
+
+**Why.** The service pages needed items in a grid — symptoms, steps, deliverables — and ListCard could
+only make a row: a rule that closes it, a marker beside the copy, a 16px inline inset for the hover
+ground. So the template drew its own tile three times over (Signals, Steps, Ledger) and its own linked
+tile once more (Router), each a marker, a title, a line and sometimes a destination. Four jobs, one
+item. Owner: *"we have similar components that i think can be used here and perhaps be added as
+variants? listcard is one such example."*
+
+**`form?: 'row' | 'tile'`**, default `row`. A placement, not a finish — both are the same groundless
+ruled item, with the same rule ink and width, type, marker fills and cue.
+
+| | `row` (unchanged) | `tile` |
+|---|---|---|
+| Where | one row of a one-column list | one item in a grid track |
+| Rule | block-end — rows end on the same line as their neighbours | block-start — tiles of unequal height only line up at the top |
+| Marker | beside the copy (`--gap-block`) | above the title (`--gap-text`); the number's baseline offset is dropped, there is no baseline to sit on |
+| Title / body | `split` or `stacked` | always stacked; `arrangement` is `never` at the type level |
+| Inset | `--gap-gutter` block, `--gap-text` inline | `--gap-block` above the copy, none inline or below: flush with the track, so the grid aligns with the heading over it; the grid's rowGap is the space after |
+| Linked: hover | the ground (`--lcrd-ground-hover`) | no ground — on a 220–390px column with flush copy a ground reads as a highlighted paragraph. The opening rule takes `--lcrd-link-ink`, and `--lcrd-link-ink-pressed` on press. No new token: the rule borrows the cue's ink while the tile is the active target |
+| Linked: cue | trailing, at the core's inline end | at the foot, pinned (`Layout pinLast`) so every cue in a grid row shares one line |
+
+The caller chooses the form, because a row cannot see its parent's column count. The rule for
+choosing is mechanical: **a set in one column is rows; a set in a grid is tiles.**
+
+**`body?: string`.** An item can be its name alone. Absent → no paragraph, no seam, no warning. Present
+but whitespace-only stays a CMS fault: omitted with a warning, as before.
+
+**Specimen:** `/design/list-card` § 1b — icon tiles in four tracks, number tiles in an ordered five,
+linked tiles with unequal bodies, and title-only rows and tiles.
+
+**Not taken into ListCard**, and why: a key line above the body (Signals' "May be", Router's "When").
+Both were the template's device, not the item's: "May be" reads as the first words of the body, and
+a route's condition is its body. No `eyebrow` prop was added.
+
+## Amendment · 6 Oct 2026 — `fdn-colour` (visual-direction § 4.2, § 4.3)
+
+- **The cue is ink at rest.** New `--lcrd-cue-ink`: neutral-900 on paper and tint, white on ink and blue.
+  `--lcrd-link-ink` (unchanged values) is now the cue's hover and focus ink as well as the tile rule's;
+  `--lcrd-link-ink-pressed` is unchanged. "Card arrows at rest are ink. They go blue on hover or focus"
+  (§ 4.3); the whole-card hover cue is blue's Free row (§ 4.2), so it spends nothing in the band rule.
+- **This supersedes "the cue holds through hover"** in § 5 and § 6. That model worked because the rest
+  ink was already blue; once rest is ink, holding through hover would leave a linked row with no blue at
+  all until the click. Hover now moves two things (ground and cue) and press steps both once more. The
+  hover-column ratios in § 6 for the cue are now `--lcrd-link-ink` on the hover ground — the same values
+  the table gives for the rest ink on that ground (5.22, 4.63, 6.26, 5.99), because they are the same
+  token.
+- `--lcrd-number-ink` was already neutral on paper and tint (3.16 and 4.39:1); § 4.4's inventory lists it
+  and it needed no change.
+
+## Amendment · 6 Oct 2026 — `fdn-media` (visual-direction § 5.3)
+
+- **The thumbnail's edge is the box's: radius 8, no frame, for every kind.** New
+  `--lcrd-thumbnail-radius: var(--radius-8)` on `.thumbnail`, which already clips (`overflow: hidden`),
+  so the radius applies to a photograph, a capture or a cut-out's panel alike. Media is passed
+  `edge="placement"`, so a capture no longer draws its hairline round a 160px crop the row made. This
+  closes § 17 q9 ("a record with no `kind` renders as a capture, hairline included — off-brand in a
+  thumbnail"): an untagged record is still a capture, and in a thumbnail it now has no frame.
+- The radius matches every other photograph box on the page (BlockCard's `--bcrd-media-radius`, Media's
+  `--media-photo-radius`), duplicated by value under token rule 6.
+
+## Amendment · 6 Oct 2026 — `fdn-blue` (supersedes the `fdn-colour` amendment above)
+
+Owner: blue is the recurring FOREGROUND accent; the reservation is only for grounds. `--lcrd-cue-ink`
+is deleted and the cue reads `--lcrd-link-ink` at rest again, holding through hover and stepping on
+press (the original model). `--lcrd-marker-ink` and `--lcrd-number-ink` move to the accent: brandeis-500
+on paper and tint, brandeis-300 on ink; blue keeps white and brandeis-200.
+
+## Amendment — final fix round (cmp-media-split, 6 Oct 2026)
+
+- A tile's marker and copy are a wrapping Cluster: from md the copy wraps under the marker at
+  `block` (24), title to body stays `text` (16); below md an icon or number marker sits beside the
+  copy, so a tile on a phone is an icon-and-title row. A thumbnail marker always sits above.
+- A tile's icon is 32 (`--lcrd-marker-icon-size-tile`, new primitive `--icon-size-32`).
+- An unlinked row (`.still`) drops the 16 inline inset: it has no hover ground to clear, so its
+  marker and title hold the column's edge.
+
+## Amendment · 6 Oct 2026 — `cmp-readdown`: ReadDown, the D set mode
+
+`ReadDown.tsx` in ListCard's folder, exported beside `Steps` (a pattern beside it would be a pattern
+importing a pattern). It is the D band's body (visual-direction § 3.4 D): ruled rows of PEERS in a
+`<ul>`, one column or two, each row a blue glyph (or none — a set is all-icon or all-text) beside its
+title with the sentence under it.
+
+- **Size is the set's** (§ 7.2): ≤ 3 rows in one column take `md` (h4); four or more, or two columns,
+  take `sm` (h5), body at body. Rows are always `stacked`, the body capped at `--lcrd-stacked-body-measure`.
+- **Two columns are one list**, laid out `{ md: 2 }` at `column` in reading order. Each frame fills its
+  grid cell (`block-size: 100%`), so the closing rules run level across the seam.
+- **On the content edge:** no inline inset (rows never link, so no hover ground), the 32 block inset kept
+  (§ 1.4's D row, padding 64), and the first row of each column starts on the set's top edge.
+- **`photo`** (fix round 2, superseding round 1's 349 portrait, which read as a third equal column
+  beside a head track left empty under its lead): the photo form gives the photograph the WIDE track.
+  From 1024 the set splits `{ lg: [2, 1] }` at `section` (96) with `reverse`, so the photo (first in the
+  DOM, for the phone's order) takes the trailing two thirds and the rows the leading third; `stretch`,
+  so the photo runs the rows' height and starts and ends with them at every width from 1024. About
+  763 × 449 at 1440. Place it under a stacked ContentSection head (`split-head`, whose head split [1, 2] over
+  the same grid, was retired 7 Oct 2026). Exactly three rows (warned), `sm` in the 381 track,
+  bodies ≤ 12 words / two lines, so the band is 822 at 1470 (with a CtaRow, 822 at `density="tight"`).
+  Below 1024 the photo sits above the rows at 3:2 (`--lcrd-readdown-photo-height-base`). The caller
+  passes no ContentSection `aside`.
+- **`rail`** (photo form only): the § 6.3 `rail` texture, hung off the photo's END EDGE rather than the
+  band's: the field's box runs from the band's end edge back across the band's inline padding (the
+  same max() Section pads with; cap duplicated on purpose as `--lcrd-readdown-rail-container`) plus
+  `--lcrd-readdown-rail-under` (80, optical) under the photo, and one 220-wide shape, blur 120, fills its
+  start. So the grid always meets the image (round 2: band-anchored, it sat 170 clear of the photo at
+  1920) and never extends past the viewport. Never under text. From 1440 only (`.rail`). Its containing
+  block must be the Section: never wrap a railed set in a positioned box.
+- **Token rename:** `--lcrd-step-body-measure` became `--lcrd-stacked-body-measure` (Steps and
+  ReadDown both read it).
+- **Ceilings warned in development:** > 3 rows in a column, > 6 rows in a set, mixed glyph / no glyph.
+- **A positional exception to § 9 and § 14 Don't 14** (no inset change at a breakpoint): in two
+  columns, from 768 (Layout's md, where the second track begins) the SECOND item is also first in its
+  column, so it drops its top inset with the first. The query follows the arrangement — below 768 the
+  item is the second row of one column and keeps its 32 — and swaps no step for another. Measured at
+  1440 / 768 / 390: both column tops at 0 from 768, the closing rules level across the seam.
+- No row change to ListCard itself; its tokens are unchanged (`--lcrd-stacked-body-measure` renamed for
+  both set modes). The module's "no media query" note now scopes to the row.
+
+## Amendment · 7 Oct 2026 — owner review: no title arrow, the action slot, the boxed tile, number tone
+
+Owner decisions of 7 Oct 2026. Where anything above differs, this section wins.
+
+### 1 · No arrow cue
+
+Nearly every clickable card in the kit showed a blue arrow — after a `cue="title"` row's title, at a
+`cue="end"` row's inline end, at a linked tile's foot — and it read as bulky. The whole item is already
+the link. So:
+
+- **The `cue` prop and `ListCardCue` are deleted.** A linked item carries no glyph at rest.
+- **The title is the affordance.** On hover and keyboard focus it takes `--lcrd-link-ink`; on press
+  `--lcrd-link-ink-pressed`. The two-part focus ring still runs round the whole item, so focus is never
+  colour alone. An open tile's opening rule still takes the link ink on hover too.
+- **The end-of-row arrow went as well.** Judged on the crops: a wide row with a title that turns blue
+  under the pointer, plus a cursor and a ring, is still plainly a link, and the owner's complaint was
+  the arrow's prevalence, not one position of it. Keeping it on rows alone would have kept two link
+  models in one kit.
+- **No row hover ground.** It answered a 1240 target whose only other signal was an 18px arrow at its
+  far end. With the title moving it answered nothing, and its 16 inline inset went with it: every row
+  now stands on the column edge the band's head and the rules share (as static, Steps, ReadDown and
+  title-cued rows already did). `--lcrd-ground-*` now serve the boxed tile only, at new values.
+- **External links still say so.** `external` keeps the visually hidden "(opens in a new tab)" at the
+  end of the accessible name, and sets a small (16, Icon `md`) `arrow-right-up` after the title's last
+  word in the link ink, joined by a non-breaking space. Justified: it does not say "this is a link" (the
+  hover does that), it says "this leaves the site" — which a sighted reader cannot otherwise know before
+  the new tab opens (WCAG technique G201 asks that the warning reach everyone). External items are rare,
+  so it does not bring the bulk back. With an action, the action's own glyph turns up-right instead and
+  the title carries none.
+
+### 2 · An opt-in action at the foot: `ctaLabel`
+
+`ctaLabel?: string`. With a destination, the item renders the link `Button` — `emphasis="link"`,
+`tone="primary"`, `as="span"`, `arrow-right` (or `arrow-right-up` when external) — a `block` (24) under
+the copy: inside a row's content core, and pinned to a tile's foot (`Layout pinLast`) so every action
+in a grid row sits on one line. The frame anchor carries `data-btn-link-group`, Button's published
+contract, so the span takes the item's hover, focus and press. One anchor, one focus stop, no nested
+interactive element. With an action the title holds still and the action moves (BlockCard's cta model:
+one cue per item). Blank labels warn and render no action. **Use it only where the action is not obvious
+from the title** — "Book an audit", "Get the Figma file". A title that names its destination needs none.
+
+### 3 · The boxed tile: `frame="box"`
+
+A partial reversal of the kit's "cards have no boxes" ruling (visual-direction § 3.1, amended the same
+day). `frame?: 'none' | 'box'`, on `form="tile"` only (typed: a row's `frame` is `never`); default
+`none`.
+
+- A `--lcrd-box-rule-width` hairline round all four sides in `--lcrd-rule-ink` (the same hairline as the
+  open tile's opening rule, so no new ink), `--lcrd-box-radius` (8, the photograph radius), and
+  `--gap-block` (24) inside on every side. The opening rule becomes the box's top edge.
+- Linked: `--lcrd-ground-hover` under the pointer, `--lcrd-ground-pressed` on press; the edge holds its
+  ink. The title moves as on any linked item. The focus ring follows the radius.
+- Ground values per surface: paper `paper-deep` / `neutral-100`; tint `neutral-100` / `neutral-200`; ink
+  `neutral-900` / `neutral-800`; blue `brandeis-600` / `brandeis-700`.
+- Use it for a set whose items must read as separate objects at a glance — an icon router of four to six
+  destinations. Boxed tiles sit a `gutter` (32) apart both ways: the box is the separation.
+- Rows are never boxed: their rules are their separation, and a box round each row is a stack of panels.
+
+### 4 · Number tone: accent or neutral
+
+`marker: { type: 'number', value, tone?: 'accent' | 'neutral' }`, `accent` by default.
+
+**The rule (owner):** blue (`accent`) when the numbered points **are the main information of the
+section** — a method's steps, a checklist that is the band's body, the phases a CTA band sells.
+**`neutral` when the numbers are auxiliary** — an index of the page's own sections, a pair of numbered
+notes under a hero's heading, any set where the numeral only counts and the band's information is
+elsewhere.
+
+Audit, 7 Oct 2026 — set to `neutral`:
+
+| Call site | Why auxiliary |
+|---|---|
+| `src/app/design/kit/cta/page.tsx` — the variation index | indexes the page's bands; the bands are the information |
+| `src/app/design/kit/service-list/page.tsx` — the variation index | the same |
+| `src/app/design/kit/hero/page.tsx` — the variation index tiles | the same |
+| `src/app/design/kit/logos/page.tsx` — two numbered notes under the h1 | supporting points to the intro's heading and lede |
+
+Left at `accent` (the numbered points are the content): `Steps` (every method); the ServicePage ledger's
+numbered rows; the CMS `labelled-list` with `displayStyle: 'numbered'` on services, expertise, audits,
+glossary, tools and how-we-work (the author numbered the list because its order is the point); the About
+checklist; the Future Interfaces Lab join steps; the kit CTA band's phases; the ContentSection and CtaRow
+specimens' steps.
+
+
+## Amendment · r7-cards, 9 Oct 2026
+
+Owner, 7 Oct review: "remove the box borders: the boxed card variant goes", and "size each icon to the
+card title beside it, from a token". `frame="box"` and `ListCardFrame` are deleted with
+`--lcrd-box-rule-width`, `--lcrd-box-radius`, `--lcrd-ground-hover` and `--lcrd-ground-pressed`; nothing
+paints a ground. A tile's icon now sits on the title's first line at every width, `tight` from it, and
+`--lcrd-marker-icon-size-tile` is `1em` of the title role for the size step (22 beside h5, 28 beside h4).
+Where earlier sections describe the box, the ground or the 32 tile icon, this amendment wins.
+
+## Amendment · owner rulings, 9 Oct 2026 (supersedes r7-cards where they differ)
+
+1. **An icon tile stacks at every width.** Glyph on its own row, then the title, then the body —
+   never the glyph inline beside the title (the phone's icon-and-title row is retired). The glyph and
+   the copy are a `Layout` at `--gap-text` (16), the head group's own seam. `--lcrd-marker-icon-size-tile`
+   is unchanged (`1em` of the title role: 22 over h5, 28 over h4), and the glyph's box is its own size.
+   Number and thumbnail markers keep their Cluster. The open tile's opening hairline is unchanged.
+2. **`frame="box"` stays, without its edge.** No border on any side (`--lcrd-box-rule-width` is
+   deleted); the `--gap-block` inset, the 8 radius on the hover ground, `--lcrd-ground-hover` /
+   `-pressed`, the title's link ink on hover and the focus ring all stay.
+3. **Clickable tiles and rows sit under their head**, full width, never beside a heading or with a
+   decorative image. Non-clickable icon tiles beside a photograph (the B band) stay.

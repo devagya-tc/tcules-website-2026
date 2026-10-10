@@ -4,9 +4,11 @@ import { notFound } from 'next/navigation';
 import { Cluster, Layout, Section } from '@/components';
 import { getMatterDesignSystemPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   CtaSection,
   Figure,
   PageHero,
@@ -77,6 +79,13 @@ export default async function MatterDesignSystemPage() {
     ? { type: 'image' as const, image: page.hero.image }
     : undefined;
 
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    /* The composed heading is this page's NAME, not a message, so it is the leaf, and heroTrail
+       drops it as a repeat of the h1: a lone Home renders no trail. */
+    { label: heroTitle, href: ROUTES.matterDesignSystem },
+  ];
+
   return (
     <>
       {page.seo?.structuredData ? (
@@ -86,20 +95,12 @@ export default async function MatterDesignSystemPage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          {
-            label: page.hero.headingTwo || page.hero.headingOne,
-            href: ROUTES.matterDesignSystem,
-          },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(crumbs, heroTitle, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={heroTitle}
-        eyebrow={page.hero.eyebrow || undefined}
+        eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
         body={[page.hero.description]}
         actions={heroActions}
         media={heroMedia}
@@ -128,7 +129,7 @@ export default async function MatterDesignSystemPage() {
                 as="ul"
                 columns={{ base: 1, md: 3 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.secondSection.cards.map((card) => (
@@ -163,7 +164,7 @@ export default async function MatterDesignSystemPage() {
               <h2 id={`matter-third-${page.thirdSection.id}`}>{page.thirdSection.heading}</h2>
             </Cluster>
             {page.thirdSection.cards.length > 0 ? (
-              <Layout as="ul" columns="fit" minTrack="lg" colGap="gutter" rowGap="gutter">
+              <Layout as="ul" columns="fit" minTrack="lg" colGap="gutter" rowGap="column">
                 {page.thirdSection.cards.map((card) => (
                   <BlockCard
                     key={card.id}
@@ -221,7 +222,7 @@ export default async function MatterDesignSystemPage() {
                 as="ul"
                 columns={{ base: 1, md: 2, lg: 4 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
               >
                 {page.fourthSection.cards.map((card) => (
                   <Layout as="li" key={card.id} rowGap="block">
@@ -282,7 +283,7 @@ export default async function MatterDesignSystemPage() {
                 as="ul"
                 columns={{ base: 1, md: 2 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.fifthSection.cards.map((card) => (

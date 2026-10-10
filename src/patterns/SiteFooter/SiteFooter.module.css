@@ -6,12 +6,13 @@
 
    ── What arranges what ──────────────────────────────────────────────────────────
    Nothing here lays out content. The band is a Section, every stack and every column set is a
-   Layout, every row is a Cluster. What is left is type, colour, hairlines, the two corrections a
-   flex child needs to be allowed to shrink, and the one breakpoint that chooses between the
+   Layout, every row is a Cluster. What is left is type, colour, hairlines, the corrections a flex
+   child needs to shrink (and, on the field, the floor it may not shrink past), and the one breakpoint that chooses between the
    directory's two renderings.
 
    ── The field ───────────────────────────────────────────────────────────────────
-   The wrapper owns only the label relationship and its place in the wrapping row. Input owns the
+   The wrapper owns the label relationship, its place in the wrapping row, and the field's usable
+   minimum (--foot-field-min-inline; Input carries no floor since 6 Oct 2026). Input owns the
    control box; the footer no longer styles a native input privately. */
 
 /* ── Band separators ───────────────────────────────────────────────────────────
@@ -60,57 +61,6 @@
   color: var(--foot-tagline-ink);
   font: var(--foot-tagline-text);
   text-wrap: var(--text-running-wrap);
-}
-
-/* The rating badge. An outline pill, not a fill: it is a claim with a source, and a filled chip
-   beside a solid button would read as a second action. */
-.ratingBadge {
-  display: inline-flex;
-  gap: var(--gap-tight);
-  align-items: center;
-  padding-block: var(--gap-tight);
-  padding-inline: var(--foot-badge-padding-inline);
-  color: var(--foot-link-ink);
-  font: var(--foot-social-text);
-  letter-spacing: var(--foot-social-tracking);
-  text-transform: var(--text-mono-case);
-  text-decoration: none;
-  border: var(--foot-rule-width) solid var(--foot-rule);
-  border-radius: var(--foot-badge-radius);
-  transition:
-    color var(--foot-transition-duration) var(--foot-transition-easing),
-    border-color var(--foot-transition-duration) var(--foot-transition-easing);
-}
-
-.ratingBadge:hover,
-.ratingBadge:focus-visible {
-  color: var(--foot-link-ink-hover);
-  border-color: var(--foot-link-ink-hover);
-}
-
-/* The one graphic in the badge, and the only thing in the footer that is neither type nor rule.
-
-   Set larger than the text it sits beside, and in `em` so it stays that way whatever the badge's
-   own role resolves to. At 1em a ★ reads noticeably smaller than the digits next to it: the glyph
-   is drawn well inside its em box, where a digit fills the cap height, so matching the font sizes
-   does NOT match the optical sizes. 1.35 is the correction, arrived at by eye against the numeral.
-
-   `em` rather than a token deliberately — this is an optical correction relative to its context,
-   which is the same reason Prose sets its sub, sup and inline code in em. A px here would be a
-   distance the scale has no answer for, and a size token would break the moment the badge's type
-   role changed. `line-height: 1` keeps the taller glyph from adding leading to the row. */
-.ratingStar {
-  font-size: 1.35em;
-  line-height: 1;
-  color: var(--foot-badge-star-ink);
-}
-
-/* Tighter than the badge's own padding, so the mark and the word read as one lockup rather than
-   as a third item in the row. */
-.ratingLockup {
-  display: inline-flex;
-  gap: var(--gap-inline);
-  align-items: center;
 }
 
 /* ── 2 · Directory ─────────────────────────────────────────────────────────────
@@ -266,10 +216,11 @@
 }
 
 /* The label IS the field's box — the input is nested inside it, so no id wires them together. It
-   grows to fill the row; Input owns the control's usable minimum. */
+   grows to fill the row, and holds the field's usable minimum: the footer owns that floor, not
+   Input (6 Oct 2026), so the button wraps under the field before the field gets too short. */
 .fieldLabel {
   flex: 1 1 auto;
-  min-inline-size: 0;
+  min-inline-size: var(--foot-field-min-inline);
 }
 
 /* Visually hidden, still announced. Not `display: none` and not `visibility: hidden` — both remove
@@ -397,7 +348,6 @@
 .socialLink:focus,
 .metaLink:focus,
 .utilityLink:focus,
-.ratingBadge:focus,
 .accordionSummary:focus {
   outline: none;
 }
@@ -406,7 +356,6 @@
 .socialLink:focus-visible,
 .metaLink:focus-visible,
 .utilityLink:focus-visible,
-.ratingBadge:focus-visible,
 .accordionSummary:focus-visible {
   outline: none;
   box-shadow:
@@ -419,7 +368,6 @@
   .socialLink,
   .metaLink,
   .utilityLink,
-  .ratingBadge,
   .accordionChevron {
     transition-duration: var(--duration-instant);
   }

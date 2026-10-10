@@ -121,8 +121,8 @@ function gapScale() {
     ['--gap-block', 'head to body inside a block — the most used step'],
     ['--gap-gutter', 'container gutter, and the gap between cards in a set'],
     ['--gap-stack', 'block to block inside a section'],
-    ['--gap-column', 'column gutter where two halves must read as separate'],
-    ['--gap-section', 'section padding, tight'],
+    ['--gap-column', 'column gutter between two peer halves that must read as separate, and the row seam of a borderless card set'],
+    ['--gap-section', 'section padding, tight; and a split — two regions of different kind side by side'],
     ['--gap-section-open', 'section padding, open'],
   ];
   const declared = new Set(namesMatching(/^--gap-/));

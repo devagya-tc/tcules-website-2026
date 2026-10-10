@@ -98,7 +98,8 @@ Two more rules that decide whether a composition is right:
 
 ### Components
 
-`Button` — `emphasis="solid|ghost|link"` × `tone="primary|neutral"`, `size="sm|md|lg"`, plus
+`Button` — `emphasis="solid|ghost|link"`; `tone="primary|neutral"` on ghost and link only (neutral is
+site chrome; the solid is always blue, the page's one main action — 8 Oct 2026), `size="sm|md|lg"`, plus
 `icon` / `iconLeft` (one side only), `iconOnly` (requires `aria-label`), `active`, `disabled`.
 A button that navigates is an anchor: `as="a" href="…"`. It never sets its own outer spacing —
 put it in a `Cluster`.
@@ -116,32 +117,45 @@ one component allowed to use margins internally.
 `SiteNav` / `SiteFooter` — whole page furniture, driven entirely by props (`items` + `cta`;
 `brand`/`groups`/`newsletter`/`meta`/`utility`). Both take `surface`.
 
-`Breadcrumbs` — the ancestor trail above a page hero: `items` (an array of `{ label, href }`,
-two or more; fewer renders nothing) and `surface`. It states position; it is not navigation —
+`Breadcrumbs` — the ancestor trail at the top of a page hero: `items` (an array of
+`{ label, href }`, two or more; fewer renders nothing). It states position; it is not navigation —
 `SiteNav` is. The last item is always the current page and is rendered as text, never a link, and
 four or more levels collapse to four with the middle elided, so depth costs nothing.
 
-It **brings its own band** — like `SiteNav` and `SiteFooter`, and that is why it takes `surface`
-rather than reading one. So place it as a **direct child of the page**, never inside a `Section`
-(the content column would inset twice) and never inside a `Layout` (a band is not a row). It
-gives 64 of air above itself and almost none below, because the air below belongs to the band
-that follows it — put the hero's `Section` immediately after and set both `surface` values the
-same, or the seam between them reads as a two-tone split.
+It renders **only the `<nav>` and its trail** — no band, no air and no `surface` (5 Oct 2026). Put
+it in `PageHero`'s `trail` slot, with `labels` set to the crumbs' labels; the hero places it 32
+above the title inside its own band, and the trail reads that band's ground like a Button does.
+
+**The last crumb names the page only when the h1 does not.** A service page's h1 is a headline, so
+its trail ends in the service's name (`Home / Services / Product Design`). An article's, an
+audit's, a glossary term's or a legal page's h1 IS its name, so its trail stops at the parent and
+renders `endsWith="parent"`: every crumb a link, none current (`Home / Insights / Guides` above the
+article's title). Never put the headline in the trail — 32px above the h1 it reads twice, and on a
+phone it wraps. A top-level page whose h1 is its name gets no trail at all.
 
 ```jsx
-<Breadcrumbs surface="paper" items={[
-  { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
-  { label: 'Interaction and UI Design', href: '/services/interaction-ui-design' },
-]} />
-<PageHero surface="paper" title="Interaction and UI Design" body={['…the opening…']} />
+<PageHero
+  surface="paper"
+  trail={{
+    crumbs: <Breadcrumbs items={[
+      { label: 'Home', href: '/' },
+      { label: 'Services', href: '/services' },
+      { label: 'Interaction and UI Design', href: '/services/interaction-ui-design' },
+    ]} />,
+    labels: ['Home', 'Services', 'Interaction and UI Design'],
+  }}
+  title="Design the screens, and the rules that decide them"
+  body={['…the opening…']}
+/>
 ```
 
 `PageHero` — **the opening of a page, and the component that owns its `h1`.** `title` (a string),
 `body` (one to six paragraph strings, the first of which renders as the lead), plus four optional
-slots: `eyebrow` (a category label above the title), `credits` (role groups — `author`, `host`,
+slots: `trail` (the Breadcrumbs, above everything), `eyebrow` (a category or format label above
+the title — never the page's own name or a named crumb's words, and never a section crumb on its
+own: "Case study · Fintech" under Home / Case studies, not "Case study"), `credits` (role groups — `author`, `host`,
 `guest`, `reviewer` — each with its own `people`), `dates` (`published`, optional `modified`), and
-`actions` (nought, one or two `{ label, href }`; the first renders solid, the second ghost).
+`actions` (nought, one or two `{ label, href }`; the first renders the blue solid, the second its blue ghost partner).
 `children` is a free slot between the byline and the actions. And `surface`, because this one
 brings its own band too.
 
@@ -157,8 +171,7 @@ Four things to get right, because each of them is a decision the component has a
    article and a case study are the same arrangement with different slots filled — an article is a
    hero *with* `credits` and `dates`, nothing more. Compose by filling slots.
 4. **It is a band, so it is a direct child of the page** — never inside a `Section`, a `Layout` or
-   a `Cluster` — and its `surface` must match the `Breadcrumbs` above it, as in the example above.
-   It gives 96 of air above and below, which is the air the trail deliberately does not give.
+   a `Cluster`. It gives 96 of air above and below; the trail sits inside it, at the top of that 96.
 
 `CtaSection` — **the page's ask, made once.** `heading` (an `h2`, never an `h1`), `body` (one or two
 paragraph strings), optional `eyebrow` and `points` (a list of `{ label, detail? }`), `surface`, and

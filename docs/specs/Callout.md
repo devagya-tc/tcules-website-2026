@@ -26,7 +26,9 @@ in the mono label voice (`--text-eyebrow` + `--text-eyebrow-tracking` + `text-tr
 var(--text-mono-case)`), leading the sentence in a baseline-aligned `Cluster` at `colGap="tight"`
 (and `rowGap="tight"` when it wraps). Its ink is a new per-surface `--call-label-ink`, one rung
 stronger than the sentence, each ≥ 4.5:1. **Without `label`, the Callout renders exactly as before**
-— same DOM, same CSS. The rulings that excluded a label (§ 2, § 3, § 14 Don't 8, and § 11's "no
+— same DOM, same CSS. **Amended 30 Sep 2026 (owner):** the key sits ABOVE the sentence in a
+`Layout rowGap="tight"`, never beside it; a key and a sentence side by side read as two columns of
+one thing. `--call-content-min-xs` is retired with the beside arrangement. The rulings that excluded a label (§ 2, § 3, § 14 Don't 8, and § 11's "no
 fixed accessible label") are revised in place below and dated; every other exclusion stands.
 
 ## 1 · Identity
@@ -59,7 +61,7 @@ this record must recede from the claim it qualifies.
 | ---- | -------- | --------------- | -------------------------- |
 | root | yes | element with native-equivalent `role="note"` | Establishes one parenthetic scope note. Owns no ground, edge, outer seam or interactive behavior. |
 | content | yes | existing `Prose` | One trusted, sanitised rich-text field containing one or two paragraphs and inline rich text. Callout owns its quiet type and ink; Prose owns the HTML seam, internal flow and inline links. |
-| label | no — only when `label` is non-blank | `<span>` inside a `Cluster colGap="tight" rowGap="tight" align="baseline"` that also holds content | A short mono key ("Scope", "Note"). Added 29 Sep 2026, tracker 2.17. `--call-label-ink`, `--text-eyebrow` + tracking + `--text-mono-case`. Beside the sentence while the row keeps `--call-content-min-xs` (192px) for it; above it when it does not. |
+| label | no — only when `label` is non-blank | `<span>` inside a `Layout rowGap="tight"` that also holds content | A short mono key ("Scope", "Note"). Added 29 Sep 2026, tracker 2.17. `--call-label-ink`, `--text-eyebrow` + tracking + `--text-mono-case`. Above the sentence (30 Sep 2026; it was beside it). |
 
 **Revised 29 Sep 2026 (tracker 2.17, owner decision).** This paragraph originally excluded a label
 along with everything else below. The owner reversed that one exclusion: without a key, a scope note
@@ -168,9 +170,9 @@ reads those Prose tokens.
   parent because the claim is not a Callout child.
 - Paragraph-to-paragraph inside the trusted field: Prose's existing `--gap-text` flow rule.
 - Root-to-content: none. There is one child and therefore no internal seam to size.
-- Label-to-content (2.17, only when keyed): the internal `Cluster`'s `colGap="tight"` beside the
-  sentence and `rowGap="tight"` when the row wraps it beneath — the step named for a key beside the
-  thing it keys. Callout's stylesheet names neither.
+- Label-to-content (2.17, only when keyed; stacked since 30 Sep 2026): the internal `Layout`'s
+  `rowGap="tight"` — the step named for a key and the thing it keys. Callout's stylesheet names it
+  nowhere.
 - Callout-to-following-content: the containing layout's next declared gap; Callout contributes no
   outer margin.
 
@@ -179,12 +181,7 @@ reads those Prose tokens.
 - Inline size: full available parent width, capped by the content's existing `--measure-body`.
 - Narrow stress reference: `--lay-track-xs`, 192px, because it is the smallest existing layout
   track and one or two body-small sentences must wrap there without widening the page.
-- Keyed content basis (2.17): `--call-content-min-xs`, 192px — the narrowest the sentence may run
-  beside its key before the row wraps. Declared in `callout.css` rather than read from
-  `--lay-track-xs`, because a component never reads another's tokens; the same value and reasoning
-  as `--fig-min-xs`. Applied as the content's flex basis (grow 1, shrink 1), item sizing inside the
-  `Cluster`'s arrangement — without a grow factor a flex item is max-content wide and any real
-  sentence would always wrap beneath its key.
+- Keyed content basis (2.17): retired 30 Sep 2026 with the beside arrangement.
 - Minimum inline size: none beyond zero. This is text, not a control or media object; imposing a
   hard floor would create overflow in a parent narrower than 192px.
 
@@ -380,8 +377,7 @@ filled rectangles is introduced to manufacture variety.
 ## 16 · New token requests
 
 **None — every value in this spec is an existing token.** Still true after 2.17: `--call-label-ink`
-and `--call-content-min-xs` are component-layer declarations of existing ramp values and an existing
-track value, not new primitives or usage tokens.
+is a component-layer declaration of existing ramp values, not a new primitive or usage token.
 
 `--call-content-ink` is the expected component-layer declaration mapping existing ramp values on
 four surfaces, not a new primitive or usage token. Body-small, body measure, parent gap and xs

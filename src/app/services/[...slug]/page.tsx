@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import {
   Button,
   Cluster,
+  Icon,
   Layout,
   Prose,
   Section,
@@ -20,6 +21,7 @@ import {
   type ServiceSection,
 } from '@/content';
 import { ROUTES, servicePath } from '@/lib/routes';
+import { eyebrowBesideTrail, heroTrail, pageName, slugLabel } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
@@ -91,21 +93,23 @@ function renderColumn(column: ServiceContentColumn) {
       ) : null}
 
       {column.links.length > 0 ? (
-        <Cluster colGap="tight" rowGap="tight">
+        /* A column's links STACK (owner, 7 Oct 2026): link buttons never sit side by side. */
+        <Layout rowGap="text" justifyItems="start">
           {column.links.map((link) => (
             <Button
               key={`${column.id}-${link.href}-${link.label}`}
               as="a"
               href={link.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
+              icon={<Icon name="arrow-right" />}
             >
               {link.label}
             </Button>
           ))}
-        </Cluster>
+        </Layout>
       ) : null}
     </Layout>
   );
@@ -127,7 +131,7 @@ function renderServiceBlock(block: ServiceBlock) {
           as="ul"
           columns={cardColumns(block.columns)}
           colGap="gutter"
-          rowGap="gutter"
+          rowGap="column"
           equalRows
         >
           {block.cards.map((card) => (
@@ -143,7 +147,7 @@ function renderServiceBlock(block: ServiceBlock) {
 
     case 'comparison-cards':
       return (
-        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="gutter" equalRows>
+        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="column" equalRows>
           {block.cards.map((card) => (
             <BlockCard key={`${block.id}-${card.title}`} title={card.title} body={card.body} />
           ))}
@@ -163,9 +167,10 @@ function renderServiceBlock(block: ServiceBlock) {
                 as="a"
                 href={block.source.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.source.label}
               </Button>
@@ -242,7 +247,7 @@ function renderServiceBlock(block: ServiceBlock) {
                 as="a"
                 href={block.download.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
               >
@@ -301,41 +306,41 @@ function sectionSurfaces(
   });
 }
 
-const ACRONYMS: Record<string, string> = {
-  ai: 'AI',
-  api: 'API',
-  b2b: 'B2B',
-  qa: 'QA',
-  saas: 'SaaS',
-  ui: 'UI',
-  ux: 'UX',
-};
-
-function breadcrumbLabel(segment: string): string {
-  return segment
-    .split('-')
-    .filter(Boolean)
-    .map((word, index) => {
-      const acronym = ACRONYMS[word.toLowerCase()];
-      if (acronym) return acronym;
-      return index === 0 ? `${word.charAt(0).toUpperCase()}${word.slice(1)}` : word;
-    })
-    .join(' ');
-}
-
-function serviceBreadcrumbs(slug: string, title: string): BreadcrumbItem[] {
+/**
+ * The service's whole trail, every level named, the page's own included, and what is left of the
+ * CMS eyebrow for the hero.
+ *
+ * The leaf is the page's NAME ("Product design", "Trust, Control and Recovery"), never its
+ * `title`: the title is a headline, which `heroTrail` would drop, ending the trail at the parent
+ * (fix round, 6 Oct 2026). `pageName` (`@/lib/trail`) chooses the name, from the eyebrow where it
+ * spells the slug's name, from the slug otherwise. The parent passed to it is the named parent
+ * service, never the Services index. The record's short `name` replaces all of this when it
+ * exists (`docs/strapi-changes.md` § 16).
+ */
+function serviceTrail(
+  slug: string,
+  eyebrow: string | undefined,
+): { crumbs: BreadcrumbItem[]; eyebrow: string | undefined } {
   const segments = slug.split('/').filter(Boolean);
   const parents = segments.slice(0, -1).map((segment, index) => ({
-    label: breadcrumbLabel(segment),
+    label: slugLabel(segment),
     href: servicePath(segments.slice(0, index + 1).join('/')),
   }));
+  const page = pageName({
+    name: slugLabel(segments.at(-1) ?? ''),
+    eyebrow,
+    parent: parents.at(-1)?.label,
+  });
 
-  return [
-    { label: 'Home', href: ROUTES.home },
-    { label: 'Services', href: ROUTES.services },
-    ...parents,
-    { label: title, href: servicePath(slug) },
-  ];
+  return {
+    crumbs: [
+      { label: 'Home', href: ROUTES.home },
+      { label: 'Services', href: ROUTES.services },
+      ...parents,
+      { label: page.label, href: servicePath(slug) },
+    ],
+    eyebrow: page.eyebrow,
+  };
 }
 
 function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
@@ -394,6 +399,8 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
   const tintFollowsRun = Boolean(service.faq || service.capabilitiesCta || service.cta);
   const surfaces = sectionSurfaces(service.sections, tintFollowsRun);
 
+  const { crumbs, eyebrow } = serviceTrail(service.slug, service.hero.eyebrow);
+
   return (
     <>
       {service.seo?.structuredData ? (
@@ -403,11 +410,12 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
         />
       ) : null}
 
-      <Breadcrumbs surface="paper" items={serviceBreadcrumbs(service.slug, title)} />
-
       <PageHero
+        trail={heroTrail(crumbs, title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={title}
-        eyebrow={service.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(eyebrow, crumbs)}
         body={[service.hero.description]}
         actions={heroActions}
         surface="paper"
@@ -478,7 +486,9 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
             heading={service.capabilitiesCta.heading}
             body={service.capabilitiesCta.body}
             points={service.capabilitiesCta.points}
-            actions={service.capabilitiesCta.actions}
+            /* Mid-page, so ONE link (r7-buttons): the offer takes the first action and a second
+               is dropped until the model carries one (docs/strapi-changes.md § 17). */
+            actions={[service.capabilitiesCta.actions[0]]}
           />
         ) : (
           <CtaSection

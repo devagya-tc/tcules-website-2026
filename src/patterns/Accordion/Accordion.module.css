@@ -32,15 +32,19 @@
    token aliasing `--z-base`; both were inert, and the token was a second name for one primitive of
    the kind CLAUDE.md deletes. Breadcrumbs and Figure had already answered this the same way.
 
-   No height, max-height or transform animation on the answer. `<details>` has no animatable
-   intrinsic size, and faking one costs the native behaviour this component exists to keep. The
-   mark still does not rotate: both chevrons are in the DOM and `[open]` picks which one shows.
+   The answer opens and closes with motion (1 Oct 2026, owner: "so it doesn't feel so jumpy"), and
+   without giving up the native element. The original ruling — no height animation, because
+   `<details>` had no animatable intrinsic size and faking one (JS measurement, max-height guesses)
+   costs the native behaviour — was right when it was written. CSS has since grown the two pieces
+   that make it native: `::details-content`, the box the UA wraps around everything after the
+   summary, and `interpolate-size: allow-keywords`, which lets `block-size` transition to `auto`.
+   Where either is unsupported the answer appears at once, exactly as before: progressive, not
+   polyfilled. The mark still does not rotate: both chevrons are in the DOM and `[open]` picks.
 
    ── Rule order is load-bearing ──────────────────────────────────────────────────
-   `.trigger:hover`/`:focus-visible`/`.item[open]`, then `:active`. All of the state selectors
-   resolve the question to the SAME raised ink, so they cannot fight over colour — what source
-   order decides is the underline: `:active` comes last so a pressed row keeps it while also
-   hovered. The `:focus-visible` ring block is separate from `:focus`, which only kills the UA
+   `.trigger:hover`/`:focus-visible`/`.item[open]` all resolve the question to the SAME raised ink,
+   so they cannot fight over colour. Pressed adds nothing of its own: no underline (owner, 7 Oct
+   2026 — it read as a stray rule under the question). The `:focus-visible` ring block is separate from `:focus`, which only kills the UA
    outline; splitting them is what stops a mouse click drawing a ring. */
 
 .root {
@@ -59,10 +63,32 @@
   box-shadow: var(--acc-shadow);
 }
 
-/* No transition and no [open] rule: the ink of this border never moves, in any state. */
+/* No transition and no [open] rule on the border: its ink never moves, in any state.
+   `interpolate-size` is set here rather than on :root so the permission to animate to `auto` is
+   this component's decision, not a page-wide one. */
 .item {
   min-inline-size: 0;
   border-block-end: var(--acc-rule-width) solid var(--acc-rule-ink);
+  interpolate-size: allow-keywords;
+}
+
+/* The answer's box. Closed it is zero tall and clipped; open it is its own height. The block size
+   eases between the two, the content fades with it, and content-visibility is transitioned as a
+   discrete property so the closing answer stays painted until the height has finished — without
+   `allow-discrete` it would vanish on the first frame and only the empty box would close. */
+.item::details-content {
+  block-size: 0;
+  overflow: clip;
+  opacity: 0;
+  transition:
+    block-size var(--acc-reveal-duration) var(--acc-transition-easing),
+    opacity var(--acc-reveal-duration) var(--acc-transition-easing),
+    content-visibility var(--acc-reveal-duration) allow-discrete;
+}
+
+.item[open]::details-content {
+  block-size: auto;
+  opacity: 1;
 }
 
 .trigger {
@@ -76,6 +102,9 @@
      void element. See .design-sync/NOTES.md. */
   padding-block: var(--gap-block);
   cursor: pointer;
+  /* The open state tightens the inset under the question (below); easing it with the answer's
+     height keeps the two from arriving at different times, which read as a second, smaller jump. */
+  transition: padding-block-end var(--acc-reveal-duration) var(--acc-transition-easing);
   /* Three rules for one marker, because the engines disagree about which handle exists.
      `list-style` is the standard removal and is what current Chromium and Firefox honour;
      ::-webkit-details-marker is the legacy WebKit pseudo-element that predates it and is the only
@@ -129,7 +158,11 @@
   overflow-wrap: anywhere;
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
-  text-wrap: var(--text-title-wrap);
+  /* Running wrap, not the title's `balance` (final fix round, 6 Oct 2026). A question shares its row
+     with the mark at the inline end, so a balanced break halves the line and leaves the gap before
+     the mark empty: at 390 "What does the first / month look like?" broke at half the column with
+     ~150 of nothing before the chevron. `pretty` fills the line and only avoids a lone last word. */
+  text-wrap: var(--text-running-wrap);
   color: var(--acc-question-ink);
   transition: color var(--acc-transition-duration) var(--acc-transition-easing);
 }
@@ -182,16 +215,6 @@
   color: var(--acc-mark-ink-hover);
 }
 
-/* Pressed holds the raised ink and adds a hairline underline, so it differs from hover by more
-   than colour — which is the job the deleted --acc-trigger-bg-pressed used to do. Last, so a row
-   that is pressed AND hovered keeps it. */
-.trigger:active .question {
-  text-decoration: underline;
-  text-decoration-color: var(--acc-mark-ink);
-  text-decoration-thickness: var(--acc-rule-width);
-  text-underline-offset: var(--acc-question-underline-offset);
-}
-
 /* Accordion says NOTHING about the answer's type or its colour, and this class is the whole of
    what it does say: the inset, the measure and the wrapping.
 
@@ -216,7 +239,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .question,
-  .mark {
+  .mark,
+  .trigger,
+  .item::details-content {
     transition-duration: var(--duration-instant);
   }
 }

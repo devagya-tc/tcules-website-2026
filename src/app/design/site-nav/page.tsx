@@ -125,7 +125,7 @@ export default async function SiteNavSpecimenPage() {
           page that would catch a block that drifted — a missing fill, a blue label at 2.77:1, a
           focus ring the same colour as its own gap. */}
       {SURFACES.map((surface) => (
-        <Section key={surface} surface={surface} density="tight">
+        <Section key={surface} surface={surface}>
           <Layout rowGap="block">
             <Layout rowGap="tight">
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>

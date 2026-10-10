@@ -1,0 +1,293 @@
+/* ServicePage · diagrams.
+
+   The six template-local E diagrams (visual-direction § 3.4 E): a scale (Spectrum), a check matrix
+   (Matrix), a record (Record), an orbit (Parts), a slice (Slice) and a bridge (Bridge). Each
+   is one service page's argument rather than a reusable unit, so it stays in the template; Thread
+   was promoted to a pattern (cmp-process-stats) and its rules left this file on 6 Oct 2026. Colour
+   from --svc-*, type from the composites, arrangement from Layout and Cluster. Positioned
+   pseudo-elements draw marks on edges (ticks, a slice); they never place siblings.
+
+   No diagram boxes its text (owner ruling, fix round 2) — but TABLES ARE BOXED (owner, 7 Oct
+   2026): the three tables (Spectrum, Matrix, Record) take DataTable's frame, which is the table's
+   own. Outside a table the only grounds are data marks — a live bar, a built cell, a filled slot —
+   never a panel behind copy.
+
+   Every mark here says something (30 Sep 2026 review): the orbit says the operating model is the
+   loop that keeps the four parts current; the paired grids say a release is one path built through
+   every layer, where layers alone leave every path broken; the dashed bars say a product is half-present while
+   the move is under way; the disruption trace is how much an option shakes the product, more ink
+   for more; a check is blue and a cross quiet ink. Marks that said nothing — a progress meter per
+   row, a dashed thread with nodes, a dot on every step's rule — were cut. */
+
+.key {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--svc-ink-label);
+}
+
+.visuallyHidden {
+  position: absolute;
+  inline-size: var(--svc-hidden-size);
+  block-size: var(--svc-hidden-size);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.icon {
+  display: inline-block;
+  color: var(--svc-mark);
+}
+
+/* ── Matrix, and the slice verdicts ─────────────────────────────────────────────────
+   A check in the blue accent (--svc-mark); a cross in the quiet ink (--svc-ink-quiet, held at 3:1
+   as a graphic) — the checks carry the comparison, a cross only says "not this one". */
+.markYes {
+  display: block;
+  color: var(--svc-mark);
+}
+
+.markNo {
+  display: block;
+  color: var(--svc-ink-quiet);
+}
+
+/* ── Parts: four parts in one orbit ──────────────────────────────────────────────────
+   The ring is a drawing, not a frame: nothing sits inside it, so it boxes no text. The loop and its
+   direction marks are the accent (the operating model is the system's one moving part); the inner
+   orbit and the spokes are the strong rule; the nodes are accent squares, the brand's pixel; the
+   hub is ink. Every stroke keeps its width at any scale (`non-scaling-stroke`). */
+.orbitLead,
+.orbitMiddle {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: var(--svc-orbit-size-lg);
+  block-size: auto;
+  aspect-ratio: 1;
+  overflow: visible;
+}
+
+/* One drawing per width (see Parts): above the list below 1024, between the pairs from it, where
+   it is the middle track's one child and centres in it (self-alignment, not arrangement). The
+   middle copy is `display: none` below 1024, so the stacked column has no empty row. */
+.orbitMiddle {
+  display: none;
+  justify-self: center;
+}
+
+@media (min-width: 1024px) {
+  .orbitLead {
+    display: none;
+  }
+
+  .orbitMiddle {
+    display: block;
+  }
+}
+
+.orbitLoop {
+  fill: none;
+  stroke: var(--svc-mark);
+  stroke-width: var(--svc-orbit-stroke);
+  vector-effect: non-scaling-stroke;
+}
+
+.orbitRule {
+  fill: none;
+  stroke: var(--svc-rule-strong);
+  stroke-width: var(--svc-rule-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.orbitLeader {
+  stroke: var(--svc-mark);
+  stroke-width: var(--svc-rule-width);
+  stroke-dasharray: var(--svc-orbit-dash);
+  vector-effect: non-scaling-stroke;
+}
+
+.orbitMark {
+  fill: var(--svc-mark);
+}
+
+.orbitHub {
+  fill: var(--svc-ink);
+}
+
+/* The start-side pair reads toward the ring from 1024, where it stands left of it. */
+@media (min-width: 1024px) {
+  .partsStart {
+    text-align: end;
+  }
+}
+
+.partName {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+  color: var(--svc-ink);
+}
+
+.partBody {
+  font: var(--text-body);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink-muted);
+}
+
+@media (min-width: 1024px) {
+  .hub {
+    text-align: center;
+  }
+}
+
+.frameTitle {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+  color: var(--svc-ink);
+}
+
+.frameBody {
+  font: var(--text-body);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink-muted);
+}
+
+/* ── Slice: the same work, organised two ways ──────────────────────────────────── */
+.sliceView {
+  min-inline-size: 0;
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+}
+
+.sliceTitle {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+  color: var(--svc-ink);
+}
+
+.sliceNote {
+  font: var(--text-body);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink-muted);
+}
+
+.layerName {
+  font: var(--text-micro);
+  letter-spacing: var(--text-micro-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--svc-ink-label);
+}
+
+/* One piece of one path in one layer: built is solid, missing is an outline — the gap a user falls
+   through. */
+.sliceCell {
+  display: block;
+  block-size: var(--svc-slice-cell);
+  border: var(--svc-rule-width) solid var(--svc-rule-strong);
+}
+
+.sliceCell[data-done='yes'],
+.sliceSwatch[data-done='yes'] {
+  background: var(--svc-ink);
+  border-color: var(--svc-ink);
+}
+
+/* The legend's swatch: a cell at legend size. */
+.sliceSwatch {
+  display: block;
+  inline-size: var(--svc-mark-size);
+  block-size: var(--svc-mark-size);
+  border: var(--svc-rule-width) solid var(--svc-rule-strong);
+}
+
+.sliceLegend {
+  font: var(--text-body-sm);
+  color: var(--svc-ink-muted);
+}
+
+/* The verdict row sits under a rule: it is the sum of the cells above it. */
+.sliceResult {
+  padding-block-start: var(--gap-tight);
+  border-block-start: var(--svc-rule-width) solid var(--svc-rule-strong);
+}
+
+/* ── Bridge: three states ────────────────────────────────────────────────────────
+   Each state is its own panel opening on a strong rule — the same opening a tile has — so the
+   three read as separate states with a gutter between, not as one table. */
+.bridge {
+  color: var(--svc-ink);
+}
+
+.phase {
+  min-inline-size: 0;
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--svc-rule-strong-width) solid var(--svc-rule-strong);
+}
+
+/* A product, as it is in one state. Live is solid: the product people use. Partial is dashed: the
+   same product half-present while the move is under way. */
+.bar {
+  display: block;
+  padding: var(--gap-text);
+  font: var(--text-ui);
+  letter-spacing: var(--text-ui-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.bar[data-state='live'] {
+  background: var(--svc-bar-live-ground);
+  color: var(--svc-bar-live-ink);
+}
+
+/* The dashed edge is the blue accent: the one mark in the bridge that says "in motion" (fix round 2:
+   the bridge read entirely black and white). A line, never a ground. */
+.bar[data-state='partial'] {
+  border: var(--svc-rule-strong-width) dashed var(--svc-bar-edge);
+  color: var(--svc-ink);
+}
+
+.state {
+  padding-block: var(--gap-text);
+  border-block-end: var(--svc-rule-width) solid var(--svc-rule);
+  font: var(--text-body);
+  text-wrap: var(--text-running-wrap);
+  color: var(--svc-ink);
+}
+
+/* ── Authority meter ───────────────────────────────────────────────────────────────
+   One slot per role: filled where the model holds the decision, outlined where a person still
+   does. In the blue accent (fix round 2): the meter is the spectrum's mark, and in ink it read as
+   black squares on a black-and-white table. */
+.authoritySlots {
+  inline-size: max-content;
+}
+
+.authoritySlot {
+  display: block;
+  inline-size: var(--svc-authority-slot);
+  block-size: var(--svc-authority-slot);
+  border: var(--svc-rule-strong-width) solid var(--svc-mark);
+}
+
+.authoritySlot[data-held='model'] {
+  background: var(--svc-mark);
+}
+
+/* ── Disruption meter ──────────────────────────────────────────────────────────────
+   The trace keeps its stroke width however the box scales (non-scaling-stroke), in the blue accent
+   the authority meter takes: one colour for a spectrum's mark, whichever meter it carries. */
+.meter {
+  display: block;
+  inline-size: var(--svc-meter-width);
+  block-size: var(--svc-meter-height);
+  overflow: visible;
+}
+
+.meterTrace {
+  fill: none;
+  stroke: var(--svc-mark);
+  stroke-width: var(--svc-meter-stroke);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}

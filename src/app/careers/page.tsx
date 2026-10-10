@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import { getCareerPage, type CareerAction } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { heroTrail } from '@/lib/trail';
 import { BlockCard, Breadcrumbs, PageHero } from '@/patterns';
 
 const CAREERS_SLUG = ROUTES.careers.slice(1);
@@ -52,15 +53,21 @@ export default async function CareersPage() {
 
   return (
     <>
-      <Breadcrumbs
+      <PageHero
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Careers', href: ROUTES.careers },
+          ],
+          page.hero.heading,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
+        title={page.hero.heading}
+        body={[page.hero.description]}
         surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: 'Careers', href: ROUTES.careers },
-        ]}
       />
-
-      <PageHero title={page.hero.heading} body={[page.hero.description]} surface="paper" />
 
       {page.secondSection ? (
         <Section
@@ -77,7 +84,7 @@ export default async function CareersPage() {
                 as="ul"
                 columns={{ base: 1, md: 2, lg: 4 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.secondSection.cards.map((card) => (
@@ -138,7 +145,7 @@ export default async function CareersPage() {
                 as="ul"
                 columns={{ base: 1, md: 2 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.thirdSection.openings.map((opening) => {
@@ -194,8 +201,10 @@ export default async function CareersPage() {
                   <Button
                     as="a"
                     href={page.fourthSection.action.href}
+                    /* The page's closing ask ("Begin engagement", to the Lab's application form):
+                       the blue solid (r7-buttons, 8 Oct 2026). */
+                    emphasis="solid"
                     size="lg"
-                    icon={<Icon name="arrow-right" />}
                     {...externalAnchorProps(page.fourthSection.action)}
                   >
                     {page.fourthSection.action.label}
@@ -209,7 +218,7 @@ export default async function CareersPage() {
                 as="ul"
                 columns={{ base: 1, md: 3 }}
                 colGap="gutter"
-                rowGap="gutter"
+                rowGap="column"
                 equalRows
               >
                 {page.fourthSection.cards.map((card) => (
@@ -230,7 +239,7 @@ export default async function CareersPage() {
                           as="a"
                           href={card.action.href}
                           emphasis="link"
-                          tone="neutral"
+                          tone="primary"
                           icon={<Icon name="arrow-right" />}
                           extendHitArea
                           {...externalAnchorProps(card.action)}
@@ -260,7 +269,7 @@ export default async function CareersPage() {
                       as="a"
                       href={page.fourthSection.bottomAction.href}
                       emphasis="ghost"
-                      tone="neutral"
+                      tone="primary"
                       icon={<Icon name="arrow-right" />}
                       {...externalAnchorProps(page.fourthSection.bottomAction)}
                     >

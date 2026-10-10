@@ -57,7 +57,8 @@
    0.11 apart. vertical-align cannot answer it, because the strut alone outgrows 24. A
    block-level box makes no line box, so the `li` is exactly the tag. fit-content keeps the
    shrink-wrap inline-flex gave, in a block container and against a stretching grid track alike.
-   A tag is never set inside a sentence — Prose's <mark> is what does that — so nothing is lost.
+   A tag is never set inside a sentence, and the website does not mark phrases inside one either
+   (visual-direction § 4.4), so nothing is lost.
 
    flex lays out this box's OWN inside — one label, optionally one glyph — which is a
    control centring its own parts and not an arrangement. Anything that arranges two tags is

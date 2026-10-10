@@ -2,7 +2,16 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Layout, Prose, Section, Tag, type LayoutProps } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  Layout,
+  Prose,
+  Section,
+  Tag,
+  type LayoutProps,
+} from '@/components';
 import {
   getHowWeWorkPage,
   type HowWeWorkAction,
@@ -10,10 +19,12 @@ import {
   type HowWeWorkContentColumn,
 } from '@/content';
 import { ROUTES } from '@/lib/routes';
+import { eyebrowBesideTrail, heroTrail, pageName } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  type BreadcrumbItem,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -75,21 +86,23 @@ function renderColumn(column: HowWeWorkContentColumn) {
       ) : null}
 
       {column.links.length > 0 ? (
-        <Cluster colGap="tight" rowGap="tight">
+        /* A column's links STACK (owner, 7 Oct 2026): link buttons never sit side by side. */
+        <Layout rowGap="text" justifyItems="start">
           {column.links.map((link) => (
             <Button
               key={`${column.id}-${link.href}-${link.label}`}
               as="a"
               href={link.href}
               emphasis="link"
-              tone="neutral"
+              tone="primary"
               size="md"
               extendHitArea
+              icon={<Icon name="arrow-right" />}
             >
               {link.label}
             </Button>
           ))}
-        </Cluster>
+        </Layout>
       ) : null}
     </Layout>
   );
@@ -111,7 +124,7 @@ function renderHowWeWorkBlock(block: HowWeWorkBlock) {
           as="ul"
           columns={cardColumns(block.columns)}
           colGap="gutter"
-          rowGap="gutter"
+          rowGap="column"
           equalRows
         >
           {block.cards.map((card) => (
@@ -127,7 +140,7 @@ function renderHowWeWorkBlock(block: HowWeWorkBlock) {
 
     case 'comparison-cards':
       return (
-        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="gutter" equalRows>
+        <Layout as="ul" columns="fit" minTrack="sm" colGap="gutter" rowGap="column" equalRows>
           {block.cards.map((card) => (
             <BlockCard key={`${block.id}-${card.title}`} title={card.title} body={card.body} />
           ))}
@@ -147,9 +160,10 @@ function renderHowWeWorkBlock(block: HowWeWorkBlock) {
                 as="a"
                 href={block.source.href}
                 emphasis="link"
-                tone="neutral"
+                tone="primary"
                 size="md"
                 extendHitArea
+                icon={<Icon name="arrow-right" />}
               >
                 {block.source.label}
               </Button>
@@ -267,6 +281,14 @@ export default async function HowWeWorkPage() {
 
   const heroActions = firstTwoHeroActions(page.hero.actions);
 
+  /* The page's name, from the record's eyebrow when it spells it ("How We Work", in the trail's
+     case), so the eyebrow becomes the crumb rather than a repeat of it. */
+  const name = pageName({ name: 'How we work', eyebrow: page.hero.eyebrow });
+  const crumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: ROUTES.home },
+    { label: name.label, href: ROUTES.howWeWork },
+  ];
+
   return (
     <>
       {page.seo?.structuredData ? (
@@ -276,17 +298,12 @@ export default async function HowWeWorkPage() {
         />
       ) : null}
 
-      <Breadcrumbs
-        surface="paper"
-        items={[
-          { label: 'Home', href: ROUTES.home },
-          { label: page.hero.eyebrow || page.title, href: ROUTES.howWeWork },
-        ]}
-      />
-
       <PageHero
+        trail={heroTrail(crumbs, page.title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
         title={page.title}
-        eyebrow={page.hero.eyebrow}
+        eyebrow={eyebrowBesideTrail(name.eyebrow, crumbs)}
         body={[page.hero.description]}
         actions={heroActions}
         surface="paper"

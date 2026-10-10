@@ -1,0 +1,78 @@
+/* ══ Component layer — Slider ═══════════════════════════════════════════════════
+   Tier 2. A row of slides that scrolls sideways (Layout `scroll="always"`), with a pair of
+   previous / next controls and a progress rail under it (visual-direction § 1.4: "an image set
+   of 5 or more is a Slider showing 3"; § 3.4 G "slider"; fdn-scroll, 6 Oct 2026). Built to
+   docs/specs/Slider.md.
+
+   Naming: --sld-{part}-{state}
+     parts: progress (the rail and its thumb, and each step's line and fill) | step (the
+            autoplay stepper's bars) | ring (the row's and the steps') | hidden
+
+   What it owns: the rail and the row's focus ring. What it does not: the two controls (Button
+   `emphasis="outline"` — the round, hairline-ruled, blue-at-rest stepper, tokens in button.css),
+   the slides (the caller's: BlockCard, a testimonial, anything that is an <li>), the row's
+   tracks, seam and snapping (Layout's), and the ground (the band's Section).
+
+   ── Blue ────────────────────────────────────────────────────────────────────────
+   The rail is neutral; its thumb — the current marker — is blue (owner, 6 Oct: blue is the
+   recurring foreground accent; visual-direction § 4). The controls are blue at rest in Button's
+   outline tokens.
+
+   Every surface restates every token, so a slider inside a band nested in a different surface
+   cannot inherit an outer ancestor's value. Contrast figures are the glyph against the ground at
+   rest, or against the fill when filled.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The rail. A fixed length rather than a fill: the controls row is a Cluster (rail at one end,
+     controls at the other), and a primitive arrangement cannot grow a child to the remainder.
+     240 is a fifth of the 1240 column — long enough that the thumb's travel reads as position, not
+     as a dash. In a narrower row it shrinks to fit (min() in Slider.module.css). */
+  --sld-progress-length: 240px;
+  --sld-progress-thickness: var(--border-width-2);
+  --sld-progress-radius: var(--radius-full);
+
+  /* The autoplay stepper (7 Oct 2026). A step is a plain bar; its length is a component
+     size — long enough that the fill's travel over a hold reads as time passing, short enough that
+     a set of six stays beside its controls at 390. The target is the WCAG 2.5.8 floor raised to
+     the 44 the site's controls hold to: the bar is 2 tall, the button is not. */
+  --sld-step-length: 56px;
+  --sld-step-target: 44px;
+
+  --sld-ring-width: var(--focus-ring-width);
+  --sld-ring-offset: var(--focus-ring-offset);
+
+  /* The visually hidden status line's clip box (the RatingBadge's and ListCard's technique). */
+  --sld-hidden-size: 1px;
+}
+
+:root,
+[data-surface='paper'] {
+  --sld-progress-rail: var(--color-neutral-200);
+  --sld-progress-thumb: var(--color-brandeis-500);
+  --sld-ring-color: var(--color-brandeis-500);
+  --sld-ring-gap-color: var(--color-paper);
+}
+
+[data-surface='tint'] {
+  --sld-progress-rail: var(--color-neutral-300);
+  --sld-progress-thumb: var(--color-brandeis-500);
+  --sld-ring-color: var(--color-brandeis-500);
+  --sld-ring-gap-color: var(--color-paper-deep);
+}
+
+/* Blue as ink fails on neutral-950 (2.77:1), so the thumb and ring lift to 300. */
+[data-surface='ink'] {
+  --sld-progress-rail: var(--color-neutral-800);
+  --sld-progress-thumb: var(--color-brandeis-300);
+  --sld-ring-color: var(--color-brandeis-300);
+  --sld-ring-gap-color: var(--color-neutral-950);
+}
+
+/* The one surface where the accent cannot be blue: the thumb and ring go white. */
+[data-surface='blue'] {
+  --sld-progress-rail: var(--color-brandeis-400);
+  --sld-progress-thumb: var(--color-white);
+  --sld-ring-color: var(--color-white);
+  --sld-ring-gap-color: var(--color-brandeis-500);
+}

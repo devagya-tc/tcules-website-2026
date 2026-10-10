@@ -131,3 +131,13 @@ different weight of type.
 `sm` row omits counter glyphs); the 16px floor; stroked-versus-solid gone, with the rename table;
 the control deciding size; labelled versus hidden; and every glyph at every size on all four
 surfaces.
+
+## Amendment · 1 Oct 2026 — content glyphs and chrome glyphs
+
+Owner: *"we should stick to solar bold icons for the content area and use more widely used icons for
+chrome like the hamburger menu."* Solar Bold stays the content set. The site's own navigation controls
+are read by convention, so they take the universal marks: `chrome-menu` (three plain bars) and
+`chrome-close` (a plain cross), the house drawings the nav shipped before the Solar move, restored under
+a `chrome-` prefix so the content area cannot reach for them by accident. SiteNav's toggle uses them.
+Solar's `hamburger-menu` and `close-circle` remain for content use (the filter chip's clear, for one).
+

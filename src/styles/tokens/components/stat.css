@@ -1,0 +1,86 @@
+/* ══ Component layer — Stat ═════════════════════════════════════════════════════
+   Tier 1. One figure, its unit, and the line that says what it counts (visual-direction § 3.3:
+   "--text-stat-lg numerals" are the S band's large thing and the D band's stat aside; § 7.1 Stats:
+   stat-lg over a body-sm label of ≤ 2 lines). Built to docs/specs/Stat.md (cmp-process-stats,
+   6 Oct 2026). Promoted from the ServicePage template's local `Stat`.
+
+   Naming: --stat-{part}-{role}
+     parts: value | unit | label | rule | mark
+
+   THE NUMERAL IS BLUE (page-showcase fix round 2, 7 Oct 2026; docs/kit/brand-amendments.md). The
+   owner's foreground ruling (visual-direction § 4.1) names numerals among blue's marks, and with the
+   figure in ink a row of four stats read as a black-and-white band with one 32px tick of colour,
+   while the rating score beside the same pages was blue: one voice for a number, two colours. The
+   figure is a mono numeral, not a block of type, so blue at 54 is a foreground accent and not a
+   mass; the unit and the label stay in the quiet ink, and the opening hairline keeps its blue mark.
+   Was: ink, never blue (cmp-process-stats, 6 Oct 2026).
+
+   What it owns: the opening rule and its mark, the three type roles and their inks. What it does
+   not: any distance (gap-scale steps in the module), any ground (the Section's). No state tokens:
+   nothing in a Stat responds to a pointer.
+
+   Every surface restates every ink, so a Stat inside a band nested in a different surface cannot
+   inherit the wrong value from an outer ancestor. */
+
+:root {
+  --stat-rule-width: var(--border-width-hairline);
+  /* The mark sits ON the hairline, so it is drawn over it rather than beside it: 2px tall, the
+     length of one gutter. A component size, not a distance between two things — it is the mark's
+     own geometry, which is why it reads the ramp (CLAUDE.md § gap scale, rule 1). */
+  --stat-mark-width: var(--border-width-2);
+  --stat-mark-length: var(--space-32);
+
+  /* lg is the band's large thing (S, the D aside); md is the plain stat, for a stat that sits
+     beside other content rather than carrying the band. */
+  --stat-value-text-lg: var(--text-stat-lg);
+  --stat-value-tracking-lg: var(--text-stat-lg-tracking);
+  --stat-value-text-md: var(--text-stat);
+  /* xl is ONE figure that is the band's hero (a facts band's rating, kit r7-facts, 9 Oct 2026):
+     the score role, serif, so "4.8" does not open into three mono cells. */
+  --stat-value-text-xl: var(--text-score);
+  --stat-value-tracking-xl: var(--text-score-tracking);
+  --stat-value-tracking-md: var(--text-stat-tracking);
+
+  /* The unit is a WORD (weeks, products, teams): mono, the label voice, set on the figure's
+     baseline. A symbol that belongs to the number (%, ×, +) is part of the value string. */
+  --stat-unit-text: var(--text-ui-lg);
+  --stat-unit-tracking: var(--text-ui-lg-tracking);
+
+  --stat-label-text: var(--text-body-sm);
+  /* Two lines at the 286 track of a 4-up row; the cap stops a stat in a wide track (the 381 head
+     track, a 3-up row at 392) running its label into one long line that reads as a caption. */
+  --stat-label-measure: var(--measure-title);
+}
+
+:root,
+[data-surface='paper'] {
+  --stat-value-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --stat-unit-ink: var(--color-neutral-700); /* 8.14:1 */
+  --stat-label-ink: var(--color-neutral-700); /* 8.14:1 */
+  --stat-rule-ink: var(--color-neutral-300); /* decoration */
+  --stat-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the accent mark */
+}
+
+[data-surface='tint'] {
+  --stat-value-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --stat-unit-ink: var(--color-neutral-700); /* 7.27:1 */
+  --stat-label-ink: var(--color-neutral-700); /* 7.27:1 */
+  --stat-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
+  --stat-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
+}
+
+[data-surface='ink'] {
+  --stat-value-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
+  --stat-unit-ink: var(--color-neutral-300); /* 11.07:1 */
+  --stat-label-ink: var(--color-neutral-300); /* 11.07:1 */
+  --stat-rule-ink: var(--color-neutral-700); /* decoration */
+  --stat-mark-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
+}
+
+[data-surface='blue'] {
+  --stat-value-ink: var(--color-white); /* 6.23:1 */
+  --stat-unit-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --stat-label-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --stat-rule-ink: var(--color-brandeis-300); /* decoration */
+  --stat-mark-ink: var(--color-white); /* 6.23:1 */
+}

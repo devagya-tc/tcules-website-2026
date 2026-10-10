@@ -1,5 +1,6 @@
 /* ══ Component layer — breadcrumbs ═══════════════════════════════════════════════
-   Tier 2. The ancestor trail above a page hero, on 128 of 129 routes. This file is the
+   Tier 2. The ancestor trail at the top of a page hero, inside its band (fdn-top, 5 Oct
+   2026), on 128 of 129 routes. This file is the
    only place a crumb colour is decided, and it decides it four times: once per surface.
    Every value is a primitive or a usage token; nothing is a literal except the hit
    minimum, and nothing is derived from another component.
@@ -93,19 +94,6 @@
 --crumb-ring-width:var(--focus-ring-width);
 --crumb-ring-offset:var(--focus-ring-offset);
 
-/* The focus ring is a box-shadow, so it always draws OUTSIDE the label's box — offset plus width,
-   on every side. Above and beside it that is free air. Below it is not: the trail contributes
-   nothing downward beyond this, so the label's bottom edge is nearly the band's bottom edge, and
-   without this the bottom of the ring lands outside the band and is painted over by the next one
-   (every Section is position:relative, so the later one wins the tree order). This is the smallest
-   value that keeps a focus ring whole.
-   DERIVED, not a step off the ramp: it is the ring's own reach, so it is computed from the two
-   tokens that define that reach rather than from a 4px that happens to equal them today. Re-tune
-   either ring token and this follows. That is the difference between a coupling and a coincidence,
-   and an earlier draft of this token asserted the coupling in a comment while hardcoding
-   --space-4. */
---crumb-ring-clearance:calc(var(--crumb-ring-offset) + var(--crumb-ring-width));
-
 --crumb-transition-duration:var(--duration-fast);
 --crumb-transition-easing:var(--easing-standard);
 
@@ -129,7 +117,7 @@
 --crumb-link-ink:var(--color-neutral-600);          /*  4.92:1 — the floor of AA, do not lighten */
 --crumb-link-ink-hover:var(--color-brandeis-500);   /*  6.17:1 */
 --crumb-link-ink-pressed:var(--color-brandeis-700); /* 10.07:1 */
---crumb-current-ink:var(--color-neutral-900);       /* 14.62:1 */
+--crumb-current-ink:var(--color-brandeis-500);       /*  6.17:1 — you are here: an active state carries the accent */
 --crumb-divider-ink:var(--color-neutral-400);       /*  2.12:1 — decoration, exempt */
 --crumb-ring-color:var(--color-brandeis-500);--crumb-ring-gap-color:var(--color-paper);
 }
@@ -149,7 +137,7 @@
 --crumb-link-ink:var(--color-neutral-700);          /*  7.27:1 — stepped; 600 would be 4.39:1 */
 --crumb-link-ink-hover:var(--color-brandeis-500);   /*  5.51:1 */
 --crumb-link-ink-pressed:var(--color-brandeis-700); /*  8.99:1 */
---crumb-current-ink:var(--color-neutral-900);       /* 13.06:1 */
+--crumb-current-ink:var(--color-brandeis-500);       /*  5.51:1 */
 --crumb-divider-ink:var(--color-neutral-500);       /*  2.82:1 — decoration, exempt */
 --crumb-ring-color:var(--color-brandeis-500);--crumb-ring-gap-color:var(--color-paper-deep);
 }
@@ -168,7 +156,7 @@
 --crumb-link-ink:var(--color-neutral-400);          /*  8.05:1 */
 --crumb-link-ink-hover:var(--color-brandeis-300);   /*  7.32:1 — floor: 500 is 2.77:1 here */
 --crumb-link-ink-pressed:var(--color-brandeis-100); /* 13.61:1 */
---crumb-current-ink:var(--color-white);             /* 17.26:1 */
+--crumb-current-ink:var(--color-brandeis-300);       /*  7.32:1 — 500 is 2.77:1 here */
 --crumb-divider-ink:var(--color-neutral-700);       /*  2.10:1 — decoration, exempt */
 --crumb-ring-color:var(--color-brandeis-300);--crumb-ring-gap-color:var(--color-neutral-950);
 }
