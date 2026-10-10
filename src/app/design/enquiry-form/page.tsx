@@ -39,6 +39,7 @@ function Enquiry({
   contact = false,
   compact = false,
   lined = false,
+  corpus = false,
   urlLabel,
 }: {
   outcome?: 'success' | 'error' | 'pending';
@@ -46,11 +47,27 @@ function Enquiry({
   contact?: boolean;
   compact?: boolean;
   lined?: boolean;
+  corpus?: boolean;
   urlLabel?: EnquiryUrlLabel;
 }) {
   const action = `${ENDPOINTS.enquiryDesign}?outcome=${outcome}`;
 
   if (compact) return <EnquiryForm variant="compact" action={action} context={CONTEXT} />;
+
+  /* The corpus enquiry (page-mapping G2): the corpus's own URL label, no scheduling link (none is
+     authored and no destination exists), and the page's own success words. */
+  if (corpus)
+    return (
+      <EnquiryForm
+        action={action}
+        context={CONTEXT}
+        urlLabel="Product or company URL"
+        success={{
+          heading: 'Your enquiry has reached us.',
+          body: "We'll reply within one business day.",
+        }}
+      />
+    );
 
   if (contact)
     return <EnquiryForm variant="contact" action={action} scheduleHref={ROUTES.contact} />;
@@ -116,6 +133,15 @@ export default function EnquiryFormSpecimenPage() {
           'Name and email as a pair where the track holds two, the one question, and the submit with "We reply within a business day." beside it.',
         ]}
         form={<Enquiry compact />}
+      />
+      <CtaSection
+        eyebrow="Variant · enquiry, from the corpus"
+        heading="Send an enquiry without a scheduling link"
+        body={[
+          'The corpus pages’ form: the URL field’s own label, no “See available times” (none is authored and no scheduling destination exists), and the page’s own success words. Submit it for the success view.',
+        ]}
+        form={<Enquiry corpus />}
+        surface="tint"
       />
       <CtaSection
         eyebrow={`Fields · line`}

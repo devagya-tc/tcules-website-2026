@@ -375,7 +375,7 @@ type PageHeroBaseProps = {
   arrangement?: HeroArrangement;
   /**
    * Taxonomy marks after the actions: an unboxed mono grid, each after a 6px blue pixel, three
-   * columns from 768 and two below. At most six render (a development warning names the rest), so
+   * columns from 768 and two below (four tags are 2 × 2 at every width). At most six render (a development warning names the rest), so
    * the set is two balanced rows. Inert; a list, so a reader is told how many. Keep the title to 3
    * lines when tags are set.
    */
@@ -814,7 +814,16 @@ export function PageHero({
         {tagItems}
       </Cluster>
     ) : (
-      <Layout as="ul" columns={{ base: 2, md: 3 }} colGap="block" rowGap="text">
+      /* Four tags are 2 × 2 (a record of four facts, home's studio line): in three columns they set
+         3 + 1, an orphan, and in a 572 track a nowrap mono tag of 21 characters fills its whole
+         175 column and touches its neighbour's pixel. Two tracks give each tag 274. Every other
+         count keeps the two balanced rows of three. */
+      <Layout
+        as="ul"
+        columns={shownTags.length === 4 ? 2 : { base: 2, md: 3 }}
+        colGap="block"
+        rowGap="text"
+      >
         {tagItems}
       </Layout>
     );

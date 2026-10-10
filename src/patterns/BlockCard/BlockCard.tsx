@@ -247,6 +247,14 @@ export type BlockCardProps = {
    */
   body?: string;
   /**
+   * The body as trusted inline HTML, one entry per paragraph (page-mapping G3): for a corpus item
+   * whose body carries a link, a bold run or a second paragraph, which `body: string` would flatten.
+   * Built by `inlineToHtml` from a parsed tree at the content seam, never from a raw string a caller
+   * typed. Exclusive with `body`. A card with an `href` is ONE anchor, so its HTML may not hold a
+   * link: a link inside a whole-card link is an anchor in an anchor.
+   */
+  bodyHtml?: readonly string[];
+  /**
    * One optional quiet label above the title — a client, a category, a content type, a kicker.
    * A plain string rather than a structured record: what belongs here varies by page, so the
    * caller composes the line and the card only renders it.
@@ -423,6 +431,7 @@ function TextureMedia({
 export function BlockCard({
   title,
   body,
+  bodyHtml,
   eyebrow,
   media,
   titleAs: Title = 'h3',
@@ -445,8 +454,12 @@ export function BlockCard({
     return null;
   }
 
-  const hasBody = body !== undefined && body.trim().length > 0;
-  if (body !== undefined && !hasBody)
+  const hasBodyHtml = bodyHtml !== undefined && bodyHtml.some((html) => html.trim().length > 0);
+  if (hasBodyHtml && body !== undefined) {
+    warn(`both body and bodyHtml for ${JSON.stringify(title)}; bodyHtml wins.`);
+  }
+  const hasBody = hasBodyHtml || (body !== undefined && body.trim().length > 0);
+  if (!hasBodyHtml && body !== undefined && !hasBody)
     warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
 
   const hasEyebrow = eyebrow !== undefined && eyebrow.trim().length > 0;
@@ -577,7 +590,20 @@ export function BlockCard({
      mark at rest to be the link; a card whose action is not obvious from its title takes the cta. */
   const cued = cueKind === 'title';
   const titleNode = <Title className={cx(styles.title, cued && styles.cued)}>{title}</Title>;
-  const bodyNode = hasBody ? <p className={styles.body}>{body}</p> : null;
+  const bodyNode = hasBodyHtml ? (
+    /* Trusted HTML, one paragraph each (`bodyHtml`). The paragraphs are a Layout at `text`: the
+       card's own paragraph step, so no margin and no Prose flow is needed, and the type role is the
+       `.body` div's, inherited by every <p>. */
+    <div className={styles.body}>
+      <Layout rowGap="text">
+        {bodyHtml.map((html, index) => (
+          <p key={index} dangerouslySetInnerHTML={{ __html: html }} />
+        ))}
+      </Layout>
+    </div>
+  ) : hasBody ? (
+    <p className={styles.body}>{body}</p>
+  ) : null;
 
   /* The copy: eyebrow, title and body as one group at `text` (16), then the cta a block (24) below
      it. 16 is one step under the section head's 24, so a card reads as a smaller unit of the same

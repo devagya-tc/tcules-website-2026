@@ -55,7 +55,7 @@ export const ROUTES = {
   contentDiscovery: '/expertise/content-knowledge-discovery-platforms',
   commerce: '/expertise/commerce-transactional-products',
   fintech: '/expertise/fintech-insurtech',
-  healthtech: '/expertise/healthtech-care',
+  healthtech: '/expertise/healthtech',
   edtech: '/expertise/edtech-learning',
   martech: '/expertise/martech-salestech',
   proptech: '/expertise/proptech-contech-field-operations',
@@ -154,6 +154,11 @@ export const ANCHORS = {
 /** The fragment href for an in-page anchor: `#enquiry`. */
 export function anchorHref(id: (typeof ANCHORS)[keyof typeof ANCHORS]): `#${string}` {
   return `#${id}`;
+}
+
+/** A corpus page through its template in the proving ground: `/design/corpus-page/<file-slug>`. */
+export function designCorpusPagePath(fileSlug: string): string {
+  return `${ROUTES.design}/corpus-page/${encodeURIComponent(fileSlug)}`;
 }
 
 /** The designed service page in the proving ground: `/design/service-page/<slug>`. */
@@ -266,11 +271,14 @@ export const EXTERNAL = {
 
 /**
  * Endpoints, which are not routes. Named here anyway so a form action is not a literal in a
- * pattern's fixture. NOTHING SERVES THIS YET — the newsletter field posts to a 404 until an
- * `app/api/newsletter/route.ts` exists.
+ * pattern's fixture. NOTHING SERVES `newsletter` OR `enquiry` YET — the newsletter field posts to a
+ * 404 until an `app/api/newsletter/route.ts` exists, and the corpus pages' enquiry form posts to a
+ * 404 until `app/api/enquiry/route.ts` does (FORM_ENDPOINT_VERIFICATION, a release dependency on
+ * every corpus page).
  */
 export const ENDPOINTS = {
   newsletter: '/api/newsletter',
   contact: '/api/contact',
+  enquiry: '/api/enquiry',
   enquiryDesign: '/api/design/enquiry',
 } as const;

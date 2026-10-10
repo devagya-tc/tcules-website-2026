@@ -162,6 +162,11 @@ export type ContentSectionHeadingSize = 'lg' | 'md' | 'display';
 
 type ContentSectionBaseProps = {
   /**
+   * The band's own anchor (`id` on the section element): a corpus band's id, so `/#faq` lands on the
+   * band the content team named. Not the heading's id, which is `headingId`.
+   */
+  id?: string;
+  /**
    * The band's `h2`, verbatim. Absent renders no heading and no seam — an untitled section is a
    * real shape in the content model (the run of blocks before the first heading), not a fault.
    *
@@ -715,6 +720,7 @@ export function ContentSection(props: ContentSectionProps) {
   return (
     <Section
       as={labelled ? 'section' : 'div'}
+      id={props.id}
       surface={surface}
       density={density}
       aria-labelledby={labelled ? headingId : undefined}

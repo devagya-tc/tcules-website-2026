@@ -17,3 +17,11 @@ export type {
 } from './CaseStudyIndex';
 export { ServicePage } from './ServicePage';
 export type { ServicePageProps } from './ServicePage';
+export { HomePage, OfferPage, planOffer, kindOf } from './CorpusPage';
+export type {
+  HomePageProps,
+  OfferPageProps,
+  OfferKind,
+  OfferPart,
+  OfferUnit,
+} from './CorpusPage';

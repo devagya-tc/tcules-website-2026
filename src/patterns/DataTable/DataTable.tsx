@@ -56,6 +56,13 @@ export type DataTableRow = {
 };
 
 export type DataTableProps = {
+  /**
+   * The id of a heading that already names this table (page-mapping G4): a corpus table sits under
+   * its section's own h2, so a visible caption would print the heading twice. Used for the scroll
+   * region and the `<table>` when there is no `caption`; a caption wins. Without either, the region
+   * is named by the key column's head, which is " table" when that head is empty.
+   */
+  labelledBy?: string;
   /** The table's name. Rendered as `<caption>`, so it is also the table's accessible name. */
   caption?: string;
   /** A plain-text lead-in, rendered as a paragraph immediately before the table. */
@@ -117,7 +124,14 @@ function warn(message: string) {
  * columns (padded with empty cells, or truncated — a cell with no column head cannot be read in
  * the stacked order). Zero rows renders nothing.
  */
-export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTableProps) {
+export function DataTable({
+  caption,
+  labelledBy,
+  summary,
+  keyColumn,
+  columns,
+  rows,
+}: DataTableProps) {
   const captionId = useId();
 
   if (rows.length === 0) {
@@ -167,11 +181,17 @@ export function DataTable({ caption, summary, keyColumn, columns, rows }: DataTa
             // head is the nearest thing the table has to one.
             {...(caption
               ? { 'aria-labelledby': captionId }
-              : { 'aria-label': `${keyColumn.heading} table` })}
+              : labelledBy
+                ? { 'aria-labelledby': labelledBy }
+                : { 'aria-label': `${keyColumn.heading} table` })}
           >
             <table
               className={styles.table}
-              {...(caption ? { 'aria-labelledby': captionId } : {})}
+              {...(caption
+                ? { 'aria-labelledby': captionId }
+                : labelledBy
+                  ? { 'aria-labelledby': labelledBy }
+                  : {})}
             >
               <thead>
                 <tr>

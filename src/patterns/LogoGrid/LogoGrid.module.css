@@ -75,6 +75,16 @@
   text-wrap: var(--text-title-wrap);
 }
 
+/* A client with no approved mark (G1): its name, set as the card title role in the ground's own ink
+   (inherited, as every heading's is), centred in the cell. The set renders every cell this way when
+   any mark is missing, so the weights stay equal. */
+.name {
+  font: var(--text-h5);
+  letter-spacing: var(--text-h5-tracking);
+  text-wrap: var(--text-title-wrap);
+  text-align: center;
+}
+
 /* The beside head's short heading: the h4 role on the h2 element (9 Oct review), so the grid
    stays the band's large thing. Its ink is the surface's, inherited as every heading's is. */
 .heading {

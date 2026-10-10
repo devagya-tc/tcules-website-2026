@@ -247,3 +247,58 @@ Append one entry per problem, newest last.
   Or fold its link into the FAQ's hiring answer, which already links to `/careers`.
 - **Why:** one ending per page. The careers link stays one scroll away, and the footer already
   carries Careers.
+
+### P20 · `/services/product-design` · worked-example · a story of three paragraphs beside a product shot
+
+- **Problem:** the band is "Example: Dealpath": three labelled paragraphs (The problem, What we did,
+  The result; 29, 45 and 28 words) and the case link, beside the Dealpath artefact. Set as a media
+  split (copy 667, photo 477) it measures **900** at 1470 against the 830 fold, and **1301** on a
+  phone. The paragraphs are long for rows: each runs three to four lines at the body measure, and the
+  rows, their rules and the link make the copy column taller than the photograph it sits beside.
+  The page renders them as written.
+- **Proposal:** write the three as one line each, the way the page's other labelled sets are
+  written ("**The problem.** Add to pipeline always started a new deal."), and leave the detail to
+  the Dealpath case, which the link already opens. Or keep the length and move "What we did" into
+  the case page, leaving the problem and the result here.
+- **Why:** the band's job on a service page is to show that the work happened and where to read it.
+  Three short lines fit the fold beside the artefact; the full story is one click away.
+
+### P21 · `/expertise/healthtech` · proof · a case story and a 43-word quote in one split
+
+- **Problem:** the CuramCare story is a heading, two paragraphs (40 and 18 words) and a 43-word
+  client quote, set beside a product shot. The copy column runs taller than the shot, so the band
+  measures **857** at 1470 against 830. The quote is set at the compact role, which is the smallest
+  the kit has for a quote, so the length is the cause. The page renders the quote in full (its
+  sign-off is pending).
+- **Proposal:** when CuramCare's quote is signed off, ask for the first two sentences ("Tcules
+  started by asking our families and carers what got in their way, turned it into a clear product
+  plan"), which carry the claim, and keep the full quote for the case page.
+- **Why:** the sentence about the handover ("so nothing got lost") is the case study's, and the
+  band stays inside the fold with it left to the case.
+
+### P22 · `/` and `/services/product-design` · faq · six and seven questions run past the fold
+
+- **Problem:** the first question of an accordion is open by default, so a closed list of six measures
+  **844** (home) and of seven **896** (product design) at 1470, against 830. The kit's budget is
+  seven closed, which assumed every item closed. Four-question lists (healthtech 664) and
+  three-question lists (the audit, 587) sit well inside the fold.
+- **Proposal:** five questions or fewer per page, with the rest on the page they belong to. Home's
+  "Do you only work with SaaS companies?" and "How do you work with teams outside India?" already
+  have homes on the services and about pages. Product design's "What will you need from us?" and
+  "How much research do we need?" could move to the audit and the case pages.
+- **Why:** an FAQ that fits the fold reads as an answer rather than a document. Every page ends on
+  the same two bands (FAQ, then form), so the budget applies to all 51 offer pages.
+
+### P23 · `/services/product-design` · media_bindings · three bound assets carry no `alt_intent`
+
+- **Pages and assets:** `product_design_doodle`, `product_design_dealpath` and `product_design_eden`
+  (the other pages' bindings all carry one).
+- **Problem:** the page renders the three images with an empty `alt`, because nothing in the
+  corpus says what each shows, and a description written by the builder would be copy nobody
+  authored. A screen-reader user gets a case card with a title and a silent cover.
+- **Proposal:** add `alt_intent` to the three bindings, one sentence each in the style of the home
+  page's ("Doodle product model connecting meeting priority, availability and scheduling
+  behaviour"). The same assets are already described on the home page, so the sentences can be
+  reused.
+- **Why:** these are the pages' only proof images, and the alt is the only way a non-visual reader
+  gets that proof.

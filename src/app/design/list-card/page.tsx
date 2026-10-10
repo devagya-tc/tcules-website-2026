@@ -454,6 +454,22 @@ export default function ListCardSpecimenPage() {
             </Specimen>
           </Layout>
           <Specimen
+            title="bodyHtml · a body with a link and a second paragraph"
+            note="For a corpus item whose body carries a link or more than one paragraph, which `body` would flatten. One entry per paragraph, trusted inline HTML built from a parsed tree; the paragraphs sit a `text` apart and take the row's own body role. An unlinked row only: a linked row is one anchor, and a link inside it would be an anchor in an anchor."
+          >
+            <Rows>
+              <ListCard
+                arrangement="stacked"
+                size="md"
+                title="Design and build."
+                bodyHtml={[
+                  'We design it, then our <a href="/services/design-engineering">Design Engineering</a> and <a href="/services/software-development">Software Development</a> teams build it.',
+                  'A second paragraph, for a body that needs one.',
+                ]}
+              />
+            </Rows>
+          </Specimen>
+          <Specimen
             title="Numbered rows · md and sm · the ordinal's baseline"
             note="The ordinal's optical offset is a function of the title's size, so it steps too: 4 against h4, 0 against h5. The numeral's baseline sits on the title's first baseline in both."
           >

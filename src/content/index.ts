@@ -39,6 +39,7 @@ export {
   getCorpusPage,
   listCorpusPages,
 } from './source';
+export { getCaseRefs, getCorpusBindings } from './corpus-refs';
 export type {
   Page,
   PageBlock,
@@ -203,5 +204,6 @@ export type {
   CorpusFormField,
   CorpusBlock,
   CorpusBand,
+  CorpusCaseRef,
   CorpusContentSource,
 } from './corpus-types';

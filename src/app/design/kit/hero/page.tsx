@@ -152,6 +152,22 @@ function variations(rating: HeroRating): Variation[] {
       },
     },
     {
+      id: 'tags-four',
+      short: 'Illustration with four tags',
+      name: 'Illustration with four tags',
+      note: 'Four tags (a record of four facts: the studio’s year, projects, countries and place) set 2 × 2 at every width. In three columns they set 3 + 1, and a 21-character mono tag filled its whole column in a 572 track and touched its neighbour’s pixel. Any other count keeps the rows of three.',
+      facts: ['Four tags are 2 × 2', 'Accent + Field'],
+      hero: {
+        trail: software.trail,
+        title: software.hero.title,
+        body: [software.hero.lead],
+        actions: software.hero.actions,
+        arrangement: 'beside',
+        media: software.media,
+        tags: ['Founded 2017', 'More than 90 projects', 'Clients in 19 countries', 'Based in Ahmedabad, India'],
+      },
+    },
+    {
       id: 'photograph',
       short: 'Photograph',
       name: 'Photograph beside the copy',

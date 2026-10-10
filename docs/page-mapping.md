@@ -688,3 +688,25 @@ bound asset was ignored. The changes below are fixes to feasibility, kit fidelit
 - healthtech's persona cards (a table whose rows are peers, which the owner's "change how an item
   is shown" allows).
 
+---
+
+## 11 · Build notes, batch B1 (`/`, `/services/product-design`, `/audits/design-to-code-audit`, `/expertise/healthtech`)
+
+Where the build departs from this sheet, and why. Everything else is built as specified.
+
+| # | Where | Sheet said | Built | Why |
+|---|---|---|---|---|
+| B1.1 | `/` · `selected-work` | slide tracks `[7, 5]`; the band's "See all case studies" a `CtaRow` footer | tracks `[1, 1]`; the link at the end of the heading's row (`actionsAt="end"`, 7 Oct ruling 5) | at `[7, 5]` the Doodle slide's 38-word quote ran 5 lines at 477 and the band measured 979; `[1, 1]` and the head link bring it to 807, inside the fold. A layout decision, not a gap or a type step |
+| B1.2 | `/` · `why-tcules-2` | reuse `about_studio_review` | a placeholder (register row added: `/` `why-tcules-2`, studio photo, 4:5) | the file is 960 × 720; the 4:5 slot needs 906 × 1133 (§ 5.4). The same file passes at healthtech `why-tcules` (head-track aside 3:2 needs 724 × 483), so it is used there |
+| B1.3 | `/` hero | four `tags` | `PageHero` sets exactly four tags 2 × 2 | in three columns a 21-character mono tag filled its 175 column and touched its neighbour's pixel, and four set 3 + 1. A count rule on the kit's tags grid, shown at `/design/kit/hero` |
+| B1.4 | the three family routes | "switch the family" | one allowlist (`PASS_1_OFFER_ROUTES`, `src/app/_corpus/offer.tsx`); the other pages of each family keep their current source | § 1.2: the 86 unverified corpus pages must not switch silently. `generateStaticParams` returns the allowlisted slugs; every other slug still renders from its current source (`dynamicParams` is the default) |
+| B1.5 | `kit` extensions | G3 `linkScope`, G4 head-less record | not built | no B1 page needs either (no card with a link in its body carries an `href`; no table lacks a header row). They belong to the About and case batches |
+| B1.6 | item titles inside a band | "h3" | an `h3` element at the h4 role (`.itemTitle`) | the h3 role beside the band's h2 read as a second band title (a reason, a case in a slide, a case story) |
+| B1.7 | `/` · `client-recognition` | name cells | name cells for all six, Doodle included | LogoGrid's set-level rule: one client without a mark and every cell is its name, so weights stay equal |
+
+Extensions to approved pieces, each the smallest the job needed and none a restyle: `LogoGridMark`
+accepts a name (G1); `EnquiryForm` takes `urlLabel="Product or company URL"`, an optional
+`scheduleHref` on `enquiry` and `success` (G2); `BlockCard`, `ListCard`, `ReadDown` and `Steps` take
+`bodyHtml` (G3a); `DataTable` takes `labelledBy` (G4b); `ContentSection` takes `id`; `PageHero`'s tag grid
+is 2 × 2 at four tags; `Icon` gains `cart`, `wallet` and `heart-pulse`.
+

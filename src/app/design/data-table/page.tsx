@@ -467,6 +467,20 @@ export default function DataTableSpecimenPage() {
           >
             <DataTable {...FIVE_COLUMNS} />
           </Specimen>
+          <Specimen
+            title="Named by the heading above it · labelledBy"
+            note="A corpus table sits under its band’s own h2, so a visible caption would print the heading twice. labelledBy names the scroll region and the table by that heading’s id, with no caption. Without a caption or labelledBy the region is named by the key column’s head."
+          >
+            <Layout rowGap="block">
+              <h3 id="dt-labelled-by">Every gap gets a cause</h3>
+              <DataTable
+                {...ROUTE_TABLE}
+                caption={undefined}
+                summary={undefined}
+                labelledBy="dt-labelled-by"
+              />
+            </Layout>
+          </Specimen>
         </Layout>
       </Section>
 

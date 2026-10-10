@@ -1,0 +1,50 @@
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
+import { isCorpusOffer } from '@/app/_corpus/offer';
+import { getCaseRefs, getCorpusBindings, getCorpusPage, listCorpusPages } from '@/content';
+import { caseRoutesIn } from '@/lib/corpus-cases';
+import { HomePage, OfferPage } from '@/templates';
+
+export const metadata: Metadata = {
+  title: 'CorpusPage · a page | Design',
+  robots: { index: false, follow: false },
+};
+
+/* Only the pages the plan has been verified against (`PASS_1_OFFER_ROUTES`): an offer page whose
+   image slots have no register row yet cannot render, by design (src/lib/placeholders.ts). */
+const isMapped = (route: string) => route === '/' || isCorpusOffer(route);
+
+const fileSlug = (route: string) =>
+  route === '/' ? 'home' : route.slice(1).replaceAll('/', '__');
+
+export async function generateStaticParams() {
+  const pages = await listCorpusPages();
+  return pages
+    .filter((page) => isMapped(page.route))
+    .map((page) => ({ slug: fileSlug(page.route) }));
+}
+
+/**
+ * One corpus page through its template, from its file slug (`services__product-design`). The live
+ * routes gate which pages switch to the corpus (`PASS_1_OFFER_ROUTES`); this route renders exactly
+ * those, in the proving ground, so a band can be judged without the site chrome. A page joins both
+ * lists in one edit, when its band shapes and its image register rows exist.
+ */
+export default async function CorpusPageSpecimen({
+  params,
+}: PageProps<'/design/corpus-page/[slug]'>) {
+  const { slug } = await params;
+  const route = slug === 'home' ? '/' : `/${slug.replaceAll('__', '/')}`;
+  const page = await getCorpusPage(route);
+  if (!page) notFound();
+
+  if (!isMapped(page.route)) notFound();
+  if (page.route === '/') return <HomePage page={page} />;
+
+  const [caseRefs, shared] = await Promise.all([
+    getCaseRefs(caseRoutesIn(page)),
+    getCorpusBindings(['about_studio_review']),
+  ]);
+  return <OfferPage page={page} caseRefs={caseRefs} shared={shared} />;
+}

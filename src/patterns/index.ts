@@ -343,5 +343,7 @@ export {
   logoGridColumns,
   type LogoGridProps,
   type LogoGridMark,
+  type LogoGridMarkArt,
+  type LogoGridMarkName,
   type LogoGridTrack,
 } from './LogoGrid';

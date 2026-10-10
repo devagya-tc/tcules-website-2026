@@ -775,6 +775,29 @@ export default function BlockCardSpecimenPage() {
           >
             <BlockCardSet items={SITUATIONS} />
           </Specimen>
+          <Specimen
+            title="bodyHtml · two paragraphs, and a link in the body"
+            note="For a corpus item whose body carries a link or a second paragraph, which `body` would flatten: one entry per paragraph, trusted inline HTML built from a parsed tree, the paragraphs a `text` apart in the card's body role. A card with an href is one anchor, so its HTML may not hold a link: a linked card lifts its trailing link into `href` and `ctaLabel`, and an unlinked one may keep it inline, as here."
+          >
+            <BlockCardSet
+              lead="none"
+              items={[
+                {
+                  id: 'html-1',
+                  title: 'Benchmark Gensuite.',
+                  bodyHtml: [
+                    'For Benchmark’s software suite, we turned the new shared patterns into working coded prototypes, and its engineers reviewed them while choices were still open.',
+                    'One engineer spotted a build problem the static designs had hidden, while there was still time to design around it. <a href="/case-studies/benchmark-gensuite-enterprise-suite-modernisation">Read the case</a>.',
+                  ],
+                },
+                {
+                  id: 'html-2',
+                  title: 'GT Tools.',
+                  body: 'A plain body beside it, for the set to compare against.',
+                },
+              ]}
+            />
+          </Specimen>
         </Layout>
       </Section>
 

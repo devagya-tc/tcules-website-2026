@@ -5,8 +5,24 @@ import { cx } from '@/lib/cx';
 
 import styles from './LogoGrid.module.css';
 
-/** One client: the same record ClientMark takes, density included — it is what sizes the mark. */
-export type LogoGridMark = Omit<ClientMarkProps, 'className'>;
+/** One client with an approved mark: the same record ClientMark takes, density included — it is what sizes the mark. */
+export type LogoGridMarkArt = Omit<ClientMarkProps, 'className'>;
+
+/**
+ * One client with NO approved mark yet (page-mapping G1): the name alone. The asset policy says
+ * "render names as fallback; never invent a logo asset", so a client without an SVG is still a
+ * member of the set, as its name.
+ */
+export type LogoGridMarkName = { name: string; src?: undefined };
+
+/**
+ * One cell of the grid. A set is ALL marks or ALL names (set-level, below): when any member lacks a
+ * mark, every cell renders its name, so no cell is a drawn logo beside a typed word at a different
+ * weight. The weights of a set stay equal because the set decides, never one cell.
+ */
+export type LogoGridMark = LogoGridMarkArt | LogoGridMarkName;
+
+const hasArt = (mark: LogoGridMark): mark is LogoGridMarkArt => Boolean(mark.src);
 
 /**
  * The width of the track the grid sits in, which decides how many cells fit across.
@@ -170,6 +186,8 @@ export function LogoGrid({
   className,
 }: LogoGridProps) {
   const beside = arrangement === 'beside';
+  /* One name, one set: a single mark without artwork turns every cell into its name. */
+  const namesOnly = marks.some((mark) => !hasArt(mark));
   const centred = !beside && align === 'center';
   const hasHead = Boolean(badge || context || heading || action);
 
@@ -190,7 +208,11 @@ export function LogoGrid({
             ...(i === marks.length - 1 ? fills.map((bp) => FILL_CLASS[bp]) : []),
           )}
         >
-          <ClientMark {...mark} />
+          {namesOnly || !hasArt(mark) ? (
+            <span className={styles.name}>{mark.name}</span>
+          ) : (
+            <ClientMark {...mark} />
+          )}
         </Cluster>
       ))}
     </Layout>

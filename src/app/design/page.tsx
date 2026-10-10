@@ -252,6 +252,11 @@ const SPECIMENS = [
         name: 'ServicePage',
         note: 'the six service lines, designed from their own content rather than the CMS translation; ?slots=1 shows the images each is designed to carry',
       },
+      {
+        href: '/design/corpus-page',
+        name: 'CorpusPage',
+        note: 'the templates the _pages corpus renders through: HomePage for /, OfferPage for a service, an audit or an expertise page, each shown with the plan that decided its bands',
+      },
     ],
   },
   {

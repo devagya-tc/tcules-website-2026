@@ -218,7 +218,27 @@ export default async function KitLogosPage() {
       </Section>
 
       {/* ── 06 ──────────────────────────────────────────────────────────────────────────── */}
-      <Label title="06 · The other surfaces">
+      <Label title="06 · Names, when a mark is missing">
+        {`A client with no approved SVG is still in the set, as its name (the asset policy: never invent a logo). The set is all marks or all names, so one missing mark turns every cell into its name and the weights stay equal. Six: ${shape(6)}.`}
+      </Label>
+      <Section aria-labelledby="logos-names">
+        <LogoGrid
+          marks={[
+            { name: 'Doodle' },
+            { name: 'Dealpath' },
+            { name: 'Benchmark Gensuite' },
+            { name: 'Eden AI' },
+            { name: 'JoVE' },
+            { name: 'Ringier Media Switzerland' },
+          ]}
+          context="Some of the teams we’ve worked with"
+          headingId="logos-names"
+          align="center"
+        />
+      </Section>
+
+      {/* ── 07 ──────────────────────────────────────────────────────────────────────────── */}
+      <Label title="07 · The other surfaces">
         Token proof, not placements: the rule and context inks on tint, ink and blue. Blue and
         ink are never this band&rsquo;s ground on a page.
       </Label>

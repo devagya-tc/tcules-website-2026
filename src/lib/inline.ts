@@ -39,3 +39,50 @@ export function inlineToText(runs: readonly InlineRun[]): string {
     })
     .join('');
 }
+
+const HTML_ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+};
+
+const escapeHtml = (text: string) => text.replace(/[&<>"]/g, (c) => HTML_ESCAPES[c] ?? c);
+
+/**
+ * Inline runs as a trusted HTML string, for the four patterns whose rich slots take HTML rather than
+ * a node: Accordion `answerHtml`, DataTable `cellsHtml`, Proof `quoteHtml`, Callout / Prose `html`.
+ * `renderInline` stays the renderer for every ReactNode slot.
+ *
+ * The string is built from a parsed tree, never from the raw markdown, and every literal is
+ * escaped, so nothing authored can open a tag. A link keeps its `href` as authored (an internal
+ * path, a `#anchor` or an absolute URL); an absolute one carries `rel="noopener"`, as
+ * `renderInline`'s does.
+ */
+export function inlineToHtml(runs: readonly InlineRun[]): string {
+  return runs
+    .map((run) => {
+      switch (run.type) {
+        case 'text':
+          return escapeHtml(run.text);
+        case 'code':
+          return `<code>${escapeHtml(run.text)}</code>`;
+        case 'br':
+          return '<br>';
+        case 'strong':
+          return `<strong>${inlineToHtml(run.children)}</strong>`;
+        case 'em':
+          return `<em>${inlineToHtml(run.children)}</em>`;
+        case 'link': {
+          const rel = /^https?:/.test(run.href) ? ' rel="noopener"' : '';
+          return `<a href="${escapeHtml(run.href)}"${rel}>${inlineToHtml(run.children)}</a>`;
+        }
+      }
+    })
+    .join('');
+}
+
+/** One paragraph of runs as `<p>…</p>`. */
+export function paragraphHtml(runs: readonly InlineRun[]): string {
+  return `<p>${inlineToHtml(runs)}</p>`;
+}
