@@ -7,9 +7,12 @@ import {
   CtaRow,
   CtaSection,
   DataTable,
+  ContentSection,
   EnquiryForm,
+  ListCard,
   PageHero,
   Proof,
+  Slider,
   type AccordionItem,
   type HeroActions,
   type HeroMedia,
@@ -139,6 +142,66 @@ export function QuoteCompact({ block }: { block: QuoteBlock }) {
   return <Proof arrangement="compact" quote={proofQuote(block)} />;
 }
 
+/* ── Quotes only (M5) ─────────────────────────────────────────────────────────── */
+
+/**
+ * M5 — a band that is only client quotes: the G slider, one quote at a time, on the page's tint, under
+ * a centred head. A lead is set when the band authors one. The attribution lines are parsed (G13), so
+ * the one- and two-line forms both arrive as name, role and company.
+ */
+export function QuoteSliderBand({ band }: { band: CorpusBand }) {
+  const lead = band.blocks.find((block) => block.type === 'paragraph');
+  const quotes = band.blocks.flatMap((block) => (block.type === 'quote' ? [block] : []));
+  return (
+    <ContentSection
+      {...head(band)}
+      data-band="G"
+      surface="tint"
+      align="center"
+      lead={lead?.type === 'paragraph' ? plain(lead.runs) : undefined}
+    >
+      <Slider label="Client quotes" slideName="testimonial" perView={1} align="center" autoplay>
+        {quotes.map((quote, index) => (
+          <li key={index}>
+            <Proof quote={proofQuote(quote)} align="center" />
+          </li>
+        ))}
+      </Slider>
+    </ContentSection>
+  );
+}
+
+/* ── Tiles ────────────────────────────────────────────────────────────────────── */
+
+export type TileRow = { title: string; body?: string; bodyHtml?: readonly string[] };
+
+/**
+ * A set of hairline tiles (ListCard `tile`), `columns` across from md: peers whose title is a claim and
+ * whose body is the proof of it. The one tile shape every media split's copy column uses.
+ */
+export function ListTiles({
+  rows,
+  columns = 2,
+}: {
+  rows: readonly TileRow[];
+  columns?: 1 | 2 | 3;
+}) {
+  return (
+    <Layout as="ul" columns={{ base: 1, md: columns }} colGap="gutter" rowGap="stack">
+      {rows.map((row) => (
+        <ListCard
+          key={row.title}
+          form="tile"
+          size="sm"
+          titleAs="h3"
+          title={row.title}
+          {...(row.bodyHtml ? { bodyHtml: row.bodyHtml } : { body: row.body })}
+        />
+      ))}
+    </Layout>
+  );
+}
+
 /* ── Body shapes shared by item sets ──────────────────────────────────────────── */
 
 /**
@@ -164,6 +227,15 @@ export function blocksHtml(blocks: readonly CorpusBlock[]): string {
           const tag = block.ordered ? 'ol' : 'ul';
           return `<${tag}>${block.items.map((item) => `<li>${inlineToHtml(item)}</li>`).join('')}</${tag}>`;
         }
+        /* A lone link line inside an answer ("Read about … at Tcules") is part of the answer: its own
+           paragraph, the link as authored. Dropping it lost words. */
+        case 'links':
+          return block.links
+            .map(
+              (link) =>
+                `<p>${inlineToHtml([{ type: 'link', href: link.href, children: link.label }])}</p>`,
+            )
+            .join('');
         default:
           return '';
       }

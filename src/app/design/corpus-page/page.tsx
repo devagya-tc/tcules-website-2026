@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Layout, Section } from '@/components';
 import { CASE_INDEX_ROUTE } from '@/app/_corpus/case-index';
 import { isCorpusCase } from '@/app/_corpus/case';
+import { isCorpusLongform } from '@/app/_corpus/longform';
 import { isCorpusOffer } from '@/app/_corpus/offer';
 import { isCorpusTool } from '@/app/_corpus/tool';
 import { listCorpusPages } from '@/content';
@@ -35,6 +36,8 @@ export default async function CorpusPageIndex() {
   const offers = pages.filter((page) => isCorpusOffer(page.route));
   const cases = pages.filter((page) => isCorpusCase(page.route));
   const tools = pages.filter((page) => isCorpusTool(page.route));
+  const longform = pages.filter((page) => isCorpusLongform(page.route));
+  const about = pages.find((page) => page.route === '/about');
   const index = pages.find((page) => page.route === CASE_INDEX_ROUTE);
 
   return (
@@ -96,6 +99,39 @@ export default async function CorpusPageIndex() {
             ))}
           </Layout>
         </Layout>
+
+        <Layout rowGap="block">
+          <h2>LongformPage, article and term</h2>
+          <Layout as="ul" rowGap="none">
+            {longform.map((page) => (
+              <ListCard
+                key={page.route}
+                title={page.route}
+                body={
+                  page.pageType === 'article'
+                    ? `${page.pageType} · ${page.bands.length} bands: the byline in the hero, the whole argument in one shell (the outline rail beside a reading column; tables, a numbered method and labelled diagrams break the prose), a tinted close that keeps its inline links.`
+                    : `${page.pageType} · ${page.bands.length} bands: the definition in the hero, its sharpest sentence as a statement, the rest of the definition and the headed sections in one shell beside the outline, a closing ask.`
+                }
+                titleAs="h3"
+                href={designCorpusPagePath(fileSlug(page.route))}
+              />
+            ))}
+          </Layout>
+        </Layout>
+
+        {about ? (
+          <Layout rowGap="block">
+            <h2>AboutPage</h2>
+            <Layout as="ul" rowGap="none">
+              <ListCard
+                title={about.route}
+                body={`${about.pageType} · ${about.bands.length} bands: the studio paragraphs beside a photograph, six services on a rail, three situations, the differences in two halves, the principles in an accordion, two people, four cases beside the working wall, client voices, the company record as two halves, the questions, a coda, the ask and a careers banner.`}
+                titleAs="h3"
+                href={designCorpusPagePath(fileSlug(about.route))}
+              />
+            </Layout>
+          </Layout>
+        ) : null}
 
         <Layout rowGap="block">
           <h2>ToolPage</h2>

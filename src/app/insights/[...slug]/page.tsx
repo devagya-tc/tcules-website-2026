@@ -3,6 +3,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Cluster, Layout, Prose, Section, Tag } from '@/components';
+import {
+  LongformRoute,
+  isCorpusLongform,
+  longformMetadata,
+  longformSlugs,
+} from '@/app/_corpus/longform';
 import { getBlogPage, type BlogBlock, type BlogImage } from '@/content';
 import { blogPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
@@ -198,8 +204,14 @@ function uniqueLabels(labels: readonly string[]): string[] {
   return [...new Set(labels.map((label) => label.trim()).filter(Boolean))];
 }
 
+export function generateStaticParams() {
+  return longformSlugs('/insights').map((slug) => ({ slug: slug.split('/') }));
+}
+
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const { slug } = await params;
+  const corpus = await longformMetadata(`/insights/${requestedSlug(slug)}`);
+  if (corpus) return corpus;
   const blog = await getBlogPage(requestedSlug(slug));
 
   if (!blog) {
@@ -251,6 +263,8 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 
 export default async function BlogPage({ params }: BlogPageProps) {
   const { slug } = await params;
+  if (isCorpusLongform(`/insights/${requestedSlug(slug)}`))
+    return <LongformRoute route={`/insights/${requestedSlug(slug)}`} />;
   const blog = await getBlogPage(requestedSlug(slug));
 
   if (!blog) notFound();

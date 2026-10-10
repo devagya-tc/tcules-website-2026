@@ -129,6 +129,11 @@
    left for the 4+4 to add to. Declared after the size rules on purpose: `height: auto` has to
    beat `.sm` and `.lg`, and both are single classes decided by source order. */
 .link {
+  /* A bare link has no box and no fixed height, so it may wrap: a 44-character label ("How AI-native
+     Product Design works at Tcules") held on one line ran 54px past a 390 viewport. A boxed button
+     keeps `nowrap`, because its height is fixed. */
+  white-space: normal;
+  text-align: start;
   height: auto;
   padding-inline: 0;
   gap: var(--btn-gap-bare);

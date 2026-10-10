@@ -786,3 +786,18 @@ Looked at and kept, with the reason:
   measures past the fold together, so the split stands (§ 1.3); the h3 band's seam is the split's.
 - **The rail's clamped outline labels** (P24): the clamp is the TableOfContents' approved geometry.
 - **The empty tool panel**: a reserved place for a gated product feature (G10), not a design surface.
+
+
+## 15 · Build notes, batch B3 (`/insights/cpq-ux-design`, `/glossary/design-system`, `/about`)
+
+| # | Where | Sheet said | Built | Why |
+|---|---|---|---|---|
+| B3.1 | the two long-form family routes | "switch the family" | one allowlist (`PASS_1_LONGFORM_ROUTES`, `src/app/_corpus/longform.tsx`), as B1.4 and B2.5 | § 1.2: unverified corpus pages must not switch silently |
+| B3.2 | CPQ · the four moves | `Steps` from the four paragraphs | read from the author's count ("Four … follow.") in `LongformShell.withMethods` | the paragraphs are not a list in the source (P28) |
+| B3.3 | `BlockCard` / `BlockCardSet` | G3b `linkScope` | `linkScope="cta"`: static frame, the cta Button is the one anchor; specimen in `/design/block-card` | About `what-we-do` |
+| B3.4 | `Button` link emphasis | not named | `white-space: normal` on `.link` | a 44-character link label ran 54px past a 390 viewport; a boxed button keeps `nowrap` |
+| B3.5 | FAQ answers | not named | `blocksHtml` renders a lone link line inside an answer | the About FAQ's "Read about AI-native Product Design at Tcules" was being dropped (also fixes earlier pages) |
+| B3.6 | quote attribution | G13 one-line form | `parseAttribution` also takes About's two-line form (a break is the comma) | About's testimonials |
+| B3.7 | shared code | — | `LongformShell.tsx` (case, article, term share one shell), `QuoteSliderBand` and `ListTiles` in `blocks.tsx` (home and offer pages now use them) | reuse, not fork |
+
+Proposals P28–P32 added; P24 extended. No register rows were added: every slot this batch needs was already registered.

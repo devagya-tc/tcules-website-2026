@@ -7,6 +7,7 @@ import {
   type BlockCardCue,
   type BlockCardFrame,
   type BlockCardImage,
+  type BlockCardLinkScope,
   type BlockCardProps,
   type BlockCardRatio,
   type BlockCardSize,
@@ -33,6 +34,7 @@ export type BlockCardSetItem = Omit<
   | 'cue'
   | 'titleAs'
   | 'frame'
+  | 'linkScope'
 > & {
   id: string;
 };
@@ -118,6 +120,12 @@ export type BlockCardSetProps = {
    * Default `none`.
    */
   frame?: BlockCardFrame;
+  /**
+   * What every linked card's `href` makes clickable (page-mapping G3b). `card` (default) the whole
+   * frame; `cta` only the cta Button, for a set whose bodies carry links of their own. A set's
+   * decision, like `frame`.
+   */
+  linkScope?: BlockCardLinkScope;
   /**
    * The cards' heading element. Default h3, under a band's h2. `h2` only where the set IS the
    * page's list directly under its h1 (the case-study index), so the outline does not skip h2.
@@ -295,6 +303,7 @@ export function BlockCardSet({
   numbered = false,
   cue,
   frame,
+  linkScope,
   titleAs,
   stagger = false,
   label,
@@ -322,6 +331,7 @@ export function BlockCardSet({
               {...card}
               cue={cue}
               frame={frame}
+              linkScope={linkScope}
               titleAs={titleAs}
               index={numbered ? 1 : undefined}
               size="lg"
@@ -334,6 +344,7 @@ export function BlockCardSet({
               {...card}
               cue={cue}
               frame={frame}
+              linkScope={linkScope}
               titleAs={titleAs}
               index={numbered ? index + 1 : undefined}
               size="md"
@@ -366,6 +377,7 @@ export function BlockCardSet({
             {...card}
             cue={cue}
             frame={frame}
+            linkScope={linkScope}
             titleAs={titleAs}
             index={numbered ? index + 1 : undefined}
             tracks={index === 0 ? 2 : 3}
@@ -446,7 +458,13 @@ export function BlockCardSet({
       aria-label={tabStop ? label : undefined}
     >
       {items.map(({ id, ...card }, index) => {
-        const shared = { index: numbered ? index + 1 : undefined, cue, frame, titleAs };
+        const shared = {
+          index: numbered ? index + 1 : undefined,
+          cue,
+          frame,
+          linkScope,
+          titleAs,
+        };
         return featured && index === 0 ? (
           <BlockCard
             key={id}

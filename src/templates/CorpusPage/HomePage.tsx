@@ -27,6 +27,7 @@ import {
   EnquiryBand,
   FaqItems,
   QuoteCompact,
+  QuoteSliderBand,
   CorpusHero,
   bodyOf,
   head,
@@ -35,7 +36,7 @@ import {
 } from './blocks';
 import { bindingNamed, slotImage } from './images';
 import styles from './CorpusPage.module.css';
-import { bandLinks, blocksOf, labelTitle, leadOf, plain } from './text';
+import { bandLinks, labelTitle, leadOf, plain } from './text';
 
 export type HomePageProps = {
   page: CorpusPage;
@@ -404,26 +405,7 @@ function WhyTcules({ page }: { page: CorpusPage }) {
 /* ── 6 · what clients say: one quote at a time ───────────────────────────────────── */
 
 function ClientVoices({ page }: { page: CorpusPage }) {
-  const b = band(page, 'client-voices');
-  const lead = b.blocks.find((x) => x.type === 'paragraph');
-  const quotes = blocksOf(b, 'quote');
-  return (
-    <ContentSection
-      {...head(b)}
-      data-band="G"
-      surface="tint"
-      align="center"
-      lead={lead?.type === 'paragraph' ? plain(lead.runs) : undefined}
-    >
-      <Slider label="Client quotes" slideName="testimonial" perView={1} align="center" autoplay>
-        {quotes.map((quote, index) => (
-          <li key={index}>
-            <Proof quote={proofQuote(quote)} align="center" />
-          </li>
-        ))}
-      </Slider>
-    </ContentSection>
-  );
+  return <QuoteSliderBand band={band(page, 'client-voices')} />;
 }
 
 /* ── 7 · how we use AI: one idea and one link ────────────────────────────────────── */

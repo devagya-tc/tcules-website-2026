@@ -212,6 +212,7 @@ export type {
   BlockCardRatio,
   BlockCardCue,
   BlockCardFrame,
+  BlockCardLinkScope,
   BlockCardTextureRecipe,
   BlockCardSetProps,
   BlockCardSetItem,

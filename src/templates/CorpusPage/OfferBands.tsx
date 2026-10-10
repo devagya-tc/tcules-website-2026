@@ -33,6 +33,7 @@ import {
   EnquiryBand,
   FaqItems,
   GenericBlocks,
+  ListTiles,
   QuoteCompact,
   TableLegend,
   bodyOf,
@@ -111,18 +112,10 @@ function ctaRow(links: readonly CorpusLink[], rule = true): ReactNode {
 }
 
 const tiles = (rows: readonly Lead[], columns: 1 | 2 | 3 = 2) => (
-  <Layout as="ul" columns={{ base: 1, md: columns }} colGap="gutter" rowGap="stack">
-    {rows.map((row) => (
-      <ListCard
-        key={row.title}
-        form="tile"
-        size="sm"
-        titleAs="h3"
-        title={row.title}
-        {...bodyOf(row.body)}
-      />
-    ))}
-  </Layout>
+  <ListTiles
+    columns={columns}
+    rows={rows.map((row) => ({ title: row.title, ...bodyOf(row.body) }))}
+  />
 );
 
 /** A trailing link run lifted out of a paragraph ("… [Read the case](/…)"): the runs without it, and the link. */

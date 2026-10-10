@@ -1,30 +1,24 @@
-import { Fragment, type ReactNode } from 'react';
-
-import { Layout, Media, Prose, Section } from '@/components';
+import { Layout } from '@/components';
 import {
   BlockCardSet,
+  CtaRow,
+  CtaSection,
   ContentSection,
   ContentSectionText,
-  CtaRow,
   DataTable,
   Statement,
-  Steps,
-  TableOfContents,
   type BlockCardSetItem,
-  type TocItem,
 } from '@/patterns';
-import { corpusImage } from '@/lib/corpus-images';
-import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
-import { FULL_COLUMN } from '@/lib/image-sizes';
+import type { CorpusBand, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 
 import { CorpusHero, EnquiryBand, TableLegend, bodyOf, head, headingIdOf } from './blocks';
+import { ArticleShell } from './LongformShell';
 import { coverFor } from './images';
-import { blocksOf, hasLink, html, plain, trimStart } from './text';
-import styles from './CorpusPage.module.css';
+import { blocksOf, hasLink, loneLink, plain } from './text';
 
-export type LongformFamily = 'case';
+export type LongformFamily = 'case' | 'article' | 'term';
 
 export type LongformPageProps = {
   page: CorpusPage;
@@ -32,8 +26,6 @@ export type LongformPageProps = {
   /** The cases the page cites, as each case's own page describes them (title, cover). */
   caseRefs: Readonly<Record<string, CorpusCaseRef>>;
 };
-
-type TableBlock = Extract<CorpusBlock, { type: 'table' }>;
 
 /**
  * TIER 3 — the long-form page: a page you would read like an article, from the `_pages/` corpus
@@ -50,10 +42,19 @@ type TableBlock = Extract<CorpusBlock, { type: 'table' }>;
  *            the argument shell, from the first band after the record to the last band before a
  *            table of peers; the impact cards; the cases to read next; the enquiry.
  *
+ *   article  the hero (the byline as its extras row), the whole argument in one shell with the
+ *            outline rail, then the close the author wrote last: a tinted band whose sentences keep
+ *            their inline links, with the ask as a link button.
+ *
+ *   term     the hero holds the definition; the term's sharpest sentence is its statement (a split
+ *            from the hero); the rest of the definition opens the shell as a head-less section above
+ *            the headed ones; a close with one link as the page's ask.
+ *
  * Nothing is reordered, and every word is the corpus's.
  */
 export function LongformPage({ page, family, caseRefs }: LongformPageProps) {
-  if (family !== 'case') return null;
+  if (family === 'article') return <ArticlePage page={page} />;
+  if (family === 'term') return <TermPage page={page} />;
   return <CasePage page={page} caseRefs={caseRefs} />;
 }
 
@@ -88,10 +89,6 @@ function CasePage({
      the next band as a statement (J) so the hero holds its fold. */
   const [lede1, lede2, ...thesis] = hero.lede;
   const ledes = [lede1, lede2].filter((runs): runs is InlineRun[] => Boolean(runs));
-  const outline: TocItem[] = shell.map((band) => ({
-    label: band.headingText,
-    href: `#${headingIdOf(band)}` as const,
-  }));
 
   return (
     <>
@@ -110,32 +107,127 @@ function CasePage({
 
       {record ? <RecordBand band={record} /> : null}
 
-      {shell.length > 0 ? (
-        /* The fold rule's exception for reading (visual-direction § 1.3): the argument is a document read by
-           scrolling, beside its own outline, so no height could hold it. A plain wrapper, as the index's. */
-        <div data-fold-exempt="Long-form argument: a document read by scrolling beside its outline (page-mapping M19).">
-          <Section as="div" surface="paper" data-band="long-form">
-            <Layout
-              columns={outline.length >= 2 ? { base: 1, lg: [1, 4] } : { base: 1 }}
-              colGap="column"
-              rowGap="stack"
-              align="start"
-            >
-              {outline.length >= 2 ? <TableOfContents items={outline} /> : null}
-              <Layout as="article" rowGap="stack">
-                {shell.map((band) => (
-                  <ArticleSection key={band.id} page={page} band={band} />
-                ))}
-              </Layout>
-            </Layout>
-          </Section>
-        </div>
-      ) : null}
+      {shell.length > 0 ? <ArticleShell page={page} sections={shell} /> : null}
 
       {peers ? <ImpactBand band={peers} /> : null}
       {related ? <RelatedBand page={page} band={related} caseRefs={caseRefs} /> : null}
       {close ? <EnquiryBand page={page} band={close} surface="tint" /> : null}
     </>
+  );
+}
+
+/* ── The article ──────────────────────────────────────────────────────────────── */
+
+/**
+ * An article: the hero, the whole argument in one shell, and the close. The byline is the hero's
+ * extras row, verbatim (PageHero's `credits` and `dates` would replace its words). The close is the
+ * last band when it ends on a lone link: its sentences keep their inline links, so it is a tinted
+ * ContentSection with the ask as a link button (M3, the form with inline links), never a CtaSection.
+ */
+function ArticlePage({ page }: { page: CorpusPage }) {
+  const { shell, close } = splitClose(page.bands);
+  return (
+    <>
+      <CorpusHero page={page} texture />
+      {shell.length > 0 ? <ArticleShell page={page} sections={shell} /> : null}
+      {close ? <CloseBand band={close} /> : null}
+    </>
+  );
+}
+
+/* ── The term ─────────────────────────────────────────────────────────────────── */
+
+/**
+ * A defined term. The hero keeps the definition (its first paragraph); the sharpest sentence after
+ * it is the term's statement (J, a split from the hero); the paragraphs that follow open the shell as
+ * a head-less section, so the definition reads on into the headed sections beside the same rail.
+ */
+function TermPage({ page }: { page: CorpusPage }) {
+  const { hero } = page;
+  const [definition, sharpest, ...rest] = hero.lede;
+  const { shell, close } = splitClose(page.bands);
+  const continued: CorpusBand | undefined =
+    rest.length > 0
+      ? {
+          id: 'definition-2',
+          heading: [],
+          headingText: '',
+          blocks: rest.map((runs) => ({ type: 'paragraph' as const, runs })),
+        }
+      : undefined;
+  return (
+    <>
+      <CorpusHero page={page} ledes={definition ? [definition] : []} texture />
+      {sharpest ? (
+        <Statement as="p" align="start" id="definition">
+          {plain(sharpest)}
+        </Statement>
+      ) : null}
+      <ArticleShell page={page} sections={continued ? [continued, ...shell] : shell} />
+      {close ? <CloseBand band={close} /> : null}
+    </>
+  );
+}
+
+/* ── The close ────────────────────────────────────────────────────────────────── */
+
+/** The link a band ends on: its last lone-link line (the full stop, if any, is dropped). */
+function closingLink(band: CorpusBand) {
+  const last = band.blocks.filter((block) => block.type !== 'comment').at(-1);
+  if (last?.type === 'links' && last.links.length === 1) return last.links[0];
+  if (last?.type === 'paragraph') {
+    const link = loneLink(last.runs);
+    return link ? { href: link.href, label: link.children, labelText: plain(link.children) } : null;
+  }
+  return null;
+}
+
+/**
+ * The bands before the close, and the close: the last band, when it ends on a lone link. A page whose
+ * last band is not an ask has no close, and every band is in the shell.
+ */
+function splitClose(bands: readonly CorpusBand[]) {
+  const last = bands.at(-1);
+  const close = last && closingLink(last) ? last : undefined;
+  return { shell: close ? bands.slice(0, -1) : [...bands], close };
+}
+
+/**
+ * M3 — a close that is one ask. Copy with no inline link is a CtaSection `open` (heading, its
+ * sentence, the link as the page's one solid). Copy WITH inline links keeps them, so it is a tinted
+ * ContentSection with the sentences as running text and the ask as a link button: CtaSection's body
+ * is plain strings, and a link in a sentence must survive.
+ */
+function CloseBand({ band }: { band: CorpusBand }) {
+  const link = closingLink(band);
+  if (!link) return null;
+  const paragraphs = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' && !loneLink(block.runs) ? [block.runs] : [],
+  );
+  if (!paragraphs.some(hasLink)) {
+    return (
+      <CtaSection
+        id={band.id}
+        data-band="L"
+        arrangement="open"
+        surface="tint"
+        heading={band.headingText}
+        body={paragraphs[0] ? [plain(paragraphs[0])] : undefined}
+        actions={[{ label: link.labelText, href: link.href }]}
+      />
+    );
+  }
+  return (
+    <ContentSection {...head(band)} data-band="L" surface="tint">
+      <ContentSectionText>
+        <Layout rowGap="text">
+          {paragraphs.map((runs, index) => (
+            <p key={index}>{renderInline(runs)}</p>
+          ))}
+        </Layout>
+      </ContentSectionText>
+      <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />
+    </ContentSection>
   );
 }
 
@@ -195,124 +287,6 @@ function RecordBand({ band }: { band: CorpusBand }) {
         </ContentSectionText>
       ) : null}
     </ContentSection>
-  );
-}
-
-/* ── The argument shell ───────────────────────────────────────────────────────── */
-
-/** A numbered list whose items each open with a one-word action and a full stop ("Stabilise. …"). */
-function stepsOf(items: readonly InlineRun[][]) {
-  const steps = items.map((runs) => {
-    const [first, ...rest] = runs;
-    if (first?.type !== 'text') return null;
-    const match = /^([^.]{1,40}\.)\s+(.*)$/s.exec(first.text);
-    if (!match) return null;
-    const bodyRuns: InlineRun[] = [{ type: 'text', text: match[2] ?? '' }, ...rest];
-    return { title: match[1] ?? '', ...bodyOf(trimStart(bodyRuns)) };
-  });
-  return steps.every(Boolean) ? (steps as NonNullable<(typeof steps)[number]>[]) : null;
-}
-
-const listHtml = (block: Extract<CorpusBlock, { type: 'list' }>) => {
-  const tag = block.ordered ? 'ol' : 'ul';
-  return `<${tag}>${block.items.map((item) => `<li>${inlineToHtml(item)}</li>`).join('')}</${tag}>`;
-};
-
-/**
- * One section of the argument: its h2, then its blocks in order. Consecutive paragraphs and lists share
- * one Prose flow; a numbered method is Steps; a table is a boxed DataTable; a bound artefact is a
- * Media placed after the section's last list, or else its last paragraph (the block that names it).
- */
-function ArticleSection({ page, band }: { page: CorpusPage; band: CorpusBand }) {
-  const binding = page.composition.mediaBindings.find(
-    (b) => b.bound && b.supportsSection === band.id,
-  );
-  const blocks = band.blocks.filter((block) => block.type !== 'comment');
-
-  let mediaAfter = -1;
-  if (binding) {
-    blocks.forEach((block, index) => {
-      if (block.type === 'list') mediaAfter = index;
-    });
-    if (mediaAfter < 0) {
-      blocks.forEach((block, index) => {
-        if (block.type === 'paragraph') mediaAfter = index;
-      });
-    }
-  }
-
-  const out: ReactNode[] = [];
-  let flow = '';
-  const flush = () => {
-    if (flow) out.push(<Prose key={`prose-${out.length}`} html={flow} className={styles.reading} />);
-    flow = '';
-  };
-
-  blocks.forEach((block, index) => {
-    switch (block.type) {
-      case 'paragraph':
-        flow += html(block.runs);
-        break;
-      case 'labelled':
-        flow += `<p><strong>${inlineToHtml(block.label)}</strong> ${inlineToHtml(block.body)}</p>`;
-        break;
-      case 'list': {
-        const steps = block.ordered ? stepsOf(block.items) : null;
-        if (steps) {
-          flush();
-          out.push(<Steps key={`steps-${out.length}`} steps={steps} />);
-        } else {
-          flow += listHtml(block);
-        }
-        break;
-      }
-      case 'table':
-        flush();
-        out.push(
-          <CorpusTable
-            key={`table-${out.length}`}
-            table={block}
-            labelledBy={headingIdOf(band)}
-          />,
-        );
-        break;
-      case 'quote':
-      case 'item':
-      case 'links':
-      case 'form':
-        break;
-    }
-    if (binding && index === mediaAfter) {
-      flush();
-      out.push(
-        <Media key={`media-${out.length}`} image={corpusImage(binding)} sizes={FULL_COLUMN} />,
-      );
-    }
-  });
-  flush();
-
-  return (
-    <Layout as="section" id={band.id} aria-labelledby={headingIdOf(band)} rowGap="block">
-      <h2 id={headingIdOf(band)}>{band.headingText}</h2>
-      {out.map((node, index) => (
-        <Fragment key={index}>{node}</Fragment>
-      ))}
-    </Layout>
-  );
-}
-
-function CorpusTable({ table, labelledBy }: { table: TableBlock; labelledBy: string }) {
-  const [key = [], ...columns] = table.header;
-  return (
-    <DataTable
-      labelledBy={labelledBy}
-      keyColumn={{ heading: plain(key) }}
-      columns={columns.map((cell) => ({ heading: plain(cell) }))}
-      rows={table.rows.map((row) => ({
-        header: plain(row[0] ?? []),
-        cellsHtml: row.slice(1).map((cell) => inlineToHtml(cell)),
-      }))}
-    />
   );
 }
 

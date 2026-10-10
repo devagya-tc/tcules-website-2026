@@ -128,3 +128,15 @@ export function lastIndexWhere<T>(items: readonly T[], test: (item: T) => boolea
   }
   return -1;
 }
+
+/**
+ * A paragraph that is one link and nothing else, with or without the full stop the author closed it
+ * with (`[Tell us where quotes slow down](/contact).`): the link. A line like that is an ask, so it
+ * becomes a button, and the button draws no full stop (page-mapping § 0 rule 1).
+ */
+export function loneLink(runs: readonly InlineRun[]): Extract<InlineRun, { type: 'link' }> | null {
+  const [first, second, ...rest] = runs;
+  if (first?.type !== 'link' || rest.length > 0) return null;
+  if (second === undefined) return first;
+  return second.type === 'text' && /^\s*[.]?\s*$/.test(second.text) ? first : null;
+}

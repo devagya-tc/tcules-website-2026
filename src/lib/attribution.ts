@@ -17,7 +17,14 @@ import { inlineToText, type InlineRun } from './inline';
 export type Attribution = { name: string; role?: string; company: string };
 
 export function parseAttribution(line: string | readonly InlineRun[]): Attribution {
-  const text = (typeof line === 'string' ? line : inlineToText(line)).trim();
+  /* The two-line form: a hard break ends the name's line, so the break is the comma. */
+  const text = (
+    typeof line === 'string'
+      ? line
+      : line
+          .map((run) => (run.type === 'br' ? ', ' : inlineToText([run])))
+          .join('')
+  ).trim();
   const parts = text
     .split(',')
     .map((part) => part.trim())

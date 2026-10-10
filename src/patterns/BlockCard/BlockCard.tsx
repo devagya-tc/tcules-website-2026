@@ -232,6 +232,9 @@ const DOWNLOAD_LABEL = 'Download';
  */
 const FILL_BOX = { width: 3, height: 2 } as const;
 
+/** What an `href` makes clickable. See `BlockCardProps.linkScope`. */
+export type BlockCardLinkScope = 'card' | 'cta';
+
 /**
  * A closed card record. Grid geometry, surface and action rendering all stay outside the public
  * API: the parent owns the grid, the nearest Section owns the surface, and BlockCard owns its
@@ -250,8 +253,9 @@ export type BlockCardProps = {
    * The body as trusted inline HTML, one entry per paragraph (page-mapping G3): for a corpus item
    * whose body carries a link, a bold run or a second paragraph, which `body: string` would flatten.
    * Built by `inlineToHtml` from a parsed tree at the content seam, never from a raw string a caller
-   * typed. Exclusive with `body`. A card with an `href` is ONE anchor, so its HTML may not hold a
-   * link: a link inside a whole-card link is an anchor in an anchor.
+   * typed. Exclusive with `body`. A card whose `href` makes the whole frame the anchor (`linkScope`
+   * `card`) may not hold a link: a link inside a whole-card link is an anchor in an anchor. Under
+   * `linkScope` `cta` it may.
    */
   bodyHtml?: readonly string[];
   /**
@@ -314,6 +318,15 @@ export type BlockCardProps = {
    * cards with a cover only; ignored otherwise.
    */
   grow?: boolean;
+  /**
+   * What an `href` makes clickable (page-mapping G3b). `card` (default) is the whole frame as ONE anchor,
+   * said by its cue. `cta` keeps the frame a plain `<div>` and makes the cta Button the card's ONLY
+   * anchor, so the card's body may carry links of its own without an anchor sitting inside an anchor.
+   * It forces the `cta` cue (a card whose pointer target is one small button has no title cue to give),
+   * and a set takes it for every card, like `frame`: a row of six where one answers the pointer
+   * differently reads as a recommendation.
+   */
+  linkScope?: BlockCardLinkScope;
   /**
    * One short format line for an artefact — "PDF · 12 pages", "Template · Figma" — in the mono
    * label voice, after the copy: on the action row beside a `download` or `cta` cue, or on its own
@@ -446,6 +459,7 @@ export function BlockCard({
   index,
   cue,
   frame = 'none',
+  linkScope = 'card',
   meta,
   grow = false,
 }: BlockCardProps) {
@@ -518,8 +532,11 @@ export function BlockCard({
 
   /* Which cue a linked card carries. The caller's, or the shape's default: a covered or icon card
      is title-cued, a text-only card carries the cta (every live route's shape). */
+  const ctaScoped = destination !== undefined && linkScope === 'cta';
   const cueKind: BlockCardCue | undefined = destination
-    ? (cue ?? (textOnly ? 'cta' : 'title'))
+    ? ctaScoped
+      ? 'cta'
+      : (cue ?? (textOnly ? 'cta' : 'title'))
     : undefined;
 
   const download = cueKind === 'download';
@@ -553,14 +570,28 @@ export function BlockCard({
      one, so "DOWNLOAD   PDF · 12 PAGES" reads as one statement about the file. */
   const ctaButton =
     cueKind === 'cta' || download ? (
-      <Button
-        as="span"
-        emphasis="link"
-        tone="primary"
-        icon={<Icon name={download ? 'download' : 'arrow-right'} />}
-      >
-        {label}
-      </Button>
+      ctaScoped ? (
+        /* The static frame's one anchor (G3b): a real link, in the tab order, so the body above it
+           can hold links of its own. */
+        <Button
+          as="a"
+          href={destination}
+          emphasis="link"
+          tone="primary"
+          icon={<Icon name="arrow-right" />}
+        >
+          {label}
+        </Button>
+      ) : (
+        <Button
+          as="span"
+          emphasis="link"
+          tone="primary"
+          icon={<Icon name={download ? 'download' : 'arrow-right'} />}
+        >
+          {label}
+        </Button>
+      )
     ) : null;
   const cta =
     ctaButton || metaNode ? (
@@ -714,7 +745,7 @@ export function BlockCard({
 
   return (
     <li className={cx(styles.root, SIZE_CLASS[step], boxed && styles.boxed)}>
-      {destination ? (
+      {destination && !ctaScoped ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it
            declares that this anchor's hover, focus-visible and pressed states are the states of
            every link Button inside it. Without it the cta would sit at rest forever. Emitted only

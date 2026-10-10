@@ -19,6 +19,7 @@ export type {
 export { ServicePage } from './ServicePage';
 export type { ServicePageProps } from './ServicePage';
 export {
+  AboutPage,
   HomePage,
   LongformPage,
   OfferPage,
@@ -31,6 +32,7 @@ export {
   slugOf,
 } from './CorpusPage';
 export type {
+  AboutPageProps,
   HomePageProps,
   LongformFamily,
   LongformPageProps,

@@ -2016,6 +2016,31 @@ export default function BlockCardSpecimenPage() {
             />
           </Specimen>
           <Specimen
+            title='linkScope="cta" · the static frame'
+            note="A card whose body carries a link of its own cannot be one whole-card anchor (an anchor inside an anchor). With linkScope cta the frame stays a div and the cta Button is the card's only anchor, and the set takes it for every card so the six answer the pointer alike (page-mapping G3b). The first card's body links to AI engineering; the pointer rests on the cta, never the card."
+          >
+            <BlockCardSet
+              lead="none"
+              across={3}
+              frame="box"
+              linkScope="cta"
+              scroll="never"
+              items={SHAPE_ICONS.map((card, index) => ({
+                id: card.id,
+                icon: card.icon,
+                title: card.title,
+                bodyHtml:
+                  index === 0
+                    ? [
+                        'Frontend, backend, integrations, <a href="/services/software-development/ai-product-engineering">AI engineering</a>, testing and release.',
+                      ]
+                    : [card.body ?? ''],
+                href: ROUTES.services,
+                ctaLabel: 'Explore services',
+              }))}
+            />
+          </Specimen>
+          <Specimen
             title="A text-only set of five · stays md"
             note="Four text peers, h4 still: the text card row of § 7.2."
           >

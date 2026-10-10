@@ -316,7 +316,9 @@ Append one entry per problem, newest last.
   in code", "Where it stands", "What to take from it". The heading on the page stays as written.
 - **Why:** an outline is a map, and a label that is cut mid-clause stops being one. Every case,
   article and glossary term on the long-form template meets the same clamp, so the field is a
-  corpus-wide ask (64 pages).
+  corpus-wide ask (64 pages). Batch B3 meets it on two more pages: `/insights/cpq-ux-design` (five of
+  nine section headings run 41 to 58 characters) and `/glossary/design-system` ("How does a design system
+  differ from a component library?", 56).
 
 ### P25 · `/case-studies/benchmark-gensuite-…` · related · two cases cited by a link line alone
 
@@ -356,3 +358,66 @@ Append one entry per problem, newest last.
 - **Proposal:** use typographic quotation marks (“ ” and ’) in both sentences. No word changes.
 - **Why:** the page renders the authored characters, so the fix belongs in the copy. Found by the B2
   critic pass; a corpus-wide sweep for straight quotes would catch the rest in one edit.
+
+### P28 · `/insights/cpq-ux-design` · make-the-configuration-rules-explain-themselves · four numbered moves written as four paragraphs
+
+- **Page and band:** the band says "Four design moves follow." and then sets four paragraphs, each of
+  which opens with the move as a sentence ("Say why an option is unavailable.").
+- **Problem:** the structure is in the sentence, not in the markup. The page shows the four moves as
+  numbered rows because that is what the author's count announces, but the template has to infer it from
+  "Four … follow." and from each paragraph's first sentence. A rewrite that drops the count word, or a
+  paragraph that opens with a clause, would silently turn four numbered moves back into four paragraphs.
+  Move two's first sentence runs 58 characters, so a title cut at a fixed length would split it.
+- **Proposal:** author the four moves as an ordered list whose items open with the bold move
+  ("**Say why an option is unavailable.** …"), keeping every word. The same shape works for any article
+  that sets a method.
+- **Why:** a numbered list is a structure the corpus parser and the CMS both name, so the page no longer
+  depends on reading a count out of prose. The page renders the paragraphs as written, as rows, in the
+  meantime.
+
+### P29 · `/about` · leadership · the studio paragraph and its link are filed under the second person
+
+- **Page and band:** in `leadership` the `###` for Rakesh Chitroda is followed by his bio and link, and then by
+  "The wider Tcules studio brings designers and engineers together…" and "[Follow Tcules on LinkedIn]".
+- **Problem:** by the markdown's own structure the studio paragraph and its link belong to Rakesh's entry,
+  so a reader of the source, a parser and a screen reader all attach "the wider Tcules studio" to him. The
+  page sets them after both people, as the band's closing note, because that is how they read.
+- **Proposal:** separate the two: end Rakesh's entry after his link and set the studio paragraph as a
+  plain paragraph of the band under a separator, or as a third `###` "The wider studio" with its own link.
+- **Why:** the structure would then say what the page shows, and a CMS model of `person` blocks would not
+  need a note that the last two blocks are not his.
+
+### P30 · `/about` · who-we-work-with and work-you-can-inspect · sentences that continue after a bold name or a link
+
+- **Page and band:** the three situations ("**Growth-stage and post-PMF SaaS teams** dealing with complex
+  workflows…") and the four cases ("[Doodle](…) shows research changing…").
+- **Problem:** each name is a title on its card and what follows it starts lower-case, so the body reads as
+  half a sentence under its own title ("Doodle" / "shows research changing the underlying product model…").
+  Same family as P18, which logged the run-in labels on other pages.
+- **Proposal:** write each body as a sentence that stands alone ("Doodle's research changed the underlying
+  product model for enterprise scheduling."), or keep the authored form and accept a card that reads as a
+  title plus its predicate.
+- **Why:** a card body is read on its own, away from the sentence it came from. Rendered as written, with
+  the lower-case body, in the meantime.
+
+### P31 · `/insights/cpq-ux-design` and `/about` · straight quote marks
+
+- **Page and band:** CPQ: "enterprise user", "Unavailable", "Not available with a 12-month term"; About: the
+  three client quotes in `testimonials`, which open and close with ".
+- **Problem:** typed with straight marks ("). The About quotes are set in the testimonial slider's display
+  italic at about 56px, where a straight mark reads as a typing slip beside the serif. Same finding as P27.
+- **Proposal:** use typographic marks (“ ” and ’) in every quotation. No word changes. A corpus-wide sweep
+  for straight quotes (P27) would catch these in one edit.
+- **Why:** the page renders the authored characters, so the fix belongs in the copy.
+
+### P32 · `/insights/cpq-ux-design` · decide-which-kind-of-quote-you-are-designing-for · the comparison table has an empty first header
+
+- **Page and band:** the table's header row is `|  | Rep-assembled quote | Expert-assembled quote |`, with
+  nothing in its first cell.
+- **Problem:** a column with no header gives a screen reader nothing to announce for the row labels
+  ("Typical contents", "Who changes it"…), and the table's name has to come from the section's heading. The
+  page renders the cell empty, as authored.
+- **Proposal:** give the key column a word, such as "Aspect" or "Question", the way the checklist table in
+  `cpq-ux-checklist` names its first column "Question".
+- **Why:** every row header gets a column to belong to, and the same fix keeps both tables on the page one
+  shape.

@@ -10,3 +10,5 @@ export { ToolPage } from './ToolPage';
 export type { ToolPageProps } from './ToolPage';
 export { corpusEnquiryForm, proofQuote } from './blocks';
 export { coverFor, slugOf } from './images';
+export { AboutPage } from './AboutPage';
+export type { AboutPageProps } from './AboutPage';
