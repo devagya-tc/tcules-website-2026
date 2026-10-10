@@ -1,6 +1,7 @@
 import { fixtureSource } from './sources/fixtures';
 import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
+import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
 import { blogSource } from './sources/strapi/blog';
 import { careersSource } from './sources/strapi/careers';
@@ -22,6 +23,7 @@ import { termsOfUseSource } from './sources/strapi/terms-of-use';
 import { toolSource } from './sources/strapi/tool';
 import type {
   AboutContentSource,
+  CorpusContentSource,
   AuditContentSource,
   BlogContentSource,
   CareerContentSource,
@@ -74,6 +76,8 @@ const servicesSource: ServiceContentSource = serviceSource;
 const servicesMastersSource: ServicesMasterContentSource = servicesMasterSource;
 const termsOfUsePagesSource: TermsOfUseContentSource = termsOfUseSource;
 const toolsSource: ToolContentSource = toolSource;
+/** The `_pages/` corpus: first-pass pages read from markdown on disk, parsed once per process. */
+const corpusPagesSource: CorpusContentSource = corpusSource;
 
 export const getPage = source.getPage.bind(source);
 export const listPages = source.listPages.bind(source);
@@ -129,6 +133,8 @@ export const getServicesMasterPage =
 export const getTermsOfUsePage =
   termsOfUsePagesSource.getTermsOfUsePage.bind(termsOfUsePagesSource);
 export const getToolPage = toolsSource.getToolPage.bind(toolsSource);
+export const getCorpusPage = corpusPagesSource.getCorpusPage.bind(corpusPagesSource);
+export const listCorpusPages = corpusPagesSource.listCorpusPages.bind(corpusPagesSource);
 
 export type {
   Page,

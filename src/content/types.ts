@@ -1657,3 +1657,6 @@ export type ContentSource = {
    */
   getNavigation(): Promise<Navigation>;
 };
+
+/* The `_pages/` corpus view models (corpus-types.ts), re-exported so callers import `@/content`. */
+export type * from './corpus-types';

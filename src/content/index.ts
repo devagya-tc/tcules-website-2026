@@ -36,6 +36,8 @@ export {
   getServicesMasterPage,
   getTermsOfUsePage,
   getToolPage,
+  getCorpusPage,
+  listCorpusPages,
 } from './source';
 export type {
   Page,
@@ -189,3 +191,17 @@ export type {
   ToolContentColumn,
   ToolContentSource,
 } from './types';
+export type {
+  CorpusPage,
+  CorpusSeo,
+  CorpusBreadcrumb,
+  CorpusConversion,
+  CorpusMediaBinding,
+  CorpusComposition,
+  CorpusHero,
+  CorpusLink,
+  CorpusFormField,
+  CorpusBlock,
+  CorpusBand,
+  CorpusContentSource,
+} from './corpus-types';

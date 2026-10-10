@@ -12,6 +12,7 @@
     "tokens:check": "node scripts/tokens-check.mjs",
     "specimens:check": "node scripts/specimens-check.mjs",
     "classes:check": "node scripts/classes-check.mjs",
+    "corpus:check": "node --no-warnings scripts/corpus-check.mjs",
     "aria:check": "node scripts/aria-check.mjs",
     "shots": "node scripts/shots.mjs",
     "fold:check": "node scripts/fold-check.mjs",
@@ -19,7 +20,7 @@
     "design:check": "node scripts/design-brief.mjs --check",
     "vocabulary": "node scripts/design-brief.mjs --vocabulary > docs/vocabulary.md",
     "guide:dist": "node scripts/guide-dist.mjs",
-    "verify": "npm run lint && npm run typecheck && npm run tokens:check && npm run classes:check && npm run specimens:check && npm run design:check && npm run photos:check",
+    "verify": "npm run lint && npm run typecheck && npm run tokens:check && npm run classes:check && npm run specimens:check && npm run design:check && npm run photos:check && npm run corpus:check",
     "format": "prettier --write .",
     "texture": "node scripts/texture.mjs",
     "photos:tone": "node scripts/photos-tone.mjs",
@@ -31,11 +32,13 @@
     "node": ">=20.11.1"
   },
   "dependencies": {
+    "js-yaml": "^4.3.1",
     "next": "^16.3.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
