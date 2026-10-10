@@ -57,6 +57,14 @@ export type DataTableRow = {
 
 export type DataTableProps = {
   /**
+   * `false` draws the table as a RECORD with no header row (page-mapping G4a): a key/value list such
+   * as "At a glance", whose first row is a pair rather than a heading. Only the rows are drawn, the
+   * key column and at most one value column. `keyColumn.heading` and `columns[].heading` are then
+   * unused for display (pass an empty string), so nothing is invented to fill a head that was never
+   * authored; name the table with `labelledBy` or `caption`. Default `true`.
+   */
+  head?: boolean;
+  /**
    * The id of a heading that already names this table (page-mapping G4): a corpus table sits under
    * its section's own h2, so a visible caption would print the heading twice. Used for the scroll
    * region and the `<table>` when there is no `caption`; a caption wins. Without either, the region
@@ -125,6 +133,7 @@ function warn(message: string) {
  * the stacked order). Zero rows renders nothing.
  */
 export function DataTable({
+  head = true,
   caption,
   labelledBy,
   summary,
@@ -149,6 +158,10 @@ export function DataTable({
 
   if (rows.length < 3 || rows.length > 12) {
     warn(`received ${rows.length} rows; the designed range is three to twelve.`);
+  }
+
+  if (!head && columns.length > 1) {
+    warn('a head-less record takes at most one value column; the others read without a head.');
   }
 
   const keyBehaviour = keyColumn.behaviour ?? 'hold';
@@ -193,25 +206,30 @@ export function DataTable({
                   ? { 'aria-labelledby': labelledBy }
                   : {})}
             >
-              <thead>
-                <tr>
-                  <th scope="col" className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}>
-                    {keyColumn.heading}
-                  </th>
-                  {columns.map((column, index) => (
+              {head ? (
+                <thead>
+                  <tr>
                     <th
-                      key={index}
                       scope="col"
-                      className={cx(
-                        styles.colHead,
-                        BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
-                      )}
+                      className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}
                     >
-                      {column.heading}
+                      {keyColumn.heading}
                     </th>
-                  ))}
-                </tr>
-              </thead>
+                    {columns.map((column, index) => (
+                      <th
+                        key={index}
+                        scope="col"
+                        className={cx(
+                          styles.colHead,
+                          BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
+                        )}
+                      >
+                        {column.heading}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+              ) : null}
               <tbody>
                 {rows.map((row, rowIndex) => {
                   if (!row.header.trim()) warn(`row ${rowIndex + 1} has a blank row header.`);

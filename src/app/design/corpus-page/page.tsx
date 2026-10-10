@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 
 import { Layout, Section } from '@/components';
+import { CASE_INDEX_ROUTE } from '@/app/_corpus/case-index';
+import { isCorpusCase } from '@/app/_corpus/case';
 import { isCorpusOffer } from '@/app/_corpus/offer';
+import { isCorpusTool } from '@/app/_corpus/tool';
 import { listCorpusPages } from '@/content';
 import { designCorpusPagePath } from '@/lib/routes';
 import { ListCard } from '@/patterns';
@@ -30,6 +33,9 @@ const fileSlug = (route: string) =>
 export default async function CorpusPageIndex() {
   const pages = await listCorpusPages();
   const offers = pages.filter((page) => isCorpusOffer(page.route));
+  const cases = pages.filter((page) => isCorpusCase(page.route));
+  const tools = pages.filter((page) => isCorpusTool(page.route));
+  const index = pages.find((page) => page.route === CASE_INDEX_ROUTE);
 
   return (
     <Section>
@@ -75,6 +81,50 @@ export default async function CorpusPageIndex() {
             ))}
           </Layout>
         </Layout>
+
+        <Layout rowGap="block">
+          <h2>LongformPage</h2>
+          <Layout as="ul" rowGap="none">
+            {cases.map((page) => (
+              <ListCard
+                key={page.route}
+                title={page.route}
+                body={`${page.pageType} · ${page.bands.length} bands: the facts as a record, the argument in one shell (a table-of-contents rail beside a reading column, a numbered method as Steps, bound artefacts as Media), the impact as cards, the cases to read next, the form.`}
+                titleAs="h3"
+                href={designCorpusPagePath(fileSlug(page.route))}
+              />
+            ))}
+          </Layout>
+        </Layout>
+
+        <Layout rowGap="block">
+          <h2>ToolPage</h2>
+          <Layout as="ul" rowGap="none">
+            {tools.map((page) => (
+              <ListCard
+                key={page.route}
+                title={page.route}
+                body={`${page.pageType} · ${page.bands.length} bands: the instructions beside the tool's shot, the tool's place, two boxed tables that teach a reader to read its output, a limits note, a close.`}
+                titleAs="h3"
+                href={designCorpusPagePath(fileSlug(page.route))}
+              />
+            ))}
+          </Layout>
+        </Layout>
+
+        {index ? (
+          <Layout rowGap="block">
+            <h2>CaseStudyIndex, grouped</h2>
+            <Layout as="ul" rowGap="none">
+              <ListCard
+                title={index.route}
+                body={`${index.pageType} · ${index.bands.length} bands: the case-study index fed grouped sections. Each group's shape comes from its position and count: a featured set, equal covers, thumbnail rows in two columns, a story with its client's words, then the form close.`}
+                titleAs="h3"
+                href={designCorpusPagePath(fileSlug(index.route))}
+              />
+            </Layout>
+          </Layout>
+        ) : null}
       </Layout>
     </Section>
   );

@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Media, type SectionSurface } from '@/components';
+import { Cluster, Icon, Layout, Media, type SectionSurface } from '@/components';
 import {
   Accordion,
   Breadcrumbs,
@@ -212,7 +212,6 @@ export function EnquiryBand({
   surface: SectionSurface;
 }) {
   const lead = band.blocks.find((block) => block.type === 'paragraph');
-  const conversion = page.conversion;
   return (
     <CtaSection
       id={band.id}
@@ -220,27 +219,56 @@ export function EnquiryBand({
       surface={surface}
       heading={band.headingText}
       body={lead && lead.type === 'paragraph' ? [plain(lead.runs)] : undefined}
-      form={
-        <EnquiryForm
-          variant="enquiry"
-          urlLabel="Product or company URL"
-          action={ENDPOINTS.enquiry}
-          success={
-            conversion?.onSuccess
-              ? { heading: conversion.onSuccess.heading, body: conversion.onSuccess.body }
-              : undefined
-          }
-          context={{
-            originRoute: page.route,
-            placement: 'corpus-close',
-            family: page.pageType,
-            serviceOrAudit: page.slug,
-            referrer: '',
-            campaign: '',
-          }}
-        />
-      }
+      form={corpusEnquiryForm(page)}
     />
+  );
+}
+
+/**
+ * The enquiry form the page's `conversion` describes: fields, submit label and success words as
+ * authored, hidden context naming the page and its family. Shared by the template's close and by a
+ * route that hands the form to a template which takes it as a slot (CaseStudyIndex).
+ */
+export function corpusEnquiryForm(page: CorpusPage) {
+  const conversion = page.conversion;
+  return (
+    <EnquiryForm
+      variant="enquiry"
+      urlLabel="Product or company URL"
+      action={ENDPOINTS.enquiry}
+      success={
+        conversion?.onSuccess
+          ? { heading: conversion.onSuccess.heading, body: conversion.onSuccess.body }
+          : undefined
+      }
+      context={{
+        originRoute: page.route,
+        placement: 'corpus-close',
+        family: page.pageType,
+        serviceOrAudit: page.slug,
+        referrer: '',
+        campaign: '',
+      }}
+    />
+  );
+}
+
+/* ── Legend (M17) ─────────────────────────────────────────────────────────────── */
+
+/**
+ * M17's legend: a table whose rows are peers becomes cards, and its two header words are set ONCE
+ * above the set, "header 1 → header 2", so they survive without a repeated eyebrow on every card.
+ * Template-local markup in the eyebrow voice; the arrow is decoration.
+ */
+export function TableLegend({ from, to }: { from: string; to: string }) {
+  return (
+    <Cluster colGap="tight" align="center" className={styles.legend}>
+      <span>{from}</span>
+      <span className={styles.legendMark}>
+        <Icon name="arrow-right" size="sm" />
+      </span>
+      <span>{to}</span>
+    </Cluster>
   );
 }
 

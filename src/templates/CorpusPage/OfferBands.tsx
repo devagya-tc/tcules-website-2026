@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Cluster, Icon, Layout, TextureHorizon } from '@/components';
+import { Layout, TextureHorizon } from '@/components';
 import {
   BlockCardSet,
   Callout,
@@ -34,6 +34,7 @@ import {
   FaqItems,
   GenericBlocks,
   QuoteCompact,
+  TableLegend,
   bodyOf,
   head,
   proofQuote,
@@ -579,13 +580,7 @@ function Personas({ band }: { band: CorpusBand }) {
   }));
   return (
     <Layout rowGap="block">
-      <Cluster colGap="tight" align="center" className={styles.legend}>
-        <span>{plain(from ?? [])}</span>
-        <span className={styles.legendMark}>
-          <Icon name="arrow-right" size="sm" />
-        </span>
-        <span>{plain(to ?? [])}</span>
-      </Cluster>
+      <TableLegend from={plain(from ?? [])} to={plain(to ?? [])} />
       <BlockCardSet items={items} lead="none" across={3} frame="none" scroll="never" />
     </Layout>
   );

@@ -481,6 +481,42 @@ export default function DataTableSpecimenPage() {
               />
             </Layout>
           </Specimen>
+          <Specimen
+            title="A record with no header row · head={false}"
+            note="A key/value record such as a case's 'At a glance': its first row is a pair, so there is no head to draw and none is invented. Rows only, one value column, named by the heading above it with labelledBy."
+          >
+            <Layout rowGap="block">
+              <h3 id="dt-record">At a glance</h3>
+              <DataTable
+                head={false}
+                labelledBy="dt-record"
+                keyColumn={{ heading: '' }}
+                columns={[{ heading: '' }]}
+                rows={[
+                  {
+                    header: 'Product',
+                    cellsHtml: [
+                      'An established environment, health and safety software suite.',
+                    ],
+                  },
+                  {
+                    header: 'Our role',
+                    cellsHtml: ['Shared interface direction and coded prototypes.'],
+                  },
+                  {
+                    header: 'The key question',
+                    cellsHtml: [
+                      'How can the suite look modern without breaking its customers’ habits?',
+                    ],
+                  },
+                  {
+                    header: 'What we delivered',
+                    cellsHtml: ['Coded prototypes of the shared patterns.'],
+                  },
+                ]}
+              />
+            </Layout>
+          </Specimen>
         </Layout>
       </Section>
 

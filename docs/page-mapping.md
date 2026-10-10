@@ -734,3 +734,23 @@ Looked at and kept, with the reason:
   past the fold (P10). With one tile type the second half reads as the set's continuation.
 - **Placeholders** in small slots (an aside of 3:2 at 381, a 16:9 cover) print their label small.
   They are stand-ins for the register's assets and do not ship.
+
+
+## 13 · Build notes, batch B2 (`/case-studies/benchmark-gensuite-…`, `/case-studies`, `/tools/design-system-drift-checker`)
+
+Where the build departs from this sheet, and why. Everything else is built as specified.
+
+| # | Where | Sheet said | Built | Why |
+|---|---|---|---|---|
+| B2.1 | `/case-studies/benchmark-gensuite-…` · `enquiry` | M2 with the scheduling link "See available times" | no scheduling link | G2 (b) made `scheduleHref` optional, but no scheduling destination exists anywhere in `routes.ts`, so a link would point nowhere. The link is not authored copy (it is a frontmatter label), so no word is lost. It arrives with the destination |
+| B2.2 | `/case-studies/benchmark-gensuite-…` · `related` | the cards' covers: Dealpath bound, Gold Image Printing a placeholder | as specified | The Gold Image Printing card shows the register's labelled placeholder until its cover lands |
+| B2.3 | `/case-studies/benchmark-gensuite-…` · outline | "TOC entries are the six shell sections" | the six headings as labels | each is 38–74 characters and clamps to two lines in the rail. No label was shortened (copy rule); P24 asks for navigation labels |
+| B2.4 | `/case-studies` · `designed-and-built` | the cover at the start, the Wandering Raven placeholder | as specified, but the placeholder is the 16:9 master cropped to 4:5, so its label is cut at the crop | a register row at 4:5 would fix it once; the real cover replaces the panel |
+| B2.5 | the three family routes | "switch the family" / `generateStaticParams` from the corpus list | one allowlist per family (`PASS_1_CASE_ROUTES`, `PASS_1_TOOL_ROUTES`), as B1.4 | § 1.2: the unverified corpus pages must not switch silently |
+| B2.6 | `CaseStudyIndex` | G9 | `hero.{eyebrow, lede, action, texture}`, `sections`, `closing.{form, id}`, `bodyHtml` and `ctaLabel` on an item, all optional; the flat `items` form and its callers are untouched | a section's arrangement is decided from its position and count (see the type's doc) |
+| B2.7 | `DataTable` | G4 (a), a head-less record | `head={false}` | B1.5 deferred it to this batch |
+| B2.8 | the tool mount | M24, a labelled panel | `ToolMount` in `ToolPage`, with `--cpg-panel-*` tokens in `tokens/components/corpus-page.css` on all four surfaces | the panel is a hairline box with two lines of text; the tool is gated by `TOOL_PRODUCTION_ACCEPTANCE` |
+
+`LongformPage` was built for the case family only (`family="case"`). Its shell, Steps detection, artefact
+placement and renderers are structure-driven, so the article and the term families (a later batch) add
+their own composed bands around the same shell without a new template.

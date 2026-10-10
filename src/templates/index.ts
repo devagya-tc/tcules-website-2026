@@ -14,13 +14,28 @@ export type {
   CaseStudyIndexClosing,
   CaseStudyIndexItem,
   CaseStudyIndexProps,
+  CaseStudyIndexSection,
 } from './CaseStudyIndex';
 export { ServicePage } from './ServicePage';
 export type { ServicePageProps } from './ServicePage';
-export { HomePage, OfferPage, planOffer, kindOf } from './CorpusPage';
+export {
+  HomePage,
+  LongformPage,
+  OfferPage,
+  ToolPage,
+  corpusEnquiryForm,
+  coverFor,
+  kindOf,
+  planOffer,
+  proofQuote,
+  slugOf,
+} from './CorpusPage';
 export type {
   HomePageProps,
+  LongformFamily,
+  LongformPageProps,
   OfferPageProps,
+  ToolPageProps,
   OfferKind,
   OfferPart,
   OfferUnit,

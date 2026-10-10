@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { CASE_INDEX_ROUTE, CaseIndexRoute } from '@/app/_corpus/case-index';
+import { CaseRoute, isCorpusCase } from '@/app/_corpus/case';
 import { isCorpusOffer } from '@/app/_corpus/offer';
+import { ToolRoute, isCorpusTool } from '@/app/_corpus/tool';
 import { getCaseRefs, getCorpusBindings, getCorpusPage, listCorpusPages } from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
 import { HomePage, OfferPage } from '@/templates';
@@ -13,7 +16,12 @@ export const metadata: Metadata = {
 
 /* Only the pages the plan has been verified against (`PASS_1_OFFER_ROUTES`): an offer page whose
    image slots have no register row yet cannot render, by design (src/lib/placeholders.ts). */
-const isMapped = (route: string) => route === '/' || isCorpusOffer(route);
+const isMapped = (route: string) =>
+  route === '/' ||
+  route === CASE_INDEX_ROUTE ||
+  isCorpusOffer(route) ||
+  isCorpusCase(route) ||
+  isCorpusTool(route);
 
 const fileSlug = (route: string) =>
   route === '/' ? 'home' : route.slice(1).replaceAll('/', '__');
@@ -41,6 +49,9 @@ export default async function CorpusPageSpecimen({
 
   if (!isMapped(page.route)) notFound();
   if (page.route === '/') return <HomePage page={page} />;
+  if (page.route === CASE_INDEX_ROUTE) return <CaseIndexRoute />;
+  if (isCorpusCase(page.route)) return <CaseRoute route={page.route} />;
+  if (isCorpusTool(page.route)) return <ToolRoute route={page.route} />;
 
   const [caseRefs, shared] = await Promise.all([
     getCaseRefs(caseRoutesIn(page)),

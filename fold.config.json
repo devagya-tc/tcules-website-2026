@@ -49,6 +49,8 @@
     "/",
     "/services/product-design",
     "/audits/design-to-code-audit",
-    "/expertise/healthtech"
+    "/expertise/healthtech",
+    "/case-studies/benchmark-gensuite-enterprise-suite-modernisation",
+    "/tools/design-system-drift-checker"
   ]
 }

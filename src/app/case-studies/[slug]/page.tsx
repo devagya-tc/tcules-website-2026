@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
+import { CaseRoute, caseMetadata, caseSlugs, isCorpusCase } from '@/app/_corpus/case';
 import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
@@ -148,10 +149,16 @@ function dateOnly(date: string | undefined): string | undefined {
   return date?.slice(0, 10);
 }
 
+export function generateStaticParams() {
+  return caseSlugs().map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<'/case-studies/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
+  const corpus = await caseMetadata(`/case-studies/${slug}`);
+  if (corpus) return corpus;
   const caseStudy = await getCaseStudyPage(slug);
 
   if (!caseStudy) {
@@ -200,6 +207,8 @@ export async function generateMetadata({
 
 export default async function CaseStudyPage({ params }: PageProps<'/case-studies/[slug]'>) {
   const { slug } = await params;
+  if (isCorpusCase(`/case-studies/${slug}`))
+    return <CaseRoute route={`/case-studies/${slug}`} />;
   const caseStudy = await getCaseStudyPage(slug);
 
   if (!caseStudy) notFound();

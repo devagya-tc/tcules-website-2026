@@ -302,3 +302,44 @@ Append one entry per problem, newest last.
   reused.
 - **Why:** these are the pages' only proof images, and the alt is the only way a non-visual reader
   gets that proof.
+
+### P24 · `/case-studies/benchmark-gensuite-…` · the argument sections · navigation labels for the outline
+
+- **Page and bands:** the six argument sections (`the-opportunity-…` through
+  `what-another-suite-owner-can-take-from-it`).
+- **Problem:** the case's table-of-contents rail takes each section heading as its label, and six
+  headings run 38 to 74 characters ("We built the prototypes in code, so engineers could try them").
+  The rail's column is narrow, so each label clamps to two lines and its tail is cut. The page renders
+  the headings as written, and TableOfContents warns about all six in development.
+- **Proposal:** add a short `navigation_label` (two to four words) to every long-form section, as the
+  CMS's audit sections already carry one: "The constraint", "The scope selector", "Three needs", "Built
+  in code", "Where it stands", "What to take from it". The heading on the page stays as written.
+- **Why:** an outline is a map, and a label that is cut mid-clause stops being one. Every case,
+  article and glossary term on the long-form template meets the same clamp, so the field is a
+  corpus-wide ask (64 pages).
+
+### P25 · `/case-studies/benchmark-gensuite-…` · related · two cases cited by a link line alone
+
+- **Page and band:** `related` carries "[Read the Gold Image Printing case](…)" and "[Read the Dealpath
+  case](…)" and no other words about either case.
+- **Problem:** a card needs a title and, ideally, one line. The page reads each title from the cited
+  case's own h1 ("A clearer path from print order to production"), which is the content team's wording
+  but a headline written for that case's page, not a teaser for this one. The cards carry no body.
+- **Proposal:** a one-sentence teaser under each link, saying what the case shares with this one ("an
+  operating print business whose ordering and production systems changed together"), in the same
+  paragraph or as a labelled line.
+- **Why:** a reader choosing the next case needs the connection, and the lead sentence ("Two other cases
+  where an operating product had to change without a sudden replacement") says it only for both at once.
+
+### P26 · `/tools/design-system-drift-checker` · workspace · an h3 table under the tool's own band
+
+- **Page and band:** `workspace` holds the tool's introduction, then a `###` "What should a
+  design-system drift check inspect?" with its table and closing paragraph.
+- **Problem:** the band mixes two jobs: where the tool opens, and a four-row checklist a reader uses
+  with or without the tool. The kit's band heading is always an h2, so the `###` cannot head a band of
+  its own, and the page sets the item in a band with no h2, its h3 carrying the authored id.
+- **Proposal:** promote the `###` to its own `##` band, "What should a design-system drift check
+  inspect?", with the same id. The six tools in the same family would then share one shape: a how-to,
+  the tool, a checklist, results.
+- **Why:** it makes the checklist a section a reader can land on and a heading navigator can list, and
+  it removes a headless band from the template.

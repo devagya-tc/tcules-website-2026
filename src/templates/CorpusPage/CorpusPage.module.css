@@ -36,3 +36,25 @@
   letter-spacing: var(--text-h4-tracking);
   text-wrap: var(--text-title-wrap);
 }
+
+/* The tool mount (G10): a labelled panel in the place the tool will be. A hairline box on a quiet
+   ground at a reserved height, its two lines at the start edge. Container padding is the gap scale's
+   `gutter`; the arrangement of its two lines is a Layout's. */
+.panel {
+  min-block-size: var(--cpg-panel-height-md);
+  padding: var(--gap-gutter);
+  background: var(--cpg-panel-ground);
+  border: var(--border-width-hairline) solid var(--cpg-panel-rule);
+}
+
+.panelLabel {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--cpg-ink-label);
+}
+
+.panelNote {
+  font: var(--text-body-sm);
+  color: var(--cpg-ink-muted);
+}
