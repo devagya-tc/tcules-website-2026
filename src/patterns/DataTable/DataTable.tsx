@@ -199,7 +199,7 @@ export function DataTable({
                 : { 'aria-label': `${keyColumn.heading} table` })}
           >
             <table
-              className={styles.table}
+              className={cx(styles.table, !head && styles.record)}
               {...(caption
                 ? { 'aria-labelledby': captionId }
                 : labelledBy

@@ -7,6 +7,16 @@
 /* The hero's quiet proof line (a labelled line: "Selected work: …"). It sits in PageHero's extras
    row, which carries no ink of its own, so the line states its own. The authored italic stays: the
    line is an `em` run. */
+/* The long-form reading column. Prose declares no measure: the caller owns it (27 Aug 2026), and the
+   rail was meant to be what narrowed it. Beside the rail the [1, 4] body track is 940 at 1440, which
+   set the case's argument at ~130 characters a line. The text caps itself at the body measure; the
+   blocks between its runs (Steps, the boxed tables, the bound artefacts) keep the whole track, and
+   both share the one inline-start edge — the shell's own stated form (/design/table-of-contents,
+   "the text caps itself, the block does not"). A measure is a type decision, not a distance. */
+.reading {
+  max-inline-size: var(--measure-body);
+}
+
 .proofLine {
   font: var(--text-body-sm);
   color: var(--cpg-ink-muted);

@@ -343,3 +343,16 @@ Append one entry per problem, newest last.
   the tool, a checklist, results.
 - **Why:** it makes the checklist a section a reader can land on and a heading navigator can list, and
   it removes a headless band from the template.
+
+### P27 · `/case-studies/benchmark-gensuite-…` · hero (case-thesis) and the-prototypes-were-code-not-pictures · straight quote marks
+
+- **Page and band:** the hero's third paragraph ("…put it: \"For established users, familiarity and
+  consistency are important parts of efficient workflows.\"") and the engineering stakeholder's question
+  in `the-prototypes-were-code-not-pictures` ("asked: \"I was curious if you use an external library…\"").
+- **Problem:** both quotations are typed with straight marks ("). The hero's third paragraph is the case's
+  one large statement, set at the h1 role across four lines, where a straight mark reads as a typing slip
+  beside the serif. Other corpus pages already use typographic marks (the index's Wandering Raven quote
+  opens with “), so the corpus is inconsistent.
+- **Proposal:** use typographic quotation marks (“ ” and ’) in both sentences. No word changes.
+- **Why:** the page renders the authored characters, so the fix belongs in the copy. Found by the B2
+  critic pass; a corpus-wide sweep for straight quotes would catch the rest in one edit.

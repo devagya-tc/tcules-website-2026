@@ -63,10 +63,25 @@ export function hasSlot(page: CorpusPage, bandId: string, qualifier?: string): b
 /**
  * A cited case's cover: this page's binding that names it, then the case page's own cover, then the
  * case's placeholder (one asset for every page that cites it).
+ *
+ * `bandId`: where a placement crops the cover to a shape its 16:9 master cannot survive (the index's
+ * one-case story, a 4:5 media split), the register gives that slot a row of its own, keyed by the band
+ * and the case (`designed-and-built (The Wandering Raven)`), drawn at the slot's ratio. A labelled
+ * panel cannot be cropped: cut to 4:5 the master lost its label mid-word and its right-hand edge. A
+ * real cover still wins over it.
  */
-export function coverFor(page: CorpusPage, name: string, caseRef?: CorpusCaseRef): SlotImage {
+export function coverFor(
+  page: CorpusPage,
+  name: string,
+  caseRef?: CorpusCaseRef,
+  bandId?: string,
+): SlotImage {
   const named = bindingNamed(page, name);
   if (named) return corpusImage(named);
   if (caseRef?.cover) return corpusImage(caseRef.cover);
-  return placeholderCover(slugOf(name.replace(/\.$/, '')));
+  const slug = slugOf(name.replace(/\.$/, ''));
+  if (bandId && hasPlaceholder(page.route, bandId, slug)) {
+    return placeholderImage(page.route, bandId, slug);
+  }
+  return placeholderCover(slug);
 }

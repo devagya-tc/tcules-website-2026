@@ -69,6 +69,7 @@ function itemOf(
     href?: string;
     bodyHtml: string[];
     ctaLabel?: string;
+    band: string;
   },
 ): CaseStudyIndexItem {
   return {
@@ -78,7 +79,7 @@ function itemOf(
     description: '',
     bodyHtml: fields.bodyHtml,
     ctaLabel: fields.ctaLabel,
-    cover: coverFor(page, fields.name, fields.href ? refs[fields.href] : undefined),
+    cover: coverFor(page, fields.name, fields.href ? refs[fields.href] : undefined, fields.band),
   };
 }
 
@@ -87,6 +88,7 @@ function featuredItem(
   page: CorpusPage,
   refs: Readonly<Record<string, CorpusCaseRef>>,
   block: Extract<CorpusBlock, { type: 'item' }>,
+  band: string,
 ): CaseStudyIndexItem {
   const bodyHtml: string[] = [];
   let href: string | undefined;
@@ -108,6 +110,7 @@ function featuredItem(
     href,
     bodyHtml,
     ctaLabel,
+    band,
   });
 }
 
@@ -116,6 +119,7 @@ function boldLedItem(
   page: CorpusPage,
   refs: Readonly<Record<string, CorpusCaseRef>>,
   block: Paragraph,
+  band: string,
 ): CaseStudyIndexItem | null {
   const [lead, ...rest] = block.runs;
   if (lead?.type !== 'strong') return null;
@@ -129,6 +133,7 @@ function boldLedItem(
     name: link ? text(link.children) : text(lead.children),
     href: link?.href,
     bodyHtml: [inlineToHtml(body)],
+    band,
   });
 }
 
@@ -137,6 +142,7 @@ function labelledItem(
   page: CorpusPage,
   refs: Readonly<Record<string, CorpusCaseRef>>,
   block: Extract<CorpusBlock, { type: 'labelled' }>,
+  band: string,
 ): CaseStudyIndexItem {
   const link = firstLink(block.label);
   return itemOf(page, refs, {
@@ -144,6 +150,7 @@ function labelledItem(
     name: link ? text(link.children) : text(block.label),
     href: link?.href,
     bodyHtml: [inlineToHtml(block.body)],
+    band,
   });
 }
 
@@ -155,10 +162,10 @@ function sectionOf(
   const items: CaseStudyIndexItem[] = [];
   let quote: CaseStudyIndexSection['quote'];
   for (const block of band.blocks) {
-    if (block.type === 'item') items.push(featuredItem(page, refs, block));
-    else if (block.type === 'labelled') items.push(labelledItem(page, refs, block));
+    if (block.type === 'item') items.push(featuredItem(page, refs, block, band.id));
+    else if (block.type === 'labelled') items.push(labelledItem(page, refs, block, band.id));
     else if (block.type === 'paragraph') {
-      const item = boldLedItem(page, refs, block);
+      const item = boldLedItem(page, refs, block, band.id);
       if (item) items.push(item);
     } else if (block.type === 'quote') quote = proofQuote(block);
   }

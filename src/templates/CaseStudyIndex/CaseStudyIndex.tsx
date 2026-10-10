@@ -149,6 +149,8 @@ export function CaseStudyIndex({
   return (
     <>
       <PageHero
+        data-band="A"
+        data-fold-hero=""
         trail={heroTrail(breadcrumbs, message || hero.name, (t) => (
           <Breadcrumbs {...t} />
         ))}
@@ -341,13 +343,15 @@ function SectionView({ section, first }: { section: CaseStudyIndexSection; first
     );
   }
 
-  /* Two to four: equal covers, each a whole-card link. */
+  /* Two to four: equal covers, each a whole-card link. On a phone a covered set of three or more
+     scrolls sideways, one card a view with the next peeking (§ 3.7 item 2, BlockCardSet's `auto`):
+     these are a catalogue's peers, not a router that must show every route at once, and stacked they
+     ran four 16:9 covers and their copy down 2,400 of a 390 screen. */
   return (
     <ContentSection {...common} data-band="M">
       <BlockCardSet
         lead="none"
         cue="title"
-        scroll="never"
         across={items.length === 4 ? 4 : undefined}
         items={items.map((item) => ({
           id: item.id,

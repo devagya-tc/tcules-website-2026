@@ -99,7 +99,15 @@ function ToolBand({
     const [lead, ...rest] = paragraphs;
     return (
       <>
-        <ContentSection {...head(band)} data-band="E" lead={lead ? plain(lead) : undefined}>
+        {/* Centred (§ 3.5): the head over the tool, the page's large object, the way a centred head
+            sits over a full-column object. Its neighbours are start-weighted (the media split above,
+            the item's table below), so the centre axis is what tells this band apart. */}
+        <ContentSection
+          {...head(band)}
+          data-band="E"
+          align="center"
+          lead={lead ? plain(lead) : undefined}
+        >
           <ToolMount />
           {rest.length > 0 ? (
             <ContentSectionText>
@@ -163,9 +171,13 @@ function ToolBand({
     );
   }
 
-  /* Plain words: a limits note and the like stay plain. */
+  /* Plain words: a limits note and the like stay plain, on the centre axis. Built start-weighted, the
+     page ran four bands down the start edge with the right half empty (head + note, table, words,
+     close); centred, the words read as a pause between the table and the close (§ 3.5: 3 to 5
+     centred heads a page, never two adjacent; a centred body is centred as a block, its lines start-
+     aligned). The tint close after it stays start-weighted. */
   return (
-    <ContentSection {...head(band)} data-band="C-text">
+    <ContentSection {...head(band)} data-band="C-text" align="center">
       <ContentSectionText>
         <Prose html={runsHtml(paragraphs)} />
       </ContentSectionText>

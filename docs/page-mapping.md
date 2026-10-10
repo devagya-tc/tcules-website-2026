@@ -754,3 +754,35 @@ Where the build departs from this sheet, and why. Everything else is built as sp
 `LongformPage` was built for the case family only (`family="case"`). Its shell, Steps detection, artefact
 placement and renderers are structure-driven, so the article and the term families (a later batch) add
 their own composed bands around the same shell without a new template.
+
+
+## 14 · Critic pass, batch B2 (10 Oct 2026)
+
+Shot at 1440 and 390 and read band by band. Copy fidelity was re-checked against the raw markdown with
+a script (visible text of each built page against every sentence and table cell of its source, in
+order): the case and the tool render every fragment in document order; on `/case-studies` the only
+fragments not on the page as written are the form's structural labels ("Enquiry form", "Submit:"), the
+attribution (rendered as name, then role and company) and the "After sending" line, which is the
+success view's body. Each note names its cause and where the fix lives.
+
+| # | Where | Seen | Cause | Fix | Lives in |
+|---|---|---|---|---|---|
+| C2.1 | `/case-studies/benchmark-gensuite-…` · the argument shell | the reading column ran the whole 940 body track: ~130 characters a line, while the Steps bodies beside it sat at ~520 | Prose has no measure by decision (the caller owns it), and the shell's caller set none; the rail alone does not narrow a `[1, 4]` track | every Prose run in the shell caps at `--measure-body`; Steps, tables and the bound artefacts keep the whole track, on one start edge (the shell's own stated form at `/design/table-of-contents`) | `CorpusPage.module.css` `.reading`, `LongformPage.tsx` |
+| C2.2 | `/case-studies/benchmark-gensuite-…` · `case-context` at 390 | the "At a glance" record scrolled sideways, the key column took 193 of 326 and every value was clipped at its last characters | the head-less record inherited the comparison table's column floors (key `hold` 192 + value 176), which exist so a comparison scrolls; a record has no second column to scroll to | in record mode (`head={false}`) the floors lift and the key breaks only between words: the table sizes the pair itself and never scrolls. Comparison tables are untouched and still scroll (7 Oct ruling 6) | `DataTable.module.css` `.record`, `DataTable.tsx` |
+| C2.3 | `/case-studies` · `designed-and-built` | the Wandering Raven placeholder was the 16:9 cover master cropped to the story split's 4:5: its label cut mid-word, its right edge missing (B2.4) | a labelled panel cannot be cropped, but every placement crops the one cover master | the slot gets its own register row at 4:5 (`designed-and-built (The Wandering Raven)`); `coverFor` takes the band and prefers that slot's panel over the master, after any real cover. The 16:9 cover row it replaces is gone | `images.ts`, `_corpus/case-index.tsx`, `docs/image-register.md` |
+| C2.4 | `/case-studies` at 390 | "New products" and "AI products" stacked four and three 16:9 placeholder covers with their copy, ~2,400 of scroll for one group | the 2–4 group passed `scroll="never"`, the router opt-out, to a catalogue's peers | the group takes BlockCardSet's default `auto`: a covered set of three or more scrolls sideways below 768, one card a view (§ 3.7 item 2). The featured group keeps its lead and stays stacked | `CaseStudyIndex.tsx` |
+| C2.5 | `/tools/design-system-drift-checker` | after the media split, four bands ran down the start edge with the right half empty (workspace head, head + Callout, limits note, close): one shape repeated | every head was start-weighted; § 3.5's head alignment axis was not used on the page at all | the workspace head is centred over the tool panel (the page's large object), and the plain limits note is centred as a pause before the close. Two centred heads, never adjacent; the close stays start-weighted | `ToolPage.tsx` |
+| C2.6 | `/case-studies` · hero | `fold:check` reported 0 heroes on the page | CaseStudyIndex's PageHero carried no `data-band="A"` / `data-fold-hero` | added, so the gate measures the index hero as it does every corpus hero | `CaseStudyIndex.tsx` |
+
+Logged for the content team: **P27**, straight quote marks in the case's statement and in the prototypes
+section.
+
+Looked at and kept, with the reason:
+
+- **The case hero's two ledes at two sizes and measures.** PageHero sets `body[0]` as the lead and the
+  rest as body copy by design; the third paragraph is already split out as the statement.
+- **The case statement at four lines** (P11): copy as written, at the statement's approved size.
+- **The tool's split bands** (`workspace` → `workspace-2`, `reading-your-results` → `-2`): each pair
+  measures past the fold together, so the split stands (§ 1.3); the h3 band's seam is the split's.
+- **The rail's clamped outline labels** (P24): the clamp is the TableOfContents' approved geometry.
+- **The empty tool panel**: a reserved place for a gated product feature (G10), not a design surface.

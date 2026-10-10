@@ -22,6 +22,7 @@ import { renderInline } from '@/lib/inline-render';
 import { CorpusHero, EnquiryBand, TableLegend, bodyOf, head, headingIdOf } from './blocks';
 import { coverFor } from './images';
 import { blocksOf, hasLink, html, plain, trimStart } from './text';
+import styles from './CorpusPage.module.css';
 
 export type LongformFamily = 'case';
 
@@ -243,7 +244,7 @@ function ArticleSection({ page, band }: { page: CorpusPage; band: CorpusBand }) 
   const out: ReactNode[] = [];
   let flow = '';
   const flush = () => {
-    if (flow) out.push(<Prose key={`prose-${out.length}`} html={flow} />);
+    if (flow) out.push(<Prose key={`prose-${out.length}`} html={flow} className={styles.reading} />);
     flow = '';
   };
 

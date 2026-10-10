@@ -115,6 +115,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'A Tcules design engineer with the Figma file and the repository open together, following a gap back to where it started.',
   },
+  '/case-studies#designed-and-built:the-wandering-raven': {
+    src: '/placeholders/case-studies--designed-and-built--the-wandering-raven.svg',
+    width: 1280,
+    height: 1600,
+    kind: 'product shot',
+    shows:
+      "The Wandering Raven's creative-writing learning world for young learners, built inside Moodle. Its own 4:5 slot (critic, B2): the index's one-case story is a 4:5 media split, and the 16:9 cover master cropped to it lost its label and its right-hand edge. If the case page later binds a cover, that cover replaces this panel.",
+  },
   '/expertise/healthtech#approach': {
     src: '/placeholders/expertise-healthtech--approach.svg',
     width: 1280,
@@ -258,13 +266,5 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'product shot',
     shows:
       "Scissors' staffing software: clients, candidates and jobs connected in one model, so details entered once carry through.",
-  },
-  'case-cover:the-wandering-raven': {
-    src: '/placeholders/case-cover--the-wandering-raven.svg',
-    width: 1600,
-    height: 900,
-    kind: 'product shot',
-    shows:
-      "The Wandering Raven's creative-writing learning world for young learners, built inside Moodle.",
   },
 };
