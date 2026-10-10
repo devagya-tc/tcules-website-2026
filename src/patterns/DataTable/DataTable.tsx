@@ -83,7 +83,7 @@ export type DataTableProps = {
   /**
    * Two halves side by side from 1024, ONE table below it (owner, 10 Oct 2026). A long record — six
    * or more facts — keeps its band inside the fold as two boxed halves from 1024 (7 Oct ruling 1),
-   * each with the head row; the first half takes the extra row of an odd count. Where the layout
+   * each with the head row, broken where the two halves' likely heights are closest (`splitAt`). Where the layout
    * drops to one column the halves JOIN: the second half's head row is set out of sight (still read
    * by a screen reader) and the seam between the two frames closes, so a phone reads one continuous
    * table instead of the same head printed twice down the column. Until this prop the About record
@@ -95,6 +95,51 @@ export type DataTableProps = {
    */
   split?: boolean;
 };
+
+/*
+ * Where a split record breaks, so its two halves END NEAR ONE LINE from 1024 rather than holding one
+ * count each (home round 1 critic, 10 Oct 2026): About's record split eight and eight, its first half
+ * all one-line facts and its second all three- and four-line ones, and the two frames ended ~100
+ * apart. Each row is weighed by the lines it is likely to wrap to in a half's tracks — the longer of
+ * its key and its value at a half's rough measure, plus one for the cell padding — and the break goes
+ * where the halves' weights are closest, never leaving fewer than three rows in a half (the designed
+ * range). Reading order is untouched: the first half is still the first rows. An estimate, not a
+ * measurement, because the server cannot measure type; it only has to beat a count.
+ */
+const KEY_CHARS_PER_LINE = 16;
+const VALUE_CHARS_PER_LINE = 44;
+const MIN_PER_HALF = 3;
+
+const textLength = (cell: string | DataTableNodeCell | undefined) =>
+  typeof cell === 'string' ? cell.replace(/<[^>]*>/g, '').trim().length : 1;
+
+const rowWeight = (row: DataTableRow) =>
+  1 +
+  Math.max(
+    Math.ceil(row.header.length / KEY_CHARS_PER_LINE),
+    ...row.cellsHtml.map((cell) => Math.ceil(textLength(cell) / VALUE_CHARS_PER_LINE)),
+    1,
+  );
+
+function splitAt(rows: readonly DataTableRow[]): number {
+  const half = Math.ceil(rows.length / 2);
+  if (rows.length < MIN_PER_HALF * 2) return half;
+  const weights = rows.map(rowWeight);
+  const total = weights.reduce((sum, w) => sum + w, 0);
+  let best = half;
+  let bestGap = Infinity;
+  let running = 0;
+  for (let at = 1; at < rows.length; at += 1) {
+    running += weights[at - 1] ?? 0;
+    if (at < MIN_PER_HALF || rows.length - at < MIN_PER_HALF) continue;
+    const gap = Math.abs(total - 2 * running);
+    if (gap < bestGap) {
+      best = at;
+      bestGap = gap;
+    }
+  }
+  return best;
+}
 
 const BEHAVIOUR_CLASS: Record<DataTableColumnBehaviour, string | undefined> = {
   fluid: undefined,
@@ -188,6 +233,7 @@ export function DataTable({
   }
 
   const keyBehaviour = keyColumn.behaviour ?? 'hold';
+  const breakAt = split ? splitAt(rows) : rows.length;
 
   /* One boxed frame over `part` of the rows; `inSplit` marks both halves of a split and `joins` the
      second. The shell holds the frame and draws the scroll fades over its clipped edges. It does
@@ -311,8 +357,8 @@ export function DataTable({
           /* The halves: side by side from 1024, a `gutter` apart, and ONE table below it — no row
              gap, and the second frame's top edge and head row give way (DataTable.module.css). */
           <Layout columns={{ lg: 2 }} colGap="gutter" rowGap="none" align="start">
-            {renderFrame(rows.slice(0, Math.ceil(rows.length / 2)), false, true)}
-            {renderFrame(rows.slice(Math.ceil(rows.length / 2)), true, true)}
+            {renderFrame(rows.slice(0, breakAt), false, true)}
+            {renderFrame(rows.slice(breakAt), true, true)}
           </Layout>
         ) : (
           renderFrame(rows, false, false)

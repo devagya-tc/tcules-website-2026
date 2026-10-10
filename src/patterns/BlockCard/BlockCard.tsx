@@ -90,7 +90,8 @@ export type BlockCardTitleElement = 'h2' | 'h3' | 'h4';
  *                headshot keeps the source's own square, so the face is never the crop's casualty.
  *                Composed by the caller in its own Layout; BlockCardSet's count rule never picks it.
  */
-export type BlockCardRatio = 'cover' | 'wide' | 'panorama' | 'double' | 'square' | 'headshot' | 'pair';
+export type BlockCardRatio =
+  'cover' | 'wide' | 'panorama' | 'double' | 'square' | 'headshot' | 'pair';
 
 /**
  * How a WHOLE-CARD link says it navigates. One cue per card, never both.
@@ -132,7 +133,7 @@ export type BlockCardFrame = 'none' | 'box';
  *
  *   vertical    the grid tile: media above copy, filling one track of a multi-column Layout.
  *   horizontal  the row: two equal tracks from md, 64 apart. With an image, media beside copy at
- *               3:2, the tile's own crop. Without one, the copy splits instead — eyebrow and title in the first track,
+ *               3:2 (or the `ratio` the caller states). Without one, the copy splits instead — eyebrow and title in the first track,
  *               body and cta in the second — so a text-only row is a head beside its body rather
  *               than a single column with an empty half. Either way it defaults to the `lg` size,
  *               because a row spanning the column carries more weight than a tile. This is the
@@ -292,7 +293,12 @@ export type BlockCardProps = {
   tracks?: BlockCardTracks;
   /** The type step. Defaults to `lg` when horizontal and `md` when vertical. */
   size?: BlockCardSize;
-  /** The cover's crop. Defaults to `cover` (3:2). Ignored when horizontal, which is always 3:2. */
+  /**
+   * The cover's crop. Defaults to `cover` (3:2), horizontal or vertical. A horizontal run of rows
+   * whose artefacts are wide (case boards at 2:1 to 3.3:1) may take `double` — 2:1 beside the copy
+   * from 1024, 16:9 stacked below — so the crop cuts less of each board and the row sits closer to
+   * its copy's height (home round 1 critic, 10 Oct 2026).
+   */
   ratio?: BlockCardRatio;
   /**
    * A Solar Bold glyph on its own row above the title of a card with NO cover — the icon card of
@@ -492,7 +498,7 @@ export function BlockCard({
   const horizontal = orientation === 'horizontal';
   const step = size ?? (horizontal ? 'lg' : 'md');
 
-  const coverRatio: BlockCardRatio = horizontal ? 'cover' : ratio;
+  const coverRatio: BlockCardRatio = ratio;
   const imageNode = hasImage ? (
     <ImageMedia
       image={image}

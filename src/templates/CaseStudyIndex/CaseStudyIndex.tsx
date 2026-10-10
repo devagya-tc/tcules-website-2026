@@ -180,6 +180,7 @@ export function CaseStudyIndex({
               its card titles are the page's h2s (axe heading-order: h1 → h3 skipped a level). */}
             <BlockCardSet
               titleAs="h2"
+              scroll="never"
               items={items.map((item) => ({
                 id: item.id,
                 title: item.title,
@@ -343,15 +344,16 @@ function SectionView({ section, first }: { section: CaseStudyIndexSection; first
     );
   }
 
-  /* Two to four: equal covers, each a whole-card link. On a phone a covered set of three or more
-     scrolls sideways, one card a view with the next peeking (§ 3.7 item 2, BlockCardSet's `auto`):
-     these are a catalogue's peers, not a router that must show every route at once, and stacked they
-     ran four 16:9 covers and their copy down 2,400 of a 390 screen. */
+  /* Two to four: equal covers, each a whole-card link, stacked on a phone. They scrolled sideways
+     there until 10 Oct 2026 (BlockCardSet's `auto`, one card a view with the next peeking), which hid
+     every case past the first from most readers: the owner's home round 1 ruling — no case sliders —
+     applies to a phone row as much as to a desktop Slider. A page of cases is read down. */
   return (
     <ContentSection {...common} data-band="M">
       <BlockCardSet
         lead="none"
         cue="title"
+        scroll="never"
         across={items.length === 4 ? 4 : undefined}
         items={items.map((item) => ({
           id: item.id,

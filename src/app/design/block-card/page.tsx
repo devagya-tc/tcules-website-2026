@@ -1455,6 +1455,26 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
 
           <Specimen
+            title='orientation="horizontal" · ratio="double" · a run of wide boards'
+            note="The horizontal card honours ratio. double is 2:1 beside the copy from 1024 and 16:9 stacked below it, for case artefacts wider than 3:2 (the home page's selected work). Every row in a run states the same ratio."
+          >
+            <Rows>
+              <BlockCard
+                {...item(CASE_STUDIES, 0)}
+                orientation="horizontal"
+                imageSide="left"
+                ratio="double"
+              />
+              <BlockCard
+                {...item(CASE_STUDIES, 1)}
+                orientation="horizontal"
+                imageSide="left"
+                ratio="double"
+              />
+            </Rows>
+          </Specimen>
+
+          <Specimen
             title="A stacked horizontal group · alternated by the caller · no separator rule"
             note={`rowGap="section" is the only thing between these rows. The caller alternates the side by index; the alternation comes from the composition rather than a card prop.`}
           >

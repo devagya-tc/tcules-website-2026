@@ -931,3 +931,15 @@ narrow measure it exists for.
 4. **Case-study index story.** The one-case "Designed and built" band keeps its client quote under the
    case in the same column. It is a story band rather than a card, so round 1 left it.
 
+
+### 17.5 Critic pass on round 1 (10 Oct 2026)
+
+| Note | Cause | Fix | Where |
+|---|---|---|---|
+| Selected work: Doodle's and Benchmark's covers ended in a sliver of a second device or panel; four 393-tall rows ran 2,336 | the boards are 1.5:1 to 3.3:1, and the horizontal card was locked at 3:2 | the horizontal card honours `ratio`; the rows take `double` (2:1 beside the copy, 16:9 stacked) with a focus per board, so the band runs ~400 shorter | `BlockCard` (+ specimen), `HomePage` |
+| Why row 3 stood ~150 taller than the three quote rows | its placeholder was 3:2 | the slot is 2:1 | `image-register.md`, `HomePage` |
+| About's services were a slider showing three | slider left in the template | six linked icon boxes, 3 / 2 / 1 across, all visible | `AboutPage` |
+| Case-study index and About's practice row swiped sideways on a phone | `BlockCardSet` `scroll="auto"` scrolls any covered set of 3+ | `scroll="never"` on every case set in the corpus templates | `CaseStudyIndex`, `AboutPage` |
+| About's split record ended ~100 apart (one-line facts left, four-line ones right) | `split` broke at the row count | `split` breaks where the halves' estimated heights are closest; one continuous table below 1024 as before | `DataTable` |
+
+17.4 items 3 is done. Item 4 (the index's story band keeps its quote under the case) is still the owner's call.

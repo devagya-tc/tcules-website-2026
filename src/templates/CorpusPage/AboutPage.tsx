@@ -2,14 +2,12 @@ import { Button, Cluster, Icon, Layout, Prose } from '@/components';
 import {
   Accordion,
   Banner,
-  BlockCard,
   BlockCardSet,
   ContentSection,
   ContentSectionText,
   CtaRow,
   CtaSection,
   DataTable,
-  Slider,
   type BlockCardSetItem,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
@@ -152,36 +150,39 @@ function Practice({ page }: { page: CorpusPage }) {
   );
 }
 
-/* ── 3 · what we do: six services, three in view ─────────────────────────────── */
+/* ── 3 · what we do: six services, all in view ───────────────────────────────── */
 
 /**
- * Six services with long bodies, three in view so each stays readable without a 2 × 3 wall. Each is a
- * boxed icon card whose body may carry a link of its own (Software Development's), so every card takes
- * the static frame (G3b): the cta is each card's one anchor, and all six answer the pointer alike.
+ * Six services with long bodies, as one grid of linked icon cards: three across from 1024, two from
+ * 768, stacked on a phone. Every service stays in view (owner, 10 Oct 2026, home round 1: a slider
+ * hides everything past its first view from most readers; this band was a Slider showing three). Each
+ * card's body may carry a link of its own (Software Development's), so every card takes the static
+ * frame (G3b): the cta is each card's one anchor, and all six answer the pointer alike.
  */
 function WhatWeDo({ page }: { page: CorpusPage }) {
   const b = band(page, 'what-we-do');
+  const cards: BlockCardSetItem[] = items(b).map((item) => {
+    const link = blocksOf({ ...b, blocks: item.blocks }, 'links')[0]?.links[0];
+    return {
+      id: item.headingText,
+      title: item.headingText,
+      bodyHtml: paragraphRuns(item.blocks).map((runs) => inlineToHtml(runs)),
+      icon: link ? glyphForRoute(link.href) : undefined,
+      href: link?.href,
+      ctaLabel: link?.labelText,
+    };
+  });
   return (
     <ContentSection {...head(b)} data-band="C-icon">
-      <Slider label={b.headingText} slideName="service" perView={3}>
-        {items(b).map((item) => {
-          const link = blocksOf({ ...b, blocks: item.blocks }, 'links')[0]?.links[0];
-          return (
-            <BlockCard
-              key={item.headingText}
-              title={item.headingText}
-              bodyHtml={paragraphRuns(item.blocks).map((runs) => inlineToHtml(runs))}
-              icon={link ? glyphForRoute(link.href) : undefined}
-              href={link?.href}
-              ctaLabel={link?.labelText}
-              frame="box"
-              linkScope="cta"
-              size="sm"
-              tracks={3}
-            />
-          );
-        })}
-      </Slider>
+      <BlockCardSet
+        items={cards}
+        lead="none"
+        across={3}
+        frame="box"
+        linkScope="cta"
+        cue="cta"
+        scroll="never"
+      />
     </ContentSection>
   );
 }
@@ -379,7 +380,7 @@ function WorkYouCanInspect({
   return (
     <>
       <ContentSection {...head(b)} data-band="M">
-        <BlockCardSet items={cards} lead="none" across={4} cue="title" />
+        <BlockCardSet items={cards} lead="none" across={4} cue="title" scroll="never" />
       </ContentSection>
       <ContentSection
         id={`${b.id}-2`}

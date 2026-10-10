@@ -293,18 +293,23 @@ function Situations({ b }: BandProps) {
 /* ── 3 · selected work: four case rows, then what two of those clients said ──────── */
 
 /**
- * Where a case cover is cropped (Media `focus`). The four bound artefacts run from 1.5:1 to 3.3:1, so
- * the band frames every one in the same 3:2 and anchors each crop on its subject: Doodle's model on
- * the left of its board, Benchmark Gensuite's first scope panel. Art direction a CMS field would carry
- * as a focal point (docs/strapi-changes.md); here it is the template's, keyed by binding id.
+ * Where a case cover is cropped (Media `focus`). The four bound artefacts run from 1.5:1 (Dealpath)
+ * to 3.3:1 (Benchmark Gensuite), so the band frames every one at the same 2:1 beside its copy (16:9
+ * stacked below 1024: BlockCard `double`). 2:1 rather than 3:2 because the boards are wide: at 3:2
+ * Doodle's board kept a sliver of its model tablet at the edge and Benchmark's a sliver of its second
+ * panel; at 2:1 Doodle shows its map and the tablet, Eden AI is near its own shape, Benchmark's two
+ * panels sit centred, and only Dealpath (the tallest) gives up the foot of its second listing, so
+ * it anchors on the top. Art direction a CMS field would carry as a focal point
+ * (docs/strapi-changes.md); here it is the template's, keyed by binding id.
  */
 const COVER_FOCUS: Readonly<Record<string, { x: number; y: number }>> = {
-  home_doodle_object_model: { x: 0.2, y: 0.5 },
-  home_benchmark_scope_selector: { x: 0.18, y: 0.5 },
+  home_doodle_object_model: { x: 0, y: 0.5 },
+  home_dealpath_workflow: { x: 0.5, y: 0 },
+  home_benchmark_scope_selector: { x: 0.5, y: 0.5 },
 };
 
 /**
- * Four cases as one consistent run of rows (owner, 10 Oct 2026, note 5): the artefact at 3:2 on the
+ * Four cases as one consistent run of rows (owner, 10 Oct 2026, note 5): the artefact at 2:1 on the
  * start, the copy beside it, every row the same shape. No slider — a slider hid three of the four
  * from most readers — and no quote inside a case: the two quotes the content authored inside the
  * Doodle and Eden AI cases leave them for their own testimonial pair after the rows, each still
@@ -342,6 +347,7 @@ function SelectedWork({ page, b }: BandProps) {
               orientation="horizontal"
               imageSide="left"
               size="lg"
+              ratio="double"
               titleAs="h3"
               title={item.headingText}
               {...(paragraphs.length === 1 && paragraphs[0]
@@ -439,7 +445,8 @@ function Capabilities({ b }: BandProps) {
  * words on the other, the sides alternating down the band, a `section` beat between banners so each
  * has its own moment. Pass 1 packed all four into one screen with the quotes under the reasons in
  * narrow columns. Reason 3 has no quote, so its other side is the work it names: The Wandering Raven,
- * built into Moodle (a register placeholder until the case binds a screen).
+ * built into Moodle, at 2:1 so its row keeps the quote rows' height (a register placeholder until the
+ * case binds a screen).
  */
 function WhyTcules({ page, b }: BandProps) {
   const reasons = items(b);
@@ -471,7 +478,6 @@ function WhyTcules({ page, b }: BandProps) {
                     '',
                 ),
               )}
-              ratio="3/2"
               sizes={CARD_TWO_TRACKS}
             />
           );

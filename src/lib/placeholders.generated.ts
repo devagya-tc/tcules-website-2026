@@ -94,10 +94,10 @@ export const PLACEHOLDER_SLOTS: Readonly<
   '/#why-tcules:the-wandering-raven': {
     src: '/placeholders/home--why-tcules--the-wandering-raven.svg',
     width: 1600,
-    height: 1067,
+    height: 800,
     kind: 'product shot',
     shows:
-      "The Wandering Raven's creative-writing world for young learners, built inside Moodle: a learner's screen mid-story, the reason \"We can build what we design\" shown as working software. Home round 1: the one reason with no client quote takes the case's artefact on its other side. The case page binds no cover yet (`ASSET_REQUIRED`); its first approved screen replaces this panel and the index's 4:5 one.",
+      "The Wandering Raven's creative-writing world for young learners, built inside Moodle: a learner's screen mid-story, the reason \"We can build what we design\" shown as working software. Home round 1: the one reason with no client quote takes the case's artefact on its other side. The case page binds no cover yet (`ASSET_REQUIRED`); its first approved screen replaces this panel and the index's 4:5 one. 2:1 (critic, home round 1): at 3:2 this row stood ~150 taller than the three quote rows around it and broke the band's beat.",
   },
   '/about#careers': {
     src: '/placeholders/about--careers.svg',
