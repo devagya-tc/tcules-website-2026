@@ -1035,3 +1035,18 @@ Proof pattern keeps its arrangements for the kit; on the corpus pages it now ren
    would need its own small set (not the service glyphs, which "What we do" uses two bands later).
 5. **Rated cards everywhere.** Every testimonial now carries stars, including the supporting quotes
    in why-tcules and outcomes. Say if supporting quotes should drop them.
+
+### 18.6 Critic pass (10 Oct 2026)
+
+All ten routes shot at 1440 and 390 and read band by band; a–f and the five patterns hold (one
+primary per band, quotes beside cases and never inside, claim before proof, rated cards in every
+testimonial group, form before FAQ, no sliders). Home copy script-checked against `_pages/home.md`:
+nothing missing beyond the two owner removals and the designed splits (figures, attributions,
+run-in labels). Four defects, each fixed at its cause:
+
+| Note | Cause | Fix |
+|---|---|---|
+| A boxed card on blue showed white stars on its paper ground (invisible; `/design/testimonial` § Four surfaces) | StarRating's colours follow the section's surface, but the boxed card is paper on blue (blue is never a card fill) | StarRating `onCard` and `--star-card-{fill,empty}-fg` per surface (they move only on blue); TestimonialCard passes it when boxed |
+| About's three voices set in straight quotes beside home's curly ones | The corpus authors some quotes with straight marks and the card printed what it was handed | `curlQuotes` in TestimonialCard: typesetting of the marks, never the words |
+| `/case-studies` Designed and built: placeholder brief cut to one line (1440 and 390) | Round 2 moved the story into a 2:1 case card; the slot was still drawn 4:5 | Register ratio 2:1, panel regenerated |
+| `/about` How Tcules works: placeholder label cut at its right edge | A 3:2 panel in an `asideFill` aside of about 0.9:1 | Register ratio 4:5, panel regenerated |

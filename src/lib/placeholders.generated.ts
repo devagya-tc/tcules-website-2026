@@ -117,11 +117,11 @@ export const PLACEHOLDER_SLOTS: Readonly<
   },
   '/about#how-we-work': {
     src: '/placeholders/about--how-we-work.svg',
-    width: 1600,
-    height: 1067,
+    width: 1280,
+    height: 1600,
     kind: 'studio photo',
     shows:
-      "A Tcules lead designer working directly with a client team, in the client's own tools and review rhythm.",
+      "A Tcules lead designer working directly with a client team, in the client's own tools and review rhythm. 4:5 since the home round 2 critic: the slot is an `asideFill` aside beside a five-item accordion, about 0.9:1 at 1440, and the 3:2 panel cropped to it cut the label's right-hand edge.",
   },
   '/about#studio': {
     src: '/placeholders/about--studio.svg',
@@ -173,11 +173,11 @@ export const PLACEHOLDER_SLOTS: Readonly<
   },
   '/case-studies#designed-and-built:the-wandering-raven': {
     src: '/placeholders/case-studies--designed-and-built--the-wandering-raven.svg',
-    width: 1280,
-    height: 1600,
+    width: 1600,
+    height: 800,
     kind: 'product shot',
     shows:
-      "The Wandering Raven's creative-writing learning world for young learners, built inside Moodle. Its own 4:5 slot (critic, B2): the index's one-case story is a 4:5 media split, and the 16:9 cover master cropped to it lost its label and its right-hand edge. If the case page later binds a cover, that cover replaces this panel.",
+      "The Wandering Raven's creative-writing learning world for young learners, built inside Moodle. Its own slot (critic, B2: the 16:9 cover master cropped to the story split lost its label). 2:1 since the home round 2 critic: the story is now a case card (BlockCard `double`, 16:9 stacked) beside its client's quote, and the 4:5 panel cropped to 2:1 cut its brief to one line at 1440 and 390. If the case page later binds a cover, that cover replaces this panel.",
   },
   '/expertise/healthtech#approach': {
     src: '/placeholders/expertise-healthtech--approach.svg',

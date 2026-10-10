@@ -12,6 +12,13 @@
    component's accessible name, so the empty star's contrast is a legibility floor rather than the
    only carrier of the score.
 
+   ON A CARD (`onCard`): a rating set inside a card that carries its own ground (the boxed
+   testimonial) is read against that card, not against the section. The two only part on blue,
+   whose cards are paper (blue is never a card fill): there a white star on the paper card vanished
+   (critic, home round 2), so the card variant keeps the blue accent. On paper, tint and ink the card
+   variant restates the surface's own values, which is why it exists as a variant rather than a
+   per-surface exception: the token moves on one surface, and every surface declares it (rule 3).
+
    Every surface restates every colour, so a rating nested in another surface never inherits the
    wrong value (index.css, rule 2). */
 
@@ -25,19 +32,28 @@
 [data-surface='paper'] {
   --star-fill-fg: var(--color-brandeis-500);
   --star-empty-fg: var(--color-neutral-300);
+  --star-card-fill-fg: var(--color-brandeis-500);
+  --star-card-empty-fg: var(--color-neutral-300);
 }
 
 [data-surface='tint'] {
   --star-fill-fg: var(--color-brandeis-500);
   --star-empty-fg: var(--color-neutral-400);
+  --star-card-fill-fg: var(--color-brandeis-500);
+  --star-card-empty-fg: var(--color-neutral-400);
 }
 
 [data-surface='ink'] {
   --star-fill-fg: var(--color-brandeis-300);
   --star-empty-fg: var(--color-neutral-700);
+  --star-card-fill-fg: var(--color-brandeis-300);
+  --star-card-empty-fg: var(--color-neutral-700);
 }
 
 [data-surface='blue'] {
   --star-fill-fg: var(--color-white);
   --star-empty-fg: var(--color-brandeis-400);
+  /* The card on blue is paper: the paper values. */
+  --star-card-fill-fg: var(--color-brandeis-500);
+  --star-card-empty-fg: var(--color-neutral-300);
 }

@@ -23,6 +23,12 @@ export type StarRatingProps = {
   glyph: ReactNode;
   /** Default `md`. */
   size?: StarRatingSize;
+  /**
+   * The rating sits on a card with its own ground (a boxed testimonial), so it takes the card
+   * colours (--star-card-*) rather than the section's. They differ only on blue, whose cards are
+   * paper: a section's white star would vanish on them. Default false.
+   */
+  onCard?: boolean;
   className?: string;
 };
 
@@ -51,7 +57,13 @@ const spoken = (value: number) => (Number.isInteger(value) ? String(value) : val
  * belongs to ONE quote and says what that client rated (owner, 10 Oct 2026, superseding "never a
  * rating beside a quote" of 7 Oct, which was about the platform score).
  */
-export function StarRating({ value, glyph, size = 'md', className }: StarRatingProps) {
+export function StarRating({
+  value,
+  glyph,
+  size = 'md',
+  onCard = false,
+  className,
+}: StarRatingProps) {
   const score = normalise(value);
   if (process.env.NODE_ENV !== 'production' && score !== value) {
     console.warn(`StarRating: ${value} is shown as ${score} (halves, 0 to 5).`);
@@ -60,7 +72,12 @@ export function StarRating({ value, glyph, size = 'md', className }: StarRatingP
     <span
       role="img"
       aria-label={`Rated ${spoken(score)} out of ${STARS}`}
-      className={cx(styles.root, size === 'sm' ? styles.sm : styles.md, className)}
+      className={cx(
+        styles.root,
+        size === 'sm' ? styles.sm : styles.md,
+        onCard && styles.onCard,
+        className,
+      )}
     >
       {Array.from({ length: STARS }, (_, index) => {
         const fill = Math.min(1, Math.max(0, score - index));

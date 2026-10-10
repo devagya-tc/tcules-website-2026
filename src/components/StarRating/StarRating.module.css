@@ -63,3 +63,12 @@
 .half {
   inline-size: 50%;
 }
+
+/* On a card with its own ground: the card colours (star-rating.css § On a card). */
+.onCard .empty {
+  color: var(--star-card-empty-fg);
+}
+
+.onCard .filled {
+  color: var(--star-card-fill-fg);
+}

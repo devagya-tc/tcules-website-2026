@@ -26,7 +26,7 @@ export default function StarRatingSpecimen() {
             {index === 0 ? <h2>1 · Four surfaces · md and sm</h2> : null}
             <Specimen
               title={surface}
-              note="5, 4.5, 4, 3.5 and 0 at md (18), then the same at sm (14). A half fills from the inline start."
+              note="5, 4.5, 4, 3.5 and 0 at md (18), then at sm (14), then md onCard. A half fills from the inline start. onCard takes the colours of a card with its own ground; they differ only on blue, whose cards are paper, so the third row reads blue on blue here by design (in place: /design/testimonial, Four surfaces)."
             >
               <Layout rowGap="block">
                 <Cluster colGap="stack" rowGap="block">
@@ -42,6 +42,11 @@ export default function StarRatingSpecimen() {
                       size="sm"
                       glyph={<Icon name="star" />}
                     />
+                  ))}
+                </Cluster>
+                <Cluster colGap="stack" rowGap="block">
+                  {VALUES.map((value) => (
+                    <StarRating key={value} value={value} onCard glyph={<Icon name="star" />} />
                   ))}
                 </Cluster>
               </Layout>

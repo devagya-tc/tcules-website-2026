@@ -84,6 +84,27 @@ function bindShortWords(html: string): string {
     .join('');
 }
 
+/**
+ * Set straight double quotes as typographic ones in the text of trusted HTML: an opening mark after
+ * the start, a space or an opening bracket, a closing mark everywhere else. The corpus authors most
+ * quotes with curly marks and some (About's three voices) with straight ones, so the site showed
+ * both (critic, home round 2). Typesetting, like `bindShortWords`: the marks change, the words do
+ * not. Tags are left alone, so attribute quotes are never touched.
+ */
+function curlQuotes(html: string): string {
+  return html
+    .split(/(<[^>]*>)/)
+    .map((part) =>
+      part.startsWith('<')
+        ? part
+        : part
+            .replace(/&quot;/g, '"')
+            .replace(/(^|[\s([{—–])"/g, '$1“')
+            .replace(/"/g, '”'),
+    )
+    .join('');
+}
+
 /** A rough height for a card, from its quote's length: enough to balance column stacks. */
 const weightOf = (item: TestimonialItem) => item.quoteHtml.replace(/<[^>]*>/g, '').length + 220;
 
@@ -135,10 +156,14 @@ export function TestimonialCard({
             value={item.rating}
             size={quiet ? 'sm' : 'md'}
             glyph={<Icon name="star" />}
+            onCard={frame === 'box'}
           />
         ) : null}
         <blockquote className={styles.quote}>
-          <Prose html={bindShortWords(item.quoteHtml)} className={styles.quoteProse} />
+          <Prose
+            html={bindShortWords(curlQuotes(item.quoteHtml))}
+            className={styles.quoteProse}
+          />
         </blockquote>
         <Cluster
           as="figcaption"
