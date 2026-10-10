@@ -49,7 +49,7 @@ export const PLACEHOLDER_SLOTS: Readonly<
     height: 533,
     kind: 'studio photo',
     shows:
-      'Designers and engineers at work together in the Ahmedabad studio, critiquing one piece of work, framed wide enough to read as the whole studio (Banner `below`, critic pass).',
+      'Designers and engineers at work together in the Ahmedabad studio, critiquing one piece of work, framed wide enough to read as the whole studio. Banner `below`, added in the critic pass.',
   },
   '/about#difference': {
     src: '/placeholders/about--difference.svg',
@@ -69,19 +69,19 @@ export const PLACEHOLDER_SLOTS: Readonly<
   },
   '/about#studio': {
     src: '/placeholders/about--studio.svg',
-    width: 1280,
-    height: 1600,
+    width: 1600,
+    height: 1333,
     kind: 'studio photo',
     shows:
-      'Product Design at the centre of the studio: Tcules designers and engineers modelling a product together at a wall in the Ahmedabad studio. Added in the critic pass.',
+      'Product Design at the centre of the studio: Tcules designers and engineers modelling a product together at a wall in the Ahmedabad studio. Added in the critic pass; 6:5 since the B3 critic pass (photo-weighted split: three short paragraphs beside it).',
   },
   '/about#what-remains-constant': {
     src: '/placeholders/about--what-remains-constant.svg',
-    width: 1280,
-    height: 1600,
+    width: 1600,
+    height: 1333,
     kind: 'studio photo',
     shows:
-      'The Ahmedabad studio in its city: the place the practice took shape, with work for clients elsewhere visible inside. Added in the critic pass.',
+      'The Ahmedabad studio in its city: the place the practice took shape, with work for clients elsewhere visible inside. Added in the critic pass; 6:5 since the B3 critic pass (photo-weighted split: a head and four short lines beside it).',
   },
   '/audits/design-to-code-audit#deliverables': {
     src: '/placeholders/audits-design-to-code-audit--deliverables.svg',

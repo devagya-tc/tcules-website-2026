@@ -53,6 +53,13 @@
      different column behaviours. */
   --dtab-fluid-size: 176px;
   --dtab-hold-size: 192px;
+  /* A record's key column (no floors, see DataTable.module.css `.record`): its share of the table,
+     so the table's own column algorithm cannot hand the key more than the value. Sized by content
+     it took 167 of 326 in the glossary comparison at 390 and split the value mid-word. 38% leaves
+     the value about 150 of text at 390, and a key whose longest word is wider still gets that word
+     (a cell's min-content beats its width). A share rather than a size, so it holds at every
+     table width with no breakpoint. */
+  --dtab-record-key-share: 38%;
   /* The width of each scroll fade — about a third of a column's text floor, so the fade softens the
      clipped edge without hiding a whole word under it. A component size, not a layout distance. */
   --dtab-fade-size: var(--space-48);

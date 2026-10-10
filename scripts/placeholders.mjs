@@ -116,7 +116,16 @@ function svgFor({ width, height, kind, shows }) {
   const pad = Math.round(unit * 0.06);
   const small = Math.round(unit * 0.03);
   const body = Math.round(unit * 0.038);
-  const budget = Math.max(24, Math.floor((width - pad * 2) / (body * 0.52)));
+  /* The label is set in the panel's central square and centred in the panel, because every placement
+     crops: a 3:1 banner is 3:2 on a phone, a 4:5 slot is 6:5 in a photo-weighted split and 4:3 above
+     the copy, a 16:9 cover is 4:5 in a story split. Anchored top-left, the label was the first thing
+     each crop cut (the careers banner at 390, the case index's story cover). The box is the central
+     square less a double pad, so a centre crop down to about 4:5 of the short side keeps the whole
+     label (a 3:2 slot in a `asideFill` aside beside a tall accordion is about 0.9:1 at 1440), and one
+     panel serves every placement of its slot. */
+  const box = unit - pad * 4;
+  const x = Math.round((width - box) / 2);
+  const budget = Math.max(24, Math.floor(box / (body * 0.52)));
   /* The first sentence of the brief, without markup: the panel says what the slot is for, and the
      full brief lives in the register. */
   const brief = shows
@@ -127,18 +136,21 @@ function svgFor({ width, height, kind, shows }) {
     .split(/(?<=\.)\s/)[0];
   const lines = wrap(brief, budget).slice(0, 7);
   const head = `Image to come · ${kind}`;
+  /* The label block's height: the head's line, the gap to the brief, then the brief's lines. */
+  const block = small + Math.round(body * 2.2) + Math.round(body * 1.45) * (lines.length - 1);
+  const top = Math.round((height - block) / 2);
   /* Neutral and unbranded on purpose: a placeholder must never be mistaken for a finished asset. */
   const tspans = lines
     .map(
       (l, i) =>
-        `<tspan x="${pad}" dy="${i === 0 ? 0 : Math.round(body * 1.45)}">${esc(l)}${i === 6 && wrap(brief, budget).length > 7 ? '…' : ''}</tspan>`,
+        `<tspan x="${x}" dy="${i === 0 ? 0 : Math.round(body * 1.45)}">${esc(l)}${i === 6 && wrap(brief, budget).length > 7 ? '…' : ''}</tspan>`,
     )
     .join('');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="${esc(head)}">
 <rect width="${width}" height="${height}" fill="#EEF0F3"/>
 <rect x="1" y="1" width="${width - 2}" height="${height - 2}" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="${small} ${small}"/>
-<text x="${pad}" y="${pad + small}" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="${small}" letter-spacing="${(small * 0.1).toFixed(1)}" fill="#4A5361">${esc(head.toUpperCase())}</text>
-<text x="${pad}" y="${pad + small + Math.round(body * 2.2)}" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="${body}" fill="#2B323D">${tspans}</text>
+<text x="${x}" y="${top + small}" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="${small}" letter-spacing="${(small * 0.1).toFixed(1)}" fill="#4A5361">${esc(head.toUpperCase())}</text>
+<text x="${x}" y="${top + small + Math.round(body * 2.2)}" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="${body}" fill="#2B323D">${tspans}</text>
 </svg>
 `;
 }

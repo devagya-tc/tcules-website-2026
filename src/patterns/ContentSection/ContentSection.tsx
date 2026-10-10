@@ -409,6 +409,18 @@ export type ContentSectionProps = ContentSectionBaseProps &
 export type ContentSectionTextProps = {
   /** The running text — in practice one `Prose`. */
   children: ReactNode;
+  /**
+   * How the LINES sit. Default `start`: running text is read down a start edge, and under a centred
+   * head the block is centred while its text stays start-aligned (§ 3.5).
+   *
+   * `center` is for a coda of one to three short lines that closes a centred band after its set (a
+   * band's last two sentences under three cards). Set start-aligned, such a coda sat as a ragged
+   * block whose left edge lined up with nothing: not the cards' edge and not the axis the head is
+   * centred on (About `who-we-work-with`, critic C3.3). Centred and balanced, it closes on the
+   * head's axis. Never for paragraphs a reader has to read down: centred running text has no edge
+   * to return to.
+   */
+  align?: 'start' | 'center';
 };
 
 /**
@@ -427,14 +439,16 @@ export type ContentSectionTextProps = {
  * exact failure the ruling removed from Prose. The one place that DOES know a block is rich text
  * is the route's `case 'rich-text'`, so that is where the mark goes, and this is the mark.
  *
- * It is a ceiling, not a width: `max-inline-size` only, no grid, no margin, no alignment. The text
- * sits at the start of the track like every other block (under a centred head the BLOCK is centred
- * and its text stays start-aligned), and in a track narrower than the measure the track wins. It
+ * It is a ceiling, not a width: `max-inline-size` only, no grid, no margin. The text sits at the
+ * start of the track like every other block (under a centred head the BLOCK is centred and its text
+ * stays start-aligned, unless `align="center"` marks it a short coda), and in a track narrower than the measure the track wins. It
  * lives in ContentSection's folder and carries its name because it means nothing outside the band —
  * a long-form route states its own reading column.
  */
-export function ContentSectionText({ children }: ContentSectionTextProps) {
-  return <div className={styles.text}>{children}</div>;
+export function ContentSectionText({ children, align = 'start' }: ContentSectionTextProps) {
+  return (
+    <div className={cx(styles.text, align === 'center' && styles.textCentred)}>{children}</div>
+  );
 }
 
 /**

@@ -199,7 +199,12 @@ export function DataTable({
                 : { 'aria-label': `${keyColumn.heading} table` })}
           >
             <table
-              className={cx(styles.table, !head && styles.record)}
+              /* A record is read down its rows, a key and ONE value: head-less, or with a head row
+                 over a single value column ("Fact · Current public record", About `company-record`,
+                 critic C3.4). Either way there is no second column to scroll to, so it sizes the
+                 pair to the track instead of scrolling. Two or more value columns are compared
+                 across a row and keep the floors that make them scroll (7 Oct ruling 6). */
+              className={cx(styles.table, (!head || columns.length === 1) && styles.record)}
               {...(caption
                 ? { 'aria-labelledby': captionId }
                 : labelledBy

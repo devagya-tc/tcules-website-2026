@@ -53,9 +53,15 @@ const paragraphRuns = (blocks: readonly CorpusBlock[]): InlineRun[][] =>
   blocks.flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []));
 
 /** A run of paragraphs as running text at the body measure. */
-function Text({ paragraphs }: { paragraphs: readonly InlineRun[][] }) {
+function Text({
+  paragraphs,
+  align,
+}: {
+  paragraphs: readonly InlineRun[][];
+  align?: 'start' | 'center';
+}) {
   return (
-    <ContentSectionText>
+    <ContentSectionText align={align}>
       <Prose html={paragraphs.map(html).join('')} />
     </ContentSectionText>
   );
@@ -101,13 +107,18 @@ export function AboutPage({ page, caseRefs = {} }: AboutPageProps) {
 
 /* ── S · the opening, split from the hero ────────────────────────────────────── */
 
+/**
+ * Three short paragraphs and no head, so the photograph carries the band (`weight: 'photo'`, 6:5 in
+ * the 7 track). Copy-weighted, the paragraphs sat as a 130-tall island in the middle of a 596-tall
+ * 4:5 column, the band's large thing nowhere (critic C3.5).
+ */
 function Studio({ page, opening }: { page: CorpusPage; opening: readonly InlineRun[][] }) {
   return (
     <ContentSection
       id="studio"
       data-band="B"
       arrangement="media"
-      media={{ image: slotImage(page, 'studio'), side: 'end', pin: false }}
+      media={{ image: slotImage(page, 'studio'), side: 'end', pin: false, weight: 'photo' }}
     >
       <Text paragraphs={opening} />
     </ContentSection>
@@ -197,7 +208,7 @@ function WhoWeWorkWith({ page }: { page: CorpusPage }) {
       lead={leadBlock?.type === 'paragraph' ? plain(leadBlock.runs) : undefined}
     >
       <BlockCardSet items={cards} lead="none" across={3} scroll="never" />
-      <Text paragraphs={paragraphRuns(closing)} />
+      <Text paragraphs={paragraphRuns(closing)} align="center" />
     </ContentSection>
   );
 }
@@ -205,9 +216,10 @@ function WhoWeWorkWith({ page }: { page: CorpusPage }) {
 /* ── 5a · 5b · what makes the practice different, in two halves ──────────────── */
 
 /**
- * Five differences. The first two sit beside a photograph as tiles; the last three are text cards
- * under them, the set's continuation, with the band's closing link as the foot (the split keeps the
- * reading order: part b follows part a).
+ * Five differences. The first two sit beside a photograph as tiles; the last three are the same
+ * tiles three across under them, the set's continuation, with the band's closing link as the foot
+ * (the split keeps the reading order: part b follows part a). One tile type for both halves: drawn
+ * as text cards, the last three set a type step above the first two (critic C3.2, as C1.2).
  */
 function Difference({ page }: { page: CorpusPage }) {
   const b = band(page, 'difference');
@@ -236,12 +248,7 @@ function Difference({ page }: { page: CorpusPage }) {
           ) : undefined
         }
       >
-        <BlockCardSet
-          items={all.slice(2).map((item) => ({ id: item.headingText, ...row(item) }))}
-          lead="none"
-          across={3}
-          scroll="never"
-        />
+        <ListTiles rows={all.slice(2).map(row)} columns={3} />
       </ContentSection>
     </>
   );
@@ -435,6 +442,7 @@ function Faq({ page }: { page: CorpusPage }) {
 
 /* ── 12 · what remains constant: the coda beside a photograph ────────────────── */
 
+/** A head and four short lines: short copy, so the photograph takes the 7 track (as `studio`). */
 function Constant({ page }: { page: CorpusPage }) {
   const b = band(page, 'what-remains-constant');
   return (
@@ -442,7 +450,13 @@ function Constant({ page }: { page: CorpusPage }) {
       {...head(b)}
       data-band="B"
       arrangement="media"
-      media={{ image: slotImage(page, b.id), side: 'end', pin: false, head: 'title' }}
+      media={{
+        image: slotImage(page, b.id),
+        side: 'end',
+        pin: false,
+        head: 'title',
+        weight: 'photo',
+      }}
     >
       <Text paragraphs={paragraphRuns(b.blocks)} />
     </ContentSection>

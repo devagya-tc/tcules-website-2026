@@ -256,7 +256,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ── The record (`head={false}`) ─────────────────────────────────────────────────────────────────
+/* ── The record (`head={false}`, or one value column) ────────────────────────────────────────────
    A record is read DOWN its rows, a key and its value, never across columns: it has one value column
    and nothing to compare. The floors above exist so a comparison scrolls instead of crushing a
    column; a record has no second column to scroll to, so on a phone they only pushed the value
@@ -264,10 +264,14 @@
    characters. With the floors lifted the table algorithm sizes the pair itself: the key keeps its
    longest line where the track allows it, and on a narrow track it wraps to its min-content while
    the value takes the rest. The frame never scrolls, and the record is still a table at every width
-   (10 Oct 2026, pages pass 1, the case's "At a glance" at 390). After the column behaviours, so it
+   (10 Oct 2026, pages pass 1, the case's "At a glance" at 390). A table with a head row and one
+   value column is the same record with its two columns named (About's "Tcules at a glance" clipped
+   "Tcules UX Private Limite" at 390 with the head on), so it takes the same sizing; the head row is
+   drawn as usual. After the column behaviours, so it
    beats `hold` on the key. The key breaks only between words: with the cells' `anywhere` its
    min-content fell to a letter or two and "Product" split as "Pro / duct"; a key's floor is its
    longest word. */
+.record .colHead,
 .record .key,
 .record .cell {
   min-inline-size: 0;
@@ -275,6 +279,16 @@
 
 .record .key {
   overflow-wrap: normal;
+}
+
+/* The key's share of the record. Without one the column algorithm gave the key what its long serif
+   lines asked for, and the value — which may break `anywhere`, so an unbreakable URL such as
+   "linkedin.com/company/tcules" never holds the table open — was split "implementatio / n" (the
+   glossary's comparison at 390). The key's head cell carries it too, so a record with a head row
+   sizes the same way. */
+.record .colHead:first-child,
+.record .key {
+  inline-size: var(--dtab-record-key-share);
 }
 
 /* ── Print ──────────────────────────────────────────────────────────────────────────────────────

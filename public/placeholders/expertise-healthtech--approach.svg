@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1600" width="1280" height="1600" role="img" aria-label="Image to come · studio photo">
 <rect width="1280" height="1600" fill="#EEF0F3"/>
 <rect x="1" y="1" width="1278" height="1598" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="38 38"/>
-<text x="77" y="115" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="38" letter-spacing="3.8" fill="#4A5361">IMAGE TO COME · STUDIO PHOTO</text>
-<text x="77" y="223" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="49" fill="#2B323D"><tspan x="77" dy="0">A researcher running a usability session</tspan><tspan x="77" dy="71">with a nurse on a real task, on the device</tspan><tspan x="77" dy="71">the nurse actually uses.</tspan></text>
+<text x="154" y="694" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="38" letter-spacing="3.8" fill="#4A5361">IMAGE TO COME · STUDIO PHOTO</text>
+<text x="154" y="802" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="49" fill="#2B323D"><tspan x="154" dy="0">A researcher running a usability</tspan><tspan x="154" dy="71">session with a nurse on a real task,</tspan><tspan x="154" dy="71">on the device the nurse actually uses.</tspan></text>
 </svg>

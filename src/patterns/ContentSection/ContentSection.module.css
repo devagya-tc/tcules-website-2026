@@ -5,7 +5,7 @@
    tokens/components/content-section.css.
 
    Classes: .eyebrow .mark .heading .headingMd .headingDisplay .asideFill .lead .leadBeside .centred
-   .centredLg .itemsCentredLg .bodyCentred .bodyCentredLg .text .textureLg .photoTrack .photo
+   .centredLg .itemsCentredLg .bodyCentred .bodyCentredLg .text .textCentred .textureLg .photoTrack .photo
    .photoLeads .photoToCopy
 
    The @media queries swap a role, a crop or an alignment, never a distance: .leadBeside (the
@@ -118,6 +118,14 @@
    width: in `beside`'s narrower track at 1024 the track is the tighter of the two and wins. */
 .text {
   max-inline-size: var(--csec-body-measure);
+}
+
+/* `ContentSectionText align="center"`: a short coda's lines centred on the band's axis, balanced so
+   a two-line coda does not leave one word alone on the axis. The lines only: no distance, and the
+   block keeps the body measure. */
+.textCentred {
+  text-align: center;
+  text-wrap: var(--text-title-wrap);
 }
 
 /* The `media` arrangement's texture slot, shown from 1024 only (visual-direction § 6.3: the B band's

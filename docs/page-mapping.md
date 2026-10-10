@@ -516,13 +516,13 @@ h1 says nothing (P2). `body` = [lede 1]. No actions are authored.
 
 | # | Band id | Component and arrangement | Surface | Why this shape | Split | Image | Proposal |
 |---|---|---|---|---|---|---|---|
-| S | `studio` (from the hero) | B, head-less: `ContentSection arrangement="media"`, photo at the **end** (4:5); copy = `ContentSectionText` × 3 (ledes 2–4), centred on the photo (§ 3.2 rule 2: no action) | paper | The founding facts and "Product Design sits at the centre" stay together as the opening paragraphs. As plain paragraphs under a no-media hero, the page's first two viewports were all text: a 126-character title, a lede and three paragraphs. With a photograph, S and band 1 open as a zig-zag (photo end, then photo start), which is B after B with the side flipped. | **split from the hero** | placeholder → register (studio photo) | P17 |
+| S | `studio` (from the hero) | B, head-less: `ContentSection arrangement="media"`, photo at the **end**, `weight: 'photo'` (6:5 in the 7 track; critic C3.5); copy = `ContentSectionText` × 3 (ledes 2–4), centred on the photo (§ 3.2 rule 2: no action) | paper | The founding facts and "Product Design sits at the centre" stay together as the opening paragraphs. As plain paragraphs under a no-media hero, the page's first two viewports were all text: a 126-character title, a lede and three paragraphs. With a photograph, S and band 1 open as a zig-zag (photo end, then photo start), which is B after B with the side flipped. | **split from the hero** | placeholder → register (studio photo) | P17 |
 | 1 | `ahmedabad-is-part-of-how-we-work` | B: `ContentSection arrangement="media"`, photo at the **start**; copy = heading + four paragraphs | paper | The studio and its people, the band's own bound photograph | — | **bound** `about_studio_review` | — |
 | 2 | `the-practice-keeps-moving` | Stacked start head + `ContentSectionText` (four paragraphs) | paper | An argument in prose | — | — | P17 |
 | 3 | `what-we-do` | C-icon slider: stacked start head + `Slider perView={3}` (no `autoplay`) of six `BlockCard frame="box"` icon cards (glyph per G12, h3, two paragraphs via `bodyHtml`, `cue="cta"`, `ctaLabel` = the authored "Explore …" link text, `href` = its link). Software Development's body carries the AI engineering link, so all six take G3's static frame, with the cta as each card's one anchor. | paper | Six services with long bodies: three in view keeps each readable without a 2 × 3 wall past the fold | — | — | — |
-| 4 | `who-we-work-with` | Centred head, `lead` "Three situations recur:", M12 text cards `BlockCardSet lead="none"` three across (the bold run-in = title; body = the rest, lower-case as authored), then `ContentSectionText` (the two closing sentences) | paper | Three client situations as peers | — | — | — |
+| 4 | `who-we-work-with` | Centred head, `lead` "Three situations recur:", M12 text cards `BlockCardSet lead="none"` three across (the bold run-in = title; body = the rest, lower-case as authored), then `ContentSectionText align="center"` (the two closing sentences, a centred coda; critic C3.3) | paper | Three client situations as peers | — | — | — |
 | 5a | `difference` | B: `ContentSection arrangement="media"`, photo at the **end**; copy = heading + items 1–2 as two `ListCard form="tile"` tiles (h3 + paragraphs via `bodyHtml`) | paper | | **split**: items 3–5 go to 5b | placeholder → register | P17 |
-| 5b | `difference-2` | M12 text cards, `BlockCardSet lead="none"` three across, no head (bodies of two paragraphs via `bodyHtml`); `footer`: `CtaRow` "How AI-native Product Design works at Tcules" | paper | | from 5a | — | — |
+| 5b | `difference-2` | the same `ListCard` tiles as 5a, three across (`ListTiles columns={3}`; critic C3.2), no head (bodies of two paragraphs via `bodyHtml`); `footer`: `CtaRow` "How AI-native Product Design works at Tcules" | paper | | from 5a | — | — |
 | 6 | `how-we-work` | D: beside head (start), photo aside, body = `Accordion` (five items: question = h3, answer = paragraphs) | paper | Five working principles, two paragraphs each. Closed, the titles alone tell the story: this is the fold remedy § 1.3 names first. | — | placeholder → register | P17 |
 | 7 | `leadership` | B, photo at the **end**; copy = heading, two leader blocks (h3, bio, LinkedIn link button), the studio paragraph, "Follow Tcules on LinkedIn" (links stacked one per line) | paper | Two people and the team behind them | — | **bound** `about_team` | — |
 | 8a | `work-you-can-inspect` | M8 case cards: start head, `BlockCardSet lead="none"` four across (`wide`), linked whole cards, `cue="title"` (title = the link text, `href` = its link, body = the rest of the sentence, lower-case as authored, e.g. "shows research changing …") | paper | Four cases, each named for what it proves | **split**: the Lab paragraph and the all-cases link go to 8b, because the band's bound photo may not sit beside clickable cards (9 Oct) | Doodle, Benchmark, GT Tools covers (bound on their case pages); Omny → register | — |
@@ -530,7 +530,7 @@ h1 says nothing (P2). `body` = [lede 1]. No actions are authored.
 | 9 | `testimonials` | M5 G slider, centred head (no lead), three slides | **tint** | | — | — | — |
 | 10 | `company-record` | M16: start head + two boxed `DataTable` halves (8 + 8 rows, each with the authored header row "Fact · Current public record") side by side from 1024 | paper | Sixteen facts as a record that holds the fold | — | — | — |
 | 11 | `frequently-asked-questions` | M4 (nine questions) | paper | | — | — | P17 |
-| 12 | `what-remains-constant` | B: `ContentSection arrangement="media"`, photo at the **end** (4:5); copy = heading + `ContentSectionText` × 4 (the four short paragraphs), centred on the photo | paper | The coda: "Ahmedabad is where the practice took shape. The world is where the work goes." is a sentence about place, which a photograph of the studio in its city shows and a paragraph cannot. It also ends the T–T pair the first draft accepted (the FAQ, then a text coda), which broke the owner's 7 Oct rule. A photograph fixes it without touching the order. | — | placeholder → register (studio photo) | — |
+| 12 | `what-remains-constant` | B: `ContentSection arrangement="media"`, photo at the **end**, `weight: 'photo'` (6:5; critic C3.5); copy = heading + `ContentSectionText` × 4 (the four short paragraphs), centred on the photo | paper | The coda: "Ahmedabad is where the practice took shape. The world is where the work goes." is a sentence about place, which a photograph of the studio in its city shows and a paragraph cannot. It also ends the T–T pair the first draft accepted (the FAQ, then a text coda), which broke the owner's 7 Oct rule. A photograph fixes it without touching the order. | — | placeholder → register (studio photo) | — |
 | 13 | `work-with-tcules` | M3: `CtaSection open` (heading, `body=[para]`, `actions=[Start a conversation → /contact]`, the page's one solid) | tint | | — | — | — |
 | 14 | `careers` | I: `Banner form="below"` (`tight`): a stacked head (heading, `lead` = paragraph, link-button action "Explore careers at Tcules") over a 3:1 photograph | paper | A second ask after the close is authored, so it takes a link and a photograph rather than a second solid. It is `below` and not `beside`, so it does not repeat 12's photo-beside-copy two bands later, and a wide studio panorama ends the page the way kit/about's Holi frame opened it. | — | placeholder → register | P19 |
 
@@ -801,3 +801,38 @@ Looked at and kept, with the reason:
 | B3.7 | shared code | — | `LongformShell.tsx` (case, article, term share one shell), `QuoteSliderBand` and `ListTiles` in `blocks.tsx` (home and offer pages now use them) | reuse, not fork |
 
 Proposals P28–P32 added; P24 extended. No register rows were added: every slot this batch needs was already registered.
+
+
+## 16 · Critic pass, batch B3 (10 Oct 2026)
+
+Shot at 1440 and 390 and read band by band. Copy fidelity was re-checked against the raw markdown with
+a script (visible text of `<main>` against every sentence, list item and table cell of the source, in
+order): About and the glossary render every fragment in document order. On the CPQ article the only
+differences are the standfirst set above the byline (a re-lay inside the hero: PageHero's `children`
+row follows the body) and the closing link's full stop, which § 0 rule 1 drops when a lone link line
+becomes a button.
+
+| # | Where | Seen | Cause | Fix | Lives in |
+|---|---|---|---|---|---|
+| C3.1 | every wrapping link Button (CPQ `where-this-work-sits`, About `difference-2` at 390) | the label wrapped to two lines and its arrow sat at the far edge of the column, a line's length from the word it belongs to | B3.4 let the label wrap inside a flex row, where a wrapped label is a block as wide as the space it is given | link emphasis flows inline: the glyph follows the label's last word, centred on the cap height (`1cap`), the 8 kept as the label's inline padding; the hover underline is a background strip on the ink, so it still wipes from the left and runs across every line. One line long, the link renders as before (checked at 4x, rest and hover) | `Button.module.css` |
+| C3.2 | About `difference` → `difference-2` | the split's last three differences were BlockCard text cards a type step above 5a's two ListCard tiles | the split's two halves were drawn with two different components (C1.2's cause, again) | `difference-2` renders the same tiles, three across | `AboutPage.tsx` |
+| C3.3 | About `who-we-work-with` | the two closing sentences sat start-aligned in a centred measure block under three cards: a ragged block whose left edge lined up with nothing | ContentSectionText keeps start alignment under a centred head, which is right for running text and wrong for a short coda | `ContentSectionText align="center"` (short codas only, balanced); specimen in `/design/content-section` § 11 | `ContentSection.tsx`, `ContentSection.module.css` |
+| C3.4 | About `company-record` at 390 (and the glossary comparison) | the record scrolled sideways and clipped every value ("Tcules UX Private Limite") | record sizing (C2.2) was tied to `head={false}`; with its authored head row the record took the comparison floors, which also sit on the head cells | a table with one value column is a record whether or not it has a head row: floors lift on head cells too, and the key takes `--dtab-record-key-share` (38%) so the column algorithm cannot starve the value (it split "implementatio / n" without it) | `DataTable.tsx`, `DataTable.module.css`, `tokens/components/data-table.css` |
+| C3.5 | About `studio` and `what-remains-constant` | three short paragraphs (and a head with four short lines) floated mid-way down a 596-tall 4:5 column: no large thing, mostly air | copy-weighted media split for copy that is short; ContentSection's `weight: 'photo'` exists for exactly this | both take `weight: 'photo'` (6:5 in the 7 track); register rows moved to 6:5. `work-you-can-inspect-2` stays copy-weighted: the bound wall photo (936 wide) fails § 5.4 at 667 | `AboutPage.tsx`, `docs/image-register.md` |
+| C3.6 | placeholders (About careers at 390, how-we-work aside) | the careers panel printed its register note "(Banner below, critic pass)"; at 390 its label was cropped, and the 3:2 how-we-work panel lost its right half in the portrait aside | the label was anchored top-left, the first thing any crop cuts; the register row's first sentence carried a build note | labels are centred and set in the panel's central square less a double pad, so crops down to about 4:5 of the short side keep them; the careers row's note moved out of the first sentence. Every page's placeholders regenerate | `scripts/placeholders.mjs`, `docs/image-register.md`, `public/placeholders/*` |
+
+Looked at and kept, with the reason:
+
+- **The glossary and the CPQ article** read as intended: stacked title, a statement (glossary), the rail
+  beside the column with its tables, Steps and two diagram slots. The Steps bodies sit on a narrower
+  measure than the Prose above them; that is the approved Steps geometry.
+- **About `the-practice-keeps-moving`**, four paragraphs on one start edge with an empty right half. A
+  head | prose split would be the text-only split the 7 Oct ruling 2 retired; the band sits between two
+  image bands and the icon slider, so the rhythm rule holds.
+- **About `work-you-can-inspect-2`**: the Lab paragraph and link beside a tall wall photo reads as the
+  photo with a short note; the photo cannot take the photo track (§ 5.4, above).
+- **The About and case "At a glance" records at 390** are tall (two halves of eight rows): copy as
+  written, now without a sideways scroll.
+- **Dev warnings** left as logged: the About eyebrow repeats the crumb (P1), nine FAQ items (P17),
+  TOC labels over 40 characters (P24).
+

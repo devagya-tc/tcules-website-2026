@@ -187,7 +187,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **contrast.css** — `--cntr-heading-tracking` -0.005em · `--cntr-item-tracking-primary` 0em · `--cntr-rule-width` 1px · `--cntr-rule-strong-width` 1px
 - **cta-row.css** — `--ctarow-rule-width` 1px · `--ctarow-note-measure` 56ch · `--ctarow-centred-measure` 75ch
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.015em · `--cta-close-heading-tracking` -0.018em · `--cta-open-heading-tracking` -0.02em · `--cta-point-tracking` 0em · `--cta-rule-width` 1px · `--cta-marker-tracking` 0.08em · `--cta-heading-measure` 32ch · `--cta-open-heading-measure` 26ch · `--cta-body-measure` 75ch · `--cta-lede-measure` 44ch
-- **data-table.css** — `--dtab-rule-width` 1px · `--dtab-fluid-size` 176px · `--dtab-hold-size` 192px · `--dtab-fade-size` 48px
+- **data-table.css** — `--dtab-rule-width` 1px · `--dtab-fluid-size` 176px · `--dtab-hold-size` 192px · `--dtab-record-key-share` 38% · `--dtab-fade-size` 48px
 - **engagement-model.css** — `--eng-eyebrow-tracking` 0.12em · `--eng-heading-tracking` -0.015em · `--eng-heading-measure` 32ch · `--eng-lead-measure` 56ch · `--eng-title-tracking` -0.005em · `--eng-body-measure` 56ch · `--eng-axis-tracking` 0.1em · `--eng-line-width` 3px · `--eng-level-width` 1px · `--eng-rule-width` 1px · `--eng-idle-width` 1px · `--eng-node-width` 2px · `--eng-swatch-width` 48px · `--eng-swatch-height` 24px
 - **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-measure` 667px · `--enq-note-min-inline` 15rem · `--enq-hidden-size` 1px
 - **figure.css** — `--fig-min-xs` 192px

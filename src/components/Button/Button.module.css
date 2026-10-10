@@ -131,13 +131,47 @@
 .link {
   /* A bare link has no box and no fixed height, so it may wrap: a 44-character label ("How AI-native
      Product Design works at Tcules") held on one line ran 54px past a 390 viewport. A boxed button
-     keeps `nowrap`, because its height is fixed. */
+     keeps `nowrap`, because its height is fixed.
+
+     A wrapping link FLOWS rather than flexes. In a flex row a wrapped label is a block as wide as
+     the space it was given, so the arrow after it was pushed to the far edge of the column, a
+     line's length away from the word it belongs to (`where-this-work-sits` at 390). As inline
+     content the glyph follows the label's last word on whichever line that ends. One line long,
+     the two forms render identically: same 8 between label ink and glyph, glyph centred on the
+     label. */
+  display: inline-block;
   white-space: normal;
   text-align: start;
   height: auto;
   padding-inline: 0;
-  gap: var(--btn-gap-bare);
   border-radius: var(--btn-radius-bare);
+}
+
+/* Centred on the capitals, as the flex row centred it: the glyph's foot sits half the difference
+   between the cap height and the glyph below the cap midline. `middle` centres on the x-height,
+   which an all-caps label does not have, and set the arrow a pixel low. `1cap` is the label's own
+   font, so it follows the size step. */
+.link > svg {
+  display: inline-block;
+  vertical-align: calc((1cap - var(--btn-icon-size-md)) / 2);
+}
+
+.link.sm > svg {
+  vertical-align: calc((1cap - var(--btn-icon-size-sm)) / 2);
+}
+
+.link.lg > svg {
+  vertical-align: calc((1cap - var(--btn-icon-size-lg)) / 2);
+}
+
+/* The 8 between label and glyph, as the label's own inline padding: inline content has no `gap`.
+   Padding rather than margin, because it is the label's box that carries the clearance. */
+.link > .label:not(:last-child) {
+  padding-inline-end: var(--btn-gap-bare);
+}
+
+.link > svg + .label {
+  padding-inline-start: var(--btn-gap-bare);
 }
 
 /* ── The label ─────────────────────────────────────────────────────────────────
@@ -152,6 +186,7 @@
 }
 
 .link .label {
+  display: inline;
   margin-inline: 0;
 }
 
@@ -349,35 +384,35 @@
    once and this one wipes in from the left. It is the single animated property in the system that
    is not a colour, and it is animated on the same 140ms as the colours.
 
-   Inset on the right by the tracking, so the rule stops under the last GLYPH rather than under
+   Short of the end by the tracking, so the rule stops under the last GLYPH rather than under
    the empty letter-space after it — the same correction the label's negative end-margin makes,
-   applied to the rule. */
+   applied to the rule.
+
+   The label flows inline (see `.link`), so the rule is a background strip on the ink rather than
+   a positioned pseudo-element: an absolutely placed rule under a label that wraps would underline
+   its last line only. A background on an inline box is laid as one strip across every line
+   (`box-decoration-break: slice`, the default), so growing it from 0 to 100% still wipes in from
+   the left, and on a wrapped label it runs line one, then line two. The padding below the ink is
+   the offset the rule sits at; it does not move the line box. */
 .link .labelInk {
-  position: relative;
+  display: inline;
+  padding-block-end: var(--btn-link-rule-offset);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% var(--btn-link-rule-width);
+  transition: background-size var(--btn-transition-duration) var(--btn-transition-easing);
 }
 
-.link .labelInk::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: var(--btn-text-tracking);
-  bottom: calc(-1 * var(--btn-link-rule-offset));
-  height: var(--btn-link-rule-width);
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform var(--btn-transition-duration) var(--btn-transition-easing);
+.link.live:hover .labelInk,
+.link.live:focus-visible .labelInk,
+.link.live:active .labelInk,
+.link.live.active .labelInk {
+  background-size: calc(100% - var(--btn-text-tracking)) var(--btn-link-rule-width);
 }
 
-.link.live:hover .labelInk::after,
-.link.live:focus-visible .labelInk::after,
-.link.live:active .labelInk::after,
-.link.live.active .labelInk::after {
-  transform: scaleX(1);
-}
-
-.link.busy .labelInk::after {
-  transform: scaleX(1);
+.link.busy .labelInk {
+  background-size: calc(100% - var(--btn-text-tracking)) var(--btn-link-rule-width);
 }
 
 /* ── Driven by an enclosing interactive surface ─────────────────────────────────
@@ -416,10 +451,10 @@
   color: var(--btn-link-neutral-fg-pressed);
 }
 
-[data-btn-link-group]:hover .link.live .labelInk::after,
-[data-btn-link-group]:focus-visible .link.live .labelInk::after,
-[data-btn-link-group]:active .link.live .labelInk::after {
-  transform: scaleX(1);
+[data-btn-link-group]:hover .link.live .labelInk,
+[data-btn-link-group]:focus-visible .link.live .labelInk,
+[data-btn-link-group]:active .link.live .labelInk {
+  background-size: calc(100% - var(--btn-text-tracking)) var(--btn-link-rule-width);
 }
 
 /* The wipe is the one motion here, so it is the one thing to answer for. Reduced motion keeps the
@@ -428,7 +463,7 @@
    and a caller cannot acquire un-answered motion by opting into the group. */
 @media (prefers-reduced-motion: reduce) {
   .button,
-  .link .labelInk::after {
+  .link .labelInk {
     transition-duration: var(--duration-instant);
   }
 }

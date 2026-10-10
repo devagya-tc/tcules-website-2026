@@ -483,7 +483,7 @@ export default function DataTableSpecimenPage() {
           </Specimen>
           <Specimen
             title="A record with no header row · head={false}"
-            note="A key/value record such as a case's 'At a glance': its first row is a pair, so there is no head to draw and none is invented. Rows only, one value column, named by the heading above it with labelledBy."
+            note="A key/value record such as a case's 'At a glance': its first row is a pair, so there is no head to draw and none is invented. Rows only, one value column, named by the heading above it with labelledBy. A table WITH a head row and one value column (About's 'Fact · Current public record') is sized the same way: at 390 the pair fits the track and never scrolls."
           >
             <Layout rowGap="block">
               <h3 id="dt-record">At a glance</h3>

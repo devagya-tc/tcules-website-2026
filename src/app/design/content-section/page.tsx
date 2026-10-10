@@ -814,7 +814,9 @@ export default function ContentSectionSpecimen() {
         passes rule=&#123;false&#125;: the ladder&rsquo;s last rule already closes the body, and
         a second hairline 48 under it reads as a double rule. Otherwise: a card set still spans
         the column, a capped block (the accordion in ContentSectionText, a centred CtaRow) sits
-        in the middle at its cap, and text inside every block stays start-aligned. Always
+        in the middle at its cap, and text inside every block stays start-aligned, except a short coda
+        after a set (ContentSectionText align=&quot;center&quot;, the first band), which closes on the
+        head&rsquo;s axis. Always
         stacked; actions never sit in a centred head (the type refuses them) — a centred
         band&rsquo;s ask is its footer.
       </Label>
@@ -826,6 +828,9 @@ export default function ContentSectionSpecimen() {
         lead="Each looks like an interface problem, and none of them starts on a screen."
       >
         <Cards />
+        <ContentSectionText align="center">
+          <Prose html="<p>None of the three is about the size of the team.</p><p>Each is a decision that matters enough to be designed before it is built.</p>" />
+        </ContentSectionText>
       </ContentSection>
       <ContentSection
         align="center"
