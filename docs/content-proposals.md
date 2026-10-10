@@ -217,3 +217,33 @@ Append one entry per problem, newest last.
   - make the hero lede one paragraph, with the founding facts in the first band.
 - **Why:** About is visitor-facing. At 12 bands or fewer the page keeps its studio, people and
   proof moments without a long run of argued text between them.
+
+### P18 · several pages · run-in labels · bodies that start mid-sentence
+
+- **Pages and bands:** `/audits/design-to-code-audit` `deliverables` ("**Every difference we
+  found,** shown against…"); `/about` `who-we-work-with` ("**Growth-stage and post-PMF SaaS teams**
+  dealing with…") and `work-you-can-inspect` ("[Doodle] shows research changing…");
+  `/services/product-design` `specialist-capabilities` ("[UX Research]: find out how people…").
+- **Problem:** each item is one sentence with its opening words in bold. When the page shows the
+  items as tiles or cards, the bold run becomes the title and the rest becomes the body. So titles
+  end in a comma or in nothing, and bodies start lower-case mid-sentence. The pages render them
+  exactly like that (mapping § 0 rule 1), because capitalising or completing the sentences would
+  change the copy. On a card the result reads as a sentence broken across two lines.
+- **Proposal:** write these items as a short title plus a full sentence, as the other labelled
+  sets in the corpus already do ("**A fix plan.** Ordered by what users feel most."). For the link
+  lists, put the name in the title and start the body with a capital ("Doodle. Research changed
+  the underlying product model…").
+- **Why:** the sets would then match every other card and tile set on the site. A run-in reads
+  well in a paragraph but not split across a card.
+
+### P19 · `/about` · careers · a second ask after the close
+
+- **Problem:** `work-with-tcules` is the page's close (the enquiry ask, on tint), and `careers`
+  follows it. The kit's rule is that the close is the page's last band, so the end reads as an
+  ending (visual-direction § 1.7). Here the reader meets the ask, then a second, unrelated ask
+  before the footer. The page renders it as written: careers is a paper banner with a link, never a
+  second solid.
+- **Proposal:** move `careers` above `work-with-tcules`, for example after `what-remains-constant`.
+  Or fold its link into the FAQ's hiring answer, which already links to `/careers`.
+- **Why:** one ending per page. The careers link stays one scroll away, and the footer already
+  carries Careers.
